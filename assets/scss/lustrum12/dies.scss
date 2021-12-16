@@ -42,30 +42,33 @@ nav{
 
 	a {
 		/* Header text */
-		color: $font-color-primary;
-		font-family: $font-header;
+		color: $oranje;
+		font-family: $dies-arkadelphia-font;
 		text-transform: uppercase;
 		text-decoration: none;
 		font-size: 24px;
 		transition: ease-in-out color .15s;
 
 		&:hover {
-			color: $kleur-wit;
+			color: $Lila;
 			text-decoration: none;
 		}
 	}
 }
 
-
 .titel {
 	color: $bordeaux-rood;
 	text-transform: uppercase;
-	//font-family: $dies-uppereast-font;
+	font-family: $dies-arkadelphia-font;
 	font-weight: bold;
 }
 
 body {
 	background-color: $rose;
+	background-image: url('../../images/lustrum12/dies-achtergrond.jpg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
 }
 
 a{
