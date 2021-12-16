@@ -13,7 +13,7 @@
 	{{ csrfMetaTag() }}
 
 	{{ js_asset('app') }}
-	{{ css_asset('thema-donker') }}
+	{{ css_asset('thema-lustrum') }}
 	{{ css_asset('common') }}
 	{{ css_asset('lustrumdies') }}
 
@@ -40,12 +40,13 @@
 		</a>
 		<div class="container">
 			<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">
-				<a class="d-none d-md-inline-block" href="./">Home</a>
-				<a class="d-none d-md-inline-block" href="#top">Top</a>
+				<a class="d-none d-md-inline-block" href="./">Dies Pagina</a>
+				<a class="d-none d-md-inline-block" href="#informatie">Informatie</a>
+				<a class="d-none d-md-inline-block" href="#ketzers">Gala Ketzers</a>
 			</div>
 		</div>
 	</nav>
-
+	<a id="informatie"></a>
 	<section class="galabeschrijving column-overzicht">
 		<div class="container">
 			<h1 class="titel">Gala informatie</h1>
@@ -79,27 +80,24 @@
 		</div>
 	</section>
 
+	<div id="ketzers" class="divider">
+		<img class="tussen" src="/images/lustrum12/DividerTussen.png">
+	</div>
+
+	<h2 class="titel">Gala Ketzers</h2>
+
 	<div class="ketzers">
 		<div class="ketzer">
 			{{ '[activiteit=2149]'|bbcode }}
 		</div>
-	</div>
-
-	<div class="divider">
-			<img class="onder" src="/images/lustrum12/DividerTussen.png">
-	</div>
-
-	<div class="ketzers">
-		<h2 class="titel">Reserve Ketzer</h2>
 		<div class="ketzer">
-			{{ '[activiteit=2149]'|bbcode }}
+			{{ '[activiteit=2150]'|bbcode }}
 		</div>
 	</div>
 
 	<div class="beschrijving">
 		<h4 class="titel">Oudleden: U heeft een mail met informatie over inschrijven</h4>
 	</div>
-	<div class="divider">
-		<img class="onder" src="/images/lustrum12/DividerOnder.png">
-	</div>
+
+	<a class="divider onder"></a>
 </body>

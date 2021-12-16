@@ -20,7 +20,7 @@ $Lila: #b8aee3;
 $rose: #d29ec4;
 $dark-rose:  #3F2F3A;
 $gray-transparant: #473d4594; // rgba(71, 61, 69, 0.6);
-$darkgray-transparant: #d29ec4; // rgba(71, 61, 69, 0.6);
+$darkgray-transparant: #473D45BA; // rgba(71, 61, 69, 0.6);
 
 $oranje: #ffaf02;
 $bruin: #2a1c02;
@@ -58,7 +58,7 @@ nav{
 
 .titel {
 	color: $bordeaux-rood;
-	text-transform: uppercase;
+	//text-transform: uppercase;
 	font-family: $dies-arkadelphia-font;
 	font-weight: bold;
 }
@@ -111,6 +111,7 @@ a{
 	}
 }
 
+/* 3 / 1 columns */
 .column-overzicht {
 	margin-top: 60px;
 	margin-bottom: 10px;
@@ -118,22 +119,31 @@ a{
 		background: $gray-transparant;
 		padding: 20px;
 		border-radius: 25px;
-		h4.titel {
-			text-align: left;
-		}
-		h3.titel {
+		h3 {
 			text-align: left;
 			font-size: 2.0rem;
+			color: $bordeaux-rood;
+		}
+		h4 {
+			text-align: left;
+			color: $bordeaux-rood;
+			text-transform: none;
 		}
 	}
 }
 
+/* Etiquette section */
 .etiquette {
+	.titel {
+		text-align: left;
+		//color: $oranje;
+	}
 	p {
 		font-size: 1.0rem;
 	}
 }
 
+/* Ketzers */
 .ketzers{
 	align-items: center;
 
@@ -141,17 +151,42 @@ a{
 		max-width: 1320px;
 		color: white;
 		.bb-block {
-			background-color: $gray-transparant;
-			.table.groep-lijst tr:nth-child(2n){
+			background-color: $darkgray-transparant;
+			table.groep-lijst tr:nth-child(2n) {
 				background-color: $gray-transparant;
 			}
 		}
+		.btn-primary {
+			background-color: $oranje;
+			border-color: $oranje;
+		}
+		a:not(.btn) {
+			color: $oranje;
+		}
+		.dropdown-menu {
+			background-color: $oranje;
+		}
+		a[id*="groep-lid-remove"] {
+			color: $kleur-wit;
+			background-color: $oranje;
+
+		}
 		h3 {
-			color: $bordeaux-rood;
+			color: $oranje;
 			font-weight: bold;
-			text-transform: uppercase;
 			font-family: $dies-uppereast-font;
+			text-transform: uppercase;
 			font-size: 2.4rem;
+		}
+		h4 {
+			color: $oranje;
+			font-family: $dies-uppereast-font;
+			text-transform: uppercase;
+		}
+		.GroepStatistiekView {
+			background-color: $bordeaux-rood;
+			padding: 20px;
+			border-radius: 25px;
 		}
 	}
 }
