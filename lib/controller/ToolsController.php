@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
@@ -129,6 +130,25 @@ class ToolsController extends AbstractController
 		ob_start();
 		phpinfo();
 		return new PlainView(ob_get_clean());
+	}
+
+	/**
+	 * @return PlainView
+	 * @Route("/tools/timeout/{seconds}", methods={"GET", "POST"})
+	 * @Auth(P_ADMIN)
+	 * @CsrfUnsafe
+	 */
+	public function timeout(Request $request, $seconds): PlainView
+	{
+		if ($request->getMethod() == "POST") {
+			for ($i = 0; $i < $seconds; $i++) {
+				sleep(10);
+			}
+
+			return new PlainView("He, je hebt lang gewacht!");
+		}
+
+		return new PlainView("<form method='post'><input type='submit'/></form>");
 	}
 
 	/**
