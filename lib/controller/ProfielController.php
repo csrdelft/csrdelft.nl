@@ -4,10 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\entity\commissievoorkeuren\CommissieVoorkeuren;
-use CsrDelft\entity\commissievoorkeuren\VoorkeurOpmerking;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\profiel\Profiel;
@@ -474,38 +471,32 @@ class ProfielController extends AbstractController {
 		if (!$profiel->magBewerken()) {
 			throw $this->createAccessDeniedException();
 		}
-		$voorkeuren1 = new CommissieVoorkeuren();
-		$voorkeuren1->opmerking = $voorkeurOpmerkingRepository->getOpmerkingVoorLid($profiel)->lidOpmerking;
+
+		$opmerking = $voorkeurOpmerkingRepository->getOpmerkingVoorLid($profiel);
 		$categorieCommissie = $voorkeurCommissieRepository->getByCategorie();
+		$voorkeuren = [];
 		foreach ($categorieCommissie as $cat) {
-			$categorie = $cat['categorie'];
 			foreach ($cat['commissies'] as $commissie) {
 				if ($commissie->zichtbaar) {
-					$voorkeuren1->voorkeuren->add($commissieVoorkeurRepository->getVoorkeur($profiel, $commissie));
+					$voorkeuren[] = $commissieVoorkeurRepository->getVoorkeur($profiel, $commissie);
 				}
 			}
 		}
 
-		$form = $this->createForm(CommissieVoorkeurenType::class, $voorkeuren1, [
+		$form = $this->createForm(CommissieVoorkeurenType::class, $opmerking, [
 			'action' => $this->generateUrl('csrdelft_profiel_voorkeuren', ['uid' => $uid]),
 		]);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
-			$voorkeuren = $voorkeuren1->getVoorkeuren();
-			$opmerking = $voorkeurOpmerkingRepository->getOpmerkingVoorLid($profiel);
-			$opmerking->lidOpmerking = $voorkeuren1->getOpmerking();
 			$manager = $this->getDoctrine()->getManager();
-			foreach ($voorkeuren as $voorkeur) {
-				$manager->persist($voorkeur);
-			}
 			$manager->persist($opmerking);
 			$manager->flush();
 			setMelding('Voorkeuren opgeslagen', 1);
 			return $this->redirectToRoute('csrdelft_profiel_voorkeuren', ['uid' => $uid]);
 		}
 
-		return $this->render('commissievoorkeuren/persoonlijk.html.twig', ['form' => $form->createView()]);
+		return $this->render('commissievoorkeuren/persoonlijk.html.twig', ['form' => $form->createView(), 'uid' => $uid, 'voorkeuren' => $voorkeuren]);
 	}
 
 	/**

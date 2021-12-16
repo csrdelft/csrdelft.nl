@@ -144,3 +144,12 @@ export const registerFlatpickrContext = async (): Promise<void> => {
 		'.DateField': initDatePicker,
 	});
 };
+
+export const registerLidInstellingenContext = async (): Promise<void> => {
+	const {
+		instellingOpslaan
+	} = await import("./page/instellingen");
+
+	ctx.addHandler('.instellingKnop', el => el.addEventListener('click', instellingOpslaan))
+	ctx.addHandler('.change-opslaan', el => el.addEventListener('change', instellingOpslaan))
+}

@@ -9,7 +9,7 @@ const instellingVeranderd = () => {
 		.forEach((el) => el.classList.remove('d-none'));
 };
 
-const instellingOpslaan = async (ev: Event) => {
+export const instellingOpslaan = async (ev: Event) => {
 	ev.preventDefault();
 
 	const input = ev.target as HTMLElement;
@@ -42,11 +42,3 @@ const instellingOpslaan = async (ev: Event) => {
 
 	return false;
 };
-
-docReady(() => {
-	document.querySelectorAll('.instellingKnop')
-		.forEach((el) => el.addEventListener('click', instellingOpslaan));
-
-	document.querySelectorAll('.change-opslaan')
-		.forEach((el) => el.addEventListener('change', instellingOpslaan));
-});

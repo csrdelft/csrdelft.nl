@@ -7,17 +7,21 @@ use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurOpmerking;
+use CsrDelft\entity\commissievoorkeuren\VoorkeurVoorkeur;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
 use CsrDelft\repository\commissievoorkeuren\VoorkeurCommissieRepository;
 use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\commissievoorkeuren\VoorkeurCommissieCategorieType;
 use CsrDelft\view\commissievoorkeuren\VoorkeurCommissieType;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurPraesesOpmerkingType;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -75,6 +79,41 @@ class CommissieVoorkeurenController extends AbstractController
 			'commissieFormulier' => $commissieFormulier->createView(),
 			'categorieFormulier' => $addCategorieFormulier->createView(),
 		]);
+	}
+
+	/**
+	 * @param Request $request
+	 * @param $cid
+	 * @param $waarde
+	 * @return JsonResponse
+	 * @Route("/commissievoorkeuren/update/{cid}/{uid}/{waarde}", methods={"POST"}, defaults={"waarde": null})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lidUpdate(Request $request, ProfielRepository $profielRepository, $cid, $uid, $waarde) {
+		$profiel = $profielRepository->get($uid);
+
+		if (!$profiel) {
+			throw new NotFoundHttpException();
+		}
+		if (!$profiel->magBewerken()) {
+			throw $this->createAccessDeniedException();
+		}
+
+		if ($waarde === null) {
+			$waarde = $request->request->get('waarde');
+		}
+
+		if (!is_numeric($waarde) || intval($waarde) > 3 || intval($waarde) < 1) {
+			return new JsonResponse(['success' => false], 400);
+		}
+
+		$commissie = $this->voorkeurCommissieRepository->find($cid);
+		$commissieVoorkeur = $this->commissieVoorkeurRepository->getVoorkeur($profiel, $commissie);
+		$commissieVoorkeur->voorkeur = $waarde;
+
+		$this->getDoctrine()->getManager()->flush();
+
+		return new JsonResponse(['success' => true]);
 	}
 
 	/**
