@@ -77,3 +77,62 @@ try {
 } catch (e) {
 	// Geen contactform
 }
+
+try {
+	const refreshInterval = 2500;
+	const remoteLoginCode = select<HTMLFormElement>('.remote-login-code')
+
+	interface RemoteLogin {
+		expires: string
+		status: string
+		uuid: string
+	}
+
+	const updateStatus = async () => {
+		const response = await fetch('/remote-login-status', {method: 'POST'});
+		const remoteLogin = await response.json() as RemoteLogin;
+
+		const expires = new Date(remoteLogin.expires);
+
+		// Ververs de qr code als rejected of verloop is bijna
+		if (remoteLogin.status == 'rejected' || +expires - +new Date < 10_000) {
+			remoteLoginCode.classList.remove('active')
+			remoteLoginCode.classList.add('loading')
+
+			const refreshResponse = await fetch('/remote-login-refresh', {method: 'POST'})
+			const refresh = await refreshResponse.json() as RemoteLogin
+
+			const qrImage = remoteLoginCode.querySelector('img')
+			qrImage.onload = () => remoteLoginCode.classList.remove('loading')
+			qrImage.src = '/remote-login-qr?uuid=' + refresh.uuid
+
+			// Link bestaat alleen in dev
+			const link = remoteLoginCode.querySelector('a')
+			if (link) link.href = '/rla/' + refresh.uuid
+
+			setTimeout(updateStatus, refreshInterval)
+			return
+		}
+
+		switch (remoteLogin.status) {
+			case 'pending':
+				remoteLoginCode.classList.remove('active');
+				setTimeout(updateStatus, refreshInterval)
+				break;
+			case 'active':
+				remoteLoginCode.classList.add('active');
+				setTimeout(updateStatus, refreshInterval)
+				break;
+			case 'accepted':
+				remoteLoginCode.classList.remove('active');
+				remoteLoginCode.classList.add('accepted');
+				// navigeer
+				remoteLoginCode.submit();
+				break;
+		}
+	}
+
+	updateStatus();
+} catch (e) {
+	// Geen remote login
+}

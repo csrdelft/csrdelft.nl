@@ -30,6 +30,15 @@ if (window.$) {
 	});
 }
 
+const backupFetch = window.fetch
+window.fetch = (input: RequestInfo, init: RequestInit = {}): Promise<Response> => backupFetch(input, {
+	...init,
+	headers: {
+		...init.headers,
+		...getCsrfHeaders(),
+	}
+})
+
 axios.interceptors.request.use((config) => {
 	if (!config.url) { return config; }
 

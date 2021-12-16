@@ -36,6 +36,7 @@ doctrine:
           enumOnderverenigingStatus: CsrDelft\common\Doctrine\Type\Enum\OnderverenigingStatusType
           enumActiviteitSoort: CsrDelft\common\Doctrine\Type\Enum\ActiviteitSoortType
           uuid: Symfony\Bridge\Doctrine\Types\UuidType
+          enumRemoteLoginStatus: CsrDelft\common\Doctrine\Type\Enum\RemoteLoginStatusType
         mapping_types:
           enum: string
     orm:

@@ -67,7 +67,7 @@ class BarTokenSubscriber implements EventSubscriberInterface
 
 			$barLocatie = $this->manager
 				->getRepository(BarLocatie::class)
-				->findBy(['uuid' => Uuid::fromString($token)]);
+				->findOneBy(['uuid' => Uuid::fromString($token)]);
 
 			if (!$barLocatie) {
 				throw new AccessDeniedException();

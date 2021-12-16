@@ -1,0 +1,26 @@
+{% extends 'plain.html.twig' %}
+
+{% block titel %}Externe Login{% endblock %}
+
+{% block body %}
+	<div class="modal show" id="modal" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Autoriseer sessie</h5>
+				</div>
+				<div class="modal-body">
+					<p>Wil je deze sessie autoriseren?</p>
+				</div>
+				<div class="modal-footer">
+					<form method="post">
+						<input type="hidden" value="{{ uuid }}" name="uuid"/>
+						{{ csrfField() }}
+						<input type="submit" value="Terug" class="btn btn-secondary" name="cancel">
+						<input type="submit" value="Autoriseer" class="btn btn-primary mr-2">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
