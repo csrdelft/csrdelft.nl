@@ -86,6 +86,9 @@ class RemoteLoginAuthenticator extends AbstractLoginFormAuthenticator
 
 	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
 	{
+		// Maak deze sessie megakort, wordt alleen gebruikt om een authorize uit te voeren.
+		$request->getSession()->migrate(false, 60 * 5);
+
 		return $this->successHandler->onAuthenticationSuccess($request, $token);
 	}
 
