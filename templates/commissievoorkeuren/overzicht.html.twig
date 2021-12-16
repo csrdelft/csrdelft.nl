@@ -16,7 +16,7 @@
 		<h2>{{ cat.categorie.naam }}</h2>
 		<ul>
 			{% for commissie in cat.commissies %}
-				<li{% if commissie.zichtbaar %} style="opacity: .50"{% endif %}>
+				<li{% if not commissie.zichtbaar %} style="opacity: .50"{% endif %}>
 					<a href="{{ url('csrdelft_commissievoorkeuren_commissie', {id: commissie.id}) }}">{{ commissie.naam }}</a>
 				</li>
 			{% endfor %}
