@@ -33,8 +33,6 @@ $query = $pdo->prepare("SELECT * FROM information_schema.PROCESSLIST WHERE COMMA
 $query->execute();
 
 if ($query->rowCount() > 10) {
-	mail($_ENV['EMAIL_PUBCIE'], "Stek kaput", var_export($query->fetchAll(), true));
-
 	$slackClient = new SlackClient($_ENV['SLACK_URL'], [
 		'username' => "Monitor",
 		'channel' => "#general",
