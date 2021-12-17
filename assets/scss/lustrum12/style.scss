@@ -1,5 +1,4 @@
 @import 'vars';
-
 a{
 	text-decoration: none;
 }
@@ -87,6 +86,9 @@ nav {
 	text-align: center;
 	color: $font-color-primary;
 	text-transform: uppercase;
+	.text-left {
+		text-align: left;
+	}
 
 	// text-shadow:
 	//   0 0 2px $kleur-wit,

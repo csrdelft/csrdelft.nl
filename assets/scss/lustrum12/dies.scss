@@ -1,30 +1,247 @@
 @import 'style.scss';
+@import 'colls';
+
+@font-face {
+	font-family: uppereastsideregular;
+	src: url('../../fonts/lustrum12/UpperEastSide.ttf');
+}
+
+@font-face {
+	font-family: Arkadelphia Regular;
+	src: url('../../fonts/lustrum12/ArkadelphiaRegular.ttf');
+}
+
+$dies-uppereast-font: uppereastsideregular, Arial, Helvetica, sans-serif;
+$dies-arkadelphia-font: Arkadelphia Regular, Arial, Helvetica, sans-serif;
+
+$bordeaux-rood: #53110f;
+$Lila: #b8aee3;
+
+$rose: #d29ec4;
+$dark-rose:  #3F2F3A;
+$gray-transparant: #473d4594;
+$lightgray-transparant: #473D4530;
+$darkgray-transparant: #473D45BA;
+
+$oranje: #ffaf02;
+$bruin: #2a1c02;
+
+$kleur-rood: #6e1321;
+$kleur-donkerrood: #310c16;
+$kleur-goud0: #ebb803;
+$kleur-goud1: #fadd00;
+$kleur-goud2: #f5d500;
+$kleur-goud3: #8f5a14;
+$kleur-wit: #FFFFFF;
+$kleur-zwart: #000000;
+
+
+
+/* nav */
+nav{
+	//background: $dark-rose !important;
+	color: $bordeaux-rood;
+
+	a {
+		/* Header text */
+		color: $oranje;
+		font-family: $dies-arkadelphia-font;
+		text-transform: uppercase;
+		text-decoration: none;
+		font-size: 24px;
+		transition: ease-in-out color .15s;
+
+		&:hover {
+			color: $Lila;
+			text-decoration: none;
+		}
+	}
+}
+
+.titel {
+	color: $bordeaux-rood;
+	font-size: 4.0rem;
+}
+
+.ondertitel {
+	text-transform: none;
+	text-align: center;
+	font-size: 2.0rem;
+}
+
+.helemaal-boven{
+	margin-top: 60px;
+}
+
+h1, h2, h3, h4 {
+	color: $bordeaux-rood;
+	//text-transform: uppercase;
+	font-family: $dies-arkadelphia-font;
+	font-weight: bold;
+}
+
+body {
+	background-color: $rose;
+	background-image: url('../../images/lustrum12/dies-achtergrond.jpg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
 
 a{
 	text-decoration: none;
 }
 
+.dies-poster {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	img {
+		max-width: 100%;
+	}
+}
+
 /* video */
 .video-container {
-	max-width: 900px;
-
+	width: 100%;
 	.youtube-container {
-		display: flex;
+		display:flex;
 		justify-content: center;
-		margin-bottom: 30px;
 		width: 100%;
 		height: 100%;
 	}
 }
 
-/* game */
-.game .game-container {
-	display: flex;
-	justify-content: center;
+section {
+	margin-bottom: 10px;
+	margin-top: 10px;
+	max-width: 1320px;
+	width: 100%;
+	align-self: center;
+	background: $gray-transparant;
+	padding: 20px;
+	border-radius: 25px;
+	border: 1px solid $Lila;
+	box-shadow: 0px 0px 20px $Lila;
+}
 
-	.unity-container {
-		width: 960px;
-		height: 650px;
-		border: 0;
+/* 3 / 1 columns */
+.column-overzicht {
+	h1 {
+		font-size: 4.0rem;
+	}
+	.container {
+		h3 {
+			text-align: left;
+			font-size: 2.4rem;
+			color: $bordeaux-rood;
+		}
+		h4 {
+			font-size: 2.0rem;
+			text-align: left;
+			color: $bordeaux-rood;
+			text-transform: none;
+		}
+	}
+}
+
+/* Etiquette section */
+.etiquette {
+	p {
+		font-size: 1.0rem;
+	}
+}
+
+/* Ketzers */
+.ketzers{
+	align-items: center;
+
+	.ketzer{
+		max-width: 1320px;
+		color: white;
+		.bb-block {
+			padding: 5px;
+			border-radius: 5px;
+			background-color: $darkgray-transparant;
+			table.groep-lijst tr:nth-child(2n) {
+				background-color: $gray-transparant;
+			}
+		}
+		.btn-primary {
+			background-color: $oranje;
+			border-color: $oranje;
+		}
+		a:not(.btn) {
+			color: $oranje;
+		}
+		.dropdown-menu {
+			background-color: $oranje;
+		}
+		a[id*="groep-lid-remove"] {
+			color: $kleur-wit;
+			background-color: $oranje;
+
+		}
+		h3 {
+			color: $oranje;
+			font-weight: bold;
+			font-family: $dies-uppereast-font;
+			text-transform: uppercase;
+			font-size: 2.0rem;
+		}
+		h4 {
+			color: $oranje;
+			font-family: $dies-uppereast-font;
+			text-transform: uppercase;
+		}
+		.GroepStatistiekView {
+			background-color: $bordeaux-rood;
+			padding: 20px;
+			border-radius: 25px;
+		}
+	}
+}
+
+.programma{
+	text-align: center;
+	.dag {
+		padding: 20px;
+		border-radius: 20px;
+		background-color: $gray-transparant;
+
+		margin-top: 20px;
+		margin-bottom: 20px;
+		h2 {
+			font-family: $dies-uppereast-font;
+			text-transform: uppercase;
+			text-align: center;
+			font-size: 3.0rem;
+		}
+		.activiteit {
+
+			//padding: 20px;
+			//border: 1px solid $Lila;
+			//box-shadow: 0px 0px 10px $Lila;
+			//border-radius: 25px;
+
+
+			margin-bottom: 40px;
+			h3 {
+				font-family: $dies-uppereast-font;
+				text-align: center;
+				text-transform: uppercase;
+				font-size: 2.4rem;
+			}
+			.beschrijving {
+
+			}
+			.ketzers {
+				.ketzer{
+					h3 {
+						font-size: 1.8rem;
+					}
+				}
+			}
+		}
 	}
 }
