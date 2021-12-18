@@ -129,6 +129,7 @@ section {
 .column-overzicht {
 	h1 {
 		font-size: 4.0rem;
+		text-transform: uppercase;
 	}
 	.container {
 		h3 {
@@ -199,6 +200,14 @@ section {
 			padding: 20px;
 			border-radius: 25px;
 		}
+		.progress-bar {
+			background-color: $bordeaux-rood;
+		}
+		.GroupAanmeldenForm {
+			input.FormElement {
+				background-color: $bordeaux-rood;
+			}
+		}
 	}
 }
 
@@ -244,4 +253,8 @@ section {
 			}
 		}
 	}
+}
+
+.verborgen {
+	display: none;
 }
