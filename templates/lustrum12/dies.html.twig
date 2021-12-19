@@ -31,126 +31,313 @@
 
 <body class="zijbalk_verborgen">
 	{%  include 'lustrum12/zandloper.html.twig' %}
-<nav class="site-header">
-	<a class="logo-titel d-inline-block" href="./">
-		<img src="/images/lustrum12//themaheader.png"
-				 alt="Logo menu" />
-	</a>
-	<div class="container">
-		<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center headerbuttons">
-			<a class="d-none d-md-inline-block" href="./">Home</a>
-			<a class="d-none d-md-inline-block" href="#thema">Thema</a>
-			<a class="d-none d-md-inline-block" href="#programma">Programma</a>
-			<a class="d-none d-md-inline-block" href="/tijdloos/dies/gala">Gala</a>
-			<a class="d-none d-md-inline-block" href="/tijdloos/dies/etiquette">Etiquette</a>
+	{{ cms('lustrum-dies') }}
 
-			<!-- <a class="d-none d-md-inline-block" href="#poster">Poster</a> -->
-		</div>
-	</div>
-</nav>
+{#<nav class="site-header">#}
+{#	<a class="logo-titel d-inline-block" href="./">#}
+{#		<img src="/images/lustrum12//themaheader.png"#}
+{#				 alt="Logo menu" />#}
+{#	</a>#}
+{#	<div class="container">#}
+{#		<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center headerbuttons">#}
+{#			<a class="d-none d-md-inline-block" href="./">Home</a>#}
+{#			<a class="d-none d-md-inline-block" href="#thema">Thema</a>#}
+{#			<a class="d-none d-md-inline-block" href="#programma">Programma</a>#}
+{#			<a class="d-none d-md-inline-block" href="/tijdloos/dies/gala">Gala</a>#}
+{#			<a class="d-none d-md-inline-block" href="/tijdloos/dies/etiquette">Etiquette</a>#}
+{#		</div>#}
+{#	</div>#}
+{#</nav>#}
 
-<a id="thema"></a>
-<section class="helemaal-boven">
-	<h1 class="titel">Thema</h1>
-	<div class="poster-container container">
-		<div class="row">
-			<div class="dies-poster col-lg-6 ">
-				<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />
-			</div>
-			<div class="dies-poster col-lg-6 ">
-				<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />
-			</div>
-		</div>
-	</div>
-	<br>
+{#<a id="thema"></a>#}
+{#<section class="helemaal-boven">#}
+{#	<h1 class="titel">Thema</h1>#}
+{#	<div class="poster-container container">#}
+{#		<div class="row">#}
+{#			<div class="dies-poster col-lg-6 ">#}
+{#				<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />#}
+{#			</div>#}
+{#			<div class="dies-poster col-lg-6 ">#}
+{#				<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />#}
+{#			</div>#}
+{#		</div>#}
+{#	</div>#}
+{#	<br>#}
 
-	<div class="video">
-		<div class="container video-container">
-			<div class="youtube-container closed">
-				<div class="embed-responsive ratio ratio-16x9" id="player">
-					<iframe src="https://www.youtube-nocookie.com/embed/iery2Lp7daA?controls=0" frameborder="0" 	allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-					</iframe>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
+{#	<div class="video">#}
+{#		<div class="container video-container">#}
+{#			<div class="youtube-container closed">#}
+{#				<div class="embed-responsive ratio ratio-16x9" id="player">#}
+{#					<iframe src="https://www.youtube-nocookie.com/embed/iery2Lp7daA?controls=0" frameborder="0" 	allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>#}
+{#					</iframe>#}
+{#				</div>#}
+{#			</div>#}
+{#		</div>#}
+{#	</div>#}
+{#</section>#}
 
-<div id="programma" class="divider">
-	<img class="tussen" src="/images/lustrum12/DividerTussen.png">
-</div>
+{#<div id="programma" class="divider">#}
+{#	<img class="tussen" src="/images/lustrum12/DiesDividerLarge.png">#}
+{#</div>#}
 
-<section class="programma">
-	<h1 class="titel">Programma</h1>
+{#<section class="programma container gx-5">#}
+{#	<h1 class="titel">Programma</h1>#}
+{#	<div class="row gx-3">#}
+{#		<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Maandag 14 Febuari</h2>#}
 
-	<div class="dag">
-		<h2>Maandag 14 Febuari</h2>
+{#					<div class="activiteit">#}
+{#						<h3>Naam activiteit</h3>#}
+{#						<div class="beschrijving">#}
+{#							Dit is de beschrijving van de activiteit.#}
+{#						</div>#}
+{#					</div>#}
 
-		<div class="activiteit">
-			<h3>Naam activiteit</h3>
-			<div class="beschrijving">
-				Dit is de beschrijving van de activiteit.
-			</div>
-		</div>
+{#					<div class="activiteit">#}
+{#						<h3>Naam activiteit</h3>#}
+{#						<div class="beschrijving">#}
+{#							Dit is de beschrijving van de activiteit.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									{{ '[activiteit=2150]'|bbcode }}#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-		<div class="activiteit">
-			<h3>Naam activiteit</h3>
-			<div class="beschrijving">
-				Dit is de beschrijving van de activiteit.
-			</div>
-			<div class="dies-activiteit-ketzers">
-				<a class="toggler">Toggle ketzers</a>
-				<div class="ketzers verborgen">
-					<div class="ketzer">
-						{{ '[activiteit=2150]'|bbcode }}
-					</div>
-				</div>
-			</div>
-		</div>
+{#					<div class="activiteit">#}
+{#						<h3>Naam activiteit</h3>#}
+{#						<div class="beschrijving">#}
+{#							Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
+{#							Of maakt dat niet zoveel uit?#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									{{ '[activiteit=2150]'|bbcode }}#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-		<div class="activiteit">
-			<h3>Naam activiteit</h3>
-			<div class="beschrijving">
-				Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.
-				Of maakt dat niet zoveel uit?
-			</div>
-			<div class="dies-activiteit-ketzers">
-				<a class="toggler">Toggle ketzers</a>
-				<div class="ketzers verborgen">
-					<div class="ketzer">
-						{{ '[activiteit=2150]'|bbcode }}
-					</div>
-				</div>
-			</div>
-		</div>
+{#					<div class="activiteit">#}
+{#						<h3>Naam Activiteit</h3>#}
+{#						<div class="beschrijving">#}
+{#							<p>#}
+{#								Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
+{#								Of maakt dat niet zoveel uit? Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
+{#								Of maakt dat niet zoveel uit?#}
+{#							</p>#}
+{#						</div>#}
 
-		<div class="activiteit">
-			<h3>Naam Activiteit</h3>
-			<div class="beschrijving">
-				<p>
-					Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.
-					Of maakt dat niet zoveel uit? Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.
-					Of maakt dat niet zoveel uit?
-				</p>
-			</div>
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#								<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									{{ '[activiteit=2149]'|bbcode }}#}
+{#								</div>#}
+{#								<div class="ketzer">#}
+{#									{{ '[activiteit=2150]'|bbcode }}#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
 
-			<div class="dies-activiteit-ketzers">
-				<a class="toggler">Toggle ketzers</a>
-					<div class="ketzers verborgen">
-					<div class="ketzer">
-						{{ '[activiteit=2149]'|bbcode }}
-					</div>
-					<div class="ketzer">
-						{{ '[activiteit=2150]'|bbcode }}
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+{#		<div class="col-xl-6">#}
+{#			<div class="dag">#}
+{#				<h2>Dinsdag 15 Febuari</h2>#}
 
+{#				<div class="activiteit">#}
+{#					<h3>Naam activiteit</h3>#}
+{#					<div class="beschrijving">#}
+{#						Dit is de beschrijving van de activiteit.#}
+{#					</div>#}
+{#				</div>#}
 
-	<div class="divider">
-		<img class="tussen" src="/images/lustrum12/DividerTussen.png">
-	</div>
-</section>
+{#				<div class="activiteit">#}
+{#					<h3>Naam activiteit</h3>#}
+{#					<div class="beschrijving">#}
+{#						Dit is de beschrijving van de activiteit.#}
+{#					</div>#}
+{#					<div class="dies-activiteit-ketzers">#}
+{#						<a class="toggler">Laat ketzers zien</a>#}
+{#						<div class="ketzers verborgen">#}
+{#							<div class="ketzer">#}
+{#								{{ '[activiteit=2150]'|bbcode }}#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+
+{#				<div class="activiteit">#}
+{#					<h3>Naam activiteit</h3>#}
+{#					<div class="beschrijving">#}
+{#						Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
+{#						Of maakt dat niet zoveel uit?#}
+{#					</div>#}
+{#					<div class="dies-activiteit-ketzers">#}
+{#						<a class="toggler">Laat ketzers zien</a>#}
+{#						<div class="ketzers verborgen">#}
+{#							<div class="ketzer">#}
+{#								{{ '[activiteit=2150]'|bbcode }}#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+
+{#				<div class="activiteit">#}
+{#					<h3>Naam Activiteit</h3>#}
+{#					<div class="beschrijving">#}
+{#						<p>#}
+{#							Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
+{#							Of maakt dat niet zoveel uit? Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
+{#							Of maakt dat niet zoveel uit?#}
+{#						</p>#}
+{#					</div>#}
+
+{#					<div class="dies-activiteit-ketzers">#}
+{#						<a class="toggler">Laat ketzers zien</a>#}
+{#						<div class="ketzers verborgen">#}
+{#							<div class="ketzer">#}
+{#								{{ '[activiteit=2149]'|bbcode }}#}
+{#							</div>#}
+{#							<div class="ketzer">#}
+{#								{{ '[activiteit=2150]'|bbcode }}#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
+{#		</div>#}
+
+{#		<div class="col-xl-6">#}
+{#			<div class="dag">#}
+{#				<h2>Woensdag 16 Febuari</h2>#}
+
+{#				<div class="activiteit">#}
+{#					<h3>Naam activiteit</h3>#}
+{#					<div class="beschrijving">#}
+{#						Dit is de beschrijving van de activiteit.#}
+{#					</div>#}
+{#				</div>#}
+
+{#				<div class="activiteit">#}
+{#					<h3>Naam activiteit</h3>#}
+{#					<div class="beschrijving">#}
+{#						Dit is de beschrijving van de activiteit.#}
+{#					</div>#}
+{#					<div class="dies-activiteit-ketzers">#}
+{#						<a class="toggler">Laat ketzers zien</a>#}
+{#						<div class="ketzers verborgen">#}
+{#							<div class="ketzer">#}
+{#								{{ '[activiteit=2150]'|bbcode }}#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+
+{#				<div class="activiteit">#}
+{#					<h3>Naam activiteit</h3>#}
+{#					<div class="beschrijving">#}
+{#						Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
+{#						Of maakt dat niet zoveel uit?#}
+{#					</div>#}
+{#					<div class="dies-activiteit-ketzers">#}
+{#						<a class="toggler">Laat ketzers zien</a>#}
+{#						<div class="ketzers verborgen">#}
+{#							<div class="ketzer">#}
+{#								{{ '[activiteit=2150]'|bbcode }}#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+
+{#				<div class="activiteit">#}
+{#					<h3>Naam Activiteit</h3>#}
+{#					<div class="beschrijving">#}
+{#						<p>#}
+{#							Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
+{#							Of maakt dat niet zoveel uit? Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
+{#							Of maakt dat niet zoveel uit?#}
+{#						</p>#}
+{#					</div>#}
+
+{#					<div class="dies-activiteit-ketzers">#}
+{#						<a class="toggler">Laat ketzers zien</a>#}
+{#						<div class="ketzers verborgen">#}
+{#							<div class="ketzer">#}
+{#								{{ '[activiteit=2149]'|bbcode }}#}
+{#							</div>#}
+{#							<div class="ketzer">#}
+{#								{{ '[activiteit=2150]'|bbcode }}#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
+{#		</div>#}
+
+{#		<div class="col-xl-6">#}
+{#			<div class="dag">#}
+{#				<h2>Donderdag 17 Febuari</h2>#}
+{#			</div>#}
+{#		</div>#}
+
+{#		<div class="col-xl-6">#}
+{#			<div class="dag">#}
+{#				<h2>Vrijdag 18 Febuari</h2>#}
+{#			</div>#}
+{#		</div>#}
+
+{#		<div class="col-xl-6">#}
+{#			<div class="dag">#}
+{#				<h2>Zaterdag 19 Febuari</h2>#}
+{#			</div>#}
+{#		</div>#}
+
+{#		<div class="col-xl-6">#}
+{#			<div class="dag">#}
+{#				<h2>Zondag 20 Febuari</h2>#}
+{#			</div>#}
+{#		</div>#}
+
+{#		<div class="col-xl-6">#}
+{#			<div class="dag">#}
+{#				<h2>Maandag 21 Febuari</h2>#}
+{#			</div>#}
+{#		</div>#}
+
+{#		<div class="col-xl-6">#}
+{#			<div class="dag">#}
+{#				<h2>Dinsdag 22 Febuari</h2>#}
+{#			</div>#}
+{#		</div>#}
+
+{#		<div class="col-xl-6">#}
+{#			<div class="dag">#}
+{#				<h2>Woensdag 23 Febuari</h2>#}
+{#			</div>#}
+{#		</div>#}
+
+{#		<div class="col-xl-6">#}
+{#			<div class="dag">#}
+{#				<h2>Donderdag 24 Febuari</h2>#}
+{#			</div>#}
+{#		</div>#}
+
+{#		<div class="col-xl-6">#}
+{#			<div class="dag">#}
+{#				<h2>Vrijdag 25 Febuari</h2>#}
+{#			</div>#}
+{#		</div>#}
+{#	</div>#}
+{#</section>#}
+
 </body>
