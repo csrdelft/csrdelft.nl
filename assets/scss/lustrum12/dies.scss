@@ -20,7 +20,7 @@ $Lila: #b8aee3;
 $rose: #d29ec4;
 $dark-rose:  #3F2F3A;
 $gray-transparant: #473d4594;
-$lightgray-transparant: #473D4530;
+$lightgray-transparant: #473D454F;
 $darkgray-transparant: #473D45BA;
 
 $oranje: #ffaf02;
@@ -129,6 +129,7 @@ section {
 .column-overzicht {
 	h1 {
 		font-size: 4.0rem;
+		text-transform: uppercase;
 	}
 	.container {
 		h3 {
@@ -199,15 +200,25 @@ section {
 			padding: 20px;
 			border-radius: 25px;
 		}
+		.progress-bar {
+			background-color: $bordeaux-rood;
+		}
+		.GroupAanmeldenForm {
+			input.FormElement {
+				background-color: $bordeaux-rood;
+			}
+		}
 	}
 }
 
 .programma{
 	text-align: center;
+	background-color: $gray-transparant; //$lightgray-transparant;
 	.dag {
 		padding: 20px;
 		border-radius: 20px;
-		background-color: $gray-transparant;
+		background-color: $gray-transparant; //$lightgray-transparant;
+		//border: 3px solid transparent;
 
 		margin-top: 20px;
 		margin-bottom: 20px;
@@ -235,13 +246,27 @@ section {
 			.beschrijving {
 
 			}
-			.ketzers {
-				.ketzer{
-					h3 {
-						font-size: 1.8rem;
+			.dies-activiteit-ketzers {
+				.toggler{
+					color:$oranje;
+					cursor: pointer;
+					user-select: none;
+				}
+				.toggler:hover{
+					color: $Lila;
+				}
+				.verborgen{
+					display: none;
+				}
+				.ketzers {
+					.ketzer {
+						h3 {
+							font-size: 1.8rem;
+						}
 					}
 				}
 			}
 		}
 	}
 }
+
