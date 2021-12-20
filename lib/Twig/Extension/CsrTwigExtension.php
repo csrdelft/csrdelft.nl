@@ -50,7 +50,7 @@ class CsrTwigExtension extends AbstractExtension
 		ProfielRepository $profielRepository
 	)
 	{
-		$this->session = $requestStack->getMainRequest()->hasSession() ? $requestStack->getMainRequest()->getSession() : new Session();
+		$this->session = $requestStack->getMainRequest() == null ? new Session() : $requestStack->getMainRequest()->getSession();
 		$this->csrfService = $csrfService;
 		$this->profielRepository = $profielRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;

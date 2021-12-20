@@ -42,7 +42,7 @@ class IsHetAlView implements View
 
 	public function __construct(LidInstellingenRepository $lidInstellingenRepository, RequestStack $requestStack, AgendaRepository $agendaRepository, WoordVanDeDagRepository $woordVanDeDagRepository, $ishetal)
 	{
-		$session = $requestStack->getMainRequest()->hasSession() ? $requestStack->getMainRequest()->getSession() : new Session();
+		$session = $requestStack->getMainRequest() == null ? new Session() : $requestStack->getMainRequest()->getSession();
 
 		// Ongeveer de 1/4 van de tijd het lustrumwoord van de dag laten zien, alleen in de periode van 21-12-2021 tot 19-2-2022
 		$differenceDays = floor((strtotime(date("d-m-Y")) - strtotime("21-12-2021")) / 86400);
