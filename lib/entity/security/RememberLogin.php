@@ -130,4 +130,9 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface {
 	public function getLastUsed() {
 		return $this->last_used;
 	}
+
+	public function getUserIdentifier(): string
+	{
+		return $this->uid;
+	}
 }
