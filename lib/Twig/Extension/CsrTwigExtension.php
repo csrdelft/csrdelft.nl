@@ -27,10 +27,6 @@ use Twig\TwigTest;
 class CsrTwigExtension extends AbstractExtension
 {
 	/**
-	 * @var SessionInterface
-	 */
-	private $session;
-	/**
 	 * @var CsrfService
 	 */
 	private $csrfService;
@@ -44,13 +40,11 @@ class CsrTwigExtension extends AbstractExtension
 	private $cmsPaginaRepository;
 
 	public function __construct(
-		RequestStack $requestStack,
 		CsrfService $csrfService,
 		CmsPaginaRepository $cmsPaginaRepository,
 		ProfielRepository $profielRepository
 	)
 	{
-		$this->session = $requestStack->getMainRequest() == null ? new Session() : $requestStack->getMainRequest()->getSession();
 		$this->csrfService = $csrfService;
 		$this->profielRepository = $profielRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
@@ -162,10 +156,10 @@ class CsrTwigExtension extends AbstractExtension
 	}
 
 
-	public function dragobject_coords($id, $top, $left)
+	public function dragobject_coords(SessionInterface $session, $id, $top, $left)
 	{
-		if ($this->session->has("dragobject_$id")) {
-			$dragObject = $this->session->get("dragobject_$id");
+		if ($session->has("dragobject_$id")) {
+			$dragObject = $session->get("dragobject_$id");
 			$top = (int)$dragObject['top'];
 			$left = (int)$dragObject['left'];
 		}

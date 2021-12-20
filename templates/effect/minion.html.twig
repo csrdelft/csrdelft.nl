@@ -12,7 +12,7 @@
 {{ css_asset('fxminion') }}
 {{ js_asset('fxminion') }}
 <div id="minion" class="dragobject savepos"
-		 style="top: {{ dragobject_coords('minion', 40, 40)["top"] }}px; left: {{ dragobject_coords('minion', 40, 40)["left"] }}px;">
+		 style="top: {{ dragobject_coords(app.session, 'minion', 40, 40)["top"] }}px; left: {{ dragobject_coords(app.session, 'minion', 40, 40)["left"] }}px;">
 	<ul class="hair hair-left">
 		<li></li>
 		<li></li>
