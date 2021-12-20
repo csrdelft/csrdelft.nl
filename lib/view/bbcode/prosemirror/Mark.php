@@ -27,7 +27,7 @@ interface Mark
 	/**
 	 * Bb attributes.
 	 *
-	 * @param $node \stdClass Prosemirror definitie.
+	 * @param $mark \stdClass Prosemirror definitie.
 	 * @return string[]
 	 */
 	public function getTagAttributes($mark);

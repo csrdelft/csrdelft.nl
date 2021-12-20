@@ -7,6 +7,7 @@ use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
 use CsrDelft\service\security\LoginService;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class IsHetAlView implements View
@@ -38,8 +39,9 @@ class IsHetAlView implements View
 		'u het forum kan volgen met RSS?' => '/profiel#forum',
 	);
 
-	public function __construct(LidInstellingenRepository $lidInstellingenRepository, SessionInterface $session, AgendaRepository $agendaRepository, WoordVanDeDagRepository $woordVanDeDagRepository, $ishetal)
+	public function __construct(LidInstellingenRepository $lidInstellingenRepository, RequestStack $requestStack, AgendaRepository $agendaRepository, WoordVanDeDagRepository $woordVanDeDagRepository, $ishetal)
 	{
+		$session = $requestStack->getSession();
 		// Ongeveer de 1/4 van de tijd het lustrumwoord van de dag laten zien, alleen in de periode van 21-12-2021 tot 19-2-2022
 		$differenceDays = floor((strtotime(date("d-m-Y")) - strtotime("21-12-2021")) / 86400);
 		if ($differenceDays >= 1 && $differenceDays <= 60 && rand(0, 100) < 25) {

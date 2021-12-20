@@ -12,6 +12,7 @@ use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
 
@@ -57,12 +58,12 @@ class Zijbalk {
 	 */
 	private $lidInstellingenRepository;
 	/**
-	 * @var SessionInterface
+	 * @var RequestStack
 	 */
-	private $session;
+	private $requestStack;
 
 	public function __construct(
-		SessionInterface $session,
+		RequestStack $requestStack,
 		Environment $twig,
 		MenuItemRepository $menuItemRepository,
 		ForumDradenRepository $forumDradenRepository,
@@ -82,7 +83,7 @@ class Zijbalk {
 		$this->verjaardagenService = $verjaardagenService;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 		$this->woordVanDeDagRepository = $woordVanDeDagRepository;
-		$this->session = $session;
+		$this->requestStack = $requestStack;
 	}
 
 	/**
@@ -110,7 +111,7 @@ class Zijbalk {
 	private function blockIsHetAl() {
 		// Is het al...
 		if (lid_instelling('zijbalk', 'ishetal') != 'niet weergeven') {
-			return (new IsHetAlView($this->lidInstellingenRepository, $this->session, $this->agendaRepository, $this->woordVanDeDagRepository, lid_instelling('zijbalk', 'ishetal')))->__toString();
+			return (new IsHetAlView($this->lidInstellingenRepository, $this->requestStack, $this->agendaRepository, $this->woordVanDeDagRepository, lid_instelling('zijbalk', 'ishetal')))->__toString();
 		}
 
 		return null;

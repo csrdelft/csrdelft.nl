@@ -2,7 +2,9 @@
 
 namespace CsrDelft\events;
 
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Trikoder\Bundle\OAuth2Bundle\Event\UserResolveEvent;
 
@@ -14,18 +16,18 @@ final class UserResolveListener
 	private $userProvider;
 
 	/**
-	 * @var UserPasswordEncoderInterface
+	 * @var UserPasswordHasherInterface
 	 */
-	private $userPasswordEncoder;
+	private $userPasswordHasher;
 
 	/**
 	 * @param UserProviderInterface $userProvider
-	 * @param UserPasswordEncoderInterface $userPasswordEncoder
+	 * @param UserPasswordHasherInterface $userPasswordHasher
 	 */
-	public function __construct(UserProviderInterface $userProvider, UserPasswordEncoderInterface $userPasswordEncoder)
+	public function __construct(UserProviderInterface $userProvider, UserPasswordHasherInterface $userPasswordHasher)
 	{
 		$this->userProvider = $userProvider;
-		$this->userPasswordEncoder = $userPasswordEncoder;
+		$this->userPasswordHasher = $userPasswordHasher;
 	}
 
 	/**
@@ -33,13 +35,17 @@ final class UserResolveListener
 	 */
 	public function onUserResolve(UserResolveEvent $event): void
 	{
-		$user = $this->userProvider->loadUserByUsername($event->getUsername());
+		$user = $this->userProvider->loadUserByIdentifier($event->getUsername());
 
 		if (null === $user) {
 			return;
 		}
 
-		if (!$this->userPasswordEncoder->isPasswordValid($user, $event->getPassword())) {
+		if (!($user instanceof PasswordAuthenticatedUserInterface)) {
+			return;
+		}
+
+		if (!$this->userPasswordHasher->isPasswordValid($user, $event->getPassword())) {
 			return;
 		}
 
