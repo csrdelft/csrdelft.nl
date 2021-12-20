@@ -5,6 +5,8 @@ namespace CsrDelft\events;
 
 
 use CsrDelft\common\Security\OAuth2Scope;
+use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\AccessService;
 use CsrDelft\service\security\LoginService;
 use Nyholm\Psr7\Response;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -32,16 +34,28 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	 * @var LoginService
 	 */
 	private $loginService;
+	/**
+	 * @var AccessService
+	 */
+	private $accessService;
+	/**
+	 * @var AccountRepository
+	 */
+	private $accountRepository;
 
 	public function __construct(
 		RequestStack $requestStack,
 		Environment $twig,
-		LoginService $loginService
+		LoginService $loginService,
+		AccessService $accessService,
+		AccountRepository $accountRepository
 	)
 	{
 		$this->loginService = $loginService;
 		$this->requestStack = $requestStack;
 		$this->twig = $twig;
+		$this->accessService = $accessService;
+		$this->accountRepository = $accountRepository;
 	}
 
 	public static function getSubscribedEvents()
@@ -56,15 +70,17 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	{
 		$requestedScopes = $event->getScopes();
 
-		$request = $this->requestStack->getMasterRequest();
+		$request = $this->requestStack->getMainRequest();
 
 		if ($request->query->has('scopeChoice')) {
-			$requestedScopes = array_map(function($scope) {return new Scope($scope); }, $request->query->get('scopeChoice'));
+			$requestedScopes = array_map(function($scope) {return new Scope($scope); }, (array)$request->query->get('scopeChoice'));
 		}
+
+		$user = $this->accountRepository->find($event->getUserIdentifier());
 
 		$scopes = [];
 		foreach ($requestedScopes as $scope) {
-			if ($this->loginService->_mag(OAuth2Scope::magScope($scope))) {
+			if ($this->accessService->mag($user, OAuth2Scope::magScope($scope))) {
 				$scopes[] = $scope;
 			}
 		}
@@ -80,7 +96,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	 */
 	public function onAuthorizationRequest(AuthorizationRequestResolveEvent $event): void
 	{
-		$request = $this->requestStack->getMasterRequest();
+		$request = $this->requestStack->getMainRequest();
 
 		// Maak een tijdelijke token aan om te voorkomen dat een applicatie voor de gebruiker kan approven.
 		if (!$request->getSession()->has('token')) {
