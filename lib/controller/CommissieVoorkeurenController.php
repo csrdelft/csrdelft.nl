@@ -110,6 +110,7 @@ class CommissieVoorkeurenController extends AbstractController
 		$commissie = $this->voorkeurCommissieRepository->find($cid);
 		$commissieVoorkeur = $this->commissieVoorkeurRepository->getVoorkeur($profiel, $commissie);
 		$commissieVoorkeur->voorkeur = $waarde;
+		$commissieVoorkeur->timestamp = date_create_immutable();
 
 		$this->getDoctrine()->getManager()->flush();
 
