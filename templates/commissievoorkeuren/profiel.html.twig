@@ -13,7 +13,14 @@
 	<h1>Voorkeuren van lid</h1>
 	<p>Naam: {{ profiel.link('volledig') | raw }}</p>
 
-	<table class="commissievoorkeuren">
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th>Commissie</th>
+			<th>Keuze</th>
+			<th>Laatst veranderd</th>
+		</tr>
+		</thead>
 		{% for commissie in commissies %}
 			{% set voorkeur = voorkeuren[commissie.id] %}
 			<tr>
@@ -25,6 +32,7 @@
 						{{ voorkeur.voorkeurTekst }}
 					{% endif %}
 				</td>
+				<td>{{ voorkeur.timestamp | datetime_format }}</td>
 			</tr>
 		{% endfor %}
 	</table>
