@@ -17,15 +17,17 @@
 			<tr>
 				<th>Lid</th>
 				<th>Interesse</th>
+				<th>Laatst veranderd</th>
 			</tr>
 			</thead>
 			<tbody>
 			{% for voorkeur in voorkeuren %}
 				{% if voorkeur.profiel.lid and voorkeur.voorkeur >= 2 %}
-					<tr{% if voorkeur.heeftGedaan %} style="opacity: .50"{% endif %}>
+					<tr{% if voorkeur.heeftGedaan %} title="Heeft gedaan" style="opacity: .50"{% endif %}>
 						<td><a href="{{ url('csrdelft_commissievoorkeuren_lidpagina', {uid: voorkeur.profiel.uid}) }}">{{ voorkeur.profiel.naam }}</a>
 						</td>
 						<td>{{ voorkeur.voorkeurTekst }}</td>
+						<td>{{ voorkeur.timestamp | datetime_format }}</td>
 					</tr>
 				{% endif %}
 			{% endfor %}
