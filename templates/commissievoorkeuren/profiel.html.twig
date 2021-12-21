@@ -32,7 +32,13 @@
 						{{ voorkeur.voorkeurTekst }}
 					{% endif %}
 				</td>
-				<td>{{ voorkeur.timestamp | datetime_format }}</td>
+				<td>
+					{% if voorkeur and voorkeur.timestamp %}
+						{{ voorkeur.timestamp | datetime_format }}
+					{% else %}
+						Nooit
+					{% endif %}
+				</td>
 			</tr>
 		{% endfor %}
 	</table>
