@@ -131,5 +131,12 @@ abstract class Enum {
 	public function getDescription() {
 		return static::$mapChoiceToDescription[$this->value];
 	}
+
+	/**
+	 * @return Enum[]
+	 */
+	public static function all() {
+		return array_map(["static", "from"], static::getEnumValues());
+	}
 }
 
