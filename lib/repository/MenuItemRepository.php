@@ -158,7 +158,7 @@ class MenuItemRepository extends AbstractRepository {
 						}
 					}
 				}
-				foreach ($this->getMenu('remotefora')->children as $remotecat) {
+				foreach ($this->getMenuRoot('remotefora')->children as $remotecat) {
 					if (!$checkRechten || $remotecat->magBekijken()) {
 						$parent->children[] = $remotecat;
 					}
