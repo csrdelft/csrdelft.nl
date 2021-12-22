@@ -269,6 +269,9 @@ section {
 							padding: 20px;
 							border-radius: 20px;
 							background: $gray-transparant;
+							h6 {
+								color: $oranje;
+							}
 							.btn-danger {
 								background: $gray-transparant;
 								border-color: transparent;
