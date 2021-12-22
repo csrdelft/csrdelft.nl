@@ -45,7 +45,7 @@ class PinTransactieMatchTableType extends AbstractDataTableType {
 		$builder->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_ontkoppel'), 'Ontkoppel', 'Ontkoppel bestelling en transactie', 'arrow_divide'));
 		$builder->addKnop(new DataTableKnop(Multiplicity::Two(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_koppel'), 'Koppel', 'Koppel een bestelling en transactie', 'arrow_join'));
 		$builder->addKnop(new DataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_info'), 'Info', 'Bekijk informatie over de gekoppelde bestelling', 'magnifier'));
-		$builder->addKnop(new DataTableKnop(Multiplicity::Any(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_verwijder_transactie'), 'Verwijder', 'Verwijder matches', 'delete'));
+		$builder->addKnop(new DataTableKnop(Multiplicity::Any(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_negeer'), 'Negeer', 'Negeer match(es)', 'delete'));
 		$builder->addKnop(new DataTableKnop(Multiplicity::None(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_heroverweeg'), 'Heroverweeg', 'Controleer op veranderingen in andere systemen', 'cart_go'));
 
 		$builder->addColumn('moment');

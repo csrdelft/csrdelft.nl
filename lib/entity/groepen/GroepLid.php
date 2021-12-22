@@ -35,6 +35,7 @@ class GroepLid
 	 * @var int
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
+	 * @Serializer\Groups("datatable")
 	 */
 	public $groepId;
 	/**
@@ -57,6 +58,7 @@ class GroepLid
 	 * CommissieFunctie of opmerking bij lidmaatschap
 	 * @var CommissieFunctie|string
 	 * @ORM\Column(type="string", nullable=true)
+	 * @Serializer\Groups("datatable")
 	 */
 	public $opmerking;
 	/**
@@ -69,6 +71,7 @@ class GroepLid
 	 * Datum en tijd van aanmelden
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $lidSinds;
 	/**
@@ -91,15 +94,19 @@ class GroepLid
 	public $groep;
 	/**
 	 * @return string|null
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("lid")
 	 */
-	public function getLid() {
+	public function getDatatableLid() {
 		return ProfielRepository::getLink($this->uid);
 	}
 
 	/**
 	 * @return string|null
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("door_uid")
 	 */
-	public function getDoorUid() {
+	public function getDatatableDoorUid() {
 		return $this->doorProfiel->getLink();
 	}
 

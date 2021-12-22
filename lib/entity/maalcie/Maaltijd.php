@@ -4,13 +4,14 @@ namespace CsrDelft\entity\maalcie;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Eisen;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\DisplayEntity;
 use DateTimeImmutable;
@@ -46,7 +47,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdenRepository")
  * @ORM\Table("mlt_maaltijden")
  */
-class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DataTableEntry, Displayentity {
+class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")

@@ -25,7 +25,7 @@ services:
   # as action arguments even if you don't extend any base controller class
   CsrDelft\controller\:
     resource: '../lib/controller'
-    tags: [ 'controller.service_arguments' ]
+    tags: ['controller.service_arguments']
 
   CsrDelft\model\:
     resource: '../lib/model'
@@ -114,7 +114,7 @@ services:
     shared: false
     public: true
     arguments:
-      - !tagged_locator { tag: csr.formulier.type, index_by: key }
+      - !tagged_locator {tag: csr.formulier.type, index_by: key}
       - '@request_stack'
       - '@CsrDelft\Component\Formulier\FormulierBuilder'
 

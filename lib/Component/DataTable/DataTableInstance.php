@@ -58,7 +58,7 @@ class DataTableInstance {
 			$columns[] = lcfirst(str_replace('_', '', ucwords($col['name'], '_')));
 		}
 
-		$normalizedData = $this->normalizer->normalize($data, 'json', [AbstractNormalizer::ATTRIBUTES => $columns]);
+		$normalizedData = $this->normalizer->normalize($data, 'json', [AbstractNormalizer::GROUPS => ['datatable']]);
 
 		$model = [
 			'modal' => $modal,

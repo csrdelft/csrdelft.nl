@@ -3,8 +3,8 @@
 namespace CsrDelft\view\datatable;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\datatable\CustomDataTableEntry;
 use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
-use CsrDelft\Component\DataTable\CustomDataTableEntry;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\formulier\FormElement;
@@ -148,20 +148,20 @@ class DataTable implements View, FormElement, ToResponse {
 	/**
 	 * @param DataTableKnop $knop
 	 */
-	public function addKnop(DataTableKnop $knop) {
+	protected function addKnop(DataTableKnop $knop) {
 		$knop->setDataTableId($this->dataTableId);
 		$this->settings['userButtons'][] = $knop;
 	}
 
-	public function addRowKnop(DataTableRowKnop $knop) {
+	protected function addRowKnop(DataTableRowKnop $knop) {
 		$this->settings['rowButtons'][] = $knop;
 	}
 
-	public function columnPosition($name) {
+	protected function columnPosition($name) {
 		return array_search($name, array_keys($this->columns));
 	}
 
-	public function setOrder($names) {
+	protected function setOrder($names) {
 		$orders = [];
 		foreach ($names as $name => $order) {
 			$orders[] = array($this->columnPosition($name), $order);
@@ -178,7 +178,7 @@ class DataTable implements View, FormElement, ToResponse {
 	 * @param CellType|null $type
 	 * @param string|null $data The data source for the column. Defaults to the column name.
 	 */
-	public function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null, $data = null) {
+	protected function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null, $data = null) {
 		$type = $type ?: CellType::String();
 		$render = $render ?: CellRender::Default();
 
@@ -224,7 +224,7 @@ class DataTable implements View, FormElement, ToResponse {
 	 *
 	 * @param string $name
 	 */
-	public function deleteColumn($name) {
+	protected function deleteColumn($name) {
 		if (isset($this->columns[$name])) {
 			array_splice($this->columns, $this->columnPosition($name), 1);
 		}
@@ -234,7 +234,7 @@ class DataTable implements View, FormElement, ToResponse {
 	 * @param string $name
 	 * @param bool $hide
 	 */
-	public function hideColumn($name, $hide = true) {
+	protected function hideColumn($name, $hide = true) {
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['visible'] = !$hide;
 		}
@@ -244,7 +244,7 @@ class DataTable implements View, FormElement, ToResponse {
 	 * @param string $name
 	 * @param bool $searchable
 	 */
-	public function searchColumn($name, $searchable = true) {
+	protected function searchColumn($name, $searchable = true) {
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['searchable'] = (boolean)$searchable;
 		}
@@ -254,7 +254,7 @@ class DataTable implements View, FormElement, ToResponse {
 	 * @param string $name
 	 * @param string $title
 	 */
-	public function setColumnTitle($name, $title) {
+	protected function setColumnTitle($name, $title) {
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['title'] = $title;
 		}

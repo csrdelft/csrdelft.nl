@@ -11,7 +11,6 @@ use CsrDelft\Component\DataTable\DataTableFactory;
 use CsrDelft\Component\DataTable\DataTableInstance;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
-use Memcache;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
