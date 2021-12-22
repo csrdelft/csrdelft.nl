@@ -13,12 +13,14 @@ class OAuth2Scope
 	const BAR_NORMAAL = "BAR:NORMAAL";
 	const BAR_BEHEER = "BAR:BEHEER";
 	const BAR_TRUST = "BAR:TRUST";
+	const WIKI_BESTUUR = "WIKI:BESTUUR";
 
 	const BESCHRIJVING = [
 		self::PROFIEL_EMAIL => 'Lezen van primair emailadres',
 		self::BAR_NORMAAL => 'Het bar systeem gebruiken om drankjes te strepen.',
 		self::BAR_BEHEER => 'Het bar systeem gebruiken om in te leggen en bijnamen aan te passen.',
 		self::BAR_TRUST => 'Een bar systeem installeren.',
+		self::WIKI_BESTUUR => 'Bestuurswiki lezen.',
 	];
 
 	const MAG = [
@@ -26,6 +28,7 @@ class OAuth2Scope
 		self::BAR_NORMAAL => 'P_ADMIN',
 		self::BAR_BEHEER => 'P_ADMIN',
 		self::BAR_TRUST => 'P_ADMIN',
+		self::WIKI_BESTUUR => 'bestuur,P_ADMIN',
 	];
 
 	// Optionele scopes
