@@ -67,28 +67,6 @@ class AbstractController extends BaseController {
 	}
 
 	/**
-	 * Redirect only to external urls if explicitly allowed
-	 * @param string $url
-	 * @param int $status
-	 * @param bool $allowExternal
-	 * @return RedirectResponse
-	 */
-	protected function csrRedirect($url, $status = 302, $allowExternal = false)
-	{
-		if (empty($url) || $url === null) {
-			$url = REQUEST_URI;
-		}
-		if (!startsWith($url, CSR_ROOT) && !$allowExternal) {
-			if (preg_match("/^[?#\/]/", $url) === 1) {
-				$url = CSR_ROOT . $url;
-			} else {
-				throw new CsrToegangException();
-			}
-		}
-		return parent::redirect($url, $status);
-	}
-
-	/**
 	 * @return Profiel|null
 	 */
 	protected function getProfiel(): ?Profiel

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\eetplan;
 
-use CsrDelft\Component\DataTable\DataTableEntry;
+use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;

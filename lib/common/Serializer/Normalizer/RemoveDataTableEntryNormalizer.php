@@ -5,7 +5,7 @@ namespace CsrDelft\common\Serializer\Normalizer;
 
 
 use ArrayObject;
-use CsrDelft\Component\DataTable\RemoveDataTableEntry;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
