@@ -29,315 +29,466 @@
 	<link rel="icon" href="/lustrum12/favicon.ico">
 </head>
 
-<body class="zijbalk_verborgen">
+<body class="zijbalk_verborgen diespagina">
 	{%  include 'lustrum12/zandloper.html.twig' %}
 	{{ cms('lustrum-dies') }}
-
-{#<nav class="site-header">#}
-{#	<a class="logo-titel d-inline-block" href="./">#}
-{#		<img src="/images/lustrum12//themaheader.png"#}
-{#				 alt="Logo menu" />#}
-{#	</a>#}
-{#	<div class="container">#}
-{#		<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center headerbuttons">#}
-{#			<a class="d-none d-md-inline-block" href="./">Home</a>#}
-{#			<a class="d-none d-md-inline-block" href="#thema">Thema</a>#}
-{#			<a class="d-none d-md-inline-block" href="#programma">Programma</a>#}
-{#			<a class="d-none d-md-inline-block" href="/tijdloos/dies/gala">Gala</a>#}
-{#			<a class="d-none d-md-inline-block" href="/tijdloos/dies/etiquette">Etiquette</a>#}
-{#		</div>#}
-{#	</div>#}
-{#</nav>#}
-
-{#<a id="thema"></a>#}
-{#<section class="helemaal-boven">#}
-{#	<h1 class="titel">Thema</h1>#}
-{#	<div class="poster-container container">#}
-{#		<div class="row">#}
-{#			<div class="dies-poster col-lg-6 ">#}
-{#				<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />#}
-{#			</div>#}
-{#			<div class="dies-poster col-lg-6 ">#}
-{#				<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />#}
+{#	<nav class="site-header">#}
+{#		<a class="logo-titel d-inline-block" href="./">#}
+{#			<img src="/images/lustrum12//themaheader.png"#}
+{#					 alt="Logo menu" />#}
+{#		</a>#}
+{#		<div class="container">#}
+{#			<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center headerbuttons">#}
+{#				<a class="d-none d-md-inline-block" href="./">Home</a>#}
+{#				<a class="d-none d-md-inline-block" href="#thema">Thema</a>#}
+{#				<a class="d-none d-md-inline-block" href="#programma">Programma</a>#}
+{#				<a class="d-none d-md-inline-block" href="/tijdloos/dies/gala">Gala</a>#}
+{#				<a class="d-none d-md-inline-block" href="/tijdloos/dies/etiquette">Etiquette</a>#}
 {#			</div>#}
 {#		</div>#}
-{#	</div>#}
-{#	<br>#}
+{#	</nav>#}
 
-{#	<div class="video">#}
-{#		<div class="container video-container">#}
-{#			<div class="youtube-container closed">#}
-{#				<div class="embed-responsive ratio ratio-16x9" id="player">#}
-{#					<iframe src="https://www.youtube-nocookie.com/embed/iery2Lp7daA?controls=0" frameborder="0" 	allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>#}
-{#					</iframe>#}
+{#	<a id="thema"></a>#}
+{#	<section class="helemaal-boven">#}
+{#		<h1 class="titel">Thema</h1>#}
+{#		<div class="poster-container container">#}
+{#			<div class="row">#}
+{#				<div class="dies-poster col-lg-6 ">#}
+{#					<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />#}
+{#				</div>#}
+{#				<div class="dies-poster col-lg-6 ">#}
+{#					<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />#}
 {#				</div>#}
 {#			</div>#}
 {#		</div>#}
+{#		<br>#}
+
+{#		<div class="video">#}
+{#			<div class="container video-container">#}
+{#				<div class="youtube-container closed">#}
+{#					<div class="embed-responsive ratio ratio-16x9" id="player">#}
+{#						<iframe src="https://www.youtube-nocookie.com/embed/iery2Lp7daA?controls=0" frameborder="0" 	allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>#}
+{#						</iframe>#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
+{#		</div>#}
+{#		<h2 class="titel ondertitel"><a class="titel ondertitel" href="/tijdloos/dies/etiquette"><u>Hier</u></a> kan u uw kennis van de gala etiquette weer helemaal opfrissen.</h2>#}
+{#	</section>#}
+
+{#	<div id="programma" class="divider">#}
+{#		<img class="tussen" src="/images/lustrum12/DiesDividerLarge.png">#}
 {#	</div>#}
-{#</section>#}
 
-{#<div id="programma" class="divider">#}
-{#	<img class="tussen" src="/images/lustrum12/DiesDividerLarge.png">#}
-{#</div>#}
+{#	<section class="programma container gx-5">#}
+{#		<h1 class="titel">Programma</h1>#}
+{#		<h2 class="titel ondertitel">Het gala heeft een eigen pagina die u <a class="titel ondertitel" href="/tijdloos/dies/gala"><u>hier</u></a> kan vinden.</h2>#}
 
-{#<section class="programma container gx-5">#}
-{#	<h1 class="titel">Programma</h1>#}
-{#	<div class="row gx-3">#}
-{#		<div class="col-xl-6">#}
+{#		<div class="row gx-3">#}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Maandag 7 Febuari</h2>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>La première</h3>#}
+{#						<div class="beschrijving">#}
+{#							C.S.R. film#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Kom debatteren en borrelen.#}
+{#						</div>#}
+{#					</div>#}
+
+{#				</div>#}
+{#			</div>#}
+
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Dinsdag 8 Febuari</h2>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>18:30 Dromerig Diner </h3>#}
+{#						<div class="beschrijving">#}
+{#							Openings diner#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=2150]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>20:00 Louer et Prayer - LeP</h3>#}
+{#						<div class="beschrijving">#}
+{#							Openings Leo#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Kom debatteren en borrelen.#}
+{#						</div>#}
+{#					</div>#}
+
+{#				</div>#}
+{#			</div>#}
+
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Woensdag 9 Febuari</h2>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>14:00 Externe Receptie</h3>#}
+{#						<div class="beschrijving">#}
+{#							Externe Receptie#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>20:00 Interne Receptie</h3>#}
+{#						<div class="beschrijving">#}
+{#							Interne Receptie#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>20:00 prêt a porter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Rokkostuum passen#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11687]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Kom debatteren en borrelen.#}
+{#						</div>#}
+{#					</div>#}
+
+{#				</div>#}
+{#			</div>#}
+
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Donderdag 10 Febuari</h2>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>8:00 Croissant et jus d'orange</h3>#}
+{#						<div class="beschrijving">#}
+{#							Kom ontbijten!#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11688]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>18:30 Dies Kring</h3>#}
+{#						<div class="beschrijving">#}
+{#							Dies kring!#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>21:00 Intern Feest</h3>#}
+{#						<div class="beschrijving">#}
+{#							Intern Feest#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
+
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Vrijdag 18 Febuari</h2>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>9:00 Verticalestrijd</h3>#}
+{#						<div class="beschrijving">#}
+{#							Strijd der Verticalen#}
+{#						</div>#}
+
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>16:00 VrijMiBo</h3>#}
+{#						<div class="beschrijving">#}
+{#							Met Karaoke!#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Kom debatteren en borrelen.#}
+{#						</div>#}
+{#					</div>#}
+
+{#				</div>#}
+{#			</div>#}
+
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Zaterdag 19 Febuari</h2>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>10:00 Brusjesdag</h3>#}
+{#						<div class="beschrijving">#}
+{#							Gezellig!#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11689]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>20:30 Filmavond</h3>#}
+{#						<div class="beschrijving">#}
+{#							Welke film zou het zijn?#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11690]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
+
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Zondag 20 Febuari</h2>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>10:00 Kerkplan</h3>#}
+{#						<div class="beschrijving">#}
+{#							kerk chillings#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11691]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>14:00 Strandwandeling</h3>#}
+{#						<div class="beschrijving">#}
+{#							Kom lekker wandelen#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11692]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+
+{#				</div>#}
+{#			</div>#}
+
+{#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
 {#					<h2>Maandag 14 Febuari</h2>#}
 
 {#					<div class="activiteit">#}
-{#						<h3>Naam activiteit</h3>#}
+{#						<h3>18:30 Van Speijk valentijns diner</h3>#}
 {#						<div class="beschrijving">#}
-{#							Dit is de beschrijving van de activiteit.#}
-{#						</div>#}
-{#					</div>#}
-
-{#					<div class="activiteit">#}
-{#						<h3>Naam activiteit</h3>#}
-{#						<div class="beschrijving">#}
-{#							Dit is de beschrijving van de activiteit.#}
+{#							Kom de liefde vieren met Van Speijk#}
 {#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
 {#							<div class="ketzers verborgen">#}
 {#								<div class="ketzer">#}
-{#									{{ '[activiteit=2150]'|bbcode }}#}
+{#									[activiteit=2150]#}
 {#								</div>#}
 {#							</div>#}
 {#						</div>#}
 {#					</div>#}
 
 {#					<div class="activiteit">#}
-{#						<h3>Naam activiteit</h3>#}
+{#						<h3>20:00 Installatie HV</h3>#}
 {#						<div class="beschrijving">#}
-{#							Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
-{#							Of maakt dat niet zoveel uit?#}
+{#							Quarantaine editie#}
+{#						</div>#}
+{#					</div>#}
+
+{#				</div>#}
+{#			</div>#}
+
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Dinsdag 22 Febuari</h2>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>20:00 Op de Planken</h3>#}
+{#						<div class="beschrijving">#}
+{#							We gaan los#}
 {#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
 {#							<div class="ketzers verborgen">#}
 {#								<div class="ketzer">#}
-{#									{{ '[activiteit=2150]'|bbcode }}#}
+{#									[activiteit=11693]#}
 {#								</div>#}
 {#							</div>#}
 {#						</div>#}
 {#					</div>#}
 
 {#					<div class="activiteit">#}
-{#						<h3>Naam Activiteit</h3>#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
 {#						<div class="beschrijving">#}
-{#							<p>#}
-{#								Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
-{#								Of maakt dat niet zoveel uit? Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
-{#								Of maakt dat niet zoveel uit?#}
-{#							</p>#}
+{#							Kom debatteren en borrelen.#}
 {#						</div>#}
+{#					</div>#}
 
+{#				</div>#}
+{#			</div>#}
+
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Woensdag 23 Febuari</h2>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>14:00 DéDé corsage klussen</h3>#}
+{#						<div class="beschrijving">#}
+{#							Klus je corsage!#}
+{#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
-{#								<div class="ketzers verborgen">#}
+{#							<div class="ketzers verborgen">#}
 {#								<div class="ketzer">#}
-{#									{{ '[activiteit=2149]'|bbcode }}#}
-{#								</div>#}
-{#								<div class="ketzer">#}
-{#									{{ '[activiteit=2150]'|bbcode }}#}
+{#									[activiteit=11694]#}
 {#								</div>#}
 {#							</div>#}
 {#						</div>#}
 {#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>20:30 Bierproeverij van LuBieCie</h3>#}
+{#						<div class="beschrijving">#}
+{#							Goed bier.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11695]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Kom debatteren en borrelen.#}
+{#						</div>#}
+{#					</div>#}
+
 {#				</div>#}
 {#			</div>#}
 
-{#		<div class="col-xl-6">#}
-{#			<div class="dag">#}
-{#				<h2>Dinsdag 15 Febuari</h2>#}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Donderdag 24 Febuari</h2>#}
 
-{#				<div class="activiteit">#}
-{#					<h3>Naam activiteit</h3>#}
-{#					<div class="beschrijving">#}
-{#						Dit is de beschrijving van de activiteit.#}
-{#					</div>#}
-{#				</div>#}
-
-{#				<div class="activiteit">#}
-{#					<h3>Naam activiteit</h3>#}
-{#					<div class="beschrijving">#}
-{#						Dit is de beschrijving van de activiteit.#}
-{#					</div>#}
-{#					<div class="dies-activiteit-ketzers">#}
-{#						<a class="toggler">Laat ketzers zien</a>#}
-{#						<div class="ketzers verborgen">#}
-{#							<div class="ketzer">#}
-{#								{{ '[activiteit=2150]'|bbcode }}#}
+{#					<div class="activiteit">#}
+{#						<h3>16:00 YER training</h3>#}
+{#						<div class="beschrijving">#}
+{#							Euros harken.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11696]#}
+{#								</div>#}
 {#							</div>#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>18:30 Maaltijd</h3>#}
+{#						<div class="beschrijving">#}
+{#							Lekker eten.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=2150]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>20:30 Dies lezing - Ted talks</h3>#}
+{#						<div class="beschrijving">#}
+{#							Kom luisteren en aanschouwen.#}
+{#						</div>#}
+{#					</div>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Kom debatteren en borrelen.#}
+{#						</div>#}
+{#					</div>#}
+
+{#				</div>#}
+{#			</div>#}
+
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Vrijdag 25 Febuari</h2>#}
+
+{#					<div class="activiteit">#}
+{#						<h3>14:00 GALA</h3>#}
+{#						<div class="beschrijving">#}
+{#							HEEL LEIP#}
 {#						</div>#}
 {#					</div>#}
 {#				</div>#}
 
-{#				<div class="activiteit">#}
-{#					<h3>Naam activiteit</h3>#}
-{#					<div class="beschrijving">#}
-{#						Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
-{#						Of maakt dat niet zoveel uit?#}
-{#					</div>#}
-{#					<div class="dies-activiteit-ketzers">#}
-{#						<a class="toggler">Laat ketzers zien</a>#}
-{#						<div class="ketzers verborgen">#}
-{#							<div class="ketzer">#}
-{#								{{ '[activiteit=2150]'|bbcode }}#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
-{#				</div>#}
-
-{#				<div class="activiteit">#}
-{#					<h3>Naam Activiteit</h3>#}
-{#					<div class="beschrijving">#}
-{#						<p>#}
-{#							Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
-{#							Of maakt dat niet zoveel uit? Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
-{#							Of maakt dat niet zoveel uit?#}
-{#						</p>#}
-{#					</div>#}
-
-{#					<div class="dies-activiteit-ketzers">#}
-{#						<a class="toggler">Laat ketzers zien</a>#}
-{#						<div class="ketzers verborgen">#}
-{#							<div class="ketzer">#}
-{#								{{ '[activiteit=2149]'|bbcode }}#}
-{#							</div>#}
-{#							<div class="ketzer">#}
-{#								{{ '[activiteit=2150]'|bbcode }}#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
-{#				</div>#}
 {#			</div>#}
 {#		</div>#}
-
-{#		<div class="col-xl-6">#}
-{#			<div class="dag">#}
-{#				<h2>Woensdag 16 Febuari</h2>#}
-
-{#				<div class="activiteit">#}
-{#					<h3>Naam activiteit</h3>#}
-{#					<div class="beschrijving">#}
-{#						Dit is de beschrijving van de activiteit.#}
-{#					</div>#}
-{#				</div>#}
-
-{#				<div class="activiteit">#}
-{#					<h3>Naam activiteit</h3>#}
-{#					<div class="beschrijving">#}
-{#						Dit is de beschrijving van de activiteit.#}
-{#					</div>#}
-{#					<div class="dies-activiteit-ketzers">#}
-{#						<a class="toggler">Laat ketzers zien</a>#}
-{#						<div class="ketzers verborgen">#}
-{#							<div class="ketzer">#}
-{#								{{ '[activiteit=2150]'|bbcode }}#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
-{#				</div>#}
-
-{#				<div class="activiteit">#}
-{#					<h3>Naam activiteit</h3>#}
-{#					<div class="beschrijving">#}
-{#						Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
-{#						Of maakt dat niet zoveel uit?#}
-{#					</div>#}
-{#					<div class="dies-activiteit-ketzers">#}
-{#						<a class="toggler">Laat ketzers zien</a>#}
-{#						<div class="ketzers verborgen">#}
-{#							<div class="ketzer">#}
-{#								{{ '[activiteit=2150]'|bbcode }}#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
-{#				</div>#}
-
-{#				<div class="activiteit">#}
-{#					<h3>Naam Activiteit</h3>#}
-{#					<div class="beschrijving">#}
-{#						<p>#}
-{#							Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
-{#							Of maakt dat niet zoveel uit? Dit is de beschrijving van de activiteit. Waarschijnlijk moeten we deze niet al te lang doen.#}
-{#							Of maakt dat niet zoveel uit?#}
-{#						</p>#}
-{#					</div>#}
-
-{#					<div class="dies-activiteit-ketzers">#}
-{#						<a class="toggler">Laat ketzers zien</a>#}
-{#						<div class="ketzers verborgen">#}
-{#							<div class="ketzer">#}
-{#								{{ '[activiteit=2149]'|bbcode }}#}
-{#							</div>#}
-{#							<div class="ketzer">#}
-{#								{{ '[activiteit=2150]'|bbcode }}#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
-{#				</div>#}
-{#			</div>#}
-{#		</div>#}
-
-{#		<div class="col-xl-6">#}
-{#			<div class="dag">#}
-{#				<h2>Donderdag 17 Febuari</h2>#}
-{#			</div>#}
-{#		</div>#}
-
-{#		<div class="col-xl-6">#}
-{#			<div class="dag">#}
-{#				<h2>Vrijdag 18 Febuari</h2>#}
-{#			</div>#}
-{#		</div>#}
-
-{#		<div class="col-xl-6">#}
-{#			<div class="dag">#}
-{#				<h2>Zaterdag 19 Febuari</h2>#}
-{#			</div>#}
-{#		</div>#}
-
-{#		<div class="col-xl-6">#}
-{#			<div class="dag">#}
-{#				<h2>Zondag 20 Febuari</h2>#}
-{#			</div>#}
-{#		</div>#}
-
-{#		<div class="col-xl-6">#}
-{#			<div class="dag">#}
-{#				<h2>Maandag 21 Febuari</h2>#}
-{#			</div>#}
-{#		</div>#}
-
-{#		<div class="col-xl-6">#}
-{#			<div class="dag">#}
-{#				<h2>Dinsdag 22 Febuari</h2>#}
-{#			</div>#}
-{#		</div>#}
-
-{#		<div class="col-xl-6">#}
-{#			<div class="dag">#}
-{#				<h2>Woensdag 23 Febuari</h2>#}
-{#			</div>#}
-{#		</div>#}
-
-{#		<div class="col-xl-6">#}
-{#			<div class="dag">#}
-{#				<h2>Donderdag 24 Febuari</h2>#}
-{#			</div>#}
-{#		</div>#}
-
-{#		<div class="col-xl-6">#}
-{#			<div class="dag">#}
-{#				<h2>Vrijdag 25 Febuari</h2>#}
-{#			</div>#}
-{#		</div>#}
-{#	</div>#}
-{#</section>#}
+{#	</section>#}
 
 </body>

@@ -87,6 +87,9 @@ body {
 	background-position: center;
 	background-size: cover;
 }
+body.diespagina{
+	background-image: url('../../images/lustrum12/dies-achtergrond-geknipt.jpg');
+}
 
 a{
 	text-decoration: none;
@@ -217,14 +220,15 @@ section {
 	.dag {
 		padding: 20px;
 		border-radius: 20px;
-		background-color: $gray-transparant; //$lightgray-transparant;
+		background-color: $lightgray-transparant;
 		//border: 3px solid transparent;
 
 		margin-top: 20px;
 		margin-bottom: 20px;
 		h2 {
-			font-family: $dies-uppereast-font;
 			text-transform: uppercase;
+			font-family: $dies-uppereast-font;
+
 			text-align: center;
 			font-size: 3.0rem;
 		}
@@ -239,8 +243,9 @@ section {
 			margin-bottom: 40px;
 			h3 {
 				font-family: $dies-uppereast-font;
-				text-align: center;
 				text-transform: uppercase;
+
+				text-align: center;
 				font-size: 2.4rem;
 			}
 			.beschrijving {
