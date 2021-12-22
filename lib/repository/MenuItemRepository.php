@@ -90,7 +90,7 @@ class MenuItemRepository extends AbstractRepository {
 				$this->getExtendedTree($root, true);
 
 				// Voorkom dat extendedTree updates doorvoert
-				$this->_em->clear();
+				$this->_em->clear(MenuItem::class);
 
 				return $root;
 			} catch (EntityNotFoundException $ex) {
