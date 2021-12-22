@@ -265,6 +265,28 @@ section {
 				}
 				.ketzers {
 					.ketzer {
+						.maaltijdketzer-wrapper {
+							padding: 20px;
+							border-radius: 20px;
+							background: $gray-transparant;
+							.btn-danger {
+								background: $gray-transparant;
+								border-color: transparent;
+							}
+							.btn-success {
+								background: $gray-transparant;
+								border-color: $bordeaux-rood;
+							}
+							.form-check-input {
+								background-color: transparent;
+								border-color: $bordeaux-rood;
+							}
+							.form-check-input:checked {
+								background-color: $bordeaux-rood;
+								border-color: $bordeaux-rood;
+							}
+
+						}
 						h3 {
 							font-size: 1.8rem;
 						}
