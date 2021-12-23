@@ -316,9 +316,13 @@ class AccessService {
 			return false;
 		}
 
+		// Altijd uppercase
+		$permission = strtoupper($permission);
+
 		// Try cache
 		$key = sprintf("hasPermission-%s-%s", urlencode(str_replace('-', '_', $permission)), $subject->uid);
 
+		echo $permission;
 		return $this->cache->get($key, function () use ($subject, $permission) {
 			return $this->hasPermission($subject, $permission);
 		});
