@@ -9,6 +9,7 @@ use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -76,10 +77,23 @@ class DataTableBuilder {
 	 * @var NormalizerInterface
 	 */
 	private $normalizer;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $entityManager;
 
-	public function __construct(SerializerInterface $serializer, NormalizerInterface $normalizer) {
+	public function __construct(
+		SerializerInterface $serializer,
+		NormalizerInterface $normalizer,
+		EntityManagerInterface $entityManager
+	) {
 		$this->serializer = $serializer;
 		$this->normalizer = $normalizer;
+		$this->entityManager = $entityManager;
+	}
+
+	public function loadFromClass(string $className) {
+		$this->loadFromMetadata($this->entityManager->getClassMetadata($className));
 	}
 
 	public function loadFromMetadata(ClassMetadata $metadata) {
@@ -325,7 +339,13 @@ class DataTableBuilder {
 	}
 
 	public function getTable() {
-		return new DataTableInstance($this->serializer, $this->normalizer, $this->getTitel(), $this->getDataTableId(), $this->getSettings());
+		return new DataTableInstance(
+			$this->serializer,
+			$this->normalizer,
+			$this->getTitel(),
+			$this->getDataTableId(),
+			$this->getSettings()
+		);
 	}
 
 	public function setTitel($titel) {

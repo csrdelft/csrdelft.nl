@@ -17,16 +17,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PinTransactieMatchTableType extends AbstractDataTableType {
 	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
 	 * @var UrlGeneratorInterface
 	 */
 	private $urlGenerator;
 
-	public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator) {
-		$this->entityManager = $entityManager;
+	public function __construct(UrlGeneratorInterface $urlGenerator) {
 		$this->urlGenerator = $urlGenerator;
 	}
 
@@ -34,7 +29,7 @@ class PinTransactieMatchTableType extends AbstractDataTableType {
 		$builder->setDataUrl($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'metFout']));
 		$builder->setTitel('Overzicht van pintransacties matches');
 
-		$builder->loadFromMetadata($this->entityManager->getClassMetadata(PinTransactieMatch::class));
+		$builder->loadFromClass(PinTransactieMatch::class);
 
 		$weergave = new CollectionDataTableKnop(Multiplicity::None(), 'Weergave', 'Weergave van de tabel', 'cart');
 		$weergave->addKnop(new SourceChangeDataTableKnop($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'metFout']), 'Met fouten', 'Fouten weergeven', 'cart_error'));
