@@ -38,7 +38,8 @@ class DataTableInstance {
 		$title = $this->titel ? "<h2 id=\"table-{$id}\" class=\"Titel\">{$this->titel}</h2>" : "";
 		$table = "<table id=\"{$this->tableId}\" class=\"ctx-datatable display\" data-settings=\"{$settingsJson}\"></table>";
 
-		return $title . $table;
+		$html = $title . $table;
+		return new DataTableView($html);
 	}
 
 	/**
@@ -49,15 +50,6 @@ class DataTableInstance {
 	 * @throws ExceptionInterface
 	 */
 	public function createData($data, $modal = null, $autoUpdate = false) {
-		$columns = ['UUID'];
-		foreach ($this->settings['columns'] as $col) {
-			// Camel & snake case voor de serializer
-			// Omdat alle field names in onze modellen underscores hebben en de getters niet zorgt dit voor wat
-			// verwarring in de serializer.
-			$columns[] = $col['name'];
-			$columns[] = lcfirst(str_replace('_', '', ucwords($col['name'], '_')));
-		}
-
 		$normalizedData = $this->normalizer->normalize($data, 'json', [AbstractNormalizer::GROUPS => ['datatable']]);
 
 		$model = [
