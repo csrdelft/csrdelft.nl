@@ -48,7 +48,7 @@ class SavedQueryRepository extends AbstractRepository {
 		$resultObject->query = $query;
 
 		try {
-			$result = $this->_em->getConnection()->fetchAllNumeric($query->savedquery);
+			$result = $this->_em->getConnection()->fetchAllAssociative($query->savedquery);
 			$cols = [];
 
 			foreach ($result[0] as $col => $value) {
