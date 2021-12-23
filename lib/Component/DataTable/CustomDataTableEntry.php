@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CsrDelft\common\datatable;
+namespace CsrDelft\Component\DataTable;
 
 
 /**
