@@ -48,7 +48,8 @@ class IsHetAlView implements View
 		$differenceDays = floor((strtotime(date("d-m-Y")) - strtotime("21-12-2021")) / 86400);
 		if ($differenceDays >= 1 && $differenceDays <= 60 && rand(0, 100) < 25) {
 			$this->model = "wvdd";
-			$this->ja = $woordVanDeDagRepository->find(intval($differenceDays))->getWoord();
+			$woordVanDeDag = $woordVanDeDagRepository->find(intval($differenceDays));
+			$this->ja = $woordVanDeDag ? $woordVanDeDag->getWoord() : "Woord van de dag niet gevonden";
 
 			return;
 		}
