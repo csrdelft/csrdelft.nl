@@ -161,6 +161,19 @@ services:
     tags:
       - { name: monolog.processor, handler: access }
 
+  csr.table.factory:
+    alias: CsrDelft\Component\DataTable\DataTableFactory
+
+  CsrDelft\Component\DataTable\DataTableBuilder:
+    shared: false
+
+  CsrDelft\Component\DataTable\DataTableFactory:
+    public: true
+    shared: false
+    arguments:
+      - !tagged_locator { tag: csr.table.type, index_by: key }
+      - '@CsrDelft\Component\DataTable\DataTableBuilder'
+
   CsrDelft\common\Logging\LogProcessor:
     arguments: ["@request_stack", "@security.helper"]
     tags:
