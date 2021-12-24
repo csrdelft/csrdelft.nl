@@ -4,7 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\Component\DataTable\RemoveDataTableEntry;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\maalcie\Maaltijd;

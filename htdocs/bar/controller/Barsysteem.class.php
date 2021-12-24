@@ -7,15 +7,12 @@ use Doctrine\DBAL\DriverManager;
 class Barsysteem {
 
 	/**
-	 * @var Connection
+	 * @var Connection|PDO
 	 */
 	var $db;
 	private $beheer;
 	private $csrfToken;
 
-	/**
-	 * @throws \Doctrine\DBAL\Exception
-	 */
 	function __construct() {
 		$this->db = DriverManager::getConnection([
 			'url' => $_ENV['DATABASE_URL'],
@@ -64,7 +61,9 @@ SQL
 		);
 		$q->bindValue('uid', $uid);
 
-		return $q->execute()->fetchAssociative();
+		$q->execute();
+
+		return $q->fetch(PDO::FETCH_ASSOC);
 	}
 
 	function getNaam($profiel) {
@@ -82,9 +81,6 @@ SQL
 		return $naam;
 	}
 
-	/**
-	 * @throws \Doctrine\DBAL\Driver\Exception
-	 */
 	function getPersonen() {
 		$terug = $this->db->query(<<<SQL
 SELECT civi_saldo.uid, civi_saldo.naam, civi_saldo.saldo, civi_saldo.deleted, COUNT(civi_bestelling.totaal) AS recent
@@ -92,7 +88,7 @@ FROM civi_saldo LEFT JOIN civi_bestelling
 ON (civi_saldo.uid = civi_bestelling.uid AND DATEDIFF(NOW(), civi_bestelling.moment) < 100 AND civi_bestelling.deleted = 0)
 GROUP BY civi_saldo.uid;
 SQL
-		)->fetchAllAssociative();
+		);
 		$result = array();
 		foreach ($terug as $row) {
 			$persoon = array();
@@ -127,9 +123,10 @@ WHERE C.cie = 'soccie' OR C.cie = 'oweecie'
 ORDER BY prioriteit DESC
 SQL
 		);
+		$q->execute();
 
 		$result = array();
-		foreach ($q->execute()->fetchAllAssociative() as $row) {
+		foreach ($q->fetchAll(PDO::FETCH_ASSOC) as $row) {
 			$product = array();
 			$product["productId"] = $row["id"];
 			$product["prijs"] = $row["prijs"];
@@ -143,12 +140,10 @@ SQL
 		return $result;
 	}
 
-	/**
-	 * @throws \Doctrine\DBAL\Driver\Exception
-	 */
 	function getGrootboeken() {
 		$q = $this->db->prepare("SELECT id, type FROM civi_categorie WHERE cie='soccie'");
-		return $q->execute()->fetchAllAssociative();
+		$q->execute();
+		return $q->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 	/**
@@ -218,7 +213,8 @@ SQL
 	function getBestellingPersoon($socCieId) {
 		$q = $this->db->prepare("SELECT *, B.deleted AS d, 0 AS oud FROM civi_bestelling AS B JOIN civi_bestelling_inhoud AS I ON B.id=I.bestelling_id WHERE uid=:socCieId AND B.cie = 'soccie' OR B.cie = 'oweecie'");
 		$q->bindValue(":socCieId", $socCieId, PDO::PARAM_STR);
-		return $this->verwerkBestellingResultaat($q->execute()->fetchAllAssociative());
+		$q->execute();
+		return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC));
 	}
 
 	function getBestellingLaatste($persoon, $begin, $eind, $productType) {
@@ -254,7 +250,8 @@ SQL
 			$q->bindValue(":socCieId", $persoon, PDO::PARAM_STR);
 		$q->bindValue(":begin", $begin);
 		$q->bindValue(":eind", $eind);
-		return $this->verwerkBestellingResultaat($q->execute()->fetchAllAssociative(), $productIDs);
+		$q->execute();
+		return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC), $productIDs);
 	}
 
 	function updateBestelling($data) {
@@ -305,7 +302,8 @@ SQL
 	function getSaldo($socCieId) {
 		$q = $this->db->prepare("SELECT saldo FROM civi_saldo WHERE uid = :socCieId");
 		$q->bindValue(":socCieId", $socCieId);
-		return $q->execute()->fetchOne();
+		$q->execute();
+		return $q->fetchColumn();
 	}
 
 	function verwijderBestelling($data) {
@@ -316,18 +314,14 @@ SQL
 		$q->execute();
 		$q = $this->db->prepare("UPDATE civi_bestelling SET deleted = 1 WHERE id = :bestelId AND deleted = 0");
 		$q->bindValue(":bestelId", $data->bestelId, PDO::PARAM_INT);
-		$result = $q->execute();
-
-		if (!$this->db->commit() || $result->rowCount() == 0) {
+		$q->execute();
+		if (!$this->db->commit() || $q->rowCount() == 0) {
 			$this->db->rollBack();
 			return false;
 		}
 		return true;
 	}
 
-	/**
-	 * @throws \Doctrine\DBAL\Driver\Exception
-	 */
 	function undoVerwijderBestelling($data) {
 		$this->db->beginTransaction();
 		$q = $this->db->prepare("UPDATE civi_saldo SET saldo = saldo - :bestelTotaal WHERE uid=:socCieId;");
@@ -336,8 +330,8 @@ SQL
 		$q->execute();
 		$q = $this->db->prepare("UPDATE civi_bestelling SET deleted = 0 WHERE id = :bestelId AND deleted = 1");
 		$q->bindValue(":bestelId", $data->bestelId, PDO::PARAM_INT);
-		$result = $q->execute();
-		if (!$this->db->commit() || $result->rowCount() == 0) {
+		$q->execute();
+		if (!$this->db->commit() || $q->rowCount() == 0) {
 			$this->db->rollBack();
 			return false;
 		}
@@ -381,14 +375,16 @@ SQL
 	private function getBestellingTotaal($bestelId) {
 		$q = $this->db->prepare("SELECT SUM(prijs * aantal) FROM civi_bestelling_inhoud AS I JOIN civi_prijs AS P USING (product_id) WHERE bestelling_id = :bestelId AND tot IS NULL");
 		$q->bindValue(":bestelId", $bestelId, PDO::PARAM_INT);
-		return $q->execute()->fetchOne();
+		$q->execute();
+		return $q->fetchColumn();
 	}
 
 	private function getBestellingTotaalTijd($bestelId, $timestamp) {
 		$q = $this->db->prepare("SELECT SUM(prijs * aantal) FROM civi_bestelling_inhoud AS I JOIN civi_prijs AS P USING (product_id) WHERE bestelling_id = :bestelId AND (:timeStamp > P.van AND (:timeStamp < P.tot OR P.tot IS NULL));");
 		$q->bindValue(":bestelId", $bestelId, PDO::PARAM_INT);
-		$q->bindValue(":timeStamp", $timestamp, PDO::PARAM_STR);
-		return $q->execute()->fetchOne();
+		$q->bindValue(":timeStamp", $timestamp, PDO::PARAM_STMT);
+		$q->execute();
+		return $q->fetchColumn();
 	}
 
 	private function parseDate($date) {
@@ -399,10 +395,6 @@ SQL
 	}
 
 	// Beheer
-
-	/**
-	 * @throws \Doctrine\DBAL\Driver\Exception
-	 */
 	public function getGrootboekInvoer() {
 
 		// GROUP BY week
@@ -431,11 +423,11 @@ GROUP BY
 	G.id
 ORDER BY yearweek DESC
 		");
-		$result = $q->execute();
+		$q->execute();
 
 		$weeks = array();
 
-		while ($r = $result->fetchAssociative()) {
+		while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
 
 			$exists = isset($weeks[$r['yearweek']]);
 
@@ -465,15 +457,11 @@ ORDER BY yearweek DESC
 		return $data;
 	}
 
-	/**
-	 * @throws \Doctrine\DBAL\Driver\Exception
-	 */
 	private function sumSaldi($profielOnly = false) {
-		$result = $profielOnly ?
-			$this->db->query("SELECT SUM(saldo) AS sum FROM civi_saldo WHERE deleted = 0 AND uid NOT LIKE 'c%'") :
-			$this->db->query("SELECT SUM(saldo) AS sum FROM civi_saldo WHERE deleted = 0");
 
-		return $result->fetchAssociative();
+		$after = $profielOnly ? "AND uid NOT LIKE 'c%'" : "";
+
+		return $this->db->query("SELECT SUM(saldo) AS sum FROM civi_saldo WHERE deleted = 0 " . $after)->fetch(PDO::FETCH_ASSOC);
 	}
 
 	private function getRed() {
@@ -481,7 +469,7 @@ ORDER BY yearweek DESC
 		$result = array();
 
 		$q = $this->db->query("SELECT uid, saldo FROM civi_saldo WHERE deleted = 0 AND saldo < 0 AND uid NOT LIKE 'c%' ORDER BY saldo");
-		while ($r = $q->fetchAssociative()) {
+		while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
 
 			$profiel = $this->getProfiel($r['uid']);
 
@@ -529,14 +517,12 @@ ORDER BY yearweek DESC
 		return $q->execute();
 	}
 
-	/**
-	 * @throws \Doctrine\DBAL\Driver\Exception
-	 */
 	public function removePerson($id) {
 
 		$q = $this->db->prepare("UPDATE civi_saldo SET deleted = 1 WHERE uid = :id AND saldo = 0");
 		$q->bindValue(':id', $id, PDO::PARAM_STR);
-		return $q->execute()->rowCount();
+		$q->execute();
+		return $q->rowCount();
 	}
 
 	public function addPerson($name, $saldo, $uid) {
@@ -547,7 +533,7 @@ ORDER BY yearweek DESC
 		if (!empty($uid)) {
 			$q->bindValue(':uid', $uid, PDO::PARAM_STR);
 		} else {
-			$latest = $this->db->query("SELECT uid FROM civi_saldo WHERE uid LIKE 'c%' ORDER BY uid DESC LIMIT 1")->fetchFirstColumn();
+			$latest = $this->db->query("SELECT uid FROM civi_saldo WHERE uid LIKE 'c%' ORDER BY uid DESC LIMIT 1")->fetchColumn();
 			$q->bindValue(':uid', ++$latest, PDO::PARAM_STR);
 		}
 

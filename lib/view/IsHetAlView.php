@@ -48,8 +48,7 @@ class IsHetAlView implements View
 		$differenceDays = floor((strtotime(date("d-m-Y")) - strtotime("21-12-2021")) / 86400);
 		if ($differenceDays >= 1 && $differenceDays <= 60 && rand(0, 100) < 25) {
 			$this->model = "wvdd";
-			$woordVanDeDag = $woordVanDeDagRepository->find(intval($differenceDays));
-			$this->ja = $woordVanDeDag ? $woordVanDeDag->getWoord() : "Woord van de dag niet gevonden";
+			$this->ja = $woordVanDeDagRepository->find(intval($differenceDays))->getWoord();
 
 			return;
 		}
@@ -180,7 +179,7 @@ class IsHetAlView implements View
 				break;
 
 			case 'wvdd':
-				$html .= '<div class="ja">Het lustrumboekwoord van de dag is '. $this->ja .' </div>';
+				$html .= '<div class="ja">Het lustrumwoord van de dag is '. $this->ja .' </div>';
 				break;
 
 			default:

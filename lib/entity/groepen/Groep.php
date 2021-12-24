@@ -3,8 +3,8 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\common\Eisen;
-use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\groepen\enum\CommissieFunctie;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;

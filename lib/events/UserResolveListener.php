@@ -3,7 +3,7 @@
 namespace CsrDelft\events;
 
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Trikoder\Bundle\OAuth2Bundle\Event\UserResolveEvent;
@@ -35,11 +35,7 @@ final class UserResolveListener
 	 */
 	public function onUserResolve(UserResolveEvent $event): void
 	{
-		try {
-			$user = $this->userProvider->loadUserByIdentifier($event->getUsername());
-		} catch (UserNotFoundException $ex) {
-			return;
-		}
+		$user = $this->userProvider->loadUserByIdentifier($event->getUsername());
 
 		if (null === $user) {
 			return;

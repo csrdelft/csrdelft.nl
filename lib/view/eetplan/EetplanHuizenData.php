@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\eetplan;
 
-use CsrDelft\Component\DataTable\CustomDataTableEntry;
+use CsrDelft\common\datatable\CustomDataTableEntry;
 
 class EetplanHuizenData implements CustomDataTableEntry {
 	public static function getIdentifierFieldNames() {

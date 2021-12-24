@@ -3,7 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\Component\DataTable\RemoveDataTableEntry;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\view\datatable\GenericDataTableResponse;
@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\RememberMe\PersistentRememberMeHandler;
+use Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices;
 use Trikoder\Bundle\OAuth2Bundle\Model\AccessToken;
 use Trikoder\Bundle\OAuth2Bundle\Model\RefreshToken;
 

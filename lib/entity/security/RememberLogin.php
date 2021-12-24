@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\security;
 
-use CsrDelft\Component\DataTable\DataTableEntry;
+use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\view\Icon;
 use DateTimeImmutable;

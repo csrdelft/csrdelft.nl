@@ -20,8 +20,6 @@ class CellRender {
 	const TIMEAGO = 'timeago';
 	const FILESIZE = 'filesize';
 	const DATETIME = 'datetime';
-	const DATE = 'date';
-	const TIME = 'time';
 
 	/** @var string */
 	protected $choice;
@@ -98,12 +96,5 @@ class CellRender {
 
 	public static function DateTime() {
 		return new static(self::DATETIME);
-	}
-
-	public static function Date() {
-		return new static(self::DATE);
-	}
-	public static function Time() {
-		return new static(self::TIME);
 	}
 }

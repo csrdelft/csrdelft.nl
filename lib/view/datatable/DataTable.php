@@ -3,8 +3,8 @@
 namespace CsrDelft\view\datatable;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\datatable\CustomDataTableEntry;
 use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
-use CsrDelft\Component\DataTable\CustomDataTableEntry;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\formulier\FormElement;

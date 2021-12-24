@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\maalcie;
 
-use CsrDelft\Component\DataTable\CustomDataTableEntry;
+use CsrDelft\common\datatable\CustomDataTableEntry;
 use CsrDelft\entity\corvee\CorveeFunctie;
 use Symfony\Component\Serializer\Annotation as Serializer;
 

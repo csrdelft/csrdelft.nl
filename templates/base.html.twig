@@ -61,7 +61,7 @@
 		{% endif %}
 		<nav aria-label="breadcrumb">
 			{% block breadcrumbs %}
-				{{ csr_breadcrumbs(get_breadcrumbs(app.request.pathInfo)) }}
+				{{ csr_breadcrumbs(get_breadcrumbs(app.request.uri)) }}
 			{% endblock %}
 		</nav>
 		<div class="cd-page-content">

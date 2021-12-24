@@ -41,11 +41,6 @@ class WeekinvoerController extends AbstractController {
 			}
 		}
 
-		$weergave = 'tabel';
-		if ($request->query->has('weergave')) {
-			$weergave = $request->query->get('weergave');
-		}
-
 		if ($from > $until) {
 			$until = $from->add(new DateInterval('P1W'));
 		}
@@ -55,7 +50,6 @@ class WeekinvoerController extends AbstractController {
 		return $this->render('fiscaat/weekinvoer.html.twig', [
 			'van' => $from->format('Y-m-d'),
 			'tot' => $until->format('Y-m-d'),
-			'weergave' => $weergave,
 			'weekinvoeren' => $weekinvoer->weken,
 			'categorieen' => $weekinvoer->categorieen
 		]);

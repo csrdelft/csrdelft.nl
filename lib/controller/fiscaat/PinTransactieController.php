@@ -5,8 +5,8 @@ namespace CsrDelft\controller\fiscaat;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\common\Mail;
-use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\entity\pin\PinTransactieMatch;
@@ -20,17 +20,15 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\MailService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\pin\PinBestellingAanmakenForm;
-use CsrDelft\view\fiscaat\pin\PinBestellingCrediterenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingInfoForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVeranderenForm;
+use CsrDelft\view\fiscaat\pin\PinBestellingCrediterenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchNegerenForm;
+use CsrDelft\view\fiscaat\pin\PinTransactieMatchTable;
 use CsrDelft\view\formulier\FoutmeldingForm;
-use CsrDelft\view\table\PinTransactieMatchTableType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -75,37 +73,38 @@ class PinTransactieController extends AbstractController {
 	}
 
 	/**
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @Route("/fiscaat/pin", methods={"GET"})
+	 * @Auth(P_FISCAAT_READ)
+	 */
+	public function overzicht() {
+		return $this->render('fiscaat/pin.html.twig', [
+			'titel' => 'Pin transacties beheer',
+			'table' => new PinTransactieMatchTable(),
+		]);
+	}
+
+	/**
 	 * @param Request $request
-	 * @return Response
-	 * @throws ExceptionInterface
-	 * @Route("/fiscaat/pin", methods={"GET", "POST"})
+	 * @Route("/fiscaat/pin", methods={"POST"})
 	 * @Auth(P_FISCAAT_READ)
 	 * @return GenericDataTableResponse
 	 */
-	public function overzicht(Request $request) {
-		$table = $this->createDataTable(PinTransactieMatchTableType::class);
+	public function lijst(Request $request) {
+		$filter = $request->query->get('filter', '');
 
-		if ($request->isMethod("POST")) {
-			$filter = $request->query->get('filter', '');
+		switch ($filter) {
+			case 'metFout':
+				$data = $this->pinTransactieMatchRepository->metFout();
+				break;
 
-			switch ($filter) {
-				case 'metFout':
-					$data = $this->pinTransactieMatchRepository->metFout();
-					break;
-
-				case 'alles':
-				default:
-					$data = $this->pinTransactieMatchRepository->findAll();
-					break;
-			}
-
-			return $table->createData($data);
+			case 'alles':
+			default:
+				$data = $this->pinTransactieMatchRepository->findAll();
+				break;
 		}
 
-		return $this->render('fiscaat/pin.html.twig', [
-			'titel' => 'Pin transacties beheer',
-			'table' => $table->createView(),
-		]);
+		return $this->tableData($data);
 	}
 
 	/**

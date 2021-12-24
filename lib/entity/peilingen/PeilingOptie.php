@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\peilingen;
 
-use CsrDelft\Component\DataTable\DataTableEntry;
+use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\view\bbcode\CsrBB;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;

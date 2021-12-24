@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity;
 
-use CsrDelft\Component\DataTable\DataTableEntry;
+use CsrDelft\common\datatable\DataTableEntry;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 

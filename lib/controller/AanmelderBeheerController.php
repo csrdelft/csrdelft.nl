@@ -2,16 +2,14 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\Component\DataTable\RemoveDataTableEntry;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\aanmelder\AanmeldActiviteit;
 use CsrDelft\entity\aanmelder\Deelnemer;
 use CsrDelft\entity\aanmelder\Reeks;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\aanmelder\AanmeldActiviteitRepository;
 use CsrDelft\repository\aanmelder\DeelnemerRepository;
-use CsrDelft\repository\aanmelder\ReeksRepository;
 use CsrDelft\view\aanmelder\AanmeldActiviteitAanmeldForm;
 use CsrDelft\view\aanmelder\AanmeldActiviteitForm;
 use CsrDelft\view\aanmelder\AanmeldActiviteitTabel;
@@ -25,6 +23,8 @@ use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\repository\aanmelder\ReeksRepository;
 
 /**
  * @Route("/aanmelder/beheer");

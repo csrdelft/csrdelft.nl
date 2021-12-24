@@ -4,7 +4,6 @@
 namespace CsrDelft\Twig\Extension;
 
 
-use CsrDelft\Component\DataTable\DataTableView;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
@@ -64,7 +63,6 @@ class CsrTwigExtension extends AbstractExtension
 			new TwigFunction('huidige_jaargang', [$this, 'huidige_jaargang']),
 			new TwigFunction('gethostbyaddr', 'gethostbyaddr'),
 			new TwigFunction('cms', [$this, 'cms'], ['is_safe' => ['html']]),
-			new TwigFunction('table', [$this, 'table'], ['is_safe' => ['html']])
 		];
 	}
 
@@ -210,11 +208,6 @@ class CsrTwigExtension extends AbstractExtension
 		$leeftijd = date_create_immutable()->diff($oprichting);
 
 		return $leeftijd->y;
-	}
-
-	public function table(DataTableView $table): string
-	{
-		return (string) $table;
 	}
 }
 

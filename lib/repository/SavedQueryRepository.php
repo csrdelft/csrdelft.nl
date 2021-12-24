@@ -8,7 +8,6 @@ namespace CsrDelft\repository;
 use CsrDelft\entity\SavedQuery;
 use CsrDelft\entity\SavedQueryResult;
 use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -48,7 +47,9 @@ class SavedQueryRepository extends AbstractRepository {
 		$resultObject->query = $query;
 
 		try {
-			$result = $this->_em->getConnection()->fetchAllAssociative($query->savedquery);
+			$stmt = $this->_em->getConnection()->query($query->savedquery);
+			$stmt->execute();
+			$result = $stmt->fetchAll();
 			$cols = [];
 
 			foreach ($result[0] as $col => $value) {
@@ -57,7 +58,7 @@ class SavedQueryRepository extends AbstractRepository {
 
 			$resultObject->cols = $cols;
 			$resultObject->rows = $result;
-		} catch (Exception $ex) {
+		} catch (DBALException $ex) {
 			$resultObject->cols = [];
 			$resultObject->rows = [];
 			$resultObject->error = $ex->getMessage();

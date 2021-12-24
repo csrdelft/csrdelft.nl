@@ -28,26 +28,10 @@ export default {
 		return data ? `<span class="ico group_key" title="Aanmeld filter actief: '${data}'"></span>` : '';
 	},
 	aanmeldingen(data, type, row) {
-		return (row.aantal_aanmeldingen || 0) + ' (' + row.aanmeld_limiet + ')';
+		return row.aantal_aanmeldingen + ' (' + row.aanmeld_limiet + ')';
 	},
 	totaalPrijs(data, type, row) {
 		return formatBedrag(row.aantal_aanmeldingen * parseInt(row.prijs, 10));
-	},
-	date(data) {
-		const datum = moment(data);
-		if (datum.isValid()) {
-			return datum.format('L');
-		}
-
-		return data;
-	},
-	time(data) {
-		const tijd = moment(data);
-		if (tijd.isValid()) {
-			return tijd.format('LT');
-		}
-
-		return data;
 	},
 	datetime(date) {
 		if (Number(date) == date) {
@@ -66,13 +50,7 @@ export default {
 			return "Nooit";
 		}
 
-		const datumTijd = moment(date);
-
-		if (datumTijd.isValid()) {
-			return moment(date).format('YYYY-MM-DD HH:mm');
-		}
-
-		return date;
+		return moment(date).format('YYYY-MM-DD HH:mm');
 	},
 	timeago(data, type, row, meta) {
 		const api = getApiFromSettings(meta.settings);

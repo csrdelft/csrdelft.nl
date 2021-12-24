@@ -3,7 +3,7 @@
 namespace CsrDelft\entity\aanmelder;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\Component\DataTable\DataTableEntry;
+use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\repository\aanmelder\AanmeldActiviteitRepository;
 use CsrDelft\repository\aanmelder\DeelnemerRepository;
 use CsrDelft\service\security\LoginService;
