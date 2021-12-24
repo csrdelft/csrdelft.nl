@@ -2,14 +2,13 @@
 
 namespace CsrDelft\entity\fiscaat;
 
-use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
-use function Clue\StreamFilter\fun;
 
 /**
  * CiviSaldo.class.php

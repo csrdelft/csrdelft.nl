@@ -16,7 +16,7 @@ if ($barsysteem->isLoggedIn() && $barsysteem->preventCsrf()){
 	/* Start beheer */
 
 	if(isset($_POST["update_person"])) {
-		echo $barsysteem->updatePerson($_POST['id'], $_POST['name']);
+		echo $barsysteem->updatePerson($_POST['id'], $_POST['name'])->rowCount();
 	}
 
 	if($barsysteem->isBeheer()) {
@@ -37,7 +37,7 @@ if ($barsysteem->isLoggedIn() && $barsysteem->preventCsrf()){
 			echo $barsysteem->updateVisibility($_POST['productId'], $_POST['visibility']);
 		}
 		if(isset($_POST["add_person"])) {
-			echo $barsysteem->addPerson($_POST['name'], $_POST['saldo'], $_POST['uid']);
+			echo $barsysteem->addPerson($_POST['name'], $_POST['saldo'], $_POST['uid'])->rowCount();
 		}
 		if(isset($_POST["remove_person"])) {
 			echo $barsysteem->removePerson($_POST['id']);

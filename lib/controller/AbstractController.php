@@ -7,9 +7,10 @@ use CsrDelft\Component\Formulier\FormulierFactory;
 use CsrDelft\Component\Formulier\FormulierInstance;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
+use CsrDelft\Component\DataTable\DataTableFactory;
+use CsrDelft\Component\DataTable\DataTableInstance;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
-use Memcache;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -24,6 +25,7 @@ use Throwable;
 class AbstractController extends BaseController {
 	public static function getSubscribedServices() {
 		return parent::getSubscribedServices() + [
+				'csr.table.factory' => DataTableFactory::class,
 				'csr.formulier.factory' => FormulierFactory::class,
 			];
 	}
@@ -92,5 +94,14 @@ class AbstractController extends BaseController {
 	 */
 	protected function createFormulier(string $type, $data = null, array $options = []): FormulierInstance {
 		return $this->container->get('csr.formulier.factory')->create($type, $data, $options);
+	}
+
+	/**
+	 * @param $type
+	 * @param array $options
+	 * @return DataTableInstance
+	 */
+	protected function createDataTable($type, $options = []) {
+		return $this->container->get('csr.table.factory')->create($type, $options)->getTable();
 	}
 }
