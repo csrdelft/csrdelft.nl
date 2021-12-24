@@ -93,7 +93,11 @@ class DataTableBuilder {
 	}
 
 	public function loadFromClass(string $className) {
-		$this->loadFromMetadata($this->entityManager->getClassMetadata($className));
+		if (is_a($className, CustomDataTableEntry::class)) {
+			$this->loadCustomDataTableEntry($className);
+		} else {
+			$this->loadFromMetadata($this->entityManager->getClassMetadata($className));
+		}
 	}
 
 	public function loadFromMetadata(ClassMetadata $metadata) {
@@ -371,5 +375,24 @@ class DataTableBuilder {
 
 	public function setDataUrl($dataUrl) {
 		$this->dataUrl = $dataUrl;
+	}
+
+	/**
+	 * @param string|CustomDataTableEntry $className
+	 */
+	private function loadCustomDataTableEntry(string $className)
+	{
+		foreach ($className::getFieldNames() as $attribute) {
+			$this->addColumn($attribute);
+		}
+
+		foreach ($className::getIdentifierFieldNames() as $attribute) {
+			$this->hideColumn($attribute);
+		}
+	}
+
+	public function resetButtons()
+	{
+		$this->settings['buttons'] = [];
 	}
 }
