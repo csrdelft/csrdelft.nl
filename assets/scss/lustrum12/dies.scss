@@ -36,12 +36,22 @@ $kleur-wit: #FFFFFF;
 $kleur-zwart: #000000;
 
 
-
+.zandloper {
+	right: 20px;
+}
 /* nav */
 nav{
 	//background: $dark-rose !important;
 	color: $bordeaux-rood;
 
+	.dies-logo-titel {
+		top: 50px;
+		height:100%;
+		left: -3px;
+		@media screen and (max-width:768px){
+			visibility: hidden;
+		}
+	}
 	a {
 		/* Header text */
 		color: $oranje;
@@ -126,6 +136,14 @@ section {
 	border-radius: 25px;
 	border: 1px solid $Lila;
 	box-shadow: 0px 0px 20px $Lila;
+
+	.poster img {
+		width: 100%;
+		height: 100%;
+		max-height: 100%;
+		max-width: 100%;
+	}
+
 }
 
 /* 3 / 1 columns */
@@ -220,17 +238,25 @@ section {
 	.dag {
 		padding: 20px;
 		border-radius: 20px;
-		background-color: $lightgray-transparant;
-		//border: 3px solid transparent;
+		//background-color: $lightgray-transparant;
+		border-color: $Lila;
+		box-shadow: 0px 0px 20px $Lila;
 
 		margin-top: 20px;
 		margin-bottom: 20px;
 		h2 {
-			text-transform: uppercase;
-			font-family: $dies-uppereast-font;
-
+			//text-transform: uppercase;
+			//font-family: $dies-uppereast-font;
+			font-family: $dies-arkadelphia-font;
 			text-align: center;
 			font-size: 3.0rem;
+			.cijfer {
+				font-family: $dies-uppereast-font;
+				font-weight: normal;
+			}
+		}
+		hr {
+			border-top: 1px solid $Lila;
 		}
 		.activiteit {
 
@@ -244,12 +270,16 @@ section {
 			h3 {
 				font-family: $dies-uppereast-font;
 				text-transform: uppercase;
-
 				text-align: center;
 				font-size: 2.4rem;
 			}
 			.beschrijving {
-
+				a {
+					color: $oranje;
+				}
+				a:hover {
+					color: $Lila;
+				}
 			}
 			.dies-activiteit-ketzers {
 				.toggler{

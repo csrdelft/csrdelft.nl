@@ -30,11 +30,15 @@
 </head>
 
 <body class="zijbalk_verborgen diespagina">
-	{%  include 'lustrum12/zandloper.html.twig' %}
+{#	{%  include 'lustrum12/zandloper.html.twig' %}#}
 	{{ cms('lustrum-dies') }}
 {#	<nav class="site-header">#}
 {#		<a class="logo-titel d-inline-block" href="./">#}
-{#			<img src="/images/lustrum12//themaheader.png"#}
+{#			<img src="/images/lustrum12/themaheader.png"#}
+{#					 alt="Logo menu" />#}
+{#		</a>#}
+{#		<a class="logo-titel dies-logo-titel d-inline-block" href="./">#}
+{#			<img src="/images/lustrum12/dies-bord.png"#}
 {#					 alt="Logo menu" />#}
 {#		</a>#}
 {#		<div class="container">#}
@@ -42,6 +46,7 @@
 {#				<a class="d-none d-md-inline-block" href="./">Home</a>#}
 {#				<a class="d-none d-md-inline-block" href="#thema">Thema</a>#}
 {#				<a class="d-none d-md-inline-block" href="#programma">Programma</a>#}
+{#				<a class="d-none d-md-inline-block" href="#ketzers">Ketzers</a>#}
 {#				<a class="d-none d-md-inline-block" href="/tijdloos/dies/gala">Gala</a>#}
 {#				<a class="d-none d-md-inline-block" href="/tijdloos/dies/etiquette">Etiquette</a>#}
 {#			</div>#}
@@ -51,15 +56,8 @@
 {#	<a id="thema"></a>#}
 {#	<section class="helemaal-boven">#}
 {#		<h1 class="titel">Thema</h1>#}
-{#		<div class="poster-container container">#}
-{#			<div class="row">#}
-{#				<div class="dies-poster col-lg-6 ">#}
-{#					<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />#}
-{#				</div>#}
-{#				<div class="dies-poster col-lg-6 ">#}
-{#					<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />#}
-{#				</div>#}
-{#			</div>#}
+{#		<div class="poster">#}
+{#			<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />#}
 {#		</div>#}
 {#		<br>#}
 
@@ -73,6 +71,7 @@
 {#				</div>#}
 {#			</div>#}
 {#		</div>#}
+{#		<br>#}
 {#		<h2 class="titel ondertitel"><a class="titel ondertitel" href="/tijdloos/dies/etiquette"><u>Hier</u></a> kan u uw kennis van de gala etiquette weer helemaal opfrissen.</h2>#}
 {#	</section>#}
 
@@ -82,24 +81,37 @@
 
 {#	<section class="programma container gx-5">#}
 {#		<h1 class="titel">Programma</h1>#}
+{#		<div class="poster">#}
+{#			<img src="/images/lustrum12/dies-programma.jpg" alt="Logo menu" />#}
+{#		</div>#}
+{#	</section>#}
+
+{#	<div id="ketzers" class="divider">#}
+{#		<img class="tussen" src="/images/lustrum12/DiesDividerLarge.png">#}
+{#	</div>#}
+
+{#	<section class="programma container gx-5">#}
+
+{#		<h1 class="divider titel">Ketzers</h1>#}
 {#		<h2 class="titel ondertitel">Het gala heeft een eigen pagina die u <a class="titel ondertitel" href="/tijdloos/dies/gala"><u>hier</u></a> kan vinden.</h2>#}
 
-{#		<div class="row gx-3">#}
+{#		<div class="row gx-5">#}
 {#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
-{#					<h2>Maandag 7 Febuari</h2>#}
+{#					<h2>Maandag <span class="cijfer">7</span> Februari</h2>#}
+{#					<hr>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>La première</h3>#}
 {#						<div class="beschrijving">#}
-{#							C.S.R. film#}
+{#							C.S.R.-film#}
 {#						</div>#}
 {#					</div>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>22:00 Santé et Debatter</h3>#}
 {#						<div class="beschrijving">#}
-{#							Kom debatteren en borrelen.#}
+{#							Debat en borrelen#}
 {#						</div>#}
 {#					</div>#}
 
@@ -108,12 +120,13 @@
 
 {#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
-{#					<h2>Dinsdag 8 Febuari</h2>#}
+{#					<h2>Dinsdag <span class="cijfer">8</span> Februari</h2>#}
+{#					<hr>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>18:30 Dromerig Diner </h3>#}
 {#						<div class="beschrijving">#}
-{#							Openings diner#}
+{#							Openingsdiner#}
 {#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
@@ -129,14 +142,14 @@
 {#					<div class="activiteit">#}
 {#						<h3>20:00 Louer et Prayer - LeP</h3>#}
 {#						<div class="beschrijving">#}
-{#							Openings Leo#}
+{#							Openings LeO#}
 {#						</div>#}
 {#					</div>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>22:00 Santé et Debatter</h3>#}
 {#						<div class="beschrijving">#}
-{#							Kom debatteren en borrelen.#}
+{#							Debat en borrelen#}
 {#						</div>#}
 {#					</div>#}
 
@@ -145,7 +158,8 @@
 
 {#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
-{#					<h2>Woensdag 9 Febuari</h2>#}
+{#					<h2>Woensdag <span class="cijfer">9</span> Februari</h2>#}
+{#					<hr>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>14:00 Externe Receptie</h3>#}
@@ -164,7 +178,7 @@
 {#					<div class="activiteit">#}
 {#						<h3>20:00 Boutique - Rokkostuum passen</h3>#}
 {#						<div class="beschrijving">#}
-{#							Voor het gala moet u uiteraard goed gekleed komen in een rokkostuum. De AcqCie heeft elke jaar een mooie deal met Gents om u te voorzien van een rokkostuum voor een zacht studenten prijsje met korting.#}
+{#							Voor het gala moet u uiteraard goed gekleed komen in een rokkostuum. De AcqCie heeft elke jaar een mooie deal met Gents om u te voorzien van een rokkostuum voor een zacht studentenprijsje met korting. Deze kunt op deze avond passen en wordt voor het gala geleverd.#}
 {#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
@@ -179,7 +193,7 @@
 {#					<div class="activiteit">#}
 {#						<h3>22:00 Santé et Debatter</h3>#}
 {#						<div class="beschrijving">#}
-{#							Kom debatteren en borrelen.#}
+{#							Kom debatteren en borrelen#}
 {#						</div>#}
 {#					</div>#}
 
@@ -188,7 +202,8 @@
 
 {#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
-{#					<h2>Donderdag 10 Febuari</h2>#}
+{#					<h2>Donderdag <span class="cijfer">10</span> Februari</h2>#}
+{#					<hr>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>8:00 Croissant et jus d'orange</h3>#}
@@ -223,7 +238,8 @@
 
 {#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
-{#					<h2>Vrijdag 11 Febuari</h2>#}
+{#					<h2>Vrijdag <span class="cijfer">11</span> Februari</h2>#}
+{#					<hr>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>9:00 Vive la Revolution - Verticalestrijd</h3>#}
@@ -243,7 +259,7 @@
 {#					<div class="activiteit">#}
 {#						<h3>22:00 Santé et Debatter</h3>#}
 {#						<div class="beschrijving">#}
-{#							Kom debatteren en borrelen.#}
+{#							Debat en borrelen#}
 {#						</div>#}
 {#					</div>#}
 
@@ -252,12 +268,13 @@
 
 {#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
-{#					<h2>Zaterdag 12 Febuari</h2>#}
+{#					<h2>Zaterdag <span class="cijfer">12</span> Februari</h2>#}
+{#					<hr>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>14:00 Les Brusjes</h3>#}
 {#						<div class="beschrijving">#}
-{#							Wat is er mooier dan je avonturen delen met andere?! Neem je brusjes mee naar een dag vol activiteiten waarin ze de gebruiken en uithoeken van Delft en de Civitas leren kennen. Vul het aantal brusjes in de ketzer in. Kosten liggen rond de 7,50pp inclusief eten en activiteiten.#}
+{#							Wat is er mooier dan je avonturen delen met anderen?! Neem je brusjes mee naar een dag vol activiteiten waarin ze de mores en uithoeken van Delft en de Civitas leren kennen. Vul het aantal brusjes in de ketzer in. Kosten liggen rond de 7,50 pp inclusief eten en activiteiten.#}
 {#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
@@ -270,9 +287,9 @@
 {#					</div>#}
 
 {#					<div class="activiteit">#}
-{#						<h3>20:30 In Siene Gezet - Filmavond</h3>#}
+{#						<h3>20:30 In Seine Gezet - Filmavond</h3>#}
 {#						<div class="beschrijving">#}
-{#							Bijkomen van de drukke diesweek met een goede film en popcorn.#}
+{#							Bijkomen van de drukke diesweek met een meeslepende film en popcorn#}
 {#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
@@ -288,12 +305,13 @@
 
 {#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
-{#					<h2>Zondag 13 Febuari</h2>#}
+{#					<h2>Zondag <span class="cijfer">13</span> Februari</h2>#}
+{#					<hr>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>10:00 Le Sacre Coeur - Kerkplan</h3>#}
 {#						<div class="beschrijving">#}
-{#							Zondag met z'n allen naar de kerk.#}
+{#							Zondag met z'n allen naar de kerk#}
 {#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
@@ -325,7 +343,8 @@
 
 {#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
-{#					<h2>Maandag 14 Febuari</h2>#}
+{#					<h2>Maandag <span class="cijfer">14</span> Februari</h2>#}
+{#					<hr>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>18:30 Van Speijk valentijns diner</h3>#}
@@ -354,12 +373,13 @@
 
 {#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
-{#					<h2>Dinsdag 15 Febuari</h2>#}
+{#					<h2>Dinsdag <span class="cijfer">15</span> Februari</h2>#}
+{#					<hr>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>20:00 Cabaretteketet - Op de Planken</h3>#}
 {#						<div class="beschrijving">#}
-{#							De jaarlijkse cabaret voorstelling keert terug onder leiding van CaCie Duister zullen er voorstellingen plaatsvinden voor het vermaak van de vereniging. Vul uw act naam in de beschrijving in.#}
+{#							De jaarlijkse cabaret voorstelling keert terug!  Onder leiding van CaCie Duister zullen er voorstellingen plaatsvinden voor het vermaak van de vereniging. Vul uw de naam van u act in de beschrijving in.#}
 {#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
@@ -374,7 +394,7 @@
 {#					<div class="activiteit">#}
 {#						<h3>22:00 Santé et Debatter</h3>#}
 {#						<div class="beschrijving">#}
-{#							Kom debatteren en borrelen.#}
+{#							Debat en borrelen#}
 {#						</div>#}
 {#					</div>#}
 
@@ -383,12 +403,13 @@
 
 {#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
-{#					<h2>Woensdag 16 Febuari</h2>#}
+{#					<h2>Woensdag 16 Februari</h2>#}
+{#					<hr>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>14:00 Les Bijoux - DéDé corsage klussen</h3>#}
 {#						<div class="beschrijving">#}
-{#							Naar het gala zonder corsage kan uiteraard niet. Lukt het in de drukke weken voor het gala niet om uw date te voorzien van een ludieke corsage? De dames van DéDé helpen u wel tijden deze klus sessie.#}
+{#							Naar het gala zonder corsage kan uiteraard niet. Lukt het in de drukke weken voor het gala niet om uw date te voorzien van een ludieke corsage? De dames van DéDé helpen u wel tijdens deze klus sessie.#}
 {#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
@@ -403,7 +424,7 @@
 {#					<div class="activiteit">#}
 {#						<h3>20:30 Bierberonner - Bierproeverij van LuBieCie</h3>#}
 {#						<div class="beschrijving">#}
-{#							De LuBieCie zal u mee nemen in de wereld van speciaal biertjes en het een en ander vertellen over de verschillende biertjes. Hier zitten uiteraard kosten aan verbonden die gecommuniceerd zullen worden. Naar verwachting tussen de 5 en 10 euro.#}
+{#							De LuBieCie zal u meenemen in de wereld van speciaalbiertjes en het één en ander vertellen over de verschillende biertjes. Naar verwachting tussen de 5 en 10 euro.#}
 {#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
@@ -418,7 +439,7 @@
 {#					<div class="activiteit">#}
 {#						<h3>22:00 Santé et Debatter</h3>#}
 {#						<div class="beschrijving">#}
-{#							Kom debatteren en borrelen.#}
+{#							Debat en borrelen#}
 {#						</div>#}
 {#					</div>#}
 
@@ -427,12 +448,13 @@
 
 {#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
-{#					<h2>Donderdag 17 Febuari</h2>#}
+{#					<h2>Donderdag <span class="cijfer">17</span> Februari</h2>#}
+{#					<hr>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>16:00 AcqCie training</h3>#}
 {#						<div class="beschrijving">#}
-{#							De AcqCie fixt een arbeidsbemiddelingsbureau dat graag langs komt om een lezing te geven over vaardigheden die belangrijk zijn op de arbeidsmarkt. Daarnaast ontvangt C.S.R. 10 euro per persoon die aanwezig is! Dus kom langs en leer over een handige  vaardigheid.#}
+{#							De AcqCie fixt een arbeidsbemiddelingsbureau dat graag langs komt om een training te geven over vaardigheden die belangrijk zijn op de arbeidsmarkt, zoals soliciteren. Daarnaast ontvangt C.S.R. 10 euro per persoon die aanwezig is! Dus kom langs en leer over een handige  vaardigheid.#}
 {#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
@@ -447,7 +469,7 @@
 {#					<div class="activiteit">#}
 {#						<h3>18:30 Tous à Table</h3>#}
 {#						<div class="beschrijving">#}
-{#							Lekker eten.#}
+{#							Tijdloos genieten van een oudwetse maatlijd op confide.#}
 {#						</div>#}
 {#						<div class="dies-activiteit-ketzers">#}
 {#							<a class="toggler">Laat ketzers zien</a>#}
@@ -462,14 +484,14 @@
 {#					<div class="activiteit">#}
 {#						<h3>20:30 Dies lezing - Ted Parle</h3>#}
 {#						<div class="beschrijving">#}
-{#							Kom luisteren en aanschouwen naar goede praatjes van leden.#}
+{#							Kom luisteren en naar de expertise en wijsheden die de Civitas rijk is!#}
 {#						</div>#}
 {#					</div>#}
 
 {#					<div class="activiteit">#}
 {#						<h3>22:00 Santé et Debatter</h3>#}
 {#						<div class="beschrijving">#}
-{#							Kom debatteren en borrelen.#}
+{#							Debat en borrelen#}
 {#						</div>#}
 {#					</div>#}
 
@@ -478,12 +500,13 @@
 
 {#			<div class="col-xl-6">#}
 {#				<div class="dag">#}
-{#					<h2>Vrijdag 18 Febuari</h2>#}
+{#					<h2>Vrijdag <span class="cijfer">18</span> Februari</h2>#}
+{#					<hr>#}
 
 {#					<div class="activiteit">#}
-{#						<h3>14:00 Le Moment Supreme </h3>#}
+{#						<h3>14:00 Le Moment Suprême </h3>#}
 {#						<div class="beschrijving">#}
-{#							Zie de aparte gala pagina<a class="titel ondertitel" href="/tijdloos/dies/gala">hier</a>#}
+{#							<a href="/tijdloos/dies/gala"><u>Bezoek de aparte gala pagina.</u></a>#}
 {#						</div>#}
 {#					</div>#}
 {#				</div>#}
@@ -491,5 +514,4 @@
 {#			</div>#}
 {#		</div>#}
 {#	</section>#}
-
 </body>
