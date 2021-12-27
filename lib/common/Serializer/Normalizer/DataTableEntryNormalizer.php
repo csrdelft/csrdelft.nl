@@ -4,7 +4,7 @@
 namespace CsrDelft\common\Serializer\Normalizer;
 
 
-use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\Component\DataTable\DataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;

@@ -4,7 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\entity\groepen\enum\GroepStatus;

@@ -311,75 +311,77 @@ class AccessService {
 			}
 		}
 
-		// case insensitive
-		return $this->hasPermission($subject, strtoupper($permission));
-	}
-
-	/**
-	 * @param UserInterface $subject
-	 * @param null $permission
-	 *
-	 * @return bool|mixed
-	 * @throws InvalidArgumentException
-	 */
-	private function hasPermission(UserInterface $subject, $permission = null) {
 		// Rechten vergeten?
 		if (empty($permission)) {
 			return false;
 		}
 
+		// Altijd uppercase
+		$permission = strtoupper($permission);
+
 		// Try cache
-		$key = 'hasPermission-' . urlencode(str_replace('-', '_', $permission)) . '-' . $subject->uid;
+		$key = sprintf("hasPermission-%s-%s", urlencode(str_replace('-', '_', $permission)), $subject->uid);
 
 		return $this->cache->get($key, function () use ($subject, $permission) {
-			// OR
-			if (strpos($permission, ',') !== false) {
-				/**
-				 * Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
-				 * gescheiden, waarvan de gebruiker er dan een hoeft te hebben. Er kunnen
-				 * dan ook uid's tussen zitten, als een daarvan gelijk is aan dat van de
-				 * gebruiker heeft hij ook rechten.
-				 */
-				$p = explode(',', $permission);
-				$result = false;
-				foreach ($p as $perm) {
-					$result |= $this->hasPermission($subject, $perm);
-				}
-			} // AND
-			elseif (strpos($permission, '+') !== false) {
-				/**
-				 * Gecombineerde permissie:
-				 * gebruiker moet alle permissies bezitten
-				 */
-				$p = explode('+', $permission);
-				$result = true;
-				foreach ($p as $perm) {
-					$result &= $this->hasPermission($subject, $perm);
-				}
-			} // OR (secondary)
-			elseif (strpos($permission, '|') !== false) {
-				/**
-				 * Mogelijkheid voor OR binnen een AND
-				 * Hierdoor zijn er geen haakjes nodig in de syntax voor niet al te ingewikkelde statements.
-				 * Statements waarbij haakjes wel nodig zijn moet je niet willen.
-				 */
-				$p = explode('|', $permission);
-				$result = false;
-				foreach ($p as $perm) {
-					$result |= $this->hasPermission($subject, $perm);
-				}
-			} // Is de gevraagde permissie het uid van de gevraagde gebruiker?
-			elseif ($subject->uid == strtolower($permission)) {
-				$result = true;
-			} // Is de gevraagde permissie voorgedefinieerd?
-			elseif (isset($this->permissions[$permission])) {
-				$result = $this->mandatoryAccessControl($subject, $permission);
-			} else {
-				$result = $this->discretionaryAccessControl($subject, $permission);
-			}
-
-			return $result;
+			return $this->hasPermission($subject, $permission);
 		});
+	}
+
+	/**
+	 * Controleer een permissie.
+	 *
+	 * @param UserInterface $subject
+	 * @param null $permission
+	 * @return bool
+	 */
+	private function hasPermission(UserInterface $subject, $permission = null) {
+		// OR
+		if (strpos($permission, ',') !== false) {
+			/**
+			 * Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
+			 * gescheiden, waarvan de gebruiker er dan een hoeft te hebben. Er kunnen
+			 * dan ook uid's tussen zitten, als een daarvan gelijk is aan dat van de
+			 * gebruiker heeft hij ook rechten.
+			 */
+			$p = explode(',', $permission);
+			$result = false;
+			foreach ($p as $perm) {
+				$result |= $this->hasPermission($subject, $perm);
+			}
+		} // AND
+		elseif (strpos($permission, '+') !== false) {
+			/**
+			 * Gecombineerde permissie:
+			 * gebruiker moet alle permissies bezitten
+			 */
+			$p = explode('+', $permission);
+			$result = true;
+			foreach ($p as $perm) {
+				$result &= $this->hasPermission($subject, $perm);
+			}
+		} // OR (secondary)
+		elseif (strpos($permission, '|') !== false) {
+			/**
+			 * Mogelijkheid voor OR binnen een AND
+			 * Hierdoor zijn er geen haakjes nodig in de syntax voor niet al te ingewikkelde statements.
+			 * Statements waarbij haakjes wel nodig zijn moet je niet willen.
+			 */
+			$p = explode('|', $permission);
+			$result = false;
+			foreach ($p as $perm) {
+				$result |= $this->hasPermission($subject, $perm);
+			}
+		} // Is de gevraagde permissie het uid van de gevraagde gebruiker?
+		elseif ($subject->uid == strtolower($permission)) {
+			$result = true;
+		} // Is de gevraagde permissie voorgedefinieerd?
+		elseif (isset($this->permissions[$permission])) {
+			$result = $this->mandatoryAccessControl($subject, $permission);
+		} else {
+			$result = $this->discretionaryAccessControl($subject, $permission);
+		}
+
+		return $result;
 	}
 
 	/**

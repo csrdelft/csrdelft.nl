@@ -4,7 +4,7 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\entity\groepen\Activiteit;
@@ -14,7 +14,6 @@ use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\groepen\GroepAanmeldMoment;
 use CsrDelft\entity\groepen\GroepAanmeldRechten;
 use CsrDelft\entity\groepen\GroepLid;
-use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;

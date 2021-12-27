@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
  * BeheerCiviSaldoController.class.php
@@ -52,23 +53,21 @@ class BeheerCiviSaldoController extends AbstractController {
 
 	/**
 	 * @return Response
-	 * @Route("/fiscaat/saldo", methods={"GET"})
+	 * @Route("/fiscaat/saldo")
 	 * @Auth(P_FISCAAT_READ)
+	 * @throws ExceptionInterface
 	 */
-	public function overzicht() {
+	public function overzicht(Request $request) {
+		$table = $this->createDataTable(CiviSaldoTable::class);
+
+		if ($request->getMethod() == 'POST') {
+			return $table->createData($this->civiSaldoRepository->findBy(['deleted' => false]));
+		}
+
 		return $this->render('fiscaat/pagina.html.twig', [
 			'titel' => 'Saldo beheer',
-			'view' => new CiviSaldoTable(),
+			'view' => $table->createView(),
 		]);
-	}
-
-	/**
-	 * @return GenericDataTableResponse
-	 * @Route("/fiscaat/saldo", methods={"POST"})
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function lijst() {
-		return $this->tableData($this->civiSaldoRepository->findBy(['deleted' => false]));
 	}
 
 	/**

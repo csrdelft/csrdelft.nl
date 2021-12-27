@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\peilingen;
 
-use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;

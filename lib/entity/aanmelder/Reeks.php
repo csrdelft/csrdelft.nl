@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\aanmelder;
 
-use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\repository\aanmelder\ReeksRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\ArrayCollection;

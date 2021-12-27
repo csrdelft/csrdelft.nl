@@ -3,6 +3,7 @@
 
 namespace CsrDelft;
 
+use CsrDelft\Component\DataTable\DataTableTypeInterface;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use CsrDelft\view\bbcode\prosemirror\Mark;
 use CsrDelft\view\bbcode\prosemirror\Node;
@@ -47,5 +48,6 @@ class Kernel extends BaseKernel {
 		$builder->registerForAutoconfiguration(FormulierTypeInterface::class)->addTag('csr.formulier.type');
 		$builder->registerForAutoconfiguration(Mark::class)->addTag('csr.editor.mark');
 		$builder->registerForAutoconfiguration(Node::class)->addTag('csr.editor.node');
+		$builder->registerForAutoconfiguration(DataTableTypeInterface::class)->addTag('csr.table.type');
 	}
 }
