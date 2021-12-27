@@ -93,7 +93,7 @@ class DataTableBuilder {
 	}
 
 	public function loadFromClass(string $className) {
-		if (is_a($className, CustomDataTableEntry::class)) {
+		if (is_a($className, CustomDataTableEntry::class, true)) {
 			$this->loadCustomDataTableEntry($className);
 		} else {
 			$this->loadFromMetadata($this->entityManager->getClassMetadata($className));
