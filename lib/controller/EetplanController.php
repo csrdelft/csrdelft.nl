@@ -338,7 +338,7 @@ class EetplanController extends AbstractController
 	{
 		return $this->render('eetplan/beheer.html.twig', [
 			'bekendentable' => new EetplanBekendenTable(),
-			'huizentable' => new EetplanHuizenTable(),
+			'huizentable' => $this->createDataTable(EetplanHuizenTable::class)->createView(),
 			'bekendehuizentable' => new EetplanBekendeHuizenTable(),
 			'eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar)
 		]);
