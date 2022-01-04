@@ -41,3 +41,7 @@
 	path = htdocs/lustrum12
 	url = https://github.com/csrdelft/lustrum12.git
 	branch = gh-pages
+[submodule "htdocs/civitasproducties"]
+	path = htdocs/civitasproducties
+	url = https://github.com/csrdelft/civitasproducties.git
+	branch = gh-pages
