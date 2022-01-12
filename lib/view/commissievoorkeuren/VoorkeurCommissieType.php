@@ -33,7 +33,7 @@ class VoorkeurCommissieType extends AbstractType
 		$builder
 			->add('naam', TextType::class, ['required' => true])
 			->add('categorie', EntityType::class, ['class' => VoorkeurCommissieCategorie::class, 'choice_label' => 'naam'])
-			->add('zichtbaar', CheckboxType::class)
+			->add('zichtbaar', CheckboxType::class, ['required' => false])
 			->add('opslaan', SubmitType::class)
 		;
 	}

@@ -140,6 +140,7 @@ class CommissieVoorkeurenController extends AbstractController
 	 * @return RedirectResponse
 	 * @Route("/commissievoorkeuren/overzicht/{id}", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
+	 * @CsrfUnsafe
 	 */
 	public function updatecommissie(Request $request, VoorkeurCommissie $commissie): RedirectResponse
 	{
