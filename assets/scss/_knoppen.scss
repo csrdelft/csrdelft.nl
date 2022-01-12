@@ -4,9 +4,22 @@ Externe links & Knoppen
 
 -------------------------------- */
 
-a[href^="http://"]:not([href*="csrdelft.nl"]):not(.not-external), a[href^="https://"]:not([href*="csrdelft.nl"]):not(.not-external) {
-  padding-right: 16px;
-  background: url("../images/external-link-blue.png") no-repeat center right;
+// Absolute urls krijgen een icoontje
+a[href^="http://"], a[href^="https://"] {
+	&:after {
+		content: '';
+		padding-right: 16px;
+		background: url("../images/external-link-blue.png") no-repeat center right;
+	}
+}
+
+// Behalve als de absolute urls in de stek zijn
+a[href*="csrdelft.nl"], a[href*="127.0.0.1"], a.not-external {
+	&:after {
+		content: none;
+		padding-right: inherit;
+		background: none;
+	}
 }
 
 .sf-toolbar {
