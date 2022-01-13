@@ -30,7 +30,7 @@ class FiscaatController extends AbstractController {
 			'saldisom' => $this->civiSaldoRepository->getSomSaldi(),
 			'saldisomleden' => $this->civiSaldoRepository->getSomSaldi(true),
 			'productenbeheer' => new CiviProductTable(),
-			'saldobeheer' => new CiviSaldoTable(),
+			'saldobeheer' => $this->createDataTable(CiviSaldoTable::class),
 		]);
 	}
 }
