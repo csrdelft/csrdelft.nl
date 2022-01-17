@@ -13,6 +13,7 @@
     <mapping directory="$PROJECT_DIR$/htdocs/bc" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/htdocs/beaufort" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/htdocs/ccd" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/civitasproducties" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/htdocs/dies/2013" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/htdocs/dies/2015" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/htdocs/dies/2016" vcs="Git" />
