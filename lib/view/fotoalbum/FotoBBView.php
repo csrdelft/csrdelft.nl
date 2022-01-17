@@ -51,7 +51,7 @@ class FotoBBView implements ToResponse, View {
 		} else {
 			$html .= $this->model->getThumbUrl();
 		}
-		$html .= '"></span>';
+		$html .= '"></div>';
 		return $html;
 	}
 
