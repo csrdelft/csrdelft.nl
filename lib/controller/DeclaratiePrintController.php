@@ -23,10 +23,12 @@ class DeclaratiePrintController extends AbstractController
 
 		list($type, $content) = $declaratiePDFGenerator->genereerDeclaratie($declaratie);
 		$response = new Response($content);
+		$safeName = preg_replace('/[^A-Za-z0-9 _\-+&]/','', $declaratie->getTitel());
 
 		$disposition = $response->headers->makeDisposition(
 			ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-			"{$declaratie->getTitel()}.{$type}"
+			"{$declaratie->getTitel()}.{$type}",
+			"{$safeName}.{$type}"
 		);
 		$response->headers->set('Content-Disposition', $disposition);
 		$response->headers->set('Content-Type', "application/{$type}");
