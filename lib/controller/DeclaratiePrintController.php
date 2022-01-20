@@ -8,6 +8,7 @@ use CsrDelft\service\DeclaratiePDFGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
+use Transliterator;
 
 class DeclaratiePrintController extends AbstractController
 {
@@ -23,7 +24,9 @@ class DeclaratiePrintController extends AbstractController
 
 		list($type, $content) = $declaratiePDFGenerator->genereerDeclaratie($declaratie);
 		$response = new Response($content);
-		$safeName = preg_replace('/[^A-Za-z0-9 _\-+&]/','', $declaratie->getTitel());
+
+		$transliterator = Transliterator::createFromRules(':: Any-Latin; :: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;', Transliterator::FORWARD);
+		$safeName = $transliterator->transliterate($declaratie->getTitel());
 
 		$disposition = $response->headers->makeDisposition(
 			ResponseHeaderBag::DISPOSITION_ATTACHMENT,
