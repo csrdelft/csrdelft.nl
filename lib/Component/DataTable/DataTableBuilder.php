@@ -354,6 +354,14 @@ class DataTableBuilder {
 
 	public function setTitel($titel) {
 		$this->titel = $titel;
+
+		if ($titel) {
+			$this->settings['buttons'][1]['filename'] = $titel;
+			$this->settings['buttons'][2]['filename'] = $titel;
+		} else {
+			unset($this->settings['buttons'][1]['filename']);
+			unset($this->settings['buttons'][2]['filename']);
+		}
 	}
 
 	// create group expand / collapse column

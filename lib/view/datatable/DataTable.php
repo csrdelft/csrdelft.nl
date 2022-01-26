@@ -56,7 +56,7 @@ class DataTable implements View, FormElement, ToResponse {
 				'exportOptions' => [
 					'columns' => ':visible',
 					'orthogonal' => 'export',
-				]
+				],
 			], [
 				'extend' => 'print',
 				'exportOptions' => [
@@ -78,6 +78,11 @@ class DataTable implements View, FormElement, ToResponse {
 		$this->dataUrl = $dataUrl;
 		$this->dataTableId = uniqid_safe(classNameZonderNamespace($orm));
 		$this->groupByColumn = $groupByColumn;
+
+		if ($titel) {
+			$this->settings['buttons'][1]['filename'] = $titel;
+			$this->settings['buttons'][2]['filename'] = $titel;
+		}
 
 		// create group expand / collapse column
 		$this->columns['details'] = array(
