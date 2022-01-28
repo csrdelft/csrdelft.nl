@@ -459,6 +459,14 @@
         <source>C.S.R. Delft in 1 minuut</source>
         <target>This is C.S.R. Delft</target>
       </trans-unit>
+      <trans-unit id="ksQhDbU" resname="Met het verzenden van dit formulier ga je akkoord met de &lt;a&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;href=&quot;/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-/05-2018.pdf&quot;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;target=&quot;_blank&quot;&gt;privacyverklaring van C.S.R. Delft&lt;/a&gt;.">
+        <source>Met het verzenden van dit formulier ga je akkoord met de &lt;a
+										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-/05-2018.pdf"
+										target="_blank"&gt;privacyverklaring van C.S.R. Delft&lt;/a&gt;.</source>
+        <target><![CDATA[By sending this form you agree to: <a
+										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-/05-2018.pdf"
+										target="_blank">Privacy declaration C.S.R. Delft</a>.]]></target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
