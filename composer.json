@@ -72,7 +72,9 @@
 		"phpdocumentor/reflection-docblock": "^5.2",
 		"symfony/property-access": "^5.0",
 		"symfony/property-info": "^5.0",
-		"symfony/serializer": "^5.0"
+		"symfony/serializer": "^5.0",
+		"picqer/exact-php-client": "^3.35",
+		"ext-http": "*"
 	},
 	"config": {
 		"platform": {

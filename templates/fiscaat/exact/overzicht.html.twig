@@ -1,0 +1,12 @@
+{% extends 'fiscaat/base.html.twig' %}
+
+{% block titel %}Exact koppeling{% endblock %}
+
+{% block civisaldocontent %}
+	<h2>Exact koppeling</h2>
+	{% if not verbonden %}
+		<a href="{{ path('exact_login') }}" class="btn btn-primary">Verbind Exact</a>
+	{% endif %}
+
+	{{ dump(connection) }}
+{% endblock %}

@@ -341,6 +341,9 @@
             "./tests/bootstrap.php"
         ]
     },
+    "picqer/exact-php-client": {
+        "version": "v3.35.0"
+    },
     "psalm/plugin-symfony": {
         "version": "v2.2.4"
     },
