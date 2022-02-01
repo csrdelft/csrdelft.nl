@@ -180,7 +180,7 @@ class IsHetAlView implements View
 				break;
 
 			case 'wvdd':
-				$html .= '<div class="ja">Het lustrumboekwoord van de dag is '. $this->ja .' </div>';
+				$html .= '<div class="ja">Het lustrumboek-woord van de dag is '. $this->ja .' </div>';
 				break;
 
 			default:
