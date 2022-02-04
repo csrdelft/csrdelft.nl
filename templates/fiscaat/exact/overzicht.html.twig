@@ -4,9 +4,10 @@
 
 {% block civisaldocontent %}
 	<h2>Exact koppeling</h2>
-	{% if not verbonden %}
+	{% if verbonden %}
+		<div>Verbonden met <strong>{{ accountnaam }}.</strong></div>
+		<a href="{{ path('exact_login') }}" class="btn btn-primary">Verbind Exact opnieuw</a>
+	{% else %}
 		<a href="{{ path('exact_login') }}" class="btn btn-primary">Verbind Exact</a>
 	{% endif %}
-
-	{{ dump(connection) }}
 {% endblock %}

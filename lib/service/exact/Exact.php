@@ -5,9 +5,11 @@ namespace CsrDelft\service\exact;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\fiscaat\exact\ExactToken;
 use CsrDelft\repository\fiscaat\exact\ExactTokenRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Picqer\Financials\Exact\Connection;
+use Picqer\Financials\Exact\TransactionLine;
 
 class Exact
 {
@@ -46,6 +48,7 @@ class Exact
 		$connection->setAccessToken($token->getAccessToken());
 		$connection->setRefreshToken($token->getRefreshToken());
 		$connection->setTokenExpires($token->getExpires());
+		$connection->setDivision(127269);
 		return $this->connect($connection);
 	}
 
@@ -60,7 +63,7 @@ class Exact
 		try {
 			$connection->connect();
 		} catch (Exception $e) {
-			return null;
+			throw new CsrGebruikerException($e->getMessage());
 		}
 
 		$this->saveConnection($connection);
@@ -85,5 +88,20 @@ class Exact
 			$this->em->persist($token);
 		}
 		$this->em->flush();
+	}
+
+	// Functionality
+	public function getOvergemaakt(DateTimeImmutable $start, DateTimeImmutable $end): array
+	{
+		$connection = $this->loadConnection();
+
+		$transactionLines = new TransactionLine($connection);
+		$result = $transactionLines->filter(
+			"GLAccountCode eq '020482' and JournalCode ne '725' and Date ge datetime'{$start->format('c')}' and Date lt datetime'{$end->format('c')}'",
+			'',
+			'ID,AmountDC,Date,Description,Notes,Type'
+		);
+
+		return $result;
 	}
 }

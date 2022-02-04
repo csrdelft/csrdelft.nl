@@ -24,7 +24,7 @@ class ExactController extends AbstractController
 
 		return $this->render('fiscaat/exact/overzicht.html.twig', [
 			'verbonden' => $connection !== null,
-			'connection' => $connection->get('current/Me'),
+			'accountnaam' => $connection ? $connection->get('current/Me')['DivisionCustomerName'] : null,
 		]);
 	}
 
@@ -47,7 +47,23 @@ class ExactController extends AbstractController
 		$connection = $exact->createConnection($code);
 
 		return $this->json([
-			'division' => $connection->getDivision()
+			'division' => $connection
+		]);
+	}
+
+	/**
+	 * @Route("/overgemaakt", methods={"GET"})
+	 * @Auth(P_FISCAAT_MOD)
+	 */
+	public function overgemaakt(Exact $exact): Response
+	{
+		$today = new \DateTimeImmutable();
+		$lastWeek = $today->sub(new \DateInterval('P1M'));
+
+		$overgemaakt = $exact->getOvergemaakt($lastWeek, $today);
+
+		return $this->json([
+			'overgemaakt' => $overgemaakt,
 		]);
 	}
 }
