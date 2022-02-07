@@ -175,7 +175,7 @@ De PubCie.
 			'aantal' => $aantal,
 		]);
 
-		$mail = new Mail([$_ENV['EMAIL_CIVITASPRODUCTIES']], "Film ticket bestelling", $bericht);
+		$mail = new Mail([$_ENV['EMAIL_CIVITASPRODUCTIES'] => 'Civitas producties', $email => $voornaam . ' ' . $naam], "Bevestiging film ticket bestelling.", $bericht);
 		$mail->setFrom($_ENV['EMAIL_PUBCIE']);
 		$this->mailService->send($mail);
 
