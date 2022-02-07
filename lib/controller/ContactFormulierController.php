@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Mail;
 use CsrDelft\common\SimpleSpamFilter;
@@ -139,6 +140,42 @@ De PubCie.
 		]);
 
 		$mail = new Mail($bestemming, "Lid worden formulier", $bericht);
+		$mail->setFrom($_ENV['EMAIL_PUBCIE']);
+		$this->mailService->send($mail);
+
+		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
+	}
+
+	/**
+	 * @return PlainView
+	 * @Route("/civitasproducties/bestel", methods={"POST"})
+	 * @Auth(P_PUBLIC)
+	 * @CsrfUnsafe
+	 */
+	public function civitasproducties() {
+		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
+
+		if (!$resp['success']) {
+			throw $this->createAccessDeniedException("Geen toegang");
+		}
+
+		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);
+		$voornaam = filter_input(INPUT_POST, "voornaam", FILTER_SANITIZE_STRING);
+		$email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_STRING);
+		$aantal = filter_input(INPUT_POST, "aantal", FILTER_SANITIZE_STRING);
+
+		if ($this->isSpam($naam, $email, $aantal)) {
+			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
+		}
+
+		$bericht = $this->renderView('mail/bericht/civitasproductiesbestelling.mail.twig', [
+			'naam' => $naam,
+			'voornaam' => $voornaam,
+			'email' => $email,
+			'aantal' => $aantal,
+		]);
+
+		$mail = new Mail([$_ENV['EMAIL_CIVITASPRODUCTIES']], "Film ticket bestelling", $bericht);
 		$mail->setFrom($_ENV['EMAIL_PUBCIE']);
 		$this->mailService->send($mail);
 
