@@ -176,10 +176,10 @@ De PubCie.
 		]);
 
 		$mail = new Mail([$_ENV['EMAIL_CIVITASPRODUCTIES'] => 'Civitas producties', $email => $voornaam . ' ' . $naam], "Bevestiging film ticket bestelling.", $bericht);
-		$mail->setFrom($_ENV['EMAIL_PUBCIE']);
+		$mail->setFrom($_ENV['EMAIL_CIVITASPRODUCTIES'], 'Civitas producties');
 		$this->mailService->send($mail);
 
-		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
+		return new PlainView('Bestelling verzonden. Er is een bevestiging gestuurd naar uw emailadres, binnenkort zult ontvangt u meer informatie.');
 	}
 
 	private function isSpam(...$input) {
