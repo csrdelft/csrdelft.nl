@@ -126,8 +126,8 @@ De PubCie.
 			$bestemming = [$_ENV['EMAIL_NOVCIE'] => $commissie];
 		} else {
 			$typeaanduiding = 'Eerst een lid spreken';
-			$commissie = "OweeCie";
-			$bestemming = [$_ENV['EMAIL_OWEECIE'] => $commissie];
+//			$commissie = "OweeCie";
+//			$bestemming = [$_ENV['EMAIL_OWEECIE'] => $commissie];
 		}
 
 		$bericht = $this->renderView('mail/bericht/contactformulier.mail.twig', [
