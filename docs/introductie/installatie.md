@@ -7,7 +7,7 @@ title: Installatie
 
 # Installatie van de stek
 
-Volg dit stappenplan om de stek op je eigen computer te installeren. Dit document gaat er vanuit dat je Windows gebruikt, als je de stek op een ander platform wil installeren moet je sommige stappen net iets anders uitvoeren, maar het stappenplan zou grotendeels moeten werken.
+Volg dit stappenplan om de stek op je eigen computer te installeren. Dit document gaat ervan uit dat je Windows gebruikt, als je de stek op een ander platform wil installeren moet je sommige stappen net iets anders uitvoeren, maar het stappenplan zou grotendeels moeten werken.
 
 Als je deze stappen volgt krijg je de standaard installatie. Er is nog een boel te configureren, maar dat is in het begin niet nodig. Let goed op bij het uitvoeren van de stappen zodat alle configuratie volgens de standaard configuratie gaat.
 
@@ -21,7 +21,7 @@ _Als je in de PubCie zit en je hebt geen toegang tot de database, zorg er dan vo
 
 Installeer de volgende programma's:
 
-_Je kan deze progamma's allemaal tegelijk downloaden en installeren, behalve als dat anders staat aangegeven_
+_Je kan deze programma's allemaal tegelijk downloaden en installeren, behalve als dat anders staat aangegeven_
 
 - [wampserver](https://sourceforge.net/projects/wampserver/)
   - Komt met Apache2, Mariadb en PHP
