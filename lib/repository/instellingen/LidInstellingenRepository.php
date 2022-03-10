@@ -8,6 +8,7 @@ use CsrDelft\common\instellingen\InstellingConfiguration;
 use CsrDelft\common\instellingen\InstellingType;
 use CsrDelft\common\yaml\YamlInstellingen;
 use CsrDelft\entity\instellingen\LidInstelling;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
@@ -171,6 +172,15 @@ class LidInstellingenRepository extends AbstractRepository {
 
 	public function getTypeOptions($module, $id) {
 		return $this->getField($module, $id, InstellingConfiguration::FIELD_OPTIES);
+	}
+
+	public function resetFOrUser(Profiel $profiel) {
+		$this->createQueryBuilder('i')
+			->andWhere('i.profiel = :profiel')
+			->setParameter('profiel', $profiel)
+			->delete()
+			->getQuery()
+			->execute();
 	}
 
 	public function resetForAll($module, $id) {
