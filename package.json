@@ -143,5 +143,6 @@
 		"timeago.js": "^4.0.2",
 		"v-money": "^0.8.1",
 		"vue": "^2.6.12"
-	}
+	},
+	"packageManager": "yarn@3.2.0"
 }
