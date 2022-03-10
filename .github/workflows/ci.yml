@@ -20,7 +20,8 @@ jobs:
         with:
           path: |
             .yarn
-            .pnp.js
+            .pnp.cjs
+            .pnp.loader.mjs
             !.yarn/.cache
           # De cache wordt alleen naderhand opgeslagen als yarn.lock veranderd is
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}

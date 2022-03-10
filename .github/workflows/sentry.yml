@@ -17,7 +17,8 @@ jobs:
         with:
           path: |
             .yarn
-            .pnp.js
+            .pnp.cjs
+            .pnp.loader.mjs
             node_modules/.cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
           restore-keys: |

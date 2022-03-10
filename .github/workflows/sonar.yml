@@ -28,7 +28,8 @@ jobs:
         with:
           path: |
             .yarn
-            .pnp.js
+            .pnp.cjs
+            .pnp.loader.mjs
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
