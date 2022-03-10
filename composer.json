@@ -77,6 +77,9 @@
 	"config": {
 		"platform": {
 			"php": "7.3.14"
+		},
+		"allow-plugins": {
+			"symfony/flex": true
 		}
 	},
 	"autoload": {

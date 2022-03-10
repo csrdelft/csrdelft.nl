@@ -8,7 +8,7 @@ RUN apk add --no-cache \
 	libpng-dev \
 	libtool \
 	make \
-	python \
+	python3 \
 	nasm
 
 RUN npm install -g cross-env webpack-cli
