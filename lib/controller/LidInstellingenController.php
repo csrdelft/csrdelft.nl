@@ -100,7 +100,7 @@ class LidInstellingenController extends AbstractController {
 
 		$this->lidInstellingenRepository->resetForUser($account->profiel);
 
-		setMelding("Instellingen terug gezet", -1);
+		setMelding("Instellingen terug gezet", 1);
 		return new Response($this->redirectToRoute('csrdelft_lidinstellingen_beheer')->getTargetUrl());
 	}
 
