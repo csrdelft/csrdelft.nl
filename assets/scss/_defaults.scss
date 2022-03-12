@@ -22,7 +22,7 @@ $indigo: #6610f2 !default;
 $purple: #6f42c1 !default;
 $pink: #e83e8c !default;
 $red: #dc3545 !default;
-$orange: #E59200 !default;
+$orange: #e59200 !default;
 $yellow: #ffc107 !default;
 $green: #28a745 !default;
 $teal: #20c997 !default;
@@ -46,15 +46,14 @@ $zijbalk-color: $body-color !default;
 $headings-font-family: "Source Sans Pro", Helvetica, Arial, sans-serif !default;
 
 /** Stek specifieke variabelen. */
+$donkerblauw: #122a4d !default;
 
-$donkerblauw: #11273A !default;
-
-	/* zijbalk */
+/* zijbalk */
 $beeldmerk: url(../images/beeldmerk.png) !default;
 
 $zijbalk-bg: #f5f5f5 !default;
-$zijbalk-border: $primary !default;
-$zijbalk-kopje: $primary !default;
+$zijbalk-border: $donkerblauw !default;
+$zijbalk-kopje: $donkerblauw !default;
 
 $zijbalk-ishetal-nee: red !default;
 $zijbalk-ishetal-ja: green !default;
@@ -83,12 +82,12 @@ $navbar-dark-color: white;
 $zoeken-active-bg: #428bca !default;
 
 /* maalcie-tabel */
-$maalcie-tabel-header: #FAFAFA !default;
-$maalcie-tabel-tr0: #EBEBEB !default;
-$maalcie-tabel-tr1: #FAFAFA !default;
+$maalcie-tabel-header: #fafafa !default;
+$maalcie-tabel-tr0: #ebebeb !default;
+$maalcie-tabel-tr1: #fafafa !default;
 
 $tabel-header: $gray-100 !default;
-$tabel-hover: #DDEEFF !default;
+$tabel-hover: #ddeeff !default;
 $tabel-regel-licht: $gray-100 !default;
 $tabel-regel-donker: $gray-200 !default;
 

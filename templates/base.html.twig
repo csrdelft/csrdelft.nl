@@ -6,7 +6,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="msapplication-tap-highlight" content="no"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-	<meta name="theme-color" content="#0a3292">
 	<meta name="robots" content="index, follow"/>
 	<meta name="author" content="PubCie C.S.R. Delft"/>
 	<meta name="description" content="{{ instelling('stek', 'beschrijving') }}">
@@ -20,8 +19,15 @@
 	{{ csrfMetaTag() }}
 	<meta property="X-CSR-LOGGEDIN" content="{{ mag('P_LOGGED_IN') ? 'true' : 'false' }}"/>
 	<title>C.S.R. Delft - {% block titel %}{% endblock %}</title>
-	<link rel="shortcut icon" href="{{ absolute_url('/images/favicon.ico') }}"/>
 	<link rel="manifest" href="{{ absolute_url('/manifest.json') }}">
+	<link rel="shortcut icon" href="{{ absolute_url('/images/favicon.ico') }}"/>
+	<meta name="theme-color" content="#122A4D">
+	<meta name="mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<!-- <meta name="apple-mobile-web-app-status-bar-style" content="black" /> -->
+	<meta name="apple-mobile-web-app-title" content="C.S.R." />
+	<link rel="apple-touch-icon" sizes="512x512" href="{{ absolute_url('/images/beeldmerk-512x512.png') }}" />
+	<link rel="apple-touch-icon" sizes="192x192" href="{{ absolute_url('/images/beeldmerk-192x192.png') }}" />
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{{ url('csrdelft_forum_rss') }}"/>
 	{{ css_asset('common') }}
 	{% for sheet in user_modules() %}

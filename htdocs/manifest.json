@@ -1,26 +1,79 @@
 {
-	"name": "C.S.R. Delft - Vereniging van Christenstudenten",
-	"short_name": "C.S.R. Delft",
+	"name": "C.S.R. Delft",
+	"short_name": "C.S.R.",
+	"description": "De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in Delft, rijk aan tradities die zijn ontstaan in haar 59-jarig bestaan. Het is een breed gezelschap van zo'n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen uithalen.",
+	"author": "PubCie C.S.R. Delft",
+	"orientation": "portrait-primary",
+	"display": "standalone",
+	"lang": "nl-NL",
+	"id": "/",
+	"start_url": "/",
+	"scope": "/",
+
 	"icons": [
 		{
-			"src": "images/beeldmerk_192.png",
-			"sizes": "192x192",
-			"type": "image/png"
-		},
-		{
-			"src": "images/beeldmerk_512.png",
-			"sizes": "512x512",
-			"type": "image/png"
-		},
-		{
-			"src": "images/beeldmerk_1024.png",
+			"src": "/images/beeldmerk-maskable.png",
 			"sizes": "1024x1024",
-			"type": "image/png"
+			"type": "image/png",
+			"purpose": "maskable"
+		},
+		{
+			"src": "/images/beeldmerk-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/images/beeldmerk-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/images/beeldmerk-1024x1024.png",
+			"sizes": "1024x1024",
+			"type": "image/png",
+			"purpose": "any"
 		}
 	],
-	"start_url": "/",
-	"background_color": "#ffffff",
-	"theme_color": "#11273a",
-	"display": "standalone",
-	"orientation": "portrait"
+	"background_color": "#152A48",
+	"theme_color": "#152A48",
+	"shortcuts": [
+		{
+			"name": "Forum - Recent gewijzigd",
+			"short_name": "Forum",
+			"url": "/forum/recent",
+			"icons": [
+				{
+					"src": "/images/icon-forum.png",
+					"sizes": "192x192",
+					"type": "image/png"
+				}
+			]
+		},
+		{
+			"name": "Agenda",
+			"short_name": "Agenda",
+			"url": "/agenda",
+			"icons": [
+				{
+					"src": "/images/icon-agenda.png",
+					"sizes": "192x192",
+					"type": "image/png"
+				}
+			]
+		},
+		{
+			"name": "Ledenlijst",
+			"short_name": "Leden",
+			"url": "/ledenlijst",
+			"icons": [
+				{
+					"src": "/images/icon-leden.png",
+					"sizes": "192x192",
+					"type": "image/png"
+				}
+			]
+		}
+	]
 }
