@@ -19,3 +19,6 @@ indent_style = space
 
 [*.vue]
 indent_style = space
+
+[*.scss]
+quote_type = double
