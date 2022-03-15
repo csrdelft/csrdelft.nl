@@ -226,7 +226,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 				$abo->maaltijd_repetitie = $repetitie;
 				$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
 				$abo->uid = $noviet->uid;
-				$abo->wanneer_ingeschakeld = date('Y-m-d H:i');
+				$abo->wanneer_ingeschakeld = date_create_immutable();
 
 				if ($this->find(['mlt_repetitie_id' => $abo->mlt_repetitie_id, 'uid' => $abo->uid])) {
 					continue;
