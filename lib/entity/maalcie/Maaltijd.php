@@ -152,6 +152,11 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 	 */
 	public $maaltijdcorvee;
 
+	public function __construct()
+	{
+		$this->aanmeldingen = new ArrayCollection();
+	}
+
 	public function getPrijsFloat() {
 		return (float)$this->getPrijs() / 100.0;
 	}

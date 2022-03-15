@@ -161,8 +161,8 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 		});
 	}
 
-	public function getAbonnementenVoorRepetitie($mrid) {
-		return $this->findBy(['mlt_repetitie_id' => $mrid]);
+	public function getAbonnementenVoorRepetitie(MaaltijdRepetitie $repetitie) {
+		return $this->findBy(['maaltijd_repetitie' => $repetitie]);
 	}
 
 	/**
