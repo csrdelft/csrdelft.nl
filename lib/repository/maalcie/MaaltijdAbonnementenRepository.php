@@ -283,9 +283,9 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @return int amount of deleted abos
 	 * @throws Throwable
 	 */
-	public function verwijderAbonnementen($mrid) {
+	public function verwijderAbonnementen(MaaltijdRepetitie $mrid) {
 		return $this->_em->transactional(function () use ($mrid) {
-			$abos = $this->findBy(['mlt_repetitie_id' => $mrid]);
+			$abos = $this->findBy(['maaltijd_repetitie' => $mrid]);
 			$aantal = count($abos);
 			foreach ($abos as $abo) {
 				$this->maaltijdAanmeldingenRepository->afmeldenDoorAbonnement($mrid, $abo->uid);
