@@ -382,8 +382,8 @@ class MaaltijdenRepository extends AbstractRepository {
 	public function meldAboAan($maaltijd) {
 		$aantal = 0;
 		// aanmelden van leden met abonnement op deze repetitie
-		if (!$maaltijd->gesloten && $maaltijd->mlt_repetitie_id !== null) {
-			$abonnementen = $this->maaltijdAbonnementenRepository->getAbonnementenVoorRepetitie($maaltijd->mlt_repetitie_id);
+		if (!$maaltijd->gesloten && $maaltijd->repetitie !== null) {
+			$abonnementen = $this->maaltijdAbonnementenRepository->getAbonnementenVoorRepetitie($maaltijd->repetitie);
 			foreach ($abonnementen as $abo) {
 				if ($this->maaltijdAanmeldingenRepository->checkAanmeldFilter($abo->uid, $maaltijd->aanmeld_filter)) {
 					if ($this->maaltijdAanmeldingenRepository->aanmeldenDoorAbonnement($maaltijd, $abo->maaltijd_repetitie, $abo->uid)) {
