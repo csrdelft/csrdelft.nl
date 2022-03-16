@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="nl">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#122A4D" />
+
+		<title>C.S.R. Delft - Offline</title>
+
+		<style>
+			body {
+				margin: 0;
+				width: 100vw;
+				height: 100vh;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				background-color: #122a4d;
+				color: white;
+				font-family: sans-serif;
+			}
+
+			h1 {
+				width: fit-content;
+				font-style: italic;
+			}
+
+			p {
+				width: fit-content;
+				margin-block: 1rem;
+			}
+
+			button {
+				appearance: none;
+				border-radius: 0.25rem;
+				padding: 0.5rem 0.75rem;
+				display: block;
+				width: fit-content;
+				background-color: #e59200;
+				border-color: #e59200;
+				color: black;
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>U bent offline</h1>
+
+		<p>Klik op de knop om de pagina te herladen.</p>
+		<button type="button">⤾ Herladen</button>
+
+		<script>
+			// Handmatig herladen
+			document.querySelector('button').addEventListener('click', () => {
+				window.location.reload();
+			});
+
+			// Luistert naar het event 'online' als de gebruiker weer online is
+			window.addEventListener('online', () => {
+				window.location.reload();
+			});
+
+			// Check elke 10000 ms even of de gebruiker weer online is
+			async function checkNetworkAndReload() {
+				try {
+					const response = await fetch('.');
+					if (response.status >= 200 && response.status < 500) {
+						window.location.reload();
+						return;
+					}
+				} catch {
+					// Offline dus doe niets
+				}
+			}
+			window.setInterval(checkNetworkAndReload, 10 * 1000);
+		</script>
+	</body>
+</html>
