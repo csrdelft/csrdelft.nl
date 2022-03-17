@@ -1,5 +1,5 @@
 @startuml
-
+!theme cerulean
 abstract class AbstractGroep {
   GroepKeuze[] keuzelijst2
   GroepVersie versie

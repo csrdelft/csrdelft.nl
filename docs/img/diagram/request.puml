@@ -1,0 +1,64 @@
+@startuml
+!theme cerulean
+participant index.php as index
+participant configuratie.include.php as configuratie.include
+participant Kernel as kernel
+
+index -> configuratie.include ++
+configuratie.include -> configuratie.include : Configuratie
+note over configuratie.include
+Laad "".env"", "".env.local"", "".env.dev"", etc.
+Zie ""symfony/dotenv""
+end note
+note over configuratie.include
+Laad error handlers
+end note
+configuratie.include -> kernel ++ : ""$kernel->boot()""
+note over kernel
+Laad configuratie voor Symfony,
+routes, bundles, etc. Zie de
+""config"" map hier voor. Zet
+ook de database klaar.
+Zie https://symfony.com/doc/current/configuration
+end note
+return
+note over configuratie.include
+Zet php configuratie
+end note
+return ""Kernel""
+index -> kernel ++ : handle()
+note over kernel
+De sessie van de gebruiker wordt
+gecontroleerd en er wordt gekeken
+of de gebruiker de juiste rechten
+heeft.
+end note
+
+kernel -> action ++
+note over action
+action wordt op bais van de
+""REQUEST_URI"" gekozen. Zie de
+""config/routes"" map voor alle
+mogelijke routes.
+Alle controllers bevinden zich in
+de ""CsrDelft\controller\""
+namespace.
+end note
+note over action
+In de action wordt alle logica uitgevoerd
+om een response te bouwen, denk aan
+dingen uit de database plukken,
+wijzigingen doorvoeren, etc.
+end note
+return
+return ""Response""
+
+index -> kernel ++ : ""$kernel->send($response)""
+note over kernel
+Converteer de Response naar een string
+en stuur deze naar de gebruiker.
+end note
+return
+
+index -> index -- : ""$kernel->terminate($request, $response)""
+@enduml
