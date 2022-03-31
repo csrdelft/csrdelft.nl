@@ -832,6 +832,15 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		return '<img class="' . htmlspecialchars($cssClass) . '" src="' . $this->getPasfotoPath() . '" alt="Pasfoto van ' . $this->getNaam('volledig') . '" />';
 	}
 
+	public function getPasfotoRounded()
+	{
+		return '<img style="height: 90px; clip-path: circle()" src="'. $this->getPasfotoPath() . '" alt="Pasfoto van ' . $this->getNaam() . '" />';
+	}
+
+	public function getPasfotoLink() {
+		return $this->getPasfotoPath();
+	}
+
 	/**
 	 * @var Profiel|null
 	 * @ORM\ManyToOne(targetEntity="Profiel", inversedBy="kinderen")

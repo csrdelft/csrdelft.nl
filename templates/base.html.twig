@@ -47,34 +47,99 @@
 	{% block head %}{% endblock %}
 </head>
 <body
-	class="nav-is-fixed {{ lid_instelling('zijbalk', 'breedte') }} {% block bodyClass %}{% endblock %}" {% block bodyArgs %}{% endblock %}>
+	class="{% block bodyClass %}{% endblock %}" {% block bodyArgs %}{% endblock %}>
 {{ js_asset('app') }}
 {% block body %}
 	{{ include('menu/main.html.twig', {root: get_menu('main'), personal: get_menu('Personal'), favorieten: get_menu(app.user.uid)}) }}
-	<main class="container my-3 py-3 flex-shrink-0">
-		{% if lid_instelling('zijbalk', 'breedte') != 'zijbalk_verborgen' %}
-			<nav id="zijbalk">
-				{% for blok in get_zijbalk() %}
-					<div class="blok">{{ blok | raw }}</div>
-				{% endfor %}
-				{% if app.debug and mag('P_ADMIN') %}
-					<div class="commit-hash">
-						<a href="{{ commitLink() }}" target="_blank" class="not-external">{{ commitHash() }}</a>
+	<div class="container-fluid p-3 min-vh-100">
+		<div class="container px-0 ratio ratio-3x2">
+			{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == "/" %}
+			<div class="grid-container p-0 p-md-3">
+				<div class="cell cell-posters ratio ratio-3x2">{{ cms('posters') }}</div>
+				<div class="cell cell-forum cell-overflow">{{ get_forum() }}</div>
+				<div class="cell cell-agenda cell-overflow">{{ get_agenda() }}</div>
+
+				<div class="cell cell-verjaardagen cell-overflow">{{ get_verjaardagen() }}</div>
+				<div class="cell cell-foto-albums">{{  get_fotoalbum() }}</div>
+				<div class="cell cell-overig">
+					<h4 class="mt-1">Overig</h4>
+					<div class="overig-grid-container">
+						<h5 class="overig-cell overig-cell-form border border-1 rounded-2">
+							<i class="fas fa-file-download text-muted me-3"></i>
+							<a href="/declaratie/mijn" style="text-decoration: none;">Declareer nu via de stek!</a>
+						</h5>
+						<h5 class="overig-cell overig-cell-rijbewijs border border-1 rounded-2">
+							<i class="fas fa-car-side text-muted mb-1"></i>
+							<a href="/wiki/leden:mogelijkheden#rijbewijs" style="text-decoration: none;">Rijbewijs</a>
+						</h5>
+						<h5 class="overig-cell overig-cell-sponserkliks border border-1 rounded-2">
+							<i class="fas fa-mouse text-muted mb-1"></i>
+							<a href="https://www.sponsorkliks.com/products/shops.php?club=3605" style="text-decoration: none;">Sponsorkliks</a>
+						</h5>
 					</div>
-				{% endif %}
-			</nav>
-		{% endif %}
-		<nav aria-label="breadcrumb">
-			{% block breadcrumbs %}
-				{{ csr_breadcrumbs(get_breadcrumbs(app.request.pathInfo)) }}
-			{% endblock %}
-		</nav>
+				</div>
+				<div class="cell cell-civi-saldo position-relative">
+					<div class="card-body text-end">
+						<h4 class="text-center card-title">CiviSaldo:</h4>
+						{% set saldo = app.user.profiel.civiSaldo %}
+						{% if saldo < 0 %}
+							<h5 class="text-center text-danger card-subtitle mb-2">&euro; {{ saldo | number_format(2, ',', '.') }}</h5>
+						{% else %}
+							<h5 class="text-center text-success card-subtitle mb-2">&euro; {{ saldo | number_format(2, ',', '.') }}</h5>
+						{% endif %}
+						<p class="card-text"></p><a class="card-link text-justify text-secondary" href="https://betaalverzoek.rabobank.nl/betaalverzoek/?id=Ps1leyKRTs-nyLtQMA1S5Q">Inleggen?</a>
+					</div></div>
+				<div class="cell cell-is-het-al">{{ get_ishetal() }}</div>
+			</div>
+		</div>
+		<div class="container p-0 p-md-3 mt-5">
+{#			<div class="cell cell-advertenties">{{> grid-cell-advertenties}}</div>#}
+		</div>
 		<div class="cd-page-content">
 			{{ getMelding() }}
-			{% block content %}{% endblock %}
+			{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) != "/" %}
+				{% block content %}{% endblock %}
+			{% endif %}
 		</div>
-	</main>
-	{% include 'menu/footer.html.twig' %}
+		{% endif %}
+	</div>
+
+{#	<main class="container my-1 py-1 flex-shrink-0">#}
+{#		{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == "/" %}#}
+{#		<div class="blocks">#}
+{#			<div class="agenda-block block-design card">{{ get_agenda() }}</div>#}
+{#			<div class="posters-block block-design card">{{ cms('posters') }}</div>#}
+{#			<div class="forum-block block-design card">{{ get_forum() }}</div>#}
+
+{#			<div class="foto-block block-design card">{{  get_fotoalbum() }}</div>#}
+{#			<div class="overig-block block-design card">#}
+
+{#			</div>#}
+{#			<div class="ishetal-block block-design card">{{ get_ishetal() }}</div>#}
+{#			<div class="civisaldo-block block-design card">#}
+{#				<div class="card-body text-end">#}
+{#					<h4 class="text-center card-title">CiviSaldo:</h4>#}
+{#					{% set saldo = app.user.profiel.civiSaldo %}#}
+{#					{% if saldo < 0 %}#}
+{#						<h5 class="text-center text-danger card-subtitle mb-2">&euro; {{ saldo | number_format(2, ',', '.') }}</h5>#}
+{#					{% else %}#}
+{#						<h5 class="text-center text-success card-subtitle mb-2">&euro; {{ saldo | number_format(2, ',', '.') }}</h5>#}
+{#					{% endif %}#}
+{#					<p class="card-text"></p><a class="card-link text-justify text-secondary" href="https://betaalverzoek.rabobank.nl/betaalverzoek/?id=Ps1leyKRTs-nyLtQMA1S5Q">Inleggen?</a>#}
+{#				</div>#}
+{#			</div>#}
+{#			<div class="verjaardag-block block-design card">{{ get_verjaardagen() }}</div>#}
+{#		</div>#}
+{#		{% endif %}#}
+
+{#		<div class="cd-page-content">#}
+{#			{{ getMelding() }}#}
+{#			{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) != "/" %}#}
+{#				{% block content %}{% endblock %}#}
+{#			{% endif %}#}
+{#		</div>#}
+{#	</main>#}
+
 	<div id="modal-background" {% if block('modal') is defined %} style="display: block;" {% endif %}></div>
 	{% if block('modal') is defined %}
 		{{ block('modal') | raw }}

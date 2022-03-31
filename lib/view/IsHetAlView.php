@@ -61,9 +61,6 @@ class IsHetAlView implements View
 		switch ($this->model) {
 			case 'wist u dat':
 			case 'foutmelding':
-			case 'sponsorkliks':
-				$this->ja = null;
-				break;
 
 			case 'dies':
 				$begin = strtotime('2022-02-08');
@@ -151,49 +148,45 @@ class IsHetAlView implements View
 
 	public function __toString() {
 		$html = '';
-		$html .= '<div class="ishetal">';
+		$html .= '<div class="card-body text-center">';
 		switch ($this->model) {
-			case 'sponsorkliks':
-				$html .= '<iframe src="https://banner.sponsorkliks.com/skinfo.php?&background-color=F5F5F5&text-color=000000&header-background-color=F5F5F5&header-text-color=F5F5F5&odd-row=FFFFFF&even-row=09494a&odd-row-text=09494a&even-row-text=ffffff&type=financial&club_id=3605&width=193" frameborder="0" referrerpolicy="no-referrer" class="sponsorkliks-zijbalk"></iframe>';
-				break;
-
 			case 'jarig':
-				$html .= 'Ben ik al jarig?';
+				$html .= '<h4 class="text-center card-title">Ben ik al jarig?</h4>';
 				break;
 
 			case 'studeren':
-				$html .= 'Moet ik alweer studeren?';
+				$html .= '<h4 class="text-center card-title">Moet ik alweer studeren?</h4>';
 				break;
 
 			case 'kring':
-				$html .= 'Is er ' . $this->model . ' vanavond?';
+				$html .= '<h4 class="text-center card-title">Is er ' . $this->model . ' vanavond?</h4>';
 				break;
 
 			case 'lezing':
 			case 'borrel':
-				$html .= 'Is er een ' . $this->model . ' vanavond?';
+				$html .= '<h4 class="text-center card-title">Is er een ' . $this->model . ' vanavond?</h4>';
 				break;
 
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);
-				$html .= '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a>';
+				$html .= '<h4 class="text-center card-title">Wist u dat...<a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a></h4>';
 				break;
 
 			case 'wvdd':
-				$html .= '<div class="ja" style="word-break: break-word">Het lustrumboek-woord van de dag is '. $this->ja .' </div>';
+				$html .= '<h4 class="text-center card-title">Het lustrumboekwoord van de dag is '. $this->ja .' </h4>';
 				break;
 
 			default:
-				$html .= 'Is het al ' . $this->model . '?';
+				$html .= '<h4 class="text-center card-title">Is het al ' . $this->model . '?</h4>';
 				break;
 		}
 
 		if ($this->ja === true) {
-			$html .= '<div class="ja">JA!</div>';
+			$html .= '<h5 class="text-center text-success card-subtitle mb-2">JA!</h5>';
 		} elseif ($this->ja === false) {
-			$html .= '<div class="nee">NEE.</div>';
+			$html .= '<h5 class="text-center text-danger card-subtitle mb-2">NEE.</h5>';
 		} elseif (in_array($this->model, self::$aftellen)) {
-			$html .= '<div class="nee">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</div>';
+			$html .= '<h5 class="text-center text-danger card-subtitle mb-2">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</h4>';
 		} else {
 			// wist u dat
 		}

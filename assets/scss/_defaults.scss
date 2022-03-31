@@ -37,11 +37,15 @@ $danger: $red !default;
 $light: $gray-100 !default;
 $dark: $gray-800 !default;
 
-$body-bg: $white !default;
+$body-bg: $gray-100 !default;
 $body-color: $black !default;
 $headings-color: inherit !default;
 
-$zijbalk-color: $body-color !default;
+$font-size-root: null;
+$font-size-base: 0.9rem;
+$font-size-lg: $font-size-base * 2;
+$font-size-sm: $font-size-base * 0.875;
+$font-size-xs: $font-size-base * 0.75;
 
 $headings-font-family: "Source Sans Pro", Helvetica, Arial, sans-serif !default;
 

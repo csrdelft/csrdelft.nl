@@ -10,6 +10,7 @@ use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\view\formulier\InstantSearchForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\login\LoginForm;
+use CsrDelft\view\Voorpagina;
 use CsrDelft\view\Zijbalk;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\AbstractExtension;
@@ -18,9 +19,9 @@ use Twig\TwigFunction;
 class LayoutTwigExtension extends AbstractExtension
 {
 	/**
-	 * @var Zijbalk
+	 * @var Voorpagina
 	 */
-	private $zijbalk;
+	private $voorpagina;
 	/**
 	 * @var MenuItemRepository
 	 */
@@ -36,11 +37,11 @@ class LayoutTwigExtension extends AbstractExtension
 
 	public function __construct(
 		RequestStack $requestStack,
-		Zijbalk $zijbalk,
+		Voorpagina $voorpagina,
 		MenuItemRepository $menuItemRepository,
 		FormulierFactory $formulierFactory
 	) {
-		$this->zijbalk = $zijbalk;
+		$this->voorpagina = $voorpagina;
 		$this->menuItemRepository = $menuItemRepository;
 		$this->requestStack = $requestStack;
 		$this->formulierFactory = $formulierFactory;
@@ -53,10 +54,16 @@ class LayoutTwigExtension extends AbstractExtension
 			new TwigFunction('get_breadcrumbs', [$this, 'get_breadcrumbs']),
 			new TwigFunction('get_menu', [$this, 'get_menu']),
 			new TwigFunction('getMelding', 'getMelding', ['is_safe' => ['html']]),
-			new TwigFunction('get_zijbalk', [$this, 'get_zijbalk'], ['is_safe' => ['html']]),
 			new TwigFunction('instant_search_form', [$this, 'instant_search_form'], ['is_safe' => ['html']]),
 			new TwigFunction('login_form', [$this, 'login_form'], ['is_safe' => ['html']]),
 			new TwigFunction('icon', [$this, 'icon'], ['is_safe' => ['html']]),
+			new TwigFunction('get_agenda', [$this, 'get_agenda'], ['is_safe' => ['html']]),
+			new TwigFunction('get_forum', [$this, 'get_forum'], ['is_safe' => ['html']]),
+			new TwigFunction('get_fotoalbum', [$this, 'get_fotoalbum'], ['is_safe' => ['html']]),
+			new TwigFunction('get_ishetal', [$this, 'get_ishetal'], ['is_safe' => ['html']]),
+			new TwigFunction('get_verjaardagen', [$this, 'get_verjaardagen'], ['is_safe' => ['html']]),
+			new TwigFunction('get_overig', [$this, 'get_overig'], ['is_safe' => ['html']]),
+			new TwigFunction('get_civisaldo', [$this, 'get_civisaldo'], ['is_safe' => ['html']]),
 		];
 	}
 
@@ -94,11 +101,6 @@ class LayoutTwigExtension extends AbstractExtension
 		return (new InstantSearchForm())->__toString();
 	}
 
-	public function get_zijbalk()
-	{
-		return $this->zijbalk->getZijbalk();
-	}
-
 	public function login_form()
 	{
 		return $this->formulierFactory->create(LoginForm::class, null, [])->createView()->__toString();
@@ -107,5 +109,30 @@ class LayoutTwigExtension extends AbstractExtension
 	public function icon($key, $hover = null, $title = null, $class = null, $content = null)
 	{
 		return Icon::getTag($key, $hover, $title, $class, $content);
+	}
+
+	public function get_agenda(): ?string
+	{
+		return $this->voorpagina->getAgenda();
+	}
+
+	public function get_forum(): ?string
+	{
+		return $this->voorpagina->getForum();
+	}
+
+	public function get_fotoalbum(): ?string
+	{
+		return $this->voorpagina->getFotoalbum();
+	}
+
+	public function get_ishetal(): ?string
+	{
+		return $this->voorpagina->getIsHetAl();
+	}
+
+	public function get_verjaardagen(): ?string
+	{
+		return $this->voorpagina->getVerjaardagen();
 	}
 }

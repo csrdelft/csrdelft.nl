@@ -1,0 +1,36 @@
+<div class="card-header text-start py-2" style="background-color: white; border-bottom: 0">
+	<div style="clear: both">
+		<h4 class="mt-1">Forum</h4>
+		{% if mag('P_FORUM_MOD') and aantalWacht > 0 %}
+			<a href="{{ url('csrdelft_forum_wacht') }}"><h5 class="text-muted m-0" style="float: right">{{ aantalWacht }}
+					wachten op goedkeuring.</h5></a>
+		{% endif %}
+	</div>
+</div>
+
+<div class="card-body">
+	<table>
+		<tbody>
+		{% for draad in draden %}
+			{% if lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen' %}
+				{% set urlHash = 'ongelezen' %}
+			{% elseif lid_instelling('forum', 'open_draad_op_pagina') == 'laatste' %}
+				{% set urlHash = 'reageren' %}
+			{% else %}
+				{% set urlHash = '' %}
+			{% endif %}
+			{% set ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave') %}
+
+			<tr>
+				<td></td>
+				<td>{{ draad.laatst_gewijzigd | zijbalk_date_format }}</td>
+				<td>
+					<a {% if app.user and draad.ongelezen %} class="fw-bold" {% endif %}
+						href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}">
+						{{ draad.titel | raw }}</a>
+				</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</div>

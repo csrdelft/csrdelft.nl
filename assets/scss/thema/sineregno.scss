@@ -1,50 +1,49 @@
 $primair-achtergrond: #697257;
-$zijbalk-achtergrond: #741F1B;
-$secundaire-accenten-1:  #5C3542;
-$secundaire-accenten-2: #59787A;
+$zijbalk-achtergrond: #741f1b;
+$secundaire-accenten-1: #5c3542;
+$secundaire-accenten-2: #59787a;
 
 $primary: $secundaire-accenten-1;
 $secondary: $secundaire-accenten-2;
 
 //$body-bg: $primair-achtergrond;
-$body-color:  #404B47;
+$body-color: #404b47;
 $zijbalk-bg: $zijbalk-achtergrond;
-$zijbalk-color: white;
 $zijbalk-kopje: $secundaire-accenten-2;
 
 $donkerblauw: $secundaire-accenten-1;
 $orange: $secundaire-accenten-2;
-$black:  #404B47;
+$black: #404b47;
 
 @font-face {
-	font-family: '28 Days';
+	font-family: "28 Days";
 	font-style: normal;
 	font-weight: normal;
-	src: url('../../fonts/sine-regno-2021/28-Days-Later_1.woff') format('woff');
+	src: url("../../fonts/sine-regno-2021/28-Days-Later_1.woff") format("woff");
 }
 
 @font-face {
-	font-family: 'Apocalypse-Now';
+	font-family: "Apocalypse-Now";
 	font-style: normal;
 	font-weight: normal;
-	src: url('../../fonts/sine-regno-2021/Apocalypse-Now.woff') format('woff');
+	src: url("../../fonts/sine-regno-2021/Apocalypse-Now.woff") format("woff");
 	size-adjust: 350%;
 }
 
-$font-family-base: 'Apocalypse-Now', 'Source Sans Pro', Helvetica, Arial, sans-serif;
-$headings-font-family: '28 Days', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+$font-family-base: "Apocalypse-Now", "Source Sans Pro", Helvetica, Arial,
+	sans-serif;
+$headings-font-family: "28 Days", "Source Sans Pro", Helvetica, Arial,
+	sans-serif;
 
 @import "./normaal";
 
 #zijbalk .blok .zijbalk-kopje {
-	color:white;
+	color: white;
 	font-family: $headings-font-family;
 	font-size: x-large;
 }
 
 #zijbalk .blok .item {
-	color:white;
+	color: white;
 	font-family: $font-family-base;
 }
-
-

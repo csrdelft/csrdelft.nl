@@ -29,7 +29,6 @@
 	<!-- Header -->
 	<header id="header" class="alt">
 		<nav id="menu">
-			{# <a class="nav-link" href="/owee">Owee</a> #}
 			{% for menuItem in get_menu('extern', true).children %}
 				{% if menuItem.children is not empty %}
 					<span class="dropdown-menu">

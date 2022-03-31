@@ -9,7 +9,7 @@ title: Symfony
 
 De stek draait op de Symfony stack. Kijk op [symfony.com](https://symfony.com) voor meer informatie over Symfony.
 
-Kijk in de [Getting Started](https://symfony.com/doc/current/index.html) categorie van de Symfony documentatie, hier staat uitgelegd hoe je dingen met moet doen.  De [Charming Development in Symfony 5](https://symfonycasts.com/screencast/symfony) screencasts zijn ook een goed startpunt. De meeste dingen zijn een-op-een toe te passen op de stek.
+Kijk in de [Getting Started](https://symfony.com/doc/current/index.html) categorie van de Symfony documentatie, hier staat uitgelegd hoe je dingen met moet doen. De [Charming Development in Symfony 5](https://symfonycasts.com/screencast/symfony) screencasts zijn ook een goed startpunt. De meeste dingen zijn een-op-een toe te passen op de stek.
 
 Als je een deep-dive in Symfony wil kun je het boek [Symfony5: The Fast Track](https://symfony.com/book) lezen (gratis te lezen, ook in het Nederlands). Dit boek gaat veel verder dan wat we nu met de stek doen en gaat ook in op Symfony cloud.
 
@@ -47,7 +47,6 @@ De router van Symfony wordt gebruikt om routes te resolven. De YAML configuratie
 ## ORM
 
 Voor alle onderdelen (behalve het Barsysteem) wordt Doctrine gebruikt als ORM. Zie [ORM](../backend/orm.md)
-
 
 ## Security
 

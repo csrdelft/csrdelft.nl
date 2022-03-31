@@ -17,10 +17,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
 
 /**
- * @author C.S.R. Delft <pubcie@csrdelft.nl>
+ * @author Daniël
  *
  */
-class Zijbalk {
+class Voorpagina {
 	/**
 	 * @var Environment
 	 */
@@ -86,36 +86,61 @@ class Zijbalk {
 		$this->requestStack = $requestStack;
 	}
 
-	/**
-	 * @return string[]
-	 */
-	public function getZijbalk() {
-		return array_filter_empty([
-			$this->blockIsHetAl(),
-			$this->blockLustrum(),
-			$this->blockFavorieten(),
-			$this->blockSponsors(),
-			$this->blockAgenda(),
-			$this->blockForumNieuwsteBelangrijkBerichten(),
-			$this->blockForumNieuwsteBerichten(),
-			$this->blockForumZelfgepost(),
-			$this->blockNieuwsteFotoAlbum(),
-			$this->blockKomendeVerjaardagen(),
-		]);
+
+	public function getIsHetAl(): ?string
+	{
+		return (new IsHetAlView($this->lidInstellingenRepository, $this->requestStack, $this->agendaRepository, $this->woordVanDeDagRepository, lid_instelling('zijbalk', 'ishetal')))->__toString();
+//		if (lid_instelling('zijbalk', 'ishetal') != 'niet weergeven') {
+//			return (new IsHetAlView($this->lidInstellingenRepository, $this->requestStack, $this->agendaRepository, $this->woordVanDeDagRepository, lid_instelling('zijbalk', 'ishetal')))->__toString();
+//		}
+//
+//		return null;
 	}
 
-	private function blockLustrum() {
-		return $this->twig->render('menu/lustrumblock.html.twig');
-	}
-
-	private function blockIsHetAl() {
-		// Is het al...
-		if (lid_instelling('zijbalk', 'ishetal') != 'niet weergeven') {
-			return (new IsHetAlView($this->lidInstellingenRepository, $this->requestStack, $this->agendaRepository, $this->woordVanDeDagRepository, lid_instelling('zijbalk', 'ishetal')))->__toString();
+	public function getVerjaardagen(): ?string
+	{
+		// Komende verjaardagen
+		if (LoginService::mag(P_LOGGED_IN)) {
+			return $this->twig->render('verjaardagen/voorpagina.html.twig', [
+				'verjaardagen' => $this->verjaardagenService->getKomende(6),
+				true,
+			]);
 		}
 
 		return null;
 	}
+
+	public function getFotoalbum(): ?string
+	{
+		// Nieuwste fotoalbum
+		$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();
+		if ($album !== null) {
+			return $this->twig->render('fotoalbum/voorpagina.html.twig', ['album' => $album, 'jaargang' => LichtingenRepository::getHuidigeJaargang()]);
+		}
+
+		return null;
+	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public function getAgenda(): ?string
+	{
+		return $this->blockAgenda();
+	}
+
+	public function getForum()
+	{
+		$belangrijk = true;
+		return $this->twig->render('forum/partial/voorpagina.html.twig', [
+			'draden' => $this->forumDradenRepository->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum'), $belangrijk),
+			'aantalWacht' => $this->forumPostsRepository->getAantalWachtOpGoedkeuring(),
+			'belangrijk' => $belangrijk
+		]);
+	}
+
 
 	private function blockFavorieten() {
 		// Favorieten menu
@@ -143,7 +168,7 @@ class Zijbalk {
 
 	private function blockAgenda() {
 		// Agenda
-		if (LoginService::mag(P_AGENDA_READ) && lid_instelling('zijbalk', 'agendaweken') > 0 && lid_instelling('zijbalk', 'agenda_max') > 0) {
+		if (LoginService::mag(P_AGENDA_READ)) {
 			$aantalWeken = lid_instelling('zijbalk', 'agendaweken');
 			$items = $this->agendaRepository->getAllAgendeerbaar(date_create_immutable(), date_create_immutable('next saturday + ' . $aantalWeken . ' weeks'), false, true);
 			if (count($items) > lid_instelling('zijbalk', 'agenda_max')) {
@@ -187,30 +212,6 @@ class Zijbalk {
 		if (lid_instelling('zijbalk', 'forum_zelf') > 0) {
 			$posts = $this->forumPostsRepository->getRecenteForumPostsVanLid(LoginService::getUid(), (int)lid_instelling('zijbalk', 'forum_zelf'), true);
 			return $this->twig->render('forum/partial/post_zijbalk.html.twig', ['posts' => $posts]);
-		}
-
-		return null;
-	}
-
-	private function blockNieuwsteFotoAlbum() {
-		// Nieuwste fotoalbum
-		if (lid_instelling('zijbalk', 'fotoalbum') == 'ja') {
-			$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();
-			if ($album !== null) {
-				return $this->twig->render('voorpagina.html.twig', ['album' => $album, 'jaargang' => LichtingenRepository::getHuidigeJaargang()]);
-			}
-		}
-
-		return null;
-	}
-
-	private function blockKomendeVerjaardagen() {
-		// Komende verjaardagen
-		if (LoginService::mag(P_LOGGED_IN) && lid_instelling('zijbalk', 'verjaardagen') > 0) {
-			return $this->twig->render('voorpagina.html.twig', [
-				'verjaardagen' => $this->verjaardagenService->getKomende((int)lid_instelling('zijbalk', 'verjaardagen')),
-				'toonpasfotos' => lid_instelling('zijbalk', 'verjaardagen_pasfotos') == 'ja',
-			]);
 		}
 
 		return null;

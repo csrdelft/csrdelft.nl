@@ -68,9 +68,3 @@ Primary style
 		margin-left: 0;
 	}
 }
-
-@include media-breakpoint-up(lg) {
-	#menu {
-		margin-left: -200px;
-	}
-}
