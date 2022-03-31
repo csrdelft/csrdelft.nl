@@ -250,3 +250,8 @@ Sommige installaties komen standaard met [OPcache](https://www.php.net/manual/en
 Als het icoontje van Wampserver oranje is kan het zijn dat bepaalde poorten in gebruik zijn. Hier voor kun je de tools in Wampserver gebruiken. Dit menu kun je openen door te rechtsklikken op het Wampserver icoontje rechts onderin. Hier kun je de poort van 3306 aanpassen naar iets anders.
 
 Als je de poort hebt aangepast kopieer dan ook de regel met `DATABASE_URL` van `.env` naar `.env.local` (maak deze aan als deze nog niet bestaat) en verander 3306 naar de poort die je gekozen hebt.
+
+### MySQL error: Index column size too large. The maximum column size is 767 bytes
+
+Deze error kun je krijgen bij het importeren van de sql dump of als er queries worden uitgevoerd. Dit is te fixen door in het wampserver menu onder MariaDB `innodb-default-row-format` naar `dynamic`.
+
