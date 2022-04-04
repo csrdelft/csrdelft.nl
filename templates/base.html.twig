@@ -51,7 +51,7 @@
 {{ js_asset('app') }}
 {% block body %}
 	{{ include('menu/main.html.twig', {root: get_menu('main'), personal: get_menu('Personal'), favorieten: get_menu(app.user.uid)}) }}
-	<div class="container-fluid bg-light p-3 min-vh-100">
+	<main class="container-fluid bg-light p-3 min-vh-100">
 		{{ getMelding() }}
 		{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == "/" %}
 			<div class="cd-page-content container px-0 ratio ratio-3x2">
@@ -61,23 +61,7 @@
 					<div class="cell cell-agenda cell-overflow">{{ get_agenda() }}</div>
 					<div class="cell cell-verjaardagen cell-overflow">{{ get_verjaardagen() }}</div>
 					<div class="cell cell-foto-albums">{{  get_fotoalbum() }}</div>
-					<div class="cell cell-overig">
-						<h4 class="mt-1">Overig</h4>
-						<div class="overig-grid-container">
-							<h5 class="overig-cell overig-cell-form border border-1 rounded-2">
-								<i class="fas fa-file-download text-muted me-3"></i>
-								<a href="/declaratie/mijn" style="text-decoration: none;">Declareer nu via de stek!</a>
-							</h5>
-							<h5 class="overig-cell overig-cell-rijbewijs border border-1 rounded-2">
-								<i class="fas fa-car-side text-muted mb-1"></i>
-								<a href="/wiki/leden:mogelijkheden#rijbewijs" style="text-decoration: none;">Rijbewijs</a>
-							</h5>
-							<h5 class="overig-cell overig-cell-sponserkliks border border-1 rounded-2">
-								<i class="fas fa-mouse text-muted mb-1"></i>
-								<a href="https://www.sponsorkliks.com/products/shops.php?club=3605" style="text-decoration: none;">Sponsorkliks</a>
-							</h5>
-						</div>
-					</div>
+					<div class="cell cell-overig">{{ get_overig() }}</div>
 					<div class="cell cell-civi-saldo position-relative">
 						<div class="card-body text-end">
 							<h4 class="text-center card-title">CiviSaldo:</h4>
@@ -102,7 +86,7 @@
 			{% block content %}{% endblock %}
 		</div>
 		{% endif %}
-	</div>
+	</main>
 	<div id="modal-background" {% if block('modal') is defined %} style="display: block;" {% endif %}></div>
 	{% if block('modal') is defined %}
 		{{ block('modal') | raw }}

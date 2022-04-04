@@ -1,0 +1,26 @@
+<h2 class="h6 fw-bolder mt-1">
+	<a href="{{ url('csrdelft_agenda_maand') }}"  title="Agenda">Agenda</a>
+</h2>
+
+<div class="list-group list-group-flush">
+	{% for item in items %}
+	<div class="list-group-item">
+		<h3 class="agenda-item-dag fw-bolder text-black-50 text-uppercase">
+			{{ date(item.beginMoment) | datetime_format_long }}
+		</h3>
+		{# {{#each this.items}} #}
+		<div class="list-group-item list-group-item-action d-flex flex-row align-items-center p-0 border-0">
+			<a href="{{ item.url }}" title="{{ item.beschrijving }}" class="d-block flex-grow-1">
+				<p class="text-truncate flex-grow-1">
+					<span class="agenda-item-moment d-inline-block">
+						{{ date(item.beginMoment) | time_format }}
+					</span>
+					{{ item.titel }}
+				</p>
+			</a>
+		</div>
+		{# {{/each}} #}
+  	</div>
+	{% endfor %}
+</div>
+

@@ -101,7 +101,7 @@ class Voorpagina {
 	{
 		// Komende verjaardagen
 		if (LoginService::mag(P_LOGGED_IN)) {
-			return $this->twig->render('verjaardagen/voorpagina.html.twig', [
+			return $this->twig->render('voorpagina/verjaardagen.html.twig', [
 				'verjaardagen' => $this->verjaardagenService->getKomende(6),
 				true,
 			]);
@@ -110,12 +110,17 @@ class Voorpagina {
 		return null;
 	}
 
+	public function getOverig(): ?string
+	{
+		return $this->twig->render('voorpagina/overig.html.twig');
+	}
+
 	public function getFotoalbum(): ?string
 	{
 		// Nieuwste fotoalbum
 		$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();
 		if ($album !== null) {
-			return $this->twig->render('fotoalbum/voorpagina.html.twig', ['album' => $album, 'jaargang' => LichtingenRepository::getHuidigeJaargang()]);
+			return $this->twig->render('voorpagina/fotoalbum.html.twig', ['album' => $album, 'jaargang' => LichtingenRepository::getHuidigeJaargang()]);
 		}
 
 		return null;
@@ -128,13 +133,24 @@ class Voorpagina {
 	 */
 	public function getAgenda(): ?string
 	{
-		return $this->blockAgenda();
+		// Agenda
+		if (LoginService::mag(P_AGENDA_READ)) {
+			$aantalWeken = lid_instelling('zijbalk', 'agendaweken');
+			$items = $this->agendaRepository->getAllAgendeerbaar(date_create_immutable(), date_create_immutable('next saturday + ' . $aantalWeken . ' weeks'), false, true);
+			// TODO: nog uit de instellingen halen
+			// if (count($items) > lid_instelling('zijbalk', 'agenda_max')) {
+			// 	$items = array_slice($items, 0, lid_instelling('zijbalk', 'agenda_max'));
+			// }
+			return $this->twig->render('voorpagina/agenda.html.twig', ['items' => $items]);
+		}
+
+		return null;
 	}
 
 	public function getForum()
 	{
 		$belangrijk = true;
-		return $this->twig->render('forum/partial/voorpagina.html.twig', [
+		return $this->twig->render('voorpagina/forum.html.twig', [
 			'draden' => $this->forumDradenRepository->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum'), $belangrijk),
 			'aantalWacht' => $this->forumPostsRepository->getAantalWachtOpGoedkeuring(),
 			'belangrijk' => $belangrijk
@@ -161,20 +177,6 @@ class Voorpagina {
 				$sponsor_menu->tekst = 'Mogelijkheden';
 				return $this->twig->render('menu/block.html.twig', ['root' => $sponsor_menu]);
 			}
-		}
-
-		return null;
-	}
-
-	private function blockAgenda() {
-		// Agenda
-		if (LoginService::mag(P_AGENDA_READ)) {
-			$aantalWeken = lid_instelling('zijbalk', 'agendaweken');
-			$items = $this->agendaRepository->getAllAgendeerbaar(date_create_immutable(), date_create_immutable('next saturday + ' . $aantalWeken . ' weeks'), false, true);
-			if (count($items) > lid_instelling('zijbalk', 'agenda_max')) {
-				$items = array_slice($items, 0, lid_instelling('zijbalk', 'agenda_max'));
-			}
-			return $this->twig->render('agenda/zijbalk.html.twig', ['items' => $items]);
 		}
 
 		return null;

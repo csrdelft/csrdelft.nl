@@ -135,4 +135,9 @@ class LayoutTwigExtension extends AbstractExtension
 	{
 		return $this->voorpagina->getVerjaardagen();
 	}
+
+	public function get_overig(): ?string
+	{
+		return $this->voorpagina->getOverig();
+	}
 }
