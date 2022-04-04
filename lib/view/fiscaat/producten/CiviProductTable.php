@@ -46,6 +46,6 @@ class CiviProductTable extends DataTable {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/" title="Startpagina"><span class="fa fa-home module-icon"></span></a> » <a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » <span class="active">Producten</span>';
+		return '<a href="/" title="Startpagina"><span class="fas fa-home module-icon"></span></a> » <a href="/fiscaat"><span class="fas fa-eur module-icon"></span></a> » <span class="active">Producten</span>';
 	}
 }

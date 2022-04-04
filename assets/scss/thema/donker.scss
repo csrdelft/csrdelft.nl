@@ -47,26 +47,6 @@ $yiq-text-light: $gray-900 !default;
 
 /** Stek specifieke variabelen. */
 
-/* zijbalk */
-$beeldmerk: url(../images/beeldmerk-wit.png) !default;
-
-$zijbalk-bg: darken($body-bg, 5%) !default;
-$zijbalk-border: darken($primary, 12%) !default;
-$zijbalk-kopje: $primary !default;
-$zijbalk-ishetal-nee: red !default;
-$zijbalk-ishetal-ja: green !default;
-$zindex-zijbalk: 800 !default;
-
-.zijbalk-kopje {
-	a {
-		font-size: 1.25em;
-	}
-}
-
-#zijbalk .blok .item {
-	font-family: "Ubuntu-Light", sans-serif;
-}
-
 /* Modals */
 $modal-content-bg: $body-bg !default;
 

@@ -1,4 +1,3 @@
-@import "~@fortawesome/fontawesome-free/scss/variables";
 @import "~datatables.net-dt/css/jquery.dataTables.css";
 @import "~datatables.net-autofill-dt/css/autoFill.dataTables.css";
 @import "~datatables.net-buttons-dt/css/buttons.dataTables.css";
@@ -35,7 +34,9 @@ h2.vliegende-knoppen + div > .dt-buttons {
 	top: 58px;
 }
 
-button, a, div {
+button,
+a,
+div {
 	&.dt-button-warning {
 		background: #f2dede linear-gradient(to bottom, #f2dede 0%, #e7c3c3 100%);
 		filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#f2dede', EndColorStr='#e7c3c3');
@@ -43,11 +44,13 @@ button, a, div {
 		&:active:not(.disabled):hover:not(.disabled),
 		&.active:not(.disabled):hover:not(.disabled) {
 			box-shadow: inset 1px 1px 3px #999999;
-			background: #e0cece linear-gradient(to bottom, #e0cece 0%, #d1b2b2 100%);
+			background: #e0cece
+				linear-gradient(to bottom, #e0cece 0%, #d1b2b2 100%);
 			filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#e0cece', EndColorStr='#d1b2b2');
 		}
 		&:hover:not(.disabled) {
-			background: #e0cece linear-gradient(to bottom, #e0cece 0%, #d1b2b2 100%);
+			background: #e0cece
+				linear-gradient(to bottom, #e0cece 0%, #d1b2b2 100%);
 			filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#e0cece', EndColorStr='#d1b2b2');
 		}
 	}
@@ -77,47 +80,40 @@ button, a, div {
 		}
 
 		tr {
-
 			td.editable {
 				cursor: url("../../images/edit.png"), cell;
 			}
 
-			td.toggle-childrow::before {
-				font-size: 1.1em;
-				font-weight: 400;
-				font-family: 'Font Awesome 5 Free';
-				content: fa-content($fa-var-plus-square);
+			td.toggle-childrow {
+				@include fa-icon-solid($fa-var-plus);
 			}
-		}
-		tr:hover {
-			cursor: default;
 
-			td.toggle-childrow::before {
-				font-weight: 900;
-				content: fa-content($fa-var-plus-square);
+			&:hover {
+				cursor: default;
+
+				td.toggle-childrow:before {
+					font-weight: 900;
+				}
 			}
 		}
 		tr.expanded {
-
-			td.toggle-childrow::before {
-				font-weight: 400;
-				content: fa-content($fa-var-minus-square);
+			td.toggle-childrow {
+				@include fa-icon-solid($fa-var-minus);
 			}
-		}
-		tr.expanded:hover {
 
-			td.toggle-childrow::before {
-				font-weight: 900;
-				content: fa-content($fa-var-minus-square);
+			&:hover {
+				td.toggle-childrow:before {
+					font-weight: 900;
+				}
 			}
 		}
 		tr.loading {
-
 			td.toggle-childrow::before {
 				content: none;
 			}
 			td.toggle-childrow {
-				background: url("../../images/loading-fb.gif") no-repeat center center;
+				background: url("../../images/loading-fb.gif") no-repeat center
+					center;
 			}
 		}
 		tr.childrow:hover {

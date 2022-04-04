@@ -1,10 +1,9 @@
-@import "~@fortawesome/fontawesome-free/scss/variables";
 @import "variables";
 
 #header {
 	transition: background-color 0.5s ease-in-out;
 	left: 0;
-	padding: .25em 1.25em;
+	padding: 0.25em 1.25em;
 	position: fixed;
 	width: 100%;
 	z-index: 10000;
@@ -43,7 +42,8 @@
 			white-space: nowrap;
 		}
 
-		.login-knop, .menu-knop {
+		.login-knop,
+		.menu-knop {
 			display: none;
 		}
 
@@ -65,7 +65,7 @@
 				padding: 15px 10px 10px;
 				border-bottom-left-radius: 15px;
 				border-bottom-right-radius: 15px;
-				margin: -15px .5em 0;
+				margin: -15px 0.5em 0;
 				width: 10em;
 				top: 100%;
 
@@ -74,7 +74,7 @@
 					box-shadow: none;
 					border-radius: 0;
 					border-bottom: none;
-					padding: .8em;
+					padding: 0.8em;
 
 					&.is-active {
 						text-decoration: underline;
@@ -87,7 +87,6 @@
 			}
 		}
 
-
 		.nav-link {
 			z-index: 13;
 
@@ -95,7 +94,7 @@
 			text-align: center;
 
 			display: inline-block;
-			margin: 0 .5em;
+			margin: 0 0.5em;
 
 			border-bottom: none;
 
@@ -106,12 +105,12 @@
 
 			text-decoration: none;
 			border-radius: 15px;
-			padding: .8em 1.35em;
+			padding: 0.8em 1.35em;
 			background: $button-bg;
 
 			&.is-active {
-				border: .2em solid $geel;
-				padding: .6em 1.15em;
+				border: 0.2em solid $geel;
+				padding: 0.6em 1.15em;
 			}
 		}
 
@@ -149,7 +148,6 @@
 }
 
 @media screen and (max-width: $scherm-middel) {
-
 	#header {
 		height: 2.75em;
 		line-height: 2.75em;
@@ -168,7 +166,6 @@
 			}
 		}
 	}
-
 }
 
 @media screen and (max-width: $scherm-middel) {
@@ -177,7 +174,7 @@
 		flex-direction: column-reverse;
 
 		height: auto;
-		padding: .25em 1.5em;
+		padding: 0.25em 1.5em;
 
 		.nav-login {
 			display: flex;
@@ -186,7 +183,8 @@
 		}
 
 		nav {
-			.login-knop, .menu-knop {
+			.login-knop,
+			.menu-knop {
 				display: block;
 				color: $geel;
 				padding: 0.5em;

@@ -17,7 +17,7 @@ class FotoAlbumBreadcrumbs {
 	}
 
 	private static function getBreadcrumbsDropdown(FotoAlbum $album, $dropdown, $self) {
-		$breadcrumbs = '<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>';
+		$breadcrumbs = '<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>';
 
 		if ($album->subdir == 'fotoalbum/') {
 			// Geen subdir

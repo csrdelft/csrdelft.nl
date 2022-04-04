@@ -66,18 +66,18 @@ class Icon {
 		'log' => 'report'
 	);
 
-	public static $fa = [
-		'calendar' => 'fa fa-calendar',
-		'forum' => 'fa fa-comments',
-		'profiel' => 'fa fa-user',
-		'fotoalbum' => 'fa fa-camera',
-		'document' => 'fa fa-file',
-		'Woonoord' => 'fa fa-home',
-		'Commissie' => 'fa fa-users',
-		'Ondervereniging' => 'fa fa-users',
-		'Kring' => 'fa fa-circle-notch',
-		'note' => 'fa fa-sticky-note',
-		'boek' => 'fa fa-book',
+	public static $fas = [
+		'calendar' => 'fas fa-calendar',
+		'forum' => 'fas fa-comments',
+		'profiel' => 'fas fa-user',
+		'fotoalbum' => 'fas fa-camera',
+		'document' => 'fas fa-file',
+		'Woonoord' => 'fas fa-home',
+		'Commissie' => 'fas fa-users',
+		'Ondervereniging' => 'fas fa-users',
+		'Kring' => 'fas fa-circle-notch',
+		'note' => 'fas fa-sticky-note',
+		'boek' => 'fas fa-book',
 	];
 
 	public static function get($key) {

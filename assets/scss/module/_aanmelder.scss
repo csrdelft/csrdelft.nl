@@ -1,11 +1,11 @@
 /**
  * aanmelder.css
  */
-.aanmelder-tabel .groep-tabs li span.fa {
+.aanmelder-tabel .groep-tabs li span.fas {
 	color: #a9a9a9;
 }
-.aanmelder-tabel .groep-tabs li:hover span.fa {
-	color: #FFFFFF;
+.aanmelder-tabel .groep-tabs li:hover span.fas {
+	color: #ffffff;
 }
 .rowColor0 {
 	background-color: $tabel-regel-donker;
@@ -25,7 +25,7 @@
 		background-color: $tabel-header;
 		font-weight: bold;
 		padding: 1em;
-		border-bottom: 2px solid #FFFFFF;
+		border-bottom: 2px solid #ffffff;
 	}
 
 	tr {

@@ -30,12 +30,6 @@ $link-hover-color: $kleur-hover;
 $body-bg: $kleur-secundair;
 $body-color: $kleur-text;
 
-$zijbalk-bg: $kleur-primair;
-$zijbalk-kopje: $kleur-text;
-$zijbalk-border: $kleur-hover;
-$zijbalk-ishetal-ja: $kleur-groen;
-$zijbalk-ishetal-nee: $kleur-rood;
-
 $bb-block-bg: $kleur-primair;
 $bb-alt-bg: darken($body-bg, 4%);
 $bb-hover-bg: $kleur-hover;
@@ -75,10 +69,4 @@ h6 {
 
 h5 {
 	color: $kleur-textheader;
-}
-
-.zijbalk {
-	.blok .zijbalk-kopje a {
-		color: $kleur-textheader;
-	}
 }

@@ -1,7 +1,7 @@
 import createElement from 'jgallery/src/utils/create-element';
 import withTooltip from 'jgallery/src/utils/with-tooltip';
 import AlbumItem from 'jgallery/types/album-item';
-import {GalleryDecorator} from 'jgallery/types/gallery';
+import { GalleryDecorator } from 'jgallery/types/gallery';
 import Params from 'jgallery/types/gallery/parameters';
 
 const withFullscreenButton: GalleryDecorator = (constructor) =>
@@ -9,8 +9,9 @@ const withFullscreenButton: GalleryDecorator = (constructor) =>
 		constructor(albums: AlbumItem[], params: Params) {
 			super(albums, params);
 
-			const fullscreenIcon = createElement(`<i class="fa fa-expand"></i>`);
-			const fullscreenButton = withTooltip(createElement(`<span class="j-gallery-icon change-mode"></span>`, {
+			const fullscreenIcon = createElement(`<i class="fas fa-expand"></i>`);
+			const fullscreenButton = withTooltip(
+				createElement(`<span class="j-gallery-icon change-mode"></span>`, {
 					children: [fullscreenIcon],
 				}),
 				{
@@ -20,7 +21,8 @@ const withFullscreenButton: GalleryDecorator = (constructor) =>
 						transform: 'translateY(-8px)',
 					},
 					content: 'Volledig scherm',
-				});
+				}
+			);
 			fullscreenButton.addEventListener('click', () => this.toggleFullscreen());
 			this.appendControlsElements([fullscreenButton]);
 

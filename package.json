@@ -53,8 +53,8 @@
 		"postcss": "^8.2.10",
 		"postcss-loader": "^5.2.0",
 		"resolve-url-loader": "^4.0.0",
-		"sass": "^1.32.11",
-		"sass-loader": "^11.0.1",
+		"sass": "^1.49.11",
+		"sass-loader": "^12.6.0",
 		"style-loader": "^2.0.0",
 		"terser-webpack-plugin": "^5.1.1",
 		"ts-loader": "^9.0.1",
@@ -73,7 +73,6 @@
 		"webpack-remove-empty-scripts": "^0.7.1"
 	},
 	"dependencies": {
-		"@fortawesome/fontawesome-free": "^5.11.2",
 		"@fullcalendar/core": "^4.3.1",
 		"@fullcalendar/daygrid": "^4.3.0",
 		"@fullcalendar/interaction": "^4.3.0",

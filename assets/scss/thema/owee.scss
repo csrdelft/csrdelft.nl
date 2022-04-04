@@ -1,6 +1,5 @@
 /* OWee 2021 */
 $primair-achtergrond: #b2d4f0;
-$zijbalk-achtergrond: #486b87;
 $secundaire-accenten-1: #002e54;
 $secundaire-accenten-2: #f6b585;
 
@@ -9,10 +8,6 @@ $secondary: $secundaire-accenten-2;
 
 $body-bg: $primair-achtergrond;
 $body-color: #002e54;
-$zijbalk-bg: $zijbalk-achtergrond;
-$zijbalk-kopje: $secundaire-accenten-2;
-
-$donkerblauw: $zijbalk-achtergrond;
 $orange: $secundaire-accenten-2;
 $footer-background: $primair-achtergrond;
 
@@ -44,22 +39,8 @@ main {
 	background-image: url("../../images/background.png") !important;
 }
 
-#zijbalk .blok .zijbalk-kopje {
-	font-family: $headings-font-family;
-}
-
 .bb-block {
 	box-shadow: #f6b585;
-}
-
-#zijbalk:before {
-	content: "";
-	display: block;
-	height: 156px;
-	background: url("../../images/owee2021.svg") no-repeat center center;
-	background-size: contain;
-	margin: 20px 0;
-	clear: left;
 }
 
 .lustrum12:before {

@@ -19,7 +19,6 @@ h5 {
 	font-family: "Old English Text MT", cursive;
 }
 
-#zijbalk,
 #forumtabel th,
 .cd-secondary-nav {
 	background: url("../../images/civitasia/achtergrond.jpg") !important;
@@ -37,35 +36,6 @@ h1,
 a,
 a:hover {
 	color: #000;
-}
-
-/*NAVIGATIE MENU*/
-
-/*Zorg voor rode borders*/
-
-#zijbalk .blok .zijbalk-kopje {
-	border: 0 solid #c52d30;
-	border-bottom-width: 2px;
-	margin-right: 40px;
-	background-image: none;
-}
-
-/* letters moeten wit */
-
-#zijbalk .blok .zijbalk-kopje a {
-	color: #fff;
-}
-
-/*Veel tekst van de zijbalk in het wit*/
-
-#zijbalk .ishetal .ja,
-#zijbalk .ishetal .nee,
-.staatrood,
-#zijbalk .blok .item a,
-#zijbalk .ishetal,
-#zijbalk .blok .item {
-	color: #000;
-	font-weight: bold;
 }
 
 /*Andere koppen ook in het wit*/
@@ -96,18 +66,6 @@ a:hover {
 .cd-primary-nav > li > a:hover,
 .cd-primary-nav > li > a.selected {
 	box-shadow: inset 0 -2px 0 #000;
-}
-
-/*Zijbalk grens van het scherm in donkerblauw*/
-
-#zijbalk {
-	border-color: #151b29;
-}
-
-/*Logo*/
-
-#zijbalk .cd-beeldmerk {
-	//background-image: url("/assets/layout/plaetjes/onontdekt_beeldmerk.png");
 }
 
 /*KNOPPEN*/

@@ -1,6 +1,7 @@
 @import "extern/variables";
 @import "~bootstrap/scss/mixins/breakpoints";
-@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "./fontawesome/fontawesome.scss";
+@import "./fontawesome/brands.scss";
 
 $primary: #b2d4f0;
 $secondary: #002e54;

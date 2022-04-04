@@ -1,11 +1,13 @@
-@import "defaults";
-@import "fonts";
+@import "./fontawesome/fontawesome.scss";
+@import "./fontawesome/solid.scss";
+@import "./fontawesome/brands.scss";
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-vue/dist/bootstrap-vue.css"; // Moet na Bootstrap geladen worden.
+@import "defaults";
+@import "fonts";
 @import "_common";
 @import "main-menu";
 @import "bbcode";
-@import "zijbalk";
 @import "module/maalcie";
 @import "zoeken";
 @import "overlay";
@@ -23,6 +25,7 @@
 @import "module/menubeheer";
 @import "module/profiel";
 @import "module/stamboom";
+
 @import "~@fullcalendar/core/main.css";
 @import "~@fullcalendar/daygrid/main.css";
 @import "~@fullcalendar/timegrid/main.css";

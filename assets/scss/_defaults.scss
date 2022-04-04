@@ -42,7 +42,7 @@ $body-color: $black !default;
 $headings-color: inherit !default;
 
 $font-size-root: null;
-$font-size-base: 1rem;
+$font-size-base: 0.9rem;
 $font-size-lg: $font-size-base * 2;
 $font-size-sm: $font-size-base * 0.875;
 $font-size-xs: $font-size-base * 0.75;
@@ -53,17 +53,6 @@ $headings-font-family: "Source Sans Pro", Helvetica, Arial, sans-serif !default;
 $donkerblauw: #122a4d !default;
 $lichtblauw: #4e698b;
 
-/* zijbalk */
-$beeldmerk: url(../images/beeldmerk.png) !default;
-
-$zijbalk-bg: #f5f5f5 !default;
-$zijbalk-border: $donkerblauw !default;
-$zijbalk-kopje: $donkerblauw !default;
-
-$zijbalk-ishetal-nee: red !default;
-$zijbalk-ishetal-ja: green !default;
-
-$zindex-zijbalk: 800 !default;
 $zindex-menu: 1000 !default;
 
 /* bbcode */

@@ -59,7 +59,7 @@ $bb-hover-bg: #ddeeff !default;
 		position: absolute;
 		margin-top: -2em;
 		color: $text-muted;
-		font-size: $small-font-size;
+		font-size: $font-size-sm;
 		margin-left: -5px;
 	}
 }
@@ -235,7 +235,7 @@ Groepen
 	li {
 		display: inline-block;
 
-		span.fa {
+		span.fas {
 			font-size: 1.1em;
 		}
 	}

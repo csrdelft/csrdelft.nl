@@ -1,18 +1,11 @@
 <template>
   <div>
-    <div
-      v-if="finished"
-      class="score-blok"
-    >
+    <div v-if="finished" class="score-blok">
       <div class="titel">
         {{ titel }}
       </div>
-      <div class="score-titel">
-        Jouw score:
-      </div>
-      <div class="score">
-        {{ Math.round(percentageGoed) }}%
-      </div>
+      <div class="score-titel">Jouw score:</div>
+      <div class="score">{{ Math.round(percentageGoed) }}%</div>
     </div>
     <div v-if="!started">
       <div class="row">
@@ -23,26 +16,23 @@
               id="alleLichtingen"
               v-model="alleLichtingen"
               type="checkbox"
-            >
+            />
             <label for="alleLichtingen">Alle lichtingen</label>
           </div>
-          <div
-            v-for="lichting in lichtingen"
-            :key="lichting"
-          >
+          <div v-for="lichting in lichtingen" :key="lichting">
             <input
               v-if="!alleLichtingen"
               :id="'lichting' + lichting"
               v-model="lichtingSelectie"
               type="checkbox"
               :value="lichting"
-            >
+            />
             <input
               v-if="alleLichtingen"
               type="checkbox"
               :checked="alleLichtingen"
               disabled
-            >
+            />
             <label :for="'lichting' + lichting">{{ lichting }}</label>
           </div>
         </div>
@@ -53,26 +43,23 @@
               id="alleVerticalen"
               v-model="alleVerticalen"
               type="checkbox"
-            >
+            />
             <label for="alleVerticalen">Alle verticalen</label>
           </div>
-          <div
-            v-for="verticale in verticalen"
-            :key="verticale"
-          >
+          <div v-for="verticale in verticalen" :key="verticale">
             <input
               v-if="!alleVerticalen"
               :id="'verticale' + verticale"
               v-model="verticaleSelectie"
               type="checkbox"
               :value="verticale"
-            >
+            />
             <input
               v-if="alleVerticalen"
               type="checkbox"
               :checked="alleVerticalen"
               disabled
-            >
+            />
             <label :for="'verticale' + verticale">{{ verticale }}</label>
           </div>
         </div>
@@ -84,114 +71,91 @@
             id="verbergOnderkant"
             v-model="verbergOnderkant"
             type="checkbox"
-          >
+          />
           <label for="verbergOnderkant">Voorkom leesbare namen op foto's</label>
         </div>
       </div>
       <strong class="mt-3 mb-1 block">Antwoordmethode</strong>
-      <select
-        v-model="antwoordMethode"
-        class="form-control"
-      >
-        <option value="voornaam">
-          Voornaam
-        </option>
-        <option value="achternaam">
-          Achternaam
-        </option>
-        <option value="combi">
-          Voor- en achternaam
-        </option>
-        <option value="civi">
-          Achternaam en achtervoegsel
-        </option>
+      <select v-model="antwoordMethode" class="form-control">
+        <option value="voornaam">Voornaam</option>
+        <option value="achternaam">Achternaam</option>
+        <option value="combi">Voor- en achternaam</option>
+        <option value="civi">Achternaam en achtervoegsel</option>
       </select>
       <a
         href="#"
         class="btn btn-primary btn-block mt-3"
-        :class="{'disabled': !klaarVoorDeStart}"
+        :class="{ disabled: !klaarVoorDeStart }"
         @click.prevent="start"
-      >Start met {{ aantal }} {{ aantal === 1 ? 'lid' : 'leden' }}</a>
+        >Start met {{ aantal }} {{ aantal === 1 ? 'lid' : 'leden' }}</a
+      >
     </div>
     <div v-else-if="!finished">
       <div class="progress">
-        <div
-          class="correct"
-          :style="{'width': percentageGoed + '%'}"
-        />
-        <div
-          class="again"
-          :style="{'width': percentageOpnieuw + '%'}"
-        />
-        <div
-          class="wrong"
-          :style="{'width': percentageFout + '%'}"
-        />
+        <div class="correct" :style="{ width: percentageGoed + '%' }" />
+        <div class="again" :style="{ width: percentageOpnieuw + '%' }" />
+        <div class="wrong" :style="{ width: percentageFout + '%' }" />
       </div>
-      <div
-        v-if="laatste"
-        class="laatste"
-        :class="{'goed': laatsteGoed}"
-      >
-        <img
-          :src="'/profiel/pasfoto/' + laatste.uid + '.jpg'"
-          alt=""
-        >
+      <div v-if="laatste" class="laatste" :class="{ goed: laatsteGoed }">
+        <img :src="'/profiel/pasfoto/' + laatste.uid + '.jpg'" alt="" />
         <div class="info">
           <div class="naam">
-            <span :class="{'bold': antwoordMethode === 'voornaam' || antwoordMethode === 'combi'}">{{
-              laatste.voornaam
-            }}</span>
-            <span :class="{'bold': antwoordMethode === 'achternaam' || antwoordMethode === 'combi' || antwoordMethode === 'civi'}">{{
-              laatste.tussenvoegsel
-            }} {{ laatste.achternaam }}</span>
+            <span
+              :class="{
+                bold:
+                  antwoordMethode === 'voornaam' || antwoordMethode === 'combi',
+              }"
+              >{{ laatste.voornaam }}</span
+            >
+            <span
+              :class="{
+                bold:
+                  antwoordMethode === 'achternaam' ||
+                  antwoordMethode === 'combi' ||
+                  antwoordMethode === 'civi',
+              }"
+              >{{ laatste.tussenvoegsel }} {{ laatste.achternaam }}</span
+            >
             <span
               v-if="laatste.postfix"
-              :class="{'bold': antwoordMethode === 'civi'}"
-            >{{
-              laatste.postfix
-            }}</span>
+              :class="{ bold: antwoordMethode === 'civi' }"
+              >{{ laatste.postfix }}</span
+            >
           </div>
           <div class="tekst">
             <span>{{ laatste.lichting }}</span>
-            <span v-if="laatste.verticale && laatste.verticale !== 'Geen'">{{ laatste.verticale }}</span>
+            <span v-if="laatste.verticale && laatste.verticale !== 'Geen'">{{
+              laatste.verticale
+            }}</span>
             <span>{{ laatste.studie }}</span>
           </div>
         </div>
-        <span
-          v-if="laatsteGoed"
-          class="fa fa-check"
-        />
-        <span
-          v-else
-          class="fa fa-times"
-        />
+        <span v-if="laatsteGoed" class="fas fa-check" />
+        <span v-else class="fas fa-times" />
       </div>
       <div
         class="pasfotoContainer"
-        :class="{'onderkantVerbergen': verbergOnderkant}"
+        :class="{ onderkantVerbergen: verbergOnderkant }"
       >
         <div
-          :style="{'background-image': 'url(/profiel/pasfoto/' + huidig.uid + '.jpg)'}"
+          :style="{
+            'background-image': 'url(/profiel/pasfoto/' + huidig.uid + '.jpg)',
+          }"
           class="pasfoto"
         />
       </div>
-      <strong
-        v-if="antwoordMethode === 'voornaam'"
-        class="mb-1 block"
-      >Voornaam:</strong>
-      <strong
-        v-if="antwoordMethode === 'achternaam'"
-        class="mb-1 block"
-      >Achternaam:</strong>
-      <strong
-        v-if="antwoordMethode === 'combi'"
-        class="mb-1 block"
-      >Voor- en achternaam:</strong>
-      <strong
-        v-if="antwoordMethode === 'civi'"
-        class="mb-1 block"
-      >Achternaam en achtervoegsel:</strong>
+      <strong v-if="antwoordMethode === 'voornaam'" class="mb-1 block"
+        >Voornaam:</strong
+      >
+      <strong v-if="antwoordMethode === 'achternaam'" class="mb-1 block"
+        >Achternaam:</strong
+      >
+      <strong v-if="antwoordMethode === 'combi'" class="mb-1 block"
+        >Voor- en achternaam:</strong
+      >
+      <strong v-if="antwoordMethode === 'civi'" class="mb-1 block"
+        >Achternaam en achtervoegsel:</strong
+      >
       <input
         type="text"
         class="form-control"
@@ -199,23 +163,22 @@
         autofocus
         @input="ingevuld = $event.target.value"
         @keydown.enter="controleer"
-      >
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 
-const shuffle = <T,>(array: T[]) => {
+const shuffle = <T>(array: T[]) => {
   let currentIndex = array.length;
   let temporaryValue;
   let randomIndex;
 
   // While there remain elements to shuffle...
   while (0 !== currentIndex) {
-
     // Pick a remaining element...
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
@@ -286,9 +249,10 @@ export default class NamenLeren extends Vue {
   }
 
   private get gefilterdeLeden() {
-    return this.leden.filter((lid: Lid) =>
-      (this.alleLichtingen || this.lichtingSelectie.includes(lid.lichting))
-      && (this.alleVerticalen || this.verticaleSelectie.includes(lid.verticale)),
+    return this.leden.filter(
+      (lid: Lid) =>
+        (this.alleLichtingen || this.lichtingSelectie.includes(lid.lichting)) &&
+        (this.alleVerticalen || this.verticaleSelectie.includes(lid.verticale))
     );
   }
 
@@ -305,19 +269,30 @@ export default class NamenLeren extends Vue {
   }
 
   private get totaalAantal() {
-    return this.todo.length + this.goed.length + this.opnieuw.length + this.fout.length;
+    return (
+      this.todo.length +
+      this.goed.length +
+      this.opnieuw.length +
+      this.fout.length
+    );
   }
 
   private get percentageGoed() {
-    return this.totaalAantal > 0 ? this.goed.length / this.totaalAantal * 100 : 0;
+    return this.totaalAantal > 0
+      ? (this.goed.length / this.totaalAantal) * 100
+      : 0;
   }
 
   private get percentageOpnieuw() {
-    return this.totaalAantal > 0 ? this.opnieuw.length / this.totaalAantal * 100 : 0;
+    return this.totaalAantal > 0
+      ? (this.opnieuw.length / this.totaalAantal) * 100
+      : 0;
   }
 
   private get percentageFout() {
-    return this.totaalAantal > 0 ? this.fout.length / this.totaalAantal * 100 : 0;
+    return this.totaalAantal > 0
+      ? (this.fout.length / this.totaalAantal) * 100
+      : 0;
   }
 
   private start() {
@@ -340,8 +315,13 @@ export default class NamenLeren extends Vue {
   }
 
   private volgende() {
-    const choice = this.fout.concat(this.todo.slice(0, Math.max(this.aantalPerKeer - this.fout.length, 0)));
-    const pickable = choice.filter((lid) => choice.length === 1 || !this.huidig || lid.uid !== this.huidig.uid);
+    const choice = this.fout.concat(
+      this.todo.slice(0, Math.max(this.aantalPerKeer - this.fout.length, 0))
+    );
+    const pickable = choice.filter(
+      (lid) =>
+        choice.length === 1 || !this.huidig || lid.uid !== this.huidig.uid
+    );
     if (pickable.length > 0) {
       for (const lid of pickable) {
         preloadImage('/profiel/pasfoto/' + lid.uid + '.jpg');
@@ -360,10 +340,17 @@ export default class NamenLeren extends Vue {
     }
     // Antwoord vormen
     const onderdelen = [];
-    if (this.antwoordMethode === 'voornaam' || this.antwoordMethode === 'combi') {
+    if (
+      this.antwoordMethode === 'voornaam' ||
+      this.antwoordMethode === 'combi'
+    ) {
       onderdelen.push(this.huidig.voornaam);
     }
-    if (this.antwoordMethode === 'achternaam' || this.antwoordMethode === 'combi' || this.antwoordMethode === 'civi') {
+    if (
+      this.antwoordMethode === 'achternaam' ||
+      this.antwoordMethode === 'combi' ||
+      this.antwoordMethode === 'civi'
+    ) {
       if (this.huidig.tussenvoegsel) {
         onderdelen.push(this.huidig.tussenvoegsel);
       }
@@ -378,8 +365,9 @@ export default class NamenLeren extends Vue {
 
     // Antwoord checken
     this.laatste = this.huidig;
-    this.laatsteGoed = antwoord.toLowerCase().replace('.', '')
-                        === this.ingevuld.toLowerCase().replace('.', '');
+    this.laatsteGoed =
+      antwoord.toLowerCase().replace('.', '') ===
+      this.ingevuld.toLowerCase().replace('.', '');
 
     // Verwijderen uit oude lijst en toevoegen aan nieuwe lijst
     let index = this.todo.findIndex((lid) => lid.uid === this.huidig?.uid);
@@ -412,7 +400,9 @@ export default class NamenLeren extends Vue {
     if (!this.alleLichtingen) {
       this.lichtingSelectie.sort();
       titel += 'Lichting ';
-      titel += this.lichtingSelectie.slice(0, this.lichtingSelectie.length - 1).join(', ');
+      titel += this.lichtingSelectie
+        .slice(0, this.lichtingSelectie.length - 1)
+        .join(', ');
       if (this.lichtingSelectie.length > 1) {
         titel += ' & ';
       }
@@ -423,7 +413,9 @@ export default class NamenLeren extends Vue {
         titel += ', ';
       }
       this.verticaleSelectie.sort();
-      titel += this.verticaleSelectie.slice(0, this.verticaleSelectie.length - 1).join(', ');
+      titel += this.verticaleSelectie
+        .slice(0, this.verticaleSelectie.length - 1)
+        .join(', ');
       if (this.verticaleSelectie.length > 1) {
         titel += ' & ';
       }
@@ -446,7 +438,7 @@ export default class NamenLeren extends Vue {
 .progress div {
   float: left;
   height: 100%;
-  transition: width ease-in-out .5s;
+  transition: width ease-in-out 0.5s;
 }
 
 .progress div.correct {
@@ -465,7 +457,8 @@ export default class NamenLeren extends Vue {
   width: 170px;
   height: 255px;
   margin: 15px auto;
-  background: url('../../../images/loading-fb.gif') no-repeat center center white;
+  background: url('../../../images/loading-fb.gif') no-repeat center center
+    white;
   overflow: hidden;
 }
 
@@ -493,7 +486,7 @@ export default class NamenLeren extends Vue {
   background: #2ecc71;
 }
 
-.laatste .fa {
+.laatste .fas {
   display: inline-block;
   font-size: 26px;
   line-height: 90px;
@@ -517,7 +510,7 @@ export default class NamenLeren extends Vue {
 
 .laatste .info .naam {
   font-size: 19px;
-  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
   line-height: 19px;
 }
 
@@ -526,7 +519,7 @@ export default class NamenLeren extends Vue {
 }
 
 .laatste .info .tekst {
-  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
   font-size: 15px;
   line-height: 24px;
 }
@@ -549,20 +542,20 @@ input {
 }
 
 .score-blok .titel {
-  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
   font-size: 19px;
   font-weight: bold;
   text-align: center;
 }
 
 .score-blok .score-titel {
-  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
   font-weight: bold;
   margin-top: 18px;
 }
 
 .score-blok .score {
-  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
   font-size: 50px;
   line-height: 50px;
   font-weight: 300;
