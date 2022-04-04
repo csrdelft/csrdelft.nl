@@ -26,7 +26,9 @@
 
 /* Box Model */
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
@@ -43,7 +45,9 @@ body {
 	-ms-overflow-style: scrollbar;
 
 	&.is-loading {
-		*, *:before, *:after {
+		*,
+		*:before,
+		*:after {
 			animation: none !important;
 			transition: none !important;
 		}
@@ -52,7 +56,10 @@ body {
 
 /* Type */
 
-body, input, select, textarea {
+body,
+input,
+select,
+textarea {
 	color: #ffffff;
 	font-family: "Source Sans Pro", Helvetica, sans-serif;
 	font-size: 16.5pt;
@@ -76,7 +83,6 @@ a {
 	}
 
 	&.special {
-
 		&:not(.button) {
 			text-decoration: none;
 			border-bottom: 0;
@@ -90,7 +96,7 @@ a {
 			&:before {
 				-moz-osx-font-smoothing: grayscale;
 				-webkit-font-smoothing: antialiased;
-				font-family: 'Font Awesome 5 Free';
+				font-family: "Font Awesome 5 Free";
 				font-style: normal;
 				font-weight: 900;
 				text-transform: none !important;
@@ -120,11 +126,13 @@ a {
 	}
 }
 
-strong, b {
+strong,
+b {
 	font-weight: 600;
 }
 
-em, i {
+em,
+i {
 	font-style: italic;
 }
 
@@ -136,7 +144,12 @@ p {
 	}
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	font-weight: 600;
 	letter-spacing: 0.1em;
 	margin: 0 0 1em 0;
@@ -151,7 +164,9 @@ h1, h2, h3, h4, h5, h6 {
 		font-weight: 200;
 	}
 
-	&.major, &.inline { // .inline voor fotoalbum
+	&.major,
+	&.inline {
+		// .inline voor fotoalbum
 		padding-bottom: 1em;
 		border-bottom: solid 4px $geel;
 	}
@@ -346,7 +361,7 @@ optgroup {
 }
 
 .remote-login-code.active {
-	background: url('../images/loading-fb.gif') no-repeat center center;
+	background: url("../images/loading-fb.gif") no-repeat center center;
 
 	img {
 		opacity: 0.2;
@@ -368,7 +383,7 @@ optgroup {
 		position: absolute;
 		left: 0;
 		right: 0;
-		content: '✔';
+		content: "✔";
 		font-size: 200px;
 		color: green;
 		text-align: center;
@@ -385,24 +400,22 @@ optgroup {
  MEDIA QUERIES
 */
 @media screen and (max-width: $scherm-extrabreed) {
-
-	body, input, select, textarea {
+	body,
+	input,
+	select,
+	textarea {
 		font-size: 13pt;
 	}
-
 }
 
 @media screen and (max-width: $scherm-breed) {
-
 	.een-minuut .sociaal .instagram .insta-grid #insta-tag {
 		font-size: 2em;
 		-webkit-text-stroke-width: 1px;
 	}
-
 }
 
 @media screen and (max-width: $scherm-middel) {
-
 	h2 {
 		font-size: 1em;
 	}
@@ -414,12 +427,11 @@ optgroup {
 	.een-minuut #hero h1 {
 		font-size: 2em;
 	}
-
 }
 
 @media screen and (max-width: $scherm-middelsmal) {
-
-	html, body {
+	html,
+	body {
 		min-width: 320px;
 	}
 
@@ -435,13 +447,13 @@ optgroup {
 			display: none;
 		}
 	}
-
 }
 
 @media screen and (max-width: $scherm-smal) {
-
-	body, input, select, textarea {
+	body,
+	input,
+	select,
+	textarea {
 		font-size: 12pt;
 	}
-
 }

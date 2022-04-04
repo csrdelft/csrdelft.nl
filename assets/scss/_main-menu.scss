@@ -16,9 +16,9 @@ Primary style
 	position: sticky;
 	z-index: $zindex-menu;
 
-	.pasfoto-menu {
-		height: 32px;
-		clip-path: circle();
+	.pasfoto {
+		width: 2rem;
+		height: 2rem;
 	}
 
 	.navbar-search {

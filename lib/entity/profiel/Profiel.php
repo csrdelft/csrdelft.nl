@@ -834,7 +834,7 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 
 	public function getPasfotoRounded()
 	{
-		return '<img style="height: 90px; clip-path: circle()" src="'. $this->getPasfotoPath() . '" alt="Pasfoto van ' . $this->getNaam() . '" />';
+		return '<img class="pasfoto rounded-circle" src="'. $this->getPasfotoPath() . '" alt="Pasfoto van ' . $this->getNaam() . '" />';
 	}
 
 	public function getPasfotoLink() {

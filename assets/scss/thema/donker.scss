@@ -1,4 +1,4 @@
-$dark-grey: #1E1F23;
+$dark-grey: #1e1f23;
 $darker-grey: #101011;
 
 $white: #000;
@@ -17,26 +17,26 @@ $body-bg: $dark-grey !default;
 $body-color: darken($black, 7%) !default;
 $headings-color: inherit;
 
-$primary: #009FFD !default;
+$primary: #009ffd !default;
 $secondary: lighten($body-bg, 20%) !default;
 $light: $gray-100 !default;
 $dark: $gray-800 !default;
 $yiq-text-dark: $white !default;
-$yiq-text-light: $gray-900 !default ;
+$yiq-text-light: $gray-900 !default;
 
-@if not variable-exists('headings-font-family') {
+@if not variable-exists("headings-font-family") {
 	@font-face {
-		font-family: 'Ubuntu-Light';
-		src: url('../../fonts/dark-mode/Ubuntu-Light.ttf') format('truetype'),
-		url('../../fonts/dark-mode/Ubuntu-Light.ttf') format('truetype');
+		font-family: "Ubuntu-Light";
+		src: url("../../fonts/dark-mode/Ubuntu-Light.ttf") format("truetype"),
+			url("../../fonts/dark-mode/Ubuntu-Light.ttf") format("truetype");
 		font-weight: normal;
 		font-style: normal;
 	}
 
 	@font-face {
-		font-family: 'Ubuntu-Medium';
-		src: url('../../fonts/dark-mode/Ubuntu-Medium.ttf') format('truetype'),
-		url('../../fonts/dark-mode/Ubuntu-Medium.ttf') format('truetype');
+		font-family: "Ubuntu-Medium";
+		src: url("../../fonts/dark-mode/Ubuntu-Medium.ttf") format("truetype"),
+			url("../../fonts/dark-mode/Ubuntu-Medium.ttf") format("truetype");
 		font-weight: normal;
 		font-style: normal;
 	}
@@ -99,7 +99,11 @@ $card-border-color: rgba(0, 0, 0, 0.3) !default;
 
 /* importeer basis */
 @import "../base";
-@import '~flatpickr/dist/themes/dark.css';
+@import "~flatpickr/dist/themes/dark.css";
+
+:root {
+	color-scheme: dark;
+}
 
 .navbar-dark .navbar-brand {
 	color: $black;
@@ -122,7 +126,7 @@ table.groep-lijst tr:nth-child(even) {
 
 .forum-deel {
 	.alternate-row {
-		&:nth-child(6n +1),
+		&:nth-child(6n + 1),
 		&:nth-child(6n + 2),
 		&:nth-child(6n + 3) {
 			background-color: $secondary;
@@ -131,7 +135,7 @@ table.groep-lijst tr:nth-child(even) {
 }
 
 .forumdeel-omschrijving {
-	background-color: #3F4149;
+	background-color: #3f4149;
 }
 
 /* Pas achtergrond in de fotogallerij aan */
@@ -139,7 +143,7 @@ table.groep-lijst tr:nth-child(even) {
 	background-color: lighten($body-bg, 4%) !important;
 
 	&-thumbnails {
-		background-color: lighten($body-bg, 4%) !important;;
+		background-color: lighten($body-bg, 4%) !important;
 	}
 }
 
@@ -180,12 +184,3 @@ div#pubciemail_form {
 span.curpage {
 	color: white;
 }
-
-
-
-
-
-
-
-
-

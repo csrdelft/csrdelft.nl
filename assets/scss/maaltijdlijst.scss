@@ -18,14 +18,21 @@ a {
 	text-decoration: none;
 	color: inherit;
 }
-h1, h3, p, ul {
+h1,
+h3,
+p,
+ul {
 	margin: 0;
 	padding: 0;
 }
-h1, h3, p, ul {
+h1,
+h3,
+p,
+ul {
 	padding-bottom: 5px;
 }
-p, ul {
+p,
+ul {
 	padding-left: 2px;
 }
 li {
@@ -70,7 +77,7 @@ span.eetwens {
 	font-weight: bold;
 }
 b.geeneetwens {
-	text-decoration:underline;
+	text-decoration: underline;
 }
 span.opmerking {
 	font-style: italic;
@@ -85,7 +92,7 @@ td.corvee {
 	width: 67%;
 }
 
-.neus2013{
+.neus2013 {
 	-webkit-print-color-adjust: exact;
 	text-align: center;
 	color: transparent;
@@ -94,14 +101,30 @@ td.corvee {
 	margin: -5px;
 }
 
-.float-start { float: left; }
-.float-end { float: right; }
-.clear { clear: both; }
-.clear-left { clear: left; }
-.clear-right { clear: right; }
-.inline { display: inline; }
-div.inline { display: inline-block; }
-table.inline { display: inline-table; }
+.float-start {
+	float: left;
+}
+.float-end {
+	float: right;
+}
+.clear {
+	clear: both;
+}
+.clear-left {
+	clear: left;
+}
+.clear-right {
+	clear: right;
+}
+.inline {
+	display: inline;
+}
+div.inline {
+	display: inline-block;
+}
+table.inline {
+	display: inline-table;
+}
 
 /**** VISITEKAARTJE ******************************************************************/
 div.visitekaartje {
@@ -121,7 +144,7 @@ div.visitekaartje {
 div.visitekaartje img {
 	float: right;
 	height: auto !important;
-	opacity: 1.0 !important;
+	opacity: 1 !important;
 	filter: alpha(opacity=100) !important;
 }
 div.visitekaartje p {

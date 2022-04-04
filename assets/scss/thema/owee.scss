@@ -16,32 +16,32 @@ $donkerblauw: $zijbalk-achtergrond;
 $orange: $secundaire-accenten-2;
 $footer-background: $primair-achtergrond;
 
-
 @font-face {
-	font-family: 'Tw Cen MT';
+	font-family: "Tw Cen MT";
 	font-style: normal;
 	font-weight: normal;
-	src: url('../../fonts/owee2021/TCM.woff') format('woff');
+	src: url("../../fonts/owee2021/TCM.woff") format("woff");
 }
 
 @font-face {
-	font-family: 'Segoe Print';
+	font-family: "Segoe Print";
 	font-style: normal;
 	font-weight: normal;
-	src: url('../../fonts/owee2021/segoepr.woff') format('woff');
+	src: url("../../fonts/owee2021/segoepr.woff") format("woff");
 }
 
-$font-family-base: 'Tw Cen MT', 'Source Sans Pro', Helvetica, Arial, sans-serif;
-$headings-font-family: 'Segoe Print', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+$font-family-base: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
+$headings-font-family: "Segoe Print", "Source Sans Pro", Helvetica, Arial,
+	sans-serif;
 
-@import '../base';
+@import "../base";
 
 body {
-	background-image: url('../../images/background.png') !important;
+	background-image: url("../../images/background.png") !important;
 }
 
 main {
-	background-image: url('../../images/background.png') !important;
+	background-image: url("../../images/background.png") !important;
 }
 
 #zijbalk .blok .zijbalk-kopje {
@@ -53,15 +53,15 @@ main {
 }
 
 #zijbalk:before {
-	content: '';
+	content: "";
 	display: block;
 	height: 156px;
-	background: url('../../images/owee2021.svg') no-repeat center center;
+	background: url("../../images/owee2021.svg") no-repeat center center;
 	background-size: contain;
 	margin: 20px 0;
 	clear: left;
 }
 
 .lustrum12:before {
-	display:none
+	display: none;
 }

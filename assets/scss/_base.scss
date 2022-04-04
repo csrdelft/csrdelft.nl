@@ -29,6 +29,10 @@
 @import "~@fullcalendar/list/main.css";
 @import "~flatpickr/dist/flatpickr.css";
 
+:root {
+	accent-color: $primary;
+}
+
 body {
 	height: auto;
 	position: relative;
@@ -97,10 +101,9 @@ main {
 
 /* Pasfotos */
 img.pasfoto {
-	float: left;
-	width: 55px;
-	height: 73px;
-	margin: 1px 0 0 1px;
+	width: 2.5rem;
+	height: 2.5rem;
+	object-fit: cover;
 }
 .lidLink img {
 	transition: all 0.4s ease-out;

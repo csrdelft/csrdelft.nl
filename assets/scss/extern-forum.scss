@@ -12,16 +12,15 @@
 }
 
 #forumZoekenForm {
+	.InputField {
+		margin: 0.5em;
+		display: flex;
+		align-items: baseline;
+	}
 
-  .InputField {
-    margin: 0.5em;
-    display: flex;
-    align-items: baseline;
-  }
-
-  .forumZoekenGeavanceerd  {
+	.forumZoekenGeavanceerd {
 		position: absolute;
-		background-color: #E53D00;
+		background-color: #e53d00;
 		border-radius: 5px;
 		display: none;
 		margin-top: 60px;
@@ -30,12 +29,12 @@
 			flex-direction: row;
 			align-items: center;
 		}
-  }
+	}
 }
 
 .breadcrumbs {
-  display: flex;
-  align-items: baseline;
+	display: flex;
+	align-items: baseline;
 
 	.breadcrumb {
 		margin: 0.5rem;
@@ -49,44 +48,42 @@
 		}
 	}
 
-  select {
-    width: auto;
+	select {
+		width: auto;
 		margin: 0;
-  }
+	}
 }
 
 .forumdeel {
-  background-color: $basiskleur;
+	background-color: $basiskleur;
 	color: black;
-  box-shadow: none;
+	box-shadow: none;
 }
 
 #forumtabel {
-  table-layout: fixed;
+	table-layout: fixed;
 
-  .bericht {
-    text-align: left;
-  }
+	.bericht {
+		text-align: left;
+	}
 }
 
 #forumPosten {
-  .verborgen {
-    display: none;
-  }
+	.verborgen {
+		display: none;
+	}
 
-  #forumForm {
+	#forumForm {
 		text-align: left;
-  }
+	}
 
-  #berichtPreview {
+	#berichtPreview {
 		background-color: white;
-    color: black;
-    strong {
-      color: black;
-    }
-  }
-
-
+		color: black;
+		strong {
+			color: black;
+		}
+	}
 }
 
 .bericht0 .citaat {
@@ -105,18 +102,20 @@
 	font-style: italic;
 }
 
-.draad-verwijderd, .post-verwijderd {
+.draad-verwijderd,
+.post-verwijderd {
 	font-weight: bold;
 	color: red;
 }
 
 .moment {
-	font-size: .9em;
+	font-size: 0.9em;
 	color: #bbb;
 	cursor: default;
 }
 
-.forum-header, .forum-footer {
+.forum-header,
+.forum-footer {
 	display: flex;
 	flex-wrap: wrap;
 
@@ -125,7 +124,8 @@
 	}
 }
 
-.forum-draad, .forum-zoeken {
+.forum-draad,
+.forum-zoeken {
 	display: flex;
 	flex-direction: column;
 
@@ -140,7 +140,8 @@
 		}
 	}
 
-	.forum-post, .forum-posten {
+	.forum-post,
+	.forum-posten {
 		display: flex;
 		flex-direction: row;
 
@@ -166,12 +167,12 @@
 			flex: 1; /* grow */
 
 			margin: 0;
-			padding: .2em .6em 10px;
+			padding: 0.2em 0.6em 10px;
 			vertical-align: top;
 			text-align: justify;
 
 			.bewerkt {
-				font-size: .8em;
+				font-size: 0.8em;
 				color: #bbb;
 				a {
 					color: #bbb;
@@ -195,7 +196,7 @@
 
 		.meldingen {
 			flex: 0;
-			margin: .2em;
+			margin: 0.2em;
 		}
 	}
 }
@@ -260,7 +261,9 @@ span.curpage {
 		}
 	}
 
-	.naam, .moment, .forumpostKnoppen {
+	.naam,
+	.moment,
+	.forumpostKnoppen {
 		grid-column: 1;
 	}
 
@@ -281,7 +284,7 @@ span.curpage {
 	// iedere 6e moet een kleurtje krijgen, en de divs daarna.
 	.alternate-row {
 		padding: 0.7em;
-		&:nth-child(6n +1),
+		&:nth-child(6n + 1),
 		&:nth-child(6n + 2),
 		&:nth-child(6n + 3) {
 			background-color: $kleur4;
@@ -303,7 +306,8 @@ span.curpage {
 		background-color: $kleur3;
 		padding: 1em;
 
-		a, a:hover {
+		a,
+		a:hover {
 			color: white;
 		}
 	}
@@ -324,14 +328,14 @@ span.curpage {
 	clear: left;
 
 	h3 {
-
 		a:hover {
 			text-decoration: none;
 			cursor: default;
 		}
 	}
 
-	p.forumcategorie-omschrijving, p.forumdeel-omschrijving {
+	p.forumcategorie-omschrijving,
+	p.forumdeel-omschrijving {
 		text-align: justify;
 	}
 
@@ -374,7 +378,8 @@ span.curpage {
 		background-color: $headerkleur;
 		padding: 1em;
 
-		a, a:hover {
+		a,
+		a:hover {
 			color: white;
 		}
 	}
@@ -386,7 +391,7 @@ span.curpage {
 	}
 }
 
-@media screen and (max-width: 960px){
+@media screen and (max-width: 960px) {
 	.modfuncties {
 		font-size: 0;
 	}
@@ -396,16 +401,19 @@ span.curpage {
 	}
 
 	.forum-deel {
-		.forum-deel-draad, .forum-deel-titel {
+		.forum-deel-draad,
+		.forum-deel-titel {
 			flex-direction: column;
 		}
 	}
 
-	.forum-draad, .forum-deel {
+	.forum-draad,
+	.forum-deel {
 		width: auto;
 		clear: both;
 
-		.forum-post, .forum-posten {
+		.forum-post,
+		.forum-posten {
 			flex-direction: column;
 		}
 
@@ -415,7 +423,7 @@ span.curpage {
 	}
 
 	.auteur {
-		flex: 1 0 ;
+		flex: 1 0;
 
 		grid-template-columns: 1fr auto auto;
 		border-bottom: 2px solid #d3d3d3;
@@ -433,8 +441,8 @@ span.curpage {
 
 			.postanchor {
 				// Compenseer voor navbar
-				padding-top:44px;
-				margin-top:-44px;
+				padding-top: 44px;
+				margin-top: -44px;
 			}
 		}
 

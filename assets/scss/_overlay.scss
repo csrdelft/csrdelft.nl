@@ -6,6 +6,6 @@
 	top: 0;
 	left: 0;
 	backface-visibility: hidden;
-	transition: opacity .3s 0s, visibility 0s .3s;
+	transition: opacity 0.3s 0s, visibility 0s 0.3s;
 	z-index: $zindex-modal-backdrop;
 }

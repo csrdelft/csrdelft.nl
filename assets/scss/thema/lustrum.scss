@@ -11,17 +11,16 @@ $kleur-secundair: $lustrum-kleur-rood;
 
 // Text
 $kleur-textheader: $lustrum-kleur-goud;
-$kleur-text:  $lustrum-kleur-goud;
-$kleur-text-hover:  $lustrum-kleur-wit;
-
+$kleur-text: $lustrum-kleur-goud;
+$kleur-text-hover: $lustrum-kleur-wit;
 
 @font-face {
-	font-family: 'Orpheus Pro';
+	font-family: "Orpheus Pro";
 	font-style: normal;
 	font-weight: normal;
-	src: url('../../fonts/lustrum12/OrpheusPro-Bold.otf');
+	src: url("../../fonts/lustrum12/OrpheusPro-Bold.otf");
 }
-$headings-font: 'Orpheus Pro', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+$headings-font: "Orpheus Pro", "Source Sans Pro", Helvetica, Arial, sans-serif;
 $headings-font-family: ($headings-font, uppercase);
 
 $theme-colors: (
@@ -45,7 +44,7 @@ $black: #fff;
 $light: $gray-100;
 $dark: $gray-800;
 $yiq-text-dark: $white;
-$yiq-text-light: $gray-900 ;
+$yiq-text-light: $gray-900;
 
 $donkerblauw: $kleur-primair;
 $blue: $kleur-primair;
@@ -107,7 +106,11 @@ h1 {
 	color: $kleur-textheader;
 }
 
-h2, h3, h4, h5, h6 {
+h2,
+h3,
+h4,
+h5,
+h6 {
 	text-transform: uppercase;
 	font-family: $headings-font-family;
 	color: $kleur-textheader;
@@ -161,7 +164,7 @@ footer {
 }
 
 // name selection right top
-#menu-personal{
+#menu-personal {
 	color: $kleur-text-hover;
 }
 
@@ -206,7 +209,7 @@ footer {
 	h2 {
 		color: inherit;
 	}
-	.breadcrumb a{
+	.breadcrumb a {
 		color: inherit;
 	}
 }
@@ -249,5 +252,5 @@ footer {
 }
 // polls
 .peiling .progress-bar {
-		background-color: $kleur-secundair;
+	background-color: $kleur-secundair;
 }

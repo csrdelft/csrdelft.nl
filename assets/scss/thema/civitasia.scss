@@ -3,29 +3,32 @@
 
 /*Lettertype*/
 @font-face {
-  font-family: "Old English Text MT";
-  src: url("../../fonts/civitasia/old-english-text-mt.ttf") format("ttf");
-  src: url("../../fonts/civitasia/old-english-text-mt.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
+	font-family: "Old English Text MT";
+	src: url("../../fonts/civitasia/old-english-text-mt.ttf") format("ttf");
+	src: url("../../fonts/civitasia/old-english-text-mt.woff") format("woff");
+	font-weight: normal;
+	font-style: normal;
 }
 
-body, h1, h2, h3, h4, h5 {
-  font-family: "Old English Text MT", cursive;
+body,
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: "Old English Text MT", cursive;
 }
-
 
 #zijbalk,
 #forumtabel th,
 .cd-secondary-nav {
-  background: url("../../images/civitasia/achtergrond.jpg") !important;
+	background: url("../../images/civitasia/achtergrond.jpg") !important;
 }
-
 
 /* Lijntje tussen ongelezen en gelezen berichten */
 
 #forumtabel tr.ongelezenvanaf td {
-  background-color: #000 !important;
+	background-color: #000 !important;
 }
 
 /*Koppen in rood*/
@@ -33,7 +36,7 @@ body, h1, h2, h3, h4, h5 {
 h1,
 a,
 a:hover {
-  color: #000;
+	color: #000;
 }
 
 /*NAVIGATIE MENU*/
@@ -44,13 +47,13 @@ a:hover {
 	border: 0 solid #c52d30;
 	border-bottom-width: 2px;
 	margin-right: 40px;
-  background-image: none;
+	background-image: none;
 }
 
 /* letters moeten wit */
 
 #zijbalk .blok .zijbalk-kopje a {
-  color: #fff;
+	color: #fff;
 }
 
 /*Veel tekst van de zijbalk in het wit*/
@@ -61,8 +64,8 @@ a:hover {
 #zijbalk .blok .item a,
 #zijbalk .ishetal,
 #zijbalk .blok .item {
-  color: #000;
-  font-weight: bold;
+	color: #000;
+	font-weight: bold;
 }
 
 /*Andere koppen ook in het wit*/
@@ -70,63 +73,66 @@ a:hover {
 .cd-primary-nav .cd-secondary-nav a,
 .cd-primary-nav .cd-secondary-nav > li > a:hover,
 .cd-primary-nav .cd-secondary-nav > li > a {
-  color: #000;
+	color: #000;
 }
 
 /*Expand menu met kinderen pijltje kleur*/
-.has-children > a::before, .has-children > a::after, .go-back a::before, .go-back a::after {
-  background-color: #444;
+.has-children > a::before,
+.has-children > a::after,
+.go-back a::before,
+.go-back a::after {
+	background-color: #444;
 }
 
 /*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
 
 .cd-primary-nav .cd-secondary-nav a:hover {
-  text-decoration: underline !important;
-  color: #000;
+	text-decoration: underline !important;
+	color: #000;
 }
 
 /*Streepje onder naam*/
 
 .cd-primary-nav > li > a:hover,
 .cd-primary-nav > li > a.selected {
-  box-shadow: inset 0 -2px 0 #000;
+	box-shadow: inset 0 -2px 0 #000;
 }
 
 /*Zijbalk grens van het scherm in donkerblauw*/
 
 #zijbalk {
-  border-color: #151b29;
+	border-color: #151b29;
 }
 
 /*Logo*/
 
 #zijbalk .cd-beeldmerk {
-  //background-image: url("/assets/layout/plaetjes/onontdekt_beeldmerk.png");
+	//background-image: url("/assets/layout/plaetjes/onontdekt_beeldmerk.png");
 }
 
 /*KNOPPEN*/
 /*Knoppen in blauw gradient*/
 
 .btn,
-input[type=submit],
-input[type=button],
+input[type="submit"],
+input[type="button"],
 .progress-bar-info,
 .btn:focus,
-input[type=submit]:focus,
-input[type=button]:focus {
-  background-image: linear-gradient(to bottom, #151b29, #2d7eb2);
+input[type="submit"]:focus,
+input[type="button"]:focus {
+	background-image: linear-gradient(to bottom, #151b29, #2d7eb2);
 }
 
 /*Voor een mouse hover wordt de gradient omgedraaid*/
 
 .btn:hover,
-input[type=submit]:hover,
-input[type=button]:hover {
-  background-image: linear-gradient(to bottom, #2d7eb2, #151b29);
+input[type="submit"]:hover,
+input[type="button"]:hover {
+	background-image: linear-gradient(to bottom, #2d7eb2, #151b29);
 }
 
 /*Actieve knoppen in rood gradient -> zo ontstaat verschil tussen hover en active*/
 
 .btn.active {
-  background-image: linear-gradient(to bottom, #c52d30, #f0262a);
+	background-image: linear-gradient(to bottom, #c52d30, #f0262a);
 }
