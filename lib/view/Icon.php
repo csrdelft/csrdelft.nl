@@ -17,13 +17,13 @@ class Icon {
 	//in de lijst met icons.
 	public static $alias = array(
 		// algemeen
-		'toevoegen' => 'add',
+		'toevoegen' => 'plus',
 		'bewerken' => 'pencil',
-		'verwijderen' => 'cross',
+		'verwijderen' => 'trash',
 		'alert' => 'stop',
-		'goedkeuren' => 'tick',
-		'verjaardag' => 'cake',
-		'vraagteken' => 'help',
+		'goedkeuren' => 'circle-check',
+		'verjaardag' => 'cake-candles',
+		'vraagteken' => 'circle-question',
 		'fout' => 'error',
 		'show' => 'eye',
 		//documumenten
@@ -63,10 +63,8 @@ class Icon {
 		'alert-warning' => 'bell',
 		// Overig
 		'table' => 'table_normal',
-		'log' => 'report'
-	);
+		'log' => 'report',
 
-	public static $fas = [
 		'calendar' => 'fas fa-calendar',
 		'forum' => 'fas fa-comments',
 		'profiel' => 'fas fa-user',
@@ -78,7 +76,7 @@ class Icon {
 		'Kring' => 'fas fa-circle-notch',
 		'note' => 'fas fa-sticky-note',
 		'boek' => 'fas fa-book',
-	];
+	);
 
 	public static function get($key) {
 		if (array_key_exists($key, self::$alias)) {
@@ -97,12 +95,8 @@ class Icon {
 	 * geselecteerd en door eventuele schermlezers opgevangen
 	 * @return string
 	 */
-	public static function getTag($key, $hover = null, $title = null, $class = null, $content = null) {
+	public static function getTag($key, $hover = null, $title = null, $class = null) {
 		$icon = self::get($key);
-
-		if (isset(static::$fa[$icon])) {
-			return sprintf('<span class="%s %s" title="%s">%s</span>', static::$fa[$icon], htmlspecialchars($class), htmlspecialchars($title), htmlspecialchars($content));
-		}
 
 		if ($hover !== null) {
 			$hover = 'hover-' . self::get($hover);
@@ -111,6 +105,6 @@ class Icon {
 			$title = 'title="' . str_replace('&amp;', '&', htmlspecialchars($title)) . '" ';
 		}
 
-		return sprintf('<span class="ico %s %s %s" %s>%s</span>', htmlspecialchars($icon), htmlspecialchars($hover), htmlspecialchars($class), $title, htmlspecialchars($content));
+		return sprintf('<i class="fas fa-%s %s %s" title="%s"></i>', htmlspecialchars($icon), htmlspecialchars($hover), htmlspecialchars($class), htmlspecialchars($title));
 	}
 }

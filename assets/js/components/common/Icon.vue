@@ -1,10 +1,10 @@
 <template>
-  <span :class="iconClass" />
+  <i :class="iconClass"></i>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class Icon extends Vue {
@@ -12,11 +12,9 @@ export default class Icon extends Vue {
   icon: string;
 
   private get iconClass() {
-    return `ico ${this.icon}`;
+    return `fas fa-${this.icon}`;
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

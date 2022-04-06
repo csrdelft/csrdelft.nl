@@ -66,7 +66,7 @@ const createGroepBlockSpec = (
 								href="/groepen/${type}/${json.id}/wijzigen"
 								title="Wijzig ${json.naam}"
 							>
-								<i class="fas fa-pen"></i>
+								<i class="fas fa-pencil"></i>
 							</a>
 						</div>
 						<h3>${json.naam}</h3>
@@ -77,7 +77,7 @@ const createGroepBlockSpec = (
 						<ul class="groep-tabs nobullets">
 							<li class="geschiedenis">
 								<a class="btn disabled" href="#" title="Bekijk geschiedenis">
-									<i class="fas fa-pen-to-square"></i>
+									<i class="fas fa-clock-rotate-left"></i>"></i>
 								</a>
 							</li>
 							<li>
