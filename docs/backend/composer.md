@@ -13,7 +13,7 @@ In het bestand `composer.json` staat alle informatie over Composer.
 
 ## Dependencies
 
-Er zijn een aantal dependencies, deze staan ook in `composer.json`. Deze dependencies zijn allemaal PHP code die we gebruiken en inladen. Kopieer nooit blokken code van Github als je ook een dependency kan toevoegen. Dependencies zijn met composer heel makkelijk te updaten.
+Er zijn een aantal [dependencies](./dependencies.md), deze staan ook in `composer.json`. Deze dependencies zijn allemaal PHP code die we gebruiken en inladen. Kopieer nooit blokken code van Github als je ook een dependency kan toevoegen. Dependencies zijn met composer heel makkelijk te updaten.
 
 In `composer.json` staan ook dependencies gedefinieerd die beginnen met `ext-...`. Deze dependencies geven aan dat specifieke PHP extensies nodig zijn. Met het volgende commando kun je controleren of jouw installatie alle extensies heeft geinstalleerd:
 

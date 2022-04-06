@@ -7,13 +7,13 @@ title: Dependencies
 
 # Dependencies
 
-Dependencies worden geladen door [composer](https://getcomposer.org). Dit document legt uit waar dependencies voor worden gebruikt.
+Dependencies worden geladen door [composer](./composer.md). Dit document legt uit waar dependencies voor worden gebruikt.
 
 ## Require
 
 Dependencies die worden gebruikt als de stek draait.
 
-| | | |
+| Naam | Versie | Beschrijving |
 |---|---|---|
 | csrdelft/bb | 1.3.5 | Onze BB parser, wordt voor het forum en het cms gebruikt.
 | easyrdf/easyrdf | ^0.9.1 | Gebruikt in de bieb voor de boekimporter om isbn info van worldcat te lezen.
@@ -63,7 +63,6 @@ Dependencies die worden gebruikt als de stek draait.
 | twig/cssinliner-extra | ^3.3
 | twig/extra-bundle | ^3.2 | Aantal coole goodies voor twig.
 | twig/intl-extra | ^3.2 | Standaard ext-intl functies in twig
-| vimeo/psalm | ^4.7 | Een static analysis tool
 | zumba/json-serializer | ^3.0 | Betere JSON serializer die ook klassen kan serializen
 
 ## Require dev
@@ -82,6 +81,7 @@ Dev dependencies worden gebruikt in de lokale teststek of bij het uitvoeren van 
 | [symfony/css-selector]() | ^5.0 | Css selector in browsertests
 | [symfony/panther]() | ^0.8.0 | Browsertests in een daadwerkelijke browser
 | [weirdan/doctrine-psalm-plugin]() | ^1.0 | Doctrine + Psalm static analysis
+| vimeo/psalm | ^4.7 | Een static analysis tool
 | [psalm/plugin-symfony]() | ^2.2 | Symfony + Psalm static analysis
 | [symfony/stopwatch]() | ^5.4 | Symfony stopwatch, voor de web profiler
 | [symfony/web-profiler-bundle]() | ^5.4 | Die mooie balk die je onderaan je scherm hebt op je dev stek
