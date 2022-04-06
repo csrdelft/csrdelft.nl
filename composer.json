@@ -27,7 +27,6 @@
 		"firebase/php-jwt": "^5.0",
 		"globalcitizen/php-iban": "^2.6",
 		"google/apiclient": "^2.0",
-		"jakeasmith/http_build_url": "^1",
 		"maknz/slack": "^1.7",
 		"symfony/config": "^5.0",
 		"symfony/dotenv": "^5.0",

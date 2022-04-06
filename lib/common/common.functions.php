@@ -732,40 +732,6 @@ function curl_request($url, $options = []) {
 }
 
 /**
- * Follow an url to its final location taking http redirects and meta refreshes into account.
- *
- * @param String $url The url to follow to its final location
- * @param array $options A curl_setopt_array compatible array
- * @return String The final url location
- */
-function curl_follow_location($url, $options = []) {
-	$curl = curl_init($url);
-	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-	curl_setopt_array($curl, $options);
-	$xpath = init_xpath(curl_exec($curl));
-	$location = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
-
-	$refresh = $xpath->query('//meta[translate(@http-equiv, "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")="REFRESH"]');
-	if ($refresh->length > 0) {
-		preg_match('/(?<=url=)(.*)/i', $refresh->item(0)->getAttribute('content'), $matches);
-		$refreshUrl = trim($matches[0]);
-
-		if (empty($refreshUrl)) {
-			return $location;
-		}
-
-		if (!str_starts_with($refreshUrl, 'http')) {
-			$refreshUrl = http_build_url($location, $refreshUrl, HTTP_URL_REPLACE | HTTP_URL_JOIN_PATH);
-		}
-
-		return curl_follow_location($refreshUrl, $options);
-	}
-
-	return $location;
-}
-
-/**
  * Create an xpath object from an HTML string.
  *
  * @param $html String the HTML string to create the xpath object from
