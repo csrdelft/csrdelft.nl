@@ -96,7 +96,7 @@ class LoginService {
 	 * @return string
 	 */
 	public static function getUid() {
-		if (isCli()) {
+		if (isCLI()) {
 			return static::$cliUid;
 		}
 
@@ -139,7 +139,7 @@ class LoginService {
 	 * @see AccessService::mag()
 	 */
 	public function getAuthenticationMethod() {
-		if (isCli()) {
+		if (isCLI()) {
 			return AuthenticationMethod::password_login;
 		}
 

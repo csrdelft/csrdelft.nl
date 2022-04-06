@@ -6,15 +6,12 @@
 // -------------------------------------------------------------------
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\common\ShutdownHandler;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
-use CsrDelft\service\CsrfService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
-use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
 
 define('LONG_DATE_FORMAT', 'EE d MMM'); // Ma 3 Jan
@@ -292,11 +289,11 @@ function isSyrinx() {
 	return 'syrinx' === php_uname('n');
 }
 
-function isCli() {
+function isCLI() {
 	return php_sapi_name() == 'cli' && $_SERVER['APP_ENV'] != 'test';
 }
 
-function isCi() {
+function isCI() {
 	return getenv('CI');
 }
 
@@ -1032,10 +1029,6 @@ function join_paths(...$args) {
  */
 function path_valid($prefix, $path) {
 	return str_starts_with(realpathunix(join_paths($prefix, $path)), realpathunix($prefix));
-}
-
-function triggerExceptionAsWarning(Exception $e) {
-	ShutdownHandler::triggerSlackMessage($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine(), true);
 }
 
 /**
