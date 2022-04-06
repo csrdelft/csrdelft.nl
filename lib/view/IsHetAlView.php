@@ -61,6 +61,7 @@ class IsHetAlView implements View
 		switch ($this->model) {
 			case 'wist u dat':
 			case 'foutmelding':
+			// TODO: Weghalen dat sponsorkliks wordt laten zien
 
 			case 'dies':
 				$begin = strtotime('2022-02-08');
@@ -148,45 +149,45 @@ class IsHetAlView implements View
 
 	public function __toString() {
 		$html = '';
-		$html .= '<div class="card-body text-center">';
+		$html .= '<div class="d-flex flex-column justify-content-center align-items-center w-100 h-100">';
 		switch ($this->model) {
 			case 'jarig':
-				$html .= '<h4 class="text-center card-title">Ben ik al jarig?</h4>';
+				$html .= '<h4 class="h6 m-0">Ben ik al jarig?</h4>';
 				break;
 
 			case 'studeren':
-				$html .= '<h4 class="text-center card-title">Moet ik alweer studeren?</h4>';
+				$html .= '<h4 class="h6 m-0">Moet ik alweer studeren?</h4>';
 				break;
 
 			case 'kring':
-				$html .= '<h4 class="text-center card-title">Is er ' . $this->model . ' vanavond?</h4>';
+				$html .= '<h4 class="h6 m-0">Is er ' . $this->model . ' vanavond?</h4>';
 				break;
 
 			case 'lezing':
 			case 'borrel':
-				$html .= '<h4 class="text-center card-title">Is er een ' . $this->model . ' vanavond?</h4>';
+				$html .= '<h4 class="h6 m-0">Is er een ' . $this->model . ' vanavond?</h4>';
 				break;
 
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);
-				$html .= '<h4 class="text-center card-title">Wist u dat...<a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a></h4>';
+				$html .= '<h4 class="h6 m-0">Wist u dat...<a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a></h4>';
 				break;
 
 			case 'wvdd':
-				$html .= '<h4 class="text-center card-title">Het lustrumboekwoord van de dag is '. $this->ja .' </h4>';
+				$html .= '<h4 class="h6 m-0">Het lustrumboekwoord van de dag is '. $this->ja .' </h4>';
 				break;
 
 			default:
-				$html .= '<h4 class="text-center card-title">Is het al ' . $this->model . '?</h4>';
+				$html .= '<h4 class="h6 m-0">Is het al ' . $this->model . '?</h4>';
 				break;
 		}
 
 		if ($this->ja === true) {
-			$html .= '<h5 class="text-center text-success card-subtitle mb-2">JA!</h5>';
+			$html .= '<p class="text-uppercase fw-bolder fs-5 text-success">JA!</p>';
 		} elseif ($this->ja === false) {
-			$html .= '<h5 class="text-center text-danger card-subtitle mb-2">NEE.</h5>';
+			$html .= '<p class="text-uppercase fw-bolder fs-5 text-danger">NEE.</p>';
 		} elseif (in_array($this->model, self::$aftellen)) {
-			$html .= '<h5 class="text-center text-danger card-subtitle mb-2">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</h4>';
+			$html .= '<p class="text-uppercase fw-bolder fs-5 text-danger">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</p>';
 		} else {
 			// wist u dat
 		}

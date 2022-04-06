@@ -1,0 +1,21 @@
+<div
+	class="
+		d-flex
+		flex-column
+		justify-content-center
+		align-items-center
+		w-100
+		h-100
+	"
+>
+	<h4 class="h6 m-0">Civisaldo</h4>
+
+    {% set saldo = app.user.profiel.civiSaldo %}
+    {% if saldo < 0 %}
+        <h5 class="text-uppercase fw-bolder fs-5 text-danger">&euro; {{ saldo | number_format(2, ',', '.') }}</h5>
+    {% else %}
+        <h5 class="text-uppercase fw-bolder fs-5 text-success">&euro; {{ saldo | number_format(2, ',', '.') }}</h5>
+    {% endif %}
+</div>
+
+<a href="https://betaalverzoek.rabobank.nl/betaalverzoek/?id=Ps1leyKRTs-nyLtQMA1S5Q" class="civisaldo-inleggen position-absolute bottom-0 end-0 m-1">Inleggen?</a>

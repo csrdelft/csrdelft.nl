@@ -62,17 +62,7 @@
 					<div class="cell cell-verjaardagen cell-overflow">{{ get_verjaardagen() }}</div>
 					<div class="cell cell-foto-albums">{{  get_fotoalbum() }}</div>
 					<div class="cell cell-overig">{{ get_overig() }}</div>
-					<div class="cell cell-civi-saldo position-relative">
-						<div class="card-body text-end">
-							<h4 class="text-center card-title">CiviSaldo:</h4>
-							{% set saldo = app.user.profiel.civiSaldo %}
-							{% if saldo < 0 %}
-								<h5 class="text-center text-danger card-subtitle mb-2">&euro; {{ saldo | number_format(2, ',', '.') }}</h5>
-							{% else %}
-								<h5 class="text-center text-success card-subtitle mb-2">&euro; {{ saldo | number_format(2, ',', '.') }}</h5>
-							{% endif %}
-							<p class="card-text"></p><a class="card-link text-justify text-secondary" href="https://betaalverzoek.rabobank.nl/betaalverzoek/?id=Ps1leyKRTs-nyLtQMA1S5Q">Inleggen?</a>
-						</div></div>
+					<div class="cell cell-civi-saldo position-relative">{{ get_civisaldo() }}</div>
 					<div class="cell cell-is-het-al">{{ get_ishetal() }}</div>
 				</div>
 			</div>

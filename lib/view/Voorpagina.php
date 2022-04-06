@@ -86,10 +86,16 @@ class Voorpagina {
 		$this->requestStack = $requestStack;
 	}
 
+	public function getCivisaldo(): ?string
+	{
+		return $this->twig->render('voorpagina/civisaldo.html.twig');
+	}
+
 
 	public function getIsHetAl(): ?string
 	{
 		return (new IsHetAlView($this->lidInstellingenRepository, $this->requestStack, $this->agendaRepository, $this->woordVanDeDagRepository, lid_instelling('zijbalk', 'ishetal')))->__toString();
+// FIXME: dit weghalen?
 //		if (lid_instelling('zijbalk', 'ishetal') != 'niet weergeven') {
 //			return (new IsHetAlView($this->lidInstellingenRepository, $this->requestStack, $this->agendaRepository, $this->woordVanDeDagRepository, lid_instelling('zijbalk', 'ishetal')))->__toString();
 //		}
@@ -141,7 +147,21 @@ class Voorpagina {
 			// if (count($items) > lid_instelling('zijbalk', 'agenda_max')) {
 			// 	$items = array_slice($items, 0, lid_instelling('zijbalk', 'agenda_max'));
 			// }
-			return $this->twig->render('voorpagina/agenda.html.twig', ['items' => $items]);
+
+			$groups = array();
+			foreach ($items as $item) {
+				$key = date('Y-m-d', $item->getBeginMoment());
+				if (!isset($groups[$key])) {
+					$groups[$key] = array(
+						'items' => array($item),
+						'beginMoment' => $item->getBeginMoment(),
+					);
+				} else {
+					$groups[$key]['items'][] = $item;
+				}
+			}
+
+			return $this->twig->render('voorpagina/agenda.html.twig', ['items' => $groups]);
 		}
 
 		return null;
