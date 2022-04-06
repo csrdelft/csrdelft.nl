@@ -4,9 +4,9 @@
 
 {% block breadcrumbs %}
 	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="{{ url('default') }}" title="Thuis"><span class="fas fa-home"></span></a></li>
+		<li class="breadcrumb-item"><a href="{{ url('default') }}" title="Thuis"><i class="fas fa-house"></i></a></li>
 		<li class="breadcrumb-item"><a href="{{ url('csrdelft_forum_forum') }}">Forum</a></li>
-		<li class="breadcrumb-item active">
+		<li class="breadcrumb-item active" aria-current="page">
 			<select name="forum_id" class="form-select form-select-sm w-auto"
 							onchange="if (this.value.substr(0,4) === 'http') { window.open(this.value); } else { window.location.href = this.value; }">
 				<option value="{{ url('csrdelft_forum_belangrijk') }}"
@@ -39,24 +39,28 @@
 						</optgroup>
 					{% endif %}
 				{% endfor %}
-			</select></li>
+			</select>
+		</li>
 	</ol>
 {% endblock %}
 
 {% block content %}
 	{{ getMelding() }}
-	<div class="forum-header btn-toolbar">
-		{% if mag('P_ADMIN') and deel.forum_id is not empty %}
-			<div class="btn-group me-2">
-				<a href="/forum/beheren/{{ deel.forum_id }}" class="btn btn-light post popup"
-					 title="Deelforum beheren">{{ icon('wrench_orange') }} Beheren</a>
-			</div>
-		{% endif %}
-		{{ include('forum/partial/head_buttons.html.twig') }}
-		{{ zoekform | raw }}
-	</div>
+	<header class="d-flex justify-content-between align-items-center">
+		<h1>{{ deel.titel }}</h1>
 
-	<h1>{{ deel.titel }}</h1>
+		{{ include('forum/partial/head_buttons.html.twig') }}
+	</header>
+
+	<section class="list-group list-group-flush ps-sm-4">
+		{% if not deel.forumDraden %}
+			<div class="list-group-item">Dit forum is nog leeg.</div>
+		{% endif %}
+
+		{% for draad in deel.forumDraden %}
+			{{ include('forum/partial/draad_lijst.html.twig', {draad: draad}) }}
+		{% endfor %}
+	</section>
 
 	<div class="forum-deel">
 		<div class="header">Titel</div>
@@ -100,18 +104,6 @@
 			<div class="breadcrumbs">{{ block('breadcrumbs') }}</div>
 			<h2>{{ deel.titel }}</h2>
 			{{ deel.omschrijving }}
-
-			{% if app.user and deel.forum_id is empty %}
-				<div>
-					Berichten per dag:
-					<div class="grafiek">
-						{# forum.ts pikt dit op en vult met een grafiekje. #}
-						<div id="stats_grafiek_overview" class="ctx-graph-line"
-								 data-url="{{ url('csrdelft_forum_grafiekdata', {type: 'overview'}) }}"
-								 style="height: 200px;"></div>
-					</div>
-				</div>
-			{% endif %}
 		</div>
 
 
