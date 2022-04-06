@@ -27,7 +27,7 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Pasfotos . '" title="' . GroepTab::Pasfotos()->getDescription() . ' tonen"><span class="fas fa-user"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Lijst . '" title="' . GroepTab::Lijst()->getDescription() . ' tonen"><span class="fas fa-align-justify"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Lijst . '" title="' . GroepTab::Lijst()->getDescription() . ' tonen"><span class="fas fa-list"></span></a></li>';
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Statistiek . '" title="' . GroepTab::Statistiek()->getDescription() . ' tonen"><span class="fas fa-chart-pie"></span></a></li>';
 

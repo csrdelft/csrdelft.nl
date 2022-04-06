@@ -65,8 +65,9 @@ const createGroepBlockSpec = (
 								target="_blank"
 								href="/groepen/${type}/${json.id}/wijzigen"
 								title="Wijzig ${json.naam}"
-								><span class="fas fa-edit"></span
-							></a>
+							>
+								<i class="fas fa-pen"></i>
+							</a>
 						</div>
 						<h3>${json.naam}</h3>
 						${json.samenvatting_html ?? ''}
@@ -75,37 +76,38 @@ const createGroepBlockSpec = (
 					<div id="groep-leden-2152" class="groep-leden">
 						<ul class="groep-tabs nobullets">
 							<li class="geschiedenis">
-								<a class="btn disabled" href="#" title="Bekijk geschiedenis"
-									><span class="fas fa-clock"></span
-								></a>
+								<a class="btn disabled" href="#" title="Bekijk geschiedenis">
+									<i class="fas fa-pen-to-square"></i>
+								</a>
 							</li>
 							<li>
 								<a
 									class="btn btn-primary disabled"
 									href="#"
 									title="Pasfoto's tonen"
-									><span class="fas fa-user"></span
-								></a>
+								>
+									<i class="fas fa-user"></i>
+								</a>
 							</li>
 							<li>
-								<a class="btn disabled" href="#" title="Lijst tonen"
-									><span class="fas fa-align-justify"></span
-								></a>
+								<a class="btn disabled" href="#" title="Lijst tonen">
+									<i class="fas fa-list"></i>
+								</a>
 							</li>
 							<li>
-								<a class="btn disabled" href="#" title="Statistiek tonen"
-									><span class="fas fa-chart-pie"></span
-								></a>
+								<a class="btn disabled" href="#" title="Statistiek tonen">
+									<i class="fas fa-chart-pie"></i>
+								</a>
 							</li>
 							<li>
-								<a class="btn disabled" href="#" title="E-mails tonen"
-									><span class="fas fa-envelope"></span
-								></a>
+								<a class="btn disabled" href="#" title="E-mails tonen">
+									<i class="fas fa-envelope"></i>
+								</a>
 							</li>
 							<li>
-								<a class="btn disabled" href="#" title="Allergie/dieet tonen"
-									><span class="fas fa-heartbeat"></span
-								></a>
+								<a class="btn disabled" href="#" title="Allergie/dieet tonen">
+									<i class="fas fa-heartbeat"></i>
+								</a>
 							</li>
 							<li class="knop-vergroot"></li>
 						</ul>
