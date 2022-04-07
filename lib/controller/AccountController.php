@@ -8,6 +8,7 @@ use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
+use CsrDelft\service\AccountCreateService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\login\AccountForm;
 use CsrDelft\view\login\UpdateLoginForm;
@@ -40,17 +41,23 @@ class AccountController extends AbstractController {
 	 * @var AccessService
 	 */
 	private $accessService;
+	/**
+	 * @var AccountCreateService
+	 */
+	private $accountService;
 
 	public function __construct(
-		AccessService $accessService,
-		AccountRepository $accountRepository,
-		CmsPaginaRepository $cmsPaginaRepository,
-		LoginService $loginService
+		AccessService        $accessService,
+		AccountRepository    $accountRepository,
+		AccountCreateService $accountService,
+		CmsPaginaRepository  $cmsPaginaRepository,
+		LoginService         $loginService
 	) {
 		$this->accessService = $accessService;
 		$this->accountRepository = $accountRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 		$this->loginService = $loginService;
+		$this->accountService = $accountService;
 	}
 
 	/**
@@ -74,7 +81,7 @@ class AccountController extends AbstractController {
 		if ($account) {
 			setMelding('Account bestaat al', 0);
 		} else {
-			$account = $this->accountRepository->maakAccount($uid);
+			$account = $this->accountService->maakAccount($uid);
 			if ($account) {
 				setMelding('Account succesvol aangemaakt', 1);
 			} else {

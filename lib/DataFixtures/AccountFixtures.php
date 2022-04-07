@@ -11,6 +11,7 @@ use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\AccountCreateService;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -21,9 +22,14 @@ class AccountFixtures extends Fixture {
 	 * @var AccountRepository
 	 */
 	private $accountRepository;
+	/**
+	 * @var AccountCreateService
+	 */
+	private $accountService;
 
-	public function __construct(AccountRepository $accountRepository) {
+	public function __construct(AccountRepository $accountRepository, AccountCreateService $accountService) {
 		$this->accountRepository = $accountRepository;
+		$this->accountService = $accountService;
 	}
 
 	public function load(ObjectManager $manager) {
@@ -86,7 +92,7 @@ class AccountFixtures extends Fixture {
 
 		$manager->persist($pubcieProfiel);
 
-		$account = $this->accountRepository->maakAccount('x101');
+		$account = $this->accountService->maakAccount('x101');
 
 		$this->accountRepository->wijzigWachtwoord($account, 'stek open u voor mij!');
 

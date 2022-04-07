@@ -5,6 +5,7 @@ namespace CsrDelft\command;
 use CsrDelft\common\Mail;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\AccountCreateService;
 use CsrDelft\service\MailService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,13 +38,18 @@ class WelkomCommand extends Command {
 	 * @var MailService
 	 */
 	private $mailService;
+	/**
+	 * @var AccountCreateService
+	 */
+	private $accountService;
 
 	public function __construct(
-		string $emailPubCie,
-		AccountRepository $accountRepository,
-		ProfielRepository $profielRepository,
+		string                $emailPubCie,
+		AccountRepository     $accountRepository,
+		AccountCreateService  $accountService,
+		ProfielRepository     $profielRepository,
 		UrlGeneratorInterface $urlGenerator,
-		MailService $mailService
+		MailService           $mailService
 	) {
 		parent::__construct();
 		$this->profielRepository = $profielRepository;
@@ -51,6 +57,7 @@ class WelkomCommand extends Command {
 		$this->emailPubCie = $emailPubCie;
 		$this->urlGenerator = $urlGenerator;
 		$this->mailService = $mailService;
+		$this->accountService = $accountService;
 	}
 
 	protected function configure() {
@@ -123,7 +130,7 @@ TEXT;
 
 			if (!$this->accountRepository->existsUid($profiel->uid)) {
 				// Maak een account aan voor deze noviet
-				$this->accountRepository->maakAccount($profiel->uid);
+				$this->accountService->maakAccount($profiel->uid);
 			}
 
 			$output->writeln($profiel->email . " SEND!");

@@ -32,33 +32,15 @@ use Symfony\Component\Uid\Uuid;
  */
 class AccountRepository extends AbstractRepository implements PasswordUpgraderInterface, UserLoaderInterface {
 	/**
-	 * @var AccessService
-	 */
-	private $accessService;
-	/**
-	 * @var CiviSaldoRepository
-	 */
-	private $civiSaldoRepository;
-	/**
-	 * @var MenuItemRepository
-	 */
-	private $menuItemRepository;
-	/**
 	 * @var PasswordHasherFactoryInterface
 	 */
 	private $passwordHasherFactory;
 
 	public function __construct(
 		ManagerRegistry                $registry,
-		PasswordHasherFactoryInterface $passwordHasherFactory,
-		AccessService                  $accessService,
-		CiviSaldoRepository            $civiSaldoRepository,
-		MenuItemRepository             $menuItemRepository
+		PasswordHasherFactoryInterface $passwordHasherFactory
 	) {
 		parent::__construct($registry, Account::class);
-		$this->accessService = $accessService;
-		$this->civiSaldoRepository = $civiSaldoRepository;
-		$this->menuItemRepository = $menuItemRepository;
 		$this->passwordHasherFactory = $passwordHasherFactory;
 	}
 
@@ -103,47 +85,6 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 			->where('a.perm_role NOT IN (:admin_perm_roles)')
 			->setParameter('admin_perm_roles', [AccessRole::Lid, AccessRole::Nobody, AccessRole::Eter, AccessRole::Oudlid])
 			->getQuery()->getResult();
-	}
-
-	/**
-	 * @param string $uid
-	 *
-	 * @return Account
-	 * @throws CsrGebruikerException
-	 */
-	public function maakAccount($uid) {
-		$profiel = ProfielRepository::get($uid);
-		if (!$profiel) {
-			throw new CsrGebruikerException('Profiel bestaat niet');
-		}
-
-		if (!$this->civiSaldoRepository->getSaldo($uid)) {
-			// Maak een CiviSaldo voor dit account
-			$this->civiSaldoRepository->maakSaldo($uid);
-		}
-
-		if (!$this->menuItemRepository->getMenuRoot($uid)) {
-			$menuItem = $this->menuItemRepository->nieuw(null);
-			$menuItem->rechten_bekijken = $uid;
-			$menuItem->tekst = $uid;
-			$menuItem->link = '';
-
-			$this->_em->persist($menuItem);
-		}
-
-		$account = new Account();
-		$account->uuid = Uuid::v4();
-		$account->uid = $uid;
-		$account->profiel = $profiel;
-		$account->username = $uid;
-		$account->email = $profiel->email;
-		$account->pass_hash = '';
-		$account->pass_since = null;
-		$account->failed_login_attempts = 0;
-		$account->perm_role = $this->accessService->getDefaultPermissionRole($profiel->status);
-		$this->_em->persist($account);
-		$this->_em->flush();
-		return $account;
 	}
 
 	/**
