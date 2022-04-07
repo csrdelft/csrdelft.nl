@@ -2,10 +2,9 @@
 
 namespace CsrDelft\entity\aanmelder;
 
-use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Eisen;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\repository\aanmelder\AanmeldActiviteitRepository;
-use CsrDelft\repository\aanmelder\DeelnemerRepository;
 use CsrDelft\service\security\LoginService;
 use DateInterval;
 use DateTimeImmutable;
@@ -50,6 +49,7 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements DataTableEntr
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Deelnemer::class, mappedBy="activiteit", orphanRemoval=true)
+	 * @var ArrayCollection|Deelnemer[]
 	 */
 	private $deelnemers;
 
@@ -232,7 +232,12 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements DataTableEntr
 
 	// Aanmeldingen
 	public function getAantalAanmeldingen(): int {
-		return $this->deelnemerRepository()->getAantalAanmeldingen($this);
+		$aantal = 0;
+		foreach ($this->deelnemers as $deelnemer) {
+			$aantal += $deelnemer->getAantal();
+		}
+
+		return $aantal;
 	}
 
 	public function getResterendeCapaciteit(): int {
@@ -306,14 +311,15 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements DataTableEntr
 	}
 
 	public function isAangemeld(): bool {
-		return $this->deelnemerRepository()->isAangemeld($this, LoginService::getProfiel());
+		return $this->deelnemers->matching(Eisen::voorIngelogdeGebruiker())->count() == 1;
 	}
 
 	public function aantalGasten(): int {
-		return $this->deelnemerRepository()->getAantalGasten($this, LoginService::getProfiel());
-	}
-
-	private function deelnemerRepository(): DeelnemerRepository {
-		return ContainerFacade::getContainer()->get(DeelnemerRepository::class);
+		/** @var Deelnemer $deelnemer */
+		$deelnemer = $this->deelnemers->matching(Eisen::voorIngelogdeGebruiker())->first();
+		if ($deelnemer) {
+			return $deelnemer->getAantal();
+		}
+		return 0;
 	}
 }
