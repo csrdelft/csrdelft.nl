@@ -7,6 +7,7 @@ use CsrDelft\common\Security\JwtTokenBadge;
 use CsrDelft\common\Security\PersistentTokenProvider;
 use CsrDelft\entity\security\Account;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\AccountService;
 use Exception;
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -51,12 +52,17 @@ class ApiAuthenticator extends AbstractAuthenticator {
 	 * @var PersistentTokenProvider
 	 */
 	private $tokenProvider;
+	/**
+	 * @var AccountService
+	 */
+	private $accountService;
 
 	public function __construct(
 		UserProviderInterface $userProvider,
 		PersistentTokenProvider $tokenProvider,
 		TokenStorageInterface $tokenStorage,
 		HttpUtils $httpUtils,
+		AccountService $accountService,
 		AccountRepository $accountRepository
 	) {
 		$this->userProvider = $userProvider;
@@ -64,6 +70,7 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		$this->httpUtils = $httpUtils;
 		$this->accountRepository = $accountRepository;
 		$this->tokenProvider = $tokenProvider;
+		$this->accountService = $accountService;
 	}
 
 	public function supports(Request $request): ?bool {
@@ -143,7 +150,7 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		];
 
 		/** @var Account $user */
-		$user = $this->userProvider->loadUserByUsername($credentials['username']);
+		$user = $this->userProvider->loadUserByIdentifier($credentials['username']);
 
 		if (!$user) {
 			throw new AuthenticationException();
@@ -155,7 +162,7 @@ class ApiAuthenticator extends AbstractAuthenticator {
 			throw new AuthenticationException("Moet wachten");
 		}
 
-		$validPassword = $this->accountRepository->controleerWachtwoord($user, $credentials['password']);
+		$validPassword = $this->accountService->controleerWachtwoord($user, $credentials['password']);
 
 		if (!$validPassword) {
 			$this->accountRepository->failedLoginAttempt($user);

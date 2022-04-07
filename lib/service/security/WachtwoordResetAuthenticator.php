@@ -8,6 +8,7 @@ use CsrDelft\common\Mail;
 use CsrDelft\controller\WachtwoordController;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
+use CsrDelft\service\AccountService;
 use CsrDelft\service\MailService;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -38,10 +39,6 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 	 */
 	private $httpUtils;
 	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
 	 * @var Environment
 	 */
 	private $twig;
@@ -49,20 +46,24 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 	 * @var MailService
 	 */
 	private $mailService;
+	/**
+	 * @var AccountService
+	 */
+	private $accountService;
 
 	public function __construct(
 		HttpUtils $httpUtils,
 		Environment $twig,
 		OneTimeTokensRepository $oneTimeTokensRepository,
-		AccountRepository $accountRepository,
+		AccountService $accountService,
 		MailService $mailService
 	)
 	{
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 		$this->httpUtils = $httpUtils;
-		$this->accountRepository = $accountRepository;
 		$this->twig = $twig;
 		$this->mailService = $mailService;
+		$this->accountService = $accountService;
 	}
 
 	public function supports(Request $request): ?bool
@@ -86,7 +87,7 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 		if ($form->validate()) {
 			// wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
-			if ($this->accountRepository->wijzigWachtwoord($user, $pass_plain)) {
+			if ($this->accountService->wijzigWachtwoord($user, $pass_plain)) {
 				setMelding('Wachtwoord instellen geslaagd', 1);
 			}
 

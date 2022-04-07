@@ -5,7 +5,7 @@ namespace CsrDelft\command;
 use CsrDelft\common\Mail;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\service\AccountCreateService;
+use CsrDelft\service\AccountService;
 use CsrDelft\service\MailService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -39,14 +39,14 @@ class WelkomCommand extends Command {
 	 */
 	private $mailService;
 	/**
-	 * @var AccountCreateService
+	 * @var AccountService
 	 */
 	private $accountService;
 
 	public function __construct(
 		string                $emailPubCie,
 		AccountRepository     $accountRepository,
-		AccountCreateService  $accountService,
+		AccountService        $accountService,
 		ProfielRepository     $profielRepository,
 		UrlGeneratorInterface $urlGenerator,
 		MailService           $mailService

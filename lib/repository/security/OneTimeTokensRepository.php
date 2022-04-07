@@ -24,7 +24,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method OneTimeToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class OneTimeTokensRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+	public function __construct(ManagerRegistry $registry, AccountRepository $accountRepository) {
 		parent::__construct($registry, OneTimeToken::class);
 	}
 
@@ -47,7 +47,7 @@ class OneTimeTokensRepository extends AbstractRepository {
 		$qb->setParameters(['url' => $url, 'token' => hash('sha512', $token)]);
 		try {
 			$tokenObj = $qb->getQuery()->getSingleResult();
-			return AccountRepository::get($tokenObj->uid);
+			return $tokenObj->account;
 		} catch (NoResultException $e) {
 			return null;
 		} catch (NonUniqueResultException $e) {
@@ -80,17 +80,18 @@ class OneTimeTokensRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param string $uid
+	 * @param Account $account
 	 * @param string $url
 	 *
 	 * @return array
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function createToken($uid, $url) {
+	public function createToken(Account $account, $url) {
 		$rand = crypto_rand_token(255);
 		$token = new OneTimeToken();
-		$token->uid = $uid;
+		$token->account = $account;
+		$token->uid = $account->uid;
 		$token->url = $url;
 		$token->token = hash('sha512', $rand);
 		$token->expire = date_create_immutable(instelling('beveiliging', 'one_time_token_expire_after'));
