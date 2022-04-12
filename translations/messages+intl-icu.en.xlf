@@ -379,16 +379,16 @@
 							You'll be set into contact with this student to pick a good date.
 							If you have questions, you can call or send a message to Christie, 06 57547448</target>
       </trans-unit>
-			<trans-unit id="tzdUVnr" resname="Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;opgenomen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Doe dit door &lt;a href=&quot;{lidworden}&quot;&gt;hier&lt;/a&gt; te&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek">
-				<source>Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).
-					Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
-					opgenomen.
-					Doe dit door &lt;a href="{lidworden}"&gt;hier&lt;/a&gt; te
-					klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek</source>
-				<target><![CDATA[Do you want to become of member? A pre-registration is possible via:
+      <trans-unit id="tzdUVnr" resname="Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;opgenomen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Doe dit door &lt;a href=&quot;{lidworden}&quot;&gt;hier&lt;/a&gt; te&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek">
+        <source>Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).
+							Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
+							opgenomen.
+							Doe dit door &lt;a href="{lidworden}"&gt;hier&lt;/a&gt; te
+																													klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek</source>
+        <target><![CDATA[Do you want to become of member? A pre-registration is possible via:
 						<a href="{lidworden}">hier</a>
 						Make sure to keep the week of 23 - 29 August free, because that week is dedicated to the introduction week of C.S.R.]]></target>
-			</trans-unit>
+      </trans-unit>
       <trans-unit id="JEFxwai" resname="Ik wil lid worden!">
         <source>Ik wil lid worden!</source>
         <target>I want to become a member!</target>
@@ -408,7 +408,7 @@
 							In this week you'll be getting to know the association and its members.
 							The activities during this week will be in a respectful and safe way.</target>
       </trans-unit>
-			<trans-unit id="WCwN33y" resname="&lt;span class=&quot;d-none d-sm-inline&quot;&gt;Ik wil een dagje met een lid meelopen&lt;/span&gt;">
+      <trans-unit id="WCwN33y" resname="&lt;span class=&quot;d-none d-sm-inline&quot;&gt;Ik wil een dagje met een lid meelopen&lt;/span&gt;">
         <source>&lt;span class="d-none d-sm-inline"&gt;Ik wil een dagje met een lid meelopen&lt;/span&gt;</source>
         <target><![CDATA[<span class="d-none d-md-inline">Let a student show you around for a day!</span>]]></target>
       </trans-unit>
