@@ -111,6 +111,7 @@ De PubCie.
 		$telefoon = filter_input(INPUT_POST, "telefoon", FILTER_SANITIZE_STRING);
 		$eten = filter_input(INPUT_POST, "eten", FILTER_SANITIZE_STRING);
 		$eetwens = filter_input(INPUT_POST, "eetwens", FILTER_SANITIZE_STRING);
+		$slapen = filter_input(INPUT_POST, "slapen", FILTER_SANITIZE_STRING);
 		$opmerking = filter_input(INPUT_POST, "opmerking", FILTER_SANITIZE_STRING);
 
 		if ($this->isSpam($naam, $email, $telefoon, $eten, $eetwens, $opmerking)) {
@@ -139,6 +140,7 @@ De PubCie.
 			'commissie' => $commissie,
 			'eten' => $eten,
 			'eetwens' => $eetwens,
+			'slapen' => $slapen,
 			'opmerking' => $opmerking,
 		]);
 
