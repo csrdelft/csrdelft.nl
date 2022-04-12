@@ -395,6 +395,15 @@ body {
 			&[for="lid-spreken"] {
 				background: $primary;
 			}
+
+			&[for="open-avond"] {
+				background: $secondary;
+			}
+		}
+
+		input:checked + .tab {
+			border-bottom: 2px solid $accent;
+			margin-bottom: -2px;
 		}
 
 		#melding {
@@ -457,11 +466,11 @@ body {
 			}
 		}
 
-		#lid-worden:checked + label + input + .interesseformulier {
-			background: $tertiary;
+		#lid-worden:checked ~ .interesseformulier {
+			background: $secondary;
 			color: white;
 
-			.lid-spreken {
+			.lid-spreken, .open-avond {
 				display: none;
 			}
 
@@ -478,14 +487,38 @@ body {
 			}
 		}
 
-		#lid-spreken:checked + .interesseformulier {
+		#lid-spreken:checked ~ .interesseformulier {
 			background: $primary;
 
 			a {
 				color: white;
 			}
 
-			.lid-worden {
+			.lid-worden, .open-avond {
+				display: none;
+			}
+
+			input {
+				background: rgba(#FFFFFF, .12);
+
+				&[type=submit] {
+					background: $secondary;
+
+					&:hover {
+						background: rgba($secondary, 0.8);
+					}
+				}
+			}
+		}
+
+		#open-avond:checked ~ .interesseformulier {
+			background: $secondary;
+
+			a {
+				color: white;
+			}
+
+			.lid-worden, .lid-spreken {
 				display: none;
 			}
 

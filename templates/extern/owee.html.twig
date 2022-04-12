@@ -36,11 +36,14 @@
 						lang niet gaat vergeten!{% endtrans %}</p>
 
 					<div class="mt-4">
-{#						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">#}
-{#							{% trans %}Ik wil lid worden!{% endtrans %}#}
-{#						</a>#}
+						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">
+							{% trans %}Ik wil lid worden!{% endtrans %}
+						</a>
 						<a href="#contact" class="cta primary" onclick="document.getElementById('lid-spreken').checked = true">
 							{% trans %}Eerst een lid spreken{% endtrans %}
+						</a>
+						<a href="#contact" class="cta secondary" onclick="document.getElementById('open-avond').checked = true">
+							{% trans %}Open avond bezoeken{% endtrans %}
 						</a>
 					</div>
 				</div>
@@ -133,11 +136,11 @@
 		<div class="content pt-4 pb-4">
 			<div class="row">
 				 <div class="col-md-5 col-lg-4 mb-4 mb-md-0">
-					<a class="whatsapp" href="https://wa.me/31681672945" target="_blank" rel="noopener noreferrer">
+					<a class="whatsapp" href="https://wa.me/31613793890" target="_blank" rel="noopener noreferrer">
 						<i class="fab fa-whatsapp me-3 me-md-0"></i>
-						<div class="call mt-3 mb-3">Vragen?<br>App met <br class="d-none d-md-inline">Mathijs!</div>
+						<div class="call mt-3 mb-3">Vragen?<br>App met <br class="d-none d-md-inline">Ellen!</div>
 						<div class="persoon"></div>
-						<div class="cta">0681672945</div>
+						<div class="cta">0613793890</div>
 					</a>
 				</div>
 				<div class=" col-md-7 col-lg-8 col-md-12">
@@ -166,16 +169,21 @@
 					</script>
 					<form action="" class="formulieren" id="owee-form">
 						{{ csrfField() }}
-						<label hidden for="lid-worden" class="owee">{% trans %}<span class="d-none d-sm-inline">Ik wil </span>lid worden{% endtrans %}</label>
-						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden">
-						<label for="lid-spreken" class="owee">{% trans %}<span class="d-none d-sm-inline">Ik wil een dagje met een lid meelopen</span>{% endtrans %}</label>
-						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken" checked>
+						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden" checked>
+						<label for="lid-worden" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil </span>lid worden{% endtrans %}</label>
+						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken">
+						<label for="lid-spreken" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil een dagje </span>met een lid meelopen{% endtrans %}</label>
+						<input id="open-avond" class="owee" type="radio" name="optie" value="open-avond">
+						<label for="open-avond" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil naar een </span>open avond<span class="d-none d-md-inline"> komen</span>{% endtrans %}</label>
 						<div class="interesseformulier">
-							<h6 class="lid-worden">{% trans %}Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek! De inschrijvingen sluiten vrijdag 20 augustus 2021 om 21:00 uur.{% endtrans %}</h6>
+							<h6 class="lid-worden">{% trans %}Ben je overtuigd om volgend studiejaar lid te worden bij C.S.R? Wat mooi! Officieel lid worden kan tijdens de introductieweek in augustus. Geef hier alvast je interesse door, dan houden wij je op de hoogte van leuke evenementen en precieze data en tijden.{% endtrans %}</h6>
 							<h6 class="lid-spreken">{% trans %}Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.
 									Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze
 									dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden: {% endtrans %}
 							<a href="https://csrdelft.nl/meeloopdag">Informatie meeloopdag</a></h6>
+							<h6 class="open-avond">{% trans %}We hebben twee keer dit jaar een open avond waarbij je kan komen kijken hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een praise uur en komen borrelen. {% endtrans %}</h6>
+
+							<p class="open-avond">{% trans %}De eerstvolgende open avond is donderdag 14 april 2022.{% endtrans %}</p>
 
 							<div id="melding"></div>
 							<div class="velden" id="formulierVelden">
@@ -188,10 +196,29 @@
 								<label for="telefoon" class="owee">{% trans %}Je mobiele telefoonnummer{% endtrans %}</label>
 								<input type="tel" id="telefoon" name="telefoon">
 
-								<div class="lid-worden">
-									<label for="datums" class="owee">{% trans %}Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug){% endtrans %}</label>
-									<input type="text" id="datums" name="datums">
+								<div class="open-avond">
+									<label class="owee">{% trans %}Wil je mee eten?{% endtrans %}</label>
+									<div>
+									<input type="radio" id="eten-ja" name="eten" value="Ja">
+									<label for="eten-ja" class="owee">{% trans %}Ja{% endtrans %}</label>
+									<input type="radio" id="eten-nee" name="eten" value="Nee">
+									<label for="eten-nee" class="owee">{% trans %}Nee{% endtrans %}</label>
+									</div>
+
+									<label for="eetwens" class="owee">{% trans %}Als je wilt mee eten, heb je nog allergenen of eetwensen?{% endtrans %}</label>
+									<input type="text" id="eetwens" name="eetwens">
+
+									<label class="owee">{% trans %}Heb je na afloop van de open avond een slaapplek nodig?{% endtrans %}</label>
+									<div>
+										<input type="radio" id="slapen-ja" name="slapen" value="Ja">
+										<label for="slapen-ja" class="owee">{% trans %}Ja{% endtrans %}</label>
+										<input type="radio" id="slapen-nee" name="slapen" value="Nee">
+										<label for="slapen-nee" class="owee">{% trans %}Nee{% endtrans %}</label>
+									</div>
 								</div>
+
+								<label for="opmerking" class="owee">{% trans %}Heb je nog opmerkingen?{% endtrans %}</label>
+								<input type="text" id="opmerking" name="opmerking">
 
 								<div class="field" id="captcha"></div>
 
@@ -201,6 +228,7 @@
 
 								<input class="lid-worden" type="submit" id="submitButton" value="{% trans %}Inschrijven{% endtrans %}">
 								<input class="lid-spreken" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
+								<input class="open-avond" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
 
 							</div>
 						</div>
