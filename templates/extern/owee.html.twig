@@ -1,6 +1,6 @@
 {% extends 'extern/layout.html.twig' %}
 
-{% block titel %}Blik Vooruit - OWee 2021{% endblock %}
+{% block titel %}Lid worden{% endblock %}
 
 {% block styles %}
 	{{ css_asset('extern') }}
@@ -18,11 +18,10 @@
 			</a>
 		</div>
 	</section>
-	<div style="color: #e8e8e8;">a</div>
 	<div class="owee-pagina">
-		<div class="bbl atl hero">
-			<div class="content">
-				<img src="{{ absolute_url('/images/owee/owee2021lg.svg') }}" alt="C.S.R. - Blik Vooruit">
+		<div class="bbl atl hero" style="margin-top: 100px;">
+			{# Hier kan de Owee banner als het nieuwe thema bekend is. #}
+			<div class="content" style="height: 36vw;">
 			</div>
 		</div>
 
@@ -197,7 +196,7 @@
 								<div class="field" id="captcha"></div>
 
 								<p>{% trans %}Met het verzenden van dit formulier ga je akkoord met de <a
-										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-/05-2018.pdf"
+										href="/download/Privacyverklaring C.S.R. Delft - Extern - 25-/05-2018.pdf"
 										target="_blank">privacyverklaring van C.S.R. Delft</a>.{% endtrans %}</p>
 
 								<input class="lid-worden" type="submit" id="submitButton" value="{% trans %}Inschrijven{% endtrans %}">

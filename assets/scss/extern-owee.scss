@@ -2,10 +2,11 @@
 @import "~bootstrap/scss/mixins/breakpoints";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
-$primary: #b2d4f0;
-$secondary: #002e54;
-$tertiary: #486b87;
-$accent: #f6b585;
+// Zet hier de OWee kleuren
+$primary: $donkerblauw; //#b2d4f0;
+$secondary: $lichtblauw; // #002e54;
+$tertiary: $grijs; // #486b87;
+$accent: $geel; // #f6b585;
 $youtubeRed: #ff0000;
 $whatsappGreen: #25D366;
 $headingFont: 'Tw Cen MT', 'Source Sans Pro', Helvetica, Arial, sans-serif;
@@ -136,7 +137,7 @@ body {
 	.cta {
 		&.primary {
 			background: $primary;
-			color: $secondary;
+			color: $tertiary;
 
 			&:hover {
 				background: darken($primary, 10%);
@@ -172,7 +173,7 @@ body {
 	}
 
 	.hero {
-		background: url('../images/owee2021bg.png') no-repeat center bottom;
+		background: url('https://csrdelft.nl/fotoalbum/Publiek/Startkamp.jpg') no-repeat center bottom;
 		background-size: cover;
 
 		img {
@@ -210,6 +211,8 @@ body {
 				text-transform: uppercase;
 				font-family: $headingFont;
 				transition: font-size 300ms ease-in-out;
+
+				color: white;
 
 				@include media-breakpoint-down(sm) {
 					font-size: 1.2rem;
@@ -408,7 +411,7 @@ body {
 
 		.interesseformulier {
 			padding: 2rem;
-			color: $secondary;
+			color: white;
 
 			@include media-breakpoint-down(xs) {
 				padding: 1.5rem 1rem;
@@ -456,6 +459,7 @@ body {
 
 		#lid-worden:checked + label + input + .interesseformulier {
 			background: $tertiary;
+			color: white;
 
 			.lid-spreken {
 				display: none;
@@ -478,7 +482,7 @@ body {
 			background: $primary;
 
 			a {
-				color: $secondary;
+				color: white;
 			}
 
 			.lid-worden {
@@ -500,7 +504,7 @@ body {
 	}
 
 	.notes {
-		background: $tertiary;
+		background: $primary;
 
 		h2 {
 			color: white;
