@@ -311,12 +311,12 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements DataTableEntr
 	}
 
 	public function isAangemeld(): bool {
-		return $this->deelnemers->matching(Eisen::voorIngelogdeGebruiker())->count() == 1;
+		return $this->deelnemers->matching(Eisen::voorIngelogdLid())->count() == 1;
 	}
 
 	public function aantalGasten(): int {
 		/** @var Deelnemer $deelnemer */
-		$deelnemer = $this->deelnemers->matching(Eisen::voorIngelogdeGebruiker())->first();
+		$deelnemer = $this->deelnemers->matching(Eisen::voorIngelogdLid())->first();
 		if ($deelnemer) {
 			return $deelnemer->getAantal();
 		}
