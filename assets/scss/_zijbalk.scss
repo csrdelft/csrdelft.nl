@@ -1,4 +1,4 @@
-@import "~bootstrap/scss/mixins/breakpoints";
+@use "~bootstrap/scss/mixins/breakpoints";
 
 .ishetal {
 	text-align: center;
@@ -20,7 +20,7 @@
 	content: '';
 	display: block;
 	height: 90px;
-	background: url('/images/lustrum12/zandloper.png') no-repeat center center;
+	background: url('../images/lustrum12/zandloper.png') no-repeat center center;
 	background-size: contain;
 	clear: left;
 }
