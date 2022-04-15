@@ -4023,14 +4023,14 @@ fsevents@~2.3.1:
   linkType: hard
 
 "jszip@npm:^3.1.5":
-  version: 3.5.0
-  resolution: "jszip@npm:3.5.0"
+  version: 3.9.1
+  resolution: "jszip@npm:3.9.1"
   dependencies:
     lie: ~3.3.0
     pako: ~1.0.2
     readable-stream: ~2.3.6
     set-immediate-shim: ~1.0.1
-  checksum: e4c555273063ac1284f387e440c9b0ccef99af3dd87f3af4a7fc1b4396f33cc45fa10afdb059105dd15a61763288c99e53a5e078dd0af9183a83e694e005d054
+  checksum: 8c4c3e99beea3dad8a0f965f2f84d3d0f68aa7d936e069f64982fe393745d27ea6aa82c5dbd7376c73f94cfad1a0ecbf240c7a380419d3d1192148c4ef8a381d
   languageName: node
   linkType: hard
 
