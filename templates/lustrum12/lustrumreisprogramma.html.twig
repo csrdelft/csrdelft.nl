@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+				content="Website voor het 12e lustrum der Civitas Studiosorum Reformatorum onder het thema Tijdloos.">
+	<meta name="author" content="Job Kanis">
+
+	<title>Tijdloos - 12e lustrum</title>
+
+	{{ csrfMetaTag() }}
+
+	{{ js_asset('app') }}
+	{{ css_asset('thema-lustrum') }}
+	{{ css_asset('common') }}
+	{{ css_asset('lustrumreisprogramma') }}
+
+	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+
+	{{ js_asset('sentry') }}
+
+	<link rel="icon" href="/lustrum12/favicon.ico">
+</head>
+
+<body class="zijbalk_verborgen">
+{%  include 'lustrum12/zandloper.html.twig' %}
+{#	{{ cms('lustrum-reis') }}#}
+
+<nav class="site-header">
+	<a class="logo-titel d-inline-block" href="./">
+		<img src="/images/lustrum12/themaheader.png"
+				 alt="Logo menu" />
+	</a>
+	<div class="container">
+		<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">
+			<a class="d-none d-md-inline-block" href="./">Home</a>
+			<a class="d-none d-md-inline-block" href="#top">Top</a>
+			<a class="d-none d-md-inline-block" href="#programma">Programma</a>
+			<a class="d-none d-md-inline-block" href="#ketzers">ketzers</a>
+		</div>
+	</div>
+</nav>
+
+<div id="top"></div>
+
+<div id="programma" class="titelbeschrijving w-69 align-self-centre" style="mw:69px">
+	<h1>Lustrumreis Programma</h1>
+	<h2>Naar Budapest</h2>
+	<h4>26 juni tot 3 juli 2022</h4>
+</div>
+
+<div class="divider">
+</div>
+
+<div class="programma container">
+
+	<div class="dag row">
+		<div class="col-lg-6">
+			<h2 class="titel">Dag 1 - Vertrek</h2>
+			<h3 class="datum">Zondag 26 juni 2022</h3>
+			<div class="beschrijving">
+				Vandaag gaat het avontuur beginnen mannen & vrouwen van CSR!
+				De bussen zullen op zondagavond klaarstaan in Delft op een nader te bepalen plek om een start te maken aan deze onvergetelijke reis.
+				Pak jullie biertjes & snacks maar in, want deze busreis wordt natuurlijk al legendarisch vanaf moment één.
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<img src="/images/lustrum12/lustrumreis/delft.jpg">
+		</div>
+	</div>
+
+	<br/>
+
+	<div class="dag row">
+		<div class="col-lg-6">
+			<img src="/images/lustrum12/lustrumreis/budapest-2.jpg">
+		</div>
+		<div class="col-lg-6">
+			<h2 class="titel">Dag 2</h2>
+			<h3 class="datum">Maandag 27 juni 2022</h3>
+			<div class="beschrijving">
+				Vandaag gaat het avontuur beginnen mannen & vrouwen van CSR!
+				De bussen zullen op zondagavond klaarstaan in Delft op een nader te bepalen plek om een start te maken aan deze onvergetelijke reis.
+				Pak jullie biertjes & snacks maar in, want deze busreis wordt natuurlijk al legendarisch vanaf moment één.
+			</div>
+		</div>
+	</div>
+
+	<br/>
+
+	<div class="dag row">
+		<div class="col-lg-6">
+			<h2 class="titel">Dag 3 - </h2>
+			<h3 class="datum">Dinsdag 28 juni 2022</h3>
+			<div class="beschrijving">
+				Vandaag gaat het avontuur beginnen mannen & vrouwen van CSR!
+				De bussen zullen op zondagavond klaarstaan in Delft op een nader te bepalen plek om een start te maken aan deze onvergetelijke reis.
+				Pak jullie biertjes & snacks maar in, want deze busreis wordt natuurlijk al legendarisch vanaf moment één.
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<img src="/images/lustrum12/lustrumreis/budapest-3.jpg">
+		</div>
+	</div>
+
+	<br/>
+
+	<div class="dag row">
+		<div class="col-lg-6">
+			<img src="/images/lustrum12/lustrumreis/budapest-4.jpg">
+		</div>
+		<div class="col-lg-6">
+			<h2 class="titel">Dag 4</h2>
+			<h3 class="datum">Woensdag 29 juni 2022</h3>
+			<div class="beschrijving">
+				Vandaag gaat het avontuur beginnen mannen & vrouwen van CSR!
+				De bussen zullen op zondagavond klaarstaan in Delft op een nader te bepalen plek om een start te maken aan deze onvergetelijke reis.
+				Pak jullie biertjes & snacks maar in, want deze busreis wordt natuurlijk al legendarisch vanaf moment één.
+			</div>
+		</div>
+	</div>
+
+	<br/>
+
+	<div class="dag row">
+		<div class="col-lg-6">
+			<h2 class="titel">Dag 5</h2>
+			<h3 class="datum">Donderdag 30 juni 2022</h3>
+			<div class="beschrijving">
+				Vandaag gaat het avontuur beginnen mannen & vrouwen van CSR!
+				De bussen zullen op zondagavond klaarstaan in Delft op een nader te bepalen plek om een start te maken aan deze onvergetelijke reis.
+				Pak jullie biertjes & snacks maar in, want deze busreis wordt natuurlijk al legendarisch vanaf moment één.
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<img src="/images/lustrum12/lustrumreis/boatparty-budapest.jpg">
+		</div>
+	</div>
+
+	<br/>
+
+	<div class="dag row">
+		<div class="col-lg-6">
+			<img src="/images/lustrum12/lustrumreis/Ruin-pub-budapest.jpg">
+		</div>
+		<div class="col-lg-6">
+			<h2 class="titel">Dag 6</h2>
+			<h3 class="datum">Vrijdag 1 juli 2022</h3>
+			<div class="beschrijving">
+				Vandaag gaat het avontuur beginnen mannen & vrouwen van CSR!
+				De bussen zullen op zondagavond klaarstaan in Delft op een nader te bepalen plek om een start te maken aan deze onvergetelijke reis.
+				Pak jullie biertjes & snacks maar in, want deze busreis wordt natuurlijk al legendarisch vanaf moment één.
+			</div>
+		</div>
+	</div>
+
+	<br/>
+
+	<div class="dag row">
+		<div class="col-lg-6">
+			<h2 class="titel">Dag 7</h2>
+			<h3 class="datum">Zaterdag 2 juli 2022</h3>
+			<div class="beschrijving">
+				Vandaag gaat het avontuur beginnen mannen & vrouwen van CSR!
+				De bussen zullen op zondagavond klaarstaan in Delft op een nader te bepalen plek om een start te maken aan deze onvergetelijke reis.
+				Pak jullie biertjes & snacks maar in, want deze busreis wordt natuurlijk al legendarisch vanaf moment één.
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<img src="/images/lustrum12/lustrumreis/Szechenyi-Bath.jpg">
+		</div>
+	</div>
+
+	<br/>
+
+	<div class="dag row">
+		<div class="col-lg-6">
+			<img src="/images/lustrum12/lustrumreis/budapest-paleis.jpg">
+		</div>
+		<div class="col-lg-6">
+			<h2 class="titel">Dag 7</h2>
+			<h3 class="datum">Zondag 3 juli 2022</h3>
+			<div class="beschrijving">
+				Vandaag gaat het avontuur beginnen mannen & vrouwen van CSR!
+				De bussen zullen op zondagavond klaarstaan in Delft op een nader te bepalen plek om een start te maken aan deze onvergetelijke reis.
+				Pak jullie biertjes & snacks maar in, want deze busreis wordt natuurlijk al legendarisch vanaf moment één.
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="ketzers" class="container ketzers">
+	<div class="titel">
+		Ketzers
+	</div>
+	<div class="ketzer">
+		{{ '[activiteit=2150]'|bbcode }}
+	</div>
+
+</div>
+</body>

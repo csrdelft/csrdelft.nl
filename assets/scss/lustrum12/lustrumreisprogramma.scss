@@ -1,0 +1,169 @@
+@import 'style.scss';
+
+$gray-transparant: #473d4594;
+$very-lightgray-transparant: #473D4521;
+$lightgray-transparant: #473D454F;
+$darkgray-transparant: #473D45BA;
+
+$text-color: #555;
+
+$background-color: #ffffff;
+$primary-color: black;
+$secondary-color: steelblue;
+
+body {
+	background-color: $background-color;
+	color: $text-color;
+}
+h1, h2 {
+	color: $secondary-color;
+	text-align: center;
+	font-family: $font-text;
+}
+.line {
+	color: $primary-color;
+}
+h3, h4 {
+	color: black;
+	text-align: center;
+	font-family: $font-text;
+}
+
+nav {
+	background-color: $primary-color;
+	a {
+		color: $background-color;
+		text-transform: uppercase;
+	}
+	a:hover {
+		color: $secondary-color;
+	}
+}
+
+.titelbeschrijving {
+	background-image: url('../../images/lustrum12/budapest-achtergrond.jpg');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+
+	padding-top: 90px;
+	padding-bottom: 40px;
+	h1, h2, h3, h4 {
+		color: white;
+		font-family: $font-text;
+	}
+	h1 {
+		font-size: 4.0rem;
+		text-transform: none;
+	}
+	h2 {
+		font-size: 2.5rem;
+		text-transform: uppercase;
+		h3, h4 {
+			text-transform: uppercase;
+		}
+	}
+}
+
+.programma {
+	padding-top: 30px;
+	.dag {
+		//background: $kleur-rood;
+		//padding: 15px;
+		//border-radius: 15px;
+		.titel {
+			font-size: 2rem;
+			color: $primary-color;
+			font-family: $font-header;
+		}
+		.datum {
+			font-size: 1.5rem;
+			color: $secondary-color;
+
+		}
+		.beschrijving {
+
+		}
+		img {
+			border-radius: 5px;
+			width: 100%
+		}
+	}
+	img {
+		max-width: 100%;
+	}
+}
+
+$oranje: green;
+$kleur-wit: green;
+$bordeaux-rood: green;
+
+/* Ketzers */
+.ketzers{
+	padding-top: 50px;
+	align-items: center;
+
+	.titel {
+		font-size: 4.0rem;
+		text-transform: none;
+		color: $primary-color;
+		padding-bottom: 20px;
+	}
+
+	.ketzer{
+		max-width: 1320px;
+		color: $text-color;
+		font-family: $font-text;
+		.bb-block {
+			padding: 5px;
+			border-radius: 5px;
+			background-color: $very-lightgray-transparant;
+			table.groep-lijst tr:nth-child(2n) {
+				background-color:$lightgray-transparant;
+			}
+		}
+		.btn {
+			color: $primary-color;
+		}
+		.btn-primary {
+			background-color: $lightgray-transparant;
+			border-color: $lightgray-transparant;
+		}
+		a:not(.btn) {
+			color: $primary-color;
+		}
+		.dropdown-menu {
+			background-color: $lightgray-transparant;
+		}
+		a[id*="groep-lid-remove"] {
+			color: $primary-color;
+			background-color: transparent;
+		}
+		h3 {
+			color: $primary-color;
+			font-weight: bold;
+			font-family: $font-header;
+			text-transform: uppercase;
+			font-size: 2.0rem;
+		}
+		h4 {
+			color: $primary-color;
+			font-family: $font-header;
+			text-transform: uppercase;
+		}
+		.GroepStatistiekView {
+			background-color: transparent;
+			color: $primary-color;
+			padding: 20px;
+			border-radius: 25px;
+		}
+		.progress-bar {
+			background-color: $secondary-color;
+		}
+		.GroupAanmeldenForm {
+			input.FormElement {
+				background-color: $lightgray-transparant;
+			}
+		}
+	}
+}

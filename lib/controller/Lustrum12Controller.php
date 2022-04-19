@@ -119,4 +119,13 @@ class Lustrum12Controller extends AbstractController
 		return $this->render('lustrum12/lustrumreis.html.twig');
 	}
 
+	/**
+	 * @return Response
+	 * @Route("/tijdloos/lustrumreis/programma")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lustrumreisprogramma() {
+		return $this->render('lustrum12/lustrumreisprogramma.html.twig');
+	}
+
 }
