@@ -275,10 +275,9 @@ class ProfielController extends AbstractController {
 					}
 
 					setMelding('Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid, 1);
-				} elseif (1 === $this->profielRepository->update($profiel)) {
-					setMelding(count($diff) . ' wijziging(en) succesvol opgeslagen', 1);
 				} else {
-					setMelding('Opslaan van ' . count($diff) . ' wijziging(en) mislukt', -1);
+					$this->profielRepository->update($profiel);
+					setMelding(count($diff) . ' wijziging(en) succesvol opgeslagen', 1);
 				}
 			}
 			return $this->redirectToRoute('csrdelft_profiel_profiel', ['uid' => $profiel->uid]);
