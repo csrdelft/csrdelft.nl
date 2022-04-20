@@ -64,6 +64,7 @@ module.exports = (env, argv) => {
 			'lustrumdiesthema': './scss/lustrum12/diesthema.scss',
 			'lustrumdies': './scss/lustrum12/dies.scss',
 			'lustrum12-js': './js/lib/lustrum12.ts',
+			'lustrumreis': './scss/lustrum12/lustrumreis.scss',
 
 		},
 		output: {

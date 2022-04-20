@@ -15,7 +15,7 @@
 	{{ js_asset('app') }}
 	{{ css_asset('thema-lustrum') }}
 	{{ css_asset('common') }}
-	{{ css_asset('lustrum') }}
+	{{ css_asset('lustrumreis') }}
 
 	<script>
 		{# Configuratie voor Sentry, zie sentry.ts #}
@@ -23,13 +23,203 @@
 		SENTRY_DSN_JS = "{{ sentry_dsn }}";
 		USER = "{{ app.user.uid }}";
 	</script>
+
 	{{ js_asset('sentry') }}
 
 	<link rel="icon" href="/lustrum12/favicon.ico">
 </head>
 
 <body class="zijbalk_verborgen">
-	{%  include 'lustrum12/zandloper.html.twig' %}
+{%  include 'lustrum12/zandloper.html.twig' %}
+{{ cms('lustrum-reis') }}
 
-	{{ cms('lustrum-reis') }}
-</body>
+{#<nav class="site-header">#}
+{#	<a class="logo-titel d-inline-block" href="./">#}
+{#		<img src="/images/lustrum12/themaheader.png"#}
+{#				 alt="Logo menu" />#}
+{#	</a>#}
+{#	<div class="container">#}
+{#		<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">#}
+{#			<a class="d-none d-md-inline-block" href="./">Home</a>#}
+{#			<a class="d-none d-md-inline-block" href="#programma">Programma</a>#}
+{#			<a class="d-none d-md-inline-block" href="#info">Info</a>#}
+{#			<a class="d-none d-md-inline-block" href="#ketzers">ketzers</a>#}
+{#			<a class="d-none d-md-inline-block" href="#poster">poster</a>#}
+{#			<a class="d-none d-md-inline-block" href="#filmpje">filmpje</a>#}
+{#		</div>#}
+{#	</div>#}
+{#</nav>#}
+
+{#<div id="top"></div>#}
+
+{#<div id="programma" class="titelbeschrijving w-69 align-self-centre">#}
+{#	<h1>C.S.R. Lustrumreis 2022</h1>#}
+{#	<h2>Naar Budapest</h2>#}
+{#	<h4>26 juni tot 3 juli 2022</h4>#}
+{#</div>#}
+
+{#<div class="programma container">#}
+{#	<div class="dag row">#}
+{#		<div class="col-lg-6">#}
+{#			<h2 class="titel">Dag 1 - Vertrek</h2>#}
+{#			<h3 class="datum">Zondag 26 juni 2022</h3>#}
+{#			<div class="beschrijving">#}
+{#				De laatste tentamenperiode van dit collegejaar is nog maar net voorbij en de mooiste reis van deze zomer gaat al beginnen! Zondagmiddag stappen we met z’n allen in de bus en begint de busreis richting Boedapest.			</div>#}
+{#		</div>#}
+{#		<div class="col-lg-6">#}
+{#			<img alt="" src="/images/lustrum12/lustrumreis-dag-1.jpg">#}
+{#		</div>#}
+{#	</div>#}
+
+{#	<br/>#}
+
+{#	<div class="dag row">#}
+{#		<div class="col-lg-6">#}
+{#			<img alt="" src="/images/lustrum12/lustrumreis-dag-2.jpg">#}
+{#		</div>#}
+{#		<div class="col-lg-6">#}
+{#			<h2 class="titel">Dag 2 - Aankomst & Ontdekken</h2>#}
+{#			<h3 class="datum">Maandag 27 juni 2022</h3>#}
+{#			<div class="beschrijving">#}
+{#				Na een korte busreis ben je zo in Boedapest en mogen we van de stad gaan genieten. We kunnen vanaf 15:00 inchecken in een leip hostel. Iedereen verblijft in hetzelfde hostel.#}
+{#				Verder is er in de middag al een rondleiding in kleinere groepjes door de stad. Zo krijg je meteen een goede indruk van de Boedapest. De avond mag je heerlijk zelf invullen.#}
+{#			</div>#}
+{#		</div>#}
+{#	</div>#}
+
+{#	<br/>#}
+
+{#	<div class="dag row">#}
+{#		<div class="col-lg-6">#}
+{#			<h2 class="titel">Dag 3 - Kroegentocht</h2>#}
+{#			<h3 class="datum">Dinsdag 28 juni 2022</h3>#}
+{#			<div class="beschrijving">#}
+{#				Na een ontbijt in het hostel, heb je de resterende ochtend en middag om Boedapest te ontdekken. Dit mag je allemaal zelf invullen, dus ga eropuit met een groepje! Als je graag nog meer van Boedapest wil zien, kan je met een gids een privé stadstour nemen (optioneel, niet bij prijs inbegrepen). s’Avonds neemt een gids ons mee langs vier kroegen en dan kunnen we met iedereen genieten van een gezellige kroegentocht.#}
+{#			</div>#}
+{#		</div>#}
+{#		<div class="col-lg-6">#}
+{#			<img alt="" src="/images/lustrum12/lustrumreis-dag-3.jpg">#}
+{#		</div>#}
+{#	</div>#}
+
+{#	<br/>#}
+
+{#	<div class="dag row">#}
+{#		<div class="col-lg-6">#}
+{#			<img alt="" src="/images/lustrum12/lustrumreis-dag-4.jpg">#}
+{#		</div>#}
+{#		<div class="col-lg-6">#}
+{#			<h2 class="titel">Dag 4 - De keuze is reuze!</h2>#}
+{#			<h3 class="datum">Woensdag 29 juni 2022</h3>#}
+{#			<div class="beschrijving">#}
+{#				Ook deze ochtend kan er weer genoten worden van een ontbijt in het hostel. Verder kan de dag ingevuld worden met keuze uit drie optionele activiteiten (optioneel, niet bij prijs inbegrepen). Zo kunnen de Széchenyi Baden bezocht worden, de wereldberoemde spa van Budapest in de meest leipe gebouwen. Daarnaast kan een bezoek worden gebracht aan het House of Terror, het oude centrum van de communistische partij met een tentoonstelling van het communistische regime. De derde optie is een privé boottour over de Donau, met een gids die jullie alles over Boedapest kan vertellen.#}
+{#			</div>#}
+{#		</div>#}
+{#	</div>#}
+
+{#	<br/>#}
+
+{#	<div class="dag row">#}
+{#		<div class="col-lg-6">#}
+{#			<h2 class="titel">Dag 5 - Boottocht</h2>#}
+{#			<h3 class="datum">Donderdag 30 juni 2022</h3>#}
+{#			<div class="beschrijving">#}
+{#				Tuurlijk is er weer ontbijt in het hostel. De rest van de ochtend en middag is vrij voor eigen invulling. In de avond is er een leipe boottocht over de Donau, met een feestje op de boot. Na de boottocht zullen we met z’n allen nog naar een afterparty gaan!#}
+{#			</div>#}
+{#		</div>#}
+{#		<div class="col-lg-6">#}
+{#			<img alt="" src="/images/lustrum12/lustrumreis-dag-5.jpg">#}
+{#		</div>#}
+{#	</div>#}
+
+{#	<br/>#}
+
+{#	<div class="dag row">#}
+{#		<div class="col-lg-6">#}
+{#			<img alt="" src="/images/lustrum12/lustrumreis-dag-6.jpg">#}
+{#		</div>#}
+{#		<div class="col-lg-6">#}
+{#			<h2 class="titel">Dag 6 - Stranddag</h2>#}
+{#			<h3 class="datum">Vrijdag 1 juli 2022</h3>#}
+{#			<div class="beschrijving">#}
+{#				Na het ontbijt in het hostel, gaan we met de bus een dagje naar het Balatonmeer. Hier kunnen we gaan genieten van een heerlijke stranddag.#}
+{#			</div>#}
+{#		</div>#}
+{#	</div>#}
+
+{#	<br/>#}
+
+{#	<div class="dag row">#}
+{#		<div class="col-lg-6">#}
+{#			<h2 class="titel">Dag 7 - Ook aan tijdloos komt een eind</h2>#}
+{#			<h3 class="datum">Zaterdag 2 juli 2022</h3>#}
+{#			<div class="beschrijving">#}
+{#				Dit zal voorlopig het laatste ontbijt uit het hostel zijn, waarna we onze spullen mogen inpakken en uit helaas moeten checken. De bagage kan bij het hostel blijven en we hebben nog één middag om de laatste hoogtepunten van de stad mee te pakken. Aan het eind van de middag of in de avond zullen we weer in de bus stappen richting Delft.#}
+{#			</div>#}
+{#		</div>#}
+{#		<div class="col-lg-6">#}
+{#			<img alt="" src="/images/lustrum12/lustrumreis-dag-7.jpg">#}
+{#		</div>#}
+{#	</div>#}
+
+{#	<br/>#}
+
+{#	<div class="dag row">#}
+{#		<div class="col-lg-6">#}
+{#			<img alt="" src="/images/lustrum12/lustrumreis-dag-8.jpg">#}
+{#		</div>#}
+{#		<div class="col-lg-6">#}
+{#			<h2 class="titel">Dag 8 - Laatste loodjes</h2>#}
+{#			<h3 class="datum">Zondag 3 juli 2022</h3>#}
+{#			<div class="beschrijving">#}
+{#				Nog een klein stukje in de bus en we zijn weer in Delft. Dan mogen we gaan bijkomen en nagenieten van een epische lustrumreis!#}
+{#			</div>#}
+{#		</div>#}
+{#	</div>#}
+{#</div>#}
+
+{#<div id="info" class="container informatie">#}
+{#	<h1 class="header titel">Praktische Informatie</h1>#}
+{#	<h3 class="titel header">Kosten en inschrijvingen</h3>#}
+{#	<div>#}
+{#		De inschrijvingen van de lustrumreis zijn reeds gesloten. De totale kosten, exclusief extra activiteiten, zijn en worden in maart, april, en mei in drie stappen afgeschreven. Deze kosten bedragen 385 euro.#}
+{#		Het is vanaf nu mogelijk om je in te schrijven voor de extra activiteiten. Dit is mogelijk tot <strong>dinsdag 26 april 12:12</strong>. Ketz je hieronder in voor de activiteiten en kijk voor meer informatie in de programma-beschrijving.#}
+{#	</div>#}
+
+{#	<h3 class="titel header">Covid-19 en annuleringsverzekering</h3>#}
+{#	<div>#}
+{#		Indien het land van bestemming een negatief reisadvies heeft (oranje/rood) kunnen we kosteloos omboeken.#}
+{#		We kunnen niet op individuele basis een annuleringsverzekering verzorgen: als je bijvoorbeeld in quarantaine zit kunnen we geen geld terug geven. We raden je aan om zelf een reis en annuleringsverzekering af te sluiten.#}
+{#	</div>#}
+{#</div>#}
+
+{#<div id="ketzers" class="container ketzers">#}
+{#	<div class="titel">#}
+{#		Ketzers#}
+{#	</div>#}
+{#	<div class="ketzer">#}
+{#		[activiteit=11828]#}
+{#		[activiteit=11829]#}
+{#	</div>#}
+{#</div>#}
+
+{#<div id="poster" class="poster-container container">#}
+{#	<h1 class="titel header">Poster</h1>#}
+{#	<div class="poster">#}
+{#		<img src="/images/lustrum12/dies-programma.jpg" alt="Logo menu" />#}
+{#	</div>#}
+{#</div>#}
+
+{#<div id="filmpje" class="container video">#}
+{#	<h1 class="header titel">Locatie Bekendmaking</h1>#}
+{#	<div class="container video-container">#}
+{#		<div class="youtube-container closed">#}
+{#			<div class="embed-responsive ratio ratio-16x9" id="player">#}
+{#				<iframe src="https://www.youtube-nocookie.com/embed/cAAgXFB9WkE?controls=0" frameborder="0" 	allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>#}
+{#				</iframe>#}
+{#			</div>#}
+{#		</div>#}
+{#	</div>#}
+{#</div>#}
+
+{#</body>#}

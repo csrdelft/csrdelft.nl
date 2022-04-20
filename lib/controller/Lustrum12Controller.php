@@ -112,6 +112,15 @@ class Lustrum12Controller extends AbstractController
 
 	/**
 	 * @return Response
+	 * @Route("/tijdloos/lustrumreis/inschrijven")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lustrumreisinschrijven() {
+		return $this->render('lustrum12/lustrumreisinschrijven.html.twig');
+	}
+
+	/**
+	 * @return Response
 	 * @Route("/tijdloos/lustrumreis")
 	 * @Auth(P_LOGGED_IN)
 	 */
