@@ -41,7 +41,6 @@ module.exports = (env, argv) => {
 			'fxraket': './js/entry/fxraket.ts',
 			'fxdruif': './js/entry/fxdruif.ts',
 			'fxminion': './js/entry/fxminion.ts',
-			'fxclippy': './js/entry/fxclippy.ts',
 			'fxspace': './js/entry/fxspace.ts',
 			'zijbalk-scroll': './js/entry/zijbalk-scroll.ts',
 			'extern': ['./js/entry/extern.ts', './scss/extern.scss'],
