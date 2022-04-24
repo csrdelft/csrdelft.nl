@@ -1,10 +1,13 @@
 @import "./fontawesome/fontawesome.scss";
 @import "./fontawesome/solid.scss";
 @import "./fontawesome/brands.scss";
+
+@import "_defaults";
+@import "fonts";
+
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-vue/dist/bootstrap-vue.css"; // Moet na Bootstrap geladen worden.
-@import "defaults";
-@import "fonts";
+
 @import "_common";
 @import "main-menu";
 @import "bbcode";
@@ -47,7 +50,7 @@ body {
 }
 
 main {
-	background: $body-bg;
+	background: $light;
 }
 
 /* Standaard Kleuren */

@@ -301,7 +301,7 @@ class MenuItemRepository extends AbstractRepository {
 			return '';
 		}
 
-		$html = '<ol class="breadcrumb">';
+		$html = '<ol class="breadcrumb bg-transparent">';
 		foreach ($breadcrumbs as $k => $breadcrumb) {
 			if (is_string($breadcrumb)) {
 				$breadcrumb = (object)['link' => $k, 'tekst' => $breadcrumb];

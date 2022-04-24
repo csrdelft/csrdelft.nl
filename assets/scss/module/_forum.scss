@@ -1,3 +1,22 @@
+i.fas,
+i.fab {
+	margin-right: $spacer * 0.25;
+}
+
+.translate-begin {
+	transform: translate(-150%, -50%) !important;
+	width: 16px;
+}
+
+@media (max-width: 575px) {
+	.translate-begin {
+		transform: translate(0%, -50%) !important;
+	}
+	.ps-24 {
+		padding-left: 24px;
+	}
+}
+
 .draad-readonly {
 	font-style: italic;
 }
@@ -81,7 +100,8 @@
 		}
 	}
 
-	.forum-post, .forum-posten {
+	.forum-post,
+	.forum-posten {
 		display: flex;
 		flex-direction: row;
 
@@ -104,18 +124,16 @@
 			}
 		}
 
-
-
 		.forum-bericht {
 			flex: 1; /* grow */
 
 			margin: 0;
-			padding: .2em .6em 10px;
+			padding: 0.2em 0.6em 10px;
 			vertical-align: top;
 			text-align: justify;
 
 			.bewerkt {
-				font-size: .8em;
+				font-size: 0.8em;
 				color: $gray-500;
 				a {
 					color: $gray-500;
@@ -138,7 +156,7 @@
 
 		.meldingen {
 			flex: 0;
-			margin: .2em;
+			margin: 0.2em;
 		}
 	}
 }
@@ -237,7 +255,6 @@ span.curpage {
 	clear: left;
 
 	h3 {
-
 		a {
 			color: $black;
 		}
@@ -391,7 +408,6 @@ span.curpage {
 		float: none;
 	}
 
-
 	.forum-deel {
 		display: flex;
 		flex-direction: row;
@@ -453,4 +469,3 @@ span.curpage {
 		}
 	}
 }
-

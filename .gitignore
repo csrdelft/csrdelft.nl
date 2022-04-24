@@ -104,3 +104,4 @@ package-lock.json
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+csrdelft.nl.code-workspace

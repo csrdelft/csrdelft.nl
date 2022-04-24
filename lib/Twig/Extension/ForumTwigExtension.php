@@ -130,7 +130,7 @@ class ForumTwigExtension extends AbstractExtension {
 		$linknum = 5;
 		$urlAppend = '';
 		$txtPrev = '<';
-		$separator = ' ';
+		$separator = '';
 		$txtNext = '>';
 		$txtSkip = '…';
 		$cssClass = '';
@@ -192,22 +192,22 @@ class ForumTwigExtension extends AbstractExtension {
 		$retval = '';
 		$cssClass = $cssClass ? 'class="' . $cssClass . '"' : '';
 		if ($curpage > 1 && $showPrevNext) {
-			$retval .= '<a href="' . $baseurl . ($curpage - 1) . $urlAppend . '" ' . $cssClass . '>' . $txtPrev . '</a>';
+			$retval .= '<li class="page-item"><a class="page-link" href="' . $baseurl . ($curpage - 1) . $urlAppend . '" ' . $cssClass . '>' . $txtPrev . '</a></li>';
 			$retval .= $separator;
 		}
 		if ($links[0] != 1) {
-			$retval .= '<a href="' . $baseurl . '1' . $urlAppend . '" ' . $cssClass . '>1</a>';
+			$retval .= '<li class="page-item"><a class="page-link" href="' . $baseurl . '1' . $urlAppend . '" ' . $cssClass . '>1</a></li>';
 			if ($links[0] == 2) {
 				$retval .= $separator;
 			} else {
-				$retval .= $separator . $txtSkip . $separator;
+				$retval .= $separator . '<li class="page-item"><span class="page-link">' . $txtSkip . '</span></li>' . $separator;
 			}
 		}
 		for ($i = 0; $i < sizeof($links); $i++) {
 			if ($links[$i] != $curpage) {
-				$retval .= '<a href="' . $baseurl . $links[$i] . $urlAppend . '" ' . $cssClass . '>' . $links[$i] . '</a>';
+				$retval .= '<li class="page-item"><a class="page-link" href="' . $baseurl . $links[$i] . $urlAppend . '" ' . $cssClass . '>' . $links[$i] . '</a></li>';
 			} else {
-				$retval .= '<span class="curpage">' . $links[$i] . '</span>';
+				$retval .= '<li class="page-item active" aria-current="page"><span class="page-link">' . $links[$i] . '</span></li>';
 			}
 
 			if ($i < sizeof($links) - 1) {
@@ -216,15 +216,15 @@ class ForumTwigExtension extends AbstractExtension {
 		}
 		if ($links[sizeof($links) - 1] != $pagecount) {
 			if ($links[sizeof($links) - 2] != $pagecount - 1) {
-				$retval .= $separator . $txtSkip . $separator;
+				$retval .= $separator . '<li class="page-item"><span class="page-link">' . $txtSkip . '</span></li>' . $separator;
 			} else {
 				$retval .= $separator;
 			}
-			$retval .= '<a href="' . $baseurl . $pagecount . $urlAppend . '" ' . $cssClass . '>' . $pagecount . '</a>';
+			$retval .= '<li class="page-item"><a class="page-link" href="' . $baseurl . $pagecount . $urlAppend . '" ' . $cssClass . '>' . $pagecount . '</a></li>';
 		}
 		if ($curpage != $pagecount && $showPrevNext) {
 			$retval .= $separator;
-			$retval .= '<a href="' . $baseurl . ($curpage + 1) . $urlAppend . '" ' . $cssClass . '>' . $txtNext . '</a>';
+			$retval .= '<li class="page-item"><a class="page-link" href="' . $baseurl . ($curpage + 1) . $urlAppend . '" ' . $cssClass . '>' . $txtNext . '</a></li>';
 		}
 		return $retval;
 	}

@@ -124,15 +124,16 @@
 		{% if paging %}
 			{% block paginering %}
 				<div class="tussenschot"></div>
-				<div class="forum-paginering">
-					{% if draad.pagina_per_post %}Bericht: {% else %}Pagina: {% endif %}
-					{{ sliding_pager({
-						baseurl: url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id}) ~ '/',
-						url_append: statistiek ? '/statistiek': '',
-						pagecount: draadGetAantalPaginas(draad.draad_id),
-						curpage: draadGetHuidigePagina()
-					}) }}
-				</div>
+				<nav aria-label="Forum pagination">
+					<ul class="pagination justify-content-center">
+						{{ sliding_pager({
+							baseurl: url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id}) ~ '/',
+							url_append: statistiek ? '/statistiek': '',
+							pagecount: draadGetAantalPaginas(draad.draad_id),
+							curpage: draadGetHuidigePagina()
+						}) }}
+					</ul>
+				</nav>
 			{% endblock %}
 		{% endif %}
 

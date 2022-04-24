@@ -51,7 +51,7 @@
 {{ js_asset('app') }}
 {% block body %}
 	{{ include('menu/main.html.twig', {root: get_menu('main'), personal: get_menu('Personal'), favorieten: get_menu(app.user.uid)}) }}
-	<main class="container-fluid bg-light p-3 min-vh-100">
+	<main class="container-fluid p-3 min-vh-100">
 		{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == "/" %}
 			<div class="cd-page-content container px-0 ratio ratio-3x2">
 				{{ getMelding() }}

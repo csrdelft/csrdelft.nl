@@ -3,7 +3,7 @@
 {% block titel %}{{ deel.titel | raw }}{% endblock %}
 
 {% block breadcrumbs %}
-	<ol class="breadcrumb">
+	<ol class="breadcrumb bg-transparent">
 		<li class="breadcrumb-item"><a href="{{ url('default') }}" title="Thuis"><i class="fas fa-house"></i></a></li>
 		<li class="breadcrumb-item"><a href="{{ url('csrdelft_forum_forum') }}">Forum</a></li>
 		<li class="breadcrumb-item active" aria-current="page">
@@ -46,8 +46,11 @@
 
 {% block content %}
 	{{ getMelding() }}
-	<header class="d-flex justify-content-between align-items-center">
-		<h1>{{ deel.titel }}</h1>
+	<header class="d-flex justify-content-between align-items-center mb-5">
+		<div>
+			<h1>{{ deel.titel }}</h1>
+			<p>{{ deel.omschrijving }}</p>
+		</div>
 
 		{{ include('forum/partial/head_buttons.html.twig') }}
 	</header>
@@ -62,65 +65,24 @@
 		{% endfor %}
 	</section>
 
-	<div class="forum-deel">
-		<div class="header">Titel</div>
-		<div class="header">Laatste wijziging</div>
-		<div class="header"></div>
+	{% if paging is defined %}
+		{{ include('forum/partial/pagination.html.twig') }}
+	{% endif %}
 
-		{% if not deel.forumDraden %}
-			<div>Dit forum is nog leeg.</div>
-		{% endif %}
 
-		{% for draad in deel.forumDraden %}
-			{{ include('forum/partial/draad_lijst.html.twig', {draad: draad}) }}
-		{% endfor %}
-
-		{% if paging is defined %}
-			<div class="paging">
-				{% if deel is none or deel.forum_id is none %}
-					{{ sliding_pager({
-						baseurl: url('csrdelft_forum_recent') ~ '/',
-						url_append: belangrijk,
-						pagecount: getAantalPaginas(),
-						curpage: getHuidigePagina(),
-						separator: ' &nbsp;'
-					}) }}
-					&nbsp;
-					<a href="/forum/recent/{{ getAantalPaginas() }}{{ belangrijk }}">verder terug</a>
-				{% else %}
-					{{ sliding_pager({
-						baseurl: url('csrdelft_forum_deel', {forum_id: deel.forum_id}) ~ '/',
-						pagecount: getAantalPaginas(deel.forum_id),
-						curpage: getHuidigePagina(),
-						separator: ' &nbsp;',
-						show_prev_next: true
-					}) }}
-				{% endif %}
+	{% if deel.magPosten %}
+		{{ include('forum/partial/draad_reageren.html.twig') }}
+		{% if app.user %}
+			<div class="meldingen">
+				<div id="draad-melding" class="alert alert-warning">
+					Hier kunt u een onderwerp toevoegen in deze categorie van het forum.
+					Kijkt u vooraf goed of het onderwerp waarover u post hier wel thuishoort.
+				</div>
 			</div>
 		{% endif %}
+		{{ include('forum/partial/post_form.html.twig', {draad: null}) }}
+	{% endif %}
 
-
-		<div class="forumdeel-omschrijving">
-			<div class="breadcrumbs">{{ block('breadcrumbs') }}</div>
-			<h2>{{ deel.titel }}</h2>
-			{{ deel.omschrijving }}
-		</div>
-
-
-		{% if deel.magPosten %}
-			{{ include('forum/partial/draad_reageren.html.twig') }}
-			{% if app.user %}
-				<div class="meldingen">
-					<div id="draad-melding" class="alert alert-warning">
-						Hier kunt u een onderwerp toevoegen in deze categorie van het forum.
-						Kijkt u vooraf goed of het onderwerp waarover u post hier wel thuishoort.
-					</div>
-				</div>
-			{% endif %}
-			{{ include('forum/partial/post_form.html.twig', {draad: null}) }}
-		{% endif %}
-	</div>
-
-	{{ include('forum/partial/rss_link.html.twig') }}
-
+	{# FIXME: naar deel modal #}
+	{# {{ include('forum/partial/rss_link.html.twig') }} #}
 {% endblock %}
