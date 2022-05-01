@@ -169,11 +169,11 @@
 					</script>
 					<form action="" class="formulieren" id="owee-form">
 						{{ csrfField() }}
-						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden" checked>
+						<input id="lid-worden" class="owee" type="radio" name="optie" value=".lid-worden" checked>
 						<label for="lid-worden" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil </span>lid worden{% endtrans %}</label>
-						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken">
+						<input id="lid-spreken" class="owee" type="radio" name="optie" value=".lid-spreken">
 						<label for="lid-spreken" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil een dagje </span>met een lid meelopen{% endtrans %}</label>
-						<input id="open-avond" class="owee" type="radio" name="optie" value="open-avond">
+						<input id="open-avond" class="owee" type="radio" name="optie" value=".open-avond">
 						<label for="open-avond" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil naar een </span>open avond<span class="d-none d-md-inline"> komen</span>{% endtrans %}</label>
 						<div class="interesseformulier">
 							<h6 class="lid-worden">{% trans %}Ben je overtuigd om volgend studiejaar lid te worden bij C.S.R? Wat mooi! Officieel lid worden kan tijdens de introductieweek in augustus. Geef hier alvast je interesse door, dan houden wij je op de hoogte van leuke evenementen en precieze data en tijden.{% endtrans %}</h6>
@@ -184,7 +184,9 @@
 							<h6 class="open-avond">{% trans %}We hebben twee keer dit jaar een open avond waarbij je kan komen kijken hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen. De eerstvolgende openavond is op 2 juni, de inschrijvingen daarvoor gaan 2 weken van tevoren open. {% endtrans %}</h6>
 
 							<div id="melding"></div>
-							<div class="velden" id="formulierVelden">
+
+{#						Alle drie de formulieren gebruiken dezelfde naam, email, telefoon en opmerking form! #}
+							<div class="lid-worden" id="formulierVelden">
 								<label for="naam" class="owee">{% trans %}Je naam{% endtrans %}</label>
 								<input type="text" id="naam" name="naam">
 
@@ -194,26 +196,26 @@
 								<label for="telefoon" class="owee">{% trans %}Je mobiele telefoonnummer{% endtrans %}</label>
 								<input type="tel" id="telefoon" name="telefoon">
 
-{#								<div class="open-avond">#}
-{#									<label class="owee">{% trans %}Wil je mee eten?{% endtrans %}</label>#}
-{#									<div>#}
-{#									<input type="radio" id="eten-ja" name="eten" value="Ja">#}
-{#									<label for="eten-ja" class="owee">{% trans %}Ja{% endtrans %}</label>#}
-{#									<input type="radio" id="eten-nee" name="eten" value="Nee">#}
-{#									<label for="eten-nee" class="owee">{% trans %}Nee{% endtrans %}</label>#}
-{#									</div>#}
+								<label for="opmerking" class="owee">{% trans %}Heb je nog opmerkingen?{% endtrans %}</label>
+								<input type="text" id="opmerking" name="opmerking">
 
-{#									<label for="eetwens" class="owee">{% trans %}Als je wilt mee eten, heb je nog allergenen of eetwensen?{% endtrans %}</label>#}
-{#									<input type="text" id="eetwens" name="eetwens">#}
+								<div class="field" id="captcha"></div>
 
-{#									<label class="owee">{% trans %}Heb je na afloop van de open avond een slaapplek nodig?{% endtrans %}</label>#}
-{#									<div>#}
-{#										<input type="radio" id="slapen-ja" name="slapen" value="Ja">#}
-{#										<label for="slapen-ja" class="owee">{% trans %}Ja{% endtrans %}</label>#}
-{#										<input type="radio" id="slapen-nee" name="slapen" value="Nee">#}
-{#										<label for="slapen-nee" class="owee">{% trans %}Nee{% endtrans %}</label>#}
-{#									</div>#}
-{#								</div>#}
+								<p>{% trans %}Met het verzenden van dit formulier ga je akkoord met de <a
+										href="/download/Privacyverklaring C.S.R. Delft - Extern - 25-/05-2018.pdf"
+										target="_blank">privacyverklaring van C.S.R. Delft</a>.{% endtrans %}</p>
+							</div>
+							<input class="lid-worden" type="submit" id="submitButton" value="{% trans %}Inschrijven{% endtrans %}">
+
+							<div class="lid-spreken" id="formulierVelden">
+								<label for="naam" class="owee">{% trans %}Je naam{% endtrans %}</label>
+								<input type="text" id="naam" name="naam">
+
+								<label for="email" class="owee">{% trans %}Je e-mailadres{% endtrans %}</label>
+								<input type="text" id="email" name="email">
+
+								<label for="telefoon" class="owee">{% trans %}Je mobiele telefoonnummer{% endtrans %}</label>
+								<input type="tel" id="telefoon" name="telefoon">
 
 								<label for="opmerking" class="owee">{% trans %}Heb je nog opmerkingen?{% endtrans %}</label>
 								<input type="text" id="opmerking" name="opmerking">
@@ -223,12 +225,49 @@
 								<p>{% trans %}Met het verzenden van dit formulier ga je akkoord met de <a
 										href="/download/Privacyverklaring C.S.R. Delft - Extern - 25-/05-2018.pdf"
 										target="_blank">privacyverklaring van C.S.R. Delft</a>.{% endtrans %}</p>
-
-								<input class="lid-worden" type="submit" id="submitButton" value="{% trans %}Inschrijven{% endtrans %}">
-								<input class="lid-spreken" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
-								<input class="open-avond" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
-
 							</div>
+							<input class="lid-spreken" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
+
+{#							<div class="open-avond">#}
+{#								<label for="naam" class="owee">{% trans %}Je naam{% endtrans %}</label>#}
+{#								<input type="text" id="naam" name="naam">#}
+
+{#								<label for="email" class="owee">{% trans %}Je e-mailadres{% endtrans %}</label>#}
+{#								<input type="text" id="email" name="email">#}
+
+{#								<label for="telefoon" class="owee">{% trans %}Je mobiele telefoonnummer{% endtrans %}</label>#}
+{#								<input type="tel" id="telefoon" name="telefoon">#}
+
+{#								<label for="opmerking" class="owee">{% trans %}Heb je nog opmerkingen?{% endtrans %}</label>#}
+{#								<input type="text" id="opmerking" name="opmerking">#}
+
+{#								<div class="field" id="captcha"></div>#}
+
+{#								<p>{% trans %}Met het verzenden van dit formulier ga je akkoord met de <a#}
+{#										href="/download/Privacyverklaring C.S.R. Delft - Extern - 25-/05-2018.pdf"#}
+{#										target="_blank">privacyverklaring van C.S.R. Delft</a>.{% endtrans %}</p>#}
+{#							</div>#}
+{#								<label class="owee">{% trans %}Wil je mee eten?{% endtrans %}</label>#}
+{#								<div>#}
+{#								<input type="radio" id="eten-ja" name="eten" value="Ja">#}
+{#								<label for="eten-ja" class="owee">{% trans %}Ja{% endtrans %}</label>#}
+{#								<input type="radio" id="eten-nee" name="eten" value="Nee">#}
+{#								<label for="eten-nee" class="owee">{% trans %}Nee{% endtrans %}</label>#}
+{#								</div>#}
+
+{#								<label for="eetwens" class="owee">{% trans %}Als je wilt mee eten, heb je nog allergenen of eetwensen?{% endtrans %}</label>#}
+{#								<input type="text" id="eetwens" name="eetwens">#}
+
+{#								<label class="owee">{% trans %}Heb je na afloop van de open avond een slaapplek nodig?{% endtrans %}</label>#}
+{#								<div>#}
+{#									<input type="radio" id="slapen-ja" name="slapen" value="Ja">#}
+{#									<label for="slapen-ja" class="owee">{% trans %}Ja{% endtrans %}</label>#}
+{#									<input type="radio" id="slapen-nee" name="slapen" value="Nee">#}
+{#									<label for="slapen-nee" class="owee">{% trans %}Nee{% endtrans %}</label>#}
+{#								</div>#}
+{#							</div>#}
+{#						<input class="open-avond" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">#}
+
 						</div>
 					</form>
 					<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async
