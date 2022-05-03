@@ -86,7 +86,6 @@
 		"bootstrap": "^5.0.0",
 		"bootstrap-vue": "^2.0.0-rc.11",
 		"chart.js": "^2.7.3",
-		"clippyjs": "^0.0.3",
 		"corejs-typeahead": "^1.2.1",
 		"datatables.net": "^1.11.3",
 		"datatables.net-autofill": "^2.3.5",
