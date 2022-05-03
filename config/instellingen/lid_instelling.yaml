@@ -62,18 +62,6 @@ instellingen:
       opties: ['ja', 'nee']
       default: 'ja'
       beschrijving: 'Schakel automatisch donkere modus in als je computer op donkere modus staat.'
-    assistent:
-      titel: 'Assistent'
-      type: Enumeration
-      opties: ['nee', 'Clippy', 'F1', 'Genie', 'Genius', 'Links', 'Merlin', 'Peedy', 'Rocky', 'Rover']
-      default: 'nee'
-      beschrijving: 'Verrijk uw ervaring op de stek met een van deze geweldige hulpjes.'
-    assistentGeluiden:
-      titel: 'Assistent Geluiden'
-      type: Enumeration
-      opties: ['ja', 'nee']
-      default: 'nee'
-      beschrijving: 'Stel in of de assistent geluid mag maken. Heeft alleen effect als een assistent geselecteerd is.'
     fx:
       titel: 'Effect'
       type: Enumeration
