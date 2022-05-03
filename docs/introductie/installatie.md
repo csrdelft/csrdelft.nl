@@ -56,7 +56,7 @@ Maak een account aan op [GitHub](https://github.com) als je dat nog niet eerder 
 
 *Ben je geen lid van de PubCie, [maak een fork van de stek](https://github.com/csrdelft/csrdelft.nl/fork)*
 
-Gebruik de GitHub Desktop client om `csrdelft/csrdelft.nl` te downloaden (of je eigen fork). Stel in dit programma ook je naam en email in (standaard waarden zijn meestal prima). Kijk goed in welke map de gedownloade code terecht komt, dit heb je later nodig. Standaard komt de code van GitHub Desktop in `C:\Users\feut\Documenten\GitHub\csrdelft.nl\` terecht.
+Gebruik de GitHub Desktop client om `csrdelft/csrdelft.nl` te clonen (of je eigen fork). Stel in dit programma ook je naam en email in (standaard waarden zijn meestal prima). Kijk goed in welke map de gedownloade code terecht komt, dit heb je later nodig. Standaard komt de code van GitHub Desktop in `C:\Users\feut\Documenten\GitHub\csrdelft.nl\` terecht.
 
 **Zorg ervoor dat de code in een map komt die niet met Google Drive of OneDrive gesynced wordt, anders zit deze straks vol.**
 
@@ -96,11 +96,15 @@ _Over installatie met docker kun je in het bestand [Docker](installatie-docker.m
 
 Start Wampserver op. Rechtsonderin bij de icoontjes verschijnt wampserver. Als je rechts of links klikt op dit icoontje krijg je verschillende menus te zien.
 
-Controleer of de database op MariaDB staat door links te klikken op het wampserver icoontje en te kijken of er een vinkje bij MariaDB staat. Als er een vinkje bij MySQL staat, rechtsklik dan op het wampserver icoontje en ga naar "Tools > Change default dbms" om de dbms op MariaDB te zetten.
+Controleer of de database op MariaDB staat door links te klikken op het wampserver icoontje en te kijken of er in de tweede blauwe balk bij 'Default DBMS:' MariaDB staat. Als in plaats daarvan MySQL aangegeven staat, rechtsklik dan op het wampserver icoontje en ga naar "Tools > Invert Default DBMS" om de dbms op MariaDB te zetten.
+
+Controleer of Wampserver met de juiste PHP versie staat ingesteld. Links klik op Wampserver icoontje > PHP > Version. Deze moet op versie 7.3.33 staan.
+
+Controleer of je PHP CLI op de juiste versie staat. Rechts klik op Wampserver icoontje > Tools > Change PHP CLI version. Ook deze moet op versie 7.3.33 staan.
 
 Open het wampserver menu en zet het vinkje bij `headers_module` onder Apache > Apache Modules.
 
-Ga naar [VirtualHost Management](http://localhost/add_vhost.php) in wampserver. Voeg hier een nieuwe virtualhost toe met de naam `dev-csrdelft.nl` en als path de `htdocs` map in de repository. Klik op opslaan en rechts-klik op het wampserver icoon rechtsonderin en klik op `Tools > Restart DNS`.
+Ga naar [VirtualHost Management](http://localhost/add_vhost.php) in wampserver. Voeg hier een nieuwe virtualhost toe met de naam `dev-csrdelft.nl` en als path de `htdocs` map in de repository. De VirtualHost by IP balk onderaan kan je leeg laten. Klik op opslaan en rechts-klik op het wampserver icoon rechtsonderin en klik op `Tools > Restart DNS`.
 
 > Als je de repository hebt gedownload in `C:\Users\feut\Documenten\GitHub\csrdelft.nl` zet dan de path op `C:/Users/feut/Documenten/GitHub/csrdelft.nl/htdocs` (let op de slashes).
 
@@ -213,7 +217,9 @@ php bin/console doctrine:database:drop --force
 
 ## Stap 3: Inloggen
 
-Om in te loggen op je teststek kun je de wachtwoord vergeten flow gebruiken. In de testomgeving worden berichten die eigenlijk een mail zouden zijn als melding weergegeven. Op deze manier kan je snel een nieuw wachtwoord aanmaken.
+De lokale stek open je met http://dev-csrdelft.nl in je browser. Het laden hiervan kan enige tijd duren. Vergeet niet dat wampserver aan moet staan.
+
+Om in te loggen op je teststek kun je de wachtwoord vergeten flow gebruiken. In de testomgeving worden berichten die eigenlijk een mail zouden zijn als melding weergegeven. Op deze manier kan je snel een nieuw wachtwoord aanmaken. Je kan ook gewoon je normale inlognaam en wachtwoord gebruiken.
 
 Op deze manier kun je ook inloggen op andere accounts, zonder SU (switch user) te gebruiken (meestal is SU genoeg).
 
