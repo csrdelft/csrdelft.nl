@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+				content="Website voor het 12e lustrum der Civitas Studiosorum Reformatorum onder het thema Tijdloos.">
+	<meta name="author" content="Job Kanis">
+
+	<title>Tijdloos - 12e lustrum</title>
+
+	{{ csrfMetaTag() }}
+
+	{{ js_asset('app') }}
+	{{ css_asset('thema-lustrum') }}
+	{{ css_asset('common') }}
+	{{ css_asset('lustrum') }}
+
+	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+	{{ js_asset('sentry') }}
+
+	<link rel="icon" href="/lustrum12/favicon.ico">
+</head>
+
+<body class="zijbalk_verborgen">
+	{%  include 'lustrum12/zandloper.html.twig' %}
+
+	{{ cms('lustrum-activiteiten-slotactiviteit') }}
+{#	<nav class="site-header">#}
+{#		<a class="logo-titel d-inline-block" href="./">#}
+{#			<img src="/images/lustrum12/themaheader.png"#}
+{#					 alt="Logo menu" />#}
+{#		</a>#}
+{#		<div class="container">#}
+{#			<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">#}
+{#				<a class="d-none d-md-inline-block" href="./">Home</a>#}
+{#				<a class="d-none d-md-inline-block" href="#top">Top</a>#}
+{#				<a class="d-none d-md-inline-block" href="#beschrijving">Beschrijving</a>#}
+{#				<a class="d-none d-md-inline-block" href="#poster">Poster</a>#}
+{#				<a class="d-none d-md-inline-block" href="#ketzers">Ketzer</a>#}
+{#			</div>#}
+{#		</div>#}
+{#	</nav>#}
+
+{#	<div id="top" class="divider">#}
+{#		<img id="beschrijving" class="helemaal-boven" src="/images/lustrum12/DividerBoven.png" alt="">#}
+{#	</div>#}
+
+{#	<div class="beschrijving">#}
+{#		<h2 class="titel"> Slotactiviteit </h2>#}
+{#		<p>#}
+{#			Kom gezellig een drankje doen op het strand. Er zijn verschillende activiteiten en om 18 wordt er een bbq aangestoken. Alles bij elkaar kost 15 euro. Tot dan!#}
+{#		</p>#}
+{#		<h4 class="titel"> Even praktisch: </h4>#}
+{#		<p>Datum: 6 oktober 2021</p>#}
+{#		<p>Tijd: vanaf 15:00, bbq om 19:00</p>#}
+{#		<p>Locatie: Scheveningen</p>#}
+{#		<p>Kosten: 15 euro</p>#}
+{#		<p>Wordt lit</p>#}
+{#	</div>#}
+
+{#	<div id="ketzers" class="ketzers">#}
+{#		<div class="ketzers-container">#}
+{#				[activiteit=11828]#}
+{#		</div>#}
+{#	</div>#}
+
+{#	<div class="divider"><img class="tussen" src="/images/lustrum12/DividerTussen.png" alt=""></div>#}
+
+{#	<div  id="poster" class="poster">#}
+{#		<h2 class="titel"> Poster </h2>#}
+{#		<img src="https://csrdelft.nl/forum/plaatjes/bekijken/b04971b2d6089dd80c1cd313b52e0a99?resized=1" alt="Logo menu" />#}
+{#	</div>#}
+
+{#	<div class="divider">#}
+{#		<img class="onder" src="/images/lustrum12/DividerOnder.png" alt="">#}
+{#	</div>#}
+
+</body>
