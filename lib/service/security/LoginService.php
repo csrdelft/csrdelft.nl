@@ -79,6 +79,7 @@ class LoginService {
 	/**
 	 * @param string $permission
 	 * @param array|null $allowedAuthenticationMethods
+	 * @deprecated Gebruik _mag
 	 *
 	 * @return bool
 	 */
@@ -94,27 +95,35 @@ class LoginService {
 
 	/**
 	 * @return string
+	 * @deprecated Gebruik _getUid
 	 */
 	public static function getUid() {
-		if (isCli()) {
+		return ContainerFacade::getContainer()->get(LoginService::class)->_getUid();
+	}
+
+	public function _getUid() {
+		if (isCLI()) {
 			return static::$cliUid;
 		}
 
-		$account = static::getAccount();
+		$token = $this->security->getToken();
 
-		if ($account) {
-			return $account->uid;
+		if (!$token) {
+			return self::UID_EXTERN;
 		}
 
-		return self::UID_EXTERN;
+		return $token->getUserIdentifier();
 	}
 
 	/**
 	 * @return UserInterface|Account|null
 	 */
 	public static function getAccount() {
-		return ContainerFacade::getContainer()->get('security')->getUser()
-			?? ContainerFacade::getContainer()->get(AccountRepository::class)->find(self::UID_EXTERN);
+		return ContainerFacade::getContainer()->get(LoginService::class)->_getAccount();
+	}
+
+	public function _getAccount() {
+		return $this->security->getUser() ?? $this->accountRepository->find(self::UID_EXTERN);
 	}
 
 	/**
@@ -128,10 +137,6 @@ class LoginService {
 		return null;
 	}
 
-	public static function isExtern() {
-		return !LoginService::mag(P_LOGGED_IN);
-	}
-
 	/**
 	 * Indien de huidige gebruiker is geauthenticeerd door middel van een token in de url
 	 * worden Permissies hierdoor beperkt voor de veiligheid.
@@ -139,7 +144,7 @@ class LoginService {
 	 * @see AccessService::mag()
 	 */
 	public function getAuthenticationMethod() {
-		if (isCli()) {
+		if (isCLI()) {
 			return AuthenticationMethod::password_login;
 		}
 

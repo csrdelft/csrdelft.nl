@@ -4,11 +4,9 @@
 namespace CsrDelft\controller;
 
 
-use CsrDelft\common\ShutdownHandler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Throwable;
 
@@ -17,24 +15,11 @@ class ErrorController extends AbstractController {
 	use TargetPathTrait;
 
 	public function handleException(RequestStack $requestStack, Throwable $exception) {
-		$request = $requestStack->getMasterRequest();
+		$request = $requestStack->getMainRequest();
 
 		$statusCode = 500;
 		if (method_exists($exception, 'getStatusCode')) {
 			$statusCode = $exception->getStatusCode();
-		}
-
-		if (!in_array($statusCode, [
-				Response::HTTP_BAD_REQUEST,
-				Response::HTTP_NOT_FOUND,
-				Response::HTTP_FORBIDDEN,
-				Response::HTTP_METHOD_NOT_ALLOWED,
-			]) &&
-			!in_array(get_class($exception), [
-				AccessDeniedException::class
-			])) {
-			ShutdownHandler::emailException($exception);
-			ShutdownHandler::slackException($exception);
 		}
 
 		if ($request->getMethod() == 'POST') {

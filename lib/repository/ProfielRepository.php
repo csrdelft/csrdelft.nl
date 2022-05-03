@@ -20,7 +20,6 @@ use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
-use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\MailService;
 use CsrDelft\service\security\LoginService;
 use DateTime;
@@ -272,7 +271,7 @@ class ProfielRepository extends AbstractRepository {
 		$geenAboEnCorveeVoor = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Commissie, LidStatus::Overleden);
 		if (in_array($profiel->status, $geenAboEnCorveeVoor)) {
 			//maaltijdabo's uitzetten (R_ETER is een S_NOBODY die toch een abo mag hebben)
-			$account = AccountRepository::get($profiel->uid);
+			$account = $profiel->account;
 			if (!$account || $account->perm_role !== AccessRole::Eter) {
 				$removedabos = $this->disableMaaltijdabos($profiel, $oudestatus);
 				$changes = array_merge($changes, $removedabos);

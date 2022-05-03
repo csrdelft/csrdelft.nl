@@ -51,4 +51,10 @@ class OneTimeToken {
 	 * @ORM\Column(type="boolean")
 	 */
 	public $verified;
+	/**
+	 * @var Account|null
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\security\Account")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid", nullable=true)
+	 */
+	public $account;
 }

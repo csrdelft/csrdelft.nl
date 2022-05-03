@@ -12,6 +12,19 @@ Er is een php wrapper voor datatables gebouwd om deze met php te kunnen op bouwe
 
 Zie `initDataTable` in `datatable/api.ts` voor de initializatie code van DataTables. Deze ontvangt een settings object vanuit de php, dit settingsobject wordt gemaakt in de [`DataTable`](https://github.com/csrdelft/csrdelft.nl/blob/master/lib/view/datatable/DataTable.php) klasse. De datatables api is heel erg declaratief waardoor dit op een elegante manier kan gebeuren.
 
+## Werking
+
+In een notendop werken datatabellen op de volgende manier:
+- De `DataTable` (oud) óf `DataTableBuilder` (nieuw) genereerd een JSON waarde met configuratie voor datatabellen, zie [datatables.net](https://datatables.net/reference/option/) voor alle mogelijke opties.
+- Er wordt een html tag gemaakt met een specifieke klasse `ctx-datatable` en een `data-settings` attribuut die de gegeneerde opties json bevat.
+- `initDataTable` (`assets/js/datatable/api.ts`) wordt aangeroepen voor iedere `ctx-datatable`, deze functie initialiseert een nieuwe datatabel
+- Datatabellen zijn op verschillende plekken uitgebreid
+  - extensie `dataTables.childRow.ts` om een regel uit te klappen met nog wat inhoud (nog een datatabel bijvoorbeeld)
+  - extensie `dataTables.columnGroup.ts` om te kunnen groeperen op een specifieke kolom
+  - extensie `dataTables.rowButton.ts` om knoppen op een datatabel regel te kunnen hebben
+  - custom renders in `render.ts` zie [Renders](#renders)
+  - custom knoppen in `buttons.ts` zie [Knoppen](#knoppen)
+
 ## API
 
 Het bestand [`api.ts`](https://github.com/csrdelft/csrdelft.nl/blob/master/assets/js/datatable/api.ts) is losgetrokken omdat anders de externe stek op datatables zou leunen terwijl dat niet nodig is. Er zijn een aantal functies in de knoppen code die datatables gebruikt en die worden ook op de externe stek geladen, maar de externe stek heeft geen datatables.
@@ -59,3 +72,17 @@ De volgende opties zijn er om knoppen eigenschappen te geven.
   * Gebruik deze in plaats van `collection`.
 
 ![2017-02-04_18-38-22](https://cloud.githubusercontent.com/assets/589651/22620306/2a9f66fc-eb09-11e6-8965-371d704152f2.gif)
+
+## Renders
+
+- default, zorgt ervoor dat de juiste weergave van de data wordt gekozen (sort, export, default)
+- bedrag, format een bedrag van 0000 naar €0,00
+- check, laat een vinkje of kruisje zien voor een boolean
+- aanmeldFilter, custom html voor maaltijden
+- aanmeldingen, custom voor maaltijden
+- totaalPrijs, custom voor maaltijden
+- date, format een datum
+- time, format een tijd
+- datetime, format een datum en tijd
+- timeago, format als tijd sinds nu (met js)
+- filesize, format een bestandsgrootte in bytes.

@@ -86,4 +86,22 @@ class LidInstellingenController extends AbstractController {
 		return new JsonResponse(true);
 	}
 
+	/**
+	 * @Route("/instellingen/reset/mijn", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function resetUser() {
+		$account = $this->getUser();
+
+		if (!$account) {
+			setMelding("Geen account", -1);
+			return new Response($this->redirectToRoute('csrdelft_lidinstellingen_beheer')->getTargetUrl());
+		}
+
+		$this->lidInstellingenRepository->resetForUser($account->profiel);
+
+		setMelding("Instellingen terug gezet", 1);
+		return new Response($this->redirectToRoute('csrdelft_lidinstellingen_beheer')->getTargetUrl());
+	}
+
 }

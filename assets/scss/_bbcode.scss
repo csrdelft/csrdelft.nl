@@ -561,9 +561,9 @@ Speciale styling voor speciale maaltijdsoorten
 */
 .bb-maaltijd[data-maaltijdnaam='Verticalekring Primitus'] {
   background-color: #00541b;
-  background-image: url("/plaetjes/maaltijdstijlen/rand.png");
+  background-image: url("https://csrdelft.nl/plaetjes/maaltijdstijlen/rand.png");
   border: solid 10px #030;
-  border-image: url("/plaetjes/maaltijdstijlen/rand.png") 50;
+  border-image: url("https://csrdelft.nl/plaetjes/maaltijdstijlen/rand.png") 50;
   color: #cfc;
 
   .titel a {
@@ -571,7 +571,7 @@ Speciale styling voor speciale maaltijdsoorten
   }
   @media screen and (min-width: 500px) and (max-width: 767px), screen and (min-width: 1150px) {
     &::after {
-      background: url("/plaetjes/maaltijdstijlen/primituslogo.png") no-repeat;
+      background: url("https://csrdelft.nl/plaetjes/maaltijdstijlen/primituslogo.png") no-repeat;
       height: 80px;
       width: 54px;
       content: "";

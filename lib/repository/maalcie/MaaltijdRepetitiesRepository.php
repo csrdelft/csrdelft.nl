@@ -87,7 +87,7 @@ class MaaltijdRepetitiesRepository extends AbstractRepository {
 			$this->_em->persist($repetitie);
 			$this->_em->flush();
 			if (!$repetitie->abonneerbaar) { // niet (meer) abonneerbaar
-				$abos = ContainerFacade::getContainer()->get(MaaltijdAbonnementenRepository::class)->verwijderAbonnementen($repetitie->mlt_repetitie_id);
+				$abos = ContainerFacade::getContainer()->get(MaaltijdAbonnementenRepository::class)->verwijderAbonnementen($repetitie);
 			}
 			return $abos;
 		});
@@ -108,7 +108,7 @@ class MaaltijdRepetitiesRepository extends AbstractRepository {
 			$maaltijdenRepository->verwijderRepetitieMaaltijden($repetitie->mlt_repetitie_id); // delete maaltijden first (foreign key)
 			throw new CsrGebruikerException('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
-		$aantalAbos = ContainerFacade::getContainer()->get(MaaltijdAbonnementenRepository::class)->verwijderAbonnementen($repetitie->mlt_repetitie_id);
+		$aantalAbos = ContainerFacade::getContainer()->get(MaaltijdAbonnementenRepository::class)->verwijderAbonnementen($repetitie);
 		$this->_em->remove($repetitie);
 		$this->_em->flush();
 		return $aantalAbos;

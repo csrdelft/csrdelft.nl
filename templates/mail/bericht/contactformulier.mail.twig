@@ -6,7 +6,13 @@ Type: {{ typeaanduiding }}
 Naam: {{ naam }}
 E-mail: {{ email }}
 Telefoon: {{ telefoon }}
-{{ datums }}
+
+Opmerking: {{ opmerking }}
+
+{% if eten is not empty %}
+Eten: {{ eten }}
+Eetwens: {{ eetwens }}
+{% endif %}
 
 Met amicale groet,
 Uw PubCie

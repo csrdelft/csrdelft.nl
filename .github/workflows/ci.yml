@@ -20,10 +20,11 @@ jobs:
         with:
           path: |
             .yarn
-            .pnp.js
+            .pnp.cjs
+            .pnp.loader.mjs
             !.yarn/.cache
           # De cache wordt alleen naderhand opgeslagen als yarn.lock veranderd is
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
           # De cache wordt opgehaald als os hetzelfde is (altijd)
           restore-keys: ${{ runner.os }}-yarn-
 
@@ -36,9 +37,9 @@ jobs:
         with:
           path: .yarn/.cache
           # De cache wordt alleen naderhand opgeslagen als yarn.lock + alle assets zijn veranderd
-          key: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('assets/**') }}
+          key: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}-${{ hashFiles('assets/**') }}
           # De cache wordt opgehaald als yarn.lock niet veranderd is
-          restore-keys: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock') }}-
+          restore-keys: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}-
 
       - name: 🔧 Run yarn build
         run: yarn run production

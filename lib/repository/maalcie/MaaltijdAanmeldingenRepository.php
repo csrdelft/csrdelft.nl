@@ -42,11 +42,16 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 * @var AccessService
 	 */
 	private $accessService;
+	/**
+	 * @var AccountRepository
+	 */
+	private $accountRepository;
 
-	public function __construct(ManagerRegistry $registry, CiviSaldoRepository $civiSaldoRepository, AccessService $accessService) {
+	public function __construct(ManagerRegistry $registry, CiviSaldoRepository $civiSaldoRepository, AccessService $accessService, AccountRepository $accountRepository) {
 		parent::__construct($registry, MaaltijdAanmelding::class);
 		$this->civiSaldoRepository = $civiSaldoRepository;
 		$this->accessService = $accessService;
+		$this->accountRepository = $accountRepository;
 	}
 
 	/**
@@ -134,7 +139,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 * @throws CsrGebruikerException Als de gebruiker niet bestaat
 	 */
 	public function checkAanmeldFilter($uid, $filter) {
-		$account = AccountRepository::get($uid); // false if account does not exist
+		$account = $this->accountRepository->find($uid); // false if account does not exist
 		if (!$account) {
 			throw new CsrGebruikerException('Lid bestaat niet: $uid =' . $uid);
 		}

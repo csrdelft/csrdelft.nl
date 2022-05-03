@@ -161,8 +161,8 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 		});
 	}
 
-	public function getAbonnementenVoorRepetitie($mrid) {
-		return $this->findBy(['mlt_repetitie_id' => $mrid]);
+	public function getAbonnementenVoorRepetitie(MaaltijdRepetitie $repetitie) {
+		return $this->findBy(['maaltijd_repetitie' => $repetitie]);
 	}
 
 	/**
@@ -226,7 +226,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 				$abo->maaltijd_repetitie = $repetitie;
 				$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
 				$abo->uid = $noviet->uid;
-				$abo->wanneer_ingeschakeld = date('Y-m-d H:i');
+				$abo->wanneer_ingeschakeld = date_create_immutable();
 
 				if ($this->find(['mlt_repetitie_id' => $abo->mlt_repetitie_id, 'uid' => $abo->uid])) {
 					continue;
@@ -283,9 +283,9 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @return int amount of deleted abos
 	 * @throws Throwable
 	 */
-	public function verwijderAbonnementen($mrid) {
+	public function verwijderAbonnementen(MaaltijdRepetitie $mrid) {
 		return $this->_em->transactional(function () use ($mrid) {
-			$abos = $this->findBy(['mlt_repetitie_id' => $mrid]);
+			$abos = $this->findBy(['maaltijd_repetitie' => $mrid]);
 			$aantal = count($abos);
 			foreach ($abos as $abo) {
 				$this->maaltijdAanmeldingenRepository->afmeldenDoorAbonnement($mrid, $abo->uid);

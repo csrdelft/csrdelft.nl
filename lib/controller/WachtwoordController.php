@@ -9,6 +9,7 @@ use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\service\AccessService;
+use CsrDelft\service\AccountService;
 use CsrDelft\service\MailService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\WachtwoordResetAuthenticator;
@@ -27,10 +28,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class WachtwoordController extends AbstractController {
 	/**
-	 * @var LoginService
-	 */
-	private $loginService;
-	/**
 	 * @var AccountRepository
 	 */
 	private $accountRepository;
@@ -46,19 +43,23 @@ class WachtwoordController extends AbstractController {
 	 * @var MailService
 	 */
 	private $mailService;
+	/**
+	 * @var AccountService
+	 */
+	private $accountService;
 
 	public function __construct(
-		LoginService $loginService,
 		AccountRepository $accountRepository,
+		AccountService $accountService,
 		OneTimeTokensRepository $oneTimeTokensRepository,
 		AccessService $accessService,
 		MailService $mailService
 	) {
-		$this->loginService = $loginService;
 		$this->accountRepository = $accountRepository;
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 		$this->accessService = $accessService;
 		$this->mailService = $mailService;
+		$this->accountService = $accountService;
 	}
 
 	/**
@@ -78,7 +79,7 @@ class WachtwoordController extends AbstractController {
 		if ($form->validate()) {
 			// wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
-			$this->accountRepository->wijzigWachtwoord($account, $pass_plain);
+			$this->accountService->wijzigWachtwoord($account, $pass_plain);
 			setMelding('Wachtwoord instellen geslaagd', 1);
 		}
 		return $this->render('default.html.twig', ['content' => $form]);
@@ -152,7 +153,7 @@ class WachtwoordController extends AbstractController {
 				$this->oneTimeTokensRepository->discardToken($account->uid, '/wachtwoord/reset');
 			}
 
-			$token = $this->oneTimeTokensRepository->createToken($account->uid, '/wachtwoord/reset');
+			$token = $this->oneTimeTokensRepository->createToken($account, '/wachtwoord/reset');
 			// stuur resetmail
 			$this->verzendResetMail($account, $token);
 

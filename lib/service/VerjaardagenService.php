@@ -98,7 +98,7 @@ FROM (
     FROM (
         SELECT profielen.*, ADDDATE(gebdatum, INTERVAL YEAR(NOW()) - YEAR(gebdatum) YEAR) AS verjaardag
         FROM profielen
-        WHERE NOT gebdatum = '0000-00-00' AND status IN ($lidstatus)
+        WHERE status IN ($lidstatus)
         {$this->getNovietenFilter()}
         ) AS T1
     ) AS T2
@@ -136,7 +136,7 @@ FROM (
     FROM (
         SELECT profielen.*, ADDDATE(gebdatum, INTERVAL YEAR(DATE(:van_datum)) - YEAR(gebdatum) YEAR) AS verjaardag
         FROM profielen
-        WHERE NOT gebdatum = '0000-00-00' AND status IN ($lidstatus)
+        WHERE status IN ($lidstatus)
         {$this->getNovietenFilter()}
         ) AS T1
     ) AS T2

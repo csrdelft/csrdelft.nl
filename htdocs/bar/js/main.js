@@ -48,6 +48,8 @@ $(function () {
 
 		var now = new Date();
 		var isStartkamp = new Date("2021-08-27") < now && new Date("2021-08-30") > now;
+		// Feestmodus: niemand mag rood komen te staan
+		var isFeestmodus = new Date("2022-04-21") < now && new Date("2022-04-23") > now;
 
     /**
      * Deze persoon is geselecteerd, dit wordt oa. gebruikt bij de invoer van bestellingen, inleg en laden van de bestellingen van die persoon.
@@ -384,6 +386,8 @@ $(function () {
 
 				zetBericht("Oudleden kunnen niet rood staan, inleg vereist!", "danger");
 
+			} else if (isFeestmodus && toRed) {
+				zetBericht("Lid heeft niet genoeg saldo. Stuur naar PIN-rij.", "danger");
 			} else if (selectedPerson && !emptyOrder) {
 
 				if(!warningGiven && toRed) {

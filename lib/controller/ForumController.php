@@ -284,10 +284,10 @@ class ForumController extends AbstractController {
 			throw $this->createNotFoundException();
 		}
 
-		if (LoginService::isExtern()) {
-			$concept = $requestStack->getSession()->remove('forum_bericht');
-		} else {
+		if ($this->getUser()) {
 			$concept = $this->forumDradenReagerenRepository->getConcept($deel);
+		} else {
+			$concept = $requestStack->getSession()->remove('forum_bericht');
 		}
 		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
@@ -327,10 +327,10 @@ class ForumController extends AbstractController {
 			$this->forumDradenRepository->setHuidigePagina((int)$pagina, $deel->forum_id);
 		}
 
-		if (LoginService::isExtern()) {
-			$concept = $requestStack->getSession()->remove('forum_bericht');
-		} else {
+		if ($this->getUser()) {
 			$concept = $this->forumDradenReagerenRepository->getConcept($deel);
+		} else {
+			$concept = $requestStack->getSession()->remove('forum_bericht');
 		}
 		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
@@ -393,10 +393,10 @@ class ForumController extends AbstractController {
 			$this->forumPostsRepository->setHuidigePagina((int)$pagina, $draad->draad_id);
 		}
 
-		if (LoginService::isExtern()) {
-			$concept = $requestStack->getSession()->remove('forum_bericht');
-		} else {
+		if ($this->getUser()) {
 			$concept = $this->forumDradenReagerenRepository->getConcept($draad->deel, $draad->draad_id);
+		} else {
+			$concept = $requestStack->getSession()->remove('forum_bericht');
 		}
 		$view = $this->render('forum/draad.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),

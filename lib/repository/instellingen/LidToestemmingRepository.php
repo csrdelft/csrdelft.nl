@@ -45,17 +45,22 @@ class LidToestemmingRepository extends AbstractRepository {
 	 * @var RequestStack
 	 */
 	private $requestStack;
+	/**
+	 * @var LoginService
+	 */
+	private $loginService;
 
 	/**
 	 * @param ManagerRegistry $registry
 	 * @throws FileLoaderImportCircularReferenceException
 	 * @throws LoaderLoadException
 	 */
-	public function __construct(ManagerRegistry $registry, RequestStack $requestStack) {
+	public function __construct(ManagerRegistry $registry, RequestStack $requestStack, LoginService $loginService) {
 		parent::__construct($registry, LidToestemming::class);
 
 		$this->load('instellingen/toestemming.yaml', new InstellingConfiguration());
 		$this->requestStack = $requestStack;
+		$this->loginService = $loginService;
 	}
 
 	/**
@@ -105,7 +110,7 @@ class LidToestemmingRepository extends AbstractRepository {
 			return true;
 		}
 
-		$uid = LoginService::getUid();
+		$uid = $this->loginService->_getUid();
 
 		$modules = [self::MODULE_ALGEMEEN, self::MODULE_INTERN, self::MODULE_PROFIEL];
 
@@ -121,15 +126,15 @@ class LidToestemmingRepository extends AbstractRepository {
 	}
 
 	public function toestemming($profiel, $id, $cat = 'profiel', $except = P_LEDEN_MOD) {
-		if (!LoginService::mag(P_LEDEN_READ)) {
+		if (!$this->loginService->_mag(P_LEDEN_READ)) {
 			return false;
 		}
 
-		if ($profiel->uid == LoginService::getUid()) {
+		if ($profiel->uid == $this->loginService->_getUid()) {
 			return true;
 		}
 
-		if (LoginService::mag($except)) {
+		if ($this->loginService->_mag($except)) {
 			return true;
 		}
 
@@ -143,11 +148,11 @@ class LidToestemmingRepository extends AbstractRepository {
 	}
 
 	public function toestemmingUid($uid, $id, $except = P_LEDEN_MOD) {
-		if ($uid == LoginService::getUid()) {
+		if ($uid == $this->loginService->_getUid()) {
 			return true;
 		}
 
-		if (LoginService::mag($except)) {
+		if ($this->loginService->_mag($except)) {
 			return true;
 		}
 
@@ -202,7 +207,7 @@ class LidToestemmingRepository extends AbstractRepository {
 
 	protected function getToestemming($module, $id, $uid = null) {
 		if ($uid == null) {
-			$uid = LoginService::getUid();
+			$uid = $this->loginService->_getUid();
 		}
 		$instelling = $this->findOneBy([self::FIELD_MODULE => $module, self::FIELD_INSTELLING => $id, self::FIELD_UID => $uid]);
 		if ($this->hasKey($module, $id)) {
