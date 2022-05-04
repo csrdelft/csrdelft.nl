@@ -1847,15 +1847,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clippyjs@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "clippyjs@npm:0.0.3"
-  dependencies:
-    jquery: ^3.2.1
-  checksum: 50968e6a368d8419e48fa512821aebd3087de244a1bb29aa4ef62ea18d9e832a43992813185acc57a9a24b1701508ba91b9a272eeec0f8cd24fd1c2bd911f798
-  languageName: node
-  linkType: hard
-
 "clone-deep@npm:^4.0.1":
   version: 4.0.1
   resolution: "clone-deep@npm:4.0.1"
@@ -3708,7 +3699,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"jquery@npm:>=1.11, jquery@npm:>=1.7, jquery@npm:>=1.8, jquery@npm:^3.2.1, jquery@npm:^3.3.1, jquery@npm:^3.4":
+"jquery@npm:>=1.11, jquery@npm:>=1.7, jquery@npm:>=1.8, jquery@npm:^3.3.1, jquery@npm:^3.4":
   version: 3.5.1
   resolution: "jquery@npm:3.5.1"
   checksum: 813047b852511ca1ecfaa7b2568aba1d7270a92e5c74962b308792a401adf041869a3b2a6858b0b7a02f6684947fb93171e40cbb4460831977a937b40b0e15ce
@@ -5620,7 +5611,6 @@ fsevents@~2.3.1:
     bootstrap: ^5.0.0
     bootstrap-vue: ^2.0.0-rc.11
     chart.js: ^2.7.3
-    clippyjs: ^0.0.3
     corejs-typeahead: ^1.2.1
     cross-env: ^7.0.3
     css-loader: ^6.7.1

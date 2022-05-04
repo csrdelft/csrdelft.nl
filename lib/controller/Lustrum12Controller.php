@@ -128,4 +128,12 @@ class Lustrum12Controller extends AbstractController
 		return $this->render('lustrum12/lustrumreis.html.twig');
 	}
 
+	/**
+	 * @return Response
+	 * @Route("/tijdloos/slotactiviteit")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function hoogtijd() {
+		return $this->render('lustrum12/slotactiviteit.html.twig');
+	}
 }
