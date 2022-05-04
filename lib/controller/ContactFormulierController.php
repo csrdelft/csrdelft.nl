@@ -114,6 +114,7 @@ De PubCie.
 		$slapen = filter_input(INPUT_POST, "slapen", FILTER_SANITIZE_STRING);
 		$opmerking = filter_input(INPUT_POST, "opmerking", FILTER_SANITIZE_STRING);
 
+
 		if ($this->isSpam($naam, $email, $telefoon, $eten, $eetwens, $opmerking)) {
 			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
 		}
