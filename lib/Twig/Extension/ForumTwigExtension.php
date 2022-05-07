@@ -134,7 +134,7 @@ class ForumTwigExtension extends AbstractExtension {
 		$txtNext = '>';
 		$txtSkip = '…';
 		$cssClass = '';
-		$showPrevNext = false;
+		$showPrevNext = true;
 
 		/* Import parameters */
 		extract($params);
@@ -192,7 +192,12 @@ class ForumTwigExtension extends AbstractExtension {
 		$retval = '';
 		$cssClass = $cssClass ? 'class="' . $cssClass . '"' : '';
 		if ($curpage > 1 && $showPrevNext) {
-			$retval .= '<li class="page-item"><a class="page-link" href="' . $baseurl . ($curpage - 1) . $urlAppend . '" ' . $cssClass . '>' . $txtPrev . '</a></li>';
+			if ($txtPrev != '<') {
+				$retval .= '<li class="page-item"><a class="page-link" href="' . $baseurl . ($curpage - 1) . $urlAppend . '" ' . $cssClass . '>' . $txtPrev . '</a></li>';
+			} else {
+				$retval .= '<li class="page-item"><a class="page-link" href="' . $baseurl . ($curpage - 1) . $urlAppend . '" ' . $cssClass . ' aria-label="Vorige"><i class="fas fa-chevron-left"></i></a></li>';
+			}
+
 			$retval .= $separator;
 		}
 		if ($links[0] != 1) {
@@ -224,7 +229,12 @@ class ForumTwigExtension extends AbstractExtension {
 		}
 		if ($curpage != $pagecount && $showPrevNext) {
 			$retval .= $separator;
-			$retval .= '<li class="page-item"><a class="page-link" href="' . $baseurl . ($curpage + 1) . $urlAppend . '" ' . $cssClass . '>' . $txtNext . '</a></li>';
+
+			if ($txtNext != '>') {
+				$retval .= '<li class="page-item"><a class="page-link" href="' . $baseurl . ($curpage + 1) . $urlAppend . '" ' . $cssClass . '>' . $txtNext . '</a></li>';
+			} else {
+				$retval .= '<li class="page-item"><a class="page-link" href="' . $baseurl . ($curpage + 1) . $urlAppend . '" ' . $cssClass . ' aria-label="Volgende"><i class="fas fa-chevron-right"></i></a></li>';
+			}
 		}
 		return $retval;
 	}

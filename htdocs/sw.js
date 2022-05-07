@@ -75,9 +75,24 @@ self.addEventListener(
 		console.log('On notification click: ', event.notification.tag);
 
 		event.notification.close();
-		if (clients.openWindow) {
-			clients.openWindow(event.notification.data);
-		}
+		
+		const url = event.notification.data;
+		event.waitUntil( 
+			// Check of de pagina open is
+			clients.matchAll().then((matchedClients) => {
+				for (let client of matchedClients) { 
+					if (client.url.indexOf(url) >= 0) { 
+						return client.focus();
+					} 
+				}
+
+				// Als pagina niet open is, open het
+				return clients.openWindow(url).then(
+				function (client) {
+					client.focus();
+				});
+			})
+		);
 	},
 	false
 );
