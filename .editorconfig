@@ -22,5 +22,3 @@ indent_style = space
 
 [*.scss]
 quote_type = double
-indent_style = tab
-indent_size = 4
