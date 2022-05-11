@@ -1,6 +1,8 @@
 i.fas,
 i.fab {
+	&:not(.neus2013) {
 	margin-right: $spacer * 0.25;
+	}
 }
 
 .translate-begin {
@@ -198,56 +200,15 @@ span.curpage {
 
 /* Forum deel */
 .forum-deel {
-	display: grid;
-	width: 100%;
-	grid-template-columns: 1fr auto auto;
-	// CSS grid ondersteund niet echt gekleurde rows.
-	// Dit is second-best. Er zijn 3 divs per row,
-	// iedere 6e moet een kleurtje krijgen, en de divs daarna.
-	.alternate-row {
-		padding: 0.7em;
-		&:nth-child(6n +1),
-		&:nth-child(6n + 2),
-		&:nth-child(6n + 3) {
-			background-color: $forum-bericht1-bg;
+	a {
+		&:not(:hover) {
+			text-decoration: none;
+		}
+	
+		&.badge {
+			background-color: $gray-500;
 		}
 	}
-
-	a:not(:hover) {
-		text-decoration: none;
-	}
-
-	.paging,
-	.meldingen,
-	.forumdeel-omschrijving,
-	.forum-posten,
-	.forum-reageren {
-		grid-column: 1 / span 3;
-	}
-
-	.paging,
-	.header {
-		font-weight: bold;
-		color: $white;
-		background-color: $primary;
-		padding: 1em;
-
-		a, a:hover {
-			color: white;
-		}
-	}
-}
-
-.forumdeel-omschrijving {
-	padding: 10px;
-	margin: 10px 0;
-	background-color: $gray-100;
-	border: 1px solid $gray-500;
-}
-
-.forumheadbtn {
-	float: right;
-	margin-right: 15px;
 }
 
 /* Forum Categorie */

@@ -5,10 +5,6 @@
 $primary: #122a4d !default;
 $secondary: #e59200 !default;
 
-/* Variabelen uit Bootstrap */
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/_variables";
-
 /* kleuren */
 $white: #fff !default;
 $gray-100: #f8f9fa !default;
@@ -37,7 +33,7 @@ $success: $green !default;
 $info: $cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
-$light: $gray-100 !default;
+$light: $gray-200 !default;
 $dark: $gray-800 !default;
 
 $body-bg: $gray-100 !default;
@@ -91,3 +87,7 @@ $tabel-regel-donker: $gray-200 !default;
 // geen breadcrumb bg, ziet er lelijk uit op cms pagina's
 $footer-background: $gray-100 !default;
 $maaltijdketzer-bg: $white !default;
+
+/* Variabelen uit Bootstrap */
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/_variables";

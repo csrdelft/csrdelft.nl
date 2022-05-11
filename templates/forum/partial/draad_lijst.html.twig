@@ -6,9 +6,8 @@
 	{% set urlHash = '' %}
 {% endif %}
 
-<a
-	class="list-group-item list-group-item-action px-0 position-relative"
-	href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}"
+<div
+	class="list-group-item px-0 position-relative"
 >
 	<span class="position-absolute top-50 start-0 translate-begin">
 		{% if draad.belangrijk %}
@@ -23,15 +22,15 @@
 	<div class="d-flex justify-content-between align-items-center ps-24">
 		<span>
 			{% set ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave') %}
-			<span id="{{ draad.draad_id }}" {% if app.user and draad.ongelezen %}class="{{ ongelezenWeergave }}"{% endif %}>
+			<a id="{{ draad.draad_id }}" {% if app.user and draad.ongelezen %}class="{{ ongelezenWeergave }}"{% endif %}
+				href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}">
 				{{ draad.titel | raw }}
-			</span>
+			</a>
 
-			<span
-				class="badge bg-gray-500 text-white mx-1"
-			>
+			<a href="{{ url('csrdelft_forum_deel', {forum_id: draad.deel.forum_id}) }}"
+					class="badge text-white mx-1">
 				{{ draad.deel.titel }}
-			</span>
+			</a>
 		</span>
 
 		<p class="text-black-50 m-0 fw-light">
@@ -44,7 +43,7 @@
 	</div>
 	<div class="d-flex justify-content-between align-items-center ps-24">
 		<p class="text-black-50 m-0 fw-light">
-			<span class="text-dark">{{ get_profiel(draad.laatste_wijziging_uid).getTitel() | raw }}:</span>
+			<span class="text-dark">{{ get_profiel(draad.laatste_wijziging_uid).link('user') | raw }}:</span>
 			An item
 		</p>
 
@@ -57,4 +56,4 @@
 		</span>
 		{% endif %}
 	</div>
-</a>
+</div>
