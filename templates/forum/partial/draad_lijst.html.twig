@@ -42,9 +42,9 @@
 		</p>
 	</div>
 	<div class="d-flex justify-content-between align-items-center ps-24">
-		<p class="text-black-50 m-0 fw-light">
+		<p class="text-black-50 m-0 fw-light text-truncate">
 			<span class="text-dark">{{ get_profiel(draad.laatste_wijziging_uid).link('user') | raw }}:</span>
-			An item
+			{{ draadGetLaatstePost(draad.draad_id) | raw }}
 		</p>
 
 		{% if app.user and draad.aantalOngelezenPosts > 0 %}

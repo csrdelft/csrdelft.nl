@@ -41,6 +41,7 @@ class ForumTwigExtension extends AbstractExtension {
 			new TwigFunction('getBelangrijkOpties', [$this, 'getBelangrijkOpties']),
 			new TwigFunction('draadGetAantalPaginas', [$this, 'draadGetAantalPaginas']),
 			new TwigFunction('draadGetHuidigePagina', [$this, 'draadGetHuidigePagina']),
+			new TwigFunction('draadGetLaatstePost', [$this, 'draadGetLaatstePost']),
 		];
 	}
 
@@ -77,6 +78,10 @@ class ForumTwigExtension extends AbstractExtension {
 
 	public function draadGetHuidigePagina() {
 		return $this->forumPostsRepository->getHuidigePagina();
+	}
+
+	public function draadGetLaatstePost($draad_id) {
+		return $this->forumPostsRepository->findOneBy(['draad_id' => $draad_id, 'verwijderd' => false], ['datum_tijd' => 'DESC'])->tekst;
 	}
 
 	public function highlight_zoekterm($bericht, $zoekterm, $before = null, $after = null) {
