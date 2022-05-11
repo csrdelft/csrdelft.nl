@@ -19,6 +19,10 @@ i.fab {
 	}
 }
 
+.list-group-item {
+	background-color: transparent;
+}
+
 .draad-readonly {
 	font-style: italic;
 }
@@ -88,25 +92,18 @@ i.fab {
 }
 
 .forum-draad, .forum-zoeken {
-	display: flex;
-	flex-direction: column;
-
 	.tussenschot {
 		height: 2px;
 		margin: 0;
 		padding: 0;
-		background-color: $gray-300;
+		background-color: $gray-400;
 
 		&.ongelezenvanaf {
-			background-color: $ongelezen-lijn;
+			background-color: $secondary;
 		}
 	}
 
-	.forum-post,
-	.forum-posten {
-		display: flex;
-		flex-direction: row;
-
+	.forum-post {
 		.forumpostKnoppen {
 			min-height: 70px;
 
@@ -126,33 +123,17 @@ i.fab {
 			}
 		}
 
-		.forum-bericht {
-			flex: 1; /* grow */
+		.bewerkt {
+			font-size: 0.8em;
+			color: $gray-600;
 
-			margin: 0;
-			padding: 0.2em 0.6em 10px;
-			vertical-align: top;
-			text-align: justify;
-
-			.bewerkt {
-				font-size: 0.8em;
-				color: $gray-500;
-				a {
-					color: $gray-500;
-				}
-
-				hr {
-					margin-bottom: 0;
-					text-align: left;
-				}
+			a {
+				color: $gray-600;
 			}
 
-			&.bericht0 {
-				background-color: $forum-bericht0-bg;
-			}
-
-			&.bericht1 {
-				background-color: $forum-bericht1-bg;
+			hr {
+				margin-bottom: 0;
+				background-color: $gray-600;
 			}
 		}
 

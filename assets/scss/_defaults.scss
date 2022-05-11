@@ -55,12 +55,11 @@ $lichtblauw: #4e698b;
 $zindex-menu: 1000 !default;
 
 /* bbcode */
-$bb-block-bg: #f5f5f5 !default;
+$bb-block-bg: $gray-100 !default;
 
 /* forum */
 $forum-bericht0-bg: $body-bg !default;
 $forum-bericht1-bg: darken($body-bg, 4%) !default;
-$ongelezen-lijn: $yellow !default;
 
 /* main menu */
 $menu-primary-hover: #0a338d !default;

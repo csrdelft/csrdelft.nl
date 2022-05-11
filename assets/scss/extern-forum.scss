@@ -133,10 +133,10 @@
 		height: 2px;
 		margin: 0;
 		padding: 0;
-		background-color: #d3d3d3;
+		background-color: $gray-400;
 
 		&.ongelezenvanaf {
-			background-color: #e8cf2a;
+			background-color: $secondary;
 		}
 	}
 

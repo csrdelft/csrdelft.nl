@@ -37,7 +37,7 @@
 				<div class="forum-zoeken-bericht">
 					{% for post in draad.forumPosts %}
 						{{ include('forum/partial/post_lijst.html.twig', {draad: draad, post: post}) }}
-						<div class="tussenschot"></div>
+						<hr class="tussenschot"></hr>
 					{% endfor %}
 				</div>
 			{% endfor %}

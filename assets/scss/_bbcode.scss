@@ -73,21 +73,20 @@ $bb-hover-bg: #ddeeff !default;
 .offtopic {
 	font-size: 0.9em;
 	line-height: 1em;
-	color: #bbb;
-}
+	color: $gray-600;
 
-.offtopic a {
-	color: #bbb;
-}
+	a {
+		color: $gray-600;
+	}
 
-.offtopic hr {
-	text-align: left;
-	background-color: #bbb;
-}
+	hr {
+		background-color: $gray-600;
+	}
 
-.offtopic img {
-	opacity: 0.3;
-	filter: alpha(opacity=30);
+	img {
+		opacity: 0.3;
+		filter: alpha(opacity=30);
+	}
 }
 
 .bb-prive {

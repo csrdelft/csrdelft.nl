@@ -94,7 +94,7 @@
 		role="toolbar"
 		aria-label="Toolbar with button groups"
 	>
-		<div class="btn-group me-2" role="group" aria-label="First group">
+		<div class="btn-group me-2" role="group">
 			<button
 				type="button"
 				class="btn btn-secondary text-white"
@@ -108,7 +108,7 @@
 		</div>
 
 		{% if mag('P_ADMIN') and deel is defined and deel.forum_id is not empty %}
-			<div class="btn-group me-2" role="group" aria-label="Second group">
+			<div class="btn-group me-2" role="group">
 				<a
 					href="/forum/beheren/{{ deel.forum_id }}"
 					class="btn btn-primary"
@@ -120,7 +120,7 @@
 			</div>
 		{% endif %}
 
-		<div class="btn-group me-2" role="group" aria-label="Third group">
+		<div class="btn-group me-2" role="group">
 			{% if deel is not defined or (deel.forum_id is not empty and deel.magModereren) %}
 				<a href="{{ url('csrdelft_forum_wacht') }}"
 					class="btn btn-primary"
@@ -139,7 +139,7 @@
 			</a>
 		</div>
 
-		<div class="btn-group" role="group" aria-label="Fourth group">
+		<div class="btn-group" role="group">
 			{# TODO: toevoegen dat je kunt filteren #}
 			{# <button
 				type="button"

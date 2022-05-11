@@ -50,7 +50,11 @@ body {
 }
 
 main {
-	background: $light;
+	background-color: $light;
+
+	.cd-page-content.container {
+		background-color: $body-bg;
+	}
 }
 
 /* Standaard Kleuren */
