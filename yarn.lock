@@ -3437,6 +3437,13 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"immutable@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "immutable@npm:4.0.0"
+  checksum: 4b5e9181e4d5fa06728a481835ec09c86367e5d03268666c95b522b7644ab891098022e4479a43c4c81a68f2ed82f10751ce5d33e208d7b873b6e7f9dfaf4d87
+  languageName: node
+  linkType: hard
+
 "import-fresh@npm:^3.0.0":
   version: 3.2.1
   resolution: "import-fresh@npm:3.2.1"
@@ -5675,7 +5682,7 @@ fsevents@~2.3.1:
     prosemirror-view: ^1.17.2
     raty-js: ^2.8.0
     resolve-url-loader: ^4.0.0
-    sass: ^1.32.11
+    sass: ^1.51.0
     sass-loader: ^11.0.1
     style-loader: ^2.0.0
     terser-webpack-plugin: ^5.1.1
@@ -5760,14 +5767,16 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.32.11":
-  version: 1.32.11
-  resolution: "sass@npm:1.32.11"
+"sass@npm:^1.51.0":
+  version: 1.51.0
+  resolution: "sass@npm:1.51.0"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
+    immutable: ^4.0.0
+    source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: 72a58f1159b0849d731a9cadbec20f68d0dc9a6bcb90a1861a16bf3f7ae5fdc96e4160e0ae1d224beecdd8410504200b1ba847b6b8608e8221a2c9039276a04b
+  checksum: d674fd87be863961d5e5233a148e381a72b06ca1749ffd95a08be2c3f4aa8fc77e3e21840347a84d7d4542cbf97cd6f9bfae19ecb1f5eefa6c207a3d8f923dbc
   languageName: node
   linkType: hard
 
@@ -5945,7 +5954,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:^1.0.2":
+"source-map-js@npm:>=0.6.2 <2.0.0, source-map-js@npm:^1.0.2":
   version: 1.0.2
   resolution: "source-map-js@npm:1.0.2"
   checksum: c049a7fc4deb9a7e9b481ae3d424cc793cb4845daa690bc5a05d428bf41bf231ced49b4cf0c9e77f9d42fdb3d20d6187619fc586605f5eabe995a316da8d377c

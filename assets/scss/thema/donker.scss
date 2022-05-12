@@ -155,23 +155,24 @@ div#pubciemail_form {
 	background-color: lighten($body-bg, 4%);
 }
 
+.dataTables_filter {
+	label,
+	input {
+		color: #fff;
+	}
+}
 .dataTable {
 	width: 100% !important;
 
 	.document {
-		&.odd {
+		color: #fff;
+		background-color: inherit;
+
+		a {
 			color: #fff;
 
-			a {
-				color: #fff;
-			}
-		}
-
-		&.even {
-			color: #000;
-
-			a {
-				color: #000;
+			&:not(:hover) {
+				text-decoration: none;
 			}
 		}
 	}
