@@ -568,6 +568,10 @@
 								During this week you will get to know the student association and her members.
 								The activities during the week will be of a respectful and safe nature.</target>
       </trans-unit>
+      <trans-unit id="aB6uxEu" resname="De eerstvolgende open avond is donderdag 2 juni 2022.">
+        <source>De eerstvolgende open avond is donderdag 2 juni 2022.</source>
+        <target>The next open day is June 2, 2022.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
