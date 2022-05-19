@@ -39,7 +39,7 @@
 						<a href="#contact" class="cta primary" onclick="document.getElementById('lid-spreken').checked = true">
 							{% trans %}Eerst een lid spreken{% endtrans %}
 						</a>
-						<a href="#contact" class="cta secondary" onclick="document.getElementById('open-avond').checked = true">
+						<a href="https://forms.gle/TjRCndkQ6iekoZ2X7" target="_blank" class="cta secondary">
 							{% trans %}Open avond bezoeken{% endtrans %}
 						</a>
 					</div>
@@ -127,7 +127,7 @@
 							ook je gegevens achterlaten voor je voorinschrijving{% endtrans %}</p>
 					<p>{% trans %}Ook hebben we twee keer dit jaar een open avond waarbij je kan komen kijken
 							hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
-							De eerstvolgende open avond is op 2 juni, de inschrijvingen daarvoor gaan 2 weken van tevoren open.{% endtrans %}</p>
+							De eerstvolgende open avond is op 2 juni.{% endtrans %} <a href="https://forms.gle/TjRCndkQ6iekoZ2X7" target="_blank">{% trans %}Schrijf je nu in!{% endtrans %}</a></p>
 				</div>
 			</div>
 		</div>
@@ -173,8 +173,8 @@
 						<label for="lid-worden" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil </span>lid worden{% endtrans %}</label>
 						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken">
 						<label for="lid-spreken" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil een dagje </span>met een lid meelopen{% endtrans %}</label>
-						<input id="open-avond" class="owee" type="radio" name="optie" value="open-avond">
-						<label for="open-avond" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil naar een </span>open avond<span class="d-none d-md-inline"> komen</span>{% endtrans %}</label>
+						<input hidden id="open-avond" class="owee" type="radio" name="optie" value="open-avond">
+						<label hidden for="open-avond" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil naar een </span>open avond<span class="d-none d-md-inline"> komen</span>{% endtrans %}</label>
 						<div class="interesseformulier">
 							<h6 class="lid-worden">{% trans %}Ben je overtuigd om volgend studiejaar lid te worden bij C.S.R? Wat mooi! Officieel lid worden kan tijdens de introductieweek in augustus. Geef hier alvast je interesse door, dan houden wij je op de hoogte van leuke evenementen en precieze data en tijden.{% endtrans %}</h6>
 							<h6 class="lid-spreken">{% trans %}Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.
@@ -231,7 +231,7 @@
 
 								<input class="lid-worden" type="submit" id="submitButton" value="{% trans %}Inschrijven{% endtrans %}">
 								<input class="lid-spreken" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
-								<input class="open-avond" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
+								<input hidden class="open-avond" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
 
 							</div>
 						</div>

@@ -525,7 +525,7 @@
 							De eerstvolgende open avond is op 2 juni, de inschrijvingen daarvoor gaan 2 weken van tevoren open.</source>
         <target>Two times a year we organize an open evening where you can come and experience what an evening at C.S.R. is like.
 					You can join a meal, join our worship evening and join us for some drinks.
-					The next open evening is on June 2, of which the registrations open 2 weeks in advance</target>
+					The next open evening is on June 2, of which the registrations open 2 weeks in advance.</target>
       </trans-unit>
       <trans-unit id=".Hsl_ux" resname="OWee: 21 t/m 25 augustus">
         <source>OWee: 21 t/m 25 augustus</source>
@@ -571,6 +571,18 @@
       <trans-unit id="aB6uxEu" resname="De eerstvolgende open avond is donderdag 2 juni 2022.">
         <source>De eerstvolgende open avond is donderdag 2 juni 2022.</source>
         <target>The next open day is June 2, 2022.</target>
+      </trans-unit>
+      <trans-unit id="RNGoS1_" resname="Ook hebben we twee keer dit jaar een open avond waarbij je kan komen kijken&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De eerstvolgende open avond is op 2 juni.">
+        <source>Ook hebben we twee keer dit jaar een open avond waarbij je kan komen kijken
+							hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
+							De eerstvolgende open avond is op 2 juni.</source>
+        <target>Two times a year we organize an open evening where you can come and experience what an evening at C.S.R. is like.
+					You can join a meal, join our worship evening and join us for some drinks.
+					The next open evening is on June 2.</target>
+      </trans-unit>
+      <trans-unit id="xVy11fX" resname="Schrijf je nu in!">
+        <source>Schrijf je nu in!</source>
+        <target>Register now!</target>
       </trans-unit>
     </body>
   </file>
