@@ -49,12 +49,12 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	private $rememberOAuthRepository;
 
 	public function __construct(
-		RequestStack $requestStack,
-		Environment $twig,
-		LoginService $loginService,
-		AccessService $accessService,
+		RequestStack            $requestStack,
+		Environment             $twig,
+		LoginService            $loginService,
+		AccessService           $accessService,
 		RememberOAuthRepository $rememberOAuthRepository,
-		AccountRepository $accountRepository
+		AccountRepository       $accountRepository
 	)
 	{
 		$this->loginService = $loginService;
@@ -76,6 +76,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	public function onScopeResolve(ScopeResolveEvent $event)
 	{
 		$rememberOAuth = $this->rememberOAuthRepository->findByUser($event->getUserIdentifier(), $event->getClient()->getIdentifier());
+		$user = $this->accountRepository->find($event->getUserIdentifier());
 
 		if ($rememberOAuth) {
 			$rememberOAuth->lastUsed = date_create_immutable();
@@ -83,7 +84,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 
 			$scopes = [];
 			foreach ($event->getScopes() as $scope) {
-				if (in_array((string)$scope, $rememberedScopes)) {
+				if (in_array((string)$scope, $rememberedScopes) && $this->accessService->mag($user, OAuth2Scope::magScope($scope))) {
 					$scopes[] = $scope;
 				}
 			}
@@ -97,10 +98,11 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		$request = $this->requestStack->getMainRequest();
 
 		if ($request->query->has('scopeChoice')) {
-			$requestedScopes = array_map(function($scope) {return new Scope($scope); }, (array)$request->query->get('scopeChoice'));
+			$requestedScopes = array_map(function ($scope) {
+				return new Scope($scope);
+			}, (array)$request->query->get('scopeChoice'));
 		}
 
-		$user = $this->accountRepository->find($event->getUserIdentifier());
 
 		$scopes = [];
 		foreach ($requestedScopes as $scope) {
@@ -172,7 +174,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 
 		$redirect_uri = parse_url($request->get('redirect_uri'));
 
-		$redirect_uri_formatted = $redirect_uri['host']  . (isset($redirect_uri['port']) ? ':' . $redirect_uri['port'] : '');
+		$redirect_uri_formatted = $redirect_uri['host'] . (isset($redirect_uri['port']) ? ':' . $redirect_uri['port'] : '');
 
 		$response = new Response(200,
 			[],

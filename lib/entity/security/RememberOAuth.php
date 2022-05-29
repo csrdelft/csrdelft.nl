@@ -31,12 +31,14 @@ class RememberOAuth implements DataTableEntry {
 	/**
 	 * @var string
 	 * @ORM\Column(type="uid")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $uid;
 	/**
 	 * Identifier in oauth2_client
 	 * @var string
 	 * @ORM\Column(type="string")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $clientIdentifier;
 	/**
@@ -48,18 +50,19 @@ class RememberOAuth implements DataTableEntry {
 	/**
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $rememberSince;
 	/**
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $lastUsed;
 	/**
 	 * OAuth2 scopes voor deze sessie.
 	 * @var string
 	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
 	 */
 	public $scopes;
 }

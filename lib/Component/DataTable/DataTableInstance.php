@@ -10,7 +10,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class DataTableInstance {
+class DataTableInstance
+{
 	/** @var array */
 	private $settings;
 	/** @var string */
@@ -21,25 +22,37 @@ class DataTableInstance {
 	private $serializer;
 	/** @var NormalizerInterface */
 	private $normalizer;
+	/** @var string */
+	private $beschrijving;
 
-	public function __construct(SerializerInterface $serializer, NormalizerInterface $normalizer, $titel, $tableId, array $settings) {
+	public function __construct(
+		SerializerInterface $serializer,
+		NormalizerInterface $normalizer,
+												$titel,
+												$beschrijving,
+												$tableId,
+		array               $settings
+	)
+	{
 		$this->settings = $settings;
 		$this->titel = $titel;
 		$this->tableId = $tableId;
 		$this->serializer = $serializer;
 		$this->normalizer = $normalizer;
+		$this->beschrijving = $beschrijving;
 	}
 
-	public function createView() {
+	public function createView()
+	{
 		$id = str_replace(' ', '-', strtolower($this->titel));
 
 		$settingsJson = htmlspecialchars($this->serializer->serialize($this->settings, 'json'));
 
 		$title = $this->titel ? "<h2 id=\"table-{$id}\" class=\"Titel\">{$this->titel}</h2>" : "";
+		$beschrijving = $this->beschrijving ? "<p>{$this->beschrijving}</p>" : "";
 		$table = "<table id=\"{$this->tableId}\" class=\"ctx-datatable display\" data-settings=\"{$settingsJson}\"></table>";
 
-		$html = $title . $table;
-		return new DataTableView($html);
+		return new DataTableView($title . $beschrijving . $table);
 	}
 
 	/**
@@ -49,7 +62,8 @@ class DataTableInstance {
 	 * @return Response
 	 * @throws ExceptionInterface
 	 */
-	public function createData($data, $modal = null, $autoUpdate = false) {
+	public function createData($data, $modal = null, $autoUpdate = false)
+	{
 		$normalizedData = $this->normalizer->normalize($data, 'json', [AbstractNormalizer::GROUPS => ['datatable']]);
 
 		$model = [
@@ -65,7 +79,8 @@ class DataTableInstance {
 	/**
 	 * @return string
 	 */
-	public function getTableId(): string {
+	public function getTableId(): string
+	{
 		return $this->tableId;
 	}
 }

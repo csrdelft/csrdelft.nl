@@ -5,12 +5,17 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\entity\security\RememberLogin;
+use CsrDelft\entity\security\RememberOAuth;
 use CsrDelft\repository\security\RememberLoginRepository;
+use CsrDelft\repository\security\RememberOAuthRepository;
 use CsrDelft\view\datatable\GenericDataTableResponse;
+use CsrDelft\view\login\OAuth2RememberTable;
 use CsrDelft\view\login\RememberLoginForm;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\RememberMe\PersistentRememberMeHandler;
 use Trikoder\Bundle\OAuth2Bundle\Model\AccessToken;
@@ -183,5 +188,38 @@ class SessionController extends AbstractController
 			'expiry' => $refreshToken->getExpiry(),
 			'revoked' => $refreshToken->isRevoked(),
 		]]);
+	}
+
+	/**
+	 * @Route("/session/oauth/remember", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 * @param RememberOAuthRepository $rememberOAuthRepository
+	 * @return Response
+	 */
+	public function oauth2RememberTokenData(RememberOAuthRepository $rememberOAuthRepository)
+	{
+		return $this->createDataTable(OAuth2RememberTable::class)
+			->createData($rememberOAuthRepository->findBy(['uid' => $this->getUid()]));
+	}
+
+	/**
+	 * @Route("/session/oauth/remember/{id}/delete", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 * @param RememberOAuth $rememberOAuth
+	 * @return GenericDataTableResponse
+	 */
+	public function oauth2RememberDelete(ManagerRegistry $managerRegistry, RememberOAuth $rememberOAuth)
+	{
+		if ($rememberOAuth->account->getUserIdentifier() != $this->getUid()) {
+			throw new AccessDeniedHttpException("Niet gevonden");
+		}
+
+		$managerRegistry->getManager()->remove($rememberOAuth);
+
+		$response = $this->tableData([new RemoveDataTableEntry($rememberOAuth->id, RememberOAuth::class)]);
+
+		$managerRegistry->getManager()->flush();
+
+		return $response;
 	}
 }
