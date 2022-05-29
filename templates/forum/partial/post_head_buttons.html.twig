@@ -53,13 +53,13 @@
 				<li>
 					<a href="{{ url('csrdelft_forum_tonen', {draad_id: draad.draad_id}) }}"
 						class="btn btn-primary post ReloadPage tonenAan"
-						title="Onderwerp tonen in zijbalk">{{ icon('file-plus') }}</a>
+						title="Onderwerp tonen in zijbalk">{{ icon('folder-plus') }}</a>
 				</li>
 			{% elseif draad.magVerbergen %}
 				<li>
 					<a href="{{ url('csrdelft_forum_verbergen', {draad_id: draad.draad_id}) }}"
 						class="btn btn-primary post ReloadPage tonenUit"
-						title="Onderwerp verbergen in zijbalk">{{ icon('file-minus') }}</a>
+						title="Onderwerp verbergen in zijbalk">{{ icon('folder-minus') }}</a>
 				</li>
 			{% endif %}
 			<li><hr class="dropdown-divider" /></li>
@@ -140,13 +140,13 @@
             <div class="btn-group me-2">
                 <a href="{{ url('csrdelft_forum_tonen', {draad_id: draad.draad_id}) }}"
                     class="btn btn-primary post ReloadPage tonenAan"
-                    title="Onderwerp tonen in zijbalk">{{ icon('file-plus') }}</a>
+                    title="Onderwerp tonen in zijbalk">{{ icon('folder-plus') }}</a>
             </div>
         {% elseif draad.magVerbergen %}
             <div class="btn-group me-2">
                 <a href="{{ url('csrdelft_forum_verbergen', {draad_id: draad.draad_id}) }}"
                     class="btn btn-primary post ReloadPage tonenUit"
-                    title="Onderwerp verbergen in zijbalk">{{ icon('file-minus') }}</a>
+                    title="Onderwerp verbergen in zijbalk">{{ icon('folder-minus') }}</a>
             </div>
         {% endif %}
 
