@@ -31,7 +31,7 @@
 				<div class="forum-zoeken-header">
 					<div>
 						<a id="{{ draad.draad_id }}"
-							 href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id}) }}"
+							 href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id}) }}"
 							 {% if draad.ongelezen %}class="{{ lid_instelling('forum', 'ongelezenWeergave') }}"{% endif %}>
 							{{ draad.titel | highlight_zoekterm(query) }}
 						</a>
@@ -57,7 +57,7 @@
 								<div class="postpijl">
 									<a class="postanchor" id="{{ post.post_id }}"></a>
 									<a class="postlink"
-										 href="{{ url('csrdelft_forum_reactie', {post_id: post.post_id, _fragment: post.post_id}) }}"
+										 href="{{ url('csrdelft_forum_forumdraad_reactie', {post_id: post.post_id, _fragment: post.post_id}) }}"
 										 title="Link naar deze post">&rarr;</a>
 								</div>
 								<div class="naam">

@@ -1,23 +1,23 @@
 {% if mag('P_LOGGED_IN') %}
 	{% if deel is defined and deel.magMeldingKrijgen %}
 		<div class="btn-group me-2">
-			<a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
+			<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
 				 class="btn btn-light post ReloadPage melding-nooit {% if not deel.lidWilMeldingVoorDeel %}active{% endif %}"
 				 title="Geen meldingen voor forumdeel onvangen">{{ icon('email_delete', 'email_delete') }}</a>
-			<a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
+			<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
 				 class="btn btn-light post ReloadPage melding-altijd {% if deel.lidWilMeldingVoorDeel %}active{% endif %}"
 				 title="Meldingen ontvangen voor nieuwe berichten in forumdeel">{{ icon('email_add', 'email_add') }}</a>
 		</div>
 	{% endif %}
 	<div class="btn-group me-2">
-		<a href="{{ url('csrdelft_forum_toonalles') }}" class="btn btn-light post confirm ReloadPage"
+		<a href="{{ url('csrdelft_forum_forumdradenverbergen_toonalles') }}" class="btn btn-light post confirm ReloadPage"
 			 title="Verborgen onderwerpen weer laten zien">
 			{{ icon('eye') }} {{ getAantalVerborgenVoorLid() }}
 		</a>
 	</div>
 	{% if deel is not defined or (deel.forum_id is not empty and deel.magModereren) %}
 		<div class="btn-group me-2">
-			<a href="{{ url('csrdelft_forum_wacht') }}" class="btn btn-light"
+			<a href="{{ url('csrdelft_forum_forumdeel_wacht') }}" class="btn btn-light"
 				 title="Reacties die wachten op goedkeuring">
 				{{ icon('hourglass') }} {{ getAantalWachtOpGoedkeuring() }}
 			</a>

@@ -4,7 +4,7 @@
 		<input type="text" class="form-control" value="{{ absolute_url(app.user.rssLink) }}" size="35"
 					 onclick="this.setSelectionRange(0, this.value.length);" readonly title="RSS Link"/>
 	{% elseif not app.user %}
-		<input type="text" class="form-control" value="{{ url('csrdelft_forum_rss') }}" size="35"
+		<input type="text" class="form-control" value="{{ url('csrdelft_forum_forum_rss') }}" size="35"
 					 onclick="this.setSelectionRange(0, this.value.length);" readonly title="RSS Link"/>
 	{% else %}
 		<span class="input-group-text"><a href="/profiel/{{ app.user.uid }}#tokenaanvragen">Privé url aanvragen</a></span>

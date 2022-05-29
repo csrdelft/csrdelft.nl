@@ -1,18 +1,17 @@
 <?php
 
 
-namespace CsrDelft\controller;
+namespace CsrDelft\controller\forum;
 
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\ForumPlaatjeRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\plaatjes\PlaatjesUploadModalForm;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -39,7 +38,7 @@ class ForumPlaatjesController extends AbstractController {
 			$plaatje = $this->forumPlaatjeRepository->fromUploader($form->uploader, $this->getUid());
 			return new JsonResponse([
 				"key" => $plaatje->access_key,
-				"src" => $this->generateUrl('csrdelft_forumplaatjes_bekijken', ["id" => $plaatje->access_key, "resized" => true]),
+				"src" => $this->generateUrl('csrdelft_forum_forumplaatjes_bekijken', ["id" => $plaatje->access_key, "resized" => true]),
 			]);
 		} else {
 			throw new BadRequestHttpException('Niet gepost');

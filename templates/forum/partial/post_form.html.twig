@@ -40,7 +40,7 @@
 
 	<div class="bericht0 flex-grow-1">
 		<form id="forumForm" class="Formulier"
-					action="{{ url('csrdelft_forum_posten', {forum_id: deel.forum_id, draad_id: draad is not none ? draad.draad_id : null}) }}"
+					action="{{ url('csrdelft_forum_forumdraad_posten', {forum_id: deel.forum_id, draad_id: draad is not none ? draad.draad_id : null}) }}"
 					method="post">
 			{{ csrfField() }}
 			{% if not app.user %}
@@ -60,7 +60,7 @@
 				{% if app.user %}
 					<input type="button" value="Concept opslaan" id="forumConcept" class="btn btn-secondary"
 								 onclick="window.forum.saveConceptForumBericht();"
-								 data-url="{{ url('csrdelft_forum_concept', {forum_id: deel.forum_id, draad_id: draad is none ? null : draad.draad_id}) }}"/>
+								 data-url="{{ url('csrdelft_forum_forumpost_concept', {forum_id: deel.forum_id, draad_id: draad is none ? null : draad.draad_id}) }}"/>
 					<div class="float-end">
 						<a href="{{ url('csrdelft_documenten_toevoegen') }}" target="_blank">Document opladen</a>
 						<a href="{{ url('csrdelft_fotoalbum_uploaden', {dir: huidige_jaargang() ~ '/Posters'}) }}" target="_blank">

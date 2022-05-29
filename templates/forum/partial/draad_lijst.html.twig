@@ -22,14 +22,14 @@
 	{% set ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave') %}
 
 	<a id="{{ draad.draad_id }}"
-		 href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}"
+		 href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}"
 		 {% if app.user and draad.ongelezen %}class="{{ ongelezenWeergave }}"{% endif %}>{{ draad.titel | raw }}</a>
 	{% if app.user and draad.aantalOngelezenPosts > 0 %}
 		<span class="badge bg-primary">{{ draad.aantalOngelezenPosts }}</span>
 	{% endif %}
 	{% if deel.forum_id is not empty %}
 		<span class="lichtgrijs">
-			[<a href="{{ url('csrdelft_forum_deel', {forum_id: draad.deel.forum_id}) }}"
+			[<a href="{{ url('csrdelft_forum_forumdeel_deel', {forum_id: draad.deel.forum_id}) }}"
 					class="lichtgrijs">{{ draad.deel.titel }}</a>]
 		</span>
 	{% endif %}
