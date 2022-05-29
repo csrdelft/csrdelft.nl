@@ -132,8 +132,6 @@ class Voorpagina {
 		return null;
 	}
 
-
-
 	/**
 	 * @return string
 	 */
