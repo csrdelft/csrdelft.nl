@@ -79,12 +79,12 @@ class LoginService {
 	/**
 	 * @param string $permission
 	 * @param array|null $allowedAuthenticationMethods
-	 * @deprecated Gebruik _mag
+	 * @deprecated Gebruik CsrSecurity::mag
 	 *
 	 * @return bool
 	 */
 	public static function mag($permission, array $allowedAuthenticationMethods = null) {
-		return ContainerFacade::getContainer()->get(LoginService::class)->_mag($permission, $allowedAuthenticationMethods);
+		return ContainerFacade::getContainer()->get(CsrSecurity::class)->mag($permission, $allowedAuthenticationMethods);
 	}
 
 	public function _mag($permission, array $allowedAuthenticationMethdos = null) {
@@ -95,7 +95,7 @@ class LoginService {
 
 	/**
 	 * @return string
-	 * @deprecated Gebruik _getUid
+	 * @deprecated Gebruik _getUid of CsrSecurity::getAccount()->uid
 	 */
 	public static function getUid() {
 		return ContainerFacade::getContainer()->get(LoginService::class)->_getUid();
@@ -117,6 +117,7 @@ class LoginService {
 
 	/**
 	 * @return UserInterface|Account|null
+	 * @deprecated Gebruik CsrSecurity::getAccount
 	 */
 	public static function getAccount() {
 		return ContainerFacade::getContainer()->get(LoginService::class)->_getAccount();
@@ -128,6 +129,7 @@ class LoginService {
 
 	/**
 	 * @return Profiel|null
+	 * @deprecated Gebruik CsrSecurity::getProfiel
 	 */
 	public static function getProfiel() {
 		$account = static::getAccount();

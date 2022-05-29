@@ -10,6 +10,7 @@ use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\service\forum\ForumDelenService;
 use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
@@ -32,10 +33,6 @@ class ForumDeelController extends AbstractController
 	 */
 	private $forumDradenReagerenRepository;
 	/**
-	 * @var ForumCategorieRepository
-	 */
-	private $forumCategorieRepository;
-	/**
 	 * @var BbToProsemirror
 	 */
 	private $bbToProsemirror;
@@ -47,20 +44,24 @@ class ForumDeelController extends AbstractController
 	 * @var ForumPostsRepository
 	 */
 	private $forumPostsRepository;
+	/**
+	 * @var ForumDelenService
+	 */
+	private $forumDelenService;
 
 	public function __construct(ForumDradenRepository         $forumDradenRepository,
+															ForumDelenService             $forumDelenService,
 															ForumDradenReagerenRepository $forumDradenReagerenRepository,
-															ForumCategorieRepository      $forumCategorieRepository,
 															ForumDelenRepository          $forumDelenRepository,
 															ForumPostsRepository          $forumPostsRepository,
 															BbToProsemirror               $bbToProsemirror)
 	{
 		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
-		$this->forumCategorieRepository = $forumCategorieRepository;
 		$this->bbToProsemirror = $bbToProsemirror;
 		$this->forumDelenRepository = $forumDelenRepository;
 		$this->forumPostsRepository = $forumPostsRepository;
+		$this->forumDelenService = $forumDelenService;
 	}
 
 	/**
@@ -97,7 +98,7 @@ class ForumDeelController extends AbstractController
 		}
 		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
-			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
+			'categorien' => $this->forumDelenService->getForumIndelingVoorLid(),
 			'deel' => $deel,
 			'paging' => $paging && $this->forumDradenRepository->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => '',
@@ -171,7 +172,7 @@ class ForumDeelController extends AbstractController
 		if ($count > 0) {
 			setMelding('Verwijder eerst alle ' . $count . ' draadjes van dit deelforum uit de database!', -1);
 		} else {
-			$this->forumDelenRepository->verwijderForumDeel($deel->forum_id);
+			$this->forumDelenService->verwijderForumDeel($deel->forum_id);
 			setMelding('Deelforum verwijderd', 1);
 		}
 		return new JsonResponse('/forum'); // redirect
@@ -204,7 +205,7 @@ class ForumDeelController extends AbstractController
 	public function wacht()
 	{
 		return $this->render('forum/wacht.html.twig', [
-			'resultaten' => $this->forumDelenRepository->getWachtOpGoedkeuring()
+			'resultaten' => $this->forumDelenService->getWachtOpGoedkeuring()
 		]);
 	}
 }

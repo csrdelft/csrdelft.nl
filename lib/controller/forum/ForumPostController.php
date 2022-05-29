@@ -12,6 +12,7 @@ use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\forum\ForumPostsService;
 use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\bbcode\ProsemirrorToBb;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,13 +45,18 @@ class ForumPostController extends AbstractController
 	 * @var ForumDradenReagerenRepository
 	 */
 	private $forumDradenReagerenRepository;
+	/**
+	 * @var ForumPostsService
+	 */
+	private $forumPostsService;
 
-	public function __construct(BbToProsemirror              $bbToProsemirror,
-															ProsemirrorToBb              $prosemirrorToBb,
-															ForumPostsRepository         $forumPostsRepository,
-															ForumDradenGelezenRepository $forumDradenGelezenRepository,
+	public function __construct(BbToProsemirror               $bbToProsemirror,
+															ProsemirrorToBb               $prosemirrorToBb,
+															ForumPostsRepository          $forumPostsRepository,
+															ForumPostsService             $forumPostsService,
+															ForumDradenGelezenRepository  $forumDradenGelezenRepository,
 															ForumDradenReagerenRepository $forumDradenReagerenRepository,
-															ForumDradenRepository        $forumDradenRepository)
+															ForumDradenRepository         $forumDradenRepository)
 	{
 		$this->bbToProsemirror = $bbToProsemirror;
 		$this->forumPostsRepository = $forumPostsRepository;
@@ -58,6 +64,7 @@ class ForumPostController extends AbstractController
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
+		$this->forumPostsService = $forumPostsService;
 	}
 
 
@@ -66,7 +73,9 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/citeren/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function citeren(ForumPost $post) {
+	public
+	function citeren(ForumPost $post)
+	{
 		if (!$post->magCiteren()) {
 			throw $this->createAccessDeniedException("Mag niet citeren");
 		}
@@ -82,7 +91,9 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/tekst/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function tekst(ForumPost $post) {
+	public
+	function tekst(ForumPost $post)
+	{
 		if (!$post->magBewerken()) {
 			throw $this->createAccessDeniedException("Mag niet bewerken");
 		}
@@ -96,13 +107,15 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/bewerken/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken(ForumPost $post) {
+	public
+	function bewerken(ForumPost $post)
+	{
 		if (!$post->magBewerken()) {
 			throw $this->createAccessDeniedException("Mag niet bewerken");
 		}
 		$tekst = $this->prosemirrorToBb->convertToBb(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_UNSAFE_RAW));
-		$this->forumPostsRepository->bewerkForumPost($tekst, $reden, $post);
+		$this->forumPostsService->bewerkForumPost($tekst, $reden, $post);
 		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($post->draad, $post->laatst_gewijzigd);
 		return $this->render('forum/partial/post_lijst.html.twig', ['post' => $post]);
 	}
@@ -113,7 +126,9 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/verplaatsen/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verplaatsen(ForumPost $post) {
+	public
+	function verplaatsen(ForumPost $post)
+	{
 		$oudDraad = $post->draad;
 		if (!$oudDraad->magModereren()) {
 			throw $this->createAccessDeniedException("Geen moderator");
@@ -123,8 +138,8 @@ class ForumPostController extends AbstractController
 		if (!$nieuwDraad->magModereren()) {
 			throw $this->createAccessDeniedException("Geen moderator");
 		}
-		$this->forumPostsRepository->verplaatsForumPost($nieuwDraad, $post);
-		$this->forumPostsRepository->goedkeurenForumPost($post);
+		$this->forumPostsService->verplaatsForumPost($nieuwDraad, $post);
+		$this->forumPostsService->goedkeurenForumPost($post);
 		return $this->render('forum/partial/post_delete.html.twig', ['post' => $post]);
 	}
 
@@ -134,11 +149,13 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/verwijderen/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verwijderen(ForumPost $post) {
+	public
+	function verwijderen(ForumPost $post)
+	{
 		if (!$post->draad->magModereren()) {
 			throw $this->createAccessDeniedException("Geen moderator");
 		}
-		$this->forumPostsRepository->verwijderForumPost($post);
+		$this->forumPostsService->verwijderForumPost($post);
 		return $this->render('forum/partial/post_delete.html.twig', ['post' => $post]);
 	}
 
@@ -148,7 +165,9 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/offtopic/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function offtopic(ForumPost $post) {
+	public
+	function offtopic(ForumPost $post)
+	{
 		if (!$post->draad->magModereren()) {
 			throw $this->createAccessDeniedException("Geen moderator");
 		}
@@ -162,11 +181,13 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/goedkeuren/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function goedkeuren(ForumPost $post) {
+	public
+	function goedkeuren(ForumPost $post)
+	{
 		if (!$post->draad->magModereren()) {
 			throw $this->createAccessDeniedException("Geen moderator");
 		}
-		$this->forumPostsRepository->goedkeurenForumPost($post);
+		$this->forumPostsService->goedkeurenForumPost($post);
 		return $this->render('forum/partial/post_lijst.html.twig', ['post' => $post]);
 	}
 
@@ -178,7 +199,9 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/concept/{forum_id}/{draad_id}", methods={"POST"}, defaults={"draad_id"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function concept(ForumDeel $deel, ForumDraad $draad = null) {
+	public
+	function concept(ForumDeel $deel, ForumDraad $draad = null)
+	{
 		$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
 		$concept = $this->prosemirrorToBb->convertToBb(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
 		$ping = filter_input(INPUT_POST, 'ping', FILTER_SANITIZE_STRING);

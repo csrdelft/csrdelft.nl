@@ -8,6 +8,7 @@ use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\service\corvee\CorveeHerinneringService;
+use CsrDelft\service\forum\ForumService;
 use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -39,13 +40,9 @@ class CronCommand extends Command {
 	 */
 	private $corveeHerinneringService;
 	/**
-	 * @var ForumCategorieRepository
+	 * @var ForumService
 	 */
-	private $forumCategorieRepository;
-	/**
-	 * @var PinTransactiesDownloadenCommand
-	 */
-	private $pinTransactiesDownloadenCommand;
+	private $forumService;
 
 	protected function configure() {
 		$this
@@ -53,13 +50,12 @@ class CronCommand extends Command {
 	}
 
 	public function __construct(
-		PinTransactiesDownloadenCommand $pinTransactiesDownloadenCommand,
 		DebugLogRepository $debugLogRepository,
 		OneTimeTokensRepository $oneTimeTokensRepository,
 		InstellingenRepository $instellingenRepository,
 		LidInstellingenRepository $lidInstellingenRepository,
 		CorveeHerinneringService $corveeHerinneringService,
-		ForumCategorieRepository $forumCategorieRepository
+		ForumService $forumService
 	) {
 		parent::__construct(null);
 		$this->debugLogRepository = $debugLogRepository;
@@ -67,8 +63,7 @@ class CronCommand extends Command {
 		$this->instellingenRepository = $instellingenRepository;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 		$this->corveeHerinneringService = $corveeHerinneringService;
-		$this->forumCategorieRepository = $forumCategorieRepository;
-		$this->pinTransactiesDownloadenCommand = $pinTransactiesDownloadenCommand;
+		$this->forumService = $forumService;
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
@@ -109,7 +104,7 @@ class CronCommand extends Command {
 
 		$output->writeln("Forum opschonen", OutputInterface::VERBOSITY_VERBOSE);
 		try {
-			$this->forumCategorieRepository->opschonen();
+			$this->forumService->opschonen();
 		} catch (Exception $e) {
 			$output->writeln($e->getMessage());
 			$this->debugLogRepository->log('cron.php', 'forumCategorieRepository->opschonen', array(), $e);

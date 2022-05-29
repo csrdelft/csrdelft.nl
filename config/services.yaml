@@ -107,6 +107,9 @@ services:
   csr.formulier.factory:
     alias: CsrDelft\Component\Formulier\FormulierFactory
 
+  csr.security:
+    alias: CsrDelft\service\security\CsrSecurity
+
   CsrDelft\Component\Formulier\FormulierBuilder:
     shared: false # iedere instance is uniek
 

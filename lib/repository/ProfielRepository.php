@@ -99,6 +99,7 @@ class ProfielRepository extends AbstractRepository {
 	/**
 	 * @param string $uid
 	 * @return Profiel|false
+	 * @deprecated Gebruik ProfielRepository::find($uid)
 	 */
 	public static function get($uid) {
 		if ($uid == null || !ctype_alnum($uid) || strlen($uid) != 4) {
@@ -110,6 +111,12 @@ class ProfielRepository extends AbstractRepository {
 		return $model->find($uid);
 	}
 
+	/**
+	 * @param $uid
+	 * @param $vorm
+	 * @return string|null
+	 * @deprecated Gebruik Profiel::getNaam($vorm)
+	 */
 	public static function getNaam($uid, $vorm = 'civitas') {
 		$profiel = static::get($uid);
 		if (!$profiel) {
@@ -118,6 +125,12 @@ class ProfielRepository extends AbstractRepository {
 		return $profiel->getNaam($vorm);
 	}
 
+	/**
+	 * @param $uid
+	 * @param $vorm
+	 * @return string|null
+	 * @deprecated Gebruik Profiel::getLink($vorm)
+	 */
 	public static function getLink($uid, $vorm = 'civitas') {
 		$profiel = static::get($uid);
 		if (!$profiel) {
@@ -126,6 +139,11 @@ class ProfielRepository extends AbstractRepository {
 		return $profiel->getLink($vorm);
 	}
 
+	/**
+	 * @param $uid
+	 * @return bool
+	 * @deprecated Doe een null check op ProfielRepository::find($uid)
+	 */
 	public static function existsUid($uid) {
 		if (!ctype_alnum($uid) || strlen($uid) != 4) {
 			return false;

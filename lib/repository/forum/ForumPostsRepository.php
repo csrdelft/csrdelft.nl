@@ -49,19 +49,11 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	 * @var int
 	 */
 	private $aantal_wacht;
-	/**
-	 * @var ForumDradenGelezenRepository
-	 */
-	private $forumDradenGelezenRepository;
 
-	public function __construct(
-		ManagerRegistry $registry,
-		ForumDradenGelezenRepository $forumDradenGelezenRepository
-	) {
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, ForumPost::class);
 		$this->pagina = 1;
 		$this->aantal_paginas = array();
-		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 	}
 
 	public function findAll() {
@@ -306,18 +298,6 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		return $post;
 	}
 
-	public function verwijderForumPost(ForumPost $post) {
-		$post->verwijderd = !$post->verwijderd;
-		try {
-			$this->getEntityManager()->persist($post);
-			$this->getEntityManager()->flush();
-		} catch (ORMException $exception) {
-			throw new CsrException('Verwijderen mislukt', 500, $exception);
-		}
-		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
-		$forumDradenRepository->resetLastPost($post->draad);
-	}
-
 	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
 		$this->createQueryBuilder('fp')
 			->update()
@@ -325,56 +305,6 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 			->where('fp.draad_id = :id')
 			->setParameter('id', $draad->draad_id)
 			->getQuery()->execute();
-	}
-
-	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post) {
-		similar_text($post->tekst, $nieuwe_tekst, $gelijkheid);
-		$post->tekst = $nieuwe_tekst;
-		$post->laatst_gewijzigd = date_create_immutable();
-		$bewerkt = 'bewerkt door [lid=' . LoginService::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate]';
-		if ($reden !== '') {
-			$bewerkt .= ': [tekst]' . CsrBB::escapeUbbOff($reden) . '[/tekst]';
-		}
-		$bewerkt .= "\n";
-		$post->bewerkt_tekst .= $bewerkt;
-		try {
-			$this->getEntityManager()->persist($post);
-			$this->getEntityManager()->flush();
-		} catch (ORMException $exception) {
-			throw new CsrException('Bewerken mislukt', 500, $exception);
-		}
-		if ($gelijkheid < 90) {
-			$draad = $post->draad;
-			$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
-			$draad->laatste_post_id = $post->post_id;
-			$draad->laatste_wijziging_uid = $post->uid;
-			$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
-			$rowCount = $forumDradenRepository->update($draad);
-			if ($rowCount !== 1) {
-				throw new CsrException('Bewerken mislukt');
-			}
-		}
-	}
-
-	public function verplaatsForumPost(ForumDraad $nieuwDraad, ForumPost $post) {
-		$oudeDraad = $post->draad;
-		$post->draad = $nieuwDraad;
-		$post->laatst_gewijzigd = date_create_immutable();
-		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginService::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate]' . "\n";
-		try {
-			$this->getEntityManager()->persist($post);
-			$this->getEntityManager()->flush();
-		} catch (ORMException $exception) {
-			throw new CsrException('Verplaatsen mislukt', 500, $exception);
-		}
-
-		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
-		$forumDradenRepository->resetLastPost($post->draad);
-		if (count($oudeDraad->getForumPosts()) == 0) {
-			$forumDradenRepository->wijzigForumDraad($oudeDraad, 'verwijderd', true);
-		} else {
-			$forumDradenRepository->resetLastPost($oudeDraad);
-		}
 	}
 
 	public function offtopicForumPost(ForumPost $post) {
@@ -389,29 +319,6 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		}
 	}
 
-	public function goedkeurenForumPost(ForumPost $post) {
-		if ($post->wacht_goedkeuring) {
-			$post->wacht_goedkeuring = false;
-			$post->laatst_gewijzigd = date_create_immutable();
-			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginService::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate][/prive]' . "\n";
-			try {
-				$this->getEntityManager()->persist($post);
-				$this->getEntityManager()->flush();
-			} catch (ORMException $exception) {
-				throw new CsrException('Goedkeuren mislukt', 500, $exception);
-			}
-		}
-		$draad = $post->draad;
-		$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
-		$draad->laatste_post_id = $post->post_id;
-		$draad->laatste_wijziging_uid = $post->uid;
-		if ($draad->wacht_goedkeuring) {
-			$draad->wacht_goedkeuring = false;
-			ContainerFacade::getContainer()->get(ForumDelenMeldingRepository::class)->stuurMeldingen($post);
-		}
-		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
-		$forumDradenRepository->update($draad);
-	}
 
 	public function citeerForumPost(ForumPost $post) {
 		return CsrBB::filterCommentaar(CsrBB::filterPrive($post->tekst));

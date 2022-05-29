@@ -29,7 +29,6 @@ class ForumMeldingController extends AbstractController
 		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
 	}
 
-
 	/**
 	 * Niveau voor meldingen instellen.
 	 *

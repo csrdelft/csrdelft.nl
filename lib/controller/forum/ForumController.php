@@ -12,9 +12,9 @@ use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\service\forum\ForumDelenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbToProsemirror;
-use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
 use CsrDelft\view\forum\ForumZoekenForm;
 use CsrDelft\view\GenericSuggestiesResponse;
@@ -33,10 +33,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ForumController extends AbstractController
 {
-	/**
-	 * @var ForumDelenRepository
-	 */
-	private $forumDelenRepository;
 	/**
 	 * @var ForumDradenGelezenRepository
 	 */
@@ -61,24 +57,28 @@ class ForumController extends AbstractController
 	 * @var BbToProsemirror
 	 */
 	private $bbToProsemirror;
+	/**
+	 * @var ForumDelenService
+	 */
+	private $forumDelenService;
 
 	public function __construct(
 		BbToProsemirror               $bbToProsemirror,
 		ForumCategorieRepository      $forumCategorieRepository,
-		ForumDelenRepository          $forumDelenRepository,
+		ForumDelenService 						$forumDelenService,
 		ForumDradenGelezenRepository  $forumDradenGelezenRepository,
 		ForumDradenRepository         $forumDradenRepository,
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumPostsRepository          $forumPostsRepository
 	)
 	{
-		$this->forumDelenRepository = $forumDelenRepository;
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumCategorieRepository = $forumCategorieRepository;
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->bbToProsemirror = $bbToProsemirror;
+		$this->forumDelenService = $forumDelenService;
 	}
 
 	/**
@@ -90,7 +90,7 @@ class ForumController extends AbstractController
 	{
 		return $this->render('forum/overzicht.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
-			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
+			'categorien' => $this->forumDelenService->getForumIndelingVoorLid(),
 		]);
 	}
 
@@ -104,7 +104,7 @@ class ForumController extends AbstractController
 	{
 		$response = new Response(null, 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
 		return $this->render('forum/rss.xml.twig', [
-			'draden' => $this->forumDradenRepository->getRecenteForumDraden(null, null, true),
+			'draden' => $this->forumDelenService->getRecenteForumDraden(null, null, true),
 			'privatelink' => $this->getUser() ? $this->getUser()->getRssLink() : null,
 		], $response);
 	}
@@ -136,7 +136,7 @@ class ForumController extends AbstractController
 		return $this->render('forum/resultaten.html.twig', [
 			'titel' => 'Zoeken',
 			'form' => $zoekform,
-			'resultaten' => $this->forumDelenRepository->zoeken($forumZoeken),
+			'resultaten' => $this->forumDelenService->zoeken($forumZoeken),
 			'query' => $forumZoeken->zoekterm,
 		]);
 	}
@@ -166,7 +166,7 @@ class ForumController extends AbstractController
 
 		$forumZoeken = ForumZoeken::nieuw($query, $limit, ['titel']);
 
-		$draden = $this->forumDelenRepository->zoeken($forumZoeken);
+		$draden = $this->forumDelenService->zoeken($forumZoeken);
 
 		foreach ($draden as $draad) {
 			$result[] = $this->draadAutocompleteArray($draad);
@@ -212,7 +212,7 @@ class ForumController extends AbstractController
 	{
 		$this->forumDradenRepository->setHuidigePagina((int)$pagina, 0);
 		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
-		$deel = $this->forumDelenRepository->getRecent($belangrijk);
+		$deel = $this->forumDelenService->getRecent($belangrijk);
 
 		$aantalPaginas = $this->forumDradenRepository->getAantalPaginas($deel->forum_id);
 
@@ -227,7 +227,7 @@ class ForumController extends AbstractController
 		}
 		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
-			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
+			'categorien' => $this->forumDelenService->getForumIndelingVoorLid(),
 			'deel' => $deel,
 			'paging' => $aantalPaginas > 1,
 			'belangrijk' => $belangrijk ? '/belangrijk' : '',

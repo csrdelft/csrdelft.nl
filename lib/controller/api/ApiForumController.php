@@ -8,6 +8,7 @@ use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\forum\ForumDelenService;
 use CsrDelft\view\bbcode\CsrBB;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,11 +21,20 @@ class ApiForumController extends AbstractController {
 	 * @var ForumDradenGelezenRepository
 	 */
 	private $forumDradenGelezenRepository;
+	/**
+	 * @var ForumDelenService
+	 */
+	private $forumDelenService;
 
-	public function __construct(ForumDradenGelezenRepository $forumDradenGelezenRepository, ForumPostsRepository $forumPostsRepository, ForumDradenRepository $forumDradenRepository) {
+	public function __construct(ForumDradenGelezenRepository $forumDradenGelezenRepository,
+															ForumDelenService $forumDelenService,
+															ForumPostsRepository         $forumPostsRepository,
+															ForumDradenRepository        $forumDradenRepository)
+	{
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->forumDradenRepository = $forumDradenRepository;
+		$this->forumDelenService = $forumDelenService;
 	}
 
 	/**
@@ -36,7 +46,7 @@ class ApiForumController extends AbstractController {
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
 
-		$draden = $this->forumDradenRepository->getRecenteForumDraden($limit, null, false, $offset);
+		$draden = $this->forumDelenService->getRecenteForumDraden($limit, null, false, $offset);
 
 		foreach ($draden as $draad) {
 			$draad->ongelezen = $draad->getAantalOngelezenPosts();

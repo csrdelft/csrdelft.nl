@@ -10,7 +10,6 @@ use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\repository\DebugLogRepository;
-use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
@@ -18,6 +17,9 @@ use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\service\forum\ForumDelenService;
+use CsrDelft\service\forum\ForumMeldingenService;
+use CsrDelft\service\forum\ForumPostsService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\bbcode\ProsemirrorToBb;
@@ -42,10 +44,6 @@ class ForumDraadController extends AbstractController
 	 * @var ForumDelenRepository
 	 */
 	private $forumDelenRepository;
-	/**
-	 * @var ForumCategorieRepository
-	 */
-	private $forumCategorieRepository;
 	/**
 	 * @var BbToProsemirror
 	 */
@@ -74,23 +72,38 @@ class ForumDraadController extends AbstractController
 	 * @var ForumDelenMeldingRepository
 	 */
 	private $forumDelenMeldingRepository;
+	/**
+	 * @var ForumPostsService
+	 */
+	private $forumPostsService;
+	/**
+	 * @var ForumDelenService
+	 */
+	private $forumDelenService;
+	/**
+	 * @var ForumMeldingenService
+	 */
+	private $forumMeldingenService;
 
-	public function __construct(ForumPostsRepository          $forumPostsRepository,
-															ForumDradenReagerenRepository $forumDradenReagerenRepository,
-															ForumDelenRepository          $forumDelenRepository,
-															ForumCategorieRepository      $forumCategorieRepository,
-															ForumDradenGelezenRepository  $forumDradenGelezenRepository,
-															ProsemirrorToBb               $prosemirrorToBb,
-															DebugLogRepository            $debugLogRepository,
-															ForumDradenRepository         $forumDradenRepository,
-															ForumDradenMeldingRepository  $forumDradenMeldingRepository,
-															ForumDelenMeldingRepository   $forumDelenMeldingRepository,
-															BbToProsemirror               $bbToProsemirror)
+	public function __construct(
+		ForumPostsRepository          $forumPostsRepository,
+		ForumDradenReagerenRepository $forumDradenReagerenRepository,
+		ForumDelenRepository          $forumDelenRepository,
+		ForumDradenGelezenRepository  $forumDradenGelezenRepository,
+		ProsemirrorToBb               $prosemirrorToBb,
+		DebugLogRepository            $debugLogRepository,
+		ForumDradenRepository         $forumDradenRepository,
+		ForumDelenService             $forumDelenService,
+		ForumPostsService             $forumPostsService,
+		ForumMeldingenService  $forumMeldingenService,
+		ForumDradenMeldingRepository  $forumDradenMeldingRepository,
+		ForumDelenMeldingRepository   $forumDelenMeldingRepository,
+		BbToProsemirror               $bbToProsemirror
+	)
 	{
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumDelenRepository = $forumDelenRepository;
-		$this->forumCategorieRepository = $forumCategorieRepository;
 		$this->bbToProsemirror = $bbToProsemirror;
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->prosemirrorToBb = $prosemirrorToBb;
@@ -98,6 +111,9 @@ class ForumDraadController extends AbstractController
 		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
 		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
+		$this->forumPostsService = $forumPostsService;
+		$this->forumDelenService = $forumDelenService;
+		$this->forumMeldingenService = $forumMeldingenService;
 	}
 
 	/**
@@ -164,7 +180,7 @@ class ForumDraadController extends AbstractController
 			'paging' => $paging && $this->forumPostsRepository->getAantalPaginas($draad->draad_id) > 1,
 			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($concept),
 			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDraad($draad),
-			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
+			'categorien' => $this->forumDelenService->getForumIndelingVoorLid(),
 			'gedeeld_met_opties' => $this->forumDelenRepository->getForumDelenOptiesOmTeDelen($draad->deel),
 			'statistiek' => $statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
 			'draad_ongelezen' => $gelezen ? $draad->isOngelezen() : true,
@@ -216,7 +232,7 @@ class ForumDraadController extends AbstractController
 		} else {
 			throw $this->createAccessDeniedException("Kan draad niet wijzigen");
 		}
-		$this->forumDradenRepository->wijzigForumDraad($draad, $property, $value);
+		$this->forumPostsService->wijzigForumDraad($draad, $property, $value);
 		if (is_bool($value)) {
 			$wijziging = ($value ? 'wel ' : 'niet ') . $property;
 		} else {
@@ -339,10 +355,10 @@ class ForumDraadController extends AbstractController
 		} else {
 
 			// direct goedkeuren voor ingelogd
-			$this->forumPostsRepository->goedkeurenForumPost($post);
-			$this->forumDradenMeldingRepository->stuurMeldingen($post);
+			$this->forumPostsService->goedkeurenForumPost($post);
+			$this->forumMeldingenService->stuurDraadMeldingen($post);
 			if ($nieuw) {
-				$this->forumDelenMeldingRepository->stuurMeldingen($post);
+				$this->forumMeldingenService->stuurDeelMeldingen($post);
 			}
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 			if ($nieuw && lid_instelling('forum', 'meldingEigenDraad') === 'ja') {
