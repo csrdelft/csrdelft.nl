@@ -78,7 +78,7 @@ services:
   CsrDelft\common\Security\PersistentTokenProvider: ~
   Symfony\Component\Security\Http\RememberMe\PersistentRememberMeHandler: '@security.authenticator.remember_me_handler.main'
 
-  CsrDelft\controller\SessionController:
+  CsrDelft\controller\security\SessionController:
     tags:
       - { name: security.remember_me_aware}
 
