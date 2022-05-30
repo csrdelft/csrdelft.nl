@@ -68,4 +68,15 @@ class ZoekController extends AbstractController {
 			return json_decode($response->getContent());
 		}, $resultaat))));
 	}
+
+	/**
+	 * @return void
+	 * @throws \Exception
+	 * @Route("/mijnzoek", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function wikizoek() {
+		// Tijdelijke methode
+		return new JsonResponse(curl_request("http://wiki.csrdelft.nl/w/api.php?action=query&list=search&srsearch=DiesCie&format=json"), 200, [], true);
+	}
 }
