@@ -1,3 +1,9 @@
+---
+layout: default
+nav_order: 5
+title: Submodules
+---
+
 # Submodules
 
 Er zijn een aantal onderdelen die vrij weinig met de werking van de stek te maken hebben maar wel onderdeel zijn van de stek. Deze onderdelen zijn losgetrokken in submodules. Hier onder vind je de verschillende submodules terug. Alle submodules bevinden zich in de `htdocs` map.
