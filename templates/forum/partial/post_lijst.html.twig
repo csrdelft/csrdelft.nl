@@ -57,21 +57,20 @@
 					</button>
 				</div>
 
+				{% if post.magCiteren %}
 				<div
 					class="btn-group me-2"
 					role="group"
 					aria-label="Second group"
 				>
-					<button
-						type="button"
-						class="btn btn-outline-primary btn-sm"
-						data-bs-toggle="modal"
-						data-bs-target="#nieuwDraadjeModal"
-					>
-						<i class="fas fa-quote-left"></i>
+					<a href="#reageren" class="btn btn-outline-primary btn-sm citeren"
+						data-citeren="{{ post.post_id }}"
+						title="Bericht citeren">
+						{{ icon('quote-left') }}
 						Bericht citeren
-					</button>
+					</a>
 				</div>
+				{% endif %}
 			</div>
 		</div>
 	</div>
