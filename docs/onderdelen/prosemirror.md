@@ -44,7 +44,7 @@ In de database staat BB code, deze wordt geconverteerd naar HTML of Prosemirror 
 
 In de klassen die `CsrDelft\view\bbcode\prosemirror\Node` en `CsrDelft\view\bbcode\prosemirror\Mark` extenden wordt gedefinieerd welke tags geconverteerd kunnen wordne en ook of er bepaalde extra velden zijn voor conversie.
 
-Niet alle bbcode is valide Prosemirror JSON, er is op dit moment geen controle hier van. Prosemirror JSON kan bijvoorbeeld om het hoofdniveau (direct in `doc`) alleen maar elementen bevatten die als `block` zijn gedefinieerd in het schema. Dit wordt niet afgedwongen door de converteerder. Omdat alle bb code die in Prosemirror terecht komt ook ooit uit Prosemirror kwam is dit geen groot probleem.
+Niet alle bbcode is valide Prosemirror JSON, want prosemirror heeft nog specifieke regels over welke elementen in andere elementen mogen zitten. Het is daarom van belang dat het niet voor kan komen dat een gebruiker gegenereerde BB code kan aanpassen. Als de gebruiker wel de originele bbcode kan aanpassen wordt het mogelijk om de prosemirror editor te slopen. Als de gebruiker toch platte bbcode wil schrijven kan er via prosemirror bbcode worden ingevoegd.
 
 ### Marks & Nodes
 
