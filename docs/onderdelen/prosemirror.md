@@ -58,7 +58,7 @@ Nodes implementeren `CsrDelft\view\bbcode\prosemirror\Node` en Marks implementer
 
 ## Frontend
 
-De frontend is dus gebaseerd op prosemirror. Zie de `assets/js/editor` map voor de implementatie. Er is altijd 1 editor de `currentEditor`, deze is beschikbaar in `window.currentEditor`. De current editor wordt gebruikt voor citeren, of in de courant voor het invoegen van sponsors/agenda. Voor nu is het gebruik van currentEditor een prima oplossing.
+De frontend is maakt gebruik van de Prosemirror libraries. Zie de `assets/js/editor` map voor de implementatie. Als er een editor op een pagina is, is altijd de `currentEditor` global variabele gezet met een verwijzing naar de meest recent gebruikte editor (als er meerdere zijn). De current editor wordt gebruikt voor citeren, of in de courant voor het invoegen van sponsors/agenda. Gebruik deze variabele alleen als je functionaliteit niet onderdeel van de editor kan zijn en niet omdat het makkelijk is!
 
 ### Schema
 
