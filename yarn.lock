@@ -48,10 +48,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-free@npm:^5.11.2":
-  version: 5.13.1
-  resolution: "@fortawesome/fontawesome-free@npm:5.13.1"
-  checksum: 3e378db59cec78e431ed9b2a85754b767bd3062ed49a70f817eea6a6698469955eeb878d38a01773b8ed9db4a91be2a0ad1918804754469998e0c69214461663
+"@fortawesome/fontawesome-free@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "@fortawesome/fontawesome-free@npm:6.1.1"
+  checksum: adb3c71e0d9e60488401a193cfd1925ad100935ae41c88d3969937b59c182289ecc6f8c0835f0a3fb9cc215348a047a39536e918247381774baf7dcebef94b64
   languageName: node
   linkType: hard
 
@@ -5578,7 +5578,7 @@ fsevents@~2.3.1:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@fortawesome/fontawesome-free": ^5.11.2
+    "@fortawesome/fontawesome-free": ^6.1.1
     "@fullcalendar/core": ^5.11.0
     "@fullcalendar/daygrid": ^5.11.0
     "@fullcalendar/interaction": ^5.11.0
