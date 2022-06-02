@@ -59,6 +59,7 @@ class LayoutTwigExtension extends AbstractExtension
 			new TwigFunction('icon', [$this, 'icon'], ['is_safe' => ['html']]),
 			new TwigFunction('get_agenda', [$this, 'get_agenda'], ['is_safe' => ['html']]),
 			new TwigFunction('get_forum', [$this, 'get_forum'], ['is_safe' => ['html']]),
+			new TwigFunction('get_posters', [$this, 'get_posters'], ['is_safe' => ['html']]),
 			new TwigFunction('get_fotoalbum', [$this, 'get_fotoalbum'], ['is_safe' => ['html']]),
 			new TwigFunction('get_civisaldo', [$this, 'get_civisaldo'], ['is_safe' => ['html']]),
 			new TwigFunction('get_ishetal', [$this, 'get_ishetal'], ['is_safe' => ['html']]),
@@ -122,6 +123,11 @@ class LayoutTwigExtension extends AbstractExtension
 		return $this->voorpagina->getForum();
 	}
 
+	public function get_posters(): ?string
+	{
+		return $this->voorpagina->getPosters();
+	}
+	
 	public function get_fotoalbum(): ?string
 	{
 		return $this->voorpagina->getFotoalbum();

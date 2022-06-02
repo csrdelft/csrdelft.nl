@@ -1,0 +1,36 @@
+<div
+	id="postersCarousel"
+	class="carousel carousel-dark slide carousel-fade"
+	data-bs-ride="carousel"
+>
+	<div class="carousel-inner h-100">
+        {# TODO: cms('posters') #}
+		{# {{#each voorpagina.posters}}
+		<div class="carousel-item h-100 {{this.isActive}}">
+			<img
+				src="{{this.src}}"
+				class="d-block w-100 h-100"
+				alt="..."
+			/>
+		</div>
+		{{/each}} #}
+	</div>
+	<button
+		class="carousel-control-prev"
+		type="button"
+		data-bs-target="#postersCarousel"
+		data-bs-slide="prev"
+	>
+		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		<span class="visually-hidden">Previous</span>
+	</button>
+	<button
+		class="carousel-control-next"
+		type="button"
+		data-bs-target="#carouselExampleFade"
+		data-bs-slide="next"
+	>
+		<span class="carousel-control-next-icon" aria-hidden="true"></span>
+		<span class="visually-hidden">Next</span>
+	</button>
+</div>

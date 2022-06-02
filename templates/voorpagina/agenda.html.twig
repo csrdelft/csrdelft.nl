@@ -16,8 +16,17 @@
 						{{ date(item.beginMoment) | time_format }}
 					</span>
 					{{ item.titel }}
+
 				</p>
 			</a>
+			<div class="ms-1">
+				<input
+					class="form-check-input"
+					type="checkbox"
+					role="button"
+					{# value="{{ this.isIngeketzt }}" #}
+				/>
+			</div>
 		</div>
 		{% endfor %}
   	</div>

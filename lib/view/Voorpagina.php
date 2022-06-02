@@ -121,6 +121,11 @@ class Voorpagina {
 		return $this->twig->render('voorpagina/overig.html.twig');
 	}
 
+	public function getPosters(): ?string
+	{
+		return $this->twig->render('voorpagina/posters.html.twig');
+	}
+
 	public function getFotoalbum(): ?string
 	{
 		// Nieuwste fotoalbum
