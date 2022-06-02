@@ -8,7 +8,8 @@ namespace CsrDelft\model\entity;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class Bestand {
+class Bestand
+{
 
 	/**
 	 * Bestandsnaam
@@ -51,8 +52,9 @@ class Bestand {
 	 *
 	 * @return bool
 	 */
-	public function exists() {
-		return @is_readable($this->directory . '/' . $this->filename) AND is_file($this->directory . '/' . $this->filename);
+	public function exists()
+	{
+		return @is_readable($this->directory . '/' . $this->filename) and is_file($this->directory . '/' . $this->filename);
 	}
 
 }

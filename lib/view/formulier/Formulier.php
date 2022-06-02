@@ -24,8 +24,10 @@ use CsrDelft\view\View;
  *
  * @see FormElement
  */
-class Formulier implements View, Validator, ToResponse {
+class Formulier implements View, Validator, ToResponse
+{
 	use ToHtmlResponse;
+
 	protected $model;
 	protected $formId;
 	protected $dataTableId;
@@ -48,7 +50,8 @@ class Formulier implements View, Validator, ToResponse {
 	protected $javascript = '';
 	public $titel;
 
-	public function __construct($model, $action, $titel = false, $dataTableId = false) {
+	public function __construct($model, $action, $titel = false, $dataTableId = false)
+	{
 		$this->model = $model;
 		$this->formId = uniqid_safe(classNameZonderNamespace(get_class($this->model == null ? $this : $this->model)));
 		$this->action = $action;
@@ -66,11 +69,13 @@ class Formulier implements View, Validator, ToResponse {
 		$this->formKnoppen = new EmptyFormKnoppen();
 	}
 
-	public function getFormId() {
+	public function getFormId()
+	{
 		return $this->formId;
 	}
 
-	public function getDataTableId() {
+	public function getDataTableId()
+	{
 		return $this->dataTableId;
 	}
 
@@ -80,23 +85,28 @@ class Formulier implements View, Validator, ToResponse {
 	 *
 	 * @param string $dataTableId
 	 */
-	public function setDataTableId($dataTableId) {
+	public function setDataTableId($dataTableId)
+	{
 		$this->dataTableId = $dataTableId;
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return $this->titel;
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->model;
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return null;
 	}
 
-	private function loadProperty(InputField $field) {
+	private function loadProperty(InputField $field)
+	{
 		$fieldName = $field->getName();
 		if ($this->model) {
 			if (method_exists($this->model, 'set' . ucfirst($fieldName))) {
@@ -107,29 +117,34 @@ class Formulier implements View, Validator, ToResponse {
 		}
 	}
 
-	public function getFields() {
+	public function getFields()
+	{
 		return $this->fields;
 	}
 
-	public function hasFields() {
+	public function hasFields()
+	{
 		return !empty($this->fields);
 	}
+
 	/**
 	 * Zoekt een InputField met exact de gegeven naam.
 	 *
 	 * @param string $fieldName
 	 * @return InputField|false if not found
 	 */
-	public function findByName($fieldName) {
+	public function findByName($fieldName)
+	{
 		foreach ($this->fields as $field) {
-			if (($field instanceof InputField OR $field instanceof FileField) AND $field->getName() === $fieldName) {
+			if (($field instanceof InputField or $field instanceof FileField) and $field->getName() === $fieldName) {
 				return $field;
 			}
 		}
 		return false;
 	}
 
-	public function addFields(array $fields) {
+	public function addFields(array $fields)
+	{
 		foreach ($fields as $field) {
 			if ($field instanceof InputField) {
 				$this->loadProperty($field);
@@ -138,28 +153,32 @@ class Formulier implements View, Validator, ToResponse {
 		$this->fields = array_merge($this->fields, $fields);
 	}
 
-	public function insertAtPos($pos, FormElement $field) {
+	public function insertAtPos($pos, FormElement $field)
+	{
 		if ($field instanceof InputField) {
 			$this->loadProperty($field);
 		}
 		array_splice($this->fields, $pos, 0, array($field));
 	}
 
-	public function removeField(FormElement $field) {
+	public function removeField(FormElement $field)
+	{
 		$pos = array_search($field, $this->fields);
 		unset($this->fields[$pos]);
 	}
 
-	public function getFormKnoppen() {
+	public function getFormKnoppen()
+	{
 		return $this->formKnoppen;
 	}
 
 	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */
-	public function isPosted() {
+	public function isPosted()
+	{
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField AND !$field->isPosted()) {
+			if ($field instanceof InputField and !$field->isPosted()) {
 				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}
@@ -171,13 +190,14 @@ class Formulier implements View, Validator, ToResponse {
 	 * Alle valideer-functies kunnen het model gebruiken bij het valideren
 	 * dat meegegeven is bij de constructie van het InputField.
 	 */
-	public function validate() {
+	public function validate()
+	{
 		if (!$this->isPosted()) {
 			return false;
 		}
 		$valid = true;
 		foreach ($this->fields as $field) {
-			if ($field instanceof Validator AND !$field->validate()) { // geen comments bijv.
+			if ($field instanceof Validator and !$field->validate()) { // geen comments bijv.
 				$valid = false; // niet gelijk retourneren om voor alle velden eventueel errors te zetten
 			}
 		}
@@ -190,7 +210,8 @@ class Formulier implements View, Validator, ToResponse {
 	/**
 	 * Geeft waardes van de formuliervelden terug.
 	 */
-	public function getValues() {
+	public function getValues()
+	{
 		$values = array();
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField) {
@@ -203,7 +224,8 @@ class Formulier implements View, Validator, ToResponse {
 	/**
 	 * Geeft errors van de formuliervelden terug.
 	 */
-	public function getError() {
+	public function getError()
+	{
 		$errors = array();
 		foreach ($this->fields as $field) {
 			if ($field instanceof Validator) {
@@ -219,21 +241,24 @@ class Formulier implements View, Validator, ToResponse {
 		return $errors;
 	}
 
-	protected function getJavascript() {
+	protected function getJavascript()
+	{
 		foreach ($this->fields as $field) {
 			$this->javascript .= $field->getJavascript();
 		}
 		return $this->javascript;
 	}
 
-	protected function getFormTag() {
+	protected function getFormTag()
+	{
 		if ($this->dataTableId) {
 			$this->css_classes[] = 'DataTableResponse';
 		}
-		return '<form enctype="' . $this->enctype . '" action="' . htmlspecialchars ($this->action) . '" id="' . $this->formId . '" data-tableid="' . $this->dataTableId . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
+		return '<form enctype="' . $this->enctype . '" action="' . htmlspecialchars($this->action) . '" id="' . $this->formId . '" data-tableid="' . $this->dataTableId . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
 	}
 
-	protected function getScriptTag() {
+	protected function getScriptTag()
+	{
 		$js = $this->getJavascript();
 
 		if (trim($js) == "") {
@@ -255,7 +280,8 @@ HTML;
 	 *
 	 * @return string
 	 */
-	public function __toString() {
+	public function __toString()
+	{
 		$string = '';
 
 		if ($this->showMelding) {
@@ -283,7 +309,8 @@ HTML;
 		return $string;
 	}
 
-	public function getCsrfField() {
+	public function getCsrfField()
+	{
 		if (!$this->preventCsrf) {
 			return null;
 		}
@@ -297,7 +324,8 @@ HTML;
 	 *
 	 * @returns ChangeLogEntry[]
 	 */
-	public function diff() {
+	public function diff()
+	{
 		$changeLogRepository = ContainerFacade::getContainer()->get(ChangeLogRepository::class);
 		$diff = array();
 		foreach ($this->getFields() as $field) {
@@ -319,7 +347,8 @@ HTML;
 	 * @param ChangeLogEntry[] $diff
 	 * @return string
 	 */
-	public function changelog(array $diff) {
+	public function changelog(array $diff)
+	{
 		$changelog = '';
 		if (!empty($diff)) {
 			$changelog .= '[div]Bewerking van [lid=' . LoginService::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
@@ -331,7 +360,8 @@ HTML;
 		return $changelog;
 	}
 
-	public function getMethod() {
+	public function getMethod()
+	{
 		return $this->post ? 'post' : 'get';
 	}
 }

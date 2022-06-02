@@ -1,166 +1,171 @@
 @import "variables";
 
 #footer {
-  .inner, h2, a, label {
-    color: black;
-  }
+	.inner, h2, a, label {
+		color: black;
+	}
 
-  a {
-    border-bottom: dotted 1px $tekstdonker;
-    text-decoration: none;
-    &:hover {
-      border-bottom-color: transparent;
-      color: #ffffff !important;
-    }
-  }
+	a {
+		border-bottom: dotted 1px $tekstdonker;
+		text-decoration: none;
 
-  iframe {
-    width: 100%;
-  }
+		&:hover {
+			border-bottom-color: transparent;
+			color: #ffffff !important;
+		}
+	}
 
-  input,textarea {
-    color: $tekstdonker!important;
-  }
+	iframe {
+		width: 100%;
+	}
 
-  .inner {
-    padding: 5em 0 3em 0;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin: 0 auto;
-    width: 55em;
+	input, textarea {
+		color: $tekstdonker !important;
+	}
 
-    & > * {
-      width: 100%;
-    }
+	.inner {
+		padding: 5em 0 3em 0;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		margin: 0 auto;
+		width: 55em;
 
-    form {
-      margin: 0 3em 0 0;
-      width: calc(50% - 1.5em);
-    }
+		& > * {
+			width: 100%;
+		}
 
-    .contact {
-      width: calc(50% - 1.5em);
+		form {
+			margin: 0 3em 0 0;
+			width: calc(50% - 1.5em);
+		}
+
+		.contact {
+			width: calc(50% - 1.5em);
 
 			&.zonder-interesseformulier {
 				width: 100%;
 			}
-    }
+		}
 
-    .copyright,.sponsors {
-      border-top: solid 2px $geel;
-      list-style: none;
-      margin: 2em 0 1em 0;
-      padding: 2em 0 0 0;
-      width: 100%;
-      text-align: center;
+		.copyright, .sponsors {
+			border-top: solid 2px $geel;
+			list-style: none;
+			margin: 2em 0 1em 0;
+			padding: 2em 0 0 0;
+			width: 100%;
+			text-align: center;
 
-      li {
-        display: block;
-        font-size: 0.9em;
-        line-height: 1;
-        margin-left: 1em;
-        padding: 0 0 0 1em;
-        margin-bottom: 2em;
+			li {
+				display: block;
+				font-size: 0.9em;
+				line-height: 1;
+				margin-left: 1em;
+				padding: 0 0 0 1em;
+				margin-bottom: 2em;
 
-        &:first-child {
-          border-left: 0;
-          margin-left: 0;
-          padding-left: 0;
-        }
+				&:first-child {
+					border-left: 0;
+					margin-left: 0;
+					padding-left: 0;
+				}
 
-        &:last-child {
-          margin-bottom: 0;
-        }
+				&:last-child {
+					margin-bottom: 0;
+				}
 
-        a {
-          color: inherit;
-          border-bottom: none;
-        }
+				a {
+					color: inherit;
+					border-bottom: none;
+				}
 
-        img {
-          max-width: 100%;
-        }
-      }
-    }
-  }
+				img {
+					max-width: 100%;
+				}
+			}
+		}
+	}
 }
 
 @media screen and (max-width: $scherm-extrabreed) {
 
-  #footer {
-    margin-top: -6.5em;
-    padding-top: 6.5em;
-  }
+	#footer {
+		margin-top: -6.5em;
+		padding-top: 6.5em;
+	}
 
 }
 
 @media screen and (max-width: $scherm-breed) {
 
-  #footer {
-    margin-top: -4.75em;
-    padding-top: 4.75em;
-    .inner {
-      padding: 3em 3em 1em 3em;
-      display: block;
-      width: 100%;
-      form {
-        width: 100%;
-        margin: 0 0 4em 0;
-      }
+	#footer {
+		margin-top: -4.75em;
+		padding-top: 4.75em;
 
-      .contact {
-        width: 100%;
-        margin: 0 0 4em 0;
-      }
+		.inner {
+			padding: 3em 3em 1em 3em;
+			display: block;
+			width: 100%;
 
-      .copyright,.sponsors {
-        margin: 4em 0 2em 0;
-      }
-    }
-  }
+			form {
+				width: 100%;
+				margin: 0 0 4em 0;
+			}
+
+			.contact {
+				width: 100%;
+				margin: 0 0 4em 0;
+			}
+
+			.copyright, .sponsors {
+				margin: 4em 0 2em 0;
+			}
+		}
+	}
 }
 
 @media screen and (max-width: $scherm-middel) {
 
-  #footer {
-    margin-top: -2.5em;
-    padding-top: 2.5em;
-    .inner {
-      padding: 2em 2em 0.1em 2em;
-    }
+	#footer {
+		margin-top: -2.5em;
+		padding-top: 2.5em;
 
-    form {
-      margin: 0 0 3em 0;
-    }
+		.inner {
+			padding: 2em 2em 0.1em 2em;
+		}
 
-    .contact {
-      margin: 0 0 3em 0;
-    }
-  }
+		form {
+			margin: 0 0 3em 0;
+		}
+
+		.contact {
+			margin: 0 0 3em 0;
+		}
+	}
 
 }
 
 @media screen and (max-width: $scherm-middelsmal) {
 
-  #footer .inner {
-    .copyright li, .sponsors li {
-      border-left: 0;
-      display: block;
-      margin: 1em 0 0 0;
-      padding-left: 0;
-      &:first-child {
-        margin-top: 0;
-      }
-    }
-  }
+	#footer .inner {
+		.copyright li, .sponsors li {
+			border-left: 0;
+			display: block;
+			margin: 1em 0 0 0;
+			padding-left: 0;
+
+			&:first-child {
+				margin-top: 0;
+			}
+		}
+	}
 
 }
 
 @media screen and (max-width: $scherm-smal) {
 
-  #footer .inner {
-    padding: 2em 1.5em 0.1em 1.5em;
-  }
+	#footer .inner {
+		padding: 2em 1.5em 0.1em 1.5em;
+	}
 
 }

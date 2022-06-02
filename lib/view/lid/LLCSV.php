@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\lid;
+
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
 use Exception;
@@ -8,9 +9,11 @@ use Exception;
 /**
  * CSV in een textarea met clientside downloadknop
  */
-class LLCSV extends LLWeergave {
+class LLCSV extends LLWeergave
+{
 
-	public function viewHeader() {
+	public function viewHeader()
+	{
 		$html = '';
 		$html .= '<textarea class="csv">';
 		foreach ($this->velden as $veld) {
@@ -37,7 +40,8 @@ class LLCSV extends LLWeergave {
 		return $html;
 	}
 
-	public function viewFooter() {
+	public function viewFooter()
+	{
 		$html = '';
 		$html .= '</textarea>';
 		$html .= <<<HTML
@@ -54,7 +58,8 @@ class LLCSV extends LLWeergave {
 		return $html;
 	}
 
-	public function viewLid(Profiel $profiel) {
+	public function viewLid(Profiel $profiel)
+	{
 		$html = '';
 
 		foreach ($this->velden as $veld) {

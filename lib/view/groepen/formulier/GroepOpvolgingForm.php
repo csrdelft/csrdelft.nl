@@ -10,12 +10,14 @@ use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
-class GroepOpvolgingForm extends ModalForm {
+class GroepOpvolgingForm extends ModalForm
+{
 
 	public function __construct(
-        Groep $groep,
-        $action
-	) {
+		Groep $groep,
+					$action
+	)
+	{
 		parent::__construct($groep, $action, 'Opvolging instellen', true);
 
 		$fields = [];

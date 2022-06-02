@@ -17,7 +17,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Trikoder\Bundle\OAuth2Bundle\Command\ClearExpiredTokensCommand;
 use Trikoder\Bundle\OAuth2Bundle\Command\ClearRevokedTokensCommand;
 
-class CronCommand extends Command {
+class CronCommand extends Command
+{
 	protected static $defaultName = 'stek:cron';
 	/**
 	 * @var DebugLogRepository
@@ -44,19 +45,21 @@ class CronCommand extends Command {
 	 */
 	private $forumService;
 
-	protected function configure() {
+	protected function configure()
+	{
 		$this
 			->setDescription('Voer alle periodieke taken uit');
 	}
 
 	public function __construct(
-		DebugLogRepository $debugLogRepository,
-		OneTimeTokensRepository $oneTimeTokensRepository,
-		InstellingenRepository $instellingenRepository,
+		DebugLogRepository        $debugLogRepository,
+		OneTimeTokensRepository   $oneTimeTokensRepository,
+		InstellingenRepository    $instellingenRepository,
 		LidInstellingenRepository $lidInstellingenRepository,
-		CorveeHerinneringService $corveeHerinneringService,
-		ForumService $forumService
-	) {
+		CorveeHerinneringService  $corveeHerinneringService,
+		ForumService              $forumService
+	)
+	{
 		parent::__construct(null);
 		$this->debugLogRepository = $debugLogRepository;
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
@@ -66,7 +69,8 @@ class CronCommand extends Command {
 		$this->forumService = $forumService;
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): int {
+	protected function execute(InputInterface $input, OutputInterface $output): int
+	{
 		$start = microtime(true);
 
 		$output->writeln("debuglog opschonen", OutputInterface::VERBOSITY_VERBOSE);

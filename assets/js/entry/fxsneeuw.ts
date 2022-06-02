@@ -13,16 +13,16 @@ import {
 	TextureLoader,
 	WebGLRenderer,
 } from 'three';
-import {docReady, isLightMode} from "../lib/util";
+import { docReady, isLightMode } from '../lib/util';
 
 let camera: PerspectiveCamera;
 let scene: Scene;
 let renderer: WebGLRenderer;
 const materials: PointsMaterial[] = [];
-let parameters: Array<{ color: number[]; sprite: Texture; size: number; }>;
+let parameters: Array<{ color: number[]; sprite: Texture; size: number }>;
 
 docReady(() => {
-	const lightTheme = isLightMode()
+	const lightTheme = isLightMode();
 
 	try {
 		init();
@@ -66,26 +66,21 @@ docReady(() => {
 		const sprite5 = textureLoader.load('/images/sneeuw/snowflake5.png');
 
 		for (let i = 0; i < 10000; i++) {
-			vertices.push(
-				Math.random() * 2000 - 1000,
-				Math.random() * 2000 - 1000,
-				Math.random() * 2000 - 1000,
-			);
+			vertices.push(Math.random() * 2000 - 1000, Math.random() * 2000 - 1000, Math.random() * 2000 - 1000);
 		}
 
 		geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
 
 		parameters = [
-			{color: [0.55, 0.2, 0.5], sprite: sprite2, size: 20},
-			{color: [0.45, 0.1, 0.5], sprite: sprite3, size: 15},
-			{color: [0.40, 0.05, 0.5], sprite: sprite1, size: 10},
-			{color: [0.35, 0, 0.5], sprite: sprite5, size: 8},
-			{color: [0.30, 0, 0.5], sprite: sprite4, size: 5},
+			{ color: [0.55, 0.2, 0.5], sprite: sprite2, size: 20 },
+			{ color: [0.45, 0.1, 0.5], sprite: sprite3, size: 15 },
+			{ color: [0.4, 0.05, 0.5], sprite: sprite1, size: 10 },
+			{ color: [0.35, 0, 0.5], sprite: sprite5, size: 8 },
+			{ color: [0.3, 0, 0.5], sprite: sprite4, size: 5 },
 		];
 
 		for (let i = 0; i < parameters.length; i++) {
-
-			const {color, sprite, size} = parameters[i];
+			const { color, sprite, size } = parameters[i];
 
 			materials[i] = new PointsMaterial({
 				size,
@@ -96,7 +91,7 @@ docReady(() => {
 			});
 
 			// Draai de hue om in light theme omdat we nu in SubtractiveBlending zitten.
-			const hue = lightTheme ? (color[0] + .5) % 1 : color[0];
+			const hue = lightTheme ? (color[0] + 0.5) % 1 : color[0];
 
 			materials[i].color.setHSL(hue, color[1], color[2]);
 
@@ -128,7 +123,7 @@ docReady(() => {
 		renderer.setSize(window.innerWidth, window.innerHeight);
 	}
 
-//
+	//
 
 	function animate() {
 		requestAnimationFrame(animate);
@@ -139,8 +134,8 @@ docReady(() => {
 	function render() {
 		const time = Date.now() * 0.00005;
 
-		camera.position.x += (camera.position.x) * 0.05;
-		camera.position.y += (camera.position.y) * 0.05;
+		camera.position.x += camera.position.x * 0.05;
+		camera.position.y += camera.position.y * 0.05;
 
 		camera.lookAt(scene.position);
 

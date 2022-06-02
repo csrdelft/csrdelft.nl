@@ -8,7 +8,8 @@ namespace CsrDelft\view\formulier;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 06/05/2017
  */
-class ModalForm extends Formulier {
+class ModalForm extends Formulier
+{
 	/**
 	 * Kan modal-lg (breed), modal-sm (smal) of leeg (normaal) zijn.
 	 *
@@ -16,7 +17,8 @@ class ModalForm extends Formulier {
 	 */
 	protected $modalBreedte = '';
 
-	public function __toString() {
+	public function __toString()
+	{
 		$this->css_classes[] = 'ModalForm';
 		$html = '';
 

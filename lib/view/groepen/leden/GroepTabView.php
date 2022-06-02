@@ -14,11 +14,13 @@ use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 
-abstract class GroepTabView extends GroepOmschrijvingView {
+abstract class GroepTabView extends GroepOmschrijvingView
+{
 
 	protected abstract function getTabContent();
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		$html = '<div id="groep-leden-' . $this->groep->id . '" class="groep-leden"><ul class="groep-tabs nobullets">';
 
 		if (!$this->groep instanceof Verticale) {
@@ -80,7 +82,7 @@ JS;
 
 		$nu = date_create_immutable();
 
-		if ($this->groep instanceof HeeftAanmeldLimiet AND $this->groep->getAanmeldLimiet() != null) {
+		if ($this->groep instanceof HeeftAanmeldLimiet and $this->groep->getAanmeldLimiet() != null) {
 			// Progress bar
 			$aantal = $this->groep->aantalLeden();
 			$percent = round($aantal * 100 / $this->groep->getAanmeldLimiet());

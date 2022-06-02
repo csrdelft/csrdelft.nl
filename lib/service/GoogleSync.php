@@ -30,7 +30,8 @@ define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
  * houdt er rekening mee dat een aanroep naar doRequestToken er voor kan zorgen dat de gebruiker naar de google
  * flow wordt gestuurd.
  */
-class GoogleSync {
+class GoogleSync
+{
 	/**
 	 * Groep naam in Google Contacts.
 	 *
@@ -80,11 +81,13 @@ class GoogleSync {
 	 * @throws \Doctrine\ORM\ORMException
 	 * @throws \Doctrine\ORM\OptimisticLockException
 	 */
-	public function __construct(GoogleTokenRepository $googleTokenRepository) {
+	public function __construct(GoogleTokenRepository $googleTokenRepository)
+	{
 		$this->googleTokenRepository = $googleTokenRepository;
 	}
 
-	public function init() {
+	public function init()
+	{
 		$google_token = $this->googleTokenRepository->find(LoginService::getUid());
 		if (!$google_token) {
 			throw new CsrException('Authsub token not available, use doRequestToken.');
@@ -116,7 +119,8 @@ class GoogleSync {
 	/**
 	 * Load all contactgroups.
 	 */
-	private function loadGroupFeed() {
+	private function loadGroupFeed()
+	{
 		$httpClient = $this->client->authorize();
 		$response = $httpClient->request('GET', GOOGLE_GROUPS_URL);
 		if ($response->getStatusCode() === 401) {
@@ -128,7 +132,8 @@ class GoogleSync {
 	/**
 	 * Load contacts from certain contact group.
 	 */
-	private function loadContactsForGroup($groupId) {
+	private function loadContactsForGroup($groupId)
+	{
 		// Default max-results is 25, laad alles in 1 keer
 		$httpClient = $this->client->authorize();
 		$response = $httpClient->request('GET', GOOGLE_CONTACTS_URL . '&max-results=1000&group=' . urlencode($groupId));
@@ -146,7 +151,8 @@ class GoogleSync {
 	 *
 	 * @param $xml SimpleXMLElement
 	 */
-	private function fixSimpleXMLNameSpace($xml) {
+	private function fixSimpleXMLNameSpace($xml)
+	{
 		foreach ($xml->getDocNamespaces() as $strPrefix => $strNamespace) {
 			if (strlen($strPrefix) == 0) {
 				$strPrefix = "_";
@@ -159,7 +165,8 @@ class GoogleSync {
 	 * Trek naam googleId en wat andere relevante meuk uit de feed-objecten
 	 * en stop dat in een array.
 	 */
-	public function getGoogleContacts() {
+	public function getGoogleContacts()
+	{
 		if ($this->contactData == null) {
 			$this->contactData = array();
 			foreach ($this->contactFeed as $contact) {
@@ -180,7 +187,8 @@ class GoogleSync {
 	 *
 	 * @return array|null Een array als de contact een csruid heeft, anders null
 	 */
-	private function unpackGoogleContact($contact) {
+	private function unpackGoogleContact($contact)
+	{
 		$this->fixSimpleXMLNameSpace($contact);
 
 		$uid = $contact->xpath('gContact:userDefinedField[@key="csruid"]');
@@ -211,7 +219,8 @@ class GoogleSync {
 	 *
 	 * @return null|array met het google-id in het geval van voorkomen, anders null.
 	 */
-	public function existsInGoogleContacts(Profiel $profiel) {
+	public function existsInGoogleContacts(Profiel $profiel)
+	{
 		if (!$this->isAuthenticated()) {
 			return null;
 		}
@@ -233,7 +242,8 @@ class GoogleSync {
 	/**
 	 * return the etag for any matching contact in this->contactFeed.
 	 */
-	public function getEtag($googleid) {
+	public function getEtag($googleid)
+	{
 		foreach ($this->getGoogleContacts() as $contact) {
 			if (strtolower($contact['self']) == $googleid) {
 				return $contact['etag'];
@@ -245,7 +255,8 @@ class GoogleSync {
 	/**
 	 * Get array with group[name] => id
 	 */
-	public function getGroups() {
+	public function getGroups()
+	{
 		$return = array();
 		foreach ($this->groupFeed as $group) {
 			$this->fixSimpleXMLNameSpace($group);
@@ -280,7 +291,8 @@ class GoogleSync {
 	 *
 	 * http://code.google.com/apis/contacts/docs/2.0/reference.html#GroupElements
 	 */
-	private function getSystemGroupId($name) {
+	private function getSystemGroupId($name)
+	{
 		//kijken of we al een grop hebben met de naam
 		foreach ($this->getGroups() as $group) {
 			if ($group['systemgroup'] == $name) {
@@ -295,7 +307,8 @@ class GoogleSync {
 	 *
 	 * @return string met het google group-id.
 	 */
-	private function getGroupId($groupname = null) {
+	private function getGroupId($groupname = null)
+	{
 		if ($groupname == null) {
 			$groupname = $this->groupname;
 		}
@@ -337,7 +350,8 @@ class GoogleSync {
 	 *
 	 * @return string met foutmeldingen en de namen van de gesyncte leden.
 	 */
-	public function syncLidBatch($leden) {
+	public function syncLidBatch($leden)
+	{
 		//kan veel tijd kosten, dus time_limit naar 0 zodat het oneindig door kan gaan.
 		set_time_limit(0);
 
@@ -429,7 +443,8 @@ class GoogleSync {
 	 * @return string met foutmelding of naam van lid bij succes.
 	 * @throws CsrException
 	 */
-	public function syncLid(Profiel $profiel) {
+	public function syncLid(Profiel $profiel)
+	{
 		if (!$profiel instanceof Profiel) {
 			$profiel = ProfielRepository::get($profiel);
 		}
@@ -488,7 +503,8 @@ class GoogleSync {
 	 * @param $contact array
 	 * @param $profiel Profiel
 	 */
-	private function updatePhoto($contact, $profiel) {
+	private function updatePhoto($contact, $profiel)
+	{
 
 		$url = $contact['photo']['href'];
 
@@ -519,7 +535,8 @@ class GoogleSync {
 	 *
 	 * @return DOMDocument XML document voor dit Profiel
 	 */
-	private function createXML(Profiel $profiel) {
+	private function createXML(Profiel $profiel)
+	{
 
 		$doc = new DOMDocument();
 		$doc->formatOutput = true;
@@ -656,7 +673,8 @@ class GoogleSync {
 	 *
 	 * @return bool
 	 */
-	public function isAuthenticated() {
+	public function isAuthenticated()
+	{
 		return $this->googleTokenRepository->exists(LoginService::getUid());
 	}
 
@@ -668,7 +686,8 @@ class GoogleSync {
 	 * de authenticatie mislukt.
 	 * @throws CsrException
 	 */
-	public function doRequestToken($state) {
+	public function doRequestToken($state)
+	{
 		if (!$this->isAuthenticated()) {
 			$client = self::createGoogleCLient();
 			$client->setState(urlencode($state));
@@ -688,7 +707,8 @@ class GoogleSync {
 	 * @return Google_Client
 	 * @throws CsrException
 	 */
-	public static function createGoogleCLient() {
+	public static function createGoogleCLient()
+	{
 		$request = ContainerFacade::getContainer()->get('request_stack')->getCurrentRequest();
 		$redirect_uri = $request->getSchemeAndHttpHost() . '/google/callback';
 		$client = new Google_Client();
@@ -704,12 +724,13 @@ class GoogleSync {
 		return $client;
 	}
 
-	public function loadXmlString($xml) {
+	public function loadXmlString($xml)
+	{
 
 		$prev = libxml_use_internal_errors(false);
 		$data = @simplexml_load_string($xml);
 		if ($data === false) {
-			throw new CsrException("Error parsing xml. Content was: ".substr ( $xml, 0, 100)."...");
+			throw new CsrException("Error parsing xml. Content was: " . substr($xml, 0, 100) . "...");
 		}
 		libxml_use_internal_errors($prev);
 		return $data;

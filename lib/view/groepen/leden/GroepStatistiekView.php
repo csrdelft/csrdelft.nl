@@ -10,18 +10,21 @@ use DateTime;
 use function array_key_first;
 use function array_key_last;
 
-class GroepStatistiekView extends GroepTabView {
+class GroepStatistiekView extends GroepTabView
+{
 	/**
 	 * @var GroepStatistiekDTO
 	 */
 	private $statistiek;
 
-	public function __construct(Groep $groep, GroepStatistiekDTO $statistiek) {
+	public function __construct(Groep $groep, GroepStatistiekDTO $statistiek)
+	{
 		parent::__construct($groep);
 		$this->statistiek = $statistiek;
 	}
 
-	private function verticale($data) {
+	private function verticale($data)
+	{
 		$verticalen = [];
 		$deelnemers = [];
 		foreach ($data as $row) {
@@ -40,7 +43,8 @@ class GroepStatistiekView extends GroepTabView {
 		]));
 	}
 
-	private function geslacht($data) {
+	private function geslacht($data)
+	{
 		$mannen = 0;
 		$vrouwen = 0;
 		foreach ($data as $row) {
@@ -65,7 +69,8 @@ class GroepStatistiekView extends GroepTabView {
 		]));
 	}
 
-	private function lichting($data) {
+	private function lichting($data)
+	{
 		$aantal = [];
 		$lichting = [];
 		foreach ($data as $row) {
@@ -74,7 +79,7 @@ class GroepStatistiekView extends GroepTabView {
 		}
 
 		return htmlentities(json_encode([
-			'labels'=> $lichting,
+			'labels' => $lichting,
 			'datasets' => [
 				[
 					'label' => 'Aantal',
@@ -84,7 +89,8 @@ class GroepStatistiekView extends GroepTabView {
 		]));
 	}
 
-	private function tijd($data) {
+	private function tijd($data)
+	{
 		$totaal = 0;
 		$series = [];
 		foreach ($data as $tijd => $aantal) {
@@ -111,7 +117,8 @@ class GroepStatistiekView extends GroepTabView {
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function getTabContent() {
+	public function getTabContent()
+	{
 		$verticale = $this->verticale($this->statistiek->verticale);
 		$geslacht = $this->geslacht($this->statistiek->geslacht);
 		$lichting = $this->lichting($this->statistiek->lichting);

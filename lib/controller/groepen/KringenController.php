@@ -18,12 +18,15 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @property KringenRepository $repository
  */
-class KringenController extends AbstractGroepenController {
-	public function __construct(ManagerRegistry $registry) {
+class KringenController extends AbstractGroepenController
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Kring::class);
 	}
 
-	public function zoeken(Request $request, $zoekterm = null) {
+	public function zoeken(Request $request, $zoekterm = null)
+	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
 		}

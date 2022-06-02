@@ -3,11 +3,11 @@
 {% block titel %}Eetplanbeheer{% endblock %}
 
 {% block breadcrumbs %}
-{{ csr_breadcrumbs({
-	(url('default')): 'main',
-	(url('csrdelft_eetplan_view')): 'Eetplan',
-	(url('csrdelft_eetplan_beheer')): 'Eetplanbeheer',
-}) }}
+	{{ csr_breadcrumbs({
+		(url('default')): 'main',
+		(url('csrdelft_eetplan_view')): 'Eetplan',
+		(url('csrdelft_eetplan_beheer')): 'Eetplanbeheer',
+	}) }}
 {% endblock %}
 
 {% block content %}

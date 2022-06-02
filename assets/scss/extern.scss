@@ -214,6 +214,7 @@ pre {
 	-webkit-overflow-scrolling: touch;
 	font-family: "Courier New", monospace;
 	font-size: 0.9em;
+
 	code {
 		display: block;
 		line-height: 1.75em;
@@ -355,6 +356,7 @@ optgroup {
 
 .remote-login-code.loading {
 	background: white;
+
 	img {
 		opacity: 0;
 	}

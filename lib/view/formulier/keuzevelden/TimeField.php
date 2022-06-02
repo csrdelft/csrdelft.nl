@@ -10,11 +10,13 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class TimeField extends InputField {
+class TimeField extends InputField
+{
 
 	protected $minutensteps;
 
-	public function __construct($name, $value, $description, $minutensteps = null) {
+	public function __construct($name, $value, $description, $minutensteps = null)
+	{
 		parent::__construct($name, $value, $description);
 		if ($minutensteps === null) {
 			$this->minutensteps = 1;
@@ -23,19 +25,23 @@ class TimeField extends InputField {
 		}
 	}
 
-	public function isPosted() {
+	public function isPosted()
+	{
 		return isset($_POST[$this->name . '_uur'], $_POST[$this->name . '_minuut']);
 	}
 
-	public function getUur() {
+	public function getUur()
+	{
 		return $_POST[$this->name . '_uur'];
 	}
 
-	public function getMinuut() {
+	public function getMinuut()
+	{
 		return $_POST[$this->name . '_minuut'];
 	}
 
-	public function getValue() {
+	public function getValue()
+	{
 		$this->value = parent::getValue();
 		if ($this->isPosted()) {
 			$this->value = $this->getUur() . ':' . $this->getMinuut();
@@ -43,19 +49,21 @@ class TimeField extends InputField {
 		return $this->value;
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		if (!parent::validate()) {
 			return false;
 		}
 		$uren = (int)substr($this->value, 0, 2);
 		$minuten = (int)substr($this->value, 3, 5);
-		if (!preg_match('/^(\d\d?):(\d\d?)$/', $this->value) OR $uren < 0 OR $uren > 23 OR $minuten < 0 OR $minuten > 59) {
+		if (!preg_match('/^(\d\d?):(\d\d?)$/', $this->value) or $uren < 0 or $uren > 23 or $minuten < 0 or $minuten > 59) {
 			$this->error = 'Ongeldig tijdstip';
 		}
 		return $this->error === '';
 	}
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		$hours = range(0, 23);
 		$minutes = range(0, 59, $this->minutensteps);
 

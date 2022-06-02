@@ -12,9 +12,10 @@
 				 title="Verander plakkerigheid">
 				{{ icon('note') }} maak {% if draad.plakkerig %}<span class="dikgedrukt">niet</span>{% endif %} plakkerig
 			</a>
-			<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'eerste_post_plakkerig'}) }}"
-				 class="btn btn-light post ReloadPage {% if draad.eerste_post_plakkerig %}active{% endif %}"
-				 title="Verander plakkerigheid van eerste post">
+			<a
+				href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'eerste_post_plakkerig'}) }}"
+				class="btn btn-light post ReloadPage {% if draad.eerste_post_plakkerig %}active{% endif %}"
+				title="Verander plakkerigheid van eerste post">
 				1e post plakkerig
 			</a>
 			<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'pagina_per_post'}) }}"
@@ -35,7 +36,8 @@
 				 class="btn btn-light"
 				 title="Bekijk de reacties die zijn verwijderd">{{ icon('bin_closed') }} verwijderde reacties</a>
 		</div>
-		<form action="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'forum_id'}) }}" method="post">
+		<form action="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'forum_id'}) }}"
+					method="post">
 			{{ csrfField() }}
 			<div class="mb-3 row">
 				<label for="verplaats-naar" class="col-md-3 col-form-label">Verplaats naar &nbsp;</label>
@@ -56,7 +58,8 @@
 				</div>
 			</div>
 		</form>
-		<form action="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'titel'}) }}" method="post">
+		<form action="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'titel'}) }}"
+					method="post">
 			{{ csrfField() }}
 			<div class="mb-3 row">
 				<label for="titel" class="col-md-3 col-form-label">Titel aanpassen &nbsp;</label>
@@ -95,8 +98,9 @@
 			</form>
 		{% endif %}
 		{% if gedeeld_met_opties %}
-			<form action="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'gedeeld_met'}) }}"
-						method="post">
+			<form
+				action="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'gedeeld_met'}) }}"
+				method="post">
 				{{ csrfField() }}
 				<div class="mb-3 row">
 					<label for="gedeeld_met" class="col-md-3 col-form-label">Delen met &nbsp;</label>

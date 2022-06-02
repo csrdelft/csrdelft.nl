@@ -13,7 +13,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository")
  */
-class CiviBestellingInhoud {
+class CiviBestellingInhoud
+{
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -46,24 +47,28 @@ class CiviBestellingInhoud {
 	 */
 	public $aantal;
 
-	public function setProduct(CiviProduct $product = null) {
+	public function setProduct(CiviProduct $product = null)
+	{
 		$this->product = $product;
 		$this->product_id = $product->id ?? null;
 	}
 
-	public function setBestelling(CiviBestelling $bestelling = null) {
+	public function setBestelling(CiviBestelling $bestelling = null)
+	{
 		$this->bestelling = $bestelling;
 		$this->bestelling_id = $bestelling->id ?? null;
 	}
 
-	public function getBeschrijving() {
+	public function getBeschrijving()
+	{
 		return sprintf("%d %s", $this->aantal, $this->product->beschrijving);
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getPrijs() {
+	public function getPrijs()
+	{
 		return $this->product->getPrijsInt() * $this->aantal;
 	}
 
@@ -71,7 +76,8 @@ class CiviBestellingInhoud {
 	 * @return string
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getStukprijs() {
+	public function getStukprijs()
+	{
 		return sprintf('€%.2f', $this->product->getPrijsInt() / 100);
 	}
 
@@ -79,7 +85,8 @@ class CiviBestellingInhoud {
 	 * @return string
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getTotaalprijs() {
+	public function getTotaalprijs()
+	{
 		return sprintf('€%.2f', $this->getPrijs() / 100);
 	}
 
@@ -88,7 +95,8 @@ class CiviBestellingInhoud {
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("product")
 	 */
-	public function getDataTableProduct() {
+	public function getDataTableProduct()
+	{
 		return $this->product->beschrijving;
 	}
 

@@ -19,7 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("crv_kwalificaties")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class CorveeKwalificatie {
+class CorveeKwalificatie
+{
 	/**
 	 * Lidnummer
 	 * @var string
@@ -54,12 +55,14 @@ class CorveeKwalificatie {
 	 */
 	public $corveeFunctie;
 
-	public function setCorveeFunctie(CorveeFunctie $corveeFunctie = null) {
+	public function setCorveeFunctie(CorveeFunctie $corveeFunctie = null)
+	{
 		$this->corveeFunctie = $corveeFunctie;
 		$this->functie_id = $corveeFunctie->functie_id ?? null;
 	}
 
-	public function setProfiel(Profiel $profiel = null) {
+	public function setProfiel(Profiel $profiel = null)
+	{
 		$this->profiel = $profiel;
 		$this->uid = $profiel->uid ?? null;
 	}

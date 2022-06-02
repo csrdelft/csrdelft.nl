@@ -39,14 +39,15 @@ class DeclaratieWachtrijRepository extends AbstractRepository
 			->leftJoin('d.categorie', 'c')
 			->leftJoin('c.wachtrij', 'w')
 			->where('w.id = ?1')
-		  ->orderBy('d.id', 'DESC')
+			->orderBy('d.id', 'DESC')
 			->setParameter(1, $wachtrij->getId());
 
 		return $qb->getQuery()->getResult();
 	}
 
-	public function filterDeclaraties(DeclaratieWachtrij $wachtrij, array $status): array {
-		return array_filter($this->declaratiesInWachtrij($wachtrij), function($declaratie) use ($status) {
+	public function filterDeclaraties(DeclaratieWachtrij $wachtrij, array $status): array
+	{
+		return array_filter($this->declaratiesInWachtrij($wachtrij), function ($declaratie) use ($status) {
 			return in_array($declaratie->getListStatus(), $status);
 		});
 	}

@@ -19,13 +19,15 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class PeilingenController extends AbstractController {
+class PeilingenController extends AbstractController
+{
 	/** @var PeilingenRepository */
 	private $peilingenRepository;
 	/** @var PeilingenService */
 	private $peilingenService;
 
-	public function __construct(PeilingenRepository $peilingenRepository, PeilingenService $peilingenService) {
+	public function __construct(PeilingenRepository $peilingenRepository, PeilingenService $peilingenService)
+	{
 		$this->peilingenRepository = $peilingenRepository;
 		$this->peilingenService = $peilingenService;
 	}
@@ -71,7 +73,8 @@ class PeilingenController extends AbstractController {
 	 * @Route("/peilingen/nieuw", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function nieuw(Request $request) {
+	public function nieuw(Request $request)
+	{
 		$peiling = new Peiling();
 
 		$form = $this->createFormulier(PeilingForm::class, $peiling, [
@@ -101,7 +104,8 @@ class PeilingenController extends AbstractController {
 	 * @Route("/peilingen/bewerken", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function bewerken(Request $request) {
+	public function bewerken(Request $request)
+	{
 		$selection = $this->getDataTableSelection();
 
 		if ($selection) {
@@ -162,7 +166,7 @@ class PeilingenController extends AbstractController {
 	{
 		$ids = $request->request->filter('opties', [], FILTER_VALIDATE_INT);
 
-		if($this->peilingenService->stem($id, $ids, $this->getUid())) {
+		if ($this->peilingenService->stem($id, $ids, $this->getUid())) {
 			return new JsonResponse(true);
 		} else {
 			return new JsonResponse(false, 400);

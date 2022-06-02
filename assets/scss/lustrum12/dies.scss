@@ -18,7 +18,7 @@ $bordeaux-rood: #53110f;
 $Lila: #b8aee3;
 
 $rose: #d29ec4;
-$dark-rose:  #3F2F3A;
+$dark-rose: #3F2F3A;
 $gray-transparant: #473d4594;
 $lightgray-transparant: #473D454F;
 $darkgray-transparant: #473D45BA;
@@ -39,19 +39,21 @@ $kleur-zwart: #000000;
 .zandloper {
 	right: 20px;
 }
+
 /* nav */
-nav{
+nav {
 	//background: $dark-rose !important;
 	color: $bordeaux-rood;
 
 	.dies-logo-titel {
 		top: 50px;
-		height:100%;
+		height: 100%;
 		left: -3px;
-		@media screen and (max-width:768px){
+		@media screen and (max-width: 768px) {
 			visibility: hidden;
 		}
 	}
+
 	a {
 		/* Header text */
 		color: $oranje;
@@ -79,7 +81,7 @@ nav{
 	font-size: 2.0rem;
 }
 
-.helemaal-boven{
+.helemaal-boven {
 	margin-top: 60px;
 }
 
@@ -97,11 +99,12 @@ body {
 	background-position: center;
 	background-size: cover;
 }
-body.diespagina{
+
+body.diespagina {
 	background-image: url('../../images/lustrum12/dies-achtergrond-geknipt.jpg');
 }
 
-a{
+a {
 	text-decoration: none;
 }
 
@@ -109,6 +112,7 @@ a{
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+
 	img {
 		max-width: 100%;
 	}
@@ -117,8 +121,9 @@ a{
 /* video */
 .video-container {
 	width: 100%;
+
 	.youtube-container {
-		display:flex;
+		display: flex;
 		justify-content: center;
 		width: 100%;
 		height: 100%;
@@ -152,12 +157,14 @@ section {
 		font-size: 4.0rem;
 		text-transform: uppercase;
 	}
+
 	.container {
 		h3 {
 			text-align: left;
 			font-size: 2.4rem;
 			color: $bordeaux-rood;
 		}
+
 		h4 {
 			font-size: 2.0rem;
 			text-align: left;
@@ -175,35 +182,42 @@ section {
 }
 
 /* Ketzers */
-.ketzers{
+.ketzers {
 	align-items: center;
 
-	.ketzer{
+	.ketzer {
 		max-width: 1320px;
 		color: white;
+
 		.bb-block {
 			padding: 5px;
 			border-radius: 5px;
 			background-color: $darkgray-transparant;
+
 			table.groep-lijst tr:nth-child(2n) {
 				background-color: $gray-transparant;
 			}
 		}
+
 		.btn-primary {
 			background-color: $oranje;
 			border-color: $oranje;
 		}
+
 		a:not(.btn) {
 			color: $oranje;
 		}
+
 		.dropdown-menu {
 			background-color: $oranje;
 		}
+
 		a[id*="groep-lid-remove"] {
 			color: $kleur-wit;
 			background-color: $oranje;
 
 		}
+
 		h3 {
 			color: $oranje;
 			font-weight: bold;
@@ -211,19 +225,23 @@ section {
 			text-transform: uppercase;
 			font-size: 2.0rem;
 		}
+
 		h4 {
 			color: $oranje;
 			font-family: $dies-uppereast-font;
 			text-transform: uppercase;
 		}
+
 		.GroepStatistiekView {
 			background-color: $bordeaux-rood;
 			padding: 20px;
 			border-radius: 25px;
 		}
+
 		.progress-bar {
 			background-color: $bordeaux-rood;
 		}
+
 		.GroupAanmeldenForm {
 			input.FormElement {
 				background-color: $bordeaux-rood;
@@ -232,7 +250,7 @@ section {
 	}
 }
 
-.programma{
+.programma {
 	text-align: center;
 	background-color: $gray-transparant; //$lightgray-transparant;
 	.dag {
@@ -244,20 +262,24 @@ section {
 
 		margin-top: 20px;
 		margin-bottom: 20px;
+
 		h2 {
 			//text-transform: uppercase;
 			//font-family: $dies-uppereast-font;
 			font-family: $dies-arkadelphia-font;
 			text-align: center;
 			font-size: 3.0rem;
+
 			.cijfer {
 				font-family: $dies-uppereast-font;
 				font-weight: normal;
 			}
 		}
+
 		hr {
 			border-top: 1px solid $Lila;
 		}
+
 		.activiteit {
 
 			//padding: 20px;
@@ -267,59 +289,72 @@ section {
 
 
 			margin-bottom: 40px;
+
 			h3 {
 				font-family: $dies-uppereast-font;
 				text-transform: uppercase;
 				text-align: center;
 				font-size: 2.4rem;
 			}
+
 			.beschrijving {
 				a {
 					color: $oranje;
 				}
+
 				a:hover {
 					color: $Lila;
 				}
 			}
+
 			.dies-activiteit-ketzers {
-				.toggler{
-					color:$oranje;
+				.toggler {
+					color: $oranje;
 					cursor: pointer;
 					user-select: none;
 				}
-				.toggler:hover{
+
+				.toggler:hover {
 					color: $Lila;
 				}
-				.verborgen{
+
+				.verborgen {
 					display: none;
 				}
+
 				.ketzers {
 					.ketzer {
 						.maaltijdketzer-wrapper {
 							padding: 20px;
 							border-radius: 20px;
 							background: $gray-transparant;
+
 							h6 {
 								color: $oranje;
 							}
+
 							.btn-danger {
 								background: $gray-transparant;
 								border-color: transparent;
 							}
+
 							.btn-success {
 								background: $gray-transparant;
 								border-color: $bordeaux-rood;
 							}
+
 							.form-check-input {
 								background-color: transparent;
 								border-color: $bordeaux-rood;
 							}
+
 							.form-check-input:checked {
 								background-color: $bordeaux-rood;
 								border-color: $bordeaux-rood;
 							}
 
 						}
+
 						h3 {
 							font-size: 1.8rem;
 						}

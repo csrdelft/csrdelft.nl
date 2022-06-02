@@ -3,38 +3,44 @@
  */
 
 .maalcie-tabel .groep-tabs li span.fa {
-  color: #a9a9a9;
+	color: #a9a9a9;
 }
+
 .maalcie-tabel .groep-tabs li:hover span.fa {
-  color: #FFFFFF;
+	color: #FFFFFF;
 }
+
 .rowColor0 {
-  background-color: $tabel-regel-donker;
+	background-color: $tabel-regel-donker;
 }
+
 .rowColor1 {
-  background-color: $tabel-regel-licht;
+	background-color: $tabel-regel-licht;
 }
 
 /* maalcie-menu */
 
 #maalcie-menu {
-  width: 100%;
+	width: 100%;
 }
+
 #maalcie-menu td {
-  height: 20px;
+	height: 20px;
 }
+
 #maalcie-menu td.active {
-  font-weight: bold;
+	font-weight: bold;
 }
+
 .maalcie-beheer-menu div.active {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 /* maalcie-tabel */
 
 .maalcie-tabel {
-  width: 100%;
-  border-spacing: 0;
+	width: 100%;
+	border-spacing: 0;
 	margin-bottom: 1em;
 
 	th {
@@ -68,81 +74,97 @@
 }
 
 tr.taak-datum-head th, tr.taak-datum-summary th {
-  cursor: pointer;
-  border-top: 5px solid #FFFFFF;
+	cursor: pointer;
+	border-top: 5px solid #FFFFFF;
 }
+
 #taak-datum-head-first th {
-  cursor: default;
+	cursor: default;
 }
+
 #suggesties-tabel {
-  padding: 0;
+	padding: 0;
 }
+
 #suggesties-tabel tr:hover, tr.taak-datum-summary:hover th {
-  background-color: $tabel-hover;
+	background-color: $tabel-hover;
 }
+
 #suggesties-controls {
-  width: 100%;
-  background-color: #EEEEEE;
-  border: 1px solid #DDDDDD;
+	width: 100%;
+	background-color: #EEEEEE;
+	border: 1px solid #DDDDDD;
 }
+
 #suggesties-controls td {
-  padding: .5em;
+	padding: .5em;
 }
+
 #suggesties-controls label {
-  margin-right: 1em;
+	margin-right: 1em;
 }
+
 .maalcie-rooster tr {
-  background-color: transparent !important;
+	background-color: transparent !important;
 }
+
 .maalcie-rooster td {
-  width: 5px;
+	width: 5px;
 }
+
 .maalcie-rooster td.taak {
-  width: 170px;
+	width: 170px;
 }
 
 /* cell style */
 
 .maaltijd-open, .maaltijd-aangemeld, .abonnement-ingeschakeld, .voorkeur-ingeschakeld, .functie-toegewezen, .taak-self { /* .taak-toegewezen */
-  background-color: #AAEEAA;
-  font-weight: bold;
-  color: green;
-  text-align: center;
+	background-color: #AAEEAA;
+	font-weight: bold;
+	color: green;
+	text-align: center;
 }
+
 .maaltijd-gesloten, .maaltijd-afgemeld, .abonnement-uitgeschakeld, .voorkeur-uitgeschakeld, .functie-open { /* .taak-open */
-  background-color: #EEAAAA;
-  font-weight: bold;
-  color: red;
-  text-align: center;
+	background-color: #EEAAAA;
+	font-weight: bold;
+	color: red;
+	text-align: center;
 }
 
 .taak-self {
-  text-align: left;
+	text-align: left;
 }
+
 td.maaltijd-aangemeld, td.maaltijd-afgemeld {
-  text-align: left;
-  padding-left: 20px;
+	text-align: left;
+	padding-left: 20px;
 }
+
 .abonnement-warning, .taak-warning {
-  background-color: #FFEE66;
+	background-color: #FFEE66;
 }
+
 .abonnement-error {
-  background-color: #000000;
+	background-color: #000000;
 }
+
 .abonnement-error, .abonnement-warning, .maaltijd-gasten {
-  text-align: center;
+	text-align: center;
 }
+
 .taak-grijs, .taak-grijs a {
-  color: grey;
+	color: grey;
 }
+
 .taak-oud {
-  opacity: .50;
+	opacity: .50;
 }
 
 .maaltijd-id {
-  color: #999;
+	color: #999;
 }
 
 .maaltijdketzer-wrapper {
-  background: $maaltijdketzer-bg;
+	background: $maaltijdketzer-bg;
 }

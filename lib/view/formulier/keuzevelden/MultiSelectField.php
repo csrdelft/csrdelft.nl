@@ -10,11 +10,13 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class MultiSelectField extends InputField {
+class MultiSelectField extends InputField
+{
 
 	private $selects = array();
 
-	public function __construct($name, $value, $description, $keuzeopties) {
+	public function __construct($name, $value, $description, $keuzeopties)
+	{
 		parent::__construct($name, str_replace('&amp;&amp;', '&&', $value), $description);
 
 		// Splits keuzes
@@ -40,11 +42,13 @@ class MultiSelectField extends InputField {
 		}
 	}
 
-	public function isPosted() {
+	public function isPosted()
+	{
 		return isset($_POST[$this->name]);
 	}
 
-	public function getValue() {
+	public function getValue()
+	{
 		$this->value = parent::getValue();
 		if ($this->isPosted()) {
 			$values = filter_input(INPUT_POST, $this->name, FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
@@ -53,7 +57,8 @@ class MultiSelectField extends InputField {
 		return $this->value;
 	}
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		$html = '<div class="input-group">';
 		foreach ($this->selects as $select) {
 			if ($this->hidden) {

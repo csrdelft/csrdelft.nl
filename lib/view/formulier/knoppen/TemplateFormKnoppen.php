@@ -22,7 +22,8 @@ class TemplateFormKnoppen extends FormKnoppen
 	 */
 	private $options;
 
-	public function __construct(Environment $twig, $template, $options = []) {
+	public function __construct(Environment $twig, $template, $options = [])
+	{
 		parent::__construct();
 		$this->twig = $twig;
 		$this->template = $template;

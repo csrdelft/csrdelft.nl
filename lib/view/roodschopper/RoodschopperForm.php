@@ -19,12 +19,14 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 11/04/2019
  */
-class RoodschopperForm extends Formulier {
+class RoodschopperForm extends Formulier
+{
 	/**
 	 * RoodschopperForm constructor.
 	 * @param Roodschopper $model
 	 */
-	public function __construct($model) {
+	public function __construct($model)
+	{
 		parent::__construct($model, '/tools/roodschopper', 'Roodschopper');
 
 		$fields = [];

@@ -9,12 +9,15 @@ use CsrDelft\repository\GroepRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 
-class OnderverenigingenRepository extends GroepRepository {
-	public function __construct(ManagerRegistry $registry) {
+class OnderverenigingenRepository extends GroepRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Ondervereniging::class);
 	}
 
-	public function nieuw($soort = null) {
+	public function nieuw($soort = null)
+	{
 		/** @var Ondervereniging $ondervereniging */
 		$ondervereniging = parent::nieuw();
 		$ondervereniging->status = GroepStatus::FT();

@@ -1,13 +1,13 @@
 import axios from 'axios';
-import {Size} from 'jgallery/src/preview';
+import { Size } from 'jgallery/src/preview';
 import createElement from 'jgallery/src/utils/create-element';
 import withTooltip from 'jgallery/src/utils/with-tooltip';
 import AlbumItem from 'jgallery/types/album-item';
-import {GalleryDecorator} from 'jgallery/types/gallery';
+import { GalleryDecorator } from 'jgallery/types/gallery';
 import Params from 'jgallery/types/gallery/parameters';
 import $ from 'jquery';
-import {basename, dirname} from '../util';
-import {select} from "../dom";
+import { basename, dirname } from '../util';
+import { select } from '../dom';
 
 interface Position {
 	x: number;
@@ -22,21 +22,20 @@ interface Tag extends Position {
 
 const withTags: GalleryDecorator = (constructor) =>
 	class extends constructor {
-
 		private get imageElement() {
 			try {
-				return select<HTMLImageElement>('.j-gallery-preview-content', this.previewElement)
+				return select<HTMLImageElement>('.j-gallery-preview-content', this.previewElement);
 			} catch (e) {
-				return null
+				return null;
 			}
 		}
 
 		private get left() {
-			return select<HTMLElement>('.j-gallery-left', this.previewElement)
+			return select<HTMLElement>('.j-gallery-left', this.previewElement);
 		}
 
 		private get right() {
-			return select<HTMLElement>('.j-gallery-right', this.previewElement)
+			return select<HTMLElement>('.j-gallery-right', this.previewElement);
 		}
 
 		private tagMode = false;
@@ -69,11 +68,13 @@ const withTags: GalleryDecorator = (constructor) =>
 			this.appendControlsElements([tagButton]);
 
 			window.addEventListener('keydown', (event) => {
-				if (event.key === 'Delete') { // delete
+				if (event.key === 'Delete') {
+					// delete
 					if (this.activeTag) {
 						this.removeTag(this.activeTag);
 					}
-				} else if (event.key === 'Escape') { // esc
+				} else if (event.key === 'Escape') {
+					// esc
 					event.preventDefault();
 					if (this.tagMode) {
 						if (this.tagFormDiv) {
@@ -103,7 +104,7 @@ const withTags: GalleryDecorator = (constructor) =>
 			tagButton.addEventListener('click', () => {
 				if (this.tagMode) {
 					this.tagMode = false;
-					tagIcon.classList.replace('fa-toggle-on', 'fa-toggle-off')
+					tagIcon.classList.replace('fa-toggle-on', 'fa-toggle-off');
 					this.hideTags();
 					if (this.tagFormDiv) {
 						this.exitTagForm();
@@ -115,24 +116,24 @@ const withTags: GalleryDecorator = (constructor) =>
 					this.right.style.display = 'block';
 				} else {
 					this.tagMode = true;
-					tagIcon.classList.replace('fa-toggle-off', 'fa-toggle-on')
+					tagIcon.classList.replace('fa-toggle-off', 'fa-toggle-on');
 					this.duringTagMode();
 				}
 			});
 			tagButton.addEventListener('mouseenter', () => {
 				if (this.tagMode) {
-					tagIcon.classList.replace('fa-toggle-off', 'fa-toggle-on')
+					tagIcon.classList.replace('fa-toggle-off', 'fa-toggle-on');
 				} else {
-					tagIcon.classList.replace('fa-toggle-on', 'fa-toggle-off')
+					tagIcon.classList.replace('fa-toggle-on', 'fa-toggle-off');
 				}
 			});
 			tagButton.addEventListener('mouseleave', () => {
 				tagIcon.classList.remove('fa-toggle-on', 'fa-toggle-off');
 				tagIcon.classList.add('fa-smile');
 			});
-			const screenIcon = select('.j-gallery-screen-icon', this.getElement())
+			const screenIcon = select('.j-gallery-screen-icon', this.getElement());
 			if (!screenIcon) {
-				throw new Error("Geen screenIcon gevonden")
+				throw new Error('Geen screenIcon gevonden');
 			}
 			screenIcon.addEventListener('click', () => {
 				if (this.preview.size !== Size.contain) {
@@ -154,8 +155,9 @@ const withTags: GalleryDecorator = (constructor) =>
 		}
 
 		private moveTagDivs() {
-			this.tagContainer.querySelectorAll('.fototag')
-				.forEach((t: HTMLElement) => this.moveTag(t, JSON.parse(t.dataset.tag ?? "{}")));
+			this.tagContainer
+				.querySelectorAll('.fototag')
+				.forEach((t: HTMLElement) => this.moveTag(t, JSON.parse(t.dataset.tag ?? '{}')));
 		}
 
 		private moveTag(t: HTMLElement, tag: Tag) {
@@ -170,8 +172,8 @@ const withTags: GalleryDecorator = (constructor) =>
 			if (!this.tagFormDiv) {
 				return;
 			}
-			const pos = this.getScreenPos(JSON.parse(this.tagFormDiv.dataset.tagPosition ?? "{}") as Position);
-			this.tagFormDiv.style.left = pos.x - (pos.size / 2) + 'px';
+			const pos = this.getScreenPos(JSON.parse(this.tagFormDiv.dataset.tagPosition ?? '{}') as Position);
+			this.tagFormDiv.style.left = pos.x - pos.size / 2 + 'px';
 			this.tagFormDiv.style.top = pos.y + pos.size + 'px';
 		}
 
@@ -186,8 +188,7 @@ const withTags: GalleryDecorator = (constructor) =>
 			const url = this.getUrl();
 			const data = new FormData();
 			data.append('foto', basename(decodeURI(url)));
-			axios.post('/fotoalbum/gettags' + dirname(url), data)
-				.then((response) => this.drawTags(response.data));
+			axios.post('/fotoalbum/gettags' + dirname(url), data).then((response) => this.drawTags(response.data));
 		}
 
 		private drawTags(tags: Tag[]) {
@@ -203,12 +204,12 @@ const withTags: GalleryDecorator = (constructor) =>
 
 		private getScreenPos(position: Position): Position {
 			if (this.imageElement == null) {
-				return {size: 0, x: 0, y: 0};
+				return { size: 0, x: 0, y: 0 };
 			}
 
 			const parent = this.imageElement.parentElement;
 			if (!parent) {
-				throw new Error("ImageElement niet in DOM")
+				throw new Error('ImageElement niet in DOM');
 			}
 			const w = this.imageElement.clientWidth;
 			const h = this.imageElement.clientHeight;
@@ -217,21 +218,19 @@ const withTags: GalleryDecorator = (constructor) =>
 				y: (parent.clientHeight - h) / 2,
 			};
 			return {
-				size: (w + h) / 200 * position.size,
-				x: position.x * w / 100 + fotoTopLeft.x,
-				y: position.y * h / 100 + fotoTopLeft.y,
+				size: ((w + h) / 200) * position.size,
+				x: (position.x * w) / 100 + fotoTopLeft.x,
+				y: (position.y * h) / 100 + fotoTopLeft.y,
 			};
 		}
 
 		private removeTag(tagDiv: HTMLElement) {
 			if (confirm('Etiket verwijderen?')) {
-				const tag = JSON.parse(tagDiv.dataset.tag ?? "{}");
+				const tag = JSON.parse(tagDiv.dataset.tag ?? '{}');
 				const data = new FormData();
 				data.append('refuuid', tag.refuuid);
 				data.append('keyword', tag.keyword);
-				axios
-					.post('/fotoalbum/removetag', data)
-					.then((response) => this.drawTags(response.data));
+				axios.post('/fotoalbum/removetag', data).then((response) => this.drawTags(response.data));
 			}
 		}
 
@@ -268,16 +267,22 @@ const withTags: GalleryDecorator = (constructor) =>
 					left: '0',
 				},
 			});
-			const btnDelTag = createElement(`<a id="btnDelTag" tabindex="-1" class="dropdown-item"><i class="fa fa-user-times"></i>&nbsp;Etiket verwijderen</a>`);
+			const btnDelTag = createElement(
+				`<a id="btnDelTag" tabindex="-1" class="dropdown-item"><i class="fa fa-user-times"></i>&nbsp;Etiket verwijderen</a>`
+			);
 			tagMenu.appendChild(btnDelTag);
 			tagDiv.appendChild(tagMenu);
 			btnDelTag.addEventListener('click', () => this.removeTag(tagDiv));
 
-			tagDiv.addEventListener('contextmenu', (e) => {
-				e.preventDefault();
-				tagMenu.style.display = 'block';
-				tagMenu.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-			}, true);
+			tagDiv.addEventListener(
+				'contextmenu',
+				(e) => {
+					e.preventDefault();
+					tagMenu.style.display = 'block';
+					tagMenu.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+				},
+				true
+			);
 			document.addEventListener('mouseup', () => {
 				tagMenu.style.display = 'none';
 			});
@@ -306,7 +311,8 @@ const withTags: GalleryDecorator = (constructor) =>
 		}
 
 		private duringTagMode() {
-			if (this.preview.size !== Size.contain) { // if zoomed in
+			if (this.preview.size !== Size.contain) {
+				// if zoomed in
 				alert('Je kunt niet inzoomen tijdens het etiketteren, dat werkt nog niet.');
 			}
 			if (this.tagFormDiv) {
@@ -334,14 +340,15 @@ const withTags: GalleryDecorator = (constructor) =>
 			data.append('x', Math.round(position.x).toString());
 			data.append('y', Math.round(position.y).toString());
 			data.append('size', Math.round(position.size).toString());
-			axios.post('/fotoalbum/addtag' + dirname(url), data)
-				.then((response) => {
-					if (typeof response.data === 'object') { // JSON tags
-						this.drawTags(response.data);
-					} else { // HTML form
-						this.drawTagForm(response.data, position);
-					}
-				});
+			axios.post('/fotoalbum/addtag' + dirname(url), data).then((response) => {
+				if (typeof response.data === 'object') {
+					// JSON tags
+					this.drawTags(response.data);
+				} else {
+					// HTML form
+					this.drawTagForm(response.data, position);
+				}
+			});
 		}
 
 		private drawTagForm(formHtml: string, position: Position) {
@@ -365,33 +372,34 @@ const withTags: GalleryDecorator = (constructor) =>
 			// set attr for move/resize
 			this.tagFormDiv.dataset.tagPosition = JSON.stringify(position);
 			// set submit handler
-			const form = this.tagFormDiv.querySelector('form')
+			const form = this.tagFormDiv.querySelector('form');
 			if (!form) {
-				throw new Error('tag div bevat geen form')
+				throw new Error('tag div bevat geen form');
 			}
 
 			$(form).data('submitCallback', (response: Tag[] | string) => {
 				if (this.tagFormDiv) {
 					this.exitTagForm();
 				}
-				if (typeof response === 'object') { // JSON tags
+				if (typeof response === 'object') {
+					// JSON tags
 					this.drawTags(response);
-				} else { // HTML form
+				} else {
+					// HTML form
 					this.drawTagForm(response, position);
 				}
 			});
 			// set focus
 			setTimeout(() => {
 				if (this.tagFormDiv) {
-					const uidInput = this.tagFormDiv.querySelector('input[name="uid"]')
+					const uidInput = this.tagFormDiv.querySelector('input[name="uid"]');
 
 					if (!uidInput) {
-						throw new Error("tagFormDiv bevat input met name uid")
+						throw new Error('tagFormDiv bevat input met name uid');
 					}
 
-					uidInput.dispatchEvent(new Event('focus'))
+					uidInput.dispatchEvent(new Event('focus'));
 				}
-
 			});
 		}
 
@@ -402,7 +410,7 @@ const withTags: GalleryDecorator = (constructor) =>
 			const offset = $(target).offset();
 
 			if (!offset) {
-				throw new Error("Tag target heeft geen offset")
+				throw new Error('Tag target heeft geen offset');
 			}
 
 			const width = img.clientWidth;
@@ -411,8 +419,8 @@ const withTags: GalleryDecorator = (constructor) =>
 				keyword: 'New',
 				name: '',
 				size: 7, // %
-				x: (e.pageX - offset.left) * 100 / width, // %,
-				y: (e.pageY - offset.top) * 100 / height, // %,
+				x: ((e.pageX - offset.left) * 100) / width, // %,
+				y: ((e.pageY - offset.top) * 100) / height, // %,
 			} as Tag;
 			// show form
 			if (this.tagFormDiv) {
@@ -430,8 +438,8 @@ const withTags: GalleryDecorator = (constructor) =>
 			let prevX = 0;
 			let prevY = 0;
 			const windowMouseMoveListener = (e2: MouseEvent) => {
-				newTag.size += (e2.pageX - prevX) * 100 / imgActive.clientWidth;
-				newTag.size += (e2.pageY - prevY) * 100 / imgActive.clientHeight;
+				newTag.size += ((e2.pageX - prevX) * 100) / imgActive.clientWidth;
+				newTag.size += ((e2.pageY - prevY) * 100) / imgActive.clientHeight;
 				prevX = e2.pageX;
 				prevY = e2.pageY;
 				if (newTag.size < 1) {

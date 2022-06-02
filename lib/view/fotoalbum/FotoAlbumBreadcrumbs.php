@@ -11,12 +11,15 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 31/12/2018
  */
-class FotoAlbumBreadcrumbs {
-	public static function getBreadcrumbs(FotoAlbum $album, $dropdown = true, $self = false) {
+class FotoAlbumBreadcrumbs
+{
+	public static function getBreadcrumbs(FotoAlbum $album, $dropdown = true, $self = false)
+	{
 		return static::getBreadcrumbsDropdown($album, $dropdown, $self);
 	}
 
-	private static function getBreadcrumbsDropdown(FotoAlbum $album, $dropdown, $self) {
+	private static function getBreadcrumbsDropdown(FotoAlbum $album, $dropdown, $self)
+	{
 		$breadcrumbs = '<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>';
 
 		if ($album->subdir == 'fotoalbum/') {
@@ -49,7 +52,8 @@ class FotoAlbumBreadcrumbs {
 		return $breadcrumbs;
 	}
 
-	private static function getDropDown($subdir, $albumnaam) {
+	private static function getDropDown($subdir, $albumnaam)
+	{
 		try {
 			$parent = ContainerFacade::getContainer()->get(FotoAlbumRepository::class)->getFotoAlbum($subdir);
 			$albums = $parent->getSubAlbums();

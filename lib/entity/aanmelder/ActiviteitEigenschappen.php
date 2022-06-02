@@ -7,7 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\MappedSuperclass()
  */
-abstract class ActiviteitEigenschappen {
+abstract class ActiviteitEigenschappen
+{
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
@@ -68,121 +69,145 @@ abstract class ActiviteitEigenschappen {
 	 */
 	private $afmeldenTot;
 
-	public function getRawTitel(): ?string {
+	public function getRawTitel(): ?string
+	{
 		return $this->titel;
 	}
 
-	public function setTitel(?string $titel): self {
+	public function setTitel(?string $titel): self
+	{
 		$this->titel = $titel;
 
 		return $this;
 	}
 
-	public function getRawBeschrijving(): ?string {
+	public function getRawBeschrijving(): ?string
+	{
 		return $this->beschrijving;
 	}
 
-	public function setBeschrijving(?string $beschrijving): self {
+	public function setBeschrijving(?string $beschrijving): self
+	{
 		$this->beschrijving = $beschrijving;
 
 		return $this;
 	}
 
-	public function getRawCapaciteit(): ?int {
+	public function getRawCapaciteit(): ?int
+	{
 		return $this->capaciteit;
 	}
 
-	public function setCapaciteit(?int $capaciteit): self {
+	public function setCapaciteit(?int $capaciteit): self
+	{
 		$this->capaciteit = $capaciteit;
 
 		return $this;
 	}
 
-	public function getRawRechtenAanmelden(): ?string {
+	public function getRawRechtenAanmelden(): ?string
+	{
 		return $this->rechtenAanmelden;
 	}
 
-	public function setRechtenAanmelden(?string $rechtenAanmelden): self {
+	public function setRechtenAanmelden(?string $rechtenAanmelden): self
+	{
 		$this->rechtenAanmelden = $rechtenAanmelden;
 
 		return $this;
 	}
 
-	public function getRawRechtenLijstBekijken(): ?string {
+	public function getRawRechtenLijstBekijken(): ?string
+	{
 		return $this->rechtenLijstBekijken;
 	}
 
-	public function setRechtenLijstBekijken(?string $rechtenLijstBekijken): self {
+	public function setRechtenLijstBekijken(?string $rechtenLijstBekijken): self
+	{
 		$this->rechtenLijstBekijken = $rechtenLijstBekijken;
 
 		return $this;
 	}
 
-	public function getRawRechtenLijstBeheren(): ?string {
+	public function getRawRechtenLijstBeheren(): ?string
+	{
 		return $this->rechtenLijstBeheren;
 	}
 
-	public function setRechtenLijstBeheren(?string $rechtenLijstBeheren): self {
+	public function setRechtenLijstBeheren(?string $rechtenLijstBeheren): self
+	{
 		$this->rechtenLijstBeheren = $rechtenLijstBeheren;
 
 		return $this;
 	}
 
-	public function getRawMaxGasten(): ?int {
+	public function getRawMaxGasten(): ?int
+	{
 		return $this->maxGasten;
 	}
 
-	public function setMaxGasten(?int $maxGasten): self {
+	public function setMaxGasten(?int $maxGasten): self
+	{
 		$this->maxGasten = $maxGasten;
 
 		return $this;
 	}
 
-	public function isRawAanmeldenMogelijk(): ?bool {
+	public function isRawAanmeldenMogelijk(): ?bool
+	{
 		return $this->aanmeldenMogelijk;
 	}
 
-	public function setAanmeldenMogelijk(?bool $aanmeldenMogelijk): self {
+	public function setAanmeldenMogelijk(?bool $aanmeldenMogelijk): self
+	{
 		$this->aanmeldenMogelijk = $aanmeldenMogelijk;
 
 		return $this;
 	}
 
-	public function getRawAanmeldenVanaf(): ?int {
+	public function getRawAanmeldenVanaf(): ?int
+	{
 		return $this->aanmeldenVanaf;
 	}
 
-	public function setAanmeldenVanaf(?int $aanmeldenVanaf): self {
+	public function setAanmeldenVanaf(?int $aanmeldenVanaf): self
+	{
 		$this->aanmeldenVanaf = $aanmeldenVanaf;
 
 		return $this;
 	}
 
-	public function getRawAanmeldenTot(): ?int {
+	public function getRawAanmeldenTot(): ?int
+	{
 		return $this->aanmeldenTot;
 	}
 
-	public function setAanmeldenTot(?int $aanmeldenTot): self {
+	public function setAanmeldenTot(?int $aanmeldenTot): self
+	{
 		$this->aanmeldenTot = $aanmeldenTot;
 
 		return $this;
 	}
 
-	public function isRawAfmeldenMogelijk(): ?bool {
+	public function isRawAfmeldenMogelijk(): ?bool
+	{
 		return $this->afmeldenMogelijk;
 	}
 
-	public function setAfmeldenMogelijk(?bool $afmeldenMogelijk): self {
+	public function setAfmeldenMogelijk(?bool $afmeldenMogelijk): self
+	{
 		$this->afmeldenMogelijk = $afmeldenMogelijk;
 
 		return $this;
 	}
 
-	public function getRawAfmeldenTot(): ?int {
+	public function getRawAfmeldenTot(): ?int
+	{
 		return $this->afmeldenTot;
 	}
 
-	public function setAfmeldenTot(?int $afmeldenTot): self {
+	public function setAfmeldenTot(?int $afmeldenTot): self
+	{
 		$this->afmeldenTot = $afmeldenTot;
 
 		return $this;

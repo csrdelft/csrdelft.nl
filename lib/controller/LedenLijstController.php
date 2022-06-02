@@ -21,7 +21,8 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class LedenLijstController extends AbstractController {
+class LedenLijstController extends AbstractController
+{
 	/**
 	 * @param Request $request
 	 * @param CmsPaginaRepository $cmsPaginaRepository
@@ -35,7 +36,8 @@ class LedenLijstController extends AbstractController {
 	 * @Route("/ledenlijst", methods={"GET", "POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function lijst(Request $request, CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker, GoogleSync $googleSync, Environment $twig) {
+	public function lijst(Request $request, CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker, GoogleSync $googleSync, Environment $twig)
+	{
 		if (!LoginService::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));

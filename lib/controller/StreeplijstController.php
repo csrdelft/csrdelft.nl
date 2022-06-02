@@ -56,12 +56,12 @@ class StreeplijstController extends AbstractController
 			'huidigestreeplijst' => new Streeplijst(),
 			'verticalen' => $this->verticalenRepository->findAll(),
 			'jongstelidjaar' => LichtingenRepository::getJongsteLidjaar(),
-			'lidstatus' =>[
+			'lidstatus' => [
 				LidStatus::Erelid(),
-			LidStatus::Oudlid(),
-			LidStatus::Lid(),
-			LidStatus::Gastlid(),
-			LidStatus::Noviet(),],
+				LidStatus::Oudlid(),
+				LidStatus::Lid(),
+				LidStatus::Gastlid(),
+				LidStatus::Noviet(),],
 		]);
 	}
 

@@ -17,17 +17,20 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 07/04/2017
  */
-class CiviSaldoTable extends AbstractDataTableType {
+class CiviSaldoTable extends AbstractDataTableType
+{
 	/**
 	 * @var UrlGeneratorInterface
 	 */
 	private $urlGenerator;
 
-	public function __construct(UrlGeneratorInterface $urlGenerator) {
+	public function __construct(UrlGeneratorInterface $urlGenerator)
+	{
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return '<a href="/" title="Startpagina"><span class="fa fa-home module-icon"></span></a> » <a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » <span class="active">Saldo</span>';
 	}
 

@@ -10,7 +10,8 @@ use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
-abstract class PinBestellingCorrectieForm extends ModalForm {
+abstract class PinBestellingCorrectieForm extends ModalForm
+{
 	protected $actie;
 	protected $modalTitel;
 	protected $voltooidDeelwoord;
@@ -21,7 +22,8 @@ abstract class PinBestellingCorrectieForm extends ModalForm {
 	/**
 	 * @param PinTransactieMatch|null $pinTransactieMatch
 	 */
-	public function __construct($pinTransactieMatch = null) {
+	public function __construct($pinTransactieMatch = null)
+	{
 		parent::__construct($pinTransactieMatch, $this->actie, $this->modalTitel, true);
 		$fields = [];
 

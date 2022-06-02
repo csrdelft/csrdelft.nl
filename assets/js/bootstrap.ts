@@ -8,22 +8,24 @@ import moment from 'moment';
 import {
 	registerBbContext,
 	registerClipboardContext,
-	registerDataTableContext, registerFlatpickrContext,
+	registerDataTableContext,
+	registerFlatpickrContext,
 	registerFormulierContext,
 	registerGlobalContext,
 	registerGrafiekContext,
-	registerKnopContext, registerLidInstellingenContext,
+	registerKnopContext,
+	registerLidInstellingenContext,
 } from './context';
-import {init} from './ctx';
-import {ketzerAjax} from './lib/ajax';
-import {importAgenda, importSponsor} from './lib/courant';
-import {initSluitMeldingen} from './lib/csrdelft';
-import {domUpdate} from './lib/domUpdate';
-import {formCancel, formInlineToggle, formSubmit} from './lib/formulier';
-import {forumBewerken, saveConceptForumBericht} from './lib/forum';
-import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './lib/maalcie';
-import {docReady, isLoggedIn} from './lib/util';
-import {Modal} from "bootstrap";
+import { init } from './ctx';
+import { ketzerAjax } from './lib/ajax';
+import { importAgenda, importSponsor } from './lib/courant';
+import { initSluitMeldingen } from './lib/csrdelft';
+import { domUpdate } from './lib/domUpdate';
+import { formCancel, formInlineToggle, formSubmit } from './lib/formulier';
+import { forumBewerken, saveConceptForumBericht } from './lib/forum';
+import { takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie } from './lib/maalcie';
+import { docReady, isLoggedIn } from './lib/util';
+import { Modal } from 'bootstrap';
 
 moment.locale('nl');
 
@@ -48,7 +50,7 @@ require('corejs-typeahead/dist/typeahead.jquery.js');
 
 declare global {
 	interface Window {
-		loggedIn: boolean
+		loggedIn: boolean;
 	}
 }
 
@@ -121,7 +123,7 @@ Dropzone.autoDiscover = false;
 		window.refreshFsLightbox();
 		initSluitMeldingen();
 		init(document.body);
-		const modalEl = document.getElementById("modal")
+		const modalEl = document.getElementById('modal');
 		if (modalEl && modalEl.innerHTML !== '') {
 			const modal = new Modal(modalEl);
 			modal.show();

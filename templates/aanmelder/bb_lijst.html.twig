@@ -5,7 +5,9 @@
 		{% endfor %}
 
 		{% if toonMeer %}
-			<div class="d-block mt-3 text-end"><a href="{{ url('csrdelft_aanmelder_mijnactiviteiten', { reeks: reeks.id }) }}">Alle {{ reeks.naam|lower }}</a></div>
+			<div class="d-block mt-3 text-end"><a
+					href="{{ url('csrdelft_aanmelder_mijnactiviteiten', { reeks: reeks.id }) }}">Alle {{ reeks.naam|lower }}</a>
+			</div>
 		{% endif %}
 	</div>
 {% endif %}

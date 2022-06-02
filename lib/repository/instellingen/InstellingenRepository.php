@@ -21,7 +21,8 @@ use Symfony\Component\Config\Exception\LoaderLoadException;
  * @method Instelling|null find($id, $lockMode = null, $lockVersion = null)
  * @method Instelling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class InstellingenRepository extends AbstractRepository {
+class InstellingenRepository extends AbstractRepository
+{
 	use YamlInstellingen;
 
 	/**
@@ -30,7 +31,8 @@ class InstellingenRepository extends AbstractRepository {
 	 * @throws FileLoaderImportCircularReferenceException
 	 * @throws LoaderLoadException
 	 */
-	public function __construct(ManagerRegistry $manager) {
+	public function __construct(ManagerRegistry $manager)
+	{
 		parent::__construct($manager, Instelling::class);
 
 		$this->load('instellingen/stek_instelling.yaml', new InstellingConfiguration());
@@ -42,7 +44,8 @@ class InstellingenRepository extends AbstractRepository {
 	 *
 	 * @return string
 	 */
-	public function getValue($module, $id) {
+	public function getValue($module, $id)
+	{
 		return $this->getInstelling($module, $id)->waarde;
 	}
 
@@ -55,7 +58,8 @@ class InstellingenRepository extends AbstractRepository {
 	 * @return Instelling
 	 * @throws CsrException indien de default waarde ontbreekt (de instelling bestaat niet)
 	 */
-	public function getInstelling($module, $id) {
+	public function getInstelling($module, $id)
+	{
 		$entity = $this->findOneBy(['module' => $module, 'instelling' => $id]);
 		if ($this->hasKey($module, $id) && $entity != null) {
 			return $entity;
@@ -77,7 +81,8 @@ class InstellingenRepository extends AbstractRepository {
 	 *
 	 * @return Instelling
 	 */
-	protected function newInstelling($module, $id) {
+	protected function newInstelling($module, $id)
+	{
 		$instelling = new Instelling();
 		$instelling->module = $module;
 		$instelling->instelling = $id;
@@ -94,7 +99,8 @@ class InstellingenRepository extends AbstractRepository {
 	 *
 	 * @return string
 	 */
-	public function getDefault($module, $id) {
+	public function getDefault($module, $id)
+	{
 		return $this->getField($module, $id, InstellingConfiguration::FIELD_DEFAULT);
 	}
 
@@ -105,7 +111,8 @@ class InstellingenRepository extends AbstractRepository {
 	 *
 	 * @return Instelling
 	 */
-	public function wijzigInstelling($module, $id, $waarde) {
+	public function wijzigInstelling($module, $id, $waarde)
+	{
 		$instelling = $this->getInstelling($module, $id);
 		$instelling->waarde = $waarde;
 		$entityManager = $this->getEntityManager();
@@ -116,7 +123,8 @@ class InstellingenRepository extends AbstractRepository {
 
 	/**
 	 */
-	public function opschonen() {
+	public function opschonen()
+	{
 		$instellingen = [];
 		foreach ($this->getModules() as $module) {
 			foreach ($this->getModuleKeys($module) as $instelling) {

@@ -21,6 +21,7 @@
 		transition: all .4s ease-in-out;
 		transform: rotateX(0deg);
 	}
+
 	.back {
 		float: none;
 		position: absolute;
@@ -40,6 +41,7 @@
 	.front {
 		transform: rotateX(180deg);
 	}
+
 	.back {
 		transform: rotateY(0deg);
 	}

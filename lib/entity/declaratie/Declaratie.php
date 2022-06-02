@@ -509,7 +509,8 @@ class Declaratie
 		return !$this->getCsrPas() && self::isFiscus();
 	}
 
-	public static function isFiscus(): bool {
+	public static function isFiscus(): bool
+	{
 		return LoginService::mag('bestuur:Fiscus');
 	}
 
@@ -519,7 +520,8 @@ class Declaratie
 			|| $this->magBeoordelen();
 	}
 
-	public function getRelatie(): string {
+	public function getRelatie(): string
+	{
 		if ($this->getCsrPas()) {
 			return $this->getNaam();
 		} else {
@@ -527,7 +529,8 @@ class Declaratie
 		}
 	}
 
-	public function getDeclaratieDatum(): DateTimeInterface {
+	public function getDeclaratieDatum(): DateTimeInterface
+	{
 		if ($this->getCsrPas()) {
 			return $this->getBonnen()[0]->getDatum();
 		} else {

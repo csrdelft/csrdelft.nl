@@ -10,19 +10,20 @@ use CsrDelft\view\ToResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
-class SuggestieLijst implements ToResponse, FormElement {
+class SuggestieLijst implements ToResponse, FormElement
+{
 
 	/**
 	 * @var CorveePuntenOverzichtDTO[]
 	 */
 	private $suggesties;
-	/** @var CorveeTaak  */
+	/** @var CorveeTaak */
 	private $taak;
-	/** @var bool  */
+	/** @var bool */
 	private $voorkeurbaar;
-	/** @var string  */
+	/** @var string */
 	private $voorkeur;
-	/** @var string  */
+	/** @var string */
 	private $recent;
 	/**
 	 * @var Environment
@@ -30,10 +31,11 @@ class SuggestieLijst implements ToResponse, FormElement {
 	private $twig;
 
 	public function __construct(
-		array $suggesties,
+		array       $suggesties,
 		Environment $twig,
-		CorveeTaak $taak
-	) {
+		CorveeTaak  $taak
+	)
+	{
 		$this->suggesties = $suggesties;
 		$this->taak = $taak;
 
@@ -51,7 +53,8 @@ class SuggestieLijst implements ToResponse, FormElement {
 		$this->twig = $twig;
 	}
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		return $this->twig->render('maaltijden/corveetaak/suggesties_lijst.html.twig', [
 			'suggesties' => $this->suggesties,
 			'jongsteLichting' => LichtingenRepository::getJongsteLidjaar(),
@@ -62,19 +65,23 @@ class SuggestieLijst implements ToResponse, FormElement {
 		]);
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		return $this->getHtml();
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return $this->getType();
 	}
 
-	public function getType() {
+	public function getType()
+	{
 		return get_class($this);
 	}
 
-	public function getJavascript() {
+	public function getJavascript()
+	{
 		$js = <<<JS
 
 /* {$this->getTitel()} */
@@ -90,15 +97,18 @@ JS;
 		return $js;
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->suggesties;
 	}
 
-	public function toResponse(): Response {
+	public function toResponse(): Response
+	{
 		return new Response($this->getHtml());
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return '';
 	}
 }

@@ -10,7 +10,8 @@ namespace CsrDelft\view\datatable;
  *
  * @see assets/js/datatable/render.js
  */
-class CellRender {
+class CellRender
+{
 	const DEFAULT = 'default';
 	const CHECK = 'check';
 	const BEDRAG = 'bedrag';
@@ -29,81 +30,95 @@ class CellRender {
 	/**
 	 * @param string $choice
 	 */
-	public function __construct(string $choice) {
+	public function __construct(string $choice)
+	{
 		$this->choice = $choice;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getChoice() {
+	public function getChoice()
+	{
 		return $this->choice;
 	}
 
 	/**
 	 * @return static
 	 */
-	public static function Default() {
+	public static function Default()
+	{
 		return new static(self::DEFAULT);
 	}
 
 	/**
 	 * @return static
 	 */
-	public static function Check() {
+	public static function Check()
+	{
 		return new static(self::CHECK);
 	}
 
 	/**
 	 * @return static
 	 */
-	public static function Bedrag() {
+	public static function Bedrag()
+	{
 		return new static(self::BEDRAG);
 	}
 
 	/**
 	 * @return static
 	 */
-	public static function AanmeldFilter() {
+	public static function AanmeldFilter()
+	{
 		return new static(self::AANMELD_FILTER);
 	}
 
 	/**
 	 * @return static
 	 */
-	public static function Aanmeldingen() {
+	public static function Aanmeldingen()
+	{
 		return new static(self::AANMELDINGEN);
 	}
 
 	/**
 	 * @return static
 	 */
-	public static function TotaalPrijs() {
+	public static function TotaalPrijs()
+	{
 		return new static(self::TOTAAL_PRIJS);
 	}
 
 	/**
 	 * @return static
 	 */
-	public static function Timeago() {
+	public static function Timeago()
+	{
 		return new static(self::TIMEAGO);
 	}
 
 	/**
 	 * @return static
 	 */
-	public static function Filesize() {
+	public static function Filesize()
+	{
 		return new static(self::FILESIZE);
 	}
 
-	public static function DateTime() {
+	public static function DateTime()
+	{
 		return new static(self::DATETIME);
 	}
 
-	public static function Date() {
+	public static function Date()
+	{
 		return new static(self::DATE);
 	}
-	public static function Time() {
+
+	public static function Time()
+	{
 		return new static(self::TIME);
 	}
 }

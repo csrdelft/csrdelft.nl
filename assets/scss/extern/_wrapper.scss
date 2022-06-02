@@ -68,6 +68,7 @@
 
 	&.alt {
 		text-align: left;
+
 		.inner {
 			flex-direction: row;
 		}
@@ -139,6 +140,7 @@
 		display: inline-block;
 		float: right;
 		flex-shrink: 0;
+
 		img {
 			border-radius: 100%;
 			width: 100%;

@@ -13,7 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @package CsrDelft\model\entity\commissievoorkeuren
  * @ORM\Entity(repositoryClass="CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository")
  */
-class VoorkeurVoorkeur {
+class VoorkeurVoorkeur
+{
 	/**
 	 * @var string
 	 * @ORM\Column(type="uid")
@@ -62,11 +63,13 @@ class VoorkeurVoorkeur {
 	 */
 	public $commissie;
 
-	public function getCommissieNaam() {
+	public function getCommissieNaam()
+	{
 		return $this->commissie->naam;
 	}
 
-	public function getCategorieNaam() {
+	public function getCategorieNaam()
+	{
 		return $this->commissie->categorie->naam;
 	}
 
@@ -75,7 +78,8 @@ class VoorkeurVoorkeur {
 	 *
 	 * @param VoorkeurCommissie $commissie
 	 */
-	public function setCommissie(VoorkeurCommissie $commissie) {
+	public function setCommissie(VoorkeurCommissie $commissie)
+	{
 		$this->commissie = $commissie;
 		$this->cid = $commissie->id;
 	}
@@ -85,17 +89,20 @@ class VoorkeurVoorkeur {
 	 *
 	 * @param Profiel $profiel
 	 */
-	public function setProfiel(Profiel $profiel) {
+	public function setProfiel(Profiel $profiel)
+	{
 		$this->profiel = $profiel;
 		$this->uid = $profiel->uid;
 	}
 
-	public function heeftGedaan() {
+	public function heeftGedaan()
+	{
 		return ContainerFacade::getContainer()->get(AccessService::class)
 			->mag($this->profiel->account, 'commissie:' . $this->commissie->naam . ',commissie:' . $this->commissie->naam . ':ot');
 	}
 
-	public function getVoorkeurTekst() {
+	public function getVoorkeurTekst()
+	{
 		return ['', 'nee', 'ja', 'misschien'][$this->voorkeur];
 	}
 }

@@ -19,18 +19,21 @@ use CsrDelft\view\bbcode\BbHelper;
  * @example [video]Zo0LJrw5nCs[/video]
  * @example [video]https://vimeo.com/1582112[/video]
  */
-class BbVideo extends BbTag {
+class BbVideo extends BbTag
+{
 
 	/**
 	 * @var string
 	 */
 	public $url;
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'video';
 	}
 
-	public function renderLight() {
+	public function renderLight()
+	{
 		list($src, $type) = $this->processVideo();
 
 		return BbHelper::lightLinkBlock('video', $src, $type . ' video', '');
@@ -40,7 +43,8 @@ class BbVideo extends BbTag {
 	 * @return string
 	 * @throws BbException
 	 */
-	public function render() {
+	public function render()
+	{
 		list($src, $type) = $this->processVideo();
 
 		// Als er geen type is, laat dan het bestand zien.
@@ -68,7 +72,8 @@ HTML;
 	 * @return array
 	 * @throws BbException
 	 */
-	private function processVideo(): array {
+	private function processVideo(): array
+	{
 		$matches = [];
 
 		//match type and id

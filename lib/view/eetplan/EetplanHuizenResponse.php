@@ -10,11 +10,13 @@ use CsrDelft\view\datatable\DataTableResponse;
  *
  * Class EetplanHuizenView
  */
-class EetplanHuizenResponse extends DataTableResponse {
+class EetplanHuizenResponse extends DataTableResponse
+{
 	/**
 	 * @param Woonoord $entity
 	 */
-	public function renderElement($entity) {
+	public function renderElement($entity)
+	{
 		return array(
 			'UUID' => $entity->getUUID(),
 			'id' => $entity->id,

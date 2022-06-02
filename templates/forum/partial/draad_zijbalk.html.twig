@@ -28,7 +28,8 @@
 			<a href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}"
 				 title="{{ draad.titel }}"
 				 {% if app.user and draad.ongelezen %}class="{{ ongelezenWeergave }}"{% endif %}>
-				<span class="zijbalk-moment">{{ draad.laatst_gewijzigd | zijbalk_date_format }}</span>&nbsp;{{ draad.titel | raw }}
+				<span
+					class="zijbalk-moment">{{ draad.laatst_gewijzigd | zijbalk_date_format }}</span>&nbsp;{{ draad.titel | raw }}
 			</a>
 		</div>
 	{% endfor %}

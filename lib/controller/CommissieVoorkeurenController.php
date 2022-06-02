@@ -89,7 +89,8 @@ class CommissieVoorkeurenController extends AbstractController
 	 * @Route("/commissievoorkeuren/update/{cid}/{uid}/{waarde}", methods={"POST"}, defaults={"waarde": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lidUpdate(Request $request, ProfielRepository $profielRepository, $cid, $uid, $waarde) {
+	public function lidUpdate(Request $request, ProfielRepository $profielRepository, $cid, $uid, $waarde)
+	{
 		$profiel = $profielRepository->get($uid);
 
 		if (!$profiel) {

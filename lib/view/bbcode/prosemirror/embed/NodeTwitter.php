@@ -28,7 +28,7 @@ class NodeTwitter implements Node
 
 		return [
 			'attrs' => [
-				'url'=> $node->url
+				'url' => $node->url
 			]
 		];
 	}

@@ -8,7 +8,8 @@ use CsrDelft\view\ToResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class GenericDataTableResponse implements ToResponse {
+class GenericDataTableResponse implements ToResponse
+{
 	public $modal;
 	public $lastUpdate;
 	/**
@@ -25,7 +26,8 @@ class GenericDataTableResponse implements ToResponse {
 	 */
 	private $groups;
 
-	public function __construct(SerializerInterface $serializer, $data, $modal = null, $autoUpdate = null, $groups = null) {
+	public function __construct(SerializerInterface $serializer, $data, $modal = null, $autoUpdate = null, $groups = null)
+	{
 		$this->data = $data;
 		$this->lastUpdate = time() - 1;
 		$this->autoUpdate = $autoUpdate;
@@ -35,7 +37,8 @@ class GenericDataTableResponse implements ToResponse {
 	}
 
 
-	public function toResponse(): Response {
+	public function toResponse(): Response
+	{
 		$serialized = $this->serializer->serialize($this->data, 'json', ['groups' => $this->groups]);
 		$autoUpdateString = $this->autoUpdate ? "true" : "false";
 		$modalHtml = json_encode($this->modal);

@@ -11,8 +11,8 @@ $kleur-secundair: $lustrum-kleur-rood;
 
 // Text
 $kleur-textheader: $lustrum-kleur-goud;
-$kleur-text:  $lustrum-kleur-goud;
-$kleur-text-hover:  $lustrum-kleur-wit;
+$kleur-text: $lustrum-kleur-goud;
+$kleur-text-hover: $lustrum-kleur-wit;
 
 
 @font-face {
@@ -21,6 +21,7 @@ $kleur-text-hover:  $lustrum-kleur-wit;
 	font-weight: normal;
 	src: url('../../fonts/lustrum12/OrpheusPro-Bold.otf');
 }
+
 $headings-font: 'Orpheus Pro', 'Source Sans Pro', Helvetica, Arial, sans-serif;
 $headings-font-family: ($headings-font, uppercase);
 
@@ -45,7 +46,7 @@ $black: #fff;
 $light: $gray-100;
 $dark: $gray-800;
 $yiq-text-dark: $white;
-$yiq-text-light: $gray-900 ;
+$yiq-text-light: $gray-900;
 
 $donkerblauw: $kleur-primair;
 $blue: $kleur-primair;
@@ -118,12 +119,14 @@ h2, h3, h4, h5, h6 {
 	.item a {
 		color: $kleur-textheader;
 	}
+
 	.zijbalk-kopje a {
 		color: $kleur-textheader;
 		font-family: $headings-font-family;
 		text-transform: uppercase;
 	}
 }
+
 // is-het-al tekst
 .ishetal {
 	color: $kleur-text;
@@ -133,6 +136,7 @@ h2, h3, h4, h5, h6 {
 .lustrum12_button {
 	color: $kleur-text;
 }
+
 .lustrum12_button:hover {
 	color: $kleur-text-hover;
 }
@@ -142,9 +146,11 @@ h2, h3, h4, h5, h6 {
 	a:active {
 		color: $lustrum-kleur-goud;
 	}
+
 	.fa-bookmark {
 		color: $lustrum-kleur-wit;
 	}
+
 	#cd-primary-nav .nav-link {
 		color: $lustrum-kleur-goud;
 	}
@@ -155,13 +161,14 @@ footer {
 	a {
 		color: $body-color;
 	}
+
 	img {
 		filter: invert(90%);
 	}
 }
 
 // name selection right top
-#menu-personal{
+#menu-personal {
 	color: $kleur-text-hover;
 }
 
@@ -174,6 +181,7 @@ footer {
 .btn-secondary {
 	background-color: darken($kleur-secundair, 4%);
 }
+
 .btn-secondary.active {
 	background-color: lighten($kleur-secundair, 4%);
 }
@@ -182,16 +190,21 @@ footer {
 .dataTables_wrapper {
 	background-color: $lustrum-kleur-wit;
 	color: $kleur-primair;
+
 	a {
 		color: inherit;
 	}
+
 	// zou vast efficienter kunnen, maar kreeg het niet werkend.
 	.table {
 		color: inherit;
+
 		tbody {
 			color: inherit;
+
 			tr {
 				color: inherit;
+
 				td {
 					color: inherit;
 				}
@@ -203,10 +216,12 @@ footer {
 // Forumdeel omschrijving
 .forumdeel-omschrijving {
 	color: $kleur-primair;
+
 	h2 {
 		color: inherit;
 	}
-	.breadcrumb a{
+
+	.breadcrumb a {
 		color: inherit;
 	}
 }
@@ -214,6 +229,7 @@ footer {
 // breadcrumbs
 .breadcrumb {
 	background-color: inherit;
+
 	a {
 		color: $kleur-text;
 	}
@@ -229,6 +245,7 @@ footer {
 .form-check-input[type="radio"] {
 	background-color: $kleur-text;
 }
+
 .form-check-input[type="radio"]:checked {
 	background-color: darken($kleur-text, 5%);
 }
@@ -238,16 +255,19 @@ footer {
 	.list-group-item {
 		color: $kleur-text;
 	}
+
 	.list-group-item:hover {
 		color: $kleur-text-hover;
 	}
 }
+
 // bb-tags
 .bb-prive {
 	background-color: $kleur-primair;
 	color: $kleur-text-hover;
 }
+
 // polls
 .peiling .progress-bar {
-		background-color: $kleur-secundair;
+	background-color: $kleur-secundair;
 }

@@ -7,6 +7,7 @@
 	<div class="details">
 		<div><span>Leeftijd</span>: {{ noviet.leeftijd }}</div>
 		<div><span>Studie</span>: {{ noviet.studie }} ({{ noviet.studiejaar }})</div>
-		{% if noviet.verticale %}<div><span>Verticale</span>: {{ noviet.getVerticale.naam }}</div>{% endif %}
+		{% if noviet.verticale %}
+			<div><span>Verticale</span>: {{ noviet.getVerticale.naam }}</div>{% endif %}
 	</div>
 </a>

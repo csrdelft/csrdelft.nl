@@ -7,13 +7,15 @@ namespace CsrDelft\view\formulier\knoppen;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class FormDefaultKnoppen extends FormKnoppen {
+class FormDefaultKnoppen extends FormKnoppen
+{
 
 	public $submit;
 	public $reset;
 	public $cancel;
 
-	public function __construct($cancel_url = null, $reset = true, $icons = true, $labels = true, $cancel_reset = false, $submit_reset = false, $submit_DataTableResponse = false) {
+	public function __construct($cancel_url = null, $reset = true, $icons = true, $labels = true, $cancel_reset = false, $submit_reset = false, $submit_DataTableResponse = false)
+	{
 		parent::__construct();
 
 		$this->submit = new SubmitKnop();
@@ -50,7 +52,8 @@ class FormDefaultKnoppen extends FormKnoppen {
 		}
 	}
 
-	public function setConfirmAll() {
+	public function setConfirmAll()
+	{
 		foreach ($this->getModel() as $knop) {
 			$knop->action .= ' confirm';
 		}

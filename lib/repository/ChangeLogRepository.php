@@ -20,7 +20,8 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @method ChangeLogEntry[]    findAll()
  * @method ChangeLogEntry[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ChangeLogRepository extends AbstractRepository {
+class ChangeLogRepository extends AbstractRepository
+{
 	/**
 	 * @var SerializerInterface
 	 */
@@ -36,7 +37,8 @@ class ChangeLogRepository extends AbstractRepository {
 	 * @param SerializerInterface $serializer
 	 * @param Security $security
 	 */
-	public function __construct(ManagerRegistry $registry, SerializerInterface $serializer, Security $security) {
+	public function __construct(ManagerRegistry $registry, SerializerInterface $serializer, Security $security)
+	{
 		parent::__construct($registry, ChangeLogEntry::class);
 
 		$this->serializer = $serializer;
@@ -51,13 +53,15 @@ class ChangeLogRepository extends AbstractRepository {
 	 *
 	 * @return ChangeLogEntry
 	 */
-	public function log($subject, $property, $old, $new) {
+	public function log($subject, $property, $old, $new)
+	{
 		$change = $this->nieuw($subject, $property, $old, $new);
 		$this->create($change);
 		return $change;
 	}
 
-	public function serialize($value) {
+	public function serialize($value)
+	{
 		return $this->serializer->serialize($value, 'json', ['groups' => 'log']);
 	}
 
@@ -69,7 +73,8 @@ class ChangeLogRepository extends AbstractRepository {
 	 *
 	 * @return ChangeLogEntry
 	 */
-	public function nieuw($subject, $property, $old, $new) {
+	public function nieuw($subject, $property, $old, $new)
+	{
 		$change = new ChangeLogEntry();
 		$change->moment = date_create_immutable();
 		try {
@@ -98,7 +103,8 @@ class ChangeLogRepository extends AbstractRepository {
 	 * @param ChangeLogEntry $change
 	 * @return void
 	 */
-	public function create(ChangeLogEntry $change) {
+	public function create(ChangeLogEntry $change)
+	{
 		$this->getEntityManager()->persist($change);
 		$this->getEntityManager()->flush();
 	}
@@ -106,7 +112,8 @@ class ChangeLogRepository extends AbstractRepository {
 	/**
 	 * @param ChangeLogEntry[] $diff
 	 */
-	public function logChanges(array $diff) {
+	public function logChanges(array $diff)
+	{
 		foreach ($diff as $change) {
 			$this->create($change);
 		}

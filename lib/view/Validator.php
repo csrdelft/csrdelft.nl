@@ -11,7 +11,8 @@ namespace CsrDelft\view;
  * en verzameling van tegengekomen errors.
  *
  */
-interface Validator {
+interface Validator
+{
 
 	public function validate();
 

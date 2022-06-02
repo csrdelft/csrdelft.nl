@@ -21,9 +21,11 @@ use CsrDelft\view\formulier\keuzevelden\SterrenField;
  * Formulier voor het invoeren van een beoordeling van een maaltijd met sterren.
  *
  */
-class MaaltijdKwantiteitBeoordelingForm extends InlineForm {
+class MaaltijdKwantiteitBeoordelingForm extends InlineForm
+{
 
-	public function __construct(Maaltijd $maaltijd, MaaltijdBeoordeling $beoordeling) {
+	public function __construct(Maaltijd $maaltijd, MaaltijdBeoordeling $beoordeling)
+	{
 
 		$field = new SterrenField('kwantiteit', $beoordeling->kwantiteit, null, 4);
 		$field->hints = array('ruim onvoldoende', 'onvoldoende', 'voldoende', 'ruim voldoende');

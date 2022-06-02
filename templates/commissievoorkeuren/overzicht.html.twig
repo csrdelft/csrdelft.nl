@@ -9,31 +9,31 @@
 {% endblock %}
 
 {% block content %}
-<h2>Commissievoorkeuren</h2>
-<div class="col-md-6">
-	<p>Klik op een commissie om de voorkeuren te bekijken</p>
-	{% for cid, cat in categorien %}
-		<h2>{{ cat.categorie.naam }}</h2>
-		<ul>
-			{% for commissie in cat.commissies %}
-				<li{% if not commissie.zichtbaar %} style="opacity: .50"{% endif %}>
-					<a href="{{ url('csrdelft_commissievoorkeuren_commissie', {id: commissie.id}) }}">{{ commissie.naam }}</a>
-				</li>
-			{% endfor %}
-			{% if cat.commissies is empty %}
-				Deze categorie bevat geen commissies.
-				<a href="{{ url('csrdelft_commissievoorkeuren_verwijdercategorie', {id: cid}) }}" class="btn post ReloadPage">
-					Categorie verwijderen
-				</a>
-			{% endif %}
-		</ul>
-	{% endfor %}
-</div>
-<div class="col-md-6">
-	<h2>Categorie toevoegen</h2>
-	{{ form(categorieFormulier) }}
+	<h2>Commissievoorkeuren</h2>
+	<div class="col-md-6">
+		<p>Klik op een commissie om de voorkeuren te bekijken</p>
+		{% for cid, cat in categorien %}
+			<h2>{{ cat.categorie.naam }}</h2>
+			<ul>
+				{% for commissie in cat.commissies %}
+					<li{% if not commissie.zichtbaar %} style="opacity: .50"{% endif %}>
+						<a href="{{ url('csrdelft_commissievoorkeuren_commissie', {id: commissie.id}) }}">{{ commissie.naam }}</a>
+					</li>
+				{% endfor %}
+				{% if cat.commissies is empty %}
+					Deze categorie bevat geen commissies.
+					<a href="{{ url('csrdelft_commissievoorkeuren_verwijdercategorie', {id: cid}) }}" class="btn post ReloadPage">
+						Categorie verwijderen
+					</a>
+				{% endif %}
+			</ul>
+		{% endfor %}
+	</div>
+	<div class="col-md-6">
+		<h2>Categorie toevoegen</h2>
+		{{ form(categorieFormulier) }}
 
-	<h2>Commissie toevoegen</h2>
-	{{ form(commissieFormulier) }}
-</div>
+		<h2>Commissie toevoegen</h2>
+		{{ form(commissieFormulier) }}
+	</div>
 {% endblock %}

@@ -4,13 +4,16 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
 
-class BbAftel extends BbTag {
+class BbAftel extends BbTag
+{
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return ['aftel'];
 	}
 
-	public function render() {
+	public function render()
+	{
 		if (!isset($_ENV['AFTEL_START'])
 			|| $_ENV['AFTEL_START'] > time()
 			|| $_ENV['AFTEL_STOP'] < time()) {
@@ -49,6 +52,7 @@ HTML;
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []) {
+	public function parse($arguments = [])
+	{
 	}
 }

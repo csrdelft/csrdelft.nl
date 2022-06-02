@@ -12,7 +12,8 @@ use CsrDelft\repository\security\AccessRepository;
  *
  * @see AccessRepository
  */
-class AccessRole extends Enum {
+class AccessRole extends Enum
+{
 
 	/**
 	 * AccessRole opties.
@@ -53,7 +54,8 @@ class AccessRole extends Enum {
 	 * @param string $from
 	 * @return string[]
 	 */
-	public static function canChangeAccessRoleTo($from) {
+	public static function canChangeAccessRoleTo($from)
+	{
 		if ($from === self::PubCie) {
 			return static::getEnumValues();
 		} elseif ($from === self::Bestuur) {

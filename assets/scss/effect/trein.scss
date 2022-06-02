@@ -1,6 +1,10 @@
 @keyframes trein {
-	0% { left: -4000px; }
-	100% { left: 6000px; }
+	0% {
+		left: -4000px;
+	}
+	100% {
+		left: 6000px;
+	}
 }
 
 .rails {
@@ -13,24 +17,77 @@
 	z-index: 3;
 }
 
-.ns-ddz-4 { background: url("../../images/trein/ddz_4.png") 0 -1px; }
-.ns-ddz-6 { background: url("../../images/trein/ddz_6.png") 0 -2px; }
-.ns-icm-3 { background: url("../../images/trein/icm_3.png") 0 0; }
-.ns-icm-4 { background: url("../../images/trein/icm_4.png") 0 0; }
-.ns-icr-7 { background: url("../../images/trein/icr_7.png") 0 2px; }
-.ns-icr-9 { background: url("../../images/trein/icr_9.png") 0 4px; }
-.flirt3-blauw { background: url("../../images/trein/keolis_flirt3_blauwnet.png") 0 -4px; }
-.arriva { background: url("../../images/trein/gtw_e_8_arriva.png") 0 -4px; }
-.ns-virm-4 { background: url("../../images/trein/virm_4.png") 0 -2px; }
-.ns-virm-6 { background: url("../../images/trein/virm_6.png") 0 -2px; }
-.ns-sgmm-2 { background: url("../../images/trein/sgmm_2.png") 0 4px; }
-.ns-sgmm-3 { background: url("../../images/trein/sgmm_3.png") 0 5px; }
-.ns-flirt-3 { background: url("../../images/trein/nsr_flirt_3.png") 0 0; }
-.ns-slt-6 { background: url("../../images/trein/slt_6.png") 0 0; }
-.ns-sng-4 { background: url("../../images/trein/sng_4.png") 0 0; }
-.rnet-gtw { background: url("../../images/trein/gtw_e_8_rnet.png") 0 1px; }
-.thalys { background: url("../../images/trein/thalys.png") 0 -2px; }
-.iceje { background: url("../../images/trein/iceje.png") 0 -2px; }
+.ns-ddz-4 {
+	background: url("../../images/trein/ddz_4.png") 0 -1px;
+}
+
+.ns-ddz-6 {
+	background: url("../../images/trein/ddz_6.png") 0 -2px;
+}
+
+.ns-icm-3 {
+	background: url("../../images/trein/icm_3.png") 0 0;
+}
+
+.ns-icm-4 {
+	background: url("../../images/trein/icm_4.png") 0 0;
+}
+
+.ns-icr-7 {
+	background: url("../../images/trein/icr_7.png") 0 2px;
+}
+
+.ns-icr-9 {
+	background: url("../../images/trein/icr_9.png") 0 4px;
+}
+
+.flirt3-blauw {
+	background: url("../../images/trein/keolis_flirt3_blauwnet.png") 0 -4px;
+}
+
+.arriva {
+	background: url("../../images/trein/gtw_e_8_arriva.png") 0 -4px;
+}
+
+.ns-virm-4 {
+	background: url("../../images/trein/virm_4.png") 0 -2px;
+}
+
+.ns-virm-6 {
+	background: url("../../images/trein/virm_6.png") 0 -2px;
+}
+
+.ns-sgmm-2 {
+	background: url("../../images/trein/sgmm_2.png") 0 4px;
+}
+
+.ns-sgmm-3 {
+	background: url("../../images/trein/sgmm_3.png") 0 5px;
+}
+
+.ns-flirt-3 {
+	background: url("../../images/trein/nsr_flirt_3.png") 0 0;
+}
+
+.ns-slt-6 {
+	background: url("../../images/trein/slt_6.png") 0 0;
+}
+
+.ns-sng-4 {
+	background: url("../../images/trein/sng_4.png") 0 0;
+}
+
+.rnet-gtw {
+	background: url("../../images/trein/gtw_e_8_rnet.png") 0 1px;
+}
+
+.thalys {
+	background: url("../../images/trein/thalys.png") 0 -2px;
+}
+
+.iceje {
+	background: url("../../images/trein/iceje.png") 0 -2px;
+}
 
 .ns-icr-9, .ns-icr-7 {
 	// De ICR heeft een locomotief

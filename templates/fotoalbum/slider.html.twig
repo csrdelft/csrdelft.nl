@@ -9,9 +9,9 @@
 	</ol>
 	<div class="carousel-inner">
 		{% for foto in fotos %}
-		<div class="carousel-item {% if loop.first %}active{% endif %}">
-			<img style="height: 360px;" src="{{ foto.resizedUrl }}" alt="{{ foto.filename }}">
-		</div>
+			<div class="carousel-item {% if loop.first %}active{% endif %}">
+				<img style="height: 360px;" src="{{ foto.resizedUrl }}" alt="{{ foto.filename }}">
+			</div>
 		{% endfor %}
 	</div>
 	<a class="carousel-control-prev" href="#{{ uniqid }}" role="button" data-bs-slide="prev">

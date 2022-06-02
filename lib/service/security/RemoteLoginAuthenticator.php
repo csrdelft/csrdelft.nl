@@ -45,8 +45,8 @@ class RemoteLoginAuthenticator extends AbstractLoginFormAuthenticator
 	private $failureHandler;
 
 	public function __construct(
-		HttpUtils $httpUtils,
-		RemoteLoginRepository $remoteLoginRepository,
+		HttpUtils                             $httpUtils,
+		RemoteLoginRepository                 $remoteLoginRepository,
 		AuthenticationSuccessHandlerInterface $successHandler,
 		AuthenticationFailureHandlerInterface $failureHandler
 	)

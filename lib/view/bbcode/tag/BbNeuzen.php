@@ -10,12 +10,15 @@ use CsrDelft\view\Icon;
  * @since 27/03/2019
  * @example [neuzen]2o13[/neuzen]
  */
-class BbNeuzen extends BbTag {
-	public static function getTagName() {
+class BbNeuzen extends BbTag
+{
+	public static function getTagName()
+	{
 		return 'neuzen';
 	}
 
-	public function render() {
+	public function render()
+	{
 		$content = $this->getContent();
 		if (lid_instelling('layout', 'neuzen') != 'nee') {
 			$neus = Icon::getTag('bullet_red', null, null, 'neus2013', 'o');
@@ -25,7 +28,8 @@ class BbNeuzen extends BbTag {
 		return '<pan data-neuzen>' . $content . '</span>';
 	}
 
-	public function parse($arguments = []) {
+	public function parse($arguments = [])
+	{
 		$this->readContent([], false);
 	}
 }

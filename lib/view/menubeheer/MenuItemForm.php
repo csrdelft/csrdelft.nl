@@ -14,9 +14,11 @@ use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
-class MenuItemForm extends ModalForm {
+class MenuItemForm extends ModalForm
+{
 
-	public function __construct(MenuItem $item, $actie, $id) {
+	public function __construct(MenuItem $item, $actie, $id)
+	{
 		parent::__construct($item, '/menubeheer/' . $actie . '/' . $id);
 		if ($id == 'favoriet') {
 			$this->titel = 'Favoriet ' . $actie;
@@ -30,7 +32,7 @@ class MenuItemForm extends ModalForm {
 		$fields = [];
 		$fields['pid'] = new DoctrineEntityField('parent', $item->parent, 'Parent', MenuItem::class, '');
 		$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
-		if (!LoginService::mag(P_ADMIN) OR $id == 'favoriet') {
+		if (!LoginService::mag(P_ADMIN) or $id == 'favoriet') {
 			$fields['pid']->readonly = true;
 			$fields['pid']->hidden = true;
 		}
@@ -45,7 +47,7 @@ class MenuItemForm extends ModalForm {
 
 		$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Lees-rechten');
 		$fields['r']->title = 'Wie mag dit menu-item zien';
-		if (!LoginService::mag(P_ADMIN) OR $id == 'favoriet') {
+		if (!LoginService::mag(P_ADMIN) or $id == 'favoriet') {
 			$fields['r']->readonly = true;
 			$fields['r']->hidden = true;
 		}

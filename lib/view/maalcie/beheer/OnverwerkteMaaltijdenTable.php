@@ -12,8 +12,10 @@ use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\PopupDataTableKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
-class OnverwerkteMaaltijdenTable extends DataTable {
-	public function __construct() {
+class OnverwerkteMaaltijdenTable extends DataTable
+{
+	public function __construct()
+	{
 		parent::__construct(Maaltijd::class, '/maaltijden/beheer?filter=onverwerkt');
 
 		$this->hideColumn('verwerkt');

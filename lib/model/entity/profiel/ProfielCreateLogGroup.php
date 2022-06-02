@@ -13,12 +13,16 @@ use CsrDelft\repository\ProfielRepository;
  * LogGroup gegenereerd bij aanmaken profiel.
  *
  */
-class ProfielCreateLogGroup extends ProfielLogGroup {
-	public function __construct($editor, $timestamp) {
+class ProfielCreateLogGroup extends ProfielLogGroup
+{
+	public function __construct($editor, $timestamp)
+	{
 		parent::__construct($editor, $timestamp);
 	}
-	public  function toHtml() {
-		return "<div class='ProfielLogEntry'>Aangemaakt door ".ProfielRepository::getLink($this->editor).($this->timestamp === null ? "?" : reldate($this->timestamp->format('Y-m-d H:i:s')))."</div>";
+
+	public function toHtml()
+	{
+		return "<div class='ProfielLogEntry'>Aangemaakt door " . ProfielRepository::getLink($this->editor) . ($this->timestamp === null ? "?" : reldate($this->timestamp->format('Y-m-d H:i:s'))) . "</div>";
 	}
 
 }

@@ -19,7 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Entity(repositoryClass="CsrDelft\repository\documenten\DocumentRepository")
  */
-class Document extends Bestand {
+class Document extends Bestand
+{
 	/**
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
@@ -93,64 +94,77 @@ class Document extends Bestand {
 	 *
 	 * @return bool
 	 */
-	public function exists() {
+	public function exists()
+	{
 		return @is_readable($this->directory . '/' . $this->filename) and is_file($this->directory . '/' . $this->filename);
 	}
 
-	public function hasFile() {
+	public function hasFile()
+	{
 		if (!$this->magBekijken()) {
 			return false;
 		}
 		return $this->filename != '' and file_exists($this->getFullPath());
 	}
 
-	public function isEigenaar() {
+	public function isEigenaar()
+	{
 		return LoginService::getUid() === $this->eigenaar;
 	}
 
-	public function magBekijken() {
+	public function magBekijken()
+	{
 		return LoginService::mag($this->leesrechten) && LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function magBewerken() {
+	public function magBewerken()
+	{
 		return $this->isEigenaar() or LoginService::mag(P_DOCS_MOD);
 	}
 
-	public function magVerwijderen() {
+	public function magVerwijderen()
+	{
 		return LoginService::mag(P_DOCS_MOD);
 	}
 
 	/**
 	 * @return string file name on disk
 	 */
-	public function getFullFileName() {
+	public function getFullFileName()
+	{
 		return $this->id . '_' . $this->filename;
 	}
 
 	/**
 	 * @return string location on disk
 	 */
-	public function getPath() {
+	public function getPath()
+	{
 		return DATA_PATH . 'documenten/';
 	}
 
-	public function getFullPath() {
+	public function getFullPath()
+	{
 		return $this->getPath() . $this->getFullFileName();
 	}
 
-	public function getUrl() {
+	public function getUrl()
+	{
 		return '/documenten/bekijken/' . $this->id . '/' . rawurlencode($this->filename);
 	}
 
-	public function getDownloadUrl() {
+	public function getDownloadUrl()
+	{
 		return '/documenten/download/' . $this->id . '/' . rawurlencode($this->filename);
 	}
 
-	public function getMimetypeIcon() {
+	public function getMimetypeIcon()
+	{
 		return Icon::getTag('mime-' . $this->getFriendlyMimetype());
 	}
 
-	public function getFriendlyMimetype() {
+	public function getFriendlyMimetype()
+	{
 		$mimetypeMap = [
 			'application/pdf' => 'pdf',
 			'application/zip' => 'zip',
@@ -199,7 +213,8 @@ class Document extends Bestand {
 	 * @return bool
 	 * @throws CsrException
 	 */
-	public function deleteFile($throwWhenNotFound = true) {
+	public function deleteFile($throwWhenNotFound = true)
+	{
 		if (!$this->hasFile()) {
 			if ($throwWhenNotFound) {
 				throw new CsrGebruikerException('Geen bestand gevonden voor dit document');

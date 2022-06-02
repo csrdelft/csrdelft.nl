@@ -13,8 +13,10 @@ use DateTime;
  *
  * Maakt het mogelijk om een datum en tijd te selecteren en de saldisommen op dat moment op te vragen.
  */
-class SaldiSomForm extends InlineForm {
-	public function __construct(CiviSaldoRepository $civiSaldoRepository, DateTime $date = null) {
+class SaldiSomForm extends InlineForm
+{
+	public function __construct(CiviSaldoRepository $civiSaldoRepository, DateTime $date = null)
+	{
 		$field = new DateTimeField("moment", $date ? $date->format("Y-m-d H:i:s") : date("Y-m-d H:i:s"), "Saldi som op", (int)date("Y"));
 
 		parent::__construct($civiSaldoRepository, '/fiscaat/saldo/som', $field, true, true);

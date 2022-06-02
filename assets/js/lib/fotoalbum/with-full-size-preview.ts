@@ -1,7 +1,7 @@
-import {Size} from 'jgallery/src/preview';
+import { Size } from 'jgallery/src/preview';
 import load from 'jgallery/src/utils/load';
 import AlbumItem from 'jgallery/types/album-item';
-import {GalleryDecorator} from 'jgallery/types/gallery';
+import { GalleryDecorator } from 'jgallery/types/gallery';
 import Params from 'jgallery/types/gallery/parameters';
 
 const withFullSizePreview: GalleryDecorator = (constructor) =>
@@ -23,7 +23,7 @@ const withFullSizePreview: GalleryDecorator = (constructor) =>
 			const content = this.preview.getElement().querySelector<HTMLDivElement>('.j-gallery-preview-content');
 
 			if (!content) {
-				throw new Error("Geen content gevonden")
+				throw new Error('Geen content gevonden');
 			}
 
 			if (size === Size.auto) {

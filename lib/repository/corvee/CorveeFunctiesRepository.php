@@ -15,7 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CorveeFunctie[]    findAll()
  * @method CorveeFunctie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CorveeFunctiesRepository extends AbstractRepository {
+class CorveeFunctiesRepository extends AbstractRepository
+{
 	/**
 	 * @var CorveeTakenRepository
 	 */
@@ -25,7 +26,8 @@ class CorveeFunctiesRepository extends AbstractRepository {
 	 */
 	private $corveeRepetitiesRepository;
 
-	public function __construct(ManagerRegistry $registry, CorveeTakenRepository $corveeTakenRepository, CorveeRepetitiesRepository $corveeRepetitiesRepository) {
+	public function __construct(ManagerRegistry $registry, CorveeTakenRepository $corveeTakenRepository, CorveeRepetitiesRepository $corveeRepetitiesRepository)
+	{
 		parent::__construct($registry, CorveeFunctie::class);
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
@@ -37,7 +39,8 @@ class CorveeFunctiesRepository extends AbstractRepository {
 	 * @param int $fid
 	 * @return CorveeFunctie|null
 	 */
-	public function get($fid) {
+	public function get($fid)
+	{
 		return $this->find($fid);
 	}
 
@@ -46,17 +49,20 @@ class CorveeFunctiesRepository extends AbstractRepository {
 	 *
 	 * @return CorveeFunctie[]
 	 */
-	public function getAlleFuncties() {
+	public function getAlleFuncties()
+	{
 		return group_by_distinct('functie_id', $this->findAll());
 	}
 
-	public function nieuw() {
+	public function nieuw()
+	{
 		$functie = new CorveeFunctie();
 		$functie->kwalificatie_benodigd = (boolean)instelling('corvee', 'standaard_kwalificatie');
 		return $functie;
 	}
 
-	public function removeFunctie(CorveeFunctie $functie) {
+	public function removeFunctie(CorveeFunctie $functie)
+	{
 		if ($this->corveeTakenRepository->existFunctieTaken($functie->functie_id)) {
 			throw new CsrGebruikerException('Verwijder eerst de bijbehorende corveetaken!');
 		}
@@ -70,7 +76,8 @@ class CorveeFunctiesRepository extends AbstractRepository {
 		$this->_em->flush();
 	}
 
-	public function getSuggesties($query) {
+	public function getSuggesties($query)
+	{
 		return $this->createQueryBuilder('f')
 			->where('f.naam LIKE :query')
 			->setParameter('query', sql_contains($query))

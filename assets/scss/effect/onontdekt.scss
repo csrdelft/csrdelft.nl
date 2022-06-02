@@ -1,24 +1,28 @@
 .layer {
-  position: absolute;
-  /* Maak een layer groter dan het scherm, om te compenseren voor de verplaatsing */
-  width: 120vw;
-  height: 100vh;
-  margin-left: -10vw;
-  background-size: cover;
-  background-position: center center;
+	position: absolute;
+	/* Maak een layer groter dan het scherm, om te compenseren voor de verplaatsing */
+	width: 120vw;
+	height: 100vh;
+	margin-left: -10vw;
+	background-size: cover;
+	background-position: center center;
 
 	&.layer1 {
 		background-image: url("../../images/onontdekt/laag1.jpg");
 	}
+
 	&.layer2 {
 		background-image: url("../../images/onontdekt/laag2.png");
 	}
+
 	&.layer3 {
 		background-image: url("../../images/onontdekt/laag3.png");
 	}
+
 	&.layer4 {
 		background-image: url("../../images/onontdekt/laag4.png");
 	}
+
 	&.layer5 {
 		background-image: url("../../images/onontdekt/laag5.png");
 	}

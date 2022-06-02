@@ -28,54 +28,62 @@ a[href*="csrdelft.nl"], a[href*="127.0.0.1"], a.not-external {
 		background: none;
 	}
 }
+
 a[href^="mailto:"] {
-  padding-right: 16px;
-  background: url("../images/email-link-blue.png") no-repeat center right;
+	padding-right: 16px;
+	background: url("../images/email-link-blue.png") no-repeat center right;
 }
+
 a.lichtgrijs {
-  padding: 0;
-  background: none;
+	padding: 0;
+	background: none;
 }
+
 /* Typeahead */
 a.suggestionUrl, a.suggestionUrl:hover {
-  text-decoration: none;
-  color: inherit;
+	text-decoration: none;
+	color: inherit;
 }
+
 a.suggestionUrl img.icon {
-  position: absolute;
-  left: 2px;
-  width: 16px;
-  height: 16px;
+	position: absolute;
+	left: 2px;
+	width: 16px;
+	height: 16px;
 }
 
 .progress-bar-info {
-  cursor: default;
+	cursor: default;
 }
 
 .icon {
-  vertical-align: text-bottom;
-}
-.module-icon {
-  color: black;
-  font-size: 1.7em;
-  opacity: 0.2;
-}
-.module-icon:hover {
-  opacity: 0.5;
-}
-input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner {
-  padding: 0;
-  border: 0
+	vertical-align: text-bottom;
 }
 
-.btn.disabled  {
-  color: #D3D3D3;
-  border: 1px solid #D3D3D3 !important;
-  cursor: default;
+.module-icon {
+	color: black;
+	font-size: 1.7em;
+	opacity: 0.2;
 }
+
+.module-icon:hover {
+	opacity: 0.5;
+}
+
+input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner {
+	padding: 0;
+	border: 0
+}
+
+.btn.disabled {
+	color: #D3D3D3;
+	border: 1px solid #D3D3D3 !important;
+	cursor: default;
+}
+
 .disabled img {
-  opacity: 0.3;
-  filter: alpha(opacity=30);
+	opacity: 0.3;
+	filter: alpha(opacity=30);
 }
 
 .btn-loading {

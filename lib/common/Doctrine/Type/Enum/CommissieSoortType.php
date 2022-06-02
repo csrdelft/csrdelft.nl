@@ -6,13 +6,16 @@ namespace CsrDelft\common\Doctrine\Type\Enum;
 
 use CsrDelft\entity\groepen\enum\CommissieSoort;
 
-class CommissieSoortType extends EnumType {
+class CommissieSoortType extends EnumType
+{
 
-	public function getEnumClass() {
+	public function getEnumClass()
+	{
 		return CommissieSoort::class;
 	}
 
-	public function getName() {
+	public function getName()
+	{
 		return 'enumCommissieSoort';
 	}
 }

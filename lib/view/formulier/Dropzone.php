@@ -13,7 +13,8 @@ use CsrDelft\view\formulier\uploadvelden\ImageField;
  *
  * Form consisting of a DropzoneUploader and fallback FileField
  */
-class Dropzone extends Formulier {
+class Dropzone extends Formulier
+{
 
 	/**
 	 * @var ImageField
@@ -24,7 +25,8 @@ class Dropzone extends Formulier {
 	 */
 	private $fallback;
 
-	public function __construct($model, $action, FileField $fallback, $cancel_url, $titel = false) {
+	public function __construct($model, $action, FileField $fallback, $cancel_url, $titel = false)
+	{
 		parent::__construct($model, $action, $titel);
 		$this->css_classes[] = 'dropzone';
 		$this->fallback = $fallback;
@@ -38,7 +40,8 @@ class Dropzone extends Formulier {
 		$this->addFields($fields);
 	}
 
-	public function getPostedUploader() {
+	public function getPostedUploader()
+	{
 		if ($this->dropzone->isPosted()) {
 			return $this->dropzone;
 		} elseif ($this->fallback->isPosted()) {
@@ -47,7 +50,8 @@ class Dropzone extends Formulier {
 		return null;
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		if (!$this->isPosted()) {
 			return false;
 		}
@@ -59,7 +63,8 @@ class Dropzone extends Formulier {
 		return false;
 	}
 
-	public function isPosted() {
+	public function isPosted()
+	{
 		if ($this->dropzone->isPosted()) {
 			return true;
 		} elseif ($this->fallback->isPosted()) {
@@ -68,7 +73,8 @@ class Dropzone extends Formulier {
 		return false;
 	}
 
-	protected function getFormTag() {
+	protected function getFormTag()
+	{
 		if ($this->dataTableId) {
 			$this->css_classes[] = 'DataTableResponse';
 		}

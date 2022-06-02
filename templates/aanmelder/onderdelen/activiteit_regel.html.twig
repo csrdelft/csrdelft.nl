@@ -16,15 +16,15 @@
 	</td>
 	<td>
 		<div class="Aanwezigen (limiet)">
-			{{ activiteit.aantalAanmeldingen }}  ({{ activiteit.getCapaciteit() }})
+			{{ activiteit.aantalAanmeldingen }} ({{ activiteit.getCapaciteit() }})
 		</div>
 	</td>
 	{% if activiteit.aangemeld %}
 		<td class="maaltijd-aangemeld">
 			{% if activiteit.magAfmelden %}
 				<a href="{{ url('csrdelft_aanmelder_afmelden', {activiteit: activiteit.id}) }}"
-				 class="btn post maaltijd-aangemeld">
-				<input type="checkbox" checked="checked"/> Ja
+					 class="btn post maaltijd-aangemeld">
+					<input type="checkbox" checked="checked"/> Ja
 				</a>
 			{% else %}
 				Ja
@@ -57,7 +57,8 @@
 							class="Formulier InlineForm ToggleForm">
 					{{ csrfField() }}
 					<input type="text" name="aantal" value="{{ activiteit.aantalGasten }}"
-								 origvalue="{{ activiteit.aantalGasten }}" class="FormElement" max="{{ activiteit.maxGasten }}" size="4"/>
+								 origvalue="{{ activiteit.aantalGasten }}" class="FormElement" max="{{ activiteit.maxGasten }}"
+								 size="4"/>
 					<a class="btn submit" title="Wijzigingen opslaan">{{ icon("accept") }}</a>
 					<a class="btn reset cancel" title="Annuleren">{{ icon("delete") }}</a>
 				</form>

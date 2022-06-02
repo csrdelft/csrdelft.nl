@@ -13,8 +13,10 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * Controller voor activiteiten.
  */
-class ActiviteitenController extends KetzersController {
-	public function __construct(ManagerRegistry $registry) {
+class ActiviteitenController extends KetzersController
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Activiteit::class);
 	}
 }

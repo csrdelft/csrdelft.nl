@@ -7,11 +7,13 @@ use CsrDelft\entity\maalcie\MaaltijdBeoordelingDTO;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\DataTable;
 
-class BeheerMaaltijdenBeoordelingenTable extends DataTable {
+class BeheerMaaltijdenBeoordelingenTable extends DataTable
+{
 	/**
 	 * BeheerMaaltijdenBeoordeelingenView constructor.
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct(MaaltijdBeoordelingDTO::class, '/maaltijden/beheer/beoordelingen');
 
 		$this->addColumn('titel');
@@ -32,7 +34,8 @@ class BeheerMaaltijdenBeoordelingenTable extends DataTable {
 		$this->searchColumn('datum');
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return "Maaltijden / Beheer / Beoordelingen";
 	}
 }

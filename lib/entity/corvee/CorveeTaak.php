@@ -37,7 +37,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeTakenRepository")
  * @ORM\Table("crv_taken")
  */
-class CorveeTaak implements Agendeerbaar {
+class CorveeTaak implements Agendeerbaar
+{
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -62,7 +63,7 @@ class CorveeTaak implements Agendeerbaar {
 	 * @ORM\JoinColumn(name="crv_repetitie_id", referencedColumnName="crv_repetitie_id", nullable=true)
 	 */
 	public $corveeRepetitie;
-		/**
+	/**
 	 * @ORM\Column(type="integer", nullable=true)
 	 * @var int
 	 */
@@ -121,11 +122,13 @@ class CorveeTaak implements Agendeerbaar {
 	 */
 	public $corveeFunctie;
 
-	public function getPuntenPrognose() {
+	public function getPuntenPrognose()
+	{
 		return $this->punten + $this->bonus_malus - $this->punten_toegekend - $this->bonus_toegekend;
 	}
 
-	public function getLaatstGemaildDate() {
+	public function getLaatstGemaildDate()
+	{
 		$pos = strpos($this->wanneer_gemaild, '&#013;');
 		if ($pos === false) {
 			return null;
@@ -138,7 +141,8 @@ class CorveeTaak implements Agendeerbaar {
 	 *
 	 * @return int
 	 */
-	public function getAantalKeerGemaild() {
+	public function getAantalKeerGemaild()
+	{
 		return substr_count($this->wanneer_gemaild, '&#013;');
 	}
 
@@ -147,7 +151,8 @@ class CorveeTaak implements Agendeerbaar {
 	 *
 	 * @return boolean
 	 */
-	public function getMoetHerinneren() {
+	public function getMoetHerinneren()
+	{
 		$aantal = $this->getAantalKeerGemaild();
 		$datum = $this->datum;
 		$laatst = $this->getLaatstGemaildDate();
@@ -176,7 +181,8 @@ class CorveeTaak implements Agendeerbaar {
 	 *
 	 * @return boolean
 	 */
-	public function getIsTelaatGemaild() {
+	public function getIsTelaatGemaild()
+	{
 		$aantal = $this->getAantalKeerGemaild();
 		$datum = $this->datum;
 		$laatst = $this->getLaatstGemaildDate();
@@ -198,7 +204,8 @@ class CorveeTaak implements Agendeerbaar {
 		return false;
 	}
 
-	public function setWanneerGemaild($datumtijd) {
+	public function setWanneerGemaild($datumtijd)
+	{
 		if (!is_string($datumtijd)) {
 			throw new CsrGebruikerException('Geen string: wanneer gemaild');
 		}
@@ -210,45 +217,54 @@ class CorveeTaak implements Agendeerbaar {
 
 	// Agendeerbaar ############################################################
 
-	public function getUUID() {
+	public function getUUID()
+	{
 		return $this->taak_id . '@corveetaak.csrdelft.nl';
 	}
 
-	public function getBeginMoment() {
+	public function getBeginMoment()
+	{
 		return $this->datum->getTimestamp();
 	}
 
-	public function getEindMoment() {
+	public function getEindMoment()
+	{
 		return $this->getBeginMoment() + 7200;
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		if ($this->profiel) {
 			return $this->corveeFunctie->naam . ' ' . $this->profiel->getNaam('civitas');
 		}
 		return 'Corvee vacature (' . $this->corveeFunctie->naam . ')';
 	}
 
-	public function getBeschrijving() {
+	public function getBeschrijving()
+	{
 		if ($this->profiel) {
 			return $this->corveeFunctie->naam;
 		}
 		return 'Nog niet ingedeeld';
 	}
 
-	public function getLocatie() {
+	public function getLocatie()
+	{
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl() {
+	public function getUrl()
+	{
 		return '/corvee/rooster';
 	}
 
-	public function isHeledag() {
+	public function isHeledag()
+	{
 		return true;
 	}
 
-	public function isTransparant() {
+	public function isTransparant()
+	{
 		return true;
 	}
 

@@ -21,7 +21,8 @@ use Symfony\Component\HttpFoundation\Response;
  * @since 2020-08-22
  * @see FormulierBuilder
  */
-class FormulierInstance {
+class FormulierInstance
+{
 	public $post = true;
 	protected $enctype = 'multipart/form-data';
 	private $action;
@@ -52,7 +53,8 @@ class FormulierInstance {
 		$css_classes,
 		$validationMethods = [],
 		$post = true
-	) {
+	)
+	{
 		$this->formId = uniqid_safe('Formulier_');
 		$this->action = $action;
 		$this->formKnoppen = $formKnoppen;
@@ -66,7 +68,8 @@ class FormulierInstance {
 		$this->validationMethods = $validationMethods;
 	}
 
-	public function createView() {
+	public function createView()
+	{
 		$html = '';
 		if ($this->showMelding) {
 			$html .= getMelding();
@@ -94,14 +97,16 @@ class FormulierInstance {
 		return new FormulierView($html, $this->titel);
 	}
 
-	protected function getFormTag() {
+	protected function getFormTag()
+	{
 		if ($this->dataTableId) {
 			$this->css_classes[] = 'DataTableResponse';
 		}
 		return '<form enctype="' . $this->enctype . '" action="' . htmlspecialchars($this->action) . '" id="' . $this->formId . '" data-tableid="' . $this->dataTableId . '" class="' . implode(' ', $this->css_classes) . '" method="' . ($this->post ? 'post' : 'get') . '">';
 	}
 
-	public function getCsrfField() {
+	public function getCsrfField()
+	{
 		if (!$this->preventCsrf) {
 			return null;
 		}
@@ -110,11 +115,13 @@ class FormulierInstance {
 		return new CsrfField($token);
 	}
 
-	public function getMethod() {
+	public function getMethod()
+	{
 		return $this->post ? 'post' : 'get';
 	}
 
-	protected function getScriptTag() {
+	protected function getScriptTag()
+	{
 		$js = $this->getJavascript();
 		if (trim($js) == "") {
 			return "";
@@ -129,7 +136,8 @@ docReady(function() {
 HTML;
 	}
 
-	protected function getJavascript() {
+	protected function getJavascript()
+	{
 		$javascript = '';
 		foreach ($this->fields as $field) {
 			$javascript .= $field->getJavascript();
@@ -137,7 +145,8 @@ HTML;
 		return $javascript;
 	}
 
-	public function createModalView() {
+	public function createModalView()
+	{
 		$html = '';
 		$this->css_classes[] = 'ModalForm';
 
@@ -185,7 +194,8 @@ HTML;
 	/**
 	 * Geeft waardes van de formuliervelden terug.
 	 */
-	public function getValues() {
+	public function getValues()
+	{
 		$values = array();
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField) {
@@ -198,7 +208,8 @@ HTML;
 	/**
 	 * Geeft errors van de formuliervelden terug.
 	 */
-	public function getError() {
+	public function getError()
+	{
 		$errors = array();
 		foreach ($this->fields as $field) {
 			if ($field instanceof Validator) {
@@ -218,7 +229,8 @@ HTML;
 	 * Alle valideer-functies kunnen het model gebruiken bij het valideren
 	 * dat meegegeven is bij de constructie van het InputField.
 	 */
-	public function validate() {
+	public function validate()
+	{
 		if (!$this->isPosted()) {
 			return false;
 		}
@@ -244,7 +256,8 @@ HTML;
 	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */
-	public function isPosted() {
+	public function isPosted()
+	{
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField && !$field->isPosted()) {
 				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
@@ -259,7 +272,8 @@ HTML;
 	 *
 	 * @returns ChangeLogEntry[]
 	 */
-	public function diff() {
+	public function diff()
+	{
 		$changeLogRepository = ContainerFacade::getContainer()->get(ChangeLogRepository::class);
 		$diff = array();
 		foreach ($this->fields as $field) {
@@ -281,7 +295,8 @@ HTML;
 	 * @param ChangeLogEntry[] $diff
 	 * @return string
 	 */
-	public function changelog(array $diff) {
+	public function changelog(array $diff)
+	{
 		$changelog = '';
 		if (!empty($diff)) {
 			$changelog .= '[div]Bewerking van [lid=' . LoginService::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
@@ -293,7 +308,8 @@ HTML;
 		return $changelog;
 	}
 
-	public function handleRequest(Request $request) {
+	public function handleRequest(Request $request)
+	{
 		if ($this->isPosted()) {
 			foreach ($this->fields as $field) {
 				if ($field instanceof InputField) {
@@ -303,7 +319,8 @@ HTML;
 		}
 	}
 
-	private function loadProperty(InputField $field) {
+	private function loadProperty(InputField $field)
+	{
 		$fieldName = $field->getName();
 		if ($this->model) {
 			if (method_exists($this->model, 'set' . ucfirst($fieldName))) {
@@ -317,11 +334,13 @@ HTML;
 	/**
 	 * @param mixed $model
 	 */
-	public function setModel($model): void {
+	public function setModel($model): void
+	{
 		$this->model = $model;
 	}
 
-	public function getField($name) {
+	public function getField($name)
+	{
 		return $this->fields[$name];
 	}
 }

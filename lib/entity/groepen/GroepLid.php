@@ -26,9 +26,11 @@ class GroepLid
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("UUID")
 	 */
-	public function getUUID() {
+	public function getUUID()
+	{
 		return $this->groepId . '.' . $this->uid . '@' . strtolower(short_class($this)) . '.csrdelft.nl';
 	}
+
 	/**
 	 * Shared primary key
 	 * Foreign key
@@ -92,12 +94,14 @@ class GroepLid
 	 * @ORM\JoinColumn(name="groep_id", referencedColumnName="id")
 	 */
 	public $groep;
+
 	/**
 	 * @return string|null
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("lid")
 	 */
-	public function getDatatableLid() {
+	public function getDatatableLid()
+	{
 		return ProfielRepository::getLink($this->uid);
 	}
 
@@ -106,7 +110,8 @@ class GroepLid
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("door_uid")
 	 */
-	public function getDatatableDoorUid() {
+	public function getDatatableDoorUid()
+	{
 		return $this->doorProfiel->getLink();
 	}
 
@@ -114,7 +119,8 @@ class GroepLid
 	 * @return string|null
 	 * @Serializer\Groups("vue")
 	 */
-	public function getLink() {
+	public function getLink()
+	{
 		return $this->profiel->getLink();
 	}
 
@@ -122,7 +128,8 @@ class GroepLid
 	 * @return string
 	 * @Serializer\Groups("vue")
 	 */
-	public function getNaam() {
+	public function getNaam()
+	{
 		return $this->profiel->getNaam();
 	}
 
@@ -131,7 +138,8 @@ class GroepLid
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("opmerking2")
 	 */
-	public function getOpmerking2String() {
+	public function getOpmerking2String()
+	{
 		if (is_array($this->opmerking2)) {
 			return implode(", ", array_map(function ($el) {
 				return $el->__toString();

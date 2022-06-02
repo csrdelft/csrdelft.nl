@@ -28,8 +28,8 @@ class InstellingenTwigExtension extends AbstractExtension
 
 	public function __construct(
 		LidInstellingenRepository $lidInstellingenRepository,
-		InstellingenRepository $instellingenRepository,
-		LidToestemmingRepository $lidToestemmingRepository
+		InstellingenRepository    $instellingenRepository,
+		LidToestemmingRepository  $lidToestemmingRepository
 	)
 	{
 		$this->lidInstellingenRepository = $lidInstellingenRepository;

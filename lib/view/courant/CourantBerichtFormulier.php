@@ -17,7 +17,8 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredEnumSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
-class CourantBerichtFormulier implements FormulierTypeInterface {
+class CourantBerichtFormulier implements FormulierTypeInterface
+{
 	/**
 	 * @var InstellingenRepository
 	 */
@@ -27,7 +28,8 @@ class CourantBerichtFormulier implements FormulierTypeInterface {
 	 * CourantFormulier constructor.
 	 * @param InstellingenRepository $instellingenRepository
 	 */
-	public function __construct(InstellingenRepository $instellingenRepository) {
+	public function __construct(InstellingenRepository $instellingenRepository)
+	{
 		$this->instellingenRepository = $instellingenRepository;
 	}
 
@@ -36,7 +38,8 @@ class CourantBerichtFormulier implements FormulierTypeInterface {
 	 * @param CourantBericht $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
+	{
 		$builder->setTitel('Courant bericht');
 
 		$fields = [];

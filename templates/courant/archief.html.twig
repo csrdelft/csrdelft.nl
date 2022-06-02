@@ -27,13 +27,13 @@
 				<h3>{{ courantJaar[0].jaar }}</h3>
 
 				<ul class="list-unstyled">
-				{% for courant in courantJaar %}
-					<li>
-					<a href="{{ url('csrdelft_courant_bekijken', {id: courant.id}) }}">
-						{{ courant.verzendMoment | date("d F") }}
-					</a>
-					</li>
-				{% endfor %}
+					{% for courant in courantJaar %}
+						<li>
+							<a href="{{ url('csrdelft_courant_bekijken', {id: courant.id}) }}">
+								{{ courant.verzendMoment | date("d F") }}
+							</a>
+						</li>
+					{% endfor %}
 				</ul>
 			</div>
 		{% endfor %}

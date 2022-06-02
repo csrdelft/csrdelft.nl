@@ -9,9 +9,11 @@ use CsrDelft\service\security\LoginService;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class PasfotoAanmeldenKnop extends SubmitKnop {
+class PasfotoAanmeldenKnop extends SubmitKnop
+{
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		if (($i = array_search('btn btn-primary', $this->css_classes)) !== false) {
 			unset($this->css_classes[$i]);
 		}

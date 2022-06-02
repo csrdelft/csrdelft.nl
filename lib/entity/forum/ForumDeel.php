@@ -21,7 +21,8 @@ use Doctrine\ORM\PersistentCollection;
  * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumDeel {
+class ForumDeel
+{
 	/**
 	 * Primary key
 	 * @var int
@@ -89,28 +90,34 @@ class ForumDeel {
 	 */
 	private $forum_draden;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->meldingen = new ArrayCollection();
 	}
 
-	public function magLezen($rss = false) {
+	public function magLezen($rss = false)
+	{
 		$auth = ($rss ? AuthenticationMethod::getEnumValues() : null);
-		return LoginService::mag(P_FORUM_READ, $auth) AND LoginService::mag($this->rechten_lezen, $auth) AND $this->categorie->magLezen($auth);
+		return LoginService::mag(P_FORUM_READ, $auth) and LoginService::mag($this->rechten_lezen, $auth) and $this->categorie->magLezen($auth);
 	}
 
-	public function magPosten() {
+	public function magPosten()
+	{
 		return LoginService::mag($this->rechten_posten);
 	}
 
-	public function magModereren() {
+	public function magModereren()
+	{
 		return LoginService::mag($this->rechten_modereren);
 	}
 
-	public function magMeldingKrijgen() {
+	public function magMeldingKrijgen()
+	{
 		return $this->magLezen();
 	}
 
-	public function isOpenbaar() {
+	public function isOpenbaar()
+	{
 		return strpos($this->rechten_lezen, P_FORUM_READ) !== false;
 	}
 
@@ -119,14 +126,16 @@ class ForumDeel {
 	 *
 	 * @return ForumDraad[]
 	 */
-	public function getForumDraden() {
+	public function getForumDraden()
+	{
 		if (!isset($this->forum_draden)) {
 			$this->setForumDraden(ContainerFacade::getContainer()->get(ForumDradenRepository::class)->getForumDradenVoorDeel($this));
 		}
 		return $this->forum_draden;
 	}
 
-	public function hasForumDraden() {
+	public function hasForumDraden()
+	{
 		$this->getForumDraden();
 		return !empty($this->forum_draden);
 	}
@@ -136,11 +145,13 @@ class ForumDeel {
 	 *
 	 * @param array $forum_draden
 	 */
-	public function setForumDraden($forum_draden) {
+	public function setForumDraden($forum_draden)
+	{
 		$this->forum_draden = $forum_draden;
 	}
 
-	public function lidWilMeldingVoorDeel($uid = null) {
+	public function lidWilMeldingVoorDeel($uid = null)
+	{
 		if ($uid === null) $uid = LoginService::getUid();
 
 		return $this->meldingen->matching(Eisen::voorGebruiker($uid))->first() != null;

@@ -591,8 +591,9 @@
 						<table class="table table-sm table-striped">
 							{% for post in forumrecent %}
 								<tr>
-									<td><a href="{{ url('csrdelft_forum_forumdraad_reactie', {post_id: post.post_id, _fragment: post.post_id}) }}"
-												 title="{{ post.tekst }}"
+									<td><a
+											href="{{ url('csrdelft_forum_forumdraad_reactie', {post_id: post.post_id, _fragment: post.post_id}) }}"
+											title="{{ post.tekst }}"
 											{% if post.draad.ongelezen %}
 												class="{{ lid_instelling('forum', 'ongelezenWeergave') }}"
 											{% endif %}

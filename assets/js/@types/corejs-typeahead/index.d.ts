@@ -14,8 +14,8 @@ declare module 'corejs-typeahead' {
 		nonword: BloodhoundTokenizer;
 		ngram: BloodhoundTokenizer;
 		obj: {
-			whitespace: (field: string) => BloodhoundTokenizer
-		}
+			whitespace: (field: string) => BloodhoundTokenizer;
+		};
 	}
 
 	type BloodhoundTokenizer = (query: string) => string[];
@@ -57,8 +57,11 @@ declare module 'corejs-typeahead' {
 		rateLimitBy?: (fun: () => void) => void;
 		rateLimitWait?: number;
 		transform?: (response: any) => any;
-		transport?:
-			(options: BloodhoundRequestData, onSuccess: (data: object) => void, onError: (error: object) => void) => void;
+		transport?: (
+			options: BloodhoundRequestData,
+			onSuccess: (data: object) => void,
+			onError: (error: object) => void
+		) => void;
 	}
 
 	interface TypeaheadOptions {

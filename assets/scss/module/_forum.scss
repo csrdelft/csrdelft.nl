@@ -105,7 +105,6 @@
 		}
 
 
-
 		.forum-bericht {
 			flex: 1; /* grow */
 
@@ -117,6 +116,7 @@
 			.bewerkt {
 				font-size: .8em;
 				color: $gray-500;
+
 				a {
 					color: $gray-500;
 				}
@@ -164,6 +164,7 @@ span.curpage {
 .forum-paginering {
 	padding: 5px;
 	margin-left: 160px;
+
 	a {
 		padding: 4px 5px;
 
@@ -188,6 +189,7 @@ span.curpage {
 	// iedere 6e moet een kleurtje krijgen, en de divs daarna.
 	.alternate-row {
 		padding: 0.7em;
+
 		&:nth-child(6n +1),
 		&:nth-child(6n + 2),
 		&:nth-child(6n + 3) {
@@ -241,6 +243,7 @@ span.curpage {
 		a {
 			color: $black;
 		}
+
 		a:hover {
 			text-decoration: none;
 			cursor: default;
@@ -314,6 +317,7 @@ span.curpage {
 // Suggesties
 .textcomplete-item {
 	color: $black;
+
 	&.active {
 		background: $gray-200;
 	}
@@ -327,7 +331,7 @@ span.curpage {
 	}
 }
 
-@media screen and (max-width: 960px){ // lg
+@media screen and (max-width: 960px) { // lg
 	.modfuncties {
 		font-size: 0;
 	}
@@ -344,7 +348,7 @@ span.curpage {
 			flex-direction: column;
 
 			.auteur {
-				flex: 1 0 ;
+				flex: 1 0;
 
 				grid-template-columns: 1fr auto auto;
 				border-bottom: 2px solid $gray-300;
@@ -362,8 +366,8 @@ span.curpage {
 
 					.postanchor {
 						// Compenseer voor navbar
-						padding-top:44px;
-						margin-top:-44px;
+						padding-top: 44px;
+						margin-top: -44px;
 					}
 				}
 
@@ -397,9 +401,17 @@ span.curpage {
 		flex-direction: row;
 		flex-wrap: wrap;
 
-		.header { display: none; }
-		.draad-titel { padding-bottom: 0; }
-		.draad-laatste-post { flex-grow: 1; }
+		.header {
+			display: none;
+		}
+
+		.draad-titel {
+			padding-bottom: 0;
+		}
+
+		.draad-laatste-post {
+			flex-grow: 1;
+		}
 
 		.paging, .draad-titel, .forumdeel-omschrijving {
 			width: 100%;
@@ -428,8 +440,8 @@ span.curpage {
 
 					.postanchor {
 						// Compenseer voor navbar
-						padding-top:44px;
-						margin-top:-44px;
+						padding-top: 44px;
+						margin-top: -44px;
 					}
 				}
 

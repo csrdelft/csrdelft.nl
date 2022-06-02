@@ -15,8 +15,10 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CiviProduct[]    findAll()
  * @method CiviProduct[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CiviProductRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+class CiviProductRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, CiviProduct::class);
 	}
 
@@ -24,7 +26,8 @@ class CiviProductRepository extends AbstractRepository {
 	 * @param string ...$cie
 	 * @return CiviProduct[]
 	 */
-	public function findByCie(...$cie) {
+	public function findByCie(...$cie)
+	{
 		return $this->createQueryBuilder('civi_product')
 			->join('civi_product.categorie', 'categorie')
 			->where('categorie.cie in (:cie)')
@@ -38,7 +41,8 @@ class CiviProductRepository extends AbstractRepository {
 	 *
 	 * @return CiviProduct
 	 */
-	public function getProduct($id) {
+	public function getProduct($id)
+	{
 		$product = $this->find($id);
 		$product->tmpPrijs = $product->getPrijs()->prijs;
 
@@ -49,7 +53,8 @@ class CiviProductRepository extends AbstractRepository {
 	 * @param $query
 	 * @return CiviProduct[]
 	 */
-	public function getSuggesties($query) {
+	public function getSuggesties($query)
+	{
 		return $this->createQueryBuilder('cp')
 			->where('cp.beschrijving LIKE :query')
 			->setParameter('query', $query)
@@ -60,7 +65,8 @@ class CiviProductRepository extends AbstractRepository {
 	 * @param CiviProduct $product
 	 * @return string last insert id
 	 */
-	public function create(CiviProduct $product) {
+	public function create(CiviProduct $product)
+	{
 		return $this->_em->transactional(function () use ($product) {
 			$this->_em->persist($product);
 
@@ -84,7 +90,8 @@ class CiviProductRepository extends AbstractRepository {
 	 * @param CiviProduct $product
 	 * @return int number of rows affected
 	 */
-	public function update(CiviProduct $product) {
+	public function update(CiviProduct $product)
+	{
 		return $this->_em->transactional(function () use ($product) {
 			$nu = date_create_immutable('now');
 

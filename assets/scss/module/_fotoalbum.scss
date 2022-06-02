@@ -66,9 +66,11 @@
 .subalbums .subalbum, .jgallery-container-inner a {
 	transition: opacity .4s ease-out;
 }
+
 .subalbums:hover .subalbum, .jgallery-container-inner:hover a {
 	opacity: 0.8;
 }
+
 .subalbums:hover .subalbum:hover, .jgallery-container-inner:hover a:hover {
 	opacity: 1;
 }
@@ -78,11 +80,13 @@
 	z-index: 10000;
 	border-radius: 50%;
 	border: 2px solid transparent;
-	transition : border 200ms ease-out;
+	transition: border 200ms ease-out;
 }
+
 .fototag.showborder {
 	border: 2px solid $white;
 }
+
 .fototag.active, .fototag:hover {
 	border: 2px solid #e8cf2a;
 }

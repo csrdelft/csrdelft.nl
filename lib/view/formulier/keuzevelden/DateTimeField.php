@@ -12,14 +12,16 @@ use CsrDelft\view\formulier\invoervelden\TextField;
  *
  * Date time picker with range (optional).
  */
-class DateTimeField extends TextField {
+class DateTimeField extends TextField
+{
 
 	public $from_datetime;
 	public $to_datetime;
 	protected $max_jaar;
 	protected $min_jaar;
 
-	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
+	public function __construct($name, $value, $description, $maxyear = null, $minyear = null)
+	{
 		parent::__construct($name, $value, $description);
 		if (is_int($maxyear)) {
 			$this->max_jaar = $maxyear;
@@ -42,7 +44,8 @@ class DateTimeField extends TextField {
 		$this->css_classes[] = 'DateTimeField';
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		if (!parent::validate()) {
 			return false;
 		}
@@ -68,7 +71,8 @@ class DateTimeField extends TextField {
 		return $this->error === '';
 	}
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		$attributes = $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete'));
 
 		$minValue = $maxValue = null;

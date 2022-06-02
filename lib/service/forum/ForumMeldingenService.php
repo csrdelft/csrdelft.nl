@@ -58,7 +58,7 @@ class ForumMeldingenService
 
 	public function __construct(
 		Environment                  $twig,
-		CsrSecurity                     $security,
+		CsrSecurity                  $security,
 		MailService                  $mailService,
 		SuService                    $suService,
 		ProfielRepository            $profielRepository,

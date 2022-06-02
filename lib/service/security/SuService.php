@@ -13,7 +13,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class SuService {
+class SuService
+{
 	/**
 	 * @var AccountRepository
 	 */
@@ -36,12 +37,13 @@ class SuService {
 	private $accessService;
 
 	public function __construct(
-		Security $security,
-		LoginService $loginService,
-		AccountRepository $accountRepository,
+		Security              $security,
+		LoginService          $loginService,
+		AccountRepository     $accountRepository,
 		TokenStorageInterface $tokenStorage,
-		AccessService $accessService
-	) {
+		AccessService         $accessService
+	)
+	{
 		$this->accountRepository = $accountRepository;
 		$this->loginService = $loginService;
 		$this->security = $security;
@@ -52,7 +54,8 @@ class SuService {
 	/**
 	 * @return bool
 	 */
-	public function isSued() {
+	public function isSued()
+	{
 		return $this->security->getToken() && $this->security->isGranted('IS_IMPERSONATOR');
 	}
 
@@ -63,7 +66,8 @@ class SuService {
 	 * @param callable $fun
 	 * @return mixed Het resultaat van $fun
 	 */
-	public function alsLid(Account $account, callable $fun) {
+	public function alsLid(Account $account, callable $fun)
+	{
 		$this->overrideUid($account);
 
 		$result = null;
@@ -84,7 +88,8 @@ class SuService {
 	 * @throws CsrException als er al een tijdelijke schakeling actief is.
 	 * @see SuService::alsLid() voor een veilige methode
 	 */
-	public function overrideUid(Account $account) {
+	public function overrideUid(Account $account)
+	{
 		$token = $this->security->getToken();
 		if ($token instanceof TemporaryToken) {
 			throw new CsrException("Er is al een tijdelijke schakeling actief, beëindig deze eerst.");
@@ -100,7 +105,8 @@ class SuService {
 	 * @throws CsrException als er geen tijdelijke schakeling actief is.
 	 * @see SuService::alsLid() voor een veilige methode
 	 */
-	public function resetUid() {
+	public function resetUid()
+	{
 		$token = $this->security->getToken();
 		if (!($token instanceof TemporaryToken)) {
 			throw new CsrException("Geen tijdelijke schakeling actief, kan niet terug.");
@@ -109,7 +115,8 @@ class SuService {
 		$this->tokenStorage->setToken($token->getOriginalToken());
 	}
 
-	public function maySuTo(UserInterface $suNaar) {
+	public function maySuTo(UserInterface $suNaar)
+	{
 		return $this->security->isGranted('ROLE_ALLOWED_TO_SWITCH') // Mag switchen
 			&& !$this->security->isGranted('IS_IMPERSONATOR') // Is niet al geswitched
 			&& $this->security->getUser()->getUsername() !== $suNaar->getUsername() // Is niet dezelfde gebruiker

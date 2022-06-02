@@ -18,7 +18,8 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * CorveePuntenService  |  P.W.G. Brussee (brussee@live.nl)
  */
-class CorveePuntenService {
+class CorveePuntenService
+{
 	/**
 	 * @var CorveeVrijstellingenRepository
 	 */
@@ -36,14 +37,16 @@ class CorveePuntenService {
 	 */
 	private $profielRepository;
 
-	public function __construct(EntityManagerInterface $entityManager, ProfielRepository $profielRepository, CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeTakenRepository $corveeTakenRepository) {
+	public function __construct(EntityManagerInterface $entityManager, ProfielRepository $profielRepository, CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeTakenRepository $corveeTakenRepository)
+	{
 		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->entityManager = $entityManager;
 		$this->profielRepository = $profielRepository;
 	}
 
-	public function resetCorveejaar() {
+	public function resetCorveejaar()
+	{
 		return $this->entityManager->transactional(function () {
 			$aantal = 0;
 			$errors = array();
@@ -81,24 +84,27 @@ class CorveePuntenService {
 		});
 	}
 
-	public function puntenToekennen(Profiel $profiel, $punten, $bonus_malus) {
+	public function puntenToekennen(Profiel $profiel, $punten, $bonus_malus)
+	{
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Punten toekennen faalt: geen integer');
 		}
 
-		if ($punten !== 0 OR $bonus_malus !== 0) {
+		if ($punten !== 0 or $bonus_malus !== 0) {
 			$this->savePuntenVoorLid($profiel, (int)$profiel->corvee_punten + $punten, (int)$profiel->corvee_punten_bonus + $bonus_malus);
 		}
 	}
 
-	public function puntenIntrekken(Profiel $profiel, $punten, $bonus_malus) {
+	public function puntenIntrekken(Profiel $profiel, $punten, $bonus_malus)
+	{
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Punten intrekken faalt: geen integer');
 		}
 		$this->puntenToekennen($profiel, -$punten, -$bonus_malus);
 	}
 
-	public function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null) {
+	public function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null)
+	{
 		if (!is_int($punten) && !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Save punten voor lid ' . $profiel->uid . ' faalt: geen integer');
 		}
@@ -114,7 +120,8 @@ class CorveePuntenService {
 	/**
 	 * @return array|CorveePuntenOverzichtDTO[]
 	 */
-	public function loadPuntenTotaalVoorAlleLeden() {
+	public function loadPuntenTotaalVoorAlleLeden()
+	{
 		$leden = $this->profielRepository->findByLidStatus([LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet]);
 		$totalen = array();
 		foreach ($leden as $lid) {
@@ -131,7 +138,8 @@ class CorveePuntenService {
 	 * @param null $functies
 	 * @return CorveePuntenOverzichtDTO[]
 	 */
-	public function loadPuntenVoorAlleLeden($functies = null) {
+	public function loadPuntenVoorAlleLeden($functies = null)
+	{
 		$taken = $this->corveeTakenRepository->getAlleTaken(true); // grouped by uid
 		$leden = $this->profielRepository->findByLidStatus([LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet]);
 		$matrix = [];
@@ -151,7 +159,8 @@ class CorveePuntenService {
 	 * @param bool $vrijstelling
 	 * @return CorveePuntenOverzichtDTO
 	 */
-	public function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = null) {
+	public function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = null)
+	{
 		if ($lidtaken === null) {
 			$lidtaken = $this->corveeTakenRepository->getTakenVoorLid($profiel);
 			$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling($profiel->uid);
@@ -194,7 +203,8 @@ class CorveePuntenService {
 	 * @param CorveeTaak[] $taken
 	 * @return CorveePuntenOverzichtDTO
 	 */
-	private function sumPuntenPerFunctie($functies, $taken) {
+	private function sumPuntenPerFunctie($functies, $taken)
+	{
 		$sumAantal = [];
 		$sumPunten = [];
 		$sumBonus = [];
@@ -229,7 +239,8 @@ class CorveePuntenService {
 	 * @param bool $tekort
 	 * @return string
 	 */
-	private function rgbCalculate($punten, $tekort = false) {
+	private function rgbCalculate($punten, $tekort = false)
+	{
 		$perjaar = intval(instelling('corvee', 'punten_per_jaar'));
 		if (!$tekort) {
 			$punten = $perjaar - $punten;

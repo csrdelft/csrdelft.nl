@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\lid;
+
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
@@ -10,9 +11,11 @@ use Exception;
 /**
  * De 'normale' ledenlijst, zoals het is zoals het was.
  */
-class LLLijst extends LLWeergave {
+class LLLijst extends LLWeergave
+{
 
-	private function viewVeldnamen() {
+	private function viewVeldnamen()
+	{
 		$html = '';
 		$html .= '<tr>';
 		foreach ($this->velden as $veld) {
@@ -22,7 +25,8 @@ class LLLijst extends LLWeergave {
 		return $html;
 	}
 
-	public function viewHeader() {
+	public function viewHeader()
+	{
 		$html = '';
 		$html .= '<table class="zoekResultaat ctx-offline-datatable"
 						id="zoekResultaat" data-display-length="50" data-length-change="false">';
@@ -32,7 +36,8 @@ class LLLijst extends LLWeergave {
 		return $html;
 	}
 
-	public function viewFooter() {
+	public function viewFooter()
+	{
 		$html = '';
 		$html .= "</tbody>\n<tfoot>";
 		$html .= $this->viewVeldnamen();
@@ -60,7 +65,8 @@ class LLLijst extends LLWeergave {
 		return $html;
 	}
 
-	public function viewLid(Profiel $profiel) {
+	public function viewLid(Profiel $profiel)
+	{
 		$html = '';
 		$html .= '<tr id="lid' . $profiel->uid . '">';
 		foreach ($this->velden as $veld) {

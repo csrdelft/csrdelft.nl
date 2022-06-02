@@ -13,14 +13,16 @@ use CsrDelft\view\formulier\keuzevelden\RadioField;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class FileField extends RadioField {
+class FileField extends RadioField
+{
 
 	private $behoudenField;
 	private $uploadField;
 	private $urlField;
 	protected $uploaders;
 
-	public function __construct($name, $description, Bestand $bestand = null, Map $dir = null, array $filterMime = array()) {
+	public function __construct($name, $description, Bestand $bestand = null, Map $dir = null, array $filterMime = array())
+	{
 		$this->behoudenField = new BestandBehouden($name . '_BB', $filterMime, $bestand);
 		$this->uploadField = new UploadFileField($name . '_HF', $filterMime);
 		$this->urlField = new DownloadUrlField($name . '_DU', $filterMime);
@@ -45,7 +47,8 @@ class FileField extends RadioField {
 		parent::__construct($name, $default, $description, $opties);
 	}
 
-	public function isPosted() {
+	public function isPosted()
+	{
 		if (!parent::isPosted()) {
 			return false;
 		}
@@ -53,41 +56,49 @@ class FileField extends RadioField {
 		return $this->uploaders[$methode]->isPosted();
 	}
 
-	public function getType() {
+	public function getType()
+	{
 		return $this->value;
 	}
 
-	public function getUploader() {
+	public function getUploader()
+	{
 		if (!isset($this->uploaders[$this->value])) {
 			throw new CsrException('Upload method not available: ' . htmlspecialchars($this->value));
 		}
 		return $this->uploaders[$this->value];
 	}
 
-	public function getFilter() {
+	public function getFilter()
+	{
 		return $this->getUploader()->getFilter();
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->getUploader()->getModel();
 	}
 
-	public function getError() {
+	public function getError()
+	{
 		return $this->getUploader()->getError();
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		if (!parent::validate()) {
 			return false;
 		}
 		return $this->getUploader()->validate();
 	}
 
-	public function opslaan($directory, $filename, $overwrite = false) {
+	public function opslaan($directory, $filename, $overwrite = false)
+	{
 		$this->getUploader()->opslaan($directory, $filename, $overwrite);
 	}
 
-	public function getOptionHtml($value, $description) {
+	public function getOptionHtml($value, $description)
+	{
 		$html = '<div class="UploadOptie';
 		if ($value === $this->value) {
 			$html .= ' verborgen';
@@ -104,7 +115,8 @@ class FileField extends RadioField {
 		return $html . '</div>';
 	}
 
-	public function getJavascript() {
+	public function getJavascript()
+	{
 		$js = parent::getJavascript() . <<<JS
 
 $('input[name="{$this->name}"]').change(function (event) {

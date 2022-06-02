@@ -29,16 +29,17 @@
 		<managingEditor>PubCie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</managingEditor>
 		<webMaster>pubcie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</webMaster>
 		{% for draad in draden %}
-		<item>
-			<title>{{ draad.titel }}</title>
-			<link>{{ url('csrdelft_forum_forumdraad_reactie', {post_id: draad.laatste_post_id}) }}</link>
-			<description>{{ draad.laatstePostSamenvatting }}</description>
-			<pubDate>{{ draad.laatst_gewijzigd | rfc2822 }}</pubDate>
-			<dc:creator>{{ get_profiel(draad.laatste_wijziging_uid).naam('user') }}</dc:creator>
-			<category>{{ draad.deel.categorie.titel }} » {{ draad.deel.titel }}</category>
-			<comments>{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id}) }}</comments>
-			<guid isPermaLink="true">{{ url('csrdelft_forum_forumdraad_reactie', {post_id: draad.laatste_post_id, _fragment: draad.laatste_post_id}) }}</guid>
-		</item>
+			<item>
+				<title>{{ draad.titel }}</title>
+				<link>{{ url('csrdelft_forum_forumdraad_reactie', {post_id: draad.laatste_post_id}) }}</link>
+				<description>{{ draad.laatstePostSamenvatting }}</description>
+				<pubDate>{{ draad.laatst_gewijzigd | rfc2822 }}</pubDate>
+				<dc:creator>{{ get_profiel(draad.laatste_wijziging_uid).naam('user') }}</dc:creator>
+				<category>{{ draad.deel.categorie.titel }} » {{ draad.deel.titel }}</category>
+				<comments>{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id}) }}</comments>
+				<guid
+					isPermaLink="true">{{ url('csrdelft_forum_forumdraad_reactie', {post_id: draad.laatste_post_id, _fragment: draad.laatste_post_id}) }}</guid>
+			</item>
 		{% endfor %}
 	</channel>
 </rss>

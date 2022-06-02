@@ -4,7 +4,8 @@ namespace CsrDelft\repository;
 
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\LedenMemoryScore;
-use CsrDelft\service\security\LoginService;use Doctrine\Persistence\ManagerRegistry;
+use CsrDelft\service\security\LoginService;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * LedenMemoryScoresModel.class.php
@@ -16,8 +17,10 @@ use CsrDelft\service\security\LoginService;use Doctrine\Persistence\ManagerRegis
  * @method LedenMemoryScore[]    findAll()
  * @method LedenMemoryScore[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LedenMemoryScoresRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+class LedenMemoryScoresRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, LedenMemoryScore::class);
 	}
 
@@ -27,23 +30,27 @@ class LedenMemoryScoresRepository extends AbstractRepository {
 	 */
 	protected $default_order = 'tijd ASC, beurten DESC';
 
-	public function nieuw() {
+	public function nieuw()
+	{
 		$score = new LedenMemoryScore();
 		$score->door_uid = LoginService::getUid();
 		$score->wanneer = getDateTime();
 		return $score;
 	}
 
-	public function getGroepTopScores(Groep $groep, $limit = 10) {
+	public function getGroepTopScores(Groep $groep, $limit = 10)
+	{
 		return $this->findBy(['eerlijk' => true, 'groep' => $groep->getUUID()], ['tijd' => 'ASC', 'beurten' => 'DESC'], $limit);
 	}
 
-	public function create(LedenMemoryScore $ledenMemoryScore) {
+	public function create(LedenMemoryScore $ledenMemoryScore)
+	{
 		$this->_em->persist($ledenMemoryScore);
 		$this->_em->flush();
 	}
 
-	public function getAllTopScores() {
+	public function getAllTopScores()
+	{
 		return $this->createQueryBuilder('s')
 			->where('s.eerlijk = true')
 			->groupBy('s.groep')

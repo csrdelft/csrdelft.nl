@@ -12,7 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WeekinvoerController extends AbstractController {
+class WeekinvoerController extends AbstractController
+{
 	/**
 	 * @Route("/fiscaat/weekinvoer")
 	 * @param Request $request
@@ -20,7 +21,8 @@ class WeekinvoerController extends AbstractController {
 	 * @return Response
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function weekinvoer(Request $request, CiviSaldoRepository $civiSaldoRepository) {
+	public function weekinvoer(Request $request, CiviSaldoRepository $civiSaldoRepository)
+	{
 		$from = new DateTimeImmutable();
 		$from = $from->sub(new DateInterval('P1M'));
 

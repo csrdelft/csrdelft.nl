@@ -1,18 +1,18 @@
 .label {
-  text-align: left;
-  font-weight: normal;
-  float: left;
-  width: 75px;
-  color: #999;
+	text-align: left;
+	font-weight: normal;
+	float: left;
+	width: 75px;
+	color: #999;
 }
 
 .data {
-  margin-left: 75px;
-  text-align: left;
+	margin-left: 75px;
+	text-align: left;
 
-  li {
-    margin-left: 0;
-  }
+	li {
+		margin-left: 0;
+	}
 }
 
 #profiel {
@@ -29,88 +29,91 @@
 		@extend .col-md-8;
 	}
 
-  .left {
-    display: none;
-    float: left;
-    width: 10px;
-    text-align: right;
-    font-style: italic;
-    font-size: 0.9em;
-  }
+	.left {
+		display: none;
+		float: left;
+		width: 10px;
+		text-align: right;
+		font-style: italic;
+		font-size: 0.9em;
+	}
 
-  .gegevens {
-    margin-left: 20px;
-    padding-right: 20px;
-    padding-left: 15px;
-    border-left: 1px solid $primary;
-    max-width: 675px;
-  }
+	.gegevens {
+		margin-left: 20px;
+		padding-right: 20px;
+		padding-left: 15px;
+		border-left: 1px solid $primary;
+		max-width: 675px;
+	}
 
-  .half {
-    width: 270px;
-    float: left;
-  }
+	.half {
+		width: 270px;
+		float: left;
+	}
 
-  .knopjes {
-    text-align: center;
-  }
+	.knopjes {
+		text-align: center;
+	}
 
-  .pasfoto {
-    margin: 25px;
-    box-shadow: 0 0 11px #000;
-  }
+	.pasfoto {
+		margin: 25px;
+		box-shadow: 0 0 11px #000;
+	}
 
-  .naam {
-    .status {
-      float: left;
-      color: #aaa;
-      width: 60px;
-      padding: 0 20px;
-    }
+	.naam {
+		.status {
+			float: left;
+			color: #aaa;
+			width: 60px;
+			padding: 0 20px;
+		}
 
-    h1 {
-      padding-left: 20px;
-    }
-  }
+		h1 {
+			padding-left: 20px;
+		}
+	}
 
-  .donker {
-    background-color: $tabel-regel-donker;
-  }
+	.donker {
+		background-color: $tabel-regel-donker;
+	}
 
-  .boeken {
-    a {
-      text-align: left;
-      text-decoration: none !important;
+	.boeken {
+		a {
+			text-align: left;
+			text-decoration: none !important;
 
-      .auteur {
-        color: #777;
-        margin-left: 10px;
-      }
+			.auteur {
+				color: #777;
+				margin-left: 10px;
+			}
 
-      .titel:hover {
-        color: #0a338d;
-        text-decoration: underline;
-      }
-    }
+			.titel:hover {
+				color: #0a338d;
+				text-decoration: underline;
+			}
+		}
 
-    li {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      -o-text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
+		li {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			-o-text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
 }
 
 li.verborgen {
-  display: none;
+	display: none;
 }
 
 .jarig {
-  background-image: url(../../images/jarig.jpg);
+	background-image: url(../../images/jarig.jpg);
 }
 
-.include-banaan { background-image: url(../../images/banaan.gif); }
+.include-banaan {
+	background-image: url(../../images/banaan.gif);
+}
+
 img.banaan {
 	width: 160px;
 }
@@ -123,8 +126,12 @@ img.banaan {
 }
 
 .ProfielLogEntry {
-  background:#f4f4f4;
-  padding:10px;
-  margin:5px 0;
-  .metadata { color:#555; margin-bottom:5px}
+	background: #f4f4f4;
+	padding: 10px;
+	margin: 5px 0;
+
+	.metadata {
+		color: #555;
+		margin-bottom: 5px
+	}
 }

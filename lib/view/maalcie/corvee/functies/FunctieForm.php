@@ -13,12 +13,14 @@ use CsrDelft\view\formulier\ModalForm;
 /**
  * Formulier voor een nieuwe of te bewerken corveefunctie.
  */
-class FunctieForm extends ModalForm {
+class FunctieForm extends ModalForm
+{
 
 	public function __construct(
 		CorveeFunctie $functie,
-		$actie
-	) {
+									$actie
+	)
+	{
 		parent::__construct($functie, '/corvee/functies/' . $actie . ($functie->functie_id ? '/' . $functie->functie_id : ''));
 		$this->titel = 'Corveefunctie ' . $actie;
 		if ($actie === 'bewerken') {

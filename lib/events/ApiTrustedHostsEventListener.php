@@ -7,8 +7,10 @@ namespace CsrDelft\events;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
-class ApiTrustedHostsEventListener {
-	public function onKernelRequest(RequestEvent $event) {
+class ApiTrustedHostsEventListener
+{
+	public function onKernelRequest(RequestEvent $event)
+	{
 		$request = $event->getRequest();
 
 		if (!str_starts_with($request->getUri(), '/API/2.0')) {

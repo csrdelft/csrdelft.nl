@@ -9,8 +9,10 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as Faker;
 
-class VerticalenFixtures extends Fixture {
-	public function load(ObjectManager $manager) {
+class VerticalenFixtures extends Fixture
+{
+	public function load(ObjectManager $manager)
+	{
 		$faker = Faker::create('nl_NL');
 
 		$verticaleLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];

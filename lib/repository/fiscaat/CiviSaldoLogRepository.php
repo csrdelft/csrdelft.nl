@@ -17,13 +17,15 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @method CiviSaldoLog[]    findAll()
  * @method CiviSaldoLog[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CiviSaldoLogRepository extends AbstractRepository {
+class CiviSaldoLogRepository extends AbstractRepository
+{
 	/**
 	 * @var SerializerInterface
 	 */
 	private $serializer;
 
-	public function __construct(ManagerRegistry $registry, SerializerInterface $serializer) {
+	public function __construct(ManagerRegistry $registry, SerializerInterface $serializer)
+	{
 		parent::__construct($registry, CiviSaldoLog::class);
 		$this->serializer = $serializer;
 	}
@@ -34,7 +36,8 @@ class CiviSaldoLogRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function log($type, $data) {
+	public function log($type, $data)
+	{
 		$logEntry = new CiviSaldoLog();
 		// Don't use filter_input for $_SERVER when PHP runs through FastCGI:
 		// https://bugs.php.net/bug.php?id=49184

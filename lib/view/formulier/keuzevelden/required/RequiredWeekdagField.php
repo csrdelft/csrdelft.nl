@@ -12,7 +12,8 @@ use CsrDelft\view\formulier\keuzevelden\WeekdagField;
  *
  * @see WeekdagField
  */
-class RequiredWeekdagField extends WeekdagField {
+class RequiredWeekdagField extends WeekdagField
+{
 
 	public $required = true;
 

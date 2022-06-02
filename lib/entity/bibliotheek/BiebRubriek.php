@@ -11,7 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BiebRubriekRepository")
  * @ORM\Table("biebcategorie")
  */
-class BiebRubriek {
+class BiebRubriek
+{
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -37,7 +38,8 @@ class BiebRubriek {
 	 */
 	protected $parent;
 
-	public function __toString() {
+	public function __toString()
+	{
 		if ($this->p_id == $this->id) {
 			return '';
 		} else {

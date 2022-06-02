@@ -84,7 +84,8 @@ use function substr_count;
  *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  */
-class CsrBB extends Parser {
+class CsrBB extends Parser
+{
 	protected $tags = [
 		// Standard
 		BbBold::class,
@@ -165,40 +166,46 @@ class CsrBB extends Parser {
 	 */
 	private $container;
 
-	public function __construct(ContainerInterface $container, $env = null) {
+	public function __construct(ContainerInterface $container, $env = null)
+	{
 		parent::__construct($env);
 
 		$this->container = $container;
 	}
 
 
-	public static function parse($bbcode) {
+	public static function parse($bbcode)
+	{
 		$parser = new CsrBB(ContainerFacade::getContainer());
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseHtml($bbcode, $inline = false) {
+	public static function parseHtml($bbcode, $inline = false)
+	{
 		$parser = new CsrBB(ContainerFacade::getContainer());
 		$parser->allow_html = true;
 		$parser->standard_html = $inline;
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseMail($bbcode) {
+	public static function parseMail($bbcode)
+	{
 		$env = new BbEnv();
 		$env->mode = "light";
 		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseLight($bbcode) {
+	public static function parseLight($bbcode)
+	{
 		$env = new BbEnv();
 		$env->mode = "light";
 		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parsePlain($bbcode) {
+	public static function parsePlain($bbcode)
+	{
 		$env = new BbEnv();
 		$env->mode = "plain";
 		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
@@ -212,7 +219,8 @@ class CsrBB extends Parser {
 	 * @param string $bbcode
 	 * @return string
 	 */
-	public static function sluitTags($bbcode) {
+	public static function sluitTags($bbcode)
+	{
 		$aantalOngesloten = substr_count($bbcode, '[') - substr_count($bbcode, '[*]') - 2 * substr_count($bbcode, '[/');
 		for ($i = 0; $i < $aantalOngesloten; $i++) {
 			$bbcode .= '[/]';
@@ -225,7 +233,8 @@ class CsrBB extends Parser {
 	 * @param string $bbcode
 	 * @return string
 	 */
-	public static function escapeUbbOff($bbcode) {
+	public static function escapeUbbOff($bbcode)
+	{
 		return str_replace(['[/ubboff]', '[/tekst]'], ['[/]', '[/]'], $bbcode);
 	}
 
@@ -235,7 +244,8 @@ class CsrBB extends Parser {
 	 * @param string $bbcode
 	 * @return string
 	 */
-	public static function filterPrive($bbcode) {
+	public static function filterPrive($bbcode)
+	{
 		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
 		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
 		// wat we hier willen, omdat anders [prive]foo[/prive]bar[prive]foo[/prive]
@@ -250,7 +260,8 @@ class CsrBB extends Parser {
 	 * @param string $bbcode
 	 * @return string
 	 */
-	public static function filterCommentaar($bbcode) {
+	public static function filterCommentaar($bbcode)
+	{
 		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
 		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
 		// wat we hier willen, omdat anders [commentaar]foo[/commentaar]bar[commentaar]foo[/commentaar]
@@ -259,7 +270,8 @@ class CsrBB extends Parser {
 		return preg_replace('/\[commentaar=?.*?\].*?\[\/commentaar\]/s', '', $bbcode);
 	}
 
-	protected function createTagInstance(string $tag, Parser $parser, $env) {
+	protected function createTagInstance(string $tag, Parser $parser, $env)
+	{
 		if ($this->container->has($tag)) {
 			$tag = $this->container->get($tag);
 		} else {

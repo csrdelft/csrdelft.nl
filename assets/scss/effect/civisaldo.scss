@@ -1,21 +1,21 @@
 .main-bg video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
 
 @media (min-aspect-ratio: 4/3) {
-  .main-bg video {
-    height: 300%;
-    top: -100%;
-  }
+	.main-bg video {
+		height: 300%;
+		top: -100%;
+	}
 }
 
 @media (max-aspect-ratio: 4/3) {
-  .main-bg video {
-    width: 300%;
-    left: -100%;
-  }
+	.main-bg video {
+		width: 300%;
+		left: -100%;
+	}
 }

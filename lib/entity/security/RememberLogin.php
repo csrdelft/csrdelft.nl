@@ -18,7 +18,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\security\RememberLoginRepository")
  * @ORM\Table("login_remember")
  */
-class RememberLogin implements DataTableEntry, PersistentTokenInterface {
+class RememberLogin implements DataTableEntry, PersistentTokenInterface
+{
 	/**
 	 * Primary key
 	 * @var int
@@ -89,7 +90,8 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface {
 	 * @Serializer\SerializedName("lock_ip")
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getDataTableLockIp() {
+	public function getDataTableLockIp()
+	{
 		return $this->lock_ip ? Icon::getTag('lock', null, 'Gekoppeld aan IP-adres') : '';
 	}
 
@@ -98,7 +100,8 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface {
 	 * @Serializer\SerializedName("remember_since")
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getDataTableRememberSince() {
+	public function getDataTableRememberSince()
+	{
 		return reldate($this->remember_since);
 	}
 
@@ -107,27 +110,33 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface {
 	 * @Serializer\SerializedName("last_used")
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getDataTableLastUsed() {
+	public function getDataTableLastUsed()
+	{
 		return reldate($this->last_used);
 	}
 
-	public function getClass() {
+	public function getClass()
+	{
 		return Account::class;
 	}
 
-	public function getUsername() {
+	public function getUsername()
+	{
 		return $this->uid;
 	}
 
-	public function getSeries() {
+	public function getSeries()
+	{
 		return $this->series;
 	}
 
-	public function getTokenValue() {
+	public function getTokenValue()
+	{
 		return $this->token;
 	}
 
-	public function getLastUsed() {
+	public function getLastUsed()
+	{
 		return $this->last_used;
 	}
 

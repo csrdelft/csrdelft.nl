@@ -31,7 +31,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository")
  * @ORM\Table("mlt_aanmeldingen")
  */
-class MaaltijdAanmelding {
+class MaaltijdAanmelding
+{
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -94,7 +95,8 @@ class MaaltijdAanmelding {
 	 *
 	 * @return float if lid exists, false otherwise
 	 */
-	public function getSaldo() {
+	public function getSaldo()
+	{
 		return $this->profiel->getCiviSaldo();
 	}
 
@@ -113,7 +115,8 @@ class MaaltijdAanmelding {
 	 *
 	 * @return int
 	 */
-	public function getSaldoStatus() {
+	public function getSaldoStatus()
+	{
 		$saldo = $this->getSaldo();
 		$prijs = $this->maaltijd->getPrijsFloat();
 
@@ -135,7 +138,8 @@ class MaaltijdAanmelding {
 	 *
 	 * @return String
 	 */
-	public function getSaldoMelding() {
+	public function getSaldoMelding()
+	{
 		$status = $this->getSaldoStatus();
 		$prijs = sprintf('%.2f', $this->maaltijd->getPrijsFloat());
 		switch ($status) {

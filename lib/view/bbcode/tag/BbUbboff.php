@@ -12,13 +12,16 @@ use CsrDelft\bb\BbTag;
  * @example [ubboff]Not parsed[/ubboff]
  * @example [tekst]Not parsed[/tekst]
  */
-class BbUbboff extends BbTag {
+class BbUbboff extends BbTag
+{
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return ['ubboff', 'tekst'];
 	}
 
-	public function render() {
+	public function render()
+	{
 		return $this->getContent();
 	}
 

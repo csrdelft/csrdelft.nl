@@ -54,7 +54,7 @@ class ForumDelenService
 															ForumPostsRepository           $forumPostsRepository,
 															ForumDradenRepository          $forumDradenRepository,
 															ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
-															ForumCategorieRepository $forumCategorieRepository,
+															ForumCategorieRepository       $forumCategorieRepository,
 															ForumDelenMeldingRepository    $forumDelenMeldingRepository)
 	{
 		$this->forumDelenRepository = $forumDelenRepository;

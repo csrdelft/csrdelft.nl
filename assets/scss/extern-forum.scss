@@ -13,29 +13,30 @@
 
 #forumZoekenForm {
 
-  .InputField {
-    margin: 0.5em;
-    display: flex;
-    align-items: baseline;
-  }
+	.InputField {
+		margin: 0.5em;
+		display: flex;
+		align-items: baseline;
+	}
 
-  .forumZoekenGeavanceerd  {
+	.forumZoekenGeavanceerd {
 		position: absolute;
 		background-color: #E53D00;
 		border-radius: 5px;
 		display: none;
 		margin-top: 60px;
+
 		.form-inline {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
 		}
-  }
+	}
 }
 
 .breadcrumbs {
-  display: flex;
-  align-items: baseline;
+	display: flex;
+	align-items: baseline;
 
 	.breadcrumb {
 		margin: 0.5rem;
@@ -49,42 +50,43 @@
 		}
 	}
 
-  select {
-    width: auto;
+	select {
+		width: auto;
 		margin: 0;
-  }
+	}
 }
 
 .forumdeel {
-  background-color: $basiskleur;
+	background-color: $basiskleur;
 	color: black;
-  box-shadow: none;
+	box-shadow: none;
 }
 
 #forumtabel {
-  table-layout: fixed;
+	table-layout: fixed;
 
-  .bericht {
-    text-align: left;
-  }
+	.bericht {
+		text-align: left;
+	}
 }
 
 #forumPosten {
-  .verborgen {
-    display: none;
-  }
+	.verborgen {
+		display: none;
+	}
 
-  #forumForm {
+	#forumForm {
 		text-align: left;
-  }
+	}
 
-  #berichtPreview {
+	#berichtPreview {
 		background-color: white;
-    color: black;
-    strong {
-      color: black;
-    }
-  }
+		color: black;
+
+		strong {
+			color: black;
+		}
+	}
 
 
 }
@@ -173,6 +175,7 @@
 			.bewerkt {
 				font-size: .8em;
 				color: #bbb;
+
 				a {
 					color: #bbb;
 				}
@@ -217,6 +220,7 @@ span.curpage {
 .forum-paginering {
 	padding: 5px;
 	margin-left: 160px;
+
 	a {
 		padding: 4px 5px;
 
@@ -281,6 +285,7 @@ span.curpage {
 	// iedere 6e moet een kleurtje krijgen, en de divs daarna.
 	.alternate-row {
 		padding: 0.7em;
+
 		&:nth-child(6n +1),
 		&:nth-child(6n + 2),
 		&:nth-child(6n + 3) {
@@ -386,7 +391,7 @@ span.curpage {
 	}
 }
 
-@media screen and (max-width: 960px){
+@media screen and (max-width: 960px) {
 	.modfuncties {
 		font-size: 0;
 	}
@@ -415,7 +420,7 @@ span.curpage {
 	}
 
 	.auteur {
-		flex: 1 0 ;
+		flex: 1 0;
 
 		grid-template-columns: 1fr auto auto;
 		border-bottom: 2px solid #d3d3d3;
@@ -433,8 +438,8 @@ span.curpage {
 
 			.postanchor {
 				// Compenseer voor navbar
-				padding-top:44px;
-				margin-top:-44px;
+				padding-top: 44px;
+				margin-top: -44px;
 			}
 		}
 

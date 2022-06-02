@@ -23,7 +23,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class LedenMemoryController extends AbstractController {
+class LedenMemoryController extends AbstractController
+{
 	/**
 	 * @var LedenMemoryScoresRepository
 	 */
@@ -43,10 +44,11 @@ class LedenMemoryController extends AbstractController {
 
 	public function __construct(
 		LedenMemoryScoresRepository $ledenMemoryScoresModel,
-		ProfielRepository $profielRepository,
-		VerticalenRepository $verticalenRepository,
-		LichtingenRepository $lichtingenRepository
-	) {
+		ProfielRepository           $profielRepository,
+		VerticalenRepository        $verticalenRepository,
+		LichtingenRepository        $lichtingenRepository
+	)
+	{
 		$this->ledenMemoryScoresModel = $ledenMemoryScoresModel;
 		$this->profielRepository = $profielRepository;
 		$this->verticalenRepository = $verticalenRepository;
@@ -122,7 +124,8 @@ class LedenMemoryController extends AbstractController {
 	 * @param Request $request
 	 * @return Groep|null
 	 */
-	private function getLichting(Request $request) {
+	private function getLichting(Request $request)
+	{
 		$l = $request->query->getInt('lichting');
 		$min = LichtingenRepository::getOudsteLidjaar();
 		$max = LichtingenRepository::getJongsteLidjaar();
@@ -139,7 +142,8 @@ class LedenMemoryController extends AbstractController {
 	 * @Route("/leden/memoryscore", methods={"POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function memoryscore() {
+	public function memoryscore()
+	{
 		$score = $this->ledenMemoryScoresModel->nieuw();
 		$form = new LedenMemoryScoreForm($score);
 		if ($form->validate()) {
@@ -154,7 +158,8 @@ class LedenMemoryController extends AbstractController {
 	 * @Route("/leden/memoryscores/{groep}", methods={"POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function memoryscores($groepUuid = null) {
+	public function memoryscores($groepUuid = null)
+	{
 		$parts = explode('@', $groepUuid);
 		if (isset($parts[0], $parts[1])) {
 			if ($parts[1] == 'verticale.csrdelft.nl') {
@@ -176,7 +181,8 @@ class LedenMemoryController extends AbstractController {
 	 * @Route("/leden/namen-leren", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function namenleren() {
+	public function namenleren()
+	{
 		// Haal alle (adspirant-/gast-)leden op.
 		$profielen = $this->profielRepository->findByLidStatus(LidStatus::getLidLike());
 

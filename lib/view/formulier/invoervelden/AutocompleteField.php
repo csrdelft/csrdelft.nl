@@ -58,7 +58,7 @@ class AutocompleteField extends TextField
 
 		$inputAttribute = $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete'));
 
-		return '<input data-autoselect="' . $autoselectStr . '" data-clicktogo="'.$clickToGo.'" data-sources="' . $sourcesJSON . '" ' . $inputAttribute . ' />';
+		return '<input data-autoselect="' . $autoselectStr . '" data-clicktogo="' . $clickToGo . '" data-sources="' . $sourcesJSON . '" ' . $inputAttribute . ' />';
 	}
 
 	protected function getInputAttribute($attribute)

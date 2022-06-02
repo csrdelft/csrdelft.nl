@@ -17,7 +17,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviBestellingRepository")
  */
-class CiviBestelling {
+class CiviBestelling
+{
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -77,7 +78,8 @@ class CiviBestelling {
 	 */
 	public $civiSaldo;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->inhoud = new ArrayCollection();
 	}
 
@@ -86,7 +88,8 @@ class CiviBestelling {
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("inhoud")
 	 */
-	public function getInhoudTekst() {
+	public function getInhoudTekst()
+	{
 		$bestellingenInhoud = [];
 		foreach ($this->inhoud as $item) {
 			$bestellingenInhoud[] = $item->getBeschrijving();
@@ -97,7 +100,8 @@ class CiviBestelling {
 	/**
 	 * @return string
 	 */
-	public function getPinBeschrijving() {
+	public function getPinBeschrijving()
+	{
 		$pinProduct = $this->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 
 		if ($pinProduct === null) {
@@ -126,7 +130,8 @@ class CiviBestelling {
 	 * @param $product_id
 	 * @return CiviBestellingInhoud|null
 	 */
-	public function getProduct($product_id) {
+	public function getProduct($product_id)
+	{
 		$product = $this->inhoud->matching(Criteria::create()->where(Criteria::expr()->eq('product_id', $product_id))->setMaxResults(1));
 
 		if (count($product) !== 1) {
@@ -141,7 +146,8 @@ class CiviBestelling {
 	 *
 	 * @return int
 	 */
-	public function berekenTotaal() {
+	public function berekenTotaal()
+	{
 		$totaal = 0;
 
 		foreach ($this->inhoud as $item) {

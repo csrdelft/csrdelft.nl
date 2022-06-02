@@ -41,20 +41,21 @@
 				<span class="image">
 					<picture>
 						<source srcset="/images/CSR_Delft-2x.jpg" media="(min-width: 1280px)">
-						<img alt="Foto vereniging" src="/images/CSR_Delft.jpg" />
+						<img alt="Foto vereniging" src="/images/CSR_Delft.jpg"/>
 					</picture>
 				</span>
 				<div class="content">
 					<h2 class="major">{% trans %}C.S.R. Delft{% endtrans %}</h2>
 					<p>{% trans with {"{leeftijd}": vereniging_leeftijd()} %}De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
-						Delft, rijk aan tradities die zijn ontstaan in haar {leeftijd}-jarig bestaan. Het is een
-						breed gezelschap
-						van zo'n 275 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
-						eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
-						vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
-						uithalen.{% endtrans %}
+							Delft, rijk aan tradities die zijn ontstaan in haar {leeftijd}-jarig bestaan. Het is een
+							breed gezelschap
+							van zo'n 275 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
+							eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
+							vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
+							uithalen.{% endtrans %}
 					</p>
-					<a href="{{ url('default', {naam: 'vereniging'}) }}" class="special">{% trans %}Lees meer over C.S.R.{% endtrans %}</a>
+					<a href="{{ url('default', {naam: 'vereniging'}) }}"
+						 class="special">{% trans %}Lees meer over C.S.R.{% endtrans %}</a>
 				</div>
 			</div>
 		</section>
@@ -79,7 +80,7 @@
 							<div class="sociaal">
 								<div class="youtube">
 									<p>{% trans %}Wil je zien hoe
-										de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'{% endtrans %}</p>
+											de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'{% endtrans %}</p>
 									<div class="bb-video">
 										<iframe src="https://www.youtube-nocookie.com/embed/a7hhtoo_kzY?hl=nl"
 														title="Delft studie is maar de helft! Aflevering 1 uit 3"
@@ -100,18 +101,19 @@
 						</noscript>
 
 						{% trans %}
-						<p>
-							De OWee gaat er anders uitzien, voor meer informatie zie de <a href="https://owee.nl">OWee
-								website</a>.<br>
-							Maar wij willen je wel vast digitaal een beetje van C.S.R. laten zien.
-							We willen jou daar goede handvaten voor geven. De belangrijkste informatie wordt gedeeld via deze website
-							dus kijk even rond.
-							Wil je meer weten? Kijk op ons <a href="https://www.youtube.com/user/CivitasFilms">YouTube kanaal</a>,
-							onze <a href="https://www.instagram.com/csrdelft">Instagram pagina</a> en de <a
-								href="https://www.owee.nl"> OWee </a> website.
-						</p>
-						<p>We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.</p>
-						<p>Liefs,<br>OWeeCie en PromoCie</p>
+							<p>
+								De OWee gaat er anders uitzien, voor meer informatie zie de <a href="https://owee.nl">OWee
+									website</a>.<br>
+								Maar wij willen je wel vast digitaal een beetje van C.S.R. laten zien.
+								We willen jou daar goede handvaten voor geven. De belangrijkste informatie wordt gedeeld via deze
+								website
+								dus kijk even rond.
+								Wil je meer weten? Kijk op ons <a href="https://www.youtube.com/user/CivitasFilms">YouTube kanaal</a>,
+								onze <a href="https://www.instagram.com/csrdelft">Instagram pagina</a> en de <a
+									href="https://www.owee.nl"> OWee </a> website.
+							</p>
+							<p>We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.</p>
+							<p>Liefs,<br>OWeeCie en PromoCie</p>
 						{% endtrans %}
 					</div>
 				</div>
@@ -129,9 +131,9 @@
 					<h2 class="major">{% trans %}OWee: 21 t/m 25 augustus{% endtrans %}</h2>
 					<p>{% trans %} Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.
 							Dit jaar duurt de OWee van 21 t/m 25 augustus.
-							Tijdens deze week is er de uitgelezen kans om	kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel	meer!
+							Tijdens deze week is er de uitgelezen kans om  kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel  meer!
 							Al deze groepen en instanties zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
-							C.S.R. heeft gedurende deze week veel interessante en	gezellige activiteiten, waar je kan kennis maken met de vereniging!
+							C.S.R. heeft gedurende deze week veel interessante en  gezellige activiteiten, waar je kan kennis maken met de vereniging!
 						{% endtrans %}</p>
 				</div>
 			</div>
@@ -142,20 +144,23 @@
 			<div class="inner">
 				<noscript class="lazy-load">
 						<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/OweeCie.jpg"
-																						 alt="Owee Commissie"/></span>
+																		 alt="Owee Commissie"/></span>
 				</noscript>
 				<div class="content">
 					<h2 class="major">{% trans %}Interesse/vragen{% endtrans %}</h2>
 					<p>{% trans %}Uiteraard is er de mogelijkheid om ons tijdens de OWee te spreken. Er is daarnaast ook gelegenheid
 							om onze sociëteit Confide aan de Oude Delft 9 te bezoeken.
-					{% endtrans %}
+						{% endtrans %}
 
-					<p class="lidworden">{% trans with {'{lidworden}': url('default', {naam: 'lidworden', _fragment: 'owee-form'})} %}Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).
+					<p
+						class="lidworden">{% trans with {'{lidworden}': url('default', {naam: 'lidworden', _fragment: 'owee-form'})} %}Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).
 							Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
 							opgenomen.
 							Doe dit door <a href="{lidworden}">hier</a> te
-																													klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek{% endtrans %}</p>
-					<a href="{{ url('default', {naam: 'lidworden'}) }}" class="special">{% trans %}Meer informatie over lid worden{% endtrans %}</a>
+							klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek{% endtrans %}
+					</p>
+					<a href="{{ url('default', {naam: 'lidworden'}) }}"
+						 class="special">{% trans %}Meer informatie over lid worden{% endtrans %}</a>
 				</div>
 			</div>
 		</section>

@@ -17,13 +17,15 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ArchiefMaaltijd[]    findAll()
  * @method ArchiefMaaltijd[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ArchiefMaaltijdenRepository extends AbstractRepository {
+class ArchiefMaaltijdenRepository extends AbstractRepository
+{
 	/**
 	 * @var MaaltijdAanmeldingenRepository
 	 */
 	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(ManagerRegistry $registry, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
+	public function __construct(ManagerRegistry $registry, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository)
+	{
 		parent::__construct($registry, ArchiefMaaltijd::class);
 
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
@@ -31,7 +33,8 @@ class ArchiefMaaltijdenRepository extends AbstractRepository {
 
 	protected $default_order = 'datum DESC, tijd DESC';
 
-	public function vanMaaltijd(Maaltijd $maaltijd) {
+	public function vanMaaltijd(Maaltijd $maaltijd)
+	{
 		$archief = new ArchiefMaaltijd();
 		$archief->maaltijd_id = $maaltijd->maaltijd_id;
 		$archief->titel = $maaltijd->titel;
@@ -62,7 +65,8 @@ class ArchiefMaaltijdenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(ArchiefMaaltijd $archiefMaaltijd) {
+	public function create(ArchiefMaaltijd $archiefMaaltijd)
+	{
 		$this->_em->persist($archiefMaaltijd);
 		$this->_em->flush();
 	}

@@ -18,7 +18,8 @@ use Twig\Environment;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class CorveeHerinneringService {
+class CorveeHerinneringService
+{
 
 	/**
 	 * @var MaaltijdAanmeldingenRepository
@@ -42,12 +43,13 @@ class CorveeHerinneringService {
 	private $mailService;
 
 	public function __construct(
-		Environment $twig,
+		Environment                    $twig,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		CorveeTakenRepository $corveeTakenRepository,
-		ProfielRepository $profielRepository,
-		MailService $mailService
-	) {
+		CorveeTakenRepository          $corveeTakenRepository,
+		ProfielRepository              $profielRepository,
+		MailService                    $mailService
+	)
+	{
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->profielRepository = $profielRepository;
@@ -55,7 +57,8 @@ class CorveeHerinneringService {
 		$this->mailService = $mailService;
 	}
 
-	public function stuurHerinnering(CorveeTaak $taak) {
+	public function stuurHerinnering(CorveeTaak $taak)
+	{
 		$datum = date_format_intl($taak->datum, DATE_FORMAT);
 		if (!$taak->profiel) {
 			throw new CsrGebruikerException($datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!');
@@ -86,7 +89,8 @@ class CorveeHerinneringService {
 		}
 	}
 
-	public function stuurHerinneringen() {
+	public function stuurHerinneringen()
+	{
 		$vooraf = str_replace('-', '+', instelling('corvee', 'herinnering_1e_mail'));
 		$van = date_create();
 		$tot = date_create_immutable()->add(DateInterval::createFromDateString($vooraf));

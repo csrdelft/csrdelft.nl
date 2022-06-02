@@ -21,7 +21,8 @@ use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\RadioField;
 
-class GroepSoortField extends RadioField {
+class GroepSoortField extends RadioField
+{
 
 	public $columns = 1;
 	protected $activiteit;
@@ -36,7 +37,8 @@ class GroepSoortField extends RadioField {
 		$value,
 		$description,
 		Groep $groep
-	) {
+	)
+	{
 		parent::__construct($name, $value, $description, array());
 
 		if ($groep instanceof HeeftSoort && $groep->getSoort() instanceof ActiviteitSoort) {
@@ -74,7 +76,8 @@ JS;
 		$this->groep = $groep;
 	}
 
-	public function getSoort() {
+	public function getSoort()
+	{
 		switch (parent::getValue()) {
 
 			case 'ActiviteitenRepository':
@@ -88,7 +91,8 @@ JS;
 		}
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		if (!parent::validate()) {
 			return false;
 		}

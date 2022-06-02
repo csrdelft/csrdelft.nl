@@ -29,73 +29,73 @@
 </head>
 
 <body class="zijbalk_verborgen">
-	{%  include 'lustrum12/zandloper.html.twig' %}
+{% include 'lustrum12/zandloper.html.twig' %}
 
-	{{ cms('lustrum-diesthema') }}
-{#	<nav class="site-header">#}
-{#		<a class="logo-titel d-inline-block" href="./">#}
-{#			<img src="/images/lustrum12/themaheader.png"#}
-{#					 alt="Logo menu" />#}
-{#		</a>#}
-{#		<div class="container">#}
-{#			<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">#}
-{#				<a class="d-none d-md-inline-block" href="./">Home</a>#}
-{#				<a class="d-none d-md-inline-block" href="#top">Top</a>#}
-{#				<a class="d-none d-md-inline-block" href="#poster">Poster</a>#}
-{#				<a class="d-none d-md-inline-block" href="#themafilm">Themafilm</a>#}
-{#				<a class="d-none d-md-inline-block" href="#game">Game</a>#}
-{#			</div>#}
-{#		</div>#}
-{#	</nav>#}
+{{ cms('lustrum-diesthema') }}
+{#  <nav class="site-header"> #}
+{#    <a class="logo-titel d-inline-block" href="./"> #}
+{#      <img src="/images/lustrum12/themaheader.png" #}
+{#           alt="Logo menu" /> #}
+{#    </a> #}
+{#    <div class="container"> #}
+{#      <div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center"> #}
+{#        <a class="d-none d-md-inline-block" href="./">Home</a> #}
+{#        <a class="d-none d-md-inline-block" href="#top">Top</a> #}
+{#        <a class="d-none d-md-inline-block" href="#poster">Poster</a> #}
+{#        <a class="d-none d-md-inline-block" href="#themafilm">Themafilm</a> #}
+{#        <a class="d-none d-md-inline-block" href="#game">Game</a> #}
+{#      </div> #}
+{#    </div> #}
+{#  </nav> #}
 
-{#	<div class="divider">#}
-{#		<img id="poster" class="helemaal-boven" src="/images/lustrum12/DividerBoven.png">#}
-{#	</div>#}
+{#  <div class="divider"> #}
+{#    <img id="poster" class="helemaal-boven" src="/images/lustrum12/DividerBoven.png"> #}
+{#  </div> #}
 
-{#	<div class="poster">#}
-{#		<h2 class="titel">Poster</h2>#}
-{#		<img src="https://csrdelft.nl/forum/plaatjes/bekijken/ccc36817408f449d70995dd2f3efe604" alt="Logo menu" />#}
-{#	</div>#}
+{#  <div class="poster"> #}
+{#    <h2 class="titel">Poster</h2> #}
+{#    <img src="https://csrdelft.nl/forum/plaatjes/bekijken/ccc36817408f449d70995dd2f3efe604" alt="Logo menu" /> #}
+{#  </div> #}
 
-{#	<div class="divider">#}
-{#		<img id="themafilm" class="tussen" src="/images/lustrum12/DividerTussen.png">#}
-{#	</div>#}
+{#  <div class="divider"> #}
+{#    <img id="themafilm" class="tussen" src="/images/lustrum12/DividerTussen.png"> #}
+{#  </div> #}
 
-{#	<div class="video">#}
-{#		<h2 class="titel">Themafilm</h2>#}
-{#		<div class="container video-container">#}
-{#			<div class="youtube-container closed">#}
-{#				<div class="embed-responsive ratio ratio-16x9" id="player">#}
-{#					<iframe src="https://www.youtube-nocookie.com/embed/iery2Lp7daA?controls=0" frameborder="0" 	allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>#}
-{#					</iframe>#}
-{#				</div>#}
-{#			</div>#}
-{#		</div>#}
-{#	</div>#}
+{#  <div class="video"> #}
+{#    <h2 class="titel">Themafilm</h2> #}
+{#    <div class="container video-container"> #}
+{#      <div class="youtube-container closed"> #}
+{#        <div class="embed-responsive ratio ratio-16x9" id="player"> #}
+{#          <iframe src="https://www.youtube-nocookie.com/embed/iery2Lp7daA?controls=0" frameborder="0" 	allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> #}
+{#          </iframe> #}
+{#        </div> #}
+{#      </div> #}
+{#    </div> #}
+{#  </div> #}
 
-{#	<div class="divider">#}
-{#		<img id="game" class="tussen" src="/images/lustrum12/DividerTussen.png">#}
-{#	</div>#}
+{#  <div class="divider"> #}
+{#    <img id="game" class="tussen" src="/images/lustrum12/DividerTussen.png"> #}
+{#  </div> #}
 
-{#	<div class="game">#}
-{#		<a class="anchor glow" id="game"> </a>#}
-{#		<h2 class="titel">Game</h2>#}
-{#		<div class="game-container" id="game-container">#}
-{#			<iframe class="unity-container" src="https://jobkanis.github.io/diesgame/" allow="fullscreen" scrolling="no"></iframe>#}
-{#		</div>#}
-{#	</div>#}
-{#	<div class="beschrijving" >#}
-{#		Wil je weten welke deur je moet hebben?#}
-{#		<a href=https://csrdelft.nl/forum/reactie/131155>Vind het hier op het forum!</a>#}
-{#		<p></p>#}
-{#	</div>#}
-{#	<div id="fotos" class="ketzers">#}
-{#		<h4 class="titel">Foto's tijdens filmen</h4>#}
-{#		<div class="ketzers-container overflow-hidden">#}
-{#			[fotoalbum]/2021-2022/21-10-01 Tot 21-10-03 Lustrumcie Weekend[/fotoalbum]#}
-{#		</div>#}
-{#	</div>#}
-{#	<div class="divider">#}
-{#		<img class="onder" src="/images/lustrum12/DividerOnder.png">#}
-{#	</div>#}
+{#  <div class="game"> #}
+{#    <a class="anchor glow" id="game"> </a> #}
+{#    <h2 class="titel">Game</h2> #}
+{#    <div class="game-container" id="game-container"> #}
+{#      <iframe class="unity-container" src="https://jobkanis.github.io/diesgame/" allow="fullscreen" scrolling="no"></iframe> #}
+{#    </div> #}
+{#  </div> #}
+{#  <div class="beschrijving" > #}
+{#    Wil je weten welke deur je moet hebben? #}
+{#    <a href=https://csrdelft.nl/forum/reactie/131155>Vind het hier op het forum!</a> #}
+{#    <p></p> #}
+{#  </div> #}
+{#  <div id="fotos" class="ketzers"> #}
+{#    <h4 class="titel">Foto's tijdens filmen</h4> #}
+{#    <div class="ketzers-container overflow-hidden"> #}
+{#      [fotoalbum]/2021-2022/21-10-01 Tot 21-10-03 Lustrumcie Weekend[/fotoalbum] #}
+{#    </div> #}
+{#  </div> #}
+{#  <div class="divider"> #}
+{#    <img class="onder" src="/images/lustrum12/DividerOnder.png"> #}
+{#  </div> #}
 </body>

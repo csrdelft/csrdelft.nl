@@ -5,7 +5,8 @@ namespace CsrDelft\model\entity;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class Map {
+class Map
+{
 
 	/**
 	 * Mapnaam
@@ -36,7 +37,8 @@ class Map {
 	/**
 	 * Bestaat er een map met het pad.
 	 */
-	public function exists() {
-		return @is_readable($this->path) AND is_dir($this->path);
+	public function exists()
+	{
+		return @is_readable($this->path) and is_dir($this->path);
 	}
 }

@@ -19,7 +19,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fotoalbum\FotoAlbumRepository")
  * @ORM\Table("fotoalbums")
  */
-class FotoAlbum extends Map {
+class FotoAlbum extends Map
+{
 	/**
 	 * Relatief pad in fotoalbum
 	 * @var string
@@ -55,7 +56,8 @@ class FotoAlbum extends Map {
 	 */
 	public $owner_profiel;
 
-	public function __construct($path = null, $absolute = false) {
+	public function __construct($path = null, $absolute = false)
+	{
 		if ($path === null) { // called from PersistenceModel
 			$this->path = realpathunix(join_paths(PHOTOALBUM_PATH, $this->subdir));
 		} else if ($absolute == true && str_starts_with(realpathunix($path), realpathunix(PHOTOALBUM_PATH))) { // Check that $path is inside PHOTOALBUM_PATH
@@ -71,31 +73,37 @@ class FotoAlbum extends Map {
 		$this->dirname = basename($this->path);
 	}
 
-	public function getPath() {
+	public function getPath()
+	{
 		return $this->path ?? join_paths(PHOTOALBUM_PATH, $this->subdir);
 	}
 
 	/**
 	 * File modification time van het album.
 	 */
-	public function modified() {
+	public function modified()
+	{
 		return filemtime($this->path);
 	}
 
-	public function getParentName() {
+	public function getParentName()
+	{
 		return ucfirst(basename(dirname($this->subdir)));
 	}
 
-	public function getUrl() {
+	public function getUrl()
+	{
 		return '/fotoalbum/' . direncode($this->subdir);
 	}
 
-	public function isEmpty() {
+	public function isEmpty()
+	{
 		$subalbums = $this->getSubAlbums();
 		return empty($subalbums) && !$this->hasFotos(true);
 	}
 
-	public function hasFotos($incompleet = false) {
+	public function hasFotos($incompleet = false)
+	{
 		$fotos = $this->getFotos($incompleet);
 		return !empty($fotos);
 	}
@@ -104,7 +112,8 @@ class FotoAlbum extends Map {
 	 * @param false $incompleet
 	 * @return Foto[]
 	 */
-	public function getFotos($incompleet = false) {
+	public function getFotos($incompleet = false)
+	{
 		if (!isset($this->fotos)) {
 
 			$this->fotos = array();
@@ -132,7 +141,8 @@ class FotoAlbum extends Map {
 		}
 	}
 
-	public function orderByDateModified() {
+	public function orderByDateModified()
+	{
 		$order = array();
 		foreach ($this->getFotos() as $i => $foto) {
 			$order[$i] = filemtime($foto->getFullPath());
@@ -145,7 +155,8 @@ class FotoAlbum extends Map {
 		$this->fotos = $result;
 	}
 
-	public function getSubAlbums($recursive = false) {
+	public function getSubAlbums($recursive = false)
+	{
 		if (!isset($this->subalbums)) {
 
 			$this->subalbums = array();
@@ -172,7 +183,8 @@ class FotoAlbum extends Map {
 	/**
 	 * @return string[]
 	 */
-	public function getCoverUrls() {
+	public function getCoverUrls()
+	{
 		$fotos = [];
 		$fotos[] = $this->getCoverUrl();
 		$fotos[] = $this->getRandomCover();
@@ -181,7 +193,8 @@ class FotoAlbum extends Map {
 		return $fotos;
 	}
 
-	public function getRandomCover() {
+	public function getRandomCover()
+	{
 		if ($this->hasFotos()) {
 			// Anders een willekeurige foto:
 			$count = count($this->fotos);
@@ -200,7 +213,8 @@ class FotoAlbum extends Map {
 		return '/plaetjes/_geen_thumb.jpg';
 	}
 
-	public function getCoverUrl() {
+	public function getCoverUrl()
+	{
 		if ($this->hasFotos() && $this->dirname !== 'Posters') {
 			foreach ($this->getFotos() as $foto) {
 				if (strpos($foto->filename, 'folder') !== false) {
@@ -211,7 +225,8 @@ class FotoAlbum extends Map {
 		return $this->getRandomCover();
 	}
 
-	public function getMostRecentSubAlbum() {
+	public function getMostRecentSubAlbum()
+	{
 		$recent = $this;
 		foreach ($this->getSubAlbums() as $subalbum) {
 			if ($subalbum->modified() > $recent->modified()) {
@@ -225,10 +240,13 @@ class FotoAlbum extends Map {
 	 * Zegt of dit album publiek toegankelijk is.
 	 * @return bool
 	 */
-	public function isPubliek() {
+	public function isPubliek()
+	{
 		return preg_match('/Publiek\/?.*$/', $this->subdir) == 1;
 	}
-	public function magBekijken() {
+
+	public function magBekijken()
+	{
 		if (!str_starts_with(realpath($this->path), realpath(PHOTOALBUM_PATH . 'fotoalbum/'))) {
 			return false;
 		}
@@ -239,7 +257,8 @@ class FotoAlbum extends Map {
 		}
 	}
 
-	public function isOwner() {
+	public function isOwner()
+	{
 		return LoginService::mag($this->owner);
 	}
 
@@ -248,7 +267,8 @@ class FotoAlbum extends Map {
 	 *
 	 * @return string[][]
 	 */
-	public function getAlbumArrayRecursive() {
+	public function getAlbumArrayRecursive()
+	{
 		$fotos = [];
 		foreach ($this->getFotos() as $foto) {
 			$fotos[] = [
@@ -281,7 +301,8 @@ class FotoAlbum extends Map {
 	 *
 	 * @return string[][]
 	 */
-	public function getAlbumArray() {
+	public function getAlbumArray()
+	{
 		$fotos = [];
 		foreach ($this->getFotos() as $foto) {
 			$fotos[] = [
@@ -295,41 +316,42 @@ class FotoAlbum extends Map {
 
 		return $fotos;
 	}
-	public function magVerwijderen() {
-		if($this->isOwner()) {
+
+	public function magVerwijderen()
+	{
+		if ($this->isOwner()) {
 			return true;
 		}
-		if($this->isPubliek()) {
+		if ($this->isPubliek()) {
 			return LoginService::mag(P_ALBUM_PUBLIC_DEL);
-		}
-		else{
+		} else {
 			return LoginService::mag(P_ALBUM_DEL);
 		}
 	}
 
-	public function magToevoegen() {
-		if($this->isPubliek()) {
+	public function magToevoegen()
+	{
+		if ($this->isPubliek()) {
 			return LoginService::mag(P_ALBUM_PUBLIC_ADD);
-		}
-		else{
+		} else {
 			return LoginService::mag(P_ALBUM_ADD);
 		}
 	}
 
-	public function magAanpassen() {
-		if($this->isPubliek()) {
+	public function magAanpassen()
+	{
+		if ($this->isPubliek()) {
 			return LoginService::mag(P_ALBUM_PUBLIC_MOD);
-		}
-		else{
+		} else {
 			return LoginService::mag(P_ALBUM_MOD) || $this->isOwner();
 		}
 	}
 
-	public function magDownloaden() {
-		if($this->isPubliek()) {
+	public function magDownloaden()
+	{
+		if ($this->isPubliek()) {
 			return LoginService::mag(P_ALBUM_PUBLIC_DOWN);
-		}
-		else{
+		} else {
 			return LoginService::mag(P_ALBUM_DOWN);
 		}
 	}

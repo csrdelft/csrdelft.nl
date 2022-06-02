@@ -14,12 +14,15 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Controller voor verticalen.
  */
-class VerticalenController extends AbstractGroepenController {
-	public function __construct(ManagerRegistry $registry) {
+class VerticalenController extends AbstractGroepenController
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Verticale::class);
 	}
 
-	public function zoeken(Request $request, $zoekterm = null) {
+	public function zoeken(Request $request, $zoekterm = null)
+	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
 		}

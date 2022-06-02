@@ -43,11 +43,11 @@
 		<td>{{ declaratie.nummer }}</td>
 		<td>{{ declaratie.declaratieDatum|date('d-m-Y') }}</td>
 		<td>
-			{{ declaratie.ingediend|date('d-m-Y') }} door<br />
+			{{ declaratie.ingediend|date('d-m-Y') }} door<br/>
 			{{ declaratie.indiener.naam }}
 		</td>
 		<td>
-			{{ declaratie.beoordeeld|date('d-m-Y') }} door<br />
+			{{ declaratie.beoordeeld|date('d-m-Y') }} door<br/>
 			{{ declaratie.beoordelaar.naam }}
 		</td>
 	</tr>
@@ -141,7 +141,8 @@
 		{% endfor %}
 		{% if declaratie.bonnen.count > 1 %}
 			<tr class="sub">
-				<td class="rechts" colspan="5">Subtotaal {% if declaratie.bonnen.count > 1 %}bon {{ loop.index }}{% endif %}</td>
+				<td class="rechts" colspan="5">
+					Subtotaal {% if declaratie.bonnen.count > 1 %}bon {{ loop.index }}{% endif %}</td>
 				<td class="rechts">{{ bon.bedragExcl|format_euro }}</td>
 				<td></td>
 				<td class="rechts">{{ bon.btwBedrag|format_euro }}</td>

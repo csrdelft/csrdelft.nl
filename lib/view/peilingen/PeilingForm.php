@@ -20,14 +20,16 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/10/2018
  */
-class PeilingForm implements FormulierTypeInterface {
+class PeilingForm implements FormulierTypeInterface
+{
 
 	/**
 	 * @param FormulierBuilder $builder
 	 * @param Peiling $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
+	{
 		//$url = $nieuw ? '/peilingen/nieuw' : '/peilingen/bewerken';
 
 		$builder->setTitel($options['nieuw'] ? 'Nieuwe peiling' : 'Peiling bewerken');

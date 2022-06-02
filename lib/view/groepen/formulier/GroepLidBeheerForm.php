@@ -7,13 +7,15 @@ use CsrDelft\view\formulier\FormFieldFactory;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
-class GroepLidBeheerForm extends ModalForm {
+class GroepLidBeheerForm extends ModalForm
+{
 
 	public function __construct(
 		GroepLid $lid,
-		$action,
-		array $blacklist = null
-	) {
+						 $action,
+		array    $blacklist = null
+	)
+	{
 		parent::__construct($lid, $action, 'Aanmelding bewerken', true);
 		$fields = FormFieldFactory::generateFields($this->model);
 

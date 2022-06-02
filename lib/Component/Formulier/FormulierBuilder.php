@@ -12,7 +12,8 @@ use CsrDelft\view\formulier\knoppen\FormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class FormulierBuilder {
+class FormulierBuilder
+{
 	public $post = true;
 	public $showMelding = true;
 	public $preventCsrf = true;
@@ -43,25 +44,30 @@ class FormulierBuilder {
 	 */
 	private $requestStack;
 
-	public function __construct(RequestStack $requestStack) {
+	public function __construct(RequestStack $requestStack)
+	{
 		$this->css_classes[] = 'Formulier';
 		$this->formKnoppen = new FormDefaultKnoppen();
 		$this->requestStack = $requestStack;
 	}
 
-	public function setShowMelding($showMelding) {
+	public function setShowMelding($showMelding)
+	{
 		$this->showMelding = $showMelding;
 	}
 
-	public function setFormId($formId) {
+	public function setFormId($formId)
+	{
 		$this->formId = $formId;
 	}
 
-	public function getFormId() {
+	public function getFormId()
+	{
 		return $this->formId;
 	}
 
-	public function getDataTableId() {
+	public function getDataTableId()
+	{
 		return $this->dataTableId;
 	}
 
@@ -71,7 +77,8 @@ class FormulierBuilder {
 	 *
 	 * @param string|bool $dataTableId
 	 */
-	public function setDataTableId($dataTableId) {
+	public function setDataTableId($dataTableId)
+	{
 		// Link with DataTable?
 		if ($dataTableId === true) {
 			$this->dataTableId = $this->requestStack
@@ -82,30 +89,36 @@ class FormulierBuilder {
 		}
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return $this->titel;
 	}
 
 	/**
 	 * @param false|mixed $titel
 	 */
-	public function setTitel($titel): void {
+	public function setTitel($titel): void
+	{
 		$this->titel = $titel;
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->model;
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return null;
 	}
 
-	public function getFields() {
+	public function getFields()
+	{
 		return $this->fields;
 	}
 
-	public function hasFields() {
+	public function hasFields()
+	{
 		return !empty($this->fields);
 	}
 
@@ -115,7 +128,8 @@ class FormulierBuilder {
 	 * @param string $fieldName
 	 * @return InputField|false if not found
 	 */
-	public function findByName($fieldName) {
+	public function findByName($fieldName)
+	{
 		foreach ($this->fields as $field) {
 			if (($field instanceof InputField || $field instanceof FileField) && $field->getName() === $fieldName) {
 				return $field;
@@ -124,21 +138,25 @@ class FormulierBuilder {
 		return false;
 	}
 
-	public function addFields(array $fields) {
+	public function addFields(array $fields)
+	{
 		$this->fields = array_merge($this->fields, $fields);
 	}
 
 
-	public function insertAtPos($pos, FormElement $field) {
+	public function insertAtPos($pos, FormElement $field)
+	{
 		array_splice($this->fields, $pos, 0, array($field));
 	}
 
-	public function removeField(FormElement $field) {
+	public function removeField(FormElement $field)
+	{
 		$pos = array_search($field, $this->fields);
 		unset($this->fields[$pos]);
 	}
 
-	public function getFormulier() {
+	public function getFormulier()
+	{
 		return new FormulierInstance(
 			$this->action,
 			$this->titel,
@@ -156,32 +174,37 @@ class FormulierBuilder {
 	/**
 	 * @param null $action
 	 */
-	public function setAction($action): void {
+	public function setAction($action): void
+	{
 		$this->action = $action;
 	}
 
-	public function addCssClass($class): void {
+	public function addCssClass($class): void
+	{
 		$this->css_classes[] = $class;
 	}
 
 	/**
 	 * @param FormKnoppen $formKnoppen
 	 */
-	public function setFormKnoppen(FormKnoppen $formKnoppen): void {
+	public function setFormKnoppen(FormKnoppen $formKnoppen): void
+	{
 		$this->formKnoppen = $formKnoppen;
 	}
 
 	/**
 	 * @param \Closure $param Kan alle velden controleren als er false wordt gereturned is ($fields: FormElement[]) => boolean
 	 */
-	public function addValidationMethod(\Closure $param) {
+	public function addValidationMethod(\Closure $param)
+	{
 		$this->validationMethods[] = $param;
 	}
 
 	/**
 	 * @param mixed $model
 	 */
-	public function setModel($model): void {
+	public function setModel($model): void
+	{
 		$this->model = $model;
 	}
 }

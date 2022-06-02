@@ -4,7 +4,8 @@
 namespace CsrDelft\entity\fiscaat;
 
 
-class CiviSaldoAfschrijvenDTO {
+class CiviSaldoAfschrijvenDTO
+{
 	public $succes;
 	public $regel;
 	public $productNaam;

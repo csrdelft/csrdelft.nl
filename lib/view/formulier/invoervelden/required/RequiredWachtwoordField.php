@@ -11,7 +11,8 @@ use CsrDelft\view\formulier\invoervelden\WachtwoordField;
  *
  * @see WachtwoordField
  */
-class RequiredWachtwoordField extends WachtwoordField {
+class RequiredWachtwoordField extends WachtwoordField
+{
 
 	public $required = true;
 

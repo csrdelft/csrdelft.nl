@@ -7,7 +7,7 @@
 		return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
 	}
 
-	var onloadCallback = function() {
+	var onloadCallback = function () {
 		window.addEventListener('scroll', function () {
 
 			if (checkVisible(document.getElementById('captcha')) && !captchaLoaded) {
@@ -77,10 +77,14 @@
 	</div>
 	<div class="field" id="captcha"></div>
 	<div class="field">
-		Met het verzenden van dit formulier ga je akkoord met de <a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">privacyverklaring</a> van C.S.R. Delft.
+		Met het verzenden van dit formulier ga je akkoord met de <a
+			href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">privacyverklaring</a> van
+		C.S.R. Delft.
 	</div>
 	<ul class="actions">
-		<li><button type="submit" name="submitButton">Verzenden</button></li>
+		<li>
+			<button type="submit" name="submitButton">Verzenden</button>
+		</li>
 	</ul>
 </form>
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>

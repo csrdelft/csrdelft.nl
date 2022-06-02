@@ -12,8 +12,10 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * Controller voor rechten-groepen. Kleine letter g vanwege groepen-router.
  */
-class RechtengroepenController extends AbstractGroepenController {
-	public function __construct(ManagerRegistry $registry) {
+class RechtengroepenController extends AbstractGroepenController
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, RechtenGroep::class);
 	}
 }

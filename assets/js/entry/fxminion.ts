@@ -20,7 +20,7 @@ function createPosition(): JQuery.Coordinates {
 	const nh = Math.floor(Math.random() * h);
 	const nw = Math.floor(Math.random() * w);
 
-	return {top: nh, left: nw};
+	return { top: nh, left: nw };
 }
 
 function calcSpeed(prev: JQuery.Coordinates, next: JQuery.Coordinates): number {
@@ -40,7 +40,7 @@ function animateMinion() {
 	}
 
 	const newq = createPosition();
-	const oldq = $minion.offset() || {top: 0, left: 0};
+	const oldq = $minion.offset() || { top: 0, left: 0 };
 	const speed = calcSpeed(oldq, newq);
 
 	$minion.animate(newq, speed, animateMinion);

@@ -26,7 +26,8 @@ use Twig\Environment;
  * @method ForumDeelMelding[]    findAll()
  * @method ForumDeelMelding[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ForumDelenMeldingRepository extends AbstractRepository {
+class ForumDelenMeldingRepository extends AbstractRepository
+{
 	/**
 	 * @var SuService
 	 */
@@ -40,14 +41,16 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 	 */
 	private $mailService;
 
-	public function __construct(ManagerRegistry $registry, Environment $twig, SuService $suService, MailService $mailService) {
+	public function __construct(ManagerRegistry $registry, Environment $twig, SuService $suService, MailService $mailService)
+	{
 		parent::__construct($registry, ForumDeelMelding::class);
 		$this->suService = $suService;
 		$this->twig = $twig;
 		$this->mailService = $mailService;
 	}
 
-	protected function maakForumDeelMelding(ForumDeel $deel, $uid) {
+	protected function maakForumDeelMelding(ForumDeel $deel, $uid)
+	{
 		$melding = new ForumDeelMelding();
 		$melding->deel = $deel;
 		$melding->forum_id = $deel->forum_id;
@@ -67,7 +70,8 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 	 * @param bool $actief of lid meldingen wil ontvangen
 	 * @param string $uid uid van lid, standaard huidig ingelogd lid
 	 */
-	public function setMeldingVoorLid(ForumDeel $deel, $actief, $uid = null) {
+	public function setMeldingVoorLid(ForumDeel $deel, $actief, $uid = null)
+	{
 		if ($uid === null) $uid = LoginService::getUid();
 
 		$lidWilMeldingVoorDeel = $deel->lidWilMeldingVoorDeel($uid);
@@ -86,7 +90,8 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 	 * Verwijder alle te ontvangen meldingen voor gegeven lid
 	 * @param $uids
 	 */
-	public function stopAlleMeldingenVoorLeden($uids) {
+	public function stopAlleMeldingenVoorLeden($uids)
+	{
 		$this->createQueryBuilder('fdm')
 			->delete()
 			->where('fdm.uid in (:uids)')
@@ -98,7 +103,8 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 	 * Verwijder alle te ontvangen meldingen voor gegeven forumdeel.
 	 * @param ForumDeel|int $deel
 	 */
-	public function stopMeldingenVoorIedereen($deel) {
+	public function stopMeldingenVoorIedereen($deel)
+	{
 		$id = $deel instanceof ForumDeel ? $deel->forum_id : $deel;
 		$manager = $this->getEntityManager();
 		foreach ($this->findBy(['forum_id' => $id]) as $melding) {
