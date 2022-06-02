@@ -32,6 +32,7 @@ const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeS
 				}
 
 				el.innerHTML = ''
+				// prettier-ignore
 				el.appendChild(html`
 <div class="bb-groep">
 <div class="groep-samenvatting">
