@@ -1,16 +1,9 @@
 {
-    "endOfLine": "lf",
+	"endOfLine": "lf",
 	"tabWidth": 2,
 	"useTabs": true,
 	"semi": true,
 	"singleQuote": true,
-
-	"twigMultiTags": [
-		"nav,endnav",
-		"switch,case,default,endswitch",
-		"ifchildren,endifchildren",
-		"cache,endcache",
-		"js,endjs"
-	],
-    "plugins": ["./.yarn/cache/prettier-plugin-twig-melody-npm-0.4.6-b5d476f9e6-660c823ab4"]
+	"bracketSpacing": true,
+	"printWidth": 120
 }
