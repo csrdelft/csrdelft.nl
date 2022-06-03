@@ -26,8 +26,7 @@ use CsrDelft\view\formulier\ModalForm;
  * Formulier voor een nieuwe of te bewerken maaltijd.
  *
  */
-class MaaltijdForm extends ModalForm
-{
+class MaaltijdForm extends ModalForm {
 
 	/**
 	 * MaaltijdForm constructor.
@@ -37,8 +36,7 @@ class MaaltijdForm extends ModalForm
 	 *
 	 * @throws CsrGebruikerException
 	 */
-	public function __construct(Maaltijd $maaltijd, $action)
-	{
+	public function __construct(Maaltijd $maaltijd, $action) {
 		parent::__construct($maaltijd, '/maaltijden/beheer/' . $action, false, true);
 
 		if ($maaltijd->maaltijd_id < 0) {

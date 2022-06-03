@@ -19,8 +19,7 @@ use Throwable;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class BeheerAbonnementenController extends AbstractController
-{
+class BeheerAbonnementenController extends AbstractController {
 	/**
 	 * @var MaaltijdAbonnementenRepository
 	 */
@@ -30,8 +29,7 @@ class BeheerAbonnementenController extends AbstractController
 	 */
 	private $maaltijdRepetitiesRepository;
 
-	public function __construct(MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository)
-	{
+	public function __construct(MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository) {
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 	}
@@ -43,8 +41,7 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/waarschuwingen", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function waarschuwingen()
-	{
+	public function waarschuwingen() {
 		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenWaarschuwingenMatrix();
 
 		return $this->render('maaltijden/abonnement/beheer_abonnementen.html.twig', [
@@ -61,8 +58,7 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/ingeschakeld", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function ingeschakeld()
-	{
+	public function ingeschakeld() {
 		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenMatrix();
 
 		return $this->render('maaltijden/abonnement/beheer_abonnementen.html.twig', [
@@ -79,8 +75,7 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/abonneerbaar", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function abonneerbaar()
-	{
+	public function abonneerbaar() {
 		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenAbonneerbaarMatrix();
 
 		return $this->render('maaltijden/abonnement/beheer_abonnementen.html.twig', [
@@ -97,8 +92,7 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/novieten", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function novieten()
-	{
+	public function novieten() {
 		$mrid = filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
 		$repetitie = $this->maaltijdRepetitiesRepository->find($mrid);
 		$aantal = $this->maaltijdAbonnementenRepository->inschakelenAbonnementVoorNovieten($repetitie);
@@ -118,8 +112,7 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/inschakelen/{mlt_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function inschakelen(MaaltijdRepetitie $repetitie, $uid)
-	{
+	public function inschakelen(MaaltijdRepetitie $repetitie, $uid) {
 		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
@@ -143,8 +136,7 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/uitschakelen/{mlt_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function uitschakelen(MaaltijdRepetitie $repetitie, $uid)
-	{
+	public function uitschakelen(MaaltijdRepetitie $repetitie, $uid) {
 		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}

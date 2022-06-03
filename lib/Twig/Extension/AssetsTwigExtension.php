@@ -108,8 +108,7 @@ class AssetsTwigExtension extends AbstractExtension
 		return $relevantAssets;
 	}
 
-	public function asset_url($name)
-	{
+	public function asset_url($name) {
 		$manifest = $this->readManifest();
 
 		if (!isset($manifest[$name])) {

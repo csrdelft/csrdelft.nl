@@ -5,11 +5,9 @@ namespace CsrDelft\view\groepen\leden;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 
-class GroepLedenData extends DataTableResponse
-{
+class GroepLedenData extends DataTableResponse {
 
-	public function renderElement($lid)
-	{
+	public function renderElement($lid) {
 		$array = (array)$lid;
 
 		$array['lid'] = ProfielRepository::getLink($array['uid'], 'civitas');

@@ -8,11 +8,9 @@ use CsrDelft\view\formulier\InlineForm;
 use CsrDelft\view\formulier\keuzevelden\SterrenField;
 
 
-class MaaltijdKwaliteitBeoordelingForm extends InlineForm
-{
+class MaaltijdKwaliteitBeoordelingForm extends InlineForm {
 
-	public function __construct(Maaltijd $maaltijd, MaaltijdBeoordeling $beoordeling)
-	{
+	public function __construct(Maaltijd $maaltijd, MaaltijdBeoordeling $beoordeling) {
 
 		$field = new SterrenField('kwaliteit', $beoordeling->kwaliteit, null, 4);
 		$field->hints = array('ruim onvoldoende', 'onvoldoende', 'voldoende', 'ruim voldoende');

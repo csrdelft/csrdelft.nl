@@ -13,11 +13,9 @@ use CsrDelft\repository\groepen\VerticalenRepository;
  *
  * Selecteer een verticale. Geeft een volgnummer terug.
  */
-class VerticaleField extends SelectField
-{
+class VerticaleField extends SelectField {
 
-	public function __construct($name, $value, $description)
-	{
+	public function __construct($name, $value, $description) {
 		$verticalen = array();
 		foreach (ContainerFacade::getContainer()->get(VerticalenRepository::class)->findAll() as $v) {
 			$verticalen[$v->letter] = $v->naam;

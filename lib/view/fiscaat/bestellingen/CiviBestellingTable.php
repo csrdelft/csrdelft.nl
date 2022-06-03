@@ -12,10 +12,8 @@ use CsrDelft\view\datatable\DataTable;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 26/04/2017
  */
-class CiviBestellingTable extends DataTable
-{
-	public function __construct($uid = null)
-	{
+class CiviBestellingTable extends DataTable {
+	public function __construct($uid = null) {
 		$dataUrl = '/fiscaat/bestellingen' . ($uid == null ? '' : '/' . $uid);
 		$titel = $uid == null ? 'Eigen overzicht' : 'Overzicht voor ' . ProfielRepository::getNaam($uid, 'volledig');
 		parent::__construct(CiviBestelling::class, $dataUrl, $titel);
@@ -29,8 +27,7 @@ class CiviBestellingTable extends DataTable
 		$this->setOrder(['moment' => 'desc']);
 	}
 
-	public function getBreadcrumbs()
-	{
+	public function getBreadcrumbs() {
 		return '<a href="/" title="Startpagina"><span class="fa fa-home module-icon"></span></a> » <a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 }

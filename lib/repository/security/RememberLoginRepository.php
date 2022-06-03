@@ -18,19 +18,16 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method RememberLogin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method RememberLogin|null retrieveByUuid($UUID)
  */
-class RememberLoginRepository extends AbstractRepository
-{
+class RememberLoginRepository extends AbstractRepository {
 
-	public function __construct(ManagerRegistry $registry)
-	{
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, RememberLogin::class);
 	}
 
 	/**
 	 * @return RememberLogin
 	 */
-	public function nieuw()
-	{
+	public function nieuw() {
 		$remember = new RememberLogin();
 		$remember->uid = LoginService::getUid();
 		$remember->profiel = LoginService::getProfiel();
@@ -54,8 +51,7 @@ class RememberLoginRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijder($token)
-	{
+	public function verwijder($token) {
 		$rememberLogin = $this->findOneBy(['token' => $token]);
 		if ($rememberLogin) {
 			$this->getEntityManager()->remove($rememberLogin);

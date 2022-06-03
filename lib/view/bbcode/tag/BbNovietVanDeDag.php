@@ -8,8 +8,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use Twig\Environment;
 
-class BbNovietVanDeDag extends BbTag
-{
+class BbNovietVanDeDag extends BbTag {
 	/**
 	 * @var ProfielRepository
 	 */
@@ -19,29 +18,24 @@ class BbNovietVanDeDag extends BbTag
 	 */
 	private $twig;
 
-	public function __construct(ProfielRepository $profielRepository, Environment $twig)
-	{
+	public function __construct(ProfielRepository $profielRepository, Environment $twig) {
 		$this->profielRepository = $profielRepository;
 		$this->twig = $twig;
 	}
 
-	public static function getTagName()
-	{
+	public static function getTagName() {
 		return 'novietvandedag';
 	}
 
-	public function isAllowed()
-	{
+	public function isAllowed() {
 		return LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function parse($arguments = [])
-	{
+	public function parse($arguments = []) {
 		// geen argumenten
 	}
 
-	public function render()
-	{
+	public function render() {
 		// Haal profielen van novieten op
 		$profielen = $this->profielRepository->findByLidStatus([LidStatus::Noviet]);
 		$aantal = count($profielen);
@@ -78,8 +72,7 @@ class BbNovietVanDeDag extends BbTag
 		}
 	}
 
-	public function renderLight()
-	{
+	public function renderLight() {
 		// Niet light te renderen
 	}
 }

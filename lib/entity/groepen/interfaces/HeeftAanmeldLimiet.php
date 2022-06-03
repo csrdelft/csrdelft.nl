@@ -1,5 +1,4 @@
 <?php
-
 namespace CsrDelft\entity\groepen\interfaces;
 
 /**
@@ -9,7 +8,6 @@ namespace CsrDelft\entity\groepen\interfaces;
  *
  * @package CsrDelft\model\entity\interfaces
  */
-interface HeeftAanmeldLimiet
-{
+interface HeeftAanmeldLimiet {
 	function getAanmeldLimiet();
 }

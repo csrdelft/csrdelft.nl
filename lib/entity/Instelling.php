@@ -26,8 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class Instelling
-{
+class Instelling {
 	/**
 	 * @var integer
 	 * @ORM\Id()

@@ -11,8 +11,7 @@ use CsrDelft\common\ContainerFacade;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 06/07/2019
  */
-final class BbHelper
-{
+final class BbHelper {
 	/**
 	 * Templates for light mode
 	 * @param BbEnv $env
@@ -21,8 +20,7 @@ final class BbHelper
 	 * @param string $content
 	 * @return string
 	 */
-	public static function lightLinkInline($env, $tag, $url, $content)
-	{
+	public static function lightLinkInline($env, $tag, $url, $content) {
 		if (isset($url[0]) && $url[0] === '/') {
 			// Zorg voor werkende link in e-mail
 			$url = getCsrRoot() . $url;
@@ -41,8 +39,7 @@ HTML;
 	 * @param string $thumbnail
 	 * @return string
 	 */
-	public static function lightLinkBlock($tag, $url, $titel, $beschrijving, $thumbnail = '')
-	{
+	public static function lightLinkBlock($tag, $url, $titel, $beschrijving, $thumbnail = '') {
 		$titel = htmlspecialchars($titel);
 		$beschrijving = htmlspecialchars($beschrijving);
 		if ($thumbnail !== '') {
@@ -63,8 +60,7 @@ HTML;
 	 * @param string $thumbnail
 	 * @return string
 	 */
-	public static function lightLinkThumbnail($tag, $url, $thumbnail)
-	{
+	public static function lightLinkThumbnail($tag, $url, $thumbnail) {
 		return <<<HTML
 			<a class="bb-link-thumbnail bb-tag-{$tag}" href="{$url}">
 				<img src="{$thumbnail}" />

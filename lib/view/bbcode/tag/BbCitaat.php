@@ -11,8 +11,7 @@ use CsrDelft\view\bbcode\BbHelper;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 27/03/2019
  */
-class BbCitaat extends BbTag
-{
+class BbCitaat extends BbTag {
 	public $bron_text = null;
 	/** @var Profiel */
 	public $bron_profiel = null;
@@ -24,18 +23,15 @@ class BbCitaat extends BbTag
 	 */
 	private $profielRepository;
 
-	public function __construct(ProfielRepository $profielRepository)
-	{
+	public function __construct(ProfielRepository $profielRepository) {
 		$this->profielRepository = $profielRepository;
 	}
 
-	public static function getTagName()
-	{
+	public static function getTagName() {
 		return 'citaat';
 	}
 
-	public function renderPlain()
-	{
+	public function renderPlain() {
 		$text = 'Citaat';
 		if ($this->bron_profiel != null) {
 			$text .= ' van ' . $this->bron_profiel->getNaam('user');
@@ -49,8 +45,7 @@ class BbCitaat extends BbTag
 		return $text . ":\n " . trim($this->getContent());
 	}
 
-	public function renderLight()
-	{
+	public function renderLight() {
 		$text = '<div class="citaatContainer bb-tag-citaat">Citaat';
 		if ($this->bron_profiel != null) {
 			$text .= ' van ' . BbHelper::lightLinkInline($this->env, 'lid', '/profiel/' . $this->bron_profiel->uid, $this->bron_profiel->getNaam('user'));
@@ -75,8 +70,7 @@ class BbCitaat extends BbTag
 	 * @example [citaat]Citaat[/citaat]
 	 * @example [citaat=1234]Citaat[/citaat]
 	 */
-	public function render($arguments = array())
-	{
+	public function render($arguments = array()) {
 		if (!$this->hidden) {
 			$content = $this->getContent();
 		} else {
@@ -97,8 +91,7 @@ class BbCitaat extends BbTag
 		return $text . ':</em><blockquote>' . trim($content) . '</blockquote></div>';
 	}
 
-	public function parse($arguments = [])
-	{
+	public function parse($arguments = []) {
 		$this->env->quote_level++;
 		$this->readContent();
 		$this->env->quote_level--;

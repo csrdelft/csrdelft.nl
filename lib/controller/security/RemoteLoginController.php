@@ -116,7 +116,7 @@ class RemoteLoginController extends AbstractController
 	 * @Route("/rla/{uuid}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function remoteLoginAuthorizeRedirect($uuid): Response
+	public function remoteLoginAuthorizeRedirect($uuid) : Response
 	{
 		return new RedirectResponse(
 			$this->generateUrl('csrdelft_security_remotelogin_remoteloginauthorize', ['uuid' => $uuid]));
@@ -194,8 +194,7 @@ class RemoteLoginController extends AbstractController
 	 * @Auth(P_PUBLIC)
 	 * @see RemoteLoginAuthenticator
 	 */
-	public function remoteLoginFinal(): Response
-	{
+	public function remoteLoginFinal(): Response {
 		throw new LogicException("Moet opgevangen worden door RemoteLoginAuthenticator");
 	}
 

@@ -12,8 +12,7 @@ use CsrDelft\view\formulier\keuzevelden\VerticaleField;
  *
  * @see VerticaleField
  */
-class RequiredVerticaleField extends VerticaleField
-{
+class RequiredVerticaleField extends VerticaleField {
 
 	public $required = true;
 

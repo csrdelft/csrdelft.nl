@@ -9,18 +9,15 @@ namespace CsrDelft\view\formulier\keuzevelden;
  *
  * Dag van de week
  */
-class WeekdagField extends SelectField
-{
+class WeekdagField extends SelectField {
 
 	private static $dagnamen = array('zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag');
 
-	public function __construct($name, $value, $description)
-	{
+	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description, self::$dagnamen);
 	}
 
-	public function getValue()
-	{
+	public function getValue() {
 		$this->value = parent::getValue();
 		return (int)$this->value;
 	}

@@ -47,8 +47,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdenRepository")
  * @ORM\Table("mlt_maaltijden")
  */
-class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
-{
+class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -158,8 +157,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 		$this->aanmeldingen = new ArrayCollection();
 	}
 
-	public function getPrijsFloat()
-	{
+	public function getPrijsFloat() {
 		return (float)$this->getPrijs() / 100.0;
 	}
 
@@ -167,13 +165,11 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 * @return integer
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getPrijs()
-	{
+	public function getPrijs() {
 		return $this->product->getPrijsInt();
 	}
 
-	public function getIsAangemeld($uid)
-	{
+	public function getIsAangemeld($uid) {
 		return $this->aanmeldingen->matching(Eisen::voorGebruiker($uid))->count() == 1;
 	}
 
@@ -182,8 +178,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("aantal_aanmeldingen")
 	 */
-	public function getAantalAanmeldingen(): int
-	{
+	public function getAantalAanmeldingen(): int {
 		$aantalAanmeldingen = 0;
 		foreach ($this->aanmeldingen as $aanmelding) {
 			$aantalAanmeldingen += 1 + $aanmelding->aantal_gasten;
@@ -197,8 +192,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 *
 	 * @return int
 	 */
-	public function getMarge()
-	{
+	public function getMarge() {
 		$aantal = $this->getAantalAanmeldingen();
 		$marge = floor($aantal / floatval(instelling('maaltijden', 'marge_gasten_verhouding')));
 		$min = intval(instelling('maaltijden', 'marge_gasten_min'));
@@ -217,8 +211,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 *
 	 * @return integer
 	 */
-	public function getBudget()
-	{
+	public function getBudget() {
 		$budget = $this->getAantalAanmeldingen() + $this->getMarge();
 		$budget *= $this->getPrijs() - intval(instelling('maaltijden', 'budget_maalcie'));
 		return $budget;
@@ -230,50 +223,41 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 * @param $functieID int ID van de functie
 	 * @return CorveeTaak[]
 	 */
-	public function getCorveeTaken($functieID)
-	{
+	public function getCorveeTaken($functieID) {
 		return ContainerFacade::getContainer()->get(CorveeTakenRepository::class)->findBy(['corveeFunctie' => $functieID, 'maaltijd_id' => $this->maaltijd_id, 'verwijderd' => false]);
 	}
 
 	// Agendeerbaar ############################################################
 
-	public function getTitel()
-	{
+	public function getTitel() {
 		return $this->titel;
 	}
 
-	public function getBeginMoment()
-	{
+	public function getBeginMoment() {
 		return $this->getMoment()->getTimestamp();
 	}
 
-	public function getEindMoment()
-	{
+	public function getEindMoment() {
 		return $this->getBeginMoment() + 7200;
 	}
 
-	public function getBeschrijving()
-	{
+	public function getBeschrijving() {
 		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
 
-	public function getLocatie()
-	{
+	public function getLocatie() {
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl()
-	{
+	public function getUrl() {
 		return '/maaltijden';
 	}
 
-	public function isHeledag()
-	{
+	public function isHeledag() {
 		return false;
 	}
 
-	public function isTransparant()
-	{
+	public function isTransparant() {
 		// Toon als transparant (vrij) als lid dat wil of lid niet ingeketzt is
 		return lid_instelling('agenda', 'transparantICal') === 'ja' || !$this->getIsAangemeld(LoginService::getUid());
 	}
@@ -287,8 +271,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 * @return boolean
 	 * @throws CsrException
 	 */
-	public function magBekijken($uid)
-	{
+	public function magBekijken($uid) {
 		if (!isset($this->maaltijdcorvee)) {
 			// Zoek op datum, want er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is.
 			// Ook hoeft een taak niet per se gekoppeld te zijn aan een maaltijd (maximaal aan 1 maaltijd).
@@ -313,9 +296,8 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 * @return boolean
 	 * @throws CsrException
 	 */
-	public function magSluiten($uid)
-	{
-		return $this->magBekijken($uid) and $this->maaltijdcorvee->corveeFunctie->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
+	public function magSluiten($uid) {
+		return $this->magBekijken($uid) AND $this->maaltijdcorvee->corveeFunctie->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
 	}
 
 	/**
@@ -323,8 +305,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 * @Serializer\SerializedName("repetitie_naam")
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getRepetitieNaam()
-	{
+	public function getRepetitieNaam() {
 		return $this->repetitie ? $this->repetitie->standaard_titel : null;
 	}
 
@@ -333,8 +314,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("tijd")
 	 */
-	public function getDataTableTijd()
-	{
+	public function getDataTableTijd() {
 		return date_format_intl($this->tijd, TIME_FORMAT);
 	}
 
@@ -343,13 +323,11 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("datum")
 	 */
-	public function getDataTableDatum()
-	{
+	public function getDataTableDatum() {
 		return date_format_intl($this->datum, DATE_FORMAT);
 	}
 
-	public function getAanmeldLimiet()
-	{
+	public function getAanmeldLimiet() {
 		return $this->aanmeld_limiet;
 	}
 
@@ -357,8 +335,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 * @return int
 	 * @Serializer\Groups("datatable-fiscaat")
 	 */
-	public function getTotaal()
-	{
+	public function getTotaal() {
 		return $this->getAantalAanmeldingen() + $this->getPrijs();
 	}
 
@@ -367,24 +344,20 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("UUID")
 	 */
-	public function getUUID()
-	{
+	public function getUUID() {
 		return $this->maaltijd_id . "@maaltijd.csrdelft.nl";
 	}
 
-	public function getMoment()
-	{
+	public function getMoment() {
 		return $this->datum->setTime($this->tijd->format('H'), $this->tijd->format('i'), $this->tijd->format('s'));
 	}
 
 
-	public function getId()
-	{
+	public function getId() {
 		return $this->maaltijd_id;
 	}
 
-	public function getWeergave(): string
-	{
+	public function getWeergave(): string {
 		if ($this->datum) {
 			return $this->titel . ' op ' . date_format_intl($this->datum, DATE_FORMAT) . ' om ' . date_format_intl($this->getMoment(), TIME_FORMAT);
 		} else {

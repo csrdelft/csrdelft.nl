@@ -1,6 +1,6 @@
 import axios from 'axios';
 import '../ajax-csrf';
-import { docReady } from '../lib/util';
+import {docReady} from '../lib/util';
 
 declare global {
 	interface Window {
@@ -27,25 +27,23 @@ docReady(() => {
 			submitButton[1].disabled = true;
 			// submitButton[2].disabled = true;
 			const formData = new FormData(oweeForm);
-			axios
-				.post('/contactformulier/owee', formData)
+			axios.post('/contactformulier/owee', formData)
 				.then((response) => {
 					oweeForm.reset();
 					submitButton[0].disabled = false;
 					submitButton[1].disabled = false;
 					// submitButton[2].disabled = false;
-					errorContainer.innerHTML =
-						'<div class="alert alert-success">' + '<span class="ico accept"></span>' + response.data + '</div>';
+					errorContainer.innerHTML = '<div class="alert alert-success">' +
+						'<span class="ico accept"></span>' + response.data +
+						'</div>';
 					formulierVelden.style.display = 'none';
 				})
 				.catch((error) => {
 					submitButton[0].disabled = false;
 					submitButton[1].disabled = false;
 					// submitButton[2].disabled = false;
-					errorContainer.innerHTML =
-						'<div class="alert alert-danger">' +
-						'<span class="ico exclamation"></span>' +
-						error.response.data +
+					errorContainer.innerHTML = '<div class="alert alert-danger">' +
+						'<span class="ico exclamation"></span>' + error.response.data +
 						'</div>';
 				});
 

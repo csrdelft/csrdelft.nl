@@ -32,8 +32,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository")
  * @ORM\Table("mlt_abonnementen")
  */
-class MaaltijdAbonnement
-{
+class MaaltijdAbonnement {
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")

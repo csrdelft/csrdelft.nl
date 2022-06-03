@@ -14,8 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumDradenReagerenRepository")
  * @ORM\Table("forum_draden_reageren")
  */
-class ForumDraadReageren
-{
+class ForumDraadReageren {
 	/**
 	 * Shared primary key
 	 * Foreign key

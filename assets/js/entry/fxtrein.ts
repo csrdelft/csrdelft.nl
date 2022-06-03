@@ -1,6 +1,6 @@
 // Laad styles
 import '../../scss/effect/trein.scss';
-import { select } from '../lib/dom';
+import {select} from "../lib/dom";
 
 /**
  * Tijd voordat een trein van het spoor wordt gehaald.
@@ -18,10 +18,7 @@ const INTERVAL = 18000;
 const OFFSET = Math.random() * 5000 + 5000;
 
 class TjoekTjoek {
-	get randomTrein() {
-		return this.treinen[Math.floor(Math.random() * this.treinen.length)];
-	}
-
+	get randomTrein() { return this.treinen[Math.floor(Math.random() * this.treinen.length)]; }
 	private rails: Element;
 	private treinen = [
 		'ns-ddz-4',
@@ -45,7 +42,7 @@ class TjoekTjoek {
 	];
 
 	constructor() {
-		this.rails = select('.rails');
+		this.rails = select('.rails')
 	}
 
 	public start() {

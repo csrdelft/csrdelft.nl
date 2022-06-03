@@ -4,28 +4,17 @@
 h1 {
 	margin-top: 5px;
 }
-
 .suggestie {
 	color: grey;
 	font-style: italic;
 }
-
 .suggestieveld {
 	float: right;
 	margin-right: 5px;
 }
-
 /*knoppen in zijbalk rechts*/
-.controls {
-	float: right;
-}
-
-.controls .btn {
-	line-height: 2em;
-	width: 125px;
-	display: block;
-}
-
+.controls		 {float: right; }
+.controls .btn {line-height: 2em; width: 125px; display:block; }
 /****************************
  *  cataloguspagina			*
  ****************************/
@@ -36,14 +25,12 @@ h1 {
 #filters input:checked + label {
 	font-weight: bold;
 }
-
 #filters {
 	position: absolute;
-	margin: 7px 0 15px 0;
+	margin: 7px  0 15px 0;
 	z-index: 2;
 	line-height: 22px;
 }
-
 #filters label {
 	margin: 0;
 }
@@ -53,79 +40,56 @@ h1 {
 	cursor: pointer;
 	color: #0a338d;
 	margin-right: -1px;
-	position: relative;
+	position:relative;
 }
-
 #filters span.button {
 	background-color: #E6E6E6;
 	border: 1px solid lightgray;
 	z-index: 1;
 }
-
 #filters span.button:hover {
 	background-color: #CCC;
 }
-
 #filters span.actief {
 	background-color: white;
 	border: 1px solid #AAA;
 	z-index: 2;
 }
-
 p.biebuitleg {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 
-.biebindicator.beschikbaar {
-	color: green;
-}
-
-.biebindicator.teruggegeven {
-	color: orange;
-}
-
-.biebindicator.vermist, .biebindicator.uitgeleend {
-	color: red;
-}
-
+.biebindicator.beschikbaar							 {color:green; }
+.biebindicator.teruggegeven							 {color:orange; }
+.biebindicator.vermist, .biebindicator.uitgeleend	 {color:red; }
 /********************************
  * boek-pagina					*
  ********************************/
 
-.blok {
-	margin-bottom: 20px;
-	clear: left;
-}
-
+.blok {		margin-bottom: 20px; clear: left; }
 .boekgegevens {
 	width: 586px;
 }
 
 /*  Exemplaren */
-.exemplaren {
-	margin-top: 10px;
+.exemplaren {	margin-top:10px;
 	overflow: hidden;
-	min-height: 200px;
-
+	min-height:200px;
 	.exemplaar {
 		overflow: hidden;
 		margin-bottom: 25px;
-
 		.fotolabel {
 			color: white;
 			float: left;
 			width: 75px;
 		}
-
 		form .row {
 			display: block;
 		}
-
 		.gegevensexemplaar {
 			float: left;
 			width: 649px;
 		}
-
 		.actieknoppen .btn {
 			margin-left: 0;
 			margin-right: 4px;
@@ -133,41 +97,27 @@ p.biebuitleg {
 
 		&.compact {
 			margin-left: 77px;
-
 			.statusmarkering {
 				margin-left: -33px;
 				float: left;
 			}
 		}
-
 		&.compact a {
 			margin-right: 5px;
 			float: left;
 		}
 	}
-
-	p {
-		margin-left: 77px;
-	}
+	p {	margin-left: 77px; }
 
 }
 
 /* boekbeschrijvingen */
-.beschrijvingen td.beschrijving {
-	width: 506px;
-	padding: 2px 0 5px 0;
-	word-wrap: break-word;
-}
-
-.beschrijvingen td.beschrijving.b0 {
-	background-color: #f5f5f5;
-}
+.beschrijvingen td.beschrijving {	width: 506px; padding: 2px 0 5px 0; word-wrap: break-word; }
+.beschrijvingen td.beschrijving.b0 {	background-color: #f5f5f5; }
 
 .beschrijvingen td.tussenschot {
 	height: 2px;
-	margin: 0;
-	padding: 0;
-	border: 0;
+	margin: 0; padding: 0; border: 0;
 	background-color: lightgray;
 }
 
@@ -180,7 +130,6 @@ p.biebuitleg {
 	margin-top: 8px;
 	margin-bottom: 1px;
 }
-
 .Formulier .bbcodePreview {
 	word-wrap: break-word;
 }
@@ -188,7 +137,6 @@ p.biebuitleg {
 .beschrijvingen h3 {
 	margin-bottom: 5px;
 }
-
 #Beschrijvingsformulier textarea {
 	width: 496px;
 }
@@ -197,11 +145,10 @@ p.biebuitleg {
 	margin-left: 0;
 	display: inline-block;
 }
-
 #Beschrijvingsformulier label {
 	float: left;
 	width: 109px;
-	height: 20px; /* blijft tekstvak op zijn plek bij waarschuwing*/
+	height: 20px;/* blijft tekstvak op zijn plek bij waarschuwing*/
 	margin: 0;
 }
 

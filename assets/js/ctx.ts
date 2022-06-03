@@ -31,7 +31,7 @@ class Context {
 	}
 
 	public addHandler(selector: string, handler: ContextHandlerFunction) {
-		this.handlers.push({ selector, handler });
+		this.handlers.push({selector, handler});
 	}
 
 	public init(parent: HTMLElement) {
@@ -39,7 +39,7 @@ class Context {
 			throw new Error('Kan geen context initializeren op dit element: ' + parent);
 		}
 
-		for (const { selector, handler } of this.handlers) {
+		for (const {selector, handler} of this.handlers) {
 			if (selector === '') {
 				handler(parent);
 			} else {

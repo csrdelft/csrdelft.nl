@@ -17,11 +17,9 @@ use CsrDelft\view\datatable\Multiplicity;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class GroepLedenTable extends DataTable
-{
+class GroepLedenTable extends DataTable {
 
-	public function __construct(Groep $groep)
-	{
+	public function __construct(Groep $groep) {
 		parent::__construct(GroepLid::class, $groep->getUrl() . '/leden', 'Leden van ' . $groep->naam, 'status');
 
 		$this->addColumn('uid', 'opmerking');

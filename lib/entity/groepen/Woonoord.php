@@ -19,8 +19,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WoonoordenRepository")
  */
-class Woonoord extends Groep implements HeeftSoort
-{
+class Woonoord extends Groep implements HeeftSoort {
 	use GroepMoment;
 
 	/**
@@ -38,8 +37,7 @@ class Woonoord extends Groep implements HeeftSoort
 	 */
 	public $eetplan;
 
-	public function getUrl()
-	{
+	public function getUrl() {
 		return '/groepen/woonoorden/' . $this->id;
 	}
 
@@ -51,8 +49,7 @@ class Woonoord extends Groep implements HeeftSoort
 	 *
 	 * @return boolean
 	 */
-	public function mag($action, $soort = null)
-	{
+	public function mag($action, $soort = null) {
 		switch ($action) {
 
 			case AccessAction::Beheren():
@@ -67,13 +64,11 @@ class Woonoord extends Groep implements HeeftSoort
 		return parent::mag($action);
 	}
 
-	public function getSoort()
-	{
+	public function getSoort() {
 		return $this->huisStatus;
 	}
 
-	public function setSoort($soort)
-	{
+	public function setSoort($soort) {
 		$this->huisStatus = $soort;
 	}
 }

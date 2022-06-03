@@ -24,8 +24,7 @@ use CsrDelft\view\formulier\ModalForm;
  * @author P.W.G. Brussee <brussee@live.nl>
  * @property Groep $model
  */
-class GroepForm extends ModalForm
-{
+class GroepForm extends ModalForm {
 
 	/**
 	 * Aanmaken/Wijzigen
@@ -41,8 +40,7 @@ class GroepForm extends ModalForm
 	 * @param false $nocancel
 	 * @throws \Exception
 	 */
-	public function __construct(Groep $groep, $action, $mode, $nocancel = false)
-	{
+	public function __construct(Groep $groep, $action, $mode, $nocancel = false) {
 		parent::__construct($groep, $action, classNameZonderNamespace(get_class($groep)), true);
 		$this->mode = $mode;
 		if ($groep->id) {
@@ -102,8 +100,7 @@ class GroepForm extends ModalForm
 		$this->formKnoppen = new FormDefaultKnoppen($nocancel ? false : null);
 	}
 
-	public function validate()
-	{
+	public function validate() {
 		/**
 		 * @var Groep $groep
 		 */

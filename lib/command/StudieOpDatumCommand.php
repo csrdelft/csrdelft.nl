@@ -13,26 +13,22 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
-class StudieOpDatumCommand extends Command
-{
+class StudieOpDatumCommand extends Command {
 	private $profielRepository;
 
-	public function __construct(ProfielRepository $profielRepository)
-	{
+	public function __construct(ProfielRepository $profielRepository) {
 		$this->profielRepository = $profielRepository;
 
 		parent::__construct();
 	}
 
-	protected function configure()
-	{
+	protected function configure() {
 		$this
 			->setName('leden:studie:datum')
 			->setDescription('Haal de studies van leden op op een bepaalde datum.');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
-	{
+	protected function execute(InputInterface $input, OutputInterface $output) {
 		$helper = $this->getHelper('question');
 
 		// Bepaal datum
@@ -61,9 +57,7 @@ class StudieOpDatumCommand extends Command
 				$values[$field] = $lid->$field;
 			}
 
-			$logs = array_filter($lid->changelog, function ($a) {
-				return $a instanceof ProfielUpdateLogGroup;
-			});
+			$logs = array_filter($lid->changelog, function($a) { return $a instanceof ProfielUpdateLogGroup; });
 			usort($logs, function (ProfielUpdateLogGroup $a, ProfielUpdateLogGroup $b) {
 				if ($a->timestamp == $b->timestamp) {
 					return 0;

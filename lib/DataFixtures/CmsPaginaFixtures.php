@@ -6,10 +6,8 @@ use CsrDelft\entity\CmsPagina;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class CmsPaginaFixtures extends Fixture
-{
-	public function load(ObjectManager $manager)
-	{
+class CmsPaginaFixtures extends Fixture {
+	public function load(ObjectManager $manager) {
 		$legePagina = new CmsPagina();
 
 		$legePagina->inhoud = '';

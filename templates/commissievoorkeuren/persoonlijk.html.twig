@@ -3,14 +3,13 @@
 {% block content %}
 	<h1>Commissievoorkeuren</h1>
 
-	<p>Maak de Praeses blij en vul uw commissievoorkeuren in! Per commissie kunt u aangeven of u interesse heeft in het
-		doen van deze commissie. Uw keuze wordt automatisch opgeslagen.</p>
+	<p>Maak de Praeses blij en vul uw commissievoorkeuren in! Per commissie kunt u aangeven of u interesse heeft in het doen van deze commissie. Uw keuze wordt automatisch opgeslagen.</p>
 
 	{% set title = "" %}
 	{% for voorkeur in voorkeuren %}
 		{% if voorkeur.categorieNaam != title %}
-			{% set title = voorkeur.categorieNaam %}
-			<h2>{{ title }}</h2>
+		{% set title = voorkeur.categorieNaam %}
+		<h2>{{ title }}</h2>
 		{% endif %}
 		<div class="mb-3">
 			<label class="col-md-3 col-form-label">{{ voorkeur.commissie.naam }}</label>

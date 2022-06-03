@@ -9,7 +9,6 @@ namespace CsrDelft\Component\DataTable;
  * @package CsrDelft\Component\DataTable
  * @see Kernel hier wordt deze interface automatisch getagged met 'csr.table.type'
  */
-interface DataTableTypeInterface
-{
+interface DataTableTypeInterface {
 	public function createDataTable(DataTableBuilder $builder, array $options): void;
 }

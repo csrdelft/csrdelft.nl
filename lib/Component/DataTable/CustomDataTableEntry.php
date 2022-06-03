@@ -9,8 +9,7 @@ namespace CsrDelft\Component\DataTable;
  *
  * @package CsrDelft\common\datatable
  */
-interface CustomDataTableEntry
-{
+interface CustomDataTableEntry {
 	/**
 	 * Velden die de primary key van deze tabel zijn.
 	 *

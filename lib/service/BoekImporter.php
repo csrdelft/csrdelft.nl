@@ -6,10 +6,8 @@ use CsrDelft\entity\bibliotheek\Boek;
 use EasyRdf_Graph;
 use EasyRdf_Resource;
 
-class BoekImporter
-{
-	public function import(Boek $boek)
-	{
+class BoekImporter {
+	public function import(Boek $boek) {
 		$isbn = filter_var($boek->isbn, FILTER_SANITIZE_NUMBER_INT);
 		if (trim($isbn) === '') {
 			return;

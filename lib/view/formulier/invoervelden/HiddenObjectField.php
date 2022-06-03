@@ -7,13 +7,11 @@ namespace CsrDelft\view\formulier\invoervelden;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 
-class HiddenObjectField extends HiddenField
-{
+class HiddenObjectField extends HiddenField {
 
 	private $entityType;
 
-	public function __construct($name, $value, $type)
-	{
+	public function __construct($name, $value, $type) {
 		$entityManager = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 		if ($value) {
 			$metadata = $entityManager->getClassMetadata($type);
@@ -33,8 +31,7 @@ class HiddenObjectField extends HiddenField
 		$this->entityType = $type;
 	}
 
-	public function getFormattedValue()
-	{
+	public function getFormattedValue() {
 		$entityManager = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 		if ($this->getValue()) {
 			return $entityManager->getReference($this->entityType, $this->getValue());

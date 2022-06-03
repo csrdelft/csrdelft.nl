@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package CsrDelft\entity\commissievoorkeuren
  * @ORM\Entity(repositoryClass="CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository")
  */
-class VoorkeurOpmerking
-{
+class VoorkeurOpmerking {
 	/**
 	 * @var string
 	 * @ORM\Column(type="uid")

@@ -5,8 +5,7 @@ namespace CsrDelft\view\ledenmemory;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\View;
 
-class LedenMemoryZijbalkView implements View
-{
+class LedenMemoryZijbalkView implements View {
 
 	private $scores;
 	private $titel;
@@ -14,29 +13,24 @@ class LedenMemoryZijbalkView implements View
 	public function __construct(
 		$scores,
 		$titel
-	)
-	{
+	) {
 		$this->scores = $scores;
 		$this->titel = $titel;
 	}
 
-	public function getTitel()
-	{
+	public function getTitel() {
 		return 'Topscores ' . $this->titel;
 	}
 
-	public function getBreadcrumbs()
-	{
+	public function getBreadcrumbs() {
 		return null;
 	}
 
-	public function getModel()
-	{
+	public function getModel() {
 		return $this->scores;
 	}
 
-	public function __toString()
-	{
+	public function __toString() {
 		$html = '';
 		$html .= '<div id="zijbalk_ledenmemory_topscores"><div class="zijbalk-kopje"><a href="/forum/onderwerp/8017">';
 		$html .= $this->getTitel();

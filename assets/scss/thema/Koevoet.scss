@@ -1,8 +1,8 @@
 @font-face {
-	font-family: "Algol";
+  font-family: "Algol";
 	src: url("../../fonts/Algol.woff") format("woff");
-	font-weight: normal;
-	font-style: normal;
+  font-weight: normal;
+  font-style: normal;
 }
 
 $font-family-base: "Algol";
@@ -67,7 +67,6 @@ h1, a, a:hover,
 .cd-primary-nav > li > a.selected {
 	color: $donkerblauw;
 }
-
 /* Lijntje tussen ongelezen en gelezen berichten */
 #forumtabel tr.ongelezenvanaf td {
 	background-color: $donkerblauw !important;

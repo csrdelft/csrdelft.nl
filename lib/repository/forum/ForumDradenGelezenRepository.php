@@ -21,21 +21,18 @@ use Symfony\Component\Security\Core\Security;
  * @method ForumDraadGelezen[]    findAll()
  * @method ForumDraadGelezen[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ForumDradenGelezenRepository extends AbstractRepository
-{
+class ForumDradenGelezenRepository extends AbstractRepository {
 	/**
 	 * @var Security
 	 */
 	private $security;
 
-	public function __construct(ManagerRegistry $registry, Security $security)
-	{
+	public function __construct(ManagerRegistry $registry, Security $security) {
 		parent::__construct($registry, ForumDraadGelezen::class);
 		$this->security = $security;
 	}
 
-	protected function maakForumDraadGelezen(ForumDraad $draad)
-	{
+	protected function maakForumDraadGelezen(ForumDraad $draad) {
 		$gelezen = new ForumDraadGelezen();
 		$gelezen->draad = $draad;
 		$gelezen->draad_id = $draad->draad_id; // Set pk
@@ -51,8 +48,7 @@ class ForumDradenGelezenRepository extends AbstractRepository
 	 * @param ForumDraad $draad
 	 * @param DateTime $moment
 	 */
-	public function setWanneerGelezenDoorLid(ForumDraad $draad, $moment = null)
-	{
+	public function setWanneerGelezenDoorLid(ForumDraad $draad, $moment = null) {
 		$gelezen = $this->find(['draad_id' => $draad->draad_id, 'uid' => $this->security->getUser()->getUsername()]);
 		if (!$gelezen) {
 			$gelezen = $this->maakForumDraadGelezen($draad);
@@ -73,8 +69,7 @@ class ForumDradenGelezenRepository extends AbstractRepository
 		$this->getEntityManager()->clear();
 	}
 
-	public function verwijderDraadGelezen(array $draadIds)
-	{
+	public function verwijderDraadGelezen(array $draadIds) {
 		$this->createQueryBuilder('fdg')
 			->delete()
 			->where('fdg.draad_id in (:draad_ids)')
@@ -82,8 +77,7 @@ class ForumDradenGelezenRepository extends AbstractRepository
 			->getQuery()->execute();
 	}
 
-	public function verwijderDraadGelezenVoorLeden(array $uids)
-	{
+	public function verwijderDraadGelezenVoorLeden(array $uids) {
 		$this->createQueryBuilder('fdg')
 			->delete()
 			->where('fdg.uid in (:uids)')

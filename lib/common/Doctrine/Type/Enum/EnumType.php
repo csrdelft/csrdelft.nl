@@ -8,14 +8,12 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use InvalidArgumentException;
 
-abstract class EnumType extends Type
-{
+abstract class EnumType extends Type {
 	protected $name;
 
 	abstract public function getEnumClass();
 
-	public function getSQLDeclaration(array $column, AbstractPlatform $platform)
-	{
+	public function getSQLDeclaration(array $column, AbstractPlatform $platform) {
 		$values = array_map(function ($val) {
 			return "'" . $val . "'";
 		}, $this->getEnumClass()::getEnumValues());
@@ -23,8 +21,7 @@ abstract class EnumType extends Type
 		return sprintf('ENUM(%s) COMMENT \'(DC2Type:%s)\'', implode(", ", $values), $this->getName());
 	}
 
-	public function convertToPHPValue($value, AbstractPlatform $platform)
-	{
+	public function convertToPHPValue($value, AbstractPlatform $platform) {
 		if ($value == null) {
 			return null;
 		}
@@ -33,8 +30,7 @@ abstract class EnumType extends Type
 		return $enumClass::from($value);
 	}
 
-	public function convertToDatabaseValue($value, AbstractPlatform $platform)
-	{
+	public function convertToDatabaseValue($value, AbstractPlatform $platform) {
 		$enumClass = $this->getEnumClass();
 		if ($value instanceof $enumClass) {
 			return $value->getValue();
@@ -43,8 +39,7 @@ abstract class EnumType extends Type
 		}
 	}
 
-	public function requiresSQLCommentHint(AbstractPlatform $platform)
-	{
+	public function requiresSQLCommentHint(AbstractPlatform $platform) {
 		return true;
 	}
 }

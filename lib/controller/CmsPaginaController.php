@@ -21,13 +21,11 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Controller van cms paginas.
  */
-class CmsPaginaController extends AbstractController
-{
+class CmsPaginaController extends AbstractController {
 	/** @var CmsPaginaRepository */
 	private $cmsPaginaRepository;
 
-	public function __construct(CmsPaginaRepository $cmsPaginaRepository)
-	{
+	public function __construct(CmsPaginaRepository $cmsPaginaRepository) {
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 

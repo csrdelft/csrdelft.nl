@@ -9,8 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\SavedQueryRepository")
  * @ORM\Table("savedquery")
  */
-class SavedQuery
-{
+class SavedQuery {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -39,8 +38,7 @@ class SavedQuery
 	 */
 	public $categorie;
 
-	public function magBekijken()
-	{
+	public function magBekijken() {
 		return LoginService::mag($this->permissie) || LoginService::mag(P_ADMIN);
 	}
 }

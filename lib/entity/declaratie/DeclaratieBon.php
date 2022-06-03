@@ -73,8 +73,7 @@ class DeclaratieBon
 		return $this;
 	}
 
-	public function isPDF(): bool
-	{
+	public function isPDF(): bool {
 		return str_ends_with(strtolower($this->getBestand()), '.pdf');
 	}
 

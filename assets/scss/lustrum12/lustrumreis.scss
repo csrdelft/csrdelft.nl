@@ -15,17 +15,14 @@ body {
 	background-color: $background-color;
 	color: $text-color;
 }
-
 h1, h2 {
 	color: $secondary-color;
 	text-align: center;
 	font-family: $font-text;
 }
-
 .line {
 	color: $primary-color;
 }
-
 h3, h4 {
 	color: black;
 	text-align: center;
@@ -34,17 +31,14 @@ h3, h4 {
 
 nav {
 	background-color: $primary-color;
-
 	a {
 		color: $background-color;
 		text-transform: uppercase;
 	}
-
 	a:hover {
 		color: $secondary-color;
 	}
 }
-
 .informatie {
 	align-items: center;
 	text-align: center;
@@ -58,21 +52,17 @@ nav {
 
 	padding-top: 90px;
 	padding-bottom: 40px;
-
 	h1, h2, h3, h4 {
 		color: white;
 		font-family: $font-text;
 	}
-
 	h1 {
 		font-size: 4.0rem;
 		text-transform: none;
 	}
-
 	h2 {
 		font-size: 2.5rem;
 		text-transform: uppercase;
-
 		h3, h4 {
 			text-transform: uppercase;
 		}
@@ -81,7 +71,6 @@ nav {
 
 .programma {
 	padding-top: 30px;
-
 	.dag {
 		//background: $kleur-rood;
 		//padding: 15px;
@@ -91,27 +80,24 @@ nav {
 			color: $primary-color;
 			font-family: $font-header;
 		}
-
 		.datum {
 			font-size: 1.5rem;
 			color: $secondary-color;
 
 		}
-
 		.beschrijving {
 
 		}
-
 		img {
 			border-radius: 5px;
 			width: 100%
 		}
 	}
-
 	img {
 		max-width: 100%;
 	}
 }
+
 
 
 .header {
@@ -131,13 +117,12 @@ h1.header {
 	h1.header {
 		padding-bottom: 0;
 	}
-
 	h3.header {
 		padding-top: 10px;
 	}
 }
 
-/* Ketzers */
+	/* Ketzers */
 .ketzers {
 	padding-top: 50px;
 	align-items: center;
@@ -164,32 +149,26 @@ h1.header {
 			background-color: $lightgray-transparant;
 		}
 	}
-
 	// Knopjes
 	.btn {
-		color: $primary-color;
+			color: $primary-color;
 	}
-
 	// Geselecteerde knopjes
 	.btn-primary {
 		background-color: $lightgray-transparant;
 		border-color: $lightgray-transparant;
 	}
-
 	// Speciale tekst (lees meer, eerste kolom namen overview)
 	a:not(.btn) {
 		color: $primary-color;
 	}
-
 	.dropdown-menu {
 		background-color: $lightgray-transparant;
 	}
-
 	a[id*="groep-lid-remove"] {
 		color: $primary-color;
 		background-color: transparent;
 	}
-
 	// Titel
 	h3 {
 		color: $primary-color;
@@ -198,24 +177,20 @@ h1.header {
 		text-transform: uppercase;
 		font-size: 2.0rem;
 	}
-
 	h4 {
 		color: $primary-color;
 		font-family: $font-header;
 		text-transform: uppercase;
 	}
-
 	.GroepStatistiekView {
 		background-color: transparent;
 		color: $primary-color;
 		padding: 20px;
 		border-radius: 25px;
 	}
-
 	.progress-bar {
 		background-color: $secondary-color;
 	}
-
 	.GroupAanmeldenForm {
 		input.FormElement {
 			background-color: $lightgray-transparant;

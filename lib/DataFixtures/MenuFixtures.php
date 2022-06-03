@@ -6,10 +6,8 @@ use CsrDelft\entity\MenuItem;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class MenuFixtures extends Fixture
-{
-	public function load(ObjectManager $manager)
-	{
+class MenuFixtures extends Fixture {
+	public function load(ObjectManager $manager) {
 		$mainMenuItem = $this->nieuwMenuItem(null, 0, 'main', '/', true, P_PUBLIC);
 		$manager->persist($mainMenuItem);
 
@@ -22,8 +20,7 @@ class MenuFixtures extends Fixture
 		$manager->flush();
 	}
 
-	private function nieuwMenuItem($parent, $volgorde, $tekst, $link, $zichtbaar, $rechten_bekijken)
-	{
+	private function nieuwMenuItem($parent, $volgorde, $tekst, $link, $zichtbaar, $rechten_bekijken) {
 		$menuItem = new MenuItem();
 		$menuItem->parent = $parent;
 		$menuItem->volgorde = $volgorde;

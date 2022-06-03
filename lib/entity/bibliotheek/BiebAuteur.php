@@ -12,8 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table("biebauteur")
  */
-class BiebAuteur
-{
+class BiebAuteur {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")

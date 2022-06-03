@@ -6,11 +6,11 @@ interface Token {
 }
 
 function getCsrfHeaders(): Token {
-	const idMetaTag = document.querySelector<HTMLMetaElement>("meta[property='X-CSRF-ID']");
-	const valueMetaTag = document.querySelector<HTMLMetaElement>("meta[property='X-CSRF-VALUE']");
+	const idMetaTag = document.querySelector<HTMLMetaElement>('meta[property=\'X-CSRF-ID\']')
+	const valueMetaTag = document.querySelector<HTMLMetaElement>('meta[property=\'X-CSRF-VALUE\']');
 
 	if (!idMetaTag || !valueMetaTag) {
-		throw new Error('Geen CSRF meta tag gevonden');
+		throw new Error("Geen CSRF meta tag gevonden")
 	}
 
 	return {
@@ -30,20 +30,17 @@ if (window.$) {
 	});
 }
 
-const backupFetch = window.fetch;
-window.fetch = (input: RequestInfo, init: RequestInit = {}): Promise<Response> =>
-	backupFetch(input, {
-		...init,
-		headers: {
-			...init.headers,
-			...getCsrfHeaders(),
-		},
-	});
+const backupFetch = window.fetch
+window.fetch = (input: RequestInfo, init: RequestInit = {}): Promise<Response> => backupFetch(input, {
+	...init,
+	headers: {
+		...init.headers,
+		...getCsrfHeaders(),
+	}
+})
 
 axios.interceptors.request.use((config) => {
-	if (!config.url) {
-		return config;
-	}
+	if (!config.url) { return config; }
 
 	if (config.url.startsWith(window.location.origin) || config.url.startsWith('/')) {
 		return {

@@ -1,39 +1,37 @@
 @mixin fade-in($duration, $translate, $filter) {
-	transition: opacity $duration ease, transform $duration ease, filter $duration/2 ease;
-	transform: none;
-	transition-delay: 0s;
+  transition: opacity $duration ease, transform $duration ease, filter $duration/2 ease;
+  transform: none;
+  transition-delay: 0s;
 
-	body.is-loading & {
-		opacity: 0;
-		transform: $translate;
-		filter: $filter;
-	}
+  body.is-loading & {
+    opacity: 0;
+    transform: $translate;
+    filter: $filter;
+  }
 }
 
 #banner img {
-	@include fade-in(1s, translateY(40px), blur(10px));
+  @include fade-in(1s, translateY(40px), blur(10px));
 }
 
 #banner-small img {
-	@include fade-in(1s, translateY(20px), blur(10px));
+  @include fade-in(1s, translateY(20px), blur(10px));
 }
 
 .wrapper:not(.alt) {
-	img {
-		@include fade-in(0.5s, translateX(2em) scale(0.1), blur(2px));
-	}
-
-	.inner {
-		@include fade-in(0.5s, translateX(-2em), blur(2px));
-	}
+  img {
+    @include fade-in(0.5s, translateX(2em) scale(0.1), blur(2px));
+  }
+  .inner {
+    @include fade-in(0.5s, translateX(-2em), blur(2px));
+  }
 }
 
 .wrapper.alt {
-	img {
-		@include fade-in(0.5s, translateX(-2em) scale(0.1), blur(2px))
-	}
-
-	.inner {
-		@include fade-in(0.5s, translateX(2em), blur(2px))
-	}
+  img {
+    @include fade-in(0.5s, translateX(-2em) scale(0.1), blur(2px))
+  }
+  .inner {
+    @include fade-in(0.5s, translateX(2em), blur(2px))
+  }
 }

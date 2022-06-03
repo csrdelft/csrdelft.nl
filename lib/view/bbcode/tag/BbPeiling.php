@@ -18,8 +18,7 @@ use Twig\Environment;
  * @example [peiling=2]
  * @example [peiling]2[/peiling]
  */
-class BbPeiling extends BbTag
-{
+class BbPeiling extends BbTag {
 
 	/**
 	 * @var Peiling
@@ -42,31 +41,26 @@ class BbPeiling extends BbTag
 	 */
 	private $id;
 
-	public function __construct(SerializerInterface $serializer, PeilingenRepository $peilingenRepository, Environment $twig)
-	{
+	public function __construct(SerializerInterface $serializer, PeilingenRepository $peilingenRepository, Environment $twig) {
 		$this->serializer = $serializer;
 		$this->peilingenRepository = $peilingenRepository;
 		$this->twig = $twig;
 	}
 
-	public static function getTagName()
-	{
+	public static function getTagName() {
 		return 'peiling';
 	}
-
 	public function isAllowed()
 	{
 		return $this->peiling->magBekijken();
 	}
 
-	public function renderLight()
-	{
+	public function renderLight() {
 		$url = '#/peiling/' . urlencode($this->id);
 		return BbHelper::lightLinkBlock('peiling', $url, $this->peiling->titel, $this->peiling->beschrijving);
 	}
 
-	public function render()
-	{
+	public function render() {
 		return $this->twig->render('peilingen/peiling.html.twig', [
 			'peiling' => $this->serializer->serialize($this->peiling, 'json', ['groups' => 'vue']),
 		]);
@@ -77,8 +71,7 @@ class BbPeiling extends BbTag
 	 * @return Peiling
 	 * @throws BbException
 	 */
-	private function getPeiling($peiling_id): Peiling
-	{
+	private function getPeiling($peiling_id): Peiling {
 		$peiling = $this->peilingenRepository->getPeilingById($peiling_id);
 		if (!$peiling) {
 			throw new BbException('[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')');
@@ -97,8 +90,7 @@ class BbPeiling extends BbTag
 		$this->peiling = $this->getPeiling($this->id);
 	}
 
-	public function getId()
-	{
+	public function getId() {
 		return $this->id;
 	}
 }

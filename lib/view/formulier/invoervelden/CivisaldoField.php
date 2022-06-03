@@ -11,24 +11,21 @@ use CsrDelft\service\ProfielService;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class CivisaldoField extends AutocompleteField
-{
+class CivisaldoField extends AutocompleteField {
 
 	protected $fieldClassName = 'col-sm-5';
 
 	private $zoekin;
 
-	public function __construct($name, $value, $description)
-	{
+	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
 		$this->zoekin = 'civisaldo';
 		$this->suggestions[ucfirst($this->zoekin)] = '/fiscaat/saldo/zoek?q=';
 	}
 
-	public function getValue()
-	{
+	public function getValue() {
 		$this->value = parent::getValue();
-		if ($this->empty_null and empty($this->value)) {
+		if ($this->empty_null AND empty($this->value)) {
 			return null;
 		}
 		if (!AccountRepository::isValidUid($this->value)) {
@@ -41,8 +38,7 @@ class CivisaldoField extends AutocompleteField
 		return $this->value;
 	}
 
-	public function validate()
-	{
+	public function validate() {
 		if (!parent::validate()) {
 			return false;
 		}
@@ -52,20 +48,18 @@ class CivisaldoField extends AutocompleteField
 		}
 		$value = parent::getValue();
 		// geldig uid?
-		if (AccountRepository::isValidUid($value) and ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->existsByUid($value)) {
+		if (AccountRepository::isValidUid($value) AND ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->existsByUid($value)) {
 			return true;
 		}
 		$this->error = 'Geen geldig lid';
 		return $this->error === '';
 	}
 
-	public function getPreviewDiv()
-	{
+	public function getPreviewDiv() {
 		return '<div class="col-md-4 col-form-label" id="lidPreview_' . $this->getId() . '"></div>';
 	}
 
-	public function getJavascript()
-	{
+	public function getJavascript() {
 		return /** @lang JavaScript */
 			parent::getJavascript() . <<<JS
 $('#{$this->getId()}').on('typeahead:select', function (event, suggestion) {

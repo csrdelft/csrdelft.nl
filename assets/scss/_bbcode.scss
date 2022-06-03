@@ -7,50 +7,50 @@ $bb-alt-bg: #E9E9E9 !default;
 $bb-hover-bg: #DDEEFF !default;
 
 .bb-block {
-	padding: 8px 12px;
-	margin: 10px 0;
-	background-color: $bb-block-bg;
-	box-shadow: 0 0 10px darken($bb-block-bg, 5%);
-	transition: box-shadow .4s ease-out;
+  padding: 8px 12px;
+  margin: 10px 0;
+  background-color: $bb-block-bg;
+  box-shadow: 0 0 10px darken($bb-block-bg, 5%);
+  transition: box-shadow .4s ease-out;
 }
 
 .bb-block:hover {
-	box-shadow: 0 0 10px $bb-block-bg;
+  box-shadow: 0 0 10px $bb-block-bg;
 }
 
 .bb-block h3 {
-	margin: 0.5em 0 1em 0;
+  margin: 0.5em 0 1em 0;
 }
 
 .bb-block hr {
-	background-color: #ccc;
-	border-bottom: 1px solid #fff;
+  background-color: #ccc;
+  border-bottom: 1px solid #fff;
 }
 
 /* ketzerception */
 .bb-block .bb-block {
-	padding: 0;
-	margin: 0;
-	box-shadow: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
 }
 
 .bb-block .bb-block .groep-tabs {
-	visibility: hidden;
+  visibility: hidden;
 }
 
 .bbcodePreview {
-	display: none;
-	margin: 7px 0;
-	border: 1px solid #ccc;
-	padding: .2em .6em 10px;
-	text-align: justify;
+  display: none;
+  margin: 7px 0;
+  border: 1px solid #ccc;
+  padding: .2em .6em 10px;
+  text-align: justify;
 	margin-top: 2em;
 
-	&::after {
-		content: "";
-		display: block;
-		clear: both;
-	}
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
 
 	&::before {
 		content: "Voorbeeld";
@@ -65,27 +65,27 @@ $bb-hover-bg: #DDEEFF !default;
 }
 
 .bbcodePreview, .bbcodePreview div, .Formulier .bbcodePreview {
-	line-height: inherit;
+  line-height: inherit;
 }
 
 .offtopic {
-	font-size: .9em;
-	line-height: 1em;
-	color: #bbb;
+  font-size: .9em;
+  line-height: 1em;
+  color: #bbb;
 }
 
 .offtopic a {
-	color: #bbb;
+  color: #bbb;
 }
 
 .offtopic hr {
-	text-align: left;
-	background-color: #bbb;
+  text-align: left;
+  background-color: #bbb;
 }
 
 .offtopic img {
-	opacity: 0.3;
-	filter: alpha(opacity=30);
+  opacity: 0.3;
+  filter: alpha(opacity=30);
 }
 
 .bb-prive {
@@ -93,45 +93,45 @@ $bb-hover-bg: #DDEEFF !default;
 }
 
 .bb-maaltijd {
-	overflow: auto;
+  overflow: auto;
 }
 
 .bb-maaltijd .titel {
-	font-size: 1.1em;
-	font-weight: bold;
+  font-size: 1.1em;
+  font-weight: bold;
 }
 
 .bb-maaltijd {
-	line-height: 2em;
+  line-height: 2em;
 }
 
 .bb-maaltijd .aanmelddata {
-	text-align: center;
-	float: right;
-	padding: 5px 15px 10px 15px;
-	margin: 10px;
+  text-align: center;
+  float: right;
+  padding: 5px 15px 10px 15px;
+  margin: 10px;
 }
 
 div.maaltijd-aangemeld {
-	background-image: -webkit-linear-gradient(top, #5cb85c 0, #077b4e 100%);
-	background-image: -o-linear-gradient(top, #5cb85c 0, #077b4e 100%);
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#5cb85c), to(#077b4e));
-	background-image: linear-gradient(to bottom, #5cb85c 0, #077b4e 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c', endColorstr='#ff077b4e', GradientType=0);
-	background-repeat: repeat-x;
-	color: white;
-	font-weight: bold;
+  background-image: -webkit-linear-gradient(top, #5cb85c 0, #077b4e 100%);
+  background-image: -o-linear-gradient(top, #5cb85c 0, #077b4e 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#5cb85c), to(#077b4e));
+  background-image: linear-gradient(to bottom, #5cb85c 0, #077b4e 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c', endColorstr='#ff077b4e', GradientType=0);
+  background-repeat: repeat-x;
+  color: white;
+  font-weight: bold;
 }
 
 div.maaltijd-afgemeld {
-	background-image: -webkit-linear-gradient(top, #d9534f 0, #7c2507 100%);
-	background-image: -o-linear-gradient(top, #d9534f 0, #7c2507 100%);
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#d9534f), to(#7c2507));
-	background-image: linear-gradient(to bottom, #d9534f 0, #7c2507 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f', endColorstr='#ff7c2507', GradientType=0);
-	background-repeat: repeat-x;
-	color: white;
-	font-weight: bold;
+  background-image: -webkit-linear-gradient(top, #d9534f 0, #7c2507 100%);
+  background-image: -o-linear-gradient(top, #d9534f 0, #7c2507 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#d9534f), to(#7c2507));
+  background-image: linear-gradient(to bottom, #d9534f 0, #7c2507 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f', endColorstr='#ff7c2507', GradientType=0);
+  background-repeat: repeat-x;
+  color: white;
+  font-weight: bold;
 }
 
 span.beoordeling-label {
@@ -146,28 +146,28 @@ span.beoordeling-label {
 }
 
 a.maaltijd-aangemeld, span.maaltijd-aangemeld {
-	font-weight: bold;
-	color: green;
-	background-color: #f5f5f5;
-	border: 1px solid #a9a9a9;
-	text-shadow: none;
-	background-image: none;
+  font-weight: bold;
+  color: green;
+  background-color: #f5f5f5;
+  border: 1px solid #a9a9a9;
+  text-shadow: none;
+  background-image: none;
 }
 
 a.maaltijd-afgemeld, span.maaltijd-afgemeld {
-	font-weight: bold;
-	color: red;
-	background-color: #f5f5f5;
-	border: 1px solid #a9a9a9;
-	text-shadow: none;
-	background-image: none;
+  font-weight: bold;
+  color: red;
+  background-color: #f5f5f5;
+  border: 1px solid #a9a9a9;
+  text-shadow: none;
+  background-image: none;
 }
 
 .bb-gmap {
-	width: 300px;
-	height: 200px;
-	border: 1px solid darkgrey;
-	margin: 2px;
+  width: 300px;
+  height: 200px;
+  border: 1px solid darkgrey;
+  margin: 2px;
 }
 
 /* --------------------------------
@@ -176,36 +176,34 @@ Groepen
 
 -------------------------------- */
 .groep-samenvatting {
-	padding-right: 2em;
-	line-height: 1.5em;
-	text-align: justify;
+  padding-right: 2em;
+  line-height: 1.5em;
+  text-align: justify;
 }
 
 .groep-id-hint {
-	color: #999999;
-
-	a {
-		color: inherit;
-	}
+  color: #999999;
+  a {
+    color: inherit;
+  }
 }
 
 .groep-leden {
 
-	.groep-tab-content {
+  .groep-tab-content {
 		height: 200px;
-		overflow: hidden auto;
-	}
-
-	.groep-tab-content.GroepPasfotosView {
-		min-height: 74px;
-	}
+    overflow: hidden auto;
+  }
+  .groep-tab-content.GroepPasfotosView {
+    min-height: 74px;
+  }
 }
 
 .GroepAanmeldenForm.pasfotos {
 
-	span.twitter-typeahead {
-		display: none !important;
-	}
+  span.twitter-typeahead {
+    display: none !important;
+  }
 }
 
 .groep-tabs {
@@ -220,264 +218,263 @@ Groepen
 		margin-left: auto;
 	}
 
-	li {
-		display: inline-block;
+  li {
+    display: inline-block;
 
-		span.fa {
-			font-size: 1.1em;
-		}
-	}
+    span.fa {
+      font-size: 1.1em;
+    }
+  }
 }
 
 .bb-groep {
-	display: flex;
+  display: flex;
 
-	.groep-leden {
-		flex-basis: 55%;
-	}
+  .groep-leden {
+    flex-basis: 55%;
+  }
 
-	.groep-samenvatting {
-		flex-basis: 45%;
-	}
+  .groep-samenvatting {
+    flex-basis: 45%;
+  }
 }
 
 .bb-groep.state-geschiedenis {
 
-	.groep-tabs {
+  .groep-tabs {
 
-		.geschiedenis {
-			display: none;
-		}
-	}
+    .geschiedenis {
+      display: none;
+    }
+  }
 }
 
 table.groep-lijst {
-	width: 100%;
+  width: 100%;
 
-	td {
-		width: 50%;
-		vertical-align: top !important;
-	}
+  td {
+    width: 50%;
+    vertical-align: top !important;
+  }
 
-	tr:nth-child(even) {
-		background-color: $bb-alt-bg;
-	}
-
-	tr:hover {
-		background-color: $bb-hover-bg;
-	}
+  tr:nth-child(even) {
+    background-color: $bb-alt-bg;
+  }
+  tr:hover {
+    background-color: $bb-hover-bg;
+  }
 }
 
 .pie-chart-label {
-	color: white;
-	text-align: center;
+  color: white;
+  text-align: center;
 }
 
 .bb-document {
-	padding: 4px 6px;
-	display: block;
-	text-align: left;
+  padding: 4px 6px;
+  display: block;
+  text-align: left;
 }
 
 .bb-document .size {
-	float: right;
-	color: #777;
+  float: right;
+  color: #777;
 }
 
 .bb-document .download {
-	float: right;
-	margin-right: 5px;
+  float: right;
+  margin-right: 5px;
 }
 
 .bb-document .download .module-icon {
-	position: initial;
-	top: initial;
+  position: initial;
+  top: initial;
 }
 
 .bb-document .icon {
-	float: left;
-	margin-right: 5px;
+  float: left;
+  margin-right: 5px;
 }
 
 .bb-boek {
-	padding: 4px 6px;
-	display: block;
-	text-align: left;
-	text-decoration: none !important;
+  padding: 4px 6px;
+  display: block;
+  text-align: left;
+  text-decoration: none !important;
 }
 
 .bb-boek .auteur {
-	color: #777;
-	margin-left: 10px;
+  color: #777;
+  margin-left: 10px;
 }
 
 .bb-boek .titel:hover {
-	color: #0a338d;
-	text-decoration: underline;
+  color: #0a338d;
+  text-decoration: underline;
 }
 
 .bb-boek .icon {
-	float: left;
-	padding-right: 5px;
+  float: left;
+  padding-right: 5px;
 }
 
 .boekindicator {
-	margin-right: 5px;
+  margin-right: 5px;
 }
 
 .boekindicator.beschikbaar {
-	color: green;
+  color: green;
 }
 
 .boekindicator.teruggegeven {
-	color: orange;
+  color: orange;
 }
 
 .boekindicator.geen {
-	color: red;
+  color: red;
 }
 
 pre.bbcode {
-	font-family: monospace;
-	background-color: $bb-block-bg;
-	margin-top: 4px;
-	border-top: 2px solid #bbb;
-	border-bottom: 2px solid #bbb;
-	max-width: 570px;
-	max-height: 360px;
-	white-space: pre-wrap;
-	overflow-y: auto;
+  font-family: monospace;
+  background-color: $bb-block-bg;
+  margin-top: 4px;
+  border-top: 2px solid #bbb;
+  border-bottom: 2px solid #bbb;
+  max-width: 570px;
+  max-height: 360px;
+  white-space: pre-wrap;
+  overflow-y: auto;
 }
 
 .bb-peiling {
-	margin: 10px;
-	padding: 5px 10px;
+  margin: 10px;
+  padding: 5px 10px;
 }
 
 .bb-peiling .totaal {
-	float: right;
-	color: #666;
-	padding-left: 20px;
+  float: right;
+  color: #666;
+  padding-left: 20px;
 }
 
 .bb-peiling ul {
-	list-style-type: none;
-	padding: 5px;
+  list-style-type: none;
+  padding: 5px;
 }
 
 .bb-peiling ul li {
-	overflow: auto;
-	border-bottom: 1px solid #eee;
-	margin-left: 0;
-	clear: both;
-	padding: 4px;
+  overflow: auto;
+  border-bottom: 1px solid #eee;
+  margin-left: 0;
+  clear: both;
+  padding: 4px;
 }
 
 
 .bb-peiling ul li .stemmen {
-	float: right;
-	color: #666;
-	width: 30px;
-	text-align: right;
+  float: right;
+  color: #666;
+  width: 30px;
+  text-align: right;
 }
 
 .bb-peiling ul li .percentage {
-	float: right;
-	color: #666;
-	width: 50px;
-	text-align: right;
+  float: right;
+  color: #666;
+  width: 50px;
+  text-align: right;
 }
 
 .bb-peiling .vraag {
-	margin: 10px 0;
+  margin: 10px 0;
 }
 
 .bb-peiling .optie {
-	float: left;
-	width: 300px;
-	vertical-align: middle;
-	min-height: 18px;
+  float: left;
+  width: 300px;
+  vertical-align: middle;
+  min-height: 18px;
 }
 
 .bb-peiling .grafisch {
-	float: right;
-	width: 300px;
-	vertical-align: top;
-	padding: 4px;
+  float: right;
+  width: 300px;
+  vertical-align: top;
+  padding: 4px;
 }
 
 .bb-peiling .balk {
-	height: 10px;
-	background-color: #6060FF;
-	border: 1px outset #0a338d;
-	float: right;
+  height: 10px;
+  background-color: #6060FF;
+  border: 1px outset #0a338d;
+  float: right;
 }
 
 .bb-table {
-	padding: 0;
-	border-collapse: collapse;
+  padding: 0;
+  border-collapse: collapse;
 }
 
 .bb-table tr {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .bb-table td, .bb-table th {
-	margin: 0;
-	padding: 2px;
+  margin: 0;
+  padding: 2px;
 }
 
 .bb-fotoalbum img.compact {
-	float: right;
-	width: 50px;
-	margin-top: -1em;
+  float: right;
+  width: 50px;
+  margin-top: -1em;
 }
 
 .bb-fotoalbum .images {
-	margin-top: 6px;
-	position: relative;
+  margin-top: 6px;
+  position: relative;
 }
 
 .bb-fotoalbum .images a {
-	position: absolute;
+  position: absolute;
 }
 
 .bb-fotoalbum .images a.sml img {
-	width: 75px;
-	height: 75px;
+  width: 75px;
+  height: 75px;
 }
 
 .bb-fotoalbum .images a.big img {
-	width: 151px;
-	height: 151px;
+  width: 151px;
+  height: 151px;
 }
 
 .bb-fotoalbum .images a {
-	-webkit-transition: opacity .4s ease-out;
-	-moz-transition: opacity .4s ease-out;
-	-o-transition: opacity .4s ease-out;
-	transition: opacity .4s ease-out;
+  -webkit-transition: opacity .4s ease-out;
+  -moz-transition: opacity .4s ease-out;
+  -o-transition: opacity .4s ease-out;
+  transition: opacity .4s ease-out;
 }
 
 .bb-fotoalbum .images:hover a {
-	opacity: 0.8;
+  opacity: 0.8;
 }
 
 .bb-fotoalbum .images:hover a:hover {
-	opacity: 1;
+  opacity: 1;
 }
 
 .spoiler {
-	display: block;
+  display: block;
 }
 
 .spoiler-content {
-	display: none;
+  display: none;
 }
 
 .citaatpuntjes {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .citaat, blockquote {
@@ -485,7 +482,6 @@ pre.bbcode {
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;
 	position: relative;
-
 	&::before {
 		background: #d3d3d3;
 		top: 0;
@@ -499,33 +495,33 @@ pre.bbcode {
 }
 
 .bb-img-loading {
-	max-width: 570px;
-	min-width: 16px;
-	min-height: 11px;
-	background: url('../images/loading-fb.gif') no-repeat bottom left;
+  max-width: 570px;
+  min-width: 16px;
+  min-height: 11px;
+  background: url('../images/loading-fb.gif') no-repeat bottom left;
 }
 
 .bb-img {
-	max-width: 100%;
-	border: 0;
+  max-width: 100%;
+  border: 0;
 	display: block;
 }
 
 a.responsive {
-	width: 100%;
+  width: 100%;
 
-	img.bb-img {
-		width: inherit;
-	}
+  img.bb-img {
+    width: inherit;
+  }
 }
 
 /* zorg dat de plaatjes ook in citaten niet te breed worden */
 .citaatContainer .citaat img.bb-img {
-	max-width: 540px;
+  max-width: 540px;
 }
 
 .citaatContainer .citaat .citaatContainer .citaat img.bb-img {
-	max-width: 510px;
+  max-width: 510px;
 }
 
 a[href].lightbox-link { // Override externe link style
@@ -542,54 +538,51 @@ a[href].lightbox-link { // Override externe link style
 }
 
 .bb-slider img {
-	object-fit: cover;
-	height: 360px;
-	width: 100%;
+  object-fit: cover;
+  height: 360px;
+  width: 100%;
 }
 
 @media screen and (max-width: 960px) {
-	.bb-groep {
-		flex-direction: column;
-
-		.groep-samenvatting {
-			padding-left: 0;
-			padding-bottom: 1em;
-		}
-
-		.groep-leden {
-			width: auto;
-		}
-	}
+  .bb-groep {
+    flex-direction: column;
+    .groep-samenvatting {
+      padding-left: 0;
+      padding-bottom: 1em;
+    }
+    .groep-leden {
+      width: auto;
+    }
+  }
 }
 
 /*
 Speciale styling voor speciale maaltijdsoorten
 */
 .bb-maaltijd[data-maaltijdnaam='Verticalekring Primitus'] {
-	background-color: #00541b;
-	background-image: url("https://csrdelft.nl/plaetjes/maaltijdstijlen/rand.png");
-	border: solid 10px #030;
-	border-image: url("https://csrdelft.nl/plaetjes/maaltijdstijlen/rand.png") 50;
-	color: #cfc;
+  background-color: #00541b;
+  background-image: url("https://csrdelft.nl/plaetjes/maaltijdstijlen/rand.png");
+  border: solid 10px #030;
+  border-image: url("https://csrdelft.nl/plaetjes/maaltijdstijlen/rand.png") 50;
+  color: #cfc;
 
-	.titel a {
-		color: white;
-	}
-
-	@media screen and (min-width: 500px) and (max-width: 767px), screen and (min-width: 1150px) {
-		&::after {
-			background: url("https://csrdelft.nl/plaetjes/maaltijdstijlen/primituslogo.png") no-repeat;
-			height: 80px;
-			width: 54px;
-			content: "";
-			display: block;
-			float: right;
-			margin: -68px 20px;
-		}
-	}
-	padding: 8px 2px 8px 12px;
-	position: relative;
-	overflow: hidden;
+  .titel a {
+    color: white;
+  }
+  @media screen and (min-width: 500px) and (max-width: 767px), screen and (min-width: 1150px) {
+    &::after {
+      background: url("https://csrdelft.nl/plaetjes/maaltijdstijlen/primituslogo.png") no-repeat;
+      height: 80px;
+      width: 54px;
+      content: "";
+      display: block;
+      float: right;
+      margin: -68px 20px;
+    }
+  }
+  padding: 8px 2px 8px 12px;
+  position: relative;
+  overflow: hidden;
 }
 
 /**
@@ -641,6 +634,5 @@ Voor de /bio pagina
 		text-decoration: none;
 		color: inherit;
 	}
-
 	color: inherit;
 }

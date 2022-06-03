@@ -22,8 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 27/04/2018
  */
-class ToestemmingController extends AbstractController
-{
+class ToestemmingController extends AbstractController {
 	/**
 	 * @var LidToestemmingRepository
 	 */
@@ -33,8 +32,7 @@ class ToestemmingController extends AbstractController
 	 */
 	private $cmsPaginaRepository;
 
-	public function __construct(LidToestemmingRepository $lidToestemmingRepository, CmsPaginaRepository $cmsPaginaRepository)
-	{
+	public function __construct(LidToestemmingRepository $lidToestemmingRepository, CmsPaginaRepository $cmsPaginaRepository) {
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
@@ -44,8 +42,7 @@ class ToestemmingController extends AbstractController
 	 * @Route("/toestemming", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function POST_overzicht()
-	{
+	public function POST_overzicht() {
 		$form = new ToestemmingModalForm($this->lidToestemmingRepository);
 
 		if ($form->isPosted() && $form->validate()) {
@@ -103,8 +100,7 @@ class ToestemmingController extends AbstractController
 	 * @Auth({P_LEDEN_MOD,P_ALBUM_MOD,"commissie:promocie:ht"})
 	 * @throws Exception
 	 */
-	public function lijst(Request $request)
-	{
+	public function lijst(Request $request) {
 		if (LoginService::mag(P_LEDEN_MOD)) {
 			$ids = ['foto_intern', 'foto_extern', 'vereniging', 'bijzonder'];
 		} else if (LoginService::mag(P_ALBUM_MOD)) {

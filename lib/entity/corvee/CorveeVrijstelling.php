@@ -20,8 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeVrijstellingenRepository")
  * @ORM\Table("crv_vrijstellingen")
  */
-class CorveeVrijstelling
-{
+class CorveeVrijstelling {
 	/**
 	 * @var string
 	 * @ORM\Column(type="uid")
@@ -52,14 +51,12 @@ class CorveeVrijstelling
 	 */
 	public $profiel;
 
-	public function setProfiel($profiel)
-	{
+	public function setProfiel($profiel) {
 		$this->profiel = $profiel;
 		$this->uid = $profiel->uid ?? null;
 	}
 
-	public function getPunten()
-	{
+	public function getPunten() {
 		return (int)ceil($this->percentage * intval(instelling('corvee', 'punten_per_jaar')) / 100);
 	}
 }

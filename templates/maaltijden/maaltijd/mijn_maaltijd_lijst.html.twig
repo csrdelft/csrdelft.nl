@@ -87,10 +87,9 @@
 								<a class="btn">{{ icon("comment_add", null, "Gasten allergie/diëet") }}</a>
 							{% endif %}
 						</div>
-						<form
-							action="{{ url('csrdelft_maalcie_mijnmaaltijden_opmerking_mijn', {maaltijd_id: maaltijd.maaltijd_id}) }}"
-							method="post"
-							class="Formulier InlineForm ToggleForm">
+						<form action="{{ url('csrdelft_maalcie_mijnmaaltijden_opmerking_mijn', {maaltijd_id: maaltijd.maaltijd_id}) }}"
+									method="post"
+									class="Formulier InlineForm ToggleForm">
 							{{ csrfField("/maaltijden/ketzer/opmerking/" ~ maaltijd.maaltijd_id) }}
 							<input type="text" name="gasten_eetwens" value="{{ aanmelding.gasten_eetwens }}"
 										 origvalue="{{ aanmelding.gasten_eetwens }}" class="FormElement" maxlength="255" size="20"/>
@@ -106,9 +105,9 @@
 			<td class="maaltijd-afgemeld">
 			{% if not maaltijd.gesloten and maaltijd.aantalAanmeldingen >= maaltijd.aanmeld_limiet %}
 				{{ icon("stop", null, "Maaltijd is vol") }}&nbsp;
-			{% endif %}
-			Nee
-			{% if maaltijd.gesloten %}
+				{% endif %}
+				Nee
+				{% if maaltijd.gesloten %}
 				<span class="float-end">
 				{{ icon("lock", null, "Maaltijd is gesloten om " ~ (maaltijd.laatst_gesloten | time_format) ~ "") }}
 				</span>

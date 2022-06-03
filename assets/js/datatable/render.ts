@@ -1,16 +1,14 @@
 import FunctionColumnRender = DataTables.FunctionColumnRender;
 import moment from 'moment';
-import { formatBedrag, formatFilesize } from '../lib/util';
-import { getApiFromSettings } from './api';
+import {formatBedrag, formatFilesize} from '../lib/util';
+import {getApiFromSettings} from './api';
 
 /**
  * Standaard gedefinieerde render functies.
  */
 export default {
 	default(data, type) {
-		if (data === null || typeof data !== 'object') {
-			return data;
-		}
+		if (data === null || typeof data !== 'object') { return data; }
 		switch (type) {
 			case 'sort':
 				return data.sort;
@@ -65,7 +63,7 @@ export default {
 		}
 
 		if (date.substr(0, 1) === '-') {
-			return 'Nooit';
+			return "Nooit";
 		}
 
 		const datumTijd = moment(date);

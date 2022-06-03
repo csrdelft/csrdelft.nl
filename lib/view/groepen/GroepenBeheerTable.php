@@ -20,14 +20,12 @@ use CsrDelft\view\datatable\Multiplicity;
  *
  * @property-read Groep $model
  */
-class GroepenBeheerTable extends DataTable
-{
+class GroepenBeheerTable extends DataTable {
 
 	private $naam;
 	private $pagina;
 
-	public function __construct(GroepRepository $repository)
-	{
+	public function __construct(GroepRepository $repository) {
 		parent::__construct($repository->entityClass, $repository->getUrl() . '/beheren', null);
 
 		$this->selectEnabled = false;
@@ -82,8 +80,7 @@ class GroepenBeheerTable extends DataTable
 		$this->addRowKnop(new DataTableRowKnop($repository->getUrl() . '/:id/logboek', 'Logboek bekijken', 'log', '', 'get'));
 	}
 
-	public function getBreadcrumbs()
-	{
+	public function getBreadcrumbs() {
 		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
 			. '<li class="breadcrumb-item"><a href="/groepen">Groepen</a></li>'
 			. '<li class="breadcrumb-item"><a href="' . $this->model->getUrl() . '">' . ucfirst($this->naam) . '</a></li>'

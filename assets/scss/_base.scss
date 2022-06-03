@@ -1,8 +1,7 @@
 @import "defaults";
 @import "fonts";
 @import "~bootstrap/scss/bootstrap";
-@import "~bootstrap-vue/dist/bootstrap-vue.css";
-// Moet na Bootstrap geladen worden.
+@import "~bootstrap-vue/dist/bootstrap-vue.css"; // Moet na Bootstrap geladen worden.
 @import "_common";
 @import "main-menu";
 @import "bbcode";
@@ -52,108 +51,92 @@ main {
 // Zie node_modules/bootstrap/scss/_input-group.scss
 // Mixt met twitter-typeahead
 .input-group {
-	position: relative;
-	display: flex;
-	flex-wrap: wrap; // For form validation feedback
-	align-items: stretch;
-	width: 100%;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap; // For form validation feedback
+  align-items: stretch;
+  width: 100%;
 
-	> .twitter-typeahead {
-		position: relative; // For focus state's z-index
-		flex: 1 1 auto;
-		// Add width 1% and flex-basis auto to ensure that button will not wrap out
-		// the column. Applies to IE Edge+ and Firefox. Chrome does not require this.
-		width: 1%;
-		margin-bottom: 0;
+  > .twitter-typeahead {
+    position: relative; // For focus state's z-index
+    flex: 1 1 auto;
+    // Add width 1% and flex-basis auto to ensure that button will not wrap out
+    // the column. Applies to IE Edge+ and Firefox. Chrome does not require this.
+    width: 1%;
+    margin-bottom: 0;
 
-		> .form-control,
-		> .custom-select,
-		> .custom-file {
-			width: 100%;
+    > .form-control,
+    > .custom-select,
+    > .custom-file {
+      width: 100%;
 
-			// Bring the "active" form control to the top of surrounding elements
-			&:focus {
-				z-index: 3;
-			}
-		}
+      // Bring the "active" form control to the top of surrounding elements
+      &:focus {
+        z-index: 3;
+      }
+    }
 
-		> .form-control,
-		> .custom-select {
-			&:not(:last-child) {
-				@include border-end-radius(0);
-			}
-		}
-	}
+    > .form-control,
+    > .custom-select {
+      &:not(:last-child) {
+        @include border-end-radius(0);
+      }
+    }
+  }
 }
 
 /* Bijbelrooster */
 .bijbelrooster {
-	columns: 250px auto;
-	line-height: 2em;
+  columns: 250px auto;
+  line-height: 2em;
 }
 
 /* Pasfotos */
 img.pasfoto {
-	float: left;
-	width: 55px;
-	height: 73px;
-	margin: 1px 0 0 1px;
+  float: left;
+  width: 55px;
+  height: 73px;
+  margin: 1px 0 0 1px;
 }
-
 .lidLink img {
-	transition: all .4s ease-out;
+  transition: all .4s ease-out;
 }
-
 .lidLink:hover img {
-	box-shadow: 0 0 5px #000;
-	transform: scale(1.33);
+  box-shadow: 0 0 5px #000;
+  transform: scale(1.33);
 }
 
 /* lidinstellingen */
 .Formulier label.instelling {
-	clear: left;
-	width: 50%;
+  clear: left;
+  width: 50%;
 }
 
 div.vertical {
-	transform: rotate(-90deg);
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  transform: rotate(-90deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
-th {
-	text-align: left;
-}
-
-td {
-	vertical-align: text-bottom;
-}
+th { text-align: left; }
+td { vertical-align: text-bottom; }
 
 ul.horizontal li {
-	display: inline;
-	padding-right: 20px;
+  display: inline;
+  padding-right: 20px;
 }
-
-ul.horizontal li.active {
-	font-weight: bold;
-}
-
-ul.nobullets li {
-	list-style-type: none;
-}
+ul.horizontal li.active { font-weight:bold; }
+ul.nobullets li { list-style-type: none; }
 
 .fade-content {
-	opacity: 0;
-	transition: opacity .3s .1s ease;
+  opacity: 0;
+  transition: opacity .3s .1s ease;
 }
-
 .fade-container:hover .fade-content {
-	opacity: 1;
+  opacity: 1;
 }
 
 /**** OVERIG ******************************************************************/
-.waarschuwing {
-	color: $danger;
-}
+.waarschuwing { color: $danger; }
 
 .instelling:target {
 	padding: 3em 0;

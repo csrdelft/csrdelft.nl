@@ -13,14 +13,12 @@ use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 
-class ForumZoekenForm extends Formulier
-{
+class ForumZoekenForm extends Formulier {
 
 	/**
 	 * @param ForumZoeken $model
 	 */
-	public function __construct($model)
-	{
+	public function __construct($model) {
 		parent::__construct($model, '/forum/zoeken');
 		$this->showMelding = false;
 		$this->css_classes[] = 'ForumZoekenForm';

@@ -17,11 +17,9 @@ use CsrDelft\view\formulier\ModalForm;
  * Formulier voor nieuw periodiek corvee.
  *
  */
-class RepetitieCorveeForm extends ModalForm
-{
+class RepetitieCorveeForm extends ModalForm {
 
-	public function __construct(CorveeRepetitie $repetitie, $beginDatum = null, $eindDatum = null, $mid = null)
-	{
+	public function __construct(CorveeRepetitie $repetitie, $beginDatum = null, $eindDatum = null, $mid = null) {
 		parent::__construct(null, '/corvee/beheer/aanmaken/' . $repetitie->crv_repetitie_id);
 		$this->titel = 'Periodiek corvee aanmaken';
 
@@ -38,8 +36,7 @@ class RepetitieCorveeForm extends ModalForm
 		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
-	public function validate()
-	{
+	public function validate() {
 		$valid = parent::validate();
 		$fields = $this->getFields();
 		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {

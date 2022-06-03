@@ -32,7 +32,6 @@ hr {
 	color: $lw2-blauw;
 	background-color: $lw2-blauw;
 }
-
 .titel {
 	font-family: $lw2-font-header;
 }
@@ -44,15 +43,12 @@ hr {
 .ketzers {
 	width: 80%;
 	align-self: center;
-
 	h3.titel {
 		text-transform: lowercase;
 		color: $lw2-goud;
 	}
-
-	.ketzer {
+	.ketzer{
 		color: white;
-
 		h3 {
 			color: $lw2-goud;
 			font-weight: bold;

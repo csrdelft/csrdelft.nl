@@ -8,8 +8,8 @@ html {
 }
 
 .dropdown-menu {
-	cursor: default;
-	z-index: 9999999;
+  cursor: default;
+  z-index: 9999999;
 }
 
 .breadcrumb {
@@ -78,9 +78,9 @@ Primary style
 
 -------------------------------- */
 html * {
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	border-collapse: collapse;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  border-collapse: collapse;
 }
 
 //html {
@@ -89,78 +89,78 @@ html * {
 //}
 
 body {
-	//color: $;
-	//background-color: #fff;
+  //color: $;
+  //background-color: #fff;
 }
 
 h1, h2, h3, h4, h5, h6 {
-	//font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
-	text-align: left;
+  //font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+  text-align: left;
 }
 
 .pre {
-	display: block;
-	unicode-bidi: embed;
-	font-family: monospace;
-	white-space: pre;
+  display: block;
+  unicode-bidi: embed;
+  font-family: monospace;
+  white-space: pre;
 }
 
 .scrollpane {
-	overflow: auto;
+  overflow: auto;
 }
 
 .clear {
-	clear: both;
+  clear: both;
 }
 
 .clear-left {
-	clear: left;
+  clear: left;
 }
 
 .clear-right {
-	clear: right;
+  clear: right;
 }
 
 .block {
-	display: block;
+  display: block;
 }
 
 .inline {
-	display: inline;
+  display: inline;
 }
 
 div.inline, form.inline, h1.inline, h2.inline, h3.inline, h4.inline, h5.inline, h6.inline {
-	display: inline-block;
+  display: inline-block;
 }
 
 table.inline {
-	display: inline-table;
+  display: inline-table;
 }
 
 .small {
-	font-size: smaller;
+  font-size: smaller;
 }
 
 .text-end {
-	text-align: right;
+  text-align: right;
 }
 
 .text-center {
-	text-align: center;
+  text-align: center;
 }
 
 .text-bottom {
-	vertical-align: bottom;
+  vertical-align: bottom;
 }
 
 .noselect {
-	-webkit-touch-callout: none;
-	user-select: none;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
 .select-text {
-	-webkit-touch-callout: text;
-	user-select: text;
+  -webkit-touch-callout: text;
+  user-select: text;
 }
 
 /* --------------------------------
@@ -169,85 +169,85 @@ Easy positioning: use these within a
 position: relative element
 -------------------------------- */
 .top-left {
-	position: absolute;
-	top: 0;
-	left: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .top-right {
-	position: absolute;
-	top: 0;
-	right: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .bottom-left {
-	position: absolute;
-	bottom: 0;
-	left: 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 
 .bottom-right {
-	position: absolute;
-	bottom: 0;
-	right: 0;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 
 .onzichtbaar {
-	visibility: hidden;
+  visibility: hidden;
 }
 
 .verborgen {
-	display: none;
+  display: none;
 }
 
 .recht {
-	font-style: normal;
+  font-style: normal;
 }
 
 .cursief {
-	font-style: italic;
+  font-style: italic;
 }
 
 .dikgedrukt {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .niet-dik {
-	font-weight: normal;
+  font-weight: normal;
 }
 
 .onderstreept {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 .doorgestreept {
-	text-decoration: line-through;
+  text-decoration: line-through;
 }
 
 .lichtgrijs {
-	color: #bbb;
+  color: #bbb;
 }
 
 .staatrood {
-	color: red;
+  color: red;
 }
 
 .error {
-	color: red !important;
-	font-weight: bold !important;
+  color: red !important;
+  font-weight: bold !important;
 }
 
 .badge.badge-red {
-	color: #fff;
-	background-color: #d9534f;
+  color: #fff;
+  background-color: #d9534f;
 }
 
 .progress {
-	margin: 0;
+  margin: 0;
 }
 
 .lidLink .ico.neus2013 {
-	color: transparent;
+  color: transparent;
 
 	display: inline;
 	background-position: -185px -124px;
@@ -259,11 +259,11 @@ Dynamic reldate
 
 -------------------------------- */
 time.timeago {
-	border: none;
+  border: none;
 }
 
 time.timeago:hover {
-	border-bottom: 1px dotted grey;
+  border-bottom: 1px dotted grey;
 }
 
 @import "lib/toggle-group";
@@ -275,25 +275,25 @@ HoverIntent visitekaartjes
 
 -------------------------------- */
 .hoverIntentContent {
-	display: none;
-	position: absolute;
+  display: none;
+  position: absolute;
 }
 
 div.hoverIntentContent {
-	border: 1px solid #000;
-	background-color: #fff;
-	box-shadow: 0 0 11px #000;
-	z-index: 250;
-	font-weight: normal !important;
-	font-style: normal !important;
-	float: none !important;
-	overflow: visible;
-	padding: 5px;
+  border: 1px solid #000;
+  background-color: #fff;
+  box-shadow: 0 0 11px #000;
+  z-index: 250;
+  font-weight: normal !important;
+  font-style: normal !important;
+  float: none !important;
+  overflow: visible;
+  padding: 5px;
 }
 
 .visitekaartje {
 	z-index: 1000;
-	width: 330px;
+  width: 330px;
 	color: $body-color;
 
 	img {
@@ -306,16 +306,16 @@ div.hoverIntentContent {
 		color: $body-color;
 	}
 
-	p.naam a {
-		font-weight: bold;
-	}
+  p.naam a {
+    font-weight: bold;
+  }
 
-	.uid {
-		float: right;
-		padding-right: 5px;
-		margin-top: 8px;
-		color: #999;
-	}
+  .uid {
+    float: right;
+    padding-right: 5px;
+    margin-top: 8px;
+    color: #999;
+  }
 }
 
 /**
@@ -334,7 +334,7 @@ Bootstrap overrides / uitbreidingen
 }
 
 .footer {
-	background: $footer-background;
+  background: $footer-background;
 }
 
 .dies {

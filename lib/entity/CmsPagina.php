@@ -15,8 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("cms_paginas")
  * @ORM\Entity(repositoryClass="CsrDelft\repository\CmsPaginaRepository")
  */
-class CmsPagina
-{
+class CmsPagina {
 
 	/**
 	 * Primary key
@@ -65,32 +64,28 @@ class CmsPagina
 	/**
 	 * @return bool
 	 */
-	public function magBekijken()
-	{
+	public function magBekijken() {
 		return LoginService::mag($this->rechtenBekijken);
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function magBewerken()
-	{
+	public function magBewerken() {
 		return LoginService::mag($this->rechtenBewerken);
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function magRechtenWijzigen()
-	{
+	public function magRechtenWijzigen() {
 		return LoginService::mag(P_ADMIN);
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function magVerwijderen()
-	{
+	public function magVerwijderen() {
 		return LoginService::mag(P_ADMIN);
 	}
 

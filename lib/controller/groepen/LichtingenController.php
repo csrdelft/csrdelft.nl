@@ -17,15 +17,12 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @property LichtingenRepository $repository
  */
-class LichtingenController extends AbstractGroepenController
-{
-	public function __construct(ManagerRegistry $registry)
-	{
+class LichtingenController extends AbstractGroepenController {
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Lichting::class);
 	}
 
-	public function zoeken(Request $request, $zoekterm = null)
-	{
+	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
 		}

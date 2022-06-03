@@ -12,11 +12,10 @@ use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiActiviteitenController extends AbstractController
-{
-	/** @var ChangeLogRepository */
+class ApiActiviteitenController extends AbstractController {
+	/** @var ChangeLogRepository  */
 	private $changeLogRepository;
-	/** @var ActiviteitenRepository */
+	/** @var ActiviteitenRepository  */
 	private $activiteitenRepository;
 	/**
 	 * @var GroepLidRepository
@@ -24,11 +23,10 @@ class ApiActiviteitenController extends AbstractController
 	private $groepLidRepository;
 
 	public function __construct(
-		ActiviteitenRepository $activiteitenRepository,
-		GroepLidRepository     $groepLidRepository,
-		ChangeLogRepository    $changeLogRepository
-	)
-	{
+		ActiviteitenRepository  $activiteitenRepository,
+		GroepLidRepository $groepLidRepository,
+		ChangeLogRepository  $changeLogRepository
+	) {
 		$this->activiteitenRepository = $activiteitenRepository;
 		$this->groepLidRepository = $groepLidRepository;
 		$this->changeLogRepository = $changeLogRepository;
@@ -39,8 +37,7 @@ class ApiActiviteitenController extends AbstractController
 	 * @Route("/API/2.0/activiteiten/{id}/aanmelden", methods={"POST"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function activiteitAanmelden($id)
-	{
+	public function activiteitAanmelden($id) {
 		$activiteit = $this->activiteitenRepository->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken())) {
@@ -64,8 +61,7 @@ class ApiActiviteitenController extends AbstractController
 	 * @Route("/API/2.0/activiteiten/{id}/afmelden", methods={"POST"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function activiteitAfmelden($id)
-	{
+	public function activiteitAfmelden($id) {
 		$activiteit = $this->activiteitenRepository->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken())) {

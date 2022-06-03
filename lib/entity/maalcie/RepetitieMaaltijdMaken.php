@@ -4,8 +4,7 @@
 namespace CsrDelft\entity\maalcie;
 
 
-class RepetitieMaaltijdMaken
-{
+class RepetitieMaaltijdMaken {
 	public $begin_moment;
 	public $eind_moment;
 	public $mlt_repetitie_id;

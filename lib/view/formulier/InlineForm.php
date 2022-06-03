@@ -12,14 +12,12 @@ use CsrDelft\view\formulier\knoppen\FormKnoppen;
  *
  * InlineForm with single InputField and FormDefaultKnoppen.
  */
-abstract class InlineForm extends Formulier implements FormElement
-{
+abstract class InlineForm extends Formulier implements FormElement {
 
 	private $field;
 	private $toggle;
 
-	public function __construct($model, $action, InputField $field, $toggle = true, $buttons = false, $dataTableId = false)
-	{
+	public function __construct($model, $action, InputField $field, $toggle = true, $buttons = false, $dataTableId = false) {
 		parent::__construct($model, $action, null, $dataTableId);
 		if (isset($_POST['InlineFormId'])) {
 			$this->formId = filter_input(INPUT_POST, 'InlineFormId', FILTER_SANITIZE_STRING);
@@ -47,8 +45,7 @@ abstract class InlineForm extends Formulier implements FormElement
 		$this->addFields($fields);
 	}
 
-	public function getHtml()
-	{
+	public function getHtml() {
 		$html = '<div id="wrapper_' . $this->formId . '" class="InlineForm">';
 		if ($this->toggle) {
 			$value = $this->field->getValue() ?? '<div class="text-muted">Geen waarde</div>';
@@ -63,18 +60,15 @@ abstract class InlineForm extends Formulier implements FormElement
 		return $html . '</form></div>';
 	}
 
-	public function __toString()
-	{
+	public function __toString() {
 		return $this->getHtml();
 	}
 
-	public function getField()
-	{
+	public function getField() {
 		return $this->field;
 	}
 
-	public function getType()
-	{
+	public function getType() {
 		return classNameZonderNamespace(get_class($this));
 	}
 
@@ -82,8 +76,7 @@ abstract class InlineForm extends Formulier implements FormElement
 	 * Public for FormElement
 	 * @return string
 	 */
-	public function getJavascript()
-	{
+	public function getJavascript() {
 		return parent::getJavascript();
 	}
 

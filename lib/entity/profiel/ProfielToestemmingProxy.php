@@ -14,8 +14,7 @@ use ReflectionProperty;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class ProfielToestemmingProxy extends Profiel
-{
+class ProfielToestemmingProxy extends Profiel {
 	/**
 	 * @var Profiel
 	 */
@@ -35,8 +34,7 @@ class ProfielToestemmingProxy extends Profiel
 	 */
 	private static $publicVelden;
 
-	public function __construct(Profiel $profiel, LidToestemmingRepository $lidToestemmingRepository)
-	{
+	public function __construct(Profiel $profiel, LidToestemmingRepository $lidToestemmingRepository) {
 		parent::__construct();
 
 		$this->profiel = $profiel;
@@ -60,23 +58,19 @@ class ProfielToestemmingProxy extends Profiel
 		}
 	}
 
-	private function zichtbaar(string $name)
-	{
+	private function zichtbaar(string $name) {
 		return !in_array($name, $this->filterVelden) || $this->lidToestemmingRepository->toestemming($this->profiel, $name);
 	}
 
-	public function __get(string $name)
-	{
+	public function __get(string $name) {
 		return $this->zichtbaar($name) ? $this->profiel->$name : null;
 	}
 
-	public function __isset(string $name)
-	{
+	public function __isset(string $name) {
 		return $this->zichtbaar($name);
 	}
 
-	public function __set($name, $value)
-	{
+	public function __set($name, $value) {
 		throw new CsrException("Kan geen velden zetten op ProfielToestemmingProxy");
 	}
 }

@@ -8,7 +8,6 @@ class SafeJsonField extends TextareaField
 	{
 		parent::__construct($name, json_encode($value, JSON_PRETTY_PRINT), $description, $rows, $max_len, $min_len);
 	}
-
 	public function getFormattedValue()
 	{
 		return json_decode(htmlspecialchars_decode(parent::getFormattedValue()), true);

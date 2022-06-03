@@ -14,39 +14,34 @@ use CsrDelft\view\bbcode\BbHelper;
  * @example [url]https://csrdelft.nl[/url]
  * @example [url=https://csrdelft.nl]Stek[/url]
  */
-class BbUrl extends BbTag
-{
+class BbUrl extends BbTag {
 
 	public $url;
 
-	public static function getTagName()
-	{
+	public static function getTagName() {
 		return ['url', 'rul'];
 	}
 
-	public function parse($arguments = [])
-	{
+	public function parse($arguments = []) {
 		$this->url = $this->getUrl($arguments);
 		if ($this->url == null) {
 			$this->readContent([], false);
 			$this->url = $this->getContent();
-		} else {
+		}
+		else {
 			$this->readContent();
 		}
 	}
 
-	public function renderPlain()
-	{
+	public function renderPlain() {
 		return $this->getContent() . " (" . $this->url . ")";
 	}
 
-	public function renderLight()
-	{
+	public function renderLight() {
 		return BbHelper::lightLinkInline($this->env, 'url', $this->url, $this->getContent());
 	}
 
-	public function render()
-	{
+	public function render() {
 		return external_url($this->url, $this->getContent());
 	}
 
@@ -54,8 +49,7 @@ class BbUrl extends BbTag
 	 * @param $arguments
 	 * @return string|null
 	 */
-	private function getUrl($arguments)
-	{
+	private function getUrl($arguments) {
 		$url = null;
 		if (isset($arguments['url'])) { // [url=
 			$url = $arguments['url'];

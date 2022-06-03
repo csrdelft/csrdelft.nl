@@ -12,15 +12,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Boek weergeven
  */
-class BoekRecensieFormulier implements FormulierTypeInterface
-{
+class BoekRecensieFormulier implements FormulierTypeInterface {
 	/**
 	 * @var UrlGeneratorInterface
 	 */
 	private $urlGenerator;
 
-	public function __construct(UrlGeneratorInterface $urlGenerator)
-	{
+	public function __construct(UrlGeneratorInterface $urlGenerator) {
 		$this->urlGenerator = $urlGenerator;
 	}
 
@@ -29,8 +27,7 @@ class BoekRecensieFormulier implements FormulierTypeInterface
 	 * @param BoekRecensie $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
-	{
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
 		$builder->setAction($this->urlGenerator->generate('csrdelft_bibliotheek_recensie', ['boek' => $data->boek->id]));
 		$builder->setTitel('');
 		$fields = [];

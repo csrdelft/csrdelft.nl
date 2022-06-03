@@ -41,8 +41,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *
  * @see http://csrc.nist.gov/groups/SNS/rbac/faq.html
  */
-class AccessService
-{
+class AccessService {
 	const PREFIX_ACTIVITEIT = 'ACTIVITEIT';
 	const PREFIX_BESTUUR = 'BESTUUR';
 	const PREFIX_COMMISSIE = 'COMMISSIE';
@@ -137,19 +136,16 @@ class AccessService
 	/**
 	 * @var EntityManagerInterface
 	 */
-	private $em;
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
+	private $em;/**
+ * @var AccountRepository
+ */private $accountRepository;
 
 	/**
 	 * @param CacheInterface $cache
 	 * @param EntityManagerInterface $em
 	 * @throws InvalidArgumentException
 	 */
-	public function __construct(CacheInterface $cache, EntityManagerInterface $em, AccountRepository $accountRepository)
-	{
+	public function __construct(CacheInterface $cache, EntityManagerInterface $em, AccountRepository $accountRepository) {
 		$this->cache = $cache;
 		$this->em = $em;
 		$this->loadPermissions();
@@ -171,8 +167,7 @@ class AccessService
 	 *
 	 * @throws InvalidArgumentException
 	 */
-	private function loadPermissions()
-	{
+	private function loadPermissions() {
 		// see if cached
 		$this->permissions = $this->cache->get('permissions-' . getlastmod(), function () {
 			// build permissions
@@ -265,8 +260,7 @@ class AccessService
 	 * @param int $level permissiewaarde
 	 * @return string permission string
 	 */
-	private function createPermStr($onderdeelnummer, $level)
-	{
+	private function createPermStr($onderdeelnummer, $level) {
 		$nulperm = str_repeat(chr(0), 15);
 		return substr_replace($nulperm, chr($level), $onderdeelnummer, 1);
 	}
@@ -302,8 +296,7 @@ class AccessService
 	 *
 	 * @return bool Of $subject $permission heeft.
 	 */
-	public function mag(UserInterface $subject = null, $permission = null, array $allowedAuthenticationMethods = null)
-	{
+	public function mag(UserInterface $subject = null, $permission = null, array $allowedAuthenticationMethods = null) {
 		if ($subject == null) {
 			$subject = $this->accountRepository->find(LoginService::UID_EXTERN);
 		}
@@ -344,8 +337,7 @@ class AccessService
 	 * @param null $permission
 	 * @return bool
 	 */
-	private function hasPermission(UserInterface $subject, $permission = null)
-	{
+	private function hasPermission(UserInterface $subject, $permission = null) {
 		// OR
 		if (strpos($permission, ',') !== false) {
 			/**
@@ -401,8 +393,7 @@ class AccessService
 	 *
 	 * @return bool
 	 */
-	private function mandatoryAccessControl(UserInterface $subject, $permission)
-	{
+	private function mandatoryAccessControl(UserInterface $subject, $permission) {
 
 		if (isset($_SESSION['password_unsafe'])) {
 			if (in_array_i($permission, self::$ledenRead) || in_array_i($permission, self::$ledenWrite)) {
@@ -471,8 +462,7 @@ class AccessService
 	 *
 	 * @return bool
 	 */
-	public function isValidRole($role)
-	{
+	public function isValidRole($role) {
 		if (isset($this->roles[$role])) {
 			return true;
 		}
@@ -486,8 +476,7 @@ class AccessService
 	 * @return bool
 	 * @throws InvalidArgumentException
 	 */
-	private function discretionaryAccessControl(UserInterface $subject, $permission)
-	{
+	private function discretionaryAccessControl(UserInterface $subject, $permission) {
 
 		// haal het profiel van de gebruiker op
 		$profiel = $subject->profiel;
@@ -743,8 +732,7 @@ class AccessService
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function getDefaultPermissionRole($lidstatus)
-	{
+	public function getDefaultPermissionRole($lidstatus) {
 		switch ($lidstatus) {
 			case LidStatus::Kringel:
 			case LidStatus::Noviet:
@@ -767,8 +755,7 @@ class AccessService
 	/**
 	 * @return string[]
 	 */
-	public function getPermissionSuggestions()
-	{
+	public function getPermissionSuggestions() {
 		$suggestions = array_keys($this->permissions);
 		$suggestions[] = 'bestuur';
 		$suggestions[] = 'geslacht:m';
@@ -784,8 +771,7 @@ class AccessService
 	 * @param string $permissions
 	 * @return array empty if no errors; substring(s) of $permissions containing error(s) otherwise
 	 */
-	public function getPermissionStringErrors($permissions)
-	{
+	public function getPermissionStringErrors($permissions) {
 		$errors = [];
 		// OR
 		$or = explode(',', $permissions);
@@ -810,8 +796,7 @@ class AccessService
 	 *
 	 * @return bool
 	 */
-	public function isValidPermission($permission)
-	{
+	public function isValidPermission($permission) {
 		// case insensitive
 		$permission = strtoupper($permission);
 

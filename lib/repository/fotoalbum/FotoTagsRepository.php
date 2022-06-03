@@ -15,10 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method FotoTag|null find($id, $lockMode = null, $lockVersion = null)
  * @method FotoTag|null findOneBy(array $criteria, array $orderBy = null)
  */
-class FotoTagsRepository extends AbstractRepository
-{
-	public function __construct(ManagerRegistry $registry)
-	{
+class FotoTagsRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, FotoTag::class);
 	}
 
@@ -29,8 +27,7 @@ class FotoTagsRepository extends AbstractRepository
 	 * @param null $offset
 	 * @return FotoTag[]
 	 */
-	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-	{
+	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {
 		if (!$orderBy) {
 			$orderBy = ['wanneer' => 'DESC'];
 		}
@@ -40,18 +37,15 @@ class FotoTagsRepository extends AbstractRepository
 	/**
 	 * @return FotoTag[]
 	 */
-	public function findAll()
-	{
+	public function findAll() {
 		return parent::findBy([]);
 	}
 
-	public function getTags(Foto $foto)
-	{
+	public function getTags(Foto $foto) {
 		return $this->findBy(['refuuid' => $foto->getUUID()]);
 	}
 
-	public function addTag(Foto $foto, $uid, $x, $y, $size)
-	{
+	public function addTag(Foto $foto, $uid, $x, $y, $size) {
 		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException('Profiel bestaat niet');
 		}
@@ -75,8 +69,7 @@ class FotoTagsRepository extends AbstractRepository
 	public function removeTag(
 		$refuuid,
 		$keyword
-	)
-	{
+	) {
 		$tag = $this->find(['refuuid' => $refuuid, 'keyword' => $keyword]);
 		if ($tag) {
 			$this->getEntityManager()->remove($tag);
@@ -84,8 +77,7 @@ class FotoTagsRepository extends AbstractRepository
 		}
 	}
 
-	public function verwijderFotoTags(Foto $foto)
-	{
+	public function verwijderFotoTags(Foto $foto) {
 		$this->createQueryBuilder('t')
 			->delete()
 			->where('t.refuuid = :refuuid')
@@ -93,14 +85,12 @@ class FotoTagsRepository extends AbstractRepository
 			->getQuery()->execute();
 	}
 
-	public function create(FotoTag $tag)
-	{
+	public function create(FotoTag $tag) {
 		$this->getEntityManager()->persist($tag);
 		$this->getEntityManager()->flush();
 	}
 
-	public function delete(FotoTag $tag)
-	{
+	public function delete(FotoTag $tag) {
 		$this->getEntityManager()->remove($tag);
 		$this->getEntityManager()->flush();
 	}

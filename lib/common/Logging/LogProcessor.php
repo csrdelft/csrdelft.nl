@@ -9,8 +9,7 @@ use Monolog\Processor\ProcessorInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
-class LogProcessor implements ProcessorInterface
-{
+class LogProcessor implements ProcessorInterface {
 	/**
 	 * @var RequestStack
 	 */
@@ -20,8 +19,7 @@ class LogProcessor implements ProcessorInterface
 	 */
 	private $security;
 
-	public function __construct(RequestStack $requestStack, Security $security)
-	{
+	public function __construct(RequestStack $requestStack, Security $security) {
 		$this->requestStack = $requestStack;
 		$this->security = $security;
 	}

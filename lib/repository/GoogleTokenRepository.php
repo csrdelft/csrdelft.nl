@@ -16,10 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method GoogleToken[]    findAll()
  * @method GoogleToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GoogleTokenRepository extends AbstractRepository
-{
-	public function __construct(ManagerRegistry $registry)
-	{
+class GoogleTokenRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, GoogleToken::class);
 	}
 
@@ -27,8 +25,7 @@ class GoogleTokenRepository extends AbstractRepository
 	 * @param $uid
 	 * @return bool
 	 */
-	public function exists($uid)
-	{
+	public function exists($uid) {
 		return $this->find($uid) != null;
 	}
 
@@ -37,8 +34,7 @@ class GoogleTokenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function delete(GoogleToken $token)
-	{
+	public function delete(GoogleToken $token) {
 		$this->getEntityManager()->remove($token);
 		$this->getEntityManager()->flush();
 	}

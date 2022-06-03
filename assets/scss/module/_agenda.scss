@@ -21,14 +21,12 @@
 	background-color: $primary;
 	border-color: $primary;
 }
-
 .fc-button-primary:not(:disabled):active,
 .fc-button-primary:not(:disabled).fc-button-active,
 .fc-button-primary:hover {
 	background-color: darken($primary, 10%);
 	border-color: darken($primary, 10%);
 }
-
 .fc-button-primary:disabled {
 	background-color: lighten($primary, 10%);
 	border-color: lighten($primary, 10%);

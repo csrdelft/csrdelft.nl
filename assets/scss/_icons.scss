@@ -2,79 +2,61 @@
 famfamfam icoontjes van een spritesheet, zie ook \CsrDelft\view\Icon
  */
 @keyframes rotate {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(360deg);
-	}
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @mixin ico {
-	display: inline-block;
-	overflow: hidden;
-	background: url('../images/icons.png') no-repeat;
-	width: 16px;
-	height: 16px;
-	vertical-align: text-bottom;
+  display: inline-block;
+  overflow: hidden;
+  background: url('../images/icons.png') no-repeat;
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom;
 }
 
 .ico {
-	@include ico;
+  @include ico;
 }
 
 .ico.text {
-	margin: 3px;
-	vertical-align: bottom;
+  margin: 3px;
+  vertical-align: bottom;
 }
 
 .ico.rotating,
 .dt-button-ico.rotating span::before {
-	animation-name: rotate;
-	animation-duration: 1s;
-	animation-iteration-count: infinite;
-	animation-timing-function: linear;
+  animation-name: rotate;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
 
 .dt-button-ico {
-	span::before {
-		content: '';
-		margin: -1px 0.5em -1px -1px;
-		@include ico;
-	}
+  span::before {
+    content: '';
+    margin: -1px 0.5em -1px -1px;
+    @include ico;
+  }
 }
 
-.ico.rotate-90 {
-	transform: rotate(90deg);
-}
-
-.ico.rotate-180 {
-	transform: rotate(180deg);
-}
-
-.ico.rotate-270 {
-	transform: rotate(270deg);
-}
-
-.ico.flip-horizontal {
-	transform: scale(-1, 1);
-}
-
-.ico.flip-vertical {
-	transform: scale(1, -1);
-}
+.ico.rotate-90 { transform: rotate(90deg); }
+.ico.rotate-180 { transform: rotate(180deg); }
+.ico.rotate-270 { transform: rotate(270deg); }
+.ico.flip-horizontal { transform: scale(-1, 1); }
+.ico.flip-vertical { transform: scale(1, -1); }
 
 @mixin icon($name, $position) {
-	.ico.#{$name},
-	*:hover > .ico.hover-#{$name} {
-		background-position: $position;
-	}
+  .ico.#{$name},
+*:hover > .ico.hover-#{$name} {
+  background-position: $position;
+}
 
-	.dt-button-ico.dt-ico-#{$name} {
-		span::before {
-			background-position: $position;
-		}
-	}
+  .dt-button-ico.dt-ico-#{$name} {
+  span::before {
+    background-position: $position;
+  }
+}
 }
 
 @include icon(accept, -1px -1px);

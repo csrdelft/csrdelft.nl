@@ -18,16 +18,14 @@ use CsrDelft\view\formulier\ModalForm;
  * Formulier voor een nieuwe of te verwijderen maaltijd-aanmelding.
  *
  */
-class AanmeldingForm extends ModalForm
-{
+class AanmeldingForm extends ModalForm {
 
 	/**
 	 * AanmeldingForm constructor.
 	 * @param MaaltijdAanmeldingDTO $aanmeldingDTO
 	 * @param boolean $nieuw
 	 */
-	public function __construct(MaaltijdAanmeldingDTO $aanmeldingDTO, bool $nieuw)
-	{
+	public function __construct(MaaltijdAanmeldingDTO $aanmeldingDTO, bool $nieuw) {
 		parent::__construct($aanmeldingDTO, '/maaltijden/beheer/' . ($nieuw ? 'aanmelden' : 'afmelden'), true, true);
 
 		if ($nieuw) {

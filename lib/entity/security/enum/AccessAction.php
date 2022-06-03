@@ -31,8 +31,7 @@ use CsrDelft\common\Enum;
  * @method static bool isBeheren(static $val)
  * @method static bool isRechten(static $val)
  */
-class AccessAction extends Enum
-{
+class AccessAction extends Enum {
 
 	// lezen
 	/**

@@ -15,11 +15,9 @@ use CsrDelft\view\formulier\ModalForm;
  * Formulier voor het sluiten van het MaalCie-boekjaar.
  *
  */
-class BoekjaarSluitenForm extends ModalForm
-{
+class BoekjaarSluitenForm extends ModalForm {
 
-	public function __construct($beginDatum = null, $eindDatum = null)
-	{
+	public function __construct($beginDatum = null, $eindDatum = null) {
 		parent::__construct(null, '/maaltijden/boekjaar/sluitboekjaar');
 		$this->titel = 'Boekjaar sluiten';
 
@@ -33,8 +31,7 @@ class BoekjaarSluitenForm extends ModalForm
 		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
-	public function validate()
-	{
+	public function validate() {
 		$valid = parent::validate();
 		$fields = $this->getFields();
 		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {

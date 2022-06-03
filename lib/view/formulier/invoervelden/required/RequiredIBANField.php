@@ -10,7 +10,6 @@ use CsrDelft\view\formulier\invoervelden\IBANField;
  *
  * @see IBANField
  */
-class RequiredIBANField extends IBANField
-{
+class RequiredIBANField extends IBANField {
 	public $required = true;
 }

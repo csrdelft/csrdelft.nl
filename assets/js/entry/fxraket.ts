@@ -1,8 +1,9 @@
 // importeer stijl
 import '../../scss/effect/raket.scss';
-import { ontstuiter } from '../lib/util';
+import {ontstuiter} from '../lib/util';
 
 class UVo {
+
 	private static startAnimatie() {
 		if (!document.body.classList.contains('scrolling')) {
 			document.body.classList.add('scrolling');
@@ -16,8 +17,8 @@ class UVo {
 	}
 
 	public start() {
-		window.addEventListener('scroll', ontstuiter(UVo.startAnimatie, 250, true), { passive: true });
-		window.addEventListener('scroll', ontstuiter(UVo.stopAnimatie, 250, false), { passive: true });
+		window.addEventListener('scroll', ontstuiter(UVo.startAnimatie, 250, true), {passive: true});
+		window.addEventListener('scroll', ontstuiter(UVo.stopAnimatie, 250, false), {passive: true});
 	}
 }
 

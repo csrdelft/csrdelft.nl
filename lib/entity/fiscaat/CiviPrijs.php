@@ -17,8 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  *   @ORM\UniqueConstraint(name="unique_van_product_id", columns={"van", "product_id"})
  * })
  */
-class CiviPrijs
-{
+class CiviPrijs {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")

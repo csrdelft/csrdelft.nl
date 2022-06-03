@@ -15,8 +15,7 @@ class OAuth2RememberTable implements DataTableTypeInterface
 	 */
 	private $generator;
 
-	public function __construct(UrlGeneratorInterface $generator)
-	{
+	public function __construct(UrlGeneratorInterface $generator) {
 
 		$this->generator = $generator;
 	}

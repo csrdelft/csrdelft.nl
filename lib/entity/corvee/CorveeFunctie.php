@@ -31,8 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("crv_functies")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class CorveeFunctie implements ISelectEntity, DisplayEntity
-{
+class CorveeFunctie implements ISelectEntity, DisplayEntity {
 	# ID om functie van kwalikok op te halen, wijzigen als ID van Kwalikok wijzigt
 	const KWALIKOK_FUNCTIE_ID = 7;
 
@@ -88,23 +87,19 @@ class CorveeFunctie implements ISelectEntity, DisplayEntity
 	 */
 	public $kwalificaties;
 
-	public function hasKwalificaties()
-	{
+	public function hasKwalificaties() {
 		return sizeof($this->kwalificaties) > 0;
 	}
 
-	public function getValue()
-	{
+	public function getValue() {
 		return $this->naam;
 	}
 
-	public function getId()
-	{
+	public function getId() {
 		return $this->functie_id;
 	}
 
-	public function getWeergave(): string
-	{
+	public function getWeergave(): string {
 		return $this->naam ?? '';
 	}
 }

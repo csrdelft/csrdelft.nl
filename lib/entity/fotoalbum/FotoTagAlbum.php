@@ -14,8 +14,7 @@ use CsrDelft\service\security\LoginService;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class FotoTagAlbum extends FotoAlbum
-{
+class FotoTagAlbum extends FotoAlbum {
 
 	/**
 	 * Lidnummer
@@ -24,8 +23,7 @@ class FotoTagAlbum extends FotoAlbum
 	 */
 	public $uid;
 
-	public function __construct($uid)
-	{
+	public function __construct($uid) {
 		parent::__construct();
 		// no parent constructor
 		$this->uid = $uid;
@@ -34,33 +32,27 @@ class FotoTagAlbum extends FotoAlbum
 		$this->dirname = 'Foto\'s met ' . ProfielRepository::getNaam($uid, 'civitas');
 	}
 
-	public function modified()
-	{
+	public function modified() {
 		return time();
 	}
 
-	public function getParentName()
-	{
+	public function getParentName() {
 		return null;
 	}
 
-	public function getUrl()
-	{
+	public function getUrl() {
 		return '/fotoalbum/' . $this->uid;
 	}
 
-	public function exists()
-	{
+	public function exists() {
 		return true;
 	}
 
-	public function isEmpty()
-	{
+	public function isEmpty() {
 		return false;
 	}
 
-	public function hasFotos($incompleet = false)
-	{
+	public function hasFotos($incompleet = false) {
 		return true;
 	}
 
@@ -68,14 +60,13 @@ class FotoTagAlbum extends FotoAlbum
 	 * @param false $incompleet
 	 * @return Foto[]
 	 */
-	public function getFotos($incompleet = false)
-	{
+	public function getFotos($incompleet = false) {
 		if (!isset($this->fotos)) {
 			// find tagged fotos
 			$container = ContainerFacade::getContainer();
 			$fotoTagsRepository = $container->get(FotoTagsRepository::class);
 			$fotoRepository = $container->get(FotoRepository::class);
-			foreach ($fotoTagsRepository->findBy(['keyword' => $this->uid]) as $tag) {
+			foreach ($fotoTagsRepository->findBy(['keyword' =>$this->uid]) as $tag) {
 				$foto = $fotoRepository->retrieveByUUID($tag->refuuid);
 				if ($foto) {
 					$this->fotos[] = $foto;
@@ -85,13 +76,11 @@ class FotoTagAlbum extends FotoAlbum
 		return $this->fotos;
 	}
 
-	public function magBekijken()
-	{
+	public function magBekijken() {
 		return LoginService::mag(P_LEDEN_READ);
 	}
 
-	public function isOwner()
-	{
+	public function isOwner() {
 		return $this->uid === LoginService::getUid();
 	}
 

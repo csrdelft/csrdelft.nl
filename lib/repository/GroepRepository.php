@@ -361,18 +361,15 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param string|null $soort
 	 * @return Groep[]
 	 */
-	public function overzicht(string $soort = null)
-	{
+	public function overzicht(string $soort = null) {
 		return $this->findBy(['status' => GroepStatus::HT()]);
 	}
 
-	public function beheer(string $soort = null)
-	{
+	public function beheer(string $soort = null) {
 		return $this->findBy([]);
 	}
 
-	public function parseSoort(string $soort = null)
-	{
+	public function parseSoort(string $soort = null) {
 		return null;
 	}
 
@@ -381,13 +378,12 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param Groep $groep
 	 * @return Groep|null
 	 */
-	public function findOt(Groep $groep)
-	{
+	public function findOt(Groep $groep) {
 		$sortBy = [];
 		if (in_array(GroepMoment::class, class_uses($groep))) {
 			$sortBy = ['eindMoment' => 'DESC'];
 		}
-		return $this->findOneBy(
+		return  $this->findOneBy(
 			["familie" => $groep->familie, 'status' => GroepStatus::OT()],
 			$sortBy,
 		);

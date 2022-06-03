@@ -10,8 +10,7 @@ use CsrDelft\common\Enum;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class OntvangtContactueel extends Enum
-{
+class OntvangtContactueel extends Enum {
 	/**
 	 * OntvangtContactueel opties.
 	 */
@@ -19,18 +18,15 @@ class OntvangtContactueel extends Enum
 	const Digitaal = 'digitaal';
 	const Nee = 'nee';
 
-	public static function Nee()
-	{
+	public static function Nee(){
 		return static::from(self::Nee);
 	}
 
-	public static function Digitaal()
-	{
+	public static function Digitaal() {
 		return static::from(self::Digitaal);
 	}
 
-	public static function Ja()
-	{
+	public static function Ja() {
 		return static::from(self::Ja);
 	}
 

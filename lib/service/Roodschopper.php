@@ -22,8 +22,7 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 
-class Roodschopper
-{
+class Roodschopper {
 
 	public $saldogrens;
 	public $bericht;
@@ -39,8 +38,7 @@ class Roodschopper
 
 	public $verzenden;
 
-	public static function getDefaults()
-	{
+	public static function getDefaults() {
 		$return = new Roodschopper();
 		$return->from = $_ENV['EMAIL_FISCUS'];
 		$return->verzenden = false;
@@ -61,8 +59,7 @@ h.t. Fiscus.';
 	 * Geef een array van Lid-objecten terug van de te schoppen leden.
 	 *
 	 */
-	public function getLeden()
-	{
+	public function getLeden() {
 		if ($this->teschoppen === null) {
 			$this->generateMails();
 		}
@@ -78,8 +75,7 @@ h.t. Fiscus.';
 	/**
 	 * @return CiviSaldo[]
 	 */
-	public function getSaldi()
-	{
+	public function getSaldi() {
 		if ($this->doelgroep == 'oudleden') {
 			$status = LidStatus::getFiscaalOudlidLike();
 		} else {
@@ -113,8 +109,7 @@ h.t. Fiscus.';
 	/**
 	 * Voor een simulatierun uit. Er worden dan geen mails gestuurd.
 	 */
-	public function generateMails()
-	{
+	public function generateMails() {
 		$this->teschoppen = [];
 		foreach ($this->getSaldi() as $saldo) {
 			$profiel = ProfielRepository::get($saldo->uid);
@@ -134,8 +129,7 @@ h.t. Fiscus.';
 	 * @param int $saldo
 	 * @return mixed
 	 */
-	public function replace($invoer, $profiel, $saldo)
-	{
+	public function replace($invoer, $profiel, $saldo) {
 		return str_replace(['LID', 'SALDO'], [$profiel->getNaam('volledig'), format_bedrag($saldo)], $invoer);
 	}
 
@@ -143,8 +137,7 @@ h.t. Fiscus.';
 	 * Geef een lijstje met het onderwerp en de body van de te verzenden
 	 * mails.
 	 */
-	public function preview()
-	{
+	public function preview() {
 		if ($this->teschoppen === null) {
 			$this->generateMails();
 		}
@@ -156,8 +149,7 @@ h.t. Fiscus.';
 	/**
 	 * Verstuurt uiteindelijk de mails.
 	 */
-	public function sendMails()
-	{
+	public function sendMails() {
 		if ($this->teschoppen === null) {
 			$this->generateMails();
 		}

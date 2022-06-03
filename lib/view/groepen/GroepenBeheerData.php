@@ -7,16 +7,14 @@ use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\view\datatable\DataTableResponse;
 use Exception;
 
-class GroepenBeheerData extends DataTableResponse
-{
+class GroepenBeheerData extends DataTableResponse {
 
 	/**
 	 * @param Groep $groep
 	 * @return string
 	 * @throws Exception
 	 */
-	public function renderElement($groep)
-	{
+	public function renderElement($groep) {
 		$array = (array)$groep;
 
 		$array['detailSource'] = $groep->getUrl() . '/leden';

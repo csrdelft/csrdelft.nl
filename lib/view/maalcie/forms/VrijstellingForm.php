@@ -18,11 +18,9 @@ use CsrDelft\view\formulier\ModalForm;
  *
  * @method CorveeVrijstelling getModel()
  */
-class VrijstellingForm extends ModalForm
-{
+class VrijstellingForm extends ModalForm {
 
-	public function __construct(CorveeVrijstelling $vrijstelling)
-	{
+	public function __construct(CorveeVrijstelling $vrijstelling) {
 		parent::__construct($vrijstelling, '/corvee/vrijstellingen/opslaan' . ($vrijstelling->uid === null ? '' : '/' . $vrijstelling->uid));
 
 		if ($vrijstelling->uid === null) {

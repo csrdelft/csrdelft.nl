@@ -6,8 +6,7 @@ namespace CsrDelft\entity\groepen\interfaces;
 
 use CsrDelft\common\Enum;
 
-interface HeeftSoort
-{
+interface HeeftSoort {
 	/**
 	 * @return Enum
 	 */

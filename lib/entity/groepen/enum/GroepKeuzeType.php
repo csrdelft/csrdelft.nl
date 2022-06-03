@@ -13,8 +13,7 @@ use CsrDelft\common\Enum;
  * @method static static RADIOS
  * @method static static TEXT
  */
-class GroepKeuzeType extends Enum
-{
+class GroepKeuzeType extends Enum {
 	const CHECKBOX = 'checkbox_1';
 	const DROPDOWN = 'dropdown_1';
 	const RADIOS = 'radios_1';

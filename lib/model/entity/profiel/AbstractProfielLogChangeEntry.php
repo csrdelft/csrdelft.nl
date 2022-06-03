@@ -11,7 +11,6 @@ namespace CsrDelft\model\entity\profiel;
  * LogGroup uit het legacy log die nog niet geparsed is.
  *
  */
-abstract class AbstractProfielLogChangeEntry extends AbstractProfielLogEntry
-{
+abstract class AbstractProfielLogChangeEntry extends AbstractProfielLogEntry {
 
 }

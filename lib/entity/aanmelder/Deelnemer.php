@@ -11,8 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=DeelnemerRepository::class)
  * @ORM\Table(name="aanmelder_deelnemer")
  */
-class Deelnemer
-{
+class Deelnemer {
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -48,84 +47,70 @@ class Deelnemer
 	 */
 	private $aanwezig = null;
 
-	public function __construct(AanmeldActiviteit $activiteit, Profiel $lid, int $aantal)
-	{
+	public function __construct(AanmeldActiviteit $activiteit, Profiel $lid, int $aantal) {
 		$this->activiteit = $activiteit;
 		$this->lid = $lid;
 		$this->aantal = $aantal;
 		$this->aangemeld = date_create_immutable();
 	}
 
-	public function getId(): ?int
-	{
+	public function getId(): ?int {
 		return $this->id;
 	}
 
-	public function getActiviteit(): ?AanmeldActiviteit
-	{
+	public function getActiviteit(): ?AanmeldActiviteit {
 		return $this->activiteit;
 	}
 
-	public function setActiviteit(?AanmeldActiviteit $activiteit): self
-	{
+	public function setActiviteit(?AanmeldActiviteit $activiteit): self {
 		$this->activiteit = $activiteit;
 
 		return $this;
 	}
 
-	public function getAantal(): int
-	{
+	public function getAantal(): int {
 		return $this->aantal;
 	}
 
-	public function setAantal(int $aantal): self
-	{
+	public function setAantal(int $aantal): self {
 		$this->aantal = $aantal;
 
 		return $this;
 	}
 
-	public function getAangemeld(): DateTimeImmutable
-	{
+	public function getAangemeld(): DateTimeImmutable {
 		return $this->aangemeld;
 	}
 
-	public function setAangemeld(DateTimeImmutable $aangemeld): self
-	{
+	public function setAangemeld(DateTimeImmutable $aangemeld): self {
 		$this->aangemeld = $aangemeld;
 
 		return $this;
 	}
 
-	public function setLid(Profiel $lid): Deelnemer
-	{
+	public function setLid(Profiel $lid): Deelnemer {
 		$this->lid = $lid;
 
 		return $this;
 	}
 
-	public function getLid(): Profiel
-	{
+	public function getLid(): Profiel {
 		return $this->lid;
 	}
 
-	public function isAanwezig(): bool
-	{
+	public function isAanwezig(): bool {
 		return $this->aanwezig !== null;
 	}
 
-	public function getAanwezigTijd(): string
-	{
+	public function getAanwezigTijd(): string {
 		return $this->isAanwezig() ? date_format_intl($this->aanwezig, 'H:mm') : '';
 	}
 
-	public function setAanwezig()
-	{
+	public function setAanwezig() {
 		$this->aanwezig = date_create_immutable();
 	}
 
-	public function setNietAanwezig()
-	{
+	public function setNietAanwezig() {
 		$this->aanwezig = null;
 	}
 }

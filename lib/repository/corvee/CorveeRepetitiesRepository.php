@@ -18,21 +18,18 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CorveeRepetitie[]    findAll()
  * @method CorveeRepetitie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CorveeRepetitiesRepository extends AbstractRepository
-{
+class CorveeRepetitiesRepository extends AbstractRepository {
 	/**
 	 * @var CorveeTakenRepository
 	 */
 	private $corveeTakenRepository;
 
-	public function __construct(ManagerRegistry $registy, CorveeTakenRepository $corveeTakenRepository)
-	{
+	public function __construct(ManagerRegistry $registy, CorveeTakenRepository $corveeTakenRepository) {
 		parent::__construct($registy, CorveeRepetitie::class);
 		$this->corveeTakenRepository = $corveeTakenRepository;
 	}
 
-	public function nieuw(MaaltijdRepetitie $maaltijdRepetitie = null)
-	{
+	public function nieuw(MaaltijdRepetitie $maaltijdRepetitie = null) {
 		$repetitie = new CorveeRepetitie();
 		$repetitie->crv_repetitie_id = null;
 		$repetitie->maaltijdRepetitie = $maaltijdRepetitie;
@@ -47,8 +44,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 		return $repetitie;
 	}
 
-	public function getFirstOccurrence(CorveeRepetitie $repetitie)
-	{
+	public function getFirstOccurrence(CorveeRepetitie $repetitie) {
 		$datum = time();
 		$shift = $repetitie->dag_vd_week - date('w', $datum) + 7;
 		$shift %= 7;
@@ -61,8 +57,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	/**
 	 * @return CorveeRepetitie[]
 	 */
-	public function getVoorkeurbareRepetities()
-	{
+	public function getVoorkeurbareRepetities() {
 		$repetities = $this->findBy(['voorkeurbaar' => true]);
 		$result = [];
 		foreach ($repetities as $repetitie) {
@@ -71,8 +66,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 		return $result;
 	}
 
-	public function getAlleRepetities()
-	{
+	public function getAlleRepetities() {
 		return $this->findAll();
 	}
 
@@ -82,8 +76,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	 * @param int $mrid
 	 * @return CorveeRepetitie[]
 	 */
-	public function getRepetitiesVoorMaaltijdRepetitie($mrid)
-	{
+	public function getRepetitiesVoorMaaltijdRepetitie($mrid) {
 		return $this->findBy(['mlt_repetitie_id' => $mrid]);
 	}
 
@@ -91,13 +84,11 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	 * @param $crid
 	 * @return CorveeRepetitie|null
 	 */
-	public function getRepetitie($crid)
-	{
+	public function getRepetitie($crid) {
 		return $this->find($crid);
 	}
 
-	public function verwijderRepetitie($crid)
-	{
+	public function verwijderRepetitie($crid) {
 		if (!is_numeric($crid) || $crid <= 0) {
 			throw new CsrGebruikerException('Verwijder corvee-repetitie faalt: Invalid $crid =' . $crid);
 		}
@@ -123,8 +114,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	 * @param int $mrid
 	 * @return bool
 	 */
-	public function existMaaltijdRepetitieCorvee($mrid)
-	{
+	public function existMaaltijdRepetitieCorvee($mrid) {
 		return count($this->findBy(['mlt_repetitie_id' => $mrid])) > 0;
 	}
 
@@ -136,8 +126,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	 * @param int $fid
 	 * @return bool
 	 */
-	public function existFunctieRepetities($fid)
-	{
+	public function existFunctieRepetities($fid) {
 		return count($this->findBy(['functie_id' => $fid])) > 0;
 	}
 

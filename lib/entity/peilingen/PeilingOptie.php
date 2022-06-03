@@ -14,8 +14,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *   @ORM\Index(name="optie", columns={"titel"})
  * })
  */
-class PeilingOptie implements DataTableEntry
-{
+class PeilingOptie implements DataTableEntry {
 	/**
 	 * Primary key
 	 * @var int
@@ -69,8 +68,7 @@ class PeilingOptie implements DataTableEntry
 	 * @Serializer\Groups("vue")
 	 * @Serializer\SerializedName("stemmen")
 	 */
-	public function getVueStemmen()
-	{
+	public function getVueStemmen() {
 		$magStemmenZien = ($this->peiling->getHeeftGestemd() || !$this->peiling->getMagStemmen()) && $this->peiling->resultaat_zichtbaar;
 
 		if ($magStemmenZien) {
@@ -84,8 +82,7 @@ class PeilingOptie implements DataTableEntry
 	 * @return string
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
-	public function getBeschrijvingFormatted()
-	{
+	public function getBeschrijvingFormatted() {
 		return CsrBB::parse($this->beschrijving);
 	}
 }

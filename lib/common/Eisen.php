@@ -13,8 +13,7 @@ use Doctrine\Common\Collections\Criteria;
  * @package CsrDelft\common
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class Eisen
-{
+class Eisen {
 	/**
 	 * Filter een PersistentCollection op de uid van de huidige gebruiker. Gaat er vanuit dat er dan maar 1 resultaat over is.
 	 *
@@ -26,7 +25,7 @@ class Eisen
 		return self::voorGebruiker(LoginService::getUid(), $veld);
 	}
 
-	public static function voorIngelogdLid($veld = 'lid'): Criteria
+	public static function voorIngelogdLid($veld = 'lid') : Criteria
 	{
 		return Criteria::create()->where(Criteria::expr()->eq($veld, LoginService::getProfiel()))->setMaxResults(1);
 	}

@@ -28,7 +28,7 @@ class ChildRow {
 	 * @private
 	 * @static
 	 */
-	public static _fnCreatedRowCallback(tr: HTMLTableRowElement, data: { detailSource: string }) {
+	public static _fnCreatedRowCallback(tr: HTMLTableRowElement, data: {detailSource: string}) {
 		// Details from external source
 		if ('detailSource' in data) {
 			$(tr).children('td:first').addClass('toggle-childrow').data('detailSource', data.detailSource);
@@ -40,7 +40,7 @@ class ChildRow {
 	constructor(dt: string) {
 		// Sanity check - you just know it will happen
 		if (!(this instanceof ChildRow)) {
-			throw new Error("ChildRow must be initialised with the 'new' keyword.");
+			throw new Error('ChildRow must be initialised with the \'new\' keyword.');
 		}
 
 		this.api = new $.fn.dataTable.Api(dt);
@@ -60,7 +60,7 @@ class ChildRow {
 			this.api.settings()[0],
 			'aoRowCreatedCallback',
 			ChildRow._fnCreatedRowCallback,
-			'child-row'
+			'child-row',
 		);
 
 		tableNode.find('tbody').on('click', 'tr td.toggle-childrow', (event) => {
@@ -100,15 +100,14 @@ class ChildRow {
 					if (row.child.isShown()) {
 						tr.removeClass('loading');
 						innerDiv.html(data).slideDown();
-						$(table.node()).trigger('childRow.dt', { container: innerDiv });
+						$(table.node()).trigger('childRow.dt', {container: innerDiv});
 					}
 				})
 				.fail((_, textStatus, errorThrown) => {
 					if (row.child.isShown()) {
 						tr.removeClass('loading');
-						tr.find('td.toggle-childrow').html(
-							`<img title="${errorThrown}" alt="cancel" src="/plaetjes/famfamfam/cancel.png" />`
-						);
+						tr.find('td.toggle-childrow')
+							.html(`<img title="${errorThrown}" alt="cancel" src="/plaetjes/famfamfam/cancel.png" />`);
 					}
 				});
 		}
@@ -144,6 +143,7 @@ $(document).on('preInit.dt.childRow', (e, settings) => {
 	const init = settings.oInit.childRow;
 
 	if (!settings._childRow) {
+
 		if (init !== false) {
 			new ChildRow(settings);
 		}
@@ -152,17 +152,14 @@ $(document).on('preInit.dt.childRow', (e, settings) => {
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-$.fn.dataTable.Api.register(
-	'childRow.toggle()',
-	function (this: DataTables.TablesMethods, td: JQuery<HTMLTableCellElement>) {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		return this.iterator('table', (ctx: { _childRow: ChildRow }) => {
-			const fh = ctx._childRow;
+$.fn.dataTable.Api.register('childRow.toggle()', function (this: DataTables.TablesMethods, td: JQuery<HTMLTableCellElement>) {
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	return this.iterator('table', (ctx: {_childRow: ChildRow}) => {
+		const fh = ctx._childRow;
 
-			if (fh) {
-				fh.fnToggleChildRow(td);
-			}
-		});
-	}
-);
+		if (fh) {
+			fh.fnToggleChildRow(td);
+		}
+	});
+});

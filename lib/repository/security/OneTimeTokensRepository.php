@@ -23,15 +23,12 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method OneTimeToken[]    findAll()
  * @method OneTimeToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OneTimeTokensRepository extends AbstractRepository
-{
-	public function __construct(ManagerRegistry $registry, AccountRepository $accountRepository)
-	{
+class OneTimeTokensRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $registry, AccountRepository $accountRepository) {
 		parent::__construct($registry, OneTimeToken::class);
 	}
 
-	public function hasToken($uid, $url)
-	{
+	public function hasToken($uid, $url) {
 		return $this->find(['uid' => $uid, 'url' => $url]) != null;
 	}
 
@@ -42,8 +39,7 @@ class OneTimeTokensRepository extends AbstractRepository
 	 * @param string $token
 	 * @return Account|null
 	 */
-	public function verifyToken($url, $token)
-	{
+	public function verifyToken($url, $token) {
 		$qb = $this->createQueryBuilder('t');
 		$qb->andWhere('t.url = :url');
 		$qb->andWhere('t.expire > CURRENT_DATE()');
@@ -66,11 +62,10 @@ class OneTimeTokensRepository extends AbstractRepository
 	 * @param string $url
 	 * @return boolean
 	 */
-	public function isVerified($uid, $url)
-	{
+	public function isVerified($uid, $url) {
 		$token = $this->find(['uid' => $uid, 'url' => $url]);
 		if ($token) {
-			return $token->verified and LoginService::getUid() === $token->uid and strtotime($token->expire) > time();
+			return $token->verified AND LoginService::getUid() === $token->uid AND strtotime($token->expire) > time();
 		}
 		return false;
 	}
@@ -79,8 +74,7 @@ class OneTimeTokensRepository extends AbstractRepository
 	 * @param string $uid
 	 * @param string $url
 	 */
-	public function discardToken($uid, $url)
-	{
+	public function discardToken($uid, $url) {
 		$this->getEntityManager()->remove($this->getEntityManager()->getReference(OneTimeToken::class, ['uid' => $uid, 'url' => $url]));
 		$this->getEntityManager()->flush();
 	}
@@ -93,8 +87,7 @@ class OneTimeTokensRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function createToken(Account $account, $url)
-	{
+	public function createToken(Account $account, $url) {
 		$rand = crypto_rand_token(255);
 		$token = new OneTimeToken();
 		$token->account = $account;
@@ -111,8 +104,7 @@ class OneTimeTokensRepository extends AbstractRepository
 
 	/**
 	 */
-	public function opschonen()
-	{
+	public function opschonen() {
 		$this->createQueryBuilder('t')
 			->delete()
 			->where('t.expire <= :now')

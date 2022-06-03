@@ -11,8 +11,7 @@ use CsrDelft\view\IsHetAlView;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class BbIsHetAl extends BbTag
-{
+class BbIsHetAl extends BbTag {
 	/**
 	 * @var RequestStack
 	 */
@@ -34,37 +33,32 @@ class BbIsHetAl extends BbTag
 	 */
 	private $value;
 
-	public function __construct(RequestStack $requestStack, AgendaRepository $agendaRepository, LidInstellingenRepository $lidInstellingenRepository, WoordVanDeDagRepository $woordVanDeDagRepository)
-	{
+	public function __construct(RequestStack $requestStack, AgendaRepository $agendaRepository, LidInstellingenRepository $lidInstellingenRepository, WoordVanDeDagRepository $woordVanDeDagRepository) {
 		$this->agendaRepository = $agendaRepository;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 		$this->woordVanDeDagRepository = $woordVanDeDagRepository;
 		$this->requestStack = $requestStack;
 	}
 
-	public static function getTagName()
-	{
+	public static function getTagName() {
 		return 'ishetal';
 	}
 
-	public function isAllowed()
-	{
+	public function isAllowed() {
 		return LoginService::mag(P_LOGGED_IN);
 	}
 
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
-	{
+	public function parse($arguments = []) {
 		$this->value = $this->readMainArgument($arguments);
 		if ($this->value == '') {
 			$this->value = lid_instelling('zijbalk', 'ishetal');
 		}
 	}
 
-	public function render()
-	{
+	public function render() {
 		$html = '';
 		$html .= '<div class="my-3 p-3 bg-white rounded shadow-sm">';
 		$html .= (new IsHetAlView($this->lidInstellingenRepository, $this->requestStack, $this->agendaRepository, $this->woordVanDeDagRepository, $this->value))->__toString();

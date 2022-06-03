@@ -18,11 +18,9 @@ use Twig\Environment;
  * Formulier om een corveetaak toe te wijzen aan een lid.
  *
  */
-class ToewijzenForm extends ModalForm
-{
+class ToewijzenForm extends ModalForm {
 
-	public function __construct(CorveeTaak $taak, Environment $twig, array $suggesties)
-	{
+	public function __construct(CorveeTaak $taak, Environment $twig, array $suggesties) {
 		parent::__construct(null, '/corvee/beheer/toewijzen/' . $taak->taak_id);
 
 		if (!is_numeric($taak->taak_id) || $taak->taak_id <= 0) {

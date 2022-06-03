@@ -12,18 +12,15 @@ use DateTimeInterface;
  *
  * Date time picker with range (optional). Takes a DateTime object as input and retuns a DateTime object
  */
-class DateTimeObjectField extends DateTimeField
-{
-	public function __construct($name, $value, $description, $maxyear = null, $minyear = null)
-	{
+class DateTimeObjectField extends DateTimeField {
+	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
 		if ($value instanceof DateTimeInterface) {
 			$value = date_format_intl($value, 'y-MM-dd HH:mm');
 		}
 		parent::__construct($name, $value, $description, $maxyear, $minyear);
 	}
 
-	public function getFormattedValue()
-	{
+	public function getFormattedValue() {
 		return $this->value ? date_create_immutable($this->value) : null;
 	}
 }

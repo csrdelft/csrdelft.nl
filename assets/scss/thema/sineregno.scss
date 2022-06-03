@@ -1,20 +1,20 @@
 $primair-achtergrond: #697257;
 $zijbalk-achtergrond: #741F1B;
-$secundaire-accenten-1: #5C3542;
+$secundaire-accenten-1:  #5C3542;
 $secundaire-accenten-2: #59787A;
 
 $primary: $secundaire-accenten-1;
 $secondary: $secundaire-accenten-2;
 
 //$body-bg: $primair-achtergrond;
-$body-color: #404B47;
+$body-color:  #404B47;
 $zijbalk-bg: $zijbalk-achtergrond;
 $zijbalk-color: white;
 $zijbalk-kopje: $secundaire-accenten-2;
 
 $donkerblauw: $secundaire-accenten-1;
 $orange: $secundaire-accenten-2;
-$black: #404B47;
+$black:  #404B47;
 
 @font-face {
 	font-family: '28 Days';
@@ -37,13 +37,13 @@ $headings-font-family: '28 Days', 'Source Sans Pro', Helvetica, Arial, sans-seri
 @import "./normaal";
 
 #zijbalk .blok .zijbalk-kopje {
-	color: white;
+	color:white;
 	font-family: $headings-font-family;
 	font-size: x-large;
 }
 
 #zijbalk .blok .item {
-	color: white;
+	color:white;
 	font-family: $font-family-base;
 }
 

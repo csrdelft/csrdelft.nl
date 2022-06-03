@@ -57,8 +57,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
 
-class ProfielController extends AbstractController
-{
+class ProfielController extends AbstractController {
 	/**
 	 * @var ProfielRepository
 	 */
@@ -77,12 +76,11 @@ class ProfielController extends AbstractController
 	private $googleSync;
 
 	public function __construct(
-		ProfielRepository        $profielRepository,
-		AccountRepository        $accountRepository,
+		ProfielRepository $profielRepository,
+		AccountRepository $accountRepository,
 		LidToestemmingRepository $lidToestemmingRepository,
-		GoogleSync               $googleSync
-	)
-	{
+		GoogleSync $googleSync
+	) {
 		$this->profielRepository = $profielRepository;
 		$this->accountRepository = $accountRepository;
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
@@ -139,26 +137,26 @@ class ProfielController extends AbstractController
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function profiel(
-		BesturenRepository             $besturenRepository,
-		CommissiesRepository           $commissiesRepository,
-		WerkgroepenRepository          $werkgroepenRepository,
-		OnderverenigingenRepository    $onderverenigingenRepository,
-		RechtenGroepenRepository       $rechtenGroepenRepository,
-		KetzersRepository              $ketzersRepository,
-		ActiviteitenRepository         $activiteitenRepository,
-		CiviBestellingRepository       $civiBestellingRepository,
-		CorveeTakenRepository          $corveeTakenRepository,
-		CorveeVoorkeurenRepository     $corveeVoorkeurenRepository,
-		BoekExemplaarRepository        $boekExemplaarRepository,
-		BoekRecensieRepository         $boekRecensieRepository,
-		FotoRepository                 $fotoRepository,
+		BesturenRepository $besturenRepository,
+		CommissiesRepository $commissiesRepository,
+		WerkgroepenRepository $werkgroepenRepository,
+		OnderverenigingenRepository $onderverenigingenRepository,
+		RechtenGroepenRepository $rechtenGroepenRepository,
+		KetzersRepository $ketzersRepository,
+		ActiviteitenRepository $activiteitenRepository,
+		CiviBestellingRepository $civiBestellingRepository,
+		CorveeTakenRepository $corveeTakenRepository,
+		CorveeVoorkeurenRepository $corveeVoorkeurenRepository,
+		BoekExemplaarRepository $boekExemplaarRepository,
+		BoekRecensieRepository $boekRecensieRepository,
+		FotoRepository $fotoRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
-		ForumPostsRepository           $forumPostsRepository,
-		FotoTagsRepository             $fotoTagsRepository,
-		CorveeKwalificatiesRepository  $corveeKwalificatiesRepository,
+		ForumPostsRepository $forumPostsRepository,
+		FotoTagsRepository $fotoTagsRepository,
+		CorveeKwalificatiesRepository $corveeKwalificatiesRepository,
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
-		Profiel                        $profiel = null
+		Profiel $profiel = null
 	): Response
 	{
 		if (!$profiel) {
@@ -209,8 +207,7 @@ class ProfielController extends AbstractController
 	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
 	 * @CsrfUnsafe()
 	 */
-	public function nieuw($lidjaar, $status, EntityManagerInterface $em)
-	{
+	public function nieuw($lidjaar, $status, EntityManagerInterface $em) {
 		if ($em->getFilters()->isEnabled('verbergNovieten')) {
 			$em->getFilters()->disable('verbergNovieten');
 		}
@@ -229,8 +226,7 @@ class ProfielController extends AbstractController
 		return $this->profielBewerken($profiel, true);
 	}
 
-	private function profielBewerken(Profiel $profiel, $alleenFormulier = false)
-	{
+	private function profielBewerken(Profiel $profiel, $alleenFormulier = false) {
 
 		if (!$profiel->magBewerken()) {
 			throw $this->createAccessDeniedException();
@@ -298,8 +294,7 @@ class ProfielController extends AbstractController
 	 * @Route("/profiel/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
-	public function bewerken($uid)
-	{
+	public function bewerken($uid) {
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
@@ -444,7 +439,7 @@ class ProfielController extends AbstractController
 	 * @Route("/profiel/voorkeuren", methods={"GET"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
-	public function voorkeurenNoUid(Request                     $request,
+	public function voorkeurenNoUid(Request $request,
 																	VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
 																	CommissieVoorkeurRepository $commissieVoorkeurRepository,
 																	VoorkeurCommissieRepository $voorkeurCommissieRepository): Response
@@ -460,11 +455,11 @@ class ProfielController extends AbstractController
 	 * @CsrfUnsafe
 	 */
 	public function voorkeuren(
-		Request                     $request,
+		Request $request,
 		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
 		CommissieVoorkeurRepository $commissieVoorkeurRepository,
 		VoorkeurCommissieRepository $voorkeurCommissieRepository,
-																$uid
+		$uid
 	): Response
 	{
 		$profiel = $this->profielRepository->get($uid);

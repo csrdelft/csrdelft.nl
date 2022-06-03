@@ -14,8 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BoekExemplaarRepository")
  * @ORM\Table("biebexemplaar")
  */
-class BoekExemplaar
-{
+class BoekExemplaar {
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -83,13 +82,11 @@ class BoekExemplaar
 	 */
 	public $boek;
 
-	public function isBiebBoek(): bool
-	{
+	public function isBiebBoek() : bool {
 		return $this->eigenaar_uid == 'x222';
 	}
 
-	public function isEigenaar(): bool
-	{
+	public function isEigenaar() : bool {
 		if ($this->eigenaar_uid == LoginService::getUid()) {
 			return true;
 		} elseif ($this->isBiebBoek() && LoginService::mag(P_BIEB_MOD)) {
@@ -98,38 +95,31 @@ class BoekExemplaar
 		return false;
 	}
 
-	public function magBewerken(): bool
-	{
+	public function magBewerken() : bool {
 		return $this->isEigenaar();
 	}
 
-	public function magBekijken()
-	{
+	public function magBekijken() {
 		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
 	}
 
-	public function isBeschikbaar()
-	{
+	public function isBeschikbaar() {
 		return $this->status === BoekExemplaarStatus::beschikbaar();
 	}
 
-	public function kanLenen(string $uid)
-	{
+	public function kanLenen(string $uid) {
 		return $this->eigenaar_uid != $uid && $this->isBeschikbaar();
 	}
 
-	public function isUitgeleend()
-	{
+	public function isUitgeleend() {
 		return $this->status === BoekExemplaarStatus::uitgeleend();
 	}
 
-	public function isTeruggegeven()
-	{
+	public function isTeruggegeven() {
 		return $this->status === BoekExemplaarStatus::teruggegeven();
 	}
 
-	public function isVermist()
-	{
+	public function isVermist() {
 		return $this->status === BoekExemplaarStatus::vermist();
 	}
 }

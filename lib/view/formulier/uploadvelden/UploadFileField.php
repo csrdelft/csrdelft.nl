@@ -14,14 +14,12 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @since 30/03/2017
  * Uploaden van bestand in de browser over http(s).
  */
-class UploadFileField extends InputField
-{
+class UploadFileField extends InputField {
 
 	public $filterMime;
 	public $type = 'file';
 
-	public function __construct($name, array $filterMime)
-	{
+	public function __construct($name, array $filterMime) {
 		parent::__construct($name, null, 'Uploaden in browser');
 		$this->filterMime = $filterMime;
 		if ($this->isPosted()) {
@@ -38,23 +36,19 @@ class UploadFileField extends InputField
 		}
 	}
 
-	public function isPosted()
-	{
+	public function isPosted() {
 		return isset($_FILES[$this->name]);
 	}
 
-	public function isAvailable()
-	{
+	public function isAvailable() {
 		return true;
 	}
 
-	public function getFilter()
-	{
+	public function getFilter() {
 		return $this->filterMime;
 	}
 
-	public function validate()
-	{
+	public function validate() {
 		parent::validate();
 		if ($this->value['error'] == UPLOAD_ERR_NO_FILE) {
 			if ($this->required) {
@@ -64,9 +58,9 @@ class UploadFileField extends InputField
 			$this->error = 'Bestand is te groot: Maximaal ' . format_filesize(getMaximumFileUploadSize());
 		} elseif ($this->value['error'] != UPLOAD_ERR_OK) {
 			$this->error = 'Upload-error: code ' . $this->value['error'];
-		} elseif (!is_uploaded_file($this->value['tmp_name']) or empty($this->model->filesize)) {
+		} elseif (!is_uploaded_file($this->value['tmp_name']) OR empty($this->model->filesize)) {
 			$this->error = 'Bestand bestaat niet (meer): ' . htmlspecialchars($this->value['tmp_name']);
-		} elseif (!empty($this->filterMime) and !in_array($this->model->mimetype, $this->filterMime)) {
+		} elseif (!empty($this->filterMime) AND !in_array($this->model->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . htmlspecialchars($this->model->mimetype);
 		} elseif (!checkMimetype($this->model->filename, $this->model->mimetype)) {
 			$this->error = 'Bestandstype komt niet overeen met bestandsnaam: ' . $this->model->mimetype;
@@ -74,8 +68,7 @@ class UploadFileField extends InputField
 		return $this->error === '';
 	}
 
-	public function opslaan($directory, $filename, $overwrite = false)
-	{
+	public function opslaan($directory, $filename, $overwrite = false) {
 		parent::opslaan($directory, $filename, $overwrite);
 		$moved = @move_uploaded_file($this->value['tmp_name'], join_paths($directory, $filename));
 		if (!$moved) {
@@ -88,8 +81,7 @@ class UploadFileField extends InputField
 		$this->model->filename = $filename;
 	}
 
-	public function getHtml()
-	{
+	public function getHtml() {
 		// werkomheen onbekende mime-types voor client
 		if ($this->filterMime == Afbeelding::$mimeTypes) {
 			$accept = 'image/*';
@@ -99,8 +91,7 @@ class UploadFileField extends InputField
 		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'disabled', 'readonly')) . ' accept="' . $accept . '" data-max-size="' . getMaximumFileUploadSize() . '" />';
 	}
 
-	public function getJavascript()
-	{
+	public function getJavascript() {
 		$max = getMaximumFileUploadSize();
 		$format = format_filesize($max);
 		return parent::getJavascript() . <<<JS

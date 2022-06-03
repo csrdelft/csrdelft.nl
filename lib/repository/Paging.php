@@ -10,8 +10,7 @@ namespace CsrDelft\repository;
  * Paginering van items.
  *
  */
-interface Paging
-{
+interface Paging {
 
 	public function getAantalPerPagina();
 

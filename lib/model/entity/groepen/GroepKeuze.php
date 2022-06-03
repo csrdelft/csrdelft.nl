@@ -9,10 +9,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/04/2019
  */
-class GroepKeuze
-{
-	public function __wakeup()
-	{
+class GroepKeuze {
+	public function __wakeup() {
 		assert(in_array($this->type, GroepKeuzeType::getEnumValues()));
 	}
 
@@ -20,7 +18,7 @@ class GroepKeuze
 	 * @var string
 	 * @Serializer\Groups("vue")
 	 */
-	public $naam;
+  public $naam;
 	/**
 	 * @var string
 	 * @Serializer\Groups("vue")
@@ -42,8 +40,7 @@ class GroepKeuze
 	 */
 	public $description;
 
-	public function __construct($naam = null, $type = null, $default = null, $description = null)
-	{
+	public function __construct($naam = null, $type = null, $default = null, $description = null) {
 		$this->naam = $naam;
 		$this->type = $type;
 		$this->default = $default;

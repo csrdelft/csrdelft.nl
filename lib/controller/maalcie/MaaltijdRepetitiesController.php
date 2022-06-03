@@ -17,16 +17,14 @@ use Throwable;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MaaltijdRepetitiesController extends AbstractController
-{
+class MaaltijdRepetitiesController extends AbstractController {
 	private $repetitie = null;
 	/** @var MaaltijdRepetitiesRepository */
 	private $maaltijdRepetitiesRepository;
 	/** @var MaaltijdenRepository */
 	private $maaltijdenRepository;
 
-	public function __construct(MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, MaaltijdenRepository $maaltijdenRepository)
-	{
+	public function __construct(MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, MaaltijdenRepository $maaltijdenRepository) {
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 	}
@@ -37,8 +35,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 * @Route("/maaltijden/repetities/{mlt_repetitie_id}", methods={"GET"}, defaults={"mlt_repetitie_id"=null})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function beheer(MaaltijdRepetitie $repetitie = null)
-	{
+	public function beheer(MaaltijdRepetitie $repetitie = null) {
 		return $this->render('maaltijden/maaltijdrepetitie/beheer_maaltijd_repetities.html.twig', [
 			'repetities' => $this->maaltijdRepetitiesRepository->getAlleRepetities(),
 			'modal' => $repetitie ? $this->bewerk($repetitie) : null
@@ -50,8 +47,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 * @Route("/maaltijden/repetities/nieuw", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function nieuw()
-	{
+	public function nieuw() {
 		return new MaaltijdRepetitieForm(new MaaltijdRepetitie()); // fetches POST values itself
 	}
 
@@ -61,8 +57,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 * @Route("/maaltijden/repetities/bewerk/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function bewerk(MaaltijdRepetitie $repetitie)
-	{
+	public function bewerk(MaaltijdRepetitie $repetitie) {
 		return new MaaltijdRepetitieForm($repetitie); // fetches POST values itself
 	}
 
@@ -74,8 +69,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 * @Route("/maaltijden/repetities/opslaan/", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function opslaan(MaaltijdRepetitie $repetitie = null)
-	{
+	public function opslaan(MaaltijdRepetitie $repetitie = null) {
 		if ($repetitie) {
 			$view = $this->bewerk($repetitie);
 		} else {
@@ -104,8 +98,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 * @Route("/maaltijden/repetities/verwijder/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function verwijder(MaaltijdRepetitie $repetitie)
-	{
+	public function verwijder(MaaltijdRepetitie $repetitie) {
 		$aantal = $this->maaltijdRepetitiesRepository->verwijderRepetitie($repetitie);
 
 		if ($aantal > 0) {
@@ -124,8 +117,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 * @Route("/maaltijden/repetities/bijwerken/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function bijwerken(MaaltijdRepetitie $repetitie)
-	{
+	public function bijwerken(MaaltijdRepetitie $repetitie) {
 		$view = $this->opslaan($repetitie);
 
 		if ($this->repetitie) { // opslaan succesvol

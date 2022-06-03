@@ -14,8 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\security\OneTimeTokensRepository")
  * @ORM\Table("onetime_tokens")
  */
-class OneTimeToken
-{
+class OneTimeToken {
 
 	/**
 	 * Lidnummer

@@ -11,8 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\pin\PinTransactieRepository")
  * @ORM\Table("pin_transacties")
  */
-class PinTransactie
-{
+class PinTransactie {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -85,8 +84,7 @@ class PinTransactie
 	 * @return int
 	 * @throws CsrException
 	 */
-	public function getBedragInCenten()
-	{
+	public function getBedragInCenten() {
 		list($valuta, $bedrag) = explode(' ', $this->amount);
 
 		if ($valuta !== 'EUR') {
@@ -102,8 +100,7 @@ class PinTransactie
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function getKorteBeschrijving()
-	{
-		return sprintf('€%.2f', $this->getBedragInCenten() / 100);
+	public function getKorteBeschrijving() {
+		return sprintf('€%.2f',$this->getBedragInCenten()/100);
 	}
 }

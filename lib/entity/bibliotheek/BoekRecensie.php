@@ -14,8 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BoekRecensieRepository")
  * @ORM\Table("biebbeschrijving")
  */
-class BoekRecensie
-{
+class BoekRecensie {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -62,8 +61,7 @@ class BoekRecensie
 	 */
 	public $boek;
 
-	public function getBoek()
-	{
+	public function getBoek() {
 		return $this->boek;
 	}
 
@@ -79,13 +77,11 @@ class BoekRecensie
 	 * @return bool
 	 *        een beschrijving mag door schrijver van beschrijving en door admins bewerkt worden.
 	 */
-	public function magVerwijderen()
-	{
+	public function magVerwijderen() {
 		return $this->isSchrijver();
 	}
 
-	public function isSchrijver($uid = null)
-	{
+	public function isSchrijver($uid = null) {
 		if (!LoginService::mag(P_LOGGED_IN)) {
 			return false;
 		}
@@ -98,8 +94,7 @@ class BoekRecensie
 	/**
 	 * @return bool
 	 */
-	public function magBewerken()
-	{
+	public function magBewerken() {
 		return $this->isSchrijver();
 	}
 }

@@ -9,15 +9,12 @@ use CsrDelft\repository\GroepRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 
-class WoonoordenRepository extends GroepRepository
-{
-	public function __construct(ManagerRegistry $registry)
-	{
+class WoonoordenRepository extends GroepRepository {
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Woonoord::class);
 	}
 
-	public function nieuw($soort = null)
-	{
+	public function nieuw($soort = null) {
 		/** @var Woonoord $woonoord */
 		$woonoord = parent::nieuw();
 		$woonoord->huisStatus = HuisStatus::Woonoord();

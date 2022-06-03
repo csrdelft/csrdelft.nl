@@ -14,46 +14,38 @@ use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 
-class GroepOmschrijvingView implements FormElement, ToResponse
-{
+class GroepOmschrijvingView implements FormElement, ToResponse {
 	use ToHtmlResponse;
 
 	protected $groep;
 	protected $javascript;
 
-	public function __construct(Groep $groep)
-	{
+	public function __construct(Groep $groep) {
 		$this->groep = $groep;
 		$this->javascript = '';
 	}
 
-	public function getBreadcrumbs()
-	{
+	public function getBreadcrumbs() {
 		return null;
 	}
 
-	public function getType()
-	{
+	public function getType() {
 		return classNameZonderNamespace(get_class($this));
 	}
 
-	public function getModel()
-	{
+	public function getModel() {
 		return $this->groep;
 	}
 
-	public function getTitel()
-	{
+	public function getTitel() {
 		return $this->groep->naam;
 	}
 
-	public function getJavascript()
-	{
+	public function getJavascript() {
 		return $this->javascript;
 	}
 
-	public function getHtml()
-	{
+	public function getHtml() {
 		$this->javascript .= <<<JS
 
 $('#groep-omschrijving-{$this->groep->id}').hide().slideDown(600);
@@ -64,13 +56,11 @@ JS;
 			. '</div>';
 	}
 
-	public function __toString()
-	{
+	public function __toString() {
 		return $this->getHtml();
 	}
 
-	protected function getScriptTag()
-	{
+	protected function getScriptTag() {
 		return <<<JS
 <script type="text/javascript">
 $(document).ready(function () {

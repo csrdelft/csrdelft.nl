@@ -30,7 +30,7 @@
 				<div class="col-md-6 mb-4 mb-md-0">
 					<h1>{% trans %}Word lid van C.S.R.{% endtrans %}</h1>
 					<p>{% trans %}C.S.R. Delft is de grootste christelijke vereniging van Delft. Lid zijn van onze studentenvereniging betekent voor jou dat je nieuwe vriendschappen maakt voor het leven en samen geniet van de activiteiten die de vereniging biedt.
-							Het  betekent dat je je geloof blijft voeden en je kan verdiepen met kringen, bidgroepjes en worshipavonden.
+							Het	betekent dat je je geloof blijft voeden en je kan verdiepen met kringen, bidgroepjes en worshipavonden.
 							Lid zijn zorgt voor prachtige momenten tijdens je studententijd die je je leven lang niet gaat vergeten!{% endtrans %}</p>
 					<div class="mt-4">
 						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">
@@ -127,9 +127,7 @@
 							ook je gegevens achterlaten voor je voorinschrijving{% endtrans %}</p>
 					<p>{% trans %}Ook hebben we twee keer dit jaar een open avond waarbij je kan komen kijken
 							hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
-							De eerstvolgende open avond is op 2 juni.{% endtrans %} <a href="https://forms.gle/TjRCndkQ6iekoZ2X7"
-																																				 target="_blank">{% trans %}Schrijf je nu in!{% endtrans %}</a>
-					</p>
+							De eerstvolgende open avond is op 2 juni.{% endtrans %} <a href="https://forms.gle/TjRCndkQ6iekoZ2X7" target="_blank">{% trans %}Schrijf je nu in!{% endtrans %}</a></p>
 				</div>
 			</div>
 		</div>
@@ -172,23 +170,17 @@
 					<form action="" class="formulieren" id="owee-form">
 						{{ csrfField() }}
 						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden" checked>
-						<label for="lid-worden" class="owee tab">{% trans %}<span
-								class="d-none d-md-inline">Ik wil </span>lid worden{% endtrans %}</label>
+						<label for="lid-worden" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil </span>lid worden{% endtrans %}</label>
 						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken">
-						<label for="lid-spreken" class="owee tab">{% trans %}<span
-								class="d-none d-md-inline">Ik wil een dagje </span>met een lid meelopen{% endtrans %}</label>
+						<label for="lid-spreken" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil een dagje </span>met een lid meelopen{% endtrans %}</label>
 						<input hidden id="open-avond" class="owee" type="radio" name="optie" value="open-avond">
-						<label hidden for="open-avond" class="owee tab">{% trans %}<span
-								class="d-none d-md-inline">Ik wil naar een </span>open avond<span
-								class="d-none d-md-inline"> komen</span>{% endtrans %}</label>
+						<label hidden for="open-avond" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil naar een </span>open avond<span class="d-none d-md-inline"> komen</span>{% endtrans %}</label>
 						<div class="interesseformulier">
-							<h6
-								class="lid-worden">{% trans %}Ben je overtuigd om volgend studiejaar lid te worden bij C.S.R? Wat mooi! Officieel lid worden kan tijdens de introductieweek in augustus. Geef hier alvast je interesse door, dan houden wij je op de hoogte van leuke evenementen en precieze data en tijden.{% endtrans %}</h6>
-							<h6
-								class="lid-spreken">{% trans %}Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.
+							<h6 class="lid-worden">{% trans %}Ben je overtuigd om volgend studiejaar lid te worden bij C.S.R? Wat mooi! Officieel lid worden kan tijdens de introductieweek in augustus. Geef hier alvast je interesse door, dan houden wij je op de hoogte van leuke evenementen en precieze data en tijden.{% endtrans %}</h6>
+							<h6 class="lid-spreken">{% trans %}Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.
 									Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze
 									dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden: {% endtrans %}
-								<a href="https://csrdelft.nl/meeloopdag">Informatie meeloopdag</a></h6>
+							<a href="https://csrdelft.nl/meeloopdag">Informatie meeloopdag</a></h6>
 							<h6 class="open-avond">{% trans %}We hebben twee keer dit jaar een open avond waarbij je kan komen kijken
 									hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
 									De eerstvolgende open avond is op 2 juni, de inschrijvingen daarvoor gaan 2 weken van tevoren open.
@@ -210,18 +202,16 @@
 								<div class="open-avond">
 									<label class="owee">{% trans %}Wil je mee eten?{% endtrans %}</label>
 									<div>
-										<input type="radio" id="eten-ja" name="eten" value="Ja">
-										<label for="eten-ja" class="owee">{% trans %}Ja{% endtrans %}</label>
-										<input type="radio" id="eten-nee" name="eten" value="Nee">
-										<label for="eten-nee" class="owee">{% trans %}Nee{% endtrans %}</label>
+									<input type="radio" id="eten-ja" name="eten" value="Ja">
+									<label for="eten-ja" class="owee">{% trans %}Ja{% endtrans %}</label>
+									<input type="radio" id="eten-nee" name="eten" value="Nee">
+									<label for="eten-nee" class="owee">{% trans %}Nee{% endtrans %}</label>
 									</div>
 
-									<label for="eetwens"
-												 class="owee">{% trans %}Als je wilt mee eten, heb je nog allergenen of eetwensen?{% endtrans %}</label>
+									<label for="eetwens" class="owee">{% trans %}Als je wilt mee eten, heb je nog allergenen of eetwensen?{% endtrans %}</label>
 									<input type="text" id="eetwens" name="eetwens">
 
-									<label
-										class="owee">{% trans %}Heb je na afloop van de open avond een slaapplek nodig?{% endtrans %}</label>
+									<label class="owee">{% trans %}Heb je na afloop van de open avond een slaapplek nodig?{% endtrans %}</label>
 									<div>
 										<input type="radio" id="slapen-ja" name="slapen" value="Ja">
 										<label for="slapen-ja" class="owee">{% trans %}Ja{% endtrans %}</label>
@@ -241,8 +231,7 @@
 
 								<input class="lid-worden" type="submit" id="submitButton" value="{% trans %}Inschrijven{% endtrans %}">
 								<input class="lid-spreken" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
-								<input hidden class="open-avond" type="submit" id="submitButton"
-											 value="{% trans %}Verzenden{% endtrans %}">
+								<input hidden class="open-avond" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
 
 							</div>
 						</div>
@@ -267,11 +256,11 @@
 					<div class="col-md-6">
 						<h2>{% trans %}Documenten{% endtrans %}</h2>
 						<p>{% trans %}C.S.R. heeft samen met de andere grote studentenverenigingen (DSC, Virgiel,
-								Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin
-								afspraken staan waar we elkaar aan zullen houden. Hierin staan afspraken hoe
-								we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een
-								KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de
-								afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.{% endtrans %}</p>
+							Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin
+							afspraken staan waar we elkaar aan zullen houden. Hierin staan afspraken hoe
+							we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een
+							KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de
+							afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.{% endtrans %}</p>
 						<ul>
 							<li><a href="https://csrdelft.nl/download/Code%20of%20Ethics%202016-2017.pdf" target="_blank">Code Of
 									Ethics</a></li>

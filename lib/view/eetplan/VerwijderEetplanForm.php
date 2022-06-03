@@ -9,13 +9,11 @@ use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
-class VerwijderEetplanForm extends ModalForm
-{
+class VerwijderEetplanForm extends ModalForm {
 	/**
 	 * @param Eetplan[] $avonden
 	 */
-	public function __construct($avonden)
-	{
+	public function __construct($avonden) {
 		parent::__construct(null, '/eetplan/verwijderen', 'Eetplan verwijderen');
 
 		$fields = [];

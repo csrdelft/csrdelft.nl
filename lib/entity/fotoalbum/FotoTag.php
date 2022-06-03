@@ -14,8 +14,7 @@ use JsonSerializable;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fotoalbum\FotoTagsRepository")
  * @ORM\Table("foto_tags")
  */
-class FotoTag implements JsonSerializable
-{
+class FotoTag implements JsonSerializable {
 	/**
 	 * Unique Universal Identifier
 	 * @var string
@@ -61,8 +60,7 @@ class FotoTag implements JsonSerializable
 	 */
 	public $size;
 
-	public function jsonSerialize()
-	{
+	public function jsonSerialize() {
 		$array = (array)$this;
 		$array['name'] = ProfielRepository::getNaam($this->keyword, 'user');
 		return $array;

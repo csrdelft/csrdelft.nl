@@ -10,8 +10,7 @@ namespace CsrDelft\entity\agenda;
  * Item dat in de agenda kan worden weergegeven.
  *
  */
-interface Agendeerbaar
-{
+interface Agendeerbaar {
 
 	public function getUUID();
 

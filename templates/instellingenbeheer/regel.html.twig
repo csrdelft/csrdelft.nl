@@ -17,8 +17,7 @@
 						action="{{ url('csrdelft_instellingenbeheer_opslaan', {module: instelling.module, id: instelling.instelling}) }}"
 						class="Formulier InlineForm ToggleForm">
 				{{ csrfField() }}
-				<textarea class="form-control FormElement" name="waarde"
-									origvalue="{{ instelling.waarde | escape('html_attr') }}"
+				<textarea class="form-control FormElement" name="waarde" origvalue="{{ instelling.waarde | escape('html_attr') }}"
 									rows="1">
 					{{- instelling.waarde -}}
 				</textarea>
@@ -35,8 +34,7 @@
 		</div>
 	</td>
 	<td class="col-del">
-		<a href="{{ url('csrdelft_instellingenbeheer_reset', {module: instelling.module, id: instelling.instelling}) }}"
-			 title="Instelling resetten"
+		<a href="{{ url('csrdelft_instellingenbeheer_reset', {module: instelling.module, id: instelling.instelling}) }}" title="Instelling resetten"
 			 class="btn post confirm">
 			{{ icon('arrow_rotate_anticlockwise') }}
 		</a>

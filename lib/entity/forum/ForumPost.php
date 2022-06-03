@@ -22,8 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumPost
-{
+class ForumPost {
 
 	/**
 	 * Primary key
@@ -100,13 +99,11 @@ class ForumPost
 	 */
 	public $draad;
 
-	public function magCiteren()
-	{
+	public function magCiteren() {
 		return LoginService::mag(P_LOGGED_IN) && $this->draad->magPosten();
 	}
 
-	public function magBewerken()
-	{
+	public function magBewerken() {
 		$draad = $this->draad;
 		if ($draad->magModereren()) {
 			return true;
@@ -117,13 +114,11 @@ class ForumPost
 		return $this->uid === LoginService::getUid() && LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function getGelezenPercentage()
-	{
+	public function getGelezenPercentage() {
 		return $this->getAantalGelezen() * 100 / $this->draad->getAantalLezers();
 	}
 
-	public function getAantalGelezen()
-	{
+	public function getAantalGelezen() {
 		if (!isset($this->aantal_gelezen)) {
 			$this->aantal_gelezen = 0;
 			foreach ($this->draad->lezers as $gelezen) {
@@ -135,8 +130,7 @@ class ForumPost
 		return $this->aantal_gelezen;
 	}
 
-	public function getLink($external = false)
-	{
+	public function getLink($external = false) {
 		return ($external ? getCsrRoot() : '') . "/forum/reactie/" . $this->post_id . "#" . $this->post_id;
 	}
 

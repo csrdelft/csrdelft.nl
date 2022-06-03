@@ -18,8 +18,7 @@
 				<input type="hidden" name="uuid" value="{{ uuid }}">
 				{{ csrfField() }}
 				{% if app.debug %}
-					<p><a href="{{ url('csrdelft_security_remotelogin_remoteloginauthorize', {uuid: uuid}) }}">DEBUG: Klik hier om
-							in
+					<p><a href="{{ url('csrdelft_security_remotelogin_remoteloginauthorize', {uuid: uuid}) }}">DEBUG: Klik hier om in
 							te loggen.</a></p>
 				{% endif %}
 				<img alt="Remote Login QR Code"

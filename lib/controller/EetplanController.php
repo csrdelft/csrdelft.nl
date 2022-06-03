@@ -48,9 +48,9 @@ class EetplanController extends AbstractController
 	private $woonoordenRepository;
 
 	public function __construct(
-		EetplanRepository         $eetplanRepository,
+		EetplanRepository $eetplanRepository,
 		EetplanBekendenRepository $eetplanBekendenRepository,
-		WoonoordenRepository      $woonoordenRepository
+		WoonoordenRepository $woonoordenRepository
 	)
 	{
 		$this->eetplanRepository = $eetplanRepository;

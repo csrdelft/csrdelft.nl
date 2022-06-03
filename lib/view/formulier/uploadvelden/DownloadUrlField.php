@@ -19,15 +19,13 @@ use CsrDelft\view\formulier\UrlDownloader;
  * element niet weergegeven.
  *
  */
-class DownloadUrlField extends UrlField
-{
+class DownloadUrlField extends UrlField {
 
 	public $filterMime;
 	private $downloader;
 	private $tmp_file;
 
-	public function __construct($name, array $filterMime)
-	{
+	public function __construct($name, array $filterMime) {
 		parent::__construct($name, 'http://', 'Downloaden van URL');
 		$this->filterMime = $filterMime;
 		$this->downloader = new UrlDownloader();
@@ -61,34 +59,30 @@ class DownloadUrlField extends UrlField
 		}
 	}
 
-	public function isAvailable()
-	{
+	public function isAvailable() {
 		return $this->downloader->isAvailable();
 	}
 
-	public function getFilter()
-	{
+	public function getFilter() {
 		return $this->filterMime;
 	}
 
-	public function validate()
-	{
+	public function validate() {
 		parent::validate();
 		if (!$this->isAvailable()) {
 			$this->error = 'PHP.ini configuratie: fsocked, cURL of allow_url_fopen moet aan staan.';
 		} elseif (!url_like($this->value)) {
 			$this->error = 'Ongeldige url';
-		} elseif (!$this->model instanceof Bestand or !$this->model->exists() or empty($this->model->filesize)) {
+		} elseif (!$this->model instanceof Bestand OR !$this->model->exists() OR empty($this->model->filesize)) {
 			$error = error_get_last();
 			$this->error = $error['message'];
-		} elseif (!empty($this->filterMime) and !in_array($this->model->mimetype, $this->filterMime)) {
+		} elseif (!empty($this->filterMime) AND !in_array($this->model->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . $this->model->mimetype;
 		}
 		return $this->error === '';
 	}
 
-	public function opslaan($directory, $filename, $overwrite = false)
-	{
+	public function opslaan($directory, $filename, $overwrite = false) {
 		parent::opslaan($directory, $filename, $overwrite);
 		$copied = copy(join_paths($this->model->directory, $this->model->filename), join_paths($directory, $filename));
 		if (!$copied) {
@@ -105,8 +99,7 @@ class DownloadUrlField extends UrlField
 		$this->model->filename = $filename;
 	}
 
-	public function getHtml()
-	{
+	public function getHtml() {
 		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly')) . '/>';
 	}
 

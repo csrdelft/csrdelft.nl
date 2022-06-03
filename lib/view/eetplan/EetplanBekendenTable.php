@@ -8,10 +8,8 @@ use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
-class EetplanBekendenTable extends DataTable
-{
-	public function __construct()
-	{
+class EetplanBekendenTable extends DataTable {
+	public function __construct() {
 		parent::__construct(EetplanBekenden::class, '/eetplan/novietrelatie', 'Novieten die elkaar kennen');
 		$this->selectEnabled = false;
 		$this->addColumn('noviet2', 'opmerking');

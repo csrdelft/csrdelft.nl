@@ -6,15 +6,12 @@ namespace CsrDelft\common\Doctrine\Type\Enum;
 
 use CsrDelft\entity\Geslacht;
 
-class GeslachtType extends EnumType
-{
-	public function getEnumClass()
-	{
+class GeslachtType extends EnumType {
+	public function getEnumClass() {
 		return Geslacht::class;
 	}
 
-	public function getName()
-	{
+	public function getName() {
 		return 'enumGeslacht';
 	}
 }

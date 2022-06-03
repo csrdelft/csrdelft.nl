@@ -16,30 +16,29 @@ use Twig\Environment;
 /**
  * Fotoalbum
  *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @since 27/03/2019
+ * Albumweergave (default):
  * @param boolean optional $arguments['compact'] Compacte weergave
  * @param integer optional $arguments['rows'] Aantal rijen
  * @param integer optional $arguments['perrow'] Aantal kolommen
  * @param boolean optional $arguments['bigfirst'] Eerste foto groot
  * @param string optional $arguments['big'] Indexen van foto's die groot moeten, of patroon 'a', 'b' of 'c'
  *
- * @param boolean optional $arguments['slider'] Slider weergave
- * @param integer optional $arguments['interval'] Slider interval in seconden
- * @param boolean optional $arguments['random'] Slider met random volgorde
- * @param boolean optional $arguments['height'] Slider hoogte in pixels
- *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @since 27/03/2019
- * Albumweergave (default):
  * @example [fotoalbum compact bigfirst]/pad/naar/album[/fotoalbum]
  * @example [fotoalbum rows=2 perrow=5 big=a]/pad/naar/album[/fotoalbum]
  * @example [fotoalbum big=0,5,14]/pad/naar/album[/fotoalbum]
  *
  * Sliderweergave:
+ * @param boolean optional $arguments['slider'] Slider weergave
+ * @param integer optional $arguments['interval'] Slider interval in seconden
+ * @param boolean optional $arguments['random'] Slider met random volgorde
+ * @param boolean optional $arguments['height'] Slider hoogte in pixels
+ *
  * @example [fotoalbum slider interval=10 random height=200]/pad/naar/album[/fotoalbum]
  * @example [fotoalbum]laatste[/fotoalbum]
  */
-class BbFotoalbum extends BbTag
-{
+class BbFotoalbum extends BbTag {
 
 	/**
 	 * @var array
@@ -62,32 +61,27 @@ class BbFotoalbum extends BbTag
 	 */
 	private $albumUrl;
 
-	public function __construct(FotoAlbumRepository $fotoAlbumRepository, Environment $twig)
-	{
+	public function __construct(FotoAlbumRepository $fotoAlbumRepository, Environment $twig) {
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
 		$this->twig = $twig;
 	}
 
-	public static function getTagName()
-	{
+	public static function getTagName() {
 		return 'fotoalbum';
 	}
-
 	public function isAllowed()
 	{
 		return ($this->album != null && $this->album->magBekijken()) || ($this->album == null && LoginService::mag(P_LOGGED_IN));
 	}
 
-	public function renderLight()
-	{
+	public function renderLight() {
 		$album = $this->album;
 		$beschrijving = count($album->getFotos()) . ' foto\'s';
 		$cover = getCsrRoot() . $album->getCoverUrl();
 		return BbHelper::lightLinkBlock('fotoalbum', $album->getUrl(), $album->dirname, $beschrijving, $cover);
 	}
 
-	public function render()
-	{
+	public function render() {
 		$album = $this->album;
 		$arguments = $this->arguments;
 		if (isset($arguments['slider'])) {
@@ -125,8 +119,7 @@ class BbFotoalbum extends BbTag
 	 * @return bool|FotoAlbum|FotoTagAlbum|null
 	 * @throws BbException
 	 */
-	private function getAlbum(string $url)
-	{
+	private function getAlbum(string $url) {
 		try {
 			if ($url === 'laatste') {
 				$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();

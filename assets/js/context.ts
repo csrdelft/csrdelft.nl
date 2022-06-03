@@ -1,17 +1,25 @@
 import ctx from './ctx';
-import { select } from './lib/dom';
-import { autosizeTextarea } from './lib/util';
+import {select} from "./lib/dom";
+import {autosizeTextarea} from "./lib/util";
 
 export const registerClipboardContext = async (): Promise<void> => {
-	const { copyTextToClipboard } = await import('./lib/clipboard');
+	const {
+		copyTextToClipboard
+	} = await import('./lib/clipboard');
 
-	ctx.addHandler('[data-copy]', (el) => {
-		el.addEventListener('click', () => copyTextToClipboard(el.dataset.copy));
-	});
-};
+	ctx.addHandler('[data-copy]', el => {
+		el.addEventListener('click', () => copyTextToClipboard(el.dataset.copy))
+	})
+}
 
 export const registerGrafiekContext = async (): Promise<void> => {
-	const { initBar, initDeelnamegrafiek, initLine, initPie, initSaldoGrafiek } = await import('./lib/grafiek');
+	const {
+		initBar,
+		initDeelnamegrafiek,
+		initLine,
+		initPie,
+		initSaldoGrafiek,
+	} = await import('./lib/grafiek');
 
 	ctx.addHandlers({
 		'.ctx-deelnamegrafiek': initDeelnamegrafiek,
@@ -23,7 +31,9 @@ export const registerGrafiekContext = async (): Promise<void> => {
 };
 
 export const registerBbContext = async (): Promise<void> => {
-	const { loadBbImage } = await import('./lib/bbcode');
+	const {
+		loadBbImage,
+	} = await import('./lib/bbcode');
 
 	ctx.addHandlers({
 		'.bb-img-loading': loadBbImage,
@@ -31,7 +41,10 @@ export const registerBbContext = async (): Promise<void> => {
 };
 
 export const registerDataTableContext = async (): Promise<void> => {
-	const { initDataTable, initOfflineDataTable } = await import('./datatable/api');
+	const {
+		initDataTable,
+		initOfflineDataTable,
+	} = await import('./datatable/api');
 
 	ctx.addHandlers({
 		'.ctx-datatable': initDataTable,
@@ -40,7 +53,12 @@ export const registerDataTableContext = async (): Promise<void> => {
 };
 
 export const registerKnopContext = async (): Promise<void> => {
-	const { initKnopPost, initKnopGet, initKnopVergroot, initRadioButtons } = await import('./lib/knop');
+	const {
+		initKnopPost,
+		initKnopGet,
+		initKnopVergroot,
+		initRadioButtons,
+	} = await import('./lib/knop');
 
 	ctx.addHandlers({
 		'.get': initKnopGet,
@@ -48,14 +66,27 @@ export const registerKnopContext = async (): Promise<void> => {
 		'.vergroot': initKnopVergroot,
 		'[data-buttons=radio]': initRadioButtons,
 	});
+
 };
 
 export const registerFormulierContext = async (): Promise<void> => {
 	const [
-		{ formCancel, formReset, formSubmit, formToggle, initSterrenField, initDoctrineField, initAutocompleteField },
-		{ initDropzone },
-		{ initTimeago },
-		{ default: $ },
+		{
+			formCancel,
+			formReset,
+			formSubmit,
+			formToggle,
+			initSterrenField,
+			initDoctrineField,
+			initAutocompleteField,
+		},
+		{
+			initDropzone,
+		},
+		{
+			initTimeago,
+		},
+		{default: $},
 	] = await Promise.all([
 		import('./lib/formulier'),
 		import('./lib/dropzone'),
@@ -79,7 +110,12 @@ export const registerFormulierContext = async (): Promise<void> => {
 };
 
 export const registerGlobalContext = async (): Promise<void> => {
-	const [{ default: hoverintent }, { initKaartjes }, { default: Vue }, { default: $ }] = await Promise.all([
+	const [
+		{default: hoverintent},
+		{initKaartjes},
+		{default: Vue},
+		{default: $},
+	] = await Promise.all([
 		import('hoverintent'),
 		import('./lib/kaartje'),
 		import('vue'),
@@ -87,20 +123,21 @@ export const registerGlobalContext = async (): Promise<void> => {
 	]);
 
 	ctx.addHandlers({
-		'.hoverIntent': (el) =>
-			hoverintent(
-				el,
-				() => $(select('.hoverIntentContent', el)).fadeIn(),
-				() => $(select('.hoverIntentContent', el)).fadeOut()
-			).options({ timeout: 250 }),
-		'.vue-context': (el) => new Vue({ el }),
+		'.hoverIntent': (el) => hoverintent(el,
+			() => $(select('.hoverIntentContent', el)).fadeIn(),
+			() => $(select('.hoverIntentContent', el)).fadeOut()
+		).options({timeout: 250}),
+		'.vue-context': (el) => new Vue({el}),
 		'[data-visite]': initKaartjes,
 		'.AutoSize': autosizeTextarea,
 	});
 };
 
 export const registerFlatpickrContext = async (): Promise<void> => {
-	const { initDateTimePicker, initDatePicker } = await import('./lib/datepicker');
+	const {
+		initDateTimePicker,
+		initDatePicker,
+	} = await import('./lib/datepicker');
 
 	ctx.addHandlers({
 		'.DateTimeField': initDateTimePicker,
@@ -109,8 +146,10 @@ export const registerFlatpickrContext = async (): Promise<void> => {
 };
 
 export const registerLidInstellingenContext = async (): Promise<void> => {
-	const { instellingOpslaan } = await import('./page/instellingen');
+	const {
+		instellingOpslaan
+	} = await import("./page/instellingen");
 
-	ctx.addHandler('.instellingKnop', (el) => el.addEventListener('click', instellingOpslaan));
-	ctx.addHandler('.change-opslaan', (el) => el.addEventListener('change', instellingOpslaan));
-};
+	ctx.addHandler('.instellingKnop', el => el.addEventListener('click', instellingOpslaan))
+	ctx.addHandler('.change-opslaan', el => el.addEventListener('change', instellingOpslaan))
+}

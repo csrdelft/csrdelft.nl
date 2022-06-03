@@ -21,8 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  *   @ORM\Index(name="eind_moment", columns={"eind_moment"})
  * })
  */
-class AgendaItem implements Agendeerbaar
-{
+class AgendaItem implements Agendeerbaar {
 
 	/**
 	 * Primary key
@@ -75,73 +74,62 @@ class AgendaItem implements Agendeerbaar
 	 */
 	public $link;
 
-	public function getBeginMoment()
-	{
+	public function getBeginMoment() {
 		return $this->begin_moment->getTimestamp();
 	}
 
-	public function getEindMoment()
-	{
-		if ($this->eind_moment and $this->eind_moment !== $this->begin_moment) {
+	public function getEindMoment() {
+		if ($this->eind_moment AND $this->eind_moment !== $this->begin_moment) {
 			return $this->eind_moment->getTimestamp();
 		}
 		return $this->getBeginMoment() + 1800;
 	}
 
-	public function getTitel()
-	{
+	public function getTitel() {
 		return $this->titel;
 	}
 
-	public function getBeschrijving()
-	{
+	public function getBeschrijving() {
 		return $this->beschrijving;
 	}
 
-	public function getLocatie()
-	{
+	public function getLocatie() {
 		return $this->locatie;
 	}
 
-	public function getUrl()
-	{
+	public function getUrl() {
 		return $this->link;
 	}
 
-	public function isHeledag()
-	{
+	public function isHeledag() {
 		$begin = date('H:i', $this->getBeginMoment());
 		$eind = date('H:i', $this->getEindMoment());
-		return $begin == '00:00' and ($eind == '23:59' or $eind == '00:00');
+		return $begin == '00:00' AND ($eind == '23:59' OR $eind == '00:00');
 	}
 
-	public function magBekijken($ical = false)
-	{
+	public function magBekijken($ical = false) {
 		$auth = ($ical ? AuthenticationMethod::getEnumValues() : null);
 		return LoginService::mag($this->rechten_bekijken, $auth);
 	}
 
-	public function magBeheren($ical = false)
-	{
+	public function magBeheren($ical = false) {
 		$auth = ($ical ? AuthenticationMethod::getEnumValues() : null);
 		if (LoginService::mag(P_AGENDA_MOD, $auth)) {
 			return true;
 		}
 		$verticale = 'verticale:' . LoginService::getProfiel()->verticale;
-		if ($this->rechten_bekijken === $verticale and LoginService::getProfiel()->verticaleleider) {
+		if ($this->rechten_bekijken === $verticale AND LoginService::getProfiel()->verticaleleider) {
 			return true;
 		}
 		return false;
 	}
 
-	public function isTransparant()
-	{
+	public function isTransparant() {
 		// Toon als transparant (vrij) als lid dat wil of activiteit hele dag(en) duurt
 		return lid_instelling('agenda', 'transparantICal') === 'ja' || $this->isHeledag();
 	}
 
-	public function getUUID()
-	{
+	public function getUUID() {
 		return strtolower(sprintf(
 			'%s@%s.csrdelft.nl',
 			implode('.', [$this->item_id]),

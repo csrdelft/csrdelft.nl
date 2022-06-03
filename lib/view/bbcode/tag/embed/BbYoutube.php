@@ -9,28 +9,25 @@ use CsrDelft\view\bbcode\BbHelper;
 /**
  * YouTube speler
  *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @since 27/03/2019
  * @param String $arguments ['youtube'] YouTube id van 11 tekens
  *
- * @since 27/03/2019
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @example [youtube]dQw4w9WgXcQ[/youtube]
  * @example [youtube=dQw4w9WgXcQ]
  */
-class BbYoutube extends BbTag
-{
+class BbYoutube extends BbTag {
 
 	/**
 	 * @var string
 	 */
 	public $id;
 
-	public static function getTagName()
-	{
+	public static function getTagName() {
 		return 'youtube';
 	}
 
-	public function renderLight()
-	{
+	public function renderLight() {
 		$this->assertId($this->id);
 
 		return BbHelper::lightLinkBlock(
@@ -46,8 +43,7 @@ class BbYoutube extends BbTag
 	 * @param string|null $id
 	 * @throws BbException
 	 */
-	private function assertId($id)
-	{
+	private function assertId($id) {
 		if (!preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
 			throw new BbException('[youtube] Geen geldig youtube-id (' . htmlspecialchars($this->id) . ')');
 		}
@@ -57,8 +53,7 @@ class BbYoutube extends BbTag
 	 * @return string
 	 * @throws BbException
 	 */
-	public function render()
-	{
+	public function render() {
 		$this->assertId($this->id);
 
 		$src = '//www.youtube-nocookie.com/embed/' . $this->id . '?modestbranding=1&hl=nl';

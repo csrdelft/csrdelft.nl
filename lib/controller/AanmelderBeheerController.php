@@ -44,9 +44,9 @@ class AanmelderBeheerController extends AbstractController
 	 */
 	private $deelnemerRepository;
 
-	public function __construct(ReeksRepository             $reeksRepository,
+	public function __construct(ReeksRepository $reeksRepository,
 															AanmeldActiviteitRepository $activiteitRepository,
-															DeelnemerRepository         $deelnemerRepository)
+															DeelnemerRepository $deelnemerRepository)
 	{
 		$this->reeksRepository = $reeksRepository;
 		$this->activiteitRepository = $activiteitRepository;
@@ -79,8 +79,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/reeks/nieuw", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function reeksNieuw(Request $request)
-	{
+	public function reeksNieuw(Request $request) {
 		if (!Reeks::magAanmaken()) {
 			throw new CsrGebruikerException('Mag geen reeks aanmaken');
 		}
@@ -240,8 +239,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/activiteiten/nieuw/{reeks}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function activiteitNieuw(Request $request, Reeks $reeks)
-	{
+	public function activiteitNieuw(Request $request, Reeks $reeks) {
 		if (!$reeks->magActiviteitenBeheren()) {
 			throw new CsrGebruikerException('Mag geen activiteit in deze reeks aanmaken');
 		}
@@ -280,7 +278,7 @@ class AanmelderBeheerController extends AbstractController
 		if ($request->query->get('filter') === 'alles') {
 			$activiteiten = $reeks->getActiviteiten();
 		} else {
-			$activiteiten = $reeks->getActiviteiten()->filter(function (AanmeldActiviteit $activiteit) {
+			$activiteiten = $reeks->getActiviteiten()->filter(function(AanmeldActiviteit $activiteit) {
 				return $activiteit->isInToekomst();
 			})->getValues();
 		}
@@ -301,9 +299,9 @@ class AanmelderBeheerController extends AbstractController
 		}
 
 		$deelnemers = $activiteit->getDeelnemers()->getValues();
-		usort($deelnemers, function (Deelnemer $deelnemerA, Deelnemer $deelnemerB) {
+		usort($deelnemers, function(Deelnemer $deelnemerA, Deelnemer $deelnemerB) {
 			return $deelnemerA->getLid()->achternaam <=> $deelnemerB->getLid()->achternaam
-				?: $deelnemerA->getLid()->voornaam <=> $deelnemerB->getLid()->voornaam;
+				  ?: $deelnemerA->getLid()->voornaam <=> $deelnemerB->getLid()->voornaam;
 		});
 
 		$form = $this->createFormulier(AanmeldActiviteitAanmeldForm::class, $activiteit, [
@@ -325,8 +323,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/lijst/{activiteit}/sluiten/{sluit}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function sluit(AanmeldActiviteit $activiteit, bool $sluit, AanmeldActiviteitRepository $activiteitRepository): Response
-	{
+	public function sluit(AanmeldActiviteit $activiteit, bool $sluit, AanmeldActiviteitRepository $activiteitRepository): Response {
 		if (!$activiteit->magLijstBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -343,8 +340,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/lijst/{activiteit}/aanmelden", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijstAanmelden(AanmeldActiviteit $activiteit, Request $request): Response
-	{
+	public function lijstAanmelden(AanmeldActiviteit $activiteit, Request $request): Response {
 		if (!$activiteit->magLijstBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -377,8 +373,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/lijst/{activiteit}/afmelden/{lid}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijstAfmelden(AanmeldActiviteit $activiteit, Profiel $lid): Response
-	{
+	public function lijstAfmelden(AanmeldActiviteit $activiteit, Profiel $lid): Response {
 		if (!$activiteit->magLijstBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -396,8 +391,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/lijst/{activiteit}/aantal/{lid}/{aantal}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijstAantal(AanmeldActiviteit $activiteit, Profiel $lid, int $aantal): Response
-	{
+	public function lijstAantal(AanmeldActiviteit $activiteit, Profiel $lid, int $aantal): Response {
 		if (!$activiteit->magLijstBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -420,8 +414,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/lijst/{activiteit}/aanwezig/{lid}/{aanwezig}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijstAanwezig(AanmeldActiviteit $activiteit, Profiel $lid, bool $aanwezig): Response
-	{
+	public function lijstAanwezig(AanmeldActiviteit $activiteit, Profiel $lid, bool $aanwezig): Response {
 		if (!$activiteit->magLijstBeheren()) {
 			throw $this->createAccessDeniedException();
 		}

@@ -68,16 +68,13 @@ Bootstrap input-group fix
 .input-group {
 	span.twitter-typeahead {
 		display: block !important;
-
 		.tt-menu {
 			top: 32px !important;
 		}
 	}
-
 	&.input-group-lg span.twitter-typeahead .tt-menu {
 		top: 44px !important;
 	}
-
 	&.input-group-sm span.twitter-typeahead .tt-menu {
 		top: 28px !important;
 	}

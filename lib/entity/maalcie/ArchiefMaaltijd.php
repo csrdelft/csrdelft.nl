@@ -27,8 +27,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository")
  * @ORM\Table("mlt_archief")
  */
-class ArchiefMaaltijd implements Agendeerbaar
-{
+class ArchiefMaaltijd implements Agendeerbaar {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -70,8 +69,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("tijd")
 	 */
-	public function getTijdFormatted()
-	{
+	public function getTijdFormatted() {
 		return date_format_intl($this->tijd, TIME_FORMAT);
 	}
 
@@ -80,8 +78,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("datum")
 	 */
-	public function getDatumFormatted()
-	{
+	public function getDatumFormatted() {
 		return date_format_intl($this->datum, DATE_FORMAT);
 	}
 
@@ -90,72 +87,59 @@ class ArchiefMaaltijd implements Agendeerbaar
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("aanmeldingen")
 	 */
-	public function getAantalAanmelding()
-	{
+	public function getAantalAanmelding() {
 		return count($this->getAanmeldingenArray());
 	}
 
 	// Agendeerbaar ############################################################
 
-	public function getPrijsFloat()
-	{
+	public function getPrijsFloat() {
 		return (float)$this->prijs / 100.0;
 	}
 
-	public function getTitel()
-	{
+	public function getTitel() {
 		return $this->titel;
 	}
 
-	public function getEindMoment()
-	{
+	public function getEindMoment() {
 		return $this->getBeginMoment() + 7200;
 	}
 
-	public function getBeginMoment()
-	{
+	public function getBeginMoment() {
 		return $this->datum->setTime($this->tijd->format('H'), $this->tijd->format('i'), $this->tijd->format('s'));
 	}
 
-	public function getBeschrijving()
-	{
+	public function getBeschrijving() {
 		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
 
-	public function getAantalAanmeldingen()
-	{
+	public function getAantalAanmeldingen() {
 		return substr_count($this->aanmeldingen, ',');
 	}
 
-	public function getLocatie()
-	{
+	public function getLocatie() {
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl()
-	{
+	public function getUrl() {
 		return '/maaltijdenbeheer/archief';
 	}
 
-	public function isHeledag()
-	{
+	public function isHeledag() {
 		return false;
 	}
 
-	public function isTransparant()
-	{
+	public function isTransparant() {
 		return true;
 	}
 
-	public function jsonSerialize()
-	{
+	public function jsonSerialize() {
 		$json = (array)$this;
 		$json['aanmeldingen'] = count($this->getAanmeldingenArray());
 		return $json;
 	}
 
-	public function getAanmeldingenArray()
-	{
+	public function getAanmeldingenArray() {
 		$result = array();
 		$aanmeldingen = explode(',', $this->aanmeldingen);
 		foreach ($aanmeldingen as $id => $aanmelding) {
@@ -166,8 +150,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return $result;
 	}
 
-	public function getUUID()
-	{
+	public function getUUID() {
 		return $this->maaltijd_id . '@archiefmaaltijd.csrdelft.nl';
 	}
 }

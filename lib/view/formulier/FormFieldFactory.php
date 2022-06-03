@@ -40,15 +40,13 @@ use Exception;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 15/09/2018
  */
-class FormFieldFactory
-{
+class FormFieldFactory {
 	/**
 	 * @param $model
 	 * @return InputField[]
 	 * @throws Exception
 	 */
-	public static function generateFields($model)
-	{
+	public static function generateFields($model) {
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
 		/** @var ClassMetadata $meta */
@@ -121,8 +119,7 @@ class FormFieldFactory
 	 * @return InputField
 	 * @throws Exception
 	 */
-	private static function getFieldByType(string $fieldName, $value, $type)
-	{
+	private static function getFieldByType(string $fieldName, $value, $type) {
 		$desc = ucfirst(str_replace('_', ' ', $fieldName));
 
 		if (str_starts_with($fieldName, 'rechten_')) {

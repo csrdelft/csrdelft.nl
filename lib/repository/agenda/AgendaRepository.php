@@ -30,8 +30,7 @@ use Symfony\Component\Security\Core\Security;
  * @method AgendaItem find($id, $lockMode = null, $lockVersion = null)
  * @method AgendaItem[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AgendaRepository extends AbstractRepository
-{
+class AgendaRepository extends AbstractRepository {
 	/**
 	 * @var AgendaVerbergenRepository
 	 */
@@ -58,15 +57,14 @@ class AgendaRepository extends AbstractRepository
 	private $security;
 
 	public function __construct(
-		ManagerRegistry           $registry,
-		Security                  $security,
+		ManagerRegistry $registry,
+		Security $security,
 		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenRepository    $activiteitenRepository,
-		CorveeTakenRepository     $corveeTakenRepository,
-		MaaltijdenRepository      $maaltijdenRepository,
-		VerjaardagenService       $verjaardagenService
-	)
-	{
+		ActiviteitenRepository $activiteitenRepository,
+		CorveeTakenRepository $corveeTakenRepository,
+		MaaltijdenRepository $maaltijdenRepository,
+		VerjaardagenService $verjaardagenService
+	) {
 		parent::__construct($registry, AgendaItem::class);
 
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
@@ -83,8 +81,7 @@ class AgendaRepository extends AbstractRepository
 	 * @param Agendeerbaar $bar
 	 * @return int
 	 */
-	public static function vergelijkAgendeerbaars(Agendeerbaar $foo, Agendeerbaar $bar)
-	{
+	public static function vergelijkAgendeerbaars(Agendeerbaar $foo, Agendeerbaar $bar) {
 		$a = $foo->getBeginMoment();
 		$b = $bar->getBeginMoment();
 		if ($a > $b) {
@@ -100,13 +97,11 @@ class AgendaRepository extends AbstractRepository
 	 * @param $itemId
 	 * @return AgendaItem|null
 	 */
-	public function getAgendaItem($itemId)
-	{
+	public function getAgendaItem($itemId) {
 		return $this->find($itemId);
 	}
 
-	public function getICalendarItems()
-	{
+	public function getICalendarItems() {
 		return $this->filterVerborgen(
 			$this->getAllAgendeerbaar(
 				date_create_immutable(instelling('agenda', 'ical_from')),
@@ -116,8 +111,7 @@ class AgendaRepository extends AbstractRepository
 		);
 	}
 
-	public function filterVerborgen(array $items)
-	{
+	public function filterVerborgen(array $items) {
 		// Items verbergen
 		$itemsByUUID = array();
 		foreach ($items as $index => $item) {
@@ -146,8 +140,7 @@ class AgendaRepository extends AbstractRepository
 	 * @param $limiet
 	 * @return AgendaItem[]
 	 */
-	public function zoeken(DateTimeImmutable $van, DateTimeImmutable $tot, $query, $limiet)
-	{
+	public function zoeken(DateTimeImmutable $van, DateTimeImmutable $tot, $query, $limiet) {
 		return $this->createQueryBuilder('a')
 			->where('a.eind_moment >= :van and a.begin_moment <= :tot')
 			->andWhere('a.titel like :query or a.beschrijving like :query or a.locatie like :query')
@@ -167,8 +160,7 @@ class AgendaRepository extends AbstractRepository
 	 * @param bool $zijbalk
 	 * @return Agendeerbaar[]
 	 */
-	public function getAllAgendeerbaar(DateTimeImmutable $van, DateTimeImmutable $tot, $ical = false, $zijbalk = false)
-	{
+	public function getAllAgendeerbaar(DateTimeImmutable $van, DateTimeImmutable $tot, $ical = false, $zijbalk = false) {
 		$result = array();
 
 		// AgendaItems
@@ -236,8 +228,7 @@ class AgendaRepository extends AbstractRepository
 	 * @param $woord string
 	 * @return mixed|null
 	 */
-	public function zoekWoordAgenda($woord)
-	{
+	public function zoekWoordAgenda($woord) {
 		$beginDag = date_create_immutable()->setTime(0, 0, 0);
 		foreach ($this->getItemsByDay($beginDag) as $item) {
 			if (stristr($item->getTitel(), $woord) !== false || stristr($item->getBeschrijving(), $woord) !== false) {
@@ -247,13 +238,11 @@ class AgendaRepository extends AbstractRepository
 		return null;
 	}
 
-	public function getItemsByDay(DateTimeImmutable $dag)
-	{
+	public function getItemsByDay(DateTimeImmutable $dag) {
 		return $this->getAllAgendeerbaar($dag, $dag);
 	}
 
-	public function nieuw($beginMoment, $eindMoment)
-	{
+	public function nieuw($beginMoment, $eindMoment) {
 		$item = new AgendaItem();
 		$item->begin_moment = $beginMoment
 			? date_create_immutable($beginMoment)

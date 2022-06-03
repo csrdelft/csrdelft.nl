@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\peilingen\PeilingStemmenRepository")
  * @ORM\Table("peiling_stemmen")
  */
-class PeilingStem
-{
+class PeilingStem {
 	/**
 	 * Shared primary key
 	 * Foreign key

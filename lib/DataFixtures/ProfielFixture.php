@@ -11,10 +11,8 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as Faker;
 
-class ProfielFixture extends Fixture
-{
-	public function load(ObjectManager $manager)
-	{
+class ProfielFixture extends Fixture {
+	public function load(ObjectManager $manager) {
 		$lichtingen = range(20, 29);
 		$lichtingsGrootte = 50;
 		$faker = Faker::create('nl_NL');

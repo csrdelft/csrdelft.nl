@@ -18,8 +18,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Configureer waar configuratie bestanden te vinden zijn.
  */
-class Kernel extends BaseKernel
-{
+class Kernel extends BaseKernel {
 	use MicroKernelTrait;
 
 	public function __construct(string $environment, bool $debug)
@@ -35,8 +34,7 @@ class Kernel extends BaseKernel
 	/**
 	 * @param ContainerConfigurator $container
 	 */
-	protected function configureContainer(ContainerConfigurator $container)
-	{
+	protected function configureContainer(ContainerConfigurator $container) {
 		$container->import('../config/{packages}/*.yaml');
 		$container->import('../config/{packages}/' . $this->environment . '/**/*.yaml');
 		$container->import('../config/{services}.yaml');
@@ -52,15 +50,13 @@ class Kernel extends BaseKernel
 	/**
 	 * @param RoutingConfigurator $routes
 	 */
-	protected function configureRoutes(RoutingConfigurator $routes)
-	{
+	protected function configureRoutes(RoutingConfigurator $routes) {
 		$routes->import('../config/{routes}/' . $this->environment . '/**/*.yaml');
 		$routes->import('../config/{routes}/*.yaml');
 		$routes->import('../config/{routes}.yaml');
 	}
 
-	protected function build(ContainerBuilder $builder)
-	{
+	protected function build(ContainerBuilder $builder) {
 		$builder->registerForAutoconfiguration(FormulierTypeInterface::class)->addTag('csr.formulier.type');
 		$builder->registerForAutoconfiguration(Mark::class)->addTag('csr.editor.mark');
 		$builder->registerForAutoconfiguration(Node::class)->addTag('csr.editor.node');

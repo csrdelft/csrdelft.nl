@@ -12,8 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @ORM\Entity(repositoryClass="CsrDelft\repository\documenten\DocumentCategorieRepository")
  */
-class DocumentCategorie implements ISelectEntity, DisplayEntity
-{
+class DocumentCategorie implements ISelectEntity, DisplayEntity {
 	/**
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
@@ -50,23 +49,19 @@ class DocumentCategorie implements ISelectEntity, DisplayEntity
 	 */
 	public $documenten;
 
-	public function magBekijken()
-	{
+	public function magBekijken() {
 		return LoginService::mag($this->leesrechten);
 	}
 
-	public function getValue()
-	{
+	public function getValue() {
 		return $this->naam;
 	}
 
-	public function getId()
-	{
+	public function getId() {
 		return $this->id;
 	}
 
-	public function getWeergave(): string
-	{
+	public function getWeergave(): string {
 		return $this->naam ?? '';
 	}
 }

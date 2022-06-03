@@ -18,8 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *   @ORM\Index(name="cie", columns={"cie"})
  * })
  */
-class CiviCategorie implements DisplayEntity
-{
+class CiviCategorie implements DisplayEntity {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -44,18 +43,15 @@ class CiviCategorie implements DisplayEntity
 	 */
 	public $cie;
 
-	public function getBeschrijving()
-	{
+	public function getBeschrijving() {
 		return sprintf('%s (%s)', $this->type, $this->cie);
 	}
 
-	public function getId()
-	{
+	public function getId() {
 		return $this->id;
 	}
 
-	public function getWeergave(): string
-	{
+	public function getWeergave(): string {
 		return $this->getBeschrijving();
 	}
 }

@@ -22,7 +22,7 @@ $secondary: lighten($body-bg, 20%) !default;
 $light: $gray-100 !default;
 $dark: $gray-800 !default;
 $yiq-text-dark: $white !default;
-$yiq-text-light: $gray-900 !default;
+$yiq-text-light: $gray-900 !default ;
 
 @if not variable-exists('headings-font-family') {
 	@font-face {
@@ -161,7 +161,6 @@ div#pubciemail_form {
 		color: #fff;
 	}
 }
-
 .dataTable {
 	width: 100% !important;
 

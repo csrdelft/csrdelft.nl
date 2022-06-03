@@ -1,11 +1,9 @@
-<div id="maaltijdketzer-{{ activiteit.id }}" class="media pt-3 maaltijdketzer-{{ activiteit.id }}"
-		 data-maaltijdnaam="{{ activiteit.titel }}">
+<div id="maaltijdketzer-{{ activiteit.id }}" class="media pt-3 maaltijdketzer-{{ activiteit.id }}" data-maaltijdnaam="{{ activiteit.titel }}">
 	<div class="media-body pb-3 mb-0 lh-125 {% if border is defined and border %}border-bottom border-gray{% endif %}">
 		<div class="row">
 			<div class="col">
 				<h6>
-					<a
-						href="{{ url('csrdelft_aanmelder_mijnactiviteiten', { reeks: activiteit.reeks.id }) }}">{{ activiteit.titel }}</a>
+					<a href="{{ url('csrdelft_aanmelder_mijnactiviteiten', { reeks: activiteit.reeks.id }) }}">{{ activiteit.titel }}</a>
 				</h6>
 				op {{ activiteit.start | datetime_format_long }} om {{ activiteit.start | time_format }}
 			</div>
