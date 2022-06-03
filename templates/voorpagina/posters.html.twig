@@ -4,16 +4,7 @@
 	data-bs-ride="carousel"
 >
 	<div class="carousel-inner h-100">
-        {# TODO: cms('posters') #}
-		{# {{#each voorpagina.posters}}
-		<div class="carousel-item h-100 {{this.isActive}}">
-			<img
-				src="{{this.src}}"
-				class="d-block w-100 h-100"
-				alt="..."
-			/>
-		</div>
-		{{/each}} #}
+		{{ cms('voorpagina_posters') }}
 	</div>
 	<button
 		class="carousel-control-prev"

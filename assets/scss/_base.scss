@@ -48,6 +48,10 @@ body {
 main {
 	background-color: $light;
 
+	padding-inline: $spacer;
+	padding-top: $spacer;
+	padding-bottom: $spacer * 3;
+
 	.cd-page-content.container:not(.voorpagina) {
 		background-color: $body-bg;
 	}
