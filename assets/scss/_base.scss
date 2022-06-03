@@ -48,7 +48,7 @@ body {
 main {
 	background-color: $light;
 
-	.cd-page-content.container {
+	.cd-page-content.container:not(.voorpagina) {
 		background-color: $body-bg;
 	}
 }

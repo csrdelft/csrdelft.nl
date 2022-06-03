@@ -54,7 +54,7 @@
 	{{ include('menu/main.html.twig', {root: get_menu('main'), personal: get_menu('Personal'), favorieten: get_menu(app.user.uid)}) }}
 	<main class="container-fluid p-3 min-vh-100">
 		{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == "/" %}
-			<div class="cd-page-content container px-0 ratio ratio-3x2">
+			<div class="cd-page-content voorpagina container px-0 ratio ratio-3x2">
 				{{ getMelding() }}
 				<div class="grid-container p-0 p-md-3">
 					<div class="cell cell-posters ratio ratio-3x2">{{ get_posters() }}</div>
@@ -68,8 +68,8 @@
 				</div>
 			</div>
 			<div class="container p-0 p-md-3 mt-5">
-			{# TODO: advertenties #}
-	{#			<div class="cell cell-advertenties">{{> grid-cell-advertenties}}</div>#}
+				{# TODO: advertenties #}
+				<div class="cell cell-advertenties gap-2">{{ cms('advertenties') }}</div>
 			</div>
 		{% else %}
 		<div class="container">
