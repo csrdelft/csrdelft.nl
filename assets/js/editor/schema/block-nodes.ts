@@ -14,7 +14,8 @@ const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeS
 	group: 'block',
 	draggable: true,
 	toDOM: (node) => {
-		const el = html` <div data-${tagType}="${node.attrs[attr]}" class="bb-block">
+		// prettier-ignore
+		const el = html`<div data-${tagType}="${node.attrs[attr]}" class="bb-block">
 			<i class="fa fa-spinner fa-spin"></i>
 		</div>`;
 
@@ -22,6 +23,7 @@ const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeS
 			.then((response) => response.json())
 			.then((json) => {
 				el.dataset.naam = json.naam;
+				// prettier-ignore
 				const ledenDiv = html` <div
 					id="groep-leden-content-2152"
 					class="groep-tab-content GroepPasfotosView"

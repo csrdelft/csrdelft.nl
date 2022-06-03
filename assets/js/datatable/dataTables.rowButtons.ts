@@ -17,23 +17,24 @@ class RowButtons {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private static createButtonGroup(config: RowButtonsConfig[], row: any) {
-		const btnGroup = html`<div class="btn-group"></div>`;
+		const btnGroup = html` <div class="btn-group"></div>`;
 
 		for (const btn of Object.values(config)) {
 			const action = replacePlaceholders(btn.action ?? '', row);
 
-			const newButton = html` <a
-				href="${action}"
-				class="btn btn-light noanim btn-sm DataTableRowKnop ${btn.method} ${btn.css}"
-				title="${btn.title}"
-			>
-				<i class="${btn.icon}"></i>
-			</a>`;
+			// prettier-ignore
+			const newButton = html`<a
+href="${action}"
+class="btn btn-light noanim btn-sm DataTableRowKnop ${btn.method} ${btn.css}"
+title="${btn.title}"
+>
+<i class="${btn.icon}"></i>
+</a>`;
 			btnGroup.append(newButton);
 		}
 		btnGroup.style.marginTop = '-10px';
 		btnGroup.style.marginBottom = '-10px';
-		const wrapper = html`<div class="d-inline-flex"></div>`;
+		const wrapper = html` <div class="d-inline-flex"></div>`;
 		wrapper.append(btnGroup);
 		init(wrapper);
 		return wrapper;

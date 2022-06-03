@@ -87,6 +87,7 @@ export async function forumBewerken(postId: string): Promise<false> {
 	berichtInput.value = JSON.stringify(response.data);
 
 	bewerkContainer.innerHTML = '';
+	// prettier-ignore
 	bewerkContainer.appendChild(html`
 		<form id="forumEditForm" class="ForumFormulier" action="/forum/bewerken/${postId}" method="post">
 			${berichtInput}
