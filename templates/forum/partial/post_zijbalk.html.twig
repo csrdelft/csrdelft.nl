@@ -5,7 +5,7 @@
 	{% for post in posts %}
 		{% set ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave') %}
 		<div class="item">
-			<a href="{{ url('csrdelft_forum_reactie', {post_id: post.post_id, _fragment: post.post_id}) }}"
+			<a href="{{ url('csrdelft_forum_forumdraad_reactie', {post_id: post.post_id, _fragment: post.post_id}) }}"
 				 title="{{ post.draad.titel }}" {% if post.draad.ongelezen %}class="{{ ongelezenWeergave }}"{% endif %}>
 				<span class="zijbalk-moment">{{ post.datum_tijd | zijbalk_date_format }}</span>&nbsp;{{ post.draad.titel | raw }}
 			</a>

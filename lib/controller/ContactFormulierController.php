@@ -105,27 +105,29 @@ De PubCie.
 		}
 
 		$type = filter_input(INPUT_POST, "optie", FILTER_SANITIZE_STRING);
-		$datums = "";
-		if ($type == 'lid-worden') {
-			$datums = "Beschikbare data: " . filter_input(INPUT_POST, "datums", FILTER_SANITIZE_STRING);
-		}
+
 		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);
 		$email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_STRING);
 		$telefoon = filter_input(INPUT_POST, "telefoon", FILTER_SANITIZE_STRING);
+		$eten = filter_input(INPUT_POST, "eten", FILTER_SANITIZE_STRING);
+		$eetwens = filter_input(INPUT_POST, "eetwens", FILTER_SANITIZE_STRING);
+		$slapen = filter_input(INPUT_POST, "slapen", FILTER_SANITIZE_STRING);
+		$opmerking = filter_input(INPUT_POST, "opmerking", FILTER_SANITIZE_STRING);
 
-		if ($this->isSpam($naam, $email, $telefoon)) {
+		if ($this->isSpam($naam, $email, $telefoon, $eten, $eetwens, $opmerking)) {
 			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
 		}
-
-		$commissie = 'PromoCie';
-		$bestemming = [$_ENV['EMAIL_PROMOCIE'] => $commissie];
 
 		if ($type === 'lid-worden') {
 			$typeaanduiding = 'Ik wil lid worden';
 			$commissie = "NovCie";
 			$bestemming = [$_ENV['EMAIL_NOVCIE'] => $commissie];
-		} else {
+		} else if ($type === 'lid-spreken') {
 			$typeaanduiding = 'Eerst een lid spreken';
+			$commissie = "OweeCie";
+			$bestemming = [$_ENV['EMAIL_OWEECIE'] => $commissie];
+		} else {
+			$typeaanduiding = 'Aanmelden open avond';
 			$commissie = "OweeCie";
 			$bestemming = [$_ENV['EMAIL_OWEECIE'] => $commissie];
 		}
@@ -136,7 +138,10 @@ De PubCie.
 			'naam' => $naam,
 			'email' => $email,
 			'commissie' => $commissie,
-			'datums' => $datums
+			'eten' => $eten,
+			'eetwens' => $eetwens,
+			'slapen' => $slapen,
+			'opmerking' => $opmerking,
 		]);
 
 		$mail = new Mail($bestemming, "Lid worden formulier", $bericht);

@@ -11,6 +11,7 @@ use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -31,6 +32,7 @@ class DataTableBuilder {
 
 	protected $dataUrl;
 	protected $titel;
+	protected $beschrijving;
 	protected $dataTableId;
 	protected $defaultLength = 10;
 	public $selectEnabled = true;
@@ -81,6 +83,10 @@ class DataTableBuilder {
 	 * @var EntityManagerInterface
 	 */
 	private $entityManager;
+	/**
+	 * @var CamelCaseToSnakeCaseNameConverter
+	 */
+	private $camelCaseToSnakeCaseNameConverter;
 
 	public function __construct(
 		SerializerInterface $serializer,
@@ -90,6 +96,7 @@ class DataTableBuilder {
 		$this->serializer = $serializer;
 		$this->normalizer = $normalizer;
 		$this->entityManager = $entityManager;
+		$this->camelCaseToSnakeCaseNameConverter = new CamelCaseToSnakeCaseNameConverter();
 	}
 
 	public function loadFromClass(string $className) {
@@ -104,18 +111,20 @@ class DataTableBuilder {
 		// generate columns from entity attributes
 		foreach ($metadata->getFieldNames() as $attribute) {
 			$type = Type::getTypeRegistry()->get($metadata->getTypeOfField($attribute));
+			$name = $this->camelCaseToSnakeCaseNameConverter->normalize($attribute);
 			if ($type instanceof DateTimeImmutableType) {
-				$this->addColumn($attribute, null, null, CellRender::DateTime());
+				$this->addColumn($name, null, null, CellRender::DateTime());
 			} elseif ($type instanceof BooleanType) {
-				$this->addColumn($attribute, null, null, CellRender::Check());
+				$this->addColumn($name, null, null, CellRender::Check());
 			} else {
-				$this->addColumn($attribute);
+				$this->addColumn($name);
 			}
 		}
 
 		// hide primary key columns
 		foreach ($metadata->getIdentifierFieldNames() as $attribute) {
-			$this->hideColumn($attribute);
+			$name = $this->camelCaseToSnakeCaseNameConverter->normalize($attribute);
+			$this->hideColumn($name);
 		}
 
 	}
@@ -347,6 +356,7 @@ class DataTableBuilder {
 			$this->serializer,
 			$this->normalizer,
 			$this->getTitel(),
+			$this->getBeschrijving(),
 			$this->getDataTableId(),
 			$this->getSettings()
 		);
@@ -362,6 +372,14 @@ class DataTableBuilder {
 			unset($this->settings['buttons'][1]['filename']);
 			unset($this->settings['buttons'][2]['filename']);
 		}
+	}
+
+	public function setBeschrijving($beschrijving) {
+		$this->beschrijving = $beschrijving;
+	}
+
+	public function getBeschrijving() {
+		return $this->beschrijving;
 	}
 
 	// create group expand / collapse column

@@ -5,15 +5,15 @@
 {% block breadcrumbs %}
 	<ol class="breadcrumb bg-transparent">
 		<li class="breadcrumb-item"><a href="{{ url('default') }}" title="Thuis"><i class="fas fa-house"></i></a></li>
-		<li class="breadcrumb-item"><a href="{{ url('csrdelft_forum_forum') }}">Forum</a></li>
+		<li class="breadcrumb-item"><a href="{{ url('csrdelft_forum_forum_forum') }}">Forum</a></li>
 		<li class="breadcrumb-item active" aria-current="page">
 			<select name="forum_id" class="form-select form-select-sm w-auto"
 							onchange="if (this.value.substr(0,4) === 'http') { window.open(this.value); } else { window.location.href = this.value; }">
-				<option value="{{ url('csrdelft_forum_belangrijk') }}"
+				<option value="{{ url('csrdelft_forum_forum_belangrijk') }}"
 								{% if deel.titel == 'Belangrijk recent gewijzigd' %}selected="selected"{% endif %}>
 					Belangrijk recent gewijzigd
 				</option>
-				<option value="{{ url('csrdelft_forum_recent') }}"
+				<option value="{{ url('csrdelft_forum_forum_recent') }}"
 								{% if deel.titel == 'Recent gewijzigd' %}selected="selected"{% endif %}>
 					Recent gewijzigd
 				</option>

@@ -42,7 +42,7 @@ class ForumDeelForm implements FormulierTypeInterface {
 		$builder->addCssClass('ReloadPage PreventUnchanged');
 
 		$fields = [];
-		$fields[] = new DoctrineEntityField('categorie', $data->categorie, 'Categorie', ForumCategorie::class, $this->urlGenerator->generate('csrdelft_forum_forumcategoriesuggestie') . "?q=");
+		$fields[] = new DoctrineEntityField('categorie', $data->categorie, 'Categorie', ForumCategorie::class, $this->urlGenerator->generate('csrdelft_forum_forum_forumcategoriesuggestie') . "?q=");
 		$fields[] = new RequiredTextField('titel', $data->titel, 'Titel');
 		$fields[] = new TextareaField('omschrijving', $data->omschrijving, 'Omschrijving');
 		$fields[] = new RechtenField('rechten_lezen', $data->rechten_lezen, 'Lees-rechten');
@@ -55,7 +55,7 @@ class ForumDeelForm implements FormulierTypeInterface {
 		$formKnoppen = new FormDefaultKnoppen();
 
 		if (!$aanmaken) {
-			$delete = new DeleteKnop($this->urlGenerator->generate('csrdelft_forum_opheffen', ['forum_id' => $data->forum_id]));
+			$delete = new DeleteKnop($this->urlGenerator->generate('csrdelft_forum_forumdeel_opheffen', ['forum_id' => $data->forum_id]));
 			$formKnoppen->addKnop($delete, true);
 		}
 

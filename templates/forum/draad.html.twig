@@ -5,8 +5,8 @@
 {% block breadcrumbs %}
 	{{ csr_breadcrumbs({
 		(url('default')): 'main',
-		(url('csrdelft_forum_forum')): 'Forum',
-		(url('csrdelft_forum_deel', {forum_id: draad.deel.forum_id})): draad.deel.titel,
+		(url('csrdelft_forum_forum_forum')): 'Forum',
+		(url('csrdelft_forum_forumdeel_deel', {forum_id: draad.deel.forum_id})): draad.deel.titel,
 		'': draad.titel,
 	}) }}
 {% endblock %}
@@ -65,7 +65,7 @@
 				<nav aria-label="Forum pagination">
 					<ul class="pagination justify-content-center">
 						{{ sliding_pager({
-							baseurl: url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id}) ~ '/',
+							baseurl: url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id}) ~ '/',
 							url_append: statistiek ? '/statistiek': '',
 							pagecount: draadGetAantalPaginas(draad.draad_id),
 							curpage: draadGetHuidigePagina()

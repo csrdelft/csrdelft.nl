@@ -6,6 +6,7 @@ namespace CsrDelft\events;
 
 use CsrDelft\common\Security\OAuth2Scope;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\repository\security\RememberOAuthRepository;
 use CsrDelft\service\AccessService;
 use CsrDelft\service\security\LoginService;
 use Nyholm\Psr7\Response;
@@ -42,13 +43,18 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	 * @var AccountRepository
 	 */
 	private $accountRepository;
+	/**
+	 * @var RememberOAuthRepository
+	 */
+	private $rememberOAuthRepository;
 
 	public function __construct(
-		RequestStack $requestStack,
-		Environment $twig,
-		LoginService $loginService,
-		AccessService $accessService,
-		AccountRepository $accountRepository
+		RequestStack            $requestStack,
+		Environment             $twig,
+		LoginService            $loginService,
+		AccessService           $accessService,
+		RememberOAuthRepository $rememberOAuthRepository,
+		AccountRepository       $accountRepository
 	)
 	{
 		$this->loginService = $loginService;
@@ -56,6 +62,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		$this->twig = $twig;
 		$this->accessService = $accessService;
 		$this->accountRepository = $accountRepository;
+		$this->rememberOAuthRepository = $rememberOAuthRepository;
 	}
 
 	public static function getSubscribedEvents()
@@ -68,15 +75,34 @@ class OAuth2Subscriber implements EventSubscriberInterface
 
 	public function onScopeResolve(ScopeResolveEvent $event)
 	{
+		$rememberOAuth = $this->rememberOAuthRepository->findByUser($event->getUserIdentifier(), $event->getClient()->getIdentifier());
+		$user = $this->accountRepository->find($event->getUserIdentifier());
+
+		if ($rememberOAuth) {
+			$rememberOAuth->lastUsed = date_create_immutable();
+			$rememberedScopes = explode(" ", $rememberOAuth->scopes);
+
+			$scopes = [];
+			foreach ($event->getScopes() as $scope) {
+				if (in_array((string)$scope, $rememberedScopes) && $this->accessService->mag($user, OAuth2Scope::magScope($scope))) {
+					$scopes[] = $scope;
+				}
+			}
+
+			$event->setScopes(...$scopes);
+			return;
+		}
+
 		$requestedScopes = $event->getScopes();
 
 		$request = $this->requestStack->getMainRequest();
 
 		if ($request->query->has('scopeChoice')) {
-			$requestedScopes = array_map(function($scope) {return new Scope($scope); }, (array)$request->query->get('scopeChoice'));
+			$requestedScopes = array_map(function ($scope) {
+				return new Scope($scope);
+			}, (array)$request->query->get('scopeChoice'));
 		}
 
-		$user = $this->accountRepository->find($event->getUserIdentifier());
 
 		$scopes = [];
 		foreach ($requestedScopes as $scope) {
@@ -98,6 +124,18 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	{
 		$request = $this->requestStack->getMainRequest();
 
+		$rememberOAuth = $this->rememberOAuthRepository->findByUser(
+			$event->getUser()->getUserIdentifier(),
+			$event->getClient()->getIdentifier()
+		);
+
+		if ($rememberOAuth) {
+			$rememberOAuth->lastUsed = date_create_immutable();
+
+			$event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
+			return;
+		}
+
 		// Maak een tijdelijke token aan om te voorkomen dat een applicatie voor de gebruiker kan approven.
 		if (!$request->getSession()->has('token')) {
 			$request->getSession()->set('token', uniqid_safe('token_'));
@@ -109,6 +147,12 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		}
 
 		if ($request->get('token') == $request->getSession()->get('token')) {
+			if ($request->get('remember')) {
+				// Vinkje bij vertrouw applicatie
+
+				$this->rememberOAuthRepository->nieuw($event->getUser(), $event->getClient()->getIdentifier(), $event->getScopes());
+			}
+
 			$event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
 			return;
 		}
@@ -130,7 +174,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 
 		$redirect_uri = parse_url($request->get('redirect_uri'));
 
-		$redirect_uri_formatted = $redirect_uri['host']  . (isset($redirect_uri['port']) ? ':' . $redirect_uri['port'] : '');
+		$redirect_uri_formatted = $redirect_uri['host'] . (isset($redirect_uri['port']) ? ':' . $redirect_uri['port'] : '');
 
 		$response = new Response(200,
 			[],

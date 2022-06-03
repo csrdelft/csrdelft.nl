@@ -39,10 +39,6 @@ JS;
 			}
 
 			$this->suggestions[] = '/zoeken?q=';
-
-			if (lid_instelling('zoeken', 'wiki') === 'ja') {
-				$this->suggestions['Wiki'] = '/wiki/lib/exe/ajax.php?call=csrlink_wikisuggesties&q=';
-			}
 		}
 	}
 
@@ -87,6 +83,7 @@ JS;
 			}
 			$html .= ucfirst($option) . '</a>';
 		}
+		$wikiUrl = ContainerFacade::getContainer()->getParameter('wiki_url');
 		$parent = parent::getHtml();
 		return <<<HTML
 <div class="form-inline d-flex flex-nowrap">
@@ -107,7 +104,7 @@ JS;
 			<a href="#" class="dropdown-item" onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent(document.querySelector('#{$this->getId()}').value);">
 				Forum reacties
 			</a>
-			<a href="#" class="dropdown-item" onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent(document.querySelector('#{$this->getId()}').value);">
+			<a href="#" class="dropdown-item" onclick="window.location.href = '{$wikiUrl}/w/index.php?title=Speciaal%3AZoeken&fulltext=1&search=' + encodeURIComponent(document.querySelector('#{$this->getId()}').value);">
 				Wiki inhoud
 			</a>
 			<a class="divider"></a>

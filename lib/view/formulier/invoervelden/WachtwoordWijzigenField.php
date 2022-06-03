@@ -5,6 +5,7 @@ namespace CsrDelft\view\formulier\invoervelden;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\security\Account;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\AccountService;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -97,7 +98,7 @@ class WachtwoordWijzigenField extends InputField {
 	}
 
 	public function validate() {
-		$accountRepository = ContainerFacade::getContainer()->get(AccountRepository::class);
+		$accountService = ContainerFacade::getContainer()->get(AccountService::class);
 		if (!parent::validate()) {
 			return false;
 		}
@@ -112,7 +113,7 @@ class WachtwoordWijzigenField extends InputField {
 			$this->error = 'U moet uw huidige wachtwoord invoeren';
 		} elseif ($this->required AND empty($new)) {
 			$this->error = 'U moet een nieuw wachtwoord invoeren';
-		} elseif ($this->require_current AND !$accountRepository->controleerWachtwoord($this->model, $current)) {
+		} elseif ($this->require_current AND !$accountService->controleerWachtwoord($this->model, $current)) {
 				$this->error = 'Uw huidige wachtwoord is niet juist';
 		} elseif (!empty($new)) {
 			if ($this->require_current AND $current == $new) {

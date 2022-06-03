@@ -8,6 +8,7 @@ use CsrDelft\bb\BbTag;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
+use CsrDelft\service\forum\ForumDelenService;
 use CsrDelft\service\security\LoginService;
 use Exception;
 use Twig\Environment;
@@ -34,11 +35,16 @@ class BbForum extends BbTag {
 	 * @var string
 	 */
 	private $id;
+	/**
+	 * @var ForumDelenService
+	 */
+	private $forumDelenService;
 
-	public function __construct(ForumDradenRepository $forumDradenRepository, ForumDelenRepository $forumDelenRepository, Environment $twig) {
+	public function __construct(ForumDradenRepository $forumDradenRepository, ForumDelenRepository $forumDelenRepository, ForumDelenService $forumDelenService, Environment $twig) {
 		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDelenRepository = $forumDelenRepository;
 		$this->twig = $twig;
+		$this->forumDelenService = $forumDelenService;
 	}
 
 	public static function getTagName() {
@@ -80,10 +86,10 @@ class BbForum extends BbTag {
 		$this->forumDradenRepository->setAantalPerPagina($this->num);
 		switch ($this->id) {
 			case 'recent':
-				$this->deel = $this->forumDelenRepository->getRecent();
+				$this->deel = $this->forumDelenService->getRecent();
 				break;
 			case 'belangrijk':
-				$this->deel = $this->forumDelenRepository->getRecent(true);
+				$this->deel = $this->forumDelenService->getRecent(true);
 				break;
 			default:
 				$this->deel = $this->forumDelenRepository->get($this->id);

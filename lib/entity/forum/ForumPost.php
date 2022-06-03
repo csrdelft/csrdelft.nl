@@ -40,6 +40,7 @@ class ForumPost {
 	public $draad_id;
 	/**
 	 * Lidnummer van auteur
+	 * TODO: Maak dit een foreign key naar Profiel
 	 * @var string
 	 * @ORM\Column(type="uid")
 	 */

@@ -7,22 +7,22 @@
 	</div>
 	<div class="card-body">
 		<div class="mb-3 d-flex justify-content-between">
-			<a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'plakkerig'}) }}"
+			<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'plakkerig'}) }}"
 				 class="btn btn-light post ReloadPage"
 				 title="Verander plakkerigheid">
 				{{ icon('note') }} maak {% if draad.plakkerig %}<span class="dikgedrukt">niet</span>{% endif %} plakkerig
 			</a>
-			<a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'eerste_post_plakkerig'}) }}"
+			<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'eerste_post_plakkerig'}) }}"
 				 class="btn btn-light post ReloadPage {% if draad.eerste_post_plakkerig %}active{% endif %}"
 				 title="Verander plakkerigheid van eerste post">
 				1e post plakkerig
 			</a>
-			<a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'pagina_per_post'}) }}"
+			<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'pagina_per_post'}) }}"
 				 class="btn btn-light post ReloadPage {% if draad.pagina_per_post %}active{% endif %}"
 				 title="Verander 1 pagina per post">
 				1 pagina per post
 			</a>
-			<a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'verwijderd'}) }}"
+			<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'verwijderd'}) }}"
 				 class="btn btn-light post confirm ReloadPage"
 				 title="Verander status verwijderd (incl. alle reacties)">
 				{% if draad.verwijderd %}
@@ -31,11 +31,11 @@
 					{{ icon('cross') }} draad verwijderen
 				{% endif %}
 			</a>
-			<a href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, pagina: 'prullenbak'}) }}"
+			<a href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, pagina: 'prullenbak'}) }}"
 				 class="btn btn-light"
 				 title="Bekijk de reacties die zijn verwijderd">{{ icon('bin_closed') }} verwijderde reacties</a>
 		</div>
-		<form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'forum_id'}) }}" method="post">
+		<form action="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'forum_id'}) }}" method="post">
 			{{ csrfField() }}
 			<div class="mb-3 row">
 				<label for="verplaats-naar" class="col-md-3 col-form-label">Verplaats naar &nbsp;</label>
@@ -56,7 +56,7 @@
 				</div>
 			</div>
 		</form>
-		<form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'titel'}) }}" method="post">
+		<form action="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'titel'}) }}" method="post">
 			{{ csrfField() }}
 			<div class="mb-3 row">
 				<label for="titel" class="col-md-3 col-form-label">Titel aanpassen &nbsp;</label>
@@ -69,7 +69,7 @@
 			</div>
 		</form>
 		{% if mag('P_FORUM_BELANGRIJK') %}
-			<form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'belangrijk'}) }}"
+			<form action="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'belangrijk'}) }}"
 						method="post">
 				{{ csrfField() }}
 				<div class="mb-3 row">
@@ -95,7 +95,7 @@
 			</form>
 		{% endif %}
 		{% if gedeeld_met_opties %}
-			<form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'gedeeld_met'}) }}"
+			<form action="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'gedeeld_met'}) }}"
 						method="post">
 				{{ csrfField() }}
 				<div class="mb-3 row">

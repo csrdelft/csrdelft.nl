@@ -5,10 +5,6 @@ namespace CsrDelft\view\groepen\formulier;
 use CsrDelft\entity\groepen\enum\HuisStatus;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Activiteit;
-use CsrDelft\entity\groepen\Commissie;
-use CsrDelft\entity\groepen\enum\ActiviteitSoort;
-use CsrDelft\entity\groepen\enum\CommissieSoort;
-use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\groepen\GroepAanmeldMoment;
 use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
@@ -16,10 +12,9 @@ use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\groepen\Kring;
 use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\security\enum\AccessAction;
-use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\FormFieldFactory;
-use CsrDelft\view\formulier\invoervelden\AutocompleteField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredAutocompleteField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -57,7 +52,7 @@ class GroepForm extends ModalForm {
 
 		$fields['oudId']->hidden = true;
 
-		$fields['familie'] = new AutocompleteField('familie', $this->model->familie, $fields['familie']->description, false);
+		$fields['familie'] = new RequiredAutocompleteField('familie', $this->model->familie, $fields['familie']->description, false);
 		$fields['familie']->title = 'Vul hier een \'achternaam\' in zodat de juiste ketzers elkaar opvolgen';
 		$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
 		$fields['omschrijving']->description = 'Meer lezen';

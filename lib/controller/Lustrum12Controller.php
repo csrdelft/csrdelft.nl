@@ -97,8 +97,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/dies/gala")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function gala() {
-		return $this->render('lustrum12/gala.html.twig');
+	public function diesgala() {
+		return $this->render('lustrum12/diesgala.html.twig');
 	}
 
 	/**
@@ -112,6 +112,15 @@ class Lustrum12Controller extends AbstractController
 
 	/**
 	 * @return Response
+	 * @Route("/tijdloos/lustrumreis/inschrijven")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lustrumreisinschrijven() {
+		return $this->render('lustrum12/lustrumreisinschrijven.html.twig');
+	}
+
+	/**
+	 * @return Response
 	 * @Route("/tijdloos/lustrumreis")
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -119,4 +128,21 @@ class Lustrum12Controller extends AbstractController
 		return $this->render('lustrum12/lustrumreis.html.twig');
 	}
 
+	/**
+	 * @return Response
+	 * @Route("/tijdloos/slotactiviteit")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function hoogtijd() {
+		return $this->render('lustrum12/slotactiviteit.html.twig');
+	}
+
+	/**
+	 * @return Response
+	 * @Route("/tijdloos/gala")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lustrumgala() {
+		return $this->render('lustrum12/lustrumgala.html.twig');
+	}
 }

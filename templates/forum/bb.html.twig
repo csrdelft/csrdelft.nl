@@ -11,7 +11,7 @@
 	<h6 class="border-bottom border-gray pb-2 mb-0">{{ deel.titel }}</h6>
 	{% for draad in deel.forumDraden %}
 		<div class="media pt-3">
-			<a href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}"
+			<a href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}"
 				 class="media-body pb-3 mb-0 lh-125 border-bottom border-gray {% if mag('P_LOGGED_IN') and draad.ongelezen %} {{ ongelezenWeergave }} {% endif %}">
 				{% if draad.belangrijk %}
 					{{ icon(draad.belangrijk, null, 'dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
@@ -30,11 +30,11 @@
 	{% endfor %}
 	<div class="d-block text-end mt-3">
 		{% if id == 'recent' %}
-			<a href="{{ url('csrdelft_forum_recent') }}">Meer lezen...</a>
+			<a href="{{ url('csrdelft_forum_forum_recent') }}">Meer lezen...</a>
 		{% elseif id == 'belangrijk' %}
-			<a href="{{ url('csrdelft_forum_belangrijk') }}">Meer lezen...</a>
+			<a href="{{ url('csrdelft_forum_forum_belangrijk') }}">Meer lezen...</a>
 		{% else %}
-			<a href="{{ url('csrdelft_forum_deel', {forum_id: deel.forum_id}) }}">Meer lezen...</a>
+			<a href="{{ url('csrdelft_forum_forumdeel_deel', {forum_id: deel.forum_id}) }}">Meer lezen...</a>
 		{% endif %}
 	</div>
 </div>

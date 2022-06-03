@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Geeft toegang tot de Symfony Service Container.
  *
  * Gebruik alleen als er geen betere manier is om services te pakken te krijgen.
+ * @deprecated Gebruik de service container
  *
  * @package CsrDelft\common
  */

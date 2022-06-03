@@ -12,7 +12,6 @@
  */
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
 use CsrDelft\repository\security\AccountRepository;
 use Symfony\Component\ErrorHandler\Debug;
@@ -21,17 +20,10 @@ use Symfony\Component\HttpFoundation\Request;
 // Zet omgeving klaar.
 require __DIR__ . '/../config/bootstrap.php';
 
-// Registreer foutmelding handlers
-if (!isCi() && !isCli()) {
-	if (DEBUG) {
-		umask(0000);
+if (!isCI() && !isCLI() && DEBUG) {
+	umask(0000);
 
-		Debug::enable();
-	} else {
-		register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
-		set_error_handler([ShutdownHandler::class, 'slackHandler']);
-		register_shutdown_function([ShutdownHandler::class, 'slackShutdownHandler']);
-	}
+	Debug::enable();
 }
 
 // alle meldingen tonen
@@ -68,7 +60,7 @@ ContainerFacade::init($container);
 
 // Use HTTP Strict Transport Security to force client to use secure connections only
 if (FORCE_HTTPS) {
-	if (!(isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') && !isCi() && !isCli()) {
+	if (!(isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') && !isCI() && !isCLI()) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
@@ -85,9 +77,9 @@ if (FORCE_HTTPS) {
 	}
 }
 
-if (isCi() && isSyrinx()) die("Syrinx is geen Travis!");
+if (isCI() && isSyrinx()) die("Syrinx is geen Travis!");
 
-if (!isCli()) {
+if (!isCLI()) {
 	// Sessie configureren
 	ini_set('session.name', 'CSRSESSID');
 	ini_set('session.save_path', SESSION_PATH);

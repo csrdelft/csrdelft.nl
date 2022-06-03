@@ -1,12 +1,10 @@
 import {Calendar} from '@fullcalendar/core';
 import nlLocale from '@fullcalendar/core/locales/nl';
-import {OptionsInput, ToolbarInput} from '@fullcalendar/core/types/input-types';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interaction from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import axios from 'axios';
-import $ from 'jquery';
 import moment from 'moment';
 import ctx from '../ctx';
 import {ajaxRequest} from '../lib/ajax';
@@ -31,7 +29,7 @@ docReady(() => {
 		throw new Error('Agenda opties niet gezet');
 	}
 
-	const defaultView = {
+	const initialView = {
 		maand: 'dayGridMonth',
 		week: 'timeGridWeek',
 		dag: 'timeGridDay',
@@ -40,11 +38,11 @@ docReady(() => {
 
 	let editable = false;
 
-	const options: OptionsInput = {
+	const options = {
 		plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interaction],
 		height: 'auto',
 		nowIndicator: true,
-		defaultView,
+		initialView,
 		locale: nlLocale,
 		customButtons: {
 			nieuw: { // Alleen zichtbaar als je mag bewerken
@@ -59,7 +57,7 @@ docReady(() => {
 			},
 			bewerken: { // Alleen zichtbaar als je mag bewerken
 				text: 'Bewerken',
-				click(this: HTMLElement) {
+				click() {
 					editable = !editable;
 
 					calendar.setOption('editable', editable);
@@ -87,12 +85,12 @@ docReady(() => {
 
 			return event;
 		},
-		header: {
+		headerToolbar: {
 			left: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
 			center: 'title',
 			right: 'today prevYear,prev,next,nextYear',
 		},
-		defaultDate: new Date(Number(jaar), Number(maand) - 1),
+		initialDate: new Date(Number(jaar), Number(maand) - 1),
 		firstDay: 0,
 		events: '/agenda/feed',
 		selectable: editable && creator === 'true',
@@ -178,7 +176,7 @@ docReady(() => {
 
 	// Creator krijgt nieuw knoppen
 	if (creator === 'true') {
-		const header = options.header as ToolbarInput;
+		const header = options.headerToolbar;
 		header.right = 'bewerken,nieuw ' + header.right;
 	}
 

@@ -1,6 +1,6 @@
 {% extends 'extern/layout.html.twig' %}
 
-{% block titel %}Blik Vooruit - OWee 2021{% endblock %}
+{% block titel %}Lid worden{% endblock %}
 
 {% block styles %}
 	{{ css_asset('extern') }}
@@ -18,11 +18,10 @@
 			</a>
 		</div>
 	</section>
-	<div style="color: #e8e8e8;">a</div>
 	<div class="owee-pagina">
-		<div class="bbl atl hero">
-			<div class="content">
-				<img src="{{ absolute_url('/images/owee/owee2021lg.svg') }}" alt="C.S.R. - Blik Vooruit">
+		<div class="bbl atl hero" style="margin-top: 100px;">
+			{# Hier kan de Owee banner als het nieuwe thema bekend is. #}
+			<div class="content" style="height: 36vw;">
 			</div>
 		</div>
 
@@ -30,18 +29,18 @@
 			<div class="row align-items-center">
 				<div class="col-md-6 mb-4 mb-md-0">
 					<h1>{% trans %}Word lid van C.S.R.{% endtrans %}</h1>
-					<p>{% trans %}C.S.R. Delft is de grootste christelijke vereniging van Delft. Lid zijn van onze studentenvereniging
-						betekent voor jou dat je nieuwe vriendschappen maakt voor het leven en samen geniet van de activiteiten die
-						de vereniging biedt. Het betekent dat je je geloof blijft voeden en je kan verdiepen met kringen,
-						bidgroepjes en zangavonden. Lid zijn zorgt voor prachtige momenten tijdens je studententijd die je je leven
-						lang niet gaat vergeten!{% endtrans %}</p>
-
+					<p>{% trans %}C.S.R. Delft is de grootste christelijke vereniging van Delft. Lid zijn van onze studentenvereniging betekent voor jou dat je nieuwe vriendschappen maakt voor het leven en samen geniet van de activiteiten die de vereniging biedt.
+							Het	betekent dat je je geloof blijft voeden en je kan verdiepen met kringen, bidgroepjes en worshipavonden.
+							Lid zijn zorgt voor prachtige momenten tijdens je studententijd die je je leven lang niet gaat vergeten!{% endtrans %}</p>
 					<div class="mt-4">
-{#						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">#}
-{#							{% trans %}Ik wil lid worden!{% endtrans %}#}
-{#						</a>#}
+						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">
+							{% trans %}Ik wil lid worden!{% endtrans %}
+						</a>
 						<a href="#contact" class="cta primary" onclick="document.getElementById('lid-spreken').checked = true">
 							{% trans %}Eerst een lid spreken{% endtrans %}
+						</a>
+						<a href="https://forms.gle/TjRCndkQ6iekoZ2X7" target="_blank" class="cta secondary">
+							{% trans %}Open avond bezoeken{% endtrans %}
 						</a>
 					</div>
 				</div>
@@ -100,7 +99,7 @@
 				</div>
 				<div class="col-12 col-sm-6 col-md-4 mb-4">
 					<div class="iframe-container">
-						<iframe src="https://www.youtube.com/embed/mj8Zr3PFrPA"
+						<iframe src="https://www.youtube.com/embed/9fRaXRnBuLY"
 										allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
 										allowfullscreen></iframe>
 					</div>
@@ -123,9 +122,12 @@
 			<div class="content">
 				<div class="pt-5 pt-md-4 pb-4 pb-sm-2">
 					<h2>{% trans %}Interesse in C.S.R.?{% endtrans %}</h2>
-					<p>{% trans %}Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met
-						nieuws over bijvoorbeeld open avonden of de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan
-						je hieronder ook je gegevens achterlaten voor je voorinschrijving.{% endtrans %}</p>
+					<p>{% trans %}Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws
+							over activiteiten, zoals open avonden en de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan je hieronder
+							ook je gegevens achterlaten voor je voorinschrijving{% endtrans %}</p>
+					<p>{% trans %}Ook hebben we twee keer dit jaar een open avond waarbij je kan komen kijken
+							hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
+							De eerstvolgende open avond is op 2 juni.{% endtrans %} <a href="https://forms.gle/TjRCndkQ6iekoZ2X7" target="_blank">{% trans %}Schrijf je nu in!{% endtrans %}</a></p>
 				</div>
 			</div>
 		</div>
@@ -133,12 +135,12 @@
 		<a id="contact"></a>
 		<div class="content pt-4 pb-4">
 			<div class="row">
-				 <div class="col-md-5 col-lg-4 mb-4 mb-md-0">
-					<a class="whatsapp" href="https://wa.me/31681672945" target="_blank" rel="noopener noreferrer">
+				<div class="col-md-5 col-lg-4 mb-4 mb-md-0">
+					<a class="whatsapp" href="https://wa.me/31613793890" target="_blank" rel="noopener noreferrer">
 						<i class="fab fa-whatsapp me-3 me-md-0"></i>
-						<div class="call mt-3 mb-3">Vragen?<br>App met <br class="d-none d-md-inline">Mathijs!</div>
+						<div class="call mt-3 mb-3">Vragen?<br>App met <br class="d-none d-md-inline">Ellen!</div>
 						<div class="persoon"></div>
-						<div class="cta">0681672945</div>
+						<div class="cta">0613793890</div>
 					</a>
 				</div>
 				<div class=" col-md-7 col-lg-8 col-md-12">
@@ -167,16 +169,24 @@
 					</script>
 					<form action="" class="formulieren" id="owee-form">
 						{{ csrfField() }}
-						<label hidden for="lid-worden" class="owee">{% trans %}<span class="d-none d-sm-inline">Ik wil </span>lid worden{% endtrans %}</label>
-						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden">
-						<label for="lid-spreken" class="owee">{% trans %}<span class="d-none d-sm-inline">Ik wil een dagje met een lid meelopen</span>{% endtrans %}</label>
-						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken" checked>
+						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden" checked>
+						<label for="lid-worden" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil </span>lid worden{% endtrans %}</label>
+						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken">
+						<label for="lid-spreken" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil een dagje </span>met een lid meelopen{% endtrans %}</label>
+						<input hidden id="open-avond" class="owee" type="radio" name="optie" value="open-avond">
+						<label hidden for="open-avond" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil naar een </span>open avond<span class="d-none d-md-inline"> komen</span>{% endtrans %}</label>
 						<div class="interesseformulier">
-							<h6 class="lid-worden">{% trans %}Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek! De inschrijvingen sluiten vrijdag 20 augustus 2021 om 21:00 uur.{% endtrans %}</h6>
+							<h6 class="lid-worden">{% trans %}Ben je overtuigd om volgend studiejaar lid te worden bij C.S.R? Wat mooi! Officieel lid worden kan tijdens de introductieweek in augustus. Geef hier alvast je interesse door, dan houden wij je op de hoogte van leuke evenementen en precieze data en tijden.{% endtrans %}</h6>
 							<h6 class="lid-spreken">{% trans %}Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.
 									Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze
 									dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden: {% endtrans %}
 							<a href="https://csrdelft.nl/meeloopdag">Informatie meeloopdag</a></h6>
+							<h6 class="open-avond">{% trans %}We hebben twee keer dit jaar een open avond waarbij je kan komen kijken
+									hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
+									De eerstvolgende open avond is op 2 juni, de inschrijvingen daarvoor gaan 2 weken van tevoren open.
+								{% endtrans %}</h6>
+
+							<p class="open-avond">{% trans %}De eerstvolgende open avond is donderdag 2 juni 2022.{% endtrans %}</p>
 
 							<div id="melding"></div>
 							<div class="velden" id="formulierVelden">
@@ -189,19 +199,39 @@
 								<label for="telefoon" class="owee">{% trans %}Je mobiele telefoonnummer{% endtrans %}</label>
 								<input type="tel" id="telefoon" name="telefoon">
 
-								<div class="lid-worden">
-									<label for="datums" class="owee">{% trans %}Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug){% endtrans %}</label>
-									<input type="text" id="datums" name="datums">
+								<div class="open-avond">
+									<label class="owee">{% trans %}Wil je mee eten?{% endtrans %}</label>
+									<div>
+									<input type="radio" id="eten-ja" name="eten" value="Ja">
+									<label for="eten-ja" class="owee">{% trans %}Ja{% endtrans %}</label>
+									<input type="radio" id="eten-nee" name="eten" value="Nee">
+									<label for="eten-nee" class="owee">{% trans %}Nee{% endtrans %}</label>
+									</div>
+
+									<label for="eetwens" class="owee">{% trans %}Als je wilt mee eten, heb je nog allergenen of eetwensen?{% endtrans %}</label>
+									<input type="text" id="eetwens" name="eetwens">
+
+									<label class="owee">{% trans %}Heb je na afloop van de open avond een slaapplek nodig?{% endtrans %}</label>
+									<div>
+										<input type="radio" id="slapen-ja" name="slapen" value="Ja">
+										<label for="slapen-ja" class="owee">{% trans %}Ja{% endtrans %}</label>
+										<input type="radio" id="slapen-nee" name="slapen" value="Nee">
+										<label for="slapen-nee" class="owee">{% trans %}Nee{% endtrans %}</label>
+									</div>
 								</div>
+
+								<label for="opmerking" class="owee">{% trans %}Heb je nog opmerkingen?{% endtrans %}</label>
+								<input type="text" id="opmerking" name="opmerking">
 
 								<div class="field" id="captcha"></div>
 
 								<p>{% trans %}Met het verzenden van dit formulier ga je akkoord met de <a
-										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-/05-2018.pdf"
+										href="/download/Privacyverklaring C.S.R. Delft - Extern - 25-/05-2018.pdf"
 										target="_blank">privacyverklaring van C.S.R. Delft</a>.{% endtrans %}</p>
 
 								<input class="lid-worden" type="submit" id="submitButton" value="{% trans %}Inschrijven{% endtrans %}">
 								<input class="lid-spreken" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
+								<input hidden class="open-avond" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
 
 							</div>
 						</div>
@@ -217,11 +247,11 @@
 				<div class="row pt-5 pb-4">
 					<div class="col-md-6 mb-4 mb-md-0">
 						<h2>{% trans %}Novitaatsweek{% endtrans %}</h2>
-						<p>{% trans %}Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek
-							(ook wel de kennismakingstijd, afgekort KMT).
-								De novitiaatsweek vindt plaats van 23 t/m 29 augustus, dus zorg dat je die week vrijhoudt!
-								In deze week zal je elkaar, de vereniging en haar leden leren kennen. De activiteiten die tijdens
-							de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.{% endtrans %}</p>
+						<p>{% trans %} Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT).
+								De novitiaatsweek vindt plaats van 29 augustus t/m 4 september, dus zorg dat je die week vrijhoudt!
+								In deze week zal je elkaar, de vereniging en haar leden leren kennen.
+								De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.
+							{% endtrans %}</p>
 					</div>
 					<div class="col-md-6">
 						<h2>{% trans %}Documenten{% endtrans %}</h2>
@@ -235,10 +265,10 @@
 							<li><a href="https://csrdelft.nl/download/Code%20of%20Ethics%202016-2017.pdf" target="_blank">Code Of
 									Ethics</a></li>
 							<li><a
-									href="https://d1rkab7tlqy5f1.cloudfront.net/TUDelft/Onderwijs/Praktische_zaken/Communicatieconvenant%20TU%20Delft%20--getekende%20versie-website.pdf"
+									href="https://csrdelft.nl/download/Communicatiecovenant%20TU%20Delft%202021-2024.pdf"
 									target="_blank" rel="noopener noreferrer">{% trans %}Communicatieconvenant{% endtrans %}</a></li>
 							<li><a
-									href="https://d1rkab7tlqy5f1.cloudfront.net/TUDelft/Onderwijs/Praktische_zaken/gedragsovereenkomst%20TU%20Delft%20en%20de%20vijf%20grote%20verenigingen%20getekende%20versie%20website.pdf"
+									href="https://csrdelft.nl/download/Gedragsovereenkomst%20TU%20Delft%202021-2022.pdf"
 									target="_blank" rel="noopener noreferrer">{% trans %}Gedragsovereenkomst{% endtrans %}</a></li>
 						</ul>
 					</div>

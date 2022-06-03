@@ -136,17 +136,20 @@ class AccessService {
 	/**
 	 * @var EntityManagerInterface
 	 */
-	private $em;
+	private $em;/**
+ * @var AccountRepository
+ */private $accountRepository;
 
 	/**
 	 * @param CacheInterface $cache
 	 * @param EntityManagerInterface $em
 	 * @throws InvalidArgumentException
 	 */
-	public function __construct(CacheInterface $cache, EntityManagerInterface $em) {
+	public function __construct(CacheInterface $cache, EntityManagerInterface $em, AccountRepository $accountRepository) {
 		$this->cache = $cache;
 		$this->em = $em;
 		$this->loadPermissions();
+		$this->accountRepository = $accountRepository;
 	}
 
 	/**
@@ -295,7 +298,7 @@ class AccessService {
 	 */
 	public function mag(UserInterface $subject = null, $permission = null, array $allowedAuthenticationMethods = null) {
 		if ($subject == null) {
-			$subject = AccountRepository::get(LoginService::UID_EXTERN);
+			$subject = $this->accountRepository->find(LoginService::UID_EXTERN);
 		}
 
 		// Als voor het ingelogde lid een permissie gevraagd wordt
@@ -307,7 +310,7 @@ class AccessService {
 			}
 			// Als de methode niet toegestaan is testen we met de permissies van niet-ingelogd
 			if (!in_array($method, $allowedAuthenticationMethods)) {
-				$subject = AccountRepository::get(LoginService::UID_EXTERN);
+				$subject = $this->accountRepository->find(LoginService::UID_EXTERN);
 			}
 		}
 

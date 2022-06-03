@@ -79,11 +79,12 @@ class LoginService {
 	/**
 	 * @param string $permission
 	 * @param array|null $allowedAuthenticationMethods
+	 * @deprecated Gebruik CsrSecurity::mag
 	 *
 	 * @return bool
 	 */
 	public static function mag($permission, array $allowedAuthenticationMethods = null) {
-		return ContainerFacade::getContainer()->get(LoginService::class)->_mag($permission, $allowedAuthenticationMethods);
+		return ContainerFacade::getContainer()->get(CsrSecurity::class)->mag($permission, $allowedAuthenticationMethods);
 	}
 
 	public function _mag($permission, array $allowedAuthenticationMethdos = null) {
@@ -94,31 +95,41 @@ class LoginService {
 
 	/**
 	 * @return string
+	 * @deprecated Gebruik _getUid of CsrSecurity::getAccount()->uid
 	 */
 	public static function getUid() {
-		if (isCli()) {
+		return ContainerFacade::getContainer()->get(LoginService::class)->_getUid();
+	}
+
+	public function _getUid() {
+		if (isCLI()) {
 			return static::$cliUid;
 		}
 
-		$account = static::getAccount();
+		$token = $this->security->getToken();
 
-		if ($account) {
-			return $account->uid;
+		if (!$token) {
+			return self::UID_EXTERN;
 		}
 
-		return self::UID_EXTERN;
+		return $token->getUserIdentifier();
 	}
 
 	/**
 	 * @return UserInterface|Account|null
+	 * @deprecated Gebruik CsrSecurity::getAccount
 	 */
 	public static function getAccount() {
-		return ContainerFacade::getContainer()->get('security')->getUser()
-			?? ContainerFacade::getContainer()->get(AccountRepository::class)->find(self::UID_EXTERN);
+		return ContainerFacade::getContainer()->get(LoginService::class)->_getAccount();
+	}
+
+	public function _getAccount() {
+		return $this->security->getUser() ?? $this->accountRepository->find(self::UID_EXTERN);
 	}
 
 	/**
 	 * @return Profiel|null
+	 * @deprecated Gebruik CsrSecurity::getProfiel
 	 */
 	public static function getProfiel() {
 		$account = static::getAccount();
@@ -128,10 +139,6 @@ class LoginService {
 		return null;
 	}
 
-	public static function isExtern() {
-		return !LoginService::mag(P_LOGGED_IN);
-	}
-
 	/**
 	 * Indien de huidige gebruiker is geauthenticeerd door middel van een token in de url
 	 * worden Permissies hierdoor beperkt voor de veiligheid.
@@ -139,7 +146,7 @@ class LoginService {
 	 * @see AccessService::mag()
 	 */
 	public function getAuthenticationMethod() {
-		if (isCli()) {
+		if (isCLI()) {
 			return AuthenticationMethod::password_login;
 		}
 

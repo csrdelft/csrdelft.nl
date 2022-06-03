@@ -186,9 +186,6 @@
     "http-interop/http-factory-guzzle": {
         "version": "1.0.0"
     },
-    "jakeasmith/http_build_url": {
-        "version": "1.0.1"
-    },
     "jean85/pretty-package-versions": {
         "version": "1.5.0"
     },

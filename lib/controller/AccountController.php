@@ -8,6 +8,7 @@ use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
+use CsrDelft\service\AccountService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\login\AccountForm;
 use CsrDelft\view\login\UpdateLoginForm;
@@ -40,17 +41,23 @@ class AccountController extends AbstractController {
 	 * @var AccessService
 	 */
 	private $accessService;
+	/**
+	 * @var AccountService
+	 */
+	private $accountService;
 
 	public function __construct(
-		AccessService $accessService,
-		AccountRepository $accountRepository,
+		AccessService       $accessService,
+		AccountRepository   $accountRepository,
+		AccountService      $accountService,
 		CmsPaginaRepository $cmsPaginaRepository,
-		LoginService $loginService
+		LoginService        $loginService
 	) {
 		$this->accessService = $accessService;
 		$this->accountRepository = $accountRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 		$this->loginService = $loginService;
+		$this->accountService = $accountService;
 	}
 
 	/**
@@ -74,7 +81,7 @@ class AccountController extends AbstractController {
 		if ($account) {
 			setMelding('Account bestaat al', 0);
 		} else {
-			$account = $this->accountRepository->maakAccount($uid);
+			$account = $this->accountService->maakAccount($uid);
 			if ($account) {
 				setMelding('Account succesvol aangemaakt', 1);
 			} else {
@@ -102,7 +109,7 @@ class AccountController extends AbstractController {
 		if ($uid !== $this->getUid() && !LoginService::mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}
-		$account = $this->accountRepository->get($uid);
+		$account = $this->accountRepository->find($uid);
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
 			throw $this->createAccessDeniedException();
@@ -118,7 +125,7 @@ class AccountController extends AbstractController {
 			$form = new UpdateLoginForm($action);
 
 			// Reset loginmoment naar nu als de gebruiker zijn wachtwoord geeft.
-			if ($form->validate() && $this->accountRepository->controleerWachtwoord($eigenAccount, $form->getValues()['pass'])) {
+			if ($form->validate() && $this->accountService->controleerWachtwoord($eigenAccount, $form->getValues()['pass'])) {
 				$this->loginService->setRecentLoginToken();
 			} else {
 				setMelding('U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.', 2);
@@ -137,7 +144,7 @@ class AccountController extends AbstractController {
 				$account->username = $account->uid;
 			}
 			// username, email & wachtwoord opslaan
-			$this->accountRepository->wijzigWachtwoord($account, $account->pass_plain);
+			$this->accountService->wijzigWachtwoord($account, $account->pass_plain);
 			setMelding('Inloggegevens wijzigen geslaagd', 1);
 		}
 		$account->eraseCredentials();
@@ -168,7 +175,7 @@ class AccountController extends AbstractController {
 		if ($uid !== $this->getUid() && !LoginService::mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}
-		$account = $this->accountRepository->get($uid);
+		$account = $this->accountRepository->find($uid);
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
 		} else {

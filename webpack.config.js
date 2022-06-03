@@ -41,7 +41,6 @@ module.exports = (env, argv) => {
 			'fxraket': './js/entry/fxraket.ts',
 			'fxdruif': './js/entry/fxdruif.ts',
 			'fxminion': './js/entry/fxminion.ts',
-			'fxclippy': './js/entry/fxclippy.ts',
 			'fxspace': './js/entry/fxspace.ts',
 			'extern': ['./js/entry/extern.ts', './scss/extern.scss'],
 			'bredeletters': './scss/bredeletters.scss',
@@ -63,6 +62,7 @@ module.exports = (env, argv) => {
 			'lustrumdiesthema': './scss/lustrum12/diesthema.scss',
 			'lustrumdies': './scss/lustrum12/dies.scss',
 			'lustrum12-js': './js/lib/lustrum12.ts',
+			'lustrumreis': './scss/lustrum12/lustrumreis.scss',
 
 		},
 		output: {

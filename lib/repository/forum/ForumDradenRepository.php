@@ -2,8 +2,6 @@
 
 namespace CsrDelft\repository\forum;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
@@ -25,7 +23,8 @@ use Exception;
  * @method ForumDraad|null findOneBy(array $criteria, array $orderBy = null)
  * @method PersistentCollection|ForumDraad[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ForumDradenRepository extends AbstractRepository implements Paging {
+class ForumDradenRepository extends AbstractRepository implements Paging
+{
 	/**
 	 * Mogelijke markeringen voor belangrijke draadjes
 	 * @var array
@@ -72,49 +71,13 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	 * @var int
 	 */
 	private $aantal_plakkerig;
-	/**
-	 * @var ForumDradenGelezenRepository
-	 */
-	private $forumDradenGelezenRepository;
 
-	/**
-	 * @var ForumDradenReagerenRepository
-	 */
-	private $forumDradenReagerenRepository;
-
-	/**
-	 * @var ForumDradenVerbergenRepository
-	 */
-	private $forumDradenVerbergenRepository;
-
-	/**
-	 * @var ForumDradenMeldingRepository
-	 */
-	private $forumDradenMeldingRepository;
-
-	/**
-	 * @var ForumPostsRepository
-	 */
-	private $forumPostsRepository;
-
-	public function __construct(
-		ManagerRegistry $registry,
-		ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		ForumDradenReagerenRepository $forumDradenReagerenRepository,
-		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
-		ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		ForumPostsRepository $forumPostsRepository
-	) {
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, ForumDraad::class);
 		$this->pagina = 1;
 		$this->aantal_paginas = array();
 		$this->aantal_plakkerig = null;
-
-		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
-		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
-		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
-		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
-		$this->forumPostsRepository = $forumPostsRepository;
 	}
 
 	/**
@@ -122,7 +85,8 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	 * @return ForumDraad
 	 * @throws CsrGebruikerException
 	 */
-	public function get($id) {
+	public function get($id)
+	{
 		$draad = $this->find($id);
 		if (!$draad) {
 			throw new CsrGebruikerException('Forum-onderwerp bestaat niet!');
@@ -130,22 +94,26 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		return $draad;
 	}
 
-	public function getAantalPerPagina() {
+	public function getAantalPerPagina()
+	{
 		if (!$this->per_pagina) {
 			$this->per_pagina = (int)lid_instelling('forum', 'draden_per_pagina');
 		}
 		return $this->per_pagina;
 	}
 
-	public function setAantalPerPagina($aantal) {
+	public function setAantalPerPagina($aantal)
+	{
 		$this->per_pagina = (int)$aantal;
 	}
 
-	public function getHuidigePagina() {
+	public function getHuidigePagina()
+	{
 		return $this->pagina;
 	}
 
-	public function setHuidigePagina($pagina, $forum_id) {
+	public function setHuidigePagina($pagina, $forum_id)
+	{
 		if (!is_int($pagina) || $pagina < 1) {
 			$pagina = 1;
 		} elseif ($forum_id !== 0 && $pagina > $this->getAantalPaginas($forum_id)) {
@@ -154,7 +122,8 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		$this->pagina = $pagina;
 	}
 
-	public function getAantalPaginas($forum_id = null) {
+	public function getAantalPaginas($forum_id = null)
+	{
 		if (!isset($forum_id)) { // recent en zoeken hebben onbeperkte paginas
 			return $this->pagina + 1;
 		}
@@ -172,21 +141,25 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		return max(1, $this->aantal_paginas[$forum_id]);
 	}
 
-	public function createQueryBuilder($alias, $indexBy = null) {
+	public function createQueryBuilder($alias, $indexBy = null)
+	{
 		return parent::createQueryBuilder($alias, $indexBy)
 			->orderBy($alias . '.plakkerig', 'DESC')
 			->addOrderBy($alias . '.laatst_gewijzigd', 'DESC');
 	}
 
-	public function createQueryBuilderWithoutOrder($alias, $indexBy = null) {
+	public function createQueryBuilderWithoutOrder($alias, $indexBy = null)
+	{
 		return parent::createQueryBuilder($alias, $indexBy);
 	}
 
-	public function setLaatstePagina($forum_id) {
+	public function setLaatstePagina($forum_id)
+	{
 		$this->pagina = $this->getAantalPaginas($forum_id);
 	}
 
-	public function getPaginaVoorDraad(ForumDraad $draad) {
+	public function getPaginaVoorDraad(ForumDraad $draad)
+	{
 		if ($draad->plakkerig) {
 			return 1;
 		}
@@ -208,7 +181,8 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		return (int)ceil($count / $this->getAantalPerPagina());
 	}
 
-	public function zoeken(ForumZoeken $forumZoeken) {
+	public function zoeken(ForumZoeken $forumZoeken)
+	{
 		$qb = $this->createQueryBuilder('draad');
 		// Als er geen spatie in de zoekterm zit, doe dan keyword search met '<zoekterm>*'
 		if (strstr($forumZoeken->zoekterm, ' ') == false) {
@@ -237,11 +211,13 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	}
 
 
-	public function getPrullenbakVoorDeel(ForumDeel $deel) {
+	public function getPrullenbakVoorDeel(ForumDeel $deel)
+	{
 		return $this->findBy(['forum_id' => $deel->forum_id, 'verwijderd' => true], ['plakkerig' => 'DESC', 'laatst_gewijzigd' => 'DESC']);
 	}
 
-	public function getBelangrijkeForumDradenVoorDeel(ForumDeel $deel) {
+	public function getBelangrijkeForumDradenVoorDeel(ForumDeel $deel)
+	{
 		$qb = $this->createQueryBuilder('d');
 		$qb->where('d.forum_id = :forum_id and d.wacht_goedkeuring = false and d.verwijderd = false and d.belangrijk = true');
 		$qb->setParameter('forum_id', $deel->forum_id);
@@ -251,7 +227,8 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		return $qb->getQuery()->getResult();
 	}
 
-	public function getForumDradenVoorDeel(ForumDeel $deel) {
+	public function getForumDradenVoorDeel(ForumDeel $deel)
+	{
 		$qb = $this->createQueryBuilder('d');
 		$qb->where('(d.forum_id = :forum_id or d.gedeeld_met = :forum_id) and d.wacht_goedkeuring = false and d.verwijderd = false');
 		$qb->setParameter('forum_id', $deel->forum_id);
@@ -266,70 +243,13 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		return $paginator->getIterator();
 	}
 
-	/**
-	 * Laad recente (niet) (belangrijke) draadjes.
-	 * Eager loading van laatste ForumPost
-	 * Check leesrechten van gebruiker.
-	 * RSS: use token & return delen.
-	 *
-	 * @param int|null $aantal
-	 * @param boolean|null $belangrijk
-	 * @param boolean $rss
-	 * @param int $offset
-	 * @return ForumDraad[]
-	 */
-	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false, $offset = 0) {
-		if (!is_int($aantal)) {
-			$aantal = $this->getAantalPerPagina();
-			$pagina = $this->pagina;
-			$offset = ($pagina - 1) * $aantal;
-		}
-		$delenById = ContainerFacade::getContainer()->get(ForumDelenRepository::class)->getForumDelenVoorLid($rss);
-		if (count($delenById) < 1) {
-			return [];
-		}
-		$forum_ids = array_keys($delenById);
-
-		$qb = $this->createQueryBuilder('d');
-		$qb->orderBy('d.laatst_gewijzigd', 'DESC');
-		$qb->setFirstResult($offset);
-		$qb->setMaxResults($aantal);
-		$qb->where('d.forum_id in (:forum_ids) or d.forum_id in (:forum_ids)');
-		$qb->setParameter('forum_ids', $forum_ids);
-
-		$verbergen = $this->forumDradenVerbergenRepository->findBy(['uid' => LoginService::getUid()]);
-		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
-		if (count($draden_ids) > 0) {
-			$qb->andWhere('d.draad_id not in (:draden_ids)');
-			$qb->setParameter('draden_ids', $draden_ids);
-		}
-
-		$qb->andWhere('d.wacht_goedkeuring = false and d.verwijderd = false');
-
-		if (is_bool($belangrijk)) {
-			if ($belangrijk) {
-				$qb->andWhere('d.belangrijk is not null');
-			} else {
-				if (!isset($pagina) || lid_instelling('forum', 'belangrijkBijRecent') === 'nee') {
-					$qb->andWhere('d.belangrijk is null');
-				}
-			}
-		}
-		$this->filterLaatstGewijzigdExtern($qb);
-		$dradenById = group_by_distinct('draad_id', $qb->getQuery()->getResult());
-		$count = count($dradenById);
-		if ($count > 0) {
-			$draden_ids = array_keys($dradenById);
-			array_unshift($draden_ids, LoginService::getUid());
-		}
-		return $dradenById;
-	}
 
 	/**
 	 * @param array $ids
 	 * @return array|ForumDraad[]
 	 */
-	public function getForumDradenById(array $ids) {
+	public function getForumDradenById(array $ids)
+	{
 		$count = count($ids);
 		if ($count < 1) {
 			return array();
@@ -342,7 +262,8 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		return group_by_distinct('draad_id', $draden);
 	}
 
-	public function maakForumDraad($deel, $titel, $wacht_goedkeuring) {
+	public function maakForumDraad($deel, $titel, $wacht_goedkeuring)
+	{
 		$draad = new ForumDraad();
 		$draad->deel = $deel;
 		$draad->gedeeld_met_deel = null;
@@ -364,47 +285,9 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		return $draad;
 	}
 
-	public function wijzigForumDraad(ForumDraad $draad, $property, $value) {
-		if (!property_exists($draad, $property)) {
-			throw new CsrException('Property undefined: ' . $property);
-		}
-		$draad->$property = $value;
 
-		$this->getEntityManager()->persist($draad);
-		$this->getEntityManager()->flush();
-
-		if ($property === 'belangrijk') {
-			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen([$draad->draad_id]);
-		} elseif ($property === 'gesloten') {
-			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen([$draad->draad_id]);
-		} elseif ($property === 'verwijderd') {
-			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen([$draad->draad_id]);
-			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen([$draad->draad_id]);
-			$this->forumDradenGelezenRepository->verwijderDraadGelezen([$draad->draad_id]);
-			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad([$draad->draad_id]);
-			$this->forumPostsRepository->verwijderForumPostsVoorDraad($draad);
-		}
-	}
-
-	public function resetLastPost(ForumDraad $draad) {
-		// reset last post
-		$last_post = $this->forumPostsRepository->findBy(['draad_id' => $draad->draad_id, 'wacht_goedkeuring' => false, 'verwijderd' => false], ['laatst_gewijzigd' => 'DESC'])[0];
-		if ($last_post) {
-			$draad->laatste_post_id = $last_post->post_id;
-			$draad->laatste_wijziging_uid = $last_post->uid;
-			$draad->laatst_gewijzigd = $last_post->laatst_gewijzigd;
-		} else {
-			$draad->laatste_post_id = null;
-			$draad->laatste_wijziging_uid = null;
-			$draad->laatst_gewijzigd = null;
-			$draad->verwijderd = true;
-			setMelding('Enige bericht in draad verwijderd: draad ook verwijderd', 2);
-		}
-		$this->getEntityManager()->persist($draad);
-		$this->getEntityManager()->flush();
-	}
-
-	public function update(ForumDraad $draad) {
+	public function update(ForumDraad $draad)
+	{
 		try {
 			$this->getEntityManager()->persist($draad);
 			$this->getEntityManager()->flush();
@@ -415,7 +298,8 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		}
 	}
 
-	private function filterLaatstGewijzigdExtern($qb, $alias = 'd') {
+	public function filterLaatstGewijzigdExtern($qb, $alias = 'd')
+	{
 		if (!LoginService::mag(P_LOGGED_IN)) {
 			$qb->andWhere("({$alias}.gesloten = true and {$alias}.laatst_gewijzigd >= :laatst_gewijzigd_gesloten) or ({$alias}.gesloten = false and {$alias}.laatst_gewijzigd >= :laatst_gewijzigd_open)");
 			$qb->setParameter('laatst_gewijzigd_gesloten', date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten')));

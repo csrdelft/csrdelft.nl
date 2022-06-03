@@ -25,6 +25,11 @@ class Eisen {
 		return self::voorGebruiker(LoginService::getUid(), $veld);
 	}
 
+	public static function voorIngelogdLid($veld = 'lid') : Criteria
+	{
+		return Criteria::create()->where(Criteria::expr()->eq($veld, LoginService::getProfiel()))->setMaxResults(1);
+	}
+
 	public static function voorGebruiker($uid, $veld = 'uid'): Criteria
 	{
 		return Criteria::create()->where(Criteria::expr()->eq($veld, $uid))->setMaxResults(1);

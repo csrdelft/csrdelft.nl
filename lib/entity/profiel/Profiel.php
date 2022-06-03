@@ -451,7 +451,7 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	}
 
 	public function getAccount() {
-		return AccountRepository::get($this->uid);
+		return $this->account;
 	}
 
 	public function getPrimaryEmail() {

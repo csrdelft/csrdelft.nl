@@ -76,6 +76,7 @@ class Icon {
 		'Kring' => 'fas fa-circle-notch',
 		'note' => 'fas fa-sticky-note',
 		'boek' => 'fas fa-book',
+		'wiki' => 'fas fa-book-atlas'
 	);
 
 	public static function get($key) {

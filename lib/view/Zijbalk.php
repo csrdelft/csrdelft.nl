@@ -10,6 +10,7 @@ use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
+use CsrDelft\service\forum\ForumDelenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -61,12 +62,17 @@ class Zijbalk {
 	 * @var RequestStack
 	 */
 	private $requestStack;
+	/**
+	 * @var ForumDelenService
+	 */
+	private $forumDelenService;
 
 	public function __construct(
 		RequestStack $requestStack,
 		Environment $twig,
 		MenuItemRepository $menuItemRepository,
 		ForumDradenRepository $forumDradenRepository,
+		ForumDelenService $forumDelenService,
 		AgendaRepository $agendaRepository,
 		ForumPostsRepository $forumPostsRepository,
 		FotoAlbumRepository $fotoAlbumRepository,
@@ -84,6 +90,7 @@ class Zijbalk {
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 		$this->woordVanDeDagRepository = $woordVanDeDagRepository;
 		$this->requestStack = $requestStack;
+		$this->forumDelenService = $forumDelenService;
 	}
 
 	/**
@@ -159,7 +166,7 @@ class Zijbalk {
 		// Nieuwste belangrijke forumberichten
 		if (lid_instelling('zijbalk', 'forum_belangrijk') > 0) {
 			return $this->twig->render('voorpagina.html.twig', [
-				'draden' => $this->forumDradenRepository->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum_belangrijk'), true),
+				'draden' => $this->forumDelenService->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum_belangrijk'), true),
 				'aantalWacht' => $this->forumPostsRepository->getAantalWachtOpGoedkeuring(),
 				'belangrijk' => true
 			]);
@@ -173,7 +180,7 @@ class Zijbalk {
 		if (lid_instelling('zijbalk', 'forum') > 0) {
 			$belangrijk = (lid_instelling('zijbalk', 'forum_belangrijk') > 0 ? false : null);
 			return $this->twig->render('voorpagina.html.twig', [
-				'draden' => $this->forumDradenRepository->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum'), $belangrijk),
+				'draden' => $this->forumDelenService->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum'), $belangrijk),
 				'aantalWacht' => $this->forumPostsRepository->getAantalWachtOpGoedkeuring(),
 				'belangrijk' => $belangrijk
 			]);

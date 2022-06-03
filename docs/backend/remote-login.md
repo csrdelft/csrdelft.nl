@@ -1,3 +1,10 @@
+---
+layout: default
+parent: Backend
+nav_order: 10
+title: Remote Login
+---
+
 # Remote Login
 
 _Werk in uitvoering, kan veranderen_

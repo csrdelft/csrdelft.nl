@@ -7,6 +7,7 @@ parameters:
   container.dumper.inline_class_loader: true
   app.supported_locales: 'nl|en'
   memcached_url: '%env(MEMCACHED_URL)%'
+  wiki_url: '%env(WIKI_URL)%'
 
 services:
   # default configuration for services in *this* file
@@ -78,7 +79,7 @@ services:
   CsrDelft\common\Security\PersistentTokenProvider: ~
   Symfony\Component\Security\Http\RememberMe\PersistentRememberMeHandler: '@security.authenticator.remember_me_handler.main'
 
-  CsrDelft\controller\SessionController:
+  CsrDelft\controller\security\SessionController:
     tags:
       - { name: security.remember_me_aware}
 
@@ -106,6 +107,9 @@ services:
 
   csr.formulier.factory:
     alias: CsrDelft\Component\Formulier\FormulierFactory
+
+  csr.security:
+    alias: CsrDelft\service\security\CsrSecurity
 
   CsrDelft\Component\Formulier\FormulierBuilder:
     shared: false # iedere instance is uniek

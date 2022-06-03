@@ -23,11 +23,3 @@
 {% if lid_instelling('layout', 'druif') != 'nee' %}
 	{{ include('effect/druif.html.twig') }}
 {% endif %}
-{% if lid_instelling('layout', 'assistent') != 'nee' %}
-	<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css"/>
-	<script type="application/javascript">
-		const ASSISTENT = '{{ lid_instelling('layout', 'assistent') }}';
-		const ASSISTENT_GELUIDEN = '{{ lid_instelling('layout', 'assistentGeluiden') }}';
-	</script>
-	{{ js_asset('fxclippy') }}
-{% endif %}
