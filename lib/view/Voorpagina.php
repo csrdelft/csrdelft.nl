@@ -12,6 +12,7 @@ use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
+use CsrDelft\service\forum\ForumDelenService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
@@ -41,6 +42,8 @@ class Voorpagina {
 	 * @var ForumPostsRepository
 	 */
 	private $forumPostsRepository;
+	/** @var ForumDelenService */
+	private $forumDelenService;
 	/**
 	 * @var FotoAlbumRepository
 	 */
@@ -69,6 +72,7 @@ class Voorpagina {
 		ForumDradenRepository $forumDradenRepository,
 		AgendaRepository $agendaRepository,
 		ForumPostsRepository $forumPostsRepository,
+		ForumDelenService $forumDelenService,
 		FotoAlbumRepository $fotoAlbumRepository,
 		VerjaardagenService $verjaardagenService,
 		LidInstellingenRepository $lidInstellingenRepository,
@@ -80,6 +84,7 @@ class Voorpagina {
 		$this->agendaRepository = $agendaRepository;
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
+		$this->forumDelenService = $forumDelenService;
 		$this->verjaardagenService = $verjaardagenService;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 		$this->woordVanDeDagRepository = $woordVanDeDagRepository;
@@ -174,7 +179,7 @@ class Voorpagina {
 	{
 		$belangrijk = true;
 		return $this->twig->render('voorpagina/forum.html.twig', [
-			'draden' => $this->forumDradenRepository->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum'), $belangrijk),
+			'draden' => $this->forumDelenService->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum'), $belangrijk),
 			'aantalWacht' => $this->forumPostsRepository->getAantalWachtOpGoedkeuring(),
 			'belangrijk' => $belangrijk
 		]);
