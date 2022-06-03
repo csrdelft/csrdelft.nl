@@ -24,28 +24,26 @@ export function openPrompt<T = any>(options: PromptOptions<T>): void {
 	}
 
 	Object.entries(options.fields).forEach(([name, field]) => {
-		// prettier-ignore
-		formBody.appendChild(html`<div class="mb-3 row">
-<label class="col-sm-2 col-form-label" for="${name}"
->${field.options.label}${field.options.required ? html`<span class="text-danger">*</span>` : ''}</label
->
-<div class="col-sm-10">${field.render(name)}</div>
-</div>`);
+		formBody.appendChild(html` <div class="mb-3 row">
+			<label class="col-sm-2 col-form-label" for="${name}"
+				>${field.options.label}${field.options.required ? html`<span class="text-danger">*</span>` : ''}</label
+			>
+			<div class="col-sm-10">${field.render(name)}</div>
+		</div>`);
 	});
 
 	formFooter.appendChild(html` <div class="${prefix}-buttons">${submitButton} ${cancelButton}</div>`);
 
-	// prettier-ignore
-	const modal = html`<div class="modal" style="display: block;" tabindex="-1">
-<div class="modal-dialog">
-<div class="modal-content">
-<div class="modal-header">
-<h5 class="modal-title">${options.title}</h5>
-</div>
-${form}
-</div>
-</div>
-</div>`;
+	const modal = html` <div class="modal" style="display: block;" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">${options.title}</h5>
+				</div>
+				${form}
+			</div>
+		</div>
+	</div>`;
 
 	document.body.appendChild(modal);
 
@@ -187,15 +185,14 @@ export class Field<T = string> {
 // ::- A field class for single-line text fields.
 export class TextField extends Field {
 	render(name: string): HTMLElement {
-		// prettier-ignore
 		return html`<input
-type="text"
-name="${name}"
-id="${name}"
-value="${this.options.value || ''}"
-autocomplete="off"
-class="form-control"
-/>`;
+			type="text"
+			name="${name}"
+			id="${name}"
+			value="${this.options.value || ''}"
+			autocomplete="off"
+			class="form-control"
+		/>`;
 	}
 }
 
@@ -263,20 +260,18 @@ export class LidField extends Field<{ uid: string; naam: string }> {
 
 	render(name: string): HTMLElement {
 		this.name = name;
-		// prettier-ignore
 		const textInput = html`<input
-type="text"
-class="form-control"
-autocomplete="off"
-name="${name}_naam"
-value="${this.options.value.naam}"
-/>`;
-		// prettier-ignore
+			type="text"
+			class="form-control"
+			autocomplete="off"
+			name="${name}_naam"
+			value="${this.options.value.naam}"
+		/>`;
 		const hiddenInput = html<HTMLInputElement>`<input
-type="hidden"
-name="${name}_uid"
-value="${this.options.value.uid}"
-/>`;
+			type="hidden"
+			name="${name}_uid"
+			value="${this.options.value.uid}"
+		/>`;
 		const auxInput = html`<input type="hidden" name="${name}" />`;
 
 		const ledenDataset = new Bloodhound({
@@ -356,10 +351,9 @@ value="${this.options.value.uid}"
 
 export class YoutubeField extends Field<string> {
 	render(name: string): HTMLElement {
-		// prettier-ignore
 		return html`<textarea name="${name}" id="${name}" autocomplete="off" class="form-control">
-${this.options.value || ''}
-</textarea>`;
+${this.options.value || ''}</textarea
+		>`;
 	}
 
 	read(dom: HTMLInputElement): string {

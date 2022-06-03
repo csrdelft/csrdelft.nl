@@ -1,6 +1,6 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
-    <option name="FORMATTER_OFF_TAG" value="prettier-ignore" />
+    <option name="ENABLE_SECOND_REFORMAT" value="true" />
     <editorconfig>
       <option name="ENABLED" value="false" />
     </editorconfig>
