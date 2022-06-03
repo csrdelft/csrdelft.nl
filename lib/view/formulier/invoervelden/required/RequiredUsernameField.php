@@ -11,9 +11,8 @@ use CsrDelft\view\formulier\invoervelden\UsernameField;
  *
  * @see UsernameField
  */
-class RequiredUsernameField extends UsernameField
-{
+class RequiredUsernameField extends UsernameField {
 
-    public $required = true;
+	public $required = true;
 
 }

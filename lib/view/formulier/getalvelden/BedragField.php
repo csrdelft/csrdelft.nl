@@ -11,30 +11,27 @@ namespace CsrDelft\view\formulier\getalvelden;
  * Invoeren van een bedrag in centen, dus precisie van 2 cijfers achter de komma.
  *
  */
-class BedragField extends IntField
-{
+class BedragField extends IntField {
 
-    public $valuta;
+	public $valuta;
 
-    public $pattern = '-?[0-9]+';
+	public $pattern = '-?[0-9]+';
 
-    public function __construct($name, $value, $description, $valuta = '€', $min = null, $max = null, $step = 0.01)
-    {
-        parent::__construct($name, $value, $description, is_numeric($min) ? intval($min * 100) : null, is_numeric($max) ? intval($max * 100) : null);
-        $this->step = $step * 100;
-        $this->valuta = $valuta;
-    }
+	public function __construct($name, $value, $description, $valuta = '€', $min = null, $max = null, $step = 0.01) {
+		parent::__construct($name, $value, $description, is_numeric($min) ? intval($min * 100) : null, is_numeric($max) ? intval($max * 100) : null);
+		$this->step = $step * 100;
+		$this->valuta = $valuta;
+	}
 
-    public function getHtml()
-    {
-        $parent = parent::getHtml();
-        return <<<HTML
+	public function getHtml() {
+		$parent = parent::getHtml();
+		return <<<HTML
 <div class="input-group">
 	<span class="input-group-text">{$this->valuta}</span>
 	{$parent}
 	<span class="input-group-text">in centen</span>
 </div>
 HTML;
-    }
+	}
 
 }

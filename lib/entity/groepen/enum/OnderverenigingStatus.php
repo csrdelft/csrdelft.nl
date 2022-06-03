@@ -15,22 +15,21 @@ use CsrDelft\common\Enum;
  * @method static static Ondervereniging
  * @method static static VoormaligOndervereniging
  */
-class OnderverenigingStatus extends Enum
-{
+class OnderverenigingStatus extends Enum {
 
-    /**
-     * OnderverenigingStatus opties.
-     */
-    const AdspirantOndervereniging = 'a';
-    const Ondervereniging = 'o';
-    const VoormaligOndervereniging = 'v';
+	/**
+	 * OnderverenigingStatus opties.
+	 */
+	const AdspirantOndervereniging = 'a';
+	const Ondervereniging = 'o';
+	const VoormaligOndervereniging = 'v';
 
-    /**
-     * @var string[]
-     */
-    protected static $mapChoiceToDescription = [
-        self::AdspirantOndervereniging => 'Adspirant-ondervereniging',
-        self::Ondervereniging => 'Ondervereniging',
-        self::VoormaligOndervereniging => 'Voormalig Ondervereniging',
-    ];
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToDescription = [
+		self::AdspirantOndervereniging => 'Adspirant-ondervereniging',
+		self::Ondervereniging => 'Ondervereniging',
+		self::VoormaligOndervereniging => 'Voormalig Ondervereniging',
+	];
 }

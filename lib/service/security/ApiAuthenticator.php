@@ -30,250 +30,235 @@ use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class ApiAuthenticator extends AbstractAuthenticator
-{
-    /**
-     * @var UserProviderInterface
-     */
-    private $userProvider;
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-    /**
-     * @var HttpUtils
-     */
-    private $httpUtils;
-    /**
-     * @var AccountRepository
-     */
-    private $accountRepository;
-    /**
-     * @var PersistentTokenProvider
-     */
-    private $tokenProvider;
+class ApiAuthenticator extends AbstractAuthenticator {
+	/**
+	 * @var UserProviderInterface
+	 */
+	private $userProvider;
+	/**
+	 * @var TokenStorageInterface
+	 */
+	private $tokenStorage;
+	/**
+	 * @var HttpUtils
+	 */
+	private $httpUtils;
+	/**
+	 * @var AccountRepository
+	 */
+	private $accountRepository;
+	/**
+	 * @var PersistentTokenProvider
+	 */
+	private $tokenProvider;
 
-    public function __construct(
-        UserProviderInterface   $userProvider,
-        PersistentTokenProvider $tokenProvider,
-        TokenStorageInterface   $tokenStorage,
-        HttpUtils               $httpUtils,
-        AccountRepository       $accountRepository
-    )
-    {
-        $this->userProvider = $userProvider;
-        $this->tokenStorage = $tokenStorage;
-        $this->httpUtils = $httpUtils;
-        $this->accountRepository = $accountRepository;
-        $this->tokenProvider = $tokenProvider;
-    }
+	public function __construct(
+		UserProviderInterface $userProvider,
+		PersistentTokenProvider $tokenProvider,
+		TokenStorageInterface $tokenStorage,
+		HttpUtils $httpUtils,
+		AccountRepository $accountRepository
+	) {
+		$this->userProvider = $userProvider;
+		$this->tokenStorage = $tokenStorage;
+		$this->httpUtils = $httpUtils;
+		$this->accountRepository = $accountRepository;
+		$this->tokenProvider = $tokenProvider;
+	}
 
-    public function supports(Request $request): ?bool
-    {
-        if ($this->isAuthorizePath($request) || $this->isRefreshPath($request)) {
-            return true;
-        }
+	public function supports(Request $request): ?bool {
+		if ($this->isAuthorizePath($request) || $this->isRefreshPath($request)) {
+			return true;
+		}
 
-        if (null !== $this->tokenStorage->getToken()) {
-            return false;
-        }
+		if (null !== $this->tokenStorage->getToken()) {
+			return false;
+		}
 
 
-        if (!$request->server->has('HTTP_X_CSR_AUTHORIZATION')) {
-            return false;
-        }
+		if (!$request->server->has('HTTP_X_CSR_AUTHORIZATION')) {
+			return false;
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    private function isAuthorizePath(Request $request)
-    {
-        return $request->isMethod('POST')
-            && $this->httpUtils->checkRequestPath($request, '/API/2.0/auth/authorize')
-            && $request->request->has('user')
-            && $request->request->has('pass');
-    }
+	private function isAuthorizePath(Request $request) {
+		return $request->isMethod('POST')
+			&& $this->httpUtils->checkRequestPath($request, '/API/2.0/auth/authorize')
+			&& $request->request->has('user')
+			&& $request->request->has('pass');
+	}
 
-    private function isRefreshPath(Request $request)
-    {
-        return $request->isMethod('POST')
-            && $this->httpUtils->checkRequestPath($request, '/API/2.0/auth/token')
-            && $request->request->has('refresh_token');
-    }
+	private function isRefreshPath(Request $request) {
+		return $request->isMethod('POST')
+			&& $this->httpUtils->checkRequestPath($request, '/API/2.0/auth/token')
+			&& $request->request->has('refresh_token');
+	}
 
-    public function authenticate(Request $request): PassportInterface
-    {
-        if ($request->server->get('HTTP_X_CSR_AUTHORIZATION')) {
-            return $this->authenticateHeader($request);
-        }
+	public function authenticate(Request $request): PassportInterface {
+		if ($request->server->get('HTTP_X_CSR_AUTHORIZATION')) {
+			return $this->authenticateHeader($request);
+		}
 
-        if ($this->isAuthorizePath($request)) {
-            return $this->authorizeRequest($request);
-        }
+		if ($this->isAuthorizePath($request)) {
+			return $this->authorizeRequest($request);
+		}
 
-        if ($this->isRefreshPath($request)) {
-            return $this->refreshRequest($request);
-        }
+		if ($this->isRefreshPath($request)) {
+			return $this->refreshRequest($request);
+		}
 
-        throw new LogicException("This request is not supported.");
-    }
+		throw new LogicException("This request is not supported.");
+	}
 
-    private function authenticateHeader(Request $request)
-    {
-        $authHeader = $request->server->get('HTTP_X_CSR_AUTHORIZATION');
+	private function authenticateHeader(Request $request) {
+		$authHeader = $request->server->get('HTTP_X_CSR_AUTHORIZATION');
 
-        $jwt = substr($authHeader, 7);
+		$jwt = substr($authHeader, 7);
 
-        if (!$jwt) {
-            throw new AuthenticationException(400);
-        }
+		if (!$jwt) {
+			throw new AuthenticationException(400);
+		}
 
-        try {
-            $token = JWT::decode($jwt, $_ENV['JWT_SECRET'], ['HS512']);
-        } catch (Exception $e) {
-            throw new AuthenticationException('', 401);
-        }
+		try {
+			$token = JWT::decode($jwt, $_ENV['JWT_SECRET'], ['HS512']);
+		} catch (Exception $e) {
+			throw new AuthenticationException('', 401);
+		}
 
-        $user = $this->userProvider->loadUserByUsername($token->data->userId);
+		$user = $this->userProvider->loadUserByUsername($token->data->userId);
 
-        if (!$user instanceof UserInterface) {
-            throw new AuthenticationServiceException('The user provider must return a UserInterface object.');
-        }
+		if (!$user instanceof UserInterface) {
+			throw new AuthenticationServiceException('The user provider must return a UserInterface object.');
+		}
 
-        return new SelfValidatingPassport($user);
-    }
+		return new SelfValidatingPassport($user);
+	}
 
-    private function authorizeRequest(Request $request)
-    {
-        $credentials = [
-            'username' => $request->request->get('user'),
-            'password' => $request->request->get('pass'),
-        ];
+	private function authorizeRequest(Request $request) {
+		$credentials = [
+			'username' => $request->request->get('user'),
+			'password' => $request->request->get('pass'),
+		];
 
-        /** @var Account $user */
-        $user = $this->userProvider->loadUserByUsername($credentials['username']);
+		/** @var Account $user */
+		$user = $this->userProvider->loadUserByUsername($credentials['username']);
 
-        if (!$user) {
-            throw new AuthenticationException();
-        }
+		if (!$user) {
+			throw new AuthenticationException();
+		}
 
-        $timeout = $this->accountRepository->moetWachten($user);
+		$timeout = $this->accountRepository->moetWachten($user);
 
-        if ($timeout != 0) {
-            throw new AuthenticationException("Moet wachten");
-        }
+		if ($timeout != 0) {
+			throw new AuthenticationException("Moet wachten");
+		}
 
-        $validPassword = $this->accountRepository->controleerWachtwoord($user, $credentials['password']);
+		$validPassword = $this->accountRepository->controleerWachtwoord($user, $credentials['password']);
 
-        if (!$validPassword) {
-            $this->accountRepository->failedLoginAttempt($user);
+		if (!$validPassword) {
+			$this->accountRepository->failedLoginAttempt($user);
 
-            throw new AuthenticationException();
-        }
+			throw new AuthenticationException();
+		}
 
-        $this->accountRepository->successfulLoginAttempt($user);
+		$this->accountRepository->successfulLoginAttempt($user);
 
-        $token = $this->createJwtToken($user->uid);
+		$token = $this->createJwtToken($user->uid);
 
-        // Generate a refresh token
-        $series = crypto_rand_token(255);
-        $rand = crypto_rand_token(255);
+		// Generate a refresh token
+		$series = crypto_rand_token(255);
+		$rand = crypto_rand_token(255);
 
-        $_SERVER['HTTP_USER_AGENT'] = 'API 2.0: ' . filter_var(strval($_SERVER['HTTP_USER_AGENT']), FILTER_SANITIZE_STRING);
+		$_SERVER['HTTP_USER_AGENT'] = 'API 2.0: ' . filter_var(strval($_SERVER['HTTP_USER_AGENT']), FILTER_SANITIZE_STRING);
 
-        $this->tokenProvider->createNewToken(
-            new PersistentToken(
-                Account::class,
-                $user->uid,
-                $series,
-                hash('sha512', $rand),
-                date_create()
-            )
-        );
+		$this->tokenProvider->createNewToken(
+			new PersistentToken(
+				Account::class,
+				$user->uid,
+				$series,
+				hash('sha512', $rand),
+				date_create()
+			)
+		);
 
-        $refreshToken = $this->createRefreshToken($series, $rand);
+		$refreshToken = $this->createRefreshToken($series, $rand);
 
-        return new Passport($user, new PasswordCredentials($credentials['password']), [new JwtTokenBadge($token, $refreshToken)]);
-    }
+		return new Passport($user, new PasswordCredentials($credentials['password']), [new JwtTokenBadge($token, $refreshToken)]);
+	}
 
-    private function createJwtToken(string $userId): string
-    {
-        // Generate new JWT
-        $tokenId = base64_encode(openssl_random_pseudo_bytes(32));
-        $issuedAt = time();
+	private function createJwtToken(string $userId): string {
+		// Generate new JWT
+		$tokenId = base64_encode(openssl_random_pseudo_bytes(32));
+		$issuedAt = time();
 
-        $data = [
-            'iat' => $issuedAt,
-            'exp' => $issuedAt + $_ENV['JWT_LIFETIME'],
-            'jti' => $tokenId,
-            'data' => [
-                'userId' => $userId
-            ]
-        ];
+		$data = [
+			'iat' => $issuedAt,
+			'exp' => $issuedAt + $_ENV['JWT_LIFETIME'],
+			'jti' => $tokenId,
+			'data' => [
+				'userId' => $userId
+			]
+		];
 
-        // Encode the new JWT
-        return JWT::encode($data, $_ENV['JWT_SECRET'], 'HS512');
-    }
+		// Encode the new JWT
+		return JWT::encode($data, $_ENV['JWT_SECRET'], 'HS512');
+	}
 
-    private function createRefreshToken(string $series, string $token)
-    {
-        return base64_encode(implode(':', [$series, $token]));
-    }
+	private function createRefreshToken(string $series, string $token) {
+		return base64_encode(implode(':', [$series, $token]));
+	}
 
-    private function refreshRequest(Request $request)
-    {
-        // Filter posted data
-        $refresh_token = filter_var($request->request->get('refresh_token'), FILTER_SANITIZE_STRING);
+	private function refreshRequest(Request $request) {
+		// Filter posted data
+		$refresh_token = filter_var($request->request->get('refresh_token'), FILTER_SANITIZE_STRING);
 
-        [$series, $rand] = $this->unpackRefreshToken($refresh_token);
+		[$series, $rand] = $this->unpackRefreshToken($refresh_token);
 
-        $remember = $this->tokenProvider->loadTokenBySeries($series);
+		$remember = $this->tokenProvider->loadTokenBySeries($series);
 
-        if (!$remember || $remember->getTokenValue() != hash('sha512', $rand)) {
-            throw new UnauthorizedHttpException('Unauthorized');
-        }
+		if (!$remember || $remember->getTokenValue() != hash('sha512', $rand)) {
+			throw new UnauthorizedHttpException('Unauthorized');
+		}
 
-        $token = $this->createJwtToken($remember->getUsername());
+		$token = $this->createJwtToken($remember->getUsername());
 
-        $user = $this->userProvider->loadUserByUsername($remember->getUserName());
+		$user = $this->userProvider->loadUserByUsername($remember->getUserName());
 
-        return new SelfValidatingPassport($user, [new JwtTokenBadge($token, null)]);
-    }
+		return new SelfValidatingPassport($user, [new JwtTokenBadge($token, null)]);
+	}
 
-    private function unpackRefreshToken(string $refreshToken)
-    {
-        return explode(':', base64_decode($refreshToken));
-    }
+	private function unpackRefreshToken(string $refreshToken) {
+		return explode(':', base64_decode($refreshToken));
+	}
 
-    public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
-    {
-        $jwtBadge = $passport->getBadge(JwtTokenBadge::class);
-        if ($passport instanceof UserPassportInterface && $jwtBadge instanceof JwtTokenBadge) {
-            return new JwtToken($passport->getUser(), $jwtBadge->getToken(), $jwtBadge->getRefreshToken(), $firewallName, $passport->getUser()->getRoles());
-        }
+	public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface {
+		$jwtBadge = $passport->getBadge(JwtTokenBadge::class);
+		if ($passport instanceof UserPassportInterface && $jwtBadge instanceof JwtTokenBadge) {
+			return new JwtToken($passport->getUser(), $jwtBadge->getToken(), $jwtBadge->getRefreshToken(), $firewallName, $passport->getUser()->getRoles());
+		}
 
-        if ($passport instanceof SelfValidatingPassport) {
-            return new PostAuthenticationToken($passport->getUser(), $firewallName, $passport->getUser()->getRoles());
-        }
+		if ($passport instanceof SelfValidatingPassport) {
+			return new PostAuthenticationToken($passport->getUser(), $firewallName, $passport->getUser()->getRoles());
+		}
 
-        throw new LogicException("Cannot create token for this passport");
-    }
+		throw new LogicException("Cannot create token for this passport");
+	}
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
-        if ($token instanceof JwtToken) {
-            return new JsonResponse([
-                'token' => $token->getToken(),
-                'refreshToken' => $token->getRefreshToken(),
-            ]);
-        }
+	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response {
+		if ($token instanceof JwtToken) {
+			return new JsonResponse([
+				'token' => $token->getToken(),
+				'refreshToken' => $token->getRefreshToken(),
+			]);
+		}
 
-        // This request was just authenticated, continue
-        return null;
-    }
+		// This request was just authenticated, continue
+		return null;
+	}
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
-    {
-        return new Response("", 401);
-    }
+	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response {
+		return new Response("", 401);
+	}
 }

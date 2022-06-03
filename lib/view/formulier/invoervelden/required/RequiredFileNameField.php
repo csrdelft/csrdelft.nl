@@ -11,9 +11,8 @@ use CsrDelft\view\formulier\invoervelden\FileNameField;
  *
  * @see FileNameField
  */
-class RequiredFileNameField extends FileNameField
-{
+class RequiredFileNameField extends FileNameField {
 
-    public $required = true;
+	public $required = true;
 
 }

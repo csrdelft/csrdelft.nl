@@ -13,7 +13,6 @@
 		"lint": "yarn run eslint --ext .vue,.ts assets/js"
 	},
 	"devDependencies": {
-		"@prettier/plugin-php": "^0.18.7",
 		"@types/bootstrap": "^5.0.0",
 		"@types/chart.js": "^2.7.42",
 		"@types/datatables.net": "^1.10.21",
@@ -44,7 +43,7 @@
 		"cross-env": "^5.1",
 		"css-loader": "^1.0.0",
 		"eslint": "^7.7.0",
-		"eslint-config-prettier": "^8.5.0",
+		"eslint-formatter-json-relative": "^0.1.0",
 		"eslint-loader": "^4.0.2",
 		"eslint-plugin-vue": "^7.9.0",
 		"mini-css-extract-plugin": "^2.4.5",
@@ -53,8 +52,6 @@
 		"path": "^0.12.7",
 		"postcss": "^8.2.10",
 		"postcss-loader": "^5.2.0",
-		"prettier": "^2.6.2",
-		"prettier-plugin-twig-melody": "^0.4.6",
 		"resolve-url-loader": "^4.0.0",
 		"sass": "^1.50.0",
 		"sass-loader": "^12.6.0",

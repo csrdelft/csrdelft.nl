@@ -12,10 +12,8 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * Controller voor commissies.
  */
-class CommissiesController extends AbstractGroepenController
-{
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Commissie::class);
-    }
+class CommissiesController extends AbstractGroepenController {
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Commissie::class);
+	}
 }

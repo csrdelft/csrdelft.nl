@@ -3,39 +3,39 @@
 {% block titel %}Instellingenbeheer{% endblock %}
 
 {% block content %}
-    <h1>Instellingenbeheer</h1>
-    <p>
-        Op deze pagina kunt u instellingen wijzigen en resetten voor elke module op de stek.
-        Onderstaande tabel toont alle instellingen van de gekozen module.
-    </p>
-    <p>
-        N.B. Deze instellingen zijn essentieel voor de werking van de stek!
-    </p>
-    <ul class="nav nav-tabs">
-        {% for m in modules %}
-            <li class="nav-item">
-                <a href="{{ url('csrdelft_instellingenbeheer_module', {module: m}) }}"
-                   class="nav-link{% if app.request.uri == url('csrdelft_instellingenbeheer_module', {module: m}) %} active{% endif %}">
-                    {{ m | title }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-    {% if module %}
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">Wijzig</th>
-                <th scope="col">Id</th>
-                <th scope="col">Waarde</th>
-                <th scope="col">Reset</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for instelling in instellingen %}
-                {{ include('instellingenbeheer/regel.html.twig', {instelling: instelling}) }}
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
+	<h1>Instellingenbeheer</h1>
+	<p>
+		Op deze pagina kunt u instellingen wijzigen en resetten voor elke module op de stek.
+		Onderstaande tabel toont alle instellingen van de gekozen module.
+	</p>
+	<p>
+		N.B. Deze instellingen zijn essentieel voor de werking van de stek!
+	</p>
+	<ul class="nav nav-tabs">
+		{% for m in modules %}
+			<li class="nav-item">
+				<a href="{{ url('csrdelft_instellingenbeheer_module', {module: m}) }}"
+					 class="nav-link{% if app.request.uri == url('csrdelft_instellingenbeheer_module', {module: m}) %} active{% endif %}">
+					{{ m | title }}
+				</a>
+			</li>
+		{% endfor %}
+	</ul>
+	{% if module %}
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<th scope="col">Wijzig</th>
+				<th scope="col">Id</th>
+				<th scope="col">Waarde</th>
+				<th scope="col">Reset</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for instelling in instellingen %}
+				{{ include('instellingenbeheer/regel.html.twig', {instelling: instelling}) }}
+			{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
 {% endblock %}

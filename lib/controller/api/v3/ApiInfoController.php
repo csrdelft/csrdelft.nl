@@ -16,36 +16,36 @@ use Trikoder\Bundle\OAuth2Bundle\Security\Authentication\Token\OAuth2Token;
 
 class ApiInfoController extends AbstractController
 {
-    /**
-     * @param Security $security
-     * @return JsonResponse
-     * @Route("/api/v3/profiel")
-     * @Auth(P_LOGGED_IN)
-     */
-    public function profiel(AccessService $accessService, Security $security): JsonResponse
-    {
-        $token = $security->getToken();
-        if (!$token instanceof OAuth2Token) {
-            throw new BadRequestHttpException();
-        }
+	/**
+	 * @param Security $security
+	 * @return JsonResponse
+	 * @Route("/api/v3/profiel")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function profiel(AccessService $accessService, Security $security): JsonResponse
+	{
+		$token = $security->getToken();
+		if (!$token instanceof OAuth2Token) {
+			throw new BadRequestHttpException();
+		}
 
-        $scopes = $token->getAttribute('server_request')->getAttribute('oauth_scopes', []);
+		$scopes = $token->getAttribute('server_request')->getAttribute('oauth_scopes', []);
 
-        $user = $this->getUser();
+		$user = $this->getUser();
 
-        $json = [
-            'id' => $user->uuid->toRfc4122(),
-            'displayName' => $this->getUser()->profiel->getNaam(),
-            'slug' => $this->getUser()->profiel->getNaam('slug'),
-            'scopes' => $scopes,
-            'admin' => $accessService->mag($this->getUser(), P_ADMIN)
-        ];
+		$json = [
+			'id' => $user->uuid->toRfc4122(),
+			'displayName' => $this->getUser()->profiel->getNaam(),
+			'slug' => $this->getUser()->profiel->getNaam('slug'),
+			'scopes' => $scopes,
+			'admin' => $accessService->mag($this->getUser(), P_ADMIN)
+		];
 
-        if ($security->isGranted('ROLE_OAUTH2_PROFIEL:EMAIL')) {
-            $json['email'] = $user->email;
-        }
+		if ($security->isGranted('ROLE_OAUTH2_PROFIEL:EMAIL')) {
+			$json['email'] = $user->email;
+		}
 
-        return new JsonResponse($json);
-    }
+		return new JsonResponse($json);
+	}
 
 }

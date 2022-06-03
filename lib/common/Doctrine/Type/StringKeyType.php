@@ -14,21 +14,18 @@ use Doctrine\DBAL\Types\Type;
  *
  * @package CsrDelft\common\Doctrine\Type
  */
-class StringKeyType extends Type
-{
-    /**
-     * @inheritDoc
-     */
-    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
-    {
-        return 'VARCHAR(191) COMMENT \'(DC2Type:stringkey)\'';
-    }
+class StringKeyType extends Type {
+	/**
+	 * @inheritDoc
+	 */
+	public function getSQLDeclaration(array $column, AbstractPlatform $platform) {
+		return 'VARCHAR(191) COMMENT \'(DC2Type:stringkey)\'';
+	}
 
-    /**
-     * @inheritDoc
-     */
-    public function getName()
-    {
-        return 'stringkey';
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function getName() {
+		return 'stringkey';
+	}
 }

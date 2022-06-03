@@ -12,9 +12,8 @@ use CsrDelft\view\formulier\getalvelden\IntField;
  *
  * @see IntField
  */
-class RequiredIntField extends IntField
-{
+class RequiredIntField extends IntField {
 
-    public $required = true;
+	public $required = true;
 
 }

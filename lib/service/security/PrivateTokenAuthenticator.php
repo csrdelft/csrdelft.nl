@@ -25,63 +25,55 @@ use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 2020-08-09
  */
-class PrivateTokenAuthenticator extends AbstractAuthenticator implements RequestMatcherInterface
-{
-    /**
-     * @var AccountRepository
-     */
-    private $accountRepository;
+class PrivateTokenAuthenticator extends AbstractAuthenticator implements RequestMatcherInterface {
+	/**
+	 * @var AccountRepository
+	 */
+	private $accountRepository;
 
-    public function __construct(AccountRepository $accountRepository)
-    {
-        $this->accountRepository = $accountRepository;
-    }
+	public function __construct(AccountRepository $accountRepository) {
+		$this->accountRepository = $accountRepository;
+	}
 
-    public function supports(Request $request): ?bool
-    {
-        return $request->attributes->has('private_auth_token')
-            && preg_match('/^[a-zA-Z0-9]{150}$/', $request->attributes->get('private_auth_token'));
-    }
+	public function supports(Request $request): ?bool {
+		return $request->attributes->has('private_auth_token')
+			&& preg_match('/^[a-zA-Z0-9]{150}$/', $request->attributes->get('private_auth_token'));
+	}
 
-    public function authenticate(Request $request): PassportInterface
-    {
-        $token = $request->attributes->get('private_auth_token');
+	public function authenticate(Request $request): PassportInterface {
+		$token = $request->attributes->get('private_auth_token');
 
-        $user = $this->accountRepository->findOneBy(['private_token' => $token]);
+		$user = $this->accountRepository->findOneBy(['private_token' => $token]);
 
-        if (!$user) {
-            throw new AuthenticationException("Geen geldige private_token");
-        }
+		if (!$user) {
+			throw new AuthenticationException("Geen geldige private_token");
+		}
 
-        $badge = new UserBadge($user->getUsername(), function () use ($user) {
-            return $user;
-        });
+		$badge = new UserBadge($user->getUsername(), function() use ($user) {
+			return $user;
+		});
 
-        return new SelfValidatingPassport($badge);
-    }
+		return new SelfValidatingPassport($badge);
+	}
 
-    public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
-    {
-        if (!$passport instanceof UserPassportInterface) {
-            throw new LogicException("Gegeven Passport bevat geen user.");
-        }
+	public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface {
+		if (!$passport instanceof UserPassportInterface) {
+			throw new LogicException("Gegeven Passport bevat geen user.");
+		}
 
-        return new PrivateTokenToken($passport->getUser());
-    }
+		return new PrivateTokenToken($passport->getUser());
+	}
 
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
-        return null;
-    }
+	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response {
+		return null;
+	}
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
-    {
-        return new Response("", 403);
-    }
+	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response {
+		return new Response("", 403);
+	}
 
-    public function matches(Request $request)
-    {
-        return $this->supports($request);
-    }
+	public function matches(Request $request) {
+		return $this->supports($request);
+	}
 }

@@ -11,32 +11,28 @@ namespace CsrDelft\view\formulier\elementen;
  *
  * Je moet zelf de DIV sluiten!
  */
-class CollapsableSubkopje extends Subkopje
-{
-    private $collapsed;
+class CollapsableSubkopje extends Subkopje {
+	private $collapsed;
 
-    public function __construct($titel, $collapsed = false)
-    {
-        parent::__construct($titel);
-        $this->collapsed = $collapsed;
-    }
+	public function __construct($titel, $collapsed = false) {
+		parent::__construct($titel);
+		$this->collapsed = $collapsed;
+	}
 
-    public function getHtml()
-    {
-        $className = $this->collapsed ? "collapse" : "collapse show";
-        $expanded = $this->collapsed ? "false" : "true";
-        $collapseId = uniqid("collapsable_");
-        $content = parent::getHtml();
+	public function getHtml() {
+		$className = $this->collapsed ? "collapse" : "collapse show";
+		$expanded = $this->collapsed ? "false" : "true";
+		$collapseId = uniqid("collapsable_");
+		$content = parent::getHtml();
 
-        return <<<HTML
+		return <<<HTML
 <a data-bs-toggle="collapse" href="#{$collapseId}" role="button" aria-expanded="{$expanded}" aria-controls="{$collapseId}">{$content}</a>
 <div id="{$collapseId}" class="{$className}">
 HTML;
-    }
+	}
 
-    public function __toString()
-    {
-        return $this->getHtml();
-    }
+	public function __toString() {
+		return $this->getHtml();
+	}
 
 }

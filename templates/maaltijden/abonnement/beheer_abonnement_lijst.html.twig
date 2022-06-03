@@ -1,12 +1,12 @@
 <tr id="abonnement-row-{{ vanuid }}">
-    {% for abonnement in abonnementen %}
-        {% if loop.first %}
-            <td>{{ get_profiel(vanuid).link(instelling('maaltijden', 'weergave_ledennamen_beheer')) | raw }}</td>
-        {% endif %}
-        {% if abonnement.maaltijd_repetitie and abonnement.maaltijd_repetitie.abonneerbaar %}
-            {{ include('maaltijden/abonnement/beheer_abonnement_veld.html.twig', {uid: abonnement.uid, vanuid: vanuid, abonnement: abonnement}) }}
-        {% else %}
-            <td></td>
-        {% endif %}
-    {% endfor %}
+	{% for abonnement in abonnementen %}
+		{% if loop.first %}
+			<td>{{ get_profiel(vanuid).link(instelling('maaltijden', 'weergave_ledennamen_beheer')) | raw }}</td>
+		{% endif %}
+		{% if abonnement.maaltijd_repetitie and abonnement.maaltijd_repetitie.abonneerbaar %}
+			{{ include('maaltijden/abonnement/beheer_abonnement_veld.html.twig', {uid: abonnement.uid, vanuid: vanuid, abonnement: abonnement}) }}
+		{% else %}
+			<td></td>
+		{% endif %}
+	{% endfor %}
 </tr>

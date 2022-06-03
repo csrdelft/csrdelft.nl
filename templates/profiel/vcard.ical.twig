@@ -3,29 +3,29 @@ VERSION:4.0
 FN;CHARSET=UTF-8:{{ profiel.getNaam('volledig') }}
 N;CHARSET=UTF-8:{{ (profiel.tussenvoegsel ? profiel.tussenvoegsel ~ ' ' : '') ~ profiel.achternaam }};{{ profiel.voornaam }};;;
 {% if profiel | is_zichtbaar('nickname') -%}
-    NICKNAME;CHARSET=UTF-8:{{ profiel.nickname }}
+	NICKNAME;CHARSET=UTF-8:{{ profiel.nickname }}
 {% endif %}
 {% if profiel|is_zichtbaar('geslacht') -%}
-    GENDER:{{ profiel.geslacht.value == 'm' ? 'M' : 'F' }}
+	GENDER:{{ profiel.geslacht.value == 'm' ? 'M' : 'F' }}
 {% endif %}
 UID;CHARSET=UTF-8:{{ profiel.uid }}
 {% if profiel|is_zichtbaar('gebdatum') -%}
-    BDAY:{{ profiel.gebdatum | date('Ymd') }}
+	BDAY:{{ profiel.gebdatum | date('Ymd') }}
 {% endif %}
 {% if profiel|is_zichtbaar('email') -%}
-    EMAIL;CHARSET=UTF-8;type=HOME,INTERNET:{{ profiel.email }}
+	EMAIL;CHARSET=UTF-8;type=HOME,INTERNET:{{ profiel.email }}
 {% endif %}
 {% if profiel|is_zichtbaar('profielfoto', 'intern') -%}
-    PHOTO;ENCODING=BASE64;TYPE=JPEG:{{ profiel.pasfotoInternalPath | file_base64 }}
+	PHOTO;ENCODING=BASE64;TYPE=JPEG:{{ profiel.pasfotoInternalPath | file_base64 }}
 {% endif %}
 {% if profiel|is_zichtbaar('mobiel') -%}
-    TEL;TYPE=CELL:{{ profiel.mobiel }}
+	TEL;TYPE=CELL:{{ profiel.mobiel }}
 {% endif %}
 {% if profiel|is_zichtbaar('telefoon') -%}
-    TEL;TYPE=HOME,VOICE:{{ profiel.telefoon }}
+	TEL;TYPE=HOME,VOICE:{{ profiel.telefoon }}
 {% endif %}
 {% if profiel|is_zichtbaar(['adres', 'woonplaats', 'postcode', 'land']) -%}
-    ADR;CHARSET=UTF-8;TYPE=HOME:;;{{ profiel.adres }};{{ profiel.woonplaats }};;{{ profiel.postcode }};{{ profiel.land }}
+	ADR;CHARSET=UTF-8;TYPE=HOME:;;{{ profiel.adres }};{{ profiel.woonplaats }};;{{ profiel.postcode }};{{ profiel.land }}
 {% endif %}
 REV:{{ date().format('c') }}
 CATEGORIES:{{ lid_instelling('googleContacts', 'groepnaam') }}

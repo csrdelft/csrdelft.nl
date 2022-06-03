@@ -31,80 +31,75 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("crv_functies")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class CorveeFunctie implements ISelectEntity, DisplayEntity
-{
-    # ID om functie van kwalikok op te halen, wijzigen als ID van Kwalikok wijzigt
-    const KWALIKOK_FUNCTIE_ID = 7;
+class CorveeFunctie implements ISelectEntity, DisplayEntity {
+	# ID om functie van kwalikok op te halen, wijzigen als ID van Kwalikok wijzigt
+	const KWALIKOK_FUNCTIE_ID = 7;
 
-    /**
-     * Primary key
-     * @var int
-     * @ORM\Column(type="integer")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
-    public $functie_id;
-    /**
-     * Naam
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    public $naam;
-    /**
-     * Afkorting
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    public $afkorting;
-    /**
-     * E-mailbericht
-     * @var string
-     * @ORM\Column(type="text")
-     */
-    public $email_bericht;
-    /**
-     * Standaard aantal corveepunten
-     * @var int
-     * @ORM\Column(type="integer")
-     */
-    public $standaard_punten;
-    /**
-     * Is een kwalificatie benodigd
-     * @var boolean
-     * @ORM\Column(type="boolean")
-     */
-    public $kwalificatie_benodigd;
-    /**
-     * Geeft deze functie speciale rechten
-     * om maaltijden te mogen sluiten
-     * @var boolean
-     * @ORM\Column(type="boolean")
-     */
-    public $maaltijden_sluiten;
-    /**
-     * Kwalificaties
-     * @var CorveeKwalificatie[]
-     * @ORM\OneToMany(targetEntity="CorveeKwalificatie", mappedBy="corveeFunctie")
-     */
-    public $kwalificaties;
+	/**
+	 * Primary key
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 */
+	public $functie_id;
+	/**
+	 * Naam
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $naam;
+	/**
+	 * Afkorting
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $afkorting;
+	/**
+	 * E-mailbericht
+	 * @var string
+	 * @ORM\Column(type="text")
+	 */
+	public $email_bericht;
+	/**
+	 * Standaard aantal corveepunten
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
+	public $standaard_punten;
+	/**
+	 * Is een kwalificatie benodigd
+	 * @var boolean
+	 * @ORM\Column(type="boolean")
+	 */
+	public $kwalificatie_benodigd;
+	/**
+	 * Geeft deze functie speciale rechten
+	 * om maaltijden te mogen sluiten
+	 * @var boolean
+	 * @ORM\Column(type="boolean")
+	 */
+	public $maaltijden_sluiten;
+	/**
+	 * Kwalificaties
+	 * @var CorveeKwalificatie[]
+	 * @ORM\OneToMany(targetEntity="CorveeKwalificatie", mappedBy="corveeFunctie")
+	 */
+	public $kwalificaties;
 
-    public function hasKwalificaties()
-    {
-        return sizeof($this->kwalificaties) > 0;
-    }
+	public function hasKwalificaties() {
+		return sizeof($this->kwalificaties) > 0;
+	}
 
-    public function getValue()
-    {
-        return $this->naam;
-    }
+	public function getValue() {
+		return $this->naam;
+	}
 
-    public function getId()
-    {
-        return $this->functie_id;
-    }
+	public function getId() {
+		return $this->functie_id;
+	}
 
-    public function getWeergave(): string
-    {
-        return $this->naam ?? '';
-    }
+	public function getWeergave(): string {
+		return $this->naam ?? '';
+	}
 }

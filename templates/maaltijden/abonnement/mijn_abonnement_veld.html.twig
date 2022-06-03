@@ -1,16 +1,16 @@
 {% if uid is defined and uid is not empty %}
-    <td id="abonnement-cell-{{ mrid }}" class="abonnement-ingeschakeld">
-        <a href="{{ url('csrdelft_maalcie_mijnabonnementen_uitschakelen', {mlt_repetitie_id: mrid}) }}"
-           class="btn post abonnement-ingeschakeld">
-            <input type="checkbox" checked="checked" aria-label="Aan"/> Aan
-        </a>
-    </td>
+	<td id="abonnement-cell-{{ mrid }}" class="abonnement-ingeschakeld">
+		<a href="{{ url('csrdelft_maalcie_mijnabonnementen_uitschakelen', {mlt_repetitie_id: mrid}) }}"
+			 class="btn post abonnement-ingeschakeld">
+			<input type="checkbox" checked="checked" aria-label="Aan"/> Aan
+		</a>
+	</td>
 {% else %}
-    <td id="abonnement-cell-{{ mrid }}" class="abonnement-uitgeschakeld">
-        <a href="{{ url('csrdelft_maalcie_mijnabonnementen_inschakelen', {mlt_repetitie_id: mrid}) }}"
-           class="btn post abonnement-uitgeschakeld">
-            <input type="checkbox" aria-label="Uit"/> Uit
-        </a>
-    </td>
+	<td id="abonnement-cell-{{ mrid }}" class="abonnement-uitgeschakeld">
+		<a href="{{ url('csrdelft_maalcie_mijnabonnementen_inschakelen', {mlt_repetitie_id: mrid}) }}"
+			 class="btn post abonnement-uitgeschakeld">
+			<input type="checkbox" aria-label="Uit"/> Uit
+		</a>
+	</td>
 {% endif %}
 

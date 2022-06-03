@@ -18,44 +18,40 @@ use Doctrine\ORM\Mapping as ORM;
  *   @ORM\Index(name="cie", columns={"cie"})
  * })
  */
-class CiviCategorie implements DisplayEntity
-{
-    /**
-     * @var integer
-     * @ORM\Column(type="integer")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
-    public $id;
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    public $type;
-    /**
-     * @var integer
-     * @ORM\Column(type="integer")
-     */
-    public $status;
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     * TODO Dit is een CiviSaldoCommissieEnum
-     */
-    public $cie;
+class CiviCategorie implements DisplayEntity {
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 */
+	public $id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $type;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $status;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 * TODO Dit is een CiviSaldoCommissieEnum
+	 */
+	public $cie;
 
-    public function getBeschrijving()
-    {
-        return sprintf('%s (%s)', $this->type, $this->cie);
-    }
+	public function getBeschrijving() {
+		return sprintf('%s (%s)', $this->type, $this->cie);
+	}
 
-    public function getId()
-    {
-        return $this->id;
-    }
+	public function getId() {
+		return $this->id;
+	}
 
-    public function getWeergave(): string
-    {
-        return $this->getBeschrijving();
-    }
+	public function getWeergave(): string {
+		return $this->getBeschrijving();
+	}
 }

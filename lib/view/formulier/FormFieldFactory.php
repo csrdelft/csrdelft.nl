@@ -40,139 +40,136 @@ use Exception;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 15/09/2018
  */
-class FormFieldFactory
-{
-    /**
-     * @param $model
-     * @return InputField[]
-     * @throws Exception
-     */
-    public static function generateFields($model)
-    {
-        $em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+class FormFieldFactory {
+	/**
+	 * @param $model
+	 * @return InputField[]
+	 * @throws Exception
+	 */
+	public static function generateFields($model) {
+		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
-        /** @var ClassMetadata $meta */
-        $meta = $em->getClassMetadata(get_class($model));
+		/** @var ClassMetadata $meta */
+		$meta = $em->getClassMetadata(get_class($model));
 
-        $fields = array();
-        foreach ($meta->getFieldNames() as $fieldName) {
-            $type = Type::getTypeRegistry()->get($meta->getTypeOfField($fieldName));
-            $field = static::getFieldByType($fieldName, $model->$fieldName, $type);
+		$fields = array();
+		foreach ($meta->getFieldNames() as $fieldName) {
+			$type = Type::getTypeRegistry()->get($meta->getTypeOfField($fieldName));
+			$field = static::getFieldByType($fieldName, $model->$fieldName, $type);
 
-            if (!$meta->isNullable($fieldName)) {
-                $field->required = true;
-            }
+			if (!$meta->isNullable($fieldName)) {
+				$field->required = true;
+			}
 
-            if ($meta->isIdentifier($fieldName)) {
-                $field->readonly = true;
-                $field->hidden = true;
-                $field->required = false;
-            }
+			if ($meta->isIdentifier($fieldName)) {
+				$field->readonly = true;
+				$field->hidden = true;
+				$field->required = false;
+			}
 
-            $fields[$fieldName] = $field;
-        }
+			$fields[$fieldName] = $field;
+		}
 
-        foreach ($meta->getAssociationMappings() as $associationMapping) {
-            // We supporten alleen als de key in dit entity zit.
-            if (!$associationMapping['isOwningSide']) {
-                continue;
-            }
+		foreach ($meta->getAssociationMappings() as $associationMapping) {
+			// We supporten alleen als de key in dit entity zit.
+			if (!$associationMapping['isOwningSide']) {
+				continue;
+			}
 
-            $fieldName = $associationMapping['fieldName'];
+			$fieldName = $associationMapping['fieldName'];
 
-            if (count($associationMapping['joinColumns']) !== 1) {
-                throw new CsrException('Compound joinColumns worden niet ondersteund voor veld ' . $fieldName . ' in class ' . get_class($model));
-            }
+			if (count($associationMapping['joinColumns']) !== 1) {
+				throw new CsrException('Compound joinColumns worden niet ondersteund voor veld ' . $fieldName . ' in class ' . get_class($model));
+			}
 
-            unset($fields[$fieldName]);
+			unset($fields[$fieldName]);
 
-            $targetEntity = $associationMapping['targetEntity'];
+			$targetEntity = $associationMapping['targetEntity'];
 
-            $readableFieldName = ucfirst(str_replace('_', ' ', $fieldName));
+			$readableFieldName = ucfirst(str_replace('_', ' ', $fieldName));
 
-            if ($targetEntity == Profiel::class) {
-                $field = new ProfielEntityField($fieldName, $model->$fieldName, $readableFieldName, 'leden');
-            } else {
-                $field = new DoctrineEntityField($fieldName, $model->$fieldName, $readableFieldName, $targetEntity, '');
-            }
+			if ($targetEntity == Profiel::class) {
+				$field = new ProfielEntityField($fieldName, $model->$fieldName, $readableFieldName, 'leden');
+			} else {
+				$field = new DoctrineEntityField($fieldName, $model->$fieldName, $readableFieldName, $targetEntity, '');
+			}
 
-            $joinColumn = $associationMapping['joinColumns'][0];
+			$joinColumn = $associationMapping['joinColumns'][0];
 
-            if (isset($joinColumn['nullable']) && !$joinColumn['nullable']) {
-                $field->required = true;
-            }
+			if (isset($joinColumn['nullable']) && !$joinColumn['nullable']) {
+				$field->required = true;
+			}
 
-            if ($meta->isIdentifier($joinColumn['name'])) {
-                $field->readonly = true;
-                $field->hidden = true;
-                $field->required = false;
-            }
+			if ($meta->isIdentifier($joinColumn['name'])) {
+				$field->readonly = true;
+				$field->hidden = true;
+				$field->required = false;
+			}
 
-            $fields[$fieldName] = $field;
-        }
+			$fields[$fieldName] = $field;
+		}
 
-        return $fields;
-    }
+		return $fields;
+	}
 
-    /**
-     * @param string $fieldName
-     * @param mixed $value
-     * @param Type $type
-     * @return InputField
-     * @throws Exception
-     */
-    private static function getFieldByType(string $fieldName, $value, $type)
-    {
-        $desc = ucfirst(str_replace('_', ' ', $fieldName));
+	/**
+	 * @param string $fieldName
+	 * @param mixed $value
+	 * @param Type $type
+	 * @return InputField
+	 * @throws Exception
+	 */
+	private static function getFieldByType(string $fieldName, $value, $type) {
+		$desc = ucfirst(str_replace('_', ' ', $fieldName));
 
-        if (str_starts_with($fieldName, 'rechten_')) {
-            return new RechtenField($fieldName, $value, $desc);
-        }
+		if (str_starts_with($fieldName, 'rechten_')) {
+			return new RechtenField($fieldName, $value, $desc);
+		}
 
-        if ($fieldName === 'verticale') {
-            return new VerticaleField($fieldName, $value, $desc);
-        }
+		if ($fieldName === 'verticale') {
+			return new VerticaleField($fieldName, $value, $desc);
+		}
 
-        if ($type instanceof EnumType) {
-            return new EnumSelectField($fieldName, $value, $desc, $type->getEnumClass());
-        }
+		if ($type instanceof EnumType) {
+			return new EnumSelectField($fieldName, $value, $desc, $type->getEnumClass());
+		}
 
-        if ($type instanceof IntegerType) {
-            return new IntField($fieldName, $value, $desc, 0);
-        }
+		if ($type instanceof IntegerType) {
+			return new IntField($fieldName, $value, $desc, 0);
+		}
 
-        if ($type instanceof StringKeyType || $type instanceof StringType) {
-            return new TextField($fieldName, $value, $desc);
-        }
+		if ($type instanceof StringKeyType || $type instanceof StringType) {
+			return new TextField($fieldName, $value, $desc);
+		}
 
-        if ($type instanceof DateTimeImmutableType) {
-            return new DateTimeObjectField($fieldName, $value, $desc);
-        }
+		if ($type instanceof DateTimeImmutableType) {
+			return new DateTimeObjectField($fieldName, $value, $desc);
+		}
 
-        if ($type instanceof TextType || $type instanceof LongTextType) {
-            return new TextareaField($fieldName, $value, $desc);
-        }
+		if ($type instanceof TextType || $type instanceof LongTextType) {
+			return new TextareaField($fieldName, $value, $desc);
+		}
 
-        if ($type instanceof SafeJsonType) {
-            return new SafeJsonField($fieldName, $value, $desc);
-        }
+		if ($type instanceof SafeJsonType) {
+			return new SafeJsonField($fieldName, $value, $desc);
+		}
 
-        if ($type instanceof UidType) {
-            return new LidField($fieldName, $value, $desc);
-        }
+		if ($type instanceof UidType) {
+			return new LidField($fieldName, $value, $desc);
+		}
 
-        if ($type instanceof BooleanType) {
-            return new JaNeeField($fieldName, $value, $desc);
-        }
+		if ($type instanceof BooleanType) {
+			return new JaNeeField($fieldName, $value, $desc);
+		}
 
-        if ($type instanceof FloatType) {
-            return new FloatField($fieldName, $value, $desc, null);
-        }
+		if ($type instanceof FloatType) {
+			return new FloatField($fieldName, $value, $desc, null);
+		}
 
-        if ($type instanceof TimeImmutableType) {
-            return new TimeObjectField($fieldName, $value, $desc);
-        }
+		if ($type instanceof TimeImmutableType) {
+			return new TimeObjectField($fieldName, $value, $desc);
+		}
 
-        throw new CsrException("Kan geef formulier genereren voor veld $fieldName van type $type.");
-    }
+		throw new CsrException("Kan geef formulier genereren voor veld $fieldName van type $type.");
+	}
 }

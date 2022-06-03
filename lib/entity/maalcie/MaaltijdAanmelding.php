@@ -31,130 +31,126 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository")
  * @ORM\Table("mlt_aanmeldingen")
  */
-class MaaltijdAanmelding
-{
-    /**
-     * @var integer
-     * @ORM\Column(type="integer")
-     * @ORM\Id()
-     */
-    public $maaltijd_id;
-    /**
-     * @var string
-     * @ORM\Column(type="uid")
-     * @ORM\Id()
-     */
-    public $uid;
-    /**
-     * @var Profiel
-     * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-     * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-     */
-    public $profiel;
-    /**
-     * @var int
-     * @ORM\Column(type="integer")
-     */
-    public $aantal_gasten = 0;
-    /**
-     * @var string|null
-     * @ORM\Column(type="string", nullable=true)
-     */
-    public $gasten_eetwens;
-    /**
-     * @var string|null
-     * @ORM\Column(type="uid", nullable=true)
-     */
-    public $door_uid;
-    /**
-     * @var DateTimeImmutable
-     * @ORM\Column(type="datetime")
-     */
-    public $laatst_gewijzigd;
-    /**
-     * @var Maaltijd
-     * @ORM\ManyToOne(targetEntity="Maaltijd", inversedBy="aanmeldingen")
-     * @ORM\JoinColumn(name="maaltijd_id", referencedColumnName="maaltijd_id")
-     */
-    public $maaltijd;
-    /**
-     * @var Profiel
-     * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-     * @ORM\JoinColumn(name="door_uid", referencedColumnName="uid")
-     */
-    public $door_profiel;
-    /**
-     * @var MaaltijdRepetitie
-     * @ORM\ManyToOne(targetEntity="CsrDelft\entity\maalcie\MaaltijdRepetitie")
-     * @ORM\JoinColumn(name="door_abonnement", referencedColumnName="mlt_repetitie_id")
-     */
-    public $abonnementRepetitie;
+class MaaltijdAanmelding {
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 */
+	public $maaltijd_id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="uid")
+	 * @ORM\Id()
+	 */
+	public $uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
+	/**
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
+	public $aantal_gasten = 0;
+	/**
+	 * @var string|null
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	public $gasten_eetwens;
+	/**
+	 * @var string|null
+	 * @ORM\Column(type="uid", nullable=true)
+	 */
+	public $door_uid;
+	/**
+	 * @var DateTimeImmutable
+	 * @ORM\Column(type="datetime")
+	 */
+	public $laatst_gewijzigd;
+	/**
+	 * @var Maaltijd
+	 * @ORM\ManyToOne(targetEntity="Maaltijd", inversedBy="aanmeldingen")
+	 * @ORM\JoinColumn(name="maaltijd_id", referencedColumnName="maaltijd_id")
+	 */
+	public $maaltijd;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="door_uid", referencedColumnName="uid")
+	 */
+	public $door_profiel;
+	/**
+	 * @var MaaltijdRepetitie
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\maalcie\MaaltijdRepetitie")
+	 * @ORM\JoinColumn(name="door_abonnement", referencedColumnName="mlt_repetitie_id")
+	 */
+	public $abonnementRepetitie;
 
-    /**
-     * Haal het MaalCie saldo op van het lid van deze aanmelding.
-     *
-     * @return float if lid exists, false otherwise
-     */
-    public function getSaldo()
-    {
-        return $this->profiel->getCiviSaldo();
-    }
+	/**
+	 * Haal het MaalCie saldo op van het lid van deze aanmelding.
+	 *
+	 * @return float if lid exists, false otherwise
+	 */
+	public function getSaldo() {
+		return $this->profiel->getCiviSaldo();
+	}
 
-    /**
-     * Bereken of het saldo toereikend is voor de prijs van de maaltijd.
-     *
-     * 3: saldo meer dan genoeg
-     *
-     * 2: saldo precies genoeg
-     *
-     * 1: saldo positief maar te weinig
-     *
-     * 0: saldo nul
-     *
-     * -1: saldo negatief
-     *
-     * @return int
-     */
-    public function getSaldoStatus()
-    {
-        $saldo = $this->getSaldo();
-        $prijs = $this->maaltijd->getPrijsFloat();
+	/**
+	 * Bereken of het saldo toereikend is voor de prijs van de maaltijd.
+	 *
+	 * 3: saldo meer dan genoeg
+	 *
+	 * 2: saldo precies genoeg
+	 *
+	 * 1: saldo positief maar te weinig
+	 *
+	 * 0: saldo nul
+	 *
+	 * -1: saldo negatief
+	 *
+	 * @return int
+	 */
+	public function getSaldoStatus() {
+		$saldo = $this->getSaldo();
+		$prijs = $this->maaltijd->getPrijsFloat();
 
-        if ($saldo > $prijs) { // saldo meer dan genoeg
-            return 3;
-        } elseif ($saldo > $prijs - 0.004) { // saldo precies genoeg
-            return 2;
-        } elseif ($saldo > 0.004) { // saldo positief maar te weinig
-            return 1;
-        } elseif ($saldo > -0.004) { // saldo nul
-            return 0;
-        } else {
-            return -1; // saldo negatief
-        }
-    }
+		if ($saldo > $prijs) { // saldo meer dan genoeg
+			return 3;
+		} elseif ($saldo > $prijs - 0.004) { // saldo precies genoeg
+			return 2;
+		} elseif ($saldo > 0.004) { // saldo positief maar te weinig
+			return 1;
+		} elseif ($saldo > -0.004) { // saldo nul
+			return 0;
+		} else {
+			return -1; // saldo negatief
+		}
+	}
 
-    /**
-     * Melding voor saldo status.
-     *
-     * @return String
-     */
-    public function getSaldoMelding()
-    {
-        $status = $this->getSaldoStatus();
-        $prijs = sprintf('%.2f', $this->maaltijd->getPrijsFloat());
-        switch ($status) {
-            case 3:
-                return 'ok';
-            case 2:
-                return $prijs;
-            case 1:
-                return '&lt; ' . $prijs;
-            case 0:
-                return '0';
-            case -1:
-                return '&lt; 0';
-        }
+	/**
+	 * Melding voor saldo status.
+	 *
+	 * @return String
+	 */
+	public function getSaldoMelding() {
+		$status = $this->getSaldoStatus();
+		$prijs = sprintf('%.2f', $this->maaltijd->getPrijsFloat());
+		switch ($status) {
+			case 3:
+				return 'ok';
+			case 2:
+				return $prijs;
+			case 1:
+				return '&lt; ' . $prijs;
+			case 0:
+				return '0';
+			case -1:
+				return '&lt; 0';
+		}
 
-        throw new CsrException("Ongeldige saldo status: " . $status);
-    }
+		throw new CsrException("Ongeldige saldo status: " . $status);
+	}
 }

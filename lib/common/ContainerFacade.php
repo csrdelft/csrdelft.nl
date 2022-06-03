@@ -11,25 +11,22 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @package CsrDelft\common
  */
-class ContainerFacade
-{
-    /** @var ContainerInterface */
-    private static $container;
+class ContainerFacade {
+	/** @var ContainerInterface */
+	private static $container;
 
-    public static function init(ContainerInterface $container)
-    {
-        static::$container = $container;
-    }
+	public static function init(ContainerInterface $container) {
+		static::$container = $container;
+	}
 
-    /**
-     * @return ContainerInterface
-     */
-    public static function getContainer()
-    {
-        if (!static::$container) {
-            throw new CsrException('Container niet geinitialiseerd');
-        }
+	/**
+	 * @return ContainerInterface
+	 */
+	public static function getContainer() {
+		if (!static::$container) {
+			throw new CsrException('Container niet geinitialiseerd');
+		}
 
-        return static::$container;
-    }
+		return static::$container;
+	}
 }

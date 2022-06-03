@@ -9,19 +9,18 @@ namespace CsrDelft\Component\DataTable;
  *
  * @package CsrDelft\common\datatable
  */
-interface CustomDataTableEntry
-{
-    /**
-     * Velden die de primary key van deze tabel zijn.
-     *
-     * @return array
-     */
-    public static function getIdentifierFieldNames();
+interface CustomDataTableEntry {
+	/**
+	 * Velden die de primary key van deze tabel zijn.
+	 *
+	 * @return array
+	 */
+	public static function getIdentifierFieldNames();
 
-    /**
-     * Standaard veldnamen voor deze tabel.
-     *
-     * @return mixed
-     */
-    public static function getFieldNames();
+	/**
+	 * Standaard veldnamen voor deze tabel.
+	 *
+	 * @return mixed
+	 */
+	public static function getFieldNames();
 }

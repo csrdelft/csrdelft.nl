@@ -14,65 +14,61 @@ use CsrDelft\view\bbcode\BbHelper;
  * @example [spotify]https://open.spotify.com/user/.../playlist/...[/spotify]
  * @example [spotify]spotify:user:...:playlist:...[/spotify]
  */
-class BbSpotify extends BbTag
-{
+class BbSpotify extends BbTag {
 
-    public $formaat;
-    /**
-     * @var string
-     */
-    public $uri;
+	public $formaat;
+	/**
+	 * @var string
+	 */
+	public $uri;
 
-    public static function getTagName()
-    {
-        return 'spotify';
-    }
+	public static function getTagName() {
+		return 'spotify';
+	}
 
-    public function renderLight()
-    {
-        $url = 'https://open.spotify.com/' . str_replace(':', '/', str_replace('spotify:', '', $this->uri));
-        return BbHelper::lightLinkBlock('spotify', $url, 'Spotify', $this->getBeschrijving());
-    }
+	public function renderLight() {
+		$url = 'https://open.spotify.com/' . str_replace(':', '/', str_replace('spotify:', '', $this->uri));
+		return BbHelper::lightLinkBlock('spotify', $url, 'Spotify', $this->getBeschrijving());
+	}
 
-    public function render()
-    {
-        $commonAttributen = "src=\"https://embed.spotify.com/?uri=$this->uri\" frameborder=\"0\" allowtransparency=\"true\"";
+	public function render() {
+		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$this->uri\" frameborder=\"0\" allowtransparency=\"true\"";
 
-        switch ($this->formaat) {
-            case "hoog":
-                return "<iframe class=\"w-100\" height=\"380\" $commonAttributen></iframe>";
-            case "blok":
-                return "<iframe width=\"80\" height=\"80\" class=\"float-start\" $commonAttributen></iframe>";
-            default:
-                return "<iframe class=\"w-100\" height=\"80\" $commonAttributen></iframe>";
-        }
-    }
+		switch($this->formaat) {
+			case "hoog":
+				return "<iframe class=\"w-100\" height=\"380\" $commonAttributen></iframe>";
+			case "blok":
+				return "<iframe width=\"80\" height=\"80\" class=\"float-start\" $commonAttributen></iframe>";
+			default:
+				return "<iframe class=\"w-100\" height=\"80\" $commonAttributen></iframe>";
+		}
+	}
 
 
-    /**
-     * @param array $arguments
-     * @throws BbException
-     */
-    public function parse($arguments = [])
-    {
-        $this->formaat = $arguments['formaat'] ?? null;
-        $url = $this->readMainArgument($arguments);
-        if (!str_starts_with($url, 'spotify') && !filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new BbException('[spotify] Geen geldige url (' . $url . ')');
-        }
-        $this->uri = urlencode($url);
-    }
+	/**
+	 * @param array $arguments
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->formaat = $arguments['formaat'] ?? null;
+		$url = $this->readMainArgument($arguments);
+		if (!str_starts_with($url, 'spotify') && !filter_var($url, FILTER_VALIDATE_URL)) {
+			throw new BbException('[spotify] Geen geldige url (' . $url . ')');
+		}
+		$this->uri = urlencode($url);
+	}
 
-    private function getBeschrijving()
-    {
-        if (strstr($this->uri, 'playlist')) {
-            return 'Afspeellijst';
-        } elseif (strstr($this->uri, 'album')) {
-            return 'Album';
-        } elseif (strstr($this->uri, 'track')) {
-            return 'Nummer';
-        } else {
-            return '';
-        }
-    }
+	private function getBeschrijving()
+	{
+		if (strstr($this->uri, 'playlist')) {
+			return'Afspeellijst';
+		} elseif (strstr($this->uri, 'album')) {
+			return 'Album';
+		} elseif (strstr($this->uri, 'track')) {
+			return 'Nummer';
+		} else {
+			return '';
+		}
+	}
 }

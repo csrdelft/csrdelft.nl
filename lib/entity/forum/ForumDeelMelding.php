@@ -10,31 +10,30 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("forum_delen_meldingen")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumDeelMelding
-{
-    /**
-     * Shared primary key
-     * Foreign key
-     * @var int
-     * @ORM\Column(type="integer")
-     * @ORM\Id()
-     */
-    public $forum_id;
+class ForumDeelMelding {
+	/**
+	 * Shared primary key
+	 * Foreign key
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 */
+	public $forum_id;
 
-    /**
-     * @var ForumDeel
-     * @ORM\ManyToOne(targetEntity="ForumDeel", inversedBy="meldingen")
-     * @ORM\JoinColumn(name="forum_id", referencedColumnName="forum_id")
-     */
-    public $deel;
+	/**
+	 * @var ForumDeel
+	 * @ORM\ManyToOne(targetEntity="ForumDeel", inversedBy="meldingen")
+	 * @ORM\JoinColumn(name="forum_id", referencedColumnName="forum_id")
+	 */
+	public $deel;
 
-    /**
-     * Lidnummer
-     * Shared primary key
-     * Foreign key
-     * @var string
-     * @ORM\Column(type="uid")
-     * @ORM\Id()
-     */
-    public $uid;
+	/**
+	 * Lidnummer
+	 * Shared primary key
+	 * Foreign key
+	 * @var string
+	 * @ORM\Column(type="uid")
+	 * @ORM\Id()
+	 */
+	public $uid;
 }

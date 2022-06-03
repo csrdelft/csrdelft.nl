@@ -12,9 +12,8 @@ use CsrDelft\view\formulier\getalvelden\FloatField;
  *
  * @see FloatField
  */
-class RequiredFloatField extends FloatField
-{
+class RequiredFloatField extends FloatField {
 
-    public $required = true;
+	public $required = true;
 
 }

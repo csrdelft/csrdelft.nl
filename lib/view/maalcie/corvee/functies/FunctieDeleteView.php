@@ -9,38 +9,32 @@ use CsrDelft\view\View;
 /**
  * Requires id of deleted corveefunctie.
  */
-class FunctieDeleteView implements ToResponse, View
-{
-    use ToHtmlResponse;
+class FunctieDeleteView implements ToResponse , View{
+	use ToHtmlResponse;
 
-    private $functieId;
+	private $functieId;
 
-    public function __construct($functieId)
-    {
-        $this->functieId = $functieId;
-    }
+	public function __construct($functieId) {
+		$this->functieId = $functieId;
+	}
 
-    public function __toString()
-    {
-        $html = '';
-        $html .= '<tr id="corveefunctie-row-' . $this->functieId . '" class="remove"></tr>';
-        $html .= '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
+	public function __toString() {
+		$html = '';
+		$html .= '<tr id="corveefunctie-row-' . $this->functieId . '" class="remove"></tr>';
+		$html .= '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
 
-        return $html;
-    }
+		return $html;
+	}
 
-    public function getTitel()
-    {
-        return '';
-    }
+	public function getTitel() {
+		return '';
+	}
 
-    public function getBreadcrumbs()
-    {
-        return '';
-    }
+	public function getBreadcrumbs() {
+		return '';
+	}
 
-    public function getModel()
-    {
-        return $this->functieId;
-    }
+	public function getModel() {
+		return $this->functieId;
+	}
 }

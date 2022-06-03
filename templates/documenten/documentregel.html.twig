@@ -1,30 +1,30 @@
 <tr class="document" id="document-{{ document.id }}">
-    <td>
-        {% if document.file %}
-            <a href="{{ document.url }}" target="_blank">
-                {{ document.naam }}
-            </a>
-        {% else %}
-            <a title="Bestand niet gevonden..." class="filenotfound">
-                {{ document.naam }}
-            </a>
-        {% endif %}
+	<td>
+		{% if document.file %}
+			<a href="{{ document.url }}" target="_blank">
+				{{ document.naam }}
+			</a>
+		{% else %}
+			<a title="Bestand niet gevonden..." class="filenotfound">
+				{{ document.naam }}
+			</a>
+		{% endif %}
 
-        {% if document.magVerwijderen %}
-            <a class="verwijderen me-2 post float-end"
-               href="{{ url('csrdelft_documenten_verwijderen', {id: document.id}) }}" title="Document verwijderen"
-               onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">{{ icon('verwijderen') }}</a>
-        {% endif %}
-        {% if document.magBewerken %}
-            <a class="bewerken me-2 float-end" href="{{ url('csrdelft_documenten_bewerken', {id: document.id}) }}"
-               title="Document bewerken">{{ icon('bewerken') }}</a>
-        {% endif %}
-        <span role="button" class="float-end me-2" data-copy="[document={{ document.id }}]"
-              title="Klik om bbcode te kopieren: [document={{ document.id }}]">{{ icon('page_copy') }}</span>
-    </td>
-    <td class="size">{{ document.filesize }}</td>
-    <td title="{{ document.mimetype }}">{{ document.mimetypeIcon | raw }}</td>
-    <td>{{ document.toegevoegd | reldate }}</td>
-    <td>{{ document.eigenaar_profiel.link('civitas') | raw }}</td>
+		{% if document.magVerwijderen %}
+			<a class="verwijderen me-2 post float-end"
+				 href="{{ url('csrdelft_documenten_verwijderen', {id: document.id}) }}" title="Document verwijderen"
+				 onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">{{ icon('verwijderen') }}</a>
+		{% endif %}
+		{% if document.magBewerken %}
+			<a class="bewerken me-2 float-end" href="{{ url('csrdelft_documenten_bewerken', {id: document.id}) }}"
+				 title="Document bewerken">{{ icon('bewerken') }}</a>
+		{% endif %}
+		<span role="button" class="float-end me-2" data-copy="[document={{ document.id }}]"
+					title="Klik om bbcode te kopieren: [document={{ document.id }}]">{{ icon('page_copy') }}</span>
+	</td>
+	<td class="size">{{ document.filesize }}</td>
+	<td title="{{ document.mimetype }}">{{ document.mimetypeIcon | raw }}</td>
+	<td>{{ document.toegevoegd | reldate }}</td>
+	<td>{{ document.eigenaar_profiel.link('civitas') | raw }}</td>
 </tr>
 

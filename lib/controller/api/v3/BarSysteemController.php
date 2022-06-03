@@ -10,8 +10,6 @@ use CsrDelft\entity\bar\BarLocatie;
 use CsrDelft\service\AccessService;
 use CsrDelft\service\BarSysteemService;
 use CsrDelft\service\security\LoginService;
-use Doctrine\DBAL\ConnectionException;
-use Doctrine\DBAL\Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,186 +25,185 @@ use Symfony\Component\Uid\Uuid;
  */
 class BarSysteemController extends AbstractController
 {
-    /**
-     * @var BarSysteemService
-     */
-    private $barSysteemService;
+	/**
+	 * @var BarSysteemService
+	 */
+	private $barSysteemService;
 
-    public function __construct(BarSysteemService $barSysteemService)
-    {
-        $this->barSysteemService = $barSysteemService;
-    }
+	public function __construct(BarSysteemService $barSysteemService)
+	{
+		$this->barSysteemService = $barSysteemService;
+	}
 
-    protected function json($data, int $status = 200, array $headers = [], array $context = []): JsonResponse
-    {
-        return parent::json($data, $status, $headers, $context + ['groups' => ['bar']]);
-    }
+	protected function json($data, int $status = 200, array $headers = [], array $context = []): JsonResponse
+	{
+		return parent::json($data, $status, $headers, $context + ['groups' => ['bar']]);
+	}
 
 
-    /**
-     * @Route("/trust", methods={"POST"})
-     * @Auth(P_FISCAAT_MOD)
-     * @IsGranted("ROLE_OAUTH2_BAR:TRUST")
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function trust(Request $request, LoginService $loginService)
-    {
-        // maak een nieuwe BarSysteemTrust object en sla op.
+	/**
+	 * @Route("/trust", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
+	 * @IsGranted("ROLE_OAUTH2_BAR:TRUST")
+	 * @param Request $request
+	 * @return JsonResponse
+	 */
+	public function trust(Request $request, LoginService $loginService) {
+		// maak een nieuwe BarSysteemTrust object en sla op.
 
-        // Als het goed is kan de BAR:TRUST scope alleen aan mensen met FISCAAT_MOD rechten gegeven worden.
-        if (!$loginService->_mag(P_FISCAAT_MOD)) {
-            throw $this->createAccessDeniedException();
-        }
+		// Als het goed is kan de BAR:TRUST scope alleen aan mensen met FISCAAT_MOD rechten gegeven worden.
+		if (!$loginService->_mag(P_FISCAAT_MOD)) {
+			throw $this->createAccessDeniedException();
+		}
 
-        $barLocatie = new BarLocatie();
-        $barLocatie->ip = $request->getClientIp();
-        $barLocatie->naam = $request->request->get('naam');
-        $barLocatie->sleutel = Uuid::v4();
-        $barLocatie->doorAccount = $this->getUser();
+		$barLocatie = new BarLocatie();
+		$barLocatie->ip = $request->getClientIp();
+		$barLocatie->naam = $request->request->get('naam');
+		$barLocatie->sleutel = Uuid::v4();
+		$barLocatie->doorAccount = $this->getUser();
 
-        $objectManager = $this->getDoctrine()->getManager();
+		$objectManager = $this->getDoctrine()->getManager();
 
-        $objectManager->persist($barLocatie);
-        $objectManager->flush();
+		$objectManager->persist($barLocatie);
+		$objectManager->flush();
 
-        return $this->json($barLocatie, 200, [], ['groups' => ['json']]);
-    }
+		return $this->json($barLocatie, 200, [], ['groups' => ['json']]);
+	}
 
-    /**
-     * @Route("/updatePerson", methods={"POST"})
-     * @Auth(P_LOGGED_IN)
-     * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
-     */
-    public function updatePerson(Request $request)
-    {
-        $id = $request->request->get('id');
-        $name = $request->request->get('name');
-        $this->barSysteemService->updatePerson($id, $name);
+	/**
+	 * @Route("/updatePerson", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
+	 */
+	public function updatePerson(Request $request)
+	{
+		$id = $request->request->get('id');
+		$name = $request->request->get('name');
+		$this->barSysteemService->updatePerson($id, $name);
 
-        return new Response("", 204);
-    }
+		return new Response("", 204);
+	}
 
-    /**
-     * @return JsonResponse
-     * @Route("/personen", methods={"POST"})
-     * @Auth(P_LOGGED_IN)
-     * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
-     */
-    public function personen()
-    {
-        return $this->json($this->barSysteemService->getPersonen());
-    }
+	/**
+	 * @return JsonResponse
+	 * @Route("/personen", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
+	 */
+	public function personen()
+	{
+		return $this->json($this->barSysteemService->getPersonen());
+	}
 
-    /**
-     * @return JsonResponse
-     * @Route("/producten", methods={"POST"})
-     * @Auth(P_LOGGED_IN)
-     * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
-     */
-    public function producten()
-    {
-        return $this->json($this->barSysteemService->getProducten());
-    }
+	/**
+	 * @return JsonResponse
+	 * @Route("/producten", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
+	 */
+	public function producten()
+	{
+		return $this->json($this->barSysteemService->getProducten());
+	}
 
-    /**
-     * @param Request $request
-     * @return Response
-     * @throws ConnectionException
-     * @throws \Doctrine\DBAL\Driver\Exception
-     * @throws Exception
-     * @Route("/bestelling", methods={"POST"})
-     * @Auth(P_LOGGED_IN)
-     * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
-     */
-    public function bestelling(Request $request)
-    {
-        $uid = $request->request->get('uid');
-        $inhoud = $request->request->get('inhoud');
+	/**
+	 * @param Request $request
+	 * @return Response
+	 * @throws \Doctrine\DBAL\ConnectionException
+	 * @throws \Doctrine\DBAL\Driver\Exception
+	 * @throws \Doctrine\DBAL\Exception
+	 * @Route("/bestelling", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
+	 */
+	public function bestelling(Request $request)
+	{
+		$uid = $request->request->get('uid');
+		$inhoud = $request->request->get('inhoud');
 
-        if ($request->request->has('oudeBestelling')) {
-            $bestelId = $request->request->get('oudeBestelling');
-            $this->barSysteemService->log('update', $_POST);
+		if ($request->request->has('oudeBestelling')) {
+			$bestelId = $request->request->get('oudeBestelling');
+			$this->barSysteemService->log('update', $_POST);
 
-            $this->barSysteemService->updateBestelling($uid, $bestelId, $inhoud);
+			$this->barSysteemService->updateBestelling($uid, $bestelId, $inhoud);
 
-            return new Response("", 204);
-        } else {
-            $this->barSysteemService->log('insert', $_POST);
+			return new Response("", 204);
+		} else {
+			$this->barSysteemService->log('insert', $_POST);
 
-            $this->barSysteemService->verwerkBestelling($uid, 'soccie', $inhoud);
+			$this->barSysteemService->verwerkBestelling($uid, 'soccie', $inhoud);
 
-            return new Response("", 204);
-        }
-    }
+			return new Response("", 204);
+		}
+	}
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     * @Route("/saldo", methods={"POST"})
-     * @Auth(P_LOGGED_IN)
-     * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
-     */
-    public function saldo(Request $request)
-    {
-        $soccieSaldoId = $request->request->get('saldoSocCieId');
-        return $this->json($this->barSysteemService->getSaldo($soccieSaldoId));
-    }
+	/**
+	 * @param Request $request
+	 * @return JsonResponse
+	 * @Route("/saldo", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
+	 */
+	public function saldo(Request $request)
+	{
+		$soccieSaldoId = $request->request->get('saldoSocCieId');
+		return $this->json($this->barSysteemService->getSaldo($soccieSaldoId));
+	}
 
-    /**
-     * @param Request $request
-     * @return Response
-     * @Route("/verwijderBestelling", methods={"POST"})
-     * @Auth(P_LOGGED_IN)
-     * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
-     */
-    public function verwijderBestelling(Request $request)
-    {
-        $this->barSysteemService->log('remove', $_POST);
+	/**
+	 * @param Request $request
+	 * @return Response
+	 * @Route("/verwijderBestelling", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
+	 */
+	public function verwijderBestelling(Request $request)
+	{
+		$this->barSysteemService->log('remove', $_POST);
 
-        $bestelling = $request->request->get('verwijderBestelling');
+		$bestelling = $request->request->get('verwijderBestelling');
 
-        $this->barSysteemService->verwijderBestelling($bestelling);
+		$this->barSysteemService->verwijderBestelling($bestelling);
 
-        return new Response("", 204);
-    }
+		return new Response("",204);
+	}
 
-    /**
-     * @param Request $request
-     * @return Response
-     * @Route("/undoVerwijderBestelling", methods={"POST"})
-     * @Auth(P_LOGGED_IN)
-     * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
-     */
-    public function undoVerwijderBestelling(Request $request)
-    {
-        $this->barSysteemService->log('remove', $_POST);
-        $data = $request->request->get("undoVerwijderBestelling");
+	/**
+	 * @param Request $request
+	 * @return Response
+	 * @Route("/undoVerwijderBestelling", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
+	 */
+	public function undoVerwijderBestelling(Request $request)
+	{
+		$this->barSysteemService->log('remove', $_POST);
+		$data = $request->request->get("undoVerwijderBestelling");
 
-        $this->barSysteemService->undoVerwijderBestelling($data);
+		$this->barSysteemService->undoVerwijderBestelling($data);
 
-        return new Response("", 204);
-    }
+		return new Response("", 204);
+	}
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     * @Route("/laadLaatste", methods={"POST"})
-     * @Auth(P_LOGGED_IN)
-     * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
-     */
-    public function laadLaatste(Request $request)
-    {
-        $persoon = $request->request->get("aantal");
-        $begin = date_create_immutable($request->request->get("begin"));
-        $eind = date_create_immutable($request->request->get("eind"));
+	/**
+	 * @param Request $request
+	 * @return JsonResponse
+	 * @Route("/laadLaatste", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
+	 */
+	public function laadLaatste(Request $request)
+	{
+		$persoon = $request->request->get("aantal");
+		$begin = date_create_immutable($request->request->get("begin"));
+		$eind = date_create_immutable($request->request->get("eind"));
 
-        if (!$begin || !$eind) {
-            throw new BadRequestHttpException("Begin en eind moeten een datum bevatten");
-        }
+		if (!$begin || !$eind) {
+			throw new BadRequestHttpException("Begin en eind moeten een datum bevatten");
+		}
 
-        $productType = $request->request->get("productType", []);
-        return $this->json($this->barSysteemService->getBestellingLaatste($persoon, $begin, $eind, $productType));
-    }
+		$productType = $request->request->get("productType", []);
+		return $this->json($this->barSysteemService->getBestellingLaatste($persoon, $begin, $eind, $productType));
+	}
 
 }

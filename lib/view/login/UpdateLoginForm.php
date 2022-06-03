@@ -14,22 +14,20 @@ use CsrDelft\view\formulier\knoppen\SubmitKnop;
  *
  * @package CsrDelft\view\login
  */
-class UpdateLoginForm extends Formulier
-{
-    public function __construct($action)
-    {
-        parent::__construct(null, $action, 'Opnieuw inloggen');
+class UpdateLoginForm extends Formulier {
+	public function __construct($action) {
+		parent::__construct(null, $action, 'Opnieuw inloggen');
 
-        $this->css_classes[] = 'modal-dialog modal-content modal-body';
+		$this->css_classes[] = 'modal-dialog modal-content modal-body';
 
 
-        $fields = [];
-        $fields['pass'] = new WachtwoordField('pass', null, null);
-        $fields['pass']->placeholder = 'Wachtwoord';
+		$fields = [];
+		$fields['pass'] = new WachtwoordField('pass', null, null);
+		$fields['pass']->placeholder = 'Wachtwoord';
 
-        $this->addFields($fields);
+		$this->addFields($fields);
 
-        $this->formKnoppen->addKnop(new SubmitKnop(null, 'submit', 'Inloggen', 'Inloggen', 'key'));
-        $this->formKnoppen->addKnop(new CancelKnop());
-    }
+		$this->formKnoppen->addKnop(new SubmitKnop(null, 'submit', 'Inloggen', 'Inloggen', 'key'));
+		$this->formKnoppen->addKnop(new CancelKnop());
+	}
 }

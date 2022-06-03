@@ -14,74 +14,70 @@ use Symfony\Component\Security\Core\Security;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class DebugLogRepository extends AbstractRepository
-{
-    /**
-     * @var SuService
-     */
-    private $suService;
-    /**
-     * @var Security
-     */
-    private $security;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+class DebugLogRepository extends AbstractRepository {
+	/**
+	 * @var SuService
+	 */
+	private $suService;
+	/**
+	 * @var Security
+	 */
+	private $security;
+	/**
+	 * @var RequestStack
+	 */
+	private $requestStack;
 
-    public function __construct(ManagerRegistry $registry, RequestStack $requestStack, Security $security, SuService $suService)
-    {
-        parent::__construct($registry, DebugLogEntry::class);
+	public function __construct(ManagerRegistry $registry, RequestStack $requestStack, Security $security, SuService $suService) {
+		parent::__construct($registry, DebugLogEntry::class);
 
-        $this->suService = $suService;
-        $this->security = $security;
-        $this->requestStack = $requestStack;
-    }
+		$this->suService = $suService;
+		$this->security = $security;
+		$this->requestStack = $requestStack;
+	}
 
-    /**
-     */
-    public function opschonen()
-    {
-        $this->createQueryBuilder('l')
-            ->delete()
-            ->where('l.moment < :moment')
-            ->setParameter('moment', date_create_immutable('-2 months'))
-            ->getQuery()->execute();
-    }
+	/**
+	 */
+	public function opschonen() {
+		$this->createQueryBuilder('l')
+			->delete()
+			->where('l.moment < :moment')
+			->setParameter('moment', date_create_immutable('-2 months'))
+			->getQuery()->execute();
+	}
 
-    /**
-     * @param string $class
-     * @param string $function
-     * @param string[] array $args
-     * @param string $dump
-     *
-     * @return DebugLogEntry
-     */
-    public function log($class, $function, array $args = array(), $dump = null)
-    {
-        $entry = new DebugLogEntry();
-        $entry->class_function = $class . '->' . $function . '(' . implode(', ', $args) . ')';
-        $entry->dump = $dump;
-        $exception = new Exception();
-        $entry->call_trace = $exception->getTraceAsString();
-        $entry->moment = date_create_immutable();
-        $entry->uid = LoginService::getUid();
-        $token = $this->security->getToken();
-        if ($token instanceof SwitchUserToken) {
-            $entry->su_uid = $token->getOriginalToken()->getUsername();
-        }
-        $entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '127.0.0.1';
-        $entry->referer = @$_SERVER['HTTP_REFERER'] ?: 'CLI';
-        $entry->request = $this->requestStack->getCurrentRequest()->getRequestUri() ?: 'CLI';
-        $entry->user_agent = @$_SERVER['HTTP_USER_AGENT'] ?: 'CLI';
+	/**
+	 * @param string $class
+	 * @param string $function
+	 * @param string[] array $args
+	 * @param string $dump
+	 *
+	 * @return DebugLogEntry
+	 */
+	public function log($class, $function, array $args = array(), $dump = null) {
+		$entry = new DebugLogEntry();
+		$entry->class_function = $class . '->' . $function . '(' . implode(', ', $args) . ')';
+		$entry->dump = $dump;
+		$exception = new Exception();
+		$entry->call_trace = $exception->getTraceAsString();
+		$entry->moment = date_create_immutable();
+		$entry->uid = LoginService::getUid();
+		$token = $this->security->getToken();
+		if ($token instanceof SwitchUserToken) {
+			$entry->su_uid = $token->getOriginalToken()->getUsername();
+		}
+		$entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '127.0.0.1';
+		$entry->referer = @$_SERVER['HTTP_REFERER'] ?: 'CLI';
+		$entry->request = $this->requestStack->getCurrentRequest()->getRequestUri() ?: 'CLI';
+		$entry->user_agent = @$_SERVER['HTTP_USER_AGENT'] ?: 'CLI';
 
-        $this->getEntityManager()->persist($entry);
-        if (DEBUG and $this->getEntityManager()->getConnection()->isTransactionActive()) {
-            setMelding('Debug log may not be committed: database transaction', 2);
-            setMelding($dump, 0);
-        }
-        $this->getEntityManager()->flush();
-        return $entry;
-    }
+		$this->getEntityManager()->persist($entry);
+		if (DEBUG AND $this->getEntityManager()->getConnection()->isTransactionActive()) {
+			setMelding('Debug log may not be committed: database transaction', 2);
+			setMelding($dump, 0);
+		}
+		$this->getEntityManager()->flush();
+		return $entry;
+	}
 
 }

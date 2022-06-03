@@ -3,59 +3,57 @@
 {% block titel %}Documenten in categorie: {{ categorie.naam }}{% endblock %}
 
 {% block breadcrumbs %}
-    {{ csr_breadcrumbs({
-        (url('default')): 'main',
-        (url('csrdelft_documenten_recenttonen')): 'Documenten',
-        '': categorie.naam
-    }) }}
+	{{ csr_breadcrumbs({
+		(url('default')): 'main',
+		(url('csrdelft_documenten_recenttonen')): 'Documenten',
+		'': categorie.naam
+	}) }}
 {% endblock %}
 
 {% block content %}
-    <div class="btn-toolbar float-end">
-        {% if mag('P_DOCS_MOD') %}
-            <a class="btn post popup redirect"
-               href="{{ url('csrdelft_documenten_categoriebewerken', {id: categorie.id}) }}">
-                {{ icon('bewerken') }} Bewerken
-            </a>
-            {% if categorie.documenten is empty %}
-                <a class="btn post redirect"
-                   href="{{ url('csrdelft_documenten_categorieverwijderen', {id: categorie.id}) }}">
-                    {{ icon('verwijderen') }} Categorie verwijderen
-                </a>
-            {% endif %}
-        {% endif %}
-        {% if mag(categorie.schrijfrechten) %}
-            <a class="btn" href="{{ url('csrdelft_documenten_toevoegen') }}?catID={{ categorie.id }}">
-                {{ icon('toevoegen') }} Toevoegen
-            </a>
-        {% endif %}
-    </div>
+	<div class="btn-toolbar float-end">
+		{% if mag('P_DOCS_MOD') %}
+			<a class="btn post popup redirect" href="{{ url('csrdelft_documenten_categoriebewerken', {id: categorie.id}) }}">
+				{{ icon('bewerken') }} Bewerken
+			</a>
+			{% if categorie.documenten is empty %}
+				<a class="btn post redirect" href="{{ url('csrdelft_documenten_categorieverwijderen', {id: categorie.id}) }}">
+					{{ icon('verwijderen') }} Categorie verwijderen
+				</a>
+			{% endif %}
+		{% endif %}
+		{% if mag(categorie.schrijfrechten) %}
+			<a class="btn" href="{{ url('csrdelft_documenten_toevoegen') }}?catID={{ categorie.id }}">
+				{{ icon('toevoegen') }} Toevoegen
+			</a>
+		{% endif %}
+	</div>
 
-    <h1>{{ categorie.naam }}</h1>
+	<h1>{{ categorie.naam }}</h1>
 
-    <table id="documentencategorie" class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Document</th>
-            <th scope="col">Grootte</th>
-            <th scope="col">Type</th>
-            <th scope="col">Toegevoegd</th>
-            <th scope="col">Eigenaar</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for document in categorie.documenten %}
-            {{ include('documenten/documentregel.html.twig', {document: document}) }}
-        {% endfor %}
-        </tbody>
-        <tfoot>
-        <tr>
-            <th scope="col">Document</th>
-            <th scope="col">Grootte</th>
-            <th scope="col">Type</th>
-            <th scope="col">Toegevoegd</th>
-            <th scope="col">Eigenaar</th>
-        </tr>
-        </tfoot>
-    </table>
+	<table id="documentencategorie" class="table table-striped">
+		<thead>
+		<tr>
+			<th scope="col">Document</th>
+			<th scope="col">Grootte</th>
+			<th scope="col">Type</th>
+			<th scope="col">Toegevoegd</th>
+			<th scope="col">Eigenaar</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for document in categorie.documenten %}
+			{{ include('documenten/documentregel.html.twig', {document: document}) }}
+		{% endfor %}
+		</tbody>
+		<tfoot>
+		<tr>
+			<th scope="col">Document</th>
+			<th scope="col">Grootte</th>
+			<th scope="col">Type</th>
+			<th scope="col">Toegevoegd</th>
+			<th scope="col">Eigenaar</th>
+		</tr>
+		</tfoot>
+	</table>
 {% endblock %}

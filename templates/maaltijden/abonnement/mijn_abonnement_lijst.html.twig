@@ -1,6 +1,6 @@
 <tr>
-    {{ include('maaltijden/abonnement/mijn_abonnement_veld.html.twig', {uid: abonnement.uid, mrid: abonnement.maaltijd_repetitie.mlt_repetitie_id}) }}
-    <td>{{ abonnement.maaltijd_repetitie.standaard_titel|raw }}</td>
-    <td>{{ abonnement.maaltijd_repetitie.dagVanDeWeekText }}</td>
-    <td>{{ abonnement.maaltijd_repetitie.periodeInDagenText }}</td>
+	{{ include('maaltijden/abonnement/mijn_abonnement_veld.html.twig', {uid: abonnement.uid, mrid: abonnement.maaltijd_repetitie.mlt_repetitie_id}) }}
+	<td>{{ abonnement.maaltijd_repetitie.standaard_titel|raw }}</td>
+	<td>{{ abonnement.maaltijd_repetitie.dagVanDeWeekText }}</td>
+	<td>{{ abonnement.maaltijd_repetitie.periodeInDagenText }}</td>
 </tr>

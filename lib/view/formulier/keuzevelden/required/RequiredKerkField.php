@@ -12,9 +12,8 @@ use CsrDelft\view\formulier\keuzevelden\KerkField;
  *
  * @see KerkField
  */
-class RequiredKerkField extends KerkField
-{
+class RequiredKerkField extends KerkField {
 
-    public $required = true;
+	public $required = true;
 
 }

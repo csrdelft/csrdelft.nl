@@ -18,17 +18,16 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class CommissieVoorkeurPraesesOpmerkingType extends AbstractType
-{
+class CommissieVoorkeurPraesesOpmerkingType extends AbstractType {
 
-    /**
-     * CommissieVoorkeurOpmerkingForm constructor.
-     * @param VoorkeurOpmerking $model
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-            ->add('praesesOpmerking', TextareaType::class)
-            ->add('opslaan', SubmitType::class);
-    }
+	/**
+	 * CommissieVoorkeurOpmerkingForm constructor.
+	 * @param VoorkeurOpmerking $model
+	 */
+	public function buildForm(FormBuilderInterface $builder, array $options) {
+		$builder
+			->add('praesesOpmerking', TextareaType::class)
+			->add('opslaan', SubmitType::class)
+			;
+	}
 }

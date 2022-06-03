@@ -11,16 +11,14 @@ namespace CsrDelft\model\entity\profiel;
  * LogEntry voor verandering van profielwaarde.
  *
  */
-abstract class AbstractProfielLogValueChangeEntry extends AbstractProfielLogChangeEntry
-{
+abstract class AbstractProfielLogValueChangeEntry extends AbstractProfielLogChangeEntry {
 
-    /**
-     * @var string
-     */
-    public $field;
+	/**
+	 * @var string
+	 */
+	public $field;
 
-    public function __construct($property)
-    {
-        $this->field = $property;
-    }
+	public function __construct($property) {
+		$this->field = $property;
+	}
 }

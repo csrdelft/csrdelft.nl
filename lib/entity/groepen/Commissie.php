@@ -21,51 +21,45 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\CommissiesRepository")
  */
-class Commissie extends Groep implements HeeftSoort
-{
-    use GroepMoment;
+class Commissie extends Groep implements HeeftSoort {
+	use GroepMoment;
+	/**
+	 * (Bestuurs-)Commissie / SjaarCie
+	 * @var CommissieSoort
+	 * @ORM\Column(type="enumCommissieSoort")
+	 * @Serializer\Groups("datatable")
+	 */
+	public $commissieSoort;
 
-    /**
-     * (Bestuurs-)Commissie / SjaarCie
-     * @var CommissieSoort
-     * @ORM\Column(type="enumCommissieSoort")
-     * @Serializer\Groups("datatable")
-     */
-    public $commissieSoort;
+	public function getUrl() {
+		return '/groepen/commissies/' . $this->id;
+	}
 
-    public function getUrl()
-    {
-        return '/groepen/commissies/' . $this->id;
-    }
+	/**
+	 * Rechten voor de gehele klasse of soort groep?
+	 *
+	 * @param AccessAction $action
+	 * @param null $allowedAuthenticationMethods
+	 * @param Enum $soort
+	 * @return boolean
+	 */
+	public static function magAlgemeen($action, $allowedAuthenticationMethods=null, $soort = null) {
+		switch ($soort) {
 
-    /**
-     * Rechten voor de gehele klasse of soort groep?
-     *
-     * @param AccessAction $action
-     * @param null $allowedAuthenticationMethods
-     * @param Enum $soort
-     * @return boolean
-     */
-    public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null)
-    {
-        switch ($soort) {
+			case CommissieSoort::SjaarCie():
+				if (LoginService::mag('commissie:NovCie')) {
+					return true;
+				}
+				break;
+		}
+		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
+	}
 
-            case CommissieSoort::SjaarCie():
-                if (LoginService::mag('commissie:NovCie')) {
-                    return true;
-                }
-                break;
-        }
-        return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
-    }
+	public function getSoort() {
+		return $this->commissieSoort;
+	}
 
-    public function getSoort()
-    {
-        return $this->commissieSoort;
-    }
-
-    public function setSoort($soort)
-    {
-        $this->commissieSoort = $soort;
-    }
+	public function setSoort($soort) {
+		$this->commissieSoort = $soort;
+	}
 }

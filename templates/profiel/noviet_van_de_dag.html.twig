@@ -1,13 +1,12 @@
 <a class="noviet-van-de-dag bb-block clearfix" href="/profiel/{{ noviet.uid }}">
-    <h5>Noviet van de dag</h5>
-    <div class="foto">
-        {{ noviet.pasfotoTag|raw }}
-    </div>
-    <h3 class="naam">{{ noviet.naam }}</h3>
-    <div class="details">
-        <div><span>Leeftijd</span>: {{ noviet.leeftijd }}</div>
-        <div><span>Studie</span>: {{ noviet.studie }} ({{ noviet.studiejaar }})</div>
-        {% if noviet.verticale %}
-            <div><span>Verticale</span>: {{ noviet.getVerticale.naam }}</div>{% endif %}
-    </div>
+	<h5>Noviet van de dag</h5>
+	<div class="foto">
+		{{ noviet.pasfotoTag|raw }}
+	</div>
+	<h3 class="naam">{{ noviet.naam }}</h3>
+	<div class="details">
+		<div><span>Leeftijd</span>: {{ noviet.leeftijd }}</div>
+		<div><span>Studie</span>: {{ noviet.studie }} ({{ noviet.studiejaar }})</div>
+		{% if noviet.verticale %}<div><span>Verticale</span>: {{ noviet.getVerticale.naam }}</div>{% endif %}
+	</div>
 </a>

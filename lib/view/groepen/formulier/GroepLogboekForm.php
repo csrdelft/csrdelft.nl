@@ -7,19 +7,17 @@ use CsrDelft\view\formulier\knoppen\ModalCloseButtons;
 use CsrDelft\view\formulier\ModalForm;
 use CsrDelft\view\groepen\GroepLogboekTable;
 
-class GroepLogboekForm extends ModalForm
-{
+class GroepLogboekForm extends ModalForm {
 
-    public function __construct(Groep $groep)
-    {
-        parent::__construct($groep, null, $groep->naam . ' logboek', true);
+	public function __construct(Groep $groep) {
+		parent::__construct($groep, null, $groep->naam . ' logboek', true);
 
-        $fields = [];
-        $fields[] = new GroepLogboekTable($groep);
+		$fields = [];
+		$fields[] = new GroepLogboekTable($groep);
 
-        $this->addFields($fields);
+		$this->addFields($fields);
 
-        $this->formKnoppen = new ModalCloseButtons();
-    }
+		$this->formKnoppen = new ModalCloseButtons();
+	}
 
 }

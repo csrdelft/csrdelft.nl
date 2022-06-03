@@ -10,30 +10,29 @@ namespace CsrDelft\entity\agenda;
  * Item dat in de agenda kan worden weergegeven.
  *
  */
-interface Agendeerbaar
-{
+interface Agendeerbaar {
 
-    public function getUUID();
+	public function getUUID();
 
-    /**
-     * Timestamp van beginmoment.
-     */
-    public function getBeginMoment();
+	/**
+	 * Timestamp van beginmoment.
+	 */
+	public function getBeginMoment();
 
-    /**
-     * Timestamp van eindmoment.
-     */
-    public function getEindMoment();
+	/**
+	 * Timestamp van eindmoment.
+	 */
+	public function getEindMoment();
 
-    public function getTitel();
+	public function getTitel();
 
-    public function getBeschrijving();
+	public function getBeschrijving();
 
-    public function getLocatie();
+	public function getLocatie();
 
-    public function getUrl();
+	public function getUrl();
 
-    public function isHeledag();
+	public function isHeledag();
 
-    public function isTransparant();
+	public function isTransparant();
 }

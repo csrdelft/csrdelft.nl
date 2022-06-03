@@ -18,87 +18,79 @@ use Twig\Environment;
  * @example [peiling=2]
  * @example [peiling]2[/peiling]
  */
-class BbPeiling extends BbTag
-{
+class BbPeiling extends BbTag {
 
-    /**
-     * @var Peiling
-     */
-    private $peiling;
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-    /**
-     * @var PeilingenRepository
-     */
-    private $peilingenRepository;
-    /**
-     * @var Environment
-     */
-    private $twig;
-    /**
-     * @var string
-     */
-    private $id;
+	/**
+	 * @var Peiling
+	 */
+	private $peiling;
+	/**
+	 * @var SerializerInterface
+	 */
+	private $serializer;
+	/**
+	 * @var PeilingenRepository
+	 */
+	private $peilingenRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
+	/**
+	 * @var string
+	 */
+	private $id;
 
-    public function __construct(SerializerInterface $serializer, PeilingenRepository $peilingenRepository, Environment $twig)
-    {
-        $this->serializer = $serializer;
-        $this->peilingenRepository = $peilingenRepository;
-        $this->twig = $twig;
-    }
+	public function __construct(SerializerInterface $serializer, PeilingenRepository $peilingenRepository, Environment $twig) {
+		$this->serializer = $serializer;
+		$this->peilingenRepository = $peilingenRepository;
+		$this->twig = $twig;
+	}
 
-    public static function getTagName()
-    {
-        return 'peiling';
-    }
+	public static function getTagName() {
+		return 'peiling';
+	}
+	public function isAllowed()
+	{
+		return $this->peiling->magBekijken();
+	}
 
-    public function isAllowed()
-    {
-        return $this->peiling->magBekijken();
-    }
+	public function renderLight() {
+		$url = '#/peiling/' . urlencode($this->id);
+		return BbHelper::lightLinkBlock('peiling', $url, $this->peiling->titel, $this->peiling->beschrijving);
+	}
 
-    public function renderLight()
-    {
-        $url = '#/peiling/' . urlencode($this->id);
-        return BbHelper::lightLinkBlock('peiling', $url, $this->peiling->titel, $this->peiling->beschrijving);
-    }
+	public function render() {
+		return $this->twig->render('peilingen/peiling.html.twig', [
+			'peiling' => $this->serializer->serialize($this->peiling, 'json', ['groups' => 'vue']),
+		]);
+	}
 
-    public function render()
-    {
-        return $this->twig->render('peilingen/peiling.html.twig', [
-            'peiling' => $this->serializer->serialize($this->peiling, 'json', ['groups' => 'vue']),
-        ]);
-    }
+	/**
+	 * @param string|null $peiling_id
+	 * @return Peiling
+	 * @throws BbException
+	 */
+	private function getPeiling($peiling_id): Peiling {
+		$peiling = $this->peilingenRepository->getPeilingById($peiling_id);
+		if (!$peiling) {
+			throw new BbException('[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')');
+		}
 
-    /**
-     * @param string|null $peiling_id
-     * @return Peiling
-     * @throws BbException
-     */
-    private function getPeiling($peiling_id): Peiling
-    {
-        $peiling = $this->peilingenRepository->getPeilingById($peiling_id);
-        if (!$peiling) {
-            throw new BbException('[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')');
-        }
+		return $peiling;
+	}
 
-        return $peiling;
-    }
+	/**
+	 * @param array $arguments
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->id = $this->readMainArgument($arguments);
+		$this->peiling = $this->getPeiling($this->id);
+	}
 
-    /**
-     * @param array $arguments
-     * @throws BbException
-     */
-    public function parse($arguments = [])
-    {
-        $this->id = $this->readMainArgument($arguments);
-        $this->peiling = $this->getPeiling($this->id);
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
+	public function getId() {
+		return $this->id;
+	}
 }

@@ -3,14 +3,24 @@ import { bbPrompt } from './bb-prompt';
 import { EditorState, NodeSelection } from 'prosemirror-state';
 import { MarkType, NodeType } from 'prosemirror-model';
 import { MenuItem, MenuItemSpec } from 'prosemirror-menu';
-import { FileField, Label, LidField, openPrompt, TextField, YoutubeField } from './prompt';
+import {
+	FileField,
+	Label,
+	LidField,
+	openPrompt,
+	TextField,
+	YoutubeField,
+} from './prompt';
 import { toggleMark } from 'prosemirror-commands';
 import { wrapInList } from 'prosemirror-schema-list';
 import { startImageUpload } from './forum-plaatje';
 import { html, ucfirst, uidLike } from '../lib/util';
 import Vue from 'vue';
 
-export function canInsert(state: EditorState<EditorSchema>, nodeType: NodeType<EditorSchema>): boolean {
+export function canInsert(
+	state: EditorState<EditorSchema>,
+	nodeType: NodeType<EditorSchema>
+): boolean {
 	const $from = state.selection.$from;
 	for (let d = $from.depth; d >= 0; d--) {
 		const index = $from.index(d);
@@ -32,15 +42,26 @@ export const insertImageItem = (nodeType: NodeType<EditorSchema>): MenuItem =>
 		},
 		run(state, _, view) {
 			let attrs = null;
-			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType)
+			if (
+				state.selection instanceof NodeSelection &&
+				state.selection.node.type == nodeType
+			)
 				attrs = state.selection.node.attrs;
 			openPrompt({
 				title: 'Afbeelding invoegen',
 				fields: {
-					src: new TextField({ label: 'Locatie', required: true, value: attrs && attrs.src }),
+					src: new TextField({
+						label: 'Locatie',
+						required: true,
+						value: attrs && attrs.src,
+					}),
 				},
 				callback: (callbackAttrs) => {
-					view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill(callbackAttrs)));
+					view.dispatch(
+						view.state.tr.replaceSelectionWith(
+							nodeType.createAndFill(callbackAttrs)
+						)
+					);
 					view.focus();
 				},
 			});
@@ -56,19 +77,27 @@ export function insertCitaat(nodeType: NodeType): MenuItem {
 			let attrs = null;
 			let content = null;
 
-			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+			if (
+				state.selection instanceof NodeSelection &&
+				state.selection.node.type == nodeType
+			) {
 				attrs = state.selection.node.attrs;
 				content = state.selection.node.content;
 			}
 
 			openPrompt({
 				description: '',
-				title: attrs ? 'Update: ' + nodeType.name : 'Invoegen: ' + nodeType.name,
+				title: attrs
+					? 'Update: ' + nodeType.name
+					: 'Invoegen: ' + nodeType.name,
 				fields: {
 					lid: new LidField({
 						label: 'Lid',
 						required: false,
-						value: attrs && uidLike(attrs.van) ? { naam: attrs.naam, uid: attrs.van } : { naam: '', uid: '' },
+						value:
+							attrs && uidLike(attrs.van)
+								? { naam: attrs.naam, uid: attrs.van }
+								: { naam: '', uid: '' },
 					}),
 					of: new Label({ label: '', value: '- Of -' }),
 					naam: new TextField({
@@ -83,10 +112,17 @@ export function insertCitaat(nodeType: NodeType): MenuItem {
 					}),
 				},
 				callback({ lid, naam, url }) {
-					const newAttrs = lid.uid ? { naam: lid.naam, van: lid.uid } : { van: naam, naam, url };
+					const newAttrs = lid.uid
+						? { naam: lid.naam, van: lid.uid }
+						: { van: naam, naam, url };
 
 					view.dispatch(
-						view.state.tr.replaceSelectionWith(nodeType.createAndFill({ type: nodeType.name, ...newAttrs }, content))
+						view.state.tr.replaceSelectionWith(
+							nodeType.createAndFill(
+								{ type: nodeType.name, ...newAttrs },
+								content
+							)
+						)
 					);
 					view.focus();
 				},
@@ -111,13 +147,19 @@ function cmdItem(
 	return new MenuItem(passedOptions);
 }
 
-function markActive(state: EditorState<EditorSchema>, type: MarkType<EditorSchema>) {
+function markActive(
+	state: EditorState<EditorSchema>,
+	type: MarkType<EditorSchema>
+) {
 	const { from, $from, to, empty } = state.selection;
 	if (empty) return !!type.isInSet(state.storedMarks || $from.marks());
 	else return state.doc.rangeHasMark(from, to, type);
 }
 
-export const markItem = (markType: MarkType<EditorSchema>, options: Partial<MenuItemSpec>): MenuItem =>
+export const markItem = (
+	markType: MarkType<EditorSchema>,
+	options: Partial<MenuItemSpec>
+): MenuItem =>
 	cmdItem(toggleMark(markType), {
 		active(state) {
 			return markActive(state, markType);
@@ -157,12 +199,21 @@ export const linkItem = (markType: MarkType<EditorSchema>): MenuItem =>
 					},
 					callback({ tekst, href }) {
 						// Voeg https toe als dat er nog niet staat.
-						if (!(href.startsWith('/') || href.startsWith('https://') || href.startsWith('http://'))) {
+						if (
+							!(
+								href.startsWith('/') ||
+								href.startsWith('https://') ||
+								href.startsWith('http://')
+							)
+						) {
 							href = 'https://' + href;
 						}
 
 						view.dispatch(
-							view.state.tr.replaceSelectionWith(state.schema.text(tekst).mark([markType.create({ href })]), false)
+							view.state.tr.replaceSelectionWith(
+								state.schema.text(tekst).mark([markType.create({ href })]),
+								false
+							)
 						);
 						view.focus();
 					},
@@ -178,7 +229,13 @@ export const linkItem = (markType: MarkType<EditorSchema>): MenuItem =>
 					},
 					callback({ href }) {
 						// Voeg https toe als dat er nog niet staat.
-						if (!(href.startsWith('/') || href.startsWith('https://') || href.startsWith('http://'))) {
+						if (
+							!(
+								href.startsWith('/') ||
+								href.startsWith('https://') ||
+								href.startsWith('http://')
+							)
+						) {
 							href = 'https://' + href;
 						}
 						toggleMark(markType, { href })(view.state, view.dispatch);
@@ -189,8 +246,10 @@ export const linkItem = (markType: MarkType<EditorSchema>): MenuItem =>
 		},
 	});
 
-export const wrapListItem = (nodeType: NodeType<EditorSchema>, options: Partial<MenuItemSpec>): MenuItem =>
-	cmdItem(wrapInList(nodeType, null), options);
+export const wrapListItem = (
+	nodeType: NodeType<EditorSchema>,
+	options: Partial<MenuItemSpec>
+): MenuItem => cmdItem(wrapInList(nodeType, null), options);
 
 export const priveItem = (markType: MarkType): MenuItem =>
 	new MenuItem({
@@ -225,25 +284,36 @@ export const lidInsert = (nodeType: NodeType<EditorSchema>): MenuItem =>
 			let attrs = null;
 			let content = null;
 
-			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+			if (
+				state.selection instanceof NodeSelection &&
+				state.selection.node.type == nodeType
+			) {
 				attrs = state.selection.node.attrs;
 				content = state.selection.node.content;
 			}
 
 			openPrompt({
-				title: attrs ? 'Update: ' + nodeType.name : 'Invoegen: ' + nodeType.name,
-				description: "Tip: Type '@' met een zoekterm in je bericht om snel een lid te noemen.",
+				title: attrs
+					? 'Update: ' + nodeType.name
+					: 'Invoegen: ' + nodeType.name,
+				description:
+					"Tip: Type '@' met een zoekterm in je bericht om snel een lid te noemen.",
 				fields: {
 					lid: new LidField({
 						label: 'Lid',
 						required: true,
-						value: attrs ? { uid: attrs.uid, naam: attrs.naam } : { uid: '', naam: '' },
+						value: attrs
+							? { uid: attrs.uid, naam: attrs.naam }
+							: { uid: '', naam: '' },
 					}),
 				},
 				callback(callbackAttrs) {
 					view.dispatch(
 						view.state.tr.replaceSelectionWith(
-							nodeType.createAndFill({ type: nodeType.name, ...callbackAttrs.lid }, content)
+							nodeType.createAndFill(
+								{ type: nodeType.name, ...callbackAttrs.lid },
+								content
+							)
 						)
 					);
 					view.focus();
@@ -266,14 +336,19 @@ export const blockTypeItemPrompt = (
 			let attrs = null;
 			let content = null;
 
-			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+			if (
+				state.selection instanceof NodeSelection &&
+				state.selection.node.type == nodeType
+			) {
 				attrs = state.selection.node.attrs;
 				content = state.selection.node.content;
 			}
 
 			openPrompt({
 				description,
-				title: attrs ? 'Update: ' + nodeType.name : 'Invoegen: ' + nodeType.name,
+				title: attrs
+					? 'Update: ' + nodeType.name
+					: 'Invoegen: ' + nodeType.name,
 				fields: Object.fromEntries(
 					Object.entries(nodeType.spec.attrs).map(([attr, spec]) => [
 						attr,
@@ -287,7 +362,10 @@ export const blockTypeItemPrompt = (
 				callback(callbackAttrs) {
 					view.dispatch(
 						view.state.tr.replaceSelectionWith(
-							nodeType.createAndFill({ type: nodeType.name, ...callbackAttrs }, content)
+							nodeType.createAndFill(
+								{ type: nodeType.name, ...callbackAttrs },
+								content
+							)
 						)
 					);
 					view.focus();
@@ -296,7 +374,12 @@ export const blockTypeItemPrompt = (
 		},
 	});
 
-export const groepPrompt = (nodeType: NodeType<EditorSchema>, label: string, title: string, type: string): MenuItem =>
+export const groepPrompt = (
+	nodeType: NodeType<EditorSchema>,
+	label: string,
+	title: string,
+	type: string
+): MenuItem =>
 	new MenuItem({
 		title,
 		label,
@@ -304,7 +387,10 @@ export const groepPrompt = (nodeType: NodeType<EditorSchema>, label: string, tit
 		run: (state, dispatch, view) => {
 			let content = null;
 
-			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+			if (
+				state.selection instanceof NodeSelection &&
+				state.selection.node.type == nodeType
+			) {
 				content = state.selection.node.content;
 			}
 
@@ -355,14 +441,19 @@ export const youtubeItemPrompt = (
 			let attrs = null;
 			let content = null;
 
-			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+			if (
+				state.selection instanceof NodeSelection &&
+				state.selection.node.type == nodeType
+			) {
 				attrs = state.selection.node.attrs;
 				content = state.selection.node.content;
 			}
 
 			openPrompt({
 				description,
-				title: attrs ? 'Update: ' + nodeType.name : 'Invoegen: ' + nodeType.name,
+				title: attrs
+					? 'Update: ' + nodeType.name
+					: 'Invoegen: ' + nodeType.name,
 				fields: {
 					id: new YoutubeField({
 						label: 'Id',
@@ -373,7 +464,10 @@ export const youtubeItemPrompt = (
 				callback(callbackAttrs) {
 					view.dispatch(
 						view.state.tr.replaceSelectionWith(
-							nodeType.createAndFill({ type: nodeType.name, ...callbackAttrs }, content)
+							nodeType.createAndFill(
+								{ type: nodeType.name, ...callbackAttrs },
+								content
+							)
 						)
 					);
 					view.focus();
@@ -382,7 +476,9 @@ export const youtubeItemPrompt = (
 		},
 	});
 
-export const bbInsert = (nodeType: NodeType<EditorSchema>): MenuItem<EditorSchema> =>
+export const bbInsert = (
+	nodeType: NodeType<EditorSchema>
+): MenuItem<EditorSchema> =>
 	new MenuItem<EditorSchema>({
 		title: 'BB code als platte tekst invoegen',
 		label: 'BB code',
@@ -390,7 +486,10 @@ export const bbInsert = (nodeType: NodeType<EditorSchema>): MenuItem<EditorSchem
 		run: (state, dispatch, view) => {
 			let attrs: Record<string, string> = { bb: '' };
 
-			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+			if (
+				state.selection instanceof NodeSelection &&
+				state.selection.node.type == nodeType
+			) {
 				attrs = state.selection.node.attrs;
 			}
 
@@ -405,7 +504,8 @@ export const insertPlaatjeItem = (
 	new MenuItem<EditorSchema>({
 		title: 'Afbeelding invoegen',
 		label: 'Afbeelding',
-		enable: (state) => canInsert(state, nodeType) || canInsert(state, imageType),
+		enable: (state) =>
+			canInsert(state, nodeType) || canInsert(state, imageType),
 		run: (state, dispatch, view) => {
 			openPrompt({
 				title: 'Plaatje uploaden',
@@ -416,7 +516,11 @@ export const insertPlaatjeItem = (
 				},
 				callback: (params) => {
 					if (params.url) {
-						view.dispatch(view.state.tr.replaceSelectionWith(imageType.createAndFill({ src: params.url })));
+						view.dispatch(
+							view.state.tr.replaceSelectionWith(
+								imageType.createAndFill({ src: params.url })
+							)
+						);
 						view.focus();
 					} else if (params.image) {
 						startImageUpload(view, params.image);

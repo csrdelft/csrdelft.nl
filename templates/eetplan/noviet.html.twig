@@ -1,30 +1,30 @@
 {% extends 'eetplan/template.html.twig' %}
 
 {% block breadcrumbs %}
-    {{ csr_breadcrumbs({
-        (url('default')): 'main',
-        (url('csrdelft_eetplan_view')): 'Eetplan',
-        '': noviet.link('civitas') | raw
-    }) }}
+	{{ csr_breadcrumbs({
+		(url('default')): 'main',
+		(url('csrdelft_eetplan_view')): 'Eetplan',
+		'': noviet.link('civitas') | raw
+	}) }}
 {% endblock %}
 
 {% block content %}
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Avond</th>
-            <th scope="col">Huis</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for sessie in eetplan %}
-            <tr class="{{ cycle(['donker', 'licht'], loop.index) }}">
-                <td>{{ sessie.avond | date("d-m-Y") }}</td>
-                <td><a
-                            href="{{ url('csrdelft_groep_woonoorden_bekijken', {id: sessie.woonoord.id}) }}">{{ sessie.woonoord.naam }}</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th scope="col">Avond</th>
+			<th scope="col">Huis</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for sessie in eetplan %}
+			<tr class="{{ cycle(['donker', 'licht'], loop.index) }}">
+				<td>{{ sessie.avond | date("d-m-Y") }}</td>
+				<td><a
+						href="{{ url('csrdelft_groep_woonoorden_bekijken', {id: sessie.woonoord.id}) }}">{{ sessie.woonoord.naam }}</a>
+				</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
 {% endblock %}

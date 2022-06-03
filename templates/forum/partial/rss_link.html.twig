@@ -1,13 +1,12 @@
 <div class="rss-link input-group mt-4" title="Houd deze url privé!&#013;Nieuwe aanvragen: zie je profiel">
-    <span class="input-group-text">{{ icon('feed') }}</span>
-    {% if app.user and app.user.privateToken %}
-        <input type="text" class="form-control" value="{{ absolute_url(app.user.rssLink) }}" size="35"
-               onclick="this.setSelectionRange(0, this.value.length);" readonly title="RSS Link"/>
-    {% elseif not app.user %}
-        <input type="text" class="form-control" value="{{ url('csrdelft_forum_rss') }}" size="35"
-               onclick="this.setSelectionRange(0, this.value.length);" readonly title="RSS Link"/>
-    {% else %}
-        <span class="input-group-text"><a
-                    href="/profiel/{{ app.user.uid }}#tokenaanvragen">Privé url aanvragen</a></span>
-    {% endif %}
+	<span class="input-group-text">{{ icon('feed') }}</span>
+	{% if app.user and app.user.privateToken %}
+		<input type="text" class="form-control" value="{{ absolute_url(app.user.rssLink) }}" size="35"
+					 onclick="this.setSelectionRange(0, this.value.length);" readonly title="RSS Link"/>
+	{% elseif not app.user %}
+		<input type="text" class="form-control" value="{{ url('csrdelft_forum_rss') }}" size="35"
+					 onclick="this.setSelectionRange(0, this.value.length);" readonly title="RSS Link"/>
+	{% else %}
+		<span class="input-group-text"><a href="/profiel/{{ app.user.uid }}#tokenaanvragen">Privé url aanvragen</a></span>
+	{% endif %}
 </div>

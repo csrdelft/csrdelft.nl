@@ -11,9 +11,8 @@ use CsrDelft\view\formulier\invoervelden\UrlField;
  *
  * @see UrlField
  */
-class RequiredUrlField extends UrlField
-{
+class RequiredUrlField extends UrlField {
 
-    public $required = true;
+	public $required = true;
 
 }

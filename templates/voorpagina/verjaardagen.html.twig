@@ -1,19 +1,19 @@
 <h2 class="h6 fw-bolder mt-1">Verjaardagen</h2>
 
 <div class="list-group list-group-flush">
-    {% for profiel in verjaardagen %}
-        <a href="#" class="list-group-item list-group-item-action d-flex gap-3 align-items-center">
-            {{ profiel.pasfotoRounded | raw }}
-            <div class="overflow-hidden">
-                <h3 class="verjaardagen-item-dag mb-0 fw-bolder text-black-50 text-uppercase">
-                    {% if profiel.jarig %}
-                        Vandaag
-                    {% else %}
-                        {{ profiel.gebdatum | date('d-m') }}
-                    {% endif %}
-                </h3>
-                <p class="text-truncate">{{ profiel.naam('civitas') }} </p>
-            </div>
-        </a>
-    {% endfor %}
+	{% for profiel in verjaardagen %}
+	<a href="#" class="list-group-item list-group-item-action d-flex gap-3 align-items-center">
+		{{ profiel.pasfotoRounded | raw}}
+		<div class="overflow-hidden">
+			<h3 class="verjaardagen-item-dag mb-0 fw-bolder text-black-50 text-uppercase">
+				{% if profiel.jarig %}
+					Vandaag
+				{% else %}
+					{{ profiel.gebdatum | date('d-m') }}
+				{% endif %}
+			</h3>
+			<p class="text-truncate">{{ profiel.naam('civitas') }} </p>
+		</div>
+	</a>
+	{% endfor %}
 </div>

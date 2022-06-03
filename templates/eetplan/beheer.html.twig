@@ -3,22 +3,22 @@
 {% block titel %}Eetplanbeheer{% endblock %}
 
 {% block breadcrumbs %}
-    {{ csr_breadcrumbs({
-        (url('default')): 'main',
-        (url('csrdelft_eetplan_view')): 'Eetplan',
-        (url('csrdelft_eetplan_beheer')): 'Eetplanbeheer',
-    }) }}
+{{ csr_breadcrumbs({
+	(url('default')): 'main',
+	(url('csrdelft_eetplan_view')): 'Eetplan',
+	(url('csrdelft_eetplan_beheer')): 'Eetplanbeheer',
+}) }}
 {% endblock %}
 
 {% block content %}
-    <h1>Eetplanbeheer</h1>
+	<h1>Eetplanbeheer</h1>
 
-    {{ huizentable | raw }}
-    {{ bekendentable | raw }}
-    {{ bekendehuizentable | raw }}
+	{{ huizentable | raw }}
+	{{ bekendentable | raw }}
+	{{ bekendehuizentable | raw }}
 
-    <a href="{{ url('csrdelft_eetplan_nieuw') }}" class="btn btn-primary post popup">Nieuw Eetplan</a>
-    <a href="{{ url('csrdelft_eetplan_verwijderen') }}" class="btn btn-primary post popup">Eetplan verwijderen</a>
+	<a href="{{ url('csrdelft_eetplan_nieuw') }}" class="btn btn-primary post popup">Nieuw Eetplan</a>
+	<a href="{{ url('csrdelft_eetplan_verwijderen') }}" class="btn btn-primary post popup">Eetplan verwijderen</a>
 
-    {{ include('eetplan/table.html.twig') }}
+	{{ include('eetplan/table.html.twig') }}
 {% endblock %}

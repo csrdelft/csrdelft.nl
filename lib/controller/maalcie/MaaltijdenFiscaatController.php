@@ -24,127 +24,121 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MaaltijdenFiscaatController extends AbstractController
-{
-    /**
-     * @var MaaltijdenRepository
-     */
-    private $maaltijdenRepository;
-    /**
-     * @var MaaltijdAanmeldingenRepository
-     */
-    private $maaltijdAanmeldingenRepository;
-    /**
-     * @var CiviBestellingRepository
-     */
-    private $civiBestellingRepository;
-    /**
-     * @var CiviSaldoRepository
-     */
-    private $civiSaldoRepository;
+class MaaltijdenFiscaatController extends AbstractController {
+	/**
+	 * @var MaaltijdenRepository
+	 */
+	private $maaltijdenRepository;
+	/**
+	 * @var MaaltijdAanmeldingenRepository
+	 */
+	private $maaltijdAanmeldingenRepository;
+	/**
+	 * @var CiviBestellingRepository
+	 */
+	private $civiBestellingRepository;
+	/**
+	 * @var CiviSaldoRepository
+	 */
+	private $civiSaldoRepository;
 
-    public function __construct(
-        MaaltijdenRepository           $maaltijdenRepository,
-        MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-        CiviBestellingRepository       $civiBestellingRepository,
-        CiviSaldoRepository            $civiSaldoRepository
-    )
-    {
-        $this->maaltijdenRepository = $maaltijdenRepository;
-        $this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-        $this->civiBestellingRepository = $civiBestellingRepository;
-        $this->civiSaldoRepository = $civiSaldoRepository;
-    }
+	public function __construct(
+		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		CiviBestellingRepository $civiBestellingRepository,
+		CiviSaldoRepository $civiSaldoRepository
+	) {
+		$this->maaltijdenRepository = $maaltijdenRepository;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+		$this->civiBestellingRepository = $civiBestellingRepository;
+		$this->civiSaldoRepository = $civiSaldoRepository;
+	}
 
-    /**
-     * @return Response
-     * @Route("/maaltijden/fiscaat", methods={"GET"})
-     * @Auth(P_MAAL_MOD)
-     */
-    public function GET_overzicht()
-    {
-        return $this->render('maaltijden/pagina.html.twig', [
-            'titel' => 'Overzicht verwerkte maaltijden',
-            'content' => new FiscaatMaaltijdenOverzichtTable(),
-        ]);
-    }
+	/**
+	 * @return Response
+	 * @Route("/maaltijden/fiscaat", methods={"GET"})
+	 * @Auth(P_MAAL_MOD)
+	 */
+	public function GET_overzicht() {
+		return $this->render('maaltijden/pagina.html.twig', [
+			'titel' => 'Overzicht verwerkte maaltijden',
+			'content' => new FiscaatMaaltijdenOverzichtTable(),
+		]);
+	}
 
-    /**
-     * @return GenericDataTableResponse
-     * @Route("/maaltijden/fiscaat", methods={"POST"})
-     * @Auth(P_MAAL_MOD)
-     */
-    public function POST_overzicht()
-    {
-        $data = $this->maaltijdenRepository->findBy(['verwerkt' => true]);
+	/**
+	 * @return GenericDataTableResponse
+	 * @Route("/maaltijden/fiscaat", methods={"POST"})
+	 * @Auth(P_MAAL_MOD)
+	 */
+	public function POST_overzicht() {
+		$data = $this->maaltijdenRepository->findBy(['verwerkt' => true]);
 
-        return $this->tableData($data, ['datatable', 'datatable-fiscaat']);
-    }
+		return $this->tableData($data, ['datatable', 'datatable-fiscaat']);
+	}
 
-    /**
-     * @return Response
-     * @Route("/maaltijden/fiscaat/onverwerkt", methods={"GET"})
-     * @Auth(P_MAAL_MOD)
-     */
-    public function GET_onverwerkt()
-    {
-        return $this->render('maaltijden/pagina.html.twig', [
-            'titel' => 'Onverwerkte Maaltijden',
-            'content' => new OnverwerkteMaaltijdenTable(),
-        ]);
-    }
+	/**
+	 * @return Response
+	 * @Route("/maaltijden/fiscaat/onverwerkt", methods={"GET"})
+	 * @Auth(P_MAAL_MOD)
+	 */
+	public function GET_onverwerkt() {
+		return $this->render('maaltijden/pagina.html.twig', [
+			'titel' => 'Onverwerkte Maaltijden',
+			'content' => new OnverwerkteMaaltijdenTable(),
+		]);
+	}
 
-    /**
-     * @param EntityManagerInterface $em
-     * @return GenericDataTableResponse
-     * @Route("/maaltijden/fiscaat/verwerk", methods={"POST"})
-     * @Auth(P_MAAL_MOD)
-     */
-    public function POST_verwerk(EntityManagerInterface $em)
-    {
-        # Haal maaltijd op
-        $selection = $this->getDataTableSelection();
-        /** @var Maaltijd $maaltijd */
-        $maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
+	/**
+	 * @param EntityManagerInterface $em
+	 * @return GenericDataTableResponse
+	 * @Route("/maaltijden/fiscaat/verwerk", methods={"POST"})
+	 * @Auth(P_MAAL_MOD)
+	 */
+	public function POST_verwerk(EntityManagerInterface $em) {
+		# Haal maaltijd op
+		$selection = $this->getDataTableSelection();
+		/** @var Maaltijd $maaltijd */
+		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 
-        # Controleer of de maaltijd gesloten is en geweest is
-        if ($maaltijd->gesloten == false or $maaltijd->getMoment() >= date_create_immutable("now")) {
-            throw new CsrGebruikerException("Maaltijd nog niet geweest");
-        }
+		# Controleer of de maaltijd gesloten is en geweest is
+		if ($maaltijd->gesloten == false OR $maaltijd->getMoment() >= date_create_immutable("now")) {
+			throw new CsrGebruikerException("Maaltijd nog niet geweest");
+		}
 
-        # Controleer of maaltijd niet al verwerkt is
-        if ($maaltijd->verwerkt) {
-            throw new CsrGebruikerException("Maaltijd is al verwerkt");
-        }
+		# Controleer of maaltijd niet al verwerkt is
+		if ($maaltijd->verwerkt) {
+			throw new CsrGebruikerException("Maaltijd is al verwerkt");
+		}
 
-        $maaltijden = $em->transactional(function () use ($maaltijd) {
-            # Ga alle personen in de maaltijd af
-            $aanmeldingen = $this->maaltijdAanmeldingenRepository->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
+		$maaltijden = $em->transactional(function () use ($maaltijd) {
+			# Ga alle personen in de maaltijd af
+			$aanmeldingen = $this->maaltijdAanmeldingenRepository->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 
-            /** @var Civibestelling[] $bestellingen */
-            $bestellingen = array();
-            # Maak een bestelling voor deze persoon
-            foreach ($aanmeldingen as $aanmelding) {
-                $bestellingen[] = $this->maaltijdAanmeldingenRepository->maakCiviBestelling($aanmelding);
-            }
+			/** @var Civibestelling[] $bestellingen */
+			$bestellingen = array();
+			# Maak een bestelling voor deze persoon
+			foreach ($aanmeldingen as $aanmelding) {
+				$bestellingen[] = $this->maaltijdAanmeldingenRepository->maakCiviBestelling($aanmelding);
+			}
 
-            # Reken de bestelling af
-            foreach ($bestellingen as $bestelling) {
-                $this->civiBestellingRepository->create($bestelling);
-                $this->civiSaldoRepository->verlagen($bestelling->uid, $bestelling->totaal);
-            }
+			# Reken de bestelling af
+			foreach ($bestellingen as $bestelling) {
+				$this->civiBestellingRepository->create($bestelling);
+				$this->civiSaldoRepository->verlagen($bestelling->uid, $bestelling->totaal);
+			}
 
-            # Zet de maaltijd op verwerkt
-            $maaltijd->verwerkt = true;
+			# Zet de maaltijd op verwerkt
+			$maaltijd->verwerkt = true;
 
-            $this->maaltijdenRepository->update($maaltijd);
+			$this->maaltijdenRepository->update($maaltijd);
 
-            $verwijderd = new RemoveDataTableEntry($maaltijd->maaltijd_id, Maaltijd::class);
+			$verwijderd = new RemoveDataTableEntry($maaltijd->maaltijd_id, Maaltijd::class);
 
-            return [$verwijderd];
-        });
+			return [$verwijderd];
+		});
 
-        return $this->tableData($maaltijden);
-    }
+		return $this->tableData($maaltijden);
+	}
 
 }

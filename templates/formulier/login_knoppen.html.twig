@@ -1,11 +1,9 @@
 <ul class="login-buttons">
-    <li>
-        <input type="submit" value="{% trans %}Inloggen{% endtrans %} &raquo;"/>
-        &nbsp;
-        <a href="{{ url('default', {naam: 'accountaanvragen'}) }}">{% trans %}Account aanvragen{% endtrans %}
-            &raquo;</a>
-    </li>
-    <li><a href="{{ url('csrdelft_wachtwoord_vergeten') }}">{% trans %}Wachtwoord vergeten?{% endtrans %} &raquo;</a>
-    </li>
+	<li>
+		<input type="submit" value="{% trans %}Inloggen{% endtrans %} &raquo;" />
+		&nbsp;
+		<a href="{{ url('default', {naam: 'accountaanvragen'}) }}">{% trans %}Account aanvragen{% endtrans %} &raquo;</a>
+	</li>
+	<li><a href="{{ url('csrdelft_wachtwoord_vergeten') }}">{% trans %}Wachtwoord vergeten?{% endtrans %} &raquo;</a></li>
 </ul>
 

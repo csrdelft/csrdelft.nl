@@ -3,30 +3,30 @@
 {% block titel %}Roodschopper{% endblock %}
 
 {% block content %}
-    {% if verzenden %}
-        <h1>Emails verzonden naar {{ aantal }} leden.</h1>
-    {% else %}
-        {{ form | raw }}
+	{% if verzenden %}
+		<h1>Emails verzonden naar {{ aantal }} leden.</h1>
+	{% else %}
+		{{ form | raw }}
 
-        <h2>Doelgroep</h2>
-        <p>De volgende {{ saldi | length }} personen zouden een mail krijgen onder de huidige selectie.</p>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Naam</th>
-                <th>Uid</th>
-                <th>Saldo</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for saldo in saldi %}
-                <tr>
-                    <td>{{ saldo.uid ? get_profiel(saldo.uid).link | raw : "" }}</td>
-                    <td>{{ saldo.uid }}</td>
-                    <td>{{ saldo.saldo | format_bedrag }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
+		<h2>Doelgroep</h2>
+		<p>De volgende {{ saldi | length }} personen zouden een mail krijgen onder de huidige selectie.</p>
+		<table class="table">
+			<thead>
+			<tr>
+				<th>Naam</th>
+				<th>Uid</th>
+				<th>Saldo</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for saldo in saldi %}
+				<tr>
+					<td>{{ saldo.uid ? get_profiel(saldo.uid).link | raw : "" }}</td>
+					<td>{{ saldo.uid }}</td>
+					<td>{{ saldo.saldo | format_bedrag }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
 {% endblock %}

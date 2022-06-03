@@ -15,49 +15,46 @@ use CsrDelft\view\datatable\Multiplicity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class PinTransactieMatchTableType extends AbstractDataTableType
-{
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
+class PinTransactieMatchTableType extends AbstractDataTableType {
+	/**
+	 * @var UrlGeneratorInterface
+	 */
+	private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
-    {
-        $this->urlGenerator = $urlGenerator;
-    }
+	public function __construct(UrlGeneratorInterface $urlGenerator) {
+		$this->urlGenerator = $urlGenerator;
+	}
 
-    public function createDataTable(DataTableBuilder $builder, array $options): void
-    {
-        $builder->setDataUrl($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'metFout']));
-        $builder->setTitel('Overzicht van pintransacties matches');
+	public function createDataTable(DataTableBuilder $builder, array $options): void {
+		$builder->setDataUrl($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'metFout']));
+		$builder->setTitel('Overzicht van pintransacties matches');
 
-        $builder->loadFromClass(PinTransactieMatch::class);
+		$builder->loadFromClass(PinTransactieMatch::class);
 
-        $weergave = new CollectionDataTableKnop(Multiplicity::None(), 'Weergave', 'Weergave van de tabel', 'cart');
-        $weergave->addKnop(new SourceChangeDataTableKnop($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'metFout']), 'Met fouten', 'Fouten weergeven', 'cart_error'));
-        $weergave->addKnop(new SourceChangeDataTableKnop($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'alles']), 'Alles', 'Alles weergeven', 'cart'));
-        $builder->addKnop($weergave);
+		$weergave = new CollectionDataTableKnop(Multiplicity::None(), 'Weergave', 'Weergave van de tabel', 'cart');
+		$weergave->addKnop(new SourceChangeDataTableKnop($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'metFout']), 'Met fouten', 'Fouten weergeven', 'cart_error'));
+		$weergave->addKnop(new SourceChangeDataTableKnop($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'alles']), 'Alles', 'Alles weergeven', 'cart'));
+		$builder->addKnop($weergave);
 
-        $builder->addKnop(new DataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_verwerk'), 'Verwerk', 'Dit probleem verwerken', 'cart_edit'));
-        $builder->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_ontkoppel'), 'Ontkoppel', 'Ontkoppel bestelling en transactie', 'arrow_divide'));
-        $builder->addKnop(new DataTableKnop(Multiplicity::Two(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_koppel'), 'Koppel', 'Koppel een bestelling en transactie', 'arrow_join'));
-        $builder->addKnop(new DataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_info'), 'Info', 'Bekijk informatie over de gekoppelde bestelling', 'magnifier'));
-        $builder->addKnop(new DataTableKnop(Multiplicity::Any(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_negeer'), 'Negeer', 'Negeer match(es)', 'delete'));
-        $builder->addKnop(new DataTableKnop(Multiplicity::None(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_heroverweeg'), 'Heroverweeg', 'Controleer op veranderingen in andere systemen', 'cart_go'));
+		$builder->addKnop(new DataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_verwerk'),  'Verwerk', 'Dit probleem verwerken', 'cart_edit'));
+		$builder->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_ontkoppel'), 'Ontkoppel', 'Ontkoppel bestelling en transactie', 'arrow_divide'));
+		$builder->addKnop(new DataTableKnop(Multiplicity::Two(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_koppel'), 'Koppel', 'Koppel een bestelling en transactie', 'arrow_join'));
+		$builder->addKnop(new DataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_info'), 'Info', 'Bekijk informatie over de gekoppelde bestelling', 'magnifier'));
+		$builder->addKnop(new DataTableKnop(Multiplicity::Any(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_negeer'), 'Negeer', 'Negeer match(es)', 'delete'));
+		$builder->addKnop(new DataTableKnop(Multiplicity::None(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_heroverweeg'), 'Heroverweeg', 'Controleer op veranderingen in andere systemen', 'cart_go'));
 
-        $builder->addColumn('moment');
-        $builder->addColumn('transactie');
-        $builder->addColumn('bestelling');
+		$builder->addColumn('moment');
+		$builder->addColumn('transactie');
+		$builder->addColumn('bestelling');
 
-        $builder->hideColumn('transactie_id');
-        $builder->hideColumn('bestelling_id');
+		$builder->hideColumn('transactie_id');
+		$builder->hideColumn('bestelling_id');
 
-        $builder->setOrder(['moment' => 'desc']);
+		$builder->setOrder(['moment' => 'desc']);
 
-        $builder->searchColumn('status');
-        $builder->searchColumn('moment');
-        $builder->searchColumn('transactie');
-        $builder->searchColumn('bestelling');
-    }
+		$builder->searchColumn('status');
+		$builder->searchColumn('moment');
+		$builder->searchColumn('transactie');
+		$builder->searchColumn('bestelling');
+	}
 }

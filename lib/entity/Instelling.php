@@ -26,29 +26,28 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class Instelling
-{
-    /**
-     * @var integer
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    public $id;
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    public $module;
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    public $instelling;
-    /**
-     * Value
-     * @var string
-     * @ORM\Column(type="text")
-     */
-    public $waarde;
+class Instelling {
+	/**
+	 * @var integer
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
+	 */
+	public $id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $module;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $instelling;
+	/**
+	 * Value
+	 * @var string
+	 * @ORM\Column(type="text")
+	 */
+	public $waarde;
 }

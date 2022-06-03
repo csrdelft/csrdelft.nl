@@ -1,25 +1,25 @@
 {% set uniqid = 'slider_' | uniqid %}
 
 <div id="{{ uniqid }}" class="carousel slide bb-slider disable-swipe" data-bs-ride="carousel">
-    <ol class="carousel-indicators">
-        {% for foto in fotos %}
-            <li data-bs-target="#{{ uniqid }}" data-bs-slide-to="{{ loop.index-1 }}"
-                {% if loop.first %}class="active"{% endif %}></li>
-        {% endfor %}
-    </ol>
-    <div class="carousel-inner">
-        {% for foto in fotos %}
-            <div class="carousel-item {% if loop.first %}active{% endif %}">
-                <img style="height: 360px;" src="{{ foto.resizedUrl }}" alt="{{ foto.filename }}">
-            </div>
-        {% endfor %}
-    </div>
-    <a class="carousel-control-prev" href="#{{ uniqid }}" role="button" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#{{ uniqid }}" role="button" data-sb-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
+	<ol class="carousel-indicators">
+		{% for foto in fotos %}
+			<li data-bs-target="#{{ uniqid }}" data-bs-slide-to="{{ loop.index-1 }}"
+					{% if loop.first %}class="active"{% endif %}></li>
+		{% endfor %}
+	</ol>
+	<div class="carousel-inner">
+		{% for foto in fotos %}
+		<div class="carousel-item {% if loop.first %}active{% endif %}">
+			<img style="height: 360px;" src="{{ foto.resizedUrl }}" alt="{{ foto.filename }}">
+		</div>
+		{% endfor %}
+	</div>
+	<a class="carousel-control-prev" href="#{{ uniqid }}" role="button" data-bs-slide="prev">
+		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		<span class="sr-only">Previous</span>
+	</a>
+	<a class="carousel-control-next" href="#{{ uniqid }}" role="button" data-sb-slide="next">
+		<span class="carousel-control-next-icon" aria-hidden="true"></span>
+		<span class="sr-only">Next</span>
+	</a>
 </div>

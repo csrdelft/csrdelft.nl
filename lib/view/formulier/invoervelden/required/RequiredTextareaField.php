@@ -11,9 +11,8 @@ use CsrDelft\view\formulier\invoervelden\TextareaField;
  *
  * @see TextareaField
  */
-class RequiredTextareaField extends TextareaField
-{
+class RequiredTextareaField extends TextareaField {
 
-    public $required = true;
+	public $required = true;
 
 }

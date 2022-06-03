@@ -15,69 +15,66 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\CourantBerichtRepository")
  * @ORM\Table("courantbericht")
  */
-class CourantBericht
-{
-    /**
-     * @var integer
-     * @ORM\Column(type="integer")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
-    public $id;
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    public $titel;
-    /**
-     * @var CourantCategorie
-     * @ORM\Column(type="enumCourantCategorie")
-     */
-    public $cat;
-    /**
-     * @var string
-     * @ORM\Column(type="text")
-     */
-    public $bericht;
-    /**
-     * @var integer
-     * @ORM\Column(type="integer")
-     */
-    public $volgorde;
-    /**
-     * @var string
-     * @ORM\Column(type="uid")
-     */
-    public $uid;
-    /**
-     * @var Profiel
-     * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-     * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-     */
-    public $schrijver;
-    /**
-     * @var DateTimeImmutable
-     * @ORM\Column(type="datetime", name="datumTijd")
-     */
-    public $datumTijd;
+class CourantBericht {
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 */
+	public $id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $titel;
+	/**
+	 * @var CourantCategorie
+	 * @ORM\Column(type="enumCourantCategorie")
+	 */
+	public $cat;
+	/**
+	 * @var string
+	 * @ORM\Column(type="text")
+	 */
+	public $bericht;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $volgorde;
+	/**
+	 * @var string
+	 * @ORM\Column(type="uid")
+	 */
+	public $uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $schrijver;
+	/**
+	 * @var DateTimeImmutable
+	 * @ORM\Column(type="datetime", name="datumTijd")
+	 */
+	public $datumTijd;
 
-    public function setVolgorde()
-    {
-        if ($this->cat == null) {
-            return;
-        }
+	public function setVolgorde() {
+		if ($this->cat == null) {
+			return;
+		}
 
-        $this->volgorde = [
-            'voorwoord' => 0,
-            'bestuur' => 1,
-            'csr' => 2,
-            'overig' => 3,
-            'sponsor' => 4,
-        ][$this->cat->getValue()];
-    }
+		$this->volgorde = [
+			'voorwoord' => 0,
+			'bestuur' => 1,
+			'csr' => 2,
+			'overig' => 3,
+			'sponsor' => 4,
+		][$this->cat->getValue()];
+	}
 
-    public function magBeheren()
-    {
-        return LoginService::mag(P_MAIL_COMPOSE) or LoginService::mag($this->uid);
-    }
+	public function magBeheren() {
+		return LoginService::mag(P_MAIL_COMPOSE) OR LoginService::mag($this->uid);
+	}
 }

@@ -2,34 +2,34 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description"
-          content="Website voor het 12e lustrum der Civitas Studiosorum Reformatorum onder het thema Tijdloos.">
-    <meta name="author" content="Job Kanis">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+				content="Website voor het 12e lustrum der Civitas Studiosorum Reformatorum onder het thema Tijdloos.">
+	<meta name="author" content="Job Kanis">
 
-    <title>Tijdloos - 12e lustrum</title>
+	<title>Tijdloos - 12e lustrum</title>
 
-    {{ csrfMetaTag() }}
+	{{ csrfMetaTag() }}
 
-    {{ js_asset('app') }}
-    {{ css_asset('thema-lustrum') }}
-    {{ css_asset('common') }}
-    {{ css_asset('lustrum') }}
+	{{ js_asset('app') }}
+	{{ css_asset('thema-lustrum') }}
+	{{ css_asset('common') }}
+	{{ css_asset('lustrum') }}
 
-    <script>
-        {# Configuratie voor Sentry, zie sentry.ts #}
-        APP_ENV = "{{ app.environment }}";
-        SENTRY_DSN_JS = "{{ sentry_dsn }}";
-        USER = "{{ app.user.uid }}";
-    </script>
-    {{ js_asset('sentry') }}
+	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+	{{ js_asset('sentry') }}
 
-    <link rel="icon" href="/lustrum12/favicon.ico">
+	<link rel="icon" href="/lustrum12/favicon.ico">
 </head>
 
 <body class="zijbalk_verborgen">
-{% include 'lustrum12/zandloper.html.twig' %}
+	{%  include 'lustrum12/zandloper.html.twig' %}
 
-{{ cms('lustrum-reis') }}
+	{{ cms('lustrum-reis') }}
 </body>

@@ -1,96 +1,93 @@
 <div class="card agenda-card">
-    <div class="card-header">
-        <div class="row no-gutters align-items-center">
-            <div class="col">
-                <h5 class="card-title mb-0">
-                    {% if item is profiel %}
-                        {{ icon('verjaardag') }} {{ item.link | raw }}
-                    {% elseif item is maaltijd %}
-                        <img src="{{ absolute_url('/images/maalcie/cutlery.png') }}" width="16" height="16"
-                             alt="cutlery"
-                             class="icon"/>
-                        <a href="{{ item.url }}">{{ item.titel }}</a>
-                    {% elseif item is corveetaak %}
-                        {% if 'klus' in item.corveeFunctie.naam %}
-                            <img src="{{ absolute_url('/images/maalcie/drill.png') }}" width="16" height="16"
-                                 alt="drill"
-                                 class="icon"/>
-                        {% else %}
-                            {{ icon('paintcan') }}
-                        {% endif %}
-                        <a href="{{ item.url }}">{{ item.titel }}</a>
-                    {% elseif item is agendeerbaar %}
-                        {% if item.url %}
-                            <a href="{{ item.url }}">{{ item.titel }}</a>
-                        {% else %}
-                            {{ item.titel }}
-                        {% endif %}
-                    {% endif %}
-                </h5>
-            </div>
-            <div class="col-auto">
-                <div class="btn-group btn-group-sm">
-                    {% if verborgen %}
-                        <a href="{{ url('csrdelft_agenda_verbergen', {refuuid: item.uUID}) }}" class="btn beheren post"
-                           title="Toon dit agenda item in ical">
-                            {{ icon('shading') }}
-                        </a>
-                    {% else %}
-                        <a href="{{ url('csrdelft_agenda_verbergen', {refuuid: item.uUID}) }}" class="btn beheren post"
-                           title="Verberg dit agenda item in ical">
-                            {{ icon('eye') }}
-                        </a>
-                    {% endif %}
+	<div class="card-header">
+		<div class="row no-gutters align-items-center">
+			<div class="col">
+				<h5 class="card-title mb-0">
+					{% if item is profiel %}
+						{{ icon('verjaardag') }} {{ item.link | raw }}
+					{% elseif item is maaltijd %}
+						<img src="{{ absolute_url('/images/maalcie/cutlery.png') }}" width="16" height="16" alt="cutlery"
+								 class="icon"/>
+						<a href="{{ item.url }}">{{ item.titel }}</a>
+					{% elseif item is corveetaak %}
+						{% if 'klus' in item.corveeFunctie.naam %}
+							<img src="{{ absolute_url('/images/maalcie/drill.png') }}" width="16" height="16" alt="drill"
+									 class="icon"/>
+						{% else %}
+							{{ icon('paintcan') }}
+						{% endif %}
+						<a href="{{ item.url }}">{{ item.titel }}</a>
+					{% elseif item is agendeerbaar %}
+						{% if item.url %}
+							<a href="{{ item.url }}">{{ item.titel }}</a>
+						{% else %}
+							{{ item.titel }}
+						{% endif %}
+					{% endif %}
+				</h5>
+			</div>
+			<div class="col-auto">
+				<div class="btn-group btn-group-sm">
+					{% if verborgen %}
+						<a href="{{ url('csrdelft_agenda_verbergen', {refuuid: item.uUID}) }}" class="btn beheren post"
+							 title="Toon dit agenda item in ical">
+							{{ icon('shading') }}
+						</a>
+					{% else %}
+						<a href="{{ url('csrdelft_agenda_verbergen', {refuuid: item.uUID}) }}" class="btn beheren post"
+							 title="Verberg dit agenda item in ical">
+							{{ icon('eye') }}
+						</a>
+					{% endif %}
 
-                    <a href="{{ url('csrdelft_agenda_export', {uuid: item.uUID}) }}" class="btn"
-                       title="Exporteer dit agenda item">
-                        {{ icon('date_go') }}
-                    </a>
+					<a href="{{ url('csrdelft_agenda_export', {uuid: item.uUID}) }}" class="btn"
+						 title="Exporteer dit agenda item">
+						{{ icon('date_go') }}
+					</a>
 
-                    {% if item is abstractgroep and item.magWijzigen %}
-                        <a href="{{ item.url }}/wijzigen" class="beheren btn" title="Wijzig {{ item.naam }}">
-                            {{ icon('bewerken') }}
-                        </a>
-                    {% elseif item is agendaitem and item.magBeheren %}
-                        <a href="{{ url('csrdelft_agenda_bewerken', {aid: item.item_id}) }}"
-                           class="btn beheren post popup"
-                           title="Dit agenda-item bewerken">
-                            {{ icon('bewerken') }}
-                        </a>
-                        <a href="{{ url('csrdelft_agenda_verwijderen', {aid: item.item_id}) }}"
-                           class="btn beheren post confirm ReloadAgenda"
-                           title="Dit agenda-item definitief verwijderen">
-                            {{ icon('bin') }}
-                        </a>
-                    {% endif %}
-                    <a href="#" class="btn close" title="Sluiten">
-                        <i class="fas fa-times"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="card-body">
-        {% if item is maaltijd %}
-            <div class="tijd">
-                {{ date(item.beginMoment) | date('H:i') }} - {{ date(item.eindMoment) | date('H:i') }}
-            </div>
-        {% elseif item is agendeerbaar and not item.heledag %}
-            <p>
-                {{ date(item.beginMoment) | date('H:i') }}
-                {% if date(item.eindMoment) | date('H:i') not in ["00:00", "23:59"] %}
-                    - {{ date(item.eindMoment) | date('H:i') }}
-                {% endif %}
-            </p>
-        {% endif %}
-        {% if item.beschrijving %}
-            <p>{{ item.beschrijving }}</p>
-        {% endif %}
-        {% if item.locatie %}
-            <p>{{ ("[kaart h=200]" ~ item.locatie ~ "[/kaart]") | bbcode }}</p>
-        {% endif %}
-        {% if item is agendaitem and item.rechten_bekijken != 'P_LOGGED_IN' %}
-            <span class="text-muted small">Zichtbaar voor: {{ item.rechten_bekijken }}</span>
-        {% endif %}
-    </div>
+					{% if item is abstractgroep and item.magWijzigen %}
+						<a href="{{ item.url }}/wijzigen" class="beheren btn" title="Wijzig {{ item.naam }}">
+							{{ icon('bewerken') }}
+						</a>
+					{% elseif item is agendaitem and item.magBeheren %}
+						<a href="{{ url('csrdelft_agenda_bewerken', {aid: item.item_id}) }}" class="btn beheren post popup"
+							 title="Dit agenda-item bewerken">
+							{{ icon('bewerken') }}
+						</a>
+						<a href="{{ url('csrdelft_agenda_verwijderen', {aid: item.item_id}) }}"
+							 class="btn beheren post confirm ReloadAgenda"
+							 title="Dit agenda-item definitief verwijderen">
+							{{ icon('bin') }}
+						</a>
+					{% endif %}
+					<a href="#" class="btn close" title="Sluiten">
+						<i class="fas fa-times"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+		{% if item is maaltijd %}
+			<div class="tijd">
+				{{ date(item.beginMoment) | date('H:i') }} - {{ date(item.eindMoment) | date('H:i') }}
+			</div>
+		{% elseif item is agendeerbaar and not item.heledag %}
+			<p>
+				{{ date(item.beginMoment) | date('H:i') }}
+				{% if date(item.eindMoment) | date('H:i') not in ["00:00", "23:59"] %}
+					- {{ date(item.eindMoment) | date('H:i') }}
+				{% endif %}
+			</p>
+		{% endif %}
+		{% if item.beschrijving %}
+			<p>{{ item.beschrijving }}</p>
+		{% endif %}
+		{% if item.locatie %}
+			<p>{{ ("[kaart h=200]" ~ item.locatie ~ "[/kaart]") | bbcode }}</p>
+		{% endif %}
+		{% if item is agendaitem and item.rechten_bekijken != 'P_LOGGED_IN' %}
+			<span class="text-muted small">Zichtbaar voor: {{ item.rechten_bekijken }}</span>
+		{% endif %}
+	</div>
 </div>

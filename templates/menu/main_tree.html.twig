@@ -1,23 +1,21 @@
 {% for item in parent.children %}
-    {% if item.tekst != 'Personal' %}
-        {% if item.hasChildren %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="menu-{{ item.item_id }}" role="button"
-                   data-bs-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    {{ item.tekst | raw }}
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="menu-{{ item.item_id }}">
-                    {{ include('menu/sub_tree.html.twig', {parent: item, sub: true}) }}
-                </ul>
-            </li>
-        {% else %}
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="{{ item.link }}" {% if item.link starts with 'http' %} target="_blank" {% endif %}>
-                    {{ item.tekst | raw }}
-                </a>
-            </li>
-        {% endif %}
-    {% endif %}
+	{% if item.tekst != 'Personal' %}
+		{% if item.hasChildren %}
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="menu-{{ item.item_id }}" role="button" data-bs-toggle="dropdown"
+					 aria-haspopup="true" aria-expanded="false">
+					{{ item.tekst | raw }}
+				</a>
+				<ul class="dropdown-menu" aria-labelledby="menu-{{ item.item_id }}">
+					{{ include('menu/sub_tree.html.twig', {parent: item, sub: true}) }}
+				</ul>
+			</li>
+		{% else %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{ item.link }}" {% if item.link starts with 'http' %} target="_blank" {% endif %}>
+					{{ item.tekst | raw }}
+				</a>
+			</li>
+		{% endif %}
+	{% endif %}
 {% endfor %}

@@ -13,23 +13,22 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\agenda\AgendaVerbergenRepository")
  * @ORM\Table("agenda_verbergen")
  */
-class AgendaVerbergen
-{
+class AgendaVerbergen {
 
-    /**
-     * Lidnummer
-     * Shared primary key
-     * @ORM\Id()
-     * @ORM\Column(type="uid")
-     * @var string
-     */
-    public $uid;
-    /**
-     * UUID of Agendeerbaar entity
-     * Shared primary key
-     * @ORM\Column(type="stringkey")
-     * @ORM\Id()
-     * @var string
-     */
-    public $refuuid;
+	/**
+	 * Lidnummer
+	 * Shared primary key
+	 * @ORM\Id()
+	 * @ORM\Column(type="uid")
+	 * @var string
+	 */
+	public $uid;
+	/**
+	 * UUID of Agendeerbaar entity
+	 * Shared primary key
+	 * @ORM\Column(type="stringkey")
+	 * @ORM\Id()
+	 * @var string
+	 */
+	public $refuuid;
 }

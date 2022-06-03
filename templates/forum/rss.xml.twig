@@ -8,37 +8,37 @@
 #}
 <?xml version = "1.0" encoding = "UTF-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
-    <channel>
-        <copyright>Copyright {{ date().format('Y') }} C.S.R. Delft</copyright>
-        <pubDate>{{ date() | rfc2822 }}</pubDate>
-        <lastBuildDate>{{ date() | rfc2822 }}</lastBuildDate>
-        <docs>{{ absolute_url('/') }}</docs>
-        <description>C.S.R. Delft: Vereniging van Christen-studenten te Delft.</description>
-        <image>
-            <link>{{ absolute_url('/') }}</link>
-            <title>C.S.R. Delft</title>
-            <url>{{ absolute_url(asset_url('images/beeldmerk.png')) }}</url>
-            <height>150</height>
-            <width>118</width>
-            <description>Beeldmerk der C.S.R. Delft</description>
-        </image>
-        <language>nl-nl</language>
-        <atom:link href="{{ privatelink }}" rel="self" type="application/rss+xml"/>
-        <link>{{ url('csrdelft_forum_forum') }}</link>
-        <title>C.S.R. Delft forum recent</title>
-        <managingEditor>PubCie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</managingEditor>
-        <webMaster>pubcie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</webMaster>
-        {% for draad in draden %}
-            <item>
-                <title>{{ draad.titel }}</title>
-                <link>{{ url('csrdelft_forum_reactie', {post_id: draad.laatste_post_id}) }}</link>
-                <description>{{ draad.laatstePostSamenvatting }}</description>
-                <pubDate>{{ draad.laatst_gewijzigd | rfc2822 }}</pubDate>
-                <dc:creator>{{ get_profiel(draad.laatste_wijziging_uid).naam('user') }}</dc:creator>
-                <category>{{ draad.deel.categorie.titel }} » {{ draad.deel.titel }}</category>
-                <comments>{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id}) }}</comments>
-                <guid isPermaLink="true">{{ url('csrdelft_forum_reactie', {post_id: draad.laatste_post_id, _fragment: draad.laatste_post_id}) }}</guid>
-            </item>
-        {% endfor %}
-    </channel>
+	<channel>
+		<copyright>Copyright {{ date().format('Y') }} C.S.R. Delft</copyright>
+		<pubDate>{{ date() | rfc2822 }}</pubDate>
+		<lastBuildDate>{{ date() | rfc2822 }}</lastBuildDate>
+		<docs>{{ absolute_url('/') }}</docs>
+		<description>C.S.R. Delft: Vereniging van Christen-studenten te Delft.</description>
+		<image>
+			<link>{{ absolute_url('/') }}</link>
+			<title>C.S.R. Delft</title>
+			<url>{{ absolute_url(asset_url('images/beeldmerk.png')) }}</url>
+			<height>150</height>
+			<width>118</width>
+			<description>Beeldmerk der C.S.R. Delft</description>
+		</image>
+		<language>nl-nl</language>
+		<atom:link href="{{ privatelink }}" rel="self" type="application/rss+xml"/>
+		<link>{{ url('csrdelft_forum_forum') }}</link>
+		<title>C.S.R. Delft forum recent</title>
+		<managingEditor>PubCie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</managingEditor>
+		<webMaster>pubcie@csrdelft.nl (Publiciteitscommissie der C.S.R.)</webMaster>
+		{% for draad in draden %}
+		<item>
+			<title>{{ draad.titel }}</title>
+			<link>{{ url('csrdelft_forum_reactie', {post_id: draad.laatste_post_id}) }}</link>
+			<description>{{ draad.laatstePostSamenvatting }}</description>
+			<pubDate>{{ draad.laatst_gewijzigd | rfc2822 }}</pubDate>
+			<dc:creator>{{ get_profiel(draad.laatste_wijziging_uid).naam('user') }}</dc:creator>
+			<category>{{ draad.deel.categorie.titel }} » {{ draad.deel.titel }}</category>
+			<comments>{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id}) }}</comments>
+			<guid isPermaLink="true">{{ url('csrdelft_forum_reactie', {post_id: draad.laatste_post_id, _fragment: draad.laatste_post_id}) }}</guid>
+		</item>
+		{% endfor %}
+	</channel>
 </rss>

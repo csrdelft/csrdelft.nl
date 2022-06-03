@@ -1,19 +1,19 @@
 {% for item in parent.children %}
-    {% if item.hasChildren %}
-        <li class="dropdown-submenu {% if dropleft is defined %} dropleft {% endif %}">
-            <a class="dropdown-item dropdown-toggle" href="#" id="menu-{{ item.item_id }}">
-                {{ item.tekst | raw }}
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="menu-{{ item.item_id }}">
-                {{ include('menu/sub_tree.html.twig', {parent: item}) }}
-            </ul>
-        </li>
-    {% else %}
-        <li>
-            <a class="dropdown-item"
-               href="{{ item.link }}" {% if item.link starts with 'http' %} target="_blank" {% endif %}>
-                {{ item.tekst | raw }}
-            </a>
-        </li>
-    {% endif %}
+	{% if item.hasChildren %}
+		<li class="dropdown-submenu {% if dropleft is defined %} dropleft {% endif %}">
+			<a class="dropdown-item dropdown-toggle" href="#" id="menu-{{ item.item_id }}">
+				{{ item.tekst | raw }}
+			</a>
+			<ul class="dropdown-menu" aria-labelledby="menu-{{ item.item_id }}">
+				{{ include('menu/sub_tree.html.twig', {parent: item}) }}
+			</ul>
+		</li>
+	{% else %}
+		<li>
+			<a class="dropdown-item"
+				 href="{{ item.link }}" {% if item.link starts with 'http' %} target="_blank" {% endif %}>
+				{{ item.tekst | raw }}
+			</a>
+		</li>
+	{% endif %}
 {% endfor %}

@@ -14,23 +14,22 @@ use CsrDelft\common\Enum;
  * @method static static BestuursCommissie
  * @method static static Extern
  */
-class CommissieSoort extends Enum
-{
-    /**
-     * Commissie soorten.
-     */
-    const Commissie = 'c';
-    const SjaarCie = 's';
-    const BestuursCommissie = 'b';
-    const Extern = 'e';
+class CommissieSoort extends Enum {
+	/**
+	 * Commissie soorten.
+	 */
+	const Commissie = 'c';
+	const SjaarCie = 's';
+	const BestuursCommissie = 'b';
+	const Extern = 'e';
 
-    /**
-     * @var string[]
-     */
-    protected static $mapChoiceToDescription = [
-        self::Commissie => 'Commissie',
-        self::SjaarCie => 'SjaarCie',
-        self::BestuursCommissie => 'Bestuurscommissie',
-        self::Extern => 'Externe commissie',
-    ];
+	/**
+	 * @var string[]
+	 */
+	protected static $mapChoiceToDescription = [
+		self::Commissie => 'Commissie',
+		self::SjaarCie => 'SjaarCie',
+		self::BestuursCommissie => 'Bestuurscommissie',
+		self::Extern => 'Externe commissie',
+	];
 }

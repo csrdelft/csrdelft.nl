@@ -11,23 +11,20 @@ use Symfony\Component\HttpFoundation\Response;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-abstract class JsonResponse extends Response
-{
+abstract class JsonResponse extends Response {
 
-    protected $model;
+	protected $model;
 
-    public function __construct($model, $code = 200)
-    {
-        parent::__construct('', $code);
+	public function __construct($model, $code = 200) {
+		parent::__construct('', $code);
 
-        $this->model = $model;
+		$this->model = $model;
 
-        $this->setContent(json_encode($this->getModel()));
-        $this->headers->set('Content-Type', 'application/json');
-    }
+		$this->setContent(json_encode($this->getModel()));
+		$this->headers->set('Content-Type', 'application/json');
+	}
 
-    public function getModel()
-    {
-        return $this->model;
-    }
+	public function getModel() {
+		return $this->model;
+	}
 }

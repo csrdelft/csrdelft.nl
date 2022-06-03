@@ -1,46 +1,45 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <h1>Commissievoorkeuren</h1>
+	<h1>Commissievoorkeuren</h1>
 
-    <p>Maak de Praeses blij en vul uw commissievoorkeuren in! Per commissie kunt u aangeven of u interesse heeft in het
-        doen van deze commissie. Uw keuze wordt automatisch opgeslagen.</p>
+	<p>Maak de Praeses blij en vul uw commissievoorkeuren in! Per commissie kunt u aangeven of u interesse heeft in het doen van deze commissie. Uw keuze wordt automatisch opgeslagen.</p>
 
-    {% set title = "" %}
-    {% for voorkeur in voorkeuren %}
-        {% if voorkeur.categorieNaam != title %}
-            {% set title = voorkeur.categorieNaam %}
-            <h2>{{ title }}</h2>
-        {% endif %}
-        <div class="mb-3">
-            <label class="col-md-3 col-form-label">{{ voorkeur.commissie.naam }}</label>
+	{% set title = "" %}
+	{% for voorkeur in voorkeuren %}
+		{% if voorkeur.categorieNaam != title %}
+		{% set title = voorkeur.categorieNaam %}
+		<h2>{{ title }}</h2>
+		{% endif %}
+		<div class="mb-3">
+			<label class="col-md-3 col-form-label">{{ voorkeur.commissie.naam }}</label>
 
-            {# - Verticaal op xs - #}
-            <div class="btn-group-vertical btn-group-toggle d-inline-flex d-sm-none" data-buttons="radio">
-                <a class="noanim instellingKnop btn btn-secondary {% if voorkeur.voorkeur == 1 %}active{% endif %}"
-                   href="{{ url('csrdelft_commissievoorkeuren_lidupdate', {cid: voorkeur.cid, uid: uid, waarde: 1}) }}">Nee</a>
-                <a class="noanim instellingKnop btn btn-secondary {% if voorkeur.voorkeur == 2 %}active{% endif %}"
-                   href="{{ url('csrdelft_commissievoorkeuren_lidupdate', {cid: voorkeur.cid, uid: uid, waarde: 2}) }}">Ja</a>
-                <a class="noanim instellingKnop btn btn-secondary {% if voorkeur.voorkeur == 3 %}active{% endif %}"
-                   href="{{ url('csrdelft_commissievoorkeuren_lidupdate', {cid: voorkeur.cid, uid: uid, waarde: 3}) }}">Misschien</a>
-            </div>
-            {# - Horizontaal op alle andere - #}
-            <div class="d-none d-sm-inline-flex btn-group btn-group-toggle"
-                 data-buttons="radio">
-                <a class="noanim instellingKnop btn btn-secondary {% if voorkeur.voorkeur == 1 %}active{% endif %}"
-                   href="{{ url('csrdelft_commissievoorkeuren_lidupdate', {cid: voorkeur.cid, uid: uid, waarde: 1}) }}">Nee</a>
-                <a class="noanim instellingKnop btn btn-secondary {% if voorkeur.voorkeur == 2 %}active{% endif %}"
-                   href="{{ url('csrdelft_commissievoorkeuren_lidupdate', {cid: voorkeur.cid, uid: uid, waarde: 2}) }}">Ja</a>
-                <a class="noanim instellingKnop btn btn-secondary {% if voorkeur.voorkeur == 3 %}active{% endif %}"
-                   href="{{ url('csrdelft_commissievoorkeuren_lidupdate', {cid: voorkeur.cid, uid: uid, waarde: 3}) }}">Misschien</a>
-            </div>
-        </div>
-    {% endfor %}
+			{# - Verticaal op xs - #}
+			<div class="btn-group-vertical btn-group-toggle d-inline-flex d-sm-none" data-buttons="radio">
+				<a class="noanim instellingKnop btn btn-secondary {% if voorkeur.voorkeur == 1 %}active{% endif %}"
+					 href="{{ url('csrdelft_commissievoorkeuren_lidupdate', {cid: voorkeur.cid, uid: uid, waarde: 1}) }}">Nee</a>
+				<a class="noanim instellingKnop btn btn-secondary {% if voorkeur.voorkeur == 2 %}active{% endif %}"
+					 href="{{ url('csrdelft_commissievoorkeuren_lidupdate', {cid: voorkeur.cid, uid: uid, waarde: 2}) }}">Ja</a>
+				<a class="noanim instellingKnop btn btn-secondary {% if voorkeur.voorkeur == 3 %}active{% endif %}"
+					 href="{{ url('csrdelft_commissievoorkeuren_lidupdate', {cid: voorkeur.cid, uid: uid, waarde: 3}) }}">Misschien</a>
+			</div>
+			{# - Horizontaal op alle andere - #}
+			<div class="d-none d-sm-inline-flex btn-group btn-group-toggle"
+					 data-buttons="radio">
+				<a class="noanim instellingKnop btn btn-secondary {% if voorkeur.voorkeur == 1 %}active{% endif %}"
+					 href="{{ url('csrdelft_commissievoorkeuren_lidupdate', {cid: voorkeur.cid, uid: uid, waarde: 1}) }}">Nee</a>
+				<a class="noanim instellingKnop btn btn-secondary {% if voorkeur.voorkeur == 2 %}active{% endif %}"
+					 href="{{ url('csrdelft_commissievoorkeuren_lidupdate', {cid: voorkeur.cid, uid: uid, waarde: 2}) }}">Ja</a>
+				<a class="noanim instellingKnop btn btn-secondary {% if voorkeur.voorkeur == 3 %}active{% endif %}"
+					 href="{{ url('csrdelft_commissievoorkeuren_lidupdate', {cid: voorkeur.cid, uid: uid, waarde: 3}) }}">Misschien</a>
+			</div>
+		</div>
+	{% endfor %}
 
-    {{ form_start(form) }}
-    {{ form_row(form.lidOpmerking) }}
-    {{ form_row(form.opslaan) }}
-    {{ form_end(form) }}
+	{{ form_start(form) }}
+	{{ form_row(form.lidOpmerking) }}
+	{{ form_row(form.opslaan) }}
+	{{ form_end(form) }}
 {% endblock %}
 
 {% block breadcrumbs %}

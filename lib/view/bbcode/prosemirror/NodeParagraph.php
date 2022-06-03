@@ -11,28 +11,28 @@ use CsrDelft\view\bbcode\tag\BbParagraph;
 
 class NodeParagraph implements Node
 {
-    public static function getBbTagType()
-    {
-        return BbParagraph::class;
-    }
+	public static function getBbTagType()
+	{
+		return BbParagraph::class;
+	}
 
-    public static function getNodeType()
-    {
-        return 'paragraph';
-    }
+	public static function getNodeType()
+	{
+		return 'paragraph';
+	}
 
-    public function getData(BbNode $node)
-    {
-        return [];
-    }
+	public function getData(BbNode $node)
+	{
+		return [];
+	}
 
-    public function getTagAttributes($node)
-    {
-        return [];
-    }
+	public function getTagAttributes($node)
+	{
+		return [];
+	}
 
-    public function selfClosing()
-    {
-        return false;
-    }
+	public function selfClosing()
+	{
+		return false;
+	}
 }

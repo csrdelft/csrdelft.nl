@@ -5,112 +5,103 @@
 {% block bodyArgs %}data-offset="5" data-spy="scroll" data-bs-target="#instellingen"{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col">
-            <h1>Lid instellingen</h1>
+	<div class="row">
+		<div class="col">
+			<h1>Lid instellingen</h1>
 
-            <p>
-                Deze instellingen zijn voor hoe de stek er voor jou uit ziet. Wees dus niet bang dat er iets kapot gaat
-                als je
-                deze instellingen veranderd. Als je de stek weer terug wil zetten naar de standaard instellingen,
-                gebruik dan de volgende knop.
-            </p>
+			<p>
+				Deze instellingen zijn voor hoe de stek er voor jou uit ziet. Wees dus niet bang dat er iets kapot gaat als je
+				deze instellingen veranderd. Als je de stek weer terug wil zetten naar de standaard instellingen, gebruik dan de volgende knop.
+			</p>
 
-            <a href="{{ url('csrdelft_lidinstellingen_resetuser') }}" class="btn btn-warning post redirect">Alle
-                instellingen terug zetten</a>
+			<a href="{{ url('csrdelft_lidinstellingen_resetuser') }}" class="btn btn-warning post redirect">Alle instellingen terug zetten</a>
 
-            <a href="{{ app.request.uri }}">
-                <div class="instellingen-bericht alert alert-warning d-none sticky-top">
-                    Er zijn instellingen veranderd, klik hier of ververs de pagina om de veranderingen te
-                    zien.
-                    {{ icon('page_error', 'page_refresh', 'Pagina verversen', 'float-end') }}
-                </div>
-            </a>
+			<a href="{{ app.request.uri }}">
+				<div class="instellingen-bericht alert alert-warning d-none sticky-top">
+					Er zijn instellingen veranderd, klik hier of ververs de pagina om de veranderingen te
+					zien.
+					{{ icon('page_error', 'page_refresh', 'Pagina verversen', 'float-end') }}
+				</div>
+			</a>
 
-            {% for module, moduleInstellingen in defaultInstellingen %}
-                <h2 id="instelling-{{ module }}">{{ module | title }}</h2>
+			{% for module, moduleInstellingen in defaultInstellingen %}
+				<h2 id="instelling-{{ module }}">{{ module | title }}</h2>
 
-                {% for id, instelling in moduleInstellingen %}
-                    {% set keuze = instellingen[module][id] is defined ? instellingen[module][id] : defaultInstellingen[module][id].default %}
-                    <div class="row instelling mb-3" id="instelling-{{ module }}-{{ id }}">
-                        <label class="col-md-3 col-form-label"
-                               for="inst_{{ module }}_{{ id }}">{{ instelling.titel | raw }}</label>
+				{% for id, instelling in moduleInstellingen %}
+					{% set keuze = instellingen[module][id] is defined ? instellingen[module][id] : defaultInstellingen[module][id].default %}
+					<div class="row instelling mb-3" id="instelling-{{ module }}-{{ id }}">
+						<label class="col-md-3 col-form-label" for="inst_{{ module }}_{{ id }}">{{ instelling.titel | raw }}</label>
 
-                        <div class="col-md-9">
-                            {% if instelling.type == 'Enumeration' %}
-                                {% if instelling.opties | length > 8 %}
-                                    <select name="{{ module }}_{{ id }}" id="inst_{{ module }}_{{ id }}"
-                                            class="form-select change-opslaan"
-                                            data-href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id}) }}">
-                                        {% for optieId, optie in instelling.opties %}
-                                            {% if optieId is numeric %}
-                                                <option value="{{ optie }}"
-                                                        {% if optie == keuze %}selected{% endif %}>{{ optie | title }}</option>
-                                            {% else %}
-                                                <option value="{{ optieId }}"
-                                                        {% if optie == keuze %}selected{% endif %}>{{ optie | title }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                {% else %}
-                                    {# - Verticaal op xs - #}
-                                    <div class="btn-group-vertical btn-group-toggle d-inline-flex d-sm-none"
-                                         data-buttons="radio">
-                                        {% for optieId, optie in instelling.opties %}
-                                            {% set optieId = optieId is numeric ? optie : optieId %}
-                                            <a class="noanim instellingKnop btn btn-secondary {% if optieId == keuze %}active{% endif %}"
-                                               href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id, waarde: optieId}) }}">{{ optie |title }}</a>
-                                        {% endfor %}
-                                    </div>
-                                    {# - Horizontaal op alle andere - #}
-                                    <div class="d-none d-sm-inline-flex btn-group btn-group-toggle"
-                                         data-buttons="radio">
-                                        {% for optieId, optie in instelling.opties %}
-                                            {% set optieId = optieId is numeric ? optie : optieId %}
-                                            <a class="noanim instellingKnop btn btn-secondary {% if optieId == keuze %}active{% endif %}"
-                                               href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id, waarde: optieId}) }}">{{ optie |title }}</a>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            {% elseif instelling.type == 'String' %}
-                                <input type="text" name="{{ module }}_{{ id }}" id="inst_{{ module }}_{{ id }}"
-                                       value="{{ keuze }}"
-                                       data-href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id}) }}"
-                                       class="form-control change-opslaan" minlength="{{ instelling.opties[0] }}"
-                                       maxlength="{{ instelling.opties[1] }}"/>
-                            {% elseif instelling.type == 'Integer' %}
-                                <input type="number" name="{{ module }}_{{ id }}" id="inst_{{ module }}_{{ id }}"
-                                       value="{{ keuze }}"
-                                       data-href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id}) }}"
-                                       class="form-control change-opslaan"
-                                       min="{{ instelling.opties[0] }}" max="{{ instelling.opties[1] }}"/>
-                            {% else %}
-                                <div class="bg-danger">Voor dit type bestaat geen optie.</div>
-                            {% endif %}
-                            <div class="form-text">
-                                {% set default = instelling.opties[instelling.default] is defined ? instelling.opties[instelling.default] : instelling.default %}
-                                {{ instelling.beschrijving | raw }} Standaard waarde: "{{ default | title }}".
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endfor %}
+						<div class="col-md-9">
+							{% if instelling.type == 'Enumeration' %}
+								{% if instelling.opties | length > 8 %}
+									<select name="{{ module }}_{{ id }}" id="inst_{{ module }}_{{ id }}"
+													class="form-select change-opslaan"
+													data-href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id}) }}">
+										{% for optieId, optie in instelling.opties %}
+											{% if optieId is numeric %}
+												<option value="{{ optie }}"
+																{% if optie == keuze %}selected{% endif %}>{{ optie | title }}</option>
+											{% else %}
+												<option value="{{ optieId }}"
+																{% if optie == keuze %}selected{% endif %}>{{ optie | title }}</option>
+											{% endif %}
+										{% endfor %}
+									</select>
+								{% else %}
+									{# - Verticaal op xs - #}
+									<div class="btn-group-vertical btn-group-toggle d-inline-flex d-sm-none" data-buttons="radio">
+										{% for optieId, optie in instelling.opties %}
+											{% set optieId = optieId is numeric ? optie : optieId %}
+											<a class="noanim instellingKnop btn btn-secondary {% if optieId == keuze %}active{% endif %}"
+												 href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id, waarde: optieId}) }}">{{ optie |title }}</a>
+										{% endfor %}
+									</div>
+									{# - Horizontaal op alle andere - #}
+									<div class="d-none d-sm-inline-flex btn-group btn-group-toggle"
+											 data-buttons="radio">
+										{% for optieId, optie in instelling.opties %}
+											{% set optieId = optieId is numeric ? optie : optieId %}
+											<a class="noanim instellingKnop btn btn-secondary {% if optieId == keuze %}active{% endif %}"
+												 href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id, waarde: optieId}) }}">{{ optie |title }}</a>
+										{% endfor %}
+									</div>
+								{% endif %}
+							{% elseif instelling.type == 'String' %}
+								<input type="text" name="{{ module }}_{{ id }}" id="inst_{{ module }}_{{ id }}" value="{{ keuze }}"
+											 data-href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id}) }}"
+											 class="form-control change-opslaan" minlength="{{ instelling.opties[0] }}"
+											 maxlength="{{ instelling.opties[1] }}"/>
+							{% elseif instelling.type == 'Integer' %}
+								<input type="number" name="{{ module }}_{{ id }}" id="inst_{{ module }}_{{ id }}" value="{{ keuze }}"
+											 data-href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id}) }}"
+											 class="form-control change-opslaan"
+											 min="{{ instelling.opties[0] }}" max="{{ instelling.opties[1] }}"/>
+							{% else %}
+								<div class="bg-danger">Voor dit type bestaat geen optie.</div>
+							{% endif %}
+							<div class="form-text">
+								{% set default = instelling.opties[instelling.default] is defined ? instelling.opties[instelling.default] : instelling.default %}
+								{{ instelling.beschrijving | raw }} Standaard waarde: "{{ default | title }}".
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			{% endfor %}
 
-            {{ rememberLoginTable | raw }}
+			{{ rememberLoginTable | raw }}
 
-            {{ authorizationCodeTable | raw }}
-        </div>
+			{{ authorizationCodeTable | raw }}
+		</div>
 
-        <div class="col-md-4 d-none d-lg-block">
-            <div id="instellingen" class="sticky-top list-group">
-                {% for module, moduleInstellingen in defaultInstellingen %}
-                    <a class="list-group-item list-group-item-action"
-                       href="#instelling-{{ module }}">{{ module | title }}</a>
-                {% endfor %}
+		<div class="col-md-4 d-none d-lg-block">
+			<div id="instellingen" class="sticky-top list-group">
+				{% for module, moduleInstellingen in defaultInstellingen %}
+					<a class="list-group-item list-group-item-action" href="#instelling-{{ module }}">{{ module | title }}</a>
+				{% endfor %}
 
-                <a class="list-group-item list-group-item-action" href="#table-automatisch-inloggen">Automatisch
-                    inloggen</a>
-            </div>
-        </div>
-    </div>
+				<a class="list-group-item list-group-item-action" href="#table-automatisch-inloggen">Automatisch inloggen</a>
+			</div>
+		</div>
+	</div>
 {% endblock %}

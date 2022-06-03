@@ -35,100 +35,95 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeRepetitiesRepository")
  * @ORM\Table("crv_repetities")
  */
-class CorveeRepetitie implements DisplayEntity
-{
-    /**
-     * @var integer
-     * @ORM\Column(type="integer")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
-    public $crv_repetitie_id;
-    /**
-     * @var integer|null
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    public $mlt_repetitie_id;
-    /**
-     * @var MaaltijdRepetitie|null
-     * @ORM\ManyToOne(targetEntity="CsrDelft\entity\maalcie\MaaltijdRepetitie")
-     * @ORM\JoinColumn(name="mlt_repetitie_id", referencedColumnName="mlt_repetitie_id", nullable=true)
-     */
-    public $maaltijdRepetitie;
-    /**
-     * 0: zondag
-     * 6: zaterdag
-     * @var int
-     * @ORM\Column(type="integer")
-     */
-    public $dag_vd_week;
-    /**
-     * @var integer
-     * @ORM\Column(type="integer")
-     */
-    public $periode_in_dagen;
-    /**
-     * @var integer
-     * @ORM\Column(type="integer")
-     */
-    public $functie_id;
-    /**
-     * @var integer
-     * @ORM\Column(type="integer")
-     */
-    public $standaard_punten;
-    /**
-     * @var integer|null
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    public $standaard_aantal;
-    /**
-     * @var boolean
-     * @ORM\Column(type="boolean")
-     */
-    public $voorkeurbaar;
+class CorveeRepetitie implements DisplayEntity {
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 */
+	public $crv_repetitie_id;
+	/**
+	 * @var integer|null
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	public $mlt_repetitie_id;
+	/**
+	 * @var MaaltijdRepetitie|null
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\maalcie\MaaltijdRepetitie")
+	 * @ORM\JoinColumn(name="mlt_repetitie_id", referencedColumnName="mlt_repetitie_id", nullable=true)
+	 */
+	public $maaltijdRepetitie;
+	/**
+	 * 0: zondag
+	 * 6: zaterdag
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
+	public $dag_vd_week;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $periode_in_dagen;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $functie_id;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $standaard_punten;
+	/**
+	 * @var integer|null
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	public $standaard_aantal;
+	/**
+	 * @var boolean
+	 * @ORM\Column(type="boolean")
+	 */
+	public $voorkeurbaar;
 
-    /**
-     * @var CorveeFunctie
-     * @ORM\ManyToOne(targetEntity="CorveeFunctie")
-     * @ORM\JoinColumn(name="functie_id", referencedColumnName="functie_id")
-     */
-    public $corveeFunctie;
+	/**
+	 * @var CorveeFunctie
+	 * @ORM\ManyToOne(targetEntity="CorveeFunctie")
+	 * @ORM\JoinColumn(name="functie_id", referencedColumnName="functie_id")
+	 */
+	public $corveeFunctie;
 
-    public function getDagVanDeWeekText()
-    {
-        return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
-    }
+	public function getDagVanDeWeekText() {
+		return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
+	}
 
-    public function getPeriodeInDagenText()
-    {
-        switch ($this->periode_in_dagen) {
-            case 0:
-                return '-';
-            case 1:
-                return 'elke dag';
-            case 7:
-                return 'elke week';
-            default:
-                if ($this->periode_in_dagen % 7 === 0) {
-                    return 'elke ' . ($this->periode_in_dagen / 7) . ' weken';
-                } else {
-                    return 'elke ' . $this->periode_in_dagen . ' dagen';
-                }
-        }
-    }
+	public function getPeriodeInDagenText() {
+		switch ($this->periode_in_dagen) {
+			case 0:
+				return '-';
+			case 1:
+				return 'elke dag';
+			case 7:
+				return 'elke week';
+			default:
+				if ($this->periode_in_dagen % 7 === 0) {
+					return 'elke ' . ($this->periode_in_dagen / 7) . ' weken';
+				} else {
+					return 'elke ' . $this->periode_in_dagen . ' dagen';
+				}
+		}
+	}
 
-    public function getId()
-    {
-        return $this->crv_repetitie_id;
-    }
+	public function getId() {
+		return $this->crv_repetitie_id;
+	}
 
-    public function getWeergave(): string
-    {
-        if ($this->corveeFunctie) {
-            return $this->corveeFunctie->naam . ' ' . $this->getDagVanDeWeekText() . ' ' . $this->getPeriodeInDagenText();
-        } else {
-            return $this->getDagVanDeWeekText() . ' ' . $this->getPeriodeInDagenText();
-        }
-    }
+	public function getWeergave(): string {
+		if ($this->corveeFunctie) {
+			return $this->corveeFunctie->naam . ' ' . $this->getDagVanDeWeekText() . ' ' . $this->getPeriodeInDagenText();
+		} else {
+			return $this->getDagVanDeWeekText() . ' ' . $this->getPeriodeInDagenText();
+		}
+	}
 }

@@ -1,99 +1,99 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="msapplication-tap-highlight" content="no"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-    <meta name="robots" content="index, follow"/>
-    <meta name="author" content="PubCie C.S.R. Delft"/>
-    <meta name="description" content="{{ instelling('stek', 'beschrijving') }}">
-    <meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE"/>
-    <meta name="apple-itunes-app" content="app-id=1112148892, app-argument={{ app.request.uri }}">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="{{ app.request.uri }}"/>
-    <meta property="og:title" content="C.S.R. Delft | {{ block('titel') }}"/>
-    <meta property="og:locale" content="nl_nl"/>
-    <meta property="og:image" content="{{ absolute_url('/images/beeldmerk.png') }}"/>
-    <meta property="og:description" content="{{ instelling('stek', 'beschrijving') }}"/>
-    {{ csrfMetaTag() }}
-    <meta property="X-CSR-LOGGEDIN" content="{{ mag('P_LOGGED_IN') ? 'true' : 'false' }}"/>
-    <title>C.S.R. Delft - {% block titel %}{% endblock %}</title>
-    <link rel="manifest" href="{{ absolute_url('/manifest.json') }}">
-    <link rel="shortcut icon" href="{{ absolute_url('/images/favicon.ico') }}"/>
-    <meta name="theme-color" content="#122A4D">
-    <meta name="mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-title" content="C.S.R."/>
-    <link rel="apple-touch-icon" sizes="512x512" href="{{ absolute_url('/images/beeldmerk-512x512.png') }}"/>
-    <link rel="apple-touch-icon" sizes="192x192" href="{{ absolute_url('/images/beeldmerk-192x192.png') }}"/>
-    <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{{ url('csrdelft_forum_rss') }}"/>
-    {{ css_asset('common') }}
-    {% for sheet in user_modules() %}
-        {{ css_asset(sheet) }}
-    {% endfor %}
-    {% if lid_instelling('layout', 'automatischDonker') == 'ja' %}
-        {{ css_asset('thema-donker', 'screen and (prefers-color-scheme: dark') }}
-    {% endif %}
-    <script>
-        {# Configuratie voor Sentry, zie sentry.ts #}
-        APP_ENV = "{{ app.environment }}";
-        SENTRY_DSN_JS = "{{ sentry_dsn }}";
-        USER = "{{ app.user.uid }}";
-    </script>
-    {{ js_asset('sentry') }}
-    {% block styles %}{% endblock %}
-    {% block scripts %}{% endblock %}
-    {% block head %}{% endblock %}
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="msapplication-tap-highlight" content="no"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+	<meta name="robots" content="index, follow"/>
+	<meta name="author" content="PubCie C.S.R. Delft"/>
+	<meta name="description" content="{{ instelling('stek', 'beschrijving') }}">
+	<meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE"/>
+	<meta name="apple-itunes-app" content="app-id=1112148892, app-argument={{ app.request.uri }}">
+	<meta property="og:type" content="article">
+	<meta property="og:url" content="{{ app.request.uri }}"/>
+	<meta property="og:title" content="C.S.R. Delft | {{ block('titel') }}"/>
+	<meta property="og:locale" content="nl_nl"/>
+	<meta property="og:image" content="{{ absolute_url('/images/beeldmerk.png') }}"/>
+	<meta property="og:description" content="{{ instelling('stek', 'beschrijving') }}"/>
+	{{ csrfMetaTag() }}
+	<meta property="X-CSR-LOGGEDIN" content="{{ mag('P_LOGGED_IN') ? 'true' : 'false' }}"/>
+	<title>C.S.R. Delft - {% block titel %}{% endblock %}</title>
+	<link rel="manifest" href="{{ absolute_url('/manifest.json') }}">
+	<link rel="shortcut icon" href="{{ absolute_url('/images/favicon.ico') }}"/>
+	<meta name="theme-color" content="#122A4D">
+	<meta name="mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-title" content="C.S.R." />
+	<link rel="apple-touch-icon" sizes="512x512" href="{{ absolute_url('/images/beeldmerk-512x512.png') }}" />
+	<link rel="apple-touch-icon" sizes="192x192" href="{{ absolute_url('/images/beeldmerk-192x192.png') }}" />
+	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{{ url('csrdelft_forum_rss') }}"/>
+	{{ css_asset('common') }}
+	{% for sheet in user_modules() %}
+		{{ css_asset(sheet) }}
+	{% endfor %}
+	{% if lid_instelling('layout', 'automatischDonker') == 'ja' %}
+		{{ css_asset('thema-donker', 'screen and (prefers-color-scheme: dark') }}
+	{% endif %}
+	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+	{{ js_asset('sentry') }}
+	{% block styles %}{% endblock %}
+	{% block scripts %}{% endblock %}
+	{% block head %}{% endblock %}
 </head>
 <body
-        class="{% block bodyClass %}{% endblock %}" {% block bodyArgs %}{% endblock %}>
+	class="{% block bodyClass %}{% endblock %}" {% block bodyArgs %}{% endblock %}>
 {{ js_asset('app') }}
 {% block body %}
-    {{ include('menu/main.html.twig', {root: get_menu('main'), personal: get_menu('Personal'), favorieten: get_menu(app.user.uid)}) }}
-    <main class="container-fluid p-3 min-vh-100">
-        {% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == "/" %}
-            <div class="cd-page-content container px-0 ratio ratio-3x2">
-                {{ getMelding() }}
-                <div class="grid-container p-0 p-md-3">
-                    <div class="cell cell-posters ratio ratio-3x2">{{ get_posters() }}</div>
-                    <div class="cell cell-forum cell-overflow">{{ get_forum() }}</div>
-                    <div class="cell cell-agenda cell-overflow">{{ get_agenda() }}</div>
-                    <div class="cell cell-verjaardagen cell-overflow">{{ get_verjaardagen() }}</div>
-                    <div class="cell cell-foto-albums">{{ get_fotoalbum() }}</div>
-                    <div class="cell cell-overig">{{ get_overig() }}</div>
-                    <div class="cell cell-civi-saldo position-relative">{{ get_civisaldo() }}</div>
-                    <div class="cell cell-is-het-al">{{ get_ishetal() }}</div>
-                </div>
-            </div>
-            <div class="container p-0 p-md-3 mt-5">
-                {# TODO: advertenties #}
-                {#            <div class="cell cell-advertenties">{{> grid-cell-advertenties}}</div> #}
-            </div>
-        {% else %}
-            <div class="container">
-                <nav class="mt-3" aria-label="breadcrumb">
-                    {% block breadcrumbs %}
-                        {{ csr_breadcrumbs(get_breadcrumbs(app.request.pathInfo)) }}
-                    {% endblock %}
-                </nav>
-            </div>
-            <div class="cd-page-content container rounded p-3">
-                {{ getMelding() }}
-                {% block content %}{% endblock %}
-            </div>
-        {% endif %}
-    </main>
-    <div id="modal-background" {% if block('modal') is defined %} style="display: block;" {% endif %}></div>
-    {% if block('modal') is defined %}
-        {{ block('modal') | raw }}
-    {% elseif not toestemming_gegeven() %}
-        {{ toestemming_form() | raw }}
-    {% else %}
-        <div id="modal" tabindex="-1"></div>
-    {% endif %}
-    {% include 'effect/effecten.html.twig' %}
+	{{ include('menu/main.html.twig', {root: get_menu('main'), personal: get_menu('Personal'), favorieten: get_menu(app.user.uid)}) }}
+	<main class="container-fluid p-3 min-vh-100">
+		{% if path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == "/" %}
+			<div class="cd-page-content container px-0 ratio ratio-3x2">
+				{{ getMelding() }}
+				<div class="grid-container p-0 p-md-3">
+					<div class="cell cell-posters ratio ratio-3x2">{{ get_posters() }}</div>
+					<div class="cell cell-forum cell-overflow">{{ get_forum() }}</div>
+					<div class="cell cell-agenda cell-overflow">{{ get_agenda() }}</div>
+					<div class="cell cell-verjaardagen cell-overflow">{{ get_verjaardagen() }}</div>
+					<div class="cell cell-foto-albums">{{  get_fotoalbum() }}</div>
+					<div class="cell cell-overig">{{ get_overig() }}</div>
+					<div class="cell cell-civi-saldo position-relative">{{ get_civisaldo() }}</div>
+					<div class="cell cell-is-het-al">{{ get_ishetal() }}</div>
+				</div>
+			</div>
+			<div class="container p-0 p-md-3 mt-5">
+			{# TODO: advertenties #}
+	{#			<div class="cell cell-advertenties">{{> grid-cell-advertenties}}</div>#}
+			</div>
+		{% else %}
+		<div class="container">
+			<nav class="mt-3" aria-label="breadcrumb">
+				{% block breadcrumbs %}
+					{{ csr_breadcrumbs(get_breadcrumbs(app.request.pathInfo)) }}
+				{% endblock %}
+			</nav>
+		</div>
+		<div class="cd-page-content container rounded p-3">
+			{{ getMelding() }}
+			{% block content %}{% endblock %}
+		</div>
+		{% endif %}
+	</main>
+	<div id="modal-background" {% if block('modal') is defined %} style="display: block;" {% endif %}></div>
+	{% if block('modal') is defined %}
+		{{ block('modal') | raw }}
+	{% elseif not toestemming_gegeven() %}
+		{{ toestemming_form() | raw }}
+	{% else %}
+		<div id="modal" tabindex="-1"></div>
+	{% endif %}
+	{% include 'effect/effecten.html.twig' %}
 {% endblock %}
 </body>
 </html>

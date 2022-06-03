@@ -1,13 +1,11 @@
 {% if activiteiten|length %}
-    <div class="my-3 p-3 maaltijdketzer-wrapper rounded shadow-sm">
-        {% for activiteit in activiteiten %}
-            {% include 'aanmelder/bb_activiteit.html.twig' with { border: (not loop.last) or toonMeer } %}
-        {% endfor %}
+	<div class="my-3 p-3 maaltijdketzer-wrapper rounded shadow-sm">
+		{% for activiteit in activiteiten %}
+			{% include 'aanmelder/bb_activiteit.html.twig' with { border: (not loop.last) or toonMeer } %}
+		{% endfor %}
 
-        {% if toonMeer %}
-            <div class="d-block mt-3 text-end"><a
-                        href="{{ url('csrdelft_aanmelder_mijnactiviteiten', { reeks: reeks.id }) }}">Alle {{ reeks.naam|lower }}</a>
-            </div>
-        {% endif %}
-    </div>
+		{% if toonMeer %}
+			<div class="d-block mt-3 text-end"><a href="{{ url('csrdelft_aanmelder_mijnactiviteiten', { reeks: reeks.id }) }}">Alle {{ reeks.naam|lower }}</a></div>
+		{% endif %}
+	</div>
 {% endif %}

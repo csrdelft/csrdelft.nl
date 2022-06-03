@@ -1,26 +1,26 @@
 <tr id="repetitie-row-{{ repetitie.crv_repetitie_id }}">
-    <td>
-        <a href="{{ url('csrdelft_maalcie_corveerepetities_bewerk', {crv_repetitie_id: repetitie.crv_repetitie_id}) }}"
-           title="Corveerepetitie wijzigen" class="btn post popup">{{ icon("pencil") }}</a>
-        <a href="{{ url('csrdelft_maalcie_beheerfuncties_bewerken', {functie_id: repetitie.functie_id}) }}"
-           title="Wijzig onderliggende functie" class="btn popup">{{ icon("cog_edit") }}</a>
-        {% if maaltijdrepetitie is none and repetitie.mlt_repetitie_id %}
-            <a href="{{ url('csrdelft_maalcie_corveerepetities_maaltijd', {mlt_repetitie_id: repetitie.mlt_repetitie_id}) }}"
-               title="Corveebeheer maaltijdrepetitie" class="btn">{{ icon("calendar_link") }}</a>
-        {% endif %}
-    </td>
-    <td>{{ repetitie.corveeFunctie.naam }}</td>
-    <td>{{ repetitie.dagVanDeWeekText }}</td>
-    <td>{{ repetitie.periodeInDagenText }}</td>
-    <td>
-        {% if repetitie.voorkeurbaar %}
-            {{ icon("tick", null, "Voorkeurbaar") }}
-        {% endif %}
-    </td>
-    <td>{{ repetitie.standaard_punten }}</td>
-    <td>{{ repetitie.standaard_aantal }}</td>
-    <td class="col-del">
-        <a href="{{ url('csrdelft_maalcie_corveerepetities_verwijder', {crv_repetitie_id: repetitie.crv_repetitie_id}) }}"
-           title="Corveerepetitie definitief verwijderen" class="btn post confirm">{{ icon("cross") }}</a>
-    </td>
+	<td>
+		<a href="{{ url('csrdelft_maalcie_corveerepetities_bewerk', {crv_repetitie_id: repetitie.crv_repetitie_id}) }}"
+			 title="Corveerepetitie wijzigen" class="btn post popup">{{ icon("pencil") }}</a>
+		<a href="{{ url('csrdelft_maalcie_beheerfuncties_bewerken', {functie_id: repetitie.functie_id}) }}"
+			 title="Wijzig onderliggende functie" class="btn popup">{{ icon("cog_edit") }}</a>
+		{% if maaltijdrepetitie is none and repetitie.mlt_repetitie_id %}
+			<a href="{{ url('csrdelft_maalcie_corveerepetities_maaltijd', {mlt_repetitie_id: repetitie.mlt_repetitie_id}) }}"
+				 title="Corveebeheer maaltijdrepetitie" class="btn">{{ icon("calendar_link") }}</a>
+		{% endif %}
+	</td>
+	<td>{{ repetitie.corveeFunctie.naam }}</td>
+	<td>{{ repetitie.dagVanDeWeekText }}</td>
+	<td>{{ repetitie.periodeInDagenText }}</td>
+	<td>
+		{% if repetitie.voorkeurbaar %}
+			{{ icon("tick", null, "Voorkeurbaar") }}
+		{% endif %}
+	</td>
+	<td>{{ repetitie.standaard_punten }}</td>
+	<td>{{ repetitie.standaard_aantal }}</td>
+	<td class="col-del">
+		<a href="{{ url('csrdelft_maalcie_corveerepetities_verwijder', {crv_repetitie_id: repetitie.crv_repetitie_id}) }}"
+			 title="Corveerepetitie definitief verwijderen" class="btn post confirm">{{ icon("cross") }}</a>
+	</td>
 </tr>

@@ -10,27 +10,27 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class WoordVanDeDag
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+	/**
+	 * @ORM\Id
+	 * @ORM\GeneratedValue
+	 * @ORM\Column(type="integer")
+	 */
+	private $id;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    public $woord;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $woord;
 
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+	public function getId(): ?int
+	{
+		return $this->id;
+	}
 
-    public function getWoord(): ?string
-    {
-        return $this->woord;
-    }
+	public function getWoord(): ?string
+	{
+		return $this->woord;
+	}
 }

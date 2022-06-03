@@ -1,6 +1,6 @@
 <tr id="maalcie-melding">
-    <td>{{ getMelding() }}</td>
+	<td>{{ getMelding() }}</td>
 </tr>
 {% for taak in taken %}
-    {{ include('maaltijden/corveetaak/beheer_taak_lijst.html.twig', {show: true, prullenbak: false, taak: taak}) }}
+	{{ include('maaltijden/corveetaak/beheer_taak_lijst.html.twig', {show: true, prullenbak: false, taak: taak}) }}
 {% endfor %}

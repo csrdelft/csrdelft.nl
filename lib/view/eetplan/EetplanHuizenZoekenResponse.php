@@ -10,20 +10,18 @@ use CsrDelft\view\JsonLijstResponse;
  *
  * Class EetplanHuizenResponse
  */
-class EetplanHuizenZoekenResponse extends JsonLijstResponse
-{
+class EetplanHuizenZoekenResponse extends JsonLijstResponse {
 
-    /**
-     * @param Woonoord $entity
-     *
-     */
-    public function renderElement($entity)
-    {
-        return array(
-            'url' => $entity->getUrl(),
-            'label' => $entity->id,
-            'value' => $entity->naam,
-            'id' => $entity->id,
-        );
-    }
+	/**
+	 * @param Woonoord $entity
+	 *
+	 */
+	public function renderElement($entity) {
+		return array(
+			'url' => $entity->getUrl(),
+			'label' => $entity->id,
+			'value' => $entity->naam,
+			'id' => $entity->id,
+		);
+	}
 }

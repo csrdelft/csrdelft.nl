@@ -1,16 +1,16 @@
 <tr id="vrijstelling-row-{{ vrijstelling.uid }}">
-    <td>
-        <a href="{{ url('csrdelft_maalcie_beheervrijstellingen_bewerk', {uid: vrijstelling.uid}) }}"
-           title="Vrijstelling wijzigen" class="btn post popup">{{ icon("pencil") }}</a>
-    </td>
-    <td>{{ vrijstelling.profiel.link(instelling('corvee', 'weergave_ledennamen_beheer')) | raw }}</td>
-    <td>{{ vrijstelling.begin_datum | date_format }}</td>
-    <td>{{ vrijstelling.eind_datum | date_format }}</td>
-    <td>{{ vrijstelling.percentage }}%</td>
-    <td>{{ vrijstelling.punten }}</td>
-    <td class="col-del">
-        <a href="{{ url('csrdelft_maalcie_beheervrijstellingen_verwijder', {uid: vrijstelling.uid}) }}"
-           title="Vrijstelling definitief verwijderen"
-           class="btn post confirm">{{ icon("cross") }}</a>
-    </td>
+	<td>
+		<a href="{{ url('csrdelft_maalcie_beheervrijstellingen_bewerk', {uid: vrijstelling.uid}) }}"
+			 title="Vrijstelling wijzigen" class="btn post popup">{{ icon("pencil") }}</a>
+	</td>
+	<td>{{ vrijstelling.profiel.link(instelling('corvee', 'weergave_ledennamen_beheer')) | raw }}</td>
+	<td>{{ vrijstelling.begin_datum | date_format }}</td>
+	<td>{{ vrijstelling.eind_datum | date_format }}</td>
+	<td>{{ vrijstelling.percentage }}%</td>
+	<td>{{ vrijstelling.punten }}</td>
+	<td class="col-del">
+		<a href="{{ url('csrdelft_maalcie_beheervrijstellingen_verwijder', {uid: vrijstelling.uid}) }}"
+			 title="Vrijstelling definitief verwijderen"
+			 class="btn post confirm">{{ icon("cross") }}</a>
+	</td>
 </tr>

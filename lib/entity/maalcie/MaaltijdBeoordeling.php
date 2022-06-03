@@ -13,37 +13,36 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository")
  * @ORM\Table("mlt_beoordelingen")
  */
-class MaaltijdBeoordeling
-{
+class MaaltijdBeoordeling {
 
-    /**
-     * Shared primary key
-     * Foreign key
-     * @var int
-     * @ORM\Column(type="integer")
-     * @ORM\Id()
-     */
-    public $maaltijd_id;
-    /**
-     * Lidnummer
-     * Shared primary key
-     * Foreign key
-     * @var string
-     * @ORM\Column(type="uid")
-     * @ORM\Id()
-     */
-    public $uid;
-    /**
-     * Kwantiteit beoordeling
-     * @var float
-     * @ORM\Column(type="float", nullable=true)
-     */
-    public $kwantiteit;
-    /**
-     * Kwaliteit beoordeling
-     * @var float
-     * @ORM\Column(type="float", nullable=true)
-     */
-    public $kwaliteit;
+	/**
+	 * Shared primary key
+	 * Foreign key
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 */
+	public $maaltijd_id;
+	/**
+	 * Lidnummer
+	 * Shared primary key
+	 * Foreign key
+	 * @var string
+	 * @ORM\Column(type="uid")
+	 * @ORM\Id()
+	 */
+	public $uid;
+	/**
+	 * Kwantiteit beoordeling
+	 * @var float
+	 * @ORM\Column(type="float", nullable=true)
+	 */
+	public $kwantiteit;
+	/**
+	 * Kwaliteit beoordeling
+	 * @var float
+	 * @ORM\Column(type="float", nullable=true)
+	 */
+	public $kwaliteit;
 
 }

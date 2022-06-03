@@ -3,345 +3,339 @@
 {% block titel %}Bibliotheek - Boek: {{ boek.titel }}{% endblock %}
 
 {% block content %}
-    <div class="foutje">{{ getMelding() }}</div>
-    <ul class="horizontal">
-        <li>
-            <a href="{{ url('csrdelft_bibliotheek_catalogustonen') }}" title="Naar de catalogus">Catalogus</a>
-        </li>
-        <li>
-            <a href="{{ url('csrdelft_bibliotheek_wenslijst') }}" title="Wenslijst van bibliothecaris">Wenslijst</a>
-        </li>
-        <li>
-            <a href="{{ url('csrdelft_bibliotheek_rubrieken') }}" title="Rubriekenoverzicht">Rubrieken</a>
-        </li>
-    </ul>
+	<div class="foutje">{{ getMelding() }}</div>
+	<ul class="horizontal">
+		<li>
+			<a href="{{ url('csrdelft_bibliotheek_catalogustonen') }}" title="Naar de catalogus">Catalogus</a>
+		</li>
+		<li>
+			<a href="{{ url('csrdelft_bibliotheek_wenslijst') }}" title="Wenslijst van bibliothecaris">Wenslijst</a>
+		</li>
+		<li>
+			<a href="{{ url('csrdelft_bibliotheek_rubrieken') }}" title="Rubriekenoverzicht">Rubrieken</a>
+		</li>
+	</ul>
 
 
-    {# nieuw boek formulier #}
-    {% if boek.id is none %}
-        <div class="col-md-8">
-            <h1>Nieuw boek toevoegen</h1>
-            <p>Zoek via het Google Books-zoekveld je boek en kies een van de suggesties om de boekgegevens hieronder in
-                te
-                vullen.</p>
-            <div class="boekzoeker mb-3 row"
-                 title="Geef titel, auteur, isbn of een ander kenmerk van het boek. Minstens 7 tekens, na 1 seconde verschijnen suggesties.">
-                <div class="col-3 col-form-label">
-                    <label for="boekzoeker"><img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"
-                                                 alt="Zoeken op Google Books"/>
-                        Google Books:
-                    </label>
-                </div>
-                <div class="col-9">
-                    <input type="text" class="form-control"
-                           placeholder="Zoek en kies een suggestie om de velden te vullen"
-                           id="boekzoeker">
-                </div>
-            </div>
+	{# nieuw boek formulier #}
+	{% if boek.id is none %}
+		<div class="col-md-8">
+			<h1>Nieuw boek toevoegen</h1>
+			<p>Zoek via het Google Books-zoekveld je boek en kies een van de suggesties om de boekgegevens hieronder in te
+				vullen.</p>
+			<div class="boekzoeker mb-3 row"
+					 title="Geef titel, auteur, isbn of een ander kenmerk van het boek. Minstens 7 tekens, na 1 seconde verschijnen suggesties.">
+				<div class="col-3 col-form-label">
+					<label for="boekzoeker"><img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"
+																			 alt="Zoeken op Google Books"/>
+						Google Books:
+					</label>
+				</div>
+				<div class="col-9">
+					<input type="text" class="form-control" placeholder="Zoek en kies een suggestie om de velden te vullen"
+								 id="boekzoeker">
+				</div>
+			</div>
 
-            {{ boekFormulier.view | raw }}
-        </div>
-    {% else %}
-        <div class="row">
-            {# weergave bestaand boek, soms met bewerkbare velden #}
-            <div class="boek col-md-8" id="{{ boek.id }}">
+			{{ boekFormulier.view | raw }}
+		</div>
+	{% else %}
+		<div class="row">
+			{# weergave bestaand boek, soms met bewerkbare velden #}
+			<div class="boek col-md-8" id="{{ boek.id }}">
 
-                {% if boek.id is none or boek.magBewerken %}
-                    {{ boekFormulier.view | raw }}
-                {% else %}
-                    <div class="row">
-                        <div class="col-3 col-form-label">Boek</div>
-                        <div class="col-9">{{ boek.titel }}</div>
-                    </div>
-                    {% if boek.auteur is not empty %}
-                        <div class="row">
-                            <div class="col-3 col-form-label">Auteur</div>
-                            <div class="col-9">{{ boek.auteur }}</div>
-                        </div>
-                    {% endif %}
-                    {% if boek.paginas is not none %}
-                        <div class="row">
-                            <div class="col-3 col-form-label">Pagina's</div>
-                            <div class="col-9">{{ boek.paginas }}</div>
-                        </div>
-                    {% endif %}
-                    {% if boek.taal is not none %}
-                        <div class="row">
-                            <div class="col-3 col-form-label">Taal</div>
-                            <div class="col-9">{{ boek.taal }}</div>
-                        </div>
-                    {% endif %}
-                    {% if boek.isbn is not none %}
-                        <div class="row">
-                            <div class="col-3 col-form-label">ISBN</div>
-                            <div class="col-9">{{ boek.isbn }}</div>
-                        </div>
-                    {% endif %}
-                    {% if boek.uitgavejaar is not none %}
-                        <div class="row">
-                            <div class="col-3 col-form-label">Uitgeverij</div>
-                            <div class="col-9">{{ boek.uitgeverij }}</div>
-                        </div>
-                    {% endif %}
-                    {% if boek.uitgavejaar is not none %}
-                        <div class="row">
-                            <div class="col-3 col-form-label">Uitgavejaar</div>
-                            <div class="col-9">{{ boek.uitgavejaar }}</div>
-                        </div>
-                    {% endif %}
-                    <div class="row">
-                        <div class="col-3 col-form-label">Rubriek</div>
-                        <div class="col-9">{{ boek.rubriek.__toString }}</div>
-                    </div>
-                    {% if boek.code is not none and boek.biebBoek %}
-                        <div class="row">
-                            <div class="col-3 col-form-label">Code</div>
-                            <div class="col-9">{{ boek.code }}</div>
-                        </div>
-                    {% endif %}
-                {% endif %}
+				{% if boek.id is none or boek.magBewerken %}
+					{{ boekFormulier.view | raw }}
+				{% else %}
+					<div class="row">
+						<div class="col-3 col-form-label">Boek</div>
+						<div class="col-9">{{ boek.titel }}</div>
+					</div>
+					{% if boek.auteur is not empty %}
+						<div class="row">
+							<div class="col-3 col-form-label">Auteur</div>
+							<div class="col-9">{{ boek.auteur }}</div>
+						</div>
+					{% endif %}
+					{% if boek.paginas is not none %}
+						<div class="row">
+							<div class="col-3 col-form-label">Pagina's</div>
+							<div class="col-9">{{ boek.paginas }}</div>
+						</div>
+					{% endif %}
+					{% if boek.taal is not none %}
+						<div class="row">
+							<div class="col-3 col-form-label">Taal</div>
+							<div class="col-9">{{ boek.taal }}</div>
+						</div>
+					{% endif %}
+					{% if boek.isbn is not none %}
+						<div class="row">
+							<div class="col-3 col-form-label">ISBN</div>
+							<div class="col-9">{{ boek.isbn }}</div>
+						</div>
+					{% endif %}
+					{% if boek.uitgavejaar is not none %}
+						<div class="row">
+							<div class="col-3 col-form-label">Uitgeverij</div>
+							<div class="col-9">{{ boek.uitgeverij }}</div>
+						</div>
+					{% endif %}
+					{% if boek.uitgavejaar is not none %}
+						<div class="row">
+							<div class="col-3 col-form-label">Uitgavejaar</div>
+							<div class="col-9">{{ boek.uitgavejaar }}</div>
+						</div>
+					{% endif %}
+					<div class="row">
+						<div class="col-3 col-form-label">Rubriek</div>
+						<div class="col-9">{{ boek.rubriek.__toString }}</div>
+					</div>
+					{% if boek.code is not none and boek.biebBoek %}
+						<div class="row">
+							<div class="col-3 col-form-label">Code</div>
+							<div class="col-9">{{ boek.code }}</div>
+						</div>
+					{% endif %}
+				{% endif %}
 
-                <div class="clear-left"></div>
+				<div class="clear-left"></div>
 
-            </div>
+			</div>
 
-            {% if boek.magBekijken %}
-                {# blok rechts met knopjes #}
-                <ul class="col-md-4 list-group">
-                    <li class="list-group-item"><a href="{{ url('csrdelft_bibliotheek_boek') }}">{{ icon("book_add") }}
-                            Nieuw
-                            boek</a>
-                    </li>
-                    {% if boek.id is not none %}
-                        {% if boek.magVerwijderen %}
-                            <li class="list-group-item">
-                                <a class="post verwijderen"
-                                   href="{{ url('csrdelft_bibliotheek_verwijderboek', {boek: boek.id}) }}"
-                                   title="Boek verwijderen"
-                                   onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">
-                                    {{ icon("verwijderen") }} Verwijderen
-                                </a>
-                            </li>
-                        {% endif %}
-                        <li class="list-group-item">
-                            <a class="post ReloadPage"
-                               href="{{ url('csrdelft_bibliotheek_addexemplaar', {boek: boek.id}) }}"
-                               title="Ik bezit dit boek ook"
-                               onclick="return confirm('U bezit zelf een exemplaar van dit boek? Door het toevoegen aan de catalogus geef je aan dat anderen dit boek kunnen lenen.')">
-                                {{ icon("user_add") }} Ik bezit dit boek
-                            </a>
-                        </li>
-                        {% if mag('P_BIEB_MOD') %}
-                            <li class="list-group-item">
-                                <a class="post ReloadPage"
-                                   href="{{ url('csrdelft_bibliotheek_addexemplaar', {boek: boek.id, profiel: 'x222'}) }}"
-                                   title="C.S.R.-bieb bezit dit boek ook"
-                                   onclick="return confirm('Bezit de C.S.R.-bieb een exemplaar van dit boek?')">
-                                    {{ icon("user_add") }} Is een biebboek
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endif %}
-                </ul>
-            {% endif %}
-        </div>
-        {# Exemplaren #}
-        <div class="row">
-            {% set total_exemplaren_bibliotheek = 0 %}
-            {# teller nodig om in compacte weergave slechts 1 biebboek te laten zien. #}
-            <div class="blok gegevens exemplaren col-md-6" id="exemplaren">
-                <h3>Exemplaren</h3>
-                {% for exemplaar in boek.exemplaren %}
-                    <div
-                            class="exemplaar uitgebreid {% if boek.exemplaren | length > 4 and not exemplaar.isEigenaar and (not exemplaar.biebBoek or total_exemplaren_bibliothee > 0) %}verborgen{% endif %}">
-                        <div class="fotolabel">{{ exemplaar.eigenaar.link('pasfoto') | raw }}</div>
-                        <div class="gegevensexemplaar" id="ex{{ exemplaar.id }}">
-                            {# eigenaar #}
-                            <div class="regel">
-                                <label>Eigenaar</label>
-                                {% if exemplaar.biebBoek %}
-                                    {% set total_exemplaren_bibliotheek = total_exemplaren_bibliotheek + 1 %}
-                                    C.S.R.-bibliotheek
-                                {% else %}
-                                    {{ exemplaar.eigenaar.link('civitas') | raw }}
-                                {% endif %}
-                            </div>
+			{% if boek.magBekijken %}
+				{# blok rechts met knopjes #}
+				<ul class="col-md-4 list-group">
+					<li class="list-group-item"><a href="{{ url('csrdelft_bibliotheek_boek') }}">{{ icon("book_add") }} Nieuw
+							boek</a>
+					</li>
+					{% if boek.id is not none %}
+						{% if boek.magVerwijderen %}
+							<li class="list-group-item">
+								<a class="post verwijderen"
+									 href="{{ url('csrdelft_bibliotheek_verwijderboek', {boek: boek.id}) }}"
+									 title="Boek verwijderen"
+									 onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">
+									{{ icon("verwijderen") }} Verwijderen
+								</a>
+							</li>
+						{% endif %}
+						<li class="list-group-item">
+							<a class="post ReloadPage" href="{{ url('csrdelft_bibliotheek_addexemplaar', {boek: boek.id}) }}"
+								 title="Ik bezit dit boek ook"
+								 onclick="return confirm('U bezit zelf een exemplaar van dit boek? Door het toevoegen aan de catalogus geef je aan dat anderen dit boek kunnen lenen.')">
+								{{ icon("user_add") }} Ik bezit dit boek
+							</a>
+						</li>
+						{% if mag('P_BIEB_MOD') %}
+							<li class="list-group-item">
+								<a class="post ReloadPage"
+									 href="{{ url('csrdelft_bibliotheek_addexemplaar', {boek: boek.id, profiel: 'x222'}) }}"
+									 title="C.S.R.-bieb bezit dit boek ook"
+									 onclick="return confirm('Bezit de C.S.R.-bieb een exemplaar van dit boek?')">
+									{{ icon("user_add") }} Is een biebboek
+								</a>
+							</li>
+						{% endif %}
+					{% endif %}
+				</ul>
+			{% endif %}
+		</div>
+		{# Exemplaren #}
+		<div class="row">
+			{% set total_exemplaren_bibliotheek = 0 %}
+			{# teller nodig om in compacte weergave slechts 1 biebboek te laten zien. #}
+			<div class="blok gegevens exemplaren col-md-6" id="exemplaren">
+				<h3>Exemplaren</h3>
+				{% for exemplaar in boek.exemplaren %}
+					<div
+						class="exemplaar uitgebreid {% if boek.exemplaren | length > 4 and not exemplaar.isEigenaar and (not exemplaar.biebBoek or total_exemplaren_bibliothee > 0) %}verborgen{% endif %}">
+						<div class="fotolabel">{{ exemplaar.eigenaar.link('pasfoto') | raw }}</div>
+						<div class="gegevensexemplaar" id="ex{{ exemplaar.id }}">
+							{# eigenaar #}
+							<div class="regel">
+								<label>Eigenaar</label>
+								{% if exemplaar.biebBoek %}
+									{% set total_exemplaren_bibliotheek = total_exemplaren_bibliotheek + 1 %}
+									C.S.R.-bibliotheek
+								{% else %}
+									{{ exemplaar.eigenaar.link('civitas') | raw }}
+								{% endif %}
+							</div>
 
-                            {# opmerking #}
-                            {% if exemplaar.magBewerken %}
-                                {{ exemplaarFormulieren[exemplaar.id].view | raw }}
-                            {% else %}
-                                {% if exemplaar.opmerking is not none %}
-                                    <div class="regel">
-                                        <label>Opmerking</label><span class="opmerking">{{ exemplaar.opmerking }}</span>
-                                    </div>
-                                {% endif %}
-                            {% endif %}
-                            {# status #}
-                            <div class="regel">
-                                <label>Status</label>
-                                {% if exemplaar.status.isuitgeleend %}
-                                    <span title="Sinds {{ exemplaar.uitleendatum | reldate | striptags }}">
+							{# opmerking #}
+							{% if exemplaar.magBewerken %}
+								{{ exemplaarFormulieren[exemplaar.id].view | raw }}
+							{% else %}
+								{% if exemplaar.opmerking is not none %}
+									<div class="regel">
+										<label>Opmerking</label><span class="opmerking">{{ exemplaar.opmerking }}</span>
+									</div>
+								{% endif %}
+							{% endif %}
+							{# status #}
+							<div class="regel">
+								<label>Status</label>
+								{% if exemplaar.status.isuitgeleend %}
+									<span title="Sinds {{ exemplaar.uitleendatum | reldate | striptags }}">
 										Uitgeleend aan {{ exemplaar.uitgeleend.link('civitas') | raw }}
 									</span>
-                                {% elseif exemplaar.status.isteruggegeven %}
-                                    <span title="Was uitgeleend sinds {{ exemplaar.uitleendatum | reldate | striptags }}">
+								{% elseif exemplaar.status.isteruggegeven %}
+									<span title="Was uitgeleend sinds {{ exemplaar.uitleendatum | reldate | striptags }}">
 										Teruggegeven door {{ exemplaar.uitgeleend.link('civitas') | raw }}
 									</span>
-                                {% elseif exemplaar.status.isvermist %}
-                                    <span class="waarschuwing"
-                                          title="Sinds {{ exemplaar.uitleendatum | reldate | striptags }}">
+								{% elseif exemplaar.status.isvermist %}
+									<span class="waarschuwing" title="Sinds {{ exemplaar.uitleendatum | reldate | striptags }}">
 										Vermist
 									</span>
-                                {% elseif exemplaar.status.isbeschikbaar %}
-                                    Beschikbaar
-                                {% endif %}
-                            </div>
-                            {# actieknoppen #}
-                            <div class="regel actieknoppen">
-                                <label>&nbsp;</label>
-                                <div>
-                                    {% if exemplaar.status.isbeschikbaar %}
-                                        {% if exemplaar.biebBoek %} {# bibliothecaris werkt met kaartjes #}
-                                            {% if not boek.eigenaar(exemplaar.id) %} {# BASFCie hoeft opmerking niet te zien #}
-                                                <span
-                                                        class="suggestie recht">Biebboek lenen: laat het kaartje achter voor de bibliothecaris.</span>
-                                                <br/>
-                                            {% endif %}
-                                        {% else %}
-                                            <a class="btn post ReloadPage"
-                                               href="{{ url('csrdelft_bibliotheek_exemplaarlenen', {exemplaar: exemplaar.id}) }}"
-                                               title="Leen dit boek"
-                                               onclick="return confirm('U wilt dit boek van {{ exemplaar.eigenaar.naam }} lenen?')">
-                                                {{ icon("lorry") }} Exemplaar lenen
-                                            </a>
-                                        {% endif %}
-                                    {% elseif exemplaar.status.isuitgeleend and exemplaar.uitgeleend_uid == app.user.uid and exemplaar.uitgeleend_uid != exemplaar.eigenaar_uid %}
-                                        <a class="btn post ReloadPage"
-                                           href="{{ url('csrdelft_bibliotheek_exemplaarteruggegeven', {id: exemplaar.id}) }}"
-                                           title="Boek heb ik teruggegeven"
-                                           onclick="return confirm('U heeft dit exemplaar van {{ exemplaar.eigenaar.naam }} teruggegeven?')">
-                                            {{ icon("lorry_go") }} Teruggegeven
-                                        </a>
-                                    {% endif %}
-                                    {% if exemplaar.eigenaar %}
-                                        {% if exemplaar.status.isuitgeleend or exemplaar.teruggegeven %}
-                                            <a class="btn post ReloadPage"
-                                               href="{{ url('csrdelft_bibliotheek_exemplaarterugontvangen', {exemplaar: exemplaar.id}) }}"
-                                               title="Boek is ontvangen"
-                                               onclick="return confirm('Dit exemplaar van {{ exemplaar.eigenaar.naam }} is terugontvangen?')">
-                                                {{ icon("lorry_flatbed") }} Ontvangen
-                                            </a>
-                                        {% elseif exemplaar.status.isbeschikbaar %}
-                                            <a class="btn post ReloadPage"
-                                               href="{{ url('csrdelft_bibliotheek_exemplaarvermist', {exemplaar: exemplaar.id}) }}"
-                                               title="Exemplaar is vermist"
-                                               onclick="return confirm('Is het exemplaar van {{ exemplaar.eigenaar.naam }} vermist?')">
-                                                {{ icon("emoticon_unhappy") }} Vermist
-                                            </a>
-                                        {% elseif exemplaar.status.isvermist %}
-                                            <a class="btn post ReloadPage"
-                                               href="{{ url('csrdelft_bibliotheek_exemplaargevonden', {exemplaar: exemplaar.id}) }}"
-                                               title="Exemplaar teruggevonden"
-                                               onclick="return confirm('Is het exemplaar van {{ exemplaar.eigenaar.naam }} teruggevonden?')">
-                                                {{ icon("emoticon_smile") }} Teruggevonden
-                                            </a>
-                                        {% endif %}
-                                        <a class="btn post ReloadPage"
-                                           href="{{ url('csrdelft_bibliotheek_verwijderexemplaar', {exemplaar: exemplaar.id}) }}"
-                                           title="Exemplaar verwijderen"
-                                           onclick="return confirm('Weet u zeker dat u dit exemplaar van {{ exemplaar.eigenaar.naam }} wilt verwijderen?')">
-                                            {{ icon("verwijderen") }} Verwijderen
-                                        </a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% else %}
-                    <p>Geen exemplaren.</p>
-                {% endfor %}
+								{% elseif exemplaar.status.isbeschikbaar %}
+									Beschikbaar
+								{% endif %}
+							</div>
+							{# actieknoppen #}
+							<div class="regel actieknoppen">
+								<label>&nbsp;</label>
+								<div>
+									{% if exemplaar.status.isbeschikbaar %}
+										{% if exemplaar.biebBoek %} {# bibliothecaris werkt met kaartjes #}
+											{% if not boek.eigenaar(exemplaar.id) %} {# BASFCie hoeft opmerking niet te zien #}
+												<span
+													class="suggestie recht">Biebboek lenen: laat het kaartje achter voor de bibliothecaris.</span>
+												<br/>
+											{% endif %}
+										{% else %}
+											<a class="btn post ReloadPage"
+												 href="{{ url('csrdelft_bibliotheek_exemplaarlenen', {exemplaar: exemplaar.id}) }}"
+												 title="Leen dit boek"
+												 onclick="return confirm('U wilt dit boek van {{ exemplaar.eigenaar.naam }} lenen?')">
+												{{ icon("lorry") }} Exemplaar lenen
+											</a>
+										{% endif %}
+									{% elseif exemplaar.status.isuitgeleend and exemplaar.uitgeleend_uid == app.user.uid and exemplaar.uitgeleend_uid != exemplaar.eigenaar_uid %}
+										<a class="btn post ReloadPage"
+											 href="{{ url('csrdelft_bibliotheek_exemplaarteruggegeven', {id: exemplaar.id}) }}"
+											 title="Boek heb ik teruggegeven"
+											 onclick="return confirm('U heeft dit exemplaar van {{ exemplaar.eigenaar.naam }} teruggegeven?')">
+											{{ icon("lorry_go") }} Teruggegeven
+										</a>
+									{% endif %}
+									{% if exemplaar.eigenaar %}
+										{% if exemplaar.status.isuitgeleend or exemplaar.teruggegeven %}
+											<a class="btn post ReloadPage"
+												 href="{{ url('csrdelft_bibliotheek_exemplaarterugontvangen', {exemplaar: exemplaar.id}) }}"
+												 title="Boek is ontvangen"
+												 onclick="return confirm('Dit exemplaar van {{ exemplaar.eigenaar.naam }} is terugontvangen?')">
+												{{ icon("lorry_flatbed") }} Ontvangen
+											</a>
+										{% elseif exemplaar.status.isbeschikbaar %}
+											<a class="btn post ReloadPage"
+												 href="{{ url('csrdelft_bibliotheek_exemplaarvermist', {exemplaar: exemplaar.id}) }}"
+												 title="Exemplaar is vermist"
+												 onclick="return confirm('Is het exemplaar van {{ exemplaar.eigenaar.naam }} vermist?')">
+												{{ icon("emoticon_unhappy") }} Vermist
+											</a>
+										{% elseif exemplaar.status.isvermist %}
+											<a class="btn post ReloadPage"
+												 href="{{ url('csrdelft_bibliotheek_exemplaargevonden', {exemplaar: exemplaar.id}) }}"
+												 title="Exemplaar teruggevonden"
+												 onclick="return confirm('Is het exemplaar van {{ exemplaar.eigenaar.naam }} teruggevonden?')">
+												{{ icon("emoticon_smile") }} Teruggevonden
+											</a>
+										{% endif %}
+										<a class="btn post ReloadPage"
+											 href="{{ url('csrdelft_bibliotheek_verwijderexemplaar', {exemplaar: exemplaar.id}) }}"
+											 title="Exemplaar verwijderen"
+											 onclick="return confirm('Weet u zeker dat u dit exemplaar van {{ exemplaar.eigenaar.naam }} wilt verwijderen?')">
+											{{ icon("verwijderen") }} Verwijderen
+										</a>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+				{% else %}
+					<p>Geen exemplaren.</p>
+				{% endfor %}
 
-                {# compacte weergave met alleen foto's #}
-                {% set total_exemplaren_bibliotheek = 0 %}
-                {# teller nodig om in compacte weergave slechts 1 biebboek te laten zien. #}
-                {% if boek.exemplaren | length > 4 %}
-                    <div class="exemplaar compact">
-                        {% for exemplaar in boek.exemplaren %}
-                            {% if not boek.eigenaar(exemplaar.id) and (not exemplaar.biebBoek or total_exemplaren_bibliotheek > 0) %}
-                                {{ exemplaar.eigenaar.link('pasfoto') | raw }}
-                                <div class="statusmarkering">
+				{# compacte weergave met alleen foto's #}
+				{% set total_exemplaren_bibliotheek = 0 %}
+				{# teller nodig om in compacte weergave slechts 1 biebboek te laten zien. #}
+				{% if boek.exemplaren | length > 4 %}
+					<div class="exemplaar compact">
+						{% for exemplaar in boek.exemplaren %}
+							{% if not boek.eigenaar(exemplaar.id) and (not exemplaar.biebBoek or total_exemplaren_bibliotheek > 0) %}
+								{{ exemplaar.eigenaar.link('pasfoto') | raw }}
+								<div class="statusmarkering">
 						<span class="biebindicator {{ exemplaar.status.description }}"
-                              title="Boek is {{ exemplaar.status.description }}">• </span>
-                                </div>
-                            {% endif %}
-                            {% if exemplaar.biebBoek %}
-                                {% set total_exemplaren_bibliotheek = total_exemplaren_bibliotheek + 1 %}
-                            {% endif %}
-                        {% endfor %}
-                        <br/>
-                        <div class="clear"></div>
-                        <label>&nbsp;</label>
-                        <a
-                                onclick="jQuery(this).parent().parent().children('div.exemplaar.uitgebreid').show(); jQuery(this).parent().remove();">
-                            » meer informatie
-                        </a>
-                    </div>
-                {% endif %}
-            </div>
+									title="Boek is {{ exemplaar.status.description }}">• </span>
+								</div>
+							{% endif %}
+							{% if exemplaar.biebBoek %}
+								{% set total_exemplaren_bibliotheek = total_exemplaren_bibliotheek + 1 %}
+							{% endif %}
+						{% endfor %}
+						<br/>
+						<div class="clear"></div>
+						<label>&nbsp;</label>
+						<a
+							onclick="jQuery(this).parent().parent().children('div.exemplaar.uitgebreid').show(); jQuery(this).parent().remove();">
+							» meer informatie
+						</a>
+					</div>
+				{% endif %}
+			</div>
 
-            {# beschrijvingen #}
+			{# beschrijvingen #}
 
-            <div class="beschrijvingen col-md-6">
-                <h3 class="header">Recensies en beschrijvingen</h3>
-                <table id="beschrijvingentabel">
-                    {% for beschrijving in recensies %}
-                        <tr>
-                            <td class="linkerkolom"></td>
-                            <td style="width:506px"></td>
-                        </tr>
-                        <tr>
-                            <td class="linkerkolom recensist">
-                                <span class="recensist">{{ beschrijving.schrijver.link('civitas') | raw }}</span><br/>
-                                <span class="moment">{{ beschrijving.toegevoegd | reldate }}</span><br/>
+			<div class="beschrijvingen col-md-6">
+				<h3 class="header">Recensies en beschrijvingen</h3>
+				<table id="beschrijvingentabel">
+					{% for beschrijving in recensies %}
+						<tr>
+							<td class="linkerkolom"></td>
+							<td style="width:506px"></td>
+						</tr>
+						<tr>
+							<td class="linkerkolom recensist">
+								<span class="recensist">{{ beschrijving.schrijver.link('civitas') | raw }}</span><br/>
+								<span class="moment">{{ beschrijving.toegevoegd | reldate }}</span><br/>
 
-                                {# knopjes bij elke post #}
-                                {% if beschrijving.magVerwijderen %}
-                                    <a
-                                            href="{{ url('csrdelft_bibliotheek_verwijderbeschrijving', {boek: boek.id, profiel: app.user.uid}) }}"
-                                            class="post ReloadPage"
-                                            onclick="return confirm('Weet u zeker dat u deze beschrijving wilt verwijderen?')">
-                                        <span class="ico cross" title="Verwijderen"></span> Verwijderen
-                                    </a>
-                                {% endif %}
-                            </td>
-                            <td class="beschrijving {{ cycle(['b0', 'b1'], loop.index) }}"
-                                id="beschrijving{{ beschrijving.id }}">
-                                {% if mijnRecensie == beschrijving %}
-                                    {{ recensieFormulier.view | raw }}
-                                {% else %}
-                                    {{ beschrijving.beschrijving | bbcode }}
-                                {% endif %}
-                                {% if beschrijving.bewerkdatum is not none %}
-                                    <br/>
-                                    <span class="offtopic">Bewerkt {{ beschrijving.bewerkdatum | reldate }}</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="linkerkolom"></td>
-                            <td class="tussenschot"></td>
-                        </tr>
-                    {% endfor %}
-                    {% if mijnRecensie.id is none %}
-                        <tr>
-                            <td colspan="2">
-                                {{ recensieFormulier.view | raw }}
-                            </td>
-                        </tr>
-                    {% endif %}
-                </table>
-            </div>
-        </div>
-    {% endif %}
+								{# knopjes bij elke post #}
+								{% if beschrijving.magVerwijderen %}
+									<a
+										href="{{ url('csrdelft_bibliotheek_verwijderbeschrijving', {boek: boek.id, profiel: app.user.uid}) }}"
+										class="post ReloadPage"
+										onclick="return confirm('Weet u zeker dat u deze beschrijving wilt verwijderen?')">
+										<span class="ico cross" title="Verwijderen"></span> Verwijderen
+									</a>
+								{% endif %}
+							</td>
+							<td class="beschrijving {{ cycle(['b0', 'b1'], loop.index) }}" id="beschrijving{{ beschrijving.id }}">
+								{% if mijnRecensie == beschrijving %}
+									{{ recensieFormulier.view | raw }}
+								{% else %}
+									{{ beschrijving.beschrijving | bbcode }}
+								{% endif %}
+								{% if beschrijving.bewerkdatum is not none %}
+									<br/>
+									<span class="offtopic">Bewerkt {{ beschrijving.bewerkdatum | reldate }}</span>
+								{% endif %}
+							</td>
+						</tr>
+						<tr>
+							<td class="linkerkolom"></td>
+							<td class="tussenschot"></td>
+						</tr>
+					{% endfor %}
+					{% if mijnRecensie.id is none %}
+						<tr>
+							<td colspan="2">
+								{{ recensieFormulier.view | raw }}
+							</td>
+						</tr>
+					{% endif %}
+				</table>
+			</div>
+		</div>
+	{% endif %}
 {% endblock %}

@@ -1,5 +1,5 @@
 <tr id="taak-datum-summary-{{ datum }}"
-    class="taak-datum-summary taak-datum-{{ datum }}
+		class="taak-datum-summary taak-datum-{{ datum }}
 		{% if date(datum) < date('-1 day') %}
 		{% if not show and not prullenbak %}taak-datum-oud
 		{% endif %} taak-oud verborgen
@@ -8,32 +8,32 @@
 		verborgen
 		{% endif %}
 " onclick="window.maalcie.takenToggleDatum('{{ datum }}');">
-    <th colspan="7" class="{{ cycle(['rowColor0', 'rowColor1'], loop.index) }}">
-        {% for fid, perfunctie in perdatum %}
-            {% for taak in perfunctie %}
-                {# @var taak \CsrDelft\entity\corvee\CorveeTaak #}
-                {% if loop.first %} {# eerste taak van functie: reset ingedeeld-teller #}
-                    {% set count = 0 %}
-                    {% if loop.parent.loop.first %}
-                        <div class="inline niet-dik" style="width: 80px;">{{ taak.datum | datetime_format_long }}</div>
-                    {% endif %}
-                    <div class="inline" style="width: 70px;">
-                    <span title="{{ taak.corveeFunctie.naam }}">
+	<th colspan="7" class="{{ cycle(['rowColor0', 'rowColor1'], loop.index) }}">
+		{% for fid, perfunctie in perdatum %}
+			{% for taak in perfunctie %}
+				{# @var taak \CsrDelft\entity\corvee\CorveeTaak #}
+				{% if loop.first %} {# eerste taak van functie: reset ingedeeld-teller #}
+					{% set count = 0 %}
+					{% if loop.parent.loop.first %}
+						<div class="inline niet-dik" style="width: 80px;">{{ taak.datum | datetime_format_long }}</div>
+					{% endif %}
+					<div class="inline" style="width: 70px;">
+					<span title="{{ taak.corveeFunctie.naam }}">
 				&nbsp;{{ taak.corveeFunctie.afkorting }}:&nbsp;
 			</span>
-                {% endif %}
-                {% if taak.profiel %}{# ingedeelde taak van functie: teller++ #}
-                    {% set count = count + 1 %}
-                {% endif %}
-                {% if loop.last %} {# laatste taak van functie: toon ingedeeld-teller en totaal aantal taken van deze functie #}
-                    <span class="{% if count == loop.length %}functie-toegewezen{% else %}functie-open{% endif %}"
-                          style="background-color: inherit;">
+				{% endif %}
+				{% if taak.profiel %}{# ingedeelde taak van functie: teller++ #}
+					{% set count = count + 1 %}
+				{% endif %}
+				{% if loop.last %} {# laatste taak van functie: toon ingedeeld-teller en totaal aantal taken van deze functie #}
+					<span class="{% if count == loop.length %}functie-toegewezen{% else %}functie-open{% endif %}"
+								style="background-color: inherit;">
 				{{ count }}/{{ loop.length }}
 			</span>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        {% endfor %}
-    </th>
+					</div>
+				{% endif %}
+			{% endfor %}
+		{% endfor %}
+	</th>
 </tr>
 {{ include('maaltijden/corveetaak/beheer_taak_head.html.twig', {datum: datum, show: show, prullenbak: prullenbak}) }}

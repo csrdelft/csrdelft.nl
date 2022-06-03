@@ -18,152 +18,145 @@ use CsrDelft\repository\security\AccountRepository;
  *
  * Bij wachtwoord resetten produceert deze 2 velden.
  */
-class WachtwoordWijzigenField extends InputField
-{
-    protected $fieldClassName = '';
-    protected $wrapperClassName = '';
+class WachtwoordWijzigenField extends InputField {
+	protected $fieldClassName = '';
+	protected $wrapperClassName = '';
 
-    private $require_current;
+	private $require_current;
 
-    public function __construct($name, Account $account, $require_current = true)
-    {
-        $this->require_current = $require_current;
-        parent::__construct($name, null, '', $account);
-        $this->title = 'Het nieuwe wachtwoord moet langer zijn dan 23 tekens of langer dan 10 en ook hoofdletters, kleine letters, cijfers en speciale tekens bevatten.';
+	public function __construct($name, Account $account, $require_current = true) {
+		$this->require_current = $require_current;
+		parent::__construct($name, null, '', $account);
+		$this->title = 'Het nieuwe wachtwoord moet langer zijn dan 23 tekens of langer dan 10 en ook hoofdletters, kleine letters, cijfers en speciale tekens bevatten.';
 
-        // blacklist gegevens van account
-        $this->blacklist[] = $account->username;
-        foreach (explode('@', $account->email) as $email) {
-            foreach (explode('.', $email) as $part) {
-                if (strlen($part) >= 5) {
-                    $this->blacklist[] = $part;
-                }
-            }
-        }
+		// blacklist gegevens van account
+		$this->blacklist[] = $account->username;
+		foreach (explode('@', $account->email) as $email) {
+			foreach (explode('.', $email) as $part) {
+				if (strlen($part) >= 5) {
+					$this->blacklist[] = $part;
+				}
+			}
+		}
 
-        // blacklist gegevens van profiel
-        $profiel = $account->profiel;
-        $this->blacklist[] = $profiel->uid;
-        $this->blacklist[] = $profiel->voornaam;
-        foreach (explode(' ', $profiel->achternaam) as $part) {
-            if (strlen($part) >= 4) {
-                $this->blacklist[] = $part;
-            }
-        }
-        $this->blacklist[] = $profiel->postcode;
-        $this->blacklist[] = str_replace(' ', '', $profiel->postcode);
-        $this->blacklist[] = $profiel->telefoon;
-        $this->blacklist[] = $profiel->mobiel;
+		// blacklist gegevens van profiel
+		$profiel = $account->profiel;
+		$this->blacklist[] = $profiel->uid;
+		$this->blacklist[] = $profiel->voornaam;
+		foreach (explode(' ', $profiel->achternaam) as $part) {
+			if (strlen($part) >= 4) {
+				$this->blacklist[] = $part;
+			}
+		}
+		$this->blacklist[] = $profiel->postcode;
+		$this->blacklist[] = str_replace(' ', '', $profiel->postcode);
+		$this->blacklist[] = $profiel->telefoon;
+		$this->blacklist[] = $profiel->mobiel;
 
-        // wis lege waarden
-        $this->blacklist = array_filter_empty($this->blacklist);
+		// wis lege waarden
+		$this->blacklist = array_filter_empty($this->blacklist);
 
-        // algemene blacklist
-        $this->blacklist[] = '1234';
-        $this->blacklist[] = 'abcd';
-        $this->blacklist[] = 'qwerty';
-        $this->blacklist[] = 'azerty';
-        $this->blacklist[] = 'asdf';
-        $this->blacklist[] = 'jkl;';
-        $this->blacklist[] = 'password';
-        $this->blacklist[] = 'wachtwoord';
-    }
+		// algemene blacklist
+		$this->blacklist[] = '1234';
+		$this->blacklist[] = 'abcd';
+		$this->blacklist[] = 'qwerty';
+		$this->blacklist[] = 'azerty';
+		$this->blacklist[] = 'asdf';
+		$this->blacklist[] = 'jkl;';
+		$this->blacklist[] = 'password';
+		$this->blacklist[] = 'wachtwoord';
+	}
 
-    public function isPosted()
-    {
-        if ($this->require_current && !isset($_POST[$this->name . '_current'])) {
-            return false;
-        }
-        return isset($_POST[$this->name . '_new']) && isset($_POST[$this->name . '_confirm']);
-    }
+	public function isPosted() {
+		if ($this->require_current && !isset($_POST[$this->name . '_current'])) {
+			return false;
+		}
+		return isset($_POST[$this->name . '_new']) && isset($_POST[$this->name . '_confirm']);
+	}
 
-    public function getValue()
-    {
-        if ($this->isPosted()) {
-            $this->value = $_POST[$this->name . '_new'];
-        } else {
-            $this->value = false;
-        }
-        if ($this->empty_null && $this->value == '') {
-            return null;
-        }
-        return $this->value;
-    }
+	public function getValue() {
+		if ($this->isPosted()) {
+			$this->value = $_POST[$this->name . '_new'];
+		} else {
+			$this->value = false;
+		}
+		if ($this->empty_null && $this->value == '') {
+			return null;
+		}
+		return $this->value;
+	}
 
-    public function checkZwarteLijst($pass_plain)
-    {
-        foreach ($this->blacklist as $disallowed) {
-            if (stripos($pass_plain, $disallowed) !== false) {
-                $this->error = htmlspecialchars($disallowed);
-                return true;
-            }
-        }
-        return false;
-    }
+	public function checkZwarteLijst($pass_plain) {
+		foreach ($this->blacklist as $disallowed) {
+			if (stripos($pass_plain, $disallowed) !== false) {
+				$this->error = htmlspecialchars($disallowed);
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public function validate()
-    {
-        $accountRepository = ContainerFacade::getContainer()->get(AccountRepository::class);
-        if (!parent::validate()) {
-            return false;
-        }
-        if ($this->require_current) {
-            $current = $_POST[$this->name . '_current'];
-        }
-        // filter_input does not use current value in $_POST
-        $new = $_POST[$this->name . '_new'];
-        $confirm = $_POST[$this->name . '_confirm'];
-        $length = strlen(utf8_decode($new));
-        if ($this->require_current and empty($current)) {
-            $this->error = 'U moet uw huidige wachtwoord invoeren';
-        } elseif ($this->required and empty($new)) {
-            $this->error = 'U moet een nieuw wachtwoord invoeren';
-        } elseif ($this->require_current and !$accountRepository->controleerWachtwoord($this->model, $current)) {
-            $this->error = 'Uw huidige wachtwoord is niet juist';
-        } elseif (!empty($new)) {
-            if ($this->require_current and $current == $new) {
-                $this->error = 'Het nieuwe wachtwoord is hetzelfde als het huidige wachtwoord';
-            } elseif ($length < 10) {
-                $this->error = 'Het nieuwe wachtwoord moet minimaal 10 tekens lang zijn';
-            } elseif ($length > 100) {
-                $this->error = 'Het nieuwe wachtwoord mag maximaal 100 tekens lang zijn';
-            } elseif ($this->checkZwarteLijst($new)) {
-                $this->error = 'Het nieuwe wachtwoord of een deel ervan staat op de zwarte lijst: "' . $this->error . '"';
-            } elseif (preg_match('/^[0-9]*$/', $new)) {
-                $this->error = 'Het nieuwe wachtwoord mag niet uit alleen getallen bestaan';
-            } elseif ($length < 23) {
-                if (preg_match('/^[a-zA-Z]*$/', $new)) {
-                    $this->error = 'Het nieuwe wachtwoord moet ook cijfers en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-                } elseif (preg_match('/^[0-9a-z]*$/', $new)) {
-                    $this->error = 'Het nieuwe wachtwoord moet ook hoofdletters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-                } elseif (preg_match('/^[0-9A-Z]*$/', $new)) {
-                    $this->error = 'Het nieuwe wachtwoord moet ook kleine letters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-                } elseif (preg_match('/^[0-9a-zA-Z]*$/', $new)) {
-                    $this->error = 'Het nieuwe wachtwoord moet ook speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-                }
-            }
+	public function validate() {
+		$accountRepository = ContainerFacade::getContainer()->get(AccountRepository::class);
+		if (!parent::validate()) {
+			return false;
+		}
+		if ($this->require_current) {
+			$current = $_POST[$this->name . '_current'];
+		}
+		// filter_input does not use current value in $_POST
+		$new = $_POST[$this->name . '_new'];
+		$confirm = $_POST[$this->name . '_confirm'];
+		$length = strlen(utf8_decode($new));
+		if ($this->require_current AND empty($current)) {
+			$this->error = 'U moet uw huidige wachtwoord invoeren';
+		} elseif ($this->required AND empty($new)) {
+			$this->error = 'U moet een nieuw wachtwoord invoeren';
+		} elseif ($this->require_current AND !$accountRepository->controleerWachtwoord($this->model, $current)) {
+				$this->error = 'Uw huidige wachtwoord is niet juist';
+		} elseif (!empty($new)) {
+			if ($this->require_current AND $current == $new) {
+				$this->error = 'Het nieuwe wachtwoord is hetzelfde als het huidige wachtwoord';
+			} elseif ($length < 10) {
+				$this->error = 'Het nieuwe wachtwoord moet minimaal 10 tekens lang zijn';
+			} elseif ($length > 100) {
+				$this->error = 'Het nieuwe wachtwoord mag maximaal 100 tekens lang zijn';
+			} elseif ($this->checkZwarteLijst($new)) {
+				$this->error = 'Het nieuwe wachtwoord of een deel ervan staat op de zwarte lijst: "' . $this->error . '"';
+			} elseif (preg_match('/^[0-9]*$/', $new)) {
+				$this->error = 'Het nieuwe wachtwoord mag niet uit alleen getallen bestaan';
+			} elseif ($length < 23) {
+				if (preg_match('/^[a-zA-Z]*$/', $new)) {
+					$this->error = 'Het nieuwe wachtwoord moet ook cijfers en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
+				} elseif (preg_match('/^[0-9a-z]*$/', $new)) {
+					$this->error = 'Het nieuwe wachtwoord moet ook hoofdletters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
+				} elseif (preg_match('/^[0-9A-Z]*$/', $new)) {
+					$this->error = 'Het nieuwe wachtwoord moet ook kleine letters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
+				} elseif (preg_match('/^[0-9a-zA-Z]*$/', $new)) {
+					$this->error = 'Het nieuwe wachtwoord moet ook speciale tekens bevatten<br />of langer zijn dan 23 tekens';
+				}
+			}
 
-            if (preg_match('/(.)\1\1+/', $new) || preg_match('/(.{3,})\1+/', $new) || preg_match('/(.{4,}).*\1+/', $new)) {
-                $this->error = 'Het nieuwe wachtwoord bevat teveel herhaling';
-            } elseif (empty($confirm)) {
-                $this->error = 'Vul uw nieuwe wachtwoord twee keer in';
-            } elseif ($new != $confirm) {
-                $this->error = 'Nieuwe wachtwoorden komen niet overeen';
-            }
-        }
-        return $this->error === '';
-    }
+			if (preg_match('/(.)\1\1+/', $new) || preg_match('/(.{3,})\1+/', $new) || preg_match('/(.{4,}).*\1+/', $new)) {
+				$this->error = 'Het nieuwe wachtwoord bevat teveel herhaling';
+			} elseif (empty($confirm)) {
+				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
+			} elseif ($new != $confirm) {
+				$this->error = 'Nieuwe wachtwoorden komen niet overeen';
+			}
+		}
+		return $this->error === '';
+	}
 
-    public function getHtml()
-    {
-        $html = '';
-        if ($this->error !== '') {
-            $this->css_classes[] = 'is-invalid';
-        }
-        $inputCssClasses = join(" ", $this->css_classes);
+	public function getHtml() {
+		$html = '';
+		if ($this->error !== '') {
+			$this->css_classes[] = 'is-invalid';
+		}
+		$inputCssClasses = join(" ", $this->css_classes);
 
-        if ($this->require_current) {
-            $html .= <<<HTML
+		if ($this->require_current) {
+			$html .= <<<HTML
 <div class="mb-3 row">
 	<div class="{$this->labelClassName}">
 		<label for="{$this->getId()}_current">Huidig wachtwoord<span class="required">*</span></label>
@@ -173,10 +166,10 @@ class WachtwoordWijzigenField extends InputField
 	</div>
 </div>
 HTML;
-        }
+		}
 
-        $required = $this->required ? '<span class="required"> *</span>' : '';
-        $html .= <<<HTML
+		$required = $this->required ? '<span class="required"> *</span>' : '';
+		$html .= <<<HTML
 <div class="mb-3 row">
 	<div class="{$this->labelClassName}">
 		<label for="{$this->getId()}_new">Nieuw wachtwoord{$required}</label>
@@ -194,14 +187,13 @@ HTML;
 	</div>
 </div>
 HTML;
-        return $html;
-    }
+		return $html;
+	}
 
-    public function getErrorDiv()
-    {
-        if ($this->getError() != '') {
-            return '<div class="d-block invalid-feedback">' . $this->getError() . '</div>';
-        }
-        return '';
-    }
+	public function getErrorDiv() {
+		if ($this->getError() != '') {
+			return '<div class="d-block invalid-feedback">' . $this->getError() . '</div>';
+		}
+		return '';
+	}
 }

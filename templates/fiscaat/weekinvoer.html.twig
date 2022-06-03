@@ -3,134 +3,133 @@
 {% block titel %}Weekinvoer{% endblock %}
 
 {% block civisaldocontent %}
-    <h2>Weekinvoer</h2>
+	<h2>Weekinvoer</h2>
 
-    <form action="{{ url('csrdelft_fiscaat_weekinvoer_weekinvoer') }}" method="get" class="mt-4">
-        <div class="row">
-            <div class="col-md-3 mb-3">
-                <label for="van">Van:</label>
-                <input id="van" name="van" type="date" class="form-control" value="{{ van }}"/>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="tot">Tot:</label>
-                <input id="tot" name="tot" type="date" class="form-control" value="{{ tot }}"/>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="weergave">Weergave:</label>
-                <select id="weergave" name="weergave" class="form-select">
-                    <option value="tabel" {% if weergave == "tabel" %}selected{% endif %}>Tabel</option>
-                    <option value="week" {% if weergave == "week" %}selected{% endif %}>Week</option>
-                </select>
-            </div>
-            <div class="col-md-2 mb-3">
-                <label>&emsp;</label>
-                <input class="btn btn-primary w-100" type="submit" value="Bekijk">
-            </div>
-        </div>
+	<form action="{{ url('csrdelft_fiscaat_weekinvoer_weekinvoer') }}" method="get" class="mt-4">
+		<div class="row">
+			<div class="col-md-3 mb-3">
+				<label for="van">Van:</label>
+				<input id="van" name="van" type="date" class="form-control" value="{{ van }}"/>
+			</div>
+			<div class="col-md-3 mb-3">
+				<label for="tot">Tot:</label>
+				<input id="tot" name="tot" type="date" class="form-control" value="{{ tot }}"/>
+			</div>
+			<div class="col-md-4 mb-3">
+				<label for="weergave">Weergave:</label>
+				<select id="weergave" name="weergave" class="form-select">
+					<option value="tabel" {% if weergave == "tabel" %}selected{% endif %}>Tabel</option>
+					<option value="week" {% if weergave == "week" %}selected{% endif %}>Week</option>
+				</select>
+			</div>
+			<div class="col-md-2 mb-3">
+				<label>&emsp;</label>
+				<input class="btn btn-primary w-100" type="submit" value="Bekijk">
+			</div>
+		</div>
 
-        {% if weekinvoeren %}
-            {% if weergave == 'tabel' %}
-                <div class="table-responsive mb-3">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Week</th>
-                            <th>Datum</th>
-                            <th>Totaal</th>
-                            {% for categorie in categorieen %}
-                                <th>{{ categorie }}</th>
-                            {% endfor %}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for weekinvoer in weekinvoeren|reverse %}
-                            <tr>
-                                <th style="white-space: nowrap;">{{ weekinvoer.jaar }}, week {{ weekinvoer.week }}</th>
-                                <td>{{ weekinvoer.datum|date('j-n-Y') }}</td>
-                                <th style="{% if weekinvoer.totaal < 0 %}color: red;{% endif %}">
-                                    {{ weekinvoer.totaal|format_bedrag }}
-                                </th>
-                                {% for categorie in categorieen %}
-                                    {% if categorie in weekinvoer.categorieen|keys %}
-                                        <td>
-                                            <a href="{{ path('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker', {
-                                                'van': weekinvoer.datum|date('Y-m-d'),
-                                                'tot': weekinvoer.einde|date('Y-m-d'),
-                                                'categorie': categorie,
-                                            }) }}"
-                                               style="{% if weekinvoer.categorieen[categorie] < 0 %}color: red;{% else %}color: inherit;{% endif %}"
-                                               target="_blank">
-                                                {{ weekinvoer.categorieen[categorie]|format_bedrag }}
-                                            </a>
-                                        </td>
-                                    {% else %}
-                                        <td></td>
-                                    {% endif %}
-                                {% endfor %}
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+		{% if weekinvoeren %}
+			{% if weergave == 'tabel' %}
+				<div class="table-responsive mb-3">
+					<table class="table table-striped">
+						<thead>
+						<tr>
+							<th>Week</th>
+							<th>Datum</th>
+							<th>Totaal</th>
+							{% for categorie in categorieen %}
+								<th>{{ categorie }}</th>
+							{% endfor %}
+						</tr>
+						</thead>
+						<tbody>
+						{% for weekinvoer in weekinvoeren|reverse %}
+							<tr>
+								<th style="white-space: nowrap;">{{ weekinvoer.jaar }}, week {{ weekinvoer.week }}</th>
+								<td>{{ weekinvoer.datum|date('j-n-Y') }}</td>
+								<th style="{% if weekinvoer.totaal < 0 %}color: red;{% endif %}">
+									{{ weekinvoer.totaal|format_bedrag }}
+								</th>
+								{% for categorie in categorieen %}
+									{% if categorie in weekinvoer.categorieen|keys %}
+										<td>
+											<a href="{{ path('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker', {
+												'van': weekinvoer.datum|date('Y-m-d'),
+												'tot': weekinvoer.einde|date('Y-m-d'),
+												'categorie': categorie,
+											}) }}"
+												 style="{% if weekinvoer.categorieen[categorie] < 0 %}color: red;{% else %}color: inherit;{% endif %}"
+												 target="_blank">
+												{{ weekinvoer.categorieen[categorie]|format_bedrag }}
+											</a>
+										</td>
+									{% else %}
+										<td></td>
+									{% endif %}
+								{% endfor %}
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
 
-                <script>
-                    function openDetail() {
-                        // Zoek categorie
-                        // Zoek datums
-                        // Open link
-                    }
-                </script>
-            {% else %}
+				<script>
+					function openDetail() {
+						// Zoek categorie
+						// Zoek datums
+						// Open link
+					}
+				</script>
+			{% else %}
 
 
-                {% for weekinvoer in weekinvoeren|reverse %}
-                <div class="table-responsive">
+				{% for weekinvoer in weekinvoeren|reverse %}
+				<div class="table-responsive">
 
-                    <table class="table table-striped caption-top">
-                        <caption>{{ weekinvoer.jaar }}, week {{ weekinvoer.week }}
-                            <small>({{ weekinvoer.datum|date('j-n-Y') }})</small></caption>
-                        <thead>
-                        <tr>
-                            <th>Soort</th>
-                            <th>Prijs</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for categorie in categorieen %}
-                            <tr>
-                                {% if categorie in weekinvoer.categorieen|keys %}
-                                    <td>{{ categorie }}</td>
-                                    <td>
-                                        <a href="{{ path('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker', {
-                                            'van': weekinvoer.datum|date('Y-m-d'),
-                                            'tot': weekinvoer.einde|date('Y-m-d'),
-                                            'categorie': categorie,
-                                        }) }}"
-                                           style="{% if weekinvoer.categorieen[categorie] < 0 %}color: red;{% else %}color: inherit;{% endif %}"
-                                           target="_blank">
-                                            {{ weekinvoer.categorieen[categorie]|format_bedrag }}
-                                        </a>
-                                    </td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td><em>Week totaal</em></td>
-                            <td style="{% if weekinvoer.totaal < 0 %}color: red;{% endif %}">
-                                {{ weekinvoer.totaal|format_bedrag }}
-                            </td>
-                        </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                {% endfor %}
+					<table class="table table-striped caption-top">
+						<caption>{{ weekinvoer.jaar }}, week {{ weekinvoer.week }} <small>({{ weekinvoer.datum|date('j-n-Y') }})</small></caption>
+						<thead>
+						<tr>
+							<th>Soort</th>
+							<th>Prijs</th>
+						</tr>
+						</thead>
+						<tbody>
+						{% for categorie in categorieen %}
+							<tr>
+								{% if categorie in weekinvoer.categorieen|keys %}
+									<td>{{ categorie }}</td>
+									<td>
+										<a href="{{ path('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker', {
+											'van': weekinvoer.datum|date('Y-m-d'),
+											'tot': weekinvoer.einde|date('Y-m-d'),
+											'categorie': categorie,
+										}) }}"
+											 style="{% if weekinvoer.categorieen[categorie] < 0 %}color: red;{% else %}color: inherit;{% endif %}"
+											 target="_blank">
+											{{ weekinvoer.categorieen[categorie]|format_bedrag }}
+										</a>
+									</td>
+								{% endif %}
+							</tr>
+						{% endfor %}
+						</tbody>
+						<tfoot>
+						<tr>
+							<td><em>Week totaal</em></td>
+							<td style="{% if weekinvoer.totaal < 0 %}color: red;{% endif %}">
+								{{ weekinvoer.totaal|format_bedrag }}
+							</td>
+						</tr>
+						</tfoot>
+					</table>
+				</div>
+				{% endfor %}
 
-            {% endif %}
-        {% else %}
-            Geen weekinvoeren in periode.
-        {% endif %}
+			{% endif %}
+		{% else %}
+			Geen weekinvoeren in periode.
+		{% endif %}
 
-    </form>
+	</form>
 {% endblock %}

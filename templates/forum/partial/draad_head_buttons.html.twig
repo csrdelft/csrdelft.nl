@@ -1,63 +1,57 @@
 {% if mag('P_LOGGED_IN') %}
-    <div class="dropdown d-block d-md-none">
-        <button
-                class="btn btn-primary dropdown-toggle"
-                type="button"
-                id="dropdownMenuButton1"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-        >
-            Opties
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li>
-                <a
-                        class="dropdown-item"
-                        data-bs-toggle="modal"
-                        data-bs-target="#nieuwDraadjeModal"
-                >
-                    <i class="fas fa-plus-circle"></i>
-                    Nieuw draadje
-                </a>
-            </li>
-            <li>
-                <hr class="dropdown-divider"/>
-            </li>
-            {% if mag('P_ADMIN') and deel is defined and deel.forum_id is not empty %}
-                <li>
-                    <a
-                            href="/forum/beheren/{{ deel.forum_id }}"
-                            class="dropdown-item"
-                    >
-                        <i class="fas fa-wrench"></i>
-                        Deelforum beheren
-                    </a>
-                </li>
-            {% endif %}
-            <li>
-                <hr class="dropdown-divider"/>
-            </li>
-            {% if deel is not defined or (deel.forum_id is not empty and deel.magModereren) %}
-                <li>
-                    <a href="{{ url('csrdelft_forum_wacht') }}"
-                       class="dropdown-item">
-                        <i class="fas fa-hourglass me-1"></i>
-                        {{ getAantalWachtOpGoedkeuring() }}
-                        reacties wachten op goedkeuring
-                    </a>
-                </li>
-            {% endif %}
-            <li>
-                <a href="{{ url('csrdelft_forum_toonalles') }}"
-                   class="dropdown-item post confirm ReloadPage">
-                    <i class="fas fa-eye me-1"></i>
-                    {{ getAantalVerborgenVoorLid() }} verborgen onderwerpen laten zien
-                </a>
-            </li>
-            <li>
-                <hr class="dropdown-divider"/>
-            </li>
-            {# <li>
+	<div class="dropdown d-block d-md-none">
+		<button
+			class="btn btn-primary dropdown-toggle"
+			type="button"
+			id="dropdownMenuButton1"
+			data-bs-toggle="dropdown"
+			aria-expanded="false"
+		>
+			Opties
+		</button>
+		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+			<li>
+				<a
+					class="dropdown-item"
+					data-bs-toggle="modal"
+					data-bs-target="#nieuwDraadjeModal"
+				>
+					<i class="fas fa-plus-circle"></i>
+					Nieuw draadje
+				</a>
+			</li>
+			<li><hr class="dropdown-divider" /></li>
+			{% if mag('P_ADMIN') and deel is defined and deel.forum_id is not empty %}
+				<li>
+					<a
+						href="/forum/beheren/{{ deel.forum_id }}"
+						class="dropdown-item"
+					>
+						<i class="fas fa-wrench"></i>
+						Deelforum beheren
+					</a>
+				</li>
+			{% endif %}
+			<li><hr class="dropdown-divider" /></li>
+			{% if deel is not defined or (deel.forum_id is not empty and deel.magModereren) %}
+				<li>
+					<a href="{{ url('csrdelft_forum_wacht') }}"
+						class="dropdown-item">
+						<i class="fas fa-hourglass me-1"></i>
+						{{ getAantalWachtOpGoedkeuring() }}
+						reacties wachten op goedkeuring
+					</a>
+				</li>
+			{% endif %}
+			<li>
+				<a href="{{ url('csrdelft_forum_toonalles') }}"
+					class="dropdown-item post confirm ReloadPage">
+					<i class="fas fa-eye me-1"></i>
+					{{ getAantalVerborgenVoorLid() }} verborgen onderwerpen laten zien
+				</a>
+			</li>
+			<li><hr class="dropdown-divider" /></li>
+			{# <li>
 				<a
 					class="dropdown-item"
 					data-bs-toggle="modal"
@@ -67,87 +61,87 @@
 					Filter
 				</a>
 			</li> #}
-            <li>
-                <a
-                        class="dropdown-item"
-                        data-bs-toggle="modal"
-                        data-bs-target="#shareModal"
-                >
-                    <i class="fas fa-share-alt"></i>
-                    Delen
-                </a>
-            </li>
-            {% if deel is defined and deel.magMeldingKrijgen %}
-                {% if deel.lidWilMeldingVoorDeel %}
-                    <a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
-                       class="dropdown-item post ReloadPage melding-nooit">
-                        <i class="fas fa-bell-slash"></i>
-                        Geen meldingen
-                    </a>
-                {% else %}
-                    <a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
-                       class="dropdown-item post ReloadPage melding-altijd">
-                        <i class="fas fa-bell-plus"></i>
-                        Meldingen
-                    </a>
-                {% endif %}
-            {% endif %}
-        </ul>
-    </div>
+			<li>
+				<a
+					class="dropdown-item"
+					data-bs-toggle="modal"
+					data-bs-target="#shareModal"
+				>
+					<i class="fas fa-share-alt"></i>
+					Delen
+				</a>
+			</li>
+			{% if deel is defined and deel.magMeldingKrijgen %}
+				{% if deel.lidWilMeldingVoorDeel %}
+				<a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
+					class="dropdown-item post ReloadPage melding-nooit">
+					<i class="fas fa-bell-slash"></i>
+					Geen meldingen
+				</a>
+				{% else %}
+				<a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
+					class="dropdown-item post ReloadPage melding-altijd">
+					<i class="fas fa-bell-plus"></i>
+					Meldingen
+				</a>
+				{% endif %}
+			{% endif %}
+		</ul>
+	</div>
 
-    <div
-            class="btn-toolbar d-none d-md-block"
-            role="toolbar"
-            aria-label="Toolbar with button groups"
-    >
-        <div class="btn-group me-2" role="group">
-            <button
-                    type="button"
-                    class="btn btn-secondary text-white"
-                    data-bs-toggle="modal"
-                    data-bs-target="#nieuwDraadjeModal"
-                    title="Nieuw draadje"
-            >
-                <i class="fas fa-plus-circle"></i>
-                Nieuw
-            </button>
-        </div>
+	<div
+		class="btn-toolbar d-none d-md-block"
+		role="toolbar"
+		aria-label="Toolbar with button groups"
+	>
+		<div class="btn-group me-2" role="group">
+			<button
+				type="button"
+				class="btn btn-secondary text-white"
+				data-bs-toggle="modal"
+				data-bs-target="#nieuwDraadjeModal"
+				title="Nieuw draadje"
+			>
+				<i class="fas fa-plus-circle"></i>
+				Nieuw
+			</button>
+		</div>
 
-        {% if mag('P_ADMIN') and deel is defined and deel.forum_id is not empty %}
-            <div class="btn-group me-2" role="group">
-                <a
-                        href="/forum/beheren/{{ deel.forum_id }}"
-                        class="btn btn-primary"
-                        title="Deelforum beheren"
-                >
-                    <i class="fas fa-wrench"></i>
-                    <span class="visually-hidden">Deelforum beheren</span>
-                </a>
-            </div>
-        {% endif %}
+		{% if mag('P_ADMIN') and deel is defined and deel.forum_id is not empty %}
+			<div class="btn-group me-2" role="group">
+				<a
+					href="/forum/beheren/{{ deel.forum_id }}"
+					class="btn btn-primary"
+					title="Deelforum beheren"
+				>
+					<i class="fas fa-wrench"></i>
+					<span class="visually-hidden">Deelforum beheren</span>
+				</a>
+			</div>
+		{% endif %}
 
-        <div class="btn-group me-2" role="group">
-            {% if deel is not defined or (deel.forum_id is not empty and deel.magModereren) %}
-                <a href="{{ url('csrdelft_forum_wacht') }}"
-                   class="btn btn-primary"
-                   title="Reacties die wachten op goedkeuring">
-                    <i class="fas fa-hourglass me-1"></i>
-                    {{ getAantalWachtOpGoedkeuring() }}
-                    <span class="visually-hidden">reacties die wachten op goedkeuring</span>
-                </a>
-            {% endif %}
-            <a href="{{ url('csrdelft_forum_toonalles') }}"
-               class="btn btn-primary post confirm ReloadPage"
-               title="Verborgen onderwerpen weer laten zien">
-                <i class="fas fa-eye me-1"></i>
-                {{ getAantalVerborgenVoorLid() }}
-                <span class="visually-hidden">verborgen onderwerpen weer laten zien</span>
-            </a>
-        </div>
+		<div class="btn-group me-2" role="group">
+			{% if deel is not defined or (deel.forum_id is not empty and deel.magModereren) %}
+				<a href="{{ url('csrdelft_forum_wacht') }}"
+					class="btn btn-primary"
+					title="Reacties die wachten op goedkeuring">
+					<i class="fas fa-hourglass me-1"></i>
+					{{ getAantalWachtOpGoedkeuring() }}
+					<span class="visually-hidden">reacties die wachten op goedkeuring</span>
+				</a>
+			{% endif %}
+			<a href="{{ url('csrdelft_forum_toonalles') }}"
+				class="btn btn-primary post confirm ReloadPage"
+				title="Verborgen onderwerpen weer laten zien">
+				<i class="fas fa-eye me-1"></i>
+				{{ getAantalVerborgenVoorLid() }}
+				<span class="visually-hidden">verborgen onderwerpen weer laten zien</span>
+			</a>
+		</div>
 
-        <div class="btn-group" role="group">
-            {# TODO: toevoegen dat je kunt filteren #}
-            {# <button
+		<div class="btn-group" role="group">
+			{# TODO: toevoegen dat je kunt filteren #}
+			{# <button
 				type="button"
 				class="btn btn-primary"
 				data-bs-toggle="modal"
@@ -158,34 +152,34 @@
 				<span class="visually-hidden">Filter</span>
 			</button> #}
 
-            <button
-                    type="button"
-                    class="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#shareModal"
-                    title="Delen"
-            >
-                <i class="fas fa-share-alt"></i>
-                <span class="visually-hidden">Delen</span>
-            </button>
-            {% if deel is defined and deel.magMeldingKrijgen %}
-                {% if deel.lidWilMeldingVoorDeel %}
-                    <a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
-                       class="btn btn-primary post ReloadPage melding-nooit"
-                       title="Geen meldingen voor forumdeel onvangen">
-                        <i class="fas fa-bell-slash"></i>
-                        <span class="visually-hidden">Geen meldingen voor forumdeel onvangen</span>
-                    </a>
-                {% else %}
-                    <a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
-                       class="btn btn-primary post ReloadPage melding-altijd"
-                       title="Meldingen ontvangen voor nieuwe berichten in forumdeel">
-                        <i class="fas fa-bell-plus"></i>
-                        <span class="visually-hidden">Meldingen ontvangen voor nieuwe berichten in forumdeel</span>
-                    </a>
-                {% endif %}
-            {% endif %}
-        </div>
-    </div>
+			<button
+				type="button"
+				class="btn btn-primary"
+				data-bs-toggle="modal"
+				data-bs-target="#shareModal"
+				title="Delen"
+			>
+				<i class="fas fa-share-alt"></i>
+				<span class="visually-hidden">Delen</span>
+			</button>
+			{% if deel is defined and deel.magMeldingKrijgen %}
+				{% if deel.lidWilMeldingVoorDeel %}
+					<a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
+						class="btn btn-primary post ReloadPage melding-nooit"
+						title="Geen meldingen voor forumdeel onvangen">
+						<i class="fas fa-bell-slash"></i>
+						<span class="visually-hidden">Geen meldingen voor forumdeel onvangen</span>
+					</a>
+				{% else %}
+					<a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
+						class="btn btn-primary post ReloadPage melding-altijd"
+						title="Meldingen ontvangen voor nieuwe berichten in forumdeel">
+						<i class="fas fa-bell-plus"></i>
+						<span class="visually-hidden">Meldingen ontvangen voor nieuwe berichten in forumdeel</span>
+					</a>
+				{% endif %}
+			{% endif %}
+		</div>
+	</div>
 {% endif %}
 

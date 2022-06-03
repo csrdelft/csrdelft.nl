@@ -11,65 +11,61 @@ use CsrDelft\common\ContainerFacade;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 06/07/2019
  */
-final class BbHelper
-{
-    /**
-     * Templates for light mode
-     * @param BbEnv $env
-     * @param string $tag
-     * @param string $url
-     * @param string $content
-     * @return string
-     */
-    public static function lightLinkInline($env, $tag, $url, $content)
-    {
-        if (isset($url[0]) && $url[0] === '/') {
-            // Zorg voor werkende link in e-mail
-            $url = getCsrRoot() . $url;
-        }
+final class BbHelper {
+	/**
+	 * Templates for light mode
+	 * @param BbEnv $env
+	 * @param string $tag
+	 * @param string $url
+	 * @param string $content
+	 * @return string
+	 */
+	public static function lightLinkInline($env, $tag, $url, $content) {
+		if (isset($url[0]) && $url[0] === '/') {
+			// Zorg voor werkende link in e-mail
+			$url = getCsrRoot() . $url;
+		}
 
-        return <<<HTML
+		return <<<HTML
 			<a class="bb-link-inline bb-tag-{$tag}" href="{$url}">{$content}</a>
 HTML;
-    }
+	}
 
-    /**
-     * @param string $tag
-     * @param string $url
-     * @param string $titel
-     * @param string $beschrijving
-     * @param string $thumbnail
-     * @return string
-     */
-    public static function lightLinkBlock($tag, $url, $titel, $beschrijving, $thumbnail = '')
-    {
-        $titel = htmlspecialchars($titel);
-        $beschrijving = htmlspecialchars($beschrijving);
-        if ($thumbnail !== '') {
-            $thumbnail = '<img src="' . $thumbnail . '" />';
-        }
-        return <<<HTML
+	/**
+	 * @param string $tag
+	 * @param string $url
+	 * @param string $titel
+	 * @param string $beschrijving
+	 * @param string $thumbnail
+	 * @return string
+	 */
+	public static function lightLinkBlock($tag, $url, $titel, $beschrijving, $thumbnail = '') {
+		$titel = htmlspecialchars($titel);
+		$beschrijving = htmlspecialchars($beschrijving);
+		if ($thumbnail !== '') {
+			$thumbnail = '<img src="' . $thumbnail . '" />';
+		}
+		return <<<HTML
 			<a class="bb-link-block bb-tag-{$tag}" href="{$url}">
 				{$thumbnail}
 				<h2>{$titel}</h2>
 				<p>{$beschrijving}</p>
 			</a>
 HTML;
-    }
+	}
 
-    /**
-     * @param string $tag
-     * @param string $url
-     * @param string $thumbnail
-     * @return string
-     */
-    public static function lightLinkThumbnail($tag, $url, $thumbnail)
-    {
-        return <<<HTML
+	/**
+	 * @param string $tag
+	 * @param string $url
+	 * @param string $thumbnail
+	 * @return string
+	 */
+	public static function lightLinkThumbnail($tag, $url, $thumbnail) {
+		return <<<HTML
 			<a class="bb-link-thumbnail bb-tag-{$tag}" href="{$url}">
 				<img src="{$thumbnail}" />
 			</a>
 HTML;
-    }
+	}
 
 }

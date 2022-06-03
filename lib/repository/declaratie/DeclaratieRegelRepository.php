@@ -12,10 +12,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method DeclaratieRegel[]    findAll()
  * @method DeclaratieRegel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DeclaratieRegelRepository extends AbstractRepository
-{
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, DeclaratieRegel::class);
-    }
+class DeclaratieRegelRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, DeclaratieRegel::class);
+	}
 }

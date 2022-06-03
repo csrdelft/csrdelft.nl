@@ -34,14 +34,13 @@ use CsrDelft\view\View;
  *    - CollapsableSubkopje    <h3> + <div>
  *
  */
-interface FormElement extends View
-{
+interface FormElement extends View {
 
-    public function getModel();
+	public function getModel();
 
-    public function getType();
+	public function getType();
 
-    public function getHtml();
+	public function getHtml();
 
-    public function getJavascript();
+	public function getJavascript();
 }

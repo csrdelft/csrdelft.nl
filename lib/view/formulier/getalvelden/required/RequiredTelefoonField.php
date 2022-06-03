@@ -12,9 +12,8 @@ use CsrDelft\view\formulier\getalvelden\TelefoonField;
  *
  * @see TelefoonField
  */
-class RequiredTelefoonField extends TelefoonField
-{
+class RequiredTelefoonField extends TelefoonField {
 
-    public $required = true;
+	public $required = true;
 
 }

@@ -1,59 +1,48 @@
 <div id="maalcie-menu">
-    <ul class="horizontal">
-        <li><a href="{{ url('csrdelft_maalcie_mijnmaaltijden_ketzer') }}">Maaltijdenketzer</a></li>
-        <li><a href="{{ url('csrdelft_maalcie_mijnabonnementen_mijn') }}">Mijn abonnementen</a></li>
-        <li><a href="{{ url('csrdelft_maalcie_mijncorvee_rooster') }}">Corveerooster</a></li>
-        <li><a href="{{ url('csrdelft_maalcie_mijncorvee_mijn') }}">Mijn corveeoverzicht</a></li>
-        <li><a href="{{ url('csrdelft_maalcie_mijnvoorkeuren_mijn') }}">Mijn voorkeuren</a></li>
-        {% if mag('P_MAAL_MOD,P_CORVEE_MOD') %}
-            <li>
-                <select onchange="window.location.href = this.value;" aria-label="Maaltijdenbeheer menu">
-                    <option value="">Beheermenu</option>
-                    <optgroup label="Maaltijden">
-                        <option value="{{ url('csrdelft_maalcie_beheermaaltijden_get_beheer') }}">Beheer</option>
-                        <option value="{{ url('csrdelft_maalcie_beheermaaltijden_get_prullenbak') }}">Prullenbak
-                        </option>
-                        <option value="{{ url('csrdelft_maalcie_beheermaaltijden_get_archief') }}">Archief</option>
-                        <option value="{{ url('csrdelft_maalcie_beheermaaltijden_get_beoordelingen') }}">Beoordelingen
-                        </option>
-                        <option value="{{ url('csrdelft_maalcie_maaltijdrepetities_beheer') }}">Repetities</option>
-                        <option value="{{ url('csrdelft_instellingenbeheer_module', {module: 'maaltijden'}) }}">
-                            Instellingen
-                        </option>
-                        <option value="{{ url('csrdelft_maalcie_beheerabonnementen_waarschuwingen') }}">Abonnementen
-                        </option>
-                    </optgroup>
-                    <optgroup label="Fiscaat">
-                        <option value="{{ url('csrdelft_fiscaat_beheerciviproducten_overzicht') }}">Productbeheer
-                        </option>
-                        <option value="{{ url('csrdelft_fiscaat_beheercivisaldo_overzicht') }}">Saldobeheer</option>
-                        <option value="{{ url('csrdelft_maalcie_maaltijdenfiscaat_get_onverwerkt') }}">Onverwerkt
-                        </option>
-                        <option value="{{ url('csrdelft_maalcie_maalcieboekjaar_beheer') }}">Boekjaar sluiten</option>
-                    </optgroup>
-                    <optgroup label="Corvee">
-                        <option value="{{ url('csrdelft_maalcie_beheertaken_beheer') }}">Beheer</option>
-                        <option value="{{ url('csrdelft_maalcie_beheerfuncties_beheer') }}">Functies & kwalificaties
-                        </option>
-                        <option value="{{ url('csrdelft_instellingenbeheer_module', {module: 'corvee'}) }}">
-                            Instellingen
-                        </option>
-                        <option value="{{ url('csrdelft_maalcie_beheerpunten_beheer') }}">Punten</option>
-                        <option value="{{ url('csrdelft_maalcie_beheervoorkeuren_beheer') }}">Voorkeuren</option>
-                        <option value="{{ url('csrdelft_maalcie_beheervrijstellingen_beheer') }}">Vrijstellingen
-                        </option>
-                    </optgroup>
-                </select>
-            </li>
-        {% endif %}
-    </ul>
+	<ul class="horizontal">
+		<li><a href="{{ url('csrdelft_maalcie_mijnmaaltijden_ketzer') }}">Maaltijdenketzer</a></li>
+		<li><a href="{{ url('csrdelft_maalcie_mijnabonnementen_mijn') }}">Mijn abonnementen</a></li>
+		<li><a href="{{ url('csrdelft_maalcie_mijncorvee_rooster') }}">Corveerooster</a></li>
+		<li><a href="{{ url('csrdelft_maalcie_mijncorvee_mijn') }}">Mijn corveeoverzicht</a></li>
+		<li><a href="{{ url('csrdelft_maalcie_mijnvoorkeuren_mijn') }}">Mijn voorkeuren</a></li>
+		{% if mag('P_MAAL_MOD,P_CORVEE_MOD') %}
+			<li>
+				<select onchange="window.location.href = this.value;" aria-label="Maaltijdenbeheer menu">
+					<option value="">Beheermenu</option>
+					<optgroup label="Maaltijden">
+						<option value="{{ url('csrdelft_maalcie_beheermaaltijden_get_beheer') }}">Beheer</option>
+						<option value="{{ url('csrdelft_maalcie_beheermaaltijden_get_prullenbak') }}">Prullenbak</option>
+						<option value="{{ url('csrdelft_maalcie_beheermaaltijden_get_archief') }}">Archief</option>
+						<option value="{{ url('csrdelft_maalcie_beheermaaltijden_get_beoordelingen') }}">Beoordelingen</option>
+						<option value="{{ url('csrdelft_maalcie_maaltijdrepetities_beheer') }}">Repetities</option>
+						<option value="{{ url('csrdelft_instellingenbeheer_module', {module: 'maaltijden'}) }}">Instellingen </option>
+						<option value="{{ url('csrdelft_maalcie_beheerabonnementen_waarschuwingen') }}">Abonnementen</option>
+					</optgroup>
+					<optgroup label="Fiscaat">
+						<option value="{{ url('csrdelft_fiscaat_beheerciviproducten_overzicht') }}">Productbeheer</option>
+						<option value="{{ url('csrdelft_fiscaat_beheercivisaldo_overzicht') }}">Saldobeheer</option>
+						<option value="{{ url('csrdelft_maalcie_maaltijdenfiscaat_get_onverwerkt') }}">Onverwerkt</option>
+						<option value="{{ url('csrdelft_maalcie_maalcieboekjaar_beheer') }}">Boekjaar sluiten</option>
+					</optgroup>
+					<optgroup label="Corvee">
+						<option value="{{ url('csrdelft_maalcie_beheertaken_beheer') }}">Beheer</option>
+						<option value="{{ url('csrdelft_maalcie_beheerfuncties_beheer') }}">Functies & kwalificaties</option>
+						<option value="{{ url('csrdelft_instellingenbeheer_module', {module: 'corvee'}) }}">Instellingen</option>
+						<option value="{{ url('csrdelft_maalcie_beheerpunten_beheer') }}">Punten</option>
+						<option value="{{ url('csrdelft_maalcie_beheervoorkeuren_beheer') }}">Voorkeuren</option>
+						<option value="{{ url('csrdelft_maalcie_beheervrijstellingen_beheer') }}">Vrijstellingen</option>
+					</optgroup>
+				</select>
+			</li>
+		{% endif %}
+	</ul>
 </div>
 <hr/>
 <table>
-    <tr id="maalcie-melding">
-        <td id="maalcie-melding-veld">{{ getMelding() }}</td>
-    </tr>
+	<tr id="maalcie-melding">
+		<td id="maalcie-melding-veld">{{ getMelding() }}</td>
+	</tr>
 </table>
 {% if titel is defined %}
-    <h1>{{ titel }}</h1>
+	<h1>{{ titel }}</h1>
 {% endif %}

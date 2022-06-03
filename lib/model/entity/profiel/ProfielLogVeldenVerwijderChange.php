@@ -11,20 +11,16 @@ namespace CsrDelft\model\entity\profiel;
  * Log voor verwijderen van profielvelden.
  *
  */
-class ProfielLogVeldenVerwijderChange extends AbstractProfielLogChangeEntry
-{
-    /**
-     * @var string[]
-     */
-    public $velden = [];
+class ProfielLogVeldenVerwijderChange extends AbstractProfielLogChangeEntry {
+	/**
+	 * @var string[]
+	 */
+	public $velden = [];
+	public function __construct($velden) {
+		$this->velden = $velden;
+	}
 
-    public function __construct($velden)
-    {
-        $this->velden = $velden;
-    }
-
-    public function toHtml()
-    {
-        return "Verwijder velden: " . implode(", ", $this->velden);
-    }
+	public function toHtml() {
+		return "Verwijder velden: ". implode(", ", $this->velden);
+	}
 }

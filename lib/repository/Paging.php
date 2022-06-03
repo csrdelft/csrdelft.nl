@@ -10,16 +10,15 @@ namespace CsrDelft\repository;
  * Paginering van items.
  *
  */
-interface Paging
-{
+interface Paging {
 
-    public function getAantalPerPagina();
+	public function getAantalPerPagina();
 
-    public function setAantalPerPagina($aantal);
+	public function setAantalPerPagina($aantal);
 
-    public function getHuidigePagina();
+	public function getHuidigePagina();
 
-    public function setHuidigePagina($pagina, $voor);
+	public function setHuidigePagina($pagina, $voor);
 
-    public function getAantalPaginas($voor);
+	public function getAantalPaginas($voor);
 }

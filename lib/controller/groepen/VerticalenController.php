@@ -14,44 +14,41 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Controller voor verticalen.
  */
-class VerticalenController extends AbstractGroepenController
-{
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Verticale::class);
-    }
+class VerticalenController extends AbstractGroepenController {
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Verticale::class);
+	}
 
-    public function zoeken(Request $request, $zoekterm = null)
-    {
-        if (!$zoekterm && !$request->query->has('q')) {
-            throw $this->createAccessDeniedException();
-        }
-        if (!$zoekterm) {
-            $zoekterm = $request->query->get('q');
-        }
-        $zoekterm = '%' . $zoekterm . '%';
-        $limit = 5;
-        if ($request->query->has('limit')) {
-            $limit = $request->query->getInt('limit');
-        }
-        $result = [];
-        $verticales = $this->repository->createQueryBuilder('v')
-            ->where('v.naam LIKE :zoekterm')
-            ->setParameter('zoekterm', $zoekterm)
-            ->setMaxResults($limit)
-            ->getQuery()->getResult();
+	public function zoeken(Request $request, $zoekterm = null) {
+		if (!$zoekterm && !$request->query->has('q')) {
+			throw $this->createAccessDeniedException();
+		}
+		if (!$zoekterm) {
+			$zoekterm = $request->query->get('q');
+		}
+		$zoekterm = '%' . $zoekterm . '%';
+		$limit = 5;
+		if ($request->query->has('limit')) {
+			$limit = $request->query->getInt('limit');
+		}
+		$result = [];
+		$verticales = $this->repository->createQueryBuilder('v')
+			->where('v.naam LIKE :zoekterm')
+			->setParameter('zoekterm', $zoekterm)
+			->setMaxResults($limit)
+			->getQuery()->getResult();
 
-        foreach ($verticales as $verticale) {
-            /** @var Verticale $verticale */
-            $result[] = [
-                'url' => $verticale->getUrl() . '#' . $verticale->id,
-                'label' => $verticale->naam,
-                'value' => 'Verticale:' . $verticale->letter,
-                'naam' => $verticale->naam,
-                'id' => $verticale->getId(),
-            ];
-        }
-        return new JsonResponse($result);
-    }
+		foreach ($verticales as $verticale) {
+			/** @var Verticale $verticale */
+			$result[] = [
+				'url' => $verticale->getUrl() . '#' . $verticale->id,
+				'label' => $verticale->naam,
+				'value' => 'Verticale:' . $verticale->letter,
+				'naam' => $verticale->naam,
+				'id' => $verticale->getId(),
+			];
+		}
+		return new JsonResponse($result);
+	}
 
 }

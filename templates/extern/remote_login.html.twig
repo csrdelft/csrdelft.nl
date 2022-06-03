@@ -3,28 +3,27 @@
 {% block titel %}{% trans %}Login{% endtrans %}{% endblock %}
 
 {% block styles %}
-    {{ css_asset('extern') }}
+	{{ css_asset('extern') }}
 {% endblock %}
 
 {% block loginpopup %}{% endblock %}
 {% block loginbutton %}{% endblock %}
 
 {% block content %}
-    <div>
-        <h1>{% trans %}Inloggen{% endtrans %}</h1>
-        <p>{% trans %}U dient in te loggen om verder te gaan{% endtrans %}</p>
+	<div>
+		<h1>{% trans %}Inloggen{% endtrans %}</h1>
+		<p>{% trans %}U dient in te loggen om verder te gaan{% endtrans %}</p>
 
-        <form method="post" action="{{ url('csrdelft_security_remotelogin_remoteloginfinal') }}"
-              class="remote-login-code">
-            <input type="hidden" name="uuid" value="{{ uuid }}">
-            {{ csrfField() }}
-            {% if app.debug %}
-                <a href="{{ url('csrdelft_security_remotelogin_remoteloginauthorize', {uuid: uuid}) }}">
-                    <img src="{{ url('csrdelft_security_remotelogin_remoteloginqr') }}?uuid={{ uuid }}"/>
-                </a>
-            {% else %}
-                <img src="{{ url('csrdelft_security_remotelogin_remoteloginqr') }}?uuid={{ uuid }}"/>
-            {% endif %}
-        </form>
-    </div>
+		<form method="post" action="{{ url('csrdelft_security_remotelogin_remoteloginfinal') }}" class="remote-login-code">
+			<input type="hidden" name="uuid" value="{{ uuid }}">
+			{{ csrfField() }}
+			{% if app.debug %}
+				<a href="{{ url('csrdelft_security_remotelogin_remoteloginauthorize', {uuid: uuid}) }}">
+					<img src="{{ url('csrdelft_security_remotelogin_remoteloginqr') }}?uuid={{ uuid }}"/>
+				</a>
+			{% else %}
+				<img src="{{ url('csrdelft_security_remotelogin_remoteloginqr') }}?uuid={{ uuid }}"/>
+			{% endif %}
+		</form>
+	</div>
 {% endblock %}

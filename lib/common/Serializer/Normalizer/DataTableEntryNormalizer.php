@@ -14,36 +14,32 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
  *
  * @package CsrDelft\common
  */
-class DataTableEntryNormalizer implements ContextAwareNormalizerInterface
-{
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-    /**
-     * @var ObjectNormalizer
-     */
-    private $normalizer;
+class DataTableEntryNormalizer implements ContextAwareNormalizerInterface {
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $entityManager;
+	/**
+	 * @var ObjectNormalizer
+	 */
+	private $normalizer;
 
-    public function __construct(EntityManagerInterface $entityManager, ObjectNormalizer $normalizer)
-    {
-        $this->entityManager = $entityManager;
-        $this->normalizer = $normalizer;
-    }
+	public function __construct(EntityManagerInterface $entityManager, ObjectNormalizer $normalizer) {
+		$this->entityManager = $entityManager;
+		$this->normalizer = $normalizer;
+	}
 
-    public function normalize($topic, string $format = null, array $context = [])
-    {
-        $metadata = $this->entityManager->getClassMetadata(get_class($topic));
+	public function normalize($topic, string $format = null, array $context = []) {
+		$metadata = $this->entityManager->getClassMetadata(get_class($topic));
 
-        $data = $this->normalizer->normalize($topic, $format, $context);
+		$data = $this->normalizer->normalize($topic, $format, $context);
 
-        $data['UUID'] = strtolower(sprintf('%s@%s.csrdelft.nl', implode('.', $metadata->getIdentifierValues($topic)), short_class($topic)));
+		$data['UUID'] = strtolower(sprintf('%s@%s.csrdelft.nl', implode('.', $metadata->getIdentifierValues($topic)), short_class($topic)));
 
-        return $data;
-    }
+		return $data;
+	}
 
-    public function supportsNormalization($data, string $format = null, array $context = [])
-    {
-        return $data instanceof DataTableEntry;
-    }
+	public function supportsNormalization($data, string $format = null, array $context = []) {
+		return $data instanceof DataTableEntry;
+	}
 }

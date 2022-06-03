@@ -4,11 +4,9 @@
 namespace CsrDelft\view\formulier\knoppen;
 
 
-class LoginFormKnoppen extends FormKnoppen
-{
-    public function getHtml()
-    {
-        return <<<HTML
+class LoginFormKnoppen extends FormKnoppen {
+	public function getHtml() {
+		return <<<HTML
 <ul class="login-buttons">
 	<li>
 		<input type="submit" value="Inloggen &raquo;" />
@@ -18,5 +16,5 @@ class LoginFormKnoppen extends FormKnoppen
 	<li><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a></li>
 </ul>
 HTML;
-    }
+	}
 }

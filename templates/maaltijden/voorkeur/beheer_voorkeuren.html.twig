@@ -3,43 +3,43 @@
 {% block titel %}Beheer voorkeuren{% endblock %}
 
 {% block content %}
-    {{ parent() }}
-    <p>
-        Op deze pagina kunt u voor alle leden de voorkeuren beheren.
-    </p>
-    <table id="maalcie-tabel" class="maalcie-tabel">
-        {% for voorkeuren in matrix %}
-        {% if loop.index % 25 == 0 %}
-        {% if not loop.first %}</tbody>{% endif %}
-        <thead>
-        <tr>
-            <th class="text-bottom">Lid</th>
-            {% for repetitie in repetities %}
-                {# @var repetitie \CsrDelft\entity\corvee\CorveeRepetitie #}
-                <th class="{{ cycle(["rowColor0", "rowColor1"], loop.index) }}" style="width: 30px;">
-                    <div style="width: 28px;">
-                        <a
-                                href="{{ url('csrdelft_maalcie_corveerepetities_beheer', {crv_repetitie_id: repetitie.crv_repetitie_id}) }}"
-                                title="Wijzig corveerepetitie"
-                                class="btn popup">
-                            {{ icon("calendar_edit") }}
-                        </a>
-                    </div>
-                    <div style="width: 26px; height: 160px;">
-                        <div class="vertical niet-dik" style="position: relative; top: 130px;">
-                            <nobr>{{ repetitie.corveeFunctie.naam }}</nobr>
-                            <br/>
-                            <nobr>op {{ repetitie.dagVanDeWeekText }}</nobr>
-                        </div>
-                    </div>
-                </th>
-            {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% endif %}
-        {{ include('maaltijden/voorkeur/beheer_voorkeur_lijst.html.twig', {voorkeuren: voorkeuren}) }}
-        {% endfor %}
-        </tbody>
-    </table>
+	{{ parent() }}
+	<p>
+		Op deze pagina kunt u voor alle leden de voorkeuren beheren.
+	</p>
+	<table id="maalcie-tabel" class="maalcie-tabel">
+		{% for voorkeuren in matrix %}
+		{% if loop.index % 25 == 0 %}
+		{% if not loop.first %}</tbody>{% endif %}
+		<thead>
+		<tr>
+			<th class="text-bottom">Lid</th>
+			{% for repetitie in repetities %}
+				{# @var repetitie \CsrDelft\entity\corvee\CorveeRepetitie #}
+				<th class="{{ cycle(["rowColor0", "rowColor1"], loop.index) }}" style="width: 30px;">
+					<div style="width: 28px;">
+						<a
+							href="{{ url('csrdelft_maalcie_corveerepetities_beheer', {crv_repetitie_id: repetitie.crv_repetitie_id}) }}"
+							title="Wijzig corveerepetitie"
+							class="btn popup">
+							{{ icon("calendar_edit") }}
+						</a>
+					</div>
+					<div style="width: 26px; height: 160px;">
+						<div class="vertical niet-dik" style="position: relative; top: 130px;">
+							<nobr>{{ repetitie.corveeFunctie.naam }}</nobr>
+							<br/>
+							<nobr>op {{ repetitie.dagVanDeWeekText }}</nobr>
+						</div>
+					</div>
+				</th>
+			{% endfor %}
+		</tr>
+		</thead>
+		<tbody>
+		{% endif %}
+		{{ include('maaltijden/voorkeur/beheer_voorkeur_lijst.html.twig', {voorkeuren: voorkeuren}) }}
+		{% endfor %}
+		</tbody>
+	</table>
 {% endblock %}

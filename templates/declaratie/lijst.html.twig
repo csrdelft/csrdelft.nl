@@ -3,97 +3,91 @@
 {% block titel %}{{ titel }}{% endblock %}
 
 {% block styles %}
-    {{ css_asset('app') }}
+	{{ css_asset('app') }}
 {% endblock %}
 
 {% block content %}
-    <div class="clearfix">
-        {% if personal %}
-            <a href="{{ path('declaratie_nieuw') }}" class="btn btn-primary btn-lg float-end">Nieuwe declaratie</a>
-        {% endif %}
-        <h2>{{ titel }}</h2>
-    </div>
+	<div class="clearfix">
+		{% if personal %}
+			<a href="{{ path('declaratie_nieuw') }}" class="btn btn-primary btn-lg float-end">Nieuwe declaratie</a>
+		{% endif %}
+		<h2>{{ titel }}</h2>
+	</div>
 
-    {% if not personal %}
-        <div class="row bg-light p-2 rounded mb-4">
-            <form method="get" action="">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="statusConcept" type="checkbox" name="status[]" value="concept"
-                           {% if 'concept' in status %}checked{% endif %} />
-                    <label class="form-check-label" for="statusConcept">Concept</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="statusIngediend" type="checkbox" name="status[]"
-                           value="ingediend" {% if 'ingediend' in status %}checked{% endif %} />
-                    <label class="form-check-label" for="statusIngediend">Te beoordelen</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="statusAfgekeurd" type="checkbox" name="status[]"
-                           value="afgekeurd" {% if 'afgekeurd' in status %}checked{% endif %} />
-                    <label class="form-check-label" for="statusAfgekeurd">Afgekeurd</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="statusUitbetaald" type="checkbox" name="status[]"
-                           value="uitbetaald" {% if 'uitbetaald' in status %}checked{% endif %} />
-                    <label class="form-check-label" for="statusUitbetaald">Uit te betalen</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="statusGoedgekeurd" type="checkbox" name="status[]"
-                           value="goedgekeurd" {% if 'goedgekeurd' in status %}checked{% endif %} />
-                    <label class="form-check-label" for="statusGoedgekeurd">Afgerond</label>
-                </div>
-                <button type="submit" class="btn btn-primary btn-sm">Zoek</button>
-            </form>
-            <div class="col">
+	{% if not personal %}
+		<div class="row bg-light p-2 rounded mb-4">
+			<form method="get" action="">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" id="statusConcept" type="checkbox" name="status[]" value="concept" {% if 'concept' in status %}checked{% endif %} />
+					<label class="form-check-label" for="statusConcept">Concept</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" id="statusIngediend" type="checkbox" name="status[]" value="ingediend" {% if 'ingediend' in status %}checked{% endif %} />
+					<label class="form-check-label" for="statusIngediend">Te beoordelen</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" id="statusAfgekeurd" type="checkbox" name="status[]" value="afgekeurd" {% if 'afgekeurd' in status %}checked{% endif %} />
+					<label class="form-check-label" for="statusAfgekeurd">Afgekeurd</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" id="statusUitbetaald" type="checkbox" name="status[]" value="uitbetaald" {% if 'uitbetaald' in status %}checked{% endif %} />
+					<label class="form-check-label" for="statusUitbetaald">Uit te betalen</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" id="statusGoedgekeurd" type="checkbox" name="status[]" value="goedgekeurd" {% if 'goedgekeurd' in status %}checked{% endif %} />
+					<label class="form-check-label" for="statusGoedgekeurd">Afgerond</label>
+				</div>
+				<button type="submit" class="btn btn-primary btn-sm">Zoek</button>
+			</form>
+			<div class="col">
 
-            </div>
-        </div>
-    {% endif %}
+			</div>
+		</div>
+	{% endif %}
 
-    {% if declaraties %}
-        <div class="table-responsive">
-            <table class="table declaratie-table">
-                <thead>
-                <tr>
-                    <th>Nummer</th>
-                    {% if not personal %}
-                        <th>Indiener</th>
-                    {% endif %}
-                    <th>Datum</th>
-                    <th>Categorie</th>
-                    <th>Omschrijving</th>
-                    <th>Bedrag incl. btw</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for declaratie in declaraties %}
-                    <tr>
-                        <td>
-                            <a href="{{ path('declaratie_detail', {'declaratie': declaratie.id}) }}"
-                               class="status {{ declaratie.listStatus }}"
-                               title="Status: {{ declaratie.status }}">
-                                {% if declaratie.nummer %}
-                                    {{ declaratie.nummer }}
-                                {% else %}
-                                    #{{ declaratie.id }}
-                                {% endif %}
-                            </a>
-                        </td>
-                        {% if not personal %}
-                            <td>{{ declaratie.indiener.link('volledig')|raw }}</td>
-                        {% endif %}
-                        <td>{% if declaratie.ingediend %}{{ declaratie.ingediend|date('d-m-Y') }}{% endif %}</td>
-                        <td>{{ declaratie.categorie.naam }}</td>
-                        <td>{{ declaratie.omschrijving }}</td>
-                        <td>{{ (declaratie.totaal * 100)|format_bedrag }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        <div class="alert alert-info" role="alert">
-            Geen declaraties gevonden.
-        </div>
-    {% endif %}
+	{% if declaraties %}
+		<div class="table-responsive">
+			<table class="table declaratie-table">
+			<thead>
+				<tr>
+					<th>Nummer</th>
+					{% if not personal %}
+						<th>Indiener</th>
+					{% endif %}
+					<th>Datum</th>
+					<th>Categorie</th>
+					<th>Omschrijving</th>
+					<th>Bedrag incl. btw</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for declaratie in declaraties %}
+					<tr>
+						<td>
+							<a href="{{ path('declaratie_detail', {'declaratie': declaratie.id}) }}" class="status {{ declaratie.listStatus }}"
+										title="Status: {{ declaratie.status }}">
+								{% if declaratie.nummer %}
+									{{ declaratie.nummer }}
+								{% else %}
+									#{{ declaratie.id }}
+								{% endif %}
+							</a>
+						</td>
+						{% if not personal %}
+							<td>{{ declaratie.indiener.link('volledig')|raw }}</td>
+						{% endif %}
+						<td>{% if declaratie.ingediend %}{{ declaratie.ingediend|date('d-m-Y') }}{% endif %}</td>
+						<td>{{ declaratie.categorie.naam }}</td>
+						<td>{{ declaratie.omschrijving }}</td>
+						<td>{{ (declaratie.totaal * 100)|format_bedrag }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		</div>
+	{% else %}
+		<div class="alert alert-info" role="alert">
+			Geen declaraties gevonden.
+		</div>
+	{% endif %}
 {% endblock %}

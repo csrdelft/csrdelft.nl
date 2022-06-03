@@ -22,17 +22,17 @@ use CsrDelft\common\Enum;
  */
 class RemoteLoginStatus extends Enum
 {
-    const PENDING = 'pending';
-    const ACTIVE = 'active';
-    const ACCEPTED = 'accepted';
-    const REJECTED = 'rejected';
-    const EXPIRED = 'expired';
+	const PENDING = 'pending';
+	const ACTIVE = 'active';
+	const ACCEPTED = 'accepted';
+	const REJECTED = 'rejected';
+	const EXPIRED = 'expired';
 
-    protected static $mapChoiceToDescription = [
-        self::PENDING => self::PENDING,
-        self::ACTIVE => self::ACTIVE,
-        self::ACCEPTED => self::ACCEPTED,
-        self::REJECTED => self::REJECTED,
-        self::EXPIRED => self::EXPIRED,
-    ];
+	protected static $mapChoiceToDescription = [
+		self::PENDING => self::PENDING,
+		self::ACTIVE => self::ACTIVE,
+		self::ACCEPTED => self::ACCEPTED,
+		self::REJECTED => self::REJECTED,
+		self::EXPIRED => self::EXPIRED,
+	];
 }

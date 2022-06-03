@@ -16,55 +16,50 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method DocumentCategorie[]    findAll()
  * @method DocumentCategorie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DocumentCategorieRepository extends AbstractRepository
-{
-    /**
-     * @var DocumentRepository
-     */
-    private $documentRepository;
-    /**
-     * @var LoginService
-     */
-    private $loginService;
+class DocumentCategorieRepository extends AbstractRepository {
+	/**
+	 * @var DocumentRepository
+	 */
+	private $documentRepository;
+	/**
+	 * @var LoginService
+	 */
+	private $loginService;
 
-    public function __construct(ManagerRegistry $registry, LoginService $loginService, DocumentRepository $documentRepository)
-    {
-        parent::__construct($registry, DocumentCategorie::class);
-        $this->documentRepository = $documentRepository;
-        $this->loginService = $loginService;
-    }
+	public function __construct(ManagerRegistry $registry, LoginService $loginService, DocumentRepository $documentRepository) {
+		parent::__construct($registry, DocumentCategorie::class);
+		$this->documentRepository = $documentRepository;
+		$this->loginService = $loginService;
+	}
 
-    /**
-     * @param $id
-     *
-     * @return DocumentCategorie|null
-     */
-    public function get($id)
-    {
-        return $this->find($id);
-    }
+	/**
+	 * @param $id
+	 *
+	 * @return DocumentCategorie|null
+	 */
+	public function get($id) {
+		return $this->find($id);
+	}
 
-    /**
-     * @return array
-     */
-    public function getCategorieNamen()
-    {
-        $categorien = $this->findAll();
+	/**
+	 * @return array
+	 */
+	public function getCategorieNamen() {
+		$categorien = $this->findAll();
 
-        $return = [];
+		$return = [];
 
-        foreach ($categorien as $categorie) {
-            $return[$categorie->id] = $categorie->naam;
-        }
+		foreach ($categorien as $categorie) {
+			$return[$categorie->id] = $categorie->naam;
+		}
 
-        return $return;
-    }
+		return $return;
+	}
 
-    public function findMetSchijfrechtenVoorLid()
-    {
-        return array_filter($this->findAll(),
-            function ($categorie) {
-                return $this->loginService->_mag($categorie->schrijfrechten);
-            });
-    }
+	public function findMetSchijfrechtenVoorLid() {
+		return array_filter($this->findAll(),
+			function ($categorie) {
+				return $this->loginService->_mag($categorie->schrijfrechten);
+			});
+	}
 }

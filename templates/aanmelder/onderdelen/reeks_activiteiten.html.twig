@@ -1,32 +1,31 @@
 <H3>
-    {{ reeks.naam }}
+	{{ reeks.naam }}
 </H3>
 <p>
-    {{ reeks.rawBeschrijving | bbcode }}
+	{{ reeks.rawBeschrijving | bbcode }}
 </p>
 
 {% if activiteiten|length %}
-    <p>
-        Hieronder ziet u een overzicht van aankomende activiteiten waar u zich voor in heeft aangemeld of voor aan kan
-        melden.
-    </p>
-    <table id="aanmelder-tabel" class="aanmelder-tabel">
-        <thead>
-        <tr>
-            <th>Activiteit</th>
-            <th>Begintijd</th>
-            <th>Eindtijd</th>
-            <th>Aanwezigen (Limiet)</th>
-            <th>Aangemeld</th>
-            <th>Gasten</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for activiteit in activiteiten %}
-            {{ include('aanmelder/onderdelen/activiteit_regel.html.twig', {activiteit: activiteit}) }}
-        {% endfor %}
-        </tbody>
-    </table>
+	<p>
+		Hieronder ziet u een overzicht van aankomende activiteiten waar u zich voor in heeft aangemeld of voor aan kan melden.
+	</p>
+	<table id="aanmelder-tabel" class="aanmelder-tabel">
+		<thead>
+		<tr>
+			<th>Activiteit</th>
+			<th>Begintijd</th>
+			<th>Eindtijd</th>
+			<th>Aanwezigen (Limiet)</th>
+			<th>Aangemeld</th>
+			<th>Gasten</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for activiteit in activiteiten %}
+			{{ include('aanmelder/onderdelen/activiteit_regel.html.twig', {activiteit: activiteit}) }}
+		{% endfor %}
+		</tbody>
+	</table>
 {% else %}
-    <p>Geen activiteiten om voor aan te melden.</p>
+	<p>Geen activiteiten om voor aan te melden.</p>
 {% endif %}

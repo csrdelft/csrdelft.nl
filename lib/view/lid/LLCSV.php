@@ -1,7 +1,6 @@
 <?php
 
 namespace CsrDelft\view\lid;
-
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
 use Exception;
@@ -9,42 +8,39 @@ use Exception;
 /**
  * CSV in een textarea met clientside downloadknop
  */
-class LLCSV extends LLWeergave
-{
+class LLCSV extends LLWeergave {
 
-    public function viewHeader()
-    {
-        $html = '';
-        $html .= '<textarea class="csv">';
-        foreach ($this->velden as $veld) {
-            switch ($veld) {
+	public function viewHeader() {
+		$html = '';
+		$html .= '<textarea class="csv">';
+		foreach ($this->velden as $veld) {
+			switch ($veld) {
 
-                case 'adres':
-                    $html .= 'adres;';
-                    $html .= 'postcode;';
-                    $html .= 'woonplaats;';
-                    break;
+				case 'adres':
+					$html .= 'adres;';
+					$html .= 'postcode;';
+					$html .= 'woonplaats;';
+					break;
 
-                case 'naam':
-                    $html .= 'voornaam;';
-                    $html .= 'tussenvoegsel;';
-                    $html .= 'achternaam;';
-                    break;
+				case 'naam':
+					$html .= 'voornaam;';
+					$html .= 'tussenvoegsel;';
+					$html .= 'achternaam;';
+					break;
 
-                default:
-                    $html .= $veld . ';';
-            }
-        }
+				default:
+					$html .= $veld . ';';
+			}
+		}
 
-        $html .= "\n";
-        return $html;
-    }
+		$html .= "\n";
+		return $html;
+	}
 
-    public function viewFooter()
-    {
-        $html = '';
-        $html .= '</textarea>';
-        $html .= <<<HTML
+	public function viewFooter() {
+		$html = '';
+		$html .= '</textarea>';
+		$html .= <<<HTML
 		<a href="" class="btn btn-primary download-ledenlijst">Download</a>
 		<script>
 			let csvContent = "data:text/csv;charset=utf-8,";
@@ -55,84 +51,83 @@ class LLCSV extends LLWeergave
 			link.attr("download", "ledenlijst.csv");
 		</script>
 		HTML;
-        return $html;
-    }
+		return $html;
+	}
 
-    public function viewLid(Profiel $profiel)
-    {
-        $html = '';
+	public function viewLid(Profiel $profiel) {
+		$html = '';
 
-        foreach ($this->velden as $veld) {
-            $return = '';
-            switch ($veld) {
+		foreach ($this->velden as $veld) {
+			$return = '';
+			switch ($veld) {
 
-                case 'adres':
-                    $return .= $profiel->adres . ';';
-                    $return .= $profiel->postcode . ';';
-                    $return .= $profiel->woonplaats;
-                    break;
+				case 'adres':
+					$return .= $profiel->adres . ';';
+					$return .= $profiel->postcode . ';';
+					$return .= $profiel->woonplaats;
+					break;
 
-                case 'naam':
-                    $return .= $profiel->voornaam . ';';
-                    $return .= $profiel->tussenvoegsel . ';';
-                    $return .= $profiel->achternaam;
-                    break;
+				case 'naam':
+					$return .= $profiel->voornaam . ';';
+					$return .= $profiel->tussenvoegsel . ';';
+					$return .= $profiel->achternaam;
+					break;
 
-                case 'kring':
-                    $kring = $profiel->getKring();
-                    if ($kring) {
-                        $return .= $kring->naam;
-                    }
-                    break;
+				case 'kring':
+					$kring = $profiel->getKring();
+					if ($kring) {
+						$return .= $kring->naam;
+					}
+					break;
 
-                case 'pasfoto':
-                    $return .= $profiel->getPasfotoPath();
-                    break;
+				case 'pasfoto':
+					$return .= $profiel->getPasfotoPath();
+					break;
 
-                case 'patroon':
-                    $patroon = ProfielRepository::get($profiel->patroon);
-                    if ($patroon) {
-                        $return .= $patroon->getNaam('volledig');
-                    }
-                    break;
+				case 'patroon':
+					$patroon = ProfielRepository::get($profiel->patroon);
+					if ($patroon) {
+						$return .= $patroon->getNaam('volledig');
+					}
+					break;
 
-                case 'echtgenoot':
-                    $echtgenoot = ProfielRepository::get($profiel->echtgenoot);
-                    if ($echtgenoot) {
-                        $return .= $echtgenoot->getNaam('volledig');
-                    }
-                    break;
+				case 'echtgenoot':
+					$echtgenoot = ProfielRepository::get($profiel->echtgenoot);
+					if ($echtgenoot) {
+						$return .= $echtgenoot->getNaam('volledig');
+					}
+					break;
 
-                case 'adresseringechtpaar':
-                    if (empty($profiel->adresseringechtpaar)) {
-                        $return .= $profiel->getNaam('voorletters');
-                    } else {
-                        $return .= $profiel->adresseringechtpaar;
-                    }
-                    break;
+				case 'adresseringechtpaar':
+					if (empty($profiel->adresseringechtpaar)) {
+						$return .= $profiel->getNaam('voorletters');
+					} else {
+						$return .= $profiel->adresseringechtpaar;
+					}
+					break;
 
-                case 'verticale':
-                    $return .= $profiel->getVerticale()->naam;
-                    break;
+				case 'verticale':
+					$return .= $profiel->getVerticale()->naam;
+					break;
 
-                case 'woonoord':
-                    $woonoord = $profiel->getWoonoord();
-                    if ($woonoord) {
-                        $return .= $woonoord->naam;
-                    }
-                    break;
+				case 'woonoord':
+					$woonoord = $profiel->getWoonoord();
+					if ($woonoord) {
+						$return .= $woonoord->naam;
+					}
+					break;
 
-                default:
-                    try {
-                        $return .= $profiel->$veld;
-                    } catch (Exception $e) {
-                        //omit non-existant fields
-                    }
-            }
-            $html .= htmlspecialchars($return) . ';';
-        }
-        $html .= "\n";
-        return $html;
-    }
+				default:
+					try {
+						$return .= $profiel->$veld;
+					} catch (Exception $e) {
+						//omit non-existant fields
+					}
+			}
+			$html .= htmlspecialchars($return) . ';';
+		}
+		$html .= "\n";
+		return $html;
+	}
 
 }

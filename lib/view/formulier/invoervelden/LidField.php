@@ -12,78 +12,72 @@ use CsrDelft\service\ProfielService;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class LidField extends AutocompleteField
-{
+class LidField extends AutocompleteField {
 
-    protected $fieldClassName = 'col-sm-4';
+	protected $fieldClassName = 'col-sm-4';
 
-    // zoekfilter voor door namen2uid gebruikte LidZoeker::zoekLeden.
-    // geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
-    private $zoekin;
+	// zoekfilter voor door namen2uid gebruikte LidZoeker::zoekLeden.
+	// geaccepteerde input: 'leden', 'oudleden', 'alleleden', 'allepersonen', 'nobodies'
+	private $zoekin;
 
-    public function __construct($name, $value, $description, $zoekin = 'alleleden')
-    {
-        parent::__construct($name, $value, $description);
-        if (!in_array($zoekin, array('leden', 'oudleden', 'novieten', 'alleleden', 'allepersonen', 'nobodies'))) {
-            $zoekin = 'leden';
-        }
-        $this->zoekin = $zoekin;
-        $this->suggestions[ucfirst($this->zoekin)] = '/tools/naamsuggesties?zoekin=' . $this->zoekin . '&q=';
-    }
+	public function __construct($name, $value, $description, $zoekin = 'alleleden') {
+		parent::__construct($name, $value, $description);
+		if (!in_array($zoekin, array('leden', 'oudleden', 'novieten', 'alleleden', 'allepersonen', 'nobodies'))) {
+			$zoekin = 'leden';
+		}
+		$this->zoekin = $zoekin;
+		$this->suggestions[ucfirst($this->zoekin)] = '/tools/naamsuggesties?zoekin=' . $this->zoekin . '&q=';
+	}
 
-    public function getValue()
-    {
-        $this->value = parent::getValue();
-        if ($this->empty_null and empty($this->value)) {
-            return null;
-        }
-        if (!AccountRepository::isValidUid($this->value)) {
-            $profielService = ContainerFacade::getContainer()->get(ProfielService::class);
-            $profielen = $profielService->zoekLeden($this->value, 'naam', 'alle', 'achternaam', $this->zoekin);
-            if (!empty($profielen)) {
-                $this->value = $profielen[0]->uid;
-            }
-        }
-        return $this->value;
-    }
+	public function getValue() {
+		$this->value = parent::getValue();
+		if ($this->empty_null AND empty($this->value)) {
+			return null;
+		}
+		if (!AccountRepository::isValidUid($this->value)) {
+			$profielService = ContainerFacade::getContainer()->get(ProfielService::class);
+			$profielen = $profielService->zoekLeden($this->value, 'naam', 'alle', 'achternaam', $this->zoekin);
+			if (!empty($profielen)) {
+				$this->value = $profielen[0]->uid;
+			}
+		}
+		return $this->value;
+	}
 
-    public function validate()
-    {
-        if (!parent::validate()) {
-            return false;
-        }
-        // parent checks not null
-        if ($this->value == '') {
-            return true;
-        }
-        $value = parent::getValue();
-        // geldig uid?
-        if (AccountRepository::isValidUid($value) and ProfielRepository::existsUid($value)) {
-            return true;
-        }
-        $profielService = ContainerFacade::getContainer()->get(ProfielService::class);
-        $profielen = $profielService->zoekLeden($value, 'naam', 'alle', 'achternaam', $this->zoekin);
-        if (!empty($profielen)) {
-            if (count($profielen) == 1) {
-                return true;
-            } else {
-                $this->error = 'Meerdere leden mogelijk';
-                return false;
-            }
-        }
-        $this->error = 'Geen geldig lid';
-        return $this->error === '';
-    }
+	public function validate() {
+		if (!parent::validate()) {
+			return false;
+		}
+		// parent checks not null
+		if ($this->value == '') {
+			return true;
+		}
+		$value = parent::getValue();
+		// geldig uid?
+		if (AccountRepository::isValidUid($value) AND ProfielRepository::existsUid($value)) {
+			return true;
+		}
+		$profielService = ContainerFacade::getContainer()->get(ProfielService::class);
+		$profielen = $profielService->zoekLeden($value, 'naam', 'alle', 'achternaam', $this->zoekin);
+		if (!empty($profielen)) {
+			if (count($profielen) == 1) {
+				return true;
+			} else {
+				$this->error = 'Meerdere leden mogelijk';
+				return false;
+			}
+		}
+		$this->error = 'Geen geldig lid';
+		return $this->error === '';
+	}
 
-    public function getPreviewDiv()
-    {
-        return '<div id="lidPreview_' . $this->getId() . '"></div>';
-    }
+	public function getPreviewDiv() {
+		return '<div id="lidPreview_' . $this->getId() . '"></div>';
+	}
 
-    public function getJavascript()
-    {
-        return /** @lang JavaScript */
-            parent::getJavascript() . <<<JS
+	public function getJavascript() {
+		return /** @lang JavaScript */
+			parent::getJavascript() . <<<JS
 
 var preview{$this->getId()} = function() {
 	var val = $('#{$this->getId()}').val();
@@ -105,6 +99,6 @@ var preview{$this->getId()} = function() {
 preview{$this->getId()}();
 $('#{$this->getId()}').change(preview{$this->getId()});
 JS;
-    }
+	}
 
 }

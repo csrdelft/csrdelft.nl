@@ -12,10 +12,8 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * Controller voor onderverenigingen.
  */
-class OnderverenigingenController extends AbstractGroepenController
-{
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Ondervereniging::class);
-    }
+class OnderverenigingenController extends AbstractGroepenController {
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Ondervereniging::class);
+	}
 }

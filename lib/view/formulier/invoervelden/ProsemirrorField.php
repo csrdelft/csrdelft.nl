@@ -11,32 +11,32 @@ use CsrDelft\view\bbcode\ProsemirrorToBb;
  */
 class ProsemirrorField extends InputField
 {
-    /**
-     * De externe editor heeft geen knopjes voor groepen, forumplaetje, leden, etc.
-     *
-     * @var bool Forceer externe editor voor dit veld.
-     */
-    public $extern = false;
+	/**
+	 * De externe editor heeft geen knopjes voor groepen, forumplaetje, leden, etc.
+	 *
+	 * @var bool Forceer externe editor voor dit veld.
+	 */
+	public $extern = false;
 
-    public function getHtml()
-    {
-        $attribute = $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly'));
-        $converter = ContainerFacade::getContainer()->get(BbToProsemirror::class);
-        $jsonValue = htmlentities(json_encode($converter->toProseMirror($this->getValue())));
+	public function getHtml()
+	{
+		$attribute = $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly'));
+		$converter = ContainerFacade::getContainer()->get(BbToProsemirror::class);
+		$jsonValue = htmlentities(json_encode($converter->toProseMirror($this->getValue())));
 
-        return <<<HTML
+		return <<<HTML
 <input type="hidden" name="{$this->getName()}_type" value="pm">
 <input type="hidden" $attribute value="{$jsonValue}">
 <div class="pm-editor" data-prosemirror-doc="{$this->getId()}" data-extern="{$this->extern}"></div>
 HTML;
-    }
+	}
 
-    public function getValue()
-    {
-        if ($this->isPosted()) {
-            $converter = ContainerFacade::getContainer()->get(ProsemirrorToBb::class);
-            $this->value = $converter->convertToBb(filter_input(INPUT_POST, $this->name, FILTER_UNSAFE_RAW));
-        }
-        return $this->value;
-    }
+	public function getValue()
+	{
+		if ($this->isPosted()) {
+			$converter = ContainerFacade::getContainer()->get(ProsemirrorToBb::class);
+			$this->value = $converter->convertToBb(filter_input(INPUT_POST, $this->name, FILTER_UNSAFE_RAW));
+		}
+		return $this->value;
+	}
 }

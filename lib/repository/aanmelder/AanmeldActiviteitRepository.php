@@ -20,44 +20,44 @@ use Exception;
  */
 class AanmeldActiviteitRepository extends AbstractRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, AanmeldActiviteit::class);
-    }
+	public function __construct(ManagerRegistry $registry)
+	{
+		parent::__construct($registry, AanmeldActiviteit::class);
+	}
 
-    /**
-     * @param Reeks $reeks
-     * @return Collection|AanmeldActiviteit[]
-     */
-    public function getKomendeActiviteiten(Reeks $reeks)
-    {
-        return $reeks->getActiviteiten()->filter(function (AanmeldActiviteit $activiteit) {
-            return $activiteit->magBekijken() && $activiteit->isInToekomst();
-        });
-    }
+	/**
+	 * @param Reeks $reeks
+	 * @return Collection|AanmeldActiviteit[]
+	 */
+	public function getKomendeActiviteiten(Reeks $reeks)
+	{
+		return $reeks->getActiviteiten()->filter(function (AanmeldActiviteit $activiteit) {
+			return $activiteit->magBekijken() && $activiteit->isInToekomst();
+		});
+	}
 
-    public function delete(AanmeldActiviteit $activiteit)
-    {
-        $em = $this->getEntityManager();
+	public function delete(AanmeldActiviteit $activiteit)
+	{
+		$em = $this->getEntityManager();
 
-        $em->beginTransaction();
-        try {
-            $em->remove($activiteit);
-            $em->flush();
-            $em->commit();
-        } catch (ORMException $ex) {
-            $em->rollback();
-            throw new CsrException($ex->getMessage());
-        }
-    }
+		$em->beginTransaction();
+		try {
+			$em->remove($activiteit);
+			$em->flush();
+			$em->commit();
+		} catch (ORMException $ex) {
+			$em->rollback();
+			throw new CsrException($ex->getMessage());
+		}
+	}
 
-    public function sluit(AanmeldActiviteit $activiteit, bool $sluit = true)
+	public function sluit(AanmeldActiviteit $activiteit, bool $sluit = true)
     {
-        try {
-            $activiteit->setGesloten($sluit);
-            $this->getEntityManager()->flush();
-        } catch (Exception $e) {
-            throw new CsrException($e->getMessage());
-        }
-    }
+    	try {
+				$activiteit->setGesloten($sluit);
+				$this->getEntityManager()->flush();
+			} catch (Exception $e) {
+				throw new CsrException($e->getMessage());
+			}
+		}
 }

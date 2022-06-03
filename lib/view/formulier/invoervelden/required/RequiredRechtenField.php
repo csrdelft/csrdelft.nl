@@ -11,9 +11,8 @@ use CsrDelft\view\formulier\invoervelden\RechtenField;
  *
  * @see RechtenField
  */
-class RequiredRechtenField extends RechtenField
-{
+class RequiredRechtenField extends RechtenField {
 
-    public $required = true;
+	public $required = true;
 
 }

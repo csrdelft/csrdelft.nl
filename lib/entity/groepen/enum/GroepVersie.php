@@ -11,13 +11,12 @@ use CsrDelft\common\Enum;
  * @method static static V1
  * @method static static V2
  */
-class GroepVersie extends Enum
-{
-    const V1 = 'v1';
-    const V2 = 'v2';
+class GroepVersie extends Enum {
+	const V1 = 'v1';
+	const V2 = 'v2';
 
-    protected static $mapChoiceToDescription = [
-        self::V1 => 'Versie 1',
-        self::V2 => 'Versie 2',
-    ];
+	protected static $mapChoiceToDescription = [
+		self::V1 => 'Versie 1',
+		self::V2 => 'Versie 2',
+	];
 }

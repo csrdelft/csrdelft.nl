@@ -17,65 +17,65 @@ use Symfony\Component\Uid\Uuid;
 
 class BarTokenSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var Security
-     */
-    private $security;
-    /**
-     * @var AccessService
-     */
-    private $accessService;
-    /**
-     * @var ManagerRegistry
-     */
-    private $manager;
+	/**
+	 * @var Security
+	 */
+	private $security;
+	/**
+	 * @var AccessService
+	 */
+	private $accessService;
+	/**
+	 * @var ManagerRegistry
+	 */
+	private $manager;
 
-    public function __construct(Security $security, AccessService $accessService, ManagerRegistry $manager)
-    {
+	public function __construct(Security $security, AccessService $accessService, ManagerRegistry $manager)
+	{
 
-        $this->security = $security;
-        $this->accessService = $accessService;
-        $this->manager = $manager;
-    }
+		$this->security = $security;
+		$this->accessService = $accessService;
+		$this->manager = $manager;
+	}
 
-    public static function getSubscribedEvents()
-    {
-        return [
-            KernelEvents::CONTROLLER
-        ];
-    }
+	public static function getSubscribedEvents()
+	{
+		return [
+			KernelEvents::CONTROLLER
+		];
+	}
 
-    public function onKernelController(ControllerEvent $event)
-    {
-        $controller = $event->getController();
-        $request = $event->getRequest();
+	public function onKernelController(ControllerEvent $event)
+	{
+		$controller = $event->getController();
+		$request = $event->getRequest();
 
-        if (is_array($controller)) {
-            $controller = $controller[0];
-        }
+		if (is_array($controller)) {
+			$controller = $controller[0];
+		}
 
-        if ($controller instanceof BarSysteemController) {
-            if ($this->accessService->mag($this->security->getUser(), P_FISCAAT_MOD)) {
-                return;
-            }
+		if ($controller instanceof BarSysteemController) {
+			if ($this->accessService->mag($this->security->getUser(), P_FISCAAT_MOD)) {
+				return;
+			}
 
-            $token = $request->headers->get('X-Bar-Token');
+			$token = $request->headers->get('X-Bar-Token');
 
-            if (!$token) {
-                throw new AccessDeniedException();
-            }
+			if (!$token) {
+				throw new AccessDeniedException();
+			}
 
-            $barLocatie = $this->manager
-                ->getRepository(BarLocatie::class)
-                ->findOneBy(['uuid' => Uuid::fromString($token)]);
+			$barLocatie = $this->manager
+				->getRepository(BarLocatie::class)
+				->findOneBy(['uuid' => Uuid::fromString($token)]);
 
-            if (!$barLocatie) {
-                throw new AccessDeniedException();
-            }
+			if (!$barLocatie) {
+				throw new AccessDeniedException();
+			}
 
-            if ($barLocatie->ip != $request->getClientIp()) {
-                throw new AccessDeniedException();
-            }
-        }
-    }
+			if ($barLocatie->ip != $request->getClientIp()) {
+				throw new AccessDeniedException();
+			}
+		}
+	}
 }

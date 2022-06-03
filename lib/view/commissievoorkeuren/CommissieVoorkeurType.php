@@ -12,20 +12,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CommissieVoorkeurType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder->add('voorkeur', ChoiceType::class, [
-            'choices' => array('nee' => 1, 'ja' => 2, 'mischien' => 3),
-            'label_format' => 'commissie', //$entity->getCommissieNaam(),
-        ]);
-        $builder->add('commissieNaam', HiddenType::class, ['disabled' => true]);
-        $builder->add('categorieNaam', HiddenType::class, ['disabled' => true]);
-    }
+	public function buildForm(FormBuilderInterface $builder, array $options)
+	{
+		$builder->add('voorkeur', ChoiceType::class, [
+			'choices' => array('nee' => 1, 'ja' => 2, 'mischien' => 3),
+			'label_format' => 'commissie', //$entity->getCommissieNaam(),
+		]);
+		$builder->add('commissieNaam', HiddenType::class, ['disabled' => true]);
+		$builder->add('categorieNaam', HiddenType::class, ['disabled' => true]);
+	}
 
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => VoorkeurVoorkeur::class,
-        ]);
-    }
+	public function configureOptions(OptionsResolver $resolver): void
+	{
+		$resolver->setDefaults([
+			'data_class' => VoorkeurVoorkeur::class,
+		]);
+	}
 }

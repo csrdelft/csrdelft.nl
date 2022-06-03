@@ -1,8 +1,8 @@
 {% extends mag('P_LOGGED_IN') ? 'base.html.twig' : 'extern/layout.html.twig' %}
 
 {% block styles %}
-    {% if not mag('P_LOGGED_IN') %}
-        {{ css_asset('extern') }}
-        {{ css_asset('extern-forum') }}
-    {% endif %}
+{% if not mag('P_LOGGED_IN') %}
+	{{ css_asset('extern') }}
+	{{ css_asset('extern-forum') }}
+{% endif %}
 {% endblock %}

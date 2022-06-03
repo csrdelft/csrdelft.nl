@@ -5,19 +5,17 @@ namespace CsrDelft\events;
 use CsrDelft\view\ToResponse;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
-class ViewEventListener
-{
-    /**
-     * Maak het mogelijk om een View klasse te returnen van een controller.
-     * Deze wordt dan in een Response gewrapped.
-     * @param ViewEvent $event
-     */
-    public function onKernelView(ViewEvent $event)
-    {
-        $value = $event->getControllerResult();
+class ViewEventListener {
+	/**
+	 * Maak het mogelijk om een View klasse te returnen van een controller.
+	 * Deze wordt dan in een Response gewrapped.
+	 * @param ViewEvent $event
+	 */
+	public function onKernelView(ViewEvent $event) {
+		$value = $event->getControllerResult();
 
-        if ($value instanceof ToResponse) {
-            $event->setResponse($value->toResponse());
-        }
-    }
+		if ($value instanceof ToResponse) {
+			$event->setResponse($value->toResponse());
+		}
+	}
 }

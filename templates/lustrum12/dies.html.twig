@@ -2,516 +2,516 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description"
-          content="Website voor het 12e lustrum der Civitas Studiosorum Reformatorum onder het thema Tijdloos.">
-    <meta name="author" content="Job Kanis">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+				content="Website voor het 12e lustrum der Civitas Studiosorum Reformatorum onder het thema Tijdloos.">
+	<meta name="author" content="Job Kanis">
 
-    <title>Tijdloos - 12e lustrum</title>
+	<title>Tijdloos - 12e lustrum</title>
 
-    {{ csrfMetaTag() }}
+	{{ csrfMetaTag() }}
 
-    {{ js_asset('app') }}
-    {{ js_asset('lustrum12-js') }}
-    {{ css_asset('thema-lustrum') }}
-    {{ css_asset('common') }}
-    {{ css_asset('lustrumdies') }}
+	{{ js_asset('app') }}
+	{{ js_asset('lustrum12-js') }}
+	{{ css_asset('thema-lustrum') }}
+	{{ css_asset('common') }}
+	{{ css_asset('lustrumdies') }}
 
-    <script>
-        {# Configuratie voor Sentry, zie sentry.ts #}
-        APP_ENV = "{{ app.environment }}";
-        SENTRY_DSN_JS = "{{ sentry_dsn }}";
-        USER = "{{ app.user.uid }}";
-    </script>
-    {{ js_asset('sentry') }}
+	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+	{{ js_asset('sentry') }}
 
-    <link rel="icon" href="/lustrum12/favicon.ico">
+	<link rel="icon" href="/lustrum12/favicon.ico">
 </head>
 
 <body class="zijbalk_verborgen diespagina">
-{#    {%  include 'lustrum12/zandloper.html.twig' %} #}
-{{ cms('lustrum-dies') }}
-{#    <nav class="site-header"> #}
-{#        <a class="logo-titel d-inline-block" href="./"> #}
-{#            <img src="/images/lustrum12/themaheader.png" #}
-{#                     alt="Logo menu" /> #}
-{#        </a> #}
-{#        <a class="logo-titel dies-logo-titel d-inline-block" href="./"> #}
-{#            <img src="/images/lustrum12/dies-bord.png" #}
-{#                     alt="Logo menu" /> #}
-{#        </a> #}
-{#        <div class="container"> #}
-{#            <div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center headerbuttons"> #}
-{#                <a class="d-none d-md-inline-block" href="./">Home</a> #}
-{#                <a class="d-none d-md-inline-block" href="#thema">Thema</a> #}
-{#                <a class="d-none d-md-inline-block" href="#programma">Programma</a> #}
-{#                <a class="d-none d-md-inline-block" href="#ketzers">Ketzers</a> #}
-{#                <a class="d-none d-md-inline-block" href="/tijdloos/dies/gala">Gala</a> #}
-{#                <a class="d-none d-md-inline-block" href="/tijdloos/dies/etiquette">Etiquette</a> #}
-{#            </div> #}
-{#        </div> #}
-{#    </nav> #}
+{#	{%  include 'lustrum12/zandloper.html.twig' %}#}
+	{{ cms('lustrum-dies') }}
+{#	<nav class="site-header">#}
+{#		<a class="logo-titel d-inline-block" href="./">#}
+{#			<img src="/images/lustrum12/themaheader.png"#}
+{#					 alt="Logo menu" />#}
+{#		</a>#}
+{#		<a class="logo-titel dies-logo-titel d-inline-block" href="./">#}
+{#			<img src="/images/lustrum12/dies-bord.png"#}
+{#					 alt="Logo menu" />#}
+{#		</a>#}
+{#		<div class="container">#}
+{#			<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center headerbuttons">#}
+{#				<a class="d-none d-md-inline-block" href="./">Home</a>#}
+{#				<a class="d-none d-md-inline-block" href="#thema">Thema</a>#}
+{#				<a class="d-none d-md-inline-block" href="#programma">Programma</a>#}
+{#				<a class="d-none d-md-inline-block" href="#ketzers">Ketzers</a>#}
+{#				<a class="d-none d-md-inline-block" href="/tijdloos/dies/gala">Gala</a>#}
+{#				<a class="d-none d-md-inline-block" href="/tijdloos/dies/etiquette">Etiquette</a>#}
+{#			</div>#}
+{#		</div>#}
+{#	</nav>#}
 
-{#    <a id="thema"></a> #}
-{#    <section class="helemaal-boven"> #}
-{#        <h1 class="titel">Thema</h1> #}
-{#        <div class="poster"> #}
-{#            <img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" /> #}
-{#        </div> #}
-{#        <br> #}
+{#	<a id="thema"></a>#}
+{#	<section class="helemaal-boven">#}
+{#		<h1 class="titel">Thema</h1>#}
+{#		<div class="poster">#}
+{#			<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />#}
+{#		</div>#}
+{#		<br>#}
 
-{#        <div class="video"> #}
-{#            <div class="container video-container"> #}
-{#                <div class="youtube-container closed"> #}
-{#                    <div class="embed-responsive ratio ratio-16x9" id="player"> #}
-{#                        <iframe src="https://www.youtube-nocookie.com/embed/iery2Lp7daA?controls=0" frameborder="0" 	allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> #}
-{#                        </iframe> #}
-{#                    </div> #}
-{#                </div> #}
-{#            </div> #}
-{#        </div> #}
-{#        <br> #}
-{#        <h2 class="titel ondertitel"><a class="titel ondertitel" href="/tijdloos/dies/etiquette"><u>Hier</u></a> kan u uw kennis van de gala etiquette weer helemaal opfrissen.</h2> #}
-{#    </section> #}
+{#		<div class="video">#}
+{#			<div class="container video-container">#}
+{#				<div class="youtube-container closed">#}
+{#					<div class="embed-responsive ratio ratio-16x9" id="player">#}
+{#						<iframe src="https://www.youtube-nocookie.com/embed/iery2Lp7daA?controls=0" frameborder="0" 	allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>#}
+{#						</iframe>#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
+{#		</div>#}
+{#		<br>#}
+{#		<h2 class="titel ondertitel"><a class="titel ondertitel" href="/tijdloos/dies/etiquette"><u>Hier</u></a> kan u uw kennis van de gala etiquette weer helemaal opfrissen.</h2>#}
+{#	</section>#}
 
-{#    <div id="programma" class="divider"> #}
-{#        <img class="tussen" src="/images/lustrum12/DiesDividerLarge.png"> #}
-{#    </div> #}
+{#	<div id="programma" class="divider">#}
+{#		<img class="tussen" src="/images/lustrum12/DiesDividerLarge.png">#}
+{#	</div>#}
 
-{#    <section class="programma container gx-5"> #}
-{#        <h1 class="titel">Programma</h1> #}
-{#        <div class="poster"> #}
-{#            <img src="/images/lustrum12/dies-programma.jpg" alt="Logo menu" /> #}
-{#        </div> #}
-{#    </section> #}
+{#	<section class="programma container gx-5">#}
+{#		<h1 class="titel">Programma</h1>#}
+{#		<div class="poster">#}
+{#			<img src="/images/lustrum12/dies-programma.jpg" alt="Logo menu" />#}
+{#		</div>#}
+{#	</section>#}
 
-{#    <div id="ketzers" class="divider"> #}
-{#        <img class="tussen" src="/images/lustrum12/DiesDividerLarge.png"> #}
-{#    </div> #}
+{#	<div id="ketzers" class="divider">#}
+{#		<img class="tussen" src="/images/lustrum12/DiesDividerLarge.png">#}
+{#	</div>#}
 
-{#    <section class="programma container gx-5"> #}
+{#	<section class="programma container gx-5">#}
 
-{#        <h1 class="divider titel">Ketzers</h1> #}
-{#        <h2 class="titel ondertitel">Het gala heeft een eigen pagina die u <a class="titel ondertitel" href="/tijdloos/dies/gala"><u>hier</u></a> kan vinden.</h2> #}
+{#		<h1 class="divider titel">Ketzers</h1>#}
+{#		<h2 class="titel ondertitel">Het gala heeft een eigen pagina die u <a class="titel ondertitel" href="/tijdloos/dies/gala"><u>hier</u></a> kan vinden.</h2>#}
 
-{#        <div class="row gx-5"> #}
-{#            <div class="col-xl-6"> #}
-{#                <div class="dag"> #}
-{#                    <h2>Maandag <span class="cijfer">7</span> Februari</h2> #}
-{#                    <hr> #}
+{#		<div class="row gx-5">#}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Maandag <span class="cijfer">7</span> Februari</h2>#}
+{#					<hr>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>La première</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            C.S.R.-film #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>La première</h3>#}
+{#						<div class="beschrijving">#}
+{#							C.S.R.-film#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>22:00 Santé et Debatter</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Debat en borrelen #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Debat en borrelen#}
+{#						</div>#}
+{#					</div>#}
 
-{#                </div> #}
-{#            </div> #}
+{#				</div>#}
+{#			</div>#}
 
-{#            <div class="col-xl-6"> #}
-{#                <div class="dag"> #}
-{#                    <h2>Dinsdag <span class="cijfer">8</span> Februari</h2> #}
-{#                    <hr> #}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Dinsdag <span class="cijfer">8</span> Februari</h2>#}
+{#					<hr>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>18:30 Dromerig Diner </h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Openingsdiner #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [maaltijd=2363] #}
-{#                                    [maaltijd=2364] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>18:30 Dromerig Diner </h3>#}
+{#						<div class="beschrijving">#}
+{#							Openingsdiner#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[maaltijd=2363]#}
+{#									[maaltijd=2364]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>20:00 Louer et Prayer - LeP</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Openings LeO #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>20:00 Louer et Prayer - LeP</h3>#}
+{#						<div class="beschrijving">#}
+{#							Openings LeO#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>22:00 Santé et Debatter</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Debat en borrelen #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Debat en borrelen#}
+{#						</div>#}
+{#					</div>#}
 
-{#                </div> #}
-{#            </div> #}
+{#				</div>#}
+{#			</div>#}
 
-{#            <div class="col-xl-6"> #}
-{#                <div class="dag"> #}
-{#                    <h2>Woensdag <span class="cijfer">9</span> Februari</h2> #}
-{#                    <hr> #}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Woensdag <span class="cijfer">9</span> Februari</h2>#}
+{#					<hr>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>14:00 Externe Receptie</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Externe Receptie #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>14:00 Externe Receptie</h3>#}
+{#						<div class="beschrijving">#}
+{#							Externe Receptie#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>20:00 Interne Receptie</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Interne Receptie #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>20:00 Interne Receptie</h3>#}
+{#						<div class="beschrijving">#}
+{#							Interne Receptie#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>20:00 Boutique - Rokkostuum passen</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Voor het gala moet u uiteraard goed gekleed komen in een rokkostuum. De AcqCie heeft elke jaar een mooie deal met Gents om u te voorzien van een rokkostuum voor een zacht studentenprijsje met korting. Deze kunt op deze avond passen en wordt voor het gala geleverd. #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [activiteit=11687] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>20:00 Boutique - Rokkostuum passen</h3>#}
+{#						<div class="beschrijving">#}
+{#							Voor het gala moet u uiteraard goed gekleed komen in een rokkostuum. De AcqCie heeft elke jaar een mooie deal met Gents om u te voorzien van een rokkostuum voor een zacht studentenprijsje met korting. Deze kunt op deze avond passen en wordt voor het gala geleverd.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11687]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>22:00 Santé et Debatter</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Kom debatteren en borrelen #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Kom debatteren en borrelen#}
+{#						</div>#}
+{#					</div>#}
 
-{#                </div> #}
-{#            </div> #}
+{#				</div>#}
+{#			</div>#}
 
-{#            <div class="col-xl-6"> #}
-{#                <div class="dag"> #}
-{#                    <h2>Donderdag <span class="cijfer">10</span> Februari</h2> #}
-{#                    <hr> #}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Donderdag <span class="cijfer">10</span> Februari</h2>#}
+{#					<hr>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>8:00 Croissant et jus d'orange</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Na de interne receptie gaat er de volgende ochtend niks boven een klassiek Frans ontbijt, het enige verschil is dat u de 'boulangerie' ruilt voor het prachtige Confide. #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [activiteit=11688] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>8:00 Croissant et jus d'orange</h3>#}
+{#						<div class="beschrijving">#}
+{#							Na de interne receptie gaat er de volgende ochtend niks boven een klassiek Frans ontbijt, het enige verschil is dat u de 'boulangerie' ruilt voor het prachtige Confide.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11688]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>18:30 Dies Kring</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Dies kring! #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>18:30 Dies Kring</h3>#}
+{#						<div class="beschrijving">#}
+{#							Dies kring!#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>21:00 Polonaise - Intern Feest</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Intern Feest #}
-{#                        </div> #}
-{#                    </div> #}
-{#                </div> #}
-{#            </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>21:00 Polonaise - Intern Feest</h3>#}
+{#						<div class="beschrijving">#}
+{#							Intern Feest#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
 
-{#            <div class="col-xl-6"> #}
-{#                <div class="dag"> #}
-{#                    <h2>Vrijdag <span class="cijfer">11</span> Februari</h2> #}
-{#                    <hr> #}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Vrijdag <span class="cijfer">11</span> Februari</h2>#}
+{#					<hr>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>9:00 Vive la Revolution - Verticalestrijd</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Strijd der Verticalen #}
-{#                        </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>9:00 Vive la Revolution - Verticalestrijd</h3>#}
+{#						<div class="beschrijving">#}
+{#							Strijd der Verticalen#}
+{#						</div>#}
 
-{#                    </div> #}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>16:00 Chanter et Santé - VrijMiBo</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Met Karaoke! #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>16:00 Chanter et Santé - VrijMiBo</h3>#}
+{#						<div class="beschrijving">#}
+{#							Met Karaoke!#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>22:00 Santé et Debatter</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Debat en borrelen #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Debat en borrelen#}
+{#						</div>#}
+{#					</div>#}
 
-{#                </div> #}
-{#            </div> #}
+{#				</div>#}
+{#			</div>#}
 
-{#            <div class="col-xl-6"> #}
-{#                <div class="dag"> #}
-{#                    <h2>Zaterdag <span class="cijfer">12</span> Februari</h2> #}
-{#                    <hr> #}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Zaterdag <span class="cijfer">12</span> Februari</h2>#}
+{#					<hr>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>14:00 Les Brusjes</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Wat is er mooier dan je avonturen delen met anderen?! Neem je brusjes mee naar een dag vol activiteiten waarin ze de mores en uithoeken van Delft en de Civitas leren kennen. Vul het aantal brusjes in de ketzer in. Kosten liggen rond de 7,50 pp inclusief eten en activiteiten. #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [activiteit=11689] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>14:00 Les Brusjes</h3>#}
+{#						<div class="beschrijving">#}
+{#							Wat is er mooier dan je avonturen delen met anderen?! Neem je brusjes mee naar een dag vol activiteiten waarin ze de mores en uithoeken van Delft en de Civitas leren kennen. Vul het aantal brusjes in de ketzer in. Kosten liggen rond de 7,50 pp inclusief eten en activiteiten.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11689]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>20:30 In Seine Gezet - Filmavond</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Bijkomen van de drukke diesweek met een meeslepende film en popcorn #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [activiteit=11690] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
-{#                </div> #}
-{#            </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>20:30 In Seine Gezet - Filmavond</h3>#}
+{#						<div class="beschrijving">#}
+{#							Bijkomen van de drukke diesweek met een meeslepende film en popcorn#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11690]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
 
-{#            <div class="col-xl-6"> #}
-{#                <div class="dag"> #}
-{#                    <h2>Zondag <span class="cijfer">13</span> Februari</h2> #}
-{#                    <hr> #}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Zondag <span class="cijfer">13</span> Februari</h2>#}
+{#					<hr>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>10:00 Le Sacre Coeur - Kerkplan</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Zondag met z'n allen naar de kerk #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [activiteit=11691] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>10:00 Le Sacre Coeur - Kerkplan</h3>#}
+{#						<div class="beschrijving">#}
+{#							Zondag met z'n allen naar de kerk#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11691]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>14:00 À la plage - Strandwandeling</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Uitwaaien op het strand en genieten van de prachtige natuur. De exacte locatie zal later worden gedeeld. #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [activiteit=11692] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>14:00 À la plage - Strandwandeling</h3>#}
+{#						<div class="beschrijving">#}
+{#							Uitwaaien op het strand en genieten van de prachtige natuur. De exacte locatie zal later worden gedeeld.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11692]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-{#                </div> #}
-{#            </div> #}
+{#				</div>#}
+{#			</div>#}
 
-{#            <div class="col-xl-6"> #}
-{#                <div class="dag"> #}
-{#                    <h2>Maandag <span class="cijfer">14</span> Februari</h2> #}
-{#                    <hr> #}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Maandag <span class="cijfer">14</span> Februari</h2>#}
+{#					<hr>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>18:30 Van Speijk valentijns diner</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Kom de liefde vieren met Van Speijk #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [maaltijd=2366] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>18:30 Van Speijk valentijns diner</h3>#}
+{#						<div class="beschrijving">#}
+{#							Kom de liefde vieren met Van Speijk#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[maaltijd=2366]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>20:00 Quarantaine - Installatie HV</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Quarantaine editie #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>20:00 Quarantaine - Installatie HV</h3>#}
+{#						<div class="beschrijving">#}
+{#							Quarantaine editie#}
+{#						</div>#}
+{#					</div>#}
 
-{#                </div> #}
-{#            </div> #}
+{#				</div>#}
+{#			</div>#}
 
-{#            <div class="col-xl-6"> #}
-{#                <div class="dag"> #}
-{#                    <h2>Dinsdag <span class="cijfer">15</span> Februari</h2> #}
-{#                    <hr> #}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Dinsdag <span class="cijfer">15</span> Februari</h2>#}
+{#					<hr>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>20:00 Cabaretteketet - Op de Planken</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            De jaarlijkse cabaret voorstelling keert terug!  Onder leiding van CaCie Duister zullen er voorstellingen plaatsvinden voor het vermaak van de vereniging. Vul uw de naam van u act in de beschrijving in. #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [activiteit=11693] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>20:00 Cabaretteketet - Op de Planken</h3>#}
+{#						<div class="beschrijving">#}
+{#							De jaarlijkse cabaret voorstelling keert terug!  Onder leiding van CaCie Duister zullen er voorstellingen plaatsvinden voor het vermaak van de vereniging. Vul uw de naam van u act in de beschrijving in.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11693]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>22:00 Santé et Debatter</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Debat en borrelen #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Debat en borrelen#}
+{#						</div>#}
+{#					</div>#}
 
-{#                </div> #}
-{#            </div> #}
+{#				</div>#}
+{#			</div>#}
 
-{#            <div class="col-xl-6"> #}
-{#                <div class="dag"> #}
-{#                    <h2>Woensdag 16 Februari</h2> #}
-{#                    <hr> #}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Woensdag 16 Februari</h2>#}
+{#					<hr>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>14:00 Les Bijoux - DéDé corsage klussen</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Naar het gala zonder corsage kan uiteraard niet. Lukt het in de drukke weken voor het gala niet om uw date te voorzien van een ludieke corsage? De dames van DéDé helpen u wel tijdens deze klus sessie. #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [activiteit=11694] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>14:00 Les Bijoux - DéDé corsage klussen</h3>#}
+{#						<div class="beschrijving">#}
+{#							Naar het gala zonder corsage kan uiteraard niet. Lukt het in de drukke weken voor het gala niet om uw date te voorzien van een ludieke corsage? De dames van DéDé helpen u wel tijdens deze klus sessie.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11694]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>20:30 Bierberonner - Bierproeverij van LuBieCie</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            De LuBieCie zal u meenemen in de wereld van speciaalbiertjes en het één en ander vertellen over de verschillende biertjes. Naar verwachting tussen de 5 en 10 euro. #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [activiteit=11695] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>20:30 Bierberonner - Bierproeverij van LuBieCie</h3>#}
+{#						<div class="beschrijving">#}
+{#							De LuBieCie zal u meenemen in de wereld van speciaalbiertjes en het één en ander vertellen over de verschillende biertjes. Naar verwachting tussen de 5 en 10 euro.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11695]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>22:00 Santé et Debatter</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Debat en borrelen #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Debat en borrelen#}
+{#						</div>#}
+{#					</div>#}
 
-{#                </div> #}
-{#            </div> #}
+{#				</div>#}
+{#			</div>#}
 
-{#            <div class="col-xl-6"> #}
-{#                <div class="dag"> #}
-{#                    <h2>Donderdag <span class="cijfer">17</span> Februari</h2> #}
-{#                    <hr> #}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Donderdag <span class="cijfer">17</span> Februari</h2>#}
+{#					<hr>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>16:00 AcqCie training</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            De AcqCie fixt een arbeidsbemiddelingsbureau dat graag langs komt om een training te geven over vaardigheden die belangrijk zijn op de arbeidsmarkt, zoals soliciteren. Daarnaast ontvangt C.S.R. 10 euro per persoon die aanwezig is! Dus kom langs en leer over een handige  vaardigheid. #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [activiteit=11696] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>16:00 AcqCie training</h3>#}
+{#						<div class="beschrijving">#}
+{#							De AcqCie fixt een arbeidsbemiddelingsbureau dat graag langs komt om een training te geven over vaardigheden die belangrijk zijn op de arbeidsmarkt, zoals soliciteren. Daarnaast ontvangt C.S.R. 10 euro per persoon die aanwezig is! Dus kom langs en leer over een handige  vaardigheid.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[activiteit=11696]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>18:30 Tous à Table</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Tijdloos genieten van een oudwetse maatlijd op confide. #}
-{#                        </div> #}
-{#                        <div class="dies-activiteit-ketzers"> #}
-{#                            <a class="toggler">Laat ketzers zien</a> #}
-{#                            <div class="ketzers verborgen"> #}
-{#                                <div class="ketzer"> #}
-{#                                    [maaltijd=2355] #}
-{#                                </div> #}
-{#                            </div> #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>18:30 Tous à Table</h3>#}
+{#						<div class="beschrijving">#}
+{#							Tijdloos genieten van een oudwetse maatlijd op confide.#}
+{#						</div>#}
+{#						<div class="dies-activiteit-ketzers">#}
+{#							<a class="toggler">Laat ketzers zien</a>#}
+{#							<div class="ketzers verborgen">#}
+{#								<div class="ketzer">#}
+{#									[maaltijd=2355]#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>20:30 Dies lezing - Ted Parle</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Kom luisteren en naar de expertise en wijsheden die de Civitas rijk is! #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>20:30 Dies lezing - Ted Parle</h3>#}
+{#						<div class="beschrijving">#}
+{#							Kom luisteren en naar de expertise en wijsheden die de Civitas rijk is!#}
+{#						</div>#}
+{#					</div>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>22:00 Santé et Debatter</h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            Debat en borrelen #}
-{#                        </div> #}
-{#                    </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>22:00 Santé et Debatter</h3>#}
+{#						<div class="beschrijving">#}
+{#							Debat en borrelen#}
+{#						</div>#}
+{#					</div>#}
 
-{#                </div> #}
-{#            </div> #}
+{#				</div>#}
+{#			</div>#}
 
-{#            <div class="col-xl-6"> #}
-{#                <div class="dag"> #}
-{#                    <h2>Vrijdag <span class="cijfer">18</span> Februari</h2> #}
-{#                    <hr> #}
+{#			<div class="col-xl-6">#}
+{#				<div class="dag">#}
+{#					<h2>Vrijdag <span class="cijfer">18</span> Februari</h2>#}
+{#					<hr>#}
 
-{#                    <div class="activiteit"> #}
-{#                        <h3>14:00 Le Moment Suprême </h3> #}
-{#                        <div class="beschrijving"> #}
-{#                            <a href="/tijdloos/dies/gala"><u>Bezoek de aparte gala pagina.</u></a> #}
-{#                        </div> #}
-{#                    </div> #}
-{#                </div> #}
+{#					<div class="activiteit">#}
+{#						<h3>14:00 Le Moment Suprême </h3>#}
+{#						<div class="beschrijving">#}
+{#							<a href="/tijdloos/dies/gala"><u>Bezoek de aparte gala pagina.</u></a>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
 
-{#            </div> #}
-{#        </div> #}
-{#    </section> #}
+{#			</div>#}
+{#		</div>#}
+{#	</section>#}
 </body>
