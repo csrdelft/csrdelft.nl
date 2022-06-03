@@ -17,34 +17,41 @@ use CsrDelft\view\View;
  *
  * Bekijken van een CmsPagina.
  */
-class CmsPaginaView implements View, ToResponse {
-	use ToHtmlResponse;
-	private $pagina;
+class CmsPaginaView implements View, ToResponse
+{
+    use ToHtmlResponse;
 
-	public function __construct(CmsPagina $pagina) {
-		$this->pagina = $pagina;
-	}
+    private $pagina;
 
-	public function getModel() {
-		return $this->pagina;
-	}
+    public function __construct(CmsPagina $pagina)
+    {
+        $this->pagina = $pagina;
+    }
 
-	public function getBreadcrumbs() {
-		return null;
-	}
+    public function getModel()
+    {
+        return $this->pagina;
+    }
 
-	public function getTitel() {
-		return $this->pagina->titel;
-	}
+    public function getBreadcrumbs()
+    {
+        return null;
+    }
 
-	public function __toString() {
-		$html = '';
-		$html .= getMelding();
-		if ($this->pagina->magBewerken()) {
-			$html .= '<a href="/pagina/bewerken/' . $this->pagina->naam . '" class="btn float-end" title="Bewerk pagina&#013;' . $this->pagina->laatstGewijzigd->format(DATETIME_FORMAT) . '">' . Icon::getTag('bewerken') . '</a>';
-		}
-		$html .= CsrBB::parseHtml(htmlspecialchars_decode($this->pagina->inhoud), $this->pagina->inlineHtml);
-		return $html;
-	}
+    public function getTitel()
+    {
+        return $this->pagina->titel;
+    }
+
+    public function __toString()
+    {
+        $html = '';
+        $html .= getMelding();
+        if ($this->pagina->magBewerken()) {
+            $html .= '<a href="/pagina/bewerken/' . $this->pagina->naam . '" class="btn float-end" title="Bewerk pagina&#013;' . $this->pagina->laatstGewijzigd->format(DATETIME_FORMAT) . '">' . Icon::getTag('bewerken') . '</a>';
+        }
+        $html .= CsrBB::parseHtml(htmlspecialchars_decode($this->pagina->inhoud), $this->pagina->inlineHtml);
+        return $html;
+    }
 
 }

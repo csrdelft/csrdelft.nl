@@ -10,19 +10,20 @@ use CsrDelft\common\Enum;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 07/04/2017
  */
-class CiviSaldoCommissieEnum extends Enum {
-	/**
-	 * CiviSaldoCommissie opties.
-	 */
-	const MAALCIE = 'maalcie';
-	const SOCCIE = 'soccie';
-	const OWEECIE = 'oweecie';
-	const ANDERS = 'anders';
+class CiviSaldoCommissieEnum extends Enum
+{
+    /**
+     * CiviSaldoCommissie opties.
+     */
+    const MAALCIE = 'maalcie';
+    const SOCCIE = 'soccie';
+    const OWEECIE = 'oweecie';
+    const ANDERS = 'anders';
 
-	protected static $mapChoiceToDescription = [
-		self::ANDERS => 'Anders',
-		self::SOCCIE => 'SocCie',
-		self::OWEECIE => 'OweeCie',
-		self::MAALCIE => 'MaalCie',
-	];
+    protected static $mapChoiceToDescription = [
+        self::ANDERS => 'Anders',
+        self::SOCCIE => 'SocCie',
+        self::OWEECIE => 'OweeCie',
+        self::MAALCIE => 'MaalCie',
+    ];
 }

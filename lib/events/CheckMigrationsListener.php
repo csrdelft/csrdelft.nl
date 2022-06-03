@@ -12,32 +12,32 @@ use Symfony\Component\HttpKernel\Log\Logger;
 
 class CheckMigrationsListener
 {
-	/**
-	 * @var DependencyFactory
-	 */
-	private $dependencyFactory;
-	/**
-	 * @var Logger
-	 */
-	private $logger;
+    /**
+     * @var DependencyFactory
+     */
+    private $dependencyFactory;
+    /**
+     * @var Logger
+     */
+    private $logger;
 
-	public function __construct(DependencyFactory $dependencyFactory, LoggerInterface $logger)
-	{
-		$this->dependencyFactory = $dependencyFactory;
-		$this->logger = $logger;
-	}
+    public function __construct(DependencyFactory $dependencyFactory, LoggerInterface $logger)
+    {
+        $this->dependencyFactory = $dependencyFactory;
+        $this->logger = $logger;
+    }
 
-	public function onKernelRequest()
-	{
-		$migrationStatusCalculator = $this->dependencyFactory->getMigrationStatusCalculator();
+    public function onKernelRequest()
+    {
+        $migrationStatusCalculator = $this->dependencyFactory->getMigrationStatusCalculator();
 
-		$aantalNieuweMigraties = count($migrationStatusCalculator->getNewMigrations());
-		if ($aantalNieuweMigraties > 0) {
-			$this->logger->alert("Er zijn '{$aantalNieuweMigraties}' migraties die nog uitgevoerd moeten worden.",
-				array_map(function (AvailableMigration $availableMigration) {
-					return $availableMigration->getVersion() . ": " . $availableMigration->getMigration()->getDescription();
-				}, $migrationStatusCalculator->getNewMigrations()->getItems())
-			);
-		}
-	}
+        $aantalNieuweMigraties = count($migrationStatusCalculator->getNewMigrations());
+        if ($aantalNieuweMigraties > 0) {
+            $this->logger->alert("Er zijn '{$aantalNieuweMigraties}' migraties die nog uitgevoerd moeten worden.",
+                array_map(function (AvailableMigration $availableMigration) {
+                    return $availableMigration->getVersion() . ": " . $availableMigration->getMigration()->getDescription();
+                }, $migrationStatusCalculator->getNewMigrations()->getItems())
+            );
+        }
+    }
 }

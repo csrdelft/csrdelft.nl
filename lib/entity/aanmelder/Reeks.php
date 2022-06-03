@@ -14,102 +14,115 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass=ReeksRepository::class)
  * @ORM\Table(name="aanmelder_reeks")
  */
-class Reeks extends ActiviteitEigenschappen implements DataTableEntry {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable"})
-	 */
-	public $id;
+class Reeks extends ActiviteitEigenschappen implements DataTableEntry
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     * @Serializer\Groups({"datatable"})
+     */
+    public $id;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Serializer\Groups({"datatable"})
-	 */
-	private $naam;
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"datatable"})
+     */
+    private $naam;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 */
-	private $rechtenAanmaken;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $rechtenAanmaken;
 
-	/**
-	 * @ORM\OneToMany(targetEntity=AanmeldActiviteit::class, mappedBy="reeks", orphanRemoval=true)
-	 * @ORM\OrderBy({"start" = "ASC", "einde" = "ASC"})
-	 */
-	private $activiteiten;
+    /**
+     * @ORM\OneToMany(targetEntity=AanmeldActiviteit::class, mappedBy="reeks", orphanRemoval=true)
+     * @ORM\OrderBy({"start" = "ASC", "einde" = "ASC"})
+     */
+    private $activiteiten;
 
-	public function __construct() {
-		$this->activiteiten = new ArrayCollection();
-	}
+    public function __construct()
+    {
+        $this->activiteiten = new ArrayCollection();
+    }
 
-	public function getId(): ?int {
-		return $this->id;
-	}
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
-	public function getNaam(): ?string {
-		return $this->naam;
-	}
+    public function getNaam(): ?string
+    {
+        return $this->naam;
+    }
 
-	public function setNaam(string $naam): self {
-		$this->naam = $naam;
+    public function setNaam(string $naam): self
+    {
+        $this->naam = $naam;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getRechtenAanmaken(): ?string {
-		return $this->rechtenAanmaken;
-	}
+    public function getRechtenAanmaken(): ?string
+    {
+        return $this->rechtenAanmaken;
+    }
 
-	public function setRechtenAanmaken(string $rechtenAanmaken): self {
-		$this->rechtenAanmaken = $rechtenAanmaken;
+    public function setRechtenAanmaken(string $rechtenAanmaken): self
+    {
+        $this->rechtenAanmaken = $rechtenAanmaken;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @return Collection|AanmeldActiviteit[]
-	 */
-	public function getActiviteiten(): Collection {
-		return $this->activiteiten;
-	}
+    /**
+     * @return Collection|AanmeldActiviteit[]
+     */
+    public function getActiviteiten(): Collection
+    {
+        return $this->activiteiten;
+    }
 
-	public function addActiviteiten(AanmeldActiviteit $activiteiten): self {
-		if (!$this->activiteiten->contains($activiteiten)) {
-			$this->activiteiten[] = $activiteiten;
-			$activiteiten->setReeks($this);
-		}
+    public function addActiviteiten(AanmeldActiviteit $activiteiten): self
+    {
+        if (!$this->activiteiten->contains($activiteiten)) {
+            $this->activiteiten[] = $activiteiten;
+            $activiteiten->setReeks($this);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function removeActiviteiten(AanmeldActiviteit $activiteiten): self {
-		if ($this->activiteiten->contains($activiteiten)) {
-			$this->activiteiten->removeElement($activiteiten);
-			// set the owning side to null (unless already changed)
-			if ($activiteiten->getReeks() === $this) {
-				$activiteiten->setReeks(null);
-			}
-		}
+    public function removeActiviteiten(AanmeldActiviteit $activiteiten): self
+    {
+        if ($this->activiteiten->contains($activiteiten)) {
+            $this->activiteiten->removeElement($activiteiten);
+            // set the owning side to null (unless already changed)
+            if ($activiteiten->getReeks() === $this) {
+                $activiteiten->setReeks(null);
+            }
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function magActiviteitenBeheren(): bool {
-		return self::magAanmaken() || LoginService::mag($this->getRechtenAanmaken());
-	}
+    public function magActiviteitenBeheren(): bool
+    {
+        return self::magAanmaken() || LoginService::mag($this->getRechtenAanmaken());
+    }
 
-	public static function magAanmaken(): bool {
-		return LoginService::mag(P_ADMIN);
-	}
+    public static function magAanmaken(): bool
+    {
+        return LoginService::mag(P_ADMIN);
+    }
 
-	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("detailSource")
-	 */
-	public function getDetailSource() {
-		return '/aanmelder/beheer/activiteiten/' . $this->id;
-	}
+    /**
+     * @return string
+     * @Serializer\Groups("datatable")
+     * @Serializer\SerializedName("detailSource")
+     */
+    public function getDetailSource()
+    {
+        return '/aanmelder/beheer/activiteiten/' . $this->id;
+    }
 }

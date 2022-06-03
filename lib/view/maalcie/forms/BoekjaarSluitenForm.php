@@ -15,30 +15,33 @@ use CsrDelft\view\formulier\ModalForm;
  * Formulier voor het sluiten van het MaalCie-boekjaar.
  *
  */
-class BoekjaarSluitenForm extends ModalForm {
+class BoekjaarSluitenForm extends ModalForm
+{
 
-	public function __construct($beginDatum = null, $eindDatum = null) {
-		parent::__construct(null, '/maaltijden/boekjaar/sluitboekjaar');
-		$this->titel = 'Boekjaar sluiten';
+    public function __construct($beginDatum = null, $eindDatum = null)
+    {
+        parent::__construct(null, '/maaltijden/boekjaar/sluitboekjaar');
+        $this->titel = 'Boekjaar sluiten';
 
-		$fields = [];
-		$fields[] = new HtmlComment('<p class="error">Dit is een onomkeerbare stap!</p>');
-		$fields['begin'] = new DateField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y') - 2);
-		$fields['eind'] = new DateField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y') - 2);
+        $fields = [];
+        $fields[] = new HtmlComment('<p class="error">Dit is een onomkeerbare stap!</p>');
+        $fields['begin'] = new DateField('begindatum', $beginDatum, 'Vanaf', date('Y') + 1, date('Y') - 2);
+        $fields['eind'] = new DateField('einddatum', $eindDatum, 'Tot en met', date('Y') + 1, date('Y') - 2);
 
-		$this->addFields($fields);
+        $this->addFields($fields);
 
-		$this->formKnoppen = new FormDefaultKnoppen();
-	}
+        $this->formKnoppen = new FormDefaultKnoppen();
+    }
 
-	public function validate() {
-		$valid = parent::validate();
-		$fields = $this->getFields();
-		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {
-			$fields['eind']->error = 'Moet na begindatum liggen';
-			$valid = false;
-		}
-		return $valid;
-	}
+    public function validate()
+    {
+        $valid = parent::validate();
+        $fields = $this->getFields();
+        if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {
+            $fields['eind']->error = 'Moet na begindatum liggen';
+            $valid = false;
+        }
+        return $valid;
+    }
 
 }

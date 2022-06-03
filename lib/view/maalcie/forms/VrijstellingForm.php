@@ -18,27 +18,29 @@ use CsrDelft\view\formulier\ModalForm;
  *
  * @method CorveeVrijstelling getModel()
  */
-class VrijstellingForm extends ModalForm {
+class VrijstellingForm extends ModalForm
+{
 
-	public function __construct(CorveeVrijstelling $vrijstelling) {
-		parent::__construct($vrijstelling, '/corvee/vrijstellingen/opslaan' . ($vrijstelling->uid === null ? '' : '/' . $vrijstelling->uid));
+    public function __construct(CorveeVrijstelling $vrijstelling)
+    {
+        parent::__construct($vrijstelling, '/corvee/vrijstellingen/opslaan' . ($vrijstelling->uid === null ? '' : '/' . $vrijstelling->uid));
 
-		if ($vrijstelling->uid === null) {
-			$this->titel = 'Vrijstelling aanmaken';
-		} else {
-			$this->titel = 'Vrijstelling wijzigen';
-			$this->css_classes[] = 'PreventUnchanged';
-		}
+        if ($vrijstelling->uid === null) {
+            $this->titel = 'Vrijstelling aanmaken';
+        } else {
+            $this->titel = 'Vrijstelling wijzigen';
+            $this->css_classes[] = 'PreventUnchanged';
+        }
 
-		$fields = [];
-		$fields[] = new RequiredLidObjectField('profiel', $vrijstelling->profiel, 'Naam of lidnummer');
-		$fields[] = new DateObjectField('begin_datum', $vrijstelling->begin_datum, 'Vanaf', date('Y') + 14, date('Y'));
-		$fields[] = new DateObjectField('eind_datum', $vrijstelling->eind_datum, 'Tot en met', date('Y') + 14, date('Y'));
-		$fields[] = new IntField('percentage', $vrijstelling->percentage, 'Percentage (%)', 0, 100);
+        $fields = [];
+        $fields[] = new RequiredLidObjectField('profiel', $vrijstelling->profiel, 'Naam of lidnummer');
+        $fields[] = new DateObjectField('begin_datum', $vrijstelling->begin_datum, 'Vanaf', date('Y') + 14, date('Y'));
+        $fields[] = new DateObjectField('eind_datum', $vrijstelling->eind_datum, 'Tot en met', date('Y') + 14, date('Y'));
+        $fields[] = new IntField('percentage', $vrijstelling->percentage, 'Percentage (%)', 0, 100);
 
-		$this->addFields($fields);
+        $this->addFields($fields);
 
-		$this->formKnoppen = new FormDefaultKnoppen();
-	}
+        $this->formKnoppen = new FormDefaultKnoppen();
+    }
 
 }

@@ -22,107 +22,114 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Controller van de ACL.
  */
-class RechtenController extends AbstractController {
-	/**
-	 * @var AccessRepository
-	 */
-	private $accessRepository;
+class RechtenController extends AbstractController
+{
+    /**
+     * @var AccessRepository
+     */
+    private $accessRepository;
 
-	public function __construct(AccessRepository $accessRepository) {
-		$this->accessRepository = $accessRepository;
-	}
+    public function __construct(AccessRepository $accessRepository)
+    {
+        $this->accessRepository = $accessRepository;
+    }
 
-	/**
-	 * @param null $environment
-	 * @param null $resource
-	 * @return Response
-	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"GET"}, defaults={"environment"=null,"resource"=null})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function bekijken($environment = null, $resource = null) {
-		return $this->render('default.html.twig', [
-			'content' => new RechtenTable($this->accessRepository, $environment, $resource)
-		]);
-	}
+    /**
+     * @param null $environment
+     * @param null $resource
+     * @return Response
+     * @Route("/rechten/bekijken/{environment}/{resource}", methods={"GET"}, defaults={"environment"=null,"resource"=null})
+     * @Auth(P_LOGGED_IN)
+     */
+    public function bekijken($environment = null, $resource = null)
+    {
+        return $this->render('default.html.twig', [
+            'content' => new RechtenTable($this->accessRepository, $environment, $resource)
+        ]);
+    }
 
-	/**
-	 * @param null $environment
-	 * @param null $resource
-	 * @return GenericDataTableResponse
-	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function data($environment = null, $resource = null) {
-		return $this->tableData($this->accessRepository->getTree($environment, $resource));
-	}
+    /**
+     * @param null $environment
+     * @param null $resource
+     * @return GenericDataTableResponse
+     * @Route("/rechten/bekijken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
+     * @Auth(P_LOGGED_IN)
+     */
+    public function data($environment = null, $resource = null)
+    {
+        return $this->tableData($this->accessRepository->getTree($environment, $resource));
+    }
 
-	/**
-	 * @param null $environment
-	 * @param null $resource
-	 * @return GenericDataTableResponse|RechtenForm
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/rechten/aanmaken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function aanmaken($environment = null, $resource = null) {
-		$ac = $this->accessRepository->nieuw($environment, $resource);
-		$form = new RechtenForm($ac, 'aanmaken');
-		if ($form->validate()) {
-			$this->accessRepository->setAcl($ac->environment, $ac->resource, [$ac->action => $ac->subject]);
-			return $this->tableData([$ac]);
-		} else {
-			return $form;
-		}
-	}
+    /**
+     * @param null $environment
+     * @param null $resource
+     * @return GenericDataTableResponse|RechtenForm
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @Route("/rechten/aanmaken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
+     * @Auth(P_LOGGED_IN)
+     */
+    public function aanmaken($environment = null, $resource = null)
+    {
+        $ac = $this->accessRepository->nieuw($environment, $resource);
+        $form = new RechtenForm($ac, 'aanmaken');
+        if ($form->validate()) {
+            $this->accessRepository->setAcl($ac->environment, $ac->resource, [$ac->action => $ac->subject]);
+            return $this->tableData([$ac]);
+        } else {
+            return $form;
+        }
+    }
 
-	/**
-	 * @return GenericDataTableResponse|RechtenForm
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/rechten/wijzigen", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function wijzigen() {
-		$selection = $this->getDataTableSelection();
+    /**
+     * @return GenericDataTableResponse|RechtenForm
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @Route("/rechten/wijzigen", methods={"POST"})
+     * @Auth(P_LOGGED_IN)
+     */
+    public function wijzigen()
+    {
+        $selection = $this->getDataTableSelection();
 
-		if (!isset($selection[0])) {
-			throw $this->createAccessDeniedException();
-		}
+        if (!isset($selection[0])) {
+            throw $this->createAccessDeniedException();
+        }
 
-		/** @var AccessControl $ac */
-		$ac = $this->accessRepository->retrieveByUUID($selection[0]);
-		$form = new RechtenForm($ac, 'wijzigen');
+        /** @var AccessControl $ac */
+        $ac = $this->accessRepository->retrieveByUUID($selection[0]);
+        $form = new RechtenForm($ac, 'wijzigen');
 
-		if ($form->validate()) {
-			$this->accessRepository->setAcl($ac->environment, $ac->resource, array(
-				$ac->action => $ac->subject
-			));
-			return $this->tableData([$ac]);
-		} else {
-			return $form;
-		}
-	}
+        if ($form->validate()) {
+            $this->accessRepository->setAcl($ac->environment, $ac->resource, array(
+                $ac->action => $ac->subject
+            ));
+            return $this->tableData([$ac]);
+        } else {
+            return $form;
+        }
+    }
 
-	/**
-	 * @return GenericDataTableResponse
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/rechten/verwijderen", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function verwijderen() {
-		$selection = $this->getDataTableSelection();
-		$response = [];
+    /**
+     * @return GenericDataTableResponse
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @Route("/rechten/verwijderen", methods={"POST"})
+     * @Auth(P_LOGGED_IN)
+     */
+    public function verwijderen()
+    {
+        $selection = $this->getDataTableSelection();
+        $response = [];
 
-		foreach ($selection as $UUID) {
-			/** @var AccessControl $ac */
-			$ac = $this->accessRepository->retrieveByUUID($UUID);
-			$response[] = new RemoveDataTableEntry(explode('@', $UUID)[0], AccessControl::class);
-			$this->accessRepository->setAcl($ac->environment, $ac->resource, [$ac->action => null]);
-		}
+        foreach ($selection as $UUID) {
+            /** @var AccessControl $ac */
+            $ac = $this->accessRepository->retrieveByUUID($UUID);
+            $response[] = new RemoveDataTableEntry(explode('@', $UUID)[0], AccessControl::class);
+            $this->accessRepository->setAcl($ac->environment, $ac->resource, [$ac->action => null]);
+        }
 
-		return $this->tableData($response);
-	}
+        return $this->tableData($response);
+    }
 
 }

@@ -12,37 +12,37 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class BbTaal extends BbTag
 {
-	/**
-	 * @var RequestStack
-	 */
-	private $requestStack;
-	/**
-	 * @var string
-	 */
-	private $taal;
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+    /**
+     * @var string
+     */
+    private $taal;
 
-	public function __construct(RequestStack $requestStack)
-	{
-		$this->requestStack = $requestStack;
-	}
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
 
-	public static function getTagName()
-	{
-		return ['taal'];
-	}
+    public static function getTagName()
+    {
+        return ['taal'];
+    }
 
-	public function parse($arguments = [])
-	{
-		$this->taal = $arguments['taal'];
-		$this->readContent();
-	}
+    public function parse($arguments = [])
+    {
+        $this->taal = $arguments['taal'];
+        $this->readContent();
+    }
 
-	public function render()
-	{
-		if ($this->requestStack->getCurrentRequest()->getLocale() == $this->taal) {
-			return $this->getContent();
-		} else {
-			return '';
-		}
-	}
+    public function render()
+    {
+        if ($this->requestStack->getCurrentRequest()->getLocale() == $this->taal) {
+            return $this->getContent();
+        } else {
+            return '';
+        }
+    }
 }

@@ -9,18 +9,18 @@ use CsrDelft\bb\BbTag;
 
 class BbParagraph extends BbTag
 {
-	public function parse($arguments = [])
-	{
-		$this->readContent();
-	}
+    public function parse($arguments = [])
+    {
+        $this->readContent();
+    }
 
-	public function render()
-	{
-		return "<p>{$this->getContent()}</p>";
-	}
+    public function render()
+    {
+        return "<p>{$this->getContent()}</p>";
+    }
 
-	public static function getTagName()
-	{
-		return 'p';
-	}
+    public static function getTagName()
+    {
+        return 'p';
+    }
 }

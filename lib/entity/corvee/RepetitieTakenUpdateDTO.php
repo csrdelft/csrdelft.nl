@@ -14,21 +14,23 @@ use CsrDelft\repository\corvee\CorveeTakenRepository;
  *
  * @package CsrDelft\entity\corvee
  */
-class RepetitieTakenUpdateDTO {
-	/** @var int */
-	public $update;
-	/** @var int */
-	public $day;
-	/** @var int */
-	public $datum;
-	/** @var int */
-	public $maaltijd;
+class RepetitieTakenUpdateDTO
+{
+    /** @var int */
+    public $update;
+    /** @var int */
+    public $day;
+    /** @var int */
+    public $datum;
+    /** @var int */
+    public $maaltijd;
 
-	public function __construct(int $update, int $day, int $datum, int $maaltijd) {
-		$this->update = $update;
-		$this->day = $day;
-		$this->datum = $datum;
-		$this->maaltijd = $maaltijd;
-	}
+    public function __construct(int $update, int $day, int $datum, int $maaltijd)
+    {
+        $this->update = $update;
+        $this->day = $day;
+        $this->datum = $datum;
+        $this->maaltijd = $maaltijd;
+    }
 
 }

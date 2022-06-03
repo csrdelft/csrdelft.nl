@@ -1,32 +1,33 @@
 {% set user = app.user %}
 {% set profiel = user.profiel %}
 <li class="nav-item d-md-block d-none ms-3">
-	<img src="{{ profiel.getPasfotoPath('vierkant') }}" alt="Pasfoto"
-			 class="pasfoto rounded-circle"/>
+    <img src="{{ profiel.getPasfotoPath('vierkant') }}" alt="Pasfoto"
+         class="pasfoto rounded-circle"/>
 </li>
 <li class="nav-item dropdown">
-	<a class="nav-link dropdown-toggle ps-2" href="#" id="menu-personal" role="button" data-bs-toggle="dropdown"
-		 aria-haspopup="true" aria-expanded="false">
-		{{ profiel.getNaam('volledig') }}
-	</a>
-	<ul class="dropdown-menu" aria-labelledby="menu-personal">
-		{% if is_granted('IS_IMPERSONATOR') %}
-			<li>
-				<a href="?_switch_user=_exit" class="dropdown-item error"
-					 title="Switch user actie beeindingen">SU {{ get_profiel(app.token.originalToken.user.uid).naam('civitas') }} </a>
-			</li>
-		{% endif %}
-		<li>
-			<a class="dropdown-item" href="{{ url('csrdelft_profiel_profiel', {uid: user.uid, _fragment: 'Civisaldo'}) }}"
-				 title="Bekijk CiviSaldo historie">
-				{% set saldo = profiel.civiSaldo %}
-				{% if saldo < 0 %}
-					CiviSaldo: <span class="staatrood">&euro; {{ saldo | number_format(2, ',', '.') }}</span>
-				{% else %}
-					CiviSaldo: <span>&euro; {{ saldo | number_format(2, ',', '.') }}</span>
-				{% endif %}
-			</a>
-		</li>
-		{{ include('menu/sub_tree.html.twig', {parent: parent, dropleft: true}) }}
-	</ul>
+    <a class="nav-link dropdown-toggle ps-2" href="#" id="menu-personal" role="button" data-bs-toggle="dropdown"
+       aria-haspopup="true" aria-expanded="false">
+        {{ profiel.getNaam('volledig') }}
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="menu-personal">
+        {% if is_granted('IS_IMPERSONATOR') %}
+            <li>
+                <a href="?_switch_user=_exit" class="dropdown-item error"
+                   title="Switch user actie beeindingen">SU {{ get_profiel(app.token.originalToken.user.uid).naam('civitas') }} </a>
+            </li>
+        {% endif %}
+        <li>
+            <a class="dropdown-item"
+               href="{{ url('csrdelft_profiel_profiel', {uid: user.uid, _fragment: 'Civisaldo'}) }}"
+               title="Bekijk CiviSaldo historie">
+                {% set saldo = profiel.civiSaldo %}
+                {% if saldo < 0 %}
+                    CiviSaldo: <span class="staatrood">&euro; {{ saldo | number_format(2, ',', '.') }}</span>
+                {% else %}
+                    CiviSaldo: <span>&euro; {{ saldo | number_format(2, ',', '.') }}</span>
+                {% endif %}
+            </a>
+        </li>
+        {{ include('menu/sub_tree.html.twig', {parent: parent, dropleft: true}) }}
+    </ul>
 </li>

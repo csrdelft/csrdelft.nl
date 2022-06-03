@@ -25,42 +25,44 @@ use CsrDelft\view\formulier\ModalForm;
  *
  * @method MaaltijdRepetitie getModel()
  */
-class MaaltijdRepetitieForm extends ModalForm {
+class MaaltijdRepetitieForm extends ModalForm
+{
 
-	/**
-	 * MaaltijdRepetitieForm constructor.
-	 * @param $model MaaltijdRepetitie
-	 */
-	public function __construct($model, $verplaats = null) {
-		parent::__construct($model, '/maaltijden/repetities/opslaan/' . $model->mlt_repetitie_id);
+    /**
+     * MaaltijdRepetitieForm constructor.
+     * @param $model MaaltijdRepetitie
+     */
+    public function __construct($model, $verplaats = null)
+    {
+        parent::__construct($model, '/maaltijden/repetities/opslaan/' . $model->mlt_repetitie_id);
 
-		if ($model->mlt_repetitie_id === null) {
-			$this->titel = 'Maaltijdrepetitie aanmaken';
-		} else {
-			$this->titel = 'Maaltijdrepetitie wijzigen';
-			$this->css_classes[] = 'PreventUnchanged';
-		}
+        if ($model->mlt_repetitie_id === null) {
+            $this->titel = 'Maaltijdrepetitie aanmaken';
+        } else {
+            $this->titel = 'Maaltijdrepetitie wijzigen';
+            $this->css_classes[] = 'PreventUnchanged';
+        }
 
-		$fields = [];
-		$fields[] = new RequiredTextField('standaard_titel', $model->standaard_titel, 'Standaard titel', 255);
-		$fields[] = new TimeObjectField('standaard_tijd', $model->standaard_tijd, 'Standaard tijd', 15);
-		$fields['dag'] = new WeekdagField('dag_vd_week', $model->dag_vd_week, 'Dag v/d week');
-		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodieke maaltijden';
-		$fields[] = new IntField('periode_in_dagen', $model->periode_in_dagen, 'Periode (in dagen)', 0, 183);
-		$fields['abo'] = new JaNeeField('abonneerbaar', $model->abonneerbaar, 'Abonneerbaar');
-		if ($model->mlt_repetitie_id !== 0) {
-			$fields['abo']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) if (!confirm('Alle abonnementen zullen worden verwijderd!')) this.checked = true;";
-		}
-		$fields[] = new RequiredDoctrineEntityField('product', $model->product, 'Product', CiviProduct::class, '/fiscaat/producten/suggesties?q=');
-		$fields[] = new IntField('standaard_limiet', $model->standaard_limiet, 'Standaard limiet', 0, 200);
-		$fields[] = new RechtenField('abonnement_filter', $model->abonnement_filter, 'Aanmeldrestrictie');
+        $fields = [];
+        $fields[] = new RequiredTextField('standaard_titel', $model->standaard_titel, 'Standaard titel', 255);
+        $fields[] = new TimeObjectField('standaard_tijd', $model->standaard_tijd, 'Standaard tijd', 15);
+        $fields['dag'] = new WeekdagField('dag_vd_week', $model->dag_vd_week, 'Dag v/d week');
+        $fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodieke maaltijden';
+        $fields[] = new IntField('periode_in_dagen', $model->periode_in_dagen, 'Periode (in dagen)', 0, 183);
+        $fields['abo'] = new JaNeeField('abonneerbaar', $model->abonneerbaar, 'Abonneerbaar');
+        if ($model->mlt_repetitie_id !== 0) {
+            $fields['abo']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) if (!confirm('Alle abonnementen zullen worden verwijderd!')) this.checked = true;";
+        }
+        $fields[] = new RequiredDoctrineEntityField('product', $model->product, 'Product', CiviProduct::class, '/fiscaat/producten/suggesties?q=');
+        $fields[] = new IntField('standaard_limiet', $model->standaard_limiet, 'Standaard limiet', 0, 200);
+        $fields[] = new RechtenField('abonnement_filter', $model->abonnement_filter, 'Aanmeldrestrictie');
 
-		$bijwerken = new FormulierKnop('/maaltijden/repetities/bijwerken/' . $model->mlt_repetitie_id, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', 'disk_multiple');
+        $bijwerken = new FormulierKnop('/maaltijden/repetities/bijwerken/' . $model->mlt_repetitie_id, 'submit', 'Alles bijwerken', 'Opslaan & alle maaltijden bijwerken', 'disk_multiple');
 
-		if ($model->mlt_repetitie_id !== 0) {
-			$fields['ver'] = new CheckboxField('verplaats_dag', $verplaats, 'Verplaatsen');
-			$fields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
-			$fields['ver']->onchange = <<<JS
+        if ($model->mlt_repetitie_id !== 0) {
+            $fields['ver'] = new CheckboxField('verplaats_dag', $verplaats, 'Verplaatsen');
+            $fields['ver']->title = 'Verplaats naar dag v/d week bij bijwerken';
+            $fields['ver']->onchange = <<<JS
 var btn = $('#{$bijwerken->getId()}');
 if (this.checked) {
 	btn.html(btn.html().replace('bijwerken', 'bijwerken en verplaatsen'));
@@ -68,12 +70,12 @@ if (this.checked) {
 	btn.html(btn.html().replace(' en verplaatsen', ''));
 }
 JS;
-		}
-		$this->addFields($fields);
+        }
+        $this->addFields($fields);
 
-		$this->formKnoppen = new FormDefaultKnoppen();
-		$this->formKnoppen->addKnop($bijwerken, false, true);
+        $this->formKnoppen = new FormDefaultKnoppen();
+        $this->formKnoppen->addKnop($bijwerken, false, true);
 
-	}
+    }
 
 }

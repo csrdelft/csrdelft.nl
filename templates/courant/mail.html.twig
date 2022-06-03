@@ -2,317 +2,320 @@
 {% apply inline_css %}
 <html>
 <head>
-	<title>C.S.R.-courant {{ date() | date_format_intl('d MMMM y') }}</title>
-	<meta name="viewport" content="width=device-width"/>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans"/>
-	<meta name="author" content="PubCie der C.S.R. Delft"/>
-	<meta name="robots" content="index, follow"/>
-	<style type="text/css">
-		/* -------------------------------------
-				GLOBAL RESETS
-		------------------------------------- */
+    <title>C.S.R.-courant {{ date() | date_format_intl('d MMMM y') }}</title>
+    <meta name="viewport" content="width=device-width"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans"/>
+    <meta name="author" content="PubCie der C.S.R. Delft"/>
+    <meta name="robots" content="index, follow"/>
+    <style type="text/css">
+        /* -------------------------------------
+                GLOBAL RESETS
+        ------------------------------------- */
 
-		/*All the styling goes here*/
+        /*All the styling goes here*/
 
-		img {
-			border: none;
-			/*-ms-interpolation-mode: bicubic;*/
-			max-width: 100%;
-		}
+        img {
+            border: none;
+            /*-ms-interpolation-mode: bicubic;*/
+            max-width: 100%;
+        }
 
-		body {
-			background-color: #fafafa;
-			font-family: sans-serif;
-			-webkit-font-smoothing: antialiased;
-			font-size: 14px;
-			line-height: 1.4;
-			margin: 0;
-			padding: 0;
-			-ms-text-size-adjust: 100%;
-			-webkit-text-size-adjust: 100%;
-		}
+        body {
+            background-color: #fafafa;
+            font-family: sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 14px;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
 
-		table {
-			border-collapse: separate;
-			mso-table-lspace: 0;
-			mso-table-rspace: 0;
-			width: 100%;
-		}
+        table {
+            border-collapse: separate;
+            mso-table-lspace: 0;
+            mso-table-rspace: 0;
+            width: 100%;
+        }
 
-		table td {
-			font-family: sans-serif;
-			font-size: 14px;
-			vertical-align: top;
-		}
+        table td {
+            font-family: sans-serif;
+            font-size: 14px;
+            vertical-align: top;
+        }
 
-		/* -------------------------------------
-				BODY & CONTAINER
-		------------------------------------- */
+        /* -------------------------------------
+                BODY & CONTAINER
+        ------------------------------------- */
 
-		.body {
-			width: 100%;
-		}
+        .body {
+            width: 100%;
+        }
 
-		/* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
-		.container {
-			display: block;
-			margin: 0 auto !important;
-			/* makes it centered */
-			min-width: 580px;
-			padding: 10px;
-		}
+        /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+        .container {
+            display: block;
+            margin: 0 auto !important;
+            /* makes it centered */
+            min-width: 580px;
+            padding: 10px;
+        }
 
-		/* -------------------------------------
-				HEADER, FOOTER, MAIN
-		------------------------------------- */
-		.main {
-			border-radius: 5px;
-			width: 100%;
-			background-color: #e8e8e8;
-		}
+        /* -------------------------------------
+                HEADER, FOOTER, MAIN
+        ------------------------------------- */
+        .main {
+            border-radius: 5px;
+            width: 100%;
+            background-color: #e8e8e8;
+        }
 
-		.wrapper {
-			box-sizing: border-box;
-			padding: 20px;
-		}
+        .wrapper {
+            box-sizing: border-box;
+            padding: 20px;
+        }
 
-		.content-block {
-			padding-bottom: 10px;
-			padding-top: 10px;
-		}
+        .content-block {
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
 
-		.footer {
-			clear: both;
-			margin-top: 10px;
-			text-align: center;
-			width: 100%;
-		}
+        .footer {
+            clear: both;
+            margin-top: 10px;
+            text-align: center;
+            width: 100%;
+        }
 
-		/* -------------------------------------
-				TYPOGRAPHY
-		------------------------------------- */
-		h1,
-		h2,
-		h3,
-		h4 {
-			color: #fff;
-			font-family: Open Sans, Arial, Helvetica, sans-serif;
-			font-weight: 400;
-			line-height: 1.4;
-			margin: 0 0 30px;
-			text-transform: uppercase;
-			font-weight: bold;
-		}
+        /* -------------------------------------
+                TYPOGRAPHY
+        ------------------------------------- */
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: #fff;
+            font-family: Open Sans, Arial, Helvetica, sans-serif;
+            font-weight: 400;
+            line-height: 1.4;
+            margin: 0 0 30px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
 
-		h3 {
-			text-align: center;
-		}
+        h3 {
+            text-align: center;
+        }
 
-		h1 {
-			font-size: 40px;
-			font-weight: 300;
-			margin-bottom: 0px !important;
-			text-align: center;
-			text-transform: uppercase;
-			color: #000;
-		}
+        h1 {
+            font-size: 40px;
+            font-weight: 300;
+            margin-bottom: 0px !important;
+            text-align: center;
+            text-transform: uppercase;
+            color: #000;
+        }
 
-		p,
-		ul,
-		ol {
-			font-family: sans-serif;
-			font-size: 14px;
-			font-weight: normal;
-			margin: 0;
-			margin-bottom: 15px;
-			color: #fff;
-		}
+        p,
+        ul,
+        ol {
+            font-family: sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            margin: 0;
+            margin-bottom: 15px;
+            color: #fff;
+        }
 
-		p li,
-		ul li,
-		ol li {
-			list-style-position: inside;
-			margin-left: 5px;
-		}
+        p li,
+        ul li,
+        ol li {
+            list-style-position: inside;
+            margin-left: 5px;
+        }
 
-		a {
-			color: #3498db;
-			text-decoration: underline;
-		}
+        a {
+            color: #3498db;
+            text-decoration: underline;
+        }
 
-		hr {
-			height: 5px;
-			background: #e59200;
-			border-style: solid;
-			border: none;
-		}
+        hr {
+            height: 5px;
+            background: #e59200;
+            border-style: solid;
+            border: none;
+        }
 
-		u {
-			text-decoration: none;
-			border-bottom: 3px solid #e59200;
-		}
+        u {
+            text-decoration: none;
+            border-bottom: 3px solid #e59200;
+        }
 
-		.inhoudKop {
-			text-align: center;
-			color: white;
-		}
+        .inhoudKop {
+            text-align: center;
+            color: white;
+        }
 
-		.inhoudKolom {
-			width: 33%;
-			padding: 30px 10px 20px 10px;
-		}
+        .inhoudKolom {
+            width: 33%;
+            padding: 30px 10px 20px 10px;
+        }
 
-		.inhoudKolom ul {
-			padding: 0;
-			list-style: none;
-		}
+        .inhoudKolom ul {
+            padding: 0;
+            list-style: none;
+        }
 
-		li {
-			list-style: none;
-		}
+        li {
+            list-style: none;
+        }
 
-		.link {
-			text-decoration: none;
-			text-align: center;
-			color: white;
-		}
+        .link {
+            text-decoration: none;
+            text-align: center;
+            color: white;
+        }
 
-		.liLink {
-			list-style: none;
-			text-align: center;
-			color: white;
-			padding: 5px;
-			margin: 0;
-		}
+        .liLink {
+            list-style: none;
+            text-align: center;
+            color: white;
+            padding: 5px;
+            margin: 0;
+        }
 
-		.box {
-			padding: 25px;
-		}
+        .box {
+            padding: 25px;
+        }
 
-		.tablerow {
-			border-radius: 5px;
-		}
+        .tablerow {
+            border-radius: 5px;
+        }
 
-		.underline {
-			text-decoration: underline;
-			text-decoration-thickness: 3px;
-			text-decoration-color: #e59200;
-		}
+        .underline {
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
+            text-decoration-color: #e59200;
+        }
 
-	</style>
+    </style>
 </head>
 <body class="">
 <table>
-	<tr>
-		<td>&nbsp;</td>
-		<td class="container">
-			<!-- START CENTERED WHITE CONTAINER -->
-			<table class="main">
-				<tr>
-					<td class="wrapper">
+    <tr>
+        <td>&nbsp;</td>
+        <td class="container">
+            <!-- START CENTERED WHITE CONTAINER -->
+            <table class="main">
+                <tr>
+                    <td class="wrapper">
 
-						<!-- LOGO en TITEL -->
-						<table border="0" cellpadding="0" cellspacing="0" class="table">
-							<tr>
-								<td
-									class="tablerow"
-									style="height: 200px; overflow-y: hidden; position: relative; text-align: center;background: #3C5573 url(https://csrdelft.nl/plaetjes/courant/courant_header_20210208.jpg) center center;background-size: cover;">
-									>
-									<table>
-										<tr>
-											<td style="vertical-align: middle; padding: 30px 20px 30px 40px;" valign="middle" align="left">
-												<img
-													src="https://csrdelft.nl/plaetjes/courant/beeldmerk_20210208.png"
-													style="display: block;"
-													alt="C.S.R. Beeldmerk"
-													width="100" height="126"/>
-											</td>
-											<td style="vertical-align: middle; text-align: right" valign="middle" align="right">
-												<h1
-													style="display: inline; color: #e8e8e8; padding-right:50px; font-size: 3em;font-weight: normal;">
-													De courant</h1>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
+                        <!-- LOGO en TITEL -->
+                        <table border="0" cellpadding="0" cellspacing="0" class="table">
+                            <tr>
+                                <td
+                                        class="tablerow"
+                                        style="height: 200px; overflow-y: hidden; position: relative; text-align: center;background: #3C5573 url(https://csrdelft.nl/plaetjes/courant/courant_header_20210208.jpg) center center;background-size: cover;">
+                                    >
+                                    <table>
+                                        <tr>
+                                            <td style="vertical-align: middle; padding: 30px 20px 30px 40px;"
+                                                valign="middle" align="left">
+                                                <img
+                                                        src="https://csrdelft.nl/plaetjes/courant/beeldmerk_20210208.png"
+                                                        style="display: block;"
+                                                        alt="C.S.R. Beeldmerk"
+                                                        width="100" height="126"/>
+                                            </td>
+                                            <td style="vertical-align: middle; text-align: right" valign="middle"
+                                                align="right">
+                                                <h1
+                                                        style="display: inline; color: #e8e8e8; padding-right:50px; font-size: 3em;font-weight: normal;">
+                                                    De courant</h1>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
 
-							<tr>
-								<td>&nbsp;</td>
-							</tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
 
-							<!-- INHOUD -->
-							<tr>
-								<td class="tablerow" style="background: #11273a">
-									<table>
-										<tr>
-											{% for categorie,catName in catNames %}
-												{% if categorie != 'voorwoord' and categorie != 'sponsor' %}
-													<td class="inhoudKolom">
-														<h4 class="inhoudKop underline">{{ catName }}</h4>
-														<ul>
-															{% for bericht in berichten %}
-																{% if bericht.cat.value == categorie %}
-																	<li class="liLink">
-																		<a href="#{{ bericht.id }}" class="link">
-																			{{ bericht.titel | bbcode("mail") }}
-																		</a>
-																	</li>
-																{% endif %}
-															{% endfor %}
-														</ul>
-													</td>
-												{% endif %}
-											{% endfor %}
-										</tr>
-									</table>
-								</td>
-							</tr>
+                            <!-- INHOUD -->
+                            <tr>
+                                <td class="tablerow" style="background: #11273a">
+                                    <table>
+                                        <tr>
+                                            {% for categorie,catName in catNames %}
+                                                {% if categorie != 'voorwoord' and categorie != 'sponsor' %}
+                                                    <td class="inhoudKolom">
+                                                        <h4 class="inhoudKop underline">{{ catName }}</h4>
+                                                        <ul>
+                                                            {% for bericht in berichten %}
+                                                                {% if bericht.cat.value == categorie %}
+                                                                    <li class="liLink">
+                                                                        <a href="#{{ bericht.id }}" class="link">
+                                                                            {{ bericht.titel | bbcode("mail") }}
+                                                                        </a>
+                                                                    </li>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </td>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
 
-							<tr>
-								<td>&nbsp;</td>
-							</tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
 
-							<!--
-							//Berichten generator//
-							donker: #11273a
-							medium: #043763
-							licht:  #4e698b
-							-->
+                            <!--
+                            //Berichten generator//
+                            donker: #11273a
+                            medium: #043763
+                            licht:  #4e698b
+                            -->
 
-							{% for bericht in berichten %}
-								{% if loop.index % 4 == 1 %}
-									{% set bgcolor = '#043763' %}
-								{% elseif loop.index % 4 == 2 %}
-									{% set bgcolor = '#3C5573' %}
-								{% elseif loop.index % 4 == 3 %}
-									{% set bgcolor = '#11273a' %}
-								{% else %}
-									{% set bgcolor = '#3C5573' %}
-								{% endif %}
+                            {% for bericht in berichten %}
+                                {% if loop.index % 4 == 1 %}
+                                    {% set bgcolor = '#043763' %}
+                                {% elseif loop.index % 4 == 2 %}
+                                    {% set bgcolor = '#3C5573' %}
+                                {% elseif loop.index % 4 == 3 %}
+                                    {% set bgcolor = '#11273a' %}
+                                {% else %}
+                                    {% set bgcolor = '#3C5573' %}
+                                {% endif %}
 
-								<tr>
-									<td class="box tablerow" style="background-color: {{ bgcolor }}">
-										<h3 class="underline"><a id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</h3>
-										<p>
-											{{ bericht.bericht | bbcode("mail") }}
-										</p>
-									</td>
-								</tr>
+                                <tr>
+                                    <td class="box tablerow" style="background-color: {{ bgcolor }}">
+                                        <h3 class="underline"><a
+                                                    id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</h3>
+                                        <p>
+                                            {{ bericht.bericht | bbcode("mail") }}
+                                        </p>
+                                    </td>
+                                </tr>
 
-								<tr>
-									<td>&nbsp;</td>
-								</tr>
-							{% endfor %}
-						</table>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
 
-					</td>
-				</tr>
-			</table>
-		</td>
-		<td>&nbsp;</td>
-	</tr>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>&nbsp;</td>
+    </tr>
 </table>
 </body>
 </html>

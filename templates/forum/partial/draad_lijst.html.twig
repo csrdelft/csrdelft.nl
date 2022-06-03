@@ -1,25 +1,25 @@
 {% if lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen' %}
-	{% set urlHash = 'ongelezen' %}
+    {% set urlHash = 'ongelezen' %}
 {% elseif lid_instelling('forum', 'open_draad_op_pagina') == 'laatste' %}
-	{% set urlHash = 'reageren' %}
+    {% set urlHash = 'reageren' %}
 {% else %}
-	{% set urlHash = '' %}
+    {% set urlHash = '' %}
 {% endif %}
 
 <div
-	class="list-group-item px-0 position-relative w-100"
+        class="list-group-item px-0 position-relative w-100"
 >
 	<span class="position-absolute top-50 start-0 translate-begin">
 		{% if draad.belangrijk %}
-			{{ icon('star', null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
-		{% elseif draad.plakkerig %}
-			{{ icon('note-sticky', null, 'Dit onderwerp is plakkerig, het blijft bovenaan') }}
-		{% elseif draad.gesloten %}
-			{{ icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
-		{% endif %}
+            {{ icon('star', null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
+        {% elseif draad.plakkerig %}
+            {{ icon('note-sticky', null, 'Dit onderwerp is plakkerig, het blijft bovenaan') }}
+        {% elseif draad.gesloten %}
+            {{ icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
+        {% endif %}
 	</span>
 
-	<div class="d-flex justify-content-between align-items-center ps-24">
+    <div class="d-flex justify-content-between align-items-center ps-24">
 		<span>
 			{% set ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave') %}
 			<a id="{{ draad.draad_id }}" {% if app.user and draad.ongelezen %}class="{{ ongelezenWeergave }}"{% endif %}
@@ -28,32 +28,32 @@
 			</a>
 
 			<a href="{{ url('csrdelft_forum_deel', {forum_id: draad.deel.forum_id}) }}"
-					class="badge text-white mx-1">
+               class="badge text-white mx-1">
 				{{ draad.deel.titel }}
 			</a>
 		</span>
 
-		<p class="text-black-50 m-0 fw-light">
-			{% if lid_instelling('forum', 'datumWeergave') == 'relatief' %}
-				{{ draad.laatst_gewijzigd | reldate }}
-			{% else %}
-				{{ draad.laatst_gewijzigd | date_format }}
-			{% endif %}
-		</p>
-	</div>
-	<div class="d-flex justify-content-between align-items-center ps-24">
-		<p class="text-black-50 m-0 fw-light text-truncate">
-			<span class="text-dark">{{ get_profiel(draad.laatste_wijziging_uid).link('user') | raw }}:</span>
-			{{ draadGetLaatstePost(draad.draad_id) | raw }}
-		</p>
+        <p class="text-black-50 m-0 fw-light">
+            {% if lid_instelling('forum', 'datumWeergave') == 'relatief' %}
+                {{ draad.laatst_gewijzigd | reldate }}
+            {% else %}
+                {{ draad.laatst_gewijzigd | date_format }}
+            {% endif %}
+        </p>
+    </div>
+    <div class="d-flex justify-content-between align-items-center ps-24">
+        <p class="text-black-50 m-0 fw-light text-truncate">
+            <span class="text-dark">{{ get_profiel(draad.laatste_wijziging_uid).link('user') | raw }}:</span>
+            {{ draadGetLaatstePost(draad.draad_id) | raw }}
+        </p>
 
-		{% if app.user and draad.aantalOngelezenPosts > 0 %}
-		<span class="badge rounded-pill bg-accent text-white">
+        {% if app.user and draad.aantalOngelezenPosts > 0 %}
+            <span class="badge rounded-pill bg-accent text-white">
 			{{ draad.aantalOngelezenPosts }}
 			<span class="visually-hidden">
 				ongelezen berichten
 			</span>
 		</span>
-		{% endif %}
-	</div>
+        {% endif %}
+    </div>
 </div>

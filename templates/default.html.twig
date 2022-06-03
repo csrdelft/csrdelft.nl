@@ -1,9 +1,9 @@
 {% extends mag('P_LOGGED_IN') ? 'base.html.twig' : 'extern/layout.html.twig' %}
 
 {% block styles %}
-	{% if not mag('P_LOGGED_IN') %}
-		{{ css_asset('extern') }}
-	{% endif %}
+    {% if not mag('P_LOGGED_IN') %}
+        {{ css_asset('extern') }}
+    {% endif %}
 {% endblock %}
 
 {% block titel %}{{ content.titel }}{% endblock %}
@@ -11,9 +11,9 @@
 {% block content %}{{ content.__toString | raw }}{% endblock %}
 
 {% block modal %}
-	{% if modal is defined %}
-		{{ modal.__toString | raw }}
-	{% else %}
-		<div id="modal" tabindex="-1"></div>
-	{% endif %}
+    {% if modal is defined %}
+        {{ modal.__toString | raw }}
+    {% else %}
+        <div id="modal" tabindex="-1"></div>
+    {% endif %}
 {% endblock %}

@@ -27,84 +27,84 @@ use Symfony\Component\Uid\Uuid;
  */
 class RemoteLoginAuthenticator extends AbstractLoginFormAuthenticator
 {
-	/**
-	 * @var HttpUtils
-	 */
-	private $httpUtils;
-	/**
-	 * @var RemoteLoginRepository
-	 */
-	private $remoteLoginRepository;
-	/**
-	 * @var AuthenticationSuccessHandlerInterface
-	 */
-	private $successHandler;
-	/**
-	 * @var AuthenticationFailureHandlerInterface
-	 */
-	private $failureHandler;
+    /**
+     * @var HttpUtils
+     */
+    private $httpUtils;
+    /**
+     * @var RemoteLoginRepository
+     */
+    private $remoteLoginRepository;
+    /**
+     * @var AuthenticationSuccessHandlerInterface
+     */
+    private $successHandler;
+    /**
+     * @var AuthenticationFailureHandlerInterface
+     */
+    private $failureHandler;
 
-	public function __construct(
-		HttpUtils $httpUtils,
-		RemoteLoginRepository $remoteLoginRepository,
-		AuthenticationSuccessHandlerInterface $successHandler,
-		AuthenticationFailureHandlerInterface $failureHandler
-	)
-	{
-		$this->httpUtils = $httpUtils;
-		$this->remoteLoginRepository = $remoteLoginRepository;
-		$this->successHandler = $successHandler;
-		$this->failureHandler = $failureHandler;
-	}
+    public function __construct(
+        HttpUtils                             $httpUtils,
+        RemoteLoginRepository                 $remoteLoginRepository,
+        AuthenticationSuccessHandlerInterface $successHandler,
+        AuthenticationFailureHandlerInterface $failureHandler
+    )
+    {
+        $this->httpUtils = $httpUtils;
+        $this->remoteLoginRepository = $remoteLoginRepository;
+        $this->successHandler = $successHandler;
+        $this->failureHandler = $failureHandler;
+    }
 
-	public function authenticate(Request $request): PassportInterface
-	{
-		$uuid = $request->request->get('uuid');
+    public function authenticate(Request $request): PassportInterface
+    {
+        $uuid = $request->request->get('uuid');
 
-		if (!$uuid) {
-			throw new AuthenticationException();
-		}
+        if (!$uuid) {
+            throw new AuthenticationException();
+        }
 
-		$remoteLogin = $this->remoteLoginRepository->findOneBy(['uuid' => Uuid::fromString($uuid)]);
+        $remoteLogin = $this->remoteLoginRepository->findOneBy(['uuid' => Uuid::fromString($uuid)]);
 
-		if (!$remoteLogin) {
-			throw new AuthenticationException();
-		}
+        if (!$remoteLogin) {
+            throw new AuthenticationException();
+        }
 
-		if (!RemoteLoginStatus::isACCEPTED($remoteLogin->status)) {
-			throw new AuthenticationException();
-		}
+        if (!RemoteLoginStatus::isACCEPTED($remoteLogin->status)) {
+            throw new AuthenticationException();
+        }
 
-		$user = $remoteLogin->account;
+        $user = $remoteLogin->account;
 
-		$badge = new UserBadge($user->getUsername(), function () use ($user) {
-			return $user;
-		});
+        $badge = new UserBadge($user->getUsername(), function () use ($user) {
+            return $user;
+        });
 
-		return new SelfValidatingPassport($badge);
-	}
+        return new SelfValidatingPassport($badge);
+    }
 
-	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-	{
-		// Maak deze sessie megakort, wordt alleen gebruikt om een authorize uit te voeren.
-		$request->getSession()->migrate(false, 60 * 5);
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    {
+        // Maak deze sessie megakort, wordt alleen gebruikt om een authorize uit te voeren.
+        $request->getSession()->migrate(false, 60 * 5);
 
-		return $this->successHandler->onAuthenticationSuccess($request, $token);
-	}
+        return $this->successHandler->onAuthenticationSuccess($request, $token);
+    }
 
-	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
-	{
-		return $this->failureHandler->onAuthenticationFailure($request, $exception);
-	}
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
+    {
+        return $this->failureHandler->onAuthenticationFailure($request, $exception);
+    }
 
-	public function supports(Request $request): bool
-	{
-		return $request->isMethod('POST')
-			&& $this->httpUtils->checkRequestPath($request, 'csrdelft_security_remotelogin_remoteloginfinal');
-	}
+    public function supports(Request $request): bool
+    {
+        return $request->isMethod('POST')
+            && $this->httpUtils->checkRequestPath($request, 'csrdelft_security_remotelogin_remoteloginfinal');
+    }
 
-	protected function getLoginUrl(Request $request): string
-	{
-		return $this->httpUtils->generateUri($request, 'csrdelft_security_remotelogin_remotelogin');
-	}
+    protected function getLoginUrl(Request $request): string
+    {
+        return $this->httpUtils->generateUri($request, 'csrdelft_security_remotelogin_remotelogin');
+    }
 }

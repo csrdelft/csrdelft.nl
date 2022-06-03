@@ -1,38 +1,40 @@
 <tr id="corveefunctie-row-{{ functie.functie_id }}">
-	<td>
-		<a href="{{ url('csrdelft_maalcie_beheerfuncties_bewerken', {functie_id: functie.functie_id}) }}"
-			 title="Functie wijzigen" class="btn post popup">{{ icon("pencil") }}</a>
-	</td>
-	<td>{{ functie.afkorting }}</td>
-	<td>{{ functie.naam }}</td>
-	<td>{{ functie.standaard_punten }}</td>
-	<td title="{{ functie.email_bericht }}">{% if functie.email_bericht | length %}{{ icon("email") }}{% endif %}</td>
-	<td>
-		{% if functie.kwalificatie_benodigd %}
-			<div class="float-start"><a
-					href="{{ url('csrdelft_maalcie_beheerfuncties_kwalificeer', {functie_id: functie.functie_id}) }}"
-					title="Kwalificatie toewijzen" class="btn post popup">{{ icon("vcard_add") }} Kwalificeer</a></div>
-		{% endif %}
-		{% if functie.kwalificaties %}
-			<div class="kwali"><a title="Toon oudleden" class="btn" onclick="$('div.kwali').toggle();">{{ icon("eye") }} Toon
-					oudleden</a></div>
-			<div class="kwali verborgen"><a title="Toon leden" class="btn"
-																			onclick="$('div.kwali').toggle();">{{ icon("eye") }} Toon leden</a></div>
-		{% endif %}
-		{% for kwali in functie.kwalificaties %}
-			<div class="kwali {% if kwali.profiel.oudlid %}verborgen{% endif %}">
-				<a
-					href="{{ url('csrdelft_maalcie_beheerfuncties_dekwalificeer', {functie_id: functie.functie_id, uid: kwali.profiel.uid}) }}"
-					title="Kwalificatie intrekken" class="btn post">{{ icon("vcard_delete") }}</a>
-				&nbsp;{{ kwali.profiel.naam(instelling('corvee', 'weergave_ledennamen_beheer')) }}
-				<span class="lichtgrijs"> (sinds {{ kwali.wanneer_toegewezen | date_format }})</span>
-			</div>
-		{% endfor %}
-	</td>
-	<td title="Mag maaltijden sluiten">{% if functie.maaltijden_sluiten %}{{ icon("lock_add") }}{% endif %}</td>
-	<td class="col-del">
-		<a href="{{ url('csrdelft_maalcie_beheerfuncties_verwijderen', {functie_id: functie.functie_id}) }}"
-			 title="Functie definitief verwijderen"
-			 class="btn post confirm">{{ icon("cross") }}</a>
-	</td>
+    <td>
+        <a href="{{ url('csrdelft_maalcie_beheerfuncties_bewerken', {functie_id: functie.functie_id}) }}"
+           title="Functie wijzigen" class="btn post popup">{{ icon("pencil") }}</a>
+    </td>
+    <td>{{ functie.afkorting }}</td>
+    <td>{{ functie.naam }}</td>
+    <td>{{ functie.standaard_punten }}</td>
+    <td title="{{ functie.email_bericht }}">{% if functie.email_bericht | length %}{{ icon("email") }}{% endif %}</td>
+    <td>
+        {% if functie.kwalificatie_benodigd %}
+            <div class="float-start"><a
+                        href="{{ url('csrdelft_maalcie_beheerfuncties_kwalificeer', {functie_id: functie.functie_id}) }}"
+                        title="Kwalificatie toewijzen" class="btn post popup">{{ icon("vcard_add") }} Kwalificeer</a>
+            </div>
+        {% endif %}
+        {% if functie.kwalificaties %}
+            <div class="kwali"><a title="Toon oudleden" class="btn" onclick="$('div.kwali').toggle();">{{ icon("eye") }}
+                    Toon
+                    oudleden</a></div>
+            <div class="kwali verborgen"><a title="Toon leden" class="btn"
+                                            onclick="$('div.kwali').toggle();">{{ icon("eye") }} Toon leden</a></div>
+        {% endif %}
+        {% for kwali in functie.kwalificaties %}
+            <div class="kwali {% if kwali.profiel.oudlid %}verborgen{% endif %}">
+                <a
+                        href="{{ url('csrdelft_maalcie_beheerfuncties_dekwalificeer', {functie_id: functie.functie_id, uid: kwali.profiel.uid}) }}"
+                        title="Kwalificatie intrekken" class="btn post">{{ icon("vcard_delete") }}</a>
+                &nbsp;{{ kwali.profiel.naam(instelling('corvee', 'weergave_ledennamen_beheer')) }}
+                <span class="lichtgrijs"> (sinds {{ kwali.wanneer_toegewezen | date_format }})</span>
+            </div>
+        {% endfor %}
+    </td>
+    <td title="Mag maaltijden sluiten">{% if functie.maaltijden_sluiten %}{{ icon("lock_add") }}{% endif %}</td>
+    <td class="col-del">
+        <a href="{{ url('csrdelft_maalcie_beheerfuncties_verwijderen', {functie_id: functie.functie_id}) }}"
+           title="Functie definitief verwijderen"
+           class="btn post confirm">{{ icon("cross") }}</a>
+    </td>
 </tr>

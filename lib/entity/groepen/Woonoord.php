@@ -19,56 +19,61 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WoonoordenRepository")
  */
-class Woonoord extends Groep implements HeeftSoort {
-	use GroepMoment;
+class Woonoord extends Groep implements HeeftSoort
+{
+    use GroepMoment;
 
-	/**
-	 * Woonoord / Huis
-	 * @var HuisStatus
-	 * @ORM\Column(type="enumHuisStatus")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $huisStatus;
+    /**
+     * Woonoord / Huis
+     * @var HuisStatus
+     * @ORM\Column(type="enumHuisStatus")
+     * @Serializer\Groups("datatable")
+     */
+    public $huisStatus;
 
-	/**
-	 * Doet mee met Eetplan
-	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $eetplan;
+    /**
+     * Doet mee met Eetplan
+     * @ORM\Column(type="boolean")
+     * @Serializer\Groups("datatable")
+     */
+    public $eetplan;
 
-	public function getUrl() {
-		return '/groepen/woonoorden/' . $this->id;
-	}
+    public function getUrl()
+    {
+        return '/groepen/woonoorden/' . $this->id;
+    }
 
-	/**
-	 * Has permission for action?
-	 *
-	 * @param AccessAction $action
-	 * @param string $soort
-	 *
-	 * @return boolean
-	 */
-	public function mag($action, $soort = null) {
-		switch ($action) {
+    /**
+     * Has permission for action?
+     *
+     * @param AccessAction $action
+     * @param string $soort
+     *
+     * @return boolean
+     */
+    public function mag($action, $soort = null)
+    {
+        switch ($action) {
 
-			case AccessAction::Beheren():
-			case AccessAction::Wijzigen():
-				// Huidige bewoners mogen beheren
-				if (LoginService::mag('woonoord:' . $this->familie)) {
-					// HuisStatus wijzigen wordt geblokkeerd in GroepForm->validate()
-					return true;
-				}
-				break;
-		}
-		return parent::mag($action);
-	}
+            case AccessAction::Beheren():
+            case AccessAction::Wijzigen():
+                // Huidige bewoners mogen beheren
+                if (LoginService::mag('woonoord:' . $this->familie)) {
+                    // HuisStatus wijzigen wordt geblokkeerd in GroepForm->validate()
+                    return true;
+                }
+                break;
+        }
+        return parent::mag($action);
+    }
 
-	public function getSoort() {
-		return $this->huisStatus;
-	}
+    public function getSoort()
+    {
+        return $this->huisStatus;
+    }
 
-	public function setSoort($soort) {
-		$this->huisStatus = $soort;
-	}
+    public function setSoort($soort)
+    {
+        $this->huisStatus = $soort;
+    }
 }

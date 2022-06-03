@@ -1,31 +1,33 @@
 <footer class="footer mt-auto py-3">
-	<div class="container-fluid p-md-5">
-		<div class="row">
-			<div class="col-12 col-md-auto">
-				<img src="{{ absolute_url(asset_url('images/beeldmerk.png')) }}" width="80" class="d-block mb-2"
-						 alt="C.S.R. Logo"/>
-				<small class="d-block mb-3 text-muted">© 2006-{{ date().format('Y') }}</small>
-				{% if not app.debug and mag('P_ADMIN') %}
-					<small class="cd-block mb-3">
-						<a href="{{ commitLink() }}" target="_blank" class="not-external text-muted">{{ commitHash() }}</a>
-					</small>
-				{% endif %}
-			</div>
-			{% set menu = get_menu('main') %}
-			{% for item in menu.children %}
-				{% if item.magBekijken %}
-					<div class="col-6 col-md">
-						<h5>{{ item.tekst }}</h5>
-						<ul class="list-unstyled text-small">
-							{% for subItem in item.children %}
-								{% if subItem.magBekijken %}
-									<li><a class="link-secondary" href="{{ subItem.link }}">{{ subItem.tekst | raw }}</a></li>
-								{% endif %}
-							{% endfor %}
-						</ul>
-					</div>
-				{% endif %}
-			{% endfor %}
-		</div>
-	</div>
+    <div class="container-fluid p-md-5">
+        <div class="row">
+            <div class="col-12 col-md-auto">
+                <img src="{{ absolute_url(asset_url('images/beeldmerk.png')) }}" width="80" class="d-block mb-2"
+                     alt="C.S.R. Logo"/>
+                <small class="d-block mb-3 text-muted">© 2006-{{ date().format('Y') }}</small>
+                {% if not app.debug and mag('P_ADMIN') %}
+                    <small class="cd-block mb-3">
+                        <a href="{{ commitLink() }}" target="_blank"
+                           class="not-external text-muted">{{ commitHash() }}</a>
+                    </small>
+                {% endif %}
+            </div>
+            {% set menu = get_menu('main') %}
+            {% for item in menu.children %}
+                {% if item.magBekijken %}
+                    <div class="col-6 col-md">
+                        <h5>{{ item.tekst }}</h5>
+                        <ul class="list-unstyled text-small">
+                            {% for subItem in item.children %}
+                                {% if subItem.magBekijken %}
+                                    <li><a class="link-secondary"
+                                           href="{{ subItem.link }}">{{ subItem.tekst | raw }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 </footer>

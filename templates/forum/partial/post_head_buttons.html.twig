@@ -1,69 +1,79 @@
 {% if app.user %}
-	<div class="dropdown d-block d-md-none">
-		<button
-			class="btn btn-primary dropdown-toggle"
-			type="button"
-			id="dropdownMenuButton1"
-			data-bs-toggle="dropdown"
-			aria-expanded="false"
-		>
-			Opties
-		</button>
-		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-			<li>
-				<a class="dropdown-item" href="#forumForm">
-					<i class="fas fa-plus-circle"></i>
-					Nieuw bericht
-				</a>
-			</li>
-			<li><hr class="dropdown-divider" /></li>
-			<li>
-				<a title="Onderwerp toevoegen aan favorieten" class="btn btn-primary post popup addfav"
-					href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: 'favoriet'}) }}">{{ icon('heart-circle-plus') }}</a>
-			</li>
-			<li><hr class="dropdown-divider" /></li>
-			{% if statistiek is none and draad.magStatistiekBekijken %}
-				<li>
-					<a
-						href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, pagina: getHuidigePagina(), statistiek: 'statistiek'}) }}"
-						class="btn btn-primary" title="Toon statistieken">{{ icon('chart-line') }}</a>
-				</li>
-			{% endif %}
-			<li><hr class="dropdown-divider" /></li>
-			{% if draad.magModereren %}
-				<li>
-					<a href="#modereren" class="btn btn-primary modfuncties" title="Moderatie-functies weergeven"
-						data-bs-toggle="collapse" onclick="">
-						{{ icon('wrench') }}
-					</a>
+    <div class="dropdown d-block d-md-none">
+        <button
+                class="btn btn-primary dropdown-toggle"
+                type="button"
+                id="dropdownMenuButton1"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+        >
+            Opties
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li>
+                <a class="dropdown-item" href="#forumForm">
+                    <i class="fas fa-plus-circle"></i>
+                    Nieuw bericht
+                </a>
+            </li>
+            <li>
+                <hr class="dropdown-divider"/>
+            </li>
+            <li>
+                <a title="Onderwerp toevoegen aan favorieten" class="btn btn-primary post popup addfav"
+                   href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: 'favoriet'}) }}">{{ icon('heart-circle-plus') }}</a>
+            </li>
+            <li>
+                <hr class="dropdown-divider"/>
+            </li>
+            {% if statistiek is none and draad.magStatistiekBekijken %}
+                <li>
+                    <a
+                            href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, pagina: getHuidigePagina(), statistiek: 'statistiek'}) }}"
+                            class="btn btn-primary" title="Toon statistieken">{{ icon('chart-line') }}</a>
+                </li>
+            {% endif %}
+            <li>
+                <hr class="dropdown-divider"/>
+            </li>
+            {% if draad.magModereren %}
+                <li>
+                    <a href="#modereren" class="btn btn-primary modfuncties" title="Moderatie-functies weergeven"
+                       data-bs-toggle="collapse" onclick="">
+                        {{ icon('wrench') }}
+                    </a>
 
-					{% if draad.gesloten %}
-						<a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
-							class="btn btn-primary post ReloadPage slotjeUit"
-							title="Openen (reactie mogelijk)">{{ icon('lock-open') }}</a>
-					{% else %}
-						<a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
-							class="btn btn-primary post ReloadPage slotjeAan"
-							title="Sluiten (geen reactie mogelijk)">{{ icon('lock') }}</a>
-					{% endif %}
-				</li>
-			{% endif %}
-			<li><hr class="dropdown-divider" /></li>
-			{% if draad.verborgen %}
-				<li>
-					<a href="{{ url('csrdelft_forum_tonen', {draad_id: draad.draad_id}) }}"
-						class="btn btn-primary post ReloadPage tonenAan"
-						title="Onderwerp tonen in zijbalk">{{ icon('folder-plus') }}</a>
-				</li>
-			{% elseif draad.magVerbergen %}
-				<li>
-					<a href="{{ url('csrdelft_forum_verbergen', {draad_id: draad.draad_id}) }}"
-						class="btn btn-primary post ReloadPage tonenUit"
-						title="Onderwerp verbergen in zijbalk">{{ icon('folder-minus') }}</a>
-				</li>
-			{% endif %}
-			<li><hr class="dropdown-divider" /></li>
-			{# {% if draad.magMeldingKrijgen %}
+                    {% if draad.gesloten %}
+                        <a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
+                           class="btn btn-primary post ReloadPage slotjeUit"
+                           title="Openen (reactie mogelijk)">{{ icon('lock-open') }}</a>
+                    {% else %}
+                        <a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
+                           class="btn btn-primary post ReloadPage slotjeAan"
+                           title="Sluiten (geen reactie mogelijk)">{{ icon('lock') }}</a>
+                    {% endif %}
+                </li>
+            {% endif %}
+            <li>
+                <hr class="dropdown-divider"/>
+            </li>
+            {% if draad.verborgen %}
+                <li>
+                    <a href="{{ url('csrdelft_forum_tonen', {draad_id: draad.draad_id}) }}"
+                       class="btn btn-primary post ReloadPage tonenAan"
+                       title="Onderwerp tonen in zijbalk">{{ icon('folder-plus') }}</a>
+                </li>
+            {% elseif draad.magVerbergen %}
+                <li>
+                    <a href="{{ url('csrdelft_forum_verbergen', {draad_id: draad.draad_id}) }}"
+                       class="btn btn-primary post ReloadPage tonenUit"
+                       title="Onderwerp verbergen in zijbalk">{{ icon('folder-minus') }}</a>
+                </li>
+            {% endif %}
+            <li>
+                <hr class="dropdown-divider"/>
+            </li>
+            {# {% if draad.magMeldingKrijgen %}
 				<li>
 					<a href="{{ url('csrdelft_forum_meldingsniveau', {draad_id: draad.draad_id, niveau: 'nooit'}) }}"
 							class="btn btn-primary post ReloadPage melding-nooit {% if draad.meldingsNiveau.isNOOIT %}active{% endif %}"
@@ -77,61 +87,61 @@
 				</li>
 			{% endif %}
 			<li><hr class="dropdown-divider" /></li> #}
-			<li>
-				<a class="dropdown-item" href="#">
-					<i class="fas fa-share-alt"></i>
-					Delen
-				</a>
-			</li>
-			<li>
-				<a class="dropdown-item" href="#">
-					<i class="fas fa-bell"></i>
-					Notificaties
-				</a>
-			</li>
-		</ul>
-	</div>
+            <li>
+                <a class="dropdown-item" href="#">
+                    <i class="fas fa-share-alt"></i>
+                    Delen
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#">
+                    <i class="fas fa-bell"></i>
+                    Notificaties
+                </a>
+            </li>
+        </ul>
+    </div>
 
-	<div
-		class="btn-toolbar d-none d-md-block"
-		role="toolbar"
-		aria-label="Toolbar with button groups"
-	>
-		<div class="btn-group me-2" role="group">
-			<a class="btn btn-secondary text-white" href="#forumForm">
-				<i class="fas fa-plus-circle"></i>
-				Nieuw
-			</a>
-		</div>
+    <div
+            class="btn-toolbar d-none d-md-block"
+            role="toolbar"
+            aria-label="Toolbar with button groups"
+    >
+        <div class="btn-group me-2" role="group">
+            <a class="btn btn-secondary text-white" href="#forumForm">
+                <i class="fas fa-plus-circle"></i>
+                Nieuw
+            </a>
+        </div>
 
         <div class="btn-group me-2" role="group">
             <a title="Onderwerp toevoegen aan favorieten" class="btn btn-primary post popup addfav"
-                href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: 'favoriet'}) }}">{{ icon('heart-circle-plus') }}</a>
+               href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: 'favoriet'}) }}">{{ icon('heart-circle-plus') }}</a>
         </div>
 
         {% if statistiek is none and draad.magStatistiekBekijken %}
-		    <div class="btn-group me-2" role="group">
+            <div class="btn-group me-2" role="group">
                 <a
-                    href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, pagina: getHuidigePagina(), statistiek: 'statistiek'}) }}"
-                    class="btn btn-primary" title="Toon statistieken">{{ icon('chart-line') }}</a>
-		    </div>
+                        href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, pagina: getHuidigePagina(), statistiek: 'statistiek'}) }}"
+                        class="btn btn-primary" title="Toon statistieken">{{ icon('chart-line') }}</a>
+            </div>
         {% endif %}
 
         {% if draad.magModereren %}
             <div class="btn-group me-2" role="group">
                 <a href="#modereren" class="btn btn-primary modfuncties" title="Moderatie-functies weergeven"
-                    data-bs-toggle="collapse" onclick="">
+                   data-bs-toggle="collapse" onclick="">
                     {{ icon('wrench') }}
                 </a>
 
                 {% if draad.gesloten %}
                     <a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
-                        class="btn btn-primary post ReloadPage slotjeUit"
-                        title="Openen (reactie mogelijk)">{{ icon('lock-open') }}</a>
+                       class="btn btn-primary post ReloadPage slotjeUit"
+                       title="Openen (reactie mogelijk)">{{ icon('lock-open') }}</a>
                 {% else %}
                     <a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
-                        class="btn btn-primary post ReloadPage slotjeAan"
-                        title="Sluiten (geen reactie mogelijk)">{{ icon('lock') }}</a>
+                       class="btn btn-primary post ReloadPage slotjeAan"
+                       title="Sluiten (geen reactie mogelijk)">{{ icon('lock') }}</a>
                 {% endif %}
             </div>
         {% endif %}
@@ -139,14 +149,14 @@
         {% if draad.verborgen %}
             <div class="btn-group me-2">
                 <a href="{{ url('csrdelft_forum_tonen', {draad_id: draad.draad_id}) }}"
-                    class="btn btn-primary post ReloadPage tonenAan"
-                    title="Onderwerp tonen in zijbalk">{{ icon('folder-plus') }}</a>
+                   class="btn btn-primary post ReloadPage tonenAan"
+                   title="Onderwerp tonen in zijbalk">{{ icon('folder-plus') }}</a>
             </div>
         {% elseif draad.magVerbergen %}
             <div class="btn-group me-2">
                 <a href="{{ url('csrdelft_forum_verbergen', {draad_id: draad.draad_id}) }}"
-                    class="btn btn-primary post ReloadPage tonenUit"
-                    title="Onderwerp verbergen in zijbalk">{{ icon('folder-minus') }}</a>
+                   class="btn btn-primary post ReloadPage tonenUit"
+                   title="Onderwerp verbergen in zijbalk">{{ icon('folder-minus') }}</a>
             </div>
         {% endif %}
 
@@ -164,19 +174,19 @@
             </div>
         {% endif %} #}
 
-		<div class="btn-group" role="group">
-			<button
-				type="button"
-				class="btn btn-primary"
-				data-bs-toggle="modal"
-				data-bs-target="#shareModal"
-			>
-				<i class="fas fa-share-alt"></i>
-			</button>
+        <div class="btn-group" role="group">
+            <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#shareModal"
+            >
+                <i class="fas fa-share-alt"></i>
+            </button>
 
-			<button type="button" class="btn btn-primary">
-				<i class="fas fa-bell"></i>
-			</button>
-		</div>
-	</div>
+            <button type="button" class="btn btn-primary">
+                <i class="fas fa-bell"></i>
+            </button>
+        </div>
+    </div>
 {% endif %}

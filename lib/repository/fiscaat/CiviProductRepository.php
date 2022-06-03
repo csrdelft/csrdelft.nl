@@ -15,96 +15,103 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CiviProduct[]    findAll()
  * @method CiviProduct[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CiviProductRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
-		parent::__construct($registry, CiviProduct::class);
-	}
+class CiviProductRepository extends AbstractRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CiviProduct::class);
+    }
 
-	/**
-	 * @param string ...$cie
-	 * @return CiviProduct[]
-	 */
-	public function findByCie(...$cie) {
-		return $this->createQueryBuilder('civi_product')
-			->join('civi_product.categorie', 'categorie')
-			->where('categorie.cie in (:cie)')
-			->setParameter('cie', $cie)
-			->orderBy('civi_product.prioriteit', 'desc')
-			->getQuery()->getResult();
-	}
+    /**
+     * @param string ...$cie
+     * @return CiviProduct[]
+     */
+    public function findByCie(...$cie)
+    {
+        return $this->createQueryBuilder('civi_product')
+            ->join('civi_product.categorie', 'categorie')
+            ->where('categorie.cie in (:cie)')
+            ->setParameter('cie', $cie)
+            ->orderBy('civi_product.prioriteit', 'desc')
+            ->getQuery()->getResult();
+    }
 
-	/**
-	 * @param int $id
-	 *
-	 * @return CiviProduct
-	 */
-	public function getProduct($id) {
-		$product = $this->find($id);
-		$product->tmpPrijs = $product->getPrijs()->prijs;
+    /**
+     * @param int $id
+     *
+     * @return CiviProduct
+     */
+    public function getProduct($id)
+    {
+        $product = $this->find($id);
+        $product->tmpPrijs = $product->getPrijs()->prijs;
 
-		return $product;
-	}
+        return $product;
+    }
 
-	/**
-	 * @param $query
-	 * @return CiviProduct[]
-	 */
-	public function getSuggesties($query) {
-		return $this->createQueryBuilder('cp')
-			->where('cp.beschrijving LIKE :query')
-			->setParameter('query', $query)
-			->getQuery()->getResult();
-	}
+    /**
+     * @param $query
+     * @return CiviProduct[]
+     */
+    public function getSuggesties($query)
+    {
+        return $this->createQueryBuilder('cp')
+            ->where('cp.beschrijving LIKE :query')
+            ->setParameter('query', $query)
+            ->getQuery()->getResult();
+    }
 
-	/**
-	 * @param CiviProduct $product
-	 * @return string last insert id
-	 */
-	public function create(CiviProduct $product) {
-		return $this->_em->transactional(function () use ($product) {
-			$this->_em->persist($product);
+    /**
+     * @param CiviProduct $product
+     * @return string last insert id
+     */
+    public function create(CiviProduct $product)
+    {
+        return $this->_em->transactional(function () use ($product) {
+            $this->_em->persist($product);
 
-			$prijs = new CiviPrijs();
-			$prijs->product = $product;
-			$prijs->van = date_create_immutable('now');
-			$prijs->tot = NULL;
-			$prijs->prijs = $product->tmpPrijs;
+            $prijs = new CiviPrijs();
+            $prijs->product = $product;
+            $prijs->van = date_create_immutable('now');
+            $prijs->tot = NULL;
+            $prijs->prijs = $product->tmpPrijs;
 
-			$product->prijzen->add($prijs);
+            $product->prijzen->add($prijs);
 
-			$this->_em->persist($prijs);
+            $this->_em->persist($prijs);
 
-			$this->_em->flush();
+            $this->_em->flush();
 
-			return $product->id;
-		});
-	}
+            return $product->id;
+        });
+    }
 
-	/**
-	 * @param CiviProduct $product
-	 * @return int number of rows affected
-	 */
-	public function update(CiviProduct $product) {
-		return $this->_em->transactional(function () use ($product) {
-			$nu = date_create_immutable('now');
+    /**
+     * @param CiviProduct $product
+     * @return int number of rows affected
+     */
+    public function update(CiviProduct $product)
+    {
+        return $this->_em->transactional(function () use ($product) {
+            $nu = date_create_immutable('now');
 
-			$prijs = $product->getPrijs();
-			// Alleen prijs updaten als deze veranderd is, niet als alleen andere velden veranderen.
-			if ($prijs->prijs !== $product->tmpPrijs) {
-				$prijs->tot = $nu;
+            $prijs = $product->getPrijs();
+            // Alleen prijs updaten als deze veranderd is, niet als alleen andere velden veranderen.
+            if ($prijs->prijs !== $product->tmpPrijs) {
+                $prijs->tot = $nu;
 
-				$nieuw_prijs = new CiviPrijs();
-				$nieuw_prijs->product = $product;
-				$nieuw_prijs->van = $nu;
-				$nieuw_prijs->tot = NULL;
-				$nieuw_prijs->prijs = $product->tmpPrijs;
+                $nieuw_prijs = new CiviPrijs();
+                $nieuw_prijs->product = $product;
+                $nieuw_prijs->van = $nu;
+                $nieuw_prijs->tot = NULL;
+                $nieuw_prijs->prijs = $product->tmpPrijs;
 
-				$product->prijzen->add($nieuw_prijs);
+                $product->prijzen->add($nieuw_prijs);
 
-				$this->_em->persist($nieuw_prijs);
-			}
+                $this->_em->persist($nieuw_prijs);
+            }
 
-			$this->_em->flush();
-		});
-	}
+            $this->_em->flush();
+        });
+    }
 }

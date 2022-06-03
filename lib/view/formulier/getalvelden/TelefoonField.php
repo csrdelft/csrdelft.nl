@@ -13,20 +13,22 @@ use CsrDelft\view\formulier\invoervelden\TextField;
  * is valid als er een enigszins op een telefoonnummer lijkende string wordt
  * ingegeven.
  */
-class TelefoonField extends TextField {
+class TelefoonField extends TextField
+{
 
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		// parent checks not null
-		if ($this->value == '') {
-			return true;
-		}
-		if (!preg_match('/^([\d\+\-]{10,20})$/', $this->value)) {
-			$this->error = 'Geen geldig telefoonnummer.';
-		}
-		return $this->error === '';
-	}
+    public function validate()
+    {
+        if (!parent::validate()) {
+            return false;
+        }
+        // parent checks not null
+        if ($this->value == '') {
+            return true;
+        }
+        if (!preg_match('/^([\d\+\-]{10,20})$/', $this->value)) {
+            $this->error = 'Geen geldig telefoonnummer.';
+        }
+        return $this->error === '';
+    }
 
 }

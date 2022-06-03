@@ -13,82 +13,82 @@ use CsrDelft\service\security\LoginService;
 class ZoekField extends AutocompleteField
 {
 
-	public $type = 'search';
+    public $type = 'search';
 
-	public function __construct($name)
-	{
-		parent::__construct($name, null, null);
-		$this->css_classes[] = 'form-control me-sm-2';
-		$this->css_classes[] = 'clicktogo';
-		$this->placeholder = 'Zoeken';
-		$this->autoselect = true;
-		$this->onkeydown = <<<JS
+    public function __construct($name)
+    {
+        parent::__construct($name, null, null);
+        $this->css_classes[] = 'form-control me-sm-2';
+        $this->css_classes[] = 'clicktogo';
+        $this->placeholder = 'Zoeken';
+        $this->autoselect = true;
+        $this->onkeydown = <<<JS
 if (event.keyCode === 191 || event.keyCode === 220) { // forward and backward slash
 	event.preventDefault();
 }
 JS;
-		if (LoginService::mag(P_LEDEN_READ)) {
+        if (LoginService::mag(P_LEDEN_READ)) {
 
-			$menuRepository = ContainerFacade::getContainer()->get(MenuItemRepository::class);
+            $menuRepository = ContainerFacade::getContainer()->get(MenuItemRepository::class);
 
-			if (lid_instelling('zoeken', 'favorieten') === 'ja') {
-				$this->addSuggestions($menuRepository->getMenu(LoginService::getUid())->children);
-			}
-			if (lid_instelling('zoeken', 'menu') === 'ja') {
-				$this->addSuggestions($menuRepository->flattenMenu($menuRepository->getMenu('main')));
-			}
+            if (lid_instelling('zoeken', 'favorieten') === 'ja') {
+                $this->addSuggestions($menuRepository->getMenu(LoginService::getUid())->children);
+            }
+            if (lid_instelling('zoeken', 'menu') === 'ja') {
+                $this->addSuggestions($menuRepository->flattenMenu($menuRepository->getMenu('main')));
+            }
 
-			$this->suggestions[] = '/zoeken?q=';
+            $this->suggestions[] = '/zoeken?q=';
 
-			if (lid_instelling('zoeken', 'wiki') === 'ja') {
-				$this->suggestions['Wiki'] = '/wiki/lib/exe/ajax.php?call=csrlink_wikisuggesties&q=';
-			}
-		}
-	}
+            if (lid_instelling('zoeken', 'wiki') === 'ja') {
+                $this->suggestions['Wiki'] = '/wiki/lib/exe/ajax.php?call=csrlink_wikisuggesties&q=';
+            }
+        }
+    }
 
-	/**
-	 * @param MenuItem[] $list
-	 */
-	private function addSuggestions($list)
-	{
-		foreach ($list as $item) {
-			$parent = $item->parent;
-			if ($parent && $parent->tekst != 'main') {
-				if ($parent->tekst == LoginService::getUid()) { // werkomheen
-					$parent->tekst = 'Favorieten';
-				}
-				$label = $parent->tekst;
-			} else {
-				$label = 'Menu';
-			}
-			$this->suggestions[''][] = array(
-				'url' => $item->link,
-				'label' => $label,
-				'value' => $item->tekst
-			);
-		}
-	}
+    /**
+     * @param MenuItem[] $list
+     */
+    private function addSuggestions($list)
+    {
+        foreach ($list as $item) {
+            $parent = $item->parent;
+            if ($parent && $parent->tekst != 'main') {
+                if ($parent->tekst == LoginService::getUid()) { // werkomheen
+                    $parent->tekst = 'Favorieten';
+                }
+                $label = $parent->tekst;
+            } else {
+                $label = 'Menu';
+            }
+            $this->suggestions[''][] = array(
+                'url' => $item->link,
+                'label' => $label,
+                'value' => $item->tekst
+            );
+        }
+    }
 
-	public function __toString()
-	{
-		$html = '';
-		$lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
-		foreach ($lidInstellingenRepository->getModuleKeys('zoeken') as $option) {
-			$html .= '<a class="dropdown-item disabled" href="#">';
-			$instelling = lid_instelling('zoeken', $option);
-			if ($instelling !== 'nee') {
-				$html .= '<span class="fas fa-check fa-fw me-2"></span> ';
-				if ($option === 'leden') {
-					$html .= ucfirst(strtolower($instelling)) . '</a>';
-					continue;
-				}
-			} else {
-				$html .= '<span class="fas fa-fw me-2"></span> ';
-			}
-			$html .= ucfirst($option) . '</a>';
-		}
-		$parent = parent::getHtml();
-		return <<<HTML
+    public function __toString()
+    {
+        $html = '';
+        $lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
+        foreach ($lidInstellingenRepository->getModuleKeys('zoeken') as $option) {
+            $html .= '<a class="dropdown-item disabled" href="#">';
+            $instelling = lid_instelling('zoeken', $option);
+            if ($instelling !== 'nee') {
+                $html .= '<span class="fas fa-check fa-fw me-2"></span> ';
+                if ($option === 'leden') {
+                    $html .= ucfirst(strtolower($instelling)) . '</a>';
+                    continue;
+                }
+            } else {
+                $html .= '<span class="fas fa-fw me-2"></span> ';
+            }
+            $html .= ucfirst($option) . '</a>';
+        }
+        $parent = parent::getHtml();
+        return <<<HTML
 <div class="form-inline d-flex flex-nowrap">
 	{$parent}
 	<div class="dropdown">
@@ -123,6 +123,6 @@ JS;
 	</div>
 </div>
 HTML;
-	}
+    }
 
 }

@@ -1,19 +1,19 @@
 <nav aria-label="Forum pagination">
-	<ul class="pagination justify-content-center">
-		{% if deel is none or deel.forum_id is none %}
-			{{ sliding_pager({
-				baseurl: url('csrdelft_forum_recent') ~ '/',
-				url_append: belangrijk,
-				pagecount: getAantalPaginas(),
-				curpage: getHuidigePagina(),
-				showPrevNext: false,
-			}) }}
-		{% else %}
-			{{ sliding_pager({
-				baseurl: url('csrdelft_forum_deel', {forum_id: deel.forum_id}) ~ '/',
-				pagecount: getAantalPaginas(deel.forum_id),
-				curpage: getHuidigePagina(),
-			}) }}
-		{% endif %}
-	</ul>
+    <ul class="pagination justify-content-center">
+        {% if deel is none or deel.forum_id is none %}
+            {{ sliding_pager({
+                baseurl: url('csrdelft_forum_recent') ~ '/',
+                url_append: belangrijk,
+                pagecount: getAantalPaginas(),
+                curpage: getHuidigePagina(),
+                showPrevNext: false,
+            }) }}
+        {% else %}
+            {{ sliding_pager({
+                baseurl: url('csrdelft_forum_deel', {forum_id: deel.forum_id}) ~ '/',
+                pagecount: getAantalPaginas(deel.forum_id),
+                curpage: getHuidigePagina(),
+            }) }}
+        {% endif %}
+    </ul>
 </nav>

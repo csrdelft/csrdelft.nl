@@ -6,5 +6,5 @@ use CsrDelft\view\formulier\invoervelden\AutocompleteField;
 
 class RequiredAutocompleteField extends AutocompleteField
 {
-	public $required = true;
+    public $required = true;
 }

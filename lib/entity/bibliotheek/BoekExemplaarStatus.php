@@ -18,26 +18,27 @@ use CsrDelft\common\Enum;
  * @method static boolean isteruggegeven
  * @method static boolean isvermist
  */
-class BoekExemplaarStatus extends Enum {
-	const beschikbaar = 'beschikbaar';
-	const uitgeleend = 'uitgeleend';
-	const teruggegeven = 'teruggegeven';
-	const vermist = 'vermist';
+class BoekExemplaarStatus extends Enum
+{
+    const beschikbaar = 'beschikbaar';
+    const uitgeleend = 'uitgeleend';
+    const teruggegeven = 'teruggegeven';
+    const vermist = 'vermist';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $mapChoiceToDescription = [
-		self::beschikbaar => 'Beschikbaar',
-		self::uitgeleend => 'Uitgeleend',
-		self::teruggegeven => 'Teruggegeven',
-		self::vermist => 'Vermist'
-	];
+    /**
+     * @var string[]
+     */
+    protected static $mapChoiceToDescription = [
+        self::beschikbaar => 'Beschikbaar',
+        self::uitgeleend => 'Uitgeleend',
+        self::teruggegeven => 'Teruggegeven',
+        self::vermist => 'Vermist'
+    ];
 
-	protected static $mapChoiceToChar = [
-		self::beschikbaar => "BE",
-		self::uitgeleend => "UI",
-		self::teruggegeven => "TE",
-		self::vermist => "VE",
-	];
+    protected static $mapChoiceToChar = [
+        self::beschikbaar => "BE",
+        self::uitgeleend => "UI",
+        self::teruggegeven => "TE",
+        self::vermist => "VE",
+    ];
 }

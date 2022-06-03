@@ -1,65 +1,65 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-	<h1>Civisaldo Beheer</h1>
+    <h1>Civisaldo Beheer</h1>
 
-	{% if mag('P_FISCAAT_READ') %}
-		<ul class="nav nav-tabs mb-2">
-			<li class="nav-item">
-				<a href="{{ url('csrdelft_fiscaat_fiscaat_overzicht') }}"
-					 class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_fiscaat_overzicht') %}active{% endif %}">
-					Overzicht
-				</a>
-			</li>
-			<li class="nav-item">
-				<a href="{{ url('csrdelft_fiscaat_beheerciviproducten_overzicht') }}"
-					 class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_beheerciviproducten_overzicht') %}active{% endif %}">
-					Producten Beheer
-				</a>
-			</li>
-			<li class="nav-item">
-				<a href="{{ url('csrdelft_fiscaat_beheercivisaldo_overzicht') }}"
-					 class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_beheercivisaldo_overzicht') %}active{% endif %}">
-					Saldo Beheer
-				</a>
-			</li>
-			<li class="nav-item">
-				<a href="{{ url('csrdelft_fiscaat_beheercivibestelling_overzicht') }}"
-					 class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_beheercivibestelling_overzicht') %}active{% endif %}">
-					Bestellingen Beheer
-				</a>
-			</li>
-			<li class="nav-item">
-				<a href="{{ url('csrdelft_fiscaat_pintransactie_overzicht') }}"
-					 class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_pintransactie_overzicht') %}active{% endif %}">
-					Pin Transacties
-				</a>
-			</li>
-			<li class="nav-item">
-				<a href="{{ url('csrdelft_fiscaat_weekinvoer_weekinvoer') }}"
-					 class="nav-link {% if app.request.uri starts with url('csrdelft_fiscaat_weekinvoer_weekinvoer') %}active{% endif %}">
-					Weekinvoer
-				</a>
-			</li>
-			<li class="nav-item">
-				<a href="{{ url('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker') }}"
-					 class="nav-link {% if app.request.uri starts with url('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker') %}active{% endif %}">
-					Zoeker
-				</a>
-			</li>
-			{% if mag('P_FISCAAT_MOD') %}
-				<li class="nav-item">
-					<a href="{{ url('csrdelft_fiscaat_civisaldoafschrijven_afschrijven') }}"
-						 class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_civisaldoafschrijven_afschrijven') %}active{% endif %}">
-						Bulk afschrijven
-					</a>
-				</li>
-			{% endif %}
-		</ul>
-	{% endif %}
-	<div>
-		{% block civisaldocontent %}{% endblock %}
-	</div>
+    {% if mag('P_FISCAAT_READ') %}
+        <ul class="nav nav-tabs mb-2">
+            <li class="nav-item">
+                <a href="{{ url('csrdelft_fiscaat_fiscaat_overzicht') }}"
+                   class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_fiscaat_overzicht') %}active{% endif %}">
+                    Overzicht
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('csrdelft_fiscaat_beheerciviproducten_overzicht') }}"
+                   class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_beheerciviproducten_overzicht') %}active{% endif %}">
+                    Producten Beheer
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('csrdelft_fiscaat_beheercivisaldo_overzicht') }}"
+                   class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_beheercivisaldo_overzicht') %}active{% endif %}">
+                    Saldo Beheer
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('csrdelft_fiscaat_beheercivibestelling_overzicht') }}"
+                   class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_beheercivibestelling_overzicht') %}active{% endif %}">
+                    Bestellingen Beheer
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('csrdelft_fiscaat_pintransactie_overzicht') }}"
+                   class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_pintransactie_overzicht') %}active{% endif %}">
+                    Pin Transacties
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('csrdelft_fiscaat_weekinvoer_weekinvoer') }}"
+                   class="nav-link {% if app.request.uri starts with url('csrdelft_fiscaat_weekinvoer_weekinvoer') %}active{% endif %}">
+                    Weekinvoer
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker') }}"
+                   class="nav-link {% if app.request.uri starts with url('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker') %}active{% endif %}">
+                    Zoeker
+                </a>
+            </li>
+            {% if mag('P_FISCAAT_MOD') %}
+                <li class="nav-item">
+                    <a href="{{ url('csrdelft_fiscaat_civisaldoafschrijven_afschrijven') }}"
+                       class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_civisaldoafschrijven_afschrijven') %}active{% endif %}">
+                        Bulk afschrijven
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    {% endif %}
+    <div>
+        {% block civisaldocontent %}{% endblock %}
+    </div>
 {% endblock %}
 
 

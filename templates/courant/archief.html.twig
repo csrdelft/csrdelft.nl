@@ -3,39 +3,39 @@
 {% block titel %}Archief C.S.R.-courant{% endblock %}
 
 {% block breadcrumbs %}
-	{{ csr_breadcrumbs({
-		(url('default')): 'main',
-		(url('csrdelft_courant_toevoegen')): 'Courant',
-		'': 'Archief C.S.R.-courant',
-	}) }}
+    {{ csr_breadcrumbs({
+        (url('default')): 'main',
+        (url('csrdelft_courant_toevoegen')): 'Courant',
+        '': 'Archief C.S.R.-courant',
+    }) }}
 {% endblock %}
 
 {% block content %}
-	<ul class="nav nav-tabs">
-		<li class="nav-item">
-			<a href="{{ url('csrdelft_courant_toevoegen') }}" class="nav-link">Courantinzendingen</a>
-		</li>
-		<li class="nav-item">
-			<a href="{{ url('csrdelft_courant_archief') }}" class="nav-link active">Archief</a>
-		</li>
-	</ul>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a href="{{ url('csrdelft_courant_toevoegen') }}" class="nav-link">Courantinzendingen</a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ url('csrdelft_courant_archief') }}" class="nav-link active">Archief</a>
+        </li>
+    </ul>
 
-	<h1>Archief C.S.R.-courant</h1>
-	<div class="row">
-		{% for jaar,courantJaar in couranten|reverse %}
-			<div class="col-auto">
-				<h3>{{ courantJaar[0].jaar }}</h3>
+    <h1>Archief C.S.R.-courant</h1>
+    <div class="row">
+        {% for jaar,courantJaar in couranten|reverse %}
+            <div class="col-auto">
+                <h3>{{ courantJaar[0].jaar }}</h3>
 
-				<ul class="list-unstyled">
-				{% for courant in courantJaar %}
-					<li>
-					<a href="{{ url('csrdelft_courant_bekijken', {id: courant.id}) }}">
-						{{ courant.verzendMoment | date("d F") }}
-					</a>
-					</li>
-				{% endfor %}
-				</ul>
-			</div>
-		{% endfor %}
-	</div>
+                <ul class="list-unstyled">
+                    {% for courant in courantJaar %}
+                        <li>
+                            <a href="{{ url('csrdelft_courant_bekijken', {id: courant.id}) }}">
+                                {{ courant.verzendMoment | date("d F") }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

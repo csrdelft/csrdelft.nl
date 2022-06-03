@@ -3,53 +3,53 @@
 {% block titel %}Declaratiewachtrijen{% endblock %}
 
 {% block styles %}
-	{{ css_asset('app') }}
+    {{ css_asset('app') }}
 {% endblock %}
 
 {% block content %}
-	<h2>Declaratiewachtrijen</h2>
+    <h2>Declaratiewachtrijen</h2>
 
-	{% if wachtrijen %}
-		<div class="table-responsive">
-			<table class="table table-hover declaratie-table">
-				<thead>
-				<tr>
-					<th>Wachtrij</th>
-					<th>Concepten</th>
-					<th>Te beoordelen</th>
-					<th>Uit te betalen</th>
-				</tr>
-				</thead>
-				<tbody>
-				{% for wachtrij in wachtrijen %}
-					<tr>
-						<th>{{ wachtrij.naam }}</th>
-						<td>
-							<a class="status concept"
-								href="{{ path('declaraties_wachtrij', {'wachtrij': wachtrij.id, 'status[]': 'concept'}) }}">
-								{{ counts[wachtrij.id].concept }}
-							</a>
-						</td>
-						<td>
-							<a class="status ingediend"
-								 href="{{ path('declaraties_wachtrij', {'wachtrij': wachtrij.id, 'status[]': 'ingediend'}) }}">
-								{{ counts[wachtrij.id].beoordelen }}
-							</a>
-						</td>
-						<td>
-							<a class="status goedgekeurd"
-								 href="{{ path('declaraties_wachtrij', {'wachtrij': wachtrij.id, 'status[]': 'uitbetaald'}) }}">
-								{{ counts[wachtrij.id].uitbetalen }}
-							</a>
-						</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	{% else %}
-		<div class="alert alert-info" role="alert">
-			Geen wachtrijen gevonden.
-		</div>
-	{% endif %}
+    {% if wachtrijen %}
+        <div class="table-responsive">
+            <table class="table table-hover declaratie-table">
+                <thead>
+                <tr>
+                    <th>Wachtrij</th>
+                    <th>Concepten</th>
+                    <th>Te beoordelen</th>
+                    <th>Uit te betalen</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for wachtrij in wachtrijen %}
+                    <tr>
+                        <th>{{ wachtrij.naam }}</th>
+                        <td>
+                            <a class="status concept"
+                               href="{{ path('declaraties_wachtrij', {'wachtrij': wachtrij.id, 'status[]': 'concept'}) }}">
+                                {{ counts[wachtrij.id].concept }}
+                            </a>
+                        </td>
+                        <td>
+                            <a class="status ingediend"
+                               href="{{ path('declaraties_wachtrij', {'wachtrij': wachtrij.id, 'status[]': 'ingediend'}) }}">
+                                {{ counts[wachtrij.id].beoordelen }}
+                            </a>
+                        </td>
+                        <td>
+                            <a class="status goedgekeurd"
+                               href="{{ path('declaraties_wachtrij', {'wachtrij': wachtrij.id, 'status[]': 'uitbetaald'}) }}">
+                                {{ counts[wachtrij.id].uitbetalen }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            Geen wachtrijen gevonden.
+        </div>
+    {% endif %}
 {% endblock %}

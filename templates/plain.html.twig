@@ -3,11 +3,11 @@
 {% block titel %}{{ titel }}{% endblock %}
 
 {% block body %}
-	<div class="container">
-		<nav aria-label="breadcrumb">
-			{{ csr_breadcrumbs(get_breadcrumbs(app.request.uri)) }}
-		</nav>
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            {{ csr_breadcrumbs(get_breadcrumbs(app.request.uri)) }}
+        </nav>
 
-		{{ content | raw }}
-	</div>
+        {{ content | raw }}
+    </div>
 {% endblock %}

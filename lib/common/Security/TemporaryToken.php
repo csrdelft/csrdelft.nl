@@ -15,26 +15,30 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  * @see SuService
  * @package CsrDelft\common\Security
  */
-class TemporaryToken extends AbstractToken {
-	/**
-	 * @var TokenInterface
-	 */
-	private $originalToken;
+class TemporaryToken extends AbstractToken
+{
+    /**
+     * @var TokenInterface
+     */
+    private $originalToken;
 
-	public function __construct(Account $account, TokenInterface $originalToken) {
-		parent::__construct($account->getRoles());
+    public function __construct(Account $account, TokenInterface $originalToken)
+    {
+        parent::__construct($account->getRoles());
 
-		$this->setUser($account);
-		$this->setAuthenticated(true);
+        $this->setUser($account);
+        $this->setAuthenticated(true);
 
-		$this->originalToken = $originalToken;
-	}
+        $this->originalToken = $originalToken;
+    }
 
-	public function getOriginalToken() {
-		return $this->originalToken;
-	}
+    public function getOriginalToken()
+    {
+        return $this->originalToken;
+    }
 
-	public function getCredentials() {
-		return '';
-	}
+    public function getCredentials()
+    {
+        return '';
+    }
 }

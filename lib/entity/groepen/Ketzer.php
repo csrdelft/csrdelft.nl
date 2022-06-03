@@ -17,38 +17,38 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ketzer extends Groep implements HeeftAanmeldLimiet
 {
-	use GroepAanmeldMoment;
-	use GroepAanmeldLimiet;
+    use GroepAanmeldMoment;
+    use GroepAanmeldLimiet;
 
-	/**
-	 * Rechten voor de gehele klasse of soort groep?
-	 *
-	 * @param AccessAction $action
-	 * @param null $allowedAuthenticationMethods
-	 * @param null $soort
-	 * @return boolean
-	 */
-	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null)
-	{
-		switch ($action) {
+    /**
+     * Rechten voor de gehele klasse of soort groep?
+     *
+     * @param AccessAction $action
+     * @param null $allowedAuthenticationMethods
+     * @param null $soort
+     * @return boolean
+     */
+    public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null)
+    {
+        switch ($action) {
 
-			case AccessAction::Aanmaken():
-			case AccessAction::Aanmelden():
-			case AccessAction::Bewerken():
-			case AccessAction::Afmelden():
-				return true;
-		}
-		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
-	}
+            case AccessAction::Aanmaken():
+            case AccessAction::Aanmelden():
+            case AccessAction::Bewerken():
+            case AccessAction::Afmelden():
+                return true;
+        }
+        return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
+    }
 
-	public function getUrl()
-	{
-		return '/groepen/ketzers/' . $this->id;
-	}
+    public function getUrl()
+    {
+        return '/groepen/ketzers/' . $this->id;
+    }
 
 
-	public function getAanmeldLimiet()
-	{
-		return $this->aanmeldLimiet;
-	}
+    public function getAanmeldLimiet()
+    {
+        return $this->aanmeldLimiet;
+    }
 }

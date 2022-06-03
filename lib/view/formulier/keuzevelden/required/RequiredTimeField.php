@@ -12,8 +12,9 @@ use CsrDelft\view\formulier\keuzevelden\TimeField;
  *
  * @see TimeField
  */
-class RequiredTimeField extends TimeField {
+class RequiredTimeField extends TimeField
+{
 
-	public $required = true;
+    public $required = true;
 
 }

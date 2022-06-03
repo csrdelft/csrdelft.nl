@@ -2,28 +2,28 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description"
-				content="Arro">
-	<title>Arro</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+          content="Arro">
+    <title>Arro</title>
 
-	{{ csrfMetaTag() }}
+    {{ csrfMetaTag() }}
 
-	<script>
-		APP_ENV = "{{ app.environment }}";
-		SENTRY_DSN_JS = "{{ sentry_dsn }}";
-		USER = "{{ app.user.uid }}";
-		setTimeout(function () {
-			document.getElementById('bottom').scrollIntoView();
-		}, 2000);
-	</script>
-	{{ js_asset('sentry') }}
+    <script>
+        APP_ENV = "{{ app.environment }}";
+        SENTRY_DSN_JS = "{{ sentry_dsn }}";
+        USER = "{{ app.user.uid }}";
+        setTimeout(function () {
+            document.getElementById('bottom').scrollIntoView();
+        }, 2000);
+    </script>
+    {{ js_asset('sentry') }}
 </head>
 
 <body class="zijbalk_verborgen">
 <iframe src="https://www.bladnl.nl/bladen/w_NX29IuoLlYht7YLZkq601c1b59" frameborder="0" height="950px"
-				width="100%"></iframe>
+        width="100%"></iframe>
 <div id="bottom"></div>
 </body>
 </html>

@@ -13,27 +13,30 @@ use DateTime;
  * Verzameling van wijzigingen aan een profiel, met dezelfde datum en auteur.
  *
  */
-abstract class ProfielLogGroup {
-	/**
-	 * UID of editor
-	 * @var string
-	 */
-	public $editor;
+abstract class ProfielLogGroup
+{
+    /**
+     * UID of editor
+     * @var string
+     */
+    public $editor;
 
-	/**
-	 * @var DateTime
-	 */
-	public $timestamp;
+    /**
+     * @var DateTime
+     */
+    public $timestamp;
 
-	public function __construct($editor, $timestamp) {
-		$this->editor = $editor;
-		$this->timestamp = $timestamp;
-	}
+    public function __construct($editor, $timestamp)
+    {
+        $this->editor = $editor;
+        $this->timestamp = $timestamp;
+    }
 
-	public abstract function toHtml();
+    public abstract function toHtml();
 
-	public function censureerVeld($naam) : bool {
-		return false;
-	}
+    public function censureerVeld($naam): bool
+    {
+        return false;
+    }
 
 }

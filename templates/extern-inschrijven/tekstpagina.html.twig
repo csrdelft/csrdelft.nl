@@ -3,25 +3,25 @@
 {% block titel %}{{ titel }}{% endblock %}
 
 {% block styles %}
-	{{ css_asset('thema-normaal') }}
-	<style>
-		body {
-			margin: 50px 10vw;
-			margin: 50px max(20px, 5vw);
-		}
+    {{ css_asset('thema-normaal') }}
+    <style>
+        body {
+            margin: 50px 10vw;
+            margin: 50px max(20px, 5vw);
+        }
 
-		img {
-			width: 100px;
-		}
-	</style>
+        img {
+            width: 100px;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
-	<div class="container">
-		<section id="banner">
-			<img src="{{ absolute_url('/images/c.s.r.logo.svg') }}" alt="Beeldmerk van de vereniging">
-		</section>
+    <div class="container">
+        <section id="banner">
+            <img src="{{ absolute_url('/images/c.s.r.logo.svg') }}" alt="Beeldmerk van de vereniging">
+        </section>
 
-		{{ content | raw }}
-	</div>
+        {{ content | raw }}
+    </div>
 {% endblock %}

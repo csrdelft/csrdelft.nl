@@ -13,106 +13,113 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class SuService {
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
-	 * @var LoginService
-	 */
-	private $loginService;
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var TokenStorageInterface
-	 */
-	private $tokenStorage;
-	/**
-	 * @var AccessService
-	 */
-	private $accessService;
+class SuService
+{
+    /**
+     * @var AccountRepository
+     */
+    private $accountRepository;
+    /**
+     * @var LoginService
+     */
+    private $loginService;
+    /**
+     * @var Security
+     */
+    private $security;
+    /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
+    /**
+     * @var AccessService
+     */
+    private $accessService;
 
-	public function __construct(
-		Security $security,
-		LoginService $loginService,
-		AccountRepository $accountRepository,
-		TokenStorageInterface $tokenStorage,
-		AccessService $accessService
-	) {
-		$this->accountRepository = $accountRepository;
-		$this->loginService = $loginService;
-		$this->security = $security;
-		$this->tokenStorage = $tokenStorage;
-		$this->accessService = $accessService;
-	}
+    public function __construct(
+        Security              $security,
+        LoginService          $loginService,
+        AccountRepository     $accountRepository,
+        TokenStorageInterface $tokenStorage,
+        AccessService         $accessService
+    )
+    {
+        $this->accountRepository = $accountRepository;
+        $this->loginService = $loginService;
+        $this->security = $security;
+        $this->tokenStorage = $tokenStorage;
+        $this->accessService = $accessService;
+    }
 
-	/**
-	 * @return bool
-	 */
-	public function isSued() {
-		return $this->security->getToken() && $this->security->isGranted('IS_IMPERSONATOR');
-	}
+    /**
+     * @return bool
+     */
+    public function isSued()
+    {
+        return $this->security->getToken() && $this->security->isGranted('IS_IMPERSONATOR');
+    }
 
-	/**
-	 * Voer een callable uit alsof je bent ingelogd als $account.
-	 *
-	 * @param Account $account
-	 * @param callable $fun
-	 * @return mixed Het resultaat van $fun
-	 */
-	public function alsLid(Account $account, callable $fun) {
-		$this->overrideUid($account);
+    /**
+     * Voer een callable uit alsof je bent ingelogd als $account.
+     *
+     * @param Account $account
+     * @param callable $fun
+     * @return mixed Het resultaat van $fun
+     */
+    public function alsLid(Account $account, callable $fun)
+    {
+        $this->overrideUid($account);
 
-		$result = null;
+        $result = null;
 
-		try {
-			$result = $fun();
-		} finally {
-			$this->resetUid();
-		}
+        try {
+            $result = $fun();
+        } finally {
+            $this->resetUid();
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * Schakel tijdelijk naar een lid om gedrag van functies te simuleren alsof dit lid is ingelogd.
-	 * Moet z.s.m. (binnen dit request) weer ongedaan worden met `endTempSwitchUser()`
-	 * @param Account $account Account van lid waarnaartoe geschakeld moet worden
-	 * @throws CsrException als er al een tijdelijke schakeling actief is.
-	 * @see SuService::alsLid() voor een veilige methode
-	 */
-	public function overrideUid(Account $account) {
-		$token = $this->security->getToken();
-		if ($token instanceof TemporaryToken) {
-			throw new CsrException("Er is al een tijdelijke schakeling actief, beëindig deze eerst.");
-		}
+    /**
+     * Schakel tijdelijk naar een lid om gedrag van functies te simuleren alsof dit lid is ingelogd.
+     * Moet z.s.m. (binnen dit request) weer ongedaan worden met `endTempSwitchUser()`
+     * @param Account $account Account van lid waarnaartoe geschakeld moet worden
+     * @throws CsrException als er al een tijdelijke schakeling actief is.
+     * @see SuService::alsLid() voor een veilige methode
+     */
+    public function overrideUid(Account $account)
+    {
+        $token = $this->security->getToken();
+        if ($token instanceof TemporaryToken) {
+            throw new CsrException("Er is al een tijdelijke schakeling actief, beëindig deze eerst.");
+        }
 
-		$temporaryToken = new TemporaryToken($account, $token);
+        $temporaryToken = new TemporaryToken($account, $token);
 
-		$this->tokenStorage->setToken($temporaryToken);
-	}
+        $this->tokenStorage->setToken($temporaryToken);
+    }
 
-	/**
-	 * Beëindig tijdelijke schakeling naar lid.
-	 * @throws CsrException als er geen tijdelijke schakeling actief is.
-	 * @see SuService::alsLid() voor een veilige methode
-	 */
-	public function resetUid() {
-		$token = $this->security->getToken();
-		if (!($token instanceof TemporaryToken)) {
-			throw new CsrException("Geen tijdelijke schakeling actief, kan niet terug.");
-		}
+    /**
+     * Beëindig tijdelijke schakeling naar lid.
+     * @throws CsrException als er geen tijdelijke schakeling actief is.
+     * @see SuService::alsLid() voor een veilige methode
+     */
+    public function resetUid()
+    {
+        $token = $this->security->getToken();
+        if (!($token instanceof TemporaryToken)) {
+            throw new CsrException("Geen tijdelijke schakeling actief, kan niet terug.");
+        }
 
-		$this->tokenStorage->setToken($token->getOriginalToken());
-	}
+        $this->tokenStorage->setToken($token->getOriginalToken());
+    }
 
-	public function maySuTo(UserInterface $suNaar) {
-		return $this->security->isGranted('ROLE_ALLOWED_TO_SWITCH') // Mag switchen
-			&& !$this->security->isGranted('IS_IMPERSONATOR') // Is niet al geswitched
-			&& $this->security->getUser()->getUsername() !== $suNaar->getUsername() // Is niet dezelfde gebruiker
-			&& $this->accessService->mag($suNaar, P_LOGGED_IN); // Gebruiker waar naar geswitched wordt mag inloggen
-	}
+    public function maySuTo(UserInterface $suNaar)
+    {
+        return $this->security->isGranted('ROLE_ALLOWED_TO_SWITCH') // Mag switchen
+            && !$this->security->isGranted('IS_IMPERSONATOR') // Is niet al geswitched
+            && $this->security->getUser()->getUsername() !== $suNaar->getUsername() // Is niet dezelfde gebruiker
+            && $this->accessService->mag($suNaar, P_LOGGED_IN); // Gebruiker waar naar geswitched wordt mag inloggen
+    }
 }

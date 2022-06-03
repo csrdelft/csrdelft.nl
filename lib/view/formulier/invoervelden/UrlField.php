@@ -9,29 +9,32 @@ namespace CsrDelft\view\formulier\invoervelden;
  *
  * UrlField checked of de invoer op een url lijkt.
  */
-class UrlField extends TextField {
+class UrlField extends TextField
+{
 
-	public function getValue() {
-		$this->value = parent::getValue();
-		if ($this->value && str_starts_with($this->value, getCsrRoot())) {
-			$this->value = str_replace(getCsrRoot(), '', $this->value);
-		}
-		return $this->value;
-	}
+    public function getValue()
+    {
+        $this->value = parent::getValue();
+        if ($this->value && str_starts_with($this->value, getCsrRoot())) {
+            $this->value = str_replace(getCsrRoot(), '', $this->value);
+        }
+        return $this->value;
+    }
 
-	public function validate() {
-		if (!parent::validate()) {
-			return false;
-		}
-		// parent checks not null
-		if ($this->value == '') {
-			return true;
-		}
-		// controleren of het een geldige url is
-		if (!url_like($this->value) && !str_starts_with($this->value, '/')) {
-			$this->error = 'Geen geldige url';
-		}
-		return $this->error === '';
-	}
+    public function validate()
+    {
+        if (!parent::validate()) {
+            return false;
+        }
+        // parent checks not null
+        if ($this->value == '') {
+            return true;
+        }
+        // controleren of het een geldige url is
+        if (!url_like($this->value) && !str_starts_with($this->value, '/')) {
+            $this->error = 'Geen geldige url';
+        }
+        return $this->error === '';
+    }
 
 }

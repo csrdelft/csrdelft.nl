@@ -9,24 +9,25 @@ use Doctrine\ORM\Mapping as ORM;
  * @package CsrDelft\model\entity\commissievoorkeuren
  * @ORM\Entity(repositoryClass="CsrDelft\repository\commissievoorkeuren\VoorkeurCommissieCategorieRepository")
  */
-class VoorkeurCommissieCategorie {
-	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $id;
+class VoorkeurCommissieCategorie
+{
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     */
+    public $id;
 
-	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $naam;
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    public $naam;
 
-	/**
-	 * @var VoorkeurCommissie[]
-	 * @ORM\OneToMany(targetEntity="VoorkeurCommissie", mappedBy="categorie")
-	 */
-	public $commissies;
+    /**
+     * @var VoorkeurCommissie[]
+     * @ORM\OneToMany(targetEntity="VoorkeurCommissie", mappedBy="categorie")
+     */
+    public $commissies;
 }

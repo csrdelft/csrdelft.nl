@@ -3,133 +3,135 @@
 {% block titel %}Mijn corveeoverzicht{% endblock %}
 
 {% block content %}
-	{{ parent() }}
-	<p>Deze pagina toont een overzicht van uw aankomende corveetaken, corveepunten en vrijstellingen.
-		Voor vragen kunt u contact opnemen met de CorveeCaesar: <a href="mailto:{{ email_corvee }}">{{ email_corvee }}</a>.
-	</p>
-	<h3>Corveerooster</h3>
-	{% if rooster is empty %}
-		<p>U bent nog niet ingedeeld.</p>
-	{% else %}
-		<p>
-			De onderstaande tabel toont de aankomende corveetaken waarvoor u bent ingedeeld. Als u niet kunt op de betreffende
-			datum bent u zelf verantwoordelijk voor het regelen van een vervanger en dit te melden aan de <a
-				href="mailto:{{ email_corvee }}">CorveeCaesar</a>.
-		</p>
-		<p>
-			Tip: zoek in het <a href="{{ url('csrdelft_maalcie_mijncorvee_rooster') }}"
-													title="Corveerooster">corveerooster</a>
-			iemand met dezelfde taak wanneer u zelf wel kunt om te ruilen.
-		</p>
+    {{ parent() }}
+    <p>Deze pagina toont een overzicht van uw aankomende corveetaken, corveepunten en vrijstellingen.
+        Voor vragen kunt u contact opnemen met de CorveeCaesar: <a
+                href="mailto:{{ email_corvee }}">{{ email_corvee }}</a>.
+    </p>
+    <h3>Corveerooster</h3>
+    {% if rooster is empty %}
+        <p>U bent nog niet ingedeeld.</p>
+    {% else %}
+        <p>
+            De onderstaande tabel toont de aankomende corveetaken waarvoor u bent ingedeeld. Als u niet kunt op de
+            betreffende
+            datum bent u zelf verantwoordelijk voor het regelen van een vervanger en dit te melden aan de <a
+                    href="mailto:{{ email_corvee }}">CorveeCaesar</a>.
+        </p>
+        <p>
+            Tip: zoek in het <a href="{{ url('csrdelft_maalcie_mijncorvee_rooster') }}"
+                                title="Corveerooster">corveerooster</a>
+            iemand met dezelfde taak wanneer u zelf wel kunt om te ruilen.
+        </p>
 
 
-		<table class="table table-sm table-striped">
-			<thead>
-			<tr>
-				<th>Week</th>
-				<th>Datum</th>
-				<th>Functie</th>
-			</tr>
-			</thead>
-			<tbody>
-			{% for week, datums in rooster %}
-				{% for datum, taken in datums %}
-					{% for taak in taken %}
-						<tr>
-							<td>
-								{{ date(datum) | date_format_intl('w') }}
-							</td>
-							<td>
-								<nobr>{{ date(datum) | date_format_intl('eee dd MMM') }}</nobr>
-							</td>
-							{% if taak is not empty %}
-								<td>
-									<nobr>{{ taak[0].corveeFunctie.naam }}</nobr>
-								</td>
-							{% endif %}
-						</tr>
-					{% endfor %}
-				{% endfor %}
-			{% endfor %}
-			</tbody>
-		</table>
-	{% endif %}
+        <table class="table table-sm table-striped">
+            <thead>
+            <tr>
+                <th>Week</th>
+                <th>Datum</th>
+                <th>Functie</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for week, datums in rooster %}
+                {% for datum, taken in datums %}
+                    {% for taak in taken %}
+                        <tr>
+                            <td>
+                                {{ date(datum) | date_format_intl('w') }}
+                            </td>
+                            <td>
+                                <nobr>{{ date(datum) | date_format_intl('eee dd MMM') }}</nobr>
+                            </td>
+                            {% if taak is not empty %}
+                                <td>
+                                    <nobr>{{ taak[0].corveeFunctie.naam }}</nobr>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
-	<h3>Corveepunten</h3>
-	<p>
-		In de onderstaande tabel is een overzicht te vinden van de punten die u per corveefunctie heeft verdiend met
-		daarachter uw bonus/malus-punten indien van toepassing.
-		Tussen haakjes staat het aantal keer dat u bent ingedeeld in deze functie.
-		Het totaal is uw huidige aantal toegekende corveepunten.
-		De prognose geeft aan hoeveel punten u naar verwachting totaal zal hebben aan het einde van het corveejaar.
-	</p>
-	<table class="table table-sm table-striped" style="width: 350px;">
-		<thead>
-		<tr>
-			<th>Functie</th>
-			<th>Punten</th>
-		</tr>
-		</thead>
-		<tbody>
-		{% for fid, aantal in punten.aantallen %}
-			<tr>
-				<td>{{ functies[fid].naam }} ({{ aantal }})</td>
-				<td>{{ punten.punten[fid] }}
-					{% if punten.bonus[fid] > 0 %}
-						+
-					{% endif %}
-					{% if punten.bonus[fid] != 0 %}
-						{{ punten.bonus[fid] }}
-					{% endif %}
-				</td>
-			</tr>
-		{% endfor %}
-		<tr class="dikgedrukt">
-			<td>Totaal</td>
-			<td>{{ punten.puntenTotaal }}
-				{% if punten.bonusTotaal > 0 %}
-					+
-				{% endif %}
-				{% if punten.bonusTotaal != 0 %}
-					{{ punten.bonusTotaal }}
-				{% endif %}
-			</td>
-		</tr>
-		<tr class="dikgedrukt">
-			<td>Prognose</td>
-			<td>{{ punten.prognose }}</td>
-		</tr>
-		<tr class="dikgedrukt">
-			<td>Tekort</td>
-			<td style="background-color: {{ '#' ~ punten.tekortColor }};">{{ punten.tekort }}</td>
-		</tr>
-		</tbody>
-	</table>
+    <h3>Corveepunten</h3>
+    <p>
+        In de onderstaande tabel is een overzicht te vinden van de punten die u per corveefunctie heeft verdiend met
+        daarachter uw bonus/malus-punten indien van toepassing.
+        Tussen haakjes staat het aantal keer dat u bent ingedeeld in deze functie.
+        Het totaal is uw huidige aantal toegekende corveepunten.
+        De prognose geeft aan hoeveel punten u naar verwachting totaal zal hebben aan het einde van het corveejaar.
+    </p>
+    <table class="table table-sm table-striped" style="width: 350px;">
+        <thead>
+        <tr>
+            <th>Functie</th>
+            <th>Punten</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for fid, aantal in punten.aantallen %}
+            <tr>
+                <td>{{ functies[fid].naam }} ({{ aantal }})</td>
+                <td>{{ punten.punten[fid] }}
+                    {% if punten.bonus[fid] > 0 %}
+                        +
+                    {% endif %}
+                    {% if punten.bonus[fid] != 0 %}
+                        {{ punten.bonus[fid] }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        <tr class="dikgedrukt">
+            <td>Totaal</td>
+            <td>{{ punten.puntenTotaal }}
+                {% if punten.bonusTotaal > 0 %}
+                    +
+                {% endif %}
+                {% if punten.bonusTotaal != 0 %}
+                    {{ punten.bonusTotaal }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr class="dikgedrukt">
+            <td>Prognose</td>
+            <td>{{ punten.prognose }}</td>
+        </tr>
+        <tr class="dikgedrukt">
+            <td>Tekort</td>
+            <td style="background-color: {{ '#' ~ punten.tekortColor }};">{{ punten.tekort }}</td>
+        </tr>
+        </tbody>
+    </table>
 
-	<h3>Corveevrijstelling</h3>
-	{% if not vrijstelling %}
-		<p>U heeft geen vrijstelling.</p>
-	{% else %}
-		<p>
-			In de onderstaande tabel staat de vrijstelling die u heeft gekregen.
-		</p>
-		<table class="maalcie-tabel" style="width: 650px;">
-			<thead>
-			<tr>
-				<th>Van</th>
-				<th>Tot</th>
-				<th>Percentage</th>
-				<th>Punten</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<td>{{ vrijstelling.begin_datum | date_format_intl('dd MMM y') }}</td>
-				<td>{{ vrijstelling.eind_datum | date_format_intl('dd MMM y') }}</td>
-				<td>{{ vrijstelling.percentage }}%</td>
-				<td>{{ vrijstelling.punten }}</td>
-			</tr>
-			</tbody>
-		</table>
-	{% endif %}
+    <h3>Corveevrijstelling</h3>
+    {% if not vrijstelling %}
+        <p>U heeft geen vrijstelling.</p>
+    {% else %}
+        <p>
+            In de onderstaande tabel staat de vrijstelling die u heeft gekregen.
+        </p>
+        <table class="maalcie-tabel" style="width: 650px;">
+            <thead>
+            <tr>
+                <th>Van</th>
+                <th>Tot</th>
+                <th>Percentage</th>
+                <th>Punten</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ vrijstelling.begin_datum | date_format_intl('dd MMM y') }}</td>
+                <td>{{ vrijstelling.eind_datum | date_format_intl('dd MMM y') }}</td>
+                <td>{{ vrijstelling.percentage }}%</td>
+                <td>{{ vrijstelling.punten }}</td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}

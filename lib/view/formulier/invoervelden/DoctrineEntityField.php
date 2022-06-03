@@ -19,124 +19,124 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class DoctrineEntityField extends TextField
 {
-	/**
-	 * @var string
-	 */
-	public $suggestieIdField = 'id';
-	/**
-	 * @var string
-	 */
-	private $show_value;
-	/**
-	 * @var  DisplayEntity
-	 */
-	private $entity;
-	/**
-	 * @var string
-	 */
-	private $idField;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $em;
-	/**
-	 * @var string
-	 */
-	private $entityType;
-	/**
-	 * @var string
-	 */
-	private $url;
+    /**
+     * @var string
+     */
+    public $suggestieIdField = 'id';
+    /**
+     * @var string
+     */
+    private $show_value;
+    /**
+     * @var  DisplayEntity
+     */
+    private $entity;
+    /**
+     * @var string
+     */
+    private $idField;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+    /**
+     * @var string
+     */
+    private $entityType;
+    /**
+     * @var string
+     */
+    private $url;
 
-	/**
-	 * EntityField constructor.
-	 * @param $name string Prefix van de input
-	 * @param DisplayEntity|null $value
-	 * @param $description string Beschrijvijng van de input
-	 * @param $type DisplayEntity|string
-	 * @param $url string Url waar aanvullingen te vinden zijn
-	 */
-	public function __construct($name, $value, $description, $type, $url)
-	{
-		if (!is_a($type, DisplayEntity::class, true)) {
-			throw new CsrException($type . ' moet DisplayEntity implementeren voor DoctrineEntityField');
-		}
-		$this->em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+    /**
+     * EntityField constructor.
+     * @param $name string Prefix van de input
+     * @param DisplayEntity|null $value
+     * @param $description string Beschrijvijng van de input
+     * @param $type DisplayEntity|string
+     * @param $url string Url waar aanvullingen te vinden zijn
+     */
+    public function __construct($name, $value, $description, $type, $url)
+    {
+        if (!is_a($type, DisplayEntity::class, true)) {
+            throw new CsrException($type . ' moet DisplayEntity implementeren voor DoctrineEntityField');
+        }
+        $this->em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
-		$meta = $this->em->getClassMetadata($type);
+        $meta = $this->em->getClassMetadata($type);
 
-		if (count($meta->getIdentifier()) !== 1) {
-			throw new CsrException('DoctrineEntityField ondersteund geen entities met een composite primary key');
-		}
+        if (count($meta->getIdentifier()) !== 1) {
+            throw new CsrException('DoctrineEntityField ondersteund geen entities met een composite primary key');
+        }
 
-		$this->idField = $meta->getIdentifier()[0];
-		$this->entityType = $type;
-		$this->entity = $value ?? new $type();
-		$this->show_value = $this->entity->getWeergave();
-		$this->origvalue = (string)$this->entity->getId();
+        $this->idField = $meta->getIdentifier()[0];
+        $this->entityType = $type;
+        $this->entity = $value ?? new $type();
+        $this->show_value = $this->entity->getWeergave();
+        $this->origvalue = (string)$this->entity->getId();
 
-		parent::__construct($name, $value ? (string)$value->getId() : null, $description);
+        parent::__construct($name, $value ? (string)$value->getId() : null, $description);
 
-		$this->css_classes[] = 'doctrine-field';
+        $this->css_classes[] = 'doctrine-field';
 
-		$this->url = $url;
-	}
+        $this->url = $url;
+    }
 
-	public function getFormattedValue()
-	{
-		$value = $this->getValue();
-		if ($value == null) {
-			return null;
-		}
-		$this->entity = $this->em->getRepository($this->entityType)->find($value);
-		$this->show_value = $this->entity->getWeergave();
-		return $this->entity;
-	}
+    public function getFormattedValue()
+    {
+        $value = $this->getValue();
+        if ($value == null) {
+            return null;
+        }
+        $this->entity = $this->em->getRepository($this->entityType)->find($value);
+        $this->show_value = $this->entity->getWeergave();
+        return $this->entity;
+    }
 
-	public function getName()
-	{
-		return $this->name;
-	}
+    public function getName()
+    {
+        return $this->name;
+    }
 
-	public function validate()
-	{
-		if (!parent::validate()) {
-			return false;
-		}
-		// parent checks not null
-		if ($this->value == '') {
-			return true;
-		}
+    public function validate()
+    {
+        if (!parent::validate()) {
+            return false;
+        }
+        // parent checks not null
+        if ($this->value == '') {
+            return true;
+        }
 
-		return $this->error === '';
-	}
+        return $this->error === '';
+    }
 
-	public function getHtml()
-	{
-		$id = $this->getId() . '_' . $this->idField;
+    public function getHtml()
+    {
+        $id = $this->getId() . '_' . $this->idField;
 
-		$html = '<input data-url="' . $this->url . '" data-id-field="' . $id . '" data-suggestie-id-field="' . $this->suggestieIdField . '" name="' . $this->name . '_show" value="' . $this->entity->getWeergave() . '" origvalue="' . $this->entity->getWeergave() . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
-		$html .= '<input type="hidden" name="' . $this->name . '" id="' . $id . '" value="' . $this->entity->getId() . '" />';
+        $html = '<input data-url="' . $this->url . '" data-id-field="' . $id . '" data-suggestie-id-field="' . $this->suggestieIdField . '" name="' . $this->name . '_show" value="' . $this->entity->getWeergave() . '" origvalue="' . $this->entity->getWeergave() . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
+        $html .= '<input type="hidden" name="' . $this->name . '" id="' . $id . '" value="' . $this->entity->getId() . '" />';
 
-		return $html;
-	}
+        return $html;
+    }
 
-	/**
-	 * Dit veld is gepost als show en de pk is gepost.
-	 *
-	 * @return bool Of alles gepost is
-	 */
-	public function isPosted()
-	{
-		if (null === filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)) {
-			return false;
-		}
+    /**
+     * Dit veld is gepost als show en de pk is gepost.
+     *
+     * @return bool Of alles gepost is
+     */
+    public function isPosted()
+    {
+        if (null === filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)) {
+            return false;
+        }
 
-		if (null === filter_input(INPUT_POST, $this->name, FILTER_DEFAULT)) {
-			return false;
-		}
+        if (null === filter_input(INPUT_POST, $this->name, FILTER_DEFAULT)) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
 }

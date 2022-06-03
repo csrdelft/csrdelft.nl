@@ -3,16 +3,16 @@
 {% block titel %}{% trans %}Login{% endtrans %}{% endblock %}
 
 {% block styles %}
-	{{ css_asset('extern') }}
+    {{ css_asset('extern') }}
 {% endblock %}
 
 {% block loginpopup %}{% endblock %}
 {% block loginbutton %}{% endblock %}
 
 {% block content %}
-	<div>
-		<h1>{% trans %}Inloggen{% endtrans %}</h1>
-		<p>{% trans %}U dient in te loggen om verder te gaan{% endtrans %}</p>
-		{{ loginForm | raw }}
-	</div>
+    <div>
+        <h1>{% trans %}Inloggen{% endtrans %}</h1>
+        <p>{% trans %}U dient in te loggen om verder te gaan{% endtrans %}</p>
+        {{ loginForm | raw }}
+    </div>
 {% endblock %}

@@ -27,33 +27,33 @@ END:STANDARD
 END:VTIMEZONE
 {# IcalResponse trimt witruimte #}
 {% for item in items %}
-	BEGIN:VEVENT
-	{% if item.heledag %}
-		DTSTART;VALUE=DATE:{{ date(item.beginMoment) | date('Ymd') }}
-	{% else %}
-		DTSTART;TZID=Europe/Amsterdam:{{ date(item.beginMoment) | date('Ymd\\THis') }}
-	{% endif %}
-	{% if item.heledag %}
-		DTEND;VALUE=DATE:{{ date(item.eindMoment) | date('Ymd') }}
-	{% else %}
-		DTEND;TZID=Europe/Amsterdam:{{ date(item.eindMoment) | date('Ymd\\THis') }}
-	{% endif %}
-	DTSTAMP:{{ published }}
-	UID:{{ item.uUID }}
-	ORGANIZER:C.S.R. Delft
-	CREATED:{{ published }}
-	DESCRIPTION:{{ item.beschrijving }}
-	LAST-MODIFIED:{{ published }}
-	LOCATION:{{ item.locatie }}
-	SEQUENCE:0
-	STATUS:CONFIRMED
-	SUMMARY:{{ item.titel }}
-	{% if item.transparant %}
-		TRANSP:TRANSPARENT
-	{% else %}
-		TRANS:OPAQUE
-	{% endif %}
-	END:VEVENT
+    BEGIN:VEVENT
+    {% if item.heledag %}
+        DTSTART;VALUE=DATE:{{ date(item.beginMoment) | date('Ymd') }}
+    {% else %}
+        DTSTART;TZID=Europe/Amsterdam:{{ date(item.beginMoment) | date('Ymd\\THis') }}
+    {% endif %}
+    {% if item.heledag %}
+        DTEND;VALUE=DATE:{{ date(item.eindMoment) | date('Ymd') }}
+    {% else %}
+        DTEND;TZID=Europe/Amsterdam:{{ date(item.eindMoment) | date('Ymd\\THis') }}
+    {% endif %}
+    DTSTAMP:{{ published }}
+    UID:{{ item.uUID }}
+    ORGANIZER:C.S.R. Delft
+    CREATED:{{ published }}
+    DESCRIPTION:{{ item.beschrijving }}
+    LAST-MODIFIED:{{ published }}
+    LOCATION:{{ item.locatie }}
+    SEQUENCE:0
+    STATUS:CONFIRMED
+    SUMMARY:{{ item.titel }}
+    {% if item.transparant %}
+        TRANSP:TRANSPARENT
+    {% else %}
+        TRANS:OPAQUE
+    {% endif %}
+    END:VEVENT
 {% endfor %}
 END:VCALENDAR
 {{- "" -}}

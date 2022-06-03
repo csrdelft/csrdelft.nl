@@ -12,8 +12,9 @@ use CsrDelft\view\formulier\keuzevelden\SelectField;
  *
  * @see SelectField
  */
-class RequiredSelectField extends SelectField {
+class RequiredSelectField extends SelectField
+{
 
-	public $required = true;
+    public $required = true;
 
 }

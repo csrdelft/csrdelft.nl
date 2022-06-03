@@ -20,43 +20,46 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeVrijstellingenRepository")
  * @ORM\Table("crv_vrijstellingen")
  */
-class CorveeVrijstelling {
-	/**
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
-	 */
-	public $uid;
-	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $begin_datum;
-	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $eind_datum;
-	// TODO: Check percentage tussen 0 en 100 in controller
-	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 */
-	public $percentage;
+class CorveeVrijstelling
+{
+    /**
+     * @var string
+     * @ORM\Column(type="uid")
+     * @ORM\Id()
+     */
+    public $uid;
+    /**
+     * @var DateTimeImmutable
+     * @ORM\Column(type="datetime")
+     */
+    public $begin_datum;
+    /**
+     * @var DateTimeImmutable
+     * @ORM\Column(type="datetime")
+     */
+    public $eind_datum;
+    // TODO: Check percentage tussen 0 en 100 in controller
+    /**
+     * @var integer
+     * @ORM\Column(type="integer")
+     */
+    public $percentage;
 
-	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-	 */
-	public $profiel;
+    /**
+     * @var Profiel
+     * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+     * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+     */
+    public $profiel;
 
-	public function setProfiel($profiel) {
-		$this->profiel = $profiel;
-		$this->uid = $profiel->uid ?? null;
-	}
+    public function setProfiel($profiel)
+    {
+        $this->profiel = $profiel;
+        $this->uid = $profiel->uid ?? null;
+    }
 
-	public function getPunten() {
-		return (int)ceil($this->percentage * intval(instelling('corvee', 'punten_per_jaar')) / 100);
-	}
+    public function getPunten()
+    {
+        return (int)ceil($this->percentage * intval(instelling('corvee', 'punten_per_jaar')) / 100);
+    }
 }

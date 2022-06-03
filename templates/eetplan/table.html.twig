@@ -1,38 +1,40 @@
 <div id="eetplan" class="row no-gutters">
-	<div class="col-auto">
-		<table class="table table-striped">
-			<thead>
-			<tr>
-				<th scope="col">Novieten</th>
-			</tr>
-			</thead>
-			<tbody>
-			{% for noviet in eetplan.novieten %}
-				<tr>
-					<td><a href="{{ url('csrdelft_eetplan_noviet', {uid: noviet.uid}) }}">{{ noviet.naam }}</a></td>
-				</tr>
-			{% endfor %}
-			</tbody>
-		</table>
-	</div>
-	<div class="col-auto">
-		<table class="table table-striped">
-			<thead>
-			<tr>
-				{% for avond in eetplan.avonden %}
-					<th scope="col">{{ avond | date("d-m-Y") }}</th>
-				{% endfor %}
-			</tr>
-			</thead>
-			<tbody>
-			{% for noviet in eetplan.novieten %}
-				<tr>
-					{% for avond in noviet.avonden %}
-						<td><a href="{{ url('csrdelft_eetplan_huis', {id: avond.woonoord_id}) }}">{{ avond.woonoord }}</a></td>
-					{% endfor %}
-				</tr>
-			{% endfor %}
-			</tbody>
-		</table>
-	</div>
+    <div class="col-auto">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Novieten</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for noviet in eetplan.novieten %}
+                <tr>
+                    <td><a href="{{ url('csrdelft_eetplan_noviet', {uid: noviet.uid}) }}">{{ noviet.naam }}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-auto">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                {% for avond in eetplan.avonden %}
+                    <th scope="col">{{ avond | date("d-m-Y") }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for noviet in eetplan.novieten %}
+                <tr>
+                    {% for avond in noviet.avonden %}
+                        <td>
+                            <a href="{{ url('csrdelft_eetplan_huis', {id: avond.woonoord_id}) }}">{{ avond.woonoord }}</a>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>

@@ -1,10 +1,10 @@
 {% if app.user %}
-	<ul id="forumReageren" class="forum-reageren">
-		{% for react in reageren %}
-			<li class="reagerenLid" title="{{ get_profiel(react.uid).naam('user') }} is een reactie aan het schrijven">
-				{{ icon('comment_edit') }} {{ get_profiel(react.uid).naam('user') }}</li>
-		{% else %}
-			{# <li class="reagerenLid"><br/></li> #}
-		{% endfor %}
-	</ul>
+    <ul id="forumReageren" class="forum-reageren">
+        {% for react in reageren %}
+            <li class="reagerenLid" title="{{ get_profiel(react.uid).naam('user') }} is een reactie aan het schrijven">
+                {{ icon('comment_edit') }} {{ get_profiel(react.uid).naam('user') }}</li>
+        {% else %}
+            {# <li class="reagerenLid"><br/></li> #}
+        {% endfor %}
+    </ul>
 {% endif %}

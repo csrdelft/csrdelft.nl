@@ -1,14 +1,14 @@
 {% block bb_text_widget %}
-	<input type="hidden" {{ block('widget_attributes') }} value="{{ value }}">
-	<div id="editor" class="pm-editor" data-prosemirror-doc="{{ id }}"></div>
+    <input type="hidden" {{ block('widget_attributes') }} value="{{ value }}">
+    <div id="editor" class="pm-editor" data-prosemirror-doc="{{ id }}"></div>
 {% endblock %}
 
 {% block date_display_widget %}
-	<div class="form-control-plaintext">
-		{% if relative %}
-			{{ value | reldate }}
-		{% else %}
-			{{ value | datetime_format }}
-		{% endif %}
-	</div>
+    <div class="form-control-plaintext">
+        {% if relative %}
+            {{ value | reldate }}
+        {% else %}
+            {{ value | datetime_format }}
+        {% endif %}
+    </div>
 {% endblock %}

@@ -21,118 +21,120 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Controller van cms paginas.
  */
-class CmsPaginaController extends AbstractController {
-	/** @var CmsPaginaRepository */
-	private $cmsPaginaRepository;
+class CmsPaginaController extends AbstractController
+{
+    /** @var CmsPaginaRepository */
+    private $cmsPaginaRepository;
 
-	public function __construct(CmsPaginaRepository $cmsPaginaRepository) {
-		$this->cmsPaginaRepository = $cmsPaginaRepository;
-	}
+    public function __construct(CmsPaginaRepository $cmsPaginaRepository)
+    {
+        $this->cmsPaginaRepository = $cmsPaginaRepository;
+    }
 
-	/**
-	 * @return Response
-	 * @Route("/pagina")
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function overzicht(): Response
-	{
-		return $this->render('cms/overzicht.html.twig', [
-			'paginas' => $this->cmsPaginaRepository->getAllePaginas(),
-		]);
-	}
+    /**
+     * @return Response
+     * @Route("/pagina")
+     * @Auth(P_LOGGED_IN)
+     */
+    public function overzicht(): Response
+    {
+        return $this->render('cms/overzicht.html.twig', [
+            'paginas' => $this->cmsPaginaRepository->getAllePaginas(),
+        ]);
+    }
 
-	/**
-	 * @param $naam
-	 * @param string $subnaam
-	 * @return Response
-	 * @Route("/pagina/{naam}")
-	 * @Auth(P_PUBLIC)
-	 */
-	public function bekijken($naam, $subnaam = ""): Response
-	{
-		$paginaNaam = $naam;
-		if ($subnaam) {
-			$paginaNaam = $subnaam;
-		}
-		/** @var CmsPagina $pagina */
-		$pagina = $this->cmsPaginaRepository->find($paginaNaam);
-		if (!$pagina) { // 404
-			throw new NotFoundHttpException();
-		}
-		if (!$pagina->magBekijken()) { // 403
-			throw $this->createAccessDeniedException();
-		}
-		$body = new CmsPaginaView($pagina);
-		if (!LoginService::mag(P_LOGGED_IN)) { // nieuwe layout altijd voor uitgelogde bezoekers
-			if ($pagina->naam === 'thuis') {
-				return $this->render('extern/index.html.twig', ['titel' => $body->getTitel()]);
-			} elseif ($naam === 'vereniging') {
-				return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body]);
-			} elseif ($naam === 'lidworden') {
-				return $this->render('extern/owee.html.twig');
-			}
+    /**
+     * @param $naam
+     * @param string $subnaam
+     * @return Response
+     * @Route("/pagina/{naam}")
+     * @Auth(P_PUBLIC)
+     */
+    public function bekijken($naam, $subnaam = ""): Response
+    {
+        $paginaNaam = $naam;
+        if ($subnaam) {
+            $paginaNaam = $subnaam;
+        }
+        /** @var CmsPagina $pagina */
+        $pagina = $this->cmsPaginaRepository->find($paginaNaam);
+        if (!$pagina) { // 404
+            throw new NotFoundHttpException();
+        }
+        if (!$pagina->magBekijken()) { // 403
+            throw $this->createAccessDeniedException();
+        }
+        $body = new CmsPaginaView($pagina);
+        if (!LoginService::mag(P_LOGGED_IN)) { // nieuwe layout altijd voor uitgelogde bezoekers
+            if ($pagina->naam === 'thuis') {
+                return $this->render('extern/index.html.twig', ['titel' => $body->getTitel()]);
+            } elseif ($naam === 'vereniging') {
+                return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body]);
+            } elseif ($naam === 'lidworden') {
+                return $this->render('extern/owee.html.twig');
+            }
 
-			return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body]);
-		} else {
-			return $this->render('cms/pagina.html.twig', ['body' => $body]);
-		}
-	}
+            return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body]);
+        } else {
+            return $this->render('cms/pagina.html.twig', ['body' => $body]);
+        }
+    }
 
-	/**
-	 * @param Request $request
-	 * @param $naam
-	 * @return Response
-	 * @Route("/pagina/bewerken/{naam}")
-	 * @Auth(P_LOGGED_IN)
-	 * @CsrfUnsafe
-	 */
-	public function bewerken(Request $request, $naam): Response
-	{
-		$pagina = $this->cmsPaginaRepository->find($naam);
-		if (!$pagina) {
-			$pagina = $this->cmsPaginaRepository->nieuw($naam);
-		}
-		if (!$pagina->magBewerken()) {
-			throw $this->createAccessDeniedException();
-		}
+    /**
+     * @param Request $request
+     * @param $naam
+     * @return Response
+     * @Route("/pagina/bewerken/{naam}")
+     * @Auth(P_LOGGED_IN)
+     * @CsrfUnsafe
+     */
+    public function bewerken(Request $request, $naam): Response
+    {
+        $pagina = $this->cmsPaginaRepository->find($naam);
+        if (!$pagina) {
+            $pagina = $this->cmsPaginaRepository->nieuw($naam);
+        }
+        if (!$pagina->magBewerken()) {
+            throw $this->createAccessDeniedException();
+        }
 
-		$form = $this->createForm(CmsPaginaType::class, $pagina, ['rechten_wijzigen' => $pagina->magRechtenWijzigen()]);
-		$form->handleRequest($request);
-		if ($form->isSubmitted() && $form->isValid()) {
-			$pagina->laatstGewijzigd = date_create_immutable();
-			$manager = $this->getDoctrine()->getManager();
-			$manager->persist($pagina);
-			$manager->flush();
-			setMelding('Bijgewerkt: ' . $pagina->naam, 1);
-			return $this->redirectToRoute('csrdelft_cmspagina_bekijken', ['naam' => $pagina->naam]);
-		} else {
-			return $this->render('default_form.html.twig', [
-				'titel' => 'Pagina bewerken: ' . $pagina->naam,
-				'form' => $form->createView(),
-				'cancel_url' => $this->generateUrl('csrdelft_cmspagina_bekijken', ['naam' => $pagina->naam]),
-			]);
-		}
-	}
+        $form = $this->createForm(CmsPaginaType::class, $pagina, ['rechten_wijzigen' => $pagina->magRechtenWijzigen()]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $pagina->laatstGewijzigd = date_create_immutable();
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($pagina);
+            $manager->flush();
+            setMelding('Bijgewerkt: ' . $pagina->naam, 1);
+            return $this->redirectToRoute('csrdelft_cmspagina_bekijken', ['naam' => $pagina->naam]);
+        } else {
+            return $this->render('default_form.html.twig', [
+                'titel' => 'Pagina bewerken: ' . $pagina->naam,
+                'form' => $form->createView(),
+                'cancel_url' => $this->generateUrl('csrdelft_cmspagina_bekijken', ['naam' => $pagina->naam]),
+            ]);
+        }
+    }
 
-	/**
-	 * @param $naam
-	 * @return JsonResponse
-	 * @Route("/pagina/verwijderen/{naam}", methods={"POST"})
-	 * @Auth(P_ADMIN)
-	 */
-	public function verwijderen($naam): JsonResponse
-	{
-		/** @var CmsPagina $pagina */
-		$pagina = $this->cmsPaginaRepository->find($naam);
-		if (!$pagina || !$pagina->magVerwijderen()) {
-			throw $this->createAccessDeniedException();
-		}
-		$manager = $this->getDoctrine()->getManager();
-		$manager->remove($pagina);
-		$manager->flush();
-		setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
+    /**
+     * @param $naam
+     * @return JsonResponse
+     * @Route("/pagina/verwijderen/{naam}", methods={"POST"})
+     * @Auth(P_ADMIN)
+     */
+    public function verwijderen($naam): JsonResponse
+    {
+        /** @var CmsPagina $pagina */
+        $pagina = $this->cmsPaginaRepository->find($naam);
+        if (!$pagina || !$pagina->magVerwijderen()) {
+            throw $this->createAccessDeniedException();
+        }
+        $manager = $this->getDoctrine()->getManager();
+        $manager->remove($pagina);
+        $manager->flush();
+        setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
 
-		return new JsonResponse($this->generateUrl('default')); // redirect
-	}
+        return new JsonResponse($this->generateUrl('default')); // redirect
+    }
 
 }

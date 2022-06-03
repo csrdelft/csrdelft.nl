@@ -18,44 +18,48 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method RememberLogin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method RememberLogin|null retrieveByUuid($UUID)
  */
-class RememberLoginRepository extends AbstractRepository {
+class RememberLoginRepository extends AbstractRepository
+{
 
-	public function __construct(ManagerRegistry $registry) {
-		parent::__construct($registry, RememberLogin::class);
-	}
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, RememberLogin::class);
+    }
 
-	/**
-	 * @return RememberLogin
-	 */
-	public function nieuw() {
-		$remember = new RememberLogin();
-		$remember->uid = LoginService::getUid();
-		$remember->profiel = LoginService::getProfiel();
-		$remember->remember_since = date_create_immutable();
-		if (isset($_SERVER['HTTP_USER_AGENT'])) {
-			$remember->device_name = $_SERVER['HTTP_USER_AGENT'];
-		} else {
-			$remember->device_name = '';
-		}
-		if (isset($_SERVER['REMOTE_ADDR'])) {
-			$remember->ip = $_SERVER['REMOTE_ADDR'];
-		} else {
-			$remember->ip = '';
-		}
-		$remember->lock_ip = false;
-		return $remember;
-	}
+    /**
+     * @return RememberLogin
+     */
+    public function nieuw()
+    {
+        $remember = new RememberLogin();
+        $remember->uid = LoginService::getUid();
+        $remember->profiel = LoginService::getProfiel();
+        $remember->remember_since = date_create_immutable();
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $remember->device_name = $_SERVER['HTTP_USER_AGENT'];
+        } else {
+            $remember->device_name = '';
+        }
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $remember->ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $remember->ip = '';
+        }
+        $remember->lock_ip = false;
+        return $remember;
+    }
 
-	/**
-	 * @param $token
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function verwijder($token) {
-		$rememberLogin = $this->findOneBy(['token' => $token]);
-		if ($rememberLogin) {
-			$this->getEntityManager()->remove($rememberLogin);
-			$this->getEntityManager()->flush();
-		}
-	}
+    /**
+     * @param $token
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function verwijder($token)
+    {
+        $rememberLogin = $this->findOneBy(['token' => $token]);
+        if ($rememberLogin) {
+            $this->getEntityManager()->remove($rememberLogin);
+            $this->getEntityManager()->flush();
+        }
+    }
 }

@@ -14,17 +14,17 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DeclaratieCategorieRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, DeclaratieCategorie::class);
-	}
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, DeclaratieCategorie::class);
+    }
 
-	public function findTuples(): array
-	{
-		$categories = [];
-		foreach ($this->findBy([], ['naam' => 'asc']) as $category) {
-			$categories[$category->getNaam()] = $category->getId();
-		}
-		return $categories;
-	}
+    public function findTuples(): array
+    {
+        $categories = [];
+        foreach ($this->findBy([], ['naam' => 'asc']) as $category) {
+            $categories[$category->getNaam()] = $category->getId();
+        }
+        return $categories;
+    }
 }

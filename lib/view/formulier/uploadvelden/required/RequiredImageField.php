@@ -12,8 +12,9 @@ use CsrDelft\view\formulier\uploadvelden\ImageField;
  *
  * @see ImageField
  */
-class RequiredImageField extends ImageField {
+class RequiredImageField extends ImageField
+{
 
-	public $required = true;
+    public $required = true;
 
 }

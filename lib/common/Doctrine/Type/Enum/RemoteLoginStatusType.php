@@ -9,13 +9,13 @@ use CsrDelft\entity\security\enum\RemoteLoginStatus;
 class RemoteLoginStatusType extends EnumType
 {
 
-	public function getEnumClass()
-	{
-		return RemoteLoginStatus::class;
-	}
+    public function getEnumClass()
+    {
+        return RemoteLoginStatus::class;
+    }
 
-	public function getName()
-	{
-		return 'enumRemoteLoginStatus';
-	}
+    public function getName()
+    {
+        return 'enumRemoteLoginStatus';
+    }
 }

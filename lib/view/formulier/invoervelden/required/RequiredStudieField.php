@@ -11,8 +11,9 @@ use CsrDelft\view\formulier\invoervelden\StudieField;
  *
  * @see StudieField
  */
-class RequiredStudieField extends StudieField {
+class RequiredStudieField extends StudieField
+{
 
-	public $required = true;
+    public $required = true;
 
 }

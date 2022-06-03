@@ -4,11 +4,11 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
-	<h1>404: Pagina niet gevonden</h1>
-	{% if mag('P_ADMIN') and bericht is defined %}
-		<p>{{ bericht }}</p>
-	{% endif %}
-	<p>
-		De pagina werd niet gevonden, neem contact op met de PubCie als deze pagina wel gevonden zou moeten worden.
-	</p>
+    <h1>404: Pagina niet gevonden</h1>
+    {% if mag('P_ADMIN') and bericht is defined %}
+        <p>{{ bericht }}</p>
+    {% endif %}
+    <p>
+        De pagina werd niet gevonden, neem contact op met de PubCie als deze pagina wel gevonden zou moeten worden.
+    </p>
 {% endblock %}

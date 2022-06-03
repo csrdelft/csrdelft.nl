@@ -11,15 +11,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArroController extends AbstractController
 {
 
-	/**
-	 * @return Response
-	 * @Route("/arro")
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function arro()
-	{
-		return $this->render('arro/index.html.twig');
-	}
+    /**
+     * @return Response
+     * @Route("/arro")
+     * @Auth(P_LOGGED_IN)
+     */
+    public function arro()
+    {
+        return $this->render('arro/index.html.twig');
+    }
 
 
 }

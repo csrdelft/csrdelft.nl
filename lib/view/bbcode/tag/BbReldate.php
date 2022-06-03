@@ -13,23 +13,26 @@ use CsrDelft\bb\BbTag;
  * @example [reldate]20-01-2012[/reldate]
  * @example [reldate]20-01-2012 18:00[/reldate]
  */
-class BbReldate extends BbTag {
-	public static function getTagName() {
-		return 'reldate';
-	}
+class BbReldate extends BbTag
+{
+    public static function getTagName()
+    {
+        return 'reldate';
+    }
 
-	public function render() {
-		return vsprintf("<span class=\"bb-tag-reldate\" title=\"%s\">%s</span>", [
-			htmlspecialchars($this->getContent()),
-			reldate($this->getContent())
-		]);
-	}
+    public function render()
+    {
+        return vsprintf("<span class=\"bb-tag-reldate\" title=\"%s\">%s</span>", [
+            htmlspecialchars($this->getContent()),
+            reldate($this->getContent())
+        ]);
+    }
 
-	/**
-	 * @param array $arguments
-	 */
-	public function parse($arguments = [])
-	{
-		$this->readContent([], false);
-	}
+    /**
+     * @param array $arguments
+     */
+    public function parse($arguments = [])
+    {
+        $this->readContent([], false);
+    }
 }

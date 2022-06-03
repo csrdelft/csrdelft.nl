@@ -3,38 +3,39 @@
 {% block titel %}Beheer corveefuncties en kwalificaties{% endblock %}
 
 {% block content %}
-	{{ parent() }}
-	<p>
-		Op deze pagina kunt u corveefuncties aanmaken, wijzigen en verwijderen.
-		Onderstaande tabel toont alle functies in het systeem.
-		Ook kunt u aangeven of er een kwalificatie benodigd is en een kwalificatie toewijzen of intrekken.
-	</p>
-	<p>
-		N.B. Voordat een corveefunctie verwijderd kan worden moeten eerst alle bijbehorende corveetaken en alle bijbehorende
-		corveerepetities definitief zijn verwijderd.
-	</p>
-	<div class="float-end">
-		<a href="{{ url('csrdelft_maalcie_beheerfuncties_toevoegen') }}" class="btn post popup">
-			{{ icon("add") }} Nieuwe functie
-		</a>
-	</div>
-	<table id="maalcie-tabel" class="maalcie-tabel">
-		<thead>
-		<tr>
-			<th>Wijzig</th>
-			<th title="Afkorting">Afk</th>
-			<th>Naam</th>
-			<th>Standaard<br/>punten</th>
-			<th title="Email bericht">{{ icon("email") }}</th>
-			<th>Gekwalificeerden</th>
-			<th title="Mag maaltijden sluiten">{{ icon("lock_add") }}</th>
-			<th title="Definitief verwijderen" class="text-center">{{ icon("cross") }}</th>
-		</tr>
-		</thead>
-		<tbody>
-		{% for functie in functies %}
-			{{ include('maaltijden/functie/beheer_functie_lijst.html.twig', {functie: functie}) }}
-		{% endfor %}
-		</tbody>
-	</table>
+    {{ parent() }}
+    <p>
+        Op deze pagina kunt u corveefuncties aanmaken, wijzigen en verwijderen.
+        Onderstaande tabel toont alle functies in het systeem.
+        Ook kunt u aangeven of er een kwalificatie benodigd is en een kwalificatie toewijzen of intrekken.
+    </p>
+    <p>
+        N.B. Voordat een corveefunctie verwijderd kan worden moeten eerst alle bijbehorende corveetaken en alle
+        bijbehorende
+        corveerepetities definitief zijn verwijderd.
+    </p>
+    <div class="float-end">
+        <a href="{{ url('csrdelft_maalcie_beheerfuncties_toevoegen') }}" class="btn post popup">
+            {{ icon("add") }} Nieuwe functie
+        </a>
+    </div>
+    <table id="maalcie-tabel" class="maalcie-tabel">
+        <thead>
+        <tr>
+            <th>Wijzig</th>
+            <th title="Afkorting">Afk</th>
+            <th>Naam</th>
+            <th>Standaard<br/>punten</th>
+            <th title="Email bericht">{{ icon("email") }}</th>
+            <th>Gekwalificeerden</th>
+            <th title="Mag maaltijden sluiten">{{ icon("lock_add") }}</th>
+            <th title="Definitief verwijderen" class="text-center">{{ icon("cross") }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for functie in functies %}
+            {{ include('maaltijden/functie/beheer_functie_lijst.html.twig', {functie: functie}) }}
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

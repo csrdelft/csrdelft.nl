@@ -3,12 +3,12 @@
 {% block titel %}{{ draad.titel | raw }}{% endblock %}
 
 {% block breadcrumbs %}
-	{{ csr_breadcrumbs({
-		(url('default')): 'main',
-		(url('csrdelft_forum_forum')): 'Forum',
-		(url('csrdelft_forum_deel', {forum_id: draad.deel.forum_id})): draad.deel.titel,
-		'': draad.titel,
-	}) }}
+    {{ csr_breadcrumbs({
+        (url('default')): 'main',
+        (url('csrdelft_forum_forum')): 'Forum',
+        (url('csrdelft_forum_deel', {forum_id: draad.deel.forum_id})): draad.deel.titel,
+        '': draad.titel,
+    }) }}
 {% endblock %}
 
 {% block content %}
@@ -17,93 +17,94 @@
 	{# {% if draad.magModereren %}
 		{{ include('forum/partial/draad_mod.html.twig') }}
 	{% endif %} #}
-	<header class="d-flex justify-content-between align-items-baseline ps-sm-4">
-		<div class="position-relative">
+<header class="d-flex justify-content-between align-items-baseline ps-sm-4">
+    <div class="position-relative">
 			<span class="position-absolute top-50 start-0 translate-begin">
 				{% if draad.belangrijk %}
-					{{ icon('star', null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
-				{% elseif draad.plakkerig %}
-					{{ icon('note-sticky', null, 'Dit onderwerp is plakkerig, het blijft bovenaan') }}
-				{% elseif draad.gesloten %}
-					{{ icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
-				{% endif %}
+                    {{ icon('star', null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
+                {% elseif draad.plakkerig %}
+                    {{ icon('note-sticky', null, 'Dit onderwerp is plakkerig, het blijft bovenaan') }}
+                {% elseif draad.gesloten %}
+                    {{ icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
+                {% endif %}
 			</span>
-			<h1 class="ps-24 d-block text-truncate">{{ draad.titel | raw }}</h1>
-		</div>
-		
-		{{ include('forum/partial/post_head_buttons.html.twig') }}
+        <h1 class="ps-24 d-block text-truncate">{{ draad.titel | raw }}</h1>
+    </div>
 
-		{# {% if statistiek %}
+    {{ include('forum/partial/post_head_buttons.html.twig') }}
+
+    {# {% if statistiek %}
 			&nbsp;&nbsp;&nbsp;
 			<span class="lichtgrijs small" title="Aantal lezers">{{ draad.aantalLezers }} lezers</span>
 		{% endif %} #}
-	</header>
+</header>
 
-	<section class="forum-draad list-group list-group-flush">
-		{% set vanaf = false %}
-		{% for post in draad.forumPosts %}
+<section class="forum-draad list-group list-group-flush">
+    {% set vanaf = false %}
+    {% for post in draad.forumPosts %}
 
-			{# Als posts gewijzigd zijn zonder draad gewijzigd te triggeren voorkomt $draad->isOngelezen() dat de gele lijn wordt getoond #}
-			{% if not vanaf and draad_ongelezen and (not gelezen_moment or post.laatst_gewijzigd > gelezen_moment) %}
-				{% set vanaf = true %}
-				<hr class="tussenschot ongelezenvanaf"><a id="ongelezen"></a></hr>
-			{% elseif not loop.first %}
-				<hr class="tussenschot"></hr>
-			{% endif %}
+        {# Als posts gewijzigd zijn zonder draad gewijzigd te triggeren voorkomt $draad->isOngelezen() dat de gele lijn wordt getoond #}
+        {% if not vanaf and draad_ongelezen and (not gelezen_moment or post.laatst_gewijzigd > gelezen_moment) %}
+            {% set vanaf = true %}
+            <hr class="tussenschot ongelezenvanaf"><a id="ongelezen"></a></hr>
+        {% elseif not loop.first %}
+            <hr class="tussenschot"></hr>
+        {% endif %}
 
-			{{ include('forum/partial/post_lijst.html.twig', { post: post }) }}
+        {{ include('forum/partial/post_lijst.html.twig', { post: post }) }}
 
-			{# Paginering onder eerste plakkerige post op alle pagina's behalve de eerste #}
-			{% if paging and draad.eerste_post_plakkerig and draadGetHuidigePagina() != 1 and loop.first %}
-				{{ block('paginering') }}
-			{% endif %}
-		{% endfor %}
+        {# Paginering onder eerste plakkerige post op alle pagina's behalve de eerste #}
+        {% if paging and draad.eerste_post_plakkerig and draadGetHuidigePagina() != 1 and loop.first %}
+            {{ block('paginering') }}
+        {% endif %}
+    {% endfor %}
 
-		{# Paginering onderaan pagina #}
-		{% if paging %}
-			{% block paginering %}
-				<nav aria-label="Forum pagination">
-					<ul class="pagination justify-content-center">
-						{{ sliding_pager({
-							baseurl: url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id}) ~ '/',
-							url_append: statistiek ? '/statistiek': '',
-							pagecount: draadGetAantalPaginas(draad.draad_id),
-							curpage: draadGetHuidigePagina()
-						}) }}
-					</ul>
-				</nav>
-			{% endblock %}
-		{% endif %}
+    {# Paginering onderaan pagina #}
+    {% if paging %}
+        {% block paginering %}
+            <nav aria-label="Forum pagination">
+                <ul class="pagination justify-content-center">
+                    {{ sliding_pager({
+                        baseurl: url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id}) ~ '/',
+                        url_append: statistiek ? '/statistiek': '',
+                        pagecount: draadGetAantalPaginas(draad.draad_id),
+                        curpage: draadGetHuidigePagina()
+                    }) }}
+                </ul>
+            </nav>
+        {% endblock %}
+    {% endif %}
 
-		{# Geen ongelezen berichten op de laatste pagina betekend in het geheel geen ongelezen berichten #}
-		{% if not vanaf and draadGetHuidigePagina() == draadGetAantalPaginas(draad.draad_id) %}
-			<hr class="tussenschot ongelezenvanaf"><a id="ongelezen"></a></hr>
-		{% else %}
-			<hr class="tussenschot"></hr>
-		{% endif %}
+    {# Geen ongelezen berichten op de laatste pagina betekend in het geheel geen ongelezen berichten #}
+    {% if not vanaf and draadGetHuidigePagina() == draadGetAantalPaginas(draad.draad_id) %}
+        <hr class="tussenschot ongelezenvanaf"><a id="ongelezen"></a></hr>
+    {% else %}
+        <hr class="tussenschot"></hr>
+    {% endif %}
 
-		<div class="list-group-item border-0 magreageren">
-			{% block magreageren %}
-				{% if draad.verwijderd %}
-					<div class="draad-verwijderd">Dit onderwerp is verwijderd.</div>
-				{% elseif draad.gesloten %}
-					<div class="draad-gesloten">
-						U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
-						{% if draad.deel.openbaar and draad.laatst_gewijzigd < date(instelling('forum', 'externen_geentoegang_gesloten')) %}
-							<div class="dikgedrukt">Dit externe onderwerp is niet meer toegankelijk voor externen en zoekmachines.
-							</div>
-						{% endif %}
-					</div>
-				{% elseif not draad.magPosten %}
-					<div class="draad-readonly">U mag in dit deel van het forum niet reageren.</div>
-				{% endif %}
-			{% endblock %}
-		</div>
+    <div class="list-group-item border-0 magreageren">
+        {% block magreageren %}
+            {% if draad.verwijderd %}
+                <div class="draad-verwijderd">Dit onderwerp is verwijderd.</div>
+            {% elseif draad.gesloten %}
+                <div class="draad-gesloten">
+                    U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
+                    {% if draad.deel.openbaar and draad.laatst_gewijzigd < date(instelling('forum', 'externen_geentoegang_gesloten')) %}
+                        <div class="dikgedrukt">Dit externe onderwerp is niet meer toegankelijk voor externen en
+                            zoekmachines.
+                        </div>
+                    {% endif %}
+                </div>
+            {% elseif not draad.magPosten %}
+                <div class="draad-readonly">U mag in dit deel van het forum niet reageren.</div>
+            {% endif %}
+        {% endblock %}
+    </div>
 
-		{% if draad.magPosten %}
-			{{ include('forum/partial/draad_reageren.html.twig') }}
-			{{ include('forum/partial/post_form.html.twig', {deel: draad.deel}) }}
-		{% endif %}
-	</div>
-	{# {{ include('forum/partial/rss_link.html.twig') }} #}
-{% endblock %}
+    {% if draad.magPosten %}
+        {{ include('forum/partial/draad_reageren.html.twig') }}
+        {{ include('forum/partial/post_form.html.twig', {deel: draad.deel}) }}
+    {% endif %}
+    </div>
+    {# {{ include('forum/partial/rss_link.html.twig') }} #}
+    {% endblock %}

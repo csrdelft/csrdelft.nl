@@ -21,44 +21,45 @@ use CsrDelft\common\Enum;
  * @method static static Archivarus
  * @method static static Statisticus
  * @method static static Fotocommissaris
-*/
-class CommissieFunctie extends Enum {
+ */
+class CommissieFunctie extends Enum
+{
 
-	/**
-	 * Bestuurs functies.
-	 */
-	const Praeses = 'Praeses';
-	const Abactis = 'Abactis';
-	const Fiscus = 'Fiscus';
-	const VicePraeses = 'Vice-Praeses';
-	const ViceAbactis = 'Vice-Abactis';
+    /**
+     * Bestuurs functies.
+     */
+    const Praeses = 'Praeses';
+    const Abactis = 'Abactis';
+    const Fiscus = 'Fiscus';
+    const VicePraeses = 'Vice-Praeses';
+    const ViceAbactis = 'Vice-Abactis';
 
-	/**
-	 * Commissie functies.
-	 */
-	const QQ = 'Q.Q.';
+    /**
+     * Commissie functies.
+     */
+    const QQ = 'Q.Q.';
 
-	/**
-	 * BASFCie commissie functies.
-	 */
-	const Bibliothecarus = 'Bibliothecarus';
-	const Archivarus = 'Archivarus';
-	const Statisticus = 'Statisticus';
-	const Fotocommissaris = 'Fotocommissaris';
+    /**
+     * BASFCie commissie functies.
+     */
+    const Bibliothecarus = 'Bibliothecarus';
+    const Archivarus = 'Archivarus';
+    const Statisticus = 'Statisticus';
+    const Fotocommissaris = 'Fotocommissaris';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $mapChoiceToDescription = [
-		self::Praeses => 'Praeses',
-		self::Abactis => 'Abactis',
-		self::Fiscus => 'Fiscus',
-		self::VicePraeses => 'Vice-Prases',
-		self::ViceAbactis => 'Vice-Abactis',
-		self::QQ => 'Q.Q.',
-		self::Bibliothecarus => 'Bibliothecarus',
-		self::Archivarus => 'Archivarus',
-		self::Statisticus => 'Statisticus',
-		self::Fotocommissaris => 'Fotocommissaris',
-	];
+    /**
+     * @var string[]
+     */
+    protected static $mapChoiceToDescription = [
+        self::Praeses => 'Praeses',
+        self::Abactis => 'Abactis',
+        self::Fiscus => 'Fiscus',
+        self::VicePraeses => 'Vice-Prases',
+        self::ViceAbactis => 'Vice-Abactis',
+        self::QQ => 'Q.Q.',
+        self::Bibliothecarus => 'Bibliothecarus',
+        self::Archivarus => 'Archivarus',
+        self::Statisticus => 'Statisticus',
+        self::Fotocommissaris => 'Fotocommissaris',
+    ];
 }

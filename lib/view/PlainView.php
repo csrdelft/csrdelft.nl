@@ -8,27 +8,34 @@ namespace CsrDelft\view;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 11/04/2019
  */
-class PlainView implements View, ToResponse {
-	use ToHtmlResponse;
-	private $body;
+class PlainView implements View, ToResponse
+{
+    use ToHtmlResponse;
 
-	public function __construct($body) {
-		$this->body = $body;
-	}
+    private $body;
 
-	public function __toString() {
-		return $this->body;
-	}
+    public function __construct($body)
+    {
+        $this->body = $body;
+    }
 
-	public function getTitel() {
-		return '';
-	}
+    public function __toString()
+    {
+        return $this->body;
+    }
 
-	public function getBreadcrumbs() {
-		return '';
-	}
+    public function getTitel()
+    {
+        return '';
+    }
 
-	public function getModel() {
-		return null;
-	}
+    public function getBreadcrumbs()
+    {
+        return '';
+    }
+
+    public function getModel()
+    {
+        return null;
+    }
 }

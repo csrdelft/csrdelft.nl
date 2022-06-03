@@ -17,17 +17,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 class VoorkeurCommissieCategorieType extends AbstractType
 {
 
-	/**
-	 * AddCommissieFormulier constructor.
-	 *
-	 * @param FormBuilderInterface $builder
-	 * @param array $options
-	 */
-	public function buildForm(FormBuilderInterface $builder, array $options)
-	{
-		$builder
-			->add('naam', TextType::class)
-			->add('opslaan', SubmitType::class)
-		;
-	}
+    /**
+     * AddCommissieFormulier constructor.
+     *
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('naam', TextType::class)
+            ->add('opslaan', SubmitType::class);
+    }
 }

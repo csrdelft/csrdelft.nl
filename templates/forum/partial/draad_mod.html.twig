@@ -1,121 +1,127 @@
 <div id="modereren" class="card collapse forum-header">
-	<div class="modal-header">
-		<h5 class="modal-title">Draad modereren</h5>
-		<button type="button" class="close" aria-label="Close" onclick="$('#modereren').slideUp()">
-			<span aria-hidden="true">&times;</span>
-		</button>
-	</div>
-	<div class="card-body">
-		<div class="mb-3 d-flex justify-content-between">
-			<a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'plakkerig'}) }}"
-				 class="btn btn-light post ReloadPage"
-				 title="Verander plakkerigheid">
-				{{ icon('note') }} maak {% if draad.plakkerig %}<span class="dikgedrukt">niet</span>{% endif %} plakkerig
-			</a>
-			<a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'eerste_post_plakkerig'}) }}"
-				 class="btn btn-light post ReloadPage {% if draad.eerste_post_plakkerig %}active{% endif %}"
-				 title="Verander plakkerigheid van eerste post">
-				1e post plakkerig
-			</a>
-			<a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'pagina_per_post'}) }}"
-				 class="btn btn-light post ReloadPage {% if draad.pagina_per_post %}active{% endif %}"
-				 title="Verander 1 pagina per post">
-				1 pagina per post
-			</a>
-			<a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'verwijderd'}) }}"
-				 class="btn btn-light post confirm ReloadPage"
-				 title="Verander status verwijderd (incl. alle reacties)">
-				{% if draad.verwijderd %}
-					{{ icon('arrow_undo') }} draad herstellen
-				{% else %}
-					{{ icon('cross') }} draad verwijderen
-				{% endif %}
-			</a>
-			<a href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, pagina: 'prullenbak'}) }}"
-				 class="btn btn-light"
-				 title="Bekijk de reacties die zijn verwijderd">{{ icon('bin_closed') }} verwijderde reacties</a>
-		</div>
-		<form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'forum_id'}) }}" method="post">
-			{{ csrfField() }}
-			<div class="mb-3 row">
-				<label for="verplaats-naar" class="col-md-3 col-form-label">Verplaats naar &nbsp;</label>
-				<div class="col-md-6">
-					<select id="verplaats-naar" class="form-select" name="forum_id">
-						{% for categorie in categorien %}
-							<optgroup label="{{ categorie.titel }}">
-								{% for newDeel in categorie.forum_delen %}
-									<option value="{{ newDeel.forum_id }}"
-													{% if newDeel.forum_id == draad.deel.forum_id %}selected="selected"{% endif %}>{{ newDeel.titel }}</option>
-								{% endfor %}
-							</optgroup>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="col-md-3">
-					<input type="submit" value="Opslaan" class="btn btn-primary"/>
-				</div>
-			</div>
-		</form>
-		<form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'titel'}) }}" method="post">
-			{{ csrfField() }}
-			<div class="mb-3 row">
-				<label for="titel" class="col-md-3 col-form-label">Titel aanpassen &nbsp;</label>
-				<div class="col-md-6">
-					<input id="titel" class="form-control" type="text" name="titel" value="{{ draad.titel }}"/>
-				</div>
-				<div class="col-md-3">
-					<input type="submit" value="Opslaan" class="btn btn-primary"/>
-				</div>
-			</div>
-		</form>
-		{% if mag('P_FORUM_BELANGRIJK') %}
-			<form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'belangrijk'}) }}"
-						method="post">
-				{{ csrfField() }}
-				<div class="mb-3 row">
-					<label for="belangrijk" class="col-md-3 col-form-label">Belangrijk markeren &nbsp;</label>
-					<div class="col-md-6">
-						<select id="belangrijk" class="form-select" name="belangrijk">
-							<option value="" {% if not draad.belangrijk %}selected="selected"{% endif %}>Niet belangrijk</option>
-							{% for group, list in getBelangrijkOpties() %}
-								<optgroup label="{{ group }}">
-									{% for value, label in list %}
-										<option value="{{ value }}" {% if value == draad.belangrijk %}selected="selected"{% endif %}>
-											{{ label }}
-										</option>
-									{% endfor %}
-								</optgroup>
-							{% endfor %}
-						</select>
-					</div>
-					<div class="col-md-3">
-						<input type="submit" value="Opslaan" class="btn btn-primary"/>
-					</div>
-				</div>
-			</form>
-		{% endif %}
-		{% if gedeeld_met_opties %}
-			<form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'gedeeld_met'}) }}"
-						method="post">
-				{{ csrfField() }}
-				<div class="mb-3 row">
-					<label for="gedeeld_met" class="col-md-3 col-form-label">Delen met &nbsp;</label>
-					<div class="col-md-6">
-						<select id="gedeeld_met" class="form-select" name="gedeeld_met">
-							<option value=""></option>
-							{% for gedeeld_deel in gedeeld_met_opties %}
-								<option value="{{ gedeeld_deel.forum_id }}"
-												{% if draad.gedeeld_met == gedeeld_deel.forum_id %}selected="selected"{% endif %}>
-									{{ gedeeld_deel.titel }}
-								</option>
-							{% endfor %}
-						</select>
-					</div>
-					<div class="col-md-3">
-						<input type="submit" value="Opslaan" class="btn btn-primary"/>
-					</div>
-				</div>
-			</form>
-		{% endif %}
-	</div>
+    <div class="modal-header">
+        <h5 class="modal-title">Draad modereren</h5>
+        <button type="button" class="close" aria-label="Close" onclick="$('#modereren').slideUp()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="mb-3 d-flex justify-content-between">
+            <a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'plakkerig'}) }}"
+               class="btn btn-light post ReloadPage"
+               title="Verander plakkerigheid">
+                {{ icon('note') }} maak {% if draad.plakkerig %}<span class="dikgedrukt">niet</span>{% endif %}
+                plakkerig
+            </a>
+            <a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'eerste_post_plakkerig'}) }}"
+               class="btn btn-light post ReloadPage {% if draad.eerste_post_plakkerig %}active{% endif %}"
+               title="Verander plakkerigheid van eerste post">
+                1e post plakkerig
+            </a>
+            <a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'pagina_per_post'}) }}"
+               class="btn btn-light post ReloadPage {% if draad.pagina_per_post %}active{% endif %}"
+               title="Verander 1 pagina per post">
+                1 pagina per post
+            </a>
+            <a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'verwijderd'}) }}"
+               class="btn btn-light post confirm ReloadPage"
+               title="Verander status verwijderd (incl. alle reacties)">
+                {% if draad.verwijderd %}
+                    {{ icon('arrow_undo') }} draad herstellen
+                {% else %}
+                    {{ icon('cross') }} draad verwijderen
+                {% endif %}
+            </a>
+            <a href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, pagina: 'prullenbak'}) }}"
+               class="btn btn-light"
+               title="Bekijk de reacties die zijn verwijderd">{{ icon('bin_closed') }} verwijderde reacties</a>
+        </div>
+        <form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'forum_id'}) }}"
+              method="post">
+            {{ csrfField() }}
+            <div class="mb-3 row">
+                <label for="verplaats-naar" class="col-md-3 col-form-label">Verplaats naar &nbsp;</label>
+                <div class="col-md-6">
+                    <select id="verplaats-naar" class="form-select" name="forum_id">
+                        {% for categorie in categorien %}
+                            <optgroup label="{{ categorie.titel }}">
+                                {% for newDeel in categorie.forum_delen %}
+                                    <option value="{{ newDeel.forum_id }}"
+                                            {% if newDeel.forum_id == draad.deel.forum_id %}selected="selected"{% endif %}>{{ newDeel.titel }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="submit" value="Opslaan" class="btn btn-primary"/>
+                </div>
+            </div>
+        </form>
+        <form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'titel'}) }}"
+              method="post">
+            {{ csrfField() }}
+            <div class="mb-3 row">
+                <label for="titel" class="col-md-3 col-form-label">Titel aanpassen &nbsp;</label>
+                <div class="col-md-6">
+                    <input id="titel" class="form-control" type="text" name="titel" value="{{ draad.titel }}"/>
+                </div>
+                <div class="col-md-3">
+                    <input type="submit" value="Opslaan" class="btn btn-primary"/>
+                </div>
+            </div>
+        </form>
+        {% if mag('P_FORUM_BELANGRIJK') %}
+            <form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'belangrijk'}) }}"
+                  method="post">
+                {{ csrfField() }}
+                <div class="mb-3 row">
+                    <label for="belangrijk" class="col-md-3 col-form-label">Belangrijk markeren &nbsp;</label>
+                    <div class="col-md-6">
+                        <select id="belangrijk" class="form-select" name="belangrijk">
+                            <option value="" {% if not draad.belangrijk %}selected="selected"{% endif %}>Niet
+                                belangrijk
+                            </option>
+                            {% for group, list in getBelangrijkOpties() %}
+                                <optgroup label="{{ group }}">
+                                    {% for value, label in list %}
+                                        <option value="{{ value }}"
+                                                {% if value == draad.belangrijk %}selected="selected"{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="submit" value="Opslaan" class="btn btn-primary"/>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+        {% if gedeeld_met_opties %}
+            <form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'gedeeld_met'}) }}"
+                  method="post">
+                {{ csrfField() }}
+                <div class="mb-3 row">
+                    <label for="gedeeld_met" class="col-md-3 col-form-label">Delen met &nbsp;</label>
+                    <div class="col-md-6">
+                        <select id="gedeeld_met" class="form-select" name="gedeeld_met">
+                            <option value=""></option>
+                            {% for gedeeld_deel in gedeeld_met_opties %}
+                                <option value="{{ gedeeld_deel.forum_id }}"
+                                        {% if draad.gedeeld_met == gedeeld_deel.forum_id %}selected="selected"{% endif %}>
+                                    {{ gedeeld_deel.titel }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="submit" value="Opslaan" class="btn btn-primary"/>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+    </div>
 </div>

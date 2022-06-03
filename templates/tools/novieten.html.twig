@@ -3,28 +3,28 @@
 {% block titel %}Novieten{% endblock %}
 
 {% block content %}
-	<table class="table">
-		<tr>
-			<th scope="col">UID</th>
-			<th scope="col">Voornaam</th>
-			<th scope="col">Tussenvoegsel</th>
-			<th scope="col">Achternaam</th>
-			<th scope="col">Mobiel</th>
-			<th scope="col">Studie</th>
-			<th scope="col">Nanoviet</th>
-			<th scope="col">Matrixplek</th>
-		</tr>
-		{% for noviet in novieten %}
-			<tr>
-				<td><a href="{{ url('csrdelft_profiel_profiel', {uid: noviet.uid}) }}">{{ noviet.uid }}</a></td>
-				<td>{{ noviet.voornaam }}</td>
-				<td>{{ noviet.tussenvoegsel }}</td>
-				<td>{{ noviet.achternaam }}</td>
-				<td>{{ noviet.mobiel }}</td>
-				<td>{{ noviet.studie }}</td>
-				<td>{% if noviet.novietSoort == '1' %}{{ icon('tick') }}{% else %}{{ icon('cross') }}{% endif %}</td>
-				<td>{% if noviet.matrixPlek is not none %}{{ ['Voor', 'Midden', 'Achter'][noviet.matrixPlek] }}{% endif %}</td>
-			</tr>
-		{% endfor %}
-	</table>
+    <table class="table">
+        <tr>
+            <th scope="col">UID</th>
+            <th scope="col">Voornaam</th>
+            <th scope="col">Tussenvoegsel</th>
+            <th scope="col">Achternaam</th>
+            <th scope="col">Mobiel</th>
+            <th scope="col">Studie</th>
+            <th scope="col">Nanoviet</th>
+            <th scope="col">Matrixplek</th>
+        </tr>
+        {% for noviet in novieten %}
+            <tr>
+                <td><a href="{{ url('csrdelft_profiel_profiel', {uid: noviet.uid}) }}">{{ noviet.uid }}</a></td>
+                <td>{{ noviet.voornaam }}</td>
+                <td>{{ noviet.tussenvoegsel }}</td>
+                <td>{{ noviet.achternaam }}</td>
+                <td>{{ noviet.mobiel }}</td>
+                <td>{{ noviet.studie }}</td>
+                <td>{% if noviet.novietSoort == '1' %}{{ icon('tick') }}{% else %}{{ icon('cross') }}{% endif %}</td>
+                <td>{% if noviet.matrixPlek is not none %}{{ ['Voor', 'Midden', 'Achter'][noviet.matrixPlek] }}{% endif %}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

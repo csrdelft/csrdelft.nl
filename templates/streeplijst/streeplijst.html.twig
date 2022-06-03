@@ -3,29 +3,29 @@
 
 {% block bodyClass %}zijbalk_verborgen{% endblock %}
 {% block body %}
-	{% for streeplijst in streeplijsten %}
-	<h1 class="text-center">{{ streeplijst.naam_streeplijst }}</h1>
-	<table class="table table-striped table-bordered">
-		<thead>
-		<tr>
-			<th scope="col"></th>
-			{% for inhoud in streeplijst.inhoud %}
-				<th scope="col">{{ inhoud | trim }}</th>
-			{% endfor %}
-		</tr>
-		</thead>
-		<tbody>
+    {% for streeplijst in streeplijsten %}
+        <h1 class="text-center">{{ streeplijst.naam_streeplijst }}</h1>
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                {% for inhoud in streeplijst.inhoud %}
+                    <th scope="col">{{ inhoud | trim }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
 
-		{% for lid in streeplijst.leden %}
-			<tr>
-				<th scope="row">{{ lid | trim }}</th>
-				{% for inhoud in streeplijst.inhoud %}
-					<td></td>
-				{% endfor %}
-			</tr>
-		{% endfor %}
+            {% for lid in streeplijst.leden %}
+                <tr>
+                    <th scope="row">{{ lid | trim }}</th>
+                    {% for inhoud in streeplijst.inhoud %}
+                        <td></td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
 
-		</tbody>
-	</table>
-	{% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
 {% endblock %}

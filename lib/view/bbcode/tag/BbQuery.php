@@ -19,65 +19,73 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * @example [query=1]
  * @example [query]1[/query]
  */
-class BbQuery extends BbTag {
+class BbQuery extends BbTag
+{
 
-	/**
-	 * @var SavedQueryResult
-	 */
-	private $query;
-	/**
-	 * @var SavedQueryRepository
-	 */
-	private $savedQueryRepository;
-	/**
-	 * @var string
-	 */
-	private $id;
+    /**
+     * @var SavedQueryResult
+     */
+    private $query;
+    /**
+     * @var SavedQueryRepository
+     */
+    private $savedQueryRepository;
+    /**
+     * @var string
+     */
+    private $id;
 
-	public function __construct(SavedQueryRepository $savedQueryRepository) {
-		$this->savedQueryRepository = $savedQueryRepository;
-	}
+    public function __construct(SavedQueryRepository $savedQueryRepository)
+    {
+        $this->savedQueryRepository = $savedQueryRepository;
+    }
 
-	public static function getTagName() {
-		return 'query';
-	}
+    public static function getTagName()
+    {
+        return 'query';
+    }
 
-	public function isAllowed() {
-		return $this->query->query->magBekijken();
-	}
+    public function isAllowed()
+    {
+        return $this->query->query->magBekijken();
+    }
 
-	public function renderLight() {
-		$url = '/tools/query?id=' . urlencode($this->id);
-		return BbHelper::lightLinkBlock('query', $url, $this->query->query->beschrijving, count($this->query->rows) . ' regels');
-	}
+    public function renderLight()
+    {
+        $url = '/tools/query?id=' . urlencode($this->id);
+        return BbHelper::lightLinkBlock('query', $url, $this->query->query->beschrijving, count($this->query->rows) . ' regels');
+    }
 
-	public function render() {
-		$sqc = new SavedQueryContent($this->query);
-		return $sqc->render_queryResult();
-	}
+    public function render()
+    {
+        $sqc = new SavedQueryContent($this->query);
+        return $sqc->render_queryResult();
+    }
 
-	/**
-	 * @param array $arguments
-	 * @throws BbException
-	 */
-	public function parse($arguments = []) {
-		$this->id = $this->readMainArgument($arguments);
-		$this->id = (int)$this->id;
-		$this->assertId($this->id);
-		try {
-			$this->query = $this->savedQueryRepository->loadQuery($this->id);
-		} catch (AccessDeniedException $ex) {
-			throw new BbException('[query] Geen geldige query');
-		}
-	}
+    /**
+     * @param array $arguments
+     * @throws BbException
+     */
+    public function parse($arguments = [])
+    {
+        $this->id = $this->readMainArgument($arguments);
+        $this->id = (int)$this->id;
+        $this->assertId($this->id);
+        try {
+            $this->query = $this->savedQueryRepository->loadQuery($this->id);
+        } catch (AccessDeniedException $ex) {
+            throw new BbException('[query] Geen geldige query');
+        }
+    }
 
-	/**
-	 * @param int $queryID
-	 * @throws BbException
-	 */
-	private function assertId(int $queryID) {
-		if ($queryID == 0) {
-			throw new BbException('[query] Geen geldig query-id opgegeven');
-		}
-	}
+    /**
+     * @param int $queryID
+     * @throws BbException
+     */
+    private function assertId(int $queryID)
+    {
+        if ($queryID == 0) {
+            throw new BbException('[query] Geen geldig query-id opgegeven');
+        }
+    }
 }

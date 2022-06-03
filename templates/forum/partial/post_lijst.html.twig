@@ -1,81 +1,82 @@
-<div id="forumpost-row-{{ post.post_id }}" data-post-id="{{ post.uid }}" class="forum-post list-group-item border-0 py-4 px-0 px-sm-3">
-	<div class="d-flex flex-row gap-3">
-		<div class="pasfoto">
-			{% if app.user and post.uid != 'x999' %}
-				{{ get_profiel(post.uid).pasfotoRounded | raw }}
-			{% endif %}
-		</div>
-		<div class="flex-grow-1">
-			<div
-				class="d-flex justify-content-between align-items-center"
-			>
+<div id="forumpost-row-{{ post.post_id }}" data-post-id="{{ post.uid }}"
+     class="forum-post list-group-item border-0 py-4 px-0 px-sm-3">
+    <div class="d-flex flex-row gap-3">
+        <div class="pasfoto">
+            {% if app.user and post.uid != 'x999' %}
+                {{ get_profiel(post.uid).pasfotoRounded | raw }}
+            {% endif %}
+        </div>
+        <div class="flex-grow-1">
+            <div
+                    class="d-flex justify-content-between align-items-center"
+            >
 				<span>
 					{{ get_profiel(post.uid).link('user') | raw }}
 				</span>
 
-				<p class="text-black-50 m-0 fw-light">
-					{% if lid_instelling('forum', 'datumWeergave') == 'relatief' %}
-						{{ post.datum_tijd | reldate }}
-					{% else %}
-						{{ post.datum_tijd | datetime_format }}
-					{% endif %}
-				</p>
-			</div>
-			<div id="post{{ post.post_id }}" data-uid="{{ post.uid }}" data-naam="{{ get_profiel(post.uid).naam }}" class="forum-bericht fw-light mb-3">
-				{% set account = get_profiel(post.uid).account %}
-				{% if account is not none and account.perm_role == 'R_PUBCIE' %}
-					{{ post.tekst | bbcode('html') }}
-				{% else %}
-					{{ post.tekst | bbcode }}
-				{% endif %}
-				{% if post.bewerkt_tekst %}
-					<div class="bewerkt clear">
-						<hr/>
-						{{ post.bewerkt_tekst | bbcode }}
-					</div>
-				{% endif %}
-			</div>
+                <p class="text-black-50 m-0 fw-light">
+                    {% if lid_instelling('forum', 'datumWeergave') == 'relatief' %}
+                        {{ post.datum_tijd | reldate }}
+                    {% else %}
+                        {{ post.datum_tijd | datetime_format }}
+                    {% endif %}
+                </p>
+            </div>
+            <div id="post{{ post.post_id }}" data-uid="{{ post.uid }}" data-naam="{{ get_profiel(post.uid).naam }}"
+                 class="forum-bericht fw-light mb-3">
+                {% set account = get_profiel(post.uid).account %}
+                {% if account is not none and account.perm_role == 'R_PUBCIE' %}
+                    {{ post.tekst | bbcode('html') }}
+                {% else %}
+                    {{ post.tekst | bbcode }}
+                {% endif %}
+                {% if post.bewerkt_tekst %}
+                    <div class="bewerkt clear">
+                        <hr/>
+                        {{ post.bewerkt_tekst | bbcode }}
+                    </div>
+                {% endif %}
+            </div>
 
-			<div
-				class="btn-toolbar"
-				role="toolbar"
-				aria-label="Toolbar with button groups"
-			>
-				<div
-					class="btn-group me-2"
-					role="group"
-					aria-label="First group"
-				>
-					<button
-						type="button"
-						class="btn btn-outline-primary btn-sm"
-						data-bs-toggle="modal"
-						data-bs-target="#nieuwDraadjeModal"
-					>
-						<i class="fas fa-link"></i>
-						Link kopiëren
-					</button>
-				</div>
+            <div
+                    class="btn-toolbar"
+                    role="toolbar"
+                    aria-label="Toolbar with button groups"
+            >
+                <div
+                        class="btn-group me-2"
+                        role="group"
+                        aria-label="First group"
+                >
+                    <button
+                            type="button"
+                            class="btn btn-outline-primary btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#nieuwDraadjeModal"
+                    >
+                        <i class="fas fa-link"></i>
+                        Link kopiëren
+                    </button>
+                </div>
 
-				{% if post.magCiteren %}
-				<div
-					class="btn-group me-2"
-					role="group"
-					aria-label="Second group"
-				>
-					<a href="#reageren" class="btn btn-outline-primary btn-sm citeren"
-						data-citeren="{{ post.post_id }}"
-						title="Bericht citeren">
-						{{ icon('quote-left') }}
-						Bericht citeren
-					</a>
-				</div>
-				{% endif %}
-			</div>
-		</div>
-	</div>
+                {% if post.magCiteren %}
+                    <div
+                            class="btn-group me-2"
+                            role="group"
+                            aria-label="Second group"
+                    >
+                        <a href="#reageren" class="btn btn-outline-primary btn-sm citeren"
+                           data-citeren="{{ post.post_id }}"
+                           title="Bericht citeren">
+                            {{ icon('quote-left') }}
+                            Bericht citeren
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
-
 
 
 {# <div>

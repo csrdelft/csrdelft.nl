@@ -15,40 +15,44 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
  *
  * @package CsrDelft\common
  */
-class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var ObjectNormalizer
-	 */
-	private $normalizer;
+class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface
+{
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+    /**
+     * @var ObjectNormalizer
+     */
+    private $normalizer;
 
-	public function __construct(EntityManagerInterface $entityManager, ObjectNormalizer $normalizer) {
-		$this->entityManager = $entityManager;
-		$this->normalizer = $normalizer;
-	}
+    public function __construct(EntityManagerInterface $entityManager, ObjectNormalizer $normalizer)
+    {
+        $this->entityManager = $entityManager;
+        $this->normalizer = $normalizer;
+    }
 
-	/**
-	 * @param RemoveDataTableEntry $removed
-	 * @param string|null $format
-	 * @param array $context
-	 * @return array|ArrayObject|bool|float|int|string|null
-	 */
-	public function normalize($removed, string $format = null, array $context = []) {
-		$id = $removed->getId();
+    /**
+     * @param RemoveDataTableEntry $removed
+     * @param string|null $format
+     * @param array $context
+     * @return array|ArrayObject|bool|float|int|string|null
+     */
+    public function normalize($removed, string $format = null, array $context = [])
+    {
+        $id = $removed->getId();
 
-		if (!is_array($id)) {
-			$id = [$id];
-		}
-		return [
-			'UUID' => strtolower(sprintf('%s@%s.csrdelft.nl', implode('.', $id), short_class($removed->getClass()))),
-			'remove' => true,
-		];
-	}
+        if (!is_array($id)) {
+            $id = [$id];
+        }
+        return [
+            'UUID' => strtolower(sprintf('%s@%s.csrdelft.nl', implode('.', $id), short_class($removed->getClass()))),
+            'remove' => true,
+        ];
+    }
 
-	public function supportsNormalization($data, string $format = null, array $context = []) {
-		return $data instanceof RemoveDataTableEntry;
-	}
+    public function supportsNormalization($data, string $format = null, array $context = [])
+    {
+        return $data instanceof RemoveDataTableEntry;
+    }
 }

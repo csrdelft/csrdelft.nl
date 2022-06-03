@@ -32,32 +32,33 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository")
  * @ORM\Table("mlt_abonnementen")
  */
-class MaaltijdAbonnement {
-	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 */
-	public $mlt_repetitie_id;
-	/**
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
-	 */
-	public $uid;
-	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $wanneer_ingeschakeld; # datetime
+class MaaltijdAbonnement
+{
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     * @ORM\Id()
+     */
+    public $mlt_repetitie_id;
+    /**
+     * @var string
+     * @ORM\Column(type="uid")
+     * @ORM\Id()
+     */
+    public $uid;
+    /**
+     * @var DateTimeImmutable
+     * @ORM\Column(type="datetime")
+     */
+    public $wanneer_ingeschakeld; # datetime
 
-	/**
-	 * @var MaaltijdRepetitie
-	 * @ORM\ManyToOne(targetEntity="MaaltijdRepetitie")
-	 * @ORM\JoinColumn(name="mlt_repetitie_id", referencedColumnName="mlt_repetitie_id")
-	 */
-	public $maaltijd_repetitie;
-	public $van_uid;
-	public $waarschuwing;
-	public $foutmelding;
+    /**
+     * @var MaaltijdRepetitie
+     * @ORM\ManyToOne(targetEntity="MaaltijdRepetitie")
+     * @ORM\JoinColumn(name="mlt_repetitie_id", referencedColumnName="mlt_repetitie_id")
+     */
+    public $maaltijd_repetitie;
+    public $van_uid;
+    public $waarschuwing;
+    public $foutmelding;
 }

@@ -20,92 +20,92 @@ use CsrDelft\bb\BbTag;
 class BbImg extends BbTag
 {
 
-	/**
-	 * @var array
-	 */
-	protected $arguments;
-	/**
-	 * @var mixed
-	 */
-	private $url;
+    /**
+     * @var array
+     */
+    protected $arguments;
+    /**
+     * @var mixed
+     */
+    private $url;
 
-	public static function getTagName()
-	{
-		return 'img';
-	}
+    public static function getTagName()
+    {
+        return 'img';
+    }
 
-	public function render()
-	{
-		$arguments = $this->arguments;
+    public function render()
+    {
+        $arguments = $this->arguments;
 
-		$style = '';
-		$class = '';
-		if (isset($arguments['class'])) {
-			$class .= htmlspecialchars($arguments['class']);
-		}
-		if (isset($arguments['float'])) {
-			switch ($arguments['float']) {
-				case 'left':
-					$style .= 'float:left;';
-					break;
-				case 'right':
-					$style .= 'float:right;';
-					break;
-			}
-		}
-		$heeftBreedte = isset($arguments['w']) && $arguments['w'] > 10;
-		$heeftHoogte = isset($arguments['h']) && $arguments['h'] > 10;
+        $style = '';
+        $class = '';
+        if (isset($arguments['class'])) {
+            $class .= htmlspecialchars($arguments['class']);
+        }
+        if (isset($arguments['float'])) {
+            switch ($arguments['float']) {
+                case 'left':
+                    $style .= 'float:left;';
+                    break;
+                case 'right':
+                    $style .= 'float:right;';
+                    break;
+            }
+        }
+        $heeftBreedte = isset($arguments['w']) && $arguments['w'] > 10;
+        $heeftHoogte = isset($arguments['h']) && $arguments['h'] > 10;
 
-		if ($heeftBreedte) {
-			$style .= 'width: ' . ((int)$arguments['w']) . 'px; ';
-		}
-		if ($heeftHoogte) {
-			$style .= 'height: ' . ((int)$arguments['h']) . 'px;';
-		}
+        if ($heeftBreedte) {
+            $style .= 'width: ' . ((int)$arguments['w']) . 'px; ';
+        }
+        if ($heeftHoogte) {
+            $style .= 'height: ' . ((int)$arguments['h']) . 'px;';
+        }
 
-		if ($this->env->mode == "light") {
-			// Geef een standaard breedte op om te voorkomen dat afbeeldingen te breed worden.
-			if (!$heeftBreedte && !$heeftHoogte) {
-				$style .= 'width:500px;';
-			}
+        if ($this->env->mode == "light") {
+            // Geef een standaard breedte op om te voorkomen dat afbeeldingen te breed worden.
+            if (!$heeftBreedte && !$heeftHoogte) {
+                $style .= 'width:500px;';
+            }
 
-			return vsprintf("<img class=\"%s\" src=\"%s\" alt=\"%s\" style=\"%s\" />", [
-				$class,
-				$this->getSourceUrl(),
-				htmlspecialchars($this->getSourceUrl()),
-				$style
-			]);
-		}
+            return vsprintf("<img class=\"%s\" src=\"%s\" alt=\"%s\" style=\"%s\" />", [
+                $class,
+                $this->getSourceUrl(),
+                htmlspecialchars($this->getSourceUrl()),
+                $style
+            ]);
+        }
 
-		return vsprintf("<a href=\"%s\" data-fslightbox><span class=\"bb-img-loading\" data-src=\"%s\" style=\"%s\"></span></a>", [
-			$this->getLinkUrl(),
-			$this->getSourceUrl(),
-			$style
-		]);
-	}
+        return vsprintf("<a href=\"%s\" data-fslightbox><span class=\"bb-img-loading\" data-src=\"%s\" style=\"%s\"></span></a>", [
+            $this->getLinkUrl(),
+            $this->getSourceUrl(),
+            $style
+        ]);
+    }
 
-	public function getSourceUrl()
-	{
-		return $this->url;
-	}
+    public function getSourceUrl()
+    {
+        return $this->url;
+    }
 
-	public function getLinkUrl()
-	{
-		return $this->url;
-	}
+    public function getLinkUrl()
+    {
+        return $this->url;
+    }
 
-	/**
-	 * @param array $arguments
-	 * @throws BbException
-	 */
-	public function parse($arguments = [])
-	{
-		$this->url = filter_var($this->readMainArgument($arguments), FILTER_SANITIZE_URL);
+    /**
+     * @param array $arguments
+     * @throws BbException
+     */
+    public function parse($arguments = [])
+    {
+        $this->url = filter_var($this->readMainArgument($arguments), FILTER_SANITIZE_URL);
 
-		if (!$this->url || (!url_like($this->url) && !str_starts_with($this->url, '/'))) {
-			throw new BbException("Wrong url " . $this->url);
-		}
+        if (!$this->url || (!url_like($this->url) && !str_starts_with($this->url, '/'))) {
+            throw new BbException("Wrong url " . $this->url);
+        }
 
-		$this->arguments = $arguments;
-	}
+        $this->arguments = $arguments;
+    }
 }

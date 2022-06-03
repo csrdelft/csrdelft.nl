@@ -1,49 +1,49 @@
 {% extends 'base.html.twig' %}
 
 {% block breadcrumbs %}
-	{{ csr_breadcrumbs({
-		(url('default')): 'main',
-		(url('csrdelft_ledenlijst_lijst')): 'Ledenlijst',
-		(url('csrdelft_commissievoorkeuren_overzicht')): 'Commissievoorkeuren',
-		'': profiel.link
-	}) }}
+    {{ csr_breadcrumbs({
+        (url('default')): 'main',
+        (url('csrdelft_ledenlijst_lijst')): 'Ledenlijst',
+        (url('csrdelft_commissievoorkeuren_overzicht')): 'Commissievoorkeuren',
+        '': profiel.link
+    }) }}
 {% endblock %}
 
 {% block content %}
-	<h1>Voorkeuren van lid</h1>
-	<p>Naam: {{ profiel.link('volledig') | raw }}</p>
+    <h1>Voorkeuren van lid</h1>
+    <p>Naam: {{ profiel.link('volledig') | raw }}</p>
 
-	<table class="table table-striped">
-		<thead>
-		<tr>
-			<th>Commissie</th>
-			<th>Keuze</th>
-			<th>Laatst veranderd</th>
-		</tr>
-		</thead>
-		{% for commissie in commissies %}
-			{% set voorkeur = voorkeuren[commissie.id] %}
-			<tr>
-				<td>{{ commissie.naam }}</td>
-				<td>
-					{% if voorkeur is none %}
-						nee
-					{% else %}
-						{{ voorkeur.voorkeurTekst }}
-					{% endif %}
-				</td>
-				<td>
-					{% if voorkeur and voorkeur.timestamp %}
-						{{ voorkeur.timestamp | datetime_format }}
-					{% else %}
-						Nooit
-					{% endif %}
-				</td>
-			</tr>
-		{% endfor %}
-	</table>
-	<h3>Opmerkingen van lid</h3>
-	<textarea readonly="" class="form-control">{{ lidOpmerking }}</textarea>
-	<h3>Opmerkingen van praeses</h3>
-	{{ form(opmerkingForm) }}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Commissie</th>
+            <th>Keuze</th>
+            <th>Laatst veranderd</th>
+        </tr>
+        </thead>
+        {% for commissie in commissies %}
+            {% set voorkeur = voorkeuren[commissie.id] %}
+            <tr>
+                <td>{{ commissie.naam }}</td>
+                <td>
+                    {% if voorkeur is none %}
+                        nee
+                    {% else %}
+                        {{ voorkeur.voorkeurTekst }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if voorkeur and voorkeur.timestamp %}
+                        {{ voorkeur.timestamp | datetime_format }}
+                    {% else %}
+                        Nooit
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h3>Opmerkingen van lid</h3>
+    <textarea readonly="" class="form-control">{{ lidOpmerking }}</textarea>
+    <h3>Opmerkingen van praeses</h3>
+    {{ form(opmerkingForm) }}
 {% endblock %}

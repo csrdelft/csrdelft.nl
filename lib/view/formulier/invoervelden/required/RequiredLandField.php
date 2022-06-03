@@ -11,8 +11,9 @@ use CsrDelft\view\formulier\invoervelden\LandField;
  *
  * @see LandField
  */
-class RequiredLandField extends LandField {
+class RequiredLandField extends LandField
+{
 
-	public $required = true;
+    public $required = true;
 
 }

@@ -7,29 +7,29 @@ use CsrDelft\bb\BbTag;
 class BbAudio extends BbTag
 {
 
-	/**
-	 * @var string
-	 */
-	public $url;
+    /**
+     * @var string
+     */
+    public $url;
 
-	public static function getTagName()
-	{
-		return ['audio', 'geluid'];
-	}
+    public static function getTagName()
+    {
+        return ['audio', 'geluid'];
+    }
 
-	public function parse($arguments = [])
-	{
-		$this->url = $this->readMainArgument($arguments);
-	}
+    public function parse($arguments = [])
+    {
+        $this->url = $this->readMainArgument($arguments);
+    }
 
-	public function render()
-	{
-		$src = htmlspecialchars($this->url);
+    public function render()
+    {
+        $src = htmlspecialchars($this->url);
 
-		return <<<HTML
+        return <<<HTML
 <audio controls>
 <source src="{$src}" />
 </audio>
 HTML;
-	}
+    }
 }

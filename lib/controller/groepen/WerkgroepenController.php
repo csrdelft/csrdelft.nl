@@ -15,8 +15,10 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * N.B. Een Werkgroep extends Ketzer, maar de controller niet om de "nieuwe ketzer"-wizard te vermijden.
  */
-class WerkgroepenController extends AbstractGroepenController {
-	public function __construct(ManagerRegistry $registry) {
-		parent::__construct($registry, Werkgroep::class);
-	}
+class WerkgroepenController extends AbstractGroepenController
+{
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Werkgroep::class);
+    }
 }

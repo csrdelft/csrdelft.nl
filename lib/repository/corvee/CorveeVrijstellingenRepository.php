@@ -19,83 +19,90 @@ use Throwable;
  * @method CorveeVrijstelling[]    findAll()
  * @method CorveeVrijstelling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CorveeVrijstellingenRepository extends AbstractRepository {
+class CorveeVrijstellingenRepository extends AbstractRepository
+{
 
-	public function __construct(ManagerRegistry $registry) {
-		parent::__construct($registry, CorveeVrijstelling::class);
-	}
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, CorveeVrijstelling::class);
+    }
 
-	public function nieuw($profiel = null, $begin = null, $eind = null, $percentage = 0) {
-		$vrijstelling = new CorveeVrijstelling();
-		$vrijstelling->profiel = $profiel;
-		$vrijstelling->uid = $profiel->uid ?? null;
-		if ($begin === null) {
-			$begin = date_create_immutable();
-		}
-		$vrijstelling->begin_datum = $begin;
-		if ($eind === null) {
-			$eind = date_create_immutable();
-		}
-		$vrijstelling->eind_datum = $eind;
-		if ($percentage === null) {
-			$percentage = intval(instelling('corvee', 'standaard_vrijstelling_percentage'));
-		}
-		$vrijstelling->percentage = $percentage;
+    public function nieuw($profiel = null, $begin = null, $eind = null, $percentage = 0)
+    {
+        $vrijstelling = new CorveeVrijstelling();
+        $vrijstelling->profiel = $profiel;
+        $vrijstelling->uid = $profiel->uid ?? null;
+        if ($begin === null) {
+            $begin = date_create_immutable();
+        }
+        $vrijstelling->begin_datum = $begin;
+        if ($eind === null) {
+            $eind = date_create_immutable();
+        }
+        $vrijstelling->eind_datum = $eind;
+        if ($percentage === null) {
+            $percentage = intval(instelling('corvee', 'standaard_vrijstelling_percentage'));
+        }
+        $vrijstelling->percentage = $percentage;
 
-		return $vrijstelling;
-	}
+        return $vrijstelling;
+    }
 
-	public function getAlleVrijstellingen($groupByUid = false) {
-		$vrijstellingen = $this->findAll();
-		if ($groupByUid) {
-			$vrijstellingenByUid = [];
-			foreach ($vrijstellingen as $vrijstelling) {
-				$vrijstellingenByUid[$vrijstelling->uid] = $vrijstelling;
-			}
-			return $vrijstellingenByUid;
-		}
-		return $vrijstellingen;
-	}
+    public function getAlleVrijstellingen($groupByUid = false)
+    {
+        $vrijstellingen = $this->findAll();
+        if ($groupByUid) {
+            $vrijstellingenByUid = [];
+            foreach ($vrijstellingen as $vrijstelling) {
+                $vrijstellingenByUid[$vrijstelling->uid] = $vrijstelling;
+            }
+            return $vrijstellingenByUid;
+        }
+        return $vrijstellingen;
+    }
 
-	/**
-	 * @param $uid
-	 * @return CorveeVrijstelling|null
-	 */
-	public function getVrijstelling($uid) {
-		return $this->find($uid);
-	}
+    /**
+     * @param $uid
+     * @return CorveeVrijstelling|null
+     */
+    public function getVrijstelling($uid)
+    {
+        return $this->find($uid);
+    }
 
-	/**
-	 * @param Profiel $profiel
-	 * @param DateTimeInterface $begin
-	 * @param DateTimeInterface $eind
-	 * @param integer $percentage
-	 * @return CorveeVrijstelling
-	 * @throws Throwable
-	 */
-	public function saveVrijstelling($profiel, DateTimeInterface $begin, DateTimeInterface $eind, $percentage) {
-		return $this->_em->transactional(function () use ($profiel, $begin, $eind, $percentage) {
-			$vrijstelling = $this->getVrijstelling($profiel->uid);
+    /**
+     * @param Profiel $profiel
+     * @param DateTimeInterface $begin
+     * @param DateTimeInterface $eind
+     * @param integer $percentage
+     * @return CorveeVrijstelling
+     * @throws Throwable
+     */
+    public function saveVrijstelling($profiel, DateTimeInterface $begin, DateTimeInterface $eind, $percentage)
+    {
+        return $this->_em->transactional(function () use ($profiel, $begin, $eind, $percentage) {
+            $vrijstelling = $this->getVrijstelling($profiel->uid);
 
-			if (!$vrijstelling) {
-				$vrijstelling = $this->nieuw($profiel, $begin, $eind, $percentage);
-			} else {
-				$vrijstelling->begin_datum = $begin;
-				$vrijstelling->eind_datum = $eind;
-				$vrijstelling->percentage = $percentage;
-			}
+            if (!$vrijstelling) {
+                $vrijstelling = $this->nieuw($profiel, $begin, $eind, $percentage);
+            } else {
+                $vrijstelling->begin_datum = $begin;
+                $vrijstelling->eind_datum = $eind;
+                $vrijstelling->percentage = $percentage;
+            }
 
-			$this->_em->persist($vrijstelling);
-			$this->_em->flush();
-			return $vrijstelling;
-		});
-	}
+            $this->_em->persist($vrijstelling);
+            $this->_em->flush();
+            return $vrijstelling;
+        });
+    }
 
-	public function verwijderVrijstelling($uid) {
-		$this->createQueryBuilder('v')
-			->delete()
-			->where('v.uid = :uid')
-			->setParameter('uid', $uid)
-			->getQuery()->execute();
-	}
+    public function verwijderVrijstelling($uid)
+    {
+        $this->createQueryBuilder('v')
+            ->delete()
+            ->where('v.uid = :uid')
+            ->setParameter('uid', $uid)
+            ->getQuery()->execute();
+    }
 }

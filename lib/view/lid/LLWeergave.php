@@ -5,30 +5,34 @@ namespace CsrDelft\view\lid;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\LidZoekerService;
 
-abstract class LLWeergave {
+abstract class LLWeergave
+{
 
-	protected $leden;
-	public $velden;
-	public function __construct(LidZoekerService $zoeker) {
-		$this->leden = $zoeker->getLeden();
-		$this->velden = $zoeker->getVelden();
-	}
+    protected $leden;
+    public $velden;
 
-	public abstract function viewHeader();
+    public function __construct(LidZoekerService $zoeker)
+    {
+        $this->leden = $zoeker->getLeden();
+        $this->velden = $zoeker->getVelden();
+    }
 
-	public abstract function viewFooter();
+    public abstract function viewHeader();
 
-	//viewLid print één regel of vakje ofzo.
-	public abstract function viewLid(Profiel $profiel);
+    public abstract function viewFooter();
 
-	public function __toString() {
-		$html = '';
-		$html .= $this->viewHeader();
-		foreach ($this->leden as $lid) {
-			$html .= $this->viewLid($lid);
-		}
-		$html .= $this->viewFooter();
-		return $html;
-	}
+    //viewLid print één regel of vakje ofzo.
+    public abstract function viewLid(Profiel $profiel);
+
+    public function __toString()
+    {
+        $html = '';
+        $html .= $this->viewHeader();
+        foreach ($this->leden as $lid) {
+            $html .= $this->viewLid($lid);
+        }
+        $html .= $this->viewFooter();
+        return $html;
+    }
 
 }

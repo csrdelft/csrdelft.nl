@@ -1,38 +1,40 @@
 <h2 class="h6 fw-bolder mt-1">
-	{# TODO: URL #}
-	<a href="/forum/recent">Forum</a>
-	{% if mag('P_FORUM_MOD') and aantalWacht > 0 %}
-		<a href="{{ url('csrdelft_forum_wacht') }}" class="badge rounded-pill bg-accent text-white" title="{{ aantalWacht }} wachten op goedkeuring">
-			{{ aantalWacht }}
-		</a>
-	{% endif %}
+    {# TODO: URL #}
+    <a href="/forum/recent">Forum</a>
+    {% if mag('P_FORUM_MOD') and aantalWacht > 0 %}
+        <a href="{{ url('csrdelft_forum_wacht') }}" class="badge rounded-pill bg-accent text-white"
+           title="{{ aantalWacht }} wachten op goedkeuring">
+            {{ aantalWacht }}
+        </a>
+    {% endif %}
 </h2>
 
 <div class="list-group list-group-flush">
-{% for draad in draden %}
-	{% if lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen' %}
-		{% set urlHash = 'ongelezen' %}
-	{% elseif lid_instelling('forum', 'open_draad_op_pagina') == 'laatste' %}
-		{% set urlHash = 'reageren' %}
-	{% else %}
-		{% set urlHash = '' %}
-	{% endif %}
-	{% set ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave') %}
+    {% for draad in draden %}
+        {% if lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen' %}
+            {% set urlHash = 'ongelezen' %}
+        {% elseif lid_instelling('forum', 'open_draad_op_pagina') == 'laatste' %}
+            {% set urlHash = 'reageren' %}
+        {% else %}
+            {% set urlHash = '' %}
+        {% endif %}
+        {% set ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave') %}
 
-	<div class="list-group-item list-group-item-action">
-		<a href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}" title="" class="d-flex align-items-center {% if app.user and draad.ongelezen %}fw-bold{% endif %}">
-			<p class="text-truncate flex-grow-1">
+        <div class="list-group-item list-group-item-action">
+            <a href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}" title=""
+               class="d-flex align-items-center {% if app.user and draad.ongelezen %}fw-bold{% endif %}">
+                <p class="text-truncate flex-grow-1">
 				<span class="forum-item-moment d-inline-block">
 					{{ draad.laatst_gewijzigd | zijbalk_date_format }}
 				</span>
-				{{ draad.titel | raw }}
-			</p>
-			{# {{#if this.nieuweBerichten}}
+                    {{ draad.titel | raw }}
+                </p>
+                {# {{#if this.nieuweBerichten}}
 			<span class="badge rounded-pill bg-secondary"
 				>{{ this.aantalNieuw }}</span
 			>
 			{{/if}} #}
-		</a>
-	</div>
-{% endfor %}
+            </a>
+        </div>
+    {% endfor %}
 </div>

@@ -1,42 +1,44 @@
 <tr id="instelling-row-{{ instelling.id }}">
-	<td>
-		<a title="Instelling wijzigen" class="btn wijzigknop" onclick="
-			if (confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
-			var form = $('#form-{{ instelling.id }}');
-			window.formulier.formInlineToggle(form);
-			form.parent().find('.InstellingToggle').toggle();
-			$(this).toggle();
-			}
-			">{{ icon('pencil') }}</a>
-	</td>
-	<td>{{ instelling.instelling | replace({'_': ' '}) }}</td>
-	<td>
-		<div class="InlineForm">
-			<div class="InstellingToggle">{{ instelling.waarde }}</div>
-			<form id="form-{{ instelling.id }}" method="post"
-						action="{{ url('csrdelft_instellingenbeheer_opslaan', {module: instelling.module, id: instelling.instelling}) }}"
-						class="Formulier InlineForm ToggleForm">
-				{{ csrfField() }}
-				<textarea class="form-control FormElement" name="waarde" origvalue="{{ instelling.waarde | escape('html_attr') }}"
-									rows="1">
+    <td>
+        <a title="Instelling wijzigen" class="btn wijzigknop" onclick="
+                if (confirm($(this).attr('title') + '.\n\nWeet u het zeker?')) {
+                var form = $('#form-{{ instelling.id }}');
+                window.formulier.formInlineToggle(form);
+                form.parent().find('.InstellingToggle').toggle();
+                $(this).toggle();
+                }
+                ">{{ icon('pencil') }}</a>
+    </td>
+    <td>{{ instelling.instelling | replace({'_': ' '}) }}</td>
+    <td>
+        <div class="InlineForm">
+            <div class="InstellingToggle">{{ instelling.waarde }}</div>
+            <form id="form-{{ instelling.id }}" method="post"
+                  action="{{ url('csrdelft_instellingenbeheer_opslaan', {module: instelling.module, id: instelling.instelling}) }}"
+                  class="Formulier InlineForm ToggleForm">
+                {{ csrfField() }}
+                <textarea class="form-control FormElement" name="waarde"
+                          origvalue="{{ instelling.waarde | escape('html_attr') }}"
+                          rows="1">
 					{{- instelling.waarde -}}
 				</textarea>
-				<div class="input-group">
-					<a class="btn submit" title="Wijzigingen opslaan">{{ icon('accept') }} Opslaan</a>
-					<a class="btn reset cancel" title="Annuleren" onclick="
-						$(this).parents('.InlineForm').find('.InstellingToggle').toggle();
-						$('#instelling-row-{{ instelling.id }}').find('.wijzigknop').toggle();
-						">
-						{{ icon('delete') }} Annuleren
-					</a>
-				</div>
-			</form>
-		</div>
-	</td>
-	<td class="col-del">
-		<a href="{{ url('csrdelft_instellingenbeheer_reset', {module: instelling.module, id: instelling.instelling}) }}" title="Instelling resetten"
-			 class="btn post confirm">
-			{{ icon('arrow_rotate_anticlockwise') }}
-		</a>
-	</td>
+                <div class="input-group">
+                    <a class="btn submit" title="Wijzigingen opslaan">{{ icon('accept') }} Opslaan</a>
+                    <a class="btn reset cancel" title="Annuleren" onclick="
+                            $(this).parents('.InlineForm').find('.InstellingToggle').toggle();
+                            $('#instelling-row-{{ instelling.id }}').find('.wijzigknop').toggle();
+                            ">
+                        {{ icon('delete') }} Annuleren
+                    </a>
+                </div>
+            </form>
+        </div>
+    </td>
+    <td class="col-del">
+        <a href="{{ url('csrdelft_instellingenbeheer_reset', {module: instelling.module, id: instelling.instelling}) }}"
+           title="Instelling resetten"
+           class="btn post confirm">
+            {{ icon('arrow_rotate_anticlockwise') }}
+        </a>
+    </td>
 </tr>

@@ -18,58 +18,64 @@ use Twig\Environment;
  * @example [boek]123[/boek]
  * @example [boek=123]
  */
-class BbBoek extends BbTag {
-	/**
-	 * @var BoekRepository
-	 */
-	private $boekRepository;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var string
-	 */
-	private $id;
+class BbBoek extends BbTag
+{
+    /**
+     * @var BoekRepository
+     */
+    private $boekRepository;
+    /**
+     * @var Environment
+     */
+    private $twig;
+    /**
+     * @var string
+     */
+    private $id;
 
-	public function __construct(BoekRepository $boekRepository, Environment $twig) {
-		$this->boekRepository = $boekRepository;
-		$this->twig = $twig;
-	}
+    public function __construct(BoekRepository $boekRepository, Environment $twig)
+    {
+        $this->boekRepository = $boekRepository;
+        $this->twig = $twig;
+    }
 
-	public static function getTagName() {
-		return 'boek';
-	}
-	public function isAllowed()
-	{
-		return LoginService::mag(P_BIEB_READ);
-	}
+    public static function getTagName()
+    {
+        return 'boek';
+    }
 
-	public function renderLight() {
-		try {
-			$boek = $this->boekRepository->find($this->id);
-			return BbHelper::lightLinkBlock('boek', $boek->getUrl(), $boek->titel, 'Auteur: ' . $boek->auteur);
-		} catch (CsrException $e) {
-			return '[boek] Boek [boekid:' . (int)$this->id . '] bestaat niet.';
-		}
-	}
+    public function isAllowed()
+    {
+        return LoginService::mag(P_BIEB_READ);
+    }
 
-	public function render() {
-		if (!mag("P_BIEB_READ")) return null;
+    public function renderLight()
+    {
+        try {
+            $boek = $this->boekRepository->find($this->id);
+            return BbHelper::lightLinkBlock('boek', $boek->getUrl(), $boek->titel, 'Auteur: ' . $boek->auteur);
+        } catch (CsrException $e) {
+            return '[boek] Boek [boekid:' . (int)$this->id . '] bestaat niet.';
+        }
+    }
 
-		try {
-			$boek = $this->boekRepository->find($this->id);
-			return $this->twig->render('bibliotheek/boek-bb.html.twig', ['boek' => $boek]);
-		} catch (CsrException $e) {
-			return '[boek] Boek [boekid:' . (int)$this->id . '] bestaat niet.';
-		}
-	}
+    public function render()
+    {
+        if (!mag("P_BIEB_READ")) return null;
 
-	/**
-	 * @param array $arguments
-	 */
-	public function parse($arguments = [])
-	{
-		$this->id = $this->readMainArgument($arguments);
-	}
+        try {
+            $boek = $this->boekRepository->find($this->id);
+            return $this->twig->render('bibliotheek/boek-bb.html.twig', ['boek' => $boek]);
+        } catch (CsrException $e) {
+            return '[boek] Boek [boekid:' . (int)$this->id . '] bestaat niet.';
+        }
+    }
+
+    /**
+     * @param array $arguments
+     */
+    public function parse($arguments = [])
+    {
+        $this->id = $this->readMainArgument($arguments);
+    }
 }

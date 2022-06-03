@@ -1,17 +1,18 @@
 <td id="abonnement-cell-{{ vanuid }}-{{ abonnement.maaltijd_repetitie.mlt_repetitie_id }}"
-		class="
+    class="
 {% if abonnement.foutmelding %}abonnement-error{% elseif abonnement.waarschuwing %}abonnement-warning{% else %}
 	{% if uid %}abonnement-ingeschakeld{% else %}abonnement-uitgeschakeld{% endif %}
 {% endif %}
 " title="{{ abonnement.foutmelding }}{{ abonnement.waarschuwing }}">
-	<a href="
+    <a href="
 {%- if uid -%}
 	{{ url('csrdelft_maalcie_beheerabonnementen_uitschakelen', {mlt_repetitie_id: abonnement.maaltijd_repetitie.mlt_repetitie_id, uid: vanuid}) }}
 {%- else -%}
 	{{ url('csrdelft_maalcie_beheerabonnementen_inschakelen', {mlt_repetitie_id: abonnement.maaltijd_repetitie.mlt_repetitie_id, uid: vanuid}) }}
 {%- endif -%}"
-		 class="btn post {% if uid %}abonnement-ingeschakeld{% else %}abonnement-uitgeschakeld{% endif %}">
-		<input type="checkbox" id="box-{{ vanuid }}-{{ abonnement.maaltijd_repetitie.mlt_repetitie_id }}"
-					 name="abo-{{ abonnement.maaltijd_repetitie.mlt_repetitie_id }}" {% if uid %}checked="checked"{% endif %} />
-	</a>
+       class="btn post {% if uid %}abonnement-ingeschakeld{% else %}abonnement-uitgeschakeld{% endif %}">
+        <input type="checkbox" id="box-{{ vanuid }}-{{ abonnement.maaltijd_repetitie.mlt_repetitie_id }}"
+               name="abo-{{ abonnement.maaltijd_repetitie.mlt_repetitie_id }}"
+               {% if uid %}checked="checked"{% endif %} />
+    </a>
 </td>

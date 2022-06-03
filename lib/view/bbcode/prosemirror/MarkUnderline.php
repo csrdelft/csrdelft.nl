@@ -9,23 +9,23 @@ use CsrDelft\bb\tag\BbUnderline;
 
 class MarkUnderline implements Mark
 {
-	public static function getBbTagType()
-	{
-		return BbUnderline::class;
-	}
+    public static function getBbTagType()
+    {
+        return BbUnderline::class;
+    }
 
-	public function getData(BbNode $node)
-	{
-		return [];
-	}
+    public function getData(BbNode $node)
+    {
+        return [];
+    }
 
-	public static function getMarkType()
-	{
-		return 'underline';
-	}
+    public static function getMarkType()
+    {
+        return 'underline';
+    }
 
-	public function getTagAttributes($mark)
-	{
-		return [];
-	}
+    public function getTagAttributes($mark)
+    {
+        return [];
+    }
 }

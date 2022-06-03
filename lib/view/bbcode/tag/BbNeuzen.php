@@ -10,22 +10,26 @@ use CsrDelft\view\Icon;
  * @since 27/03/2019
  * @example [neuzen]2o13[/neuzen]
  */
-class BbNeuzen extends BbTag {
-	public static function getTagName() {
-		return 'neuzen';
-	}
+class BbNeuzen extends BbTag
+{
+    public static function getTagName()
+    {
+        return 'neuzen';
+    }
 
-	public function render() {
-		$content = $this->getContent();
-		if (lid_instelling('layout', 'neuzen') != 'nee') {
-			$neus = Icon::getTag('circle', null, 'Neus 2013', 'neus2013');
-			$content = str_replace('o', $neus, $content);
-		}
+    public function render()
+    {
+        $content = $this->getContent();
+        if (lid_instelling('layout', 'neuzen') != 'nee') {
+            $neus = Icon::getTag('circle', null, 'Neus 2013', 'neus2013');
+            $content = str_replace('o', $neus, $content);
+        }
 
-		return '<span data-neuzen>' . $content . '</span>';
-	}
+        return '<span data-neuzen>' . $content . '</span>';
+    }
 
-	public function parse($arguments = []) {
-		$this->readContent([], false);
-	}
+    public function parse($arguments = [])
+    {
+        $this->readContent([], false);
+    }
 }

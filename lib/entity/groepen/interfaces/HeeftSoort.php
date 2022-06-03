@@ -6,11 +6,12 @@ namespace CsrDelft\entity\groepen\interfaces;
 
 use CsrDelft\common\Enum;
 
-interface HeeftSoort {
-	/**
-	 * @return Enum
-	 */
-	public function getSoort();
+interface HeeftSoort
+{
+    /**
+     * @return Enum
+     */
+    public function getSoort();
 
-	public function setSoort($soort);
+    public function setSoort($soort);
 }

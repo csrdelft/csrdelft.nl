@@ -16,56 +16,59 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Table("acl")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class AccessControl {
-	/**
-	 * AclController / View / etc.
-	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
-	 * @Serializer\Groups("datatable")
-	 */
-	public $environment;
-	/**
-	 * Action
-	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
-	 */
-	public $action;
-	/**
-	 * UUID
-	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
-	 */
-	public $resource;
-	/**
-	 * Benodigde rechten
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $subject;
+class AccessControl
+{
+    /**
+     * AclController / View / etc.
+     * @var string
+     * @ORM\Column(type="stringkey")
+     * @ORM\Id()
+     * @Serializer\Groups("datatable")
+     */
+    public $environment;
+    /**
+     * Action
+     * @var string
+     * @ORM\Column(type="stringkey")
+     * @ORM\Id()
+     */
+    public $action;
+    /**
+     * UUID
+     * @var string
+     * @ORM\Column(type="stringkey")
+     * @ORM\Id()
+     */
+    public $resource;
+    /**
+     * Benodigde rechten
+     * @var string
+     * @ORM\Column(type="string")
+     * @Serializer\Groups("datatable")
+     */
+    public $subject;
 
-	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("action")
-	 */
-	public function getDataTableAction() {
-		return AccessAction::from($this->action)->getDescription();
-	}
+    /**
+     * @return string
+     * @Serializer\Groups("datatable")
+     * @Serializer\SerializedName("action")
+     */
+    public function getDataTableAction()
+    {
+        return AccessAction::from($this->action)->getDescription();
+    }
 
-	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("resource")
-	 */
-	public function getDataTableResource() {
-		if ($this->resource === '*') {
-			return 'Elke ' . lcfirst($this->environment);
-		} else {
-			return 'Deze ' . lcfirst($this->environment);
-		}
-	}
+    /**
+     * @return string
+     * @Serializer\Groups("datatable")
+     * @Serializer\SerializedName("resource")
+     */
+    public function getDataTableResource()
+    {
+        if ($this->resource === '*') {
+            return 'Elke ' . lcfirst($this->environment);
+        } else {
+            return 'Deze ' . lcfirst($this->environment);
+        }
+    }
 }

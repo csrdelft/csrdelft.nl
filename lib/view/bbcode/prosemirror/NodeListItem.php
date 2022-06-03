@@ -8,28 +8,28 @@ use CsrDelft\bb\tag\BbNode;
 class NodeListItem implements Node
 {
 
-	public static function getBbTagType()
-	{
-		return BbListItem::class;
-	}
+    public static function getBbTagType()
+    {
+        return BbListItem::class;
+    }
 
-	public static function getNodeType()
-	{
-		return 'list_item';
-	}
+    public static function getNodeType()
+    {
+        return 'list_item';
+    }
 
-	public function getData(BbNode $node)
-	{
-		return [];
-	}
+    public function getData(BbNode $node)
+    {
+        return [];
+    }
 
-	public function getTagAttributes($node)
-	{
-		return [];
-	}
+    public function getTagAttributes($node)
+    {
+        return [];
+    }
 
-	public function selfClosing()
-	{
-		return false;
-	}
+    public function selfClosing()
+    {
+        return false;
+    }
 }

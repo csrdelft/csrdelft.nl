@@ -15,21 +15,21 @@ use CsrDelft\view\formulier\ModalForm;
  */
 class PeilingOptieForm extends ModalForm
 {
-	/**
-	 * @param PeilingOptie $model
-	 * @param int $id
-	 */
-	public function __construct($model, $id)
-	{
-		parent::__construct($model,'/peilingen/opties/' . $id . '/toevoegen', 'Optie toevoegen', true);
+    /**
+     * @param PeilingOptie $model
+     * @param int $id
+     */
+    public function __construct($model, $id)
+    {
+        parent::__construct($model, '/peilingen/opties/' . $id . '/toevoegen', 'Optie toevoegen', true);
 
-		$fields = [];
-		$fields[] = new HiddenField('peiling_id', $model->peiling_id);
-		$fields[] = new RequiredTextField('titel', $model->titel, 'Titel');
-		$fields[] = new ProsemirrorField('beschrijving', $model->beschrijving, 'Beschrijving');
+        $fields = [];
+        $fields[] = new HiddenField('peiling_id', $model->peiling_id);
+        $fields[] = new RequiredTextField('titel', $model->titel, 'Titel');
+        $fields[] = new ProsemirrorField('beschrijving', $model->beschrijving, 'Beschrijving');
 
-		$this->addFields($fields);
+        $this->addFields($fields);
 
-		$this->formKnoppen = new FormDefaultKnoppen();
-	}
+        $this->formKnoppen = new FormDefaultKnoppen();
+    }
 }

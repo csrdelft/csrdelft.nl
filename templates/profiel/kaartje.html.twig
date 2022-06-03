@@ -1,38 +1,38 @@
 <div class="card visitekaartje flex-row">
-	<div class="card-body {% if profiel.jarig %}jarig{% endif %}">
-		{% if profiel.account and profiel.account | may_su_to %}
-			<div class="float-end">
-				<a href="?_switch_user={{ profiel.uid }}" title="Su naar dit lid">{{ profiel.uid }}</a>
-			</div>
-		{% endif %}
-		<p class="naam">
-			<a href="{{ url('csrdelft_profiel_profiel', {uid: profiel.uid}) }}" class="lidLink {{ profiel.status }}">
-				{{ profiel.naam('volledig') | raw }} &nbsp; {{ profiel.char }}
-			</a>
-		</p>
-		<p>
-			{{ profiel.lidjaar }}
-			{% if profiel.verticale %}
-				{{ profiel.verticale().naam }}
-			{% endif %}
-		</p>
-		{% set bestuurslid = getBestuurslid(profiel) %}
-		{% if bestuurslid %}
-			<p><a
-					href="{{ bestuurslid.groep.url }}">{{ bestuurslid.groep.status.description }} {{ bestuurslid.opmerking }}</a>
-			</p>
-		{% endif %}
+    <div class="card-body {% if profiel.jarig %}jarig{% endif %}">
+        {% if profiel.account and profiel.account | may_su_to %}
+            <div class="float-end">
+                <a href="?_switch_user={{ profiel.uid }}" title="Su naar dit lid">{{ profiel.uid }}</a>
+            </div>
+        {% endif %}
+        <p class="naam">
+            <a href="{{ url('csrdelft_profiel_profiel', {uid: profiel.uid}) }}" class="lidLink {{ profiel.status }}">
+                {{ profiel.naam('volledig') | raw }} &nbsp; {{ profiel.char }}
+            </a>
+        </p>
+        <p>
+            {{ profiel.lidjaar }}
+            {% if profiel.verticale %}
+                {{ profiel.verticale().naam }}
+            {% endif %}
+        </p>
+        {% set bestuurslid = getBestuurslid(profiel) %}
+        {% if bestuurslid %}
+            <p><a
+                        href="{{ bestuurslid.groep.url }}">{{ bestuurslid.groep.status.description }} {{ bestuurslid.opmerking }}</a>
+            </p>
+        {% endif %}
 
-		{% for commissielid in getCommissielid(profiel) %}
-			{% if commissielid.groep.status.isHT %}
-				<p>
-					{% if commissielid.opmerking is not empty %}
-						{{ commissielid.opmerking }} <br/>
-					{% endif %}
-					<a href="{{ commissielid.groep.url }}">{{ commissielid.groep.naam }}</a></p>
-			{% endif %}
-		{% endfor %}
+        {% for commissielid in getCommissielid(profiel) %}
+            {% if commissielid.groep.status.isHT %}
+                <p>
+                    {% if commissielid.opmerking is not empty %}
+                        {{ commissielid.opmerking }} <br/>
+                    {% endif %}
+                    <a href="{{ commissielid.groep.url }}">{{ commissielid.groep.naam }}</a></p>
+            {% endif %}
+        {% endfor %}
 
-	</div>
-	{{ profiel.pasfotoTag('') | raw }}
+    </div>
+    {{ profiel.pasfotoTag('') | raw }}
 </div>

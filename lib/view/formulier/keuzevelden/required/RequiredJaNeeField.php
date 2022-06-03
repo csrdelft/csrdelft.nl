@@ -12,8 +12,9 @@ use CsrDelft\view\formulier\keuzevelden\JaNeeField;
  *
  * @see JaNeeField
  */
-class RequiredJaNeeField extends JaNeeField {
+class RequiredJaNeeField extends JaNeeField
+{
 
-	public $required = true;
+    public $required = true;
 
 }

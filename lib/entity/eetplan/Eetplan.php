@@ -15,69 +15,73 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *   uniqueConstraints={@ORM\UniqueConstraint(name="noviet_woonoord", columns={"uid", "woonoord_id"})}
  * )
  */
-class Eetplan implements DataTableEntry {
-	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @Serializer\Groups("datatable")
-	 * @ORM\GeneratedValue()
-	 */
-	public $id;
-	/**
-	 * @var Woonoord
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\groepen\Woonoord")
-	 */
-	public $woonoord;
+class Eetplan implements DataTableEntry
+{
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     * @ORM\Id()
+     * @Serializer\Groups("datatable")
+     * @ORM\GeneratedValue()
+     */
+    public $id;
+    /**
+     * @var Woonoord
+     * @ORM\ManyToOne(targetEntity="CsrDelft\entity\groepen\Woonoord")
+     */
+    public $woonoord;
 
-	/**
-	 * @ORM\Column(type="date", nullable=true)
-	 * @var DateTimeImmutable
-	 */
-	public $avond;
-	/**
-	 * Specifiek bedoelt voor bekende huizen.
-	 *
-	 * @ORM\Column(type="string", nullable=true)
-	 * @var string
-	 * @Serializer\Groups("datatable")
-	 */
-	public $opmerking;
-	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-	 */
-	public $noviet;
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     * @var DateTimeImmutable
+     */
+    public $avond;
+    /**
+     * Specifiek bedoelt voor bekende huizen.
+     *
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     * @Serializer\Groups("datatable")
+     */
+    public $opmerking;
+    /**
+     * @var Profiel
+     * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+     * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+     */
+    public $noviet;
 
-	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("woonoord")
-	 */
-	public function getDataTableWoonoord() {
-		return $this->woonoord->naam;
-	}
+    /**
+     * @return string
+     * @Serializer\Groups("datatable")
+     * @Serializer\SerializedName("woonoord")
+     */
+    public function getDataTableWoonoord()
+    {
+        return $this->woonoord->naam;
+    }
 
-	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("naam")
-	 */
-	public function getDataTableNaam() {
-		return $this->noviet->getNaam();
-	}
+    /**
+     * @return string
+     * @Serializer\Groups("datatable")
+     * @Serializer\SerializedName("naam")
+     */
+    public function getDataTableNaam()
+    {
+        return $this->noviet->getNaam();
+    }
 
-	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("avond")
-	 */
-	public function getDataTableAvond() {
-		if ($this->avond) {
-			return date_format_intl($this->avond, DATE_FORMAT);
-		} else {
-			return null;
-		}
-	}
+    /**
+     * @return string
+     * @Serializer\Groups("datatable")
+     * @Serializer\SerializedName("avond")
+     */
+    public function getDataTableAvond()
+    {
+        if ($this->avond) {
+            return date_format_intl($this->avond, DATE_FORMAT);
+        } else {
+            return null;
+        }
+    }
 }

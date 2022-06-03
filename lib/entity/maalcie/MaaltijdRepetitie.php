@@ -30,111 +30,119 @@ use Monolog\DateTimeImmutable;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository")
  * @ORM\Table("mlt_repetities")
  */
-class MaaltijdRepetitie implements DisplayEntity {
-	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $mlt_repetitie_id;
-	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $product_id;
-	/**
-	 * @var CiviProduct
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\fiscaat\CiviProduct")
-	 */
-	public $product;
-	/**
-	 * 0: Sunday
-	 * 6: Saturday
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $dag_vd_week;
-	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $periode_in_dagen;
-	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $standaard_titel;
-	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="time")
-	 */
-	public $standaard_tijd;
-	/**
-	 * @var int|null
-	 * @ORM\Column(type="integer", nullable=true)
-	 */
-	public $standaard_prijs;
-	/**
-	 * @var boolean
-	 * @ORM\Column(type="boolean")
-	 */
-	public $abonneerbaar;
-	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 */
-	public $standaard_limiet;
-	/**
-	 * @var string
-	 * @ORM\Column(type="string", nullable=true)
-	 */
-	public $abonnement_filter;
+class MaaltijdRepetitie implements DisplayEntity
+{
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     */
+    public $mlt_repetitie_id;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    public $product_id;
+    /**
+     * @var CiviProduct
+     * @ORM\ManyToOne(targetEntity="CsrDelft\entity\fiscaat\CiviProduct")
+     */
+    public $product;
+    /**
+     * 0: Sunday
+     * 6: Saturday
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    public $dag_vd_week;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    public $periode_in_dagen;
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    public $standaard_titel;
+    /**
+     * @var DateTimeImmutable
+     * @ORM\Column(type="time")
+     */
+    public $standaard_tijd;
+    /**
+     * @var int|null
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    public $standaard_prijs;
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     */
+    public $abonneerbaar;
+    /**
+     * @var integer
+     * @ORM\Column(type="integer")
+     */
+    public $standaard_limiet;
+    /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    public $abonnement_filter;
 
-	public function getStandaardPrijs() {
-		return $this->product->getPrijsInt();
-	}
+    public function getStandaardPrijs()
+    {
+        return $this->product->getPrijsInt();
+    }
 
-	public function getDagVanDeWeekText() {
-		return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
-	}
+    public function getDagVanDeWeekText()
+    {
+        return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
+    }
 
-	public function getPeriodeInDagenText() {
-		switch ($this->periode_in_dagen) {
-			case 0:
-				return '-';
-			case 1:
-				return 'elke dag';
-			case 7:
-				return 'elke week';
-			default:
-				if ($this->periode_in_dagen % 7 === 0) {
-					return 'elke ' . ($this->periode_in_dagen / 7) . ' weken';
-				} else {
-					return 'elke ' . $this->periode_in_dagen . ' dagen';
-				}
-		}
-	}
+    public function getPeriodeInDagenText()
+    {
+        switch ($this->periode_in_dagen) {
+            case 0:
+                return '-';
+            case 1:
+                return 'elke dag';
+            case 7:
+                return 'elke week';
+            default:
+                if ($this->periode_in_dagen % 7 === 0) {
+                    return 'elke ' . ($this->periode_in_dagen / 7) . ' weken';
+                } else {
+                    return 'elke ' . $this->periode_in_dagen . ' dagen';
+                }
+        }
+    }
 
-	public function getStandaardPrijsFloat() {
-		return (float)$this->getStandaardPrijs() / 100.0;
-	}
+    public function getStandaardPrijsFloat()
+    {
+        return (float)$this->getStandaardPrijs() / 100.0;
+    }
 
-	public function getFirstOccurrence() {
-		$datum = time();
-		$shift = $this->dag_vd_week - date('w', $datum) + 7;
-		$shift %= 7;
-		if ($shift > 0) {
-			$datum = strtotime('+' . $shift . ' days', $datum);
-		}
-		return date('Y-m-d', $datum);
-	}
+    public function getFirstOccurrence()
+    {
+        $datum = time();
+        $shift = $this->dag_vd_week - date('w', $datum) + 7;
+        $shift %= 7;
+        if ($shift > 0) {
+            $datum = strtotime('+' . $shift . ' days', $datum);
+        }
+        return date('Y-m-d', $datum);
+    }
 
-	public function getId() {
-		return $this->mlt_repetitie_id;
-	}
+    public function getId()
+    {
+        return $this->mlt_repetitie_id;
+    }
 
-	public function getWeergave(): string {
-		return $this->standaard_titel ?? "";
-	}
+    public function getWeergave(): string
+    {
+        return $this->standaard_titel ?? "";
+    }
 }

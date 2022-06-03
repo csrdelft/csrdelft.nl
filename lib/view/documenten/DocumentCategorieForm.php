@@ -13,21 +13,21 @@ use CsrDelft\view\formulier\keuzevelden\required\RequiredCheckboxField;
 
 class DocumentCategorieForm implements FormulierTypeInterface
 {
-	/**
-	 * @param FormulierBuilder $builder
-	 * @param DocumentCategorie $data
-	 * @param array $options
-	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
-	{
-		$builder->setTitel('Categorie bewerken');
+    /**
+     * @param FormulierBuilder $builder
+     * @param DocumentCategorie $data
+     * @param array $options
+     */
+    public function createFormulier(FormulierBuilder $builder, $data, $options = [])
+    {
+        $builder->setTitel('Categorie bewerken');
 
-		$fields = [];
-		$fields[] = new RequiredTextField('naam', $data->naam, 'Naam');
-		$fields[] = new RequiredCheckboxField('zichtbaar', $data->zichtbaar, 'Zichtbaar');
-		$fields[] = new RequiredRechtenField('leesrechten', $data->leesrechten, 'Leesrechten');
-		$fields[] = new RequiredRechtenField('schrijfrechten', $data->schrijfrechten, 'Schrijfrechten');
+        $fields = [];
+        $fields[] = new RequiredTextField('naam', $data->naam, 'Naam');
+        $fields[] = new RequiredCheckboxField('zichtbaar', $data->zichtbaar, 'Zichtbaar');
+        $fields[] = new RequiredRechtenField('leesrechten', $data->leesrechten, 'Leesrechten');
+        $fields[] = new RequiredRechtenField('schrijfrechten', $data->schrijfrechten, 'Schrijfrechten');
 
-		$builder->addFields($fields);
-	}
+        $builder->addFields($fields);
+    }
 }

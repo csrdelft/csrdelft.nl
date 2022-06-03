@@ -14,37 +14,39 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\CourantRepository")
  * @ORM\Table("courant")
  */
-class Courant {
-	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $id;
-	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime", name="verzendMoment")
-	 */
-	public $verzendMoment;
-	/**
-	 * @var string
-	 * @ORM\Column(type="text")
-	 */
-	public $inhoud;
-	/**
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 */
-	public $verzender;
-	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="verzender", referencedColumnName="uid")
-	 */
-	public $verzender_profiel;
+class Courant
+{
+    /**
+     * @var integer
+     * @ORM\Column(type="integer")
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     */
+    public $id;
+    /**
+     * @var DateTimeImmutable
+     * @ORM\Column(type="datetime", name="verzendMoment")
+     */
+    public $verzendMoment;
+    /**
+     * @var string
+     * @ORM\Column(type="text")
+     */
+    public $inhoud;
+    /**
+     * @var string
+     * @ORM\Column(type="uid")
+     */
+    public $verzender;
+    /**
+     * @var Profiel
+     * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+     * @ORM\JoinColumn(name="verzender", referencedColumnName="uid")
+     */
+    public $verzender_profiel;
 
-	public function getJaar() {
-		return $this->verzendMoment->format('Y');
-	}
+    public function getJaar()
+    {
+        return $this->verzendMoment->format('Y');
+    }
 }

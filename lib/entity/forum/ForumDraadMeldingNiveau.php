@@ -14,18 +14,19 @@ use CsrDelft\common\Enum;
  * @method static boolean isVERMELDING($niveau)
  * @method static boolean isALTIJD($niveau)
  */
-class ForumDraadMeldingNiveau extends Enum {
+class ForumDraadMeldingNiveau extends Enum
+{
 
-	const NOOIT = 'nooit';
-	const VERMELDING = 'vermelding';
-	const ALTIJD = 'altijd';
+    const NOOIT = 'nooit';
+    const VERMELDING = 'vermelding';
+    const ALTIJD = 'altijd';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $mapChoiceToDescription = [
-		self::NOOIT => 'Nooit',
-		self::VERMELDING => 'Bij vermelding',
-		self::ALTIJD => 'Altijd'
-	];
+    /**
+     * @var string[]
+     */
+    protected static $mapChoiceToDescription = [
+        self::NOOIT => 'Nooit',
+        self::VERMELDING => 'Bij vermelding',
+        self::ALTIJD => 'Altijd'
+    ];
 }

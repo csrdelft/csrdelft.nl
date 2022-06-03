@@ -14,17 +14,20 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\OnderverenigingenRepository")
  */
-class Ondervereniging extends Groep {
-	use GroepMoment;
-	/**
-	 * (Adspirant-)Ondervereniging
-	 * @var OnderverenigingStatus
-	 * @ORM\Column(type="enumOnderverenigingStatus")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $onderverenigingStatus;
+class Ondervereniging extends Groep
+{
+    use GroepMoment;
 
-	public function getUrl() {
-		return '/groepen/onderverenigingen/' . $this->id;
-	}
+    /**
+     * (Adspirant-)Ondervereniging
+     * @var OnderverenigingStatus
+     * @ORM\Column(type="enumOnderverenigingStatus")
+     * @Serializer\Groups("datatable")
+     */
+    public $onderverenigingStatus;
+
+    public function getUrl()
+    {
+        return '/groepen/onderverenigingen/' . $this->id;
+    }
 }

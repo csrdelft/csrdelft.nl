@@ -3,713 +3,727 @@
 {% block titel %}Het profiel van {{ profiel.naam('volledig') }}{% endblock %}
 
 {% block breadcrumbs %}
-	{{ csr_breadcrumbs({
-		(url('default')): 'main',
-		(url('csrdelft_ledenlijst_lijst')): 'Leden',
-		'': profiel.naam('civitas')
-	}) }}
+    {{ csr_breadcrumbs({
+        (url('default')): 'main',
+        (url('csrdelft_ledenlijst_lijst')): 'Leden',
+        '': profiel.naam('civitas')
+    }) }}
 {% endblock %}
 
 {% block content %}
-	<div id="profiel" class="container {{ profiel.profielClasses }}">
-		<div id="profielregel">
-			<div class="row">
-				<div class="col">
-					<h1 class="col" title="Lid-status: {{ profiel.lidStatusDescription }}">
-						{% if profiel.char %}
-							<span class="status">
+    <div id="profiel" class="container {{ profiel.profielClasses }}">
+        <div id="profielregel">
+            <div class="row">
+                <div class="col">
+                    <h1 class="col" title="Lid-status: {{ profiel.lidStatusDescription }}">
+                        {% if profiel.char %}
+                            <span class="status">
 							{{ profiel.char }}
 					</span>
-						{% endif %}
-						{{ profiel.naam('volledig') }}
-					</h1>
+                        {% endif %}
+                        {{ profiel.naam('volledig') }}
+                    </h1>
 
-					<div class="row">
-						<div class="col-md"></div>
-						<div class="col-md-auto">
-							{{ profiel.pasfotoTag('rounded shadow-sm') | raw }}
-						</div>
-						<div class="col-md">
-							{% if 'banaan' in profiel.profielOpties %}
-								<img src="{{ absolute_url(asset_url('images/banaan.gif')) }}" alt="Dansende banaan"
-										 class="banaan clear">
-							{% endif %}
-						</div>
-					</div>
-				</div>
+                    <div class="row">
+                        <div class="col-md"></div>
+                        <div class="col-md-auto">
+                            {{ profiel.pasfotoTag('rounded shadow-sm') | raw }}
+                        </div>
+                        <div class="col-md">
+                            {% if 'banaan' in profiel.profielOpties %}
+                                <img src="{{ absolute_url(asset_url('images/banaan.gif')) }}" alt="Dansende banaan"
+                                     class="banaan clear">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
 
-				<div class="col-auto">
-					<div class="list-group">
-						{% if profiel.inGoogleContacts %}
-							<a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}" class="list-group-item"
-								 title="Dit profiel opdateren in mijn google adresboek">
-								<img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"
-										 alt="opdateren in Google contacts"/>
-								Google Contacten
-							</a>
-						{% else %}
-							<a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}" class="list-group-item"
-								 title="Dit profiel toevoegen aan mijn google adresboek">
-								<img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"
-										 alt="toevoegen aan Google contacts"/>
-								Google Contacten
-							</a>
-						{% endif %}
-						<a href="{{ url('csrdelft_profiel_vcard', {uid: profiel.uid}) }}" class="list-group-item"
-							 title="Dit profiel opslaan in lokaal adresboek">
-							{{ icon('vcard_add') }} Exporteren
-						</a>
-						{% if profiel.magBewerken %}
-							<a href="{{ url('csrdelft_profiel_bewerken', {uid: profiel.uid}) }}" class="list-group-item"
-								 title="Bewerk dit profiel">
-								{{ icon('pencil') }} Profiel bewerken
-							</a>
-							<a href="{{ url('csrdelft_profiel_voorkeuren', {uid: profiel.uid}) }}" class="list-group-item"
-								 title="Pas voorkeuren voor commissies aan">
-								{{ icon('report_edit') }} Commissievoorkeuren
-							</a>
-							<a href="{{ url('csrdelft_toestemming_get_overzicht') }}" class="list-group-item"
-								 title="Pas toestemming aan">
-								{{ icon('lock_edit') }} Toestemming
-							</a>
-						{% endif %}
-						{% if mag('P_ADMIN') or app.user.uid == profiel.uid %}
-							{% if profiel.account %}
-								<a href="{{ url('csrdelft_account_bewerken', {uid: profiel.uid}) }}" class="list-group-item"
-									 title="Inloggegevens bewerken">
-									{{ icon('key') }} Inloggegevens bewerken
-								</a>
-							{% else %}
-								{% if mag('P_ADMIN') %}
-									<a href="{{ url('csrdelft_account_aanmaken', {uid: profiel.uid}) }}" class="list-group-item"
-										 title="Account aanmaken">
-										{{ icon('key_delete', 'key_add') }} Account aanmaken
-									</a>
-								{% endif %}
-							{% endif %}
-						{% endif %}
-					</div>
-				</div>
-			</div>
-		</div>
+                <div class="col-auto">
+                    <div class="list-group">
+                        {% if profiel.inGoogleContacts %}
+                            <a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}"
+                               class="list-group-item"
+                               title="Dit profiel opdateren in mijn google adresboek">
+                                <img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"
+                                     alt="opdateren in Google contacts"/>
+                                Google Contacten
+                            </a>
+                        {% else %}
+                            <a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}"
+                               class="list-group-item"
+                               title="Dit profiel toevoegen aan mijn google adresboek">
+                                <img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"
+                                     alt="toevoegen aan Google contacts"/>
+                                Google Contacten
+                            </a>
+                        {% endif %}
+                        <a href="{{ url('csrdelft_profiel_vcard', {uid: profiel.uid}) }}" class="list-group-item"
+                           title="Dit profiel opslaan in lokaal adresboek">
+                            {{ icon('vcard_add') }} Exporteren
+                        </a>
+                        {% if profiel.magBewerken %}
+                            <a href="{{ url('csrdelft_profiel_bewerken', {uid: profiel.uid}) }}" class="list-group-item"
+                               title="Bewerk dit profiel">
+                                {{ icon('pencil') }} Profiel bewerken
+                            </a>
+                            <a href="{{ url('csrdelft_profiel_voorkeuren', {uid: profiel.uid}) }}"
+                               class="list-group-item"
+                               title="Pas voorkeuren voor commissies aan">
+                                {{ icon('report_edit') }} Commissievoorkeuren
+                            </a>
+                            <a href="{{ url('csrdelft_toestemming_get_overzicht') }}" class="list-group-item"
+                               title="Pas toestemming aan">
+                                {{ icon('lock_edit') }} Toestemming
+                            </a>
+                        {% endif %}
+                        {% if mag('P_ADMIN') or app.user.uid == profiel.uid %}
+                            {% if profiel.account %}
+                                <a href="{{ url('csrdelft_account_bewerken', {uid: profiel.uid}) }}"
+                                   class="list-group-item"
+                                   title="Inloggegevens bewerken">
+                                    {{ icon('key') }} Inloggegevens bewerken
+                                </a>
+                            {% else %}
+                                {% if mag('P_ADMIN') %}
+                                    <a href="{{ url('csrdelft_account_aanmaken', {uid: profiel.uid}) }}"
+                                       class="list-group-item"
+                                       title="Account aanmaken">
+                                        {{ icon('key_delete', 'key_add') }} Account aanmaken
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
-		<div class="row">
-			<dl class="col-md-6">
-				<dt>Naam</dt>
-				<dd>{{ profiel.naam('civitas') }}</dd>
-				<dt>Lidnummer</dt>
-				<dd>
-					{% if profiel.account and profiel.account | may_su_to %}
-						<a href="?_switch_user={{ profiel.uid }}" title="Su naar dit lid">{{ profiel.uid }}</a>
-					{% else %}
-						{{ profiel.uid }}
-					{% endif %}
-				</dd>
-				{% if profiel.nickname %}
-					<dt>Bijnaam:</dt>
-					<dd>{{ profiel.nickname }}</dd>
-				{% endif %}
-				{% if profiel.duckname %}
-					<dt>Duckstad-naam</dt>
-					<dd>{{ profiel.duckname }}</dd>
-				{% endif %}
-				{% if profiel.voorletters and profiel | is_zichtbaar('voorletters') %}
-					<dt>Voorletters</dt>
-					<dd>{{ profiel.voorletters }}</dd>
-				{% endif %}
-				{% if profiel.gebdatum and profiel | is_zichtbaar('gebdatum') %}
-					<dt>Geboortedatum</dt>
-					<dd>{{ profiel.gebdatum | date_format }}</dd>
-				{% endif %}
-				{% if profiel.status == 'S_OVERLEDEN' and profiel.sterfdatum %}
-					<dt>Overleden op</dt>
-					<dd>{{ profiel.sterfdatum | date_format }}</dd>
-				{% endif %}
-				{% if profiel.echtgenoot %}
-					{% set echtgenoot = get_profiel(profiel.echtgenoot) %}
-					<dt>
-						{% if echtgenoot.geslacht.isVrouw %}Echtgenote{% else %}Echtgenoot{% endif %}
-					</dt>
-					<dd>{{ echtgenoot.link('civitas') | raw }}</dd>
-				{% endif %}
-			</dl>
-		</div>
+        <div class="row">
+            <dl class="col-md-6">
+                <dt>Naam</dt>
+                <dd>{{ profiel.naam('civitas') }}</dd>
+                <dt>Lidnummer</dt>
+                <dd>
+                    {% if profiel.account and profiel.account | may_su_to %}
+                        <a href="?_switch_user={{ profiel.uid }}" title="Su naar dit lid">{{ profiel.uid }}</a>
+                    {% else %}
+                        {{ profiel.uid }}
+                    {% endif %}
+                </dd>
+                {% if profiel.nickname %}
+                    <dt>Bijnaam:</dt>
+                    <dd>{{ profiel.nickname }}</dd>
+                {% endif %}
+                {% if profiel.duckname %}
+                    <dt>Duckstad-naam</dt>
+                    <dd>{{ profiel.duckname }}</dd>
+                {% endif %}
+                {% if profiel.voorletters and profiel | is_zichtbaar('voorletters') %}
+                    <dt>Voorletters</dt>
+                    <dd>{{ profiel.voorletters }}</dd>
+                {% endif %}
+                {% if profiel.gebdatum and profiel | is_zichtbaar('gebdatum') %}
+                    <dt>Geboortedatum</dt>
+                    <dd>{{ profiel.gebdatum | date_format }}</dd>
+                {% endif %}
+                {% if profiel.status == 'S_OVERLEDEN' and profiel.sterfdatum %}
+                    <dt>Overleden op</dt>
+                    <dd>{{ profiel.sterfdatum | date_format }}</dd>
+                {% endif %}
+                {% if profiel.echtgenoot %}
+                    {% set echtgenoot = get_profiel(profiel.echtgenoot) %}
+                    <dt>
+                        {% if echtgenoot.geslacht.isVrouw %}Echtgenote{% else %}Echtgenoot{% endif %}
+                    </dt>
+                    <dd>{{ echtgenoot.link('civitas') | raw }}</dd>
+                {% endif %}
+            </dl>
+        </div>
 
-		{% if profiel.status != 'S_OVERLEDEN' and (profiel.adres or profiel.o_adres) %}
-			<div class="row">
-				<dl class="col-md-6">
-					{% if profiel.adres and profiel | is_zichtbaar(['adres', 'postcode', 'woonplaats', 'land']) %}
-						<dt class="text-center">
-							<a target="_blank"
-								 href="https://maps.google.nl/maps?q={{ profiel.adres | url_encode }}+{{ profiel.woonplaats | url_encode }}+{{ profiel.land | url_encode }}"
-								 title="Open kaart" class="lichtgrijs fas fa-map-marked fa-5x not-external"></a>
-						</dt>
-						<dd>
-							<ul class="list-unstyled">
-								{% if profiel.woonoord %}
-									<li>
-										<a href="{{ profiel.woonoord.url }}" class="dikgedrukt">
-											{{ profiel.woonoord.naam }}
-										</a>
-									</li>
-								{% endif %}
-								<li>{{ profiel.adres }}</li>
-								<li>{{ profiel.postcode }} {{ profiel.woonplaats }}</li>
-								<li>{{ profiel.land }}</li>
-								{% if profiel.telefoon %}
-									<li>{{ profiel.telefoon }}</li>
-								{% endif %}
-								{% if profiel.mobiel %}
-									<li>{{ profiel.mobiel }}</li>
-								{% endif %}
-							</ul>
-						</dd>
-					{% endif %}
-				</dl>
-				{% if profiel.lid and profiel.o_adres and profiel | is_zichtbaar(['o_adres', 'o_postcode', 'o_woonplaats', 'o_land', 'o_telefoon']) %}
-					<dl class="col-md-6">
-						<dt class="text-center">
-							<a target="_blank"
-								 href="https://maps.google.nl/maps?q={{ profiel.o_adres | url_encode }}+{{ profiel.o_woonplaats | url_encode }}+{{ profiel.o_land | url_encode }}"
-								 title="Open kaart" class="lichtgrijs fas fa-map-marked fa-5x not-external"></a>
-						</dt>
-						<dd>
-							<ul class="list-unstyled">
-								<li><strong>Ouders</strong></li>
-								<li>{{ profiel.o_adres }}</li>
-								<li>{{ profiel.o_postcode }} {{ profiel.o_woonplaats }}</li>
-								<li>{{ profiel.o_land }}</li>
-								<li>{{ profiel.o_telefoon }}</li>
-							</ul>
-						</dd>
-					</dl>
-				{% endif %}
-			</div>
-		{% endif %}
+        {% if profiel.status != 'S_OVERLEDEN' and (profiel.adres or profiel.o_adres) %}
+            <div class="row">
+                <dl class="col-md-6">
+                    {% if profiel.adres and profiel | is_zichtbaar(['adres', 'postcode', 'woonplaats', 'land']) %}
+                        <dt class="text-center">
+                            <a target="_blank"
+                               href="https://maps.google.nl/maps?q={{ profiel.adres | url_encode }}+{{ profiel.woonplaats | url_encode }}+{{ profiel.land | url_encode }}"
+                               title="Open kaart" class="lichtgrijs fas fa-map-marked fa-5x not-external"></a>
+                        </dt>
+                        <dd>
+                            <ul class="list-unstyled">
+                                {% if profiel.woonoord %}
+                                    <li>
+                                        <a href="{{ profiel.woonoord.url }}" class="dikgedrukt">
+                                            {{ profiel.woonoord.naam }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                <li>{{ profiel.adres }}</li>
+                                <li>{{ profiel.postcode }} {{ profiel.woonplaats }}</li>
+                                <li>{{ profiel.land }}</li>
+                                {% if profiel.telefoon %}
+                                    <li>{{ profiel.telefoon }}</li>
+                                {% endif %}
+                                {% if profiel.mobiel %}
+                                    <li>{{ profiel.mobiel }}</li>
+                                {% endif %}
+                            </ul>
+                        </dd>
+                    {% endif %}
+                </dl>
+                {% if profiel.lid and profiel.o_adres and profiel | is_zichtbaar(['o_adres', 'o_postcode', 'o_woonplaats', 'o_land', 'o_telefoon']) %}
+                    <dl class="col-md-6">
+                        <dt class="text-center">
+                            <a target="_blank"
+                               href="https://maps.google.nl/maps?q={{ profiel.o_adres | url_encode }}+{{ profiel.o_woonplaats | url_encode }}+{{ profiel.o_land | url_encode }}"
+                               title="Open kaart" class="lichtgrijs fas fa-map-marked fa-5x not-external"></a>
+                        </dt>
+                        <dd>
+                            <ul class="list-unstyled">
+                                <li><strong>Ouders</strong></li>
+                                <li>{{ profiel.o_adres }}</li>
+                                <li>{{ profiel.o_postcode }} {{ profiel.o_woonplaats }}</li>
+                                <li>{{ profiel.o_land }}</li>
+                                <li>{{ profiel.o_telefoon }}</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                {% endif %}
+            </div>
+        {% endif %}
 
-		<div class="row">
-			<dl class="col-md-6">
-				{% if profiel | is_zichtbaar('email') %}
-					<dt>Email</dt>
-					<dd>{{ profiel.primaryEmail }}</dd>
-					{% if profiel.sec_email %}
-						<dt></dt>
-						<dd>{{ profiel.sec_email }}</dd>
-					{% endif %}
-				{% endif %}
+        <div class="row">
+            <dl class="col-md-6">
+                {% if profiel | is_zichtbaar('email') %}
+                    <dt>Email</dt>
+                    <dd>{{ profiel.primaryEmail }}</dd>
+                    {% if profiel.sec_email %}
+                        <dt></dt>
+                        <dd>{{ profiel.sec_email }}</dd>
+                    {% endif %}
+                {% endif %}
 
-				{% if profiel.linkedin %}
-					<dt>LinkedIn</dt>
-					<dd>{{ profiel.linkedin }}</dd>
-				{% endif %}
-				{% if profiel.website %}
-					<dt>Website</dt>
-					<dd>{{ profiel.website }}</dd>
-				{% endif %}
-			</dl>
-		</div>
+                {% if profiel.linkedin %}
+                    <dt>LinkedIn</dt>
+                    <dd>{{ profiel.linkedin }}</dd>
+                {% endif %}
+                {% if profiel.website %}
+                    <dt>Website</dt>
+                    <dd>{{ profiel.website }}</dd>
+                {% endif %}
+            </dl>
+        </div>
 
-		<div class="row">
-			<dl class="col-md-6">
-				{% if profiel.studie and profiel | is_zichtbaar('studie') %}
-					<dt>Studie</dt>
-					<dd>{{ profiel.studie }}</dd>
+        <div class="row">
+            <dl class="col-md-6">
+                {% if profiel.studie and profiel | is_zichtbaar('studie') %}
+                    <dt>Studie</dt>
+                    <dd>{{ profiel.studie }}</dd>
 
-					<dt>Studie sinds</dt>
-					<dd>{{ profiel.studiejaar }}</dd>
-				{% endif %}
-				<dt>Lid sinds</dt>
-				<dd>
-					{% if profiel.lidjaar %}
-						<a href="{{ url('csrdelft_ledenlijst_lijst') }}?q=lichting:{{ profiel.lidjaar }}&amp;status=ALL"
-							 title="Bekijk de leden van lichting {{ profiel.lidjaar }}">{{ profiel.lidjaar }}</a>
-					{% endif %}
-					{% if not profiel.lid and profiel.lidafdatum %}
-						tot {{ profiel.lidafdatum | date('Y') }}
-					{% endif %}
-				</dd>
-				<dt>Status</dt>
-				<dd>{{ profiel.lidStatusDescription }}</dd>
-				{% if profiel.beroep and profiel.oudlid %}
-					<dt>Beroep/werk</dt>
-					<dd>{{ profiel.beroep }}</dd>
-				{% endif %}
-			</dl>
-			{% if profiel | is_zichtbaar(['kinderen'], 'intern') and profiel | is_zichtbaar(['patroon'], 'profiel') %}
-				<dl class="col-md-6">
-					{% if profiel.patroonProfiel %}
-						<dt>
-							{% if profiel.patroonProfiel.geslacht.isVrouw %}Matroon{% else %}Patroon{% endif %}
-						</dt>
-						<dd>
-							{{ profiel.patroonProfiel.link('civitas') | raw }}
-						</dd>
-					{% endif %}
-					{% if profiel.kinderen %}
-						<dt>Kinderen</dt>
-						<dd>
-							<ul class="list-unstyled">
-								{% for kind in profiel.kinderen %}
-									<li>{{ kind.link('civitas') | raw }}</li>
-								{% endfor %}
-							</ul>
-						</dd>
-					{% endif %}
-					{% if profiel.patroonProfiel or profiel.kinderen %}
-						<dt></dt>
-						<dd>
-							<a class="btn btn-light" href="{{ url('csrdelft_profiel_stamboom', {uid: profiel.uid}) }}"
-								 title="Stamboom van {{ profiel.naam }}">
-								<span class="fas fa-tree"></span>
-								Stamboom bekijken
-							</a>
-						</dd>
-					{% endif %}
-				</dl>
-			{% endif %}
-		</div>
+                    <dt>Studie sinds</dt>
+                    <dd>{{ profiel.studiejaar }}</dd>
+                {% endif %}
+                <dt>Lid sinds</dt>
+                <dd>
+                    {% if profiel.lidjaar %}
+                        <a href="{{ url('csrdelft_ledenlijst_lijst') }}?q=lichting:{{ profiel.lidjaar }}&amp;status=ALL"
+                           title="Bekijk de leden van lichting {{ profiel.lidjaar }}">{{ profiel.lidjaar }}</a>
+                    {% endif %}
+                    {% if not profiel.lid and profiel.lidafdatum %}
+                        tot {{ profiel.lidafdatum | date('Y') }}
+                    {% endif %}
+                </dd>
+                <dt>Status</dt>
+                <dd>{{ profiel.lidStatusDescription }}</dd>
+                {% if profiel.beroep and profiel.oudlid %}
+                    <dt>Beroep/werk</dt>
+                    <dd>{{ profiel.beroep }}</dd>
+                {% endif %}
+            </dl>
+            {% if profiel | is_zichtbaar(['kinderen'], 'intern') and profiel | is_zichtbaar(['patroon'], 'profiel') %}
+                <dl class="col-md-6">
+                    {% if profiel.patroonProfiel %}
+                        <dt>
+                            {% if profiel.patroonProfiel.geslacht.isVrouw %}Matroon{% else %}Patroon{% endif %}
+                        </dt>
+                        <dd>
+                            {{ profiel.patroonProfiel.link('civitas') | raw }}
+                        </dd>
+                    {% endif %}
+                    {% if profiel.kinderen %}
+                        <dt>Kinderen</dt>
+                        <dd>
+                            <ul class="list-unstyled">
+                                {% for kind in profiel.kinderen %}
+                                    <li>{{ kind.link('civitas') | raw }}</li>
+                                {% endfor %}
+                            </ul>
+                        </dd>
+                    {% endif %}
+                    {% if profiel.patroonProfiel or profiel.kinderen %}
+                        <dt></dt>
+                        <dd>
+                            <a class="btn btn-light" href="{{ url('csrdelft_profiel_stamboom', {uid: profiel.uid}) }}"
+                               title="Stamboom van {{ profiel.naam }}">
+                                <span class="fas fa-tree"></span>
+                                Stamboom bekijken
+                            </a>
+                        </dd>
+                    {% endif %}
+                </dl>
+            {% endif %}
+        </div>
 
-		<div class="row">
-			<dl class="col-md-6">
-				{% if profiel.verticale and profiel|is_zichtbaar('verticale', 'intern') %}
-					<dt>Verticale</dt>
-					<dd>
-						<a
-							href="{{ url('csrdelft_ledenlijst_lijst') }}?q=verticale:{{ profiel.verticale().letter }}">{{ profiel.verticale().naam }}
-							{% if profiel.status == 'S_KRINGEL' %}
-								(kringel)
-							{% elseif profiel.kring and profiel.kring.lid(profiel.uid).opmerking == 'leider' %}
-								(kringleider)
-							{% elseif profiel.verticaleleider %}
-								(leider)
-							{% elseif profiel.kringcoach %}
-								<span title="Kringcoach van verticale {{ profiel.verticale().naam }}">(kringcoach)</span>
-							{% endif %}
-						</a>
-					</dd>
-				{% endif %}
-				{% if profiel.moot %}
-					<dt>Oude moot</dt>
-					<dd><a href="{{ url('csrdelft_ledenlijst_lijst') }}?q=moot:{{ profiel.moot }}">{{ profiel.moot }}</a></dd>
-				{% endif %}
-			</dl>
-			<dl class="col-md-6">
-				{% if profiel.kring and profiel|is_zichtbaar('kring', 'intern') %}
-					<dt>Kring</dt>
-					<dd>
-						<a href="{{ profiel.kring.url }}">{{ profiel.kring.naam }}</a>
-					</dd>
-				{% endif %}
-			</dl>
-		</div>
+        <div class="row">
+            <dl class="col-md-6">
+                {% if profiel.verticale and profiel|is_zichtbaar('verticale', 'intern') %}
+                    <dt>Verticale</dt>
+                    <dd>
+                        <a
+                                href="{{ url('csrdelft_ledenlijst_lijst') }}?q=verticale:{{ profiel.verticale().letter }}">{{ profiel.verticale().naam }}
+                            {% if profiel.status == 'S_KRINGEL' %}
+                                (kringel)
+                            {% elseif profiel.kring and profiel.kring.lid(profiel.uid).opmerking == 'leider' %}
+                                (kringleider)
+                            {% elseif profiel.verticaleleider %}
+                                (leider)
+                            {% elseif profiel.kringcoach %}
+                                <span title="Kringcoach van verticale {{ profiel.verticale().naam }}">(kringcoach)</span>
+                            {% endif %}
+                        </a>
+                    </dd>
+                {% endif %}
+                {% if profiel.moot %}
+                    <dt>Oude moot</dt>
+                    <dd>
+                        <a href="{{ url('csrdelft_ledenlijst_lijst') }}?q=moot:{{ profiel.moot }}">{{ profiel.moot }}</a>
+                    </dd>
+                {% endif %}
+            </dl>
+            <dl class="col-md-6">
+                {% if profiel.kring and profiel|is_zichtbaar('kring', 'intern') %}
+                    <dt>Kring</dt>
+                    <dd>
+                        <a href="{{ profiel.kring.url }}">{{ profiel.kring.naam }}</a>
+                    </dd>
+                {% endif %}
+            </dl>
+        </div>
 
-		<div class="row">
-			<dl class="col-md-6">
-				{% if besturen is not empty %}
-					<dt>Bestuur</dt>
-					<dd>
-						<ul class="list-unstyled">
-							{% for bestuur in besturen %}
-								<li><a href="{{ bestuur.url }}">{{ bestuur.naam | raw }}</a></li>
-							{% endfor %}
-						</ul>
-					</dd>
-				{% endif %}
-				{% if (commissies_ft is not empty or commissies_ht is not empty or commissies_ot is not empty) and profiel|is_zichtbaar('commissies', 'intern') %}
-					<dt>Commissies</dt>
-					<dd>
-						{% if commissies_ft is not empty %}
-							<abbr title="Future tempore (toekomstig)"><em>f.t.</em></abbr>
-							<ul class="list-unstyled">
-								{% for commissie in commissies_ft %}
-									<li><a href="{{ commissie.url }}">{{ commissie.naam | raw }}</a></li>
-								{% endfor %}
-							</ul>
-						{% endif %}
-						{% if commissies_ht is not empty %}
-							<abbr title="Hoc tempore (huidig)"><em>h.t.</em></abbr>
-							<ul class="list-unstyled">
-								{% for commissie in commissies_ht %}
-									<li><a href="{{ commissie.url }}">{{ commissie.naam | raw }}</a></li>
-								{% endfor %}
-							</ul>
-						{% endif %}
-						{% if commissies_ot is not empty %}
-							<abbr title="Olim tempore (voorheen)"><em>o.t.</em></abbr>
-							<ul class="list-unstyled">
-								{% for commissie in commissies_ot %}
-									<li><a href="{{ commissie.url }}">{{ commissie.naam | raw }}</a></li>
-								{% endfor %}
-							</ul>
-						{% endif %}
-					</dd>
-				{% endif %}
-				{% if onderverenigingen is not empty and profiel|is_zichtbaar('ondervereniging', 'intern') %}
-					<dt>Onderverenigingen</dt>
-					<dd>
-						<ul class="list-unstyled">
-							{% for ondervereniging in onderverenigingen %}
-								<li><a href="{{ ondervereniging.url }}">{{ ondervereniging.naam }}</a></li>
-							{% endfor %}
-						</ul>
-					</dd>
-				{% endif %}
-				{% if groepen is not empty and profiel|is_zichtbaar('groepen', 'intern') %}
-					<dt>Overigegroepen</dt>
-					<dd>
-						<ul class="list-unstyled">
-							{% for groep in groepen %}
-								<li><a href="{{ groep.url }}">{{ groep.naam | raw }}</a></li>
-							{% endfor %}
-						</ul>
-					</dd>
-				{% endif %}
-			</dl>
-			<dl class="col-md-6">
-				{% if werkgroepen is not empty and profiel|is_zichtbaar('werkgroepen', 'intern') %}
-					<dt>Werkgroepen</dt>
-					<dd>
-						<ul class="list-unstyled">
-							{% for werkgroep in werkgroepen %}
-								<li><a href="{{ werkgroep.url }}">{{ werkgroep.naam | raw }}</a></li>
-							{% endfor %}
-						</ul>
-					</dd>
-				{% endif %}
-			</dl>
-			{% if mag('P_LEDEN_MOD') or app.user.uid == profiel.uid %}
-				<div class="col-12 mb-3">
-					<a class="btn btn-primary" href="#"
-						 onclick="$(this).parent().remove(); $('.meer-groepen').slideDown();return false;" tabindex="0">
-						Toon activiteiten
-					</a>
-				</div>
-				<dl class="col-md-6 meer-groepen" style="display: none">
-					{% if ketzers is not empty %}
-						<dt>Aanschafketzers</dt>
-						<dd>
-							<ul class="list-unstyled">
-								{% for ketzer in ketzers %}
-									<li><a href="{{ ketzer.url }}">{{ ketzer.naam | raw }}</a></li>
-								{% endfor %}
-							</ul>
-						</dd>
-					{% endif %}
-				</dl>
-				<dl class="col-md-6 meer-groepen" style="display: none">
-					{% if activiteiten is not empty %}
-						<dt>Activiteiten</dt>
-						<dd>
-							<ul class="list-unstyled">
-								{% for activiteit in activiteiten %}
-									<li><a href="{{ activiteit.url }}">{{ activiteit.naam | raw }}</a></li>
-								{% endfor %}
-							</ul>
-						</dd>
-					{% endif %}
-				</dl>
-			{% endif %}
-		</div>
+        <div class="row">
+            <dl class="col-md-6">
+                {% if besturen is not empty %}
+                    <dt>Bestuur</dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            {% for bestuur in besturen %}
+                                <li><a href="{{ bestuur.url }}">{{ bestuur.naam | raw }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                {% endif %}
+                {% if (commissies_ft is not empty or commissies_ht is not empty or commissies_ot is not empty) and profiel|is_zichtbaar('commissies', 'intern') %}
+                    <dt>Commissies</dt>
+                    <dd>
+                        {% if commissies_ft is not empty %}
+                            <abbr title="Future tempore (toekomstig)"><em>f.t.</em></abbr>
+                            <ul class="list-unstyled">
+                                {% for commissie in commissies_ft %}
+                                    <li><a href="{{ commissie.url }}">{{ commissie.naam | raw }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if commissies_ht is not empty %}
+                            <abbr title="Hoc tempore (huidig)"><em>h.t.</em></abbr>
+                            <ul class="list-unstyled">
+                                {% for commissie in commissies_ht %}
+                                    <li><a href="{{ commissie.url }}">{{ commissie.naam | raw }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if commissies_ot is not empty %}
+                            <abbr title="Olim tempore (voorheen)"><em>o.t.</em></abbr>
+                            <ul class="list-unstyled">
+                                {% for commissie in commissies_ot %}
+                                    <li><a href="{{ commissie.url }}">{{ commissie.naam | raw }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </dd>
+                {% endif %}
+                {% if onderverenigingen is not empty and profiel|is_zichtbaar('ondervereniging', 'intern') %}
+                    <dt>Onderverenigingen</dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            {% for ondervereniging in onderverenigingen %}
+                                <li><a href="{{ ondervereniging.url }}">{{ ondervereniging.naam }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                {% endif %}
+                {% if groepen is not empty and profiel|is_zichtbaar('groepen', 'intern') %}
+                    <dt>Overigegroepen</dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            {% for groep in groepen %}
+                                <li><a href="{{ groep.url }}">{{ groep.naam | raw }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                {% endif %}
+            </dl>
+            <dl class="col-md-6">
+                {% if werkgroepen is not empty and profiel|is_zichtbaar('werkgroepen', 'intern') %}
+                    <dt>Werkgroepen</dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            {% for werkgroep in werkgroepen %}
+                                <li><a href="{{ werkgroep.url }}">{{ werkgroep.naam | raw }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                {% endif %}
+            </dl>
+            {% if mag('P_LEDEN_MOD') or app.user.uid == profiel.uid %}
+                <div class="col-12 mb-3">
+                    <a class="btn btn-primary" href="#"
+                       onclick="$(this).parent().remove(); $('.meer-groepen').slideDown();return false;" tabindex="0">
+                        Toon activiteiten
+                    </a>
+                </div>
+                <dl class="col-md-6 meer-groepen" style="display: none">
+                    {% if ketzers is not empty %}
+                        <dt>Aanschafketzers</dt>
+                        <dd>
+                            <ul class="list-unstyled">
+                                {% for ketzer in ketzers %}
+                                    <li><a href="{{ ketzer.url }}">{{ ketzer.naam | raw }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </dd>
+                    {% endif %}
+                </dl>
+                <dl class="col-md-6 meer-groepen" style="display: none">
+                    {% if activiteiten is not empty %}
+                        <dt>Activiteiten</dt>
+                        <dd>
+                            <ul class="list-unstyled">
+                                {% for activiteit in activiteiten %}
+                                    <li><a href="{{ activiteit.url }}">{{ activiteit.naam | raw }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </dd>
+                    {% endif %}
+                </dl>
+            {% endif %}
+        </div>
 
-		{% if (profiel.lid or (mag('P_LEDEN_MOD') and profiel.civiSaldo)) and profiel.bankrekening %}
-			<dl>
-				{% if profiel.bankrekening and profiel|is_zichtbaar('bankrekening', 'profiel_lid') %}
-					<dt>Bankrekening</dt>
-					<dd>
-						{{ profiel.bankrekening }}
-						{% if mag('P_MAAL_MOD') %}
-							<span class="lichtgrijs">({% if not profiel.machtiging %}geen{% endif %} machtiging getekend)</span>
-						{% endif %}
-					</dd>
-				{% endif %}
-			</dl>
-			{% if mag('P_FISCAAT_MOD') or app.user.uid == profiel.uid %}
-				<dl id="CiviSaldo">
-					<dt>Saldohistorie</dt>
-					<dd>
-						<a class="btn btn-primary" href="#" onclick="$('#saldoTabel').show();$(this).hide();return false;">Toon
-							recente bestellingen</a>
-						<div id="saldoTabel" style="display: none;">
-							<table class="table table-sm table-striped">
-								{% for bestelling in bestellinglog %}
-									<tr>
-										<td>
-											{{ bestelling.inhoudTekst }}
-											{% if bestelling.comment %}
-												<br><i>{{ bestelling.comment }}</i>
-											{% endif %}
-										</td>
-										<td>{{ bestelling.totaal | format_bedrag }}</td>
-										<td>({{ bestelling.moment | datetime_format }})</td>
-									</tr>
-								{% endfor %}
-							</table>
-							<div class="text-end">
-								<a href="{{ bestellingenlink }}">Meer &#187;</a>
-							</div>
-						</div>
-					</dd>
-				</dl>
-			{% endif %}
-			{% if mag('P_FISCAAT_MOD') or app.user.uid == profiel.uid %}
-				<dl>
-					<dt>Saldografiek</dt>
-					<dd>
-						<div class="ctx-saldografiek verborgen" data-uid="{{ profiel.uid }}"
-								 data-closed="{{ app.user.uid != profiel.uid | json_encode }}"></div>
-					</dd>
-				</dl>
-			{% endif %}
-		{% endif %}
+        {% if (profiel.lid or (mag('P_LEDEN_MOD') and profiel.civiSaldo)) and profiel.bankrekening %}
+            <dl>
+                {% if profiel.bankrekening and profiel|is_zichtbaar('bankrekening', 'profiel_lid') %}
+                    <dt>Bankrekening</dt>
+                    <dd>
+                        {{ profiel.bankrekening }}
+                        {% if mag('P_MAAL_MOD') %}
+                            <span class="lichtgrijs">({% if not profiel.machtiging %}geen{% endif %} machtiging getekend)</span>
+                        {% endif %}
+                    </dd>
+                {% endif %}
+            </dl>
+            {% if mag('P_FISCAAT_MOD') or app.user.uid == profiel.uid %}
+                <dl id="CiviSaldo">
+                    <dt>Saldohistorie</dt>
+                    <dd>
+                        <a class="btn btn-primary" href="#"
+                           onclick="$('#saldoTabel').show();$(this).hide();return false;">Toon
+                            recente bestellingen</a>
+                        <div id="saldoTabel" style="display: none;">
+                            <table class="table table-sm table-striped">
+                                {% for bestelling in bestellinglog %}
+                                    <tr>
+                                        <td>
+                                            {{ bestelling.inhoudTekst }}
+                                            {% if bestelling.comment %}
+                                                <br><i>{{ bestelling.comment }}</i>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ bestelling.totaal | format_bedrag }}</td>
+                                        <td>({{ bestelling.moment | datetime_format }})</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                            <div class="text-end">
+                                <a href="{{ bestellingenlink }}">Meer &#187;</a>
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+            {% endif %}
+            {% if mag('P_FISCAAT_MOD') or app.user.uid == profiel.uid %}
+                <dl>
+                    <dt>Saldografiek</dt>
+                    <dd>
+                        <div class="ctx-saldografiek verborgen" data-uid="{{ profiel.uid }}"
+                             data-closed="{{ app.user.uid != profiel.uid | json_encode }}"></div>
+                    </dd>
+                </dl>
+            {% endif %}
+        {% endif %}
 
-		<div class="row" id="maaltijden">
-			<dl class="col-md-6">
-				<dt>Allergie/dieet</dt>
-				<dd>
-					{% if profiel.eetwens and profiel|is_zichtbaar('eetwens') and profiel|is_zichtbaar('bijzonder', 'algemeen') %}
-						{{ profiel.eetwens }}
-					{% else %}
-						-
-					{% endif %}
-					{% if app.user.uid == profiel.uid %}
-						<div class="inline" style="position: absolute;"><a href="{{ url('csrdelft_maalcie_mijnvoorkeuren_mijn') }}"
-																															 title="Bewerk voorkeuren"
-																															 class="btn">{{ icon('pencil') }}</a></div>
-					{% endif %}
-				</dd>
-			</dl>
-			{% if mag('P_MAAL_MOD') or app.user.uid == profiel.uid %}
-				<dl class="col-md-6">
-					{% if abos is not empty %}
-						<dt>Abo's</dt>
-						<dd>
-							<ul class="list-unstyled">
-								{% for abonnement in abos %}
-									<li>{{ abonnement.maaltijd_repetitie.standaard_titel }}</li>
-								{% endfor %}
-							</ul>
-						</dd>
-					{% endif %}
-				</dl>
-				<dl class="col-md-6">
-					<dt>Corveevoorkeuren</dt>
-					<dd>
-						<ul class="list-unstyled">
-							{% for vrk in corveevoorkeuren %}
-								<li>{{ vrk.corveeRepetitie.dagVanDeWeekText }} {{ vrk.corveeRepetitie.corveeFunctie.naam }}</li>
-							{% endfor %}
-						</ul>
-					</dd>
-				</dl>
-				<dl class="col-md-6">
-					<dt>Recent</dt>
-					<dd>
-						<ul class="list-unstyled">
-							{% for aanmelding in recenteAanmeldingen %}
-								<li>
-									{{ aanmelding.maaltijd.titel }}
-									<span class="lichtgrijs">({{ aanmelding.maaltijd.datum | datetime_format_long }})</span>
-								</li>
-							{% endfor %}
-						</ul>
-					</dd>
-				</dl>
-				<dl class="col-md-6">
-					<dt>Corveepunten</dt>
-					<dd>
-						{{ profiel.corvee_punten }}
-						{% if profiel.corvee_punten_bonus > 0 %} + {% endif %}
-						{% if profiel.corvee_punten_bonus != 0 %}{{ profiel.corvee_punten_bonus }}{% endif %}
-					</dd>
-					<dt>Corveetaken</dt>
-					<dd>
-						<ul class="list-unstyled">
-							{% for taak in corveetaken %}
-								<li>
-									{{ taak.corveeFunctie.naam }}
-									<span class="lichtgrijs">({{ taak.datum | datetime_format_long }})</span>
-								</li>
-							{% endfor %}
-						</ul>
-					</dd>
-				</dl>
-				<dl class="col-md-6">
-					<dt>Kwalificaties</dt>
-					<dd>
-						<ul class="list-unstyled">
-							{% for kwali in corveekwalificaties %}
-								<li>
-									{{ kwali.corveeFunctie.naam }}
-									<span class="lichtgrijs"> (sinds {{ kwali.wanneer_toegewezen | datetime_format }})</span>
-								</li>
-							{% endfor %}
-						</ul>
-					</dd>
-				</dl>
-			{% endif %}
-		</div>
+        <div class="row" id="maaltijden">
+            <dl class="col-md-6">
+                <dt>Allergie/dieet</dt>
+                <dd>
+                    {% if profiel.eetwens and profiel|is_zichtbaar('eetwens') and profiel|is_zichtbaar('bijzonder', 'algemeen') %}
+                        {{ profiel.eetwens }}
+                    {% else %}
+                        -
+                    {% endif %}
+                    {% if app.user.uid == profiel.uid %}
+                        <div class="inline" style="position: absolute;"><a
+                                    href="{{ url('csrdelft_maalcie_mijnvoorkeuren_mijn') }}"
+                                    title="Bewerk voorkeuren"
+                                    class="btn">{{ icon('pencil') }}</a></div>
+                    {% endif %}
+                </dd>
+            </dl>
+            {% if mag('P_MAAL_MOD') or app.user.uid == profiel.uid %}
+                <dl class="col-md-6">
+                    {% if abos is not empty %}
+                        <dt>Abo's</dt>
+                        <dd>
+                            <ul class="list-unstyled">
+                                {% for abonnement in abos %}
+                                    <li>{{ abonnement.maaltijd_repetitie.standaard_titel }}</li>
+                                {% endfor %}
+                            </ul>
+                        </dd>
+                    {% endif %}
+                </dl>
+                <dl class="col-md-6">
+                    <dt>Corveevoorkeuren</dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            {% for vrk in corveevoorkeuren %}
+                                <li>{{ vrk.corveeRepetitie.dagVanDeWeekText }} {{ vrk.corveeRepetitie.corveeFunctie.naam }}</li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                </dl>
+                <dl class="col-md-6">
+                    <dt>Recent</dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            {% for aanmelding in recenteAanmeldingen %}
+                                <li>
+                                    {{ aanmelding.maaltijd.titel }}
+                                    <span class="lichtgrijs">({{ aanmelding.maaltijd.datum | datetime_format_long }})</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                </dl>
+                <dl class="col-md-6">
+                    <dt>Corveepunten</dt>
+                    <dd>
+                        {{ profiel.corvee_punten }}
+                        {% if profiel.corvee_punten_bonus > 0 %} + {% endif %}
+                        {% if profiel.corvee_punten_bonus != 0 %}{{ profiel.corvee_punten_bonus }}{% endif %}
+                    </dd>
+                    <dt>Corveetaken</dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            {% for taak in corveetaken %}
+                                <li>
+                                    {{ taak.corveeFunctie.naam }}
+                                    <span class="lichtgrijs">({{ taak.datum | datetime_format_long }})</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                </dl>
+                <dl class="col-md-6">
+                    <dt>Kwalificaties</dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            {% for kwali in corveekwalificaties %}
+                                <li>
+                                    {{ kwali.corveeFunctie.naam }}
+                                    <span class="lichtgrijs"> (sinds {{ kwali.wanneer_toegewezen | datetime_format }})</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                </dl>
+            {% endif %}
+        </div>
 
-		{% if app.user.uid == profiel.uid %}
-			<dl id="agenda">
-				<dt>Persoonlijke ICal-feed</dt>
-				<dd>
-					{% if profiel.account.privateToken %}
-						<input title="ICal-feed" class="form-control" type="text"
-									 value="{{ absolute_url(profiel.account.iCalLink) }}"
-									 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
-					{% endif %}
-					&nbsp;
-					<small>Gebruikt dezelfde private token als het forum (zie hieronder)</small>
-				</dd>
-			</dl>
-		{% endif %}
+        {% if app.user.uid == profiel.uid %}
+            <dl id="agenda">
+                <dt>Persoonlijke ICal-feed</dt>
+                <dd>
+                    {% if profiel.account.privateToken %}
+                        <input title="ICal-feed" class="form-control" type="text"
+                               value="{{ absolute_url(profiel.account.iCalLink) }}"
+                               onclick="this.setSelectionRange(0, this.value.length);" readonly/>
+                    {% endif %}
+                    &nbsp;
+                    <small>Gebruikt dezelfde private token als het forum (zie hieronder)</small>
+                </dd>
+            </dl>
+        {% endif %}
 
-		{% if forumpostcount or app.user.uid == profiel.uid %}
-			<dl id="forum">
-				{% if app.user.uid == profiel.uid %}
-					<dt>Persoonlijk RSS-feed</dt>
-					<dd>
-						{% if profiel.account.privateToken %}
-							<input title="RSS-feed" class="form-control" type="text"
-										 value="{{ absolute_url(profiel.account.rssLink) }}"
-										 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
-						{% endif %}
-						<a id="tokenaanvragen" class="btn btn-primary"
-							 href="{{ url('csrdelft_profiel_resetprivatetoken', {uid: profiel.uid}) }}">
-							Nieuwe aanvragen
-						</a>
-					</dd>
-				{% endif %}
-				{% if forumpostcount and profiel|is_zichtbaar('forum_posts', 'intern') %}
-					<dt># bijdragen</dt>
-					<dd>
-						{{ forumpostcount }} {% if forumpostcount > 1 %}berichten.{% else %}bericht.{% endif %}
-					</dd>
-					<dt>Recent</dt>
-					<dd>
-						<table class="table table-sm table-striped">
-							{% for post in forumrecent %}
-								<tr>
-									<td><a href="{{ url('csrdelft_forum_reactie', {post_id: post.post_id, _fragment: post.post_id}) }}"
-												 title="{{ post.tekst }}"
-											{% if post.draad.ongelezen %}
-												class="{{ lid_instelling('forum', 'ongelezenWeergave') }}"
-											{% endif %}
-										>
-											{{ post.draad.titel | truncate(75) }}
-										</a>
-									</td>
-									<td>
-										{% if lid_instelling('forum', 'datumWeergave') == 'relatief' %}
-											{{ post.datum_tijd | reldate }}
-										{% else %}
-											{{ post.datum_tijd | datetime_format }}
-										{% endif %}
-									</td>
-								</tr>
-							{% else %}
-								<tr>
-									<td>Geen bijdragen</td>
-								</tr>
-							{% endfor %}
-						</table>
-					</dd>
-				{% endif %}
-			</dl>
-		{% endif %}
+        {% if forumpostcount or app.user.uid == profiel.uid %}
+            <dl id="forum">
+                {% if app.user.uid == profiel.uid %}
+                    <dt>Persoonlijk RSS-feed</dt>
+                    <dd>
+                        {% if profiel.account.privateToken %}
+                            <input title="RSS-feed" class="form-control" type="text"
+                                   value="{{ absolute_url(profiel.account.rssLink) }}"
+                                   onclick="this.setSelectionRange(0, this.value.length);" readonly/>
+                        {% endif %}
+                        <a id="tokenaanvragen" class="btn btn-primary"
+                           href="{{ url('csrdelft_profiel_resetprivatetoken', {uid: profiel.uid}) }}">
+                            Nieuwe aanvragen
+                        </a>
+                    </dd>
+                {% endif %}
+                {% if forumpostcount and profiel|is_zichtbaar('forum_posts', 'intern') %}
+                    <dt># bijdragen</dt>
+                    <dd>
+                        {{ forumpostcount }} {% if forumpostcount > 1 %}berichten.{% else %}bericht.{% endif %}
+                    </dd>
+                    <dt>Recent</dt>
+                    <dd>
+                        <table class="table table-sm table-striped">
+                            {% for post in forumrecent %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ url('csrdelft_forum_reactie', {post_id: post.post_id, _fragment: post.post_id}) }}"
+                                           title="{{ post.tekst }}"
+                                                {% if post.draad.ongelezen %}
+                                                    class="{{ lid_instelling('forum', 'ongelezenWeergave') }}"
+                                                {% endif %}
+                                        >
+                                            {{ post.draad.titel | truncate(75) }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {% if lid_instelling('forum', 'datumWeergave') == 'relatief' %}
+                                            {{ post.datum_tijd | reldate }}
+                                        {% else %}
+                                            {{ post.datum_tijd | datetime_format }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td>Geen bijdragen</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </dd>
+                {% endif %}
+            </dl>
+        {% endif %}
 
-		{% if boeken is not empty or app.user.uid == profiel.uid or gerecenseerdeboeken is not empty %}
-			<dl id="boeken" class="boeken">
-				{% if boeken is not empty %}
-					<dt>Boeken</dt>
-					<dd>
-						<ul class="list-unstyled">
-							{% for exemplaar in boeken %}
-								{% set boek = exemplaar.boek %}
-								<li>
-									<a href="{{ url('csrdelft_bibliotheek_boek', {boek_id: boek.id}) }}" title="Boek: {{ boek.titel }}">
-										<span title="boek" class="boekindicator">•</span>
-										<span class="titel">{{ boek.titel }}</span>
-										<span class="auteur">{{ boek.auteur }}</span>
-									</a>
-								</li>
-							{% else %}
-								<li>Geen boeken</li>
-							{% endfor %}
-						</ul>
-					</dd>
-				{% endif %}
-				{% if app.user.uid == profiel.uid %}
-					<dt></dt>
-					<dd>
-						<a class="btn btn-primary" href="{{ url('csrdelft_bibliotheek_boek') }}">{{ icon('book_add') }} Nieuw
-							boek</a>
-					</dd>
-				{% endif %}
-				{% if gerecenseerdeboeken is not empty %}
-					<dt>Boekrecensies</dt>
-					<dd>
-						<ul class="list-unstyled">
-							{% for exemplaar in gerecenseerdeboeken %}
-								{% set boek = exemplaar.boek %}
-								<li>
-									<a href="{{ url('csrdelft_bibliotheek_boek', {boek_id: boek.id}) }}" title="Boek: {{ boek.titel }}">
-										<span title="boek" class="boekindicator">•</span>
-										<span class="titel">{{ boek.titel }}</span>
-										<span class="auteur">{{ boek.auteur }}</span>
-									</a>
-								</li>
-							{% else %}
-								<li>Geen boeken</li>
-							{% endfor %}
-						</ul>
-					</dd>
-				{% endif %}
-			</dl>
-		{% endif %}
+        {% if boeken is not empty or app.user.uid == profiel.uid or gerecenseerdeboeken is not empty %}
+            <dl id="boeken" class="boeken">
+                {% if boeken is not empty %}
+                    <dt>Boeken</dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            {% for exemplaar in boeken %}
+                                {% set boek = exemplaar.boek %}
+                                <li>
+                                    <a href="{{ url('csrdelft_bibliotheek_boek', {boek_id: boek.id}) }}"
+                                       title="Boek: {{ boek.titel }}">
+                                        <span title="boek" class="boekindicator">•</span>
+                                        <span class="titel">{{ boek.titel }}</span>
+                                        <span class="auteur">{{ boek.auteur }}</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li>Geen boeken</li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                {% endif %}
+                {% if app.user.uid == profiel.uid %}
+                    <dt></dt>
+                    <dd>
+                        <a class="btn btn-primary" href="{{ url('csrdelft_bibliotheek_boek') }}">{{ icon('book_add') }}
+                            Nieuw
+                            boek</a>
+                    </dd>
+                {% endif %}
+                {% if gerecenseerdeboeken is not empty %}
+                    <dt>Boekrecensies</dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            {% for exemplaar in gerecenseerdeboeken %}
+                                {% set boek = exemplaar.boek %}
+                                <li>
+                                    <a href="{{ url('csrdelft_bibliotheek_boek', {boek_id: boek.id}) }}"
+                                       title="Boek: {{ boek.titel }}">
+                                        <span title="boek" class="boekindicator">•</span>
+                                        <span class="titel">{{ boek.titel }}</span>
+                                        <span class="auteur">{{ boek.auteur }}</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li>Geen boeken</li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                {% endif %}
+            </dl>
+        {% endif %}
 
-		{% if profiel|is_zichtbaar('fotos', 'intern') %}
-			<dl>
-				<dt>Fotoalbum</dt>
-				<dd>
-					{% if fotos is empty %}
-						Er zijn geen foto's gevonden met {{ profiel.naam('civitas') }} erop.
-					{% else %}
-						<div class="row">
-							{% for foto in fotos %}
-								<div class="col-md-2">
-									{{ foto.html | raw }}
-								</div>
-							{% endfor %}
-						</div>
-						<a class="btn btn-primary" href="{{ url('csrdelft_fotoalbum_bekijken', {dir: profiel.uid}) }}">Toon alle
-							foto's</a>
-					{% endif %}
-				</dd>
-			</dl>
-		{% endif %}
+        {% if profiel|is_zichtbaar('fotos', 'intern') %}
+            <dl>
+                <dt>Fotoalbum</dt>
+                <dd>
+                    {% if fotos is empty %}
+                        Er zijn geen foto's gevonden met {{ profiel.naam('civitas') }} erop.
+                    {% else %}
+                        <div class="row">
+                            {% for foto in fotos %}
+                                <div class="col-md-2">
+                                    {{ foto.html | raw }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <a class="btn btn-primary" href="{{ url('csrdelft_fotoalbum_bekijken', {dir: profiel.uid}) }}">Toon
+                            alle
+                            foto's</a>
+                    {% endif %}
+                </dd>
+            </dl>
+        {% endif %}
 
-		{% if mag('P_ADMIN,bestuur,commissie:NovCie') and profiel.status == 'S_NOVIET' and profiel.kgb %}
-			<div class="" id="novcieopmerking">
-				<div style="cursor: pointer;" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
-				<div class="gegevens verborgen" id="novcie_gegevens">{{ profiel.kgb | bbcode }}</div>
-			</div>
-		{% endif %}
+        {% if mag('P_ADMIN,bestuur,commissie:NovCie') and profiel.status == 'S_NOVIET' and profiel.kgb %}
+            <div class="" id="novcieopmerking">
+                <div style="cursor: pointer;" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
+                <div class="gegevens verborgen" id="novcie_gegevens">{{ profiel.kgb | bbcode }}</div>
+            </div>
+        {% endif %}
 
-		{% if mag('P_LEDEN_MOD') %}
-			<div class="row" id="changelog">
-				<div class="col">
-					<div style="cursor: pointer;" onclick="$('#changelog_gegevens').toggle();this.remove()">
-						Bewerklog &raquo;
-					</div>
-					<div class="verborgen" id="changelog_gegevens">
-						{% for loggroup in (profiel.changelog | reverse) %}
-							{{ loggroup.toHtml | raw }}
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-		{% endif %}
-	</div>
+        {% if mag('P_LEDEN_MOD') %}
+            <div class="row" id="changelog">
+                <div class="col">
+                    <div style="cursor: pointer;" onclick="$('#changelog_gegevens').toggle();this.remove()">
+                        Bewerklog &raquo;
+                    </div>
+                    <div class="verborgen" id="changelog_gegevens">
+                        {% for loggroup in (profiel.changelog | reverse) %}
+                            {{ loggroup.toHtml | raw }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

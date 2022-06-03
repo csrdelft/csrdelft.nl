@@ -3,45 +3,46 @@
 {% block titel %}Beheer abonnementen{% endblock %}
 
 {% block content %}
-	{{ parent() }}
-	<p>
-		Op deze pagina kunt u alle abonnementen beheren en zoeken.
-	</p>
-	<form action="{{ url('csrdelft_maalcie_beheerabonnementen_novieten') }}" method="post"
-				class="Formulier ModalForm SubmitReset float-end">
-		{{ csrfField() }}
-		Abonneer novieten op:
-		<select aria-label="Selecteer repetitie" name="mrid" origvalue="kies" class="FormElement SubmitChange">
-			<option selected="selected">kies</option>
-			{% for repetitie in aborepetities %}
-				<option value="{{ repetitie.mlt_repetitie_id }}" class="save">{{ repetitie.standaard_titel }}</option>
-			{% endfor %}
-		</select>
-	</form>
-	<div class="inline" style="width: 30%;"><label for="toon">Toon abonnementen:</label>
-	</div><select aria-label="Selecteer weergave" name="toon"
-								onchange="location.href='/maaltijden/abonnementen/beheer/'+this.value;">
-	<option value="waarschuwingen" class="arrow" {% if toon == 'waarschuwing' %}selected="selected"{% endif %}>
-		waarschuwingen
-	</option>
-	<option value="ingeschakeld" class="arrow" {% if toon == 'in' %}selected="selected"{% endif %}>ingeschakeld</option>
-	<option value="abonneerbaar" class="arrow" {% if toon == 'abo' %}selected="selected"{% endif %}>abonneerbaar</option>
+    {{ parent() }}
+    <p>
+        Op deze pagina kunt u alle abonnementen beheren en zoeken.
+    </p>
+    <form action="{{ url('csrdelft_maalcie_beheerabonnementen_novieten') }}" method="post"
+          class="Formulier ModalForm SubmitReset float-end">
+        {{ csrfField() }}
+        Abonneer novieten op:
+        <select aria-label="Selecteer repetitie" name="mrid" origvalue="kies" class="FormElement SubmitChange">
+            <option selected="selected">kies</option>
+            {% for repetitie in aborepetities %}
+                <option value="{{ repetitie.mlt_repetitie_id }}" class="save">{{ repetitie.standaard_titel }}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <div class="inline" style="width: 30%;"><label for="toon">Toon abonnementen:</label>
+    </div><select aria-label="Selecteer weergave" name="toon"
+                  onchange="location.href='/maaltijden/abonnementen/beheer/'+this.value;">
+    <option value="waarschuwingen" class="arrow" {% if toon == 'waarschuwing' %}selected="selected"{% endif %}>
+        waarschuwingen
+    </option>
+    <option value="ingeschakeld" class="arrow" {% if toon == 'in' %}selected="selected"{% endif %}>ingeschakeld</option>
+    <option value="abonneerbaar" class="arrow" {% if toon == 'abo' %}selected="selected"{% endif %}>abonneerbaar
+    </option>
 </select>
-	<p>&nbsp;</p>
-	<table id="maalcie-tabel" class="maalcie-tabel">
-		{% for vanuid, abonnementen in matrix %}
-		{% if loop.index % 25 == 0 %}
-		{% if not loop.first %}
-			</tbody>
-		{% endif %}
-		{{ include('maaltijden/abonnement/beheer_abonnement_head.html.twig', {repetities: repetities}) }}
-		<tbody>
-		{% endif %}
-		{{ include('maaltijden/abonnement/beheer_abonnement_lijst.html.twig', {vanuid: vanuid, abonnementen: abonnementen}) }}
-		{% else %}
-		{{ include('maaltijden/abonnement/beheer_abonnement_head.html.twig', {repetities: repetities}) }}
-		<tbody>
-		{% endfor %}
-		</tbody>
-	</table>
+    <p>&nbsp;</p>
+    <table id="maalcie-tabel" class="maalcie-tabel">
+        {% for vanuid, abonnementen in matrix %}
+        {% if loop.index % 25 == 0 %}
+        {% if not loop.first %}
+            </tbody>
+        {% endif %}
+        {{ include('maaltijden/abonnement/beheer_abonnement_head.html.twig', {repetities: repetities}) }}
+        <tbody>
+        {% endif %}
+        {{ include('maaltijden/abonnement/beheer_abonnement_lijst.html.twig', {vanuid: vanuid, abonnementen: abonnementen}) }}
+        {% else %}
+        {{ include('maaltijden/abonnement/beheer_abonnement_head.html.twig', {repetities: repetities}) }}
+        <tbody>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

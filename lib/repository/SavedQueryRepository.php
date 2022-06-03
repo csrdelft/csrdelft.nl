@@ -21,48 +21,53 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * @method SavedQuery[]    findAll()
  * @method SavedQuery[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SavedQueryRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
-		parent::__construct($registry, SavedQuery::class);
-	}
+class SavedQueryRepository extends AbstractRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, SavedQuery::class);
+    }
 
-	public function get($id) {
-		return $this->find($id);
-	}
+    public function get($id)
+    {
+        return $this->find($id);
+    }
 
-	/**
-	 * @return SavedQuery[]
-	 */
-	public function getQueries() {
-		return $this->findBy([], ['categorie' => 'ASC']);
-	}
+    /**
+     * @return SavedQuery[]
+     */
+    public function getQueries()
+    {
+        return $this->findBy([], ['categorie' => 'ASC']);
+    }
 
-	public function loadQuery($queryId) {
-		$query = $this->find($queryId);
+    public function loadQuery($queryId)
+    {
+        $query = $this->find($queryId);
 
-		if (!$query || !$query->magBekijken()) {
-			throw new AccessDeniedException();
-		}
+        if (!$query || !$query->magBekijken()) {
+            throw new AccessDeniedException();
+        }
 
-		$resultObject = new SavedQueryResult();
-		$resultObject->query = $query;
+        $resultObject = new SavedQueryResult();
+        $resultObject->query = $query;
 
-		try {
-			$result = $this->_em->getConnection()->fetchAllAssociative($query->savedquery);
-			$cols = [];
+        try {
+            $result = $this->_em->getConnection()->fetchAllAssociative($query->savedquery);
+            $cols = [];
 
-			foreach ($result[0] as $col => $value) {
-				$cols[] = $col;
-			}
+            foreach ($result[0] as $col => $value) {
+                $cols[] = $col;
+            }
 
-			$resultObject->cols = $cols;
-			$resultObject->rows = $result;
-		} catch (Exception $ex) {
-			$resultObject->cols = [];
-			$resultObject->rows = [];
-			$resultObject->error = $ex->getMessage();
-		}
+            $resultObject->cols = $cols;
+            $resultObject->rows = $result;
+        } catch (Exception $ex) {
+            $resultObject->cols = [];
+            $resultObject->rows = [];
+            $resultObject->error = $ex->getMessage();
+        }
 
-		return $resultObject;
-	}
+        return $resultObject;
+    }
 }

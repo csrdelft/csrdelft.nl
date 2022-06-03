@@ -3,41 +3,42 @@
 {% block titel %}Forum{% endblock %}
 
 {% block breadcrumbs %}
-	{{ csr_breadcrumbs({
-		'/': 'main',
-		'/forum': 'Forum',
-	}) }}
+    {{ csr_breadcrumbs({
+        '/': 'main',
+        '/forum': 'Forum',
+    }) }}
 {% endblock %}
 
 {% block content %}
-	{{ getMelding() }}
-	<header class="d-flex justify-content-between align-items-center">
-		<h1>Forum</h1>
+    {{ getMelding() }}
+    <header class="d-flex justify-content-between align-items-center">
+        <h1>Forum</h1>
 
-		{# TODO: De plus knop ook in head_buttons #}
-		{# {% if mag('P_ADMIN') %}
+        {# TODO: De plus knop ook in head_buttons #}
+        {# {% if mag('P_ADMIN') %}
 			<div class="btn-group me-2">
 				<a href="{{ url('csrdelft_forum_aanmaken') }}" class="btn btn-secondary post popup"
 					title="Deelforum aanmaken">{{ icon('add') }} Nieuw</a>
 			</div>
 		{% endif %} #}
 
-		{{ include('forum/partial/draad_head_buttons.html.twig') }}
-	</header>
+        {{ include('forum/partial/draad_head_buttons.html.twig') }}
+    </header>
 
-	{% for categorie in categorien %}
-		<div class="forumcategorie">
-			<h3><a name="{{ categorie.categorie_id }}">{{ categorie.titel }}</a></h3>
-			<div class="forumdelen">
-				{% for deel in categorie.forum_delen %}
-					<div class="forumdeel">
-						<h4><a href="{{ url('csrdelft_forum_deel', {forum_id: deel.forum_id}) }}">{{ deel.titel }}</a></h4>
-						<p class="forumdeel-omschrijving">{{ deel.omschrijving }}</p>
-					</div>
-				{% endfor %}
-			</div>
-		</div>
-	{% endfor %}
+    {% for categorie in categorien %}
+        <div class="forumcategorie">
+            <h3><a name="{{ categorie.categorie_id }}">{{ categorie.titel }}</a></h3>
+            <div class="forumdelen">
+                {% for deel in categorie.forum_delen %}
+                    <div class="forumdeel">
+                        <h4><a href="{{ url('csrdelft_forum_deel', {forum_id: deel.forum_id}) }}">{{ deel.titel }}</a>
+                        </h4>
+                        <p class="forumdeel-omschrijving">{{ deel.omschrijving }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
 
-	{{ include('forum/partial/rss_link.html.twig') }}
+    {{ include('forum/partial/rss_link.html.twig') }}
 {% endblock %}

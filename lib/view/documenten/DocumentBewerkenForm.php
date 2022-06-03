@@ -19,47 +19,50 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class DocumentBewerkenForm implements FormulierTypeInterface {
+class DocumentBewerkenForm implements FormulierTypeInterface
+{
 
-	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-	/**
-	 * @var DocumentCategorieRepository
-	 */
-	private $documentCategorieRepository;
-	/**
-	 * @var LoginService
-	 */
-	private $loginService;
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+    /**
+     * @var DocumentCategorieRepository
+     */
+    private $documentCategorieRepository;
+    /**
+     * @var LoginService
+     */
+    private $loginService;
 
-	public function __construct(UrlGeneratorInterface $urlGenerator, LoginService $loginService, DocumentCategorieRepository $documentCategorieRepository) {
-		$this->urlGenerator = $urlGenerator;
-		$this->documentCategorieRepository = $documentCategorieRepository;
-		$this->loginService = $loginService;
-	}
+    public function __construct(UrlGeneratorInterface $urlGenerator, LoginService $loginService, DocumentCategorieRepository $documentCategorieRepository)
+    {
+        $this->urlGenerator = $urlGenerator;
+        $this->documentCategorieRepository = $documentCategorieRepository;
+        $this->loginService = $loginService;
+    }
 
-	/**
-	 * @param FormulierBuilder $builder
-	 * @param Document $data
-	 * @param array $options
-	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
-		$builder->setTitel('Document bewerken');
-		$fields = [];
-		$fields['categorie'] = new EntitySelectField('categorie', $data->categorie, 'Categorie', DocumentCategorie::class);
-		$toegestaneCategorien = $this->documentCategorieRepository->findMetSchijfrechtenVoorLid();
-		$fields['categorie']->setOptions($toegestaneCategorien);
-		if (count($toegestaneCategorien) == 1) {
-			$fields['categorie']->hidden = true;
-		}
-		$fields[] = new RequiredTextField('naam', $data->naam, 'Documentnaam');
-		$fields['rechten'] = new RechtenField('leesrechten', $data->leesrechten, 'Leesrechten');
-		$fields['rechten']->readonly = true;
+    /**
+     * @param FormulierBuilder $builder
+     * @param Document $data
+     * @param array $options
+     */
+    public function createFormulier(FormulierBuilder $builder, $data, $options = [])
+    {
+        $builder->setTitel('Document bewerken');
+        $fields = [];
+        $fields['categorie'] = new EntitySelectField('categorie', $data->categorie, 'Categorie', DocumentCategorie::class);
+        $toegestaneCategorien = $this->documentCategorieRepository->findMetSchijfrechtenVoorLid();
+        $fields['categorie']->setOptions($toegestaneCategorien);
+        if (count($toegestaneCategorien) == 1) {
+            $fields['categorie']->hidden = true;
+        }
+        $fields[] = new RequiredTextField('naam', $data->naam, 'Documentnaam');
+        $fields['rechten'] = new RechtenField('leesrechten', $data->leesrechten, 'Leesrechten');
+        $fields['rechten']->readonly = true;
 
-		$builder->addFields($fields);
+        $builder->addFields($fields);
 
-		$builder->setFormKnoppen(new FormDefaultKnoppen($this->urlGenerator->generate('csrdelft_documenten_recenttonen')));
-	}
+        $builder->setFormKnoppen(new FormDefaultKnoppen($this->urlGenerator->generate('csrdelft_documenten_recenttonen')));
+    }
 }

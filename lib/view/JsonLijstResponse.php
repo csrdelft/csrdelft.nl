@@ -8,12 +8,15 @@
 
 namespace CsrDelft\view;
 
-abstract class JsonLijstResponse extends JsonResponse {
+abstract class JsonLijstResponse extends JsonResponse
+{
 
-	public function getModel()
-	{
-		return array_map(function ($element){ return $this->renderElement($element);}, as_array($this->model));
-	}
+    public function getModel()
+    {
+        return array_map(function ($element) {
+            return $this->renderElement($element);
+        }, as_array($this->model));
+    }
 
-	public abstract function renderElement($element);
+    public abstract function renderElement($element);
 }

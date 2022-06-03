@@ -12,16 +12,16 @@ use Trikoder\Bundle\OAuth2Bundle\Model\RefreshToken;
 class OAuth2RefreshTokenTable extends DataTable
 {
 
-	public function __construct()
-	{
-		parent::__construct(RefreshToken::class, "/session/oauth2-refresh-token");
-		$this->deleteColumn('accessToken');
-		$this->addColumn('client', 'expiry');
-		$this->setOrder(['expiry' => 'desc']);
+    public function __construct()
+    {
+        parent::__construct(RefreshToken::class, "/session/oauth2-refresh-token");
+        $this->deleteColumn('accessToken');
+        $this->addColumn('client', 'expiry');
+        $this->setOrder(['expiry' => 'desc']);
 
-		$this->addColumn('expiry', 'scopes', null, CellRender::DateTime());
+        $this->addColumn('expiry', 'scopes', null, CellRender::DateTime());
 
-		$this->addRowKnop(new DataTableRowKnop("/session/oauth2-refresh-token-revoke/:identifier", "Revoke", "delete"));
-	}
+        $this->addRowKnop(new DataTableRowKnop("/session/oauth2-refresh-token-revoke/:identifier", "Revoke", "delete"));
+    }
 
 }

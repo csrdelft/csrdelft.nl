@@ -7,5 +7,5 @@ use Symfony\Component\HttpFoundation\Response;
 
 interface ToResponse
 {
-	public function toResponse() : Response;
+    public function toResponse(): Response;
 }

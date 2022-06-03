@@ -3,102 +3,107 @@
 {% block titel %}Besteling zoeker{% endblock %}
 
 {% block civisaldocontent %}
-	<h2>Besteling zoeker</h2>
+    <h2>Besteling zoeker</h2>
 
-	<form action="{{ url('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker') }}" method="get" class="mt-4">
-		<div class="row">
-			<div class="col-md-3">
-					<label for="commissie">Commissie:</label>
-					<select id="commissie" name="commissie" class="form-select">
-						<option value="-1" {% if selectedCommissie == -1 %}selected{% endif %}>Alle</option>
-						{% for val,cie in commissies %}
-							<option value="{{ val }}" {% if val == selectedCommissie %}selected{% endif %}>{{ cie }}</option>
-						{% endfor %}
-					</select>
-			</div>
-			<div class="col-md-3">
-					<label for="categorie">Categorie:</label>
-					<select id="categorie" name="categorie" class="form-select">
-						<option value="-1" {% if selectedCategorie == -1 %}selected{% endif %}>Alle</option>
-						{% for val,cat in categorieen %}
-							<option value="{{ val }}" {% if val == selectedCategorie %}selected{% endif %}>{{ cat }}</option>
-						{% endfor %}
-					</select>
-			</div>
-			<div class="col-md-3">
-					<label for="product">Product:</label>
-					<select id="product" name="product" class="form-select">
-						<option value="-1" {% if selectedProduct == -1 %}selected{% endif %}>Alle</option>
-						{% for val,cat in producten %}
-							<optgroup label="{{ val }}">
-								{% for id,prod in cat %}
-									<option value="{{ id }}" {% if id == selectedProduct %}selected{% endif %}>{{ prod }}</option>
-								{% endfor %}
-							</optgroup>
-						{% endfor %}
-					</select>
-			</div>
-			<div class="col-md-3">
-					<label for="groeperen">Groeperen:</label>
-					<select id="groeperen" name="groeperen" class="form-select">
-						<option value="-1" {% if not groeperen %}selected{% endif %}>Nee</option>
-						<option value="1" {% if groeperen %}selected{% endif %}>Op opmerking</option>
-					</select>
-			</div>
-		</div>
-		<div class="row mt-2">
-			<div class="col-md-5 mb-3">
-				<label for="van">Van:</label>
-				<input id="van" name="van" type="date" class="form-control" value="{{ van }}" />
-			</div>
-			<div class="col-md-5 mb-3">
-				<label for="tot">Tot:</label>
-				<input id="tot" name="tot" type="date" class="form-control" value="{{ tot }}" />
-			</div>
-			<div class="col-md-2 mb-3">
-				<label>&emsp;</label>
-				<input class="btn btn-primary w-100" type="submit" value="Zoek">
-			</div>
-		</div>
+    <form action="{{ url('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker') }}" method="get" class="mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="commissie">Commissie:</label>
+                <select id="commissie" name="commissie" class="form-select">
+                    <option value="-1" {% if selectedCommissie == -1 %}selected{% endif %}>Alle</option>
+                    {% for val,cie in commissies %}
+                        <option value="{{ val }}"
+                                {% if val == selectedCommissie %}selected{% endif %}>{{ cie }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="categorie">Categorie:</label>
+                <select id="categorie" name="categorie" class="form-select">
+                    <option value="-1" {% if selectedCategorie == -1 %}selected{% endif %}>Alle</option>
+                    {% for val,cat in categorieen %}
+                        <option value="{{ val }}"
+                                {% if val == selectedCategorie %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="product">Product:</label>
+                <select id="product" name="product" class="form-select">
+                    <option value="-1" {% if selectedProduct == -1 %}selected{% endif %}>Alle</option>
+                    {% for val,cat in producten %}
+                        <optgroup label="{{ val }}">
+                            {% for id,prod in cat %}
+                                <option value="{{ id }}"
+                                        {% if id == selectedProduct %}selected{% endif %}>{{ prod }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="groeperen">Groeperen:</label>
+                <select id="groeperen" name="groeperen" class="form-select">
+                    <option value="-1" {% if not groeperen %}selected{% endif %}>Nee</option>
+                    <option value="1" {% if groeperen %}selected{% endif %}>Op opmerking</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-5 mb-3">
+                <label for="van">Van:</label>
+                <input id="van" name="van" type="date" class="form-control" value="{{ van }}"/>
+            </div>
+            <div class="col-md-5 mb-3">
+                <label for="tot">Tot:</label>
+                <input id="tot" name="tot" type="date" class="form-control" value="{{ tot }}"/>
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>&emsp;</label>
+                <input class="btn btn-primary w-100" type="submit" value="Zoek">
+            </div>
+        </div>
 
-		{% if bestellingen %}
-			<div class="table-responsive">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>Moment</th>
-							{% if not groeperen %}<th>Account</th>{% endif %}
-							<th>Commissie</th>
-							<th>Categorie</th>
-							<th>Product</th>
-							<th>Opmerking</th>
-							<th>Prijs</th>
-							<th>Aantal</th>
-							<th>Totaal</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for bestelling in bestellingen %}
-							<tr>
-								<td>{{ bestelling.moment|date("D j-n-Y G:i:s") }}</td>
-								{% if not groeperen %}<td>{{ bestelling.civisaldo|raw }}</td>{% endif %}
-								<td>{{ bestelling.cie }}</td>
-								<td>{{ bestelling.type }}</td>
-								<td>{{ bestelling.beschrijving }}</td>
-								<td>{{ bestelling.comment }}</td>
-								<td>{{ bestelling.prijs|format_bedrag }}</td>
-								<td>{{ bestelling.aantal }}</td>
-								<td>{{ (bestelling.prijs * bestelling.aantal)|format_bedrag }}</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		{% elseif bestellingen is not null %}
-			Geen bestellingen gevonden.
-		{% else %}
-			Stel minimaal één filter in om te zoeken.
-		{% endif %}
+        {% if bestellingen %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Moment</th>
+                        {% if not groeperen %}
+                            <th>Account</th>{% endif %}
+                        <th>Commissie</th>
+                        <th>Categorie</th>
+                        <th>Product</th>
+                        <th>Opmerking</th>
+                        <th>Prijs</th>
+                        <th>Aantal</th>
+                        <th>Totaal</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for bestelling in bestellingen %}
+                        <tr>
+                            <td>{{ bestelling.moment|date("D j-n-Y G:i:s") }}</td>
+                            {% if not groeperen %}
+                                <td>{{ bestelling.civisaldo|raw }}</td>{% endif %}
+                            <td>{{ bestelling.cie }}</td>
+                            <td>{{ bestelling.type }}</td>
+                            <td>{{ bestelling.beschrijving }}</td>
+                            <td>{{ bestelling.comment }}</td>
+                            <td>{{ bestelling.prijs|format_bedrag }}</td>
+                            <td>{{ bestelling.aantal }}</td>
+                            <td>{{ (bestelling.prijs * bestelling.aantal)|format_bedrag }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% elseif bestellingen is not null %}
+            Geen bestellingen gevonden.
+        {% else %}
+            Stel minimaal één filter in om te zoeken.
+        {% endif %}
 
-	</form>
+    </form>
 {% endblock %}

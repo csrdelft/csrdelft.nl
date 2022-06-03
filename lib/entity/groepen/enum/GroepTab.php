@@ -23,36 +23,37 @@ use CsrDelft\common\Enum;
  * @method static boolean isEmails($tab)
  * @method static boolean isEetwens($tab)
  */
-class GroepTab extends Enum {
+class GroepTab extends Enum
+{
 
-	/**
-	 * GroepTab opties.
-	 */
-	const Lijst = 'lijst';
-	const Pasfotos = 'pasfotos';
-	const Statistiek = 'stats';
-	const Emails = 'emails';
-	const Eetwens = 'eetwens';
+    /**
+     * GroepTab opties.
+     */
+    const Lijst = 'lijst';
+    const Pasfotos = 'pasfotos';
+    const Statistiek = 'stats';
+    const Emails = 'emails';
+    const Eetwens = 'eetwens';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $mapChoiceToDescription = [
-		self::Lijst => 'Lijst',
-		self::Pasfotos => 'Pasfoto\'s',
-		self::Statistiek => 'Statistiek',
-		self::Emails => 'E-mails',
-		self::Eetwens => 'Allergie/dieet',
-	];
+    /**
+     * @var string[]
+     */
+    protected static $mapChoiceToDescription = [
+        self::Lijst => 'Lijst',
+        self::Pasfotos => 'Pasfoto\'s',
+        self::Statistiek => 'Statistiek',
+        self::Emails => 'E-mails',
+        self::Eetwens => 'Allergie/dieet',
+    ];
 
-	/**
-	 * @var string[]
-	 */
-	protected static $mapChoiceToChar = [
-		self::Lijst => 'l',
-		self::Pasfotos => 'p',
-		self::Statistiek => 's',
-		self::Emails => 'e',
-		self::Eetwens => 'a',
-	];
+    /**
+     * @var string[]
+     */
+    protected static $mapChoiceToChar = [
+        self::Lijst => 'l',
+        self::Pasfotos => 'p',
+        self::Statistiek => 's',
+        self::Emails => 'e',
+        self::Eetwens => 'a',
+    ];
 }

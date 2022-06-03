@@ -27,130 +27,147 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository")
  * @ORM\Table("mlt_archief")
  */
-class ArchiefMaaltijd implements Agendeerbaar {
-	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
-	 */
-	public $maaltijd_id;
-	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $titel;
-	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="date")
-	 */
-	public $datum;
-	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="time")
-	 */
-	public $tijd;
-	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $prijs;
-	/**
-	 * @var string
-	 * @ORM\Column(type="text")
-	 */
-	public $aanmeldingen;
+class ArchiefMaaltijd implements Agendeerbaar
+{
+    /**
+     * @var integer
+     * @ORM\Column(type="integer")
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @Serializer\Groups("datatable")
+     */
+    public $maaltijd_id;
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     * @Serializer\Groups("datatable")
+     */
+    public $titel;
+    /**
+     * @var DateTimeImmutable
+     * @ORM\Column(type="date")
+     */
+    public $datum;
+    /**
+     * @var DateTimeImmutable
+     * @ORM\Column(type="time")
+     */
+    public $tijd;
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     * @Serializer\Groups("datatable")
+     */
+    public $prijs;
+    /**
+     * @var string
+     * @ORM\Column(type="text")
+     */
+    public $aanmeldingen;
 
-	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("tijd")
-	 */
-	public function getTijdFormatted() {
-		return date_format_intl($this->tijd, TIME_FORMAT);
-	}
+    /**
+     * @return string
+     * @Serializer\Groups("datatable")
+     * @Serializer\SerializedName("tijd")
+     */
+    public function getTijdFormatted()
+    {
+        return date_format_intl($this->tijd, TIME_FORMAT);
+    }
 
-	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("datum")
-	 */
-	public function getDatumFormatted() {
-		return date_format_intl($this->datum, DATE_FORMAT);
-	}
+    /**
+     * @return string
+     * @Serializer\Groups("datatable")
+     * @Serializer\SerializedName("datum")
+     */
+    public function getDatumFormatted()
+    {
+        return date_format_intl($this->datum, DATE_FORMAT);
+    }
 
-	/**
-	 * @return int
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("aanmeldingen")
-	 */
-	public function getAantalAanmelding() {
-		return count($this->getAanmeldingenArray());
-	}
+    /**
+     * @return int
+     * @Serializer\Groups("datatable")
+     * @Serializer\SerializedName("aanmeldingen")
+     */
+    public function getAantalAanmelding()
+    {
+        return count($this->getAanmeldingenArray());
+    }
 
-	// Agendeerbaar ############################################################
+    // Agendeerbaar ############################################################
 
-	public function getPrijsFloat() {
-		return (float)$this->prijs / 100.0;
-	}
+    public function getPrijsFloat()
+    {
+        return (float)$this->prijs / 100.0;
+    }
 
-	public function getTitel() {
-		return $this->titel;
-	}
+    public function getTitel()
+    {
+        return $this->titel;
+    }
 
-	public function getEindMoment() {
-		return $this->getBeginMoment() + 7200;
-	}
+    public function getEindMoment()
+    {
+        return $this->getBeginMoment() + 7200;
+    }
 
-	public function getBeginMoment() {
-		return $this->datum->setTime($this->tijd->format('H'), $this->tijd->format('i'), $this->tijd->format('s'));
-	}
+    public function getBeginMoment()
+    {
+        return $this->datum->setTime($this->tijd->format('H'), $this->tijd->format('i'), $this->tijd->format('s'));
+    }
 
-	public function getBeschrijving() {
-		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
-	}
+    public function getBeschrijving()
+    {
+        return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
+    }
 
-	public function getAantalAanmeldingen() {
-		return substr_count($this->aanmeldingen, ',');
-	}
+    public function getAantalAanmeldingen()
+    {
+        return substr_count($this->aanmeldingen, ',');
+    }
 
-	public function getLocatie() {
-		return 'C.S.R. Delft';
-	}
+    public function getLocatie()
+    {
+        return 'C.S.R. Delft';
+    }
 
-	public function getUrl() {
-		return '/maaltijdenbeheer/archief';
-	}
+    public function getUrl()
+    {
+        return '/maaltijdenbeheer/archief';
+    }
 
-	public function isHeledag() {
-		return false;
-	}
+    public function isHeledag()
+    {
+        return false;
+    }
 
-	public function isTransparant() {
-		return true;
-	}
+    public function isTransparant()
+    {
+        return true;
+    }
 
-	public function jsonSerialize() {
-		$json = (array)$this;
-		$json['aanmeldingen'] = count($this->getAanmeldingenArray());
-		return $json;
-	}
+    public function jsonSerialize()
+    {
+        $json = (array)$this;
+        $json['aanmeldingen'] = count($this->getAanmeldingenArray());
+        return $json;
+    }
 
-	public function getAanmeldingenArray() {
-		$result = array();
-		$aanmeldingen = explode(',', $this->aanmeldingen);
-		foreach ($aanmeldingen as $id => $aanmelding) {
-			if ($aanmelding !== '') {
-				$result[$id] = explode('_', $aanmelding);
-			}
-		}
-		return $result;
-	}
+    public function getAanmeldingenArray()
+    {
+        $result = array();
+        $aanmeldingen = explode(',', $this->aanmeldingen);
+        foreach ($aanmeldingen as $id => $aanmelding) {
+            if ($aanmelding !== '') {
+                $result[$id] = explode('_', $aanmelding);
+            }
+        }
+        return $result;
+    }
 
-	public function getUUID() {
-		return $this->maaltijd_id . '@archiefmaaltijd.csrdelft.nl';
-	}
+    public function getUUID()
+    {
+        return $this->maaltijd_id . '@archiefmaaltijd.csrdelft.nl';
+    }
 }

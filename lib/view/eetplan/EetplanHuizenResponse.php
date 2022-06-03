@@ -10,17 +10,19 @@ use CsrDelft\view\datatable\DataTableResponse;
  *
  * Class EetplanHuizenView
  */
-class EetplanHuizenResponse extends DataTableResponse {
-	/**
-	 * @param Woonoord $entity
-	 */
-	public function renderElement($entity) {
-		return array(
-			'UUID' => $entity->getUUID(),
-			'id' => $entity->id,
-			'naam' => '<a href="' . $entity->getUrl() . '">' . $entity->naam . '</a>',
-			'soort' => $entity->huisStatus->getDescription(),
-			'eetplan' => $entity->eetplan
-		);
-	}
+class EetplanHuizenResponse extends DataTableResponse
+{
+    /**
+     * @param Woonoord $entity
+     */
+    public function renderElement($entity)
+    {
+        return array(
+            'UUID' => $entity->getUUID(),
+            'id' => $entity->id,
+            'naam' => '<a href="' . $entity->getUrl() . '">' . $entity->naam . '</a>',
+            'soort' => $entity->huisStatus->getDescription(),
+            'eetplan' => $entity->eetplan
+        );
+    }
 }

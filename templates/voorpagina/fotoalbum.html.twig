@@ -1,18 +1,18 @@
 {% if album.fotos is empty and album.subAlbums is not empty %}
-	{% set album = random(album.subAlbums) %}
+    {% set album = random(album.subAlbums) %}
 {% endif %}
 
 <h2 class="h6 fw-bolder mt-1">
-	<a href="{{ url('csrdelft_fotoalbum_bekijken', { dir: jaargang }) }}">Fotoalbum</a>
+    <a href="{{ url('csrdelft_fotoalbum_bekijken', { dir: jaargang }) }}">Fotoalbum</a>
 </h2>
 <p>
-	<a href="{{ album.url }}" class="text-body">{{ album.dirname }}</a>
+    <a href="{{ album.url }}" class="text-body">{{ album.dirname }}</a>
 </p>
 
 <div class="album-grid-container gap-1">
-	{% for i in 0..12 %}
-	<div class="album-cell ratio ratio-1x1">
-		<img src="{{album.fotos[i].thumbUrl}}" alt="{{ album.fotos[i].filename }}" class="album-item" />
-	</div>
-	{% endfor %}
+    {% for i in 0..12 %}
+        <div class="album-cell ratio ratio-1x1">
+            <img src="{{ album.fotos[i].thumbUrl }}" alt="{{ album.fotos[i].filename }}" class="album-item"/>
+        </div>
+    {% endfor %}
 </div>

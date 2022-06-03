@@ -14,28 +14,30 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * @since 2020-08-17
  * @see /config/packages/prod/monolog.yaml
  */
-class LogActivationStrategy implements ActivationStrategyInterface {
+class LogActivationStrategy implements ActivationStrategyInterface
+{
 
-	public function isHandlerActivated(array $record): bool {
-		if ($record['level'] <= Logger::WARNING) {
-			return false;
-		}
+    public function isHandlerActivated(array $record): bool
+    {
+        if ($record['level'] <= Logger::WARNING) {
+            return false;
+        }
 
-		if (!isset($record['context']['exception'])) {
-			return true;
-		}
+        if (!isset($record['context']['exception'])) {
+            return true;
+        }
 
-		$exception = $record['context']['exception'];
+        $exception = $record['context']['exception'];
 
-		// Alleen http status 500 loggen
-		if ($exception instanceof HttpException) {
-			return $exception->getStatusCode() == 500;
-		}
+        // Alleen http status 500 loggen
+        if ($exception instanceof HttpException) {
+            return $exception->getStatusCode() == 500;
+        }
 
-		if ($exception instanceof AccessDeniedException) {
-			return false;
-		}
+        if ($exception instanceof AccessDeniedException) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

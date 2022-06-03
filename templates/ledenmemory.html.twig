@@ -1,50 +1,51 @@
 <!doctype html>
 <html>
 <head>
-	<title>{{ titel }}</title>
-	{{ css_asset('ledenmemory') }}
-	{{ js_asset('ledenmemory') }}
+    <title>{{ titel }}</title>
+    {{ css_asset('ledenmemory') }}
+    {{ js_asset('ledenmemory') }}
 </head>
 <body data-groep="{{ groep.uUID }}">
 <table role="presentation">
-	<tbody>
-	<tr>
-		<td class="pasfotos">
-			{% if not cheat %}
-				{% set leden = leden | shuffle %}
-			{% endif %}
-			{% for lid in leden %}
-				<div uid="{{ lid.uid }}" class="flip memorycard pasfoto {{ learnmode?'flipped':'' }}">
-					<div class="blue front">
-						{% if cheat %}
-							{{ lid.uid }}
-						{% endif %}
-					</div>
-					<div class="blue back">
-						<img alt="Foto" src="{{ lid.pasFotoPath('vierkant') }}" title="{{ learnmode?lid.naam('volledig'):'' }}"/>
-					</div>
-				</div>
-			{% endfor %}
-		</td>
-		<td class="namen">
-			{% if not cheat and not learnmode %}
-				{% set leden = leden  | shuffle %}
-			{% endif %}
-			{% for lid in leden %}
-				<div uid="{{ lid.uid }}" class="flip memorycard naam {{ learnmode?'flipped':'' }}">
-					<div class="blue front">
-						{% if cheat %}
-							{{ lid.uid }}
-						{% endif %}
-					</div>
-					<div class="blue back">
-						<h3 title="{{ lid.naam('volledig') }}">{{ lid.naam('civitas') }}</h3>
-					</div>
-				</div>
-			{% endfor %}
-		</td>
-	</tr>
-	</tbody>
+    <tbody>
+    <tr>
+        <td class="pasfotos">
+            {% if not cheat %}
+                {% set leden = leden | shuffle %}
+            {% endif %}
+            {% for lid in leden %}
+                <div uid="{{ lid.uid }}" class="flip memorycard pasfoto {{ learnmode?'flipped':'' }}">
+                    <div class="blue front">
+                        {% if cheat %}
+                            {{ lid.uid }}
+                        {% endif %}
+                    </div>
+                    <div class="blue back">
+                        <img alt="Foto" src="{{ lid.pasFotoPath('vierkant') }}"
+                             title="{{ learnmode?lid.naam('volledig'):'' }}"/>
+                    </div>
+                </div>
+            {% endfor %}
+        </td>
+        <td class="namen">
+            {% if not cheat and not learnmode %}
+                {% set leden = leden  | shuffle %}
+            {% endif %}
+            {% for lid in leden %}
+                <div uid="{{ lid.uid }}" class="flip memorycard naam {{ learnmode?'flipped':'' }}">
+                    <div class="blue front">
+                        {% if cheat %}
+                            {{ lid.uid }}
+                        {% endif %}
+                    </div>
+                    <div class="blue back">
+                        <h3 title="{{ lid.naam('volledig') }}">{{ lid.naam('civitas') }}</h3>
+                    </div>
+                </div>
+            {% endfor %}
+        </td>
+    </tr>
+    </tbody>
 </table>
 </body>
 </html>

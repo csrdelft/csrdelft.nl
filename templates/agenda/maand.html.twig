@@ -3,56 +3,56 @@
 {% block titel %}Maandoverzicht voor {{ date(jaar ~ '-' ~ maand ~ '-01') | date_format_intl('MMMM y') }}{% endblock %}
 
 {% block dropdownJaar %}
-	<select title="Verander jaar" onchange="location.href = this.value">
-		{% set jaarMin = jaar - 5 %}
-		{% set jaarMax = jaar + 5 %}
-		{% for huidigJaar in jaarMin..jaarMax %}
-			<option value="{{ url('csrdelft_agenda_maand', {jaar: huidigJaar, maand: maand}) }}"
-							{% if jaar == huidigJaar %}selected="selected"{% endif %}>
-				{{ huidigJaar }}
-			</option>
-		{% endfor %}
-	</select>
+    <select title="Verander jaar" onchange="location.href = this.value">
+        {% set jaarMin = jaar - 5 %}
+        {% set jaarMax = jaar + 5 %}
+        {% for huidigJaar in jaarMin..jaarMax %}
+            <option value="{{ url('csrdelft_agenda_maand', {jaar: huidigJaar, maand: maand}) }}"
+                    {% if jaar == huidigJaar %}selected="selected"{% endif %}>
+                {{ huidigJaar }}
+            </option>
+        {% endfor %}
+    </select>
 {% endblock %}
 
 {% block dropdownMaand %}
-	<select title="Verander maand" onchange="location.href = this.value">
-		{% for huidigeMaand in 1..12 %}
-			<option value="{{ url('csrdelft_agenda_maand', {jaar: jaar, maand: huidigeMaand}) }}"
-							{% if maand == huidigeMaand %}selected="selected"{% endif %}>
-				{{ date(jaar ~ '-' ~ huidigeMaand ~ '-01') | date_format_intl('LLLL') }}
-			</option>
-		{% endfor %}
-	</select>
+    <select title="Verander maand" onchange="location.href = this.value">
+        {% for huidigeMaand in 1..12 %}
+            <option value="{{ url('csrdelft_agenda_maand', {jaar: jaar, maand: huidigeMaand}) }}"
+                    {% if maand == huidigeMaand %}selected="selected"{% endif %}>
+                {{ date(jaar ~ '-' ~ huidigeMaand ~ '-01') | date_format_intl('LLLL') }}
+            </option>
+        {% endfor %}
+    </select>
 {% endblock %}
 
 {% block breadcrumbs %}
-	{{ csr_breadcrumbs({
-		(url('default')): 'main',
-		(url('csrdelft_agenda_maand')): 'Agenda',
-		'-jaar': block('dropdownJaar'),
-		'-maand': block('dropdownMaand'),
-	}) }}
+    {{ csr_breadcrumbs({
+        (url('default')): 'main',
+        (url('csrdelft_agenda_maand')): 'Agenda',
+        '-jaar': block('dropdownJaar'),
+        '-maand': block('dropdownMaand'),
+    }) }}
 {% endblock %}
 
 {% block content %}
-	<div id="agenda"
-			 data-maand="{{ maand }}"
-			 data-jaar="{{ jaar }}"
-			 data-weergave="{{ lid_instelling('agenda', 'weergave') }}"
-			 data-creator="{{ creator ? "true" : "false" }}"></div>
-	<div id="ICAL" class="input-group mt-2" title="Houd deze url privé!&#013;Nieuwe aanvragen: zie je profiel">
-		<label class="input-group-text" for="ical-link">
-			<img src="{{ absolute_url('/images/ical.gif') }}" alt="ICAL"/>
-		</label>
-		{% if app.user.privateToken %}
-			<input class="form-control" type="text" id="ical-link"
-						 value="{{ absolute_url(app.user.iCalLink) }}"
-						 size="35" onclick="this.setSelectionRange(0, this.value.length);" readonly/>
-		{% else %}
-			<a class="input-group-text" href="{{ url('csrdelft_profiel_profiel', {_fragment: 'tokenaanvragen'}) }}">
-				Privé url aanvragen
-			</a>
-		{% endif %}
-	</div>
+    <div id="agenda"
+         data-maand="{{ maand }}"
+         data-jaar="{{ jaar }}"
+         data-weergave="{{ lid_instelling('agenda', 'weergave') }}"
+         data-creator="{{ creator ? "true" : "false" }}"></div>
+    <div id="ICAL" class="input-group mt-2" title="Houd deze url privé!&#013;Nieuwe aanvragen: zie je profiel">
+        <label class="input-group-text" for="ical-link">
+            <img src="{{ absolute_url('/images/ical.gif') }}" alt="ICAL"/>
+        </label>
+        {% if app.user.privateToken %}
+            <input class="form-control" type="text" id="ical-link"
+                   value="{{ absolute_url(app.user.iCalLink) }}"
+                   size="35" onclick="this.setSelectionRange(0, this.value.length);" readonly/>
+        {% else %}
+            <a class="input-group-text" href="{{ url('csrdelft_profiel_profiel', {_fragment: 'tokenaanvragen'}) }}">
+                Privé url aanvragen
+            </a>
+        {% endif %}
+    </div>
 {% endblock %}

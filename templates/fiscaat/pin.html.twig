@@ -3,45 +3,48 @@
 {% block titel %}Pinbestellingen{% endblock %}
 
 {% block civisaldocontent %}
-	<h2>Pin transacties beheer</h2>
-	<p>
-		Iedere nacht rond een uur of één worden de transacties van de pinautomaat opgehaald en
-		vergeleken met de bestellingen die in ons systeem staan. Als er iets is mis gegaan komt dat
-		in deze tabel terecht.
-	</p>
-	<p>
-		Als een bestelling en transactie aan elkaar gekoppeld moeten worden kun je een selectie maken,
-		door ctrl ingedrukt te houden kun je een selectie maken van meerdere regels.
-	</p>
-	<p>De verwerk knop doet één van de volgende dingen:</p>
-	<ul>
-		<li>
-			Als er alleen een transactie is: Op basis van een lidnummer een nieuwe bestelling maken.
-		</li>
-		<li>
-			Als er alleen een bestelling is: een creditbestelling aanmaken waarin de verhoging van het CiviSaldo teruggedraaid
-			wordt.
-		</li>
-		<li>
-			Als er een transactie en een bestelling is, maar de bedragen kloppen niet: een corrigerende bestelling aanmaken om
-			het verschil in CiviSaldo te corrigeren.
-		</li>
-	</ul>
-	<p>
-		Bij elke actie is te kiezen voor een melding aan het betreffende lid waarin vermeld staat dat het CiviSaldo verhoogd
-		/ verlaagd is met de reden waarom.
-		Dit gebeurt in een e-mail uit naam van de Fiscus. Hierin wordt ook gevraagd contact op te nemen als er iets niet
-		klopt.
-	</p>
-	<p>
-		De negeer knop haalt een bestelling, transactie of match uit de lijst met fouten. Dit kan
-		bijvoorbeeld gebruikt worden bij een feest, een corrigerende bestelling of een gesplitste
-		betaling of bestelling.
-	</p>
-	<p>
-		De heroverweeg knop controleert gekoppelde matches opnieuw, gebruik dit als je aanpassingen
-		hebt gemaakt in het SocCie systeem.
-	</p>
+    <h2>Pin transacties beheer</h2>
+    <p>
+        Iedere nacht rond een uur of één worden de transacties van de pinautomaat opgehaald en
+        vergeleken met de bestellingen die in ons systeem staan. Als er iets is mis gegaan komt dat
+        in deze tabel terecht.
+    </p>
+    <p>
+        Als een bestelling en transactie aan elkaar gekoppeld moeten worden kun je een selectie maken,
+        door ctrl ingedrukt te houden kun je een selectie maken van meerdere regels.
+    </p>
+    <p>De verwerk knop doet één van de volgende dingen:</p>
+    <ul>
+        <li>
+            Als er alleen een transactie is: Op basis van een lidnummer een nieuwe bestelling maken.
+        </li>
+        <li>
+            Als er alleen een bestelling is: een creditbestelling aanmaken waarin de verhoging van het CiviSaldo
+            teruggedraaid
+            wordt.
+        </li>
+        <li>
+            Als er een transactie en een bestelling is, maar de bedragen kloppen niet: een corrigerende bestelling
+            aanmaken om
+            het verschil in CiviSaldo te corrigeren.
+        </li>
+    </ul>
+    <p>
+        Bij elke actie is te kiezen voor een melding aan het betreffende lid waarin vermeld staat dat het CiviSaldo
+        verhoogd
+        / verlaagd is met de reden waarom.
+        Dit gebeurt in een e-mail uit naam van de Fiscus. Hierin wordt ook gevraagd contact op te nemen als er iets niet
+        klopt.
+    </p>
+    <p>
+        De negeer knop haalt een bestelling, transactie of match uit de lijst met fouten. Dit kan
+        bijvoorbeeld gebruikt worden bij een feest, een corrigerende bestelling of een gesplitste
+        betaling of bestelling.
+    </p>
+    <p>
+        De heroverweeg knop controleert gekoppelde matches opnieuw, gebruik dit als je aanpassingen
+        hebt gemaakt in het SocCie systeem.
+    </p>
 
-	{{ table(table) }}
+    {{ table(table) }}
 {% endblock %}

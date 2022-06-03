@@ -3,77 +3,78 @@
 {% block titel %}Documenten overzicht{% endblock %}
 
 {% block breadcrumbs %}
-	{{ csr_breadcrumbs({
-		(url('default')): 'main',
-		'': 'Documenten'
-	}) }}
+    {{ csr_breadcrumbs({
+        (url('default')): 'main',
+        '': 'Documenten'
+    }) }}
 {% endblock %}
 
 {% block content %}
-	<div class="btn-group float-end">
-		{% if mag('P_DOCS_MOD') %}
-			<a class="btn post popup redirect" href="{{ url('csrdelft_documenten_categorieaanmaken') }}">Categorie toevoegen</a>
-		{% endif %}
-		<a class="btn" href="{{ url('csrdelft_documenten_toevoegen') }}">{{ icon('toevoegen') }} Toevoegen</a>
-	</div>
+    <div class="btn-group float-end">
+        {% if mag('P_DOCS_MOD') %}
+            <a class="btn post popup redirect" href="{{ url('csrdelft_documenten_categorieaanmaken') }}">Categorie
+                toevoegen</a>
+        {% endif %}
+        <a class="btn" href="{{ url('csrdelft_documenten_toevoegen') }}">{{ icon('toevoegen') }} Toevoegen</a>
+    </div>
 
-	{{ getMelding() }}
+    {{ getMelding() }}
 
-	<h1>Documenten</h1>
+    <h1>Documenten</h1>
 
-	<table id="documenten" class="table table-striped">
-		<thead>
-		<tr>
-			<th scope="col">Document</th>
-			<th scope="col">Grootte</th>
-			<th scope="col">Type</th>
-			<th scope="col">Toegevoegd</th>
-			<th scope="col">Eigenaar</th>
-		</tr>
-		</thead>
+    <table id="documenten" class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Document</th>
+            <th scope="col">Grootte</th>
+            <th scope="col">Type</th>
+            <th scope="col">Toegevoegd</th>
+            <th scope="col">Eigenaar</th>
+        </tr>
+        </thead>
 
-		{% for categorie in categorien %}
-			{% if mag(categorie.leesrechten) %}
-				<tbody>
-				<tr class="table-primary">
-					<td colspan="5">
-						<a href="{{ url('csrdelft_documenten_categorie', {id: categorie.id}) }}"
-							 title="Alle documenten in {{ categorie.naam }}">
-							{{ categorie.naam }}
-						</a>
-						{% if mag(categorie.schrijfrechten) %}
-							<a class="toevoegen float-end"
-								 href="{{ url('csrdelft_documenten_toevoegen') }}?catID={{ categorie.id }}"
-								 title="Document toevoegen in categorie: {{ categorie.naam }}">
-								{{ icon('toevoegen') }}
-							</a>
-						{% endif %}
-					</td>
-				</tr>
-				{% for document in categorie.documenten.slice(0, 5) %}
-					{{ include('documenten/documentregel.html.twig', {document: document}) }}
-				{% else %}
-					<tr>
-						<td class="document" colspan="5">Geen documenten in deze categorie</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			{% endif %}
-		{% else %}
-			<tr>
-				<td colspan="5">
-					Geen categorieën in de database aanwezig.
-				</td>
-			</tr>
-		{% endfor %}
-		<tfoot>
-		<tr>
-			<th scope="col">Document</th>
-			<th scope="col">Grootte</th>
-			<th scope="col">Type</th>
-			<th scope="col">Toegevoegd</th>
-			<th scope="col">Eigenaar</th>
-		</tr>
-		</tfoot>
-	</table>
+        {% for categorie in categorien %}
+            {% if mag(categorie.leesrechten) %}
+                <tbody>
+                <tr class="table-primary">
+                    <td colspan="5">
+                        <a href="{{ url('csrdelft_documenten_categorie', {id: categorie.id}) }}"
+                           title="Alle documenten in {{ categorie.naam }}">
+                            {{ categorie.naam }}
+                        </a>
+                        {% if mag(categorie.schrijfrechten) %}
+                            <a class="toevoegen float-end"
+                               href="{{ url('csrdelft_documenten_toevoegen') }}?catID={{ categorie.id }}"
+                               title="Document toevoegen in categorie: {{ categorie.naam }}">
+                                {{ icon('toevoegen') }}
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% for document in categorie.documenten.slice(0, 5) %}
+                    {{ include('documenten/documentregel.html.twig', {document: document}) }}
+                {% else %}
+                    <tr>
+                        <td class="document" colspan="5">Geen documenten in deze categorie</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="5">
+                    Geen categorieën in de database aanwezig.
+                </td>
+            </tr>
+        {% endfor %}
+        <tfoot>
+        <tr>
+            <th scope="col">Document</th>
+            <th scope="col">Grootte</th>
+            <th scope="col">Type</th>
+            <th scope="col">Toegevoegd</th>
+            <th scope="col">Eigenaar</th>
+        </tr>
+        </tfoot>
+    </table>
 {% endblock %}

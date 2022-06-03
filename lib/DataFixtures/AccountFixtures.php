@@ -16,86 +16,89 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Uid\Uuid;
 
-class AccountFixtures extends Fixture {
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
+class AccountFixtures extends Fixture
+{
+    /**
+     * @var AccountRepository
+     */
+    private $accountRepository;
 
-	public function __construct(AccountRepository $accountRepository) {
-		$this->accountRepository = $accountRepository;
-	}
+    public function __construct(AccountRepository $accountRepository)
+    {
+        $this->accountRepository = $accountRepository;
+    }
 
-	public function load(ObjectManager $manager) {
-		$externProfiel = new Profiel();
-		$externProfiel->uid = LoginService::UID_EXTERN;
-		$externProfiel->nickname = 'nobody';
-		$externProfiel->voornaam = 'Niet';
-		$externProfiel->achternaam = 'ingelogd';
-		$externProfiel->voorletters = 'Niet';
-		$externProfiel->land = 'Nederland';
-		$externProfiel->geslacht = Geslacht::Man();
-		$externProfiel->status = LidStatus::Nobody;
-		$externProfiel->ontvangtcontactueel = OntvangtContactueel::Nee();
-		$externProfiel->gebdatum = date_create_immutable('1960-01-01');
-		$externProfiel->lengte = 0;
-		$externProfiel->adres = '';
-		$externProfiel->postcode = '';
-		$externProfiel->woonplaats = '';
-		$externProfiel->email = '';
-		$externProfiel->lidjaar = 0;
-		$externProfiel->changelog = [
-			new ProfielLogTextEntry('Aangemaakt door fixtures'),
-		];
+    public function load(ObjectManager $manager)
+    {
+        $externProfiel = new Profiel();
+        $externProfiel->uid = LoginService::UID_EXTERN;
+        $externProfiel->nickname = 'nobody';
+        $externProfiel->voornaam = 'Niet';
+        $externProfiel->achternaam = 'ingelogd';
+        $externProfiel->voorletters = 'Niet';
+        $externProfiel->land = 'Nederland';
+        $externProfiel->geslacht = Geslacht::Man();
+        $externProfiel->status = LidStatus::Nobody;
+        $externProfiel->ontvangtcontactueel = OntvangtContactueel::Nee();
+        $externProfiel->gebdatum = date_create_immutable('1960-01-01');
+        $externProfiel->lengte = 0;
+        $externProfiel->adres = '';
+        $externProfiel->postcode = '';
+        $externProfiel->woonplaats = '';
+        $externProfiel->email = '';
+        $externProfiel->lidjaar = 0;
+        $externProfiel->changelog = [
+            new ProfielLogTextEntry('Aangemaakt door fixtures'),
+        ];
 
-		$manager->persist($externProfiel);
+        $manager->persist($externProfiel);
 
-		$externAccount = new Account();
-		$externAccount->uuid = Uuid::v4();
-		$externAccount->username = '';
-		$externAccount->email = '';
-		$externAccount->pass_hash = '';
-		$externAccount->failed_login_attempts = 0;
-		$externAccount->pass_since = date_create_immutable();
-		$externAccount->uid = $externProfiel->uid;
-		$externAccount->profiel = $externProfiel;
-		$externAccount->perm_role = AccessRole::Nobody;
+        $externAccount = new Account();
+        $externAccount->uuid = Uuid::v4();
+        $externAccount->username = '';
+        $externAccount->email = '';
+        $externAccount->pass_hash = '';
+        $externAccount->failed_login_attempts = 0;
+        $externAccount->pass_since = date_create_immutable();
+        $externAccount->uid = $externProfiel->uid;
+        $externAccount->profiel = $externProfiel;
+        $externAccount->perm_role = AccessRole::Nobody;
 
-		$manager->persist($externAccount);
+        $manager->persist($externAccount);
 
-		$pubcieProfiel = new Profiel();
-		$pubcieProfiel->uid = 'x101';
-		$pubcieProfiel->nickname = 'pubcie';
-		$pubcieProfiel->voornaam = 'Pub';
-		$pubcieProfiel->achternaam = 'Cie';
-		$pubcieProfiel->voorletters = 'P.';
-		$pubcieProfiel->land = 'Nederland';
-		$pubcieProfiel->geslacht = Geslacht::Man();
-		$pubcieProfiel->status = LidStatus::Lid;
-		$pubcieProfiel->ontvangtcontactueel = OntvangtContactueel::Nee();
-		$pubcieProfiel->gebdatum = date_create_immutable('1960-01-01');
-		$pubcieProfiel->lengte = 0;
-		$pubcieProfiel->adres = '';
-		$pubcieProfiel->postcode = '';
-		$pubcieProfiel->woonplaats = '';
-		$pubcieProfiel->email = '';
-		$pubcieProfiel->lidjaar = 0;
-		$pubcieProfiel->changelog = [
-			new ProfielLogTextEntry('Aangemaakt door fixtures'),
-		];
+        $pubcieProfiel = new Profiel();
+        $pubcieProfiel->uid = 'x101';
+        $pubcieProfiel->nickname = 'pubcie';
+        $pubcieProfiel->voornaam = 'Pub';
+        $pubcieProfiel->achternaam = 'Cie';
+        $pubcieProfiel->voorletters = 'P.';
+        $pubcieProfiel->land = 'Nederland';
+        $pubcieProfiel->geslacht = Geslacht::Man();
+        $pubcieProfiel->status = LidStatus::Lid;
+        $pubcieProfiel->ontvangtcontactueel = OntvangtContactueel::Nee();
+        $pubcieProfiel->gebdatum = date_create_immutable('1960-01-01');
+        $pubcieProfiel->lengte = 0;
+        $pubcieProfiel->adres = '';
+        $pubcieProfiel->postcode = '';
+        $pubcieProfiel->woonplaats = '';
+        $pubcieProfiel->email = '';
+        $pubcieProfiel->lidjaar = 0;
+        $pubcieProfiel->changelog = [
+            new ProfielLogTextEntry('Aangemaakt door fixtures'),
+        ];
 
-		$manager->persist($pubcieProfiel);
+        $manager->persist($pubcieProfiel);
 
-		$account = $this->accountRepository->maakAccount('x101');
+        $account = $this->accountRepository->maakAccount('x101');
 
-		$this->accountRepository->wijzigWachtwoord($account, 'stek open u voor mij!');
+        $this->accountRepository->wijzigWachtwoord($account, 'stek open u voor mij!');
 
-		$account->perm_role = AccessRole::PubCie;
+        $account->perm_role = AccessRole::PubCie;
 
-		$pubcieMenu = new MenuItem();
-		$pubcieMenu->tekst = 'x101';
-		$pubcieMenu->rechten_bekijken = 'x101';
+        $pubcieMenu = new MenuItem();
+        $pubcieMenu->tekst = 'x101';
+        $pubcieMenu->rechten_bekijken = 'x101';
 
-		$manager->flush();
-	}
+        $manager->flush();
+    }
 }

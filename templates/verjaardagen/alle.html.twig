@@ -3,28 +3,28 @@
 {% block titel %}Verjaardagen{% endblock %}
 
 {% block content %}
-	<h1>Verjaardagen</h1>
-	<div class="row">
-		{% for m in  0..11 %}
-			{% set maand = (dezemaand - 1 + m) % 12 + 1 %}
-			<div class="col-xl-2 col-md-3 col-sm-4 mb-3">
-				<table class="table table-sm">
-					<tr>
-						<th colspan="2"><h3>{{ maand | date_create("!m") | date('F') | title }}</h3></th>
-					</tr>
-					{% for verjaardag in verjaardagen[maand - 1] %}
-						<tr>
-							<td class="text-right {% if verjaardag.jarig %}dikgedrukt cursief{% endif %}">
-								{{ verjaardag.gebdatum.format('j') }}
-							</td>
-							<td {% if verjaardag.jarig %}class="dikgedrukt cursief"{% endif %}>
-								&nbsp;
-								{{ verjaardag.link('civitas') | raw }}
-							</td>
-						</tr>
-					{% endfor %}
-				</table>
-			</div>
-		{% endfor %}
-	</div>
+    <h1>Verjaardagen</h1>
+    <div class="row">
+        {% for m in  0..11 %}
+            {% set maand = (dezemaand - 1 + m) % 12 + 1 %}
+            <div class="col-xl-2 col-md-3 col-sm-4 mb-3">
+                <table class="table table-sm">
+                    <tr>
+                        <th colspan="2"><h3>{{ maand | date_create("!m") | date('F') | title }}</h3></th>
+                    </tr>
+                    {% for verjaardag in verjaardagen[maand - 1] %}
+                        <tr>
+                            <td class="text-right {% if verjaardag.jarig %}dikgedrukt cursief{% endif %}">
+                                {{ verjaardag.gebdatum.format('j') }}
+                            </td>
+                            <td {% if verjaardag.jarig %}class="dikgedrukt cursief"{% endif %}>
+                                &nbsp;
+                                {{ verjaardag.link('civitas') | raw }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

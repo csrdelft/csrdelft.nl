@@ -2,22 +2,22 @@
 <html lang="nl">
 
 <head>
-	<meta name="description" content="{{ instelling('stek', 'beschrijving') }}">
-	<meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE"/>
-	<meta property="og:type" content="article">
-	<meta property="og:url" content="{{ app.request.uri }}"/>
-	<meta property="og:title" content="C.S.R. Delft | {{ block('titel') }}"/>
-	<meta property="og:locale" content="nl_nl"/>
-	<meta property="og:image" content="{{ absolute_url('images/beeldmerk.png') }}"/>
-	<meta property="og:description" content="{{ instelling('stek', 'beschrijving') }}"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	{{ csrfMetaTag() }}
-	<title>C.S.R. Delft - {% block titel %}{% endblock %}</title>
-	<link rel="shortcut icon" href="{{ absolute_url('/images/favicon.ico') }}"/>
-	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"
-				href="{{ url('csrdelft_forum_rss') }}"/>
-	{% block styles %}{% endblock %}
-	{{ js_asset('extern') }}
+    <meta name="description" content="{{ instelling('stek', 'beschrijving') }}">
+    <meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE"/>
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ app.request.uri }}"/>
+    <meta property="og:title" content="C.S.R. Delft | {{ block('titel') }}"/>
+    <meta property="og:locale" content="nl_nl"/>
+    <meta property="og:image" content="{{ absolute_url('images/beeldmerk.png') }}"/>
+    <meta property="og:description" content="{{ instelling('stek', 'beschrijving') }}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{ csrfMetaTag() }}
+    <title>C.S.R. Delft - {% block titel %}{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ absolute_url('/images/favicon.ico') }}"/>
+    <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"
+          href="{{ url('csrdelft_forum_rss') }}"/>
+    {% block styles %}{% endblock %}
+    {{ js_asset('extern') }}
 </head>
 
 <body>
@@ -25,104 +25,105 @@
 <!-- Page Wrapper -->
 <div id="page-wrapper">
 
-	{% block oweebanner %}{% endblock %}
+    {% block oweebanner %}{% endblock %}
 
-	<!-- Header -->
-	<header id="header" class="alt">
-		<nav id="menu">
-			{% for menuItem in get_menu('extern', true).children %}
-				{% if menuItem.children is not empty %}
-					<span class="dropdown-menu">
+    <!-- Header -->
+    <header id="header" class="alt">
+        <nav id="menu">
+            {% for menuItem in get_menu('extern', true).children %}
+                {% if menuItem.children is not empty %}
+                    <span class="dropdown-menu">
 						<a href="{{ menuItem.link }}"
-							 class="nav-link dropdown-link {% if app.request.requestUri starts with menuItem.link %} is-active {% endif %}">
+                           class="nav-link dropdown-link {% if app.request.requestUri starts with menuItem.link %} is-active {% endif %}">
 							{{ menuItem.tekst }} <span class="expand-dropdown"><i class="fas fa-plus"></i></span>
 						</a>
 						<span class="dropdown">
 							{% for childMenuItem in menuItem.children %}
-								<a
-									href="{{ childMenuItem.link }}" {% if app.request.requestUri starts with childMenuItem.link %} class="is-active" {% endif %}>
+                                <a
+                                        href="{{ childMenuItem.link }}" {% if app.request.requestUri starts with childMenuItem.link %} class="is-active" {% endif %}>
 									{{ childMenuItem.tekst }}
 								</a>
-							{% endfor %}
+                            {% endfor %}
 						</span>
 					</span>
-				{% else %}
-					<a class="nav-link {% if app.request.uri starts with menuItem.link %} is-active {% endif %}"
-						 href="{{ menuItem.link }}">
-						{{ menuItem.tekst }}
-					</a>
-				{% endif %}
-			{% endfor %}
-		</nav>
-		<nav style="margin-left: auto;">
-			{% set currentRoute = app.request.get('_route') %}
-			{% set routeParams = app.request.get('_route_params') ?: {} %}
+                {% else %}
+                    <a class="nav-link {% if app.request.uri starts with menuItem.link %} is-active {% endif %}"
+                       href="{{ menuItem.link }}">
+                        {{ menuItem.tekst }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </nav>
+        <nav style="margin-left: auto;">
+            {% set currentRoute = app.request.get('_route') %}
+            {% set routeParams = app.request.get('_route_params') ?: {} %}
 
-			{% if app.request.locale == 'nl' %}
-				<a class="" style="padding: 1em;"
-					 href="{{ path((currentRoute == 'defaultNoLocale' or currentRoute is null) ? 'default' : currentRoute, routeParams|merge({_locale: 'en'})) }}">
-					<img height="30" src="/images/locale_en.svg" alt="{{ "en"|locale_name("en") }}" style="height: 1em;"
-							 title="{{ "en"|locale_name("en") }}"/>
-				</a>
-			{% else %}
-				<a class="" style="padding: 1em;"
-					 href="{{ path((currentRoute == 'defaultNoLocale' or currentRoute is null) ? 'default' : currentRoute, routeParams|merge({_locale: 'nl'})) }}">
-					<img height="30" src="/images/locale_nl.svg" alt="{{ "nl"|locale_name("nl") }}" style="height: 1em;"
-							 title="{{ "nl"|locale_name("nl") }}"/>
-				</a>
-			{% endif %}
-		</nav>
-		<nav class="nav-login">
-			{% block loginbutton %}
-				<a class="login-knop" href="#login"><i class="fas fa-2x fa-fw fa-user"></i></a>
-				<a class="nav-link inloggen" href="#login">{% trans %}Inloggen{% endtrans %}</a>
-			{% endblock %}
-			<a href="#menu" class="menu-knop"><i class="fas fa-2x fa-fw fa-bars"></i></a>
-		</nav>
-	</header>
+            {% if app.request.locale == 'nl' %}
+                <a class="" style="padding: 1em;"
+                   href="{{ path((currentRoute == 'defaultNoLocale' or currentRoute is null) ? 'default' : currentRoute, routeParams|merge({_locale: 'en'})) }}">
+                    <img height="30" src="/images/locale_en.svg" alt="{{ "en"|locale_name("en") }}" style="height: 1em;"
+                         title="{{ "en"|locale_name("en") }}"/>
+                </a>
+            {% else %}
+                <a class="" style="padding: 1em;"
+                   href="{{ path((currentRoute == 'defaultNoLocale' or currentRoute is null) ? 'default' : currentRoute, routeParams|merge({_locale: 'nl'})) }}">
+                    <img height="30" src="/images/locale_nl.svg" alt="{{ "nl"|locale_name("nl") }}" style="height: 1em;"
+                         title="{{ "nl"|locale_name("nl") }}"/>
+                </a>
+            {% endif %}
+        </nav>
+        <nav class="nav-login">
+            {% block loginbutton %}
+                <a class="login-knop" href="#login"><i class="fas fa-2x fa-fw fa-user"></i></a>
+                <a class="nav-link inloggen" href="#login">{% trans %}Inloggen{% endtrans %}</a>
+            {% endblock %}
+            <a href="#menu" class="menu-knop"><i class="fas fa-2x fa-fw fa-bars"></i></a>
+        </nav>
+    </header>
 
-	{% block loginpopup %}
-		<!-- Loginform -->
-		<nav id="login">
-			<a href="#_" class="overlay"></a>
-			<div class="inner">
-				<h2>{% trans %}Inloggen{% endtrans %}</h2>
-				{{ login_form() }}
-				<a href="#_" class="close">{% trans %}Sluiten{% endtrans %}</a>
-			</div>
-		</nav>
-	{% endblock %}
+    {% block loginpopup %}
+        <!-- Loginform -->
+        <nav id="login">
+            <a href="#_" class="overlay"></a>
+            <div class="inner">
+                <h2>{% trans %}Inloggen{% endtrans %}</h2>
+                {{ login_form() }}
+                <a href="#_" class="close">{% trans %}Sluiten{% endtrans %}</a>
+            </div>
+        </nav>
+    {% endblock %}
 
-	{% block body %}
-		<!-- Banner -->
-		<section id="banner">
-			<div class="inner">
-				<a href="{{ path('default') }}">
-					<img src="{{ absolute_url('/images/c.s.r.logo.svg') }}" alt="Beeldmerk van de vereniging">
-					<h1>C.S.R. Delft</h1>
-				</a>
-			</div>
-		</section>
+    {% block body %}
+        <!-- Banner -->
+        <section id="banner">
+            <div class="inner">
+                <a href="{{ path('default') }}">
+                    <img src="{{ absolute_url('/images/c.s.r.logo.svg') }}" alt="Beeldmerk van de vereniging">
+                    <h1>C.S.R. Delft</h1>
+                </a>
+            </div>
+        </section>
 
-		<!-- Wrapper -->
-		<section id="wrapper">
-			<section class="wrapper detail first">
-				<div class="inner">
-					<div class="content">
-						{% block content %}{% endblock %}
-					</div>
-				</div>
-			</section>
-			<section id="footer">
-				<div class="inner">
-					<ul class="copyright">
-						<li>&copy; {{ date().format('Y') }} - C.S.R. Delft - <a
-								href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">Privacy</a></li>
-					</ul>
-				</div>
-			</section>
-		</section>
-	{% endblock %}
+        <!-- Wrapper -->
+        <section id="wrapper">
+            <section class="wrapper detail first">
+                <div class="inner">
+                    <div class="content">
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+            </section>
+            <section id="footer">
+                <div class="inner">
+                    <ul class="copyright">
+                        <li>&copy; {{ date().format('Y') }} - C.S.R. Delft - <a
+                                    href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </section>
+    {% endblock %}
 </div>
 </body>
 </html>

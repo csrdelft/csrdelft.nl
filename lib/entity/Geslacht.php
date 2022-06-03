@@ -12,18 +12,19 @@ use CsrDelft\common\Enum;
  * @method static boolean isMan($geslacht)
  * @method static boolean isVrouw($geslacht)
  */
-class Geslacht extends Enum {
-	/**
-	 * Geslacht opties.
-	 */
-	const Man = 'm';
-	const Vrouw = 'v';
+class Geslacht extends Enum
+{
+    /**
+     * Geslacht opties.
+     */
+    const Man = 'm';
+    const Vrouw = 'v';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $mapChoiceToDescription = [
-		self::Man => 'man',
-		self::Vrouw => 'vrouw',
-	];
+    /**
+     * @var string[]
+     */
+    protected static $mapChoiceToDescription = [
+        self::Man => 'man',
+        self::Vrouw => 'vrouw',
+    ];
 }

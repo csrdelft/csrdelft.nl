@@ -1,11 +1,11 @@
 [p]
 {%- for item in items -%}
-	{%- if item is profiel -%}{# Geen verjaardagen #}
-	{%- elseif item is corveetaak -%}{# Geen corvee #}
-	{%- else -%}
-		{%- set url = url('csrdelft_agenda_maand', {jaar: date(item.beginMoment) | date('Y'), maand: date(item.eindMoment) | date('m')}) -%}
-		{%- set date = date(item.beginMoment) | date_format_intl('eeee dd-MM HH:mm') -%}
-		{{- date }} [url={{ url }}]{{ item.titel }}[/url][rn]
-	{%- endif -%}
+    {%- if item is profiel -%}{# Geen verjaardagen #}
+    {%- elseif item is corveetaak -%}{# Geen corvee #}
+    {%- else -%}
+        {%- set url = url('csrdelft_agenda_maand', {jaar: date(item.beginMoment) | date('Y'), maand: date(item.eindMoment) | date('m')}) -%}
+        {%- set date = date(item.beginMoment) | date_format_intl('eeee dd-MM HH:mm') -%}
+        {{- date }} [url={{ url }}]{{ item.titel }}[/url][rn]
+    {%- endif -%}
 {%- endfor -%}
 [/p]

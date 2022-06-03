@@ -16,127 +16,131 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Trikoder\Bundle\OAuth2Bundle\Command\ClearExpiredTokensCommand;
 use Trikoder\Bundle\OAuth2Bundle\Command\ClearRevokedTokensCommand;
 
-class CronCommand extends Command {
-	protected static $defaultName = 'stek:cron';
-	/**
-	 * @var DebugLogRepository
-	 */
-	private $debugLogRepository;
-	/**
-	 * @var OneTimeTokensRepository
-	 */
-	private $oneTimeTokensRepository;
-	/**
-	 * @var InstellingenRepository
-	 */
-	private $instellingenRepository;
-	/**
-	 * @var LidInstellingenRepository
-	 */
-	private $lidInstellingenRepository;
-	/**
-	 * @var CorveeHerinneringService
-	 */
-	private $corveeHerinneringService;
-	/**
-	 * @var ForumCategorieRepository
-	 */
-	private $forumCategorieRepository;
-	/**
-	 * @var PinTransactiesDownloadenCommand
-	 */
-	private $pinTransactiesDownloadenCommand;
+class CronCommand extends Command
+{
+    protected static $defaultName = 'stek:cron';
+    /**
+     * @var DebugLogRepository
+     */
+    private $debugLogRepository;
+    /**
+     * @var OneTimeTokensRepository
+     */
+    private $oneTimeTokensRepository;
+    /**
+     * @var InstellingenRepository
+     */
+    private $instellingenRepository;
+    /**
+     * @var LidInstellingenRepository
+     */
+    private $lidInstellingenRepository;
+    /**
+     * @var CorveeHerinneringService
+     */
+    private $corveeHerinneringService;
+    /**
+     * @var ForumCategorieRepository
+     */
+    private $forumCategorieRepository;
+    /**
+     * @var PinTransactiesDownloadenCommand
+     */
+    private $pinTransactiesDownloadenCommand;
 
-	protected function configure() {
-		$this
-			->setDescription('Voer alle periodieke taken uit');
-	}
+    protected function configure()
+    {
+        $this
+            ->setDescription('Voer alle periodieke taken uit');
+    }
 
-	public function __construct(
-		PinTransactiesDownloadenCommand $pinTransactiesDownloadenCommand,
-		DebugLogRepository $debugLogRepository,
-		OneTimeTokensRepository $oneTimeTokensRepository,
-		InstellingenRepository $instellingenRepository,
-		LidInstellingenRepository $lidInstellingenRepository,
-		CorveeHerinneringService $corveeHerinneringService,
-		ForumCategorieRepository $forumCategorieRepository
-	) {
-		parent::__construct(null);
-		$this->debugLogRepository = $debugLogRepository;
-		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
-		$this->instellingenRepository = $instellingenRepository;
-		$this->lidInstellingenRepository = $lidInstellingenRepository;
-		$this->corveeHerinneringService = $corveeHerinneringService;
-		$this->forumCategorieRepository = $forumCategorieRepository;
-		$this->pinTransactiesDownloadenCommand = $pinTransactiesDownloadenCommand;
-	}
+    public function __construct(
+        PinTransactiesDownloadenCommand $pinTransactiesDownloadenCommand,
+        DebugLogRepository              $debugLogRepository,
+        OneTimeTokensRepository         $oneTimeTokensRepository,
+        InstellingenRepository          $instellingenRepository,
+        LidInstellingenRepository       $lidInstellingenRepository,
+        CorveeHerinneringService        $corveeHerinneringService,
+        ForumCategorieRepository        $forumCategorieRepository
+    )
+    {
+        parent::__construct(null);
+        $this->debugLogRepository = $debugLogRepository;
+        $this->oneTimeTokensRepository = $oneTimeTokensRepository;
+        $this->instellingenRepository = $instellingenRepository;
+        $this->lidInstellingenRepository = $lidInstellingenRepository;
+        $this->corveeHerinneringService = $corveeHerinneringService;
+        $this->forumCategorieRepository = $forumCategorieRepository;
+        $this->pinTransactiesDownloadenCommand = $pinTransactiesDownloadenCommand;
+    }
 
-	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$start = microtime(true);
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $start = microtime(true);
 
-		$output->writeln("debuglog opschonen", OutputInterface::VERBOSITY_VERBOSE);
-		try {
-			$this->debugLogRepository->opschonen();
-		} catch (Exception $e) {
-			$output->writeln($e->getMessage());
-			$this->debugLogRepository->log('cron.php', 'debugLogRepository->opschonen', array(), $e);
-		}
+        $output->writeln("debuglog opschonen", OutputInterface::VERBOSITY_VERBOSE);
+        try {
+            $this->debugLogRepository->opschonen();
+        } catch (Exception $e) {
+            $output->writeln($e->getMessage());
+            $this->debugLogRepository->log('cron.php', 'debugLogRepository->opschonen', array(), $e);
+        }
 
-		$output->writeln("One time tokens opschonen", OutputInterface::VERBOSITY_VERBOSE);
-		try {
-			$this->oneTimeTokensRepository->opschonen();
-		} catch (Exception $e) {
-			$output->writeln($e->getMessage());
-			$this->debugLogRepository->log('cron.php', 'oneTimeTokensRepository->opschonen', array(), $e);
-		}
+        $output->writeln("One time tokens opschonen", OutputInterface::VERBOSITY_VERBOSE);
+        try {
+            $this->oneTimeTokensRepository->opschonen();
+        } catch (Exception $e) {
+            $output->writeln($e->getMessage());
+            $this->debugLogRepository->log('cron.php', 'oneTimeTokensRepository->opschonen', array(), $e);
+        }
 
-		$output->writeln("Instellingen opschonen", OutputInterface::VERBOSITY_VERBOSE);
-		try {
-			$this->instellingenRepository->opschonen();
-			$this->lidInstellingenRepository->opschonen();
-		} catch (Exception $e) {
-			$output->writeln($e->getMessage());
-			$this->debugLogRepository->log('cron.php', '(Lid)InstellingenRepository->opschonen', array(), $e);
-		}
+        $output->writeln("Instellingen opschonen", OutputInterface::VERBOSITY_VERBOSE);
+        try {
+            $this->instellingenRepository->opschonen();
+            $this->lidInstellingenRepository->opschonen();
+        } catch (Exception $e) {
+            $output->writeln($e->getMessage());
+            $this->debugLogRepository->log('cron.php', '(Lid)InstellingenRepository->opschonen', array(), $e);
+        }
 
-		$output->writeln("Corvee herinneringen", OutputInterface::VERBOSITY_VERBOSE);
-		try {
-			$this->corveeHerinneringService->stuurHerinneringen();
-		} catch (Exception $e) {
-			$output->writeln($e->getMessage());
-			$this->debugLogRepository->log('cron.php', 'corveeHerinneringenService->stuurHerinneringen', array(), $e);
-		}
+        $output->writeln("Corvee herinneringen", OutputInterface::VERBOSITY_VERBOSE);
+        try {
+            $this->corveeHerinneringService->stuurHerinneringen();
+        } catch (Exception $e) {
+            $output->writeln($e->getMessage());
+            $this->debugLogRepository->log('cron.php', 'corveeHerinneringenService->stuurHerinneringen', array(), $e);
+        }
 
-		$output->writeln("Forum opschonen", OutputInterface::VERBOSITY_VERBOSE);
-		try {
-			$this->forumCategorieRepository->opschonen();
-		} catch (Exception $e) {
-			$output->writeln($e->getMessage());
-			$this->debugLogRepository->log('cron.php', 'forumCategorieRepository->opschonen', array(), $e);
-		}
+        $output->writeln("Forum opschonen", OutputInterface::VERBOSITY_VERBOSE);
+        try {
+            $this->forumCategorieRepository->opschonen();
+        } catch (Exception $e) {
+            $output->writeln($e->getMessage());
+            $this->debugLogRepository->log('cron.php', 'forumCategorieRepository->opschonen', array(), $e);
+        }
 
-		$ret = $this->getApplication()
-			->find(PinTransactiesDownloadenCommand::getDefaultName())
-			->run(new ArrayInput(["--no-interaction" => true]), $output);
+        $ret = $this->getApplication()
+            ->find(PinTransactiesDownloadenCommand::getDefaultName())
+            ->run(new ArrayInput(["--no-interaction" => true]), $output);
 
-		if ($ret !== 0) {
-			$output->writeln($ret);
-			$this->debugLogRepository->log('cron.php', 'pin_transactie_download', [], 'exit ' . $ret);
-		}
+        if ($ret !== 0) {
+            $output->writeln($ret);
+            $this->debugLogRepository->log('cron.php', 'pin_transactie_download', [], 'exit ' . $ret);
+        }
 
-		// Verwijder verlopen oauth2 tokens
-		$this->getApplication()
-			->find(ClearExpiredTokensCommand::getDefaultName())
-			->run(new ArrayInput([]), $output);
+        // Verwijder verlopen oauth2 tokens
+        $this->getApplication()
+            ->find(ClearExpiredTokensCommand::getDefaultName())
+            ->run(new ArrayInput([]), $output);
 
-		// Verwijder revoked oauth2 tokens
-		$this->getApplication()
-			->find(ClearRevokedTokensCommand::getDefaultName())
-			->run(new ArrayInput([]), $output);
+        // Verwijder revoked oauth2 tokens
+        $this->getApplication()
+            ->find(ClearRevokedTokensCommand::getDefaultName())
+            ->run(new ArrayInput([]), $output);
 
-		$finish = microtime(true) - $start;
-		$output->writeln(getDateTime() . ' Finished in ' . (int)$finish . ' seconds', OutputInterface::VERBOSITY_VERBOSE);
+        $finish = microtime(true) - $start;
+        $output->writeln(getDateTime() . ' Finished in ' . (int)$finish . ' seconds', OutputInterface::VERBOSITY_VERBOSE);
 
-		return Command::SUCCESS;
-	}
+        return Command::SUCCESS;
+    }
 }

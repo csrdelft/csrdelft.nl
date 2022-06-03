@@ -6,16 +6,19 @@ namespace CsrDelft\common\Doctrine\Type;
 
 use CsrDelft\model\entity\groepen\GroepKeuze;
 
-class GroepKeuzeType extends SafeJsonType {
+class GroepKeuzeType extends SafeJsonType
+{
 
-	/**
-	 * @inheritDoc
-	 */
-	public function getName() {
-		return 'groepkeuze';
-	}
+    /**
+     * @inheritDoc
+     */
+    public function getName()
+    {
+        return 'groepkeuze';
+    }
 
-	protected function getAcceptedTypes() {
-		return [GroepKeuze::class];
-	}
+    protected function getAcceptedTypes()
+    {
+        return [GroepKeuze::class];
+    }
 }

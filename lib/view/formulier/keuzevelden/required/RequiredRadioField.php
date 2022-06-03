@@ -12,8 +12,9 @@ use CsrDelft\view\formulier\keuzevelden\RadioField;
  *
  * @see RadioField
  */
-class RequiredRadioField extends RadioField {
+class RequiredRadioField extends RadioField
+{
 
-	public $required = true;
+    public $required = true;
 
 }

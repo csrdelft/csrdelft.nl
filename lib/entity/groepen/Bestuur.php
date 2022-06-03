@@ -12,17 +12,20 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\BesturenRepository")
  */
-class Bestuur extends Groep {
-	use GroepMoment;
-	/**
-	 * Bestuurstekst
-	 * @var string
-	 * @ORM\Column(type="text")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $bijbeltekst;
+class Bestuur extends Groep
+{
+    use GroepMoment;
 
-	public function getUrl() {
-		return '/groepen/besturen/' . $this->id;
-	}
+    /**
+     * Bestuurstekst
+     * @var string
+     * @ORM\Column(type="text")
+     * @Serializer\Groups("datatable")
+     */
+    public $bijbeltekst;
+
+    public function getUrl()
+    {
+        return '/groepen/besturen/' . $this->id;
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\lid;
+
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
@@ -10,146 +11,151 @@ use Exception;
 /**
  * De 'normale' ledenlijst, zoals het is zoals het was.
  */
-class LLLijst extends LLWeergave {
+class LLLijst extends LLWeergave
+{
 
-	private function viewVeldnamen() {
-		$html = '';
-		$html .= '<tr>';
-		foreach ($this->velden as $veld) {
-			$html .= '<th>' . ucfirst($veld) . '</th>';
-		}
-		$html .= '</tr>';
-		return $html;
-	}
+    private function viewVeldnamen()
+    {
+        $html = '';
+        $html .= '<tr>';
+        foreach ($this->velden as $veld) {
+            $html .= '<th>' . ucfirst($veld) . '</th>';
+        }
+        $html .= '</tr>';
+        return $html;
+    }
 
-	public function viewHeader() {
-		$html = '';
-		$html .= '<table class="zoekResultaat ctx-offline-datatable"
+    public function viewHeader()
+    {
+        $html = '';
+        $html .= '<table class="zoekResultaat ctx-offline-datatable"
 						id="zoekResultaat" data-display-length="50" data-length-change="false">';
-		$html .= '<thead>';
-		$html .= $this->viewVeldnamen();
-		$html .= '</thead><tbody>';
-		return $html;
-	}
+        $html .= '<thead>';
+        $html .= $this->viewVeldnamen();
+        $html .= '</thead><tbody>';
+        return $html;
+    }
 
-	public function viewFooter() {
-		$html = '';
-		$html .= "</tbody>\n<tfoot>";
-		$html .= $this->viewVeldnamen();
-		$html .= '</tfoot></table>';
+    public function viewFooter()
+    {
+        $html = '';
+        $html .= "</tbody>\n<tfoot>";
+        $html .= $this->viewVeldnamen();
+        $html .= '</tfoot></table>';
 
-		//fix jQuery datatables op deze tabel.
-		$aoColumns = array();
-		foreach ($this->velden as $veld) {
-			switch ($veld) {
-				case 'pasfoto':
-					$aoColumns[] = '{"bSortable": false}';
-					break;
-				case 'email':
-				case 'naam':
-				case 'kring':
-				case 'patroon':
-				case 'verticale':
-				case 'woonoord':
-					$aoColumns[] = '{"sType": \'html\'}';
-					break;
-				default:
-					$aoColumns[] = 'null';
-			}
-		}
-		return $html;
-	}
+        //fix jQuery datatables op deze tabel.
+        $aoColumns = array();
+        foreach ($this->velden as $veld) {
+            switch ($veld) {
+                case 'pasfoto':
+                    $aoColumns[] = '{"bSortable": false}';
+                    break;
+                case 'email':
+                case 'naam':
+                case 'kring':
+                case 'patroon':
+                case 'verticale':
+                case 'woonoord':
+                    $aoColumns[] = '{"sType": \'html\'}';
+                    break;
+                default:
+                    $aoColumns[] = 'null';
+            }
+        }
+        return $html;
+    }
 
-	public function viewLid(Profiel $profiel) {
-		$html = '';
-		$html .= '<tr id="lid' . $profiel->uid . '">';
-		foreach ($this->velden as $veld) {
-			$html .= '<td class="' . $veld . '">';
-			switch ($veld) {
+    public function viewLid(Profiel $profiel)
+    {
+        $html = '';
+        $html .= '<tr id="lid' . $profiel->uid . '">';
+        foreach ($this->velden as $veld) {
+            $html .= '<td class="' . $veld . '">';
+            switch ($veld) {
 
-				case 'email':
-					$email = $profiel->getPrimaryEmail();
-					if ($email) {
-						$html .= '<a href="mailto:' . $email . '">' . $email . '</a>';
-					}
-					break;
+                case 'email':
+                    $email = $profiel->getPrimaryEmail();
+                    if ($email) {
+                        $html .= '<a href="mailto:' . $email . '">' . $email . '</a>';
+                    }
+                    break;
 
-				case 'adres':
-					$html .= htmlspecialchars($profiel->getAdres());
-					break;
+                case 'adres':
+                    $html .= htmlspecialchars($profiel->getAdres());
+                    break;
 
-				case 'kring':
-					$kring = $profiel->getKring();
-					if ($kring) {
-						$html .= '<a href="' . $kring->getUrl() . '">' . $kring->naam . '</a>';
-					}
-					break;
+                case 'kring':
+                    $kring = $profiel->getKring();
+                    if ($kring) {
+                        $html .= '<a href="' . $kring->getUrl() . '">' . $kring->naam . '</a>';
+                    }
+                    break;
 
-				case 'naam':
-					//we stoppen er een verborgen <span> bij waar op gesorteerd wordt door datatables.
-					$html .= '<span class="verborgen">' . $profiel->getNaam('streeplijst') . '</span>';
-					$html .= $profiel->getLink('volledig');
-					break;
+                case 'naam':
+                    //we stoppen er een verborgen <span> bij waar op gesorteerd wordt door datatables.
+                    $html .= '<span class="verborgen">' . $profiel->getNaam('streeplijst') . '</span>';
+                    $html .= $profiel->getLink('volledig');
+                    break;
 
-				case 'pasfoto':
-					$html .= $profiel->getPasfotoTag();
-					break;
+                case 'pasfoto':
+                    $html .= $profiel->getPasfotoTag();
+                    break;
 
-				case 'patroon':
-					$patroon = ProfielRepository::get($profiel->patroon);
-					if ($patroon) {
-						$html .= $patroon->getLink('volledig');
-					} else {
-						$html .= '-';
-					}
-					break;
+                case 'patroon':
+                    $patroon = ProfielRepository::get($profiel->patroon);
+                    if ($patroon) {
+                        $html .= $patroon->getLink('volledig');
+                    } else {
+                        $html .= '-';
+                    }
+                    break;
 
-				case 'echtgenoot':
-					$echtgenoot = ProfielRepository::get($profiel->echtgenoot);
-					if ($echtgenoot) {
-						$html .= $echtgenoot->getLink('volledig');
-					} else {
-						$html .= '-';
-					}
-					break;
+                case 'echtgenoot':
+                    $echtgenoot = ProfielRepository::get($profiel->echtgenoot);
+                    if ($echtgenoot) {
+                        $html .= $echtgenoot->getLink('volledig');
+                    } else {
+                        $html .= '-';
+                    }
+                    break;
 
-				case 'status':
-					$html .= LidStatus::from($profiel->status)->getDescription();
-					break;
+                case 'status':
+                    $html .= LidStatus::from($profiel->status)->getDescription();
+                    break;
 
-				case 'verticale':
-					if ($profiel->getVerticale())
-						$html .= htmlspecialchars($profiel->getVerticale()->naam);
-					break;
+                case 'verticale':
+                    if ($profiel->getVerticale())
+                        $html .= htmlspecialchars($profiel->getVerticale()->naam);
+                    break;
 
-				case 'woonoord':
-					$woonoord = $profiel->getWoonoord();
-					if ($woonoord) {
-						$html .= '<a href="' . $woonoord->getUrl() . '">' . htmlspecialchars($woonoord->naam) . '</a>';
-					}
-					break;
+                case 'woonoord':
+                    $woonoord = $profiel->getWoonoord();
+                    if ($woonoord) {
+                        $html .= '<a href="' . $woonoord->getUrl() . '">' . htmlspecialchars($woonoord->naam) . '</a>';
+                    }
+                    break;
 
-				case 'linkedin':
-				case 'website':
-					$html .= '<a target="_blank" href="' . htmlspecialchars($profiel->$veld) . '">' . htmlspecialchars($profiel->$veld) . '</a>';
-					break;
+                case 'linkedin':
+                case 'website':
+                    $html .= '<a target="_blank" href="' . htmlspecialchars($profiel->$veld) . '">' . htmlspecialchars($profiel->$veld) . '</a>';
+                    break;
 
-				default:
-					try {
-						if ($profiel->$veld instanceof DateTimeInterface) {
-							$html .= date_format_intl($profiel->$veld, DATE_FORMAT);
-						} else {
-							$html .= htmlspecialchars($profiel->$veld);
-						}
-					} catch (Exception $e) {
-						$html .= ' - ';
-					}
-			}
-			$html .= '</td>';
-		}
+                default:
+                    try {
+                        if ($profiel->$veld instanceof DateTimeInterface) {
+                            $html .= date_format_intl($profiel->$veld, DATE_FORMAT);
+                        } else {
+                            $html .= htmlspecialchars($profiel->$veld);
+                        }
+                    } catch (Exception $e) {
+                        $html .= ' - ';
+                    }
+            }
+            $html .= '</td>';
+        }
 
-		$html .= '</tr>';
-		return $html;
-	}
+        $html .= '</tr>';
+        return $html;
+    }
 
 }
