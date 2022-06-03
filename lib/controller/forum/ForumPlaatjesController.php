@@ -17,13 +17,11 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ForumPlaatjesController extends AbstractController
-{
-	/** @var ForumPlaatjeRepository */
+class ForumPlaatjesController extends AbstractController {
+	/** @var ForumPlaatjeRepository  */
 	private $forumPlaatjeRepository;
 
-	public function __construct(ForumPlaatjeRepository $forumPlaatjeRepository)
-	{
+	public function __construct(ForumPlaatjeRepository $forumPlaatjeRepository) {
 		$this->forumPlaatjeRepository = $forumPlaatjeRepository;
 	}
 
@@ -34,8 +32,7 @@ class ForumPlaatjesController extends AbstractController
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function uploadJson()
-	{
+	public function uploadJson() {
 		$form = new PlaatjesUploadModalForm();
 		if ($form->isPosted()) {
 			$plaatje = $this->forumPlaatjeRepository->fromUploader($form->uploader, $this->getUid());
@@ -56,8 +53,7 @@ class ForumPlaatjesController extends AbstractController
 	 * @Route("/forum/plaatjes/bekijken/{id}/resized", methods={"GET"}, requirements={"id"="[a-zA-Z0-9]*"}, defaults={"resized"=true})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bekijken($id, $resized = false)
-	{
+	public function bekijken($id, $resized=false) {
 		$plaatje = $this->forumPlaatjeRepository->getByKey($id);
 		if (!$plaatje) {
 			throw new NotFoundHttpException();

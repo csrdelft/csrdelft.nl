@@ -6,13 +6,11 @@ use CsrDelft\view\formulier\knoppen\FormKnoppen;
 use CsrDelft\view\formulier\knoppen\PasfotoAanmeldenKnop;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 
-class GroepAanmeldKnoppen extends FormKnoppen
-{
+class GroepAanmeldKnoppen extends FormKnoppen {
 
 	public $submit;
 
-	public function __construct($pasfoto = false)
-	{
+	public function __construct($pasfoto = false) {
 		parent::__construct();
 		if ($pasfoto) {
 			$this->submit = new PasfotoAanmeldenKnop();

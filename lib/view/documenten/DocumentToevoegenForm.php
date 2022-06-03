@@ -74,7 +74,7 @@ hoort, of als je er zeker van wil zijn dat je document in de goede categorie ter
 Documenten met een tijdelijke aard zul je zelf ergens op een externe plek neer moeten zetten.
 [p]Zorg ervoor dat de naam van je document genoeg context geeft over de inhoud, zodat er op gezocht kan worden.[/p]
 TAG
-		);
+);
 
 		$fields['categorie'] = new EntitySelectField('categorie', $data->categorie, 'Categorie', DocumentCategorie::class);
 		$fields['categorie']->setOptions($this->documentCategorieRepository->findMetSchijfrechtenVoorLid());

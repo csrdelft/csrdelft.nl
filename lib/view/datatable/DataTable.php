@@ -26,10 +26,8 @@ use Doctrine\ORM\Mapping\ClassMetadata;
  * @see http://www.datatables.net/
  *
  */
-class DataTable implements View, FormElement, ToResponse
-{
+class DataTable implements View, FormElement, ToResponse {
 	use ToHtmlResponse;
-
 	const POST_SELECTION = 'DataTableSelection';
 
 	protected $dataUrl;
@@ -74,8 +72,7 @@ class DataTable implements View, FormElement, ToResponse
 	private $columns = array();
 	private $groupByColumn;
 
-	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null, $loadColumns = true)
-	{
+	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null, $loadColumns = true) {
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
@@ -106,13 +103,11 @@ class DataTable implements View, FormElement, ToResponse
 	/**
 	 * @return string
 	 */
-	public function getDataTableId()
-	{
+	public function getDataTableId() {
 		return $this->dataTableId;
 	}
 
-	public function setSearch($searchString)
-	{
+	public function setSearch($searchString) {
 		$this->settings['search'] = ['search' => $searchString];
 	}
 
@@ -158,24 +153,20 @@ class DataTable implements View, FormElement, ToResponse
 	/**
 	 * @param DataTableKnop $knop
 	 */
-	protected function addKnop(DataTableKnop $knop)
-	{
+	protected function addKnop(DataTableKnop $knop) {
 		$knop->setDataTableId($this->dataTableId);
 		$this->settings['userButtons'][] = $knop;
 	}
 
-	protected function addRowKnop(DataTableRowKnop $knop)
-	{
+	protected function addRowKnop(DataTableRowKnop $knop) {
 		$this->settings['rowButtons'][] = $knop;
 	}
 
-	protected function columnPosition($name)
-	{
+	protected function columnPosition($name) {
 		return array_search($name, array_keys($this->columns));
 	}
 
-	protected function setOrder($names)
-	{
+	protected function setOrder($names) {
 		$orders = [];
 		foreach ($names as $name => $order) {
 			$orders[] = array($this->columnPosition($name), $order);
@@ -192,8 +183,7 @@ class DataTable implements View, FormElement, ToResponse
 	 * @param CellType|null $type
 	 * @param string|null $data The data source for the column. Defaults to the column name.
 	 */
-	protected function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null, $data = null)
-	{
+	protected function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null, $data = null) {
 		$type = $type ?: CellType::String();
 		$render = $render ?: CellRender::Default();
 
@@ -233,24 +223,23 @@ class DataTable implements View, FormElement, ToResponse
 	/**
 	 * Gebruik deze functie om kolommen te verwijderen, doe dit als eerst.
 	 *
-	 * @param string $name
-	 * @param string $name
-	 * @param bool $hide
-	 * @see hideColumn als je de inhoud van een kolom nog wil kunnen opvragen.
-	 *
 	 * @see columnPosition geeft een andere uitvoer na deze functie.
 	 *
-	 * Gebruik de veiligere/
-	 * protected function deleteColumn($name) {
-	 * if (isset($this->columns[$name])) {
-	 * array_splice($this->columns, $this->columnPosition($name), 1);
-	 * }
-	 * }
+	 * Gebruik de veiligere @see hideColumn als je de inhoud van een kolom nog wil kunnen opvragen.
 	 *
-	 * /**
+	 * @param string $name
 	 */
-	protected function hideColumn($name, $hide = true)
-	{
+	protected function deleteColumn($name) {
+		if (isset($this->columns[$name])) {
+			array_splice($this->columns, $this->columnPosition($name), 1);
+		}
+	}
+
+	/**
+	 * @param string $name
+	 * @param bool $hide
+	 */
+	protected function hideColumn($name, $hide = true) {
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['visible'] = !$hide;
 		}
@@ -260,8 +249,7 @@ class DataTable implements View, FormElement, ToResponse
 	 * @param string $name
 	 * @param bool $searchable
 	 */
-	protected function searchColumn($name, $searchable = true)
-	{
+	protected function searchColumn($name, $searchable = true) {
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['searchable'] = (boolean)$searchable;
 		}
@@ -271,15 +259,13 @@ class DataTable implements View, FormElement, ToResponse
 	 * @param string $name
 	 * @param string $title
 	 */
-	protected function setColumnTitle($name, $title)
-	{
+	protected function setColumnTitle($name, $title) {
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['title'] = $title;
 		}
 	}
 
-	protected function getSettings()
-	{
+	protected function getSettings() {
 		$settings = $this->settings;
 
 		// set view modus: paging or scrolling
@@ -357,36 +343,30 @@ class DataTable implements View, FormElement, ToResponse
 		return $settings;
 	}
 
-	public function __toString()
-	{
+	public function __toString() {
 		return $this->getHtml();
 	}
 
-	public function getTitel()
-	{
+	public function getTitel() {
 		return $this->titel;
 	}
 
-	public function getBreadcrumbs()
-	{
+	public function getBreadcrumbs() {
 		return $this->titel;
 	}
 
 	/**
 	 * Hiermee wordt gepoogt af te dwingen dat een view een model heeft om te tonen
 	 */
-	public function getModel()
-	{
+	public function getModel() {
 		return null;
 	}
 
-	public function getType()
-	{
+	public function getType() {
 		return classNameZonderNamespace(get_class($this));
 	}
 
-	public function getHtml()
-	{
+	public function getHtml() {
 		$id = str_replace(' ', '-', strtolower($this->getTitel()));
 
 		$settingsJson = htmlspecialchars(json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0));
@@ -399,8 +379,7 @@ class DataTable implements View, FormElement, ToResponse
 HTML;
 	}
 
-	public function getJavascript()
-	{
+	public function getJavascript() {
 		//Nothing should be returned here because the script is already embedded in getView
 		return "";
 	}

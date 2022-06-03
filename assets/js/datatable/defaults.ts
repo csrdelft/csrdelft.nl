@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import { init } from '../ctx';
-import { PersistentEntity } from './api';
+import {init} from '../ctx';
+import {PersistentEntity} from './api';
 import Settings = DataTables.Settings;
 
 export default {
@@ -9,20 +9,16 @@ export default {
 		$(tr).attr('data-uuid', data.UUID);
 		init(tr as HTMLElement);
 
-		$(tr)
-			.children()
-			.each((columnIndex, td) => {
-				// Init custom buttons in rows
-				$(td)
-					.children('a.post')
-					.each((i, a) => {
-						const id = this.attr('id');
-						if (!id) {
-							throw new Error('Geen datatableid');
-						}
-						$(a).attr('data-tableid', id);
-					});
+		$(tr).children().each((columnIndex, td) => {
+			// Init custom buttons in rows
+			$(td).children('a.post').each((i, a) => {
+				const id = this.attr('id');
+				if (!id) {
+					throw new Error("Geen datatableid")
+				}
+				$(a).attr('data-tableid', id);
 			});
+		});
 	},
 	language: {
 		buttons: {

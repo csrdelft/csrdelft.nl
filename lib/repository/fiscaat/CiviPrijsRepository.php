@@ -18,10 +18,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CiviPrijs[]    findAll()
  * @method CiviPrijs[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CiviPrijsRepository extends AbstractRepository
-{
-	public function __construct(ManagerRegistry $registry)
-	{
+class CiviPrijsRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, CiviPrijs::class);
 	}
 
@@ -34,8 +32,7 @@ class CiviPrijsRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderVoorProduct(CiviProduct $product)
-	{
+	public function verwijderVoorProduct(CiviProduct $product) {
 		if (!$this->_em->getConnection()->isTransactionActive()) throw new CsrException('Kan geen product verwijderen als je niet in een transactie zit!');
 
 		$prijzen = $this->findBy(['product_id' => $product->id]);

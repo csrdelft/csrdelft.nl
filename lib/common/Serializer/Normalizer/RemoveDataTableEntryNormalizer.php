@@ -15,8 +15,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
  *
  * @package CsrDelft\common
  */
-class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface
-{
+class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface {
 	/**
 	 * @var EntityManagerInterface
 	 */
@@ -26,8 +25,7 @@ class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface
 	 */
 	private $normalizer;
 
-	public function __construct(EntityManagerInterface $entityManager, ObjectNormalizer $normalizer)
-	{
+	public function __construct(EntityManagerInterface $entityManager, ObjectNormalizer $normalizer) {
 		$this->entityManager = $entityManager;
 		$this->normalizer = $normalizer;
 	}
@@ -38,8 +36,7 @@ class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface
 	 * @param array $context
 	 * @return array|ArrayObject|bool|float|int|string|null
 	 */
-	public function normalize($removed, string $format = null, array $context = [])
-	{
+	public function normalize($removed, string $format = null, array $context = []) {
 		$id = $removed->getId();
 
 		if (!is_array($id)) {
@@ -51,8 +48,7 @@ class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface
 		];
 	}
 
-	public function supportsNormalization($data, string $format = null, array $context = [])
-	{
+	public function supportsNormalization($data, string $format = null, array $context = []) {
 		return $data instanceof RemoveDataTableEntry;
 	}
 }

@@ -16,8 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method DocumentCategorie[]    findAll()
  * @method DocumentCategorie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DocumentCategorieRepository extends AbstractRepository
-{
+class DocumentCategorieRepository extends AbstractRepository {
 	/**
 	 * @var DocumentRepository
 	 */
@@ -27,8 +26,7 @@ class DocumentCategorieRepository extends AbstractRepository
 	 */
 	private $loginService;
 
-	public function __construct(ManagerRegistry $registry, LoginService $loginService, DocumentRepository $documentRepository)
-	{
+	public function __construct(ManagerRegistry $registry, LoginService $loginService, DocumentRepository $documentRepository) {
 		parent::__construct($registry, DocumentCategorie::class);
 		$this->documentRepository = $documentRepository;
 		$this->loginService = $loginService;
@@ -39,16 +37,14 @@ class DocumentCategorieRepository extends AbstractRepository
 	 *
 	 * @return DocumentCategorie|null
 	 */
-	public function get($id)
-	{
+	public function get($id) {
 		return $this->find($id);
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getCategorieNamen()
-	{
+	public function getCategorieNamen() {
 		$categorien = $this->findAll();
 
 		$return = [];
@@ -60,8 +56,7 @@ class DocumentCategorieRepository extends AbstractRepository
 		return $return;
 	}
 
-	public function findMetSchijfrechtenVoorLid()
-	{
+	public function findMetSchijfrechtenVoorLid() {
 		return array_filter($this->findAll(),
 			function ($categorie) {
 				return $this->loginService->_mag($categorie->schrijfrechten);

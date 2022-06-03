@@ -48,8 +48,7 @@ class BarSysteemController extends AbstractController
 	 * @param Request $request
 	 * @return JsonResponse
 	 */
-	public function trust(Request $request, LoginService $loginService)
-	{
+	public function trust(Request $request, LoginService $loginService) {
 		// maak een nieuwe BarSysteemTrust object en sla op.
 
 		// Als het goed is kan de BAR:TRUST scope alleen aan mensen met FISCAAT_MOD rechten gegeven worden.
@@ -166,7 +165,7 @@ class BarSysteemController extends AbstractController
 
 		$this->barSysteemService->verwijderBestelling($bestelling);
 
-		return new Response("", 204);
+		return new Response("",204);
 	}
 
 	/**

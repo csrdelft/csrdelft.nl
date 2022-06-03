@@ -8,11 +8,9 @@ use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
-class RememberLoginTable extends DataTable
-{
+class RememberLoginTable extends DataTable {
 
-	public function __construct()
-	{
+	public function __construct() {
 		parent::__construct(RememberLogin::class, '/session/rememberdata', 'Automatisch inloggen');
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->deleteColumn('token');
@@ -28,12 +26,11 @@ class RememberLoginTable extends DataTable
 		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), '/session/remember', 'Toevoegen', 'Automatisch inloggen vanaf dit apparaat', 'add'));
 
 		$this->addRowKnop(new DataTableRowKnop('/session/remember', 'Wijzig naam van apparaat', 'pencil'));
-		$this->addRowKnop(new DataTableRowKnop('/session/lockip', '(Ont)Koppel IP, alleen inloggen vanaf bepaald IP-adres', 'lock'));
+		$this->addRowKnop(new DataTableRowKnop( '/session/lockip', '(Ont)Koppel IP, alleen inloggen vanaf bepaald IP-adres', 'lock'));
 		$this->addRowKnop(new DataTableRowKnop('/session/forget', 'Stop automatische login voor dit apparaat', 'delete'));
 	}
 
-	public function getType()
-	{
+	public function getType() {
 		return get_class($this);
 	}
 

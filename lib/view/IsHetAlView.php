@@ -100,16 +100,16 @@ class IsHetAlView implements View
 				break;
 
 			case 'lunch':
-				$this->ja = (date('Hi') > '1230' and date('Hi') < '1330');
+				$this->ja = (date('Hi') > '1230' AND date('Hi') < '1330');
 				break;
 
 			case 'weekend':
-				$this->ja = (date('w') == 0 or date('w') > 5 or (date('w') == 5 and date('Hi') >= '1700'));
+				$this->ja = (date('w') == 0 OR date('w') > 5 OR (date('w') == 5 AND date('Hi') >= '1700'));
 				break;
 
 			case 'studeren':
 				if ($session->has('studeren')) {
-					$this->ja = (time() > ($session->get('studeren') + 5 * 60) and date('w') != 0);
+					$this->ja = (time() > ($session->get('studeren') + 5 * 60) AND date('w') != 0);
 					$tijd = $session->get('studeren');
 				} else {
 					$this->ja = false;
@@ -137,23 +137,19 @@ class IsHetAlView implements View
 		}
 	}
 
-	public function getModel()
-	{
+	public function getModel() {
 		return $this->model;
 	}
 
-	public function getBreadcrumbs()
-	{
+	public function getBreadcrumbs() {
 		return null;
 	}
 
-	public function getTitel()
-	{
+	public function getTitel() {
 		return $this->model;
 	}
 
-	public function __toString()
-	{
+	public function __toString() {
 		$html = '';
 		$html .= '<div class="ishetal">';
 		switch ($this->model) {
@@ -184,7 +180,7 @@ class IsHetAlView implements View
 				break;
 
 			case 'wvdd':
-				$html .= '<div class="ja" style="word-break: break-word">Het lustrumboek-woord van de dag is ' . $this->ja . ' </div>';
+				$html .= '<div class="ja" style="word-break: break-word">Het lustrumboek-woord van de dag is '. $this->ja .' </div>';
 				break;
 
 			default:

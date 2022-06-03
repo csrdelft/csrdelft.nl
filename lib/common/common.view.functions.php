@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUnused wordt gebruikt in templates */
+<?php /** @noinspection PhpUnused wordt gebruikt in templates*/
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
@@ -21,13 +21,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @param string input
  * @return string
  */
-function crlf_endings(string $input)
-{
+function crlf_endings(string $input) {
 	return str_replace("\n", "\r\n", $input);
 }
 
-function bbcode(string $string, string $mode = 'normal')
-{
+function bbcode(string $string, string $mode = 'normal') {
 	if ($mode === 'html') {
 		return CsrBB::parseHtml($string);
 	} else if ($mode == 'mail') {
@@ -41,8 +39,7 @@ function bbcode(string $string, string $mode = 'normal')
  * @param int $bedrag Bedrag in centen
  * @return string Geformat met euro
  */
-function format_bedrag($bedrag)
-{
+function format_bedrag($bedrag) {
 	return '€' . format_bedrag_kaal($bedrag);
 }
 
@@ -50,8 +47,7 @@ function format_bedrag($bedrag)
  * @param int $bedrag Bedrag in euros
  * @return string Geformat met euro, bij hele euro's met ",-"
  */
-function format_euro($bedrag)
-{
+function format_euro($bedrag) {
 	$bedragtekst = sprintf('%.2f', $bedrag);
 	$leesbaar = str_replace(',00', ',-', $bedragtekst);
 	return '€ ' . $leesbaar;
@@ -61,8 +57,7 @@ function format_euro($bedrag)
  * @param int $bedrag Bedrag in centen
  * @return string Geformat zonder euro
  */
-function format_bedrag_kaal($bedrag)
-{
+function format_bedrag_kaal($bedrag) {
 	return sprintf('%.2f', $bedrag / 100);
 }
 
@@ -75,8 +70,7 @@ function format_bedrag_kaal($bedrag)
  *
  * @return string truncated string
  */
-function truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false)
-{
+function truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false) {
 	if ($length === 0) {
 		return '';
 	}
@@ -105,8 +99,7 @@ function truncate($string, $length = 80, $etc = '...', $break_words = false, $mi
  * @param int $offset
  * @return bool|int
  */
-function first_space_before(string $string, int $offset = null)
-{
+function first_space_before(string $string, int $offset = null) {
 	return mb_strrpos(substr($string, 0, $offset), ' ') + 1;
 }
 
@@ -117,8 +110,7 @@ function first_space_before(string $string, int $offset = null)
  * @param int $offset
  * @return bool|int
  */
-function first_space_after(string $string, int $offset = null)
-{
+function first_space_after(string $string, int $offset = null) {
 	return mb_strpos($string, ' ', $offset);
 }
 
@@ -132,8 +124,7 @@ function first_space_after(string $string, int $offset = null)
  * @param string $ellipsis Character(s) to use as ellipsis character. default: …
  * @return string
  */
-function split_on_keyword(string $string, string $keyword, int $space_around = 100, int $threshold = 10, string $ellipsis = '…')
-{
+function split_on_keyword(string $string, string $keyword, int $space_around = 100, int $threshold = 10, string $ellipsis = '…') {
 	$prevPos = $lastPos = 0;
 	$firstPos = mb_stripos($string, $keyword);
 
@@ -186,8 +177,7 @@ function split_on_keyword(string $string, string $keyword, int $space_around = 1
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-function escape_ical($string)
-{
+function escape_ical($string) {
 	$string = str_replace('\\', '\\\\', $string);
 	$string = str_replace("\r", '', $string);
 	$string = str_replace("\n", '\n', $string);
@@ -202,16 +192,14 @@ function escape_ical($string)
  * @param $format
  * @return false|string
  */
-function date_format_intl(DateTimeInterface $date, $format)
-{
+function date_format_intl(DateTimeInterface $date, $format) {
 	$fmt = new IntlDateFormatter('nl', null, null);
 	$fmt->setPattern($format);
 
 	return $fmt->format($date);
 }
 
-function commitHash($full = false)
-{
+function commitHash($full = false) {
 	if ($full) {
 		return trim(`git rev-parse HEAD`);
 	} else {
@@ -219,13 +207,11 @@ function commitHash($full = false)
 	}
 }
 
-function commitLink()
-{
+function commitLink() {
 	return 'https://github.com/csrdelft/productie/commit/' . commitHash(true);
 }
 
-function reldate($datum)
-{
+function reldate($datum) {
 	if ($datum instanceof DateTimeInterface) {
 		$moment = $datum->getTimestamp();
 	} else {
@@ -239,5 +225,5 @@ function reldate($datum)
 	} else {
 		$return = strftime('%A %e %B %Y om %H:%M', $moment); // php-bug: %e does not work on Windows
 	}
-	return '<time class="timeago" title="' . $return . '" datetime="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</time>'; // ISO8601
+	return '<time class="timeago" title="'.$return.'" datetime="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</time>'; // ISO8601
 }

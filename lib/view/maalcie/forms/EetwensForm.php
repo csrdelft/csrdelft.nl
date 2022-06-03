@@ -14,11 +14,9 @@ use CsrDelft\view\formulier\invoervelden\TextareaField;
  * Formulier voor het invoeren van een eetwens.
  *
  */
-class EetwensForm extends InlineForm
-{
+class EetwensForm extends InlineForm {
 
-	public function __construct()
-	{
+	public function __construct() {
 
 		$field = new TextareaField('eetwens', LoginService::getProfiel()->eetwens, 'Allergie/diëet:');
 

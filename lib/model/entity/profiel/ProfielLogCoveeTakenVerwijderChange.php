@@ -11,20 +11,16 @@ namespace CsrDelft\model\entity\profiel;
  * Log voor verwijderen van corveetaken.
  *
  */
-class ProfielLogCoveeTakenVerwijderChange extends AbstractProfielLogChangeEntry
-{
+class ProfielLogCoveeTakenVerwijderChange extends AbstractProfielLogChangeEntry {
 	/**
 	 * @var string[]
 	 */
 	public $corveetaken = [];
-
-	public function __construct($corveetaken)
-	{
+	public function __construct($corveetaken) {
 		$this->corveetaken = $corveetaken;
 	}
 
-	public function toHtml()
-	{
-		return "Verwijder corveetaken:" . implode(",", $this->corveetaken);
+	public function toHtml() {
+		return "Verwijder corveetaken:". implode(",", $this->corveetaken);
 	}
 }

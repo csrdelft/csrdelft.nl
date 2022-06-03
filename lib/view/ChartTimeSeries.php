@@ -5,11 +5,9 @@ namespace CsrDelft\view;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class ChartTimeSeries extends JsonResponse
-{
+class ChartTimeSeries extends JsonResponse {
 
-	public function getModel()
-	{
+	public function getModel() {
 		$array = [];
 		$minimum = time();
 		foreach ($this->model as $label => $data) {

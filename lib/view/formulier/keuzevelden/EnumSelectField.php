@@ -6,8 +6,7 @@ namespace CsrDelft\view\formulier\keuzevelden;
 
 use CsrDelft\common\Enum;
 
-class EnumSelectField extends SelectField
-{
+class EnumSelectField extends SelectField {
 	/**
 	 * @var Enum
 	 */
@@ -22,15 +21,13 @@ class EnumSelectField extends SelectField
 	 * @param int $size
 	 * @param bool $multiple
 	 */
-	public function __construct($name, $value, $description, $enumClass, $size = 1, $multiple = false)
-	{
+	public function __construct($name, $value, $description, $enumClass, $size = 1, $multiple = false) {
 		parent::__construct($name, $value == null ? null : $value->getValue(), $description, $enumClass::getEnumDescriptions(), $size, $multiple);
 
 		$this->enumClass = $enumClass;
 	}
 
-	public function getFormattedValue()
-	{
+	public function getFormattedValue() {
 		if ($this->value == null) {
 			return null;
 		}

@@ -10,8 +10,7 @@ use CsrDelft\common\Enum;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class LidStatus extends Enum
-{
+class LidStatus extends Enum {
 	/**
 	 * Status voor h.t. leden.
 	 */
@@ -106,16 +105,14 @@ class LidStatus extends Enum
 	/**
 	 * @return string[]
 	 */
-	public static function getLidLike()
-	{
+	public static function getLidLike() {
 		return array_values(static::$lidlike);
 	}
 
 	/**
 	 * @return LidStatus[]
 	 */
-	public static function getLidLikeObject()
-	{
+	public static function getLidLikeObject() {
 		return array_map(function ($val) {
 			return static::from($val);
 		}, static::getLidLike());
@@ -124,16 +121,14 @@ class LidStatus extends Enum
 	/**
 	 * @return string[]
 	 */
-	public static function getOudlidLike()
-	{
+	public static function getOudlidLike() {
 		return array_values(static::$oudlidlike);
 	}
 
 	/**
 	 * @return LidStatus[]
 	 */
-	public static function getOudLidLikeObject()
-	{
+	public static function getOudLidLikeObject() {
 		return array_map(function ($val) {
 			return static::from($val);
 		}, static::getOudLidLike());
@@ -142,16 +137,14 @@ class LidStatus extends Enum
 	/**
 	 * @return string[]
 	 */
-	public static function getFiscaalLidLike()
-	{
+	public static function getFiscaalLidLike() {
 		return array_values(static::$fiscaalLidlike);
 	}
 
 	/**
 	 * @return string[]
 	 */
-	public static function getFiscaalOudlidLike()
-	{
+	public static function getFiscaalOudlidLike() {
 		return array_values(static::$fiscaalOudlidlike);
 	}
 
@@ -160,8 +153,7 @@ class LidStatus extends Enum
 	 *
 	 * @return bool
 	 */
-	public static function isLidLike($option)
-	{
+	public static function isLidLike($option) {
 		return isset(static::$lidlike[$option]);
 	}
 
@@ -170,13 +162,11 @@ class LidStatus extends Enum
 	 *
 	 * @return bool
 	 */
-	public static function isOudlidLike($option)
-	{
+	public static function isOudlidLike($option) {
 		return isset(static::$oudlidlike[$option]);
 	}
 
-	public function getChar()
-	{
+	public function getChar() {
 		return static::$mapChoiceToChar[$this->getValue()];
 	}
 }

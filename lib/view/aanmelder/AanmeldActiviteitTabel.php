@@ -12,10 +12,8 @@ use CsrDelft\view\datatable\knoppen\PopupDataTableKnop;
 use CsrDelft\view\datatable\knoppen\SourceChangeDataTableKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
-class AanmeldActiviteitTabel extends DataTable
-{
-	public function __construct(Reeks $reeks)
-	{
+class AanmeldActiviteitTabel extends DataTable {
+	public function __construct(Reeks $reeks) {
 
 		parent::__construct(AanmeldActiviteit::class, '/aanmelder/beheer/activiteiten/' . $reeks->getId(), $reeks->getNaam() . ' activiteiten', null, false);
 

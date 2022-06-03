@@ -9,8 +9,7 @@ use CsrDelft\view\formulier\invoervelden\ProsemirrorField;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class RequiredProsemirrorField extends ProsemirrorField
-{
+class RequiredProsemirrorField extends ProsemirrorField {
 
 	public $required = true;
 

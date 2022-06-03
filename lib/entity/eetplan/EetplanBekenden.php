@@ -16,8 +16,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *   uniqueConstraints={@ORM\UniqueConstraint(name="noviet1_noviet2", columns={"uid1", "uid2"})}
  * )
  */
-class EetplanBekenden implements DataTableEntry
-{
+class EetplanBekenden implements DataTableEntry {
 	/**
 	 * @var int
 	 * @ORM\Id()
@@ -50,8 +49,7 @@ class EetplanBekenden implements DataTableEntry
 	 * @Serializer\SerializedName("noviet1")
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getDataTableNoviet1()
-	{
+	public function getDataTableNoviet1() {
 		return $this->noviet1->getDataTableColumn();
 	}
 
@@ -60,8 +58,7 @@ class EetplanBekenden implements DataTableEntry
 	 * @Serializer\SerializedName("noviet2")
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getDataTableNoviet2()
-	{
+	public function getDataTableNoviet2() {
 		return $this->noviet2->getDataTableColumn();
 	}
 }

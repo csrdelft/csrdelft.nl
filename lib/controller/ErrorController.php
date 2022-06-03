@@ -11,12 +11,10 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Throwable;
 
 
-class ErrorController extends AbstractController
-{
+class ErrorController extends AbstractController {
 	use TargetPathTrait;
 
-	public function handleException(RequestStack $requestStack, Throwable $exception)
-	{
+	public function handleException(RequestStack $requestStack, Throwable $exception) {
 		$request = $requestStack->getMainRequest();
 
 		$statusCode = 500;

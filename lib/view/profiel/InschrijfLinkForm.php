@@ -9,11 +9,9 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 
-class InschrijfLinkForm extends Formulier
-{
+class InschrijfLinkForm extends Formulier {
 
-	public function __construct()
-	{
+	public function __construct() {
 		parent::__construct(null, '/inschrijflink');
 
 		$fields = [];

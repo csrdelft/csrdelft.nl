@@ -12,8 +12,7 @@ use CsrDelft\view\formulier\uploadvelden\FileField;
  *
  * @see FileField
  */
-class RequiredFileField extends FileField
-{
+class RequiredFileField extends FileField {
 
 	public $required = true;
 

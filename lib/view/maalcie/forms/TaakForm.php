@@ -23,11 +23,9 @@ use CsrDelft\view\formulier\ModalForm;
  * Formulier voor een nieuwe of te bewerken corveetaak.
  *
  */
-class TaakForm extends ModalForm
-{
+class TaakForm extends ModalForm {
 
-	public function __construct(CorveeTaak $taak, $action)
-	{
+	public function __construct(CorveeTaak $taak, $action) {
 		parent::__construct($taak, '/corvee/beheer/' . $action);
 
 		if ($taak->taak_id === null) {

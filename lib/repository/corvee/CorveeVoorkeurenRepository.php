@@ -19,8 +19,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CorveeVoorkeur[]    findAll()
  * @method CorveeVoorkeur[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CorveeVoorkeurenRepository extends AbstractRepository
-{
+class CorveeVoorkeurenRepository extends AbstractRepository {
 	/**
 	 * @var CorveeRepetitiesRepository
 	 */
@@ -30,8 +29,7 @@ class CorveeVoorkeurenRepository extends AbstractRepository
 	 */
 	private $corveeKwalificatiesRepository;
 
-	public function __construct(ManagerRegistry $registry, CorveeRepetitiesRepository $corveeRepetitiesRepository, CorveeKwalificatiesRepository $corveeKwalificatiesRepository)
-	{
+	public function __construct(ManagerRegistry $registry, CorveeRepetitiesRepository $corveeRepetitiesRepository, CorveeKwalificatiesRepository $corveeKwalificatiesRepository) {
 		parent::__construct($registry, CorveeVoorkeur::class);
 		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
@@ -47,8 +45,7 @@ class CorveeVoorkeurenRepository extends AbstractRepository
 	 * @param boolean $uitgeschakeld
 	 * @return CorveeVoorkeur[]
 	 */
-	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false)
-	{
+	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false) {
 		$repById = $this->corveeRepetitiesRepository->getVoorkeurbareRepetities(); // grouped by crid
 		$lijst = [];
 		$voorkeuren = $this->findBy(['uid' => $uid]);
@@ -84,8 +81,7 @@ class CorveeVoorkeurenRepository extends AbstractRepository
 	 *
 	 * @return CorveeVoorkeur[][]
 	 */
-	public function getVoorkeurenMatrix()
-	{
+	public function getVoorkeurenMatrix() {
 		$repById = $this->corveeRepetitiesRepository->getVoorkeurbareRepetities(); // grouped by crid
 		$leden_voorkeuren = $this->loadLedenVoorkeuren();
 		$matrix = array();
@@ -109,8 +105,7 @@ class CorveeVoorkeurenRepository extends AbstractRepository
 	/**
 	 * @return CorveeVoorkeurMatrixDTO[]
 	 */
-	private function loadLedenVoorkeuren()
-	{
+	private function loadLedenVoorkeuren() {
 		return $this->_em->createQuery(<<<'DQL'
 SELECT NEW CsrDelft\entity\corvee\CorveeVoorkeurMatrixDTO(p.uid, r.crv_repetitie_id, v.uid)
 FROM CsrDelft\entity\profiel\Profiel p
@@ -128,8 +123,7 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function inschakelenVoorkeur(CorveeVoorkeur $voorkeur)
-	{
+	public function inschakelenVoorkeur(CorveeVoorkeur $voorkeur) {
 		if ($this->getHeeftVoorkeur($voorkeur->crv_repetitie_id, $voorkeur->uid)) {
 			throw new CsrGebruikerException('Voorkeur al ingeschakeld');
 		}
@@ -149,8 +143,7 @@ DQL
 		return $voorkeur;
 	}
 
-	public function getHeeftVoorkeur($crid, $uid)
-	{
+	public function getHeeftVoorkeur($crid, $uid) {
 		return $this->find(['uid' => $uid, 'crv_repetitie_id' => $crid]) != null;
 	}
 
@@ -160,8 +153,7 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function uitschakelenVoorkeur(CorveeVoorkeur $voorkeur)
-	{
+	public function uitschakelenVoorkeur(CorveeVoorkeur $voorkeur) {
 		if (!$this->getHeeftVoorkeur($voorkeur->crv_repetitie_id, $voorkeur->uid)) {
 			throw new CsrGebruikerException('Voorkeur al uitgeschakeld');
 		}
@@ -183,8 +175,7 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderVoorkeuren($crid)
-	{
+	public function verwijderVoorkeuren($crid) {
 		$voorkeuren = $this->findBy(['corveeRepetitie' => $crid]);
 		$num = count($voorkeuren);
 		foreach ($voorkeuren as $voorkeur) {
@@ -203,8 +194,7 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderVoorkeurenVoorLid($uid)
-	{
+	public function verwijderVoorkeurenVoorLid($uid) {
 		$voorkeuren = $this->findBy(['uid' => $uid]);
 		$num = count($voorkeuren);
 		foreach ($voorkeuren as $voorkeur) {
@@ -215,8 +205,7 @@ DQL
 		return $num;
 	}
 
-	public function getVoorkeur($crid, $uid)
-	{
+	public function getVoorkeur($crid, $uid) {
 		return $this->find(['uid' => $uid, 'crv_repetitie_id' => $crid]);
 	}
 

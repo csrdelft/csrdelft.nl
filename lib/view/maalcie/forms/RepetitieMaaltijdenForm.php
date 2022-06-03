@@ -17,11 +17,9 @@ use CsrDelft\view\formulier\ModalForm;
  * Formulier voor nieuwe periodieke maaltijden.
  *
  */
-class RepetitieMaaltijdenForm extends ModalForm
-{
+class RepetitieMaaltijdenForm extends ModalForm {
 
-	public function __construct(RepetitieMaaltijdMaken $repetitie)
-	{
+	public function __construct(RepetitieMaaltijdMaken $repetitie) {
 		parent::__construct($repetitie, '/maaltijden/beheer/aanmaken/' . $repetitie->mlt_repetitie_id);
 		$this->titel = 'Periodieke maaltijden aanmaken';
 
@@ -35,8 +33,7 @@ class RepetitieMaaltijdenForm extends ModalForm
 		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
-	public function validate()
-	{
+	public function validate() {
 		$valid = parent::validate();
 		$fields = $this->getFields();
 		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {

@@ -41,12 +41,11 @@ class BarSysteemService
 	private $entityManager;
 
 	public function __construct(
-		EntityManagerInterface   $entityManager,
-		CiviSaldoRepository      $civiSaldoRepository,
-		CiviProductRepository    $civiProductRepository,
+		EntityManagerInterface $entityManager,
+		CiviSaldoRepository  $civiSaldoRepository,
+		CiviProductRepository $civiProductRepository,
 		CiviBestellingRepository $civiBestellingRepository
-	)
-	{
+	) {
 		$this->db = DriverManager::getConnection([
 			'url' => $_ENV['DATABASE_URL'],
 			'driverOptions' => [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"]
@@ -222,7 +221,7 @@ SQL
 			return $this->civiBestellingRepository->findTussen($begin, $eind, ['soccie', 'oweecie']);
 		} else {
 			return $this->civiBestellingRepository->findTussen($begin, $eind, ['soccie', 'oweecie'], $persoon);
-		}
+			}
 	}
 
 	/**

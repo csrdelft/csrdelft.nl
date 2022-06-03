@@ -52,12 +52,12 @@ class AanmeldActiviteitRepository extends AbstractRepository
 	}
 
 	public function sluit(AanmeldActiviteit $activiteit, bool $sluit = true)
-	{
-		try {
-			$activiteit->setGesloten($sluit);
-			$this->getEntityManager()->flush();
-		} catch (Exception $e) {
-			throw new CsrException($e->getMessage());
+    {
+    	try {
+				$activiteit->setGesloten($sluit);
+				$this->getEntityManager()->flush();
+			} catch (Exception $e) {
+				throw new CsrException($e->getMessage());
+			}
 		}
-	}
 }

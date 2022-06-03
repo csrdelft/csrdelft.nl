@@ -12,28 +12,24 @@ use function urlencode;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 27/03/2019
  */
-class BbLocatie extends BbTag
-{
+class BbLocatie extends BbTag {
 
 	/**
 	 * @var int
 	 */
 	private $height;
 
-	public static function getTagName()
-	{
+	public static function getTagName() {
 		return ['map', 'kaart', 'locatie'];
 	}
 
-	public function renderLight()
-	{
+	public function renderLight() {
 		$address = $this->getContent();
 		$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
 		return BbHelper::lightLinkInline($this->env, 'locatie', $url, $address);
 	}
 
-	public function render()
-	{
+	public function render() {
 		$address = $this->getContent();
 		$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
 		if (trim(htmlspecialchars($address)) == '') {

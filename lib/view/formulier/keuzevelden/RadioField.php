@@ -15,33 +15,29 @@ use CsrDelft\view\formulier\FormElement;
  *
  * is valid als één van de opties geselecteerd is
  */
-class RadioField extends SelectField
-{
+class RadioField extends SelectField {
 
 	public $type = 'radio';
 
-	public function __construct($name, $value, $description, array $options)
-	{
+	public function __construct($name, $value, $description, array $options) {
 		parent::__construct($name, $value, $description, $options, 1, false);
 
 		$this->css_classes = ['FormElement', 'form-check-input'];
 	}
 
-	public function getHtml($include_hidden = true)
-	{
+	public function getHtml($include_hidden = true) {
 		$html = '';
 		if ($include_hidden) {
 			$html .= '<input type="hidden" name="' . $this->name . '" value="" />';
 		}
-		$html .= '<div class="KeuzeRondjeOptions' . ($this->description ? '' : ' breed') . '">';
+		$html .= '<div class="KeuzeRondjeOptions'. ($this->description ? '' : ' breed') . '">';
 		foreach ($this->options as $value => $description) {
 			$html .= $this->getOptionHtml($value, $description);
 		}
 		return $html . '</div>';
 	}
 
-	protected function getOptionHtml($value, $description)
-	{
+	protected function getOptionHtml($value, $description) {
 		$id = $this->getId() . 'Option_' . $value;
 		$html = '<div class="form-check form-check-inline" id="' . $this->getId() . '">';
 		$html .= '<input id="' . $id . '" value="' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'class', 'origvalue', 'disabled', 'readonly', 'onclick'));
@@ -58,8 +54,7 @@ class RadioField extends SelectField
 		return $html;
 	}
 
-	public function getJavascript()
-	{
+	public function getJavascript() {
 		$js = parent::getJavascript();
 		foreach ($this->options as $value => $description) {
 			if ($description instanceof FormElement) {

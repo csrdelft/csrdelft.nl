@@ -15,8 +15,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *   uniqueConstraints={@ORM\UniqueConstraint(name="noviet_woonoord", columns={"uid", "woonoord_id"})}
  * )
  */
-class Eetplan implements DataTableEntry
-{
+class Eetplan implements DataTableEntry {
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -56,8 +55,7 @@ class Eetplan implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("woonoord")
 	 */
-	public function getDataTableWoonoord()
-	{
+	public function getDataTableWoonoord() {
 		return $this->woonoord->naam;
 	}
 
@@ -66,8 +64,7 @@ class Eetplan implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("naam")
 	 */
-	public function getDataTableNaam()
-	{
+	public function getDataTableNaam() {
 		return $this->noviet->getNaam();
 	}
 
@@ -76,8 +73,7 @@ class Eetplan implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("avond")
 	 */
-	public function getDataTableAvond()
-	{
+	public function getDataTableAvond() {
 		if ($this->avond) {
 			return date_format_intl($this->avond, DATE_FORMAT);
 		} else {

@@ -20,16 +20,14 @@ use Throwable;
  * @method MaaltijdRepetitie[]    findAll()
  * @method MaaltijdRepetitie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MaaltijdRepetitiesRepository extends AbstractRepository
-{
+class MaaltijdRepetitiesRepository extends AbstractRepository {
 	protected $default_order = '(periode_in_dagen = 0) ASC, periode_in_dagen ASC, dag_vd_week ASC, standaard_titel ASC';
 	/**
 	 * @var MaaltijdAanmeldingenRepository
 	 */
 	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(ManagerRegistry $registry, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository)
-	{
+	public function __construct(ManagerRegistry $registry, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
 		parent::__construct($registry, MaaltijdRepetitie::class);
 
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
@@ -42,8 +40,7 @@ class MaaltijdRepetitiesRepository extends AbstractRepository
 	 * @return MaaltijdRepetitie[]
 	 * @internal param MaaltijdRepetitie[] $repetities
 	 */
-	public function getAbonneerbareRepetitiesVoorLid($uid)
-	{
+	public function getAbonneerbareRepetitiesVoorLid($uid) {
 		$repetities = $this->findBy(['abonneerbaar' => 'true']);
 		$result = array();
 		foreach ($repetities as $repetitie) {
@@ -54,8 +51,7 @@ class MaaltijdRepetitiesRepository extends AbstractRepository
 		return $result;
 	}
 
-	public function getAlleRepetities($groupById = false)
-	{
+	public function getAlleRepetities($groupById = false) {
 		$repetities = $this->findAll();
 		if ($groupById) {
 			$result = array();
@@ -72,8 +68,7 @@ class MaaltijdRepetitiesRepository extends AbstractRepository
 	 * @return MaaltijdRepetitie
 	 * @throws CsrGebruikerException
 	 */
-	public function getRepetitie($mrid)
-	{
+	public function getRepetitie($mrid) {
 		$repetitie = $this->find($mrid);
 		if (!$repetitie) {
 			throw new CsrGebruikerException('Get maaltijd-repetitie faalt: Not found $mrid =' . $mrid);
@@ -86,8 +81,7 @@ class MaaltijdRepetitiesRepository extends AbstractRepository
 	 * @return array
 	 * @throws Throwable
 	 */
-	public function saveRepetitie($repetitie)
-	{
+	public function saveRepetitie($repetitie) {
 		return $this->_em->transactional(function () use ($repetitie) {
 			$abos = 0;
 			$this->_em->persist($repetitie);
@@ -105,8 +99,7 @@ class MaaltijdRepetitiesRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderRepetitie(MaaltijdRepetitie $repetitie)
-	{
+	public function verwijderRepetitie(MaaltijdRepetitie $repetitie) {
 		if (ContainerFacade::getContainer()->get(CorveeRepetitiesRepository::class)->existMaaltijdRepetitieCorvee($repetitie->mlt_repetitie_id)) {
 			throw new CsrGebruikerException('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
 		}

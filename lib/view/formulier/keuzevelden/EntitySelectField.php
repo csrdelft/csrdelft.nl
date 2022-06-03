@@ -12,8 +12,7 @@ use Doctrine\Persistence\ObjectRepository;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class EntitySelectField extends InputField
-{
+class EntitySelectField extends InputField {
 
 	public $size;
 	/**
@@ -30,8 +29,7 @@ class EntitySelectField extends InputField
 	 */
 	private $entityManager;
 
-	public function __construct($name, $value, $description, $entityType)
-	{
+	public function __construct($name, $value, $description, $entityType) {
 		$this->css_classes = ['FormElement', 'form-select'];
 
 		if (!in_array(ISelectEntity::class, class_implements($entityType))) {
@@ -48,13 +46,11 @@ class EntitySelectField extends InputField
 		$this->options = $this->repository->findAll();
 	}
 
-	public function getOptions()
-	{
+	public function getOptions() {
 		return $this->options;
 	}
 
-	public function validate()
-	{
+	public function validate() {
 		if (!parent::validate()) {
 			return false;
 		}
@@ -65,8 +61,7 @@ class EntitySelectField extends InputField
 		return $this->error === '';
 	}
 
-	public function getFormattedValue()
-	{
+	public function getFormattedValue() {
 		$value = $this->getValue();
 
 		if (!$value) {
@@ -76,8 +71,7 @@ class EntitySelectField extends InputField
 		return $this->entityManager->getReference($this->entityType, $value);
 	}
 
-	public function getHtml($include_hidden = true)
-	{
+	public function getHtml($include_hidden = true) {
 		$html = '';
 		if ($include_hidden) {
 			$html .= '<input type="hidden" name="' . $this->name . '" value="" />';
@@ -96,8 +90,7 @@ class EntitySelectField extends InputField
 	 * @param ISelectEntity[] $options
 	 * @return string
 	 */
-	protected function getOptionsHtml(array $options)
-	{
+	protected function getOptionsHtml(array $options) {
 		$html = '';
 		foreach ($options as $description) {
 			$html .= '<option value="' . $description->getId() . '"';
@@ -120,11 +113,8 @@ class EntitySelectField extends InputField
 		$this->options = $options;
 	}
 
-	public function getOptionIds()
-	{
-		return array_map(function ($option) {
-			return $option->getId();
-		}, $this->options);
+	public function getOptionIds() {
+		return array_map(function ($option) { return $option->getId(); }, $this->options);
 	}
 
 }

@@ -21,7 +21,7 @@ class StreeplijstForm extends ModalForm
 	 */
 	public function __construct($model)
 	{
-		parent::__construct($model, "/streeplijst/aanmaken");
+		parent::__construct( $model, "/streeplijst/aanmaken");
 //		$fields[] = new TextareaField('inhoud_streeplijst', $model->inhoud_streeplijst, 'Inhoud van de streeplijst');
 //		$this->addFields($fields);
 //		$this->formKnoppen = new FormDefaultKnoppen();

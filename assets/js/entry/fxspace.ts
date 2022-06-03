@@ -1,4 +1,4 @@
-import { shaderToy } from '../lib/shadertoy';
+import {shaderToy} from '../lib/shadertoy';
 
 try {
 	shaderToy(`

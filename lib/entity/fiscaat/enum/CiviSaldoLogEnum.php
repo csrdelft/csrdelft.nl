@@ -10,8 +10,7 @@ use CsrDelft\common\Enum;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 07/04/2017
  */
-class CiviSaldoLogEnum extends Enum
-{
+class CiviSaldoLogEnum extends Enum {
 
 	/** Maken van een bestelling */
 	const INSERT_BESTELLING = 'insert';

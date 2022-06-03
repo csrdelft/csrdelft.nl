@@ -17,8 +17,7 @@ use CsrDelft\view\formulier\knoppen\DeleteKnop;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ForumDeelForm implements FormulierTypeInterface
-{
+class ForumDeelForm implements FormulierTypeInterface {
 	/**
 	 * @var UrlGeneratorInterface
 	 */
@@ -28,8 +27,7 @@ class ForumDeelForm implements FormulierTypeInterface
 	 * @param UrlGeneratorInterface $urlGenerator
 	 * @param ForumCategorieRepository $forumCategorieRepository
 	 */
-	public function __construct(UrlGeneratorInterface $urlGenerator)
-	{
+	public function __construct(UrlGeneratorInterface $urlGenerator) {
 		$this->urlGenerator = $urlGenerator;
 	}
 
@@ -38,8 +36,7 @@ class ForumDeelForm implements FormulierTypeInterface
 	 * @param ForumDeel $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
-	{
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
 		$aanmaken = $options['aanmaken'];
 		$builder->setTitel('Deelforum ' . $aanmaken ? 'aanmaken' : 'beheren');
 		$builder->addCssClass('ReloadPage PreventUnchanged');

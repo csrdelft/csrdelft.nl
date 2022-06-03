@@ -12,10 +12,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\BesturenRepository")
  */
-class Bestuur extends Groep
-{
+class Bestuur extends Groep {
 	use GroepMoment;
-
 	/**
 	 * Bestuurstekst
 	 * @var string
@@ -24,8 +22,7 @@ class Bestuur extends Groep
 	 */
 	public $bijbeltekst;
 
-	public function getUrl()
-	{
+	public function getUrl() {
 		return '/groepen/besturen/' . $this->id;
 	}
 }

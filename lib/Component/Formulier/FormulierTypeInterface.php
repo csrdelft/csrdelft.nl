@@ -4,7 +4,6 @@
 namespace CsrDelft\Component\Formulier;
 
 
-interface FormulierTypeInterface
-{
+interface FormulierTypeInterface {
 	public function createFormulier(FormulierBuilder $builder, $data, $options = []);
 }

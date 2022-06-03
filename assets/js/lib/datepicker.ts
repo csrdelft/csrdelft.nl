@@ -1,10 +1,10 @@
 import flatpickr from 'flatpickr';
-import { Dutch } from 'flatpickr/dist/l10n/nl';
+import {Dutch} from 'flatpickr/dist/l10n/nl';
 import rangePlugin from 'flatpickr/dist/plugins/rangePlugin';
-import { Options } from 'flatpickr/dist/types/options';
+import {Options} from 'flatpickr/dist/types/options';
 
 export const initDateTimePicker = (el: HTMLInputElement): void => {
-	const { before, after, maxDate, minDate, readonly } = el.dataset;
+	const {before, after, maxDate, minDate, readonly} = el.dataset;
 
 	if (readonly) {
 		el.readOnly = true;
@@ -28,7 +28,7 @@ export const initDateTimePicker = (el: HTMLInputElement): void => {
 	if (before) {
 		flatpickr(el, {
 			...defaultOpts,
-			plugins: [rangePlugin({ input: `#${before}` })],
+			plugins: [rangePlugin({input: `#${before}`})],
 		});
 
 		return;
@@ -38,16 +38,16 @@ export const initDateTimePicker = (el: HTMLInputElement): void => {
 };
 
 export const initDatePicker = (el: HTMLInputElement): void => {
-	const { readonly, minDate, maxDate } = el.dataset;
+	const {readonly, minDate, maxDate} = el.dataset
 
 	if (readonly) {
 		el.readOnly = true;
-		return;
+		return
 	}
 
 	flatpickr(el, {
 		locale: Dutch,
 		minDate,
-		maxDate,
-	});
-};
+		maxDate
+	})
+}

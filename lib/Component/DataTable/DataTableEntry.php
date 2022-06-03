@@ -11,6 +11,5 @@ use CsrDelft\common\Serializer\Normalizer\DataTableEntryNormalizer;
  * @package CsrDelft\common
  * @see DataTableEntryNormalizer
  */
-interface DataTableEntry
-{
+interface DataTableEntry {
 }

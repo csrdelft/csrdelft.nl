@@ -20,20 +20,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CiviSaldoAfschrijvenController extends AbstractController
-{
+class CiviSaldoAfschrijvenController extends AbstractController {
 	/**
 	 * @Route("/fiscaat/afschrijven")
 	 * @return Response
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function afschrijven()
-	{
+	public function afschrijven() {
 		return $this->render('fiscaat/afschrijven.html.twig', []);
 	}
 
-	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven')
-	{
+	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven') {
 		setMelding($melding, $code);
 		return $this->redirect($url);
 	}
@@ -45,8 +42,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @param Session $session
 	 * @return Response
 	 */
-	public function upload(Request $request, Session $session)
-	{
+	public function upload(Request $request, Session $session) {
 		// Kijk of bestand meegegeven is
 		if (!$request->files->has('csv')) {
 			return $this->quickMelding("Upload een CSV", 2);
@@ -96,12 +92,11 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @return Response
 	 */
 	public function controle(
-		string                $key,
-		Session               $session,
-		CiviSaldoRepository   $civiSaldoRepository,
+		string $key,
+		Session $session,
+		CiviSaldoRepository $civiSaldoRepository,
 		CiviProductRepository $civiProductRepository
-	)
-	{
+	) {
 		// Haal data op
 		if (!$session->has("afschrijven-{$key}")) {
 			return $this->quickMelding("Er ging iets fout bij het inladen van de CSV", 2);
@@ -208,15 +203,14 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @return Response
 	 */
 	public function verwerk(
-		string                   $key,
-		Session                  $session,
-		CiviSaldoRepository      $civiSaldoRepository,
-		CiviProductRepository    $civiProductRepository,
+		string $key,
+		Session $session,
+		CiviSaldoRepository $civiSaldoRepository,
+		CiviProductRepository $civiProductRepository,
 		CiviBestellingRepository $civiBestellingRepository,
-		Request                  $request,
-		EntityManagerInterface   $em
-	)
-	{
+		Request $request,
+		EntityManagerInterface $em
+	) {
 		// Haal data op
 		if (!$session->has("afschrijven-{$key}")) {
 			return $this->quickMelding("Er ging iets fout bij het verwerken van de CSV", 2);
@@ -311,8 +305,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @Auth(P_FISCAAT_MOD)
 	 * @return Response
 	 */
-	public function downloadTemplate()
-	{
+	public function downloadTemplate() {
 		$template = "uid;productID;aantal;beschrijving\r\nx101;32;100;Lunch";
 		$response = new Response($template);
 		$disposition = HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, 'afschrijven.csv');

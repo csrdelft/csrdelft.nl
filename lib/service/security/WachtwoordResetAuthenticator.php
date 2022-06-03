@@ -52,11 +52,11 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 	private $accountService;
 
 	public function __construct(
-		HttpUtils               $httpUtils,
-		Environment             $twig,
+		HttpUtils $httpUtils,
+		Environment $twig,
 		OneTimeTokensRepository $oneTimeTokensRepository,
-		AccountService          $accountService,
-		MailService             $mailService
+		AccountService $accountService,
+		MailService $mailService
 	)
 	{
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;

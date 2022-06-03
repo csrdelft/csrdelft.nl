@@ -12,8 +12,7 @@ use CsrDelft\view\formulier\getalvelden\BedragField;
  *
  * @see BedragField
  */
-class RequiredBedragField extends BedragField
-{
+class RequiredBedragField extends BedragField {
 
 	public $required = true;
 

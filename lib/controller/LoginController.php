@@ -21,8 +21,7 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
  *
  * Controller van de agenda.
  */
-class LoginController extends AbstractController
-{
+class LoginController extends AbstractController {
 	use TargetPathTrait;
 
 	/**
@@ -38,8 +37,7 @@ class LoginController extends AbstractController
 	 */
 	private $suService;
 
-	public function __construct(LoginService $loginService, SuService $suService, RememberLoginRepository $rememberLoginRepository)
-	{
+	public function __construct(LoginService $loginService, SuService $suService, RememberLoginRepository $rememberLoginRepository) {
 		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->loginService = $loginService;
 		$this->suService = $suService;
@@ -88,8 +86,7 @@ class LoginController extends AbstractController
 	 * @Route("/{_locale<%app.supported_locales%>}/login_check", name="app_login_check", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function login_check()
-	{
+	public function login_check() {
 		throw new LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.form_login.check_path in config/packages/security.yaml');
 	}
 
@@ -97,8 +94,7 @@ class LoginController extends AbstractController
 	 * @Route("/logout", name="app_logout")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function logout()
-	{
+	public function logout() {
 		throw new LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.logout.path config/packages/security.yaml');
 	}
 }

@@ -17,15 +17,13 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
  *
  * Class EetplanBekendeHuizenForm
  */
-class EetplanBekendeHuizenForm implements FormulierTypeInterface
-{
+class EetplanBekendeHuizenForm implements FormulierTypeInterface {
 	/**
 	 * @param FormulierBuilder $builder
 	 * @param Eetplan $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
-	{
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
 		$builder->setDataTableId(true);
 		$builder->setTitel('Noviet die een huis kent toevoegen');
 		$builder->setAction($options['action']);

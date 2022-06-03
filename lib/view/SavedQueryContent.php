@@ -7,8 +7,7 @@ use CsrDelft\entity\SavedQueryResult;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\SavedQueryRepository;
 
-class SavedQueryContent implements View
-{
+class SavedQueryContent implements View {
 	use ToHtmlResponse;
 
 	/**
@@ -17,28 +16,23 @@ class SavedQueryContent implements View
 	 */
 	private $sq;
 
-	public function __construct(SavedQueryResult $sq = null)
-	{
+	public function __construct(SavedQueryResult $sq = null) {
 		$this->sq = $sq;
 	}
 
-	public function getModel()
-	{
+	public function getModel() {
 		return $this->sq;
 	}
 
-	public function getBreadcrumbs()
-	{
+	public function getBreadcrumbs() {
 		return null;
 	}
 
-	public function getTitel()
-	{
+	public function getTitel() {
 		return 'Opgeslagen query\'s';
 	}
 
-	public static function render_header($name)
-	{
+	public static function render_header($name) {
 		switch ($name) {
 			case 'uid_naam':
 				return 'Naam';
@@ -61,15 +55,14 @@ class SavedQueryContent implements View
 	public static function render_field(
 		$name,
 		$contents
-	)
-	{
+	) {
 		if ($name == 'uid_naam') {
 			return ProfielRepository::getLink($contents, 'volledig');
 		} elseif ($name == 'uid_naam_civitas') {
 			return ProfielRepository::getLink($contents, 'civitas');
 		} elseif ($name == 'onderwerp_link') { //link naar het forum.
 			return '<a href="/forum/onderwerp/' . $contents . '">' . $contents . '</a>';
-		} elseif (substr($name, 0, 10) == 'groep_naam' and $contents != '') {
+		} elseif (substr($name, 0, 10) == 'groep_naam' AND $contents != '') {
 			return ''; //FIXME: OldGroep::ids2links($contents, '<br />');
 		} elseif ($name == 'med_link') { //link naar een mededeling.
 			return '<a href="/mededelingen/' . $contents . '">' . $contents . '</a>';
@@ -78,8 +71,7 @@ class SavedQueryContent implements View
 		return htmlspecialchars($contents);
 	}
 
-	public function render_queryResult()
-	{
+	public function render_queryResult() {
 		if ($this->sq && !$this->sq->error) {
 
 			$sq = $this->sq;
@@ -110,8 +102,7 @@ class SavedQueryContent implements View
 		return $return;
 	}
 
-	public function getQueryselector()
-	{
+	public function getQueryselector() {
 		//als er een query ingeladen is, die highlighten
 		$id = $this->sq instanceof SavedQueryResult ? $this->sq->query->ID : 0;
 
@@ -148,8 +139,7 @@ class SavedQueryContent implements View
 		return $return;
 	}
 
-	public function __toString()
-	{
+	public function __toString() {
 		$html = '';
 		$html .= '<h1>' . $this->getTitel() . '</h1>';
 		$html .= $this->getQueryselector();

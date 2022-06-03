@@ -9,8 +9,7 @@ use CsrDelft\common\CsrGebruikerException;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class Afbeelding extends Bestand
-{
+class Afbeelding extends Bestand {
 
 	/**
 	 * Geaccepteerde afbeelding types
@@ -31,8 +30,7 @@ class Afbeelding extends Bestand
 	/**
 	 * @return string
 	 */
-	public function getFullPath()
-	{
+	public function getFullPath() {
 		return join_paths($this->directory, $this->filename);
 	}
 
@@ -45,8 +43,7 @@ class Afbeelding extends Bestand
 	 *
 	 * @throws CsrGebruikerException
 	 */
-	public function __construct($path, $parse = true)
-	{
+	public function __construct($path, $parse = true) {
 		if ($path !== null) {
 			$this->directory = dirname($path) . '/';
 			$this->filename = basename($path);

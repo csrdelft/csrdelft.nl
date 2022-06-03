@@ -15,8 +15,7 @@ use CsrDelft\view\Icon;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\View;
 
-class GroepenView implements View
-{
+class GroepenView implements View {
 	use ToHtmlResponse;
 
 	private $model;
@@ -33,12 +32,11 @@ class GroepenView implements View
 	private $pagina;
 
 	public function __construct(
-		GroepRepository $model,
-										$groepen,
-										$soort = null,
-										$geschiedenis = false
-	)
-	{
+        GroepRepository $model,
+        $groepen,
+        $soort = null,
+        $geschiedenis = false
+	) {
 		$this->model = $model;
 		$this->groepen = $groepen;
 		$this->soort = $soort;
@@ -55,25 +53,21 @@ class GroepenView implements View
 		}
 	}
 
-	public function getBreadcrumbs()
-	{
+	public function getBreadcrumbs() {
 		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
 			. '<li class="breadcrumb-item"><a href="/groepen">Groepen</a></li>'
 			. '<li class="breadcrumb-item active">' . $this->getTitel() . '</li></ul>';
 	}
 
-	public function getModel()
-	{
+	public function getModel() {
 		return $this->groepen;
 	}
 
-	public function getTitel()
-	{
+	public function getTitel() {
 		return $this->pagina->titel;
 	}
 
-	public function __toString()
-	{
+	public function __toString() {
 		$model = $this->model;
 		$orm = $model->entityClass;
 		$html = '';

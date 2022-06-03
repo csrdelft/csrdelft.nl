@@ -14,9 +14,9 @@ class GroepBewerkenForm extends InlineForm
 
 	public function __construct(
 		GroepLid $lid,
-		Groep    $groep,
-						 $toggle = true,
-						 $buttons = true
+		Groep $groep,
+		$toggle = true,
+		$buttons = true
 	)
 	{
 

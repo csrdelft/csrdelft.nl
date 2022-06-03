@@ -24,8 +24,7 @@ class BarSysteemBeheerController extends AbstractController
 	 */
 	private $barSysteemService;
 
-	public function __construct(BarSysteemService $barSysteemService)
-	{
+	public function __construct(BarSysteemService $barSysteemService) {
 		$this->barSysteemService = $barSysteemService;
 	}
 
@@ -35,8 +34,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
-	public function grootboek()
-	{
+	public function grootboek() {
 		return $this->json($this->barSysteemService->getGrootboekInvoer());
 	}
 
@@ -46,8 +44,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
-	public function grootboeken()
-	{
+	public function grootboeken() {
 		return $this->json($this->barSysteemService->getGrootboeken());
 	}
 
@@ -57,8 +54,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
-	public function tools()
-	{
+	public function tools() {
 		return $this->json($this->barSysteemService->getToolData());
 	}
 
@@ -69,8 +65,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
-	public function addProduct(Request $request)
-	{
+	public function addProduct(Request $request) {
 		$name = $request->request->get('name');
 		$price = $request->request->get('price');
 		$type = $request->request->get('grootboekId');
@@ -85,8 +80,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
-	public function updatePrice(Request $request)
-	{
+	public function updatePrice(Request $request) {
 		$productId = $request->request->get('productId');
 		$price = $request->request->get('price');
 
@@ -100,8 +94,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
-	public function updateVisibility(Request $request)
-	{
+	public function updateVisibility(Request $request) {
 		$visibility = $request->request->get('visibility');
 		$productId = $request->request->get('productId');
 
@@ -115,8 +108,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
-	public function addPerson(Request $request)
-	{
+	public function addPerson(Request $request) {
 		$name = $request->request->get('name');
 		$saldo = $request->request->get('saldo');
 		$uid = $request->request->get('uid');
@@ -131,8 +123,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
-	public function removePerson(Request $request)
-	{
+	public function removePerson(Request $request) {
 		$id = $request->request->get('id');
 
 		return $this->json($this->barSysteemService->removePerson($id));

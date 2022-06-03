@@ -13,13 +13,10 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method GroepLid[]    findAll()
  * @method GroepLid[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GroepLidRepository extends AbstractRepository
-{
-	public function __construct(ManagerRegistry $managerRegistry)
-	{
+class GroepLidRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $managerRegistry) {
 		parent::__construct($managerRegistry, GroepLid::class);
 	}
-
 	/**
 	 * Default ORDER BY
 	 * @var string
@@ -32,8 +29,7 @@ class GroepLidRepository extends AbstractRepository
 	 *
 	 * @return GroepLid|null
 	 */
-	public function get(Groep $groep, $uid)
-	{
+	public function get(Groep $groep, $uid) {
 		return $this->find(['groep_id' => $groep->id, 'uid' => $uid]);
 	}
 
@@ -43,8 +39,7 @@ class GroepLidRepository extends AbstractRepository
 	 *
 	 * @return GroepLid
 	 */
-	public function nieuw(Groep $groep, $uid)
-	{
+	public function nieuw(Groep $groep, $uid) {
 		$lid = new GroepLid();
 		$lid->groep = $groep;
 		$lid->groepId = $groep->id;

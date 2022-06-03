@@ -65,7 +65,7 @@ class ForumController extends AbstractController
 	public function __construct(
 		BbToProsemirror               $bbToProsemirror,
 		ForumCategorieRepository      $forumCategorieRepository,
-		ForumDelenService             $forumDelenService,
+		ForumDelenService 						$forumDelenService,
 		ForumDradenGelezenRepository  $forumDradenGelezenRepository,
 		ForumDradenRepository         $forumDradenRepository,
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,

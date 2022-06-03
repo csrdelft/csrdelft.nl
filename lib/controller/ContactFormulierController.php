@@ -15,25 +15,21 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 19/12/2018
  */
-class ContactFormulierController extends AbstractController
-{
+class ContactFormulierController extends AbstractController {
 	/**
 	 * @var MailService
 	 */
 	private $mailService;
 
-	public function __construct(MailService $mailService)
-	{
+	public function __construct(MailService $mailService) {
 		$this->mailService = $mailService;
 	}
-
 	/**
 	 * @return PlainView
 	 * @Route("/contactformulier/interesse", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function interesse()
-	{
+	public function interesse() {
 		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
 
 		if (!$resp['success']) {
@@ -101,8 +97,7 @@ De PubCie.
 	 * @Route("/contactformulier/owee", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function owee()
-	{
+	public function owee() {
 		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
 
 		if (!$resp['success']) {
@@ -162,8 +157,7 @@ De PubCie.
 	 * @Auth(P_PUBLIC)
 	 * @CsrfUnsafe
 	 */
-	public function civitasproducties()
-	{
+	public function civitasproducties() {
 		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
 
 		if (!$resp['success']) {
@@ -193,8 +187,7 @@ De PubCie.
 		return new PlainView('Bestelling verzonden. Er is een bevestiging gestuurd naar uw emailadres, binnenkort zult ontvangt u meer informatie.');
 	}
 
-	private function isSpam(...$input)
-	{
+	private function isSpam(...$input) {
 		$filter = new SimpleSpamFilter();
 		foreach ($input as $item) {
 			if ($item && $filter->isSpam($item)) {
@@ -204,8 +197,7 @@ De PubCie.
 		return false;
 	}
 
-	private function bevatUrl($opmerking)
-	{
+	private function bevatUrl($opmerking) {
 		return preg_match('/https?:|\.(com|ru|pw|pro|nl)\/?($|\W)/', $opmerking) == true;
 	}
 
@@ -213,8 +205,7 @@ De PubCie.
 	 * @param $response
 	 * @return mixed
 	 */
-	public function checkCaptcha($response)
-	{
+	public function checkCaptcha($response) {
 		$secret = $_ENV['GOOGLE_CAPTCHA_SECRET'];
 
 		$ch = curl_init("https://www.google.com/recaptcha/api/siteverify");

@@ -25,8 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Controller van de courant.
  */
-class CourantController extends AbstractController
-{
+class CourantController extends AbstractController {
 	/**
 	 * @var CourantRepository
 	 */
@@ -36,8 +35,7 @@ class CourantController extends AbstractController
 	 */
 	private $courantBerichtRepository;
 
-	public function __construct(CourantRepository $courantRepository, CourantBerichtRepository $courantBerichtRepository)
-	{
+	public function __construct(CourantRepository $courantRepository, CourantBerichtRepository $courantBerichtRepository) {
 		$this->courantRepository = $courantRepository;
 		$this->courantBerichtRepository = $courantBerichtRepository;
 	}
@@ -174,8 +172,7 @@ class CourantController extends AbstractController
 	 * @Route("/courant/verzenden/{iedereen}", methods={"POST"}, defaults={"iedereen": null})
 	 * @Auth(P_MAIL_SEND)
 	 */
-	public function verzenden($iedereen = null)
-	{
+	public function verzenden($iedereen = null) {
 		if (count($this->courantBerichtRepository->findAll()) < 1) {
 			setMelding('Lege courant kan niet worden verzonden', 0);
 			return $this->redirectToRoute('csrdelft_courant_toevoegen');

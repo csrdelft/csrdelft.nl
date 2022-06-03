@@ -4,9 +4,7 @@
 namespace CsrDelft\entity;
 
 
-interface ISelectEntity
-{
+interface ISelectEntity {
 	public function getValue();
-
 	public function getId();
 }

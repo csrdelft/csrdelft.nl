@@ -15,10 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Reeks[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Reeks|null retrieveByUuid($UUID)
  */
-class ReeksRepository extends AbstractRepository
-{
-	public function __construct(ManagerRegistry $registry)
-	{
+class ReeksRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Reeks::class);
 	}
 

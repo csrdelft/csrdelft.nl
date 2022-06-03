@@ -1,39 +1,40 @@
 import Hammer from 'hammerjs';
-import { docReady } from './lib/util';
-import { select, selectAll } from './lib/dom';
+import {docReady} from './lib/util';
+import {select, selectAll} from "./lib/dom";
 
 declare global {
 	// Hammer kan een Document als element krijgen, dit zorgt ervoor dat horizontale scroll mogelijk is op mobiel.
 	interface HammerStatic {
-		new (element: HTMLElement | SVGElement | Document, options?: HammerOptions | undefined): HammerManager;
+		new(element: HTMLElement | SVGElement | Document, options?: HammerOptions | undefined): HammerManager;
 	}
 }
 
 const initSubmenus = () => {
 	// Probeer menu te selecteren
-	select('#menu');
+	select('#menu')
 
-	const hideSubMenus = () =>
-		selectAll('.dropdown-submenu .show').forEach((subMenu) => subMenu.classList.remove('show'));
+	const hideSubMenus = () => selectAll('.dropdown-submenu .show').forEach(subMenu => subMenu.classList.remove('show'))
 
-	selectAll('.dropdown-menu a.dropdown-toggle').forEach((el) => {
-		el.addEventListener('click', (e) => {
-			e.stopPropagation();
+	selectAll('.dropdown-menu a.dropdown-toggle').forEach(el => {
+		el.addEventListener('click', e => {
+			e.stopPropagation()
 
-			const subMenu = el.nextElementSibling;
+			const subMenu = el.nextElementSibling
 
 			if (!subMenu.classList.contains('show')) {
-				hideSubMenus();
+				hideSubMenus()
 			}
 
-			subMenu.classList.toggle('show');
+			subMenu.classList.toggle('show')
 
-			return false;
-		});
-	});
+			return false
+		})
 
-	document.addEventListener('hidden.bs.dropdown', hideSubMenus);
-};
+	})
+
+	document.addEventListener('hidden.bs.dropdown', hideSubMenus)
+
+}
 
 const initInstantSearch = () => {
 	const searchfield = select<HTMLInputElement>('input[type=search].ZoekField');
@@ -69,14 +70,15 @@ const initInstantSearch = () => {
 			searchfield.focus();
 		}
 	});
-};
+
+}
 
 docReady(() => {
 	try {
-		initSubmenus();
-		initInstantSearch();
+		initSubmenus()
+		initInstantSearch()
 
-		const ZIJBALK_SELECTOR = '#zijbalk';
+		const ZIJBALK_SELECTOR = '#zijbalk'
 		let active: string | null = null;
 
 		/**
@@ -84,7 +86,7 @@ docReady(() => {
 		 */
 		const toggleScroll = () => {
 			if (active === '#zijbalk') {
-				document.body.classList.add('overflow-x-hidden');
+				document.body.classList.add('overflow-x-hidden')
 			} else {
 				// Sta toe om te scrollen _nadat_ de animatie klaar is.
 				setTimeout(() => document.body.classList.remove('overflow-x-hidden'), 300);
@@ -101,10 +103,11 @@ docReady(() => {
 
 			active = null;
 
-			selectAll('.target').forEach((el) => el.classList.remove('target'));
+			selectAll('.target').forEach(el => el.classList.remove('target'))
 
 			toggleScroll();
 		};
+
 
 		/**
 		 * Toggle view met id.
@@ -119,34 +122,34 @@ docReady(() => {
 			} else {
 				active = ZIJBALK_SELECTOR;
 
-				selectAll('.target').forEach((el) => {
+				selectAll('.target').forEach(el => {
 					if (el.id != 'zijbalk') {
-						el.classList.remove('target');
+						el.classList.remove('target')
 					}
-				});
+				})
 
-				select(ZIJBALK_SELECTOR).classList.toggle('target');
+				select(ZIJBALK_SELECTOR).classList.toggle('target')
 
 				toggleScroll();
 			}
 		};
 
-		selectAll('.trigger[href="#zijbalk"]').forEach((el) => el.addEventListener('click', toggle));
+		selectAll('.trigger[href="#zijbalk"]').forEach(el => el.addEventListener('click', toggle))
 
-		selectAll('.cd-page-content, #menu, footer').forEach((el) => el.addEventListener('click', reset));
+		selectAll('.cd-page-content, #menu, footer').forEach(el => el.addEventListener('click', reset))
 
-		document.addEventListener('keydown', (e) => {
-			if (e.key == 'Escape') {
+		document.addEventListener('keydown', e => {
+			if (e.key == "Escape") {
 				reset();
 			}
-		});
+		})
 
 		// Maak het mogelijk om nog tekst te kunnen selecteren.
 		delete Hammer.defaults.cssProps.userSelect;
 
-		const hammertime = new Hammer(document, { inputClass: Hammer.TouchInput });
+		const hammertime = new Hammer(document, {inputClass: Hammer.TouchInput});
 
-		const swipeDisabled = (e: HammerInput) => e.target.closest('.disable-swipe, table') != null;
+		const swipeDisabled = (e: HammerInput) => e.target.closest('.disable-swipe, table') != null
 
 		hammertime.on('swiperight', (e) => {
 			if (swipeDisabled(e)) {

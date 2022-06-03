@@ -10,8 +10,7 @@ use JsonSerializable;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 07/05/2017
  */
-class DataTableKnop implements JsonSerializable
-{
+class DataTableKnop implements JsonSerializable {
 	protected $multiplicity;
 	protected $tableId;
 	protected $label;
@@ -22,8 +21,7 @@ class DataTableKnop implements JsonSerializable
 	protected $buttons;
 	protected $title;
 
-	public function __construct(Multiplicity $multiplicity, $url, $label, $title, $icon = '', $extend = 'default')
-	{
+	public function __construct(Multiplicity $multiplicity, $url, $label, $title, $icon = '', $extend = 'default') {
 		$this->icon = $icon;
 		$this->label = $label;
 		$this->title = $title;
@@ -33,8 +31,7 @@ class DataTableKnop implements JsonSerializable
 		$this->buttons = array();
 	}
 
-	public function jsonSerialize()
-	{
+	public function jsonSerialize() {
 		return [
 			'text' => $this->label,
 			'titleAttr' => $this->title,
@@ -47,8 +44,7 @@ class DataTableKnop implements JsonSerializable
 		];
 	}
 
-	public function setDataTableId($dataTableId)
-	{
+	public function setDataTableId($dataTableId) {
 		$this->tableId = $dataTableId;
 
 		foreach ($this->buttons as $button) {
@@ -59,8 +55,7 @@ class DataTableKnop implements JsonSerializable
 	/**
 	 * @return string
 	 */
-	protected function getIconClass(): string
-	{
+	protected function getIconClass(): string {
 		return $this->icon ? 'dt-button-ico dt-ico-' . Icon::get($this->icon) : '';
 	}
 }

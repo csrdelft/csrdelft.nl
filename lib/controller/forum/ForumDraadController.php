@@ -95,7 +95,7 @@ class ForumDraadController extends AbstractController
 		ForumDradenRepository         $forumDradenRepository,
 		ForumDelenService             $forumDelenService,
 		ForumPostsService             $forumPostsService,
-		ForumMeldingenService         $forumMeldingenService,
+		ForumMeldingenService  $forumMeldingenService,
 		ForumDradenMeldingRepository  $forumDradenMeldingRepository,
 		ForumDelenMeldingRepository   $forumDelenMeldingRepository,
 		BbToProsemirror               $bbToProsemirror

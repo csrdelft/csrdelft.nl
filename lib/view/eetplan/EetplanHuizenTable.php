@@ -8,15 +8,13 @@ use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class EetplanHuizenTable extends AbstractDataTableType
-{
+class EetplanHuizenTable extends AbstractDataTableType {
 	/**
 	 * @var UrlGeneratorInterface
 	 */
 	private $urlGenerator;
 
-	public function __construct(UrlGeneratorInterface $urlGenerator)
-	{
+	public function __construct(UrlGeneratorInterface $urlGenerator) {
 		$this->urlGenerator = $urlGenerator;
 	}
 

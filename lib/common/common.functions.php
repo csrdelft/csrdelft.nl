@@ -51,13 +51,11 @@ if (!function_exists('str_ends_with')) {
  *
  * @return array
  */
-function array_filter_empty($array)
-{
+function array_filter_empty($array) {
 	return array_filter($array, 'not_empty');
 }
 
-function not_empty($value)
-{
+function not_empty($value) {
 	return $value != '';
 }
 
@@ -70,8 +68,7 @@ function not_empty($value)
  *
  * @return boolean
  */
-function in_array_i($needle, array $haystack)
-{
+function in_array_i($needle, array $haystack) {
 	return in_array(strtolower($needle), array_map('strtolower', $haystack));
 }
 
@@ -84,8 +81,7 @@ function in_array_i($needle, array $haystack)
  *
  * @return array $out
  */
-function group_by($prop, $in, $del = true)
-{
+function group_by($prop, $in, $del = true) {
 	$del &= is_array($in);
 	$out = array();
 	foreach ($in as $i => $obj) {
@@ -114,8 +110,7 @@ function group_by($prop, $in, $del = true)
  *
  * @return array $out
  */
-function group_by_distinct($prop, $in, $del = true)
-{
+function group_by_distinct($prop, $in, $del = true) {
 	$del &= is_array($in);
 	$out = array();
 	foreach ($in as $i => $obj) {
@@ -134,8 +129,7 @@ function group_by_distinct($prop, $in, $del = true)
  * @param boolean $refresh allow a refresh; redirect to / otherwise
  * @deprecated Gebruik redirect in de controller
  */
-function redirect($url = null, $refresh = true)
-{
+function redirect($url = null, $refresh = true) {
 	$request = ContainerFacade::getContainer()->get('request_stack')->getCurrentRequest();
 	if (empty($url)) {
 		$url = $request->getRequestUri();
@@ -154,8 +148,7 @@ function redirect($url = null, $refresh = true)
 	exit;
 }
 
-function getCsrRoot()
-{
+function getCsrRoot() {
 	$request = ContainerFacade::getContainer()->get('request_stack')->getCurrentRequest();
 
 	return $request->getSchemeAndHttpHost();
@@ -168,8 +161,7 @@ function getCsrRoot()
  *
  * @return string
  */
-function direncode($url)
-{
+function direncode($url) {
 	return str_replace('%2F', '/', rawurlencode($url));
 }
 
@@ -178,13 +170,11 @@ function direncode($url)
  *
  * @return bool
  */
-function is_utf8($string)
-{
+function is_utf8($string) {
 	return checkEncoding($string, 'UTF-8');
 }
 
-function checkEncoding($string, $string_encoding)
-{
+function checkEncoding($string, $string_encoding) {
 	$fs = $string_encoding == 'UTF-8' ? 'UTF-32' : $string_encoding;
 	$ts = $string_encoding == 'UTF-32' ? 'UTF-8' : $string_encoding;
 	return $string === mb_convert_encoding(mb_convert_encoding($string, $fs, $ts), $ts, $fs);
@@ -195,8 +185,7 @@ function checkEncoding($string, $string_encoding)
  * @param $length
  * @return string
  */
-function crypto_rand_token($length)
-{
+function crypto_rand_token($length) {
 	$token = '';
 	$codeAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	$codeAlphabet .= 'abcdefghijklmnopqrstuvwxyz';
@@ -213,8 +202,7 @@ function crypto_rand_token($length)
  *
  * @return mixed
  */
-function crypto_rand_secure($min, $max)
-{
+function crypto_rand_secure($min, $max) {
 	$range = $max - $min;
 	if ($range < 0) {
 		return $min; // not so random...
@@ -235,8 +223,7 @@ function crypto_rand_secure($min, $max)
  *
  * @return bool
  */
-function valid_filename($name)
-{
+function valid_filename($name) {
 	return preg_match('/^(?:[a-z0-9 \-_()éê]|\.(?!\.))+$/iD', $name);
 }
 
@@ -246,8 +233,7 @@ function valid_filename($name)
  *
  * @return bool
  */
-function filter_filename($name)
-{
+function filter_filename($name) {
 	//Remove dots in front of filename to prevent directory traversal
 	$name = ltrim($name, ".");
 
@@ -260,8 +246,7 @@ function filter_filename($name)
  *
  * @return bool
  */
-function email_like($email)
-{
+function email_like($email) {
 	if (empty($email)) {
 		return false;
 	}
@@ -274,16 +259,14 @@ function email_like($email)
  *
  * @return bool
  */
-function url_like($url)
-{
+function url_like($url) {
 	if (empty($url)) {
 		return false;
 	}
 	return preg_match('_^(?:(?:https?|ftp)://)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)(?:\.(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)*(?:\.(?:[a-z\x{00a1}-\x{ffff}]{2,})))(?::\d{2,5})?(?:/[^\s]*)?$_iuS', $url);
 }
 
-function external_url($url, $label)
-{
+function external_url($url, $label) {
 	$url = filter_var($url, FILTER_SANITIZE_URL);
 	if ($url && (url_like($url) || url_like(getCsrRoot() . $url))) {
 		if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
@@ -302,18 +285,15 @@ function external_url($url, $label)
  * Is de huidige host genaamd 'syrinx'?
  * @return boolean
  */
-function isSyrinx()
-{
+function isSyrinx() {
 	return 'syrinx' === php_uname('n');
 }
 
-function isCLI()
-{
+function isCLI() {
 	return php_sapi_name() == 'cli' && $_SERVER['APP_ENV'] != 'test';
 }
 
-function isCI()
-{
+function isCI() {
 	return getenv('CI');
 }
 
@@ -322,8 +302,7 @@ function isCI()
  *
  * @return string current DateTime formatted Y-m-d H:i:s
  */
-function getDateTime($timestamp = null)
-{
+function getDateTime($timestamp = null) {
 	if ($timestamp === null) {
 		$timestamp = time();
 	}
@@ -335,8 +314,7 @@ function getDateTime($timestamp = null)
  * @param string $format
  * @return true als huidige datum & tijd voorbij gegeven datum en tijd zijn
  */
-function isDatumVoorbij(string $date, $format = 'Y-m-d H:i:s')
-{
+function isDatumVoorbij(string $date, $format = 'Y-m-d H:i:s') {
 	$date = date_create_immutable_from_format($format, $date);
 	$now = date_create_immutable();
 	return $now >= $date;
@@ -348,8 +326,7 @@ function isDatumVoorbij(string $date, $format = 'Y-m-d H:i:s')
  * @param mixed $sString
  * @param string $cssID
  */
-function debugprint($sString, $cssID = 'pubcie_debug')
-{
+function debugprint($sString, $cssID = 'pubcie_debug') {
 	if (DEBUG || LoginService::mag(P_ADMIN) || ContainerFacade::getContainer()->get(SuService::class)->isSued()) {
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}
@@ -363,8 +340,7 @@ function debugprint($sString, $cssID = 'pubcie_debug')
  *
  * @return string
  */
-function internationalizePhonenumber($phonenumber, $prefix = '+31')
-{
+function internationalizePhonenumber($phonenumber, $prefix = '+31') {
 	$number = str_replace(array(' ', '-'), '', $phonenumber);
 	if ($number[0] === '0') {
 		// vergelijken met == 0 levert problemen op want (int) '+' = 0 dankzij php
@@ -386,8 +362,7 @@ function internationalizePhonenumber($phonenumber, $prefix = '+31')
  * @param int $jpg_quality
  * @return bool
  */
-function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 90)
-{
+function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 90) {
 
 	// Get dimensions of existing image
 	$image = getimagesize($src_image);
@@ -466,8 +441,7 @@ function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 9
 	}
 }
 
-function format_filesize($size)
-{
+function format_filesize($size) {
 	$units = array(' B', ' KB', ' MB', ' GB', ' TB');
 	for ($i = 0; $size >= 1024 && $i < 4; $i++) {
 		$size /= 1024;
@@ -482,8 +456,7 @@ function format_filesize($size)
  * @param $sSize
  * @return false|int|string
  */
-function convertPHPSizeToBytes($sSize)
-{
+function convertPHPSizeToBytes($sSize) {
 	if (is_numeric($sSize)) {
 		return $sSize;
 	}
@@ -511,8 +484,7 @@ function convertPHPSizeToBytes($sSize)
 	return $iValue;
 }
 
-function getMaximumFileUploadSize()
-{
+function getMaximumFileUploadSize() {
 	return min(convertPHPSizeToBytes(ini_get('post_max_size')), convertPHPSizeToBytes(ini_get('upload_max_filesize')));
 }
 
@@ -526,13 +498,12 @@ function getMaximumFileUploadSize()
  *  1 success
  *  2 warning / notify
  *
- * @param string $msg
- * @param int $lvl
  * @see    getMelding()
  * gebaseerd op DokuWiki code
+ * @param string $msg
+ * @param int $lvl
  */
-function setMelding(string $msg, int $lvl)
-{
+function setMelding(string $msg, int $lvl) {
 	$levels[-1] = 'danger';
 	$levels[0] = 'info';
 	$levels[1] = 'success';
@@ -555,8 +526,7 @@ function setMelding(string $msg, int $lvl)
  *
  * @return string html van melding(en) of lege string
  */
-function getMelding()
-{
+function getMelding() {
 	if (isset($_SESSION['melding']) && is_array($_SESSION['melding'])) {
 		$melding = '';
 		foreach ($_SESSION['melding'] as $msg) {
@@ -576,8 +546,7 @@ function getMelding()
  * @param string $lvl
  * @return string
  */
-function formatMelding(string $msg, string $lvl)
-{
+function formatMelding(string $msg, string $lvl) {
 	$icon = Icon::getTag('alert-' . $lvl);
 
 	return <<<HTML
@@ -595,8 +564,7 @@ HTML;
  *
  * @return string
  */
-function className($className)
-{
+function className($className) {
 	return preg_replace('/\\\\/', '-', $className);
 }
 
@@ -607,8 +575,7 @@ function className($className)
  *
  * @return string
  */
-function classNameZonderNamespace($className)
-{
+function classNameZonderNamespace($className) {
 	try {
 		return (new ReflectionClass($className))->getShortName();
 	} catch (ReflectionException $e) {
@@ -623,8 +590,7 @@ function classNameZonderNamespace($className)
  *
  * @return string
  */
-function errorName($type)
-{
+function errorName($type) {
 	$errors = [
 		E_ERROR => 'E_ERROR',
 		E_WARNING => 'E_WARNING',
@@ -656,8 +622,7 @@ function errorName($type)
  *
  * @return string
  */
-function aaidrom($voornaam, $tussenvoegsel, $achternaam)
-{
+function aaidrom($voornaam, $tussenvoegsel, $achternaam) {
 	$voornaam = mb_strtolower($voornaam);
 	$achternaam = mb_strtolower($achternaam);
 
@@ -672,8 +637,7 @@ function aaidrom($voornaam, $tussenvoegsel, $achternaam)
 	return sprintf("%s %s%s", $nwvoor, !empty($tussenvoegsel) ? $tussenvoegsel . ' ' : '', $nwachter);
 }
 
-function url2absolute($baseurl, $relativeurl)
-{
+function url2absolute($baseurl, $relativeurl) {
 
 	// if the relative URL is scheme relative then treat it differently
 	if (substr($relativeurl, 0, 2) === "//") {
@@ -751,8 +715,7 @@ function url2absolute($baseurl, $relativeurl)
  * @param array $options curl options
  * @return mixed The curl_exec result
  */
-function curl_request($url, $options = [])
-{
+function curl_request($url, $options = []) {
 	$curl = curl_init($url);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt_array($curl, $options);
@@ -771,8 +734,7 @@ function curl_request($url, $options = [])
  * @param $html String the HTML string to create the xpath object from
  * @return DOMXPath The xpath object
  */
-function init_xpath($html)
-{
+function init_xpath($html) {
 	$xml = new DOMDocument();
 	$xml->loadHTML($html);
 	return new DOMXPath($xml);
@@ -785,8 +747,7 @@ function init_xpath($html)
  * @param string $mime
  * @return bool
  */
-function checkMimetype($filename, $mime)
-{
+function checkMimetype($filename, $mime) {
 	$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
 	$mimeToExtension = [
@@ -903,8 +864,7 @@ function checkMimetype($filename, $mime)
  * @param array|null $allowedAuthenticationMethods
  * @return bool
  */
-function mag($permission, array $allowedAuthenticationMethods = null)
-{
+function mag($permission, array $allowedAuthenticationMethods = null) {
 	return LoginService::mag($permission, $allowedAuthenticationMethods);
 }
 
@@ -915,8 +875,7 @@ function mag($permission, array $allowedAuthenticationMethods = null)
  * @param string $uitzondering Sommige commissie mogen wel dit veld zien.
  * @return bool
  */
-function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_MOD)
-{
+function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_MOD) {
 	$lidToestemmingRepository = ContainerFacade::getContainer()->get(LidToestemmingRepository::class);
 	if (is_array($key)) {
 		foreach ($key as $item) {
@@ -931,18 +890,15 @@ function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_
 	return $lidToestemmingRepository->toestemming($profiel, $key, $cat, $uitzondering);
 }
 
-function lid_instelling($module, $key)
-{
+function lid_instelling($module, $key) {
 	return ContainerFacade::getContainer()->get(LidInstellingenRepository::class)->getValue($module, $key);
 }
 
-function instelling($module, $key)
-{
+function instelling($module, $key) {
 	return ContainerFacade::getContainer()->get(InstellingenRepository::class)->getValue($module, $key);
 }
 
-function to_unix_path($path)
-{
+function to_unix_path($path) {
 	return str_replace(DIRECTORY_SEPARATOR, "/", $path);
 }
 
@@ -953,8 +909,7 @@ function to_unix_path($path)
  * @param $subpath
  * @return string|null
  */
-function safe_combine_path($folder, $subpath)
-{
+function safe_combine_path($folder, $subpath) {
 	if ($folder == null || $subpath == null) {
 		return null;
 	}
@@ -969,8 +924,7 @@ function safe_combine_path($folder, $subpath)
 	return $combined;
 }
 
-function realpathunix($path)
-{
+function realpathunix($path) {
 	return to_unix_path(realpath($path));
 }
 
@@ -986,8 +940,7 @@ function realpathunix($path)
  * @param string $prefix
  * @return string
  */
-function uniqid_safe($prefix = "")
-{
+function uniqid_safe($prefix = "") {
 	return str_replace('.', '_', uniqid($prefix, true));
 }
 
@@ -997,8 +950,7 @@ function uniqid_safe($prefix = "")
  * @param array $arr
  * @return array
  */
-function array_shuffle(array $arr)
-{
+function array_shuffle(array $arr) {
 	shuffle($arr);
 
 	return $arr;
@@ -1006,8 +958,7 @@ function array_shuffle(array $arr)
 
 $configCache = [];
 
-function sql_contains($field)
-{
+function sql_contains($field) {
 	return "%$field%";
 }
 
@@ -1020,8 +971,7 @@ if (!function_exists('array_key_first')) {
 	 * @param array $array
 	 * @return mixed
 	 */
-	function array_key_first($array)
-	{
+	function array_key_first($array) {
 		return $array ? array_keys($array)[0] : null;
 	}
 }
@@ -1035,45 +985,39 @@ if (!function_exists('array_key_last')) {
 	 * @param array $array
 	 * @return mixed
 	 */
-	function array_key_last($array)
-	{
+	function array_key_last($array) {
 		$key = NULL;
 
-		if (is_array($array)) {
+		if ( is_array( $array ) ) {
 
-			end($array);
-			$key = key($array);
+			end( $array );
+			$key = key( $array );
 		}
 
 		return $key;
 	}
 }
 
-function delTree($dir)
-{
-	$files = array_diff(scandir($dir), array('.', '..'));
+function delTree($dir) {
+	$files = array_diff(scandir($dir), array('.','..'));
 	foreach ($files as $file) {
 		(is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
 	}
 	return rmdir($dir);
 }
 
-function vue_encode($object)
-{
+function vue_encode($object) {
 	return htmlspecialchars(json_encode($object));
 }
 
-function join_paths(...$args)
-{
+function join_paths(...$args) {
 	$paths = [];
 
 	foreach ($args as $arg) {
-		if ($arg !== '') {
-			$paths[] = $arg;
-		}
+		if ($arg !== '') { $paths[] = $arg; }
 	}
 
-	return preg_replace('#/+#', '/', join('/', $paths));
+	return preg_replace('#/+#','/',join('/', $paths));
 }
 
 /**
@@ -1083,8 +1027,7 @@ function join_paths(...$args)
  * @param $path
  * @return bool
  */
-function path_valid($prefix, $path)
-{
+function path_valid($prefix, $path) {
 	return str_starts_with(realpathunix(join_paths($prefix, $path)), realpathunix($prefix));
 }
 
@@ -1092,8 +1035,7 @@ function path_valid($prefix, $path)
  * @param Traversable|array
  * @return array
  */
-function as_array($value)
-{
+function as_array($value) {
 	if (is_array($value)) {
 		return $value;
 	} else if ($value instanceof Traversable) {
@@ -1109,20 +1051,17 @@ function as_array($value)
  *
  * @return string
  */
-function short_class($class)
-{
+function short_class($class) {
 	return (new \ReflectionClass($class))->getShortName();
 }
 
 // Base64url functies van https://www.php.net/manual/en/function.base64-encode.php#103849
-function base64url_encode($data)
-{
-	return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+function base64url_encode($data) {
+  return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
 }
 
-function base64url_decode($data)
-{
-	return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+function base64url_decode($data) {
+  return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
 }
 
 /**
@@ -1132,8 +1071,7 @@ function base64url_decode($data)
  * @return ReflectionMethod
  * @throws ReflectionException
  */
-function createReflectionMethod(callable $fn)
-{
+function createReflectionMethod(callable $fn) {
 	if (is_callable($fn)) {
 		if (is_array($fn)) {
 			if (is_object($fn[0])) {
@@ -1158,8 +1096,7 @@ function createReflectionMethod(callable $fn)
  * @param bool $substr Of alleen de laatste twee cijfers gegeven moeten worden
  * @return string Startjaar van boekjaar van gegeven datum
  */
-function boekjaar(DateTimeInterface $date = null, bool $substr = false): string
-{
+function boekjaar(DateTimeInterface $date = null, bool $substr = false): string {
 	if ($date === null) {
 		$date = date_create_immutable();
 	}

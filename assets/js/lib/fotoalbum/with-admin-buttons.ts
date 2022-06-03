@@ -2,10 +2,10 @@ import axios from 'axios';
 import createElement from 'jgallery/src/utils/create-element';
 import withTooltip from 'jgallery/src/utils/with-tooltip';
 import AlbumItem from 'jgallery/types/album-item';
-import { GalleryDecorator } from 'jgallery/types/gallery';
+import {GalleryDecorator} from 'jgallery/types/gallery';
 import Params from 'jgallery/types/gallery/parameters';
-import { redirect, reload } from '../reload';
-import { basename, dirname } from '../util';
+import {redirect, reload} from '../reload';
+import {basename, dirname} from '../util';
 
 const withAdminButtons: GalleryDecorator = (constructor) =>
 	class extends constructor {
@@ -40,30 +40,23 @@ const withAdminButtons: GalleryDecorator = (constructor) =>
 			});
 			rotateClockwiseButton.addEventListener('click', () => {
 				const url = this.getUrl();
-				axios
-					.post('/fotoalbum/roteren' + dirname(url), {
-						foto: basename(url),
-						rotation: 90,
-					})
-					.then(reload);
+				axios.post('/fotoalbum/roteren' + dirname(url), {
+					foto: basename(url),
+					rotation: 90,
+				}).then(reload);
 			});
 
-			const rotateCounterClockwiseButton = createElement(
-				`<div><i class="fa fa-undo"></i>&nbsp;Draai tegen de klok in</div>`,
-				{
-					style: {
-						padding: '0.2em',
-					},
-				}
-			);
+			const rotateCounterClockwiseButton = createElement(`<div><i class="fa fa-undo"></i>&nbsp;Draai tegen de klok in</div>`, {
+				style: {
+					padding: '0.2em',
+				},
+			});
 			rotateCounterClockwiseButton.addEventListener('click', () => {
 				const url = this.getUrl();
-				axios
-					.post('/fotoalbum/roteren' + dirname(url), {
-						foto: basename(url),
-						rotation: -90,
-					})
-					.then(reload);
+				axios.post('/fotoalbum/roteren' + dirname(url), {
+					foto: basename(url),
+					rotation: -90,
+				}).then(reload);
 			});
 
 			const setCoverButton = createElement(`<div><i class="fa fa-folder"></i>&nbsp;Instellen als albumcover</div>`, {
@@ -73,11 +66,9 @@ const withAdminButtons: GalleryDecorator = (constructor) =>
 			});
 			setCoverButton.addEventListener('click', () => {
 				const url = this.getUrl();
-				axios
-					.post('/fotoalbum/albumcover' + dirname(url), {
-						foto: basename(url),
-					})
-					.then((resp) => redirect(resp.data));
+				axios.post('/fotoalbum/albumcover' + dirname(url), {
+					foto: basename(url),
+				}).then((resp) => redirect(resp.data));
 			});
 
 			const deleteButton = createElement(`<div><i class="fa fa-times"></i>&nbsp;Verwijderen</div>`, {
@@ -90,11 +81,9 @@ const withAdminButtons: GalleryDecorator = (constructor) =>
 					return false;
 				}
 				const url = this.getUrl();
-				axios
-					.post('/fotoalbum/verwijderen' + dirname(url), {
-						foto: decodeURI(basename(url)),
-					})
-					.then(reload);
+				axios.post('/fotoalbum/verwijderen' + dirname(url), {
+					foto: decodeURI(basename(url)),
+				}).then(reload);
 			});
 
 			const dropdown = createElement('<div class="j-gallery-dropdown"></div>', {

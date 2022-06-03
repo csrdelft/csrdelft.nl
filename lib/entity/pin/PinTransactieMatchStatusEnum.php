@@ -8,8 +8,7 @@ use CsrDelft\common\Enum;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 23/02/2018
  */
-class PinTransactieMatchStatusEnum extends Enum
-{
+class PinTransactieMatchStatusEnum extends Enum {
 	/**
 	 * PinTransactieMatchStatus opties.
 	 */

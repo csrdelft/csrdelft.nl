@@ -24,8 +24,7 @@ use CsrDelft\common\Enum;
  * @method static static IFES
  * @method static static Extern
  */
-class ActiviteitSoort extends Enum
-{
+class ActiviteitSoort extends Enum {
 
 	/**
 	 * ActiviteitSoort opties.

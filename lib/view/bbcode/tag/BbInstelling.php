@@ -13,8 +13,7 @@ use CsrDelft\service\security\LoginService;
  * @since 27/03/2019
  * @example [instelling=maaltijdblokje module=voorpagina][maaltijd=next][/instelling]
  */
-class BbInstelling extends BbTag
-{
+class BbInstelling extends BbTag {
 
 	private $module;
 	private $testwaarde;
@@ -25,13 +24,11 @@ class BbInstelling extends BbTag
 		LoginService::mag(P_LOGGED_IN);
 	}
 
-	public static function getTagName()
-	{
+	public static function getTagName() {
 		return 'instelling';
 	}
 
-	public function render()
-	{
+	public function render() {
 		if ($this->instelling == null) {
 			return 'Geen instelling opgegeven';
 		}

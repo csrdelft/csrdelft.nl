@@ -6,8 +6,7 @@ namespace CsrDelft\entity\corvee;
 
 use CsrDelft\entity\profiel\Profiel;
 
-class CorveePuntenOverzichtDTO
-{
+class CorveePuntenOverzichtDTO {
 	/**
 	 * @var CorveeTaak
 	 */

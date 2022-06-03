@@ -16,15 +16,13 @@ use CsrDelft\events\AccessControlEventListener;
  * @Annotation
  * @Target({"CLASS", "METHOD"})
  */
-class Auth
-{
+class Auth {
 	/**
 	 * @var string
 	 */
 	private $mag;
 
-	public function __construct(array $data)
-	{
+	public function __construct(array $data) {
 		if (isset($data['value'])) {
 			if (is_array($data['value'])) {
 				$data['mag'] = implode(',', $data['value']);
@@ -35,7 +33,7 @@ class Auth
 		}
 
 		foreach ($data as $key => $value) {
-			$method = 'set' . str_replace('_', '', $key);
+			$method = 'set'.str_replace('_', '', $key);
 			if (!method_exists($this, $method)) {
 				throw new \BadMethodCallException(sprintf('Unknown property "%s" on annotation "%s".', $key, static::class));
 			}
@@ -43,13 +41,11 @@ class Auth
 		}
 	}
 
-	public function setMag($mag)
-	{
+	public function setMag($mag) {
 		$this->mag = $mag;
 	}
 
-	public function getMag()
-	{
+	public function getMag() {
 		return $this->mag;
 	}
 

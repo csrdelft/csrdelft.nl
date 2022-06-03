@@ -25,8 +25,7 @@ use Twig\Environment;
  * @example [maaltijd]next[/maaldijd]
  * @example [maaltijd]123[/maaltijd]
  */
-class BbMaaltijd extends BbTag
-{
+class BbMaaltijd extends BbTag {
 
 	/**
 	 * @var Maaltijd[]
@@ -53,33 +52,28 @@ class BbMaaltijd extends BbTag
 	 */
 	private $id;
 
-	public function __construct(Environment $twig, MaaltijdenRepository $maaltijdenRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository)
-	{
+	public function __construct(Environment $twig, MaaltijdenRepository $maaltijdenRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
 		$this->twig = $twig;
 	}
 
-	public static function getTagName()
-	{
+	public static function getTagName() {
 		return 'maaltijd';
 	}
 
-	public function isAllowed()
-	{
+	public function isAllowed() {
 		return LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function renderLight()
-	{
+	public function renderLight() {
 		$maaltijd = $this->maaltijden[0];
 		$url = $maaltijd->getUrl() . '#' . $maaltijd->maaltijd_id;
 		return BbHelper::lightLinkBlock('maaltijd', $url, $maaltijd->titel, date_format_intl($maaltijd->getMoment(), DATETIME_FORMAT));
 	}
 
-	public function render()
-	{
+	public function render() {
 		$result = '<div class="my-3 p-3 maaltijdketzer-wrapper rounded shadow-sm">';
 		foreach ($this->maaltijden as $maaltijd) {
 			// Aanmeldingen
@@ -120,8 +114,7 @@ class BbMaaltijd extends BbTag
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
-	{
+	public function parse($arguments = []) {
 		$this->id = $this->readMainArgument($arguments);
 		$this->maaltijden = [];
 		foreach ($this->getMaaltijd($this->id) as $maaltijd) {
@@ -136,8 +129,7 @@ class BbMaaltijd extends BbTag
 	 * @return array
 	 * @throws BbException
 	 */
-	private function getMaaltijd($mid): array
-	{
+	private function getMaaltijd($mid): array {
 		// @TODO clean up this ugly code
 		$maaltijd2 = null;
 
@@ -156,9 +148,7 @@ class BbMaaltijd extends BbTag
 			} elseif ($mid === 'beoordeling') {
 				$timestamp = date_create_immutable(instelling('maaltijden', 'beoordeling_periode'));
 				$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(LoginService::getUid(), $timestamp);
-				$recent = array_slice(array_map(function ($m) {
-					return $m->maaltijd;
-				}, $recent), -2);
+				$recent = array_slice(array_map(function($m) { return $m->maaltijd; }, $recent), -2);
 				if (count($recent) === 0) throw new BbException('');
 				$maaltijd = array_values($recent)[0];
 				if (count($recent) > 1) $maaltijd2 = array_values($recent)[1];
@@ -181,8 +171,7 @@ class BbMaaltijd extends BbTag
 		return array($maaltijd, $maaltijd2);
 	}
 
-	public function getId()
-	{
+	public function getId() {
 		return $this->id;
 	}
 }

@@ -23,8 +23,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviSaldoRepository"))
  */
-class CiviSaldo implements DataTableEntry, DisplayEntity
-{
+class CiviSaldo implements DataTableEntry, DisplayEntity {
 	/**
 	 * Let op, dit is geen fk naar Profiel. Er zijn CiviSaldo's die geen profiel zijn en vice versa.
 	 *
@@ -70,12 +69,12 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	 * @return integer
 	 * @Serializer\Groups("bar")
 	 */
-	public function getRecent()
-	{
+	public function getRecent() {
 		$eb = Criteria::expr();
 		$criteria = Criteria::create()
 			->where($eb->eq('deleted', false))
-			->andWhere($eb->gt('moment', date_create_immutable()->add(\DateInterval::createFromDateString('-100 days'))));
+			->andWhere($eb->gt('moment', date_create_immutable()->add(\DateInterval::createFromDateString('-100 days'))))
+		;
 
 		return $this->bestellingen->matching($criteria)->count();
 	}
@@ -85,8 +84,7 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("lichting")
 	 */
-	public function getDataTableLichting()
-	{
+	public function getDataTableLichting() {
 		return substr($this->uid, 0, 2);
 	}
 
@@ -95,13 +93,11 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("naam")
 	 */
-	public function getDataTableNaam()
-	{
+	public function getDataTableNaam() {
 		return $this->getWeergave();
 	}
 
-	public function getId()
-	{
+	public function getId() {
 		return $this->uid;
 	}
 
@@ -109,13 +105,11 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	 * @return string
 	 * @Serializer\Groups("bar")
 	 */
-	public function getWeergave(): string
-	{
+	public function getWeergave(): string {
 		return ProfielRepository::existsUid($this->uid) ? ProfielRepository::getNaam($this->uid, 'volledig') : $this->naam;
 	}
 
-	public function getLink(): string
-	{
+	public function getLink(): string {
 		return ProfielRepository::existsUid($this->uid) ? ProfielRepository::getLink($this->uid, 'volledig') : $this->naam;
 	}
 }

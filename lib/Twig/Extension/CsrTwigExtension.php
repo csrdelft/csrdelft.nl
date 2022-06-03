@@ -41,9 +41,9 @@ class CsrTwigExtension extends AbstractExtension
 	private $cmsPaginaRepository;
 
 	public function __construct(
-		CsrfService         $csrfService,
+		CsrfService $csrfService,
 		CmsPaginaRepository $cmsPaginaRepository,
-		ProfielRepository   $profielRepository
+		ProfielRepository $profielRepository
 	)
 	{
 		$this->csrfService = $csrfService;
@@ -214,7 +214,7 @@ class CsrTwigExtension extends AbstractExtension
 
 	public function table(DataTableView $table): string
 	{
-		return (string)$table;
+		return (string) $table;
 	}
 }
 

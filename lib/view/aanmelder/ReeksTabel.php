@@ -8,10 +8,8 @@ use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
-class ReeksTabel extends DataTable
-{
-	public function __construct()
-	{
+class ReeksTabel extends DataTable {
+	public function __construct() {
 		parent::__construct(Reeks::class, '/aanmelder/beheer', 'Aanmelder beheer', null, false);
 
 		$this->addColumn('id');

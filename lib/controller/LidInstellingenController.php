@@ -19,13 +19,11 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class LidInstellingenController extends AbstractController
-{
-	/** @var LidInstellingenRepository */
+class LidInstellingenController extends AbstractController {
+	/** @var LidInstellingenRepository  */
 	private $lidInstellingenRepository;
 
-	public function __construct(LidInstellingenRepository $lidInstellingenRepository)
-	{
+	public function __construct(LidInstellingenRepository $lidInstellingenRepository) {
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 	}
 
@@ -34,8 +32,7 @@ class LidInstellingenController extends AbstractController
 	 * @Route("/instellingen", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function beheer()
-	{
+	public function beheer() {
 		return $this->render('instellingen/lidinstellingen.html.twig', [
 			'defaultInstellingen' => $this->lidInstellingenRepository->getAll(),
 			'instellingen' => $this->lidInstellingenRepository->getAllForLid($this->getUid()),
@@ -54,8 +51,7 @@ class LidInstellingenController extends AbstractController
 	 * @Route("/instellingen/update/{module}/{instelling}/{waarde}", methods={"POST"}, defaults={"waarde": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function update(Request $request, $module, $instelling, $waarde = null)
-	{
+	public function update(Request $request, $module, $instelling, $waarde = null) {
 		if ($waarde === null) {
 			$waarde = $request->request->get('waarde');
 		}
@@ -73,8 +69,7 @@ class LidInstellingenController extends AbstractController
 	 * @Route("/instellingen/opslaan", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function opslaan()
-	{
+	public function opslaan() {
 		$this->lidInstellingenRepository->saveAll(); // fetches $_POST values itself
 		setMelding('Instellingen opgeslagen', 1);
 		return $this->redirectToRoute('csrdelft_lidinstellingen_beheer');
@@ -87,8 +82,7 @@ class LidInstellingenController extends AbstractController
 	 * @Route("/instellingen/reset/{module}/{key}", methods={"POST"})
 	 * @Auth(P_ADMIN)
 	 */
-	public function reset($module, $key)
-	{
+	public function reset($module, $key) {
 		$this->lidInstellingenRepository->resetForAll($module, $key);
 		setMelding('Voor iedereen de instelling ge-reset naar de standaard waarde', 1);
 		return new JsonResponse(true);
@@ -98,8 +92,7 @@ class LidInstellingenController extends AbstractController
 	 * @Route("/instellingen/reset/mijn", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function resetUser()
-	{
+	public function resetUser() {
 		$account = $this->getUser();
 
 		if (!$account) {

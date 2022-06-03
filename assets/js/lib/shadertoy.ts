@@ -1,4 +1,12 @@
-import { Mesh, OrthographicCamera, PlaneBufferGeometry, Scene, ShaderMaterial, Vector3, WebGLRenderer } from 'three';
+import {
+	Mesh,
+	OrthographicCamera,
+	PlaneBufferGeometry,
+	Scene,
+	ShaderMaterial,
+	Vector3,
+	WebGLRenderer,
+} from 'three';
 
 /**
  * Gedeeltelijke implementatie van shadertoy.
@@ -71,8 +79,8 @@ void main() {
 	// texture.wrapS = RepeatWrapping;
 	// texture.wrapT = RepeatWrapping;
 	const uniforms = {
-		iTime: { value: 0 },
-		iResolution: { value: new Vector3() },
+		iTime: {value: 0},
+		iResolution: {value: new Vector3()},
 		// iChannel0: {value: texture},
 	};
 	const material = new ShaderMaterial({
@@ -93,7 +101,7 @@ void main() {
 	}
 
 	function render(time: number) {
-		time *= 0.001; // convert to seconds
+		time *= 0.001;  // convert to seconds
 
 		resizeRendererToDisplaySize();
 

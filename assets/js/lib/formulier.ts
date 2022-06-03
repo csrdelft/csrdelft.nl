@@ -1,33 +1,33 @@
 import axios from 'axios';
 import $ from 'jquery';
-import { fnGetSelection, fnUpdateDataTable, isDataTableResponse } from '../datatable/api';
-import { ajaxRequest } from './ajax';
-import { domUpdate } from './domUpdate';
-import { modalClose } from './modal';
-import { redirect, reload } from './reload';
-import { parents, select, selectAll } from './dom';
-import { throwError } from './util';
-import Bloodhound, { BloodhoundOptions, TypeaheadDataset } from 'corejs-typeahead';
+import {fnGetSelection, fnUpdateDataTable, isDataTableResponse} from '../datatable/api';
+import {ajaxRequest} from './ajax';
+import {domUpdate} from './domUpdate';
+import {modalClose} from './modal';
+import {redirect, reload} from './reload';
+import {parents, select, selectAll} from "./dom";
+import {throwError} from "./util";
+import Bloodhound, {BloodhoundOptions, TypeaheadDataset} from "corejs-typeahead";
 
-require('../editor');
+require('../editor')
 
 export function formIsChanged(form: HTMLFormElement): boolean {
 	let changed = false;
-	selectAll<HTMLInputElement>('.FormElement:not(.tt-hint)', form).forEach((el) => {
+	selectAll<HTMLInputElement>('.FormElement:not(.tt-hint)', form).forEach(el => {
 		const origValue = el.getAttribute('origvalue');
 
 		if (el.type == 'radio') {
 			if (el.checked && origValue !== el.value) {
-				changed = true;
+				changed = true
 			}
 		} else if (el.type == 'checkbox') {
 			if (Boolean(origValue) !== el.checked) {
-				changed = true;
+				changed = true
 			}
 		} else if (el.value !== origValue) {
-			changed = true;
+			changed = true
 		}
-	});
+	})
 
 	return changed;
 }
@@ -37,7 +37,7 @@ export function formIsChanged(form: HTMLFormElement): boolean {
  * @param form
  */
 export function formInlineToggle(form: HTMLElement): void {
-	const $form = $(form);
+	const $form = $(form)
 	$form.prev('.InlineFormToggle').toggle();
 	$form.toggle();
 	$form.children(':first').trigger('focus');
@@ -52,10 +52,10 @@ export function formToggle(target: HTMLElement, event: Event): false {
 }
 
 export function formReset(event: Event, form?: HTMLFormElement | null): false {
-	const target = event.target;
+	const target = event.target
 
 	if (!target || !(target instanceof HTMLElement)) {
-		throw new Error('formReset: geen EventTarget');
+		throw new Error("formReset: geen EventTarget")
 	}
 
 	if (!form) {
@@ -64,7 +64,7 @@ export function formReset(event: Event, form?: HTMLFormElement | null): false {
 	}
 
 	if (!form) {
-		throw new Error('Geen form gevonden in formReset');
+		throw new Error("Geen form gevonden in formReset")
 	}
 
 	if (target.classList.contains('confirm') && !confirm(target.title + '.\n\nWeet u het zeker?')) {
@@ -72,9 +72,9 @@ export function formReset(event: Event, form?: HTMLFormElement | null): false {
 	}
 
 	selectAll('.FormElement', form).forEach(function (el) {
-		const orig = el.getAttribute('origvalue');
+		const orig = el.getAttribute('origvalue')
 		if (orig && (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) {
-			el.value = orig;
+			el.value = orig
 		}
 	});
 	return false;
@@ -126,11 +126,11 @@ export function formSubmit(event: Event): boolean {
 		event.preventDefault();
 		const formData = new FormData(form);
 		let done = domUpdate;
-		let source: Element | null = null;
+		let source: Element | null = null
 
 		if (form.classList.contains('InlineForm')) {
 			source = form;
-			const id = form.id;
+			const id = form.id
 			if (id) {
 				formData.append('InlineFormId', id);
 			}
@@ -150,9 +150,10 @@ export function formSubmit(event: Event): boolean {
 		}
 
 		if (form.classList.contains('DataTableResponse')) {
-			const tableId = form.dataset.tableid;
+
+			const tableId = form.dataset.tableid
 			if (!tableId || !document.getElementById(tableId)) {
-				throw new Error('DataTable not found');
+				throw new Error("DataTable not found")
 			}
 
 			formData.append('DataTableId', tableId);
@@ -162,19 +163,17 @@ export function formSubmit(event: Event): boolean {
 			});
 
 			done = (response: unknown) => {
-				if (isDataTableResponse(response)) {
-					// JSON
+				if (isDataTableResponse(response)) { // JSON
 					fnUpdateDataTable('#' + tableId, response);
 					if (response.modal) {
 						domUpdate(response.modal);
 					} else {
 						modalClose();
 					}
-				} else if (typeof response === 'string') {
-					// HTML
+				} else if (typeof response === 'string') { // HTML
 					domUpdate(response);
 				} else {
-					throw new Error('onbekende response' + response);
+					throw new Error('onbekende response' + response)
 				}
 			};
 
@@ -192,7 +191,7 @@ export function formSubmit(event: Event): boolean {
 		const url = form.getAttribute('action');
 
 		if (!url) {
-			throw new Error('Form heeft geen action');
+			throw new Error("Form heeft geen action")
 		}
 
 		ajaxRequest('POST', url, formData, source, done, throwError, () => {
@@ -211,10 +210,10 @@ export function formSubmit(event: Event): boolean {
  * @returns {boolean}
  */
 export function formCancel(event: Event): boolean {
-	const sourceEl = event.target;
+	const sourceEl = event.target
 
 	if (!sourceEl || !(sourceEl instanceof HTMLElement)) {
-		throw new Error('formCancel: Geen EventTarget');
+		throw new Error("formCancel: Geen EventTarget")
 	}
 
 	if (sourceEl.classList.contains('confirm') && !confirm(sourceEl.title + '.\n\nWeet u het zeker?')) {
@@ -224,7 +223,7 @@ export function formCancel(event: Event): boolean {
 	const form = sourceEl.closest('form');
 
 	if (!form) {
-		throw new Error('Geen form in formCancel');
+		throw new Error("Geen form in formCancel")
 	}
 
 	if (form.classList.contains('InlineForm')) {
@@ -234,7 +233,7 @@ export function formCancel(event: Event): boolean {
 	}
 	if (form.classList.contains('ModalForm')) {
 		event.preventDefault();
-		const href = sourceEl.getAttribute('href');
+		const href = sourceEl.getAttribute('href')
 		if (href) {
 			axios.get(href);
 		}
@@ -254,10 +253,10 @@ export function initSterrenField(el: HTMLElement): void {
 		cancelPlace: 'right',
 		noRatedMsg: '',
 		click: function (score) {
-			$(this).raty('score', score);
-			$(this).closest('form').submit();
-		},
-	});
+			$(this).raty('score', score)
+			$(this).closest('form').submit()
+		}
+	})
 }
 
 export const initDoctrineField = (el: HTMLElement): void => {
@@ -269,45 +268,43 @@ export const initDoctrineField = (el: HTMLElement): void => {
 		remote: {
 			url: `${url}%QUERY`,
 			wildcard: '%QUERY',
-		},
+		}
 	});
 
-	$(el).typeahead(
-		{
-			hint: true,
-			highlight: true,
-			autoselect: true,
-		},
-		{
-			name: 'Entity',
-			display: 'value',
-			source: bloodhound.ttAdapter(),
-			limit: 20,
-			templates: {
-				suggestion: function (suggestion) {
-					return `
-<p${suggestion.title ? ' title="' + suggestion.title + '"' : ''}>
+	$(el).typeahead({
+		hint: true,
+		highlight: true,
+		autoselect: true,
+	}, {
+		name: "Entity",
+		display: "value",
+		source: bloodhound.ttAdapter(),
+		limit: 20,
+		templates: {
+			suggestion: function (suggestion) {
+				return `
+<p${suggestion.title ? ' title="' + suggestion.title + '"' : ""}>
 <a class="suggestionUrl">
-${suggestion.icon ? suggestion.icon : ''}
+${suggestion.icon ? suggestion.icon : ""}
 ${suggestion.value}
-${suggestion.label ? `<span class="lichtgrijs"> - ${suggestion.label}</span>` : ''}
+${suggestion.label ? `<span class="lichtgrijs"> - ${suggestion.label}</span>` : ""}
 </a>
 </p>`;
-				},
-			},
+			}
 		}
-	);
+	});
 
 	$(el).on('typeahead:select', function (event, suggestion, dataset) {
-		$(this).trigger('change');
+		$(this).trigger('change')
 		$('#' + el.dataset.idField).val(suggestion[el.dataset.suggestieIdField]);
 	});
-};
+
+}
 
 export const initAutocompleteField = (el: HTMLElement): void => {
-	const autoselect = el.dataset.autoselect == 'true';
-	const clicktogo = el.dataset.clicktogo == 'true';
-	const sources = JSON.parse(el.dataset.sources) as Omit<BloodhoundOptions, 'datumTokenizer' | 'queryTokenizer'>[];
+	const autoselect = el.dataset.autoselect == "true";
+	const clicktogo = el.dataset.clicktogo == "true";
+	const sources = JSON.parse(el.dataset.sources) as Omit<BloodhoundOptions, "datumTokenizer" | "queryTokenizer">[]
 
 	const datasets: TypeaheadDataset[] = [];
 
@@ -316,41 +313,38 @@ export const initAutocompleteField = (el: HTMLElement): void => {
 			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			// limit: 5,
-			...source,
+			...source
 		});
 
 		datasets.push({
 			name,
-			display: 'value',
+			display: "value",
 			source: bloodhound.ttAdapter(),
 			limit: 20,
 			templates: {
 				header: isNaN(Number(name)) ? `<h3 class="tt-header">${name}</h3>` : '',
 				suggestion: function (suggestion) {
 					return `
-<p${suggestion.title ? ' title="' + suggestion.title + '"' : ''}>
+<p${suggestion.title ? ' title="' + suggestion.title + '"' : ""}>
 <a class="suggestionUrl" ${clicktogo ? ` href="${suggestion.url}"` : ` onclick="event.preventDefault();return false;"`}>
-${suggestion.icon ? suggestion.icon : ''}
+${suggestion.icon ? suggestion.icon : ""}
 ${suggestion.value}
-${suggestion.label ? `<span class="lichtgrijs"> - ${suggestion.label}</span>` : ''}
+${suggestion.label ? `<span class="lichtgrijs"> - ${suggestion.label}</span>` : ""}
 </a>
 </p>`;
-				},
-			},
-		});
+				}
+			}
+		})
 	}
 
-	$(el).typeahead(
-		{
-			hint: true,
-			highlight: true,
-			autoselect,
-		},
-		...datasets
-	);
+	$(el).typeahead({
+		hint: true,
+		highlight: true,
+		autoselect,
+	}, ...datasets);
 
 	$(el).on('typeahead:select', function (event, suggestion, dataset) {
-		$(this).trigger('change');
+		$(this).trigger('change')
 		if (clicktogo) {
 			if (suggestion) {
 				window.location.href = suggestion.url;
@@ -359,4 +353,4 @@ ${suggestion.label ? `<span class="lichtgrijs"> - ${suggestion.label}</span>` : 
 			}
 		}
 	});
-};
+}

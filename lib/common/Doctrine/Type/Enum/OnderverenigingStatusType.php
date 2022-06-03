@@ -8,13 +8,11 @@ use CsrDelft\entity\groepen\enum\OnderverenigingStatus;
 
 class OnderverenigingStatusType extends EnumType
 {
-	public function getEnumClass()
-	{
+	public function getEnumClass() {
 		return OnderverenigingStatus::class;
 	}
 
-	public function getName()
-	{
+	public function getName() {
 		return 'enumOnderverenigingStatus';
 	}
 }

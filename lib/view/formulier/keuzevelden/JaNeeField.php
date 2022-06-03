@@ -9,21 +9,17 @@ namespace CsrDelft\view\formulier\keuzevelden;
  *
  * Ja (1) of Nee (0)
  */
-class JaNeeField extends RadioField
-{
+class JaNeeField extends RadioField {
 
-	public function __construct($name, $value, $description)
-	{
+	public function __construct($name, $value, $description) {
 		parent::__construct($name, (int)$value, $description, array(1 => 'Ja', 0 => 'Nee'));
 	}
 
-	public function validate()
-	{
+	public function validate() {
 		return array_key_exists($this->value, $this->options);
 	}
 
-	public function getValue()
-	{
+	public function getValue() {
 		// Override $this->value, want parent doet dat ook.
 		$this->value = (int)parent::getValue();
 		return $this->value;

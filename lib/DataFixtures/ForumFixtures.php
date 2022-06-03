@@ -63,9 +63,7 @@ class ForumFixtures extends Fixture
 				$post->verwijderd = false;
 				$post->auteur_ip = "::1";
 				$post->wacht_goedkeuring = false;
-				$post->tekst = implode("", array_map(function ($p) {
-					return '[p]' . $p . '[/p]';
-				}, $faker->paragraphs));
+				$post->tekst = implode("", array_map(function ($p) { return '[p]'. $p . '[/p]';},$faker->paragraphs));
 
 				$manager->persist($post);
 			}

@@ -20,8 +20,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  * @method AccessControl[]    findAll()
  * @method AccessControl[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AccessRepository extends AbstractRepository
-{
+class AccessRepository extends AbstractRepository {
 
 	/**
 	 * @var CacheInterface
@@ -37,8 +36,7 @@ class AccessRepository extends AbstractRepository
 	 * @param CacheInterface $cache
 	 * @param EntityManagerInterface $em
 	 */
-	public function __construct(ManagerRegistry $registry, CacheInterface $cache, EntityManagerInterface $em)
-	{
+	public function __construct(ManagerRegistry $registry, CacheInterface $cache, EntityManagerInterface $em) {
 		parent::__construct($registry, AccessControl::class);
 		$this->cache = $cache;
 		$this->em = $em;
@@ -51,8 +49,7 @@ class AccessRepository extends AbstractRepository
 	 *
 	 * @return array
 	 */
-	public function getTree($environment, $resource)
-	{
+	public function getTree($environment, $resource) {
 		$resources = [$resource, '*'];
 
 		if ($environment === Activiteit::class) {
@@ -85,8 +82,7 @@ class AccessRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function setAcl($environment, $resource, array $acl)
-	{
+	public function setAcl($environment, $resource, array $acl) {
 		// Has permission to change permissions?
 		if (!LoginService::mag(P_ADMIN)) {
 			$rechten = $this->getSubject($environment, AccessAction::Rechten, $resource);
@@ -145,8 +141,7 @@ class AccessRepository extends AbstractRepository
 	 *
 	 * @return null|string
 	 */
-	public function getSubject($environment, $action, $resource)
-	{
+	public function getSubject($environment, $action, $resource) {
 		$ac = $this->find(['environment' => $environment, 'action' => $action, 'resource' => $resource]);
 		if ($ac) {
 			return $ac->subject;
@@ -160,8 +155,7 @@ class AccessRepository extends AbstractRepository
 	 *
 	 * @return AccessControl
 	 */
-	public function nieuw($environment, $resource)
-	{
+	public function nieuw($environment, $resource) {
 		$ac = new AccessControl();
 		$ac->environment = $environment;
 		$ac->resource = $resource;

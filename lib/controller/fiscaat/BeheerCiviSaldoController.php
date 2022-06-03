@@ -31,8 +31,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 07/04/2017
  */
-class BeheerCiviSaldoController extends AbstractController
-{
+class BeheerCiviSaldoController extends AbstractController {
 	/**
 	 * @var CiviSaldoRepository
 	 */
@@ -46,8 +45,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 */
 	private $profielService;
 
-	public function __construct(CiviSaldoRepository $civiSaldoRepository, CiviBestellingRepository $civiBestellingRepository, ProfielService $profielService)
-	{
+	public function __construct(CiviSaldoRepository $civiSaldoRepository, CiviBestellingRepository $civiBestellingRepository, ProfielService $profielService) {
 		$this->profielService = $profielService;
 		$this->civiSaldoRepository = $civiSaldoRepository;
 		$this->civiBestellingRepository = $civiBestellingRepository;
@@ -59,8 +57,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Auth(P_FISCAAT_READ)
 	 * @throws ExceptionInterface
 	 */
-	public function overzicht(Request $request)
-	{
+	public function overzicht(Request $request) {
 		$table = $this->createDataTable(CiviSaldoTable::class);
 
 		if ($request->getMethod() == 'POST') {
@@ -80,8 +77,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/inleggen/{uid}", defaults={"uid"=null}, methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function inleggen(EntityManagerInterface $em, $uid)
-	{
+	public function inleggen(EntityManagerInterface $em, $uid) {
 		if ($uid) {
 			$civisaldo = $this->civiSaldoRepository->find($uid);
 		} else {
@@ -119,8 +115,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/verwijderen", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function verwijderen()
-	{
+	public function verwijderen() {
 		$selection = $this->getDataTableSelection();
 
 		$removed = array();
@@ -149,8 +144,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/registreren", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function registreren()
-	{
+	public function registreren() {
 		$form = new LidRegistratieForm(new CiviSaldo());
 
 		if ($form->validate()) {
@@ -185,8 +179,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/som", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function som()
-	{
+	public function som() {
 		$momentString = filter_input(INPUT_POST, 'moment', FILTER_SANITIZE_STRING);
 		$moment = DateTime::createFromFormat("Y-m-d H:i", $momentString);
 		if (!$moment) {
@@ -206,14 +199,11 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/zoek", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function zoek(Request $request)
-	{
+	public function zoek(Request $request) {
 		$zoekterm = $request->query->get('q');
 
 		$leden = $this->profielService->zoekLeden($zoekterm, 'naam', 'alle', 'achternaam');
-		$uids = array_map(function ($profiel) {
-			return $profiel->uid;
-		}, $leden);
+		$uids = array_map(function ($profiel) { return $profiel->uid; }, $leden);
 
 		$civiSaldi = $this->civiSaldoRepository->zoeken($uids, $zoekterm);
 

@@ -22,8 +22,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Peiling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Peiling|null retrieveByUuid($UUID)
  */
-class PeilingenRepository extends AbstractRepository
-{
+class PeilingenRepository extends AbstractRepository {
 	/**
 	 * @var PeilingOptiesRepository
 	 */
@@ -33,8 +32,7 @@ class PeilingenRepository extends AbstractRepository
 	 */
 	private $peilingStemmenModel;
 
-	public function __construct(PeilingOptiesRepository $peilingOptiesRepository, PeilingStemmenRepository $peilingStemmenRepository, ManagerRegistry $registry)
-	{
+	public function __construct(PeilingOptiesRepository $peilingOptiesRepository, PeilingStemmenRepository $peilingStemmenRepository, ManagerRegistry $registry) {
 		parent::__construct($registry, Peiling::class);
 
 		$this->peilingOptiesModel = $peilingOptiesRepository;
@@ -45,8 +43,7 @@ class PeilingenRepository extends AbstractRepository
 	 * @param Peiling $entity
 	 * @return void
 	 */
-	public function delete(Peiling $entity)
-	{
+	public function delete(Peiling $entity) {
 		$manager = $this->getEntityManager();
 
 		$manager->beginTransaction();
@@ -75,8 +72,7 @@ class PeilingenRepository extends AbstractRepository
 	 * @param Peiling $entity
 	 * @return string
 	 */
-	public function create(Peiling $entity)
-	{
+	public function create(Peiling $entity) {
 		$manager = $this->getEntityManager();
 
 		$manager->persist($entity);
@@ -90,8 +86,7 @@ class PeilingenRepository extends AbstractRepository
 	 * @param int $optie_id
 	 * @throws \Doctrine\ORM\ORMException
 	 */
-	public function stem($peiling_id, $optie_id)
-	{
+	public function stem($peiling_id, $optie_id) {
 		$peiling = $this->getPeilingById((int)$peiling_id);
 		if ($peiling->getMagStemmen() && !$this->peilingStemmenModel->heeftGestemd($peiling_id, $optie_id)) {
 			$optie = $this->peilingOptiesModel->findOneBy(['peiling_id' => $peiling_id, 'id' => $optie_id]);
@@ -120,8 +115,7 @@ class PeilingenRepository extends AbstractRepository
 	 * @param $peiling_id
 	 * @return Peiling|false
 	 */
-	public function getPeilingById($peiling_id)
-	{
+	public function getPeilingById($peiling_id) {
 		return $this->find($peiling_id);
 	}
 
@@ -131,8 +125,7 @@ class PeilingenRepository extends AbstractRepository
 	 * @return string
 	 * @throws CsrGebruikerException
 	 */
-	public function validate(Peiling $entity)
-	{
+	public function validate(Peiling $entity) {
 		$errors = '';
 		if ($entity == null) {
 			throw new CsrGebruikerException('Peiling is leeg');
@@ -149,8 +142,7 @@ class PeilingenRepository extends AbstractRepository
 		return $errors;
 	}
 
-	public function getPeilingenVoorBeheer()
-	{
+	public function getPeilingenVoorBeheer() {
 
 		$peilingen = $this->findAll();
 		if (LoginService::mag(P_PEILING_MOD)) {
@@ -173,8 +165,7 @@ class PeilingenRepository extends AbstractRepository
 		}
 	}
 
-	public function magBewerken($peiling)
-	{
+	public function magBewerken($peiling) {
 		if (LoginService::mag(P_PEILING_MOD)
 			|| $peiling->eigenaar == LoginService::getUid()
 			|| LoginService::mag($peiling->rechten_mod)) {
@@ -187,8 +178,7 @@ class PeilingenRepository extends AbstractRepository
 	/**
 	 * @return Peiling[]
 	 */
-	public function getLijst()
-	{
+	public function getLijst() {
 		return $this->findBy([], ['id' => 'DESC']);
 	}
 }

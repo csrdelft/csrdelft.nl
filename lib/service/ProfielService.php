@@ -11,15 +11,13 @@ use CsrDelft\service\security\LoginService;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 19/09/2018
  */
-class ProfielService
-{
+class ProfielService {
 	/**
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
 
-	public function __construct(ProfielRepository $profielRepository)
-	{
+	public function __construct(ProfielRepository $profielRepository) {
 		$this->profielRepository = $profielRepository;
 	}
 
@@ -32,8 +30,7 @@ class ProfielService
 	 * @param int $limiet
 	 * @return Profiel[]
 	 */
-	public function zoekLeden(string $zoekterm, string $zoekveld, string $verticale, string $sort, $zoekstatus = '', int $limiet = 0)
-	{
+	public function zoekLeden(string $zoekterm, string $zoekveld, string $verticale, string $sort, $zoekstatus = '', int $limiet = 0) {
 		$queryBuilder = $this->profielRepository->createQueryBuilder('p');
 		$expr = $queryBuilder->expr();
 		$containsZonderSpatiesZoekterm = sql_contains(str_replace(' ', '', $zoekterm));
@@ -86,7 +83,7 @@ class ProfielService
 				->setParameter('containsZoekterm', sql_contains($zoekterm))
 				->setParameter('containsZonderSpatiesZoekterm', $containsZonderSpatiesZoekterm);
 		} else {
-			if (preg_match('/^\d{2}$/', $zoekterm) and ($zoekveld == 'uid' or $zoekveld == 'naam')) {
+			if (preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld == 'uid' OR $zoekveld == 'naam')) {
 				//zoeken op lichtingen...
 				$queryBuilder
 					->where('p.uid LIKE :uid')

@@ -17,15 +17,12 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ForumDraadVerbergen[]    findAll()
  * @method ForumDraadVerbergen[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ForumDradenVerbergenRepository extends AbstractRepository
-{
-	public function __construct(ManagerRegistry $registry)
-	{
+class ForumDradenVerbergenRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, ForumDraadVerbergen::class);
 	}
 
-	protected function maakForumDraadVerbergen(ForumDraad $draad)
-	{
+	protected function maakForumDraadVerbergen(ForumDraad $draad) {
 		$verbergen = new ForumDraadVerbergen();
 		$verbergen->draad = $draad;
 		$verbergen->draad_id = $draad->draad_id;
@@ -35,18 +32,15 @@ class ForumDradenVerbergenRepository extends AbstractRepository
 		return $verbergen;
 	}
 
-	public function getAantalVerborgenVoorLid()
-	{
+	public function getAantalVerborgenVoorLid() {
 		return count($this->findBy(['uid' => LoginService::getUid()]));
 	}
 
-	public function getVerbergenVoorLid(ForumDraad $draad)
-	{
+	public function getVerbergenVoorLid(ForumDraad $draad) {
 		return $this->find(['draad_id' => $draad->draad_id, 'uid' => LoginService::getUid()]);
 	}
 
-	public function setVerbergenVoorLid(ForumDraad $draad, $verbergen = true)
-	{
+	public function setVerbergenVoorLid(ForumDraad $draad, $verbergen = true) {
 		if ($verbergen) {
 			if (!$this->getVerbergenVoorLid($draad)) {
 				$this->maakForumDraadVerbergen($draad);
@@ -57,8 +51,7 @@ class ForumDradenVerbergenRepository extends AbstractRepository
 		}
 	}
 
-	public function toonAllesVoorLeden(array $uids)
-	{
+	public function toonAllesVoorLeden(array $uids) {
 		$this->createQueryBuilder('v')
 			->delete()
 			->where('v.uid in (:uids)')
@@ -66,8 +59,7 @@ class ForumDradenVerbergenRepository extends AbstractRepository
 			->getQuery()->execute();
 	}
 
-	public function toonDraadVoorIedereen(array $draadIds)
-	{
+	public function toonDraadVoorIedereen(array $draadIds) {
 		$this->createQueryBuilder('v')
 			->delete()
 			->where('v.draad_id in (:draad_ids)')

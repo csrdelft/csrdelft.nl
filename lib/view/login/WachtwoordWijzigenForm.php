@@ -9,15 +9,13 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredWachtwoordWijzigenField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
-class WachtwoordWijzigenForm extends Formulier
-{
+class WachtwoordWijzigenForm extends Formulier {
 
 	public function __construct(
 		Account $account,
-						$action,
-						$require_current = true
-	)
-	{
+		$action,
+		$require_current = true
+	) {
 		parent::__construct($account, $action, 'Wachtwoord instellen');
 
 		$fields = [];

@@ -14,13 +14,11 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MaalCieBoekjaarController extends AbstractController
-{
-	/** @var MaaltijdenRepository */
+class MaalCieBoekjaarController extends AbstractController {
+	/** @var MaaltijdenRepository  */
 	private $maaltijdenRepository;
 
-	public function __construct(MaaltijdenRepository $maaltijdenRepository)
-	{
+	public function __construct(MaaltijdenRepository $maaltijdenRepository) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 	}
 
@@ -29,8 +27,7 @@ class MaalCieBoekjaarController extends AbstractController
 	 * @Route("/maaltijden/boekjaar", methods={"GET"})
 	 * @Auth(P_MAAL_SALDI)
 	 */
-	public function beheer()
-	{
+	public function beheer() {
 		return $this->render('maaltijden/boekjaar_sluiten.html.twig');
 	}
 
@@ -41,8 +38,7 @@ class MaalCieBoekjaarController extends AbstractController
 	 * @Route("/maaltijden/boekjaar/sluitboekjaar", methods={"POST"})
 	 * @Auth(P_MAAL_SALDI)
 	 */
-	public function sluitboekjaar()
-	{
+	public function sluitboekjaar() {
 		$form = new BoekjaarSluitenForm(date('Y-m-d', strtotime('-1 year')), date('Y-m-d')); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();

@@ -5,15 +5,13 @@ namespace CsrDelft\view\groepen\leden;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\groepen;
 
-class GroepEmailsView extends groepen\leden\GroepTabView
-{
+class GroepEmailsView extends groepen\leden\GroepTabView {
 
-	public function getTabContent()
-	{
+	public function getTabContent() {
 		$html = '';
 		foreach ($this->groep->getLeden() as $lid) {
 			$profiel = ProfielRepository::get($lid->uid);
-			if ($profiel and $profiel->getPrimaryEmail() != '') {
+			if ($profiel AND $profiel->getPrimaryEmail() != '') {
 				$html .= $profiel->getPrimaryEmail() . '; ';
 			}
 		}

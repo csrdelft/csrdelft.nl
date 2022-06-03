@@ -22,8 +22,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class FotoAlbumRepository extends AbstractRepository
-{
+class FotoAlbumRepository extends AbstractRepository {
 	/**
 	 * @var FotoRepository
 	 */
@@ -38,12 +37,11 @@ class FotoAlbumRepository extends AbstractRepository
 	private $security;
 
 	public function __construct(
-		ManagerRegistry    $registry,
-		Security           $security,
-		FotoRepository     $fotoRepository,
+		ManagerRegistry $registry,
+		Security $security,
+		FotoRepository $fotoRepository,
 		FotoTagsRepository $fotoTagsRepository
-	)
-	{
+	) {
 		parent::__construct($registry, FotoAlbum::class);
 
 		$this->fotoRepository = $fotoRepository;
@@ -56,8 +54,7 @@ class FotoAlbumRepository extends AbstractRepository
 	 * @param int $limit
 	 * @return FotoAlbum[]
 	 */
-	public function zoeken($dir, $limit)
-	{
+	public function zoeken($dir, $limit) {
 		return $this->createQueryBuilder('fa')
 			->where('fa.subdir LIKE :subdir')
 			->setParameter('subdir', '%' . $dir . '%')
@@ -70,8 +67,7 @@ class FotoAlbumRepository extends AbstractRepository
 	 * @param string $subdir
 	 * @return FotoAlbum[]
 	 */
-	public function findBySubdir($subdir)
-	{
+	public function findBySubdir($subdir) {
 		return $this->createQueryBuilder('fa')
 			->where('fa.subdir LIKE :subdir')
 			->setParameter('subdir', $subdir . '%')
@@ -83,8 +79,7 @@ class FotoAlbumRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(FotoAlbum $album)
-	{
+	public function create(FotoAlbum $album) {
 		if (!file_exists($album->getPath())) {
 			mkdir($album->getPath());
 			if (false === @chmod($album->getPath(), 0755)) {
@@ -104,8 +99,7 @@ class FotoAlbumRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function delete(FotoAlbum $album)
-	{
+	public function delete(FotoAlbum $album) {
 		$path = $album->path . '_resized';
 		if (file_exists($path)) {
 			rmdir($path);
@@ -122,9 +116,8 @@ class FotoAlbumRepository extends AbstractRepository
 		$this->getEntityManager()->flush();
 	}
 
-	public function getFotoAlbum($path)
-	{
-		if (AccountRepository::isValidUid($path) and ProfielRepository::existsUid($path)) {
+	public function getFotoAlbum($path) {
+		if (AccountRepository::isValidUid($path) AND ProfielRepository::existsUid($path)) {
 			$album = new FotoTagAlbum($path);
 		} else {
 			$album = new FotoAlbum($path);
@@ -138,8 +131,7 @@ class FotoAlbumRepository extends AbstractRepository
 		return $album;
 	}
 
-	public function verwerkFotos(FotoAlbum $fotoalbum)
-	{
+	public function verwerkFotos(FotoAlbum $fotoalbum) {
 		// verwijder niet bestaande subalbums en fotos uit de database
 		$this->opschonen($fotoalbum);
 		//define('RESIZE_OUTPUT', null);
@@ -202,8 +194,7 @@ HTML;
 		}
 	}
 
-	public function getMostRecentFotoAlbum()
-	{
+	public function getMostRecentFotoAlbum() {
 		try {
 			$album = $this->getFotoAlbum('');
 			return $album->getMostRecentSubAlbum();
@@ -212,8 +203,7 @@ HTML;
 		}
 	}
 
-	public function hernoemAlbum(FotoAlbum $album, $newName)
-	{
+	public function hernoemAlbum(FotoAlbum $album, $newName) {
 		if (!valid_filename($newName)) {
 			throw new CsrGebruikerException('Ongeldige naam');
 		}
@@ -267,8 +257,7 @@ HTML;
 		return true;
 	}
 
-	public function setAlbumCover(FotoAlbum $album, Foto $cover)
-	{
+	public function setAlbumCover(FotoAlbum $album, Foto $cover) {
 		$success = true;
 		// find old cover
 		foreach ($album->getFotos() as $foto) {
@@ -311,8 +300,7 @@ HTML;
 		return $success;
 	}
 
-	public function opschonen(FotoAlbum $fotoalbum)
-	{
+	public function opschonen(FotoAlbum $fotoalbum) {
 		foreach ($this->findBySubdir($fotoalbum->subdir) as $album) {
 			/** @var FotoAlbum $album */
 			if (!$album->exists()) {

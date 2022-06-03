@@ -15,8 +15,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\repository\aanmelder\AanmeldActiviteitRepository;
 use CsrDelft\repository\aanmelder\DeelnemerRepository;
 
-class AanmelderController extends AbstractController
-{
+class AanmelderController extends AbstractController {
 	/**
 	 * @var DeelnemerRepository
 	 */
@@ -26,7 +25,7 @@ class AanmelderController extends AbstractController
 	 */
 	private $activiteitRepository;
 
-	public function __construct(DeelnemerRepository         $deelnemerRepository,
+	public function __construct(DeelnemerRepository $deelnemerRepository,
 															AanmeldActiviteitRepository $activiteitRepository)
 	{
 		$this->deelnemerRepository = $deelnemerRepository;
@@ -97,8 +96,7 @@ class AanmelderController extends AbstractController
 	 * @Route("/aanmelder/aanmelden/{activiteit}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function aanmeldenBB(AanmeldActiviteit $activiteit): Response
-	{
+	public function aanmeldenBB(AanmeldActiviteit $activiteit): Response {
 		$this->deelnemerRepository->aanmelden($activiteit, $this->getProfiel(), 1);
 
 		return $this->render('aanmelder/bb_activiteit.html.twig', [
@@ -129,8 +127,7 @@ class AanmelderController extends AbstractController
 	 * @Route("/aanmelder/afmelden/{activiteit}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function afmeldenBB(AanmeldActiviteit $activiteit): Response
-	{
+	public function afmeldenBB(AanmeldActiviteit $activiteit): Response {
 		$this->deelnemerRepository->afmelden($activiteit, $this->getProfiel());
 
 		return $this->render('aanmelder/bb_activiteit.html.twig', [

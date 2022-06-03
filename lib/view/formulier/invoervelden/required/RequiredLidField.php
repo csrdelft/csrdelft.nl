@@ -11,8 +11,7 @@ use CsrDelft\view\formulier\invoervelden\LidField;
  *
  * @see LidField
  */
-class RequiredLidField extends LidField
-{
+class RequiredLidField extends LidField {
 
 	public $required = true;
 

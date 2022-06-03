@@ -4,8 +4,7 @@ namespace CsrDelft\entity\maalcie;
 
 use CsrDelft\entity\profiel\Profiel;
 
-class MaaltijdAanmeldingDTO
-{
+class MaaltijdAanmeldingDTO {
 	/**
 	 * @var Profiel
 	 */

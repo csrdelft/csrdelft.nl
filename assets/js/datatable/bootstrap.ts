@@ -36,7 +36,7 @@ window.JSZip = JSZip;
 
 $.extend(true, $.fn.dataTable.defaults, defaults);
 
-$.fn.dataTable.ext.errMode = 'throw';
+$.fn.dataTable.ext.errMode = 'throw'
 
 $(() => {
 	$('body').on('click', () => {

@@ -18,8 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *   @ORM\Index(name="access_key", columns={"access_key"})
  * })
  */
-class ForumPlaatje
-{
+class ForumPlaatje {
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -54,28 +53,23 @@ class ForumPlaatje
 	 */
 	public $source_url;
 
-	public function exists()
-	{
+	public function exists() {
 		return $this->getAfbeelding()->exists();
 	}
 
-	public function getAfbeelding($resize = false)
-	{
+	public function getAfbeelding($resize = false) {
 		return new Afbeelding($this->getPath($resize));
 	}
 
-	public function getPath($resize = false)
-	{
+	public function getPath($resize = false) {
 		return PLAATJES_PATH . ($resize ? "resized/" : "") . strval($this->id);
 	}
 
-	public function getUrl($resized = false)
-	{
+	public function getUrl($resized = false) {
 		return "/forum/plaatjes/bekijken/$this->access_key" . ($resized ? "/resized" : "");
 	}
 
-	public function createResized()
-	{
+	public function createResized() {
 		// Resize the smallest side of the image to at most 1024px
 		$command = $_ENV['IMAGEMAGICK'] . ' ' . escapeshellarg($this->getPath(false)) . ' -resize "750x>" -format jpg -quality 85 -interlace Line  -auto-orient ' . escapeshellarg($this->getPath(true));
 		shell_exec($command);
@@ -86,8 +80,7 @@ class ForumPlaatje
 		}
 	}
 
-	public function hasResized()
-	{
+	public function hasResized() {
 		$path = $this->getPath(true);
 		return file_exists($path) && is_file($path);
 	}

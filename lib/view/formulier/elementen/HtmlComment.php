@@ -1,7 +1,6 @@
 <?php
 
 namespace CsrDelft\view\formulier\elementen;
-
 use CsrDelft\view\formulier\FormElement;
 
 /**
@@ -14,48 +13,39 @@ use CsrDelft\view\formulier\FormElement;
  *
  * Commentaardingen voor formulieren
  */
-class HtmlComment implements FormElement
-{
+class HtmlComment implements FormElement {
 
 	protected $comment;
 
-	public function __construct($comment)
-	{
+	public function __construct($comment) {
 		$this->comment = $comment;
 	}
 
-	public function getModel()
-	{
+	public function getModel() {
 		return $this->comment;
 	}
 
-	public function getBreadcrumbs()
-	{
+	public function getBreadcrumbs() {
 		return null;
 	}
 
-	public function getHtml()
-	{
+	public function getHtml() {
 		return $this->comment;
 	}
 
-	public function __toString()
-	{
-		return '<div>' . $this->getHtml() . '</div>';
+	public function __toString() {
+		return '<div>'. $this->getHtml(). '</div>';
 	}
 
-	public function getJavascript()
-	{
+	public function getJavascript() {
 		return "";
 	}
 
-	public function getTitel()
-	{
+	public function getTitel() {
 		return $this->getType();
 	}
 
-	public function getType()
-	{
+	public function getType() {
 		return classNameZonderNamespace(get_class($this));
 	}
 

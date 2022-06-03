@@ -8,7 +8,7 @@ export function selectText(elmnt: HTMLElement): void {
 	const selection = window.getSelection();
 
 	if (!selection) {
-		throw new Error('Geen getSelection in window');
+		throw new Error("Geen getSelection in window")
 	}
 
 	const range = document.createRange();
@@ -29,7 +29,8 @@ export function selectText(elmnt: HTMLElement): void {
  *   returns 3: '/dir'
  */
 export function dirname(path: string): string {
-	return path.replace(/\\/g, '/').replace(/\/[^/]*\/?$/, '');
+	return path.replace(/\\/g, '/')
+		.replace(/\/[^/]*\/?$/, '');
 }
 
 export function basename(path: string, suffix = ''): string {
@@ -127,36 +128,30 @@ export function singleLineString(strings: TemplateStringsArray, ...values: strin
 	const lines = output.split(/(?:\r\n|\n|\r)/);
 
 	// Rip out the leading whitespace.
-	return lines
-		.map((line) => line.replace(/^\s+/gm, ''))
-		.join(' ')
-		.trim();
+	return lines.map((line) => line.replace(/^\s+/gm, '')).join(' ').trim();
 }
 
-export function html<T extends HTMLElement = HTMLElement>(
-	strings: TemplateStringsArray,
-	...values: Array<string | undefined | null | Node>
-): T {
+export function html<T extends HTMLElement = HTMLElement>(strings: TemplateStringsArray, ...values: Array<string | undefined | null | Node>): T {
 	let output = '';
-	const nodes: [string, Node][] = [];
+	const nodes: [string, Node][] = []
 	for (let i = 0; i < values.length; i++) {
 		output += strings[i];
-		const value = values[i];
+		const value = values[i]
 		if (value instanceof Node) {
-			output += `<div id="_node_html_${i}"></div>`;
-			nodes.push([`_node_html_${i}`, value]);
+			output += `<div id="_node_html_${i}"></div>`
+			nodes.push([`_node_html_${i}`, value])
 		} else {
-			output += value;
+			output += value
 		}
 	}
 	output += strings[values.length];
 
-	const element = document.createElement('div');
+	const element = document.createElement("div")
 
-	element.innerHTML = output;
+	element.innerHTML = output
 
 	for (const [id, node] of nodes) {
-		element.querySelector(`#${id}`).replaceWith(node);
+		element.querySelector(`#${id}`).replaceWith(node)
 	}
 
 	return element.firstElementChild as T;
@@ -168,11 +163,11 @@ export function htmlParse(htmlString: string): Node[] {
 
 export function preloadImage(url: string): Promise<Event> {
 	return new Promise((resolve, reject) => {
-		const img = new Image();
-		img.src = url;
-		img.onload = resolve;
-		img.onerror = reject;
-	});
+		const img = new Image()
+		img.src = url
+		img.onload = resolve
+		img.onerror = reject
+	})
 }
 
 /**
@@ -181,11 +176,11 @@ export function preloadImage(url: string): Promise<Event> {
  * @param fileName
  */
 export async function base64toFile(str: string, fileName: string): Promise<File> {
-	const res = await fetch(str);
-	const blob = await res.blob();
-	const extension = blob.type.split('/').pop();
+	const res = await fetch(str)
+	const blob = await res.blob()
+	const extension = blob.type.split("/").pop()
 
-	return new File([blob], `${fileName}.${extension}`, { type: blob.type });
+	return new File([blob], `${fileName}.${extension}`, {type: blob.type})
 }
 
 export function parseData(el: HTMLElement): Record<string, unknown> {
@@ -209,7 +204,7 @@ export function parseData(el: HTMLElement): Record<string, unknown> {
 }
 
 export function htmlDecode(str: string): string {
-	const txt = document.createElement('textarea');
+	const txt = document.createElement("textarea");
 	txt.innerHTML = str;
 	return txt.value;
 }
@@ -223,11 +218,7 @@ export function htmlEncode(str: string): string {
 		.replace(/>/g, '&gt;');
 }
 
-export function ontstuiter(
-	func: (...args: unknown[]) => unknown,
-	wait: number,
-	immediate: boolean
-): (...args: unknown[]) => void {
+export function ontstuiter(func: (...args: unknown[]) => unknown, wait: number, immediate: boolean): (...args: unknown[]) => void {
 	let timeout: number | undefined;
 	return function (this: unknown, ...args: unknown[]) {
 		const later = () => {
@@ -254,7 +245,7 @@ export function docReady(fn: () => void): void {
 }
 
 export function isLoggedIn(): boolean {
-	const elem = document.querySelector("meta[property='X-CSR-LOGGEDIN']");
+	const elem = document.querySelector('meta[property=\'X-CSR-LOGGEDIN\']');
 	if (!elem) {
 		return false;
 	}
@@ -262,44 +253,45 @@ export function isLoggedIn(): boolean {
 }
 
 export function throwError(message: string): void {
-	throw new Error(message);
+	throw new Error(message)
 }
+
 
 /**
  * Voer de meegegeven functie éénmaal uit.
  * @param func
  */
-export const once = <T extends unknown[], U>(func: (...args: T) => U): ((...args: T) => U) => {
+export const once = <T extends unknown[], U>(func: (...args: T) => U): (...args: T) => U => {
 	let called = false;
 	let returnValue: U;
 	return (...args: T): U => {
 		if (!called) {
 			called = true;
-			returnValue = func(...args);
+			returnValue = func(...args)
 		}
 
-		return returnValue;
-	};
-};
+		return returnValue
+	}
+}
 
 export const wait = (ms: number): Promise<void> => {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-};
+	return new Promise(resolve =>  setTimeout(resolve, ms))
+}
 
 export const fadeAway = async (el: HTMLElement, ms: number): Promise<void> => {
-	const transitionValue = `opacity ${ms}ms`;
+	const transitionValue = `opacity ${ms}ms`
 	if (el.style.transition) {
-		el.style.transition += `, ${transitionValue}`;
+		el.style.transition += `, ${transitionValue}`
 	} else {
-		el.style.transition = transitionValue;
+		el.style.transition = transitionValue
 	}
 
-	el.style.opacity = '0';
+	el.style.opacity = "0";
 
-	await wait(ms);
+	await wait(ms)
 
-	el.remove();
-};
+	el.remove()
+}
 
 // Grote beunmethode om te zien of we een light theme hebben.
 export const isLightMode = (): boolean => {
@@ -308,29 +300,29 @@ export const isLightMode = (): boolean => {
 	const sep = bgColor.indexOf(',') > -1 ? ',' : ' ';
 	const rgb = bgColor.substr(4).split(')')[0].split(sep);
 
-	return Number(rgb[0]) > 124 && Number(rgb[1]) > 124 && Number(rgb[2]) > 124;
-};
+	return (Number(rgb[0]) > 124 && Number(rgb[1]) > 124 && Number(rgb[2]) > 124)
+}
 
 export const autosizeTextarea = (el: HTMLTextAreaElement): void => {
 	const cb = () => {
 		el.style.height = 'auto';
-		el.style.height = el.scrollHeight + 'px';
-	};
-	el.setAttribute('style', 'height:' + el.scrollHeight + 'px;overflow-y:hidden;');
-	el.addEventListener('input', cb, false);
-	setTimeout(cb);
-};
+		el.style.height = (el.scrollHeight) + 'px';
+	}
+	el.setAttribute('style', 'height:' + (el.scrollHeight) + 'px;overflow-y:hidden;');
+	el.addEventListener("input", cb, false);
+	setTimeout(cb)
+}
 
 /**
  * Eerste letter wordt een hoofdletter.
  * @param str
  */
-export const ucfirst = (str: string): string => str.slice(0, 1).toUpperCase() + str.slice(1);
+export const ucfirst = (str: string): string => str.slice(0, 1).toUpperCase() + str.slice(1)
 
 /**
  * Verwijder null/falsy elementen uit een lijst.
  * @param list
  */
-export const cut = <T>(list: T[]): T[] => list.filter((_) => _);
+export const cut = <T>(list: T[]): T[] => list.filter(_=>_)
 
-export const uidLike = (str: string): boolean => str.length == 4;
+export const uidLike = (str: string): boolean => str.length == 4

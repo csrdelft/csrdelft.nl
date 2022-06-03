@@ -24,8 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MaaltijdenFiscaatController extends AbstractController
-{
+class MaaltijdenFiscaatController extends AbstractController {
 	/**
 	 * @var MaaltijdenRepository
 	 */
@@ -44,12 +43,11 @@ class MaaltijdenFiscaatController extends AbstractController
 	private $civiSaldoRepository;
 
 	public function __construct(
-		MaaltijdenRepository           $maaltijdenRepository,
+		MaaltijdenRepository $maaltijdenRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		CiviBestellingRepository       $civiBestellingRepository,
-		CiviSaldoRepository            $civiSaldoRepository
-	)
-	{
+		CiviBestellingRepository $civiBestellingRepository,
+		CiviSaldoRepository $civiSaldoRepository
+	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->civiBestellingRepository = $civiBestellingRepository;
@@ -61,8 +59,7 @@ class MaaltijdenFiscaatController extends AbstractController
 	 * @Route("/maaltijden/fiscaat", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function GET_overzicht()
-	{
+	public function GET_overzicht() {
 		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Overzicht verwerkte maaltijden',
 			'content' => new FiscaatMaaltijdenOverzichtTable(),
@@ -74,8 +71,7 @@ class MaaltijdenFiscaatController extends AbstractController
 	 * @Route("/maaltijden/fiscaat", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function POST_overzicht()
-	{
+	public function POST_overzicht() {
 		$data = $this->maaltijdenRepository->findBy(['verwerkt' => true]);
 
 		return $this->tableData($data, ['datatable', 'datatable-fiscaat']);
@@ -86,8 +82,7 @@ class MaaltijdenFiscaatController extends AbstractController
 	 * @Route("/maaltijden/fiscaat/onverwerkt", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function GET_onverwerkt()
-	{
+	public function GET_onverwerkt() {
 		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Onverwerkte Maaltijden',
 			'content' => new OnverwerkteMaaltijdenTable(),
@@ -100,15 +95,14 @@ class MaaltijdenFiscaatController extends AbstractController
 	 * @Route("/maaltijden/fiscaat/verwerk", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function POST_verwerk(EntityManagerInterface $em)
-	{
+	public function POST_verwerk(EntityManagerInterface $em) {
 		# Haal maaltijd op
 		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 
 		# Controleer of de maaltijd gesloten is en geweest is
-		if ($maaltijd->gesloten == false or $maaltijd->getMoment() >= date_create_immutable("now")) {
+		if ($maaltijd->gesloten == false OR $maaltijd->getMoment() >= date_create_immutable("now")) {
 			throw new CsrGebruikerException("Maaltijd nog niet geweest");
 		}
 

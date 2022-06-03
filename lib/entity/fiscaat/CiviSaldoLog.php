@@ -8,8 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package CsrDelft\entity\fiscaat
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviSaldoLogRepository")
  */
-class CiviSaldoLog
-{
+class CiviSaldoLog {
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")

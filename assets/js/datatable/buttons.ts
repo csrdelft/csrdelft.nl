@@ -1,8 +1,8 @@
 import $ from 'jquery';
 
-import { knopPost } from '../lib/knop';
-import { evaluateMultiplicity } from '../lib/util';
-import { replacePlaceholders } from './api';
+import {knopPost} from '../lib/knop';
+import {evaluateMultiplicity} from '../lib/util';
+import {replacePlaceholders} from './api';
 import ButtonApi = DataTables.ButtonApi;
 import ButtonsSettings = DataTables.ButtonsSettings;
 
@@ -28,7 +28,6 @@ declare global {
 			confirm: ButtonSettings;
 			defaultCollection: ButtonSettings;
 		}
-
 		// Eigen attributen op ButtonSettings, worden in DatatableKnop gezet
 		interface ButtonSettings {
 			href?: string;
@@ -52,7 +51,12 @@ $.fn.dataTable.ext.buttons.print.className += ' dt-button-ico dt-ico-printer';
 $.fn.dataTable.ext.buttons.default = {
 	init(this: ButtonApi, dt, node, config) {
 		const toggle = () => {
-			this.enable(evaluateMultiplicity(config.multiplicity, dt.rows({ selected: true }).count()));
+			this.enable(
+				evaluateMultiplicity(
+					config.multiplicity,
+					dt.rows({selected: true}).count(),
+				),
+			);
 		};
 		dt.on('select.dt.DT deselect.dt.DT', toggle);
 		// Initiele staat
@@ -74,7 +78,7 @@ $.fn.dataTable.ext.buttons.default = {
 		const id = dt.tables().nodes().to$().attr('id');
 
 		if (!id) {
-			throw new Error('Datatable heeft geen id');
+			throw new Error("Datatable heeft geen id")
 		}
 
 		node.attr('data-tableid', id);
@@ -95,7 +99,7 @@ $.fn.dataTable.ext.buttons.popup = {
 $.fn.dataTable.ext.buttons.url = {
 	extend: 'default',
 	action(e, dt, button) {
-		window.location.href = button.attr('href') ?? '';
+		window.location.href = button.attr('href') ?? "";
 	},
 };
 
@@ -112,10 +116,10 @@ $.fn.dataTable.ext.buttons.sourceChange = {
 		enable();
 	},
 	action(e, dt, button, config) {
-		const href = config.href;
+		const href = config.href
 
 		if (!href) {
-			throw new Error('SourceChange Button heeft geen href');
+			throw new Error("SourceChange Button heeft geen href")
 		}
 
 		dt.ajax.url(href).load();
@@ -126,7 +130,12 @@ $.fn.dataTable.ext.buttons.confirm = {
 	extend: 'collection',
 	init(this: ButtonApi, dt, node, config) {
 		const toggle = () => {
-			this.enable(evaluateMultiplicity(config.multiplicity, dt.rows({ selected: true }).count()));
+			this.enable(
+				evaluateMultiplicity(
+					config.multiplicity,
+					dt.rows({selected: true}).count(),
+				),
+			);
 		};
 		dt.on('select.dt.DT deselect.dt.DT', toggle);
 		// Initiele staat
@@ -146,9 +155,7 @@ $.fn.dataTable.ext.buttons.confirm = {
 			],
 		} as ButtonsSettings);
 
-		dt.button('confirm' + config.text + ':name')
-			.node()
-			.appendTo(config._collection);
+		dt.button('confirm' + config.text + ':name').node().appendTo(config._collection);
 
 		// Reset action to extend one.
 		config.action = $.fn.dataTable.ext.buttons.collection.action;
@@ -164,7 +171,7 @@ $.fn.dataTable.ext.buttons.defaultCollection = {
 		const init = $.fn.dataTable.ext.buttons.default.init;
 
 		if (!init) {
-			throw new Error('Configuratie fout! Default knop bestaat niet');
+			throw new Error("Configuratie fout! Default knop bestaat niet")
 		}
 
 		init.call(this, dt, node, config);

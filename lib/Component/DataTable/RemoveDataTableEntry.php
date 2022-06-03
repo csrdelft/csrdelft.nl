@@ -4,13 +4,11 @@
 namespace CsrDelft\Component\DataTable;
 
 
-class RemoveDataTableEntry
-{
+class RemoveDataTableEntry {
 	private $id;
 	private $class;
 
-	public function __construct($id, $class)
-	{
+	public function __construct($id, $class) {
 		$this->id = $id;
 		$this->class = $class;
 	}
@@ -18,16 +16,14 @@ class RemoveDataTableEntry
 	/**
 	 * @return mixed
 	 */
-	public function getId()
-	{
+	public function getId() {
 		return $this->id;
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getClass()
-	{
+	public function getClass() {
 		return $this->class;
 	}
 }

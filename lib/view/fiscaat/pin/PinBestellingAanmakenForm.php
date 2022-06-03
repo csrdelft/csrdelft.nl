@@ -17,14 +17,12 @@ use CsrDelft\view\formulier\ModalForm;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 24/02/2018
  */
-class PinBestellingAanmakenForm extends ModalForm
-{
+class PinBestellingAanmakenForm extends ModalForm {
 	/**
 	 * @param PinTransactieMatch|null $pinTransactieMatch
 	 * @throws CsrGebruikerException
 	 */
-	public function __construct($pinTransactieMatch = null)
-	{
+	public function __construct($pinTransactieMatch = null) {
 		parent::__construct([], '/fiscaat/pin/aanmaken', 'Voeg een bestelling toe', true);
 		$comment = 'Pinbetaling ' . ($pinTransactieMatch ? PinTransactieMatch::renderMoment($pinTransactieMatch->getMoment(), false) : '');
 

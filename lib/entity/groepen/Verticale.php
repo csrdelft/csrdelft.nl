@@ -18,8 +18,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\VerticalenRepository")
  */
-class Verticale extends Groep
-{
+class Verticale extends Groep {
 	/**
 	 * Primary key
 	 * @var string
@@ -37,8 +36,7 @@ class Verticale extends Groep
 	public $naam;
 
 	// Stiekem hebben we helemaal geen leden.
-	public function getLeden()
-	{
+	public function getLeden() {
 		$leden = [];
 		$container = ContainerFacade::getContainer();
 		$profielRepository = $container->get(ProfielRepository::class);
@@ -67,8 +65,7 @@ class Verticale extends Groep
 		return new ArrayCollection($leden);
 	}
 
-	public function getUrl()
-	{
+	public function getUrl() {
 		return '/groepen/verticalen/' . $this->letter;
 	}
 
@@ -78,8 +75,7 @@ class Verticale extends Groep
 	 * @param null $allowedAuthenticationMethods
 	 * @return bool
 	 */
-	public function mag(AccessAction $action, $allowedAuthenticationMethods = null)
-	{
+	public function mag(AccessAction $action, $allowedAuthenticationMethods = null) {
 		switch ($action) {
 
 			case AccessAction::Bekijken():
@@ -97,8 +93,7 @@ class Verticale extends Groep
 	 * @param null $soort
 	 * @return bool
 	 */
-	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null)
-	{
+	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null) {
 		switch ($action) {
 
 			case AccessAction::Bekijken():

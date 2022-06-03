@@ -5,26 +5,19 @@
  * @param bericht
  * @throws Error als element niet wordt gevonden
  */
-export const select = <T extends Element = HTMLElement>(
-	selectors: string,
-	container: Element | Document = document,
-	bericht = ''
-): T => {
-	const el = container.querySelector<T>(selectors);
+export const select = <T extends Element = HTMLElement>(selectors: string, container: Element | Document = document, bericht = ""): T => {
+	const el = container.querySelector<T>(selectors)
 
 	if (!el) {
-		throw new Error(`Element "${selectors}" niet gevonden. ${bericht}`);
+		throw new Error(`Element "${selectors}" niet gevonden. ${bericht}`)
 	}
 
-	return el;
-};
+	return el
+}
 
-export const selectAll = <T extends Element = HTMLElement>(
-	selectors: string,
-	container: Element | Document = document
-): T[] => {
-	return Array.from(container.querySelectorAll<T>(selectors));
-};
+export const selectAll = <T extends Element = HTMLElement>(selectors: string, container: Element | Document = document): T[] => {
+	return Array.from(container.querySelectorAll<T>(selectors))
+}
 
 export const parents = (element: HTMLElement, selector: string | null = null): HTMLElement => {
 	let parent = element.parentElement;
@@ -36,8 +29,8 @@ export const parents = (element: HTMLElement, selector: string | null = null): H
 	}
 
 	if (!parent) {
-		throw new Error('Parent verwacht');
+		throw new Error("Parent verwacht");
 	}
 
-	return parent;
-};
+	return parent
+}

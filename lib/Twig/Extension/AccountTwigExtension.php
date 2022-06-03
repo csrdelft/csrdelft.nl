@@ -36,10 +36,10 @@ class AccountTwigExtension extends AbstractExtension
 	private $commissiesRepository;
 
 	public function __construct(
-		LoginService         $loginService,
-		BesturenRepository   $besturenRepository,
+		LoginService $loginService,
+		BesturenRepository $besturenRepository,
 		CommissiesRepository $commissiesRepository,
-		SuService            $suService
+		SuService $suService
 	)
 	{
 		$this->suService = $suService;

@@ -9,8 +9,7 @@ use DateInterval;
 use DateTime;
 use Exception;
 
-class SaldoGrafiekService
-{
+class SaldoGrafiekService {
 	/**
 	 * @var CiviSaldoRepository
 	 */
@@ -20,8 +19,7 @@ class SaldoGrafiekService
 	 */
 	private $civiBestellingRepository;
 
-	public function __construct(CiviSaldoRepository $civiSaldoRepository, CiviBestellingRepository $civiBestellingRepository)
-	{
+	public function __construct(CiviSaldoRepository $civiSaldoRepository, CiviBestellingRepository $civiBestellingRepository) {
 		$this->civiSaldoRepository = $civiSaldoRepository;
 		$this->civiBestellingRepository = $civiBestellingRepository;
 	}
@@ -32,8 +30,7 @@ class SaldoGrafiekService
 	 * @return array|null
 	 * @throws Exception
 	 */
-	public function getDataPoints($uid, $timespan)
-	{
+	public function getDataPoints($uid, $timespan) {
 		if (!$this->magGrafiekZien($uid)) {
 			return null;
 		}
@@ -81,8 +78,7 @@ class SaldoGrafiekService
 	 * @param string $uid
 	 * @return bool
 	 */
-	public function magGrafiekZien($uid)
-	{
+	public function magGrafiekZien($uid) {
 		//mogen we uberhaupt een grafiek zien?
 		return LoginService::getUid() === $uid || LoginService::mag(P_LEDEN_MOD . ',commissie:SocCie,commissie:MaalCie');
 	}

@@ -1,4 +1,4 @@
-import { docReady } from '../lib/util';
+import {docReady} from "../lib/util";
 
 docReady(() => {
 	// Zijbalk meescrollen
@@ -67,11 +67,11 @@ docReady(() => {
 
 	determineSizes();
 	setZijbalkState();
-	$(window).resize(function () {
+	$(window).resize(function() {
 		determineSizes();
 		setZijbalkState();
 	});
-	$(window).scroll(function () {
+	$(window).scroll(function() {
 		setZijbalkState();
 	});
 });

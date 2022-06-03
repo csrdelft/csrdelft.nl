@@ -9,14 +9,12 @@ use CsrDelft\view\JsonLijstResponse;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 04/04/2017
  */
-class CiviProductSuggestiesResponse extends JsonLijstResponse
-{
+class CiviProductSuggestiesResponse extends JsonLijstResponse {
 	/**
 	 * @param CiviProduct $entity
 	 * @return array
 	 */
-	public function renderElement($entity)
-	{
+	public function renderElement($entity) {
 		return array(
 			'url' => '/fiscaat/producten',
 			'value' => $entity->getBeschrijvingFormatted(),

@@ -26,8 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 28/07/2019
  */
-class WachtwoordController extends AbstractController
-{
+class WachtwoordController extends AbstractController {
 	/**
 	 * @var AccountRepository
 	 */
@@ -50,13 +49,12 @@ class WachtwoordController extends AbstractController
 	private $accountService;
 
 	public function __construct(
-		AccountRepository       $accountRepository,
-		AccountService          $accountService,
+		AccountRepository $accountRepository,
+		AccountService $accountService,
 		OneTimeTokensRepository $oneTimeTokensRepository,
-		AccessService           $accessService,
-		MailService             $mailService
-	)
-	{
+		AccessService $accessService,
+		MailService $mailService
+	) {
 		$this->accountRepository = $accountRepository;
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 		$this->accessService = $accessService;
@@ -164,8 +162,7 @@ class WachtwoordController extends AbstractController
 		return $this->render('default.html.twig', ['content' => $form]);
 	}
 
-	private function verzendResetMail(Account $account, $token)
-	{
+	private function verzendResetMail(Account $account, $token) {
 		$profiel = $account->profiel;
 
 		$url = $this->generateUrl('wachtwoord_reset', ['token' => $token[0]]);

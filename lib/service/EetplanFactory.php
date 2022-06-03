@@ -15,8 +15,7 @@ use CsrDelft\repository\ProfielRepository;
  *
  * Verzorgt het aanmaken van een nieuw eetplan, gebasseerd op een bak met data
  */
-class EetplanFactory
-{
+class EetplanFactory {
 	/**
 	 * Avond van deze nieuwe sessie
 	 *
@@ -90,8 +89,7 @@ class EetplanFactory
 	/**
 	 * @param EetplanBekenden[] $bekenden
 	 */
-	public function setBekenden($bekenden)
-	{
+	public function setBekenden($bekenden) {
 		$this->bekenden = [];
 
 		foreach ($bekenden as $eetplanBekenden) {
@@ -105,8 +103,7 @@ class EetplanFactory
 	/**
 	 * @param Eetplan[] $bezochten
 	 */
-	public function setBezocht($bezochten)
-	{
+	public function setBezocht($bezochten) {
 		$this->bezocht = [];
 		$this->bezocht_ah = [];
 		$this->bezocht_sh = [];
@@ -120,16 +117,14 @@ class EetplanFactory
 	/**
 	 * @param Profiel[] $novieten
 	 */
-	public function setNovieten($novieten)
-	{
+	public function setNovieten($novieten) {
 		$this->novieten = $novieten;
 	}
 
 	/**
 	 * @param Woonoord[] $huizen
 	 */
-	public function setHuizen($huizen)
-	{
+	public function setHuizen($huizen) {
 		$this->huizen = $huizen;
 	}
 
@@ -140,8 +135,7 @@ class EetplanFactory
 	 * @param bool $random
 	 * @return Eetplan[]
 	 */
-	public function genereer($avond, $random = false)
-	{
+	public function genereer($avond, $random = false) {
 		assert(isset($this->novieten), 'Veld novieten is niet gezet');
 		assert(isset($this->huizen), 'Veld huizen is niet gezet');
 

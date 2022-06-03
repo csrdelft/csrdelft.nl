@@ -16,8 +16,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class WelkomCommand extends Command
-{
+class WelkomCommand extends Command {
 	protected static $defaultName = 'stek:welkom';
 	/**
 	 * @var ProfielRepository
@@ -51,8 +50,7 @@ class WelkomCommand extends Command
 		ProfielRepository     $profielRepository,
 		UrlGeneratorInterface $urlGenerator,
 		MailService           $mailService
-	)
-	{
+	) {
 		parent::__construct();
 		$this->profielRepository = $profielRepository;
 		$this->accountRepository = $accountRepository;
@@ -62,16 +60,14 @@ class WelkomCommand extends Command
 		$this->accountService = $accountService;
 	}
 
-	protected function configure()
-	{
+	protected function configure() {
 		$this
 			->setDescription('Add a short description for your command')
 			->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
 			->addOption('option1', null, InputOption::VALUE_NONE, 'Option description');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$helper = $this->getHelper('question');
 		$jaar = $helper->ask($input, $output, new Question("Welke lichting moet een welkom mail krijgen (vier cijfers). "));
 

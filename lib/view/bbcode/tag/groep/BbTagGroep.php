@@ -40,8 +40,7 @@ abstract class BbTagGroep extends BbTag
 		$this->serializer = $serializer;
 	}
 
-	public function getId()
-	{
+	public function getId() {
 		return $this->id;
 	}
 

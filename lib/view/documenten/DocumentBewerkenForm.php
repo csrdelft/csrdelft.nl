@@ -19,8 +19,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class DocumentBewerkenForm implements FormulierTypeInterface
-{
+class DocumentBewerkenForm implements FormulierTypeInterface {
 
 	/**
 	 * @var UrlGeneratorInterface
@@ -35,8 +34,7 @@ class DocumentBewerkenForm implements FormulierTypeInterface
 	 */
 	private $loginService;
 
-	public function __construct(UrlGeneratorInterface $urlGenerator, LoginService $loginService, DocumentCategorieRepository $documentCategorieRepository)
-	{
+	public function __construct(UrlGeneratorInterface $urlGenerator, LoginService $loginService, DocumentCategorieRepository $documentCategorieRepository) {
 		$this->urlGenerator = $urlGenerator;
 		$this->documentCategorieRepository = $documentCategorieRepository;
 		$this->loginService = $loginService;
@@ -47,8 +45,7 @@ class DocumentBewerkenForm implements FormulierTypeInterface
 	 * @param Document $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
-	{
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
 		$builder->setTitel('Document bewerken');
 		$fields = [];
 		$fields['categorie'] = new EntitySelectField('categorie', $data->categorie, 'Categorie', DocumentCategorie::class);

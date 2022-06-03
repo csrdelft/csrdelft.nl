@@ -12,8 +12,7 @@ namespace CsrDelft\view;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  */
-class Icon
-{
+class Icon {
 	//handige dingen die we graag gebruiken in csrdelft.nl. Moeten geen namen zijn die al voorkomen
 	//in de lijst met icons.
 	public static $alias = array(
@@ -82,8 +81,7 @@ class Icon
 		'wiki' => 'fa fa-atlas',
 	];
 
-	public static function get($key)
-	{
+	public static function get($key) {
 		if (array_key_exists($key, self::$alias)) {
 			return self::$alias[$key];
 		} else {
@@ -100,8 +98,7 @@ class Icon
 	 * geselecteerd en door eventuele schermlezers opgevangen
 	 * @return string
 	 */
-	public static function getTag($key, $hover = null, $title = null, $class = null, $content = null)
-	{
+	public static function getTag($key, $hover = null, $title = null, $class = null, $content = null) {
 		$icon = self::get($key);
 
 		if (isset(static::$fa[$icon])) {

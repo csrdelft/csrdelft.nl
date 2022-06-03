@@ -6,15 +6,12 @@ namespace CsrDelft\common\Doctrine\Type\Enum;
 
 use CsrDelft\entity\courant\CourantCategorie;
 
-class CourantCategorieType extends EnumType
-{
-	public function getEnumClass()
-	{
+class CourantCategorieType extends EnumType {
+	public function getEnumClass() {
 		return CourantCategorie::class;
 	}
 
-	public function getName()
-	{
+	public function getName() {
 		return 'enumCourantCategorie';
 	}
 }

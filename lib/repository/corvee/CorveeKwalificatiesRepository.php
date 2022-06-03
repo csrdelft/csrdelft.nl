@@ -18,15 +18,12 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CorveeKwalificatie[]    findAll()
  * @method CorveeKwalificatie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CorveeKwalificatiesRepository extends AbstractRepository
-{
-	public function __construct(ManagerRegistry $registry)
-	{
+class CorveeKwalificatiesRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, CorveeKwalificatie::class);
 	}
 
-	public function getKwalificatiesVoorFunctie($fid)
-	{
+	public function getKwalificatiesVoorFunctie($fid) {
 		return $this->findBy(['functie_id' => $fid]);
 	}
 
@@ -36,18 +33,15 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 	 * @param string $uid
 	 * @return CorveeKwalificatie[]
 	 */
-	public function getKwalificatiesVanLid($uid)
-	{
+	public function getKwalificatiesVanLid($uid) {
 		return $this->findBy(['uid' => $uid]);
 	}
 
-	public function isLidGekwalificeerdVoorFunctie($uid, $fid)
-	{
+	public function isLidGekwalificeerdVoorFunctie($uid, $fid) {
 		return $this->find(['uid' => $uid, 'functie_id' => $fid]) != null;
 	}
 
-	public function nieuw(CorveeFunctie $functie)
-	{
+	public function nieuw(CorveeFunctie $functie) {
 		$kwalificatie = new CorveeKwalificatie();
 		$kwalificatie->setCorveeFunctie($functie);
 		$kwalificatie->wanneer_toegewezen = date_create_immutable();
@@ -59,8 +53,7 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function kwalificatieToewijzen(CorveeKwalificatie $kwali)
-	{
+	public function kwalificatieToewijzen(CorveeKwalificatie $kwali) {
 		if ($this->find(['uid' => $kwali->profiel->uid, 'functie_id' => $kwali->corveeFunctie->functie_id]) != null) {
 			throw new CsrGebruikerException('Is al gekwalificeerd!');
 		}
@@ -74,8 +67,7 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function kwalificatieIntrekken(CorveeKwalificatie $kwalificatie)
-	{
+	public function kwalificatieIntrekken(CorveeKwalificatie $kwalificatie) {
 		$this->_em->remove($kwalificatie);
 		$this->_em->flush();
 	}
@@ -85,8 +77,7 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 	 * @param $fid
 	 * @return CorveeKwalificatie|null
 	 */
-	public function getKwalificatie($uid, $fid)
-	{
+	public function getKwalificatie($uid, $fid) {
 		return $this->find(['uid' => $uid, 'functie_id' => $fid]);
 	}
 

@@ -7,8 +7,7 @@ use CsrDelft\common\Enum;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class Kringleider extends Enum
-{
+class Kringleider extends Enum {
 
 	/**
 	 * Kringleider opties.

@@ -21,10 +21,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ForumDeel[]    findAll()
  * @method ForumDeel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ForumDelenRepository extends AbstractRepository
-{
-	public function __construct(ManagerRegistry $registry)
-	{
+class ForumDelenRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, ForumDeel::class);
 	}
 
@@ -33,8 +31,7 @@ class ForumDelenRepository extends AbstractRepository
 	 * @return ForumDeel
 	 * @throws CsrGebruikerException
 	 */
-	public function get($id)
-	{
+	public function get($id) {
 		$deel = $this->find($id);
 		if (!$deel) {
 			throw new CsrGebruikerException('Forum bestaat niet!');
@@ -46,15 +43,13 @@ class ForumDelenRepository extends AbstractRepository
 	 * @param ForumDeel $entity
 	 * @return int
 	 */
-	public function create(ForumDeel $entity)
-	{
+	public function create(ForumDeel $entity) {
 		$this->getEntityManager()->persist($entity);
 		$this->getEntityManager()->flush();
 		return $entity->forum_id;
 	}
 
-	public function nieuwForumDeel()
-	{
+	public function nieuwForumDeel() {
 		$deel = new ForumDeel();
 		$deel->categorie_id = 0;
 		$deel->titel = 'Nieuw deelforum';
@@ -66,19 +61,16 @@ class ForumDelenRepository extends AbstractRepository
 		return $deel;
 	}
 
-	public function bestaatForumDeel($id)
-	{
+	public function bestaatForumDeel($id) {
 		return $this->findBy($id) !== null;
 	}
 
 
-	public function getForumDelenVoorCategorie(ForumCategorie $categorie)
-	{
+	public function getForumDelenVoorCategorie(ForumCategorie $categorie) {
 		return $this->findBy(['categorie_id' => $categorie->categorie_id], ['volgorde' => 'ASC']);
 	}
 
-	public function getForumDelenVoorLid($rss = false)
-	{
+	public function getForumDelenVoorLid($rss = false) {
 		/** @var ForumDeel[] $delen */
 		$delen = group_by_distinct('forum_id', $this->findBy([], ['volgorde' => 'ASC']));
 		foreach ($delen as $forum_id => $deel) {
@@ -95,8 +87,7 @@ class ForumDelenRepository extends AbstractRepository
 	 * @param ForumDeel $deel
 	 * @return ForumDeel[]
 	 */
-	public function getForumDelenOptiesOmTeDelen(ForumDeel $deel)
-	{
+	public function getForumDelenOptiesOmTeDelen(ForumDeel $deel) {
 		$qb = $this->createQueryBuilder('r')
 			->where('r.rechten_posten != :rechten_posten and r.rechten_posten LIKE :query')
 			->setParameter('rechten_posten', $deel->rechten_posten);
@@ -113,8 +104,7 @@ class ForumDelenRepository extends AbstractRepository
 		return $qb->getQuery()->getResult();
 	}
 
-	public function update(ForumDeel $deel)
-	{
+	public function update(ForumDeel $deel) {
 		$this->getEntityManager()->persist($deel);
 		$this->getEntityManager()->flush();
 	}

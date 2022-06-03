@@ -15,19 +15,16 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CmsPagina[]    findAll()
  * @method CmsPagina[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CmsPaginaRepository extends AbstractRepository
-{
+class CmsPaginaRepository extends AbstractRepository {
 
-	public function __construct(ManagerRegistry $registry)
-	{
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, CmsPagina::class);
 	}
 
 	/**
 	 * @return CmsPagina[]
 	 */
-	public function getAllePaginas()
-	{
+	public function getAllePaginas() {
 		/** @var CmsPagina[] $paginas */
 		$paginas = $this->findBy([], ['titel' => 'ASC']);
 		$result = [];
@@ -44,8 +41,7 @@ class CmsPaginaRepository extends AbstractRepository
 	 *
 	 * @return CmsPagina
 	 */
-	public function nieuw($naam)
-	{
+	public function nieuw($naam) {
 		$pagina = new CmsPagina();
 		$pagina->naam = $naam;
 		$pagina->titel = $naam;

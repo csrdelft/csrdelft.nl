@@ -19,8 +19,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Boek weergeven
  */
-class BoekFormulier implements FormulierTypeInterface
-{
+class BoekFormulier implements FormulierTypeInterface {
 	/**
 	 * @var UrlGeneratorInterface
 	 */
@@ -30,8 +29,7 @@ class BoekFormulier implements FormulierTypeInterface
 	 */
 	private $biebRubriekRepository;
 
-	public function __construct(UrlGeneratorInterface $urlGenerator, BiebRubriekRepository $biebRubriekRepository)
-	{
+	public function __construct(UrlGeneratorInterface $urlGenerator, BiebRubriekRepository $biebRubriekRepository) {
 		$this->urlGenerator = $urlGenerator;
 		$this->biebRubriekRepository = $biebRubriekRepository;
 	}
@@ -41,8 +39,7 @@ class BoekFormulier implements FormulierTypeInterface
 	 * @param Boek $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
-	{
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
 		$builder->setAction($this->urlGenerator->generate('csrdelft_bibliotheek_boek', ['boek' => $data->id]));
 		$builder->setTitel('');
 
@@ -72,8 +69,7 @@ class BoekFormulier implements FormulierTypeInterface
 		$builder->addCssClass('boekformulier');
 	}
 
-	private function getRubriekOptions(): array
-	{
+	private function getRubriekOptions(): array {
 		$ret = [];
 		$rubrieken = $this->biebRubriekRepository->findAll();
 		foreach ($rubrieken as $rubriek) {

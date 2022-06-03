@@ -11,9 +11,7 @@ use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
  * @package CsrDelft\view\formulier
  * @see DoctrineEntityField
  */
-interface DisplayEntity
-{
+interface DisplayEntity {
 	function getId();
-
 	function getWeergave(): string;
 }

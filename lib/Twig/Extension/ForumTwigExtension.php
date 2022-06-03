@@ -11,8 +11,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-class ForumTwigExtension extends AbstractExtension
-{
+class ForumTwigExtension extends AbstractExtension {
 	/**
 	 * @var ForumDradenVerbergenRepository
 	 */
@@ -26,15 +25,13 @@ class ForumTwigExtension extends AbstractExtension
 	 */
 	private $forumDradenRepository;
 
-	public function __construct(ForumDradenVerbergenRepository $forumDradenVerbergenRepository, ForumPostsRepository $forumPostsRepository, ForumDradenRepository $forumDradenRepository)
-	{
+	public function __construct(ForumDradenVerbergenRepository $forumDradenVerbergenRepository, ForumPostsRepository $forumPostsRepository, ForumDradenRepository $forumDradenRepository) {
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->forumDradenRepository = $forumDradenRepository;
 	}
 
-	public function getFunctions()
-	{
+	public function getFunctions() {
 		return [
 			new TwigFunction('getAantalVerborgenVoorLid', [$this, 'getAantalVerborgenVoorLid']),
 			new TwigFunction('getAantalWachtOpGoedkeuring', [$this, 'getAantalWachtOpGoedkeuring']),
@@ -47,51 +44,42 @@ class ForumTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function getFilters()
-	{
+	public function getFilters() {
 		return [
 			new TwigFilter('highlight_zoekterm', [$this, 'highlight_zoekterm'], ['is_safe' => ['html']]),
 			new TwigFilter('split_on_keyword', 'split_on_keyword', ['is_safe' => ['html']]),
 		];
 	}
 
-	public function getBelangrijkOpties()
-	{
+	public function getBelangrijkOpties() {
 		return ForumDradenRepository::$belangrijk_opties;
 	}
 
-	public function getAantalVerborgenVoorLid()
-	{
+	public function getAantalVerborgenVoorLid() {
 		return $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
 	}
 
-	public function getAantalWachtOpGoedkeuring()
-	{
+	public function getAantalWachtOpGoedkeuring() {
 		return $this->forumPostsRepository->getAantalWachtOpGoedkeuring();
 	}
 
-	public function getHuidigePagina()
-	{
+	public function getHuidigePagina() {
 		return $this->forumDradenRepository->getHuidigePagina();
 	}
 
-	public function getAantalPaginas($forum_id = null)
-	{
+	public function getAantalPaginas($forum_id = null) {
 		return $this->forumDradenRepository->getAantalPaginas($forum_id);
 	}
 
-	public function draadGetAantalPaginas($draad_id)
-	{
+	public function draadGetAantalPaginas($draad_id) {
 		return $this->forumPostsRepository->getAantalPaginas($draad_id);
 	}
 
-	public function draadGetHuidigePagina()
-	{
+	public function draadGetHuidigePagina() {
 		return $this->forumPostsRepository->getHuidigePagina();
 	}
 
-	public function highlight_zoekterm($bericht, $zoekterm, $before = null, $after = null)
-	{
+	public function highlight_zoekterm($bericht, $zoekterm, $before = null, $after = null) {
 		$before = $before ?: '<span style="background-color: rgba(255,255,0,0.4);">';
 		$after = $after ?: '</span>';
 		return preg_replace('/' . preg_quote($zoekterm, '/') . '/i', $before . '$0' . $after, $bericht);

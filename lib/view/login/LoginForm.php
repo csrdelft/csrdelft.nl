@@ -22,8 +22,7 @@ use Twig\Environment;
  * @package CsrDelft\view\login
  * @see FormLoginAuthenticator Voor de afhandeling van dit formulier
  */
-class LoginForm implements FormulierTypeInterface
-{
+class LoginForm implements FormulierTypeInterface {
 	/**
 	 * @var UrlGeneratorInterface
 	 */
@@ -42,12 +41,11 @@ class LoginForm implements FormulierTypeInterface
 	private $translator;
 
 	public function __construct(
-		TranslatorInterface       $translator,
-		UrlGeneratorInterface     $urlGenerator,
+		TranslatorInterface $translator,
+		UrlGeneratorInterface $urlGenerator,
 		CsrfTokenManagerInterface $csrfTokenManager,
-		Environment               $twig
-	)
-	{
+		Environment $twig
+	) {
 
 		$this->urlGenerator = $urlGenerator;
 		$this->csrfTokenManager = $csrfTokenManager;
@@ -61,8 +59,7 @@ class LoginForm implements FormulierTypeInterface
 	 * @param AuthenticationException $exception
 	 * @return string
 	 */
-	private function formatError(AuthenticationException $exception, $lastUsername)
-	{
+	private function formatError(AuthenticationException $exception, $lastUsername) {
 		switch ($exception->getMessageKey()) {
 			case "Username could not be found.":
 				$errorString = $this->translator->trans("Gebruiker '%username%' niet gevonden.", ['%username%' => $lastUsername]);
@@ -78,8 +75,7 @@ class LoginForm implements FormulierTypeInterface
 		return strtr($errorString, $exception->getMessageData());
 	}
 
-	protected function getScriptTag()
-	{
+	protected function getScriptTag() {
 		// er is geen javascript
 		return "";
 	}

@@ -148,8 +148,7 @@ class AccountService
 	 * @param string $passPlain
 	 * @return boolean
 	 */
-	public function controleerWachtwoord(UserInterface $account, $passPlain)
-	{
+	public function controleerWachtwoord(UserInterface $account, $passPlain) {
 		// Controleer of het wachtwoord klopt
 		return $this->passwordHasherFactory->getPasswordHasher($account)
 			->verify($account->getPassword(), $passPlain, $account->getSalt());

@@ -14,16 +14,14 @@ use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateTimeObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
-class AanmeldActiviteitForm implements FormulierTypeInterface
-{
+class AanmeldActiviteitForm implements FormulierTypeInterface {
 
 	/**
 	 * @param FormulierBuilder $builder
 	 * @param AanmeldActiviteit $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
-	{
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
 		$builder->setTitel($options['nieuw'] ? 'Nieuwe activiteit' : 'Activiteit bewerken');
 		$builder->setDataTableId(true);
 

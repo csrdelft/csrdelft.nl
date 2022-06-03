@@ -4,8 +4,7 @@
 namespace CsrDelft\entity;
 
 
-class SavedQueryResult
-{
+class SavedQueryResult {
 	/** @var SavedQuery */
 	public $query;
 	/** @var string[] */

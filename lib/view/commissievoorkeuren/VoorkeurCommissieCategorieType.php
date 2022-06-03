@@ -27,6 +27,7 @@ class VoorkeurCommissieCategorieType extends AbstractType
 	{
 		$builder
 			->add('naam', TextType::class)
-			->add('opslaan', SubmitType::class);
+			->add('opslaan', SubmitType::class)
+		;
 	}
 }

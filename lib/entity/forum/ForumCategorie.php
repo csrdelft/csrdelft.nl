@@ -20,8 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumCategorie implements DisplayEntity
-{
+class ForumCategorie implements DisplayEntity {
 
 	/**
 	 * Primary key
@@ -57,14 +56,12 @@ class ForumCategorie implements DisplayEntity
 	 */
 	public $forum_delen;
 
-	public function __construct()
-	{
+	public function __construct() {
 		$this->forum_delen = new ArrayCollection();
 	}
 
 
-	public function magLezen($auth = null)
-	{
+	public function magLezen($auth = null) {
 		return LoginService::mag($this->rechten_lezen, $auth);
 	}
 
@@ -73,18 +70,15 @@ class ForumCategorie implements DisplayEntity
 	 *
 	 * @param array $forum_delen
 	 */
-	public function setForumDelen(array $forum_delen)
-	{
+	public function setForumDelen(array $forum_delen) {
 		$this->forum_delen = $forum_delen;
 	}
 
-	public function getId()
-	{
+	public function getId() {
 		return $this->categorie_id;
 	}
 
-	public function getWeergave(): string
-	{
+	public function getWeergave(): string {
 		return $this->titel ?? "";
 	}
 }

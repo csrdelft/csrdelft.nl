@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @ORM\Entity(repositoryClass="CsrDelft\repository\GoogleTokenRepository")
  */
-class GoogleToken
-{
+class GoogleToken {
 	/**
 	 * @var string
 	 * @ORM\Column(type="uid")

@@ -15,8 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\CourantBerichtRepository")
  * @ORM\Table("courantbericht")
  */
-class CourantBericht
-{
+class CourantBericht {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -61,8 +60,7 @@ class CourantBericht
 	 */
 	public $datumTijd;
 
-	public function setVolgorde()
-	{
+	public function setVolgorde() {
 		if ($this->cat == null) {
 			return;
 		}
@@ -76,8 +74,7 @@ class CourantBericht
 		][$this->cat->getValue()];
 	}
 
-	public function magBeheren()
-	{
-		return LoginService::mag(P_MAIL_COMPOSE) or LoginService::mag($this->uid);
+	public function magBeheren() {
+		return LoginService::mag(P_MAIL_COMPOSE) OR LoginService::mag($this->uid);
 	}
 }

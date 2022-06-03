@@ -13,8 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository")
  * @ORM\Table("mlt_beoordelingen")
  */
-class MaaltijdBeoordeling
-{
+class MaaltijdBeoordeling {
 
 	/**
 	 * Shared primary key
