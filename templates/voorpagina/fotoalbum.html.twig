@@ -11,8 +11,10 @@
 
 <div class="album-grid-container gap-1">
 	{% for i in 0..12 %}
-	<div class="album-cell ratio ratio-1x1">
-		<img src="{{album.fotos[i].thumbUrl}}" alt="{{ album.fotos[i].filename }}" class="album-item" />
-	</div>
+		{% if album.fotos|length > i %}
+			<div class="album-cell ratio ratio-1x1">
+				<img src="{{album.fotos[i].thumbUrl}}" alt="{{ album.fotos[i].filename }}" class="album-item" />
+			</div>
+		{% endif %}
 	{% endfor %}
 </div>
