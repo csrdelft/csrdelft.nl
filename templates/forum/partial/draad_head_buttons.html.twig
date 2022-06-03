@@ -35,7 +35,7 @@
 			<li><hr class="dropdown-divider" /></li>
 			{% if deel is not defined or (deel.forum_id is not empty and deel.magModereren) %}
 				<li>
-					<a href="{{ url('csrdelft_forum_wacht') }}"
+					<a href="{{ url('csrdelft_forum_forumdeel_wacht') }}"
 						class="dropdown-item">
 						<i class="fas fa-hourglass me-1"></i>
 						{{ getAantalWachtOpGoedkeuring() }}
@@ -44,7 +44,7 @@
 				</li>
 			{% endif %}
 			<li>
-				<a href="{{ url('csrdelft_forum_toonalles') }}"
+				<a href="{{ url('csrdelft_forum_forumdradenverbergen_toonalles') }}"
 					class="dropdown-item post confirm ReloadPage">
 					<i class="fas fa-eye me-1"></i>
 					{{ getAantalVerborgenVoorLid() }} verborgen onderwerpen laten zien
@@ -73,13 +73,13 @@
 			</li>
 			{% if deel is defined and deel.magMeldingKrijgen %}
 				{% if deel.lidWilMeldingVoorDeel %}
-				<a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
+				<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
 					class="dropdown-item post ReloadPage melding-nooit">
 					<i class="fas fa-bell-slash"></i>
 					Geen meldingen
 				</a>
 				{% else %}
-				<a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
+				<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
 					class="dropdown-item post ReloadPage melding-altijd">
 					<i class="fas fa-bell-plus"></i>
 					Meldingen
@@ -122,7 +122,7 @@
 
 		<div class="btn-group me-2" role="group">
 			{% if deel is not defined or (deel.forum_id is not empty and deel.magModereren) %}
-				<a href="{{ url('csrdelft_forum_wacht') }}"
+				<a href="{{ url('csrdelft_forum_forumdeel_wacht') }}"
 					class="btn btn-primary"
 					title="Reacties die wachten op goedkeuring">
 					<i class="fas fa-hourglass me-1"></i>
@@ -130,7 +130,7 @@
 					<span class="visually-hidden">reacties die wachten op goedkeuring</span>
 				</a>
 			{% endif %}
-			<a href="{{ url('csrdelft_forum_toonalles') }}"
+			<a href="{{ url('csrdelft_forum_forumdradenverbergen_toonalles') }}"
 				class="btn btn-primary post confirm ReloadPage"
 				title="Verborgen onderwerpen weer laten zien">
 				<i class="fas fa-eye me-1"></i>
@@ -164,14 +164,14 @@
 			</button>
 			{% if deel is defined and deel.magMeldingKrijgen %}
 				{% if deel.lidWilMeldingVoorDeel %}
-					<a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
+					<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
 						class="btn btn-primary post ReloadPage melding-nooit"
 						title="Geen meldingen voor forumdeel onvangen">
 						<i class="fas fa-bell-slash"></i>
 						<span class="visually-hidden">Geen meldingen voor forumdeel onvangen</span>
 					</a>
 				{% else %}
-					<a href="{{ url('csrdelft_forum_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
+					<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
 						class="btn btn-primary post ReloadPage melding-altijd"
 						title="Meldingen ontvangen voor nieuwe berichten in forumdeel">
 						<i class="fas fa-bell-plus"></i>

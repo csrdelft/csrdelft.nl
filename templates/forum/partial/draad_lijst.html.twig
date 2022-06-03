@@ -23,11 +23,11 @@
 		<span>
 			{% set ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave') %}
 			<a id="{{ draad.draad_id }}" {% if app.user and draad.ongelezen %}class="{{ ongelezenWeergave }}"{% endif %}
-				href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}">
+				href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}">
 				{{ draad.titel | raw }}
 			</a>
 
-			<a href="{{ url('csrdelft_forum_deel', {forum_id: draad.deel.forum_id}) }}"
+			<a href="{{ url('csrdelft_forum_forumdeel_deel', {forum_id: draad.deel.forum_id}) }}"
 					class="badge text-white mx-1">
 				{{ draad.deel.titel }}
 			</a>
