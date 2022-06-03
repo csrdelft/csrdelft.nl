@@ -15,9 +15,11 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 
-class GroepPasfotosView extends GroepTabView {
+class GroepPasfotosView extends GroepTabView
+{
 
-	protected function getTabContent() {
+	protected function getTabContent()
+	{
 		$html = '';
 		if ($this->groep->mag(AccessAction::Aanmelden())) {
 			$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');

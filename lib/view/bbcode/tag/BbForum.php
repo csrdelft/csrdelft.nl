@@ -13,7 +13,8 @@ use CsrDelft\service\security\LoginService;
 use Exception;
 use Twig\Environment;
 
-class BbForum extends BbTag {
+class BbForum extends BbTag
+{
 	public $num = 3;
 	/**
 	 * @var ForumDeel
@@ -40,18 +41,21 @@ class BbForum extends BbTag {
 	 */
 	private $forumDelenService;
 
-	public function __construct(ForumDradenRepository $forumDradenRepository, ForumDelenRepository $forumDelenRepository, ForumDelenService $forumDelenService, Environment $twig) {
+	public function __construct(ForumDradenRepository $forumDradenRepository, ForumDelenRepository $forumDelenRepository, ForumDelenService $forumDelenService, Environment $twig)
+	{
 		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDelenRepository = $forumDelenRepository;
 		$this->twig = $twig;
 		$this->forumDelenService = $forumDelenService;
 	}
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'forum';
 	}
 
-	public function isAllowed() {
+	public function isAllowed()
+	{
 		if ($this->id == 'recent' || $this->id == 'belangrijk') {
 			return LoginService::mag(P_LOGGED_IN);
 		}
@@ -63,7 +67,8 @@ class BbForum extends BbTag {
 	 * @return mixed
 	 * @throws Exception
 	 */
-	public function render() {
+	public function render()
+	{
 		if (!LoginService::mag(P_LOGGED_IN)) {
 			return 'Geen toegang';
 		}
@@ -77,7 +82,8 @@ class BbForum extends BbTag {
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []) {
+	public function parse($arguments = [])
+	{
 		$this->id = $this->readMainArgument($arguments);
 		if (isset($arguments['num'])) {
 			$this->num = (int)$arguments['num'];

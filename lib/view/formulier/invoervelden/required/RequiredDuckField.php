@@ -11,7 +11,8 @@ use CsrDelft\view\formulier\invoervelden\DuckField;
  *
  * @see DuckField
  */
-class RequiredDuckField extends DuckField {
+class RequiredDuckField extends DuckField
+{
 
 	public $required = true;
 

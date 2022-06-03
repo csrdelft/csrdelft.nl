@@ -22,20 +22,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 namespace CsrDelft\common\Doctrine\Type;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 
-trait DateTimeImmutableTypeTrait {
+trait DateTimeImmutableTypeTrait
+{
 	/**
 	 * @param $value
 	 * @param AbstractPlatform $platform
 	 * @return DateTimeImmutable|null
 	 * @throws ConversionException
 	 */
-	public function convertToPHPValue($value, AbstractPlatform $platform) {
+	public function convertToPHPValue($value, AbstractPlatform $platform)
+	{
 		$value = parent::convertToPHPValue($value, $platform);
 		if ($value === null) {
 			return $value;

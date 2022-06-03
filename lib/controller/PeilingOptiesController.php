@@ -20,13 +20,15 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Voor routes in /peilingen/opties
  */
-class PeilingOptiesController extends AbstractController {
+class PeilingOptiesController extends AbstractController
+{
 	/** @var PeilingenService */
 	private $peilingenService;
 	/** @var PeilingOptiesRepository */
 	private $peilingOptiesRepository;
 
-	public function __construct(PeilingOptiesRepository $peilingOptiesRepository, PeilingenService $peilingenService) {
+	public function __construct(PeilingOptiesRepository $peilingOptiesRepository, PeilingenService $peilingenService)
+	{
 		$this->peilingOptiesRepository = $peilingOptiesRepository;
 		$this->peilingenService = $peilingenService;
 	}
@@ -59,7 +61,8 @@ class PeilingOptiesController extends AbstractController {
 	 * @Route("/peilingen/opties/{id}/toevoegen", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_VOTE)
 	 */
-	public function toevoegen(Peiling $peiling) {
+	public function toevoegen(Peiling $peiling)
+	{
 		$form = new PeilingOptieForm(new PeilingOptie(), $peiling->id);
 
 		if (!$this->peilingenService->magOptieToevoegen($peiling)) {
@@ -81,10 +84,10 @@ class PeilingOptiesController extends AbstractController {
 	}
 
 	/**
-	 * @throws CsrGebruikerException
 	 * @return GenericDataTableResponse
 	 * @Route("/peilingen/opties/verwijderen", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
+	 * @throws CsrGebruikerException
 	 */
 	public function verwijderen(): GenericDataTableResponse
 	{

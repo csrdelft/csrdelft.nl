@@ -14,7 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\CourantRepository")
  * @ORM\Table("courant")
  */
-class Courant {
+class Courant
+{
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -44,7 +45,8 @@ class Courant {
 	 */
 	public $verzender_profiel;
 
-	public function getJaar() {
+	public function getJaar()
+	{
 		return $this->verzendMoment->format('Y');
 	}
 }

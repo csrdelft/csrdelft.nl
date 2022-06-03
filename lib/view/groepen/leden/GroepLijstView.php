@@ -17,9 +17,11 @@ use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
 use CsrDelft\view\Icon;
 
-class GroepLijstView extends GroepTabView {
+class GroepLijstView extends GroepTabView
+{
 
-	public function getTabContent() {
+	public function getTabContent()
+	{
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
 		$html = '<table class="groep-lijst"><tbody>';
@@ -36,12 +38,12 @@ class GroepLijstView extends GroepTabView {
 		}
 		foreach ($this->groep->getLedenOpAchternaamGesorteerd() as $lid) {
 			$html .= '<tr><td>';
-			if ($lid->uid === LoginService::getUid() AND $this->groep->mag(AccessAction::Afmelden())) {
+			if ($lid->uid === LoginService::getUid() and $this->groep->mag(AccessAction::Afmelden())) {
 				$html .= '<a href="' . $this->groep->getUrl() . '/ketzer/afmelden" class="post confirm float-start" title="Afmelden">' . Icon::getTag('bullet_delete') . '</a>';
 			}
 			$html .= ProfielRepository::getLink($lid->uid, 'civitas');
 			$html .= '</td><td>';
-			if ($lid->uid === LoginService::getUid() AND $this->groep->mag(AccessAction::Bewerken())) {
+			if ($lid->uid === LoginService::getUid() and $this->groep->mag(AccessAction::Bewerken())) {
 				$form = new GroepBewerkenForm($lid, $this->groep);
 				$html .= $form->getHtml();
 			} else {

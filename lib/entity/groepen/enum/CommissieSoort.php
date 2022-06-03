@@ -14,7 +14,8 @@ use CsrDelft\common\Enum;
  * @method static static BestuursCommissie
  * @method static static Extern
  */
-class CommissieSoort extends Enum {
+class CommissieSoort extends Enum
+{
 	/**
 	 * Commissie soorten.
 	 */

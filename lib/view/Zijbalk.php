@@ -21,7 +21,8 @@ use Twig\Environment;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  *
  */
-class Zijbalk {
+class Zijbalk
+{
 	/**
 	 * @var Environment
 	 */
@@ -68,18 +69,19 @@ class Zijbalk {
 	private $forumDelenService;
 
 	public function __construct(
-		RequestStack $requestStack,
-		Environment $twig,
-		MenuItemRepository $menuItemRepository,
-		ForumDradenRepository $forumDradenRepository,
-		ForumDelenService $forumDelenService,
-		AgendaRepository $agendaRepository,
-		ForumPostsRepository $forumPostsRepository,
-		FotoAlbumRepository $fotoAlbumRepository,
-		VerjaardagenService $verjaardagenService,
+		RequestStack              $requestStack,
+		Environment               $twig,
+		MenuItemRepository        $menuItemRepository,
+		ForumDradenRepository     $forumDradenRepository,
+		ForumDelenService         $forumDelenService,
+		AgendaRepository          $agendaRepository,
+		ForumPostsRepository      $forumPostsRepository,
+		FotoAlbumRepository       $fotoAlbumRepository,
+		VerjaardagenService       $verjaardagenService,
 		LidInstellingenRepository $lidInstellingenRepository,
-		WoordVanDeDagRepository $woordVanDeDagRepository
-	) {
+		WoordVanDeDagRepository   $woordVanDeDagRepository
+	)
+	{
 		$this->twig = $twig;
 		$this->menuItemRepository = $menuItemRepository;
 		$this->forumDradenRepository = $forumDradenRepository;
@@ -96,7 +98,8 @@ class Zijbalk {
 	/**
 	 * @return string[]
 	 */
-	public function getZijbalk() {
+	public function getZijbalk()
+	{
 		return array_filter_empty([
 			$this->blockIsHetAl(),
 			$this->blockLustrum(),
@@ -111,11 +114,13 @@ class Zijbalk {
 		]);
 	}
 
-	private function blockLustrum() {
+	private function blockLustrum()
+	{
 		return $this->twig->render('menu/lustrumblock.html.twig');
 	}
 
-	private function blockIsHetAl() {
+	private function blockIsHetAl()
+	{
 		// Is het al...
 		if (lid_instelling('zijbalk', 'ishetal') != 'niet weergeven') {
 			return (new IsHetAlView($this->lidInstellingenRepository, $this->requestStack, $this->agendaRepository, $this->woordVanDeDagRepository, lid_instelling('zijbalk', 'ishetal')))->__toString();
@@ -124,7 +129,8 @@ class Zijbalk {
 		return null;
 	}
 
-	private function blockFavorieten() {
+	private function blockFavorieten()
+	{
 		// Favorieten menu
 		if (LoginService::mag(P_LOGGED_IN) && lid_instelling('zijbalk', 'favorieten') == 'ja') {
 			$menu = $this->menuItemRepository->getMenu(LoginService::getUid());
@@ -135,7 +141,8 @@ class Zijbalk {
 		return null;
 	}
 
-	private function blockSponsors() {
+	private function blockSponsors()
+	{
 		// Sponsors
 		if (LoginService::mag(P_LOGGED_IN)) {
 			$sponsor_menu = $this->menuItemRepository->getMenu("sponsors");
@@ -148,7 +155,8 @@ class Zijbalk {
 		return null;
 	}
 
-	private function blockAgenda() {
+	private function blockAgenda()
+	{
 		// Agenda
 		if (LoginService::mag(P_AGENDA_READ) && lid_instelling('zijbalk', 'agendaweken') > 0 && lid_instelling('zijbalk', 'agenda_max') > 0) {
 			$aantalWeken = lid_instelling('zijbalk', 'agendaweken');
@@ -162,7 +170,8 @@ class Zijbalk {
 		return null;
 	}
 
-	private function blockForumNieuwsteBelangrijkBerichten() {
+	private function blockForumNieuwsteBelangrijkBerichten()
+	{
 		// Nieuwste belangrijke forumberichten
 		if (lid_instelling('zijbalk', 'forum_belangrijk') > 0) {
 			return $this->twig->render('forum/partial/draad_zijbalk.html.twig', [
@@ -175,7 +184,8 @@ class Zijbalk {
 		return null;
 	}
 
-	private function blockForumNieuwsteBerichten() {
+	private function blockForumNieuwsteBerichten()
+	{
 		// Nieuwste forumberichten
 		if (lid_instelling('zijbalk', 'forum') > 0) {
 			$belangrijk = (lid_instelling('zijbalk', 'forum_belangrijk') > 0 ? false : null);
@@ -189,7 +199,8 @@ class Zijbalk {
 		return null;
 	}
 
-	private function blockForumZelfgepost() {
+	private function blockForumZelfgepost()
+	{
 		// Zelfgeposte forumberichten
 		if (lid_instelling('zijbalk', 'forum_zelf') > 0) {
 			$posts = $this->forumPostsRepository->getRecenteForumPostsVanLid(LoginService::getUid(), (int)lid_instelling('zijbalk', 'forum_zelf'), true);
@@ -199,7 +210,8 @@ class Zijbalk {
 		return null;
 	}
 
-	private function blockNieuwsteFotoAlbum() {
+	private function blockNieuwsteFotoAlbum()
+	{
 		// Nieuwste fotoalbum
 		if (lid_instelling('zijbalk', 'fotoalbum') == 'ja') {
 			$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();
@@ -211,7 +223,8 @@ class Zijbalk {
 		return null;
 	}
 
-	private function blockKomendeVerjaardagen() {
+	private function blockKomendeVerjaardagen()
+	{
 		// Komende verjaardagen
 		if (LoginService::mag(P_LOGGED_IN) && lid_instelling('zijbalk', 'verjaardagen') > 0) {
 			return $this->twig->render('verjaardagen/komende.html.twig', [

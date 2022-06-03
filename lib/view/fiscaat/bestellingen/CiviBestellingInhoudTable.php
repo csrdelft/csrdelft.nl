@@ -10,11 +10,13 @@ use CsrDelft\view\datatable\DataTable;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 26/02/2018
  */
-class CiviBestellingInhoudTable extends DataTable {
+class CiviBestellingInhoudTable extends DataTable
+{
 	/**
 	 * @param CiviBestelling $civiBestelling
 	 */
-	public function __construct($civiBestelling) {
+	public function __construct($civiBestelling)
+	{
 		parent::__construct(CiviBestellingInhoud::class, '/fiscaat/bestellingen/inhoud/' . $civiBestelling->id);
 
 		$this->defaultLength = -1;
@@ -35,7 +37,8 @@ class CiviBestellingInhoudTable extends DataTable {
 	/**
 	 * Print niet de JS, dat wordt door formulier gedaan.
 	 */
-	public function __toString() {
+	public function __toString()
+	{
 		return $this->getHtml();
 	}
 }

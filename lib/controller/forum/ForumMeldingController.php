@@ -39,7 +39,8 @@ class ForumMeldingController extends AbstractController
 	 * @Route("/forum/meldingsniveau/{draad_id}/{niveau}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function meldingsniveau(ForumDraad $draad, $niveau) {
+	public function meldingsniveau(ForumDraad $draad, $niveau)
+	{
 		if (!$draad || !$draad->magLezen() || !$draad->magMeldingKrijgen()) {
 			throw $this->createAccessDeniedException('Onderwerp mag geen melding voor ontvangen worden');
 		}
@@ -60,7 +61,8 @@ class ForumMeldingController extends AbstractController
 	 * @Route("/forum/deelmelding/{forum_id}/{niveau}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function deelmelding(ForumDeel $deel, $niveau) {
+	public function deelmelding(ForumDeel $deel, $niveau)
+	{
 		if (!$deel || !$deel->magLezen() || !$deel->magMeldingKrijgen()) {
 			throw $this->createAccessDeniedException('Deel mag geen melding voor ontvangen worden');
 		}

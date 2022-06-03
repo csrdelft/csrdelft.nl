@@ -16,7 +16,8 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
 
-class AccountForm implements FormulierTypeInterface {
+class AccountForm implements FormulierTypeInterface
+{
 	/**
 	 * @var Security
 	 */
@@ -26,7 +27,8 @@ class AccountForm implements FormulierTypeInterface {
 	 */
 	private $urlGenerator;
 
-	public function __construct(Security $security, UrlGeneratorInterface $urlGenerator) {
+	public function __construct(Security $security, UrlGeneratorInterface $urlGenerator)
+	{
 		$this->security = $security;
 		$this->urlGenerator = $urlGenerator;
 	}
@@ -36,7 +38,8 @@ class AccountForm implements FormulierTypeInterface {
 	 * @param Account $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
+	{
 		$builder->setTitel('Inloggegevens aanpassen');
 		$fields = [];
 

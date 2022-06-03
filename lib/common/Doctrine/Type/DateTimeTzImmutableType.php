@@ -22,11 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 namespace CsrDelft\common\Doctrine\Type;
 
 use Doctrine\DBAL\Types\DateTimeTzType;
 
-class DateTimeTzImmutableType extends DateTimeTzType {
+class DateTimeTzImmutableType extends DateTimeTzType
+{
 	use DateTimeImmutableTypeTrait;
 }
 

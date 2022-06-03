@@ -27,19 +27,23 @@ class DateTimeTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function twig_date_format($date) {
+	public function twig_date_format($date)
+	{
 		return date_format_intl($date, DATE_FORMAT);
 	}
 
-	public function twig_time_format($date) {
+	public function twig_time_format($date)
+	{
 		return date_format_intl($date, TIME_FORMAT);
 	}
 
-	public function twig_datetime_format($datetime) {
+	public function twig_datetime_format($datetime)
+	{
 		return date_format_intl($datetime, DATETIME_FORMAT);
 	}
 
-	public function twig_datetime_format_long($datetime) {
+	public function twig_datetime_format_long($datetime)
+	{
 		return date_format_intl($datetime, LONG_DATE_FORMAT);
 	}
 
@@ -50,11 +54,12 @@ class DateTimeTwigExtension extends AbstractExtension
 	 *  - Als dezelfde maand:  ma 06
 	 *  - Anders:              06-12
 	 *
-	 * @version 1.0
 	 * @param string|integer
 	 * @return string
+	 * @version 1.0
 	 */
-	public function twig_zijbalk_date_format(DateTimeInterface $datetime) {
+	public function twig_zijbalk_date_format(DateTimeInterface $datetime)
+	{
 		$datetime = $datetime->getTimestamp();
 
 		if (date('d-m', $datetime) === date('d-m')) {
@@ -70,7 +75,8 @@ class DateTimeTwigExtension extends AbstractExtension
 	 * @param $date
 	 * @return false|string
 	 */
-	public function twig_rfc2822(DateTimeInterface $date) {
+	public function twig_rfc2822(DateTimeInterface $date)
+	{
 		$date = $date->getTimestamp();
 		if (strlen($date) == strlen((int)$date)) {
 			return date('r', $date);
@@ -79,7 +85,8 @@ class DateTimeTwigExtension extends AbstractExtension
 		}
 	}
 
-	public function twig_date_create($date, $format) {
+	public function twig_date_create($date, $format)
+	{
 		return DateTime::createFromFormat($format, $date);
 	}
 

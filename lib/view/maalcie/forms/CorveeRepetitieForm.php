@@ -26,9 +26,11 @@ use CsrDelft\view\formulier\ModalForm;
  *
  * @method CorveeRepetitie getModel()
  */
-class CorveeRepetitieForm extends ModalForm {
+class CorveeRepetitieForm extends ModalForm
+{
 
-	public function __construct(CorveeRepetitie $repetitie) {
+	public function __construct(CorveeRepetitie $repetitie)
+	{
 		parent::__construct($repetitie, '/corvee/repetities/opslaan' . ($repetitie->crv_repetitie_id ? '/' . $repetitie->crv_repetitie_id : ''));
 
 		if ($repetitie->crv_repetitie_id) {

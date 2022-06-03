@@ -25,13 +25,15 @@ use CsrDelft\view\formulier\ModalForm;
  *
  * @method MaaltijdRepetitie getModel()
  */
-class MaaltijdRepetitieForm extends ModalForm {
+class MaaltijdRepetitieForm extends ModalForm
+{
 
 	/**
 	 * MaaltijdRepetitieForm constructor.
 	 * @param $model MaaltijdRepetitie
 	 */
-	public function __construct($model, $verplaats = null) {
+	public function __construct($model, $verplaats = null)
+	{
 		parent::__construct($model, '/maaltijden/repetities/opslaan/' . $model->mlt_repetitie_id);
 
 		if ($model->mlt_repetitie_id === null) {

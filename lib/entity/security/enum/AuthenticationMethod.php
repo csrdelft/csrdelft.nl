@@ -11,7 +11,8 @@ use CsrDelft\common\Enum;
  *
  * Authentication methods for LoginSession.
  */
-class AuthenticationMethod extends Enum {
+class AuthenticationMethod extends Enum
+{
 
 	/**
 	 * AuthenticationMethod opties.

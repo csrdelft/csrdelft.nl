@@ -15,7 +15,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * @author J. Rijsdijk <jorairijsdijk@gmail.com>
  * @since 26/10/2017
  */
-class SponsorAffiliateDownloadCommand extends Command {
+class SponsorAffiliateDownloadCommand extends Command
+{
 	protected static $defaultName = 'stek:sponsor:download';
 	/**
 	 * @var string
@@ -30,19 +31,22 @@ class SponsorAffiliateDownloadCommand extends Command {
 	 */
 	private $sponsorUserAgent;
 
-	public function __construct(string $sponsorSlHost, string $sponsorClubId, string $sponsorUserAgent) {
+	public function __construct(string $sponsorSlHost, string $sponsorClubId, string $sponsorUserAgent)
+	{
 		parent::__construct();
 		$this->sponsorSlHost = $sponsorSlHost;
 		$this->sponsorClubId = $sponsorClubId;
 		$this->sponsorUserAgent = $sponsorUserAgent;
 	}
 
-	protected function configure() {
+	protected function configure()
+	{
 		$this
 			->setDescription('Download sponsorlinks');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): int {
+	protected function execute(InputInterface $input, OutputInterface $output): int
+	{
 		$output->writeln("Download sponsorlinks");
 
 		if (!$this->sponsorSlHost || !$this->sponsorClubId || !$this->sponsorUserAgent) {

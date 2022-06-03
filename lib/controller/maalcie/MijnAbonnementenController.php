@@ -17,15 +17,17 @@ use Throwable;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MijnAbonnementenController extends AbstractController {
-	/** @var MaaltijdAbonnementenRepository  */
+class MijnAbonnementenController extends AbstractController
+{
+	/** @var MaaltijdAbonnementenRepository */
 	private $maaltijdAbonnementenRepository;
 	/**
 	 * @var MaaltijdRepetitiesRepository
 	 */
 	private $maaltijdRepetitiesRepository;
 
-	public function __construct(MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository) {
+	public function __construct(MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository)
+	{
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 	}
@@ -36,7 +38,8 @@ class MijnAbonnementenController extends AbstractController {
 	 * @Route("/maaltijden/abonnementen", methods={"GET"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function mijn() {
+	public function mijn()
+	{
 		$abonnementen = $this->maaltijdAbonnementenRepository->getAbonnementenVoorLid($this->getUid(), true, true);
 		return $this->render('maaltijden/abonnement/mijn_abonnementen.html.twig', ['titel' => 'Mijn abonnementen', 'abonnementen' => $abonnementen]);
 	}
@@ -48,7 +51,8 @@ class MijnAbonnementenController extends AbstractController {
 	 * @Route("/maaltijden/abonnementen/inschakelen/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function inschakelen(MaaltijdRepetitie $repetitie) {
+	public function inschakelen(MaaltijdRepetitie $repetitie)
+	{
 		$abo = new MaaltijdAbonnement();
 		$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
 		$abo->maaltijd_repetitie = $repetitie;
@@ -68,7 +72,8 @@ class MijnAbonnementenController extends AbstractController {
 	 * @Route("/maaltijden/abonnementen/uitschakelen/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function uitschakelen(MaaltijdRepetitie $repetitie) {
+	public function uitschakelen(MaaltijdRepetitie $repetitie)
+	{
 		$abo_aantal = $this->maaltijdAbonnementenRepository->uitschakelenAbonnement($repetitie, $this->getUid());
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');

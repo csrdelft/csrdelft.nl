@@ -13,7 +13,8 @@ use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\View;
 
-class FotoAlbumBBView implements View {
+class FotoAlbumBBView implements View
+{
 	use ToHtmlResponse;
 
 	private $compact = false; //compact or expanded tag.
@@ -24,7 +25,8 @@ class FotoAlbumBBView implements View {
 	private $rowmargin = 0.5; //margin between the images
 	protected $model;
 
-	public function __construct(FotoAlbum $fotoalbum) {
+	public function __construct(FotoAlbum $fotoalbum)
+	{
 		// als het album alleen subalbums bevat kies een willkeurige daarvan om fotos van te tonen
 		if (count($fotoalbum->getFotos()) === 0) {
 			$subalbums = $fotoalbum->getSubAlbums();
@@ -38,7 +40,8 @@ class FotoAlbumBBView implements View {
 		$this->model = $fotoalbum;
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		$html = '';
 		if (count($this->model->getFotos()) < 1) {
 			$html .= '<div class="bb-block">Fotoalbum bevat geen foto\'s: /' . $this->model->dirname . '</div>';
@@ -48,15 +51,18 @@ class FotoAlbumBBView implements View {
 		return $html;
 	}
 
-	public function makeCompact() {
+	public function makeCompact()
+	{
 		$this->compact = true;
 	}
 
-	public function setRows($rows) {
+	public function setRows($rows)
+	{
 		$this->rows = $rows;
 	}
 
-	public function setPerRow($per_row) {
+	public function setPerRow($per_row)
+	{
 		$this->per_row = $per_row;
 	}
 
@@ -69,7 +75,8 @@ class FotoAlbumBBView implements View {
 	 *
 	 * @param string $index
 	 */
-	public function setBig($index) {
+	public function setBig($index)
+	{
 		if (in_array($index, array('a', 'b', 'c'))) {
 			switch ($index) {
 				case 'a':
@@ -98,7 +105,8 @@ class FotoAlbumBBView implements View {
 	 * The index is saved together with the object for correct reference
 	 * in case the image is moved one left or one up in the grid at borders.
 	 */
-	private function getGrid() {
+	private function getGrid()
+	{
 		$fotos = $this->model->getFotos();
 		$grid = array_fill(0, $this->rows, array_fill(0, $this->per_row, null));
 		// put big images on grid.
@@ -169,7 +177,8 @@ class FotoAlbumBBView implements View {
 		return $grid;
 	}
 
-	public function getGridHtml() {
+	public function getGridHtml()
+	{
 		$grid = $this->getGrid();
 		$url = $this->model->getUrl();
 		$delta = $this->picsize + (2 * $this->rowmargin);
@@ -189,7 +198,8 @@ class FotoAlbumBBView implements View {
 		return $ret;
 	}
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		if ($this->compact) {
 			// compacte versie van de tag is alleen een thumbnail.
 			$content = '<a href="' . $this->model->getUrl() . '"><img src="' . $this->model->getCoverUrl() . '" class="compact" /></a><div class="clear"></div>';
@@ -199,15 +209,18 @@ class FotoAlbumBBView implements View {
 		return '<div class="bb-block bb-fotoalbum"><ol class="breadcrumb">' . FotoAlbumBreadcrumbs::getBreadcrumbs($this->model, false, true) . '</ol>' . $content . '</div>';
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		// Niet boeiend
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		// Niet boeiend
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->model;
 	}
 }

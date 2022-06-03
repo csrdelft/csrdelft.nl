@@ -10,11 +10,13 @@ namespace CsrDelft\common;
  * Simple spamfilter.
  *
  */
-class SimpleSpamFilter {
+class SimpleSpamFilter
+{
 
 	private $spamregex;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->spamregex = "/s-e-x|zoofilia|sexyongpin|grusskarte|geburtstagskarten|animalsex|" .
 			"sex-with|dogsex|adultchat|adultlive|camsexlivesex|viagra|" .
 			"chatsex|onlinesex|adultporn|adultvideo|adultweb.|hardcoresex|hardcoreporn|" .
@@ -27,7 +29,8 @@ class SimpleSpamFilter {
 			"buy-viagra|-cialis|-levitra|boy-and-girl-kissing|squirting|\[link=|<a href=/i";
 	}
 
-	public function isSpam($string) {
+	public function isSpam($string)
+	{
 		$score = 0;
 		// score gaat niet met meer dan 1 omhoog omdat preg_match na de eerste match stopt met zoeken.
 		$score += preg_match($this->spamregex, $string);
@@ -37,7 +40,8 @@ class SimpleSpamFilter {
 		return $score > 0;
 	}
 
-	private function hasOnlyLinks($str) {
+	private function hasOnlyLinks($str)
+	{
 		// strip out all URLs from the comment
 		$str = preg_replace("'https*://(\S*)'", "", $str);
 		$str = preg_replace("'<a ([^<]*?)</a>'", "", $str);

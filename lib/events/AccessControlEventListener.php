@@ -109,7 +109,7 @@ class AccessControlEventListener
 		$user = $this->security->getUser();
 
 		if ($user && $user->blocked_reason) {
-			throw new NotFoundHttpException("Geblokkeerd: ". $user->blocked_reason);
+			throw new NotFoundHttpException("Geblokkeerd: " . $user->blocked_reason);
 		}
 
 		if (!LoginService::mag($mag)) {

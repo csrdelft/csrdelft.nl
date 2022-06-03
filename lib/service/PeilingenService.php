@@ -18,7 +18,8 @@ use Doctrine\ORM\ORMException;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 02/11/2018
  */
-class PeilingenService {
+class PeilingenService
+{
 	/**
 	 * @var PeilingenRepository
 	 */
@@ -37,18 +38,20 @@ class PeilingenService {
 	private $entityManager;
 
 	public function __construct(
-		PeilingenRepository $peilingenRepository,
-		PeilingOptiesRepository $peilingOptiesRepository,
+		PeilingenRepository      $peilingenRepository,
+		PeilingOptiesRepository  $peilingOptiesRepository,
 		PeilingStemmenRepository $peilingStemmenRepository,
-		EntityManagerInterface $entityManager
-	) {
+		EntityManagerInterface   $entityManager
+	)
+	{
 		$this->peilingenRepository = $peilingenRepository;
 		$this->peilingOptiesRepository = $peilingOptiesRepository;
 		$this->peilingStemmenRepository = $peilingStemmenRepository;
 		$this->entityManager = $entityManager;
 	}
 
-	public function magOptieToevoegen(Peiling $peiling) {
+	public function magOptieToevoegen(Peiling $peiling)
+	{
 		if ($this->peilingenRepository->magBewerken($peiling)) {
 			return true;
 		}
@@ -65,7 +68,8 @@ class PeilingenService {
 		return $aantalVoorgesteld < $peiling->aantal_voorstellen;
 	}
 
-	public function stem($peilingId, $opties, $uid) {
+	public function stem($peilingId, $opties, $uid)
+	{
 		try {
 			$this->entityManager->beginTransaction();
 
@@ -106,7 +110,8 @@ class PeilingenService {
 	 * @param int[] $opties
 	 * @return int[]
 	 */
-	public function valideerOpties($peilingId, $opties) {
+	public function valideerOpties($peilingId, $opties)
+	{
 		$mogelijkeOpties = $this->peilingOptiesRepository->findBy(['peiling_id' => $peilingId]);
 		$mogelijkeOptieIds = array_map(function ($optie) {
 			return $optie->id;
@@ -121,7 +126,8 @@ class PeilingenService {
 	 * @return bool
 	 * @throws CsrGebruikerException
 	 */
-	public function isGeldigeStem($peilingId, $opties, $uid) {
+	public function isGeldigeStem($peilingId, $opties, $uid)
+	{
 		$peiling = $this->peilingenRepository->getPeilingById($peilingId);
 
 		if (!$peiling) {

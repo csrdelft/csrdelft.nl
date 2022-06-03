@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\fiscaat\pin;
+
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\pin\PinTransactieMatch;
@@ -18,11 +19,13 @@ use CsrDelft\view\formulier\ModalForm;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 26/02/2018
  */
-class PinBestellingInfoForm extends ModalForm {
+class PinBestellingInfoForm extends ModalForm
+{
 	/**
 	 * @param PinTransactieMatch $pinTransactieMatch
 	 */
-	public function __construct($pinTransactieMatch) {
+	public function __construct($pinTransactieMatch)
+	{
 		parent::__construct([], '/fiscaat/pin/info', 'Match informatie', true);
 
 		$fields = [];

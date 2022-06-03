@@ -15,7 +15,8 @@ use CsrDelft\service\security\LoginService;
  * @example [prive]Persoonsgegevens[/prive]
  * @example [prive=commissie:PubCie]Tekst[/prive]
  */
-class BbPrive extends BbTag {
+class BbPrive extends BbTag
+{
 	/**
 	 * @var string
 	 */
@@ -26,11 +27,13 @@ class BbPrive extends BbTag {
 		return LoginService::mag($this->permissie);
 	}
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'prive';
 	}
 
-	public function render() {
+	public function render()
+	{
 		return '<span class="bb-prive bb-tag-prive">' . $this->getContent() . '</span>';
 	}
 
@@ -43,7 +46,8 @@ class BbPrive extends BbTag {
 		$this->permissie = $arguments['prive'] ?? 'P_LOGGED_IN';
 	}
 
-	public function getPermissie() {
+	public function getPermissie()
+	{
 		return $this->permissie;
 	}
 }

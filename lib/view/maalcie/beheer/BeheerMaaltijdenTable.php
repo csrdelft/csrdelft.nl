@@ -15,13 +15,15 @@ use CsrDelft\view\datatable\knoppen\SourceChangeDataTableKnop;
 use CsrDelft\view\datatable\knoppen\UrlDataTableKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
-class BeheerMaaltijdenTable extends DataTable {
+class BeheerMaaltijdenTable extends DataTable
+{
 	/**
 	 * BeheerMaaltijdenView constructor.
 	 *
 	 * @param $repetities MaaltijdRepetitie[]
 	 */
-	public function __construct($repetities) {
+	public function __construct($repetities)
+	{
 		parent::__construct(Maaltijd::class, '/maaltijden/beheer');
 
 		$this->hideColumn('verwijderd');
@@ -48,7 +50,7 @@ class BeheerMaaltijdenTable extends DataTable {
 		$weergave->addKnop(new SourceChangeDataTableKnop($this->dataUrl . '?filter=alles', 'Alles', 'Alles weergeven', 'time'));
 		$this->addKnop($weergave);
 
-		$nieuw = new CollectionDataTableKnop(Multiplicity::None(),'Nieuw', 'Nieuwe maaltijd aanmaken', 'add');
+		$nieuw = new CollectionDataTableKnop(Multiplicity::None(), 'Nieuw', 'Nieuwe maaltijd aanmaken', 'add');
 
 		foreach ($repetities as $repetitie) {
 			$nieuw->addKnop(new DataTableKnop(Multiplicity::None(), $this->dataUrl . '/nieuw?mrid=' . $repetitie->mlt_repetitie_id, $repetitie->standaard_titel, "Nieuwe $repetitie->standaard_titel aanmaken"));
@@ -72,7 +74,8 @@ class BeheerMaaltijdenTable extends DataTable {
 		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/maaltijden/lijst/:maaltijd_id', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal'));
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return "Maaltijden / Beheer";
 	}
 }

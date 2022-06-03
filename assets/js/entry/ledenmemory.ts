@@ -36,17 +36,27 @@ $(() => {
 
 		const box = $(content).appendTo('body');
 
-		box.animate({
-			left: '60%',
-		}, 'slow', function () {
-			$(this).css('left', '60%');
-		});
+		box.animate(
+			{
+				left: '60%',
+			},
+			'slow',
+			function () {
+				$(this).css('left', '60%');
+			}
+		);
 
-		$(box).delay(1200).animate({
-			left: '-50%',
-		}, 'slow', () => {
-			$(box).remove();
-		});
+		$(box)
+			.delay(1200)
+			.animate(
+				{
+					left: '-50%',
+				},
+				'slow',
+				() => {
+					$(box).remove();
+				}
+			);
 	}
 
 	function flipback() {
@@ -62,7 +72,9 @@ $(() => {
 					flip1.removeClass('flipped');
 					flip2.removeClass('flipped');
 				} else {
-					$('.memorycard[uid=' + flip1.attr('uid') + ']').not(flip1).effect('shake');
+					$('.memorycard[uid=' + flip1.attr('uid') + ']')
+						.not(flip1)
+						.effect('shake');
 				}
 			} else {
 				if (flip1.hasClass('goed') && flip2.hasClass('goed')) {
@@ -84,7 +96,8 @@ $(() => {
 		}
 		beurten += 1;
 
-		if (flip1.attr('uid') === flip2.attr('uid')) { // goed
+		if (flip1.attr('uid') === flip2.attr('uid')) {
+			// goed
 			flip1.addClass('goed');
 			flip2.addClass('goed');
 			goed += 1;
@@ -94,18 +107,17 @@ $(() => {
 		const memorycard = $('.memorycard');
 		const memorycardGoed = $('.memorycard.goed');
 
-		if (memorycard.length === memorycardGoed.length) { // einde: toon alles
+		if (memorycard.length === memorycardGoed.length) {
+			// einde: toon alles
 			finished = true;
 			memorycard.addClass('flipped').fadeTo('fast', 0.5);
 		} else {
 			delayed = true;
 			window.setTimeout(flipback, 1000);
 		}
-
 	}
 
 	function updateTitle() {
-
 		const nu = new Date();
 		let seconds = Math.floor((nu.getTime() - starttijd.getTime()) / 1000);
 		const minutes = Math.floor(seconds / 60);
@@ -130,7 +142,8 @@ $(() => {
 		content += ' en heeft daar in totaal ' + minutes + ' minuten en ' + seconds + ' seconden over gedaan.';
 
 		if (!learnmode) {
-			content += '<p>Wilt u deze score toevoegen aan de lijst met hoogste scores?</p>' +
+			content +=
+				'<p>Wilt u deze score toevoegen aan de lijst met hoogste scores?</p>' +
 				'<input name="eerlijk" id="eerlijk" type="checkbox" />' +
 				'<label for="eerlijk"> Ik heb deze score eerlijk verkregen</label>';
 
@@ -161,24 +174,29 @@ $(() => {
 	}
 
 	$('.memorycard').on('click', function () {
-
 		flipback(); // gebruiker hoeft niet te wachten op delayed flipback
 
-		if (first) { // start de tijd
+		if (first) {
+			// start de tijd
 			first = false;
 			starttijd = new Date();
 			updateTitle();
 		}
 
-		if ($(this).hasClass('goed')) { // goed?
+		if ($(this).hasClass('goed')) {
+			// goed?
 			// ignore
-		} else if (learnmode) { // faden?
+		} else if (learnmode) {
+			// faden?
 
 			if (flip1 && flip2) {
 				alert('reset failed');
-			} else if (flip1) { // dit is de tweede
-				if (($(this).hasClass('naam') && flip1.hasClass('pasfoto'))
-					|| ($(this).hasClass('pasfoto') && flip1.hasClass('naam'))) {
+			} else if (flip1) {
+				// dit is de tweede
+				if (
+					($(this).hasClass('naam') && flip1.hasClass('pasfoto')) ||
+					($(this).hasClass('pasfoto') && flip1.hasClass('naam'))
+				) {
 					flip2 = $(this);
 					if (flip2.hasClass('pasfoto')) {
 						$('.memorycard.pasfoto').not(flip2).fadeTo('fast', 0.5);
@@ -192,8 +210,8 @@ $(() => {
 				} else {
 					// ignore
 				}
-
-			} else { // dit is de eerste
+			} else {
+				// dit is de eerste
 
 				flip1 = $(this);
 				if (flip1.hasClass('pasfoto')) {
@@ -203,13 +221,11 @@ $(() => {
 				} else {
 					alert('error');
 				}
-
 			}
-
-		} else { // omdraaien?
+		} else {
+			// omdraaien?
 
 			if ($(this).hasClass('flipped')) {
-
 				if (flip1 && flip1.get(0) === $(this).get(0)) {
 					// ignore
 				} else if (flip2 && flip2.get(0) === $(this).get(0)) {
@@ -218,13 +234,15 @@ $(() => {
 					alert('flipback failed');
 				}
 			} else {
-
 				if (flip1 && flip2) {
 					alert('reset failed');
-				} else if (flip1) { // dit is de tweede
+				} else if (flip1) {
+					// dit is de tweede
 
-					if (($(this).hasClass('naam') && flip1.hasClass('pasfoto'))
-						|| ($(this).hasClass('pasfoto') && flip1.hasClass('naam'))) {
+					if (
+						($(this).hasClass('naam') && flip1.hasClass('pasfoto')) ||
+						($(this).hasClass('pasfoto') && flip1.hasClass('naam'))
+					) {
 						flip2 = $(this);
 						flip2.addClass('flipped');
 
@@ -232,15 +250,12 @@ $(() => {
 					} else {
 						// ignore
 					}
-
-				} else { // dit is de eerste
+				} else {
+					// dit is de eerste
 					flip1 = $(this);
 					flip1.addClass('flipped');
 				}
-
 			}
 		}
-
 	});
-
 });

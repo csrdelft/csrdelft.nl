@@ -7,11 +7,13 @@ use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 
-class LedenMemoryScoreResponse extends DataTableResponse {
+class LedenMemoryScoreResponse extends DataTableResponse
+{
 
 	private $titles = array();
 
-	public function renderElement($score) {
+	public function renderElement($score)
+	{
 		$array = $score->jsonSerialize();
 
 		$minutes = floor($score->tijd / 60);

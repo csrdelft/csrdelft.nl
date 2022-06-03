@@ -35,11 +35,12 @@ class LayoutTwigExtension extends AbstractExtension
 	private $formulierFactory;
 
 	public function __construct(
-		RequestStack $requestStack,
-		Zijbalk $zijbalk,
+		RequestStack       $requestStack,
+		Zijbalk            $zijbalk,
 		MenuItemRepository $menuItemRepository,
-		FormulierFactory $formulierFactory
-	) {
+		FormulierFactory   $formulierFactory
+	)
+	{
 		$this->zijbalk = $zijbalk;
 		$this->menuItemRepository = $menuItemRepository;
 		$this->requestStack = $requestStack;

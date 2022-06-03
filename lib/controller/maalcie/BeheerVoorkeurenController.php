@@ -16,13 +16,15 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class BeheerVoorkeurenController extends AbstractController {
+class BeheerVoorkeurenController extends AbstractController
+{
 	/**
 	 * @var CorveeVoorkeurenRepository
 	 */
 	private $corveeVoorkeurenRepository;
 
-	public function __construct(CorveeVoorkeurenRepository $corveeVoorkeurenRepository) {
+	public function __construct(CorveeVoorkeurenRepository $corveeVoorkeurenRepository)
+	{
 		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
 	}
 
@@ -31,7 +33,8 @@ class BeheerVoorkeurenController extends AbstractController {
 	 * @Route("/corvee/voorkeuren/beheer", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function beheer() {
+	public function beheer()
+	{
 		list($matrix, $repetities) = $this->corveeVoorkeurenRepository->getVoorkeurenMatrix();
 		return $this->render('maaltijden/voorkeur/beheer_voorkeuren.html.twig', ['matrix' => $matrix, 'repetities' => $repetities]);
 	}
@@ -45,7 +48,8 @@ class BeheerVoorkeurenController extends AbstractController {
 	 * @Route("/corvee/voorkeuren/beheer/inschakelen/{crv_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function inschakelen(CorveeRepetitie $repetitie, Profiel $profiel) {
+	public function inschakelen(CorveeRepetitie $repetitie, Profiel $profiel)
+	{
 		$voorkeur = new CorveeVoorkeur();
 		$voorkeur->setProfiel($profiel);
 		$voorkeur->setCorveeRepetitie($repetitie);
@@ -63,7 +67,8 @@ class BeheerVoorkeurenController extends AbstractController {
 	 * @Route("/corvee/voorkeuren/beheer/uitschakelen/{crv_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function uitschakelen(CorveeVoorkeur $voorkeur) {
+	public function uitschakelen(CorveeVoorkeur $voorkeur)
+	{
 		$voorkeur->van_uid = $voorkeur->uid;
 
 		$this->corveeVoorkeurenRepository->uitschakelenVoorkeur($voorkeur);

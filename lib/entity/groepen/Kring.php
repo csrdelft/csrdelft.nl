@@ -12,7 +12,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\KringenRepository")
  */
-class Kring extends Groep {
+class Kring extends Groep
+{
 	use GroepMoment;
 
 	/**
@@ -30,7 +31,8 @@ class Kring extends Groep {
 	 */
 	public $kringNummer;
 
-	public function getUrl() {
+	public function getUrl()
+	{
 		return '/groepen/kringen/' . $this->verticale . '.' . $this->kringNummer;
 	}
 }

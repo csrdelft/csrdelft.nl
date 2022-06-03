@@ -36,7 +36,7 @@ class DeelnemerRepository extends ServiceEntityRepository
 
 		try {
 			return $q->getSingleScalarResult() ?? 0;
-		} catch (NoResultException | NonUniqueResultException $e) {
+		} catch (NoResultException|NonUniqueResultException $e) {
 			return 0;
 		}
 	}

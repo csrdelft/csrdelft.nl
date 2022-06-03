@@ -18,14 +18,16 @@ use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
-class RechtenForm extends ModalForm {
+class RechtenForm extends ModalForm
+{
 
 	/**
 	 * RechtenForm constructor.
 	 * @param AccessControl $ac
 	 * @param $action
 	 */
-	public function __construct(AccessControl $ac, $action) {
+	public function __construct(AccessControl $ac, $action)
+	{
 		parent::__construct($ac, '/rechten/' . $action . '/' . $ac->environment . '/' . $ac->resource, 'Rechten aanpassen voor ', true);
 		if ($ac->resource === '*') {
 			$this->titel .= 'elke ' . $ac->environment;

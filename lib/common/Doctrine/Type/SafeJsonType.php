@@ -8,16 +8,20 @@ use CsrDelft\common\Doctrine\Type\Serializer\SafeJsonSerializer;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
-abstract class SafeJsonType extends Type {
+abstract class SafeJsonType extends Type
+{
 	protected abstract function getAcceptedTypes();
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
+	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+	{
 		return sprintf('TEXT COMMENT \'(DC2Type:%s)\'', $this->getName());
 	}
-	public function convertToPHPValue($value, AbstractPlatform $platform) {
+
+	public function convertToPHPValue($value, AbstractPlatform $platform)
+	{
 		if (!$value) {
 			return $value;
 		}
@@ -25,7 +29,8 @@ abstract class SafeJsonType extends Type {
 		return $serializer->unserialize($value);
 	}
 
-	public function convertToDatabaseValue($value, AbstractPlatform $platform) {
+	public function convertToDatabaseValue($value, AbstractPlatform $platform)
+	{
 		$serializer = new SafeJsonSerializer($this->getAcceptedTypes());
 		return $serializer->serialize($value);
 	}

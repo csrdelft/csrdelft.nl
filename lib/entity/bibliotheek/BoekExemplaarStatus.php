@@ -18,7 +18,8 @@ use CsrDelft\common\Enum;
  * @method static boolean isteruggegeven
  * @method static boolean isvermist
  */
-class BoekExemplaarStatus extends Enum {
+class BoekExemplaarStatus extends Enum
+{
 	const beschikbaar = 'beschikbaar';
 	const uitgeleend = 'uitgeleend';
 	const teruggegeven = 'teruggegeven';

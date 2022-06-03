@@ -24,7 +24,8 @@ use Symfony\Component\Security\Core\Security;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 28/07/2019
  */
-class AccountController extends AbstractController {
+class AccountController extends AbstractController
+{
 	/**
 	 * @var CmsPaginaRepository
 	 */
@@ -52,7 +53,8 @@ class AccountController extends AbstractController {
 		AccountService      $accountService,
 		CmsPaginaRepository $cmsPaginaRepository,
 		LoginService        $loginService
-	) {
+	)
+	{
 		$this->accessService = $accessService;
 		$this->accountRepository = $accountRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;

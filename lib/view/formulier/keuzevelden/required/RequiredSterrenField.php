@@ -12,7 +12,8 @@ use CsrDelft\view\formulier\keuzevelden\SterrenField;
  *
  * @see SterrenField
  */
-class RequiredSterrenField extends SterrenField {
+class RequiredSterrenField extends SterrenField
+{
 
 	public $required = true;
 

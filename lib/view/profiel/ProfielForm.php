@@ -43,15 +43,18 @@ use CsrDelft\view\toestemming\ToestemmingModalForm;
 /**
  * @property ProfielRepository $model
  */
-class ProfielForm extends Formulier {
+class ProfielForm extends Formulier
+{
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return '<ol class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
 			. '<li class="breadcrumb-item"><a href="/ledenlijst">Leden</a></li>'
-			. '<li class="breadcrumb-item">'. $this->model->getLink('civitas') . '</li></ol>';
+			. '<li class="breadcrumb-item">' . $this->model->getLink('civitas') . '</li></ol>';
 	}
 
-	public function __construct(Profiel $profiel, $inschrijven) {
+	public function __construct(Profiel $profiel, $inschrijven)
+	{
 		if ($profiel->uid) {
 			parent::__construct($profiel, '/profiel/' . $profiel->uid . '/bewerken');
 		} else {
@@ -136,7 +139,7 @@ class ProfielForm extends Formulier {
 			$fields[] = new TextField('tussenvoegsel', $profiel->tussenvoegsel, 'Tussenvoegsel', 15);
 			$fields[] = new RequiredTextField('achternaam', $profiel->achternaam, 'Achternaam', 50);
 		}
-		$fields["bijnaam"]= new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
+		$fields["bijnaam"] = new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
 		$fields["bijnaam"]->title = "Bijnaam is zichtbaar op profiel, kan op worden gezocht in de zoekbalk en wordt
 		weergegeven op het forum bij gebruikers waarbij als profielinstelling de naamweergave 'bijnaam' is ingesteld.";
 		if ($admin || $inschrijven || $profiel->isOudlid()) {

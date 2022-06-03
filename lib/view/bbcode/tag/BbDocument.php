@@ -16,7 +16,8 @@ use Twig\Environment;
  * @example [document]1234[/document]
  * @example [document=1234]
  */
-class BbDocument extends BbTag {
+class BbDocument extends BbTag
+{
 	/**
 	 * @var Document
 	 */
@@ -34,20 +35,24 @@ class BbDocument extends BbTag {
 	 */
 	public $id;
 
-	public function __construct(DocumentRepository $documentRepository, Environment $twig) {
+	public function __construct(DocumentRepository $documentRepository, Environment $twig)
+	{
 		$this->documentRepository = $documentRepository;
 		$this->twig = $twig;
 	}
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'document';
 	}
 
-	public function isAllowed() {
+	public function isAllowed()
+	{
 		return $this->document == false || $this->document->magBekijken();
 	}
 
-	public function renderLight() {
+	public function renderLight()
+	{
 		if ($this->document) {
 			$beschrijving = $this->document->getFriendlyMimetype() . ' (' . format_filesize((int)$this->document->filesize) . ')';
 			return BbHelper::lightLinkBlock('document', $this->document->getDownloadUrl(), $this->document->naam, $beschrijving);
@@ -56,7 +61,8 @@ class BbDocument extends BbTag {
 		}
 	}
 
-	public function render() {
+	public function render()
+	{
 		if ($this->document) {
 			return $this->twig->render('documenten/document_bb.html.twig', ['document' => $this->document]);
 		} else {
@@ -67,7 +73,8 @@ class BbDocument extends BbTag {
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []) {
+	public function parse($arguments = [])
+	{
 		$this->id = $this->readMainArgument($arguments);
 		$this->document = $this->documentRepository->get($this->id);
 	}

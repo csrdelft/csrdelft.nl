@@ -31,7 +31,8 @@ use Psr\Log\LoggerInterface;
  * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumDraad {
+class ForumDraad
+{
 	/**
 	 * Primary key
 	 * @var int
@@ -176,39 +177,47 @@ class ForumDraad {
 	 */
 	private $meldingen;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->verbergen = new ArrayCollection();
 		$this->meldingen = new ArrayCollection();
 	}
 
-	public function magPosten() {
+	public function magPosten()
+	{
 		if ($this->verwijderd || $this->gesloten) {
 			return false;
 		}
 		return $this->deel->magPosten() || ($this->isGedeeld() && $this->gedeeld_met_deel->magPosten());
 	}
 
-	public function isGedeeld() {
+	public function isGedeeld()
+	{
 		return !empty($this->gedeeld_met);
 	}
 
-	public function magStatistiekBekijken() {
+	public function magStatistiekBekijken()
+	{
 		return $this->magModereren() || ($this->uid != LoginService::UID_EXTERN && $this->uid === LoginService::getUid());
 	}
 
-	public function magModereren() {
+	public function magModereren()
+	{
 		return $this->deel->magModereren() || ($this->isGedeeld() && $this->gedeeld_met_deel->magModereren());
 	}
 
-	public function magVerbergen() {
+	public function magVerbergen()
+	{
 		return !$this->belangrijk && LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function magMeldingKrijgen() {
+	public function magMeldingKrijgen()
+	{
 		return $this->magLezen();
 	}
 
-	public function magLezen() {
+	public function magLezen()
+	{
 		if ($this->verwijderd && !$this->magModereren()) {
 			return false;
 		}
@@ -224,15 +233,18 @@ class ForumDraad {
 		return $this->deel->magLezen() || ($this->isGedeeld() && $this->gedeeld_met_deel->magLezen());
 	}
 
-	public function isVerborgen() {
+	public function isVerborgen()
+	{
 		return $this->verbergen->matching(Eisen::voorIngelogdeGebruiker())->first() != null;
 	}
 
-	public function getAantalLezers() {
+	public function getAantalLezers()
+	{
 		return count($this->lezers);
 	}
 
-	public function isOngelezen() {
+	public function isOngelezen()
+	{
 		if ($gelezen = $this->getWanneerGelezen()) {
 			// Omdat this en gelezen uit de cache _kunnen_ komen kunnen de milliseconden in
 			// de date verschillend zijn van wat er in de db staat. Doe dus hier check op seconden.
@@ -249,11 +261,13 @@ class ForumDraad {
 	 *
 	 * @return ForumDraadGelezen|null $gelezen
 	 */
-	public function getWanneerGelezen() {
+	public function getWanneerGelezen()
+	{
 		return $this->lezers->matching(Eisen::voorIngelogdeGebruiker())->first();
 	}
 
-	public function hasForumPosts() {
+	public function hasForumPosts()
+	{
 		return !empty($this->getForumPosts());
 	}
 
@@ -262,7 +276,8 @@ class ForumDraad {
 	 *
 	 * @return ForumPost[]
 	 */
-	public function getForumPosts() {
+	public function getForumPosts()
+	{
 		if (!isset($this->forum_posts)) {
 			$this->setForumPosts(ContainerFacade::getContainer()->get(ForumPostsRepository::class)->getForumPostsVoorDraad($this));
 		}
@@ -272,7 +287,8 @@ class ForumDraad {
 	/**
 	 * @return string
 	 */
-	public function getLaatstePostSamenvatting() {
+	public function getLaatstePostSamenvatting()
+	{
 		$laatste = $this->laatste_post;
 		$parseMail = strip_tags(CsrBB::parseMail($laatste->tekst));
 		return truncate($parseMail, 100);
@@ -283,11 +299,13 @@ class ForumDraad {
 	 *
 	 * @param array $forum_posts
 	 */
-	public function setForumPosts(array $forum_posts) {
+	public function setForumPosts(array $forum_posts)
+	{
 		$this->forum_posts = $forum_posts;
 	}
 
-	public function getAantalOngelezenPosts() {
+	public function getAantalOngelezenPosts()
+	{
 		if (!isset($this->aantal_ongelezen_posts)) {
 			$forumPostsRepository = ContainerFacade::getContainer()->get(ForumPostsRepository::class);
 			$this->aantal_ongelezen_posts = $forumPostsRepository->getAantalOngelezenPosts($this);
@@ -298,7 +316,8 @@ class ForumDraad {
 	/**
 	 * @return ForumDraadMeldingNiveau
 	 */
-	public function getMeldingsNiveau() {
+	public function getMeldingsNiveau()
+	{
 		if (!$this->magLezen()) {
 			return ForumDraadMeldingNiveau::NOOIT();
 		}

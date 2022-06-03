@@ -17,7 +17,8 @@ use Doctrine\ORM\EntityManagerInterface;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 20/02/2018
  */
-class PinTransactieMatcher {
+class PinTransactieMatcher
+{
 	/**
 	 * Constants.
 	 */
@@ -48,25 +49,31 @@ class PinTransactieMatcher {
 	private $entityManager;
 
 	public function __construct(
-		EntityManagerInterface $entityManager,
+		EntityManagerInterface       $entityManager,
 		PinTransactieMatchRepository $pinTransactieMatchModel
-	) {
+	)
+	{
 		$this->pinTransactieMatchModel = $pinTransactieMatchModel;
 		$this->entityManager = $entityManager;
 	}
 
-	public function setPinTransacties(array $pinTransacties) {
+	public function setPinTransacties(array $pinTransacties)
+	{
 		$this->pinTransacties = $pinTransacties;
 	}
 
-	public function setPinBestellingen(array $pinBestellingen) {
+	public function setPinBestellingen(array $pinBestellingen)
+	{
 		$this->pinBestellingen = $pinBestellingen;
 	}
 
 	/**
 	 */
-	public function clean() {
-		$ids = array_map(function (CiviBestelling $inhoud) { return $inhoud->id; }, $this->pinBestellingen);
+	public function clean()
+	{
+		$ids = array_map(function (CiviBestelling $inhoud) {
+			return $inhoud->id;
+		}, $this->pinBestellingen);
 		$this->pinTransactieMatchModel->cleanByBestellingIds($ids);
 	}
 
@@ -76,7 +83,8 @@ class PinTransactieMatcher {
 	 * @return int[][]
 	 * @throws CsrException
 	 */
-	protected function levenshteinMatrix(array $pinTransacties, array $pinBestellingen) {
+	protected function levenshteinMatrix(array $pinTransacties, array $pinBestellingen)
+	{
 		$pinTransactiesCount = count($pinTransacties);
 		$pinBestellingenCount = count($pinBestellingen);
 
@@ -109,7 +117,8 @@ class PinTransactieMatcher {
 	/**
 	 * @throws CsrException
 	 */
-	public function match() {
+	public function match()
+	{
 		$pinTransacties = $this->pinTransacties;
 		$pinBestellingen = $this->pinBestellingen;
 		$distanceMatrix = $this->levenshteinMatrix($pinTransacties, $pinBestellingen);
@@ -118,13 +127,13 @@ class PinTransactieMatcher {
 		$indexTransactie = count($pinTransacties) - 1;
 		$indexBestelling = count($pinBestellingen) - 1;
 
-		while ($indexTransactie >= 0 && $indexBestelling >=0) {
+		while ($indexTransactie >= 0 && $indexBestelling >= 0) {
 			$matchCost = $this->matchCost($indexTransactie, $indexBestelling);
 			$matchDistance = $distanceMatrix[$indexTransactie][$indexBestelling] + $matchCost;
-			$missendeBestellingDistance = $distanceMatrix[$indexTransactie][$indexBestelling +1] + self::COST_MISSING;
-			$missendeTransactieDistance = $distanceMatrix[$indexTransactie + 1][$indexBestelling ] + self::COST_MISSING;
+			$missendeBestellingDistance = $distanceMatrix[$indexTransactie][$indexBestelling + 1] + self::COST_MISSING;
+			$missendeTransactieDistance = $distanceMatrix[$indexTransactie + 1][$indexBestelling] + self::COST_MISSING;
 
-			$distance = $distanceMatrix[$indexTransactie+1][$indexBestelling+1];
+			$distance = $distanceMatrix[$indexTransactie + 1][$indexBestelling + 1];
 
 			switch ($distance) {
 				case $matchDistance:
@@ -169,7 +178,8 @@ class PinTransactieMatcher {
 	/**
 	 * @return bool
 	 */
-	public function bevatFouten() {
+	public function bevatFouten()
+	{
 		foreach ($this->matches as $match) {
 			if ($match->status !== PinTransactieMatchStatusEnum::STATUS_MATCH) {
 				return true;
@@ -183,7 +193,8 @@ class PinTransactieMatcher {
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function genereerReport() {
+	public function genereerReport()
+	{
 		ob_start();
 
 		$verschil = 0;
@@ -235,7 +246,8 @@ class PinTransactieMatcher {
 
 	/**
 	 */
-	public function save() {
+	public function save()
+	{
 		foreach ($this->matches as $match) {
 			$this->entityManager->persist($match);
 		}
@@ -245,11 +257,13 @@ class PinTransactieMatcher {
 	/**
 	 * @return PinTransactieMatch[]
 	 */
-	public function getMatches() {
+	public function getMatches()
+	{
 		return $this->matches;
 	}
 
-	private function matchCost($i, $j) {
+	private function matchCost($i, $j)
+	{
 		if ($this->pinTransacties[$i]->getBedragInCenten() == $this->pinBestellingen[$j]->getProduct(CiviProductTypeEnum::PINTRANSACTIE)->aantal) {
 			return 0;
 		} else {

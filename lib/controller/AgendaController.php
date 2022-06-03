@@ -34,7 +34,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Controller van de agenda.
  */
-class AgendaController extends AbstractController {
+class AgendaController extends AbstractController
+{
 	const SECONDEN_IN_JAAR = 31557600;
 	/**
 	 * @var AgendaRepository
@@ -62,13 +63,14 @@ class AgendaController extends AbstractController {
 	private $profielRepository;
 
 	public function __construct(
-		AgendaRepository $agendaRepository,
+		AgendaRepository          $agendaRepository,
 		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenRepository $activiteitenRepository,
-		CorveeTakenRepository $corveeTakenRepository,
-		MaaltijdenRepository $maaltijdenRepository,
-		ProfielRepository $profielRepository
-	) {
+		ActiviteitenRepository    $activiteitenRepository,
+		CorveeTakenRepository     $corveeTakenRepository,
+		MaaltijdenRepository      $maaltijdenRepository,
+		ProfielRepository         $profielRepository
+	)
+	{
 		$this->agendaRepository = $agendaRepository;
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
 		$this->activiteitenRepository = $activiteitenRepository;
@@ -189,7 +191,8 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/courant", methods={"POST"})
 	 * @Auth(P_MAIL_COMPOSE)
 	 */
-	public function courant(BbToProsemirror $bbToProsemirror) {
+	public function courant(BbToProsemirror $bbToProsemirror)
+	{
 		$items = $this->agendaRepository->getAllAgendeerbaar(
 			date_create_immutable(),
 			date_create_immutable('next saturday + 2 weeks'),
@@ -208,7 +211,8 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/toevoegen/{datum}", methods={"POST"}, defaults={"datum": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function toevoegen(Request $request, $datum = null) {
+	public function toevoegen(Request $request, $datum = null)
+	{
 		$profiel = $this->getProfiel();
 		if (!LoginService::mag(P_AGENDA_ADD) && !$profiel->verticaleleider) {
 			throw $this->createAccessDeniedException('Mag geen gebeurtenis toevoegen.');
@@ -245,7 +249,8 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/bewerken/{aid}", methods={"POST"}, requirements={"aid": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken(Request $request, $aid) {
+	public function bewerken(Request $request, $aid)
+	{
 		$item = $this->agendaRepository->getAgendaItem((int)$aid);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
@@ -323,7 +328,8 @@ class AgendaController extends AbstractController {
 	 * @param $refuuid
 	 * @return Agendeerbaar|null
 	 */
-	private function getAgendaItemByUuid($refuuid) {
+	private function getAgendaItemByUuid($refuuid)
+	{
 		$parts = explode('@', $refuuid, 2);
 		$module = explode('.', $parts[1], 2);
 		switch ($module[0]) {
@@ -443,7 +449,8 @@ class AgendaController extends AbstractController {
 	/**
 	 * @return mixed
 	 */
-	public function icalDate() {
+	public function icalDate()
+	{
 		return str_replace('-', '', str_replace(':', '', str_replace('+00:00', 'Z', gmdate('c'))));
 	}
 

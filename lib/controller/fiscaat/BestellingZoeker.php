@@ -14,7 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class BestellingZoeker extends AbstractController {
+class BestellingZoeker extends AbstractController
+{
 	/**
 	 * @Route("/fiscaat/bestelling-zoeker")
 	 * @param Request $request
@@ -24,10 +25,11 @@ class BestellingZoeker extends AbstractController {
 	 * @return Response
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function bestellingZoeker(Request $request,
+	public function bestellingZoeker(Request                 $request,
 																	 CiviCategorieRepository $civiCategorieRepository,
-																	 CiviProductRepository $civiProductRepository,
-																	 CiviSaldoRepository $civiSaldoRepository) {
+																	 CiviProductRepository   $civiProductRepository,
+																	 CiviSaldoRepository     $civiSaldoRepository)
+	{
 		$from = new DateTimeImmutable();
 		$from = $from->sub(new DateInterval('P1W'));
 

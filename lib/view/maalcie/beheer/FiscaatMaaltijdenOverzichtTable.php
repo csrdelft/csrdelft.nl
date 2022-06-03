@@ -9,8 +9,10 @@ use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\PopupDataTableKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
-class FiscaatMaaltijdenOverzichtTable extends DataTable {
-	public function __construct() {
+class FiscaatMaaltijdenOverzichtTable extends DataTable
+{
+	public function __construct()
+	{
 		parent::__construct(Maaltijd::class, '/maaltijden/fiscaat/overzicht');
 
 		$this->deleteColumn('mlt_repetitie_id');

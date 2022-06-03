@@ -18,45 +18,53 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @property Bestand $model
  *
  */
-class BestandBehouden extends InputField {
+class BestandBehouden extends InputField
+{
 
 	public $filterMime;
 
-	public function __construct($name, array $filterMime, Bestand $bestand = null) {
+	public function __construct($name, array $filterMime, Bestand $bestand = null)
+	{
 		parent::__construct($name, null, 'Huidig bestand behouden', $bestand);
 		$this->filterMime = $filterMime;
 	}
 
-	public function isPosted() {
+	public function isPosted()
+	{
 		return $this->isAvailable();
 	}
 
-	public function isAvailable() {
-		return $this->model instanceof Bestand AND $this->model->exists();
+	public function isAvailable()
+	{
+		return $this->model instanceof Bestand and $this->model->exists();
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		parent::validate();
-		if (!$this->isAvailable() OR empty($this->model->filesize)) {
+		if (!$this->isAvailable() or empty($this->model->filesize)) {
 			$this->error = 'Bestand bestaat niet (meer): ' . htmlspecialchars($this->model->directory . $this->model->filename);
-		} elseif (!empty($this->filterMime) AND !in_array($this->model->mimetype, $this->filterMime)) {
+		} elseif (!empty($this->filterMime) and !in_array($this->model->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . htmlspecialchars($this->model->mimetype);
 		}
 		return $this->error === '';
 	}
 
-	public function opslaan($directory, $filename, $overwrite = false) {
+	public function opslaan($directory, $filename, $overwrite = false)
+	{
 		parent::opslaan($directory, $filename, $overwrite);
 		if (false === @chmod(join_paths($this->model->directory, $this->model->filename), 0644)) {
 			throw new CsrException('Geen eigenaar van bestand: ' . htmlspecialchars($this->model->directory . $this->model->filename));
 		}
 	}
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		return '<div ' . $this->getInputAttribute(array('id', 'name', 'class')) . '>' . $this->model->filename . ' (' . format_filesize($this->model->filesize) . ')</div>';
 	}
 
-	public function getPreviewDiv() {
+	public function getPreviewDiv()
+	{
 		if ($this->model instanceof Afbeelding) {
 			return '<div id="imagePreview_' . $this->getId() . '" class="previewDiv"><img src="' . str_replace(PHOTOALBUM_PATH, getCsrRoot() . '/plaetjes/', $this->model->directory) . $this->model->filename . '" width="' . $this->model->width . '" height="' . $this->model->height . '" /></div>';
 		}

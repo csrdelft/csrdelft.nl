@@ -15,14 +15,16 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredJaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
-class ReeksForm implements FormulierTypeInterface {
+class ReeksForm implements FormulierTypeInterface
+{
 
 	/**
 	 * @param FormulierBuilder $builder
 	 * @param Reeks $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
+	{
 		$builder->setTitel($options['nieuw'] ? 'Nieuwe reeks' : 'Reeks bewerken');
 		$builder->setDataTableId(true);
 

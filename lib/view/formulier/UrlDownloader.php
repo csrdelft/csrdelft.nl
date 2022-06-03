@@ -9,14 +9,16 @@ namespace CsrDelft\view\formulier;
  *
  * Download content van de gegeven url, gebruikt beschikbare mechanisme.
  */
-class UrlDownloader {
+class UrlDownloader
+{
 
 	/**
 	 * Is er uberhaupt een methode beschikbaar
 	 * @return bool
 	 */
-	public function isAvailable() {
-		return $this->file_get_contents_available() OR function_exists('curl_init') OR function_exists('fsockopen');
+	public function isAvailable()
+	{
+		return $this->file_get_contents_available() or function_exists('curl_init') or function_exists('fsockopen');
 	}
 
 	/**
@@ -25,7 +27,8 @@ class UrlDownloader {
 	 * @param $url
 	 * @return mixed|string
 	 */
-	public function file_get_contents($url) {
+	public function file_get_contents($url)
+	{
 		if ($this->file_get_contents_available()) {
 			return @file_get_contents($url);
 		} else {
@@ -38,7 +41,8 @@ class UrlDownloader {
 	 *
 	 * @return bool
 	 */
-	protected function file_get_contents_available() {
+	protected function file_get_contents_available()
+	{
 		return in_array(ini_get('allow_url_fopen'), array('On', 'Yes', 1));
 	}
 
@@ -47,7 +51,8 @@ class UrlDownloader {
 	 * @param $url
 	 * @return mixed
 	 */
-	protected function curl_file_get_contents($url) {
+	protected function curl_file_get_contents($url)
+	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -62,7 +67,8 @@ class UrlDownloader {
 	 * @return string
 	 * @see SimplePie_File
 	 */
-	protected function fsocket_file_get_contents($url) {
+	protected function fsocket_file_get_contents($url)
+	{
 		$timeout = 10;
 		$useragent = null;
 

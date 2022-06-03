@@ -17,7 +17,8 @@ use Twig\Environment;
  * @method Declaratie[]    findAll()
  * @method Declaratie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DeclaratieRepository extends AbstractRepository {
+class DeclaratieRepository extends AbstractRepository
+{
 	/**
 	 * @var SuService
 	 */
@@ -31,14 +32,16 @@ class DeclaratieRepository extends AbstractRepository {
 	 */
 	private $mailService;
 
-	public function __construct(ManagerRegistry $registry, SuService $suService, Environment $twig, MailService $mailService) {
+	public function __construct(ManagerRegistry $registry, SuService $suService, Environment $twig, MailService $mailService)
+	{
 		parent::__construct($registry, Declaratie::class);
 		$this->suService = $suService;
 		$this->twig = $twig;
 		$this->mailService = $mailService;
 	}
 
-	public function verwijderen(Declaratie $declaratie) {
+	public function verwijderen(Declaratie $declaratie)
+	{
 		foreach ($declaratie->getBonnen() as $bon) {
 			foreach ($bon->getRegels() as $regel) {
 				$this->remove($regel);
@@ -51,15 +54,17 @@ class DeclaratieRepository extends AbstractRepository {
 		$this->getEntityManager()->flush();
 	}
 
-	public function mijnDeclaraties(Profiel $profiel) {
-		return array_filter( $this->findBy([
+	public function mijnDeclaraties(Profiel $profiel)
+	{
+		return array_filter($this->findBy([
 			'indiener' => $profiel
-		], ['id' => 'desc']), function($decl) {
+		], ['id' => 'desc']), function ($decl) {
 			return $decl->magBekijken();
 		});
 	}
 
-	public function stuurMail(Declaratie $declaratie) {
+	public function stuurMail(Declaratie $declaratie)
+	{
 		$wachtrij = $declaratie->getCategorie()->getWachtrij();
 
 		if (!empty($wachtrij->getEmail())) {

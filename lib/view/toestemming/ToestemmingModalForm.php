@@ -15,7 +15,8 @@ use Exception;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 27/04/2018
  */
-class ToestemmingModalForm extends ModalForm {
+class ToestemmingModalForm extends ModalForm
+{
 	/**
 	 * @var bool
 	 */
@@ -30,7 +31,8 @@ class ToestemmingModalForm extends ModalForm {
 	 * @param bool $nieuw
 	 * @throws Exception
 	 */
-	public function __construct(LidToestemmingRepository $lidToestemmingRepository, $nieuw = false) {
+	public function __construct(LidToestemmingRepository $lidToestemmingRepository, $nieuw = false)
+	{
 		parent::__construct(new LidToestemming(), '/toestemming', 'Toestemming geven');
 
 		$this->modalBreedte = 'modal-lg';
@@ -93,7 +95,8 @@ class ToestemmingModalForm extends ModalForm {
 		);
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		if (!parent::validate()) {
 			return false;
 		}

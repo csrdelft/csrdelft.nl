@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import {init} from '../ctx';
-import {html} from '../lib/util';
-import {replacePlaceholders} from './api';
+import { init } from '../ctx';
+import { html } from '../lib/util';
+import { replacePlaceholders } from './api';
 
 interface RowButtonsConfig {
 	icon?: string;
@@ -17,24 +17,23 @@ class RowButtons {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private static createButtonGroup(config: RowButtonsConfig[], row: any) {
-		// prettier-ignore
 		const btnGroup = html` <div class="btn-group"></div>`;
 
 		for (const btn of Object.values(config)) {
-			const action = replacePlaceholders(btn.action ?? "", row);
+			const action = replacePlaceholders(btn.action ?? '', row);
 
 			// prettier-ignore
-			const newButton = html`
-<a href="${action}"
-	class="btn btn-light noanim btn-sm DataTableRowKnop ${btn.method} ${btn.css}"
-	title="${btn.title}">
-		<i class="${btn.icon}"></i>
+			const newButton = html`<a
+href="${action}"
+class="btn btn-light noanim btn-sm DataTableRowKnop ${btn.method} ${btn.css}"
+title="${btn.title}"
+>
+<i class="${btn.icon}"></i>
 </a>`;
 			btnGroup.append(newButton);
 		}
 		btnGroup.style.marginTop = '-10px';
 		btnGroup.style.marginBottom = '-10px';
-		// prettier-ignore
 		const wrapper = html` <div class="d-inline-flex"></div>`;
 		wrapper.append(btnGroup);
 		init(wrapper);
@@ -42,7 +41,7 @@ class RowButtons {
 	}
 
 	private c: RowButtonsConfig;
-	private s: { dt: DataTables.Api; collapsedGroups: unknown[]; regrouping: boolean; lastDraw: null; };
+	private s: { dt: DataTables.Api; collapsedGroups: unknown[]; regrouping: boolean; lastDraw: null };
 
 	constructor(settings: string, config: RowButtonsConfig[]) {
 		const dt = new $.fn.dataTable.Api(settings);
@@ -64,10 +63,12 @@ class RowButtons {
 		dtSettings._rowButtons = this;
 
 		dt.on('draw.dt', () => {
-			dt.column('actionButtons:name').nodes().each((cell: HTMLTableCellElement, index, api) => {
-				cell.innerHTML = '';
-				cell.append(RowButtons.createButtonGroup(config, api.row(cell).data()));
-			});
+			dt.column('actionButtons:name')
+				.nodes()
+				.each((cell: HTMLTableCellElement, index, api) => {
+					cell.innerHTML = '';
+					cell.append(RowButtons.createButtonGroup(config, api.row(cell).data()));
+				});
 		});
 	}
 }

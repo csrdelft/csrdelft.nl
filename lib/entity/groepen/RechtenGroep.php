@@ -14,10 +14,12 @@ use Doctrine\ORM\Mapping as ORM;
  * Een groep beperkt voor rechten.
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\RechtenGroepenRepository")
  */
-class RechtenGroep extends Groep {
+class RechtenGroep extends Groep
+{
 	use GroepAanmeldRechten;
 
-	public function getUrl() {
+	public function getUrl()
+	{
 		return '/groepen/overig/' . $this->id;
 	}
 
@@ -29,7 +31,8 @@ class RechtenGroep extends Groep {
 	 * @param null $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null) {
+	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null)
+	{
 		switch ($action) {
 			case AccessAction::Aanmaken():
 			case AccessAction::Aanmelden():

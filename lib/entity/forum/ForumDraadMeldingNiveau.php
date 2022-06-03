@@ -14,7 +14,8 @@ use CsrDelft\common\Enum;
  * @method static boolean isVERMELDING($niveau)
  * @method static boolean isALTIJD($niveau)
  */
-class ForumDraadMeldingNiveau extends Enum {
+class ForumDraadMeldingNiveau extends Enum
+{
 
 	const NOOIT = 'nooit';
 	const VERMELDING = 'vermelding';

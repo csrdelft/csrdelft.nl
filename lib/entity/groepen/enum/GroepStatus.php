@@ -18,7 +18,8 @@ use CsrDelft\common\Enum;
  * @method static boolean isHT($groepStatus)
  * @method static boolean isOT($groepStatus)
  */
-class GroepStatus extends Enum {
+class GroepStatus extends Enum
+{
 	/**
 	 * GroepStatus opties.
 	 */

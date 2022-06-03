@@ -30,7 +30,8 @@ use Monolog\DateTimeImmutable;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository")
  * @ORM\Table("mlt_repetities")
  */
-class MaaltijdRepetitie implements DisplayEntity {
+class MaaltijdRepetitie implements DisplayEntity
+{
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -91,15 +92,18 @@ class MaaltijdRepetitie implements DisplayEntity {
 	 */
 	public $abonnement_filter;
 
-	public function getStandaardPrijs() {
+	public function getStandaardPrijs()
+	{
 		return $this->product->getPrijsInt();
 	}
 
-	public function getDagVanDeWeekText() {
+	public function getDagVanDeWeekText()
+	{
 		return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
 	}
 
-	public function getPeriodeInDagenText() {
+	public function getPeriodeInDagenText()
+	{
 		switch ($this->periode_in_dagen) {
 			case 0:
 				return '-';
@@ -116,11 +120,13 @@ class MaaltijdRepetitie implements DisplayEntity {
 		}
 	}
 
-	public function getStandaardPrijsFloat() {
+	public function getStandaardPrijsFloat()
+	{
 		return (float)$this->getStandaardPrijs() / 100.0;
 	}
 
-	public function getFirstOccurrence() {
+	public function getFirstOccurrence()
+	{
 		$datum = time();
 		$shift = $this->dag_vd_week - date('w', $datum) + 7;
 		$shift %= 7;
@@ -130,11 +136,13 @@ class MaaltijdRepetitie implements DisplayEntity {
 		return date('Y-m-d', $datum);
 	}
 
-	public function getId() {
+	public function getId()
+	{
 		return $this->mlt_repetitie_id;
 	}
 
-	public function getWeergave(): string {
+	public function getWeergave(): string
+	{
 		return $this->standaard_titel ?? "";
 	}
 }

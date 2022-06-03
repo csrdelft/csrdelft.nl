@@ -8,6 +8,7 @@ use CsrDelft\entity\declaratie\DeclaratieBon;
 use Symfony\Component\Filesystem\Filesystem;
 use TCPDF;
 use Twig\Environment;
+
 //use ZipArchive;
 
 class DeclaratiePDFGenerator
@@ -21,7 +22,8 @@ class DeclaratiePDFGenerator
 	 */
 	private $filesystem;
 
-	public function __construct(Environment $twig, Filesystem $filesystem) {
+	public function __construct(Environment $twig, Filesystem $filesystem)
+	{
 		$this->twig = $twig;
 		$this->filesystem = $filesystem;
 	}
@@ -65,7 +67,7 @@ class DeclaratiePDFGenerator
 		$pdf->SetTitle($declaratie->getTitel());
 
 		// PDF styling
-		$pdf->setHeaderData( null, null, 'Declaratie C.S.R. Delft (#' . $declaratie->getId() . ')', $declaratie->getTitel(), [17, 39, 58]);
+		$pdf->setHeaderData(null, null, 'Declaratie C.S.R. Delft (#' . $declaratie->getId() . ')', $declaratie->getTitel(), [17, 39, 58]);
 		$pdf->SetMargins(PDF_MARGIN_LEFT, 20, PDF_MARGIN_RIGHT);
 		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 		$pdf->setPrintFooter(false);
@@ -122,7 +124,8 @@ class DeclaratiePDFGenerator
 		return $pdf->Output('declaratie.pdf', 'S');
 	}
 
-	public function genereerDeclaratie(Declaratie $declaratie) {
+	public function genereerDeclaratie(Declaratie $declaratie)
+	{
 		$location = $this->filesystem->tempnam(TMP_PATH, 'decla_');
 		$declaInfo = $this->genereerDeclaratieInfo($declaratie);
 		$this->filesystem->dumpFile($location, $declaInfo);

@@ -65,7 +65,8 @@ class PinTransactieDownloader
 	 */
 	public $disableSSL = true;
 
-	public function __construct(PinTransactieRepository $pinTransactieRepository, EntityManagerInterface $entityManager) {
+	public function __construct(PinTransactieRepository $pinTransactieRepository, EntityManagerInterface $entityManager)
+	{
 		$this->pinTransactieRepository = $pinTransactieRepository;
 		$this->entityManager = $entityManager;
 	}
@@ -165,7 +166,8 @@ class PinTransactieDownloader
 	 * Zet SSL verify uit indien disableSSL aan staat
 	 * @param resource $ch
 	 */
-	private function disableSSLCheck($ch) {
+	private function disableSSLCheck($ch)
+	{
 		if ($this->disableSSL) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

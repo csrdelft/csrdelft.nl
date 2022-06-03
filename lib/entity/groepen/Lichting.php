@@ -16,7 +16,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\LichtingenRepository")
  */
-class Lichting extends Groep {
+class Lichting extends Groep
+{
 	/**
 	 * Lidjaar
 	 * @var int
@@ -32,7 +33,8 @@ class Lichting extends Groep {
 	 * @param null $soort
 	 * @return bool
 	 */
-	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null) {
+	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null)
+	{
 		return AccessAction::isBekijken($action);
 	}
 
@@ -40,7 +42,8 @@ class Lichting extends Groep {
 	 * Stiekem hebben we helemaal geen leden
 	 * @return GroepLid[]|ArrayCollection
 	 */
-	public function getLeden() {
+	public function getLeden()
+	{
 		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 		$model = $em->getRepository(GroepLid::class);
@@ -57,7 +60,8 @@ class Lichting extends Groep {
 		return new ArrayCollection($leden);
 	}
 
-	public function getUrl() {
+	public function getUrl()
+	{
 		return '/groepen/lichtingen/' . $this->lidjaar;
 	}
 
@@ -67,7 +71,8 @@ class Lichting extends Groep {
 	 * @param null $allowedAuthenticationMethods
 	 * @return bool
 	 */
-	public function mag(AccessAction $action, $allowedAuthenticationMethods = null) {
+	public function mag(AccessAction $action, $allowedAuthenticationMethods = null)
+	{
 		return AccessAction::isBekijken($action);
 	}
 

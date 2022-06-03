@@ -23,10 +23,10 @@ class VoorkeurCommissieType extends AbstractType
 	/**
 	 * AddCommissieFormulier constructor.
 	 *
-	 * @see VoorkeurCommissie
-	 *
 	 * @param FormBuilderInterface $builder
 	 * @param array $options
+	 * @see VoorkeurCommissie
+	 *
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
@@ -34,7 +34,6 @@ class VoorkeurCommissieType extends AbstractType
 			->add('naam', TextType::class, ['required' => true])
 			->add('categorie', EntityType::class, ['class' => VoorkeurCommissieCategorie::class, 'choice_label' => 'naam'])
 			->add('zichtbaar', CheckboxType::class, ['required' => false])
-			->add('opslaan', SubmitType::class)
-		;
+			->add('opslaan', SubmitType::class);
 	}
 }

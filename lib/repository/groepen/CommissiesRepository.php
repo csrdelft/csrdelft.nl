@@ -8,12 +8,15 @@ use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\repository\GroepRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class CommissiesRepository extends GroepRepository {
-	public function __construct(ManagerRegistry $registry) {
+class CommissiesRepository extends GroepRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Commissie::class);
 	}
 
-	public function nieuw($soort = null) {
+	public function nieuw($soort = null)
+	{
 		if (is_string($soort)) {
 			$soort = $this->parseSoort($soort);
 		}

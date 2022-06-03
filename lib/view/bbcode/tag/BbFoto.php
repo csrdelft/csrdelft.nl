@@ -19,7 +19,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @example [foto responsive]/pad/naar/foto[/foto]
  */
-class BbFoto extends BbTag {
+class BbFoto extends BbTag
+{
 
 	/**
 	 * @var bool
@@ -38,23 +39,28 @@ class BbFoto extends BbTag {
 	 */
 	private $fotoUrl;
 
-	public function __construct(FotoAlbumRepository $fotoAlbumRepository) {
+	public function __construct(FotoAlbumRepository $fotoAlbumRepository)
+	{
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
 	}
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'foto';
 	}
 
-	public function isAllowed() {
+	public function isAllowed()
+	{
 		return $this->foto->magBekijken();
 	}
 
-	public function renderLight() {
+	public function renderLight()
+	{
 		return BbHelper::lightLinkThumbnail('foto', $this->foto->getAlbumUrl() . '#' . $this->foto->getResizedUrl(), getCsrRoot() . $this->foto->getThumbUrl());
 	}
 
-	public function render() {
+	public function render()
+	{
 		$url = $this->fotoUrl;
 		$parts = explode('/', $url);
 		$fototag = new FotoBBView($this->foto, in_array('Posters', $parts), $this->responsive);
@@ -64,7 +70,8 @@ class BbFoto extends BbTag {
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []) {
+	public function parse($arguments = [])
+	{
 		$this->responsive = isset($arguments['responsive']);
 		$this->fotoUrl = $this->readMainArgument($arguments);
 		$this->foto = $this->getFoto(explode('/', $this->fotoUrl), $this->fotoUrl);
@@ -76,7 +83,8 @@ class BbFoto extends BbTag {
 	 * @return Foto
 	 * @throws BbException
 	 */
-	private function getFoto(array $parts, string $url): Foto {
+	private function getFoto(array $parts, string $url): Foto
+	{
 		$filename = str_replace('#', '', array_pop($parts)); // replace # (foolproof)
 		$path = implode('/', $parts);
 		$path = str_replace('fotoalbum/', '', $path);

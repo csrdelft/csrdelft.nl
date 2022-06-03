@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\peilingen;
+
 use CsrDelft\entity\peilingen\PeilingOptie;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;

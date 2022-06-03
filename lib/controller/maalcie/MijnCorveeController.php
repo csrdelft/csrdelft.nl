@@ -16,7 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MijnCorveeController extends AbstractController {
+class MijnCorveeController extends AbstractController
+{
 	/**
 	 * @var CorveeTakenRepository
 	 */
@@ -34,7 +35,8 @@ class MijnCorveeController extends AbstractController {
 	 */
 	private $corveePuntenService;
 
-	public function __construct(CorveeTakenRepository $corveeTakenRepository, CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeFunctiesRepository $corveeFunctiesRepository, CorveePuntenService $corveePuntenService) {
+	public function __construct(CorveeTakenRepository $corveeTakenRepository, CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeFunctiesRepository $corveeFunctiesRepository, CorveePuntenService $corveePuntenService)
+	{
 		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
 		$this->corveeFunctiesRepository = $corveeFunctiesRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
@@ -46,7 +48,8 @@ class MijnCorveeController extends AbstractController {
 	 * @Route("/corvee", methods={"GET"})
 	 * @Auth(P_CORVEE_IK)
 	 */
-	public function mijn() {
+	public function mijn()
+	{
 		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($this->getProfiel());
 		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
@@ -65,7 +68,8 @@ class MijnCorveeController extends AbstractController {
 	 * @Route("/corvee/rooster", methods={"GET"})
 	 * @Auth(P_CORVEE_IK)
 	 */
-	public function rooster() {
+	public function rooster()
+	{
 		$taken = $this->corveeTakenRepository->getKomendeTaken();
 		$toonverleden = LoginService::mag(P_CORVEE_MOD);
 		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
@@ -77,7 +81,8 @@ class MijnCorveeController extends AbstractController {
 	 * @Route("/corvee/rooster/verleden", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function roosterVerleden() {
+	public function roosterVerleden()
+	{
 		$taken = $this->corveeTakenRepository->getVerledenTaken();
 		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
 		return $this->render('maaltijden/corveetaak/corvee_rooster.html.twig', ['rooster' => $rooster, 'toonverleden' => false]);

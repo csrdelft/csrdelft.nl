@@ -34,7 +34,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * BibliotheekController.class.php  |  Gerrit Uitslag (klapinklapin@gmail.com)
  *
  */
-class BibliotheekController extends AbstractController {
+class BibliotheekController extends AbstractController
+{
 	/**
 	 * @var BoekExemplaarRepository
 	 */
@@ -62,12 +63,13 @@ class BibliotheekController extends AbstractController {
 
 	public function __construct(
 		BoekExemplaarRepository $boekExemplaarRepository,
-		BoekRepository $boekRepository,
-		BoekRecensieRepository $boekRecensieRepository,
-		BiebRubriekRepository $biebRubriekRepository,
-		BiebAuteurRepository $biebAuteurRepository,
-		CmsPaginaRepository $cmsPaginaRepository
-	) {
+		BoekRepository          $boekRepository,
+		BoekRecensieRepository  $boekRecensieRepository,
+		BiebRubriekRepository   $biebRubriekRepository,
+		BiebAuteurRepository    $biebAuteurRepository,
+		CmsPaginaRepository     $cmsPaginaRepository
+	)
+	{
 		$this->boekExemplaarRepository = $boekExemplaarRepository;
 		$this->boekRepository = $boekRepository;
 		$this->boekRecensieRepository = $boekRecensieRepository;
@@ -248,7 +250,8 @@ class BibliotheekController extends AbstractController {
 	 * @Route("/bibliotheek/verwijderbeschrijving/{boek}/{profiel}", methods={"POST"}, requirements={"boek": "\d+", "profiel": ".{4}"})
 	 * @Auth(P_BIEB_READ)
 	 */
-	public function verwijderbeschrijving(Boek $boek, Profiel $profiel) {
+	public function verwijderbeschrijving(Boek $boek, Profiel $profiel)
+	{
 		$recensie = $this->boekRecensieRepository->get($boek, $profiel);
 		if (!$recensie->magVerwijderen()) {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);

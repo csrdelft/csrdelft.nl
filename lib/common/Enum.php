@@ -19,7 +19,8 @@ use ReflectionClass;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 2020-08-16
  */
-abstract class Enum {
+abstract class Enum
+{
 	/**
 	 * @var string[]
 	 */
@@ -33,19 +34,22 @@ abstract class Enum {
 	 * Enum constructor.
 	 * @param $value
 	 */
-	private function __construct($value) {
+	private function __construct($value)
+	{
 		if (!static::isValidValue($value)) {
 			throw new InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
 		}
 		$this->value = $value;
 	}
 
-	public static function isValidValue($value) {
+	public static function isValidValue($value)
+	{
 		$values = array_values(self::getConstants());
 		return in_array($value, $values, $strict = true);
 	}
 
-	private static function getConstants() {
+	private static function getConstants()
+	{
 		if (self::$constCacheArray == NULL) {
 			self::$constCacheArray = [];
 		}
@@ -56,11 +60,13 @@ abstract class Enum {
 		return self::$constCacheArray[static::class];
 	}
 
-	public static function getEnumValues() {
+	public static function getEnumValues()
+	{
 		return array_values(self::getConstants());
 	}
 
-	public static function getEnumDescriptions() {
+	public static function getEnumDescriptions()
+	{
 		return static::$mapChoiceToDescription;
 	}
 
@@ -75,7 +81,8 @@ abstract class Enum {
 	 * @psalm-pure
 	 * @throws \BadMethodCallException
 	 */
-	public static function __callStatic($name, $arguments) {
+	public static function __callStatic($name, $arguments)
+	{
 		if (str_starts_with($name, 'is') && count($arguments) == 1) {
 			$enumName = substr($name, 2);
 
@@ -92,7 +99,8 @@ abstract class Enum {
 		throw new \BadMethodCallException("Enum " . static::class . '::' . $name . ' bestaat niet.');
 	}
 
-	public function __call($name, $arguments) {
+	public function __call($name, $arguments)
+	{
 		if (str_starts_with($name, 'is')) {
 			$enumName = substr($name, 2);
 
@@ -108,7 +116,8 @@ abstract class Enum {
 	 * @param $value
 	 * @return static
 	 */
-	public static function from($value) {
+	public static function from($value)
+	{
 		if (!static::isValidValue($value)) {
 			throw new InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
 		}
@@ -124,18 +133,21 @@ abstract class Enum {
 		return self::$instanceCacheArray[static::class][$value];
 	}
 
-	public function getValue() {
+	public function getValue()
+	{
 		return $this->value;
 	}
 
-	public function getDescription() {
+	public function getDescription()
+	{
 		return static::$mapChoiceToDescription[$this->value];
 	}
 
 	/**
 	 * @return Enum[]
 	 */
-	public static function all() {
+	public static function all()
+	{
 		return array_map(["static", "from"], static::getEnumValues());
 	}
 }

@@ -21,23 +21,28 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * @method SavedQuery[]    findAll()
  * @method SavedQuery[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SavedQueryRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+class SavedQueryRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, SavedQuery::class);
 	}
 
-	public function get($id) {
+	public function get($id)
+	{
 		return $this->find($id);
 	}
 
 	/**
 	 * @return SavedQuery[]
 	 */
-	public function getQueries() {
+	public function getQueries()
+	{
 		return $this->findBy([], ['categorie' => 'ASC']);
 	}
 
-	public function loadQuery($queryId) {
+	public function loadQuery($queryId)
+	{
 		$query = $this->find($queryId);
 
 		if (!$query || !$query->magBekijken()) {

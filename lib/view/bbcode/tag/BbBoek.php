@@ -18,7 +18,8 @@ use Twig\Environment;
  * @example [boek]123[/boek]
  * @example [boek=123]
  */
-class BbBoek extends BbTag {
+class BbBoek extends BbTag
+{
 	/**
 	 * @var BoekRepository
 	 */
@@ -32,20 +33,24 @@ class BbBoek extends BbTag {
 	 */
 	private $id;
 
-	public function __construct(BoekRepository $boekRepository, Environment $twig) {
+	public function __construct(BoekRepository $boekRepository, Environment $twig)
+	{
 		$this->boekRepository = $boekRepository;
 		$this->twig = $twig;
 	}
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'boek';
 	}
+
 	public function isAllowed()
 	{
 		return LoginService::mag(P_BIEB_READ);
 	}
 
-	public function renderLight() {
+	public function renderLight()
+	{
 		try {
 			$boek = $this->boekRepository->find($this->id);
 			return BbHelper::lightLinkBlock('boek', $boek->getUrl(), $boek->titel, 'Auteur: ' . $boek->auteur);
@@ -54,7 +59,8 @@ class BbBoek extends BbTag {
 		}
 	}
 
-	public function render() {
+	public function render()
+	{
 		if (!mag("P_BIEB_READ")) return null;
 
 		try {

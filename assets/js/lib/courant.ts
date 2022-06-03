@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {Node} from 'prosemirror-model'
+import { Node } from 'prosemirror-model';
 
 export function importAgenda(): void {
 	$.ajax({
@@ -11,14 +11,14 @@ export function importAgenda(): void {
 		const editor = window.currentEditor;
 		const node = Node.fromJSON(editor.state.schema, data[0]);
 
-		editor.dispatch(editor.state.tr.replaceSelectionWith(node))
+		editor.dispatch(editor.state.tr.replaceSelectionWith(node));
 	});
 }
 
 export function importSponsor(bb: string): void {
-	const editor = window.currentEditor
+	const editor = window.currentEditor;
 
-	const node = editor.state.schema.nodes.bb.create({bb})
+	const node = editor.state.schema.nodes.bb.create({ bb });
 
-	editor.dispatch(editor.state.tr.replaceSelectionWith(node))
+	editor.dispatch(editor.state.tr.replaceSelectionWith(node));
 }

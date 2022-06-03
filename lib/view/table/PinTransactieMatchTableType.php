@@ -15,17 +15,20 @@ use CsrDelft\view\datatable\Multiplicity;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class PinTransactieMatchTableType extends AbstractDataTableType {
+class PinTransactieMatchTableType extends AbstractDataTableType
+{
 	/**
 	 * @var UrlGeneratorInterface
 	 */
 	private $urlGenerator;
 
-	public function __construct(UrlGeneratorInterface $urlGenerator) {
+	public function __construct(UrlGeneratorInterface $urlGenerator)
+	{
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function createDataTable(DataTableBuilder $builder, array $options): void {
+	public function createDataTable(DataTableBuilder $builder, array $options): void
+	{
 		$builder->setDataUrl($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'metFout']));
 		$builder->setTitel('Overzicht van pintransacties matches');
 
@@ -36,7 +39,7 @@ class PinTransactieMatchTableType extends AbstractDataTableType {
 		$weergave->addKnop(new SourceChangeDataTableKnop($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'alles']), 'Alles', 'Alles weergeven', 'cart'));
 		$builder->addKnop($weergave);
 
-		$builder->addKnop(new DataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_verwerk'),  'Verwerk', 'Dit probleem verwerken', 'cart_edit'));
+		$builder->addKnop(new DataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_verwerk'), 'Verwerk', 'Dit probleem verwerken', 'cart_edit'));
 		$builder->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_ontkoppel'), 'Ontkoppel', 'Ontkoppel bestelling en transactie', 'arrow_divide'));
 		$builder->addKnop(new DataTableKnop(Multiplicity::Two(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_koppel'), 'Koppel', 'Koppel een bestelling en transactie', 'arrow_join'));
 		$builder->addKnop(new DataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_info'), 'Info', 'Bekijk informatie over de gekoppelde bestelling', 'magnifier'));

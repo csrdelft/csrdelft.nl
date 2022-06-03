@@ -8,16 +8,20 @@ use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class LichtingenRepository extends GroepRepository {
-	public function __construct(ManagerRegistry $registry) {
+class LichtingenRepository extends GroepRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Lichting::class);
 	}
 
-	public function get($lidjaar) {
+	public function get($lidjaar)
+	{
 		return $this->nieuw($lidjaar);
 	}
 
-	public function nieuw($lidjaar = null) {
+	public function nieuw($lidjaar = null)
+	{
 		if ($lidjaar === null) {
 			$lidjaar = date('Y');
 		}
@@ -31,7 +35,8 @@ class LichtingenRepository extends GroepRepository {
 		return $lichting;
 	}
 
-	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {
+	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+	{
 		$jongste = static::getJongsteLidjaar();
 		$oudste = static::getOudsteLidjaar();
 		$lichtingen = [];
@@ -41,7 +46,8 @@ class LichtingenRepository extends GroepRepository {
 		return $lichtingen;
 	}
 
-	public static function getHuidigeJaargang() {
+	public static function getHuidigeJaargang()
+	{
 		$jaar = (int)date('Y');
 		$maand = (int)date('m');
 		if ($maand < 8) {
@@ -50,14 +56,16 @@ class LichtingenRepository extends GroepRepository {
 		return $jaar . '-' . ($jaar + 1);
 	}
 
-	public static function getJongsteLidjaar() {
+	public static function getJongsteLidjaar()
+	{
 		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
 		return (int)$profielRepository->createQueryBuilder('p')
 			->select('MAX(p.lidjaar)')
 			->getQuery()->getSingleScalarResult();
 	}
 
-	public static function getOudsteLidjaar() {
+	public static function getOudsteLidjaar()
+	{
 		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
 
 		return (int)$profielRepository->createQueryBuilder('p')

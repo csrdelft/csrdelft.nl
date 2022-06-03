@@ -8,18 +8,22 @@ use CsrDelft\bb\BbTag;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 27/03/2019
  */
-class BbVerklapper extends BbTag {
+class BbVerklapper extends BbTag
+{
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return ['spoiler', 'verklapper'];
 	}
 
-	public function renderLight() {
+	public function renderLight()
+	{
 		$content = str_replace('[br]', '<br />', $this->getContent());
 		return '<a class="bb-tag-spoiler" href="#/verklapper/' . urlencode($content) . '">Toon verklapper</a>';
 	}
 
-	public function render() {
+	public function render()
+	{
 		$id = uniqid_safe('verklapper_');
 
 		return <<<HTML

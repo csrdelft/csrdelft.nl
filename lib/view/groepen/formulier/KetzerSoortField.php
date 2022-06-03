@@ -10,7 +10,8 @@ use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\KetzersRepository;
 use CsrDelft\repository\GroepRepository;
 
-class KetzerSoortField extends GroepSoortField {
+class KetzerSoortField extends GroepSoortField
+{
 
 	public $columns = 2;
 
@@ -19,7 +20,8 @@ class KetzerSoortField extends GroepSoortField {
 		$value,
 		$description,
 		Groep $groep
-	) {
+	)
+	{
 		parent::__construct($name, $value, $description, $groep);
 
 		$this->options = array();
@@ -35,7 +37,8 @@ class KetzerSoortField extends GroepSoortField {
 	 * Pretty ugly
 	 * @return boolean
 	 */
-	public function validate() {
+	public function validate()
+	{
 		$class = explode('_', $this->value, 2);
 
 		if ($class[0] === ActiviteitenRepository::class) {

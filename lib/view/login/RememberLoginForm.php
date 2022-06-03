@@ -9,9 +9,11 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
-class RememberLoginForm extends ModalForm {
+class RememberLoginForm extends ModalForm
+{
 
-	public function __construct(RememberLogin $remember) {
+	public function __construct(RememberLogin $remember)
+	{
 		parent::__construct($remember, '/session/remember', 'Automatisch inloggen vanaf huidig apparaat', true);
 
 		$fields = [];

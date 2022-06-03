@@ -20,8 +20,10 @@ use stdClass;
  * @method MaaltijdBeoordeling[]    findAll()
  * @method MaaltijdBeoordeling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MaaltijdBeoordelingenRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+class MaaltijdBeoordelingenRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, MaaltijdBeoordeling::class);
 	}
 
@@ -31,7 +33,8 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function nieuw(Maaltijd $maaltijd) {
+	public function nieuw(Maaltijd $maaltijd)
+	{
 		$b = new MaaltijdBeoordeling();
 		$b->maaltijd_id = $maaltijd->maaltijd_id;
 		$b->uid = LoginService::getUid();
@@ -42,7 +45,8 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 		return $b;
 	}
 
-	public function getBeoordelingSamenvatting(Maaltijd $maaltijd) {
+	public function getBeoordelingSamenvatting(Maaltijd $maaltijd)
+	{
 		// Haal beoordelingen voor deze maaltijd op
 		$beoordelingen = $this->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 
@@ -91,7 +95,8 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 		return $beoordeling;
 	}
 
-	private function getalWeergave($number, $placeholder, $precision, $showPlus = false) {
+	private function getalWeergave($number, $placeholder, $precision, $showPlus = false)
+	{
 		if ($number === null) {
 			return $placeholder;
 		} else {
@@ -105,7 +110,8 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function update(MaaltijdBeoordeling $maaltijdBeoordeling) {
+	public function update(MaaltijdBeoordeling $maaltijdBeoordeling)
+	{
 		$this->_em->persist($maaltijdBeoordeling);
 		$this->_em->flush();
 	}

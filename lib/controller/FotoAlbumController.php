@@ -36,7 +36,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Controller van het fotoalbum.
  */
-class FotoAlbumController extends AbstractController {
+class FotoAlbumController extends AbstractController
+{
 	/**
 	 * @var FotoAlbumRepository
 	 */
@@ -51,10 +52,11 @@ class FotoAlbumController extends AbstractController {
 	private $fotoRepository;
 
 	public function __construct(
-		FotoTagsRepository $fotoTagsRepository,
+		FotoTagsRepository  $fotoTagsRepository,
 		FotoAlbumRepository $fotoAlbumRepository,
-		FotoRepository $fotoRepository
-	) {
+		FotoRepository      $fotoRepository
+	)
+	{
 		$this->fotoTagsRepository = $fotoTagsRepository;
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
 		$this->fotoRepository = $fotoRepository;
@@ -66,7 +68,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/verwerken/{dir}", methods={"GET"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_MOD,P_ALBUM_PUBLIC_MOD})
 	 */
-	public function verwerken($dir) {
+	public function verwerken($dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
@@ -89,7 +92,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/toevoegen/{dir}", methods={"POST"}, requirements={"dir": ".+"}, defaults={"dir": ""})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function toevoegen(Request $request, $dir) {
+	public function toevoegen(Request $request, $dir)
+	{
 		$album = new FotoAlbum($dir);
 		if (!$album->magToevoegen()) {
 			throw $this->createAccessDeniedException();
@@ -114,7 +118,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/uploaden/{dir}", methods={"GET","POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function uploaden(Request $request, $dir) {
+	public function uploaden(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
@@ -177,7 +182,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/bestaande/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function bestaande($dir) {
+	public function bestaande($dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
@@ -206,7 +212,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/downloaden/{dir}", methods={"GET"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_DOWN,P_ALBUM_PUBLIC_READ})
 	 */
-	public function downloaden($dir) {
+	public function downloaden($dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magDownloaden()) {
@@ -239,7 +246,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/hernoemen/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_MOD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function hernoemen(Request $request, $dir) {
+	public function hernoemen(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
@@ -263,7 +271,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/albumcover/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function albumcover(Request $request, $dir) {
+	public function albumcover(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
@@ -285,7 +294,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/verwijderen/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function verwijderen(Request $request, $dir) {
+	public function verwijderen(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magVerwijderen()) {
@@ -321,7 +331,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/roteren/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function roteren(Request $request, $dir) {
+	public function roteren(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
@@ -341,7 +352,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/zoeken", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function zoeken(Request $request, $zoekterm = null) {
+	public function zoeken(Request $request, $zoekterm = null)
+	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
 		}
@@ -371,7 +383,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/gettags/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function gettags(Request $request, $dir) {
+	public function gettags(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		$filename = $request->request->get('foto');
@@ -391,7 +404,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/addtag/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function addtag(Request $request, $dir) {
+	public function addtag(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
@@ -423,7 +437,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/removetag", methods={"POST"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function removetag(Request $request) {
+	public function removetag(Request $request)
+	{
 		$refuuid = $request->request->get('refuuid');
 		$keyword = $request->request->get('keyword');
 		if (!LoginService::mag(P_ALBUM_MOD) && !LoginService::mag($keyword)) {
@@ -441,7 +456,8 @@ class FotoAlbumController extends AbstractController {
 		}
 	}
 
-	private function assertValidFotoPath($dir, $foto) {
+	private function assertValidFotoPath($dir, $foto)
+	{
 		if (!preg_match("/\.(JPE?G|PNG|jpe?g|png)/", $foto)) {
 			throw $this->createNotFoundException();
 		}
@@ -458,7 +474,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/{dir}/_resized/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+"})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function raw_image_resized(Request $request, string $dir, string $foto) {
+	public function raw_image_resized(Request $request, string $dir, string $foto)
+	{
 		$this->assertValidFotoPath($dir, $foto);
 
 		$image = new Foto($foto, new FotoAlbum($dir), true);
@@ -487,7 +504,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/{dir}/_thumbs/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+"})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function raw_image_thumb(Request $request, string $dir, string $foto) {
+	public function raw_image_thumb(Request $request, string $dir, string $foto)
+	{
 		$this->assertValidFotoPath($dir, $foto);
 
 		$image = new Foto($foto, new FotoAlbum($dir), true);
@@ -516,7 +534,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/{dir}/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+\.(JPE?G|PNG|jpe?g|png)"})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function raw_image(Request $request, string $dir, string $foto) {
+	public function raw_image(Request $request, string $dir, string $foto)
+	{
 		$this->assertValidFotoPath($dir, $foto);
 
 		$image = new Foto($foto, new FotoAlbum($dir), true);
@@ -541,7 +560,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/{dir}", methods={"GET"}, requirements={"dir": ".+"}, defaults={"dir": ""})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function bekijken($dir) {
+	public function bekijken($dir)
+	{
 		if ($dir == "" && !LoginService::mag(P_ALBUM_READ)) {
 			$dir = 'Publiek';
 		}

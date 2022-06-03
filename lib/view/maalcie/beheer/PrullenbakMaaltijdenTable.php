@@ -12,8 +12,10 @@ use CsrDelft\view\datatable\knoppen\PopupDataTableKnop;
 use CsrDelft\view\datatable\knoppen\UrlDataTableKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
-class PrullenbakMaaltijdenTable extends DataTable {
-	public function __construct() {
+class PrullenbakMaaltijdenTable extends DataTable
+{
+	public function __construct()
+	{
 		parent::__construct(Maaltijd::class, '/maaltijden/beheer/prullenbak');
 
 		$this->hideColumn('verwijderd');
@@ -33,7 +35,8 @@ class PrullenbakMaaltijdenTable extends DataTable {
 		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/maaltijden/beheer/verwijder', 'Verwijderen', 'Maaltijd definitief verwijderen', 'cross'));
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return "Maaltijden / Beheer / Prullenbak";
 	}
 }

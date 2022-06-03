@@ -5,7 +5,7 @@ import '../../scss/effect/onontdekt.scss';
 const overlay = document.getElementById('onontdekt-overlay');
 
 if (!overlay) {
-	throw new Error("Overlay niet gevonden")
+	throw new Error('Overlay niet gevonden');
 }
 
 new Parallax(overlay, {

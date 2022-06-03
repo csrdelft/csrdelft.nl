@@ -12,7 +12,8 @@ use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInt
 use Symfony\Component\Security\Core\Authentication\RememberMe\TokenProviderInterface;
 use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
 
-class PersistentTokenProvider implements TokenProviderInterface {
+class PersistentTokenProvider implements TokenProviderInterface
+{
 	/**
 	 * @var EntityManagerInterface
 	 */
@@ -26,13 +27,15 @@ class PersistentTokenProvider implements TokenProviderInterface {
 	 */
 	private $profielRepository;
 
-	public function __construct(EntityManagerInterface $entityManager, RememberLoginRepository $rememberLoginRepository, ProfielRepository $profielRepository) {
+	public function __construct(EntityManagerInterface $entityManager, RememberLoginRepository $rememberLoginRepository, ProfielRepository $profielRepository)
+	{
 		$this->entityManager = $entityManager;
 		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->profielRepository = $profielRepository;
 	}
 
-	public function loadTokenBySeries(string $series) {
+	public function loadTokenBySeries(string $series)
+	{
 		$token = $this->rememberLoginRepository->findOneBy(['series' => $series]);
 
 		if (!$token) {
@@ -42,7 +45,8 @@ class PersistentTokenProvider implements TokenProviderInterface {
 		return $token;
 	}
 
-	public function deleteTokenBySeries(string $series) {
+	public function deleteTokenBySeries(string $series)
+	{
 		$token = $this->loadTokenBySeries($series);
 		if ($token) {
 			$this->entityManager->remove($token);
@@ -50,7 +54,8 @@ class PersistentTokenProvider implements TokenProviderInterface {
 		}
 	}
 
-	public function updateToken(string $series, string $tokenValue, \DateTime $lastUsed) {
+	public function updateToken(string $series, string $tokenValue, \DateTime $lastUsed)
+	{
 		$token = $this->loadTokenBySeries($series);
 		$token->token = $tokenValue;
 		$token->last_used = $lastUsed;
@@ -58,7 +63,8 @@ class PersistentTokenProvider implements TokenProviderInterface {
 		$this->entityManager->flush();
 	}
 
-	public function createNewToken(PersistentTokenInterface $token) {
+	public function createNewToken(PersistentTokenInterface $token)
+	{
 		$persistentToken = new RememberLogin();
 		$persistentToken->token = $token->getTokenValue();
 		$persistentToken->series = $token->getSeries();

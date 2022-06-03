@@ -7,9 +7,11 @@ namespace CsrDelft\view\formulier\invoervelden;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class EmailField extends TextField {
+class EmailField extends TextField
+{
 
-	public function validate() {
+	public function validate()
+	{
 		if (!parent::validate()) {
 			return false;
 		}
@@ -23,7 +25,7 @@ class EmailField extends TextField {
 		} // check dns record
 		else {
 			$parts = explode('@', $this->value, 2);
-			if (!checkdnsrr($parts[1], 'A') AND !checkdnsrr($parts[1], 'MX')) {
+			if (!checkdnsrr($parts[1], 'A') and !checkdnsrr($parts[1], 'MX')) {
 				$this->error = 'E-mailadres bestaat niet';
 			}
 		}
@@ -35,7 +37,8 @@ class EmailField extends TextField {
 	 *
 	 * @return string
 	 */
-	public function getValue() {
+	public function getValue()
+	{
 		return trim(parent::getValue());
 	}
 }

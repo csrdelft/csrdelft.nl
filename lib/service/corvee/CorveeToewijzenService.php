@@ -14,7 +14,8 @@ use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
  * CorveeToewijzenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
  *
  */
-class CorveeToewijzenService {
+class CorveeToewijzenService
+{
 	/**
 	 * @var CorveePuntenService
 	 */
@@ -24,7 +25,8 @@ class CorveeToewijzenService {
 	 */
 	private $corveeVrijstellingenRepository;
 
-	public function __construct(CorveeVrijstellingenRepository $corveeVrijstellingenModel, CorveePuntenService $corveePuntenService) {
+	public function __construct(CorveeVrijstellingenRepository $corveeVrijstellingenModel, CorveePuntenService $corveePuntenService)
+	{
 		$this->corveePuntenService = $corveePuntenService;
 		$this->corveeVrijstellingenRepository = $corveeVrijstellingenModel;
 	}
@@ -38,7 +40,8 @@ class CorveeToewijzenService {
 	 * @return array
 	 * @throws CsrGebruikerException
 	 */
-	public function getSuggesties(CorveeTaak $taak) {
+	public function getSuggesties(CorveeTaak $taak)
+	{
 		$vrijstellingen = $this->corveeVrijstellingenRepository->getAlleVrijstellingen(true); // grouped by uid
 		$functie = $taak->corveeFunctie;
 		if ($functie->kwalificatie_benodigd) { // laad alleen gekwalificeerde leden
@@ -109,7 +112,8 @@ class CorveeToewijzenService {
 	 * @param CorveePuntenOverzichtDTO $b
 	 * @return int
 	 */
-	public function sorteerKwali(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b) {
+	public function sorteerKwali(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b)
+	{
 		if (!$a->laatste && !$b->laatste) {
 			$a = $a->aantal;
 			$b = $b->aantal;
@@ -130,7 +134,8 @@ class CorveeToewijzenService {
 		}
 	}
 
-	public function sorteerPrognose(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b) {
+	public function sorteerPrognose(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b)
+	{
 		$a = $a->prognose;
 		$b = $b->prognose;
 		if ($a === $b) {

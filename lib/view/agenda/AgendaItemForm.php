@@ -14,13 +14,15 @@ use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormulierKnop;
 
-class AgendaItemForm implements FormulierTypeInterface {
+class AgendaItemForm implements FormulierTypeInterface
+{
 	/**
 	 * @param FormulierBuilder $builder
 	 * @param AgendaItem $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
+	{
 		$builder->setAction('/agenda/' . $options['actie'] . ($data->item_id ? '/' . $data->item_id : ''));
 		$builder->setTitel('Agenda-item ' . $options['actie']);
 		if ($options['actie'] === 'bewerken') {
@@ -63,7 +65,7 @@ class AgendaItemForm implements FormulierTypeInterface {
 
 		$builder->setFormKnoppen($formKnoppen);
 
-		$builder->addValidationMethod(function($fields) {
+		$builder->addValidationMethod(function ($fields) {
 			if ($fields['eind_moment']->getValue() !== null && $fields['eind_moment']->getValue() < $fields['begin_moment']->getValue()) {
 				$fields['eind_moment']->error = 'Eindmoment moet na beginmoment liggen';
 

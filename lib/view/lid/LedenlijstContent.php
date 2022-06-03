@@ -22,7 +22,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * LedenlijstContent
  *    Algemene View voor de ledenlijst.
  */
-class LedenlijstContent implements View {
+class LedenlijstContent implements View
+{
 	use ToHtmlResponse;
 
 	/**
@@ -35,25 +36,30 @@ class LedenlijstContent implements View {
 	 */
 	private $requestStack;
 
-	public function __construct(Request $requestStack, LidZoekerService $zoeker) {
+	public function __construct(Request $requestStack, LidZoekerService $zoeker)
+	{
 		$this->lidzoeker = $zoeker;
 		$this->requestStack = $requestStack;
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->lidzoeker;
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
 			. '<li class="breadcrumb-item active">Ledenlijst der Civitas</li></ul>';
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return 'Ledenlijst der Civitas';
 	}
 
-	public function viewSelect($name, $options) {
+	public function viewSelect($name, $options)
+	{
 		$html = '';
 		$html .= '<select class="form-select" name="' . $name . '" id="f' . $name . '">';
 		foreach ($options as $key => $value) {
@@ -67,7 +73,8 @@ class LedenlijstContent implements View {
 		return $html;
 	}
 
-	public function viewVeldselectie() {
+	public function viewVeldselectie()
+	{
 		$html = '';
 		$html .= '<div class="mb-3">';
 		$html .= '<label for="veldselectie">Veldselectie: </label>';
@@ -88,7 +95,8 @@ class LedenlijstContent implements View {
 		return $html;
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		$html = '';
 		$requestUri = $this->requestStack->getRequestUri();
 		if ($this->lidzoeker->count() > 0) {

@@ -2,11 +2,11 @@
  * Wordt geladen als de pagina geladen is.
  */
 import axios from 'axios';
-import {registerBbContext, registerFormulierContext} from '../context';
-import {init} from '../ctx';
-import {route} from '../lib/util';
-import {select} from "../lib/dom";
-import {lazyLoad} from "../lib/lazy-load";
+import { registerBbContext, registerFormulierContext } from '../context';
+import { init } from '../ctx';
+import { route } from '../lib/util';
+import { select } from '../lib/dom';
+import { lazyLoad } from '../lib/lazy-load';
 
 require('fslightbox');
 
@@ -29,7 +29,7 @@ declare global {
 	}
 }
 
-lazyLoad(".lazy-load")
+lazyLoad('.lazy-load');
 
 try {
 	const header = select('#header');
@@ -47,9 +47,9 @@ try {
 }
 
 try {
-	const contactForm = select<HTMLFormElement>('#contact-form')
+	const contactForm = select<HTMLFormElement>('#contact-form');
 
-	const errorContainer = select('#melding')
+	const errorContainer = select('#melding');
 	const submitButton = contactForm.submitButton as HTMLButtonElement;
 
 	contactForm.addEventListener('submit', async (event) => {
@@ -59,17 +59,15 @@ try {
 		const formData = new FormData(contactForm);
 
 		try {
-			const response = await axios.post('/contactformulier/interesse', formData)
+			const response = await axios.post('/contactformulier/interesse', formData);
 			contactForm.reset();
 			submitButton.disabled = false;
-			errorContainer.innerHTML = '<div class="alert alert-success">' +
-				'<span class="ico accept"></span>' + response.data +
-				'</div>';
+			errorContainer.innerHTML =
+				'<div class="alert alert-success">' + '<span class="ico accept"></span>' + response.data + '</div>';
 		} catch (error) {
 			submitButton.disabled = false;
-			errorContainer.innerHTML = '<div class="alert alert-danger">' +
-				'<span class="ico exclamation"></span>' + error.response.data +
-				'</div>';
+			errorContainer.innerHTML =
+				'<div class="alert alert-danger">' + '<span class="ico exclamation"></span>' + error.response.data + '</div>';
 		}
 
 		return false;
@@ -80,48 +78,48 @@ try {
 
 try {
 	const refreshInterval = 2500;
-	const remoteLoginCode = select<HTMLFormElement>('.remote-login-code')
+	const remoteLoginCode = select<HTMLFormElement>('.remote-login-code');
 
 	interface RemoteLogin {
-		expires: string
-		status: string
-		uuid: string
+		expires: string;
+		status: string;
+		uuid: string;
 	}
 
 	const updateStatus = async () => {
-		const response = await fetch('/remote-login-status', {method: 'POST'});
-		const remoteLogin = await response.json() as RemoteLogin;
+		const response = await fetch('/remote-login-status', { method: 'POST' });
+		const remoteLogin = (await response.json()) as RemoteLogin;
 
 		const expires = new Date(remoteLogin.expires);
 
 		// Ververs de qr code als rejected of verloop is bijna
-		if (remoteLogin.status == 'rejected' || +expires - +new Date < 10_000) {
-			remoteLoginCode.classList.remove('active')
-			remoteLoginCode.classList.add('loading')
+		if (remoteLogin.status == 'rejected' || +expires - +new Date() < 10_000) {
+			remoteLoginCode.classList.remove('active');
+			remoteLoginCode.classList.add('loading');
 
-			const refreshResponse = await fetch('/remote-login-refresh', {method: 'POST'})
-			const refresh = await refreshResponse.json() as RemoteLogin
+			const refreshResponse = await fetch('/remote-login-refresh', { method: 'POST' });
+			const refresh = (await refreshResponse.json()) as RemoteLogin;
 
-			const qrImage = remoteLoginCode.querySelector('img')
-			qrImage.onload = () => remoteLoginCode.classList.remove('loading')
-			qrImage.src = '/remote-login-qr?uuid=' + refresh.uuid
+			const qrImage = remoteLoginCode.querySelector('img');
+			qrImage.onload = () => remoteLoginCode.classList.remove('loading');
+			qrImage.src = '/remote-login-qr?uuid=' + refresh.uuid;
 
 			// Link bestaat alleen in dev
-			const link = remoteLoginCode.querySelector('a')
-			if (link) link.href = '/rla/' + refresh.uuid
+			const link = remoteLoginCode.querySelector('a');
+			if (link) link.href = '/rla/' + refresh.uuid;
 
-			setTimeout(updateStatus, refreshInterval)
-			return
+			setTimeout(updateStatus, refreshInterval);
+			return;
 		}
 
 		switch (remoteLogin.status) {
 			case 'pending':
 				remoteLoginCode.classList.remove('active');
-				setTimeout(updateStatus, refreshInterval)
+				setTimeout(updateStatus, refreshInterval);
 				break;
 			case 'active':
 				remoteLoginCode.classList.add('active');
-				setTimeout(updateStatus, refreshInterval)
+				setTimeout(updateStatus, refreshInterval);
 				break;
 			case 'accepted':
 				remoteLoginCode.classList.remove('active');
@@ -130,7 +128,7 @@ try {
 				remoteLoginCode.submit();
 				break;
 		}
-	}
+	};
 
 	updateStatus();
 } catch (e) {

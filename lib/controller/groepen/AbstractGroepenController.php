@@ -73,7 +73,8 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	/** @var GroepLidRepository */
 	private $groepLidRepository;
 
-	public function __construct(ManagerRegistry $registry, $groepType) {
+	public function __construct(ManagerRegistry $registry, $groepType)
+	{
 		$this->repository = $registry->getRepository($groepType);
 		$this->changeLogRepository = $registry->getRepository(ChangeLogEntry::class);
 		$this->groepLidRepository = $registry->getRepository(GroepLid::class);
@@ -567,8 +568,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			}
 			$data = $this->changeLogRepository->findBy(['subject' => $groep->getUUID()]);
 			return $this->tableData($data);
-		}
-		// popup request
+		} // popup request
 		else {
 			$groep = $this->repository->retrieveByUUID($id);
 			if (!$groep || !$groep->mag(AccessAction::Bekijken())) {

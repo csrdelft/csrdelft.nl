@@ -31,7 +31,8 @@ use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class ApiAuthenticator extends AbstractAuthenticator {
+class ApiAuthenticator extends AbstractAuthenticator
+{
 	/**
 	 * @var UserProviderInterface
 	 */
@@ -58,13 +59,14 @@ class ApiAuthenticator extends AbstractAuthenticator {
 	private $accountService;
 
 	public function __construct(
-		UserProviderInterface $userProvider,
+		UserProviderInterface   $userProvider,
 		PersistentTokenProvider $tokenProvider,
-		TokenStorageInterface $tokenStorage,
-		HttpUtils $httpUtils,
-		AccountService $accountService,
-		AccountRepository $accountRepository
-	) {
+		TokenStorageInterface   $tokenStorage,
+		HttpUtils               $httpUtils,
+		AccountService          $accountService,
+		AccountRepository       $accountRepository
+	)
+	{
 		$this->userProvider = $userProvider;
 		$this->tokenStorage = $tokenStorage;
 		$this->httpUtils = $httpUtils;
@@ -73,7 +75,8 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		$this->accountService = $accountService;
 	}
 
-	public function supports(Request $request): ?bool {
+	public function supports(Request $request): ?bool
+	{
 		if ($this->isAuthorizePath($request) || $this->isRefreshPath($request)) {
 			return true;
 		}
@@ -90,20 +93,23 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		return null;
 	}
 
-	private function isAuthorizePath(Request $request) {
+	private function isAuthorizePath(Request $request)
+	{
 		return $request->isMethod('POST')
 			&& $this->httpUtils->checkRequestPath($request, '/API/2.0/auth/authorize')
 			&& $request->request->has('user')
 			&& $request->request->has('pass');
 	}
 
-	private function isRefreshPath(Request $request) {
+	private function isRefreshPath(Request $request)
+	{
 		return $request->isMethod('POST')
 			&& $this->httpUtils->checkRequestPath($request, '/API/2.0/auth/token')
 			&& $request->request->has('refresh_token');
 	}
 
-	public function authenticate(Request $request): PassportInterface {
+	public function authenticate(Request $request): PassportInterface
+	{
 		if ($request->server->get('HTTP_X_CSR_AUTHORIZATION')) {
 			return $this->authenticateHeader($request);
 		}
@@ -119,7 +125,8 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		throw new LogicException("This request is not supported.");
 	}
 
-	private function authenticateHeader(Request $request) {
+	private function authenticateHeader(Request $request)
+	{
 		$authHeader = $request->server->get('HTTP_X_CSR_AUTHORIZATION');
 
 		$jwt = substr($authHeader, 7);
@@ -143,7 +150,8 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		return new SelfValidatingPassport($user);
 	}
 
-	private function authorizeRequest(Request $request) {
+	private function authorizeRequest(Request $request)
+	{
 		$credentials = [
 			'username' => $request->request->get('user'),
 			'password' => $request->request->get('pass'),
@@ -195,7 +203,8 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		return new Passport($user, new PasswordCredentials($credentials['password']), [new JwtTokenBadge($token, $refreshToken)]);
 	}
 
-	private function createJwtToken(string $userId): string {
+	private function createJwtToken(string $userId): string
+	{
 		// Generate new JWT
 		$tokenId = base64_encode(openssl_random_pseudo_bytes(32));
 		$issuedAt = time();
@@ -213,11 +222,13 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		return JWT::encode($data, $_ENV['JWT_SECRET'], 'HS512');
 	}
 
-	private function createRefreshToken(string $series, string $token) {
+	private function createRefreshToken(string $series, string $token)
+	{
 		return base64_encode(implode(':', [$series, $token]));
 	}
 
-	private function refreshRequest(Request $request) {
+	private function refreshRequest(Request $request)
+	{
 		// Filter posted data
 		$refresh_token = filter_var($request->request->get('refresh_token'), FILTER_SANITIZE_STRING);
 
@@ -236,11 +247,13 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		return new SelfValidatingPassport($user, [new JwtTokenBadge($token, null)]);
 	}
 
-	private function unpackRefreshToken(string $refreshToken) {
+	private function unpackRefreshToken(string $refreshToken)
+	{
 		return explode(':', base64_decode($refreshToken));
 	}
 
-	public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface {
+	public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
+	{
 		$jwtBadge = $passport->getBadge(JwtTokenBadge::class);
 		if ($passport instanceof UserPassportInterface && $jwtBadge instanceof JwtTokenBadge) {
 			return new JwtToken($passport->getUser(), $jwtBadge->getToken(), $jwtBadge->getRefreshToken(), $firewallName, $passport->getUser()->getRoles());
@@ -253,7 +266,8 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		throw new LogicException("Cannot create token for this passport");
 	}
 
-	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response {
+	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+	{
 		if ($token instanceof JwtToken) {
 			return new JsonResponse([
 				'token' => $token->getToken(),
@@ -265,7 +279,8 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		return null;
 	}
 
-	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response {
+	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+	{
 		return new Response("", 401);
 	}
 }

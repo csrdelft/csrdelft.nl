@@ -12,14 +12,16 @@ use CsrDelft\view\formulier\getalvelden\FloatField;
  *
  * Sterren
  */
-class SterrenField extends FloatField {
+class SterrenField extends FloatField
+{
 
 	public $click_submit = false;
 	public $reset;
 	public $half;
 	public $hints;
 
-	public function __construct($name, $value, $description, $max_stars = 5, $half = false, $reset = false) {
+	public function __construct($name, $value, $description, $max_stars = 5, $half = false, $reset = false)
+	{
 		parent::__construct($name, $value, $description, $half ? 1 : 0, 1, $max_stars);
 		$this->reset = $reset;
 		$this->half = $half;
@@ -27,7 +29,8 @@ class SterrenField extends FloatField {
 		$this->css_classes[] = 'SterrenField';
 	}
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		$attributes = $this->getInputAttribute(array('id', 'name', 'class'));
 		$config = htmlspecialchars(json_encode([
 			'scoreName' => $this->name,

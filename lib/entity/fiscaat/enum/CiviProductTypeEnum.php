@@ -10,7 +10,8 @@ use CsrDelft\common\Enum;
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 19/02/2018
  */
-class CiviProductTypeEnum extends Enum {
+class CiviProductTypeEnum extends Enum
+{
 	/**
 	 * CiviProductTypeEnum opties.
 	 */

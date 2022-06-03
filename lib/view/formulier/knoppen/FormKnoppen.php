@@ -15,35 +15,42 @@ use CsrDelft\view\formulier\FormElement;
  *    - DeleteKnop    invoer wordt verwijderd
  *
  */
-abstract class FormKnoppen implements FormElement {
+abstract class FormKnoppen implements FormElement
+{
 
 	private $knoppen_left = array();
 	private $knoppen_right = array();
 	public $css_classes = array();
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->css_classes[] = 'FormKnoppen';
 		$this->css_classes[] = 'clearfix';
 		$this->css_classes[] = $this->getType();
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return array_merge($this->knoppen_left, $this->knoppen_right);
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return null;
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return $this->getType();
 	}
 
-	public function getType() {
+	public function getType()
+	{
 		return classNameZonderNamespace(get_class($this));
 	}
 
-	public function addKnop(FormulierKnop $knop, $left = false, $prepend = false) {
+	public function addKnop(FormulierKnop $knop, $left = false, $prepend = false)
+	{
 		if ($left) {
 			if ($prepend) {
 				array_unshift($this->knoppen_left, $knop);
@@ -59,7 +66,8 @@ abstract class FormKnoppen implements FormElement {
 		}
 	}
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		$html = '<div class="' . implode(' ', $this->css_classes) . '">';
 		if (!empty($this->knoppen_left)) {
 			$html .= '<div class="float-start">';
@@ -79,11 +87,13 @@ abstract class FormKnoppen implements FormElement {
 		return $html . '</div>';
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		return $this->getHtml();
 	}
 
-	public function getJavascript() {
+	public function getJavascript()
+	{
 		$js = <<<JS
 
 /* {$this->getTitel()} */

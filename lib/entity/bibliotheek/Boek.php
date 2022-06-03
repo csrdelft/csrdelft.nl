@@ -12,7 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BoekRepository")
  * @ORM\Table("biebboek")
  */
-class Boek {
+class Boek
+{
 
 	/**
 	 * @var int
@@ -99,26 +100,31 @@ class Boek {
 	 */
 	protected $categorie;
 
-	public function getRubriek() {
+	public function getRubriek()
+	{
 		return $this->categorie;
 	}
 
-	public function setCategorie(BiebRubriek $biebRubriek) {
+	public function setCategorie(BiebRubriek $biebRubriek)
+	{
 		$this->categorie = $biebRubriek;
 	}
 
-	public function getStatus() {
+	public function getStatus()
+	{
 		return "";
 	}
 
-	public function getUrl() {
+	public function getUrl()
+	{
 		return '/bibliotheek/boek/' . $this->id;
 	}
 
 	/**
 	 * Iedereen met extra rechten en zij met BIEB_READ mogen
 	 */
-	public function magBekijken() {
+	public function magBekijken()
+	{
 		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
 	}
 
@@ -128,7 +134,8 @@ class Boek {
 	 * @return  bool
 	 *    boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
 	 */
-	public function magBewerken() {
+	public function magBewerken()
+	{
 		return LoginService::mag(P_BIEB_EDIT) || $this->isEigenaar() || $this->magVerwijderen();
 	}
 
@@ -143,7 +150,8 @@ class Boek {
 	 *      false
 	 *        geen geen resultaat of niet de eigenaar
 	 */
-	public function isEigenaar($uid = null) {
+	public function isEigenaar($uid = null)
+	{
 		foreach ($this->getExemplaren() as $exemplaar) {
 			if ($uid != null) {
 				if ($uid == $exemplaar->eigenaar_uid) {
@@ -161,7 +169,8 @@ class Boek {
 	 *
 	 * @return BoekExemplaar[]
 	 */
-	public function getExemplaren() {
+	public function getExemplaren()
+	{
 		return $this->exemplaren ?? [];
 	}
 
@@ -171,11 +180,13 @@ class Boek {
 	 * @return  bool
 	 *    boek mag alleen door admins verwijdert worden
 	 */
-	public function magVerwijderen() {
+	public function magVerwijderen()
+	{
 		return LoginService::mag('commissie:BASFCie,' . P_BIEB_MOD . ',' . P_ADMIN);
 	}
 
-	public function isBiebBoek() {
+	public function isBiebBoek()
+	{
 		foreach ($this->getExemplaren() as $exemplaar) {
 			if ($exemplaar->isBiebBoek()) {
 				return true;
@@ -187,7 +198,8 @@ class Boek {
 	/**
 	 * @return BoekRecensie[]
 	 */
-	public function getRecensies() {
+	public function getRecensies()
+	{
 		return $this->recensies ?? [];
 	}
 }

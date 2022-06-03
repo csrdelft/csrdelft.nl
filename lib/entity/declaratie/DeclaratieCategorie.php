@@ -10,7 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=DeclaratieCategorieRepository::class)
  */
-class DeclaratieCategorie {
+class DeclaratieCategorie
+{
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -34,29 +35,35 @@ class DeclaratieCategorie {
 	 */
 	private $declaraties;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->declaraties = new ArrayCollection();
 	}
 
-	public function getId(): ?int {
+	public function getId(): ?int
+	{
 		return $this->id;
 	}
 
-	public function getNaam(): string {
+	public function getNaam(): string
+	{
 		return $this->naam;
 	}
 
-	public function setNaam(string $naam): self {
+	public function setNaam(string $naam): self
+	{
 		$this->naam = $naam;
 
 		return $this;
 	}
 
-	public function getWachtrij(): DeclaratieWachtrij {
+	public function getWachtrij(): DeclaratieWachtrij
+	{
 		return $this->wachtrij;
 	}
 
-	public function setWachtrij(DeclaratieWachtrij $wachtrij): self {
+	public function setWachtrij(DeclaratieWachtrij $wachtrij): self
+	{
 		$this->wachtrij = $wachtrij;
 
 		return $this;
@@ -65,11 +72,13 @@ class DeclaratieCategorie {
 	/**
 	 * @return Collection|Declaratie[]
 	 */
-	public function getDeclaraties(): Collection {
+	public function getDeclaraties(): Collection
+	{
 		return $this->declaraties;
 	}
 
-	public function addDeclaratie(Declaratie $declaratie): self {
+	public function addDeclaratie(Declaratie $declaratie): self
+	{
 		if (!$this->declaraties->contains($declaratie)) {
 			$this->declaraties[] = $declaratie;
 			$declaratie->setCategorie($this);
@@ -78,7 +87,8 @@ class DeclaratieCategorie {
 		return $this;
 	}
 
-	public function removeDeclaratie(Declaratie $declaratie): self {
+	public function removeDeclaratie(Declaratie $declaratie): self
+	{
 		if ($this->declaraties->contains($declaratie)) {
 			$this->declaraties->removeElement($declaratie);
 			// set the owning side to null (unless already changed)
@@ -90,7 +100,8 @@ class DeclaratieCategorie {
 		return $this;
 	}
 
-	public function magBeoordelen(): bool {
+	public function magBeoordelen(): bool
+	{
 		return $this->getWachtrij()->magBeoordelen();
 	}
 }

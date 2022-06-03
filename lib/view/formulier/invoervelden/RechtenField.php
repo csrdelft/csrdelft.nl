@@ -10,9 +10,11 @@ use CsrDelft\service\AccessService;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class RechtenField extends AutocompleteField {
+class RechtenField extends AutocompleteField
+{
 
-	public function __construct($name, $value, $description) {
+	public function __construct($name, $value, $description)
+	{
 		parent::__construct($name, $value, $description);
 		$this->suggestions[] = ContainerFacade::getContainer()->get(AccessService::class)->getPermissionSuggestions();
 
@@ -24,7 +26,8 @@ class RechtenField extends AutocompleteField {
 		$this->title = 'Met , en + voor respectievelijk OR en AND. Gebruik | voor OR binnen AND (alsof er haakjes omheen staan)';
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		if (!parent::validate()) {
 			return false;
 		}

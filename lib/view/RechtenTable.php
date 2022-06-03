@@ -19,9 +19,11 @@ use CsrDelft\view\datatable\Multiplicity;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class RechtenTable extends DataTable {
+class RechtenTable extends DataTable
+{
 
-	public function __construct(AccessRepository $model, $environment, $resource) {
+	public function __construct(AccessRepository $model, $environment, $resource)
+	{
 		parent::__construct(AccessControl::class, '/rechten/bekijken/' . $environment . '/' . $resource, 'Rechten voor ' . $environment . ' ' . $resource, 'resource');
 
 		$this->hideColumn('action', false);
@@ -30,7 +32,7 @@ class RechtenTable extends DataTable {
 		// Has permission to change permissions?
 		if (!LoginService::mag(P_ADMIN)) {
 			$rechten = $model->getSubject($environment, AccessAction::Rechten, $resource);
-			if (!$rechten OR !LoginService::mag($rechten)) {
+			if (!$rechten or !LoginService::mag($rechten)) {
 				return;
 			}
 		}
@@ -45,7 +47,8 @@ class RechtenTable extends DataTable {
 		$this->addKnop($delete);
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		$view = new CmsPaginaView(ContainerFacade::getContainer()->get(CmsPaginaRepository::class)->find('UitlegACL'));
 		return $view->__toString() . parent::__toString();
 	}

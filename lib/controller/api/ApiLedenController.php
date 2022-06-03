@@ -9,13 +9,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiLedenController {
+class ApiLedenController
+{
 	/**
 	 * @var LidZoekerService
 	 */
 	private $lidZoekerService;
 
-	public function __construct(LidZoekerService $lidZoekerService) {
+	public function __construct(LidZoekerService $lidZoekerService)
+	{
 		$this->lidZoekerService = $lidZoekerService;
 	}
 
@@ -23,7 +25,8 @@ class ApiLedenController {
 	 * @Route("/API/2.0/leden", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function getLeden() {
+	public function getLeden()
+	{
 		$leden = [];
 
 		foreach ($this->lidZoekerService->getLeden() as $profiel) {
@@ -42,7 +45,8 @@ class ApiLedenController {
 	 * @Route("/API/2.0/leden/{id}", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function getLid($id) {
+	public function getLid($id)
+	{
 		$profiel = ProfielRepository::get($id);
 
 		if (!$profiel) {

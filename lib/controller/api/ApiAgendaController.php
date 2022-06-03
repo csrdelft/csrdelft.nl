@@ -31,12 +31,13 @@ class ApiAgendaController extends AbstractController
 	private $maaltijdAanmeldingenRepository;
 
 	public function __construct(
-		AgendaRepository $agendaRepository,
-		ActiviteitenRepository $activiteitenRepository,
+		AgendaRepository               $agendaRepository,
+		ActiviteitenRepository         $activiteitenRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		MaaltijdenRepository $maaltijdenRepository,
-		GroepLidRepository $groepLidRepository
-	) {
+		MaaltijdenRepository           $maaltijdenRepository,
+		GroepLidRepository             $groepLidRepository
+	)
+	{
 		$this->agendaRepository = $agendaRepository;
 		$this->activiteitenRepository = $activiteitenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;

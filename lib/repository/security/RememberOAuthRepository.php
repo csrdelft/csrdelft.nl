@@ -19,9 +19,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @method RememberOAuth[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method RememberOAuth|null retrieveByUuid($UUID)
  */
-class RememberOAuthRepository extends AbstractRepository {
+class RememberOAuthRepository extends AbstractRepository
+{
 
-	public function __construct(ManagerRegistry $registry) {
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, RememberOAuth::class);
 	}
 
@@ -44,7 +46,8 @@ class RememberOAuthRepository extends AbstractRepository {
 		return $remember;
 	}
 
-	public function findByUser(string $userIdentifier, string $clientIdentifier) {
+	public function findByUser(string $userIdentifier, string $clientIdentifier)
+	{
 		return $this->findOneBy(['clientIdentifier' => $clientIdentifier, 'uid' => $userIdentifier]);
 	}
 }

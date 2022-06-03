@@ -10,7 +10,8 @@ use DateTime;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 14/03/2019
  */
-class ForumZoeken {
+class ForumZoeken
+{
 	/**
 	 * @var string
 	 */
@@ -40,7 +41,8 @@ class ForumZoeken {
 	 */
 	public $limit;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->zoek_in = ['titel', 'alle_berichten', 'eerste_bericht'];
 		$this->van = (new DateTime())->modify('-1 year')->format('Y-m-d');
 		$this->tot = (new DateTime())->modify('+1 day')->format('Y-m-d');
@@ -49,7 +51,8 @@ class ForumZoeken {
 		$this->limit = 20;
 	}
 
-	public static function nieuw($zoekterm, $limit, $zoek_in) {
+	public static function nieuw($zoekterm, $limit, $zoek_in)
+	{
 		$forumZoeken = new static();
 		$forumZoeken->zoekterm = $zoekterm;
 		$forumZoeken->limit = $limit;

@@ -32,13 +32,15 @@ use Exception;
 /**
  * @property ProfielRepository $model
  */
-class ExternProfielForm extends Formulier {
+class ExternProfielForm extends Formulier
+{
 
-	public function __construct(Profiel $profiel, $url) {
+	public function __construct(Profiel $profiel, $url)
+	{
 		parent::__construct($profiel, $url);
 
 		$fields = [];
-		$this->titel = 'Welkom bij C.S.R. Delft, ' . htmlentities($profiel->voornaam) .'!';
+		$this->titel = 'Welkom bij C.S.R. Delft, ' . htmlentities($profiel->voornaam) . '!';
 		$fields[] = new HtmlComment('<p>
 			Hieronder mag je gegevens invullen in het databeest van de Civitas. Zo kunnen we contact met je houden,
 			kunnen andere leden opzoeken waar je woont en kun je (na het novitiaat) op het forum berichten plaatsen.

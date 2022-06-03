@@ -19,7 +19,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Twig\Environment;
 
-class PinTransactiesDownloadenCommand extends Command {
+class PinTransactiesDownloadenCommand extends Command
+{
 	protected static $defaultName = 'fiscaat:pintransacties:download';
 	/**
 	 * @var PinTransactieRepository
@@ -55,14 +56,15 @@ class PinTransactiesDownloadenCommand extends Command {
 	private $mailService;
 
 	public function __construct(
-		Environment $twig,
-		PinTransactieRepository $pinTransactieRepository,
+		Environment                  $twig,
+		PinTransactieRepository      $pinTransactieRepository,
 		PinTransactieMatchRepository $pinTransactieMatchRepository,
-		PinTransactieMatcher $pinTransactieMatcher,
-		PinTransactieDownloader $pinTransactieDownloader,
-		CiviBestellingRepository $civiBestellingRepository,
-		MailService $mailService
-	) {
+		PinTransactieMatcher         $pinTransactieMatcher,
+		PinTransactieDownloader      $pinTransactieDownloader,
+		CiviBestellingRepository     $civiBestellingRepository,
+		MailService                  $mailService
+	)
+	{
 		parent::__construct(null);
 		$this->pinTransactieRepository = $pinTransactieRepository;
 		$this->pinTransactieMatchRepository = $pinTransactieMatchRepository;
@@ -73,7 +75,8 @@ class PinTransactiesDownloadenCommand extends Command {
 		$this->mailService = $mailService;
 	}
 
-	protected function configure() {
+	protected function configure()
+	{
 		$this
 			->setDescription('Download pintransacties van aangegeven periode en probeer te matchen met bestellingen.')
 			->addArgument('vanaf', InputArgument::OPTIONAL, 'Vanaf welke datum wil je downloaden (jjjj-mm-dd)')
@@ -81,7 +84,8 @@ class PinTransactiesDownloadenCommand extends Command {
 			->addOption('disableSSL', null, InputOption::VALUE_NONE, 'Zet SSL validatie bij ophalen pintransacties uit - handmatig gebruik i.v.m. problemen Payplaza');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
 		$this->interactive = $input->isInteractive() && !$input->getOption('no-interaction');
 
 		if ($this->interactive) {
@@ -131,7 +135,8 @@ class PinTransactiesDownloadenCommand extends Command {
 		return 0;
 	}
 
-	private function downloadDag(OutputInterface $output, $from, $to) {
+	private function downloadDag(OutputInterface $output, $from, $to)
+	{
 		// Verwijder eerdere download.
 		$vorigePinTransacties = $this->pinTransactieRepository->getPinTransactieInMoment($from, $to);
 

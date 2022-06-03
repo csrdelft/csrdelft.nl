@@ -15,7 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
-class MaaltijdVerwerkingTerugdraaienCommand extends Command {
+class MaaltijdVerwerkingTerugdraaienCommand extends Command
+{
 	/** @var MaaltijdenRepository */
 	private $maaltijdenRepository;
 	/** @var CiviBestellingRepository */
@@ -23,7 +24,8 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 	/** @var EntityManagerInterface */
 	private $em;
 
-	public function __construct(MaaltijdenRepository $maaltijdenRepository, CiviBestellingRepository $civiBestellingRepository, EntityManagerInterface $em) {
+	public function __construct(MaaltijdenRepository $maaltijdenRepository, CiviBestellingRepository $civiBestellingRepository, EntityManagerInterface $em)
+	{
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->civiBestellingRepository = $civiBestellingRepository;
 		$this->em = $em;
@@ -31,13 +33,15 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 		parent::__construct();
 	}
 
-	protected function configure() {
+	protected function configure()
+	{
 		$this
 			->setName('maalcie:fiscaat:terugdraaien')
 			->setDescription('Draai verwerking van maaltijden op bepaalde datum terug. Let op: hiermee wordt ook civi-saldo teruggestort naar oud-leden.');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
 		$helper = $this->getHelper('question');
 
 		// Bepaal datum

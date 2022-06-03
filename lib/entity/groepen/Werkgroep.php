@@ -16,10 +16,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WerkgroepenRepository")
  */
-class Werkgroep extends Groep {
+class Werkgroep extends Groep
+{
 	use GroepMoment;
 
-	public function getUrl() {
+	public function getUrl()
+	{
 		return '/groepen/werkgroepen/' . $this->id;
 	}
 
@@ -31,7 +33,8 @@ class Werkgroep extends Groep {
 	 * @param null $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null) {
+	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null)
+	{
 		if (AccessAction::isAanmaken($action) && !LoginService::mag(P_LEDEN_MOD)) {
 			return false;
 		}

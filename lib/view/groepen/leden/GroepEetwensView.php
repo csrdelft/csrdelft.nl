@@ -5,13 +5,15 @@ namespace CsrDelft\view\groepen\leden;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\groepen;
 
-class GroepEetwensView extends groepen\leden\GroepTabView {
+class GroepEetwensView extends groepen\leden\GroepTabView
+{
 
-	public function getTabContent() {
+	public function getTabContent()
+	{
 		$html = '<table class="groep-lijst"><tbody>';
 		foreach ($this->groep->getLeden() as $lid) {
 			$profiel = ProfielRepository::get($lid->uid);
-			if ($profiel AND $profiel->eetwens != '') {
+			if ($profiel and $profiel->eetwens != '') {
 				$html .= '<tr><td>' . $profiel->getLink() . '</td><td>' . $profiel->eetwens . '</td></tr>';
 			}
 		}
