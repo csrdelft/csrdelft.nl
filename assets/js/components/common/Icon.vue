@@ -1,5 +1,5 @@
 <template>
-  <span :class="iconClass" />
+  <i :class="iconClass"></i>
 </template>
 
 <script lang="ts">
@@ -12,7 +12,7 @@ export default class Icon extends Vue {
   icon: string;
 
   private get iconClass() {
-    return `ico ${this.icon}`;
+    return `fas fa-${this.icon}`;
   }
 }
 </script>

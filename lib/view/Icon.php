@@ -5,9 +5,7 @@ namespace CsrDelft\view;
 /**
  * Icon dingetje voor csrdelft.nl.
  *
- * Gaat samen met 'layout/css/icons.less' en 'layout/css/icons.png'
- *
- * Icon::getTag('bewerken'); geeft <span class="ico pencil"></span>
+ * Icon::getTag('bewerken'); geeft <i class="fas fa-pencil"></i>
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
@@ -18,49 +16,38 @@ class Icon
 	//in de lijst met icons.
 	public static $alias = [
 		// algemeen
-		'toevoegen' => 'add',
+		'toevoegen' => 'plus',
 		'bewerken' => 'pencil',
-		'verwijderen' => 'cross',
+		'verwijderen' => 'trash',
 		'alert' => 'stop',
-		'goedkeuren' => 'tick',
-		'verjaardag' => 'cake',
-		'vraagteken' => 'help',
-		'fout' => 'error',
+		'goedkeuren' => 'circle-check',
+		'verjaardag' => 'cake-candles',
+		'vraagteken' => 'circle-question',
 		'show' => 'eye',
 		//documumenten
-		'mime-onbekend' => 'page_white',
-		'mime-audio' => 'sound',
-		'mime-html' => 'page_white_world',
-		'mime-word' => 'page_white_word',
-		'mime-excel' => 'page_white_excel',
-		'mime-powerpoint' => 'page_white_powerpoint',
-		'mime-image' => 'page_white_picture',
-		'mime-pdf' => 'page_white_acrobat',
-		'mime-plain' => 'page_white_text',
-		'mime-zip' => 'page_white_zip',
+		'mime-onbekend' => 'file-circle-exclamation',
+		'mime-audio' => 'file-audio',
+		'mime-html' => 'file-code',
+		'mime-word' => 'file-word',
+		'mime-excel' => 'file-excel',
+		'mime-powerpoint' => 'file-powerpoint',
+		'mime-image' => 'file-image',
+		'mime-pdf' => 'file-pdf',
+		'mime-plain' => 'file-lines',
+		'mime-zip' => 'file-zipper',
 		// forum
-		'citeren' => 'comments',
+		'citeren' => 'quote-left',
 		'slotje' => 'lock',
 		'plakkerig' => 'note',
-		'belangrijk' => 'asterisk_orange',
-		// corvee
-		'taken_bewerken' => 'text_list_bullets',
-		'punten_bewerken' => 'award_star_gold_1',
-		'punten_bewerken_toegekend' => 'award_star_gold_2',
-		'gemaild' => 'email_go',
-		'gemaildoranje' => 'email_go_orange',
-		'niet_gemaild' => 'email',
+		'belangrijk' => 'star',
 		// profiel
-		'stats' => 'server_chart',
-		'su' => 'user_go',
-		'resetpassword' => 'user_gray',
-		'instellingen' => 'cog',
-		// mededelingen
-		'legenda' => 'tag_yellow',
-		// Melding
-		'alert-danger' => 'exclamation',
-		'alert-info' => 'information',
-		'alert-success' => 'accept',
+		'stats' => 'chart-line',
+		'resetpassword' => 'user-lock',
+		'instellingen' => 'gear',
+		// melding
+		'alert-danger' => 'bell-exclamation',
+		'alert-info' => 'bell-on',
+		'alert-success' => 'circle-check',
 		'alert-warning' => 'bell',
 		// Overig
 		'table' => 'table_normal',
@@ -94,10 +81,8 @@ class Icon
 	/**
 	 * @param string $key Naam van het icoon, mag een alias zijn
 	 * @param null $hover string Naam van het icoon bij muis-over
-	 * @param null $title string Titel van het icoon
+	 * @param string $title string Titel van het icoon
 	 * @param string $class
-	 * @param null $content string Inhoud van dit icoon, is verborgen in de browser, maar wordt wel
-	 * geselecteerd en door eventuele schermlezers opgevangen
 	 * @return string
 	 */
 	public static function getTag(
