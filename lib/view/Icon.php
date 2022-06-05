@@ -12,10 +12,11 @@ namespace CsrDelft\view;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  */
-class Icon {
+class Icon
+{
 	//handige dingen die we graag gebruiken in csrdelft.nl. Moeten geen namen zijn die al voorkomen
 	//in de lijst met icons.
-	public static $alias = array(
+	public static $alias = [
 		// algemeen
 		'toevoegen' => 'plus',
 		'bewerken' => 'pencil',
@@ -76,10 +77,11 @@ class Icon {
 		'Kring' => 'fas fa-circle-notch',
 		'note' => 'fas fa-sticky-note',
 		'boek' => 'fas fa-book',
-		'wiki' => 'fas fa-book-atlas'
-	);
+		'wiki' => 'fas fa-book-atlas',
+	];
 
-	public static function get($key) {
+	public static function get($key)
+	{
 		if (array_key_exists($key, self::$alias)) {
 			return self::$alias[$key];
 		} else {
@@ -94,13 +96,24 @@ class Icon {
 	 * @param string $class
 	 * @return string
 	 */
-	public static function getTag($key, $hover = null, $title = null, $class = null) {
+	public static function getTag(
+		$key,
+		$hover = null,
+		$title = null,
+		$class = null
+	) {
 		$icon = self::get($key);
 
 		if ($hover !== null) {
 			$hover = 'hover-' . self::get($hover);
 		}
 
-		return sprintf('<i class="fas fa-%s %s %s" title="%s"></i>', htmlspecialchars($icon), htmlspecialchars($hover), htmlspecialchars($class), htmlspecialchars($title));
+		return sprintf(
+			'<i class="fas fa-%s %s %s" title="%s"></i>',
+			htmlspecialchars($icon),
+			htmlspecialchars($hover),
+			htmlspecialchars($class),
+			htmlspecialchars($title)
+		);
 	}
 }
