@@ -1,7 +1,7 @@
 i.fas,
 i.fab {
 	&:not(.neus2013) {
-	margin-right: $spacer * 0.25;
+		margin-right: $spacer * 0.25;
 	}
 }
 
@@ -31,7 +31,8 @@ i.fab {
 	font-style: italic;
 }
 
-.draad-verwijderd, .post-verwijderd {
+.draad-verwijderd,
+.post-verwijderd {
 	font-weight: bold;
 	color: $danger;
 }
@@ -45,12 +46,13 @@ i.fab {
 }
 
 .moment {
-	font-size: .9em;
+	font-size: 0.9em;
 	color: $gray-500;
 	cursor: default;
 }
 
-.forum-header, .forum-footer {
+.forum-header,
+.forum-footer {
 	.form-group {
 		margin-bottom: 0;
 	}
@@ -75,7 +77,9 @@ i.fab {
 		align-self: start;
 	}
 
-	.naam, .moment, .forumpostKnoppen {
+	.naam,
+	.moment,
+	.forumpostKnoppen {
 		grid-column: 1;
 	}
 
@@ -91,7 +95,8 @@ i.fab {
 	}
 }
 
-.forum-draad, .forum-zoeken {
+.forum-draad,
+.forum-zoeken {
 	.tussenschot {
 		height: 2px;
 		margin: 0;
@@ -185,7 +190,7 @@ span.curpage {
 		&:not(:hover) {
 			text-decoration: none;
 		}
-	
+
 		&.badge {
 			background-color: $gray-500;
 		}
@@ -206,7 +211,8 @@ span.curpage {
 		}
 	}
 
-	p.forumcategorie-omschrijving, p.forumdeel-omschrijving {
+	p.forumcategorie-omschrijving,
+	p.forumdeel-omschrijving {
 		text-align: justify;
 	}
 
@@ -247,7 +253,8 @@ span.curpage {
 		background-color: $primary;
 		padding: 1em;
 
-		a, a:hover {
+		a,
+		a:hover {
 			color: white;
 		}
 	}
@@ -278,15 +285,18 @@ span.curpage {
 	}
 }
 
-@media screen and (max-width: 576px) { // sm
-	.forum-header, .forum-footer {
+@media screen and (max-width: 576px) {
+	// sm
+	.forum-header,
+	.forum-footer {
 		h1 {
 			width: 100%;
 		}
 	}
 }
 
-@media screen and (max-width: 960px){ // lg
+@media screen and (max-width: 960px) {
+	// lg
 	.modfuncties {
 		font-size: 0;
 	}
@@ -299,11 +309,12 @@ span.curpage {
 		width: auto;
 		clear: both;
 
-		.forum-post, .forum-posten {
+		.forum-post,
+		.forum-posten {
 			flex-direction: column;
 
 			.auteur {
-				flex: 1 0 ;
+				flex: 1 0;
 
 				grid-template-columns: 1fr auto auto;
 				border-bottom: 2px solid $gray-300;
@@ -321,8 +332,8 @@ span.curpage {
 
 					.postanchor {
 						// Compenseer voor navbar
-						padding-top:44px;
-						margin-top:-44px;
+						padding-top: 44px;
+						margin-top: -44px;
 					}
 				}
 
@@ -355,11 +366,19 @@ span.curpage {
 		flex-direction: row;
 		flex-wrap: wrap;
 
-		.header { display: none; }
-		.draad-titel { padding-bottom: 0; }
-		.draad-laatste-post { flex-grow: 1; }
+		.header {
+			display: none;
+		}
+		.draad-titel {
+			padding-bottom: 0;
+		}
+		.draad-laatste-post {
+			flex-grow: 1;
+		}
 
-		.paging, .draad-titel, .forumdeel-omschrijving {
+		.paging,
+		.draad-titel,
+		.forumdeel-omschrijving {
 			width: 100%;
 		}
 
@@ -386,8 +405,8 @@ span.curpage {
 
 					.postanchor {
 						// Compenseer voor navbar
-						padding-top:44px;
-						margin-top:-44px;
+						padding-top: 44px;
+						margin-top: -44px;
 					}
 				}
 

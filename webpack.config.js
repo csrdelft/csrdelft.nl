@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 
 const contextPath = path.resolve(__dirname, 'assets');
 
@@ -19,58 +19,63 @@ module.exports = (env, argv) => {
 		'thema-roze': './scss/thema/roze.scss',
 		'thema-koevoet': './scss/thema/Koevoet.scss',
 		'thema-sineregno': './scss/thema/sineregno.scss',
-	}
+	};
 
 	if (process.env.THEMA in styleEntries) {
-		console.log("Maak alleen thema: " + process.env.THEMA);
+		console.log('Maak alleen thema: ' + process.env.THEMA);
 
-		styleEntries = {[process.env.THEMA]: styleEntries[process.env.THEMA]}
+		styleEntries = { [process.env.THEMA]: styleEntries[process.env.THEMA] };
 	}
 
-	return ({
+	return {
 		mode: 'development',
 		context: contextPath,
 		entry: {
-			'app': './js/entry/app.ts',
-			'sentry': './js/entry/sentry.ts',
-			'ledenmemory': './js/entry/ledenmemory.ts',
-			'fxclouds': './js/entry/fxclouds.ts',
-			'fxsneeuw': './js/entry/fxsneeuw.ts',
-			'fxonontdekt': './js/entry/fxonontdekt.ts',
-			'fxtrein': './js/entry/fxtrein.ts',
-			'fxraket': './js/entry/fxraket.ts',
-			'fxdruif': './js/entry/fxdruif.ts',
-			'fxminion': './js/entry/fxminion.ts',
-			'fxspace': './js/entry/fxspace.ts',
-			'extern': ['./js/entry/extern.ts', './scss/extern.scss'],
-			'bredeletters': './scss/bredeletters.scss',
-			'common': './scss/common.scss',
+			app: './js/entry/app.ts',
+			sentry: './js/entry/sentry.ts',
+			ledenmemory: './js/entry/ledenmemory.ts',
+			fxclouds: './js/entry/fxclouds.ts',
+			fxsneeuw: './js/entry/fxsneeuw.ts',
+			fxonontdekt: './js/entry/fxonontdekt.ts',
+			fxtrein: './js/entry/fxtrein.ts',
+			fxraket: './js/entry/fxraket.ts',
+			fxdruif: './js/entry/fxdruif.ts',
+			fxminion: './js/entry/fxminion.ts',
+			fxspace: './js/entry/fxspace.ts',
+			extern: ['./js/entry/extern.ts', './scss/extern.scss'],
+			bredeletters: './scss/bredeletters.scss',
+			common: './scss/common.scss',
 			'extern-forum': './scss/extern-forum.scss',
 			'extern-fotoalbum': './scss/extern-fotoalbum.scss',
 			'extern-owee': ['./js/entry/extern-owee.ts', './scss/extern-owee.scss'],
-			'maaltijdlijst': './scss/maaltijdlijst.scss',
+			maaltijdlijst: './scss/maaltijdlijst.scss',
 			// Donker wordt altijd geladen
 			'thema-donker': './scss/thema/donker.scss',
 			...styleEntries,
 			'effect-civisaldo': './scss/effect/civisaldo.scss',
 			// lustrum-page related scss
-			'lustrum': './scss/lustrum12/style.scss',
-			'lustrumthema': './scss/lustrum12/thema.scss',
-			'lustrumweek': './scss/lustrum12/lustrumweek.scss',
-			'lustrumweek2': './scss/lustrum12/lustrumweek2.scss',
-			'lustrummerch': './scss/lustrum12/dikkemerch.scss',
-			'lustrumdiesthema': './scss/lustrum12/diesthema.scss',
-			'lustrumdies': './scss/lustrum12/dies.scss',
+			lustrum: './scss/lustrum12/style.scss',
+			lustrumthema: './scss/lustrum12/thema.scss',
+			lustrumweek: './scss/lustrum12/lustrumweek.scss',
+			lustrumweek2: './scss/lustrum12/lustrumweek2.scss',
+			lustrummerch: './scss/lustrum12/dikkemerch.scss',
+			lustrumdiesthema: './scss/lustrum12/diesthema.scss',
+			lustrumdies: './scss/lustrum12/dies.scss',
 			'lustrum12-js': './js/lib/lustrum12.ts',
-			'lustrumreis': './scss/lustrum12/lustrumreis.scss',
-
+			lustrumreis: './scss/lustrum12/lustrumreis.scss',
 		},
 		output: {
 			// De map waarin alle bestanden geplaatst worden.
 			path: path.resolve(__dirname, 'htdocs/dist'),
 			// Alle javascript bestanden worden in de map js geplaatst.
-			filename: argv.mode !== 'production' ? 'js/[name].bundle.js' : 'js/[name].[contenthash].bundle.js',
-			chunkFilename: argv.mode !== 'production' ? 'js/[name].chunk.js' : 'js/[name].[contenthash].chunk.js',
+			filename:
+				argv.mode !== 'production'
+					? 'js/[name].bundle.js'
+					: 'js/[name].[contenthash].bundle.js',
+			chunkFilename:
+				argv.mode !== 'production'
+					? 'js/[name].chunk.js'
+					: 'js/[name].[contenthash].chunk.js',
 			publicPath: '/dist/',
 			assetModuleFilename: 'images/[hash][ext][query]',
 		},
@@ -84,16 +89,13 @@ module.exports = (env, argv) => {
 			fallback: {
 				stream: false,
 				util: false,
-			}
+			},
 		},
 		cache: {
-			type: "filesystem",
+			type: 'filesystem',
 		},
 		optimization: {
-			minimizer: [
-				new OptimizeCssAssetsWebpackPlugin({}),
-				new terserPlugin(),
-			],
+			minimizer: [new OptimizeCssAssetsWebpackPlugin({}), new terserPlugin()],
 			splitChunks: {
 				chunks: 'all',
 			},
@@ -101,7 +103,10 @@ module.exports = (env, argv) => {
 		plugins: [
 			new (require('mini-css-extract-plugin'))({
 				// Css bestanden komen in de map css terecht.
-				filename: argv.mode !== 'production' ? 'css/[name].css' : 'css/[name].[contenthash].css',
+				filename:
+					argv.mode !== 'production'
+						? 'css/[name].css'
+						: 'css/[name].[contenthash].css',
 			}),
 			new RemoveEmptyScriptsPlugin(),
 			new VuePlugin(),
@@ -121,10 +126,7 @@ module.exports = (env, argv) => {
 				{
 					enforce: 'pre',
 					test: /\.(js|jsx)$/,
-					exclude: [
-						/node_modules/,
-						/lib\/external/,
-					],
+					exclude: [/node_modules/, /lib\/external/],
 					use: 'eslint-loader',
 				},
 				// Verwerk .ts (typescript) bestanden en maak er javascript van.
@@ -137,8 +139,8 @@ module.exports = (env, argv) => {
 								appendTsSuffixTo: [/\.vue$/],
 								// We compilen jgallery ts
 								allowTsInNodeModules: true,
-							}
-						}
+							},
+						},
 					],
 				},
 				{
@@ -177,7 +179,7 @@ module.exports = (env, argv) => {
 							options: {
 								postcssOptions: {
 									plugins: [require('autoprefixer')],
-								}
+								},
 							},
 						},
 						{
@@ -210,10 +212,10 @@ module.exports = (env, argv) => {
 					test: /\.(png|svg|jpg|gif)$/,
 					type: 'asset/resource',
 					generator: {
-						filename: "images/[hash][ext][query]"
-					}
+						filename: 'images/[hash][ext][query]',
+					},
 				},
 			],
 		},
-	});
+	};
 };

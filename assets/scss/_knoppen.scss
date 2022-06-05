@@ -10,8 +10,7 @@ a[href^="http://"], a[href^="https://"]
 	&:after {
 		content: "";
 		padding-right: 16px;
-		background: url("../images/external-link-blue.png") no-repeat center
-			right;
+		background: url("../images/external-link-blue.png") no-repeat center right;
 	}
 }
 

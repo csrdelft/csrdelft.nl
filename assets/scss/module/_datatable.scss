@@ -48,13 +48,11 @@ div {
 		&:active:not(.disabled):hover:not(.disabled),
 		&.active:not(.disabled):hover:not(.disabled) {
 			box-shadow: inset 1px 1px 3px #999999;
-			background: #e0cece
-				linear-gradient(to bottom, #e0cece 0%, #d1b2b2 100%);
+			background: #e0cece linear-gradient(to bottom, #e0cece 0%, #d1b2b2 100%);
 			filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#e0cece', EndColorStr='#d1b2b2');
 		}
 		&:hover:not(.disabled) {
-			background: #e0cece
-				linear-gradient(to bottom, #e0cece 0%, #d1b2b2 100%);
+			background: #e0cece linear-gradient(to bottom, #e0cece 0%, #d1b2b2 100%);
 			filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#e0cece', EndColorStr='#d1b2b2');
 		}
 	}
@@ -116,8 +114,7 @@ div {
 				content: none;
 			}
 			td.toggle-childrow {
-				background: url("../../images/loading-fb.gif") no-repeat center
-					center;
+				background: url("../../images/loading-fb.gif") no-repeat center center;
 			}
 		}
 		tr.childrow:hover {
