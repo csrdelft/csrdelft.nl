@@ -10,7 +10,7 @@ monolog:
       members: [streamed, filtered]
     streamed:
       type: stream
-      path: "%kernel.logs_dir%/%kernel.environment%.log"
+      path: '%kernel.logs_dir%/%kernel.environment%.log'
     filtered:
       type: filter
       min_level: error

@@ -24,7 +24,7 @@ security:
     api:
       pattern: ^/API/2.0/
       stateless: true
-      custom_authenticators: [ CsrDelft\service\security\ApiAuthenticator ]
+      custom_authenticators: [CsrDelft\service\security\ApiAuthenticator]
       provider: accounts
       lazy: true
     # Achter deze firewall zitten requests die met een private token worden opgehaald.
@@ -34,7 +34,8 @@ security:
       request_matcher: CsrDelft\service\security\PrivateTokenAuthenticator
       provider: accounts
       stateless: true
-      custom_authenticators: [ CsrDelft\service\security\PrivateTokenAuthenticator ]
+      custom_authenticators:
+        [CsrDelft\service\security\PrivateTokenAuthenticator]
     # Dit is de standaard firewall en wordt gebruikt als geen van de andere firewalls gebruikt worden.
     main:
       form_login:

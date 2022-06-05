@@ -4,6 +4,7 @@ parent: Onderdelen
 nav_order: 1
 title: Wiki
 ---
+
 # Wiki
 
 De wiki is een installatie van MediaWiki op [wiki.csrdelft.nl](https://wiki.csrdelft.nl). De installatie is te vinden op Syrinx.
@@ -88,4 +89,3 @@ php bin/console trikoder:oauth2:create-client --redirect-uri=http://wiki.dev-csr
 ```
 
 Hier wordt een secret terug gegeven, vul deze in in `$wgOAuthClientSecret` in `LocalSettings.php`
-

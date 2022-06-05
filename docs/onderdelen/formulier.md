@@ -20,7 +20,7 @@ Velden zijn te vinden in `FormElement.abstract.php`, `FormKnoppen.class.php`, `G
 Een stuk losse HTML in het formulier.
 
 | `$comment` | De HTML |
-|----------|---------|
+| ---------- | ------- |
 
 ```php
 $fields[] = new HtmlComment('<strong>Dit gedeelte is belangrijk</strong>');
@@ -31,7 +31,7 @@ $fields[] = new HtmlComment('<strong>Dit gedeelte is belangrijk</strong>');
 Een stuk losse HTML met mogelijke BBCode in het formulier
 
 | `$comment` | De HTML |
-|------------|---------|
+| ---------- | ------- |
 
 ```php
 $fields[] = new HtmlBbComment('[b]Dit gedeelte is belangrijk[/b]');
@@ -42,7 +42,7 @@ $fields[] = new HtmlBbComment('[b]Dit gedeelte is belangrijk[/b]');
 Het begin van een nieuwe fieldset, alle volgende elementen zitten in deze FieldSet, totdat een veld `new HtmlComment('</fieldset>');` volgt.
 
 | `$titel` | De titel van de fieldset |
-|----------|--------------------------|
+| -------- | ------------------------ |
 
 ```php
 $fields[] = new FieldSet('Adres');
@@ -55,7 +55,7 @@ $fields[] = new HtmlComment('</fieldset>');
 Maak een subkopje aan, de standaard is `<h3>`. De eigenschap `$h` kan gebruikt worden om dit aan te passen.
 
 | `$tekst` | De inhoud van de titel |
-|----------|------------------------|
+| -------- | ---------------------- |
 
 ```php
 $subkopje = new SubKopje('Persoonlijke gegevens');
@@ -67,14 +67,14 @@ $fields[] = $subkopje;
 
 Maak een Subkopje met alles eronder collapsable, moet afgesloten worden met `new HtmlComment('</div>');`
 
-|||
-|---|---|
-| `$id`                   | De id gebruikt in de JavaScript |
-| `$titel`                | De titel van het kopje |
-| `$collapsed = false`    | Of het subkopje collapsed is bij laden |
+|                         |                                              |
+| ----------------------- | -------------------------------------------- |
+| `$id`                   | De id gebruikt in de JavaScript              |
+| `$titel`                | De titel van het kopje                       |
+| `$collapsed = false`    | Of het subkopje collapsed is bij laden       |
 | `$single = false`       | Of andere kopjes ook ingeklapt moeten worden |
-| `$hover_click = false ` | Of het kopje moet uitklappen bij hover |
-| `$animate = true`       | Of het uitklappen geanimeerd moet zijn |
+| `$hover_click = false ` | Of het kopje moet uitklappen bij hover       |
+| `$animate = true`       | Of het uitklappen geanimeerd moet zijn       |
 
 ```php
 $fields[] = new CollapsableSubKopje('optioneel', 'Optionele gegevens', true);
@@ -88,14 +88,14 @@ $fields[] = new HtmlComment('</div>');
 
 Een normaal `<input type="text".../>` veld.
 
-|||
-|---|---|
+|                  |                                                            |
+| ---------------- | ---------------------------------------------------------- |
 | `$name`          | Naam van de input, gebruikt om waarde op te halen met POST |
-| `$value`         | Waarde van de input |
-| `$description`   | Beschrijving, bij mouse-over |
-| `$max_len = 255` | Maximale lengte van de input |
-| `$min_len = 0`   | Minimale lengte van de input |
-| `$model = null`  | _Ongebruikt_ |
+| `$value`         | Waarde van de input                                        |
+| `$description`   | Beschrijving, bij mouse-over                               |
+| `$max_len = 255` | Maximale lengte van de input                               |
+| `$min_len = 0`   | Minimale lengte van de input                               |
+| `$model = null`  | _Ongebruikt_                                               |
 
 ```php
 $fields[] = new TextField('voornaam', 'Voornaam', 'Vul hier je voornaam in', 255, 2);
@@ -133,12 +133,12 @@ $fields[] = new RequiredRechtenField('magschrijven', 'Mag schrijven', '');
 
 Zie [TextField](#requiredtextfield), geeft suggesties voor leden. Opties zijn 'leden', 'oudleden', 'novieten', 'alleleden', 'allepersonen', 'nobodies'.
 
-|||
-|---|---|
-| `$name`                 | Naam van de input |
-| `$value`                | Beginwaarde van de input |
+|                         |                              |
+| ----------------------- | ---------------------------- |
+| `$name`                 | Naam van de input            |
+| `$value`                | Beginwaarde van de input     |
 | `$description`          | Beschrijving, bij mouse-voer |
-| `$zoekin = 'alleleden'` | Groep om in te zoeken |
+| `$zoekin = 'alleleden'` | Groep om in te zoeken        |
 
 ```php
 $fields[] = new LidField('lid', 'Lid', '');
@@ -190,8 +190,6 @@ $fields[] = new RequiredLidField('noviet', 'Noviet', '', 'novieten');
 |UploadFileField
 |ExistingFileField
 |DownloadUrlField
-
-
 
 ## Voorbeeld
 

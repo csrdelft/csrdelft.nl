@@ -15,7 +15,7 @@ $stamboom-bg-hover: $gray-100;
 
 		// Voeg lijntje naar beneden toe vanaf ouders.
 		ul::before {
-			content: '';
+			content: "";
 			position: absolute;
 			top: 0;
 			left: 50%;
@@ -37,8 +37,9 @@ $stamboom-bg-hover: $gray-100;
 		-moz-transition: all 0.5s;
 
 		// Lijnen tussen blokken worden met ::before en ::after getekend
-		&::before, &::after {
-			content: '';
+		&::before,
+		&::after {
+			content: "";
 			position: absolute;
 			top: 0;
 			right: 50%;
@@ -54,7 +55,8 @@ $stamboom-bg-hover: $gray-100;
 		}
 
 		// Lijnen naar links en rechts moeten verwijderd worden als een kind geen brusjes heeft.
-		&:only-child::after, &:only-child::before {
+		&:only-child::after,
+		&:only-child::before {
 			display: none;
 		}
 
@@ -64,7 +66,8 @@ $stamboom-bg-hover: $gray-100;
 		}
 
 		// Verwijder lijntje naar link van eerste kind en lijntje naar rechts van laatste kind.
-		&:first-child::before, &:last-child::after {
+		&:first-child::before,
+		&:last-child::after {
 			border: 0 none;
 		}
 
@@ -95,7 +98,6 @@ $stamboom-bg-hover: $gray-100;
 			-webkit-transition: all 0.5s;
 			-moz-transition: all 0.5s;
 
-
 			&:hover + ul li::after,
 			&:hover + ul li::before,
 			&:hover + ul::before,
@@ -103,12 +105,12 @@ $stamboom-bg-hover: $gray-100;
 				border-color: $stamboom-lijn-hover;
 			}
 
-			&:hover, &:hover + ul li a {
+			&:hover,
+			&:hover + ul li a {
 				background: $stamboom-bg-hover;
 				color: $black;
 				border: 1px solid $stamboom-lijn-hover;
 			}
 		}
 	}
-
 }

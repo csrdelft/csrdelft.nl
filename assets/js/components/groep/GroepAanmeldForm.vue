@@ -7,10 +7,7 @@
       v-model="opmerking.selectie"
       :keuze="getKeuze(opmerking.naam)"
     />
-    <button
-      class="btn btn-primary"
-      @click="$emit('aanmelden', opmerkingData)"
-    >
+    <button class="btn btn-primary" @click="$emit('aanmelden', opmerkingData)">
       Aanmelden
     </button>
   </div>
@@ -18,9 +15,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import GroepKeuzeType from '../../enum/GroepKeuzeType';
-import {GroepKeuzeSelectie, KeuzeOptie} from '../../model/groep';
+import { GroepKeuzeSelectie, KeuzeOptie } from '../../model/groep';
 import CheckboxKeuze from './keuzes/CheckboxKeuze.vue';
 import DropDownKeuze from './keuzes/DropDownKeuze.vue';
 import MultiSelectKeuze from './keuzes/MultiSelectKeuze.vue';
@@ -65,6 +62,4 @@ export default class GroepAanmeldForm extends Vue {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -18,16 +18,17 @@ De `trikoder:oauth2:` commands zijn er om clients te beheren.
 ## Flow
 
 De OAuth2 flow is als volgt:
+
 1. De gebruiker komt aan bij een externe service en klikt op de knop om in te loggen met zijn C.S.R. Delft stek account.
 1. De gebruiker wordt doorverwezen naar https://csrdelft.nl/authorize?client_id=...&...
-	1. `OAUth2AuthorizeListener` pikt dit op en toont een pagina met uitleg aan de gebruiker
-	1. De gebruiker klikt op Autoriseer
+   1. `OAUth2AuthorizeListener` pikt dit op en toont een pagina met uitleg aan de gebruiker
+   1. De gebruiker klikt op Autoriseer
 1. De gebruiker wordt doorverwezen naar de `redirect_uri` die de externe service heeft opgegeven, met een token.
 1. De externe service ontvangt een refresh_token
 1. De externe service kan de refresh_token gebruiken om bij `/api/v3/token` een access_token op te vragen.
 1. De externe service
-	1. Weet dat de gebruiker een C.S.R. stek account heeft
-	1. Kan requests maken naar pagina's in `/api/v3/`
+   1. Weet dat de gebruiker een C.S.R. stek account heeft
+   1. Kan requests maken naar pagina's in `/api/v3/`
 
 Vaak wordt hierna nog een request gemaakt naar `/api/v3/profiel` om meer info op te vragen over de gebruiker.
 

@@ -1,15 +1,15 @@
 $kleur-primair: #903921;
-$kleur-secundair: #C8611A;
-$kleur-textheader: #D08976;
+$kleur-secundair: #c8611a;
+$kleur-textheader: #d08976;
 $kleur-text: #fffbfa;
-$kleur-hover: #E9600B;
+$kleur-hover: #e9600b;
 
-$kleur-groen: #ABD1B5;
-$kleur-rood: #B0413E;
+$kleur-groen: #abd1b5;
+$kleur-rood: #b0413e;
 
 @font-face {
 	font-family: BossaNovaMVB;
-	src: url('../../fonts/dies-2021/BossaNovaMVB.otf');
+	src: url("../../fonts/dies-2021/BossaNovaMVB.otf");
 }
 
 $font: Calibri, sans-serif;
@@ -18,7 +18,7 @@ $headings-font-family: ($font, uppercase);
 
 $theme-colors: (
 	"primary": $kleur-primair,
-	"danger": #E54B4B,
+	"danger": #e54b4b,
 	"white": $kleur-text,
 );
 
@@ -64,7 +64,12 @@ $text-muted: #fffbfa;
 /* importeer basis */
 @import "../base";
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	font-family: BossaNovaMVB, Calibri, sans-serif;
 }
 

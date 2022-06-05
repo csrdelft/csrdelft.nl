@@ -1,6 +1,7 @@
 <template>
   <div class="mb-3">
-    <label class="w-100">{{ keuze.description }}
+    <label class="w-100"
+      >{{ keuze.description }}
       <select
         class="form-select"
         :name="'DropDownKeuze-' + keuze.naam"
@@ -21,8 +22,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
-import {KeuzeOptie} from '../../../model/groep';
+import { Component, Prop } from 'vue-property-decorator';
+import { KeuzeOptie } from '../../../model/groep';
 
 @Component({})
 export default class DropDownKeuze extends Vue {
@@ -34,7 +35,4 @@ export default class DropDownKeuze extends Vue {
 }
 </script>
 
-<style scoped>
-
-</style>
-
+<style scoped></style>

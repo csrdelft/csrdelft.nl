@@ -1,8 +1,8 @@
 import $ from 'jquery';
 
-import {knopPost} from '../lib/knop';
-import {evaluateMultiplicity} from '../lib/util';
-import {replacePlaceholders} from './api';
+import { knopPost } from '../lib/knop';
+import { evaluateMultiplicity } from '../lib/util';
+import { replacePlaceholders } from './api';
 import ButtonApi = DataTables.ButtonApi;
 import ButtonsSettings = DataTables.ButtonsSettings;
 
@@ -37,14 +37,22 @@ declare global {
 }
 
 // Zet de icons van de default buttons
-$.fn.dataTable.ext.buttons.copyHtml5.className += ' dt-button-ico dt-ico-page_white_copy';
-$.fn.dataTable.ext.buttons.copyFlash.className += ' dt-button-ico dt-ico-page_white_copy';
-$.fn.dataTable.ext.buttons.csvHtml5.className += ' dt-button-ico dt-ico-page_white_text';
-$.fn.dataTable.ext.buttons.csvFlash.className += ' dt-button-ico dt-ico-page_white_text';
-$.fn.dataTable.ext.buttons.pdfHtml5.className += ' dt-button-ico dt-ico-page_white_acrobat';
-$.fn.dataTable.ext.buttons.pdfFlash.className += ' dt-button-ico dt-ico-page_white_acrobat';
-$.fn.dataTable.ext.buttons.excelHtml5.className += ' dt-button-ico dt-ico-page_white_excel';
-$.fn.dataTable.ext.buttons.excelFlash.className += ' dt-button-ico dt-ico-page_white_excel';
+$.fn.dataTable.ext.buttons.copyHtml5.className +=
+	' dt-button-ico dt-ico-page_white_copy';
+$.fn.dataTable.ext.buttons.copyFlash.className +=
+	' dt-button-ico dt-ico-page_white_copy';
+$.fn.dataTable.ext.buttons.csvHtml5.className +=
+	' dt-button-ico dt-ico-page_white_text';
+$.fn.dataTable.ext.buttons.csvFlash.className +=
+	' dt-button-ico dt-ico-page_white_text';
+$.fn.dataTable.ext.buttons.pdfHtml5.className +=
+	' dt-button-ico dt-ico-page_white_acrobat';
+$.fn.dataTable.ext.buttons.pdfFlash.className +=
+	' dt-button-ico dt-ico-page_white_acrobat';
+$.fn.dataTable.ext.buttons.excelHtml5.className +=
+	' dt-button-ico dt-ico-page_white_excel';
+$.fn.dataTable.ext.buttons.excelFlash.className +=
+	' dt-button-ico dt-ico-page_white_excel';
 $.fn.dataTable.ext.buttons.print.className += ' dt-button-ico dt-ico-printer';
 
 // Laat een modal zien, of doe een ajax call gebasseerd op selectie.
@@ -54,8 +62,8 @@ $.fn.dataTable.ext.buttons.default = {
 			this.enable(
 				evaluateMultiplicity(
 					config.multiplicity,
-					dt.rows({selected: true}).count(),
-				),
+					dt.rows({ selected: true }).count()
+				)
 			);
 		};
 		dt.on('select.dt.DT deselect.dt.DT', toggle);
@@ -78,7 +86,7 @@ $.fn.dataTable.ext.buttons.default = {
 		const id = dt.tables().nodes().to$().attr('id');
 
 		if (!id) {
-			throw new Error("Datatable heeft geen id")
+			throw new Error('Datatable heeft geen id');
 		}
 
 		node.attr('data-tableid', id);
@@ -99,7 +107,7 @@ $.fn.dataTable.ext.buttons.popup = {
 $.fn.dataTable.ext.buttons.url = {
 	extend: 'default',
 	action(e, dt, button) {
-		window.location.href = button.attr('href') ?? "";
+		window.location.href = button.attr('href') ?? '';
 	},
 };
 
@@ -116,10 +124,10 @@ $.fn.dataTable.ext.buttons.sourceChange = {
 		enable();
 	},
 	action(e, dt, button, config) {
-		const href = config.href
+		const href = config.href;
 
 		if (!href) {
-			throw new Error("SourceChange Button heeft geen href")
+			throw new Error('SourceChange Button heeft geen href');
 		}
 
 		dt.ajax.url(href).load();
@@ -133,8 +141,8 @@ $.fn.dataTable.ext.buttons.confirm = {
 			this.enable(
 				evaluateMultiplicity(
 					config.multiplicity,
-					dt.rows({selected: true}).count(),
-				),
+					dt.rows({ selected: true }).count()
+				)
 			);
 		};
 		dt.on('select.dt.DT deselect.dt.DT', toggle);
@@ -155,7 +163,9 @@ $.fn.dataTable.ext.buttons.confirm = {
 			],
 		} as ButtonsSettings);
 
-		dt.button('confirm' + config.text + ':name').node().appendTo(config._collection);
+		dt.button('confirm' + config.text + ':name')
+			.node()
+			.appendTo(config._collection);
 
 		// Reset action to extend one.
 		config.action = $.fn.dataTable.ext.buttons.collection.action;
@@ -171,7 +181,7 @@ $.fn.dataTable.ext.buttons.defaultCollection = {
 		const init = $.fn.dataTable.ext.buttons.default.init;
 
 		if (!init) {
-			throw new Error("Configuratie fout! Default knop bestaat niet")
+			throw new Error('Configuratie fout! Default knop bestaat niet');
 		}
 
 		init.call(this, dt, node, config);

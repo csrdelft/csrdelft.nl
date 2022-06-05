@@ -22,41 +22,38 @@ Het volgen van de [Guide](https://vuejs.org/v2/guide/) van Vue is aangeraden als
 Om een nieuw component te maken maak je een nieuw `.vue` bestand aan met dezelfde structuur als hier onder beschreven.
 
 ```vue
-
-<template>
-</template>
+<template></template>
 
 <script lang="ts">
 import Vue from 'docs/frontend/vue';
-import {Component, Prop} from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 
-@Component({components: {}})
+@Component({ components: {} })
 export default class MijnComponent extends Vue {
-  /// Props
-  @Prop()
-  private settings: { id: number };
+	/// Props
+	@Prop()
+	private settings: { id: number };
 
-  /// Data
-  private id: number = 0;
+	/// Data
+	private id: number = 0;
 
-  protected created() {
-    this.id = this.settings.id;
-  }
+	protected created() {
+		this.id = this.settings.id;
+	}
 
-  /// Getters
-  private get mooiId() {
-    return `Mijn id is ${this.id}`;
-  }
+	/// Getters
+	private get mooiId() {
+		return `Mijn id is ${this.id}`;
+	}
 
-  /// Methods
-  protected veranderId(event: Event) {
-    this.id = 13;
-  }
+	/// Methods
+	protected veranderId(event: Event) {
+		this.id = 13;
+	}
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
 ```
 
 Tussen de template tags kun je je template definieren, tussen de script tags kun je je component definieren en tussen de style tags kun je css definieren.

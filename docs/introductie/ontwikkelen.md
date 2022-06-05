@@ -19,12 +19,12 @@ In principe kun je alle git dingen in GitHub desktop doen. Wil je graag beter be
 
 PhpStorm is een heel erg krachtige IDE met super veel functies. Langzaamaan zul je meer functies ontdekken, maar er zijn een aantal functies die handig zijn vanaf het begin.
 
-|Sneltoets|Beschrijving|
-|:---:|:---|
-| `Shift+Shift` | Twee keer shift indrukken achter elkaar opent de 'Ga naar alles...' zoekbalk. Hiermee kun je zoeken op klassen, functies, bestanden en nog allerlei andere dingen. Gebruik deze als je ongeveer weet welke klasse je nodig hebt, dit is een stuk sneller dan door de bestandsstructuur scrollen om je bestand te vinden. |
-| `Ctrl+Ctrl` | Twee keer ctrl indrukken achter elkaar opent de 'Voer alles uit...' zoekbalk. Hiermee kun je zoeken in alle commando's die je kan uitvoeren. Dit zijn de voorgedefinieerde commando's in het configuratiemenu, maar ook alle commando's van Symfony. |
-| `Ctrl+Shift+F` | Opent het zoekscherm, hiermee kun je in het hele project zoeken. Dit is heel handig als je niet precies weet waar je moet zijn. Je kan hier bijvoorbeeld zoeken op een foutmelding die je bij een bug krijgt (als de foutmelding in onze code staat natuurlijk), of je kan zoeken op een classname in de gegenereerde HTML om erachter te komen waar deze html gegenereerd wordt. Je kan zoeken ook beperken tot een specifieke map of een specifieke bestandsextensie.|
-| `Shift+f6` | Hernoem een variabele, functie of class. PhpStorm zorgt ervoor dat alle referenties naar deze naam ook veranderen. (meestal lukt dit, maar er zijn plekken waar dit niet lukt, controleer dus of het gelukt is en of er niet toevallig nog ergens verwijzingen zijn naar de oude naam)|
+|   Sneltoets    | Beschrijving                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| :------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Shift+Shift`  | Twee keer shift indrukken achter elkaar opent de 'Ga naar alles...' zoekbalk. Hiermee kun je zoeken op klassen, functies, bestanden en nog allerlei andere dingen. Gebruik deze als je ongeveer weet welke klasse je nodig hebt, dit is een stuk sneller dan door de bestandsstructuur scrollen om je bestand te vinden.                                                                                                                                                |
+|  `Ctrl+Ctrl`   | Twee keer ctrl indrukken achter elkaar opent de 'Voer alles uit...' zoekbalk. Hiermee kun je zoeken in alle commando's die je kan uitvoeren. Dit zijn de voorgedefinieerde commando's in het configuratiemenu, maar ook alle commando's van Symfony.                                                                                                                                                                                                                    |
+| `Ctrl+Shift+F` | Opent het zoekscherm, hiermee kun je in het hele project zoeken. Dit is heel handig als je niet precies weet waar je moet zijn. Je kan hier bijvoorbeeld zoeken op een foutmelding die je bij een bug krijgt (als de foutmelding in onze code staat natuurlijk), of je kan zoeken op een classname in de gegenereerde HTML om erachter te komen waar deze html gegenereerd wordt. Je kan zoeken ook beperken tot een specifieke map of een specifieke bestandsextensie. |
+|   `Shift+f6`   | Hernoem een variabele, functie of class. PhpStorm zorgt ervoor dat alle referenties naar deze naam ook veranderen. (meestal lukt dit, maar er zijn plekken waar dit niet lukt, controleer dus of het gelukt is en of er niet toevallig nog ergens verwijzingen zijn naar de oude naam)                                                                                                                                                                                  |
 
 ## Database
 
@@ -34,11 +34,11 @@ Vaak ontwikkel je aan de stek met een database dump van de productieomgeving, da
 
 In PhpStorm kun je makkelijk een dump laden, zorg ervoor dat de database bestaat en dat alle tabellen bestaan.
 
-* Open de database tab in `View > Database`
-* Rechtsklik op `csrdelft@localhost`
-* Klik op `Run SQL Script...`
-* Kies de dump die je hebt gekregen en klik op `Ok`
-* De dump wordt nu geladen, dit kan een paar minuten duren
+- Open de database tab in `View > Database`
+- Rechtsklik op `csrdelft@localhost`
+- Klik op `Run SQL Script...`
+- Kies de dump die je hebt gekregen en klik op `Ok`
+- De dump wordt nu geladen, dit kan een paar minuten duren
 
 _Soms falen er een paar statements, meestal is dit niet erg. Als er veel statements falen is er iets mis._
 
@@ -64,7 +64,6 @@ php bin/console doctrine:migrations:migrate
 Soms gaat er iets mis met de database, iemand heeft een fout gemaakt in een migratie, of je hebt per ongeluk iets verwijderd. Als dit zo is kun je het makkelijkst een dump laden.
 
 Om een database te resetten moet je eerst de database weggooien (`[PHP] Database Verwijdern`), dan de database aanmaken (`[PHP] Database Aanmaken`), migraties uitvoeren (`[PHP] Database Migraties`, type `yes` in de Run dialoog) en hierna kun je een dump terugzetten (zie het kopje Dump inladen).
-
 
 <details>
 <summary><strong>Commando's</strong></summary>

@@ -24,11 +24,11 @@ span.twitter-typeahead {
 			max-height: 80vh;
 			overflow: auto;
 		}
-
 	}
 
-	.fa, .ico {
-		margin-right: $spacer * .5;
+	.fa,
+	.ico {
+		margin-right: $spacer * 0.5;
 	}
 
 	.tt-suggestion {
@@ -79,4 +79,3 @@ Bootstrap input-group fix
 		top: 28px !important;
 	}
 }
-

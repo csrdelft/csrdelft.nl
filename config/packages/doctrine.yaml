@@ -1,71 +1,71 @@
 doctrine:
-    dbal:
-        # configure these for your database server
-        # use postgresql for PostgreSQL
-        # use sqlite for SQLite
-        driver: 'mysql'
-        server_version: 'mariadb-10.3.20'
+  dbal:
+    # configure these for your database server
+    # use postgresql for PostgreSQL
+    # use sqlite for SQLite
+    driver: 'mysql'
+    server_version: 'mariadb-10.3.20'
 
-        # only needed for MySQL
-        charset: utf8mb4
-        default_table_options:
-            charset: utf8mb4
-            collate: utf8mb4_general_ci
+    # only needed for MySQL
+    charset: utf8mb4
+    default_table_options:
+      charset: utf8mb4
+      collate: utf8mb4_general_ci
 
-        url: '%env(resolve:DATABASE_URL)%'
-        types:
-          date: CsrDelft\common\Doctrine\Type\DateImmutableType
-          datetime: CsrDelft\common\Doctrine\Type\DateTimeImmutableType
-          datetimetz: CsrDelft\common\Doctrine\Type\DateTimeTzImmutableType
-          time: Doctrine\DBAL\Types\TimeImmutableType
-          changelog: CsrDelft\common\Doctrine\Type\ChangeLogType
-          groepkeuze: CsrDelft\common\Doctrine\Type\GroepKeuzeType
-          groepkeuzeselectie: CsrDelft\common\Doctrine\Type\GroepKeuzeSelectieType
-          longtext: CsrDelft\common\Doctrine\Type\LongTextType
-          uid: CsrDelft\common\Doctrine\Type\UidType
-          stringkey: CsrDelft\common\Doctrine\Type\StringKeyType
-          enumOntvangtContactueel: CsrDelft\common\Doctrine\Type\Enum\OntvangtContactueelType
-          enumBoekExemplaarStatus: CsrDelft\common\Doctrine\Type\Enum\BoekExemplaarStatusType
-          enumCourantCategorie: CsrDelft\common\Doctrine\Type\Enum\CourantCategorieType
-          enumForumDraadMeldingNiveau: CsrDelft\common\Doctrine\Type\Enum\ForumDraadMeldingNiveauType
-          enumGroepStatus: CsrDelft\common\Doctrine\Type\Enum\GroepStatusType
-          enumHuisStatus: CsrDelft\common\Doctrine\Type\Enum\HuisStatusType
-          enumCommissieSoort: CsrDelft\common\Doctrine\Type\Enum\CommissieSoortType
-          enumGeslacht: CsrDelft\common\Doctrine\Type\Enum\GeslachtType
-          enumGroepVersie: CsrDelft\common\Doctrine\Type\Enum\GroepVersieType
-          enumOnderverenigingStatus: CsrDelft\common\Doctrine\Type\Enum\OnderverenigingStatusType
-          enumActiviteitSoort: CsrDelft\common\Doctrine\Type\Enum\ActiviteitSoortType
-          uuid: Symfony\Bridge\Doctrine\Types\UuidType
-          enumRemoteLoginStatus: CsrDelft\common\Doctrine\Type\Enum\RemoteLoginStatusType
-        mapping_types:
-          enum: string
-    orm:
-        auto_generate_proxy_classes: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-        auto_mapping: true
-        dql:
-          # Zie https://github.com/beberlei/DoctrineExtensions voor meer mooie extensies.
-          string_functions:
-            date: DoctrineExtensions\Query\Mysql\Date
-            match: DoctrineExtensions\Query\Mysql\MatchAgainst
-            unix_timestamp: DoctrineExtensions\Query\Mysql\UnixTimestamp
-            day: DoctrineExtensions\Query\Mysql\Day
-            month: DoctrineExtensions\Query\Mysql\Month
-            dayofyear: DoctrineExtensions\Query\Mysql\DayOfYear
-            now: DoctrineExtensions\Query\Mysql\Now
-            concat_ws: DoctrineExtensions\Query\Mysql\ConcatWs
-            replace: DoctrineExtensions\Query\Mysql\Replace
-            date_format: DoctrineExtensions\Query\Mysql\DateFormat
-        mappings:
-            CsrDelft:
-                is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/lib/entity'
-                prefix: 'CsrDelft\entity'
-                alias: App
-        filters:
-            verbergNovieten:
-                class: CsrDelft\common\Doctrine\VerbergNovietenFilter
-                enabled: false
-                parameters:
-                    jaar: 2020
+    url: '%env(resolve:DATABASE_URL)%'
+    types:
+      date: CsrDelft\common\Doctrine\Type\DateImmutableType
+      datetime: CsrDelft\common\Doctrine\Type\DateTimeImmutableType
+      datetimetz: CsrDelft\common\Doctrine\Type\DateTimeTzImmutableType
+      time: Doctrine\DBAL\Types\TimeImmutableType
+      changelog: CsrDelft\common\Doctrine\Type\ChangeLogType
+      groepkeuze: CsrDelft\common\Doctrine\Type\GroepKeuzeType
+      groepkeuzeselectie: CsrDelft\common\Doctrine\Type\GroepKeuzeSelectieType
+      longtext: CsrDelft\common\Doctrine\Type\LongTextType
+      uid: CsrDelft\common\Doctrine\Type\UidType
+      stringkey: CsrDelft\common\Doctrine\Type\StringKeyType
+      enumOntvangtContactueel: CsrDelft\common\Doctrine\Type\Enum\OntvangtContactueelType
+      enumBoekExemplaarStatus: CsrDelft\common\Doctrine\Type\Enum\BoekExemplaarStatusType
+      enumCourantCategorie: CsrDelft\common\Doctrine\Type\Enum\CourantCategorieType
+      enumForumDraadMeldingNiveau: CsrDelft\common\Doctrine\Type\Enum\ForumDraadMeldingNiveauType
+      enumGroepStatus: CsrDelft\common\Doctrine\Type\Enum\GroepStatusType
+      enumHuisStatus: CsrDelft\common\Doctrine\Type\Enum\HuisStatusType
+      enumCommissieSoort: CsrDelft\common\Doctrine\Type\Enum\CommissieSoortType
+      enumGeslacht: CsrDelft\common\Doctrine\Type\Enum\GeslachtType
+      enumGroepVersie: CsrDelft\common\Doctrine\Type\Enum\GroepVersieType
+      enumOnderverenigingStatus: CsrDelft\common\Doctrine\Type\Enum\OnderverenigingStatusType
+      enumActiviteitSoort: CsrDelft\common\Doctrine\Type\Enum\ActiviteitSoortType
+      uuid: Symfony\Bridge\Doctrine\Types\UuidType
+      enumRemoteLoginStatus: CsrDelft\common\Doctrine\Type\Enum\RemoteLoginStatusType
+    mapping_types:
+      enum: string
+  orm:
+    auto_generate_proxy_classes: true
+    naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+    auto_mapping: true
+    dql:
+      # Zie https://github.com/beberlei/DoctrineExtensions voor meer mooie extensies.
+      string_functions:
+        date: DoctrineExtensions\Query\Mysql\Date
+        match: DoctrineExtensions\Query\Mysql\MatchAgainst
+        unix_timestamp: DoctrineExtensions\Query\Mysql\UnixTimestamp
+        day: DoctrineExtensions\Query\Mysql\Day
+        month: DoctrineExtensions\Query\Mysql\Month
+        dayofyear: DoctrineExtensions\Query\Mysql\DayOfYear
+        now: DoctrineExtensions\Query\Mysql\Now
+        concat_ws: DoctrineExtensions\Query\Mysql\ConcatWs
+        replace: DoctrineExtensions\Query\Mysql\Replace
+        date_format: DoctrineExtensions\Query\Mysql\DateFormat
+    mappings:
+      CsrDelft:
+        is_bundle: false
+        type: annotation
+        dir: '%kernel.project_dir%/lib/entity'
+        prefix: 'CsrDelft\entity'
+        alias: App
+    filters:
+      verbergNovieten:
+        class: CsrDelft\common\Doctrine\VerbergNovietenFilter
+        enabled: false
+        parameters:
+          jaar: 2020

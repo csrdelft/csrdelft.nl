@@ -18,4 +18,3 @@ De autorisatie van het barsysteem is een beetje bijzonder, het is niet de bedoel
 ## Frontend
 
 De frontend van het barsysteem is te vinden in de [`csrdelft/bar`](https://github.com/csrdelft/bar) repository.
-

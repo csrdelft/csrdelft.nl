@@ -1,7 +1,10 @@
-import {domUpdate} from './domUpdate';
+import { domUpdate } from './domUpdate';
 
 export function reload(htmlString: string | unknown | boolean): void {
-	if (typeof htmlString === 'string' && htmlString.substring(0, 16) === '<div id="modal" ') {
+	if (
+		typeof htmlString === 'string' &&
+		htmlString.substring(0, 16) === '<div id="modal" '
+	) {
 		domUpdate(htmlString);
 		return;
 	}

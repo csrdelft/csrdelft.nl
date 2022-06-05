@@ -32,4 +32,3 @@ De fixtures bevatten ook het account `x101` met wachtwoord `stek open u voor mij
 Met de maker bundle kun je makkelijk nieuwe fixtures genereren. Run `php bin/console make:fixtures` om nieuwe fixtures te maken. In de map `lib/DataFixtures` staan alle fixtures. Je kan hier afkijken hoe het gedaan wordt.
 
 Voor fixtures kun je ook `fzaninotto/faker` gebruiken om fake data te genereren.
-

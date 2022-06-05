@@ -1,13 +1,13 @@
 import $ from 'jquery';
-import axios from 'axios'
-import {domUpdate} from '../lib/domUpdate';
-import {forumCiteren} from '../lib/forum';
-import hoverintent from "hoverintent";
-import {select, selectAll} from "../lib/dom";
+import axios from 'axios';
+import { domUpdate } from '../lib/domUpdate';
+import { forumCiteren } from '../lib/forum';
+import hoverintent from 'hoverintent';
+import { select, selectAll } from '../lib/dom';
 
 try {
-	const textarea = select<HTMLTextAreaElement>('textarea#forumBericht')
-	const concept = select<HTMLElement>('#forumConcept')
+	const textarea = select<HTMLTextAreaElement>('textarea#forumBericht');
+	const concept = select<HTMLElement>('#forumConcept');
 
 	// The last value that we pinged
 	let lastPing = false;
@@ -17,12 +17,14 @@ try {
 		const pingValue = textarea.value !== textarea.getAttribute('origvalue');
 		if (pingValue || lastPing) {
 			try {
-				const {data} = await axios.post(concept.dataset.url, {ping: pingValue})
+				const { data } = await axios.post(concept.dataset.url, {
+					ping: pingValue,
+				});
 				domUpdate(data);
 				lastPing = pingValue;
 			} catch (e) {
 				// Herlaad de pagina als dit niet lukt
-				window.location.reload()
+				window.location.reload();
 			}
 		}
 	}, 60000);
@@ -38,7 +40,10 @@ try {
 }
 
 // naar juiste forumreactie scrollen door hash toe te voegen
-if (!window.location.hash && window.location.pathname.substr(0, 15) === '/forum/reactie/') {
+if (
+	!window.location.hash &&
+	window.location.pathname.substr(0, 15) === '/forum/reactie/'
+) {
 	const reactieid = parseInt(window.location.pathname.substr(15), 10);
 	window.location.hash = '#' + reactieid;
 }
@@ -49,15 +54,18 @@ $('.togglePasfoto').on('click', function () {
 	$(this).parent().find('.forumpasfoto').toggleClass('verborgen');
 });
 
-selectAll('.auteur').forEach(auteur => {
-	const forummodKnoppen = selectAll<HTMLElement>('a.forummodknop', auteur)
+selectAll('.auteur').forEach((auteur) => {
+	const forummodKnoppen = selectAll<HTMLElement>('a.forummodknop', auteur);
 
-	hoverintent(auteur,
-		() => forummodKnoppen.forEach(el => el.style.opacity = '1'),
-		() => forummodKnoppen.forEach(el => el.style.opacity = '0'),
-	)
-})
+	hoverintent(
+		auteur,
+		() => forummodKnoppen.forEach((el) => (el.style.opacity = '1')),
+		() => forummodKnoppen.forEach((el) => (el.style.opacity = '0'))
+	);
+});
 
 for (const citeerKnop of selectAll<HTMLElement>('a.citeren')) {
-	citeerKnop.addEventListener('click', () => forumCiteren(citeerKnop.dataset.citeren))
+	citeerKnop.addEventListener('click', () =>
+		forumCiteren(citeerKnop.dataset.citeren)
+	);
 }

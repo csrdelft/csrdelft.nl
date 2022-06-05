@@ -13,8 +13,14 @@ h1 {
 	margin-right: 5px;
 }
 /*knoppen in zijbalk rechts*/
-.controls		 {float: right; }
-.controls .btn {line-height: 2em; width: 125px; display:block; }
+.controls {
+	float: right;
+}
+.controls .btn {
+	line-height: 2em;
+	width: 125px;
+	display: block;
+}
 /****************************
  *  cataloguspagina			*
  ****************************/
@@ -27,7 +33,7 @@ h1 {
 }
 #filters {
 	position: absolute;
-	margin: 7px  0 15px 0;
+	margin: 7px 0 15px 0;
 	z-index: 2;
 	line-height: 22px;
 }
@@ -40,41 +46,52 @@ h1 {
 	cursor: pointer;
 	color: #0a338d;
 	margin-right: -1px;
-	position:relative;
+	position: relative;
 }
 #filters span.button {
-	background-color: #E6E6E6;
+	background-color: #e6e6e6;
 	border: 1px solid lightgray;
 	z-index: 1;
 }
 #filters span.button:hover {
-	background-color: #CCC;
+	background-color: #ccc;
 }
 #filters span.actief {
 	background-color: white;
-	border: 1px solid #AAA;
+	border: 1px solid #aaa;
 	z-index: 2;
 }
 p.biebuitleg {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
-.biebindicator.beschikbaar							 {color:green; }
-.biebindicator.teruggegeven							 {color:orange; }
-.biebindicator.vermist, .biebindicator.uitgeleend	 {color:red; }
+.biebindicator.beschikbaar {
+	color: green;
+}
+.biebindicator.teruggegeven {
+	color: orange;
+}
+.biebindicator.vermist,
+.biebindicator.uitgeleend {
+	color: red;
+}
 /********************************
  * boek-pagina					*
  ********************************/
 
-.blok {		margin-bottom: 20px; clear: left; }
+.blok {
+	margin-bottom: 20px;
+	clear: left;
+}
 .boekgegevens {
 	width: 586px;
 }
 
 /*  Exemplaren */
-.exemplaren {	margin-top:10px;
+.exemplaren {
+	margin-top: 10px;
 	overflow: hidden;
-	min-height:200px;
+	min-height: 200px;
 	.exemplaar {
 		overflow: hidden;
 		margin-bottom: 25px;
@@ -107,17 +124,26 @@ p.biebuitleg {
 			float: left;
 		}
 	}
-	p {	margin-left: 77px; }
-
+	p {
+		margin-left: 77px;
+	}
 }
 
 /* boekbeschrijvingen */
-.beschrijvingen td.beschrijving {	width: 506px; padding: 2px 0 5px 0; word-wrap: break-word; }
-.beschrijvingen td.beschrijving.b0 {	background-color: #f5f5f5; }
+.beschrijvingen td.beschrijving {
+	width: 506px;
+	padding: 2px 0 5px 0;
+	word-wrap: break-word;
+}
+.beschrijvingen td.beschrijving.b0 {
+	background-color: #f5f5f5;
+}
 
 .beschrijvingen td.tussenschot {
 	height: 2px;
-	margin: 0; padding: 0; border: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
 	background-color: lightgray;
 }
 
@@ -148,7 +174,7 @@ p.biebuitleg {
 #Beschrijvingsformulier label {
 	float: left;
 	width: 109px;
-	height: 20px;/* blijft tekstvak op zijn plek bij waarschuwing*/
+	height: 20px; /* blijft tekstvak op zijn plek bij waarschuwing*/
 	margin: 0;
 }
 

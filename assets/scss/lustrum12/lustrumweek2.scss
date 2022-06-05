@@ -1,18 +1,18 @@
 $lw2-blauw: #2a6272;
 $lw2-donkerblauw: darken($lw2-blauw, 20%);
 $lw2-oranje: #ef7d38;
-$lw2-goud: #F2BC04;
+$lw2-goud: #f2bc04;
 
 $primary: $lw2-donkerblauw;
 $secondary: $lw2-oranje;
 $font-color-primary: $lw2-oranje;
 $font-color-secondary: $lw2-goud;
 
-@import 'style.scss';
+@import "style.scss";
 
 @font-face {
 	font-family: BTTF;
-	src: url('../../fonts/lustrum12/BTTF.ttf');
+	src: url("../../fonts/lustrum12/BTTF.ttf");
 }
 
 $lw2-font-header: BTTF, Arial, Helvetica, sans-serif;
@@ -47,7 +47,7 @@ hr {
 		text-transform: lowercase;
 		color: $lw2-goud;
 	}
-	.ketzer{
+	.ketzer {
 		color: white;
 		h3 {
 			color: $lw2-goud;

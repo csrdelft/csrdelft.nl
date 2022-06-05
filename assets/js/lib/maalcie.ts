@@ -1,29 +1,42 @@
 import $ from 'jquery';
-import {dragObject} from '../dragobject';
-import {ajaxRequest} from './ajax';
-import {domUpdate} from './domUpdate';
-import {parents} from "./dom";
-import {throwError} from "./util";
+import { dragObject } from '../dragobject';
+import { ajaxRequest } from './ajax';
+import { domUpdate } from './domUpdate';
+import { parents } from './dom';
+import { throwError } from './util';
 
 export function takenSubmitRange(e: Event): void | boolean {
 	let target = e.target as HTMLElement;
-	if (target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
-		target = parents(target)
+	if (target.tagName.toUpperCase() === 'IMG') {
+		// over an image inside of anchor
+		target = parents(target);
 	}
 	$(target).find('input').prop('checked', true);
-	if ($(target).hasClass('confirm') && !confirm($(target).attr('title') + '.\n\nWeet u het zeker?')) {
+	if (
+		$(target).hasClass('confirm') &&
+		!confirm($(target).attr('title') + '.\n\nWeet u het zeker?')
+	) {
 		return false;
 	}
-	$('input[name="' + $(target).find('input:first').attr('name') + '"]:visible').each(function () {
+	$(
+		'input[name="' + $(target).find('input:first').attr('name') + '"]:visible'
+	).each(function () {
 		if ($(this).prop('checked')) {
 			const href = $(target).parent().attr('href');
 			const post = $(target).parent().attr('post');
 
 			if (!href || !post) {
-				throw new Error("Element heeft geen href of post");
+				throw new Error('Element heeft geen href of post');
 			}
 
-			ajaxRequest('POST', href, post, target.parentElement, domUpdate, throwError);
+			ajaxRequest(
+				'POST',
+				href,
+				post,
+				target.parentElement,
+				domUpdate,
+				throwError
+			);
 		}
 	});
 }
@@ -68,7 +81,10 @@ export function takenToggleSuggestie(soort: string, show: boolean): void {
 }
 
 function takenToggleDatumFirst(datum: string, index: number) {
-	if ('taak-datum-head-' + datum === $('#maalcie-tabel tr:visible').eq(index).attr('id')) {
+	if (
+		'taak-datum-head-' + datum ===
+		$('#maalcie-tabel tr:visible').eq(index).attr('id')
+	) {
 		$('#taak-datum-head-first').toggleClass('verborgen');
 	}
 }
@@ -83,7 +99,6 @@ export function takenToggleDatum(datum: string): void {
 	$('.taak-datum-' + datum).toggleClass('verborgen');
 	takenToggleDatumFirst(datum, 1);
 	takenColorDatum();
-
 }
 
 export function takenShowOld(): void {
@@ -95,8 +110,9 @@ export function takenShowOld(): void {
 /* Ruilen van CorveeTaak */
 export function takenMagRuilen(e: Event): void {
 	let target = e.target as HTMLElement;
-	if (target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
-		target = parents(target)
+	if (target.tagName.toUpperCase() === 'IMG') {
+		// over an image inside of anchor
+		target = parents(target);
 	}
 
 	if (dragObject.el && dragObject.el.id !== target.id) {
@@ -107,11 +123,17 @@ export function takenMagRuilen(e: Event): void {
 export function takenRuilen(e: Event): void {
 	e.preventDefault();
 	let elmnt = e.target as HTMLElement;
-	if (elmnt.tagName.toUpperCase() === 'IMG') { // dropped on image inside of anchor
-		elmnt = parents(elmnt)
+	if (elmnt.tagName.toUpperCase() === 'IMG') {
+		// dropped on image inside of anchor
+		elmnt = parents(elmnt);
 	}
-	const source = dragObject.el
-	if (!source || !confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
+	const source = dragObject.el;
+	if (
+		!source ||
+		!confirm(
+			'Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?'
+		)
+	) {
 		return;
 	}
 	let attr = source.getAttribute('uid');
@@ -120,7 +142,7 @@ export function takenRuilen(e: Event): void {
 	}
 	const href = elmnt.getAttribute('href');
 	if (!href) {
-		throw new Error("Element heeft geen href")
+		throw new Error('Element heeft geen href');
 	}
 	ajaxRequest('POST', href, 'uid=' + attr, elmnt, domUpdate, throwError);
 	attr = elmnt.getAttribute('uid');
@@ -136,24 +158,27 @@ export function takenSelectRange(e: KeyboardEvent): void {
 	const target = e.target;
 
 	if (!target) {
-		throw new Error("Er is geen target")
+		throw new Error('Er is geen target');
 	}
 
 	let withinRange = false;
-	$('#maalcie-tabel').find('tbody tr td a input[name="' + $(target).attr('name') + '"]:visible').each(function () {
-		const thisId = $(this).attr('id');
-		if (thisId === lastSelectedId) {
-			withinRange = !withinRange;
-		}
-		if (thisId === (e.target as Element).id) {
-			withinRange = !withinRange;
-			const check = $(this).prop('checked');
-			setTimeout(() => { // workaround e.preventDefault()
-				$('#' + thisId).prop('checked', check);
-			}, 50);
-		} else if (e.shiftKey && withinRange) {
-			$(this).prop('checked', true);
-		}
-	});
+	$('#maalcie-tabel')
+		.find('tbody tr td a input[name="' + $(target).attr('name') + '"]:visible')
+		.each(function () {
+			const thisId = $(this).attr('id');
+			if (thisId === lastSelectedId) {
+				withinRange = !withinRange;
+			}
+			if (thisId === (e.target as Element).id) {
+				withinRange = !withinRange;
+				const check = $(this).prop('checked');
+				setTimeout(() => {
+					// workaround e.preventDefault()
+					$('#' + thisId).prop('checked', check);
+				}, 50);
+			} else if (e.shiftKey && withinRange) {
+				$(this).prop('checked', true);
+			}
+		});
 	lastSelectedId = (e.target as Element).id;
 }

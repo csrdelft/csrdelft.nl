@@ -2,7 +2,7 @@ name: Create Sentry Releases
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   release_js:

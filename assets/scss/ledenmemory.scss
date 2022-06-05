@@ -21,13 +21,15 @@ body {
 	height: 222px;
 }
 
-.box, #dialog-finish {
+.box,
+#dialog-finish {
 	background-image: url("../images/memory/blue-box-h2-w2.png");
 }
 
-
-.flip > div, .box {
-	box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4), -1px 1px 10px rgba(0, 0, 0, 0.5);
+.flip > div,
+.box {
+	box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4),
+		-1px 1px 10px rgba(0, 0, 0, 0.5);
 }
 
 .memorycard {
@@ -48,7 +50,9 @@ body {
 		width: 340px;
 		height: 57px;
 
-		h3, .box h3, #dialog-finish {
+		h3,
+		.box h3,
+		#dialog-finish {
 			font-family: SentinelBold, sans-serif;
 			line-height: 31px;
 			font-size: 24px;
@@ -57,10 +61,10 @@ body {
 			margin: 0;
 		}
 	}
-
 }
 
-.memorycard.pasfoto img, .box img {
+.memorycard.pasfoto img,
+.box img {
 	width: 150px;
 	height: 150px;
 	border: 6px solid #fff;

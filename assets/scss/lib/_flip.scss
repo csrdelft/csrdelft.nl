@@ -18,7 +18,7 @@
 
 		transform-style: preserve-3d;
 		backface-visibility: hidden;
-		transition: all .4s ease-in-out;
+		transition: all 0.4s ease-in-out;
 		transform: rotateX(0deg);
 	}
 	.back {
@@ -31,12 +31,13 @@
 
 		transform-style: preserve-3d;
 		backface-visibility: hidden;
-		transition: all .4s ease-in-out;
+		transition: all 0.4s ease-in-out;
 		transform: rotateX(-180deg);
 	}
 }
 
-.flipped, .fliphover:hover {
+.flipped,
+.fliphover:hover {
 	.front {
 		transform: rotateX(180deg);
 	}

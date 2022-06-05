@@ -3,7 +3,7 @@
  */
 import axios from 'axios';
 
-export const dragObject: { el: HTMLElement | null; } = {
+export const dragObject: { el: HTMLElement | null } = {
 	el: null,
 };
 
@@ -12,11 +12,15 @@ let oldX: number;
 let oldY: number;
 
 function docScrollLeft() {
-	return (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+	return document.documentElement.scrollLeft
+		? document.documentElement.scrollLeft
+		: document.body.scrollLeft;
 }
 
 function docScrollTop() {
-	return (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+	return document.documentElement.scrollTop
+		? document.documentElement.scrollTop
+		: document.body.scrollTop;
 }
 
 function mouseX(e: MouseEvent) {
@@ -58,17 +62,17 @@ function mouseMoveHandler(e: MouseEvent) {
 	const newX = mouseX(e);
 	const newY = mouseY(e);
 	dragged = instance.classList.contains('savepos');
-	const scrollTop = instance.scrollTop
-	const scrollLeft = instance.scrollLeft
+	const scrollTop = instance.scrollTop;
+	const scrollLeft = instance.scrollLeft;
 	if (instance.classList.contains('dragvertical')) {
 		instance.scrollTop = scrollTop + oldY - newY;
 	} else if (instance.classList.contains('draghorizontal')) {
 		instance.scrollLeft = scrollLeft + oldX - newX;
 	} else {
-		const offset = {left: instance.offsetLeft, top: instance.offsetTop};
+		const offset = { left: instance.offsetLeft, top: instance.offsetTop };
 
-		instance.style.left = (offset.left - docScrollLeft() + newX - oldX) + 'px'
-		instance.style.top = (offset.top - docScrollTop() + newY - oldY) + 'px'
+		instance.style.left = offset.left - docScrollLeft() + newX - oldX + 'px';
+		instance.style.top = offset.top - docScrollTop() + newY - oldY + 'px';
 	}
 	oldX = newX;
 	oldY = newY;
@@ -78,18 +82,24 @@ function mouseMoveHandler(e: MouseEvent) {
  * @param {MouseEvent} e
  */
 function startDrag(e: MouseEvent) {
-
 	const target = e.target;
 
 	if (target instanceof HTMLElement) {
 		const tag = target.tagName.toUpperCase();
-		const overflow = getComputedStyle(target).overflow
+		const overflow = getComputedStyle(target).overflow;
 		// sliding scrollbar of dropdown menu or input field
-		if ((tag !== 'DIV' && tag !== 'H1') || overflow === 'auto' || overflow === 'scroll') {
+		if (
+			(tag !== 'DIV' && tag !== 'H1') ||
+			overflow === 'auto' ||
+			overflow === 'scroll'
+		) {
 			return;
 		}
 		dragObject.el = target;
-		if (typeof dragObject.el === 'undefined' || !dragObject.el.classList.contains('dragobject')) {
+		if (
+			typeof dragObject.el === 'undefined' ||
+			!dragObject.el.classList.contains('dragobject')
+		) {
 			dragObject.el = target.closest('.dragobject');
 		}
 		if (typeof dragObject.el !== 'undefined') {
@@ -112,16 +122,19 @@ function stopDrag() {
 		const instance = dragObject.el;
 		let top;
 		let left;
-		if (instance.classList.contains('dragvertical') || instance.classList.contains('draghorizontal')) {
+		if (
+			instance.classList.contains('dragvertical') ||
+			instance.classList.contains('draghorizontal')
+		) {
 			top = instance.scrollTop;
 			left = instance.scrollLeft;
 		} else {
-			const offset = {top: instance.offsetTop, left: instance.offsetLeft}
+			const offset = { top: instance.offsetTop, left: instance.offsetLeft };
 			top = offset.top - docScrollTop();
 			left = offset.left - docScrollLeft();
 		}
 		axios.post('/tools/dragobject', {
-			coords: {left, top},
+			coords: { left, top },
 			id: instance.id,
 		});
 		dragged = false;

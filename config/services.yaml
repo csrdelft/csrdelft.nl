@@ -12,9 +12,9 @@ parameters:
 services:
   # default configuration for services in *this* file
   _defaults:
-    autowire: true      # Automatically injects dependencies in your services.
+    autowire: true # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-    public: false       # Allows optimizing the container by removing unused services; this also means
+    public: false # Allows optimizing the container by removing unused services; this also means
     # fetching services directly from the container via $container->get() won't work.
     # The best practice is to be explicit about your dependencies anyway.
 
@@ -81,7 +81,7 @@ services:
 
   CsrDelft\controller\security\SessionController:
     tags:
-      - { name: security.remember_me_aware}
+      - { name: security.remember_me_aware }
 
   CsrDelft\common\Logging\LogActivationStrategy: ~
 
@@ -118,22 +118,34 @@ services:
     shared: false
     public: true
     arguments:
-      - !tagged_locator {tag: csr.formulier.type, index_by: key}
+      - !tagged_locator { tag: csr.formulier.type, index_by: key }
       - '@request_stack'
       - '@CsrDelft\Component\Formulier\FormulierBuilder'
 
   CsrDelft\view\bbcode\BbToProsemirror:
     public: true
     arguments:
-      - !tagged_locator {tag: csr.editor.mark, default_index_method: getBbTagType}
-      - !tagged_locator {tag: csr.editor.node, default_index_method: getBbTagType}
+      - !tagged_locator {
+          tag: csr.editor.mark,
+          default_index_method: getBbTagType,
+        }
+      - !tagged_locator {
+          tag: csr.editor.node,
+          default_index_method: getBbTagType,
+        }
       - '@Psr\Container\ContainerInterface'
 
   CsrDelft\view\bbcode\ProsemirrorToBb:
     public: true
     arguments:
-      - !tagged_locator {tag: csr.editor.mark, default_index_method: getMarkType}
-      - !tagged_locator {tag: csr.editor.node, default_index_method: getNodeType}
+      - !tagged_locator {
+          tag: csr.editor.mark,
+          default_index_method: getMarkType,
+        }
+      - !tagged_locator {
+          tag: csr.editor.node,
+          default_index_method: getNodeType,
+        }
 
   CsrDelft\Twig\Configurator:
     decorates: 'twig.configurator.environment'
@@ -150,7 +162,11 @@ services:
 
   CsrDelft\events\UserResolveListener:
     tags:
-      - { name: kernel.event_listener, event: trikoder.oauth2.user_resolve, method: onUserResolve }
+      - {
+          name: kernel.event_listener,
+          event: trikoder.oauth2.user_resolve,
+          method: onUserResolve,
+        }
 
   Trikoder\Bundle\OAuth2Bundle\Security\Guard\Authenticator\OAuth2Authenticator:
 
@@ -179,6 +195,6 @@ services:
       - '@CsrDelft\Component\DataTable\DataTableBuilder'
 
   CsrDelft\common\Logging\LogProcessor:
-    arguments: ["@request_stack", "@security.helper"]
+    arguments: ['@request_stack', '@security.helper']
     tags:
       - { name: monolog.processor }

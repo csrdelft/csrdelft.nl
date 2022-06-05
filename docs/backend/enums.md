@@ -6,6 +6,7 @@ title: Enums
 ---
 
 # Enums
+
 Enums zijn vet handig als je van tevoren al weet welke waarden een specifiek veld mag hebben.
 
 Met enums kun je type safe vaste waardes over en weer sturen en hoef je dus geen losse strings te gebruiken op plekken waar je weet dat er maar een paar verschillende waardes mogelijk zijn.

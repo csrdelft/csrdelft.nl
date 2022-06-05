@@ -1,9 +1,9 @@
-@import 'style.scss';
+@import "style.scss";
 
 $gray-transparant: #473d4594;
-$very-lightgray-transparant: #473D4521;
-$lightgray-transparant: #473D454F;
-$darkgray-transparant: #473D45BA;
+$very-lightgray-transparant: #473d4521;
+$lightgray-transparant: #473d454f;
+$darkgray-transparant: #473d45ba;
 
 $text-color: #555;
 
@@ -15,7 +15,8 @@ body {
 	background-color: $background-color;
 	color: $text-color;
 }
-h1, h2 {
+h1,
+h2 {
 	color: $secondary-color;
 	text-align: center;
 	font-family: $font-text;
@@ -23,7 +24,8 @@ h1, h2 {
 .line {
 	color: $primary-color;
 }
-h3, h4 {
+h3,
+h4 {
 	color: black;
 	text-align: center;
 	font-family: $font-text;
@@ -45,25 +47,29 @@ nav {
 }
 
 .titelbeschrijving {
-	background-image: url('../../images/lustrum12/budapest-achtergrond.jpg');
+	background-image: url("../../images/lustrum12/budapest-achtergrond.jpg");
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
 
 	padding-top: 90px;
 	padding-bottom: 40px;
-	h1, h2, h3, h4 {
+	h1,
+	h2,
+	h3,
+	h4 {
 		color: white;
 		font-family: $font-text;
 	}
 	h1 {
-		font-size: 4.0rem;
+		font-size: 4rem;
 		text-transform: none;
 	}
 	h2 {
 		font-size: 2.5rem;
 		text-transform: uppercase;
-		h3, h4 {
+		h3,
+		h4 {
 			text-transform: uppercase;
 		}
 	}
@@ -83,22 +89,18 @@ nav {
 		.datum {
 			font-size: 1.5rem;
 			color: $secondary-color;
-
 		}
 		.beschrijving {
-
 		}
 		img {
 			border-radius: 5px;
-			width: 100%
+			width: 100%;
 		}
 	}
 	img {
 		max-width: 100%;
 	}
 }
-
-
 
 .header {
 	padding-top: 10px;
@@ -108,7 +110,7 @@ nav {
 }
 
 h1.header {
-	font-size: 4.0rem;
+	font-size: 4rem;
 	padding-bottom: 20px;
 	padding-top: 50px;
 }
@@ -122,13 +124,13 @@ h1.header {
 	}
 }
 
-	/* Ketzers */
+/* Ketzers */
 .ketzers {
 	padding-top: 50px;
 	align-items: center;
 
 	.titel {
-		font-size: 4.0rem;
+		font-size: 4rem;
 		text-transform: none;
 		color: $primary-color;
 		padding-bottom: 20px;
@@ -151,7 +153,7 @@ h1.header {
 	}
 	// Knopjes
 	.btn {
-			color: $primary-color;
+		color: $primary-color;
 	}
 	// Geselecteerde knopjes
 	.btn-primary {
@@ -175,7 +177,7 @@ h1.header {
 		font-weight: bold;
 		font-family: $font-header;
 		text-transform: uppercase;
-		font-size: 2.0rem;
+		font-size: 2rem;
 	}
 	h4 {
 		color: $primary-color;

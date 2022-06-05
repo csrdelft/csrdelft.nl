@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class Icon extends Vue {
@@ -17,6 +17,4 @@ export default class Icon extends Vue {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

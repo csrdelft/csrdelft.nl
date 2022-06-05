@@ -18,22 +18,33 @@ In de database staat BB code, deze wordt geconverteerd naar HTML of Prosemirror 
 ```
 [verklapper][b]dingen[b][/verklapper]
 ```
+
 ```json
 {
 	"type": "doc",
-	"content": [{
-		"type": "verklapper",
-		"content": [{
-			"type": "text",
-			"text": "dingen",
-			"marks": [{"type": "bold"}]
-		}]
-	}]
+	"content": [
+		{
+			"type": "verklapper",
+			"content": [
+				{
+					"type": "text",
+					"text": "dingen",
+					"marks": [{ "type": "bold" }]
+				}
+			]
+		}
+	]
 }
 ```
+
 ```html
 <div class="card">
-	<a class="btn btn-secondary btn-sm" data-toggle="collapse" href="#verklapper_123">Verklapper</a>
+	<a
+		class="btn btn-secondary btn-sm"
+		data-toggle="collapse"
+		href="#verklapper_123"
+		>Verklapper</a
+	>
 	<div id="verklapper_123" class="collapse">
 		<div class="card-body">
 			<strong class="dikgedrukt bb-tag-b">dingen</strong>

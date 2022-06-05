@@ -1,14 +1,14 @@
-@import 'style.scss';
-@import 'colls';
+@import "style.scss";
+@import "colls";
 
 @font-face {
 	font-family: uppereastsideregular;
-	src: url('../../fonts/lustrum12/UpperEastSide.ttf');
+	src: url("../../fonts/lustrum12/UpperEastSide.ttf");
 }
 
 @font-face {
 	font-family: Arkadelphia Regular;
-	src: url('../../fonts/lustrum12/ArkadelphiaRegular.ttf');
+	src: url("../../fonts/lustrum12/ArkadelphiaRegular.ttf");
 }
 
 $dies-uppereast-font: uppereastsideregular, Arial, Helvetica, sans-serif;
@@ -18,10 +18,10 @@ $bordeaux-rood: #53110f;
 $Lila: #b8aee3;
 
 $rose: #d29ec4;
-$dark-rose:  #3F2F3A;
+$dark-rose: #3f2f3a;
 $gray-transparant: #473d4594;
-$lightgray-transparant: #473D454F;
-$darkgray-transparant: #473D45BA;
+$lightgray-transparant: #473d454f;
+$darkgray-transparant: #473d45ba;
 
 $oranje: #ffaf02;
 $bruin: #2a1c02;
@@ -32,23 +32,22 @@ $kleur-goud0: #ebb803;
 $kleur-goud1: #fadd00;
 $kleur-goud2: #f5d500;
 $kleur-goud3: #8f5a14;
-$kleur-wit: #FFFFFF;
+$kleur-wit: #ffffff;
 $kleur-zwart: #000000;
-
 
 .zandloper {
 	right: 20px;
 }
 /* nav */
-nav{
+nav {
 	//background: $dark-rose !important;
 	color: $bordeaux-rood;
 
 	.dies-logo-titel {
 		top: 50px;
-		height:100%;
+		height: 100%;
 		left: -3px;
-		@media screen and (max-width:768px){
+		@media screen and (max-width: 768px) {
 			visibility: hidden;
 		}
 	}
@@ -59,7 +58,7 @@ nav{
 		text-transform: uppercase;
 		text-decoration: none;
 		font-size: 24px;
-		transition: ease-in-out color .15s;
+		transition: ease-in-out color 0.15s;
 
 		&:hover {
 			color: $Lila;
@@ -70,20 +69,23 @@ nav{
 
 .titel {
 	color: $bordeaux-rood;
-	font-size: 4.0rem;
+	font-size: 4rem;
 }
 
 .ondertitel {
 	text-transform: none;
 	text-align: center;
-	font-size: 2.0rem;
+	font-size: 2rem;
 }
 
-.helemaal-boven{
+.helemaal-boven {
 	margin-top: 60px;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
 	color: $bordeaux-rood;
 	//text-transform: uppercase;
 	font-family: $dies-arkadelphia-font;
@@ -92,16 +94,16 @@ h1, h2, h3, h4 {
 
 body {
 	background-color: $rose;
-	background-image: url('../../images/lustrum12/dies-achtergrond.jpg');
+	background-image: url("../../images/lustrum12/dies-achtergrond.jpg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
 }
-body.diespagina{
-	background-image: url('../../images/lustrum12/dies-achtergrond-geknipt.jpg');
+body.diespagina {
+	background-image: url("../../images/lustrum12/dies-achtergrond-geknipt.jpg");
 }
 
-a{
+a {
 	text-decoration: none;
 }
 
@@ -118,7 +120,7 @@ a{
 .video-container {
 	width: 100%;
 	.youtube-container {
-		display:flex;
+		display: flex;
 		justify-content: center;
 		width: 100%;
 		height: 100%;
@@ -143,13 +145,12 @@ section {
 		max-height: 100%;
 		max-width: 100%;
 	}
-
 }
 
 /* 3 / 1 columns */
 .column-overzicht {
 	h1 {
-		font-size: 4.0rem;
+		font-size: 4rem;
 		text-transform: uppercase;
 	}
 	.container {
@@ -159,7 +160,7 @@ section {
 			color: $bordeaux-rood;
 		}
 		h4 {
-			font-size: 2.0rem;
+			font-size: 2rem;
 			text-align: left;
 			color: $bordeaux-rood;
 			text-transform: none;
@@ -170,15 +171,15 @@ section {
 /* Etiquette section */
 .etiquette {
 	p {
-		font-size: 1.0rem;
+		font-size: 1rem;
 	}
 }
 
 /* Ketzers */
-.ketzers{
+.ketzers {
 	align-items: center;
 
-	.ketzer{
+	.ketzer {
 		max-width: 1320px;
 		color: white;
 		.bb-block {
@@ -202,14 +203,13 @@ section {
 		a[id*="groep-lid-remove"] {
 			color: $kleur-wit;
 			background-color: $oranje;
-
 		}
 		h3 {
 			color: $oranje;
 			font-weight: bold;
 			font-family: $dies-uppereast-font;
 			text-transform: uppercase;
-			font-size: 2.0rem;
+			font-size: 2rem;
 		}
 		h4 {
 			color: $oranje;
@@ -232,7 +232,7 @@ section {
 	}
 }
 
-.programma{
+.programma {
 	text-align: center;
 	background-color: $gray-transparant; //$lightgray-transparant;
 	.dag {
@@ -249,7 +249,7 @@ section {
 			//font-family: $dies-uppereast-font;
 			font-family: $dies-arkadelphia-font;
 			text-align: center;
-			font-size: 3.0rem;
+			font-size: 3rem;
 			.cijfer {
 				font-family: $dies-uppereast-font;
 				font-weight: normal;
@@ -259,12 +259,10 @@ section {
 			border-top: 1px solid $Lila;
 		}
 		.activiteit {
-
 			//padding: 20px;
 			//border: 1px solid $Lila;
 			//box-shadow: 0px 0px 10px $Lila;
 			//border-radius: 25px;
-
 
 			margin-bottom: 40px;
 			h3 {
@@ -282,15 +280,15 @@ section {
 				}
 			}
 			.dies-activiteit-ketzers {
-				.toggler{
-					color:$oranje;
+				.toggler {
+					color: $oranje;
 					cursor: pointer;
 					user-select: none;
 				}
-				.toggler:hover{
+				.toggler:hover {
 					color: $Lila;
 				}
-				.verborgen{
+				.verborgen {
 					display: none;
 				}
 				.ketzers {
@@ -318,7 +316,6 @@ section {
 								background-color: $bordeaux-rood;
 								border-color: $bordeaux-rood;
 							}
-
 						}
 						h3 {
 							font-size: 1.8rem;
@@ -329,4 +326,3 @@ section {
 		}
 	}
 }
-
