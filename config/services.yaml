@@ -125,27 +125,15 @@ services:
   CsrDelft\view\bbcode\BbToProsemirror:
     public: true
     arguments:
-      - !tagged_locator {
-          tag: csr.editor.mark,
-          default_index_method: getBbTagType,
-        }
-      - !tagged_locator {
-          tag: csr.editor.node,
-          default_index_method: getBbTagType,
-        }
+      - !tagged_locator { tag: csr.editor.mark, default_index_method: getBbTagType }
+      - !tagged_locator { tag: csr.editor.node, default_index_method: getBbTagType }
       - '@Psr\Container\ContainerInterface'
 
   CsrDelft\view\bbcode\ProsemirrorToBb:
     public: true
     arguments:
-      - !tagged_locator {
-          tag: csr.editor.mark,
-          default_index_method: getMarkType,
-        }
-      - !tagged_locator {
-          tag: csr.editor.node,
-          default_index_method: getNodeType,
-        }
+      - !tagged_locator { tag: csr.editor.mark, default_index_method: getMarkType }
+      - !tagged_locator { tag: csr.editor.node, default_index_method: getNodeType }
 
   CsrDelft\Twig\Configurator:
     decorates: 'twig.configurator.environment'
@@ -162,11 +150,7 @@ services:
 
   CsrDelft\events\UserResolveListener:
     tags:
-      - {
-          name: kernel.event_listener,
-          event: trikoder.oauth2.user_resolve,
-          method: onUserResolve,
-        }
+      - { name: kernel.event_listener, event: trikoder.oauth2.user_resolve, method: onUserResolve }
 
   Trikoder\Bundle\OAuth2Bundle\Security\Guard\Authenticator\OAuth2Authenticator:
 

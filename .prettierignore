@@ -12,3 +12,6 @@ vendor
 
 # Built docs site
 docs/_site
+
+# Services, !tagged_locator wordt gesloopt door prettier.
+services.yaml
