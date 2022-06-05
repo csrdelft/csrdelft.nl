@@ -14,9 +14,9 @@
 {% block content %}
 	{{ getMelding() }}
 
-	{# {% if draad.magModereren %}
+	{% if draad.magModereren %}
 		{{ include('forum/partial/draad_mod.html.twig') }}
-	{% endif %} #}
+	{% endif %}
 	<header class="d-flex justify-content-between align-items-baseline ps-sm-4">
 		<div class="position-relative">
 			<span class="position-absolute top-50 start-0 translate-begin">
@@ -30,7 +30,7 @@
 			</span>
 			<h1 class="ps-24 d-block text-truncate">{{ draad.titel | raw }}</h1>
 		</div>
-		
+
 		{{ include('forum/partial/post_head_buttons.html.twig') }}
 
 		{# {% if statistiek %}
@@ -104,6 +104,6 @@
 			{{ include('forum/partial/draad_reageren.html.twig') }}
 			{{ include('forum/partial/post_form.html.twig', {deel: draad.deel}) }}
 		{% endif %}
-	</div>
+	</section>
 	{# {{ include('forum/partial/rss_link.html.twig') }} #}
 {% endblock %}
