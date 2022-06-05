@@ -3,16 +3,20 @@
 		<div class="btn-group me-2">
 			<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
 				 class="btn btn-light post ReloadPage melding-nooit {% if not deel.lidWilMeldingVoorDeel %}active{% endif %}"
-				 title="Geen meldingen voor forumdeel onvangen">{{ icon('email_delete', 'email_delete') }}</a>
+				 title="Geen meldingen voor forumdeel onvangen">
+				{{ icon('bell-slash') }}
+			</a>
 			<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
 				 class="btn btn-light post ReloadPage melding-altijd {% if deel.lidWilMeldingVoorDeel %}active{% endif %}"
-				 title="Meldingen ontvangen voor nieuwe berichten in forumdeel">{{ icon('email_add', 'email_add') }}</a>
+				 title="Meldingen ontvangen voor nieuwe berichten in forumdeel">
+				{{ icon('bell') }}
+			</a>
 		</div>
 	{% endif %}
 	<div class="btn-group me-2">
 		<a href="{{ url('csrdelft_forum_forumdradenverbergen_toonalles') }}" class="btn btn-light post confirm ReloadPage"
 			 title="Verborgen onderwerpen weer laten zien">
-			{{ icon('eye') }} {{ getAantalVerborgenVoorLid() }}
+			{{ icon('tonen') }} {{ getAantalVerborgenVoorLid() }}
 		</a>
 	</div>
 	{% if deel is not defined or (deel.forum_id is not empty and deel.magModereren) %}

@@ -49,7 +49,10 @@
 		{% if mag('P_ADMIN') and deel.forum_id is not empty %}
 			<div class="btn-group me-2">
 				<a href="/forum/beheren/{{ deel.forum_id }}" class="btn btn-light post popup"
-					 title="Deelforum beheren">{{ icon('wrench_orange') }} Beheren</a>
+					 title="Deelforum beheren">
+					{{ icon('wrench') }}
+					Beheren
+				</a>
 			</div>
 		{% endif %}
 		{{ include('forum/partial/head_buttons.html.twig') }}

@@ -19,31 +19,41 @@
 	<div class="float-end">
 		{% if album.subdir and album.magToevoegen %}
 			<a class="btn" href="{{ url('csrdelft_fotoalbum_uploaden', {dir: album.subdir}) }}">
-				{{ icon('picture_add') }} Toevoegen
+				{{ icon('toevoegen') }}
+				Toevoegen
 			</a>
 			<a class="btn post popup" href="{{ url('csrdelft_fotoalbum_toevoegen', {dir: album.subdir}) }}">
-				{{ icon('folder_add') }} Nieuw album
+				{{ icon('folder-plus') }}
+				Nieuw album
 			</a>
 		{% endif %}
 		{% if album.subdir and album.magAanpassen %}
 			<a href="{{ url('csrdelft_fotoalbum_hernoemen', {dir: album.subdir}) }}" class="btn post prompt redirect"
 				 title="Fotoalbum hernoemen"
 				 data="naam={{ album.dirname | title }}">
-				{{ icon('pencil') }} Naam wijzigen
+				{{ icon('bewerken') }}
+				Naam wijzigen
 			</a>
 			{% if album.empty %}
 				<a href="{{ url('csrdelft_fotoalbum_verwijderen', {dir: album.subdir}) }}" class="btn post confirm redirect"
-					 title="Fotoalbum verwijderen">{{ icon('cross') }} Verwijderen</a>
+					 title="Fotoalbum verwijderen">
+					{{ icon('verwijderen') }}
+					Verwijderen
+				</a>
 			{% endif %}
 			<a class="btn popup confirm" href="{{ url('csrdelft_fotoalbum_verwerken', {dir: album.subdir}) }}"
 				 title="Fotoalbum verwerken (dit kan even duren). Verwijder magick-* files in /tmp handmatig bij timeout!">
-				{{ icon('application_view_gallery') }} Verwerken
+				{{ icon('images') }}
+				Verwerken
 			</a>
 		{% endif %}
 		{% if mag('P_LOGGED_IN') %}
 			{% if album.fotos and album.subdir %}
 				<a class="btn" href="{{ url('csrdelft_fotoalbum_downloaden', {dir: album.subdir}) }}"
-					 title="Download als TAR-bestand">{{ icon('picture_save') }} Download album</a>
+					 title="Download als TAR-bestand">
+					{{ icon('download') }}
+					Download album
+				</a>
 			{% endif %}
 		{% endif %}
 	</div>

@@ -26,47 +26,47 @@
 		<div class="forumpostKnoppen">
 			{% if post.wacht_goedkeuring %}
 			<a href="{{ url('csrdelft_forum_forumpost_goedkeuren', {post_id: post.post_id}) }}" class="btn post confirm"
-				 title="Bericht goedkeuren">{{ icon('check') }}</a>
+				 title="Bericht goedkeuren">{{ icon('goedkeuren') }}</a>
 			<a href="/forum/verwijderen/{{ post.post_id }}" class="btn post confirm"
-				 title="Verwijder bericht of draad">{{ icon('cross') }}</a>
+				 title="Verwijder bericht of draad">{{ icon('verwijderen') }}</a>
 			{% if post.magBewerken %}
 				<a href="#{{ post.post_id }}"
 					 class="{% if app.user and app.user.uid != post.uid and not post.wacht_goedkeuring %}forummodknop{% endif %}"
-					 onclick="window.forum.forumBewerken({{ post.post_id }});" title="Bewerk bericht">{{ icon('pencil') }}</a>
+					 onclick="window.forum.forumBewerken({{ post.post_id }});" title="Bewerk bericht">{{ icon('bewerken') }}</a>
 			{% endif %}
 			{% else %}
 			{% if post.verwijderd %}
 				<div class="post-verwijderd">Deze reactie is verwijderd.</div>
 				<a href="/forum/verwijderen/{{ post.post_id }}" class="btn post"
-					 title="Bericht herstellen">{{ icon('arrow_undo') }}</a>
+					 title="Bericht herstellen">{{ icon('undo') }}</a>
 			{% endif %}
 			{% if post.magCiteren %}
 				<a href="#reageren" class="btn citeren" data-citeren="{{ post.post_id }}"
-					 title="Citeer bericht">{{ icon('comments') }}</a>
+					 title="Citeer bericht">{{ icon('citeren') }}</a>
 			{% endif %}
 			{% if post.magBewerken %}
 				<a href="#{{ post.post_id }}"
 					 class="{% if app.user and app.user.uid != post.uid and not post.wacht_goedkeuring %}forummodknop{% endif %}"
-					 onclick="window.forum.forumBewerken({{ post.post_id }});" title="Bewerk bericht">{{ icon('pencil') }}</a>
+					 onclick="window.forum.forumBewerken({{ post.post_id }});" title="Bewerk bericht">{{ icon('bewerken') }}</a>
 			{% endif %}
 			{% if app.user %}
 				{% set timestamp = post.datum_tijd.timestamp %}
 				<a id="timestamp{{ timestamp }}" href="{{ url('csrdelft_forum_forum_bladwijzer', {draad_id: post.draad_id}) }}"
 					 class="btn post forummodknop bladwijzer" data="timestamp={{ timestamp }}"
-					 title="Bladwijzer bij dit bericht leggen">{{ icon('tab') }}</a>
+					 title="Bladwijzer bij dit bericht leggen">{{ icon('bookmark') }}</a>
 			{% endif %}
 			{% if post.draad.magModereren %}
 			<a href="/forum/offtopic/{{ post.post_id }}"
 				 class="btn post confirm {% if not post.wacht_goedkeuring %}forummodknop{% endif %}"
-				 title="Offtopic markeren">{{ icon('thumb_down') }}</a>
+				 title="Offtopic markeren">{{ icon('thumbs-down') }}</a>
 			{% if not post.verwijderd %}
 			<a href="/forum/verwijderen/{{ post.post_id }}"
 				 class="btn post confirm {% if not post.wacht_goedkeuring %}forummodknop{% endif %}"
-				 title="Verwijder bericht">{{ icon('cross') }}</a>
+				 title="Verwijder bericht">{{ icon('verwijderen') }}</a>
 			{% endif %}
 			<a href="/forum/verplaatsen/{{ post.post_id }}"
 				 class="btn post prompt {% if not post.wacht_goedkeuring %}forummodknop{% endif %}" title="Verplaats bericht"
-				 data="draad_id={{ post.draad_id }}">{{ icon('arrow_right') }}</a>
+				 data="draad_id={{ post.draad_id }}">{{ icon('folder-tree') }}</a>
 			{% endif %}
 			{% endif %}
 		</div>

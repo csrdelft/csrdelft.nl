@@ -15,9 +15,9 @@ class="taak-datum-head taak-datum-{{ datum }}
 	<th>Punten<br/>toegekend</th>
 	<th class="text-center">
 		{% if prullenbak %}
-			{{ icon("cross", null, "Definitief verwijderen") }}
+			{{ icon("verwijderen", null, "Definitief verwijderen") }}
 		{% else %}
-			{{ icon("bin_empty", null, "Naar de prullenbak verplaatsen") }}
+			{{ icon("prullenbak", null, "Naar de prullenbak verplaatsen") }}
 		{% endif %}
 	</th>
 </tr>

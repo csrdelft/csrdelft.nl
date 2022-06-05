@@ -20,7 +20,10 @@
 			<a
 				href="{{ url('csrdelft_maalcie_maaltijdrepetities_bewerk', {mlt_repetitie_id: maaltijdrepetitie.mlt_repetitie_id}) }}"
 				title="Wijzig gekoppelde maaltijd"
-				class="btn popup">{{ icon("calendar_edit") }}</a>
+				class="btn popup"
+			>
+				{{ icon("file-pen") }}
+			</a>
 		{% endif %}
 	</p>
 	<p>
@@ -46,13 +49,13 @@
 	<div class="float-end">
 		{% if maaltijdrepetitie is none %}
 			<a href="{{ url('csrdelft_maalcie_corveerepetities_nieuw') }}" class="btn post popup">
-				{{ icon("add") }} Nieuwe repetitie
+				{{ icon("toevoegen") }} Nieuwe repetitie
 			</a>
 		{% else %}
 			<a
 				href="{{ url('csrdelft_maalcie_corveerepetities_nieuw', {mlt_repetitie_id: maaltijdrepetitie.mlt_repetitie_id}) }}"
 				class="btn post popup">
-				{{ icon("add") }} Nieuwe repetitie
+				{{ icon("toevoegen") }} Nieuwe repetitie
 			</a>
 		{% endif %}
 	</div>
@@ -63,10 +66,10 @@
 			<th>Functie</th>
 			<th>Dag</th>
 			<th>Periode</th>
-			<th>{{ icon("tick", null, "Voorkeurbaar") }}</th>
+			<th>{{ icon("check", null, "Voorkeurbaar", 'text-success') }}</th>
 			<th>Standaard<br/>punten</th>
 			<th>Aantal<br/>corveeërs</th>
-			<th title="Definitief verwijderen" class="text-center">{{ icon("cross") }}</th>
+			<th title="Definitief verwijderen" class="text-center">{{ icon("verwijderen") }}</th>
 		</tr>
 		</thead>
 		<tbody>

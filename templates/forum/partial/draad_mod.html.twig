@@ -10,7 +10,7 @@
 			<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'plakkerig'}) }}"
 				 class="btn btn-light post ReloadPage"
 				 title="Verander plakkerigheid">
-				{{ icon('note') }} maak {% if draad.plakkerig %}<span class="dikgedrukt">niet</span>{% endif %} plakkerig
+				{{ icon('plakkerig') }} maak {% if draad.plakkerig %}<span class="dikgedrukt">niet</span>{% endif %} plakkerig
 			</a>
 			<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'eerste_post_plakkerig'}) }}"
 				 class="btn btn-light post ReloadPage {% if draad.eerste_post_plakkerig %}active{% endif %}"
@@ -26,14 +26,14 @@
 				 class="btn btn-light post confirm ReloadPage"
 				 title="Verander status verwijderd (incl. alle reacties)">
 				{% if draad.verwijderd %}
-					{{ icon('arrow_undo') }} draad herstellen
+					{{ icon('undo') }} draad herstellen
 				{% else %}
-					{{ icon('cross') }} draad verwijderen
+					{{ icon('verwijderen') }} draad verwijderen
 				{% endif %}
 			</a>
 			<a href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, pagina: 'prullenbak'}) }}"
 				 class="btn btn-light"
-				 title="Bekijk de reacties die zijn verwijderd">{{ icon('bin_closed') }} verwijderde reacties</a>
+				 title="Bekijk de reacties die zijn verwijderd">{{ icon('trash-arrow-up') }} verwijderde reacties</a>
 		</div>
 		<form action="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'forum_id'}) }}" method="post">
 			{{ csrfField() }}

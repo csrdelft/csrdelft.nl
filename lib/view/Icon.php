@@ -18,11 +18,17 @@ class Icon {
 		'toevoegen' => 'plus',
 		'bewerken' => 'pencil',
 		'verwijderen' => 'trash',
-		'alert' => 'stop',
 		'goedkeuren' => 'circle-check',
 		'verjaardag' => 'cake-candles',
 		'vraagteken' => 'circle-question',
-		'show' => 'eye',
+		'tonen' => 'eye',
+		'verbergen' => 'eye-slash',
+		'sluiten' => 'xmark',
+		'kopieren' => 'clipboard',
+		'undo' => 'arrow-rotate-left',
+		'redo' => 'arrow-rotate-right',
+		'alert' => 'stop',
+		'stop' => 'ban',
 		//documumenten
 		'mime-onbekend' => 'file-circle-exclamation',
 		'mime-audio' => 'file-audio',
@@ -37,8 +43,14 @@ class Icon {
 		// forum
 		'citeren' => 'quote-left',
 		'slotje' => 'lock',
-		'plakkerig' => 'note',
+		'plakkerig' => 'note-sticky',
 		'belangrijk' => 'star',
+		'ruby' => 'gem',
+		'asterisk_orange' => 'star',
+		'flag_red' => 'flag', // Backwards compatibility
+		'flag_orange' => 'flag',
+		'flag_green' => 'flag',
+		'flag_blue' => 'flag',
 		// profiel
 		'stats' => 'chart-line',
 		'resetpassword' => 'user-lock',
@@ -48,21 +60,23 @@ class Icon {
 		'alert-info' => 'bell-on',
 		'alert-success' => 'circle-check',
 		'alert-warning' => 'bell',
-		// Overig
-		'table' => 'table',
+		// overig
+		'tabel' => 'table',
 		'log' => 'rectangle-terminal',
+		'prullenbak' => 'dumpster',
 
 		'calendar' => 'calendar',
 		'forum' => 'comments',
 		'profiel' => 'user',
 		'fotoalbum' => 'camera',
 		'document' => 'file',
-		'Woonoord' => 'home',
-		'Commissie' => 'users',
-		'Ondervereniging' => 'users',
-		'Kring' => 'circle-notch',
+		'woonoord' => 'home',
+		'commissie' => 'users',
+		'ondervereniging' => 'users',
+		'kring' => 'circle-notch',
 		'boek' => 'book',
-		'wiki' => 'book-atlas'
+		'wiki' => 'book-atlas',
+		'rechten' => 'key'
 	);
 
 	public static function get($key) {

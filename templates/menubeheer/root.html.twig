@@ -14,7 +14,7 @@
 	<div class="col-auto">
 		<a href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: root.item_id}) }}" class="btn btn-sm post popup"
 			 title="Menu-item toevoegen">
-			{{ icon('add') }}
+			{{ icon('toevoegen') }}
 		</a>
 		{% if mag('P_ADMIN') %}
 			<a href="{{ url('csrdelft_menubeheer_bewerken', {itemId: root.item_id}) }}" class="btn btn-sm post popup"
