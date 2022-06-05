@@ -12,15 +12,19 @@
 
 		{% if document.magVerwijderen %}
 			<a class="verwijderen me-2 post float-end"
-				 href="{{ url('csrdelft_documenten_verwijderen', {id: document.id}) }}" title="Document verwijderen"
-				 onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">{{ icon('verwijderen') }}</a>
+				 href="{{ url('csrdelft_documenten_verwijderen', {id: document.id}) }}"
+				 onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">
+				{{ icon('verwijderen', null, 'Document verwijderen') }}
+			</a>
 		{% endif %}
 		{% if document.magBewerken %}
-			<a class="bewerken me-2 float-end" href="{{ url('csrdelft_documenten_bewerken', {id: document.id}) }}"
-				 title="Document bewerken">{{ icon('bewerken') }}</a>
+			<a class="bewerken me-2 float-end" href="{{ url('csrdelft_documenten_bewerken', {id: document.id}) }}">
+				{{ icon('bewerken', null, 'Document bewerken') }}
+			</a>
 		{% endif %}
-		<span role="button" class="float-end me-2" data-copy="[document={{ document.id }}]"
-					title="Klik om bbcode te kopieren: [document={{ document.id }}]">{{ icon('page_copy') }}</span>
+		<span role="button" class="float-end me-2" data-copy="[document={{ document.id }}]">
+			{{ icon('kopieren', null, 'Klik om bbcode te kopieren') }}
+		</span>
 	</td>
 	<td class="size">{{ document.filesize }}</td>
 	<td title="{{ document.mimetype }}">{{ document.mimetypeIcon | raw }}</td>

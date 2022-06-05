@@ -24,11 +24,11 @@
 			{% endif %}
 			maaltijd:<br/>
 			{% if maaltijd.verwijderd %}
-				{{ icon("bin", null, "Maaltijd is verwijderd") }}
+				{{ icon("verwijderen", null, "Maaltijd is verwijderd") }}
 			{% else %}
 				<a href="{{ url('csrdelft_maalcie_beheermaaltijden_get_beheer', {maaltijd_id: maaltijd.maaltijd_id}) }}"
 					 title="Wijzig gekoppelde maaltijd"
-					 class="btn popup">{{ icon("cup_edit") }}</a>
+					 class="btn popup">{{ icon("bewerken") }}</a>
 			{% endif %}
 			<span
 				class="dikgedrukt">{{ maaltijd.titel }} op {{ maaltijd.datum | datetime_format_long }} om {{ maaltijd.tijd | time_format }}</span>
@@ -47,15 +47,20 @@
 		<p>N.B. U kunt ingedeelde corveeërs eenvoudig ruilen door het icoontje voor de naam te verslepen.</p>
 		<br/>
 		{#
-		<a href="/corvee/beheer/indelen" title="Leden automatisch indelen voor taken" class="btn">@icon("date") Automatisch indelen</a>
-	<a href="/corvee/beheer/herinneren" title="Verstuur herinneringen" class="btn">@icon("clock") Herinneringen
+		<a href="/corvee/beheer/indelen" title="Leden automatisch indelen voor taken" class="btn">@icon("calendar") Automatisch indelen</a>
+	<a href="/corvee/beheer/herinneren" title="Verstuur herinneringen" class="btn">@icon("stopwatch") Herinneringen
 	versturen</a>
 		#}
 		<div class="float-end">
 			{% if maaltijd is none or not maaltijd.verwijderd %}
-				<a class="btn" onclick="$(this).hide(); window.maalcie.takenShowOld();">{{ icon("eye") }} Toon verleden</a>
-				<a href="{{ url('csrdelft_maalcie_beheertaken_prullenbak') }}" class="btn">{{ icon("bin_closed") }} Open
-					prullenbak</a>
+				<a class="btn" onclick="$(this).hide(); window.maalcie.takenShowOld();">
+					{{ icon("tonen") }}
+					Toon verleden
+				</a>
+				<a href="{{ url('csrdelft_maalcie_beheertaken_prullenbak') }}" class="btn">
+					{{ icon("prullenbak") }}
+					Open prullenbak
+				</a>
 				<a
 					{% if maaltijd is none %}
 						href="{{ url('csrdelft_maalcie_beheertaken_nieuw') }}"
@@ -64,7 +69,8 @@
 					{% endif %}
 					class="btn post popup"
 				>
-					{{ icon("add") }} Nieuwe taak
+					{{ icon("toevoegen") }}
+					Nieuwe taak
 				</a>
 			{% endif %}
 		</div>
@@ -79,7 +85,10 @@
 			method="post"
 			class="Formulier ModalForm SubmitReset">
 			{{ csrfField() }}
-			<label for="crid" style="width: auto;">{{ icon("calendar_add") }} Periodieke taken aanmaken:</label>&nbsp;
+			<label for="crid" style="width: auto;">
+				{{ icon("calendar-plus") }}
+				Periodieke taken aanmaken:
+			</label>&nbsp;
 			<select id="crid" name="crv_repetitie_id" value="kies" origvalue="kies" class="FormElement SubmitChange">
 				<option selected="selected">kies</option>
 				{% for repetitie in repetities %}
@@ -89,7 +98,7 @@
 				{% endfor %}
 			</select>
 			<a href="{{ url('csrdelft_maalcie_corveerepetities_beheer') }}" class="btn" title="Periodiek corvee beheren">
-				{{ icon("calendar_edit") }}
+				{{ icon("file-pen") }}
 			</a>
 		</form>
 	{% endif %}

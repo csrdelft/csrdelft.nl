@@ -26,18 +26,21 @@
 					<td>{{ pagina.laatstGewijzigd | reldate }}</td>
 					<td>{{ pagina.rechtenBekijken }}</td>
 					<td>{{ pagina.rechtenBewerken }}</td>
-					<td>{{ pagina.inlineHtml ? icon('tick') : icon('cross') }}</td>
+					<td>{{ pagina.inlineHtml ? icon('check', null, 'Ja', 'text-success') : icon('xmark', null, 'Nee', 'text-danger') }}</td>
 					<td>
 						<div class="btn-group btn-group-sm">
-							<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_bekijken', {naam: pagina.naam}) }}"
-								 title="Bekijken">{{ icon('eye') }}</a>
+							<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_bekijken', {naam: pagina.naam}) }}">
+								{{ icon('tonen', null, 'Bekijken') }}
+							</a>
 							{% if is_granted('bewerken', pagina) %}
-								<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_bewerken', {naam: pagina.naam}) }}"
-									 title="Bewerken">{{ icon('bewerken') }}</a>
+								<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_bewerken', {naam: pagina.naam}) }}">
+									{{ icon('bewerken', null, 'Bewerken') }}
+								</a>
 							{% endif %}
 							{% if is_granted('verwijderen', pagina) %}
-								<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_verwijderen', {naam: pagina.naam}) }}"
-									 title="Verwijderen">{{ icon('delete') }}</a>
+								<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_verwijderen', {naam: pagina.naam}) }}">
+									{{ icon('verwijderen', null, 'Verwijderen') }}
+								</a>
 							{% endif %}
 						</div>
 					</td>

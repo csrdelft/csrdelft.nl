@@ -14,7 +14,10 @@
 		{% if is_granted('ROLE_DOCS_MOD') %}
 			<a class="btn post popup redirect" href="{{ url('csrdelft_documenten_categorieaanmaken') }}">Categorie toevoegen</a>
 		{% endif %}
-		<a class="btn" href="{{ url('csrdelft_documenten_toevoegen') }}">{{ icon('toevoegen') }} Toevoegen</a>
+		<a class="btn" href="{{ url('csrdelft_documenten_toevoegen') }}">
+			{{ icon('toevoegen') }}
+			Toevoegen
+		</a>
 	</div>
 
 	{{ getMelding() }}

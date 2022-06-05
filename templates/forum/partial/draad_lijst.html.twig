@@ -4,11 +4,11 @@
 	{% endif %}
 
 	{% if draad.belangrijk %}
-		{{ icon(draad.belangrijk, null, 'dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
+		{{ icon(draad.belangrijk, null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
 	{% elseif draad.plakkerig %}
-		{{ icon('note', null, 'Dit onderwerp is plakkerig, het blijft bovenaan') }}
+		{{ icon('plakkerig', null, 'Dit onderwerp is plakkerig, het blijft bovenaan') }}
 	{% elseif draad.gesloten %}
-		{{ icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
+		{{ icon('slotje', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
 	{% endif %}
 
 	{% if lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen' %}

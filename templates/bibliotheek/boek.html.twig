@@ -106,7 +106,7 @@
 			{% if boek.magBekijken %}
 				{# blok rechts met knopjes #}
 				<ul class="col-md-4 list-group">
-					<li class="list-group-item"><a href="{{ url('csrdelft_bibliotheek_boek') }}">{{ icon("book_add") }} Nieuw
+					<li class="list-group-item"><a href="{{ url('csrdelft_bibliotheek_boek') }}">{{ icon("toevoegen") }} Nieuw
 							boek</a>
 					</li>
 					{% if boek.id is not none %}
@@ -124,7 +124,7 @@
 							<a class="post ReloadPage" href="{{ url('csrdelft_bibliotheek_addexemplaar', {boek: boek.id}) }}"
 								 title="Ik bezit dit boek ook"
 								 onclick="return confirm('U bezit zelf een exemplaar van dit boek? Door het toevoegen aan de catalogus geef je aan dat anderen dit boek kunnen lenen.')">
-								{{ icon("user_add") }} Ik bezit dit boek
+								{{ icon("user-plus") }} Ik bezit dit boek
 							</a>
 						</li>
 						{% if is_granted('ROLE_BIEB_MOD') %}
@@ -133,7 +133,7 @@
 									 href="{{ url('csrdelft_bibliotheek_addexemplaar', {boek: boek.id, profiel: 'x222'}) }}"
 									 title="C.S.R.-bieb bezit dit boek ook"
 									 onclick="return confirm('Bezit de C.S.R.-bieb een exemplaar van dit boek?')">
-									{{ icon("user_add") }} Is een biebboek
+									{{ icon("bookmark") }} Is een biebboek
 								</a>
 							</li>
 						{% endif %}
@@ -204,45 +204,45 @@
 												<br/>
 											{% endif %}
 										{% else %}
-											<a class="btn post ReloadPage"
+											<a class="btn btn-primary post ReloadPage"
 												 href="{{ url('csrdelft_bibliotheek_exemplaarlenen', {exemplaar: exemplaar.id}) }}"
 												 title="Leen dit boek"
 												 onclick="return confirm('U wilt dit boek van {{ exemplaar.eigenaar.naam }} lenen?')">
-												{{ icon("lorry") }} Exemplaar lenen
+												{{ icon("truck") }} Exemplaar lenen
 											</a>
 										{% endif %}
 									{% elseif exemplaar.status.isuitgeleend and exemplaar.uitgeleend_uid == app.user.uid and exemplaar.uitgeleend_uid != exemplaar.eigenaar_uid %}
-										<a class="btn post ReloadPage"
+										<a class="btn btn-primary post ReloadPage"
 											 href="{{ url('csrdelft_bibliotheek_exemplaarteruggegeven', {id: exemplaar.id}) }}"
 											 title="Boek heb ik teruggegeven"
 											 onclick="return confirm('U heeft dit exemplaar van {{ exemplaar.eigenaar.naam }} teruggegeven?')">
-											{{ icon("lorry_go") }} Teruggegeven
+											{{ icon("truck-arrow-right") }} Teruggegeven
 										</a>
 									{% endif %}
 									{% if exemplaar.eigenaar %}
 										{% if exemplaar.status.isuitgeleend or exemplaar.teruggegeven %}
-											<a class="btn post ReloadPage"
+											<a class="btn btn-primary post ReloadPage"
 												 href="{{ url('csrdelft_bibliotheek_exemplaarterugontvangen', {exemplaar: exemplaar.id}) }}"
 												 title="Boek is ontvangen"
 												 onclick="return confirm('Dit exemplaar van {{ exemplaar.eigenaar.naam }} is terugontvangen?')">
-												{{ icon("lorry_flatbed") }} Ontvangen
+												{{ icon("truck-arrow-right") }} Ontvangen
 											</a>
 										{% elseif exemplaar.status.isbeschikbaar %}
-											<a class="btn post ReloadPage"
+											<a class="btn btn-primary post ReloadPage"
 												 href="{{ url('csrdelft_bibliotheek_exemplaarvermist', {exemplaar: exemplaar.id}) }}"
 												 title="Exemplaar is vermist"
 												 onclick="return confirm('Is het exemplaar van {{ exemplaar.eigenaar.naam }} vermist?')">
-												{{ icon("emoticon_unhappy") }} Vermist
+												{{ icon("face-frown") }} Vermist
 											</a>
 										{% elseif exemplaar.status.isvermist %}
-											<a class="btn post ReloadPage"
+											<a class="btn btn-primary post ReloadPage"
 												 href="{{ url('csrdelft_bibliotheek_exemplaargevonden', {exemplaar: exemplaar.id}) }}"
 												 title="Exemplaar teruggevonden"
 												 onclick="return confirm('Is het exemplaar van {{ exemplaar.eigenaar.naam }} teruggevonden?')">
-												{{ icon("emoticon_smile") }} Teruggevonden
+												{{ icon("face-grin") }} Teruggevonden
 											</a>
 										{% endif %}
-										<a class="btn post ReloadPage"
+										<a class="btn btn-secondary post ReloadPage"
 											 href="{{ url('csrdelft_bibliotheek_verwijderexemplaar', {exemplaar: exemplaar.id}) }}"
 											 title="Exemplaar verwijderen"
 											 onclick="return confirm('Weet u zeker dat u dit exemplaar van {{ exemplaar.eigenaar.naam }} wilt verwijderen?')">

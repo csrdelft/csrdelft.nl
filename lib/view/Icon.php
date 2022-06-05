@@ -14,16 +14,22 @@ class Icon
 {
 	//handige dingen die we graag gebruiken in csrdelft.nl. Moeten geen namen zijn die al voorkomen
 	//in de lijst met icons.
-	public static $alias = [
+	public static $alias = array(
 		// algemeen
 		'toevoegen' => 'plus',
 		'bewerken' => 'pencil',
 		'verwijderen' => 'trash',
-		'alert' => 'stop',
 		'goedkeuren' => 'circle-check',
 		'verjaardag' => 'cake-candles',
 		'vraagteken' => 'circle-question',
-		'show' => 'eye',
+		'tonen' => 'eye',
+		'verbergen' => 'eye-slash',
+		'sluiten' => 'xmark',
+		'kopieren' => 'clipboard',
+		'undo' => 'arrow-rotate-left',
+		'redo' => 'arrow-rotate-right',
+		'alert' => 'stop',
+		'stop' => 'ban',
 		//documumenten
 		'mime-onbekend' => 'file-circle-exclamation',
 		'mime-audio' => 'file-audio',
@@ -38,8 +44,14 @@ class Icon
 		// forum
 		'citeren' => 'quote-left',
 		'slotje' => 'lock',
-		'plakkerig' => 'note',
+		'plakkerig' => 'note-sticky',
 		'belangrijk' => 'star',
+		'ruby' => 'gem',
+		'asterisk_orange' => 'star',
+		'flag_red' => 'flag', // Backwards compatibility
+		'flag_orange' => 'flag',
+		'flag_green' => 'flag',
+		'flag_blue' => 'flag',
 		// profiel
 		'stats' => 'chart-line',
 		'resetpassword' => 'user-lock',
@@ -49,25 +61,24 @@ class Icon
 		'alert-info' => 'bell-on',
 		'alert-success' => 'circle-check',
 		'alert-warning' => 'bell',
-		// Overig
-		'table' => 'table_normal',
-		'log' => 'report',
-	];
+		// overig
+		'tabel' => 'table',
+		'log' => 'rectangle-terminal',
+		'prullenbak' => 'dumpster',
 
-	public static $fa = [
-		'calendar' => 'fa fa-calendar',
-		'forum' => 'fa fa-comments',
-		'profiel' => 'fa fa-user',
-		'fotoalbum' => 'fa fa-camera',
-		'document' => 'fa fa-file',
-		'Woonoord' => 'fa fa-home',
-		'Commissie' => 'fa fa-users',
-		'Ondervereniging' => 'fa fa-users',
-		'Kring' => 'fa fa-circle-notch',
-		'note' => 'fa fa-sticky-note',
-		'boek' => 'fa fa-book',
-		'wiki' => 'fa fa-atlas',
-	];
+		'calendar' => 'calendar',
+		'forum' => 'comments',
+		'profiel' => 'user',
+		'fotoalbum' => 'camera',
+		'document' => 'file',
+		'woonoord' => 'home',
+		'commissie' => 'users',
+		'ondervereniging' => 'users',
+		'kring' => 'circle-notch',
+		'boek' => 'book',
+		'wiki' => 'book-atlas',
+		'rechten' => 'key'
+	);
 
 	public static function get($key)
 	{
@@ -93,16 +104,6 @@ class Icon
 		$content = null
 	) {
 		$icon = self::get($key);
-
-		if (isset(static::$fa[$icon])) {
-			return sprintf(
-				'<span class="%s %s" title="%s">%s</span>',
-				static::$fa[$icon],
-				htmlspecialchars($class),
-				htmlspecialchars($title),
-				htmlspecialchars($content)
-			);
-		}
 
 		if ($hover !== null) {
 			$hover = 'hover-' . self::get($hover);

@@ -9,7 +9,7 @@
 			<th style="width: 135px;">Naam</th>
 			<th>Laatste taak
 				{% if kwalificatie_benodigd %}
-					&nbsp;{{ icon("bullet_arrow_up") }}
+					&nbsp;{{ icon("clock-rotate-left") }}
 				{% endif %}
 			</th>
 		</tr>
@@ -27,11 +27,11 @@
 						<a class="btn submit" style="padding: 0 2px;"
 							 onclick="$(this).closest('form').find('.LidObjectField').val('{{ uid }}');">
 							{% if suggestie.recent %}
-								{{ icon("time_delete", null, "Recent gecorveed") }}
+								{{ icon("xmark", null, "Recent gecorveed") }}
 							{% elseif suggestie.voorkeur %}
-								{{ icon("emoticon_smile", null, "Heeft voorkeur") }}
+								{{ icon("face-grin", null, "Heeft voorkeur") }}
 							{% else %}
-								{{ icon("bullet_go", null, "Toewijzen aan dit lid") }}
+								{{ icon("arrow-right", null, "Toewijzen aan dit lid") }}
 							{% endif %}
 						</a>
 					</td>

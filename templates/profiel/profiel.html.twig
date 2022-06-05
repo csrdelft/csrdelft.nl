@@ -55,33 +55,38 @@
 						{% endif %}
 						<a href="{{ url('csrdelft_profiel_vcard', {uid: profiel.uid}) }}" class="list-group-item"
 							 title="Dit profiel opslaan in lokaal adresboek">
-							{{ icon('vcard_add') }} Exporteren
+							{{ icon('address-card') }}
+							Exporteren
 						</a>
 						{% if profiel.magBewerken %}
 							<a href="{{ url('csrdelft_profiel_bewerken', {uid: profiel.uid}) }}" class="list-group-item"
 								 title="Bewerk dit profiel">
-								{{ icon('pencil') }} Profiel bewerken
+								{{ icon('bewerken') }}
+								Profiel bewerken
 							</a>
 							<a href="{{ url('csrdelft_profiel_voorkeuren', {uid: profiel.uid}) }}" class="list-group-item"
 								 title="Pas voorkeuren voor commissies aan">
-								{{ icon('report_edit') }} Commissievoorkeuren
+								{{ icon('file-pen') }} Commissievoorkeuren
 							</a>
 							<a href="{{ url('csrdelft_toestemming_get_overzicht') }}" class="list-group-item"
 								 title="Pas toestemming aan">
-								{{ icon('lock_edit') }} Toestemming
+								{{ icon('user-shield') }}
+								Toestemming
 							</a>
 						{% endif %}
 						{% if is_granted('ROLE_ADMIN') or app.user.uid == profiel.uid %}
 							{% if profiel.account %}
 								<a href="{{ url('csrdelft_account_bewerken', {uid: profiel.uid}) }}" class="list-group-item"
 									 title="Inloggegevens bewerken">
-									{{ icon('key') }} Inloggegevens bewerken
+									{{ icon('rechten') }}
+									Inloggegevens bewerken
 								</a>
 							{% else %}
 								{% if is_granted('ROLE_ADMIN') %}
 									<a href="{{ url('csrdelft_account_aanmaken', {uid: profiel.uid}) }}" class="list-group-item"
 										 title="Account aanmaken">
-										{{ icon('key_delete', 'key_add') }} Account aanmaken
+										{{ icon('user-plus') }}
+										Account aanmaken
 									</a>
 								{% endif %}
 							{% endif %}
@@ -471,9 +476,11 @@
 						-
 					{% endif %}
 					{% if app.user.uid == profiel.uid %}
-						<div class="inline" style="position: absolute;"><a href="{{ url('csrdelft_maalcie_mijnvoorkeuren_mijn') }}"
-																															 title="Bewerk voorkeuren"
-																															 class="btn">{{ icon('pencil') }}</a></div>
+						<div class="inline" style="position: absolute;">
+							<a href="{{ url('csrdelft_maalcie_mijnvoorkeuren_mijn') }}" title="Bewerk voorkeuren" class="btn">
+								{{ icon('bewerken') }}
+							</a>
+						</div>
 					{% endif %}
 				</dd>
 			</dl>
@@ -641,8 +648,10 @@
 				{% if app.user.uid == profiel.uid %}
 					<dt></dt>
 					<dd>
-						<a class="btn btn-primary" href="{{ url('csrdelft_bibliotheek_boek') }}">{{ icon('book_add') }} Nieuw
-							boek</a>
+						<a class="btn btn-primary" href="{{ url('csrdelft_bibliotheek_boek') }}">
+							{{ icon('toevoegen') }}
+							Nieuw boek
+						</a>
 					</dd>
 				{% endif %}
 				{% if gerecenseerdeboeken is not empty %}
