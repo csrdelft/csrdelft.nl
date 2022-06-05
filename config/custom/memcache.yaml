@@ -11,7 +11,7 @@ doctrine:
 framework:
   cache:
     app: cache.adapter.memcached
-    default_memcached_provider: "%env(MEMCACHED_URL)%"
+    default_memcached_provider: '%env(MEMCACHED_URL)%'
     pools:
       doctrine.second_level_cache_pool:
         name: doctrine.second_level_cache_pool
@@ -21,6 +21,6 @@ framework:
 
 services:
   CsrDelft\command\FlushMemcacheCommand:
-    tags: [ console.command ]
+    tags: [console.command]
     arguments:
       - '@cache.app'

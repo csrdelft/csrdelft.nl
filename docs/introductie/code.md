@@ -16,5 +16,3 @@ Verder houden we [PSR-12](https://www.php-fig.org/psr/psr-12/) aan dit is de cod
 ## TypeScript
 
 ESLint is een tool die TypeScript controleert. Voer `yarn lint` uit om de linter uit te voeren.
-
-

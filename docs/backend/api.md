@@ -7,7 +7,7 @@ title: API
 
 # API
 
-*Laatste versie:* **v3**
+_Laatste versie:_ **v3**
 
 Autorisatie met [oauth](../onderdelen/oauth.md), op dit moment alleen bedoeld voor externe toegang.
 

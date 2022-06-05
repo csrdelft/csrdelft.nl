@@ -6,7 +6,11 @@ declare module 'corejs-typeahead' {
 
 		public initialize(): void;
 
-		public ttAdapter(): (query: string, syncResults: any, asyncResults: any) => void;
+		public ttAdapter(): (
+			query: string,
+			syncResults: any,
+			asyncResults: any
+		) => void;
 	}
 
 	interface BloodhoundTokenizers {
@@ -14,8 +18,8 @@ declare module 'corejs-typeahead' {
 		nonword: BloodhoundTokenizer;
 		ngram: BloodhoundTokenizer;
 		obj: {
-			whitespace: (field: string) => BloodhoundTokenizer
-		}
+			whitespace: (field: string) => BloodhoundTokenizer;
+		};
 	}
 
 	type BloodhoundTokenizer = (query: string) => string[];
@@ -57,8 +61,11 @@ declare module 'corejs-typeahead' {
 		rateLimitBy?: (fun: () => void) => void;
 		rateLimitWait?: number;
 		transform?: (response: any) => any;
-		transport?:
-			(options: BloodhoundRequestData, onSuccess: (data: object) => void, onError: (error: object) => void) => void;
+		transport?: (
+			options: BloodhoundRequestData,
+			onSuccess: (data: object) => void,
+			onError: (error: object) => void
+		) => void;
 	}
 
 	interface TypeaheadOptions {
@@ -97,7 +104,10 @@ declare module 'corejs-typeahead' {
 
 	global {
 		interface JQuery {
-			typeahead(options: TypeaheadOptions, ...datasets: TypeaheadDataset[]): this;
+			typeahead(
+				options: TypeaheadOptions,
+				...datasets: TypeaheadDataset[]
+			): this;
 
 			typeahead(action: 'val'): string;
 

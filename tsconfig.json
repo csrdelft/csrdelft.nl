@@ -2,23 +2,14 @@
 	"compilerOptions": {
 		"target": "es2017",
 		"module": "esnext",
-		"lib": [
-			"DOM",
-			"ES2019"
-		],
+		"lib": ["DOM", "ES2019"],
 		"moduleResolution": "node",
 		"experimentalDecorators": true,
 		"removeComments": false,
-		"types": [
-			"vue-typescript-import-dts",
-			"@types/jqueryui"
-		],
+		"types": ["vue-typescript-import-dts", "@types/jqueryui"],
 		"allowSyntheticDefaultImports": true,
 		"skipLibCheck": true
 	},
-	"include": [
-		"assets/js/**/*.ts",
-		"assets/js/**/*.vue"
-	],
+	"include": ["assets/js/**/*.ts", "assets/js/**/*.vue"],
 	"compileOnSave": false
 }

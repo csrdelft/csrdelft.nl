@@ -68,13 +68,21 @@ void main() {
 	canvas.width = 32;
 	canvas.height = window.innerHeight;
 
-	const camera = new PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 3000);
+	const camera = new PerspectiveCamera(
+		30,
+		window.innerWidth / window.innerHeight,
+		1,
+		3000
+	);
 	camera.position.z = 3000;
 
 	const scene = new Scene();
 	const geometry = new Geometry();
 
-	const texture = new TextureLoader().load('/images/cloud10.png', animateClouds);
+	const texture = new TextureLoader().load(
+		'/images/cloud10.png',
+		animateClouds
+	);
 
 	const fog = new Fog(0x4584b4, -100, 3000);
 
@@ -83,10 +91,10 @@ void main() {
 		depthWrite: false,
 		transparent: true,
 		uniforms: {
-			fogColor: {value: fog.color},
-			fogFar: {value: fog.far},
-			fogNear: {value: fog.near},
-			map: {value: texture},
+			fogColor: { value: fog.color },
+			fogFar: { value: fog.far },
+			fogNear: { value: fog.near },
+			map: { value: texture },
 		},
 		fragmentShader,
 		vertexShader,

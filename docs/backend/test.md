@@ -12,19 +12,18 @@ Er zijn twee soorten tests in de stek, unit tests en functionele tests. Unit tes
 ## Tests runnen
 
 1. Stel een andere database in dan de database waar je normaal op test, door `DATABASE_URL` te zetten in `.env.local`.
-    ```
-    DATABASE_URL=mysql://root@127.0.0.1:3306/csrdelft_test
-    ```
+   ```
+   DATABASE_URL=mysql://root@127.0.0.1:3306/csrdelft_test
+   ```
 1. Maak een db in te test environment
-    ```shell script
-    # Als de database al bestaat je en je hem wil verversen
-    php bin/console doctrine:database:drop --force
-    php bin/console doctrine:database:create
-    php bin/console doctrine:migrations:migrate
-    php bin/console doctrine:fixtures:load
-    ```
+   ```shell script
+   # Als de database al bestaat je en je hem wil verversen
+   php bin/console doctrine:database:drop --force
+   php bin/console doctrine:database:create
+   php bin/console doctrine:migrations:migrate
+   php bin/console doctrine:fixtures:load
+   ```
 1. Run `php bin/phpunit` om alle tests te runnen. PhpStorm kan ook losse tests uitvoeren.
-
 
 ### Panther (Browser) tests
 
@@ -49,5 +48,3 @@ Er zijn een aantal base classes die interessant zijn voor tests
 1. `PHPUnit\Framework\TestCase` Voor simpele tests die alleen functies testen.
 1. `Symfony\Bundle\FrameworkBundle\Test\KernelTestCase` Voor tests die onderdelen van de stek testen en daar bijvoorbeeld database functionaliteit nodig hebben
 1. `Symfony\Bundle\FrameworkBundle\Test\WebTestCase` Voor tests die requests uitvoeren op de stek en controleren of het resultaat klopt.
-
-

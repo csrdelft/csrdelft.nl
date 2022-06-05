@@ -5,7 +5,7 @@
       <label
         v-for="(optie, i) in keuze.opties"
         :key="i"
-        :class="{'btn btn-outline-primary': true, 'active': optie === value}"
+        :class="{ 'btn btn-outline-primary': true, active: optie === value }"
       >
         <input
           type="radio"
@@ -14,7 +14,7 @@
           :value="optie"
           :checked="optie === value"
           @input="$emit('input', $event.target.value)"
-        >{{ optie }}
+        />{{ optie }}
       </label>
     </div>
   </div>
@@ -22,8 +22,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
-import {KeuzeOptie} from '../../../model/groep';
+import { Component, Prop } from 'vue-property-decorator';
+import { KeuzeOptie } from '../../../model/groep';
 
 @Component({})
 export default class MultiSelectKeuze extends Vue {
@@ -35,7 +35,4 @@ export default class MultiSelectKeuze extends Vue {
 }
 </script>
 
-<style scoped>
-
-</style>
-
+<style scoped></style>

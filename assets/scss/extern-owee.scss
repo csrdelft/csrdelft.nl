@@ -174,7 +174,8 @@ body {
 	}
 
 	.hero {
-		background: url('https://csrdelft.nl/fotoalbum/Publiek/Startkamp.jpg') no-repeat center bottom;
+		background: url("https://csrdelft.nl/fotoalbum/Publiek/Startkamp.jpg")
+			no-repeat center bottom;
 		background-size: cover;
 
 		img {
@@ -470,7 +471,8 @@ body {
 			background: $secondary;
 			color: white;
 
-			.lid-spreken, .open-avond {
+			.lid-spreken,
+			.open-avond {
 				display: none;
 			}
 
@@ -494,14 +496,15 @@ body {
 				color: white;
 			}
 
-			.lid-worden, .open-avond {
+			.lid-worden,
+			.open-avond {
 				display: none;
 			}
 
 			input {
-				background: rgba(#FFFFFF, .12);
+				background: rgba(#ffffff, 0.12);
 
-				&[type=submit] {
+				&[type="submit"] {
 					background: $secondary;
 
 					&:hover {
@@ -518,7 +521,8 @@ body {
 				color: white;
 			}
 
-			.lid-worden, .lid-spreken {
+			.lid-worden,
+			.lid-spreken {
 				display: none;
 			}
 

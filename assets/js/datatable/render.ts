@@ -1,14 +1,16 @@
 import FunctionColumnRender = DataTables.FunctionColumnRender;
 import moment from 'moment';
-import {formatBedrag, formatFilesize} from '../lib/util';
-import {getApiFromSettings} from './api';
+import { formatBedrag, formatFilesize } from '../lib/util';
+import { getApiFromSettings } from './api';
 
 /**
  * Standaard gedefinieerde render functies.
  */
 export default {
 	default(data, type) {
-		if (data === null || typeof data !== 'object') { return data; }
+		if (data === null || typeof data !== 'object') {
+			return data;
+		}
 		switch (type) {
 			case 'sort':
 				return data.sort;
@@ -25,7 +27,9 @@ export default {
 		return '<span class="ico ' + (data ? 'tick' : 'cross') + '"></span>';
 	},
 	aanmeldFilter(data) {
-		return data ? `<span class="ico group_key" title="Aanmeld filter actief: '${data}'"></span>` : '';
+		return data
+			? `<span class="ico group_key" title="Aanmeld filter actief: '${data}'"></span>`
+			: '';
 	},
 	aanmeldingen(data, type, row) {
 		return (row.aantal_aanmeldingen || 0) + ' (' + row.aanmeld_limiet + ')';
@@ -63,7 +67,7 @@ export default {
 		}
 
 		if (date.substr(0, 1) === '-') {
-			return "Nooit";
+			return 'Nooit';
 		}
 
 		const datumTijd = moment(date);
@@ -76,7 +80,8 @@ export default {
 	},
 	timeago(data, type, row, meta) {
 		const api = getApiFromSettings(meta.settings);
-		const cell = api.cell(meta.row, meta.col).node().firstChild as HTMLTimeElement;
+		const cell = api.cell(meta.row, meta.col).node()
+			.firstChild as HTMLTimeElement;
 
 		switch (type) {
 			case 'sort':

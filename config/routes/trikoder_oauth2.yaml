@@ -8,4 +8,3 @@ oauth2_token:
   controller: Trikoder\Bundle\OAuth2Bundle\Controller\TokenController::indexAction
   methods: POST
   defaults: { _csrfUnsafe: ja }
-

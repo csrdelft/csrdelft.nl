@@ -54,7 +54,7 @@ _Je kan deze programma's allemaal tegelijk downloaden en installeren, behalve al
 
 Maak een account aan op [GitHub](https://github.com) als je dat nog niet eerder hebt gedaan.
 
-*Ben je geen lid van de PubCie, [maak een fork van de stek](https://github.com/csrdelft/csrdelft.nl/fork)*
+_Ben je geen lid van de PubCie, [maak een fork van de stek](https://github.com/csrdelft/csrdelft.nl/fork)_
 
 Gebruik de GitHub Desktop client om `csrdelft/csrdelft.nl` te clonen (of je eigen fork). Stel in dit programma ook je naam en email in (standaard waarden zijn meestal prima). Kijk goed in welke map de gedownloade code terecht komt, dit heb je later nodig. Standaard komt de code van GitHub Desktop in `C:\Users\feut\Documenten\GitHub\csrdelft.nl\` terecht.
 
@@ -84,6 +84,7 @@ git submodule update
 De hele filestructuur van de repository is nu gedownload op je computer. Een korte uitleg van wat welke folder betekent is te vinden op de pagina [Filestructuur](filestructuur.md).
 
 ## Stap 2: Installatie
+
 Er zijn twee mogelijke manieren om te installeren, met Docker of met de hand. Als je actief gaat ontwikkelen aan de stek is het met de hand opzetten aan te raden.
 
 Zorg dat je vanaf hier Apache2 en MariaDB, oftewel wampserver hebt draaien.
@@ -92,7 +93,7 @@ _Over installatie met docker kun je in het bestand [Docker](installatie-docker.m
 
 ### 2.1: VirtualHost instellen
 
-*Gaat er vanuit dat je Wampserver hebt geinstalleerd in stap 0*
+_Gaat er vanuit dat je Wampserver hebt geinstalleerd in stap 0_
 
 Start Wampserver op. Rechtsonderin bij de icoontjes verschijnt wampserver. Als je rechts of links klikt op dit icoontje krijg je verschillende menus te zien.
 
@@ -154,8 +155,8 @@ In de lijst met Configurations kun je allerlei interessante commando's vinden. D
 
 Installeer de volgende Plugins in PhpStorm (File > Settings... > Plugins):
 
-* Symfony Support
-* .env files support
+- Symfony Support
+- .env files support
 
 <details>
 <summary><strong>Command line</strong></summary>
@@ -163,16 +164,19 @@ Installeer de volgende Plugins in PhpStorm (File > Settings... > Plugins):
 De volgende commando's worden uitgevoerd om de boel te initialiseren en te updaten:
 
 Javascript dependencies installeren:
+
 <pre>
 yarn
 </pre>
 
 PHP dependencies installeren:
+
 <pre>
 composer install
 </pre>
 
 Javascript & SCSS compileren:
+
 <pre>
 yarn dev
 </pre>
@@ -181,7 +185,7 @@ yarn dev
 
 ### 2.3: Database instellen
 
-*Dit gaat er vanuit dat je database een gebruiker `root` heeft zonder wachtwoord, dit is standaard bij een installatie van MySQL. Heb je je database beveiligd kopieer dan het `DATABASE_URL` veld uit `.env` naar `.env.local` en zet de gegevens goed.*
+_Dit gaat er vanuit dat je database een gebruiker `root` heeft zonder wachtwoord, dit is standaard bij een installatie van MySQL. Heb je je database beveiligd kopieer dan het `DATABASE_URL` veld uit `.env` naar `.env.local` en zet de gegevens goed._
 
 Voer vanuit PhpStorm het `[PHP] Maak Database` commando uit. Dit commando zorgt ervoor dat er een lege database wordt neergezet.
 
@@ -199,16 +203,19 @@ Als je database kapot is (in het begin een kleine kans dat het gebeurt). Kun je 
 Je kan ook commando's in de commandline uitvoeren. Dan moet je deze commando's hebben.
 
 Database aanmaken:
+
 <pre>
 php bin/console doctrine:database:create
 </pre>
 
 Database migraties:
+
 <pre>
 php bin/console doctrine:migrations:migrate
 </pre>
 
 Database verwijderen:
+
 <pre>
 php bin/console doctrine:database:drop --force
 </pre>
@@ -260,4 +267,3 @@ Als je de poort hebt aangepast kopieer dan ook de regel met `DATABASE_URL` van `
 ### MySQL error: Index column size too large. The maximum column size is 767 bytes
 
 Deze error kun je krijgen bij het importeren van de sql dump of als er queries worden uitgevoerd. Dit is te fixen door in het wampserver menu onder MariaDB `innodb-default-row-format` naar `dynamic`.
-

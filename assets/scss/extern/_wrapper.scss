@@ -2,18 +2,23 @@
 
 // Zorgt voor de schuine balken op de pagina's en de kleuren in de paginas
 
-@function str-replace($string, $search, $replace: '') {
+@function str-replace($string, $search, $replace: "") {
 	$index: str-index($string, $search);
 
 	@if $index {
-		@return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+		@return str-slice($string, 1, $index - 1) + $replace +
+			str-replace(
+				str-slice($string, $index + str-length($search)),
+				$search,
+				$replace
+			);
 	}
 
 	@return $string;
 }
 
 @function escape-color($kleur) {
-	@return str_replace(inspect($kleur), '#', '%23')
+	@return str_replace(inspect($kleur), "#", "%23");
 }
 
 @mixin angle-edge-before($kleur) {
@@ -42,11 +47,11 @@
 @mixin angle-edge-bordered($bg-kleur, $fg-kleur, $border-kleur) {
 	color: $fg-kleur;
 	background-color: $bg-kleur;
-	&:before, &:after {
+	&:before,
+	&:after {
 		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='110' viewBox='0 -5 100 110' preserveAspectRatio='none'%3E%3Cpolygon points='-10,110 110,-10 110,110' style='fill:#{escape-color($bg-kleur)};stroke:#{escape-color($border-kleur)};stroke-width:3;stroke-location:inside' /%3E%3C/svg%3E");
 	}
 }
-
 
 .wrapper-img img {
 	margin: -6.6em 0;
@@ -79,12 +84,12 @@
 		&:after {
 			transform: scaleY(-1) scaleX(-1);
 		}
-
 	}
 
-	&:before, &:after {
+	&:before,
+	&:after {
 		background-size: 100% 100%;
-		content: '';
+		content: "";
 		display: block;
 		height: 6.5em;
 		position: absolute;
@@ -152,7 +157,6 @@
 }
 
 @media screen and (max-width: $scherm-breed) {
-
 	.wrapper-img img {
 		margin: -5em 0;
 		height: calc(500px + 4.75em * 2);
@@ -160,7 +164,8 @@
 	.wrapper {
 		margin: 4.75em 0;
 
-		&:before, &:after {
+		&:before,
+		&:after {
 			height: 4.8em;
 		}
 
@@ -182,11 +187,9 @@
 			width: 15em;
 		}
 	}
-
 }
 
 @media screen and (max-width: $scherm-middel) {
-
 	.wrapper-img img {
 		margin: -3em 0;
 		height: calc(500px + 2.5em * 2);
@@ -194,7 +197,8 @@
 	.wrapper {
 		margin: 2.5em 0;
 
-		&:before, &:after {
+		&:before,
+		&:after {
 			height: 2.55em;
 		}
 
@@ -228,7 +232,6 @@
 			margin: 2em 1.75em;
 		}
 	}
-
 }
 
 @media screen and (max-width: $scherm-smal) {

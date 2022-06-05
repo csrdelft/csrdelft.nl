@@ -1,4 +1,4 @@
-import {selectAll} from "./dom";
+import { selectAll } from './dom';
 
 /**
  * Lazyload door <noscript> blokken van de noscript tag te ontdoen.
@@ -29,15 +29,15 @@ export const lazyLoad = (selector: string): void => {
 				window.refreshFsLightbox();
 			});
 		}
-	}
+	};
 
 	if (window.scrollY === 0) {
 		const listener = () => {
 			load();
 			document.removeEventListener('scroll', listener);
-		}
-		document.addEventListener('scroll', listener)
+		};
+		document.addEventListener('scroll', listener);
 	} else {
 		load();
 	}
-}
+};

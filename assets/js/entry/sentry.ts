@@ -11,9 +11,7 @@ declare global {
 Sentry.init({
 	dsn: window.SENTRY_DSN_JS,
 	environment: window.APP_ENV,
-	ignoreErrors: [
-		/ChunkLoadError/
-	]
+	ignoreErrors: [/ChunkLoadError/],
 });
 
 Sentry.setUser({

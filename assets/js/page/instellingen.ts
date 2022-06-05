@@ -1,11 +1,12 @@
 import axios from 'axios';
-import {docReady} from '../lib/util';
+import { docReady } from '../lib/util';
 
 /**
  * Code voor de /instellingen pagina
  */
 const instellingVeranderd = () => {
-	document.querySelectorAll('.instellingen-bericht')
+	document
+		.querySelectorAll('.instellingen-bericht')
 		.forEach((el) => el.classList.remove('d-none'));
 };
 
@@ -31,10 +32,10 @@ export const instellingOpslaan = async (ev: Event) => {
 	}
 
 	if (!href) {
-		throw new Error("Geen url gevonden voor instelling")
+		throw new Error('Geen url gevonden voor instelling');
 	}
 
-	await axios.post(href, {waarde});
+	await axios.post(href, { waarde });
 
 	instellingVeranderd();
 

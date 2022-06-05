@@ -4,7 +4,7 @@
 import $ from 'jquery';
 
 interface ColumnGroupConfig {
-	column: string
+	column: string;
 }
 
 interface ColumnGroupSettings {
@@ -34,7 +34,9 @@ class ColumnGroup {
 	constructor(settings: DataTables.SettingsLegacy, config: ColumnGroupConfig) {
 		// Sanity check - you just know it will happen
 		if (!(this instanceof ColumnGroup)) {
-			throw new Error('ColumnGroup must be initialised with the \'new\' keyword.');
+			throw new Error(
+				"ColumnGroup must be initialised with the 'new' keyword."
+			);
 		}
 
 		const dt = new $.fn.dataTable.Api(settings);
@@ -50,7 +52,9 @@ class ColumnGroup {
 
 		const dtSettings = dt.settings()[0];
 		if (dtSettings._columnGroup) {
-			throw new Error('ColumnGroup already initialized on table ' + dtSettings.nTable.id);
+			throw new Error(
+				'ColumnGroup already initialized on table ' + dtSettings.nTable.id
+			);
 		}
 
 		dtSettings._columnGroup = this;
@@ -68,18 +72,19 @@ class ColumnGroup {
 		});
 
 		// Group by column
-		tableNode.find('tbody')
-			.on('click', 'tr.group', (event) => {
-				if (!event.shiftKey && !event.ctrlKey) {
-					this._fnGroupExpandCollapse($(event.target));
-				}
-			});
-		tableNode.find('thead')
-			.on('click', 'th.toggle-group:first', (event) => {
-				this._fnGroupExpandCollapseAll($(event.target));
-			});
+		tableNode.find('tbody').on('click', 'tr.group', (event) => {
+			if (!event.shiftKey && !event.ctrlKey) {
+				this._fnGroupExpandCollapse($(event.target));
+			}
+		});
+		tableNode.find('thead').on('click', 'th.toggle-group:first', (event) => {
+			this._fnGroupExpandCollapseAll($(event.target));
+		});
 		tableNode.on('draw.dt', () => this._fnGroupByColumnDraw());
-		tableNode.find('thead tr th').first().addClass('toggle-group toggle-group-expanded');
+		tableNode
+			.find('thead tr th')
+			.first()
+			.addClass('toggle-group toggle-group-expanded');
 	}
 
 	public _fnGroupByColumnDraw() {
@@ -104,33 +109,33 @@ class ColumnGroup {
 		}
 		let groupRow;
 		// Create group rows for visible rows
-		const rows = $(dt.rows({page: 'current'}).nodes());
+		const rows = $(dt.rows({ page: 'current' }).nodes());
 		tableNode.find('tr.group').remove();
 		let last: unknown;
 		// Iterate over data in the group by column
-		dt.column(column, {page: 'current'}).data().each((group, i) => {
-			if (last !== group) {
-				// Create group rows for collapsed groups
-				while (collapse.length > 0 && collapse[0].localeCompare(group) < 0) {
-					groupRow = $(`<tr class="group">
+		dt.column(column, { page: 'current' })
+			.data()
+			.each((group, i) => {
+				if (last !== group) {
+					// Create group rows for collapsed groups
+					while (collapse.length > 0 && collapse[0].localeCompare(group) < 0) {
+						groupRow = $(`<tr class="group">
 <td class="toggle-group"></td>
 <td class="group-label">${collapse[0]}</td>
 ${colspan}
-</tr>`)
-						.data('groupData', collapse[0]);
-					rows.eq(i).before(groupRow);
-					collapse.shift();
-				}
-				groupRow = $(`<tr class="group">
+</tr>`).data('groupData', collapse[0]);
+						rows.eq(i).before(groupRow);
+						collapse.shift();
+					}
+					groupRow = $(`<tr class="group">
 <td class="toggle-group toggle-group-expanded"></td>
 <td class="group-label">${group}</td>
 ${colspan}
-</tr>`)
-					.data('groupData', group);
-				rows.eq(i).before(groupRow);
-				last = group;
-			}
-		});
+</tr>`).data('groupData', group);
+					rows.eq(i).before(groupRow);
+					last = group;
+				}
+			});
 		// Create group rows for collapsed groups
 		const tbody = tableNode.children('tbody:first');
 		collapse.forEach((group) => {
@@ -138,8 +143,7 @@ ${colspan}
 <td class="toggle-group"></td>
 <td class="group-label">${group}</td>
 ${colspan}
-</tr>`)
-				.data('groupData', group);
+</tr>`).data('groupData', group);
 			tbody.append(groupRow);
 		});
 		this.s.lastDraw = Date.now();
@@ -187,19 +191,24 @@ ${colspan}
 
 		if ($th.hasClass('toggle-group-expanded')) {
 			let last: unknown;
-			dt.column(column).data().each((group) => {
-				if (last !== group) {
-					collapsedGroups.push(group);
-					last = group;
-				}
-			});
+			dt.column(column)
+				.data()
+				.each((group) => {
+					if (last !== group) {
+						collapsedGroups.push(group);
+						last = group;
+					}
+				});
 		}
 		this.s.collapsedGroups = collapsedGroups;
 		dt.draw(false);
 		this._fnHideEmptyCollapsedAll($th);
 	}
 
-	public _fnGroupExpandCollapseDraw(settings: unknown, data: Record<string, string>) {
+	public _fnGroupExpandCollapseDraw(
+		settings: unknown,
+		data: Record<string, string>
+	) {
 		const column = this.c.column;
 		const collapsedGroups = this.s.collapsedGroups;
 

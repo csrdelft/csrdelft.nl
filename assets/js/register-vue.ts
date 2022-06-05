@@ -17,7 +17,7 @@ Vue.component('declaratie', DeclaratieVue);
 Vue.component('groepprompt', GroepPrompt);
 
 Vue.directive('input-mask', {
-	bind: function(el) {
+	bind: function (el) {
 		new Inputmask().mask(el);
 	},
 });

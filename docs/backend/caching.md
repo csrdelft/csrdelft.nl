@@ -27,8 +27,8 @@ De `cache.app` cache is vrij te gebruiken en in te laden door `Symfony\Contracts
 
 Er is geen build van de laatste versie van Memcached voor windows beschikbaar, maar een oude versie is prima. Op Syrinx draait ook een best wel oude versie.
 
-* [downloads.northscale.com/memcached-1.4.5-x86.zip](http://downloads.northscale.com/memcached-1.4.5-x86.zip)
-* [downloads.northscale.com/memcached-1.4.5-amd64.zip](http://downloads.northscale.com/memcached-1.4.5-amd64.zip)
+- [downloads.northscale.com/memcached-1.4.5-x86.zip](http://downloads.northscale.com/memcached-1.4.5-x86.zip)
+- [downloads.northscale.com/memcached-1.4.5-amd64.zip](http://downloads.northscale.com/memcached-1.4.5-amd64.zip)
 
 Je kan de executable uitvoeren en dan draait er een Memcached server op `localhost:11211`, zo simpel is het. Op Syrinx is memcached beschikbaar als unix socket in de data map, maar dit werkt niet echt op Windows.
 

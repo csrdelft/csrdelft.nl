@@ -5,15 +5,15 @@ volumes:
     driver: local
   symfonycache:
   sessiecache:
-    
+
 services:
   stek:
     build:
       context: .
-      dockerfile: "docker/Dockerfile-stek"
+      dockerfile: 'docker/Dockerfile-stek'
     image: csrdelft/stek
     ports:
-      - "8080:80" # Expose stek op poort 8080
+      - '8080:80' # Expose stek op poort 8080
     environment:
       XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9000 remote_enable=1
     volumes:
@@ -26,7 +26,7 @@ services:
   composer:
     build:
       context: .
-      dockerfile: "docker/Dockerfile-composer"
+      dockerfile: 'docker/Dockerfile-composer'
     image: csrdelft/composer
     command: install --ignore-platform-reqs # Doe initieel een install
     volumes:
@@ -45,12 +45,12 @@ services:
       - mysqldata:/var/lib/mysql/
       - ./data:/docker-entrypoint-initdb.d # laad sql bestanden
     ports:
-      - "3307:3306" # Expose mysql op poort 3307
+      - '3307:3306' # Expose mysql op poort 3307
 
   yarn:
     build:
       context: .
-      dockerfile: "docker/Dockerfile-yarn"
+      dockerfile: 'docker/Dockerfile-yarn'
     image: csrdelft/yarn
     volumes:
       - ./:/app

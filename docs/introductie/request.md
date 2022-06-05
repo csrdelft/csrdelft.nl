@@ -27,6 +27,7 @@ Het resultaat van deze stap is een `Kernel` object, dit object bevat alle info d
 
 Het verwerken van een request wordt door een Controller gedaan. Hier komen we in het domein van onze eigen code.
 Iedere request komt aan bij een functie in een controller. Welke functie dit precies is kan op twee plekken gedefinieerd zijn.
+
 - De .yaml bestanden in `config/routes` bevatten een aantal routes, zoals de standaard route en de routes voor groepen
 - Controllers in de `lib/controller` map bevatten annotaties om routes te matchen.
 

@@ -1,6 +1,6 @@
 import '../ajax-csrf';
-import {docReady} from '../lib/util';
-import {select, selectAll} from "../lib/dom";
+import { docReady } from '../lib/util';
+import { select, selectAll } from '../lib/dom';
 
 declare global {
 	interface Window {
@@ -19,16 +19,21 @@ declare global {
 window.docReady = docReady;
 
 // Versimpelde versie van formSubmit in formulier.js
-window.formulier = {formSubmit: (event) => (event.target as HTMLFormElement).form.submit()};
+window.formulier = {
+	formSubmit: (event) => (event.target as HTMLFormElement).form.submit(),
+};
 
 docReady(async () => {
 	setTimeout(() => document.body.classList.remove('is-loading'));
-	setTimeout(() => import('./extern-defer'))
+	setTimeout(() => import('./extern-defer'));
 
 	const menu = select('#menu');
 	const menuKnop = select('.menu-knop');
 	document.body.addEventListener('click', (e) => {
-		if (!menu.contains(e.target as Node) && !menuKnop.contains(e.target as Node)) {
+		if (
+			!menu.contains(e.target as Node) &&
+			!menuKnop.contains(e.target as Node)
+		) {
 			menu.classList.remove('show');
 		}
 	});
