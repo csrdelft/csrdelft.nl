@@ -41,7 +41,7 @@ class CmsPaginaView implements View, ToResponse {
 		$html = '';
 		$html .= getMelding();
 		if ($this->pagina->magBewerken()) {
-			$html .= '<a href="/pagina/bewerken/' . $this->pagina->naam . '" class="btn float-end" title="Bewerk pagina&#013;' . $this->pagina->laatstGewijzigd->format(DATETIME_FORMAT) . '">' . Icon::getTag('bewerken') . '</a>';
+			$html .= '<a href="/pagina/bewerken/' . $this->pagina->naam . '" class="btn btn-light float-end" title="Bewerk pagina&#013;' . $this->pagina->laatstGewijzigd->format(DATETIME_FORMAT) . '">' . Icon::getTag('bewerken') . '</a>';
 		}
 		$html .= CsrBB::parseHtml(htmlspecialchars_decode($this->pagina->inhoud), $this->pagina->inlineHtml);
 		return $html;

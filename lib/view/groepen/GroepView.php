@@ -90,11 +90,11 @@ class GroepView implements FormElement, ToResponse {
 		}
 		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting">';
 		if ($this->groep->mag(AccessAction::Wijzigen())) {
-			$html .= '<div class="float-end"><a class="btn" href="' . $this->groep->getUrl() . '/wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><i class="fas fa-edit"></i></a></div>';
+			$html .= '<div class="float-end"><a class="btn" href="' . $this->groep->getUrl() . '/wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><i class="fas fa-pencil"></i></a></div>';
 		}
 		$html .= '<h3>' . $this->getTitel();
 		if (property_exists($this->groep, 'locatie') AND !empty($this->groep->locatie)) {
-			$html .= ' &nbsp; <a target="_blank" href="https://maps.google.nl/maps?q=' . urlencode($this->groep->locatie) . '" title="' . $this->groep->locatie . '" class="lichtgrijs fa fa-map-marker fa-lg"></a>';
+			$html .= ' &nbsp; <a target="_blank" href="https://maps.google.nl/maps?q=' . urlencode($this->groep->locatie) . '" title="' . $this->groep->locatie . '" class="lichtgrijs fas fa-map-marker fa-lg"></a>';
 		}
 		$html .= '</h3>';
 		$html .= CsrBB::parse($this->groep->samenvatting);

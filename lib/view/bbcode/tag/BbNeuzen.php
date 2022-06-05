@@ -18,11 +18,11 @@ class BbNeuzen extends BbTag {
 	public function render() {
 		$content = $this->getContent();
 		if (lid_instelling('layout', 'neuzen') != 'nee') {
-			$neus = Icon::getTag('bullet_red', null, null, 'neus2013', 'o');
+			$neus = Icon::getTag('circle', null, 'Neus 2013', 'neus2013');
 			$content = str_replace('o', $neus, $content);
 		}
 
-		return '<pan data-neuzen>' . $content . '</span>';
+		return '<span data-neuzen>' . $content . '</span>';
 	}
 
 	public function parse($arguments = []) {

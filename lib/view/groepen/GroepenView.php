@@ -72,11 +72,11 @@ class GroepenView implements View {
 		$orm = $model->entityClass;
 		$html = '';
 		if ($orm::magAlgemeen(AccessAction::Aanmaken(), null, $this->soort)) {
-			$html .= '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . ($this->soort ? $this->soort->getValue() : '') . '">' . Icon::getTag('add') . ' Toevoegen</a>';
+			$html .= '<a class="btn btn-light" href="' . $this->model->getUrl() . '/nieuw/' . ($this->soort ? $this->soort->getValue() : '') . '">' . Icon::getTag('add') . ' Toevoegen</a>';
 		}
-		$html .= '<a class="btn" href="' . $this->model->getUrl() . '/beheren">' . Icon::getTag('table') . ' Beheren</a>';
+		$html .= '<a class="btn btn-light" href="' . $this->model->getUrl() . '/beheren">' . Icon::getTag('table') . ' Beheren</a>';
 		if ($this->geschiedenis) {
-			$html .= '<a id="deelnamegrafiek" class="btn post" href="' . $this->model->getUrl() . "/" . $this->geschiedenis . '/deelnamegrafiek">' . Icon::getTag('chart_bar') . ' Deelnamegrafiek</a>';
+			$html .= '<a id="deelnamegrafiek" class="btn btn-light post" href="' . $this->model->getUrl() . "/" . $this->geschiedenis . '/deelnamegrafiek">' . Icon::getTag('chart_bar') . ' Deelnamegrafiek</a>';
 		}
 		$view = new CmsPaginaView($this->pagina);
 		$html .= $view->__toString();

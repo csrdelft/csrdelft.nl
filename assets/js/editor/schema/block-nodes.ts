@@ -37,7 +37,7 @@ const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeS
 <div class="groep-samenvatting">
 <div class="float-end"><a class="btn" target="_blank" href="/groepen/${type}/${json.id}/wijzigen"
 title="Wijzig ${json.naam}"><span
-class="fasfa-edit"></span></a></div>
+class="fas fa-pencil"></span></a></div>
 <h3>${json.naam}</h3>
 ${json.samenvatting_html ?? ""}
 </div>
@@ -45,10 +45,10 @@ ${json.samenvatting_html ?? ""}
 <div id="groep-leden-2152" class="groep-leden">
 <ul class="groep-tabs nobullets">
 <li class="geschiedenis"><a class="btn disabled" href="#" title="Bekijk geschiedenis"><span
-class="fasfa-clock"></span></a></li>
+class="fas fa-clock-rotate-left"></span></a></li>
 <li><a class="btn btn-primary disabled" href="#" title="Pasfoto's tonen"><span
 class="fas fa-user"></span></a></li>
-<li><a class="btn disabled" href="#" title="Lijst tonen"><i class="fas fa-align-justify"></i></a>
+<li><a class="btn disabled" href="#" title="Lijst tonen"><i class="fas fa-list"></i></a>
 </li>
 <li><a class="btn disabled" href="#" title="Statistiek tonen"><i class="fas fa-chart-pie"></i></a>
 </li>
