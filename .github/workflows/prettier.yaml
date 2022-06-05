@@ -19,7 +19,7 @@ jobs:
             .pnp.cjs
             .pnp.loader.mjs
             node_modules/.cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
