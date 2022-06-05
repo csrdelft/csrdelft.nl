@@ -26,77 +26,21 @@ abstract class GroepTabView extends GroepOmschrijvingView
 			'" class="groep-leden"><ul class="groep-tabs nobullets">';
 
 		if (!$this->groep instanceof Verticale) {
-			$html .=
-				'<li class="geschiedenis"><a class="btn" href="' .
-				$this->groep->getUrl() .
-				'" title="Bekijk geschiedenis"><span class="fas fa-clock-rotate-left"></span></a></li>';
+			$html .= '<li class="geschiedenis"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><i class="fas fa-clock-rotate-left"></i></a></li>';
 		}
 
-		$html .=
-			'<li><a class="btn post noanim ' .
-			($this instanceof GroepPasfotosView ? 'btn-primary' : '') .
-			'" href="' .
-			$this->groep->getUrl() .
-			'/' .
-			GroepTab::Pasfotos .
-			'" title="' .
-			GroepTab::Pasfotos()->getDescription() .
-			' tonen"><span class="fas fa-user"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Pasfotos . '" title="' . GroepTab::Pasfotos()->getDescription() . ' tonen"><i class="fas fa-user"></i></a></li>';
 
-		$html .=
-			'<li><a class="btn post noanim ' .
-			($this instanceof GroepLijstView ? 'btn-primary' : '') .
-			'" href="' .
-			$this->groep->getUrl() .
-			'/' .
-			GroepTab::Lijst .
-			'" title="' .
-			GroepTab::Lijst()->getDescription() .
-			' tonen"><span class="fas fa-list"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Lijst . '" title="' . GroepTab::Lijst()->getDescription() . ' tonen"><i class="fas fa-list"></i></a></li>';
 
-		$html .=
-			'<li><a class="btn post noanim ' .
-			($this instanceof GroepStatistiekView ? 'btn-primary' : '') .
-			'" href="' .
-			$this->groep->getUrl() .
-			'/' .
-			GroepTab::Statistiek .
-			'" title="' .
-			GroepTab::Statistiek()->getDescription() .
-			' tonen"><span class="fas fa-chart-pie"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Statistiek . '" title="' . GroepTab::Statistiek()->getDescription() . ' tonen"><i class="fas fa-chart-pie"></i></a></li>';
 
-		$html .=
-			'<li><a class="btn post noanim ' .
-			($this instanceof GroepEmailsView ? 'btn-primary' : '') .
-			'" href="' .
-			$this->groep->getUrl() .
-			'/' .
-			GroepTab::Emails .
-			'" title="' .
-			GroepTab::Emails()->getDescription() .
-			' tonen"><span class="fas fa-envelope"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Emails . '" title="' . GroepTab::Emails()->getDescription() . ' tonen"><i class="fas fa-envelope"></i></a></li>';
 
-		$html .=
-			'<li><a class="btn post noanim ' .
-			($this instanceof GroepEetwensView ? 'btn-primary' : '') .
-			'" href="' .
-			$this->groep->getUrl() .
-			'/' .
-			GroepTab::Eetwens .
-			'" title="' .
-			GroepTab::Eetwens()->getDescription() .
-			' tonen"><span class="fas fa-heartbeat"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEetwensView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Eetwens . '" title="' . GroepTab::Eetwens()->getDescription() . ' tonen"><i class="fas fa-heartbeat"></i></a></li>';
 
-		$onclick =
-			"$('#groep-" . $this->groep->id . "').toggleClass('leden-uitgeklapt');";
-		$html .=
-			'<li class="knop-vergroot"><a class="btn vergroot" id="groep-vergroot-' .
-			$this->groep->id .
-			'" data-vergroot="#groep-leden-content-' .
-			$this->groep->id .
-			'" title="Uitklappen" onclick="' .
-			$onclick .
-			'"><span class="fas fa-expand"></span></a>';
+		$onclick = "$('#groep-" . $this->groep->id . "').toggleClass('leden-uitgeklapt');";
+		$html .= '<li class="knop-vergroot"><a class="btn vergroot" id="groep-vergroot-' . $this->groep->id . '" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Uitklappen" onclick="' . $onclick . '"><i class="fas fa-expand"></i></a>';
 
 		$html .=
 			'</ul><div id="groep-leden-content-' .
@@ -105,12 +49,7 @@ abstract class GroepTabView extends GroepOmschrijvingView
 			$this->getType() .
 			'">';
 
-		$html .=
-			'<ul id="groep-context-menu-' .
-			$this->groep->id .
-			'" class="dropdown-menu" role="menu"><li><a id="groep-lid-remove-' .
-			$this->groep->id .
-			'" tabindex="-1"><span class="fas fa-user-times"></span> &nbsp; Uit de ketzer halen</a></li></ul>';
+		$html .= '<ul id="groep-context-menu-' . $this->groep->id . '" class="dropdown-menu" role="menu"><li><a id="groep-lid-remove-' . $this->groep->id . '" tabindex="-1"><i class="fas fa-xmark"></i> &nbsp; Uit de ketzer halen</a></li></ul>';
 
 		$html .= $this->getTabContent();
 

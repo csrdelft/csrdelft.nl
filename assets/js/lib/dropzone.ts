@@ -58,9 +58,7 @@ export const initDropzone = (el: HTMLFormElement): void => {
 					try {
 						await axios.post(coverUrl, 'foto=' + file.name);
 
-						coverBtn.replaceWith(
-							html`<span><span class="fas fa-check"></span> Omslag</span>`
-						);
+						coverBtn.replaceWith(html`<span><i class="fas fa-check"></i>Omslag</span>`)
 					} catch (e) {
 						throw new Error(e);
 					}

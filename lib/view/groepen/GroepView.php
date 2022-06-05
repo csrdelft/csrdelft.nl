@@ -117,7 +117,7 @@ class GroepView implements FormElement, ToResponse
 				'/wijzigen' .
 				'" title="Wijzig ' .
 				htmlspecialchars($this->groep->naam) .
-				'"><span class="fas fa-pencil"></span></a></div>';
+				'"><i class="fas fa-pencil"></i></a></div>';
 		}
 		$html .= '<h3>' . $this->getTitel();
 		if (

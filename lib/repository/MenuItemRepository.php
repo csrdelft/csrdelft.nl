@@ -382,7 +382,7 @@ class MenuItemRepository extends AbstractRepository
 		$tekst = $breadcrumb->tekst;
 
 		if ($tekst == 'main') {
-			$tekst = '<i class="fa fa-home"></i>';
+			$tekst = '<i class="fas fa-home"></i>';
 		}
 
 		if ($active) {
