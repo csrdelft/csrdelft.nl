@@ -34,7 +34,7 @@ docReady(() => {
 					submitButton[1].disabled = false;
 					// submitButton[2].disabled = false;
 					errorContainer.innerHTML = '<div class="alert alert-success">' +
-						'<span class="ico accept"></span>' + response.data +
+						'<i class="fas fa-check"></i>' + response.data +
 						'</div>';
 					formulierVelden.style.display = 'none';
 				})
@@ -43,7 +43,7 @@ docReady(() => {
 					submitButton[1].disabled = false;
 					// submitButton[2].disabled = false;
 					errorContainer.innerHTML = '<div class="alert alert-danger">' +
-						'<span class="ico exclamation"></span>' + error.response.data +
+						'<i class="fas fa-ban"></i>' + error.response.data +
 						'</div>';
 				});
 

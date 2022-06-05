@@ -25,12 +25,12 @@ class PrullenbakMaaltijdenTable extends DataTable {
 		$this->addColumn('aanmeldingen', 'aanmeld_limiet', null, CellRender::Aanmeldingen());
 		$this->addColumn('prijs', null, null, CellRender::Bedrag(), null, CellType::FormattedNumber());
 
-		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/maaltijden/beheer/herstel', 'Herstellen', 'Deze maaltijd herstellen', 'arrow_undo'));
-		$this->addKnop(new UrlDataTableKnop(Multiplicity::One(), '/corvee/beheer/maaltijd/:maaltijd_id', 'Corvee bewerken', 'Gekoppelde corveetaken bewerken', 'chart_organisation'));
+		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/maaltijden/beheer/herstel', 'Herstellen', 'Deze maaltijd herstellen', 'undo'));
+		$this->addKnop(new UrlDataTableKnop(Multiplicity::One(), '/corvee/beheer/maaltijd/:maaltijd_id', 'Corvee bewerken', 'Gekoppelde corveetaken bewerken', 'folder-tree'));
 
-		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/maaltijden/lijst/:maaltijd_id', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal'));
+		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/maaltijden/lijst/:maaltijd_id', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'tabel'));
 
-		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/maaltijden/beheer/verwijder', 'Verwijderen', 'Maaltijd definitief verwijderen', 'cross'));
+		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/maaltijden/beheer/verwijder', 'Verwijderen', 'Maaltijd definitief verwijderen', 'verwijderen'));
 	}
 
 	public function getBreadcrumbs() {

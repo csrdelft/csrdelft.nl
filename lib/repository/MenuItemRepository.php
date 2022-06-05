@@ -8,6 +8,7 @@ use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\MenuItem;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;
+use CsrDelft\view\Icon;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\OptimisticLockException;
@@ -327,7 +328,7 @@ class MenuItemRepository extends AbstractRepository {
 		$tekst = $breadcrumb->tekst;
 
 		if ($tekst == 'main') {
-			$tekst = '<i class="fas fa-home"></i>';
+			$tekst = Icon::getTag('home');
 		}
 
 		if ($active) {

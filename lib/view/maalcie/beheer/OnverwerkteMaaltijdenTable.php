@@ -29,14 +29,14 @@ class OnverwerkteMaaltijdenTable extends DataTable {
 		$this->addColumn('prijs', null, null, CellRender::Bedrag(), null, CellType::FormattedNumber());
 		$this->addColumn('totaalprijs', null, null, CellRender::TotaalPrijs(), null, CellType::FormattedNumber());
 
-		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/maaltijden/fiscaat/verwerk', 'Verwerken', 'Maaltijd verwerken', 'cog_go'));
+		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/maaltijden/fiscaat/verwerk', 'Verwerken', 'Maaltijd verwerken', 'gear'));
 
-		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/maaltijden/beheer/verwijder', 'Verwijderen', 'Maaltijd verwijderen', 'cross'));
-		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/maaltijden/lijst/:maaltijd_id', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal'));
+		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/maaltijden/beheer/verwijder', 'Verwijderen', 'Maaltijd verwijderen', 'verwijderen'));
+		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/maaltijden/lijst/:maaltijd_id', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'tabel'));
 
-		$aanmeldingen = new CollectionDataTableKnop(Multiplicity::One(), 'Aanmeldingen', 'Aanmeldingen bewerken', 'user');
-		$aanmeldingen->addKnop(new DataTableKnop(Multiplicity::None(), '/maaltijden/beheer/aanmelden', 'Toevoegen', 'Aanmelding toevoegen', 'user_add'));
-		$aanmeldingen->addKnop(new DataTableKnop(Multiplicity::None(), '/maaltijden/beheer/afmelden', 'Verwijderen', 'Aanmelding verwijderen', 'user_delete'));
+		$aanmeldingen = new CollectionDataTableKnop(Multiplicity::One(), 'Aanmeldingen', 'Aanmeldingen bewerken', 'user-pen');
+		$aanmeldingen->addKnop(new DataTableKnop(Multiplicity::None(), '/maaltijden/beheer/aanmelden', 'Toevoegen', 'Aanmelding toevoegen', 'user-plus'));
+		$aanmeldingen->addKnop(new DataTableKnop(Multiplicity::None(), '/maaltijden/beheer/afmelden', 'Verwijderen', 'Aanmelding verwijderen', 'user-minus'));
 
 		$this->addKnop($aanmeldingen);
 

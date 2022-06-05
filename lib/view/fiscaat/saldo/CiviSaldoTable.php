@@ -10,6 +10,7 @@ use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\Multiplicity;
+use CsrDelft\view\Icon;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -28,7 +29,7 @@ class CiviSaldoTable extends AbstractDataTableType {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/" title="Startpagina"><i class="fas fa-home module-icon"></i></a> » <a href="/fiscaat"><i class="fas fa-eur module-icon"></i></a> » <span class="active">Saldo</span>';
+		return '<a href="/" title="Startpagina">' . Icon::getTag('home', null, 'Voorpagina', 'module-icon') . '</a> » <a href="/fiscaat">' . Icon::getTag('money-bill', null, 'Fiscaat', 'module-icon') . '</a> » <span class="active">Saldo</span>';
 	}
 
 	public function createDataTable(DataTableBuilder $builder, array $options): void

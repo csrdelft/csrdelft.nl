@@ -30,8 +30,8 @@ class PeilingTable extends DataTable
 
 		$this->setOrder(['id' => 'desc']);
 
-		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/peilingen/bewerken', 'Bewerken', 'Deze peiling bewerken', 'pencil'));
-		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), '/peilingen/nieuw', 'Nieuw', 'Nieuwe peiling aanmaken', 'add'));
-		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/peilingen/verwijderen', 'Verwijderen', 'Peiling verwijderen', 'delete'));
+		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/peilingen/bewerken', 'Bewerken', 'Deze peiling bewerken', 'bewerken'));
+		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), '/peilingen/nieuw', 'Nieuw', 'Nieuwe peiling aanmaken', 'toevoegen'));
+		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/peilingen/verwijderen', 'Verwijderen', 'Peiling verwijderen', 'verwijderen'));
 	}
 }

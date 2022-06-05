@@ -35,7 +35,7 @@ Boven een datatable staat bijna altijd een rij met knoppen, het aanmaken van een
 
 ```php
 // In een DataTable class' __construct
-$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/maaltijden/beheer/verwijder', 'Verwijderen', 'Maaltijd verwijderen', 'cross'));
+$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/maaltijden/beheer/verwijder', 'Verwijderen', 'Maaltijd verwijderen', 'xmark'));
 ```
 
 De volgende opties zijn er om knoppen eigenschappen te geven.

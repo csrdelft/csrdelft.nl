@@ -158,14 +158,8 @@
             <span>{{ laatste.studie }}</span>
           </div>
         </div>
-        <span
-          v-if="laatsteGoed"
-          class="fas fa-check"
-        />
-        <span
-          v-else
-          class="fas fa-times"
-        />
+        <Icon icon="check" v-if="laatsteGoed" />
+        <Icon icon="xmark" v-else />
       </div>
       <div
         class="pasfotoContainer"
@@ -207,6 +201,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import {Component, Prop} from 'vue-property-decorator';
+import Icon from '../common/Icon.vue';
 
 const shuffle = <T,>(array: T[]) => {
   let currentIndex = array.length;

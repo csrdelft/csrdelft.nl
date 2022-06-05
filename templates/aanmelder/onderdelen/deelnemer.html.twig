@@ -15,7 +15,7 @@
 							<span class="badge rounded-pill bg-info text-light" type="button"
 										id="dropdown-profiel-{{ deelnemer.lid.uid }}" data-bs-toggle="dropdown"
 										aria-expanded="false">
-								<i class="fas fa-ellipsis-h"></i>
+								{{ icon('ellipsis') }}
 							</span>
 							<ul class="dropdown-menu" aria-labelledby="dropdown-profiel-{{ deelnemer.lid.uid }}">
 								<li>
@@ -51,7 +51,8 @@
 					<a class="list-group-item text-center text-success btn fw-bold post confirm noanim"
 						 title="{{ deelnemer.lid.naam(naamweergave) }} wordt weer afwezig gemeld"
 						 href="{{ path('csrdelft_aanmelderbeheer_lijstaanwezig', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aanwezig: 0 }) }}">
-						<i class="fas fa-check"></i> {{ deelnemer.aanwezigTijd }}
+						{{ icon('check') }}
+						{{ deelnemer.aanwezigTijd }}
 					</a>
 				{% else %}
 					<a class="list-group-item text-center text-secondary btn bg-success fw-bold text-light post noanim"

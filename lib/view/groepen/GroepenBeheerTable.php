@@ -11,6 +11,7 @@ use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\Multiplicity;
+use CsrDelft\view\Icon;
 
 
 /**
@@ -81,7 +82,7 @@ class GroepenBeheerTable extends DataTable {
 	}
 
 	public function getBreadcrumbs() {
-		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>'
+		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/">' . Icon::getTag('home') . '</i></a></li>'
 			. '<li class="breadcrumb-item"><a href="/groepen">Groepen</a></li>'
 			. '<li class="breadcrumb-item"><a href="' . $this->model->getUrl() . '">' . ucfirst($this->naam) . '</a></li>'
 			. '<li class="breadcrumb-item active">Beheren</li></ul>';

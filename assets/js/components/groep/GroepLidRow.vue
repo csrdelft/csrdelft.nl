@@ -19,6 +19,7 @@ import {Component, Prop} from 'vue-property-decorator';
 import GroepKeuzeType from '../../enum/GroepKeuzeType';
 import {htmlEncode} from '../../lib/util';
 import {GroepLid, KeuzeOptie} from '../../model/groep';
+import Icon from '../common/Icon.vue';
 
 @Component({})
 export default class GroepLidRow extends Vue {
@@ -32,12 +33,12 @@ export default class GroepLidRow extends Vue {
     const lidKeuze = this.lid.opmerking2.find((k) => k.naam === keuze.naam);
 
     if (lidKeuze === undefined) {
-      return '<span class="ico bullet_error"></span>';
+      return '<Icon icon="ban"></Icon>';
     }
 
     switch (keuze.type) {
       case GroepKeuzeType.CHECKBOX:
-        return lidKeuze.selectie ? '<span class="ico tick"></span>' : '<span class="ico cross"></span>';
+        return lidKeuze.selectie ? '<Icon icon="check"></Icon>' : '<Icon icon="xmark"></Icon>';
       default:
         return htmlEncode(lidKeuze.selectie);
     }

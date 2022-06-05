@@ -54,7 +54,7 @@ class GroepenView implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>'
+		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/">' . Icon::getTag('home') . '</a></li>'
 			. '<li class="breadcrumb-item"><a href="/groepen">Groepen</a></li>'
 			. '<li class="breadcrumb-item active">' . $this->getTitel() . '</li></ul>';
 	}

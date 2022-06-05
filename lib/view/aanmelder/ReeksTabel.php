@@ -19,11 +19,11 @@ class ReeksTabel extends DataTable {
 		$this->searchColumn('naam');
 
 		if (Reeks::magAanmaken()) {
-			$this->addKnop(new DataTableKnop(Multiplicity::None(), '/aanmelder/beheer/reeks/nieuw', 'Nieuw', 'Nieuwe reeks aanmaken', 'add'));
+			$this->addKnop(new DataTableKnop(Multiplicity::None(), '/aanmelder/beheer/reeks/nieuw', 'Nieuw', 'Nieuwe reeks aanmaken', 'toevoegen'));
 		}
-		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/aanmelder/beheer/reeks/bewerken', 'Bewerken', 'Deze reeks bewerken', 'pencil'));
+		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/aanmelder/beheer/reeks/bewerken', 'Bewerken', 'Deze reeks bewerken', 'bewerken'));
 		if (Reeks::magAanmaken()) {
-			$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/aanmelder/beheer/reeks/verwijderen', 'Verwijderen', 'Activiteit verwijderen', 'cross'));
+			$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/aanmelder/beheer/reeks/verwijderen', 'Verwijderen', 'Activiteit verwijderen', 'verwijderen'));
 		}
 	}
 }

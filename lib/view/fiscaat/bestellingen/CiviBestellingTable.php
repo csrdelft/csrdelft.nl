@@ -7,6 +7,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\Icon;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -28,6 +29,6 @@ class CiviBestellingTable extends DataTable {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/" title="Startpagina"><i class="fas fa-home module-icon"></i></a> » <a href="/fiscaat"><i class="fas fa-eur module-icon"></i></a> » <span class="active">' . $this->getTitel() . '</span>';
+		return '<a href="/" title="Startpagina">' . Icon::getTag('home', null, 'Voorpagina', 'module-icon') . '</a> » <a href="/fiscaat">' . Icon::getTag('money-bill', null, 'Fiscaat', 'module-icon') . '</a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 }

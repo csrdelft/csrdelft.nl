@@ -9,8 +9,10 @@
 
 {% block content %}
 	{% if mag('P_ADMIN') or mag('commissie:NovCie') %}
-		<a href="{{ url('csrdelft_eetplan_beheer') }}" class="btn btn-primary float-end"><span class="ico wrench"></span>
-			Eetplanbeheer</a>
+		<a href="{{ url('csrdelft_eetplan_beheer') }}" class="btn btn-primary float-end">
+			{{ icon('wrench') }}
+			Eetplanbeheer
+		</a>
 	{% endif %}
 	<h1>Eetplan</h1>
 	<div class="alert alert-warning">

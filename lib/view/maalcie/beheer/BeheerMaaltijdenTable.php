@@ -44,32 +44,32 @@ class BeheerMaaltijdenTable extends DataTable {
 		$this->searchColumn('aanmeld_filter');
 
 		$weergave = new CollectionDataTableKnop(Multiplicity::None(), 'Weergave', 'Weergave van tabel', '');
-		$weergave->addKnop(new SourceChangeDataTableKnop($this->dataUrl, 'Toekomst', 'Toekomst weergeven', 'time_go'));
-		$weergave->addKnop(new SourceChangeDataTableKnop($this->dataUrl . '?filter=alles', 'Alles', 'Alles weergeven', 'time'));
+		$weergave->addKnop(new SourceChangeDataTableKnop($this->dataUrl, 'Toekomst', 'Toekomst weergeven', 'arrow-rotate-right'));
+		$weergave->addKnop(new SourceChangeDataTableKnop($this->dataUrl . '?filter=alles', 'Alles', 'Alles weergeven', 'clock'));
 		$this->addKnop($weergave);
 
-		$nieuw = new CollectionDataTableKnop(Multiplicity::None(),'Nieuw', 'Nieuwe maaltijd aanmaken', 'add');
+		$nieuw = new CollectionDataTableKnop(Multiplicity::None(),'Nieuw', 'Nieuwe maaltijd aanmaken', 'toevoegen');
 
 		foreach ($repetities as $repetitie) {
 			$nieuw->addKnop(new DataTableKnop(Multiplicity::None(), $this->dataUrl . '/nieuw?mrid=' . $repetitie->mlt_repetitie_id, $repetitie->standaard_titel, "Nieuwe $repetitie->standaard_titel aanmaken"));
 		}
 
-		$nieuw->addKnop(new DataTableKnop(Multiplicity::None(), $this->dataUrl . '/nieuw', 'Anders', 'Maaltijd zonder repetitie aanmaken', 'calendar_edit'));
+		$nieuw->addKnop(new DataTableKnop(Multiplicity::None(), $this->dataUrl . '/nieuw', 'Anders', 'Maaltijd zonder repetitie aanmaken', 'file-pen'));
 		$this->addKnop($nieuw);
 
 		$this->addKnop(new DataTableKnop(Multiplicity::One(), $this->dataUrl . '/toggle/:maaltijd_id', 'Open/Sluit', 'Maaltijd openen of sluiten'));
 
-		$aanmeldingen = new CollectionDataTableKnop(Multiplicity::One(), 'Aanmeldingen', 'Aanmeldingen bewerken', 'user');
-		$aanmeldingen->addKnop(new DataTableKnop(Multiplicity::None(), $this->dataUrl . '/aanmelden', 'Toevoegen', 'Aanmelding toevoegen', 'user_add'));
-		$aanmeldingen->addKnop(new DataTableKnop(Multiplicity::None(), $this->dataUrl . '/afmelden', 'Verwijderen', 'Aanmelding verwijderen', 'user_delete'));
+		$aanmeldingen = new CollectionDataTableKnop(Multiplicity::One(), 'Aanmeldingen', 'Aanmeldingen bewerken', 'user-pen');
+		$aanmeldingen->addKnop(new DataTableKnop(Multiplicity::None(), $this->dataUrl . '/aanmelden', 'Toevoegen', 'Aanmelding toevoegen', 'user-plus'));
+		$aanmeldingen->addKnop(new DataTableKnop(Multiplicity::None(), $this->dataUrl . '/afmelden', 'Verwijderen', 'Aanmelding verwijderen', 'user-minus'));
 
 		$this->addKnop($aanmeldingen);
 
-		$this->addKnop(new DataTableKnop(Multiplicity::One(), $this->dataUrl . '/bewerk', 'Bewerken', 'Maaltijd bewerken', 'pencil'));
-		$this->addKnop(new UrlDataTableKnop(Multiplicity::One(), '/corvee/beheer/maaltijd/:maaltijd_id', 'Corvee bewerken', 'Gekoppelde corveetaken bewerken', 'chart_organisation'));
-		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), $this->dataUrl . '/verwijder', 'Verwijderen', 'Maaltijd verwijderen', 'cross'));
+		$this->addKnop(new DataTableKnop(Multiplicity::One(), $this->dataUrl . '/bewerk', 'Bewerken', 'Maaltijd bewerken', 'bewerken'));
+		$this->addKnop(new UrlDataTableKnop(Multiplicity::One(), '/corvee/beheer/maaltijd/:maaltijd_id', 'Corvee bewerken', 'Gekoppelde corveetaken bewerken', 'folder-tree'));
+		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), $this->dataUrl . '/verwijder', 'Verwijderen', 'Maaltijd verwijderen', 'verwijderen'));
 
-		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/maaltijden/lijst/:maaltijd_id', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal'));
+		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/maaltijden/lijst/:maaltijd_id', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'tabel'));
 	}
 
 	public function getBreadcrumbs() {
