@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror\embed;
-
 
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\prosemirror\Node;
@@ -28,15 +26,15 @@ class NodeVideo implements Node
 
 		return [
 			'attrs' => [
-				'url' => $node->url
-			]
+				'url' => $node->url,
+			],
 		];
 	}
 
 	public function getTagAttributes($node)
 	{
 		return [
-			'video' => $node->attrs->url
+			'video' => $node->attrs->url,
 		];
 	}
 

@@ -12,8 +12,10 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * Controller voor woonoorden en huizen.
  */
-class WoonoordenController extends AbstractGroepenController {
-	public function __construct(ManagerRegistry $registry) {
+class WoonoordenController extends AbstractGroepenController
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Woonoord::class);
 	}
 }

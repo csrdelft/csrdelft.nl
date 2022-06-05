@@ -10,7 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("forum_delen_meldingen")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumDeelMelding {
+class ForumDeelMelding
+{
 	/**
 	 * Shared primary key
 	 * Foreign key

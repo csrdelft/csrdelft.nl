@@ -30,7 +30,9 @@ In templates kunnen stukken tekst op twee verschillende manieren vertaald worden
 Gebruik voor vertalingen in code de functie `trans` van `Symfony\Contracts\Translation\TranslatorInterface`.
 
 ```php
-function __construct(\Symfony\Contracts\Translation\TranslatorInterface $translator) {
+function __construct(
+	\Symfony\Contracts\Translation\TranslatorInterface $translator
+) {
 	$bericht = $translator->trans('Deze tekst wordt vertaald');
 }
 ```

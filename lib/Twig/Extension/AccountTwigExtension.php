@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\Twig\Extension;
-
 
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\GroepLid;
@@ -40,8 +38,7 @@ class AccountTwigExtension extends AbstractExtension
 		BesturenRepository $besturenRepository,
 		CommissiesRepository $commissiesRepository,
 		SuService $suService
-	)
-	{
+	) {
 		$this->suService = $suService;
 		$this->loginService = $loginService;
 		$this->besturenRepository = $besturenRepository;
@@ -50,9 +47,7 @@ class AccountTwigExtension extends AbstractExtension
 
 	public function getFilters()
 	{
-		return [
-			new TwigFilter('may_su_to', [$this, 'may_su_to']),
-		];
+		return [new TwigFilter('may_su_to', [$this, 'may_su_to'])];
 	}
 
 	public function getFunctions()
@@ -73,7 +68,10 @@ class AccountTwigExtension extends AbstractExtension
 	 */
 	public function mag($permission, array $allowedAuthenticationMethods = null)
 	{
-		return $this->loginService->_mag($permission, $allowedAuthenticationMethods);
+		return $this->loginService->_mag(
+			$permission,
+			$allowedAuthenticationMethods
+		);
 	}
 
 	public function may_su_to(Account $account)
@@ -87,10 +85,11 @@ class AccountTwigExtension extends AbstractExtension
 	 */
 	public function getBestuurslid(Profiel $profiel)
 	{
-		$besturen = $this->besturenRepository->getGroepenVoorLid(
-			$profiel,
-			[GroepStatus::OT, GroepStatus::HT, GroepStatus::FT]
-		);
+		$besturen = $this->besturenRepository->getGroepenVoorLid($profiel, [
+			GroepStatus::OT,
+			GroepStatus::HT,
+			GroepStatus::FT,
+		]);
 		if (count($besturen)) {
 			return $besturen[0]->getLid($profiel->uid);
 		}
@@ -108,5 +107,4 @@ class AccountTwigExtension extends AbstractExtension
 			yield $commissie->getLid($profiel->uid);
 		}
 	}
-
 }

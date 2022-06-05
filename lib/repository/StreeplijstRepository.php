@@ -18,7 +18,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class StreeplijstRepository extends ServiceEntityRepository
 {
-
 	public function __construct(ManagerRegistry $registry)
 	{
 		parent::__construct($registry, Streeplijst::class);
@@ -29,7 +28,10 @@ class StreeplijstRepository extends ServiceEntityRepository
 	 */
 	public function getAlleStreeplijsten()
 	{
-		return $this->findBy(['maker' => LoginService::getUid()], ['aanmaakdatum' => 'ASC']);
+		return $this->findBy(
+			['maker' => LoginService::getUid()],
+			['aanmaakdatum' => 'ASC']
+		);
 	}
 
 	/**
@@ -38,8 +40,11 @@ class StreeplijstRepository extends ServiceEntityRepository
 	 * @param string $inhoud_streeplijst
 	 * @return Streeplijst
 	 */
-	public function nieuw($naam_streeplijst, $leden_streeplijst, $inhoud_streeplijst)
-	{
+	public function nieuw(
+		$naam_streeplijst,
+		$leden_streeplijst,
+		$inhoud_streeplijst
+	) {
 		$streeplijst = new Streeplijst();
 		$streeplijst->maker = LoginService::getUid();
 		$streeplijst->aanmaakdatum = date_create_immutable();
@@ -70,5 +75,4 @@ class StreeplijstRepository extends ServiceEntityRepository
 		$streeplijst->inhoud_streeplijst = $inhoud_streeplijst;
 		$streeplijst->leden_streeplijst = $leden_streeplijst;
 	}
-
 }

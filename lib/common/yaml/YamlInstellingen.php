@@ -22,7 +22,8 @@ use Symfony\Component\Config\FileLocator;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 15/07/2019
  */
-trait YamlInstellingen {
+trait YamlInstellingen
+{
 	private $defaults;
 
 	/**
@@ -31,14 +32,15 @@ trait YamlInstellingen {
 	 * @throws FileLoaderImportCircularReferenceException
 	 * @throws LoaderLoadException
 	 */
-	protected function load($resource, $configuration) {
+	protected function load($resource, $configuration)
+	{
 		$file = CONFIG_CACHE_PATH . str_replace('/', '_', $resource) . '.cache.php';
 
 		/** @noinspection PhpIncludeInspection */
 		$config = @include $file;
 
 		// Config niet eerder geladen of in debug mode.
-    if (DEBUG || $config == null) {
+		if (DEBUG || $config == null) {
 			$yamlLoader = new YamlFileLoader(new FileLocator([CONFIG_PATH]));
 			$yamlLoader->setCurrentDir(__DIR__);
 			$yaml = $yamlLoader->import($resource);
@@ -48,37 +50,44 @@ trait YamlInstellingen {
 			$this->writeConfig($config, $file);
 		}
 
-    $this->defaults = $config;
+		$this->defaults = $config;
 	}
 
-	public function hasKey($module, $key) {
+	public function hasKey($module, $key)
+	{
 		return isset($this->defaults[$module][$key]);
 	}
 
-	public function getDefinition($module, $key) {
+	public function getDefinition($module, $key)
+	{
 		return $this->defaults[$module][$key];
 	}
 
-	public function getField($module, $key, $field) {
+	public function getField($module, $key, $field)
+	{
 		return $this->defaults[$module][$key][$field];
 	}
 
 	/**
 	 * @return string[]
 	 */
-	public function getAll() {
+	public function getAll()
+	{
 		return $this->defaults;
 	}
 
-	public function getModules() {
+	public function getModules()
+	{
 		return array_keys($this->defaults);
 	}
 
-	public function getModuleKeys($module) {
+	public function getModuleKeys($module)
+	{
 		return array_keys($this->defaults[$module]);
 	}
 
-	private function writeConfig($config, $file) {
+	private function writeConfig($config, $file)
+	{
 		if (!file_exists($file)) {
 			@mkdir(CONFIG_CACHE_PATH, 0777, true);
 			touch($file);

@@ -14,8 +14,8 @@ use CsrDelft\common\Enum;
  * @method static boolean isVERMELDING($niveau)
  * @method static boolean isALTIJD($niveau)
  */
-class ForumDraadMeldingNiveau extends Enum {
-
+class ForumDraadMeldingNiveau extends Enum
+{
 	const NOOIT = 'nooit';
 	const VERMELDING = 'vermelding';
 	const ALTIJD = 'altijd';
@@ -26,6 +26,6 @@ class ForumDraadMeldingNiveau extends Enum {
 	protected static $mapChoiceToDescription = [
 		self::NOOIT => 'Nooit',
 		self::VERMELDING => 'Bij vermelding',
-		self::ALTIJD => 'Altijd'
+		self::ALTIJD => 'Altijd',
 	];
 }

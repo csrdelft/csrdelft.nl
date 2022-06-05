@@ -14,36 +14,45 @@ use CsrDelft\view\bbcode\BbHelper;
  * @example [spotify]https://open.spotify.com/user/.../playlist/...[/spotify]
  * @example [spotify]spotify:user:...:playlist:...[/spotify]
  */
-class BbSpotify extends BbTag {
-
+class BbSpotify extends BbTag
+{
 	public $formaat;
 	/**
 	 * @var string
 	 */
 	public $uri;
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'spotify';
 	}
 
-	public function renderLight() {
-		$url = 'https://open.spotify.com/' . str_replace(':', '/', str_replace('spotify:', '', $this->uri));
-		return BbHelper::lightLinkBlock('spotify', $url, 'Spotify', $this->getBeschrijving());
+	public function renderLight()
+	{
+		$url =
+			'https://open.spotify.com/' .
+			str_replace(':', '/', str_replace('spotify:', '', $this->uri));
+		return BbHelper::lightLinkBlock(
+			'spotify',
+			$url,
+			'Spotify',
+			$this->getBeschrijving()
+		);
 	}
 
-	public function render() {
+	public function render()
+	{
 		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$this->uri\" frameborder=\"0\" allowtransparency=\"true\"";
 
-		switch($this->formaat) {
-			case "hoog":
+		switch ($this->formaat) {
+			case 'hoog':
 				return "<iframe class=\"w-100\" height=\"380\" $commonAttributen></iframe>";
-			case "blok":
+			case 'blok':
 				return "<iframe width=\"80\" height=\"80\" class=\"float-start\" $commonAttributen></iframe>";
 			default:
 				return "<iframe class=\"w-100\" height=\"80\" $commonAttributen></iframe>";
 		}
 	}
-
 
 	/**
 	 * @param array $arguments
@@ -53,7 +62,10 @@ class BbSpotify extends BbTag {
 	{
 		$this->formaat = $arguments['formaat'] ?? null;
 		$url = $this->readMainArgument($arguments);
-		if (!str_starts_with($url, 'spotify') && !filter_var($url, FILTER_VALIDATE_URL)) {
+		if (
+			!str_starts_with($url, 'spotify') &&
+			!filter_var($url, FILTER_VALIDATE_URL)
+		) {
 			throw new BbException('[spotify] Geen geldige url (' . $url . ')');
 		}
 		$this->uri = urlencode($url);
@@ -62,7 +74,7 @@ class BbSpotify extends BbTag {
 	private function getBeschrijving()
 	{
 		if (strstr($this->uri, 'playlist')) {
-			return'Afspeellijst';
+			return 'Afspeellijst';
 		} elseif (strstr($this->uri, 'album')) {
 			return 'Album';
 		} elseif (strstr($this->uri, 'track')) {

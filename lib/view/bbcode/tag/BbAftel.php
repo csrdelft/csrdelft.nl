@@ -4,20 +4,24 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
 
-class BbAftel extends BbTag {
-
-	public static function getTagName() {
+class BbAftel extends BbTag
+{
+	public static function getTagName()
+	{
 		return ['aftel'];
 	}
 
-	public function render() {
-		if (!isset($_ENV['AFTEL_START'])
-			|| $_ENV['AFTEL_START'] > time()
-			|| $_ENV['AFTEL_STOP'] < time()) {
-			return "";
+	public function render()
+	{
+		if (
+			!isset($_ENV['AFTEL_START']) ||
+			$_ENV['AFTEL_START'] > time() ||
+			$_ENV['AFTEL_STOP'] < time()
+		) {
+			return '';
 		}
 
-		$id = uniqid_safe("flipdown_");
+		$id = uniqid_safe('flipdown_');
 		return <<<HTML
 <link rel="stylesheet" href="https://unpkg.com/flipdown@0.3.2/dist/flipdown.min.css">
 <script src="https://unpkg.com/flipdown@0.3.2/dist/flipdown.min.js"></script>
@@ -49,6 +53,7 @@ HTML;
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []) {
+	public function parse($arguments = [])
+	{
 	}
 }

@@ -8,7 +8,6 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
-
 /**
  * Class ForumPlaatjeRepository
  * @package CsrDelft\repository
@@ -17,14 +16,17 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ForumPlaatje[]    findAll()
  * @method ForumPlaatje[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ForumPlaatjeRepository extends AbstractRepository {
-
+class ForumPlaatjeRepository extends AbstractRepository
+{
 	/**
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
 
-	public function __construct(ManagerRegistry $registry, ProfielRepository $profielRepository) {
+	public function __construct(
+		ManagerRegistry $registry,
+		ProfielRepository $profielRepository
+	) {
 		parent::__construct($registry, ForumPlaatje::class);
 		$this->profielRepository = $profielRepository;
 	}
@@ -36,7 +38,8 @@ class ForumPlaatjeRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function fromUploader(ImageField $uploader, $uid) {
+	public function fromUploader(ImageField $uploader, $uid)
+	{
 		$plaatje = static::generate();
 		$plaatje->maker = $uid;
 		$plaatje->maker_profiel = $this->profielRepository->find($uid);
@@ -49,7 +52,8 @@ class ForumPlaatjeRepository extends AbstractRepository {
 		return $plaatje;
 	}
 
-	private static function generate() {
+	private static function generate()
+	{
 		$plaatje = new ForumPlaatje();
 		$plaatje->datum_toegevoegd = date_create_immutable();
 		$plaatje->access_key = bin2hex(random_bytes(16));
@@ -60,16 +64,16 @@ class ForumPlaatjeRepository extends AbstractRepository {
 	 * @param $key
 	 * @return ForumPlaatje|null
 	 */
-	public function getByKey($key) {
+	public function getByKey($key)
+	{
 		if (!self::isValidKey($key)) {
 			return null;
 		}
-		return $this->findOneBy(["access_key" => $key]);
-
+		return $this->findOneBy(['access_key' => $key]);
 	}
 
-	public static function isValidKey($key) {
+	public static function isValidKey($key)
+	{
 		return preg_match('/^[a-zA-Z0-9]{32}$/', $key);
 	}
-
 }

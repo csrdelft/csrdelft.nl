@@ -16,7 +16,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Security;
 
-
 /**
  * LidZoeker
  *
@@ -25,7 +24,7 @@ use Symfony\Component\Security\Core\Security;
 class LidZoekerService
 {
 	//velden die door gewone leden geselecteerd mogen worden.
-	public $veldNamen = array(
+	public $veldNamen = [
 		'telefoon' => 'Nummer',
 		'mobiel' => 'Pauper',
 		'studie' => 'Studie',
@@ -34,45 +33,74 @@ class LidZoekerService
 		'machtiging' => 'Machtiging getekend?',
 		'adresseringechtpaar' => 'Post echtpaar t.n.v.',
 		'linkedin' => 'LinkedIn',
-	);
+	];
 	//velden die ook door mensen met P_LEDEN_MOD bekeken mogen worden
 	//(merge in de constructor)
-	private $allowVelden = array(
-		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'geslacht',
-		'email', 'adres', 'telefoon', 'mobiel', 'studie', 'status',
-		'gebdatum', 'beroep', 'verticale', 'lidjaar', 'kring', 'patroon', 'woonoord');
+	private $allowVelden = [
+		'pasfoto',
+		'uid',
+		'naam',
+		'voorletters',
+		'voornaam',
+		'tussenvoegsel',
+		'achternaam',
+		'nickname',
+		'geslacht',
+		'email',
+		'adres',
+		'telefoon',
+		'mobiel',
+		'studie',
+		'status',
+		'gebdatum',
+		'beroep',
+		'verticale',
+		'lidjaar',
+		'kring',
+		'patroon',
+		'woonoord',
+	];
 	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te
 	//filteren en te sorteren.
-	private $allowVeldenLEDENMOD = array(
-		'eetwens', 'moot',
-		'muziek', 'ontvangtcontactueel', 'kerk', 'lidafdatum',
-		'echtgenoot', 'adresseringechtpaar', 'land', 'bankrekening', 'machtiging');
+	private $allowVeldenLEDENMOD = [
+		'eetwens',
+		'moot',
+		'muziek',
+		'ontvangtcontactueel',
+		'kerk',
+		'lidafdatum',
+		'echtgenoot',
+		'adresseringechtpaar',
+		'land',
+		'bankrekening',
+		'machtiging',
+	];
 	//velden die wel selecteerbaar zijn, maar niet in de db bestaan
-	private $veldenNotSelectable = array('voornaam', 'achternaam', 'tussenvoegsel');
+	private $veldenNotSelectable = ['voornaam', 'achternaam', 'tussenvoegsel'];
 	//nette aliassen voor kolommen, als ze niet beschikbaar zijn wordt gewoon
 	//de naam uit $this->allowVelden gebruikt
-	private $veldenNotindb = array('pasfoto');
+	private $veldenNotindb = ['pasfoto'];
 	//toegestane opties voor het statusfilter.
 	private $allowStatus;
 	//toegestane opties voor de weergave.
 	private $allowWeergave = [
 		'lijst' => LLLijst::class,
 		'kaartje' => LLKaartje::class,
-		'csv' => LLCSV::class
+		'csv' => LLCSV::class,
 	];
-	private $sortable = array(
+	private $sortable = [
 		'achternaam' => 'Achternaam',
 		'email' => 'Email',
 		'gebdatum' => 'Geboortedatum',
 		'lidjaar' => 'lichting',
-		'studie' => 'Studie'
-	);
+		'studie' => 'Studie',
+	];
 	//standaardwaarden voor het zoeken zonder parameters
-	private $rawQuery = array('status' => 'LEDEN', 'sort' => 'achternaam');
+	private $rawQuery = ['status' => 'LEDEN', 'sort' => 'achternaam'];
 	private $query = '';
-	private $filters = array();
-	private $sort = array('achternaam');
-	private $velden = array('naam', 'email', 'telefoon', 'mobiel');
+	private $filters = [];
+	private $sort = ['achternaam'];
+	private $velden = ['naam', 'email', 'telefoon', 'mobiel'];
 	private $weergave = LLLijst::class;
 	private $result = null;
 	/**
@@ -96,17 +124,21 @@ class LidZoekerService
 	 */
 	private $verticalenRepository;
 
-	public function __construct(EntityManagerInterface   $em,
-															ProfielRepository        $profielRepository,
-															Security                 $security,
-															VerticalenRepository     $verticalenRepository,
-															LidToestemmingRepository $lidToestemmingRepository)
-	{
+	public function __construct(
+		EntityManagerInterface $em,
+		ProfielRepository $profielRepository,
+		Security $security,
+		VerticalenRepository $verticalenRepository,
+		LidToestemmingRepository $lidToestemmingRepository
+	) {
 		$this->allowStatus = LidStatus::getEnumValues();
 
 		//wat extra velden voor moderators.
 		if (LoginService::mag(P_LEDEN_MOD)) {
-			$this->allowVelden = array_merge($this->allowVelden, $this->allowVeldenLEDENMOD);
+			$this->allowVelden = array_merge(
+				$this->allowVelden,
+				$this->allowVeldenLEDENMOD
+			);
 		}
 
 		//parse default values.
@@ -128,13 +160,15 @@ class LidZoekerService
 		$this->rawQuery = $query;
 
 		//als er geen explicite status is opgegeven, en het zoekende lid is oudlid, dan zoeken we automagisch ook in de oudleden.
-		if (!isset($query['status']) && $this->security->getUser()->profiel->isOudlid()) {
+		if (
+			!isset($query['status']) &&
+			$this->security->getUser()->profiel->isOudlid()
+		) {
 			$this->rawQuery['status'] = 'LEDEN|OUDLEDEN';
 		}
 
 		foreach ($this->rawQuery as $key => $value) {
 			switch ($key) {
-
 				case 'q':
 					$this->query = $value;
 					break;
@@ -146,14 +180,14 @@ class LidZoekerService
 					break;
 
 				case 'velden':
-					$this->velden = array();
+					$this->velden = [];
 					foreach ($value as $veld) {
 						if (array_key_exists($veld, $this->getSelectableVelden())) {
 							$this->velden[] = $veld;
 						}
 					}
 					if (count($this->velden) == 0) {
-						$this->velden = array('naam', 'adres', 'email', 'mobiel');
+						$this->velden = ['naam', 'adres', 'email', 'mobiel'];
 					}
 					break;
 
@@ -169,7 +203,7 @@ class LidZoekerService
 					}
 					$filters = explode('|', $value);
 
-					$add = array();
+					$add = [];
 					foreach ($filters as $filter) {
 						if ($filter == 'LEDEN') {
 							$add = array_merge($add, LidStatus::getLidLike());
@@ -189,7 +223,7 @@ class LidZoekerService
 
 				case 'sort':
 					if (array_key_exists($value, $this->getSortableVelden())) {
-						$this->sort = array($value);
+						$this->sort = [$value];
 					}
 					break;
 			}
@@ -200,7 +234,7 @@ class LidZoekerService
 
 	public function getSelectableVelden()
 	{
-		$return = array();
+		$return = [];
 		foreach ($this->allowVelden as $veld) {
 			if (in_array($veld, $this->veldenNotSelectable)) {
 				continue;
@@ -219,7 +253,7 @@ class LidZoekerService
 		if (is_array($value)) {
 			$this->filters[$field] = $value;
 		} else {
-			$this->filters[$field] = array($value);
+			$this->filters[$field] = [$value];
 		}
 	}
 
@@ -256,7 +290,10 @@ class LidZoekerService
 
 		foreach ($result as $profiel) {
 			if ($this->magProfielVinden($profiel, $this->query)) {
-				$this->result[] = new ProfielToestemmingProxy($profiel, $this->lidToestemmingRepository);
+				$this->result[] = new ProfielToestemmingProxy(
+					$profiel,
+					$this->lidToestemmingRepository
+				);
 			}
 		}
 	}
@@ -269,8 +306,9 @@ class LidZoekerService
 	 */
 	private function defaultSearch(QueryBuilder $queryBuilder, $zoekterm)
 	{
-		if (preg_match('/^groep:([0-9]+|[a-z]+)$/i', $zoekterm)) { //leden van een groep
-			$uids = array();
+		if (preg_match('/^groep:([0-9]+|[a-z]+)$/i', $zoekterm)) {
+			//leden van een groep
+			$uids = [];
 			/*try {
 				//FIXME: $groep = new OldGroep(substr($zoekterm, 6));
 				$uids = array_keys($groep->getLeden());
@@ -279,7 +317,8 @@ class LidZoekerService
 			}*/
 			$queryBuilder->where('p.uid in (:uids)');
 			$queryBuilder->setParameter('uids', $uids);
-		} elseif (preg_match('/^verticale:\w*$/', $zoekterm)) { //verticale, id, letter
+		} elseif (preg_match('/^verticale:\w*$/', $zoekterm)) {
+			//verticale, id, letter
 			$v = substr($zoekterm, 10);
 			if (strlen($v) > 1) {
 				$result = $this->verticalenRepository->searchByNaam($v);
@@ -298,10 +337,12 @@ class LidZoekerService
 					$queryBuilder->where('p.verticale = \'\'');
 				}
 			}
-		} elseif (preg_match('/^\d{2}$/', $zoekterm)) { //lichting bij een string van 2 cijfers
+		} elseif (preg_match('/^\d{2}$/', $zoekterm)) {
+			//lichting bij een string van 2 cijfers
 			$queryBuilder->where('p.lidjaar LIKE :zoekterm');
 			$queryBuilder->setParameter('zoekterm', '__' . $zoekterm);
-		} elseif (preg_match('/^lichting:\d\d(\d\d)?$/', $zoekterm)) { //lichting op de explicite manier
+		} elseif (preg_match('/^lichting:\d\d(\d\d)?$/', $zoekterm)) {
+			//lichting op de explicite manier
 			$lichting = substr($zoekterm, 9);
 			if (strlen($lichting) == 4) {
 				$queryBuilder->where('p.lidjaar = :lidjaar');
@@ -310,17 +351,26 @@ class LidZoekerService
 				$queryBuilder->where('p.lidjaar LIKE :lidjaar');
 				$queryBuilder->setParameter('lidjaar', '__' . $lichting);
 			}
-
-		} elseif (preg_match('/^[a-z0-9][0-9]{3}$/', $zoekterm)) { //uid's is ook niet zo moeilijk.
+		} elseif (preg_match('/^[a-z0-9][0-9]{3}$/', $zoekterm)) {
+			//uid's is ook niet zo moeilijk.
 			$queryBuilder->where('p.uid = :uid');
 			$queryBuilder->setParameter('uid', $zoekterm);
-		} elseif (preg_match('/^([a-z0-9][0-9]{3} ?,? ?)*([a-z0-9][0-9]{3})$/', $zoekterm)) {
+		} elseif (
+			preg_match('/^([a-z0-9][0-9]{3} ?,? ?)*([a-z0-9][0-9]{3})$/', $zoekterm)
+		) {
 			//meerdere uid's gescheiden door komma's.
 			//explode en trim() elke waarde van de array.
 			$uids = array_map('trim', explode(',', $zoekterm));
 			$queryBuilder->where('p.uid in (:uids)');
 			$queryBuilder->setParameter('uids', $uids);
-		} elseif (preg_match('/^(' . implode('|', $this->getDBVeldenAllowed()) . '):=?([a-z0-9\-_])+$/i', $zoekterm)) {
+		} elseif (
+			preg_match(
+				'/^(' .
+					implode('|', $this->getDBVeldenAllowed()) .
+					'):=?([a-z0-9\-_])+$/i',
+				$zoekterm
+			)
+		) {
 			//Zoeken in de velden van $this->allowVelden. Zoektermen met 'veld:' ervoor.
 			//met 'veld:=<zoekterm> wordt exact gezocht.
 			$parts = explode(':', $zoekterm);
@@ -328,23 +378,34 @@ class LidZoekerService
 			$veld = strtolower($parts[0]);
 
 			if ($parts[1][0] == '=') {
-				$queryBuilder->where($queryBuilder->expr()->eq('p.' . $veld, ':zoekterm'));
+				$queryBuilder->where(
+					$queryBuilder->expr()->eq('p.' . $veld, ':zoekterm')
+				);
 				$queryBuilder->setParameter('zoekterm', substr($parts[1], 1));
 			} else {
-				$queryBuilder->where($queryBuilder->expr()->like('p.' . $veld, ':zoekterm'));
+				$queryBuilder->where(
+					$queryBuilder->expr()->like('p.' . $veld, ':zoekterm')
+				);
 				$queryBuilder->setParameter('zoekterm', sql_contains($parts[1]));
 			}
-		} else { //als niets van hierboven toepasselijk is zoeken we in zo ongeveer alles
+		} else {
+			//als niets van hierboven toepasselijk is zoeken we in zo ongeveer alles
 
-			$zoekExpr = $queryBuilder->expr()->orX()
+			$zoekExpr = $queryBuilder
+				->expr()
+				->orX()
 				->add('p.voornaam LIKE :zoekterm')
 				->add('p.achternaam LIKE :zoekterm')
-				->add('CONCAT_WS(\' \', p.voornaam, p.tussenvoegsel, p.achternaam) LIKE :zoekterm')
+				->add(
+					'CONCAT_WS(\' \', p.voornaam, p.tussenvoegsel, p.achternaam) LIKE :zoekterm'
+				)
 				->add('CONCAT_WS(\' \', p.voornaam, p.achternaam) LIKE :zoekterm')
 				->add('CONCAT_WS(\' \', p.tussenvoegsel, p.achternaam) LIKE :zoekterm')
 				->add('CONCAT_WS(\' \', p.achternaam, p.tussenvoegsel) LIKE :zoekterm')
 				->add('p.nickname LIKE :zoekterm')
-				->add('CONCAT_WS(\' \', p.adres, p.postcode, p.woonplaats) LIKE :zoekterm')
+				->add(
+					'CONCAT_WS(\' \', p.adres, p.postcode, p.woonplaats) LIKE :zoekterm'
+				)
 				->add('p.adres LIKE :zoekterm')
 				->add('p.postcode LIKE :zoekterm')
 				->add('p.woonplaats LIKE :zoekterm')
@@ -366,9 +427,11 @@ class LidZoekerService
 
 	private function getDBVeldenAllowed()
 	{
-
 		//hier staat eigenlijk $a - $b, maar die heeft php niet.
-		return array_intersect(array_diff($this->allowVelden, $this->veldenNotindb), $this->allowVelden);
+		return array_intersect(
+			array_diff($this->allowVelden, $this->veldenNotindb),
+			$this->allowVelden
+		);
 	}
 
 	public function getFilterSQL(QueryBuilder $queryBuilder)
@@ -409,9 +472,15 @@ class LidZoekerService
 				continue;
 			}
 
-			$zichtbaar = $this->lidToestemmingRepository->toestemming($profiel, $veld);
+			$zichtbaar = $this->lidToestemmingRepository->toestemming(
+				$profiel,
+				$veld
+			);
 
-			$queryInVeld = is_string($profiel->$veld) && $query !== '' && strpos($profiel->$veld, $query) !== false;
+			$queryInVeld =
+				is_string($profiel->$veld) &&
+				$query !== '' &&
+				strpos($profiel->$veld, $query) !== false;
 
 			// Geef dit profiel niet terug als een niet zichtbaar veld de query bevat.
 			if (!$zichtbaar && $queryInVeld) {
@@ -475,5 +544,4 @@ class LidZoekerService
 		$return .= print_r($this->filters, true);
 		return $return;
 	}
-
 }

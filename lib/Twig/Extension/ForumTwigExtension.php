@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\Twig\Extension;
-
 
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
@@ -11,7 +9,8 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-class ForumTwigExtension extends AbstractExtension {
+class ForumTwigExtension extends AbstractExtension
+{
 	/**
 	 * @var ForumDradenVerbergenRepository
 	 */
@@ -25,64 +24,109 @@ class ForumTwigExtension extends AbstractExtension {
 	 */
 	private $forumDradenRepository;
 
-	public function __construct(ForumDradenVerbergenRepository $forumDradenVerbergenRepository, ForumPostsRepository $forumPostsRepository, ForumDradenRepository $forumDradenRepository) {
+	public function __construct(
+		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
+		ForumPostsRepository $forumPostsRepository,
+		ForumDradenRepository $forumDradenRepository
+	) {
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->forumDradenRepository = $forumDradenRepository;
 	}
 
-	public function getFunctions() {
+	public function getFunctions()
+	{
 		return [
-			new TwigFunction('getAantalVerborgenVoorLid', [$this, 'getAantalVerborgenVoorLid']),
-			new TwigFunction('getAantalWachtOpGoedkeuring', [$this, 'getAantalWachtOpGoedkeuring']),
-			new TwigFunction('sliding_pager', [$this, 'sliding_pager'], ['is_safe' => ['html']]),
+			new TwigFunction('getAantalVerborgenVoorLid', [
+				$this,
+				'getAantalVerborgenVoorLid',
+			]),
+			new TwigFunction('getAantalWachtOpGoedkeuring', [
+				$this,
+				'getAantalWachtOpGoedkeuring',
+			]),
+			new TwigFunction(
+				'sliding_pager',
+				[$this, 'sliding_pager'],
+				['is_safe' => ['html']]
+			),
 			new TwigFunction('getHuidigePagina', [$this, 'getHuidigePagina']),
 			new TwigFunction('getAantalPaginas', [$this, 'getAantalPaginas']),
 			new TwigFunction('getBelangrijkOpties', [$this, 'getBelangrijkOpties']),
-			new TwigFunction('draadGetAantalPaginas', [$this, 'draadGetAantalPaginas']),
-			new TwigFunction('draadGetHuidigePagina', [$this, 'draadGetHuidigePagina']),
+			new TwigFunction('draadGetAantalPaginas', [
+				$this,
+				'draadGetAantalPaginas',
+			]),
+			new TwigFunction('draadGetHuidigePagina', [
+				$this,
+				'draadGetHuidigePagina',
+			]),
 		];
 	}
 
-	public function getFilters() {
+	public function getFilters()
+	{
 		return [
-			new TwigFilter('highlight_zoekterm', [$this, 'highlight_zoekterm'], ['is_safe' => ['html']]),
-			new TwigFilter('split_on_keyword', 'split_on_keyword', ['is_safe' => ['html']]),
+			new TwigFilter(
+				'highlight_zoekterm',
+				[$this, 'highlight_zoekterm'],
+				['is_safe' => ['html']]
+			),
+			new TwigFilter('split_on_keyword', 'split_on_keyword', [
+				'is_safe' => ['html'],
+			]),
 		];
 	}
 
-	public function getBelangrijkOpties() {
+	public function getBelangrijkOpties()
+	{
 		return ForumDradenRepository::$belangrijk_opties;
 	}
 
-	public function getAantalVerborgenVoorLid() {
+	public function getAantalVerborgenVoorLid()
+	{
 		return $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
 	}
 
-	public function getAantalWachtOpGoedkeuring() {
+	public function getAantalWachtOpGoedkeuring()
+	{
 		return $this->forumPostsRepository->getAantalWachtOpGoedkeuring();
 	}
 
-	public function getHuidigePagina() {
+	public function getHuidigePagina()
+	{
 		return $this->forumDradenRepository->getHuidigePagina();
 	}
 
-	public function getAantalPaginas($forum_id = null) {
+	public function getAantalPaginas($forum_id = null)
+	{
 		return $this->forumDradenRepository->getAantalPaginas($forum_id);
 	}
 
-	public function draadGetAantalPaginas($draad_id) {
+	public function draadGetAantalPaginas($draad_id)
+	{
 		return $this->forumPostsRepository->getAantalPaginas($draad_id);
 	}
 
-	public function draadGetHuidigePagina() {
+	public function draadGetHuidigePagina()
+	{
 		return $this->forumPostsRepository->getHuidigePagina();
 	}
 
-	public function highlight_zoekterm($bericht, $zoekterm, $before = null, $after = null) {
-		$before = $before ?: '<span style="background-color: rgba(255,255,0,0.4);">';
+	public function highlight_zoekterm(
+		$bericht,
+		$zoekterm,
+		$before = null,
+		$after = null
+	) {
+		$before =
+			$before ?: '<span style="background-color: rgba(255,255,0,0.4);">';
 		$after = $after ?: '</span>';
-		return preg_replace('/' . preg_quote($zoekterm, '/') . '/i', $before . '$0' . $after, $bericht);
+		return preg_replace(
+			'/' . preg_quote($zoekterm, '/') . '/i',
+			$before . '$0' . $after,
+			$bericht
+		);
 	}
 
 	/**
@@ -146,7 +190,7 @@ class ForumTwigExtension extends AbstractExtension {
 
 		/* Define additional required vars */
 		if ($linknum % 2 == 0) {
-			$deltaL = ($linknum / 2) - 1;
+			$deltaL = $linknum / 2 - 1;
 			$deltaR = $linknum / 2;
 		} else {
 			$deltaL = $deltaR = ($linknum - 1) / 2;
@@ -165,25 +209,30 @@ class ForumTwigExtension extends AbstractExtension {
 		}
 
 		/* Build all page links (we'll delete some later if required) */
-		$links = array();
+		$links = [];
 		for ($i = 0; $i < $pagecount; $i++) {
 			$links[$i] = $i + 1;
 		}
 
 		/* Sliding needed? */
-		if ($pagecount > $linknum) { // Yes
-			if (($intCurpage - $deltaL) < 1) { // Delta_l needs adjustment, we are too far left
+		if ($pagecount > $linknum) {
+			// Yes
+			if ($intCurpage - $deltaL < 1) {
+				// Delta_l needs adjustment, we are too far left
 				$deltaL = $intCurpage - 1;
 				$deltaR = $linknum - $deltaL - 1;
 			}
-			if (($intCurpage + $deltaR) > $pagecount) { // Delta_r needs adjustment, we are too far right
+			if ($intCurpage + $deltaR > $pagecount) {
+				// Delta_r needs adjustment, we are too far right
 				$deltaR = $pagecount - $intCurpage;
 				$deltaL = $linknum - $deltaR - 1;
 			}
-			if ($intCurpage - $deltaL > 1) { // Let's do some cutting on the left side
+			if ($intCurpage - $deltaL > 1) {
+				// Let's do some cutting on the left side
 				array_splice($links, 0, $intCurpage - $deltaL);
 			}
-			if ($intCurpage + $deltaR < $pagecount) { // The right side will also need some treatment
+			if ($intCurpage + $deltaR < $pagecount) {
+				// The right side will also need some treatment
 				array_splice($links, $intCurpage + $deltaR + 2 - $links[0]);
 			}
 		}
@@ -192,11 +241,21 @@ class ForumTwigExtension extends AbstractExtension {
 		$retval = '';
 		$cssClass = $cssClass ? 'class="' . $cssClass . '"' : '';
 		if ($curpage > 1 && $showPrevNext) {
-			$retval .= '<a href="' . $baseurl . ($curpage - 1) . $urlAppend . '" ' . $cssClass . '>' . $txtPrev . '</a>';
+			$retval .=
+				'<a href="' .
+				$baseurl .
+				($curpage - 1) .
+				$urlAppend .
+				'" ' .
+				$cssClass .
+				'>' .
+				$txtPrev .
+				'</a>';
 			$retval .= $separator;
 		}
 		if ($links[0] != 1) {
-			$retval .= '<a href="' . $baseurl . '1' . $urlAppend . '" ' . $cssClass . '>1</a>';
+			$retval .=
+				'<a href="' . $baseurl . '1' . $urlAppend . '" ' . $cssClass . '>1</a>';
 			if ($links[0] == 2) {
 				$retval .= $separator;
 			} else {
@@ -205,7 +264,16 @@ class ForumTwigExtension extends AbstractExtension {
 		}
 		for ($i = 0; $i < sizeof($links); $i++) {
 			if ($links[$i] != $curpage) {
-				$retval .= '<a href="' . $baseurl . $links[$i] . $urlAppend . '" ' . $cssClass . '>' . $links[$i] . '</a>';
+				$retval .=
+					'<a href="' .
+					$baseurl .
+					$links[$i] .
+					$urlAppend .
+					'" ' .
+					$cssClass .
+					'>' .
+					$links[$i] .
+					'</a>';
 			} else {
 				$retval .= '<span class="curpage">' . $links[$i] . '</span>';
 			}
@@ -220,11 +288,29 @@ class ForumTwigExtension extends AbstractExtension {
 			} else {
 				$retval .= $separator;
 			}
-			$retval .= '<a href="' . $baseurl . $pagecount . $urlAppend . '" ' . $cssClass . '>' . $pagecount . '</a>';
+			$retval .=
+				'<a href="' .
+				$baseurl .
+				$pagecount .
+				$urlAppend .
+				'" ' .
+				$cssClass .
+				'>' .
+				$pagecount .
+				'</a>';
 		}
 		if ($curpage != $pagecount && $showPrevNext) {
 			$retval .= $separator;
-			$retval .= '<a href="' . $baseurl . ($curpage + 1) . $urlAppend . '" ' . $cssClass . '>' . $txtNext . '</a>';
+			$retval .=
+				'<a href="' .
+				$baseurl .
+				($curpage + 1) .
+				$urlAppend .
+				'" ' .
+				$cssClass .
+				'>' .
+				$txtNext .
+				'</a>';
 		}
 		return $retval;
 	}

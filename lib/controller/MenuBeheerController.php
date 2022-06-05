@@ -65,7 +65,7 @@ class MenuBeheerController extends AbstractController
 		if ($parentId == 'favoriet') {
 			$parent = $this->menuItemRepository->getMenuRoot($this->getUid());
 		} else {
-			$parent = $this->menuItemRepository->getMenuItem((int)$parentId);
+			$parent = $this->menuItemRepository->getMenuItem((int) $parentId);
 		}
 		if (!$parent || !$parent->magBeheren()) {
 			throw $this->createAccessDeniedException();
@@ -75,7 +75,8 @@ class MenuBeheerController extends AbstractController
 			throw $this->createAccessDeniedException();
 		}
 		$form = new MenuItemForm($item, 'toevoegen', $parentId); // fetches POST values itself
-		if ($form->validate()) { // form checks if hidden fields are modified
+		if ($form->validate()) {
+			// form checks if hidden fields are modified
 			$this->menuItemRepository->persist($item);
 			setMelding('Toegevoegd: ' . $item->tekst, 1);
 			return new MeldingResponse();
@@ -92,12 +93,13 @@ class MenuBeheerController extends AbstractController
 	 */
 	public function bewerken($itemId)
 	{
-		$item = $this->menuItemRepository->getMenuItem((int)$itemId);
+		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
 		$form = new MenuItemForm($item, 'bewerken', $item->item_id); // fetches POST values itself
-		if ($form->validate()) { // form checks if hidden fields are modified
+		if ($form->validate()) {
+			// form checks if hidden fields are modified
 			try {
 				$this->menuItemRepository->persist($item);
 				setMelding($item->tekst . ' bijgewerkt', 1);
@@ -118,7 +120,7 @@ class MenuBeheerController extends AbstractController
 	 */
 	public function verwijderen($itemId): JsonResponse
 	{
-		$item = $this->menuItemRepository->getMenuItem((int)$itemId);
+		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -140,13 +142,16 @@ class MenuBeheerController extends AbstractController
 	 */
 	public function zichtbaar($itemId): JsonResponse
 	{
-		$item = $this->menuItemRepository->getMenuItem((int)$itemId);
+		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
 		$item->zichtbaar = !$item->zichtbaar;
 		$this->menuItemRepository->persist($item);
-		setMelding($item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt', 1);
+		setMelding(
+			$item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt',
+			1
+		);
 		return new JsonResponse(true);
 	}
 
@@ -158,6 +163,8 @@ class MenuBeheerController extends AbstractController
 	 */
 	public function suggesties(Request $request): GenericSuggestiesResponse
 	{
-		return new GenericSuggestiesResponse($this->menuItemRepository->getSuggesties($request->query->get('q')));
+		return new GenericSuggestiesResponse(
+			$this->menuItemRepository->getSuggesties($request->query->get('q'))
+		);
 	}
 }

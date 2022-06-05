@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\controller;
-
 
 use CsrDelft\common\Annotation\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,13 +8,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class Lustrum12Controller extends AbstractController
 {
-
 	/**
 	 * @return Response
 	 * @Route("/tijdloos")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lustrum() {
+	public function lustrum()
+	{
 		return $this->render('lustrum12/index.html.twig');
 	}
 
@@ -25,7 +23,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/thema")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function LustrumThema() {
+	public function LustrumThema()
+	{
 		return $this->render('lustrum12/thema.html.twig');
 	}
 
@@ -34,7 +33,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/opening")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lustrumOpening() {
+	public function lustrumOpening()
+	{
 		return $this->render('lustrum12/opening.html.twig');
 	}
 
@@ -43,7 +43,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/lustrumweek")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lustrumWeek() {
+	public function lustrumWeek()
+	{
 		return $this->render('lustrum12/lustrumweek.html.twig');
 	}
 
@@ -52,7 +53,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/terugnaardetoekomst")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lustrumWeek2() {
+	public function lustrumWeek2()
+	{
 		return $this->render('lustrum12/lustrumweek2.html.twig');
 	}
 
@@ -61,7 +63,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/zingmee")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lustrumActiviteitCantus() {
+	public function lustrumActiviteitCantus()
+	{
 		return $this->render('lustrum12/zingmee.html.twig');
 	}
 
@@ -70,7 +73,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/dikkemerch")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lustrumMerch() {
+	public function lustrumMerch()
+	{
 		return $this->render('lustrum12/dikkemerch.html.twig');
 	}
 
@@ -79,7 +83,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/diesthema")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function diesThema() {
+	public function diesThema()
+	{
 		return $this->render('lustrum12/diesthema.html.twig');
 	}
 
@@ -88,7 +93,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/dies")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function dies() {
+	public function dies()
+	{
 		return $this->render('lustrum12/dies.html.twig');
 	}
 
@@ -97,7 +103,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/dies/gala")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function diesgala() {
+	public function diesgala()
+	{
 		return $this->render('lustrum12/diesgala.html.twig');
 	}
 
@@ -106,7 +113,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/dies/etiquette")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function etiquette() {
+	public function etiquette()
+	{
 		return $this->render('lustrum12/etiquette.html.twig');
 	}
 
@@ -115,7 +123,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/lustrumreis/inschrijven")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lustrumreisinschrijven() {
+	public function lustrumreisinschrijven()
+	{
 		return $this->render('lustrum12/lustrumreisinschrijven.html.twig');
 	}
 
@@ -124,7 +133,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/lustrumreis")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lustrumreis() {
+	public function lustrumreis()
+	{
 		return $this->render('lustrum12/lustrumreis.html.twig');
 	}
 
@@ -133,7 +143,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/slotactiviteit")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function hoogtijd() {
+	public function hoogtijd()
+	{
 		return $this->render('lustrum12/slotactiviteit.html.twig');
 	}
 
@@ -142,7 +153,8 @@ class Lustrum12Controller extends AbstractController
 	 * @Route("/tijdloos/gala")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lustrumgala() {
+	public function lustrumgala()
+	{
 		return $this->render('lustrum12/lustrumgala.html.twig');
 	}
 }

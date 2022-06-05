@@ -18,13 +18,19 @@ use Twig\Environment;
  * Formulier om een corveetaak toe te wijzen aan een lid.
  *
  */
-class ToewijzenForm extends ModalForm {
-
-	public function __construct(CorveeTaak $taak, Environment $twig, array $suggesties) {
+class ToewijzenForm extends ModalForm
+{
+	public function __construct(
+		CorveeTaak $taak,
+		Environment $twig,
+		array $suggesties
+	) {
 		parent::__construct(null, '/corvee/beheer/toewijzen/' . $taak->taak_id);
 
 		if (!is_numeric($taak->taak_id) || $taak->taak_id <= 0) {
-			throw new CsrGebruikerException(sprintf('Ongeldig taak id "%s".', $taak->taak_id));
+			throw new CsrGebruikerException(
+				sprintf('Ongeldig taak id "%s".', $taak->taak_id)
+			);
 		}
 		$this->titel = 'Taak toewijzen aan lid';
 		$this->css_classes[] = 'PreventUnchanged';
@@ -37,5 +43,4 @@ class ToewijzenForm extends ModalForm {
 
 		$this->formKnoppen = new FormDefaultKnoppen();
 	}
-
 }

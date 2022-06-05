@@ -14,7 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class BestellingZoeker extends AbstractController {
+class BestellingZoeker extends AbstractController
+{
 	/**
 	 * @Route("/fiscaat/bestelling-zoeker")
 	 * @param Request $request
@@ -24,10 +25,12 @@ class BestellingZoeker extends AbstractController {
 	 * @return Response
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function bestellingZoeker(Request $request,
-																	 CiviCategorieRepository $civiCategorieRepository,
-																	 CiviProductRepository $civiProductRepository,
-																	 CiviSaldoRepository $civiSaldoRepository) {
+	public function bestellingZoeker(
+		Request $request,
+		CiviCategorieRepository $civiCategorieRepository,
+		CiviProductRepository $civiProductRepository,
+		CiviSaldoRepository $civiSaldoRepository
+	) {
 		$from = new DateTimeImmutable();
 		$from = $from->sub(new DateInterval('P1W'));
 
@@ -55,7 +58,12 @@ class BestellingZoeker extends AbstractController {
 		$selectedCommissie = -1;
 		$selectedCategorie = -1;
 		$selectedProduct = -1;
-		$commissies = ['soccie' => 'SocCie', 'maalcie' => 'MaalCie', 'oweecie' => 'OWeeCie', 'anders' => 'Anders'];
+		$commissies = [
+			'soccie' => 'SocCie',
+			'maalcie' => 'MaalCie',
+			'oweecie' => 'OWeeCie',
+			'anders' => 'Anders',
+		];
 		$categorieen = [];
 		$producten = [];
 
@@ -65,18 +73,28 @@ class BestellingZoeker extends AbstractController {
 			}
 		}
 
-		foreach ($civiCategorieRepository->findBy([], ['type' => 'ASC']) as $categorie) {
+		foreach (
+			$civiCategorieRepository->findBy([], ['type' => 'ASC'])
+			as $categorie
+		) {
 			$categorieen[$categorie->id] = $categorie->type;
-			if ($request->query->get('categorie') == $categorie->id || $request->query->get('categorie') == $categorie->type) {
+			if (
+				$request->query->get('categorie') == $categorie->id ||
+				$request->query->get('categorie') == $categorie->type
+			) {
 				$selectedCategorie = $categorie->id;
 			}
 		}
 
-		foreach ($civiProductRepository->findBy([], ['beschrijving' => 'ASC']) as $product) {
+		foreach (
+			$civiProductRepository->findBy([], ['beschrijving' => 'ASC'])
+			as $product
+		) {
 			if (!isset($producten[$product->categorie->type])) {
 				$producten[$product->categorie->type] = [];
 			}
-			$producten[$product->categorie->type][$product->id] = $product->beschrijving;
+			$producten[$product->categorie->type][$product->id] =
+				$product->beschrijving;
 			if ($request->query->get('product') == $product->id) {
 				$selectedProduct = $product->id;
 			}
@@ -85,8 +103,19 @@ class BestellingZoeker extends AbstractController {
 		$groeperen = $request->query->get('groeperen') == 1;
 
 		$bestellingen = null;
-		if ($selectedCommissie != -1 || $selectedCategorie != -1 || $selectedProduct != -1) {
-			$bestellingen = $civiSaldoRepository->zoekBestellingen($from, $until, $selectedCommissie, $selectedCategorie, $selectedProduct, $groeperen);
+		if (
+			$selectedCommissie != -1 ||
+			$selectedCategorie != -1 ||
+			$selectedProduct != -1
+		) {
+			$bestellingen = $civiSaldoRepository->zoekBestellingen(
+				$from,
+				$until,
+				$selectedCommissie,
+				$selectedCategorie,
+				$selectedProduct,
+				$groeperen
+			);
 		}
 
 		return $this->render('fiscaat/bestelling-zoeker.html.twig', [

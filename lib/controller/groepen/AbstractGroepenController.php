@@ -62,7 +62,8 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-abstract class AbstractGroepenController extends AbstractController implements RouteLoaderInterface
+abstract class AbstractGroepenController extends AbstractController implements
+	RouteLoaderInterface
 {
 	/** @var DataTable */
 	protected $table;
@@ -73,9 +74,12 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	/** @var GroepLidRepository */
 	private $groepLidRepository;
 
-	public function __construct(ManagerRegistry $registry, $groepType) {
+	public function __construct(ManagerRegistry $registry, $groepType)
+	{
 		$this->repository = $registry->getRepository($groepType);
-		$this->changeLogRepository = $registry->getRepository(ChangeLogEntry::class);
+		$this->changeLogRepository = $registry->getRepository(
+			ChangeLogEntry::class
+		);
 		$this->groepLidRepository = $registry->getRepository(GroepLid::class);
 	}
 
@@ -90,18 +94,28 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 		$className = get_class($this);
 
-		$route = function ($path, $func, $methods, $defaults = [], $requirements = [], $overrideName = null) use ($routes, $prefix, $className) {
+		$route = function (
+			$path,
+			$func,
+			$methods,
+			$defaults = [],
+			$requirements = [],
+			$overrideName = null
+		) use ($routes, $prefix, $className) {
 			$name = $prefix . '_' . ($overrideName ?? $func);
 			$controller = "$className::$func";
-			$routes->add($name, new Route(
-				$path,
-				$defaults + ['_mag' => P_LOGGED_IN, '_controller' => $controller],
-				$requirements,
-				[],
-				'',
-				[],
-				$methods
-			));
+			$routes->add(
+				$name,
+				new Route(
+					$path,
+					$defaults + ['_mag' => P_LOGGED_IN, '_controller' => $controller],
+					$requirements,
+					[],
+					'',
+					[],
+					$methods
+				)
+			);
 		};
 
 		// Let op, als je meerdere routes naar dezelfde functie hebt, gebruik
@@ -112,10 +126,22 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$route('{id}/verwijderen', 'verwijderen', ['POST']);
 		$route('zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
 		$route('nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
-		$route('{id}/ketzer/afmelden/{uid}', 'ketzer_afmelden', ['POST'], ['uid' => null]);
+		$route(
+			'{id}/ketzer/afmelden/{uid}',
+			'ketzer_afmelden',
+			['POST'],
+			['uid' => null]
+		);
 		$route('{id}/ketzer/aanmelden', 'ketzer_aanmelden', ['POST']);
 		$route('{id}/ketzer/bewerken', 'ketzer_bewerken', ['POST']);
-		$route('{id}/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null], [], 'nieuw_id');
+		$route(
+			'{id}/nieuw/{soort}',
+			'nieuw',
+			['GET', 'POST'],
+			['soort' => null],
+			[],
+			'nieuw_id'
+		);
 		$route('{id}/info', 'info', ['GET']);
 		$route('{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST']);
 		$route('{id}/omschrijving', 'omschrijving', ['POST']);
@@ -125,15 +151,45 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$route('{id}/emails', 'emails', ['POST']);
 		$route('{id}/eetwens', 'eetwens', ['POST']);
 		$route('{id}/aanmelden', 'aanmelden', ['POST'], [], ['uid' => '.{4}']);
-		$route('{id}/aanmelden2/{uid}', 'aanmelden2', ['POST'], [], ['uid' => '.{4}']);
-		$route('{id}/naar_ot/{uid}', 'naar_ot', ['POST'], ['uid' => null], ['uid' => '.{4}']);
-		$route('{id}/bewerken/{uid}', 'bewerken', ['POST'], ['uid' => null], ['uid' => '.{4}']);
+		$route(
+			'{id}/aanmelden2/{uid}',
+			'aanmelden2',
+			['POST'],
+			[],
+			['uid' => '.{4}']
+		);
+		$route(
+			'{id}/naar_ot/{uid}',
+			'naar_ot',
+			['POST'],
+			['uid' => null],
+			['uid' => '.{4}']
+		);
+		$route(
+			'{id}/bewerken/{uid}',
+			'bewerken',
+			['POST'],
+			['uid' => null],
+			['uid' => '.{4}']
+		);
 		$route('{id}/afmelden/{uid}', 'afmelden', ['POST'], [], ['uid' => '.{4}']);
 		$route('{id}/leden', 'leden', ['GET', 'POST']);
 		$route('{id}/wijzigen', 'wijzigen', ['GET', 'POST'], ['id' => null]);
 		$route('{id}/logboek', 'logboek', ['GET', 'POST'], ['id' => null]);
-		$route('aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['id' => null, 'soort' => null]);
-		$route('{id}/aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['soort' => null], [], 'aanmaken_id');
+		$route(
+			'aanmaken/{soort}',
+			'aanmaken',
+			['GET', 'POST'],
+			['id' => null, 'soort' => null]
+		);
+		$route(
+			'{id}/aanmaken/{soort}',
+			'aanmaken',
+			['GET', 'POST'],
+			['soort' => null],
+			[],
+			'aanmaken_id'
+		);
 		$route('{id}/opvolging', 'opvolging', ['POST']);
 		$route('{id}/converteren', 'converteren', ['POST']);
 		$route('{id}/sluiten', 'sluiten', ['POST']);
@@ -315,7 +371,6 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$profiel = $this->getProfiel();
 			if ($groep instanceof Activiteit && empty($groep->rechtenAanmelden)) {
 				switch ($groep->activiteitSoort) {
-
 					case ActiviteitSoort::Lichting():
 						$groep->rechtenAanmelden = 'Lichting:' . $profiel->lidjaar;
 						break;
@@ -327,7 +382,8 @@ abstract class AbstractGroepenController extends AbstractController implements R
 					case ActiviteitSoort::Kring():
 						$kring = $profiel->getKring();
 						if ($kring) {
-							$groep->rechtenAanmelden = 'Kring:' . $kring->verticale . '.' . $kring->kringNummer;
+							$groep->rechtenAanmelden =
+								'Kring:' . $kring->verticale . '.' . $kring->kringNummer;
 						}
 						break;
 					default:
@@ -335,7 +391,8 @@ abstract class AbstractGroepenController extends AbstractController implements R
 						break;
 				}
 			}
-		} // opvolger
+		}
+		// opvolger
 		else {
 			$vorige = $this->repository->retrieveByUUID($id);
 			if (!$vorige) {
@@ -349,19 +406,34 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$groep->familie = $vorige->familie;
 			$groep->samenvatting = $vorige->samenvatting;
 			$groep->omschrijving = $vorige->omschrijving;
-			if (in_array(GroepAanmeldRechten::class, class_uses($groep)) && in_array(GroepAanmeldRechten::class, class_uses($vorige))) {
+			if (
+				in_array(GroepAanmeldRechten::class, class_uses($groep)) &&
+				in_array(GroepAanmeldRechten::class, class_uses($vorige))
+			) {
 				$groep->rechtenAanmelden = $vorige->rechtenAanmelden;
 			}
 		}
 
 		// checks rechten aanmaken
-		$form = new GroepForm($groep, $this->repository->getUrl() . '/aanmaken', AccessAction::Aanmaken());
+		$form = new GroepForm(
+			$groep,
+			$this->repository->getUrl() . '/aanmaken',
+			AccessAction::Aanmaken()
+		);
 		if ($request->getMethod() == 'GET') {
 			$table = new GroepenBeheerTable($this->repository);
 			$form->setDataTableId($table->getDataTableId());
-			return $this->render('default.html.twig', ['content' => $table, 'modal' => $form]);
+			return $this->render('default.html.twig', [
+				'content' => $table,
+				'modal' => $form,
+			]);
 		} elseif ($form->validate()) {
-			$this->changeLogRepository->log($groep, 'create', null, $this->changeLogRepository->serialize($groep));
+			$this->changeLogRepository->log(
+				$groep,
+				'create',
+				null,
+				$this->changeLogRepository->serialize($groep)
+			);
 			$this->repository->create($groep);
 			$response[] = $groep;
 			if ($vorige) {
@@ -414,12 +486,19 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			throw $this->createAccessDeniedException();
 		}
 		// checks rechten wijzigen
-		$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen());
+		$form = new GroepForm(
+			$groep,
+			$groep->getUrl() . '/wijzigen',
+			AccessAction::Wijzigen()
+		);
 		if ($request->getMethod() == 'GET') {
 			$this->beheren($request);
 			$this->table->filter = $groep->naam;
 			$form->setDataTableId($this->table->getDataTableId());
-			return $this->render('default.html.twig', ['content' => $this->table, 'modal' => $form]);
+			return $this->render('default.html.twig', [
+				'content' => $this->table,
+				'modal' => $form,
+			]);
 		} elseif ($form->validate()) {
 			$this->changeLogRepository->logChanges($form->diff());
 			$this->repository->update($groep);
@@ -440,10 +519,14 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	{
 		$response = [];
 		$groep = $this->repository->retrieveByUUID($id);
-		if ($groep && $groep->mag(AccessAction::Verwijderen()) && count($groep->getLeden()) === 0) {
+		if (
+			$groep &&
+			$groep->mag(AccessAction::Verwijderen()) &&
+			count($groep->getLeden()) === 0
+		) {
 			$old = $serializer->serialize($groep, 'json', [
 				AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($obj) {
-					return $obj->id ?? "";
+					return $obj->id ?? '';
 				},
 				AbstractNormalizer::GROUPS => ['log'],
 			]);
@@ -463,14 +546,27 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function opvolging($id)
 	{
 		$groep = $this->repository->retrieveByUUID($id);
-		$form = new GroepOpvolgingForm($groep, $this->repository->getUrl() . '/opvolging');
+		$form = new GroepOpvolgingForm(
+			$groep,
+			$this->repository->getUrl() . '/opvolging'
+		);
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$response = [];
 			$groep = $this->repository->retrieveByUUID($id);
 			if ($groep && $groep->mag(AccessAction::Opvolging())) {
-				$this->changeLogRepository->log($groep, 'familie', $groep->familie, $values['familie']);
-				$this->changeLogRepository->log($groep, 'status', $groep->status, $values['status']);
+				$this->changeLogRepository->log(
+					$groep,
+					'familie',
+					$groep->familie,
+					$values['familie']
+				);
+				$this->changeLogRepository->log(
+					$groep,
+					'status',
+					$groep->status,
+					$values['status']
+				);
 				$groep->familie = $values['familie'];
 				$groep->status = $values['status'];
 				$this->repository->update($groep);
@@ -501,14 +597,31 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$groep = $this->repository->retrieveByUUID($id);
 			if ($groep && $groep->mag(AccessAction::Wijzigen())) {
 				if ($converteer) {
-					$this->changeLogRepository->log($groep, 'class', get_class($groep), $model->entityClass);
-					$nieuw = $model->converteer($groep, $this->repository, $values['soort']);
+					$this->changeLogRepository->log(
+						$groep,
+						'class',
+						get_class($groep),
+						$model->entityClass
+					);
+					$nieuw = $model->converteer(
+						$groep,
+						$this->repository,
+						$values['soort']
+					);
 					if ($nieuw) {
-						$response[] = new RemoveDataTableEntry($groep->id, get_class($groep));
+						$response[] = new RemoveDataTableEntry(
+							$groep->id,
+							get_class($groep)
+						);
 						$response[] = $groep;
 					}
 				} elseif ($groep instanceof HeeftSoort) {
-					$this->changeLogRepository->log($groep, 'soort', $groep->getSoort(), $values['soort']);
+					$this->changeLogRepository->log(
+						$groep,
+						'soort',
+						$groep->getSoort(),
+						$values['soort']
+					);
 					$groep->setSoort($values['soort']);
 					$this->repository->update($groep);
 					$response[] = $groep;
@@ -530,12 +643,18 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	{
 		$response = [];
 		$groep = $this->repository->retrieveByUUID($id);
-		if ($groep
-			&& in_array(GroepAanmeldMoment::class, class_uses($groep))
-			&& date_create_immutable() <= $groep->aanmeldenTot
-			&& $groep->mag(AccessAction::Wijzigen())
+		if (
+			$groep &&
+			in_array(GroepAanmeldMoment::class, class_uses($groep)) &&
+			date_create_immutable() <= $groep->aanmeldenTot &&
+			$groep->mag(AccessAction::Wijzigen())
 		) {
-			$this->changeLogRepository->log($groep, 'aanmelden_tot', $groep->aanmeldenTot, date_create_immutable());
+			$this->changeLogRepository->log(
+				$groep,
+				'aanmelden_tot',
+				$groep->aanmeldenTot,
+				date_create_immutable()
+			);
 			$groep->aanmeldenTot = date_create_immutable();
 			$this->repository->update($groep);
 			$response[] = $groep;
@@ -565,7 +684,9 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			if (!$groep->mag(AccessAction::Bekijken())) {
 				throw $this->createAccessDeniedException();
 			}
-			$data = $this->changeLogRepository->findBy(['subject' => $groep->getUUID()]);
+			$data = $this->changeLogRepository->findBy([
+				'subject' => $groep->getUUID(),
+			]);
 			return $this->tableData($data);
 		}
 		// popup request
@@ -594,12 +715,16 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	/*
 	 * Voor groepen V2
 	 */
-	public function aanmelden2(Request $request, EntityManagerInterface $em, $id, $uid)
-	{
+	public function aanmelden2(
+		Request $request,
+		EntityManagerInterface $em,
+		$id,
+		$uid
+	) {
 		$groep = $this->repository->get($id);
 
 		if ($groep->versie !== GroepVersie::V2()) {
-			throw new BadRequestHttpException("Groep is niet van versie 2.");
+			throw new BadRequestHttpException('Groep is niet van versie 2.');
 		}
 
 		if (!$groep->mag(AccessAction::Aanmelden())) {
@@ -632,7 +757,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$groep = $this->repository->get($id);
 
 		if ($groep->versie !== GroepVersie::V1()) {
-			throw new BadRequestHttpException("Groep is niet van versie 1.");
+			throw new BadRequestHttpException('Groep is niet van versie 1.');
 		}
 
 		if (!$groep->mag(AccessAction::Aanmelden())) {
@@ -666,10 +791,19 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$lid->groep = $groep;
 		$lid->groep_id = $groep->id;
 		$leden = group_by_distinct('uid', $groep->getLeden());
-		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/aanmelden', array_keys($leden));
+		$form = new GroepLidBeheerForm(
+			$lid,
+			$groep->getUrl() . '/aanmelden',
+			array_keys($leden)
+		);
 
 		if ($form->validate()) {
-			$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->profiel->uid);
+			$this->changeLogRepository->log(
+				$groep,
+				'aanmelden',
+				null,
+				$lid->profiel->uid
+			);
 			$lid->groep_id = $lid->groep->id;
 			$lid->uid = $lid->profiel->uid;
 			$this->groepLidRepository->save($lid);
@@ -717,7 +851,10 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			throw $this->createAccessDeniedException();
 		}
 
-		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken/' . $lid->uid);
+		$form = new GroepLidBeheerForm(
+			$lid,
+			$groep->getUrl() . '/bewerken/' . $lid->uid
+		);
 
 		if ($form->validate()) {
 			$this->changeLogRepository->logChanges($form->diff());
@@ -738,7 +875,9 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$groep = $this->repository->get($id);
 
 		if ($uid && !$groep->mag(AccessAction::Beheren())) {
-			throw $this->createAccessDeniedException("Mag niet afmelden via context menu");
+			throw $this->createAccessDeniedException(
+				'Mag niet afmelden via context menu'
+			);
 		}
 
 		if (!$uid) {
@@ -746,7 +885,10 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		}
 
 		// A::Beheren voor afmelden via context-menu
-		if (!$groep->mag(AccessAction::Afmelden()) && !$groep->mag(AccessAction::Beheren())) {
+		if (
+			!$groep->mag(AccessAction::Afmelden()) &&
+			!$groep->mag(AccessAction::Beheren())
+		) {
 			throw $this->createAccessDeniedException();
 		}
 
@@ -773,7 +915,10 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 		$lid = $groep->getLid($uid);
 		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
-		$response = new RemoveDataTableEntry(['groepId' => $lid->groepId, 'uid' => $uid], get_class($lid));
+		$response = new RemoveDataTableEntry(
+			['groepId' => $lid->groepId, 'uid' => $uid],
+			get_class($lid)
+		);
 		$em->remove($lid);
 		$em->flush();
 
@@ -789,15 +934,16 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			throw new CsrGebruikerException('Geen o.t. groep gevonden');
 		}
 
-
 		if ($otGroep->getLid($uid)) {
 			throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
 		}
 
 		// A::Beheren voor afmelden via context-menu
-		if (!$groep->mag(AccessAction::Afmelden())
-			&& !$groep->mag(AccessAction::Beheren())
-			&& !$otGroep->mag(AccessAction::Aanmelden())) {
+		if (
+			!$groep->mag(AccessAction::Afmelden()) &&
+			!$groep->mag(AccessAction::Beheren()) &&
+			!$otGroep->mag(AccessAction::Aanmelden())
+		) {
 			throw new CsrGebruikerException();
 		}
 
@@ -815,6 +961,11 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$em->clear();
 		});
 
-		return $this->tableData([new RemoveDataTableEntry(['groep_id' => $groep->id, 'uid' => $lid->uid], get_class($lid))]);
+		return $this->tableData([
+			new RemoveDataTableEntry(
+				['groep_id' => $groep->id, 'uid' => $lid->uid],
+				get_class($lid)
+			),
+		]);
 	}
 }

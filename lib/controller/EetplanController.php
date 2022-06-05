@@ -51,8 +51,7 @@ class EetplanController extends AbstractController
 		EetplanRepository $eetplanRepository,
 		EetplanBekendenRepository $eetplanBekendenRepository,
 		WoonoordenRepository $woonoordenRepository
-	)
-	{
+	) {
 		$this->eetplanRepository = $eetplanRepository;
 		$this->eetplanBekendenRepository = $eetplanBekendenRepository;
 		$this->woonoordenRepository = $woonoordenRepository;
@@ -67,7 +66,7 @@ class EetplanController extends AbstractController
 	public function view(): Response
 	{
 		return $this->render('eetplan/overzicht.html.twig', [
-			'eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar)
+			'eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar),
 		]);
 	}
 
@@ -81,7 +80,7 @@ class EetplanController extends AbstractController
 	{
 		$eetplan = $this->eetplanRepository->getEetplanVoorNoviet($uid);
 		if (!$eetplan) {
-			throw new NotFoundHttpException("Geen eetplan gevonden voor deze noviet");
+			throw new NotFoundHttpException('Geen eetplan gevonden voor deze noviet');
 		}
 
 		return $this->render('eetplan/noviet.html.twig', [
@@ -98,7 +97,10 @@ class EetplanController extends AbstractController
 	 */
 	public function huis(int $id): Response
 	{
-		$eetplan = $this->eetplanRepository->getEetplanVoorHuis($id, $this->lidjaar);
+		$eetplan = $this->eetplanRepository->getEetplanVoorHuis(
+			$id,
+			$this->lidjaar
+		);
 		if ($eetplan == []) {
 			throw new CsrGebruikerException('Huis niet gevonden');
 		}
@@ -137,7 +139,9 @@ class EetplanController extends AbstractController
 	 */
 	public function woonoorden(): EetplanHuizenResponse
 	{
-		$woonoorden = $this->woonoordenRepository->findBy(['status' => GroepStatus::HT()]);
+		$woonoorden = $this->woonoordenRepository->findBy([
+			'status' => GroepStatus::HT(),
+		]);
 		return new EetplanHuizenResponse($woonoorden);
 	}
 
@@ -148,7 +152,9 @@ class EetplanController extends AbstractController
 	 */
 	public function bekendehuizen(): GenericDataTableResponse
 	{
-		return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lidjaar));
+		return $this->tableData(
+			$this->eetplanRepository->getBekendeHuizen($this->lidjaar)
+		);
 	}
 
 	/**
@@ -160,20 +166,28 @@ class EetplanController extends AbstractController
 	public function bekendehuizen_toevoegen(Request $request)
 	{
 		$eetplan = new Eetplan();
-		$form = $this->createFormulier(
-			EetplanBekendeHuizenForm::class,
-			$eetplan,
-			['action' => $this->generateUrl('csrdelft_eetplan_bekendehuizen_toevoegen'), 'update' => false]
-		);
+		$form = $this->createFormulier(EetplanBekendeHuizenForm::class, $eetplan, [
+			'action' => $this->generateUrl(
+				'csrdelft_eetplan_bekendehuizen_toevoegen'
+			),
+			'update' => false,
+		]);
 		$form->handleRequest($request);
 		if (!$form->validate()) {
 			return new Response($form->createModalView());
-		} elseif ($this->eetplanRepository->findOneBy(['noviet' => $eetplan->noviet, 'woonoord' => $eetplan->woonoord]) != null) {
+		} elseif (
+			$this->eetplanRepository->findOneBy([
+				'noviet' => $eetplan->noviet,
+				'woonoord' => $eetplan->woonoord,
+			]) != null
+		) {
 			setMelding('Deze noviet is al eens op dit huis geweest', -1);
 			return new Response($form->createModalView());
 		} else {
 			$this->eetplanRepository->save($eetplan);
-			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lidjaar));
+			return $this->tableData(
+				$this->eetplanRepository->getBekendeHuizen($this->lidjaar)
+			);
 		}
 	}
 
@@ -191,15 +205,19 @@ class EetplanController extends AbstractController
 		}
 
 		$eetplan = $this->eetplanRepository->retrieveByUUID($uuid);
-		$form = $this->createFormulier(
-			EetplanBekendeHuizenForm::class,
-			$eetplan,
-			['action' => $this->generateUrl('csrdelft_eetplan_bekendehuizen_bewerken', ['uuid' => $uuid]), 'update' => true],
-		);
+		$form = $this->createFormulier(EetplanBekendeHuizenForm::class, $eetplan, [
+			'action' => $this->generateUrl(
+				'csrdelft_eetplan_bekendehuizen_bewerken',
+				['uuid' => $uuid]
+			),
+			'update' => true,
+		]);
 		$form->handleRequest($request);
 		if ($form->isPosted() && $form->validate()) {
 			$this->eetplanRepository->save($eetplan);
-			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lidjaar));
+			return $this->tableData(
+				$this->eetplanRepository->getBekendeHuizen($this->lidjaar)
+			);
 		} else {
 			return new Response($form->createModalView());
 		}
@@ -213,7 +231,7 @@ class EetplanController extends AbstractController
 	public function bekendehuizen_verwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
-		$verwijderd = array();
+		$verwijderd = [];
 		if ($selection !== false) {
 			foreach ($selection as $uuid) {
 				$eetplan = $this->eetplanRepository->retrieveByUUID($uuid);
@@ -233,16 +251,19 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/bekendehuizen/zoeken", methods={"GET"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen_zoeken(Request $request): EetplanHuizenZoekenResponse
-	{
+	public function bekendehuizen_zoeken(
+		Request $request
+	): EetplanHuizenZoekenResponse {
 		$huisnaam = $request->query->get('q');
 		$huisnaam = '%' . $huisnaam . '%';
 		/** @var Woonoord[] $woonoorden */
-		$woonoorden = $this->woonoordenRepository->createQueryBuilder('w')
+		$woonoorden = $this->woonoordenRepository
+			->createQueryBuilder('w')
 			->where('w.status = :status and w.naam LIKE :naam')
 			->setParameter('status', GroepStatus::HT)
 			->setParameter('naam', $huisnaam)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 		return new EetplanHuizenZoekenResponse($woonoorden);
 	}
 
@@ -253,7 +274,9 @@ class EetplanController extends AbstractController
 	 */
 	public function novietrelatie(): GenericDataTableResponse
 	{
-		return $this->tableData($this->eetplanBekendenRepository->getBekendenVoorLidjaar($this->lidjaar));
+		return $this->tableData(
+			$this->eetplanBekendenRepository->getBekendenVoorLidjaar($this->lidjaar)
+		);
 	}
 
 	/**
@@ -268,7 +291,12 @@ class EetplanController extends AbstractController
 		$form = $this->createFormulier(
 			EetplanBekendenForm::class,
 			$eetplanbekenden,
-			['action' => $this->generateUrl('csrdelft_eetplan_novietrelatie_toevoegen'), 'update' => false]
+			[
+				'action' => $this->generateUrl(
+					'csrdelft_eetplan_novietrelatie_toevoegen'
+				),
+				'update' => false,
+			]
 		);
 		$form->handleRequest($request);
 		if (!$form->validate()) {
@@ -278,7 +306,9 @@ class EetplanController extends AbstractController
 			return new Response($form->createModalView());
 		} else {
 			$this->eetplanBekendenRepository->save($eetplanbekenden);
-			return $this->tableData($this->eetplanBekendenRepository->getBekendenVoorLidjaar($this->lidjaar));
+			return $this->tableData(
+				$this->eetplanBekendenRepository->getBekendenVoorLidjaar($this->lidjaar)
+			);
 		}
 	}
 
@@ -299,12 +329,20 @@ class EetplanController extends AbstractController
 		$form = $this->createFormulier(
 			EetplanBekendenForm::class,
 			$eetplanbekenden,
-			['action' => $this->generateUrl('csrdelft_eetplan_novietrelatie_bewerken', ['uuid' => $uuid]), 'update' => true]
+			[
+				'action' => $this->generateUrl(
+					'csrdelft_eetplan_novietrelatie_bewerken',
+					['uuid' => $uuid]
+				),
+				'update' => true,
+			]
 		);
 		$form->handleRequest($request);
 		if ($form->isPosted() && $form->validate()) {
 			$this->eetplanBekendenRepository->save($eetplanbekenden);
-			return $this->tableData($this->eetplanBekendenRepository->getBekendenVoorLidjaar($this->lidjaar));
+			return $this->tableData(
+				$this->eetplanBekendenRepository->getBekendenVoorLidjaar($this->lidjaar)
+			);
 		} else {
 			return new Response($form->createModalView());
 		}
@@ -321,7 +359,10 @@ class EetplanController extends AbstractController
 		$verwijderd = [];
 		foreach ($selection as $uuid) {
 			$bekenden = $this->eetplanBekendenRepository->retrieveByUUID($uuid);
-			$verwijderd[] = new RemoveDataTableEntry($bekenden->id, EetplanBekenden::class);
+			$verwijderd[] = new RemoveDataTableEntry(
+				$bekenden->id,
+				EetplanBekenden::class
+			);
 			$this->eetplanBekendenRepository->remove($bekenden);
 		}
 		return $this->tableData($verwijderd);
@@ -338,9 +379,11 @@ class EetplanController extends AbstractController
 	{
 		return $this->render('eetplan/beheer.html.twig', [
 			'bekendentable' => new EetplanBekendenTable(),
-			'huizentable' => $this->createDataTable(EetplanHuizenTable::class)->createView(),
+			'huizentable' => $this->createDataTable(
+				EetplanHuizenTable::class
+			)->createView(),
 			'bekendehuizentable' => new EetplanBekendeHuizenTable(),
-			'eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar)
+			'eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar),
 		]);
 	}
 
@@ -355,7 +398,11 @@ class EetplanController extends AbstractController
 
 		if (!$form->validate()) {
 			return $form;
-		} elseif ($this->eetplanRepository->avondHasEetplan(date_create_immutable($form->getValues()['avond']))) {
+		} elseif (
+			$this->eetplanRepository->avondHasEetplan(
+				date_create_immutable($form->getValues()['avond'])
+			)
+		) {
 			setMelding('Er bestaat al een eetplan met deze datum', -1);
 			return $form;
 		} else {
@@ -366,7 +413,9 @@ class EetplanController extends AbstractController
 				$this->eetplanRepository->save($sessie);
 			}
 
-			return $this->render('eetplan/table.html.twig', ['eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar)]);
+			return $this->render('eetplan/table.html.twig', [
+				'eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar),
+			]);
 		}
 	}
 
@@ -386,7 +435,9 @@ class EetplanController extends AbstractController
 			$avond = date_create_immutable($form->getValues()['avond']);
 			$this->eetplanRepository->verwijderEetplan($avond, $this->lidjaar);
 
-			return $this->render('eetplan/table.html.twig', ['eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar)]);
+			return $this->render('eetplan/table.html.twig', [
+				'eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar),
+			]);
 		}
 	}
 }

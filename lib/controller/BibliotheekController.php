@@ -34,7 +34,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * BibliotheekController.class.php  |  Gerrit Uitslag (klapinklapin@gmail.com)
  *
  */
-class BibliotheekController extends AbstractController {
+class BibliotheekController extends AbstractController
+{
 	/**
 	 * @var BoekExemplaarRepository
 	 */
@@ -86,20 +87,25 @@ class BibliotheekController extends AbstractController {
 	public function recensie(Request $request, Boek $boek): RedirectResponse
 	{
 		$recensie = $this->boekRecensieRepository->get($boek, $this->getProfiel());
-		$formulier = $this->createFormulier(BoekRecensieFormulier::class, $recensie);
+		$formulier = $this->createFormulier(
+			BoekRecensieFormulier::class,
+			$recensie
+		);
 		$formulier->handleRequest($request);
 		if ($formulier->validate()) {
 			if (!$recensie->magBewerken()) {
-				throw $this->createAccessDeniedException("Mag recensie niet bewerken");
+				throw $this->createAccessDeniedException('Mag recensie niet bewerken');
 			} else {
 				$recensie->bewerkdatum = date_create_immutable();
 				$manager = $this->getDoctrine()->getManager();
 				$manager->persist($recensie);
 				$manager->flush();
-				setMelding("Recensie opgeslagen", 0);
+				setMelding('Recensie opgeslagen', 0);
 			}
 		}
-		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek' => $boek->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
+			'boek' => $boek->id,
+		]);
 	}
 
 	/**
@@ -109,7 +115,11 @@ class BibliotheekController extends AbstractController {
 	 */
 	public function rubrieken(): Response
 	{
-		return $this->render('default.html.twig', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('rubrieken'))]);
+		return $this->render('default.html.twig', [
+			'content' => new CmsPaginaView(
+				$this->cmsPaginaRepository->find('rubrieken')
+			),
+		]);
 	}
 
 	/**
@@ -119,7 +129,11 @@ class BibliotheekController extends AbstractController {
 	 */
 	public function wenslijst(): Response
 	{
-		return $this->render('default.html.twig', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('wenslijst'))]);
+		return $this->render('default.html.twig', [
+			'content' => new CmsPaginaView(
+				$this->cmsPaginaRepository->find('wenslijst')
+			),
+		]);
 	}
 
 	/**
@@ -128,7 +142,9 @@ class BibliotheekController extends AbstractController {
 	 */
 	public function catalogustonen(): Response
 	{
-		return $this->render('default.html.twig', ['content' => new BibliotheekCatalogusDatatable()]);
+		return $this->render('default.html.twig', [
+			'content' => new BibliotheekCatalogusDatatable(),
+		]);
 	}
 
 	/**
@@ -138,10 +154,11 @@ class BibliotheekController extends AbstractController {
 	 * @param Request $request
 	 * @return BibliotheekCatalogusDatatableResponse
 	 */
-	public function catalogusdata(Request $request): BibliotheekCatalogusDatatableResponse
-	{
+	public function catalogusdata(
+		Request $request
+	): BibliotheekCatalogusDatatableResponse {
 		$boeken = $this->boekRepository->findAll();
-		$uid = $request->query->get("eigenaar");
+		$uid = $request->query->get('eigenaar');
 		$results = [];
 		if ($uid !== null) {
 			foreach ($boeken as $boek) {
@@ -172,24 +189,34 @@ class BibliotheekController extends AbstractController {
 		$boekForm->handleRequest($request);
 		if ($boekForm->validate()) {
 			if (!$boek->magBewerken()) {
-				throw $this->createAccessDeniedException('U mag dit boek niet bewerken');
+				throw $this->createAccessDeniedException(
+					'U mag dit boek niet bewerken'
+				);
 			} else {
-				$auteur = $this->biebAuteurRepository->findOneBy(['auteur' => $boek->auteur]);
+				$auteur = $this->biebAuteurRepository->findOneBy([
+					'auteur' => $boek->auteur,
+				]);
 
 				if (!$auteur) {
 					$auteur = new BiebAuteur();
 					$auteur->auteur = $boek->auteur;
-					$this->getDoctrine()->getManager()->persist($auteur);
+					$this->getDoctrine()
+						->getManager()
+						->persist($auteur);
 				}
 
 				$boek->auteur2 = $auteur;
 
-				$boek->setCategorie($this->biebRubriekRepository->find($boek->categorie_id));
+				$boek->setCategorie(
+					$this->biebRubriekRepository->find($boek->categorie_id)
+				);
 				$manager = $this->getDoctrine()->getManager();
 				$manager->persist($boek);
 				$manager->flush();
 
-				return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek' => $boek->id]);
+				return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
+					'boek' => $boek->id,
+				]);
 			}
 		}
 
@@ -202,7 +229,10 @@ class BibliotheekController extends AbstractController {
 		$exemplaarFormulieren = [];
 		foreach ($boek->getExemplaren() as $exemplaar) {
 			if ($exemplaar->magBewerken()) {
-				$exemplaarFormulieren[$exemplaar->id] = $this->createFormulier(BoekExemplaarFormulier::class, $exemplaar)->createView();
+				$exemplaarFormulieren[$exemplaar->id] = $this->createFormulier(
+					BoekExemplaarFormulier::class,
+					$exemplaar
+				)->createView();
 			}
 		}
 		foreach ($alleRecensies as $recensie) {
@@ -210,14 +240,18 @@ class BibliotheekController extends AbstractController {
 				$mijnRecensie = $recensie;
 			}
 			$andereRecensies[] = $recensie;
-
 		}
 		return $this->render('bibliotheek/boek.html.twig', [
 			'boek' => $boek,
 			'recensies' => $andereRecensies,
 			'boekFormulier' => $boekForm->createView(),
 			'mijnRecensie' => $mijnRecensie,
-			'recensieFormulier' => $boek->id ? $this->createFormulier(BoekRecensieFormulier::class, $mijnRecensie)->createView() : null,
+			'recensieFormulier' => $boek->id
+				? $this->createFormulier(
+					BoekRecensieFormulier::class,
+					$mijnRecensie
+				)->createView()
+				: null,
 			'exemplaarFormulieren' => $exemplaarFormulieren,
 		]);
 	}
@@ -238,7 +272,9 @@ class BibliotheekController extends AbstractController {
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($boek);
 			$manager->flush();
-			return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek' => $boek->id]);
+			return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
+				'boek' => $boek->id,
+			]);
 		}
 	}
 
@@ -248,7 +284,8 @@ class BibliotheekController extends AbstractController {
 	 * @Route("/bibliotheek/verwijderbeschrijving/{boek}/{profiel}", methods={"POST"}, requirements={"boek": "\d+", "profiel": ".{4}"})
 	 * @Auth(P_BIEB_READ)
 	 */
-	public function verwijderbeschrijving(Boek $boek, Profiel $profiel) {
+	public function verwijderbeschrijving(Boek $boek, Profiel $profiel)
+	{
 		$recensie = $this->boekRecensieRepository->get($boek, $profiel);
 		if (!$recensie->magVerwijderen()) {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
@@ -258,9 +295,8 @@ class BibliotheekController extends AbstractController {
 			$manager->remove($recensie);
 			$manager->flush();
 			setMelding('Recensie met succes verwijderd.', 1);
-
 		}
-		exit;
+		exit();
 	}
 
 	/**
@@ -274,7 +310,10 @@ class BibliotheekController extends AbstractController {
 	public function verwijderboek(Boek $boek): RedirectResponse
 	{
 		if (!$boek->magVerwijderen()) {
-			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addbeschrijving', -1);
+			setMelding(
+				'Onvoldoende rechten voor deze actie. Biebcontrllr::addbeschrijving',
+				-1
+			);
 			return $this->redirectToRoute('csrdelft_bibliotheek_catalogustonen');
 		} else {
 			$manager = $this->getDoctrine()->getManager();
@@ -292,10 +331,12 @@ class BibliotheekController extends AbstractController {
 	 * @Route("/bibliotheek/exemplaar/{exemplaar}", methods={"POST"}, requirements={"exemplaar": "\d+"})
 	 * @Auth(P_BIEB_READ)
 	 */
-	public function exemplaar(Request $request, BoekExemplaar $exemplaar): RedirectResponse
-	{
+	public function exemplaar(
+		Request $request,
+		BoekExemplaar $exemplaar
+	): RedirectResponse {
 		if (!$exemplaar->magBewerken()) {
-			throw $this->createAccessDeniedException("Mag exemplaar niet bewerken");
+			throw $this->createAccessDeniedException('Mag exemplaar niet bewerken');
 		}
 		$form = $this->createFormulier(BoekExemplaarFormulier::class, $exemplaar);
 		$form->handleRequest($request);
@@ -304,7 +345,9 @@ class BibliotheekController extends AbstractController {
 			$manager->persist($exemplaar);
 			$manager->flush();
 		}
-		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek' => $exemplaar->boek->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
+			'boek' => $exemplaar->boek->id,
+		]);
 	}
 
 	/**
@@ -315,22 +358,34 @@ class BibliotheekController extends AbstractController {
 	 * @Route("/bibliotheek/addexemplaar/{boek}/{profiel}", methods={"POST"}, defaults={"profiel": null}, requirements={"boek": "\d+", "profiel": ".{4}"})
 	 * @Auth(P_BIEB_READ)
 	 */
-	public function addexemplaar(Boek $boek, Profiel $profiel = null): RedirectResponse
-	{
+	public function addexemplaar(
+		Boek $boek,
+		Profiel $profiel = null
+	): RedirectResponse {
 		if (!$boek->magBekijken()) {
-			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addexemplaar()', -1);
-			return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek' => $boek->id]);
+			setMelding(
+				'Onvoldoende rechten voor deze actie. Biebcontrllr::addexemplaar()',
+				-1
+			);
+			return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
+				'boek' => $boek->id,
+			]);
 		}
 		if ($profiel == null) {
 			$profiel = $this->getProfiel();
 		}
-		if ($profiel->uid != $this->getUid() && !($profiel->uid == 'x222' && LoginService::mag(P_BIEB_MOD))) {
+		if (
+			$profiel->uid != $this->getUid() &&
+			!($profiel->uid == 'x222' && LoginService::mag(P_BIEB_MOD))
+		) {
 			throw $this->createAccessDeniedException('Mag deze eigenaar niet kiezen');
 		}
 		$this->boekExemplaarRepository->addExemplaar($boek, $profiel);
 
 		setMelding('Exemplaar met succes toegevoegd.', 1);
-		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek' => $boek->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
+			'boek' => $boek->id,
+		]);
 	}
 
 	/**
@@ -350,7 +405,9 @@ class BibliotheekController extends AbstractController {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
-		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek' => $exemplaar->boek->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
+			'boek' => $exemplaar->boek->id,
+		]);
 	}
 
 	/**
@@ -371,7 +428,9 @@ class BibliotheekController extends AbstractController {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
-		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek' => $exemplaar->boek->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
+			'boek' => $exemplaar->boek->id,
+		]);
 	}
 
 	/**
@@ -392,7 +451,11 @@ class BibliotheekController extends AbstractController {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
-		return new JsonResponse($this->generateUrl('csrdelft_bibliotheek_boek', ['boek' => $exemplaar->boek->id]));
+		return new JsonResponse(
+			$this->generateUrl('csrdelft_bibliotheek_boek', [
+				'boek' => $exemplaar->boek->id,
+			])
+		);
 	}
 
 	/**
@@ -402,22 +465,28 @@ class BibliotheekController extends AbstractController {
 	 * @return RedirectResponse
 	 * TODO Deze methode wordt niet gebruikt, waarom?
 	 */
-	public function exemplaaruitlenen(Request $request, BoekExemplaar $exemplaar): RedirectResponse
-	{
+	public function exemplaaruitlenen(
+		Request $request,
+		BoekExemplaar $exemplaar
+	): RedirectResponse {
 		$uid = $request->request->get('lener_uid');
 		if (!$exemplaar->isEigenaar()) {
 			setMelding('Alleen de eigenaar mag boeken uitlenen', -1);
-		} else if (!ProfielRepository::existsUid($uid)) {
+		} elseif (!ProfielRepository::existsUid($uid)) {
 			setMelding('Incorrecte lener', -1);
-		} else if ($this->boekExemplaarRepository->leen($exemplaar, $uid)) {
-			return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek' => $exemplaar->boek->id, '_fragment' => 'exemplaren']);
+		} elseif ($this->boekExemplaarRepository->leen($exemplaar, $uid)) {
+			return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
+				'boek' => $exemplaar->boek->id,
+				'_fragment' => 'exemplaren',
+			]);
 		} else {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
 
-		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek' => $exemplaar->boek->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
+			'boek' => $exemplaar->boek->id,
+		]);
 	}
-
 
 	/**
 	 * @param BoekExemplaar $exemplaar
@@ -430,9 +499,11 @@ class BibliotheekController extends AbstractController {
 		if (!$this->boekExemplaarRepository->leen($exemplaar, $this->getUid())) {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
-		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek' => $exemplaar->boek->id, '_fragment' => 'exemplaren']);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
+			'boek' => $exemplaar->boek->id,
+			'_fragment' => 'exemplaren',
+		]);
 	}
-
 
 	/**
 	 * Lener zegt dat hij/zij exemplaar heeft teruggegeven
@@ -445,7 +516,10 @@ class BibliotheekController extends AbstractController {
 	 */
 	public function exemplaarteruggegeven(BoekExemplaar $exemplaar): JsonResponse
 	{
-		if ($exemplaar->isUitgeleend() && $exemplaar->uitgeleend_uid == $this->getUid()) {
+		if (
+			$exemplaar->isUitgeleend() &&
+			$exemplaar->uitgeleend_uid == $this->getUid()
+		) {
 			if ($this->boekExemplaarRepository->terugGegeven($exemplaar)) {
 				setMelding('Exemplaar is teruggegeven.', 1);
 			} else {
@@ -454,7 +528,11 @@ class BibliotheekController extends AbstractController {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie. ', -1);
 		}
-		return new JsonResponse($this->generateUrl('csrdelft_bibliotheek_boek', ['boek' => $exemplaar->boek->id]));
+		return new JsonResponse(
+			$this->generateUrl('csrdelft_bibliotheek_boek', [
+				'boek' => $exemplaar->boek->id,
+			])
+		);
 	}
 
 	/**
@@ -466,20 +544,30 @@ class BibliotheekController extends AbstractController {
 	 * @Route("/bibliotheek/exemplaarterugontvangen/{exemplaar}", methods={"POST"}, requirements={"exemplaar": "\d+"})
 	 * @Auth(P_BIEB_READ)
 	 */
-	public function exemplaarterugontvangen(BoekExemplaar $exemplaar): JsonResponse
-	{
-		if ($exemplaar->isEigenaar() && ($exemplaar->isUitgeleend() || $exemplaar->isTeruggegeven())) {
+	public function exemplaarterugontvangen(
+		BoekExemplaar $exemplaar
+	): JsonResponse {
+		if (
+			$exemplaar->isEigenaar() &&
+			($exemplaar->isUitgeleend() || $exemplaar->isTeruggegeven())
+		) {
 			if ($this->boekExemplaarRepository->terugOntvangen($exemplaar)) {
 				setMelding('Exemplaar terugontvangen.', 1);
 			} else {
 				setMelding('Exemplaar terugontvangen melden is mislukt. ', -1);
 			}
 		} else {
-			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::exemplaarterugontvangen()', -1);
+			setMelding(
+				'Onvoldoende rechten voor deze actie. Biebcontrllr::exemplaarterugontvangen()',
+				-1
+			);
 		}
-		return new JsonResponse($this->generateUrl('csrdelft_bibliotheek_boek', ['boek' => $exemplaar->boek->id]));
+		return new JsonResponse(
+			$this->generateUrl('csrdelft_bibliotheek_boek', [
+				'boek' => $exemplaar->boek->id,
+			])
+		);
 	}
-
 
 	/**
 	 * Genereert suggesties voor jquery-autocomplete
@@ -496,7 +584,10 @@ class BibliotheekController extends AbstractController {
 		if ($request->query->has('q')) {
 			$zoekterm = $request->query->get('q');
 
-			$results = $this->boekRepository->autocompleteProperty($zoekveld, $zoekterm);
+			$results = $this->boekRepository->autocompleteProperty(
+				$zoekveld,
+				$zoekterm
+			);
 			$data = [];
 			foreach ($results as $result) {
 				$waarde = $result[$zoekveld];
@@ -523,17 +614,17 @@ class BibliotheekController extends AbstractController {
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');
 		}
-		$result = array();
+		$result = [];
 		foreach ($this->boekRepository->autocompleteBoek($zoekterm) as $boek) {
-			$result[] = array(
-				'url' => $this->generateUrl('csrdelft_bibliotheek_boek', ['boek' => $boek->id]),
+			$result[] = [
+				'url' => $this->generateUrl('csrdelft_bibliotheek_boek', [
+					'boek' => $boek->id,
+				]),
 				'icon' => Icon::getTag('boek'),
 				'label' => $boek->auteur,
-				'value' => $boek->titel
-			);
+				'value' => $boek->titel,
+			];
 		}
 		return new JsonResponse($result);
 	}
-
-
 }

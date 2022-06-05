@@ -24,7 +24,8 @@ use stdClass;
  * @method CiviSaldo[]    findAll()
  * @method CiviSaldo[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CiviSaldoRepository extends AbstractRepository {
+class CiviSaldoRepository extends AbstractRepository
+{
 	/**
 	 * @var CiviSaldoLogRepository
 	 */
@@ -49,7 +50,8 @@ class CiviSaldoRepository extends AbstractRepository {
 	 * @param bool $alleenActief
 	 * @return CiviSaldo|null
 	 */
-	public function getSaldo($uid, $alleenActief = false) {
+	public function getSaldo($uid, $alleenActief = false)
+	{
 		$critera = ['uid' => $uid];
 		if ($alleenActief) {
 			$critera['deleted'] = 0;
@@ -62,7 +64,8 @@ class CiviSaldoRepository extends AbstractRepository {
 	 *
 	 * @return CiviSaldo
 	 */
-	public function maakSaldo($uid) {
+	public function maakSaldo($uid)
+	{
 		$saldo = new CiviSaldo();
 		$saldo->uid = $uid;
 		$saldo->naam = '';
@@ -77,7 +80,8 @@ class CiviSaldoRepository extends AbstractRepository {
 	 *
 	 * @return mixed
 	 */
-	public function getSomSaldi($profielOnly = false) {
+	public function getSomSaldi($profielOnly = false)
+	{
 		$qb = $this->createQueryBuilder('s')
 			->select('SUM(s.saldo)')
 			->where('s.deleted = false');
@@ -95,9 +99,13 @@ class CiviSaldoRepository extends AbstractRepository {
 	 *
 	 * @return mixed
 	 */
-	public function getSomSaldiOp(DateTime $date, $profielOnly = false) {
+	public function getSomSaldiOp(DateTime $date, $profielOnly = false)
+	{
 		$currentSum = $this->getSomSaldi($profielOnly);
-		return $currentSum + ContainerFacade::getContainer()->get(CiviBestellingRepository::class)->getSomBestellingenVanaf($date, $profielOnly);
+		return $currentSum +
+			ContainerFacade::getContainer()
+				->get(CiviBestellingRepository::class)
+				->getSomBestellingenVanaf($date, $profielOnly);
 	}
 
 	/**
@@ -107,9 +115,12 @@ class CiviSaldoRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function ophogen($uid, $bedrag) {
+	public function ophogen($uid, $bedrag)
+	{
 		if ($bedrag < 0) {
-			throw new CsrGebruikerException('Kan niet ophogen met een negatief bedrag');
+			throw new CsrGebruikerException(
+				'Kan niet ophogen met een negatief bedrag'
+			);
 		}
 
 		$saldo = $this->getSaldo($uid);
@@ -131,9 +142,12 @@ class CiviSaldoRepository extends AbstractRepository {
 	 * @return int Nieuwe saldo
 	 * @throws CsrGebruikerException
 	 */
-	public function verlagen($uid, $bedrag) {
+	public function verlagen($uid, $bedrag)
+	{
 		if ($bedrag < 0) {
-			throw new CsrGebruikerException('Kan niet verlagen met een negatief bedrag');
+			throw new CsrGebruikerException(
+				'Kan niet verlagen met een negatief bedrag'
+			);
 		}
 
 		$saldo = $this->getSaldo($uid);
@@ -154,9 +168,12 @@ class CiviSaldoRepository extends AbstractRepository {
 	 * @return int
 	 * @throws CsrGebruikerException
 	 */
-	public function delete(CiviSaldo $entity) {
+	public function delete(CiviSaldo $entity)
+	{
 		if ($entity->saldo !== 0) {
-			throw new CsrGebruikerException("Kan CiviSaldo niet verwijderen: Saldo ongelijk aan nul.");
+			throw new CsrGebruikerException(
+				'Kan CiviSaldo niet verwijderen: Saldo ongelijk aan nul.'
+			);
 		}
 		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::DELETE_SALDO, $entity);
 
@@ -171,7 +188,8 @@ class CiviSaldoRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(CiviSaldo $entity) {
+	public function create(CiviSaldo $entity)
+	{
 		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::CREATE_SALDO, $entity);
 
 		$this->_em->persist($entity);
@@ -180,12 +198,14 @@ class CiviSaldoRepository extends AbstractRepository {
 		return $entity->uid;
 	}
 
-	public function findLaatsteCommissie() {
+	public function findLaatsteCommissie()
+	{
 		return $this->createQueryBuilder('s')
 			->where('s.uid LIKE \'c%\'')
 			->orderBy('s.uid', 'DESC')
 			->setMaxResults(1)
-			->getQuery()->getResult()[0];
+			->getQuery()
+			->getResult()[0];
 	}
 
 	/**
@@ -195,35 +215,43 @@ class CiviSaldoRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function update(CiviSaldo $entity) {
+	public function update(CiviSaldo $entity)
+	{
 		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::UPDATE_SALDO, $entity);
 
 		$this->_em->persist($entity);
 		$this->_em->flush();
 	}
 
-	public function existsByUid(string $uid) {
+	public function existsByUid(string $uid)
+	{
 		return count($this->findBy(['uid' => $uid])) == 1;
 	}
 
-	public function zoeken($uids, $query) {
+	public function zoeken($uids, $query)
+	{
 		return $this->createQueryBuilder('cs')
 			->where('cs.deleted = false')
-			->andWhere('cs.uid LIKE :query OR cs.naam LIKE :query OR cs.uid in (:uids)')
+			->andWhere(
+				'cs.uid LIKE :query OR cs.naam LIKE :query OR cs.uid in (:uids)'
+			)
 			->setParameter('query', sql_contains($query))
 			->setParameter('uids', $uids)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
 	 * @param int $saldogrens
 	 * @return CiviSaldo[]
 	 */
-	public function getRoodstaandeLeden($saldogrens) {
+	public function getRoodstaandeLeden($saldogrens)
+	{
 		return $this->createQueryBuilder('cs')
 			->where('cs.saldo < :saldogrens')
 			->setParameter('saldogrens', $saldogrens)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
@@ -231,7 +259,10 @@ class CiviSaldoRepository extends AbstractRepository {
 	 * @param DateTimeImmutable $until
 	 * @return stdClass
 	 */
-	public function getWeekinvoer(DateTimeImmutable $from, DateTimeImmutable $until) {
+	public function getWeekinvoer(
+		DateTimeImmutable $from,
+		DateTimeImmutable $until
+	) {
 		// Invoer gebeurt op maandag, zoek eerste en laatse maandag (eerste inbegrepen, laatste niet)
 		$from = $from->modify('monday');
 		$until = $until->modify('next monday'); // Ook als het maandag is de volgende maandag pakken
@@ -274,14 +305,27 @@ SQL;
 		return self::formatWeekinvoer($nativeQuery->getResult());
 	}
 
-	private static function formatWeekinvoer($result) {
+	private static function formatWeekinvoer($result)
+	{
 		$weekinvoeren = new stdClass();
 		// Standaard volgorde categorieën
 		$weekinvoeren->categorieen = [
-			'Bier', 'Wijn', 'Fris', 'Speciaalbier', 'Sterk', 'Whisky',
-			'Etenswaar', 'Glaswerk', 'Overig',
-			'PrakCie pils', 'PrakCie cent', 'Incidentele donateur', 'Cent',
-			'PIN', 'Overgemaakt', 'Contant'
+			'Bier',
+			'Wijn',
+			'Fris',
+			'Speciaalbier',
+			'Sterk',
+			'Whisky',
+			'Etenswaar',
+			'Glaswerk',
+			'Overig',
+			'PrakCie pils',
+			'PrakCie cent',
+			'Incidentele donateur',
+			'Cent',
+			'PIN',
+			'Overgemaakt',
+			'Contant',
 		];
 		$weekinvoeren->weken = [];
 
@@ -292,7 +336,9 @@ SQL;
 				$weekinvoer->jaar = intval(substr($yearweek, 0, 4));
 				$weekinvoer->week = intval(substr($yearweek, 4));
 				$padWeek = str_pad($weekinvoer->week, 2, '0', STR_PAD_LEFT);
-				$weekinvoer->datum = new DateTimeImmutable("{$weekinvoer->jaar}-W{$padWeek}-1");
+				$weekinvoer->datum = new DateTimeImmutable(
+					"{$weekinvoer->jaar}-W{$padWeek}-1"
+				);
 				$weekinvoer->einde = $weekinvoer->datum->add(new DateInterval('P1W'));
 				$weekinvoer->categorieen = [];
 				$weekinvoer->totaal = 0;
@@ -304,7 +350,8 @@ SQL;
 				$weekinvoeren->categorieen[] = $regel['categorie'];
 			}
 
-			$weekinvoeren->weken[$yearweek]->categorieen[$regel['categorie']] = $regel['total'];
+			$weekinvoeren->weken[$yearweek]->categorieen[$regel['categorie']] =
+				$regel['total'];
 			$weekinvoeren->weken[$yearweek]->totaal += $regel['total'];
 		}
 
@@ -320,7 +367,14 @@ SQL;
 	 * @param bool $groeperen
 	 * @return int|mixed|string
 	 */
-	public function zoekBestellingen(DateTimeImmutable $from, DateTimeImmutable $until, string $cie, int $categorie, int $product, bool $groeperen) {
+	public function zoekBestellingen(
+		DateTimeImmutable $from,
+		DateTimeImmutable $until,
+		string $cie,
+		int $categorie,
+		int $product,
+		bool $groeperen
+	) {
 		$rsm = new ResultSetMapping();
 		$rsm->addScalarResult('moment', 'moment', 'datetime_immutable');
 		$rsm->addScalarResult('cie', 'cie');
@@ -331,26 +385,28 @@ SQL;
 		$rsm->addScalarResult('aantal', 'aantal', 'integer');
 
 		if ($groeperen) {
-			$select = "MIN(moment) AS moment, G.cie, type, beschrijving, comment, prijs, SUM(aantal) AS aantal";
-			$orderBy = "MIN(moment)";
-			$groupBy = "GROUP BY G.cie, type, beschrijving, comment";
+			$select =
+				'MIN(moment) AS moment, G.cie, type, beschrijving, comment, prijs, SUM(aantal) AS aantal';
+			$orderBy = 'MIN(moment)';
+			$groupBy = 'GROUP BY G.cie, type, beschrijving, comment';
 		} else {
-			$select = "moment, uid, G.cie, type, beschrijving, prijs, aantal, comment";
-			$orderBy = "moment";
-			$groupBy = "";
+			$select =
+				'moment, uid, G.cie, type, beschrijving, prijs, aantal, comment';
+			$orderBy = 'moment';
+			$groupBy = '';
 
 			$rsm->addScalarResult('uid', 'uid');
 		}
 
-		$filter = "";
+		$filter = '';
 		if ($cie != -1) {
-			$filter .= " AND G.cie = :cie ";
+			$filter .= ' AND G.cie = :cie ';
 		}
 		if ($categorie != -1) {
-			$filter .= " AND G.id = :categorie ";
+			$filter .= ' AND G.id = :categorie ';
 		}
 		if ($product != -1) {
-			$filter .= " AND P.id = :product ";
+			$filter .= ' AND P.id = :product ';
 		}
 
 		$query = <<<SQL
@@ -391,7 +447,10 @@ SQL;
 		$result = $nativeQuery->getResult();
 
 		if (count($result) > 1000) {
-			setMelding("Te veel (>1000) resultaten. Stel specifiekere filters in.", -1);
+			setMelding(
+				'Te veel (>1000) resultaten. Stel specifiekere filters in.',
+				-1
+			);
 			return [];
 		}
 
@@ -407,5 +466,4 @@ SQL;
 		}
 		return $result;
 	}
-
 }

@@ -5,7 +5,6 @@ namespace CsrDelft\controller\groepen;
 use CsrDelft\entity\groepen\Activiteit;
 use Doctrine\Persistence\ManagerRegistry;
 
-
 /**
  * ApiActiviteitenController.class.php
  *
@@ -13,8 +12,10 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * Controller voor activiteiten.
  */
-class ActiviteitenController extends KetzersController {
-	public function __construct(ManagerRegistry $registry) {
+class ActiviteitenController extends KetzersController
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Activiteit::class);
 	}
 }

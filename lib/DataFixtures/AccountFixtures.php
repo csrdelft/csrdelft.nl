@@ -17,17 +17,20 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Uid\Uuid;
 
-class AccountFixtures extends Fixture {
+class AccountFixtures extends Fixture
+{
 	/**
 	 * @var AccountService
 	 */
 	private $accountService;
 
-	public function __construct(AccountService $accountService) {
+	public function __construct(AccountService $accountService)
+	{
 		$this->accountService = $accountService;
 	}
 
-	public function load(ObjectManager $manager) {
+	public function load(ObjectManager $manager)
+	{
 		$externProfiel = new Profiel();
 		$externProfiel->uid = LoginService::UID_EXTERN;
 		$externProfiel->nickname = 'nobody';

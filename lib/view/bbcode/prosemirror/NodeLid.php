@@ -31,14 +31,14 @@ class NodeLid implements Node
 				'attrs' => [
 					'uid' => $profiel->uid,
 					'naam' => $profiel->getNaam('user'),
-				]
+				],
 			];
 		} catch (BbException $exception) {
 			return [
 				'attrs' => [
 					'uid' => $node->uid,
 					'naam' => $node->uid,
-				]
+				],
 			];
 		}
 	}
@@ -46,7 +46,7 @@ class NodeLid implements Node
 	public function getTagAttributes($node)
 	{
 		return [
-			'lid' => $node->attrs->uid
+			'lid' => $node->attrs->uid,
 		];
 	}
 

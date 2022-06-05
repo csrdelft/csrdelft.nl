@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\common\Doctrine\Type;
-
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -14,18 +12,21 @@ use Doctrine\DBAL\Types\Type;
  *
  * @package CsrDelft\common\Doctrine\Type
  */
-class StringKeyType extends Type {
+class StringKeyType extends Type
+{
 	/**
 	 * @inheritDoc
 	 */
-	public function getSQLDeclaration(array $column, AbstractPlatform $platform) {
+	public function getSQLDeclaration(array $column, AbstractPlatform $platform)
+	{
 		return 'VARCHAR(191) COMMENT \'(DC2Type:stringkey)\'';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getName() {
+	public function getName()
+	{
 		return 'stringkey';
 	}
 }

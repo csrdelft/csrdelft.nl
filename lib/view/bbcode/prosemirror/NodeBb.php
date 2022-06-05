@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror;
-
 
 use CsrDelft\bb\internal\BbString;
 use CsrDelft\bb\tag\BbNode;
@@ -28,20 +26,21 @@ class NodeBb implements Node
 		$content = $node->getChildren();
 		$node->setChildren([]);
 
-		$contentString = implode("", array_map(function (BbString $string) {
-			return $string->getContent();
-		}, $content));
+		$contentString = implode(
+			'',
+			array_map(function (BbString $string) {
+				return $string->getContent();
+			}, $content)
+		);
 
 		return [
-			'attrs' => ['bb' => str_replace("[br]", "\n", $contentString)]
+			'attrs' => ['bb' => str_replace('[br]', "\n", $contentString)],
 		];
 	}
 
 	public function getTagAttributes($node)
 	{
-		return [
-			$node->attrs->bb
-		];
+		return [$node->attrs->bb];
 	}
 
 	public function selfClosing()

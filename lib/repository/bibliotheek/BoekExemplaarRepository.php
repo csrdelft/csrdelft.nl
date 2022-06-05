@@ -16,8 +16,10 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method BoekExemplaar[]    findAll()
  * @method BoekExemplaar[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BoekExemplaarRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+class BoekExemplaarRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, BoekExemplaar::class);
 	}
 
@@ -25,19 +27,22 @@ class BoekExemplaarRepository extends AbstractRepository {
 	 * @param $id
 	 * @return BoekExemplaar|null
 	 */
-	public function get($id) {
+	public function get($id)
+	{
 		return $this->find($id);
 	}
 
-	public function getExemplaren(Boek $boek) {
-		return $this->find("boek_id = ?", [$boek->id]);
+	public function getExemplaren(Boek $boek)
+	{
+		return $this->find('boek_id = ?', [$boek->id]);
 	}
 
 	/**
 	 * @param Profiel $profiel
 	 * @return BoekExemplaar[]
 	 */
-	public function getGeleend(Profiel $profiel) {
+	public function getGeleend(Profiel $profiel)
+	{
 		return $this->findBy(['uitgeleend_uid' => $profiel->uid]);
 	}
 
@@ -45,11 +50,13 @@ class BoekExemplaarRepository extends AbstractRepository {
 	 * @param $uid
 	 * @return BoekExemplaar[]
 	 */
-	public function getEigendom($uid) {
+	public function getEigendom($uid)
+	{
 		return $this->findBy(['eigenaar_uid' => $uid]);
 	}
 
-	public function leen(BoekExemplaar $exemplaar, string $uid) {
+	public function leen(BoekExemplaar $exemplaar, string $uid)
+	{
 		if (!$exemplaar->kanLenen($uid)) {
 			return false;
 		} else {
@@ -62,7 +69,8 @@ class BoekExemplaarRepository extends AbstractRepository {
 		}
 	}
 
-	public function addExemplaar(Boek $boek, Profiel $profiel) {
+	public function addExemplaar(Boek $boek, Profiel $profiel)
+	{
 		$exemplaar = new BoekExemplaar();
 		$exemplaar->boek = $boek;
 		$exemplaar->eigenaar = $profiel;
@@ -76,7 +84,8 @@ class BoekExemplaarRepository extends AbstractRepository {
 		$this->getEntityManager()->flush();
 	}
 
-	public function terugGegeven(BoekExemplaar $exemplaar) {
+	public function terugGegeven(BoekExemplaar $exemplaar)
+	{
 		if ($exemplaar->isUitgeleend()) {
 			$exemplaar->status = BoekExemplaarStatus::teruggegeven();
 			$this->getEntityManager()->persist($exemplaar);
@@ -87,7 +96,8 @@ class BoekExemplaarRepository extends AbstractRepository {
 		}
 	}
 
-	public function terugOntvangen(BoekExemplaar $exemplaar) {
+	public function terugOntvangen(BoekExemplaar $exemplaar)
+	{
 		if ($exemplaar->isUitgeleend() || $exemplaar->isTeruggegeven()) {
 			$exemplaar->status = BoekExemplaarStatus::beschikbaar();
 			$this->getEntityManager()->persist($exemplaar);
@@ -98,7 +108,8 @@ class BoekExemplaarRepository extends AbstractRepository {
 		}
 	}
 
-	public function setVermist(BoekExemplaar $exemplaar) {
+	public function setVermist(BoekExemplaar $exemplaar)
+	{
 		if ($exemplaar->isBeschikbaar()) {
 			$exemplaar->status = BoekExemplaarStatus::vermist();
 			$this->getEntityManager()->persist($exemplaar);
@@ -109,7 +120,8 @@ class BoekExemplaarRepository extends AbstractRepository {
 		}
 	}
 
-	public function setGevonden(BoekExemplaar $exemplaar) {
+	public function setGevonden(BoekExemplaar $exemplaar)
+	{
 		if ($exemplaar->isVermist()) {
 			$exemplaar->status = BoekExemplaarStatus::beschikbaar();
 			$this->getEntityManager()->persist($exemplaar);

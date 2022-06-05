@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\cms;
-
 
 use CsrDelft\Component\Form\Type\BbTextType;
 use CsrDelft\Component\Form\Type\DateDisplayType;
@@ -20,23 +18,26 @@ class CmsPaginaType extends AbstractType
 		$builder
 			->add('laatstGewijzigd', DateDisplayType::class)
 			->add('titel', TextType::class)
-			->add('rechtenBekijken', TextType::class, ['disabled' => !$options['rechten_wijzigen']])
-			->add('rechtenBewerken', TextType::class, ['disabled' => !$options['rechten_wijzigen']]);
+			->add('rechtenBekijken', TextType::class, [
+				'disabled' => !$options['rechten_wijzigen'],
+			])
+			->add('rechtenBewerken', TextType::class, [
+				'disabled' => !$options['rechten_wijzigen'],
+			]);
 
 		if ($options['rechten_wijzigen']) {
-			$builder
-				->add('inlineHtml', ChoiceType::class, [
-					'expanded' => true,
-					'choices' => [
-						'Direct <html>' => true,
-						'[html] tussen [/html]' => false,
-					],
-					'help' => 'Geen [html] nodig en zelf regeleindes plaatsen met [rn] of <br />'
-				]);
+			$builder->add('inlineHtml', ChoiceType::class, [
+				'expanded' => true,
+				'choices' => [
+					'Direct <html>' => true,
+					'[html] tussen [/html]' => false,
+				],
+				'help' =>
+					'Geen [html] nodig en zelf regeleindes plaatsen met [rn] of <br />',
+			]);
 		}
 
-		$builder
-			->add('inhoud', BbTextType::class);
+		$builder->add('inhoud', BbTextType::class);
 	}
 
 	public function configureOptions(OptionsResolver $resolver)

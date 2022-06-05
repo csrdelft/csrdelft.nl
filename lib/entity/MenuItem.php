@@ -23,7 +23,8 @@ use Doctrine\ORM\PersistentCollection;
  *   @ORM\Index(name="prioriteit", columns={"volgorde"})
  * })
  */
-class MenuItem implements DisplayEntity {
+class MenuItem implements DisplayEntity
+{
 	/**
 	 * Primary key
 	 * @var int
@@ -82,7 +83,8 @@ class MenuItem implements DisplayEntity {
 	 */
 	public $children;
 
-	public function hasChildren() {
+	public function hasChildren()
+	{
 		if (!$this->children) {
 			return false;
 		}
@@ -94,15 +96,19 @@ class MenuItem implements DisplayEntity {
 		return $this->children->count();
 	}
 
-	public function magBekijken() {
+	public function magBekijken()
+	{
 		return $this->zichtbaar && LoginService::mag($this->rechten_bekijken);
 	}
 
-	public function magBeheren() {
-		return $this->rechten_bekijken == LoginService::getUid() || LoginService::mag(P_ADMIN);
+	public function magBeheren()
+	{
+		return $this->rechten_bekijken == LoginService::getUid() ||
+			LoginService::mag(P_ADMIN);
 	}
 
-	public function isOngelezen() {
+	public function isOngelezen()
+	{
 		$prefix = '/forum/onderwerp/';
 		if (str_starts_with($this->link, $prefix)) {
 			$begin = strlen($prefix);
@@ -113,21 +119,29 @@ class MenuItem implements DisplayEntity {
 				$draad_id = substr($this->link, $begin);
 			}
 			try {
-				$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
-				$draad = $forumDradenRepository->get((int)$draad_id);
+				$forumDradenRepository = ContainerFacade::getContainer()->get(
+					ForumDradenRepository::class
+				);
+				$draad = $forumDradenRepository->get((int) $draad_id);
 				return $draad->isOngelezen();
 			} catch (CsrException $e) {
-				setMelding('Uw favoriete forumdraadje bestaat helaas niet meer: ' . htmlspecialchars($this->tekst), 2);
+				setMelding(
+					'Uw favoriete forumdraadje bestaat helaas niet meer: ' .
+						htmlspecialchars($this->tekst),
+					2
+				);
 			}
 		}
 		return false;
 	}
 
-	public function getId() {
+	public function getId()
+	{
 		return $this->item_id;
 	}
 
-	public function getWeergave(): string {
+	public function getWeergave(): string
+	{
 		return $this->tekst . ' [' . $this->link . ']';
 	}
 }

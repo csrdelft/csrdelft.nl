@@ -15,7 +15,8 @@ use CsrDelft\view\Icon;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\View;
 
-class GroepenView implements View {
+class GroepenView implements View
+{
 	use ToHtmlResponse;
 
 	private $model;
@@ -32,10 +33,10 @@ class GroepenView implements View {
 	private $pagina;
 
 	public function __construct(
-        GroepRepository $model,
-        $groepen,
-        $soort = null,
-        $geschiedenis = false
+		GroepRepository $model,
+		$groepen,
+		$soort = null,
+		$geschiedenis = false
 	) {
 		$this->model = $model;
 		$this->groepen = $groepen;
@@ -46,37 +47,66 @@ class GroepenView implements View {
 		} else {
 			$this->tab = GroepTab::Pasfotos;
 		}
-		$cmsPaginaRepository = ContainerFacade::getContainer()->get(CmsPaginaRepository::class);
-		$this->pagina = $cmsPaginaRepository->find('groepsbeschrijving_' . $model->getNaam());
+		$cmsPaginaRepository = ContainerFacade::getContainer()->get(
+			CmsPaginaRepository::class
+		);
+		$this->pagina = $cmsPaginaRepository->find(
+			'groepsbeschrijving_' . $model->getNaam()
+		);
 		if (!$this->pagina) {
 			$this->pagina = $cmsPaginaRepository->find('');
 		}
 	}
 
-	public function getBreadcrumbs() {
-		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>'
-			. '<li class="breadcrumb-item"><a href="/groepen">Groepen</a></li>'
-			. '<li class="breadcrumb-item active">' . $this->getTitel() . '</li></ul>';
+	public function getBreadcrumbs()
+	{
+		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>' .
+			'<li class="breadcrumb-item"><a href="/groepen">Groepen</a></li>' .
+			'<li class="breadcrumb-item active">' .
+			$this->getTitel() .
+			'</li></ul>';
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->groepen;
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return $this->pagina->titel;
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		$model = $this->model;
 		$orm = $model->entityClass;
 		$html = '';
 		if ($orm::magAlgemeen(AccessAction::Aanmaken(), null, $this->soort)) {
-			$html .= '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . ($this->soort ? $this->soort->getValue() : '') . '">' . Icon::getTag('add') . ' Toevoegen</a>';
+			$html .=
+				'<a class="btn" href="' .
+				$this->model->getUrl() .
+				'/nieuw/' .
+				($this->soort ? $this->soort->getValue() : '') .
+				'">' .
+				Icon::getTag('add') .
+				' Toevoegen</a>';
 		}
-		$html .= '<a class="btn" href="' . $this->model->getUrl() . '/beheren">' . Icon::getTag('table') . ' Beheren</a>';
+		$html .=
+			'<a class="btn" href="' .
+			$this->model->getUrl() .
+			'/beheren">' .
+			Icon::getTag('table') .
+			' Beheren</a>';
 		if ($this->geschiedenis) {
-			$html .= '<a id="deelnamegrafiek" class="btn post" href="' . $this->model->getUrl() . "/" . $this->geschiedenis . '/deelnamegrafiek">' . Icon::getTag('chart_bar') . ' Deelnamegrafiek</a>';
+			$html .=
+				'<a id="deelnamegrafiek" class="btn post" href="' .
+				$this->model->getUrl() .
+				'/' .
+				$this->geschiedenis .
+				'/deelnamegrafiek">' .
+				Icon::getTag('chart_bar') .
+				' Deelnamegrafiek</a>';
 		}
 		$view = new CmsPaginaView($this->pagina);
 		$html .= $view->__toString();
@@ -92,5 +122,4 @@ class GroepenView implements View {
 
 		return $html;
 	}
-
 }

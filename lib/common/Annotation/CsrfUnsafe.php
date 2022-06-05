@@ -12,5 +12,6 @@ use CsrDelft\events\AccessControlEventListener;
  * @Annotation
  * @Target({"METHOD"})
  */
-class CsrfUnsafe {
+class CsrfUnsafe
+{
 }

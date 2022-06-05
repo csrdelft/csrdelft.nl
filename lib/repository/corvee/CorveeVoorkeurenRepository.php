@@ -19,7 +19,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CorveeVoorkeur[]    findAll()
  * @method CorveeVoorkeur[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CorveeVoorkeurenRepository extends AbstractRepository {
+class CorveeVoorkeurenRepository extends AbstractRepository
+{
 	/**
 	 * @var CorveeRepetitiesRepository
 	 */
@@ -29,7 +30,11 @@ class CorveeVoorkeurenRepository extends AbstractRepository {
 	 */
 	private $corveeKwalificatiesRepository;
 
-	public function __construct(ManagerRegistry $registry, CorveeRepetitiesRepository $corveeRepetitiesRepository, CorveeKwalificatiesRepository $corveeKwalificatiesRepository) {
+	public function __construct(
+		ManagerRegistry $registry,
+		CorveeRepetitiesRepository $corveeRepetitiesRepository,
+		CorveeKwalificatiesRepository $corveeKwalificatiesRepository
+	) {
 		parent::__construct($registry, CorveeVoorkeur::class);
 		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
@@ -45,13 +50,15 @@ class CorveeVoorkeurenRepository extends AbstractRepository {
 	 * @param boolean $uitgeschakeld
 	 * @return CorveeVoorkeur[]
 	 */
-	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false) {
+	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false)
+	{
 		$repById = $this->corveeRepetitiesRepository->getVoorkeurbareRepetities(); // grouped by crid
 		$lijst = [];
 		$voorkeuren = $this->findBy(['uid' => $uid]);
 		foreach ($voorkeuren as $voorkeur) {
 			$crid = $voorkeur->crv_repetitie_id;
-			if (!array_key_exists($crid, $repById)) { // ingeschakelde voorkeuren altijd weergeven
+			if (!array_key_exists($crid, $repById)) {
+				// ingeschakelde voorkeuren altijd weergeven
 				$repById[$crid] = $voorkeur->corveeRepetitie;
 			}
 			$voorkeur->van_uid = $uid;
@@ -59,11 +66,17 @@ class CorveeVoorkeurenRepository extends AbstractRepository {
 		}
 		foreach ($repById as $crid => $repetitie) {
 			if ($repetitie->corveeFunctie->kwalificatie_benodigd) {
-				if (!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie($uid, $repetitie->corveeFunctie->functie_id)) {
+				if (
+					!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie(
+						$uid,
+						$repetitie->corveeFunctie->functie_id
+					)
+				) {
 					continue;
 				}
 			}
-			if (!array_key_exists($crid, $lijst)) { // uitgeschakelde voorkeuren weergeven
+			if (!array_key_exists($crid, $lijst)) {
+				// uitgeschakelde voorkeuren weergeven
 				if ($uitgeschakeld) {
 					$voorkeur = new CorveeVoorkeur();
 					$voorkeur->setCorveeRepetitie($repetitie);
@@ -81,16 +94,19 @@ class CorveeVoorkeurenRepository extends AbstractRepository {
 	 *
 	 * @return CorveeVoorkeur[][]
 	 */
-	public function getVoorkeurenMatrix() {
+	public function getVoorkeurenMatrix()
+	{
 		$repById = $this->corveeRepetitiesRepository->getVoorkeurbareRepetities(); // grouped by crid
 		$leden_voorkeuren = $this->loadLedenVoorkeuren();
-		$matrix = array();
-		foreach ($leden_voorkeuren as $lv) { // build matrix
+		$matrix = [];
+		foreach ($leden_voorkeuren as $lv) {
+			// build matrix
 			$crid = $lv->crv_repetitie_id;
 			$uid = $lv->uid;
 			$voorkeur = new CorveeVoorkeur();
 			$voorkeur->setCorveeRepetitie($repById[$crid]);
-			if ($lv->voorkeur) { // ingeschakelde voorkeuren
+			if ($lv->voorkeur) {
+				// ingeschakelde voorkeuren
 				$voorkeur->setProfiel(ProfielRepository::get($uid));
 			}
 			$voorkeur->setCorveeRepetitie($repById[$crid]);
@@ -99,14 +115,17 @@ class CorveeVoorkeurenRepository extends AbstractRepository {
 			ksort($repById);
 			ksort($matrix[$uid]);
 		}
-		return array($matrix, $repById);
+		return [$matrix, $repById];
 	}
 
 	/**
 	 * @return CorveeVoorkeurMatrixDTO[]
 	 */
-	private function loadLedenVoorkeuren() {
-		return $this->_em->createQuery(<<<'DQL'
+	private function loadLedenVoorkeuren()
+	{
+		return $this->_em
+			->createQuery(
+				<<<'DQL'
 SELECT NEW CsrDelft\entity\corvee\CorveeVoorkeurMatrixDTO(p.uid, r.crv_repetitie_id, v.uid)
 FROM CsrDelft\entity\profiel\Profiel p
 JOIN CsrDelft\entity\corvee\CorveeRepetitie r
@@ -114,7 +133,8 @@ LEFT JOIN CsrDelft\entity\corvee\CorveeVoorkeur v WITH v.uid = p.uid AND v.corve
 WHERE r.voorkeurbaar = true AND p.status IN ('S_LID', 'S_GASTLID', 'S_NOVIET')
 ORDER BY p.achternaam ASC, p.voornaam ASC
 DQL
-		)->getResult();
+			)
+			->getResult();
 	}
 
 	/**
@@ -123,7 +143,8 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function inschakelenVoorkeur(CorveeVoorkeur $voorkeur) {
+	public function inschakelenVoorkeur(CorveeVoorkeur $voorkeur)
+	{
 		if ($this->getHeeftVoorkeur($voorkeur->crv_repetitie_id, $voorkeur->uid)) {
 			throw new CsrGebruikerException('Voorkeur al ingeschakeld');
 		}
@@ -132,7 +153,12 @@ DQL
 			throw new CsrGebruikerException('Niet voorkeurbaar');
 		}
 		if ($repetitie->corveeFunctie->kwalificatie_benodigd) {
-			if (!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->corveeFunctie->functie_id)) {
+			if (
+				!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie(
+					$voorkeur->uid,
+					$repetitie->corveeFunctie->functie_id
+				)
+			) {
 				throw new CsrGebruikerException('Niet gekwalificeerd');
 			}
 		}
@@ -143,7 +169,8 @@ DQL
 		return $voorkeur;
 	}
 
-	public function getHeeftVoorkeur($crid, $uid) {
+	public function getHeeftVoorkeur($crid, $uid)
+	{
 		return $this->find(['uid' => $uid, 'crv_repetitie_id' => $crid]) != null;
 	}
 
@@ -153,7 +180,8 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function uitschakelenVoorkeur(CorveeVoorkeur $voorkeur) {
+	public function uitschakelenVoorkeur(CorveeVoorkeur $voorkeur)
+	{
 		if (!$this->getHeeftVoorkeur($voorkeur->crv_repetitie_id, $voorkeur->uid)) {
 			throw new CsrGebruikerException('Voorkeur al uitgeschakeld');
 		}
@@ -175,7 +203,8 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderVoorkeuren($crid) {
+	public function verwijderVoorkeuren($crid)
+	{
 		$voorkeuren = $this->findBy(['corveeRepetitie' => $crid]);
 		$num = count($voorkeuren);
 		foreach ($voorkeuren as $voorkeur) {
@@ -194,7 +223,8 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderVoorkeurenVoorLid($uid) {
+	public function verwijderVoorkeurenVoorLid($uid)
+	{
 		$voorkeuren = $this->findBy(['uid' => $uid]);
 		$num = count($voorkeuren);
 		foreach ($voorkeuren as $voorkeur) {
@@ -205,8 +235,8 @@ DQL
 		return $num;
 	}
 
-	public function getVoorkeur($crid, $uid) {
+	public function getVoorkeur($crid, $uid)
+	{
 		return $this->find(['uid' => $uid, 'crv_repetitie_id' => $crid]);
 	}
-
 }

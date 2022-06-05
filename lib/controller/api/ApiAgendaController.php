@@ -58,16 +58,17 @@ class ApiAgendaController extends AbstractController
 		$from = strtotime($_GET['from']);
 		$to = strtotime($_GET['to']);
 
-
-		$result = array();
+		$result = [];
 
 		// AgendaItems
 		/** @var AgendaItem[] $items */
-		$items = $this->agendaRepository->createQueryBuilder('a')
+		$items = $this->agendaRepository
+			->createQueryBuilder('a')
 			->where('a.begin_moment >= :van and a.begin_moment <= :tot')
 			->setParameter('van', date_create($_GET['from']))
 			->setParameter('tot', date_create($_GET['to']))
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 		foreach ($items as $item) {
 			if ($item->magBekijken()) {
 				$result[] = $item;
@@ -76,21 +77,31 @@ class ApiAgendaController extends AbstractController
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
-		$activiteiten = $this->activiteitenRepository->createQueryBuilder('a')
-			->where('a.inAgenda = true and (a.beginMoment >= :begin and a.beginMoment <= :eind)')
+		$activiteiten = $this->activiteitenRepository
+			->createQueryBuilder('a')
+			->where(
+				'a.inAgenda = true and (a.beginMoment >= :begin and a.beginMoment <= :eind)'
+			)
 			->setParameter('begin', date_create_immutable("@$from"))
 			->setParameter('eind', date_create_immutable("@$to"))
-			->getQuery()->getResult();
-		$activiteitenFiltered = array();
+			->getQuery()
+			->getResult();
+		$activiteitenFiltered = [];
 		foreach ($activiteiten as $activiteit) {
-			if (in_array($activiteit->activiteitSoort, array(ActiviteitSoort::Extern(), ActiviteitSoort::OWee(), ActiviteitSoort::IFES())) or $activiteit->mag(AccessAction::Bekijken())) {
+			if (
+				in_array($activiteit->activiteitSoort, [
+					ActiviteitSoort::Extern(),
+					ActiviteitSoort::OWee(),
+					ActiviteitSoort::IFES(),
+				]) or $activiteit->mag(AccessAction::Bekijken())
+			) {
 				$activiteitenFiltered[] = $activiteit;
 			}
 		}
 		$result = array_merge($result, $activiteitenFiltered);
 
 		// Activiteit aanmeldingen
-		$activiteitAanmeldingen = array();
+		$activiteitAanmeldingen = [];
 		foreach ($activiteitenFiltered as $activiteit) {
 			$deelnemer = $this->groepLidRepository->get($activiteit, $this->getUid());
 			if ($deelnemer) {
@@ -99,33 +110,38 @@ class ApiAgendaController extends AbstractController
 		}
 
 		// Maaltijden
-		$maaltijden = $this->maaltijdenRepository->getMaaltijdenVoorAgenda($from, $to);
-
+		$maaltijden = $this->maaltijdenRepository->getMaaltijdenVoorAgenda(
+			$from,
+			$to
+		);
 
 		// Maaltijd aanmeldingen
-		$mids = array();
+		$mids = [];
 		foreach ($maaltijden as $maaltijd) {
 			$id = $maaltijd->maaltijd_id;
 			$mids[$id] = $maaltijd;
 
 			$maaltijd->gesloten = $maaltijd->gesloten ? '1' : '0';
 			$result[] = $maaltijd;
-
 		}
-		$maaltijdAanmeldingen = array_keys($this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid($mids, $this->getUid()));
-
-		// Sorteren
-		usort($result, array(AgendaRepository::class, 'vergelijkAgendeerbaars'));
-
-		$agenda = array(
-			'events' => $result,
-			'joined' => array(
-				'maaltijden' => $maaltijdAanmeldingen,
-				'activiteiten' => $activiteitAanmeldingen
+		$maaltijdAanmeldingen = array_keys(
+			$this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid(
+				$mids,
+				$this->getUid()
 			)
 		);
 
-		return new JsonResponse(array('data' => $agenda));
-	}
+		// Sorteren
+		usort($result, [AgendaRepository::class, 'vergelijkAgendeerbaars']);
 
+		$agenda = [
+			'events' => $result,
+			'joined' => [
+				'maaltijden' => $maaltijdAanmeldingen,
+				'activiteiten' => $activiteitAanmeldingen,
+			],
+		];
+
+		return new JsonResponse(['data' => $agenda]);
+	}
 }

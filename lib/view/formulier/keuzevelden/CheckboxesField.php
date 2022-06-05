@@ -8,20 +8,22 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 14/03/2019
  */
-class CheckboxesField extends InputField {
+class CheckboxesField extends InputField
+{
 	/**
 	 * @var array
 	 */
 	private $opties;
 
-	public function __construct($name, $value, $description, array $opties) {
+	public function __construct($name, $value, $description, array $opties)
+	{
 		$this->opties = $opties;
 
 		parent::__construct($name, $value, $description, null);
 	}
 
-
-	public function getHtml() {
+	public function getHtml()
+	{
 		$html = '';
 		foreach ($this->opties as $value => $description) {
 			$checkboxId = $this->name . '_' . $value;
@@ -38,15 +40,19 @@ HTML;
 		return $html;
 	}
 
-	public function isPosted() {
+	public function isPosted()
+	{
 		foreach ($this->opties as $value => $description) {
-			if (!isset($_POST[$this->name . '_' . $value])) return false;
+			if (!isset($_POST[$this->name . '_' . $value])) {
+				return false;
+			}
 		}
 
 		return true;
 	}
 
-	public function getValue() {
+	public function getValue()
+	{
 		if ($this->isPosted()) {
 			$values = [];
 
@@ -62,5 +68,4 @@ HTML;
 
 		return $this->value;
 	}
-
 }

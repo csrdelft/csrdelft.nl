@@ -20,8 +20,10 @@ use stdClass;
  * @method MaaltijdBeoordeling[]    findAll()
  * @method MaaltijdBeoordeling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MaaltijdBeoordelingenRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+class MaaltijdBeoordelingenRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, MaaltijdBeoordeling::class);
 	}
 
@@ -31,7 +33,8 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function nieuw(Maaltijd $maaltijd) {
+	public function nieuw(Maaltijd $maaltijd)
+	{
 		$b = new MaaltijdBeoordeling();
 		$b->maaltijd_id = $maaltijd->maaltijd_id;
 		$b->uid = LoginService::getUid();
@@ -42,7 +45,8 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 		return $b;
 	}
 
-	public function getBeoordelingSamenvatting(Maaltijd $maaltijd) {
+	public function getBeoordelingSamenvatting(Maaltijd $maaltijd)
+	{
 		// Haal beoordelingen voor deze maaltijd op
 		$beoordelingen = $this->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 
@@ -56,10 +60,13 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 		foreach ($beoordelingen as $b) {
 			// Haal gemiddelde beoordeling van lid op
 			$avg = $this->createQueryBuilder('mb')
-				->select('avg(mb.kwantiteit) as kwantiteit, avg(mb.kwaliteit) as kwaliteit')
+				->select(
+					'avg(mb.kwantiteit) as kwantiteit, avg(mb.kwaliteit) as kwaliteit'
+				)
 				->where('mb.uid = :uid')
 				->setParameter('uid', $b->uid)
-				->getQuery()->getArrayResult();
+				->getQuery()
+				->getArrayResult();
 
 			// Alleen als waarde is ingevuld
 			if (!is_null($b->kwantiteit)) {
@@ -78,12 +85,30 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 
 		// Geef resultaat terug in object, null als er geen beoordelingen zijn
 		$beoordeling = new MaaltijdBeoordelingDTO();
-		$beoordeling->kwantiteit = $this->getalWeergave($kwantiteitAantal === 0 ? null : $kwantiteit / $kwantiteitAantal, '-', 3);
-		$beoordeling->kwantiteitAfwijking = $this->getalWeergave($kwantiteitAantal === 0 ? null : $kwantiteitAfwijking / $kwantiteitAantal, '-', 3, true);
+		$beoordeling->kwantiteit = $this->getalWeergave(
+			$kwantiteitAantal === 0 ? null : $kwantiteit / $kwantiteitAantal,
+			'-',
+			3
+		);
+		$beoordeling->kwantiteitAfwijking = $this->getalWeergave(
+			$kwantiteitAantal === 0 ? null : $kwantiteitAfwijking / $kwantiteitAantal,
+			'-',
+			3,
+			true
+		);
 		$beoordeling->kwantiteitAantal = $kwantiteitAantal;
 
-		$beoordeling->kwaliteit = $this->getalWeergave($kwaliteitAantal === 0 ? null : $kwaliteit / $kwaliteitAantal, '-', 3);
-		$beoordeling->kwaliteitAfwijking = $this->getalWeergave($kwaliteitAantal === 0 ? null : $kwaliteitAfwijking / $kwaliteitAantal, '-', 3, true);
+		$beoordeling->kwaliteit = $this->getalWeergave(
+			$kwaliteitAantal === 0 ? null : $kwaliteit / $kwaliteitAantal,
+			'-',
+			3
+		);
+		$beoordeling->kwaliteitAfwijking = $this->getalWeergave(
+			$kwaliteitAantal === 0 ? null : $kwaliteitAfwijking / $kwaliteitAantal,
+			'-',
+			3,
+			true
+		);
 		$beoordeling->kwaliteitAantal = $kwaliteitAantal;
 
 		$beoordeling->setMaaltijd($maaltijd);
@@ -91,7 +116,12 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 		return $beoordeling;
 	}
 
-	private function getalWeergave($number, $placeholder, $precision, $showPlus = false) {
+	private function getalWeergave(
+		$number,
+		$placeholder,
+		$precision,
+		$showPlus = false
+	) {
 		if ($number === null) {
 			return $placeholder;
 		} else {
@@ -105,7 +135,8 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function update(MaaltijdBeoordeling $maaltijdBeoordeling) {
+	public function update(MaaltijdBeoordeling $maaltijdBeoordeling)
+	{
 		$this->_em->persist($maaltijdBeoordeling);
 		$this->_em->flush();
 	}

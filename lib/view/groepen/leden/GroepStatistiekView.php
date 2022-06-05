@@ -10,18 +10,21 @@ use DateTime;
 use function array_key_first;
 use function array_key_last;
 
-class GroepStatistiekView extends GroepTabView {
+class GroepStatistiekView extends GroepTabView
+{
 	/**
 	 * @var GroepStatistiekDTO
 	 */
 	private $statistiek;
 
-	public function __construct(Groep $groep, GroepStatistiekDTO $statistiek) {
+	public function __construct(Groep $groep, GroepStatistiekDTO $statistiek)
+	{
 		parent::__construct($groep);
 		$this->statistiek = $statistiek;
 	}
 
-	private function verticale($data) {
+	private function verticale($data)
+	{
 		$verticalen = [];
 		$deelnemers = [];
 		foreach ($data as $row) {
@@ -29,18 +32,21 @@ class GroepStatistiekView extends GroepTabView {
 			$deelnemers[] = $row['aantal'];
 		}
 
-		return htmlentities(json_encode([
-			'labels' => $verticalen,
-			'datasets' => [
-				[
-					'label' => '# van verticale',
-					'data' => $deelnemers,
-				]
-			]
-		]));
+		return htmlentities(
+			json_encode([
+				'labels' => $verticalen,
+				'datasets' => [
+					[
+						'label' => '# van verticale',
+						'data' => $deelnemers,
+					],
+				],
+			])
+		);
 	}
 
-	private function geslacht($data) {
+	private function geslacht($data)
+	{
 		$mannen = 0;
 		$vrouwen = 0;
 		foreach ($data as $row) {
@@ -53,65 +59,74 @@ class GroepStatistiekView extends GroepTabView {
 					break;
 			}
 		}
-		return htmlentities(json_encode([
-			'labels' => ['Mannen', 'Vrouwen'],
-			'datasets' => [
-				[
-					'label' => '# mannen en vrouwen',
-					'data' => [$mannen, $vrouwen],
-					'backgroundColor' => ['#AFD8F8', '#FFCBDB'],
-				]
-			]
-		]));
+		return htmlentities(
+			json_encode([
+				'labels' => ['Mannen', 'Vrouwen'],
+				'datasets' => [
+					[
+						'label' => '# mannen en vrouwen',
+						'data' => [$mannen, $vrouwen],
+						'backgroundColor' => ['#AFD8F8', '#FFCBDB'],
+					],
+				],
+			])
+		);
 	}
 
-	private function lichting($data) {
+	private function lichting($data)
+	{
 		$aantal = [];
 		$lichting = [];
 		foreach ($data as $row) {
-			$aantal[] = (int)$row['aantal'];
-			$lichting[] = (int)$row['lidjaar'];
+			$aantal[] = (int) $row['aantal'];
+			$lichting[] = (int) $row['lidjaar'];
 		}
 
-		return htmlentities(json_encode([
-			'labels'=> $lichting,
-			'datasets' => [
-				[
-					'label' => 'Aantal',
-					'data' => $aantal,
-				]
-			]
-		]));
+		return htmlentities(
+			json_encode([
+				'labels' => $lichting,
+				'datasets' => [
+					[
+						'label' => 'Aantal',
+						'data' => $aantal,
+					],
+				],
+			])
+		);
 	}
 
-	private function tijd($data) {
+	private function tijd($data)
+	{
 		$totaal = 0;
 		$series = [];
 		foreach ($data as $tijd => $aantal) {
 			$totaal += $aantal;
-			$series[] = ["t" => date(DateTime::RFC2822, $tijd), "y" => $totaal];
+			$series[] = ['t' => date(DateTime::RFC2822, $tijd), 'y' => $totaal];
 		}
 
 		$begin = date(DateTime::RFC2822, array_key_first($data));
 		$eind = date(DateTime::RFC2822, array_key_last($data));
 
-		return htmlentities(json_encode([
-			'labels' => [$begin, $eind],
-			'datasets' => [
-				[
-					'label' => 'Aantal over tijd',
-					'fill' => false,
-					'data' => $series,
-				]
-			]
-		]));
+		return htmlentities(
+			json_encode([
+				'labels' => [$begin, $eind],
+				'datasets' => [
+					[
+						'label' => 'Aantal over tijd',
+						'fill' => false,
+						'data' => $series,
+					],
+				],
+			])
+		);
 	}
 
 	/**
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function getTabContent() {
+	public function getTabContent()
+	{
 		$verticale = $this->verticale($this->statistiek->verticale);
 		$geslacht = $this->geslacht($this->statistiek->geslacht);
 		$lichting = $this->lichting($this->statistiek->lichting);
@@ -132,5 +147,4 @@ class GroepStatistiekView extends GroepTabView {
 
 HTML;
 	}
-
 }

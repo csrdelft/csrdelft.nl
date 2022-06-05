@@ -11,7 +11,8 @@ use CsrDelft\common\Enum;
  * @method static static V1
  * @method static static V2
  */
-class GroepVersie extends Enum {
+class GroepVersie extends Enum
+{
 	const V1 = 'v1';
 	const V2 = 'v2';
 

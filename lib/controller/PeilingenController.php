@@ -19,13 +19,17 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class PeilingenController extends AbstractController {
+class PeilingenController extends AbstractController
+{
 	/** @var PeilingenRepository */
 	private $peilingenRepository;
 	/** @var PeilingenService */
 	private $peilingenService;
 
-	public function __construct(PeilingenRepository $peilingenRepository, PeilingenService $peilingenService) {
+	public function __construct(
+		PeilingenRepository $peilingenRepository,
+		PeilingenService $peilingenService
+	) {
 		$this->peilingenRepository = $peilingenRepository;
 		$this->peilingenService = $peilingenService;
 	}
@@ -49,9 +53,14 @@ class PeilingenController extends AbstractController {
 				'dataTableId' => $table->getDataTableId(),
 			]);
 
-			return $this->render('default.html.twig', ['content' => $table, 'modal' => $form->createModalView()]);
+			return $this->render('default.html.twig', [
+				'content' => $table,
+				'modal' => $form->createModalView(),
+			]);
 		} else {
-			return $this->render('default.html.twig', ['content' => new PeilingTable()]);
+			return $this->render('default.html.twig', [
+				'content' => new PeilingTable(),
+			]);
 		}
 	}
 
@@ -62,7 +71,9 @@ class PeilingenController extends AbstractController {
 	 */
 	public function lijst(): GenericDataTableResponse
 	{
-		return $this->tableData($this->peilingenRepository->getPeilingenVoorBeheer());
+		return $this->tableData(
+			$this->peilingenRepository->getPeilingenVoorBeheer()
+		);
 	}
 
 	/**
@@ -71,7 +82,8 @@ class PeilingenController extends AbstractController {
 	 * @Route("/peilingen/nieuw", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function nieuw(Request $request) {
+	public function nieuw(Request $request)
+	{
 		$peiling = new Peiling();
 
 		$form = $this->createFormulier(PeilingForm::class, $peiling, [
@@ -86,8 +98,12 @@ class PeilingenController extends AbstractController {
 			$peiling->eigenaarProfiel = $this->getProfiel();
 			$peiling->mag_bewerken = false;
 
-			$this->getDoctrine()->getManager()->persist($peiling);
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->persist($peiling);
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 
 			return $this->tableData([$peiling]);
 		}
@@ -101,7 +117,8 @@ class PeilingenController extends AbstractController {
 	 * @Route("/peilingen/bewerken", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function bewerken(Request $request) {
+	public function bewerken(Request $request)
+	{
 		$selection = $this->getDataTableSelection();
 
 		if ($selection) {
@@ -112,7 +129,7 @@ class PeilingenController extends AbstractController {
 			}
 		} else {
 			// Hier is de id in post gezet
-//			$peiling = new Peiling();
+			//			$peiling = new Peiling();
 			$id = $request->request->get('id');
 			$peiling = $this->peilingenRepository->find($id);
 		}
@@ -126,8 +143,12 @@ class PeilingenController extends AbstractController {
 		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
-			$this->getDoctrine()->getManager()->persist($peiling);
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->persist($peiling);
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 
 			return $this->tableData([$peiling]);
 		}
@@ -162,7 +183,7 @@ class PeilingenController extends AbstractController {
 	{
 		$ids = $request->request->filter('opties', [], FILTER_VALIDATE_INT);
 
-		if($this->peilingenService->stem($id, $ids, $this->getUid())) {
+		if ($this->peilingenService->stem($id, $ids, $this->getUid())) {
 			return new JsonResponse(true);
 		} else {
 			return new JsonResponse(false, 400);

@@ -10,8 +10,8 @@ use CsrDelft\view\Icon;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class FormulierKnop implements FormElement {
-
+class FormulierKnop implements FormElement
+{
 	protected $id;
 	public $url;
 	public $action;
@@ -19,9 +19,10 @@ class FormulierKnop implements FormElement {
 	public $icon;
 	public $label;
 	public $title;
-	public $css_classes = array('FormulierKnop');
+	public $css_classes = ['FormulierKnop'];
 
-	public function __construct($url, $action, $label, $title, $icon) {
+	public function __construct($url, $action, $label, $title, $icon)
+	{
 		$this->id = uniqid_safe('knop_');
 		$this->url = $url;
 		$this->action = $action;
@@ -32,29 +33,44 @@ class FormulierKnop implements FormElement {
 		$this->css_classes[] = 'btn btn-primary';
 	}
 
-	public function getId() {
+	public function getId()
+	{
 		return $this->id;
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return null;
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return null;
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return $this->getType();
 	}
 
-	public function getType() {
+	public function getType()
+	{
 		return classNameZonderNamespace(get_class($this));
 	}
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		$this->css_classes[] = $this->action;
-		$html = '<a id="' . $this->getId() . '" href="'.($this->url ?: '#').'" class="' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '" tabindex="0"';
+		$html =
+			'<a id="' .
+			$this->getId() .
+			'" href="' .
+			($this->url ?: '#') .
+			'" class="' .
+			implode(' ', $this->css_classes) .
+			'" title="' .
+			htmlspecialchars($this->title) .
+			'" tabindex="0"';
 		if (isset($this->data)) {
 			$html .= ' data="' . $this->data . '"';
 		}
@@ -66,15 +82,16 @@ class FormulierKnop implements FormElement {
 		return $html . '</a> ';
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		return $this->getHtml();
 	}
 
-	public function getJavascript() {
+	public function getJavascript()
+	{
 		return <<<JS
 
 /* {$this->getId()} */
 JS;
 	}
-
 }

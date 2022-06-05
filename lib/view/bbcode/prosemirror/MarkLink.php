@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror;
-
 
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbUrl;
@@ -22,7 +20,7 @@ class MarkLink implements Mark
 	public function getTagAttributes($mark)
 	{
 		return [
-			'url' => $mark->attrs->href
+			'url' => $mark->attrs->href,
 		];
 	}
 

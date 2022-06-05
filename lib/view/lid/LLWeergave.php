@@ -5,23 +5,25 @@ namespace CsrDelft\view\lid;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\LidZoekerService;
 
-abstract class LLWeergave {
-
+abstract class LLWeergave
+{
 	protected $leden;
 	public $velden;
-	public function __construct(LidZoekerService $zoeker) {
+	public function __construct(LidZoekerService $zoeker)
+	{
 		$this->leden = $zoeker->getLeden();
 		$this->velden = $zoeker->getVelden();
 	}
 
-	public abstract function viewHeader();
+	abstract public function viewHeader();
 
-	public abstract function viewFooter();
+	abstract public function viewFooter();
 
 	//viewLid print één regel of vakje ofzo.
-	public abstract function viewLid(Profiel $profiel);
+	abstract public function viewLid(Profiel $profiel);
 
-	public function __toString() {
+	public function __toString()
+	{
 		$html = '';
 		$html .= $this->viewHeader();
 		foreach ($this->leden as $lid) {
@@ -30,5 +32,4 @@ abstract class LLWeergave {
 		$html .= $this->viewFooter();
 		return $html;
 	}
-
 }

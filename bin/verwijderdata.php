@@ -10,7 +10,7 @@ $container = $kernel->getContainer();
 $profielRepository = $container->get(ProfielRepository::class);
 
 foreach ($profielRepository->findAll() as $profiel) {
-    if($profielRepository->verwijderVeldenUpdate($profiel)) {
-        echo "Verwijder data van " . $profiel->uid . "\n";
+	if ($profielRepository->verwijderVeldenUpdate($profiel)) {
+		echo 'Verwijder data van ' . $profiel->uid . "\n";
 	}
 }

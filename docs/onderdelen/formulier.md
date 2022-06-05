@@ -98,8 +98,20 @@ Een normaal `<input type="text".../>` veld.
 | `$model = null`  | _Ongebruikt_                                               |
 
 ```php
-$fields[] = new TextField('voornaam', 'Voornaam', 'Vul hier je voornaam in', 255, 2);
-$fields[] = new RequiredTextField('achternaam', 'Achternaam', 'Vul hier je achternaam in', 255, 2);
+$fields[] = new TextField(
+	'voornaam',
+	'Voornaam',
+	'Vul hier je voornaam in',
+	255,
+	2
+);
+$fields[] = new RequiredTextField(
+	'achternaam',
+	'Achternaam',
+	'Vul hier je achternaam in',
+	255,
+	2
+);
 ```
 
 #### (Required)FileNameField

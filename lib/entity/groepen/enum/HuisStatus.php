@@ -12,8 +12,8 @@ use CsrDelft\common\Enum;
  * @method static static Woonoord
  * @method static static Huis
  */
-class HuisStatus extends Enum {
-
+class HuisStatus extends Enum
+{
 	/**
 	 * HuisStatus opties.
 	 */

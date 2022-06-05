@@ -14,8 +14,10 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Document[]    findAll()
  * @method Document[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DocumentRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+class DocumentRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Document::class);
 	}
 
@@ -24,7 +26,8 @@ class DocumentRepository extends AbstractRepository {
 	 *
 	 * @return Document|false
 	 */
-	public function get($id) {
+	public function get($id)
+	{
 		return $this->find($id);
 	}
 
@@ -34,11 +37,13 @@ class DocumentRepository extends AbstractRepository {
 	 *
 	 * @return Document[]
 	 */
-	public function zoek($zoekterm, $limiet = null) {
+	public function zoek($zoekterm, $limiet = null)
+	{
 		return $this->createQueryBuilder('d')
 			->where('MATCH(d.naam, d.filename) AGAINST (:zoekterm) > 0')
 			->setParameter('zoekterm', $zoekterm)
 			->setMaxResults($limiet)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 }

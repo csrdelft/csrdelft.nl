@@ -7,13 +7,15 @@ use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use Doctrine\Persistence\ManagerRegistry;
 
-
-class ActiviteitenRepository extends KetzersRepository {
-	public function __construct(ManagerRegistry $registry) {
+class ActiviteitenRepository extends KetzersRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Activiteit::class);
 	}
 
-	public function nieuw($soort = null) {
+	public function nieuw($soort = null)
+	{
 		if (is_string($soort)) {
 			$soort = $this->parseSoort($soort);
 		}
@@ -32,7 +34,10 @@ class ActiviteitenRepository extends KetzersRepository {
 	public function overzicht(string $soort = null)
 	{
 		if ($soort && ActiviteitSoort::isValidValue($soort)) {
-			return $this->findBy(['status' => GroepStatus::HT(), 'activiteitSoort' => ActiviteitSoort::from($soort)]);
+			return $this->findBy([
+				'status' => GroepStatus::HT(),
+				'activiteitSoort' => ActiviteitSoort::from($soort),
+			]);
 		}
 		return parent::overzicht($soort);
 	}
@@ -40,11 +45,12 @@ class ActiviteitenRepository extends KetzersRepository {
 	public function beheer(string $soort = null)
 	{
 		if ($soort && ActiviteitSoort::isValidValue($soort)) {
-			return $this->findBy(['activiteitSoort' => ActiviteitSoort::from($soort)]);
+			return $this->findBy([
+				'activiteitSoort' => ActiviteitSoort::from($soort),
+			]);
 		}
 		return parent::beheer($soort);
 	}
-
 
 	public function parseSoort(string $soort = null)
 	{
@@ -53,6 +59,4 @@ class ActiviteitenRepository extends KetzersRepository {
 		}
 		return parent::parseSoort($soort);
 	}
-
-
 }

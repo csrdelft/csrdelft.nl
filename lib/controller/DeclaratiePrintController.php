@@ -16,16 +16,23 @@ class DeclaratiePrintController extends AbstractController
 	 * @Route("/declaratie/print/{declaratie}", name="declaratie_print", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function print(Declaratie $declaratie, DeclaratiePDFGenerator $declaratiePDFGenerator): Response
-	{
+	public function print(
+		Declaratie $declaratie,
+		DeclaratiePDFGenerator $declaratiePDFGenerator
+	): Response {
 		if (!$declaratie->magBeoordelen() || !$declaratie->isGoedgekeurd()) {
 			throw $this->createAccessDeniedException();
 		}
 
-		list($type, $content) = $declaratiePDFGenerator->genereerDeclaratie($declaratie);
+		list($type, $content) = $declaratiePDFGenerator->genereerDeclaratie(
+			$declaratie
+		);
 		$response = new Response($content);
 
-		$transliterator = Transliterator::createFromRules(':: Any-Latin; :: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;', Transliterator::FORWARD);
+		$transliterator = Transliterator::createFromRules(
+			':: Any-Latin; :: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;',
+			Transliterator::FORWARD
+		);
 		$safeName = $transliterator->transliterate($declaratie->getTitel());
 
 		$disposition = $response->headers->makeDisposition(

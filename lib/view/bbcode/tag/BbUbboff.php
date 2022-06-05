@@ -12,13 +12,15 @@ use CsrDelft\bb\BbTag;
  * @example [ubboff]Not parsed[/ubboff]
  * @example [tekst]Not parsed[/tekst]
  */
-class BbUbboff extends BbTag {
-
-	public static function getTagName() {
+class BbUbboff extends BbTag
+{
+	public static function getTagName()
+	{
 		return ['ubboff', 'tekst'];
 	}
 
-	public function render() {
+	public function render()
+	{
 		return $this->getContent();
 	}
 
@@ -35,6 +37,6 @@ class BbUbboff extends BbTag {
 	protected function getStoppers()
 	{
 		// De [/] tag werkt niet hier
-		return ["[/tekst]", "[/uboff]"];
+		return ['[/tekst]', '[/uboff]'];
 	}
 }

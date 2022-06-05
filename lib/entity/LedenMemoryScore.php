@@ -14,8 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\LedenMemoryScoresRepository")
  * @ORM\Table("memory_scores")
  */
-class LedenMemoryScore implements DataTableEntry {
-
+class LedenMemoryScore implements DataTableEntry
+{
 	/**
 	 * Id
 	 * @var int

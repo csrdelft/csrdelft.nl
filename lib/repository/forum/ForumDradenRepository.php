@@ -29,22 +29,22 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	 * Mogelijke markeringen voor belangrijke draadjes
 	 * @var array
 	 */
-	public static $belangrijk_opties = array(
-		'Plaatje' => array(
+	public static $belangrijk_opties = [
+		'Plaatje' => [
 			'asterisk_orange' => 'Asterisk',
 			'ruby' => 'Robijn',
-			'rosette' => 'Rozet'
-		),
-		'Vlag' => array(
+			'rosette' => 'Rozet',
+		],
+		'Vlag' => [
 			'flag_red' => 'Rood',
 			'flag_orange' => 'Oranje',
 			'flag_yellow' => 'Geel',
 			'flag_green' => 'Groen',
 			'flag_blue' => 'Blauw',
 			'flag_purple' => 'Paars',
-			'flag_pink' => 'Roze'
-		)
-	);
+			'flag_pink' => 'Roze',
+		],
+	];
 	/**
 	 * Default ORDER BY
 	 * @var string
@@ -76,7 +76,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	{
 		parent::__construct($registry, ForumDraad::class);
 		$this->pagina = 1;
-		$this->aantal_paginas = array();
+		$this->aantal_paginas = [];
 		$this->aantal_plakkerig = null;
 	}
 
@@ -97,14 +97,14 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	public function getAantalPerPagina()
 	{
 		if (!$this->per_pagina) {
-			$this->per_pagina = (int)lid_instelling('forum', 'draden_per_pagina');
+			$this->per_pagina = (int) lid_instelling('forum', 'draden_per_pagina');
 		}
 		return $this->per_pagina;
 	}
 
 	public function setAantalPerPagina($aantal)
 	{
-		$this->per_pagina = (int)$aantal;
+		$this->per_pagina = (int) $aantal;
 	}
 
 	public function getHuidigePagina()
@@ -124,19 +124,24 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 
 	public function getAantalPaginas($forum_id = null)
 	{
-		if (!isset($forum_id)) { // recent en zoeken hebben onbeperkte paginas
+		if (!isset($forum_id)) {
+			// recent en zoeken hebben onbeperkte paginas
 			return $this->pagina + 1;
 		}
 		if (!array_key_exists($forum_id, $this->aantal_paginas)) {
 			$qb = $this->createQueryBuilder('d');
 			$qb->select('count(d.draad_id)');
-			$qb->where('d.forum_id = :forum_id and d.wacht_goedkeuring = false and d.verwijderd = false');
+			$qb->where(
+				'd.forum_id = :forum_id and d.wacht_goedkeuring = false and d.verwijderd = false'
+			);
 			$qb->setParameter('forum_id', $forum_id);
 			$this->filterLaatstGewijzigdExtern($qb);
 
 			$aantal = $qb->getQuery()->getSingleScalarResult();
 
-			$this->aantal_paginas[$forum_id] = (int)ceil($aantal / $this->getAantalPerPagina());
+			$this->aantal_paginas[$forum_id] = (int) ceil(
+				$aantal / $this->getAantalPerPagina()
+			);
 		}
 		return max(1, $this->aantal_paginas[$forum_id]);
 	}
@@ -166,19 +171,23 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		if ($this->aantal_plakkerig === null) {
 			$qb = $this->createQueryBuilder('d');
 			$qb->select('count(d.draad_id)');
-			$qb->where('d.forum_id = :forum_id and d.plakkerig = true and d.wacht_goedkeuring = false and d.verwijderd = false');
+			$qb->where(
+				'd.forum_id = :forum_id and d.plakkerig = true and d.wacht_goedkeuring = false and d.verwijderd = false'
+			);
 			$qb->setParameter('forum_id', $draad->forum_id);
 			$this->aantal_plakkerig = $qb->getQuery()->getSingleScalarResult();
 		}
 
 		$qb = $this->createQueryBuilder('d');
 		$qb->select('count(d.draad_id)');
-		$qb->where('d.forum_id = :forum_id and d.laatst_gewijzigd >= :laatst_gewijzigd and d.plakkerig = false and d.wacht_goedkeuring = false and d.verwijderd = false');
+		$qb->where(
+			'd.forum_id = :forum_id and d.laatst_gewijzigd >= :laatst_gewijzigd and d.plakkerig = false and d.wacht_goedkeuring = false and d.verwijderd = false'
+		);
 		$qb->setParameter('forum_id', $draad->forum_id);
 		$qb->setParameter('laatst_gewijzigd', $draad->laatst_gewijzigd);
 
 		$count = $this->aantal_plakkerig + $qb->getQuery()->getSingleScalarResult();
-		return (int)ceil($count / $this->getAantalPerPagina());
+		return (int) ceil($count / $this->getAantalPerPagina());
 	}
 
 	public function zoeken(ForumZoeken $forumZoeken)
@@ -186,13 +195,17 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		$qb = $this->createQueryBuilder('draad');
 		// Als er geen spatie in de zoekterm zit, doe dan keyword search met '<zoekterm>*'
 		if (strstr($forumZoeken->zoekterm, ' ') == false) {
-			$qb->addSelect('MATCH(draad.titel) AGAINST (:query IN BOOLEAN MODE) AS score');
+			$qb->addSelect(
+				'MATCH(draad.titel) AGAINST (:query IN BOOLEAN MODE) AS score'
+			);
 		} else {
 			$qb->addSelect('MATCH(draad.titel) AGAINST (:query) AS score');
 		}
 
 		$qb->setParameter('query', $forumZoeken->zoekterm);
-		$qb->where('draad.wacht_goedkeuring = false and draad.verwijderd = false and draad.laatst_gewijzigd >= :van and draad.laatst_gewijzigd <= :tot');
+		$qb->where(
+			'draad.wacht_goedkeuring = false and draad.verwijderd = false and draad.laatst_gewijzigd >= :van and draad.laatst_gewijzigd <= :tot'
+		);
 		$qb->setParameter('van', $forumZoeken->van);
 		$qb->setParameter('tot', $forumZoeken->tot);
 		$this->filterLaatstGewijzigdExtern($qb, 'draad');
@@ -210,16 +223,20 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return $results;
 	}
 
-
 	public function getPrullenbakVoorDeel(ForumDeel $deel)
 	{
-		return $this->findBy(['forum_id' => $deel->forum_id, 'verwijderd' => true], ['plakkerig' => 'DESC', 'laatst_gewijzigd' => 'DESC']);
+		return $this->findBy(
+			['forum_id' => $deel->forum_id, 'verwijderd' => true],
+			['plakkerig' => 'DESC', 'laatst_gewijzigd' => 'DESC']
+		);
 	}
 
 	public function getBelangrijkeForumDradenVoorDeel(ForumDeel $deel)
 	{
 		$qb = $this->createQueryBuilder('d');
-		$qb->where('d.forum_id = :forum_id and d.wacht_goedkeuring = false and d.verwijderd = false and d.belangrijk = true');
+		$qb->where(
+			'd.forum_id = :forum_id and d.wacht_goedkeuring = false and d.verwijderd = false and d.belangrijk = true'
+		);
 		$qb->setParameter('forum_id', $deel->forum_id);
 
 		$this->filterLaatstGewijzigdExtern($qb);
@@ -230,7 +247,9 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	public function getForumDradenVoorDeel(ForumDeel $deel)
 	{
 		$qb = $this->createQueryBuilder('d');
-		$qb->where('(d.forum_id = :forum_id or d.gedeeld_met = :forum_id) and d.wacht_goedkeuring = false and d.verwijderd = false');
+		$qb->where(
+			'(d.forum_id = :forum_id or d.gedeeld_met = :forum_id) and d.wacht_goedkeuring = false and d.verwijderd = false'
+		);
 		$qb->setParameter('forum_id', $deel->forum_id);
 
 		$this->filterLaatstGewijzigdExtern($qb);
@@ -243,7 +262,6 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return $paginator->getIterator();
 	}
 
-
 	/**
 	 * @param array $ids
 	 * @return array|ForumDraad[]
@@ -252,13 +270,14 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	{
 		$count = count($ids);
 		if ($count < 1) {
-			return array();
+			return [];
 		}
 
 		$draden = $this->createQueryBuilder('d')
 			->where('d.draad_id in (:ids)')
 			->setParameter('ids', $ids)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 		return group_by_distinct('draad_id', $draden);
 	}
 
@@ -285,7 +304,6 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return $draad;
 	}
 
-
 	public function update(ForumDraad $draad)
 	{
 		try {
@@ -301,10 +319,19 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	public function filterLaatstGewijzigdExtern($qb, $alias = 'd')
 	{
 		if (!LoginService::mag(P_LOGGED_IN)) {
-			$qb->andWhere("({$alias}.gesloten = true and {$alias}.laatst_gewijzigd >= :laatst_gewijzigd_gesloten) or ({$alias}.gesloten = false and {$alias}.laatst_gewijzigd >= :laatst_gewijzigd_open)");
-			$qb->setParameter('laatst_gewijzigd_gesloten', date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten')));
-			$qb->setParameter('laatst_gewijzigd_open', date_create_immutable(instelling('forum', 'externen_geentoegang_open')));
+			$qb->andWhere(
+				"({$alias}.gesloten = true and {$alias}.laatst_gewijzigd >= :laatst_gewijzigd_gesloten) or ({$alias}.gesloten = false and {$alias}.laatst_gewijzigd >= :laatst_gewijzigd_open)"
+			);
+			$qb->setParameter(
+				'laatst_gewijzigd_gesloten',
+				date_create_immutable(
+					instelling('forum', 'externen_geentoegang_gesloten')
+				)
+			);
+			$qb->setParameter(
+				'laatst_gewijzigd_open',
+				date_create_immutable(instelling('forum', 'externen_geentoegang_open'))
+			);
 		}
 	}
-
 }

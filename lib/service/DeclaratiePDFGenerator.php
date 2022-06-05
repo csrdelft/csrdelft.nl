@@ -21,7 +21,8 @@ class DeclaratiePDFGenerator
 	 */
 	private $filesystem;
 
-	public function __construct(Environment $twig, Filesystem $filesystem) {
+	public function __construct(Environment $twig, Filesystem $filesystem)
+	{
 		$this->twig = $twig;
 		$this->filesystem = $filesystem;
 	}
@@ -65,17 +66,23 @@ class DeclaratiePDFGenerator
 		$pdf->SetTitle($declaratie->getTitel());
 
 		// PDF styling
-		$pdf->setHeaderData( null, null, 'Declaratie C.S.R. Delft (#' . $declaratie->getId() . ')', $declaratie->getTitel(), [17, 39, 58]);
+		$pdf->setHeaderData(
+			null,
+			null,
+			'Declaratie C.S.R. Delft (#' . $declaratie->getId() . ')',
+			$declaratie->getTitel(),
+			[17, 39, 58]
+		);
 		$pdf->SetMargins(PDF_MARGIN_LEFT, 20, PDF_MARGIN_RIGHT);
 		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 		$pdf->setPrintFooter(false);
-		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		$pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
 		$pdf->SetFontSize(9);
 
 		// Declaratie informatie
 		$pdf->AddPage();
 		$declaratieInhoud = $this->twig->render('declaratie/print.html.twig', [
-			'declaratie' => $declaratie
+			'declaratie' => $declaratie,
 		]);
 		$pdf->writeHTML($declaratieInhoud);
 
@@ -122,7 +129,8 @@ class DeclaratiePDFGenerator
 		return $pdf->Output('declaratie.pdf', 'S');
 	}
 
-	public function genereerDeclaratie(Declaratie $declaratie) {
+	public function genereerDeclaratie(Declaratie $declaratie)
+	{
 		$location = $this->filesystem->tempnam(TMP_PATH, 'decla_');
 		$declaInfo = $this->genereerDeclaratieInfo($declaratie);
 		$this->filesystem->dumpFile($location, $declaInfo);
@@ -130,7 +138,10 @@ class DeclaratiePDFGenerator
 
 		foreach ($declaratie->getBonnen() as $i => $declaratieBon) {
 			$location = $this->filesystem->tempnam(TMP_PATH, 'decla_');
-			$this->filesystem->dumpFile($location, $this->genereerBon($declaratieBon));
+			$this->filesystem->dumpFile(
+				$location,
+				$this->genereerBon($declaratieBon)
+			);
 			$pdfs[] = $location;
 		}
 
@@ -148,19 +159,22 @@ class DeclaratiePDFGenerator
 
 			return ['pdf', $merged];
 		} catch (\Exception $e) {
-//			$zipTmp = tempnam(sys_get_temp_dir(), "zip");
-//			$zip = new ZipArchive();
-//			$zip->open($zipTmp, ZipArchive::OVERWRITE);
-//			foreach ($pdfs as $index => $location) {
-//				$nummer = $index + 1;
-//				$zip->addFromString("{$declaratie->getTitel()} - {$nummer}.pdf", file_get_contents($location));
-//			}
-//			$filename = $zip->filename;
-//			$zip->close();
-//
-//			$data = ['zip', file_get_contents($filename)];
-//			unlink($zipTmp);
-			$data = ['txt', 'Er ging iets fout bij het genereren van de PDF: ' . $e->getMessage()];
+			//			$zipTmp = tempnam(sys_get_temp_dir(), "zip");
+			//			$zip = new ZipArchive();
+			//			$zip->open($zipTmp, ZipArchive::OVERWRITE);
+			//			foreach ($pdfs as $index => $location) {
+			//				$nummer = $index + 1;
+			//				$zip->addFromString("{$declaratie->getTitel()} - {$nummer}.pdf", file_get_contents($location));
+			//			}
+			//			$filename = $zip->filename;
+			//			$zip->close();
+			//
+			//			$data = ['zip', file_get_contents($filename)];
+			//			unlink($zipTmp);
+			$data = [
+				'txt',
+				'Er ging iets fout bij het genereren van de PDF: ' . $e->getMessage(),
+			];
 			return $data;
 		}
 	}

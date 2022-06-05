@@ -49,8 +49,12 @@ class AccessControlEventListener
 	 */
 	private $security;
 
-	public function __construct(CsrfService $csrfService, Security $security, Reader $annotations, EntityManagerInterface $entityManager)
-	{
+	public function __construct(
+		CsrfService $csrfService,
+		Security $security,
+		Reader $annotations,
+		EntityManagerInterface $entityManager
+	) {
 		$this->csrfService = $csrfService;
 		$this->annotations = $annotations;
 		$this->em = $entityManager;
@@ -75,17 +79,22 @@ class AccessControlEventListener
 
 		$csrfUnsafeAttribute = $request->attributes->get('_csrfUnsafe');
 		/** @var CsrfUnsafe $authAnnotation */
-		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, CsrfUnsafe::class);
+		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation(
+			$reflectionMethod,
+			CsrfUnsafe::class
+		);
 
-		$isInApi = str_starts_with($request->getPathInfo(), '/API/2.0') || str_starts_with($request->getPathInfo(), '/api/v3/');
+		$isInApi =
+			str_starts_with($request->getPathInfo(), '/API/2.0') ||
+			str_starts_with($request->getPathInfo(), '/api/v3/');
 
 		if (
-			$isInApi === false
-			&& $csrfUnsafeAttribute === null
-			&& $csrfUnsafeAnnotation === null
-			&& !$this->csrfService->preventCsrf($request)
+			$isInApi === false &&
+			$csrfUnsafeAttribute === null &&
+			$csrfUnsafeAnnotation === null &&
+			!$this->csrfService->preventCsrf($request)
 		) {
-			throw new AccessDeniedException("Ongeldige CSRF token");
+			throw new AccessDeniedException('Ongeldige CSRF token');
 		}
 
 		$controller = $request->attributes->get('_controller');
@@ -94,7 +103,10 @@ class AccessControlEventListener
 		}
 
 		/** @var Auth $authAnnotation */
-		$authAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, Auth::class);
+		$authAnnotation = $this->annotations->getMethodAnnotation(
+			$reflectionMethod,
+			Auth::class
+		);
 
 		if ($authAnnotation) {
 			$mag = $authAnnotation->getMag();
@@ -103,24 +115,29 @@ class AccessControlEventListener
 		}
 
 		if (!$mag) {
-			throw new CsrException("Route heeft geen @Auth: " . $controller);
+			throw new CsrException('Route heeft geen @Auth: ' . $controller);
 		}
 
 		$user = $this->security->getUser();
 
 		if ($user && $user->blocked_reason) {
-			throw new NotFoundHttpException("Geblokkeerd: ". $user->blocked_reason);
+			throw new NotFoundHttpException('Geblokkeerd: ' . $user->blocked_reason);
 		}
 
 		if (!LoginService::mag($mag)) {
 			if (DEBUG) {
-				throw new AccessDeniedException("Geen toegang tot " . $controller . ", ten minste " . $mag . " nodig.");
+				throw new AccessDeniedException(
+					'Geen toegang tot ' . $controller . ', ten minste ' . $mag . ' nodig.'
+				);
 			} else {
-				throw new AccessDeniedException("Geen toegang");
+				throw new AccessDeniedException('Geen toegang');
 			}
 		}
 
-		if (LoginService::mag('commissie:NovCie') && $this->em->getFilters()->isEnabled('verbergNovieten')) {
+		if (
+			LoginService::mag('commissie:NovCie') &&
+			$this->em->getFilters()->isEnabled('verbergNovieten')
+		) {
 			$this->em->getFilters()->disable('verbergNovieten');
 		}
 	}

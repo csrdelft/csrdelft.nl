@@ -9,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @package CsrDelft\entity\commissievoorkeuren
  * @ORM\Entity(repositoryClass="CsrDelft\repository\commissievoorkeuren\VoorkeurCommissieRepository")
  */
-class VoorkeurCommissie {
+class VoorkeurCommissie
+{
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")

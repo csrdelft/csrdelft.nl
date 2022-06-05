@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror\embed;
-
 
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\prosemirror\Node;
@@ -27,15 +25,15 @@ class NodeAudio implements Node
 		}
 		return [
 			'attrs' => [
-				'url' => $node->url
-			]
+				'url' => $node->url,
+			],
 		];
 	}
 
 	public function getTagAttributes($node)
 	{
 		return [
-			'audio' => $node->attrs->url
+			'audio' => $node->attrs->url,
 		];
 	}
 

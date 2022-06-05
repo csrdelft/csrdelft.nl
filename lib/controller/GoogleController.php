@@ -17,13 +17,15 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class GoogleController extends AbstractController {
+class GoogleController extends AbstractController
+{
 	/**
 	 * @var GoogleTokenRepository
 	 */
 	private $googleTokenModel;
 
-	public function __construct(GoogleTokenRepository $googleTokenModel) {
+	public function __construct(GoogleTokenRepository $googleTokenModel)
+	{
 		$this->googleTokenModel = $googleTokenModel;
 	}
 
@@ -33,20 +35,23 @@ class GoogleController extends AbstractController {
 	 * @Route("/google/callback", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function callback(Request $request) {
+	public function callback(Request $request)
+	{
 		$state = urldecode($request->query->get('state', null));
 
 		if (!str_starts_with($state, $request->getSchemeAndHttpHost())) {
-			throw new CsrGebruikerException("Redirect is niet binnen de stek!");
+			throw new CsrGebruikerException('Redirect is niet binnen de stek!');
 		}
 
 		$code = $request->query->get('code', null);
-		$error = $request->query->get('error',null);
+		$error = $request->query->get('error', null);
 		if ($code) {
 			$client = GoogleSync::createGoogleCLient();
 			$client->fetchAccessTokenWithAuthCode($code);
 
-			$existingToken = $this->googleTokenModel->findOneBy(['uid' => $this->getUid()]);
+			$existingToken = $this->googleTokenModel->findOneBy([
+				'uid' => $this->getUid(),
+			]);
 			$manager = $this->getDoctrine()->getManager();
 
 			if (!$existingToken) {

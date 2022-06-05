@@ -18,8 +18,8 @@ use Twig\Environment;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class CorveeHerinneringService {
-
+class CorveeHerinneringService
+{
 	/**
 	 * @var MaaltijdAanmeldingenRepository
 	 */
@@ -55,10 +55,13 @@ class CorveeHerinneringService {
 		$this->mailService = $mailService;
 	}
 
-	public function stuurHerinnering(CorveeTaak $taak) {
+	public function stuurHerinnering(CorveeTaak $taak)
+	{
 		$datum = date_format_intl($taak->datum, DATE_FORMAT);
 		if (!$taak->profiel) {
-			throw new CsrGebruikerException($datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!');
+			throw new CsrGebruikerException(
+				$datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!'
+			);
 		}
 		$lidnaam = $taak->profiel->getNaam('civitas');
 		$to = $taak->profiel->getEmailOntvanger();
@@ -66,33 +69,55 @@ class CorveeHerinneringService {
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
 		$eten = '';
 		if ($taak->maaltijd !== null) {
-			$aangemeld = $this->maaltijdAanmeldingenRepository->getIsAangemeld($taak->maaltijd->maaltijd_id, $taak->profiel->uid);
+			$aangemeld = $this->maaltijdAanmeldingenRepository->getIsAangemeld(
+				$taak->maaltijd->maaltijd_id,
+				$taak->profiel->uid
+			);
 			if ($aangemeld) {
 				$eten = instelling('corvee', 'mail_wel_meeeten');
 			} else {
 				$eten = instelling('corvee', 'mail_niet_meeeten');
 			}
 		}
-		$bericht = str_replace(['LIDNAAM', 'DATUM', 'MEEETEN'], [$lidnaam, $datum, $eten], $taak->corveeFunctie->email_bericht);
+		$bericht = str_replace(
+			['LIDNAAM', 'DATUM', 'MEEETEN'],
+			[$lidnaam, $datum, $eten],
+			$taak->corveeFunctie->email_bericht
+		);
 		$mail = new Mail($to, $onderwerp, $bericht);
 		$mail->setFrom($from);
-		if ($this->mailService->send($mail)) { // false if failed
+		if ($this->mailService->send($mail)) {
+			// false if failed
 			if (!$mail->inDebugMode()) {
 				$this->corveeTakenRepository->updateGemaild($taak);
 			}
-			return $datum . ' ' . $taak->corveeFunctie->naam . ' verstuurd! (' . $lidnaam . ')';
+			return $datum .
+				' ' .
+				$taak->corveeFunctie->naam .
+				' verstuurd! (' .
+				$lidnaam .
+				')';
 		} else {
-			throw new CsrGebruikerException($datum . ' ' . $taak->corveeFunctie->naam . ' faalt! (' . $lidnaam . ')');
+			throw new CsrGebruikerException(
+				$datum . ' ' . $taak->corveeFunctie->naam . ' faalt! (' . $lidnaam . ')'
+			);
 		}
 	}
 
-	public function stuurHerinneringen() {
-		$vooraf = str_replace('-', '+', instelling('corvee', 'herinnering_1e_mail'));
+	public function stuurHerinneringen()
+	{
+		$vooraf = str_replace(
+			'-',
+			'+',
+			instelling('corvee', 'herinnering_1e_mail')
+		);
 		$van = date_create();
-		$tot = date_create_immutable()->add(DateInterval::createFromDateString($vooraf));
+		$tot = date_create_immutable()->add(
+			DateInterval::createFromDateString($vooraf)
+		);
 		$taken = $this->corveeTakenRepository->getTakenVoorAgenda($van, $tot, true);
-		$verzonden = array();
-		$errors = array();
+		$verzonden = [];
+		$errors = [];
 		foreach ($taken as $taak) {
 			if ($taak->getMoetHerinneren()) {
 				try {
@@ -102,7 +127,6 @@ class CorveeHerinneringService {
 				}
 			}
 		}
-		return array($verzonden, $errors);
+		return [$verzonden, $errors];
 	}
-
 }

@@ -24,8 +24,8 @@ use CsrDelft\view\formulier\ModalForm;
  * @author P.W.G. Brussee <brussee@live.nl>
  * @property Groep $model
  */
-class GroepForm extends ModalForm {
-
+class GroepForm extends ModalForm
+{
 	/**
 	 * Aanmaken/Wijzigen
 	 * @var AccessAction
@@ -40,8 +40,14 @@ class GroepForm extends ModalForm {
 	 * @param false $nocancel
 	 * @throws \Exception
 	 */
-	public function __construct(Groep $groep, $action, $mode, $nocancel = false) {
-		parent::__construct($groep, $action, classNameZonderNamespace(get_class($groep)), true);
+	public function __construct(Groep $groep, $action, $mode, $nocancel = false)
+	{
+		parent::__construct(
+			$groep,
+			$action,
+			classNameZonderNamespace(get_class($groep)),
+			true
+		);
 		$this->mode = $mode;
 		if ($groep->id) {
 			$this->titel .= ' wijzigen';
@@ -52,8 +58,14 @@ class GroepForm extends ModalForm {
 
 		$fields['oudId']->hidden = true;
 
-		$fields['familie'] = new RequiredAutocompleteField('familie', $this->model->familie, $fields['familie']->description, false);
-		$fields['familie']->title = 'Vul hier een \'achternaam\' in zodat de juiste ketzers elkaar opvolgen';
+		$fields['familie'] = new RequiredAutocompleteField(
+			'familie',
+			$this->model->familie,
+			$fields['familie']->description,
+			false
+		);
+		$fields['familie']->title =
+			'Vul hier een \'achternaam\' in zodat de juiste ketzers elkaar opvolgen';
 		$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
 		$fields['omschrijving']->description = 'Meer lezen';
 
@@ -71,15 +83,20 @@ class GroepForm extends ModalForm {
 			$fields['aanmeldenTot']->from_datetime = $fields['aanmeldenVanaf'];
 
 			if (in_array(GroepMoment::class, class_uses($groep))) {
-				$fields['beginMoment']->title = 'Dit is NIET het moment van openstellen voor aanmeldingen';
-				$fields['eindMoment']->title = 'Dit is NIET het moment van sluiten voor aanmeldingen';
+				$fields['beginMoment']->title =
+					'Dit is NIET het moment van openstellen voor aanmeldingen';
+				$fields['eindMoment']->title =
+					'Dit is NIET het moment van sluiten voor aanmeldingen';
 			}
 		}
 
 		if ($groep instanceof Ketzer || $groep instanceof Activiteit) {
-			$fields['bewerkenTot']->title = 'Leden mogen hun eigen opmerking of keuze niet aanpassen als u dit veld leeg laat';
-			$fields['afmeldenTot']->title = 'Leden mogen zichzelf niet afmelden als u dit veld leeg laat';
-			$fields['keuzelijst']->title = 'Zet | tussen de opties en gebruik && voor meerdere keuzelijsten';
+			$fields['bewerkenTot']->title =
+				'Leden mogen hun eigen opmerking of keuze niet aanpassen als u dit veld leeg laat';
+			$fields['afmeldenTot']->title =
+				'Leden mogen zichzelf niet afmelden als u dit veld leeg laat';
+			$fields['keuzelijst']->title =
+				'Zet | tussen de opties en gebruik && voor meerdere keuzelijsten';
 		}
 		if ($groep instanceof Kring) {
 			unset($fields['samenvatting']);
@@ -90,8 +107,10 @@ class GroepForm extends ModalForm {
 			$fields['versie']->hidden = true;
 			$fields['keuzelijst2']->hidden = true;
 		} else {
-			$fields['versie']->title = 'Versie 2 is een testversie, niet gebruiken als je niet weet wat je doet.';
-			$fields['keuzelijst2']->title = 'Formaat: naam:type:default:description:optie,optie,optie|naam:type:default:description:|...';
+			$fields['versie']->title =
+				'Versie 2 is een testversie, niet gebruiken als je niet weet wat je doet.';
+			$fields['keuzelijst2']->title =
+				'Formaat: naam:type:default:description:optie,optie,optie|naam:type:default:description:|...';
 		}
 
 		$fields['maker']->readonly = !LoginService::mag(P_ADMIN);
@@ -100,7 +119,8 @@ class GroepForm extends ModalForm {
 		$this->formKnoppen = new FormDefaultKnoppen($nocancel ? false : null);
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		/**
 		 * @var Groep $groep
 		 */
@@ -129,10 +149,13 @@ class GroepForm extends ModalForm {
 			 * op moment van uitvoeren van deze funtie, hier een extra check:
 			 *
 			 * N.B.: Deze check staat binnen de !magAlgemeen zodat P_LEDEN_MOD deze check overslaat
-			 */
-			elseif (AccessAction::isWijzigen($this->mode) && $groep instanceof Woonoord) {
-
-				$vorigeHuisStatus = HuisStatus::from($this->findByName('huisStatus')->getOrigValue());
+			 */ elseif (
+				AccessAction::isWijzigen($this->mode) &&
+				$groep instanceof Woonoord
+			) {
+				$vorigeHuisStatus = HuisStatus::from(
+					$this->findByName('huisStatus')->getOrigValue()
+				);
 				if ($vorigeHuisStatus !== $soort) {
 					setMelding('U mag de huisstatus niet wijzigen', -1);
 					return false;
@@ -141,24 +164,38 @@ class GroepForm extends ModalForm {
 		}
 
 		$fields = $this->getFields();
-		if (isset($fields['eindMoment']) && $fields['eindMoment']->getValue() !== null and strtotime($fields['eindMoment']->getValue()) < strtotime($fields['beginMoment']->getValue())) {
+		if (
+			isset($fields['eindMoment']) &&
+				$fields['eindMoment']->getValue() !== null and
+			strtotime($fields['eindMoment']->getValue()) <
+				strtotime($fields['beginMoment']->getValue())
+		) {
 			$fields['eindMoment']->error = 'Eindmoment moet na beginmoment liggen';
 		}
 		if ($groep instanceof Ketzer) {
-			if ($fields['afmeldenTot']->getValue() !== null and strtotime($fields['afmeldenTot']->getValue()) < strtotime($fields['aanmeldenVanaf']->getValue())) {
-				$fields['afmeldenTot']->error = 'Afmeldperiode moet eindigen na begin aanmeldperiode';
+			if (
+				$fields['afmeldenTot']->getValue() !== null and
+				strtotime($fields['afmeldenTot']->getValue()) <
+					strtotime($fields['aanmeldenVanaf']->getValue())
+			) {
+				$fields['afmeldenTot']->error =
+					'Afmeldperiode moet eindigen na begin aanmeldperiode';
 			}
-			if ($fields['bewerkenTot']->getValue() !== null and strtotime($fields['bewerkenTot']->getValue()) < strtotime($fields['aanmeldenVanaf']->getValue())) {
-				$fields['bewerkenTot']->error = 'Bewerkenperiode moet eindigen na begin aanmeldperiode';
+			if (
+				$fields['bewerkenTot']->getValue() !== null and
+				strtotime($fields['bewerkenTot']->getValue()) <
+					strtotime($fields['aanmeldenVanaf']->getValue())
+			) {
+				$fields['bewerkenTot']->error =
+					'Bewerkenperiode moet eindigen na begin aanmeldperiode';
 			}
 		}
 
 		// GROEPEN_V2
-//		if ($fields['keuzelijst2']->getValue() !== null && $fields['versie']->getValue() === GroepVersie::V2) {
-//			$this->model->keuzelijst2 = $this->parseKeuzelijst($fields['keuzelijst2']->getValue());
-//		}
+		//		if ($fields['keuzelijst2']->getValue() !== null && $fields['versie']->getValue() === GroepVersie::V2) {
+		//			$this->model->keuzelijst2 = $this->parseKeuzelijst($fields['keuzelijst2']->getValue());
+		//		}
 
 		return parent::validate();
 	}
-
 }

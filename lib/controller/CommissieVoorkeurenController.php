@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 /**
  * CommissieVoorkeurenController.class.php
  *
@@ -52,8 +51,7 @@ class CommissieVoorkeurenController extends AbstractController
 		CommissieVoorkeurRepository $commissieVoorkeurRepository,
 		VoorkeurCommissieRepository $voorkeurCommissieRepository,
 		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository
-	)
-	{
+	) {
 		$this->commissieVoorkeurRepository = $commissieVoorkeurRepository;
 		$this->voorkeurCommissieRepository = $voorkeurCommissieRepository;
 		$this->voorkeurOpmerkingRepository = $voorkeurOpmerkingRepository;
@@ -66,13 +64,25 @@ class CommissieVoorkeurenController extends AbstractController
 	 */
 	public function overzicht(): Response
 	{
-		$commissieFormulier = $this->createForm(VoorkeurCommissieType::class, new VoorkeurCommissie(), [
-			'action' => $this->generateUrl('csrdelft_commissievoorkeuren_nieuwecommissie'),
-		]);
+		$commissieFormulier = $this->createForm(
+			VoorkeurCommissieType::class,
+			new VoorkeurCommissie(),
+			[
+				'action' => $this->generateUrl(
+					'csrdelft_commissievoorkeuren_nieuwecommissie'
+				),
+			]
+		);
 
-		$addCategorieFormulier = $this->createForm(VoorkeurCommissieCategorieType:: class, new VoorkeurCommissieCategorie(), [
-			'action' => $this->generateUrl('csrdelft_commissievoorkeuren_nieuwecategorie')
-		]);
+		$addCategorieFormulier = $this->createForm(
+			VoorkeurCommissieCategorieType::class,
+			new VoorkeurCommissieCategorie(),
+			[
+				'action' => $this->generateUrl(
+					'csrdelft_commissievoorkeuren_nieuwecategorie'
+				),
+			]
+		);
 
 		return $this->render('commissievoorkeuren/overzicht.html.twig', [
 			'categorien' => $this->voorkeurCommissieRepository->getByCategorie(),
@@ -89,7 +99,13 @@ class CommissieVoorkeurenController extends AbstractController
 	 * @Route("/commissievoorkeuren/update/{cid}/{uid}/{waarde}", methods={"POST"}, defaults={"waarde": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lidUpdate(Request $request, ProfielRepository $profielRepository, $cid, $uid, $waarde) {
+	public function lidUpdate(
+		Request $request,
+		ProfielRepository $profielRepository,
+		$cid,
+		$uid,
+		$waarde
+	) {
 		$profiel = $profielRepository->get($uid);
 
 		if (!$profiel) {
@@ -108,11 +124,16 @@ class CommissieVoorkeurenController extends AbstractController
 		}
 
 		$commissie = $this->voorkeurCommissieRepository->find($cid);
-		$commissieVoorkeur = $this->commissieVoorkeurRepository->getVoorkeur($profiel, $commissie);
+		$commissieVoorkeur = $this->commissieVoorkeurRepository->getVoorkeur(
+			$profiel,
+			$commissie
+		);
 		$commissieVoorkeur->voorkeur = $waarde;
 		$commissieVoorkeur->timestamp = date_create_immutable();
 
-		$this->getDoctrine()->getManager()->flush();
+		$this->getDoctrine()
+			->getManager()
+			->flush();
 
 		return new JsonResponse(['success' => true]);
 	}
@@ -128,7 +149,9 @@ class CommissieVoorkeurenController extends AbstractController
 		$form = $this->createForm(VoorkeurCommissieType::class, $commissie);
 
 		return $this->render('commissievoorkeuren/commissie.html.twig', [
-			'voorkeuren' => $this->commissieVoorkeurRepository->getVoorkeurenVoorCommissie($commissie),
+			'voorkeuren' => $this->commissieVoorkeurRepository->getVoorkeurenVoorCommissie(
+				$commissie
+			),
 			'commissie' => $commissie,
 			'commissieFormulier' => $form->createView(),
 		]);
@@ -142,8 +165,10 @@ class CommissieVoorkeurenController extends AbstractController
 	 * @Auth({"bestuur",P_ADMIN})
 	 * @CsrfUnsafe
 	 */
-	public function updatecommissie(Request $request, VoorkeurCommissie $commissie): RedirectResponse
-	{
+	public function updatecommissie(
+		Request $request,
+		VoorkeurCommissie $commissie
+	): RedirectResponse {
 		$form = $this->createForm(VoorkeurCommissieType::class, $commissie);
 		$form->handleRequest($request);
 
@@ -154,7 +179,10 @@ class CommissieVoorkeurenController extends AbstractController
 
 			setMelding('Aanpassingen commissie opgeslagen', 1);
 		}
-		return $this->redirectToRoute('csrdelft_commissievoorkeuren_updatecommissie', ['id' => $commissie->id]);
+		return $this->redirectToRoute(
+			'csrdelft_commissievoorkeuren_updatecommissie',
+			['id' => $commissie->id]
+		);
 	}
 
 	/**
@@ -167,9 +195,15 @@ class CommissieVoorkeurenController extends AbstractController
 	public function nieuwecommissie(Request $request): Response
 	{
 		$model = new VoorkeurCommissie();
-		$commissieFormulier = $this->createForm(VoorkeurCommissieType::class, $model, [
-			'action' => $this->generateUrl('csrdelft_commissievoorkeuren_nieuwecommissie')
-		]);
+		$commissieFormulier = $this->createForm(
+			VoorkeurCommissieType::class,
+			$model,
+			[
+				'action' => $this->generateUrl(
+					'csrdelft_commissievoorkeuren_nieuwecommissie'
+				),
+			]
+		);
 		$commissieFormulier->handleRequest($request);
 
 		if ($commissieFormulier->isSubmitted() && $commissieFormulier->isValid()) {
@@ -177,12 +211,20 @@ class CommissieVoorkeurenController extends AbstractController
 			$manager->persist($model);
 			$manager->flush();
 
-			return $this->redirectToRoute('csrdelft_commissievoorkeuren_commissie', ['id' => $model->id]);
+			return $this->redirectToRoute('csrdelft_commissievoorkeuren_commissie', [
+				'id' => $model->id,
+			]);
 		}
 
-		$categorieFormulier = $this->createForm(VoorkeurCommissieCategorieType::class, new VoorkeurCommissieCategorie(), [
-			'action' => $this->generateUrl('csrdelft_commissievoorkeuren_nieuwecategorie')
-		]);
+		$categorieFormulier = $this->createForm(
+			VoorkeurCommissieCategorieType::class,
+			new VoorkeurCommissieCategorie(),
+			[
+				'action' => $this->generateUrl(
+					'csrdelft_commissievoorkeuren_nieuwecategorie'
+				),
+			]
+		);
 
 		return $this->render('commissievoorkeuren/overzicht.html.twig', [
 			'categorien' => $this->voorkeurCommissieRepository->getByCategorie(),
@@ -200,9 +242,15 @@ class CommissieVoorkeurenController extends AbstractController
 	public function nieuwecategorie(Request $request): Response
 	{
 		$model = new VoorkeurCommissieCategorie();
-		$categorieFormulier = $this->createForm(VoorkeurCommissieCategorieType::class, $model, [
-			'action' => $this->generateUrl('csrdelft_commissievoorkeuren_nieuwecategorie'),
-		]);
+		$categorieFormulier = $this->createForm(
+			VoorkeurCommissieCategorieType::class,
+			$model,
+			[
+				'action' => $this->generateUrl(
+					'csrdelft_commissievoorkeuren_nieuwecategorie'
+				),
+			]
+		);
 		$categorieFormulier->handleRequest($request);
 
 		if ($categorieFormulier->isSubmitted() && $categorieFormulier->isValid()) {
@@ -212,9 +260,15 @@ class CommissieVoorkeurenController extends AbstractController
 			return $this->redirectToRoute('csrdelft_commissievoorkeuren_overzicht'); // Prevent resubmit
 		}
 
-		$commissieFormulier = $this->createForm(VoorkeurCommissieType::class, new VoorkeurCommissie(), [
-			'action' => $this->generateUrl('csrdelft_commissievoorkeuren_nieuwecommissie'),
-		]);
+		$commissieFormulier = $this->createForm(
+			VoorkeurCommissieType::class,
+			new VoorkeurCommissie(),
+			[
+				'action' => $this->generateUrl(
+					'csrdelft_commissievoorkeuren_nieuwecommissie'
+				),
+			]
+		);
 		return $this->render('commissievoorkeuren/overzicht.html.twig', [
 			'categorien' => $this->voorkeurCommissieRepository->getByCategorie(),
 			'commissieFormulier' => $commissieFormulier->createView(),
@@ -228,14 +282,14 @@ class CommissieVoorkeurenController extends AbstractController
 	 * @Route("/commissievoorkeuren/verwijdercategorie/{id}", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
-	public function verwijdercategorie(VoorkeurCommissieCategorie $categorie): RedirectResponse
-	{
+	public function verwijdercategorie(
+		VoorkeurCommissieCategorie $categorie
+	): RedirectResponse {
 		if (count($categorie->commissies) == 0) {
 			$manager = $this->getDoctrine()->getManager();
 			$manager->remove($categorie);
 			$manager->flush();
 			setMelding("Categorie '{$categorie->naam}' succesvol verwijderd", 1);
-
 		} else {
 			setMelding('Kan categorie niet verwijderen: is niet leeg', 2);
 		}
@@ -251,9 +305,13 @@ class CommissieVoorkeurenController extends AbstractController
 	 */
 	public function lidpagina(Profiel $profiel): Response
 	{
-		$voorkeuren = $this->commissieVoorkeurRepository->getVoorkeurenVoorLid($profiel);
+		$voorkeuren = $this->commissieVoorkeurRepository->getVoorkeurenVoorLid(
+			$profiel
+		);
 		$voorkeurenMap = [];
-		$commissies = $this->voorkeurCommissieRepository->findBy(['zichtbaar' => 'true']);
+		$commissies = $this->voorkeurCommissieRepository->findBy([
+			'zichtbaar' => 'true',
+		]);
 		foreach ($commissies as $commissie) {
 			$voorkeurenMap[$commissie->id] = null;
 		}
@@ -261,17 +319,26 @@ class CommissieVoorkeurenController extends AbstractController
 			$voorkeurenMap[$voorkeur->cid] = $voorkeur;
 		}
 
-		$opmerking = $this->voorkeurOpmerkingRepository->getOpmerkingVoorLid($profiel);
+		$opmerking = $this->voorkeurOpmerkingRepository->getOpmerkingVoorLid(
+			$profiel
+		);
 
-		$commissieVoorkeurPraesesOpmerkingForm = $this->createForm(CommissieVoorkeurPraesesOpmerkingType::class, $opmerking, [
-			'action' => $this->generateUrl('csrdelft_commissievoorkeuren_lidpaginaopmerking', ['uid' => $profiel->uid]),
-		]);
+		$commissieVoorkeurPraesesOpmerkingForm = $this->createForm(
+			CommissieVoorkeurPraesesOpmerkingType::class,
+			$opmerking,
+			[
+				'action' => $this->generateUrl(
+					'csrdelft_commissievoorkeuren_lidpaginaopmerking',
+					['uid' => $profiel->uid]
+				),
+			]
+		);
 		return $this->render('commissievoorkeuren/profiel.html.twig', [
 			'profiel' => $profiel,
 			'voorkeuren' => $voorkeurenMap,
 			'commissies' => $commissies,
 			'lidOpmerking' => $opmerking->lidOpmerking,
-			'opmerkingForm' => $commissieVoorkeurPraesesOpmerkingForm->createView()
+			'opmerkingForm' => $commissieVoorkeurPraesesOpmerkingForm->createView(),
 		]);
 	}
 
@@ -283,16 +350,26 @@ class CommissieVoorkeurenController extends AbstractController
 	 * @Auth({"bestuur",P_ADMIN})
 	 * @CsrfUnsafe
 	 */
-	public function lidpaginaopmerking(Request $request, $uid, VoorkeurOpmerking $opmerking = null): RedirectResponse
-	{
+	public function lidpaginaopmerking(
+		Request $request,
+		$uid,
+		VoorkeurOpmerking $opmerking = null
+	): RedirectResponse {
 		if (!$opmerking) {
 			$opmerking = new VoorkeurOpmerking();
 			$opmerking->uid = $uid;
 		}
 
-		$form = $this->createForm(CommissieVoorkeurPraesesOpmerkingType::class, $opmerking, [
-			'action' => $this->generateUrl('csrdelft_commissievoorkeuren_lidpaginaopmerking', ['uid' => $uid]),
-		]);
+		$form = $this->createForm(
+			CommissieVoorkeurPraesesOpmerkingType::class,
+			$opmerking,
+			[
+				'action' => $this->generateUrl(
+					'csrdelft_commissievoorkeuren_lidpaginaopmerking',
+					['uid' => $uid]
+				),
+			]
+		);
 
 		$form->handleRequest($request);
 
@@ -302,6 +379,8 @@ class CommissieVoorkeurenController extends AbstractController
 			$manager->flush();
 		}
 
-		return $this->redirectToRoute('csrdelft_commissievoorkeuren_lidpagina', ['uid' => $uid]);
+		return $this->redirectToRoute('csrdelft_commissievoorkeuren_lidpagina', [
+			'uid' => $uid,
+		]);
 	}
 }

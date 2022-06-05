@@ -20,8 +20,10 @@ class BbTextType extends AbstractType
 	 */
 	private $prosemirrorToBb;
 
-	public function __construct(BbToProsemirror $bbToProsemirror, ProsemirrorToBb $prosemirrorToBb)
-	{
+	public function __construct(
+		BbToProsemirror $bbToProsemirror,
+		ProsemirrorToBb $prosemirrorToBb
+	) {
 		$this->bbToProsemirror = $bbToProsemirror;
 		$this->prosemirrorToBb = $prosemirrorToBb;
 	}
@@ -33,13 +35,18 @@ class BbTextType extends AbstractType
 
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-		$builder->addModelTransformer(new CallbackTransformer(
-			function ($bbcode) {
-				return json_encode($this->bbToProsemirror->toProseMirror($bbcode), JSON_HEX_QUOT);
-			},
-			function ($data) {
-				return $this->prosemirrorToBb->convertToBb(json_decode($data));
-			}
-		));
+		$builder->addModelTransformer(
+			new CallbackTransformer(
+				function ($bbcode) {
+					return json_encode(
+						$this->bbToProsemirror->toProseMirror($bbcode),
+						JSON_HEX_QUOT
+					);
+				},
+				function ($data) {
+					return $this->prosemirrorToBb->convertToBb(json_decode($data));
+				}
+			)
+		);
 	}
 }

@@ -16,8 +16,10 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method VoorkeurVoorkeur[]    findAll()
  * @method VoorkeurVoorkeur[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CommissieVoorkeurRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+class CommissieVoorkeurRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, VoorkeurVoorkeur::class);
 	}
 
@@ -25,7 +27,8 @@ class CommissieVoorkeurRepository extends AbstractRepository {
 	 * @param Profiel $profiel
 	 * @return VoorkeurVoorkeur[]|false
 	 */
-	public function getVoorkeurenVoorLid(Profiel $profiel) {
+	public function getVoorkeurenVoorLid(Profiel $profiel)
+	{
 		return $this->findBy(['uid' => $profiel->uid]);
 	}
 
@@ -34,11 +37,17 @@ class CommissieVoorkeurRepository extends AbstractRepository {
 	 * @param int $minVoorkeurWaarde
 	 * @return VoorkeurVoorkeur[]|false
 	 */
-	public function getVoorkeurenVoorCommissie(VoorkeurCommissie $commissie, int $minVoorkeurWaarde = 1) {
+	public function getVoorkeurenVoorCommissie(
+		VoorkeurCommissie $commissie,
+		int $minVoorkeurWaarde = 1
+	) {
 		$qb = $this->createQueryBuilder('v');
 		$qb->andWhere('v.cid = :cid');
 		$qb->andWhere('v.voorkeur >= :minVoorkeur');
-		$qb->setParameters(['cid' => $commissie->id, 'minVoorkeur' => $minVoorkeurWaarde]);
+		$qb->setParameters([
+			'cid' => $commissie->id,
+			'minVoorkeur' => $minVoorkeurWaarde,
+		]);
 
 		return $qb->getQuery()->getResult();
 	}
@@ -48,7 +57,8 @@ class CommissieVoorkeurRepository extends AbstractRepository {
 	 * @param VoorkeurCommissie $commissie
 	 * @return VoorkeurVoorkeur|null
 	 */
-	public function getVoorkeur(Profiel $profiel, VoorkeurCommissie $commissie) {
+	public function getVoorkeur(Profiel $profiel, VoorkeurCommissie $commissie)
+	{
 		$voorkeur = $this->find(['uid' => $profiel->uid, 'cid' => $commissie->id]);
 		if ($voorkeur == null) {
 			$voorkeur = new VoorkeurVoorkeur();
@@ -60,5 +70,4 @@ class CommissieVoorkeurRepository extends AbstractRepository {
 		}
 		return $voorkeur;
 	}
-
 }

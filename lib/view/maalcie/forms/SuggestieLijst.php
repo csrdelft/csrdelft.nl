@@ -10,8 +10,8 @@ use CsrDelft\view\ToResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
-class SuggestieLijst implements ToResponse, FormElement {
-
+class SuggestieLijst implements ToResponse, FormElement
+{
 	/**
 	 * @var CorveePuntenOverzichtDTO[]
 	 */
@@ -42,7 +42,10 @@ class SuggestieLijst implements ToResponse, FormElement {
 		}
 
 		if ($taak->corveeFunctie->kwalificatie_benodigd) {
-			$this->voorkeur = instelling('corvee', 'suggesties_voorkeur_kwali_filter');
+			$this->voorkeur = instelling(
+				'corvee',
+				'suggesties_voorkeur_kwali_filter'
+			);
 			$this->recent = instelling('corvee', 'suggesties_recent_kwali_filter');
 		} else {
 			$this->voorkeur = instelling('corvee', 'suggesties_voorkeur_filter');
@@ -51,30 +54,39 @@ class SuggestieLijst implements ToResponse, FormElement {
 		$this->twig = $twig;
 	}
 
-	public function getHtml() {
-		return $this->twig->render('maaltijden/corveetaak/suggesties_lijst.html.twig', [
-			'suggesties' => $this->suggesties,
-			'jongsteLichting' => LichtingenRepository::getJongsteLidjaar(),
-			'voorkeur' => $this->voorkeur,
-			'recent' => $this->recent,
-			'voorkeurbaar' => $this->voorkeurbaar,
-			'kwalificatie_benodigd' => $this->taak->corveeFunctie->kwalificatie_benodigd,
-		]);
+	public function getHtml()
+	{
+		return $this->twig->render(
+			'maaltijden/corveetaak/suggesties_lijst.html.twig',
+			[
+				'suggesties' => $this->suggesties,
+				'jongsteLichting' => LichtingenRepository::getJongsteLidjaar(),
+				'voorkeur' => $this->voorkeur,
+				'recent' => $this->recent,
+				'voorkeurbaar' => $this->voorkeurbaar,
+				'kwalificatie_benodigd' =>
+					$this->taak->corveeFunctie->kwalificatie_benodigd,
+			]
+		);
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		return $this->getHtml();
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return $this->getType();
 	}
 
-	public function getType() {
+	public function getType()
+	{
 		return get_class($this);
 	}
 
-	public function getJavascript() {
+	public function getJavascript()
+	{
 		$js = <<<JS
 
 /* {$this->getTitel()} */
@@ -90,15 +102,18 @@ JS;
 		return $js;
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->suggesties;
 	}
 
-	public function toResponse(): Response {
+	public function toResponse(): Response
+	{
 		return new Response($this->getHtml());
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return '';
 	}
 }

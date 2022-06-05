@@ -14,7 +14,8 @@ use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiForumController extends AbstractController {
+class ApiForumController extends AbstractController
+{
 	private $forumDradenRepository;
 	private $forumPostsRepository;
 	/**
@@ -26,11 +27,12 @@ class ApiForumController extends AbstractController {
 	 */
 	private $forumDelenService;
 
-	public function __construct(ForumDradenGelezenRepository $forumDradenGelezenRepository,
-															ForumDelenService $forumDelenService,
-															ForumPostsRepository         $forumPostsRepository,
-															ForumDradenRepository        $forumDradenRepository)
-	{
+	public function __construct(
+		ForumDradenGelezenRepository $forumDradenGelezenRepository,
+		ForumDelenService $forumDelenService,
+		ForumPostsRepository $forumPostsRepository,
+		ForumDradenRepository $forumDradenRepository
+	) {
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->forumDradenRepository = $forumDradenRepository;
@@ -42,19 +44,30 @@ class ApiForumController extends AbstractController {
 	 * @Auth(P_OUDLEDEN_READ)
 	 * @return JsonResponse
 	 */
-	public function getRecent() {
+	public function getRecent()
+	{
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
 
-		$draden = $this->forumDelenService->getRecenteForumDraden($limit, null, false, $offset);
+		$draden = $this->forumDelenService->getRecenteForumDraden(
+			$limit,
+			null,
+			false,
+			$offset
+		);
 
 		foreach ($draden as $draad) {
 			$draad->ongelezen = $draad->getAantalOngelezenPosts();
-			$draad->laatste_post = $this->forumPostsRepository->get($draad->laatste_post_id);
-			$draad->laatste_wijziging_naam = ProfielRepository::getNaam($draad->laatste_wijziging_uid, 'civitas');
+			$draad->laatste_post = $this->forumPostsRepository->get(
+				$draad->laatste_post_id
+			);
+			$draad->laatste_wijziging_naam = ProfielRepository::getNaam(
+				$draad->laatste_wijziging_uid,
+				'civitas'
+			);
 		}
 
-		return new JsonResponse(array('data' => array_values($draden)));
+		return new JsonResponse(['data' => array_values($draden)]);
 	}
 
 	/**
@@ -64,12 +77,13 @@ class ApiForumController extends AbstractController {
 	 * @param int limit
 	 * @return JsonResponse
 	 */
-	public function getOnderwerp($id) {
+	public function getOnderwerp($id)
+	{
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
 
 		try {
-			$draad = $this->forumDradenRepository->get((int)$id);
+			$draad = $this->forumDradenRepository->get((int) $id);
 		} catch (Exception $e) {
 			throw $this->createNotFoundException();
 		}
@@ -78,9 +92,17 @@ class ApiForumController extends AbstractController {
 			throw $this->createAccessDeniedException();
 		}
 
-		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, date_create_immutable());
+		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid(
+			$draad,
+			date_create_immutable()
+		);
 
-		$posts = $this->forumPostsRepository->findBy(['draad_id' => $id, 'wacht_goedkeuring' => false, 'verwijderd' => false], ['datum_tijd' => 'DESC'], $limit, $offset);
+		$posts = $this->forumPostsRepository->findBy(
+			['draad_id' => $id, 'wacht_goedkeuring' => false, 'verwijderd' => false],
+			['datum_tijd' => 'DESC'],
+			$limit,
+			$offset
+		);
 
 		// Most recent first
 		$posts = array_reverse($posts);
@@ -90,7 +112,6 @@ class ApiForumController extends AbstractController {
 			$post->tekst = CsrBB::parseLight($post->tekst);
 		}
 
-		return new JsonResponse(array('data' => $posts));
+		return new JsonResponse(['data' => $posts]);
 	}
-
 }

@@ -2,14 +2,12 @@
 
 namespace CsrDelft\repository\corvee;
 
-
 use CsrDelft\entity\corvee\CorveeVrijstelling;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
 use DateTimeInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Throwable;
-
 
 /**
  * @author P.W.G. Brussee (brussee@live.nl)
@@ -19,13 +17,19 @@ use Throwable;
  * @method CorveeVrijstelling[]    findAll()
  * @method CorveeVrijstelling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CorveeVrijstellingenRepository extends AbstractRepository {
-
-	public function __construct(ManagerRegistry $registry) {
+class CorveeVrijstellingenRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, CorveeVrijstelling::class);
 	}
 
-	public function nieuw($profiel = null, $begin = null, $eind = null, $percentage = 0) {
+	public function nieuw(
+		$profiel = null,
+		$begin = null,
+		$eind = null,
+		$percentage = 0
+	) {
 		$vrijstelling = new CorveeVrijstelling();
 		$vrijstelling->profiel = $profiel;
 		$vrijstelling->uid = $profiel->uid ?? null;
@@ -38,14 +42,17 @@ class CorveeVrijstellingenRepository extends AbstractRepository {
 		}
 		$vrijstelling->eind_datum = $eind;
 		if ($percentage === null) {
-			$percentage = intval(instelling('corvee', 'standaard_vrijstelling_percentage'));
+			$percentage = intval(
+				instelling('corvee', 'standaard_vrijstelling_percentage')
+			);
 		}
 		$vrijstelling->percentage = $percentage;
 
 		return $vrijstelling;
 	}
 
-	public function getAlleVrijstellingen($groupByUid = false) {
+	public function getAlleVrijstellingen($groupByUid = false)
+	{
 		$vrijstellingen = $this->findAll();
 		if ($groupByUid) {
 			$vrijstellingenByUid = [];
@@ -61,7 +68,8 @@ class CorveeVrijstellingenRepository extends AbstractRepository {
 	 * @param $uid
 	 * @return CorveeVrijstelling|null
 	 */
-	public function getVrijstelling($uid) {
+	public function getVrijstelling($uid)
+	{
 		return $this->find($uid);
 	}
 
@@ -73,8 +81,18 @@ class CorveeVrijstellingenRepository extends AbstractRepository {
 	 * @return CorveeVrijstelling
 	 * @throws Throwable
 	 */
-	public function saveVrijstelling($profiel, DateTimeInterface $begin, DateTimeInterface $eind, $percentage) {
-		return $this->_em->transactional(function () use ($profiel, $begin, $eind, $percentage) {
+	public function saveVrijstelling(
+		$profiel,
+		DateTimeInterface $begin,
+		DateTimeInterface $eind,
+		$percentage
+	) {
+		return $this->_em->transactional(function () use (
+			$profiel,
+			$begin,
+			$eind,
+			$percentage
+		) {
 			$vrijstelling = $this->getVrijstelling($profiel->uid);
 
 			if (!$vrijstelling) {
@@ -91,11 +109,13 @@ class CorveeVrijstellingenRepository extends AbstractRepository {
 		});
 	}
 
-	public function verwijderVrijstelling($uid) {
+	public function verwijderVrijstelling($uid)
+	{
 		$this->createQueryBuilder('v')
 			->delete()
 			->where('v.uid = :uid')
 			->setParameter('uid', $uid)
-			->getQuery()->execute();
+			->getQuery()
+			->execute();
 	}
 }

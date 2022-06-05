@@ -26,7 +26,8 @@ use Doctrine\ORM\Mapping\ClassMetadata;
  * @see http://www.datatables.net/
  *
  */
-class DataTable implements View, FormElement, ToResponse {
+class DataTable implements View, FormElement, ToResponse
+{
 	use ToHtmlResponse;
 	const POST_SELECTION = 'DataTableSelection';
 
@@ -44,35 +45,44 @@ class DataTable implements View, FormElement, ToResponse {
 				'exportOptions' => [
 					'columns' => ':visible',
 					'orthogonal' => 'export',
-				]
-			], [
+				],
+			],
+			[
 				'extend' => 'csv',
 				'exportOptions' => [
 					'columns' => ':visible',
 					'orthogonal' => 'export',
-				]
-			], [
+				],
+			],
+			[
 				'extend' => 'excel',
 				'exportOptions' => [
 					'columns' => ':visible',
 					'orthogonal' => 'export',
 				],
-			], [
+			],
+			[
 				'extend' => 'print',
 				'exportOptions' => [
 					'columns' => ':visible',
 					'orthogonal' => 'export',
-				]
-			]
+				],
+			],
 		],
 		'userButtons' => [],
 		'rowButtons' => [],
 	];
 
-	private $columns = array();
+	private $columns = [];
 	private $groupByColumn;
 
-	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null, $loadColumns = true) {
+	public function __construct(
+		$orm,
+		$dataUrl,
+		$titel = false,
+		$groupByColumn = null,
+		$loadColumns = true
+	) {
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
@@ -85,15 +95,15 @@ class DataTable implements View, FormElement, ToResponse {
 		}
 
 		// create group expand / collapse column
-		$this->columns['details'] = array(
+		$this->columns['details'] = [
 			'name' => 'details',
 			'data' => 'details',
 			'title' => '',
 			'type' => 'string',
 			'orderable' => false,
 			'searchable' => false,
-			'defaultContent' => ''
-		);
+			'defaultContent' => '',
+		];
 
 		if ($loadColumns) {
 			$this->loadColumns($orm);
@@ -103,11 +113,13 @@ class DataTable implements View, FormElement, ToResponse {
 	/**
 	 * @return string
 	 */
-	public function getDataTableId() {
+	public function getDataTableId()
+	{
 		return $this->dataTableId;
 	}
 
-	public function setSearch($searchString) {
+	public function setSearch($searchString)
+	{
 		$this->settings['search'] = ['search' => $searchString];
 	}
 
@@ -126,13 +138,17 @@ class DataTable implements View, FormElement, ToResponse {
 				$this->hideColumn($attribute);
 			}
 		} else {
-			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
+			$manager = ContainerFacade::getContainer()
+				->get('doctrine')
+				->getManager();
 			/** @var ClassMetadata $metadata */
 			$metadata = $manager->getClassMetaData($orm);
 
 			// generate columns from entity attributes
 			foreach ($metadata->getFieldNames() as $attribute) {
-				$type = Type::getTypeRegistry()->get($metadata->getTypeOfField($attribute));
+				$type = Type::getTypeRegistry()->get(
+					$metadata->getTypeOfField($attribute)
+				);
 				$columnName = $metadata->getColumnName($attribute);
 				if ($type instanceof DateTimeImmutableType) {
 					$this->addColumn($columnName, null, null, CellRender::DateTime());
@@ -153,23 +169,27 @@ class DataTable implements View, FormElement, ToResponse {
 	/**
 	 * @param DataTableKnop $knop
 	 */
-	protected function addKnop(DataTableKnop $knop) {
+	protected function addKnop(DataTableKnop $knop)
+	{
 		$knop->setDataTableId($this->dataTableId);
 		$this->settings['userButtons'][] = $knop;
 	}
 
-	protected function addRowKnop(DataTableRowKnop $knop) {
+	protected function addRowKnop(DataTableRowKnop $knop)
+	{
 		$this->settings['rowButtons'][] = $knop;
 	}
 
-	protected function columnPosition($name) {
+	protected function columnPosition($name)
+	{
 		return array_search($name, array_keys($this->columns));
 	}
 
-	protected function setOrder($names) {
+	protected function setOrder($names)
+	{
 		$orders = [];
 		foreach ($names as $name => $order) {
-			$orders[] = array($this->columnPosition($name), $order);
+			$orders[] = [$this->columnPosition($name), $order];
 		}
 		$this->settings['order'] = $orders;
 	}
@@ -183,25 +203,33 @@ class DataTable implements View, FormElement, ToResponse {
 	 * @param CellType|null $type
 	 * @param string|null $data The data source for the column. Defaults to the column name.
 	 */
-	protected function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null, $data = null) {
+	protected function addColumn(
+		$newName,
+		$before = null,
+		$defaultContent = null,
+		CellRender $render = null,
+		$order_by = null,
+		CellType $type = null,
+		$data = null
+	) {
 		$type = $type ?: CellType::String();
 		$render = $render ?: CellRender::Default();
 
 		// column definition
-		$newColumn = array(
+		$newColumn = [
 			'name' => $newName,
 			'data' => $data ?? $newName,
 			'title' => ucfirst(str_replace('_', ' ', $newName)),
 			'defaultContent' => $defaultContent,
 			'type' => $type,
 			'searchable' => false,
-			'render' => $render->getChoice()
+			'render' => $render->getChoice(),
 			/*
 			  //TODO: sort by other column
 			  { "iDataSort": 1 },
 			  reldate(getDateTime());
 			 */
-		);
+		];
 		if ($order_by !== null) {
 			$newColumn['orderData'] = $this->columnPosition($order_by);
 		}
@@ -209,7 +237,7 @@ class DataTable implements View, FormElement, ToResponse {
 		if ($before === null) {
 			$this->columns[$newName] = $newColumn;
 		} else {
-			$array = array();
+			$array = [];
 			foreach ($this->columns as $name => $column) {
 				if ($name == $before) {
 					$array[$newName] = $newColumn;
@@ -229,7 +257,8 @@ class DataTable implements View, FormElement, ToResponse {
 	 *
 	 * @param string $name
 	 */
-	protected function deleteColumn($name) {
+	protected function deleteColumn($name)
+	{
 		if (isset($this->columns[$name])) {
 			array_splice($this->columns, $this->columnPosition($name), 1);
 		}
@@ -239,7 +268,8 @@ class DataTable implements View, FormElement, ToResponse {
 	 * @param string $name
 	 * @param bool $hide
 	 */
-	protected function hideColumn($name, $hide = true) {
+	protected function hideColumn($name, $hide = true)
+	{
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['visible'] = !$hide;
 		}
@@ -249,9 +279,10 @@ class DataTable implements View, FormElement, ToResponse {
 	 * @param string $name
 	 * @param bool $searchable
 	 */
-	protected function searchColumn($name, $searchable = true) {
+	protected function searchColumn($name, $searchable = true)
+	{
 		if (isset($this->columns[$name])) {
-			$this->columns[$name]['searchable'] = (boolean)$searchable;
+			$this->columns[$name]['searchable'] = (bool) $searchable;
 		}
 	}
 
@@ -259,13 +290,15 @@ class DataTable implements View, FormElement, ToResponse {
 	 * @param string $name
 	 * @param string $title
 	 */
-	protected function setColumnTitle($name, $title) {
+	protected function setColumnTitle($name, $title)
+	{
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['title'] = $title;
 		}
 	}
 
-	protected function getSettings() {
+	protected function getSettings()
+	{
 		$settings = $this->settings;
 
 		// set view modus: paging or scrolling
@@ -281,14 +314,14 @@ class DataTable implements View, FormElement, ToResponse {
 
 		// set ajax url
 		if ($this->dataUrl) {
-			$settings['ajax'] = array(
+			$settings['ajax'] = [
 				'url' => $this->dataUrl,
 				'type' => 'POST',
-				'data' => array(
-					'lastUpdate' => '' // Overridden in datatable.js
-				),
-				'dataSrc' => '' // Overriden in datatable.js
-			);
+				'data' => [
+					'lastUpdate' => '', // Overridden in datatable.js
+				],
+				'dataSrc' => '', // Overriden in datatable.js
+			];
 		}
 
 		// group by column
@@ -299,9 +332,7 @@ class DataTable implements View, FormElement, ToResponse {
 
 			$groupByColumnPosition = $this->columnPosition($this->groupByColumn);
 			$settings['columnGroup'] = ['column' => $groupByColumnPosition];
-			$settings['orderFixed'] = [
-				[$groupByColumnPosition, 'asc']
-			];
+			$settings['orderFixed'] = [[$groupByColumnPosition, 'asc']];
 		}
 
 		if (count($settings['rowButtons']) > 0) {
@@ -321,12 +352,12 @@ class DataTable implements View, FormElement, ToResponse {
 		$visibleIndex = 0;
 		foreach ($this->columns as $name => $def) {
 			if (!isset($def['visible']) || $def['visible'] === true) {
-
 				// default order by first visible orderable column
-				if (!isset($settings['order']) && !(isset($def['orderable']) && $def['orderable'] === false)) {
-					$settings['order'] = array(
-						array($index, 'asc')
-					);
+				if (
+					!isset($settings['order']) &&
+					!(isset($def['orderable']) && $def['orderable'] === false)
+				) {
+					$settings['order'] = [[$index, 'asc']];
 				}
 
 				$visibleIndex++;
@@ -338,38 +369,49 @@ class DataTable implements View, FormElement, ToResponse {
 		$settings['columns'] = array_values($this->columns);
 
 		// Voeg nieuwe knoppen toe
-		$settings['buttons'] = array_merge($settings['userButtons'], $settings['buttons']);
+		$settings['buttons'] = array_merge(
+			$settings['userButtons'],
+			$settings['buttons']
+		);
 
 		return $settings;
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		return $this->getHtml();
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return $this->titel;
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return $this->titel;
 	}
 
 	/**
 	 * Hiermee wordt gepoogt af te dwingen dat een view een model heeft om te tonen
 	 */
-	public function getModel() {
+	public function getModel()
+	{
 		return null;
 	}
 
-	public function getType() {
+	public function getType()
+	{
 		return classNameZonderNamespace(get_class($this));
 	}
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		$id = str_replace(' ', '-', strtolower($this->getTitel()));
 
-		$settingsJson = htmlspecialchars(json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0));
+		$settingsJson = htmlspecialchars(
+			json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0)
+		);
 		$vliegendeKnoppenClass = $this->vliegendeKnoppen ? 'vliegende-knoppen' : '';
 
 		return <<<HTML
@@ -379,8 +421,9 @@ class DataTable implements View, FormElement, ToResponse {
 HTML;
 	}
 
-	public function getJavascript() {
+	public function getJavascript()
+	{
 		//Nothing should be returned here because the script is already embedded in getView
-		return "";
+		return '';
 	}
 }

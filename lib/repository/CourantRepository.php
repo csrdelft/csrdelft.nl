@@ -21,26 +21,31 @@ use Symfony\Component\Security\Core\Security;
  * @method Courant[]    findAll()
  * @method Courant[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CourantRepository extends AbstractRepository {
+class CourantRepository extends AbstractRepository
+{
 	/**
 	 * @var Security
 	 */
 	private $security;
 
-	public function __construct(ManagerRegistry $registry, Security $security) {
+	public function __construct(ManagerRegistry $registry, Security $security)
+	{
 		parent::__construct($registry, Courant::class);
 		$this->security = $security;
 	}
 
-	public function magBeheren() {
+	public function magBeheren()
+	{
 		return LoginService::mag(P_MAIL_COMPOSE);
 	}
 
-	public function magVerzenden() {
+	public function magVerzenden()
+	{
 		return LoginService::mag(P_MAIL_SEND);
 	}
 
-	public function nieuwCourant() {
+	public function nieuwCourant()
+	{
 		$courant = new Courant();
 		$courant->verzendMoment = new DateTime();
 		$courant->verzender_profiel = $this->security->getUser()->profiel;
@@ -49,7 +54,8 @@ class CourantRepository extends AbstractRepository {
 		return $courant;
 	}
 
-	public function verzenden($email, $inhoud) {
+	public function verzenden($email, $inhoud)
+	{
 		$csrMailPassword = $_ENV['CSRMAIL_PASSWORD'];
 		$datum = date_format_intl(date_create_immutable(), 'd MMMM y');
 		$headers = <<<HEAD
@@ -76,8 +82,8 @@ HEAD;
 		fwrite($smtp, "MAIL FROM:<pubcie@csrdelft.nl>\r\n");
 		$response .= htmlspecialchars("MAIL FROM:<pubcie@csrdelft.nl>\r\n");
 		$response .= fread($smtp, 1024);
-		fwrite($smtp, "RCPT TO:<" . $email . ">\r\n");
-		$response .= htmlspecialchars("RCPT TO:<" . $email . ">\r\n");
+		fwrite($smtp, 'RCPT TO:<' . $email . ">\r\n");
+		$response .= htmlspecialchars('RCPT TO:<' . $email . ">\r\n");
 		$response .= fread($smtp, 1024);
 		fwrite($smtp, "DATA\r\n");
 		$response .= htmlspecialchars("DATA\r\n");

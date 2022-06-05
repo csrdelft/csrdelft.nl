@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\controller\security;
-
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
@@ -105,7 +103,9 @@ class RemoteLoginController extends AbstractController
 			$remoteLogin->status = RemoteLoginStatus::EXPIRED();
 		}
 
-		$this->getDoctrine()->getManager()->flush();
+		$this->getDoctrine()
+			->getManager()
+			->flush();
 
 		return $this->json($remoteLogin, 200, [], ['groups' => ['json']]);
 	}
@@ -116,10 +116,13 @@ class RemoteLoginController extends AbstractController
 	 * @Route("/rla/{uuid}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function remoteLoginAuthorizeRedirect($uuid) : Response
+	public function remoteLoginAuthorizeRedirect($uuid): Response
 	{
 		return new RedirectResponse(
-			$this->generateUrl('csrdelft_security_remotelogin_remoteloginauthorize', ['uuid' => $uuid]));
+			$this->generateUrl('csrdelft_security_remotelogin_remoteloginauthorize', [
+				'uuid' => $uuid,
+			])
+		);
 	}
 
 	/**
@@ -130,22 +133,32 @@ class RemoteLoginController extends AbstractController
 	 */
 	public function remoteLoginAuthorize($uuid): Response
 	{
-		$remoteLogin = $this->remoteLoginRepository->findOneBy(['uuid' => Uuid::fromString($uuid)]);
+		$remoteLogin = $this->remoteLoginRepository->findOneBy([
+			'uuid' => Uuid::fromString($uuid),
+		]);
 
 		if (!$remoteLogin) {
 			throw $this->createNotFoundException();
 		}
 
 		if (RemoteLoginStatus::isEXPIRED($remoteLogin->status)) {
-			throw new CsrGebruikerException("Deze link is verlopen! Probeer een nieuwe link");
+			throw new CsrGebruikerException(
+				'Deze link is verlopen! Probeer een nieuwe link'
+			);
 		}
 
 		$remoteLogin->status = RemoteLoginStatus::ACTIVE();
-		$remoteLogin->expires = date_create_immutable()->add(new DateInterval('PT3M'));
+		$remoteLogin->expires = date_create_immutable()->add(
+			new DateInterval('PT3M')
+		);
 
-		$this->getDoctrine()->getManager()->flush();
+		$this->getDoctrine()
+			->getManager()
+			->flush();
 
-		return $this->render('security/remote_login_authorize.html.twig', ['uuid' => $uuid]);
+		return $this->render('security/remote_login_authorize.html.twig', [
+			'uuid' => $uuid,
+		]);
 	}
 
 	/**
@@ -157,7 +170,9 @@ class RemoteLoginController extends AbstractController
 	 */
 	public function remoteLoginAuthorizePost(Request $request, $uuid): Response
 	{
-		$remoteLogin = $this->remoteLoginRepository->findOneBy(['uuid' => Uuid::fromString($uuid)]);
+		$remoteLogin = $this->remoteLoginRepository->findOneBy([
+			'uuid' => Uuid::fromString($uuid),
+		]);
 
 		if (!$remoteLogin) {
 			throw $this->createNotFoundException();
@@ -165,17 +180,22 @@ class RemoteLoginController extends AbstractController
 
 		if ($request->request->has('cancel')) {
 			$remoteLogin->status = RemoteLoginStatus::REJECTED();
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 
 			return $this->redirectToRoute('default');
 		} else {
 			$remoteLogin->status = RemoteLoginStatus::ACCEPTED();
 			$remoteLogin->account = $this->getUser();
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 		}
 
-
-		return $this->redirectToRoute('csrdelft_security_remotelogin_remoteloginauthorizesuccess');
+		return $this->redirectToRoute(
+			'csrdelft_security_remotelogin_remoteloginauthorizesuccess'
+		);
 	}
 
 	/**
@@ -194,8 +214,11 @@ class RemoteLoginController extends AbstractController
 	 * @Auth(P_PUBLIC)
 	 * @see RemoteLoginAuthenticator
 	 */
-	public function remoteLoginFinal(): Response {
-		throw new LogicException("Moet opgevangen worden door RemoteLoginAuthenticator");
+	public function remoteLoginFinal(): Response
+	{
+		throw new LogicException(
+			'Moet opgevangen worden door RemoteLoginAuthenticator'
+		);
 	}
 
 	/**
@@ -221,7 +244,8 @@ class RemoteLoginController extends AbstractController
 			->errorCorrectionLevel(new ErrorCorrectionLevelLow())
 			->build();
 
-		return new Response($result->getString(), 200, ['Content-Type' => $result->getMimeType()]);
+		return new Response($result->getString(), 200, [
+			'Content-Type' => $result->getMimeType(),
+		]);
 	}
-
 }

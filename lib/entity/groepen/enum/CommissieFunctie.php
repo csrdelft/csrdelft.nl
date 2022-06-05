@@ -21,9 +21,9 @@ use CsrDelft\common\Enum;
  * @method static static Archivarus
  * @method static static Statisticus
  * @method static static Fotocommissaris
-*/
-class CommissieFunctie extends Enum {
-
+ */
+class CommissieFunctie extends Enum
+{
 	/**
 	 * Bestuurs functies.
 	 */

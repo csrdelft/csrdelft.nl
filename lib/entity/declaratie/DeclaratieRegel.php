@@ -9,7 +9,8 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 /**
  * @ORM\Entity(repositoryClass=DeclaratieRegelRepository::class)
  */
-class DeclaratieRegel {
+class DeclaratieRegel
+{
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -43,61 +44,73 @@ class DeclaratieRegel {
 	 */
 	private $omschrijving;
 
-	public function getId(): ?int {
+	public function getId(): ?int
+	{
 		return $this->id;
 	}
 
-	public function getBon(): ?DeclaratieBon {
+	public function getBon(): ?DeclaratieBon
+	{
 		return $this->bon;
 	}
 
-	public function setBon(?DeclaratieBon $bon): self {
+	public function setBon(?DeclaratieBon $bon): self
+	{
 		$this->bon = $bon;
 
 		return $this;
 	}
 
-	public function getBedrag(): ?float {
+	public function getBedrag(): ?float
+	{
 		return $this->bedrag;
 	}
 
-	public function setBedrag(?float $bedrag): self {
+	public function setBedrag(?float $bedrag): self
+	{
 		$this->bedrag = $bedrag;
 
 		return $this;
 	}
 
-	public function getInclBtw(): ?bool {
+	public function getInclBtw(): ?bool
+	{
 		return $this->inclBtw;
 	}
 
-	public function setInclBtw(?bool $inclBtw): self {
+	public function setInclBtw(?bool $inclBtw): self
+	{
 		$this->inclBtw = $inclBtw;
 
 		return $this;
 	}
 
-	public function getBtw(): ?int {
+	public function getBtw(): ?int
+	{
 		return $this->btw;
 	}
 
-	public function setBtw(?int $btw): self {
+	public function setBtw(?int $btw): self
+	{
 		$this->btw = $btw;
 
 		return $this;
 	}
 
-	public function getOmschrijving(): ?string {
+	public function getOmschrijving(): ?string
+	{
 		return $this->omschrijving;
 	}
 
-	public function setOmschrijving(?string $omschrijving): self {
+	public function setOmschrijving(?string $omschrijving): self
+	{
 		$this->omschrijving = $omschrijving;
 
 		return $this;
 	}
 
-	public function fromParameters(ParameterBag $regelData): self {
+	public function fromParameters(ParameterBag $regelData): self
+	{
 		$this->setOmschrijving(null);
 		if ($regelData->get('omschrijving')) {
 			$this->setOmschrijving($regelData->get('omschrijving'));
@@ -136,7 +149,8 @@ class DeclaratieRegel {
 		return $this;
 	}
 
-	public function getBedragExcl(): float {
+	public function getBedragExcl(): float
+	{
 		if ($this->inclBtw === true) {
 			return $this->bedrag / (1 + $this->btw / 100);
 		} elseif ($this->inclBtw === false) {
@@ -146,15 +160,17 @@ class DeclaratieRegel {
 		}
 	}
 
-	public function getBtwBedrag(): float {
+	public function getBtwBedrag(): float
+	{
 		if ($this->btw) {
-			return $this->getBedragExcl() * $this->btw / 100;
+			return ($this->getBedragExcl() * $this->btw) / 100;
 		} else {
 			return 0;
 		}
 	}
 
-	public function getBedragIncl(): float {
+	public function getBedragIncl(): float
+	{
 		if ($this->inclBtw === false) {
 			return $this->bedrag * (1 + $this->btw / 100);
 		} elseif ($this->inclBtw === true) {
@@ -180,15 +196,18 @@ class DeclaratieRegel {
 		}
 
 		if (!empty($toFill)) {
-			$combined = implode(', ', array_slice($toFill, 0, count($toFill) - 1))
-				. (count($toFill) > 1 ? ' en ' : '') . $toFill[count($toFill) - 1];
+			$combined =
+				implode(', ', array_slice($toFill, 0, count($toFill) - 1)) .
+				(count($toFill) > 1 ? ' en ' : '') .
+				$toFill[count($toFill) - 1];
 			$fouten[] = "Bon $bonIndex, regel $regelIndex: vul $combined in";
 		}
 
 		return $fouten;
 	}
 
-	public function naarObject(): array {
+	public function naarObject(): array
+	{
 		if ($this->btw === 0) {
 			$btw = 'geen: 0%';
 		} elseif ($this->inclBtw === true) {

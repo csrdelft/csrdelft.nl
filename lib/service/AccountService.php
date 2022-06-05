@@ -39,13 +39,14 @@ class AccountService
 	 */
 	private $profielRepository;
 
-	public function __construct(CiviSaldoRepository            $civiSaldoRepository,
-															MenuItemRepository             $menuItemRepository,
-															AccessService                  $accessService,
-															ProfielRepository              $profielRepository,
-															PasswordHasherFactoryInterface $passwordHasherFactory,
-															EntityManagerInterface         $manager)
-	{
+	public function __construct(
+		CiviSaldoRepository $civiSaldoRepository,
+		MenuItemRepository $menuItemRepository,
+		AccessService $accessService,
+		ProfielRepository $profielRepository,
+		PasswordHasherFactoryInterface $passwordHasherFactory,
+		EntityManagerInterface $manager
+	) {
 		$this->civiSaldoRepository = $civiSaldoRepository;
 		$this->menuItemRepository = $menuItemRepository;
 		$this->accessService = $accessService;
@@ -53,7 +54,6 @@ class AccountService
 		$this->passwordHasherFactory = $passwordHasherFactory;
 		$this->profielRepository = $profielRepository;
 	}
-
 
 	/**
 	 * @param string $uid
@@ -91,7 +91,9 @@ class AccountService
 		$account->pass_hash = '';
 		$account->pass_since = null;
 		$account->failed_login_attempts = 0;
-		$account->perm_role = $this->accessService->getDefaultPermissionRole($profiel->status);
+		$account->perm_role = $this->accessService->getDefaultPermissionRole(
+			$profiel->status
+		);
 		$this->manager->persist($account);
 		$this->manager->flush();
 		return $account;
@@ -106,8 +108,11 @@ class AccountService
 	 * @param bool $isVeranderd
 	 * @return bool
 	 */
-	public function wijzigWachtwoord(Account $account, $passPlain, bool $isVeranderd = true)
-	{
+	public function wijzigWachtwoord(
+		Account $account,
+		$passPlain,
+		bool $isVeranderd = true
+	) {
 		if ($passPlain != '') {
 			$account->pass_hash = $this->maakWachtwoord($account, $passPlain);
 			if ($isVeranderd) {
@@ -138,7 +143,9 @@ class AccountService
 	 */
 	public function maakWachtwoord(Account $account, $passPlain)
 	{
-		return $this->passwordHasherFactory->getPasswordHasher($account)->hash($passPlain, $account->getSalt());
+		return $this->passwordHasherFactory
+			->getPasswordHasher($account)
+			->hash($passPlain, $account->getSalt());
 	}
 
 	/**
@@ -148,9 +155,11 @@ class AccountService
 	 * @param string $passPlain
 	 * @return boolean
 	 */
-	public function controleerWachtwoord(UserInterface $account, $passPlain) {
+	public function controleerWachtwoord(UserInterface $account, $passPlain)
+	{
 		// Controleer of het wachtwoord klopt
-		return $this->passwordHasherFactory->getPasswordHasher($account)
+		return $this->passwordHasherFactory
+			->getPasswordHasher($account)
 			->verify($account->getPassword(), $passPlain, $account->getSalt());
 	}
 }

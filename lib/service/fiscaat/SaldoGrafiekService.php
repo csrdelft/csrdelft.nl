@@ -9,7 +9,8 @@ use DateInterval;
 use DateTime;
 use Exception;
 
-class SaldoGrafiekService {
+class SaldoGrafiekService
+{
 	/**
 	 * @var CiviSaldoRepository
 	 */
@@ -19,7 +20,10 @@ class SaldoGrafiekService {
 	 */
 	private $civiBestellingRepository;
 
-	public function __construct(CiviSaldoRepository $civiSaldoRepository, CiviBestellingRepository $civiBestellingRepository) {
+	public function __construct(
+		CiviSaldoRepository $civiSaldoRepository,
+		CiviBestellingRepository $civiBestellingRepository
+	) {
 		$this->civiSaldoRepository = $civiSaldoRepository;
 		$this->civiBestellingRepository = $civiBestellingRepository;
 	}
@@ -30,7 +34,8 @@ class SaldoGrafiekService {
 	 * @return array|null
 	 * @throws Exception
 	 */
-	public function getDataPoints($uid, $timespan) {
+	public function getDataPoints($uid, $timespan)
+	{
 		if (!$this->magGrafiekZien($uid)) {
 			return null;
 		}
@@ -41,25 +46,36 @@ class SaldoGrafiekService {
 		$saldo = $klant->saldo;
 		// Teken het huidige saldo
 		$data = [['t' => date(DateTime::RFC2822), 'y' => $saldo]];
-		$bestellingen = $this->civiBestellingRepository->createQueryBuilder('b')
+		$bestellingen = $this->civiBestellingRepository
+			->createQueryBuilder('b')
 			->where('b.uid = :uid and b.deleted = false and b.moment > :moment')
 			->setParameter('uid', $klant->uid)
-			->setParameter('moment', date_create_immutable()->sub(new DateInterval('P' . $timespan . 'D')))
+			->setParameter(
+				'moment',
+				date_create_immutable()->sub(new DateInterval('P' . $timespan . 'D'))
+			)
 			->orderBy('b.moment', 'DESC')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 
 		foreach ($bestellingen as $bestelling) {
-			$data[] = ['t' => $bestelling->moment->format(DateTime::RFC2822), 'y' => $saldo];
+			$data[] = [
+				't' => $bestelling->moment->format(DateTime::RFC2822),
+				'y' => $saldo,
+			];
 			$saldo += $bestelling->totaal;
 		}
 
 		$row = end($data);
-		$time = date(DateTime::RFC2822, strtotime($timespan - 1 . ' days 23 hours ago'));
-		array_push($data, ["t" => $time, 'y' => $row['y']]);
+		$time = date(
+			DateTime::RFC2822,
+			strtotime($timespan - 1 . ' days 23 hours ago')
+		);
+		array_push($data, ['t' => $time, 'y' => $row['y']]);
 
 		return [
-			"labels" => [$time, date(DateTime::RFC2822)],
-			"datasets" => [
+			'labels' => [$time, date(DateTime::RFC2822)],
+			'datasets' => [
 				[
 					'label' => 'Civisaldo',
 					'steppedLine' => true,
@@ -78,8 +94,10 @@ class SaldoGrafiekService {
 	 * @param string $uid
 	 * @return bool
 	 */
-	public function magGrafiekZien($uid) {
+	public function magGrafiekZien($uid)
+	{
 		//mogen we uberhaupt een grafiek zien?
-		return LoginService::getUid() === $uid || LoginService::mag(P_LEDEN_MOD . ',commissie:SocCie,commissie:MaalCie');
+		return LoginService::getUid() === $uid ||
+			LoginService::mag(P_LEDEN_MOD . ',commissie:SocCie,commissie:MaalCie');
 	}
 }

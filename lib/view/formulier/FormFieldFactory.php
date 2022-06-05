@@ -40,19 +40,21 @@ use Exception;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 15/09/2018
  */
-class FormFieldFactory {
+class FormFieldFactory
+{
 	/**
 	 * @param $model
 	 * @return InputField[]
 	 * @throws Exception
 	 */
-	public static function generateFields($model) {
+	public static function generateFields($model)
+	{
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
 		/** @var ClassMetadata $meta */
 		$meta = $em->getClassMetadata(get_class($model));
 
-		$fields = array();
+		$fields = [];
 		foreach ($meta->getFieldNames() as $fieldName) {
 			$type = Type::getTypeRegistry()->get($meta->getTypeOfField($fieldName));
 			$field = static::getFieldByType($fieldName, $model->$fieldName, $type);
@@ -79,7 +81,12 @@ class FormFieldFactory {
 			$fieldName = $associationMapping['fieldName'];
 
 			if (count($associationMapping['joinColumns']) !== 1) {
-				throw new CsrException('Compound joinColumns worden niet ondersteund voor veld ' . $fieldName . ' in class ' . get_class($model));
+				throw new CsrException(
+					'Compound joinColumns worden niet ondersteund voor veld ' .
+						$fieldName .
+						' in class ' .
+						get_class($model)
+				);
 			}
 
 			unset($fields[$fieldName]);
@@ -89,9 +96,20 @@ class FormFieldFactory {
 			$readableFieldName = ucfirst(str_replace('_', ' ', $fieldName));
 
 			if ($targetEntity == Profiel::class) {
-				$field = new ProfielEntityField($fieldName, $model->$fieldName, $readableFieldName, 'leden');
+				$field = new ProfielEntityField(
+					$fieldName,
+					$model->$fieldName,
+					$readableFieldName,
+					'leden'
+				);
 			} else {
-				$field = new DoctrineEntityField($fieldName, $model->$fieldName, $readableFieldName, $targetEntity, '');
+				$field = new DoctrineEntityField(
+					$fieldName,
+					$model->$fieldName,
+					$readableFieldName,
+					$targetEntity,
+					''
+				);
 			}
 
 			$joinColumn = $associationMapping['joinColumns'][0];
@@ -119,7 +137,8 @@ class FormFieldFactory {
 	 * @return InputField
 	 * @throws Exception
 	 */
-	private static function getFieldByType(string $fieldName, $value, $type) {
+	private static function getFieldByType(string $fieldName, $value, $type)
+	{
 		$desc = ucfirst(str_replace('_', ' ', $fieldName));
 
 		if (str_starts_with($fieldName, 'rechten_')) {
@@ -131,7 +150,12 @@ class FormFieldFactory {
 		}
 
 		if ($type instanceof EnumType) {
-			return new EnumSelectField($fieldName, $value, $desc, $type->getEnumClass());
+			return new EnumSelectField(
+				$fieldName,
+				$value,
+				$desc,
+				$type->getEnumClass()
+			);
 		}
 
 		if ($type instanceof IntegerType) {
@@ -170,6 +194,8 @@ class FormFieldFactory {
 			return new TimeObjectField($fieldName, $value, $desc);
 		}
 
-		throw new CsrException("Kan geef formulier genereren voor veld $fieldName van type $type.");
+		throw new CsrException(
+			"Kan geef formulier genereren voor veld $fieldName van type $type."
+		);
 	}
 }

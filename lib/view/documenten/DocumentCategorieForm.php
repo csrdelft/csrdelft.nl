@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\documenten;
-
 
 use CsrDelft\Component\Formulier\FormulierBuilder;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
@@ -18,15 +16,30 @@ class DocumentCategorieForm implements FormulierTypeInterface
 	 * @param DocumentCategorie $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
-	{
+	public function createFormulier(
+		FormulierBuilder $builder,
+		$data,
+		$options = []
+	) {
 		$builder->setTitel('Categorie bewerken');
 
 		$fields = [];
 		$fields[] = new RequiredTextField('naam', $data->naam, 'Naam');
-		$fields[] = new RequiredCheckboxField('zichtbaar', $data->zichtbaar, 'Zichtbaar');
-		$fields[] = new RequiredRechtenField('leesrechten', $data->leesrechten, 'Leesrechten');
-		$fields[] = new RequiredRechtenField('schrijfrechten', $data->schrijfrechten, 'Schrijfrechten');
+		$fields[] = new RequiredCheckboxField(
+			'zichtbaar',
+			$data->zichtbaar,
+			'Zichtbaar'
+		);
+		$fields[] = new RequiredRechtenField(
+			'leesrechten',
+			$data->leesrechten,
+			'Leesrechten'
+		);
+		$fields[] = new RequiredRechtenField(
+			'schrijfrechten',
+			$data->schrijfrechten,
+			'Schrijfrechten'
+		);
 
 		$builder->addFields($fields);
 	}

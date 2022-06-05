@@ -15,7 +15,8 @@ use Doctrine\ORM\QueryBuilder;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com
  */
-class VerjaardagenService {
+class VerjaardagenService
+{
 	const FILTER_BY_TOESTEMMING = "INNER JOIN lidtoestemmingen t ON T2.uid  = t.uid AND t.waarde = 'ja' AND t.module = 'profiel' AND t.instelling = 'gebdatum'";
 	/**
 	 * @var ProfielRepository
@@ -26,18 +27,31 @@ class VerjaardagenService {
 	 */
 	private $em;
 
-	public function __construct(ProfielRepository $profielRepository, EntityManagerInterface $em) {
+	public function __construct(
+		ProfielRepository $profielRepository,
+		EntityManagerInterface $em
+	) {
 		$this->profielRepository = $profielRepository;
 		$this->em = $em;
 	}
 
-	private function getFilterByToestemmingSql() {
-		return LoginService::mag(P_LEDEN_MOD) ? "" : self::FILTER_BY_TOESTEMMING;
+	private function getFilterByToestemmingSql()
+	{
+		return LoginService::mag(P_LEDEN_MOD) ? '' : self::FILTER_BY_TOESTEMMING;
 	}
 
-	private function getNovietenFilter() {
+	private function getNovietenFilter()
+	{
 		if ($this->em->getFilters()->isEnabled('verbergNovieten')) {
-			$jaar = intval(trim($this->em->getFilters()->getFilter('verbergNovieten')->getParameter('jaar'), "'"));
+			$jaar = intval(
+				trim(
+					$this->em
+						->getFilters()
+						->getFilter('verbergNovieten')
+						->getParameter('jaar'),
+					"'"
+				)
+			);
 			return "AND NOT (STATUS = 'S_NOVIET' AND lidjaar = $jaar)";
 		}
 
@@ -47,7 +61,8 @@ class VerjaardagenService {
 	/**
 	 * @return Profiel[][]
 	 */
-	public function getJaar() {
+	public function getJaar()
+	{
 		return array_map([$this, 'get'], range(1, 12));
 	}
 
@@ -56,10 +71,15 @@ class VerjaardagenService {
 	 *
 	 * @return Profiel[]
 	 */
-	public function get($maand) {
-		$qb = $this->profielRepository->createQueryBuilder('p')
+	public function get($maand)
+	{
+		$qb = $this->profielRepository
+			->createQueryBuilder('p')
 			->where('p.status in (:lidstatus) and MONTH(p.gebdatum) = :maand')
-			->setParameter('lidstatus', array_merge(LidStatus::getLidLike(), [LidStatus::Kringel]))
+			->setParameter(
+				'lidstatus',
+				array_merge(LidStatus::getLidLike(), [LidStatus::Kringel])
+			)
 			->setParameter('maand', $maand)
 			->orderBy('DAY(p.gebdatum)');
 
@@ -67,13 +87,19 @@ class VerjaardagenService {
 			static::filterByToestemming($qb, 'profiel', 'gebdatum');
 		}
 
-		return $qb
-			->getQuery()->getResult();
+		return $qb->getQuery()->getResult();
 	}
 
-	public static function filterByToestemming(QueryBuilder $queryBuilder, $module, $instelling, $profielAlias = 'p') {
+	public static function filterByToestemming(
+		QueryBuilder $queryBuilder,
+		$module,
+		$instelling,
+		$profielAlias = 'p'
+	) {
 		return $queryBuilder
-			->andWhere('t.waarde = \'ja\' and t.module = :t_module and t.instelling = :t_instelling')
+			->andWhere(
+				't.waarde = \'ja\' and t.module = :t_module and t.instelling = :t_instelling'
+			)
 			->setParameter('t_module', $module)
 			->setParameter('t_instelling', $instelling)
 			->join($profielAlias . '.toestemmingen', 't');
@@ -84,12 +110,19 @@ class VerjaardagenService {
 	 *
 	 * @return Profiel[]
 	 */
-	public function getKomende($aantal = 10) {
+	public function getKomende($aantal = 10)
+	{
 		$rsm = new ResultSetMappingBuilder($this->em);
 		$rsm->addRootEntityFromClassMetadata(Profiel::class, 'p');
 		$select = $rsm->generateSelectClause(['p' => 'T2']);
 
-		$lidstatus = "'" . implode("', '", array_merge(LidStatus::getLidLike(), [LidStatus::Kringel])) . "'";
+		$lidstatus =
+			"'" .
+			implode(
+				"', '",
+				array_merge(LidStatus::getLidLike(), [LidStatus::Kringel])
+			) .
+			"'";
 
 		$query = <<<SQL
 SELECT $select, DATEDIFF(volgende_verjaardag, NOW()) AS distance
@@ -107,7 +140,8 @@ ORDER BY distance
 LIMIT :limit
 SQL;
 
-		return $this->em->createNativeQuery($query, $rsm)
+		return $this->em
+			->createNativeQuery($query, $rsm)
 			->setParameter('limit', $aantal)
 			->getResult();
 	}
@@ -122,12 +156,22 @@ SQL;
 	 *
 	 * @return Profiel[]
 	 */
-	public function getTussen(DateTimeInterface $van, DateTimeInterface $tot, $limiet = null) {
+	public function getTussen(
+		DateTimeInterface $van,
+		DateTimeInterface $tot,
+		$limiet = null
+	) {
 		$rsm = new ResultSetMappingBuilder($this->em);
 		$rsm->addRootEntityFromClassMetadata(Profiel::class, 'p');
 
 		$select = $rsm->generateSelectClause(['p' => 'T2']);
-		$lidstatus = "'" . implode("', '", array_merge(LidStatus::getLidLike(), [LidStatus::Kringel])) . "'";
+		$lidstatus =
+			"'" .
+			implode(
+				"', '",
+				array_merge(LidStatus::getLidLike(), [LidStatus::Kringel])
+			) .
+			"'";
 
 		$query = <<<SQL
 SELECT $select
@@ -146,10 +190,11 @@ ORDER BY volgende_verjaardag
 SQL;
 
 		if ($limiet != null) {
-			$query .= "LIMIT " . (int)$limiet;
+			$query .= 'LIMIT ' . (int) $limiet;
 		}
 
-		return $this->em->createNativeQuery($query, $rsm)
+		return $this->em
+			->createNativeQuery($query, $rsm)
 			->setParameter('van_datum', $van)
 			->setParameter('tot_datum', $tot)
 			->getResult();

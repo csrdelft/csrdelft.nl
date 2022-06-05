@@ -16,8 +16,10 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method EetplanBekenden[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method EetplanBekenden|null retrieveByUuid($UUID)
  */
-class EetplanBekendenRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+class EetplanBekendenRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, EetplanBekenden::class);
 	}
 
@@ -26,12 +28,14 @@ class EetplanBekendenRepository extends AbstractRepository {
 	 *
 	 * @return EetplanBekenden[]
 	 */
-	public function getBekendenVoorLidjaar($lidjaar) {
+	public function getBekendenVoorLidjaar($lidjaar)
+	{
 		return $this->createQueryBuilder('b')
 			->join('b.noviet1', 'n')
 			->where('n.lidjaar = :lidjaar')
 			->setParameter('lidjaar', $lidjaar)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
@@ -39,8 +43,19 @@ class EetplanBekendenRepository extends AbstractRepository {
 	 *
 	 * @return bool
 	 */
-	public function exists($entity) {
-		return count($this->findBy(['noviet1' => $entity->noviet1, 'noviet2' => $entity->noviet2])) != 0
-			|| count($this->findBy(['noviet1' => $entity->noviet1, 'noviet2' => $entity->noviet1])) != 0;
+	public function exists($entity)
+	{
+		return count(
+			$this->findBy([
+				'noviet1' => $entity->noviet1,
+				'noviet2' => $entity->noviet2,
+			])
+		) != 0 ||
+			count(
+				$this->findBy([
+					'noviet1' => $entity->noviet1,
+					'noviet2' => $entity->noviet1,
+				])
+			) != 0;
 	}
 }

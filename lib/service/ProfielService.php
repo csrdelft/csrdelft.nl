@@ -11,13 +11,15 @@ use CsrDelft\service\security\LoginService;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 19/09/2018
  */
-class ProfielService {
+class ProfielService
+{
 	/**
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
 
-	public function __construct(ProfielRepository $profielRepository) {
+	public function __construct(ProfielRepository $profielRepository)
+	{
 		$this->profielRepository = $profielRepository;
 	}
 
@@ -30,10 +32,19 @@ class ProfielService {
 	 * @param int $limiet
 	 * @return Profiel[]
 	 */
-	public function zoekLeden(string $zoekterm, string $zoekveld, string $verticale, string $sort, $zoekstatus = '', int $limiet = 0) {
+	public function zoekLeden(
+		string $zoekterm,
+		string $zoekveld,
+		string $verticale,
+		string $sort,
+		$zoekstatus = '',
+		int $limiet = 0
+	) {
 		$queryBuilder = $this->profielRepository->createQueryBuilder('p');
 		$expr = $queryBuilder->expr();
-		$containsZonderSpatiesZoekterm = sql_contains(str_replace(' ', '', $zoekterm));
+		$containsZonderSpatiesZoekterm = sql_contains(
+			str_replace(' ', '', $zoekterm)
+		);
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
 		if ($zoekveld == 'naam' && !preg_match('/^\d{2}$/', $zoekterm)) {
 			if (preg_match('/ /', trim($zoekterm))) {
@@ -41,49 +52,72 @@ class ProfielService {
 				$iZoekdelen = count($zoekdelen);
 				if ($iZoekdelen == 2) {
 					$queryBuilder
-						->where($expr->orX()
-							->add('p.voornaam LIKE :voornaam AND p.achternaam LIKE :achternaam')
-							->add('p.voornaam LIKE :containsZoekterm')
-							->add('p.achternaam LIKE :containsZoekterm')
-							->add('p.nickname LIKE :containsZoekterm')
-							->add('p.uid LIKE :containsZoekterm')
+						->where(
+							$expr
+								->orX()
+								->add(
+									'p.voornaam LIKE :voornaam AND p.achternaam LIKE :achternaam'
+								)
+								->add('p.voornaam LIKE :containsZoekterm')
+								->add('p.achternaam LIKE :containsZoekterm')
+								->add('p.nickname LIKE :containsZoekterm')
+								->add('p.uid LIKE :containsZoekterm')
 						)
 						->setParameter('voornaam', sql_contains($zoekdelen[0]))
 						->setParameter('achternaam', sql_contains($zoekdelen[1]))
 						->setParameter('containsZoekterm', sql_contains($zoekterm));
 				} else {
 					$queryBuilder
-						->where('p.voornaam LIKE :voornaam and p.achternaam LIKE :achternaam')
+						->where(
+							'p.voornaam LIKE :voornaam and p.achternaam LIKE :achternaam'
+						)
 						->setParameter('voornaam', sql_contains($zoekdelen[0]))
-						->setParameter('achternaam', sql_contains($zoekdelen[$iZoekdelen - 1]));
+						->setParameter(
+							'achternaam',
+							sql_contains($zoekdelen[$iZoekdelen - 1])
+						);
 				}
 			} else {
 				$queryBuilder
-					->where($expr->orX()
-						->add('p.voornaam LIKE :containsZoekterm')
-						->add('p.achternaam LIKE :containsZoekterm')
-						->add('p.nickname LIKE :containsZoekterm')
-						->add('p.uid LIKE :containsZoekterm')
+					->where(
+						$expr
+							->orX()
+							->add('p.voornaam LIKE :containsZoekterm')
+							->add('p.achternaam LIKE :containsZoekterm')
+							->add('p.nickname LIKE :containsZoekterm')
+							->add('p.uid LIKE :containsZoekterm')
 					)
 					->setParameter('containsZoekterm', sql_contains($zoekterm));
 			}
 
 			$queryBuilder
-				->orWhere('CONCAT_WS(\' \', p.voornaam, p.tussenvoegsel, p.achternaam) LIKE :naam')
+				->orWhere(
+					'CONCAT_WS(\' \', p.voornaam, p.tussenvoegsel, p.achternaam) LIKE :naam'
+				)
 				->orWhere('CONCAT_WS(\' \', p.voornaam, p.achternaam) LIKE :naam')
 				->setParameter('naam', sql_contains($zoekterm));
 		} elseif ($zoekveld == 'adres') {
 			$queryBuilder
-				->where($expr->orX()
-					->add('p.adres LIKE :containsZoekterm')
-					->add('p.woonplaats LIKE :containsZoekterm')
-					->add('p.postcode LIKE :containsZoekterm')
-					->add('REPLACE(p.postcode, \' \', \'\') LIKE :containsZonderSpatiesZoekterm')
+				->where(
+					$expr
+						->orX()
+						->add('p.adres LIKE :containsZoekterm')
+						->add('p.woonplaats LIKE :containsZoekterm')
+						->add('p.postcode LIKE :containsZoekterm')
+						->add(
+							'REPLACE(p.postcode, \' \', \'\') LIKE :containsZonderSpatiesZoekterm'
+						)
 				)
 				->setParameter('containsZoekterm', sql_contains($zoekterm))
-				->setParameter('containsZonderSpatiesZoekterm', $containsZonderSpatiesZoekterm);
+				->setParameter(
+					'containsZonderSpatiesZoekterm',
+					$containsZonderSpatiesZoekterm
+				);
 		} else {
-			if (preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld == 'uid' OR $zoekveld == 'naam')) {
+			if (
+				preg_match('/^\d{2}$/', $zoekterm) and
+				($zoekveld == 'uid' or $zoekveld == 'naam')
+			) {
 				//zoeken op lichtingen...
 				$queryBuilder
 					->where('p.uid LIKE :uid')
@@ -124,7 +158,11 @@ class ProfielService {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
 			if (
-				(LoginService::mag(P_LEDEN_READ) && !LoginService::mag(P_OUDLEDEN_READ)) || (LoginService::mag(P_LEDEN_READ) && LoginService::mag(P_OUDLEDEN_READ) && $zoekstatus != 'oudleden')
+				(LoginService::mag(P_LEDEN_READ) &&
+					!LoginService::mag(P_OUDLEDEN_READ)) ||
+				(LoginService::mag(P_LEDEN_READ) &&
+					LoginService::mag(P_OUDLEDEN_READ) &&
+					$zoekstatus != 'oudleden')
 			) {
 				$statussen[] = LidStatus::Lid;
 				$statussen[] = LidStatus::Gastlid;
@@ -135,7 +173,11 @@ class ProfielService {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
 			if (
-				(!LoginService::mag(P_LEDEN_READ) && LoginService::mag(P_OUDLEDEN_READ)) || (LoginService::mag(P_LEDEN_READ) && LoginService::mag(P_OUDLEDEN_READ) && $zoekstatus != 'leden')
+				(!LoginService::mag(P_LEDEN_READ) &&
+					LoginService::mag(P_OUDLEDEN_READ)) ||
+				(LoginService::mag(P_LEDEN_READ) &&
+					LoginService::mag(P_OUDLEDEN_READ) &&
+					$zoekstatus != 'leden')
 			) {
 				$statussen[] = LidStatus::Oudlid;
 				$statussen[] = LidStatus::Erelid;
@@ -166,7 +208,7 @@ class ProfielService {
 		# is er een maximum aantal resultaten gewenst
 		$queryBuilder
 			->orderBy('p.' . $sort)
-			->setMaxResults((int)$limiet > 0 ? (int)$limiet : null);
+			->setMaxResults((int) $limiet > 0 ? (int) $limiet : null);
 
 		return $queryBuilder->getQuery()->getResult();
 	}

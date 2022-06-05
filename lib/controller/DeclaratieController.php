@@ -34,15 +34,19 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/mijn/{uid}", name="declaraties_mijn")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijstMijn(DeclaratieRepository $declaratieRepository, string $uid = null): Response
-	{
+	public function lijstMijn(
+		DeclaratieRepository $declaratieRepository,
+		string $uid = null
+	): Response {
 		$profiel = $uid ? ProfielRepository::get($uid) : LoginService::getProfiel();
 		if (!$profiel) {
 			throw $this->createNotFoundException();
 		}
 
 		return $this->render('declaratie/lijst.html.twig', [
-			'titel' => $uid ? 'Declaraties van ' . $profiel->getNaam() : 'Mijn declaraties',
+			'titel' => $uid
+				? 'Declaraties van ' . $profiel->getNaam()
+				: 'Mijn declaraties',
 			'declaraties' => $declaratieRepository->mijnDeclaraties($profiel),
 			'personal' => true,
 		]);
@@ -52,14 +56,25 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/wachtrij", name="declaraties_wachtrijen")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function wachtrijen(DeclaratieWachtrijRepository $declaratieWachtrijRepository): Response
-	{
+	public function wachtrijen(
+		DeclaratieWachtrijRepository $declaratieWachtrijRepository
+	): Response {
 		$wachtrijen = $declaratieWachtrijRepository->mijnWachtrijen();
 		$wachtrijCounts = [];
 		foreach ($wachtrijen as $wachtrij) {
-			$wachtrijCounts[$wachtrij->getId()]['concept'] = count($declaratieWachtrijRepository->filterDeclaraties($wachtrij, ['concept']));
-			$wachtrijCounts[$wachtrij->getId()]['beoordelen'] = count($declaratieWachtrijRepository->filterDeclaraties($wachtrij, ['ingediend']));
-			$wachtrijCounts[$wachtrij->getId()]['uitbetalen'] = count($declaratieWachtrijRepository->filterDeclaraties($wachtrij, ['uitbetaald']));
+			$wachtrijCounts[$wachtrij->getId()]['concept'] = count(
+				$declaratieWachtrijRepository->filterDeclaraties($wachtrij, ['concept'])
+			);
+			$wachtrijCounts[$wachtrij->getId()]['beoordelen'] = count(
+				$declaratieWachtrijRepository->filterDeclaraties($wachtrij, [
+					'ingediend',
+				])
+			);
+			$wachtrijCounts[$wachtrij->getId()]['uitbetalen'] = count(
+				$declaratieWachtrijRepository->filterDeclaraties($wachtrij, [
+					'uitbetaald',
+				])
+			);
 		}
 
 		return $this->render('declaratie/wachtrijen.html.twig', [
@@ -72,8 +87,11 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/wachtrij/{wachtrij}", name="declaraties_wachtrij")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijstWachtrij(DeclaratieWachtrij $wachtrij, DeclaratieWachtrijRepository $wachtrijRepository, Request $request): Response
-	{
+	public function lijstWachtrij(
+		DeclaratieWachtrij $wachtrij,
+		DeclaratieWachtrijRepository $wachtrijRepository,
+		Request $request
+	): Response {
 		if (!$wachtrij->magBeoordelen()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -86,7 +104,7 @@ class DeclaratieController extends AbstractController
 			'titel' => 'Wachtrij ' . $wachtrij->getNaam(),
 			'declaraties' => $declaraties,
 			'personal' => false,
-			'status' => $status
+			'status' => $status,
 		]);
 	}
 
@@ -96,8 +114,9 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/nieuw", name="declaratie_nieuw", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function nieuw(DeclaratieCategorieRepository $categorieRepository): Response
-	{
+	public function nieuw(
+		DeclaratieCategorieRepository $categorieRepository
+	): Response {
 		$lid = $this->getProfiel();
 		$categorieLijst = $categorieRepository->findTuples();
 		return $this->render('declaratie/detail.html.twig', [
@@ -117,8 +136,11 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/{declaratie}", name="declaratie_detail", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function detail(Declaratie $declaratie, DeclaratieCategorieRepository $categorieRepository, UrlGeneratorInterface $generator): Response
-	{
+	public function detail(
+		Declaratie $declaratie,
+		DeclaratieCategorieRepository $categorieRepository,
+		UrlGeneratorInterface $generator
+	): Response {
 		if (!$declaratie->magBekijken()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -142,8 +164,11 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/download/{path}", name="declaratie_download", methods={"GET"}, requirements={"filename"="[a-f0-9]+.[a-z]+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function download(string $path, Filesystem $filesystem, DeclaratieBonRepository $bonRepository)
-	{
+	public function download(
+		string $path,
+		Filesystem $filesystem,
+		DeclaratieBonRepository $bonRepository
+	) {
 		$filename = DECLARATIE_PATH . $path;
 		if (!$filesystem->exists($filename)) {
 			throw $this->createAccessDeniedException();
@@ -168,8 +193,10 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/upload", name="declaratie_upload", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function upload(Request $request, DeclaratieBonRepository $bonRepository)
-	{
+	public function upload(
+		Request $request,
+		DeclaratieBonRepository $bonRepository
+	) {
 		$key = bin2hex(random_bytes(16));
 
 		/** @var File $file */
@@ -195,7 +222,9 @@ class DeclaratieController extends AbstractController
 
 		$bon = $bonRepository->generate($filename, $this->getProfiel());
 		return $this->json([
-			'file' => $this->generateUrl('declaratie_download', ['path' => $filename]),
+			'file' => $this->generateUrl('declaratie_download', [
+				'path' => $filename,
+			]),
 			'id' => $bon->getId(),
 		]);
 	}
@@ -205,8 +234,10 @@ class DeclaratieController extends AbstractController
 	 * @param Declaratie|null $declaratie
 	 * @return JsonResponse
 	 */
-	private function ajaxResponse(array $messages, Declaratie $declaratie = null): JsonResponse
-	{
+	private function ajaxResponse(
+		array $messages,
+		Declaratie $declaratie = null
+	): JsonResponse {
 		return $this->json([
 			'success' => empty($messages),
 			'id' => $declaratie ? $declaratie->getId() : null,
@@ -226,12 +257,13 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/opslaan", name="declaratie_opslaan", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function opslaan(Request                       $request,
-													DeclaratieRepository          $declaratieRepository,
-													DeclaratieBonRepository       $bonRepository,
-													DeclaratieCategorieRepository $categorieRepository,
-													EntityManagerInterface        $entityManager)
-	{
+	public function opslaan(
+		Request $request,
+		DeclaratieRepository $declaratieRepository,
+		DeclaratieBonRepository $bonRepository,
+		DeclaratieCategorieRepository $categorieRepository,
+		EntityManagerInterface $entityManager
+	) {
 		$data = $request->request->get('declaratie');
 		if (!empty($data)) {
 			$data = new ParameterBag($data);
@@ -253,7 +285,9 @@ class DeclaratieController extends AbstractController
 		// Declaratie-eigenschappen
 		$categorie = $categorieRepository->find($data->getInt('categorie'));
 		if (!$categorie) {
-			return $this->ajaxResponse(['Selecteer een categorie voor deze declaratie']);
+			return $this->ajaxResponse([
+				'Selecteer een categorie voor deze declaratie',
+			]);
 		}
 
 		$declaratie->fromParameters($data);
@@ -272,9 +306,13 @@ class DeclaratieController extends AbstractController
 			foreach ($data->get('bonnen') as $rawBon) {
 				$bonData = new ParameterBag($rawBon);
 				$bon = $bonRepository->find($bonData->getInt('id'));
-				if (!($bon->magBekijken() || $declaratie->magBeoordelen())
-					|| ($bon->getDeclaratie() !== null && $bon->getDeclaratie()->getId() !== $declaratie->getId())) {
-					$messages[] = 'Een van de bonnen kan niet gebruikt worden in deze declaratie';
+				if (
+					!($bon->magBekijken() || $declaratie->magBeoordelen()) ||
+					($bon->getDeclaratie() !== null &&
+						$bon->getDeclaratie()->getId() !== $declaratie->getId())
+				) {
+					$messages[] =
+						'Een van de bonnen kan niet gebruikt worden in deze declaratie';
 					continue;
 				}
 
@@ -326,7 +364,13 @@ class DeclaratieController extends AbstractController
 		}
 
 		if ($declaratie->magBeoordelen()) {
-			if (in_array($declaratie->getStatus(), ['ingediend', 'goedgekeurd', 'uitbetaald'])) {
+			if (
+				in_array($declaratie->getStatus(), [
+					'ingediend',
+					'goedgekeurd',
+					'uitbetaald',
+				])
+			) {
 				$declaratie->setNummer($data->getAlnum('nummer'));
 			}
 
@@ -350,15 +394,27 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/status/{declaratie}", name="declaratie_status", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function setStatus(Declaratie $declaratie, Request $request, EntityManagerInterface $entityManager)
-	{
+	public function setStatus(
+		Declaratie $declaratie,
+		Request $request,
+		EntityManagerInterface $entityManager
+	) {
 		$status = $request->request->getAlpha('status');
 		$vanNaar = $declaratie->getStatus() . '-' . $status;
 
-		if (($declaratie->getStatus() === 'uitbetaald' || $status === 'uitbetaald') && !$declaratie->magUitbetalen()) {
-			return $this->ajaxResponse(['Geen rechten om uitbetaling aan te passen'], $declaratie);
+		if (
+			($declaratie->getStatus() === 'uitbetaald' || $status === 'uitbetaald') &&
+			!$declaratie->magUitbetalen()
+		) {
+			return $this->ajaxResponse(
+				['Geen rechten om uitbetaling aan te passen'],
+				$declaratie
+			);
 		} elseif (!$declaratie->magBeoordelen()) {
-			return $this->ajaxResponse(['Geen rechten om declaratie te beoordelen'], $declaratie);
+			return $this->ajaxResponse(
+				['Geen rechten om declaratie te beoordelen'],
+				$declaratie
+			);
 		}
 
 		switch ($vanNaar) {
@@ -373,7 +429,10 @@ class DeclaratieController extends AbstractController
 				$declaratie->setBeoordeeld(date_create_immutable());
 				$declaratie->setBeoordelaar($this->getProfiel());
 				$declaratie->setGoedgekeurd($status === 'goedgekeurd');
-				if ($declaratie->isGoedgekeurd() && !empty($request->request->getAlnum('nummer'))) {
+				if (
+					$declaratie->isGoedgekeurd() &&
+					!empty($request->request->getAlnum('nummer'))
+				) {
 					$declaratie->setNummer($request->request->getAlnum('nummer'));
 				} else {
 					$declaratie->setNummer(null);
@@ -407,20 +466,25 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/verwijderen/{declaratie}", name="declaratie_verwijderen", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function declaratieVerwijderen(Declaratie $declaratie, DeclaratieRepository $declaratieRepository): Response
-	{
+	public function declaratieVerwijderen(
+		Declaratie $declaratie,
+		DeclaratieRepository $declaratieRepository
+	): Response {
 		if (!$declaratie->magBewerken()) {
 			throw $this->createAccessDeniedException();
 		}
 
 		$wachtrij = $declaratie->getCategorie()->getWachtrij();
-		$redirect = $declaratie->getIndiener()->uid === $this->getProfiel()->uid
-			? $this->generateUrl('declaraties_mijn')
-			: $this->generateUrl('declaraties_wachtrij', ['wachtrij' => $wachtrij->getId()]);
+		$redirect =
+			$declaratie->getIndiener()->uid === $this->getProfiel()->uid
+				? $this->generateUrl('declaraties_mijn')
+				: $this->generateUrl('declaraties_wachtrij', [
+					'wachtrij' => $wachtrij->getId(),
+				]);
 		$declaratieRepository->verwijderen($declaratie);
 
 		return $this->json([
-			'redirect' => $redirect
+			'redirect' => $redirect,
 		]);
 	}
 }

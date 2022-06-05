@@ -19,7 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Entity(repositoryClass="CsrDelft\repository\documenten\DocumentRepository")
  */
-class Document extends Bestand {
+class Document extends Bestand
+{
 	/**
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
@@ -93,64 +94,85 @@ class Document extends Bestand {
 	 *
 	 * @return bool
 	 */
-	public function exists() {
-		return @is_readable($this->directory . '/' . $this->filename) and is_file($this->directory . '/' . $this->filename);
+	public function exists()
+	{
+		return @is_readable($this->directory . '/' . $this->filename) and
+			is_file($this->directory . '/' . $this->filename);
 	}
 
-	public function hasFile() {
+	public function hasFile()
+	{
 		if (!$this->magBekijken()) {
 			return false;
 		}
 		return $this->filename != '' and file_exists($this->getFullPath());
 	}
 
-	public function isEigenaar() {
+	public function isEigenaar()
+	{
 		return LoginService::getUid() === $this->eigenaar;
 	}
 
-	public function magBekijken() {
-		return LoginService::mag($this->leesrechten) && LoginService::mag(P_LOGGED_IN);
+	public function magBekijken()
+	{
+		return LoginService::mag($this->leesrechten) &&
+			LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function magBewerken() {
+	public function magBewerken()
+	{
 		return $this->isEigenaar() or LoginService::mag(P_DOCS_MOD);
 	}
 
-	public function magVerwijderen() {
+	public function magVerwijderen()
+	{
 		return LoginService::mag(P_DOCS_MOD);
 	}
 
 	/**
 	 * @return string file name on disk
 	 */
-	public function getFullFileName() {
+	public function getFullFileName()
+	{
 		return $this->id . '_' . $this->filename;
 	}
 
 	/**
 	 * @return string location on disk
 	 */
-	public function getPath() {
+	public function getPath()
+	{
 		return DATA_PATH . 'documenten/';
 	}
 
-	public function getFullPath() {
+	public function getFullPath()
+	{
 		return $this->getPath() . $this->getFullFileName();
 	}
 
-	public function getUrl() {
-		return '/documenten/bekijken/' . $this->id . '/' . rawurlencode($this->filename);
+	public function getUrl()
+	{
+		return '/documenten/bekijken/' .
+			$this->id .
+			'/' .
+			rawurlencode($this->filename);
 	}
 
-	public function getDownloadUrl() {
-		return '/documenten/download/' . $this->id . '/' . rawurlencode($this->filename);
+	public function getDownloadUrl()
+	{
+		return '/documenten/download/' .
+			$this->id .
+			'/' .
+			rawurlencode($this->filename);
 	}
 
-	public function getMimetypeIcon() {
+	public function getMimetypeIcon()
+	{
 		return Icon::getTag('mime-' . $this->getFriendlyMimetype());
 	}
 
-	public function getFriendlyMimetype() {
+	public function getFriendlyMimetype()
+	{
 		$mimetypeMap = [
 			'application/pdf' => 'pdf',
 			'application/zip' => 'zip',
@@ -176,9 +198,12 @@ class Document extends Bestand {
 			'application/vnd.openxmlformats-officedocument.word' => 'word',
 			'application/vnd.openxmlformats-officedocument.pres' => 'powerpoint',
 			'application/x-zip-compressed' => 'zip',
-			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'excel',
-			'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'powerpoint',
-			'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'word',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' =>
+				'excel',
+			'application/vnd.openxmlformats-officedocument.presentationml.presentation' =>
+				'powerpoint',
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.document' =>
+				'word',
 			'application/octet-stream' => 'onbekend',
 			'text/pdf' => 'pdf',
 			'application/vnd.ms-excel.sheet.macroenabled.12' => 'excel',
@@ -199,10 +224,13 @@ class Document extends Bestand {
 	 * @return bool
 	 * @throws CsrException
 	 */
-	public function deleteFile($throwWhenNotFound = true) {
+	public function deleteFile($throwWhenNotFound = true)
+	{
 		if (!$this->hasFile()) {
 			if ($throwWhenNotFound) {
-				throw new CsrGebruikerException('Geen bestand gevonden voor dit document');
+				throw new CsrGebruikerException(
+					'Geen bestand gevonden voor dit document'
+				);
 			} else {
 				return true;
 			}
@@ -212,9 +240,14 @@ class Document extends Bestand {
 			return true;
 		} else {
 			if (is_writable($this->getFullPath())) {
-				throw new CsrException('Kan bestand niet verwijderen, lijkt wel beschrijfbaar' . $this->getFullPath());
+				throw new CsrException(
+					'Kan bestand niet verwijderen, lijkt wel beschrijfbaar' .
+						$this->getFullPath()
+				);
 			} else {
-				throw new CsrException('Kan bestand niet verwijderen, niet beschrijfbaar');
+				throw new CsrException(
+					'Kan bestand niet verwijderen, niet beschrijfbaar'
+				);
 			}
 		}
 	}

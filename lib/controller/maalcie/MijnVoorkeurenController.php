@@ -17,7 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MijnVoorkeurenController extends AbstractController {
+class MijnVoorkeurenController extends AbstractController
+{
 	/**
 	 * @var CorveeVoorkeurenRepository
 	 */
@@ -27,7 +28,10 @@ class MijnVoorkeurenController extends AbstractController {
 	 */
 	private $profielRepository;
 
-	public function __construct(CorveeVoorkeurenRepository $corveeVoorkeurenRepository, ProfielRepository $profielRepository) {
+	public function __construct(
+		CorveeVoorkeurenRepository $corveeVoorkeurenRepository,
+		ProfielRepository $profielRepository
+	) {
 		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
 		$this->profielRepository = $profielRepository;
 	}
@@ -37,8 +41,12 @@ class MijnVoorkeurenController extends AbstractController {
 	 * @Route("/corvee/voorkeuren", methods={"GET"})
 	 * @Auth(P_CORVEE_IK)
 	 */
-	public function mijn() {
-		$voorkeuren = $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid($this->getUid(), true);
+	public function mijn()
+	{
+		$voorkeuren = $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid(
+			$this->getUid(),
+			true
+		);
 		return $this->render('maaltijden/voorkeuren/mijn_voorkeuren.html.twig', [
 			'voorkeuren' => $voorkeuren,
 			'eetwens' => new EetwensForm(),
@@ -53,7 +61,8 @@ class MijnVoorkeurenController extends AbstractController {
 	 * @Route("/corvee/voorkeuren/inschakelen/{crv_repetitie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_IK)
 	 */
-	public function inschakelen(CorveeRepetitie $repetitie) {
+	public function inschakelen(CorveeRepetitie $repetitie)
+	{
 		$voorkeur = new CorveeVoorkeur();
 		$voorkeur->setProfiel($this->getProfiel());
 		$voorkeur->setCorveeRepetitie($repetitie);
@@ -74,8 +83,12 @@ class MijnVoorkeurenController extends AbstractController {
 	 * @Route("/corvee/voorkeuren/uitschakelen/{crv_repetitie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_IK)
 	 */
-	public function uitschakelen($crv_repetitie_id) {
-		$voorkeur = $this->corveeVoorkeurenRepository->getVoorkeur($crv_repetitie_id, $this->getUid());
+	public function uitschakelen($crv_repetitie_id)
+	{
+		$voorkeur = $this->corveeVoorkeurenRepository->getVoorkeur(
+			$crv_repetitie_id,
+			$this->getUid()
+		);
 		$this->corveeVoorkeurenRepository->uitschakelenVoorkeur($voorkeur);
 
 		return $this->render('maaltijden/voorkeuren/mijn_voorkeur_veld.html.twig', [
@@ -89,12 +102,15 @@ class MijnVoorkeurenController extends AbstractController {
 	 * @Route("/corvee/voorkeuren/eetwens", methods={"POST"})
 	 * @Auth(P_CORVEE_IK)
 	 */
-	public function eetwens() {
+	public function eetwens()
+	{
 		$form = new EetwensForm();
 		if ($form->validate()) {
-			$this->profielRepository->setEetwens($this->getProfiel(), $form->getField()->getValue());
+			$this->profielRepository->setEetwens(
+				$this->getProfiel(),
+				$form->getField()->getValue()
+			);
 		}
 		return $form;
 	}
-
 }

@@ -31,7 +31,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository")
  * @ORM\Table("mlt_aanmeldingen")
  */
-class MaaltijdAanmelding {
+class MaaltijdAanmelding
+{
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -94,7 +95,8 @@ class MaaltijdAanmelding {
 	 *
 	 * @return float if lid exists, false otherwise
 	 */
-	public function getSaldo() {
+	public function getSaldo()
+	{
 		return $this->profiel->getCiviSaldo();
 	}
 
@@ -113,17 +115,22 @@ class MaaltijdAanmelding {
 	 *
 	 * @return int
 	 */
-	public function getSaldoStatus() {
+	public function getSaldoStatus()
+	{
 		$saldo = $this->getSaldo();
 		$prijs = $this->maaltijd->getPrijsFloat();
 
-		if ($saldo > $prijs) { // saldo meer dan genoeg
+		if ($saldo > $prijs) {
+			// saldo meer dan genoeg
 			return 3;
-		} elseif ($saldo > $prijs - 0.004) { // saldo precies genoeg
+		} elseif ($saldo > $prijs - 0.004) {
+			// saldo precies genoeg
 			return 2;
-		} elseif ($saldo > 0.004) { // saldo positief maar te weinig
+		} elseif ($saldo > 0.004) {
+			// saldo positief maar te weinig
 			return 1;
-		} elseif ($saldo > -0.004) { // saldo nul
+		} elseif ($saldo > -0.004) {
+			// saldo nul
 			return 0;
 		} else {
 			return -1; // saldo negatief
@@ -135,7 +142,8 @@ class MaaltijdAanmelding {
 	 *
 	 * @return String
 	 */
-	public function getSaldoMelding() {
+	public function getSaldoMelding()
+	{
 		$status = $this->getSaldoStatus();
 		$prijs = sprintf('%.2f', $this->maaltijd->getPrijsFloat());
 		switch ($status) {
@@ -151,6 +159,6 @@ class MaaltijdAanmelding {
 				return '&lt; 0';
 		}
 
-		throw new CsrException("Ongeldige saldo status: " . $status);
+		throw new CsrException('Ongeldige saldo status: ' . $status);
 	}
 }

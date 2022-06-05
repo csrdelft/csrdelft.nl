@@ -37,8 +37,10 @@ class StreeplijstController extends AbstractController
 	private $verticalenRepository;
 
 	public function __construct(
-		StreeplijstRepository $streeplijstRepository, ProfielRepository $profielRepository, VerticalenRepository $verticalenRepository)
-	{
+		StreeplijstRepository $streeplijstRepository,
+		ProfielRepository $profielRepository,
+		VerticalenRepository $verticalenRepository
+	) {
 		$this->streeplijstRepository = $streeplijstRepository;
 		$this->profielRepository = $profielRepository;
 		$this->verticalenRepository = $verticalenRepository;
@@ -56,12 +58,13 @@ class StreeplijstController extends AbstractController
 			'huidigestreeplijst' => new Streeplijst(),
 			'verticalen' => $this->verticalenRepository->findAll(),
 			'jongstelidjaar' => LichtingenRepository::getJongsteLidjaar(),
-			'lidstatus' =>[
+			'lidstatus' => [
 				LidStatus::Erelid(),
-			LidStatus::Oudlid(),
-			LidStatus::Lid(),
-			LidStatus::Gastlid(),
-			LidStatus::Noviet(),],
+				LidStatus::Oudlid(),
+				LidStatus::Lid(),
+				LidStatus::Gastlid(),
+				LidStatus::Noviet(),
+			],
 		]);
 	}
 
@@ -73,10 +76,14 @@ class StreeplijstController extends AbstractController
 	 */
 	public function aanmaken(Request $request)
 	{
-		$inhoud_streeplijst = $request->query->get("inhoud_streeplijst");
-		$leden_streeplijst = $request->query->get("leden_streeplijst");
-		$naam_streeplijst = $request->query->get("naam_streeplijst");
-		$nieuwelijst = $this->streeplijstRepository->nieuw($naam_streeplijst, $leden_streeplijst, $inhoud_streeplijst);
+		$inhoud_streeplijst = $request->query->get('inhoud_streeplijst');
+		$leden_streeplijst = $request->query->get('leden_streeplijst');
+		$naam_streeplijst = $request->query->get('naam_streeplijst');
+		$nieuwelijst = $this->streeplijstRepository->nieuw(
+			$naam_streeplijst,
+			$leden_streeplijst,
+			$inhoud_streeplijst
+		);
 		$manager = $this->getDoctrine()->getManager();
 		$manager->persist($nieuwelijst);
 		$manager->flush();
@@ -145,22 +152,22 @@ class StreeplijstController extends AbstractController
 		$opmaakInhoud = $request->request->get('opmaakInhoud');
 
 		if ($opmaakInhoud) {
-
 			sort($goederen);
 		}
 		$stringGoederen = null;
 
 		if ($goederen != null) {
-
-			$stringGoederen = implode("; ", $goederen);
+			$stringGoederen = implode('; ', $goederen);
 		}
 
-		$opmaakSorteringWantCasperVindDatMooierKlinken = $request->request->get('opmaakabc');
+		$opmaakSorteringWantCasperVindDatMooierKlinken = $request->request->get(
+			'opmaakabc'
+		);
 
 		if ($opmaakSorteringWantCasperVindDatMooierKlinken) {
 			sort($namen);
 		}
-		$stringNamen = implode("; ", $namen);
+		$stringNamen = implode('; ', $namen);
 
 		$streeplijst = new Streeplijst();
 		$streeplijst->leden_streeplijst = $stringNamen;
@@ -187,7 +194,7 @@ class StreeplijstController extends AbstractController
 		$streeplijst = $this->streeplijstRepository->find($id);
 
 		return $this->render('streeplijst/streeplijst.html.twig', [
-			'streeplijsten' => [$streeplijst]
+			'streeplijsten' => [$streeplijst],
 		]);
 	}
 
@@ -199,16 +206,19 @@ class StreeplijstController extends AbstractController
 	 */
 	public function genererenZonderId(Request $request)
 	{
-		$naam_streeplijst = $request->query->get("naam_streeplijst");
-		$leden_streeplijst = $request->query->get("leden_streeplijst");
-		$inhoud_streeplijst = $request->query->get("inhoud_streeplijst");
-		$nieuwelijst = $this->streeplijstRepository->nieuw($naam_streeplijst, $leden_streeplijst, $inhoud_streeplijst);
+		$naam_streeplijst = $request->query->get('naam_streeplijst');
+		$leden_streeplijst = $request->query->get('leden_streeplijst');
+		$inhoud_streeplijst = $request->query->get('inhoud_streeplijst');
+		$nieuwelijst = $this->streeplijstRepository->nieuw(
+			$naam_streeplijst,
+			$leden_streeplijst,
+			$inhoud_streeplijst
+		);
 
 		return $this->render('streeplijst/streeplijst.html.twig', [
-			'streeplijsten' => [$nieuwelijst]
+			'streeplijsten' => [$nieuwelijst],
 		]);
 	}
-
 
 	/**
 	 * @param Request $request
@@ -218,7 +228,7 @@ class StreeplijstController extends AbstractController
 	 */
 	public function genererenHVPresentielijst(Request $request)
 	{
-		$naam_HVlijst = $request->query->get("naam_HVlijst");
+		$naam_HVlijst = $request->query->get('naam_HVlijst');
 		$arrayStreeplijsten = [];
 		$ledentype = $request->query->get('ledentype');
 		$streepopties = $request->query->get('HVStreepopties');
@@ -226,24 +236,26 @@ class StreeplijstController extends AbstractController
 		foreach ($ledentype as $type) {
 			$nieuwelijst = new Streeplijst();
 			$nieuwelijst->naam_streeplijst = LidStatus::from($type)->getDescription();
-			$profielen = $this->profielRepository->findBy(['status' => $type], ['achternaam' => 'asc']);
+			$profielen = $this->profielRepository->findBy(
+				['status' => $type],
+				['achternaam' => 'asc']
+			);
 			$namen = [];
 			foreach ($profielen as $profiel) {
 				$namen[] = $profiel->getNaam('streeplijst');
 			}
-			$stringNamen = implode("; ", $namen);
+			$stringNamen = implode('; ', $namen);
 
 			if ($streepopties != null) {
-				$stringStreepopties = implode("; ", $streepopties);
+				$stringStreepopties = implode('; ', $streepopties);
 			}
 			$nieuwelijst->leden_streeplijst = $stringNamen;
 			$nieuwelijst->inhoud_streeplijst = $stringStreepopties;
 			$arrayStreeplijsten[] = $nieuwelijst;
-
 		}
 		return $this->render('streeplijst/presentielijst.html.twig', [
 			'streeplijsten' => $arrayStreeplijsten,
-			'HVnummer' => $naam_HVlijst
+			'HVnummer' => $naam_HVlijst,
 		]);
 	}
 }

@@ -49,14 +49,15 @@ class ForumDelenService
 	 */
 	private $forumCategorieRepository;
 
-	public function __construct(EntityManagerInterface         $entityManager,
-															ForumDelenRepository           $forumDelenRepository,
-															ForumPostsRepository           $forumPostsRepository,
-															ForumDradenRepository          $forumDradenRepository,
-															ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
-															ForumCategorieRepository $forumCategorieRepository,
-															ForumDelenMeldingRepository    $forumDelenMeldingRepository)
-	{
+	public function __construct(
+		EntityManagerInterface $entityManager,
+		ForumDelenRepository $forumDelenRepository,
+		ForumPostsRepository $forumPostsRepository,
+		ForumDradenRepository $forumDradenRepository,
+		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
+		ForumCategorieRepository $forumCategorieRepository,
+		ForumDelenMeldingRepository $forumDelenMeldingRepository
+	) {
 		$this->forumDelenRepository = $forumDelenRepository;
 		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
 		$this->entityManager = $entityManager;
@@ -82,14 +83,33 @@ class ForumDelenService
 	 */
 	public function getWachtOpGoedkeuring()
 	{
-		$postsByDraadId = group_by('draad_id', $this->forumPostsRepository->findBy(['wacht_goedkeuring' => true, 'verwijderd' => false]));
-		$dradenById = group_by_distinct('draad_id', $this->forumDradenRepository->findBy(['wacht_goedkeuring' => true, 'verwijderd' => false]));
-		$dradenById += $this->forumDradenRepository->getForumDradenById(array_keys($postsByDraadId)); // laad draden bij posts
-		foreach ($dradenById as $draad) { // laad posts bij draden
-			if (array_key_exists($draad->draad_id, $postsByDraadId)) { // post is al gevonden
+		$postsByDraadId = group_by(
+			'draad_id',
+			$this->forumPostsRepository->findBy([
+				'wacht_goedkeuring' => true,
+				'verwijderd' => false,
+			])
+		);
+		$dradenById = group_by_distinct(
+			'draad_id',
+			$this->forumDradenRepository->findBy([
+				'wacht_goedkeuring' => true,
+				'verwijderd' => false,
+			])
+		);
+		$dradenById += $this->forumDradenRepository->getForumDradenById(
+			array_keys($postsByDraadId)
+		); // laad draden bij posts
+		foreach ($dradenById as $draad) {
+			// laad posts bij draden
+			if (array_key_exists($draad->draad_id, $postsByDraadId)) {
+				// post is al gevonden
 				$draad->setForumPosts($postsByDraadId[$draad->draad_id]);
 			} else {
-				$melding = 'Draad ' . $draad->draad_id . ' niet goedgekeurd, maar alle posts wel. Automatische actie: ';
+				$melding =
+					'Draad ' .
+					$draad->draad_id .
+					' niet goedgekeurd, maar alle posts wel. Automatische actie: ';
 				$draad->wacht_goedkeuring = false;
 				if (count($draad->getForumPosts()) === 0) {
 					$draad->verwijderd = true;
@@ -108,8 +128,14 @@ class ForumDelenService
 				unset($dradenById[$draad_id]);
 			}
 		}
-		if (empty($dradenById) && $this->forumPostsRepository->getAantalWachtOpGoedkeuring() > 0) {
-			setMelding('U heeft onvoldoende rechten om de berichten goed te keuren', 0);
+		if (
+			empty($dradenById) &&
+			$this->forumPostsRepository->getAantalWachtOpGoedkeuring() > 0
+		) {
+			setMelding(
+				'U heeft onvoldoende rechten om de berichten goed te keuren',
+				0
+			);
 		}
 		return $dradenById;
 	}
@@ -149,44 +175,63 @@ class ForumDelenService
 		$gevonden_posts = [];
 
 		if (in_array('titel', $zoek_in)) {
-			foreach ($this->forumDradenRepository->zoeken($forumZoeken) as [0 => $draad, 'score' => $score]) {
+			foreach (
+				$this->forumDradenRepository->zoeken($forumZoeken)
+				as [0 => $draad, 'score' => $score]
+			) {
 				$gevonden_draden[$draad->draad_id] = $draad;
 				$draad->score = $score;
 			}
 		}
 
 		if (in_array('alle_berichten', $zoek_in)) {
-			foreach ($this->forumPostsRepository->zoeken($forumZoeken, false) as [0 => $post, 'score' => $score]) {
+			foreach (
+				$this->forumPostsRepository->zoeken($forumZoeken, false)
+				as [0 => $post, 'score' => $score]
+			) {
 				$gevonden_posts[$post->draad_id][] = $post;
 				$post->score = $score;
 			}
 		}
 
 		if (in_array('eerste_bericht', $zoek_in)) {
-			foreach ($this->forumPostsRepository->zoeken($forumZoeken, true) as [0 => $post, 'score' => $score]) {
+			foreach (
+				$this->forumPostsRepository->zoeken($forumZoeken, true)
+				as [0 => $post, 'score' => $score]
+			) {
 				$gevonden_posts[$post->draad_id][] = $post;
 				$post->score = $score;
 			}
 		}
 
-		$gevonden_draden += $this->forumDradenRepository->getForumDradenById(array_keys($gevonden_posts));
+		$gevonden_draden += $this->forumDradenRepository->getForumDradenById(
+			array_keys($gevonden_posts)
+		);
 		// laad draden bij posts
 
 		// laad posts bij draden
 		foreach ($gevonden_draden as $draad) {
-			if (property_exists($draad, 'score')) { // gevonden op draad titel
-				$draad->score = (float)50;
-			} else { // gevonden op post tekst
-				$draad->score = (float)0;
+			if (property_exists($draad, 'score')) {
+				// gevonden op draad titel
+				$draad->score = (float) 50;
+			} else {
+				// gevonden op post tekst
+				$draad->score = (float) 0;
 			}
-			if (array_key_exists($draad->draad_id, $gevonden_posts)) { // posts al gevonden
+			if (array_key_exists($draad->draad_id, $gevonden_posts)) {
+				// posts al gevonden
 				$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
-				$draad->laatst_gewijzigd = $this->laatstGewijzigd($gevonden_posts[$draad->draad_id]);
+				$draad->laatst_gewijzigd = $this->laatstGewijzigd(
+					$gevonden_posts[$draad->draad_id]
+				);
 				foreach ($draad->getForumPosts() as $post) {
-					$draad->score += (float)$post->score;
+					$draad->score += (float) $post->score;
 				}
-			} else { // laad eerste post
-				$array_first_post = $this->forumPostsRepository->getEerstePostVoorDraad($draad);
+			} else {
+				// laad eerste post
+				$array_first_post = $this->forumPostsRepository->getEerstePostVoorDraad(
+					$draad
+				);
 				$draad->setForumPosts([$array_first_post]);
 			}
 		}
@@ -206,9 +251,11 @@ class ForumDelenService
 
 	public function laatstGewijzigd($posts)
 	{
-		return max(array_map(function (ForumPost $post) {
-			return $post->laatst_gewijzigd;
-		}, $posts));
+		return max(
+			array_map(function (ForumPost $post) {
+				return $post->laatst_gewijzigd;
+			}, $posts)
+		);
 	}
 
 	private function sorteerFunctie($sorteerOp)
@@ -216,15 +263,15 @@ class ForumDelenService
 		switch ($sorteerOp) {
 			case 'aangemaakt_op':
 				return function ($a, $b) {
-					return ($a->datum_tijd < $b->datum_tijd) ? 1 : -1;
+					return $a->datum_tijd < $b->datum_tijd ? 1 : -1;
 				};
 			case 'laatste_bericht':
 				return function ($a, $b) {
-					return ($a->laatst_gewijzigd < $b->laatst_gewijzigd) ? 1 : -1;
+					return $a->laatst_gewijzigd < $b->laatst_gewijzigd ? 1 : -1;
 				};
 			case 'relevantie':
 				return function ($a, $b) {
-					return ($a->score < $b->score) ? 1 : -1;
+					return $a->score < $b->score ? 1 : -1;
 				};
 			default:
 				throw new CsrGebruikerException('Onbekende sorteermethode');
@@ -243,8 +290,12 @@ class ForumDelenService
 	 * @param int $offset
 	 * @return ForumDraad[]
 	 */
-	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false, $offset = 0)
-	{
+	public function getRecenteForumDraden(
+		$aantal,
+		$belangrijk,
+		$rss = false,
+		$offset = 0
+	) {
 		if (!is_int($aantal)) {
 			$aantal = $this->forumDradenRepository->getAantalPerPagina();
 			$pagina = $this->forumDradenRepository->getHuidigePagina();
@@ -263,7 +314,9 @@ class ForumDelenService
 		$qb->where('d.forum_id in (:forum_ids) or d.forum_id in (:forum_ids)');
 		$qb->setParameter('forum_ids', $forum_ids);
 
-		$verbergen = $this->forumDradenVerbergenRepository->findBy(['uid' => LoginService::getUid()]);
+		$verbergen = $this->forumDradenVerbergenRepository->findBy([
+			'uid' => LoginService::getUid(),
+		]);
 		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
 		if (count($draden_ids) > 0) {
 			$qb->andWhere('d.draad_id not in (:draden_ids)');
@@ -276,7 +329,10 @@ class ForumDelenService
 			if ($belangrijk) {
 				$qb->andWhere('d.belangrijk is not null');
 			} else {
-				if (!isset($pagina) || lid_instelling('forum', 'belangrijkBijRecent') === 'nee') {
+				if (
+					!isset($pagina) ||
+					lid_instelling('forum', 'belangrijkBijRecent') === 'nee'
+				) {
 					$qb->andWhere('d.belangrijk is null');
 				}
 			}
@@ -296,15 +352,20 @@ class ForumDelenService
 	 */
 	public function getForumIndelingVoorLid()
 	{
-		$delenByCategorieId = group_by('categorie_id', $this->forumDelenRepository->getForumDelenVoorLid());
-		$indeling = array();
+		$delenByCategorieId = group_by(
+			'categorie_id',
+			$this->forumDelenRepository->getForumDelenVoorLid()
+		);
+		$indeling = [];
 		foreach ($this->forumCategorieRepository->findAll() as $categorie) {
 			if ($categorie->magLezen()) {
 				$indeling[] = $categorie;
 				if (isset($delenByCategorieId[$categorie->categorie_id])) {
-					$categorie->setForumDelen($delenByCategorieId[$categorie->categorie_id]);
+					$categorie->setForumDelen(
+						$delenByCategorieId[$categorie->categorie_id]
+					);
 				} else {
-					$categorie->setForumDelen(array());
+					$categorie->setForumDelen([]);
 				}
 			}
 		}

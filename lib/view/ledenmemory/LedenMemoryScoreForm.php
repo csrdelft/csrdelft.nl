@@ -7,9 +7,10 @@ use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 
-class LedenMemoryScoreForm extends Formulier {
-
-	public function __construct(LedenMemoryScore $score) {
+class LedenMemoryScoreForm extends Formulier
+{
+	public function __construct(LedenMemoryScore $score)
+	{
 		parent::__construct($score, '/leden/memoryscore');
 
 		$fields = [];
@@ -21,5 +22,4 @@ class LedenMemoryScoreForm extends Formulier {
 
 		$this->addFields($fields);
 	}
-
 }

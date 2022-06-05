@@ -13,12 +13,18 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  *
  * @Warning: NEVER use for persistence!
  */
-class CheckboxField extends InputField {
-
+class CheckboxField extends InputField
+{
 	public $type = 'checkbox';
 	public $label;
 
-	public function __construct($name, $value, $description, $label = null, $model = null) {
+	public function __construct(
+		$name,
+		$value,
+		$description,
+		$label = null,
+		$model = null
+	) {
 		$this->css_classes = ['FormElement'];
 		parent::__construct($name, $value, $description, $model);
 		$this->label = $label;
@@ -33,7 +39,8 @@ class CheckboxField extends InputField {
 	 *
 	 * @return boolean
 	 */
-	public function isPosted() {
+	public function isPosted()
+	{
 		if (parent::isPosted()) {
 			return true;
 		}
@@ -46,16 +53,18 @@ class CheckboxField extends InputField {
 	 *
 	 * @return boolean
 	 */
-	public function getValue() {
-	    if ($this->isPosted()) {
-            $this->value = parent::isPosted();
+	public function getValue()
+	{
+		if ($this->isPosted()) {
+			$this->value = parent::isPosted();
 		}
 		return $this->value;
 	}
 
-	public function validate() {
-		if (!$this->value AND $this->required) {
-			if ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
+	public function validate()
+	{
+		if (!$this->value and $this->required) {
+			if ($this->leden_mod and LoginService::mag(P_LEDEN_MOD)) {
 				// exception for leden mod
 			} else {
 				$this->error = 'Dit is een verplicht veld';
@@ -64,17 +73,32 @@ class CheckboxField extends InputField {
 		return $this->error === '';
 	}
 
-	public function getHtml() {
-		$html = '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'origvalue', 'class', 'disabled', 'readonly'));
+	public function getHtml()
+	{
+		$html =
+			'<input ' .
+			$this->getInputAttribute([
+				'type',
+				'id',
+				'name',
+				'origvalue',
+				'class',
+				'disabled',
+				'readonly',
+			]);
 		if ($this->value) {
 			$html .= ' checked="checked" ';
 		}
 		$html .= '/>';
 
 		if (!empty($this->label)) {
-			$html .= '<label for="' . $this->getId() . '" class="CheckboxFieldLabel">' . $this->label . '</label>';
+			$html .=
+				'<label for="' .
+				$this->getId() .
+				'" class="CheckboxFieldLabel">' .
+				$this->label .
+				'</label>';
 		}
 		return $html;
 	}
-
 }

@@ -20,7 +20,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 abstract class BbTagGroep extends BbTag
 {
-
 	/**
 	 * @var GroepRepository
 	 */
@@ -34,13 +33,16 @@ abstract class BbTagGroep extends BbTag
 	 */
 	private $id;
 
-	public function __construct(GroepRepository $model, SerializerInterface $serializer)
-	{
+	public function __construct(
+		GroepRepository $model,
+		SerializerInterface $serializer
+	) {
 		$this->model = $model;
 		$this->serializer = $serializer;
 	}
 
-	public function getId() {
+	public function getId()
+	{
 		return $this->id;
 	}
 
@@ -59,7 +61,7 @@ abstract class BbTagGroep extends BbTag
 	 */
 	private function getGroep()
 	{
-		$this->id = (int)$this->id;
+		$this->id = (int) $this->id;
 		$groep = $this->model->get($this->id);
 		if (!$groep) {
 			throw new BbException("Groep met id $this->id bestaat niet");
@@ -79,16 +81,21 @@ abstract class BbTagGroep extends BbTag
 			return $this->groepLight($groep, 'ketzer', $this->getLidNaam());
 		} else {
 			$url = $this->model->getUrl();
-			return vsprintf("%s met id=%s bestaat niet. <a href=\"%s/beheren\">Zoeken</a>", [
-				ucfirst($this->getTagName()),
-				htmlspecialchars($this->id), $url
-			]);
+			return vsprintf(
+				"%s met id=%s bestaat niet. <a href=\"%s/beheren\">Zoeken</a>",
+				[ucfirst($this->getTagName()), htmlspecialchars($this->id), $url]
+			);
 		}
 	}
 
 	protected function groepLight(Groep $groep, $tag, $leden)
 	{
-		return BbHelper::lightLinkBlock($tag, $groep->getUrl(), $groep->naam, $groep->aantalLeden() . ' ' . $leden);
+		return BbHelper::lightLinkBlock(
+			$tag,
+			$groep->getUrl(),
+			$groep->naam,
+			$groep->aantalLeden() . ' ' . $leden
+		);
 	}
 
 	abstract public function getLidNaam();
@@ -102,10 +109,12 @@ abstract class BbTagGroep extends BbTag
 		$groep = $this->getGroep();
 		if (!$groep) {
 			$url = $this->model->getUrl();
-			throw new BbException(vsprintf("%s met id=%s bestaat niet. <a href=\"%s/beheren\">Zoeken</a>", [
-				ucfirst($this->getTagName()),
-				htmlspecialchars($this->id), $url
-			]));
+			throw new BbException(
+				vsprintf(
+					"%s met id=%s bestaat niet. <a href=\"%s/beheren\">Zoeken</a>",
+					[ucfirst($this->getTagName()), htmlspecialchars($this->id), $url]
+				)
+			);
 		}
 		return $this->groep($groep);
 	}
@@ -120,12 +129,14 @@ abstract class BbTagGroep extends BbTag
 				'aanmeld_url' => $groep->getUrl() . '/aanmelden2/' . $uid,
 			];
 
-			$groepJson = htmlspecialchars($this->serializer->serialize($groep, 'json', ['groups' => ['vue']]));
+			$groepJson = htmlspecialchars(
+				$this->serializer->serialize($groep, 'json', ['groups' => ['vue']])
+			);
 
-			return vsprintf('<groep class="vue-context" :groep="%s" :settings="%s"></groep>', [
-				$groepJson,
-				vue_encode($settings)
-			]);
+			return vsprintf(
+				'<groep class="vue-context" :groep="%s" :settings="%s"></groep>',
+				[$groepJson, vue_encode($settings)]
+			);
 		}
 		$view = new GroepView($groep, null, false, true);
 		return $view->getHtml();

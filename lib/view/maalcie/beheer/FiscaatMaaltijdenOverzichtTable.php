@@ -9,8 +9,10 @@ use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\PopupDataTableKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
-class FiscaatMaaltijdenOverzichtTable extends DataTable {
-	public function __construct() {
+class FiscaatMaaltijdenOverzichtTable extends DataTable
+{
+	public function __construct()
+	{
 		parent::__construct(Maaltijd::class, '/maaltijden/fiscaat/overzicht');
 
 		$this->deleteColumn('mlt_repetitie_id');
@@ -24,11 +26,33 @@ class FiscaatMaaltijdenOverzichtTable extends DataTable {
 		$this->deleteColumn('omschrijving');
 
 		$this->addColumn('aantal_aanmeldingen');
-		$this->addColumn('prijs', null, null, CellRender::Bedrag(), null, CellType::FormattedNumber());
-		$this->addColumn('totaal', null, null, CellRender::Bedrag(), null, CellType::FormattedNumber());
+		$this->addColumn(
+			'prijs',
+			null,
+			null,
+			CellRender::Bedrag(),
+			null,
+			CellType::FormattedNumber()
+		);
+		$this->addColumn(
+			'totaal',
+			null,
+			null,
+			CellRender::Bedrag(),
+			null,
+			CellType::FormattedNumber()
+		);
 
-		$this->setOrder(array('datum' => 'desc'));
+		$this->setOrder(['datum' => 'desc']);
 
-		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/maaltijden/lijst/:maaltijd_id', 'Maaltijdlijst', 'Maaltijdlijst bekijken', 'table_normal'));
+		$this->addKnop(
+			new PopupDataTableKnop(
+				Multiplicity::One(),
+				'/maaltijden/lijst/:maaltijd_id',
+				'Maaltijdlijst',
+				'Maaltijdlijst bekijken',
+				'table_normal'
+			)
+		);
 	}
 }

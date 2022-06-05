@@ -35,7 +35,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeRepetitiesRepository")
  * @ORM\Table("crv_repetities")
  */
-class CorveeRepetitie implements DisplayEntity {
+class CorveeRepetitie implements DisplayEntity
+{
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -94,11 +95,13 @@ class CorveeRepetitie implements DisplayEntity {
 	 */
 	public $corveeFunctie;
 
-	public function getDagVanDeWeekText() {
+	public function getDagVanDeWeekText()
+	{
 		return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
 	}
 
-	public function getPeriodeInDagenText() {
+	public function getPeriodeInDagenText()
+	{
 		switch ($this->periode_in_dagen) {
 			case 0:
 				return '-';
@@ -108,22 +111,30 @@ class CorveeRepetitie implements DisplayEntity {
 				return 'elke week';
 			default:
 				if ($this->periode_in_dagen % 7 === 0) {
-					return 'elke ' . ($this->periode_in_dagen / 7) . ' weken';
+					return 'elke ' . $this->periode_in_dagen / 7 . ' weken';
 				} else {
 					return 'elke ' . $this->periode_in_dagen . ' dagen';
 				}
 		}
 	}
 
-	public function getId() {
+	public function getId()
+	{
 		return $this->crv_repetitie_id;
 	}
 
-	public function getWeergave(): string {
+	public function getWeergave(): string
+	{
 		if ($this->corveeFunctie) {
-			return $this->corveeFunctie->naam . ' ' . $this->getDagVanDeWeekText() . ' ' . $this->getPeriodeInDagenText();
+			return $this->corveeFunctie->naam .
+				' ' .
+				$this->getDagVanDeWeekText() .
+				' ' .
+				$this->getPeriodeInDagenText();
 		} else {
-			return $this->getDagVanDeWeekText() . ' ' . $this->getPeriodeInDagenText();
+			return $this->getDagVanDeWeekText() .
+				' ' .
+				$this->getPeriodeInDagenText();
 		}
 	}
 }

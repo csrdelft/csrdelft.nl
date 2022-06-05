@@ -36,7 +36,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Controller van het fotoalbum.
  */
-class FotoAlbumController extends AbstractController {
+class FotoAlbumController extends AbstractController
+{
 	/**
 	 * @var FotoAlbumRepository
 	 */
@@ -66,7 +67,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/verwerken/{dir}", methods={"GET"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_MOD,P_ALBUM_PUBLIC_MOD})
 	 */
-	public function verwerken($dir) {
+	public function verwerken($dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
@@ -77,7 +79,9 @@ class FotoAlbumController extends AbstractController {
 		} else {
 			$this->fotoAlbumRepository->verwerkFotos($album);
 		}
-		return $this->redirectToRoute('csrdelft_fotoalbum_bekijken', ['dir' => $dir]);
+		return $this->redirectToRoute('csrdelft_fotoalbum_bekijken', [
+			'dir' => $dir,
+		]);
 	}
 
 	/**
@@ -89,7 +93,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/toevoegen/{dir}", methods={"POST"}, requirements={"dir": ".+"}, defaults={"dir": ""})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function toevoegen(Request $request, $dir) {
+	public function toevoegen(Request $request, $dir)
+	{
 		$album = new FotoAlbum($dir);
 		if (!$album->magToevoegen()) {
 			throw $this->createAccessDeniedException();
@@ -114,7 +119,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/uploaden/{dir}", methods={"GET","POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function uploaden(Request $request, $dir) {
+	public function uploaden(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
@@ -132,7 +138,8 @@ class FotoAlbumController extends AbstractController {
 			if ($formulier->validate()) {
 				try {
 					if ($poster) {
-						$filename = $formulier->findByName('posternaam')->getValue() . '.jpg';
+						$filename =
+							$formulier->findByName('posternaam')->getValue() . '.jpg';
 						if (strpos($filename, 'folder') !== false) {
 							throw new CsrGebruikerException('Albumcover niet toegestaan');
 						}
@@ -152,19 +159,19 @@ class FotoAlbumController extends AbstractController {
 					}
 
 					if ($poster) {
-						return $this->redirectToRoute(
-							'csrdelft_fotoalbum_bekijken',
-							['dir' => $dir, '_fragment' => $foto->getResizedUrl()]
-						);
+						return $this->redirectToRoute('csrdelft_fotoalbum_bekijken', [
+							'dir' => $dir,
+							'_fragment' => $foto->getResizedUrl(),
+						]);
 					} else {
 						return new JsonResponse(true);
 					}
 				} catch (CsrGebruikerException $e) {
-					return new JsonResponse(array('error' => $e->getMessage()), 500);
+					return new JsonResponse(['error' => $e->getMessage()], 500);
 				}
 			} else {
 				if (!$poster && $uploader !== null) {
-					return new JsonResponse(array('error' => $uploader->getError()), 500);
+					return new JsonResponse(['error' => $uploader->getError()], 500);
 				}
 			}
 		}
@@ -177,7 +184,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/bestaande/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function bestaande($dir) {
+	public function bestaande($dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
@@ -206,7 +214,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/downloaden/{dir}", methods={"GET"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_DOWN,P_ALBUM_PUBLIC_READ})
 	 */
-	public function downloaden($dir) {
+	public function downloaden($dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magDownloaden()) {
@@ -214,13 +223,15 @@ class FotoAlbumController extends AbstractController {
 		}
 		header('Content-Description: File Transfer');
 		header('Content-Type: application/x-tar');
-		header('Content-Disposition: attachment; filename="' . $album->dirname . '.tar"');
+		header(
+			'Content-Disposition: attachment; filename="' . $album->dirname . '.tar"'
+		);
 		header('Expires: 0');
 		header('Cache-Control: must-revalidate');
 		header('Pragma: public');
 		$fotos = $album->getFotos();
 		set_time_limit(0);
-		$cmd = "tar cC " . escapeshellarg($album->path);
+		$cmd = 'tar cC ' . escapeshellarg($album->path);
 		foreach ($fotos as $foto) {
 			$cmd .= ' ' . escapeshellarg($foto->filename);
 		}
@@ -229,7 +240,7 @@ class FotoAlbumController extends AbstractController {
 			print fread($fh, 8192);
 		}
 		pclose($fh);
-		exit;
+		exit();
 	}
 
 	/**
@@ -239,7 +250,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/hernoemen/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_MOD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function hernoemen(Request $request, $dir) {
+	public function hernoemen(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
@@ -263,7 +275,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/albumcover/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function albumcover(Request $request, $dir) {
+	public function albumcover(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
@@ -271,7 +284,10 @@ class FotoAlbumController extends AbstractController {
 		}
 		$filename = $request->request->get('foto');
 		$cover = new Foto($filename, $album);
-		if ($cover->exists() && $this->fotoAlbumRepository->setAlbumCover($album, $cover)) {
+		if (
+			$cover->exists() &&
+			$this->fotoAlbumRepository->setAlbumCover($album, $cover)
+		) {
 			return new JsonResponse($album->getUrl() . '#' . $cover->getResizedUrl());
 		} else {
 			return new JsonResponse('Fotoalbum-cover instellen mislukt', 500);
@@ -285,7 +301,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/verwijderen/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function verwijderen(Request $request, $dir) {
+	public function verwijderen(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magVerwijderen()) {
@@ -306,7 +323,7 @@ class FotoAlbumController extends AbstractController {
 		$foto = $this->fotoRepository->get($album->subdir, $filename);
 		if ($this->fotoRepository->verwijderFoto($foto)) {
 			echo '<div id="' . md5($filename) . '" class="remove"></div>';
-			exit;
+			exit();
 		} else {
 			return new JsonResponse('Foto verwijderen mislukt', 500);
 		}
@@ -321,7 +338,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/roteren/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function roteren(Request $request, $dir) {
+	public function roteren(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
@@ -341,7 +359,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/zoeken", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function zoeken(Request $request, $zoekterm = null) {
+	public function zoeken(Request $request, $zoekterm = null)
+	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
 		}
@@ -351,15 +370,15 @@ class FotoAlbumController extends AbstractController {
 		}
 		$query = iconv('utf-8', 'ascii//TRANSLIT', $zoekterm); // convert accented characters to regular
 		$limit = $request->query->getInt('limit', 5);
-		$result = array();
+		$result = [];
 		foreach ($this->fotoAlbumRepository->zoeken($query, $limit) as $album) {
 			/** @var FotoAlbum $album */
-			$result[] = array(
+			$result[] = [
 				'icon' => Icon::getTag('fotoalbum', null, 'Fotoalbum', 'me-2'),
 				'url' => $album->getUrl(),
 				'label' => $album->getParentName(),
-				'value' => ucfirst($album->dirname)
-			);
+				'value' => ucfirst($album->dirname),
+			];
 		}
 		return new JsonResponse($result);
 	}
@@ -371,7 +390,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/gettags/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function gettags(Request $request, $dir) {
+	public function gettags(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		$filename = $request->request->get('foto');
@@ -391,7 +411,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/addtag/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function addtag(Request $request, $dir) {
+	public function addtag(Request $request, $dir)
+	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
@@ -423,7 +444,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/removetag", methods={"POST"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function removetag(Request $request) {
+	public function removetag(Request $request)
+	{
 		$refuuid = $request->request->get('refuuid');
 		$keyword = $request->request->get('keyword');
 		if (!LoginService::mag(P_ALBUM_MOD) && !LoginService::mag($keyword)) {
@@ -437,12 +459,13 @@ class FotoAlbumController extends AbstractController {
 			$tags = $this->fotoTagsRepository->getTags($foto);
 			return new JsonResponse($tags);
 		} else {
-			return new JsonResponse(array());
+			return new JsonResponse([]);
 		}
 	}
 
-	private function assertValidFotoPath($dir, $foto) {
-		if (!preg_match("/\.(JPE?G|PNG|jpe?g|png)/", $foto)) {
+	private function assertValidFotoPath($dir, $foto)
+	{
+		if (!preg_match('/\.(JPE?G|PNG|jpe?g|png)/', $foto)) {
 			throw $this->createNotFoundException();
 		}
 		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto))) {
@@ -458,7 +481,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/{dir}/_resized/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+"})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function raw_image_resized(Request $request, string $dir, string $foto) {
+	public function raw_image_resized(Request $request, string $dir, string $foto)
+	{
 		$this->assertValidFotoPath($dir, $foto);
 
 		$image = new Foto($foto, new FotoAlbum($dir), true);
@@ -467,12 +491,25 @@ class FotoAlbumController extends AbstractController {
 			throw $this->createAccessDeniedException();
 		} elseif (!$image->exists()) {
 			throw $this->createNotFoundException();
-		} elseif (!is_file($image->getResizedPath()) || !is_readable($image->getResizedPath())) {
+		} elseif (
+			!is_file($image->getResizedPath()) ||
+			!is_readable($image->getResizedPath())
+		) {
 			$image->createResized();
 		}
 
-		$response = new BinaryFileResponse($image->getResizedPath(), 200, [], true, null, true);
-		$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $image->filename);
+		$response = new BinaryFileResponse(
+			$image->getResizedPath(),
+			200,
+			[],
+			true,
+			null,
+			true
+		);
+		$response->setContentDisposition(
+			ResponseHeaderBag::DISPOSITION_INLINE,
+			$image->filename
+		);
 		$response->setExpires(date_create_immutable('+1 day'));
 		$response->isNotModified($request);
 
@@ -487,7 +524,8 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/{dir}/_thumbs/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+"})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function raw_image_thumb(Request $request, string $dir, string $foto) {
+	public function raw_image_thumb(Request $request, string $dir, string $foto)
+	{
 		$this->assertValidFotoPath($dir, $foto);
 
 		$image = new Foto($foto, new FotoAlbum($dir), true);
@@ -496,12 +534,25 @@ class FotoAlbumController extends AbstractController {
 			throw $this->createAccessDeniedException();
 		} elseif (!$image->exists()) {
 			throw $this->createNotFoundException();
-		} elseif (!is_file($image->getThumbPath()) || !is_readable($image->getThumbPath())) {
+		} elseif (
+			!is_file($image->getThumbPath()) ||
+			!is_readable($image->getThumbPath())
+		) {
 			$image->createThumb();
 		}
 
-		$response = new BinaryFileResponse($image->getThumbPath(), 200, [], true, null, true);
-		$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $image->filename);
+		$response = new BinaryFileResponse(
+			$image->getThumbPath(),
+			200,
+			[],
+			true,
+			null,
+			true
+		);
+		$response->setContentDisposition(
+			ResponseHeaderBag::DISPOSITION_INLINE,
+			$image->filename
+		);
 		$response->setExpires(date_create_immutable('+1 day'));
 		$response->isNotModified($request);
 
@@ -516,19 +567,32 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/{dir}/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+\.(JPE?G|PNG|jpe?g|png)"})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function raw_image(Request $request, string $dir, string $foto) {
+	public function raw_image(Request $request, string $dir, string $foto)
+	{
 		$this->assertValidFotoPath($dir, $foto);
 
 		$image = new Foto($foto, new FotoAlbum($dir), true);
 
 		if (!$image->magBekijken()) {
 			throw $this->createAccessDeniedException();
-		} else if (!$image->exists()) {
+		} elseif (!$image->exists()) {
 			throw $this->createNotFoundException();
 		}
 
-		$response = new BinaryFileResponse($image->getFullPath(), 200, [], true, null, true);
-		$response->setContentDisposition($request->query->has('download') ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE, $image->filename);
+		$response = new BinaryFileResponse(
+			$image->getFullPath(),
+			200,
+			[],
+			true,
+			null,
+			true
+		);
+		$response->setContentDisposition(
+			$request->query->has('download')
+				? ResponseHeaderBag::DISPOSITION_ATTACHMENT
+				: ResponseHeaderBag::DISPOSITION_INLINE,
+			$image->filename
+		);
 		$response->setExpires(date_create_immutable('+1 day'));
 		$response->isNotModified($request);
 
@@ -541,8 +605,9 @@ class FotoAlbumController extends AbstractController {
 	 * @Route("/fotoalbum/{dir}", methods={"GET"}, requirements={"dir": ".+"}, defaults={"dir": ""})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function bekijken($dir) {
-		if ($dir == "" && !LoginService::mag(P_ALBUM_READ)) {
+	public function bekijken($dir)
+	{
+		if ($dir == '' && !LoginService::mag(P_ALBUM_READ)) {
 			$dir = 'Publiek';
 		}
 
@@ -555,6 +620,9 @@ class FotoAlbumController extends AbstractController {
 		if ($album->dirname === 'Posters') {
 			$album->orderByDateModified();
 		}
-		return $this->render('fotoalbum/album.html.twig', ['album' => $album, 'breadcrumbs' => FotoAlbumBreadcrumbs::getBreadcrumbs($album)]);
+		return $this->render('fotoalbum/album.html.twig', [
+			'album' => $album,
+			'breadcrumbs' => FotoAlbumBreadcrumbs::getBreadcrumbs($album),
+		]);
 	}
 }

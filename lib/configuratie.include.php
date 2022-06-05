@@ -37,18 +37,23 @@ setlocale(LC_ALL, 'nl_NL');
 setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Amsterdam');
 
-if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false) {
+if (
+	$trustedProxies =
+		$_SERVER['TRUSTED_PROXIES'] ?? ($_ENV['TRUSTED_PROXIES'] ?? false)
+) {
 	Request::setTrustedProxies(
 		explode(',', $trustedProxies),
 		Request::HEADER_X_FORWARDED_ALL
 	);
 }
 
-if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false) {
+if (
+	$trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? ($_ENV['TRUSTED_HOSTS'] ?? false)
+) {
 	Request::setTrustedHosts([$trustedHosts]);
 }
 
-$kernel = new Kernel($_SERVER['APP_ENV'], (bool)$_SERVER['APP_DEBUG']);
+$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $kernel->boot();
 $container = $kernel->getContainer();
 
@@ -60,11 +65,22 @@ ContainerFacade::init($container);
 
 // Use HTTP Strict Transport Security to force client to use secure connections only
 if (FORCE_HTTPS) {
-	if (!(isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') && !isCI() && !isCLI()) {
+	if (
+		!(
+			isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) &&
+			$_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https'
+		) &&
+		!isCI() &&
+		!isCLI()
+	) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-			if ($account = $container->get(AccountRepository::class)->findOneBy(['private_token' => $token])) {
+			if (
+				$account = $container
+					->get(AccountRepository::class)
+					->findOneBy(['private_token' => $token])
+			) {
 				// Reset private token, user has to get a new one
 				$container->get(AccountRepository::class)->resetPrivateToken($account);
 			}
@@ -77,7 +93,9 @@ if (FORCE_HTTPS) {
 	}
 }
 
-if (isCI() && isSyrinx()) die("Syrinx is geen Travis!");
+if (isCI() && isSyrinx()) {
+	die('Syrinx is geen Travis!');
+}
 
 if (!isCLI()) {
 	// Sessie configureren
@@ -85,7 +103,10 @@ if (!isCLI()) {
 	ini_set('session.save_path', SESSION_PATH);
 	ini_set('session.use_trans_sid', 0);
 	// Sync lifetime of FS based PHP session with DB based C.S.R. session
-	ini_set('session.gc_maxlifetime', (int)instelling('beveiliging', 'session_lifetime_seconds'));
+	ini_set(
+		'session.gc_maxlifetime',
+		(int) instelling('beveiliging', 'session_lifetime_seconds')
+	);
 	ini_set('session.use_strict_mode', true);
 	ini_set('session.use_cookies', true);
 	ini_set('session.use_only_cookies', true);

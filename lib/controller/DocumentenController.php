@@ -32,8 +32,10 @@ class DocumentenController extends AbstractController
 	/** @var DocumentCategorieRepository */
 	private $documentCategorieRepository;
 
-	public function __construct(DocumentRepository $documentRepository, DocumentCategorieRepository $documentCategorieRepository)
-	{
+	public function __construct(
+		DocumentRepository $documentRepository,
+		DocumentCategorieRepository $documentCategorieRepository
+	) {
 		$this->documentRepository = $documentRepository;
 		$this->documentCategorieRepository = $documentCategorieRepository;
 	}
@@ -45,7 +47,9 @@ class DocumentenController extends AbstractController
 	 */
 	public function recenttonen(): Response
 	{
-		return $this->render('documenten/documenten.html.twig', ['categorien' => $this->documentCategorieRepository->findAll()]);
+		return $this->render('documenten/documenten.html.twig', [
+			'categorien' => $this->documentCategorieRepository->findAll(),
+		]);
 	}
 
 	/**
@@ -64,7 +68,9 @@ class DocumentenController extends AbstractController
 			return new JsonResponse(false);
 		}
 
-		return new PlainView(sprintf('<tr class="remove" id="document-%s"></tr>', $id));
+		return new PlainView(
+			sprintf('<tr class="remove" id="document-%s"></tr>', $id)
+		);
 	}
 
 	/**
@@ -81,7 +87,11 @@ class DocumentenController extends AbstractController
 
 		//We do not allow serving html files because they can be used for XSS.
 		//We do not allow serving javascript files because they can increase the impact of XSS by registering a service worker.
-		if ($document->mimetype == "text/html" || $document->mimetype == "text/javascript" || !checkMimetype($document->filename, $document->mimetype)) {
+		if (
+			$document->mimetype == 'text/html' ||
+			$document->mimetype == 'text/javascript' ||
+			!checkMimetype($document->filename, $document->mimetype)
+		) {
 			setMelding('Dit type bestand kan niet worden getoond', -1);
 			return $this->redirectToRoute('csrdelft_documenten_recenttonen');
 		}
@@ -108,7 +118,10 @@ class DocumentenController extends AbstractController
 
 		if ($document->hasFile()) {
 			$response = new BinaryFileResponse($document->getFullPath());
-			$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $document->filename);
+			$response->setContentDisposition(
+				ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+				$document->filename
+			);
 			return $response;
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
@@ -125,9 +138,13 @@ class DocumentenController extends AbstractController
 	public function categorie(DocumentCategorie $categorie): Response
 	{
 		if (!$categorie->magBekijken()) {
-			throw $this->createAccessDeniedException('Mag deze categorie niet bekijken');
+			throw $this->createAccessDeniedException(
+				'Mag deze categorie niet bekijken'
+			);
 		} else {
-			return $this->render('documenten/categorie.html.twig', ['categorie' => $categorie]);
+			return $this->render('documenten/categorie.html.twig', [
+				'categorie' => $categorie,
+			]);
 		}
 	}
 
@@ -138,20 +155,28 @@ class DocumentenController extends AbstractController
 	 * @Route("/documenten/categorie/{id}/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */
-	public function categorieBewerken(Request $request, DocumentCategorie $categorie)
-	{
+	public function categorieBewerken(
+		Request $request,
+		DocumentCategorie $categorie
+	) {
 		$form = $this->createFormulier(DocumentCategorieForm::class, $categorie, [
-			'action' => $this->generateUrl('csrdelft_documenten_categoriebewerken', ['id' => $categorie->id])
+			'action' => $this->generateUrl('csrdelft_documenten_categoriebewerken', [
+				'id' => $categorie->id,
+			]),
 		]);
 
 		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 			return new JsonResponse(true);
 		} else {
 			// Voorkom opslaan
-			$this->getDoctrine()->getManager()->clear();
+			$this->getDoctrine()
+				->getManager()
+				->clear();
 			return new Response($form->createModalView());
 		}
 	}
@@ -166,18 +191,24 @@ class DocumentenController extends AbstractController
 	{
 		$categorie = new DocumentCategorie();
 		$form = $this->createFormulier(DocumentCategorieForm::class, $categorie, [
-			'action' => $this->generateUrl('csrdelft_documenten_categorieaanmaken')
+			'action' => $this->generateUrl('csrdelft_documenten_categorieaanmaken'),
 		]);
 
 		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
-			$this->getDoctrine()->getManager()->persist($categorie);
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->persist($categorie);
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 			return new JsonResponse(true);
 		} else {
 			// Voorkom opslaan
-			$this->getDoctrine()->getManager()->clear();
+			$this->getDoctrine()
+				->getManager()
+				->clear();
 			return new Response($form->createModalView());
 		}
 	}
@@ -188,12 +219,19 @@ class DocumentenController extends AbstractController
 	 * @Auth(P_DOCS_MOD)
 	 * @return JsonResponse
 	 */
-	public function categorieVerwijderen(DocumentCategorie $categorie): JsonResponse
-	{
-		$this->getDoctrine()->getManager()->remove($categorie);
-		$this->getDoctrine()->getManager()->flush();
+	public function categorieVerwijderen(
+		DocumentCategorie $categorie
+	): JsonResponse {
+		$this->getDoctrine()
+			->getManager()
+			->remove($categorie);
+		$this->getDoctrine()
+			->getManager()
+			->flush();
 
-		return new JsonResponse($this->generateUrl('csrdelft_documenten_recenttonen'));
+		return new JsonResponse(
+			$this->generateUrl('csrdelft_documenten_recenttonen')
+		);
 	}
 
 	/**
@@ -209,7 +247,9 @@ class DocumentenController extends AbstractController
 			throw $this->createAccessDeniedException();
 		}
 		$form = $this->createFormulier(DocumentBewerkenForm::class, $document, [
-			'action' => $this->generateUrl('csrdelft_documenten_bewerken', ['id' => $document->id])
+			'action' => $this->generateUrl('csrdelft_documenten_bewerken', [
+				'id' => $document->id,
+			]),
 		]);
 
 		$form->handleRequest($request);
@@ -217,14 +257,15 @@ class DocumentenController extends AbstractController
 		if ($form->isPosted() && $form->validate()) {
 			$this->documentRepository->save($document);
 
-			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
+			return $this->redirectToRoute('csrdelft_documenten_categorie', [
+				'id' => $document->categorie->id,
+			]);
 		} else {
 			return $this->render('default.html.twig', [
 				'titel' => 'Document bewerken',
 				'content' => $form->createView(),
 			]);
 		}
-
 	}
 
 	/**
@@ -240,7 +281,9 @@ class DocumentenController extends AbstractController
 
 		$catId = $request->query->getInt('catID');
 		if ($catId) {
-			$document->categorie = $this->getDoctrine()->getManager()->getReference(DocumentCategorie::class, $catId);
+			$document->categorie = $this->getDoctrine()
+				->getManager()
+				->getReference(DocumentCategorie::class, $catId);
 		}
 
 		$form = $this->createFormulier(DocumentToevoegenForm::class, $document, [
@@ -268,13 +311,17 @@ class DocumentenController extends AbstractController
 					$document->deleteFile();
 				}
 
-				$form->getField('uploader')->opslaan($document->getPath(), $document->getFullFileName());
+				$form
+					->getField('uploader')
+					->opslaan($document->getPath(), $document->getFullFileName());
 			} catch (Exception $exception) {
 				$this->documentRepository->remove($document);
 				throw $exception;
 			}
 
-			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
+			return $this->redirectToRoute('csrdelft_documenten_categorie', [
+				'id' => $document->categorie->id,
+			]);
 		} else {
 			return $this->render('default.html.twig', [
 				'titel' => 'Document toevoegen',
@@ -301,16 +348,16 @@ class DocumentenController extends AbstractController
 
 		$limit = $request->query->getInt('limit', 5);
 
-		$result = array();
+		$result = [];
 		foreach ($this->documentRepository->zoek($zoekterm, $limit) as $doc) {
 			if ($doc->magBekijken()) {
-				$result[] = array(
+				$result[] = [
 					'url' => '/documenten/bekijken/' . $doc->id . '/' . $doc->filename,
 					'label' => $doc->categorie->naam,
 					'value' => $doc->naam,
 					'icon' => Icon::getTag('document'),
-					'id' => $doc->id
-				);
+					'id' => $doc->id,
+				];
 			}
 		}
 		return new JsonResponse($result);

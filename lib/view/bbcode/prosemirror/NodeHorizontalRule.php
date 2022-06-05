@@ -1,6 +1,5 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror;
 
 use CsrDelft\bb\tag\BbHorizontalRule;

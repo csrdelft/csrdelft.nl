@@ -34,7 +34,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Controller van de agenda.
  */
-class AgendaController extends AbstractController {
+class AgendaController extends AbstractController
+{
 	const SECONDEN_IN_JAAR = 31557600;
 	/**
 	 * @var AgendaRepository
@@ -104,7 +105,8 @@ class AgendaController extends AbstractController {
 		return $this->render('agenda/maand.html.twig', [
 			'maand' => $maand,
 			'jaar' => $jaar,
-			'creator' => LoginService::mag(P_AGENDA_ADD) || $this->getProfiel()->verticaleleider,
+			'creator' =>
+				LoginService::mag(P_AGENDA_ADD) || $this->getProfiel()->verticaleleider,
 		]);
 	}
 
@@ -115,10 +117,14 @@ class AgendaController extends AbstractController {
 	 */
 	public function ical(): Response
 	{
-		return $this->render('agenda/icalendar.ical.twig', [
-			'items' => $this->agendaRepository->getICalendarItems(),
-			'published' => $this->icalDate(),
-		], new IcalResponse());
+		return $this->render(
+			'agenda/icalendar.ical.twig',
+			[
+				'items' => $this->agendaRepository->getICalendarItems(),
+				'published' => $this->icalDate(),
+			],
+			new IcalResponse()
+		);
 	}
 
 	/**
@@ -129,10 +135,14 @@ class AgendaController extends AbstractController {
 	 */
 	public function export($uuid): Response
 	{
-		return $this->render('agenda/icalendar.ical.twig', [
-			'items' => [$this->getAgendaItemByUuid($uuid)],
-			'published' => $this->icalDate(),
-		], new IcalResponse());
+		return $this->render(
+			'agenda/icalendar.ical.twig',
+			[
+				'items' => [$this->getAgendaItemByUuid($uuid)],
+				'published' => $this->icalDate(),
+			],
+			new IcalResponse()
+		);
 	}
 
 	/**
@@ -173,12 +183,12 @@ class AgendaController extends AbstractController {
 			} else {
 				$url = '/agenda/' . $y . '/' . $m . '#dag-' . $y . '-' . $m . '-' . $d;
 			}
-			$result[] = array(
+			$result[] = [
 				'icon' => Icon::getTag('calendar'),
 				'url' => $url,
 				'label' => $d . ' ' . strftime('%b', $begin) . ' ' . $y,
-				'value' => $item->getTitel()
-			);
+				'value' => $item->getTitel(),
+			];
 		}
 		return new JsonResponse($result);
 	}
@@ -189,7 +199,8 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/courant", methods={"POST"})
 	 * @Auth(P_MAIL_COMPOSE)
 	 */
-	public function courant(BbToProsemirror $bbToProsemirror) {
+	public function courant(BbToProsemirror $bbToProsemirror)
+	{
 		$items = $this->agendaRepository->getAllAgendeerbaar(
 			date_create_immutable(),
 			date_create_immutable('next saturday + 2 weeks'),
@@ -197,7 +208,9 @@ class AgendaController extends AbstractController {
 			false
 		);
 		return new JsonResponse(
-			$bbToProsemirror->toProseMirrorFragment($this->renderView('agenda/courant.html.twig', ['items' => $items]))
+			$bbToProsemirror->toProseMirrorFragment(
+				$this->renderView('agenda/courant.html.twig', ['items' => $items])
+			)
 		);
 	}
 
@@ -208,17 +221,25 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/toevoegen/{datum}", methods={"POST"}, defaults={"datum": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function toevoegen(Request $request, $datum = null) {
+	public function toevoegen(Request $request, $datum = null)
+	{
 		$profiel = $this->getProfiel();
 		if (!LoginService::mag(P_AGENDA_ADD) && !$profiel->verticaleleider) {
-			throw $this->createAccessDeniedException('Mag geen gebeurtenis toevoegen.');
+			throw $this->createAccessDeniedException(
+				'Mag geen gebeurtenis toevoegen.'
+			);
 		}
 
-		$item = $this->agendaRepository->nieuw($request->request->get('begin_moment'), $request->request->get('eind_moment'));
+		$item = $this->agendaRepository->nieuw(
+			$request->request->get('begin_moment'),
+			$request->request->get('eind_moment')
+		);
 		if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
 			$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
 		}
-		$form = $this->createFormulier(AgendaItemForm::class, $item, ['actie' => 'toevoegen']);
+		$form = $this->createFormulier(AgendaItemForm::class, $item, [
+			'actie' => 'toevoegen',
+		]);
 		$form->handleRequest($request);
 		if ($form->validate()) {
 			if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
@@ -227,9 +248,20 @@ class AgendaController extends AbstractController {
 			$this->agendaRepository->save($item);
 			if ($datum === 'doorgaan') {
 				$_POST = []; // clear post values of previous input
-				setMelding('Toegevoegd: ' . $item->titel . ' (' . date_format_intl($item->begin_moment, DATETIME_FORMAT) . ')', 1);
+				setMelding(
+					'Toegevoegd: ' .
+						$item->titel .
+						' (' .
+						date_format_intl($item->begin_moment, DATETIME_FORMAT) .
+						')',
+					1
+				);
 				$item->item_id = null;
-				return new Response($this->createFormulier(AgendaItemForm::class, $item, ['actie' => 'toevoegen'])->createModalView());
+				return new Response(
+					$this->createFormulier(AgendaItemForm::class, $item, [
+						'actie' => 'toevoegen',
+					])->createModalView()
+				);
 			} else {
 				return new JsonResponse(true);
 			}
@@ -245,12 +277,15 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/bewerken/{aid}", methods={"POST"}, requirements={"aid": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken(Request $request, $aid) {
-		$item = $this->agendaRepository->getAgendaItem((int)$aid);
+	public function bewerken(Request $request, $aid)
+	{
+		$item = $this->agendaRepository->getAgendaItem((int) $aid);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
-		$form = $this->createFormulier(AgendaItemForm::class, $item, ['actie' => 'bewerken']);
+		$form = $this->createFormulier(AgendaItemForm::class, $item, [
+			'actie' => 'bewerken',
+		]);
 		$form->handleRequest($request);
 		if ($form->validate()) {
 			$this->agendaRepository->save($item);
@@ -279,8 +314,12 @@ class AgendaController extends AbstractController {
 			throw $this->createAccessDeniedException();
 		}
 
-		$item->begin_moment = date_create_immutable($request->request->get('begin_moment'));
-		$item->eind_moment = date_create_immutable($request->request->get('eind_moment'));
+		$item->begin_moment = date_create_immutable(
+			$request->request->get('begin_moment')
+		);
+		$item->eind_moment = date_create_immutable(
+			$request->request->get('eind_moment')
+		);
 
 		$this->agendaRepository->save($item);
 
@@ -295,7 +334,7 @@ class AgendaController extends AbstractController {
 	 */
 	public function verwijderen($aid): JsonResponse
 	{
-		$item = $this->agendaRepository->getAgendaItem((int)$aid);
+		$item = $this->agendaRepository->getAgendaItem((int) $aid);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -323,11 +362,11 @@ class AgendaController extends AbstractController {
 	 * @param $refuuid
 	 * @return Agendeerbaar|null
 	 */
-	private function getAgendaItemByUuid($refuuid) {
+	private function getAgendaItemByUuid($refuuid)
+	{
 		$parts = explode('@', $refuuid, 2);
 		$module = explode('.', $parts[1], 2);
 		switch ($module[0]) {
-
 			case 'csrdelft':
 				$item = $this->profielRepository->retrieveByUUID($refuuid);
 				break;
@@ -366,16 +405,23 @@ class AgendaController extends AbstractController {
 		$startMoment = date_create_immutable($request->query->get('start'));
 		$eindMoment = date_create_immutable($request->query->get('end'));
 
-		if ($startMoment->add(DateInterval::createFromDateString('1 year')) < $eindMoment) {
+		if (
+			$startMoment->add(DateInterval::createFromDateString('1 year')) <
+			$eindMoment
+		) {
 			// Om de gare logica omtrent verjaardagen te laten werken
-			throw new CsrGebruikerException("Verschil tussen start en eind mag niet groter zijn dan een jaar.");
+			throw new CsrGebruikerException(
+				'Verschil tussen start en eind mag niet groter zijn dan een jaar.'
+			);
 		}
 
-		$events = $this->agendaRepository->getAllAgendeerbaar($startMoment, $eindMoment);
+		$events = $this->agendaRepository->getAllAgendeerbaar(
+			$startMoment,
+			$eindMoment
+		);
 
 		$eventsJson = [];
 		foreach ($events as $event) {
-
 			$backgroundColor = '#214AB0';
 			if ($event instanceof Profiel) {
 				$backgroundColor = '#BD135E';
@@ -388,7 +434,10 @@ class AgendaController extends AbstractController {
 			}
 
 			// Zet eindmoment naar dag erna als activiteit tot 23:59 duurt en allDay is
-			if ($event->isHeledag() && date('H:i', $event->getEindMoment()) === '23:59') {
+			if (
+				$event->isHeledag() &&
+				date('H:i', $event->getEindMoment()) === '23:59'
+			) {
 				$eind = date_create_immutable('@' . $event->getEindMoment())
 					->add(new DateInterval('P1D'))
 					->setTime(0, 0, 0)
@@ -443,8 +492,12 @@ class AgendaController extends AbstractController {
 	/**
 	 * @return mixed
 	 */
-	public function icalDate() {
-		return str_replace('-', '', str_replace(':', '', str_replace('+00:00', 'Z', gmdate('c'))));
+	public function icalDate()
+	{
+		return str_replace(
+			'-',
+			'',
+			str_replace(':', '', str_replace('+00:00', 'Z', gmdate('c')))
+		);
 	}
-
 }

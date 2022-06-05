@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  *
@@ -63,15 +62,14 @@ class ForumController extends AbstractController
 	private $forumDelenService;
 
 	public function __construct(
-		BbToProsemirror               $bbToProsemirror,
-		ForumCategorieRepository      $forumCategorieRepository,
-		ForumDelenService 						$forumDelenService,
-		ForumDradenGelezenRepository  $forumDradenGelezenRepository,
-		ForumDradenRepository         $forumDradenRepository,
+		BbToProsemirror $bbToProsemirror,
+		ForumCategorieRepository $forumCategorieRepository,
+		ForumDelenService $forumDelenService,
+		ForumDradenGelezenRepository $forumDradenGelezenRepository,
+		ForumDradenRepository $forumDradenRepository,
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
-		ForumPostsRepository          $forumPostsRepository
-	)
-	{
+		ForumPostsRepository $forumPostsRepository
+	) {
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
@@ -102,11 +100,23 @@ class ForumController extends AbstractController
 	 */
 	public function rss()
 	{
-		$response = new Response(null, 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
-		return $this->render('forum/rss.xml.twig', [
-			'draden' => $this->forumDelenService->getRecenteForumDraden(null, null, true),
-			'privatelink' => $this->getUser() ? $this->getUser()->getRssLink() : null,
-		], $response);
+		$response = new Response(null, 200, [
+			'Content-Type' => 'application/rss+xml; charset=UTF-8',
+		]);
+		return $this->render(
+			'forum/rss.xml.twig',
+			[
+				'draden' => $this->forumDelenService->getRecenteForumDraden(
+					null,
+					null,
+					true
+				),
+				'privatelink' => $this->getUser()
+					? $this->getUser()->getRssLink()
+					: null,
+			],
+			$response
+		);
 	}
 
 	/**
@@ -173,13 +183,13 @@ class ForumController extends AbstractController
 		}
 
 		if (empty($result)) {
-			$result[] = array(
+			$result[] = [
 				'url' => '/forum/zoeken/' . urlencode($query),
 				'icon' => Icon::getTag('magnifier'),
 				'title' => 'Zoeken in forumreacties',
 				'label' => 'Zoeken in reacties',
-				'value' => htmlspecialchars($query)
-			);
+				'value' => htmlspecialchars($query),
+			];
 		}
 
 		return new JsonResponse($result);
@@ -208,13 +218,18 @@ class ForumController extends AbstractController
 	 * @Route("/forum/recent/{pagina<\d+>}/belangrijk", methods={"GET"}, defaults={"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function recent(RequestStack $requestStack, $pagina = 1, $belangrijk = null)
-	{
-		$this->forumDradenRepository->setHuidigePagina((int)$pagina, 0);
+	public function recent(
+		RequestStack $requestStack,
+		$pagina = 1,
+		$belangrijk = null
+	) {
+		$this->forumDradenRepository->setHuidigePagina((int) $pagina, 0);
 		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
 		$deel = $this->forumDelenService->getRecent($belangrijk);
 
-		$aantalPaginas = $this->forumDradenRepository->getAantalPaginas($deel->forum_id);
+		$aantalPaginas = $this->forumDradenRepository->getAantalPaginas(
+			$deel->forum_id
+		);
 
 		if ($pagina > $aantalPaginas) {
 			throw $this->createNotFoundException();
@@ -231,12 +246,15 @@ class ForumController extends AbstractController
 			'deel' => $deel,
 			'paging' => $aantalPaginas > 1,
 			'belangrijk' => $belangrijk ? '/belangrijk' : '',
-			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
+			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel(
+				$deel
+			),
 			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($concept),
-			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel)
+			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDeel(
+				$deel
+			),
 		]);
 	}
-
 
 	/**
 	 * @return GenericSuggestiesResponse
@@ -246,13 +264,14 @@ class ForumController extends AbstractController
 	public function forumCategorieSuggestie(Request $request)
 	{
 		$zoekterm = $request->query->get('q');
-		$forumCategories = $this->forumCategorieRepository->createQueryBuilder('c')
+		$forumCategories = $this->forumCategorieRepository
+			->createQueryBuilder('c')
 			->where('c.titel LIKE :zoekterm')
 			->setParameter('zoekterm', sql_contains($zoekterm))
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 		return new GenericSuggestiesResponse($forumCategories);
 	}
-
 
 	/**
 	 * Leg bladwijzer
@@ -263,13 +282,23 @@ class ForumController extends AbstractController
 	 */
 	public function bladwijzer(ForumDraad $draad)
 	{
-		$timestamp = (int)filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
-		if ($this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, date_create_immutable('@' . ($timestamp - 1)))) {
-			echo '<img id="timestamp' . $timestamp . '" src="/plaetjes/famfamfam/tick.png" class="icon" title="Bladwijzer succesvol geplaatst">';
+		$timestamp = (int) filter_input(
+			INPUT_POST,
+			'timestamp',
+			FILTER_SANITIZE_NUMBER_INT
+		);
+		if (
+			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid(
+				$draad,
+				date_create_immutable('@' . ($timestamp - 1))
+			)
+		) {
+			echo '<img id="timestamp' .
+				$timestamp .
+				'" src="/plaetjes/famfamfam/tick.png" class="icon" title="Bladwijzer succesvol geplaatst">';
 		}
-		exit; //TODO: JsonResponse
+		exit(); //TODO: JsonResponse
 	}
-
 
 	/**
 	 * @param ForumDraad $draad
@@ -304,7 +333,7 @@ class ForumController extends AbstractController
 			'icon' => $icon,
 			'title' => $title,
 			'label' => $draad->deel->titel,
-			'value' => $draad->titel
+			'value' => $draad->titel,
 		];
 	}
 }

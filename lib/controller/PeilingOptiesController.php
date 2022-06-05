@@ -20,13 +20,17 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Voor routes in /peilingen/opties
  */
-class PeilingOptiesController extends AbstractController {
+class PeilingOptiesController extends AbstractController
+{
 	/** @var PeilingenService */
 	private $peilingenService;
 	/** @var PeilingOptiesRepository */
 	private $peilingOptiesRepository;
 
-	public function __construct(PeilingOptiesRepository $peilingOptiesRepository, PeilingenService $peilingenService) {
+	public function __construct(
+		PeilingOptiesRepository $peilingOptiesRepository,
+		PeilingenService $peilingenService
+	) {
 		$this->peilingOptiesRepository = $peilingOptiesRepository;
 		$this->peilingenService = $peilingenService;
 	}
@@ -50,7 +54,9 @@ class PeilingOptiesController extends AbstractController {
 	 */
 	public function lijst($id): GenericDataTableResponse
 	{
-		return $this->tableData($this->peilingOptiesRepository->findBy(['peiling_id' => $id]));
+		return $this->tableData(
+			$this->peilingOptiesRepository->findBy(['peiling_id' => $id])
+		);
 	}
 
 	/**
@@ -59,11 +65,12 @@ class PeilingOptiesController extends AbstractController {
 	 * @Route("/peilingen/opties/{id}/toevoegen", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_VOTE)
 	 */
-	public function toevoegen(Peiling $peiling) {
+	public function toevoegen(Peiling $peiling)
+	{
 		$form = new PeilingOptieForm(new PeilingOptie(), $peiling->id);
 
 		if (!$this->peilingenService->magOptieToevoegen($peiling)) {
-			throw new CsrGebruikerException("Mag geen opties meer toevoegen!");
+			throw new CsrGebruikerException('Mag geen opties meer toevoegen!');
 		}
 
 		if ($form->isPosted() && $form->validate()) {
@@ -72,8 +79,12 @@ class PeilingOptiesController extends AbstractController {
 			$optie->ingebracht_door = $this->getUid();
 			$optie->peiling = $peiling;
 
-			$this->getDoctrine()->getManager()->persist($optie);
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->persist($optie);
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 			return $this->tableData([$optie]);
 		}
 
@@ -91,15 +102,26 @@ class PeilingOptiesController extends AbstractController {
 		$selection = $this->getDataTableSelection();
 
 		/** @var PeilingOptie|false $peilingOptie */
-		$peilingOptie = $this->peilingOptiesRepository->retrieveByUUID($selection[0]);
+		$peilingOptie = $this->peilingOptiesRepository->retrieveByUUID(
+			$selection[0]
+		);
 
 		if ($peilingOptie && $peilingOptie->stemmen == 0) {
-			$this->getDoctrine()->getManager()->remove($peilingOptie);
-			$removed = new RemoveDataTableEntry($peilingOptie->id, PeilingOptie::class);
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->remove($peilingOptie);
+			$removed = new RemoveDataTableEntry(
+				$peilingOptie->id,
+				PeilingOptie::class
+			);
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 			return $this->tableData([$removed]);
 		} else {
-			throw new CsrGebruikerException('Peiling optie bestaat niet of er is al een keer op gestemd.');
+			throw new CsrGebruikerException(
+				'Peiling optie bestaat niet of er is al een keer op gestemd.'
+			);
 		}
 	}
 }

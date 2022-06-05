@@ -7,7 +7,8 @@ use CsrDelft\entity\SavedQueryResult;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\SavedQueryRepository;
 
-class SavedQueryContent implements View {
+class SavedQueryContent implements View
+{
 	use ToHtmlResponse;
 
 	/**
@@ -16,23 +17,28 @@ class SavedQueryContent implements View {
 	 */
 	private $sq;
 
-	public function __construct(SavedQueryResult $sq = null) {
+	public function __construct(SavedQueryResult $sq = null)
+	{
 		$this->sq = $sq;
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->sq;
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return null;
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return 'Opgeslagen query\'s';
 	}
 
-	public static function render_header($name) {
+	public static function render_header($name)
+	{
 		switch ($name) {
 			case 'uid_naam':
 				return 'Naam';
@@ -52,31 +58,41 @@ class SavedQueryContent implements View {
 		return $name;
 	}
 
-	public static function render_field(
-		$name,
-		$contents
-	) {
+	public static function render_field($name, $contents)
+	{
 		if ($name == 'uid_naam') {
 			return ProfielRepository::getLink($contents, 'volledig');
 		} elseif ($name == 'uid_naam_civitas') {
 			return ProfielRepository::getLink($contents, 'civitas');
-		} elseif ($name == 'onderwerp_link') { //link naar het forum.
-			return '<a href="/forum/onderwerp/' . $contents . '">' . $contents . '</a>';
-		} elseif (substr($name, 0, 10) == 'groep_naam' AND $contents != '') {
+		} elseif ($name == 'onderwerp_link') {
+			//link naar het forum.
+			return '<a href="/forum/onderwerp/' .
+				$contents .
+				'">' .
+				$contents .
+				'</a>';
+		} elseif (substr($name, 0, 10) == 'groep_naam' and $contents != '') {
 			return ''; //FIXME: OldGroep::ids2links($contents, '<br />');
-		} elseif ($name == 'med_link') { //link naar een mededeling.
+		} elseif ($name == 'med_link') {
+			//link naar een mededeling.
 			return '<a href="/mededelingen/' . $contents . '">' . $contents . '</a>';
 		}
 
 		return htmlspecialchars($contents);
 	}
 
-	public function render_queryResult() {
+	public function render_queryResult()
+	{
 		if ($this->sq && !$this->sq->error) {
-
 			$sq = $this->sq;
 			$id = 'query-' . time();
-			$return = $sq->query->beschrijving . ' (' . count($sq->rows) . ' regels)<br /><table class="table table-sm table-striped" id="' . $id . '">';
+			$return =
+				$sq->query->beschrijving .
+				' (' .
+				count($sq->rows) .
+				' regels)<br /><table class="table table-sm table-striped" id="' .
+				$id .
+				'">';
 
 			$return .= '<thead><tr>';
 			foreach ($sq->cols as $kopje) {
@@ -97,23 +113,30 @@ class SavedQueryContent implements View {
 		} else {
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.
-			$return = 'Query (' . $this->sq->query->ID . ') bestaat niet, geeft een fout, of u heeft niet voldoende rechten.';
+			$return =
+				'Query (' .
+				$this->sq->query->ID .
+				') bestaat niet, geeft een fout, of u heeft niet voldoende rechten.';
 		}
 		return $return;
 	}
 
-	public function getQueryselector() {
+	public function getQueryselector()
+	{
 		//als er een query ingeladen is, die highlighten
 		$id = $this->sq instanceof SavedQueryResult ? $this->sq->query->ID : 0;
 
-		$return = '<a class="btn btn-primary" href="#" onclick="$(\'#sqSelector\').toggle();">Laat queryselector zien.</a>';
+		$return =
+			'<a class="btn btn-primary" href="#" onclick="$(\'#sqSelector\').toggle();">Laat queryselector zien.</a>';
 		$return .= '<div id="sqSelector" class="row';
 		if ($id != 0) {
 			$return .= ' verborgen';
 		}
 		$return .= '">';
 		$current = '';
-		$savedQueryRepository = ContainerFacade::getContainer()->get(SavedQueryRepository::class);
+		$savedQueryRepository = ContainerFacade::getContainer()->get(
+			SavedQueryRepository::class
+		);
 		foreach ($savedQueryRepository->getQueries() as $query) {
 			if (!$query->magBekijken()) {
 				continue;
@@ -122,7 +145,10 @@ class SavedQueryContent implements View {
 				if ($current != '') {
 					$return .= '</ul></div>';
 				}
-				$return .= '<div class="col-md-6"><span class="dikgedrukt">' . $query->categorie . '</span><ul>';
+				$return .=
+					'<div class="col-md-6"><span class="dikgedrukt">' .
+					$query->categorie .
+					'</span><ul>';
 				$current = $query->categorie;
 			}
 			$return .= '<li><a href="query?id=' . $query->ID . '">';
@@ -139,7 +165,8 @@ class SavedQueryContent implements View {
 		return $return;
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		$html = '';
 		$html .= '<h1>' . $this->getTitel() . '</h1>';
 		$html .= $this->getQueryselector();
@@ -150,5 +177,4 @@ class SavedQueryContent implements View {
 		}
 		return $html;
 	}
-
 }

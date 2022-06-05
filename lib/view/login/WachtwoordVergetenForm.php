@@ -6,9 +6,10 @@ use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
-class WachtwoordVergetenForm extends Formulier {
-
-	public function __construct() {
+class WachtwoordVergetenForm extends Formulier
+{
+	public function __construct()
+	{
 		parent::__construct(null, '/wachtwoord/vergeten', 'Wachtwoord vergeten');
 
 		$fields = [];
@@ -17,5 +18,4 @@ class WachtwoordVergetenForm extends Formulier {
 
 		$this->addFields($fields);
 	}
-
 }

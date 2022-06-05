@@ -14,7 +14,8 @@ use Symfony\Component\Security\Core\Security;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class DebugLogRepository extends AbstractRepository {
+class DebugLogRepository extends AbstractRepository
+{
 	/**
 	 * @var SuService
 	 */
@@ -28,7 +29,12 @@ class DebugLogRepository extends AbstractRepository {
 	 */
 	private $requestStack;
 
-	public function __construct(ManagerRegistry $registry, RequestStack $requestStack, Security $security, SuService $suService) {
+	public function __construct(
+		ManagerRegistry $registry,
+		RequestStack $requestStack,
+		Security $security,
+		SuService $suService
+	) {
 		parent::__construct($registry, DebugLogEntry::class);
 
 		$this->suService = $suService;
@@ -38,12 +44,14 @@ class DebugLogRepository extends AbstractRepository {
 
 	/**
 	 */
-	public function opschonen() {
+	public function opschonen()
+	{
 		$this->createQueryBuilder('l')
 			->delete()
 			->where('l.moment < :moment')
 			->setParameter('moment', date_create_immutable('-2 months'))
-			->getQuery()->execute();
+			->getQuery()
+			->execute();
 	}
 
 	/**
@@ -54,9 +62,11 @@ class DebugLogRepository extends AbstractRepository {
 	 *
 	 * @return DebugLogEntry
 	 */
-	public function log($class, $function, array $args = array(), $dump = null) {
+	public function log($class, $function, array $args = [], $dump = null)
+	{
 		$entry = new DebugLogEntry();
-		$entry->class_function = $class . '->' . $function . '(' . implode(', ', $args) . ')';
+		$entry->class_function =
+			$class . '->' . $function . '(' . implode(', ', $args) . ')';
 		$entry->dump = $dump;
 		$exception = new Exception();
 		$entry->call_trace = $exception->getTraceAsString();
@@ -68,16 +78,21 @@ class DebugLogRepository extends AbstractRepository {
 		}
 		$entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '127.0.0.1';
 		$entry->referer = @$_SERVER['HTTP_REFERER'] ?: 'CLI';
-		$entry->request = $this->requestStack->getCurrentRequest()->getRequestUri() ?: 'CLI';
+		$entry->request =
+			$this->requestStack->getCurrentRequest()->getRequestUri() ?: 'CLI';
 		$entry->user_agent = @$_SERVER['HTTP_USER_AGENT'] ?: 'CLI';
 
 		$this->getEntityManager()->persist($entry);
-		if (DEBUG AND $this->getEntityManager()->getConnection()->isTransactionActive()) {
+		if (
+			DEBUG and
+			$this->getEntityManager()
+				->getConnection()
+				->isTransactionActive()
+		) {
 			setMelding('Debug log may not be committed: database transaction', 2);
 			setMelding($dump, 0);
 		}
 		$this->getEntityManager()->flush();
 		return $entry;
 	}
-
 }

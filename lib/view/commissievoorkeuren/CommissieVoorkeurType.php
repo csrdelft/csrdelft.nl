@@ -15,7 +15,7 @@ class CommissieVoorkeurType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder->add('voorkeur', ChoiceType::class, [
-			'choices' => array('nee' => 1, 'ja' => 2, 'mischien' => 3),
+			'choices' => ['nee' => 1, 'ja' => 2, 'mischien' => 3],
 			'label_format' => 'commissie', //$entity->getCommissieNaam(),
 		]);
 		$builder->add('commissieNaam', HiddenType::class, ['disabled' => true]);

@@ -16,7 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class LidToestemming {
+class LidToestemming
+{
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -47,7 +48,8 @@ class LidToestemming {
 	 */
 	public $profiel;
 
-	public function uid() {
+	public function uid()
+	{
 		return $this->profiel->uid;
 	}
 }

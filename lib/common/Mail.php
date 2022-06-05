@@ -43,10 +43,15 @@ class Mail
 	{
 		foreach ($to as $email => $name) {
 			if (!email_like($email)) {
-				throw new CsrGebruikerException('Invalid e-mailadres in TO "' . $email . '"');
+				throw new CsrGebruikerException(
+					'Invalid e-mailadres in TO "' . $email . '"'
+				);
 			}
 			// Geen speciale tekens in naam vanwege spamfilters
-			$this->to[$this->productionSafe($email)] = filter_var($name, FILTER_SANITIZE_STRING);
+			$this->to[$this->productionSafe($email)] = filter_var(
+				$name,
+				FILTER_SANITIZE_STRING
+			);
 		}
 	}
 
@@ -74,10 +79,15 @@ class Mail
 	{
 		foreach ($bcc as $email => $name) {
 			if (!email_like($email)) {
-				throw new CsrGebruikerException('Invalid e-mailadres in BCC "' . $email . '"');
+				throw new CsrGebruikerException(
+					'Invalid e-mailadres in BCC "' . $email . '"'
+				);
 			}
 			// Geen speciale tekens in naam vanwege spamfilters
-			$this->bcc[$this->productionSafe($email)] = filter_var($name, FILTER_SANITIZE_STRING);
+			$this->bcc[$this->productionSafe($email)] = filter_var(
+				$name,
+				FILTER_SANITIZE_STRING
+			);
 		}
 	}
 
@@ -102,7 +112,9 @@ class Mail
 	public function setFrom(string $email, string $name = null)
 	{
 		if (!email_like($email)) {
-			throw new CsrGebruikerException('Emailadres in $from geen valide e-mailadres');
+			throw new CsrGebruikerException(
+				'Emailadres in $from geen valide e-mailadres'
+			);
 		}
 		// Geen speciale tekens in naam vanwege spamfilters
 		$this->from = [$email => filter_var($name, FILTER_SANITIZE_STRING)];
@@ -125,7 +137,9 @@ class Mail
 	public function setReplyTo(string $email, string $name = null)
 	{
 		if (!email_like($email)) {
-			throw new CsrGebruikerException('Emailadres in $reply_to geen valide e-mailadres');
+			throw new CsrGebruikerException(
+				'Emailadres in $reply_to geen valide e-mailadres'
+			);
 		}
 		// Geen speciale tekens in naam vanwege spamfilters
 		$this->replyTo = [$email => filter_var($name, FILTER_SANITIZE_STRING)];

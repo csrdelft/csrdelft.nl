@@ -1,17 +1,17 @@
 <?php
 
-
 namespace CsrDelft\Twig;
-
 
 use Twig\FileExtensionEscapingStrategy;
 
-class AutoEscapeService {
+class AutoEscapeService
+{
 	const STRATEGY_ICAL = 'ical';
 	const STRATEGY_XML = 'xml';
 	const STRATEGY_MAIL = 'mail';
 
-	public function guess(string $name) {
+	public function guess(string $name)
+	{
 		if (str_ends_with($name, '.ical.twig')) {
 			return self::STRATEGY_ICAL;
 		}
@@ -24,5 +24,4 @@ class AutoEscapeService {
 
 		return FileExtensionEscapingStrategy::guess($name);
 	}
-
 }

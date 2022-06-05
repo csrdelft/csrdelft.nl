@@ -21,7 +21,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @method Account[]    findAll()
  * @method Account[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AccountRepository extends AbstractRepository implements PasswordUpgraderInterface, UserLoaderInterface
+class AccountRepository extends AbstractRepository implements
+	PasswordUpgraderInterface,
+	UserLoaderInterface
 {
 	public function __construct(ManagerRegistry $registry)
 	{
@@ -62,8 +64,14 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 	{
 		return $this->createQueryBuilder('a')
 			->where('a.perm_role NOT IN (:admin_perm_roles)')
-			->setParameter('admin_perm_roles', [AccessRole::Lid, AccessRole::Nobody, AccessRole::Eter, AccessRole::Oudlid])
-			->getQuery()->getResult();
+			->setParameter('admin_perm_roles', [
+				AccessRole::Lid,
+				AccessRole::Nobody,
+				AccessRole::Eter,
+				AccessRole::Oudlid,
+			])
+			->getQuery()
+			->getResult();
 	}
 
 	/**
@@ -140,8 +148,10 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 		$this->_em->flush();
 	}
 
-	public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
-	{
+	public function upgradePassword(
+		UserInterface $user,
+		string $newEncodedPassword
+	): void {
 		$user->pass_hash = $newEncodedPassword;
 
 		$this->_em->flush();
@@ -155,9 +165,9 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 
 	public function findOneByUsername($username)
 	{
-		return $this->find($username)
-			?? $this->findOneBy(['username' => $username])
-			?? $this->findOneByEmail($username);
+		return $this->find($username) ??
+			($this->findOneBy(['username' => $username]) ??
+				$this->findOneByEmail($username));
 	}
 
 	/**

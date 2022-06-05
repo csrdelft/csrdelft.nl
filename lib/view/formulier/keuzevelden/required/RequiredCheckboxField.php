@@ -12,8 +12,7 @@ use CsrDelft\view\formulier\keuzevelden\CheckboxField;
  *
  * @see CheckboxField
  */
-class RequiredCheckboxField extends CheckboxField {
-
+class RequiredCheckboxField extends CheckboxField
+{
 	public $required = true;
-
 }

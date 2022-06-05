@@ -12,7 +12,8 @@ use CsrDelft\common\Enum;
  * @method static boolean isMan($geslacht)
  * @method static boolean isVrouw($geslacht)
  */
-class Geslacht extends Enum {
+class Geslacht extends Enum
+{
 	/**
 	 * Geslacht opties.
 	 */

@@ -15,42 +15,50 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method PinTransactieMatch[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method PinTransactieMatch|null retrieveByUuid($UUID)
  */
-class PinTransactieMatchRepository extends AbstractRepository {
+class PinTransactieMatchRepository extends AbstractRepository
+{
 	/**
 	 * @param ManagerRegistry $registry
 	 */
-	public function __construct(ManagerRegistry $registry) {
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, PinTransactieMatch::class);
 	}
 
 	/**
 	 * @return PinTransactieMatch[]
 	 */
-	public function metFout() {
+	public function metFout()
+	{
 		return $this->createQueryBuilder('m')
 			->where('m.status != \'match\' and m.status != \'verwijderd\'')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
 	 * @param int[] $ids
 	 */
-	public function cleanByBestellingIds($ids) {
+	public function cleanByBestellingIds($ids)
+	{
 		$this->createQueryBuilder('m')
 			->delete()
 			->where('m.bestelling_id in (:ids)')
 			->setParameter('ids', $ids)
-			->getQuery()->execute();
+			->getQuery()
+			->execute();
 	}
 
 	/**
 	 * @param int[] $ids
 	 */
-	public function cleanByTransactieIds($ids) {
+	public function cleanByTransactieIds($ids)
+	{
 		$this->createQueryBuilder('m')
 			->delete()
 			->where('m.transactie_id in (:ids)')
 			->setParameter('ids', $ids)
-			->getQuery()->execute();
+			->getQuery()
+			->execute();
 	}
 }

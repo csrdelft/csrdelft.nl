@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\entity\bibliotheek;
-
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BiebRubriekRepository")
  * @ORM\Table("biebcategorie")
  */
-class BiebRubriek {
+class BiebRubriek
+{
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -37,11 +36,12 @@ class BiebRubriek {
 	 */
 	protected $parent;
 
-	public function __toString() {
+	public function __toString()
+	{
 		if ($this->p_id == $this->id) {
 			return '';
 		} else {
-			$parent = (string)$this->parent;
+			$parent = (string) $this->parent;
 			if ($parent !== '') {
 				$parent .= ' - ';
 			}

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\streeplijst;
-
 
 use CsrDelft\entity\Streeplijst;
 use CsrDelft\view\formulier\elementen\HtmlComment;
@@ -21,12 +19,12 @@ class StreeplijstForm extends ModalForm
 	 */
 	public function __construct($model)
 	{
-		parent::__construct( $model, "/streeplijst/aanmaken");
-//		$fields[] = new TextareaField('inhoud_streeplijst', $model->inhoud_streeplijst, 'Inhoud van de streeplijst');
-//		$this->addFields($fields);
-//		$this->formKnoppen = new FormDefaultKnoppen();
-		$this->addFields([new HtmlComment("<h2>Inhoud toevoegen</h2>")]);
-		$this->addFields([new RequiredTextField("inhoud", "", "Inhoud")]);
+		parent::__construct($model, '/streeplijst/aanmaken');
+		//		$fields[] = new TextareaField('inhoud_streeplijst', $model->inhoud_streeplijst, 'Inhoud van de streeplijst');
+		//		$this->addFields($fields);
+		//		$this->formKnoppen = new FormDefaultKnoppen();
+		$this->addFields([new HtmlComment('<h2>Inhoud toevoegen</h2>')]);
+		$this->addFields([new RequiredTextField('inhoud', '', 'Inhoud')]);
 		$this->formKnoppen->addKnop(new SubmitKnop());
 	}
 }

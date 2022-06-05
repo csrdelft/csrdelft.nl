@@ -13,8 +13,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\ChangeLogRepository")
  * @ORM\Table("changelog")
  */
-class ChangeLogEntry {
-
+class ChangeLogEntry
+{
 	/**
 	 * Primary key
 	 * @var int

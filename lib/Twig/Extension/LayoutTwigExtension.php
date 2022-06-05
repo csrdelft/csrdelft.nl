@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\Twig\Extension;
-
 
 use CsrDelft\Component\Formulier\FormulierFactory;
 use CsrDelft\entity\MenuItem;
@@ -49,13 +47,29 @@ class LayoutTwigExtension extends AbstractExtension
 	public function getFunctions()
 	{
 		return [
-			new TwigFunction('csr_breadcrumbs', [$this, 'csr_breadcrumbs'], ['is_safe' => ['html']]),
+			new TwigFunction(
+				'csr_breadcrumbs',
+				[$this, 'csr_breadcrumbs'],
+				['is_safe' => ['html']]
+			),
 			new TwigFunction('get_breadcrumbs', [$this, 'get_breadcrumbs']),
 			new TwigFunction('get_menu', [$this, 'get_menu']),
 			new TwigFunction('getMelding', 'getMelding', ['is_safe' => ['html']]),
-			new TwigFunction('get_zijbalk', [$this, 'get_zijbalk'], ['is_safe' => ['html']]),
-			new TwigFunction('instant_search_form', [$this, 'instant_search_form'], ['is_safe' => ['html']]),
-			new TwigFunction('login_form', [$this, 'login_form'], ['is_safe' => ['html']]),
+			new TwigFunction(
+				'get_zijbalk',
+				[$this, 'get_zijbalk'],
+				['is_safe' => ['html']]
+			),
+			new TwigFunction(
+				'instant_search_form',
+				[$this, 'instant_search_form'],
+				['is_safe' => ['html']]
+			),
+			new TwigFunction(
+				'login_form',
+				[$this, 'login_form'],
+				['is_safe' => ['html']]
+			),
 			new TwigFunction('icon', [$this, 'icon'], ['is_safe' => ['html']]),
 		];
 	}
@@ -79,14 +93,18 @@ class LayoutTwigExtension extends AbstractExtension
 	{
 		$defaultName = $name;
 		$locale = $this->requestStack->getCurrentRequest()->getLocale();
-		if ($locale != $this->requestStack->getCurrentRequest()->getDefaultLocale()) {
+		if (
+			$locale != $this->requestStack->getCurrentRequest()->getDefaultLocale()
+		) {
 			$name = $name . '_' . $locale;
 		}
 		if ($root) {
-			return $this->menuItemRepository->getMenuRoot($name) ?? $this->menuItemRepository->getMenuRoot($defaultName);
+			return $this->menuItemRepository->getMenuRoot($name) ??
+				$this->menuItemRepository->getMenuRoot($defaultName);
 		}
 
-		return $this->menuItemRepository->getMenu($name) ?? $this->menuItemRepository->getMenu($defaultName);
+		return $this->menuItemRepository->getMenu($name) ??
+			$this->menuItemRepository->getMenu($defaultName);
 	}
 
 	public function instant_search_form()
@@ -101,11 +119,19 @@ class LayoutTwigExtension extends AbstractExtension
 
 	public function login_form()
 	{
-		return $this->formulierFactory->create(LoginForm::class, null, [])->createView()->__toString();
+		return $this->formulierFactory
+			->create(LoginForm::class, null, [])
+			->createView()
+			->__toString();
 	}
 
-	public function icon($key, $hover = null, $title = null, $class = null, $content = null)
-	{
+	public function icon(
+		$key,
+		$hover = null,
+		$title = null,
+		$class = null,
+		$content = null
+	) {
 		return Icon::getTag($key, $hover, $title, $class, $content);
 	}
 }

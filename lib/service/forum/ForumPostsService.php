@@ -17,7 +17,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ForumPostsService
 {
-
 	/**
 	 * @var EntityManagerInterface
 	 */
@@ -52,16 +51,15 @@ class ForumPostsService
 	private $forumMeldingenService;
 
 	public function __construct(
-		EntityManagerInterface         $entityManager,
-		ForumDradenRepository          $forumDradenRepository,
-		ForumDradenMeldingRepository   $forumDradenMeldingRepository,
-		ForumPostsRepository           $forumPostsRepository,
-		ForumMeldingenService          $forumMeldingenService,
-		ForumDradenGelezenRepository   $forumDradenGelezenRepository,
-		ForumDradenReagerenRepository  $forumDradenReagerenRepository,
+		EntityManagerInterface $entityManager,
+		ForumDradenRepository $forumDradenRepository,
+		ForumDradenMeldingRepository $forumDradenMeldingRepository,
+		ForumPostsRepository $forumPostsRepository,
+		ForumMeldingenService $forumMeldingenService,
+		ForumDradenGelezenRepository $forumDradenGelezenRepository,
+		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository
-	)
-	{
+	) {
 		$this->entityManager = $entityManager;
 		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
@@ -77,7 +75,13 @@ class ForumPostsService
 		$oudeDraad = $post->draad;
 		$post->draad = $nieuwDraad;
 		$post->laatst_gewijzigd = date_create_immutable();
-		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginService::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate]' . "\n";
+		$post->bewerkt_tekst .=
+			'verplaatst door [lid=' .
+			LoginService::getUid() .
+			'] [reldate]' .
+			date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) .
+			'[/reldate]' .
+			"\n";
 		$this->entityManager->persist($post);
 		$this->entityManager->flush();
 
@@ -100,14 +104,26 @@ class ForumPostsService
 		$this->entityManager->flush();
 
 		if ($property === 'belangrijk') {
-			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen([$draad->draad_id]);
+			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen([
+				$draad->draad_id,
+			]);
 		} elseif ($property === 'gesloten') {
-			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen([$draad->draad_id]);
+			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen([
+				$draad->draad_id,
+			]);
 		} elseif ($property === 'verwijderd') {
-			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen([$draad->draad_id]);
-			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen([$draad->draad_id]);
-			$this->forumDradenGelezenRepository->verwijderDraadGelezen([$draad->draad_id]);
-			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad([$draad->draad_id]);
+			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen([
+				$draad->draad_id,
+			]);
+			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen([
+				$draad->draad_id,
+			]);
+			$this->forumDradenGelezenRepository->verwijderDraadGelezen([
+				$draad->draad_id,
+			]);
+			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad([
+				$draad->draad_id,
+			]);
 			$this->forumPostsRepository->verwijderForumPostsVoorDraad($draad);
 		}
 	}
@@ -126,7 +142,12 @@ class ForumPostsService
 		similar_text($post->tekst, $nieuwe_tekst, $gelijkheid);
 		$post->tekst = $nieuwe_tekst;
 		$post->laatst_gewijzigd = date_create_immutable();
-		$bewerkt = 'bewerkt door [lid=' . LoginService::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate]';
+		$bewerkt =
+			'bewerkt door [lid=' .
+			LoginService::getUid() .
+			'] [reldate]' .
+			date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) .
+			'[/reldate]';
 		if ($reden !== '') {
 			$bewerkt .= ': [tekst]' . CsrBB::escapeUbbOff($reden) . '[/tekst]';
 		}
@@ -151,7 +172,11 @@ class ForumPostsService
 	{
 		// reset last post
 		$last_post = $this->forumPostsRepository->findBy(
-			['draad_id' => $draad->draad_id, 'wacht_goedkeuring' => false, 'verwijderd' => false],
+			[
+				'draad_id' => $draad->draad_id,
+				'wacht_goedkeuring' => false,
+				'verwijderd' => false,
+			],
 			['laatst_gewijzigd' => 'DESC']
 		)[0];
 		if ($last_post) {
@@ -174,7 +199,13 @@ class ForumPostsService
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;
 			$post->laatst_gewijzigd = date_create_immutable();
-			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginService::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate][/prive]' . "\n";
+			$post->bewerkt_tekst .=
+				'[prive=P_FORUM_MOD]Goedgekeurd door [lid=' .
+				LoginService::getUid() .
+				'] [reldate]' .
+				date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) .
+				'[/reldate][/prive]' .
+				"\n";
 			$this->entityManager->persist($post);
 			$this->entityManager->flush();
 		}

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace CsrDelft\service;
 
 use Psr\Log\LoggerInterface;
@@ -8,7 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-class CsrfService {
+class CsrfService
+{
 	/**
 	 * @var CsrfTokenManagerInterface
 	 */
@@ -23,7 +23,10 @@ class CsrfService {
 	 * @param $manager CsrfTokenManagerInterface
 	 * @param LoggerInterface $logger
 	 */
-	public function __construct(CsrfTokenManagerInterface $manager, LoggerInterface $logger) {
+	public function __construct(
+		CsrfTokenManagerInterface $manager,
+		LoggerInterface $logger
+	) {
 		$this->manager = $manager;
 		$this->logger = $logger;
 	}
@@ -33,8 +36,9 @@ class CsrfService {
 	 * @param string $method
 	 * @return CsrfToken|null
 	 */
-	public function generateToken($path, string $method) {
-		return $this->manager->getToken("global");
+	public function generateToken($path, string $method)
+	{
+		return $this->manager->getToken('global');
 	}
 
 	/**
@@ -43,7 +47,8 @@ class CsrfService {
 	 * @param Request $request
 	 * @return bool
 	 */
-	public function preventCsrf(Request $request) {
+	public function preventCsrf(Request $request)
+	{
 		// Safe: GET, OPTIONS, HEAD, TRACE
 		if ($request->isMethodSafe()) {
 			return true;
@@ -72,7 +77,8 @@ class CsrfService {
 	 * @param string $method
 	 * @return bool
 	 */
-	public function isValid($token, string $path, string $method): bool {
+	public function isValid($token, string $path, string $method): bool
+	{
 		if (session_status() == PHP_SESSION_NONE || $token == null) {
 			return false;
 		}

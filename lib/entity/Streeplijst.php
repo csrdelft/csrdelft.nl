@@ -61,5 +61,4 @@ class Streeplijst
 	{
 		return explode(';', $this->inhoud_streeplijst);
 	}
-
 }

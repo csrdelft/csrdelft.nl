@@ -1,15 +1,14 @@
 <?php
 
-
 namespace CsrDelft\Component\DataTable;
-
 
 /**
  * Implementeer deze interface om een datatable te maken voor een object die niet in Doctrine zit.
  *
  * @package CsrDelft\common\datatable
  */
-interface CustomDataTableEntry {
+interface CustomDataTableEntry
+{
 	/**
 	 * Velden die de primary key van deze tabel zijn.
 	 *

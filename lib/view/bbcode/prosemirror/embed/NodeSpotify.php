@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror\embed;
-
 
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\prosemirror\Node;
@@ -30,7 +28,7 @@ class NodeSpotify implements Node
 			'attrs' => [
 				'url' => $node->uri,
 				'formaat' => $node->formaat,
-			]
+			],
 		];
 	}
 

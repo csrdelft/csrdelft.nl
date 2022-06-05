@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen\enum;
 
-
 use CsrDelft\common\Enum;
 
 /**
@@ -23,8 +22,8 @@ use CsrDelft\common\Enum;
  * @method static boolean isEmails($tab)
  * @method static boolean isEetwens($tab)
  */
-class GroepTab extends Enum {
-
+class GroepTab extends Enum
+{
 	/**
 	 * GroepTab opties.
 	 */

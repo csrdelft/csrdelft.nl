@@ -18,8 +18,10 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method PinTransactie[]    findAll()
  * @method PinTransactie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PinTransactieRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+class PinTransactieRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, PinTransactie::class);
 	}
 
@@ -28,25 +30,29 @@ class PinTransactieRepository extends AbstractRepository {
 	 * @param string $to
 	 * @return int[]
 	 */
-	public function getPinTransactieInMoment($from, $to) {
+	public function getPinTransactieInMoment($from, $to)
+	{
 		return $this->createQueryBuilder('t')
 			->select('t.id')
 			->where('t.datetime > :from and t.datetime < :to')
 			->setParameter('from', $from)
 			->setParameter('to', $to)
 			->orderBy('t.datetime', 'DESC')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
 	 * @param int[] $ids
 	 */
-	public function clean($ids) {
+	public function clean($ids)
+	{
 		$this->createQueryBuilder('m')
 			->delete()
 			->where('m.id in (:ids)')
 			->setParameter('ids', $ids)
-			->getQuery()->execute();
+			->getQuery()
+			->execute();
 	}
 
 	/**
@@ -54,15 +60,17 @@ class PinTransactieRepository extends AbstractRepository {
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function getKorteBeschrijving($pinTransactie) {
-		return sprintf('€%.2f',$pinTransactie->getBedragInCenten()/100);
+	public function getKorteBeschrijving($pinTransactie)
+	{
+		return sprintf('€%.2f', $pinTransactie->getBedragInCenten() / 100);
 	}
 
 	/**
 	 * @param int $id
 	 * @return PinTransactie
 	 */
-	public function get($id) {
+	public function get($id)
+	{
 		return $this->find($id);
 	}
 }

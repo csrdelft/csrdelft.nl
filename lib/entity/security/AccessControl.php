@@ -16,7 +16,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Table("acl")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class AccessControl {
+class AccessControl
+{
 	/**
 	 * AclController / View / etc.
 	 * @var string
@@ -52,7 +53,8 @@ class AccessControl {
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("action")
 	 */
-	public function getDataTableAction() {
+	public function getDataTableAction()
+	{
 		return AccessAction::from($this->action)->getDescription();
 	}
 
@@ -61,7 +63,8 @@ class AccessControl {
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("resource")
 	 */
-	public function getDataTableResource() {
+	public function getDataTableResource()
+	{
 		if ($this->resource === '*') {
 			return 'Elke ' . lcfirst($this->environment);
 		} else {

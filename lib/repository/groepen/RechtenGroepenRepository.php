@@ -9,7 +9,8 @@ use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class RechtenGroepenRepository extends GroepRepository {
+class RechtenGroepenRepository extends GroepRepository
+{
 	/** @var BesturenRepository */
 	private $besturenRepository;
 	/** @var GroepLidRepository */
@@ -30,14 +31,16 @@ class RechtenGroepenRepository extends GroepRepository {
 		$this->groepLidRepository = $groepLidRepository;
 	}
 
-	public function nieuw($soort = null) {
+	public function nieuw($soort = null)
+	{
 		/** @var RechtenGroep $groep */
 		$groep = parent::nieuw();
 		$groep->rechtenAanmelden = P_LEDEN_MOD;
 		return $groep;
 	}
 
-	public static function getNaam() {
+	public static function getNaam()
+	{
 		return 'overig';
 	}
 
@@ -47,29 +50,42 @@ class RechtenGroepenRepository extends GroepRepository {
 	 * @param string $uid
 	 * @return array
 	 */
-	public function getWikiToegang($uid) {
+	public function getWikiToegang($uid)
+	{
 		$result = [];
 		$profiel = ProfielRepository::get($uid);
 		if (!$profiel) {
 			return $result;
 		}
-		if ($profiel->isLid() OR $profiel->isOudlid()) {
+		if ($profiel->isLid() or $profiel->isOudlid()) {
 			$result[] = 'htleden-oudleden';
 		}
 		// 1 generatie vooruit en 1 achteruit (default order by)
 		$ft = $this->besturenRepository->findOneBy(['status' => GroepStatus::FT()]);
 		$ht = $this->besturenRepository->findOneBy(['status' => GroepStatus::HT()]);
-		$ot = $this->besturenRepository->findOneBy(['status' => GroepStatus::OT()], ['id' => 'DESC']);
-		if (($ft && $ft->getLid($uid)) || ($ht && $ht->getLid($uid)) || ($ot && $ot->getLid($uid))) {
+		$ot = $this->besturenRepository->findOneBy(
+			['status' => GroepStatus::OT()],
+			['id' => 'DESC']
+		);
+		if (
+			($ft && $ft->getLid($uid)) ||
+			($ht && $ht->getLid($uid)) ||
+			($ot && $ot->getLid($uid))
+		) {
 			$result[] = 'bestuur';
 		}
-		foreach ($this->groepLidRepository->findBy(['uid' => $uid]) as $commissielid) {
+		foreach (
+			$this->groepLidRepository->findBy(['uid' => $uid])
+			as $commissielid
+		) {
 			$commissie = $commissielid->groep;
-			if ($commissie->status === GroepStatus::HT() OR $commissie->status === GroepStatus::FT()) {
+			if (
+				$commissie->status === GroepStatus::HT() or
+				$commissie->status === GroepStatus::FT()
+			) {
 				$result[] = $commissie->familie;
 			}
 		}
 		return $result;
 	}
-
 }

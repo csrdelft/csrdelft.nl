@@ -17,10 +17,16 @@ use CsrDelft\view\datatable\Multiplicity;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class GroepLedenTable extends DataTable {
-
-	public function __construct(Groep $groep) {
-		parent::__construct(GroepLid::class, $groep->getUrl() . '/leden', 'Leden van ' . $groep->naam, 'status');
+class GroepLedenTable extends DataTable
+{
+	public function __construct(Groep $groep)
+	{
+		parent::__construct(
+			GroepLid::class,
+			$groep->getUrl() . '/leden',
+			'Leden van ' . $groep->naam,
+			'status'
+		);
 
 		$this->addColumn('uid', 'opmerking');
 		$this->addColumn('lid', 'opmerking');
@@ -29,13 +35,40 @@ class GroepLedenTable extends DataTable {
 		$this->setColumnTitle('door_uid', 'Aangemeld door');
 
 		if ($groep->mag(AccessAction::Beheren())) {
-			$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $groep->getUrl() . '/aanmelden', 'Aanmelden', 'Lid toevoegen', 'user_add'));
-			$this->addRowKnop(new DataTableRowKnop($groep->getUrl() . '/bewerken/:uid', 'Lidmaatschap bewerken', 'user_edit'));
-			$this->addRowKnop(new DataTableRowKnop($groep->getUrl() . '/afmelden/:uid', 'Leden verwijderen', 'user_delete', 'confirm'));
+			$this->addKnop(
+				new DataTableKnop(
+					Multiplicity::Zero(),
+					$groep->getUrl() . '/aanmelden',
+					'Aanmelden',
+					'Lid toevoegen',
+					'user_add'
+				)
+			);
+			$this->addRowKnop(
+				new DataTableRowKnop(
+					$groep->getUrl() . '/bewerken/:uid',
+					'Lidmaatschap bewerken',
+					'user_edit'
+				)
+			);
+			$this->addRowKnop(
+				new DataTableRowKnop(
+					$groep->getUrl() . '/afmelden/:uid',
+					'Leden verwijderen',
+					'user_delete',
+					'confirm'
+				)
+			);
 			if (GroepStatus::isHT($groep->status)) {
-				$this->addRowKnop(new DataTableRowKnop($groep->getUrl() . '/naar_ot/:uid', 'Naar o.t. groep verplaatsen', 'user_go', 'confirm'));
+				$this->addRowKnop(
+					new DataTableRowKnop(
+						$groep->getUrl() . '/naar_ot/:uid',
+						'Naar o.t. groep verplaatsen',
+						'user_go',
+						'confirm'
+					)
+				);
 			}
 		}
 	}
-
 }

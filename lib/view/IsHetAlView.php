@@ -29,33 +29,48 @@ class IsHetAlView implements View
 	 * Aftellen voor deze typen IsHetAlContent
 	 * @var array
 	 */
-	public static $aftellen = array('jarig', 'dies', 'lustrum');
+	public static $aftellen = ['jarig', 'dies', 'lustrum'];
 	/**
 	 * Wist u dat'tjes
 	 * @var array
 	 */
-	public static $wistudat = array(
+	public static $wistudat = [
 		'u de webstek geheel naar wens kan instellen?' => '/instellingen',
 		'u de C.S.R.-agenda kan importeren met ICAL?' => '/profiel#agenda',
 		'u het forum kan volgen met RSS?' => '/profiel#forum',
-	);
+	];
 
-	public function __construct(LidInstellingenRepository $lidInstellingenRepository, RequestStack $requestStack, AgendaRepository $agendaRepository, WoordVanDeDagRepository $woordVanDeDagRepository, $ishetal)
-	{
-		$session = $requestStack->getMainRequest() == null ? new Session() : $requestStack->getMainRequest()->getSession();
+	public function __construct(
+		LidInstellingenRepository $lidInstellingenRepository,
+		RequestStack $requestStack,
+		AgendaRepository $agendaRepository,
+		WoordVanDeDagRepository $woordVanDeDagRepository,
+		$ishetal
+	) {
+		$session =
+			$requestStack->getMainRequest() == null
+				? new Session()
+				: $requestStack->getMainRequest()->getSession();
 
 		// Ongeveer de 1/4 van de tijd het lustrumwoord van de dag laten zien, alleen in de periode van 21-12-2021 tot 19-2-2022
-		$differenceDays = floor((strtotime(date("d-m-Y")) - strtotime("21-12-2021")) / 86400);
+		$differenceDays = floor(
+			(strtotime(date('d-m-Y')) - strtotime('21-12-2021')) / 86400
+		);
 		if ($differenceDays >= 1 && $differenceDays <= 60 && rand(0, 100) < 25) {
-			$this->model = "wvdd";
+			$this->model = 'wvdd';
 			$woordVanDeDag = $woordVanDeDagRepository->find(intval($differenceDays));
-			$this->ja = $woordVanDeDag ? $woordVanDeDag->getWoord() : "Woord van de dag niet gevonden";
+			$this->ja = $woordVanDeDag
+				? $woordVanDeDag->getWoord()
+				: 'Woord van de dag niet gevonden';
 
 			return;
 		}
 		$this->model = $ishetal;
 		if ($this->model == 'willekeurig') {
-			$opties = array_slice($lidInstellingenRepository->getTypeOptions('zijbalk', 'ishetal'), 2);
+			$opties = array_slice(
+				$lidInstellingenRepository->getTypeOptions('zijbalk', 'ishetal'),
+				2
+			);
 			$this->model = $opties[array_rand($opties)];
 		}
 		switch ($this->model) {
@@ -100,16 +115,20 @@ class IsHetAlView implements View
 				break;
 
 			case 'lunch':
-				$this->ja = (date('Hi') > '1230' AND date('Hi') < '1330');
+				$this->ja = (date('Hi') > '1230' and date('Hi') < '1330');
 				break;
 
 			case 'weekend':
-				$this->ja = (date('w') == 0 OR date('w') > 5 OR (date('w') == 5 AND date('Hi') >= '1700'));
+				$this->ja =
+					(date('w') == 0 or
+					date('w') > 5 or
+					date('w') == 5 and date('Hi') >= '1700');
 				break;
 
 			case 'studeren':
 				if ($session->has('studeren')) {
-					$this->ja = (time() > ($session->get('studeren') + 5 * 60) AND date('w') != 0);
+					$this->ja =
+						(time() > $session->get('studeren') + 5 * 60 and date('w') != 0);
 					$tijd = $session->get('studeren');
 				} else {
 					$this->ja = false;
@@ -137,24 +156,29 @@ class IsHetAlView implements View
 		}
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->model;
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return null;
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return $this->model;
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		$html = '';
 		$html .= '<div class="ishetal">';
 		switch ($this->model) {
 			case 'sponsorkliks':
-				$html .= '<iframe src="https://banner.sponsorkliks.com/skinfo.php?&background-color=F5F5F5&text-color=000000&header-background-color=F5F5F5&header-text-color=F5F5F5&odd-row=FFFFFF&even-row=09494a&odd-row-text=09494a&even-row-text=ffffff&type=financial&club_id=3605&width=193" frameborder="0" referrerpolicy="no-referrer" class="sponsorkliks-zijbalk"></iframe>';
+				$html .=
+					'<iframe src="https://banner.sponsorkliks.com/skinfo.php?&background-color=F5F5F5&text-color=000000&header-background-color=F5F5F5&header-text-color=F5F5F5&odd-row=FFFFFF&even-row=09494a&odd-row-text=09494a&even-row-text=ffffff&type=financial&club_id=3605&width=193" frameborder="0" referrerpolicy="no-referrer" class="sponsorkliks-zijbalk"></iframe>';
 				break;
 
 			case 'jarig':
@@ -176,11 +200,19 @@ class IsHetAlView implements View
 
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);
-				$html .= '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a>';
+				$html .=
+					'<div class="ja">Wist u dat...</div><a href="' .
+					self::$wistudat[$wistudat] .
+					'" class="cursief">' .
+					$wistudat .
+					'</a>';
 				break;
 
 			case 'wvdd':
-				$html .= '<div class="ja" style="word-break: break-word">Het lustrumboek-woord van de dag is '. $this->ja .' </div>';
+				$html .=
+					'<div class="ja" style="word-break: break-word">Het lustrumboek-woord van de dag is ' .
+					$this->ja .
+					' </div>';
 				break;
 
 			default:
@@ -193,7 +225,12 @@ class IsHetAlView implements View
 		} elseif ($this->ja === false) {
 			$html .= '<div class="nee">NEE.</div>';
 		} elseif (in_array($this->model, self::$aftellen)) {
-			$html .= '<div class="nee">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</div>';
+			$html .=
+				'<div class="nee">OVER ' .
+				$this->ja .
+				' ' .
+				($this->ja == 1 ? 'DAG' : 'DAGEN') .
+				'!</div>';
 		} else {
 			// wist u dat
 		}
@@ -202,5 +239,4 @@ class IsHetAlView implements View
 
 		return $html;
 	}
-
 }
