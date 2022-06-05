@@ -11,6 +11,7 @@ use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\entity\fiscaat\enum\CiviSaldoCommissieEnum;
 use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
+use CsrDelft\view\Icon;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -176,15 +177,11 @@ class PinTransactieMatch implements DataTableEntry
 		$desc = '';
 		if ($this->bestelling !== null && $this->bestelling->comment) {
 			$desc .=
-				'&nbsp;<i class="fas fa-comment" title="' .
-				$this->bestelling->comment .
-				'"></i>';
+				'&nbsp;' . Icon::getTag('message', null, $this->bestelling->comment);
 		}
 		if ($this->notitie) {
 			$desc .=
-				'&nbsp;<i class="fas fa-info-circle" title="' .
-				$this->notitie .
-				'"></i>';
+				'&nbsp;' . Icon::getTag('circle-info', null, $this->notitie);
 		}
 		return $desc;
 	}

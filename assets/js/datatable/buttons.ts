@@ -38,22 +38,22 @@ declare global {
 
 // Zet de icons van de default buttons
 $.fn.dataTable.ext.buttons.copyHtml5.className +=
-	' dt-button-ico dt-ico-page_white_copy';
+	' dt-button-ico fa-file-code';
 $.fn.dataTable.ext.buttons.copyFlash.className +=
-	' dt-button-ico dt-ico-page_white_copy';
+	' dt-button-ico fa-file-code';
 $.fn.dataTable.ext.buttons.csvHtml5.className +=
-	' dt-button-ico dt-ico-page_white_text';
+	' dt-button-ico fa-file-csv';
 $.fn.dataTable.ext.buttons.csvFlash.className +=
-	' dt-button-ico dt-ico-page_white_text';
+	' dt-button-ico fa-file-csv';
 $.fn.dataTable.ext.buttons.pdfHtml5.className +=
-	' dt-button-ico dt-ico-page_white_acrobat';
+	' dt-button-ico fa-file-pdf';
 $.fn.dataTable.ext.buttons.pdfFlash.className +=
-	' dt-button-ico dt-ico-page_white_acrobat';
+	' dt-button-ico fa-file-pdf';
 $.fn.dataTable.ext.buttons.excelHtml5.className +=
-	' dt-button-ico dt-ico-page_white_excel';
+	' dt-button-ico fa-file-excel';
 $.fn.dataTable.ext.buttons.excelFlash.className +=
-	' dt-button-ico dt-ico-page_white_excel';
-$.fn.dataTable.ext.buttons.print.className += ' dt-button-ico dt-ico-printer';
+	' dt-button-ico fa-file-excel';
+$.fn.dataTable.ext.buttons.print.className += ' dt-button-ico fa-print';
 
 // Laat een modal zien, of doe een ajax call gebasseerd op selectie.
 $.fn.dataTable.ext.buttons.default = {

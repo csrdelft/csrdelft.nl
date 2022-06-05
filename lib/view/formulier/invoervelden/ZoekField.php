@@ -7,6 +7,7 @@ use CsrDelft\entity\MenuItem;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\Icon;
 
 /**
  */
@@ -80,24 +81,25 @@ JS;
 			$html .= '<a class="dropdown-item disabled" href="#">';
 			$instelling = lid_instelling('zoeken', $option);
 			if ($instelling !== 'nee') {
-				$html .= '<i class="fas fa-check fa-fw me-2"></i> ';
+				$html .= Icon::getTag('check', null, '', 'fa-fw me-2') . ' ';
 				if ($option === 'leden') {
 					$html .= ucfirst(strtolower($instelling)) . '</a>';
 					continue;
 				}
 			} else {
-				$html .= '<i class="fas fa-fw me-2"></i> ';
+				$html .= Icon::getTag('', null, '', 'fa-fw me-2') . ' ';
 			}
 			$html .= ucfirst($option) . '</a>';
 		}
 		$wikiUrl = ContainerFacade::getContainer()->getParameter('wiki_url');
+		$zoekIcoon = Icon::getTag('search', null, 'Zoeken');
 		$parent = parent::getHtml();
 		return <<<HTML
 <div class="form-inline d-flex flex-nowrap">
 	{$parent}
 	<div class="dropdown">
 		<button id="cd-zoek-engines" class="btn btn-light dropdown-toggle ZoekFieldDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-			<i class="fas fa-search"></i>
+			{$zoekIcoon}
 			<span class="caret"></span>
 		</button>
 		<div class="dropdown-menu dropdown-menu-right" role="menu">

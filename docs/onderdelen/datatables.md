@@ -43,7 +43,7 @@ $this->addKnop(
 		'/maaltijden/beheer/verwijder',
 		'Verwijderen',
 		'Maaltijd verwijderen',
-		'cross'
+		'verwijderen'
 	)
 );
 ```

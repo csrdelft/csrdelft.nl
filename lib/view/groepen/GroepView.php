@@ -22,6 +22,7 @@ use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
+use CsrDelft\view\Icon;
 
 class GroepView implements FormElement, ToResponse
 {
@@ -117,7 +118,7 @@ class GroepView implements FormElement, ToResponse
 				'/wijzigen' .
 				'" title="Wijzig ' .
 				htmlspecialchars($this->groep->naam) .
-				'"><i class="fas fa-pencil"></i></a></div>';
+				'">' . Icon::getTag('bewerken') . '</a></div>';
 		}
 		$html .= '<h3>' . $this->getTitel();
 		if (
@@ -128,7 +129,7 @@ class GroepView implements FormElement, ToResponse
 				urlencode($this->groep->locatie) .
 				'" title="' .
 				$this->groep->locatie .
-				'" class="lichtgrijs fas fa-map-marker fa-lg"></a>';
+				'" class="lichtgrijs not-external">' . Icon::getTag('adres', null, $this->groep->locatie, 'fa-lg') . '</a>';
 		}
 		$html .= '</h3>';
 		$html .= CsrBB::parse($this->groep->samenvatting);

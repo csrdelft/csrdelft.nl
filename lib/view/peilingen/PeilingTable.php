@@ -40,7 +40,7 @@ class PeilingTable extends DataTable
 				'/peilingen/bewerken',
 				'Bewerken',
 				'Deze peiling bewerken',
-				'pencil'
+				'bewerken'
 			)
 		);
 		$this->addKnop(
@@ -49,7 +49,7 @@ class PeilingTable extends DataTable
 				'/peilingen/nieuw',
 				'Nieuw',
 				'Nieuwe peiling aanmaken',
-				'add'
+				'toevoegen'
 			)
 		);
 		$this->addKnop(
@@ -58,7 +58,7 @@ class PeilingTable extends DataTable
 				'/peilingen/verwijderen',
 				'Verwijderen',
 				'Peiling verwijderen',
-				'delete'
+				'verwijderen'
 			)
 		);
 	}

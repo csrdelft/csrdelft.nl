@@ -1,6 +1,9 @@
 <template>
   <div>
-    <a @click="toevoegen"> <span :class="icon" /> {{ text }} </a>
+    <a @click="toevoegen">
+      <Icon :icon="icon" />
+	    {{ text }}
+    </a>
   </div>
 </template>
 
@@ -9,10 +12,11 @@ import axios from 'axios';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { domUpdate } from '../../lib/domUpdate';
+import Icon from '../common/Icon.vue';
 
 @Component
 export default class PeilingOptieToevoegen extends Vue {
-  icon = 'ico add';
+  icon = 'plus';
   text = 'Optie toevoegen';
 
   @Prop({
@@ -26,15 +30,15 @@ export default class PeilingOptieToevoegen extends Vue {
 
   private toevoegen(event: MouseEvent) {
     event.preventDefault();
-    this.icon = 'ico arrow_rotate_clockwise rotating';
+    this.icon = 'spinner fa-spin';
     axios
       .post(this.optieToevoegenUrl.toString())
       .then((response) => {
         domUpdate(response.data);
-        this.icon = 'ico add';
+        this.icon = 'plus';
       })
       .catch(() => {
-        this.icon = 'ico cancel';
+        this.icon = 'ban';
         this.text = 'Mag geen optie meer toevoegen';
       });
   }

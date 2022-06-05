@@ -67,14 +67,14 @@ try {
 			submitButton.disabled = false;
 			errorContainer.innerHTML =
 				'<div class="alert alert-success">' +
-				'<span class="ico accept"></span>' +
+				'<i class="fas fa-check"></i>' +
 				response.data +
 				'</div>';
 		} catch (error) {
 			submitButton.disabled = false;
 			errorContainer.innerHTML =
 				'<div class="alert alert-danger">' +
-				'<span class="ico exclamation"></span>' +
+				'<i class="fas fa-ban"></i>' +
 				error.response.data +
 				'</div>';
 		}

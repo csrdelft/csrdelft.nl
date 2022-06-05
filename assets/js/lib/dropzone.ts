@@ -70,7 +70,7 @@ export const initDropzone = (el: HTMLFormElement): void => {
 	});
 
 	const showExisting = html`<a href="#"
-		><span class="ico photos"></span> Toon bestaande foto's in dit album</a
+		><i class="fas fa-images"></i> Toon bestaande foto's in dit album</a
 	>`;
 	el.appendChild(showExisting);
 	showExisting.addEventListener('click', async function (e) {

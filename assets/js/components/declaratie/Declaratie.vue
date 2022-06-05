@@ -227,8 +227,12 @@
           bedragen van de bon of het factuur over.
         </p>
         <div class="buttons">
-          <button v-if="uploading" class="loading blue" disabled>
-            <i class="fas fa-circle-notch fa-spin" />
+          <button
+            v-if="uploading"
+            class="loading blue"
+            disabled
+          >
+            <Icon icon="spinner fa-spin" />
           </button>
           <template v-else>
             <label class="blue" for="fileUpload"> Kies bestand </label>
@@ -285,7 +289,7 @@
               class="bonVerwijderen"
               @click="bonVerwijderen(bonIndex)"
             >
-              <i class="fas fa-trash-alt" />
+              <Icon icon="verwijderen" />
             </div>
             <div class="title">Bon {{ bonIndex + 1 }}</div>
 
@@ -344,7 +348,7 @@
                   class="trash"
                   @click="regelVerwijderen(bon, index)"
                 >
-                  <i class="fas fa-trash-alt" />
+                  <Icon icon="verwijderen" />
                 </div>
               </div>
               <div
@@ -364,7 +368,7 @@
                   </select>
                 </div>
                 <div class="add">
-                  <i class="fas fa-plus-circle" />
+                  <Icon icon="toevoegen" />
                 </div>
               </div>
               <div class="regels-row totaal streep">
@@ -405,7 +409,7 @@
           class="nieuwe-bon"
           @click="bonUploaden = true"
         >
-          <i class="fas fa-plus-circle" />
+          <Icon icon="toevoegen" />
         </div>
       </div>
       <div class="voorbeeld">
@@ -599,8 +603,11 @@
       </a>
     </div>
 
-    <div v-if="submitting" class="opslaan">
-      <i class="fas fa-circle-notch fa-spin" />
+    <div
+      v-if="submitting"
+      class="opslaan"
+    >
+      <Icon icon="spinner fa-spin" />
     </div>
   </div>
 </template>
@@ -609,6 +616,7 @@
 import axios from 'axios';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import Icon from '../common/Icon.vue';
 
 type status =
   | 'concept'
