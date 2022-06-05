@@ -1,0 +1,27 @@
+name: Prettier Checks
+
+on: [push, pull_request]
+
+jobs:
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Cache Yarn packages
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            .yarn
+            .pnp.cjs
+            .pnp.loader.mjs
+            node_modules/.cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Check Prettier
+        run: yarn dlx prettier --check .

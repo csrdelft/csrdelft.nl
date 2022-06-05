@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
@@ -61,8 +61,8 @@ jobs:
 
       - uses: getong/mariadb-action@v1.1
         with:
-          mariadb version: "10.3"
-          mysql root password: ""
+          mariadb version: '10.3'
+          mysql root password: ''
 
       - uses: actions/checkout@v2
 
@@ -107,9 +107,9 @@ jobs:
 
       - name: 🧪 Run PhpUnit
         env:
-          PANTHER_CHROME_ARGUMENTS: "--disable-dev-shm-usage"
-          PANTHER_CHROME_DRIVER_BINARY: "/usr/bin/chromedriver"
-          PANTHER_NO_SANDBOX: "1"
+          PANTHER_CHROME_ARGUMENTS: '--disable-dev-shm-usage'
+          PANTHER_CHROME_DRIVER_BINARY: '/usr/bin/chromedriver'
+          PANTHER_NO_SANDBOX: '1'
         run: php bin/phpunit
 
   deploy:

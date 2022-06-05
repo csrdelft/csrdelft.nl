@@ -1,4 +1,4 @@
-import {route} from './lib/util';
+import { route } from './lib/util';
 
 /**
  * Voer specifieke code uit voor specifieke routes.

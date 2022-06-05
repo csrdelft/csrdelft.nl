@@ -1,5 +1,5 @@
-@import 'vars';
-a{
+@import "vars";
+a {
 	text-decoration: none;
 }
 
@@ -47,7 +47,7 @@ nav {
 		text-transform: uppercase;
 		text-decoration: none;
 		font-size: 24px;
-		transition: ease-in-out color .15s;
+		transition: ease-in-out color 0.15s;
 
 		&:hover {
 			color: $kleur-wit;
@@ -59,11 +59,11 @@ nav {
 		position: absolute;
 		left: 5px;
 		top: 5px;
-		@media screen and (max-width:1100px) and (min-width:768px){
+		@media screen and (max-width: 1100px) and (min-width: 768px) {
 			visibility: hidden;
 		}
-		@media screen and (max-width:768px){
-			left:50%;
+		@media screen and (max-width: 768px) {
+			left: 50%;
 			transform: translate(-50%, 0%);
 		}
 
@@ -81,7 +81,7 @@ nav {
 }
 
 /* Kopjes */
-.titel{
+.titel {
 	font-weight: bold;
 	text-align: center;
 	color: $font-color-primary;
@@ -102,7 +102,7 @@ nav {
 	flex-direction: column;
 	align-items: center;
 	margin-bottom: 20px;
-	.plaetje{
+	.plaetje {
 		width: 400px;
 		max-width: 100%;
 	}
@@ -124,7 +124,7 @@ nav {
 	}
 
 	// only show it when it does not overlap with the other stuff (960 + 105 * 2)
-	@media screen and (max-width:1170px){
+	@media screen and (max-width: 1170px) {
 		display: none;
 	}
 }
@@ -145,7 +145,7 @@ nav {
 		font-weight: bold;
 	}
 
-	.instagram-embed{
+	.instagram-embed {
 		width: 400px;
 		height: 100%;
 		max-width: 100%;
@@ -168,7 +168,7 @@ nav {
 	}
 }
 /* Dividers */
-.divider{
+.divider {
 	display: flex;
 	flex-direction: column;
 
@@ -179,7 +179,7 @@ nav {
 		height: 100%;
 	}
 
-	.helemaal-boven{
+	.helemaal-boven {
 		margin-top: 60px;
 		margin-bottom: 10px;
 	}
@@ -238,7 +238,7 @@ nav {
 }
 
 // Poster weergave
-.poster{
+.poster {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -250,7 +250,7 @@ nav {
 }
 
 // Ketzers weergave
-.ketzers{
+.ketzers {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -265,7 +265,7 @@ nav {
 	src: url("../../fonts/lustrum12/segoescb.ttf");
 }
 $lw-font-text-temp: Segoe Script, Arial, Helvetica, sans-serif;
-$lw-blauw-temp: #3B9596;
+$lw-blauw-temp: #3b9596;
 
 .lw-font-text {
 	font-family: $lw-font-text-temp;

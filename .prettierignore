@@ -1,0 +1,17 @@
+htdocs
+
+# Yarn files
+.yarn
+.yarnrc.yml
+.pnp.cjs
+.pnp.loader.mjs
+
+# Php vendor files
+bin/.phpunit
+vendor
+
+# Built docs site
+docs/_site
+
+# Services, !tagged_locator wordt gesloopt door prettier.
+services.yaml

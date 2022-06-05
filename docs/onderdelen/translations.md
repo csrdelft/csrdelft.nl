@@ -12,6 +12,7 @@ De externe stek is ook beschikbaar in het Engels. Op de meeste plekken wordt de 
 Zie ook de documentatie van [`symfony/translation`](https://symfony.com/doc/current/translation.html) voor meer informatie.
 
 ## Vertalignen gebruiken
+
 ### Vertalingen in templates
 
 In templates kunnen stukken tekst op twee verschillende manieren vertaald worden. Met `{% raw %}{% trans %}{% endraw %}` blokken en met de `trans` filter.

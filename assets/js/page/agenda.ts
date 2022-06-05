@@ -1,4 +1,4 @@
-import {Calendar} from '@fullcalendar/core';
+import { Calendar } from '@fullcalendar/core';
 import nlLocale from '@fullcalendar/core/locales/nl';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interaction from '@fullcalendar/interaction';
@@ -7,10 +7,10 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import axios from 'axios';
 import moment from 'moment';
 import ctx from '../ctx';
-import {ajaxRequest} from '../lib/ajax';
-import {domUpdate} from '../lib/domUpdate';
-import {docReady, htmlParse} from '../lib/util';
-import {createPopper} from "@popperjs/core";
+import { ajaxRequest } from '../lib/ajax';
+import { domUpdate } from '../lib/domUpdate';
+import { docReady, htmlParse } from '../lib/util';
+import { createPopper } from '@popperjs/core';
 
 docReady(() => {
 	const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss';
@@ -23,7 +23,7 @@ docReady(() => {
 		throw new Error('Agenda element niet gevonden');
 	}
 
-	const {jaar, maand, weergave, creator} = calendarEl.dataset;
+	const { jaar, maand, weergave, creator } = calendarEl.dataset;
 
 	if (jaar == null || maand == null || weergave == null || creator == null) {
 		throw new Error('Agenda opties niet gezet');
@@ -45,17 +45,25 @@ docReady(() => {
 		initialView,
 		locale: nlLocale,
 		customButtons: {
-			nieuw: { // Alleen zichtbaar als je mag bewerken
+			nieuw: {
+				// Alleen zichtbaar als je mag bewerken
 				text: 'Nieuw',
 				click: () => {
 					const datum = fmt(calendar.getDate());
-					ajaxRequest('POST', '/agenda/toevoegen', {
-						begin_moment: datum,
-						eind_moment: datum,
-					}, null, domUpdate);
+					ajaxRequest(
+						'POST',
+						'/agenda/toevoegen',
+						{
+							begin_moment: datum,
+							eind_moment: datum,
+						},
+						null,
+						domUpdate
+					);
 				},
 			},
-			bewerken: { // Alleen zichtbaar als je mag bewerken
+			bewerken: {
+				// Alleen zichtbaar als je mag bewerken
 				text: 'Bewerken',
 				click() {
 					editable = !editable;
@@ -70,10 +78,10 @@ docReady(() => {
 						const button = calendarEl.querySelector('.fc-bewerken-button');
 
 						if (!button) {
-							throw new Error("Geen bewerken knop gevonden");
+							throw new Error('Geen bewerken knop gevonden');
 						}
 
-						button.classList.toggle('fc-button-active', editable)
+						button.classList.toggle('fc-button-active', editable);
 					});
 				},
 			},
@@ -95,84 +103,95 @@ docReady(() => {
 		events: '/agenda/feed',
 		selectable: editable && creator === 'true',
 		select: (selectionInfo) => {
-			ajaxRequest('POST', '/agenda/toevoegen', {
-				begin_moment: fmt(selectionInfo.start),
-				eind_moment: fmt(selectionInfo.end),
-			}, null, domUpdate);
+			ajaxRequest(
+				'POST',
+				'/agenda/toevoegen',
+				{
+					begin_moment: fmt(selectionInfo.start),
+					eind_moment: fmt(selectionInfo.end),
+				},
+				null,
+				domUpdate
+			);
 		},
 		eventClick: (info) => {
-			const start = info.event.start
+			const start = info.event.start;
 
 			if (!start) {
 				return;
 			}
 
-			axios.get(`/agenda/details/${info.event.id}?jaar=${(start.getFullYear())}`).then((response) => {
-				const card = htmlParse(response.data)[0] as HTMLElement;
-				card.style.zIndex = '100';
-				card.style.position = 'absolute';
+			axios
+				.get(`/agenda/details/${info.event.id}?jaar=${start.getFullYear()}`)
+				.then((response) => {
+					const card = htmlParse(response.data)[0] as HTMLElement;
+					card.style.zIndex = '100';
+					card.style.position = 'absolute';
 
-				const closeButton = card.querySelector('.close')
+					const closeButton = card.querySelector('.close');
 
-				if (closeButton) {
-					closeButton.addEventListener('click', () => {
-						card.remove();
-						return false;
-					});
-				}
-
-				document.body.append(card);
-				ctx.init(card);
-
-				createPopper(info.el, card, {placement: 'bottom'});
-
-				// Na deze klik een event listener
-				setTimeout(() => {
-					const clickListener = (e: Event) => {
-						if (!card.contains(e.target as Node)) {
+					if (closeButton) {
+						closeButton.addEventListener('click', () => {
 							card.remove();
-							document.body.removeEventListener('click', clickListener);
-						}
-					};
+							return false;
+						});
+					}
 
-					document.body.addEventListener('click', clickListener);
+					document.body.append(card);
+					ctx.init(card);
+
+					createPopper(info.el, card, { placement: 'bottom' });
+
+					// Na deze klik een event listener
+					setTimeout(() => {
+						const clickListener = (e: Event) => {
+							if (!card.contains(e.target as Node)) {
+								card.remove();
+								document.body.removeEventListener('click', clickListener);
+							}
+						};
+
+						document.body.addEventListener('click', clickListener);
+					});
 				});
-			});
 		},
 		eventDrop: async (dropInfo) => {
-			const start = dropInfo.event.start
-			const end = dropInfo.event.end
+			const start = dropInfo.event.start;
+			const end = dropInfo.event.end;
 
 			if (!start || !end) {
-				throw new Error("Drop heeft geen start of end")
+				throw new Error('Drop heeft geen start of end');
 			}
 
 			await axios.post(`/agenda/verplaatsen/${dropInfo.event.id}`, {
 				begin_moment: fmt(start),
 				eind_moment: fmt(end),
-			})
+			});
 
-			calendar.refetchEvents()
+			calendar.refetchEvents();
 		},
 		eventResize: async (resizeInfo) => {
-			const start = resizeInfo.event.start
-			const end = resizeInfo.event.end
+			const start = resizeInfo.event.start;
+			const end = resizeInfo.event.end;
 
 			if (!start || !end) {
-				throw new Error("Resize heeft geen start of end")
+				throw new Error('Resize heeft geen start of end');
 			}
 
 			await axios.post(`/agenda/verplaatsen/${resizeInfo.event.id}`, {
 				begin_moment: fmt(start),
 				eind_moment: fmt(end),
-			})
+			});
 
-			calendar.refetchEvents()
+			calendar.refetchEvents();
 		},
 	};
 
 	ctx.addHandler('.ReloadAgenda', (el: Element) =>
-		el.addEventListener('click', () => setTimeout(() => calendar.refetchEvents())));
+		el.addEventListener('click', () =>
+			setTimeout(() => calendar.refetchEvents())
+		)
+	);
 
 	// Creator krijgt nieuw knoppen
 	if (creator === 'true') {

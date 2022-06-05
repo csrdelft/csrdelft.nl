@@ -10,7 +10,8 @@
 		"production": "cross-env webpack --mode=production",
 		"docker": "yarn install && yarn run watch-poll",
 		"startup": "yarn run dev",
-		"lint": "yarn run eslint --ext .vue,.ts assets/js"
+		"lint": "yarn run eslint --ext .vue,.ts assets/js",
+		"prepare": "husky install"
 	},
 	"devDependencies": {
 		"@types/bootstrap": "^5.0.0",
@@ -43,15 +44,19 @@
 		"cross-env": "^7.0.3",
 		"css-loader": "^6.7.1",
 		"eslint": "^7.7.0",
+		"eslint-config-prettier": "^8.5.0",
 		"eslint-formatter-json-relative": "^0.1.0",
 		"eslint-loader": "^4.0.2",
 		"eslint-plugin-vue": "^7.9.0",
+		"husky": "^8.0.1",
+		"lint-staged": "^13.0.0",
 		"mini-css-extract-plugin": "^2.4.5",
 		"moment-locales-webpack-plugin": "^1.2.0",
 		"optimize-css-assets-webpack-plugin": "^6.0.1",
 		"path": "^0.12.7",
 		"postcss": "^8.2.10",
 		"postcss-loader": "^5.2.0",
+		"prettier": "^2.6.2",
 		"resolve-url-loader": "^4.0.0",
 		"sass": "^1.51.0",
 		"sass-loader": "^11.0.1",
@@ -142,6 +147,9 @@
 		"timeago.js": "^4.0.2",
 		"v-money": "^0.8.1",
 		"vue": "^2.6.12"
+	},
+	"lint-staged": {
+		"*": "npx prettier --write --ignore-unknown"
 	},
 	"packageManager": "yarn@3.2.0"
 }

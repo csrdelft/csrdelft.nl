@@ -4,7 +4,8 @@
 	text-align: center;
 	margin: 1em;
 
-	.ja, .nee {
+	.ja,
+	.nee {
 		font-size: 1.4em;
 		font-weight: bold;
 		color: $zijbalk-ishetal-nee;
@@ -17,10 +18,10 @@
 }
 
 .lustrum12:before {
-	content: '';
+	content: "";
 	display: block;
 	height: 90px;
-	background: url('../images/lustrum12/zandloper.png') no-repeat center center;
+	background: url("../images/lustrum12/zandloper.png") no-repeat center center;
 	background-size: contain;
 	clear: left;
 }
@@ -29,7 +30,7 @@
 	background-color: #6e1321;
 	color: #eeeeee;
 	font-weight: bold;
-	font-size: 1.0em;
+	font-size: 1em;
 	align-items: center;
 	width: 100%;
 }
@@ -55,7 +56,6 @@
 }
 
 .zijbalk_extra_breed {
-
 	#menu {
 		margin-left: -250px;
 	}
@@ -112,7 +112,8 @@
 			font-weight: normal;
 			margin: 10px 0 5px 0;
 			padding: 2px 0 5px 0;
-			background: transparent url("../images/portal-break.png") no-repeat bottom left;
+			background: transparent url("../images/portal-break.png") no-repeat bottom
+				left;
 
 			a {
 				color: $zijbalk-kopje;
@@ -139,7 +140,6 @@
 		width: 3em;
 		text-align: right;
 	}
-
 
 	/* Verjaardag in de zijbalk */
 	#komende_pasfotos .verjaardag {

@@ -24,21 +24,21 @@ description: >- # this means to ignore newlines until "baseurl:"
   Write an awesome description for your new site here. You can edit this
   line in _config.yml. It will appear in your document head meta (for
   Google search results) and in your feed.xml site description.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: '' # the subpath of your site, e.g. /blog
+url: '' # the base hostname & protocol for your site, e.g. http://example.com
 
 remote_theme: pmarsceill/just-the-docs
 # Build settings
 #theme: just-the-docs
 
 aux_links:
-  "Naar de code":
-    - "//github.com/csrdelft/csrdelft.nl"
-  "Naar de stek":
-    - "//csrdelft.nl"
+  'Naar de code':
+    - '//github.com/csrdelft/csrdelft.nl'
+  'Naar de stek':
+    - '//csrdelft.nl'
 
 color_scheme: stek
 
 exclude:
- - Gemfile
- - Gemfile.lock
+  - Gemfile
+  - Gemfile.lock

@@ -7,12 +7,11 @@ title: Database Migraties
 
 # Migraties
 
-*Je hebt dit document pas nodig als je zelf migraties gaat maken. Tot die tijd moet je je er niet te druk over maken.*
+_Je hebt dit document pas nodig als je zelf migraties gaat maken. Tot die tijd moet je je er niet te druk over maken._
 
 [Database migraties](https://en.wikipedia.org/wiki/Schema_migration) zijn een oplossing voor de problemen die ontstaan als je veranderingen wil aanbrengen aan de database, maar dit op een reproduceerbare manier wil doen en dit ook wil communiceren met andere mensen die aan de een project ontwikkelen.
 
 Voor migraties gebruiken we [Doctrine Migrations](https://www.doctrine-project.org/projects/doctrine-migrations/en/2.2/index.html) en de [DoctrineMigrationsBundle](https://symfony.com/doc/2.2.x/bundles/DoctrineMigrationsBundle/index.html) kijk eerst naar de documentatie van DoctrineMigrationsBundle als je meer informatie wil hebben.
-
 
 ## Migraties uitvoeren
 
@@ -48,7 +47,6 @@ In de map `db/doctrine_migrations` is nu een lege migratie gemaakt. Kijk in de D
 
 ### Een migratie laten genereren
 
-
 Je kan een migratie laten genereren op basis van de veranderingen die je hebt gemaakt. Hier voor voer je het volgende commando uit:
 
 ```bash
@@ -73,7 +71,7 @@ php bin/console doctrine:migrations:migrate prev
 
 ## Migraties in CI
 
-In de `CI` workflow in de `Voer tests uit` stap worden alle migraties uitgevoerd en wordt  er gecontroleerd of de database na het uitvoeren van alle migraties precies hetzelfde is als wat er in de code staat. Als dit niet het geval is wordt een sql script gedumpt met potentiele oplossingen voor de fouten, deze sql statements laten je zien waar de fouten zitten. Je kan hier ook het `php bin/console doctrine:schema:validate` commando voor uitvoeren.
+In de `CI` workflow in de `Voer tests uit` stap worden alle migraties uitgevoerd en wordt er gecontroleerd of de database na het uitvoeren van alle migraties precies hetzelfde is als wat er in de code staat. Als dit niet het geval is wordt een sql script gedumpt met potentiele oplossingen voor de fouten, deze sql statements laten je zien waar de fouten zitten. Je kan hier ook het `php bin/console doctrine:schema:validate` commando voor uitvoeren.
 
 # Belangrijke noten
 

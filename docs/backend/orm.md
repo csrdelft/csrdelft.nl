@@ -13,7 +13,7 @@ Voor interactie met de database wordt een ORM gebruikt, namelijk [Doctrine](http
 
 Met een Entity beschrijf je hoe een object eruit ziet dat je later in de database gaat opslaan. Dit is een normaal PHP class met een aantal extra toevoegingen. Entities zijn te vinden in de `lib/entities` map in de repository.
 
-Hier onder vind je ene simpele entity met drie velden. We gebruiken *PHP annotaties* om aan te geven hoe de velden er in de database uit zien.
+Hier onder vind je ene simpele entity met drie velden. We gebruiken _PHP annotaties_ om aan te geven hoe de velden er in de database uit zien.
 
 ```php
 namespace CsrDelft\entity;

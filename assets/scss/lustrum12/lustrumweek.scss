@@ -1,12 +1,12 @@
-@import 'style.scss';
+@import "style.scss";
 
-$lw-blauw: #3B9596;
+$lw-blauw: #3b9596;
 $lw-grijs: #275e5f;
-$lw-oranje: #EC673E;
-$lw-donkerrood:   #551D10;      //#67250D;
-$lw-header-donkerrood:  #431413;    //#310c16;
+$lw-oranje: #ec673e;
+$lw-donkerrood: #551d10; //#67250D;
+$lw-header-donkerrood: #431413; //#310c16;
 
-$lw-beige: #F2C292;
+$lw-beige: #f2c292;
 $lw-beige-background: #f2c292ec;
 
 $lw-primary: $lw-blauw;
@@ -14,25 +14,25 @@ $lw-secondary: $lw-oranje;
 
 @font-face {
 	font-family: Segoe Script;
-	src: url('../../fonts/lustrum12/segoescb.ttf');	// was first without url()
+	src: url("../../fonts/lustrum12/segoescb.ttf"); // was first without url()
 }
 
 @font-face {
-	font-family: 'Mrs Sheppards Regular';
+	font-family: "Mrs Sheppards Regular";
 	font-style: italic;
 	font-weight: normal;
-	src: url('../../fonts/lustrum12/MrsSheppards-Regular.woff') format('woff');
+	src: url("../../fonts/lustrum12/MrsSheppards-Regular.woff") format("woff");
 }
 
 $lw-font-header: Mrs Sheppards Regular, Arial, Helvetica, sans-serif;
 $lw-font-text: Segoe Script, Arial, Helvetica, sans-serif;
 
-a{
+a {
 	text-decoration: none;
 }
 
 body {
-	background-image: url('../../images/lustrum12/lw-achtergrond.jpg');
+	background-image: url("../../images/lustrum12/lw-achtergrond.jpg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
@@ -53,24 +53,18 @@ h2 {
 	.lw-titel {
 		font-family: $lw-font-header;
 		text-transform: uppercase;
-		font-size: 5.0rem;
+		font-size: 5rem;
 
 		color: $lw-oranje;
-		text-shadow:
-			-2px 1px 0 $lw-beige-background,
-			1px 2px 0 $lw-beige-background,
-			2px -1px 0 $lw-beige-background,
-			-1px -2px 0 $lw-beige-background;
+		text-shadow: -2px 1px 0 $lw-beige-background, 1px 2px 0 $lw-beige-background,
+			2px -1px 0 $lw-beige-background, -1px -2px 0 $lw-beige-background;
 	}
 	.lw-ondertitel {
 		font-family: $lw-font-text;
-		font-size: 3.0rem;
+		font-size: 3rem;
 		color: $lw-blauw;
-		text-shadow:
-			-2px 1px 0 $lw-beige-background,
-			1px 2px 0 $lw-beige-background,
-			2px -1px 0 $lw-beige-background,
-			-1px -2px 0 $lw-beige-background;
+		text-shadow: -2px 1px 0 $lw-beige-background, 1px 2px 0 $lw-beige-background,
+			2px -1px 0 $lw-beige-background, -1px -2px 0 $lw-beige-background;
 	}
 }
 
@@ -98,7 +92,7 @@ nav {
 		text-transform: uppercase;
 
 		font-size: 24px;
-		transition: ease-in-out color .15s;
+		transition: ease-in-out color 0.15s;
 		&:hover {
 			color: $lw-blauw;
 			text-decoration: none;
@@ -106,7 +100,7 @@ nav {
 	}
 
 	.logo-titel {
-		left:-20px;
+		left: -20px;
 		top: -20px;
 		padding-top: 30px;
 		padding-bottom: 10px;
@@ -119,7 +113,7 @@ nav {
 		border-width: 2px;
 		background-color: $lw-donkerrood;
 
-		@media screen and (max-width:1100px){
+		@media screen and (max-width: 1100px) {
 			visibility: hidden;
 		}
 	}
@@ -133,8 +127,7 @@ nav {
 
 	display: flex;
 
-
-	.lw-dag{
+	.lw-dag {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -154,22 +147,18 @@ nav {
 			.lw-titel {
 				font-family: $lw-font-text;
 				text-transform: uppercase;
-				font-size: 2.0rem;
+				font-size: 2rem;
 
 				color: $lw-oranje;
-				text-shadow: -2px 1px 0 $lw-beige,
-				1px 2px 0 $lw-beige,
-				2px -1px 0 $lw-beige,
-				-1px -2px 0 $lw-beige;
-
+				text-shadow: -2px 1px 0 $lw-beige, 1px 2px 0 $lw-beige,
+					2px -1px 0 $lw-beige, -1px -2px 0 $lw-beige;
 			}
 			.lw-beschrijving {
 				color: $lw-blauw; //grijs;
 				font-weight: bold;
 				text-shadow: -2px 1px 0 $lw-beige-background,
-				1px 2px 0 $lw-beige-background,
-				2px -1px 0 $lw-beige-background,
-				-1px -2px 0 $lw-beige-background;
+					1px 2px 0 $lw-beige-background, 2px -1px 0 $lw-beige-background,
+					-1px -2px 0 $lw-beige-background;
 			}
 		}
 	}

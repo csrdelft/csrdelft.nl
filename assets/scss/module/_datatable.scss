@@ -36,7 +36,9 @@ h2.vliegende-knoppen + div > .dt-buttons {
 	top: 58px;
 }
 
-button, a, div {
+button,
+a,
+div {
 	&.dt-button-warning {
 		background: #f2dede linear-gradient(to bottom, #f2dede 0%, #e7c3c3 100%);
 		filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#f2dede', EndColorStr='#e7c3c3');
@@ -78,7 +80,6 @@ button, a, div {
 		}
 
 		tr {
-
 			td.editable {
 				cursor: url("../../images/edit.png"), cell;
 			}
@@ -86,7 +87,7 @@ button, a, div {
 			td.toggle-childrow::before {
 				font-size: 1.1em;
 				font-weight: 400;
-				font-family: 'Font Awesome 5 Free';
+				font-family: "Font Awesome 5 Free";
 				content: fa-content($fa-var-plus-square);
 			}
 		}
@@ -99,21 +100,18 @@ button, a, div {
 			}
 		}
 		tr.expanded {
-
 			td.toggle-childrow::before {
 				font-weight: 400;
 				content: fa-content($fa-var-minus-square);
 			}
 		}
 		tr.expanded:hover {
-
 			td.toggle-childrow::before {
 				font-weight: 900;
 				content: fa-content($fa-var-minus-square);
 			}
 		}
 		tr.loading {
-
 			td.toggle-childrow::before {
 				content: none;
 			}

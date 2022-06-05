@@ -1,5 +1,5 @@
 import AlbumItem from 'jgallery/types/album-item';
-import {GalleryDecorator} from 'jgallery/types/gallery';
+import { GalleryDecorator } from 'jgallery/types/gallery';
 import Params from 'jgallery/types/gallery/parameters';
 
 const withHotkeys: GalleryDecorator = (constructor) =>

@@ -3,7 +3,18 @@ instellingen:
     bijbel:
       titel: 'Bijbelvertaling'
       type: Enumeration
-      opties: { NBV: 'De Nieuwe Bijbelvertaling', 'BGT': 'Bijbel in Gewone Taal', 'GNB96': 'Groot Nieuws Bijbel', 'NFB': 'Nije Fryske Bibeloersetting', 'NBG51': 'NBG-vertaling 1951', 'SVJ': 'Statenvertaling (Jongbloed-editie)', 'HSVI': 'Herziene Statenvertaling', 'CEVD': 'Contemporary English Version', 'GNTD': 'Good News Translation'}
+      opties:
+        {
+          NBV: 'De Nieuwe Bijbelvertaling',
+          'BGT': 'Bijbel in Gewone Taal',
+          'GNB96': 'Groot Nieuws Bijbel',
+          'NFB': 'Nije Fryske Bibeloersetting',
+          'NBG51': 'NBG-vertaling 1951',
+          'SVJ': 'Statenvertaling (Jongbloed-editie)',
+          'HSVI': 'Herziene Statenvertaling',
+          'CEVD': 'Contemporary English Version',
+          'GNTD': 'Good News Translation',
+        }
       default: 'NBV'
       beschrijving: 'Bijbelvertaling die wordt gebruikt als iemand naar een bijbeltekst verwijst op het forum.'
   agenda:
@@ -53,7 +64,18 @@ instellingen:
     opmaak:
       titel: 'Opmaak'
       type: Enumeration
-      opties: ['normaal', 'lustrum', 'owee', 'dies', 'donker', 'sineregno', 'civitasia', 'roze', 'koevoet']
+      opties:
+        [
+          'normaal',
+          'lustrum',
+          'owee',
+          'dies',
+          'donker',
+          'sineregno',
+          'civitasia',
+          'roze',
+          'koevoet',
+        ]
       default: 'normaal'
       beschrijving: 'Ik daag je uit roze te gebruiken. Of koevoet.'
     automatischDonker:
@@ -203,27 +225,140 @@ instellingen:
         zijbalk_verborgen: Verborgen
       default: 'zijbalk_normaal'
       beschrijving: ''
-    meescrollen: {titel: "Zijbalk meescrollen", type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
+    meescrollen:
+      {
+        titel: 'Zijbalk meescrollen',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'nee',
+        beschrijving: '',
+      }
     ishetal:
       titel: 'Is het al… weergeven'
       type: Enumeration
-      opties: ['niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lustrum', 'lunch', 'studeren', 'sponsorkliks']
+      opties:
+        [
+          'niet weergeven',
+          'willekeurig',
+          'wist u dat',
+          'weekend',
+          'kring',
+          'lezing',
+          'borrel',
+          'jarig',
+          'dies',
+          'lustrum',
+          'lunch',
+          'studeren',
+          'sponsorkliks',
+        ]
       default: 'willekeurig'
       beschrijving: ''
-    favorieten: {titel: 'Favorieten menu weergeven', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
-    agendaweken: {titel: 'Aantal weken in agenda weergeven', type: 'Integer', opties: [0, 10], default: 2, beschrijving: ''}
-    agenda_max: {titel: 'Maximaal aantal agenda-items', type: 'Integer', opties: [0, 50], default: 15, beschrijving: ''}
-    forum_belangrijk: {titel: 'Aantal belangrijke forumberichten', type: 'Integer', opties: [0, 50], default: 5, beschrijving: ''}
-    forum: {titel: 'Aantal forumberichten', type: 'Integer', opties: [0, 50], default: 10, beschrijving: ''}
-    forum_zelf: {titel: 'Aantal zelf geposte forumberichten', type: 'Integer', opties: [0, 50], default: 0, beschrijving: ''}
-    ledenmemory_topscores: {titel: 'Ledenmemory topscores weergeven', type: 'Integer', opties: [0, 10], default: 0, beschrijving: ''}
-    fotoalbum: {titel: 'Laatste fotoalbum weergeven', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
-    fotos: {titel: "Aantal foto's weergeven", type: 'Integer', opties: [0, 50], default: 6, beschrijving: ''}
-    verjaardagen: {titel: 'Aantal verjaardagen weergeven', type: 'Integer', opties: [0, 50], default: 9, beschrijving: ''}
-    verjaardagen_pasfotos: {titel: "Pasfoto's bij verjaardagen", type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    favorieten:
+      {
+        titel: 'Favorieten menu weergeven',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'ja',
+        beschrijving: '',
+      }
+    agendaweken:
+      {
+        titel: 'Aantal weken in agenda weergeven',
+        type: 'Integer',
+        opties: [0, 10],
+        default: 2,
+        beschrijving: '',
+      }
+    agenda_max:
+      {
+        titel: 'Maximaal aantal agenda-items',
+        type: 'Integer',
+        opties: [0, 50],
+        default: 15,
+        beschrijving: '',
+      }
+    forum_belangrijk:
+      {
+        titel: 'Aantal belangrijke forumberichten',
+        type: 'Integer',
+        opties: [0, 50],
+        default: 5,
+        beschrijving: '',
+      }
+    forum:
+      {
+        titel: 'Aantal forumberichten',
+        type: 'Integer',
+        opties: [0, 50],
+        default: 10,
+        beschrijving: '',
+      }
+    forum_zelf:
+      {
+        titel: 'Aantal zelf geposte forumberichten',
+        type: 'Integer',
+        opties: [0, 50],
+        default: 0,
+        beschrijving: '',
+      }
+    ledenmemory_topscores:
+      {
+        titel: 'Ledenmemory topscores weergeven',
+        type: 'Integer',
+        opties: [0, 10],
+        default: 0,
+        beschrijving: '',
+      }
+    fotoalbum:
+      {
+        titel: 'Laatste fotoalbum weergeven',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'ja',
+        beschrijving: '',
+      }
+    fotos:
+      {
+        titel: "Aantal foto's weergeven",
+        type: 'Integer',
+        opties: [0, 50],
+        default: 6,
+        beschrijving: '',
+      }
+    verjaardagen:
+      {
+        titel: 'Aantal verjaardagen weergeven',
+        type: 'Integer',
+        opties: [0, 50],
+        default: 9,
+        beschrijving: '',
+      }
+    verjaardagen_pasfotos:
+      {
+        titel: "Pasfoto's bij verjaardagen",
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'ja',
+        beschrijving: '',
+      }
   zoeken:
-    favorieten: {titel: 'Favorieten', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
-    menu: {titel: 'Menu', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    favorieten:
+      {
+        titel: 'Favorieten',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'ja',
+        beschrijving: '',
+      }
+    menu:
+      {
+        titel: 'Menu',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'ja',
+        beschrijving: '',
+      }
     leden:
       titel: 'Leden'
       type: Enumeration
@@ -237,15 +372,99 @@ instellingen:
         nee: 'Nee'
       default: 'LEDEN'
       beschrijving: ''
-    commissies: {titel: 'Commissies', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
-    kringen: {titel: 'Kringen', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
-    onderverenigingen: {titel: 'Onderverenigingen', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
-    werkgroepen: {titel: 'Werkgroepen', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
-    woonoorden: {titel: 'Woonoorden', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
-    groepen: {titel: 'Overige groepen', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
-    agenda: {titel: 'Agenda', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
-    forum: {titel: 'Forum', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
-    fotoalbum: {titel: 'Fotoalbum', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
-    wiki: {titel: 'Wiki', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
-    documenten: {titel: 'Documenten', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
-    boeken: {titel: 'Boeken', type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
+    commissies:
+      {
+        titel: 'Commissies',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'ja',
+        beschrijving: '',
+      }
+    kringen:
+      {
+        titel: 'Kringen',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'nee',
+        beschrijving: '',
+      }
+    onderverenigingen:
+      {
+        titel: 'Onderverenigingen',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'nee',
+        beschrijving: '',
+      }
+    werkgroepen:
+      {
+        titel: 'Werkgroepen',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'nee',
+        beschrijving: '',
+      }
+    woonoorden:
+      {
+        titel: 'Woonoorden',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'ja',
+        beschrijving: '',
+      }
+    groepen:
+      {
+        titel: 'Overige groepen',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'nee',
+        beschrijving: '',
+      }
+    agenda:
+      {
+        titel: 'Agenda',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'ja',
+        beschrijving: '',
+      }
+    forum:
+      {
+        titel: 'Forum',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'ja',
+        beschrijving: '',
+      }
+    fotoalbum:
+      {
+        titel: 'Fotoalbum',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'nee',
+        beschrijving: '',
+      }
+    wiki:
+      {
+        titel: 'Wiki',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'ja',
+        beschrijving: '',
+      }
+    documenten:
+      {
+        titel: 'Documenten',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'nee',
+        beschrijving: '',
+      }
+    boeken:
+      {
+        titel: 'Boeken',
+        type: 'Enumeration',
+        opties: ['ja', 'nee'],
+        default: 'nee',
+        beschrijving: '',
+      }

@@ -4,65 +4,81 @@
     <div class="voortgang">
       <div
         class="fase concept"
-        :class="{'active': declaratie.status === 'concept', 'done': declaratie.status !== 'concept'}"
+        :class="{
+          active: declaratie.status === 'concept',
+          done: declaratie.status !== 'concept',
+        }"
       >
         <span class="status">Concept</span>
       </div>
       <div
         class="fase ingediend"
-        :class="{'active': declaratie.status === 'ingediend', 'done': declaratie.status === 'goedgekeurd' || declaratie.status === 'afgekeurd' || declaratie.status === 'uitbetaald'}"
+        :class="{
+          active: declaratie.status === 'ingediend',
+          done:
+            declaratie.status === 'goedgekeurd' ||
+            declaratie.status === 'afgekeurd' ||
+            declaratie.status === 'uitbetaald',
+        }"
       >
         <span class="status">Ingediend</span>
-        <span
-          v-if="declaratie.status !== 'concept'"
-          class="datum"
-        >
-          {{ declaratie.statusData.ingediendDoor }}, {{ declaratie.statusData.ingediendOp }}
+        <span v-if="declaratie.status !== 'concept'" class="datum">
+          {{ declaratie.statusData.ingediendDoor }},
+          {{ declaratie.statusData.ingediendOp }}
         </span>
       </div>
       <div
-        v-if="declaratie.status !== 'afgekeurd' && declaratie.betaalwijze === 'C.S.R.-pas'"
+        v-if="
+          declaratie.status !== 'afgekeurd' &&
+          declaratie.betaalwijze === 'C.S.R.-pas'
+        "
         class="fase goedgekeurd"
-        :class="{'active': declaratie.status === 'goedgekeurd', 'done': declaratie.status === 'uitbetaald'}"
+        :class="{
+          active: declaratie.status === 'goedgekeurd',
+          done: declaratie.status === 'uitbetaald',
+        }"
       >
         <span class="status">Goedgekeurd</span>
-        <span
-          v-if="declaratie.statusData.beoordeeldDoor"
-          class="datum"
-        >
-          {{ declaratie.statusData.beoordeeldDoor }}, {{ declaratie.statusData.goedgekeurdOp }}
+        <span v-if="declaratie.statusData.beoordeeldDoor" class="datum">
+          {{ declaratie.statusData.beoordeeldDoor }},
+          {{ declaratie.statusData.goedgekeurdOp }}
         </span>
       </div>
       <div
-        v-if="declaratie.status !== 'afgekeurd' && declaratie.betaalwijze === 'voorgeschoten'"
+        v-if="
+          declaratie.status !== 'afgekeurd' &&
+          declaratie.betaalwijze === 'voorgeschoten'
+        "
         class="fase uitbetaald"
-        :class="{'active': declaratie.status === 'goedgekeurd', 'done': declaratie.status === 'uitbetaald'}"
+        :class="{
+          active: declaratie.status === 'goedgekeurd',
+          done: declaratie.status === 'uitbetaald',
+        }"
       >
         <span class="status">Goedgekeurd</span>
-        <span
-          v-if="declaratie.statusData.beoordeeldDoor"
-          class="datum"
-        >
-          {{ declaratie.statusData.beoordeeldDoor }}, {{ declaratie.statusData.goedgekeurdOp }}
+        <span v-if="declaratie.statusData.beoordeeldDoor" class="datum">
+          {{ declaratie.statusData.beoordeeldDoor }},
+          {{ declaratie.statusData.goedgekeurdOp }}
         </span>
       </div>
       <div
         v-if="declaratie.status === 'afgekeurd'"
         class="fase afgekeurd"
-        :class="{'active': declaratie.status === 'afgekeurd'}"
+        :class="{ active: declaratie.status === 'afgekeurd' }"
       >
         <span class="status">Afgekeurd</span>
-        <span
-          v-if="declaratie.statusData.beoordeeldDoor"
-          class="datum"
-        >
-          {{ declaratie.statusData.beoordeeldDoor }}, {{ declaratie.statusData.afgekeurdOp }}
+        <span v-if="declaratie.statusData.beoordeeldDoor" class="datum">
+          {{ declaratie.statusData.beoordeeldDoor }},
+          {{ declaratie.statusData.afgekeurdOp }}
         </span>
       </div>
       <div
-        v-if="declaratie.status !== 'afgekeurd' && declaratie.betaalwijze === 'voorgeschoten'"
+        v-if="
+          declaratie.status !== 'afgekeurd' &&
+          declaratie.betaalwijze === 'voorgeschoten'
+        "
         class="fase goedgekeurd"
-        :class="{'active': declaratie.status === 'uitbetaald'}"
+        :class="{ active: declaratie.status === 'uitbetaald' }"
       >
         <span class="status">Uitbetaald</span>
         <span class="datum">{{ declaratie.statusData.uitbetaaldOp }}</span>
@@ -70,7 +86,9 @@
     </div>
 
     <div
-      v-if="declaratie.statusData.magBeoordelen && declaratie.status !== 'concept'"
+      v-if="
+        declaratie.statusData.magBeoordelen && declaratie.status !== 'concept'
+      "
       class="field"
     >
       <label for="datumDeclaratie">Datum declaratie</label>
@@ -81,7 +99,7 @@
         data-inputmask="'alias': 'datetime', 'inputFormat': 'dd-mm-yyyy'"
         type="text"
         :disabled="veldenDisabled"
-      >
+      />
     </div>
     <div class="field">
       <label for="categorie">Categorie</label>
@@ -92,7 +110,7 @@
       >
         <option disabled />
         <option
-          v-for="(categorieID,categorie) in categorieen"
+          v-for="(categorieID, categorie) in categorieen"
           :key="'categorie-' + categorieID"
           :value="categorieID"
         >
@@ -109,7 +127,7 @@
         type="text"
         :disabled="veldenDisabled"
         maxlength="255"
-      >
+      />
     </div>
 
     <div class="field">
@@ -122,7 +140,7 @@
           name="betaalwijze"
           value="C.S.R.-pas"
           :disabled="veldenDisabled"
-        >
+        />
         <label for="C.S.R.-pas">Betaald met C.S.R.-pas</label>
       </div>
       <div>
@@ -133,15 +151,12 @@
           name="betaalwijze"
           value="voorgeschoten"
           :disabled="veldenDisabled"
-        >
+        />
         <label for="voorgeschoten">Voorgeschoten</label>
       </div>
     </div>
 
-    <div
-      v-if="declaratie.betaalwijze === 'voorgeschoten'"
-      class="field"
-    >
+    <div v-if="declaratie.betaalwijze === 'voorgeschoten'" class="field">
       <label>Terugstorten</label>
       <div>
         <input
@@ -150,8 +165,10 @@
           type="radio"
           :value="true"
           :disabled="veldenDisabled"
+        />
+        <label for="eigenRekening"
+          >Naar eigen rekening: {{ iban }} t.n.v. {{ tenaamstelling }}</label
         >
-        <label for="eigenRekening">Naar eigen rekening: {{ iban }} t.n.v. {{ tenaamstelling }}</label>
       </div>
       <div>
         <input
@@ -160,13 +177,15 @@
           type="radio"
           :value="false"
           :disabled="veldenDisabled"
-        >
+        />
         <label for="nietEigenRekening">Naar andere rekening</label>
       </div>
     </div>
 
     <div
-      v-if="declaratie.betaalwijze === 'voorgeschoten' && !declaratie.eigenRekening"
+      v-if="
+        declaratie.betaalwijze === 'voorgeschoten' && !declaratie.eigenRekening
+      "
       class="field"
     >
       <label for="rekening">IBAN</label>
@@ -176,63 +195,49 @@
         type="text"
         :disabled="veldenDisabled"
         maxlength="255"
-      >
+      />
     </div>
 
     <div
-      v-if="declaratie.betaalwijze === 'voorgeschoten' && !declaratie.eigenRekening || declaratie.betaalwijze === 'C.S.R.-pas'"
+      v-if="
+        (declaratie.betaalwijze === 'voorgeschoten' &&
+          !declaratie.eigenRekening) ||
+        declaratie.betaalwijze === 'C.S.R.-pas'
+      "
       class="field"
     >
-      <label
-        v-if="declaratie.betaalwijze === 'voorgeschoten'"
-        for="tnv"
-      >Ten name van</label>
-      <label
-        v-else
-        for="tnv"
-      >Bij bedrijf</label>
+      <label v-if="declaratie.betaalwijze === 'voorgeschoten'" for="tnv"
+        >Ten name van</label
+      >
+      <label v-else for="tnv">Bij bedrijf</label>
       <input
         id="tnv"
         v-model="declaratie.tnv"
         type="text"
         :disabled="veldenDisabled"
         maxlength="255"
-      >
+      />
     </div>
 
-    <div
-      v-if="bonUploaden || !heeftBonnen"
-      class="bonnen bon-upload"
-    >
+    <div v-if="bonUploaden || !heeftBonnen" class="bonnen bon-upload">
       <div class="inhoud">
-        <div class="titel">
-          Voeg je bonnen en facturen toe
-        </div>
+        <div class="titel">Voeg je bonnen en facturen toe</div>
         <p>
-          Upload je bon of factuur als PDF of goed leesbare foto.
-          Neem daarna de bedragen van de bon of het factuur over.
+          Upload je bon of factuur als PDF of goed leesbare foto. Neem daarna de
+          bedragen van de bon of het factuur over.
         </p>
         <div class="buttons">
-          <button
-            v-if="uploading"
-            class="loading blue"
-            disabled
-          >
+          <button v-if="uploading" class="loading blue" disabled>
             <i class="fas fa-circle-notch fa-spin" />
           </button>
           <template v-else>
-            <label
-              class="blue"
-              for="fileUpload"
-            >
-              Kies bestand
-            </label>
+            <label class="blue" for="fileUpload"> Kies bestand </label>
             <input
               id="fileUpload"
               type="file"
               accept=".jpg,.jpeg,.png,.pdf"
               @change="uploadBon($event.target.files)"
-            >
+            />
             <button
               v-if="heeftBonnen"
               class="open"
@@ -245,13 +250,10 @@
       </div>
     </div>
 
-    <div
-      v-if="!bonUploaden && heeftBonnen"
-      class="bonnen bonnen-weergave"
-    >
+    <div v-if="!bonUploaden && heeftBonnen" class="bonnen bonnen-weergave">
       <div class="lijst">
         <div
-          v-for="(bon,bonIndex) in declaratie.bonnen"
+          v-for="(bon, bonIndex) in declaratie.bonnen"
           :key="'bon-' + bonIndex"
           class="bon"
         >
@@ -261,36 +263,31 @@
             @click="geselecteerdeBon = bonIndex"
           >
             <div class="left">
-              <div class="title">
-                Bon {{ bonIndex + 1 }}
-              </div>
+              <div class="title">Bon {{ bonIndex + 1 }}</div>
               <div class="date">
                 {{ bon.datum }}
               </div>
             </div>
             <div class="right">
               <div class="title">
-                &euro; {{ berekening(bon).totaalIncl|bedrag }}
+                &euro; {{ berekening(bon).totaalIncl | bedrag }}
               </div>
-              <div class="btw">
-                incl. btw
-              </div>
+              <div class="btw">incl. btw</div>
             </div>
           </div>
-          <div
-            v-else
-            class="bon-selected"
-          >
+          <div v-else class="bon-selected">
             <div
-              v-if="(declaratie.bonnen.length > 1 || declaratie.status === 'concept') && !veldenDisabled"
+              v-if="
+                (declaratie.bonnen.length > 1 ||
+                  declaratie.status === 'concept') &&
+                !veldenDisabled
+              "
               class="bonVerwijderen"
               @click="bonVerwijderen(bonIndex)"
             >
               <i class="fa fa-trash-alt" />
             </div>
-            <div class="title">
-              Bon {{ bonIndex + 1 }}
-            </div>
+            <div class="title">Bon {{ bonIndex + 1 }}</div>
 
             <div class="field">
               <label :for="'bon' + bonIndex + '_datum'">Datum</label>
@@ -301,7 +298,7 @@
                 data-inputmask="'alias': 'datetime', 'inputFormat': 'dd-mm-yyyy'"
                 type="text"
                 :disabled="veldenDisabled"
-              >
+              />
             </div>
 
             <div class="bon-regels">
@@ -322,40 +319,24 @@
                     type="text"
                     :disabled="veldenDisabled"
                     maxlength="255"
-                  >
+                  />
                 </div>
                 <div class="field">
                   <money
                     v-model="regel.bedrag"
                     v-money="money"
-                    style="text-align: right;"
+                    style="text-align: right"
                     :disabled="veldenDisabled"
                   />
                 </div>
                 <div class="field">
-                  <select
-                    v-model="regel.btw"
-                    :disabled="veldenDisabled"
-                  >
-                    <option
-                      value=""
-                      disabled
-                    />
-                    <option value="incl. 9%">
-                      incl. 9%
-                    </option>
-                    <option value="incl. 21%">
-                      incl. 21%
-                    </option>
-                    <option value="excl. 9%">
-                      excl. 9%
-                    </option>
-                    <option value="excl. 21%">
-                      excl. 21%
-                    </option>
-                    <option value="geen: 0%">
-                      geen: 0%
-                    </option>
+                  <select v-model="regel.btw" :disabled="veldenDisabled">
+                    <option value="" disabled />
+                    <option value="incl. 9%">incl. 9%</option>
+                    <option value="incl. 21%">incl. 21%</option>
+                    <option value="excl. 9%">excl. 9%</option>
+                    <option value="excl. 21%">excl. 21%</option>
+                    <option value="geen: 0%">geen: 0%</option>
                   </select>
                 </div>
                 <div
@@ -372,16 +353,10 @@
                 @click="nieuweRegel(bon)"
               >
                 <div class="field">
-                  <input
-                    type="text"
-                    disabled
-                  >
+                  <input type="text" disabled />
                 </div>
                 <div class="field">
-                  <input
-                    type="text"
-                    disabled
-                  >
+                  <input type="text" disabled />
                 </div>
                 <div class="field">
                   <select disabled>
@@ -393,41 +368,33 @@
                 </div>
               </div>
               <div class="regels-row totaal streep">
-                <div class="onderdeel">
-                  Totaal excl. btw
-                </div>
+                <div class="onderdeel">Totaal excl. btw</div>
                 <div class="bedrag">
-                  {{ berekening(bon).totaalExcl|bedrag }}
+                  {{ berekening(bon).totaalExcl | bedrag }}
                 </div>
               </div>
               <div
                 v-if="berekening(bon).btw[9] !== 0"
                 class="regels-row totaal"
               >
-                <div class="onderdeel">
-                  Btw 9%
-                </div>
+                <div class="onderdeel">Btw 9%</div>
                 <div class="bedrag">
-                  {{ berekening(bon).btw[9]|bedrag }}
+                  {{ berekening(bon).btw[9] | bedrag }}
                 </div>
               </div>
               <div
                 v-if="berekening(bon).btw[21] !== 0"
                 class="regels-row totaal"
               >
-                <div class="onderdeel">
-                  Btw 21%
-                </div>
+                <div class="onderdeel">Btw 21%</div>
                 <div class="bedrag">
-                  {{ berekening(bon).btw[21]|bedrag }}
+                  {{ berekening(bon).btw[21] | bedrag }}
                 </div>
               </div>
               <div class="regels-row totaal totaalBold">
-                <div class="onderdeel">
-                  Totaal incl. btw
-                </div>
+                <div class="onderdeel">Totaal incl. btw</div>
                 <div class="bedrag">
-                  {{ berekening(bon).totaalIncl|bedrag }}
+                  {{ berekening(bon).totaalIncl | bedrag }}
                 </div>
               </div>
             </div>
@@ -443,32 +410,26 @@
       </div>
       <div class="voorbeeld">
         <div
-          v-for="(bon,bonIndex) in declaratie.bonnen"
+          v-for="(bon, bonIndex) in declaratie.bonnen"
           v-show="geselecteerdeBon === bonIndex"
           :key="'voorbeeld-' + bonIndex"
-          >
-          <iframe :src="bon.bestandsnaam" v-if="bon.bestandsnaam.toLowerCase().endsWith('.pdf')" />
-          <div class="imageContainer" :class="{'zoomFit': isZoomFit}" v-else>
-            <img :src="bon.bestandsnaam" alt="Bon" @click="zoomFit()">
+        >
+          <iframe
+            :src="bon.bestandsnaam"
+            v-if="bon.bestandsnaam.toLowerCase().endsWith('.pdf')"
+          />
+          <div class="imageContainer" :class="{ zoomFit: isZoomFit }" v-else>
+            <img :src="bon.bestandsnaam" alt="Bon" @click="zoomFit()" />
           </div>
         </div>
       </div>
     </div>
 
-    <div
-      v-if="totaal > 0"
-      class="totaal"
-    >
-      <div class="left">
-        Totaal
-      </div>
+    <div v-if="totaal > 0" class="totaal">
+      <div class="left">Totaal</div>
       <div class="right">
-        <div class="title">
-          &euro; {{ totaal|bedrag }}
-        </div>
-        <div class="btw">
-          incl. btw
-        </div>
+        <div class="title">&euro; {{ totaal | bedrag }}</div>
+        <div class="btw">incl. btw</div>
       </div>
     </div>
 
@@ -482,19 +443,29 @@
     </div>
 
     <div
-      v-if="declaratie.status !== 'concept' && declaratie.status !== 'afgekeurd' && declaratie.statusData.magBeoordelen"
+      v-if="
+        declaratie.status !== 'concept' &&
+        declaratie.status !== 'afgekeurd' &&
+        declaratie.statusData.magBeoordelen
+      "
       class="field"
     >
       <label for="rekening">Nummer</label>
       <input
         id="nummer"
         v-model="declaratie.nummer"
-        :placeholder="(declaratie.status !== 'ingediend' && !editing) || submitting ? '' : declaratie.statusData.nummerPrefix + '000'"
+        :placeholder="
+          (declaratie.status !== 'ingediend' && !editing) || submitting
+            ? ''
+            : declaratie.statusData.nummerPrefix + '000'
+        "
         type="text"
-        :disabled="(declaratie.status !== 'ingediend' && !editing) || submitting"
+        :disabled="
+          (declaratie.status !== 'ingediend' && !editing) || submitting
+        "
         @focus="vulNummer(declaratie.statusData.nummerPrefix)"
         @blur="removeNummer(declaratie.statusData.nummerPrefix)"
-      >
+      />
     </div>
 
     <div
@@ -506,10 +477,7 @@
       {{ error }}
     </div>
 
-    <div
-      v-if="!veldenDisabled && !submitting && !editing"
-      class="save-buttons"
-    >
+    <div v-if="!veldenDisabled && !submitting && !editing" class="save-buttons">
       <button
         v-if="declaratie.status === 'concept' && declaratie.id"
         class="afkeuren"
@@ -535,15 +503,8 @@
       </button>
     </div>
 
-    <div
-      v-if="editing && !submitting"
-      class="save-buttons"
-    >
-      <button
-        class="afkeuren"
-        :disabled="submitting"
-        @click="reload()"
-      >
+    <div v-if="editing && !submitting" class="save-buttons">
+      <button class="afkeuren" :disabled="submitting" @click="reload()">
         Wijzigingen annuleren
       </button>
       <button
@@ -556,7 +517,12 @@
     </div>
 
     <div
-      v-if="declaratie.status !== 'concept' && declaratie.statusData.magBeoordelen && !editing && !submitting"
+      v-if="
+        declaratie.status !== 'concept' &&
+        declaratie.statusData.magBeoordelen &&
+        !editing &&
+        !submitting
+      "
       class="save-buttons"
     >
       <button
@@ -568,7 +534,10 @@
         Terug naar concept
       </button>
       <button
-        v-if="declaratie.status === 'goedgekeurd' || declaratie.status === 'afgekeurd'"
+        v-if="
+          declaratie.status === 'goedgekeurd' ||
+          declaratie.status === 'afgekeurd'
+        "
         class="ingediend"
         :disabled="submitting"
         @click="setStatus('ingediend')"
@@ -592,7 +561,10 @@
         Afkeuren
       </button>
       <button
-        v-if="declaratie.statusData.magUitbetalen && declaratie.status === 'goedgekeurd'"
+        v-if="
+          declaratie.statusData.magUitbetalen &&
+          declaratie.status === 'goedgekeurd'
+        "
         class="uitbetaald"
         :disabled="submitting"
         @click="setStatus('uitbetaald')"
@@ -600,7 +572,10 @@
         Uitbetaald
       </button>
       <button
-        v-if="declaratie.statusData.magUitbetalen && declaratie.status === 'uitbetaald'"
+        v-if="
+          declaratie.statusData.magUitbetalen &&
+          declaratie.status === 'uitbetaald'
+        "
         class="goedkeuren"
         :disabled="submitting"
         @click="setStatus('goedgekeurd')"
@@ -608,35 +583,23 @@
         Uitbetaald ongedaan maken
       </button>
       <span class="divider" />
-      <button
-        class="concept"
-        @click="declaratieBewerken()"
-      >
-        Bewerken
-      </button>
-      <a
-        :href="'mailto:' + email"
-        class="no-mail"
-      >
-        <button class="mail">
-          Mail lid
-        </button>
+      <button class="concept" @click="declaratieBewerken()">Bewerken</button>
+      <a :href="'mailto:' + email" class="no-mail">
+        <button class="mail">Mail lid</button>
       </a>
       <a
-        v-if="declaratie.status === 'goedgekeurd' || declaratie.status === 'uitbetaald'"
+        v-if="
+          declaratie.status === 'goedgekeurd' ||
+          declaratie.status === 'uitbetaald'
+        "
         :href="'/declaratie/print/' + declaratie.id"
         class="no-mail"
       >
-        <button class="confirm">
-          Download
-        </button>
+        <button class="confirm">Download</button>
       </a>
     </div>
 
-    <div
-      v-if="submitting"
-      class="opslaan"
-    >
+    <div v-if="submitting" class="opslaan">
       <i class="fas fa-circle-notch fa-spin" />
     </div>
   </div>
@@ -645,9 +608,14 @@
 <script lang="ts">
 import axios from 'axios';
 import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 
-type status = 'concept' | 'ingediend' | 'afgekeurd' | 'goedgekeurd' | 'uitbetaald';
+type status =
+  | 'concept'
+  | 'ingediend'
+  | 'afgekeurd'
+  | 'goedgekeurd'
+  | 'uitbetaald';
 
 interface StatusData {
   ingediendOp?: string;
@@ -718,23 +686,23 @@ const legeDeclaratie: () => Declaratie = () => ({
 });
 
 interface DeclaratieOpslaanResponse {
-  data: DeclaratieOpslaanData
+  data: DeclaratieOpslaanData;
 }
 
 interface DeclaratieOpslaanData {
-  id?: number
-  messages: string[]
-  success: boolean
-  status: status
-  statusData: StatusData
+  id?: number;
+  messages: string[];
+  success: boolean;
+  status: status;
+  statusData: StatusData;
 }
 
 interface DeclaratieVerwijderenResponse {
-  data: DeclaratieVerwijderenData
+  data: DeclaratieVerwijderenData;
 }
 
 interface DeclaratieVerwijderenData {
-  redirect: string
+  redirect: string;
 }
 
 @Component({
@@ -755,7 +723,7 @@ export default class DeclaratieVue extends Vue {
   private type: 'nieuw' | 'bewerken';
   @Prop()
   private categorieen: Record<string, number>;
-  @Prop({default: legeDeclaratie})
+  @Prop({ default: legeDeclaratie })
   private declaratieinput!: Declaratie;
   @Prop()
   private iban: string;
@@ -768,7 +736,7 @@ export default class DeclaratieVue extends Vue {
   private bonUploaden = this.declaratie.bonnen.length === 0;
   private uploading = false;
   private geselecteerdeBon = 0;
-  private money = {precision: 2, decimal: ',', thousands: ' ', prefix: '€ '};
+  private money = { precision: 2, decimal: ',', thousands: ' ', prefix: '€ ' };
   private submitting = false;
   private editing = false;
   private errors = [];
@@ -779,8 +747,9 @@ export default class DeclaratieVue extends Vue {
   }
 
   private get veldenDisabled() {
-    return this.submitting
-      || (this.declaratie.status !== 'concept' && !this.editing);
+    return (
+      this.submitting || (this.declaratie.status !== 'concept' && !this.editing)
+    );
   }
 
   private get heeftBonnen() {
@@ -788,9 +757,7 @@ export default class DeclaratieVue extends Vue {
   }
 
   public nieuweBon(file: string, id: number): void {
-    this.declaratie.bonnen.push(
-      legeBon(file, id)
-    );
+    this.declaratie.bonnen.push(legeBon(file, id));
     this.geselecteerdeBon = this.declaratie.bonnen?.length - 1;
   }
 
@@ -818,7 +785,11 @@ export default class DeclaratieVue extends Vue {
     return Math.round((toRound + Number.EPSILON) * 100) / 100;
   }
 
-  public berekening(bon: Bon): { totaalExcl: number, totaalIncl: number, btw: { 0: number, 9: number, 21: number } } {
+  public berekening(bon: Bon): {
+    totaalExcl: number;
+    totaalIncl: number;
+    btw: { 0: number; 9: number; 21: number };
+  } {
     const ret = {
       totaalExcl: 0,
       totaalIncl: 0,
@@ -838,7 +809,7 @@ export default class DeclaratieVue extends Vue {
 
         if (incl) {
           ret.totaalExcl += regel.bedrag / (1 + perunage);
-          ret.btw[percentage] += regel.bedrag / (1 + perunage) * perunage;
+          ret.btw[percentage] += (regel.bedrag / (1 + perunage)) * perunage;
           ret.totaalIncl += regel.bedrag;
         } else {
           ret.totaalExcl += regel.bedrag;
@@ -874,30 +845,33 @@ export default class DeclaratieVue extends Vue {
       url: '/declaratie/upload',
       data: formData,
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then((res) => {
-      this.uploading = false;
-      this.bonUploaden = false;
-      this.nieuweBon(res.data.file, res.data.id);
-    }).catch((err) => {
-      this.uploading = false;
-      alert(err?.response?.data?.detail ?? err);
-    });
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then((res) => {
+        this.uploading = false;
+        this.bonUploaden = false;
+        this.nieuweBon(res.data.file, res.data.id);
+      })
+      .catch((err) => {
+        this.uploading = false;
+        alert(err?.response?.data?.detail ?? err);
+      });
   }
 
   public declaratieOpslaan(indienen: boolean): void {
     this.submitting = true;
     this.errors = [];
 
-    axios.request<DeclaratieOpslaanData, DeclaratieOpslaanResponse>({
-      method: 'post',
-      url: '/declaratie/opslaan',
-      data: {
-        declaratie: this.declaratie,
-        indienen: this.declaratie.status === 'concept' && indienen === true,
-      },
-    })
+    axios
+      .request<DeclaratieOpslaanData, DeclaratieOpslaanResponse>({
+        method: 'post',
+        url: '/declaratie/opslaan',
+        data: {
+          declaratie: this.declaratie,
+          indienen: this.declaratie.status === 'concept' && indienen === true,
+        },
+      })
       .then(this.processAjaxResponse)
       .catch((err) => {
         this.submitting = false;
@@ -909,14 +883,15 @@ export default class DeclaratieVue extends Vue {
     this.submitting = true;
     this.errors = [];
 
-    axios.request<DeclaratieOpslaanData, DeclaratieOpslaanResponse>({
-      method: 'post',
-      url: '/declaratie/status/' + this.declaratie.id,
-      data: {
-        status: status,
-        nummer: this.declaratie.nummer,
-      },
-    })
+    axios
+      .request<DeclaratieOpslaanData, DeclaratieOpslaanResponse>({
+        method: 'post',
+        url: '/declaratie/status/' + this.declaratie.id,
+        data: {
+          status: status,
+          nummer: this.declaratie.nummer,
+        },
+      })
       .then(this.processAjaxResponse)
       .catch((err) => {
         this.submitting = false;
@@ -925,7 +900,7 @@ export default class DeclaratieVue extends Vue {
   }
 
   private processAjaxResponse(res: DeclaratieOpslaanResponse): void {
-    const {data} = res;
+    const { data } = res;
     if (data.id) {
       this.declaratie.id = data.id;
       this.declaratie.status = data.status;
@@ -934,7 +909,11 @@ export default class DeclaratieVue extends Vue {
         this.declaratie.datum = this.declaratie.statusData.ingediendOp;
       }
       if (window.location.pathname.endsWith('nieuw')) {
-        window.history.pushState("Declaratie " + data.id, "Declaratie", "/declaratie/" + data.id);
+        window.history.pushState(
+          'Declaratie ' + data.id,
+          'Declaratie',
+          '/declaratie/' + data.id
+        );
       }
     }
     this.errors = data.messages;
@@ -966,14 +945,15 @@ export default class DeclaratieVue extends Vue {
   }
 
   public conceptVerwijderen(): void {
-    const confirm = window.confirm("Wil je deze declaratie verwijderen?");
+    const confirm = window.confirm('Wil je deze declaratie verwijderen?');
     if (confirm) {
       this.submitting = true;
 
-      axios.request<DeclaratieVerwijderenData, DeclaratieVerwijderenResponse>({
-        method: 'post',
-        url: '/declaratie/verwijderen/' + this.declaratie.id,
-      })
+      axios
+        .request<DeclaratieVerwijderenData, DeclaratieVerwijderenResponse>({
+          method: 'post',
+          url: '/declaratie/verwijderen/' + this.declaratie.id,
+        })
         .then((data) => {
           window.location.replace(data.data.redirect);
         })
@@ -1007,8 +987,8 @@ export default class DeclaratieVue extends Vue {
   }
 
   .fase {
-    color: #D0D0D0;
-    background: #F6F6F6;
+    color: #d0d0d0;
+    background: #f6f6f6;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -1038,19 +1018,19 @@ export default class DeclaratieVue extends Vue {
       }
 
       &.ingediend {
-        background: #E19600;
+        background: #e19600;
       }
 
       &.goedgekeurd {
-        background: #00DB49;
+        background: #00db49;
       }
 
       &.afgekeurd {
-        background: #E20000;
+        background: #e20000;
       }
 
       &.uitbetaald {
-        background: #2C3E50;
+        background: #2c3e50;
       }
     }
   }
@@ -1063,15 +1043,15 @@ export default class DeclaratieVue extends Vue {
     margin-bottom: 4px;
   }
 
-  input[type=text],
-  input[type=date],
-  input[type=tel],
+  input[type='text'],
+  input[type='date'],
+  input[type='tel'],
   select,
   textarea {
     border: 1px solid #868686;
     outline: none;
     padding: 0.4rem;
-    font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
     font-size: 1.2rem;
     font-weight: 300;
     border-radius: 4px;
@@ -1079,7 +1059,7 @@ export default class DeclaratieVue extends Vue {
     width: 100%;
   }
 
-  [type=radio] + label {
+  [type='radio'] + label {
     font-weight: 300;
     font-size: 1.2rem;
     margin-left: 6px;
@@ -1092,7 +1072,7 @@ export default class DeclaratieVue extends Vue {
 
 .bonnen {
   border-radius: 6px;
-  border: 1px solid #D0D0D0;
+  border: 1px solid #d0d0d0;
   margin: 30px 0;
   color: black;
 
@@ -1111,29 +1091,29 @@ export default class DeclaratieVue extends Vue {
     .lijst {
       height: 100%;
       overflow-y: auto;
-      background: #F2F2F2;
+      background: #f2f2f2;
 
       .nieuwe-bon {
         text-align: center;
         font-size: 21px;
         padding: 14px 0 33px;
-        color: #2ECC71;
+        color: #2ecc71;
         cursor: pointer;
       }
 
       .bon {
-        border-bottom: 1px solid #D0D0D0;
+        border-bottom: 1px solid #d0d0d0;
 
         .bon-collapsed {
           padding: 12px 25px;
-          background: #FAFAFA;
+          background: #fafafa;
           cursor: pointer;
           display: flex;
           justify-content: space-between;
 
           .title {
             font-size: 16px;
-            color: #4A4A4A;
+            color: #4a4a4a;
             margin-bottom: 0;
           }
 
@@ -1171,7 +1151,8 @@ export default class DeclaratieVue extends Vue {
             margin-top: 0;
           }
 
-          .trash, .add {
+          .trash,
+          .add {
             line-height: 33px;
             text-align: right;
             cursor: pointer;
@@ -1185,7 +1166,7 @@ export default class DeclaratieVue extends Vue {
             }
 
             &.add {
-              color: #2ECC71;
+              color: #2ecc71;
             }
           }
 
@@ -1206,7 +1187,8 @@ export default class DeclaratieVue extends Vue {
               }
             }
 
-            input:disabled, select:disabled {
+            input:disabled,
+            select:disabled {
               background: white;
             }
           }
@@ -1226,7 +1208,7 @@ export default class DeclaratieVue extends Vue {
               }
 
               .bedrag {
-                border-top: 1px solid #C7C7C7;
+                border-top: 1px solid #c7c7c7;
               }
             }
 
@@ -1343,7 +1325,8 @@ export default class DeclaratieVue extends Vue {
     }
 
     .buttons {
-      button, label {
+      button,
+      label {
         width: 110px;
         border-radius: 3px;
         -webkit-appearance: none;
@@ -1359,7 +1342,7 @@ export default class DeclaratieVue extends Vue {
         }
 
         &.blue {
-          background: #00087B;
+          background: #00087b;
           color: white;
           font-weight: 600;
 
@@ -1369,7 +1352,7 @@ export default class DeclaratieVue extends Vue {
         }
 
         &.open {
-          border: 1px solid #D0D0D0;
+          border: 1px solid #d0d0d0;
           color: #898989;
           font-weight: 600;
 
@@ -1388,7 +1371,7 @@ export default class DeclaratieVue extends Vue {
     &:before {
       content: '';
       position: absolute;
-      background: url("../../../images/declaratie.svg") right bottom no-repeat;
+      background: url('../../../images/declaratie.svg') right bottom no-repeat;
       background-size: auto 210px;
       left: 0;
       top: 0;
@@ -1455,35 +1438,34 @@ export default class DeclaratieVue extends Vue {
 
     &.confirm {
       color: white;
-      background: #2ECC71;
+      background: #2ecc71;
 
       &:hover {
-        background: #48E088;
+        background: #48e088;
       }
     }
 
     &.concept {
-
     }
 
     &.ingediend {
       color: white;
-      background: #E19600;
+      background: #e19600;
     }
 
     &.goedkeuren {
       color: white;
-      background: #00DB49;
+      background: #00db49;
     }
 
     &.afkeuren {
       color: white;
-      background: #E20000;
+      background: #e20000;
     }
 
     &.uitbetaald {
       color: white;
-      background: #2C3E50;
+      background: #2c3e50;
     }
 
     &.mail {

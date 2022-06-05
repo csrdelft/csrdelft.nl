@@ -13,15 +13,24 @@ $(async () => {
 	// tabellen naar zebra converteren.
 	$documenten.find('tr:odd').addClass('odd');
 	// render de filesize cellen
-	$documenten.find('.size')
-		.each((i, el) => el.innerText = render.filesize(el.innerText, 'display', null, {} as CellMetaSettings));
+	$documenten
+		.find('.size')
+		.each(
+			(i, el) =>
+				(el.innerText = render.filesize(
+					el.innerText,
+					'display',
+					null,
+					{} as CellMetaSettings
+				))
+		);
 
 	$('#documentencategorie').DataTable({
 		columns: [
-			{type: 'html'}, // documentnaam
-			{type: 'num', render: render.filesize}, // Bestandsgrootte
-			{type: 'string'}, // mime-type, forceer string anders werkt sorteren uberhaupt niet
-			{render: render.timeago}, // moment toegevoegd
+			{ type: 'html' }, // documentnaam
+			{ type: 'num', render: render.filesize }, // Bestandsgrootte
+			{ type: 'string' }, // mime-type, forceer string anders werkt sorteren uberhaupt niet
+			{ render: render.timeago }, // moment toegevoegd
 			{}, // Eigenaar
 		],
 		info: false,

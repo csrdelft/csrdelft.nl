@@ -24,7 +24,7 @@ De PHP code geeft HTML terug met specifieke klassen die door de TypeScript code 
 In de TypeScript code wordt een nieuwe handler aan de 'context' `ctx` gehangen. `ctx` is een singleton waar allerlei handlers aan gehangen kunnen worden, op basis van een selector.
 
 ```ts
-import ctx from './ctx'
+import ctx from './ctx';
 ctx.addHandlers({
 	'.ctx-graph-pie': initPie,
 });
@@ -42,14 +42,14 @@ Meer info is te vinden op de [Code Splitting](https://webpack.js.org/guides/code
 
 Voorbeelden van het gebruik van dynamisch laden in de stek:
 
-* `router.ts`, om voor specifieke pagina's te laden.
-* `context.ts`, waar bij het laden van een specifieke context ook de dependencies geladen worden, hier wordt dat gedaan omdat sommige onderdelen in de interne én externe stek geladen worden en sommige alleen op de interne stek.
-* `fotoalbum/main.ts`, als de gebruiker is ingelogd wordt ook `with-tags.ts` geladen en als de gebruiker een beheerder is, wordt ook `with-admin-buttons.ts` geladen.
+- `router.ts`, om voor specifieke pagina's te laden.
+- `context.ts`, waar bij het laden van een specifieke context ook de dependencies geladen worden, hier wordt dat gedaan omdat sommige onderdelen in de interne én externe stek geladen worden en sommige alleen op de interne stek.
+- `fotoalbum/main.ts`, als de gebruiker is ingelogd wordt ook `with-tags.ts` geladen en als de gebruiker een beheerder is, wordt ook `with-admin-buttons.ts` geladen.
 
 ```javascript
 // assets/js/router.ts
 
-import {route} from './util';
+import { route } from './util';
 
 // route(pathPrefix, cb);
 route('/instellingen', () => import('./instellingen'));
@@ -59,16 +59,17 @@ route('/eetplan', () => import('./eetplan'));
 Als je op een andere plek `import(module)` gebruikt wordt ook een los bestand gemaakt voor de te importeren code (zolang het niet al op een andere plek geimport wordt). Webpack probeert zo slim mogelijk de modules in stukjes te knippen.
 
 Voor nog meer geavanceerd gebruik kun je ook het volgende doen. Om code uit te voeren nadat de module geladen is.
+
 ```javascript
 // main.js
 import('./eetplan').then((module) => {
-  console.log('Module is geladen!');
-  module.initialiseerEetplan();
+	console.log('Module is geladen!');
+	module.initialiseerEetplan();
 });
 
 // eetplan.js
 export function initialiseerEetplan() {
-  console.log('Laad Eetplan');
+	console.log('Laad Eetplan');
 }
 ```
 

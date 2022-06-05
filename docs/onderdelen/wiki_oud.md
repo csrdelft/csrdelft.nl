@@ -31,14 +31,13 @@ Via de beheerinterface van de wiki kun je de wiki en extensies updaten. Doe dit 
 
 Er zijn een aantal extensies die specifiek zijn voor de stek, ze regelen documenten, groepen etc.
 
-* `authcsr`
-  * Zorgt ervoor dat inloggen via het stek systeem gaat.
-* `csrgroepgeschiedenis`
-  * Een linkje naar de groepen pagina
-* `csrlink`
-  * Een linkje naar een boek/document/groep/lid
+- `authcsr`
+  - Zorgt ervoor dat inloggen via het stek systeem gaat.
+- `csrgroepgeschiedenis`
+  - Een linkje naar de groepen pagina
+- `csrlink`
+  - Een linkje naar een boek/document/groep/lid
 
 ## Rechten
 
 Dokuwiki kan allerlei dingen met rechten, maar niemand weet hoe dit precies werkt. Heb jij het uitgezocht? Pas dan dit document aan.
-

@@ -1,4 +1,5 @@
-#editor, .pm-editor {
+#editor,
+.pm-editor {
 	background: white;
 	color: black;
 	background-clip: padding-box;
@@ -44,7 +45,7 @@
 }
 
 .ProseMirror p {
-	margin-bottom: 1em
+	margin-bottom: 1em;
 }
 
 .ProseMirror hr {
@@ -70,18 +71,18 @@
 }
 
 .ProseMirror .pm-verklapper {
-	border: 1px solid rgba(0, 0, 0, .125);
+	border: 1px solid rgba(0, 0, 0, 0.125);
 	border-radius: 0.25rem;
 	padding: 1.25rem;
 
 	&::before {
 		margin: -1.25rem -1.25rem 0 -1.25rem;
-		content: 'Verklapper';
+		content: "Verklapper";
 		display: block;
-		padding: .25rem .5rem;
-		font-size: .875rem;
+		padding: 0.25rem 0.5rem;
+		font-size: 0.875rem;
 		line-height: 1.5;
-		border-radius: .2rem;
+		border-radius: 0.2rem;
 		color: #fff;
 		background-color: #6c757d;
 		border-color: #6c757d;
@@ -92,7 +93,7 @@
 
 .ProseMirror .plaatje-placeholder {
 	&::before {
-		content: '\f03e';
+		content: "\f03e";
 		display: block;
 		font-family: "Font Awesome 5 Free", sans-serif;
 		text-align: center;
@@ -127,7 +128,7 @@
 	color: $link-color;
 
 	&::before {
-		content: '\f007'; // fa-user
+		content: "\f007"; // fa-user
 		display: inline-block;
 		font-family: "Font Awesome 5 Free", sans-serif;
 		margin-right: 3px;
@@ -136,7 +137,6 @@
 }
 
 .ProseMirror [data-bb-citaat] {
-
 	padding-left: 1em;
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;
@@ -157,7 +157,6 @@
 		color: #0a3292;
 	}
 
-
 	&::after {
 		background: #d3d3d3;
 		top: 0;
@@ -166,7 +165,7 @@
 		bottom: 0;
 		left: 0;
 		border-radius: 4px;
-		content: '';
+		content: "";
 	}
 }
 
@@ -191,7 +190,7 @@
 	position: fixed;
 	border-radius: 3px;
 	z-index: 11;
-	box-shadow: -.5px 2px 5px rgba(0, 0, 0, .2);
+	box-shadow: -0.5px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .ProseMirror-popup h5 {

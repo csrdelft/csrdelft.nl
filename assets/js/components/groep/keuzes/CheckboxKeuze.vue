@@ -7,19 +7,18 @@
         class="custom-control-input"
         :checked="value"
         @input="$emit('input', $event.target.checked)"
-      >
-      <label
-        class="custom-control-label"
-        :for="`customCheck${keuze.naam}`"
-      >{{ keuze.description }}</label>
+      />
+      <label class="custom-control-label" :for="`customCheck${keuze.naam}`">{{
+        keuze.description
+      }}</label>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
-import {KeuzeOptie} from '../../../model/groep';
+import { Component, Prop } from 'vue-property-decorator';
+import { KeuzeOptie } from '../../../model/groep';
 
 @Component({})
 export default class CheckboxKeuze extends Vue {
@@ -31,6 +30,4 @@ export default class CheckboxKeuze extends Vue {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

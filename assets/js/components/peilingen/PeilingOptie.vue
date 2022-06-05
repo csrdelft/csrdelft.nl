@@ -1,9 +1,6 @@
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <div
-    v-if="!kanStemmen"
-    class="row"
-  >
+  <div v-if="!kanStemmen" class="row">
     <div class="col-md-4">
       {{ titel }}
     </div>
@@ -19,10 +16,7 @@
       v-html="beschrijving"
     />
   </div>
-  <div
-    v-else
-    class="row"
-  >
+  <div v-else class="row">
     <div class="col-md-12">
       <div class="form-check">
         <input
@@ -34,29 +28,24 @@
           :disabled="isDisabled"
           :checked="selected"
           @change="$emit('input', $event.target.checked)"
-        >
-        <label
-          :for="'PeilingOptie' + id"
-          class="form-check-label"
-        >{{ titel }}</label>
+        />
+        <label :for="'PeilingOptie' + id" class="form-check-label">{{
+          titel
+        }}</label>
       </div>
     </div>
-    <div
-      ref="beschrijving"
-      class="col-md-12 pt-2"
-      v-html="beschrijving"
-    />
+    <div ref="beschrijving" class="col-md-12 pt-2" v-html="beschrijving" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Prop, Watch} from 'vue-property-decorator';
-import {init} from '../../ctx';
+import { Component, Prop, Watch } from 'vue-property-decorator';
+import { init } from '../../ctx';
 import ProgressBar from '../common/ProgressBar.vue';
 
 @Component({
-  components: {ProgressBar},
+  components: { ProgressBar },
 })
 export default class PeilingOptie extends Vue {
   @Prop()
@@ -100,7 +89,7 @@ export default class PeilingOptie extends Vue {
   }
 
   private get progress() {
-    return (this.stemmen / this.aantalGestemd * 100).toFixed(2);
+    return ((this.stemmen / this.aantalGestemd) * 100).toFixed(2);
   }
 
   private get progressText() {
@@ -113,6 +102,4 @@ export default class PeilingOptie extends Vue {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

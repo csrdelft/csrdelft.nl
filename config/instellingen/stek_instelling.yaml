@@ -87,9 +87,10 @@ instellingen:
     'marge_gasten_max': '6'
     'weergave_ledennamen_beheer': 'volledig'
     'weergave_ledennamen_maaltijdlijst': 'volledig'
-    'maaltijdlijst_tekst': '<p>Regels omtrent het betalen van de maaltijden op Confide:</p>
+    'maaltijdlijst_tekst':
+      '<p>Regels omtrent het betalen van de maaltijden op Confide:</p>
       <ul>
-    <li>Maaltijdprijs: &euro; MAALTIJDPRIJS</li>
+      <li>Maaltijdprijs: &euro; MAALTIJDPRIJS</li>
       <li>Niet betaald = nb</li>
       <li>Betaald met machtiging = omcirkel "m" en vul bedrag in.</li>
       <li>Contant betaald = bedrag invullen.</li>

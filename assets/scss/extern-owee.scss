@@ -8,14 +8,14 @@ $secondary: $lichtblauw; // #002e54;
 $tertiary: $grijs; // #486b87;
 $accent: $geel; // #f6b585;
 $youtubeRed: #ff0000;
-$whatsappGreen: #25D366;
-$headingFont: 'Tw Cen MT', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+$whatsappGreen: #25d366;
+$headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
 
 @font-face {
-	font-family: 'Tw Cen MT';
+	font-family: "Tw Cen MT";
 	font-style: normal;
 	font-weight: normal;
-	src: url('../fonts/owee2021/TCM.woff') format('woff');
+	src: url("../fonts/owee2021/TCM.woff") format("woff");
 }
 
 @mixin triangle($kleur, $top, $left) {
@@ -41,7 +41,7 @@ $headingFont: 'Tw Cen MT', 'Source Sans Pro', Helvetica, Arial, sans-serif;
 
 @mixin triangle-before($kleur, $left, $top) {
 	&:before {
-		content: '';
+		content: "";
 		@include triangle($kleur, $left, $top);
 	}
 	.content {
@@ -52,7 +52,7 @@ $headingFont: 'Tw Cen MT', 'Source Sans Pro', Helvetica, Arial, sans-serif;
 
 @mixin triangle-after($kleur, $left, $top) {
 	&:after {
-		content: '';
+		content: "";
 		@include triangle($kleur, $left, $top);
 	}
 	.content {
@@ -106,7 +106,8 @@ body {
 		@extend .container;
 	}
 
-	h1, h2 {
+	h1,
+	h2 {
 		color: $secondary;
 		font-size: 1.5rem;
 		text-transform: uppercase;
@@ -173,7 +174,8 @@ body {
 	}
 
 	.hero {
-		background: url('https://csrdelft.nl/fotoalbum/Publiek/Startkamp.jpg') no-repeat center bottom;
+		background: url("https://csrdelft.nl/fotoalbum/Publiek/Startkamp.jpg")
+			no-repeat center bottom;
 		background-size: cover;
 
 		img {
@@ -236,7 +238,6 @@ body {
 
 			.youtube-container {
 				@include media-breakpoint-down(lg) {
-
 					.youtube div {
 						display: flex;
 						align-items: center;
@@ -410,7 +411,7 @@ body {
 			font-size: 1rem;
 		}
 
-		input[type=radio] {
+		input[type="radio"] {
 			display: none;
 		}
 
@@ -446,13 +447,13 @@ body {
 			}
 
 			input {
-				background-color: rgba($tertiary, .20);
+				background-color: rgba($tertiary, 0.2);
 				font-size: 1rem;
 				border: none;
 				border-radius: 0;
 				margin-bottom: 1rem;
 
-				&[type=submit] {
+				&[type="submit"] {
 					display: block;
 					width: 100%;
 					border: none;
@@ -470,14 +471,15 @@ body {
 			background: $secondary;
 			color: white;
 
-			.lid-spreken, .open-avond {
+			.lid-spreken,
+			.open-avond {
 				display: none;
 			}
 
 			input {
-				background:  $primary;
+				background: $primary;
 
-				&[type=submit] {
+				&[type="submit"] {
 					background: $primary;
 
 					&:hover {
@@ -494,14 +496,15 @@ body {
 				color: white;
 			}
 
-			.lid-worden, .open-avond {
+			.lid-worden,
+			.open-avond {
 				display: none;
 			}
 
 			input {
-				background: rgba(#FFFFFF, .12);
+				background: rgba(#ffffff, 0.12);
 
-				&[type=submit] {
+				&[type="submit"] {
 					background: $secondary;
 
 					&:hover {
@@ -518,14 +521,15 @@ body {
 				color: white;
 			}
 
-			.lid-worden, .lid-spreken {
+			.lid-worden,
+			.lid-spreken {
 				display: none;
 			}
 
 			input {
-				background: rgba(#FFFFFF, .12);
+				background: rgba(#ffffff, 0.12);
 
-				&[type=submit] {
+				&[type="submit"] {
 					background: $secondary;
 
 					&:hover {
