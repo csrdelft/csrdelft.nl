@@ -1,0 +1,6 @@
+htdocs
+.yarn
+.pnp.cjs
+bin/.phpunit
+vendor
+docs/_site
