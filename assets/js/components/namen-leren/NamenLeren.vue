@@ -160,11 +160,11 @@
         </div>
         <span
           v-if="laatsteGoed"
-          class="fa fa-check"
+          class="fas fa-check"
         />
         <span
           v-else
-          class="fa fa-times"
+          class="fas fa-times"
         />
       </div>
       <div
@@ -493,7 +493,7 @@ export default class NamenLeren extends Vue {
   background: #2ecc71;
 }
 
-.laatste .fa {
+.laatste .fas{
   display: inline-block;
   font-size: 26px;
   line-height: 90px;

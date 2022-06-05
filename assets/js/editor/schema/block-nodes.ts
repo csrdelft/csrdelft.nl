@@ -15,7 +15,7 @@ const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeS
 	draggable: true,
 	toDOM: node => {
 		const el = html`
-			<div data-${tagType}="${node.attrs[attr]}" class="bb-block"><i class="fa fa-spinner fa-spin"></i></div>`
+			<div data-${tagType}="${node.attrs[attr]}" class="bb-block"><i class="fasfa-spinner fa-spin"></i></div>`
 
 		fetch(`/groepen/${type}/${node.attrs[attr]}/info`)
 			.then(response => response.json())
@@ -37,7 +37,7 @@ const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeS
 <div class="groep-samenvatting">
 <div class="float-end"><a class="btn" target="_blank" href="/groepen/${type}/${json.id}/wijzigen"
 title="Wijzig ${json.naam}"><span
-class="fa fa-edit"></span></a></div>
+class="fasfa-edit"></span></a></div>
 <h3>${json.naam}</h3>
 ${json.samenvatting_html ?? ""}
 </div>
@@ -45,15 +45,15 @@ ${json.samenvatting_html ?? ""}
 <div id="groep-leden-2152" class="groep-leden">
 <ul class="groep-tabs nobullets">
 <li class="geschiedenis"><a class="btn disabled" href="#" title="Bekijk geschiedenis"><span
-class="fa fa-clock"></span></a></li>
+class="fasfa-clock"></span></a></li>
 <li><a class="btn btn-primary disabled" href="#" title="Pasfoto's tonen"><span
-class="fa fa-user"></span></a></li>
-<li><a class="btn disabled" href="#" title="Lijst tonen"><span class="fa fa-align-justify"></span></a>
+class="fas fa-user"></span></a></li>
+<li><a class="btn disabled" href="#" title="Lijst tonen"><span class="fas fa-align-justify"></span></a>
 </li>
-<li><a class="btn disabled" href="#" title="Statistiek tonen"><span class="fa fa-chart-pie"></span></a>
+<li><a class="btn disabled" href="#" title="Statistiek tonen"><span class="fas fa-chart-pie"></span></a>
 </li>
-<li><a class="btn disabled" href="#" title="E-mails tonen"><span class="fa fa-envelope"></span></a></li>
-<li><a class="btn disabled" href="#" title="Allergie/dieet tonen"><span class="fa fa-heartbeat"></span></a>
+<li><a class="btn disabled" href="#" title="E-mails tonen"><span class="fas fa-envelope"></span></a></li>
+<li><a class="btn disabled" href="#" title="Allergie/dieet tonen"><span class="fas fa-heartbeat"></span></a>
 </li>
 <li class="knop-vergroot"></li>
 </ul>

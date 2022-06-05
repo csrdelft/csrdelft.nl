@@ -43,15 +43,13 @@
 						{% if profiel.inGoogleContacts %}
 							<a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}" class="list-group-item"
 								 title="Dit profiel opdateren in mijn google adresboek">
-								<img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"
-										 alt="opdateren in Google contacts"/>
+								{{ icon('fab fa-google', null, 'Opdateren in Google contacts') }}
 								Google Contacten
 							</a>
 						{% else %}
 							<a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}" class="list-group-item"
 								 title="Dit profiel toevoegen aan mijn google adresboek">
-								<img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"
-										 alt="toevoegen aan Google contacts"/>
+								{{ icon('fab fa-google', null, 'Toevoegen aan Google contacts') }}
 								Google Contacten
 							</a>
 						{% endif %}

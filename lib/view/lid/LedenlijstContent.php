@@ -97,7 +97,7 @@ class LedenlijstContent implements View {
 			} else {
 				$url = $requestUri . '?addToGoogleContacts=true';
 			}
-			$html .= '<a href="' . htmlspecialchars($url) . '" class="btn float-end" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts" /></a>';
+			$html .= '<a href="' . htmlspecialchars($url) . '" class="btn float-end" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')">' . Icon::getTag('fab fa-google', null, 'Toevoegen aan Google contacts') . '</a>';
 			if (strstr($requestUri, '?') !== false) {
 				$url = $requestUri . '&exportVcf=true';
 			} else {
