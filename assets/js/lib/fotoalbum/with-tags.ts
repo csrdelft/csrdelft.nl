@@ -53,7 +53,7 @@ const withTags: GalleryDecorator = (constructor) =>
 
 			this.tagContainer = createElement(`<div class="tag-container"></div>`);
 			this.previewElement.appendChild(this.tagContainer);
-			const tagIcon = createElement('<i class="fa fa-smile"></i>');
+			const tagIcon = createElement('<i class="fas fa-smile"></i>');
 
 			const tagButton = createElement(`<span class="j-gallery-icon"></span>`, {
 				children: [tagIcon],
@@ -268,7 +268,7 @@ const withTags: GalleryDecorator = (constructor) =>
 					left: '0',
 				},
 			});
-			const btnDelTag = createElement(`<a id="btnDelTag" tabindex="-1" class="dropdown-item"><i class="fa fa-user-times"></i>&nbsp;Etiket verwijderen</a>`);
+			const btnDelTag = createElement(`<a id="btnDelTag" tabindex="-1" class="dropdown-item"><i class="fas fa-user-times"></i>&nbsp;Etiket verwijderen</a>`);
 			tagMenu.appendChild(btnDelTag);
 			tagDiv.appendChild(tagMenu);
 			btnDelTag.addEventListener('click', () => this.removeTag(tagDiv));

@@ -12,7 +12,7 @@ const withDownloadButton: GalleryDecorator = (constructor) =>
 			super(albums, params);
 
 			const downloadIcon =
-				withTooltip(createElement(`<span class="j-gallery-icon"><i class="fa fa-download"></i></span>`), {
+				withTooltip(createElement(`<span class="j-gallery-icon"><i class="fas fa-download"></i></span>`), {
 					style: {
 						color: params.backgroundColor,
 						background: params.textColor,

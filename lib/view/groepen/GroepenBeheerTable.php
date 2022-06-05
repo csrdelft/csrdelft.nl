@@ -81,7 +81,7 @@ class GroepenBeheerTable extends DataTable {
 	}
 
 	public function getBreadcrumbs() {
-		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
+		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>'
 			. '<li class="breadcrumb-item"><a href="/groepen">Groepen</a></li>'
 			. '<li class="breadcrumb-item"><a href="' . $this->model->getUrl() . '">' . ucfirst($this->naam) . '</a></li>'
 			. '<li class="breadcrumb-item active">Beheren</li></ul>';

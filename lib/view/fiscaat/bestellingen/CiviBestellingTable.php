@@ -28,6 +28,6 @@ class CiviBestellingTable extends DataTable {
 	}
 
 	public function getBreadcrumbs() {
-		return '<a href="/" title="Startpagina"><span class="fa fa-home module-icon"></span></a> » <a href="/fiscaat"><span class="fa fa-eur module-icon"></span></a> » <span class="active">' . $this->getTitel() . '</span>';
+		return '<a href="/" title="Startpagina"><i class="fas fa-home module-icon"></i></a> » <a href="/fiscaat"><i class="fas fa-eur module-icon"></i></a> » <span class="active">' . $this->getTitel() . '</span>';
 	}
 }
