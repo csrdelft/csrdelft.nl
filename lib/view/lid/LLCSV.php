@@ -8,14 +8,14 @@ use Exception;
 /**
  * CSV in een textarea met clientside downloadknop
  */
-class LLCSV extends LLWeergave {
-
-	public function viewHeader() {
+class LLCSV extends LLWeergave
+{
+	public function viewHeader()
+	{
 		$html = '';
 		$html .= '<textarea class="csv">';
 		foreach ($this->velden as $veld) {
 			switch ($veld) {
-
 				case 'adres':
 					$html .= 'adres;';
 					$html .= 'postcode;';
@@ -37,30 +37,31 @@ class LLCSV extends LLWeergave {
 		return $html;
 	}
 
-	public function viewFooter() {
+	public function viewFooter()
+	{
 		$html = '';
 		$html .= '</textarea>';
 		$html .= <<<HTML
-		<a href="" class="btn btn-primary download-ledenlijst">Download</a>
-		<script>
-			let csvContent = "data:text/csv;charset=utf-8,";
-			csvContent += $('textarea.csv').text();
-			let encodedUri = encodeURI(csvContent);
-			let link = $('.download-ledenlijst');
-			link.attr("href", encodedUri);
-			link.attr("download", "ledenlijst.csv");
-		</script>
-		HTML;
+<a href="" class="btn btn-primary download-ledenlijst">Download</a>
+<script>
+	let csvContent = "data:text/csv;charset=utf-8,";
+	csvContent += $('textarea.csv').text();
+	let encodedUri = encodeURI(csvContent);
+	let link = $('.download-ledenlijst');
+	link.attr("href", encodedUri);
+	link.attr("download", "ledenlijst.csv");
+</script>
+HTML;
 		return $html;
 	}
 
-	public function viewLid(Profiel $profiel) {
+	public function viewLid(Profiel $profiel)
+	{
 		$html = '';
 
 		foreach ($this->velden as $veld) {
 			$return = '';
 			switch ($veld) {
-
 				case 'adres':
 					$return .= $profiel->adres . ';';
 					$return .= $profiel->postcode . ';';
@@ -129,5 +130,4 @@ class LLCSV extends LLWeergave {
 		$html .= "\n";
 		return $html;
 	}
-
 }

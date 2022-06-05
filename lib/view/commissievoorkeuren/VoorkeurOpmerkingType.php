@@ -10,7 +10,6 @@ class VoorkeurOpmerkingType extends AbstractType
 {
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-		$builder
-			->add('lidOpmerking', TextType::class);
+		$builder->add('lidOpmerking', TextType::class);
 	}
 }

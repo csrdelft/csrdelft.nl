@@ -8,7 +8,6 @@
 
 namespace CsrDelft\view\commissievoorkeuren;
 
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,7 +15,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class VoorkeurCommissieCategorieType extends AbstractType
 {
-
 	/**
 	 * AddCommissieFormulier constructor.
 	 *
@@ -25,9 +23,6 @@ class VoorkeurCommissieCategorieType extends AbstractType
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-		$builder
-			->add('naam', TextType::class)
-			->add('opslaan', SubmitType::class)
-		;
+		$builder->add('naam', TextType::class)->add('opslaan', SubmitType::class);
 	}
 }

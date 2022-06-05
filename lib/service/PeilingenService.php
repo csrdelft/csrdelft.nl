@@ -18,7 +18,8 @@ use Doctrine\ORM\ORMException;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 02/11/2018
  */
-class PeilingenService {
+class PeilingenService
+{
 	/**
 	 * @var PeilingenRepository
 	 */
@@ -48,12 +49,18 @@ class PeilingenService {
 		$this->entityManager = $entityManager;
 	}
 
-	public function magOptieToevoegen(Peiling $peiling) {
+	public function magOptieToevoegen(Peiling $peiling)
+	{
 		if ($this->peilingenRepository->magBewerken($peiling)) {
 			return true;
 		}
 
-		if ($this->peilingStemmenRepository->heeftGestemd($peiling->id, LoginService::getUid())) {
+		if (
+			$this->peilingStemmenRepository->heeftGestemd(
+				$peiling->id,
+				LoginService::getUid()
+			)
+		) {
 			return false;
 		}
 
@@ -61,11 +68,15 @@ class PeilingenService {
 			return false;
 		}
 
-		$aantalVoorgesteld = $this->peilingOptiesRepository->count(['peiling_id' => $peiling->id, 'ingebracht_door' => LoginService::getUid()]);
+		$aantalVoorgesteld = $this->peilingOptiesRepository->count([
+			'peiling_id' => $peiling->id,
+			'ingebracht_door' => LoginService::getUid(),
+		]);
 		return $aantalVoorgesteld < $peiling->aantal_voorstellen;
 	}
 
-	public function stem($peilingId, $opties, $uid) {
+	public function stem($peilingId, $opties, $uid)
+	{
 		try {
 			$this->entityManager->beginTransaction();
 
@@ -81,7 +92,10 @@ class PeilingenService {
 
 				$stem = new PeilingStem();
 				$stem->peiling_id = $peilingId;
-				$stem->peiling = $this->entityManager->getReference(Peiling::class, $peilingId);
+				$stem->peiling = $this->entityManager->getReference(
+					Peiling::class,
+					$peilingId
+				);
 				$stem->profiel = ProfielRepository::get($uid);
 				$stem->uid = $uid;
 				$stem->aantal = count($opties);
@@ -106,8 +120,11 @@ class PeilingenService {
 	 * @param int[] $opties
 	 * @return int[]
 	 */
-	public function valideerOpties($peilingId, $opties) {
-		$mogelijkeOpties = $this->peilingOptiesRepository->findBy(['peiling_id' => $peilingId]);
+	public function valideerOpties($peilingId, $opties)
+	{
+		$mogelijkeOpties = $this->peilingOptiesRepository->findBy([
+			'peiling_id' => $peilingId,
+		]);
 		$mogelijkeOptieIds = array_map(function ($optie) {
 			return $optie->id;
 		}, $mogelijkeOpties);
@@ -121,7 +138,8 @@ class PeilingenService {
 	 * @return bool
 	 * @throws CsrGebruikerException
 	 */
-	public function isGeldigeStem($peilingId, $opties, $uid) {
+	public function isGeldigeStem($peilingId, $opties, $uid)
+	{
 		$peiling = $this->peilingenRepository->getPeilingById($peilingId);
 
 		if (!$peiling) {
@@ -140,11 +158,12 @@ class PeilingenService {
 			throw new CsrGebruikerException('Selecteer tenminste een optie.');
 		}
 
-
 		$geldigeOptieIds = $this->valideerOpties($peilingId, $opties);
 
 		if (count($geldigeOptieIds) > $peiling->aantal_stemmen) {
-			throw new CsrGebruikerException(sprintf('Selecteer maximaal %d opties.', $peiling->aantal_stemmen));
+			throw new CsrGebruikerException(
+				sprintf('Selecteer maximaal %d opties.', $peiling->aantal_stemmen)
+			);
 		}
 
 		// Er zijn opties in $opties die niet in $mogelijkeOpties zitten

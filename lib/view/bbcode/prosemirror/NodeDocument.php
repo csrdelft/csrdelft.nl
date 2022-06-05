@@ -1,15 +1,12 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror;
-
 
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbDocument;
 
 class NodeDocument implements Node
 {
-
 	public static function getBbTagType()
 	{
 		return BbDocument::class;

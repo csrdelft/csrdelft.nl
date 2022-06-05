@@ -14,13 +14,16 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method BoekRecensie[]    findAll()
  * @method BoekRecensie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BoekRecensieRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+class BoekRecensieRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, BoekRecensie::class);
 	}
 
-	public function get(Boek $boek, Profiel $profiel): BoekRecensie {
-		$recensie = $this->findOneBy(["boek" => $boek, "schrijver" => $profiel]);
+	public function get(Boek $boek, Profiel $profiel): BoekRecensie
+	{
+		$recensie = $this->findOneBy(['boek' => $boek, 'schrijver' => $profiel]);
 
 		if (!$recensie) {
 			$recensie = new BoekRecensie();
@@ -36,7 +39,8 @@ class BoekRecensieRepository extends AbstractRepository {
 	 * @param $uid
 	 * @return BoekRecensie[]
 	 */
-	public function getVoorLid($uid) {
-		return $this->findBy(["schrijver_uid" => $uid]);
+	public function getVoorLid($uid)
+	{
+		return $this->findBy(['schrijver_uid' => $uid]);
 	}
 }

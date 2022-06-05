@@ -30,7 +30,6 @@ use Exception;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
-
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -40,7 +39,8 @@ use Twig\Environment;
  * @method Profiel[]    findAll()
  * @method Profiel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProfielRepository extends AbstractRepository {
+class ProfielRepository extends AbstractRepository
+{
 	/**
 	 * @var MaaltijdAbonnementenRepository
 	 */
@@ -85,13 +85,18 @@ class ProfielRepository extends AbstractRepository {
 		$this->mailService = $mailService;
 	}
 
-	public static function changelog(array $diff, $uid) {
+	public static function changelog(array $diff, $uid)
+	{
 		if (empty($diff)) {
 			return null;
 		}
 		$changes = [];
 		foreach ($diff as $change) {
-			$changes[] = new ProfielLogValueChange($change->property, $change->old_value, $change->new_value);
+			$changes[] = new ProfielLogValueChange(
+				$change->property,
+				$change->old_value,
+				$change->new_value
+			);
 		}
 		return new ProfielUpdateLogGroup($uid, date_create_immutable(), $changes);
 	}
@@ -101,7 +106,8 @@ class ProfielRepository extends AbstractRepository {
 	 * @return Profiel|false
 	 * @deprecated Gebruik ProfielRepository::find($uid)
 	 */
-	public static function get($uid) {
+	public static function get($uid)
+	{
 		if ($uid == null || !ctype_alnum($uid) || strlen($uid) != 4) {
 			return null;
 		}
@@ -117,7 +123,8 @@ class ProfielRepository extends AbstractRepository {
 	 * @return string|null
 	 * @deprecated Gebruik Profiel::getNaam($vorm)
 	 */
-	public static function getNaam($uid, $vorm = 'civitas') {
+	public static function getNaam($uid, $vorm = 'civitas')
+	{
 		$profiel = static::get($uid);
 		if (!$profiel) {
 			return null;
@@ -131,7 +138,8 @@ class ProfielRepository extends AbstractRepository {
 	 * @return string|null
 	 * @deprecated Gebruik Profiel::getLink($vorm)
 	 */
-	public static function getLink($uid, $vorm = 'civitas') {
+	public static function getLink($uid, $vorm = 'civitas')
+	{
 		$profiel = static::get($uid);
 		if (!$profiel) {
 			return null;
@@ -144,7 +152,8 @@ class ProfielRepository extends AbstractRepository {
 	 * @return bool
 	 * @deprecated Doe een null check op ProfielRepository::find($uid)
 	 */
-	public static function existsUid($uid) {
+	public static function existsUid($uid)
+	{
 		if (!ctype_alnum($uid) || strlen($uid) != 4) {
 			return false;
 		}
@@ -152,20 +161,25 @@ class ProfielRepository extends AbstractRepository {
 		return $model->find($uid) !== null;
 	}
 
-	public function existsDuck($duck) {
+	public function existsDuck($duck)
+	{
 		return count($this->findBy(['duckname' => $duck])) !== 0;
 	}
 
-	public function nieuw($lidjaar, $lidstatus) {
+	public function nieuw($lidjaar, $lidstatus)
+	{
 		$user = $this->security->getUser();
 
 		// Create kan door x999 gedaan worden
-		$logUsername = $user == null ? LoginService::UID_EXTERN : $user->getUsername();
+		$logUsername =
+			$user == null ? LoginService::UID_EXTERN : $user->getUsername();
 		$profiel = new Profiel();
 		$profiel->lidjaar = $lidjaar;
 		$profiel->status = $lidstatus;
 		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee();
-		$profiel->changelog = [new ProfielCreateLogGroup($logUsername, new DateTime())];
+		$profiel->changelog = [
+			new ProfielCreateLogGroup($logUsername, new DateTime()),
+		];
 		return $profiel;
 	}
 
@@ -173,14 +187,15 @@ class ProfielRepository extends AbstractRepository {
 	 * @param Profiel $profiel
 	 * @throws NonUniqueResultException
 	 */
-	public function create(Profiel $profiel) {
+	public function create(Profiel $profiel)
+	{
 		// Lichting zijn de laatste 2 cijfers van lidjaar
 		$jj = substr($profiel->lidjaar, 2, 2);
 		try {
 			$laatste_uid = $this->createQueryBuilder('p')
 				->select('MAX(p.uid)')
 				->where('p.uid LIKE :jj')
-				->setParameter('jj', $jj . "__")
+				->setParameter('jj', $jj . '__')
 				->getQuery()
 				->getSingleScalarResult();
 			$volgnummer = intval(substr($laatste_uid, 2, 2)) + 1;
@@ -195,7 +210,8 @@ class ProfielRepository extends AbstractRepository {
 	/**
 	 * @param Profiel $profiel
 	 */
-	public function update(Profiel $profiel) {
+	public function update(Profiel $profiel)
+	{
 		try {
 			$this->save_ldap($profiel);
 		} catch (Exception $e) {
@@ -211,7 +227,8 @@ class ProfielRepository extends AbstractRepository {
 	 * @param LDAP $ldap persistent connection
 	 * @return bool success
 	 */
-	public function save_ldap(Profiel $profiel, LDAP $ldap = null) {
+	public function save_ldap(Profiel $profiel, LDAP $ldap = null)
+	{
 		$success = true;
 
 		if ($ldap === null) {
@@ -222,10 +239,13 @@ class ProfielRepository extends AbstractRepository {
 		}
 
 		// Alleen leden, gastleden, novieten en kringels staan in LDAP (en Knorrie öO~ en Gerrit Uitslag)
-		if (preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL|CIE)$/', $profiel->status) or $profiel->uid == '9808' or $profiel->uid == '0431') {
-
+		if (
+			preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL|CIE)$/', $profiel->status) or
+			$profiel->uid == '9808' or
+			$profiel->uid == '0431'
+		) {
 			// LDAP entry in elkaar zetten
-			$entry = array();
+			$entry = [];
 			$entry['uid'] = $profiel->uid;
 			$entry['givenname'] = $profiel->voornaam;
 			$entry['sn'] = $profiel->achternaam;
@@ -237,7 +257,11 @@ class ProfielRepository extends AbstractRepository {
 			$entry['mail'] = $profiel->getPrimaryEmail();
 			$entry['homephone'] = $profiel->telefoon;
 			$entry['mobile'] = $profiel->mobiel;
-			$entry['homepostaladdress'] = implode('', array($profiel->adres, $profiel->postcode, $profiel->woonplaats));
+			$entry['homepostaladdress'] = implode('', [
+				$profiel->adres,
+				$profiel->postcode,
+				$profiel->woonplaats,
+			]);
 			$entry['o'] = 'C.S.R. Delft';
 			$entry['mozillanickname'] = $profiel->nickname;
 			$entry['mozillausehtmlmail'] = 'FALSE';
@@ -283,10 +307,18 @@ class ProfielRepository extends AbstractRepository {
 		return $success;
 	}
 
-	public function wijzig_lidstatus(Profiel $profiel, $oudestatus) {
+	public function wijzig_lidstatus(Profiel $profiel, $oudestatus)
+	{
 		$changes = [];
 		// Maaltijd en corvee bijwerken
-		$geenAboEnCorveeVoor = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Commissie, LidStatus::Overleden);
+		$geenAboEnCorveeVoor = [
+			LidStatus::Oudlid,
+			LidStatus::Erelid,
+			LidStatus::Nobody,
+			LidStatus::Exlid,
+			LidStatus::Commissie,
+			LidStatus::Overleden,
+		];
 		if (in_array($profiel->status, $geenAboEnCorveeVoor)) {
 			//maaltijdabo's uitzetten (R_ETER is een S_NOBODY die toch een abo mag hebben)
 			$account = $profiel->account;
@@ -299,9 +331,23 @@ class ProfielRepository extends AbstractRepository {
 			$changes = array_merge($changes, $removedcorvee);
 		}
 		// Mailen naar fisci,bibliothecaris...
-		$wordtinactief = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden);
-		$wasactief = array(LidStatus::Noviet, LidStatus::Gastlid, LidStatus::Lid, LidStatus::Kringel);
-		if (in_array($profiel->status, $wordtinactief) && in_array($oudestatus, $wasactief)) {
+		$wordtinactief = [
+			LidStatus::Oudlid,
+			LidStatus::Erelid,
+			LidStatus::Nobody,
+			LidStatus::Exlid,
+			LidStatus::Overleden,
+		];
+		$wasactief = [
+			LidStatus::Noviet,
+			LidStatus::Gastlid,
+			LidStatus::Lid,
+			LidStatus::Kringel,
+		];
+		if (
+			in_array($profiel->status, $wordtinactief) &&
+			in_array($oudestatus, $wasactief)
+		) {
 			$this->notifyFisci($profiel, $oudestatus);
 			$this->notifyBibliothecaris($profiel, $oudestatus);
 		}
@@ -315,10 +361,15 @@ class ProfielRepository extends AbstractRepository {
 	 * @param $oudestatus
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
-	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
-		$aantal = $this->maaltijdAbonnementenRepository->verwijderAbonnementenVoorLid($profiel->uid);
+	private function disableMaaltijdabos(Profiel $profiel, $oudestatus)
+	{
+		$aantal = $this->maaltijdAbonnementenRepository->verwijderAbonnementenVoorLid(
+			$profiel->uid
+		);
 		if ($aantal > 0) {
-			return [new ProfielLogTextEntry('Afmelden abo\'s: ' . $aantal . ' uitgezet.')];
+			return [
+				new ProfielLogTextEntry('Afmelden abo\'s: ' . $aantal . ' uitgezet.'),
+			];
 		}
 		return [];
 	}
@@ -330,9 +381,12 @@ class ProfielRepository extends AbstractRepository {
 	 * @param $oudestatus
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
-	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus) {
+	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus)
+	{
 		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($profiel);
-		$aantal = $this->corveeTakenRepository->verwijderTakenVoorLid($profiel->uid);
+		$aantal = $this->corveeTakenRepository->verwijderTakenVoorLid(
+			$profiel->uid
+		);
 		if (sizeof($taken) !== $aantal) {
 			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
 		}
@@ -340,22 +394,32 @@ class ProfielRepository extends AbstractRepository {
 		if ($aantal > 0) {
 			$change = new ProfielLogCoveeTakenVerwijderChange([]);
 			foreach ($taken as $taak) {
-				$change->corveetaken[] = strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->corveeFunctie->naam;
+				$change->corveetaken[] =
+					strftime('%a %e-%m-%Y', $taak->getBeginMoment()) .
+					' ' .
+					$taak->corveeFunctie->naam;
 			}
 			$changes[] = $change;
 
 			// Corveeceasar mailen over vrijvallende corveetaken.
-			$bericht = $this->twig->render('mail/bericht/toekomstigcorveeverwijderd.mail.twig', [
-				'aantal' => $aantal,
-				'naam' => $profiel->getNaam('volledig'),
-				'uid' => $profiel->uid,
-				'oud' => $oudestatus,
-				'nieuw' => $profiel->status,
-				'change' => $change->toHtml(),
-				'admin' => $this->security->getUser()->profiel->getNaam()
-			]);
-			$mail = new Mail(array('corvee@csrdelft.nl' => 'CorveeCaesar'), 'Lid-af: toekomstig corvee verwijderd', $bericht);
-			$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
+			$bericht = $this->twig->render(
+				'mail/bericht/toekomstigcorveeverwijderd.mail.twig',
+				[
+					'aantal' => $aantal,
+					'naam' => $profiel->getNaam('volledig'),
+					'uid' => $profiel->uid,
+					'oud' => $oudestatus,
+					'nieuw' => $profiel->status,
+					'change' => $change->toHtml(),
+					'admin' => $this->security->getUser()->profiel->getNaam(),
+				]
+			);
+			$mail = new Mail(
+				['corvee@csrdelft.nl' => 'CorveeCaesar'],
+				'Lid-af: toekomstig corvee verwijderd',
+				$bericht
+			);
+			$mail->addBcc(['pubcie@csrdelft.nl' => 'PubCie C.S.R.']);
 			$this->mailService->send($mail);
 		}
 		return $changes;
@@ -368,7 +432,8 @@ class ProfielRepository extends AbstractRepository {
 	 * @param $oudestatus
 	 * @return bool mailen is wel/niet verzonden
 	 */
-	private function notifyFisci(Profiel $profiel, $oudestatus) {
+	private function notifyFisci(Profiel $profiel, $oudestatus)
+	{
 		// Saldi ophalen
 		$saldi = '';
 		$saldi .= 'CiviSaldo: ' . $profiel->getCiviSaldo() . "\n";
@@ -379,16 +444,16 @@ class ProfielRepository extends AbstractRepository {
 			'oud' => $oudestatus,
 			'nieuw' => $profiel->status,
 			'saldi' => $saldi,
-			'admin' => $this->security->getUser()->profiel->getNaam()
+			'admin' => $this->security->getUser()->profiel->getNaam(),
 		]);
-		$to = array(
+		$to = [
 			'fiscus@csrdelft.nl' => 'Fiscus C.S.R.',
 			'maalcie-fiscus@csrdelft.nl' => 'MaalCie fiscus C.S.R.',
-			'soccie@csrdelft.nl' => 'SocCie C.S.R.'
-		);
+			'soccie@csrdelft.nl' => 'SocCie C.S.R.',
+		];
 
 		$mail = new Mail($to, 'Melding lid-af worden', $bericht);
-		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
+		$mail->addBcc(['pubcie@csrdelft.nl' => 'PubCie C.S.R.']);
 
 		return $this->mailService->send($mail);
 	}
@@ -400,40 +465,46 @@ class ProfielRepository extends AbstractRepository {
 	 * @param $oudestatus
 	 * @return bool mailen is wel/niet verzonden
 	 */
-	private function notifyBibliothecaris(Profiel $profiel, $oudestatus) {
+	private function notifyBibliothecaris(Profiel $profiel, $oudestatus)
+	{
 		$geleend = $this->boekExemplaarModel->getGeleend($profiel);
 		if (!is_array($geleend)) {
-			$geleend = array();
+			$geleend = [];
 		}
 		// Lijst van boeken genereren
-		$bknleden = $bkncsr = array(
+		$bknleden = $bkncsr = [
 			'kopje' => '',
 			'lijst' => '',
-			'aantal' => 0
-		);
+			'aantal' => 0,
+		];
 		foreach ($geleend as $exemplaar) {
 			$boek = $exemplaar->boek;
 			if ($exemplaar->isBiebBoek()) {
 				$bkncsr['aantal']++;
 				$bkncsr['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
-				$bkncsr['lijst'] .= " - " . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
+				$bkncsr['lijst'] .=
+					' - ' . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
 			} else {
 				$bknleden['aantal']++;
 				$bknleden['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
-				$bknleden['lijst'] .= " - " . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
+				$bknleden['lijst'] .=
+					' - ' . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
 				$naam = $exemplaar->eigenaar->getNaam('volledig');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}
 		}
 		// Kopjes
-		$mv = ($profiel->geslacht->getValue() === Geslacht::Man ? 'hem' : 'haar');
+		$mv = $profiel->geslacht->getValue() === Geslacht::Man ? 'hem' : 'haar';
 		$enkelvoud = "Het volgende boek is nog door {$mv} geleend";
 		$meervoud = "De volgende boeken zijn nog door {$mv} geleend";
 		if ($bkncsr['aantal']) {
-			$bkncsr['kopje'] = ($bkncsr['aantal'] > 1 ? $meervoud : $enkelvoud) . " van de C.S.R.-bibliotheek:";
+			$bkncsr['kopje'] =
+				($bkncsr['aantal'] > 1 ? $meervoud : $enkelvoud) .
+				' van de C.S.R.-bibliotheek:';
 		}
 		if ($bknleden['aantal']) {
-			$bknleden['kopje'] = ($bknleden['aantal'] > 1 ? $meervoud : $enkelvoud) . " van leden:";
+			$bknleden['kopje'] =
+				($bknleden['aantal'] > 1 ? $meervoud : $enkelvoud) . ' van leden:';
 		}
 
 		// Alleen mailen als er C.S.R.boeken zijn
@@ -441,21 +512,33 @@ class ProfielRepository extends AbstractRepository {
 			return false;
 		}
 
-		$to = array(
+		$to = [
 			'bibliothecaris@csrdelft.nl' => 'Bibliothecaris C.S.R.',
-			$profiel->getPrimaryEmail() => $profiel->getNaam('civitas')
+			$profiel->getPrimaryEmail() => $profiel->getNaam('civitas'),
+		];
+		$bericht = $this->twig->render(
+			'mail/bericht/lidafgeleendebiebboeken.mail.twig',
+			[
+				'naam' => $profiel->getNaam('volledig'),
+				'uid' => $profiel->uid,
+				'oud' => substr($oudestatus, 2),
+				'nieuw' =>
+					$profiel->status === LidStatus::Nobody
+						? 'GEEN LID'
+						: substr($profiel->status, 2),
+				'csrlijst' => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
+				'ledenlijst' =>
+					$bkncsr['aantal'] > 0
+						? 'Verder ter informatie: ' .
+							$bknleden['kopje'] .
+							"\n" .
+							$bknleden['lijst']
+						: '',
+				'admin' => $this->security->getUser()->profiel->getNaam(),
+			]
 		);
-		$bericht = $this->twig->render('mail/bericht/lidafgeleendebiebboeken.mail.twig', [
-			'naam' => $profiel->getNaam('volledig'),
-			'uid' => $profiel->uid,
-			'oud' => substr($oudestatus, 2),
-			'nieuw' => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),
-			'csrlijst' => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
-			'ledenlijst' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
-			'admin' => $this->security->getUser()->profiel->getNaam()
-		]);
 		$mail = new Mail($to, 'Geleende boeken - Melding lid-af worden', $bericht);
-		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
+		$mail->addBcc(['pubcie@csrdelft.nl' => 'PubCie C.S.R.']);
 
 		return $this->mailService->send($mail);
 	}
@@ -465,7 +548,8 @@ class ProfielRepository extends AbstractRepository {
 	 * @param Profiel $profiel
 	 * @return AbstractProfielLogEntry[]  Een logentry als er wijzigingen zijn.
 	 */
-	private function verwijderVelden(Profiel $profiel) {
+	private function verwijderVelden(Profiel $profiel)
+	{
 		$velden_verwijderd = [];
 		foreach (Profiel::$properties_lidstatus as $key => $status_allowed) {
 			if (!$profiel->propertyMogelijk($key)) {
@@ -490,12 +574,17 @@ class ProfielRepository extends AbstractRepository {
 	 * Verwijder onnodige velden van het profiel. Slaat wijzigingen op in database.
 	 * @param Profiel $profiel
 	 */
-	public function verwijderVeldenUpdate(Profiel $profiel) {
+	public function verwijderVeldenUpdate(Profiel $profiel)
+	{
 		$changes = $this->verwijderVelden($profiel);
 		if (empty($changes)) {
 			return false;
 		}
-		$profiel->changelog[] = new ProfielUpdateLogGroup($this->security->getUser()->getUsername(), new DateTime(), $changes);
+		$profiel->changelog[] = new ProfielUpdateLogGroup(
+			$this->security->getUser()->getUsername(),
+			new DateTime(),
+			$changes
+		);
 		$this->update($profiel);
 		return true;
 	}
@@ -506,38 +595,43 @@ class ProfielRepository extends AbstractRepository {
 	 * @param null $lidjaar
 	 * @return int|mixed|string
 	 */
-	public function getNovietenVanLaatsteLidjaar($lidjaar = null) {
+	public function getNovietenVanLaatsteLidjaar($lidjaar = null)
+	{
 		if (empty($lidjaar)) {
 			return $this->createQueryBuilder('p')
 				->where('p.status = :status')
 				->setParameter('status', LidStatus::Noviet)
-				->getQuery()->getResult();
+				->getQuery()
+				->getResult();
 		}
 
 		return $this->createQueryBuilder('p')
 			->where('p.status = :status and p.lidjaar = :lidjaar')
 			->setParameter('lidjaar', $lidjaar)
 			->setParameter('status', LidStatus::Noviet)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
 	 * @param $toegestaan
 	 * @return Profiel[]
 	 */
-	public function findByLidStatus($toegestaan) {
+	public function findByLidStatus($toegestaan)
+	{
 		return $this->createQueryBuilder('p')
 			->where('p.status in (:toegestaan)')
 			->setParameter('toegestaan', $toegestaan)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
-	public function setEetwens(Profiel $profiel, $eetwens) {
+	public function setEetwens(Profiel $profiel, $eetwens)
+	{
 		if ($profiel->eetwens === $eetwens) {
 			return;
 		}
 		$profiel->eetwens = $eetwens;
 		$this->update($profiel);
 	}
-
 }

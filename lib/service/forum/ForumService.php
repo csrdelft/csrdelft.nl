@@ -49,16 +49,15 @@ class ForumService
 	private $forumDradenRepository;
 
 	public function __construct(
-		ForumDradenReagerenRepository  $forumDradenReagerenRepository,
-		ForumPostsRepository           $forumPostsRepository,
-		ForumDradenGelezenRepository   $forumDradenGelezenRepository,
+		ForumDradenReagerenRepository $forumDradenReagerenRepository,
+		ForumPostsRepository $forumPostsRepository,
+		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
-		ForumDradenMeldingRepository   $forumDradenMeldingRepository,
-		ForumDelenMeldingRepository    $forumDelenMeldingRepository,
-		ForumDradenRepository          $forumDradenRepository,
-		ProfielRepository              $profielRepository
-	)
-	{
+		ForumDradenMeldingRepository $forumDradenMeldingRepository,
+		ForumDelenMeldingRepository $forumDelenMeldingRepository,
+		ForumDradenRepository $forumDradenRepository,
+		ProfielRepository $profielRepository
+	) {
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->profielRepository = $profielRepository;
@@ -76,17 +75,26 @@ class ForumService
 
 		// Niet-goedgekeurde posts verwijderen
 
-		$this->forumPostsRepository->createQueryBuilder('fp')
+		$this->forumPostsRepository
+			->createQueryBuilder('fp')
 			->delete()
 			->where('fp.verwijderd = true and fp.wacht_goedkeuring = true')
-			->getQuery()->execute();
+			->getQuery()
+			->execute();
 
 		// Voor alle ex-leden settings opschonen
-		$profielen = $this->profielRepository->createQueryBuilder('p')
+		$profielen = $this->profielRepository
+			->createQueryBuilder('p')
 			->select('p.uid')
 			->where('p.status in (:status)')
-			->setParameter('status', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden))
-			->getQuery()->getArrayResult();
+			->setParameter('status', [
+				LidStatus::Commissie,
+				LidStatus::Nobody,
+				LidStatus::Exlid,
+				LidStatus::Overleden,
+			])
+			->getQuery()
+			->getArrayResult();
 
 		$uids = array_column($profielen, 'uid');
 		$this->forumDradenGelezenRepository->verwijderDraadGelezenVoorLeden($uids);
@@ -97,11 +105,15 @@ class ForumService
 
 		// Settings voor oude topics opschonen en oude/verwijderde topics en posts definitief verwijderen
 		/** @var ForumDraad[] $draden */
-		$draden = $this->forumDradenRepository->createQueryBuilder('fd')
+		$draden = $this->forumDradenRepository
+			->createQueryBuilder('fd')
 			->select('fd.draad_id')
-			->where('fd.verwijderd = true or (fd.gesloten = true and (fd.laatst_gewijzigd is null or fd.laatst_gewijzigd < :laatst_gewijzigd))')
+			->where(
+				'fd.verwijderd = true or (fd.gesloten = true and (fd.laatst_gewijzigd is null or fd.laatst_gewijzigd < :laatst_gewijzigd))'
+			)
 			->setParameter('laatst_gewijzigd', date_create_immutable('-1 year'))
-			->getQuery()->getArrayResult();
+			->getQuery()
+			->getArrayResult();
 		$draadIds = array_column($draden, 'draad_id');
 
 		// Settings verwijderen
@@ -110,7 +122,8 @@ class ForumService
 		$this->forumDradenGelezenRepository->verwijderDraadGelezen($draadIds);
 		$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draadIds);
 
-		$this->forumDradenRepository->createQueryBuilderWithoutOrder('fd')
+		$this->forumDradenRepository
+			->createQueryBuilderWithoutOrder('fd')
 			->update()
 			->where('fd.draad_id in (?2)')
 			->set('fd.laatste_post_id', '?1')
@@ -120,7 +133,8 @@ class ForumService
 			->execute();
 
 		// Oude verwijderde posts definitief verwijderen
-		$this->forumPostsRepository->createQueryBuilder('fp')
+		$this->forumPostsRepository
+			->createQueryBuilder('fp')
 			->delete()
 			->where('fp.draad_id in (:draad_ids)')
 			->setParameter('draad_ids', $draadIds)
@@ -128,7 +142,8 @@ class ForumService
 			->execute();
 
 		// Verwijder corresponderende draden
-		$this->forumDradenRepository->createQueryBuilderWithoutOrder('fd')
+		$this->forumDradenRepository
+			->createQueryBuilderWithoutOrder('fd')
 			->delete()
 			->where('fd.draad_id in (:draad_ids)')
 			->setParameter('draad_ids', $draadIds)

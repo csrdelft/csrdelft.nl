@@ -26,7 +26,7 @@ namespace CsrDelft\common\Doctrine\Type;
 
 use Doctrine\DBAL\Types\DateTimeTzType;
 
-class DateTimeTzImmutableType extends DateTimeTzType {
+class DateTimeTzImmutableType extends DateTimeTzType
+{
 	use DateTimeImmutableTypeTrait;
 }
-

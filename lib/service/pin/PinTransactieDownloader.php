@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
 use DOMXPath;
 
-
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 22/02/2018
@@ -65,7 +64,10 @@ class PinTransactieDownloader
 	 */
 	public $disableSSL = true;
 
-	public function __construct(PinTransactieRepository $pinTransactieRepository, EntityManagerInterface $entityManager) {
+	public function __construct(
+		PinTransactieRepository $pinTransactieRepository,
+		EntityManagerInterface $entityManager
+	) {
 		$this->pinTransactieRepository = $pinTransactieRepository;
 		$this->entityManager = $entityManager;
 	}
@@ -77,22 +79,35 @@ class PinTransactieDownloader
 			self::POST_FIELD_LOGIN_USERNAME => $username,
 			self::POST_FIELD_LOGIN_PASSWORD => $password,
 		];
-		$result = $this->postPage(url2absolute($baseUrl, self::RELATIVE_URL_LOGIN), $postFields, null, true);
+		$result = $this->postPage(
+			url2absolute($baseUrl, self::RELATIVE_URL_LOGIN),
+			$postFields,
+			null,
+			true
+		);
 
 		//2. Parse session cookie from response
 		$sessionCookie = static::parseSessionCookie($result);
 
 		//3. GET report overview
-		$result = $this->getPage(url2absolute($baseUrl, self::RELATIVE_URL_REPORT), $sessionCookie);
+		$result = $this->getPage(
+			url2absolute($baseUrl, self::RELATIVE_URL_REPORT),
+			$sessionCookie
+		);
 
 		//4. Retrieve Merchant Transactions Url #article-content .report a[title=Merchant transactions]@href
 		$xml = new DOMDocument();
 		$xml->loadHTML($result);
 		$xpath = new DOMXPath($xml);
-		$merchantTransactionsUrl = $xpath->query('//a[@title = "Merchant transactions"]/@href')->item(0)->nodeValue;
+		$merchantTransactionsUrl = $xpath
+			->query('//a[@title = "Merchant transactions"]/@href')
+			->item(0)->nodeValue;
 
 		//5. GET Merchant Transactions Url
-		$result = $this->getPage(url2absolute($baseUrl, $merchantTransactionsUrl), $sessionCookie);
+		$result = $this->getPage(
+			url2absolute($baseUrl, $merchantTransactionsUrl),
+			$sessionCookie
+		);
 
 		//6. Retrieve Search Url: Only form tag -> action
 		preg_match('/action="(.*?)"/', $result, $searchMatches);
@@ -100,14 +115,21 @@ class PinTransactieDownloader
 
 		//7. POST Search with correct date
 		$postFields = [
-			self::POST_FIELD_PERIOD_FROM_DATE_DATE => date(self::DATE_FORMAT_ONLINE, strtotime($moment)),
+			self::POST_FIELD_PERIOD_FROM_DATE_DATE => date(
+				self::DATE_FORMAT_ONLINE,
+				strtotime($moment)
+			),
 			self::POST_FIELD_PERIOD_FROM_DATE_HOURS => self::DATE_START_HOURS,
 			self::POST_FIELD_PERIOD_FROM_DATE_MINUTES => self::DATE_START_MINUTES,
 			self::POST_FIELD_PERIOD_DURATION => self::DURATION_DAY,
 			self::POST_FIELD_NUM_ROWS => 2,
 			self::POST_FIELD_STORE => $store,
 		];
-		$result = $this->postPage(url2absolute($baseUrl, $searchUrl), $postFields, $sessionCookie);
+		$result = $this->postPage(
+			url2absolute($baseUrl, $searchUrl),
+			$postFields,
+			$sessionCookie
+		);
 
 		//8. Parse html and create PinTransactie
 		$xml = new DOMDocument();
@@ -120,7 +142,9 @@ class PinTransactieDownloader
 			$labels = $xpath->query('td/label', $row);
 
 			$pinTransactie = new PinTransactie();
-			$pinTransactie->datetime = date_create_immutable($labels->item(0)->nodeValue);
+			$pinTransactie->datetime = date_create_immutable(
+				$labels->item(0)->nodeValue
+			);
 			$pinTransactie->brand = $labels->item(1)->nodeValue;
 			$pinTransactie->merchant = $labels->item(2)->nodeValue;
 			$pinTransactie->store = $labels->item(3)->nodeValue;
@@ -152,7 +176,7 @@ class PinTransactieDownloader
 	public static function parseSessionCookie($headers): string
 	{
 		preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $headers, $matches);
-		$cookies = array();
+		$cookies = [];
 		foreach ($matches[1] as $item) {
 			parse_str($item, $cookie);
 			$cookies = array_merge($cookies, $cookie);
@@ -165,7 +189,8 @@ class PinTransactieDownloader
 	 * Zet SSL verify uit indien disableSSL aan staat
 	 * @param resource $ch
 	 */
-	private function disableSSLCheck($ch) {
+	private function disableSSLCheck($ch)
+	{
 		if ($this->disableSSL) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -194,12 +219,20 @@ class PinTransactieDownloader
 	 * @param bool $returnHeader
 	 * @return string
 	 */
-	private function postPage($url, $postFields, $sessionCookie, $returnHeader = false): string
-	{
+	private function postPage(
+		$url,
+		$postFields,
+		$sessionCookie,
+		$returnHeader = false
+	): string {
 		$curl_handle = curl_init();
 		curl_setopt($curl_handle, CURLOPT_URL, $url);
 		curl_setopt($curl_handle, CURLOPT_POST, true);
-		curl_setopt($curl_handle, CURLOPT_POSTFIELDS, http_build_query($postFields));
+		curl_setopt(
+			$curl_handle,
+			CURLOPT_POSTFIELDS,
+			http_build_query($postFields)
+		);
 		curl_setopt($curl_handle, CURLOPT_COOKIE, $sessionCookie);
 		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, true);

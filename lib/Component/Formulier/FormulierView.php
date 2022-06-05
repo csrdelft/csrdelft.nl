@@ -1,41 +1,47 @@
 <?php
 
-
 namespace CsrDelft\Component\Formulier;
-
 
 use CsrDelft\common\CsrException;
 
-class FormulierView {
+class FormulierView
+{
 	private $view;
 	private $titel;
 
-	public function __construct($view, $titel) {
+	public function __construct($view, $titel)
+	{
 		$this->view = $view;
 		$this->titel = $titel;
 	}
 
-	public function getView() {
+	public function getView()
+	{
 		return $this->view;
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return $this->titel;
 	}
 
-	public function getBreadcrumbs() {
-		throw new CsrException("Niet geimplementeerd");
+	public function getBreadcrumbs()
+	{
+		throw new CsrException('Niet geimplementeerd');
 	}
 
-	public function getModel() {
-		throw new CsrException("Niet geimplementeerd");
+	public function getModel()
+	{
+		throw new CsrException('Niet geimplementeerd');
 	}
 
-	public function toString() {
+	public function toString()
+	{
 		return $this->view;
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		return $this->view;
 	}
 }

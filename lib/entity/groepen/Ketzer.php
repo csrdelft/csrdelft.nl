@@ -28,10 +28,12 @@ class Ketzer extends Groep implements HeeftAanmeldLimiet
 	 * @param null $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null)
-	{
+	public static function magAlgemeen(
+		AccessAction $action,
+		$allowedAuthenticationMethods = null,
+		$soort = null
+	) {
 		switch ($action) {
-
 			case AccessAction::Aanmaken():
 			case AccessAction::Aanmelden():
 			case AccessAction::Bewerken():
@@ -45,7 +47,6 @@ class Ketzer extends Groep implements HeeftAanmeldLimiet
 	{
 		return '/groepen/ketzers/' . $this->id;
 	}
-
 
 	public function getAanmeldLimiet()
 	{

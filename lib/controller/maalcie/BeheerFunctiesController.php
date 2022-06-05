@@ -22,7 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class BeheerFunctiesController extends AbstractController {
+class BeheerFunctiesController extends AbstractController
+{
 	/** @var CorveeFunctiesRepository */
 	private $corveeFunctiesRepository;
 	/** @var CorveeKwalificatiesRepository */
@@ -32,7 +33,11 @@ class BeheerFunctiesController extends AbstractController {
 	 */
 	private $entityManager;
 
-	public function __construct(EntityManagerInterface $entityManager, CorveeFunctiesRepository $corveeFunctiesRepository, CorveeKwalificatiesRepository $corveeKwalificatiesRepository) {
+	public function __construct(
+		EntityManagerInterface $entityManager,
+		CorveeFunctiesRepository $corveeFunctiesRepository,
+		CorveeKwalificatiesRepository $corveeKwalificatiesRepository
+	) {
 		$this->corveeFunctiesRepository = $corveeFunctiesRepository;
 		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
 		$this->entityManager = $entityManager;
@@ -44,8 +49,11 @@ class BeheerFunctiesController extends AbstractController {
 	 * @Route("/corvee/functies/suggesties", methods={"GET"}, options={"priority"=1})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function suggesties(Request $request) {
-		return new GenericSuggestiesResponse($this->corveeFunctiesRepository->getSuggesties($request->query->get('q')));
+	public function suggesties(Request $request)
+	{
+		return new GenericSuggestiesResponse(
+			$this->corveeFunctiesRepository->getSuggesties($request->query->get('q'))
+		);
 	}
 
 	/**
@@ -54,10 +62,14 @@ class BeheerFunctiesController extends AbstractController {
 	 * @Route("/corvee/functies/{functie_id}", methods={"GET"}, defaults={"functie_id"=null})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function beheer(CorveeFunctie $functie = null) {
+	public function beheer(CorveeFunctie $functie = null)
+	{
 		$modal = $functie ? $this->bewerken($functie) : null;
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
-		return $this->render('maaltijden/functie/beheer_functies.html.twig', ['functies' => $functies, 'modal' => $modal]);
+		return $this->render('maaltijden/functie/beheer_functies.html.twig', [
+			'functies' => $functies,
+			'modal' => $modal,
+		]);
 	}
 
 	/**
@@ -65,7 +77,8 @@ class BeheerFunctiesController extends AbstractController {
 	 * @Route("/corvee/functies/toevoegen", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function toevoegen() {
+	public function toevoegen()
+	{
 		$functie = $this->corveeFunctiesRepository->nieuw();
 		$form = new FunctieForm($functie, 'toevoegen'); // fetches POST values itself
 		if ($form->validate()) {
@@ -74,7 +87,9 @@ class BeheerFunctiesController extends AbstractController {
 
 			setMelding('Toegevoegd', 1);
 
-			return $this->render('maaltijden/functie/beheer_functie.html.twig', ['functie' => $functie]);
+			return $this->render('maaltijden/functie/beheer_functie.html.twig', [
+				'functie' => $functie,
+			]);
 		} else {
 			return $form;
 		}
@@ -86,12 +101,15 @@ class BeheerFunctiesController extends AbstractController {
 	 * @Route("/corvee/functies/bewerken/{functie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function bewerken(CorveeFunctie $functie) {
+	public function bewerken(CorveeFunctie $functie)
+	{
 		$form = new FunctieForm($functie, 'bewerken'); // fetches POST values itself
 		if ($form->validate()) {
 			$this->entityManager->flush();
 			setMelding('Bijgewerkt', 1);
-			return $this->render('maaltijden/functie/beheer_functie.html.twig', ['functie' => $functie]);
+			return $this->render('maaltijden/functie/beheer_functie.html.twig', [
+				'functie' => $functie,
+			]);
 		} else {
 			// Voorkom opslaan
 			$this->entityManager->clear();
@@ -105,7 +123,8 @@ class BeheerFunctiesController extends AbstractController {
 	 * @Route("/corvee/functies/verwijderen/{functie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function verwijderen(CorveeFunctie $functie) {
+	public function verwijderen(CorveeFunctie $functie)
+	{
 		$functieId = $functie->functie_id;
 		$this->corveeFunctiesRepository->removeFunctie($functie);
 		setMelding('Verwijderd', 1);
@@ -120,12 +139,17 @@ class BeheerFunctiesController extends AbstractController {
 	 * @Route("/corvee/functies/kwalificeer/{functie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function kwalificeer(CorveeFunctie $functie) {
+	public function kwalificeer(CorveeFunctie $functie)
+	{
 		$kwalificatie = $this->corveeKwalificatiesRepository->nieuw($functie);
 		$form = new KwalificatieForm($kwalificatie); // fetches POST values itself
 		if ($form->validate()) {
-			$this->corveeKwalificatiesRepository->kwalificatieToewijzen($kwalificatie);
-			return $this->render('maaltijden/functie/beheer_functie.html.twig', ['functie' => $functie]);
+			$this->corveeKwalificatiesRepository->kwalificatieToewijzen(
+				$kwalificatie
+			);
+			return $this->render('maaltijden/functie/beheer_functie.html.twig', [
+				'functie' => $functie,
+			]);
 		} else {
 			return $form;
 		}
@@ -137,11 +161,14 @@ class BeheerFunctiesController extends AbstractController {
 	 * @Route("/corvee/functies/dekwalificeer/{functie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function dekwalificeer(CorveeKwalificatie $kwalificatie) {
+	public function dekwalificeer(CorveeKwalificatie $kwalificatie)
+	{
 		$functie = $kwalificatie->corveeFunctie;
 		$this->entityManager->remove($kwalificatie);
 		$this->entityManager->flush();
 
-		return $this->render('maaltijden/functie/beheer_functie.html.twig', ['functie' => $functie]);
+		return $this->render('maaltijden/functie/beheer_functie.html.twig', [
+			'functie' => $functie,
+		]);
 	}
 }

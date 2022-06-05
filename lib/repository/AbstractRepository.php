@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\repository;
-
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -13,21 +11,27 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  *
  * @package CsrDelft\repository
  */
-abstract class AbstractRepository extends ServiceEntityRepository {
-	public function retrieveByUuid($UUID) {
+abstract class AbstractRepository extends ServiceEntityRepository
+{
+	public function retrieveByUuid($UUID)
+	{
 		$metadata = $this->getClassMetadata();
 
 		$parts = explode('@', $UUID, 2);
 		$primary_key_values = explode('.', $parts[0]);
-		return $this->findOneBy(array_combine($metadata->getIdentifierFieldNames(), $primary_key_values));
+		return $this->findOneBy(
+			array_combine($metadata->getIdentifierFieldNames(), $primary_key_values)
+		);
 	}
 
-	public function save($entity) {
+	public function save($entity)
+	{
 		$this->_em->persist($entity);
 		$this->_em->flush();
 	}
 
-	public function remove($entity) {
+	public function remove($entity)
+	{
 		$this->_em->remove($entity);
 		$this->_em->flush();
 	}

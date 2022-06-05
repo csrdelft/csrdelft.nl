@@ -8,7 +8,6 @@
 
 namespace CsrDelft\view\commissievoorkeuren;
 
-
 use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -32,9 +31,11 @@ class VoorkeurCommissieType extends AbstractType
 	{
 		$builder
 			->add('naam', TextType::class, ['required' => true])
-			->add('categorie', EntityType::class, ['class' => VoorkeurCommissieCategorie::class, 'choice_label' => 'naam'])
+			->add('categorie', EntityType::class, [
+				'class' => VoorkeurCommissieCategorie::class,
+				'choice_label' => 'naam',
+			])
 			->add('zichtbaar', CheckboxType::class, ['required' => false])
-			->add('opslaan', SubmitType::class)
-		;
+			->add('opslaan', SubmitType::class);
 	}
 }

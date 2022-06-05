@@ -6,7 +6,6 @@ use CsrDelft\bb\BbTag;
 
 class BbAudio extends BbTag
 {
-
 	/**
 	 * @var string
 	 */

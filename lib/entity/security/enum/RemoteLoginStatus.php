@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\entity\security\enum;
-
 
 use CsrDelft\common\Enum;
 

@@ -1,15 +1,12 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror;
-
 
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbImg;
 
 class NodeImage implements Node
 {
-
 	public static function getBbTagType()
 	{
 		return BbImg::class;
@@ -26,7 +23,7 @@ class NodeImage implements Node
 				'alt' => $node->getSourceUrl(),
 				'src' => $node->getSourceUrl(),
 				'title' => $node->getSourceUrl(),
-			]
+			],
 		];
 	}
 

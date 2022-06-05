@@ -8,12 +8,24 @@ use CsrDelft\view\formulier\InlineForm;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 
-class FotoTagToevoegenForm extends InlineForm {
-
-	public function __construct(Foto $foto) {
-		$field = new LidField('uid', null, null, lid_instelling('fotoalbum', 'tag_suggestions'));
+class FotoTagToevoegenForm extends InlineForm
+{
+	public function __construct(Foto $foto)
+	{
+		$field = new LidField(
+			'uid',
+			null,
+			null,
+			lid_instelling('fotoalbum', 'tag_suggestions')
+		);
 		$field->placeholder = 'Naam of lidnummer';
-		parent::__construct(null, '/fotoalbum/addtag/' . $foto->subdir, $field, false, false);
+		parent::__construct(
+			null,
+			'/fotoalbum/addtag/' . $foto->subdir,
+			$field,
+			false,
+			false
+		);
 
 		$fields = [];
 		$fields[] = new RequiredTextField('foto', $foto->filename, null);
@@ -25,5 +37,4 @@ class FotoTagToevoegenForm extends InlineForm {
 		}
 		$this->addFields($fields);
 	}
-
 }

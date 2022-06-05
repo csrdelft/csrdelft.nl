@@ -57,7 +57,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
 
-class ProfielController extends AbstractController {
+class ProfielController extends AbstractController
+{
 	/**
 	 * @var ProfielRepository
 	 */
@@ -102,7 +103,7 @@ class ProfielController extends AbstractController {
 		}
 
 		if ($profiel->account == null) {
-			throw new NotFoundHttpException("Profiel heeft geen account");
+			throw new NotFoundHttpException('Profiel heeft geen account');
 		}
 
 		$this->accountRepository->resetPrivateToken($profiel->account);
@@ -157,13 +158,15 @@ class ProfielController extends AbstractController {
 		CorveeKwalificatiesRepository $corveeKwalificatiesRepository,
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
 		Profiel $profiel = null
-	): Response
-	{
+	): Response {
 		if (!$profiel) {
 			$profiel = $this->getProfiel();
 		}
 		$fotos = [];
-		foreach ($fotoTagsRepository->findBy(['keyword' => $profiel->uid], null, 3) as $tag) {
+		foreach (
+			$fotoTagsRepository->findBy(['keyword' => $profiel->uid], null, 3)
+			as $tag
+		) {
 			/** @var Foto $foto */
 			$foto = $fotoRepository->retrieveByUUID($tag->refuuid);
 			if ($foto) {
@@ -174,27 +177,61 @@ class ProfielController extends AbstractController {
 		return $this->render('profiel/profiel.html.twig', [
 			'profiel' => $profiel,
 			'besturen' => $besturenRepository->getGroepenVoorLid($profiel),
-			'commissies_ft' => $commissiesRepository->getGroepenVoorLid($profiel, GroepStatus::FT),
-			'commissies_ht' => $commissiesRepository->getGroepenVoorLid($profiel, GroepStatus::HT),
-			'commissies_ot' => $commissiesRepository->getGroepenVoorLid($profiel, GroepStatus::OT),
+			'commissies_ft' => $commissiesRepository->getGroepenVoorLid(
+				$profiel,
+				GroepStatus::FT
+			),
+			'commissies_ht' => $commissiesRepository->getGroepenVoorLid(
+				$profiel,
+				GroepStatus::HT
+			),
+			'commissies_ot' => $commissiesRepository->getGroepenVoorLid(
+				$profiel,
+				GroepStatus::OT
+			),
 			'werkgroepen' => $werkgroepenRepository->getGroepenVoorLid($profiel),
-			'onderverenigingen' => $onderverenigingenRepository->getGroepenVoorLid($profiel),
+			'onderverenigingen' => $onderverenigingenRepository->getGroepenVoorLid(
+				$profiel
+			),
 			'groepen' => $rechtenGroepenRepository->getGroepenVoorLid($profiel),
 			'ketzers' => $ketzersRepository->getGroepenVoorLid($profiel),
 			'activiteiten' => $activiteitenRepository->getGroepenVoorLid($profiel),
-			'bestellinglog' => $civiBestellingRepository->getBestellingenVoorLid($profiel->uid, 10),
-			'bestellingenlink' => '/fiscaat/bestellingen' . ($this->getUid() === $profiel->uid ? '' : '/' . $profiel->uid),
+			'bestellinglog' => $civiBestellingRepository->getBestellingenVoorLid(
+				$profiel->uid,
+				10
+			),
+			'bestellingenlink' =>
+				'/fiscaat/bestellingen' .
+				($this->getUid() === $profiel->uid ? '' : '/' . $profiel->uid),
 			'corveetaken' => $corveeTakenRepository->getTakenVoorLid($profiel),
-			'corveevoorkeuren' => $corveeVoorkeurenRepository->getVoorkeurenVoorLid($profiel->uid),
-			'corveevrijstelling' => $corveeVrijstellingenRepository->getVrijstelling($profiel->uid),
-			'corveekwalificaties' => $corveeKwalificatiesRepository->getKwalificatiesVanLid($profiel->uid),
-			'forumpostcount' => $forumPostsRepository->getAantalForumPostsVoorLid($profiel->uid),
-			'forumrecent' => $forumPostsRepository->getRecenteForumPostsVanLid($profiel->uid, (int)lid_instelling('forum', 'draden_per_pagina')),
+			'corveevoorkeuren' => $corveeVoorkeurenRepository->getVoorkeurenVoorLid(
+				$profiel->uid
+			),
+			'corveevrijstelling' => $corveeVrijstellingenRepository->getVrijstelling(
+				$profiel->uid
+			),
+			'corveekwalificaties' => $corveeKwalificatiesRepository->getKwalificatiesVanLid(
+				$profiel->uid
+			),
+			'forumpostcount' => $forumPostsRepository->getAantalForumPostsVoorLid(
+				$profiel->uid
+			),
+			'forumrecent' => $forumPostsRepository->getRecenteForumPostsVanLid(
+				$profiel->uid,
+				(int) lid_instelling('forum', 'draden_per_pagina')
+			),
 			'boeken' => $boekExemplaarRepository->getEigendom($profiel->uid),
-			'recenteAanmeldingen' => $maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($profiel->uid, date_create_immutable(instelling('maaltijden', 'recent_lidprofiel'))),
-			'abos' => $maaltijdAbonnementenRepository->getAbonnementenVoorLid($profiel->uid),
-			'gerecenseerdeboeken' => $boekRecensieRepository->getVoorLid($profiel->uid),
-			'fotos' => $fotos
+			'recenteAanmeldingen' => $maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(
+				$profiel->uid,
+				date_create_immutable(instelling('maaltijden', 'recent_lidprofiel'))
+			),
+			'abos' => $maaltijdAbonnementenRepository->getAbonnementenVoorLid(
+				$profiel->uid
+			),
+			'gerecenseerdeboeken' => $boekRecensieRepository->getVoorLid(
+				$profiel->uid
+			),
+			'fotos' => $fotos,
 		]);
 	}
 
@@ -207,13 +244,17 @@ class ProfielController extends AbstractController {
 	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
 	 * @CsrfUnsafe()
 	 */
-	public function nieuw($lidjaar, $status, EntityManagerInterface $em) {
+	public function nieuw($lidjaar, $status, EntityManagerInterface $em)
+	{
 		if ($em->getFilters()->isEnabled('verbergNovieten')) {
 			$em->getFilters()->disable('verbergNovieten');
 		}
 		// Controleer invoer
 		$lidstatus = 'S_' . strtoupper($status);
-		if (!preg_match('/^[0-9]{4}$/', $lidjaar) || !in_array($lidstatus, LidStatus::getEnumValues())) {
+		if (
+			!preg_match('/^[0-9]{4}$/', $lidjaar) ||
+			!in_array($lidstatus, LidStatus::getEnumValues())
+		) {
 			throw $this->createAccessDeniedException();
 		}
 		// NovCie mag novieten aanmaken
@@ -221,13 +262,13 @@ class ProfielController extends AbstractController {
 			throw $this->createAccessDeniedException();
 		}
 		// Maak nieuw profiel zonder op te slaan
-		$profiel = $this->profielRepository->nieuw((int)$lidjaar, $lidstatus);
+		$profiel = $this->profielRepository->nieuw((int) $lidjaar, $lidstatus);
 
 		return $this->profielBewerken($profiel, true);
 	}
 
-	private function profielBewerken(Profiel $profiel, $alleenFormulier = false) {
-
+	private function profielBewerken(Profiel $profiel, $alleenFormulier = false)
+	{
 		if (!$profiel->magBewerken()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -237,11 +278,19 @@ class ProfielController extends AbstractController {
 			if (empty($diff)) {
 				setMelding('Geen wijzigingen', 0);
 			} else {
-				$nieuw = $profiel->uid === null || $this->profielRepository->find($profiel->uid) == null;
+				$nieuw =
+					$profiel->uid === null ||
+					$this->profielRepository->find($profiel->uid) == null;
 				$changeEntry = ProfielRepository::changelog($diff, $this->getUid());
 				foreach ($diff as $change) {
 					if ($change->property === 'status') {
-						array_push($changeEntry->entries, ...$this->profielRepository->wijzig_lidstatus($profiel, $change->old_value));
+						array_push(
+							$changeEntry->entries,
+							...$this->profielRepository->wijzig_lidstatus(
+								$profiel,
+								$change->old_value
+							)
+						);
 					}
 				}
 				$profiel->changelog[] = $changeEntry;
@@ -256,7 +305,10 @@ class ProfielController extends AbstractController {
 
 							if (filter_input(INPUT_POST, 'toestemming_geven') === 'true') {
 								// Sla toesteming op.
-								$toestemmingForm = new ToestemmingModalForm($this->lidToestemmingRepository, true);
+								$toestemmingForm = new ToestemmingModalForm(
+									$this->lidToestemmingRepository,
+									true
+								);
 								if ($toestemmingForm->validate()) {
 									$this->lidToestemmingRepository->saveForLid($profiel->uid);
 								} else {
@@ -274,16 +326,24 @@ class ProfielController extends AbstractController {
 						setMelding($ex->getMessage(), -1);
 					}
 
-					setMelding('Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid, 1);
+					setMelding(
+						'Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid,
+						1
+					);
 				} else {
 					$this->profielRepository->update($profiel);
 					setMelding(count($diff) . ' wijziging(en) succesvol opgeslagen', 1);
 				}
 			}
-			return $this->redirectToRoute('csrdelft_profiel_profiel', ['uid' => $profiel->uid]);
+			return $this->redirectToRoute('csrdelft_profiel_profiel', [
+				'uid' => $profiel->uid,
+			]);
 		}
 		if ($alleenFormulier) {
-			return $this->render('plain.html.twig', ['titel' => 'Noviet toevoegen', 'content' => $form]);
+			return $this->render('plain.html.twig', [
+				'titel' => 'Noviet toevoegen',
+				'content' => $form,
+			]);
 		}
 		return $this->render('default.html.twig', ['content' => $form]);
 	}
@@ -294,7 +354,8 @@ class ProfielController extends AbstractController {
 	 * @Route("/profiel/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
-	public function bewerken($uid) {
+	public function bewerken($uid)
+	{
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
@@ -320,17 +381,21 @@ class ProfielController extends AbstractController {
 				$values['tussenvoegsel'],
 				$values['achternaam'],
 				$values['email'],
-				$values['mobiel']
+				$values['mobiel'],
 			]);
 			$token = base64url_encode($string);
-			$link = $this->generateUrl('extern-inschrijven', ['pre' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+			$link = $this->generateUrl(
+				'extern-inschrijven',
+				['pre' => $token],
+				UrlGeneratorInterface::ABSOLUTE_URL
+			);
 			$_POST = [];
 			$form = new InschrijfLinkForm();
 		}
 
 		return $this->render('extern-inschrijven/link.html.twig', [
 			'link' => $link,
-			'form' => $form
+			'form' => $form,
 		]);
 	}
 
@@ -343,22 +408,27 @@ class ProfielController extends AbstractController {
 	 * @return Response
 	 * @throws ConnectionException
 	 */
-	public function externInschrijfformulier(string $pre, EntityManagerInterface $em): Response
-	{
+	public function externInschrijfformulier(
+		string $pre,
+		EntityManagerInterface $em
+	): Response {
 		if (isDatumVoorbij('2021-08-28 00:00:00')) {
 			return $this->render('extern-inschrijven/tekstpagina.html.twig', [
 				'titel' => 'C.S.R. Delft - Inschrijven',
 				'content' => '
 				<h1 class="Titel">Inschrijvingen gesloten</h1>
 				<p>Neem contact op met <a href="mailto:novcie@csrdelft.nl">novcie@csrdelft.nl</a></p>
-			'
+			',
 			]);
 		}
 
 		if ($em->getFilters()->isEnabled('verbergNovieten')) {
 			$em->getFilters()->disable('verbergNovieten');
 		}
-		$profiel = $this->profielRepository->nieuw(date_create_immutable()->format('Y'), LidStatus::Noviet);
+		$profiel = $this->profielRepository->nieuw(
+			date_create_immutable()->format('Y'),
+			LidStatus::Noviet
+		);
 
 		if (empty($pre)) {
 			throw new NotFoundHttpException();
@@ -376,16 +446,25 @@ class ProfielController extends AbstractController {
 			$profiel->tussenvoegsel,
 			$profiel->achternaam,
 			$profiel->email,
-			$profiel->mobiel
-			) = $split;
+			$profiel->mobiel,
+		) = $split;
 
 		$form = new ExternProfielForm($profiel, '/inschrijven/' . $pre);
 		if ($form->validate()) {
 			$diff = $form->diff();
-			$changeEntry = ProfielRepository::changelog($diff, LoginService::UID_EXTERN);
+			$changeEntry = ProfielRepository::changelog(
+				$diff,
+				LoginService::UID_EXTERN
+			);
 			foreach ($diff as $change) {
 				if ($change->property === 'status') {
-					array_push($changeEntry->entries, ...$this->profielRepository->wijzig_lidstatus($profiel, $change->old_value));
+					array_push(
+						$changeEntry->entries,
+						...$this->profielRepository->wijzig_lidstatus(
+							$profiel,
+							$change->old_value
+						)
+					);
 				}
 			}
 			$profiel->changelog[] = $changeEntry;
@@ -398,7 +477,10 @@ class ProfielController extends AbstractController {
 				$conn->setAutoCommit(false);
 				$conn->connect();
 				try {
-					$toestemmingForm = new ToestemmingModalForm($this->lidToestemmingRepository, true);
+					$toestemmingForm = new ToestemmingModalForm(
+						$this->lidToestemmingRepository,
+						true
+					);
 
 					// Sla toesteming op.
 					if ($toestemmingForm->validate()) {
@@ -427,11 +509,15 @@ class ProfielController extends AbstractController {
 					'content' => '
 					<h1 class="Titel">Bedankt voor je inschrijving!</h1>
 					<p>De NovCie neemt z.s.m. contact met je op.</p>
-				']);
+				',
+				]);
 			}
 		}
 
-		return $this->render('extern-inschrijven/inschrijven.html.twig', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => $form]);
+		return $this->render('extern-inschrijven/inschrijven.html.twig', [
+			'titel' => 'C.S.R. Delft - Inschrijven',
+			'content' => $form,
+		]);
 	}
 
 	/**
@@ -439,12 +525,19 @@ class ProfielController extends AbstractController {
 	 * @Route("/profiel/voorkeuren", methods={"GET"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
-	public function voorkeurenNoUid(Request $request,
-																	VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
-																	CommissieVoorkeurRepository $commissieVoorkeurRepository,
-																	VoorkeurCommissieRepository $voorkeurCommissieRepository): Response
-	{
-		return $this->voorkeuren($request, $voorkeurOpmerkingRepository, $commissieVoorkeurRepository, $voorkeurCommissieRepository, $this->getUid());
+	public function voorkeurenNoUid(
+		Request $request,
+		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
+		CommissieVoorkeurRepository $commissieVoorkeurRepository,
+		VoorkeurCommissieRepository $voorkeurCommissieRepository
+	): Response {
+		return $this->voorkeuren(
+			$request,
+			$voorkeurOpmerkingRepository,
+			$commissieVoorkeurRepository,
+			$voorkeurCommissieRepository,
+			$this->getUid()
+		);
 	}
 
 	/**
@@ -460,8 +553,7 @@ class ProfielController extends AbstractController {
 		CommissieVoorkeurRepository $commissieVoorkeurRepository,
 		VoorkeurCommissieRepository $voorkeurCommissieRepository,
 		$uid
-	): Response
-	{
+	): Response {
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
@@ -477,13 +569,18 @@ class ProfielController extends AbstractController {
 		foreach ($categorieCommissie as $cat) {
 			foreach ($cat['commissies'] as $commissie) {
 				if ($commissie->zichtbaar) {
-					$voorkeuren[] = $commissieVoorkeurRepository->getVoorkeur($profiel, $commissie);
+					$voorkeuren[] = $commissieVoorkeurRepository->getVoorkeur(
+						$profiel,
+						$commissie
+					);
 				}
 			}
 		}
 
 		$form = $this->createForm(CommissieVoorkeurenType::class, $opmerking, [
-			'action' => $this->generateUrl('csrdelft_profiel_voorkeuren', ['uid' => $uid]),
+			'action' => $this->generateUrl('csrdelft_profiel_voorkeuren', [
+				'uid' => $uid,
+			]),
 		]);
 		$form->handleRequest($request);
 
@@ -492,10 +589,16 @@ class ProfielController extends AbstractController {
 			$manager->persist($opmerking);
 			$manager->flush();
 			setMelding('Voorkeuren opgeslagen', 1);
-			return $this->redirectToRoute('csrdelft_profiel_voorkeuren', ['uid' => $uid]);
+			return $this->redirectToRoute('csrdelft_profiel_voorkeuren', [
+				'uid' => $uid,
+			]);
 		}
 
-		return $this->render('commissievoorkeuren/persoonlijk.html.twig', ['form' => $form->createView(), 'uid' => $uid, 'voorkeuren' => $voorkeuren]);
+		return $this->render('commissievoorkeuren/persoonlijk.html.twig', [
+			'form' => $form->createView(),
+			'uid' => $uid,
+			'voorkeuren' => $voorkeuren,
+		]);
 	}
 
 	/**
@@ -512,16 +615,21 @@ class ProfielController extends AbstractController {
 			throw new NotFoundHttpException();
 		}
 		try {
-			$addToContactsUrl = $this->generateUrl('csrdelft_profiel_addtogooglecontacts', ['uid' => $profiel->uid], UrlGeneratorInterface::ABSOLUTE_URL);
+			$addToContactsUrl = $this->generateUrl(
+				'csrdelft_profiel_addtogooglecontacts',
+				['uid' => $profiel->uid],
+				UrlGeneratorInterface::ABSOLUTE_URL
+			);
 			$this->googleSync->doRequestToken($addToContactsUrl);
 			$msg = $this->googleSync->syncLid($profiel);
 			setMelding('Opgeslagen in Google Contacts: ' . $msg, 1);
 		} catch (CsrException $e) {
-			setMelding("Opslaan in Google Contacts mislukt: " . $e->getMessage(), -1);
+			setMelding('Opslaan in Google Contacts mislukt: ' . $e->getMessage(), -1);
 		}
-		return $this->redirectToRoute('csrdelft_profiel_profiel', ['uid' => $profiel->uid]);
+		return $this->redirectToRoute('csrdelft_profiel_profiel', [
+			'uid' => $profiel->uid,
+		]);
 	}
-
 
 	/**
 	 * @param null $uid
@@ -544,8 +652,9 @@ class ProfielController extends AbstractController {
 	 * @Route("/leden/verjaardagen", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function verjaardagen(VerjaardagenService $verjaardagenService): Response
-	{
+	public function verjaardagen(
+		VerjaardagenService $verjaardagenService
+	): Response {
 		$nu = time();
 		return $this->render('verjaardagen/alle.html.twig', [
 			'dezemaand' => date('m', $nu),
@@ -563,10 +672,15 @@ class ProfielController extends AbstractController {
 	 * @Route("/profiel/{uid}/saldo/{timespan}", methods={"POST"}, requirements={"uid": ".{4}", "timespan": "\d+"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function saldo($uid, $timespan, SaldoGrafiekService $saldoGrafiekService): JsonResponse
-	{
+	public function saldo(
+		$uid,
+		$timespan,
+		SaldoGrafiekService $saldoGrafiekService
+	): JsonResponse {
 		if ($saldoGrafiekService->magGrafiekZien($uid)) {
-			return new JsonResponse($saldoGrafiekService->getDataPoints($uid, $timespan));
+			return new JsonResponse(
+				$saldoGrafiekService->getDataPoints($uid, $timespan)
+			);
 		} else {
 			throw $this->createAccessDeniedException();
 		}
@@ -588,7 +702,11 @@ class ProfielController extends AbstractController {
 
 		$response = new Response(null, 200, ['Content-Type' => 'text/x-vcard']);
 
-		return $this->render('profiel/vcard.ical.twig', ['profiel' => $profiel], $response);
+		return $this->render(
+			'profiel/vcard.ical.twig',
+			['profiel' => $profiel],
+			$response
+		);
 	}
 
 	/**
@@ -599,6 +717,8 @@ class ProfielController extends AbstractController {
 	 */
 	public function kaartje($uid): Response
 	{
-		return $this->render('profiel/kaartje.html.twig', ['profiel' => $this->profielRepository->get($uid)]);
+		return $this->render('profiel/kaartje.html.twig', [
+			'profiel' => $this->profielRepository->get($uid),
+		]);
 	}
 }

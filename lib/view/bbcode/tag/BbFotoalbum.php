@@ -38,8 +38,8 @@ use Twig\Environment;
  * @example [fotoalbum slider interval=10 random height=200]/pad/naar/album[/fotoalbum]
  * @example [fotoalbum]laatste[/fotoalbum]
  */
-class BbFotoalbum extends BbTag {
-
+class BbFotoalbum extends BbTag
+{
 	/**
 	 * @var array
 	 */
@@ -61,32 +61,45 @@ class BbFotoalbum extends BbTag {
 	 */
 	private $albumUrl;
 
-	public function __construct(FotoAlbumRepository $fotoAlbumRepository, Environment $twig) {
+	public function __construct(
+		FotoAlbumRepository $fotoAlbumRepository,
+		Environment $twig
+	) {
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
 		$this->twig = $twig;
 	}
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'fotoalbum';
 	}
 	public function isAllowed()
 	{
-		return ($this->album != null && $this->album->magBekijken()) || ($this->album == null && LoginService::mag(P_LOGGED_IN));
+		return ($this->album != null && $this->album->magBekijken()) ||
+			($this->album == null && LoginService::mag(P_LOGGED_IN));
 	}
 
-	public function renderLight() {
+	public function renderLight()
+	{
 		$album = $this->album;
 		$beschrijving = count($album->getFotos()) . ' foto\'s';
 		$cover = getCsrRoot() . $album->getCoverUrl();
-		return BbHelper::lightLinkBlock('fotoalbum', $album->getUrl(), $album->dirname, $beschrijving, $cover);
+		return BbHelper::lightLinkBlock(
+			'fotoalbum',
+			$album->getUrl(),
+			$album->dirname,
+			$beschrijving,
+			$cover
+		);
 	}
 
-	public function render() {
+	public function render()
+	{
 		$album = $this->album;
 		$arguments = $this->arguments;
 		if (isset($arguments['slider'])) {
 			return $this->twig->render('fotoalbum/slider.html.twig', [
-				'fotos' => array_shuffle($album->getFotos())
+				'fotos' => array_shuffle($album->getFotos()),
 			]);
 		} else {
 			$view = new FotoAlbumBBView($album);
@@ -95,10 +108,10 @@ class BbFotoalbum extends BbTag {
 				$view->makeCompact();
 			}
 			if (isset($arguments['rows'])) {
-				$view->setRows((int)$arguments['rows']);
+				$view->setRows((int) $arguments['rows']);
 			}
 			if (isset($arguments['perrow'])) {
-				$view->setPerRow((int)$arguments['perrow']);
+				$view->setPerRow((int) $arguments['perrow']);
 			}
 			if (isset($arguments['bigfirst'])) {
 				$view->setBig(0);
@@ -119,7 +132,8 @@ class BbFotoalbum extends BbTag {
 	 * @return bool|FotoAlbum|FotoTagAlbum|null
 	 * @throws BbException
 	 */
-	private function getAlbum(string $url) {
+	private function getAlbum(string $url)
+	{
 		try {
 			if ($url === 'laatste') {
 				$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();
@@ -149,7 +163,11 @@ class BbFotoalbum extends BbTag {
 		$this->arguments = $arguments;
 		$this->album = $this->getAlbum($this->albumUrl);
 		if ($this->album == null) {
-			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($this->albumUrl) . '</div>');
+			throw new BbException(
+				'<div class="bb-block">Fotoalbum niet gevonden: ' .
+					htmlspecialchars($this->albumUrl) .
+					'</div>'
+			);
 		}
 	}
 }

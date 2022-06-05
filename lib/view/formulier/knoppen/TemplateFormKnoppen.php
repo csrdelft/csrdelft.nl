@@ -1,14 +1,11 @@
 <?php
 
-
 namespace CsrDelft\view\formulier\knoppen;
-
 
 use Twig\Environment;
 
 class TemplateFormKnoppen extends FormKnoppen
 {
-
 	/**
 	 * @var Environment
 	 */
@@ -22,7 +19,8 @@ class TemplateFormKnoppen extends FormKnoppen
 	 */
 	private $options;
 
-	public function __construct(Environment $twig, $template, $options = []) {
+	public function __construct(Environment $twig, $template, $options = [])
+	{
 		parent::__construct();
 		$this->twig = $twig;
 		$this->template = $template;
@@ -33,5 +31,4 @@ class TemplateFormKnoppen extends FormKnoppen
 	{
 		return $this->twig->render($this->template, $this->options);
 	}
-
 }

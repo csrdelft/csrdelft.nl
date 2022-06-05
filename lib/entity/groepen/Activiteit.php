@@ -12,7 +12,6 @@ use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-
 /**
  * Activiteit.class.php
  *
@@ -20,7 +19,10 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\ActiviteitenRepository")
  */
-class Activiteit extends Groep implements Agendeerbaar, HeeftAanmeldLimiet, HeeftSoort
+class Activiteit extends Groep implements
+	Agendeerbaar,
+	HeeftAanmeldLimiet,
+	HeeftSoort
 {
 	use GroepMoment;
 	use GroepAanmeldMoment;
@@ -57,32 +59,48 @@ class Activiteit extends Groep implements Agendeerbaar, HeeftAanmeldLimiet, Heef
 	 * @param Enum $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null)
-	{
+	public static function magAlgemeen(
+		$action,
+		$allowedAuthenticationMethods = null,
+		$soort = null
+	) {
 		if ($soort && $soort instanceof ActiviteitSoort) {
 			switch ($soort) {
-
 				case ActiviteitSoort::OWee():
-					if (LoginService::mag('commissie:OWeeCie', $allowedAuthenticationMethods)) {
+					if (
+						LoginService::mag(
+							'commissie:OWeeCie',
+							$allowedAuthenticationMethods
+						)
+					) {
 						return true;
 					}
 					break;
 
 				case ActiviteitSoort::Dies():
-					if (LoginService::mag('commissie:DiesCie', $allowedAuthenticationMethods)) {
+					if (
+						LoginService::mag(
+							'commissie:DiesCie',
+							$allowedAuthenticationMethods
+						)
+					) {
 						return true;
 					}
 					break;
 
 				case ActiviteitSoort::Lustrum():
-					if (LoginService::mag('commissie:LustrumCie', $allowedAuthenticationMethods)) {
+					if (
+						LoginService::mag(
+							'commissie:LustrumCie',
+							$allowedAuthenticationMethods
+						)
+					) {
 						return true;
 					}
 					break;
 			}
 		}
 		switch ($action) {
-
 			case AccessAction::Aanmaken():
 			case AccessAction::Aanmelden():
 			case AccessAction::Bewerken():
@@ -122,9 +140,9 @@ class Activiteit extends Groep implements Agendeerbaar, HeeftAanmeldLimiet, Heef
 	public function isTransparant()
 	{
 		// Toon als transparant (vrij) als lid dat wil, activiteit hele dag(en) duurt of lid niet ingeketzt is
-		return lid_instelling('agenda', 'transparantICal') === 'ja'
-			|| $this->isHeledag()
-			|| !$this->getLid(LoginService::getUid());
+		return lid_instelling('agenda', 'transparantICal') === 'ja' ||
+			$this->isHeledag() ||
+			!$this->getLid(LoginService::getUid());
 	}
 
 	public function isHeledag()

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\entity\bar;
-
 
 use CsrDelft\entity\profiel\Profiel;
 use Doctrine\ORM\Mapping as ORM;

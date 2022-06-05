@@ -21,7 +21,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  *
@@ -190,7 +189,8 @@ class Groep implements DataTableEntry, DisplayEntity
 		try {
 			$iterator = $leden->getIterator();
 			$iterator->uasort(function (GroepLid $a, GroepLid $b) {
-				return strcmp($a->profiel->achternaam, $b->profiel->achternaam) ?: strnatcmp($a->uid, $b->uid);
+				return strcmp($a->profiel->achternaam, $b->profiel->achternaam) ?:
+					strnatcmp($a->uid, $b->uid);
 			});
 		} catch (Exception $e) {
 			return $leden;
@@ -205,9 +205,11 @@ class Groep implements DataTableEntry, DisplayEntity
 		/** @var GroepRepository $repo */
 		$repo = $em->getRepository(get_class($this));
 
-		$result = $repo->createQueryBuilder('g')
+		$result = $repo
+			->createQueryBuilder('g')
 			->select('DISTINCT g.familie')
-			->getQuery()->getScalarResult();
+			->getQuery()
+			->getScalarResult();
 
 		return array_map(function ($e) {
 			return $e['familie'];
@@ -221,14 +223,19 @@ class Groep implements DataTableEntry, DisplayEntity
 		} elseif ($this instanceof Commissie || $this instanceof Bestuur) {
 			$suggesties = CommissieFunctie::getEnumValues();
 		} else {
-			$suggesties = array_unique($this->getLeden()->map(function (GroepLid $lid) {
-				return $lid->opmerking;
-			})->toArray());
+			$suggesties = array_unique(
+				$this->getLeden()
+					->map(function (GroepLid $lid) {
+						return $lid->opmerking;
+					})
+					->toArray()
+			);
 		}
 		return $suggesties;
 	}
 
-	public function magWijzigen($allowedAuthenticationMethods = null) {
+	public function magWijzigen($allowedAuthenticationMethods = null)
+	{
 		return $this->mag(AccessAction::Wijzigen(), $allowedAuthenticationMethods);
 	}
 
@@ -239,27 +246,37 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public function mag(AccessAction $action, $allowedAuthenticationMethods = null)
-	{
+	public function mag(
+		AccessAction $action,
+		$allowedAuthenticationMethods = null
+	) {
 		if (!LoginService::mag(P_LOGGED_IN, $allowedAuthenticationMethods)) {
 			return false;
 		}
 
-		if (in_array(GroepAanmeldLimiet::class, class_uses($this)) && !$this->magAanmeldLimiet($action)) {
+		if (
+			in_array(GroepAanmeldLimiet::class, class_uses($this)) &&
+			!$this->magAanmeldLimiet($action)
+		) {
 			return false;
 		}
 
-		if (in_array(GroepAanmeldMoment::class, class_uses($this)) && !$this->magAanmeldMoment($action)) {
+		if (
+			in_array(GroepAanmeldMoment::class, class_uses($this)) &&
+			!$this->magAanmeldMoment($action)
+		) {
 			return false;
 		}
 
-		if (in_array(GroepAanmeldRechten::class, class_uses($this)) && !$this->magAanmeldRechten($action)) {
+		if (
+			in_array(GroepAanmeldRechten::class, class_uses($this)) &&
+			!$this->magAanmeldRechten($action)
+		) {
 			return false;
 		}
 
 		$aangemeld = $this->getLid(LoginService::getUid()) != null;
 		switch ($action) {
-
 			case AccessAction::Aanmelden():
 				if ($aangemeld) {
 					return false;
@@ -295,7 +312,9 @@ class Groep implements DataTableEntry, DisplayEntity
 			return null;
 		}
 
-		return $this->getLeden()->matching(Eisen::voorGebruiker($uid))->first();
+		return $this->getLeden()
+			->matching(Eisen::voorGebruiker($uid))
+			->first();
 	}
 
 	/**
@@ -306,10 +325,12 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * @param null $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null)
-	{
+	public static function magAlgemeen(
+		AccessAction $action,
+		$allowedAuthenticationMethods = null,
+		$soort = null
+	) {
 		switch ($action) {
-
 			case AccessAction::Bekijken():
 				return LoginService::mag(P_LEDEN_READ, $allowedAuthenticationMethods);
 
@@ -320,7 +341,10 @@ class Groep implements DataTableEntry, DisplayEntity
 				return false;
 		}
 		// Moderators mogen alles
-		return LoginService::mag(P_LEDEN_MOD . ',groep:P_GROEP:_MOD', $allowedAuthenticationMethods);
+		return LoginService::mag(
+			P_LEDEN_MOD . ',groep:P_GROEP:_MOD',
+			$allowedAuthenticationMethods
+		);
 	}
 
 	/**
@@ -364,6 +388,6 @@ class Groep implements DataTableEntry, DisplayEntity
 
 	public function getWeergave(): string
 	{
-		return $this->naam ?? "";
+		return $this->naam ?? '';
 	}
 }

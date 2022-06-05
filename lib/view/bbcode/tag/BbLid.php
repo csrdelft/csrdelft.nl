@@ -17,8 +17,8 @@ use CsrDelft\view\bbcode\BbHelper;
  * @example [lid=0436]
  * @example [lid]0436[/lid]
  */
-class BbLid extends BbTag {
-
+class BbLid extends BbTag
+{
 	/**
 	 * @var ProfielRepository
 	 */
@@ -28,32 +28,44 @@ class BbLid extends BbTag {
 	 */
 	public $uid;
 
-	public function __construct(ProfielRepository $profielRepository) {
+	public function __construct(ProfielRepository $profielRepository)
+	{
 		$this->profielRepository = $profielRepository;
 	}
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'lid';
 	}
 
-	public function isAllowed() {
-		return LoginService::mag(P_LEDEN_READ . "," . P_OUDLEDEN_READ);
+	public function isAllowed()
+	{
+		return LoginService::mag(P_LEDEN_READ . ',' . P_OUDLEDEN_READ);
 	}
 
-	public function renderLight() {
+	public function renderLight()
+	{
 		$profiel = $this->getProfiel();
-		return BbHelper::lightLinkInline($this->env, 'lid', '/profiel/' . $profiel->uid, $profiel->getNaam('user'));
+		return BbHelper::lightLinkInline(
+			$this->env,
+			'lid',
+			'/profiel/' . $profiel->uid,
+			$profiel->getNaam('user')
+		);
 	}
 
 	/**
 	 * @return Profiel
 	 * @throws BbException
 	 */
-	public function getProfiel() {
+	public function getProfiel()
+	{
 		$profiel = $this->profielRepository->find($this->uid);
 
 		if (!$profiel) {
-			throw new BbException('[lid] ' . htmlspecialchars($this->uid) . '] &notin; db.');
+			throw new BbException(
+				'[lid] ' . htmlspecialchars($this->uid) . '] &notin; db.'
+			);
 		}
 
 		return $profiel;
@@ -63,7 +75,8 @@ class BbLid extends BbTag {
 	 * @return string
 	 * @throws BbException
 	 */
-	public function render() {
+	public function render()
+	{
 		$profiel = $this->getProfiel();
 		return $profiel->getLink('user');
 	}
@@ -71,7 +84,8 @@ class BbLid extends BbTag {
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []) {
+	public function parse($arguments = [])
+	{
 		$this->uid = $this->readMainArgument($arguments);
 	}
 }

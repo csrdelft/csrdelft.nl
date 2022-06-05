@@ -17,30 +17,55 @@ use CsrDelft\view\formulier\ModalForm;
  * Formulier voor nieuwe periodieke maaltijden.
  *
  */
-class RepetitieMaaltijdenForm extends ModalForm {
-
-	public function __construct(RepetitieMaaltijdMaken $repetitie) {
-		parent::__construct($repetitie, '/maaltijden/beheer/aanmaken/' . $repetitie->mlt_repetitie_id);
+class RepetitieMaaltijdenForm extends ModalForm
+{
+	public function __construct(RepetitieMaaltijdMaken $repetitie)
+	{
+		parent::__construct(
+			$repetitie,
+			'/maaltijden/beheer/aanmaken/' . $repetitie->mlt_repetitie_id
+		);
 		$this->titel = 'Periodieke maaltijden aanmaken';
 
 		$fields = [];
-		$fields[] = new HtmlComment('<p>Aanmaken <span class="dikgedrukt">' . $repetitie->periode . '</span> op <span class="dikgedrukt">' . $repetitie->dag . '</span> in de periode:</p>');
-		$fields['begin'] = new DateObjectField('begin_moment', $repetitie->begin_moment, 'Vanaf', date('Y') + 1, date('Y'));
-		$fields['eind'] = new DateObjectField('eind_moment', $repetitie->eind_moment, 'Tot en met', date('Y') + 1, date('Y'));
+		$fields[] = new HtmlComment(
+			'<p>Aanmaken <span class="dikgedrukt">' .
+				$repetitie->periode .
+				'</span> op <span class="dikgedrukt">' .
+				$repetitie->dag .
+				'</span> in de periode:</p>'
+		);
+		$fields['begin'] = new DateObjectField(
+			'begin_moment',
+			$repetitie->begin_moment,
+			'Vanaf',
+			date('Y') + 1,
+			date('Y')
+		);
+		$fields['eind'] = new DateObjectField(
+			'eind_moment',
+			$repetitie->eind_moment,
+			'Tot en met',
+			date('Y') + 1,
+			date('Y')
+		);
 
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		$valid = parent::validate();
 		$fields = $this->getFields();
-		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {
+		if (
+			strtotime($fields['eind']->getValue()) <
+			strtotime($fields['begin']->getValue())
+		) {
 			$fields['eind']->error = 'Moet na begindatum liggen';
 			$valid = false;
 		}
 		return $valid;
 	}
-
 }

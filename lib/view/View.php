@@ -10,9 +10,9 @@ namespace CsrDelft\view;
  * Een View heeft een methode om een model aan de gebruiker te tonen.
  *
  */
-interface View {
-
-//	public function view();
+interface View
+{
+	//	public function view();
 
 	public function getTitel();
 

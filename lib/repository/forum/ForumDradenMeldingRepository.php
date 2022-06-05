@@ -29,13 +29,17 @@ use Twig\Environment;
  * @method ForumDraadMelding[]    findAll()
  * @method ForumDraadMelding[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ForumDradenMeldingRepository extends AbstractRepository {
-
-	public function __construct(ManagerRegistry $registry) {
+class ForumDradenMeldingRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, ForumDraadMelding::class);
 	}
 
-	public function setNiveauVoorLid(ForumDraad $draad, ForumDraadMeldingNiveau $niveau) {
+	public function setNiveauVoorLid(
+		ForumDraad $draad,
+		ForumDraadMeldingNiveau $niveau
+	) {
 		$uid = LoginService::getUid();
 		$voorkeur = $this->find(['draad_id' => $draad->draad_id, 'uid' => $uid]);
 		if ($voorkeur) {
@@ -47,7 +51,11 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		}
 	}
 
-	protected function maakForumDraadMelding(ForumDraad $draad, $uid, ForumDraadMeldingNiveau $niveau) {
+	protected function maakForumDraadMelding(
+		ForumDraad $draad,
+		$uid,
+		ForumDraadMeldingNiveau $niveau
+	) {
 		$melding = new ForumDraadMelding();
 		$melding->draad = $draad;
 		$melding->draad_id = $draad->draad_id;
@@ -59,23 +67,31 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		return $melding;
 	}
 
-	public function stopAlleMeldingenVoorLeden(array $uids) {
+	public function stopAlleMeldingenVoorLeden(array $uids)
+	{
 		$this->createQueryBuilder('m')
 			->where('m.uid in (:uids)')
 			->setParameter('uids', $uids)
 			->delete()
-			->getQuery()->execute();
+			->getQuery()
+			->execute();
 	}
 
-	public function stopMeldingenVoorIedereen(array $draadIds) {
+	public function stopMeldingenVoorIedereen(array $draadIds)
+	{
 		$this->createQueryBuilder('m')
 			->where('m.draad_id in (:draad_ids)')
 			->setParameter('draad_ids', $draadIds)
 			->delete()
-			->getQuery()->execute();
+			->getQuery()
+			->execute();
 	}
 
-	public function getAltijdMeldingVoorDraad(ForumDraad $draad) {
-		return $this->findBy(['draad_id' => $draad->draad_id, 'niveau' => ForumDraadMeldingNiveau::ALTIJD()]);
+	public function getAltijdMeldingVoorDraad(ForumDraad $draad)
+	{
+		return $this->findBy([
+			'draad_id' => $draad->draad_id,
+			'niveau' => ForumDraadMeldingNiveau::ALTIJD(),
+		]);
 	}
 }

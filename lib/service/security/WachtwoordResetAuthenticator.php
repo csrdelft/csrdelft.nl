@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\service\security;
-
 
 use CsrDelft\common\Mail;
 use CsrDelft\controller\WachtwoordController;
@@ -57,8 +55,7 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 		OneTimeTokensRepository $oneTimeTokensRepository,
 		AccountService $accountService,
 		MailService $mailService
-	)
-	{
+	) {
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 		$this->httpUtils = $httpUtils;
 		$this->twig = $twig;
@@ -75,14 +72,21 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 	{
 		$token = $request->getSession()->get('wachtwoord_reset_token');
 
-		$user = $this->oneTimeTokensRepository->verifyToken('/wachtwoord/reset', $token);
+		$user = $this->oneTimeTokensRepository->verifyToken(
+			'/wachtwoord/reset',
+			$token
+		);
 
 		if (!$user) {
 			$request->getSession()->remove('wachtwoord_reset_token');
 			throw new AuthenticationException();
 		}
 
-		$form = new WachtwoordWijzigenForm($user, $this->httpUtils->generateUri($request, 'wachtwoord_reset'), false);
+		$form = new WachtwoordWijzigenForm(
+			$user,
+			$this->httpUtils->generateUri($request, 'wachtwoord_reset'),
+			false
+		);
 
 		if ($form->validate()) {
 			// wachtwoord opslaan
@@ -93,14 +97,24 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 
 			// token verbruikt
 			// (pas na wachtwoord opslaan om meedere pogingen toe te staan als wachtwoord niet aan eisen voldoet)
-			$this->oneTimeTokensRepository->discardToken($user->uid, '/wachtwoord/reset');
+			$this->oneTimeTokensRepository->discardToken(
+				$user->uid,
+				'/wachtwoord/reset'
+			);
 
 			// stuur bevestigingsmail
 			$profiel = $user->profiel;
-			$bericht = $this->twig->render('mail/bericht/wachtwoordresetsucces.mail.twig', [
-				'naam' => $profiel->getNaam('civitas'),
-			]);
-			$mail = new Mail(array($user->email => $profiel->getNaam()), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
+			$bericht = $this->twig->render(
+				'mail/bericht/wachtwoordresetsucces.mail.twig',
+				[
+					'naam' => $profiel->getNaam('civitas'),
+				]
+			);
+			$mail = new Mail(
+				[$user->email => $profiel->getNaam()],
+				'[C.S.R. webstek] Nieuw wachtwoord ingesteld',
+				$bericht
+			);
 			$this->mailService->send($mail);
 
 			$badge = new UserBadge($user->getUsername(), function () use ($user) {
@@ -113,13 +127,20 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 		throw new AuthenticationException();
 	}
 
-	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-	{
-		return new RedirectResponse($this->httpUtils->generateUri($request, 'default'));
+	public function onAuthenticationSuccess(
+		Request $request,
+		TokenInterface $token,
+		string $firewallName
+	): ?Response {
+		return new RedirectResponse(
+			$this->httpUtils->generateUri($request, 'default')
+		);
 	}
 
-	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
-	{
+	public function onAuthenticationFailure(
+		Request $request,
+		AuthenticationException $exception
+	): ?Response {
 		return null;
 	}
 }

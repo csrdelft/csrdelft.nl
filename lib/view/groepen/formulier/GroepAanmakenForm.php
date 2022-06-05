@@ -7,14 +7,16 @@ use CsrDelft\repository\GroepRepository;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
-class GroepAanmakenForm extends ModalForm {
-
-	public function __construct(
-		GroepRepository $huidig,
-		$soort = null
-	) {
+class GroepAanmakenForm extends ModalForm
+{
+	public function __construct(GroepRepository $huidig, $soort = null)
+	{
 		$groep = $huidig->nieuw($soort);
-		parent::__construct($groep, $huidig->getUrl() . '/nieuw', 'Nieuwe ketzer aanmaken');
+		parent::__construct(
+			$groep,
+			$huidig->getUrl() . '/nieuw',
+			'Nieuwe ketzer aanmaken'
+		);
 		$this->css_classes[] = 'redirect';
 
 		$default = get_class($huidig);
@@ -32,8 +34,9 @@ class GroepAanmakenForm extends ModalForm {
 		$this->formKnoppen->submit->label = 'Aanmaken';
 	}
 
-	public function getValues() {
-		$return = array();
+	public function getValues()
+	{
+		$return = [];
 		$value = $this->findByName('model')->getValue();
 		$values = explode('_', $value, 2);
 		$return['model'] = $values[0];
@@ -44,5 +47,4 @@ class GroepAanmakenForm extends ModalForm {
 		}
 		return $return;
 	}
-
 }

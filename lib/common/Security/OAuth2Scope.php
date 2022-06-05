@@ -1,24 +1,23 @@
 <?php
 
-
 namespace CsrDelft\common\Security;
-
 
 use CsrDelft\common\CsrException;
 use Trikoder\Bundle\OAuth2Bundle\Model\Scope;
 
 class OAuth2Scope
 {
-	const PROFIEL_EMAIL = "PROFIEL:EMAIL";
-	const BAR_NORMAAL = "BAR:NORMAAL";
-	const BAR_BEHEER = "BAR:BEHEER";
-	const BAR_TRUST = "BAR:TRUST";
-	const WIKI_BESTUUR = "WIKI:BESTUUR";
+	const PROFIEL_EMAIL = 'PROFIEL:EMAIL';
+	const BAR_NORMAAL = 'BAR:NORMAAL';
+	const BAR_BEHEER = 'BAR:BEHEER';
+	const BAR_TRUST = 'BAR:TRUST';
+	const WIKI_BESTUUR = 'WIKI:BESTUUR';
 
 	const BESCHRIJVING = [
 		self::PROFIEL_EMAIL => 'Lezen van primair emailadres',
 		self::BAR_NORMAAL => 'Het bar systeem gebruiken om drankjes te strepen.',
-		self::BAR_BEHEER => 'Het bar systeem gebruiken om in te leggen en bijnamen aan te passen.',
+		self::BAR_BEHEER =>
+			'Het bar systeem gebruiken om in te leggen en bijnamen aan te passen.',
 		self::BAR_TRUST => 'Een bar systeem installeren.',
 		self::WIKI_BESTUUR => 'Bestuurswiki lezen.',
 	];
@@ -43,15 +42,16 @@ class OAuth2Scope
 	 */
 	public static function magScope($scope)
 	{
-		if (isset(self::MAG[(string)$scope])) {
-			return self::MAG[(string)$scope];
+		if (isset(self::MAG[(string) $scope])) {
+			return self::MAG[(string) $scope];
 		}
 
 		throw new CsrException("Scope $scope heeft geen rechten gedefinieerd");
 	}
 
-	public static function isOptioneel($scope) {
-		if (isset(self::OPTIONAL[(string)$scope])) {
+	public static function isOptioneel($scope)
+	{
+		if (isset(self::OPTIONAL[(string) $scope])) {
 			return true;
 		}
 
@@ -64,8 +64,8 @@ class OAuth2Scope
 	 */
 	public static function getBeschrijving($scope)
 	{
-		if (isset(self::BESCHRIJVING[(string)$scope])) {
-			return self::BESCHRIJVING[(string)$scope];
+		if (isset(self::BESCHRIJVING[(string) $scope])) {
+			return self::BESCHRIJVING[(string) $scope];
 		}
 
 		throw new CsrException("Scope $scope heeft geen beschrijving");

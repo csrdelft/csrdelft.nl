@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\common\Doctrine\Type;
-
 
 use CsrDelft\model\entity\profiel\ProfielCreateLogGroup;
 use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;
@@ -16,15 +14,18 @@ use CsrDelft\model\entity\profiel\UnparsedProfielLogGroup;
 use DateTime;
 use DateTimeImmutable;
 
-class ChangeLogType extends SafeJsonType {
+class ChangeLogType extends SafeJsonType
+{
 	/**
 	 * @inheritDoc
 	 */
-	public function getName() {
+	public function getName()
+	{
 		return 'changelog';
 	}
 
-	protected function getAcceptedTypes() {
+	protected function getAcceptedTypes()
+	{
 		return [
 			ProfielLogGroup::class,
 			ProfielCreateLogGroup::class,
@@ -36,7 +37,7 @@ class ChangeLogType extends SafeJsonType {
 			ProfielUpdateLogGroup::class,
 			UnparsedProfielLogGroup::class,
 			DateTime::class,
-			DateTimeImmutable::class
+			DateTimeImmutable::class,
 		];
 	}
 }

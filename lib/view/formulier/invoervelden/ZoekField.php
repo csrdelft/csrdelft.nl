@@ -12,7 +12,6 @@ use CsrDelft\service\security\LoginService;
  */
 class ZoekField extends AutocompleteField
 {
-
 	public $type = 'search';
 
 	public function __construct($name)
@@ -28,14 +27,19 @@ if (event.keyCode === 191 || event.keyCode === 220) { // forward and backward sl
 }
 JS;
 		if (LoginService::mag(P_LEDEN_READ)) {
-
-			$menuRepository = ContainerFacade::getContainer()->get(MenuItemRepository::class);
+			$menuRepository = ContainerFacade::getContainer()->get(
+				MenuItemRepository::class
+			);
 
 			if (lid_instelling('zoeken', 'favorieten') === 'ja') {
-				$this->addSuggestions($menuRepository->getMenu(LoginService::getUid())->children);
+				$this->addSuggestions(
+					$menuRepository->getMenu(LoginService::getUid())->children
+				);
 			}
 			if (lid_instelling('zoeken', 'menu') === 'ja') {
-				$this->addSuggestions($menuRepository->flattenMenu($menuRepository->getMenu('main')));
+				$this->addSuggestions(
+					$menuRepository->flattenMenu($menuRepository->getMenu('main'))
+				);
 			}
 
 			$this->suggestions[] = '/zoeken?q=';
@@ -50,25 +54,28 @@ JS;
 		foreach ($list as $item) {
 			$parent = $item->parent;
 			if ($parent && $parent->tekst != 'main') {
-				if ($parent->tekst == LoginService::getUid()) { // werkomheen
+				if ($parent->tekst == LoginService::getUid()) {
+					// werkomheen
 					$parent->tekst = 'Favorieten';
 				}
 				$label = $parent->tekst;
 			} else {
 				$label = 'Menu';
 			}
-			$this->suggestions[''][] = array(
+			$this->suggestions[''][] = [
 				'url' => $item->link,
 				'label' => $label,
-				'value' => $item->tekst
-			);
+				'value' => $item->tekst,
+			];
 		}
 	}
 
 	public function __toString()
 	{
 		$html = '';
-		$lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
+		$lidInstellingenRepository = ContainerFacade::getContainer()->get(
+			LidInstellingenRepository::class
+		);
 		foreach ($lidInstellingenRepository->getModuleKeys('zoeken') as $option) {
 			$html .= '<a class="dropdown-item disabled" href="#">';
 			$instelling = lid_instelling('zoeken', $option);
@@ -121,5 +128,4 @@ JS;
 </div>
 HTML;
 	}
-
 }

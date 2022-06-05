@@ -17,18 +17,20 @@ use CsrDelft\view\bbcode\BbHelper;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @example [twitter][/twitter]
  */
-class BbTwitter extends BbTag {
-
+class BbTwitter extends BbTag
+{
 	/**
 	 * @var string
 	 */
 	public $url;
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'twitter';
 	}
 
-	public function renderLight() {
+	public function renderLight()
+	{
 		return BbHelper::lightLinkBlock(
 			'twitter',
 			'https://twitter.com/' . $this->url,
@@ -37,11 +39,11 @@ class BbTwitter extends BbTag {
 		);
 	}
 
-	public function render() {
+	public function render()
+	{
 		// widget size
 		$width = 580;
 		$height = 300;
-
 
 		$script = <<<HTML
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -69,7 +71,6 @@ HTML;
 </a>
 {$script}
 HTML;
-
 	}
 
 	/**
@@ -83,7 +84,7 @@ HTML;
 			$this->url = 'https://twitter.com/' . $this->url;
 		}
 		if (!preg_match('^https?://(www.)?twitter.com/', $this->url)) {
-			throw new BbException("Not a valid twitter url");
+			throw new BbException('Not a valid twitter url');
 		}
 	}
 }

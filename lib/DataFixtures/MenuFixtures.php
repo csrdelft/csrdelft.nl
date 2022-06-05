@@ -6,21 +6,44 @@ use CsrDelft\entity\MenuItem;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class MenuFixtures extends Fixture {
-	public function load(ObjectManager $manager) {
+class MenuFixtures extends Fixture
+{
+	public function load(ObjectManager $manager)
+	{
 		$mainMenuItem = $this->nieuwMenuItem(null, 0, 'main', '/', true, P_PUBLIC);
 		$manager->persist($mainMenuItem);
 
-		$personalMenuItem = $this->nieuwMenuItem(null, 5, 'Personal', '/profiel', true, P_LOGGED_IN);
+		$personalMenuItem = $this->nieuwMenuItem(
+			null,
+			5,
+			'Personal',
+			'/profiel',
+			true,
+			P_LOGGED_IN
+		);
 		$manager->persist($personalMenuItem);
 
-		$remoteForaMenuItem = $this->nieuwMenuItem(null, 0, 'remotefora', '/', true, P_PUBLIC);
+		$remoteForaMenuItem = $this->nieuwMenuItem(
+			null,
+			0,
+			'remotefora',
+			'/',
+			true,
+			P_PUBLIC
+		);
 		$manager->persist($remoteForaMenuItem);
 
 		$manager->flush();
 	}
 
-	private function nieuwMenuItem($parent, $volgorde, $tekst, $link, $zichtbaar, $rechten_bekijken) {
+	private function nieuwMenuItem(
+		$parent,
+		$volgorde,
+		$tekst,
+		$link,
+		$zichtbaar,
+		$rechten_bekijken
+	) {
 		$menuItem = new MenuItem();
 		$menuItem->parent = $parent;
 		$menuItem->volgorde = $volgorde;

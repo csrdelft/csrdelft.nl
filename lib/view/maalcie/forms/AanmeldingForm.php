@@ -18,15 +18,21 @@ use CsrDelft\view\formulier\ModalForm;
  * Formulier voor een nieuwe of te verwijderen maaltijd-aanmelding.
  *
  */
-class AanmeldingForm extends ModalForm {
-
+class AanmeldingForm extends ModalForm
+{
 	/**
 	 * AanmeldingForm constructor.
 	 * @param MaaltijdAanmeldingDTO $aanmeldingDTO
 	 * @param boolean $nieuw
 	 */
-	public function __construct(MaaltijdAanmeldingDTO $aanmeldingDTO, bool $nieuw) {
-		parent::__construct($aanmeldingDTO, '/maaltijden/beheer/' . ($nieuw ? 'aanmelden' : 'afmelden'), true, true);
+	public function __construct(MaaltijdAanmeldingDTO $aanmeldingDTO, bool $nieuw)
+	{
+		parent::__construct(
+			$aanmeldingDTO,
+			'/maaltijden/beheer/' . ($nieuw ? 'aanmelden' : 'afmelden'),
+			true,
+			true
+		);
 
 		if ($nieuw) {
 			$this->titel = 'Aanmelding toevoegen/aanpassen';
@@ -36,14 +42,24 @@ class AanmeldingForm extends ModalForm {
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields = [];
-		$fields[] = new RequiredProfielEntityField('voor_lid', $aanmeldingDTO->voor_lid, 'Naam of lidnummer', 'leden');
+		$fields[] = new RequiredProfielEntityField(
+			'voor_lid',
+			$aanmeldingDTO->voor_lid,
+			'Naam of lidnummer',
+			'leden'
+		);
 		if ($nieuw) {
-			$fields[] = new RequiredIntField('aantal_gasten', $aanmeldingDTO->aantal_gasten, 'Aantal gasten', 0, 200);
+			$fields[] = new RequiredIntField(
+				'aantal_gasten',
+				$aanmeldingDTO->aantal_gasten,
+				'Aantal gasten',
+				0,
+				200
+			);
 		}
 
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen();
 	}
-
 }

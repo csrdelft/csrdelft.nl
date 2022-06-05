@@ -22,7 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 27/04/2018
  */
-class ToestemmingController extends AbstractController {
+class ToestemmingController extends AbstractController
+{
 	/**
 	 * @var LidToestemmingRepository
 	 */
@@ -32,7 +33,10 @@ class ToestemmingController extends AbstractController {
 	 */
 	private $cmsPaginaRepository;
 
-	public function __construct(LidToestemmingRepository $lidToestemmingRepository, CmsPaginaRepository $cmsPaginaRepository) {
+	public function __construct(
+		LidToestemmingRepository $lidToestemmingRepository,
+		CmsPaginaRepository $cmsPaginaRepository
+	) {
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
@@ -42,11 +46,11 @@ class ToestemmingController extends AbstractController {
 	 * @Route("/toestemming", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function POST_overzicht() {
+	public function POST_overzicht()
+	{
 		$form = new ToestemmingModalForm($this->lidToestemmingRepository);
 
 		if ($form->isPosted() && $form->validate()) {
-
 			$this->lidToestemmingRepository->saveForLid();
 			setMelding('Toestemming opgeslagen', 1);
 			return new CmsPaginaView($this->cmsPaginaRepository->find('thuis'));
@@ -100,12 +104,13 @@ class ToestemmingController extends AbstractController {
 	 * @Auth({P_LEDEN_MOD,P_ALBUM_MOD,"commissie:promocie:ht"})
 	 * @throws Exception
 	 */
-	public function lijst(Request $request) {
+	public function lijst(Request $request)
+	{
 		if (LoginService::mag(P_LEDEN_MOD)) {
 			$ids = ['foto_intern', 'foto_extern', 'vereniging', 'bijzonder'];
-		} else if (LoginService::mag(P_ALBUM_MOD)) {
+		} elseif (LoginService::mag(P_ALBUM_MOD)) {
 			$ids = ['foto_intern', 'foto_extern'];
-		} else if (LoginService::mag('commissie:promocie:ht')) {
+		} elseif (LoginService::mag('commissie:promocie:ht')) {
 			$ids = ['foto_intern', 'foto_extern'];
 		} else {
 			throw $this->createAccessDeniedException('Geen toegang');
@@ -117,11 +122,17 @@ class ToestemmingController extends AbstractController {
 			$filterStatus = [
 				'leden' => LidStatus::getLidLike(),
 				'oudleden' => LidStatus::getOudlidLike(),
-				'ledenoudleden' => array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike()),
+				'ledenoudleden' => array_merge(
+					LidStatus::getLidLike(),
+					LidStatus::getOudlidLike()
+				),
 				'iedereen' => LidStatus::getEnumValues(),
 			];
 
-			$toestemming = group_by('uid', $this->lidToestemmingRepository->getToestemmingForIds($ids));
+			$toestemming = group_by(
+				'uid',
+				$this->lidToestemmingRepository->getToestemmingForIds($ids)
+			);
 
 			$toestemmingFiltered = [];
 			foreach ($toestemming as $uid => $toestemmingen) {
@@ -135,7 +146,7 @@ class ToestemmingController extends AbstractController {
 			return new ToestemmingLijstResponse($toestemmingFiltered, $ids);
 		} else {
 			return $this->render('default.html.twig', [
-				'content' => new ToestemmingLijstTable($ids)
+				'content' => new ToestemmingLijstTable($ids),
 			]);
 		}
 	}

@@ -73,7 +73,8 @@ class DeclaratieBon
 		return $this;
 	}
 
-	public function isPDF(): bool {
+	public function isPDF(): bool
+	{
 		return str_ends_with(strtolower($this->getBestand()), '.pdf');
 	}
 
@@ -207,7 +208,9 @@ class DeclaratieBon
 	public function naarObject(UrlGeneratorInterface $generator): array
 	{
 		return [
-			'bestandsnaam' => $generator->generate('declaratie_download', ['path' => $this->bestand]),
+			'bestandsnaam' => $generator->generate('declaratie_download', [
+				'path' => $this->bestand,
+			]),
 			'datum' => $this->datum ? date_format($this->datum, 'd-m-Y') : null,
 			'id' => $this->id,
 			'regels' => array_map(function (DeclaratieRegel $a) {
@@ -218,7 +221,7 @@ class DeclaratieBon
 
 	public function magBekijken(): bool
 	{
-		return $this->getMaker()->uid === LoginService::getUid()
-			|| $this->getDeclaratie() && $this->getDeclaratie()->magBekijken();
+		return $this->getMaker()->uid === LoginService::getUid() ||
+			($this->getDeclaratie() && $this->getDeclaratie()->magBekijken());
 	}
 }

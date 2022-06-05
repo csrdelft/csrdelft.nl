@@ -27,11 +27,9 @@ class TestProsemirrorToBb extends CsrTestCase
 				'content' => [
 					[
 						'type' => 'text',
-						'marks' => [
-							['type' => 'bold'],
-						],
+						'marks' => [['type' => 'bold']],
 						'text' => 'vetgedrukt',
-					]
+					],
 				],
 			])
 		);
@@ -50,17 +48,12 @@ class TestProsemirrorToBb extends CsrTestCase
 				'content' => [
 					[
 						'type' => 'text',
-						'marks' => [
-							['type' => 'bold'],
-						],
+						'marks' => [['type' => 'bold']],
 						'text' => 'vetgedrukt en ',
 					],
 					[
 						'type' => 'text',
-						'marks' => [
-							['type' => 'bold'],
-							['type' => 'italic'],
-						],
+						'marks' => [['type' => 'bold'], ['type' => 'italic']],
 						'text' => 'schuingedrukt',
 					],
 				],
@@ -68,7 +61,8 @@ class TestProsemirrorToBb extends CsrTestCase
 		);
 	}
 
-	public function testLink() {
+	public function testLink()
+	{
 		$this->assertEquals(
 			'Een linkje naar: [url=https://google.com]Google[/url]',
 			$this->converter->convertToBb([
@@ -83,9 +77,9 @@ class TestProsemirrorToBb extends CsrTestCase
 						'text' => 'Google',
 						'marks' => [
 							['type' => 'link', 'attrs' => ['href' => 'https://google.com']],
-						]
-					]
-				]
+						],
+					],
+				],
 			])
 		);
 	}

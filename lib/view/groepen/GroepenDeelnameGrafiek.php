@@ -10,16 +10,17 @@ use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\Response;
 
-class GroepenDeelnameGrafiek implements View, ToResponse {
-
-	private $series = array();
-	private $step = array();
+class GroepenDeelnameGrafiek implements View, ToResponse
+{
+	private $series = [];
+	private $step = [];
 
 	/**
 	 * GroepenDeelnameGrafiek constructor.
 	 * @param Groep[] $groepen
 	 */
-	public function __construct($groepen) {
+	public function __construct($groepen)
+	{
 		$aantalMannen = [];
 		$aantalVrouwen = [];
 		$groepNamen = [];
@@ -46,11 +47,11 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 				/** @var GroepMoment $groep */
 				$groepJaren[] = $groep->beginMoment->format('Y');
 			} else {
-				$groepJaren[] = "000" . $index++;
+				$groepJaren[] = '000' . $index++;
 			}
 		}
 		$this->series = [
-			'labels'=> $groepNamen,
+			'labels' => $groepNamen,
 			'jaren' => $groepJaren,
 			'datasets' => [
 				[
@@ -62,24 +63,28 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 					'label' => 'Aantal vrouwen',
 					'data' => $aantalVrouwen,
 					'backgroundColor' => '#FFCBDB',
-				]
-			]
+				],
+			],
 		];
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return null;
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->series;
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return null;
 	}
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		$step = htmlspecialchars(json_encode($this->step));
 
 		$series = htmlspecialchars(json_encode($this->series));
@@ -91,11 +96,13 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 HTML;
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		return $this->getHtml();
 	}
 
-	public function toResponse(): Response {
+	public function toResponse(): Response
+	{
 		return new Response($this->getHtml());
 	}
 }

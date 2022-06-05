@@ -14,12 +14,13 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @since 30/03/2017
  * Uploaden van bestand in de browser over http(s).
  */
-class UploadFileField extends InputField {
-
+class UploadFileField extends InputField
+{
 	public $filterMime;
 	public $type = 'file';
 
-	public function __construct($name, array $filterMime) {
+	public function __construct($name, array $filterMime)
+	{
 		parent::__construct($name, null, 'Uploaden in browser');
 		$this->filterMime = $filterMime;
 		if ($this->isPosted()) {
@@ -36,65 +37,108 @@ class UploadFileField extends InputField {
 		}
 	}
 
-	public function isPosted() {
+	public function isPosted()
+	{
 		return isset($_FILES[$this->name]);
 	}
 
-	public function isAvailable() {
+	public function isAvailable()
+	{
 		return true;
 	}
 
-	public function getFilter() {
+	public function getFilter()
+	{
 		return $this->filterMime;
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		parent::validate();
 		if ($this->value['error'] == UPLOAD_ERR_NO_FILE) {
 			if ($this->required) {
 				$this->error = 'Selecteer een bestand';
 			}
 		} elseif ($this->value['error'] == UPLOAD_ERR_INI_SIZE) {
-			$this->error = 'Bestand is te groot: Maximaal ' . format_filesize(getMaximumFileUploadSize());
+			$this->error =
+				'Bestand is te groot: Maximaal ' .
+				format_filesize(getMaximumFileUploadSize());
 		} elseif ($this->value['error'] != UPLOAD_ERR_OK) {
 			$this->error = 'Upload-error: code ' . $this->value['error'];
-		} elseif (!is_uploaded_file($this->value['tmp_name']) OR empty($this->model->filesize)) {
-			$this->error = 'Bestand bestaat niet (meer): ' . htmlspecialchars($this->value['tmp_name']);
-		} elseif (!empty($this->filterMime) AND !in_array($this->model->mimetype, $this->filterMime)) {
-			$this->error = 'Bestandstype niet toegestaan: ' . htmlspecialchars($this->model->mimetype);
+		} elseif (
+			!is_uploaded_file($this->value['tmp_name']) or
+			empty($this->model->filesize)
+		) {
+			$this->error =
+				'Bestand bestaat niet (meer): ' .
+				htmlspecialchars($this->value['tmp_name']);
+		} elseif (
+			!empty($this->filterMime) and
+			!in_array($this->model->mimetype, $this->filterMime)
+		) {
+			$this->error =
+				'Bestandstype niet toegestaan: ' .
+				htmlspecialchars($this->model->mimetype);
 		} elseif (!checkMimetype($this->model->filename, $this->model->mimetype)) {
-			$this->error = 'Bestandstype komt niet overeen met bestandsnaam: ' . $this->model->mimetype;
+			$this->error =
+				'Bestandstype komt niet overeen met bestandsnaam: ' .
+				$this->model->mimetype;
 		}
 		return $this->error === '';
 	}
 
-	public function opslaan($directory, $filename, $overwrite = false) {
+	public function opslaan($directory, $filename, $overwrite = false)
+	{
 		parent::opslaan($directory, $filename, $overwrite);
-		$moved = @move_uploaded_file($this->value['tmp_name'], join_paths($directory, $filename));
+		$moved = @move_uploaded_file(
+			$this->value['tmp_name'],
+			join_paths($directory, $filename)
+		);
 		if (!$moved) {
-			throw new CsrException('Verplaatsen mislukt: ' . htmlspecialchars($this->value['tmp_name']));
+			throw new CsrException(
+				'Verplaatsen mislukt: ' . htmlspecialchars($this->value['tmp_name'])
+			);
 		}
 		if (false === @chmod(join_paths($directory, $filename), 0644)) {
-			throw new CsrException('Geen eigenaar van bestand: ' . htmlspecialchars(join_paths($directory, $filename)));
+			throw new CsrException(
+				'Geen eigenaar van bestand: ' .
+					htmlspecialchars(join_paths($directory, $filename))
+			);
 		}
 		$this->model->directory = $directory;
 		$this->model->filename = $filename;
 	}
 
-	public function getHtml() {
+	public function getHtml()
+	{
 		// werkomheen onbekende mime-types voor client
 		if ($this->filterMime == Afbeelding::$mimeTypes) {
 			$accept = 'image/*';
 		} else {
 			$accept = implode('|', $this->filterMime);
 		}
-		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'disabled', 'readonly')) . ' accept="' . $accept . '" data-max-size="' . getMaximumFileUploadSize() . '" />';
+		return '<input ' .
+			$this->getInputAttribute([
+				'type',
+				'id',
+				'name',
+				'class',
+				'disabled',
+				'readonly',
+			]) .
+			' accept="' .
+			$accept .
+			'" data-max-size="' .
+			getMaximumFileUploadSize() .
+			'" />';
 	}
 
-	public function getJavascript() {
+	public function getJavascript()
+	{
 		$max = getMaximumFileUploadSize();
 		$format = format_filesize($max);
-		return parent::getJavascript() . <<<JS
+		return parent::getJavascript() .
+			<<<JS
 
 $('#{$this->getId()}').change(function() {
 	for (i = 0; i < this.files.length; i++) {
@@ -108,5 +152,4 @@ $('#{$this->getId()}').change(function() {
 });
 JS;
 	}
-
 }

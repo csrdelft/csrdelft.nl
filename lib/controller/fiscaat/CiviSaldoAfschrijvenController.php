@@ -20,17 +20,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CiviSaldoAfschrijvenController extends AbstractController {
+class CiviSaldoAfschrijvenController extends AbstractController
+{
 	/**
 	 * @Route("/fiscaat/afschrijven")
 	 * @return Response
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function afschrijven() {
+	public function afschrijven()
+	{
 		return $this->render('fiscaat/afschrijven.html.twig', []);
 	}
 
-	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven') {
+	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven')
+	{
 		setMelding($melding, $code);
 		return $this->redirect($url);
 	}
@@ -42,10 +45,11 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 	 * @param Session $session
 	 * @return Response
 	 */
-	public function upload(Request $request, Session $session) {
+	public function upload(Request $request, Session $session)
+	{
 		// Kijk of bestand meegegeven is
 		if (!$request->files->has('csv')) {
-			return $this->quickMelding("Upload een CSV", 2);
+			return $this->quickMelding('Upload een CSV', 2);
 		}
 
 		// Kijk of bestand CSV is
@@ -55,23 +59,31 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 			return $this->quickMelding('Geen bestand gekozen', 2);
 		}
 
-		if (!in_array($file->getMimeType(), ['text/plain', 'text/csv', 'application/vnd.ms-excel'])) {
-			return $this->quickMelding("Alleen een CSV is toegestaan", 2);
+		if (
+			!in_array($file->getMimeType(), [
+				'text/plain',
+				'text/csv',
+				'application/vnd.ms-excel',
+			])
+		) {
+			return $this->quickMelding('Alleen een CSV is toegestaan', 2);
 		}
 
 		// Parse CSV
 		$csv = new Csv();
 		if ($csv->auto($file->getPathname()) === false) {
-			return $this->quickMelding("Fout bij inlezen van CSV", 2);
+			return $this->quickMelding('Fout bij inlezen van CSV', 2);
 		}
 		$data = $csv->data;
 
 		// Controleer of er regels zijn en eerste regel geldige keys heeft
 		if (empty($data) === 0) {
-			return $this->quickMelding("Geen regels gevonden", 2);
+			return $this->quickMelding('Geen regels gevonden', 2);
 		}
-		if (array_keys($data[0]) !== ['uid', 'productID', 'aantal', 'beschrijving']) {
-			return $this->quickMelding("Ongeldige kolommen in de CSV", 2);
+		if (
+			array_keys($data[0]) !== ['uid', 'productID', 'aantal', 'beschrijving']
+		) {
+			return $this->quickMelding('Ongeldige kolommen in de CSV', 2);
 		}
 
 		// Sla data op in sessie
@@ -99,7 +111,10 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 	) {
 		// Haal data op
 		if (!$session->has("afschrijven-{$key}")) {
-			return $this->quickMelding("Er ging iets fout bij het inladen van de CSV", 2);
+			return $this->quickMelding(
+				'Er ging iets fout bij het inladen van de CSV',
+				2
+			);
 		}
 		$data = $session->get("afschrijven-{$key}");
 
@@ -121,17 +136,23 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 			$aantalGefaald++;
 
 			// Check keys
-			if (array_keys($data[0]) !== ['uid', 'productID', 'aantal', 'beschrijving']) {
+			if (
+				array_keys($data[0]) !== ['uid', 'productID', 'aantal', 'beschrijving']
+			) {
 				$afschriften[$i]->succes = false;
 				$afschriften[$i]->waarschuwing[] = 'Ongeldige kolommen';
 				continue;
 			}
 
 			// Haal account op
-			$account = $civiSaldoRepository->findOneBy(['uid' => (strlen($regel['uid']) === 3 ? '0' : '') . $regel['uid']]);
+			$account = $civiSaldoRepository->findOneBy([
+				'uid' => (strlen($regel['uid']) === 3 ? '0' : '') . $regel['uid'],
+			]);
 			if (!$account) {
 				$afschriften[$i]->succes = false;
-				$afschriften[$i]->waarschuwing[] = "Account {$regel['uid']} niet gevonden";
+				$afschriften[
+					$i
+				]->waarschuwing[] = "Account {$regel['uid']} niet gevonden";
 				$afschriften[$i]->accountNaam = $regel['uid'];
 			} elseif ($account->deleted) {
 				$afschriften[$i]->succes = false;
@@ -145,7 +166,9 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 			$product = $civiProductRepository->find(intval($regel['productID']));
 			if (!$product) {
 				$afschriften[$i]->succes = false;
-				$afschriften[$i]->waarschuwing[] = "Product {$regel['productID']} niet gevonden";
+				$afschriften[
+					$i
+				]->waarschuwing[] = "Product {$regel['productID']} niet gevonden";
 				$afschriften[$i]->productNaam = $regel['productID'];
 			} else {
 				$afschriften[$i]->productNaam = $product->getWeergave();
@@ -171,7 +194,8 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 			// Bereken nieuwe CiviSaldo
 			if ($account && $product && isset($aantal)) {
 				$afschriften[$i]->totaal = $product->getPrijsInt() * $aantal;
-				$afschriften[$i]->nieuwSaldo = $account->saldo - $afschriften[$i]->totaal;
+				$afschriften[$i]->nieuwSaldo =
+					$account->saldo - $afschriften[$i]->totaal;
 			}
 
 			// Sla op
@@ -213,33 +237,61 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 	) {
 		// Haal data op
 		if (!$session->has("afschrijven-{$key}")) {
-			return $this->quickMelding("Er ging iets fout bij het verwerken van de CSV", 2);
+			return $this->quickMelding(
+				'Er ging iets fout bij het verwerken van de CSV',
+				2
+			);
 		} elseif ($session->has("afschrijven-{$key}-locked")) {
-			return $this->quickMelding("Deze CSV wordt al verwerkt", 2);
+			return $this->quickMelding('Deze CSV wordt al verwerkt', 2);
 		} else {
 			$session->set("afschrijven-{$key}-locked", true);
 		}
 		$data = $session->get("afschrijven-{$key}");
 
-		if (!$request->request->has('gecheckt') || !$request->request->has('foutenAkkoord')) {
+		if (
+			!$request->request->has('gecheckt') ||
+			!$request->request->has('foutenAkkoord')
+		) {
 			$session->remove("afschrijven-{$key}-locked");
-			return $this->quickMelding("Geef akkoord voor verwerking", 2, "/fiscaat/afschrijven/controle/{$key}");
+			return $this->quickMelding(
+				'Geef akkoord voor verwerking',
+				2,
+				"/fiscaat/afschrijven/controle/{$key}"
+			);
 		}
 
 		// Ga regels langs
 		$aantalSucces = 0;
 		$totaal = 0;
-		$em->transactional(function () use ($civiBestellingRepository, $civiSaldoRepository, $civiProductRepository, $data, &$aantalSucces, &$totaal, $session, $key) {
+		$em->transactional(function () use (
+			$civiBestellingRepository,
+			$civiSaldoRepository,
+			$civiProductRepository,
+			$data,
+			&$aantalSucces,
+			&$totaal,
+			$session,
+			$key
+		) {
 			/** @var CiviBestelling[] $bestellingen */
 			$bestellingen = [];
 			foreach ($data as $regel) {
 				// Check keys
-				if (array_keys($data[0]) !== ['uid', 'productID', 'aantal', 'beschrijving']) {
+				if (
+					array_keys($data[0]) !== [
+						'uid',
+						'productID',
+						'aantal',
+						'beschrijving',
+					]
+				) {
 					continue;
 				}
 
 				// Haal account & product op
-				$account = $civiSaldoRepository->findOneBy(['uid' => (strlen($regel['uid']) === 3 ? '0' : '') . $regel['uid']]);
+				$account = $civiSaldoRepository->findOneBy([
+					'uid' => (strlen($regel['uid']) === 3 ? '0' : '') . $regel['uid'],
+				]);
 				$product = $civiProductRepository->find(intval($regel['productID']));
 				if (!$account || $account->deleted || !$product) {
 					continue;
@@ -253,7 +305,10 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 				}
 
 				// Check beschrijving
-				if (empty($regel['beschrijving']) || strlen($regel['beschrijving']) > 255) {
+				if (
+					empty($regel['beschrijving']) ||
+					strlen($regel['beschrijving']) > 255
+				) {
 					continue;
 				}
 
@@ -296,7 +351,7 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 		// Overzicht tonen
 		return $this->render('fiscaat/afschrijven-succes.html.twig', [
 			'aantalSucces' => $aantalSucces,
-			'totaal' => $totaal
+			'totaal' => $totaal,
 		]);
 	}
 
@@ -305,10 +360,14 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 	 * @Auth(P_FISCAAT_MOD)
 	 * @return Response
 	 */
-	public function downloadTemplate() {
+	public function downloadTemplate()
+	{
 		$template = "uid;productID;aantal;beschrijving\r\nx101;32;100;Lunch";
 		$response = new Response($template);
-		$disposition = HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, 'afschrijven.csv');
+		$disposition = HeaderUtils::makeDisposition(
+			HeaderUtils::DISPOSITION_ATTACHMENT,
+			'afschrijven.csv'
+		);
 		$response->headers->set('Content-Type', 'text/csv');
 		$response->headers->set('Content-Disposition', $disposition);
 		return $response;

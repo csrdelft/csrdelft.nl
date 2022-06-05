@@ -14,7 +14,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass=ReeksRepository::class)
  * @ORM\Table(name="aanmelder_reeks")
  */
-class Reeks extends ActiviteitEigenschappen implements DataTableEntry {
+class Reeks extends ActiviteitEigenschappen implements DataTableEntry
+{
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -40,29 +41,35 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry {
 	 */
 	private $activiteiten;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->activiteiten = new ArrayCollection();
 	}
 
-	public function getId(): ?int {
+	public function getId(): ?int
+	{
 		return $this->id;
 	}
 
-	public function getNaam(): ?string {
+	public function getNaam(): ?string
+	{
 		return $this->naam;
 	}
 
-	public function setNaam(string $naam): self {
+	public function setNaam(string $naam): self
+	{
 		$this->naam = $naam;
 
 		return $this;
 	}
 
-	public function getRechtenAanmaken(): ?string {
+	public function getRechtenAanmaken(): ?string
+	{
 		return $this->rechtenAanmaken;
 	}
 
-	public function setRechtenAanmaken(string $rechtenAanmaken): self {
+	public function setRechtenAanmaken(string $rechtenAanmaken): self
+	{
 		$this->rechtenAanmaken = $rechtenAanmaken;
 
 		return $this;
@@ -71,11 +78,13 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry {
 	/**
 	 * @return Collection|AanmeldActiviteit[]
 	 */
-	public function getActiviteiten(): Collection {
+	public function getActiviteiten(): Collection
+	{
 		return $this->activiteiten;
 	}
 
-	public function addActiviteiten(AanmeldActiviteit $activiteiten): self {
+	public function addActiviteiten(AanmeldActiviteit $activiteiten): self
+	{
 		if (!$this->activiteiten->contains($activiteiten)) {
 			$this->activiteiten[] = $activiteiten;
 			$activiteiten->setReeks($this);
@@ -84,7 +93,8 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry {
 		return $this;
 	}
 
-	public function removeActiviteiten(AanmeldActiviteit $activiteiten): self {
+	public function removeActiviteiten(AanmeldActiviteit $activiteiten): self
+	{
 		if ($this->activiteiten->contains($activiteiten)) {
 			$this->activiteiten->removeElement($activiteiten);
 			// set the owning side to null (unless already changed)
@@ -96,11 +106,14 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry {
 		return $this;
 	}
 
-	public function magActiviteitenBeheren(): bool {
-		return self::magAanmaken() || LoginService::mag($this->getRechtenAanmaken());
+	public function magActiviteitenBeheren(): bool
+	{
+		return self::magAanmaken() ||
+			LoginService::mag($this->getRechtenAanmaken());
 	}
 
-	public static function magAanmaken(): bool {
+	public static function magAanmaken(): bool
+	{
 		return LoginService::mag(P_ADMIN);
 	}
 
@@ -109,7 +122,8 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("detailSource")
 	 */
-	public function getDetailSource() {
+	public function getDetailSource()
+	{
 		return '/aanmelder/beheer/activiteiten/' . $this->id;
 	}
 }

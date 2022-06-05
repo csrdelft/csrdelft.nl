@@ -57,16 +57,15 @@ class ForumMeldingenService
 	private $security;
 
 	public function __construct(
-		Environment                  $twig,
-		CsrSecurity                     $security,
-		MailService                  $mailService,
-		SuService                    $suService,
-		ProfielRepository            $profielRepository,
-		LidInstellingenRepository    $lidInstellingenRepository,
+		Environment $twig,
+		CsrSecurity $security,
+		MailService $mailService,
+		SuService $suService,
+		ProfielRepository $profielRepository,
+		LidInstellingenRepository $lidInstellingenRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		ForumDelenMeldingRepository  $forumDelenMeldingRepository
-	)
-	{
+		ForumDelenMeldingRepository $forumDelenMeldingRepository
+	) {
 		$this->suService = $suService;
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
 		$this->twig = $twig;
@@ -92,7 +91,12 @@ class ForumMeldingenService
 	{
 		$auteur = $this->profielRepository->find($post->uid);
 		// Laad meldingsbericht in
-		foreach ($this->forumDradenMeldingRepository->getAltijdMeldingVoorDraad($post->draad) as $volger) {
+		foreach (
+			$this->forumDradenMeldingRepository->getAltijdMeldingVoorDraad(
+				$post->draad
+			)
+			as $volger
+		) {
 			$volgerProfiel = $this->profielRepository->find($volger->uid);
 
 			// Stuur geen meldingen als lid niet gevonden is of lid de auteur
@@ -105,7 +109,13 @@ class ForumMeldingenService
 			if (!$account) {
 				$this->forumDradenMeldingRepository->remove($volger);
 			} else {
-				$this->stuurDraadMelding($account, $auteur, $post, $post->draad, 'mail/bericht/forumaltijdmelding.mail.twig');
+				$this->stuurDraadMelding(
+					$account,
+					$auteur,
+					$post,
+					$post->draad,
+					'mail/bericht/forumaltijdmelding.mail.twig'
+				);
 			}
 		}
 	}
@@ -127,19 +137,35 @@ class ForumMeldingenService
 
 			// Stuur geen meldingen als lid niet gevonden is, lid de auteur is of als lid geen meldingen wil voor draadje
 			// Met laatste voorwaarde worden ook leden afgevangen die sowieso al een melding zouden ontvangen
-			if (!$genoemde || !$genoemde->account || $genoemde->uid === $post->uid || !ForumDraadMeldingNiveau::isVERMELDING($this->getDraadMeldingNiveauVoorLid($post->draad, $genoemde->uid))) {
+			if (
+				!$genoemde ||
+				!$genoemde->account ||
+				$genoemde->uid === $post->uid ||
+				!ForumDraadMeldingNiveau::isVERMELDING(
+					$this->getDraadMeldingNiveauVoorLid($post->draad, $genoemde->uid)
+				)
+			) {
 				continue;
 			}
 
-			$magMeldingKrijgen = $this->suService->alsLid($genoemde->account, function () use ($draad) {
-				return $draad->magMeldingKrijgen();
-			});
+			$magMeldingKrijgen = $this->suService->alsLid(
+				$genoemde->account,
+				function () use ($draad) {
+					return $draad->magMeldingKrijgen();
+				}
+			);
 
 			if (!$magMeldingKrijgen) {
 				continue;
 			}
 
-			$this->stuurDraadMelding($genoemde->account, $auteur, $post, $post->draad, 'mail/bericht/forumvermeldingmelding.mail.twig');
+			$this->stuurDraadMelding(
+				$genoemde->account,
+				$auteur,
+				$post,
+				$post->draad,
+				'mail/bericht/forumvermeldingmelding.mail.twig'
+			);
 		}
 	}
 
@@ -151,7 +177,7 @@ class ForumMeldingenService
 	 */
 	public function zoekGenoemdeLeden($bericht)
 	{
-		$regex = "/\[(?:lid|citaat)=?\s*]?\s*([[:alnum:]]+)\s*[\[\]]/";
+		$regex = '/\[(?:lid|citaat)=?\s*]?\s*([[:alnum:]]+)\s*[\[\]]/';
 		preg_match_all($regex, $bericht, $leden);
 
 		return array_unique($leden[1]);
@@ -159,14 +185,25 @@ class ForumMeldingenService
 
 	public function getDraadMeldingNiveauVoorLid(ForumDraad $draad, $uid = null)
 	{
-		if ($uid === null) $uid = $this->security->getAccount()->getUserIdentifier();
+		if ($uid === null) {
+			$uid = $this->security->getAccount()->getUserIdentifier();
+		}
 
-		$voorkeur = $this->forumDradenMeldingRepository->find(['draad_id' => $draad->draad_id, 'uid' => $uid]);
+		$voorkeur = $this->forumDradenMeldingRepository->find([
+			'draad_id' => $draad->draad_id,
+			'uid' => $uid,
+		]);
 		if ($voorkeur) {
 			return $voorkeur->niveau;
 		} else {
-			$wilMeldingBijVermelding = $this->lidInstellingenRepository->getInstellingVoorLid('forum', 'meldingStandaard', $uid);
-			return $wilMeldingBijVermelding === 'ja' ? ForumDraadMeldingNiveau::VERMELDING() : ForumDraadMeldingNiveau::NOOIT();
+			$wilMeldingBijVermelding = $this->lidInstellingenRepository->getInstellingVoorLid(
+				'forum',
+				'meldingStandaard',
+				$uid
+			);
+			return $wilMeldingBijVermelding === 'ja'
+				? ForumDraadMeldingNiveau::VERMELDING()
+				: ForumDraadMeldingNiveau::NOOIT();
 		}
 	}
 
@@ -182,10 +219,21 @@ class ForumMeldingenService
 	 * @throws RuntimeError
 	 * @throws SyntaxError
 	 */
-	private function stuurDraadMelding(Account $ontvanger, Profiel $auteur, ForumPost $post, ForumDraad $draad, $template)
-	{
+	private function stuurDraadMelding(
+		Account $ontvanger,
+		Profiel $auteur,
+		ForumPost $post,
+		ForumDraad $draad,
+		$template
+	) {
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		$this->suService->alsLid($ontvanger, function () use ($ontvanger, $auteur, $post, $draad, $template) {
+		$this->suService->alsLid($ontvanger, function () use (
+			$ontvanger,
+			$auteur,
+			$post,
+			$draad,
+			$template
+		) {
 			$bericht = $this->twig->render($template, [
 				'naam' => $ontvanger->profiel->getNaam('civitas'),
 				'auteur' => $auteur->getNaam('civitas'),
@@ -194,7 +242,11 @@ class ForumMeldingenService
 				'tekst' => str_replace('\r\n', "\n", $post->tekst),
 			]);
 
-			$mail = new Mail($ontvanger->profiel->getEmailOntvanger(), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
+			$mail = new Mail(
+				$ontvanger->profiel->getEmailOntvanger(),
+				'C.S.R. Forum: nieuwe reactie op ' . $draad->titel,
+				$bericht
+			);
 			$this->mailService->send($mail);
 		});
 	}
@@ -217,21 +269,41 @@ class ForumMeldingenService
 	 * @param ForumDraad $draad
 	 * @param ForumDeel $deel
 	 */
-	private function stuurDeelMelding(Account $ontvanger, Profiel $auteur, ForumPost $post, ForumDraad $draad, ForumDeel $deel)
-	{
-
+	private function stuurDeelMelding(
+		Account $ontvanger,
+		Profiel $auteur,
+		ForumPost $post,
+		ForumDraad $draad,
+		ForumDeel $deel
+	) {
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		$this->suService->alsLid($ontvanger, function () use ($draad, $deel, $ontvanger, $auteur, $post) {
-			$bericht = $this->twig->render('mail/bericht/forumdeelmelding.mail.twig', [
-				'naam' => $ontvanger->profiel->getNaam('civitas'),
-				'auteur' => $auteur->getNaam('civitas'),
-				'postlink' => $post->getLink(true),
-				'titel' => $draad->titel,
-				'forumdeel' => $deel->titel,
-				'tekst' => str_replace('\r\n', "\n", $post->tekst),
-			]);
+		$this->suService->alsLid($ontvanger, function () use (
+			$draad,
+			$deel,
+			$ontvanger,
+			$auteur,
+			$post
+		) {
+			$bericht = $this->twig->render(
+				'mail/bericht/forumdeelmelding.mail.twig',
+				[
+					'naam' => $ontvanger->profiel->getNaam('civitas'),
+					'auteur' => $auteur->getNaam('civitas'),
+					'postlink' => $post->getLink(true),
+					'titel' => $draad->titel,
+					'forumdeel' => $deel->titel,
+					'tekst' => str_replace('\r\n', "\n", $post->tekst),
+				]
+			);
 			if ($draad->magMeldingKrijgen()) {
-				$mail = new Mail($ontvanger->profiel->getEmailOntvanger(), 'C.S.R. Forum: nieuw draadje in ' . $deel->titel . ': ' . $draad->titel, $bericht);
+				$mail = new Mail(
+					$ontvanger->profiel->getEmailOntvanger(),
+					'C.S.R. Forum: nieuw draadje in ' .
+						$deel->titel .
+						': ' .
+						$draad->titel,
+					$bericht
+				);
 				$this->mailService->send($mail);
 			}
 		});

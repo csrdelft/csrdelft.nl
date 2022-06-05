@@ -5,18 +5,22 @@ namespace CsrDelft\view;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class ChartTimeSeries extends JsonResponse {
-
-	public function getModel() {
+class ChartTimeSeries extends JsonResponse
+{
+	public function getModel()
+	{
 		$array = [];
 		$minimum = time();
 		foreach ($this->model as $label => $data) {
 			$entry = [];
 			foreach ($data as $row) {
 				if ($row['timestamp'] < $minimum) {
-					$minimum = (int)$row['timestamp'];
+					$minimum = (int) $row['timestamp'];
 				}
-				$entry[] = ['x' => date('Y-m-d', $row['timestamp']), 'y' => (int)$row['count']];
+				$entry[] = [
+					'x' => date('Y-m-d', $row['timestamp']),
+					'y' => (int) $row['count'],
+				];
 			}
 			$array[] = [
 				'label' => $label,
@@ -33,5 +37,4 @@ class ChartTimeSeries extends JsonResponse {
 			'datasets' => $array,
 		];
 	}
-
 }

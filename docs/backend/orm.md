@@ -23,7 +23,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="CsrDelft\repository\MijnEntityRepository")
  */
-class MijnEntity {
+class MijnEntity
+{
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -62,25 +63,30 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  */
-class MijnEntityRepository extends AbstractRepository {
-    public function __construct(ManagerRegistry $registry) {
-        parent::__construct($registry, MijnEntity::class);
-    }
+class MijnEntityRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
+		parent::__construct($registry, MijnEntity::class);
+	}
 
-    public function zoek($query) {
-        return $this->createQueryBuilder('e')
-            ->where('e.waarde LIKE :query')
-            ->setParameter('query', "%$query%")
-            ->getQuery()->getResult();
-    }
+	public function zoek($query)
+	{
+		return $this->createQueryBuilder('e')
+			->where('e.waarde LIKE :query')
+			->setParameter('query', "%$query%")
+			->getQuery()
+			->getResult();
+	}
 
-    public function nieuwEntity() {
-        $entity = new MijnEntity();
-        $entity->waarde = 'leeg';
-        $entity->uid = 'x999';
+	public function nieuwEntity()
+	{
+		$entity = new MijnEntity();
+		$entity->waarde = 'leeg';
+		$entity->uid = 'x999';
 
-        return $entity;
-    }
+		return $entity;
+	}
 }
 ```
 

@@ -10,11 +10,18 @@ namespace CsrDelft\view\formulier\invoervelden;
  * LandField met een aantal autocomplete suggesties voor landen.
  * Doet verder geen controle op niet-bestaande landen...
  */
-class LandField extends AutocompleteField {
-
-	public function __construct($name, $value, $description) {
+class LandField extends AutocompleteField
+{
+	public function __construct($name, $value, $description)
+	{
 		parent::__construct($name, $value, $description);
-		$this->suggestions[] = array('Nederland', 'België', 'Duitsland', 'Frankrijk', 'Verenigd Koninkrijk', 'Verenigde Staten');
+		$this->suggestions[] = [
+			'Nederland',
+			'België',
+			'Duitsland',
+			'Frankrijk',
+			'Verenigd Koninkrijk',
+			'Verenigde Staten',
+		];
 	}
-
 }

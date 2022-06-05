@@ -26,8 +26,8 @@ use CsrDelft\view\formulier\ModalForm;
  * Formulier voor een nieuwe of te bewerken maaltijd.
  *
  */
-class MaaltijdForm extends ModalForm {
-
+class MaaltijdForm extends ModalForm
+{
 	/**
 	 * MaaltijdForm constructor.
 	 *
@@ -36,11 +36,19 @@ class MaaltijdForm extends ModalForm {
 	 *
 	 * @throws CsrGebruikerException
 	 */
-	public function __construct(Maaltijd $maaltijd, $action) {
-		parent::__construct($maaltijd, '/maaltijden/beheer/' . $action, false, true);
+	public function __construct(Maaltijd $maaltijd, $action)
+	{
+		parent::__construct(
+			$maaltijd,
+			'/maaltijden/beheer/' . $action,
+			false,
+			true
+		);
 
 		if ($maaltijd->maaltijd_id < 0) {
-			throw new CsrGebruikerException(sprintf('Ongeldig maaltijd id "%s".', $maaltijd->maaltijd_id));
+			throw new CsrGebruikerException(
+				sprintf('Ongeldig maaltijd id "%s".', $maaltijd->maaltijd_id)
+			);
 		}
 		if ($maaltijd->maaltijd_id == 0) {
 			$this->titel = 'Maaltijd aanmaken';
@@ -50,20 +58,68 @@ class MaaltijdForm extends ModalForm {
 		}
 
 		$fields = [];
-		$fields['mrid'] = new DoctrineEntityField('repetitie', $maaltijd->repetitie, null, MaaltijdRepetitie::class, '');
+		$fields['mrid'] = new DoctrineEntityField(
+			'repetitie',
+			$maaltijd->repetitie,
+			null,
+			MaaltijdRepetitie::class,
+			''
+		);
 		$fields['mrid']->hidden = true;
-		$fields[] = new RequiredTextField('titel', $maaltijd->titel, 'Titel', 255, 5);
-		$fields[] = new RequiredDateObjectField('datum', $maaltijd->datum, 'Datum', date('Y') + 2, date('Y') - 2);
-		$fields[] = new RequiredTimeObjectField('tijd', $maaltijd->tijd, 'Tijd', 15);
-		$fields[] = new RequiredDoctrineEntityField('product', $maaltijd->product, 'Product', CiviProduct::class, '/fiscaat/producten/suggesties?q=');
-		$fields[] = new FormulierKnop('/fiscaat/producten', 'redirect', 'Nieuw product', 'Nieuw product aanmaken', '');
-		$fields[] = new RequiredIntField('aanmeld_limiet', $maaltijd->aanmeld_limiet, 'Aanmeldlimiet', 0, 200);
-		$fields[] = new RechtenField('aanmeld_filter', $maaltijd->aanmeld_filter, 'Aanmeldrestrictie');
-		$fields[] = new ProsemirrorField('omschrijving', $maaltijd->omschrijving, 'Omschrijving');
+		$fields[] = new RequiredTextField(
+			'titel',
+			$maaltijd->titel,
+			'Titel',
+			255,
+			5
+		);
+		$fields[] = new RequiredDateObjectField(
+			'datum',
+			$maaltijd->datum,
+			'Datum',
+			date('Y') + 2,
+			date('Y') - 2
+		);
+		$fields[] = new RequiredTimeObjectField(
+			'tijd',
+			$maaltijd->tijd,
+			'Tijd',
+			15
+		);
+		$fields[] = new RequiredDoctrineEntityField(
+			'product',
+			$maaltijd->product,
+			'Product',
+			CiviProduct::class,
+			'/fiscaat/producten/suggesties?q='
+		);
+		$fields[] = new FormulierKnop(
+			'/fiscaat/producten',
+			'redirect',
+			'Nieuw product',
+			'Nieuw product aanmaken',
+			''
+		);
+		$fields[] = new RequiredIntField(
+			'aanmeld_limiet',
+			$maaltijd->aanmeld_limiet,
+			'Aanmeldlimiet',
+			0,
+			200
+		);
+		$fields[] = new RechtenField(
+			'aanmeld_filter',
+			$maaltijd->aanmeld_filter,
+			'Aanmeldrestrictie'
+		);
+		$fields[] = new ProsemirrorField(
+			'omschrijving',
+			$maaltijd->omschrijving,
+			'Omschrijving'
+		);
 
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen();
 	}
-
 }

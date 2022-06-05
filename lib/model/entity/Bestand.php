@@ -2,14 +2,13 @@
 
 namespace CsrDelft\model\entity;
 
-
 /**
  * Bestand.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class Bestand {
-
+class Bestand
+{
 	/**
 	 * Bestandsnaam
 	 * @var string
@@ -34,12 +33,12 @@ class Bestand {
 	 * Database table columns
 	 * @var array
 	 */
-	protected static $persistent_attributes = array();
+	protected static $persistent_attributes = [];
 	/**
 	 * Database primary key
 	 * @var array
 	 */
-	protected static $primary_key = array();
+	protected static $primary_key = [];
 	/**
 	 * Database table name
 	 * @var string
@@ -51,8 +50,9 @@ class Bestand {
 	 *
 	 * @return bool
 	 */
-	public function exists() {
-		return @is_readable($this->directory . '/' . $this->filename) AND is_file($this->directory . '/' . $this->filename);
+	public function exists()
+	{
+		return @is_readable($this->directory . '/' . $this->filename) and
+			is_file($this->directory . '/' . $this->filename);
 	}
-
 }

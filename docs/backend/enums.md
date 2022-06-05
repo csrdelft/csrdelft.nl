@@ -21,7 +21,8 @@ De enum klasse kijkt naar alle `const` variabelen in de klasse, deze worden vers
  * @method static static Digitaal
  * @method static static Ja
  */
-class OntvangtContactueel extends \CsrDelft\common\Enum {
+class OntvangtContactueel extends \CsrDelft\common\Enum
+{
 	const Ja = 'ja';
 	const Digitaal = 'digitaal';
 	const Nee = 'nee';
@@ -29,7 +30,7 @@ class OntvangtContactueel extends \CsrDelft\common\Enum {
 	/**
 	 * @var string[]
 	 */
-	 protected static $mapChoiceToDescription = [
+	protected static $mapChoiceToDescription = [
 		self::Ja => 'ja',
 		self::Digitaal => 'ja, digitaal',
 		self::Nee => 'nee',
@@ -42,13 +43,17 @@ class OntvangtContactueel extends \CsrDelft\common\Enum {
 Om doctrine je enum te laten snappen moet je een 'Type' er voor aanmaken, zie de `lib/common/Doctrine/Type` map voor voorbeelden. Hier onder zie je de meest simpele versie.
 
 ```php
-class OntvangtContactueelType extends \CsrDelft\common\Doctrine\Type\Enum\EnumType {
-    public  function getEnumClass(): string{
-        return \CsrDelft\entity\OntvangtContactueel::class;
-    }
-    public  function getName(): string{
-        return 'enumOntvangtContactueel';
-    }
+class OntvangtContactueelType extends
+	\CsrDelft\common\Doctrine\Type\Enum\EnumType
+{
+	public function getEnumClass(): string
+	{
+		return \CsrDelft\entity\OntvangtContactueel::class;
+	}
+	public function getName(): string
+	{
+		return 'enumOntvangtContactueel';
+	}
 }
 ```
 

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\events;
-
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -15,7 +13,8 @@ class LogEventListener
 	 */
 	private $logger;
 
-	public function __construct(LoggerInterface $logger) {
+	public function __construct(LoggerInterface $logger)
+	{
 		$this->logger = $logger;
 	}
 
@@ -24,7 +23,8 @@ class LogEventListener
 	 *
 	 * @param RequestEvent $event
 	 */
-	public function onKernelRequest(RequestEvent $event) {
+	public function onKernelRequest(RequestEvent $event)
+	{
 		$request = $event->getRequest();
 
 		$this->logger->info($request->getRequestUri(), [
@@ -33,5 +33,4 @@ class LogEventListener
 			'referer' => $request->headers->get('Referer'),
 		]);
 	}
-
 }

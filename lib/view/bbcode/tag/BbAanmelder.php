@@ -8,7 +8,8 @@ use CsrDelft\repository\aanmelder\AanmeldActiviteitRepository;
 use CsrDelft\repository\aanmelder\ReeksRepository;
 use Twig\Environment;
 
-class BbAanmelder extends BbTag {
+class BbAanmelder extends BbTag
+{
 	private $reeks;
 	private $activiteit;
 	private $aantal;
@@ -26,19 +27,23 @@ class BbAanmelder extends BbTag {
 	 */
 	private $twig;
 
-	public function __construct(ReeksRepository $reeksRepository,
-															AanmeldActiviteitRepository $activiteitRepository,
-															Environment $twig) {
+	public function __construct(
+		ReeksRepository $reeksRepository,
+		AanmeldActiviteitRepository $activiteitRepository,
+		Environment $twig
+	) {
 		$this->reeksRepository = $reeksRepository;
 		$this->activiteitRepository = $activiteitRepository;
 		$this->twig = $twig;
 	}
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'aanmelder';
 	}
 
-	public function parse($arguments = []) {
+	public function parse($arguments = [])
+	{
 		if (isset($arguments['aanmelder'])) {
 			$this->activiteit = intval($arguments['aanmelder']);
 		} elseif (isset($arguments['reeks'])) {
@@ -47,15 +52,18 @@ class BbAanmelder extends BbTag {
 		}
 	}
 
-	public function render() {
+	public function render()
+	{
 		if (isset($this->reeks)) {
 			$reeks = $this->reeksRepository->find($this->reeks);
 			if (!$reeks) {
 				return "Reeks met id {$this->reeks} niet gevonden.";
 			}
 
-			$activiteiten = $this->activiteitRepository->getKomendeActiviteiten($reeks);
-		  $toonMeer = count($activiteiten) > $this->aantal;
+			$activiteiten = $this->activiteitRepository->getKomendeActiviteiten(
+				$reeks
+			);
+			$toonMeer = count($activiteiten) > $this->aantal;
 			$activiteiten = $activiteiten->slice(0, $this->aantal);
 		} else {
 			/** @var AanmeldActiviteit $activiteit */

@@ -23,7 +23,8 @@ use Exception;
  * @method CiviBestelling[]    findAll()
  * @method CiviBestelling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CiviBestellingRepository extends AbstractRepository {
+class CiviBestellingRepository extends AbstractRepository
+{
 	/**
 	 * @var CiviBestellingInhoudRepository
 	 */
@@ -60,7 +61,8 @@ class CiviBestellingRepository extends AbstractRepository {
 	 * @param int $id
 	 * @return CiviBestelling
 	 */
-	public function get($id) {
+	public function get($id)
+	{
 		return $this->find($id);
 	}
 
@@ -78,13 +80,11 @@ class CiviBestellingRepository extends AbstractRepository {
 			->setParameter('tot', $tot);
 
 		if ($uid) {
-			$qb = $qb->andWhere('cb.uid = :uid')
-				->setParameter('uid', $uid);
+			$qb = $qb->andWhere('cb.uid = :uid')->setParameter('uid', $uid);
 		}
 
 		if (!empty($cie)) {
-			$qb = $qb->andWhere('cb.cie in (:cie)')
-				->setParameter('cie', $cie);
+			$qb = $qb->andWhere('cb.cie in (:cie)')->setParameter('cie', $cie);
 		}
 
 		return $qb->getQuery()->getResult();
@@ -95,14 +95,16 @@ class CiviBestellingRepository extends AbstractRepository {
 	 * @param string $to
 	 * @return CiviBestelling[]
 	 */
-	public function getPinBestellingInMoment($from, $to) {
+	public function getPinBestellingInMoment($from, $to)
+	{
 		/** @var CiviBestelling[] $bestellingen */
 		$bestellingen = $this->createQueryBuilder('b')
 			->where('b.moment > :van and b.moment < :tot and b.deleted = false')
 			->setParameter('van', $from)
 			->setParameter('tot', $to)
 			->orderBy('b.moment', 'ASC')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 		$pinBestellingen = [];
 
 		foreach ($bestellingen as $bestelling) {
@@ -119,15 +121,22 @@ class CiviBestellingRepository extends AbstractRepository {
 	/**
 	 * @param CiviBestelling $bestelling
 	 */
-	public function revert(CiviBestelling $bestelling) {
+	public function revert(CiviBestelling $bestelling)
+	{
 		return $this->_em->transactional(function () use ($bestelling) {
 			if ($bestelling->deleted) {
-				throw new Exception("Bestelling kan niet worden teruggedraaid.");
+				throw new Exception('Bestelling kan niet worden teruggedraaid.');
 			}
 			if ($bestelling->totaal > 0) {
-				$this->civiSaldoRepository->ophogen($bestelling->uid, $bestelling->totaal);
+				$this->civiSaldoRepository->ophogen(
+					$bestelling->uid,
+					$bestelling->totaal
+				);
 			} else {
-				$this->civiSaldoRepository->verlagen($bestelling->uid, -$bestelling->totaal);
+				$this->civiSaldoRepository->verlagen(
+					$bestelling->uid,
+					-$bestelling->totaal
+				);
 			}
 			$bestelling->deleted = true;
 			// TODO LOG?
@@ -142,8 +151,13 @@ class CiviBestellingRepository extends AbstractRepository {
 	 *
 	 * @return CiviBestelling[]
 	 */
-	public function getBestellingenVoorLid($uid, $limit = null) {
-		return $this->findBy(['uid' => $uid, 'deleted' => false], ['moment' => 'DESC'], $limit);
+	public function getBestellingenVoorLid($uid, $limit = null)
+	{
+		return $this->findBy(
+			['uid' => $uid, 'deleted' => false],
+			['moment' => 'DESC'],
+			$limit
+		);
 	}
 
 	/**
@@ -154,7 +168,8 @@ class CiviBestellingRepository extends AbstractRepository {
 	 * @throws NoResultException
 	 * @throws NonUniqueResultException
 	 */
-	public function getSomBestellingenVanaf(DateTime $date, $profielOnly = false) {
+	public function getSomBestellingenVanaf(DateTime $date, $profielOnly = false)
+	{
 		$qb = $this->createQueryBuilder('cb')
 			->select('SUM(cb.totaal)')
 			->where('cb.deleted = false and cb.moment > :moment')
@@ -164,21 +179,26 @@ class CiviBestellingRepository extends AbstractRepository {
 			$qb->andWhere('cb.uid NOT LIKE \'c%\'');
 		}
 
-		return (int)$qb->getQuery()->getSingleScalarResult();
+		return (int) $qb->getQuery()->getSingleScalarResult();
 	}
 
-	public function vanBedragInCenten($bedrag, $uid) {
+	public function vanBedragInCenten($bedrag, $uid)
+	{
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'anders';
 		$bestelling->uid = $uid;
-		$bestelling->civiSaldo = ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->find($uid);
+		$bestelling->civiSaldo = ContainerFacade::getContainer()
+			->get(CiviSaldoRepository::class)
+			->find($uid);
 		$bestelling->deleted = false;
 		$bestelling->moment = date_create_immutable();
 
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = -$bedrag;
 		$inhoud->product_id = CiviProductTypeEnum::OVERGEMAAKT;
-		$civiProduct = $this->civiProductRepository->getProduct($inhoud->product_id);
+		$civiProduct = $this->civiProductRepository->getProduct(
+			$inhoud->product_id
+		);
 		$inhoud->product = $civiProduct;
 
 		$bestelling->inhoud[] = $inhoud;
@@ -193,7 +213,8 @@ class CiviBestellingRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(CiviBestelling $entity) {
+	public function create(CiviBestelling $entity)
+	{
 		// Persist bestelling eerst zonder inhoud
 		$inhoud = $entity->inhoud;
 		$entity->inhoud = [];

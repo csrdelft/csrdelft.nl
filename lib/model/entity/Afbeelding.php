@@ -9,13 +9,19 @@ use CsrDelft\common\CsrGebruikerException;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class Afbeelding extends Bestand {
-
+class Afbeelding extends Bestand
+{
 	/**
 	 * Geaccepteerde afbeelding types
 	 * @var array
 	 */
-	public static $mimeTypes = array('image/jpeg', 'image/png', 'image/gif', 'image/tiff', 'image/x-ms-bmp');
+	public static $mimeTypes = [
+		'image/jpeg',
+		'image/png',
+		'image/gif',
+		'image/tiff',
+		'image/x-ms-bmp',
+	];
 	/**
 	 * Breedte in pixels
 	 * @var int
@@ -30,7 +36,8 @@ class Afbeelding extends Bestand {
 	/**
 	 * @return string
 	 */
-	public function getFullPath() {
+	public function getFullPath()
+	{
 		return join_paths($this->directory, $this->filename);
 	}
 
@@ -43,7 +50,8 @@ class Afbeelding extends Bestand {
 	 *
 	 * @throws CsrGebruikerException
 	 */
-	public function __construct($path, $parse = true) {
+	public function __construct($path, $parse = true)
+	{
 		if ($path !== null) {
 			$this->directory = dirname($path) . '/';
 			$this->filename = basename($path);
@@ -51,18 +59,24 @@ class Afbeelding extends Bestand {
 		if ($parse) {
 			$this->filesize = @filesize($this->getFullPath());
 			if (!$this->filesize) {
-				throw new CsrGebruikerException('Afbeelding is leeg of bestaat niet: ' . $this->filename);
+				throw new CsrGebruikerException(
+					'Afbeelding is leeg of bestaat niet: ' . $this->filename
+				);
 			}
 			$image = @getimagesize($this->getFullPath());
 			if (!$image) {
-				throw new CsrGebruikerException('Afbeelding is geen afbeelding: ' . $this->filename);
+				throw new CsrGebruikerException(
+					'Afbeelding is geen afbeelding: ' . $this->filename
+				);
 			}
 			$this->width = $image[0];
 			$this->height = $image[1];
 			$this->mimetype = $image['mime'];
 
 			if (!in_array($this->mimetype, static::$mimeTypes)) {
-				throw new CsrGebruikerException('Geen afbeelding: [' . $this->mimetype . '] ' . $this->filename);
+				throw new CsrGebruikerException(
+					'Geen afbeelding: [' . $this->mimetype . '] ' . $this->filename
+				);
 			}
 		}
 	}

@@ -22,7 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class BeheerCiviProductenController extends AbstractController {
+class BeheerCiviProductenController extends AbstractController
+{
 	/**
 	 * @var CiviProductRepository
 	 */
@@ -58,8 +59,13 @@ class BeheerCiviProductenController extends AbstractController {
 	 * @Route("/fiscaat/producten/suggesties", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function suggesties(Request $request) {
-		return new CiviProductSuggestiesResponse($this->civiProductRepository->getSuggesties(sql_contains($request->query->get('q'))));
+	public function suggesties(Request $request)
+	{
+		return new CiviProductSuggestiesResponse(
+			$this->civiProductRepository->getSuggesties(
+				sql_contains($request->query->get('q'))
+			)
+		);
 	}
 
 	/**
@@ -67,7 +73,8 @@ class BeheerCiviProductenController extends AbstractController {
 	 * @Route("/fiscaat/producten/{cie}", defaults={"cie": null}, methods={"POST"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function lijst($cie) {
+	public function lijst($cie)
+	{
 		if ($cie) {
 			return $this->tableData($this->civiProductRepository->findByCie($cie));
 		}
@@ -79,7 +86,8 @@ class BeheerCiviProductenController extends AbstractController {
 	 * @Route("/fiscaat/producten", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function overzicht() {
+	public function overzicht()
+	{
 		return $this->render('fiscaat/pagina.html.twig', [
 			'titel' => 'Producten beheer',
 			'view' => new CiviProductTable(),
@@ -91,7 +99,8 @@ class BeheerCiviProductenController extends AbstractController {
 	 * @Route("/fiscaat/producten/bewerken", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function bewerken() {
+	public function bewerken()
+	{
 		$selection = $this->getDataTableSelection();
 
 		if (empty($selection)) {
@@ -109,23 +118,35 @@ class BeheerCiviProductenController extends AbstractController {
 	 * @Route("/fiscaat/producten/verwijderen", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function verwijderen() {
+	public function verwijderen()
+	{
 		$selection = $this->getDataTableSelection();
 
 		$removed = $this->em->transactional(function () use ($selection) {
-			$removed = array();
+			$removed = [];
 			foreach ($selection as $uuid) {
 				/** @var CiviProduct $product */
 				$product = $this->civiProductRepository->retrieveByUUID($uuid);
 
 				if ($product) {
-					if (count($this->civiBestellingInhoudRepository->findBy(['product_id' => $product->id])) == 0) {
+					if (
+						count(
+							$this->civiBestellingInhoudRepository->findBy([
+								'product_id' => $product->id,
+							])
+						) == 0
+					) {
 						$this->civiPrijsRepository->verwijderVoorProduct($product);
-						$removed[] = new RemoveDataTableEntry($product->id, CiviProduct::class);
+						$removed[] = new RemoveDataTableEntry(
+							$product->id,
+							CiviProduct::class
+						);
 						$this->em->remove($product);
 						$this->em->flush();
 					} else {
-						throw new CsrGebruikerException('Mag product niet verwijderen, het is al eens besteld');
+						throw new CsrGebruikerException(
+							'Mag product niet verwijderen, het is al eens besteld'
+						);
 					}
 				}
 			}
@@ -146,7 +167,8 @@ class BeheerCiviProductenController extends AbstractController {
 	 * @Route("/fiscaat/producten/opslaan", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function opslaan(Request $request) {
+	public function opslaan(Request $request)
+	{
 		$id = $request->request->getInt('id');
 
 		if (!$id) {

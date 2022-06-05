@@ -19,13 +19,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Controller van de courant.
  */
-class CourantController extends AbstractController {
+class CourantController extends AbstractController
+{
 	/**
 	 * @var CourantRepository
 	 */
@@ -35,7 +35,10 @@ class CourantController extends AbstractController {
 	 */
 	private $courantBerichtRepository;
 
-	public function __construct(CourantRepository $courantRepository, CourantBerichtRepository $courantBerichtRepository) {
+	public function __construct(
+		CourantRepository $courantRepository,
+		CourantBerichtRepository $courantBerichtRepository
+	) {
 		$this->courantRepository = $courantRepository;
 		$this->courantBerichtRepository = $courantBerichtRepository;
 	}
@@ -49,7 +52,7 @@ class CourantController extends AbstractController {
 	public function archief(): Response
 	{
 		return $this->render('courant/archief.html.twig', [
-			'couranten' => group_by('getJaar', $this->courantRepository->findAll())
+			'couranten' => group_by('getJaar', $this->courantRepository->findAll()),
 		]);
 	}
 
@@ -91,7 +94,7 @@ class CourantController extends AbstractController {
 		$bericht->schrijver = $this->getProfiel();
 
 		$form = $this->createFormulier(CourantBerichtFormulier::class, $bericht, [
-			'action' => $this->generateUrl('csrdelft_courant_toevoegen')
+			'action' => $this->generateUrl('csrdelft_courant_toevoegen'),
 		]);
 
 		$form->handleRequest($request);
@@ -100,7 +103,10 @@ class CourantController extends AbstractController {
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($bericht);
 			$manager->flush();
-			setMelding('Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
+			setMelding(
+				'Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.',
+				1
+			);
 
 			return $this->redirectToRoute('csrdelft_courant_toevoegen');
 		}
@@ -123,12 +129,16 @@ class CourantController extends AbstractController {
 	public function bewerken(Request $request, CourantBericht $bericht): Response
 	{
 		$form = $this->createFormulier(CourantBerichtFormulier::class, $bericht, [
-			'action' => $this->generateUrl('csrdelft_courant_bewerken', ['id' => $bericht->id]),
+			'action' => $this->generateUrl('csrdelft_courant_bewerken', [
+				'id' => $bericht->id,
+			]),
 		]);
 
 		$form->handleRequest($request);
 		if ($form->isPosted() && $form->validate()) {
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 			setMelding('Bericht is bewerkt', 1);
 			return $this->redirectToRoute('csrdelft_courant_toevoegen');
 		}
@@ -172,7 +182,8 @@ class CourantController extends AbstractController {
 	 * @Route("/courant/verzenden/{iedereen}", methods={"POST"}, defaults={"iedereen": null})
 	 * @Auth(P_MAIL_SEND)
 	 */
-	public function verzenden($iedereen = null) {
+	public function verzenden($iedereen = null)
+	{
 		if (count($this->courantBerichtRepository->findAll()) < 1) {
 			setMelding('Lege courant kan niet worden verzonden', 0);
 			return $this->redirectToRoute('csrdelft_courant_toevoegen');
@@ -185,7 +196,10 @@ class CourantController extends AbstractController {
 			'catNames' => CourantCategorie::getEnumDescriptions(),
 		]);
 		if ($iedereen === 'iedereen') {
-			$response = $this->courantRepository->verzenden($_ENV['EMAIL_LEDEN'], $courant->inhoud);
+			$response = $this->courantRepository->verzenden(
+				$_ENV['EMAIL_LEDEN'],
+				$courant->inhoud
+			);
 			/** @var Connection $conn */
 			$conn = $this->getDoctrine()->getConnection();
 			$conn->beginTransaction();
@@ -209,11 +223,24 @@ class CourantController extends AbstractController {
 				setMelding('Courant niet verzonden', -1);
 			}
 
-			return new PlainView('<div id="courantKnoppenContainer">' . $response . getMelding() . '<strong>Aan iedereen verzonden</strong></div>');
+			return new PlainView(
+				'<div id="courantKnoppenContainer">' .
+					$response .
+					getMelding() .
+					'<strong>Aan iedereen verzonden</strong></div>'
+			);
 		} else {
-			$response = $this->courantRepository->verzenden($_ENV['EMAIL_PUBCIE'], $courant->inhoud);
+			$response = $this->courantRepository->verzenden(
+				$_ENV['EMAIL_PUBCIE'],
+				$courant->inhoud
+			);
 			setMelding('Verzonden naar de PubCie', 1);
-			return new PlainView('<div id="courantKnoppenContainer">' . $response . getMelding() . '<a class="btn btn-primary post confirm" title="Courant aan iedereen verzenden" href="/courant/verzenden/iedereen">Aan iedereen verzenden</a></div>');
+			return new PlainView(
+				'<div id="courantKnoppenContainer">' .
+					$response .
+					getMelding() .
+					'<a class="btn btn-primary post confirm" title="Courant aan iedereen verzenden" href="/courant/verzenden/iedereen">Aan iedereen verzenden</a></div>'
+			);
 		}
 	}
 }

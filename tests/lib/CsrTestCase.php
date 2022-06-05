@@ -2,7 +2,6 @@
 
 namespace CsrDelft\tests;
 
-
 use CsrDelft\common\ContainerFacade;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

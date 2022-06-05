@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror;
-
 
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbCitaat;
@@ -30,7 +28,7 @@ class NodeCitaat implements Node
 			$naam = $node->bron_profiel->getNaam('user');
 			$url = '/profiel/' . $node->bron_profiel->uid;
 		} elseif ($node->bron_text != null) {
-			$van = str_replace("_", " ", $node->bron_text);
+			$van = str_replace('_', ' ', $node->bron_text);
 			$naam = $van;
 			$url = $node->bron_url;
 		} else {
@@ -44,15 +42,15 @@ class NodeCitaat implements Node
 				'van' => $van,
 				'naam' => $naam,
 				'url' => $url,
-			]
+			],
 		];
 	}
 
 	public function getTagAttributes($node)
 	{
 		return [
-			'citaat' => str_replace(" ", "_", $node->attrs->van),
-			'url' => $node->attrs->url
+			'citaat' => str_replace(' ', '_', $node->attrs->van),
+			'url' => $node->attrs->url,
 		];
 	}
 

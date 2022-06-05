@@ -55,7 +55,13 @@ abstract class GroepRepository extends AbstractRepository
 
 	public static function getNaam()
 	{
-		return strtolower(str_replace('Repository', '', classNameZonderNamespace(get_called_class())));
+		return strtolower(
+			str_replace(
+				'Repository',
+				'',
+				classNameZonderNamespace(get_called_class())
+			)
+		);
 	}
 
 	/**
@@ -65,8 +71,12 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param null $offset
 	 * @return Groep[]
 	 */
-	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-	{
+	public function findBy(
+		array $criteria,
+		array $orderBy = null,
+		$limit = null,
+		$offset = null
+	) {
 		// Eerst sorteren op FT/HT/OT
 		$orderBy = ['status' => 'DESC'] + ($orderBy ?? []);
 		if (in_array(GroepMoment::class, class_uses($this->entityClass))) {
@@ -139,14 +149,24 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param string $soort
 	 * @return Groep|bool
 	 */
-	public function converteer(Groep $oldgroep, GroepRepository $oldmodel, $soort = null)
-	{
+	public function converteer(
+		Groep $oldgroep,
+		GroepRepository $oldmodel,
+		$soort = null
+	) {
 		try {
-			return $this->_em->transactional(function () use ($oldgroep, $oldmodel, $soort) {
+			return $this->_em->transactional(function () use (
+				$oldgroep,
+				$oldmodel,
+				$soort
+			) {
 				// groep converteren
 				$newgroep = $this->nieuw($soort);
 				$rc = new ReflectionClass($newgroep);
-				foreach ($rc->getProperties(ReflectionProperty::IS_PUBLIC) as $attribute => $value) {
+				foreach (
+					$rc->getProperties(ReflectionProperty::IS_PUBLIC)
+					as $attribute => $value
+				) {
 					if (property_exists($newgroep, $value->getName())) {
 						$newgroep->{$value->getName()} = $oldgroep->{$value->getName()};
 					}
@@ -159,7 +179,10 @@ abstract class GroepRepository extends AbstractRepository
 				foreach ($oldgroep->getLeden() as $oldlid) {
 					$newlid = $ledenmodel->nieuw($newgroep, $oldlid->uid);
 					$oldlidRc = new ReflectionClass($oldlid);
-					foreach ($oldlidRc->getProperties(ReflectionProperty::IS_PUBLIC) as $attribute => $value) {
+					foreach (
+						$oldlidRc->getProperties(ReflectionProperty::IS_PUBLIC)
+						as $attribute => $value
+					) {
 						if (property_exists($newlid, $value->getName())) {
 							$newlid->{$value->getName()} = $oldgroep->{$value->getName()};
 						}
@@ -189,8 +212,9 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param null $soort
 	 * @return Groep
 	 */
-	public function nieuw(/* @noinspection PhpUnusedParameterInspection */ $soort = null)
-	{
+	public function nieuw(
+		/* @noinspection PhpUnusedParameterInspection */ $soort = null
+	) {
 		$orm = $this->entityClass;
 		$groep = new $orm();
 		$groep->naam = null;
@@ -226,11 +250,9 @@ abstract class GroepRepository extends AbstractRepository
 			->setParameter('uid', $uid->uid);
 
 		if (is_array($status)) {
-			$qb->andWhere('ag.status in (:status)')
-				->setParameter('status', $status);
+			$qb->andWhere('ag.status in (:status)')->setParameter('status', $status);
 		} elseif ($status) {
-			$qb->andWhere('ag.status = :status')
-				->setParameter('status', $status);
+			$qb->andWhere('ag.status = :status')->setParameter('status', $status);
 		}
 
 		return $qb->getQuery()->getResult();
@@ -275,9 +297,15 @@ abstract class GroepRepository extends AbstractRepository
 			->innerJoin('g.leden', 'l')
 			->innerJoin('l.profiel', 'p')
 			// v.letter is niet onderdeel van de pk van Verticale, dus een association is hier niet mogelijk
-			->innerJoin('\CsrDelft\entity\groepen\Verticale', 'v', Join::WITH, 'v.letter = p.verticale')
+			->innerJoin(
+				'\CsrDelft\entity\groepen\Verticale',
+				'v',
+				Join::WITH,
+				'v.letter = p.verticale'
+			)
 			->groupBy('p.verticale')
-			->getQuery()->getArrayResult();
+			->getQuery()
+			->getArrayResult();
 
 		$geslachten = $this->createQueryBuilder('g')
 			->where('g.id = :id')
@@ -286,7 +314,8 @@ abstract class GroepRepository extends AbstractRepository
 			->innerJoin('g.leden', 'l')
 			->innerJoin('l.profiel', 'p')
 			->groupBy('p.geslacht')
-			->getQuery()->getArrayResult();
+			->getQuery()
+			->getArrayResult();
 
 		$lidjaren = $this->createQueryBuilder('g')
 			->where('g.id = :id')
@@ -295,9 +324,16 @@ abstract class GroepRepository extends AbstractRepository
 			->innerJoin('g.leden', 'l')
 			->innerJoin('l.profiel', 'p')
 			->groupBy('p.lidjaar')
-			->getQuery()->getArrayResult();
+			->getQuery()
+			->getArrayResult();
 
-		return new GroepStatistiekDTO($totaal, $verticalen, $geslachten, $lidjaren, $tijd);
+		return new GroepStatistiekDTO(
+			$totaal,
+			$verticalen,
+			$geslachten,
+			$lidjaren,
+			$tijd
+		);
 	}
 
 	/**
@@ -310,7 +346,9 @@ abstract class GroepRepository extends AbstractRepository
 	{
 		foreach ($status as $item) {
 			if (!GroepStatus::isValidValue($item)) {
-				throw new \InvalidArgumentException($item . ' is geen geldige groepstatus');
+				throw new \InvalidArgumentException(
+					$item . ' is geen geldige groepstatus'
+				);
 			}
 		}
 
@@ -345,14 +383,19 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param $tot
 	 * @return Groep[]
 	 */
-	public function getGroepenVoorAgenda(\DateTimeImmutable $van, \DateTimeImmutable $tot)
-	{
+	public function getGroepenVoorAgenda(
+		\DateTimeImmutable $van,
+		\DateTimeImmutable $tot
+	) {
 		return $this->createQueryBuilder('a')
-			->where("a.inAgenda = true")
-			->andWhere("(a.beginMoment >= :van and a.beginMoment <= :tot) or (a.eindMoment >= :van and a.eindMoment <= :tot)")
+			->where('a.inAgenda = true')
+			->andWhere(
+				'(a.beginMoment >= :van and a.beginMoment <= :tot) or (a.eindMoment >= :van and a.eindMoment <= :tot)'
+			)
 			->setParameter('van', $van)
 			->setParameter('tot', $tot)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
@@ -361,15 +404,18 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param string|null $soort
 	 * @return Groep[]
 	 */
-	public function overzicht(string $soort = null) {
+	public function overzicht(string $soort = null)
+	{
 		return $this->findBy(['status' => GroepStatus::HT()]);
 	}
 
-	public function beheer(string $soort = null) {
+	public function beheer(string $soort = null)
+	{
 		return $this->findBy([]);
 	}
 
-	public function parseSoort(string $soort = null) {
+	public function parseSoort(string $soort = null)
+	{
 		return null;
 	}
 
@@ -378,14 +424,15 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param Groep $groep
 	 * @return Groep|null
 	 */
-	public function findOt(Groep $groep) {
+	public function findOt(Groep $groep)
+	{
 		$sortBy = [];
 		if (in_array(GroepMoment::class, class_uses($groep))) {
 			$sortBy = ['eindMoment' => 'DESC'];
 		}
-		return  $this->findOneBy(
-			["familie" => $groep->familie, 'status' => GroepStatus::OT()],
-			$sortBy,
+		return $this->findOneBy(
+			['familie' => $groep->familie, 'status' => GroepStatus::OT()],
+			$sortBy
 		);
 	}
 }

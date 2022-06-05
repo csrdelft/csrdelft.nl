@@ -11,7 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\DebugLogRepository")
  * @ORM\Table("debug_log")
  */
-class DebugLogEntry {
+class DebugLogEntry
+{
 	/**
 	 * Primary key
 	 * @var int

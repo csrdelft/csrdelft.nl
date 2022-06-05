@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror\groep;
-
 
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\prosemirror\Node;
@@ -27,7 +25,7 @@ class NodeVerticale implements Node
 		}
 
 		return [
-			'attrs' => ['id' => $node->getLetter()]
+			'attrs' => ['id' => $node->getLetter()],
 		];
 	}
 

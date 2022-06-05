@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\events;
-
 
 use CsrDelft\controller\api\v3\BarSysteemController;
 use CsrDelft\entity\bar\BarLocatie;
@@ -30,9 +28,11 @@ class BarTokenSubscriber implements EventSubscriberInterface
 	 */
 	private $manager;
 
-	public function __construct(Security $security, AccessService $accessService, ManagerRegistry $manager)
-	{
-
+	public function __construct(
+		Security $security,
+		AccessService $accessService,
+		ManagerRegistry $manager
+	) {
 		$this->security = $security;
 		$this->accessService = $accessService;
 		$this->manager = $manager;
@@ -40,9 +40,7 @@ class BarTokenSubscriber implements EventSubscriberInterface
 
 	public static function getSubscribedEvents()
 	{
-		return [
-			KernelEvents::CONTROLLER
-		];
+		return [KernelEvents::CONTROLLER];
 	}
 
 	public function onKernelController(ControllerEvent $event)
@@ -55,7 +53,9 @@ class BarTokenSubscriber implements EventSubscriberInterface
 		}
 
 		if ($controller instanceof BarSysteemController) {
-			if ($this->accessService->mag($this->security->getUser(), P_FISCAAT_MOD)) {
+			if (
+				$this->accessService->mag($this->security->getUser(), P_FISCAAT_MOD)
+			) {
 				return;
 			}
 

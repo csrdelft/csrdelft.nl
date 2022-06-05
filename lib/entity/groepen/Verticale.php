@@ -18,7 +18,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\VerticalenRepository")
  */
-class Verticale extends Groep {
+class Verticale extends Groep
+{
 	/**
 	 * Primary key
 	 * @var string
@@ -36,16 +37,19 @@ class Verticale extends Groep {
 	public $naam;
 
 	// Stiekem hebben we helemaal geen leden.
-	public function getLeden() {
+	public function getLeden()
+	{
 		$leden = [];
 		$container = ContainerFacade::getContainer();
 		$profielRepository = $container->get(ProfielRepository::class);
 		/** @var Profiel $profielen */
-		$profielen = $profielRepository->createQueryBuilder('p')
+		$profielen = $profielRepository
+			->createQueryBuilder('p')
 			->where('p.verticale = :verticale and p.status in (:lidstatus)')
 			->setParameter('verticale', $this->letter)
 			->setParameter('lidstatus', LidStatus::getLidLike())
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 		$em = $container->get('doctrine.orm.entity_manager');
 		$model = $em->getRepository(GroepLid::class);
 		foreach ($profielen as $profiel) {
@@ -58,14 +62,17 @@ class Verticale extends Groep {
 				}
 				$lid->doorUid = null;
 				$lid->doorProfiel = null;
-				$lid->lidSinds = date_create_immutable($profiel->lidjaar . '-09-01 00:00:00');
+				$lid->lidSinds = date_create_immutable(
+					$profiel->lidjaar . '-09-01 00:00:00'
+				);
 				$leden[] = $lid;
 			}
 		}
 		return new ArrayCollection($leden);
 	}
 
-	public function getUrl() {
+	public function getUrl()
+	{
 		return '/groepen/verticalen/' . $this->letter;
 	}
 
@@ -75,9 +82,11 @@ class Verticale extends Groep {
 	 * @param null $allowedAuthenticationMethods
 	 * @return bool
 	 */
-	public function mag(AccessAction $action, $allowedAuthenticationMethods = null) {
+	public function mag(
+		AccessAction $action,
+		$allowedAuthenticationMethods = null
+	) {
 		switch ($action) {
-
 			case AccessAction::Bekijken():
 			case AccessAction::Aanmaken():
 			case AccessAction::Wijzigen():
@@ -93,15 +102,21 @@ class Verticale extends Groep {
 	 * @param null $soort
 	 * @return bool
 	 */
-	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null) {
+	public static function magAlgemeen(
+		AccessAction $action,
+		$allowedAuthenticationMethods = null,
+		$soort = null
+	) {
 		switch ($action) {
-
 			case AccessAction::Bekijken():
 			case AccessAction::Aanmaken():
 			case AccessAction::Wijzigen():
-				return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
+				return parent::magAlgemeen(
+					$action,
+					$allowedAuthenticationMethods,
+					$soort
+				);
 		}
 		return false;
 	}
-
 }

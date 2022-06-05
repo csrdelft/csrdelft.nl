@@ -6,10 +6,16 @@ use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\view\datatable\DataTable;
 
-class GroepLogboekTable extends DataTable {
-
-	public function __construct(Groep $groep) {
-		parent::__construct(ChangeLogEntry::class, $groep->getUrl() . '/logboek', false, 'moment');
+class GroepLogboekTable extends DataTable
+{
+	public function __construct(Groep $groep)
+	{
+		parent::__construct(
+			ChangeLogEntry::class,
+			$groep->getUrl() . '/logboek',
+			false,
+			'moment'
+		);
 		$this->hideColumn('subject');
 		$this->searchColumn('property');
 		$this->searchColumn('old_value');
@@ -18,8 +24,8 @@ class GroepLogboekTable extends DataTable {
 		$this->setColumnTitle('uid', 'Door');
 	}
 
-	public function getType() {
+	public function getType()
+	{
 		return className($this);
 	}
-
 }

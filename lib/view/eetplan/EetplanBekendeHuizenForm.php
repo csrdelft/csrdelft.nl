@@ -17,19 +17,35 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
  *
  * Class EetplanBekendeHuizenForm
  */
-class EetplanBekendeHuizenForm implements FormulierTypeInterface {
+class EetplanBekendeHuizenForm implements FormulierTypeInterface
+{
 	/**
 	 * @param FormulierBuilder $builder
 	 * @param Eetplan $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
+	public function createFormulier(
+		FormulierBuilder $builder,
+		$data,
+		$options = []
+	) {
 		$builder->setDataTableId(true);
 		$builder->setTitel('Noviet die een huis kent toevoegen');
 		$builder->setAction($options['action']);
 		$fields[] = new HiddenField('id', $data->id);
-		$fields['noviet'] = new RequiredProfielEntityField('noviet', $data->noviet, 'Noviet', 'novieten');
-		$fields['woonoord'] = new RequiredDoctrineEntityField('woonoord', $data->woonoord, 'Woonoord', Woonoord::class, '/eetplan/bekendehuizen/zoeken?q=');
+		$fields['noviet'] = new RequiredProfielEntityField(
+			'noviet',
+			$data->noviet,
+			'Noviet',
+			'novieten'
+		);
+		$fields['woonoord'] = new RequiredDoctrineEntityField(
+			'woonoord',
+			$data->woonoord,
+			'Woonoord',
+			Woonoord::class,
+			'/eetplan/bekendehuizen/zoeken?q='
+		);
 		$fields[] = new TextareaField('opmerking', $data->opmerking, 'Opmerking');
 
 		if ($options['update']) {

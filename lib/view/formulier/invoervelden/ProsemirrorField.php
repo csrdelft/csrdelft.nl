@@ -20,9 +20,18 @@ class ProsemirrorField extends InputField
 
 	public function getHtml()
 	{
-		$attribute = $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly'));
+		$attribute = $this->getInputAttribute([
+			'id',
+			'name',
+			'origvalue',
+			'class',
+			'disabled',
+			'readonly',
+		]);
 		$converter = ContainerFacade::getContainer()->get(BbToProsemirror::class);
-		$jsonValue = htmlentities(json_encode($converter->toProseMirror($this->getValue())));
+		$jsonValue = htmlentities(
+			json_encode($converter->toProseMirror($this->getValue()))
+		);
 
 		return <<<HTML
 <input type="hidden" name="{$this->getName()}_type" value="pm">
@@ -35,7 +44,9 @@ HTML;
 	{
 		if ($this->isPosted()) {
 			$converter = ContainerFacade::getContainer()->get(ProsemirrorToBb::class);
-			$this->value = $converter->convertToBb(filter_input(INPUT_POST, $this->name, FILTER_UNSAFE_RAW));
+			$this->value = $converter->convertToBb(
+				filter_input(INPUT_POST, $this->name, FILTER_UNSAFE_RAW)
+			);
 		}
 		return $this->value;
 	}

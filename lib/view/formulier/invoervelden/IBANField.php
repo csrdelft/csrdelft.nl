@@ -8,9 +8,10 @@ namespace CsrDelft\view\formulier\invoervelden;
  *
  * Class IBANField checked of de ingevulde bankrekening een valide IBAN is.
  */
-class IBANField extends TextField {
-
-	public function validate() {
+class IBANField extends TextField
+{
+	public function validate()
+	{
 		if (!parent::validate()) {
 			return false;
 		}
@@ -20,9 +21,8 @@ class IBANField extends TextField {
 		}
 		// check format
 		if (!verify_iban($this->value)) {
-			$this->error = "Ongeldige IBAN";
+			$this->error = 'Ongeldige IBAN';
 		}
 		return $this->error === '';
 	}
-
 }

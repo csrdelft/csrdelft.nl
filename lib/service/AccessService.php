@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\service;
-
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
@@ -41,7 +39,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  *
  * @see http://csrc.nist.gov/groups/SNS/rbac/faq.html
  */
-class AccessService {
+class AccessService
+{
 	const PREFIX_ACTIVITEIT = 'ACTIVITEIT';
 	const PREFIX_BESTUUR = 'BESTUUR';
 	const PREFIX_COMMISSIE = 'COMMISSIE';
@@ -71,7 +70,7 @@ class AccessService {
 		AuthenticationMethod::cookie_token,
 		AuthenticationMethod::password_login,
 		AuthenticationMethod::recent_password_login,
-		AuthenticationMethod::password_login_and_one_time_token
+		AuthenticationMethod::password_login_and_one_time_token,
 	];
 
 	/**
@@ -96,7 +95,7 @@ class AccessService {
 		self::PREFIX_OUDEREJAARS,
 		self::PREFIX_EERSTEJAARS,
 		self::PREFIX_MAALTIJD,
-		self::PREFIX_KWALIFICATIE
+		self::PREFIX_KWALIFICATIE,
 	];
 
 	/**
@@ -136,16 +135,21 @@ class AccessService {
 	/**
 	 * @var EntityManagerInterface
 	 */
-	private $em;/**
- * @var AccountRepository
- */private $accountRepository;
+	private $em; /**
+	 * @var AccountRepository
+	 */
+	private $accountRepository;
 
 	/**
 	 * @param CacheInterface $cache
 	 * @param EntityManagerInterface $em
 	 * @throws InvalidArgumentException
 	 */
-	public function __construct(CacheInterface $cache, EntityManagerInterface $em, AccountRepository $accountRepository) {
+	public function __construct(
+		CacheInterface $cache,
+		EntityManagerInterface $em,
+		AccountRepository $accountRepository
+	) {
 		$this->cache = $cache;
 		$this->em = $em;
 		$this->loadPermissions();
@@ -167,62 +171,66 @@ class AccessService {
 	 *
 	 * @throws InvalidArgumentException
 	 */
-	private function loadPermissions() {
+	private function loadPermissions()
+	{
 		// see if cached
-		$this->permissions = $this->cache->get('permissions-' . getlastmod(), function () {
-			// build permissions
-			return [
-				P_PUBLIC => $this->createPermStr(0, 0), // Iedereen op het Internet
-				P_LOGGED_IN => $this->createPermStr(0, 1), // Eigen profiel raadplegen
-				P_ADMIN => $this->createPermStr(0, 1 + 2), // Super-admin
-				P_VERJAARDAGEN => $this->createPermStr(1, 1), // Verjaardagen van leden zien
-				P_PROFIEL_EDIT => $this->createPermStr(1, 1 + 2), // Eigen gegevens aanpassen
-				P_LEDEN_READ => $this->createPermStr(1, 1 + 2 + 4), // Gegevens van leden raadplegen
-				P_OUDLEDEN_READ => $this->createPermStr(1, 1 + 2 + 4 + 8), // Gegevens van oudleden raadplegen
-				P_LEDEN_MOD => $this->createPermStr(1, 1 + 2 + 4 + 8 + 16), // (Oud)ledengegevens aanpassen
-				P_FORUM_READ => $this->createPermStr(2, 1), // Forum lezen
-				P_FORUM_POST => $this->createPermStr(2, 1 + 2), // Berichten plaatsen op het forum en eigen berichten wijzigen
-				P_FORUM_MOD => $this->createPermStr(2, 1 + 2 + 4), // Forum-moderator mag berichten van anderen wijzigen of verwijderen
-				P_FORUM_BELANGRIJK => $this->createPermStr(2, 8), // Forum belangrijk (de)markeren  [[let op: niet cumulatief]]
-				P_FORUM_ADMIN => $this->createPermStr(2, 16), // Forum-admin mag deel-fora aanmaken en rechten wijzigen  [[let op: niet cumulatief]]
-				P_AGENDA_READ => $this->createPermStr(3, 1), // Agenda bekijken
-				P_AGENDA_ADD => $this->createPermStr(3, 1 + 2), // Items toevoegen aan de agenda
-				P_AGENDA_MOD => $this->createPermStr(3, 1 + 2 + 4), // Items beheren in de agenda
-				P_DOCS_READ => $this->createPermStr(4, 1), // Documenten-rubriek lezen
-				P_DOCS_POST => $this->createPermStr(4, 1 + 2), // Documenten verwijderen of erbij plaatsen
-				P_DOCS_MOD => $this->createPermStr(4, 1 + 2 + 4), // Documenten aanpassen
-				P_ALBUM_READ => $this->createPermStr(5, 1), // Foto-album bekijken
-				P_ALBUM_DOWN => $this->createPermStr(5, 1 + 2), // Foto-album downloaden
-				P_ALBUM_ADD => $this->createPermStr(5, 1 + 2 + 4), // Fotos uploaden en albums toevoegen
-				P_ALBUM_MOD => $this->createPermStr(5, 1 + 2 + 4 + 8), // Foto-albums aanpassen
-				P_ALBUM_DEL => $this->createPermStr(5, 1 + 2 + 4 + 8 + 16), // Fotos uit fotoalbum verwijderen
-				P_BIEB_READ => $this->createPermStr(6, 1), // Bibliotheek lezen
-				P_BIEB_EDIT => $this->createPermStr(6, 1 + 2), // Bibliotheek wijzigen
-				P_BIEB_MOD => $this->createPermStr(6, 1 + 2 + 4), // Bibliotheek zowel wijzigen als lezen
-				P_NEWS_POST => $this->createPermStr(7, 1), // Nieuws plaatsen en wijzigen van jezelf
-				P_NEWS_MOD => $this->createPermStr(7, 1 + 2), // Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
-				P_NEWS_PUBLISH => $this->createPermStr(7, 1 + 2 + 4), // Nieuws publiceren en rechten bepalen
-				P_MAAL_IK => $this->createPermStr(8, 1), // Jezelf aan en afmelden voor maaltijd en eigen abo wijzigen
-				P_MAAL_MOD => $this->createPermStr(8, 1 + 2), // Maaltijden beheren (MaalCie P)
-				P_MAAL_SALDI => $this->createPermStr(8, 1 + 2 + 4), // MaalCie saldo aanpassen van iedereen (MaalCie fiscus)
-				P_CORVEE_IK => $this->createPermStr(9, 1), // Eigen voorkeuren aangeven voor corveetaken
-				P_CORVEE_MOD => $this->createPermStr(9, 1 + 2), // Corveetaken beheren (CorveeCaesar)
-				P_CORVEE_SCHED => $this->createPermStr(9, 1 + 2 + 4), // Automatische corvee-indeler beheren
-				P_MAIL_POST => $this->createPermStr(10, 1), // Berichten aan de courant toevoegen
-				P_MAIL_COMPOSE => $this->createPermStr(10, 1 + 2), // Alle berichtjes in de courant bewerken en volgorde wijzigen
-				P_MAIL_SEND => $this->createPermStr(10, 1 + 2 + 4), // Courant verzenden
-				P_PEILING_VOTE => $this->createPermStr(11, 1), // Stemmen op peilingen
-				P_PEILING_EDIT => $this->createPermStr(11, 1 + 2), // Peilingen aanmaken en eigen peiling bewerken
-				P_PEILING_MOD => $this->createPermStr(11, 1 + 2 + 4), // Peilingen aanmaken en verwijderen
-				P_FISCAAT_READ => $this->createPermStr(12, 1), // Fiscale dingen inzien
-				P_FISCAAT_MOD => $this->createPermStr(12, 1 + 2), // Fiscale bewerkingen maken
-				P_ALBUM_PUBLIC_READ => $this->createPermStr(13, 1), // Publiek foto-album bekijken
-				P_ALBUM_PUBLIC_DOWN => $this->createPermStr(13, 1 + 2), // Publiek foto-album downloaden
-				P_ALBUM_PUBLIC_ADD => $this->createPermStr(13, 1 + 2 + 4), // Publieke fotos uploaden en publieke albums toevoegen
-				P_ALBUM_PUBLIC_MOD => $this->createPermStr(13, 1 + 2 + 4 + 8), // Publiek foto-albums aanpassen
-				P_ALBUM_PUBLIC_DEL => $this->createPermStr(13, 1 + 2 + 4 + 8 + 16), // Fotos uit publiek fotoalbum verwijderen
-			];
-		});
+		$this->permissions = $this->cache->get(
+			'permissions-' . getlastmod(),
+			function () {
+				// build permissions
+				return [
+					P_PUBLIC => $this->createPermStr(0, 0), // Iedereen op het Internet
+					P_LOGGED_IN => $this->createPermStr(0, 1), // Eigen profiel raadplegen
+					P_ADMIN => $this->createPermStr(0, 1 + 2), // Super-admin
+					P_VERJAARDAGEN => $this->createPermStr(1, 1), // Verjaardagen van leden zien
+					P_PROFIEL_EDIT => $this->createPermStr(1, 1 + 2), // Eigen gegevens aanpassen
+					P_LEDEN_READ => $this->createPermStr(1, 1 + 2 + 4), // Gegevens van leden raadplegen
+					P_OUDLEDEN_READ => $this->createPermStr(1, 1 + 2 + 4 + 8), // Gegevens van oudleden raadplegen
+					P_LEDEN_MOD => $this->createPermStr(1, 1 + 2 + 4 + 8 + 16), // (Oud)ledengegevens aanpassen
+					P_FORUM_READ => $this->createPermStr(2, 1), // Forum lezen
+					P_FORUM_POST => $this->createPermStr(2, 1 + 2), // Berichten plaatsen op het forum en eigen berichten wijzigen
+					P_FORUM_MOD => $this->createPermStr(2, 1 + 2 + 4), // Forum-moderator mag berichten van anderen wijzigen of verwijderen
+					P_FORUM_BELANGRIJK => $this->createPermStr(2, 8), // Forum belangrijk (de)markeren  [[let op: niet cumulatief]]
+					P_FORUM_ADMIN => $this->createPermStr(2, 16), // Forum-admin mag deel-fora aanmaken en rechten wijzigen  [[let op: niet cumulatief]]
+					P_AGENDA_READ => $this->createPermStr(3, 1), // Agenda bekijken
+					P_AGENDA_ADD => $this->createPermStr(3, 1 + 2), // Items toevoegen aan de agenda
+					P_AGENDA_MOD => $this->createPermStr(3, 1 + 2 + 4), // Items beheren in de agenda
+					P_DOCS_READ => $this->createPermStr(4, 1), // Documenten-rubriek lezen
+					P_DOCS_POST => $this->createPermStr(4, 1 + 2), // Documenten verwijderen of erbij plaatsen
+					P_DOCS_MOD => $this->createPermStr(4, 1 + 2 + 4), // Documenten aanpassen
+					P_ALBUM_READ => $this->createPermStr(5, 1), // Foto-album bekijken
+					P_ALBUM_DOWN => $this->createPermStr(5, 1 + 2), // Foto-album downloaden
+					P_ALBUM_ADD => $this->createPermStr(5, 1 + 2 + 4), // Fotos uploaden en albums toevoegen
+					P_ALBUM_MOD => $this->createPermStr(5, 1 + 2 + 4 + 8), // Foto-albums aanpassen
+					P_ALBUM_DEL => $this->createPermStr(5, 1 + 2 + 4 + 8 + 16), // Fotos uit fotoalbum verwijderen
+					P_BIEB_READ => $this->createPermStr(6, 1), // Bibliotheek lezen
+					P_BIEB_EDIT => $this->createPermStr(6, 1 + 2), // Bibliotheek wijzigen
+					P_BIEB_MOD => $this->createPermStr(6, 1 + 2 + 4), // Bibliotheek zowel wijzigen als lezen
+					P_NEWS_POST => $this->createPermStr(7, 1), // Nieuws plaatsen en wijzigen van jezelf
+					P_NEWS_MOD => $this->createPermStr(7, 1 + 2), // Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
+					P_NEWS_PUBLISH => $this->createPermStr(7, 1 + 2 + 4), // Nieuws publiceren en rechten bepalen
+					P_MAAL_IK => $this->createPermStr(8, 1), // Jezelf aan en afmelden voor maaltijd en eigen abo wijzigen
+					P_MAAL_MOD => $this->createPermStr(8, 1 + 2), // Maaltijden beheren (MaalCie P)
+					P_MAAL_SALDI => $this->createPermStr(8, 1 + 2 + 4), // MaalCie saldo aanpassen van iedereen (MaalCie fiscus)
+					P_CORVEE_IK => $this->createPermStr(9, 1), // Eigen voorkeuren aangeven voor corveetaken
+					P_CORVEE_MOD => $this->createPermStr(9, 1 + 2), // Corveetaken beheren (CorveeCaesar)
+					P_CORVEE_SCHED => $this->createPermStr(9, 1 + 2 + 4), // Automatische corvee-indeler beheren
+					P_MAIL_POST => $this->createPermStr(10, 1), // Berichten aan de courant toevoegen
+					P_MAIL_COMPOSE => $this->createPermStr(10, 1 + 2), // Alle berichtjes in de courant bewerken en volgorde wijzigen
+					P_MAIL_SEND => $this->createPermStr(10, 1 + 2 + 4), // Courant verzenden
+					P_PEILING_VOTE => $this->createPermStr(11, 1), // Stemmen op peilingen
+					P_PEILING_EDIT => $this->createPermStr(11, 1 + 2), // Peilingen aanmaken en eigen peiling bewerken
+					P_PEILING_MOD => $this->createPermStr(11, 1 + 2 + 4), // Peilingen aanmaken en verwijderen
+					P_FISCAAT_READ => $this->createPermStr(12, 1), // Fiscale dingen inzien
+					P_FISCAAT_MOD => $this->createPermStr(12, 1 + 2), // Fiscale bewerkingen maken
+					P_ALBUM_PUBLIC_READ => $this->createPermStr(13, 1), // Publiek foto-album bekijken
+					P_ALBUM_PUBLIC_DOWN => $this->createPermStr(13, 1 + 2), // Publiek foto-album downloaden
+					P_ALBUM_PUBLIC_ADD => $this->createPermStr(13, 1 + 2 + 4), // Publieke fotos uploaden en publieke albums toevoegen
+					P_ALBUM_PUBLIC_MOD => $this->createPermStr(13, 1 + 2 + 4 + 8), // Publiek foto-albums aanpassen
+					P_ALBUM_PUBLIC_DEL => $this->createPermStr(13, 1 + 2 + 4 + 8 + 16), // Fotos uit publiek fotoalbum verwijderen
+				];
+			}
+		);
 
 		$this->roles = $this->cache->get('roles-' . getlastmod(), function () {
 			/**
@@ -238,16 +246,64 @@ class AccessService {
 			// use | $p[] for hierarchical RBAC (inheritance between roles)
 			// use & ~$p[] for constrained RBAC (separation of duties)
 
-			$roles[AccessRole::Nobody] = $p[P_PUBLIC] | $p[P_FORUM_READ] | $p[P_ALBUM_PUBLIC_READ];
-			$roles[AccessRole::Eter] = $roles[AccessRole::Nobody] | $p[P_LOGGED_IN] | $p[P_PROFIEL_EDIT] | $p[P_MAAL_IK] | $p[P_AGENDA_READ];
-			$roles[AccessRole::Lid] = $roles[AccessRole::Eter] | $p[P_OUDLEDEN_READ] | $p[P_FORUM_POST] | $p[P_DOCS_READ] | $p[P_BIEB_READ] | $p[P_CORVEE_IK] | $p[P_MAIL_POST] | $p[P_NEWS_POST] | $p[P_ALBUM_ADD] | $p[P_ALBUM_PUBLIC_DOWN] | $p[P_PEILING_VOTE] | $p[P_PEILING_EDIT];
+			$roles[AccessRole::Nobody] =
+				$p[P_PUBLIC] | $p[P_FORUM_READ] | $p[P_ALBUM_PUBLIC_READ];
+			$roles[AccessRole::Eter] =
+				$roles[AccessRole::Nobody] |
+				$p[P_LOGGED_IN] |
+				$p[P_PROFIEL_EDIT] |
+				$p[P_MAAL_IK] |
+				$p[P_AGENDA_READ];
+			$roles[AccessRole::Lid] =
+				$roles[AccessRole::Eter] |
+				$p[P_OUDLEDEN_READ] |
+				$p[P_FORUM_POST] |
+				$p[P_DOCS_READ] |
+				$p[P_BIEB_READ] |
+				$p[P_CORVEE_IK] |
+				$p[P_MAIL_POST] |
+				$p[P_NEWS_POST] |
+				$p[P_ALBUM_ADD] |
+				$p[P_ALBUM_PUBLIC_DOWN] |
+				$p[P_PEILING_VOTE] |
+				$p[P_PEILING_EDIT];
 			$roles[AccessRole::Oudlid] = $roles[AccessRole::Lid];
-			$roles[AccessRole::Fiscaat] = $roles[AccessRole::Lid] | $p[P_FISCAAT_READ] | $p[P_FISCAAT_MOD];
-			$roles[AccessRole::MaalCie] = $roles[AccessRole::Fiscaat] | $p[P_MAAL_MOD] | $p[P_CORVEE_MOD] | $p[P_MAAL_SALDI];
-			$roles[AccessRole::BASFCie] = $roles[AccessRole::Lid] | $p[P_DOCS_MOD] | $p[P_ALBUM_PUBLIC_DEL] | $p[P_ALBUM_DEL] | $p[P_BIEB_MOD];
-			$roles[AccessRole::Bestuur] = $roles[AccessRole::BASFCie] | $roles[AccessRole::MaalCie] | $p[P_LEDEN_MOD] | $p[P_FORUM_MOD] | $p[P_DOCS_MOD] | $p[P_AGENDA_MOD] | $p[P_NEWS_MOD] | $p[P_MAIL_COMPOSE] | $p[P_ALBUM_DEL] | $p[P_MAAL_MOD] | $p[P_CORVEE_MOD] | $p[P_MAIL_COMPOSE] | $p[P_FORUM_BELANGRIJK] | $p[P_PEILING_MOD];
-			$roles[AccessRole::PubCie] = $roles[AccessRole::Bestuur] | $p[P_ADMIN] | $p[P_MAIL_SEND] | $p[P_CORVEE_SCHED] | $p[P_FORUM_ADMIN];
-			$roles[AccessRole::ForumModerator] = $roles[AccessRole::Lid] | $p[P_FORUM_MOD];
+			$roles[AccessRole::Fiscaat] =
+				$roles[AccessRole::Lid] | $p[P_FISCAAT_READ] | $p[P_FISCAAT_MOD];
+			$roles[AccessRole::MaalCie] =
+				$roles[AccessRole::Fiscaat] |
+				$p[P_MAAL_MOD] |
+				$p[P_CORVEE_MOD] |
+				$p[P_MAAL_SALDI];
+			$roles[AccessRole::BASFCie] =
+				$roles[AccessRole::Lid] |
+				$p[P_DOCS_MOD] |
+				$p[P_ALBUM_PUBLIC_DEL] |
+				$p[P_ALBUM_DEL] |
+				$p[P_BIEB_MOD];
+			$roles[AccessRole::Bestuur] =
+				$roles[AccessRole::BASFCie] |
+				$roles[AccessRole::MaalCie] |
+				$p[P_LEDEN_MOD] |
+				$p[P_FORUM_MOD] |
+				$p[P_DOCS_MOD] |
+				$p[P_AGENDA_MOD] |
+				$p[P_NEWS_MOD] |
+				$p[P_MAIL_COMPOSE] |
+				$p[P_ALBUM_DEL] |
+				$p[P_MAAL_MOD] |
+				$p[P_CORVEE_MOD] |
+				$p[P_MAIL_COMPOSE] |
+				$p[P_FORUM_BELANGRIJK] |
+				$p[P_PEILING_MOD];
+			$roles[AccessRole::PubCie] =
+				$roles[AccessRole::Bestuur] |
+				$p[P_ADMIN] |
+				$p[P_MAIL_SEND] |
+				$p[P_CORVEE_SCHED] |
+				$p[P_FORUM_ADMIN];
+			$roles[AccessRole::ForumModerator] =
+				$roles[AccessRole::Lid] | $p[P_FORUM_MOD];
 
 			return $roles;
 		});
@@ -260,7 +316,8 @@ class AccessService {
 	 * @param int $level permissiewaarde
 	 * @return string permission string
 	 */
-	private function createPermStr($onderdeelnummer, $level) {
+	private function createPermStr($onderdeelnummer, $level)
+	{
 		$nulperm = str_repeat(chr(0), 15);
 		return substr_replace($nulperm, chr($level), $onderdeelnummer, 1);
 	}
@@ -296,7 +353,11 @@ class AccessService {
 	 *
 	 * @return bool Of $subject $permission heeft.
 	 */
-	public function mag(UserInterface $subject = null, $permission = null, array $allowedAuthenticationMethods = null) {
+	public function mag(
+		UserInterface $subject = null,
+		$permission = null,
+		array $allowedAuthenticationMethods = null
+	) {
 		if ($subject == null) {
 			$subject = $this->accountRepository->find(LoginService::UID_EXTERN);
 		}
@@ -304,9 +365,12 @@ class AccessService {
 		// Als voor het ingelogde lid een permissie gevraagd wordt
 		if ($subject->uid == LoginService::getUid()) {
 			// Controlleer hoe de gebruiker ge-authenticeerd is
-			$method = ContainerFacade::getContainer()->get(LoginService::class)->getAuthenticationMethod();
+			$method = ContainerFacade::getContainer()
+				->get(LoginService::class)
+				->getAuthenticationMethod();
 			if ($allowedAuthenticationMethods == null) {
-				$allowedAuthenticationMethods = self::$defaultAllowedAuthenticationMethods;
+				$allowedAuthenticationMethods =
+					self::$defaultAllowedAuthenticationMethods;
 			}
 			// Als de methode niet toegestaan is testen we met de permissies van niet-ingelogd
 			if (!in_array($method, $allowedAuthenticationMethods)) {
@@ -323,7 +387,11 @@ class AccessService {
 		$permission = strtoupper($permission);
 
 		// Try cache
-		$key = sprintf("hasPermission-%s-%s", urlencode(str_replace('-', '_', $permission)), $subject->uid);
+		$key = sprintf(
+			'hasPermission-%s-%s',
+			urlencode(str_replace('-', '_', $permission)),
+			$subject->uid
+		);
 
 		return $this->cache->get($key, function () use ($subject, $permission) {
 			return $this->hasPermission($subject, $permission);
@@ -337,7 +405,8 @@ class AccessService {
 	 * @param null $permission
 	 * @return bool
 	 */
-	private function hasPermission(UserInterface $subject, $permission = null) {
+	private function hasPermission(UserInterface $subject, $permission = null)
+	{
 		// OR
 		if (strpos($permission, ',') !== false) {
 			/**
@@ -351,7 +420,8 @@ class AccessService {
 			foreach ($p as $perm) {
 				$result |= $this->hasPermission($subject, $perm);
 			}
-		} // AND
+		}
+		// AND
 		elseif (strpos($permission, '+') !== false) {
 			/**
 			 * Gecombineerde permissie:
@@ -362,7 +432,8 @@ class AccessService {
 			foreach ($p as $perm) {
 				$result &= $this->hasPermission($subject, $perm);
 			}
-		} // OR (secondary)
+		}
+		// OR (secondary)
 		elseif (strpos($permission, '|') !== false) {
 			/**
 			 * Mogelijkheid voor OR binnen een AND
@@ -374,10 +445,12 @@ class AccessService {
 			foreach ($p as $perm) {
 				$result |= $this->hasPermission($subject, $perm);
 			}
-		} // Is de gevraagde permissie het uid van de gevraagde gebruiker?
+		}
+		// Is de gevraagde permissie het uid van de gevraagde gebruiker?
 		elseif ($subject->uid == strtolower($permission)) {
 			$result = true;
-		} // Is de gevraagde permissie voorgedefinieerd?
+		}
+		// Is de gevraagde permissie voorgedefinieerd?
 		elseif (isset($this->permissions[$permission])) {
 			$result = $this->mandatoryAccessControl($subject, $permission);
 		} else {
@@ -393,11 +466,17 @@ class AccessService {
 	 *
 	 * @return bool
 	 */
-	private function mandatoryAccessControl(UserInterface $subject, $permission) {
-
+	private function mandatoryAccessControl(UserInterface $subject, $permission)
+	{
 		if (isset($_SESSION['password_unsafe'])) {
-			if (in_array_i($permission, self::$ledenRead) || in_array_i($permission, self::$ledenWrite)) {
-				setMelding('U mag geen ledengegevens opvragen want uw wachtwoord is onveilig', 2);
+			if (
+				in_array_i($permission, self::$ledenRead) ||
+				in_array_i($permission, self::$ledenWrite)
+			) {
+				setMelding(
+					'U mag geen ledengegevens opvragen want uw wachtwoord is onveilig',
+					2
+				);
 				return false;
 			}
 		}
@@ -462,7 +541,8 @@ class AccessService {
 	 *
 	 * @return bool
 	 */
-	public function isValidRole($role) {
+	public function isValidRole($role)
+	{
 		if (isset($this->roles[$role])) {
 			return true;
 		}
@@ -476,8 +556,10 @@ class AccessService {
 	 * @return bool
 	 * @throws InvalidArgumentException
 	 */
-	private function discretionaryAccessControl(UserInterface $subject, $permission) {
-
+	private function discretionaryAccessControl(
+		UserInterface $subject,
+		$permission
+	) {
 		// haal het profiel van de gebruiker op
 		$profiel = $subject->profiel;
 
@@ -505,12 +587,14 @@ class AccessService {
 		}
 
 		switch ($prefix) {
-
 			/**
 			 * Is lid man of vrouw?
 			 */
 			case self::PREFIX_GESLACHT:
-				if ($profiel->geslacht && $gevraagd == strtoupper($profiel->geslacht->getValue())) {
+				if (
+					$profiel->geslacht &&
+					$gevraagd == strtoupper($profiel->geslacht->getValue())
+				) {
 					// Niet ingelogd heeft geslacht m dus check of ingelogd
 					if ($this->hasPermission($subject, P_LOGGED_IN)) {
 						return true;
@@ -526,9 +610,15 @@ class AccessService {
 				$gevraagd = 'S_' . $gevraagd;
 				if ($gevraagd == $profiel->status) {
 					return true;
-				} elseif ($gevraagd == LidStatus::Lid && LidStatus::isLidLike($profiel->status)) {
+				} elseif (
+					$gevraagd == LidStatus::Lid &&
+					LidStatus::isLidLike($profiel->status)
+				) {
 					return true;
-				} elseif ($gevraagd == LidStatus::Oudlid && LidStatus::isOudlidLike($profiel->status)) {
+				} elseif (
+					$gevraagd == LidStatus::Oudlid &&
+					LidStatus::isOudlidLike($profiel->status)
+				) {
 					return true;
 				}
 
@@ -539,7 +629,7 @@ class AccessService {
 			 */
 			case self::PREFIX_LICHTING:
 			case self::PREFIX_LIDJAAR:
-				return (string)$profiel->lidjaar === $gevraagd;
+				return (string) $profiel->lidjaar === $gevraagd;
 
 			case self::PREFIX_EERSTEJAARS:
 				if ($profiel->lidjaar === LichtingenRepository::getJongsteLidjaar()) {
@@ -559,7 +649,10 @@ class AccessService {
 			case self::PREFIX_VERTICALE:
 				if (!$profiel->verticale) {
 					return false;
-				} elseif ($profiel->verticale === $gevraagd || $gevraagd == strtoupper($profiel->getVerticale()->naam)) {
+				} elseif (
+					$profiel->verticale === $gevraagd ||
+					$gevraagd == strtoupper($profiel->getVerticale()->naam)
+				) {
 					if (!$role) {
 						return true;
 					} elseif ($role === 'LEIDER' && $profiel->verticaleleider) {
@@ -575,10 +668,14 @@ class AccessService {
 			case self::PREFIX_BESTUUR:
 				$gevraagd = strtolower($gevraagd);
 				if (in_array($gevraagd, GroepStatus::getEnumValues())) {
-					return 1 === (int)($this->em->createQuery('SELECT COUNT(b) FROM CsrDelft\entity\groepen\Bestuur b JOIN b.leden l WHERE l.uid = :uid AND b.status = :gevraagd')
+					return 1 ===
+						(int) $this->em
+							->createQuery(
+								'SELECT COUNT(b) FROM CsrDelft\entity\groepen\Bestuur b JOIN b.leden l WHERE l.uid = :uid AND b.status = :gevraagd'
+							)
 							->setParameter('gevraagd', $gevraagd)
 							->setParameter('uid', $profiel->uid)
-							->getSingleScalarResult());
+							->getSingleScalarResult();
 				}
 
 			/** @noinspection PhpMissingBreakStatementInspection */
@@ -586,7 +683,11 @@ class AccessService {
 				$role = strtolower($role);
 				// Alleen als GroepStatus is opgegeven, anders: fall through
 				if (in_array($role, GroepStatus::getEnumValues())) {
-					return 1 === (int)$this->em->createQuery('SELECT COUNT(c) FROM CsrDelft\entity\groepen\Commissie c JOIN c.leden l WHERE l.uid = :uid AND c.familie = :gevraagd AND c.status = :role')
+					return 1 ===
+						(int) $this->em
+							->createQuery(
+								'SELECT COUNT(c) FROM CsrDelft\entity\groepen\Commissie c JOIN c.leden l WHERE l.uid = :uid AND c.familie = :gevraagd AND c.status = :role'
+							)
 							->setParameter('gevraagd', $gevraagd)
 							->setParameter('role', $role)
 							->setParameter('uid', $profiel->uid)
@@ -608,9 +709,10 @@ class AccessService {
 			case self::PREFIX_WERKGROEP:
 			case self::PREFIX_GROEP:
 				switch ($prefix) {
-
 					case self::PREFIX_BESTUUR:
-						if (in_array(ucfirst($gevraagd), CommissieFunctie::getEnumValues())) {
+						if (
+							in_array(ucfirst($gevraagd), CommissieFunctie::getEnumValues())
+						) {
 							$role = $gevraagd;
 							$gevraagd = false;
 						}
@@ -630,7 +732,9 @@ class AccessService {
 						break;
 
 					case self::PREFIX_ONDERVERENIGING:
-						$groep = $this->em->getRepository(Ondervereniging::class)->get($gevraagd);
+						$groep = $this->em
+							->getRepository(Ondervereniging::class)
+							->get($gevraagd);
 						break;
 
 					case self::PREFIX_WOONOORD:
@@ -638,7 +742,9 @@ class AccessService {
 						break;
 
 					case self::PREFIX_ACTIVITEIT:
-						$groep = $this->em->getRepository(Activiteit::class)->get($gevraagd);
+						$groep = $this->em
+							->getRepository(Activiteit::class)
+							->get($gevraagd);
 						break;
 
 					case self::PREFIX_KETZER:
@@ -651,7 +757,9 @@ class AccessService {
 
 					case self::PREFIX_GROEP:
 					default:
-						$groep = $this->em->getRepository(RechtenGroep::class)->get($gevraagd);
+						$groep = $this->em
+							->getRepository(RechtenGroep::class)
+							->get($gevraagd);
 						break;
 				}
 
@@ -679,15 +787,23 @@ class AccessService {
 					return false;
 				}
 				// Aangemeld voor maaltijd?
-				if (!$role && $this->em->getRepository(MaaltijdAanmelding::class)->getIsAangemeld((int)$gevraagd, $profiel->uid)) {
+				if (
+					!$role &&
+					$this->em
+						->getRepository(MaaltijdAanmelding::class)
+						->getIsAangemeld((int) $gevraagd, $profiel->uid)
+				) {
 					return true;
-				} // Mag maaltijd sluiten?
+				}
+				// Mag maaltijd sluiten?
 				elseif ($role === 'SLUITEN') {
 					if ($this->hasPermission($subject, P_MAAL_MOD)) {
 						return true;
 					}
 					try {
-						$maaltijd = $this->em->getRepository(Maaltijd::class)->getMaaltijd((int)$gevraagd);
+						$maaltijd = $this->em
+							->getRepository(Maaltijd::class)
+							->getMaaltijd((int) $gevraagd);
 						if ($maaltijd && $maaltijd->magSluiten($profiel->uid)) {
 							return true;
 						}
@@ -702,16 +818,21 @@ class AccessService {
 			 * Heeft een lid een kwalficatie voor een functie in het covee-systeem?
 			 */
 			case self::PREFIX_KWALIFICATIE:
-
 				if (is_numeric($gevraagd)) {
-					$functie_id = (int)$gevraagd;
+					$functie_id = (int) $gevraagd;
 				} else {
-					$corveeFunctiesRepository = $this->em->getRepository(CorveeFunctie::class);
+					$corveeFunctiesRepository = $this->em->getRepository(
+						CorveeFunctie::class
+					);
 
-					$functie = $corveeFunctiesRepository->findOneBy(['afkorting' => $gevraagd]);
+					$functie = $corveeFunctiesRepository->findOneBy([
+						'afkorting' => $gevraagd,
+					]);
 
 					if (!$functie) {
-						$functie = $corveeFunctiesRepository->findOneBy(['naam' => $gevraagd]);
+						$functie = $corveeFunctiesRepository->findOneBy([
+							'naam' => $gevraagd,
+						]);
 					}
 
 					if ($functie) {
@@ -721,7 +842,9 @@ class AccessService {
 					}
 				}
 
-				return $this->em->getRepository(CorveeKwalificatie::class)->isLidGekwalificeerdVoorFunctie($profiel->uid, $functie_id);
+				return $this->em
+					->getRepository(CorveeKwalificatie::class)
+					->isLidGekwalificeerdVoorFunctie($profiel->uid, $functie_id);
 		}
 		return false;
 	}
@@ -732,7 +855,8 @@ class AccessService {
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function getDefaultPermissionRole($lidstatus) {
+	public function getDefaultPermissionRole($lidstatus)
+	{
 		switch ($lidstatus) {
 			case LidStatus::Kringel:
 			case LidStatus::Noviet:
@@ -755,7 +879,8 @@ class AccessService {
 	/**
 	 * @return string[]
 	 */
-	public function getPermissionSuggestions() {
+	public function getPermissionSuggestions()
+	{
 		$suggestions = array_keys($this->permissions);
 		$suggestions[] = 'bestuur';
 		$suggestions[] = 'geslacht:m';
@@ -771,7 +896,8 @@ class AccessService {
 	 * @param string $permissions
 	 * @return array empty if no errors; substring(s) of $permissions containing error(s) otherwise
 	 */
-	public function getPermissionStringErrors($permissions) {
+	public function getPermissionStringErrors($permissions)
+	{
 		$errors = [];
 		// OR
 		$or = explode(',', $permissions);
@@ -796,7 +922,8 @@ class AccessService {
 	 *
 	 * @return bool
 	 */
-	public function isValidPermission($permission) {
+	public function isValidPermission($permission)
+	{
 		// case insensitive
 		$permission = strtoupper($permission);
 
@@ -824,6 +951,4 @@ class AccessService {
 
 		return false;
 	}
-
-
 }

@@ -1,11 +1,12 @@
 <?php
 
-
 use CsrDelft\common\ContainerFacade;
 use Symfony\Component\Panther\PantherTestCase;
 
-class LoginTest extends PantherTestCase {
-	public function testPageLoad() {
+class LoginTest extends PantherTestCase
+{
+	public function testPageLoad()
+	{
 		$client = static::createPantherClient();
 		ContainerFacade::init(self::$container);
 
@@ -15,12 +16,13 @@ class LoginTest extends PantherTestCase {
 		$this->assertTrue(true);
 	}
 
-	public function testLogin() {
+	public function testLogin()
+	{
 		$client = static::createPantherClient();
 
 		$crawler = $client->request('GET', '/');
 
-		$crawler->selectLink("Inloggen")->click();
+		$crawler->selectLink('Inloggen')->click();
 
 		$form = $crawler->selectButton('Inloggen')->form();
 
@@ -33,5 +35,4 @@ class LoginTest extends PantherTestCase {
 
 		$this->assertStringContainsString('Dit is de voorpagina.', $pageContent);
 	}
-
 }

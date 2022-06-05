@@ -346,7 +346,10 @@ class Declaratie
 	public function getListStatus(): string
 	{
 		$status = $this->getStatus();
-		if ($status === 'uitbetaald' || $status === 'goedgekeurd' && $this->getCsrPas()) {
+		if (
+			$status === 'uitbetaald' ||
+			($status === 'goedgekeurd' && $this->getCsrPas())
+		) {
 			return 'goedgekeurd';
 		} elseif ($status === 'goedgekeurd') {
 			return 'uitbetaald';
@@ -424,7 +427,8 @@ class Declaratie
 			}
 		} else {
 			if (empty($this->rekening)) {
-				$fouten[] = 'Vul de IBAN in waar het bedrag naar teruggestort moet worden';
+				$fouten[] =
+					'Vul de IBAN in waar het bedrag naar teruggestort moet worden';
 			} elseif (!verify_iban($this->rekening)) {
 				$fouten[] = "{$this->rekening} is geen geldige IBAN";
 			}
@@ -450,7 +454,9 @@ class Declaratie
 	private function getNummerPrefix(): string
 	{
 		if ($this->isIngediend() && $this->getCategorie()) {
-			return $this->getCategorie()->getWachtrij()->getPrefix() . boekjaar($this->getIngediend(), true);
+			return $this->getCategorie()
+				->getWachtrij()
+				->getPrefix() . boekjaar($this->getIngediend(), true);
 		}
 		return '';
 	}
@@ -458,12 +464,24 @@ class Declaratie
 	public function naarStatusData(): array
 	{
 		return [
-			'ingediendOp' => $this->isIngediend() ? date_format_intl($this->ingediend, 'dd-MM-yyyy') : null,
+			'ingediendOp' => $this->isIngediend()
+				? date_format_intl($this->ingediend, 'dd-MM-yyyy')
+				: null,
 			'ingediendDoor' => $this->indiener->getNaam(),
-			'goedgekeurdOp' => $this->isBeoordeeld() && $this->isGoedgekeurd() ? date_format_intl($this->beoordeeld, 'dd-MM-yyyy') : null,
-			'afgekeurdOp' => $this->isBeoordeeld() && !$this->isGoedgekeurd() ? date_format_intl($this->beoordeeld, 'dd-MM-yyyy') : null,
-			'beoordeeldDoor' => $this->beoordelaar ? $this->beoordelaar->getNaam() : null,
-			'uitbetaaldOp' => $this->isUitbetaald() ? date_format_intl($this->uitbetaald, 'dd-MM-yyyy') : null,
+			'goedgekeurdOp' =>
+				$this->isBeoordeeld() && $this->isGoedgekeurd()
+					? date_format_intl($this->beoordeeld, 'dd-MM-yyyy')
+					: null,
+			'afgekeurdOp' =>
+				$this->isBeoordeeld() && !$this->isGoedgekeurd()
+					? date_format_intl($this->beoordeeld, 'dd-MM-yyyy')
+					: null,
+			'beoordeeldDoor' => $this->beoordelaar
+				? $this->beoordelaar->getNaam()
+				: null,
+			'uitbetaaldOp' => $this->isUitbetaald()
+				? date_format_intl($this->uitbetaald, 'dd-MM-yyyy')
+				: null,
 			'magBeoordelen' => $this->magBeoordelen(),
 			'magUitbetalen' => $this->magUitbetalen(),
 			'nummerPrefix' => $this->getNummerPrefix(),
@@ -472,13 +490,23 @@ class Declaratie
 
 	public function naarObject(UrlGeneratorInterface $generator): array
 	{
-		$eigenRekening = $this->csrPas || $this->csrPas === null || $this->rekening === $this->indiener->bankrekening && $this->naam === $this->indiener->getNaam('voorletters');
+		$eigenRekening =
+			$this->csrPas ||
+			$this->csrPas === null ||
+			($this->rekening === $this->indiener->bankrekening &&
+				$this->naam === $this->indiener->getNaam('voorletters'));
 		return [
 			'id' => $this->id,
-			'datum' => $this->isIngediend() ? date_format_intl($this->getIngediend(), 'dd-MM-yyyy') : null,
+			'datum' => $this->isIngediend()
+				? date_format_intl($this->getIngediend(), 'dd-MM-yyyy')
+				: null,
 			'categorie' => $this->getCategorie()->getId(),
 			'omschrijving' => $this->omschrijving,
-			'betaalwijze' => $this->csrPas ? 'C.S.R.-pas' : ($this->csrPas === false ? 'voorgeschoten' : null),
+			'betaalwijze' => $this->csrPas
+				? 'C.S.R.-pas'
+				: ($this->csrPas === false
+					? 'voorgeschoten'
+					: null),
 			'eigenRekening' => $eigenRekening,
 			'rekening' => $eigenRekening ? null : $this->rekening,
 			'tnv' => $this->csrPas || !$eigenRekening ? $this->naam : null,
@@ -494,9 +522,10 @@ class Declaratie
 
 	public function magBewerken(): bool
 	{
-		return $this->magUitbetalen()
-			|| ($this->getStatus() !== 'uitbetaald' && $this->magBeoordelen())
-			|| ($this->getStatus() === 'concept' && $this->getIndiener()->uid === LoginService::getUid());
+		return $this->magUitbetalen() ||
+			($this->getStatus() !== 'uitbetaald' && $this->magBeoordelen()) ||
+			($this->getStatus() === 'concept' &&
+				$this->getIndiener()->uid === LoginService::getUid());
 	}
 
 	public function magBeoordelen(): bool
@@ -509,17 +538,19 @@ class Declaratie
 		return !$this->getCsrPas() && self::isFiscus();
 	}
 
-	public static function isFiscus(): bool {
+	public static function isFiscus(): bool
+	{
 		return LoginService::mag('bestuur:Fiscus');
 	}
 
 	public function magBekijken(): bool
 	{
-		return $this->getIndiener()->uid === LoginService::getUid()
-			|| $this->magBeoordelen();
+		return $this->getIndiener()->uid === LoginService::getUid() ||
+			$this->magBeoordelen();
 	}
 
-	public function getRelatie(): string {
+	public function getRelatie(): string
+	{
 		if ($this->getCsrPas()) {
 			return $this->getNaam();
 		} else {
@@ -527,7 +558,8 @@ class Declaratie
 		}
 	}
 
-	public function getDeclaratieDatum(): DateTimeInterface {
+	public function getDeclaratieDatum(): DateTimeInterface
+	{
 		if ($this->getCsrPas()) {
 			return $this->getBonnen()[0]->getDatum();
 		} else {
@@ -537,6 +569,8 @@ class Declaratie
 
 	public function getTitel(): string
 	{
-		return "{$this->getNummer()} - {$this->getRelatie()} - {$this->getOmschrijving()} - {$this->getDeclaratieDatum()->format('d-m-Y')}";
+		return "{$this->getNummer()} - {$this->getRelatie()} - {$this->getOmschrijving()} - {$this->getDeclaratieDatum()->format(
+			'd-m-Y'
+		)}";
 	}
 }

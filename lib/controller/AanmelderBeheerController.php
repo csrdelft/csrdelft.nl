@@ -44,10 +44,11 @@ class AanmelderBeheerController extends AbstractController
 	 */
 	private $deelnemerRepository;
 
-	public function __construct(ReeksRepository $reeksRepository,
-															AanmeldActiviteitRepository $activiteitRepository,
-															DeelnemerRepository $deelnemerRepository)
-	{
+	public function __construct(
+		ReeksRepository $reeksRepository,
+		AanmeldActiviteitRepository $activiteitRepository,
+		DeelnemerRepository $deelnemerRepository
+	) {
 		$this->reeksRepository = $reeksRepository;
 		$this->activiteitRepository = $activiteitRepository;
 		$this->deelnemerRepository = $deelnemerRepository;
@@ -79,7 +80,8 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/reeks/nieuw", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function reeksNieuw(Request $request) {
+	public function reeksNieuw(Request $request)
+	{
 		if (!Reeks::magAanmaken()) {
 			throw new CsrGebruikerException('Mag geen reeks aanmaken');
 		}
@@ -95,8 +97,12 @@ class AanmelderBeheerController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
-			$this->getDoctrine()->getManager()->persist($reeks);
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->persist($reeks);
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 
 			return $this->tableData([$reeks]);
 		}
@@ -133,8 +139,12 @@ class AanmelderBeheerController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
-			$this->getDoctrine()->getManager()->persist($reeks);
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->persist($reeks);
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 
 			return $this->tableData([$reeks]);
 		}
@@ -191,11 +201,15 @@ class AanmelderBeheerController extends AbstractController
 		}
 
 		if (!$activiteit->getReeks()->magActiviteitenBeheren()) {
-			throw new CsrGebruikerException('Mag activiteiten in reeks niet bewerken');
+			throw new CsrGebruikerException(
+				'Mag activiteiten in reeks niet bewerken'
+			);
 		}
 
 		$form = $this->createFormulier(AanmeldActiviteitForm::class, $activiteit, [
-			'action' => $this->generateUrl('csrdelft_aanmelderbeheer_activiteitbewerken'),
+			'action' => $this->generateUrl(
+				'csrdelft_aanmelderbeheer_activiteitbewerken'
+			),
 			'nieuw' => false,
 			'dataTableId' => true,
 		]);
@@ -203,8 +217,12 @@ class AanmelderBeheerController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
-			$this->getDoctrine()->getManager()->persist($activiteit);
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->persist($activiteit);
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 
 			return $this->tableData([$activiteit]);
 		}
@@ -225,7 +243,10 @@ class AanmelderBeheerController extends AbstractController
 			throw new CsrGebruikerException('Mag activiteit niet verwijderen');
 		}
 
-		$removed = new RemoveDataTableEntry($activiteit->id, AanmeldActiviteit::class);
+		$removed = new RemoveDataTableEntry(
+			$activiteit->id,
+			AanmeldActiviteit::class
+		);
 
 		$this->activiteitRepository->delete($activiteit);
 
@@ -239,9 +260,12 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/activiteiten/nieuw/{reeks}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function activiteitNieuw(Request $request, Reeks $reeks) {
+	public function activiteitNieuw(Request $request, Reeks $reeks)
+	{
 		if (!$reeks->magActiviteitenBeheren()) {
-			throw new CsrGebruikerException('Mag geen activiteit in deze reeks aanmaken');
+			throw new CsrGebruikerException(
+				'Mag geen activiteit in deze reeks aanmaken'
+			);
 		}
 
 		$activiteit = new AanmeldActiviteit();
@@ -249,7 +273,10 @@ class AanmelderBeheerController extends AbstractController
 		$activiteit->setGesloten(false);
 
 		$form = $this->createFormulier(AanmeldActiviteitForm::class, $activiteit, [
-			'action' => $this->generateUrl('csrdelft_aanmelderbeheer_activiteitnieuw', ['reeks' => $reeks->getId()]),
+			'action' => $this->generateUrl(
+				'csrdelft_aanmelderbeheer_activiteitnieuw',
+				['reeks' => $reeks->getId()]
+			),
 			'nieuw' => true,
 			'dataTableId' => true,
 		]);
@@ -257,8 +284,12 @@ class AanmelderBeheerController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
-			$this->getDoctrine()->getManager()->persist($activiteit);
-			$this->getDoctrine()->getManager()->flush();
+			$this->getDoctrine()
+				->getManager()
+				->persist($activiteit);
+			$this->getDoctrine()
+				->getManager()
+				->flush();
 
 			return $this->tableData([$activiteit]);
 		}
@@ -273,14 +304,19 @@ class AanmelderBeheerController extends AbstractController
 	 * @return GenericDataTableResponse
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function reeksDetailLijst(Reeks $reeks, Request $request): GenericDataTableResponse
-	{
+	public function reeksDetailLijst(
+		Reeks $reeks,
+		Request $request
+	): GenericDataTableResponse {
 		if ($request->query->get('filter') === 'alles') {
 			$activiteiten = $reeks->getActiviteiten();
 		} else {
-			$activiteiten = $reeks->getActiviteiten()->filter(function(AanmeldActiviteit $activiteit) {
-				return $activiteit->isInToekomst();
-			})->getValues();
+			$activiteiten = $reeks
+				->getActiviteiten()
+				->filter(function (AanmeldActiviteit $activiteit) {
+					return $activiteit->isInToekomst();
+				})
+				->getValues();
 		}
 
 		return $this->tableData($activiteiten);
@@ -299,14 +335,22 @@ class AanmelderBeheerController extends AbstractController
 		}
 
 		$deelnemers = $activiteit->getDeelnemers()->getValues();
-		usort($deelnemers, function(Deelnemer $deelnemerA, Deelnemer $deelnemerB) {
-			return $deelnemerA->getLid()->achternaam <=> $deelnemerB->getLid()->achternaam
-				  ?: $deelnemerA->getLid()->voornaam <=> $deelnemerB->getLid()->voornaam;
+		usort($deelnemers, function (Deelnemer $deelnemerA, Deelnemer $deelnemerB) {
+			return $deelnemerA->getLid()->achternaam <=>
+				$deelnemerB->getLid()->achternaam ?:
+				$deelnemerA->getLid()->voornaam <=> $deelnemerB->getLid()->voornaam;
 		});
 
-		$form = $this->createFormulier(AanmeldActiviteitAanmeldForm::class, $activiteit, [
-			'action' => $this->generateUrl('csrdelft_aanmelderbeheer_lijstaanmelden', ['activiteit' => $activiteit->getId()]),
-		]);
+		$form = $this->createFormulier(
+			AanmeldActiviteitAanmeldForm::class,
+			$activiteit,
+			[
+				'action' => $this->generateUrl(
+					'csrdelft_aanmelderbeheer_lijstaanmelden',
+					['activiteit' => $activiteit->getId()]
+				),
+			]
+		);
 
 		return $this->render('aanmelder/deelnemers_lijst.html.twig', [
 			'activiteit' => $activiteit,
@@ -323,13 +367,19 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/lijst/{activiteit}/sluiten/{sluit}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function sluit(AanmeldActiviteit $activiteit, bool $sluit, AanmeldActiviteitRepository $activiteitRepository): Response {
+	public function sluit(
+		AanmeldActiviteit $activiteit,
+		bool $sluit,
+		AanmeldActiviteitRepository $activiteitRepository
+	): Response {
 		if (!$activiteit->magLijstBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
 
 		$activiteitRepository->sluit($activiteit, $sluit);
-		return $this->render('aanmelder/onderdelen/status.html.twig', ['activiteit' => $activiteit]);
+		return $this->render('aanmelder/onderdelen/status.html.twig', [
+			'activiteit' => $activiteit,
+		]);
 	}
 
 	/**
@@ -340,14 +390,24 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/lijst/{activiteit}/aanmelden", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijstAanmelden(AanmeldActiviteit $activiteit, Request $request): Response {
+	public function lijstAanmelden(
+		AanmeldActiviteit $activiteit,
+		Request $request
+	): Response {
 		if (!$activiteit->magLijstBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
 
-		$form = $this->createFormulier(AanmeldActiviteitAanmeldForm::class, $activiteit, [
-			'action' => $this->generateUrl('csrdelft_aanmelderbeheer_lijstaanmelden', ['activiteit' => $activiteit->getId()]),
-		]);
+		$form = $this->createFormulier(
+			AanmeldActiviteitAanmeldForm::class,
+			$activiteit,
+			[
+				'action' => $this->generateUrl(
+					'csrdelft_aanmelderbeheer_lijstaanmelden',
+					['activiteit' => $activiteit->getId()]
+				),
+			]
+		);
 		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
@@ -362,7 +422,9 @@ class AanmelderBeheerController extends AbstractController
 			$this->deelnemerRepository->aanmelden($activiteit, $lid, $aantal, true);
 		}
 
-		return $this->redirectToRoute('csrdelft_aanmelderbeheer_lijst', ['activiteit' => $activiteit->getId()]);
+		return $this->redirectToRoute('csrdelft_aanmelderbeheer_lijst', [
+			'activiteit' => $activiteit->getId(),
+		]);
 	}
 
 	/**
@@ -373,13 +435,18 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/lijst/{activiteit}/afmelden/{lid}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijstAfmelden(AanmeldActiviteit $activiteit, Profiel $lid): Response {
+	public function lijstAfmelden(
+		AanmeldActiviteit $activiteit,
+		Profiel $lid
+	): Response {
 		if (!$activiteit->magLijstBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
 
 		$this->deelnemerRepository->afmelden($activiteit, $lid, true);
-		return new Response("<div id='aanmelding-{$lid->uid}' class='remove'></div>");
+		return new Response(
+			"<div id='aanmelding-{$lid->uid}' class='remove'></div>"
+		);
 	}
 
 	/**
@@ -391,16 +458,28 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/lijst/{activiteit}/aantal/{lid}/{aantal}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijstAantal(AanmeldActiviteit $activiteit, Profiel $lid, int $aantal): Response {
+	public function lijstAantal(
+		AanmeldActiviteit $activiteit,
+		Profiel $lid,
+		int $aantal
+	): Response {
 		if (!$activiteit->magLijstBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
 
-		$deelnemer = $this->deelnemerRepository->aantalAanpassen($activiteit, $lid, $aantal, true);
+		$deelnemer = $this->deelnemerRepository->aantalAanpassen(
+			$activiteit,
+			$lid,
+			$aantal,
+			true
+		);
 		return $this->render('aanmelder/onderdelen/deelnemer.html.twig', [
 			'activiteit' => $activiteit,
 			'deelnemer' => $deelnemer,
-			'naamweergave' => instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst'),
+			'naamweergave' => instelling(
+				'maaltijden',
+				'weergave_ledennamen_maaltijdlijst'
+			),
 		]);
 	}
 
@@ -414,16 +493,27 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/lijst/{activiteit}/aanwezig/{lid}/{aanwezig}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijstAanwezig(AanmeldActiviteit $activiteit, Profiel $lid, bool $aanwezig): Response {
+	public function lijstAanwezig(
+		AanmeldActiviteit $activiteit,
+		Profiel $lid,
+		bool $aanwezig
+	): Response {
 		if (!$activiteit->magLijstBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
 
-		$deelnemer = $this->deelnemerRepository->setAanwezig($activiteit, $lid, $aanwezig);
+		$deelnemer = $this->deelnemerRepository->setAanwezig(
+			$activiteit,
+			$lid,
+			$aanwezig
+		);
 		return $this->render('aanmelder/onderdelen/deelnemer.html.twig', [
 			'activiteit' => $activiteit,
 			'deelnemer' => $deelnemer,
-			'naamweergave' => instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst'),
+			'naamweergave' => instelling(
+				'maaltijden',
+				'weergave_ledennamen_maaltijdlijst'
+			),
 		]);
 	}
 }

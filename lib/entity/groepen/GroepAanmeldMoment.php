@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\entity\groepen;
-
 
 use CsrDelft\entity\security\enum\AccessAction;
 use DateTimeImmutable;
@@ -48,7 +46,10 @@ trait GroepAanmeldMoment
 	{
 		$nu = date_create_immutable();
 
-		if (AccessAction::isAanmelden($action) && ($nu > $this->aanmeldenTot || $nu < $this->aanmeldenVanaf)) {
+		if (
+			AccessAction::isAanmelden($action) &&
+			($nu > $this->aanmeldenTot || $nu < $this->aanmeldenVanaf)
+		) {
 			// Controleer aanmeldperiode
 			return false;
 		} elseif (AccessAction::isBewerken($action) && $nu > $this->bewerkenTot) {

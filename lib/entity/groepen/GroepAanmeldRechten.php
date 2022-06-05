@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\entity\groepen;
-
 
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
@@ -34,7 +32,10 @@ trait GroepAanmeldRechten
 			AccessAction::Afmelden(),
 		];
 
-		if (in_array($action, $beschermdeActies) && !LoginService::mag($this->rechtenAanmelden)) {
+		if (
+			in_array($action, $beschermdeActies) &&
+			!LoginService::mag($this->rechtenAanmelden)
+		) {
 			return false;
 		}
 

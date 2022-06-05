@@ -18,7 +18,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * 	@ORM\UniqueConstraint(name="account_client", columns={"uid", "client_identifier"})
  * })
  */
-class RememberOAuth implements DataTableEntry {
+class RememberOAuth implements DataTableEntry
+{
 	/**
 	 * Primary key
 	 * @var int

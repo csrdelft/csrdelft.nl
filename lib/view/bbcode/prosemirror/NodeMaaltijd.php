@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror;
-
 
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbMaaltijd;
@@ -26,7 +24,7 @@ class NodeMaaltijd implements Node
 		}
 
 		return [
-			'attrs' => ['id' => $node->getId()]
+			'attrs' => ['id' => $node->getId()],
 		];
 	}
 

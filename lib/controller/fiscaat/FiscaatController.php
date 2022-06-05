@@ -11,11 +11,13 @@ use CsrDelft\view\fiscaat\saldo\SaldiSomForm;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FiscaatController extends AbstractController {
+class FiscaatController extends AbstractController
+{
 	/** @var CiviSaldoRepository */
 	private $civiSaldoRepository;
 
-	public function __construct(CiviSaldoRepository $civiSaldoRepository) {
+	public function __construct(CiviSaldoRepository $civiSaldoRepository)
+	{
 		$this->civiSaldoRepository = $civiSaldoRepository;
 	}
 
@@ -24,7 +26,8 @@ class FiscaatController extends AbstractController {
 	 * @Route("/fiscaat")
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function overzicht() {
+	public function overzicht()
+	{
 		return $this->render('fiscaat/overzicht.html.twig', [
 			'saldisomform' => new SaldiSomForm($this->civiSaldoRepository),
 			'saldisom' => $this->civiSaldoRepository->getSomSaldi(),

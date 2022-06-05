@@ -17,7 +17,8 @@ use Doctrine\ORM\EntityManagerInterface;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 20/02/2018
  */
-class PinTransactieMatcher {
+class PinTransactieMatcher
+{
 	/**
 	 * Constants.
 	 */
@@ -55,18 +56,23 @@ class PinTransactieMatcher {
 		$this->entityManager = $entityManager;
 	}
 
-	public function setPinTransacties(array $pinTransacties) {
+	public function setPinTransacties(array $pinTransacties)
+	{
 		$this->pinTransacties = $pinTransacties;
 	}
 
-	public function setPinBestellingen(array $pinBestellingen) {
+	public function setPinBestellingen(array $pinBestellingen)
+	{
 		$this->pinBestellingen = $pinBestellingen;
 	}
 
 	/**
 	 */
-	public function clean() {
-		$ids = array_map(function (CiviBestelling $inhoud) { return $inhoud->id; }, $this->pinBestellingen);
+	public function clean()
+	{
+		$ids = array_map(function (CiviBestelling $inhoud) {
+			return $inhoud->id;
+		}, $this->pinBestellingen);
 		$this->pinTransactieMatchModel->cleanByBestellingIds($ids);
 	}
 
@@ -76,7 +82,10 @@ class PinTransactieMatcher {
 	 * @return int[][]
 	 * @throws CsrException
 	 */
-	protected function levenshteinMatrix(array $pinTransacties, array $pinBestellingen) {
+	protected function levenshteinMatrix(
+		array $pinTransacties,
+		array $pinBestellingen
+	) {
 		$pinTransactiesCount = count($pinTransacties);
 		$pinBestellingenCount = count($pinBestellingen);
 
@@ -109,29 +118,44 @@ class PinTransactieMatcher {
 	/**
 	 * @throws CsrException
 	 */
-	public function match() {
+	public function match()
+	{
 		$pinTransacties = $this->pinTransacties;
 		$pinBestellingen = $this->pinBestellingen;
-		$distanceMatrix = $this->levenshteinMatrix($pinTransacties, $pinBestellingen);
+		$distanceMatrix = $this->levenshteinMatrix(
+			$pinTransacties,
+			$pinBestellingen
+		);
 
 		$matches = [];
 		$indexTransactie = count($pinTransacties) - 1;
 		$indexBestelling = count($pinBestellingen) - 1;
 
-		while ($indexTransactie >= 0 && $indexBestelling >=0) {
+		while ($indexTransactie >= 0 && $indexBestelling >= 0) {
 			$matchCost = $this->matchCost($indexTransactie, $indexBestelling);
-			$matchDistance = $distanceMatrix[$indexTransactie][$indexBestelling] + $matchCost;
-			$missendeBestellingDistance = $distanceMatrix[$indexTransactie][$indexBestelling +1] + self::COST_MISSING;
-			$missendeTransactieDistance = $distanceMatrix[$indexTransactie + 1][$indexBestelling ] + self::COST_MISSING;
+			$matchDistance =
+				$distanceMatrix[$indexTransactie][$indexBestelling] + $matchCost;
+			$missendeBestellingDistance =
+				$distanceMatrix[$indexTransactie][$indexBestelling + 1] +
+				self::COST_MISSING;
+			$missendeTransactieDistance =
+				$distanceMatrix[$indexTransactie + 1][$indexBestelling] +
+				self::COST_MISSING;
 
-			$distance = $distanceMatrix[$indexTransactie+1][$indexBestelling+1];
+			$distance = $distanceMatrix[$indexTransactie + 1][$indexBestelling + 1];
 
 			switch ($distance) {
 				case $matchDistance:
 					if ($matchCost > 0) {
-						$matches[] = PinTransactieMatch::verkeerdBedrag($pinTransacties[$indexTransactie], $pinBestellingen[$indexBestelling]);
+						$matches[] = PinTransactieMatch::verkeerdBedrag(
+							$pinTransacties[$indexTransactie],
+							$pinBestellingen[$indexBestelling]
+						);
 					} else {
-						$matches[] = PinTransactieMatch::match($pinTransacties[$indexTransactie], $pinBestellingen[$indexBestelling]);
+						$matches[] = PinTransactieMatch::match(
+							$pinTransacties[$indexTransactie],
+							$pinBestellingen[$indexBestelling]
+						);
 					}
 
 					$indexTransactie--;
@@ -140,13 +164,17 @@ class PinTransactieMatcher {
 					break;
 
 				case $missendeTransactieDistance:
-					$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexBestelling]);
+					$matches[] = PinTransactieMatch::missendeTransactie(
+						$pinBestellingen[$indexBestelling]
+					);
 					$indexBestelling--;
 
 					break;
 
 				case $missendeBestellingDistance:
-					$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexTransactie]);
+					$matches[] = PinTransactieMatch::missendeBestelling(
+						$pinTransacties[$indexTransactie]
+					);
 					$indexTransactie--;
 
 					break;
@@ -154,12 +182,16 @@ class PinTransactieMatcher {
 		}
 
 		while ($indexTransactie >= 0) {
-			$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexTransactie]);
+			$matches[] = PinTransactieMatch::missendeBestelling(
+				$pinTransacties[$indexTransactie]
+			);
 			$indexTransactie--;
 		}
 
 		while ($indexBestelling >= 0) {
-			$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexBestelling]);
+			$matches[] = PinTransactieMatch::missendeTransactie(
+				$pinBestellingen[$indexBestelling]
+			);
 			$indexBestelling--;
 		}
 
@@ -169,7 +201,8 @@ class PinTransactieMatcher {
 	/**
 	 * @return bool
 	 */
-	public function bevatFouten() {
+	public function bevatFouten()
+	{
 		foreach ($this->matches as $match) {
 			if ($match->status !== PinTransactieMatchStatusEnum::STATUS_MATCH) {
 				return true;
@@ -183,40 +216,72 @@ class PinTransactieMatcher {
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function genereerReport() {
+	public function genereerReport()
+	{
 		ob_start();
 
 		$verschil = 0;
 
 		foreach ($this->matches as $match) {
-
 			switch ($match->status) {
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING:
 					$pinTransactie = $match->transactie;
 					$verschil += $pinTransactie->getBedragInCenten();
 					$moment = date_format_intl($pinTransactie->datetime, DATETIME_FORMAT);
 
-					printf("%s - Missende bestelling voor pintransactie %d om %s van %s.\n", $moment, $pinTransactie->STAN, $moment, $pinTransactie->amount);
+					printf(
+						"%s - Missende bestelling voor pintransactie %d om %s van %s.\n",
+						$moment,
+						$pinTransactie->STAN,
+						$moment,
+						$pinTransactie->amount
+					);
 					break;
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE:
 					$pinBestelling = $match->bestelling;
-					$pinBestellingInhoud = $pinBestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
+					$pinBestellingInhoud = $pinBestelling->getProduct(
+						CiviProductTypeEnum::PINTRANSACTIE
+					);
 					$verschil -= $pinBestellingInhoud->aantal;
 					$moment = date_format_intl($pinBestelling->moment, DATETIME_FORMAT);
 
-					printf("%s - Missende transactie voor bestelling %d om %s van EUR %.2f door %d.\n", $moment, $pinBestelling->id, $moment, $pinBestellingInhoud->aantal / 100, $pinBestelling->uid);
+					printf(
+						"%s - Missende transactie voor bestelling %d om %s van EUR %.2f door %d.\n",
+						$moment,
+						$pinBestelling->id,
+						$moment,
+						$pinBestellingInhoud->aantal / 100,
+						$pinBestelling->uid
+					);
 					break;
 				case PinTransactieMatchStatusEnum::STATUS_VERKEERD_BEDRAG:
 					$pinTransactie = $match->transactie;
 					$pinBestelling = $match->bestelling;
-					$pinBestellingInhoud = $pinBestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
+					$pinBestellingInhoud = $pinBestelling->getProduct(
+						CiviProductTypeEnum::PINTRANSACTIE
+					);
 
-					$verschil += $pinTransactie->getBedragInCenten() - $pinBestellingInhoud->aantal;
+					$verschil +=
+						$pinTransactie->getBedragInCenten() - $pinBestellingInhoud->aantal;
 					$moment = date_format_intl($pinTransactie->datetime, DATETIME_FORMAT);
 
-					printf("%s - Bestelling en transactie hebben geen overeenkomend bedrag.\n", $moment);
-					printf(" - %s Transactie %d om %s.\n", $pinTransactie->amount, $pinTransactie->STAN, date_format_intl($pinTransactie->datetime, DATETIME_FORMAT));
-					printf(" - EUR %.2f Bestelling %d om %s door %s.\n", $pinBestellingInhoud->aantal / 100, $pinBestelling->id, date_format_intl($pinBestelling->moment, DATETIME_FORMAT), $pinBestelling->uid);
+					printf(
+						"%s - Bestelling en transactie hebben geen overeenkomend bedrag.\n",
+						$moment
+					);
+					printf(
+						" - %s Transactie %d om %s.\n",
+						$pinTransactie->amount,
+						$pinTransactie->STAN,
+						date_format_intl($pinTransactie->datetime, DATETIME_FORMAT)
+					);
+					printf(
+						" - EUR %.2f Bestelling %d om %s door %s.\n",
+						$pinBestellingInhoud->aantal / 100,
+						$pinBestelling->id,
+						date_format_intl($pinBestelling->moment, DATETIME_FORMAT),
+						$pinBestelling->uid
+					);
 					break;
 				default:
 					// Er is niets mis gegaan.
@@ -235,7 +300,8 @@ class PinTransactieMatcher {
 
 	/**
 	 */
-	public function save() {
+	public function save()
+	{
 		foreach ($this->matches as $match) {
 			$this->entityManager->persist($match);
 		}
@@ -245,12 +311,18 @@ class PinTransactieMatcher {
 	/**
 	 * @return PinTransactieMatch[]
 	 */
-	public function getMatches() {
+	public function getMatches()
+	{
 		return $this->matches;
 	}
 
-	private function matchCost($i, $j) {
-		if ($this->pinTransacties[$i]->getBedragInCenten() == $this->pinBestellingen[$j]->getProduct(CiviProductTypeEnum::PINTRANSACTIE)->aantal) {
+	private function matchCost($i, $j)
+	{
+		if (
+			$this->pinTransacties[$i]->getBedragInCenten() ==
+			$this->pinBestellingen[$j]->getProduct(CiviProductTypeEnum::PINTRANSACTIE)
+				->aantal
+		) {
 			return 0;
 		} else {
 			return self::COST_VERKEERD_BEDRAG;

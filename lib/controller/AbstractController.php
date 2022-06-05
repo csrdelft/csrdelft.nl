@@ -1,6 +1,5 @@
 <?php
 
-
 namespace CsrDelft\controller;
 
 use CsrDelft\Component\Formulier\FormulierFactory;
@@ -22,12 +21,14 @@ use Throwable;
  * @package CsrDelft\controller
  * @method Account|null getUser()
  */
-class AbstractController extends BaseController {
-	public static function getSubscribedServices() {
+class AbstractController extends BaseController
+{
+	public static function getSubscribedServices()
+	{
 		return parent::getSubscribedServices() + [
-				'csr.table.factory' => DataTableFactory::class,
-				'csr.formulier.factory' => FormulierFactory::class,
-			];
+			'csr.table.factory' => DataTableFactory::class,
+			'csr.formulier.factory' => FormulierFactory::class,
+		];
 	}
 
 	/**
@@ -50,7 +51,13 @@ class AbstractController extends BaseController {
 
 	protected function tableData($data, $groups = null): GenericDataTableResponse
 	{
-		return new GenericDataTableResponse($this->get('serializer'), $data, null, null, $groups);
+		return new GenericDataTableResponse(
+			$this->get('serializer'),
+			$data,
+			null,
+			null,
+			$groups
+		);
 	}
 
 	/**
@@ -77,11 +84,17 @@ class AbstractController extends BaseController {
 		return null;
 	}
 
-	protected function createAccessDeniedException(string $message = 'Geen Toegang.', Throwable $previous = null): AccessDeniedException {
+	protected function createAccessDeniedException(
+		string $message = 'Geen Toegang.',
+		Throwable $previous = null
+	): AccessDeniedException {
 		return parent::createAccessDeniedException($message, $previous);
 	}
 
-	protected function createNotFoundException(string $message = 'Niet gevonden', Throwable $previous = null): NotFoundHttpException {
+	protected function createNotFoundException(
+		string $message = 'Niet gevonden',
+		Throwable $previous = null
+	): NotFoundHttpException {
 		return parent::createNotFoundException($message, $previous);
 	}
 
@@ -92,8 +105,14 @@ class AbstractController extends BaseController {
 	 * @param array $options
 	 * @return FormulierInstance
 	 */
-	protected function createFormulier(string $type, $data = null, array $options = []): FormulierInstance {
-		return $this->container->get('csr.formulier.factory')->create($type, $data, $options);
+	protected function createFormulier(
+		string $type,
+		$data = null,
+		array $options = []
+	): FormulierInstance {
+		return $this->container
+			->get('csr.formulier.factory')
+			->create($type, $data, $options);
 	}
 
 	/**
@@ -101,7 +120,11 @@ class AbstractController extends BaseController {
 	 * @param array $options
 	 * @return DataTableInstance
 	 */
-	protected function createDataTable($type, $options = []) {
-		return $this->container->get('csr.table.factory')->create($type, $options)->getTable();
+	protected function createDataTable($type, $options = [])
+	{
+		return $this->container
+			->get('csr.table.factory')
+			->create($type, $options)
+			->getTable();
 	}
 }

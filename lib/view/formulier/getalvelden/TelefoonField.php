@@ -13,9 +13,10 @@ use CsrDelft\view\formulier\invoervelden\TextField;
  * is valid als er een enigszins op een telefoonnummer lijkende string wordt
  * ingegeven.
  */
-class TelefoonField extends TextField {
-
-	public function validate() {
+class TelefoonField extends TextField
+{
+	public function validate()
+	{
 		if (!parent::validate()) {
 			return false;
 		}
@@ -28,5 +29,4 @@ class TelefoonField extends TextField {
 		}
 		return $this->error === '';
 	}
-
 }

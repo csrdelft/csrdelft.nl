@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\Twig\Extension;
-
 
 use CsrDelft\common\CsrException;
 use CsrDelft\service\security\LoginService;
@@ -15,8 +13,16 @@ class AssetsTwigExtension extends AbstractExtension
 	{
 		return [
 			new TwigFunction('user_modules', [$this, 'getUserModules']),
-			new TwigFunction('css_asset', [$this, 'css_asset'], ['is_safe' => ['html']]),
-			new TwigFunction('js_asset', [$this, 'js_asset'], ['is_safe' => ['html']]),
+			new TwigFunction(
+				'css_asset',
+				[$this, 'css_asset'],
+				['is_safe' => ['html']]
+			),
+			new TwigFunction(
+				'js_asset',
+				[$this, 'js_asset'],
+				['is_safe' => ['html']]
+			),
 			new TwigFunction('asset_url', [$this, 'asset_url']),
 		];
 	}
@@ -96,7 +102,9 @@ class AssetsTwigExtension extends AbstractExtension
 		}
 
 		if (!isset($entrypoints[$module]['assets'][$extension])) {
-			throw new CsrException("Entrypoint met naam {$module} heeft geen extensie {$extension}");
+			throw new CsrException(
+				"Entrypoint met naam {$module} heeft geen extensie {$extension}"
+			);
 		}
 
 		$assets = $manifest['entrypoints'][$module]['assets'][$extension];
@@ -108,7 +116,8 @@ class AssetsTwigExtension extends AbstractExtension
 		return $relevantAssets;
 	}
 
-	public function asset_url($name) {
+	public function asset_url($name)
+	{
 		$manifest = $this->readManifest();
 
 		if (!isset($manifest[$name])) {
@@ -126,10 +135,15 @@ class AssetsTwigExtension extends AbstractExtension
 	private function readManifest()
 	{
 		if (!file_exists(HTDOCS_PATH . 'dist/assets-manifest.json')) {
-			throw new CsrException('htdocs/dist/assets-manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.');
+			throw new CsrException(
+				'htdocs/dist/assets-manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.'
+			);
 		}
 
-		$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/assets-manifest.json'), true);
+		$manifest = json_decode(
+			file_get_contents(HTDOCS_PATH . 'dist/assets-manifest.json'),
+			true
+		);
 		return $manifest;
 	}
 }

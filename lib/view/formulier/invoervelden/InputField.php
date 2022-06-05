@@ -39,7 +39,8 @@ use CsrDelft\view\Validator;
  * InputField is de base class van alle FormElements die data leveren,
  * behalve FileField zelf die wel meerdere InputFields bevat.
  */
-abstract class InputField implements FormElement, Validator {
+abstract class InputField implements FormElement, Validator
+{
 	protected $wrapperClassName = 'row mb-3';
 	protected $labelClassName = 'col-3 col-form-label';
 	protected $fieldClassName = 'col-9';
@@ -72,8 +73,8 @@ abstract class InputField implements FormElement, Validator {
 	public $whitelist = null; // array met exclusief toegestane waarden
 	public $autoselect = false; // selecteer autoaanvullen automatisch
 
-
-	public function __construct($name, $value, $description, $model = null) {
+	public function __construct($name, $value, $description, $model = null)
+	{
 		$this->id = uniqid_safe('field_');
 		$this->model = $model;
 		$this->name = $name;
@@ -89,43 +90,56 @@ abstract class InputField implements FormElement, Validator {
 
 		if ($description === null) {
 			$this->labelClassName .= ' d-none';
-			$this->fieldClassName = str_replace('col-9', 'col', $this->fieldClassName);
+			$this->fieldClassName = str_replace(
+				'col-9',
+				'col',
+				$this->fieldClassName
+			);
 		}
 	}
 
-	public function getType() {
+	public function getType()
+	{
 		return $this->type;
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->model;
 	}
 
-	public function getBreadcrumbs() {
+	public function getBreadcrumbs()
+	{
 		return null;
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return $this->description;
 	}
 
-	public function getName() {
+	public function getName()
+	{
 		return $this->name;
 	}
 
-	public function getId() {
+	public function getId()
+	{
 		return $this->id;
 	}
 
-	public function isPosted() {
+	public function isPosted()
+	{
 		return isset($_POST[$this->name]);
 	}
 
-	public function getOrigValue() {
+	public function getOrigValue()
+	{
 		return $this->origvalue;
 	}
 
-	public function getValue() {
+	public function getValue()
+	{
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_UNSAFE_RAW);
 		}
@@ -135,7 +149,8 @@ abstract class InputField implements FormElement, Validator {
 	/**
 	 * Value returned from this field
 	 */
-	public function getFormattedValue() {
+	public function getFormattedValue()
+	{
 		return $this->getValue();
 	}
 
@@ -146,7 +161,8 @@ abstract class InputField implements FormElement, Validator {
 	 * Kindertjes van deze classe kunnen deze methode overloaden om specifiekere
 	 * testen mogelijk te maken.
 	 */
-	public function validate() {
+	public function validate()
+	{
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
 		} elseif ($this->readonly && $this->value != $this->origvalue) {
@@ -160,12 +176,20 @@ abstract class InputField implements FormElement, Validator {
 			}
 		}
 		// als blacklist is gezet dan controleren
-		if (is_array($this->blacklist) && in_array_i($this->value, $this->blacklist)) {
-			$this->error = 'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
+		if (
+			is_array($this->blacklist) &&
+			in_array_i($this->value, $this->blacklist)
+		) {
+			$this->error =
+				'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
 		}
 		// als whitelist is gezet dan controleren
-		if (is_array($this->whitelist) && !in_array_i($this->value, $this->whitelist)) {
-			$this->error = 'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
+		if (
+			is_array($this->whitelist) &&
+			!in_array_i($this->value, $this->whitelist)
+		) {
+			$this->error =
+				'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
 		}
 		return $this->error === '';
 	}
@@ -180,32 +204,47 @@ abstract class InputField implements FormElement, Validator {
 	 * @param boolean $overwrite allowed to overwrite existing file
 	 * @throws CsrException Ongeldige bestandsnaam, doelmap niet schrijfbaar of naam ingebruik
 	 */
-	public function opslaan($directory, $filename, $overwrite = false) {
+	public function opslaan($directory, $filename, $overwrite = false)
+	{
 		if (!$this->isAvailable()) {
-			throw new CsrException('Uploadmethode niet beschikbaar: ' . get_class($this));
+			throw new CsrException(
+				'Uploadmethode niet beschikbaar: ' . get_class($this)
+			);
 		}
 		if (!$this->validate()) {
 			throw new CsrGebruikerException($this->getError());
 		}
 		if (!valid_filename($filename)) {
-			throw new CsrGebruikerException('Ongeldige bestandsnaam: ' . htmlspecialchars($filename));
+			throw new CsrGebruikerException(
+				'Ongeldige bestandsnaam: ' . htmlspecialchars($filename)
+			);
 		}
 		if (!file_exists($directory)) {
 			mkdir($directory);
 		}
 		if (false === @chmod($directory, 0755)) {
-			throw new CsrException('Geen eigenaar van map: ' . htmlspecialchars($directory));
+			throw new CsrException(
+				'Geen eigenaar van map: ' . htmlspecialchars($directory)
+			);
 		}
 		if (!is_writable($directory)) {
-			throw new CsrException('Doelmap is niet beschrijfbaar: ' . htmlspecialchars($directory));
+			throw new CsrException(
+				'Doelmap is niet beschrijfbaar: ' . htmlspecialchars($directory)
+			);
 		}
 		if (file_exists(join_paths($directory, $filename))) {
 			if ($overwrite) {
 				if (!unlink(join_paths($directory, $filename))) {
-					throw new CsrException('Overschrijven mislukt: ' . htmlspecialchars(join_paths($directory, $filename)));
+					throw new CsrException(
+						'Overschrijven mislukt: ' .
+							htmlspecialchars(join_paths($directory, $filename))
+					);
 				}
 			} elseif (!$this instanceof BestandBehouden) {
-				throw new CsrGebruikerException('Bestandsnaam al in gebruik: ' . htmlspecialchars(join_paths($directory, $filename)));
+				throw new CsrGebruikerException(
+					'Bestandsnaam al in gebruik: ' .
+						htmlspecialchars(join_paths($directory, $filename))
+				);
 			}
 		}
 	}
@@ -213,18 +252,24 @@ abstract class InputField implements FormElement, Validator {
 	/**
 	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
 	 */
-	public function getDiv() {
+	public function getDiv()
+	{
 		$cssclass = $this->wrapperClassName;
 		if ($this->hidden) {
 			$cssclass .= ' verborgen';
 		}
-		return '<div id="wrapper_' . $this->getId() . '" class="' . $cssclass . '">';
+		return '<div id="wrapper_' .
+			$this->getId() .
+			'" class="' .
+			$cssclass .
+			'">';
 	}
 
 	/**
 	 * Elk veld heeft een label, geef de html voor het label
 	 */
-	public function getLabel() {
+	public function getLabel()
+	{
 		if (!empty($this->description)) {
 			$required = '';
 			if ($this->required) {
@@ -234,7 +279,14 @@ abstract class InputField implements FormElement, Validator {
 					$required = '<span class="field-required">*</span>';
 				}
 			}
-			return '<div class="' . $this->labelClassName . '"><label for="' . $this->getId() . '">' . $this->description . $required . '</label></div>';
+			return '<div class="' .
+				$this->labelClassName .
+				'"><label for="' .
+				$this->getId() .
+				'">' .
+				$this->description .
+				$required .
+				'</label></div>';
 		}
 		return '';
 	}
@@ -242,28 +294,34 @@ abstract class InputField implements FormElement, Validator {
 	/**
 	 * Geef de foutmelding voor dit veld terug.
 	 */
-	public function getError() {
+	public function getError()
+	{
 		return $this->error;
 	}
 
 	/**
 	 * Geef een div met de foutmelding voor dit veld terug.
 	 */
-	public function getErrorDiv() {
+	public function getErrorDiv()
+	{
 		if ($this->getError() != '') {
-			return '<div class="display-block invalid-feedback">' . $this->getError() . '</div>';
+			return '<div class="display-block invalid-feedback">' .
+				$this->getError() .
+				'</div>';
 		}
 		return '';
 	}
 
-	public function getPreviewDiv() {
+	public function getPreviewDiv()
+	{
 		return '';
 	}
 
 	/**
 	 * Geef lijst van allerlei CSS-classes voor dit veld terug.
 	 */
-	protected function getCssClasses() {
+	protected function getCssClasses()
+	{
 		if ($this->required) {
 			if ($this->leden_mod && LoginService::mag(P_LEDEN_MOD)) {
 				// exception for leden mod
@@ -289,7 +347,8 @@ abstract class InputField implements FormElement, Validator {
 	 * elke instantie dan bijvoorbeeld de prefix van het id-veld te
 	 * moeten aanpassen. Niet meer nodig dus.
 	 */
-	protected function getInputAttribute($attribute) {
+	protected function getInputAttribute($attribute)
+	{
 		if (is_array($attribute)) {
 			$return = '';
 			foreach ($attribute as $a) {
@@ -349,11 +408,27 @@ abstract class InputField implements FormElement, Validator {
 		return '';
 	}
 
-	public function getHtml() {
-		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
+	public function getHtml()
+	{
+		return '<input ' .
+			$this->getInputAttribute([
+				'type',
+				'id',
+				'name',
+				'class',
+				'value',
+				'origvalue',
+				'disabled',
+				'readonly',
+				'maxlength',
+				'placeholder',
+				'autocomplete',
+			]) .
+			' />';
 	}
 
-	public function getHelpDiv() {
+	public function getHelpDiv()
+	{
 		if ($this->title) {
 			return '<div class="form-text">' . $this->title . '</div>';
 		}
@@ -363,7 +438,8 @@ abstract class InputField implements FormElement, Validator {
 	/**
 	 * View die zou moeten werken voor veel velden.
 	 */
-	public function __toString() {
+	public function __toString()
+	{
 		$html = '';
 		$html .= $this->getDiv();
 		$html .= $this->getLabel();
@@ -392,8 +468,9 @@ abstract class InputField implements FormElement, Validator {
 	 * )
 	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
 	 */
-	public function getJavascript() {
-		$js = "";
+	public function getJavascript()
+	{
+		$js = '';
 		if ($this->readonly) {
 			return $js;
 		}
@@ -452,11 +529,10 @@ document.getElementById('{$this->getId()}').addEventListener('keyup', function(e
 JS;
 		}
 
-		if (trim($js) == "") {
-			return "";
+		if (trim($js) == '') {
+			return '';
 		}
 
 		return $js;
 	}
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\service\security;
-
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Security\JwtToken;
@@ -27,7 +25,8 @@ use Trikoder\Bundle\OAuth2Bundle\Security\Authentication\Token\OAuth2Token;
  *
  * @package CsrDelft\service
  */
-class LoginService {
+class LoginService
+{
 	/**
 	 * Voorgedefinieerde uids
 	 */
@@ -83,25 +82,39 @@ class LoginService {
 	 *
 	 * @return bool
 	 */
-	public static function mag($permission, array $allowedAuthenticationMethods = null) {
-		return ContainerFacade::getContainer()->get(CsrSecurity::class)->mag($permission, $allowedAuthenticationMethods);
+	public static function mag(
+		$permission,
+		array $allowedAuthenticationMethods = null
+	) {
+		return ContainerFacade::getContainer()
+			->get(CsrSecurity::class)
+			->mag($permission, $allowedAuthenticationMethods);
 	}
 
-	public function _mag($permission, array $allowedAuthenticationMethdos = null) {
+	public function _mag($permission, array $allowedAuthenticationMethdos = null)
+	{
 		$account = $this->security->getUser();
 
-		return $this->accessService->mag($account, $permission, $allowedAuthenticationMethdos);
+		return $this->accessService->mag(
+			$account,
+			$permission,
+			$allowedAuthenticationMethdos
+		);
 	}
 
 	/**
 	 * @return string
 	 * @deprecated Gebruik _getUid of CsrSecurity::getAccount()->uid
 	 */
-	public static function getUid() {
-		return ContainerFacade::getContainer()->get(LoginService::class)->_getUid();
+	public static function getUid()
+	{
+		return ContainerFacade::getContainer()
+			->get(LoginService::class)
+			->_getUid();
 	}
 
-	public function _getUid() {
+	public function _getUid()
+	{
 		if (isCLI()) {
 			return static::$cliUid;
 		}
@@ -119,19 +132,25 @@ class LoginService {
 	 * @return UserInterface|Account|null
 	 * @deprecated Gebruik CsrSecurity::getAccount
 	 */
-	public static function getAccount() {
-		return ContainerFacade::getContainer()->get(LoginService::class)->_getAccount();
+	public static function getAccount()
+	{
+		return ContainerFacade::getContainer()
+			->get(LoginService::class)
+			->_getAccount();
 	}
 
-	public function _getAccount() {
-		return $this->security->getUser() ?? $this->accountRepository->find(self::UID_EXTERN);
+	public function _getAccount()
+	{
+		return $this->security->getUser() ??
+			$this->accountRepository->find(self::UID_EXTERN);
 	}
 
 	/**
 	 * @return Profiel|null
 	 * @deprecated Gebruik CsrSecurity::getProfiel
 	 */
-	public static function getProfiel() {
+	public static function getProfiel()
+	{
 		$account = static::getAccount();
 		if ($account) {
 			return $account->profiel;
@@ -145,7 +164,8 @@ class LoginService {
 	 * @return string|null uit AuthenticationMethod
 	 * @see AccessService::mag()
 	 */
-	public function getAuthenticationMethod() {
+	public function getAuthenticationMethod()
+	{
 		if (isCLI()) {
 			return AuthenticationMethod::password_login;
 		}
@@ -184,12 +204,19 @@ class LoginService {
 	/**
 	 * Maak de gebruiker opnieuw recent ingelogd
 	 */
-	public function setRecentLoginToken() {
+	public function setRecentLoginToken()
+	{
 		$token = $this->security->getToken();
 
 		if ($token instanceof RememberMeToken) {
 			$this->tokenStorage->setToken(
-				new UsernamePasswordToken($token->getUser(), [], $token->getFirewallName(), $token->getRoleNames()));
+				new UsernamePasswordToken(
+					$token->getUser(),
+					[],
+					$token->getFirewallName(),
+					$token->getRoleNames()
+				)
+			);
 		}
 	}
 }

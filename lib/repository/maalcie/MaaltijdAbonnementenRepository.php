@@ -21,13 +21,17 @@ use Throwable;
  * @method MaaltijdAbonnement[]    findAll()
  * @method MaaltijdAbonnement[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MaaltijdAbonnementenRepository extends AbstractRepository {
+class MaaltijdAbonnementenRepository extends AbstractRepository
+{
 	/**
 	 * @var MaaltijdAanmeldingenRepository
 	 */
 	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(ManagerRegistry $registry, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
+	public function __construct(
+		ManagerRegistry $registry,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
+	) {
 		parent::__construct($registry, MaaltijdAbonnement::class);
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
@@ -36,27 +40,41 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @return bool|mixed
 	 * @throws Throwable
 	 */
-	public function getAbonnementenWaarschuwingenMatrix() {
+	public function getAbonnementenWaarschuwingenMatrix()
+	{
 		return $this->_em->transactional(function () {
 			$abos = $this->findAll();
 
 			$waarschuwingen = [];
 
 			foreach ($abos as $abo) {
-				$repetitie = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($abo->mlt_repetitie_id);
-				if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($abo->uid, $repetitie->abonnement_filter)) {
-					$abo->foutmelding = 'Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter;
+				$repetitie = ContainerFacade::getContainer()
+					->get(MaaltijdRepetitiesRepository::class)
+					->getRepetitie($abo->mlt_repetitie_id);
+				if (
+					!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
+						$abo->uid,
+						$repetitie->abonnement_filter
+					)
+				) {
+					$abo->foutmelding =
+						'Niet toegestaan vanwege aanmeldrestrictie: ' .
+						$repetitie->abonnement_filter;
 					$waarschuwingen[$abo->uid][$abo->mlt_repetitie_id] = $abo;
 				} elseif (!$repetitie->abonneerbaar) {
 					$abo->foutmelding = 'Niet abonneerbaar';
 					$waarschuwingen[$abo->uid][$abo->mlt_repetitie_id] = $abo;
-				} elseif (!LidStatus::isLidLike(ProfielRepository::get($abo->uid)->status)) {
+				} elseif (
+					!LidStatus::isLidLike(ProfielRepository::get($abo->uid)->status)
+				) {
 					$abo->waarschuwing = 'Geen huidig lid';
 					$waarschuwingen[$abo->uid][$abo->mlt_repetitie_id] = $abo;
 				}
 			}
 
-			$repById = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getAlleRepetities(true);
+			$repById = ContainerFacade::getContainer()
+				->get(MaaltijdRepetitiesRepository::class)
+				->getAlleRepetities(true);
 
 			return $this->fillHoles($waarschuwingen, $repById);
 		});
@@ -68,8 +86,10 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @param bool $ingeschakeld
 	 * @return array
 	 */
-	private function fillHoles($matrix, $repById, $ingeschakeld = false) {
-		foreach ($repById as $mrid => $repetitie) { // vul gaten in matrix vanwege uitgeschakelde abonnementen
+	private function fillHoles($matrix, $repById, $ingeschakeld = false)
+	{
+		foreach ($repById as $mrid => $repetitie) {
+			// vul gaten in matrix vanwege uitgeschakelde abonnementen
 			foreach ($matrix as $uid => $abos) {
 				if (!array_key_exists($mrid, $abos)) {
 					$abonnement = new MaaltijdAbonnement();
@@ -82,30 +102,43 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 				ksort($matrix[$uid]);
 			}
 		}
-		return array($matrix, $repById);
+		return [$matrix, $repById];
 	}
 
 	/**
 	 * @return array
 	 * @throws Throwable
 	 */
-	public function getAbonnementenAbonneerbaarMatrix() {
+	public function getAbonnementenAbonneerbaarMatrix()
+	{
 		return $this->_em->transactional(function () {
-			$repById = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getAlleRepetities(true); // grouped by mrid
+			$repById = ContainerFacade::getContainer()
+				->get(MaaltijdRepetitiesRepository::class)
+				->getAlleRepetities(true); // grouped by mrid
 
 			/** @var Profiel[] $leden */
-			$leden = ContainerFacade::getContainer()->get(ProfielRepository::class)->createQueryBuilder('p')
-			->where('p.status in (:lidstatus)')
-			->setParameter('lidstatus', LidStatus::getLidLike())
-			->getQuery()->getResult();
+			$leden = ContainerFacade::getContainer()
+				->get(ProfielRepository::class)
+				->createQueryBuilder('p')
+				->where('p.status in (:lidstatus)')
+				->setParameter('lidstatus', LidStatus::getLidLike())
+				->getQuery()
+				->getResult();
 
-			$matrix = array();
+			$matrix = [];
 			foreach ($leden as $lid) {
 				$abos = $this->findBy(['uid' => $lid->uid]);
 				foreach ($abos as $abo) {
 					$rep = $repById[$abo->mlt_repetitie_id];
-					if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($lid->uid, $rep->abonnement_filter)) {
-						$abo->foutmelding = 'Niet toegestaan vanwege aanmeldrestrictie: ' . $rep->abonnement_filter;
+					if (
+						!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
+							$lid->uid,
+							$rep->abonnement_filter
+						)
+					) {
+						$abo->foutmelding =
+							'Niet toegestaan vanwege aanmeldrestrictie: ' .
+							$rep->abonnement_filter;
 					}
 					$matrix[$lid->uid][$abo->mlt_repetitie_id] = $abo;
 				}
@@ -121,25 +154,36 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @return MaaltijdAbonnement[][] 2d matrix met eerst uid, en dan repetitie id
 	 * @throws Throwable
 	 */
-	public function getAbonnementenMatrix() {
+	public function getAbonnementenMatrix()
+	{
 		return $this->_em->transactional(function () {
 			/** @var MaaltijdRepetitie[] $repById */
-			$repById = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getAlleRepetities(true); // grouped by mrid
+			$repById = ContainerFacade::getContainer()
+				->get(MaaltijdRepetitiesRepository::class)
+				->getAlleRepetities(true); // grouped by mrid
 
 			/** @var Profiel[] $profielen */
-			$profielen = ContainerFacade::getContainer()->get(ProfielRepository::class)->findAll();
+			$profielen = ContainerFacade::getContainer()
+				->get(ProfielRepository::class)
+				->findAll();
 
 			$matrix = [];
-			foreach($profielen as $profiel) {
+			foreach ($profielen as $profiel) {
 				// Skip oudleden
-				if (!LidStatus::isLidLike($profiel->status) && $this->count(['uid' => $profiel->uid]) == 0) {
+				if (
+					!LidStatus::isLidLike($profiel->status) &&
+					$this->count(['uid' => $profiel->uid]) == 0
+				) {
 					continue;
 				}
 
 				$matrix[$profiel->uid] = [];
 
 				foreach ($repById as $rep) {
-					$abo = $this->find(['uid' => $profiel->uid, 'mlt_repetitie_id' => $rep->mlt_repetitie_id]);
+					$abo = $this->find([
+						'uid' => $profiel->uid,
+						'mlt_repetitie_id' => $rep->mlt_repetitie_id,
+					]);
 
 					if (!$abo) {
 						$abo = new MaaltijdAbonnement();
@@ -149,8 +193,15 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 						$abo->foutmelding = 'Niet abonneerbaar';
 					} elseif (!LidStatus::isLidLike($profiel->status)) {
 						$abo->foutmelding = 'Geen huidig lid';
-					} elseif (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($profiel->uid, $rep->abonnement_filter)) {
-						$abo->foutmelding = 'Niet toegestaan vanwege aanmeldrestrictie: ' . $rep->abonnement_filter;
+					} elseif (
+						!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
+							$profiel->uid,
+							$rep->abonnement_filter
+						)
+					) {
+						$abo->foutmelding =
+							'Niet toegestaan vanwege aanmeldrestrictie: ' .
+							$rep->abonnement_filter;
 					}
 
 					$matrix[$profiel->uid][$rep->mlt_repetitie_id] = $abo;
@@ -161,7 +212,8 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 		});
 	}
 
-	public function getAbonnementenVoorRepetitie(MaaltijdRepetitie $repetitie) {
+	public function getAbonnementenVoorRepetitie(MaaltijdRepetitie $repetitie)
+	{
 		return $this->findBy(['maaltijd_repetitie' => $repetitie]);
 	}
 
@@ -169,12 +221,18 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @return MaaltijdAbonnement[][]
 	 * @throws Throwable
 	 */
-	public function getAbonnementenVanNovieten() {
+	public function getAbonnementenVanNovieten()
+	{
 		return $this->_em->transactional(function () {
-			$novieten = ContainerFacade::getContainer()->get(ProfielRepository::class)->findBy(['status' =>  LidStatus::Noviet]);
-			$matrix = array();
+			$novieten = ContainerFacade::getContainer()
+				->get(ProfielRepository::class)
+				->findBy(['status' => LidStatus::Noviet]);
+			$matrix = [];
 			foreach ($novieten as $noviet) {
-				$matrix[$noviet->uid] = $this->findBy(['uid' => $noviet->uid], ['mlt_repetitie_id' => 'DESC']);
+				$matrix[$noviet->uid] = $this->findBy(
+					['uid' => $noviet->uid],
+					['mlt_repetitie_id' => 'DESC']
+				);
 			}
 			return $matrix;
 		});
@@ -186,16 +244,30 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @throws CsrGebruikerException
 	 * @throws Throwable
 	 */
-	public function inschakelenAbonnement($abo) {
+	public function inschakelenAbonnement($abo)
+	{
 		return $this->_em->transactional(function () use ($abo) {
 			if (!$abo->maaltijd_repetitie->abonneerbaar) {
 				throw new CsrGebruikerException('Niet abonneerbaar');
 			}
-			if ($this->find(['mlt_repetitie_id' => $abo->mlt_repetitie_id, 'uid' => $abo->uid])) {
+			if (
+				$this->find([
+					'mlt_repetitie_id' => $abo->mlt_repetitie_id,
+					'uid' => $abo->uid,
+				])
+			) {
 				throw new CsrGebruikerException('Abonnement al ingeschakeld');
 			}
-			if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($abo->uid, $abo->maaltijd_repetitie->abonnement_filter)) {
-				throw new CsrGebruikerException('Niet toegestaan vanwege aanmeldrestrictie: ' . $abo->maaltijd_repetitie->abonnement_filter);
+			if (
+				!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
+					$abo->uid,
+					$abo->maaltijd_repetitie->abonnement_filter
+				)
+			) {
+				throw new CsrGebruikerException(
+					'Niet toegestaan vanwege aanmeldrestrictie: ' .
+						$abo->maaltijd_repetitie->abonnement_filter
+				);
 			}
 
 			$abo->van_uid = $abo->uid;
@@ -203,7 +275,10 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 			$this->_em->persist($abo);
 			$this->_em->flush();
 
-			return $this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden($abo->maaltijd_repetitie, $abo->uid);
+			return $this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden(
+				$abo->maaltijd_repetitie,
+				$abo->uid
+			);
 		});
 	}
 
@@ -212,13 +287,22 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @return bool|mixed
 	 * @throws Throwable
 	 */
-	public function inschakelenAbonnementVoorNovieten(MaaltijdRepetitie $repetitie) {
+	public function inschakelenAbonnementVoorNovieten(
+		MaaltijdRepetitie $repetitie
+	) {
 		return $this->_em->transactional(function () use ($repetitie) {
-			$novieten = ContainerFacade::getContainer()->get(ProfielRepository::class)->findBy(['status' => LidStatus::Noviet]);
+			$novieten = ContainerFacade::getContainer()
+				->get(ProfielRepository::class)
+				->findBy(['status' => LidStatus::Noviet]);
 
 			$aantal = 0;
 			foreach ($novieten as $noviet) {
-				if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($noviet->uid, $repetitie->abonnement_filter)) {
+				if (
+					!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
+						$noviet->uid,
+						$repetitie->abonnement_filter
+					)
+				) {
 					continue;
 				}
 
@@ -228,11 +312,19 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 				$abo->uid = $noviet->uid;
 				$abo->wanneer_ingeschakeld = date_create_immutable();
 
-				if ($this->find(['mlt_repetitie_id' => $abo->mlt_repetitie_id, 'uid' => $abo->uid])) {
+				if (
+					$this->find([
+						'mlt_repetitie_id' => $abo->mlt_repetitie_id,
+						'uid' => $abo->uid,
+					])
+				) {
 					continue;
 				}
 				$this->_em->persist($abo);
-				$this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden($repetitie, $noviet->uid);
+				$this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden(
+					$repetitie,
+					$noviet->uid
+				);
 				$aantal += 1;
 			}
 
@@ -248,13 +340,17 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @return bool|mixed
 	 * @throws Throwable
 	 */
-	public function uitschakelenAbonnement(MaaltijdRepetitie $repetitie, $uid) {
+	public function uitschakelenAbonnement(MaaltijdRepetitie $repetitie, $uid)
+	{
 		return $this->_em->transactional(function () use ($repetitie, $uid) {
 			if (!$this->getHeeftAbonnement($repetitie->mlt_repetitie_id, $uid)) {
 				throw new CsrGebruikerException('Abonnement al uitgeschakeld');
 			}
 
-			$abo = $this->find(['mlt_repetitie_id' => $repetitie->mlt_repetitie_id, 'uid' => $uid]);
+			$abo = $this->find([
+				'mlt_repetitie_id' => $repetitie->mlt_repetitie_id,
+				'uid' => $uid,
+			]);
 			$rep = $abo->maaltijd_repetitie;
 			$this->_em->remove($abo);
 			$this->_em->flush();
@@ -265,12 +361,16 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 			$abo->maaltijd_repetitie = $rep;
 			$abo->van_uid = $uid;
 
-			$aantal = $this->maaltijdAanmeldingenRepository->afmeldenDoorAbonnement($repetitie, $uid);
-			return array($abo, $aantal);
+			$aantal = $this->maaltijdAanmeldingenRepository->afmeldenDoorAbonnement(
+				$repetitie,
+				$uid
+			);
+			return [$abo, $aantal];
 		});
 	}
 
-	public function getHeeftAbonnement($mrid, $uid) {
+	public function getHeeftAbonnement($mrid, $uid)
+	{
 		return $this->find(['mlt_repetitie_id' => $mrid, 'uid' => $uid]) != null;
 	}
 
@@ -283,12 +383,16 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @return int amount of deleted abos
 	 * @throws Throwable
 	 */
-	public function verwijderAbonnementen(MaaltijdRepetitie $mrid) {
+	public function verwijderAbonnementen(MaaltijdRepetitie $mrid)
+	{
 		return $this->_em->transactional(function () use ($mrid) {
 			$abos = $this->findBy(['maaltijd_repetitie' => $mrid]);
 			$aantal = count($abos);
 			foreach ($abos as $abo) {
-				$this->maaltijdAanmeldingenRepository->afmeldenDoorAbonnement($mrid, $abo->uid);
+				$this->maaltijdAanmeldingenRepository->afmeldenDoorAbonnement(
+					$mrid,
+					$abo->uid
+				);
 				$this->_em->remove($abo);
 			}
 			$this->_em->flush();
@@ -304,7 +408,8 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @return int amount of deleted abos
 	 * @throws Throwable
 	 */
-	public function verwijderAbonnementenVoorLid($uid) {
+	public function verwijderAbonnementenVoorLid($uid)
+	{
 		return $this->_em->transactional(function () use ($uid) {
 			$abos = $this->getAbonnementenVoorLid($uid);
 			$aantal = 0;
@@ -332,21 +437,34 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @return MaaltijdAbonnement[]
 	 * @throws Throwable
 	 */
-	public function getAbonnementenVoorLid($uid, $abonneerbaar = false, $uitgeschakeld = false) {
-
-		$lijst = $this->_em->transactional(function () use ($uid, $abonneerbaar, $uitgeschakeld) {
+	public function getAbonnementenVoorLid(
+		$uid,
+		$abonneerbaar = false,
+		$uitgeschakeld = false
+	) {
+		$lijst = $this->_em->transactional(function () use (
+			$uid,
+			$abonneerbaar,
+			$uitgeschakeld
+		) {
 			$lijst = [];
 
-			$maaltijdRepetitiesRepository = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class);
+			$maaltijdRepetitiesRepository = ContainerFacade::getContainer()->get(
+				MaaltijdRepetitiesRepository::class
+			);
 			if ($abonneerbaar) {
-				$repById = $maaltijdRepetitiesRepository->getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
+				$repById = $maaltijdRepetitiesRepository->getAbonneerbareRepetitiesVoorLid(
+					$uid
+				); // grouped by mrid
 			} else {
 				$repById = $maaltijdRepetitiesRepository->getAlleRepetities(true); // grouped by mrid
 			}
 			$abos = $this->findBy(['uid' => $uid]);
-			foreach ($abos as $abo) { // ingeschakelde abonnementen
+			foreach ($abos as $abo) {
+				// ingeschakelde abonnementen
 				$mrid = $abo->mlt_repetitie_id;
-				if (!array_key_exists($mrid, $repById)) { // ingeschakelde abonnementen altijd weergeven
+				if (!array_key_exists($mrid, $repById)) {
+					// ingeschakelde abonnementen altijd weergeven
 					$repById[$mrid] = $maaltijdRepetitiesRepository->getRepetitie($mrid);
 				}
 				$abo->maaltijd_repetitie = $repById[$mrid];
@@ -356,7 +474,8 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 			if ($uitgeschakeld) {
 				foreach ($repById as $repetitie) {
 					$mrid = $repetitie->mlt_repetitie_id;
-					if (!array_key_exists($mrid, $lijst)) { // uitgeschakelde abonnementen weergeven
+					if (!array_key_exists($mrid, $lijst)) {
+						// uitgeschakelde abonnementen weergeven
 						$abo = new MaaltijdAbonnement();
 						$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
 						$abo->maaltijd_repetitie = $repetitie;

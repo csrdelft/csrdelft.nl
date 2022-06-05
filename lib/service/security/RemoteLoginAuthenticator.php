@@ -1,6 +1,5 @@
 <?php
 
-
 namespace CsrDelft\service\security;
 
 use CsrDelft\entity\security\enum\RemoteLoginStatus;
@@ -49,8 +48,7 @@ class RemoteLoginAuthenticator extends AbstractLoginFormAuthenticator
 		RemoteLoginRepository $remoteLoginRepository,
 		AuthenticationSuccessHandlerInterface $successHandler,
 		AuthenticationFailureHandlerInterface $failureHandler
-	)
-	{
+	) {
 		$this->httpUtils = $httpUtils;
 		$this->remoteLoginRepository = $remoteLoginRepository;
 		$this->successHandler = $successHandler;
@@ -65,7 +63,9 @@ class RemoteLoginAuthenticator extends AbstractLoginFormAuthenticator
 			throw new AuthenticationException();
 		}
 
-		$remoteLogin = $this->remoteLoginRepository->findOneBy(['uuid' => Uuid::fromString($uuid)]);
+		$remoteLogin = $this->remoteLoginRepository->findOneBy([
+			'uuid' => Uuid::fromString($uuid),
+		]);
 
 		if (!$remoteLogin) {
 			throw new AuthenticationException();
@@ -84,27 +84,38 @@ class RemoteLoginAuthenticator extends AbstractLoginFormAuthenticator
 		return new SelfValidatingPassport($badge);
 	}
 
-	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-	{
+	public function onAuthenticationSuccess(
+		Request $request,
+		TokenInterface $token,
+		string $firewallName
+	): ?Response {
 		// Maak deze sessie megakort, wordt alleen gebruikt om een authorize uit te voeren.
 		$request->getSession()->migrate(false, 60 * 5);
 
 		return $this->successHandler->onAuthenticationSuccess($request, $token);
 	}
 
-	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
-	{
+	public function onAuthenticationFailure(
+		Request $request,
+		AuthenticationException $exception
+	): Response {
 		return $this->failureHandler->onAuthenticationFailure($request, $exception);
 	}
 
 	public function supports(Request $request): bool
 	{
-		return $request->isMethod('POST')
-			&& $this->httpUtils->checkRequestPath($request, 'csrdelft_security_remotelogin_remoteloginfinal');
+		return $request->isMethod('POST') &&
+			$this->httpUtils->checkRequestPath(
+				$request,
+				'csrdelft_security_remotelogin_remoteloginfinal'
+			);
 	}
 
 	protected function getLoginUrl(Request $request): string
 	{
-		return $this->httpUtils->generateUri($request, 'csrdelft_security_remotelogin_remotelogin');
+		return $this->httpUtils->generateUri(
+			$request,
+			'csrdelft_security_remotelogin_remotelogin'
+		);
 	}
 }

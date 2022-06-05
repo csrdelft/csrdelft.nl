@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\controller\api\v3;
-
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
@@ -22,14 +20,18 @@ class ApiInfoController extends AbstractController
 	 * @Route("/api/v3/profiel")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function profiel(AccessService $accessService, Security $security): JsonResponse
-	{
+	public function profiel(
+		AccessService $accessService,
+		Security $security
+	): JsonResponse {
 		$token = $security->getToken();
 		if (!$token instanceof OAuth2Token) {
 			throw new BadRequestHttpException();
 		}
 
-		$scopes = $token->getAttribute('server_request')->getAttribute('oauth_scopes', []);
+		$scopes = $token
+			->getAttribute('server_request')
+			->getAttribute('oauth_scopes', []);
 
 		$user = $this->getUser();
 
@@ -38,7 +40,7 @@ class ApiInfoController extends AbstractController
 			'displayName' => $this->getUser()->profiel->getNaam(),
 			'slug' => $this->getUser()->profiel->getNaam('slug'),
 			'scopes' => $scopes,
-			'admin' => $accessService->mag($this->getUser(), P_ADMIN)
+			'admin' => $accessService->mag($this->getUser(), P_ADMIN),
 		];
 
 		if ($security->isGranted('ROLE_OAUTH2_PROFIEL:EMAIL')) {
@@ -47,5 +49,4 @@ class ApiInfoController extends AbstractController
 
 		return new JsonResponse($json);
 	}
-
 }

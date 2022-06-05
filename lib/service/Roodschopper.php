@@ -22,8 +22,8 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 
-class Roodschopper {
-
+class Roodschopper
+{
 	public $saldogrens;
 	public $bericht;
 	public $doelgroep = 'leden';
@@ -38,7 +38,8 @@ class Roodschopper {
 
 	public $verzenden;
 
-	public static function getDefaults() {
+	public static function getDefaults()
+	{
 		$return = new Roodschopper();
 		$return->from = $_ENV['EMAIL_FISCUS'];
 		$return->verzenden = false;
@@ -59,11 +60,12 @@ h.t. Fiscus.';
 	 * Geef een array van Lid-objecten terug van de te schoppen leden.
 	 *
 	 */
-	public function getLeden() {
+	public function getLeden()
+	{
 		if ($this->teschoppen === null) {
 			$this->generateMails();
 		}
-		$leden = array();
+		$leden = [];
 		if (is_array($this->teschoppen)) {
 			foreach ($this->teschoppen as $uid => $bericht) {
 				$leden[] = ProfielRepository::get($uid);
@@ -75,14 +77,17 @@ h.t. Fiscus.';
 	/**
 	 * @return CiviSaldo[]
 	 */
-	public function getSaldi() {
+	public function getSaldi()
+	{
 		if ($this->doelgroep == 'oudleden') {
 			$status = LidStatus::getFiscaalOudlidLike();
 		} else {
 			$status = LidStatus::getFiscaalLidLike();
 		}
 
-		$saldi = ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->getRoodstaandeLeden($this->saldogrens);
+		$saldi = ContainerFacade::getContainer()
+			->get(CiviSaldoRepository::class)
+			->getRoodstaandeLeden($this->saldogrens);
 
 		$return = [];
 		foreach ($saldi as $saldo) {
@@ -109,13 +114,18 @@ h.t. Fiscus.';
 	/**
 	 * Voor een simulatierun uit. Er worden dan geen mails gestuurd.
 	 */
-	public function generateMails() {
+	public function generateMails()
+	{
 		$this->teschoppen = [];
 		foreach ($this->getSaldi() as $saldo) {
 			$profiel = ProfielRepository::get($saldo->uid);
 
 			$this->teschoppen[$saldo->uid] = [
-				'onderwerp' => $this->replace($this->onderwerp, $profiel, $saldo->saldo),
+				'onderwerp' => $this->replace(
+					$this->onderwerp,
+					$profiel,
+					$saldo->saldo
+				),
 				'bericht' => $this->replace($this->bericht, $profiel, $saldo->saldo),
 			];
 		}
@@ -129,27 +139,38 @@ h.t. Fiscus.';
 	 * @param int $saldo
 	 * @return mixed
 	 */
-	public function replace($invoer, $profiel, $saldo) {
-		return str_replace(['LID', 'SALDO'], [$profiel->getNaam('volledig'), format_bedrag($saldo)], $invoer);
+	public function replace($invoer, $profiel, $saldo)
+	{
+		return str_replace(
+			['LID', 'SALDO'],
+			[$profiel->getNaam('volledig'), format_bedrag($saldo)],
+			$invoer
+		);
 	}
 
 	/**
 	 * Geef een lijstje met het onderwerp en de body van de te verzenden
 	 * mails.
 	 */
-	public function preview() {
+	public function preview()
+	{
 		if ($this->teschoppen === null) {
 			$this->generateMails();
 		}
 		foreach ($this->teschoppen as $uid => $bericht) {
-			echo '<strong>' . $bericht['onderwerp'] . '</strong><br />' . nl2br($bericht['bericht']) . '<hr />';
+			echo '<strong>' .
+				$bericht['onderwerp'] .
+				'</strong><br />' .
+				nl2br($bericht['bericht']) .
+				'<hr />';
 		}
 	}
 
 	/**
 	 * Verstuurt uiteindelijk de mails.
 	 */
-	public function sendMails() {
+	public function sendMails()
+	{
 		if ($this->teschoppen === null) {
 			$this->generateMails();
 		}
@@ -159,12 +180,18 @@ h.t. Fiscus.';
 			if (!$profiel) {
 				continue;
 			}
-			$mail = new Mail($profiel->getEmailOntvanger(), $this->onderwerp, $bericht['bericht']);
+			$mail = new Mail(
+				$profiel->getEmailOntvanger(),
+				$this->onderwerp,
+				$bericht['bericht']
+			);
 			$mail->setFrom($this->from);
 			if ($this->bcc) {
 				$mail->addBcc([$this->bcc => $this->bcc]);
 			}
-			ContainerFacade::getContainer()->get(MailService::class)->send($mail);
+			ContainerFacade::getContainer()
+				->get(MailService::class)
+				->send($mail);
 		}
 	}
 }

@@ -11,30 +11,39 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as Faker;
 
-class ProfielFixture extends Fixture {
-	public function load(ObjectManager $manager) {
+class ProfielFixture extends Fixture
+{
+	public function load(ObjectManager $manager)
+	{
 		$lichtingen = range(20, 29);
 		$lichtingsGrootte = 50;
 		$faker = Faker::create('nl_NL');
 
 		foreach ($lichtingen as $lichting) {
 			foreach (range(0, $lichtingsGrootte) as $index) {
-				$lidNummer = sprintf("%02d%02d", $lichting, $index);
+				$lidNummer = sprintf('%02d%02d', $lichting, $index);
 				$geslacht = $faker->randomElement(['male', 'female']);
 
 				$profiel = new Profiel();
 				$profiel->uid = $lidNummer;
 				$profiel->lidjaar = 2000 + $lichting;
-				$profiel->geslacht = ['male' => Geslacht::Man(), 'female' => Geslacht::Vrouw()][$geslacht];
+				$profiel->geslacht = [
+					'male' => Geslacht::Man(),
+					'female' => Geslacht::Vrouw(),
+				][$geslacht];
 				// TODO $profiel->changelog;
 				$profiel->changelog = [
 					new ProfielLogTextEntry('Aangemaakt door fixtures'),
 				];
 				$profiel->voornaam = $faker->firstName($geslacht);
-				$profiel->voornamen = $profiel->voornaam . " " . $faker->firstName($geslacht);
-				$profiel->voorletters = implode("", array_map(function ($el) {
-					return substr($el, 0, 1) . ".";
-				}, explode(" ", $profiel->voornamen)));
+				$profiel->voornamen =
+					$profiel->voornaam . ' ' . $faker->firstName($geslacht);
+				$profiel->voorletters = implode(
+					'',
+					array_map(function ($el) {
+						return substr($el, 0, 1) . '.';
+					}, explode(' ', $profiel->voornamen))
+				);
 				$profiel->tussenvoegsel = '';
 				$profiel->achternaam = $faker->lastName;
 				$profiel->postfix = '';
@@ -76,7 +85,17 @@ class ProfielFixture extends Fixture {
 				$profiel->machtiging = true;
 				// verticale
 				$profiel->moot = null;
-				$profiel->verticale = $faker->randomElement(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']);
+				$profiel->verticale = $faker->randomElement([
+					'A',
+					'B',
+					'C',
+					'D',
+					'E',
+					'F',
+					'G',
+					'H',
+					'I',
+				]);
 				$profiel->verticaleleider = false;
 				$profiel->kringcoach = false;
 				// civi-gegevens

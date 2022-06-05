@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\controller;
-
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\forum\ForumController;
@@ -31,48 +29,83 @@ class ZoekController extends AbstractController
 
 		$instelling = lid_instelling('zoeken', 'leden');
 		if ($instelling !== 'nee') {
-			$resultaat[] = $this->forward(ToolsController::class . '::naamsuggesties', ['zoekin' => 'leden', 'zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(
+				ToolsController::class . '::naamsuggesties',
+				['zoekin' => 'leden', 'zoekterm' => $zoekterm]
+			);
 		}
 		if (lid_instelling('zoeken', 'commissies') === 'ja') {
-			$resultaat[] = $this->forward(CommissiesController::class . '::zoeken', ['zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(CommissiesController::class . '::zoeken', [
+				'zoekterm' => $zoekterm,
+			]);
 		}
 		if (lid_instelling('zoeken', 'kringen') === 'ja') {
-			$resultaat[] = $this->forward(KringenController::class . '::zoeken', ['zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(KringenController::class . '::zoeken', [
+				'zoekterm' => $zoekterm,
+			]);
 		}
 		if (lid_instelling('zoeken', 'onderverenigingen') === 'ja') {
-			$resultaat[] = $this->forward(OnderverenigingenController::class . '::zoeken', ['zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(
+				OnderverenigingenController::class . '::zoeken',
+				['zoekterm' => $zoekterm]
+			);
 		}
 		if (lid_instelling('zoeken', 'werkgroepen') === 'ja') {
-			$resultaat[] = $this->forward(WerkgroepenController::class . '::zoeken', ['zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(WerkgroepenController::class . '::zoeken', [
+				'zoekterm' => $zoekterm,
+			]);
 		}
 		if (lid_instelling('zoeken', 'woonoorden') === 'ja') {
-			$resultaat[] = $this->forward(WoonoordenController::class . '::zoeken', ['zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(WoonoordenController::class . '::zoeken', [
+				'zoekterm' => $zoekterm,
+			]);
 		}
 		if (lid_instelling('zoeken', 'groepen') === 'ja') {
-			$resultaat[] = $this->forward(RechtengroepenController::class . '::zoeken', ['zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(
+				RechtengroepenController::class . '::zoeken',
+				['zoekterm' => $zoekterm]
+			);
 		}
 		if (lid_instelling('zoeken', 'forum') === 'ja') {
-			$resultaat[] = $this->forward(ForumController::class . '::titelzoeken', ['zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(ForumController::class . '::titelzoeken', [
+				'zoekterm' => $zoekterm,
+			]);
 		}
 		if (lid_instelling('zoeken', 'fotoalbum') === 'ja') {
-			$resultaat[] = $this->forward(FotoAlbumController::class . '::zoeken', ['zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(FotoAlbumController::class . '::zoeken', [
+				'zoekterm' => $zoekterm,
+			]);
 		}
 		if (lid_instelling('zoeken', 'agenda') === 'ja') {
-			$resultaat[] = $this->forward(AgendaController::class . '::zoeken', ['zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(AgendaController::class . '::zoeken', [
+				'zoekterm' => $zoekterm,
+			]);
 		}
 		if (lid_instelling('zoeken', 'documenten') === 'ja') {
-			$resultaat[] = $this->forward(DocumentenController::class . '::zoeken', ['zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(DocumentenController::class . '::zoeken', [
+				'zoekterm' => $zoekterm,
+			]);
 		}
 		if (lid_instelling('zoeken', 'boeken') === 'ja') {
-			$resultaat[] = $this->forward(BibliotheekController::class . '::zoeken', ['zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(BibliotheekController::class . '::zoeken', [
+				'zoekterm' => $zoekterm,
+			]);
 		}
 		if (lid_instelling('zoeken', 'wiki') === 'ja') {
-			$resultaat[] = $this->forward(ZoekController::class . '::wikizoek', ['zoekterm' => $zoekterm]);
+			$resultaat[] = $this->forward(ZoekController::class . '::wikizoek', [
+				'zoekterm' => $zoekterm,
+			]);
 		}
 
-		return new JsonResponse(array_merge(...array_values(array_map(function ($response) {
-			return json_decode($response->getContent());
-		}, $resultaat))));
+		return new JsonResponse(
+			array_merge(
+				...array_values(
+					array_map(function ($response) {
+						return json_decode($response->getContent());
+					}, $resultaat)
+				)
+			)
+		);
 	}
 
 	/**
@@ -91,14 +124,20 @@ class ZoekController extends AbstractController
 			$zoekterm = $request->query->get('q');
 		}
 
-		$url = $this->getParameter('wiki_url') . '/w/api.php?' . http_build_query([
+		$url =
+			$this->getParameter('wiki_url') .
+			'/w/api.php?' .
+			http_build_query([
 				'action' => 'query',
 				'list' => 'search',
 				'srsearch' => $zoekterm,
 				'format' => 'json',
 			]);
 
-		$response = json_decode(curl_request($url, [CURLOPT_FOLLOWLOCATION => true]), true);
+		$response = json_decode(
+			curl_request($url, [CURLOPT_FOLLOWLOCATION => true]),
+			true
+		);
 
 		$result = [];
 
@@ -108,17 +147,20 @@ class ZoekController extends AbstractController
 				continue;
 			}
 
-			$result[] = array(
+			$result[] = [
 				'url' => $this->getParameter('wiki_url') . '/wiki/' . $item['title'],
 				'label' => 'Wiki',
 				'value' => $item['title'],
 				'icon' => Icon::getTag('wiki'),
-				'id' => $item['pageid']
-			);
+				'id' => $item['pageid'],
+			];
 		}
 
-		$result[] = array(
-			'url' => $this->getParameter('wiki_url') . '/w/index.php?' . http_build_query([
+		$result[] = [
+			'url' =>
+				$this->getParameter('wiki_url') .
+				'/w/index.php?' .
+				http_build_query([
 					'search' => $zoekterm,
 					'title' => 'Speciaal:Zoeken',
 					'fulltext' => '1',
@@ -127,7 +169,7 @@ class ZoekController extends AbstractController
 			'value' => $zoekterm,
 			'icon' => Icon::getTag('wiki'),
 			'id' => htmlspecialchars($zoekterm) . 'wiki',
-		);
+		];
 
 		return new JsonResponse($result);
 	}

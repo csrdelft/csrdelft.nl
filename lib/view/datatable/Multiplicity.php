@@ -8,7 +8,8 @@ namespace CsrDelft\view\datatable;
  *
  * @see assets/js/util.js
  */
-class Multiplicity {
+class Multiplicity
+{
 	const NONE = '';
 	const ZERO = '== 0';
 	const ONE = '== 1';
@@ -17,11 +18,13 @@ class Multiplicity {
 
 	protected $choice;
 
-	public function __construct($choice) {
+	public function __construct($choice)
+	{
 		$this->choice = $choice;
 	}
 
-	public function getChoice() {
+	public function getChoice()
+	{
 		return $this->choice;
 	}
 
@@ -30,7 +33,8 @@ class Multiplicity {
 	 *
 	 * @return static
 	 */
-	public static function None() {
+	public static function None()
+	{
 		return new static(self::NONE);
 	}
 
@@ -39,7 +43,8 @@ class Multiplicity {
 	 *
 	 * @return static
 	 */
-	public static function Zero() {
+	public static function Zero()
+	{
 		return new static(self::ZERO);
 	}
 
@@ -48,7 +53,8 @@ class Multiplicity {
 	 *
 	 * @return static
 	 */
-	public static function One() {
+	public static function One()
+	{
 		return new static(self::ONE);
 	}
 
@@ -57,7 +63,8 @@ class Multiplicity {
 	 *
 	 * @return static
 	 */
-	public static function Two() {
+	public static function Two()
+	{
 		return new static(self::TWO);
 	}
 
@@ -66,7 +73,8 @@ class Multiplicity {
 	 *
 	 * @return static
 	 */
-	public static function Any() {
+	public static function Any()
+	{
 		return new static(self::ANY);
 	}
 }
