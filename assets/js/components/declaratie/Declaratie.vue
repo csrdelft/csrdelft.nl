@@ -285,7 +285,7 @@
               class="bonVerwijderen"
               @click="bonVerwijderen(bonIndex)"
             >
-              <i class="fa fa-trash-alt" />
+              <i class="fas fa-trash-alt" />
             </div>
             <div class="title">Bon {{ bonIndex + 1 }}</div>
 
@@ -344,7 +344,7 @@
                   class="trash"
                   @click="regelVerwijderen(bon, index)"
                 >
-                  <i class="fa fa-trash-alt" />
+                  <i class="fas fa-trash-alt" />
                 </div>
               </div>
               <div
@@ -364,7 +364,7 @@
                   </select>
                 </div>
                 <div class="add">
-                  <i class="fa fa-plus-circle" />
+                  <i class="fas fa-plus-circle" />
                 </div>
               </div>
               <div class="regels-row totaal streep">
@@ -405,7 +405,7 @@
           class="nieuwe-bon"
           @click="bonUploaden = true"
         >
-          <i class="fa fa-plus-circle" />
+          <i class="fas fa-plus-circle" />
         </div>
       </div>
       <div class="voorbeeld">

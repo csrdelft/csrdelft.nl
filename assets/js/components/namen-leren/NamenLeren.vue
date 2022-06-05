@@ -130,8 +130,8 @@
             <span>{{ laatste.studie }}</span>
           </div>
         </div>
-        <span v-if="laatsteGoed" class="fa fa-check" />
-        <span v-else class="fa fa-times" />
+        <span v-if="laatsteGoed" class="fas fa-check" />
+        <span v-else class="fas fa-times" />
       </div>
       <div
         class="pasfotoContainer"
@@ -486,7 +486,7 @@ export default class NamenLeren extends Vue {
   background: #2ecc71;
 }
 
-.laatste .fa {
+.laatste .fas {
   display: inline-block;
   font-size: 26px;
   line-height: 90px;
