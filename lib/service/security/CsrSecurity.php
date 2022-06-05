@@ -27,8 +27,11 @@ class CsrSecurity
 	 */
 	private $accessService;
 
-	public function __construct(Security $security, AccessService $accessService, AccountRepository $accountRepository)
-	{
+	public function __construct(
+		Security $security,
+		AccessService $accessService,
+		AccountRepository $accountRepository
+	) {
 		$this->security = $security;
 		$this->accountRepository = $accountRepository;
 		$this->accessService = $accessService;
@@ -39,7 +42,7 @@ class CsrSecurity
 		$externAccount = $this->accountRepository->find(LoginService::UID_EXTERN);
 
 		if (!$externAccount) {
-			throw new CsrException("Extern account bestaat niet!");
+			throw new CsrException('Extern account bestaat niet!');
 		}
 
 		return $externAccount;
@@ -63,8 +66,14 @@ class CsrSecurity
 		return $this->getAccount()->profiel;
 	}
 
-	public function mag($permission, array $allowedAuthenticationMethdos = null): bool
-	{
-		return $this->accessService->mag($this->getAccount(), $permission, $allowedAuthenticationMethdos);
+	public function mag(
+		$permission,
+		array $allowedAuthenticationMethdos = null
+	): bool {
+		return $this->accessService->mag(
+			$this->getAccount(),
+			$permission,
+			$allowedAuthenticationMethdos
+		);
 	}
 }

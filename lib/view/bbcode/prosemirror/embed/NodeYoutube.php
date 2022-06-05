@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror\embed;
-
 
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\prosemirror\Node;
@@ -27,8 +25,8 @@ class NodeYoutube implements Node
 		}
 		return [
 			'attrs' => [
-				'id' => $node->id
-			]
+				'id' => $node->id,
+			],
 		];
 	}
 

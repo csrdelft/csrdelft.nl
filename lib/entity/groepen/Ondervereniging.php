@@ -14,7 +14,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\OnderverenigingenRepository")
  */
-class Ondervereniging extends Groep {
+class Ondervereniging extends Groep
+{
 	use GroepMoment;
 	/**
 	 * (Adspirant-)Ondervereniging
@@ -24,7 +25,8 @@ class Ondervereniging extends Groep {
 	 */
 	public $onderverenigingStatus;
 
-	public function getUrl() {
+	public function getUrl()
+	{
 		return '/groepen/onderverenigingen/' . $this->id;
 	}
 }

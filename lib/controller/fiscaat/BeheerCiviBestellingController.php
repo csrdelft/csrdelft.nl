@@ -16,13 +16,17 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class BeheerCiviBestellingController extends AbstractController {
+class BeheerCiviBestellingController extends AbstractController
+{
 	/** @var CiviBestellingRepository */
 	private $civiBestellingRepository;
 	/** @var CiviBestellingInhoudRepository  */
 	private $civiBestellingInhoudRepository;
 
-	public function __construct(CiviBestellingRepository $civiBestellingRepository, CiviBestellingInhoudRepository $civiBestellingInhoudRepository) {
+	public function __construct(
+		CiviBestellingRepository $civiBestellingRepository,
+		CiviBestellingInhoudRepository $civiBestellingInhoudRepository
+	) {
 		$this->civiBestellingInhoudRepository = $civiBestellingInhoudRepository;
 		$this->civiBestellingRepository = $civiBestellingRepository;
 	}
@@ -33,12 +37,13 @@ class BeheerCiviBestellingController extends AbstractController {
 	 * @Route("/fiscaat/bestellingen/{uid}", methods={"GET"}, defaults={"uid"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function overzicht($uid = null) {
+	public function overzicht($uid = null)
+	{
 		$this->checkToegang($uid);
 
 		return $this->render('fiscaat/pagina.html.twig', [
 			'titel' => 'Beheer bestellingen',
-			'view' => new CiviBestellingTable($uid)
+			'view' => new CiviBestellingTable($uid),
 		]);
 	}
 
@@ -49,13 +54,17 @@ class BeheerCiviBestellingController extends AbstractController {
 	 * @Route("/fiscaat/bestellingen/{uid}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijst(Request $request, $uid = null) {
+	public function lijst(Request $request, $uid = null)
+	{
 		$this->checkToegang($uid);
 		$uid = $uid == null ? $this->getUid() : $uid;
-		if ($request->query->get("deleted") == "true") {
+		if ($request->query->get('deleted') == 'true') {
 			$data = $this->civiBestellingRepository->findBy(['uid' => $uid]);
 		} else {
-			$data = $this->civiBestellingRepository->findBy(['uid' => $uid, 'deleted' => false]);
+			$data = $this->civiBestellingRepository->findBy([
+				'uid' => $uid,
+				'deleted' => false,
+			]);
 		}
 		return $this->tableData($data);
 	}
@@ -66,8 +75,11 @@ class BeheerCiviBestellingController extends AbstractController {
 	 * @Route("/fiscaat/bestellingen/inhoud/{bestelling_id}", methods={"POST"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function inhoud($bestelling_id) {
-		$data = $this->civiBestellingInhoudRepository->findBy(['bestelling_id' => $bestelling_id]);
+	public function inhoud($bestelling_id)
+	{
+		$data = $this->civiBestellingInhoudRepository->findBy([
+			'bestelling_id' => $bestelling_id,
+		]);
 
 		return $this->tableData($data);
 	}
@@ -77,7 +89,8 @@ class BeheerCiviBestellingController extends AbstractController {
 	 *
 	 * @param string $uid
 	 */
-	private function checkToegang($uid) {
+	private function checkToegang($uid)
+	{
 		if (!LoginService::mag(P_FISCAAT_READ) && $uid) {
 			throw $this->createAccessDeniedException();
 		}

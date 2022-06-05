@@ -22,7 +22,6 @@ class AutocompleteField extends TextField
 		}
 	}
 
-
 	public function getHtml()
 	{
 		$sources = [];
@@ -35,7 +34,7 @@ class AutocompleteField extends TextField
 				$suggestions = array_values($source);
 				foreach ($suggestions as $i => $suggestion) {
 					if (!is_array($suggestion)) {
-						$suggestions[$i] = array('value' => $suggestion);
+						$suggestions[$i] = ['value' => $suggestion];
 					}
 				}
 
@@ -45,20 +44,42 @@ class AutocompleteField extends TextField
 					'remote' => [
 						'url' => "{$source}%QUERY",
 						'wildcard' => '%QUERY',
-					]
+					],
 				];
 			}
 		}
 
 		$sourcesJSON = vue_encode($sources);
 
-		$clickToGo = array_search('clicktogo', $this->css_classes) ? "true" : "false";
+		$clickToGo = array_search('clicktogo', $this->css_classes)
+			? 'true'
+			: 'false';
 
-		$autoselectStr = $this->autoselect ? "true" : "false";
+		$autoselectStr = $this->autoselect ? 'true' : 'false';
 
-		$inputAttribute = $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete'));
+		$inputAttribute = $this->getInputAttribute([
+			'type',
+			'id',
+			'name',
+			'class',
+			'value',
+			'origvalue',
+			'disabled',
+			'readonly',
+			'maxlength',
+			'placeholder',
+			'autocomplete',
+		]);
 
-		return '<input data-autoselect="' . $autoselectStr . '" data-clicktogo="'.$clickToGo.'" data-sources="' . $sourcesJSON . '" ' . $inputAttribute . ' />';
+		return '<input data-autoselect="' .
+			$autoselectStr .
+			'" data-clicktogo="' .
+			$clickToGo .
+			'" data-sources="' .
+			$sourcesJSON .
+			'" ' .
+			$inputAttribute .
+			' />';
 	}
 
 	protected function getInputAttribute($attribute)

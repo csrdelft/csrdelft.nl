@@ -25,6 +25,4 @@ class CommissieVoorkeurenType extends AbstractType
 			'data_class' => VoorkeurOpmerking::class,
 		]);
 	}
-
-
 }

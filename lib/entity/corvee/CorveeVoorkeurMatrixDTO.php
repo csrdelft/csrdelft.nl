@@ -1,10 +1,9 @@
 <?php
 
-
 namespace CsrDelft\entity\corvee;
 
-
-class CorveeVoorkeurMatrixDTO {
+class CorveeVoorkeurMatrixDTO
+{
 	/**
 	 * @var string
 	 */
@@ -18,7 +17,8 @@ class CorveeVoorkeurMatrixDTO {
 	 */
 	public $voorkeur;
 
-	public function __construct($profiel, $repetitie, $voorkeur = null) {
+	public function __construct($profiel, $repetitie, $voorkeur = null)
+	{
 		$this->uid = $profiel;
 		$this->crv_repetitie_id = $repetitie;
 		$this->voorkeur = $voorkeur != null;

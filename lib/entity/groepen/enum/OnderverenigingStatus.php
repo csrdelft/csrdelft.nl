@@ -15,8 +15,8 @@ use CsrDelft\common\Enum;
  * @method static static Ondervereniging
  * @method static static VoormaligOndervereniging
  */
-class OnderverenigingStatus extends Enum {
-
+class OnderverenigingStatus extends Enum
+{
 	/**
 	 * OnderverenigingStatus opties.
 	 */

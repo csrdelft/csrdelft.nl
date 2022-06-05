@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\service\security;
-
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Security\TemporaryToken;
@@ -13,7 +11,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class SuService {
+class SuService
+{
 	/**
 	 * @var AccountRepository
 	 */
@@ -52,8 +51,10 @@ class SuService {
 	/**
 	 * @return bool
 	 */
-	public function isSued() {
-		return $this->security->getToken() && $this->security->isGranted('IS_IMPERSONATOR');
+	public function isSued()
+	{
+		return $this->security->getToken() &&
+			$this->security->isGranted('IS_IMPERSONATOR');
 	}
 
 	/**
@@ -63,7 +64,8 @@ class SuService {
 	 * @param callable $fun
 	 * @return mixed Het resultaat van $fun
 	 */
-	public function alsLid(Account $account, callable $fun) {
+	public function alsLid(Account $account, callable $fun)
+	{
 		$this->overrideUid($account);
 
 		$result = null;
@@ -84,10 +86,13 @@ class SuService {
 	 * @throws CsrException als er al een tijdelijke schakeling actief is.
 	 * @see SuService::alsLid() voor een veilige methode
 	 */
-	public function overrideUid(Account $account) {
+	public function overrideUid(Account $account)
+	{
 		$token = $this->security->getToken();
 		if ($token instanceof TemporaryToken) {
-			throw new CsrException("Er is al een tijdelijke schakeling actief, beëindig deze eerst.");
+			throw new CsrException(
+				'Er is al een tijdelijke schakeling actief, beëindig deze eerst.'
+			);
 		}
 
 		$temporaryToken = new TemporaryToken($account, $token);
@@ -100,19 +105,23 @@ class SuService {
 	 * @throws CsrException als er geen tijdelijke schakeling actief is.
 	 * @see SuService::alsLid() voor een veilige methode
 	 */
-	public function resetUid() {
+	public function resetUid()
+	{
 		$token = $this->security->getToken();
 		if (!($token instanceof TemporaryToken)) {
-			throw new CsrException("Geen tijdelijke schakeling actief, kan niet terug.");
+			throw new CsrException(
+				'Geen tijdelijke schakeling actief, kan niet terug.'
+			);
 		}
 
 		$this->tokenStorage->setToken($token->getOriginalToken());
 	}
 
-	public function maySuTo(UserInterface $suNaar) {
-		return $this->security->isGranted('ROLE_ALLOWED_TO_SWITCH') // Mag switchen
-			&& !$this->security->isGranted('IS_IMPERSONATOR') // Is niet al geswitched
-			&& $this->security->getUser()->getUsername() !== $suNaar->getUsername() // Is niet dezelfde gebruiker
-			&& $this->accessService->mag($suNaar, P_LOGGED_IN); // Gebruiker waar naar geswitched wordt mag inloggen
+	public function maySuTo(UserInterface $suNaar)
+	{
+		return $this->security->isGranted('ROLE_ALLOWED_TO_SWITCH') && // Mag switchen
+		!$this->security->isGranted('IS_IMPERSONATOR') && // Is niet al geswitched
+		$this->security->getUser()->getUsername() !== $suNaar->getUsername() && // Is niet dezelfde gebruiker
+			$this->accessService->mag($suNaar, P_LOGGED_IN); // Gebruiker waar naar geswitched wordt mag inloggen
 	}
 }

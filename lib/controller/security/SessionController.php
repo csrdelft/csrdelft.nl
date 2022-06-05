@@ -34,8 +34,10 @@ class SessionController extends AbstractController
 	 */
 	private $objectManager;
 
-	public function __construct(ManagerRegistry $managerRegistry, RememberLoginRepository $rememberLoginRepository)
-	{
+	public function __construct(
+		ManagerRegistry $managerRegistry,
+		RememberLoginRepository $rememberLoginRepository
+	) {
 		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->objectManager = $managerRegistry->getManager();
 	}
@@ -47,7 +49,9 @@ class SessionController extends AbstractController
 	 */
 	public function rememberdata(): GenericDataTableResponse
 	{
-		return $this->tableData($this->rememberLoginRepository->findBy(['uid' => $this->getUid()]));
+		return $this->tableData(
+			$this->rememberLoginRepository->findBy(['uid' => $this->getUid()])
+		);
 	}
 
 	/**
@@ -57,8 +61,10 @@ class SessionController extends AbstractController
 	 * @Route("/session/remember", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function remember(Request $request, PersistentRememberMeHandler $rememberMeHandler)
-	{
+	public function remember(
+		Request $request,
+		PersistentRememberMeHandler $rememberMeHandler
+	) {
 		$selection = $this->getDataTableSelection();
 
 		if (empty($selection)) {
@@ -79,7 +85,7 @@ class SessionController extends AbstractController
 		if ($form->validate()) {
 			if (isset($_POST['DataTableId'])) {
 				$response = $this->tableData([$remember]);
-			} else if (!empty($_POST['redirect'])) {
+			} elseif (!empty($_POST['redirect'])) {
 				$response = new JsonResponse($_POST['redirect']);
 			} else {
 				$response = new JsonResponse($this->generateUrl('default'));
@@ -101,11 +107,16 @@ class SessionController extends AbstractController
 	 */
 	public function forgetAll(): GenericDataTableResponse
 	{
-		$remembers = $this->rememberLoginRepository->findBy(['uid' => $this->getUid()]);
+		$remembers = $this->rememberLoginRepository->findBy([
+			'uid' => $this->getUid(),
+		]);
 
 		$response = [];
 		foreach ($remembers as $remember) {
-			$response[] = new RemoveDataTableEntry($remember->id, RememberLogin::class);
+			$response[] = new RemoveDataTableEntry(
+				$remember->id,
+				RememberLogin::class
+			);
 			$this->objectManager->remove($remember);
 		}
 		$this->objectManager->flush();
@@ -131,7 +142,10 @@ class SessionController extends AbstractController
 			if (!$remember || $remember->uid !== $this->getUid()) {
 				throw $this->createAccessDeniedException();
 			}
-			$response[] = new RemoveDataTableEntry($remember->id, RememberLogin::class);
+			$response[] = new RemoveDataTableEntry(
+				$remember->id,
+				RememberLogin::class
+			);
 			$this->objectManager->remove($remember);
 		}
 		$this->objectManager->flush();

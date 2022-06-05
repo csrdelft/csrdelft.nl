@@ -1,6 +1,5 @@
 <?php
 
-
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\entity\security\enum\AccessAction;
@@ -20,7 +19,11 @@ trait GroepAanmeldLimiet
 	public function magAanmeldLimiet(AccessAction $action)
 	{
 		// Controleer maximum leden
-		if (AccessAction::isAanmelden($action) && isset($this->aanmeldLimiet) && $this->aantalLeden() >= $this->aanmeldLimiet) {
+		if (
+			AccessAction::isAanmelden($action) &&
+			isset($this->aanmeldLimiet) &&
+			$this->aantalLeden() >= $this->aanmeldLimiet
+		) {
 			return false;
 		} else {
 			return true;

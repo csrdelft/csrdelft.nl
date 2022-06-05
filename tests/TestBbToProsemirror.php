@@ -23,58 +23,63 @@ final class TestBbToProsemirror extends CsrTestCase
 
 	public function testString()
 	{
-		$this->assertEquals([
-			'type' => 'doc',
-			'content' => [
-				[
-					'type' => 'text',
-					'text' => 'testString',
+		$this->assertEquals(
+			[
+				'type' => 'doc',
+				'content' => [
+					[
+						'type' => 'text',
+						'text' => 'testString',
+					],
 				],
 			],
-		], $this->converter->toProseMirror("testString"));
+			$this->converter->toProseMirror('testString')
+		);
 	}
 
 	public function testBold()
 	{
-		$this->assertEquals([
-			'type' => 'doc',
-			'content' => [
-				[
-					'type' => 'text',
-					'marks' => [
-						['type' => 'strong'],
+		$this->assertEquals(
+			[
+				'type' => 'doc',
+				'content' => [
+					[
+						'type' => 'text',
+						'marks' => [['type' => 'strong']],
+						'text' => 'vetgedrukt',
 					],
-					'text' => 'vetgedrukt',
-				]
+				],
 			],
-		], $this->converter->toProseMirror("[b]vetgedrukt[/b]"));
+			$this->converter->toProseMirror('[b]vetgedrukt[/b]')
+		);
 	}
 
 	public function testMultipleMark()
 	{
-		$this->assertEquals([
-			'type' => 'doc',
-			'content' => [
-				[
-					'type' => 'text',
-					'marks' => [
-						['type' => 'strong'],
+		$this->assertEquals(
+			[
+				'type' => 'doc',
+				'content' => [
+					[
+						'type' => 'text',
+						'marks' => [['type' => 'strong']],
+						'text' => 'vetgedrukt en ',
 					],
-					'text' => 'vetgedrukt en ',
-				],
-				[
-					'type' => 'text',
-					'marks' => [
-						['type' => 'strong'],
-						['type' => 'em'],
+					[
+						'type' => 'text',
+						'marks' => [['type' => 'strong'], ['type' => 'em']],
+						'text' => 'schuingedrukt',
 					],
-					'text' => 'schuingedrukt',
 				],
 			],
-		], $this->converter->toProseMirror("[b]vetgedrukt en [i]schuingedrukt[/i][/b]"));
+			$this->converter->toProseMirror(
+				'[b]vetgedrukt en [i]schuingedrukt[/i][/b]'
+			)
+		);
 	}
 
-	public function testLink() {
+	public function testLink()
+	{
 		$this->assertEquals(
 			[
 				'type' => 'doc',
@@ -88,11 +93,13 @@ final class TestBbToProsemirror extends CsrTestCase
 						'text' => 'Google',
 						'marks' => [
 							['type' => 'link', 'attrs' => ['href' => 'https://google.com']],
-						]
-					]
-				]
+						],
+					],
+				],
 			],
-			$this->converter->toProseMirror('Een linkje naar: [url=https://google.com]Google[/url]')
+			$this->converter->toProseMirror(
+				'Een linkje naar: [url=https://google.com]Google[/url]'
+			)
 		);
 	}
 }

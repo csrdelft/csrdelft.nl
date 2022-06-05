@@ -17,7 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class LidInstelling {
+class LidInstelling
+{
 	/**
 	 * @var integer
 	 * @ORM\Id()

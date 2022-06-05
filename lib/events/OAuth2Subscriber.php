@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\events;
-
 
 use CsrDelft\common\Security\OAuth2Scope;
 use CsrDelft\repository\security\AccountRepository;
@@ -49,14 +47,13 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	private $rememberOAuthRepository;
 
 	public function __construct(
-		RequestStack            $requestStack,
-		Environment             $twig,
-		LoginService            $loginService,
-		AccessService           $accessService,
+		RequestStack $requestStack,
+		Environment $twig,
+		LoginService $loginService,
+		AccessService $accessService,
 		RememberOAuthRepository $rememberOAuthRepository,
-		AccountRepository       $accountRepository
-	)
-	{
+		AccountRepository $accountRepository
+	) {
 		$this->loginService = $loginService;
 		$this->requestStack = $requestStack;
 		$this->twig = $twig;
@@ -75,16 +72,22 @@ class OAuth2Subscriber implements EventSubscriberInterface
 
 	public function onScopeResolve(ScopeResolveEvent $event)
 	{
-		$rememberOAuth = $this->rememberOAuthRepository->findByUser($event->getUserIdentifier(), $event->getClient()->getIdentifier());
+		$rememberOAuth = $this->rememberOAuthRepository->findByUser(
+			$event->getUserIdentifier(),
+			$event->getClient()->getIdentifier()
+		);
 		$user = $this->accountRepository->find($event->getUserIdentifier());
 
 		if ($rememberOAuth) {
 			$rememberOAuth->lastUsed = date_create_immutable();
-			$rememberedScopes = explode(" ", $rememberOAuth->scopes);
+			$rememberedScopes = explode(' ', $rememberOAuth->scopes);
 
 			$scopes = [];
 			foreach ($event->getScopes() as $scope) {
-				if (in_array((string)$scope, $rememberedScopes) && $this->accessService->mag($user, OAuth2Scope::magScope($scope))) {
+				if (
+					in_array((string) $scope, $rememberedScopes) &&
+					$this->accessService->mag($user, OAuth2Scope::magScope($scope))
+				) {
 					$scopes[] = $scope;
 				}
 			}
@@ -100,9 +103,8 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		if ($request->query->has('scopeChoice')) {
 			$requestedScopes = array_map(function ($scope) {
 				return new Scope($scope);
-			}, (array)$request->query->get('scopeChoice'));
+			}, (array) $request->query->get('scopeChoice'));
 		}
-
 
 		$scopes = [];
 		foreach ($requestedScopes as $scope) {
@@ -120,8 +122,9 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	 * @throws RuntimeError
 	 * @throws SyntaxError
 	 */
-	public function onAuthorizationRequest(AuthorizationRequestResolveEvent $event): void
-	{
+	public function onAuthorizationRequest(
+		AuthorizationRequestResolveEvent $event
+	): void {
 		$request = $this->requestStack->getMainRequest();
 
 		$rememberOAuth = $this->rememberOAuthRepository->findByUser(
@@ -132,7 +135,9 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		if ($rememberOAuth) {
 			$rememberOAuth->lastUsed = date_create_immutable();
 
-			$event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
+			$event->resolveAuthorization(
+				AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED
+			);
 			return;
 		}
 
@@ -142,7 +147,9 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		}
 
 		if ($request->get('cancel')) {
-			$event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_DENIED);
+			$event->resolveAuthorization(
+				AuthorizationRequestResolveEvent::AUTHORIZATION_DENIED
+			);
 			return;
 		}
 
@@ -150,15 +157,23 @@ class OAuth2Subscriber implements EventSubscriberInterface
 			if ($request->get('remember')) {
 				// Vinkje bij vertrouw applicatie
 
-				$this->rememberOAuthRepository->nieuw($event->getUser(), $event->getClient()->getIdentifier(), $event->getScopes());
+				$this->rememberOAuthRepository->nieuw(
+					$event->getUser(),
+					$event->getClient()->getIdentifier(),
+					$event->getScopes()
+				);
 			}
 
-			$event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
+			$event->resolveAuthorization(
+				AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED
+			);
 			return;
 		}
 
 		/** @var Scope[] $requestedScopes */
-		$requestedScopes = array_unique(array_merge($event->getScopes(), $event->getClient()->getScopes()));
+		$requestedScopes = array_unique(
+			array_merge($event->getScopes(), $event->getClient()->getScopes())
+		);
 
 		// Deze check wordt ook gedaan in OAuth2ScopeSubscriber
 		$scopeBeschrijving = [];
@@ -174,9 +189,12 @@ class OAuth2Subscriber implements EventSubscriberInterface
 
 		$redirect_uri = parse_url($request->get('redirect_uri'));
 
-		$redirect_uri_formatted = $redirect_uri['host'] . (isset($redirect_uri['port']) ? ':' . $redirect_uri['port'] : '');
+		$redirect_uri_formatted =
+			$redirect_uri['host'] .
+			(isset($redirect_uri['port']) ? ':' . $redirect_uri['port'] : '');
 
-		$response = new Response(200,
+		$response = new Response(
+			200,
 			[],
 			$this->twig->render('oauth2/authorize.html.twig', [
 				'client_id' => $event->getClient()->getIdentifier(),

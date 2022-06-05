@@ -59,23 +59,33 @@ class DoctrineEntityField extends TextField
 	public function __construct($name, $value, $description, $type, $url)
 	{
 		if (!is_a($type, DisplayEntity::class, true)) {
-			throw new CsrException($type . ' moet DisplayEntity implementeren voor DoctrineEntityField');
+			throw new CsrException(
+				$type . ' moet DisplayEntity implementeren voor DoctrineEntityField'
+			);
 		}
-		$this->em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+		$this->em = ContainerFacade::getContainer()->get(
+			'doctrine.orm.entity_manager'
+		);
 
 		$meta = $this->em->getClassMetadata($type);
 
 		if (count($meta->getIdentifier()) !== 1) {
-			throw new CsrException('DoctrineEntityField ondersteund geen entities met een composite primary key');
+			throw new CsrException(
+				'DoctrineEntityField ondersteund geen entities met een composite primary key'
+			);
 		}
 
 		$this->idField = $meta->getIdentifier()[0];
 		$this->entityType = $type;
 		$this->entity = $value ?? new $type();
 		$this->show_value = $this->entity->getWeergave();
-		$this->origvalue = (string)$this->entity->getId();
+		$this->origvalue = (string) $this->entity->getId();
 
-		parent::__construct($name, $value ? (string)$value->getId() : null, $description);
+		parent::__construct(
+			$name,
+			$value ? (string) $value->getId() : null,
+			$description
+		);
 
 		$this->css_classes[] = 'doctrine-field';
 
@@ -115,8 +125,39 @@ class DoctrineEntityField extends TextField
 	{
 		$id = $this->getId() . '_' . $this->idField;
 
-		$html = '<input data-url="' . $this->url . '" data-id-field="' . $id . '" data-suggestie-id-field="' . $this->suggestieIdField . '" name="' . $this->name . '_show" value="' . $this->entity->getWeergave() . '" origvalue="' . $this->entity->getWeergave() . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
-		$html .= '<input type="hidden" name="' . $this->name . '" id="' . $id . '" value="' . $this->entity->getId() . '" />';
+		$html =
+			'<input data-url="' .
+			$this->url .
+			'" data-id-field="' .
+			$id .
+			'" data-suggestie-id-field="' .
+			$this->suggestieIdField .
+			'" name="' .
+			$this->name .
+			'_show" value="' .
+			$this->entity->getWeergave() .
+			'" origvalue="' .
+			$this->entity->getWeergave() .
+			'"' .
+			$this->getInputAttribute([
+				'type',
+				'id',
+				'class',
+				'disabled',
+				'readonly',
+				'maxlength',
+				'placeholder',
+				'autocomplete',
+			]) .
+			' />';
+		$html .=
+			'<input type="hidden" name="' .
+			$this->name .
+			'" id="' .
+			$id .
+			'" value="' .
+			$this->entity->getId() .
+			'" />';
 
 		return $html;
 	}
@@ -128,7 +169,9 @@ class DoctrineEntityField extends TextField
 	 */
 	public function isPosted()
 	{
-		if (null === filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)) {
+		if (
+			null === filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)
+		) {
 			return false;
 		}
 
@@ -138,5 +181,4 @@ class DoctrineEntityField extends TextField
 
 		return true;
 	}
-
 }

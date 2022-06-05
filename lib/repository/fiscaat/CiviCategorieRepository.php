@@ -14,8 +14,10 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CiviCategorie[]    findAll()
  * @method CiviCategorie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CiviCategorieRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+class CiviCategorieRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, CiviCategorie::class);
 	}
 
@@ -23,10 +25,12 @@ class CiviCategorieRepository extends AbstractRepository {
 	 * @param $query
 	 * @return CiviCategorie[]
 	 */
-	public function suggesties($query) {
+	public function suggesties($query)
+	{
 		return $this->createQueryBuilder('cc')
 			->where('cc.type LIKE :query')
 			->setParameter('query', $query)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 }

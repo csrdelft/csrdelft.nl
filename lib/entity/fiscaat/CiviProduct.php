@@ -17,7 +17,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviProductRepository")
  */
-class CiviProduct implements DataTableEntry, DisplayEntity {
+class CiviProduct implements DataTableEntry, DisplayEntity
+{
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -77,7 +78,8 @@ class CiviProduct implements DataTableEntry, DisplayEntity {
 	 * @Serializer\SerializedName("categorie")
 	 * @Serializer\Groups("bar")
 	 */
-	public function getCategorieString() {
+	public function getCategorieString()
+	{
 		return $this->categorie->getWeergave();
 	}
 
@@ -85,22 +87,26 @@ class CiviProduct implements DataTableEntry, DisplayEntity {
 	 * @return string
 	 * @Serializer\Groups("bar")
 	 */
-	public function getCie() {
+	public function getCie()
+	{
 		return $this->categorie->cie;
 	}
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->prijzen = new ArrayCollection();
 	}
 
-	public function getUUID() {
+	public function getUUID()
+	{
 		return $this->id . '@civiproduct.csrdelft.nl';
 	}
 
 	/**
 	 * @return CiviPrijs
 	 */
-	public function getPrijs() {
+	public function getPrijs()
+	{
 		return $this->prijzen->last();
 	}
 
@@ -109,7 +115,8 @@ class CiviProduct implements DataTableEntry, DisplayEntity {
 	 * @Serializer\Groups({"datatable", "bar"})
 	 * @Serializer\SerializedName("prijs")
 	 */
-	public function getPrijsInt() {
+	public function getPrijsInt()
+	{
 		if ($prijs = $this->getPrijs()) {
 			return $prijs->prijs;
 		}
@@ -123,14 +130,16 @@ class CiviProduct implements DataTableEntry, DisplayEntity {
 	 * @param \DateTimeInterface $moment
 	 * @return false|mixed
 	 */
-	public function getPrijsOpMoment(\DateTimeInterface $moment) {
+	public function getPrijsOpMoment(\DateTimeInterface $moment)
+	{
 		$vanExpr = Criteria::expr()->lt('van', $moment);
 		$totExpr = Criteria::expr()->orX(
 			Criteria::expr()->gt('tot', $moment),
-			Criteria::expr()->isNull('tot'),
+			Criteria::expr()->isNull('tot')
 		);
-		$criteria = Criteria::create()
-			->where(Criteria::expr()->andX($vanExpr, $totExpr));
+		$criteria = Criteria::create()->where(
+			Criteria::expr()->andX($vanExpr, $totExpr)
+		);
 
 		/** @var CiviPrijs $prijs */
 		$prijs = $this->prijzen->matching($criteria)->first();
@@ -143,19 +152,27 @@ class CiviProduct implements DataTableEntry, DisplayEntity {
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("categorie")
 	 */
-	public function getDataTableCategorie() {
+	public function getDataTableCategorie()
+	{
 		return $this->categorie->getBeschrijving();
 	}
 
-	public function getBeschrijvingFormatted() {
-		return sprintf("%s (€%.2f)", $this->beschrijving, $this->getPrijsInt() / 100);
+	public function getBeschrijvingFormatted()
+	{
+		return sprintf(
+			'%s (€%.2f)',
+			$this->beschrijving,
+			$this->getPrijsInt() / 100
+		);
 	}
 
-	public function getId() {
+	public function getId()
+	{
 		return $this->id;
 	}
 
-	public function getWeergave(): string {
+	public function getWeergave(): string
+	{
 		return $this->getBeschrijvingFormatted();
 	}
 }

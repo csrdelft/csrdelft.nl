@@ -11,17 +11,17 @@ namespace CsrDelft\model\entity\profiel;
  * Textuele toelichting op wijziging aan profiel.
  *
  */
-class ProfielLogTextEntry extends AbstractProfielLogEntry {
-
+class ProfielLogTextEntry extends AbstractProfielLogEntry
+{
 	public $text;
 
-	public function __construct($text) {
+	public function __construct($text)
+	{
 		$this->text = $text;
 	}
 
-	public function toHtml() {
+	public function toHtml()
+	{
 		return htmlspecialchars($this->text);
 	}
-
-
 }

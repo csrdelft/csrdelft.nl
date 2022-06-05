@@ -21,7 +21,8 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
  *
  * Controller van de agenda.
  */
-class LoginController extends AbstractController {
+class LoginController extends AbstractController
+{
 	use TargetPathTrait;
 
 	/**
@@ -37,7 +38,11 @@ class LoginController extends AbstractController {
 	 */
 	private $suService;
 
-	public function __construct(LoginService $loginService, SuService $suService, RememberLoginRepository $rememberLoginRepository) {
+	public function __construct(
+		LoginService $loginService,
+		SuService $suService,
+		RememberLoginRepository $rememberLoginRepository
+	) {
 		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->loginService = $loginService;
 		$this->suService = $suService;
@@ -51,8 +56,10 @@ class LoginController extends AbstractController {
 	 * @Route("/{_locale<%app.supported_locales%>}/login", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function loginForm(Request $request, AuthenticationUtils $authenticationUtils): Response
-	{
+	public function loginForm(
+		Request $request,
+		AuthenticationUtils $authenticationUtils
+	): Response {
 		if ($this->getUser()) {
 			return $this->redirectToRoute('default');
 		}
@@ -62,16 +69,28 @@ class LoginController extends AbstractController {
 			$this->saveTargetPath($request->getSession(), 'main', $targetPath);
 		}
 
-		if (str_contains($this->getTargetPath($request->getSession(), 'main'), "remote-login=true")) {
-			return $this->redirectToRoute("csrdelft_security_remotelogin_remotelogin");
+		if (
+			str_contains(
+				$this->getTargetPath($request->getSession(), 'main'),
+				'remote-login=true'
+			)
+		) {
+			return $this->redirectToRoute(
+				'csrdelft_security_remotelogin_remotelogin'
+			);
 		}
 
 		$error = $authenticationUtils->getLastAuthenticationError();
 		$userName = $authenticationUtils->getLastUsername();
 
-		$loginForm = $this->createFormulier(LoginForm::class, null, ['lastUserName' => $userName, 'lastError' => $error]);
+		$loginForm = $this->createFormulier(LoginForm::class, null, [
+			'lastUserName' => $userName,
+			'lastError' => $error,
+		]);
 
-		$response = $this->render('extern/login.html.twig', ['loginForm' => $loginForm->createView()]);
+		$response = $this->render('extern/login.html.twig', [
+			'loginForm' => $loginForm->createView(),
+		]);
 
 		// Als er geredirect wordt, stuur dan een forbidden status
 		if ($targetPath) {
@@ -86,15 +105,21 @@ class LoginController extends AbstractController {
 	 * @Route("/{_locale<%app.supported_locales%>}/login_check", name="app_login_check", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function login_check() {
-		throw new LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.form_login.check_path in config/packages/security.yaml');
+	public function login_check()
+	{
+		throw new LogicException(
+			'Deze route wordt opgevangen door de firewall, zie security.firewalls.main.form_login.check_path in config/packages/security.yaml'
+		);
 	}
 
 	/**
 	 * @Route("/logout", name="app_logout")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function logout() {
-		throw new LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.logout.path config/packages/security.yaml');
+	public function logout()
+	{
+		throw new LogicException(
+			'Deze route wordt opgevangen door de firewall, zie security.firewalls.main.logout.path config/packages/security.yaml'
+		);
 	}
 }

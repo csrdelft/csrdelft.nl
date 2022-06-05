@@ -22,7 +22,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class FotoAlbumRepository extends AbstractRepository {
+class FotoAlbumRepository extends AbstractRepository
+{
 	/**
 	 * @var FotoRepository
 	 */
@@ -54,24 +55,28 @@ class FotoAlbumRepository extends AbstractRepository {
 	 * @param int $limit
 	 * @return FotoAlbum[]
 	 */
-	public function zoeken($dir, $limit) {
+	public function zoeken($dir, $limit)
+	{
 		return $this->createQueryBuilder('fa')
 			->where('fa.subdir LIKE :subdir')
 			->setParameter('subdir', '%' . $dir . '%')
 			->orderBy('fa.subdir', 'DESC')
 			->setMaxResults($limit)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
 	 * @param string $subdir
 	 * @return FotoAlbum[]
 	 */
-	public function findBySubdir($subdir) {
+	public function findBySubdir($subdir)
+	{
 		return $this->createQueryBuilder('fa')
 			->where('fa.subdir LIKE :subdir')
 			->setParameter('subdir', $subdir . '%')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
@@ -79,11 +84,14 @@ class FotoAlbumRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(FotoAlbum $album) {
+	public function create(FotoAlbum $album)
+	{
 		if (!file_exists($album->getPath())) {
 			mkdir($album->getPath());
 			if (false === @chmod($album->getPath(), 0755)) {
-				throw new CsrException('Geen eigenaar van album: ' . htmlspecialchars($album->path));
+				throw new CsrException(
+					'Geen eigenaar van album: ' . htmlspecialchars($album->path)
+				);
 			}
 		}
 		$album->owner = $this->security->getUser()->getUsername();
@@ -99,7 +107,8 @@ class FotoAlbumRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function delete(FotoAlbum $album) {
+	public function delete(FotoAlbum $album)
+	{
 		$path = $album->path . '_resized';
 		if (file_exists($path)) {
 			rmdir($path);
@@ -116,8 +125,12 @@ class FotoAlbumRepository extends AbstractRepository {
 		$this->getEntityManager()->flush();
 	}
 
-	public function getFotoAlbum($path) {
-		if (AccountRepository::isValidUid($path) AND ProfielRepository::existsUid($path)) {
+	public function getFotoAlbum($path)
+	{
+		if (
+			AccountRepository::isValidUid($path) and
+			ProfielRepository::existsUid($path)
+		) {
 			$album = new FotoTagAlbum($path);
 		} else {
 			$album = new FotoAlbum($path);
@@ -131,12 +144,20 @@ class FotoAlbumRepository extends AbstractRepository {
 		return $album;
 	}
 
-	public function verwerkFotos(FotoAlbum $fotoalbum) {
+	public function verwerkFotos(FotoAlbum $fotoalbum)
+	{
 		// verwijder niet bestaande subalbums en fotos uit de database
 		$this->opschonen($fotoalbum);
 		//define('RESIZE_OUTPUT', null);
 		//echo '<h1>Fotoalbum verwerken: ' . $album->dirname . '</h1>Dit kan even duren...<br />';
-		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fotoalbum->path, RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS), RecursiveIteratorIterator::SELF_FIRST);
+		$iterator = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator(
+				$fotoalbum->path,
+				RecursiveDirectoryIterator::SKIP_DOTS |
+					RecursiveDirectoryIterator::UNIX_PATHS
+			),
+			RecursiveIteratorIterator::SELF_FIRST
+		);
 		$albums = 0;
 		$fotos = 0;
 		$errors = 0;
@@ -156,7 +177,8 @@ class FotoAlbumRepository extends AbstractRepository {
 					if (false === @chmod($path, 0755)) {
 						throw new CsrException('Geen eigenaar van album: ' . $path);
 					}
-				} // Foto
+				}
+				// Foto
 				else {
 					$filename = basename($path);
 					if ($filename === 'Thumbs.db') {
@@ -167,7 +189,9 @@ class FotoAlbumRepository extends AbstractRepository {
 					$album = new FotoAlbum(dirname($path), true);
 					$foto = new Foto($filename, $album, true);
 					if (!$foto->exists()) {
-						throw new CsrException('Foto bestaat niet: ' . $foto->directory . $foto->filename);
+						throw new CsrException(
+							'Foto bestaat niet: ' . $foto->directory . $foto->filename
+						);
 					}
 					$this->fotoRepository->verwerkFoto($foto);
 					if (false === @chmod($path, 0644)) {
@@ -188,13 +212,14 @@ Voltooid met {$errors} errors. Dit album bevat {$albums} sub-albums en in totaal
 HTML;
 		if (defined('RESIZE_OUTPUT')) {
 			echo '<br />' . $msg;
-			exit;
+			exit();
 		} else {
 			setMelding($msg, $errors > 0 ? 2 : 1);
 		}
 	}
 
-	public function getMostRecentFotoAlbum() {
+	public function getMostRecentFotoAlbum()
+	{
 		try {
 			$album = $this->getFotoAlbum('');
 			return $album->getMostRecentSubAlbum();
@@ -203,14 +228,18 @@ HTML;
 		}
 	}
 
-	public function hernoemAlbum(FotoAlbum $album, $newName) {
+	public function hernoemAlbum(FotoAlbum $album, $newName)
+	{
 		if (!valid_filename($newName)) {
 			throw new CsrGebruikerException('Ongeldige naam');
 		}
 		// controleer rechten
 		$oldDir = $album->subdir;
 		if (false === @chmod(PHOTOALBUM_PATH . $oldDir, 0755)) {
-			throw new CsrException('Geen eigenaar van album: ' . htmlspecialchars(PHOTOALBUM_PATH . $oldDir));
+			throw new CsrException(
+				'Geen eigenaar van album: ' .
+					htmlspecialchars(PHOTOALBUM_PATH . $oldDir)
+			);
 		}
 
 		// nieuwe subdir op basis van path
@@ -226,7 +255,10 @@ HTML;
 		}
 		// controleer rechten
 		if (false === @chmod(PHOTOALBUM_PATH . $newDir, 0755)) {
-			throw new CsrException('Geen eigenaar van album: ' . htmlspecialchars(PHOTOALBUM_PATH . $newDir));
+			throw new CsrException(
+				'Geen eigenaar van album: ' .
+					htmlspecialchars(PHOTOALBUM_PATH . $newDir)
+			);
 		}
 
 		// database in sync houden
@@ -247,7 +279,10 @@ HTML;
 			$this->fotoRepository->delete($foto);
 			$foto->subdir = str_replace($oldDir, $newDir, $foto->subdir);
 			$this->fotoRepository->create($foto);
-			foreach ($this->fotoTagsRepository->findBy(['refuuid' => $oldUUID]) as $tag) {
+			foreach (
+				$this->fotoTagsRepository->findBy(['refuuid' => $oldUUID])
+				as $tag
+			) {
 				// updaten gaat niet vanwege primary key
 				$this->fotoTagsRepository->delete($tag);
 				$tag->refuuid = $foto->getUUID();
@@ -257,7 +292,8 @@ HTML;
 		return true;
 	}
 
-	public function setAlbumCover(FotoAlbum $album, Foto $cover) {
+	public function setAlbumCover(FotoAlbum $album, Foto $cover)
+	{
 		$success = true;
 		// find old cover
 		foreach ($album->getFotos() as $foto) {
@@ -285,22 +321,37 @@ HTML;
 		}
 		// set new cover
 		$path = $cover->getThumbPath();
-		$success &= rename($path, substr_replace($path, 'folder', strrpos($path, '.'), 0));
+		$success &= rename(
+			$path,
+			substr_replace($path, 'folder', strrpos($path, '.'), 0)
+		);
 		$path = $cover->getResizedPath();
-		$success &= rename($path, substr_replace($path, 'folder', strrpos($path, '.'), 0));
+		$success &= rename(
+			$path,
+			substr_replace($path, 'folder', strrpos($path, '.'), 0)
+		);
 		$path = $cover->getFullPath();
-		$success &= rename($path, substr_replace($path, 'folder', strrpos($path, '.'), 0));
+		$success &= rename(
+			$path,
+			substr_replace($path, 'folder', strrpos($path, '.'), 0)
+		);
 		if ($success) {
 			// database in sync houden
 			// updaten gaat niet vanwege primary key
 			$this->fotoRepository->delete($cover);
-			$cover->filename = substr_replace($cover->filename, 'folder', strrpos($cover->filename, '.'), 0);
+			$cover->filename = substr_replace(
+				$cover->filename,
+				'folder',
+				strrpos($cover->filename, '.'),
+				0
+			);
 			$this->fotoRepository->create($cover);
 		}
 		return $success;
 	}
 
-	public function opschonen(FotoAlbum $fotoalbum) {
+	public function opschonen(FotoAlbum $fotoalbum)
+	{
 		foreach ($this->findBySubdir($fotoalbum->subdir) as $album) {
 			/** @var FotoAlbum $album */
 			if (!$album->exists()) {
@@ -312,5 +363,4 @@ HTML;
 			}
 		}
 	}
-
 }

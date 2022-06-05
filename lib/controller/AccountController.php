@@ -24,7 +24,8 @@ use Symfony\Component\Security\Core\Security;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 28/07/2019
  */
-class AccountController extends AbstractController {
+class AccountController extends AbstractController
+{
 	/**
 	 * @var CmsPaginaRepository
 	 */
@@ -47,11 +48,11 @@ class AccountController extends AbstractController {
 	private $accountService;
 
 	public function __construct(
-		AccessService       $accessService,
-		AccountRepository   $accountRepository,
-		AccountService      $accountService,
+		AccessService $accessService,
+		AccountRepository $accountRepository,
+		AccountService $accountService,
 		CmsPaginaRepository $cmsPaginaRepository,
-		LoginService        $loginService
+		LoginService $loginService
 	) {
 		$this->accessService = $accessService;
 		$this->accountRepository = $accountRepository;
@@ -100,8 +101,11 @@ class AccountController extends AbstractController {
 	 * @Route("/account/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken(Request $request, Security $security, $uid = null): Response
-	{
+	public function bewerken(
+		Request $request,
+		Security $security,
+		$uid = null
+	): Response {
 		$eigenAccount = $security->getUser();
 		if ($uid == null) {
 			$uid = $this->getUid();
@@ -120,23 +124,41 @@ class AccountController extends AbstractController {
 		// Als dit niet het geval is moet de gebruiker zijn wachtwoord geven om de huidige sessie te converteren
 		// naar een 'recent_password_login' sessie. Deze sessie blijft gelden totdat de sessie verloopt en de
 		// rememberme token wordt gebruikt om een nieuwe sessie aan te vragen.
-		if ($this->loginService->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
-			$action = $this->generateUrl('csrdelft_account_bewerken', ['uid' => $uid]);
+		if (
+			$this->loginService->getAuthenticationMethod() !==
+			AuthenticationMethod::recent_password_login
+		) {
+			$action = $this->generateUrl('csrdelft_account_bewerken', [
+				'uid' => $uid,
+			]);
 			$form = new UpdateLoginForm($action);
 
 			// Reset loginmoment naar nu als de gebruiker zijn wachtwoord geeft.
-			if ($form->validate() && $this->accountService->controleerWachtwoord($eigenAccount, $form->getValues()['pass'])) {
+			if (
+				$form->validate() &&
+				$this->accountService->controleerWachtwoord(
+					$eigenAccount,
+					$form->getValues()['pass']
+				)
+			) {
 				$this->loginService->setRecentLoginToken();
 			} else {
-				setMelding('U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.', 2);
-				return $this->render('default.html.twig', ['content' => new UpdateLoginForm($action)]);
+				setMelding(
+					'U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.',
+					2
+				);
+				return $this->render('default.html.twig', [
+					'content' => new UpdateLoginForm($action),
+				]);
 			}
 		}
 		if (!$this->accessService->mag($account, P_LOGGED_IN)) {
 			setMelding('Account mag niet inloggen', 2);
 		}
 		$form = $this->createFormulier(AccountForm::class, $account, [
-			'action' => $this->generateUrl('csrdelft_account_bewerken', ['uid' => $account->uid])
+			'action' => $this->generateUrl('csrdelft_account_bewerken', [
+				'uid' => $account->uid,
+			]),
 		]);
 		$form->handleRequest($request);
 		if ($form->validate()) {
@@ -148,7 +170,9 @@ class AccountController extends AbstractController {
 			setMelding('Inloggegevens wijzigen geslaagd', 1);
 		}
 		$account->eraseCredentials();
-		return $this->render('default.html.twig', ['content' => $form->createView()]);
+		return $this->render('default.html.twig', [
+			'content' => $form->createView(),
+		]);
 	}
 
 	/**
@@ -158,7 +182,9 @@ class AccountController extends AbstractController {
 	 */
 	public function aanvragen(): Response
 	{
-		return $this->render('default.html.twig', ['content' => $this->cmsPaginaRepository->find('accountaanvragen')]);
+		return $this->render('default.html.twig', [
+			'content' => $this->cmsPaginaRepository->find('accountaanvragen'),
+		]);
 	}
 
 	/**

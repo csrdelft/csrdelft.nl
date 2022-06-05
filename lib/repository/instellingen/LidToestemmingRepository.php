@@ -16,7 +16,6 @@ use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceExceptio
 use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  *
@@ -28,7 +27,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @method LidToestemming[]    findAll()
  * @method LidToestemming[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LidToestemmingRepository extends AbstractRepository {
+class LidToestemmingRepository extends AbstractRepository
+{
 	use YamlInstellingen;
 
 	const FIELD_MODULE = 'module';
@@ -55,7 +55,11 @@ class LidToestemmingRepository extends AbstractRepository {
 	 * @throws FileLoaderImportCircularReferenceException
 	 * @throws LoaderLoadException
 	 */
-	public function __construct(ManagerRegistry $registry, RequestStack $requestStack, LoginService $loginService) {
+	public function __construct(
+		ManagerRegistry $registry,
+		RequestStack $requestStack,
+		LoginService $loginService
+	) {
 		parent::__construct($registry, LidToestemming::class);
 
 		$this->load('instellingen/toestemming.yaml', new InstellingConfiguration());
@@ -69,21 +73,31 @@ class LidToestemmingRepository extends AbstractRepository {
 	 * @param boolean $islid
 	 * @return array
 	 */
-	public function getRelevantToestemmingCategories($islid) {
+	public function getRelevantToestemmingCategories($islid)
+	{
 		$toestemmingen = [];
 
 		if ($islid) {
-			$toestemmingen[self::MODULE_PROFIEL_LID] = $this->getModuleKeys(self::MODULE_PROFIEL_LID);
+			$toestemmingen[self::MODULE_PROFIEL_LID] = $this->getModuleKeys(
+				self::MODULE_PROFIEL_LID
+			);
 		}
 
-		$toestemmingen[self::MODULE_PROFIEL_OUDLID] = $this->getModuleKeys(self::MODULE_PROFIEL_OUDLID);
-		$toestemmingen[self::MODULE_PROFIEL] = $this->getModuleKeys(self::MODULE_PROFIEL);
-		$toestemmingen[self::MODULE_INTERN] = $this->getModuleKeys(self::MODULE_INTERN);
+		$toestemmingen[self::MODULE_PROFIEL_OUDLID] = $this->getModuleKeys(
+			self::MODULE_PROFIEL_OUDLID
+		);
+		$toestemmingen[self::MODULE_PROFIEL] = $this->getModuleKeys(
+			self::MODULE_PROFIEL
+		);
+		$toestemmingen[self::MODULE_INTERN] = $this->getModuleKeys(
+			self::MODULE_INTERN
+		);
 
 		return $toestemmingen;
 	}
 
-	protected function newToestemming($module, $id, $uid) {
+	protected function newToestemming($module, $id, $uid)
+	{
 		$toestemming = new LidToestemming();
 		$toestemming->module = $module;
 		$toestemming->instelling = $id;
@@ -94,9 +108,13 @@ class LidToestemmingRepository extends AbstractRepository {
 		return $toestemming;
 	}
 
-	public function toestemmingGegeven() {
+	public function toestemmingGegeven()
+	{
 		$requestUri = $this->requestStack->getCurrentRequest()->getRequestUri();
-		$stopNag = $this->requestStack->getCurrentRequest()->getSession()->get('stop_nag', null);
+		$stopNag = $this->requestStack
+			->getCurrentRequest()
+			->getSession()
+			->get('stop_nag', null);
 		// Doe niet naggen op de privacy info pagina.
 		if ($requestUri == '/privacy') {
 			return true;
@@ -112,9 +130,19 @@ class LidToestemmingRepository extends AbstractRepository {
 
 		$uid = $this->loginService->_getUid();
 
-		$modules = [self::MODULE_ALGEMEEN, self::MODULE_INTERN, self::MODULE_PROFIEL];
+		$modules = [
+			self::MODULE_ALGEMEEN,
+			self::MODULE_INTERN,
+			self::MODULE_PROFIEL,
+		];
 
-		if ($this->count([self::FIELD_MODULE => $modules, self::FIELD_UID => $uid, self::FIELD_WAARDE => '']) != 0) {
+		if (
+			$this->count([
+				self::FIELD_MODULE => $modules,
+				self::FIELD_UID => $uid,
+				self::FIELD_WAARDE => '',
+			]) != 0
+		) {
 			return false;
 		}
 		// Er is geen enkele selectie gemaakt
@@ -125,7 +153,12 @@ class LidToestemmingRepository extends AbstractRepository {
 		return true;
 	}
 
-	public function toestemming($profiel, $id, $cat = 'profiel', $except = P_LEDEN_MOD) {
+	public function toestemming(
+		$profiel,
+		$id,
+		$cat = 'profiel',
+		$except = P_LEDEN_MOD
+	) {
 		if (!$this->loginService->_mag(P_LEDEN_READ)) {
 			return false;
 		}
@@ -138,16 +171,21 @@ class LidToestemmingRepository extends AbstractRepository {
 			return true;
 		}
 
-		$toestemming = $this->findOneBy([self::FIELD_MODULE => $cat, self::FIELD_INSTELLING => $id, self::FIELD_UID => $profiel->uid]);
+		$toestemming = $this->findOneBy([
+			self::FIELD_MODULE => $cat,
+			self::FIELD_INSTELLING => $id,
+			self::FIELD_UID => $profiel->uid,
+		]);
 
 		if (!$toestemming) {
 			return false;
 		}
 
-		return $toestemming->waarde == "ja";
+		return $toestemming->waarde == 'ja';
 	}
 
-	public function toestemmingUid($uid, $id, $except = P_LEDEN_MOD) {
+	public function toestemmingUid($uid, $id, $except = P_LEDEN_MOD)
+	{
 		if ($uid == $this->loginService->_getUid()) {
 			return true;
 		}
@@ -156,20 +194,26 @@ class LidToestemmingRepository extends AbstractRepository {
 			return true;
 		}
 
-		$toestemming = $this->findOneBy([self::FIELD_MODULE => self::MODULE_TOESTEMMING, self::FIELD_INSTELLING => $id, self::FIELD_UID => $uid]);
+		$toestemming = $this->findOneBy([
+			self::FIELD_MODULE => self::MODULE_TOESTEMMING,
+			self::FIELD_INSTELLING => $id,
+			self::FIELD_UID => $uid,
+		]);
 
 		if (!$toestemming) {
 			return false;
 		}
 
-		return $toestemming->waarde == "ja";
+		return $toestemming->waarde == 'ja';
 	}
 
-	public function getDescription($module, $id) {
+	public function getDescription($module, $id)
+	{
 		return $this->getField($module, $id, 'titel');
 	}
 
-	public function getType($module, $id) {
+	public function getType($module, $id)
+	{
 		if ($this->hasKey($module, $id)) {
 			return $this->getField($module, $id, 'type');
 		} else {
@@ -177,15 +221,18 @@ class LidToestemmingRepository extends AbstractRepository {
 		}
 	}
 
-	public function getTypeOptions($module, $id) {
+	public function getTypeOptions($module, $id)
+	{
 		return $this->getField($module, $id, 'opties');
 	}
 
-	public function getDefault($module, $id) {
+	public function getDefault($module, $id)
+	{
 		return $this->getField($module, $id, 'default');
 	}
 
-	public function isValidValue($module, $id, $waarde) {
+	public function isValidValue($module, $id, $waarde)
+	{
 		$options = $this->getTypeOptions($module, $id);
 		if ($this->getType($module, $id) == InstellingType::Enumeration) {
 			if (in_array($waarde, $options)) {
@@ -201,15 +248,21 @@ class LidToestemmingRepository extends AbstractRepository {
 	 *
 	 * @return string
 	 */
-	public function getValue($module, $id) {
+	public function getValue($module, $id)
+	{
 		return $this->getToestemming($module, $id)->waarde;
 	}
 
-	protected function getToestemming($module, $id, $uid = null) {
+	protected function getToestemming($module, $id, $uid = null)
+	{
 		if ($uid == null) {
 			$uid = $this->loginService->_getUid();
 		}
-		$instelling = $this->findOneBy([self::FIELD_MODULE => $module, self::FIELD_INSTELLING => $id, self::FIELD_UID => $uid]);
+		$instelling = $this->findOneBy([
+			self::FIELD_MODULE => $module,
+			self::FIELD_INSTELLING => $id,
+			self::FIELD_UID => $uid,
+		]);
 		if ($this->hasKey($module, $id)) {
 			if (!$instelling) {
 				$instelling = $this->newToestemming($module, $id, $uid);
@@ -221,19 +274,26 @@ class LidToestemmingRepository extends AbstractRepository {
 				$this->_em->remove($instelling);
 				$this->_em->flush();
 			}
-			throw new CsrException(sprintf('Toestemming bestaat niet: "%s" module: "%s".', $id, $module));
+			throw new CsrException(
+				sprintf('Toestemming bestaat niet: "%s" module: "%s".', $id, $module)
+			);
 		}
 	}
 
-	public function getToestemmingForIds($ids, $waardes = ['ja', 'nee']) {
-		return $this->findBy([self::FIELD_INSTELLING => $ids, self::FIELD_WAARDE => $waardes], [self::FIELD_UID => 'ASC']);
+	public function getToestemmingForIds($ids, $waardes = ['ja', 'nee'])
+	{
+		return $this->findBy(
+			[self::FIELD_INSTELLING => $ids, self::FIELD_WAARDE => $waardes],
+			[self::FIELD_UID => 'ASC']
+		);
 	}
 
 	/**
 	 * @param null $uid Sla op voor uid
 	 * @throws Exception
 	 */
-	public function saveForLid($uid = null) {
+	public function saveForLid($uid = null)
+	{
 		// create matrix for sqlInsertMultiple
 		foreach ($this->defaults as $module => $instellingen) {
 			foreach ($instellingen as $id => $waarde) {
@@ -247,7 +307,7 @@ class LidToestemmingRepository extends AbstractRepository {
 					continue;
 				}
 				$instelling = $this->getToestemming($module, $id, $uid);
-				$instelling->waarde = (string)$waarde;
+				$instelling->waarde = (string) $waarde;
 			}
 		}
 		$this->getEntityManager()->flush();

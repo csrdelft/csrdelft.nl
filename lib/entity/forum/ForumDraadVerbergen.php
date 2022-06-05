@@ -13,7 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("forum_draden_verbergen")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumDraadVerbergen {
+class ForumDraadVerbergen
+{
 	/**
 	 * Shared primary key
 	 * Foreign key

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\events;
-
 
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Metadata\AvailableMigration;
@@ -21,8 +19,10 @@ class CheckMigrationsListener
 	 */
 	private $logger;
 
-	public function __construct(DependencyFactory $dependencyFactory, LoggerInterface $logger)
-	{
+	public function __construct(
+		DependencyFactory $dependencyFactory,
+		LoggerInterface $logger
+	) {
 		$this->dependencyFactory = $dependencyFactory;
 		$this->logger = $logger;
 	}
@@ -31,11 +31,16 @@ class CheckMigrationsListener
 	{
 		$migrationStatusCalculator = $this->dependencyFactory->getMigrationStatusCalculator();
 
-		$aantalNieuweMigraties = count($migrationStatusCalculator->getNewMigrations());
+		$aantalNieuweMigraties = count(
+			$migrationStatusCalculator->getNewMigrations()
+		);
 		if ($aantalNieuweMigraties > 0) {
-			$this->logger->alert("Er zijn '{$aantalNieuweMigraties}' migraties die nog uitgevoerd moeten worden.",
+			$this->logger->alert(
+				"Er zijn '{$aantalNieuweMigraties}' migraties die nog uitgevoerd moeten worden.",
 				array_map(function (AvailableMigration $availableMigration) {
-					return $availableMigration->getVersion() . ": " . $availableMigration->getMigration()->getDescription();
+					return $availableMigration->getVersion() .
+						': ' .
+						$availableMigration->getMigration()->getDescription();
 				}, $migrationStatusCalculator->getNewMigrations()->getItems())
 			);
 		}

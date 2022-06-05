@@ -56,14 +56,22 @@ class ForumFixtures extends Fixture
 
 			for ($j = 0; $j < $posts; $j++) {
 				$post = new ForumPost();
-				$post->datum_tijd = $faker->dateTimeBetween($draad->datum_tijd->format(DATE_RFC2822), 'now');
+				$post->datum_tijd = $faker->dateTimeBetween(
+					$draad->datum_tijd->format(DATE_RFC2822),
+					'now'
+				);
 				$post->laatst_gewijzigd = $post->datum_tijd;
 				$post->uid = FixtureHelpers::getUid();
 				$post->draad = $draad;
 				$post->verwijderd = false;
-				$post->auteur_ip = "::1";
+				$post->auteur_ip = '::1';
 				$post->wacht_goedkeuring = false;
-				$post->tekst = implode("", array_map(function ($p) { return '[p]'. $p . '[/p]';},$faker->paragraphs));
+				$post->tekst = implode(
+					'',
+					array_map(function ($p) {
+						return '[p]' . $p . '[/p]';
+					}, $faker->paragraphs)
+				);
 
 				$manager->persist($post);
 			}

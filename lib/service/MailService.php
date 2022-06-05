@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\service;
-
 
 use CsrDelft\common\Mail;
 use Twig\Environment;
@@ -23,8 +21,12 @@ class MailService
 	{
 		$boundary = uniqid('csr_');
 
-		$htmlBody = $this->environment->render('mail/letter.mail.twig', ['bericht' => $mail->getBericht()]);
-		$plainBody = $this->environment->render('mail/plain.mail.twig', ['bericht' => $mail->getBericht()]);
+		$htmlBody = $this->environment->render('mail/letter.mail.twig', [
+			'bericht' => $mail->getBericht(),
+		]);
+		$plainBody = $this->environment->render('mail/plain.mail.twig', [
+			'bericht' => $mail->getBericht(),
+		]);
 
 		$headers = $this->getHeaders($mail);
 		$headers .= "\r\nContent-Type: multipart/alternative;boundary=\"$boundary\"\r\n";
@@ -50,7 +52,13 @@ MAIL;
 			setMelding($htmlBody, 0);
 			return false;
 		}
-		return mail($mail->getTo(), $mail->getSubject(), $body, $headers, $this->getExtraParameters($mail));
+		return mail(
+			$mail->getTo(),
+			$mail->getSubject(),
+			$body,
+			$headers,
+			$this->getExtraParameters($mail)
+		);
 	}
 
 	private function getHeaders(Mail $mail): string

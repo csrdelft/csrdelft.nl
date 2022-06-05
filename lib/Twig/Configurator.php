@@ -1,6 +1,5 @@
 <?php
 
-
 namespace CsrDelft\Twig;
 
 use Symfony\Bundle\TwigBundle\DependencyInjection\Configurator\EnvironmentConfigurator;
@@ -9,7 +8,6 @@ use Twig\Extension\EscaperExtension;
 
 class Configurator
 {
-
 	/**
 	 * @var EnvironmentConfigurator
 	 */
@@ -22,9 +20,15 @@ class Configurator
 
 	public function configure(Environment $environment)
 	{
-		$environment->getExtension(EscaperExtension::class)->setEscaper(AutoEscapeService::STRATEGY_ICAL, [$this, 'escape_ical']);
-		$environment->getExtension(EscaperExtension::class)->setEscaper(AutoEscapeService::STRATEGY_XML, [$this, 'escape_xml']);
-		$environment->getExtension(EscaperExtension::class)->setEscaper(AutoEscapeService::STRATEGY_MAIL, [$this, 'escape_mail']);
+		$environment
+			->getExtension(EscaperExtension::class)
+			->setEscaper(AutoEscapeService::STRATEGY_ICAL, [$this, 'escape_ical']);
+		$environment
+			->getExtension(EscaperExtension::class)
+			->setEscaper(AutoEscapeService::STRATEGY_XML, [$this, 'escape_xml']);
+		$environment
+			->getExtension(EscaperExtension::class)
+			->setEscaper(AutoEscapeService::STRATEGY_MAIL, [$this, 'escape_mail']);
 
 		$this->configurator->configure($environment);
 	}
@@ -44,4 +48,3 @@ class Configurator
 		return $string;
 	}
 }
-

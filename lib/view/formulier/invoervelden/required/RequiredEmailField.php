@@ -11,8 +11,7 @@ use CsrDelft\view\formulier\invoervelden\EmailField;
  *
  * @see EmailField
  */
-class RequiredEmailField extends EmailField {
-
+class RequiredEmailField extends EmailField
+{
 	public $required = true;
-
 }

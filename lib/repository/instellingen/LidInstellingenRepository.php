@@ -17,7 +17,6 @@ use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 
-
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  *
@@ -28,7 +27,8 @@ use Symfony\Component\Config\Exception\LoaderLoadException;
  * @method LidInstelling|null find($id, $lockMode = null, $lockVersion = null)
  * @method LidInstelling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LidInstellingenRepository extends AbstractRepository {
+class LidInstellingenRepository extends AbstractRepository
+{
 	use YamlInstellingen;
 
 	/**
@@ -36,10 +36,14 @@ class LidInstellingenRepository extends AbstractRepository {
 	 * @throws FileLoaderImportCircularReferenceException
 	 * @throws LoaderLoadException
 	 */
-	public function __construct(ManagerRegistry $registry) {
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, LidInstelling::class);
 
-		$this->load('instellingen/lid_instelling.yaml', new InstellingConfiguration());
+		$this->load(
+			'instellingen/lid_instelling.yaml',
+			new InstellingConfiguration()
+		);
 	}
 
 	/**
@@ -50,23 +54,26 @@ class LidInstellingenRepository extends AbstractRepository {
 	 * @param string $uid
 	 * @return string[]
 	 */
-	public function getAllForLid(string $uid) {
+	public function getAllForLid(string $uid)
+	{
 		$result = [];
 		foreach ($this->findBy(['profiel' => $uid]) as $instelling) {
 			if (!isset($result[$instelling->module])) {
 				$result[$instelling->module] = [];
 			}
-			$result[$instelling->module][$instelling->instelling] = $instelling->waarde;
+			$result[$instelling->module][$instelling->instelling] =
+				$instelling->waarde;
 		}
 
 		return $result;
 	}
 
-	public function getValue($module, $id) {
+	public function getValue($module, $id)
+	{
 		$instelling = $this->getInstelling($module, $id);
 
 		if ($this->getType($module, $id) == InstellingType::Integer) {
-			return (int)$instelling->waarde;
+			return (int) $instelling->waarde;
 		}
 
 		return $instelling->waarde;
@@ -82,11 +89,16 @@ class LidInstellingenRepository extends AbstractRepository {
 	 * @return LidInstelling
 	 * @throws CsrException indien de default waarde ontbreekt (de instelling bestaat niet)
 	 */
-	protected function getInstelling($module, $id, $uid = null) {
+	protected function getInstelling($module, $id, $uid = null)
+	{
 		if (!$uid) {
 			$uid = $this->getUid() ?? LoginService::UID_EXTERN;
 		}
-		$instelling = $this->findOneBy(['module' => $module, 'instelling' => $id, 'profiel' => $uid]);
+		$instelling = $this->findOneBy([
+			'module' => $module,
+			'instelling' => $id,
+			'profiel' => $uid,
+		]);
 		if ($this->hasKey($module, $id)) {
 			if (!$instelling) {
 				$instelling = $this->newInstelling($module, $id, $uid);
@@ -98,15 +110,19 @@ class LidInstellingenRepository extends AbstractRepository {
 				$this->_em->remove($instelling);
 				$this->_em->flush();
 			}
-			throw new CsrException(sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module));
+			throw new CsrException(
+				sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module)
+			);
 		}
 	}
 
-	private function getUid() {
+	private function getUid()
+	{
 		return LoginService::getUid();
 	}
 
-	protected function newInstelling($module, $id, $uid) {
+	protected function newInstelling($module, $id, $uid)
+	{
 		$instelling = new LidInstelling();
 		$instelling->module = $module;
 		$instelling->instelling = $id;
@@ -118,11 +134,17 @@ class LidInstellingenRepository extends AbstractRepository {
 		return $instelling;
 	}
 
-	public function getDefault($module, $id) {
-		return $this->getField($module, $id, InstellingConfiguration::FIELD_DEFAULT);
+	public function getDefault($module, $id)
+	{
+		return $this->getField(
+			$module,
+			$id,
+			InstellingConfiguration::FIELD_DEFAULT
+		);
 	}
 
-	public function getType($module, $id) {
+	public function getType($module, $id)
+	{
 		if ($this->hasKey($module, $id)) {
 			return $this->getField($module, $id, InstellingConfiguration::FIELD_TYPE);
 		} else {
@@ -133,7 +155,8 @@ class LidInstellingenRepository extends AbstractRepository {
 	/**
 	 * @throws Exception
 	 */
-	public function saveAll() {
+	public function saveAll()
+	{
 		foreach ($this->getAll() as $module => $instellingen) {
 			foreach ($instellingen as $id => $waarde) {
 				if ($this->getType($module, $id) === InstellingType::Integer) {
@@ -156,25 +179,32 @@ class LidInstellingenRepository extends AbstractRepository {
 		$this->_em->flush();
 	}
 
-	public function isValidValue($module, $id, $waarde) {
+	public function isValidValue($module, $id, $waarde)
+	{
 		$options = $this->getTypeOptions($module, $id);
 		switch ($this->getType($module, $id)) {
 			case InstellingType::Enumeration:
 				return isset($options[$waarde]) || in_array($waarde, $options);
 			case InstellingType::Integer:
-				return is_numeric($waarde) && $waarde >= $options[0] && $waarde <= $options[1];
+				return is_numeric($waarde) &&
+					$waarde >= $options[0] &&
+					$waarde <= $options[1];
 			case InstellingType::String:
-				return strlen($waarde) >= $options[0] && strlen($waarde) <= $options[1] && preg_match('/^[\w\-_\. ]*$/', $waarde);
+				return strlen($waarde) >= $options[0] &&
+					strlen($waarde) <= $options[1] &&
+					preg_match('/^[\w\-_\. ]*$/', $waarde);
 			default:
 				return false;
 		}
 	}
 
-	public function getTypeOptions($module, $id) {
+	public function getTypeOptions($module, $id)
+	{
 		return $this->getField($module, $id, InstellingConfiguration::FIELD_OPTIES);
 	}
 
-	public function resetFOrUser(Profiel $profiel) {
+	public function resetFOrUser(Profiel $profiel)
+	{
 		$this->createQueryBuilder('i')
 			->andWhere('i.profiel = :profiel')
 			->setParameter('profiel', $profiel)
@@ -183,7 +213,8 @@ class LidInstellingenRepository extends AbstractRepository {
 			->execute();
 	}
 
-	public function resetForAll($module, $id) {
+	public function resetForAll($module, $id)
+	{
 		$this->createQueryBuilder('i')
 			->andWhere('i.module = :module')
 			->andWhere('i.instelling = :id')
@@ -200,7 +231,8 @@ class LidInstellingenRepository extends AbstractRepository {
 	 *
 	 * @return LidInstelling
 	 */
-	public function wijzigInstelling($module, $id, $waarde) {
+	public function wijzigInstelling($module, $id, $waarde)
+	{
 		$instelling = $this->getInstelling($module, $id);
 		$instelling->waarde = $waarde;
 		$this->update($instelling);
@@ -211,35 +243,41 @@ class LidInstellingenRepository extends AbstractRepository {
 	 * @param LidInstelling $entity
 	 * @throws CsrGebruikerException
 	 */
-	public function update($entity) {
+	public function update($entity)
+	{
 		if (!$this->hasKey($entity->module, $entity->instelling)) {
-			throw new CsrGebruikerException("Instelling '{$entity->instelling}' uit module '{$entity->module}' niet gevonden.");
+			throw new CsrGebruikerException(
+				"Instelling '{$entity->instelling}' uit module '{$entity->module}' niet gevonden."
+			);
 		}
 
 		$type = $this->getTypeOptions($entity->module, $entity->instelling);
 		$typeOptions = $this->getTypeOptions($entity->module, $entity->instelling);
 
-		if ($type === InstellingType::Enumeration && !in_array($entity->waarde, $typeOptions)) {
-			throw new CsrGebruikerException("Waarde is geen geldige optie");
+		if (
+			$type === InstellingType::Enumeration &&
+			!in_array($entity->waarde, $typeOptions)
+		) {
+			throw new CsrGebruikerException('Waarde is geen geldige optie');
 		}
 
 		if ($type === InstellingType::String) {
 			if (strlen($entity->waarde) > $typeOptions[1]) {
-				throw new CsrGebruikerException("Waarde is te lang");
+				throw new CsrGebruikerException('Waarde is te lang');
 			}
 
 			if (strlen($entity->waarde) < $typeOptions[0]) {
-				throw new CsrGebruikerException("Waarde is te kort");
+				throw new CsrGebruikerException('Waarde is te kort');
 			}
 		}
 
 		if ($type === InstellingType::Integer) {
 			if (intval($entity->waarde) > $typeOptions[1]) {
-				throw new CsrGebruikerException("Waarde is te lang");
+				throw new CsrGebruikerException('Waarde is te lang');
 			}
 
 			if (intval($entity->waarde) < $typeOptions[0]) {
-				throw new CsrGebruikerException("Waarde is te kort");
+				throw new CsrGebruikerException('Waarde is te kort');
 			}
 		}
 
@@ -255,13 +293,15 @@ class LidInstellingenRepository extends AbstractRepository {
 	 * @param int $uid
 	 * @return string
 	 */
-	public function getInstellingVoorLid($module, $id, $uid) {
+	public function getInstellingVoorLid($module, $id, $uid)
+	{
 		return $this->getInstelling($module, $id, $uid)->waarde;
 	}
 
 	/**
 	 */
-	public function opschonen() {
+	public function opschonen()
+	{
 		$instellingen = [];
 		foreach ($this->getModules() as $module) {
 			foreach ($this->getModuleKeys($module) as $instelling) {
@@ -271,9 +311,12 @@ class LidInstellingenRepository extends AbstractRepository {
 
 		$this->createQueryBuilder('i')
 			->delete()
-			->where('i.module not in (:modules) or i.instelling not in (:instellingen)')
+			->where(
+				'i.module not in (:modules) or i.instelling not in (:instellingen)'
+			)
 			->setParameter('modules', $this->getModules())
 			->setParameter('instellingen', $instellingen)
-			->getQuery()->execute();
+			->getQuery()
+			->execute();
 	}
 }

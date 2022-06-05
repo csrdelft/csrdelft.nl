@@ -10,25 +10,29 @@ namespace CsrDelft\view\datatable;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 08/03/2018
  */
-class CellType {
+class CellType
+{
 	const STRING = 'string';
 	const FORMATTED_NUMBER = 'num-fmt';
 	protected $choice;
 
-	public function __construct($choice) {
+	public function __construct($choice)
+	{
 		$this->choice = $choice;
 	}
 
-	public function getChoice() {
+	public function getChoice()
+	{
 		return $this->choice;
 	}
 
-	public static function String() {
+	public static function String()
+	{
 		return new static(self::STRING);
 	}
 
-	public static function FormattedNumber() {
+	public static function FormattedNumber()
+	{
 		return new static(self::FORMATTED_NUMBER);
 	}
-
 }

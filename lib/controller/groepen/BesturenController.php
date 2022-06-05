@@ -13,12 +13,15 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * Controller voor besturen.
  */
-class BesturenController extends AbstractGroepenController {
-	public function __construct(ManagerRegistry $registry) {
+class BesturenController extends AbstractGroepenController
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Bestuur::class);
 	}
 
-	public function overzicht($soort = null) {
+	public function overzicht($soort = null)
+	{
 		// Zoek ook op ot,ft
 		$groepen = $this->repository->findBy([]);
 		// controleert rechten bekijken per groep

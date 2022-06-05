@@ -18,7 +18,8 @@ const ENUMS = [
 /**
  * @throws Exception
  */
-function generateEnums() {
+function generateEnums()
+{
 	foreach (ENUMS as $enum) {
 		generateTypescript($enum);
 	}
@@ -28,7 +29,8 @@ function generateEnums() {
  * @param string|\CsrDelft\common\Enum $enum
  * @throws ReflectionException
  */
-function generateTypescript($enum) {
+function generateTypescript($enum)
+{
 	$reflectionClass = new ReflectionClass($enum);
 	$className = $reflectionClass->getShortName();
 

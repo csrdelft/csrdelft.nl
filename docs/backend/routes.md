@@ -22,9 +22,11 @@ In het begin is een controller een klasse met een lege constructor. Een controll
 ```php
 namespace CsrDelft\controller;
 
-class MijnController extends AbstractController {
-    public function __construct() {
-    }
+class MijnController extends AbstractController
+{
+	public function __construct()
+	{
+	}
 }
 ```
 
@@ -39,18 +41,21 @@ use CsrDelft\common\Annotation\Auth;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class MijnController extends AbstractController {
-    public function __construct() {
-    }
+class MijnController extends AbstractController
+{
+	public function __construct()
+	{
+	}
 
-    /**
-     * @return Response
-     * @Route("/mijn/zien/{naam}", methods={"GET"})
-     * @Auth(P_LOGGED_IN)
-     */
-    public function laatZien($naam) {
-        return new Response("Mijn dingen " . $naam);
-    }
+	/**
+	 * @return Response
+	 * @Route("/mijn/zien/{naam}", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function laatZien($naam)
+	{
+		return new Response('Mijn dingen ' . $naam);
+	}
 }
 ```
 
@@ -76,19 +81,22 @@ use CsrDelft\entity\profiel\Profiel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class MijnController extends AbstractController {
-    public function __construct() {
-    }
+class MijnController extends AbstractController
+{
+	public function __construct()
+	{
+	}
 
-    /**
-     * @param Profiel $profiel
-     * @return Response
-     * @Route("/naam/{uid}", methods={"GET"})
-     * @Auth(P_LOGGED_IN)
-    */
-    public function geefNaam(Profiel $profiel) {
-        return new Response("Mijn dingen " . $profiel->getNaam());
-    }
+	/**
+	 * @param Profiel $profiel
+	 * @return Response
+	 * @Route("/naam/{uid}", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function geefNaam(Profiel $profiel)
+	{
+		return new Response('Mijn dingen ' . $profiel->getNaam());
+	}
 }
 ```
 

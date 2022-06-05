@@ -22,8 +22,21 @@ class PeilingOptieTable extends DataTable
 		$this->searchColumn('titel');
 		$this->searchColumn('beschrijving');
 
-		$this->addKnop(new DataTableKnop(Multiplicity::None(), '/peilingen/opties/' . $id . '/toevoegen', 'Toevoegen', 'Optie toevoegen', 'add'));
-		$this->addRowKnop(new DataTableRowKnop('/peilingen/opties/verwijderen', 'Optie Verwijderen', 'verwijderen'));
+		$this->addKnop(
+			new DataTableKnop(
+				Multiplicity::None(),
+				'/peilingen/opties/' . $id . '/toevoegen',
+				'Toevoegen',
+				'Optie toevoegen',
+				'add'
+			)
+		);
+		$this->addRowKnop(
+			new DataTableRowKnop(
+				'/peilingen/opties/verwijderen',
+				'Optie Verwijderen',
+				'verwijderen'
+			)
+		);
 	}
-
 }

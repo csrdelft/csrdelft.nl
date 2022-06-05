@@ -10,19 +10,15 @@ use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\KetzersRepository;
 use CsrDelft\repository\GroepRepository;
 
-class KetzerSoortField extends GroepSoortField {
-
+class KetzerSoortField extends GroepSoortField
+{
 	public $columns = 2;
 
-	public function __construct(
-		$name,
-		$value,
-		$description,
-		Groep $groep
-	) {
+	public function __construct($name, $value, $description, Groep $groep)
+	{
 		parent::__construct($name, $value, $description, $groep);
 
-		$this->options = array();
+		$this->options = [];
 		foreach ($this->activiteit->getOptions() as $soort => $label) {
 			$this->options[ActiviteitenRepository::class . '_' . $soort] = $label;
 		}
@@ -35,7 +31,8 @@ class KetzerSoortField extends GroepSoortField {
 	 * Pretty ugly
 	 * @return boolean
 	 */
-	public function validate() {
+	public function validate()
+	{
 		$class = explode('_', $this->value, 2);
 
 		if ($class[0] === ActiviteitenRepository::class) {
@@ -61,5 +58,4 @@ class KetzerSoortField extends GroepSoortField {
 
 		return true;
 	}
-
 }

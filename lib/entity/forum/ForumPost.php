@@ -22,8 +22,8 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumPost {
-
+class ForumPost
+{
 	/**
 	 * Primary key
 	 * @var int
@@ -99,11 +99,13 @@ class ForumPost {
 	 */
 	public $draad;
 
-	public function magCiteren() {
+	public function magCiteren()
+	{
 		return LoginService::mag(P_LOGGED_IN) && $this->draad->magPosten();
 	}
 
-	public function magBewerken() {
+	public function magBewerken()
+	{
 		$draad = $this->draad;
 		if ($draad->magModereren()) {
 			return true;
@@ -111,18 +113,24 @@ class ForumPost {
 		if (!$draad->magPosten()) {
 			return false;
 		}
-		return $this->uid === LoginService::getUid() && LoginService::mag(P_LOGGED_IN);
+		return $this->uid === LoginService::getUid() &&
+			LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function getGelezenPercentage() {
-		return $this->getAantalGelezen() * 100 / $this->draad->getAantalLezers();
+	public function getGelezenPercentage()
+	{
+		return ($this->getAantalGelezen() * 100) / $this->draad->getAantalLezers();
 	}
 
-	public function getAantalGelezen() {
+	public function getAantalGelezen()
+	{
 		if (!isset($this->aantal_gelezen)) {
 			$this->aantal_gelezen = 0;
 			foreach ($this->draad->lezers as $gelezen) {
-				if ($this->laatst_gewijzigd && $this->laatst_gewijzigd <= $gelezen->datum_tijd) {
+				if (
+					$this->laatst_gewijzigd &&
+					$this->laatst_gewijzigd <= $gelezen->datum_tijd
+				) {
 					$this->aantal_gelezen++;
 				}
 			}
@@ -130,8 +138,12 @@ class ForumPost {
 		return $this->aantal_gelezen;
 	}
 
-	public function getLink($external = false) {
-		return ($external ? getCsrRoot() : '') . "/forum/reactie/" . $this->post_id . "#" . $this->post_id;
+	public function getLink($external = false)
+	{
+		return ($external ? getCsrRoot() : '') .
+			'/forum/reactie/' .
+			$this->post_id .
+			'#' .
+			$this->post_id;
 	}
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\controller;
-
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\entity\profiel\Profiel;
@@ -25,14 +23,16 @@ class PasfotoController extends AbstractController
 	public function pasfoto(Request $request, Profiel $profiel, $vorm = 'civitas')
 	{
 		if (
-			$profiel
-			&& is_zichtbaar($profiel, 'profielfoto', 'intern')
-			&& ($path = $profiel->getPasfotoInternalPath(false, $vorm)) != null
+			$profiel &&
+			is_zichtbaar($profiel, 'profielfoto', 'intern') &&
+			($path = $profiel->getPasfotoInternalPath(false, $vorm)) != null
 		) {
 			$image = new Afbeelding($path);
 			return new BinaryFileResponse($image->getFullPath(), 200, [], false);
 		}
 
-		return $this->redirect($request->getSchemeAndHttpHost() . '/images/geen-foto.jpg');
+		return $this->redirect(
+			$request->getSchemeAndHttpHost() . '/images/geen-foto.jpg'
+		);
 	}
 }

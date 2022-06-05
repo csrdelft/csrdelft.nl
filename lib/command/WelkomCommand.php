@@ -16,7 +16,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class WelkomCommand extends Command {
+class WelkomCommand extends Command
+{
 	protected static $defaultName = 'stek:welkom';
 	/**
 	 * @var ProfielRepository
@@ -44,12 +45,12 @@ class WelkomCommand extends Command {
 	private $accountService;
 
 	public function __construct(
-		string                $emailPubCie,
-		AccountRepository     $accountRepository,
-		AccountService        $accountService,
-		ProfielRepository     $profielRepository,
+		string $emailPubCie,
+		AccountRepository $accountRepository,
+		AccountService $accountService,
+		ProfielRepository $profielRepository,
 		UrlGeneratorInterface $urlGenerator,
-		MailService           $mailService
+		MailService $mailService
 	) {
 		parent::__construct();
 		$this->profielRepository = $profielRepository;
@@ -60,27 +61,45 @@ class WelkomCommand extends Command {
 		$this->accountService = $accountService;
 	}
 
-	protected function configure() {
-		$this
-			->setDescription('Add a short description for your command')
+	protected function configure()
+	{
+		$this->setDescription('Add a short description for your command')
 			->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-			->addOption('option1', null, InputOption::VALUE_NONE, 'Option description');
+			->addOption(
+				'option1',
+				null,
+				InputOption::VALUE_NONE,
+				'Option description'
+			);
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): int {
+	protected function execute(
+		InputInterface $input,
+		OutputInterface $output
+	): int {
 		$helper = $this->getHelper('question');
-		$jaar = $helper->ask($input, $output, new Question("Welke lichting moet een welkom mail krijgen (vier cijfers). "));
+		$jaar = $helper->ask(
+			$input,
+			$output,
+			new Question(
+				'Welke lichting moet een welkom mail krijgen (vier cijfers). '
+			)
+		);
 
 		if ($jaar == null && strlen($jaar) != 4 && !is_numeric($jaar)) {
-			$output->writeln("Geen geldig jaar");
+			$output->writeln('Geen geldig jaar');
 
 			return Command::FAILURE;
 		}
 
-		$praesesNaam = $helper->ask($input, $output, new Question("Wat is de naam van de h.t. PubCie-Praeses? "));
+		$praesesNaam = $helper->ask(
+			$input,
+			$output,
+			new Question('Wat is de naam van de h.t. PubCie-Praeses? ')
+		);
 
 		if ($praesesNaam == null) {
-			$output->writeln("Geen geldige naam");
+			$output->writeln('Geen geldige naam');
 
 			return Command::FAILURE;
 		}
@@ -93,13 +112,21 @@ class WelkomCommand extends Command {
 		$novieten = $this->profielRepository->getNovietenVanLaatsteLidjaar($jaar);
 		$numNovieten = count($novieten);
 
-		if (!$helper->ask($input, $output, new ConfirmationQuestion("Er zijn {$numNovieten} novieten gevonden, doorgaan met mails versturen? [Yn] "))) {
+		if (
+			!$helper->ask(
+				$input,
+				$output,
+				new ConfirmationQuestion(
+					"Er zijn {$numNovieten} novieten gevonden, doorgaan met mails versturen? [Yn] "
+				)
+			)
+		) {
 			return Command::SUCCESS;
 		}
 
 		foreach ($novieten as $profiel) {
-//			$url = $this->urlGenerator->generate('wachtwoord_aanvragen');
-			$url = "https://csrdelft.nl/wachtwoord/aanvragen";
+			//			$url = $this->urlGenerator->generate('wachtwoord_aanvragen');
+			$url = 'https://csrdelft.nl/wachtwoord/aanvragen';
 			$tekst = <<<TEXT
 
 Beste noviet {$profiel->voornaam},
@@ -124,8 +151,12 @@ Met amicale groet,
 {$praesesNaam},
 h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 TEXT;
-			$mail = new Mail(array($profiel->email => $profiel->voornaam), 'Inloggegevens C.S.R.-webstek', $tekst);
-			$mail->addBcc(array($this->emailPubCie => 'PubCie C.S.R.'));
+			$mail = new Mail(
+				[$profiel->email => $profiel->voornaam],
+				'Inloggegevens C.S.R.-webstek',
+				$tekst
+			);
+			$mail->addBcc([$this->emailPubCie => 'PubCie C.S.R.']);
 			$this->mailService->send($mail);
 
 			if (!$this->accountRepository->existsUid($profiel->uid)) {
@@ -133,7 +164,7 @@ TEXT;
 				$this->accountService->maakAccount($profiel->uid);
 			}
 
-			$output->writeln($profiel->email . " SEND!");
+			$output->writeln($profiel->email . ' SEND!');
 		}
 
 		return Command::SUCCESS;

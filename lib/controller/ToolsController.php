@@ -43,21 +43,25 @@ class ToolsController extends AbstractController
 	 * @Route("/tools/verticalelijsten", methods={"GET"})
 	 * @Auth(P_ADMIN)
 	 */
-	public function verticalelijsten(VerticalenRepository $verticalenRepository, ProfielRepository $profielRepository): Response
-	{
+	public function verticalelijsten(
+		VerticalenRepository $verticalenRepository,
+		ProfielRepository $profielRepository
+	): Response {
 		return $this->render('tools/verticalelijst.html.twig', [
 			'verticalen' => array_reduce(
 				$verticalenRepository->findAll(),
 				function ($carry, $verticale) use ($profielRepository) {
-					$carry[$verticale->naam] = $profielRepository->createQueryBuilder('p')
+					$carry[$verticale->naam] = $profielRepository
+						->createQueryBuilder('p')
 						->where('p.verticale = :verticale and p.status in (:lidstatus)')
 						->setParameter('verticale', $verticale->letter)
 						->setParameter('lidstatus', LidStatus::getFiscaalLidLike())
-						->getQuery()->getResult();
+						->getQuery()
+						->getResult();
 					return $carry;
 				},
 				[]
-			)
+			),
 		]);
 	}
 
@@ -79,13 +83,17 @@ class ToolsController extends AbstractController
 		$roodschopper = Roodschopper::getDefaults();
 		$roodschopperForm = new RoodschopperForm($roodschopper);
 
-		if ($roodschopperForm->isPosted() && $roodschopperForm->validate() && $roodschopper->verzenden) {
+		if (
+			$roodschopperForm->isPosted() &&
+			$roodschopperForm->validate() &&
+			$roodschopper->verzenden
+		) {
 			$roodschopper->sendMails();
 			// Voorkom dubbele submit
-			return $this->redirectToRoute(
-				'csrdelft_tools_roodschopper',
-				['verzenden' => true, 'aantal' => count($roodschopper->getSaldi())]
-			);
+			return $this->redirectToRoute('csrdelft_tools_roodschopper', [
+				'verzenden' => true,
+				'aantal' => count($roodschopper->getSaldi()),
+			]);
 		} else {
 			$roodschopper->generateMails();
 		}
@@ -104,8 +112,10 @@ class ToolsController extends AbstractController
 	 * @Route("/tools/syncldap", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function syncldap(ProfielRepository $profielRepository, SuService $suService): PlainView
-	{
+	public function syncldap(
+		ProfielRepository $profielRepository,
+		SuService $suService
+	): PlainView {
 		if (DEBUG || LoginService::mag(P_ADMIN) || $suService->isSued()) {
 			$ldap = new LDAP();
 			foreach ($profielRepository->findAll() as $profiel) {
@@ -140,12 +150,12 @@ class ToolsController extends AbstractController
 	 */
 	public function timeout(Request $request, $seconds): PlainView
 	{
-		if ($request->getMethod() == "POST") {
+		if ($request->getMethod() == 'POST') {
 			for ($i = 0; $i < $seconds; $i++) {
 				sleep(10);
 			}
 
-			return new PlainView("He, je hebt lang gewacht!");
+			return new PlainView('He, je hebt lang gewacht!');
 		}
 
 		return new PlainView("<form method='post'><input type='submit'/></form>");
@@ -175,7 +185,10 @@ class ToolsController extends AbstractController
 	public function novieten(ProfielRepository $profielRepository): Response
 	{
 		return $this->render('tools/novieten.html.twig', [
-			'novieten' => $profielRepository->findBy(['status' => LidStatus::Noviet, 'lidjaar' => date('Y')])
+			'novieten' => $profielRepository->findBy([
+				'status' => LidStatus::Noviet,
+				'lidjaar' => date('Y'),
+			]),
 		]);
 	}
 
@@ -203,8 +216,11 @@ class ToolsController extends AbstractController
 	 * @Route("/tools/naamlink", methods={"GET", "POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function naamlink(Request $request, AccountRepository $accountRepository, ProfielService $profielService): PlainView
-	{
+	public function naamlink(
+		Request $request,
+		AccountRepository $accountRepository,
+		ProfielService $profielService
+	): PlainView {
 		$uid = $request->get('uid');
 		$naam = $request->get('naam');
 		$zoekin = $request->query->get('zoekin');
@@ -219,10 +235,20 @@ class ToolsController extends AbstractController
 			throw new CsrGebruikerException('Geen naam invoer in naamlink');
 		}
 
-//welke subset van leden?
-		$toegestanezoekfilters = ['leden', 'oudleden', 'novieten', 'alleleden', 'allepersonen', 'nobodies'];
+		//welke subset van leden?
+		$toegestanezoekfilters = [
+			'leden',
+			'oudleden',
+			'novieten',
+			'alleleden',
+			'allepersonen',
+			'nobodies',
+		];
 		if (!$zoekin || !in_array($zoekin, $toegestanezoekfilters)) {
-			$zoekin = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
+			$zoekin = array_merge(
+				LidStatus::getLidLike(),
+				LidStatus::getOudlidLike()
+			);
 		}
 
 		function uid2naam($uid): string
@@ -245,7 +271,13 @@ class ToolsController extends AbstractController
 				}
 			}
 		} elseif ($given == 'naam') {
-			$namen = $profielService->zoekLeden($string, 'naam', 'alle', 'achternaam', $zoekin);
+			$namen = $profielService->zoekLeden(
+				$string,
+				'naam',
+				'alle',
+				'achternaam',
+				$zoekin
+			);
 			if (!empty($namen)) {
 				if (count($namen) === 1) {
 					return new PlainView($namen[0]->getLink());
@@ -267,14 +299,30 @@ class ToolsController extends AbstractController
 	 * @Route("/tools/naamsuggesties", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function naamsuggesties(ProfielService $profielService, $zoekin = null, $query = ''): JsonResponse
-	{
+	public function naamsuggesties(
+		ProfielService $profielService,
+		$zoekin = null,
+		$query = ''
+	): JsonResponse {
 		//welke subset van leden?
 		if (empty($zoekin)) {
-			$zoekin = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
+			$zoekin = array_merge(
+				LidStatus::getLidLike(),
+				LidStatus::getOudlidLike()
+			);
 		}
-		$toegestanezoekfilters = array('leden', 'oudleden', 'novieten', 'alleleden', 'allepersonen', 'nobodies');
-		if (isset($_GET['zoekin']) && in_array($_GET['zoekin'], $toegestanezoekfilters)) {
+		$toegestanezoekfilters = [
+			'leden',
+			'oudleden',
+			'novieten',
+			'alleleden',
+			'allepersonen',
+			'nobodies',
+		];
+		if (
+			isset($_GET['zoekin']) &&
+			in_array($_GET['zoekin'], $toegestanezoekfilters)
+		) {
 			$zoekin = $_GET['zoekin'];
 		}
 		if (isset($_GET['zoekin']) && $_GET['zoekin'] === 'voorkeur') {
@@ -286,23 +334,44 @@ class ToolsController extends AbstractController
 		}
 		$limiet = 20;
 		if (isset($_GET['limit'])) {
-			$limiet = (int)$_GET['limit'];
+			$limiet = (int) $_GET['limit'];
 		}
 
-		$toegestaneNaamVormen = ['user', 'volledig', 'streeplijst', 'voorletters', 'bijnaam', 'Duckstad', 'civitas', 'aaidrom'];
+		$toegestaneNaamVormen = [
+			'user',
+			'volledig',
+			'streeplijst',
+			'voorletters',
+			'bijnaam',
+			'Duckstad',
+			'civitas',
+			'aaidrom',
+		];
 		$vorm = 'volledig';
-		if (isset($_GET['vorm']) && in_array($_GET['vorm'], $toegestaneNaamVormen)) {
+		if (
+			isset($_GET['vorm']) &&
+			in_array($_GET['vorm'], $toegestaneNaamVormen)
+		) {
 			$vorm = $_GET['vorm'];
 		}
 
-		$profielen = $profielService->zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $limiet);
+		$profielen = $profielService->zoekLeden(
+			$query,
+			'naam',
+			'alle',
+			'achternaam',
+			$zoekin,
+			$limiet
+		);
 
 		$scoredProfielen = [];
 		foreach ($profielen as $profiel) {
 			$score = 0;
 
 			// Beste match start met de zoekterm
-			if (str_starts_with(strtolower($profiel->getNaam()), strtolower($query))) {
+			if (
+				str_starts_with(strtolower($profiel->getNaam()), strtolower($query))
+			) {
 				$score += 100;
 			}
 
@@ -321,18 +390,18 @@ class ToolsController extends AbstractController
 
 		$scoredProfielen = array_slice($scoredProfielen, 0, 5);
 
-		$result = array();
+		$result = [];
 		foreach ($scoredProfielen as $scoredProfiel) {
 			/** @var Profiel $profiel */
 			$profiel = $scoredProfiel['profiel'];
 
-			$result[] = array(
+			$result[] = [
 				'icon' => Icon::getTag('profiel', null, 'Profiel', 'me-2'),
 				'url' => '/profiel/' . $profiel->uid,
 				'label' => $profiel->uid,
 				'value' => $profiel->getNaam($vorm),
 				'uid' => $profiel->uid,
-			);
+			];
 		}
 
 		return new JsonResponse($result);
@@ -352,7 +421,9 @@ class ToolsController extends AbstractController
 			echo getMelding();
 			echo '<h1>MemCache statistieken</h1>';
 			try {
-				$memcached = MemcachedAdapter::createConnection($this->getParameter('memcached_url'));
+				$memcached = MemcachedAdapter::createConnection(
+					$this->getParameter('memcached_url')
+				);
 
 				debugprint(current($memcached->getStats()));
 			} catch (ServiceNotFoundException $ex) {
@@ -372,8 +443,10 @@ class ToolsController extends AbstractController
 	 * @Route("/tools/query", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function query(Request $request, SavedQueryRepository $savedQueryRepository): Response
-	{
+	public function query(
+		Request $request,
+		SavedQueryRepository $savedQueryRepository
+	): Response {
 		if ($request->query->has('id')) {
 			$id = $request->query->getInt('id');
 			$result = $savedQueryRepository->loadQuery($id);

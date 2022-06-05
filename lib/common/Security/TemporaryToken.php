@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\common\Security;
-
 
 use CsrDelft\entity\security\Account;
 use CsrDelft\service\security\SuService;
@@ -15,13 +13,15 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  * @see SuService
  * @package CsrDelft\common\Security
  */
-class TemporaryToken extends AbstractToken {
+class TemporaryToken extends AbstractToken
+{
 	/**
 	 * @var TokenInterface
 	 */
 	private $originalToken;
 
-	public function __construct(Account $account, TokenInterface $originalToken) {
+	public function __construct(Account $account, TokenInterface $originalToken)
+	{
 		parent::__construct($account->getRoles());
 
 		$this->setUser($account);
@@ -30,11 +30,13 @@ class TemporaryToken extends AbstractToken {
 		$this->originalToken = $originalToken;
 	}
 
-	public function getOriginalToken() {
+	public function getOriginalToken()
+	{
 		return $this->originalToken;
 	}
 
-	public function getCredentials() {
+	public function getCredentials()
+	{
 		return '';
 	}
 }

@@ -11,7 +11,8 @@ use CsrDelft\view\bbcode\BbHelper;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 27/03/2019
  */
-class BbCitaat extends BbTag {
+class BbCitaat extends BbTag
+{
 	public $bron_text = null;
 	/** @var Profiel */
 	public $bron_profiel = null;
@@ -23,15 +24,18 @@ class BbCitaat extends BbTag {
 	 */
 	private $profielRepository;
 
-	public function __construct(ProfielRepository $profielRepository) {
+	public function __construct(ProfielRepository $profielRepository)
+	{
 		$this->profielRepository = $profielRepository;
 	}
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'citaat';
 	}
 
-	public function renderPlain() {
+	public function renderPlain()
+	{
 		$text = 'Citaat';
 		if ($this->bron_profiel != null) {
 			$text .= ' van ' . $this->bron_profiel->getNaam('user');
@@ -45,18 +49,36 @@ class BbCitaat extends BbTag {
 		return $text . ":\n " . trim($this->getContent());
 	}
 
-	public function renderLight() {
+	public function renderLight()
+	{
 		$text = '<div class="citaatContainer bb-tag-citaat">Citaat';
 		if ($this->bron_profiel != null) {
-			$text .= ' van ' . BbHelper::lightLinkInline($this->env, 'lid', '/profiel/' . $this->bron_profiel->uid, $this->bron_profiel->getNaam('user'));
+			$text .=
+				' van ' .
+				BbHelper::lightLinkInline(
+					$this->env,
+					'lid',
+					'/profiel/' . $this->bron_profiel->uid,
+					$this->bron_profiel->getNaam('user')
+				);
 		} elseif ($this->bron_text != null) {
 			if ($this->bron_url != null) {
-				$text .= ' van ' . BbHelper::lightLinkInline($this->env, 'url', $this->bron_url, $this->bron_text);
+				$text .=
+					' van ' .
+					BbHelper::lightLinkInline(
+						$this->env,
+						'url',
+						$this->bron_url,
+						$this->bron_text
+					);
 			} else {
 				$text .= ' van ' . $this->bron_url;
 			}
 		}
-		return $text . ':<div class="citaat">' . trim($this->getContent()) . '</div></div>';
+		return $text .
+			':<div class="citaat">' .
+			trim($this->getContent()) .
+			'</div></div>';
 	}
 
 	/**
@@ -70,11 +92,15 @@ class BbCitaat extends BbTag {
 	 * @example [citaat]Citaat[/citaat]
 	 * @example [citaat=1234]Citaat[/citaat]
 	 */
-	public function render($arguments = array()) {
+	public function render($arguments = [])
+	{
 		if (!$this->hidden) {
 			$content = $this->getContent();
 		} else {
-			$content = '<div onclick="$(this).children(\'.citaatpuntjes\').slideUp();$(this).children(\'.meercitaat\').slideDown();"><div class="meercitaat verborgen">' . $this->getContent() . '</div><div class="citaatpuntjes" title="Toon citaat">...</div></div>';
+			$content =
+				'<div onclick="$(this).children(\'.citaatpuntjes\').slideUp();$(this).children(\'.meercitaat\').slideDown();"><div class="meercitaat verborgen">' .
+				$this->getContent() .
+				'</div><div class="citaatpuntjes" title="Toon citaat">...</div></div>';
 		}
 		$text = '<div class="citaatContainer bb-tag-citaat"><em>Citaat';
 
@@ -88,17 +114,23 @@ class BbCitaat extends BbTag {
 			}
 		}
 
-		return $text . ':</em><blockquote>' . trim($content) . '</blockquote></div>';
+		return $text .
+			':</em><blockquote>' .
+			trim($content) .
+			'</blockquote></div>';
 	}
 
-	public function parse($arguments = []) {
+	public function parse($arguments = [])
+	{
 		$this->env->quote_level++;
 		$this->readContent();
 		$this->env->quote_level--;
 		$this->hidden = $this->env->quote_level > 1;
 		if (isset($arguments['citaat'])) {
 			$bron = $arguments['citaat'];
-			$profiel = mag("P_LEDEN_READ,P_OUDLEDEN_READ") ? $this->profielRepository->find($bron) : null;
+			$profiel = mag('P_LEDEN_READ,P_OUDLEDEN_READ')
+				? $this->profielRepository->find($bron)
+				: null;
 			if ($profiel) {
 				$this->bron_profiel = $profiel;
 			} else {

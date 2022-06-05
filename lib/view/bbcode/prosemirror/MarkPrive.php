@@ -31,7 +31,7 @@ class MarkPrive implements Mark
 		}
 
 		return [
-			'attrs' => ['prive' => $node->getPermissie()]
+			'attrs' => ['prive' => $node->getPermissie()],
 		];
 	}
 }

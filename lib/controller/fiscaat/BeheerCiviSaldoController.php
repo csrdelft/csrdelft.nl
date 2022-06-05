@@ -31,7 +31,8 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 07/04/2017
  */
-class BeheerCiviSaldoController extends AbstractController {
+class BeheerCiviSaldoController extends AbstractController
+{
 	/**
 	 * @var CiviSaldoRepository
 	 */
@@ -45,7 +46,11 @@ class BeheerCiviSaldoController extends AbstractController {
 	 */
 	private $profielService;
 
-	public function __construct(CiviSaldoRepository $civiSaldoRepository, CiviBestellingRepository $civiBestellingRepository, ProfielService $profielService) {
+	public function __construct(
+		CiviSaldoRepository $civiSaldoRepository,
+		CiviBestellingRepository $civiBestellingRepository,
+		ProfielService $profielService
+	) {
 		$this->profielService = $profielService;
 		$this->civiSaldoRepository = $civiSaldoRepository;
 		$this->civiBestellingRepository = $civiBestellingRepository;
@@ -57,11 +62,14 @@ class BeheerCiviSaldoController extends AbstractController {
 	 * @Auth(P_FISCAAT_READ)
 	 * @throws ExceptionInterface
 	 */
-	public function overzicht(Request $request) {
+	public function overzicht(Request $request)
+	{
 		$table = $this->createDataTable(CiviSaldoTable::class);
 
 		if ($request->getMethod() == 'POST') {
-			return $table->createData($this->civiSaldoRepository->findBy(['deleted' => false]));
+			return $table->createData(
+				$this->civiSaldoRepository->findBy(['deleted' => false])
+			);
 		}
 
 		return $this->render('fiscaat/pagina.html.twig', [
@@ -77,7 +85,8 @@ class BeheerCiviSaldoController extends AbstractController {
 	 * @Route("/fiscaat/saldo/inleggen/{uid}", defaults={"uid"=null}, methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function inleggen(EntityManagerInterface $em, $uid) {
+	public function inleggen(EntityManagerInterface $em, $uid)
+	{
 		if ($uid) {
 			$civisaldo = $this->civiSaldoRepository->find($uid);
 		} else {
@@ -89,10 +98,17 @@ class BeheerCiviSaldoController extends AbstractController {
 		if ($civisaldo) {
 			$form = new InleggenForm($civisaldo);
 			$values = $form->getValues();
-			if ($form->validate() && $values['inleg'] !== 0 && $values['saldo'] == $civisaldo->saldo) {
+			if (
+				$form->validate() &&
+				$values['inleg'] !== 0 &&
+				$values['saldo'] == $civisaldo->saldo
+			) {
 				$inleg = $values['inleg'];
 				$em->transactional(function () use ($inleg, $civisaldo) {
-					$bestelling = $this->civiBestellingRepository->vanBedragInCenten($inleg, $civisaldo->uid);
+					$bestelling = $this->civiBestellingRepository->vanBedragInCenten(
+						$inleg,
+						$civisaldo->uid
+					);
 					$this->civiBestellingRepository->create($bestelling);
 
 					$this->civiSaldoRepository->ophogen($civisaldo->uid, $inleg);
@@ -115,17 +131,21 @@ class BeheerCiviSaldoController extends AbstractController {
 	 * @Route("/fiscaat/saldo/verwijderen", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function verwijderen() {
+	public function verwijderen()
+	{
 		$selection = $this->getDataTableSelection();
 
-		$removed = array();
+		$removed = [];
 		foreach ($selection as $uuid) {
 			/** @var CiviSaldo $civisaldo */
 			$civisaldo = $this->civiSaldoRepository->retrieveByUUID($uuid);
 
 			if ($civisaldo) {
 				$civisaldo->deleted = true;
-				$removed[] = new RemoveDataTableEntry($civisaldo->uid, CiviSaldo::class);
+				$removed[] = new RemoveDataTableEntry(
+					$civisaldo->uid,
+					CiviSaldo::class
+				);
 				$this->civiSaldoRepository->update($civisaldo);
 			}
 		}
@@ -144,7 +164,8 @@ class BeheerCiviSaldoController extends AbstractController {
 	 * @Route("/fiscaat/saldo/registreren", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function registreren() {
+	public function registreren()
+	{
 		$form = new LidRegistratieForm(new CiviSaldo());
 
 		if ($form->validate()) {
@@ -162,7 +183,9 @@ class BeheerCiviSaldoController extends AbstractController {
 				$saldo->naam = '';
 			}
 
-			if (count($this->civiSaldoRepository->findBy(['uid' => $saldo->uid])) === 1) {
+			if (
+				count($this->civiSaldoRepository->findBy(['uid' => $saldo->uid])) === 1
+			) {
 				throw $this->createAccessDeniedException();
 			} else {
 				$this->civiSaldoRepository->create($saldo);
@@ -179,9 +202,10 @@ class BeheerCiviSaldoController extends AbstractController {
 	 * @Route("/fiscaat/saldo/som", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function som() {
+	public function som()
+	{
 		$momentString = filter_input(INPUT_POST, 'moment', FILTER_SANITIZE_STRING);
-		$moment = DateTime::createFromFormat("Y-m-d H:i", $momentString);
+		$moment = DateTime::createFromFormat('Y-m-d H:i', $momentString);
 		if (!$moment) {
 			throw $this->createAccessDeniedException();
 		}
@@ -189,7 +213,10 @@ class BeheerCiviSaldoController extends AbstractController {
 		return $this->render('fiscaat/saldisom.html.twig', [
 			'saldisomform' => new SaldiSomForm($this->civiSaldoRepository, $moment),
 			'saldisom' => $this->civiSaldoRepository->getSomSaldiOp($moment),
-			'saldisomleden' => $this->civiSaldoRepository->getSomSaldiOp($moment, true),
+			'saldisomleden' => $this->civiSaldoRepository->getSomSaldiOp(
+				$moment,
+				true
+			),
 		]);
 	}
 
@@ -199,11 +226,19 @@ class BeheerCiviSaldoController extends AbstractController {
 	 * @Route("/fiscaat/saldo/zoek", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function zoek(Request $request) {
+	public function zoek(Request $request)
+	{
 		$zoekterm = $request->query->get('q');
 
-		$leden = $this->profielService->zoekLeden($zoekterm, 'naam', 'alle', 'achternaam');
-		$uids = array_map(function ($profiel) { return $profiel->uid; }, $leden);
+		$leden = $this->profielService->zoekLeden(
+			$zoekterm,
+			'naam',
+			'alle',
+			'achternaam'
+		);
+		$uids = array_map(function ($profiel) {
+			return $profiel->uid;
+		}, $leden);
 
 		$civiSaldi = $this->civiSaldoRepository->zoeken($uids, $zoekterm);
 
@@ -212,7 +247,7 @@ class BeheerCiviSaldoController extends AbstractController {
 			$profiel = ProfielRepository::get($civiSaldo->uid);
 			$resp[] = [
 				'label' => !$profiel ? $civiSaldo->naam : $profiel->getNaam('volledig'),
-				'value' => $civiSaldo->uid
+				'value' => $civiSaldo->uid,
 			];
 		}
 

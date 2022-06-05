@@ -9,15 +9,20 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 
-class InschrijfLinkForm extends Formulier {
-
-	public function __construct() {
+class InschrijfLinkForm extends Formulier
+{
+	public function __construct()
+	{
 		parent::__construct(null, '/inschrijflink');
 
 		$fields = [];
 		$fields['voornaam'] = new RequiredTextField('voornaam', '', 'Voornaam');
 		$fields['voornaam']->autocomplete = false;
-		$fields['tussenvoegsel'] = new TextField('tussenvoegsel', '', 'Tussenvoegsel');
+		$fields['tussenvoegsel'] = new TextField(
+			'tussenvoegsel',
+			'',
+			'Tussenvoegsel'
+		);
 		$fields['tussenvoegsel']->autocomplete = false;
 		$fields['achternaam'] = new TextField('achternaam', '', 'Achternaam');
 		$fields['achternaam']->autocomplete = false;
@@ -26,9 +31,14 @@ class InschrijfLinkForm extends Formulier {
 		$fields['mobiel'] = new TelefoonField('mobiel', '', 'Mobiel');
 		$fields['mobiel']->autocomplete = false;
 
-		$fields[] = new SubmitKnop(null, 'submit', 'Link genereren', 'Link genereren', false);
+		$fields[] = new SubmitKnop(
+			null,
+			'submit',
+			'Link genereren',
+			'Link genereren',
+			false
+		);
 
 		$this->addFields($fields);
 	}
-
 }

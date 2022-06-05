@@ -1,14 +1,13 @@
 <?php
 
-
 namespace CsrDelft\view\datatable;
-
 
 use CsrDelft\view\ToResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class GenericDataTableResponse implements ToResponse {
+class GenericDataTableResponse implements ToResponse
+{
 	public $modal;
 	public $lastUpdate;
 	/**
@@ -25,7 +24,13 @@ class GenericDataTableResponse implements ToResponse {
 	 */
 	private $groups;
 
-	public function __construct(SerializerInterface $serializer, $data, $modal = null, $autoUpdate = null, $groups = null) {
+	public function __construct(
+		SerializerInterface $serializer,
+		$data,
+		$modal = null,
+		$autoUpdate = null,
+		$groups = null
+	) {
 		$this->data = $data;
 		$this->lastUpdate = time() - 1;
 		$this->autoUpdate = $autoUpdate;
@@ -34,10 +39,12 @@ class GenericDataTableResponse implements ToResponse {
 		$this->groups = $groups ?? ['datatable'];
 	}
 
-
-	public function toResponse(): Response {
-		$serialized = $this->serializer->serialize($this->data, 'json', ['groups' => $this->groups]);
-		$autoUpdateString = $this->autoUpdate ? "true" : "false";
+	public function toResponse(): Response
+	{
+		$serialized = $this->serializer->serialize($this->data, 'json', [
+			'groups' => $this->groups,
+		]);
+		$autoUpdateString = $this->autoUpdate ? 'true' : 'false';
 		$modalHtml = json_encode($this->modal);
 
 		$responseText = <<<JSON
@@ -49,6 +56,8 @@ class GenericDataTableResponse implements ToResponse {
 }
 JSON;
 
-		return new Response($responseText, 200, ['Content-Type' => 'application/json']);
+		return new Response($responseText, 200, [
+			'Content-Type' => 'application/json',
+		]);
 	}
 }

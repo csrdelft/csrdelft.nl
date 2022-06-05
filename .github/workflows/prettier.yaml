@@ -19,9 +19,13 @@ jobs:
             .pnp.cjs
             .pnp.loader.mjs
             node_modules/.cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - name: Install yarn dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+
       - name: Check Prettier
-        run: yarn dlx prettier --check .
+        run: yarn run prettier-check-all

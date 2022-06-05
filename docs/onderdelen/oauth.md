@@ -39,7 +39,9 @@ In OAuth2 worden scopes gebruikt om aan te geven tot welke onderdelen een client
 In de code can op scope gecontroleerd worden door de rol van de gebruiker te controleren, deze roles hebben altijd de vorm `ROLE_OAUTH2_<scopenaam>`. Bijvoorbeeld om de scope `PROFIEL:EMAIL` te checken:
 
 ```php
-function heeftScopeProfielEmail(\Symfony\Component\Security\Core\Security $security) {
+function heeftScopeProfielEmail(
+	\Symfony\Component\Security\Core\Security $security
+) {
 	return $security->isGranted('ROLE_OAUTH2_PROFIEL:EMAIL');
 }
 ```

@@ -4,7 +4,8 @@ namespace CsrDelft\view\fiscaat\pin;
 
 use CsrDelft\entity\pin\PinTransactieMatch;
 
-class PinBestellingCrediterenForm extends PinBestellingCorrectieForm {
+class PinBestellingCrediterenForm extends PinBestellingCorrectieForm
+{
 	protected $actie = '/fiscaat/pin/crediteer';
 	protected $modalTitel = 'Crediteer bestelling.';
 	protected $bestellingType = 'creditbestelling';
@@ -15,7 +16,8 @@ class PinBestellingCrediterenForm extends PinBestellingCorrectieForm {
 	/**
 	 * @param PinTransactieMatch|null $pinTransactieMatch
 	 */
-	public function __construct($pinTransactieMatch = null) {
+	public function __construct($pinTransactieMatch = null)
+	{
 		parent::__construct($pinTransactieMatch);
 	}
 }

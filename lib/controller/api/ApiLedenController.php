@@ -9,13 +9,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiLedenController {
+class ApiLedenController
+{
 	/**
 	 * @var LidZoekerService
 	 */
 	private $lidZoekerService;
 
-	public function __construct(LidZoekerService $lidZoekerService) {
+	public function __construct(LidZoekerService $lidZoekerService)
+	{
 		$this->lidZoekerService = $lidZoekerService;
 	}
 
@@ -23,26 +25,28 @@ class ApiLedenController {
 	 * @Route("/API/2.0/leden", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function getLeden() {
+	public function getLeden()
+	{
 		$leden = [];
 
 		foreach ($this->lidZoekerService->getLeden() as $profiel) {
-			$leden[] = array(
+			$leden[] = [
 				'id' => $profiel->uid,
 				'voornaam' => $profiel->voornaam,
 				'tussenvoegsel' => $profiel->tussenvoegsel,
-				'achternaam' => $profiel->achternaam
-			);
+				'achternaam' => $profiel->achternaam,
+			];
 		}
 
-		return new JsonResponse(array('data' => $leden));
+		return new JsonResponse(['data' => $leden]);
 	}
 
 	/**
 	 * @Route("/API/2.0/leden/{id}", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function getLid($id) {
+	public function getLid($id)
+	{
 		$profiel = ProfielRepository::get($id);
 
 		if (!$profiel) {
@@ -50,34 +54,35 @@ class ApiLedenController {
 		}
 
 		$woonoord = $profiel->getWoonoord();
-		$lid = array(
+		$lid = [
 			'id' => $profiel->uid,
-			'naam' => array(
+			'naam' => [
 				'voornaam' => $profiel->voornaam,
 				'tussenvoegsel' => $profiel->tussenvoegsel,
 				'achternaam' => $profiel->achternaam,
-				'formeel' => $profiel->getNaam('civitas')
-			),
+				'formeel' => $profiel->getNaam('civitas'),
+			],
 			'pasfoto' => $profiel->getPasfotoPath('vierkant'),
 			'geboortedatum' => date_format_intl($profiel->gebdatum, DATE_FORMAT),
 			'email' => $profiel->email,
 			'mobiel' => $profiel->mobiel,
-			'huis' => array(
+			'huis' => [
 				'naam' => $woonoord ? $woonoord->naam : null,
 				'adres' => $profiel->adres,
 				'postcode' => $profiel->postcode,
 				'woonplaats' => $profiel->woonplaats,
-				'land' => $profiel->land
-			),
-			'studie' => array(
+				'land' => $profiel->land,
+			],
+			'studie' => [
 				'naam' => $profiel->studie,
-				'sinds' => $profiel->studiejaar
-			),
+				'sinds' => $profiel->studiejaar,
+			],
 			'lichting' => $profiel->lidjaar,
-			'verticale' => !$profiel->getVerticale() ? null : $profiel->getVerticale()->naam,
-		);
+			'verticale' => !$profiel->getVerticale()
+				? null
+				: $profiel->getVerticale()->naam,
+		];
 
-		return new JsonResponse(array('data' => $lid));
+		return new JsonResponse(['data' => $lid]);
 	}
-
 }

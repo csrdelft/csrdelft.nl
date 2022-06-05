@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\entity\courant;
-
 
 use CsrDelft\common\Enum;
 
@@ -14,7 +12,8 @@ use CsrDelft\common\Enum;
  * @method static static OVERIG
  * @method static static SPONSOR
  */
-class CourantCategorie extends Enum {
+class CourantCategorie extends Enum
+{
 	const VOORWOORD = 'voorwoord';
 	const BESTUUR = 'bestuur';
 	const CSR = 'csr';

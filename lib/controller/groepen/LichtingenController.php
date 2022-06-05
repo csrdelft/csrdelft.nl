@@ -17,30 +17,35 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @property LichtingenRepository $repository
  */
-class LichtingenController extends AbstractGroepenController {
-	public function __construct(ManagerRegistry $registry) {
+class LichtingenController extends AbstractGroepenController
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Lichting::class);
 	}
 
-	public function zoeken(Request $request, $zoekterm = null) {
+	public function zoeken(Request $request, $zoekterm = null)
+	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');
 		}
-		$result = array();
+		$result = [];
 		if (is_numeric($zoekterm)) {
-
-			$data = range($this->repository->getJongsteLidjaar(), $this->repository->getOudsteLidjaar());
-			$found = preg_grep('/' . (int)$zoekterm . '/', $data);
+			$data = range(
+				$this->repository->getJongsteLidjaar(),
+				$this->repository->getOudsteLidjaar()
+			);
+			$found = preg_grep('/' . (int) $zoekterm . '/', $data);
 
 			foreach ($found as $lidjaar) {
-				$result[] = array(
+				$result[] = [
 					'url' => '/groepen/lichtingen/' . $lidjaar . '#' . $lidjaar,
 					'label' => 'Groepen',
-					'value' => 'Lichting:' . $lidjaar
-				);
+					'value' => 'Lichting:' . $lidjaar,
+				];
 			}
 		}
 		return new JsonResponse($result);
@@ -48,7 +53,6 @@ class LichtingenController extends AbstractGroepenController {
 
 	public function beheren(Request $request, $soort = null)
 	{
-		throw $this->createNotFoundException("Kan geen lichtingen beheren");
+		throw $this->createNotFoundException('Kan geen lichtingen beheren');
 	}
-
 }

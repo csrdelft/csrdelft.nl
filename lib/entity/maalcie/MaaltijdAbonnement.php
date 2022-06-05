@@ -32,7 +32,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository")
  * @ORM\Table("mlt_abonnementen")
  */
-class MaaltijdAbonnement {
+class MaaltijdAbonnement
+{
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -50,7 +51,6 @@ class MaaltijdAbonnement {
 	 * @ORM\Column(type="datetime")
 	 */
 	public $wanneer_ingeschakeld; # datetime
-
 	/**
 	 * @var MaaltijdRepetitie
 	 * @ORM\ManyToOne(targetEntity="MaaltijdRepetitie")

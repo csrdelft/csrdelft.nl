@@ -19,7 +19,6 @@ use CsrDelft\bb\BbTag;
  */
 class BbImg extends BbTag
 {
-
 	/**
 	 * @var array
 	 */
@@ -57,31 +56,33 @@ class BbImg extends BbTag
 		$heeftHoogte = isset($arguments['h']) && $arguments['h'] > 10;
 
 		if ($heeftBreedte) {
-			$style .= 'width: ' . ((int)$arguments['w']) . 'px; ';
+			$style .= 'width: ' . ((int) $arguments['w']) . 'px; ';
 		}
 		if ($heeftHoogte) {
-			$style .= 'height: ' . ((int)$arguments['h']) . 'px;';
+			$style .= 'height: ' . ((int) $arguments['h']) . 'px;';
 		}
 
-		if ($this->env->mode == "light") {
+		if ($this->env->mode == 'light') {
 			// Geef een standaard breedte op om te voorkomen dat afbeeldingen te breed worden.
 			if (!$heeftBreedte && !$heeftHoogte) {
 				$style .= 'width:500px;';
 			}
 
-			return vsprintf("<img class=\"%s\" src=\"%s\" alt=\"%s\" style=\"%s\" />", [
-				$class,
-				$this->getSourceUrl(),
-				htmlspecialchars($this->getSourceUrl()),
-				$style
-			]);
+			return vsprintf(
+				"<img class=\"%s\" src=\"%s\" alt=\"%s\" style=\"%s\" />",
+				[
+					$class,
+					$this->getSourceUrl(),
+					htmlspecialchars($this->getSourceUrl()),
+					$style,
+				]
+			);
 		}
 
-		return vsprintf("<a href=\"%s\" data-fslightbox><span class=\"bb-img-loading\" data-src=\"%s\" style=\"%s\"></span></a>", [
-			$this->getLinkUrl(),
-			$this->getSourceUrl(),
-			$style
-		]);
+		return vsprintf(
+			"<a href=\"%s\" data-fslightbox><span class=\"bb-img-loading\" data-src=\"%s\" style=\"%s\"></span></a>",
+			[$this->getLinkUrl(), $this->getSourceUrl(), $style]
+		);
 	}
 
 	public function getSourceUrl()
@@ -100,10 +101,16 @@ class BbImg extends BbTag
 	 */
 	public function parse($arguments = [])
 	{
-		$this->url = filter_var($this->readMainArgument($arguments), FILTER_SANITIZE_URL);
+		$this->url = filter_var(
+			$this->readMainArgument($arguments),
+			FILTER_SANITIZE_URL
+		);
 
-		if (!$this->url || (!url_like($this->url) && !str_starts_with($this->url, '/'))) {
-			throw new BbException("Wrong url " . $this->url);
+		if (
+			!$this->url ||
+			(!url_like($this->url) && !str_starts_with($this->url, '/'))
+		) {
+			throw new BbException('Wrong url ' . $this->url);
 		}
 
 		$this->arguments = $arguments;

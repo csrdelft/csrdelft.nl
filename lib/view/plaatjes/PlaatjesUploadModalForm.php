@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\plaatjes;
-
 
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;

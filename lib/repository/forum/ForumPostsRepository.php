@@ -27,7 +27,8 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method ForumPost|null find($id, $lockMode = null, $lockVersion = null)
  */
-class ForumPostsRepository extends AbstractRepository implements Paging {
+class ForumPostsRepository extends AbstractRepository implements Paging
+{
 	/**
 	 * Huidige pagina
 	 * @var int
@@ -50,13 +51,15 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	 */
 	private $aantal_wacht;
 
-	public function __construct(ManagerRegistry $registry) {
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, ForumPost::class);
 		$this->pagina = 1;
-		$this->aantal_paginas = array();
+		$this->aantal_paginas = [];
 	}
 
-	public function findAll() {
+	public function findAll()
+	{
 		return $this->findBy([]);
 	}
 
@@ -67,7 +70,12 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	 * @param null $offset
 	 * @return PersistentCollection|ForumPost[]
 	 */
-	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {
+	public function findBy(
+		array $criteria,
+		array $orderBy = null,
+		$limit = null,
+		$offset = null
+	) {
 		$orderBy = $orderBy ?? ['datum_tijd' => 'ASC'];
 		return parent::findBy($criteria, $orderBy, $limit, $offset);
 	}
@@ -77,7 +85,8 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	 * @return ForumPost
 	 * @throws CsrGebruikerException
 	 */
-	public function get($id) {
+	public function get($id)
+	{
 		$post = $this->find($id);
 		if (!$post) {
 			throw new CsrGebruikerException('Forum-reactie bestaat niet!');
@@ -85,43 +94,59 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		return $post;
 	}
 
-	public function getAantalPerPagina() {
+	public function getAantalPerPagina()
+	{
 		if (!$this->per_pagina) {
-			$this->per_pagina = (int)lid_instelling('forum', 'posts_per_pagina');
+			$this->per_pagina = (int) lid_instelling('forum', 'posts_per_pagina');
 		}
 		return $this->per_pagina;
 	}
 
-	public function setAantalPerPagina($aantal) {
-		$this->per_pagina = (int)$aantal;
+	public function setAantalPerPagina($aantal)
+	{
+		$this->per_pagina = (int) $aantal;
 	}
 
-	public function getHuidigePagina() {
+	public function getHuidigePagina()
+	{
 		return $this->pagina;
 	}
 
-	public function setLaatstePagina($draad_id) {
+	public function setLaatstePagina($draad_id)
+	{
 		$this->pagina = $this->getAantalPaginas($draad_id);
 	}
 
-	public function getAantalPaginas($draad_id) {
+	public function getAantalPaginas($draad_id)
+	{
 		if (!array_key_exists($draad_id, $this->aantal_paginas)) {
-			$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
+			$forumDradenRepository = ContainerFacade::getContainer()->get(
+				ForumDradenRepository::class
+			);
 			$draad = $forumDradenRepository->get($draad_id);
 			if ($draad->pagina_per_post) {
 				$this->per_pagina = 1;
 			} else {
-				$this->per_pagina = (int)lid_instelling('forum', 'posts_per_pagina');
+				$this->per_pagina = (int) lid_instelling('forum', 'posts_per_pagina');
 			}
-			$this->aantal_paginas[$draad_id] = (int)ceil($this->count(['draad_id' => $draad_id, 'wacht_goedkeuring' => false, 'verwijderd' => false]) / $this->getAantalPerPagina());
+			$this->aantal_paginas[$draad_id] = (int) ceil(
+				$this->count([
+					'draad_id' => $draad_id,
+					'wacht_goedkeuring' => false,
+					'verwijderd' => false,
+				]) / $this->getAantalPerPagina()
+			);
 		}
 		return max(1, $this->aantal_paginas[$draad_id]);
 	}
 
-	public function getAantalOngelezenPosts(ForumDraad $draad) {
+	public function getAantalOngelezenPosts(ForumDraad $draad)
+	{
 		$qb = $this->createQueryBuilder('fp')
 			->select('count(fp.post_id)')
-			->where('fp.draad_id = :draad_id and fp.wacht_goedkeuring = false and fp.verwijderd = false')
+			->where(
+				'fp.draad_id = :draad_id and fp.wacht_goedkeuring = false and fp.verwijderd = false'
+			)
 			->setParameter('draad_id', $draad->draad_id);
 		$gelezen = $draad->getWanneerGelezen();
 		if ($gelezen) {
@@ -131,28 +156,42 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		return $qb->getQuery()->getSingleScalarResult();
 	}
 
-	public function getPaginaVoorPost(ForumPost $post) {
+	public function getPaginaVoorPost(ForumPost $post)
+	{
 		$count = $this->createQueryBuilder('fp')
 			->select('count(fp.post_id)')
-			->where('fp.draad_id = :draad_id and fp.post_id <= :post_id and fp.wacht_goedkeuring = false and fp.verwijderd = false')
+			->where(
+				'fp.draad_id = :draad_id and fp.post_id <= :post_id and fp.wacht_goedkeuring = false and fp.verwijderd = false'
+			)
 			->setParameter('draad_id', $post->draad_id)
 			->setParameter('post_id', $post->post_id)
-			->getQuery()->getSingleScalarResult();
-		return (int)ceil($count / $this->getAantalPerPagina());
+			->getQuery()
+			->getSingleScalarResult();
+		return (int) ceil($count / $this->getAantalPerPagina());
 	}
 
-	public function setPaginaVoorLaatstGelezen(ForumDraadGelezen $gelezen) {
-		$count = 1 + $this->createQueryBuilder('fp')
+	public function setPaginaVoorLaatstGelezen(ForumDraadGelezen $gelezen)
+	{
+		$count =
+			1 +
+			$this->createQueryBuilder('fp')
 				->select('count(fp.post_id)')
-				->where('fp.draad_id = :draad_id and fp.datum_tijd <= :datum_tijd and fp.wacht_goedkeuring = false and fp.verwijderd = false')
+				->where(
+					'fp.draad_id = :draad_id and fp.datum_tijd <= :datum_tijd and fp.wacht_goedkeuring = false and fp.verwijderd = false'
+				)
 				->setParameter('draad_id', $gelezen->draad_id)
 				->setParameter('datum_tijd', $gelezen->datum_tijd)
-				->getQuery()->getSingleScalarResult();
+				->getQuery()
+				->getSingleScalarResult();
 		$this->getAantalPaginas($gelezen->draad_id); // set per_pagina
-		$this->setHuidigePagina((int)ceil($count / $this->getAantalPerPagina()), $gelezen->draad_id);
+		$this->setHuidigePagina(
+			(int) ceil($count / $this->getAantalPerPagina()),
+			$gelezen->draad_id
+		);
 	}
 
-	public function setHuidigePagina($pagina, $draad_id) {
+	public function setHuidigePagina($pagina, $draad_id)
+	{
 		if (!is_int($pagina) || $pagina < 1) {
 			$pagina = 1;
 		} elseif ($draad_id !== 0 && $pagina > $this->getAantalPaginas($draad_id)) {
@@ -166,24 +205,30 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	 * @param $alleen_eerste_post
 	 * @return ForumPost[]
 	 */
-	public function zoeken(ForumZoeken $forumZoeken, $alleen_eerste_post) {
+	public function zoeken(ForumZoeken $forumZoeken, $alleen_eerste_post)
+	{
 		$results = $this->createQueryBuilder('fp')
 			->addSelect('MATCH(fp.tekst) AGAINST (:query) AS score')
-			->where('fp.wacht_goedkeuring = false and fp.verwijderd = false and fp.laatst_gewijzigd >= :van and fp.laatst_gewijzigd <= :tot')
+			->where(
+				'fp.wacht_goedkeuring = false and fp.verwijderd = false and fp.laatst_gewijzigd >= :van and fp.laatst_gewijzigd <= :tot'
+			)
 			->setParameter('query', $forumZoeken->zoekterm)
 			->setParameter('van', $forumZoeken->van)
 			->setParameter('tot', $forumZoeken->tot)
 			->orderBy('score', 'DESC')
 			->having('score > 0')
 			->setMaxResults($forumZoeken->limit)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 
 		if ($alleen_eerste_post) {
 			$out = [];
 			foreach ($results as $result) {
 				/** @var $post ForumPost */
 				$post = $result[0];
-				if ($this->getEerstePostVoorDraad($post->draad)->post_id == $post->post_id) {
+				if (
+					$this->getEerstePostVoorDraad($post->draad)->post_id == $post->post_id
+				) {
 					$out[] = $result;
 				}
 			}
@@ -193,8 +238,13 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		}
 	}
 
-	public function getEerstePostVoorDraad(ForumDraad $draad) {
-		return $this->findOneBy(['draad_id' => $draad->draad_id, 'wacht_goedkeuring' => false, 'verwijderd' => false]);
+	public function getEerstePostVoorDraad(ForumDraad $draad)
+	{
+		return $this->findOneBy([
+			'draad_id' => $draad->draad_id,
+			'wacht_goedkeuring' => false,
+			'verwijderd' => false,
+		]);
 	}
 
 	/**
@@ -202,27 +252,42 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	 * @param array|null $orderBy
 	 * @return ForumPost|null
 	 */
-	public function findOneBy(array $criteria, array $orderBy = null) {
+	public function findOneBy(array $criteria, array $orderBy = null)
+	{
 		$orderBy = $orderBy ?? ['datum_tijd' => 'ASC'];
 		return parent::findOneBy($criteria, $orderBy);
 	}
 
-	public function getAantalForumPostsVoorLid($uid) {
-		return $this->count(['uid' => $uid, 'wacht_goedkeuring' => false, 'verwijderd' => false]);
+	public function getAantalForumPostsVoorLid($uid)
+	{
+		return $this->count([
+			'uid' => $uid,
+			'wacht_goedkeuring' => false,
+			'verwijderd' => false,
+		]);
 	}
 
-	public function getAantalWachtOpGoedkeuring() {
+	public function getAantalWachtOpGoedkeuring()
+	{
 		if (!isset($this->aantal_wacht)) {
-			$this->aantal_wacht = $this->count(['wacht_goedkeuring' => true, 'verwijderd' => false]);
+			$this->aantal_wacht = $this->count([
+				'wacht_goedkeuring' => true,
+				'verwijderd' => false,
+			]);
 		}
 		return $this->aantal_wacht;
 	}
 
-	public function getPrullenbakVoorDraad(ForumDraad $draad) {
-		return $this->findBy(['draad_id' => $draad->draad_id, 'verwijderd' => true]);
+	public function getPrullenbakVoorDraad(ForumDraad $draad)
+	{
+		return $this->findBy([
+			'draad_id' => $draad->draad_id,
+			'verwijderd' => true,
+		]);
 	}
 
-	public function getForumPostsVoorDraad(ForumDraad $draad) {
+	public function getForumPostsVoorDraad(ForumDraad $draad)
+	{
 		$qb = $this->createQueryBuilder('fp')
 			->where('fp.draad_id = :draad_id and fp.verwijderd = false')
 			->setParameter('draad_id', $draad->draad_id)
@@ -251,9 +316,15 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	 * @param boolean $draad_uniek
 	 * @return ForumPost[]
 	 */
-	public function getRecenteForumPostsVanLid($uid, $aantal, $draad_uniek = false) {
+	public function getRecenteForumPostsVanLid(
+		$uid,
+		$aantal,
+		$draad_uniek = false
+	) {
 		$qb = $this->createQueryBuilder('fp')
-			->where('fp.uid = :uid and fp.wacht_goedkeuring = false and fp.verwijderd = false')
+			->where(
+				'fp.uid = :uid and fp.wacht_goedkeuring = false and fp.verwijderd = false'
+			)
 			->setParameter('uid', $uid)
 			->setMaxResults($aantal)
 			->orderBy('fp.laatst_gewijzigd', 'DESC');
@@ -264,8 +335,8 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 
 		/** @var ForumPost[] $results */
 		$results = $qb->getQuery()->getResult();
-		$posts = array();
-		$draden_ids = array();
+		$posts = [];
+		$draden_ids = [];
 		foreach ($results as $post) {
 			if ($post->draad->magLezen()) {
 				$posts[] = $post;
@@ -279,7 +350,8 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		return $posts;
 	}
 
-	public function maakForumPost($draad, $tekst, $ip, $wacht_goedkeuring, $email) {
+	public function maakForumPost($draad, $tekst, $ip, $wacht_goedkeuring, $email)
+	{
 		$post = new ForumPost();
 		$post->draad = $draad;
 		$post->uid = LoginService::getUid();
@@ -291,26 +363,36 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		$post->auteur_ip = $ip;
 		$post->wacht_goedkeuring = $wacht_goedkeuring;
 		if ($wacht_goedkeuring) {
-			$post->bewerkt_tekst = '[prive]email: [email]' . $email . '[/email][/prive]' . "\n";
+			$post->bewerkt_tekst =
+				'[prive]email: [email]' . $email . '[/email][/prive]' . "\n";
 		}
 		$this->getEntityManager()->persist($post);
 		$this->getEntityManager()->flush();
 		return $post;
 	}
 
-	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
+	public function verwijderForumPostsVoorDraad(ForumDraad $draad)
+	{
 		$this->createQueryBuilder('fp')
 			->update()
 			->set('fp.verwijderd', $draad->verwijderd)
 			->where('fp.draad_id = :id')
 			->setParameter('id', $draad->draad_id)
-			->getQuery()->execute();
+			->getQuery()
+			->execute();
 	}
 
-	public function offtopicForumPost(ForumPost $post) {
+	public function offtopicForumPost(ForumPost $post)
+	{
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
 		$post->laatst_gewijzigd = date_create_immutable();
-		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginService::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate]' . "\n";
+		$post->bewerkt_tekst .=
+			'offtopic door [lid=' .
+			LoginService::getUid() .
+			'] [reldate]' .
+			date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) .
+			'[/reldate]' .
+			"\n";
 		try {
 			$this->getEntityManager()->persist($post);
 			$this->getEntityManager()->flush();
@@ -319,16 +401,23 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		}
 	}
 
-
-	public function citeerForumPost(ForumPost $post) {
+	public function citeerForumPost(ForumPost $post)
+	{
 		return CsrBB::filterCommentaar(CsrBB::filterPrive($post->tekst));
 	}
 
-	public function getStatsTotal() {
+	public function getStatsTotal()
+	{
 		$qb = $this->createQueryBuilder('fp');
-		$qb->select(['UNIX_TIMESTAMP(DATE(fp.datum_tijd)) AS timestamp', 'COUNT(fp.post_id) AS count']);
+		$qb->select([
+			'UNIX_TIMESTAMP(DATE(fp.datum_tijd)) AS timestamp',
+			'COUNT(fp.post_id) AS count',
+		]);
 		$qb->where('fp.datum_tijd > :terug');
-		$qb->setParameter('terug', date_create_immutable(instelling('forum', 'grafiek_stats_periode')));
+		$qb->setParameter(
+			'terug',
+			date_create_immutable(instelling('forum', 'grafiek_stats_periode'))
+		);
 		$qb->groupBy('timestamp');
 		$stats = $qb->getQuery()->getResult();
 
@@ -338,7 +427,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 
 		$curTime = date_create_immutable('@' . current($stats)['timestamp']);
 
-		while (false !== $current = next($stats)) {
+		while (false !== ($current = next($stats))) {
 			$next = date_create_immutable('@' . $current['timestamp']);
 			$curTime = $curTime->add(new DateInterval('P1D'));
 			while ($next > $curTime) {
@@ -352,25 +441,47 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		return $newStats;
 	}
 
-	public function getStatsVoorForumDeel(ForumDeel $deel) {
+	public function getStatsVoorForumDeel(ForumDeel $deel)
+	{
 		$rsm = new ResultSetMapping();
 		$rsm->addScalarResult('timestamp', 'timestamp', 'integer');
 		$rsm->addScalarResult('count', 'count', 'integer');
-		return $this->getEntityManager()->createNativeQuery(<<<'SQL'
+		return $this->getEntityManager()
+			->createNativeQuery(
+				<<<'SQL'
 select unix_timestamp(date(p.datum_tijd)) as timestamp, count(p.post_id) as count from forum_posts as p
 right join forum_draden as d on p.draad_id = d.draad_id where d.forum_id = :forum_id and p.datum_tijd > :datum_tijd
 group by timestamp
-SQL, $rsm)
-			->setParameters(['forum_id' => $deel->forum_id, 'datum_tijd' => date_create_immutable(instelling('forum', 'grafiek_stats_periode'))])
+SQL
+				,
+				$rsm
+			)
+			->setParameters([
+				'forum_id' => $deel->forum_id,
+				'datum_tijd' => date_create_immutable(
+					instelling('forum', 'grafiek_stats_periode')
+				),
+			])
 			->getResult();
 	}
 
-	public function getStatsVoorDraad(ForumDraad $draad) {
+	public function getStatsVoorDraad(ForumDraad $draad)
+	{
 		$qb = $this->createQueryBuilder('fp');
-		$qb->select(['UNIX_TIMESTAMP(DATE(fp.datum_tijd)) AS timestamp', 'COUNT(fp.post_id) AS count']);
+		$qb->select([
+			'UNIX_TIMESTAMP(DATE(fp.datum_tijd)) AS timestamp',
+			'COUNT(fp.post_id) AS count',
+		]);
 		$qb->where('fp.draad_id = :draad_id && fp.datum_tijd > :terug');
 		$qb->setParameter('draad_id', $draad->draad_id);
-		$qb->setParameter('terug', $draad->laatst_gewijzigd->add(DateInterval::createFromDateString(instelling('forum', 'grafiek_draad_recent'))));
+		$qb->setParameter(
+			'terug',
+			$draad->laatst_gewijzigd->add(
+				DateInterval::createFromDateString(
+					instelling('forum', 'grafiek_draad_recent')
+				)
+			)
+		);
 		$qb->groupBy('timestamp');
 		return $qb->getQuery()->getResult();
 	}

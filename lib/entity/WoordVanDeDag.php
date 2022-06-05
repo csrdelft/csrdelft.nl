@@ -23,7 +23,6 @@ class WoordVanDeDag
 	 */
 	public $woord;
 
-
 	public function getId(): ?int
 	{
 		return $this->id;

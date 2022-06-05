@@ -18,13 +18,17 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Foto[]    findAll()
  * @method Foto[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class FotoRepository extends AbstractRepository {
+class FotoRepository extends AbstractRepository
+{
 	/**
 	 * @var FotoTagsRepository
 	 */
 	private $fotoTagsRepository;
 
-	public function __construct(ManagerRegistry $registry, FotoTagsRepository $fotoTagsRepository) {
+	public function __construct(
+		ManagerRegistry $registry,
+		FotoTagsRepository $fotoTagsRepository
+	) {
 		parent::__construct($registry, Foto::class);
 
 		$this->fotoTagsRepository = $fotoTagsRepository;
@@ -33,7 +37,8 @@ class FotoRepository extends AbstractRepository {
 	/**
 	 * @override parent::retrieveByUUID($UUID)
 	 */
-	public function retrieveByUUID($UUID) {
+	public function retrieveByUUID($UUID)
+	{
 		$parts = explode('@', $UUID, 2);
 		$path = explode('/', $parts[0]);
 		$filename = array_pop($path);
@@ -46,7 +51,8 @@ class FotoRepository extends AbstractRepository {
 	 * @param $filename
 	 * @return Foto|null
 	 */
-	public function get($subdir, $filename) {
+	public function get($subdir, $filename)
+	{
 		return $this->find(['subdir' => $subdir, 'filename' => $filename]);
 	}
 
@@ -55,8 +61,12 @@ class FotoRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(Foto $foto) {
-		$dbFoto = $this->find(['subdir' => $foto->subdir, 'filename' => $foto->filename]);
+	public function create(Foto $foto)
+	{
+		$dbFoto = $this->find([
+			'subdir' => $foto->subdir,
+			'filename' => $foto->filename,
+		]);
 		if ($dbFoto) {
 			$foto = $dbFoto;
 		}
@@ -69,25 +79,32 @@ class FotoRepository extends AbstractRepository {
 		$this->getEntityManager()->flush();
 	}
 
-	public function delete(Foto $foto) {
+	public function delete(Foto $foto)
+	{
 		// Sta toe om een detached foto entity te verwijderen.
 		$this->createQueryBuilder('foto')
 			->delete()
 			->where('foto.subdir = :subdir and foto.filename = :filename')
 			->setParameter('subdir', $foto->subdir)
 			->setParameter('filename', $foto->filename)
-			->getQuery()->execute();
+			->getQuery()
+			->execute();
 	}
 
 	/**
 	 * @param Foto $foto
 	 * @throws CsrException
 	 */
-	public function verwerkFoto(Foto $foto) {
-		if (!$this->find(['subdir' => $foto->subdir, 'filename' => $foto->filename])) {
+	public function verwerkFoto(Foto $foto)
+	{
+		if (
+			!$this->find(['subdir' => $foto->subdir, 'filename' => $foto->filename])
+		) {
 			$this->create($foto);
 			if (false === @chmod($foto->getFullPath(), 0644)) {
-				throw new CsrException('Geen eigenaar van foto: ' . htmlspecialchars($foto->getFullPath()));
+				throw new CsrException(
+					'Geen eigenaar van foto: ' . htmlspecialchars($foto->getFullPath())
+				);
 			}
 		}
 		if (!$foto->hasThumb()) {
@@ -102,7 +119,8 @@ class FotoRepository extends AbstractRepository {
 	 * @param Foto $foto
 	 * @return bool
 	 */
-	public function verwijderFoto(Foto $foto) {
+	public function verwijderFoto(Foto $foto)
+	{
 		$ret = true;
 		$ret &= unlink($foto->getFullPath());
 		if ($foto->hasResized()) {
@@ -127,7 +145,8 @@ class FotoRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function rotate(Foto $foto, $degrees) {
+	public function rotate(Foto $foto, $degrees)
+	{
 		$foto->rotation += $degrees;
 		$foto->rotation %= 360;
 		$this->getEntityManager()->persist($foto);
@@ -148,11 +167,12 @@ class FotoRepository extends AbstractRepository {
 	 * @param string|null $subdir
 	 * @return Foto[]
 	 */
-	public function findBySubdir(?string $subdir) {
+	public function findBySubdir(?string $subdir)
+	{
 		return $this->createQueryBuilder('foto')
 			->where('foto.subdir like :subdir')
 			->setParameter('subdir', $subdir . '%')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
-
 }

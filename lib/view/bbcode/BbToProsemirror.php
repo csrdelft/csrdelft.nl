@@ -37,8 +37,11 @@ class BbToProsemirror
 	 */
 	private $nodesRegistry;
 
-	public function __construct($marksRegistry, $nodesRegistry, ContainerInterface $container)
-	{
+	public function __construct(
+		$marksRegistry,
+		$nodesRegistry,
+		ContainerInterface $container
+	) {
 		$env = new BbEnv();
 		$env->prosemirror = true;
 		$this->csrBB = new CsrBB($container, $env);
@@ -53,7 +56,8 @@ class BbToProsemirror
 	 * @param $bbCode
 	 * @return array
 	 */
-	public function toProseMirrorFragment($bbCode) {
+	public function toProseMirrorFragment($bbCode)
+	{
 		return $this->nodeToProseMirror($this->csrBB->parseString($bbCode));
 	}
 
@@ -80,11 +84,17 @@ class BbToProsemirror
 			if ($this->nodesRegistry->has(get_class($child))) {
 				/** @var Node $class */
 				$class = $this->nodesRegistry->get(get_class($child));
-				$item = array_merge(['type' => $class::getNodeType()], $class->getData($child));
+				$item = array_merge(
+					['type' => $class::getNodeType()],
+					$class->getData($child)
+				);
 
 				if ($item === null) {
 					if (!empty($child->getChildren())) {
-						$nodes = array_merge($nodes, $this->nodeToProseMirror($child->getChildren()));
+						$nodes = array_merge(
+							$nodes,
+							$this->nodeToProseMirror($child->getChildren())
+						);
 					}
 					continue;
 				}
@@ -105,15 +115,27 @@ class BbToProsemirror
 			} elseif ($this->marksRegistry->has(get_class($child))) {
 				/** @var Mark $class */
 				$class = $this->marksRegistry->get(get_class($child));
-				array_push($this->storedMarks, array_merge(['type' => $class::getMarkType()], $class->getData($child)));
+				array_push(
+					$this->storedMarks,
+					array_merge(
+						['type' => $class::getMarkType()],
+						$class->getData($child)
+					)
+				);
 
 				if (!empty($child->getChildren())) {
-					$nodes = array_merge($nodes, $this->nodeToProseMirror($child->getChildren()));
+					$nodes = array_merge(
+						$nodes,
+						$this->nodeToProseMirror($child->getChildren())
+					);
 				}
 
 				array_pop($this->storedMarks);
 			} elseif (!empty($child->getChildren())) {
-				$nodes = array_merge($nodes, $this->nodeToProseMirror($child->getChildren()));
+				$nodes = array_merge(
+					$nodes,
+					$this->nodeToProseMirror($child->getChildren())
+				);
 			}
 		}
 

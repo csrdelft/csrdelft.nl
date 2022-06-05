@@ -23,8 +23,10 @@ class ForumMeldingController extends AbstractController
 	 */
 	private $forumDelenMeldingRepository;
 
-	public function __construct(ForumDradenMeldingRepository $forumDradenMeldingRepository, ForumDelenMeldingRepository $forumDelenMeldingRepository)
-	{
+	public function __construct(
+		ForumDradenMeldingRepository $forumDradenMeldingRepository,
+		ForumDelenMeldingRepository $forumDelenMeldingRepository
+	) {
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
 		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
 	}
@@ -39,14 +41,22 @@ class ForumMeldingController extends AbstractController
 	 * @Route("/forum/meldingsniveau/{draad_id}/{niveau}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function meldingsniveau(ForumDraad $draad, $niveau) {
+	public function meldingsniveau(ForumDraad $draad, $niveau)
+	{
 		if (!$draad || !$draad->magLezen() || !$draad->magMeldingKrijgen()) {
-			throw $this->createAccessDeniedException('Onderwerp mag geen melding voor ontvangen worden');
+			throw $this->createAccessDeniedException(
+				'Onderwerp mag geen melding voor ontvangen worden'
+			);
 		}
 		if (!ForumDraadMeldingNiveau::isValidValue($niveau)) {
-			throw $this->createAccessDeniedException('Ongeldig meldingsniveau gespecificeerd');
+			throw $this->createAccessDeniedException(
+				'Ongeldig meldingsniveau gespecificeerd'
+			);
 		}
-		$this->forumDradenMeldingRepository->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::from($niveau));
+		$this->forumDradenMeldingRepository->setNiveauVoorLid(
+			$draad,
+			ForumDraadMeldingNiveau::from($niveau)
+		);
 		return new JsonResponse(true);
 	}
 
@@ -60,14 +70,22 @@ class ForumMeldingController extends AbstractController
 	 * @Route("/forum/deelmelding/{forum_id}/{niveau}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function deelmelding(ForumDeel $deel, $niveau) {
+	public function deelmelding(ForumDeel $deel, $niveau)
+	{
 		if (!$deel || !$deel->magLezen() || !$deel->magMeldingKrijgen()) {
-			throw $this->createAccessDeniedException('Deel mag geen melding voor ontvangen worden');
+			throw $this->createAccessDeniedException(
+				'Deel mag geen melding voor ontvangen worden'
+			);
 		}
 		if ($niveau !== 'aan' && $niveau !== 'uit') {
-			throw $this->createAccessDeniedException('Ongeldig meldingsniveau gespecificeerd');
+			throw $this->createAccessDeniedException(
+				'Ongeldig meldingsniveau gespecificeerd'
+			);
 		}
-		$this->forumDelenMeldingRepository->setMeldingVoorLid($deel, $niveau === 'aan');
+		$this->forumDelenMeldingRepository->setMeldingVoorLid(
+			$deel,
+			$niveau === 'aan'
+		);
 		return new JsonResponse(true);
 	}
 }

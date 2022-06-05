@@ -11,9 +11,12 @@ use Doctrine\ORM\Query\Filter\SQLFilter;
  * Filter om nieuwe novieten nog niet te tonen.
  * Aan/uit te zetten in config/packages/doctrine.yaml onder doctrine.orm.filters.novieten
  */
-class VerbergNovietenFilter extends SQLFilter {
-
-	public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias) {
+class VerbergNovietenFilter extends SQLFilter
+{
+	public function addFilterConstraint(
+		ClassMetadata $targetEntity,
+		$targetTableAlias
+	) {
 		if ($targetEntity->getReflectionClass()->name !== Profiel::class) {
 			return '';
 		} else {
@@ -23,7 +26,8 @@ class VerbergNovietenFilter extends SQLFilter {
 				$jaar = trim($this->getParameter('jaar'), "'");
 			}
 
-			return sprintf("NOT (%s.status = '%s' AND %s.lidjaar = %d)",
+			return sprintf(
+				"NOT (%s.status = '%s' AND %s.lidjaar = %d)",
 				$targetTableAlias,
 				LidStatus::Noviet,
 				$targetTableAlias,

@@ -1,11 +1,11 @@
 <?php
 
-
 namespace CsrDelft\view\formulier\knoppen;
 
-
-class LoginFormKnoppen extends FormKnoppen {
-	public function getHtml() {
+class LoginFormKnoppen extends FormKnoppen
+{
+	public function getHtml()
+	{
 		return <<<HTML
 <ul class="login-buttons">
 	<li>

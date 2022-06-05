@@ -14,11 +14,13 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MaalCieBoekjaarController extends AbstractController {
+class MaalCieBoekjaarController extends AbstractController
+{
 	/** @var MaaltijdenRepository  */
 	private $maaltijdenRepository;
 
-	public function __construct(MaaltijdenRepository $maaltijdenRepository) {
+	public function __construct(MaaltijdenRepository $maaltijdenRepository)
+	{
 		$this->maaltijdenRepository = $maaltijdenRepository;
 	}
 
@@ -27,7 +29,8 @@ class MaalCieBoekjaarController extends AbstractController {
 	 * @Route("/maaltijden/boekjaar", methods={"GET"})
 	 * @Auth(P_MAAL_SALDI)
 	 */
-	public function beheer() {
+	public function beheer()
+	{
 		return $this->render('maaltijden/boekjaar_sluiten.html.twig');
 	}
 
@@ -38,18 +41,29 @@ class MaalCieBoekjaarController extends AbstractController {
 	 * @Route("/maaltijden/boekjaar/sluitboekjaar", methods={"POST"})
 	 * @Auth(P_MAAL_SALDI)
 	 */
-	public function sluitboekjaar() {
-		$form = new BoekjaarSluitenForm(date('Y-m-d', strtotime('-1 year')), date('Y-m-d')); // fetches POST values itself
+	public function sluitboekjaar()
+	{
+		$form = new BoekjaarSluitenForm(
+			date('Y-m-d', strtotime('-1 year')),
+			date('Y-m-d')
+		); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$errors_aantal = $this->maaltijdenRepository->archiveerOudeMaaltijden(strtotime($values['begindatum']), strtotime($values['einddatum']));
+			$errors_aantal = $this->maaltijdenRepository->archiveerOudeMaaltijden(
+				strtotime($values['begindatum']),
+				strtotime($values['einddatum'])
+			);
 			if (count($errors_aantal[0]) === 0) {
-				setMelding('Boekjaar succesvol gesloten: ' . $errors_aantal[1] . ' maaltijden naar het archief verplaatst.', 1);
+				setMelding(
+					'Boekjaar succesvol gesloten: ' .
+						$errors_aantal[1] .
+						' maaltijden naar het archief verplaatst.',
+					1
+				);
 			}
 			return $this->render('maaltijden/boekjaar_sluiten.html.twig');
 		} else {
 			return $form;
 		}
 	}
-
 }

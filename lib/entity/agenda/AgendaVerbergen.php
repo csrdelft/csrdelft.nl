@@ -13,8 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\agenda\AgendaVerbergenRepository")
  * @ORM\Table("agenda_verbergen")
  */
-class AgendaVerbergen {
-
+class AgendaVerbergen
+{
 	/**
 	 * Lidnummer
 	 * Shared primary key

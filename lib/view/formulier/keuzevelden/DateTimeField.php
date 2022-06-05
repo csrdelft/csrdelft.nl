@@ -12,26 +12,32 @@ use CsrDelft\view\formulier\invoervelden\TextField;
  *
  * Date time picker with range (optional).
  */
-class DateTimeField extends TextField {
-
+class DateTimeField extends TextField
+{
 	public $from_datetime;
 	public $to_datetime;
 	protected $max_jaar;
 	protected $min_jaar;
 
-	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
+	public function __construct(
+		$name,
+		$value,
+		$description,
+		$maxyear = null,
+		$minyear = null
+	) {
 		parent::__construct($name, $value, $description);
 		if (is_int($maxyear)) {
 			$this->max_jaar = $maxyear;
 		} else {
-			$this->max_jaar = (int)date('Y') + 10;
+			$this->max_jaar = (int) date('Y') + 10;
 		}
 		if (is_int($minyear)) {
 			$this->min_jaar = $minyear;
 		} else {
-			$this->min_jaar = (int)date('Y') - 10;
+			$this->min_jaar = (int) date('Y') - 10;
 		}
-		$jaar = (int)date('Y', strtotime($value));
+		$jaar = (int) date('Y', strtotime($value));
 		if ($jaar > $this->max_jaar) {
 			$this->max_jaar = $jaar;
 		}
@@ -42,7 +48,8 @@ class DateTimeField extends TextField {
 		$this->css_classes[] = 'DateTimeField';
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		if (!parent::validate()) {
 			return false;
 		}
@@ -50,15 +57,22 @@ class DateTimeField extends TextField {
 		if ($this->value == '') {
 			return true;
 		}
-		$jaar = (int)substr($this->value, 0, 4);
-		$maand = (int)substr($this->value, 5, 2);
-		$dag = (int)substr($this->value, 8, 2);
-		$uur = (int)substr($this->value, 11, 2);
-		$min = (int)substr($this->value, 14, 2);
-		$sec = (int)substr($this->value, 17, 2);
+		$jaar = (int) substr($this->value, 0, 4);
+		$maand = (int) substr($this->value, 5, 2);
+		$dag = (int) substr($this->value, 8, 2);
+		$uur = (int) substr($this->value, 11, 2);
+		$min = (int) substr($this->value, 14, 2);
+		$sec = (int) substr($this->value, 17, 2);
 		if (!checkdate($maand, $dag, $jaar)) {
 			$this->error = 'Ongeldige datum';
-		} elseif ($uur < 0 || $uur > 23 || $min < 0 || $min > 59 || $sec < 0 || $sec > 59) {
+		} elseif (
+			$uur < 0 ||
+			$uur > 23 ||
+			$min < 0 ||
+			$min > 59 ||
+			$sec < 0 ||
+			$sec > 59
+		) {
 			$this->error = 'Ongeldig tijdstip';
 		} elseif (is_int($this->max_jaar) && $jaar > $this->max_jaar) {
 			$this->error = 'Kies een jaar voor ' . $this->max_jaar;
@@ -68,8 +82,21 @@ class DateTimeField extends TextField {
 		return $this->error === '';
 	}
 
-	public function getHtml() {
-		$attributes = $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete'));
+	public function getHtml()
+	{
+		$attributes = $this->getInputAttribute([
+			'type',
+			'id',
+			'name',
+			'class',
+			'value',
+			'origvalue',
+			'disabled',
+			'readonly',
+			'maxlength',
+			'placeholder',
+			'autocomplete',
+		]);
 
 		$minValue = $maxValue = null;
 
@@ -78,7 +105,7 @@ class DateTimeField extends TextField {
 		}
 
 		if ($this->max_jaar) {
-			$maxValue = ($this->max_jaar + 1) . '-01-01 00:00';
+			$maxValue = $this->max_jaar + 1 . '-01-01 00:00';
 		}
 
 		$before = $after = null;

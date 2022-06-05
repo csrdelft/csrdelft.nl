@@ -27,7 +27,8 @@ use Throwable;
  * @method Maaltijd[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Maaltijd[]    findByVerwijderd($verwijderd, array $orderBy = null, $limit = null, $offset = null)
  */
-class MaaltijdenRepository extends AbstractRepository {
+class MaaltijdenRepository extends AbstractRepository
+{
 	protected $default_order = 'datum ASC, tijd ASC';
 
 	/**
@@ -80,8 +81,10 @@ class MaaltijdenRepository extends AbstractRepository {
 		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 	}
 
-
-	public function vanRepetitie(MaaltijdRepetitie $repetitie, DateTimeInterface $datum) {
+	public function vanRepetitie(
+		MaaltijdRepetitie $repetitie,
+		DateTimeInterface $datum
+	) {
 		$maaltijd = new Maaltijd();
 		$maaltijd->repetitie = $repetitie;
 		$maaltijd->product = $repetitie->product;
@@ -102,7 +105,8 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function openMaaltijd(Maaltijd $maaltijd) {
+	public function openMaaltijd(Maaltijd $maaltijd)
+	{
 		if (!$maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is al geopend');
 		}
@@ -117,7 +121,8 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function sluitMaaltijd(Maaltijd $maaltijd) {
+	public function sluitMaaltijd(Maaltijd $maaltijd)
+	{
 		if ($maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is al gesloten');
 		}
@@ -130,30 +135,35 @@ class MaaltijdenRepository extends AbstractRepository {
 	/**
 	 * @return Maaltijd[]
 	 */
-	public function getMaaltijdenToekomst() {
+	public function getMaaltijdenToekomst()
+	{
 		return $this->createQueryBuilder('m')
 			->where('m.verwijderd = false and m.datum > :datum')
 			->setParameter(':datum', date_create('-1 week'))
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
 	 * @return Maaltijd[]
 	 */
-	public function getMaaltijdenHistorie() {
+	public function getMaaltijdenHistorie()
+	{
 		return $this->createQueryBuilder('m')
 			->where('m.verwijderd = false and m.datum <= NOW()')
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
 	 * @return Maaltijd[]
 	 */
-	public function getMaaltijden() {
+	public function getMaaltijden()
+	{
 		return $this->findBy(['verwijderd' => false]);
 	}
 
@@ -166,22 +176,33 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @return Maaltijd[] implements Agendeerbaar
 	 * @throws CsrException
 	 */
-	public function getMaaltijdenVoorAgenda($van, $tot) {
+	public function getMaaltijdenVoorAgenda($van, $tot)
+	{
 		if (!is_int($van)) {
-			throw new CsrException('Invalid timestamp: $van getMaaltijdenVoorAgenda()');
+			throw new CsrException(
+				'Invalid timestamp: $van getMaaltijdenVoorAgenda()'
+			);
 		}
 		if (!is_int($tot)) {
-			throw new CsrException('Invalid timestamp: $tot getMaaltijdenVoorAgenda()');
+			throw new CsrException(
+				'Invalid timestamp: $tot getMaaltijdenVoorAgenda()'
+			);
 		}
 		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->createQueryBuilder('m')
-			->where('m.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum')
+			->where(
+				'm.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum'
+			)
 			->setParameter('van_datum', date_create_immutable("@$van"))
 			->setParameter('tot_datum', date_create_immutable("@$tot"))
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
-			->getQuery()->getResult();
-		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, LoginService::getUid());
+			->getQuery()
+			->getResult();
+		$maaltijden = $this->filterMaaltijdenVoorLid(
+			$maaltijden,
+			LoginService::getUid()
+		);
 		return $maaltijden;
 	}
 
@@ -192,15 +213,22 @@ class MaaltijdenRepository extends AbstractRepository {
 	 *
 	 * @return Maaltijd[]
 	 */
-	public function getKomendeMaaltijdenVoorLid($uid) {
+	public function getKomendeMaaltijdenVoorLid($uid)
+	{
 		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->createQueryBuilder('m')
-			->where('m.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum')
+			->where(
+				'm.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum'
+			)
 			->setParameter('van_datum', date_create('-1 day'))
-			->setParameter('tot_datum', date_create(instelling('maaltijden', 'toon_ketzer_vooraf')))
+			->setParameter(
+				'tot_datum',
+				date_create(instelling('maaltijden', 'toon_ketzer_vooraf'))
+			)
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, $uid, true);
 		return $maaltijden;
 	}
@@ -212,20 +240,28 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @param null $limit
 	 * @return Maaltijd[]
 	 */
-	public function getRecenteMaaltijden(DateTimeInterface $timestamp, $limit = null) {
+	public function getRecenteMaaltijden(
+		DateTimeInterface $timestamp,
+		$limit = null
+	) {
 		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->createQueryBuilder('m')
-			->where('m.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum')
+			->where(
+				'm.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum'
+			)
 			->setParameter('van_datum', $timestamp)
 			->setParameter('tot_datum', date_create())
 			->setMaxResults($limit)
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 		$maaltijdenById = [];
 		foreach ($maaltijden as $maaltijd) {
 			// Sla over als maaltijd nog niet voorbij is
-			if ($maaltijd->getEindMoment() > time()) continue;
+			if ($maaltijd->getEindMoment() > time()) {
+				continue;
+			}
 			$maaltijdenById[$maaltijd->maaltijd_id] = $maaltijd;
 		}
 		return $maaltijdenById;
@@ -237,16 +273,21 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @param int $mid
 	 * @return Maaltijd|false
 	 */
-	public function getMaaltijdVoorKetzer($mid) {
-		$maaltijden = array($this->getMaaltijd($mid));
-		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, LoginService::getUid());
+	public function getMaaltijdVoorKetzer($mid)
+	{
+		$maaltijden = [$this->getMaaltijd($mid)];
+		$maaltijden = $this->filterMaaltijdenVoorLid(
+			$maaltijden,
+			LoginService::getUid()
+		);
 		if (!empty($maaltijden)) {
 			return reset($maaltijden);
 		}
 		return false;
 	}
 
-	public function getVerwijderdeMaaltijden() {
+	public function getVerwijderdeMaaltijden()
+	{
 		return $this->findBy(['verwijderd' => 'true']);
 	}
 
@@ -257,7 +298,8 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @return Maaltijd
 	 * @throws CsrGebruikerException
 	 */
-	public function getMaaltijd($mid, $verwijderd = false) {
+	public function getMaaltijd($mid, $verwijderd = false)
+	{
 		$maaltijd = $this->find($mid);
 		if (!$maaltijd) {
 			throw new CsrGebruikerException('Maaltijd bestaat niet: ' . $mid);
@@ -275,7 +317,8 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function saveMaaltijd($maaltijd) {
+	public function saveMaaltijd($maaltijd)
+	{
 		$verwijderd = 0;
 		if (!$maaltijd->maaltijd_id) {
 			$this->_em->persist($maaltijd);
@@ -287,12 +330,20 @@ class MaaltijdenRepository extends AbstractRepository {
 			if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
 				$this->sluitMaaltijd($maaltijd);
 			}
-			if (!$maaltijd->gesloten && !$maaltijd->verwijderd && !empty($maaltijd->filter)) {
-				$verwijderd = $this->maaltijdAanmeldingenRepository->checkAanmeldingenFilter($maaltijd->filter, array($maaltijd));
-				$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() - $verwijderd;
+			if (
+				!$maaltijd->gesloten &&
+				!$maaltijd->verwijderd &&
+				!empty($maaltijd->filter)
+			) {
+				$verwijderd = $this->maaltijdAanmeldingenRepository->checkAanmeldingenFilter(
+					$maaltijd->filter,
+					[$maaltijd]
+				);
+				$maaltijd->aantal_aanmeldingen =
+					$maaltijd->getAantalAanmeldingen() - $verwijderd;
 			}
 		}
-		return array($maaltijd, $verwijderd);
+		return [$maaltijd, $verwijderd];
 	}
 
 	/**
@@ -300,7 +351,8 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function prullenbakLeegmaken() {
+	public function prullenbakLeegmaken()
+	{
 		$aantal = 0;
 		$maaltijden = $this->getVerwijderdeMaaltijden();
 		foreach ($maaltijden as $maaltijd) {
@@ -319,13 +371,24 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderMaaltijd(Maaltijd $maaltijd) {
-		$this->corveeTakenRepository->verwijderMaaltijdCorvee($maaltijd->maaltijd_id); // delete corveetaken first (foreign key)
+	public function verwijderMaaltijd(Maaltijd $maaltijd)
+	{
+		$this->corveeTakenRepository->verwijderMaaltijdCorvee(
+			$maaltijd->maaltijd_id
+		); // delete corveetaken first (foreign key)
 		if ($maaltijd->verwijderd) {
-			if ($this->corveeTakenRepository->existMaaltijdCorvee($maaltijd->maaltijd_id)) {
-				throw new CsrGebruikerException('Er zitten nog bijbehorende corveetaken in de prullenbak. Verwijder die eerst definitief!');
+			if (
+				$this->corveeTakenRepository->existMaaltijdCorvee(
+					$maaltijd->maaltijd_id
+				)
+			) {
+				throw new CsrGebruikerException(
+					'Er zitten nog bijbehorende corveetaken in de prullenbak. Verwijder die eerst definitief!'
+				);
 			}
-			$this->maaltijdAanmeldingenRepository->deleteAanmeldingenVoorMaaltijd($maaltijd->maaltijd_id);
+			$this->maaltijdAanmeldingenRepository->deleteAanmeldingenVoorMaaltijd(
+				$maaltijd->maaltijd_id
+			);
 			$this->_em->remove($maaltijd);
 			$this->_em->flush();
 		} else {
@@ -341,7 +404,8 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function herstelMaaltijd(Maaltijd $maaltijd) {
+	public function herstelMaaltijd(Maaltijd $maaltijd)
+	{
 		if (!$maaltijd->verwijderd) {
 			throw new CsrGebruikerException('Maaltijd is niet verwijderd');
 		}
@@ -360,14 +424,27 @@ class MaaltijdenRepository extends AbstractRepository {
 	 *
 	 * @return Maaltijd[]
 	 */
-	private function filterMaaltijdenVoorLid($maaltijden, $uid, $verbergVerleden = false) {
+	private function filterMaaltijdenVoorLid(
+		$maaltijden,
+		$uid,
+		$verbergVerleden = false
+	) {
 		$result = [];
 		foreach ($maaltijden as $maaltijd) {
 			// Verberg afgelopen maaltijd
-			if ($verbergVerleden && $maaltijd->getEindMoment() < time()) continue;
+			if ($verbergVerleden && $maaltijd->getEindMoment() < time()) {
+				continue;
+			}
 
 			// Kan en mag aanmelden of mag maaltijdlijst zien en sluiten? Dan maaltijd ook zien.
-			if (($maaltijd->aanmeld_limiet > 0 AND $this->maaltijdAanmeldingenRepository->checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) OR $maaltijd->magBekijken($uid)) {
+			if (
+				$maaltijd->aanmeld_limiet > 0 and
+					$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
+						$uid,
+						$maaltijd->aanmeld_filter
+					) or
+				$maaltijd->magBekijken($uid)
+			) {
 				$result[$maaltijd->maaltijd_id] = $maaltijd;
 			}
 		}
@@ -379,14 +456,28 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function meldAboAan($maaltijd) {
+	public function meldAboAan($maaltijd)
+	{
 		$aantal = 0;
 		// aanmelden van leden met abonnement op deze repetitie
 		if (!$maaltijd->gesloten && $maaltijd->repetitie !== null) {
-			$abonnementen = $this->maaltijdAbonnementenRepository->getAbonnementenVoorRepetitie($maaltijd->repetitie);
+			$abonnementen = $this->maaltijdAbonnementenRepository->getAbonnementenVoorRepetitie(
+				$maaltijd->repetitie
+			);
 			foreach ($abonnementen as $abo) {
-				if ($this->maaltijdAanmeldingenRepository->checkAanmeldFilter($abo->uid, $maaltijd->aanmeld_filter)) {
-					if ($this->maaltijdAanmeldingenRepository->aanmeldenDoorAbonnement($maaltijd, $abo->maaltijd_repetitie, $abo->uid)) {
+				if (
+					$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
+						$abo->uid,
+						$maaltijd->aanmeld_filter
+					)
+				) {
+					if (
+						$this->maaltijdAanmeldingenRepository->aanmeldenDoorAbonnement(
+							$maaltijd,
+							$abo->maaltijd_repetitie,
+							$abo->uid
+						)
+					) {
 						$aantal++;
 					}
 				}
@@ -404,32 +495,44 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function archiveerOudeMaaltijden($van, $tot) {
+	public function archiveerOudeMaaltijden($van, $tot)
+	{
 		if (!is_int($van) || !is_int($tot)) {
 			throw new CsrException('Invalid timestamp: archiveerOudeMaaltijden()');
 		}
 		$errors = [];
 		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->createQueryBuilder('m')
-			->where('m.verwijderd = false and m.datum >= :van_datum and datum <= :tot_datum')
+			->where(
+				'm.verwijderd = false and m.datum >= :van_datum and datum <= :tot_datum'
+			)
 			->setParameter('van_datum', $van)
 			->setParameter('tot_datum', $tot)
 			->orderBy('m.datum', 'ASC')
 			->orderBy('m.tijd', 'ASC')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 		foreach ($maaltijden as $maaltijd) {
 			try {
 				$archief = $this->archiefMaaltijdenRepository->vanMaaltijd($maaltijd);
 				$this->archiefMaaltijdenRepository->create($archief);
-				if ($this->corveeTakenRepository->existMaaltijdCorvee($maaltijd->maaltijd_id)) {
-					setMelding(date_format_intl($maaltijd->getMoment(), DATETIME_FORMAT) . ' heeft nog gekoppelde corveetaken!', 2);
+				if (
+					$this->corveeTakenRepository->existMaaltijdCorvee(
+						$maaltijd->maaltijd_id
+					)
+				) {
+					setMelding(
+						date_format_intl($maaltijd->getMoment(), DATETIME_FORMAT) .
+							' heeft nog gekoppelde corveetaken!',
+						2
+					);
 				}
 			} catch (CsrGebruikerException $e) {
 				$errors[] = $e;
 				setMelding($e->getMessage(), -1);
 			}
 		}
-		return array($errors, count($maaltijden));
+		return [$errors, count($maaltijden)];
 	}
 
 	// Repetitie-Maaltijden ############################################################
@@ -438,28 +541,36 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @param $mrid
 	 * @return Maaltijd[]
 	 */
-	public function getKomendeRepetitieMaaltijden($mrid) {
+	public function getKomendeRepetitieMaaltijden($mrid)
+	{
 		return $this->createQueryBuilder('m')
-			->where('m.mlt_repetitie_id = :maaltijd_id and verwijderd = false and datum >= :datum')
+			->where(
+				'm.mlt_repetitie_id = :maaltijd_id and verwijderd = false and datum >= :datum'
+			)
 			->setParameter('maaltijd_id', $mrid)
 			->setParameter('datum', date_create())
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
 	 * @param $mrid
 	 * @return Maaltijd[]
 	 */
-	public function getKomendeOpenRepetitieMaaltijden($mrid) {
+	public function getKomendeOpenRepetitieMaaltijden($mrid)
+	{
 		return $this->createQueryBuilder('m')
-			->where('m.mlt_repetitie_id = :repetitie and m.gesloten = false and m.verwijderd = false and m.datum >= :datum')
+			->where(
+				'm.mlt_repetitie_id = :repetitie and m.gesloten = false and m.verwijderd = false and m.datum >= :datum'
+			)
 			->setParameter('repetitie', $mrid)
 			->setParameter('datum', date_create())
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
@@ -467,7 +578,8 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderRepetitieMaaltijden($mrid) {
+	public function verwijderRepetitieMaaltijden($mrid)
+	{
 		$maaltijden = $this->findBy(['mlt_repetitie_id' => $mrid]);
 		foreach ($maaltijden as $maaltijd) {
 			$maaltijd->verwijderd = true;
@@ -483,7 +595,8 @@ class MaaltijdenRepository extends AbstractRepository {
 	 *
 	 * @return bool
 	 */
-	public function existRepetitieMaaltijden($mrid) {
+	public function existRepetitieMaaltijden($mrid)
+	{
 		return $this->count(['mlt_repetitie_id' => $mrid]) > 0;
 	}
 
@@ -493,23 +606,36 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @return bool|mixed
 	 * @throws Throwable
 	 */
-	public function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $verplaats) {
+	public function updateRepetitieMaaltijden(
+		MaaltijdRepetitie $repetitie,
+		$verplaats
+	) {
 		return $this->_em->transactional(function () use ($repetitie, $verplaats) {
 			// update day of the week & check filter
 			$updated = 0;
 			$aanmeldingen = 0;
-			$maaltijden = $this->findBy(['verwijderd' => false, 'mlt_repetitie_id' => $repetitie->mlt_repetitie_id]);
+			$maaltijden = $this->findBy([
+				'verwijderd' => false,
+				'mlt_repetitie_id' => $repetitie->mlt_repetitie_id,
+			]);
 			$filter = $repetitie->abonnement_filter;
 			if (!empty($filter)) {
-				$aanmeldingen = $this->maaltijdAanmeldingenRepository->checkAanmeldingenFilter($filter, $maaltijden);
+				$aanmeldingen = $this->maaltijdAanmeldingenRepository->checkAanmeldingenFilter(
+					$filter,
+					$maaltijden
+				);
 			}
 			foreach ($maaltijden as $maaltijd) {
 				if ($verplaats) {
 					$shift = $repetitie->dag_vd_week - $maaltijd->datum->format('w');
 					if ($shift > 0) {
-						$maaltijd->datum = $maaltijd->datum->add(DateInterval::createFromDateString('+' . $shift . 'days'));
+						$maaltijd->datum = $maaltijd->datum->add(
+							DateInterval::createFromDateString('+' . $shift . 'days')
+						);
 					} elseif ($shift < 0) {
-						$maaltijd->datum = $maaltijd->datum->add(DateInterval::createFromDateString($shift . ' days'));
+						$maaltijd->datum = $maaltijd->datum->add(
+							DateInterval::createFromDateString($shift . ' days')
+						);
 					}
 				}
 				$maaltijd->titel = $repetitie->standaard_titel;
@@ -522,10 +648,9 @@ class MaaltijdenRepository extends AbstractRepository {
 					$this->_em->flush();
 					$updated++;
 				} catch (Exception $e) {
-
 				}
 			}
-			return array($updated, $aanmeldingen);
+			return [$updated, $aanmeldingen];
 		});
 	}
 
@@ -540,22 +665,38 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @return Maaltijd[]
 	 * @throws Throwable
 	 */
-	public function maakRepetitieMaaltijden(MaaltijdRepetitie $repetitie, DateTimeInterface $beginDatum, DateTimeInterface $eindDatum) {
-		return $this->_em->transactional(function () use ($repetitie, $beginDatum, $eindDatum) {
+	public function maakRepetitieMaaltijden(
+		MaaltijdRepetitie $repetitie,
+		DateTimeInterface $beginDatum,
+		DateTimeInterface $eindDatum
+	) {
+		return $this->_em->transactional(function () use (
+			$repetitie,
+			$beginDatum,
+			$eindDatum
+		) {
 			if ($repetitie->periode_in_dagen < 1) {
-				throw new CsrGebruikerException('New repetitie-maaltijden faalt: $periode =' . $repetitie->periode_in_dagen);
+				throw new CsrGebruikerException(
+					'New repetitie-maaltijden faalt: $periode =' .
+						$repetitie->periode_in_dagen
+				);
 			}
 
 			// start at first occurence
 			$shift = $repetitie->dag_vd_week - $beginDatum->format('w') + 7;
 			$shift %= 7;
 			if ($shift > 0) {
-				$beginDatum = $beginDatum->add(DateInterval::createFromDateString("+{$shift} days"));
+				$beginDatum = $beginDatum->add(
+					DateInterval::createFromDateString("+{$shift} days")
+				);
 			}
 			$datum = $beginDatum;
-			$corveerepetities = $this->corveeRepetitiesRepository->getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id);
+			$corveerepetities = $this->corveeRepetitiesRepository->getRepetitiesVoorMaaltijdRepetitie(
+				$repetitie->mlt_repetitie_id
+			);
 			$maaltijden = [];
-			while ($datum <= $eindDatum) { // break after one
+			while ($datum <= $eindDatum) {
+				// break after one
 
 				$maaltijd = $this->vanRepetitie($repetitie, $datum);
 				$this->_em->persist($maaltijd);
@@ -563,17 +704,25 @@ class MaaltijdenRepository extends AbstractRepository {
 				$this->meldAboAan($maaltijd);
 
 				foreach ($corveerepetities as $corveerepetitie) {
-					$this->corveeTakenRepository->newRepetitieTaken($corveerepetitie, $datum, $datum, $maaltijd); // do not repeat within maaltijd period
+					$this->corveeTakenRepository->newRepetitieTaken(
+						$corveerepetitie,
+						$datum,
+						$datum,
+						$maaltijd
+					); // do not repeat within maaltijd period
 				}
 				$maaltijden[] = $maaltijd;
 				if ($repetitie->periode_in_dagen < 1) {
 					break;
 				}
-				$datum = $datum->add(DateInterval::createFromDateString('+' . $repetitie->periode_in_dagen . ' days'));
+				$datum = $datum->add(
+					DateInterval::createFromDateString(
+						'+' . $repetitie->periode_in_dagen . ' days'
+					)
+				);
 			}
 			return $maaltijden;
 		});
-
 	}
 
 	/**
@@ -581,7 +730,8 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function update(Maaltijd $maaltijd) {
+	public function update(Maaltijd $maaltijd)
+	{
 		$this->_em->persist($maaltijd);
 		$this->_em->flush();
 	}
@@ -591,7 +741,8 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function delete(Maaltijd $maaltijd) {
+	public function delete(Maaltijd $maaltijd)
+	{
 		$this->_em->remove($maaltijd);
 		$this->_em->flush();
 	}
@@ -600,11 +751,14 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @param $query
 	 * @return Maaltijd[]
 	 */
-	public function getSuggesties($query) {
+	public function getSuggesties($query)
+	{
 		return $this->createQueryBuilder('m')
-			->where('m.titel like :query or date_format(m.datum, \'%Y-%m-%d\') like :query or m.maaltijd_id like :query')
+			->where(
+				'm.titel like :query or date_format(m.datum, \'%Y-%m-%d\') like :query or m.maaltijd_id like :query'
+			)
 			->setParameter('query', sql_contains($query))
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
-
 }

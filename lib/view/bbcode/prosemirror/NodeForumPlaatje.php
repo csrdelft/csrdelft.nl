@@ -27,14 +27,14 @@ class NodeForumPlaatje implements Node
 			'attrs' => [
 				'key' => $node->getKey(),
 				'src' => $node->getSourceUrl(),
-			]
+			],
 		];
 	}
 
 	public function getTagAttributes($node)
 	{
 		return [
-			'plaatje' => $node->attrs->key
+			'plaatje' => $node->attrs->key,
 		];
 	}
 

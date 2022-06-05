@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\common\Logging;
-
 
 use Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
 use Monolog\Logger;
@@ -14,9 +12,10 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * @since 2020-08-17
  * @see /config/packages/prod/monolog.yaml
  */
-class LogActivationStrategy implements ActivationStrategyInterface {
-
-	public function isHandlerActivated(array $record): bool {
+class LogActivationStrategy implements ActivationStrategyInterface
+{
+	public function isHandlerActivated(array $record): bool
+	{
 		if ($record['level'] <= Logger::WARNING) {
 			return false;
 		}

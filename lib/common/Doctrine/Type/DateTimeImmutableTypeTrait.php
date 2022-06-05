@@ -28,14 +28,16 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 
-trait DateTimeImmutableTypeTrait {
+trait DateTimeImmutableTypeTrait
+{
 	/**
 	 * @param $value
 	 * @param AbstractPlatform $platform
 	 * @return DateTimeImmutable|null
 	 * @throws ConversionException
 	 */
-	public function convertToPHPValue($value, AbstractPlatform $platform) {
+	public function convertToPHPValue($value, AbstractPlatform $platform)
+	{
 		$value = parent::convertToPHPValue($value, $platform);
 		if ($value === null) {
 			return $value;
@@ -44,4 +46,3 @@ trait DateTimeImmutableTypeTrait {
 		return DateTimeImmutable::createFromMutable($value);
 	}
 }
-

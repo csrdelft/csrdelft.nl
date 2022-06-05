@@ -86,21 +86,20 @@ class ForumDraadController extends AbstractController
 	private $forumMeldingenService;
 
 	public function __construct(
-		ForumPostsRepository          $forumPostsRepository,
+		ForumPostsRepository $forumPostsRepository,
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
-		ForumDelenRepository          $forumDelenRepository,
-		ForumDradenGelezenRepository  $forumDradenGelezenRepository,
-		ProsemirrorToBb               $prosemirrorToBb,
-		DebugLogRepository            $debugLogRepository,
-		ForumDradenRepository         $forumDradenRepository,
-		ForumDelenService             $forumDelenService,
-		ForumPostsService             $forumPostsService,
-		ForumMeldingenService  $forumMeldingenService,
-		ForumDradenMeldingRepository  $forumDradenMeldingRepository,
-		ForumDelenMeldingRepository   $forumDelenMeldingRepository,
-		BbToProsemirror               $bbToProsemirror
-	)
-	{
+		ForumDelenRepository $forumDelenRepository,
+		ForumDradenGelezenRepository $forumDradenGelezenRepository,
+		ProsemirrorToBb $prosemirrorToBb,
+		DebugLogRepository $debugLogRepository,
+		ForumDradenRepository $forumDradenRepository,
+		ForumDelenService $forumDelenService,
+		ForumPostsService $forumPostsService,
+		ForumMeldingenService $forumMeldingenService,
+		ForumDradenMeldingRepository $forumDradenMeldingRepository,
+		ForumDelenMeldingRepository $forumDelenMeldingRepository,
+		BbToProsemirror $bbToProsemirror
+	) {
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumDelenRepository = $forumDelenRepository;
@@ -130,7 +129,11 @@ class ForumDraadController extends AbstractController
 		if ($post->verwijderd) {
 			setMelding('Deze reactie is verwijderd', 0);
 		}
-		return $this->onderwerp($requestStack, $post->draad, $this->forumPostsRepository->getPaginaVoorPost($post));
+		return $this->onderwerp(
+			$requestStack,
+			$post->draad,
+			$this->forumPostsRepository->getPaginaVoorPost($post)
+		);
 	}
 
 	/**
@@ -144,8 +147,12 @@ class ForumDraadController extends AbstractController
 	 * @Route("/forum/onderwerp/{draad_id}/{pagina}/{statistiek}", methods={"GET"}, defaults={"pagina"=null,"statistiek"=null})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function onderwerp(RequestStack $requestStack, ForumDraad $draad, $pagina = null, $statistiek = null): Response
-	{
+	public function onderwerp(
+		RequestStack $requestStack,
+		ForumDraad $draad,
+		$pagina = null,
+		$statistiek = null
+	): Response {
 		if (!$draad->magLezen()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -163,26 +170,41 @@ class ForumDraadController extends AbstractController
 		} elseif ($pagina === 'laatste') {
 			$this->forumPostsRepository->setLaatstePagina($draad->draad_id);
 		} elseif ($pagina === 'prullenbak' && $draad->magModereren()) {
-			$draad->setForumPosts($this->forumPostsRepository->getPrullenbakVoorDraad($draad));
+			$draad->setForumPosts(
+				$this->forumPostsRepository->getPrullenbakVoorDraad($draad)
+			);
 			$paging = false;
 		} else {
-			$this->forumPostsRepository->setHuidigePagina((int)$pagina, $draad->draad_id);
+			$this->forumPostsRepository->setHuidigePagina(
+				(int) $pagina,
+				$draad->draad_id
+			);
 		}
 
 		if ($this->getUser()) {
-			$concept = $this->forumDradenReagerenRepository->getConcept($draad->deel, $draad->draad_id);
+			$concept = $this->forumDradenReagerenRepository->getConcept(
+				$draad->deel,
+				$draad->draad_id
+			);
 		} else {
 			$concept = $requestStack->getSession()->remove('forum_bericht');
 		}
 		$view = $this->render('forum/draad.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'draad' => $draad,
-			'paging' => $paging && $this->forumPostsRepository->getAantalPaginas($draad->draad_id) > 1,
+			'paging' =>
+				$paging &&
+				$this->forumPostsRepository->getAantalPaginas($draad->draad_id) > 1,
 			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($concept),
-			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDraad($draad),
+			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDraad(
+				$draad
+			),
 			'categorien' => $this->forumDelenService->getForumIndelingVoorLid(),
-			'gedeeld_met_opties' => $this->forumDelenRepository->getForumDelenOptiesOmTeDelen($draad->deel),
-			'statistiek' => $statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
+			'gedeeld_met_opties' => $this->forumDelenRepository->getForumDelenOptiesOmTeDelen(
+				$draad->deel
+			),
+			'statistiek' =>
+				$statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
 			'draad_ongelezen' => $gelezen ? $draad->isOngelezen() : true,
 			'gelezen_moment' => $gelezen ? $gelezen->datum_tijd : false,
 		]);
@@ -209,13 +231,28 @@ class ForumDraadController extends AbstractController
 		if (!$draad->deel->magModereren()) {
 			throw $this->createAccessDeniedException();
 		}
-		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'eerste_post_plakkerig', 'pagina_per_post'))) {
+		if (
+			in_array($property, [
+				'verwijderd',
+				'gesloten',
+				'plakkerig',
+				'eerste_post_plakkerig',
+				'pagina_per_post',
+			])
+		) {
 			$value = !$draad->$property;
-			if ($property === 'belangrijk' && !LoginService::mag(P_FORUM_BELANGRIJK)) {
+			if (
+				$property === 'belangrijk' &&
+				!LoginService::mag(P_FORUM_BELANGRIJK)
+			) {
 				throw $this->createAccessDeniedException();
 			}
 		} elseif ($property === 'forum_id' || $property === 'gedeeld_met') {
-			$value = (int)filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
+			$value = (int) filter_input(
+				INPUT_POST,
+				$property,
+				FILTER_SANITIZE_NUMBER_INT
+			);
 			if ($property === 'forum_id') {
 				$deel = $this->forumDelenRepository->get($value);
 				if (!$deel->magModereren()) {
@@ -225,12 +262,14 @@ class ForumDraadController extends AbstractController
 				$value = null;
 			}
 		} elseif ($property === 'titel' || $property === 'belangrijk') {
-			$value = trim(filter_input(INPUT_POST, $property, FILTER_SANITIZE_STRING));
+			$value = trim(
+				filter_input(INPUT_POST, $property, FILTER_SANITIZE_STRING)
+			);
 			if (empty($value)) {
 				$value = null;
 			}
 		} else {
-			throw $this->createAccessDeniedException("Kan draad niet wijzigen");
+			throw $this->createAccessDeniedException('Kan draad niet wijzigen');
 		}
 		$this->forumPostsService->wijzigForumDraad($draad, $property, $value);
 		if (is_bool($value)) {
@@ -239,8 +278,15 @@ class ForumDraadController extends AbstractController
 			$wijziging = $property . ' = ' . $value;
 		}
 		setMelding('Wijziging geslaagd: ' . $wijziging, 1);
-		if ($property === 'belangrijk' || $property === 'forum_id' || $property === 'titel' || $property === 'gedeeld_met') {
-			return $this->redirectToRoute('csrdelft_forum_forumdraad_onderwerp', ['draad_id' => $draad->draad_id]);
+		if (
+			$property === 'belangrijk' ||
+			$property === 'forum_id' ||
+			$property === 'titel' ||
+			$property === 'gedeeld_met'
+		) {
+			return $this->redirectToRoute('csrdelft_forum_forumdraad_onderwerp', [
+				'draad_id' => $draad->draad_id,
+			]);
 		} else {
 			return new JsonResponse(true);
 		}
@@ -256,27 +302,43 @@ class ForumDraadController extends AbstractController
 	 * @Route("/forum/posten/{forum_id}/{draad_id}", methods={"POST"}, defaults={"draad_id"=null})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function posten(RequestStack $requestStack, ForumDeel $deel, ForumDraad $draad = null)
-	{
+	public function posten(
+		RequestStack $requestStack,
+		ForumDeel $deel,
+		ForumDraad $draad = null
+	) {
 		// post in bestaand draadje?
 		$titel = null;
 		if ($draad !== null) {
 			// check draad in forum deel
-			if (!$draad || $draad->forum_id !== $deel->forum_id || !$draad->magPosten()) {
+			if (
+				!$draad ||
+				$draad->forum_id !== $deel->forum_id ||
+				!$draad->magPosten()
+			) {
 				throw $this->createAccessDeniedException('Draad bestaat niet');
 			}
-			$redirect = $this->redirectToRoute('csrdelft_forum_forumdraad_onderwerp', ['draad_id' => $draad->draad_id]);
+			$redirect = $this->redirectToRoute(
+				'csrdelft_forum_forumdraad_onderwerp',
+				['draad_id' => $draad->draad_id]
+			);
 			$nieuw = false;
 		} else {
 			if (!$deel->magPosten()) {
 				throw $this->createAccessDeniedException('Mag niet posten');
 			}
-			$redirect = $this->redirectToRoute('csrdelft_forum_forumdeel_deel', ['forum_id' => $deel->forum_id]);
+			$redirect = $this->redirectToRoute('csrdelft_forum_forumdeel_deel', [
+				'forum_id' => $deel->forum_id,
+			]);
 			$nieuw = true;
 
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
 		}
-		$tekst = $this->prosemirrorToBb->convertToBb(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
+		$tekst = $this->prosemirrorToBb->convertToBb(
+			json_decode(
+				trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))
+			)
+		);
 
 		if (empty($tekst)) {
 			setMelding('Bericht mag niet leeg zijn', -1);
@@ -284,14 +346,20 @@ class ForumDraadController extends AbstractController
 		}
 
 		// voorkom dubbelposts
-		if (isset($_SESSION['forum_laatste_post_tekst']) && $_SESSION['forum_laatste_post_tekst'] === $tekst) {
+		if (
+			isset($_SESSION['forum_laatste_post_tekst']) &&
+			$_SESSION['forum_laatste_post_tekst'] === $tekst
+		) {
 			setMelding('Uw reactie is al geplaatst', 0);
 
 			// concept wissen
 			if ($nieuw) {
 				$this->forumDradenReagerenRepository->setConcept($deel);
 			} else {
-				$this->forumDradenReagerenRepository->setConcept($deel, $draad->draad_id);
+				$this->forumDradenReagerenRepository->setConcept(
+					$deel,
+					$draad->draad_id
+				);
 			}
 
 			return $redirect;
@@ -300,12 +368,20 @@ class ForumDraadController extends AbstractController
 		if (LoginService::mag(P_LOGGED_IN)) {
 			// concept opslaan
 			if ($draad == null) {
-				$this->forumDradenReagerenRepository->setConcept($deel, null, $tekst, $titel);
+				$this->forumDradenReagerenRepository->setConcept(
+					$deel,
+					null,
+					$tekst,
+					$titel
+				);
 			} else {
-				$this->forumDradenReagerenRepository->setConcept($deel, $draad->draad_id, $tekst);
+				$this->forumDradenReagerenRepository->setConcept(
+					$deel,
+					$draad->draad_id,
+					$tekst
+				);
 			}
 		}
-
 
 		// externen checks
 		$mailadres = null;
@@ -314,10 +390,19 @@ class ForumDraadController extends AbstractController
 			$filter = new SimpleSpamfilter();
 			$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
 
-			if (!empty($spamtrap) || ($tekst && $filter->isSpam($tekst)) || (isset($titel) && $titel && $filter->isSpam($titel))) {
-				$this->debugLogRepository->log(static::class, 'posten', [$deel->forum_id, $draad->draad_id], 'SPAM ' . $tekst);
+			if (
+				!empty($spamtrap) ||
+				($tekst && $filter->isSpam($tekst)) ||
+				(isset($titel) && $titel && $filter->isSpam($titel))
+			) {
+				$this->debugLogRepository->log(
+					static::class,
+					'posten',
+					[$deel->forum_id, $draad->draad_id],
+					'SPAM ' . $tekst
+				);
 				setMelding('SPAM', -1);
-				throw $this->createAccessDeniedException("");
+				throw $this->createAccessDeniedException('');
 			}
 
 			$wacht_goedkeuring = true;
@@ -327,7 +412,8 @@ class ForumDraadController extends AbstractController
 				$requestStack->getSession()->set('forum_bericht', $tekst);
 				return $redirect;
 			}
-			if ($filter->isSpam($mailadres)) { //TODO: logging
+			if ($filter->isSpam($mailadres)) {
+				//TODO: logging
 				setMelding('SPAM', -1);
 				throw $this->createAccessDeniedException('SPAM');
 			}
@@ -340,20 +426,43 @@ class ForumDraadController extends AbstractController
 				return $redirect;
 			}
 			// maak draad
-			$draad = $this->forumDradenRepository->maakForumDraad($deel, $titel, $wacht_goedkeuring);
+			$draad = $this->forumDradenRepository->maakForumDraad(
+				$deel,
+				$titel,
+				$wacht_goedkeuring
+			);
 		}
 
 		// maak post
-		$post = $this->forumPostsRepository->maakForumPost($draad, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring, $mailadres);
+		$post = $this->forumPostsRepository->maakForumPost(
+			$draad,
+			$tekst,
+			$_SERVER['REMOTE_ADDR'],
+			$wacht_goedkeuring,
+			$mailadres
+		);
 
 		// bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht?
 		if ($wacht_goedkeuring) {
-			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
+			setMelding(
+				'Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.',
+				1
+			);
 
-			$url = $this->generateUrl('csrdelft_forum_forumdraad_onderwerp', ['draad_id' => $draad->draad_id, '_fragment' => $post->post_id]);
-			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', $url . "\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT", "From: pubcie@csrdelft.nl\r\nReply-To: " . $mailadres);
+			$url = $this->generateUrl('csrdelft_forum_forumdraad_onderwerp', [
+				'draad_id' => $draad->draad_id,
+				'_fragment' => $post->post_id,
+			]);
+			mail(
+				'pubcie@csrdelft.nl',
+				'Nieuw bericht wacht op goedkeuring',
+				$url .
+					"\n\nDe inhoud van het bericht is als volgt: \n\n" .
+					str_replace('\r\n', "\n", $tekst) .
+					"\n\nEINDE BERICHT",
+				"From: pubcie@csrdelft.nl\r\nReply-To: " . $mailadres
+			);
 		} else {
-
 			// direct goedkeuren voor ingelogd
 			$this->forumPostsService->goedkeurenForumPost($post);
 			$this->forumMeldingenService->stuurDraadMeldingen($post);
@@ -362,10 +471,16 @@ class ForumDraadController extends AbstractController
 			}
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 			if ($nieuw && lid_instelling('forum', 'meldingEigenDraad') === 'ja') {
-				$this->forumDradenMeldingRepository->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::ALTIJD());
+				$this->forumDradenMeldingRepository->setNiveauVoorLid(
+					$draad,
+					ForumDraadMeldingNiveau::ALTIJD()
+				);
 			}
 
-			$redirect = $this->redirectToRoute('csrdelft_forum_forumdraad_reactie', ['post_id' => $post->post_id, '_fragment' => $post->post_id]);
+			$redirect = $this->redirectToRoute('csrdelft_forum_forumdraad_reactie', [
+				'post_id' => $post->post_id,
+				'_fragment' => $post->post_id,
+			]);
 		}
 
 		// concept wissen
@@ -377,7 +492,10 @@ class ForumDraadController extends AbstractController
 
 		// markeer als gelezen
 		if (LoginService::mag(P_LOGGED_IN)) {
-			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, $post->laatst_gewijzigd);
+			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid(
+				$draad,
+				$post->laatst_gewijzigd
+			);
 		}
 
 		// voorkom dubbelposts

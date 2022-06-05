@@ -24,8 +24,10 @@ final class UserResolveListener
 	 * @param UserProviderInterface $userProvider
 	 * @param UserPasswordHasherInterface $userPasswordHasher
 	 */
-	public function __construct(UserProviderInterface $userProvider, UserPasswordHasherInterface $userPasswordHasher)
-	{
+	public function __construct(
+		UserProviderInterface $userProvider,
+		UserPasswordHasherInterface $userPasswordHasher
+	) {
 		$this->userProvider = $userProvider;
 		$this->userPasswordHasher = $userPasswordHasher;
 	}
@@ -49,7 +51,9 @@ final class UserResolveListener
 			return;
 		}
 
-		if (!$this->userPasswordHasher->isPasswordValid($user, $event->getPassword())) {
+		if (
+			!$this->userPasswordHasher->isPasswordValid($user, $event->getPassword())
+		) {
 			return;
 		}
 

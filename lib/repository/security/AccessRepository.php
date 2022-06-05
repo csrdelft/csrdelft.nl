@@ -20,8 +20,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  * @method AccessControl[]    findAll()
  * @method AccessControl[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AccessRepository extends AbstractRepository {
-
+class AccessRepository extends AbstractRepository
+{
 	/**
 	 * @var CacheInterface
 	 */
@@ -36,12 +36,15 @@ class AccessRepository extends AbstractRepository {
 	 * @param CacheInterface $cache
 	 * @param EntityManagerInterface $em
 	 */
-	public function __construct(ManagerRegistry $registry, CacheInterface $cache, EntityManagerInterface $em) {
+	public function __construct(
+		ManagerRegistry $registry,
+		CacheInterface $cache,
+		EntityManagerInterface $em
+	) {
 		parent::__construct($registry, AccessControl::class);
 		$this->cache = $cache;
 		$this->em = $em;
 	}
-
 
 	/**
 	 * @param string $environment
@@ -49,7 +52,8 @@ class AccessRepository extends AbstractRepository {
 	 *
 	 * @return array
 	 */
-	public function getTree($environment, $resource) {
+	public function getTree($environment, $resource)
+	{
 		$resources = [$resource, '*'];
 
 		if ($environment === Activiteit::class) {
@@ -65,10 +69,13 @@ class AccessRepository extends AbstractRepository {
 		}
 
 		return $this->createQueryBuilder('access')
-			->where('access.environment = :environment and access.resource in (:resources)')
+			->where(
+				'access.environment = :environment and access.resource in (:resources)'
+			)
 			->setParameter('environment', $environment)
 			->setParameter('resources', $resources)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 	}
 
 	/**
@@ -82,10 +89,15 @@ class AccessRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function setAcl($environment, $resource, array $acl) {
+	public function setAcl($environment, $resource, array $acl)
+	{
 		// Has permission to change permissions?
 		if (!LoginService::mag(P_ADMIN)) {
-			$rechten = $this->getSubject($environment, AccessAction::Rechten, $resource);
+			$rechten = $this->getSubject(
+				$environment,
+				AccessAction::Rechten,
+				$resource
+			);
 			if (!$rechten || !LoginService::mag($rechten)) {
 				return false;
 			}
@@ -96,33 +108,43 @@ class AccessRepository extends AbstractRepository {
 				->delete()
 				->where('access.environment = :environment')
 				->setParameter('environment', $environment)
-				->getQuery()->execute();
+				->getQuery()
+				->execute();
 			return true;
 		}
 		// Delete entire ACL for object
 		if (empty($acl)) {
 			$this->createQueryBuilder('access')
 				->delete()
-				->where('access.environment = :environment and access.resource = :resource')
+				->where(
+					'access.environment = :environment and access.resource = :resource'
+				)
 				->setParameter('environment', $environment)
 				->setParameter('resource', $resource)
-				->getQuery()->execute();
+				->getQuery()
+				->execute();
 			return true;
 		}
 		// CRUD ACL
 		foreach ($acl as $action => $subject) {
 			// Retrieve AC
 			/** @var AccessControl $ac */
-			$ac = $this->find(['environment' => $environment, 'action' => $action, 'resource' => $resource]);
+			$ac = $this->find([
+				'environment' => $environment,
+				'action' => $action,
+				'resource' => $resource,
+			]);
 			// Delete AC
 			if (empty($subject)) {
 				if ($ac) {
 					$this->_em->remove($ac);
 				}
-			} // Update AC
+			}
+			// Update AC
 			elseif ($ac) {
 				$ac->subject = $subject;
-			} // Create AC
+			}
+			// Create AC
 			else {
 				$ac = $this->nieuw($environment, $resource);
 				$ac->action = $action;
@@ -141,8 +163,13 @@ class AccessRepository extends AbstractRepository {
 	 *
 	 * @return null|string
 	 */
-	public function getSubject($environment, $action, $resource) {
-		$ac = $this->find(['environment' => $environment, 'action' => $action, 'resource' => $resource]);
+	public function getSubject($environment, $action, $resource)
+	{
+		$ac = $this->find([
+			'environment' => $environment,
+			'action' => $action,
+			'resource' => $resource,
+		]);
 		if ($ac) {
 			return $ac->subject;
 		}
@@ -155,7 +182,8 @@ class AccessRepository extends AbstractRepository {
 	 *
 	 * @return AccessControl
 	 */
-	public function nieuw($environment, $resource) {
+	public function nieuw($environment, $resource)
+	{
 		$ac = new AccessControl();
 		$ac->environment = $environment;
 		$ac->resource = $resource;

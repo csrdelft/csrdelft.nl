@@ -12,7 +12,8 @@ use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiActiviteitenController extends AbstractController {
+class ApiActiviteitenController extends AbstractController
+{
 	/** @var ChangeLogRepository  */
 	private $changeLogRepository;
 	/** @var ActiviteitenRepository  */
@@ -23,9 +24,9 @@ class ApiActiviteitenController extends AbstractController {
 	private $groepLidRepository;
 
 	public function __construct(
-		ActiviteitenRepository  $activiteitenRepository,
+		ActiviteitenRepository $activiteitenRepository,
 		GroepLidRepository $groepLidRepository,
-		ChangeLogRepository  $changeLogRepository
+		ChangeLogRepository $changeLogRepository
 	) {
 		$this->activiteitenRepository = $activiteitenRepository;
 		$this->groepLidRepository = $groepLidRepository;
@@ -37,7 +38,8 @@ class ApiActiviteitenController extends AbstractController {
 	 * @Route("/API/2.0/activiteiten/{id}/aanmelden", methods={"POST"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function activiteitAanmelden($id) {
+	public function activiteitAanmelden($id)
+	{
 		$activiteit = $this->activiteitenRepository->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken())) {
@@ -51,17 +53,22 @@ class ApiActiviteitenController extends AbstractController {
 		$lid = $this->groepLidRepository->nieuw($activiteit, $this->getUid());
 
 		$this->changeLogRepository->log($activiteit, 'aanmelden', null, $lid->uid);
-		$this->getDoctrine()->getManager()->persist($lid);
-		$this->getDoctrine()->getManager()->flush();
+		$this->getDoctrine()
+			->getManager()
+			->persist($lid);
+		$this->getDoctrine()
+			->getManager()
+			->flush();
 
-		return array('data' => $activiteit);
+		return ['data' => $activiteit];
 	}
 
 	/**
 	 * @Route("/API/2.0/activiteiten/{id}/afmelden", methods={"POST"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function activiteitAfmelden($id) {
+	public function activiteitAfmelden($id)
+	{
 		$activiteit = $this->activiteitenRepository->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken())) {
@@ -74,10 +81,13 @@ class ApiActiviteitenController extends AbstractController {
 
 		$lid = $activiteit->getLid($this->getUid());
 		$this->changeLogRepository->log($activiteit, 'afmelden', $lid->uid, null);
-		$this->getDoctrine()->getManager()->remove($lid);
-		$this->getDoctrine()->getManager()->flush();
+		$this->getDoctrine()
+			->getManager()
+			->remove($lid);
+		$this->getDoctrine()
+			->getManager()
+			->flush();
 
-		return array('data' => $activiteit);
+		return ['data' => $activiteit];
 	}
-
 }

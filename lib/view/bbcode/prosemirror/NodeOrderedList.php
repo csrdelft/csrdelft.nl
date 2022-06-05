@@ -7,7 +7,6 @@ use CsrDelft\view\bbcode\tag\BbOrderedList;
 
 class NodeOrderedList implements Node
 {
-
 	public static function getBbTagType()
 	{
 		return BbOrderedList::class;
@@ -27,7 +26,7 @@ class NodeOrderedList implements Node
 		return [
 			'attrs' => [
 				'order' => $node->getOrder(),
-			]
+			],
 		];
 	}
 

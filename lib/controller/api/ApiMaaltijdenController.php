@@ -9,11 +9,15 @@ use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use Exception;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiMaaltijdenController extends AbstractController {
+class ApiMaaltijdenController extends AbstractController
+{
 	private $maaltijdenRepository;
 	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(MaaltijdenRepository $maaltijdenRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
+	public function __construct(
+		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
+	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
@@ -22,12 +26,16 @@ class ApiMaaltijdenController extends AbstractController {
 	 * @Route("/API/2.0/maaltijden/{id}/aanmelden", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function maaltijdAanmelden($id) {
-
+	public function maaltijdAanmelden($id)
+	{
 		try {
 			$maaltijd = $this->maaltijdenRepository->getMaaltijd($id);
-			$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $this->getProfiel(), $this->getProfiel());
-			return array('data' => $aanmelding->maaltijd);
+			$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd(
+				$maaltijd,
+				$this->getProfiel(),
+				$this->getProfiel()
+			);
+			return ['data' => $aanmelding->maaltijd];
 		} catch (Exception $e) {
 			throw $this->createAccessDeniedException($e->getMessage());
 		}
@@ -37,15 +45,17 @@ class ApiMaaltijdenController extends AbstractController {
 	 * @Route("/API/2.0/maaltijden/{id}/afmelden", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function maaltijdAfmelden($id) {
-
+	public function maaltijdAfmelden($id)
+	{
 		try {
 			$maaltijd = $this->maaltijdenRepository->getMaaltijd($id);
-			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $this->getProfiel());
-			return array('data' => $maaltijd);
+			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid(
+				$maaltijd,
+				$this->getProfiel()
+			);
+			return ['data' => $maaltijd];
 		} catch (Exception $e) {
 			throw $this->createAccessDeniedException($e->getMessage());
 		}
 	}
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\controller\api\v3;
-
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
@@ -35,11 +33,19 @@ class BarSysteemController extends AbstractController
 		$this->barSysteemService = $barSysteemService;
 	}
 
-	protected function json($data, int $status = 200, array $headers = [], array $context = []): JsonResponse
-	{
-		return parent::json($data, $status, $headers, $context + ['groups' => ['bar']]);
+	protected function json(
+		$data,
+		int $status = 200,
+		array $headers = [],
+		array $context = []
+	): JsonResponse {
+		return parent::json(
+			$data,
+			$status,
+			$headers,
+			$context + ['groups' => ['bar']]
+		);
 	}
-
 
 	/**
 	 * @Route("/trust", methods={"POST"})
@@ -48,7 +54,8 @@ class BarSysteemController extends AbstractController
 	 * @param Request $request
 	 * @return JsonResponse
 	 */
-	public function trust(Request $request, LoginService $loginService) {
+	public function trust(Request $request, LoginService $loginService)
+	{
 		// maak een nieuwe BarSysteemTrust object en sla op.
 
 		// Als het goed is kan de BAR:TRUST scope alleen aan mensen met FISCAAT_MOD rechten gegeven worden.
@@ -81,7 +88,7 @@ class BarSysteemController extends AbstractController
 		$name = $request->request->get('name');
 		$this->barSysteemService->updatePerson($id, $name);
 
-		return new Response("", 204);
+		return new Response('', 204);
 	}
 
 	/**
@@ -127,13 +134,13 @@ class BarSysteemController extends AbstractController
 
 			$this->barSysteemService->updateBestelling($uid, $bestelId, $inhoud);
 
-			return new Response("", 204);
+			return new Response('', 204);
 		} else {
 			$this->barSysteemService->log('insert', $_POST);
 
 			$this->barSysteemService->verwerkBestelling($uid, 'soccie', $inhoud);
 
-			return new Response("", 204);
+			return new Response('', 204);
 		}
 	}
 
@@ -165,7 +172,7 @@ class BarSysteemController extends AbstractController
 
 		$this->barSysteemService->verwijderBestelling($bestelling);
 
-		return new Response("",204);
+		return new Response('', 204);
 	}
 
 	/**
@@ -178,11 +185,11 @@ class BarSysteemController extends AbstractController
 	public function undoVerwijderBestelling(Request $request)
 	{
 		$this->barSysteemService->log('remove', $_POST);
-		$data = $request->request->get("undoVerwijderBestelling");
+		$data = $request->request->get('undoVerwijderBestelling');
 
 		$this->barSysteemService->undoVerwijderBestelling($data);
 
-		return new Response("", 204);
+		return new Response('', 204);
 	}
 
 	/**
@@ -194,16 +201,24 @@ class BarSysteemController extends AbstractController
 	 */
 	public function laadLaatste(Request $request)
 	{
-		$persoon = $request->request->get("aantal");
-		$begin = date_create_immutable($request->request->get("begin"));
-		$eind = date_create_immutable($request->request->get("eind"));
+		$persoon = $request->request->get('aantal');
+		$begin = date_create_immutable($request->request->get('begin'));
+		$eind = date_create_immutable($request->request->get('eind'));
 
 		if (!$begin || !$eind) {
-			throw new BadRequestHttpException("Begin en eind moeten een datum bevatten");
+			throw new BadRequestHttpException(
+				'Begin en eind moeten een datum bevatten'
+			);
 		}
 
-		$productType = $request->request->get("productType", []);
-		return $this->json($this->barSysteemService->getBestellingLaatste($persoon, $begin, $eind, $productType));
+		$productType = $request->request->get('productType', []);
+		return $this->json(
+			$this->barSysteemService->getBestellingLaatste(
+				$persoon,
+				$begin,
+				$eind,
+				$productType
+			)
+		);
 	}
-
 }

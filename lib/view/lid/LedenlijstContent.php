@@ -22,7 +22,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * LedenlijstContent
  *    Algemene View voor de ledenlijst.
  */
-class LedenlijstContent implements View {
+class LedenlijstContent implements View
+{
 	use ToHtmlResponse;
 
 	/**
@@ -35,27 +36,33 @@ class LedenlijstContent implements View {
 	 */
 	private $requestStack;
 
-	public function __construct(Request $requestStack, LidZoekerService $zoeker) {
+	public function __construct(Request $requestStack, LidZoekerService $zoeker)
+	{
 		$this->lidzoeker = $zoeker;
 		$this->requestStack = $requestStack;
 	}
 
-	public function getModel() {
+	public function getModel()
+	{
 		return $this->lidzoeker;
 	}
 
-	public function getBreadcrumbs() {
-		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>'
-			. '<li class="breadcrumb-item active">Ledenlijst der Civitas</li></ul>';
+	public function getBreadcrumbs()
+	{
+		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>' .
+			'<li class="breadcrumb-item active">Ledenlijst der Civitas</li></ul>';
 	}
 
-	public function getTitel() {
+	public function getTitel()
+	{
 		return 'Ledenlijst der Civitas';
 	}
 
-	public function viewSelect($name, $options) {
+	public function viewSelect($name, $options)
+	{
 		$html = '';
-		$html .= '<select class="form-select" name="' . $name . '" id="f' . $name . '">';
+		$html .=
+			'<select class="form-select" name="' . $name . '" id="f' . $name . '">';
 		foreach ($options as $key => $value) {
 			$html .= '<option value="' . htmlspecialchars($key) . '"';
 			if ($key == $this->lidzoeker->getRawQuery($name)) {
@@ -67,7 +74,8 @@ class LedenlijstContent implements View {
 		return $html;
 	}
 
-	public function viewVeldselectie() {
+	public function viewVeldselectie()
+	{
 		$html = '';
 		$html .= '<div class="mb-3">';
 		$html .= '<label for="veldselectie">Veldselectie: </label>';
@@ -75,12 +83,22 @@ class LedenlijstContent implements View {
 		$velden = $this->lidzoeker->getSelectableVelden();
 		foreach ($velden as $key => $veld) {
 			$html .= '<div class="form-check">';
-			$html .= '<input class="form-check-input" type="checkbox" name="velden[]" id="veld' . $key . '" value="' . $key . '" ';
+			$html .=
+				'<input class="form-check-input" type="checkbox" name="velden[]" id="veld' .
+				$key .
+				'" value="' .
+				$key .
+				'" ';
 			if (in_array($key, $this->lidzoeker->getSelectedVelden())) {
 				$html .= 'checked="checked" ';
 			}
 			$html .= ' />';
-			$html .= '<label class="form-check-label" for="veld' . $key . '">' . ucfirst($veld) . '</label>';
+			$html .=
+				'<label class="form-check-label" for="veld' .
+				$key .
+				'">' .
+				ucfirst($veld) .
+				'</label>';
 			$html .= '</div>';
 		}
 		$html .= '</div>';
@@ -88,7 +106,8 @@ class LedenlijstContent implements View {
 		return $html;
 	}
 
-	public function __toString() {
+	public function __toString()
+	{
 		$html = '';
 		$requestUri = $this->requestStack->getRequestUri();
 		if ($this->lidzoeker->count() > 0) {
@@ -97,40 +116,58 @@ class LedenlijstContent implements View {
 			} else {
 				$url = $requestUri . '?addToGoogleContacts=true';
 			}
-			$html .= '<a href="' . htmlspecialchars($url) . '" class="btn float-end" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts" /></a>';
+			$html .=
+				'<a href="' .
+				htmlspecialchars($url) .
+				'" class="btn float-end" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' .
+				$this->lidzoeker->count() .
+				' leden wilt importeren in uw Google-contacts?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts" /></a>';
 			if (strstr($requestUri, '?') !== false) {
 				$url = $requestUri . '&exportVcf=true';
 			} else {
 				$url = $requestUri . '?exportVcf=true';
 			}
-			$html .= '<a href="' . htmlspecialchars($url) . '" class="btn float-end" title="Huidige selectie exporteren als vcard">' . Icon::getTag('vcard_add') . '</a>';
+			$html .=
+				'<a href="' .
+				htmlspecialchars($url) .
+				'" class="btn float-end" title="Huidige selectie exporteren als vcard">' .
+				Icon::getTag('vcard_add') .
+				'</a>';
 		}
 		$html .= getMelding();
-		$html .= '<h1>' . (LoginService::getProfiel()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
+		$html .=
+			'<h1>' .
+			(LoginService::getProfiel()->isOudlid() ? 'Oud-leden en l' : 'L') .
+			'edenlijst </h1>';
 		$html .= '<form id="zoekform" method="get">';
 		$html .= '<div class="input-group">';
-		$html .= '<input type="text" class="form-control" name="q" value="' . htmlspecialchars($this->lidzoeker->getQuery()) . '" /> ';
-		$html .= '<div class="input-group-text"><button class="btn submit">Zoeken</button></div></div><a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
+		$html .=
+			'<input type="text" class="form-control" name="q" value="' .
+			htmlspecialchars($this->lidzoeker->getQuery()) .
+			'" /> ';
+		$html .=
+			'<div class="input-group-text"><button class="btn submit">Zoeken</button></div></div><a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
 
 		$html .= '<div id="advanced" class="verborgen">';
 		$html .= '<div class="mb-3">';
 		$html .= '<label for="status">Status:</label>';
-		$html .= $this->viewSelect('status', array(
+		$html .= $this->viewSelect('status', [
 			'LEDEN' => 'Leden',
 			'NOVIET' => 'Novieten',
 			'GASTLID' => 'Gastlid',
 			'OUDLEDEN' => 'Oudleden',
 			'LEDEN|OUDLEDEN' => 'Leden & oudleden',
 			'KRINGEL' => 'Kringel',
-			'ALL' => 'Alles'
-		));
+			'ALL' => 'Alles',
+		]);
 		$html .= '</div>';
 		$html .= '<div class="mb-3">';
 		$html .= '<label for="weergave">Weergave:</label>';
-		$html .= $this->viewSelect('weergave', array(
+		$html .= $this->viewSelect('weergave', [
 			'lijst' => 'Lijst (standaard)',
 			'kaartje' => 'Visitekaartjes',
-			'csv' => 'CSV-bestand'));
+			'csv' => 'CSV-bestand',
+		]);
 		$html .= '</div>';
 
 		//sorteren op:
@@ -202,5 +239,4 @@ class LedenlijstContent implements View {
 HTML;
 		return $html;
 	}
-
 }

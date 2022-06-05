@@ -17,7 +17,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\peilingen\PeilingenRepository")
  * @ORM\Table("peiling")
  */
-class Peiling implements DataTableEntry {
+class Peiling implements DataTableEntry
+{
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -111,7 +112,8 @@ class Peiling implements DataTableEntry {
 	 * @return int
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
-	public function getAantalGestemd() {
+	public function getAantalGestemd()
+	{
 		if (!$this->opties) {
 			return 0;
 		}
@@ -126,7 +128,8 @@ class Peiling implements DataTableEntry {
 	/**
 	 * @Serializer\Groups("vue")
 	 */
-	public function getHeeftGestemd() {
+	public function getHeeftGestemd()
+	{
 		if (!$this->stemmen) {
 			return false;
 		}
@@ -144,7 +147,8 @@ class Peiling implements DataTableEntry {
 	 * @return bool
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
-	public function getMagBewerken() {
+	public function getMagBewerken()
+	{
 		//Elk BASFCie-lid heeft voorlopig peilingbeheerrechten.
 		return LoginService::mag(P_ADMIN . ',bestuur,commissie:BASFCie');
 	}
@@ -153,17 +157,23 @@ class Peiling implements DataTableEntry {
 	 * @return bool
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
-	public function getIsMod() {
-		return LoginService::mag(P_PEILING_MOD) || LoginService::getUid() == $this->eigenaar;
+	public function getIsMod()
+	{
+		return LoginService::mag(P_PEILING_MOD) ||
+			LoginService::getUid() == $this->eigenaar;
 	}
 
 	/**
 	 * @return bool
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
-	public function getMagStemmen() {
-		return LoginService::mag(P_PEILING_VOTE) && ($this->eigenaar == LoginService::getUid() || empty(trim($this->rechten_stemmen)) || LoginService::mag($this->rechten_stemmen))
-			&& $this->isPeilingOpen();
+	public function getMagStemmen()
+	{
+		return LoginService::mag(P_PEILING_VOTE) &&
+			($this->eigenaar == LoginService::getUid() ||
+				empty(trim($this->rechten_stemmen)) ||
+				LoginService::mag($this->rechten_stemmen)) &&
+			$this->isPeilingOpen();
 	}
 
 	/**
@@ -171,8 +181,11 @@ class Peiling implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("eigenaar")
 	 */
-	public function getDataTableEigenaar() {
-		return $this->eigenaarProfiel ? $this->eigenaarProfiel->getDataTableColumn() : '';
+	public function getDataTableEigenaar()
+	{
+		return $this->eigenaarProfiel
+			? $this->eigenaarProfiel->getDataTableColumn()
+			: '';
 	}
 
 	/**
@@ -180,21 +193,25 @@ class Peiling implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("detailSource")
 	 */
-	public function getDetailSource() {
+	public function getDetailSource()
+	{
 		return '/peilingen/opties/' . $this->id;
 	}
 
 	/**
 	 * @return bool
 	 */
-	private function isPeilingOpen() {
-		return $this->sluitingsdatum == NULL || time() < $this->sluitingsdatum->getTimestamp();
+	private function isPeilingOpen()
+	{
+		return $this->sluitingsdatum == null ||
+			time() < $this->sluitingsdatum->getTimestamp();
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function magBekijken() {
+	public function magBekijken()
+	{
 		return LoginService::mag(P_LOGGED_IN);
 	}
 
@@ -202,10 +219,8 @@ class Peiling implements DataTableEntry {
 	 * @return string|null
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
-	public function getBeschrijving() {
+	public function getBeschrijving()
+	{
 		return CsrBB::parse($this->beschrijving);
 	}
-
 }
-
-

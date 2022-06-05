@@ -15,8 +15,8 @@ use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 27/03/2019
  */
-class BbLedenmemoryscores extends BbTag {
-
+class BbLedenmemoryscores extends BbTag
+{
 	/**
 	 * @var Groep|Lichting|false|null
 	 */
@@ -31,27 +31,39 @@ class BbLedenmemoryscores extends BbTag {
 	 */
 	private $lichtingenRepository;
 
-	public function __construct(VerticalenRepository $verticalenRepository, LichtingenRepository $lichtingenRepository) {
+	public function __construct(
+		VerticalenRepository $verticalenRepository,
+		LichtingenRepository $lichtingenRepository
+	) {
 		$this->verticalenRepository = $verticalenRepository;
 		$this->lichtingenRepository = $lichtingenRepository;
 	}
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'ledenmemoryscores';
 	}
 
-	public function isAllowed() {
+	public function isAllowed()
+	{
 		return LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function renderLight() {
-		return BbHelper::lightLinkBlock('ledenmemoryscores', '/forum/onderwerp/8017', 'Ledenmemory Scores', $this->titel);
+	public function renderLight()
+	{
+		return BbHelper::lightLinkBlock(
+			'ledenmemoryscores',
+			'/forum/onderwerp/8017',
+			'Ledenmemory Scores',
+			$this->titel
+		);
 	}
 
 	/**
 	 * @param $arguments
 	 */
-	public function parse($arguments = []) {
+	public function parse($arguments = [])
+	{
 		$groep = null;
 		$titel = null;
 		if (isset($arguments['verticale'])) {
@@ -66,7 +78,7 @@ class BbLedenmemoryscores extends BbTag {
 				$groep = $verticale;
 			}
 		} elseif (isset($arguments['lichting'])) {
-			$l = (int)filter_var($arguments['lichting'], FILTER_SANITIZE_NUMBER_INT);
+			$l = (int) filter_var($arguments['lichting'], FILTER_SANITIZE_NUMBER_INT);
 			if ($l < 1950) {
 				$l = LichtingenRepository::getJongsteLidjaar();
 			}
@@ -80,7 +92,8 @@ class BbLedenmemoryscores extends BbTag {
 		$this->titel = $titel;
 	}
 
-	public function render() {
+	public function render()
+	{
 		$table = new LedenMemoryScoreTable($this->groep, $this->titel);
 		return $table->getHtml();
 	}

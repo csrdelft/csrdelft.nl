@@ -12,10 +12,11 @@ namespace CsrDelft\view;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  */
-class Icon {
+class Icon
+{
 	//handige dingen die we graag gebruiken in csrdelft.nl. Moeten geen namen zijn die al voorkomen
 	//in de lijst met icons.
-	public static $alias = array(
+	public static $alias = [
 		// algemeen
 		'toevoegen' => 'add',
 		'bewerken' => 'pencil',
@@ -63,8 +64,8 @@ class Icon {
 		'alert-warning' => 'bell',
 		// Overig
 		'table' => 'table_normal',
-		'log' => 'report'
-	);
+		'log' => 'report',
+	];
 
 	public static $fa = [
 		'calendar' => 'fa fa-calendar',
@@ -81,7 +82,8 @@ class Icon {
 		'wiki' => 'fa fa-atlas',
 	];
 
-	public static function get($key) {
+	public static function get($key)
+	{
 		if (array_key_exists($key, self::$alias)) {
 			return self::$alias[$key];
 		} else {
@@ -98,20 +100,40 @@ class Icon {
 	 * geselecteerd en door eventuele schermlezers opgevangen
 	 * @return string
 	 */
-	public static function getTag($key, $hover = null, $title = null, $class = null, $content = null) {
+	public static function getTag(
+		$key,
+		$hover = null,
+		$title = null,
+		$class = null,
+		$content = null
+	) {
 		$icon = self::get($key);
 
 		if (isset(static::$fa[$icon])) {
-			return sprintf('<span class="%s %s" title="%s">%s</span>', static::$fa[$icon], htmlspecialchars($class), htmlspecialchars($title), htmlspecialchars($content));
+			return sprintf(
+				'<span class="%s %s" title="%s">%s</span>',
+				static::$fa[$icon],
+				htmlspecialchars($class),
+				htmlspecialchars($title),
+				htmlspecialchars($content)
+			);
 		}
 
 		if ($hover !== null) {
 			$hover = 'hover-' . self::get($hover);
 		}
 		if ($title !== null) {
-			$title = 'title="' . str_replace('&amp;', '&', htmlspecialchars($title)) . '" ';
+			$title =
+				'title="' . str_replace('&amp;', '&', htmlspecialchars($title)) . '" ';
 		}
 
-		return sprintf('<span class="ico %s %s %s" %s>%s</span>', htmlspecialchars($icon), htmlspecialchars($hover), htmlspecialchars($class), $title, htmlspecialchars($content));
+		return sprintf(
+			'<span class="ico %s %s %s" %s>%s</span>',
+			htmlspecialchars($icon),
+			htmlspecialchars($hover),
+			htmlspecialchars($class),
+			$title,
+			htmlspecialchars($content)
+		);
 	}
 }

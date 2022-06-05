@@ -1,6 +1,5 @@
 <?php
 
-
 namespace CsrDelft;
 
 use CsrDelft\Component\DataTable\DataTableTypeInterface;
@@ -18,7 +17,8 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Configureer waar configuratie bestanden te vinden zijn.
  */
-class Kernel extends BaseKernel {
+class Kernel extends BaseKernel
+{
 	use MicroKernelTrait;
 
 	public function __construct(string $environment, bool $debug)
@@ -30,19 +30,20 @@ class Kernel extends BaseKernel {
 		LockRegistry::setFiles([]);
 	}
 
-
 	/**
 	 * @param ContainerConfigurator $container
 	 */
-	protected function configureContainer(ContainerConfigurator $container) {
+	protected function configureContainer(ContainerConfigurator $container)
+	{
 		$container->import('../config/{packages}/*.yaml');
-		$container->import('../config/{packages}/' . $this->environment . '/**/*.yaml');
+		$container->import(
+			'../config/{packages}/' . $this->environment . '/**/*.yaml'
+		);
 		$container->import('../config/{services}.yaml');
 		$container->import('../config/{services}_' . $this->environment . '.yaml');
 
-
 		// We willen dat alles ook werkt als Memcache niet bestaat
-		if (class_exists("Memcached") && $_ENV['MEMCACHED_URL'] != "") {
+		if (class_exists('Memcached') && $_ENV['MEMCACHED_URL'] != '') {
 			$container->import('../config/custom/memcache.yaml');
 		}
 	}
@@ -50,16 +51,26 @@ class Kernel extends BaseKernel {
 	/**
 	 * @param RoutingConfigurator $routes
 	 */
-	protected function configureRoutes(RoutingConfigurator $routes) {
+	protected function configureRoutes(RoutingConfigurator $routes)
+	{
 		$routes->import('../config/{routes}/' . $this->environment . '/**/*.yaml');
 		$routes->import('../config/{routes}/*.yaml');
 		$routes->import('../config/{routes}.yaml');
 	}
 
-	protected function build(ContainerBuilder $builder) {
-		$builder->registerForAutoconfiguration(FormulierTypeInterface::class)->addTag('csr.formulier.type');
-		$builder->registerForAutoconfiguration(Mark::class)->addTag('csr.editor.mark');
-		$builder->registerForAutoconfiguration(Node::class)->addTag('csr.editor.node');
-		$builder->registerForAutoconfiguration(DataTableTypeInterface::class)->addTag('csr.table.type');
+	protected function build(ContainerBuilder $builder)
+	{
+		$builder
+			->registerForAutoconfiguration(FormulierTypeInterface::class)
+			->addTag('csr.formulier.type');
+		$builder
+			->registerForAutoconfiguration(Mark::class)
+			->addTag('csr.editor.mark');
+		$builder
+			->registerForAutoconfiguration(Node::class)
+			->addTag('csr.editor.node');
+		$builder
+			->registerForAutoconfiguration(DataTableTypeInterface::class)
+			->addTag('csr.table.type');
 	}
 }

@@ -19,24 +19,28 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @method RememberOAuth[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method RememberOAuth|null retrieveByUuid($UUID)
  */
-class RememberOAuthRepository extends AbstractRepository {
-
-	public function __construct(ManagerRegistry $registry) {
+class RememberOAuthRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, RememberOAuth::class);
 	}
 
 	/**
 	 * @return RememberOAuth
 	 */
-	public function nieuw(UserInterface $account, $clientIdentifier, $scopes): RememberOAuth
-	{
+	public function nieuw(
+		UserInterface $account,
+		$clientIdentifier,
+		$scopes
+	): RememberOAuth {
 		$remember = new RememberOAuth();
 		$remember->account = $account;
 		$remember->uid = $account->uid;
 		$remember->rememberSince = date_create_immutable();
 		$remember->lastUsed = date_create_immutable();
 		$remember->clientIdentifier = $clientIdentifier;
-		$remember->scopes = implode(" ", $scopes);
+		$remember->scopes = implode(' ', $scopes);
 
 		$this->_em->persist($remember);
 		$this->_em->flush();
@@ -44,7 +48,11 @@ class RememberOAuthRepository extends AbstractRepository {
 		return $remember;
 	}
 
-	public function findByUser(string $userIdentifier, string $clientIdentifier) {
-		return $this->findOneBy(['clientIdentifier' => $clientIdentifier, 'uid' => $userIdentifier]);
+	public function findByUser(string $userIdentifier, string $clientIdentifier)
+	{
+		return $this->findOneBy([
+			'clientIdentifier' => $clientIdentifier,
+			'uid' => $userIdentifier,
+		]);
 	}
 }

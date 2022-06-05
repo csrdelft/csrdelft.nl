@@ -14,12 +14,15 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Controller voor verticalen.
  */
-class VerticalenController extends AbstractGroepenController {
-	public function __construct(ManagerRegistry $registry) {
+class VerticalenController extends AbstractGroepenController
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Verticale::class);
 	}
 
-	public function zoeken(Request $request, $zoekterm = null) {
+	public function zoeken(Request $request, $zoekterm = null)
+	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
 		}
@@ -32,11 +35,13 @@ class VerticalenController extends AbstractGroepenController {
 			$limit = $request->query->getInt('limit');
 		}
 		$result = [];
-		$verticales = $this->repository->createQueryBuilder('v')
+		$verticales = $this->repository
+			->createQueryBuilder('v')
 			->where('v.naam LIKE :zoekterm')
 			->setParameter('zoekterm', $zoekterm)
 			->setMaxResults($limit)
-			->getQuery()->getResult();
+			->getQuery()
+			->getResult();
 
 		foreach ($verticales as $verticale) {
 			/** @var Verticale $verticale */
@@ -50,5 +55,4 @@ class VerticalenController extends AbstractGroepenController {
 		}
 		return new JsonResponse($result);
 	}
-
 }

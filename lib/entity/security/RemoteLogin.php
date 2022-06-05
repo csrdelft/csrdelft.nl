@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\entity\security;
-
 
 use CsrDelft\entity\security\enum\RemoteLoginStatus;
 use Doctrine\ORM\Mapping as ORM;

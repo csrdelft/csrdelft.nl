@@ -7,7 +7,6 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeListItem implements Node
 {
-
 	public static function getBbTagType()
 	{
 		return BbListItem::class;

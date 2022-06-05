@@ -16,23 +16,30 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  *
  * Produceert drie velden.
  */
-class DateField extends InputField {
+class DateField extends InputField
+{
 	protected $max_jaar;
 	protected $min_jaar;
 
-	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
+	public function __construct(
+		$name,
+		$value,
+		$description,
+		$maxyear = null,
+		$minyear = null
+	) {
 		parent::__construct($name, $value, $description);
 		if (is_int($maxyear)) {
 			$this->max_jaar = $maxyear;
 		} else {
-			$this->max_jaar = (int)date('Y') + 10;
+			$this->max_jaar = (int) date('Y') + 10;
 		}
 		if (is_int($minyear)) {
 			$this->min_jaar = $minyear;
 		} else {
-			$this->min_jaar = (int)date('Y') - 10;
+			$this->min_jaar = (int) date('Y') - 10;
 		}
-		$jaar = (int)date('Y', strtotime($value));
+		$jaar = (int) date('Y', strtotime($value));
 		if ($jaar > $this->max_jaar) {
 			$this->max_jaar = $jaar;
 		}
@@ -41,33 +48,52 @@ class DateField extends InputField {
 		}
 
 		$this->css_classes[] = 'DateField';
-
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		if (!parent::validate()) {
 			return false;
 		}
 
-		$date = \DateTimeImmutable::createFromFormat("!Y-m-d", $this->value);
+		$date = \DateTimeImmutable::createFromFormat('!Y-m-d', $this->value);
 
-		if ($this->value == '0000-00-00' OR empty($this->value)) {
+		if ($this->value == '0000-00-00' or empty($this->value)) {
 			if ($this->required) {
 				$this->error = 'Dit is een verplicht veld';
 			}
 		} elseif ($date === false) {
 			$this->error = 'Ongeldige datum';
-		} elseif (is_int($this->max_jaar) AND intval($date->format('Y')) > $this->max_jaar) {
+		} elseif (
+			is_int($this->max_jaar) and
+			intval($date->format('Y')) > $this->max_jaar
+		) {
 			$this->error = 'Kies een jaar voor ' . $this->max_jaar;
-		} elseif (is_int($this->min_jaar) AND intval($date->format('Y')) < $this->min_jaar) {
+		} elseif (
+			is_int($this->min_jaar) and
+			intval($date->format('Y')) < $this->min_jaar
+		) {
 			$this->error = 'Kies een jaar na ' . $this->min_jaar;
 		}
 
 		return $this->error === '';
 	}
 
-	public function getHtml() {
-		$attributes = $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete'));
+	public function getHtml()
+	{
+		$attributes = $this->getInputAttribute([
+			'type',
+			'id',
+			'name',
+			'class',
+			'value',
+			'origvalue',
+			'disabled',
+			'readonly',
+			'maxlength',
+			'placeholder',
+			'autocomplete',
+		]);
 
 		$minValue = $maxValue = null;
 
@@ -76,7 +102,7 @@ class DateField extends InputField {
 		}
 
 		if ($this->max_jaar) {
-			$maxValue = ($this->max_jaar + 1) . '-01-01 00:00';
+			$maxValue = $this->max_jaar + 1 . '-01-01 00:00';
 		}
 
 		return <<<HTML
@@ -88,5 +114,4 @@ class DateField extends InputField {
 />
 HTML;
 	}
-
 }

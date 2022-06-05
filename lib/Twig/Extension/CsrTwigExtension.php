@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\Twig\Extension;
-
 
 use CsrDelft\Component\DataTable\DataTableView;
 use CsrDelft\entity\agenda\AgendaItem;
@@ -44,8 +42,7 @@ class CsrTwigExtension extends AbstractExtension
 		CsrfService $csrfService,
 		CmsPaginaRepository $cmsPaginaRepository,
 		ProfielRepository $profielRepository
-	)
-	{
+	) {
 		$this->csrfService = $csrfService;
 		$this->profielRepository = $profielRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
@@ -57,14 +54,22 @@ class CsrTwigExtension extends AbstractExtension
 			new TwigFunction('dragobject_coords', [$this, 'dragobject_coords']),
 			new TwigFunction('commitHash', 'commitHash'),
 			new TwigFunction('commitLink', 'commitLink'),
-			new TwigFunction('csrfMetaTag', [$this, 'csrfMetaTag'], ['is_safe' => ['html']]),
-			new TwigFunction('csrfField', [$this, 'csrfField'], ['is_safe' => ['html']]),
+			new TwigFunction(
+				'csrfMetaTag',
+				[$this, 'csrfMetaTag'],
+				['is_safe' => ['html']]
+			),
+			new TwigFunction(
+				'csrfField',
+				[$this, 'csrfField'],
+				['is_safe' => ['html']]
+			),
 			new TwigFunction('vereniging_leeftijd', [$this, 'vereniging_leeftijd']),
 			new TwigFunction('get_profiel', [$this, 'get_profiel']),
 			new TwigFunction('huidige_jaargang', [$this, 'huidige_jaargang']),
 			new TwigFunction('gethostbyaddr', 'gethostbyaddr'),
 			new TwigFunction('cms', [$this, 'cms'], ['is_safe' => ['html']]),
-			new TwigFunction('table', [$this, 'table'], ['is_safe' => ['html']])
+			new TwigFunction('table', [$this, 'table'], ['is_safe' => ['html']]),
 		];
 	}
 
@@ -80,13 +85,19 @@ class CsrTwigExtension extends AbstractExtension
 
 	public function csrfField($path = '', $method = 'post')
 	{
-		return (new CsrfField($this->csrfService->generateToken($path, $method)))->__toString();
+		return (new CsrfField(
+			$this->csrfService->generateToken($path, $method)
+		))->__toString();
 	}
 
 	public function csrfMetaTag()
 	{
 		$token = $this->csrfService->generateToken('', 'POST');
-		return '<meta property="X-CSRF-ID" content="' . htmlentities($token->getId()) . '" /><meta property="X-CSRF-VALUE" content="' . htmlentities($token->getValue()) . '" />';
+		return '<meta property="X-CSRF-ID" content="' .
+			htmlentities($token->getId()) .
+			'" /><meta property="X-CSRF-VALUE" content="' .
+			htmlentities($token->getValue()) .
+			'" />';
 	}
 
 	public function cms($id)
@@ -94,7 +105,9 @@ class CsrTwigExtension extends AbstractExtension
 		$pagina = $this->cmsPaginaRepository->find($id);
 
 		if (!$pagina) {
-			return '<div class="alert alert-danger">Gedeelte van de pagina met naam "' . htmlspecialchars($id) . '" niet gevonden.</div>';
+			return '<div class="alert alert-danger">Gedeelte van de pagina met naam "' .
+				htmlspecialchars($id) .
+				'" niet gevonden.</div>';
 		}
 
 		if ($pagina->magBekijken()) {
@@ -110,7 +123,11 @@ class CsrTwigExtension extends AbstractExtension
 			new TwigFilter('escape_ical', 'escape_ical'),
 			new TwigFilter('file_base64', [$this, 'file_base64']),
 			new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
-			new TwigFilter('bbcode_light', [$this, 'bbcode_light'], ['is_safe' => ['html']]),
+			new TwigFilter(
+				'bbcode_light',
+				[$this, 'bbcode_light'],
+				['is_safe' => ['html']]
+			),
 			new TwigFilter('uniqid', function ($prefix) {
 				return uniqid_safe($prefix);
 			}),
@@ -157,13 +174,12 @@ class CsrTwigExtension extends AbstractExtension
 		];
 	}
 
-
 	public function dragobject_coords(SessionInterface $session, $id, $top, $left)
 	{
 		if ($session->has("dragobject_$id")) {
 			$dragObject = $session->get("dragobject_$id");
-			$top = (int)$dragObject['top'];
-			$left = (int)$dragObject['left'];
+			$top = (int) $dragObject['top'];
+			$left = (int) $dragObject['left'];
 		}
 
 		$top = max($top, 0);
@@ -175,9 +191,9 @@ class CsrTwigExtension extends AbstractExtension
 	{
 		if ($mode === 'html') {
 			return CsrBB::parseHtml($string);
-		} else if ($mode == 'mail') {
+		} elseif ($mode == 'mail') {
 			return CsrBB::parseMail($string);
-		} else if ($mode == 'plain') {
+		} elseif ($mode == 'plain') {
 			return CsrBB::parsePlain($string);
 		} else {
 			return CsrBB::parse($string);
@@ -196,7 +212,6 @@ class CsrTwigExtension extends AbstractExtension
 		}
 		return '';
 	}
-
 
 	/**
 	 * Reken uit hoe oud de vereniging is.
@@ -217,4 +232,3 @@ class CsrTwigExtension extends AbstractExtension
 		return (string) $table;
 	}
 }
-

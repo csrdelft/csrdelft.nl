@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\Component\DataTable;
-
 
 use CsrDelft\common\Serializer\Normalizer\DataTableEntryNormalizer;
 
@@ -11,5 +9,6 @@ use CsrDelft\common\Serializer\Normalizer\DataTableEntryNormalizer;
  * @package CsrDelft\common
  * @see DataTableEntryNormalizer
  */
-interface DataTableEntry {
+interface DataTableEntry
+{
 }

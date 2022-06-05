@@ -9,12 +9,12 @@ namespace CsrDelft\model\entity\profiel;
  * @author Sander Borst <s.borst@live.nl>
  *
  */
-abstract class AbstractProfielLogEntry {
+abstract class AbstractProfielLogEntry
+{
+	abstract public function toHtml();
 
-	public abstract function toHtml();
-
-	public function censureerVeld($naam) {
+	public function censureerVeld($naam)
+	{
 		return $this;
 	}
-
 }

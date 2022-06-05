@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode;
-
 
 use CsrDelft\view\bbcode\prosemirror\Mark;
 use CsrDelft\view\bbcode\prosemirror\Node;
@@ -46,13 +44,15 @@ class ProsemirrorToBb
 
 		$bb = [];
 
-		$content = is_array($this->document->content) ? $this->document->content : [];
+		$content = is_array($this->document->content)
+			? $this->document->content
+			: [];
 
 		foreach ($content as $node) {
 			$bb[] = $this->convertNodeToBb($node);
 		}
 
-		return implode("", $bb);
+		return implode('', $bb);
 	}
 
 	private function document($value)
@@ -81,17 +81,23 @@ class ProsemirrorToBb
 				}
 
 				$tagName = $markRenderClass::getBbTagType()::getTagName();
-				$bb[] = $this->renderOpeningTag($tagName, $markRenderClass->getTagAttributes($mark));
+				$bb[] = $this->renderOpeningTag(
+					$tagName,
+					$markRenderClass->getTagAttributes($mark)
+				);
 			}
 		}
 
-		if ($node->type != "text") {
+		if ($node->type != 'text') {
 			/** @var Node $renderClass */
 			$markRenderClass = $this->nodesRegistry->get($node->type);
 
 			if ($markRenderClass != null) {
 				$tagName = $markRenderClass->getBbTagType()::getTagName();
-				$bb[] = $this->renderOpeningTag($tagName, $markRenderClass->getTagAttributes($node));
+				$bb[] = $this->renderOpeningTag(
+					$tagName,
+					$markRenderClass->getTagAttributes($node)
+				);
 			}
 		}
 
@@ -120,7 +126,7 @@ class ProsemirrorToBb
 			}
 		}
 
-		return implode("", $bb);
+		return implode('', $bb);
 	}
 
 	private function renderOpeningTag($tagName, $tagAttributes)
@@ -165,4 +171,3 @@ class ProsemirrorToBb
 		return "[/{$tagName}]";
 	}
 }
-

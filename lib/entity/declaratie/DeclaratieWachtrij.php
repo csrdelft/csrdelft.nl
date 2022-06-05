@@ -11,7 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=DeclaratieWachtrijRepository::class)
  */
-class DeclaratieWachtrij {
+class DeclaratieWachtrij
+{
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -49,39 +50,47 @@ class DeclaratieWachtrij {
 	 */
 	private $categorieen;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->categorieen = new ArrayCollection();
 	}
 
-	public function getId(): ?int {
+	public function getId(): ?int
+	{
 		return $this->id;
 	}
 
-	public function getNaam(): string {
+	public function getNaam(): string
+	{
 		return $this->naam;
 	}
 
-	public function setNaam(string $naam): self {
+	public function setNaam(string $naam): self
+	{
 		$this->naam = $naam;
 
 		return $this;
 	}
 
-	public function getRechten(): string {
+	public function getRechten(): string
+	{
 		return $this->rechten;
 	}
 
-	public function setRechten(string $rechten): self {
+	public function setRechten(string $rechten): self
+	{
 		$this->rechten = $rechten;
 
 		return $this;
 	}
 
-	public function getPositie(): int {
+	public function getPositie(): int
+	{
 		return $this->positie;
 	}
 
-	public function setPositie(int $positie): self {
+	public function setPositie(int $positie): self
+	{
 		$this->positie = $positie;
 
 		return $this;
@@ -112,11 +121,13 @@ class DeclaratieWachtrij {
 	/**
 	 * @return Collection|DeclaratieCategorie[]
 	 */
-	public function getCategorieen(): Collection {
+	public function getCategorieen(): Collection
+	{
 		return $this->categorieen;
 	}
 
-	public function addCategorie(DeclaratieCategorie $categorie): self {
+	public function addCategorie(DeclaratieCategorie $categorie): self
+	{
 		if (!$this->categorieen->contains($categorie)) {
 			$this->categorieen[] = $categorie;
 			$categorie->setWachtrij($this);
@@ -125,7 +136,8 @@ class DeclaratieWachtrij {
 		return $this;
 	}
 
-	public function removeCategorie(DeclaratieCategorie $categorie): self {
+	public function removeCategorie(DeclaratieCategorie $categorie): self
+	{
 		if ($this->categorieen->contains($categorie)) {
 			$this->categorieen->removeElement($categorie);
 			// set the owning side to null (unless already changed)
@@ -137,7 +149,8 @@ class DeclaratieWachtrij {
 		return $this;
 	}
 
-	public function magBeoordelen(): bool {
+	public function magBeoordelen(): bool
+	{
 		return LoginService::mag($this->rechten) || Declaratie::isFiscus();
 	}
 }

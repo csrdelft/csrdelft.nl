@@ -12,8 +12,7 @@ use CsrDelft\view\formulier\keuzevelden\DateField;
  *
  * @see DateField
  */
-class RequiredDateField extends DateField {
-
+class RequiredDateField extends DateField
+{
 	public $required = true;
-
 }

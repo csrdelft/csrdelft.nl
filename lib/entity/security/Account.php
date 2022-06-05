@@ -19,8 +19,8 @@ use Symfony\Component\Uid\Uuid;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\security\AccountRepository")
  * @ORM\Table("accounts")
  */
-class Account implements UserInterface, PasswordAuthenticatedUserInterface {
-
+class Account implements UserInterface, PasswordAuthenticatedUserInterface
+{
 	/**
 	 * Lidnummer
 	 * Foreign key
@@ -110,11 +110,13 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface {
 	 */
 	public $profiel;
 
-	public function hasPrivateToken() {
+	public function hasPrivateToken()
+	{
 		return !empty($this->private_token);
 	}
 
-	public function getICalLink() {
+	public function getICalLink()
+	{
 		$url = '/agenda/ical/';
 		if (empty($this->private_token)) {
 			return $url . 'csrdelft.ics';
@@ -123,7 +125,8 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface {
 		}
 	}
 
-	public function getRssLink() {
+	public function getRssLink()
+	{
 		$url = '/forum/rss/';
 		if (empty($this->private_token)) {
 			return $url . 'csrdelft.xml';
@@ -132,7 +135,8 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface {
 		}
 	}
 
-	public function getEmail() {
+	public function getEmail()
+	{
 		return $this->email;
 	}
 
@@ -140,19 +144,23 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface {
 	// UserInterface implementatie
 	//****
 
-	public function getRoles() {
+	public function getRoles()
+	{
 		return [$this->perm_role];
 	}
 
-	public function getPassword(): string {
+	public function getPassword(): string
+	{
 		return $this->pass_hash;
 	}
 
-	public function getSalt() {
+	public function getSalt()
+	{
 		return '';
 	}
 
-	public function getUsername() {
+	public function getUsername()
+	{
 		return $this->uid;
 	}
 
@@ -163,7 +171,8 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface {
 
 	public $pass_plain;
 
-	public function eraseCredentials() {
+	public function eraseCredentials()
+	{
 		$this->pass_plain = null;
 	}
 }

@@ -10,19 +10,27 @@ use CsrDelft\view\formulier\ModalForm;
 /**
  * Formulier voor het toewijzen van een corvee-kwalificatie.
  */
-class KwalificatieForm extends ModalForm {
-
-	public function __construct(CorveeKwalificatie $kwalificatie) {
-		parent::__construct($kwalificatie, '/corvee/functies/kwalificeer/' . $kwalificatie->corveeFunctie->functie_id);
+class KwalificatieForm extends ModalForm
+{
+	public function __construct(CorveeKwalificatie $kwalificatie)
+	{
+		parent::__construct(
+			$kwalificatie,
+			'/corvee/functies/kwalificeer/' . $kwalificatie->corveeFunctie->functie_id
+		);
 		$this->titel = 'Kwalificatie toewijzen';
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields = [];
-		$fields[] = new LidObjectField('profiel', $kwalificatie->profiel, 'Naam of lidnummer', 'leden');
+		$fields[] = new LidObjectField(
+			'profiel',
+			$kwalificatie->profiel,
+			'Naam of lidnummer',
+			'leden'
+		);
 
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen();
 	}
-
 }

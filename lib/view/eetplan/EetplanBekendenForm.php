@@ -15,20 +15,35 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
  *
  * Class EetplanBekendenForm
  */
-class EetplanBekendenForm implements FormulierTypeInterface {
+class EetplanBekendenForm implements FormulierTypeInterface
+{
 	/**
 	 * @param FormulierBuilder $builder
 	 * @param EetplanBekenden $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
+	public function createFormulier(
+		FormulierBuilder $builder,
+		$data,
+		$options = []
+	) {
 		$builder->setAction($options['action']);
 		$builder->setDataTableId(true);
 		$builder->setTitel('Novieten die elkaar kennen toevoegen');
 		$fields[] = new HiddenField('id', $data->id);
 
-		$fields['noviet1'] = new RequiredProfielEntityField('noviet1', $data->noviet1, 'Noviet 1', 'novieten');
-		$fields['noviet2'] = new RequiredProfielEntityField('noviet2', $data->noviet2, 'Noviet 2', 'novieten');
+		$fields['noviet1'] = new RequiredProfielEntityField(
+			'noviet1',
+			$data->noviet1,
+			'Noviet 1',
+			'novieten'
+		);
+		$fields['noviet2'] = new RequiredProfielEntityField(
+			'noviet2',
+			$data->noviet2,
+			'Noviet 2',
+			'novieten'
+		);
 
 		$fields[] = new TextareaField('opmerking', $data->opmerking, 'Opmerking');
 
