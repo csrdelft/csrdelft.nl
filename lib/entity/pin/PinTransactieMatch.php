@@ -154,10 +154,10 @@ class PinTransactieMatch implements DataTableEntry {
 	private function icons() {
 		$desc = '';
 		if ($this->bestelling !== null && $this->bestelling->comment) {
-			$desc .= '&nbsp;<i class="fa fa-comment" title="' . $this->bestelling->comment . '"></i>';
+			$desc .= '&nbsp;<i class="fas fa-comment" title="' . $this->bestelling->comment . '"></i>';
 		}
 		if ($this->notitie) {
-			$desc .= '&nbsp;<i class="fa fa-info-circle" title="' . $this->notitie . '"></i>';
+			$desc .= '&nbsp;<i class="fas fa-info-circle" title="' . $this->notitie . '"></i>';
 		}
 		return $desc;
 	}

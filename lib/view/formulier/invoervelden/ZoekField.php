@@ -73,13 +73,13 @@ JS;
 			$html .= '<a class="dropdown-item disabled" href="#">';
 			$instelling = lid_instelling('zoeken', $option);
 			if ($instelling !== 'nee') {
-				$html .= '<span class="fa fa-check fa-fw me-2"></span> ';
+				$html .= '<span class="fas fa-check fa-fw me-2"></span> ';
 				if ($option === 'leden') {
 					$html .= ucfirst(strtolower($instelling)) . '</a>';
 					continue;
 				}
 			} else {
-				$html .= '<span class="fa fa-fw me-2"></span> ';
+				$html .= '<span class="fas fa-fw me-2"></span> ';
 			}
 			$html .= ucfirst($option) . '</a>';
 		}
@@ -90,7 +90,7 @@ JS;
 	{$parent}
 	<div class="dropdown">
 		<button id="cd-zoek-engines" class="btn btn-light dropdown-toggle ZoekFieldDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-			<span class="fa fa-search"></span>
+			<span class="fas fa-search"></span>
 			<span class="caret"></span>
 		</button>
 		<div class="dropdown-menu dropdown-menu-right" role="menu">
