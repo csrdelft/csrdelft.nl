@@ -1,6 +1,14 @@
 htdocs
+
+# Yarn files
 .yarn
+.yarnrc.yml
 .pnp.cjs
+.pnp.loader.mjs
+
+# Php vendor files
 bin/.phpunit
 vendor
+
+# Built docs site
 docs/_site
