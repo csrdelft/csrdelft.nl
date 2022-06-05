@@ -1,3 +1,10 @@
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "~@fortawesome/fontawesome-free/scss/functions";
+@import "~@fortawesome/fontawesome-free/scss/variables";
+
 /* --------------------------------
 
 Externe links & Knoppen
@@ -7,30 +14,33 @@ Externe links & Knoppen
 // Absolute urls krijgen een icoontje
 a[href^="http://"], a[href^="https://"] {
 	&:after {
-		content: '';
-		padding-right: 16px;
-		background: url("../images/external-link-blue.png") no-repeat center right;
+		margin-left: 0.25rem;
+		
+		@extend %fa-icon;
+		@extend .fa-solid;
+		
+		content: fa-content($fa-var-square-arrow-up-right);
 	}
 }
 
 // Behalve als de absolute urls in de stek zijn
-a[href*="csrdelft.nl"], a[href*="127.0.0.1"], a.not-external {
+a[href*="csrdelft.nl"],
+a[href*="127.0.0.1"],
+a[href*="localhost"],
+a.not-external {
 	&:after {
-		content: none;
-		padding-right: inherit;
-		background: none;
+		margin-left: 0;
+		content: '';
 	}
 }
 
-.sf-toolbar {
-	a[href^="http://"], a[href^="https://"] {
-		padding-right: inherit;
-		background: none;
-	}
-}
-a[href^="mailto:"] {
-  padding-right: 16px;
-  background: url("../images/email-link-blue.png") no-repeat center right;
+a[href^="mailto:"]:before {
+  margin-right: 0.125rem;
+
+  @extend %fa-icon;
+  @extend .fa-solid;
+
+  content: fa-content($fa-var-envelope);
 }
 a.lichtgrijs {
   padding: 0;

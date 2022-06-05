@@ -78,7 +78,6 @@ button, a, div {
 		}
 
 		tr {
-
 			td.editable {
 				cursor: url("../../images/edit.png"), cell;
 			}
@@ -86,7 +85,7 @@ button, a, div {
 			td.toggle-childrow::before {
 				font-size: 1.1em;
 				font-weight: 400;
-				font-family: 'Font Awesome 5 Free';
+				font-family: 'Font Awesome 6 Free';
 				content: fa-content($fa-var-plus-square);
 			}
 		}

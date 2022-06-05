@@ -210,10 +210,11 @@ input[type="radio"]:not(.owee) {
     padding-left: 2.4em;
     padding-right: 0.75em;
     position: relative;
+    
     &:before {
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'Font Awesome 6 Free';
       font-style: normal;
       font-weight: 900;
       text-transform: none !important;

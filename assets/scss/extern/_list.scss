@@ -149,35 +149,26 @@ ul {
 ul.contact {
   list-style: none;
   padding: 0;
+
   li {
     text-decoration: none;
     margin: 2.5em 0 0 0;
     padding: 0 0 0 3.25em;
     position: relative;
 
-    &:before {
-      -moz-osx-font-smoothing: grayscale;
-      -webkit-font-smoothing: antialiased;
-      font-family: 'Font Awesome 5 Free';
-      font-style: normal;
-      font-weight: 900;
-      text-transform: none !important;
+    i::before {
       border-radius: 100%;
       border: solid 2px rgba(255, 255, 255, 0.5);
       display: inline-block;
       font-size: 0.8em;
+      width: 2.5em;
       height: 2.5em;
-      left: 0;
       line-height: 2.35em;
       position: absolute;
       text-align: center;
       top: 0;
-      width: 2.5em;
+      left: 0;
     }
-
-		&.fa-instagram:before {
-			font-family: 'Font Awesome 5 Brands';
-		}
 
     &:first-child {
       margin-top: 0;
