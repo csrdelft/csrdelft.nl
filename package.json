@@ -11,9 +11,12 @@
 		"docker": "yarn install && yarn run watch-poll",
 		"startup": "yarn run dev",
 		"lint": "yarn run eslint --ext .vue,.ts assets/js",
-		"prepare": "husky install"
+		"prettier-all": "yarn run prettier --write . --plugin=@prettier/plugin-php",
+		"prettier-check-all": "yarn run prettier --check . --plugin=@prettier/plugin-php",
+		"prepare": "cross-env husky install"
 	},
 	"devDependencies": {
+		"@prettier/plugin-php": "^0.18.7",
 		"@types/bootstrap": "^5.0.0",
 		"@types/chart.js": "^2.7.42",
 		"@types/datatables.net": "^1.10.21",
@@ -149,7 +152,7 @@
 		"vue": "^2.6.12"
 	},
 	"lint-staged": {
-		"*": "npx prettier --write --ignore-unknown"
+		"*": "yarn run prettier --write --ignore-unknown --plugin=@prettier/plugin-php"
 	},
 	"packageManager": "yarn@3.2.0"
 }

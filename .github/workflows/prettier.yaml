@@ -23,5 +23,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - name: Install yarn dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+
       - name: Check Prettier
-        run: yarn dlx prettier --check .
+        run: yarn run prettier-check-all

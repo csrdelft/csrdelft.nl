@@ -1,12 +1,12 @@
 htdocs
 
-# Yarn files
+# Yarn bestanden
 .yarn
 .yarnrc.yml
 .pnp.cjs
 .pnp.loader.mjs
 
-# Php vendor files
+# Php vendor bestanden
 bin/.phpunit
 vendor
 
@@ -15,3 +15,9 @@ docs/_site
 
 # Services, !tagged_locator wordt gesloopt door prettier.
 services.yaml
+
+# Php temp bestanden
+var
+
+# Overige php bestanden
+db # db bestanden kunnen wat chaotisch zijn.
