@@ -17,7 +17,8 @@ docs/_site
 services.yaml
 
 # Php temp bestanden
-var
+var/
 
 # Overige php bestanden
-db # db bestanden kunnen wat chaotisch zijn.
+# db bestanden kunnen wat chaotisch zijn.
+db/
