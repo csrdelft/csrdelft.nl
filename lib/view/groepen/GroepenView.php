@@ -89,7 +89,7 @@ class GroepenView implements View
 				'/nieuw/' .
 				($this->soort ? $this->soort->getValue() : '') .
 				'">' .
-				Icon::getTag('add') .
+				Icon::getTag('toevoegen') .
 				' Toevoegen</a>';
 		}
 		$html .=
@@ -105,7 +105,7 @@ class GroepenView implements View
 				'/' .
 				$this->geschiedenis .
 				'/deelnamegrafiek">' .
-				Icon::getTag('chart_bar') .
+				Icon::getTag('chart-line') .
 				' Deelnamegrafiek</a>';
 		}
 		$view = new CmsPaginaView($this->pagina);

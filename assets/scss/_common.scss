@@ -258,11 +258,9 @@ position: relative element
 	margin: 0;
 }
 
-.lidLink .ico.neus2013 {
-	color: transparent;
-
-	display: inline;
-	background-position: -185px -124px;
+.lidLink i.neus2013 {
+	color: $red-500;
+	// font-size: $font-size-xs;
 }
 
 /* --------------------------------
