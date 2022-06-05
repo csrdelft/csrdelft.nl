@@ -44,7 +44,7 @@ class Icon
 		// forum
 		'citeren' => 'quote-left',
 		'slotje' => 'lock',
-		'plakkerig' => 'note-sticky',
+		'plakkerig' => 'tape',
 		'belangrijk' => 'star',
 		'ruby' => 'gem',
 		'asterisk_orange' => 'star',
