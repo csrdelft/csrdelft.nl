@@ -107,9 +107,9 @@ class Icon {
 
 		// Test if string contains the word 
 		if(strpos($icon, 'fab fa-') !== false) {
-			return sprintf('<i class="%s %s %s" title="%s"></i>', htmlspecialchars($icon), htmlspecialchars($hover), htmlspecialchars($class), $title);
+			return sprintf('<i class="%s %s %s" title="%s" aria-hidden="true"></i>', htmlspecialchars($icon), htmlspecialchars($hover), htmlspecialchars($class), $title);
 		} else{
-			return sprintf('<i class="fas fa-%s %s %s" title="%s"></i>', htmlspecialchars($icon), htmlspecialchars($hover), htmlspecialchars($class), $title);
+			return sprintf('<i class="fas fa-%s %s %s" title="%s" aria-hidden="true"></i>', htmlspecialchars($icon), htmlspecialchars($hover), htmlspecialchars($class), $title);
 		}
 	}
 }
