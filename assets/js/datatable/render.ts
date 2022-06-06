@@ -24,11 +24,11 @@ export default {
 		return formatBedrag(data);
 	},
 	check(data) {
-		return '<i class="fas fa-' + (data ? 'check' : 'xmark') + '"></i>';
+		return '<i class="fas fa-' + (data ? 'check' : 'xmark') + '" aria-hidden="true"></i>';
 	},
 	aanmeldFilter(data) {
 		return data
-			? `<i class="fas fa-key" title="Aanmeld filter actief: '${data}'"></i>`
+			? `<i class="fas fa-key" title="Aanmeld filter actief: '${data}'" aria-hidden="true"></i>`
 			: '';
 	},
 	aanmeldingen(data, type, row) {

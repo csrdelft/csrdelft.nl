@@ -9,7 +9,7 @@ const withFullscreenButton: GalleryDecorator = (constructor) =>
 		constructor(albums: AlbumItem[], params: Params) {
 			super(albums, params);
 
-			const fullscreenIcon = createElement(`<i class="fas fa-expand"></i>`);
+			const fullscreenIcon = createElement(`<i class="fas fa-expand" aria-hidden="true"></i>`);
 			const fullscreenButton = withTooltip(
 				createElement(`<span class="j-gallery-icon change-mode"></span>`, {
 					children: [fullscreenIcon],

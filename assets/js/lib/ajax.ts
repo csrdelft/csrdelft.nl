@@ -18,7 +18,7 @@ export function ajaxRequest(
 ): void {
 	if (source) {
 		if (!source.classList.contains('noanim')) {
-			const img = $(`<i class="fa-solid fa-spinner fa-spin" title="Laden: ${url}"></i>`)
+			const img = $(`<i class="fa-solid fa-spinner fa-spin" title="Laden: ${url}" aria-hidden="true"></i>`)
 			$(source).replaceWith(img);
 			source = img.get(0);
 		} else if (source.classList.contains('InlineForm')) {
