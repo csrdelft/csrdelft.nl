@@ -15,7 +15,7 @@ const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeS
 	draggable: true,
 	toDOM: node => {
 		const el = html`
-			<div data-${tagType}="${node.attrs[attr]}" class="bb-block"><i class="fasfa-spinner fa-spin"></i></div>`
+			<div data-${tagType}="${node.attrs[attr]}" class="bb-block"><i class="fasfa-spinner fa-spin" aria-hidden="true"></i></div>`
 
 		fetch(`/groepen/${type}/${node.attrs[attr]}/info`)
 			.then(response => response.json())
@@ -48,12 +48,12 @@ ${json.samenvatting_html ?? ""}
 class="fas fa-clock-rotate-left"></span></a></li>
 <li><a class="btn btn-primary disabled" href="#" title="Pasfoto's tonen"><span
 class="fas fa-user"></span></a></li>
-<li><a class="btn disabled" href="#" title="Lijst tonen"><i class="fas fa-list"></i></a>
+<li><a class="btn disabled" href="#" title="Lijst tonen"><i class="fas fa-list" aria-hidden="true"></i></a>
 </li>
-<li><a class="btn disabled" href="#" title="Statistiek tonen"><i class="fas fa-chart-pie"></i></a>
+<li><a class="btn disabled" href="#" title="Statistiek tonen"><i class="fas fa-chart-pie" aria-hidden="true"></i></a>
 </li>
-<li><a class="btn disabled" href="#" title="E-mails tonen"><i class="fas fa-envelope"></i></a></li>
-<li><a class="btn disabled" href="#" title="Allergie/dieet tonen"><i class="fas fa-heartbeat"></i></a>
+<li><a class="btn disabled" href="#" title="E-mails tonen"><i class="fas fa-envelope" aria-hidden="true"></i></a></li>
+<li><a class="btn disabled" href="#" title="Allergie/dieet tonen"><i class="fas fa-heartbeat" aria-hidden="true"></i></a>
 </li>
 <li class="knop-vergroot"></li>
 </ul>

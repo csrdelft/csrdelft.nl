@@ -17,7 +17,7 @@ const withAdminButtons: GalleryDecorator = (constructor) =>
 
 			this.root = params.root || '';
 
-			const container = withTooltip(createElement('<span class="j-gallery-icon"><i class="fas fa-wrench"></i></span>'), {
+			const container = withTooltip(createElement('<span class="j-gallery-icon"><i class="fas fa-wrench" aria-hidden="true"></i></span>'), {
 				style: {
 					color: params.backgroundColor,
 					background: params.textColor,
@@ -33,7 +33,7 @@ const withAdminButtons: GalleryDecorator = (constructor) =>
 				dropdown.style.display = 'none';
 			});
 
-			const rotateClockwiseButton = createElement(`<div><i class="fas fa-redo"></i>&nbsp;Draai met de klok mee</div>`, {
+			const rotateClockwiseButton = createElement(`<div><i class="fas fa-redo" aria-hidden="true"></i>&nbsp;Draai met de klok mee</div>`, {
 				style: {
 					padding: '0.2em',
 				},
@@ -46,7 +46,7 @@ const withAdminButtons: GalleryDecorator = (constructor) =>
 				}).then(reload);
 			});
 
-			const rotateCounterClockwiseButton = createElement(`<div><i class="fas fa-undo"></i>&nbsp;Draai tegen de klok in</div>`, {
+			const rotateCounterClockwiseButton = createElement(`<div><i class="fas fa-undo" aria-hidden="true"></i>&nbsp;Draai tegen de klok in</div>`, {
 				style: {
 					padding: '0.2em',
 				},
@@ -59,7 +59,7 @@ const withAdminButtons: GalleryDecorator = (constructor) =>
 				}).then(reload);
 			});
 
-			const setCoverButton = createElement(`<div><i class="fas fa-folder"></i>&nbsp;Instellen als albumcover</div>`, {
+			const setCoverButton = createElement(`<div><i class="fas fa-folder" aria-hidden="true"></i>&nbsp;Instellen als albumcover</div>`, {
 				style: {
 					padding: '0.2em',
 				},
@@ -71,7 +71,7 @@ const withAdminButtons: GalleryDecorator = (constructor) =>
 				}).then((resp) => redirect(resp.data));
 			});
 
-			const deleteButton = createElement(`<div><i class="fas fa-times"></i>&nbsp;Verwijderen</div>`, {
+			const deleteButton = createElement(`<div><i class="fas fa-times" aria-hidden="true"></i>&nbsp;Verwijderen</div>`, {
 				style: {
 					padding: '0.2em',
 				},

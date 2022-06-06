@@ -22,10 +22,10 @@ export default {
 		return formatBedrag(data);
 	},
 	check(data) {
-		return '<i class="fas fa-' + (data ? 'check' : 'xmark') + '"></i>';
+		return '<i class="fas fa-' + (data ? 'check' : 'xmark') + '" aria-hidden="true"></i>';
 	},
 	aanmeldFilter(data) {
-		return data ? `<i class="fas fa-key" title="Aanmeld filter actief: '${data}'"></i>` : '';
+		return data ? `<i class="fas fa-key" title="Aanmeld filter actief: '${data}'" aria-hidden="true"></i>` : '';
 	},
 	aanmeldingen(data, type, row) {
 		return (row.aantal_aanmeldingen || 0) + ' (' + row.aanmeld_limiet + ')';
