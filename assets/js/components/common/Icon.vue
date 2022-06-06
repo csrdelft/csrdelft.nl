@@ -41,7 +41,7 @@ export default class Icon extends Vue {
 		// forum
 		'citeren': 'quote-left',
 		'slotje': 'lock',
-		'plakkerig': 'tape',
+		'plakkerig': 'note-sticky',
 		'belangrijk': 'star',
 		'ruby': 'gem',
 		'asterisk_orange': 'star',
