@@ -102,7 +102,6 @@ class Icon
 		$hover = null,
 		$title = null,
 		$class = null,
-		$content = null
 	) {
 		$icon = self::get($key);
 
@@ -110,17 +109,26 @@ class Icon
 			$hover = 'hover-' . self::get($hover);
 		}
 		if ($title !== null) {
-			$title =
-				'title="' . str_replace('&amp;', '&', htmlspecialchars($title)) . '" ';
+			$title = str_replace('&amp;', '&', htmlspecialchars($title));
 		}
 
-		return sprintf(
-			'<span class="ico %s %s %s" %s>%s</span>',
-			htmlspecialchars($icon),
-			htmlspecialchars($hover),
-			htmlspecialchars($class),
-			$title,
-			htmlspecialchars($content)
-		);
+		// Test if string contains the a fa brands tag. 
+		if(strpos($icon, 'fab fa-') !== false) {
+			return sprintf(
+				'<i class="%s %s %s" title="%s" aria-hidden="true"></i>',
+				htmlspecialchars($icon),
+				htmlspecialchars($hover),
+				htmlspecialchars($class),
+				$title
+			);
+		} else{
+			return sprintf(
+				'<i class="fas fa-%s %s %s" title="%s" aria-hidden="true"></i>',
+				htmlspecialchars($icon),
+				htmlspecialchars($hover),
+				htmlspecialchars($class),
+				$title
+			);
+		}
 	}
 }
