@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -72,5 +73,8 @@ class Kernel extends BaseKernel
 		$builder
 			->registerForAutoconfiguration(DataTableTypeInterface::class)
 			->addTag('csr.table.type');
+		$builder
+			->registerForAutoconfiguration(VoterInterface::class)
+			->addTag('security.voter');
 	}
 }

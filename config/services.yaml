@@ -182,3 +182,6 @@ services:
     arguments: ['@request_stack', '@security.helper']
     tags:
       - { name: monolog.processor }
+
+  CsrDelft\common\Security\Voter\:
+    resource: '../lib/common/Security/Voter'
