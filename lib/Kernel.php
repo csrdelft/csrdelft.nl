@@ -73,8 +73,5 @@ class Kernel extends BaseKernel
 		$builder
 			->registerForAutoconfiguration(DataTableTypeInterface::class)
 			->addTag('csr.table.type');
-		$builder
-			->registerForAutoconfiguration(VoterInterface::class)
-			->addTag('security.voter');
 	}
 }
