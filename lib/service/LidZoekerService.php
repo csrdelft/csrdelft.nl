@@ -8,7 +8,7 @@ use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\CsrSecurity;
 use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
@@ -123,18 +123,23 @@ class LidZoekerService
 	 * @var VerticalenRepository
 	 */
 	private $verticalenRepository;
+	/**
+	 * @var CsrSecurity
+	 */
+	private $csrSecurity;
 
 	public function __construct(
 		EntityManagerInterface $em,
 		ProfielRepository $profielRepository,
 		Security $security,
+		CsrSecurity $csrSecurity,
 		VerticalenRepository $verticalenRepository,
 		LidToestemmingRepository $lidToestemmingRepository
 	) {
 		$this->allowStatus = LidStatus::getEnumValues();
 
 		//wat extra velden voor moderators.
-		if (LoginService::mag(P_LEDEN_MOD)) {
+		if ($csrSecurity->mag(P_LEDEN_MOD)) {
 			$this->allowVelden = array_merge(
 				$this->allowVelden,
 				$this->allowVeldenLEDENMOD
@@ -148,6 +153,7 @@ class LidZoekerService
 		$this->em = $em;
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
 		$this->verticalenRepository = $verticalenRepository;
+		$this->csrSecurity = $csrSecurity;
 	}
 
 	public function parseQuery($query)
@@ -414,7 +420,7 @@ class LidZoekerService
 				->add('p.studie LIKE :zoekterm')
 				->add('p.email LIKE :zoekterm');
 
-			if (LoginService::mag(P_LEDEN_MOD)) {
+			if ($this->csrSecurity->mag(P_LEDEN_MOD)) {
 				$zoekExpr->add('p.eetwens LIKE :zoekterm');
 			}
 

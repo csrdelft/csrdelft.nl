@@ -5,7 +5,7 @@ namespace CsrDelft\service;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\CsrSecurity;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -17,10 +17,17 @@ class ProfielService
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
+	/**
+	 * @var CsrSecurity
+	 */
+	private $security;
 
-	public function __construct(ProfielRepository $profielRepository)
-	{
+	public function __construct(
+		CsrSecurity $security,
+		ProfielRepository $profielRepository
+	) {
 		$this->profielRepository = $profielRepository;
+		$this->security = $security;
 	}
 
 	/**
@@ -115,8 +122,8 @@ class ProfielService
 				);
 		} else {
 			if (
-				preg_match('/^\d{2}$/', $zoekterm) and
-				($zoekveld == 'uid' or $zoekveld == 'naam')
+				preg_match('/^\d{2}$/', $zoekterm) &&
+				($zoekveld == 'uid' || $zoekveld == 'naam')
 			) {
 				//zoeken op lichtingen...
 				$queryBuilder
@@ -129,18 +136,6 @@ class ProfielService
 			}
 		}
 
-		# In welke status wordt gezocht, is afhankelijk van wat voor rechten de
-		# ingelogd persoon heeft.
-		#
-		# R_LID en R_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen
-		# de volgende afkortingen gebruiken:
-		#  - '' (lege string) of alleleden: novieten, (gast)leden, kringels, ere- en oudleden
-		#  - leden :  						novieten, (gast)leden en kringels
-		#  - oudleden : 					oud- en ereleden
-		#  - allepersonen:					novieten, (gast)leden, kringels, oud- en ereleden, overleden leden en nobodies (alleen geen commissies)
-		# én alleen voor OUDLEDENMOD:
-		#  - nobodies : 					alleen nobodies
-
 		if ($zoekstatus == 'alleleden') {
 			$zoekstatus = '';
 		}
@@ -148,68 +143,91 @@ class ProfielService
 			$zoekstatus = LidStatus::getEnumValues();
 		}
 
-		$statussen = [];
-		if (is_array($zoekstatus)) {
-			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu
-			//geen controle of een gebruiker dat mag, dat moet dus eerder gebeuren.
-			$statussen = $zoekstatus;
-		} else {
-			# we zoeken in leden als
-			# 1. ingelogde persoon dat alleen maar mag of
-			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
-			if (
-				(LoginService::mag(P_LEDEN_READ) &&
-					!LoginService::mag(P_OUDLEDEN_READ)) ||
-				(LoginService::mag(P_LEDEN_READ) &&
-					LoginService::mag(P_OUDLEDEN_READ) &&
-					$zoekstatus != 'oudleden')
-			) {
-				$statussen[] = LidStatus::Lid;
-				$statussen[] = LidStatus::Gastlid;
-				$statussen[] = LidStatus::Noviet;
-				$statussen[] = LidStatus::Kringel;
-			}
-			# we zoeken in oudleden als
-			# 1. ingelogde persoon dat alleen maar mag of
-			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
-			if (
-				(!LoginService::mag(P_LEDEN_READ) &&
-					LoginService::mag(P_OUDLEDEN_READ)) ||
-				(LoginService::mag(P_LEDEN_READ) &&
-					LoginService::mag(P_OUDLEDEN_READ) &&
-					$zoekstatus != 'leden')
-			) {
-				$statussen[] = LidStatus::Oudlid;
-				$statussen[] = LidStatus::Erelid;
-			}
-			# we zoeken in nobodies als
-			# de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if ($zoekstatus === 'nobodies' && LoginService::mag(P_LEDEN_MOD)) {
-				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
-				$statussen = [LidStatus::Nobody, LidStatus::Exlid];
-			}
-
-			if (LoginService::mag(P_LEDEN_READ) && $zoekstatus === 'novieten') {
-				$statussen = [LidStatus::Noviet];
-			}
-		}
+		$statussen = $this->determineStatussen($zoekstatus);
 
 		$queryBuilder
 			->andWhere('p.status in (:zoekstatus)')
 			->setParameter('zoekstatus', $statussen);
 
-		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
+		// als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
 		if ($verticale != 'alle') {
 			$queryBuilder
 				->andWhere('p.verticale = :verticale')
 				->setParameter('verticale', $verticale);
 		}
 
-		# is er een maximum aantal resultaten gewenst
+		// is er een maximum aantal resultaten gewenst
 		$queryBuilder
 			->orderBy('p.' . $sort)
 			->setMaxResults((int) $limiet > 0 ? (int) $limiet : null);
 
 		return $queryBuilder->getQuery()->getResult();
+	}
+
+	/**
+	 * In welke status wordt gezocht, is afhankelijk van wat voor rechten de
+	 * ingelogd persoon heeft.
+	 *
+	 * R_LID en R_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen
+	 * de volgende afkortingen gebruiken:
+	 *  - '' (lege string) of alleleden: novieten, (gast)leden, kringels, ere- en oudleden
+	 *  - leden :  						novieten, (gast)leden en kringels
+	 *  - oudleden : 					oud- en ereleden
+	 *  - allepersonen:	 novieten, (gast)leden, kringels, oud- en ereleden, overleden leden en nobodies (alleen geen commissies)
+	 * én alleen voor OUDLEDENMOD:
+	 *  - nobodies : 					alleen nobodies
+	 * @param $zoekstatus
+	 * @return array
+	 */
+	private function determineStatussen($zoekstatus): array
+	{
+		$statussen = [];
+		if (is_array($zoekstatus)) {
+			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu
+			//geen controle of een gebruiker dat mag, dat moet dus eerder gebeuren.
+			$statussen = $zoekstatus;
+		} else {
+			// we zoeken in leden als
+			// 1. ingelogde persoon dat alleen maar mag of
+			// 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
+			if (
+				$this->security->mag(P_LEDEN_READ) &&
+				!$this->security->mag(P_OUDLEDEN_READ)
+			) {
+				$statussen = array_merge($statussen, LidStatus::getZoekenLidLike());
+			} elseif (
+				$this->security->mag(P_LEDEN_READ) &&
+				$this->security->mag(P_OUDLEDEN_READ) &&
+				$zoekstatus != 'oudleden'
+			) {
+				$statussen = array_merge($statussen, LidStatus::getZoekenLidLike());
+			}
+			// we zoeken in oudleden als
+			// 1. ingelogde persoon dat alleen maar mag of
+			// 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
+			if (
+				!$this->security->mag(P_LEDEN_READ) &&
+				$this->security->mag(P_OUDLEDEN_READ)
+			) {
+				$statussen = array_merge($statussen, LidStatus::getZoekenOudlidLike());
+			} elseif (
+				$this->security->mag(P_LEDEN_READ) &&
+				$this->security->mag(P_OUDLEDEN_READ) &&
+				$zoekstatus != 'leden'
+			) {
+				$statussen = array_merge($statussen, LidStatus::getZoekenOudlidLike());
+			}
+			// we zoeken in nobodies als
+			// de ingelogde persoon dat mag EN daarom gevraagd heeft
+			if ($this->security->mag(P_LEDEN_MOD) && $zoekstatus === 'nobodies') {
+				// alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
+				$statussen = LidStatus::getZoekenExlidLike();
+			}
+
+			if ($this->security->mag(P_LEDEN_READ) && $zoekstatus === 'novieten') {
+				$statussen = [LidStatus::Noviet];
+			}
+		}
+		return $statussen;
 	}
 }

@@ -40,7 +40,7 @@
 
 				<div class="col-auto">
 					<div class="list-group">
-						{% if profiel.inGoogleContacts %}
+						{% if isInGoogleContacts(profiel) %}
 							<a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}" class="list-group-item"
 								 title="Dit profiel opdateren in mijn google adresboek">
 								<img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"

@@ -71,6 +71,26 @@ class LidStatus extends Enum
 		self::Kringel => self::Kringel,
 	];
 
+	protected static $zoekenLidlike = [
+		self::Noviet => self::Noviet,
+		self::Lid => self::Lid,
+		self::Gastlid => self::Gastlid,
+		self::Kringel => self::Kringel,
+	];
+
+	/**
+	 * @var string[]
+	 */
+	protected static $zoekenOudlidlike = [
+		self::Oudlid => self::Oudlid,
+		self::Erelid => self::Erelid,
+	];
+
+	protected static $zoekenExlidlike = [
+		self::Nobody => self::Nobody,
+		self::Exlid => self::Exlid,
+	];
+
 	/**
 	 * @var string[]
 	 */
@@ -173,6 +193,21 @@ class LidStatus extends Enum
 	public static function isOudlidLike($option)
 	{
 		return isset(static::$oudlidlike[$option]);
+	}
+
+	public static function getZoekenLidLike()
+	{
+		return array_values(static::$zoekenLidlike);
+	}
+
+	public static function getZoekenOudlidLike()
+	{
+		return array_values(static::$zoekenOudlidlike);
+	}
+
+	public static function getZoekenExlidLike()
+	{
+		return array_values(static::$zoekenExlidlike);
 	}
 
 	public function getChar()

@@ -3,7 +3,6 @@
 namespace CsrDelft\entity\profiel;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\enum\GroepStatus;
@@ -19,8 +18,6 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;
-use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\service\GoogleSync;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
@@ -30,7 +27,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Persistence\Proxy;
-use GuzzleHttp\Exception\RequestException;
 
 /**
  * Profiel.class.php
@@ -1050,28 +1046,6 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		}
 
 		return 0;
-	}
-
-	/**
-	 * Controleer of een lid al in de google-contacts-lijst staat.
-	 *
-	 * @return boolean
-	 */
-	public function isInGoogleContacts()
-	{
-		try {
-			$googleSync = ContainerFacade::getContainer()->get(GoogleSync::class);
-			if (!$googleSync->isAuthenticated()) {
-				return false;
-			}
-			$googleSync->init();
-			return !is_null($googleSync->existsInGoogleContacts($this));
-		} catch (CsrGebruikerException $e) {
-			setMelding($e->getMessage(), 0);
-		} catch (RequestException $e) {
-			setMelding($e->getMessage(), -1);
-		}
-		return false;
 	}
 
 	public function propertyMogelijk(string $name)

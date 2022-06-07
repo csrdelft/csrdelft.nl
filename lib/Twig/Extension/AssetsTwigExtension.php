@@ -3,12 +3,23 @@
 namespace CsrDelft\Twig\Extension;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\service\security\CsrSecurity;
 use CsrDelft\service\security\LoginService;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class AssetsTwigExtension extends AbstractExtension
 {
+	/**
+	 * @var CsrSecurity
+	 */
+	private $security;
+
+	public function __construct(CsrSecurity $security)
+	{
+		$this->security = $security;
+	}
+
 	public function getFunctions()
 	{
 		return [
@@ -35,7 +46,7 @@ class AssetsTwigExtension extends AbstractExtension
 	 */
 	public function getUserModules()
 	{
-		if (!LoginService::mag(P_LOGGED_IN)) {
+		if (!$this->security->mag(P_LOGGED_IN)) {
 			return [];
 		}
 

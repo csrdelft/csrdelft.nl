@@ -8,6 +8,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\GoogleTokenRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\CsrSecurity;
 use CsrDelft\service\security\LoginService;
 use DOMDocument;
 use DOMText;
@@ -83,21 +84,35 @@ class GoogleSync
 	 * @var GoogleTokenRepository
 	 */
 	private $googleTokenRepository;
+	/**
+	 * @var CsrSecurity
+	 */
+	private $security;
+	/**
+	 * @var ProfielRepository
+	 */
+	private $profielRepository;
 
 	/**
 	 * GoogleSync constructor.
+	 * @param CsrSecurity $security
 	 * @param GoogleTokenRepository $googleTokenRepository
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
 	 */
-	public function __construct(GoogleTokenRepository $googleTokenRepository)
-	{
+	public function __construct(
+		CsrSecurity $security,
+		ProfielRepository $profielRepository,
+		GoogleTokenRepository $googleTokenRepository
+	) {
 		$this->googleTokenRepository = $googleTokenRepository;
+		$this->security = $security;
+		$this->profielRepository = $profielRepository;
 	}
 
 	public function init()
 	{
-		$google_token = $this->googleTokenRepository->find(LoginService::getUid());
+		$google_token = $this->googleTokenRepository->find(
+			$this->security->getAccount()->uid
+		);
 		if (!$google_token) {
 			throw new CsrException(
 				'Authsub token not available, use doRequestToken.'
@@ -385,7 +400,7 @@ class GoogleSync
 			if ($profiel instanceof Profiel) {
 				$profielBatch[] = $profiel;
 			} else {
-				$profiel = ProfielRepository::get($profiel);
+				$profiel = $this->profielRepository->find($profiel);
 				if ($profiel) {
 					$profielBatch[] = $profiel;
 				}
@@ -393,7 +408,7 @@ class GoogleSync
 		}
 		$message = '';
 
-		# Google contacts api kan max 100 per keer.
+		// Google contacts api kan max 100 per keer.
 		$chunks = array_chunk($profielBatch, 100);
 		foreach ($chunks as $profielBatch) {
 			$doc = new DOMDocument();
