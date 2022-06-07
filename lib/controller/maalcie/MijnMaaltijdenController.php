@@ -120,10 +120,7 @@ class MijnMaaltijdenController extends AbstractController
 	 */
 	public function lijst(Maaltijd $maaltijd)
 	{
-		if (
-			!$maaltijd->magSluiten($this->getUid()) &&
-			!LoginService::mag(P_MAAL_MOD)
-		) {
+		if (!$maaltijd->magSluiten($this->getUid()) && !$this->mag(P_MAAL_MOD)) {
 			throw $this->createAccessDeniedException();
 		}
 		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorMaaltijd(
@@ -159,10 +156,7 @@ class MijnMaaltijdenController extends AbstractController
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
 		}
-		if (
-			!$maaltijd->magSluiten($this->getUid()) &&
-			!LoginService::mag(P_MAAL_MOD)
-		) {
+		if (!$maaltijd->magSluiten($this->getUid()) && !$this->mag(P_MAAL_MOD)) {
 			throw $this->createAccessDeniedException();
 		}
 		$this->maaltijdenRepository->sluitMaaltijd($maaltijd);

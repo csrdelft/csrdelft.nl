@@ -5,6 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\entity\ForumPlaatje;
 use CsrDelft\repository\ForumPlaatjeRepository;
+use CsrDelft\service\security\LoginService;
 
 class BbForumPlaatje extends BbImg
 {
@@ -29,7 +30,7 @@ class BbForumPlaatje extends BbImg
 
 	public function isAllowed()
 	{
-		return mag('P_LOGGED_IN');
+		return LoginService::mag('P_LOGGED_IN');
 	}
 
 	public function getKey()

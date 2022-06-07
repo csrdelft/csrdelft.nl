@@ -39,7 +39,7 @@ class MenuBeheerController extends AbstractController
 	 */
 	public function beheer($menuName = 'main'): Response
 	{
-		if ($menuName != $this->getUid() && !LoginService::mag(P_ADMIN)) {
+		if ($menuName != $this->getUid() && !$this->mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}
 		$root = $this->menuItemRepository->getMenuBeheer($menuName);

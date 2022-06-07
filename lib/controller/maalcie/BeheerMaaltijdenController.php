@@ -426,7 +426,7 @@ class BeheerMaaltijdenController extends AbstractController
 		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository
 	) {
 		$maaltijden = $this->maaltijdenRepository->getMaaltijdenHistorie();
-		if (!LoginService::mag(P_MAAL_MOD)) {
+		if (!$this->mag(P_MAAL_MOD)) {
 			// Als bekijker geen MaalCie-rechten heeft, toon alleen maaltijden waarvoor persoon sluitrechten had (kok)
 			$maaltijden = array_filter($maaltijden, function ($maaltijd) {
 				return $maaltijd->magSluiten($this->getUid());

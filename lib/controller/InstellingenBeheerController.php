@@ -37,13 +37,13 @@ class InstellingenBeheerController extends AbstractController
 		if ($module) {
 			switch ($module) {
 				case 'agenda':
-					return LoginService::mag(P_AGENDA_MOD);
+					return $this->mag(P_AGENDA_MOD);
 				case 'corvee':
-					return LoginService::mag(P_CORVEE_MOD);
+					return $this->mag(P_CORVEE_MOD);
 				case 'maaltijden':
-					return LoginService::mag(P_MAAL_MOD);
+					return $this->mag(P_MAAL_MOD);
 				default:
-					return LoginService::mag(P_ADMIN);
+					return $this->mag(P_ADMIN);
 			}
 		}
 		return true; // hoofdpagina: geen module

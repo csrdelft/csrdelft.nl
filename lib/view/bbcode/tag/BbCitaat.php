@@ -5,6 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbTag;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -128,7 +129,7 @@ class BbCitaat extends BbTag
 		$this->hidden = $this->env->quote_level > 1;
 		if (isset($arguments['citaat'])) {
 			$bron = $arguments['citaat'];
-			$profiel = mag('P_LEDEN_READ,P_OUDLEDEN_READ')
+			$profiel = LoginService::mag('P_LEDEN_READ,P_OUDLEDEN_READ')
 				? $this->profielRepository->find($bron)
 				: null;
 			if ($profiel) {

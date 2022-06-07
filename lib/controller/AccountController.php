@@ -9,6 +9,7 @@ use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
 use CsrDelft\service\AccountService;
+use CsrDelft\service\security\CsrSecurity;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\login\AccountForm;
 use CsrDelft\view\login\UpdateLoginForm;
@@ -69,10 +70,6 @@ class AccountController extends AbstractController
 	 */
 	public function aanmaken($uid = null): RedirectResponse
 	{
-		if (!LoginService::mag(P_ADMIN)) {
-			throw $this->createAccessDeniedException();
-		}
-
 		if ($uid == null) {
 			$account = $this->getUser();
 		} else {
@@ -101,16 +98,13 @@ class AccountController extends AbstractController
 	 * @Route("/account/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken(
-		Request $request,
-		Security $security,
-		$uid = null
-	): Response {
-		$eigenAccount = $security->getUser();
+	public function bewerken(Request $request, $uid = null): Response
+	{
+		$eigenAccount = $this->getUser();
 		if ($uid == null) {
 			$uid = $this->getUid();
 		}
-		if ($uid !== $this->getUid() && !LoginService::mag(P_ADMIN)) {
+		if ($uid !== $this->getUid() && !$this->mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}
 		$account = $this->accountRepository->find($uid);
@@ -198,7 +192,7 @@ class AccountController extends AbstractController
 		if ($uid == null) {
 			$uid = $this->getUid();
 		}
-		if ($uid !== $this->getUid() && !LoginService::mag(P_ADMIN)) {
+		if ($uid !== $this->getUid() && !$this->mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}
 		$account = $this->accountRepository->find($uid);

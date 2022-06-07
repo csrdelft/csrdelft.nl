@@ -67,7 +67,7 @@ class CmsPaginaController extends AbstractController
 			throw $this->createAccessDeniedException();
 		}
 		$body = new CmsPaginaView($pagina);
-		if (!LoginService::mag(P_LOGGED_IN)) {
+		if (!$this->mag(P_LOGGED_IN)) {
 			// nieuwe layout altijd voor uitgelogde bezoekers
 			if ($pagina->naam === 'thuis') {
 				return $this->render('extern/index.html.twig', [

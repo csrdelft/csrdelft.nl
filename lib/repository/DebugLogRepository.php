@@ -17,10 +17,6 @@ use Symfony\Component\Security\Core\Security;
 class DebugLogRepository extends AbstractRepository
 {
 	/**
-	 * @var SuService
-	 */
-	private $suService;
-	/**
 	 * @var Security
 	 */
 	private $security;
@@ -32,12 +28,10 @@ class DebugLogRepository extends AbstractRepository
 	public function __construct(
 		ManagerRegistry $registry,
 		RequestStack $requestStack,
-		Security $security,
-		SuService $suService
+		Security $security
 	) {
 		parent::__construct($registry, DebugLogEntry::class);
 
-		$this->suService = $suService;
 		$this->security = $security;
 		$this->requestStack = $requestStack;
 	}

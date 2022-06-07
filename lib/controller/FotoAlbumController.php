@@ -448,7 +448,7 @@ class FotoAlbumController extends AbstractController
 	{
 		$refuuid = $request->request->get('refuuid');
 		$keyword = $request->request->get('keyword');
-		if (!LoginService::mag(P_ALBUM_MOD) && !LoginService::mag($keyword)) {
+		if (!$this->mag(P_ALBUM_MOD) && !$this->mag($keyword)) {
 			throw $this->createAccessDeniedException();
 		}
 		$this->fotoTagsRepository->removeTag($refuuid, $keyword);
@@ -607,7 +607,7 @@ class FotoAlbumController extends AbstractController
 	 */
 	public function bekijken($dir)
 	{
-		if ($dir == '' && !LoginService::mag(P_ALBUM_READ)) {
+		if ($dir == '' && !$this->mag(P_ALBUM_READ)) {
 			$dir = 'Publiek';
 		}
 

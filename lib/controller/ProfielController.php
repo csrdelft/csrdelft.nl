@@ -258,7 +258,7 @@ class ProfielController extends AbstractController
 			throw $this->createAccessDeniedException();
 		}
 		// NovCie mag novieten aanmaken
-		if ($lidstatus !== LidStatus::Noviet && !LoginService::mag(P_LEDEN_MOD)) {
+		if ($lidstatus !== LidStatus::Noviet && !$this->mag(P_LEDEN_MOD)) {
 			throw $this->createAccessDeniedException();
 		}
 		// Maak nieuw profiel zonder op te slaan

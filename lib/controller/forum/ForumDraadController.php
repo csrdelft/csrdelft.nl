@@ -156,7 +156,7 @@ class ForumDraadController extends AbstractController
 		if (!$draad->magLezen()) {
 			throw $this->createAccessDeniedException();
 		}
-		if (LoginService::mag(P_LOGGED_IN)) {
+		if ($this->mag(P_LOGGED_IN)) {
 			$gelezen = $draad->getWanneerGelezen();
 		} else {
 			$gelezen = null;
@@ -209,7 +209,7 @@ class ForumDraadController extends AbstractController
 			'gelezen_moment' => $gelezen ? $gelezen->datum_tijd : false,
 		]);
 
-		if (LoginService::mag(P_LOGGED_IN)) {
+		if ($this->mag(P_LOGGED_IN)) {
 			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad);
 		}
 
@@ -241,10 +241,7 @@ class ForumDraadController extends AbstractController
 			])
 		) {
 			$value = !$draad->$property;
-			if (
-				$property === 'belangrijk' &&
-				!LoginService::mag(P_FORUM_BELANGRIJK)
-			) {
+			if ($property === 'belangrijk' && !$this->mag(P_FORUM_BELANGRIJK)) {
 				throw $this->createAccessDeniedException();
 			}
 		} elseif ($property === 'forum_id' || $property === 'gedeeld_met') {
@@ -365,7 +362,7 @@ class ForumDraadController extends AbstractController
 			return $redirect;
 		}
 
-		if (LoginService::mag(P_LOGGED_IN)) {
+		if ($this->mag(P_LOGGED_IN)) {
 			// concept opslaan
 			if ($draad == null) {
 				$this->forumDradenReagerenRepository->setConcept(
@@ -386,7 +383,7 @@ class ForumDraadController extends AbstractController
 		// externen checks
 		$mailadres = null;
 		$wacht_goedkeuring = false;
-		if (!LoginService::mag(P_LOGGED_IN)) {
+		if (!$this->mag(P_LOGGED_IN)) {
 			$filter = new SimpleSpamfilter();
 			$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
 
@@ -491,7 +488,7 @@ class ForumDraadController extends AbstractController
 		}
 
 		// markeer als gelezen
-		if (LoginService::mag(P_LOGGED_IN)) {
+		if ($this->mag(P_LOGGED_IN)) {
 			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid(
 				$draad,
 				$post->laatst_gewijzigd
