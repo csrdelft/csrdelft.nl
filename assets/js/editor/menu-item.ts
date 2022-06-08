@@ -510,6 +510,11 @@ export const insertPlaatjeItem = (
 			openPrompt({
 				title: 'Plaatje uploaden',
 				fields: {
+					noot: new Label({
+						label: '',
+						value:
+							'Als je hier een bestand van je computer kiest is deze <strong>alleen zichtbaar voor leden</strong>. Zet je afbeelding neer bij een externe service als je wil dat je afbeelding ook op de externe stek zichtbaar is.',
+					}),
 					image: new FileField({ label: 'Afbeelding' }),
 					of: new Label({ label: '', value: '- Of -' }),
 					url: new TextField({ label: 'Url' }),
