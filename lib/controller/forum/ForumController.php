@@ -101,7 +101,7 @@ class ForumController extends AbstractController
 	public function rss()
 	{
 		$response = new Response(null, 200, [
-			'Content-Type' => 'application/rss+xml; charset=UTF-8',
+			//'Content-Type' => 'application/rss+xml; charset=UTF-8',
 		]);
 		return $this->render(
 			'forum/rss.xml.twig',

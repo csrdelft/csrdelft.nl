@@ -64,7 +64,10 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 		Passport $passport,
 		string $firewallName
 	): TokenInterface {
-		return new PrivateTokenToken($passport->getUser());
+		return new PrivateTokenToken(
+			$passport->getUser(),
+			$passport->getUser()->getRoles()
+		);
 	}
 
 	public function onAuthenticationSuccess(
