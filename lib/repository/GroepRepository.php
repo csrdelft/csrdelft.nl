@@ -29,7 +29,7 @@ use Throwable;
  * @method Groep[]    findAll()
  * @method Groep|null retrieveByUUID($UUID)
  */
-class GroepRepository extends AbstractRepository
+abstract class GroepRepository extends AbstractRepository
 {
 	/**
 	 * @var Groep
@@ -41,13 +41,8 @@ class GroepRepository extends AbstractRepository
 	 * @param ManagerRegistry $managerRegistry
 	 * @param $entityClass
 	 */
-	public function __construct(
-		ManagerRegistry $managerRegistry,
-		$entityClass = null
-	) {
-		if ($entityClass == null) {
-			$entityClass = Groep::class;
-		}
+	public function __construct(ManagerRegistry $managerRegistry, $entityClass)
+	{
 		parent::__construct($managerRegistry, $entityClass);
 
 		$this->entityClass = $entityClass;
