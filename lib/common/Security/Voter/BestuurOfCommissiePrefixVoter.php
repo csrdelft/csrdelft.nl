@@ -6,7 +6,18 @@ use CsrDelft\entity\groepen\enum\GroepStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class BestuurPrefixVoter extends PrefixVoter
+/**
+ * Behoort een lid tot een f.t. / h.t. / o.t. bestuur of commissie?
+ *
+ * Controleert rechten als
+ * - bestuur
+ * - bestuur:ft
+ * - bestuur:ot:abactis
+ * - commissie
+ * - commissie:ot
+ * - commissie:ht:qq
+ */
+class BestuurOfCommissiePrefixVoter extends PrefixVoter
 {
 	const PREFIX_BESTUUR = 'BESTUUR';
 	const PREFIX_COMMISSIE = 'COMMISSIE';

@@ -9,12 +9,10 @@ use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\LogicException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
-use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface;
 
 /**
  * Authenticate een private token, voor forum rss en agenda ical.
@@ -45,7 +43,7 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 			);
 	}
 
-	public function authenticate(Request $request): PassportInterface
+	public function authenticate(Request $request): Passport
 	{
 		$token = $request->attributes->get('private_auth_token');
 
@@ -62,14 +60,10 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 		return new SelfValidatingPassport($badge);
 	}
 
-	public function createAuthenticatedToken(
-		PassportInterface $passport,
+	public function createToken(
+		Passport $passport,
 		string $firewallName
 	): TokenInterface {
-		if (!$passport instanceof UserPassportInterface) {
-			throw new LogicException('Gegeven Passport bevat geen user.');
-		}
-
 		return new PrivateTokenToken($passport->getUser());
 	}
 

@@ -7,9 +7,12 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Check rechten voor een specifieke uid.
+ */
 class UidVoter extends Voter
 {
-	use CacheableVoterTrait;
+	use CacheableVoterSupportsTrait;
 
 	public function supportsAttribute(string $attribute): bool
 	{

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\common\Security\Voter;
 
-trait CacheableVoterTrait
+trait CacheableVoterSupportsTrait
 {
 	protected function supports(string $attribute, $subject)
 	{

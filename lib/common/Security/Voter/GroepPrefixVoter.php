@@ -15,6 +15,12 @@ use CsrDelft\entity\groepen\Woonoord;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+/**
+ * Behoort een lid tot een bepaalde groep? Verticalen en kringen zijn ook groepen.
+ * Als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer de h.t.
+ * groep met die korte naam erbij, als het getal is uiteraard de groep met dat id.
+ * Met de toevoeging ':Fiscus' kan ook specifieke functie geëist worden binnen een groep.
+ */
 class GroepPrefixVoter extends PrefixVoter
 {
 	const PREFIX_ACTIVITEIT = 'ACTIVITEIT';
@@ -39,13 +45,13 @@ class GroepPrefixVoter extends PrefixVoter
 	protected function supportsPrefix($prefix)
 	{
 		switch (strtoupper($prefix)) {
-			case 'KRING':
-			case 'ONDERVERENIGING':
-			case 'WOONOORD':
-			case 'ACTIVITEIT':
-			case 'KETZER':
-			case 'WERKGROEP':
-			case 'GROEP':
+			case self::PREFIX_KRING:
+			case self::PREFIX_ONDERVERENIGING:
+			case self::PREFIX_WOONOORD:
+			case self::PREFIX_ACTIVITEIT:
+			case self::PREFIX_KETZER:
+			case self::PREFIX_WERKGROEP:
+			case self::PREFIX_GROEP:
 				return true;
 			default:
 				return false;

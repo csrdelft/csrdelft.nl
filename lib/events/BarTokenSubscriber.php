@@ -20,21 +20,13 @@ class BarTokenSubscriber implements EventSubscriberInterface
 	 */
 	private $security;
 	/**
-	 * @var AccessService
-	 */
-	private $accessService;
-	/**
 	 * @var ManagerRegistry
 	 */
 	private $manager;
 
-	public function __construct(
-		Security $security,
-		AccessService $accessService,
-		ManagerRegistry $manager
-	) {
+	public function __construct(Security $security, ManagerRegistry $manager)
+	{
 		$this->security = $security;
-		$this->accessService = $accessService;
 		$this->manager = $manager;
 	}
 
@@ -53,9 +45,7 @@ class BarTokenSubscriber implements EventSubscriberInterface
 		}
 
 		if ($controller instanceof BarSysteemController) {
-			if (
-				$this->accessService->mag($this->security->getUser(), P_FISCAAT_MOD)
-			) {
+			if ($this->security->isGranted('ROLE_FISCAAT_MOD')) {
 				return;
 			}
 

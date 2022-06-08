@@ -173,7 +173,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 		if (empty($filter)) {
 			return true;
 		}
-		return $this->accessService->mag($account, $filter);
+		return $this->accessService->isUserGranted($account, $filter);
 	}
 
 	public function getIsAangemeld($mid, $uid)

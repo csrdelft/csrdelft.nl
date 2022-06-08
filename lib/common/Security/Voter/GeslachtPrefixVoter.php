@@ -6,6 +6,9 @@ use CsrDelft\entity\profiel\Profiel;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
 
+/**
+ * Is de gebruiker man of vrouw?
+ */
 class GeslachtPrefixVoter extends PrefixVoter
 {
 	/**
@@ -20,7 +23,7 @@ class GeslachtPrefixVoter extends PrefixVoter
 
 	protected function supportsPrefix($prefix)
 	{
-		return $prefix == 'geslacht';
+		return strtoupper($prefix) == 'GESLACHT';
 	}
 
 	protected function voteOnPrefix(
@@ -30,19 +33,15 @@ class GeslachtPrefixVoter extends PrefixVoter
 		$subject,
 		TokenInterface $token
 	) {
+		// Niet ingelogd heeft geslacht m dus check of ingelogd
+		if (!$this->security->isGranted('ROLE_LOGGED_IN')) {
+			return false;
+		}
+
 		/** @var Profiel $profiel */
 		$profiel = $token->getUser()->profiel;
 
-		if (
-			$profiel->geslacht &&
-			$gevraagd == strtoupper($profiel->geslacht->getValue())
-		) {
-			// Niet ingelogd heeft geslacht m dus check of ingelogd
-			if ($this->security->isGranted('ROLE_LOGGED_IN')) {
-				return true;
-			}
-		}
-
-		return false;
+		return $profiel->geslacht &&
+			$gevraagd == strtoupper($profiel->geslacht->getValue());
 	}
 }

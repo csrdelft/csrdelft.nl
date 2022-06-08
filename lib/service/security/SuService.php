@@ -122,6 +122,6 @@ class SuService
 		return $this->security->isGranted('ROLE_ALLOWED_TO_SWITCH') && // Mag switchen
 		!$this->security->isGranted('IS_IMPERSONATOR') && // Is niet al geswitched
 		$this->security->getUser()->getUsername() !== $suNaar->getUsername() && // Is niet dezelfde gebruiker
-			$this->accessService->mag($suNaar, P_LOGGED_IN); // Gebruiker waar naar geswitched wordt mag inloggen
+			$this->accessService->isUserGranted($suNaar, 'ROLE_LOGGED_IN'); // Gebruiker waar naar geswitched wordt mag inloggen
 	}
 }

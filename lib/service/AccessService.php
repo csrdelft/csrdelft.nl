@@ -29,9 +29,14 @@ use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Cache\CacheInterface;
+use function preg_replace;
+use function preg_replace as preg_replace1;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -113,18 +118,6 @@ class AccessService
 	private static $ledenWrite = [P_PROFIEL_EDIT, P_LEDEN_MOD];
 
 	/**
-	 * Partially ordered Role Hierarchy:
-	 *
-	 * A subject can have multiple roles.  <- NIET ondersteund met MAC, wel met DAC
-	 * A role can have multiple subjects.
-	 * A role can have many permissions.
-	 * A permission can be assigned to many roles.
-	 * An operation can be assigned many permissions.
-	 * A permission can be assigned to many operations.
-	 */
-	private $roles = [];
-
-	/**
 	 * Permissies die we gebruiken om te vergelijken met de permissies van een gebruiker.
 	 */
 	private $permissions = [];
@@ -145,6 +138,10 @@ class AccessService
 	 * @var Security
 	 */
 	private $security;
+	/**
+	 * @var AccessDecisionManagerInterface
+	 */
+	private $accessDecisionManager;
 
 	/**
 	 * @param CacheInterface $cache
@@ -155,6 +152,7 @@ class AccessService
 		CacheInterface $cache,
 		EntityManagerInterface $em,
 		Security $security,
+		AccessDecisionManagerInterface $accessDecisionManager,
 		AccountRepository $accountRepository
 	) {
 		$this->cache = $cache;
@@ -162,6 +160,7 @@ class AccessService
 		$this->loadPermissions();
 		$this->accountRepository = $accountRepository;
 		$this->security = $security;
+		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	/**
@@ -239,82 +238,6 @@ class AccessService
 				];
 			}
 		);
-
-		$this->roles = $this->cache->get('roles-' . getlastmod(), function () {
-			/**
-			 * Deze waarden worden  samengesteld uit bovenstaande permissies en
-			 * worden in de gebruikersprofielen gebruikt als aanduiding voor
-			 * welke permissie-groep (Role) de gebruiker in zit (max. 1 momenteel).
-			 */
-			$p = $this->permissions;
-
-			// Permission Assignment:
-			$roles = [];
-
-			// use | $p[] for hierarchical RBAC (inheritance between roles)
-			// use & ~$p[] for constrained RBAC (separation of duties)
-
-			$roles[AccessRole::Nobody] =
-				$p[P_PUBLIC] | $p[P_FORUM_READ] | $p[P_ALBUM_PUBLIC_READ];
-			$roles[AccessRole::Eter] =
-				$roles[AccessRole::Nobody] |
-				$p[P_LOGGED_IN] |
-				$p[P_PROFIEL_EDIT] |
-				$p[P_MAAL_IK] |
-				$p[P_AGENDA_READ];
-			$roles[AccessRole::Lid] =
-				$roles[AccessRole::Eter] |
-				$p[P_OUDLEDEN_READ] |
-				$p[P_FORUM_POST] |
-				$p[P_DOCS_READ] |
-				$p[P_BIEB_READ] |
-				$p[P_CORVEE_IK] |
-				$p[P_MAIL_POST] |
-				$p[P_NEWS_POST] |
-				$p[P_ALBUM_ADD] |
-				$p[P_ALBUM_PUBLIC_DOWN] |
-				$p[P_PEILING_VOTE] |
-				$p[P_PEILING_EDIT];
-			$roles[AccessRole::Oudlid] = $roles[AccessRole::Lid];
-			$roles[AccessRole::Fiscaat] =
-				$roles[AccessRole::Lid] | $p[P_FISCAAT_READ] | $p[P_FISCAAT_MOD];
-			$roles[AccessRole::MaalCie] =
-				$roles[AccessRole::Fiscaat] |
-				$p[P_MAAL_MOD] |
-				$p[P_CORVEE_MOD] |
-				$p[P_MAAL_SALDI];
-			$roles[AccessRole::BASFCie] =
-				$roles[AccessRole::Lid] |
-				$p[P_DOCS_MOD] |
-				$p[P_ALBUM_PUBLIC_DEL] |
-				$p[P_ALBUM_DEL] |
-				$p[P_BIEB_MOD];
-			$roles[AccessRole::Bestuur] =
-				$roles[AccessRole::BASFCie] |
-				$roles[AccessRole::MaalCie] |
-				$p[P_LEDEN_MOD] |
-				$p[P_FORUM_MOD] |
-				$p[P_DOCS_MOD] |
-				$p[P_AGENDA_MOD] |
-				$p[P_NEWS_MOD] |
-				$p[P_MAIL_COMPOSE] |
-				$p[P_ALBUM_DEL] |
-				$p[P_MAAL_MOD] |
-				$p[P_CORVEE_MOD] |
-				$p[P_MAIL_COMPOSE] |
-				$p[P_FORUM_BELANGRIJK] |
-				$p[P_PEILING_MOD];
-			$roles[AccessRole::PubCie] =
-				$roles[AccessRole::Bestuur] |
-				$p[P_ADMIN] |
-				$p[P_MAIL_SEND] |
-				$p[P_CORVEE_SCHED] |
-				$p[P_FORUM_ADMIN];
-			$roles[AccessRole::ForumModerator] =
-				$roles[AccessRole::Lid] | $p[P_FORUM_MOD];
-
-			return $roles;
-		});
 	}
 
 	/**
@@ -328,6 +251,24 @@ class AccessService
 	{
 		$nulperm = str_repeat(chr(0), 15);
 		return substr_replace($nulperm, chr($level), $onderdeelnummer, 1);
+	}
+
+	public function checkAuthenticationMethod(
+		$allowedAuthenticationMethods = null
+	) {
+		$method = ContainerFacade::getContainer()
+			->get(LoginService::class)
+			->getAuthenticationMethod();
+		if ($allowedAuthenticationMethods == null) {
+			$allowedAuthenticationMethods =
+				self::$defaultAllowedAuthenticationMethods;
+		}
+		// Als de methode niet toegestaan is testen we met de permissies van niet-ingelogd
+		if (!in_array($method, $allowedAuthenticationMethods)) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -402,214 +343,30 @@ class AccessService
 		);
 
 		return $this->cache->get($key, function () use ($subject, $permission) {
-			return $this->hasPermission($subject, $permission);
+			$permission1 = $permission;
+			$permission1 = preg_replace1('/^P_/', 'ROLE_', $permission1);
+			$permission1 = preg_replace1(
+				'/^ROLE_PUBLIC/',
+				'PUBLIC_ACCESS',
+				$permission1
+			);
+			return $this->security->isGranted($permission1, $subject);
 		});
 	}
 
-	/**
-	 * Controleer een permissie.
-	 *
-	 * @param UserInterface $subject
-	 * @param null $permission
-	 * @return bool
-	 */
-	private function hasPermission(UserInterface $subject, $permission = null)
-	{
-		// OR
-		if (strpos($permission, ',') !== false) {
-			/**
-			 * Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
-			 * gescheiden, waarvan de gebruiker er dan een hoeft te hebben. Er kunnen
-			 * dan ook uid's tussen zitten, als een daarvan gelijk is aan dat van de
-			 * gebruiker heeft hij ook rechten.
-			 */
-			$p = explode(',', $permission);
-			$result = false;
-			foreach ($p as $perm) {
-				$result |= $this->hasPermission($subject, $perm);
-			}
-		}
-		// AND
-		elseif (strpos($permission, '+') !== false) {
-			/**
-			 * Gecombineerde permissie:
-			 * gebruiker moet alle permissies bezitten
-			 */
-			$p = explode('+', $permission);
-			$result = true;
-			foreach ($p as $perm) {
-				$result &= $this->hasPermission($subject, $perm);
-			}
-		}
-		// OR (secondary)
-		elseif (strpos($permission, '|') !== false) {
-			/**
-			 * Mogelijkheid voor OR binnen een AND
-			 * Hierdoor zijn er geen haakjes nodig in de syntax voor niet al te ingewikkelde statements.
-			 * Statements waarbij haakjes wel nodig zijn moet je niet willen.
-			 */
-			$p = explode('|', $permission);
-			$result = false;
-			foreach ($p as $perm) {
-				$result |= $this->hasPermission($subject, $perm);
-			}
-		}
-		// Is de gevraagde permissie het uid van de gevraagde gebruiker?
-		elseif ($subject->uid == strtolower($permission)) {
-			$result = true;
-		} else {
-			$result = $this->discretionaryAccessControl($subject, $permission);
-		}
-
-		return $result;
-	}
-
-	/**
-	 * @param Account|UserInterface $subject
-	 * @param string $permission
-	 *
-	 * @return bool
-	 */
-	private function mandatoryAccessControl(UserInterface $subject, $permission)
-	{
-		$permission = preg_replace('/^P_/', 'ROLE_', $permission);
-		$permission = preg_replace('/^ROLE_PUBLIC/', 'PUBLIC_ACCESS', $permission);
-		return $this->security->isGranted($permission, $subject);
-	}
-
-	/**
-	 * @param string $role
-	 *
-	 * @return bool
-	 */
-	public function isValidRole($role)
-	{
-		if (isset($this->roles[$role])) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @param Account|UserInterface $subject
-	 * @param string $permission
-	 *
-	 * @return bool
-	 * @throws InvalidArgumentException
-	 */
-	private function discretionaryAccessControl(
-		UserInterface $subject,
-		$permission
+	public function isUserGranted(
+		UserInterface $user,
+		$attribute,
+		$subject = null
 	) {
-		// haal het profiel van de gebruiker op
-		$profiel = $subject->profiel;
+		$token = new UsernamePasswordToken(
+			$user,
+			'none',
+			'none',
+			$user->getRoles()
+		);
 
-		// ga alleen verder als er een geldig profiel wordt teruggegeven
-		if (!$profiel) {
-			return false;
-		}
-
-		// splits permissie in type, waarde en rol
-		$p = explode(':', $permission, 3);
-		if (isset($p[0])) {
-			$prefix = $p[0];
-		} else {
-			return false;
-		}
-		if (isset($p[1])) {
-			$gevraagd = $p[1];
-		} else {
-			$gevraagd = false;
-		}
-		if (isset($p[2])) {
-			$role = $p[2];
-		} else {
-			$role = false;
-		}
-
-		switch ($prefix) {
-			/**
-			 * Is lid man of vrouw?
-			 */
-			case self::PREFIX_GESLACHT:
-				$access = $this->isGeslacht($profiel, $gevraagd, $subject);
-				break;
-			/**
-			 * Heeft lid status?
-			 */
-			case self::PREFIX_STATUS:
-				$access = $this->isStatus($gevraagd, $profiel);
-				break;
-			/**
-			 *  Behoort een lid tot een bepaalde lichting?
-			 */
-			case self::PREFIX_LICHTING:
-			case self::PREFIX_LIDJAAR:
-				$access = (string) $profiel->lidjaar === $gevraagd;
-				break;
-
-			case self::PREFIX_EERSTEJAARS:
-				$access = $this->isEerstejaars($profiel);
-				break;
-			case self::PREFIX_OUDEREJAARS:
-				$access = $this->isOuderejaars($profiel);
-				break;
-			/**
-			 *  Behoort een lid tot een bepaalde verticale?
-			 */
-			case self::PREFIX_VERTICALE:
-				$access = $this->isVerticale($profiel, $gevraagd, $role);
-				break;
-			/**
-			 * Behoort een lid tot een f.t. / h.t. / o.t. bestuur of commissie?
-			 */
-			case self::PREFIX_BESTUUR:
-			case self::PREFIX_COMMISSIE:
-				$access = $this->isBestuurOfCommissie(
-					$prefix,
-					$gevraagd,
-					$profiel,
-					$role
-				);
-				break;
-			/**
-			 * Behoort een lid tot een bepaalde groep? Verticalen en kringen zijn ook groepen.
-			 * Als een string als bijvoorbeeld 'pubcie' wordt meegegeven zoekt de ketzer de h.t.
-			 * groep met die korte naam erbij, als het getal is uiteraard de groep met dat id.
-			 * Met de toevoeging ':Fiscus' kan ook specifieke functie geëist worden binnen een groep.
-			 */
-			case self::PREFIX_KRING:
-			case self::PREFIX_ONDERVERENIGING:
-			case self::PREFIX_WOONOORD:
-			case self::PREFIX_ACTIVITEIT:
-			case self::PREFIX_KETZER:
-			case self::PREFIX_WERKGROEP:
-			case self::PREFIX_GROEP:
-				$access = $this->isGroep($prefix, $gevraagd, $role, $profiel);
-				break;
-			/**
-			 * Is een lid aangemeld voor een bepaalde maaltijd?
-			 */
-			case self::PREFIX_MAALTIJD:
-				// Geldig maaltijd id?
-				$access = $this->isMaaltijdAangemeld(
-					$gevraagd,
-					$role,
-					$profiel,
-					$subject
-				);
-				break;
-			/**
-			 * Heeft een lid een kwalficatie voor een functie in het covee-systeem?
-			 */
-			case self::PREFIX_KWALIFICATIE:
-				$access = $this->isHeeftKwalificatie($gevraagd, $profiel);
-				break;
-			default:
-				$access = $this->mandatoryAccessControl($subject, $permission);
-		}
-
-		return $access;
+		return $this->accessDecisionManager->decide($token, [$attribute], $subject);
 	}
 
 	/**
@@ -713,301 +470,5 @@ class AccessService
 		}
 
 		return false;
-	}
-
-	/**
-	 * @param $gevraagd
-	 * @param Profiel $profiel
-	 * @return bool
-	 */
-	private function isStatus($gevraagd, Profiel $profiel): bool
-	{
-		$gevraagd = 'S_' . $gevraagd;
-		if ($gevraagd == $profiel->status) {
-			return true;
-		} elseif (
-			$gevraagd == LidStatus::Lid &&
-			LidStatus::isLidLike($profiel->status)
-		) {
-			return true;
-		} elseif (
-			$gevraagd == LidStatus::Oudlid &&
-			LidStatus::isOudlidLike($profiel->status)
-		) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param Profiel $profiel
-	 * @return bool
-	 */
-	private function isEerstejaars(Profiel $profiel): bool
-	{
-		if ($profiel->lidjaar === LichtingenRepository::getJongsteLidjaar()) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @param Profiel $profiel
-	 * @return bool
-	 */
-	private function isOuderejaars(Profiel $profiel): bool
-	{
-		if ($profiel->lidjaar === LichtingenRepository::getJongsteLidjaar()) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * @param Profiel $profiel
-	 * @param $gevraagd
-	 * @param $subject
-	 * @return bool
-	 */
-	private function isGeslacht(Profiel $profiel, $gevraagd, $subject): bool
-	{
-		if (
-			$profiel->geslacht &&
-			$gevraagd == strtoupper($profiel->geslacht->getValue())
-		) {
-			// Niet ingelogd heeft geslacht m dus check of ingelogd
-			if ($this->hasPermission($subject, P_LOGGED_IN)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param Profiel $profiel
-	 * @param $gevraagd
-	 * @param $role
-	 * @return bool
-	 */
-	private function isVerticale(Profiel $profiel, $gevraagd, $role): bool
-	{
-		if (!$profiel->verticale) {
-			return false;
-		} elseif (
-			$profiel->verticale === $gevraagd ||
-			$gevraagd == strtoupper($profiel->getVerticale()->naam)
-		) {
-			if (!$role) {
-				return true;
-			} elseif ($role === 'LEIDER' && $profiel->verticaleleider) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * @param string $prefix
-	 * @param $gevraagd
-	 * @param $role
-	 * @param Profiel $profiel
-	 * @return bool
-	 */
-	private function isGroep(
-		string $prefix,
-		$gevraagd,
-		$role,
-		Profiel $profiel
-	): bool {
-		switch ($prefix) {
-			case self::PREFIX_BESTUUR:
-				if (in_array(ucfirst($gevraagd), CommissieFunctie::getEnumValues())) {
-					$role = $gevraagd;
-					$gevraagd = false;
-				}
-				if ($gevraagd) {
-					$groep = $this->em->getRepository(Bestuur::class)->get($gevraagd);
-				} else {
-					$groep = $this->em->getRepository(Bestuur::class)->get('bestuur'); // h.t.
-				}
-				break;
-
-			case self::PREFIX_COMMISSIE:
-				$groep = $this->em->getRepository(Commissie::class)->get($gevraagd);
-				break;
-
-			case self::PREFIX_KRING:
-				$groep = $this->em->getRepository(Kring::class)->get($gevraagd);
-				break;
-
-			case self::PREFIX_ONDERVERENIGING:
-				$groep = $this->em
-					->getRepository(Ondervereniging::class)
-					->get($gevraagd);
-				break;
-
-			case self::PREFIX_WOONOORD:
-				$groep = $this->em->getRepository(Woonoord::class)->get($gevraagd);
-				break;
-
-			case self::PREFIX_ACTIVITEIT:
-				$groep = $this->em->getRepository(Activiteit::class)->get($gevraagd);
-				break;
-
-			case self::PREFIX_KETZER:
-				$groep = $this->em->getRepository(Ketzer::class)->get($gevraagd);
-				break;
-
-			case self::PREFIX_WERKGROEP:
-				$groep = $this->em->getRepository(Werkgroep::class)->get($gevraagd);
-				break;
-
-			case self::PREFIX_GROEP:
-			default:
-				$groep = $this->em->getRepository(RechtenGroep::class)->get($gevraagd);
-				break;
-		}
-
-		if (!$groep) {
-			return false;
-		}
-
-		$lid = $groep->getLid($profiel->uid);
-		if (!$lid) {
-			return false;
-		}
-
-		// wordt er een functie gevraagd?
-		if ($role && strtoupper($role) !== strtoupper($lid->opmerking)) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * @param $gevraagd
-	 * @param $role
-	 * @param Profiel $profiel
-	 * @param $subject
-	 * @return bool
-	 */
-	private function isMaaltijdAangemeld(
-		$gevraagd,
-		$role,
-		Profiel $profiel,
-		$subject
-	): bool {
-		if (!is_numeric($gevraagd)) {
-			return false;
-		}
-		// Aangemeld voor maaltijd?
-		if (
-			!$role &&
-			$this->em
-				->getRepository(MaaltijdAanmelding::class)
-				->getIsAangemeld((int) $gevraagd, $profiel->uid)
-		) {
-			return true;
-		} elseif ($role === 'SLUITEN') {
-			// Mag maaltijd sluiten?
-			if ($this->hasPermission($subject, P_MAAL_MOD)) {
-				return true;
-			}
-			try {
-				$maaltijd = $this->em
-					->getRepository(Maaltijd::class)
-					->getMaaltijd((int) $gevraagd);
-				if ($maaltijd && $maaltijd->magSluiten($profiel->uid)) {
-					return true;
-				}
-			} catch (CsrException $e) {
-				// Maaltijd bestaat niet
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param $gevraagd
-	 * @param Profiel $profiel
-	 * @return bool
-	 */
-	private function isHeeftKwalificatie($gevraagd, Profiel $profiel): bool
-	{
-		if (is_numeric($gevraagd)) {
-			$functie_id = (int) $gevraagd;
-		} else {
-			$corveeFunctiesRepository = $this->em->getRepository(
-				CorveeFunctie::class
-			);
-
-			$functie = $corveeFunctiesRepository->findOneBy([
-				'afkorting' => $gevraagd,
-			]);
-
-			if (!$functie) {
-				$functie = $corveeFunctiesRepository->findOneBy([
-					'naam' => $gevraagd,
-				]);
-			}
-
-			if ($functie) {
-				$functie_id = $functie->functie_id;
-			} else {
-				return false;
-			}
-		}
-
-		return $this->em
-			->getRepository(CorveeKwalificatie::class)
-			->isLidGekwalificeerdVoorFunctie($profiel->uid, $functie_id);
-	}
-
-	/**
-	 * @param string $prefix
-	 * @param $gevraagd
-	 * @param Profiel $profiel
-	 * @param $role
-	 * @return bool
-	 * @throws \Doctrine\ORM\NoResultException
-	 * @throws \Doctrine\ORM\NonUniqueResultException
-	 */
-	private function isBestuurOfCommissie(
-		string $prefix,
-		$gevraagd,
-		Profiel $profiel,
-		$role
-	): bool {
-		if ($prefix == self::PREFIX_BESTUUR) {
-			$gevraagd = strtolower($gevraagd);
-			if (in_array($gevraagd, GroepStatus::getEnumValues())) {
-				return 1 ===
-					(int) $this->em
-						->createQuery(
-							'SELECT COUNT(b) FROM CsrDelft\entity\groepen\Bestuur b JOIN b.leden l WHERE l.uid = :uid AND b.status = :gevraagd'
-						)
-						->setParameter('gevraagd', $gevraagd)
-						->setParameter('uid', $profiel->uid)
-						->getSingleScalarResult();
-			}
-		}
-
-		$role = strtolower($role);
-		// Alleen als GroepStatus is opgegeven, anders: fall through
-		if (in_array($role, GroepStatus::getEnumValues())) {
-			return 1 ===
-				(int) $this->em
-					->createQuery(
-						'SELECT COUNT(c) FROM CsrDelft\entity\groepen\Commissie c JOIN c.leden l WHERE l.uid = :uid AND c.familie = :gevraagd AND c.status = :role'
-					)
-					->setParameter('gevraagd', $gevraagd)
-					->setParameter('role', $role)
-					->setParameter('uid', $profiel->uid)
-					->getSingleScalarResult();
-		}
-		return $this->isGroep($prefix, $gevraagd, $role, $profiel);
 	}
 }

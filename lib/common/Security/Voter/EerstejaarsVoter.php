@@ -3,17 +3,20 @@
 namespace CsrDelft\common\Security\Voter;
 
 use CsrDelft\entity\security\Account;
-use CsrDelft\model\entity\LidStatus;
+use CsrDelft\repository\groepen\LichtingenRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class StatusVoter extends Voter
+/**
+ * Is het lid eerstejaars?
+ */
+class EerstejaarsVoter extends Voter
 {
-	use CacheableVoterTrait;
+	use CacheableVoterSupportsTrait;
 
 	public function supportsAttribute(string $attribute): bool
 	{
-		return LidStatus::isValidValue('S_' . strtoupper($attribute));
+		return strtoupper($attribute) == 'EERSTEJAARS';
 	}
 
 	protected function voteOnAttribute(
@@ -28,24 +31,9 @@ class StatusVoter extends Voter
 			return false;
 		}
 
-		$profiel = $user->profiel;
-
-		$gevraagd = 'S_' . $attribute;
-
-		if ($gevraagd == $profiel->status) {
-			return true;
-		} elseif (
-			$gevraagd == LidStatus::Lid &&
-			LidStatus::isLidLike($profiel->status)
-		) {
-			return true;
-		} elseif (
-			$gevraagd == LidStatus::Oudlid &&
-			LidStatus::isOudlidLike($profiel->status)
-		) {
+		if ($user->profiel->lidjaar === LichtingenRepository::getJongsteLidjaar()) {
 			return true;
 		}
-
 		return false;
 	}
 }

@@ -73,7 +73,10 @@ class WachtwoordController extends AbstractController
 	{
 		$account = $this->getUser();
 		// mag inloggen?
-		if (!$account || !$this->accessService->mag($account, P_LOGGED_IN)) {
+		if (
+			!$account ||
+			!$this->accessService->isUserGranted($account, 'ROLE_LOGGED_IN')
+		) {
 			throw $this->createAccessDeniedException();
 		}
 		$form = new WachtwoordWijzigenForm(

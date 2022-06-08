@@ -5,6 +5,17 @@ namespace CsrDelft\common\Security\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * Hulpklasse om rechten te checken
+ *
+ * Controleert een rechtendefinitie met de volgende structuur:
+ *
+ * <prefix>:<gevraagd>:<role>
+ *
+ * Bijvoorbeeld:
+ *
+ * bestuur:ht:abactis
+ */
 abstract class PrefixVoter extends Voter
 {
 	abstract protected function supportsPrefix($prefix);
@@ -41,16 +52,8 @@ abstract class PrefixVoter extends Voter
 		} else {
 			return false;
 		}
-		if (isset($p[1])) {
-			$gevraagd = $p[1];
-		} else {
-			$gevraagd = false;
-		}
-		if (isset($p[2])) {
-			$role = $p[2];
-		} else {
-			$role = false;
-		}
+		$gevraagd = $p[1] ?? false;
+		$role = $p[2] ?? false;
 
 		return $this->voteOnPrefix($prefix, $gevraagd, $role, $subject, $token);
 	}

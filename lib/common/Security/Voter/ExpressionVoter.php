@@ -7,8 +7,19 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
+/**
+ * Checkt een rechten epxressie
+ *
+ * Or: `bestuur,pubcie`. Lid is bestuur of pubcie
+ * And: `bestuur+pubcie`. Lid is bestuur en pubcie
+ * Or: `bestuur|pubcie`. Lid is bestuur of pubcie
+ *
+ * `,` heeft precedence over `+` heeft precedence over `|` dus
+ * `bestuur|pubcie+ROLE_FISCAAT_MOD betekent (bestuur of pubcie) en ROLE_FISCAAT_MOD
+ */
 class ExpressionVoter extends Voter
 {
+	use CacheableVoterSupportsTrait;
 	/**
 	 * @var Security
 	 */
@@ -22,11 +33,6 @@ class ExpressionVoter extends Voter
 	public function supportsAttribute(string $attribute): bool
 	{
 		return (bool) preg_match('/[|,+]/', $attribute);
-	}
-
-	protected function supports(string $attribute, $subject)
-	{
-		return $this->supportsAttribute($attribute);
 	}
 
 	protected function voteOnAttribute(
@@ -72,10 +78,10 @@ class ExpressionVoter extends Voter
 			foreach ($p as $perm) {
 				$result |= $this->security->isGranted($perm, $subject);
 			}
+		} else {
+			throw new CsrException('Rechten expressie bevat geen |,+');
 		}
 
-		throw new CsrException(
-			'ExpressionVoter permissie bevat geen +,| ' . $attribute
-		);
+		return $result;
 	}
 }

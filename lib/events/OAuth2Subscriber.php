@@ -86,7 +86,10 @@ class OAuth2Subscriber implements EventSubscriberInterface
 			foreach ($event->getScopes() as $scope) {
 				if (
 					in_array((string) $scope, $rememberedScopes) &&
-					$this->accessService->mag($user, OAuth2Scope::magScope($scope))
+					$this->accessService->isUserGranted(
+						$user,
+						OAuth2Scope::magScope($scope)
+					)
 				) {
 					$scopes[] = $scope;
 				}
@@ -108,7 +111,12 @@ class OAuth2Subscriber implements EventSubscriberInterface
 
 		$scopes = [];
 		foreach ($requestedScopes as $scope) {
-			if ($this->accessService->mag($user, OAuth2Scope::magScope($scope))) {
+			if (
+				$this->accessService->isUserGranted(
+					$user,
+					OAuth2Scope::magScope($scope)
+				)
+			) {
 				$scopes[] = $scope;
 			}
 		}

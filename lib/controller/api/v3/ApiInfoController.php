@@ -4,8 +4,6 @@ namespace CsrDelft\controller\api\v3;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
-use CsrDelft\service\AccessService;
-use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,10 +18,8 @@ class ApiInfoController extends AbstractController
 	 * @Route("/api/v3/profiel")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function profiel(
-		AccessService $accessService,
-		Security $security
-	): JsonResponse {
+	public function profiel(Security $security): JsonResponse
+	{
 		$token = $security->getToken();
 		if (!$token instanceof OAuth2Token) {
 			throw new BadRequestHttpException();
@@ -40,7 +36,7 @@ class ApiInfoController extends AbstractController
 			'displayName' => $this->getUser()->profiel->getNaam(),
 			'slug' => $this->getUser()->profiel->getNaam('slug'),
 			'scopes' => $scopes,
-			'admin' => $accessService->mag($this->getUser(), P_ADMIN),
+			'admin' => $security->isGranted('ROLE_ADMIN'),
 		];
 
 		if ($security->isGranted('ROLE_OAUTH2_PROFIEL:EMAIL')) {

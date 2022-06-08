@@ -146,7 +146,7 @@ class AccountController extends AbstractController
 				]);
 			}
 		}
-		if (!$this->accessService->mag($account, P_LOGGED_IN)) {
+		if (!$this->accessService->isUserGranted($account, 'ROLE_LOGGED_IN')) {
 			setMelding('Account mag niet inloggen', 2);
 		}
 		$form = $this->createFormulier(AccountForm::class, $account, [
