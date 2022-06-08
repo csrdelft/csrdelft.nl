@@ -74,7 +74,6 @@ class ForumDeelController extends AbstractController
 	 * @return Response
 	 * @Route("/forum/deel/{forum_id}/{pagina<\d+>}", methods={"GET","POST"}, defaults={"pagina"=1})
 	 * @Auth(P_PUBLIC)
-	 * @IsGranted("PUBLIC_ACCESS")
 	 */
 	public function deel(RequestStack $requestStack, ForumDeel $deel, $pagina = 1)
 	{

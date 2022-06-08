@@ -49,7 +49,6 @@ class CmsPaginaController extends AbstractController
 	 * @param string $subnaam
 	 * @return Response
 	 * @Route("/pagina/{naam}")
-	 * @IsGranted("PUBLIC_ACCESS")
 	 */
 	public function bekijken($naam, $subnaam = ''): Response
 	{
