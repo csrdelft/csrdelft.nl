@@ -82,24 +82,11 @@ class LoginService
 	 *
 	 * @return bool
 	 */
-	public static function mag(
-		$permission,
-		array $allowedAuthenticationMethods = null
-	) {
-		return ContainerFacade::getContainer()
-			->get(CsrSecurity::class)
-			->mag($permission, $allowedAuthenticationMethods);
-	}
-
-	public function _mag($permission, array $allowedAuthenticationMethdos = null)
+	public static function mag($permission)
 	{
-		$account = $this->security->getUser();
-
-		return $this->accessService->mag(
-			$account,
-			$permission,
-			$allowedAuthenticationMethdos
-		);
+		return ContainerFacade::getContainer()
+			->get('security')
+			->isGranted($permission);
 	}
 
 	/**

@@ -82,7 +82,7 @@ class GroepenView implements View
 		$model = $this->model;
 		$orm = $model->entityClass;
 		$html = '';
-		if ($orm::magAlgemeen(AccessAction::Aanmaken(), null, $this->soort)) {
+		if ($orm::magAlgemeen(AccessAction::Aanmaken(), $this->soort)) {
 			$html .=
 				'<a class="btn" href="' .
 				$this->model->getUrl() .

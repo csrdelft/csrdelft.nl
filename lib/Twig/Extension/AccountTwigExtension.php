@@ -25,10 +25,6 @@ class AccountTwigExtension extends AbstractExtension
 	 */
 	private $suService;
 	/**
-	 * @var LoginService
-	 */
-	private $loginService;
-	/**
 	 * @var BesturenRepository
 	 */
 	private $besturenRepository;
@@ -42,14 +38,12 @@ class AccountTwigExtension extends AbstractExtension
 	private $googleSync;
 
 	public function __construct(
-		LoginService $loginService,
 		BesturenRepository $besturenRepository,
 		CommissiesRepository $commissiesRepository,
 		GoogleSync $googleSync,
 		SuService $suService
 	) {
 		$this->suService = $suService;
-		$this->loginService = $loginService;
 		$this->besturenRepository = $besturenRepository;
 		$this->commissiesRepository = $commissiesRepository;
 		$this->googleSync = $googleSync;
@@ -63,26 +57,10 @@ class AccountTwigExtension extends AbstractExtension
 	public function getFunctions()
 	{
 		return [
-			new TwigFunction('mag', [$this, 'mag']),
 			new TwigFunction('getBestuurslid', [$this, 'getBestuurslid']),
 			new TwigFunction('getCommissielid', [$this, 'getCommissielid']),
 			new TwigFunction('isInGoogleContacts', [$this, 'isInGoogleContacts']),
 		];
-	}
-
-	/**
-	 * Mag de op dit moment ingelogde gebruiker $permissie?
-	 *
-	 * @param string $permission
-	 * @param array|null $allowedAuthenticationMethods
-	 * @return bool
-	 */
-	public function mag($permission, array $allowedAuthenticationMethods = null)
-	{
-		return $this->loginService->_mag(
-			$permission,
-			$allowedAuthenticationMethods
-		);
 	}
 
 	public function may_su_to(Account $account)

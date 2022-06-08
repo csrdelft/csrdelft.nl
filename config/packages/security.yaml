@@ -62,9 +62,8 @@ security:
     CsrDelft\entity\security\Account:
       algorithm: auto
 
-  # Hang stek rollen `R_...` aan Symfony rollen
   role_hierarchy:
-    PUBLIC_ACCESS: [ROLE_PUBLIC]
+    PUBLIC_ACCESS: [ROLE_PUBLIC, ROLE_FORUM_READ, ROLE_ALBUM_PUBLIC_READ]
     ROLE_NOBODY: [ROLE_PUBLIC, ROLE_FORUM_READ, ROLE_ALBUM_PUBLIC_READ]
     ROLE_ETER:
       [

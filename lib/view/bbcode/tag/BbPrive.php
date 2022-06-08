@@ -45,7 +45,7 @@ class BbPrive extends BbTag
 	public function parse($arguments = [])
 	{
 		$this->readContent();
-		$this->permissie = $arguments['prive'] ?? 'P_LOGGED_IN';
+		$this->permissie = $arguments['prive'] ?? 'ROLE_LOGGED_IN';
 	}
 
 	public function getPermissie()

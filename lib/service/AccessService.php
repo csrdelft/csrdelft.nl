@@ -106,18 +106,6 @@ class AccessService
 	];
 
 	/**
-	 * Gebruikt om ledengegevens te raadplegen
-	 * @var array
-	 */
-	private static $ledenRead = [P_LEDEN_READ, P_OUDLEDEN_READ];
-
-	/**
-	 * Gebruikt om ledengegevens te wijzigen
-	 * @var array
-	 */
-	private static $ledenWrite = [P_PROFIEL_EDIT, P_LEDEN_MOD];
-
-	/**
 	 * Permissies die we gebruiken om te vergelijken met de permissies van een gebruiker.
 	 */
 	private $permissions = [];

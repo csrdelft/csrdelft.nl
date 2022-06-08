@@ -14,7 +14,7 @@
 {{ getMelding() }}
 
 <div class="forum-header btn-toolbar">
-	{% if mag('P_ADMIN') %}
+	{% if is_granted('ROLE_ADMIN') %}
 		<div class="btn-group me-2">
 			<a href="{{ url('csrdelft_forum_forumdeel_aanmaken') }}" class="btn btn-light post popup"
 				 title="Deelforum aanmaken">{{ icon('add') }}</a>

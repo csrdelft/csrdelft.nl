@@ -9,6 +9,7 @@ use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaType;
 use CsrDelft\view\cms\CmsPaginaView;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +49,7 @@ class CmsPaginaController extends AbstractController
 	 * @param string $subnaam
 	 * @return Response
 	 * @Route("/pagina/{naam}")
-	 * @Auth(P_PUBLIC)
+	 * @IsGranted("PUBLIC_ACCESS")
 	 */
 	public function bekijken($naam, $subnaam = ''): Response
 	{

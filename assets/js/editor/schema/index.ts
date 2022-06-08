@@ -379,7 +379,7 @@ export const marks = RecordWithType<MarkSpec>()({
 			{
 				'data-prive': node.attrs.prive,
 				class: 'bb-prive',
-				title: `Prive: ${node.attrs.prive || 'P_LOGGED_IN'}`,
+				title: `Prive: ${node.attrs.prive || 'ROLE_LOGGED_IN'}`,
 			},
 			0,
 		],

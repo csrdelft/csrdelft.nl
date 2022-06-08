@@ -47,7 +47,7 @@ class KetzerSoortField extends GroepSoortField
 		/** @var GroepRepository $model */
 		$model = ContainerFacade::getContainer()->get($class[0]); // require once
 		$orm = $model->entityClass;
-		if (!$orm::magAlgemeen(AccessAction::Aanmaken(), null, $soort)) {
+		if (!$orm::magAlgemeen(AccessAction::Aanmaken(), $soort)) {
 			if ($model instanceof ActiviteitenRepository) {
 				$naam = ActiviteitSoort::from($soort)->getDescription();
 			} else {

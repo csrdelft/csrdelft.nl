@@ -1,6 +1,6 @@
 <div id="zijbalk_verjaardagen">
 	<div class="zijbalk-kopje">
-		{% if mag('P_LEDEN_READ') %}
+		{% if is_granted('ROLE_LEDEN_READ') %}
 			<a href="{{ url('csrdelft_profiel_verjaardagen') }}">Verjaardagen</a>
 		{% else %}
 			Verjaardagen

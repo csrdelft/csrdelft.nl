@@ -28,18 +28,14 @@ class Werkgroep extends Groep
 	 * Rechten voor de gehele klasse of soort groep?
 	 *
 	 * @param AccessAction $action
-	 * @param null $allowedAuthenticationMethods
 	 * @param null $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen(
-		AccessAction $action,
-		$allowedAuthenticationMethods = null,
-		$soort = null
-	) {
+	public static function magAlgemeen(AccessAction $action, $soort = null)
+	{
 		if (AccessAction::isAanmaken($action) && !LoginService::mag(P_LEDEN_MOD)) {
 			return false;
 		}
-		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
+		return parent::magAlgemeen($action, $soort);
 	}
 }

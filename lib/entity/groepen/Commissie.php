@@ -40,15 +40,11 @@ class Commissie extends Groep implements HeeftSoort
 	 * Rechten voor de gehele klasse of soort groep?
 	 *
 	 * @param AccessAction $action
-	 * @param null $allowedAuthenticationMethods
 	 * @param Enum $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen(
-		$action,
-		$allowedAuthenticationMethods = null,
-		$soort = null
-	) {
+	public static function magAlgemeen($action, $soort = null)
+	{
 		switch ($soort) {
 			case CommissieSoort::SjaarCie():
 				if (LoginService::mag('commissie:NovCie')) {
@@ -56,7 +52,7 @@ class Commissie extends Groep implements HeeftSoort
 				}
 				break;
 		}
-		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
+		return parent::magAlgemeen($action, $soort);
 	}
 
 	public function getSoort()

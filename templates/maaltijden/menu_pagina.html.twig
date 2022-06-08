@@ -5,7 +5,7 @@
 		<li><a href="{{ url('csrdelft_maalcie_mijncorvee_rooster') }}">Corveerooster</a></li>
 		<li><a href="{{ url('csrdelft_maalcie_mijncorvee_mijn') }}">Mijn corveeoverzicht</a></li>
 		<li><a href="{{ url('csrdelft_maalcie_mijnvoorkeuren_mijn') }}">Mijn voorkeuren</a></li>
-		{% if mag('P_MAAL_MOD,P_CORVEE_MOD') %}
+		{% if is_granted('ROLE_MAAL_MOD,P_CORVEE_MOD') %}
 			<li>
 				<select onchange="window.location.href = this.value;" aria-label="Maaltijdenbeheer menu">
 					<option value="">Beheermenu</option>

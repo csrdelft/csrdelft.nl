@@ -37,7 +37,7 @@ class MenuItemForm extends ModalForm
 			''
 		);
 		$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
-		if (!LoginService::mag(P_ADMIN) or $id == 'favoriet') {
+		if (!LoginService::mag(P_ADMIN) || $id == 'favoriet') {
 			$fields['pid']->readonly = true;
 			$fields['pid']->hidden = true;
 		}

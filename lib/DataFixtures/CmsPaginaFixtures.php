@@ -64,8 +64,8 @@ BB;
 Dit is de voorpagina.
 BB;
 		$thuisPagina->laatstGewijzigd = date_create_immutable();
-		$thuisPagina->rechtenBekijken = P_PUBLIC;
-		$thuisPagina->rechtenBewerken = 'P_ADMIN,Bestuur';
+		$thuisPagina->rechtenBekijken = 'ROLE_PUBLIC';
+		$thuisPagina->rechtenBewerken = 'ROLE_ADMIN,Bestuur';
 		$thuisPagina->inlineHtml = true;
 
 		$manager->persist($thuisPagina);

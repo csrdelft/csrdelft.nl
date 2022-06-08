@@ -7,6 +7,6 @@ trait CacheableVoterSupportsTrait
 	protected function supports(string $attribute, $subject)
 	{
 		return $this->supportsAttribute($attribute) &&
-			$this->supportsType(get_class($subject));
+			$this->supportsType($subject ? get_class($subject) : '');
 	}
 }

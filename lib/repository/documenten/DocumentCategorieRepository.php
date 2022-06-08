@@ -6,6 +6,7 @@ use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class DocumentCategorieModel.
@@ -19,22 +20,14 @@ use Doctrine\Persistence\ManagerRegistry;
 class DocumentCategorieRepository extends AbstractRepository
 {
 	/**
-	 * @var DocumentRepository
+	 * @var Security
 	 */
-	private $documentRepository;
-	/**
-	 * @var LoginService
-	 */
-	private $loginService;
+	private $security;
 
-	public function __construct(
-		ManagerRegistry $registry,
-		LoginService $loginService,
-		DocumentRepository $documentRepository
-	) {
+	public function __construct(ManagerRegistry $registry, Security $security)
+	{
 		parent::__construct($registry, DocumentCategorie::class);
-		$this->documentRepository = $documentRepository;
-		$this->loginService = $loginService;
+		$this->security = $security;
 	}
 
 	/**
@@ -66,7 +59,7 @@ class DocumentCategorieRepository extends AbstractRepository
 	public function findMetSchijfrechtenVoorLid()
 	{
 		return array_filter($this->findAll(), function ($categorie) {
-			return $this->loginService->_mag($categorie->schrijfrechten);
+			return $this->security->isGranted($categorie->schrijfrechten);
 		});
 	}
 }

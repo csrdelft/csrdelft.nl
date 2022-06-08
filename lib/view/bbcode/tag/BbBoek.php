@@ -65,7 +65,7 @@ class BbBoek extends BbTag
 
 	public function render()
 	{
-		if (!LoginService::mag('P_BIEB_READ')) {
+		if (!LoginService::mag('ROLE_BIEB_READ')) {
 			return null;
 		}
 

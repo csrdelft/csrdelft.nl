@@ -3,7 +3,7 @@
 {% block content %}
 	<h1>Civisaldo Beheer</h1>
 
-	{% if mag('P_FISCAAT_READ') %}
+	{% if is_granted('ROLE_FISCAAT_READ') %}
 		<ul class="nav nav-tabs mb-2">
 			<li class="nav-item">
 				<a href="{{ url('csrdelft_fiscaat_fiscaat_overzicht') }}"
@@ -47,7 +47,7 @@
 					Zoeker
 				</a>
 			</li>
-			{% if mag('P_FISCAAT_MOD') %}
+			{% if is_granted('ROLE_FISCAAT_MOD') %}
 				<li class="nav-item">
 					<a href="{{ url('csrdelft_fiscaat_civisaldoafschrijven_afschrijven') }}"
 						 class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_civisaldoafschrijven_afschrijven') %}active{% endif %}">

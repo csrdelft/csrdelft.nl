@@ -111,7 +111,7 @@ JS;
 		/**
 		 * @Warning: Duplicate function in GroepForm->validate()
 		 */
-		if (!$this->groep->magAlgemeen(AccessAction::Beheren(), null, $soort)) {
+		if (!$this->groep->magAlgemeen(AccessAction::Beheren(), $soort)) {
 			if ($model instanceof ActiviteitenRepository) {
 				$naam = $soort->getDescription();
 			} elseif ($model instanceof CommissiesRepository) {

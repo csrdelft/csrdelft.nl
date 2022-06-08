@@ -61,9 +61,9 @@ class ForumCategorie implements DisplayEntity
 		$this->forum_delen = new ArrayCollection();
 	}
 
-	public function magLezen($auth = null)
+	public function magLezen()
 	{
-		return LoginService::mag($this->rechten_lezen, $auth);
+		return LoginService::mag($this->rechten_lezen);
 	}
 
 	/**

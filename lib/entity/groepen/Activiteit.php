@@ -55,15 +55,11 @@ class Activiteit extends Groep implements
 	 * Rechten voor de gehele klasse of soort groep?
 	 *
 	 * @param AccessAction $action
-	 * @param array|null $allowedAuthenticationMethods
 	 * @param Enum $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen(
-		$action,
-		$allowedAuthenticationMethods = null,
-		$soort = null
-	) {
+	public static function magAlgemeen($action, $soort = null)
+	{
 		if ($soort && $soort instanceof ActiviteitSoort) {
 			switch ($soort) {
 				case ActiviteitSoort::OWee():
@@ -107,7 +103,7 @@ class Activiteit extends Groep implements
 			case AccessAction::Afmelden():
 				return true;
 		}
-		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
+		return parent::magAlgemeen($action, $soort);
 	}
 
 	public function getUUID()
