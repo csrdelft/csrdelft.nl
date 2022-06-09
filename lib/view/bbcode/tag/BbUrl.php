@@ -28,7 +28,7 @@ class BbUrl extends BbTag
 		$this->url = $this->getUrl($arguments);
 		if ($this->url == null) {
 			$this->readContent([], false);
-			$this->url = $this->getContent();
+			$this->url = $this->getChildren()[0]->render();
 		} else {
 			$this->readContent();
 		}
