@@ -128,9 +128,6 @@ class AccessControlEventListener
 			throw new CsrException('Route heeft geen @Auth: ' . $controller);
 		}
 
-		$mag = preg_replace('/^P_/', 'ROLE_', $mag);
-		$mag = preg_replace('/^ROLE_PUBLIC/', 'PUBLIC_ACCESS', $mag);
-
 		$user = $this->security->getUser();
 
 		if ($user && $user->blocked_reason) {

@@ -4,39 +4,18 @@ namespace CsrDelft\service;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\entity\corvee\CorveeFunctie;
-use CsrDelft\entity\corvee\CorveeKwalificatie;
-use CsrDelft\entity\groepen\Activiteit;
-use CsrDelft\entity\groepen\Bestuur;
-use CsrDelft\entity\groepen\Commissie;
-use CsrDelft\entity\groepen\enum\CommissieFunctie;
-use CsrDelft\entity\groepen\enum\GroepStatus;
-use CsrDelft\entity\groepen\Ketzer;
-use CsrDelft\entity\groepen\Kring;
-use CsrDelft\entity\groepen\Ondervereniging;
-use CsrDelft\entity\groepen\RechtenGroep;
-use CsrDelft\entity\groepen\Werkgroep;
-use CsrDelft\entity\groepen\Woonoord;
-use CsrDelft\entity\maalcie\Maaltijd;
-use CsrDelft\entity\maalcie\MaaltijdAanmelding;
-use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Cache\CacheInterface;
-use function preg_replace;
-use function preg_replace as preg_replace1;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -114,11 +93,7 @@ class AccessService
 	 * @var CacheInterface
 	 */
 	private $cache;
-
 	/**
-	 * @var EntityManagerInterface
-	 */
-	private $em; /**
 	 * @var AccountRepository
 	 */
 	private $accountRepository;
@@ -138,13 +113,11 @@ class AccessService
 	 */
 	public function __construct(
 		CacheInterface $cache,
-		EntityManagerInterface $em,
 		Security $security,
 		AccessDecisionManagerInterface $accessDecisionManager,
 		AccountRepository $accountRepository
 	) {
 		$this->cache = $cache;
-		$this->em = $em;
 		$this->accountRepository = $accountRepository;
 		$this->security = $security;
 		$this->accessDecisionManager = $accessDecisionManager;
@@ -240,17 +213,18 @@ class AccessService
 		);
 
 		return $this->cache->get($key, function () use ($subject, $permission) {
-			$permission1 = $permission;
-			$permission1 = preg_replace1('/^P_/', 'ROLE_', $permission1);
-			$permission1 = preg_replace1(
-				'/^ROLE_PUBLIC/',
-				'PUBLIC_ACCESS',
-				$permission1
-			);
-			return $this->security->isGranted($permission1, $subject);
+			return $this->security->isGranted($permission, $subject);
 		});
 	}
 
+	/**
+	 * Controleert of een specifieke gebruiker de juiste rechten heeft.
+	 *
+	 * @param UserInterface $user
+	 * @param $attribute
+	 * @param $subject
+	 * @return bool
+	 */
 	public function isUserGranted(
 		UserInterface $user,
 		$attribute,
