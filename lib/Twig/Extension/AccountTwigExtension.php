@@ -2,7 +2,6 @@
 
 namespace CsrDelft\Twig\Extension;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\GroepLid;
@@ -11,7 +10,6 @@ use CsrDelft\entity\security\Account;
 use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\repository\groepen\CommissiesRepository;
 use CsrDelft\service\GoogleSync;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\Security\Core\Security;
@@ -25,10 +23,6 @@ class AccountTwigExtension extends AbstractExtension
 	 * @var SuService
 	 */
 	private $suService;
-	/**
-	 * @var LoginService
-	 */
-	private $loginService;
 	/**
 	 * @var BesturenRepository
 	 */
@@ -47,7 +41,6 @@ class AccountTwigExtension extends AbstractExtension
 	private $security;
 
 	public function __construct(
-		LoginService $loginService,
 		Security $security,
 		BesturenRepository $besturenRepository,
 		CommissiesRepository $commissiesRepository,
@@ -55,7 +48,6 @@ class AccountTwigExtension extends AbstractExtension
 		SuService $suService
 	) {
 		$this->suService = $suService;
-		$this->loginService = $loginService;
 		$this->besturenRepository = $besturenRepository;
 		$this->commissiesRepository = $commissiesRepository;
 		$this->googleSync = $googleSync;
