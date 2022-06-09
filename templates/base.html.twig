@@ -17,7 +17,7 @@
 	<meta property="og:image" content="{{ absolute_url(asset_url('images/beeldmerk.png')) }}"/>
 	<meta property="og:description" content="{{ instelling('stek', 'beschrijving') }}"/>
 	{{ csrfMetaTag() }}
-	<meta property="X-CSR-LOGGEDIN" content="{{ is_granted('ROLE_LOGGED_IN') ? 'true' : 'false' }}"/>
+	<meta property="X-CSR-LOGGEDIN" content="{{ mag('P_LOGGED_IN') ? 'true' : 'false' }}"/>
 	<title>C.S.R. Delft - {% block titel %}{% endblock %}</title>
 	<link rel="manifest" href="{{ absolute_url('/manifest.json') }}">
 	<link rel="shortcut icon" href="{{ absolute_url('/images/favicon.ico') }}"/>
@@ -57,7 +57,7 @@
 				{% for blok in get_zijbalk() %}
 					<div class="blok">{{ blok | raw }}</div>
 				{% endfor %}
-				{% if app.debug and is_granted('ROLE_ADMIN') %}
+				{% if app.debug and mag('P_ADMIN') %}
 					<div class="commit-hash">
 						<a href="{{ commitLink() }}" target="_blank" class="not-external">{{ commitHash() }}</a>
 					</div>

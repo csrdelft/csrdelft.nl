@@ -50,7 +50,7 @@
 	</table>
 
 	<br>
-	{% if is_granted("BESTUUR:HT,ROLE_ADMIN") %}
+	{% if mag("BESTUUR:HT,P_ADMIN") %}
 		<h4>HV-presentielijst</h4>
 		<form action="{{ url('csrdelft_streeplijst_genererenhvpresentielijst') }}" method="get">
 			<div>

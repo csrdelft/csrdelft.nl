@@ -19,7 +19,7 @@
 		</thead>
 		<tbody>
 		{% for pagina in paginas %}
-			{% if pagina.titel and is_granted(pagina.rechtenBekijken) %}
+			{% if pagina.titel and mag(pagina.rechtenBekijken) %}
 				<tr>
 					<td>/pagina/{{ pagina.naam }}</td>
 					<td>{{ pagina.titel }}</td>
@@ -31,11 +31,11 @@
 						<div class="btn-group btn-group-sm">
 							<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_bekijken', {naam: pagina.naam}) }}"
 								 title="Bekijken">{{ icon('eye') }}</a>
-							{% if is_granted(pagina.rechtenBewerken) %}
+							{% if mag(pagina.rechtenBewerken) %}
 								<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_bewerken', {naam: pagina.naam}) }}"
 									 title="Bewerken">{{ icon('bewerken') }}</a>
 							{% endif %}
-							{% if is_granted('ROLE_ADMIN') %}
+							{% if mag('P_ADMIN') %}
 								<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_verwijderen', {naam: pagina.naam}) }}"
 									 title="Verwijderen">{{ icon('delete') }}</a>
 							{% endif %}

@@ -73,14 +73,14 @@
 								{{ icon('lock_edit') }} Toestemming
 							</a>
 						{% endif %}
-						{% if is_granted('ROLE_ADMIN') or app.user.uid == profiel.uid %}
+						{% if mag('P_ADMIN') or app.user.uid == profiel.uid %}
 							{% if profiel.account %}
 								<a href="{{ url('csrdelft_account_bewerken', {uid: profiel.uid}) }}" class="list-group-item"
 									 title="Inloggegevens bewerken">
 									{{ icon('key') }} Inloggegevens bewerken
 								</a>
 							{% else %}
-								{% if is_granted('ROLE_ADMIN') %}
+								{% if mag('P_ADMIN') %}
 									<a href="{{ url('csrdelft_account_aanmaken', {uid: profiel.uid}) }}" class="list-group-item"
 										 title="Account aanmaken">
 										{{ icon('key_delete', 'key_add') }} Account aanmaken
@@ -378,7 +378,7 @@
 					</dd>
 				{% endif %}
 			</dl>
-			{% if is_granted('ROLE_LEDEN_MOD') or app.user.uid == profiel.uid %}
+			{% if mag('P_LEDEN_MOD') or app.user.uid == profiel.uid %}
 				<div class="col-12 mb-3">
 					<a class="btn btn-primary" href="#"
 						 onclick="$(this).parent().remove(); $('.meer-groepen').slideDown();return false;" tabindex="0">
@@ -412,19 +412,19 @@
 			{% endif %}
 		</div>
 
-		{% if (profiel.lid or (is_granted('ROLE_LEDEN_MOD') and profiel.civiSaldo)) and profiel.bankrekening %}
+		{% if (profiel.lid or (mag('P_LEDEN_MOD') and profiel.civiSaldo)) and profiel.bankrekening %}
 			<dl>
 				{% if profiel.bankrekening and profiel|is_zichtbaar('bankrekening', 'profiel_lid') %}
 					<dt>Bankrekening</dt>
 					<dd>
 						{{ profiel.bankrekening }}
-						{% if is_granted('ROLE_MAAL_MOD') %}
+						{% if mag('P_MAAL_MOD') %}
 							<span class="lichtgrijs">({% if not profiel.machtiging %}geen{% endif %} machtiging getekend)</span>
 						{% endif %}
 					</dd>
 				{% endif %}
 			</dl>
-			{% if is_granted('ROLE_FISCAAT_MOD') or app.user.uid == profiel.uid %}
+			{% if mag('P_FISCAAT_MOD') or app.user.uid == profiel.uid %}
 				<dl id="CiviSaldo">
 					<dt>Saldohistorie</dt>
 					<dd>
@@ -452,7 +452,7 @@
 					</dd>
 				</dl>
 			{% endif %}
-			{% if is_granted('ROLE_FISCAAT_MOD') or app.user.uid == profiel.uid %}
+			{% if mag('P_FISCAAT_MOD') or app.user.uid == profiel.uid %}
 				<dl>
 					<dt>Saldografiek</dt>
 					<dd>
@@ -479,7 +479,7 @@
 					{% endif %}
 				</dd>
 			</dl>
-			{% if is_granted('ROLE_MAAL_MOD') or app.user.uid == profiel.uid %}
+			{% if mag('P_MAAL_MOD') or app.user.uid == profiel.uid %}
 				<dl class="col-md-6">
 					{% if abos is not empty %}
 						<dt>Abo's</dt>
@@ -690,14 +690,14 @@
 			</dl>
 		{% endif %}
 
-		{% if is_granted('ROLE_ADMIN,bestuur,commissie:NovCie') and profiel.status == 'S_NOVIET' and profiel.kgb %}
+		{% if mag('P_ADMIN,bestuur,commissie:NovCie') and profiel.status == 'S_NOVIET' and profiel.kgb %}
 			<div class="" id="novcieopmerking">
 				<div style="cursor: pointer;" onclick="$('#novcie_gegevens').toggle();">NovCie-Opmerking &raquo;</div>
 				<div class="gegevens verborgen" id="novcie_gegevens">{{ profiel.kgb | bbcode }}</div>
 			</div>
 		{% endif %}
 
-		{% if is_granted('ROLE_LEDEN_MOD') %}
+		{% if mag('P_LEDEN_MOD') %}
 			<div class="row" id="changelog">
 				<div class="col">
 					<div style="cursor: pointer;" onclick="$('#changelog_gegevens').toggle();this.remove()">

@@ -14,6 +14,7 @@ use CsrDelft\service\GoogleSync;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use GuzzleHttp\Exception\RequestException;
+use Symfony\Component\Security\Core\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -24,6 +25,10 @@ class AccountTwigExtension extends AbstractExtension
 	 * @var SuService
 	 */
 	private $suService;
+	/**
+	 * @var LoginService
+	 */
+	private $loginService;
 	/**
 	 * @var BesturenRepository
 	 */
@@ -36,17 +41,25 @@ class AccountTwigExtension extends AbstractExtension
 	 * @var GoogleSync
 	 */
 	private $googleSync;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
+		LoginService $loginService,
+		Security $security,
 		BesturenRepository $besturenRepository,
 		CommissiesRepository $commissiesRepository,
 		GoogleSync $googleSync,
 		SuService $suService
 	) {
 		$this->suService = $suService;
+		$this->loginService = $loginService;
 		$this->besturenRepository = $besturenRepository;
 		$this->commissiesRepository = $commissiesRepository;
 		$this->googleSync = $googleSync;
+		$this->security = $security;
 	}
 
 	public function getFilters()
@@ -57,10 +70,23 @@ class AccountTwigExtension extends AbstractExtension
 	public function getFunctions()
 	{
 		return [
+			new TwigFunction('mag', [$this, 'mag']),
 			new TwigFunction('getBestuurslid', [$this, 'getBestuurslid']),
 			new TwigFunction('getCommissielid', [$this, 'getCommissielid']),
 			new TwigFunction('isInGoogleContacts', [$this, 'isInGoogleContacts']),
 		];
+	}
+
+	/**
+	 * Mag de op dit moment ingelogde gebruiker $permissie?
+	 *
+	 * @param string $permission
+	 * @return bool
+	 */
+	public function mag($permission)
+	{
+		$permission = preg_replace('/^P_/', 'ROLE_', $permission);
+		return $this->security->isGranted($permission);
 	}
 
 	public function may_su_to(Account $account)

@@ -1,7 +1,7 @@
-{% extends is_granted('ROLE_LOGGED_IN') ? 'base.html.twig' : 'extern/layout.html.twig' %}
+{% extends mag('P_LOGGED_IN') ? 'base.html.twig' : 'extern/layout.html.twig' %}
 
 {% block styles %}
-{% if not is_granted('ROLE_LOGGED_IN') %}
+{% if not mag('P_LOGGED_IN') %}
 	{{ css_asset('extern') }}
 	{{ css_asset('extern-forum') }}
 {% endif %}

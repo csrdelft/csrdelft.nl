@@ -12,7 +12,7 @@
 	{% for draad in deel.forumDraden %}
 		<div class="media pt-3">
 			<a href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}"
-				 class="media-body pb-3 mb-0 lh-125 border-bottom border-gray {% if is_granted('ROLE_LOGGED_IN') and draad.ongelezen %} {{ ongelezenWeergave }} {% endif %}">
+				 class="media-body pb-3 mb-0 lh-125 border-bottom border-gray {% if mag('P_LOGGED_IN') and draad.ongelezen %} {{ ongelezenWeergave }} {% endif %}">
 				{% if draad.belangrijk %}
 					{{ icon(draad.belangrijk, null, 'dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
 				{% elseif draad.plakkerig %}
@@ -21,7 +21,7 @@
 					{{ icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
 				{% endif %}
 				<strong>{{ draad.titel }}</strong>
-				{% if is_granted('ROLE_LOGGED_IN') and draad.aantalOngelezenPosts > 0 %}
+				{% if mag('P_LOGGED_IN') and draad.aantalOngelezenPosts > 0 %}
 					<span class="badge bg-primary">{{ draad.aantalOngelezenPosts }}</span>
 				{% endif %}
 				<span class="text-muted float-end">{{ draad.laatst_gewijzigd | reldate }}</span>

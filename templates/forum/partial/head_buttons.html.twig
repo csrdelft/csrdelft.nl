@@ -1,4 +1,4 @@
-{% if is_granted('ROLE_LOGGED_IN') %}
+{% if mag('P_LOGGED_IN') %}
 	{% if deel is defined and deel.magMeldingKrijgen %}
 		<div class="btn-group me-2">
 			<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
