@@ -149,7 +149,6 @@ class LoginService
 	 * Indien de huidige gebruiker is geauthenticeerd door middel van een token in de url
 	 * worden Permissies hierdoor beperkt voor de veiligheid.
 	 * @return string|null uit AuthenticationMethod
-	 * @see AccessService::mag()
 	 */
 	public function getAuthenticationMethod()
 	{

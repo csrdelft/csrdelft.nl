@@ -2,20 +2,13 @@
 
 namespace CsrDelft\service;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\security\enum\AccessRole;
-use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\service\security\LoginService;
-use Doctrine\ORM\EntityManagerInterface;
-use InvalidArgumentException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -47,19 +40,6 @@ class AccessService
 	const PREFIX_KWALIFICATIE = 'KWALIFICATIE';
 
 	/**
-	 * Standaard toegestane authenticatie methoden
-	 * @var array
-	 */
-	private static $defaultAllowedAuthenticationMethods = [
-		AuthenticationMethod::impersonate,
-		AuthenticationMethod::temporary,
-		AuthenticationMethod::cookie_token,
-		AuthenticationMethod::password_login,
-		AuthenticationMethod::recent_password_login,
-		AuthenticationMethod::password_login_and_one_time_token,
-	];
-
-	/**
 	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
@@ -85,136 +65,17 @@ class AccessService
 	];
 
 	/**
-	 * Permissies die we gebruiken om te vergelijken met de permissies van een gebruiker.
-	 */
-	private $permissions = [];
-
-	/**
-	 * @var CacheInterface
-	 */
-	private $cache;
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
 	 * @var AccessDecisionManagerInterface
 	 */
 	private $accessDecisionManager;
 
 	/**
-	 * @param CacheInterface $cache
-	 * @param EntityManagerInterface $em
-	 * @throws InvalidArgumentException
+	 * @param AccessDecisionManagerInterface $accessDecisionManager
 	 */
 	public function __construct(
-		CacheInterface $cache,
-		Security $security,
-		AccessDecisionManagerInterface $accessDecisionManager,
-		AccountRepository $accountRepository
+		AccessDecisionManagerInterface $accessDecisionManager
 	) {
-		$this->cache = $cache;
-		$this->accountRepository = $accountRepository;
-		$this->security = $security;
 		$this->accessDecisionManager = $accessDecisionManager;
-	}
-
-	public function checkAuthenticationMethod(
-		$allowedAuthenticationMethods = null
-	) {
-		$method = ContainerFacade::getContainer()
-			->get(LoginService::class)
-			->getAuthenticationMethod();
-		if ($allowedAuthenticationMethods == null) {
-			$allowedAuthenticationMethods =
-				self::$defaultAllowedAuthenticationMethods;
-		}
-		// Als de methode niet toegestaan is testen we met de permissies van niet-ingelogd
-		if (!in_array($method, $allowedAuthenticationMethods)) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * @param UserInterface|null $subject Het lid dat de gevraagde permissies zou moeten bezitten.
-	 * @param string|null $permission Gevraagde permissie(s).
-	 * @param array|null $allowedAuthenticationMethods Bij niet toegestane methode doen alsof gebruiker x999 is.
-	 *
-	 * Met deze functies kan op één of meerdere permissies worden getest,
-	 * onderling gescheiden door komma's. Als een lid één van de
-	 * permissies 'heeft', geeft de functie true terug. Het is dus een
-	 * logische OF tussen de verschillende te testen permissies.
-	 *
-	 * Voorbeeldjes:
-	 *  commissie:NovCie      geeft true leden van de h.t. NovCie.
-	 *  commissie:SocCie:ot      geeft true voor alle leden die ooit SocCie hebben gedaan
-	 *  commissie:PubCie,bestuur  geeft true voor leden van h.t. bestuur en h.t. pubcie
-	 *  commissie:SocCie>Fiscus    geeft true voor h.t. Soccielid met functie fiscus
-	 *  geslacht:m          geeft true voor alle mannelijke leden
-	 *  verticale:d          geeft true voor alle leden van verticale d.
-	 *
-	 * Gecompliceerde voorbeeld:
-	 *    commissie:NovCie+commissie:MaalCie|1337,bestuur
-	 *
-	 * Equivalent met haakjes:
-	 *    (commissie:NovCie AND (commissie:MaalCie OR 1337)) OR bestuur
-	 *
-	 * Geeft toegang aan:
-	 *    de mensen die én in de NovCie zitten én in de MaalCie zitten
-	 *    of mensen die in de NovCie zitten en lidnummer 1337 hebben
-	 *    of mensen die in het bestuur zitten
-	 *
-	 * @return bool Of $subject $permission heeft.
-	 */
-	public function mag(
-		UserInterface $subject = null,
-		$permission = null,
-		array $allowedAuthenticationMethods = null
-	) {
-		if ($subject == null) {
-			$subject = $this->accountRepository->find(LoginService::UID_EXTERN);
-		}
-
-		// Als voor het ingelogde lid een permissie gevraagd wordt
-		if ($subject->uid == LoginService::getUid()) {
-			// Controlleer hoe de gebruiker ge-authenticeerd is
-			$method = ContainerFacade::getContainer()
-				->get(LoginService::class)
-				->getAuthenticationMethod();
-			if ($allowedAuthenticationMethods == null) {
-				$allowedAuthenticationMethods =
-					self::$defaultAllowedAuthenticationMethods;
-			}
-			// Als de methode niet toegestaan is testen we met de permissies van niet-ingelogd
-			if (!in_array($method, $allowedAuthenticationMethods)) {
-				$subject = $this->accountRepository->find(LoginService::UID_EXTERN);
-			}
-		}
-
-		// Rechten vergeten?
-		if (empty($permission)) {
-			return false;
-		}
-
-		// Altijd uppercase
-		$permission = strtoupper($permission);
-
-		// Try cache
-		$key = sprintf(
-			'hasPermission-%s-%s',
-			urlencode(str_replace('-', '_', $permission)),
-			$subject->uid
-		);
-
-		return $this->cache->get($key, function () use ($subject, $permission) {
-			return $this->security->isGranted($permission, $subject);
-		});
 	}
 
 	/**
@@ -272,7 +133,7 @@ class AccessService
 	 */
 	public function getPermissionSuggestions()
 	{
-		$suggestions = array_keys($this->permissions);
+		$suggestions = [];
 		$suggestions[] = 'bestuur';
 		$suggestions[] = 'geslacht:m';
 		$suggestions[] = 'geslacht:v';
@@ -323,14 +184,9 @@ class AccessService
 			return true;
 		}
 
-		// Is de gevraagde permissie voorgedefinieerd?
-		if (isset($this->permissions[$permission])) {
-			return true;
-		}
-
 		// splits permissie in type, waarde en rol
 		$p = explode(':', $permission);
-		if (in_array($p[0], self::$prefix) && sizeof($p) <= 3) {
+		if (in_array($p[0], self::$prefix) && count($p) <= 3) {
 			if (isset($p[1]) && $p[1] == '') {
 				return false;
 			}
