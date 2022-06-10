@@ -111,7 +111,7 @@ class GoogleSync
 	public function init()
 	{
 		$google_token = $this->googleTokenRepository->find(
-			$this->security->getAccount()->uid
+			$this->security->getUser()->getUserIdentifier()
 		);
 		if (!$google_token) {
 			throw new CsrException(
