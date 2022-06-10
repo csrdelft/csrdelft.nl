@@ -17,12 +17,12 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  * - commissie:ot
  * - commissie:ht:qq
  */
-class BestuurOfCommissiePrefixVoter extends PrefixVoter
+class BestuurOfCommissieVoter extends PrefixVoter
 {
 	const PREFIX_BESTUUR = 'BESTUUR';
 	const PREFIX_COMMISSIE = 'COMMISSIE';
 	/**
-	 * @var GroepPrefixVoter
+	 * @var GroepVoter
 	 */
 	private $groepPrefixVoter;
 	/**
@@ -32,7 +32,7 @@ class BestuurOfCommissiePrefixVoter extends PrefixVoter
 
 	public function __construct(
 		EntityManagerInterface $em,
-		GroepPrefixVoter $groepPrefixVoter
+		GroepVoter $groepPrefixVoter
 	) {
 		$this->groepPrefixVoter = $groepPrefixVoter;
 		$this->em = $em;

@@ -13,6 +13,30 @@ Een lid die een `Account` heeft mag inloggen in de stek. Zodra een lid is ingelo
 
 In `config/packages/security.yaml` is alles wat met security te maken heeft geconfigureerd.
 
+## Roles
+
+> [Symfony documentatie over Roles](https://symfony.com/doc/current/security.html#roles)
+
+In `security.yaml` staan alle rollen gedefineerd. Een gebruiker heeft in ieder geval één ROLE, deze is opgeslagen in het `perm_role` veld in Account.
+
+Er is een rollen hierarchie gedefinieerd zodat er met een specifieke rol meerdere standaardrollen afgevangen kan worden.
+
+Er zijn een aantal standaard rollen in Symfony:
+
+- `ROLE_ALLOWED_TO_SWITCH`: Mag van gebruiker switchen (su)
+- `IS_IMPERSONATOR`: Is van gebruiker geswitched
+- `PUBLIC_ACCESS`: Het hele internet
+
+## Voters
+
+> [Symfony documentatie over Voters](https://symfony.com/doc/current/security/voters.html)
+
+Het idee van voters is dat ze op basis van een permissie-string kunnen zeggen of een gebruiker toegang heeft. Dit kan algemene toegang zijn, maar ook toegang tot een specifiek object. Dit laatste wordt nog niet gedaan in de stek.
+
+Alle voters zijn te vinden in de `CsrDelft\common\Security\Voters\ ` namespace. Ze implementeren allemaal `Symfony\Component\Security\Core\Authorization\VoterInterface`, maar er is ook een `Voter` class die ge-extend kan worden en al grotendeels geimplementeerd is.
+
+Kijk bijvoorbeeld naar `EerstejaarsVoter` voor een simpele implementatie van een voter die alleen toegang geeft aan eerstejaars.
+
 ## Authenticators
 
 Er zijn een aantal Authenticators, een authenticator is verantwoordelijk voor het toegang geven tot een specifiek onderdeel van de stek. Een authenticator vangt requests af op basis van een `supports` methode. In deze methode wordt gekeken of de specifieke authenticator overweg kan met de specifieke request, bijvoorbeeld op basis van path, cookie, header, etc.
@@ -45,7 +69,15 @@ Controleert de private token van een gebruiker om een specifieke route te bezoek
 
 _Geactiveerd wanneer:_ De sessie een `wachtwoord_reset_token` bevat.
 
-Controleerd of het wachtwoord reset formulier goed ingevuld is, als dit het geval is wordt het wachtwoord gereset en wordt de gebuiker ingelogd.
+Controleert of het wachtwoord reset formulier goed ingevuld is, als dit het geval is wordt het wachtwoord gereset en wordt de gebuiker ingelogd.
+
+### RemoteLoginAuthenticator
+
+_Geactiveerd wanneer:_ Er een `POST` request wordt gestuurd naar `/remote-login-final`
+
+Controleert of de meegegeven uuid geaccepteerd is door een gebruiker. Als dit het geval is wordt de huidige gebruiker ingelogd in het account van de gebruiker die de uuid heeft geaccepteerd.
+
+Zie ook [Remote Login](./remote-login.md).
 
 ### ApiAuthenticator
 

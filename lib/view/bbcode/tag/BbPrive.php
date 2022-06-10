@@ -3,7 +3,9 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\service\AccessService;
 use CsrDelft\service\security\LoginService;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Tekst binnen de privé-tag wordt enkel weergegeven voor leden met
@@ -21,10 +23,26 @@ class BbPrive extends BbTag
 	 * @var string
 	 */
 	private $permissie;
+	/**
+	 * @var Security
+	 */
+	private $security;
+	/**
+	 * @var AccessService
+	 */
+	private $accessService;
+
+	public function __construct(Security $security, AccessService $accessService)
+	{
+		$this->security = $security;
+		$this->accessService = $accessService;
+	}
 
 	public function isAllowed()
 	{
-		return LoginService::mag($this->permissie);
+		return $this->security->isGranted(
+			$this->accessService->converteerPermissie($this->permissie)
+		);
 	}
 
 	public static function getTagName()

@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  * groep met die korte naam erbij, als het getal is uiteraard de groep met dat id.
  * Met de toevoeging ':Fiscus' kan ook specifieke functie geëist worden binnen een groep.
  */
-class GroepPrefixVoter extends PrefixVoter
+class GroepVoter extends PrefixVoter
 {
 	const PREFIX_ACTIVITEIT = 'ACTIVITEIT';
 	const PREFIX_BESTUUR = 'BESTUUR';

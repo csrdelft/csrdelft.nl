@@ -198,4 +198,15 @@ class AccessService
 
 		return false;
 	}
+
+	/**
+	 * Converteer een oude permissie, zoals P_LOGGED_IN naar een nieuwe permissie zoals ROLE_LOGGED_IN.
+	 *
+	 * @param $permissie
+	 * @return array|string|string[]|null
+	 */
+	public function converteerPermissie($permissie)
+	{
+		return preg_replace('/[^a-zA-Z]P_/', 'ROLE_', $permissie);
+	}
 }

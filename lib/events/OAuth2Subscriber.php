@@ -6,7 +6,6 @@ use CsrDelft\common\Security\OAuth2Scope;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\RememberOAuthRepository;
 use CsrDelft\service\AccessService;
-use CsrDelft\service\security\LoginService;
 use Nyholm\Psr7\Response;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
