@@ -9,6 +9,7 @@ htdocs
 # Php vendor bestanden
 bin/.phpunit
 vendor
+composer.lock
 
 # Built docs site
 docs/_site
