@@ -6,9 +6,9 @@ app-controller-sub:
 default:
   path: /{_locale<%app.supported_locales%>}/{naam}/{subnaam}
   controller: CsrDelft\controller\CmsPaginaController::bekijken
-  defaults: { naam: thuis, subnaam: '', _mag: P_PUBLIC }
+  defaults: { naam: thuis, subnaam: '', _mag: 'PUBLIC_ACCESS' }
 
 defaultNoLocale:
   path: /{naam}/{subnaam}
   controller: CsrDelft\controller\CmsPaginaController::bekijken
-  defaults: { naam: thuis, subnaam: '', _mag: P_PUBLIC, _locale: nl }
+  defaults: { naam: thuis, subnaam: '', _mag: 'PUBLIC_ACCESS', _locale: nl }
