@@ -22,7 +22,7 @@
 				</a>
 			{% endif %}
 		{% endif %}
-		{% if mag(categorie.schrijfrechten) %}
+		{% if is_granted(categorie.schrijfrechten) %}
 			<a class="btn" href="{{ url('csrdelft_documenten_toevoegen') }}?catID={{ categorie.id }}">
 				{{ icon('toevoegen') }} Toevoegen
 			</a>
