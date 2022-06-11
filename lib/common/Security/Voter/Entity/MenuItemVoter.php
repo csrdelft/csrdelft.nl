@@ -4,19 +4,17 @@ namespace CsrDelft\common\Security\Voter\Entity;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Security\Voter\CacheableVoterSupportsTrait;
-use CsrDelft\entity\CmsPagina;
+use CsrDelft\entity\MenuItem;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
-class CmsPaginaVoter extends Voter
+class MenuItemVoter extends Voter
 {
 	use CacheableVoterSupportsTrait;
 
 	const BEKIJKEN = 'bekijken';
-	const BEWERKEN = 'bewerken';
-	const RECHTEN_WIJZIGEN = 'rechten_wijzigen';
-	const VERWIJDEREN = 'verwijderen';
+	const BEHEREN = 'beheren';
 	/**
 	 * @var Security
 	 */
@@ -29,38 +27,35 @@ class CmsPaginaVoter extends Voter
 
 	public function supportsAttribute(string $attribute): bool
 	{
-		return in_array($attribute, [
-			self::BEKIJKEN,
-			self::BEWERKEN,
-			self::RECHTEN_WIJZIGEN,
-			self::VERWIJDEREN,
-		]);
+		return in_array($attribute, [self::BEKIJKEN, self::BEHEREN]);
 	}
 
 	public function supportsType(string $subjectType): bool
 	{
-		return $subjectType == CmsPagina::class;
+		return $subjectType == MenuItem::class;
 	}
 
+	/**
+	 * @param string $attribute
+	 * @param MenuItem $subject
+	 * @param TokenInterface $token
+	 * @return bool
+	 */
 	protected function voteOnAttribute(
 		string $attribute,
 		$subject,
 		TokenInterface $token
 	) {
-		if (!$subject instanceof CmsPagina) {
-			return false;
-		}
-
 		switch ($attribute) {
 			case self::BEKIJKEN:
-				return $this->security->isGranted($subject->rechtenBekijken);
-			case self::BEWERKEN:
-				return $this->security->isGranted($subject->rechtenBewerken);
-			case self::RECHTEN_WIJZIGEN:
-			case self::VERWIJDEREN:
-				return $this->security->isGranted('ROLE_ADMIN');
+				return $subject->zichtbaar &&
+					$this->security->isGranted($subject->rechten_bekijken);
+			case self::BEHEREN:
+				return $subject->rechten_bekijken ==
+					$this->security->getUser()->getUserIdentifier() ||
+					$this->security->isGranted('ROLE_ADMIN');
 			default:
-				throw new CsrException("Onbekende rechten nodig: '$attribute'.");
+				throw new CsrException("Onbekende attribute: '$attribute'.");
 		}
 	}
 }

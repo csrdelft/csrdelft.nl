@@ -7,7 +7,7 @@
 </div>
 {% if root.children %}
 	{% for item in root.children %}
-		{% if item.magBekijken %}
+		{% if is_granted('bekijken', item) %}
 			<div class="item {% if item.active %}active{% endif %}{% if root.tekst == 'Sponsors' %} ads{% endif %}">
 				&raquo;
 				<a href="{{ item.link }}" title="{{ item.tekst }}"

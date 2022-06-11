@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Security\Voter\Entity\MenuItemVoter;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\GenericSuggestiesResponse;
@@ -43,9 +44,7 @@ class MenuBeheerController extends AbstractController
 			throw $this->createAccessDeniedException();
 		}
 		$root = $this->menuItemRepository->getMenuBeheer($menuName);
-		if (!$root || !$root->magBeheren()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $root);
 		return $this->render('menubeheer/tree.html.twig', [
 			'root' => $root,
 			'menus' => $this->menuItemRepository->getMenuBeheerLijst(),
@@ -67,13 +66,9 @@ class MenuBeheerController extends AbstractController
 		} else {
 			$parent = $this->menuItemRepository->getMenuItem((int) $parentId);
 		}
-		if (!$parent || !$parent->magBeheren()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $parent);
 		$item = $this->menuItemRepository->nieuw($parent);
-		if (!$item || !$item->magBeheren()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $item);
 		$form = new MenuItemForm($item, 'toevoegen', $parentId); // fetches POST values itself
 		if ($form->validate()) {
 			// form checks if hidden fields are modified
@@ -94,9 +89,7 @@ class MenuBeheerController extends AbstractController
 	public function bewerken($itemId)
 	{
 		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
-		if (!$item || !$item->magBeheren()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $item);
 		$form = new MenuItemForm($item, 'bewerken', $item->item_id); // fetches POST values itself
 		if ($form->validate()) {
 			// form checks if hidden fields are modified
@@ -121,9 +114,7 @@ class MenuBeheerController extends AbstractController
 	public function verwijderen($itemId): JsonResponse
 	{
 		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
-		if (!$item || !$item->magBeheren()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $item);
 		$rowCount = $this->menuItemRepository->removeMenuItem($item);
 		setMelding($item->tekst . ' verwijderd', 1);
 		if ($rowCount > 0) {
@@ -143,9 +134,7 @@ class MenuBeheerController extends AbstractController
 	public function zichtbaar($itemId): JsonResponse
 	{
 		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
-		if (!$item || !$item->magBeheren()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $item);
 		$item->zichtbaar = !$item->zichtbaar;
 		$this->menuItemRepository->persist($item);
 		setMelding(

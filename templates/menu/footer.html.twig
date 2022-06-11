@@ -13,12 +13,12 @@
 			</div>
 			{% set menu = get_menu('main') %}
 			{% for item in menu.children %}
-				{% if item.magBekijken %}
+				{% if is_granted('bekijken', item) %}
 					<div class="col-6 col-md">
 						<h5>{{ item.tekst }}</h5>
 						<ul class="list-unstyled text-small">
 							{% for subItem in item.children %}
-								{% if subItem.magBekijken %}
+								{% if is_granted('bekijken', subItem) %}
 									<li><a class="link-secondary" href="{{ subItem.link }}">{{ subItem.tekst | raw }}</a></li>
 								{% endif %}
 							{% endfor %}

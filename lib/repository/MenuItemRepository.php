@@ -3,6 +3,7 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Security\Voter\Entity\MenuItemVoter;
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\MenuItem;
@@ -140,7 +141,10 @@ class MenuItemRepository extends AbstractRepository
 		if ($parent->children) {
 			$newChildren = [];
 			foreach ($parent->children as $child) {
-				if (!$checkRechten || $child->magBekijken()) {
+				if (
+					!$checkRechten ||
+					$this->security->isGranted(MenuItemVoter::BEKIJKEN, $child)
+				) {
 					$this->getExtendedTree($child, $checkRechten);
 					$newChildren[] = $child;
 				}
@@ -163,7 +167,10 @@ class MenuItemRepository extends AbstractRepository
 					$item->rechten_bekijken = $categorie->rechten_lezen;
 					$item->link = '/forum#' . $categorie->categorie_id;
 					$item->tekst = $categorie->titel;
-					if (!$checkRechten || $item->magBekijken()) {
+					if (
+						!$checkRechten ||
+						$this->security->isGranted(MenuItemVoter::BEKIJKEN, $item)
+					) {
 						$parent->children[] = $item;
 					}
 
@@ -172,13 +179,19 @@ class MenuItemRepository extends AbstractRepository
 						$subitem->rechten_bekijken = $deel->rechten_lezen;
 						$subitem->link = '/forum/deel/' . $deel->forum_id;
 						$subitem->tekst = $deel->titel;
-						if (!$checkRechten || $subitem->magBekijken()) {
+						if (
+							!$checkRechten ||
+							$this->security->isGranted(MenuItemVoter::BEKIJKEN, $subitem)
+						) {
 							$item->children[] = $subitem;
 						}
 					}
 				}
 				foreach ($this->getMenuRoot('remotefora')->children as $remotecat) {
-					if (!$checkRechten || $remotecat->magBekijken()) {
+					if (
+						!$checkRechten ||
+						$this->security->isGranted(MenuItemVoter::BEKIJKEN, $remotecat)
+					) {
 						$parent->children[] = $remotecat;
 					}
 				}
@@ -199,12 +212,19 @@ class MenuItemRepository extends AbstractRepository
 					if (!$overig && $item->tekst == 'Overig') {
 						$overig = $item;
 					} else {
-						if (!$checkRechten || $item->magBekijken()) {
+						if (
+							!$checkRechten ||
+							$this->security->isGranted(MenuItemVoter::BEKIJKEN, $item)
+						) {
 							$parent->children[] = $item;
 						}
 					}
 				}
-				if ($overig && (!$checkRechten || $overig->magBekijken())) {
+				if (
+					$overig &&
+					(!$checkRechten ||
+						$this->security->isGranted(MenuItemVoter::BEKIJKEN, $overig))
+				) {
 					$parent->children[] = $overig;
 				}
 				break;
@@ -394,7 +414,7 @@ class MenuItemRepository extends AbstractRepository
 		$items = $this->findBy(['link' => $link, 'zichtbaar' => $link]);
 
 		foreach ($items as $item) {
-			if ($item->magBekijken()) {
+			if ($this->security->isGranted(MenuItemVoter::BEKIJKEN, $item)) {
 				$breadcrumbs = [$item];
 
 				do {
