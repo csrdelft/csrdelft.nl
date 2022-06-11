@@ -184,6 +184,11 @@ class AccessService
 			return true;
 		}
 
+		// Oude permissie
+		if (preg_match('/P_[a-zA-Z_]+/', $permission)) {
+			return false;
+		}
+
 		// splits permissie in type, waarde en rol
 		$p = explode(':', $permission);
 		if (in_array($p[0], self::$prefix) && count($p) <= 3) {

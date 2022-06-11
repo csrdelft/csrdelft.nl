@@ -17,7 +17,7 @@ In `config/packages/security.yaml` is alles wat met security te maken heeft geco
 
 > [Symfony documentatie over Roles](https://symfony.com/doc/current/security.html#roles)
 
-In `security.yaml` staan alle rollen gedefineerd. Een gebruiker heeft in ieder geval één ROLE, deze is opgeslagen in het `perm_role` veld in Account.
+In `security.yaml` staan alle rollen gedefinieerd. Een gebruiker heeft in ieder geval één ROLE, deze is opgeslagen in het `perm_role` veld in Account.
 
 Er is een rollen hierarchie gedefinieerd zodat er met een specifieke rol meerdere standaardrollen afgevangen kan worden.
 
