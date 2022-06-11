@@ -260,27 +260,6 @@ class FotoAlbum extends Map
 	{
 		return preg_match('/Publiek\/?.*$/', $this->subdir) == 1;
 	}
-	public function magBekijken()
-	{
-		if (
-			!str_starts_with(
-				realpath($this->path),
-				realpath(PHOTOALBUM_PATH . 'fotoalbum/')
-			)
-		) {
-			return false;
-		}
-		if ($this->isPubliek()) {
-			return LoginService::mag(P_ALBUM_PUBLIC_READ);
-		} else {
-			return LoginService::mag(P_ALBUM_READ);
-		}
-	}
-
-	public function isOwner()
-	{
-		return LoginService::mag($this->owner);
-	}
 
 	/**
 	 * Maak een object voor jGallery.
@@ -335,43 +314,5 @@ class FotoAlbum extends Map
 		}
 
 		return $fotos;
-	}
-	public function magVerwijderen()
-	{
-		if ($this->isOwner()) {
-			return true;
-		}
-		if ($this->isPubliek()) {
-			return LoginService::mag(P_ALBUM_PUBLIC_DEL);
-		} else {
-			return LoginService::mag(P_ALBUM_DEL);
-		}
-	}
-
-	public function magToevoegen()
-	{
-		if ($this->isPubliek()) {
-			return LoginService::mag(P_ALBUM_PUBLIC_ADD);
-		} else {
-			return LoginService::mag(P_ALBUM_ADD);
-		}
-	}
-
-	public function magAanpassen()
-	{
-		if ($this->isPubliek()) {
-			return LoginService::mag(P_ALBUM_PUBLIC_MOD);
-		} else {
-			return LoginService::mag(P_ALBUM_MOD) || $this->isOwner();
-		}
-	}
-
-	public function magDownloaden()
-	{
-		if ($this->isPubliek()) {
-			return LoginService::mag(P_ALBUM_PUBLIC_DOWN);
-		} else {
-			return LoginService::mag(P_ALBUM_DOWN);
-		}
 	}
 }

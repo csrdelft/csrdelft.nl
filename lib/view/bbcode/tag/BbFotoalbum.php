@@ -4,6 +4,7 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
@@ -81,7 +82,8 @@ class BbFotoalbum extends BbTag
 	}
 	public function isAllowed()
 	{
-		return ($this->album != null && $this->album->magBekijken()) ||
+		return ($this->album != null &&
+			$this->security->isGranted(FotoAlbumVoter::BEKIJKEN, $this->album)) ||
 			($this->album == null && $this->security->isGranted('ROLE_LOGGED_IN'));
 	}
 

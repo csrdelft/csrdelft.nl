@@ -5,6 +5,7 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\entity\Afbeelding;
@@ -71,9 +72,7 @@ class FotoAlbumController extends AbstractController
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
-		if (!$album->magAanpassen()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(FotoAlbumVoter::AANPASSEN, $album);
 		if ($album->dirname === 'fotoalbum') {
 			setMelding('Niet het complete fotoalbum verwerken', -1);
 		} else {
@@ -96,9 +95,9 @@ class FotoAlbumController extends AbstractController
 	public function toevoegen(Request $request, $dir)
 	{
 		$album = new FotoAlbum($dir);
-		if (!$album->magToevoegen()) {
-			throw $this->createAccessDeniedException();
-		}
+
+		$this->denyAccessUnlessGranted(FotoAlbumVoter::TOEVOEGEN, $album);
+
 		$formulier = new FotoAlbumToevoegenForm($album);
 		if ($request->getMethod() == 'POST' && $formulier->validate()) {
 			$subalbum = $formulier->findByName('subalbum')->getValue();
@@ -123,9 +122,8 @@ class FotoAlbumController extends AbstractController
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
-		if (!$album->magToevoegen()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(FotoAlbumVoter::TOEVOEGEN, $album);
+
 		$poster = $album->dirname === 'Posters';
 		if ($poster) {
 			$formulier = new PosterUploadForm($album);
@@ -188,9 +186,8 @@ class FotoAlbumController extends AbstractController
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
-		if (!$album->magToevoegen()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(FotoAlbumVoter::TOEVOEGEN, $album);
+
 		$list = [];
 		$files = $album->getFotos();
 		if ($files !== false) {
@@ -218,9 +215,7 @@ class FotoAlbumController extends AbstractController
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
-		if (!$album->magDownloaden()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(FotoAlbumVoter::DOWNLOADEN, $album);
 		header('Content-Description: File Transfer');
 		header('Content-Type: application/x-tar');
 		header(
@@ -254,9 +249,7 @@ class FotoAlbumController extends AbstractController
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
-		if (!$album->magAanpassen()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(FotoAlbumVoter::AANPASSEN, $album);
 		$naam = trim($request->request->get('naam'));
 		$naam = str_replace('..', '', $naam);
 
@@ -279,9 +272,7 @@ class FotoAlbumController extends AbstractController
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
-		if (!$album->magAanpassen()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(FotoAlbumVoter::AANPASSEN, $album);
 		$filename = $request->request->get('foto');
 		$cover = new Foto($filename, $album);
 		if (
@@ -305,9 +296,8 @@ class FotoAlbumController extends AbstractController
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
-		if (!$album->magVerwijderen()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(FotoAlbumVoter::VERWIJDEREN, $album);
+
 		if ($album->isEmpty()) {
 			try {
 				$this->fotoAlbumRepository->delete($album);
@@ -342,9 +332,7 @@ class FotoAlbumController extends AbstractController
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
-		if (!$album->magAanpassen()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(FotoAlbumVoter::AANPASSEN, $album);
 		$filename = $request->request->get('foto');
 		$foto = new Foto($filename, $album);
 		$degrees = $request->request->getInt('rotation');
@@ -415,9 +403,8 @@ class FotoAlbumController extends AbstractController
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
-		if (!$album->magToevoegen()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(FotoAlbumVoter::TOEVOEGEN, $album);
+
 		$filename = $request->request->get('foto');
 		$foto = new Foto($filename, $album);
 		if (!$foto->exists()) {
@@ -487,9 +474,12 @@ class FotoAlbumController extends AbstractController
 
 		$image = new Foto($foto, new FotoAlbum($dir), true);
 
-		if (!$image->magBekijken()) {
-			throw $this->createAccessDeniedException();
-		} elseif (!$image->exists()) {
+		$this->denyAccessUnlessGranted(
+			FotoAlbumVoter::BEKIJKEN,
+			$image->getAlbum()
+		);
+
+		if (!$image->exists()) {
 			throw $this->createNotFoundException();
 		} elseif (
 			!is_file($image->getResizedPath()) ||
@@ -530,9 +520,12 @@ class FotoAlbumController extends AbstractController
 
 		$image = new Foto($foto, new FotoAlbum($dir), true);
 
-		if (!$image->magBekijken()) {
-			throw $this->createAccessDeniedException();
-		} elseif (!$image->exists()) {
+		$this->denyAccessUnlessGranted(
+			FotoAlbumVoter::BEKIJKEN,
+			$image->getAlbum()
+		);
+
+		if (!$image->exists()) {
 			throw $this->createNotFoundException();
 		} elseif (
 			!is_file($image->getThumbPath()) ||
@@ -573,9 +566,12 @@ class FotoAlbumController extends AbstractController
 
 		$image = new Foto($foto, new FotoAlbum($dir), true);
 
-		if (!$image->magBekijken()) {
-			throw $this->createAccessDeniedException();
-		} elseif (!$image->exists()) {
+		$this->denyAccessUnlessGranted(
+			FotoAlbumVoter::BEKIJKEN,
+			$image->getAlbum()
+		);
+
+		if (!$image->exists()) {
 			throw $this->createNotFoundException();
 		}
 
@@ -613,9 +609,7 @@ class FotoAlbumController extends AbstractController
 
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
-		if (!$album->magBekijken()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(FotoAlbumVoter::BEKIJKEN, $album);
 
 		if ($album->dirname === 'Posters') {
 			$album->orderByDateModified();

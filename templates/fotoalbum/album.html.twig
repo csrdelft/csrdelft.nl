@@ -17,7 +17,7 @@
 
 {% block content %}
 	<div class="float-end">
-		{% if album.subdir and album.magToevoegen %}
+		{% if album.subdir and is_granted('toevoegen', album) %}
 			<a class="btn" href="{{ url('csrdelft_fotoalbum_uploaden', {dir: album.subdir}) }}">
 				{{ icon('picture_add') }} Toevoegen
 			</a>
@@ -25,7 +25,7 @@
 				{{ icon('folder_add') }} Nieuw album
 			</a>
 		{% endif %}
-		{% if album.subdir and album.magAanpassen %}
+		{% if album.subdir and is_granted('aanpassen', album) %}
 			<a href="{{ url('csrdelft_fotoalbum_hernoemen', {dir: album.subdir}) }}" class="btn post prompt redirect"
 				 title="Fotoalbum hernoemen"
 				 data="naam={{ album.dirname | title }}">
@@ -52,7 +52,7 @@
 		<div class="fotoalbum disable-swipe"
 				 data-fotos="{{ album.albumArrayRecursive | json_encode | escape }}"
 				 data-is-logged-in="{{ is_granted('ROLE_LOGGED_IN') | json_encode }}"
-				 data-mag-aanpassen="{{ album.magAanpassen | json_encode }}"
+				 data-mag-aanpassen="{{ is_granted('aanpassen', album) | json_encode }}"
 				 data-root="{{ url('csrdelft_fotoalbum_bekijken') }}"
 				 data-slideshow-interval="{{ instelling('fotoalbum', 'slideshow_interval') }}">
 		</div>

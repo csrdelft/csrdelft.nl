@@ -4,11 +4,13 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Toont de thumbnail van een foto met link naar fotoalbum.
@@ -37,10 +39,17 @@ class BbFoto extends BbTag
 	 * @var string
 	 */
 	private $fotoUrl;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
-	public function __construct(FotoAlbumRepository $fotoAlbumRepository)
-	{
+	public function __construct(
+		Security $security,
+		FotoAlbumRepository $fotoAlbumRepository
+	) {
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
+		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -50,7 +59,10 @@ class BbFoto extends BbTag
 
 	public function isAllowed()
 	{
-		return $this->foto->magBekijken();
+		return $this->security->isGranted(
+			FotoAlbumVoter::BEKIJKEN,
+			$this->foto->getAlbum()
+		);
 	}
 
 	public function renderLight()

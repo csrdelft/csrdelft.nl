@@ -208,9 +208,4 @@ class Foto extends Afbeelding
 	{
 		return $this->hasThumb() && $this->hasResized();
 	}
-
-	public function magBekijken()
-	{
-		return $this->getAlbum()->magBekijken();
-	}
 }
