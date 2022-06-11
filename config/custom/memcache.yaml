@@ -24,3 +24,4 @@ services:
     tags: [console.command]
     arguments:
       - '@cache.app'
+      - '@cache.system'

@@ -12,12 +12,17 @@ class FlushMemcacheCommand extends Command
 	/**
 	 * @var CacheInterface
 	 */
-	private $cache;
+	private $appCache;
+	/**
+	 * @var CacheInterface
+	 */
+	private $systemCache;
 
-	public function __construct(CacheInterface $cache)
+	public function __construct(CacheInterface $app, CacheInterface $system)
 	{
 		parent::__construct();
-		$this->cache = $cache;
+		$this->appCache = $app;
+		$this->systemCache = $system;
 	}
 
 	public function configure()
@@ -27,14 +32,26 @@ class FlushMemcacheCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		if ($this->cache == null) {
+		if ($this->appCache == null) {
 			$output->writeln('Geen cache geinstalleerd');
 			return 1;
 		} else {
-			if ($this->cache->clear()) {
-				$output->writeln('Memcache succesvol geflushed');
+			if ($this->appCache->clear()) {
+				$output->writeln('cache.app succesvol geflushed');
 			} else {
-				$output->writeln('Memcache flushen mislukt');
+				$output->writeln('cache.app flushen mislukt');
+				$output->writeln(error_get_last()['message']);
+			}
+		}
+
+		if ($this->systemCache == null) {
+			$output->writeln('Geen cache geinstalleerd');
+			return 1;
+		} else {
+			if ($this->systemCache->clear()) {
+				$output->writeln('cache.system succesvol geflushed');
+			} else {
+				$output->writeln('cache.system flushen mislukt');
 				$output->writeln(error_get_last()['message']);
 			}
 		}
