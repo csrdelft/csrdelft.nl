@@ -8,13 +8,13 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\GoogleTokenRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\CsrSecurity;
 use CsrDelft\service\security\LoginService;
 use DOMDocument;
 use DOMText;
 use Exception;
 use Google_Client;
 use SimpleXMLElement;
+use Symfony\Component\Security\Core\Security;
 
 define(
 	'GOOGLE_CONTACTS_URL',
@@ -85,7 +85,7 @@ class GoogleSync
 	 */
 	private $googleTokenRepository;
 	/**
-	 * @var CsrSecurity
+	 * @var Security
 	 */
 	private $security;
 	/**
@@ -95,11 +95,11 @@ class GoogleSync
 
 	/**
 	 * GoogleSync constructor.
-	 * @param CsrSecurity $security
+	 * @param Security $security
 	 * @param GoogleTokenRepository $googleTokenRepository
 	 */
 	public function __construct(
-		CsrSecurity $security,
+		Security $security,
 		ProfielRepository $profielRepository,
 		GoogleTokenRepository $googleTokenRepository
 	) {
@@ -111,7 +111,7 @@ class GoogleSync
 	public function init()
 	{
 		$google_token = $this->googleTokenRepository->find(
-			$this->security->getAccount()->uid
+			$this->security->getUser()->getUserIdentifier()
 		);
 		if (!$google_token) {
 			throw new CsrException(

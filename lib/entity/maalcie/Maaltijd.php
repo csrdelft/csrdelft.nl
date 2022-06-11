@@ -336,7 +336,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 	 */
 	public function magSluiten($uid)
 	{
-		return $this->magBekijken($uid) and
+		return $this->magBekijken($uid) &&
 			$this->maaltijdcorvee->corveeFunctie->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
 	}
 

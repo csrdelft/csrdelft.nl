@@ -2,7 +2,9 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\service\AccessService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -146,7 +148,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public function getRoles()
 	{
-		return [$this->perm_role];
+		return [str_replace('R_', 'ROLE_', $this->perm_role)];
 	}
 
 	public function getPassword(): string

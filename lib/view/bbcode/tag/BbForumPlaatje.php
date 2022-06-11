@@ -30,7 +30,7 @@ class BbForumPlaatje extends BbImg
 
 	public function isAllowed()
 	{
-		return LoginService::mag('P_LOGGED_IN');
+		return LoginService::mag('ROLE_LOGGED_IN');
 	}
 
 	public function getKey()

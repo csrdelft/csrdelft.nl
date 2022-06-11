@@ -5,13 +5,11 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Mail;
 use CsrDelft\entity\security\Account;
-use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\service\AccessService;
 use CsrDelft\service\AccountService;
 use CsrDelft\service\MailService;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\WachtwoordResetAuthenticator;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
@@ -73,7 +71,10 @@ class WachtwoordController extends AbstractController
 	{
 		$account = $this->getUser();
 		// mag inloggen?
-		if (!$account || !$this->accessService->mag($account, P_LOGGED_IN)) {
+		if (
+			!$account ||
+			!$this->accessService->isUserGranted($account, 'ROLE_LOGGED_IN')
+		) {
 			throw $this->createAccessDeniedException();
 		}
 		$form = new WachtwoordWijzigenForm(
@@ -156,11 +157,7 @@ class WachtwoordController extends AbstractController
 			// (mag ook als na verify($tokenString) niet ingelogd is met wachtwoord en dus AuthenticationMethod::url_token is)
 			if (
 				!$account ||
-				!$this->accessService->mag(
-					$account,
-					P_LOGGED_IN,
-					AuthenticationMethod::getEnumValues()
-				)
+				!$this->accessService->isUserGranted($account, 'ROLE_LOGGED_IN')
 			) {
 				setMelding('E-mailadres onjuist', -1);
 

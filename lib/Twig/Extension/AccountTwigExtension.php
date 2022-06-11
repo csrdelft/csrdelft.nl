@@ -2,7 +2,6 @@
 
 namespace CsrDelft\Twig\Extension;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\GroepLid;
@@ -11,9 +10,9 @@ use CsrDelft\entity\security\Account;
 use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\repository\groepen\CommissiesRepository;
 use CsrDelft\service\GoogleSync;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use GuzzleHttp\Exception\RequestException;
+use Symfony\Component\Security\Core\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -24,10 +23,6 @@ class AccountTwigExtension extends AbstractExtension
 	 * @var SuService
 	 */
 	private $suService;
-	/**
-	 * @var LoginService
-	 */
-	private $loginService;
 	/**
 	 * @var BesturenRepository
 	 */
@@ -40,19 +35,23 @@ class AccountTwigExtension extends AbstractExtension
 	 * @var GoogleSync
 	 */
 	private $googleSync;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
-		LoginService $loginService,
+		Security $security,
 		BesturenRepository $besturenRepository,
 		CommissiesRepository $commissiesRepository,
 		GoogleSync $googleSync,
 		SuService $suService
 	) {
 		$this->suService = $suService;
-		$this->loginService = $loginService;
 		$this->besturenRepository = $besturenRepository;
 		$this->commissiesRepository = $commissiesRepository;
 		$this->googleSync = $googleSync;
+		$this->security = $security;
 	}
 
 	public function getFilters()
@@ -74,15 +73,12 @@ class AccountTwigExtension extends AbstractExtension
 	 * Mag de op dit moment ingelogde gebruiker $permissie?
 	 *
 	 * @param string $permission
-	 * @param array|null $allowedAuthenticationMethods
 	 * @return bool
 	 */
-	public function mag($permission, array $allowedAuthenticationMethods = null)
+	public function mag($permission)
 	{
-		return $this->loginService->_mag(
-			$permission,
-			$allowedAuthenticationMethods
-		);
+		$permission = preg_replace('/^P_/', 'ROLE_', $permission);
+		return $this->security->isGranted($permission);
 	}
 
 	public function may_su_to(Account $account)

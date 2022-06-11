@@ -3,19 +3,18 @@
 namespace CsrDelft\Twig\Extension;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\service\security\CsrSecurity;
-use CsrDelft\service\security\LoginService;
+use Symfony\Component\Security\Core\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class AssetsTwigExtension extends AbstractExtension
 {
 	/**
-	 * @var CsrSecurity
+	 * @var Security
 	 */
 	private $security;
 
-	public function __construct(CsrSecurity $security)
+	public function __construct(Security $security)
 	{
 		$this->security = $security;
 	}
@@ -46,7 +45,7 @@ class AssetsTwigExtension extends AbstractExtension
 	 */
 	public function getUserModules()
 	{
-		if (!$this->security->mag(P_LOGGED_IN)) {
+		if (!$this->security->isGranted('ROLE_LOGGED_IN')) {
 			return [];
 		}
 

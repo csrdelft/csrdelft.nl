@@ -97,10 +97,9 @@ class ForumDeel
 
 	public function magLezen($rss = false)
 	{
-		$auth = $rss ? AuthenticationMethod::getEnumValues() : null;
-		return LoginService::mag(P_FORUM_READ, $auth) and
-			LoginService::mag($this->rechten_lezen, $auth) and
-			$this->categorie->magLezen($auth);
+		return LoginService::mag(P_FORUM_READ) &&
+			LoginService::mag($this->rechten_lezen) &&
+			$this->categorie->magLezen();
 	}
 
 	public function magPosten()

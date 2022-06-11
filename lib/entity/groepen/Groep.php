@@ -234,9 +234,9 @@ class Groep implements DataTableEntry, DisplayEntity
 		return $suggesties;
 	}
 
-	public function magWijzigen($allowedAuthenticationMethods = null)
+	public function magWijzigen()
 	{
-		return $this->mag(AccessAction::Wijzigen(), $allowedAuthenticationMethods);
+		return $this->mag(AccessAction::Wijzigen());
 	}
 
 	/**
@@ -246,11 +246,9 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public function mag(
-		AccessAction $action,
-		$allowedAuthenticationMethods = null
-	) {
-		if (!LoginService::mag(P_LOGGED_IN, $allowedAuthenticationMethods)) {
+	public function mag(AccessAction $action)
+	{
+		if (!LoginService::mag(P_LOGGED_IN)) {
 			return false;
 		}
 
@@ -297,7 +295,7 @@ class Groep implements DataTableEntry, DisplayEntity
 				}
 				break;
 		}
-		return static::magAlgemeen($action, $allowedAuthenticationMethods);
+		return static::magAlgemeen($action);
 	}
 
 	/**
@@ -321,18 +319,14 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * Rechten voor de gehele klasse of soort groep?
 	 *
 	 * @param AccessAction $action
-	 * @param array|null $allowedAuthenticationMethods
 	 * @param null $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen(
-		AccessAction $action,
-		$allowedAuthenticationMethods = null,
-		$soort = null
-	) {
+	public static function magAlgemeen(AccessAction $action, $soort = null)
+	{
 		switch ($action) {
 			case AccessAction::Bekijken():
-				return LoginService::mag(P_LEDEN_READ, $allowedAuthenticationMethods);
+				return LoginService::mag(P_LEDEN_READ);
 
 			// Voorkom dat moderators overal een normale aanmeldknop krijgen
 			case AccessAction::Aanmelden():
@@ -341,10 +335,7 @@ class Groep implements DataTableEntry, DisplayEntity
 				return false;
 		}
 		// Moderators mogen alles
-		return LoginService::mag(
-			P_LEDEN_MOD . ',groep:P_GROEP:_MOD',
-			$allowedAuthenticationMethods
-		);
+		return LoginService::mag(P_LEDEN_MOD . ',groep:P_GROEP:_MOD');
 	}
 
 	/**

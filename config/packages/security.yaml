@@ -62,9 +62,120 @@ security:
     CsrDelft\entity\security\Account:
       algorithm: auto
 
-  # Hang stek rollen `R_...` aan Symfony rollen
   role_hierarchy:
-    R_PUBCIE: ROLE_ALLOWED_TO_SWITCH
+    PUBLIC_ACCESS: [ROLE_PUBLIC, ROLE_FORUM_READ, ROLE_ALBUM_PUBLIC_READ]
+    ROLE_NOBODY: [ROLE_PUBLIC, ROLE_FORUM_READ, ROLE_ALBUM_PUBLIC_READ]
+    ROLE_ETER:
+      [
+        ROLE_NOBODY,
+        ROLE_LOGGED_IN,
+        ROLE_PROFIEL_EDIT,
+        ROLE_MAAL_IK,
+        ROLE_AGENDA_READ,
+      ]
+    ROLE_LID:
+      [
+        ROLE_ETER,
+        ROLE_OUDLEDEN_READ,
+        ROLE_FORUM_POST,
+        ROLE_DOCS_READ,
+        ROLE_BIEB_READ,
+        ROLE_CORVEE_IK,
+        ROLE_MAIL_POST,
+        ROLE_NEWS_POST,
+        ROLE_ALBUM_ADD,
+        ROLE_ALBUM_PUBLIC_DOWN,
+        ROLE_PEILING_VOTE,
+        ROLE_PEILING_EDIT,
+      ]
+    ROLE_OUDLID: [ROLE_LID]
+    ROLE_FISCAAT: [ROLE_LID, ROLE_FISCAAT_READ, ROLE_FISCAAT_MOD]
+    ROLE_MAALCIE:
+      [ROLE_FISCAAT, ROLE_MAAL_MOD, ROLE_CORVEE_MOD, ROLE_MAAL_SALDI]
+    ROLE_BASFCIE:
+      [
+        ROLE_LID,
+        ROLE_DOCS_MOD,
+        ROLE_ALBUM_PUBLIC_DEL,
+        ROLE_ALBUM_DEL,
+        ROLE_BIEB_MOD,
+      ]
+    ROLE_BESTUUR:
+      [
+        ROLE_BASFCIE,
+        ROLE_MAALCIE,
+        ROLE_LEDEN_MOD,
+        ROLE_FORUM_MOD,
+        ROLE_DOCS_MOD,
+        ROLE_AGENDA_MOD,
+        ROLE_NEWS_MOD,
+        ROLE_MAIL_COMPOSE,
+        ROLE_ALBUM_DEL,
+        ROLE_MAAL_MOD,
+        ROLE_CORVEE_MOD,
+        ROLE_MAIL_COMPOSE,
+        ROLE_FORUM_BELANGRIJK,
+        ROLE_PEILING_MOD,
+      ]
+    ROLE_PUBCIE:
+      [
+        ROLE_BESTUUR,
+        ROLE_ADMIN,
+        ROLE_MAIL_SEND,
+        ROLE_CORVEE_SCHED,
+        ROLE_FORUM_ADMIN,
+        ROLE_ALLOWED_TO_SWITCH,
+      ]
+    ROLE_FORUMMODERATOR: [ROLE_LID, ROLE_FORUM_MOD]
+    ROLE_PUBLIC: [] # Iedereen op het Internet
+    ROLE_LOGGED_IN: [ROLE_PUBLIC] # Eigen profiel raadplegen
+    ROLE_ADMIN: [ROLE_LOGGED_IN] # Super-admin
+    ROLE_VERJAARDAGEN: [] # Verjaardagen van leden zien
+    ROLE_PROFIEL_EDIT: [ROLE_VERJAARDAGEN] # Eigen gegevens aanpassen
+    ROLE_LEDEN_READ: [ROLE_PROFIEL_EDIT] # Gegevens van leden raadplegen
+    ROLE_OUDLEDEN_READ: [ROLE_LEDEN_READ] # Gegevens van oudleden raadplegen
+    ROLE_LEDEN_MOD: [ROLE_OUDLEDEN_READ] # (Oud)ledengegevens aanpassen
+    ROLE_FORUM_READ: [] # Forum lezen
+    ROLE_FORUM_POST: [ROLE_FORUM_READ] # Berichten plaatsen op het forum en eigen berichten wijzigen
+    ROLE_FORUM_MOD: [ROLE_FORUM_POST] # Forum-moderator mag berichten van anderen wijzigen of verwijderen
+    ROLE_FORUM_BELANGRIJK: [] # Forum belangrijk (de)markeren  [[let op: niet cumulatief]]
+    ROLE_FORUM_ADMIN: [] # Forum-admin mag deel-fora aanmaken en rechten wijzigen  [[let op: niet cumulatief]]
+    ROLE_AGENDA_READ: [] # Agenda bekijken
+    ROLE_AGENDA_ADD: [ROLE_AGENDA_READ] # Items toevoegen aan de agenda
+    ROLE_AGENDA_MOD: [ROLE_AGENDA_ADD] # Items beheren in de agenda
+    ROLE_DOCS_READ: [] # Documenten-rubriek lezen
+    ROLE_DOCS_POST: [ROLE_DOCS_READ] # Documenten verwijderen of erbij plaatsen
+    ROLE_DOCS_MOD: [ROLE_DOCS_POST] # Documenten aanpassen
+    ROLE_ALBUM_READ: [] # Foto-album bekijken
+    ROLE_ALBUM_DOWN: [ROLE_ALBUM_READ] # Foto-album downloaden
+    ROLE_ALBUM_ADD: [ROLE_ALBUM_DOWN] # Fotos uploaden en albums toevoegen
+    ROLE_ALBUM_MOD: [ROLE_ALBUM_ADD] # Foto-albums aanpassen
+    ROLE_ALBUM_DEL: [ROLE_ALBUM_MOD] # Fotos uit fotoalbum verwijderen
+    ROLE_BIEB_READ: [] # Bibliotheek lezen
+    ROLE_BIEB_EDIT: [ROLE_BIEB_READ] # Bibliotheek wijzigen
+    ROLE_BIEB_MOD: [ROLE_BIEB_EDIT] # Bibliotheek zowel wijzigen als lezen
+    ROLE_NEWS_POST: [] # Nieuws plaatsen en wijzigen van jezelf
+    ROLE_NEWS_MOD: [ROLE_NEWS_POST] # Nieuws-moderator mag berichten van anderen wijzigen of verwijderen
+    ROLE_NEWS_PUBLISH: [ROLE_NEWS_MOD] # Nieuws publiceren en rechten bepalen
+    ROLE_MAAL_IK: [] # Jezelf aan en afmelden voor maaltijd en eigen abo wijzigen
+    ROLE_MAAL_MOD: [ROLE_MAAL_IK] # Maaltijden beheren (MaalCie P)
+    ROLE_MAAL_SALDI: [ROLE_MAAL_MOD] # MaalCie saldo aanpassen van iedereen (MaalCie fiscus)
+    ROLE_CORVEE_IK: [] # Eigen voorkeuren aangeven voor corveetaken
+    ROLE_CORVEE_MOD: [ROLE_CORVEE_IK] # Corveetaken beheren (CorveeCaesar)
+    ROLE_CORVEE_SCHED: [ROLE_CORVEE_MOD] # Automatische corvee-indeler beheren
+    ROLE_MAIL_POST: [] # Berichten aan de courant toevoegen
+    ROLE_MAIL_COMPOSE: [ROLE_MAIL_POST] # Alle berichtjes in de courant bewerken en volgorde wijzigen
+    ROLE_MAIL_SEND: [ROLE_MAIL_COMPOSE] # Courant verzenden
+    ROLE_PEILING_VOTE: [] # Stemmen op peilingen
+    ROLE_PEILING_EDIT: [ROLE_PEILING_EDIT] # Peilingen aanmaken en eigen peiling bewerken
+    ROLE_PEILING_MOD: [ROLE_PEILING_EDIT] # Peilingen aanmaken en verwijderen
+    ROLE_FISCAAT_READ: [] # Fiscale dingen inzien
+    ROLE_FISCAAT_MOD: [ROLE_FISCAAT_READ] # Fiscale bewerkingen maken
+    ROLE_ALBUM_PUBLIC_READ: [] # Publiek foto-album bekijken
+    ROLE_ALBUM_PUBLIC_DOWN: [ROLE_ALBUM_PUBLIC_READ] # Publiek foto-album downloaden
+    ROLE_ALBUM_PUBLIC_ADD: [ROLE_ALBUM_PUBLIC_DOWN] # Publieke fotos uploaden en publieke albums toevoegen
+    ROLE_ALBUM_PUBLIC_MOD: [ROLE_ALBUM_PUBLIC_ADD] # Publiek foto-albums aanpassen
+    ROLE_ALBUM_PUBLIC_DEL: [ROLE_ALBUM_PUBLIC_MOD] # Fotos uit publiek fotoalbum verwijderen
 
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used

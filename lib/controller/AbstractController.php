@@ -8,7 +8,6 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\Component\DataTable\DataTableFactory;
 use CsrDelft\Component\DataTable\DataTableInstance;
-use CsrDelft\service\security\CsrSecurity;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
@@ -29,7 +28,6 @@ class AbstractController extends BaseController
 		return parent::getSubscribedServices() + [
 			'csr.table.factory' => DataTableFactory::class,
 			'csr.formulier.factory' => FormulierFactory::class,
-			'csr.security' => CsrSecurity::class,
 		];
 	}
 
@@ -86,24 +84,9 @@ class AbstractController extends BaseController
 		return null;
 	}
 
-	protected function mag(
-		$permissie,
-		array $allowedAuthenticationMethods = null
-	): bool {
-		return $this->container
-			->get('csr.security')
-			->mag($permissie, $allowedAuthenticationMethods);
-	}
-
-	protected function guard(
-		$permissie,
-		array $allowedAuthenticationMethods = null
-	) {
-		if ($this->mag($permissie, $allowedAuthenticationMethods)) {
-			return;
-		}
-
-		throw $this->createAccessDeniedException();
+	protected function mag($permissie): bool
+	{
+		return $this->isGranted($permissie);
 	}
 
 	protected function createAccessDeniedException(

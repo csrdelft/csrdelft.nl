@@ -82,15 +82,13 @@ class Verticale extends Groep
 	 * @param null $allowedAuthenticationMethods
 	 * @return bool
 	 */
-	public function mag(
-		AccessAction $action,
-		$allowedAuthenticationMethods = null
-	) {
+	public function mag(AccessAction $action)
+	{
 		switch ($action) {
 			case AccessAction::Bekijken():
 			case AccessAction::Aanmaken():
 			case AccessAction::Wijzigen():
-				return parent::mag($action, $allowedAuthenticationMethods);
+				return parent::mag($action);
 		}
 		return false;
 	}
@@ -98,24 +96,16 @@ class Verticale extends Groep
 	/**
 	 * Limit functionality: leden generated
 	 * @param AccessAction $action
-	 * @param null $allowedAuthenticationMethods
 	 * @param null $soort
 	 * @return bool
 	 */
-	public static function magAlgemeen(
-		AccessAction $action,
-		$allowedAuthenticationMethods = null,
-		$soort = null
-	) {
+	public static function magAlgemeen(AccessAction $action, $soort = null)
+	{
 		switch ($action) {
 			case AccessAction::Bekijken():
 			case AccessAction::Aanmaken():
 			case AccessAction::Wijzigen():
-				return parent::magAlgemeen(
-					$action,
-					$allowedAuthenticationMethods,
-					$soort
-				);
+				return parent::magAlgemeen($action, $soort);
 		}
 		return false;
 	}

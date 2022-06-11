@@ -11,6 +11,7 @@ use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManagerInterface;
 use phpseclib3\Exception\InsufficientSetupException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -102,6 +103,15 @@ class AccessControlEventListener
 			return;
 		}
 
+		if (
+			$this->annotations->getMethodAnnotation(
+				$reflectionMethod,
+				IsGranted::class
+			)
+		) {
+			return;
+		}
+
 		/** @var Auth $authAnnotation */
 		$authAnnotation = $this->annotations->getMethodAnnotation(
 			$reflectionMethod,
@@ -124,7 +134,7 @@ class AccessControlEventListener
 			throw new NotFoundHttpException('Geblokkeerd: ' . $user->blocked_reason);
 		}
 
-		if (!LoginService::mag($mag)) {
+		if (!$this->security->isGranted($mag)) {
 			if (DEBUG) {
 				throw new AccessDeniedException(
 					'Geen toegang tot ' . $controller . ', ten minste ' . $mag . ' nodig.'

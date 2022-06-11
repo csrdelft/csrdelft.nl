@@ -15,6 +15,7 @@ use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -46,9 +47,9 @@ class LidToestemmingRepository extends AbstractRepository
 	 */
 	private $requestStack;
 	/**
-	 * @var LoginService
+	 * @var Security
 	 */
-	private $loginService;
+	private $security;
 
 	/**
 	 * @param ManagerRegistry $registry
@@ -58,13 +59,13 @@ class LidToestemmingRepository extends AbstractRepository
 	public function __construct(
 		ManagerRegistry $registry,
 		RequestStack $requestStack,
-		LoginService $loginService
+		Security $security
 	) {
 		parent::__construct($registry, LidToestemming::class);
 
 		$this->load('instellingen/toestemming.yaml', new InstellingConfiguration());
 		$this->requestStack = $requestStack;
-		$this->loginService = $loginService;
+		$this->security = $security;
 	}
 
 	/**
@@ -128,7 +129,7 @@ class LidToestemmingRepository extends AbstractRepository
 			return true;
 		}
 
-		$uid = $this->loginService->_getUid();
+		$uid = $this->security->getUser()->getUserIdentifier();
 
 		$modules = [
 			self::MODULE_ALGEMEEN,
@@ -157,17 +158,17 @@ class LidToestemmingRepository extends AbstractRepository
 		$profiel,
 		$id,
 		$cat = 'profiel',
-		$except = P_LEDEN_MOD
+		$except = 'ROLE_LEDEN_MOD'
 	) {
-		if (!$this->loginService->_mag(P_LEDEN_READ)) {
+		if (!$this->security->isGranted('ROLE_LEDEN_READ')) {
 			return false;
 		}
 
-		if ($profiel->uid == $this->loginService->_getUid()) {
+		if ($profiel->uid == $this->security->getUser()->getUserIdentifier()) {
 			return true;
 		}
 
-		if ($this->loginService->_mag($except)) {
+		if ($this->security->isGranted($except)) {
 			return true;
 		}
 
@@ -184,13 +185,13 @@ class LidToestemmingRepository extends AbstractRepository
 		return $toestemming->waarde == 'ja';
 	}
 
-	public function toestemmingUid($uid, $id, $except = P_LEDEN_MOD)
+	public function toestemmingUid($uid, $id, $except = 'ROLE_LEDEN_MOD')
 	{
-		if ($uid == $this->loginService->_getUid()) {
+		if ($uid == $this->security->getUser()->getUserIdentifier()) {
 			return true;
 		}
 
-		if ($this->loginService->_mag($except)) {
+		if ($this->security->isGranted($except)) {
 			return true;
 		}
 
@@ -256,7 +257,7 @@ class LidToestemmingRepository extends AbstractRepository
 	protected function getToestemming($module, $id, $uid = null)
 	{
 		if ($uid == null) {
-			$uid = $this->loginService->_getUid();
+			$uid = $this->security->getUser()->getUserIdentifier();
 		}
 		$instelling = $this->findOneBy([
 			self::FIELD_MODULE => $module,

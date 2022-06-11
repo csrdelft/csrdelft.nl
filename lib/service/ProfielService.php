@@ -5,7 +5,7 @@ namespace CsrDelft\service;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\CsrSecurity;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -18,12 +18,12 @@ class ProfielService
 	 */
 	private $profielRepository;
 	/**
-	 * @var CsrSecurity
+	 * @var Security
 	 */
 	private $security;
 
 	public function __construct(
-		CsrSecurity $security,
+		Security $security,
 		ProfielRepository $profielRepository
 	) {
 		$this->profielRepository = $profielRepository;
@@ -139,7 +139,10 @@ class ProfielService
 		if ($zoekstatus == 'alleleden') {
 			$zoekstatus = '';
 		}
-		if ($zoekstatus == 'allepersonen') {
+		if (
+			$this->security->isGranted('ROLE_ADMIN') &&
+			$zoekstatus == 'allepersonen'
+		) {
 			$zoekstatus = LidStatus::getEnumValues();
 		}
 
@@ -191,13 +194,13 @@ class ProfielService
 			// 1. ingelogde persoon dat alleen maar mag of
 			// 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
 			if (
-				$this->security->mag(P_LEDEN_READ) &&
-				!$this->security->mag(P_OUDLEDEN_READ)
+				$this->security->isGranted('ROLE_LEDEN_READ') &&
+				!$this->security->isGranted('ROLE_OUDLEDEN_READ')
 			) {
 				$statussen = array_merge($statussen, LidStatus::getZoekenLidLike());
 			} elseif (
-				$this->security->mag(P_LEDEN_READ) &&
-				$this->security->mag(P_OUDLEDEN_READ) &&
+				$this->security->isGranted('ROLE_LEDEN_READ') &&
+				$this->security->isGranted('ROLE_OUDLEDEN_READ') &&
 				$zoekstatus != 'oudleden'
 			) {
 				$statussen = array_merge($statussen, LidStatus::getZoekenLidLike());
@@ -206,25 +209,31 @@ class ProfielService
 			// 1. ingelogde persoon dat alleen maar mag of
 			// 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
 			if (
-				!$this->security->mag(P_LEDEN_READ) &&
-				$this->security->mag(P_OUDLEDEN_READ)
+				!$this->security->isGranted('ROLE_LEDEN_READ') &&
+				$this->security->isGranted('ROLE_OUDLEDEN_READ')
 			) {
 				$statussen = array_merge($statussen, LidStatus::getZoekenOudlidLike());
 			} elseif (
-				$this->security->mag(P_LEDEN_READ) &&
-				$this->security->mag(P_OUDLEDEN_READ) &&
+				$this->security->isGranted('ROLE_LEDEN_READ') &&
+				$this->security->isGranted('ROLE_OUDLEDEN_READ') &&
 				$zoekstatus != 'leden'
 			) {
 				$statussen = array_merge($statussen, LidStatus::getZoekenOudlidLike());
 			}
 			// we zoeken in nobodies als
 			// de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if ($this->security->mag(P_LEDEN_MOD) && $zoekstatus === 'nobodies') {
+			if (
+				$this->security->isGranted('ROLE_LEDEN_MOD') &&
+				$zoekstatus === 'nobodies'
+			) {
 				// alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
 				$statussen = LidStatus::getZoekenExlidLike();
 			}
 
-			if ($this->security->mag(P_LEDEN_READ) && $zoekstatus === 'novieten') {
+			if (
+				$this->security->isGranted('ROLE_LEDEN_READ') &&
+				$zoekstatus === 'novieten'
+			) {
 				$statussen = [LidStatus::Noviet];
 			}
 		}

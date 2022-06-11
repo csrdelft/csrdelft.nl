@@ -99,7 +99,7 @@ class VoorkeurVoorkeur
 	{
 		return ContainerFacade::getContainer()
 			->get(AccessService::class)
-			->mag(
+			->isUserGranted(
 				$this->profiel->account,
 				'commissie:' .
 					$this->commissie->naam .

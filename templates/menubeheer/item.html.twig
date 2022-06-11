@@ -15,7 +15,7 @@
 			{% endif %}
 		</div>
 		<div class="col-auto">
-			{% if item.rechten_bekijken != 'P_PUBLIC' and item.rechten_bekijken != app.user.uid %}
+			{% if item.rechten_bekijken != 'ROLE_PUBLIC' and item.rechten_bekijken != app.user.uid %}
 				<button class="btn btn-sm"
 								disabled>{{ icon('group_key', null, 'Rechten bekijken: &#013; ' ~ item.rechten_bekijken) }}</button>
 			{% endif %}

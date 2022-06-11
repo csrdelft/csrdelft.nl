@@ -133,7 +133,7 @@ class GroepForm extends ModalForm
 		/**
 		 * @Notice: Similar function in GroepSoortField->validate()
 		 */
-		if (!$groep->magAlgemeen($this->mode, null, $soort)) {
+		if (!$groep->magAlgemeen($this->mode, $soort)) {
 			if (!$groep->mag($this->mode)) {
 				// beide aanroepen vanwege niet doorsturen van param $soort door mag() naar magAlgemeen()
 				if ($soort) {
