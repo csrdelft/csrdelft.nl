@@ -35,7 +35,7 @@
 	</p>
 	{% if berichten is not empty %}
 		<div id="courantKnoppenContainer">
-			{% if magVerzenden %}
+			{% if is_granted('ROLE_MAIL_SEND') %}
 				<a href="{{ url('csrdelft_courant_verzenden') }}" title="De C.S.R.-courant wilt versturen?"
 					 class="btn btn-primary post confirm">Verzenden</a>
 				<a href="{{ url('csrdelft_courant_voorbeeld') }}" class="btn btn-primary" target="_blank">Laat voorbeeld
@@ -49,11 +49,11 @@
 				<dt>
 					<span
 						class="onderstreept">{{ bericht.cat ? bericht.cat.description : 'Geen categorie' }}</span>
-					{% if magBeheren %}
+					{% if is_granted('ROLE_MAIL_COMPOSE') %}
 						{{ bericht.schrijver.link('civitas') | raw }}
 					{% endif %}
 					<span class="dikgedrukt">{{ bericht.titel }}</span>
-					{% if bericht.magBeheren %}
+					{% if is_granted('beheren', bericht) %}
 						<a class="btn btn-primary" href="{{ url('csrdelft_courant_bewerken', {id: bericht.id}) }}">bewerken</a>
 						<a class="btn btn-primary post confirm ReloadPage"
 							 href="{{ url('csrdelft_courant_verwijderen', {id: bericht.id}) }}"
@@ -61,7 +61,7 @@
 					{% endif %}
 				</dt>
 				<dd id="courantbericht{{ bericht.id }}"></dd>
-				{% if not bericht.magBeheren %}
+				{% if not is_granted('beheren', bericht) %}
 					<dd>{{ bericht.bericht | bbcode("mail") }}</dd>
 				{% endif %}
 			{% endfor %}

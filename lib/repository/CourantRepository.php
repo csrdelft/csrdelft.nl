@@ -34,16 +34,6 @@ class CourantRepository extends AbstractRepository
 		$this->security = $security;
 	}
 
-	public function magBeheren()
-	{
-		return LoginService::mag(P_MAIL_COMPOSE);
-	}
-
-	public function magVerzenden()
-	{
-		return LoginService::mag(P_MAIL_SEND);
-	}
-
 	public function nieuwCourant()
 	{
 		$courant = new Courant();

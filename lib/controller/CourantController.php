@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Security\Voter\Entity\CourantBerichtVoter;
 use CsrDelft\entity\courant\Courant;
 use CsrDelft\entity\courant\CourantBericht;
 use CsrDelft\entity\courant\CourantCategorie;
@@ -112,8 +113,6 @@ class CourantController extends AbstractController
 		}
 
 		return $this->render('courant/beheer.html.twig', [
-			'magVerzenden' => $this->courantRepository->magVerzenden(),
-			'magBeheren' => $this->courantRepository->magBeheren(),
 			'berichten' => $this->courantBerichtRepository->getBerichtenVoorGebruiker(),
 			'form' => $form->createView(),
 		]);
@@ -144,8 +143,6 @@ class CourantController extends AbstractController
 		}
 
 		return $this->render('courant/beheer.html.twig', [
-			'magVerzenden' => $this->courantRepository->magVerzenden(),
-			'magBeheren' => $this->courantRepository->magBeheren(),
 			'berichten' => $this->courantBerichtRepository->getBerichtenVoorGebruiker(),
 			'form' => $form->createView(),
 		]);
@@ -159,9 +156,7 @@ class CourantController extends AbstractController
 	 */
 	public function verwijderen(CourantBericht $bericht): RedirectResponse
 	{
-		if (!$bericht->magBeheren()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(CourantBerichtVoter::BEHEREN, $bericht);
 
 		try {
 			$manager = $this->getDoctrine()->getManager();
