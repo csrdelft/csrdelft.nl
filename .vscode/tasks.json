@@ -1,0 +1,105 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "[yarn] Build (DEV)",
+			"type": "npm",
+			"script": "dev",
+			"detail": "yarn run development"
+		},
+		{
+			"label": "[yarn] Build (PROD)",
+			"type": "npm",
+			"script": "prod",
+			"detail": "yarn run production"
+		},
+		{
+			"label": "[yarn] Install",
+			"type": "npm",
+			"script": "install",
+			"detail": "yarn install"
+		},
+		{
+			"label": "[yarn] Startup",
+			"type": "npm",
+			"script": "startup",
+			"detail": "yarn run startup"
+		},
+		{
+			"label": "[yarn] Watch",
+			"type": "npm",
+			"script": "watch",
+			"detail": "yarn run watch"
+		},
+		{
+			"label": "[composer] Analyze",
+			"type": "shell",
+			"command": "composer analyze",
+			"detail": "composer analyze",
+			"problemMatcher": []
+		},
+		{
+			"label": "[composer] Flush cache",
+			"type": "shell",
+			"command": "composer flushcache",
+			"detail": "composer flushcache",
+			"problemMatcher": []
+		},
+		{
+			"label": "[composer] Serve",
+			"type": "shell",
+			"command": "composer serve",
+			"detail": "composer serve",
+			"problemMatcher": []
+		},
+		{
+			"label": "[composer] Startup",
+			"type": "shell",
+			"command": "composer startup",
+			"detail": "composer startup",
+			"problemMatcher": []
+		},
+		{
+			"label": "[composer] Test",
+			"type": "shell",
+			"command": "composer test",
+			"detail": "composer test",
+			"problemMatcher": []
+		},
+		{
+			"label": "[composer] Update-dev",
+			"type": "shell",
+			"command": "composer update-dev",
+			"detail": "composer update-dev",
+			"problemMatcher": []
+		},
+		{
+			"label": "[PHP] Database Aanmaken",
+			"type": "shell",
+			"command": "php bin/console doctrine:database:create",
+			"detail": "php bin/console doctrine:database:create",
+			"problemMatcher": []
+		},
+		{
+			"label": "[PHP] Database Fixtures",
+			"type": "shell",
+			"command": "php bin/console doctrine:fixtures:load",
+			"detail": "php bin/console doctrine:fixtures:load",
+			"problemMatcher": []
+		},
+		{
+			"label": "[PHP] Database Migraties",
+			"type": "shell",
+			"command": "php bin/console doctrine:migrations:migrate",
+			"detail": "php bin/console doctrine:migrations:migrate",
+			"problemMatcher": []
+		},
+		{
+			"label": "[PHP] Database Verwijderen",
+			"type": "shell",
+			"command": "php bin/console doctrine:database:drop --force",
+			"detail": "php bin/console doctrine:database:drop --force",
+			"problemMatcher": []
+		}
+	]
+}
