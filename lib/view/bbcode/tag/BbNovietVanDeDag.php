@@ -6,6 +6,7 @@ use CsrDelft\bb\BbTag;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
+use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
 class BbNovietVanDeDag extends BbTag
@@ -18,13 +19,19 @@ class BbNovietVanDeDag extends BbTag
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
+		Security $security,
 		ProfielRepository $profielRepository,
 		Environment $twig
 	) {
 		$this->profielRepository = $profielRepository;
 		$this->twig = $twig;
+		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -34,7 +41,7 @@ class BbNovietVanDeDag extends BbTag
 
 	public function isAllowed()
 	{
-		return LoginService::mag(P_LOGGED_IN);
+		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
 	public function parse($arguments = [])

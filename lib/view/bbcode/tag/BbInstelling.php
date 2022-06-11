@@ -4,7 +4,8 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
-use CsrDelft\service\security\LoginService;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Toont content als instelling een bepaalde waarde heeft, standaard 'ja';
@@ -18,10 +19,26 @@ class BbInstelling extends BbTag
 	private $module;
 	private $testwaarde;
 	private $instelling;
+	/**
+	 * @var Security
+	 */
+	private $security;
+	/**
+	 * @var LidInstellingenRepository
+	 */
+	private $lidInstellingenRepository;
+
+	public function __construct(
+		Security $security,
+		LidInstellingenRepository $lidInstellingenRepository
+	) {
+		$this->security = $security;
+		$this->lidInstellingenRepository = $lidInstellingenRepository;
+	}
 
 	public function isAllowed()
 	{
-		LoginService::mag(P_LOGGED_IN);
+		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
 	public static function getTagName()
@@ -36,7 +53,10 @@ class BbInstelling extends BbTag
 		}
 		try {
 			if (
-				lid_instelling($this->module, $this->instelling) == $this->testwaarde
+				$this->lidInstellingenRepository->getValue(
+					$this->module,
+					$this->instelling
+				) == $this->testwaarde
 			) {
 				return $this->getContent();
 			}

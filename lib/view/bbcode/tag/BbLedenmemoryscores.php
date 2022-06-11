@@ -10,6 +10,7 @@ use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -30,13 +31,19 @@ class BbLedenmemoryscores extends BbTag
 	 * @var LichtingenRepository
 	 */
 	private $lichtingenRepository;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
+		Security $security,
 		VerticalenRepository $verticalenRepository,
 		LichtingenRepository $lichtingenRepository
 	) {
 		$this->verticalenRepository = $verticalenRepository;
 		$this->lichtingenRepository = $lichtingenRepository;
+		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -46,7 +53,7 @@ class BbLedenmemoryscores extends BbTag
 
 	public function isAllowed()
 	{
-		return LoginService::mag(P_LOGGED_IN);
+		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
 	public function renderLight()

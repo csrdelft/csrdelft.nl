@@ -5,8 +5,8 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\bibliotheek\BoekRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
+use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
 /**
@@ -32,11 +32,19 @@ class BbBoek extends BbTag
 	 * @var string
 	 */
 	private $id;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
-	public function __construct(BoekRepository $boekRepository, Environment $twig)
-	{
+	public function __construct(
+		BoekRepository $boekRepository,
+		Environment $twig,
+		Security $security
+	) {
 		$this->boekRepository = $boekRepository;
 		$this->twig = $twig;
+		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -45,7 +53,7 @@ class BbBoek extends BbTag
 	}
 	public function isAllowed()
 	{
-		return LoginService::mag(P_BIEB_READ);
+		return $this->security->isGranted('ROLE_BIEB_READ');
 	}
 
 	public function renderLight()
@@ -65,7 +73,7 @@ class BbBoek extends BbTag
 
 	public function render()
 	{
-		if (!LoginService::mag('ROLE_BIEB_READ')) {
+		if (!$this->security->isGranted('ROLE_BIEB_READ')) {
 			return null;
 		}
 

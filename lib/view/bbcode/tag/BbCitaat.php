@@ -5,8 +5,8 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbTag;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -24,10 +24,17 @@ class BbCitaat extends BbTag
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
-	public function __construct(ProfielRepository $profielRepository)
-	{
+	public function __construct(
+		Security $security,
+		ProfielRepository $profielRepository
+	) {
 		$this->profielRepository = $profielRepository;
+		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -129,7 +136,9 @@ class BbCitaat extends BbTag
 		$this->hidden = $this->env->quote_level > 1;
 		if (isset($arguments['citaat'])) {
 			$bron = $arguments['citaat'];
-			$profiel = LoginService::mag('ROLE_LEDEN_READ,ROLE_OUDLEDEN_READ')
+			$profiel = $this->security->isGranted(
+				'ROLE_LEDEN_READ,ROLE_OUDLEDEN_READ'
+			)
 				? $this->profielRepository->find($bron)
 				: null;
 			if ($profiel) {

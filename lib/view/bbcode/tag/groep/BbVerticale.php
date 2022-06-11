@@ -6,6 +6,7 @@ use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\service\security\LoginService;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Geeft een link naar de verticale.
@@ -25,15 +26,22 @@ class BbVerticale extends BbTag
 	 * @var string
 	 */
 	private $letter;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function getLetter()
 	{
 		return $this->letter;
 	}
 
-	public function __construct(VerticalenRepository $verticalenRepository)
-	{
+	public function __construct(
+		Security $security,
+		VerticalenRepository $verticalenRepository
+	) {
 		$this->verticalenRepository = $verticalenRepository;
+		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -43,7 +51,7 @@ class BbVerticale extends BbTag
 
 	public function isAllowed()
 	{
-		return LoginService::mag(P_LOGGED_IN);
+		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
 	public function render()
