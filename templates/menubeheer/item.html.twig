@@ -10,7 +10,7 @@
 			<span class="text-muted">{{ item.volgorde }}</span>
 			<span>{{ item.tekst }}</span>
 			[<a href="{{ item.link }}">{{ item.link }}</a>]
-			{% if mag('P_ADMIN') and item.item_id is not none and item.item_id > 0 %}
+			{% if is_granted('ROLE_ADMIN') and item.item_id is not none and item.item_id > 0 %}
 				<span class="text-muted">({{ item.item_id }})</span>
 			{% endif %}
 		</div>
@@ -38,7 +38,7 @@
 						{{ icon('shading') }}
 					{% endif %}
 				</a>
-				{% if mag('P_ADMIN') %}
+				{% if is_granted('ROLE_ADMIN') %}
 					<a href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: item.item_id}) }}" class="btn btn-sm post popup"
 						 title="Sub-menu-item toevoegen">
 						{{ icon('add') }}

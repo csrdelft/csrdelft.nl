@@ -5,7 +5,7 @@
 
 {% block content %}
 	<h1>404: Pagina niet gevonden</h1>
-	{% if mag('P_ADMIN') and bericht is defined %}
+	{% if is_granted('ROLE_ADMIN') and bericht is defined %}
 		<p>{{ bericht }}</p>
 	{% endif %}
 	<p>

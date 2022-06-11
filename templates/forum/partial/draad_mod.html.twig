@@ -68,7 +68,7 @@
 				</div>
 			</div>
 		</form>
-		{% if mag('P_FORUM_BELANGRIJK') %}
+		{% if is_granted('ROLE_FORUM_BELANGRIJK') %}
 			<form action="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'belangrijk'}) }}"
 						method="post">
 				{{ csrfField() }}

@@ -12,7 +12,7 @@
 
 {% block content %}
 	<div class="btn-toolbar float-end">
-		{% if mag('P_DOCS_MOD') %}
+		{% if is_granted('ROLE_DOCS_MOD') %}
 			<a class="btn post popup redirect" href="{{ url('csrdelft_documenten_categoriebewerken', {id: categorie.id}) }}">
 				{{ icon('bewerken') }} Bewerken
 			</a>

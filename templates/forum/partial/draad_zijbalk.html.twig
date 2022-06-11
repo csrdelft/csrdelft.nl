@@ -6,7 +6,7 @@
 			<a href="{{ url('csrdelft_forum_forum_recent') }}">Forum</a>
 		{% endif %}
 
-		{% if mag('P_FORUM_MOD') and aantalWacht > 0 %}
+		{% if is_granted('ROLE_FORUM_MOD') and aantalWacht > 0 %}
 			&nbsp;<a href="{{ url('csrdelft_forum_forumdeel_wacht') }}" class="badge bg-primary text-white"
 							 title="{{ aantalWacht }} forumbericht{{ (aantalWacht == 1 ? '' : 'en') }} wacht{{ (aantalWacht == 1 ? '' : 'en') }} op goedkeuring">{{ aantalWacht }}</a>
 		{% endif %}

@@ -127,7 +127,7 @@
 								{{ icon("user_add") }} Ik bezit dit boek
 							</a>
 						</li>
-						{% if mag('P_BIEB_MOD') %}
+						{% if is_granted('ROLE_BIEB_MOD') %}
 							<li class="list-group-item">
 								<a class="post ReloadPage"
 									 href="{{ url('csrdelft_bibliotheek_addexemplaar', {boek: boek.id, profiel: 'x222'}) }}"

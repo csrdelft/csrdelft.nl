@@ -35,7 +35,7 @@
 								<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_bewerken', {naam: pagina.naam}) }}"
 									 title="Bewerken">{{ icon('bewerken') }}</a>
 							{% endif %}
-							{% if mag('P_ADMIN') %}
+							{% if is_granted('ROLE_ADMIN') %}
 								<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_verwijderen', {naam: pagina.naam}) }}"
 									 title="Verwijderen">{{ icon('delete') }}</a>
 							{% endif %}
