@@ -2,8 +2,10 @@
 
 namespace CsrDelft\repository;
 
+use CsrDelft\common\Security\Voter\Entity\CmsPaginaVoter;
 use CsrDelft\entity\CmsPagina;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -17,9 +19,15 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CmsPaginaRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
+	/**
+	 * @var Security
+	 */
+	private $security;
+
+	public function __construct(ManagerRegistry $registry, Security $security)
 	{
 		parent::__construct($registry, CmsPagina::class);
+		$this->security = $security;
 	}
 
 	/**
@@ -31,7 +39,8 @@ class CmsPaginaRepository extends AbstractRepository
 		$paginas = $this->findBy([], ['titel' => 'ASC']);
 		$result = [];
 		foreach ($paginas as $pagina) {
-			if ($pagina->magBekijken()) {
+			// TODO: Deze security check zou later moeten worden gedaan.
+			if ($this->security->isGranted(CmsPaginaVoter::BEKIJKEN, $pagina)) {
 				$result[$pagina->naam] = $pagina;
 			}
 		}

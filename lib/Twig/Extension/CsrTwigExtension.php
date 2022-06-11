@@ -2,6 +2,7 @@
 
 namespace CsrDelft\Twig\Extension;
 
+use CsrDelft\common\Security\Voter\Entity\CmsPaginaVoter;
 use CsrDelft\Component\DataTable\DataTableView;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
@@ -18,6 +19,7 @@ use CsrDelft\view\formulier\CsrfField;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -37,15 +39,21 @@ class CsrTwigExtension extends AbstractExtension
 	 * @var CmsPaginaRepository
 	 */
 	private $cmsPaginaRepository;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
 		CsrfService $csrfService,
+		Security $security,
 		CmsPaginaRepository $cmsPaginaRepository,
 		ProfielRepository $profielRepository
 	) {
 		$this->csrfService = $csrfService;
 		$this->profielRepository = $profielRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
+		$this->security = $security;
 	}
 
 	public function getFunctions()
@@ -110,7 +118,7 @@ class CsrTwigExtension extends AbstractExtension
 				'" niet gevonden.</div>';
 		}
 
-		if ($pagina->magBekijken()) {
+		if ($this->security->isGranted(CmsPaginaVoter::BEKIJKEN, $pagina)) {
 			return CsrBB::parseHtml($pagina->inhoud, $pagina->inlineHtml);
 		}
 

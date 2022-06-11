@@ -31,11 +31,13 @@ Er zijn een aantal standaard rollen in Symfony:
 
 > [Symfony documentatie over Voters](https://symfony.com/doc/current/security/voters.html)
 
-Het idee van voters is dat ze op basis van een permissie-string kunnen zeggen of een gebruiker toegang heeft. Dit kan algemene toegang zijn, maar ook toegang tot een specifiek object. Dit laatste wordt nog niet gedaan in de stek.
+Het idee van voters is dat ze op basis van een permissie-string kunnen zeggen of een gebruiker toegang heeft. Dit kan algemene toegang zijn, maar ook toegang tot een specifiek object.
 
 Alle voters zijn te vinden in de `CsrDelft\common\Security\Voters\ ` namespace. Ze implementeren allemaal `Symfony\Component\Security\Core\Authorization\VoterInterface`, maar er is ook een `Voter` class die ge-extend kan worden en al grotendeels geimplementeerd is.
 
 Kijk bijvoorbeeld naar `EerstejaarsVoter` voor een simpele implementatie van een voter die alleen toegang geeft aan eerstejaars.
+
+In `CmsPaginaVoter` wordt op basis van een specifieke entity de keuze gemaakt of een actie mag worden uitgevoerd.
 
 ## Authenticators
 
