@@ -212,6 +212,6 @@ class AccessService
 	 */
 	public function converteerPermissie($permissie)
 	{
-		return preg_replace('/[^a-zA-Z]P_/', 'ROLE_', $permissie);
+		return preg_replace('/P_/', 'ROLE_', $permissie);
 	}
 }
