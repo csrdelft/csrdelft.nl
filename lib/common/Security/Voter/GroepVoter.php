@@ -52,6 +52,8 @@ class GroepVoter extends PrefixVoter
 			case self::PREFIX_KETZER:
 			case self::PREFIX_WERKGROEP:
 			case self::PREFIX_GROEP:
+			case self::PREFIX_BESTUUR:
+			case self::PREFIX_COMMISSIE:
 				return true;
 			default:
 				return false;
@@ -71,7 +73,7 @@ class GroepVoter extends PrefixVoter
 			return false;
 		}
 
-		switch ($prefix) {
+		switch (strtoupper($prefix)) {
 			case self::PREFIX_BESTUUR:
 				if (in_array(ucfirst($gevraagd), CommissieFunctie::getEnumValues())) {
 					$role = $gevraagd;

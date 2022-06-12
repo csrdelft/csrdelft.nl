@@ -57,7 +57,7 @@ class BestuurOfCommissieVoter extends PrefixVoter
 			return false;
 		}
 
-		if ($prefix == self::PREFIX_BESTUUR) {
+		if (strtoupper($prefix) == self::PREFIX_BESTUUR) {
 			$gevraagd = strtolower($gevraagd);
 			if (in_array($gevraagd, GroepStatus::getEnumValues())) {
 				return 1 ===
