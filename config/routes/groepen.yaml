@@ -2,7 +2,7 @@ csrdelft_groep_overzicht:
   path: /groepen
   controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
   defaults:
-    _mag: P_LOGGED_IN
+    _mag: ROLE_LOGGED_IN
     route: csrdelft_groep_commissies_overzicht
 
 groep-activiteiten:
