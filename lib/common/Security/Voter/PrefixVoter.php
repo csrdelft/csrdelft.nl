@@ -45,6 +45,7 @@ abstract class PrefixVoter extends Voter
 		$subject,
 		TokenInterface $token
 	) {
+		$attribute = strtolower($attribute);
 		// splits permissie in type, waarde en rol
 		$p = explode(':', $attribute, 3);
 		if (isset($p[0])) {
