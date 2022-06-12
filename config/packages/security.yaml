@@ -92,7 +92,7 @@ security:
     ROLE_FISCAAT: [ROLE_LID, ROLE_FISCAAT_READ, ROLE_FISCAAT_MOD]
     ROLE_MAALCIE:
       [ROLE_FISCAAT, ROLE_MAAL_MOD, ROLE_CORVEE_MOD, ROLE_MAAL_SALDI]
-    ROLE_BASFCIE:
+    ROLE_BASF:
       [
         ROLE_LID,
         ROLE_DOCS_MOD,
@@ -102,7 +102,7 @@ security:
       ]
     ROLE_BESTUUR:
       [
-        ROLE_BASFCIE,
+        ROLE_BASF,
         ROLE_MAALCIE,
         ROLE_LEDEN_MOD,
         ROLE_FORUM_MOD,
