@@ -8,6 +8,7 @@ use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\entity\security\Account;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
 /**
@@ -20,14 +21,16 @@ class MaaltijdVoter extends PrefixVoter
 	 */
 	private $em;
 	/**
-	 * @var Security
+	 * @var AccessDecisionManagerInterface
 	 */
-	private $security;
+	private $accessDecisionManager;
 
-	public function __construct(EntityManagerInterface $em, Security $security)
-	{
+	public function __construct(
+		EntityManagerInterface $em,
+		AccessDecisionManagerInterface $accessDecisionManager
+	) {
 		$this->em = $em;
-		$this->security = $security;
+		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	protected function supportsPrefix($prefix)
@@ -64,7 +67,7 @@ class MaaltijdVoter extends PrefixVoter
 			return true;
 		} elseif ($role === 'SLUITEN') {
 			// Mag maaltijd sluiten?
-			if ($this->security->isGranted('ROLE_MAAL_MOD', $subject)) {
+			if ($this->accessDecisionManager->decide($token, ['ROLE_MAAL_MOD'])) {
 				return true;
 			}
 			try {

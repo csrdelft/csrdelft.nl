@@ -4,6 +4,7 @@ namespace CsrDelft\common\Security\Voter;
 
 use CsrDelft\entity\profiel\Profiel;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
 /**
@@ -12,13 +13,14 @@ use Symfony\Component\Security\Core\Security;
 class GeslachtPrefixVoter extends PrefixVoter
 {
 	/**
-	 * @var Security
+	 * @var AccessDecisionManagerInterface
 	 */
-	private $security;
+	private $accessDecisionManager;
 
-	public function __construct(Security $security)
-	{
-		$this->security = $security;
+	public function __construct(
+		AccessDecisionManagerInterface $accessDecisionManager
+	) {
+		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	protected function supportsPrefix($prefix)
@@ -34,7 +36,7 @@ class GeslachtPrefixVoter extends PrefixVoter
 		TokenInterface $token
 	) {
 		// Niet ingelogd heeft geslacht m dus check of ingelogd
-		if (!$this->security->isGranted('ROLE_LOGGED_IN')) {
+		if (!$this->accessDecisionManager->decide($token, ['ROLE_LOGGED_IN'])) {
 			return false;
 		}
 

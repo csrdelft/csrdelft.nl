@@ -6,6 +6,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\Security\Voter\CacheableVoterSupportsTrait;
 use CsrDelft\entity\CmsPagina;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
@@ -18,13 +19,14 @@ class CmsPaginaVoter extends Voter
 	const RECHTEN_WIJZIGEN = 'rechten_wijzigen';
 	const VERWIJDEREN = 'verwijderen';
 	/**
-	 * @var Security
+	 * @var AccessDecisionManagerInterface
 	 */
-	private $security;
+	private $accessDecisionManager;
 
-	public function __construct(Security $security)
-	{
-		$this->security = $security;
+	public function __construct(
+		AccessDecisionManagerInterface $accessDecisionManager
+	) {
+		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	public function supportsAttribute(string $attribute): bool
@@ -53,12 +55,16 @@ class CmsPaginaVoter extends Voter
 
 		switch ($attribute) {
 			case self::BEKIJKEN:
-				return $this->security->isGranted($subject->rechtenBekijken);
+				return $this->accessDecisionManager->decide($token, [
+					$subject->rechtenBekijken,
+				]);
 			case self::BEWERKEN:
-				return $this->security->isGranted($subject->rechtenBewerken);
+				return $this->accessDecisionManager->decide($token, [
+					$subject->rechtenBewerken,
+				]);
 			case self::RECHTEN_WIJZIGEN:
 			case self::VERWIJDEREN:
-				return $this->security->isGranted('ROLE_ADMIN');
+				return $this->accessDecisionManager->decide($token, ['ROLE_ADMIN']);
 			default:
 				throw new CsrException("Onbekende rechten nodig: '$attribute'.");
 		}

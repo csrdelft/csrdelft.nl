@@ -7,6 +7,7 @@ use CsrDelft\common\Security\Voter\CacheableVoterSupportsTrait;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\entity\fotoalbum\FotoTagAlbum;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
@@ -20,13 +21,14 @@ class FotoAlbumVoter extends Voter
 	const AANPASSEN = 'aanpassen';
 	const DOWNLOADEN = 'downloaden';
 	/**
-	 * @var Security
+	 * @var AccessDecisionManagerInterface
 	 */
-	private $security;
+	private $accessDecisionManager;
 
-	public function __construct(Security $security)
-	{
-		$this->security = $security;
+	public function __construct(
+		AccessDecisionManagerInterface $accessDecisionManager
+	) {
+		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	public function supportsAttribute(string $attribute): bool
@@ -68,40 +70,61 @@ class FotoAlbumVoter extends Voter
 					return false;
 				}
 				if ($subject instanceof FotoTagAlbum) {
-					return $this->security->isGranted('ROLE_LEDEN_READ');
+					return $this->accessDecisionManager->decide($token, [
+						'ROLE_LEDEN_READ',
+					]);
 				}
 				if ($subject->isPubliek()) {
-					return $this->security->isGranted('PUBLIC_ACCESS');
+					return $this->accessDecisionManager->decide($token, [
+						'PUBLIC_ACCESS',
+					]);
 				} else {
-					return $this->security->isGranted('ROLE_ALBUM_READ');
+					return $this->accessDecisionManager->decide($token, [
+						'ROLE_ALBUM_READ',
+					]);
 				}
 			case self::VERWIJDEREN:
 				if ($token->getUserIdentifier() == $subject->owner) {
 					return true;
 				}
 				if ($subject->isPubliek()) {
-					return $this->security->isGranted('ROLE_ALBUM_PUBLIC_DEL');
+					return $this->accessDecisionManager->decide($token, [
+						'ROLE_ALBUM_PUBLIC_DEL',
+					]);
 				} else {
-					return $this->security->isGranted('ROLE_ALBUM_DEL');
+					return $this->accessDecisionManager->decide($token, [
+						'ROLE_ALBUM_DEL',
+					]);
 				}
 			case self::TOEVOEGEN:
 				if ($subject->isPubliek()) {
-					return $this->security->isGranted('ROLE_ALBUM_PUBLIC_ADD');
+					return $this->accessDecisionManager->decide($token, [
+						'ROLE_ALBUM_PUBLIC_ADD',
+					]);
 				} else {
-					return $this->security->isGranted('ROLE_ALBUM_ADD');
+					return $this->accessDecisionManager->decide($token, [
+						'ROLE_ALBUM_ADD',
+					]);
 				}
 			case self::AANPASSEN:
 				if ($subject->isPubliek()) {
-					return $this->security->isGranted('ROLE_ALBUM_PUBLIC_MOD');
+					return $this->accessDecisionManager->decide($token, [
+						'ROLE_ALBUM_PUBLIC_MOD',
+					]);
 				} else {
-					return $this->security->isGranted('ROLE_ALBUM_MOD') ||
-						$token->getUserIdentifier() == $subject->owner;
+					return $this->accessDecisionManager->decide($token, [
+						'ROLE_ALBUM_MOD',
+					]) || $token->getUserIdentifier() == $subject->owner;
 				}
 			case self::DOWNLOADEN:
 				if ($subject->isPubliek()) {
-					return $this->security->isGranted('ROLE_ALBUM_PUBLIC_DOWN');
+					return $this->accessDecisionManager->decide($token, [
+						'ROLE_ALBUM_PUBLIC_DOWN',
+					]);
 				} else {
-					return $this->security->isGranted('ROLE_ALBUM_DOWN');
+					return $this->accessDecisionManager->decide($token, [
+						'ROLE_ALBUM_DOWN',
+					]);
 				}
 			default:
 				throw new CsrException("Onbekende rechten nodig: '$attribute'.");

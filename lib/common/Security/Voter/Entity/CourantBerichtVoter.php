@@ -6,6 +6,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Security\Voter\CacheableVoterSupportsTrait;
 use CsrDelft\entity\courant\CourantBericht;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
@@ -15,13 +16,14 @@ class CourantBerichtVoter extends Voter
 
 	const BEHEREN = 'beheren';
 	/**
-	 * @var Security
+	 * @var AccessDecisionManagerInterface
 	 */
-	private $security;
+	private $accessDecisionManager;
 
-	public function __construct(Security $security)
-	{
-		$this->security = $security;
+	public function __construct(
+		AccessDecisionManagerInterface $accessDecisionManager
+	) {
+		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	public function supportsAttribute(string $attribute): bool
@@ -47,8 +49,9 @@ class CourantBerichtVoter extends Voter
 	) {
 		switch ($attribute) {
 			case self::BEHEREN:
-				return $this->security->isGranted('ROLE_MAIL_COMPOSE') ||
-					$this->security->isGranted($subject->uid);
+				return $this->accessDecisionManager->decide($token, [
+					'ROLE_MAIL_COMPOSE',
+				]) || $this->accessDecisionManager->decide($token, [$subject->uid]);
 			default:
 				throw new CsrGebruikerException(
 					"Attribute niet gevonden: '$attribute'."

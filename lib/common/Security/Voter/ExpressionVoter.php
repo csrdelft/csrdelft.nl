@@ -4,6 +4,7 @@ namespace CsrDelft\common\Security\Voter;
 
 use CsrDelft\common\CsrException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
@@ -21,13 +22,14 @@ class ExpressionVoter extends Voter
 {
 	use CacheableVoterSupportsTrait;
 	/**
-	 * @var Security
+	 * @var AccessDecisionManagerInterface
 	 */
-	private $security;
+	private $accessDecisionManager;
 
-	public function __construct(Security $security)
-	{
-		$this->security = $security;
+	public function __construct(
+		AccessDecisionManagerInterface $accessDecisionManager
+	) {
+		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	public function supportsAttribute(string $attribute): bool
@@ -51,7 +53,11 @@ class ExpressionVoter extends Voter
 			$p = explode(',', $attribute);
 			$result = false;
 			foreach ($p as $perm) {
-				$result |= $this->security->isGranted($perm, $subject);
+				$result |= $this->accessDecisionManager->decide(
+					$token,
+					[$perm],
+					$subject
+				);
 			}
 		}
 		// AND
@@ -63,7 +69,11 @@ class ExpressionVoter extends Voter
 			$p = explode('+', $attribute);
 			$result = true;
 			foreach ($p as $perm) {
-				$result &= $this->security->isGranted($perm, $subject);
+				$result &= $this->accessDecisionManager->decide(
+					$token,
+					[$perm],
+					$subject
+				);
 			}
 		}
 		// OR (secondary)
@@ -76,7 +86,11 @@ class ExpressionVoter extends Voter
 			$p = explode('|', $attribute);
 			$result = false;
 			foreach ($p as $perm) {
-				$result |= $this->security->isGranted($perm, $subject);
+				$result |= $this->accessDecisionManager->decide(
+					$token,
+					[$perm],
+					$subject
+				);
 			}
 		} else {
 			throw new CsrException('Rechten expressie bevat geen |,+');

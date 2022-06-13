@@ -32,6 +32,11 @@ abstract class PrefixVoter extends Voter
 
 	protected function supports(string $attribute, $subject)
 	{
+		if (preg_match('/[|,+]/', $attribute)) {
+			// ExpressionVoter mag eerst!
+			return false;
+		}
+
 		$attribute = strtoupper($attribute);
 		// splits permissie in type, waarde en rol
 		$p = explode(':', $attribute, 3);
