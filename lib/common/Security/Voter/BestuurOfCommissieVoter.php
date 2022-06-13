@@ -85,9 +85,7 @@ class BestuurOfCommissieVoter extends PrefixVoter
 					->getSingleScalarResult();
 		}
 
-		$attribute = $this->buildAttribute($prefix, $gevraagd, $role);
-
-		return $this->groepPrefixVoter->vote($token, $subject, [$attribute]);
+		return false;
 	}
 
 	private function buildAttribute($prefix, $gevraagd, $role): string

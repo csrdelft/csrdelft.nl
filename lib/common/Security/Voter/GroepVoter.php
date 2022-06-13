@@ -6,6 +6,7 @@ use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Bestuur;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\groepen\enum\CommissieFunctie;
+use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\groepen\Kring;
 use CsrDelft\entity\groepen\Ondervereniging;
@@ -86,7 +87,7 @@ class GroepVoter extends PrefixVoter
 				}
 				break;
 
-			case self::PREFIX_COMMISSIE:
+			case self::PREFIX_COMMISSIE: // BestuurOfCommissieVoter kan overweg met o.t. en f.t. cies
 				$groep = $this->em->getRepository(Commissie::class)->get($gevraagd);
 				break;
 
