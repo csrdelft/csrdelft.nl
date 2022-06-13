@@ -189,6 +189,11 @@ class AccessService
 			return false;
 		}
 
+		if (preg_match('/^ROLE_/', $permission)) {
+			//Aannemen dat alle ROLE_ permissies kloppen
+			return true;
+		}
+
 		// splits permissie in type, waarde en rol
 		$p = explode(':', $permission);
 		if (in_array($p[0], self::$prefix) && count($p) <= 3) {
