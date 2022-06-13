@@ -42,7 +42,8 @@ class FotoAlbumVoter extends Voter
 
 	public function supportsType(string $subjectType): bool
 	{
-		return $subjectType == FotoAlbum::class;
+		return $subjectType == FotoAlbum::class ||
+			$subjectType == FotoTagAlbum::class;
 	}
 
 	/**
