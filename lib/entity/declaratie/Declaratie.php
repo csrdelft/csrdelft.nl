@@ -540,7 +540,7 @@ class Declaratie
 
 	public static function isFiscus(): bool
 	{
-		return LoginService::mag('bestuur:Fiscus');
+		return LoginService::mag('bestuur:ht:fiscus');
 	}
 
 	public function magBekijken(): bool
