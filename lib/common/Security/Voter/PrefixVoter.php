@@ -8,6 +8,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 /**
  * Hulpklasse om rechten te checken
  *
+ * Rechten worden altijd naar uppercase geconverteerd!.
+ *
  * Controleert een rechtendefinitie met de volgende structuur:
  *
  * <prefix>:<gevraagd>:<role>
@@ -30,6 +32,7 @@ abstract class PrefixVoter extends Voter
 
 	protected function supports(string $attribute, $subject)
 	{
+		$attribute = strtoupper($attribute);
 		// splits permissie in type, waarde en rol
 		$p = explode(':', $attribute, 3);
 		if (isset($p[0])) {
@@ -45,7 +48,8 @@ abstract class PrefixVoter extends Voter
 		$subject,
 		TokenInterface $token
 	) {
-		$attribute = strtolower($attribute);
+		// Altijd uppercase
+		$attribute = strtoupper($attribute);
 		// splits permissie in type, waarde en rol
 		$p = explode(':', $attribute, 3);
 		if (isset($p[0])) {
