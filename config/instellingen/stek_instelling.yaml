@@ -20,7 +20,7 @@ instellingen:
     beschrijving_foto_intern: >
       Met de volgende optie kunt u aangeven of u akkoord gaat met het plaatsen van foto\'s op het interne gedeelte van de stek.
   agenda:
-    standaard_rechten: P_LOGGED_IN
+    standaard_rechten: ROLE_LOGGED_IN
     ical_from: '-1 month'
     ical_to: '+6 months'
   beveiliging:
