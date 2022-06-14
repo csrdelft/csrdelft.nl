@@ -1,11 +1,18 @@
 sentry:
   dsn: '%env(SENTRY_DSN)%'
   options:
-    excluded_exceptions:
-      - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-      - Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-      - Symfony\Component\HttpKernel\Exception\BadRequestHttpException
-      - CsrDelft\common\CsrGebruikerException
-      - Symfony\Component\Security\Core\Exception\AccessDeniedException
-      - Symfony\Component\Security\Core\Exception\TokenNotFoundException
     send_default_pii: true
+    integrations:
+      - 'Sentry\Integration\IgnoreErrorsIntegration'
+
+services:
+  Sentry\Integration\IgnoreErrorsIntegration:
+    arguments:
+      $options:
+        ignore_exceptions:
+          - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+          - Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+          - Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+          - CsrDelft\common\CsrGebruikerException
+          - Symfony\Component\Security\Core\Exception\AccessDeniedException
+          - Symfony\Component\Security\Core\Exception\TokenNotFoundException
