@@ -14,4 +14,6 @@ services:
     arguments:
       - '@doctrine.fixtures.loader'
       - '@doctrine'
-      - { default: '@CsrDelft\DataFixtures\Purger\DisableForeignKeysORMPurgerFactory' }
+      - {
+          default: '@CsrDelft\DataFixtures\Purger\DisableForeignKeysORMPurgerFactory',
+        }
