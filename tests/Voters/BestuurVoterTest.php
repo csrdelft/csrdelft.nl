@@ -38,7 +38,6 @@ class BestuurVoterTest extends CsrTestCase
 	{
 		$htPraesesToken = $this->getToken(AccountFixtures::UID_BESTUUR_PRAESES);
 
-		$this->assertTrue(false);
 		$this->assertTrue($this->adm->decide($htPraesesToken, ['bestuur:ht']));
 		$this->assertTrue($this->adm->decide($htPraesesToken, ['bestuur']));
 		$this->assertTrue(
