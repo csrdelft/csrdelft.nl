@@ -416,6 +416,7 @@
         >
           <iframe
             :src="bon.bestandsnaam"
+            title="Bon"
             v-if="bon.bestandsnaam.toLowerCase().endsWith('.pdf')"
           />
           <div class="imageContainer" :class="{ zoomFit: isZoomFit }" v-else>
