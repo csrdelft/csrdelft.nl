@@ -1,6 +1,7 @@
 sentry:
   dsn: '%env(SENTRY_DSN)%'
   options:
+    traces_sample_rate: 1.0
     send_default_pii: true
     integrations:
       - 'Sentry\Integration\IgnoreErrorsIntegration'
