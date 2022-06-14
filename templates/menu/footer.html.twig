@@ -7,7 +7,7 @@
 				<small class="d-block mb-3 text-muted">© 2006-{{ date().format('Y') }}</small>
 				{% if not app.debug and is_granted('ROLE_ADMIN') %}
 					<small class="cd-block mb-3">
-						<a href="{{ commitLink() }}" target="_blank" class="not-external text-muted">{{ commitHash() }}</a>
+						<a href="{{ commitLink() }}" target="_blank" rel="noopener" class="not-external text-muted">{{ commitHash() }}</a>
 					</small>
 				{% endif %}
 			</div>
