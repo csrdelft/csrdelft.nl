@@ -38,3 +38,5 @@ In tests kun je gebruik maken van de data gegenereerd in de fixtures. Bijvoorbee
 Zie als voorbeeld `GeslachtVoterTest`, in de fixtures wordt de boel goed gezet en in de test wordt naar de specifieke accounts die hier goed gezet zijn verwezen.
 
 Je kan er bij een test altijd vanuit gaan dat er een verse database staat, maar probeer alsnog de database netjes achter te laten na een test.
+
+Let op met Faker als je fixtures voor testen wil gebruiken, gegevens die iedere keer veranderen zijn hier natuurlijk onhandig.

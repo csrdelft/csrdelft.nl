@@ -243,7 +243,6 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * Has permission for action?
 	 *
 	 * @param AccessAction $action
-	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
 	public function mag(AccessAction $action)

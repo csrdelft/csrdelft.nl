@@ -12,7 +12,6 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -32,12 +31,6 @@ use Throwable;
  * @method Groep|null findOneBy(array $criteria, array $orderBy = null)
  * @method Groep[]    findAll()
  * @method Groep|null retrieveByUUID($UUID)
- * @ORM\NamedQueries({
- *   @ORM\NamedQuery(name="isLid", query="SELECT count(l) FROM __CLASS__ g JOIN g.leden l WHERE l.uid = :uid AND g.status = 'ht'"),
- *   @ORM\NamedQuery(name="isLidStatus", query="SELECT count(l) FROM __CLASS__ g JOIN g.leden l WHERE l.uid = :uid AND g.status = :status"),
- *   @ORM\NamedQuery(name="isLidRoleStatus", query="SELECT count(l) FROM __CLASS__ g JOIN g.leden l WHERE l.uid = :uid AND g.status = :status AND l.opmerking = :role"),
- *   @ORM\NamedQuery(name="isLidRole", query="SELECT count(l) FROM __CLASS__ g JOIN g.leden l WHERE l.uid = :uid AND g.status = 'ht' AND l.opmerking = :role"),
- * })
  */
 abstract class GroepRepository extends AbstractRepository
 {

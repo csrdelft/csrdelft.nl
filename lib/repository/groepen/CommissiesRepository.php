@@ -7,7 +7,6 @@ use CsrDelft\entity\groepen\enum\CommissieSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\repository\GroepRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class CommissiesRepository extends GroepRepository
 {
