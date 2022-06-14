@@ -7,6 +7,7 @@ use CsrDelft\entity\groepen\enum\CommissieSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\repository\GroepRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class CommissiesRepository extends GroepRepository
 {
@@ -54,5 +55,27 @@ class CommissiesRepository extends GroepRepository
 			return CommissieSoort::from($soort);
 		}
 		return parent::parseSoort($soort);
+	}
+
+	public function isLid(
+		UserInterface $user,
+		$familie,
+		$status = 'HT',
+		$role = null
+	) {
+		$role = strtolower($role);
+		if (in_array($role, GroepStatus::getEnumValues())) {
+			return 1 ===
+				(int) $this->_em
+					->createQuery(
+						'SELECT COUNT(c) FROM CsrDelft\entity\groepen\Commissie c JOIN c.leden l WHERE l.uid = :uid AND c.familie = :gevraagd AND c.status = :role'
+					)
+					->setParameter('gevraagd', $familie)
+					->setParameter('role', $status)
+					->setParameter('uid', $user->getUserIdentifier())
+					->getSingleScalarResult();
+		}
+
+		return parent::isLid($user, $familie, $status, $role);
 	}
 }

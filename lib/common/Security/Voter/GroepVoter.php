@@ -2,11 +2,12 @@
 
 namespace CsrDelft\common\Security\Voter;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Bestuur;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\groepen\enum\CommissieFunctie;
-use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\groepen\Kring;
 use CsrDelft\entity\groepen\Ondervereniging;
@@ -33,6 +34,21 @@ class GroepVoter extends PrefixVoter
 	const PREFIX_WERKGROEP = 'WERKGROEP';
 	const PREFIX_WOONOORD = 'WOONOORD';
 	const PREFIX_KRING = 'KRING';
+
+	/**
+	 * @var string[]|Groep[]
+	 */
+	const CLASS_MAP = [
+		self::PREFIX_ACTIVITEIT => Activiteit::class,
+		self::PREFIX_BESTUUR => Bestuur::class,
+		self::PREFIX_COMMISSIE => Commissie::class,
+		self::PREFIX_GROEP => RechtenGroep::class,
+		self::PREFIX_KETZER => Ketzer::class,
+		self::PREFIX_ONDERVERENIGING => Ondervereniging::class,
+		self::PREFIX_WERKGROEP => Werkgroep::class,
+		self::PREFIX_WOONOORD => Woonoord::class,
+		self::PREFIX_KRING => Kring::class,
+	];
 	/**
 	 * @var EntityManagerInterface
 	 */
@@ -45,20 +61,7 @@ class GroepVoter extends PrefixVoter
 
 	protected function supportsPrefix($prefix)
 	{
-		switch (strtoupper($prefix)) {
-			case self::PREFIX_KRING:
-			case self::PREFIX_ONDERVERENIGING:
-			case self::PREFIX_WOONOORD:
-			case self::PREFIX_ACTIVITEIT:
-			case self::PREFIX_KETZER:
-			case self::PREFIX_WERKGROEP:
-			case self::PREFIX_GROEP:
-			case self::PREFIX_BESTUUR:
-			case self::PREFIX_COMMISSIE:
-				return true;
-			default:
-				return false;
-		}
+		return isset(self::CLASS_MAP[$prefix]);
 	}
 
 	protected function voteOnPrefix(
@@ -74,68 +77,12 @@ class GroepVoter extends PrefixVoter
 			return false;
 		}
 
-		switch (strtoupper($prefix)) {
-			case self::PREFIX_BESTUUR:
-				if (in_array(ucfirst($gevraagd), CommissieFunctie::getEnumValues())) {
-					$role = $gevraagd;
-					$gevraagd = false;
-				}
-				if ($gevraagd) {
-					$groep = $this->em->getRepository(Bestuur::class)->get($gevraagd);
-				} else {
-					$groep = $this->em->getRepository(Bestuur::class)->get('bestuur'); // h.t.
-				}
-				break;
-
-			case self::PREFIX_COMMISSIE: // BestuurOfCommissieVoter kan overweg met o.t. en f.t. cies
-				$groep = $this->em->getRepository(Commissie::class)->get($gevraagd);
-				break;
-
-			case self::PREFIX_KRING:
-				$groep = $this->em->getRepository(Kring::class)->get($gevraagd);
-				break;
-
-			case self::PREFIX_ONDERVERENIGING:
-				$groep = $this->em
-					->getRepository(Ondervereniging::class)
-					->get($gevraagd);
-				break;
-
-			case self::PREFIX_WOONOORD:
-				$groep = $this->em->getRepository(Woonoord::class)->get($gevraagd);
-				break;
-
-			case self::PREFIX_ACTIVITEIT:
-				$groep = $this->em->getRepository(Activiteit::class)->get($gevraagd);
-				break;
-
-			case self::PREFIX_KETZER:
-				$groep = $this->em->getRepository(Ketzer::class)->get($gevraagd);
-				break;
-
-			case self::PREFIX_WERKGROEP:
-				$groep = $this->em->getRepository(Werkgroep::class)->get($gevraagd);
-				break;
-
-			case self::PREFIX_GROEP:
-			default:
-				$groep = $this->em->getRepository(RechtenGroep::class)->get($gevraagd);
-				break;
+		if (isset(self::CLASS_MAP[$prefix])) {
+			return $this->em
+				->getRepository(self::CLASS_MAP[$prefix])
+				->isLid($user, $gevraagd, $role);
 		}
 
-		if (!$groep) {
-			return false;
-		}
-
-		$lid = $groep->getLid($user->getUserIdentifier());
-		if (!$lid) {
-			return false;
-		}
-
-		// wordt er een functie gevraagd?
-		if ($role && strtoupper($role) !== strtoupper($lid->opmerking)) {
-			return false;
-		}
-		return true;
+		throw new CsrException("Geen klasse gevonden voor prefix: '$prefix'");
 	}
 }

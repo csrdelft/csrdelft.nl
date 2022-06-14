@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\DataFixtures;
+namespace CsrDelft\DataFixtures\Util;
 
 use Faker\Factory as Faker;
 

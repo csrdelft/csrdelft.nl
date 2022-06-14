@@ -12,12 +12,16 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use ReflectionClass;
 use ReflectionProperty;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 
 /**
@@ -28,6 +32,12 @@ use Throwable;
  * @method Groep|null findOneBy(array $criteria, array $orderBy = null)
  * @method Groep[]    findAll()
  * @method Groep|null retrieveByUUID($UUID)
+ * @ORM\NamedQueries({
+ *   @ORM\NamedQuery(name="isLid", query="SELECT count(l) FROM __CLASS__ g JOIN g.leden l WHERE l.uid = :uid AND g.status = 'ht'"),
+ *   @ORM\NamedQuery(name="isLidStatus", query="SELECT count(l) FROM __CLASS__ g JOIN g.leden l WHERE l.uid = :uid AND g.status = :status"),
+ *   @ORM\NamedQuery(name="isLidRoleStatus", query="SELECT count(l) FROM __CLASS__ g JOIN g.leden l WHERE l.uid = :uid AND g.status = :status AND l.opmerking = :role"),
+ *   @ORM\NamedQuery(name="isLidRole", query="SELECT count(l) FROM __CLASS__ g JOIN g.leden l WHERE l.uid = :uid AND g.status = 'ht' AND l.opmerking = :role"),
+ * })
  */
 abstract class GroepRepository extends AbstractRepository
 {
@@ -85,6 +95,55 @@ abstract class GroepRepository extends AbstractRepository
 		}
 
 		return parent::findBy($criteria, $orderBy, $limit, $offset);
+	}
+
+	public function isLid(
+		UserInterface $user,
+		$familie,
+		$status = 'ht',
+		$role = null
+	) {
+		try {
+			$qb = $this->createQueryBuilder('groep')
+				->select('COUNT(groep)')
+				->join('groep.leden', 'leden')
+				->where('leden.uid = :uid')
+				->setParameter('uid', $user->getUserIdentifier())
+				->andWhere('groep.familie = :familie')
+				->setParameter('familie', $familie);
+
+			if (in_array(strtolower($status), GroepStatus::getEnumValues())) {
+				$qb = $qb
+					->andWhere('groep.status = :status')
+					->setParameter('status', strtolower($status));
+			}
+
+			if ($role) {
+				$qb = $qb
+					->andWhere('leden.opmerking = :role')
+					->setParameter('role', $role);
+			}
+
+			return 1 === (int) $qb->getQuery()->getSingleScalarResult();
+
+			return 1 ===
+				(int) $this->_em
+					->createQuery(
+						<<<'EOF'
+SELECT COUNT(g)
+FROM CsrDelft\entity\groepen\Woonoord g
+JOIN g.leden l
+WHERE ((g.familie = :familie AND g.status = 'ht') OR g.oudId = :familie) AND l.uid = :uid
+EOF
+					)
+					->setParameters([
+						'familie' => $familie,
+						'uid' => $user->getUserIdentifier(),
+					])
+					->getSingleScalarResult();
+		} catch (NoResultException | NonUniqueResultException $e) {
+			return false;
+		}
 	}
 
 	/**

@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="[PHP] Database Fixtures" type="PhpLocalRunConfigurationType" factoryName="PHP Console" path="$PROJECT_DIR$/bin/console" scriptParameters="doctrine:fixtures:load">
+  <configuration default="false" name="[PHP] Database Fixtures" type="PhpLocalRunConfigurationType" factoryName="PHP Console" path="$PROJECT_DIR$/bin/console" scriptParameters="doctrine:fixtures:load -n">
     <method v="2" />
   </configuration>
 </component>

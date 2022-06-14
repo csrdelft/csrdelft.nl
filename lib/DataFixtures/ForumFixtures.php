@@ -2,6 +2,7 @@
 
 namespace CsrDelft\DataFixtures;
 
+use CsrDelft\DataFixtures\Util\FixtureHelpers;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;

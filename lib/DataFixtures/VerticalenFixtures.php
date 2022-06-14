@@ -6,10 +6,12 @@ use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\entity\profiel\Profiel;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as Faker;
 
-class VerticalenFixtures extends Fixture
+class VerticalenFixtures extends Fixture implements DependentFixtureInterface
 {
 	public function load(ObjectManager $manager)
 	{
@@ -27,11 +29,16 @@ class VerticalenFixtures extends Fixture
 			$verticale->eindMoment = null;
 			$verticale->status = GroepStatus::HT();
 			$verticale->samenvatting = '';
-			$verticale->maker = $manager->find(Profiel::class, '2020');
+			$verticale->maker = $this->getReference(AccountFixtures::UID_PUBCIE);
 
 			$manager->persist($verticale);
 		}
 
 		$manager->flush();
+	}
+
+	public function getDependencies()
+	{
+		return [AccountFixtures::class];
 	}
 }
