@@ -27,7 +27,7 @@ class ProsemirrorToBbTest extends CsrTestCase
 				'content' => [
 					[
 						'type' => 'text',
-						'marks' => [['type' => 'bold']],
+						'marks' => [['type' => 'strong']],
 						'text' => 'vetgedrukt',
 					],
 				],
@@ -48,12 +48,12 @@ class ProsemirrorToBbTest extends CsrTestCase
 				'content' => [
 					[
 						'type' => 'text',
-						'marks' => [['type' => 'bold']],
+						'marks' => [['type' => 'strong']],
 						'text' => 'vetgedrukt en ',
 					],
 					[
 						'type' => 'text',
-						'marks' => [['type' => 'bold'], ['type' => 'italic']],
+						'marks' => [['type' => 'strong'], ['type' => 'em']],
 						'text' => 'schuingedrukt',
 					],
 				],
