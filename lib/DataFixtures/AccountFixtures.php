@@ -2,55 +2,151 @@
 
 namespace CsrDelft\DataFixtures;
 
+use CsrDelft\DataFixtures\Util\ProfielFixtureUtil;
 use CsrDelft\entity\Geslacht;
-use CsrDelft\entity\MenuItem;
-use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
-use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccountService;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory as Faker;
 use Symfony\Component\Uid\Uuid;
 
 class AccountFixtures extends Fixture
 {
 	/**
+	 * Gebruik deze consts om naar accounts/profielen te verwijzen in tests.
+	 */
+	const UID_BESTUUR_PRAESES = 'x001';
+	const UID_BESTUUR_ABACTIS = 'x002';
+	const UID_BESTUUR_FISCUS = 'x003';
+	const UID_BESTUUR_VICEABACTIS = 'x004';
+	const UID_BESTUUR_VICEPRAESES = 'x005';
+	const UID_BESTUUR_OT_PRAESES = 'x006';
+	const UID_BESTUUR_OT_ABACTIS = 'x007';
+	const UID_BESTUUR_OT_FISCUS = 'x008';
+	const UID_BESTUUR_OT_VICEABACTIS = 'x009';
+	const UID_BESTUUR_OT_VICEPRAESES = 'x010';
+	const UID_BESTUUR_FT_PRAESES = 'x011';
+	const UID_BESTUUR_FT_ABACTIS = 'x012';
+	const UID_BESTUUR_FT_FISCUS = 'x013';
+	const UID_BESTUUR_FT_VICEABACTIS = 'x014';
+	const UID_BESTUUR_FT_VICEPRAESES = 'x015';
+	const UID_LID_MAN = 'x016';
+	const UID_LID_VROUW = 'x017';
+	const UID_SOCCIE_PRAESES = 'x018';
+	const UID_SOCCIE_FISCUS = 'x019';
+	const UID_PUBCIE = 'x101';
+
+	/**
 	 * @var AccountService
 	 */
 	private $accountService;
+	/**
+	 * @var \Faker\Generator
+	 */
+	private $faker;
 
 	public function __construct(AccountService $accountService)
 	{
 		$this->accountService = $accountService;
+		$this->faker = Faker::create('nl_NL');
 	}
 
 	public function load(ObjectManager $manager)
 	{
-		$externProfiel = new Profiel();
-		$externProfiel->uid = LoginService::UID_EXTERN;
-		$externProfiel->nickname = 'nobody';
-		$externProfiel->voornaam = 'Niet';
-		$externProfiel->achternaam = 'ingelogd';
-		$externProfiel->voorletters = 'Niet';
-		$externProfiel->land = 'Nederland';
-		$externProfiel->geslacht = Geslacht::Man();
+		$this->maakExternAccount($manager);
+
+		// Maak PubCie account
+		$profielPubCie = ProfielFixtureUtil::maakProfiel(
+			$this->faker,
+			self::UID_PUBCIE,
+			'pubcie',
+			'Pub',
+			'Cie',
+			'P.'
+		);
+		$this->setReference(self::UID_PUBCIE, $profielPubCie);
+		$manager->persist($profielPubCie);
+		$account = $this->accountService->maakAccount(self::UID_PUBCIE);
+		$this->accountService->wijzigWachtwoord($account, 'stek open u voor mij!');
+		$account->perm_role = AccessRole::PubCie;
+
+		// Maak een bestuur
+		$this->maakProfielEnAccount(
+			$manager,
+			self::UID_BESTUUR_PRAESES,
+			AccessRole::Bestuur
+		);
+		$this->maakProfielEnAccount(
+			$manager,
+			self::UID_BESTUUR_ABACTIS,
+			AccessRole::Bestuur
+		);
+		$this->maakProfielEnAccount(
+			$manager,
+			self::UID_BESTUUR_FISCUS,
+			AccessRole::Bestuur
+		);
+		$this->maakProfielEnAccount(
+			$manager,
+			self::UID_BESTUUR_VICEABACTIS,
+			AccessRole::Bestuur
+		);
+		$this->maakProfielEnAccount(
+			$manager,
+			self::UID_BESTUUR_VICEPRAESES,
+			AccessRole::Bestuur
+		);
+
+		// Maak een o.t. bestuur
+		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_OT_PRAESES);
+		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_OT_ABACTIS);
+		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_OT_FISCUS);
+		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_OT_VICEABACTIS);
+		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_OT_VICEPRAESES);
+
+		// Maak een f.t. bestuur
+		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_FT_PRAESES);
+		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_FT_ABACTIS);
+		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_FT_FISCUS);
+		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_FT_VICEABACTIS);
+		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_FT_VICEPRAESES);
+
+		// Maak een doodgewoon lid
+		$man = $this->maakProfielEnAccount($manager, self::UID_LID_MAN);
+		$man->geslacht = Geslacht::Man();
+		$vrouw = $this->maakProfielEnAccount($manager, self::UID_LID_VROUW);
+		$vrouw->geslacht = Geslacht::Vrouw();
+
+		$this->maakProfielEnAccount($manager, self::UID_SOCCIE_PRAESES);
+		$this->maakProfielEnAccount(
+			$manager,
+			self::UID_SOCCIE_FISCUS,
+			AccessRole::Fiscaat
+		);
+
+		$manager->flush();
+	}
+
+	/**
+	 * @param ObjectManager $manager
+	 * @return void
+	 */
+	private function maakExternAccount(ObjectManager $manager): void
+	{
+		$externProfiel = ProfielFixtureUtil::maakProfiel(
+			$this->faker,
+			LoginService::UID_EXTERN,
+			'nobody',
+			'Niet',
+			'ingelogd'
+		);
 		$externProfiel->status = LidStatus::Nobody;
-		$externProfiel->ontvangtcontactueel = OntvangtContactueel::Nee();
 		$externProfiel->gebdatum = date_create_immutable('1960-01-01');
-		$externProfiel->lengte = 0;
-		$externProfiel->adres = '';
-		$externProfiel->postcode = '';
-		$externProfiel->woonplaats = '';
-		$externProfiel->email = '';
-		$externProfiel->lidjaar = 0;
-		$externProfiel->changelog = [
-			new ProfielLogTextEntry('Aangemaakt door fixtures'),
-		];
 
 		$manager->persist($externProfiel);
 
@@ -66,40 +162,36 @@ class AccountFixtures extends Fixture
 		$externAccount->perm_role = AccessRole::Nobody;
 
 		$manager->persist($externAccount);
+	}
 
-		$pubcieProfiel = new Profiel();
-		$pubcieProfiel->uid = 'x101';
-		$pubcieProfiel->nickname = 'pubcie';
-		$pubcieProfiel->voornaam = 'Pub';
-		$pubcieProfiel->achternaam = 'Cie';
-		$pubcieProfiel->voorletters = 'P.';
-		$pubcieProfiel->land = 'Nederland';
-		$pubcieProfiel->geslacht = Geslacht::Man();
-		$pubcieProfiel->status = LidStatus::Lid;
-		$pubcieProfiel->ontvangtcontactueel = OntvangtContactueel::Nee();
-		$pubcieProfiel->gebdatum = date_create_immutable('1960-01-01');
-		$pubcieProfiel->lengte = 0;
-		$pubcieProfiel->adres = '';
-		$pubcieProfiel->postcode = '';
-		$pubcieProfiel->woonplaats = '';
-		$pubcieProfiel->email = '';
-		$pubcieProfiel->lidjaar = 0;
-		$pubcieProfiel->changelog = [
-			new ProfielLogTextEntry('Aangemaakt door fixtures'),
-		];
+	/**
+	 * @param $uid
+	 * @param $permRole
+	 * @return Account
+	 */
+	private function maakAccount($uid, $permRole): Account
+	{
+		$account = $this->accountService->maakAccount($uid);
+		$account->perm_role = $permRole;
+		return $account;
+	}
 
-		$manager->persist($pubcieProfiel);
+	/**
+	 * @param ObjectManager $manager
+	 * @param $uid
+	 * @param string $permRole
+	 * @return void
+	 */
+	private function maakProfielEnAccount(
+		ObjectManager $manager,
+		string $uid,
+		string $permRole = AccessRole::Lid
+	): Profiel {
+		$profiel = ProfielFixtureUtil::maakProfiel($this->faker, $uid);
+		$this->setReference($uid, $profiel);
+		$manager->persist($profiel);
+		$manager->persist($this->maakAccount($uid, $permRole));
 
-		$account = $this->accountService->maakAccount('x101');
-
-		$this->accountService->wijzigWachtwoord($account, 'stek open u voor mij!');
-
-		$account->perm_role = AccessRole::PubCie;
-
-		$pubcieMenu = new MenuItem();
-		$pubcieMenu->tekst = 'x101';
-		$pubcieMenu->rechten_bekijken = 'x101';
-
-		$manager->flush();
+		return $profiel;
 	}
 }

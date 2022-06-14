@@ -9,6 +9,7 @@ htdocs
 # Php vendor bestanden
 bin/.phpunit
 vendor
+composer.lock
 
 # Built docs site
 docs/_site
@@ -22,3 +23,4 @@ var/
 # Overige php bestanden
 # db bestanden kunnen wat chaotisch zijn.
 db/
+.vscode/tasks.json

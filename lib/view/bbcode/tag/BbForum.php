@@ -7,8 +7,8 @@ use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\service\forum\ForumDelenService;
-use CsrDelft\service\security\LoginService;
 use Exception;
+use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
 class BbForum extends BbTag
@@ -38,17 +38,23 @@ class BbForum extends BbTag
 	 * @var ForumDelenService
 	 */
 	private $forumDelenService;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
 		ForumDradenRepository $forumDradenRepository,
 		ForumDelenRepository $forumDelenRepository,
 		ForumDelenService $forumDelenService,
+		Security $security,
 		Environment $twig
 	) {
 		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDelenRepository = $forumDelenRepository;
 		$this->twig = $twig;
 		$this->forumDelenService = $forumDelenService;
+		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -59,7 +65,7 @@ class BbForum extends BbTag
 	public function isAllowed()
 	{
 		if ($this->id == 'recent' || $this->id == 'belangrijk') {
-			return LoginService::mag(P_LOGGED_IN);
+			return $this->security->isGranted('ROLE_LOGGED_IN');
 		}
 
 		return $this->deel->magLezen();
@@ -71,7 +77,7 @@ class BbForum extends BbTag
 	 */
 	public function render()
 	{
-		if (!LoginService::mag(P_LOGGED_IN)) {
+		if (!$this->security->isGranted('ROLE_LOGGED_IN')) {
 			return 'Geen toegang';
 		}
 

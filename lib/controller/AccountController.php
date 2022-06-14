@@ -69,10 +69,6 @@ class AccountController extends AbstractController
 	 */
 	public function aanmaken($uid = null): RedirectResponse
 	{
-		if (!LoginService::mag(P_ADMIN)) {
-			throw $this->createAccessDeniedException();
-		}
-
 		if ($uid == null) {
 			$account = $this->getUser();
 		} else {
@@ -101,16 +97,13 @@ class AccountController extends AbstractController
 	 * @Route("/account/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken(
-		Request $request,
-		Security $security,
-		$uid = null
-	): Response {
-		$eigenAccount = $security->getUser();
+	public function bewerken(Request $request, $uid = null): Response
+	{
+		$eigenAccount = $this->getUser();
 		if ($uid == null) {
 			$uid = $this->getUid();
 		}
-		if ($uid !== $this->getUid() && !LoginService::mag(P_ADMIN)) {
+		if ($uid !== $this->getUid() && !$this->mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}
 		$account = $this->accountRepository->find($uid);
@@ -152,7 +145,7 @@ class AccountController extends AbstractController
 				]);
 			}
 		}
-		if (!$this->accessService->mag($account, P_LOGGED_IN)) {
+		if (!$this->accessService->isUserGranted($account, 'ROLE_LOGGED_IN')) {
 			setMelding('Account mag niet inloggen', 2);
 		}
 		$form = $this->createFormulier(AccountForm::class, $account, [
@@ -198,7 +191,7 @@ class AccountController extends AbstractController
 		if ($uid == null) {
 			$uid = $this->getUid();
 		}
-		if ($uid !== $this->getUid() && !LoginService::mag(P_ADMIN)) {
+		if ($uid !== $this->getUid() && !$this->mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}
 		$account = $this->accountRepository->find($uid);

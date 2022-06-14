@@ -6,10 +6,10 @@ use CsrDelft\common\Security\OAuth2Scope;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\RememberOAuthRepository;
 use CsrDelft\service\AccessService;
-use CsrDelft\service\security\LoginService;
 use Nyholm\Psr7\Response;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Security;
 use Trikoder\Bundle\OAuth2Bundle\Event\AuthorizationRequestResolveEvent;
 use Trikoder\Bundle\OAuth2Bundle\Event\ScopeResolveEvent;
 use Trikoder\Bundle\OAuth2Bundle\Model\Scope;
@@ -30,10 +30,6 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	 */
 	private $twig;
 	/**
-	 * @var LoginService
-	 */
-	private $loginService;
-	/**
 	 * @var AccessService
 	 */
 	private $accessService;
@@ -45,21 +41,25 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	 * @var RememberOAuthRepository
 	 */
 	private $rememberOAuthRepository;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
 		RequestStack $requestStack,
 		Environment $twig,
-		LoginService $loginService,
+		Security $security,
 		AccessService $accessService,
 		RememberOAuthRepository $rememberOAuthRepository,
 		AccountRepository $accountRepository
 	) {
-		$this->loginService = $loginService;
 		$this->requestStack = $requestStack;
 		$this->twig = $twig;
 		$this->accessService = $accessService;
 		$this->accountRepository = $accountRepository;
 		$this->rememberOAuthRepository = $rememberOAuthRepository;
+		$this->security = $security;
 	}
 
 	public static function getSubscribedEvents()
@@ -86,7 +86,10 @@ class OAuth2Subscriber implements EventSubscriberInterface
 			foreach ($event->getScopes() as $scope) {
 				if (
 					in_array((string) $scope, $rememberedScopes) &&
-					$this->accessService->mag($user, OAuth2Scope::magScope($scope))
+					$this->accessService->isUserGranted(
+						$user,
+						OAuth2Scope::magScope($scope)
+					)
 				) {
 					$scopes[] = $scope;
 				}
@@ -108,7 +111,12 @@ class OAuth2Subscriber implements EventSubscriberInterface
 
 		$scopes = [];
 		foreach ($requestedScopes as $scope) {
-			if ($this->accessService->mag($user, OAuth2Scope::magScope($scope))) {
+			if (
+				$this->accessService->isUserGranted(
+					$user,
+					OAuth2Scope::magScope($scope)
+				)
+			) {
 				$scopes[] = $scope;
 			}
 		}
@@ -178,7 +186,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		// Deze check wordt ook gedaan in OAuth2ScopeSubscriber
 		$scopeBeschrijving = [];
 		foreach ($requestedScopes as $scope) {
-			if ($this->loginService->_mag(OAuth2Scope::magScope($scope))) {
+			if ($this->security->isGranted(OAuth2Scope::magScope($scope))) {
 				$scopeBeschrijving[] = [
 					'naam' => $scope->__toString(),
 					'beschrijving' => OAuth2Scope::getBeschrijving($scope),

@@ -14,8 +14,8 @@ use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\MailService;
-use CsrDelft\service\security\CsrSecurity;
 use CsrDelft\service\security\SuService;
+use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -52,13 +52,13 @@ class ForumMeldingenService
 	 */
 	private $profielRepository;
 	/**
-	 * @var CsrSecurity
+	 * @var Security
 	 */
 	private $security;
 
 	public function __construct(
 		Environment $twig,
-		CsrSecurity $security,
+		Security $security,
 		MailService $mailService,
 		SuService $suService,
 		ProfielRepository $profielRepository,
@@ -185,8 +185,8 @@ class ForumMeldingenService
 
 	public function getDraadMeldingNiveauVoorLid(ForumDraad $draad, $uid = null)
 	{
-		if ($uid === null) {
-			$uid = $this->security->getAccount()->getUserIdentifier();
+		if ($uid === null && $this->security->getUser()) {
+			$uid = $this->security->getUser()->getUserIdentifier();
 		}
 
 		$voorkeur = $this->forumDradenMeldingRepository->find([

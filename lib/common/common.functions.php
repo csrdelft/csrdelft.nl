@@ -952,18 +952,6 @@ function checkMimetype($filename, $mime)
 }
 
 /**
- * Mag de op dit moment ingelogde gebruiker $permissie?
- *
- * @param string $permission
- * @param array|null $allowedAuthenticationMethods
- * @return bool
- */
-function mag($permission, array $allowedAuthenticationMethods = null)
-{
-	return LoginService::mag($permission, $allowedAuthenticationMethods);
-}
-
-/**
  * @param Profiel $profiel
  * @param string|string[] $key
  * @param string $cat

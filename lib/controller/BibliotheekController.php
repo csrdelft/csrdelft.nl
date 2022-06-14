@@ -376,7 +376,7 @@ class BibliotheekController extends AbstractController
 		}
 		if (
 			$profiel->uid != $this->getUid() &&
-			!($profiel->uid == 'x222' && LoginService::mag(P_BIEB_MOD))
+			!($profiel->uid == 'x222' && $this->mag(P_BIEB_MOD))
 		) {
 			throw $this->createAccessDeniedException('Mag deze eigenaar niet kiezen');
 		}

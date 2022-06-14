@@ -91,7 +91,7 @@ class BeheerCiviBestellingController extends AbstractController
 	 */
 	private function checkToegang($uid)
 	{
-		if (!LoginService::mag(P_FISCAAT_READ) && $uid) {
+		if (!$this->mag(P_FISCAAT_READ) && $uid) {
 			throw $this->createAccessDeniedException();
 		}
 	}

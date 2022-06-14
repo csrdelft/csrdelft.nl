@@ -75,11 +75,11 @@ class IntField extends InputField
 			return true;
 		} elseif (!preg_match('/^' . $this->pattern . '$/', $this->value)) {
 			$this->error = 'Alleen gehele getallen toegestaan';
-		} elseif (is_int($this->max) and $this->value > $this->max) {
+		} elseif (is_int($this->max) && $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} elseif ($this->leden_mod and LoginService::mag(P_LEDEN_MOD)) {
+		} elseif ($this->leden_mod && LoginService::mag(P_LEDEN_MOD)) {
 			// exception for leden mod
-		} elseif (is_int($this->min) and $this->value < $this->min) {
+		} elseif (is_int($this->min) && $this->value < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
 		return $this->error === '';

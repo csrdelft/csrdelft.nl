@@ -2,13 +2,15 @@
 
 namespace CsrDelft\entity;
 
-use CsrDelft\service\security\LoginService;
+use CsrDelft\common\Security\Voter\Entity\CmsPaginaVoter;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * @see CmsPaginaVoter
  *
  * Content Management System Paginas zijn statische pagina's die via de front-end kunnen worden gewijzigd.
  *
@@ -60,36 +62,4 @@ class CmsPagina
 	 * @var boolean
 	 */
 	public $inlineHtml;
-
-	/**
-	 * @return bool
-	 */
-	public function magBekijken()
-	{
-		return LoginService::mag($this->rechtenBekijken);
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function magBewerken()
-	{
-		return LoginService::mag($this->rechtenBewerken);
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function magRechtenWijzigen()
-	{
-		return LoginService::mag(P_ADMIN);
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function magVerwijderen()
-	{
-		return LoginService::mag(P_ADMIN);
-	}
 }

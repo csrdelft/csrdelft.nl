@@ -75,6 +75,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-dev-
 
+      - name: 🗃 Cache phpunit installatie
+        id: phpunit-cache
+        uses: actions/cache@v2
+        with:
+          path: bin/.phpunit
+          key: ${{ runner.os }}-phpunit-dev-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-phpunit-dev-
+
       - name: Install Composer packages
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install

@@ -84,14 +84,4 @@ class FotoTagAlbum extends FotoAlbum
 		}
 		return $this->fotos;
 	}
-
-	public function magBekijken()
-	{
-		return LoginService::mag(P_LEDEN_READ);
-	}
-
-	public function isOwner()
-	{
-		return $this->uid === LoginService::getUid();
-	}
 }

@@ -86,7 +86,7 @@
 		{% if item.locatie %}
 			<p>{{ ("[kaart h=200]" ~ item.locatie ~ "[/kaart]") | bbcode }}</p>
 		{% endif %}
-		{% if item is agendaitem and item.rechten_bekijken != 'P_LOGGED_IN' %}
+		{% if item is agendaitem and item.rechten_bekijken != 'ROLE_LOGGED_IN' %}
 			<span class="text-muted small">Zichtbaar voor: {{ item.rechten_bekijken }}</span>
 		{% endif %}
 	</div>

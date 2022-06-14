@@ -5,6 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\entity\ForumPlaatje;
 use CsrDelft\repository\ForumPlaatjeRepository;
+use Symfony\Component\Security\Core\Security;
 
 class BbForumPlaatje extends BbImg
 {
@@ -16,10 +17,17 @@ class BbForumPlaatje extends BbImg
 	 * @var ForumPlaatjeRepository
 	 */
 	private $forumPlaatjeRepository;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
-	public function __construct(ForumPlaatjeRepository $forumPlaatjeRepository)
-	{
+	public function __construct(
+		Security $security,
+		ForumPlaatjeRepository $forumPlaatjeRepository
+	) {
 		$this->forumPlaatjeRepository = $forumPlaatjeRepository;
+		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -29,7 +37,7 @@ class BbForumPlaatje extends BbImg
 
 	public function isAllowed()
 	{
-		return mag('P_LOGGED_IN');
+		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
 	public function getKey()
@@ -59,11 +67,10 @@ class BbForumPlaatje extends BbImg
 	public function parse($arguments = [])
 	{
 		$key = $this->readMainArgument($arguments);
-		$plaatje = $this->forumPlaatjeRepository->getByKey($key);
-		if (!$plaatje) {
+		$this->plaatje = $this->forumPlaatjeRepository->getByKey($key);
+		if (!$this->plaatje) {
 			throw new BbException('Plaatje bestaat niet');
 		}
-		$this->plaatje = $plaatje;
 		$this->arguments = $arguments;
 	}
 }

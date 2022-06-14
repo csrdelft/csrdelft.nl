@@ -116,7 +116,7 @@ class ToolsController extends AbstractController
 		ProfielRepository $profielRepository,
 		SuService $suService
 	): PlainView {
-		if (DEBUG || LoginService::mag(P_ADMIN) || $suService->isSued()) {
+		if (DEBUG || $this->mag(P_ADMIN) || $suService->isSued()) {
 			$ldap = new LDAP();
 			foreach ($profielRepository->findAll() as $profiel) {
 				$profielRepository->save_ldap($profiel, $ldap);
@@ -415,7 +415,7 @@ class ToolsController extends AbstractController
 	 */
 	public function memcachestats(SuService $suService): PlainView
 	{
-		if (DEBUG || LoginService::mag(P_ADMIN) || $suService->isSued()) {
+		if (DEBUG || $this->mag(P_ADMIN) || $suService->isSued()) {
 			ob_start();
 
 			echo getMelding();

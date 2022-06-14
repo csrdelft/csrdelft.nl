@@ -106,11 +106,11 @@ class ToestemmingController extends AbstractController
 	 */
 	public function lijst(Request $request)
 	{
-		if (LoginService::mag(P_LEDEN_MOD)) {
+		if ($this->mag(P_LEDEN_MOD)) {
 			$ids = ['foto_intern', 'foto_extern', 'vereniging', 'bijzonder'];
-		} elseif (LoginService::mag(P_ALBUM_MOD)) {
+		} elseif ($this->mag(P_ALBUM_MOD)) {
 			$ids = ['foto_intern', 'foto_extern'];
-		} elseif (LoginService::mag('commissie:promocie:ht')) {
+		} elseif ($this->mag('commissie:promocie:ht')) {
 			$ids = ['foto_intern', 'foto_extern'];
 		} else {
 			throw $this->createAccessDeniedException('Geen toegang');

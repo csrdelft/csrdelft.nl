@@ -84,6 +84,11 @@ class AbstractController extends BaseController
 		return null;
 	}
 
+	protected function mag($permissie): bool
+	{
+		return $this->isGranted($permissie);
+	}
+
 	protected function createAccessDeniedException(
 		string $message = 'Geen Toegang.',
 		Throwable $previous = null

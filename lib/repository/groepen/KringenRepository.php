@@ -4,7 +4,10 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Kring;
 use CsrDelft\repository\GroepRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class KringenRepository extends GroepRepository
 {
@@ -25,6 +28,39 @@ class KringenRepository extends GroepRepository
 			$limit,
 			$offset
 		);
+	}
+
+	public function isLid(
+		UserInterface $user,
+		$familie,
+		$status = 'ht',
+		$role = null
+	): bool {
+		try {
+			list($verticale, $kringNummer) = explode('.', $familie);
+			if ($verticale && $kringNummer) {
+				return 1 ===
+					(int) $this->_em
+						->createQuery(
+							<<<'EOF'
+SELECT COUNT(kring)
+FROM CsrDelft\entity\groepen\Kring kring
+JOIN kring.leden lid
+WHERE kring.verticale = :verticale AND kring.kringNummer = :kringNummer AND lid.uid = :uid
+EOF
+						)
+						->setParameters([
+							'verticale' => $verticale,
+							'kringNummer' => $kringNummer,
+							'uid' => $user->getUserIdentifier(),
+						])
+						->getSingleScalarResult();
+			}
+
+			return parent::isLid($user, $familie, $status, $role);
+		} catch (NoResultException | NonUniqueResultException $e) {
+			return false;
+		}
 	}
 
 	public function get($id)

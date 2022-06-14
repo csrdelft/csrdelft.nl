@@ -4,6 +4,7 @@ namespace CsrDelft\repository\fotoalbum;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\entity\fotoalbum\FotoTagAlbum;
@@ -138,7 +139,7 @@ class FotoAlbumRepository extends AbstractRepository
 		if (!$album->exists()) {
 			throw new NotFoundHttpException("Fotoalbum $path bestaat niet");
 		}
-		if (!$album->magBekijken()) {
+		if (!$this->security->isGranted(FotoAlbumVoter::BEKIJKEN, $album)) {
 			throw new NotFoundHttpException();
 		}
 		return $album;

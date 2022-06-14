@@ -6,10 +6,9 @@ use CsrDelft\bb\BbTag;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\IsHetAlView;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Security;
 
 class BbIsHetAl extends BbTag
 {
@@ -33,9 +32,14 @@ class BbIsHetAl extends BbTag
 	 * @var string
 	 */
 	private $value;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
 		RequestStack $requestStack,
+		Security $security,
 		AgendaRepository $agendaRepository,
 		LidInstellingenRepository $lidInstellingenRepository,
 		WoordVanDeDagRepository $woordVanDeDagRepository
@@ -44,6 +48,7 @@ class BbIsHetAl extends BbTag
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 		$this->woordVanDeDagRepository = $woordVanDeDagRepository;
 		$this->requestStack = $requestStack;
+		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -53,7 +58,7 @@ class BbIsHetAl extends BbTag
 
 	public function isAllowed()
 	{
-		return LoginService::mag(P_LOGGED_IN);
+		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
 	/**

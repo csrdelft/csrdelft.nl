@@ -96,17 +96,6 @@ class MenuItem implements DisplayEntity
 		return $this->children->count();
 	}
 
-	public function magBekijken()
-	{
-		return $this->zichtbaar && LoginService::mag($this->rechten_bekijken);
-	}
-
-	public function magBeheren()
-	{
-		return $this->rechten_bekijken == LoginService::getUid() ||
-			LoginService::mag(P_ADMIN);
-	}
-
 	public function isOngelezen()
 	{
 		$prefix = '/forum/onderwerp/';

@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
+use CsrDelft\common\Security\Voter\Entity\CmsPaginaVoter;
 use CsrDelft\entity\CmsPagina;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\security\CsrSecurity;
@@ -63,12 +64,9 @@ class CmsPaginaController extends AbstractController
 			// 404
 			throw new NotFoundHttpException();
 		}
-		if (!$pagina->magBekijken()) {
-			// 403
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(CmsPaginaVoter::BEKIJKEN, $pagina);
 		$body = new CmsPaginaView($pagina);
-		if (!LoginService::mag(P_LOGGED_IN)) {
+		if (!$this->mag(P_LOGGED_IN)) {
 			// nieuwe layout altijd voor uitgelogde bezoekers
 			if ($pagina->naam === 'thuis') {
 				return $this->render('extern/index.html.twig', [
@@ -106,12 +104,13 @@ class CmsPaginaController extends AbstractController
 		if (!$pagina) {
 			$pagina = $this->cmsPaginaRepository->nieuw($naam);
 		}
-		if (!$pagina->magBewerken()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(CmsPaginaVoter::BEWERKEN, $pagina);
 
 		$form = $this->createForm(CmsPaginaType::class, $pagina, [
-			'rechten_wijzigen' => $pagina->magRechtenWijzigen(),
+			'rechten_wijzigen' => $this->isGranted(
+				CmsPaginaVoter::RECHTEN_WIJZIGEN,
+				$pagina
+			),
 		]);
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -144,9 +143,8 @@ class CmsPaginaController extends AbstractController
 	{
 		/** @var CmsPagina $pagina */
 		$pagina = $this->cmsPaginaRepository->find($naam);
-		if (!$pagina || !$pagina->magVerwijderen()) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(CmsPaginaVoter::VERWIJDEREN, $pagina);
+
 		$manager = $this->getDoctrine()->getManager();
 		$manager->remove($pagina);
 		$manager->flush();

@@ -4,13 +4,14 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
 /**
@@ -60,13 +61,19 @@ class BbFotoalbum extends BbTag
 	 * @var string
 	 */
 	private $albumUrl;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
 		FotoAlbumRepository $fotoAlbumRepository,
+		Security $security,
 		Environment $twig
 	) {
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
 		$this->twig = $twig;
+		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -75,8 +82,9 @@ class BbFotoalbum extends BbTag
 	}
 	public function isAllowed()
 	{
-		return ($this->album != null && $this->album->magBekijken()) ||
-			($this->album == null && LoginService::mag(P_LOGGED_IN));
+		return ($this->album != null &&
+			$this->security->isGranted(FotoAlbumVoter::BEKIJKEN, $this->album)) ||
+			($this->album == null && $this->security->isGranted('ROLE_LOGGED_IN'));
 	}
 
 	public function renderLight()

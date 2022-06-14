@@ -23,6 +23,7 @@ use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\Icon;
 use CsrDelft\view\response\IcalResponse;
 use DateInterval;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,14 +107,14 @@ class AgendaController extends AbstractController
 			'maand' => $maand,
 			'jaar' => $jaar,
 			'creator' =>
-				LoginService::mag(P_AGENDA_ADD) || $this->getProfiel()->verticaleleider,
+				$this->mag(P_AGENDA_ADD) || $this->getProfiel()->verticaleleider,
 		]);
 	}
 
 	/**
 	 * @return Response
 	 * @Route("/agenda/ical/{private_auth_token}/csrdelft.ics", methods={"GET"})
-	 * @Auth(P_PUBLIC)
+	 * @IsGranted("ROLE_LOGGED_IN")
 	 */
 	public function ical(): Response
 	{
@@ -224,7 +225,7 @@ class AgendaController extends AbstractController
 	public function toevoegen(Request $request, $datum = null)
 	{
 		$profiel = $this->getProfiel();
-		if (!LoginService::mag(P_AGENDA_ADD) && !$profiel->verticaleleider) {
+		if (!$this->mag(P_AGENDA_ADD) && !$profiel->verticaleleider) {
 			throw $this->createAccessDeniedException(
 				'Mag geen gebeurtenis toevoegen.'
 			);
@@ -234,7 +235,7 @@ class AgendaController extends AbstractController
 			$request->request->get('begin_moment'),
 			$request->request->get('eind_moment')
 		);
-		if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
+		if ($profiel->verticaleleider && !$this->mag(P_AGENDA_ADD)) {
 			$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
 		}
 		$form = $this->createFormulier(AgendaItemForm::class, $item, [
@@ -242,7 +243,7 @@ class AgendaController extends AbstractController
 		]);
 		$form->handleRequest($request);
 		if ($form->validate()) {
-			if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
+			if ($profiel->verticaleleider && !$this->mag(P_AGENDA_ADD)) {
 				$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
 			}
 			$this->agendaRepository->save($item);

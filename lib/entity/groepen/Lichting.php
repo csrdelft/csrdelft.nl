@@ -29,15 +29,11 @@ class Lichting extends Groep
 	/**
 	 * Read-only: generated group
 	 * @param $action
-	 * @param null $allowedAuthenticationMethods
 	 * @param null $soort
 	 * @return bool
 	 */
-	public static function magAlgemeen(
-		AccessAction $action,
-		$allowedAuthenticationMethods = null,
-		$soort = null
-	) {
+	public static function magAlgemeen(AccessAction $action, $soort = null)
+	{
 		return AccessAction::isBekijken($action);
 	}
 
@@ -81,10 +77,8 @@ class Lichting extends Groep
 	 * @param null $allowedAuthenticationMethods
 	 * @return bool
 	 */
-	public function mag(
-		AccessAction $action,
-		$allowedAuthenticationMethods = null
-	) {
+	public function mag(AccessAction $action)
+	{
 		return AccessAction::isBekijken($action);
 	}
 }

@@ -33,16 +33,6 @@ class LoginService
 	public const UID_EXTERN = 'x999';
 	public const UID_CLI = 'x900';
 	/**
-	 * Sessiesleutels
-	 */
-	const SESS_UID = '_uid';
-	const SESS_AUTHENTICATION_METHOD = '_authenticationMethod';
-	const SESS_SUED_FROM = '_suedFrom';
-	/**
-	 * Cookies
-	 */
-	const COOKIE_REMEMBER = 'remember';
-	/**
 	 * @var string Huidige uid als met cli is ingelogd.
 	 */
 	private static $cliUid = 'x999';
@@ -58,21 +48,15 @@ class LoginService
 	 * @var TokenStorageInterface
 	 */
 	private $tokenStorage;
-	/**
-	 * @var AccessService
-	 */
-	private $accessService;
 
 	public function __construct(
 		Security $security,
 		AccountRepository $accountRepository,
-		AccessService $accessService,
 		TokenStorageInterface $tokenStorage
 	) {
 		$this->accountRepository = $accountRepository;
 		$this->security = $security;
 		$this->tokenStorage = $tokenStorage;
-		$this->accessService = $accessService;
 	}
 
 	/**
@@ -82,24 +66,11 @@ class LoginService
 	 *
 	 * @return bool
 	 */
-	public static function mag(
-		$permission,
-		array $allowedAuthenticationMethods = null
-	) {
-		return ContainerFacade::getContainer()
-			->get(CsrSecurity::class)
-			->mag($permission, $allowedAuthenticationMethods);
-	}
-
-	public function _mag($permission, array $allowedAuthenticationMethdos = null)
+	public static function mag($permission)
 	{
-		$account = $this->security->getUser();
-
-		return $this->accessService->mag(
-			$account,
-			$permission,
-			$allowedAuthenticationMethdos
-		);
+		return ContainerFacade::getContainer()
+			->get('security')
+			->isGranted($permission);
 	}
 
 	/**
@@ -162,7 +133,6 @@ class LoginService
 	 * Indien de huidige gebruiker is geauthenticeerd door middel van een token in de url
 	 * worden Permissies hierdoor beperkt voor de veiligheid.
 	 * @return string|null uit AuthenticationMethod
-	 * @see AccessService::mag()
 	 */
 	public function getAuthenticationMethod()
 	{

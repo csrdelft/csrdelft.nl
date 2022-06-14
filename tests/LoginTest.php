@@ -1,6 +1,7 @@
 <?php
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\DataFixtures\AccountFixtures;
 use Symfony\Component\Panther\PantherTestCase;
 
 class LoginTest extends PantherTestCase
@@ -26,7 +27,7 @@ class LoginTest extends PantherTestCase
 
 		$form = $crawler->selectButton('Inloggen')->form();
 
-		$form['_username'] = 'x101';
+		$form['_username'] = AccountFixtures::UID_PUBCIE;
 		$form['_password'] = 'stek open u voor mij!';
 
 		$crawler = $client->submit($form);

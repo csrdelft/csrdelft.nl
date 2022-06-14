@@ -27,15 +27,11 @@ class RechtenGroep extends Groep
 	 * Rechten voor de gehele klasse of soort groep?
 	 *
 	 * @param AccessAction $action
-	 * @param null $allowedAuthenticationMethods
 	 * @param null $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen(
-		AccessAction $action,
-		$allowedAuthenticationMethods = null,
-		$soort = null
-	) {
+	public static function magAlgemeen(AccessAction $action, $soort = null)
+	{
 		switch ($action) {
 			case AccessAction::Aanmaken():
 			case AccessAction::Aanmelden():
@@ -43,16 +39,14 @@ class RechtenGroep extends Groep
 			case AccessAction::Afmelden():
 				return true;
 		}
-		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
+		return parent::magAlgemeen($action, $soort);
 	}
 
-	public function mag(
-		AccessAction $action,
-		$allowedAuthenticationMethods = null
-	) {
+	public function mag(AccessAction $action)
+	{
 		if (AccessAction::isBekijken($action)) {
 			return true;
 		}
-		return parent::mag($action, $allowedAuthenticationMethods);
+		return parent::mag($action);
 	}
 }

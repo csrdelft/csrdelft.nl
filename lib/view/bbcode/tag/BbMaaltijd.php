@@ -13,6 +13,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
+use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
 /**
@@ -51,9 +52,14 @@ class BbMaaltijd extends BbTag
 	 * @var string
 	 */
 	private $id;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
 		Environment $twig,
+		Security $security,
 		MaaltijdenRepository $maaltijdenRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository
@@ -62,6 +68,7 @@ class BbMaaltijd extends BbTag
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
 		$this->twig = $twig;
+		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -71,7 +78,7 @@ class BbMaaltijd extends BbTag
 
 	public function isAllowed()
 	{
-		return LoginService::mag(P_LOGGED_IN);
+		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
 	public function renderLight()

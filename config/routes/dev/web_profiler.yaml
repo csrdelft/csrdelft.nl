@@ -3,11 +3,11 @@ web_profiler_wdt:
   prefix: /_wdt
   defaults:
     _csrfUnsafe: true
-    _mag: P_PUBLIC
+    _mag: PUBLIC_ACCESS
 
 web_profiler_profiler:
   resource: '@WebProfilerBundle/Resources/config/routing/profiler.xml'
   prefix: /_profiler
   defaults:
     _csrfUnsafe: true
-    _mag: P_PUBLIC
+    _mag: PUBLIC_ACCESS

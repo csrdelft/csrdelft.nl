@@ -5,9 +5,7 @@ namespace CsrDelft\controller\api\v3;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\bar\BarLocatie;
-use CsrDelft\service\AccessService;
 use CsrDelft\service\BarSysteemService;
-use CsrDelft\service\security\LoginService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,14 +52,16 @@ class BarSysteemController extends AbstractController
 	 * @param Request $request
 	 * @return JsonResponse
 	 */
-	public function trust(Request $request, LoginService $loginService)
+	public function trust(Request $request)
 	{
 		// maak een nieuwe BarSysteemTrust object en sla op.
 
 		// Als het goed is kan de BAR:TRUST scope alleen aan mensen met FISCAAT_MOD rechten gegeven worden.
-		if (!$loginService->_mag(P_FISCAAT_MOD)) {
-			throw $this->createAccessDeniedException();
-		}
+		$this->denyAccessUnlessGranted(
+			'ROLE_FISCAAT_MOD',
+			null,
+			'Moet fiscus zijn.'
+		);
 
 		$barLocatie = new BarLocatie();
 		$barLocatie->ip = $request->getClientIp();

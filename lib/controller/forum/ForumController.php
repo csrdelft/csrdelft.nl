@@ -136,7 +136,7 @@ class ForumController extends AbstractController
 		$forumZoeken->zoekterm = $query;
 		$zoekform = new ForumZoekenForm($forumZoeken);
 
-		if (!LoginService::mag(P_LOGGED_IN)) {
+		if (!$this->mag(P_LOGGED_IN)) {
 			// Reset de waarden waarbinnen een externe gebruiker mag zoeken.
 			$override = new ForumZoeken();
 			$override->zoekterm = $forumZoeken->zoekterm;

@@ -5,3 +5,15 @@ services:
       - '@logger'
     tags:
       - { name: kernel.event_listener, event: kernel.request }
+
+  CsrDelft\DataFixtures\Purger\DisableForeignKeysORMPurgerFactory: ~
+
+  doctrine.fixtures_load_command.custom:
+    decorates: doctrine.fixtures_load_command
+    class: Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand
+    arguments:
+      - '@doctrine.fixtures.loader'
+      - '@doctrine'
+      - {
+          default: '@CsrDelft\DataFixtures\Purger\DisableForeignKeysORMPurgerFactory',
+        }

@@ -4,10 +4,10 @@ namespace CsrDelft\service\fiscaat;
 
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
-use CsrDelft\service\security\LoginService;
 use DateInterval;
 use DateTime;
 use Exception;
+use Symfony\Component\Security\Core\Security;
 
 class SaldoGrafiekService
 {
@@ -19,13 +19,19 @@ class SaldoGrafiekService
 	 * @var CiviBestellingRepository
 	 */
 	private $civiBestellingRepository;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
+		Security $security,
 		CiviSaldoRepository $civiSaldoRepository,
 		CiviBestellingRepository $civiBestellingRepository
 	) {
 		$this->civiSaldoRepository = $civiSaldoRepository;
 		$this->civiBestellingRepository = $civiBestellingRepository;
+		$this->security = $security;
 	}
 
 	/**
@@ -97,7 +103,8 @@ class SaldoGrafiekService
 	public function magGrafiekZien($uid)
 	{
 		//mogen we uberhaupt een grafiek zien?
-		return LoginService::getUid() === $uid ||
-			LoginService::mag(P_LEDEN_MOD . ',commissie:SocCie,commissie:MaalCie');
+		return $this->security->isGranted(
+			$uid . ',ROLE_LEDEN_MOD,commissie:SocCie,commissie:MaalCie'
+		);
 	}
 }

@@ -81,7 +81,7 @@ class MijnCorveeController extends AbstractController
 	public function rooster()
 	{
 		$taken = $this->corveeTakenRepository->getKomendeTaken();
-		$toonverleden = LoginService::mag(P_CORVEE_MOD);
+		$toonverleden = $this->mag(P_CORVEE_MOD);
 		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
 		return $this->render('maaltijden/corveetaak/corvee_rooster.html.twig', [
 			'rooster' => $rooster,

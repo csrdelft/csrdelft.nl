@@ -17,10 +17,11 @@ Er zijn twee soorten tests in de stek, unit tests en functionele tests. Unit tes
    ```
 1. Maak een db in te test environment
    ```shell script
-   # Als de database al bestaat je en je hem wil verversen
-   php bin/console doctrine:database:drop --force
+   # Maak de database
    php bin/console doctrine:database:create
+   # Maak de tabellen
    php bin/console doctrine:migrations:migrate
+   # Vul de tabellen met testdata. Als de database al bestaat is allen het volgende commando genoeg om de data te verversen.
    php bin/console doctrine:fixtures:load
    ```
 1. Run `php bin/phpunit` om alle tests te runnen. PhpStorm kan ook losse tests uitvoeren.

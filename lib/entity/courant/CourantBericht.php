@@ -73,9 +73,4 @@ class CourantBericht
 			'sponsor' => 4,
 		][$this->cat->getValue()];
 	}
-
-	public function magBeheren()
-	{
-		return LoginService::mag(P_MAIL_COMPOSE) or LoginService::mag($this->uid);
-	}
 }

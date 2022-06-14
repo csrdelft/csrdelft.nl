@@ -8,7 +8,6 @@ use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
@@ -134,7 +133,7 @@ class LidZoekerService
 		$this->allowStatus = LidStatus::getEnumValues();
 
 		//wat extra velden voor moderators.
-		if (LoginService::mag(P_LEDEN_MOD)) {
+		if ($security->isGranted('ROLE_LEDEN_MOD')) {
 			$this->allowVelden = array_merge(
 				$this->allowVelden,
 				$this->allowVeldenLEDENMOD
@@ -414,7 +413,7 @@ class LidZoekerService
 				->add('p.studie LIKE :zoekterm')
 				->add('p.email LIKE :zoekterm');
 
-			if (LoginService::mag(P_LEDEN_MOD)) {
+			if ($this->security->isGranted('ROLE_LEDEN_MOD')) {
 				$zoekExpr->add('p.eetwens LIKE :zoekterm');
 			}
 

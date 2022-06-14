@@ -41,7 +41,7 @@ class LedenLijstController extends AbstractController
 		GoogleSync $googleSync,
 		Environment $twig
 	) {
-		if (!LoginService::mag(P_OUDLEDEN_READ)) {
+		if (!$this->mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
 			return $this->render('default.html.twig', ['content' => $body]);
@@ -92,7 +92,7 @@ class LedenLijstController extends AbstractController
 					0
 				);
 
-				if (LoginService::mag(P_ADMIN)) {
+				if ($this->mag(P_ADMIN)) {
 					setMelding('Tijd nodig voor deze sync: ' . $elapsed . 's', 0);
 				}
 			} catch (CsrGebruikerException $e) {

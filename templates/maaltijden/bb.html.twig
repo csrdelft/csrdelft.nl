@@ -32,7 +32,7 @@
 				</div>
 			</div>
 			<div class="col-auto">
-				{% if mag('P_MAAL_IK') %}
+				{% if is_granted('ROLE_MAAL_IK') %}
 					{% if not maaltijd.gesloten %}
 						{% if aanmelding is defined and aanmelding is not none %}
 							<a

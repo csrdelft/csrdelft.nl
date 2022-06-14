@@ -30,7 +30,7 @@
 	</button>
 	<div id="navbarNav" class="collapse navbar-collapse">
 		<ul id="cd-primary-nav" class="navbar-nav flex-wrap">
-			{% if mag('P_LOGGED_IN') %}
+			{% if is_granted('ROLE_LOGGED_IN') %}
 				{{ include('menu/main_tree.html.twig', {parent: root}) }}
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="menu-favorieten" role="button" data-bs-toggle="dropdown"
