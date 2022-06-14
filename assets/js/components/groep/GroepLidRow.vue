@@ -5,8 +5,12 @@
     <td
       v-for="keuze in keuzes"
       :key="keuze.naam"
-      v-html="renderSelectie(keuze)"
-    />
+    >
+      <Icon v-if="getLidKeuze(keuze) === undefined" icon="ban"></Icon>
+      <Icon v-else-if="keuze.type === GroepKeuzeType.CHECKBOX && getLidKeuze(keuze).selectie" icon="check"></Icon>
+      <Icon v-else-if="keuze.type === GroepKeuzeType.CHECKBOX && !getLidKeuze(keuze).selectie" icon="xmark"></Icon>
+      <span v-else v-html="htmlEncode(getLidKeuze(keuze).selectie)" />
+    </td>
   </tr>
 </template>
 
@@ -26,21 +30,8 @@ export default class GroepLidRow extends Vue {
   @Prop()
   keuzes: KeuzeOptie[];
 
-  private renderSelectie(keuze: KeuzeOptie) {
-    const lidKeuze = this.lid.opmerking2.find((k) => k.naam === keuze.naam);
-
-    if (lidKeuze === undefined) {
-      return '<Icon icon="ban"></Icon>';
-    }
-
-    switch (keuze.type) {
-      case GroepKeuzeType.CHECKBOX:
-        return lidKeuze.selectie
-          ? '<Icon icon="check"></Icon>'
-          : '<Icon icon="xmark"></Icon>';
-      default:
-        return htmlEncode(lidKeuze.selectie);
-    }
+  private getLidKeuze(keuze: KeuzeOptie) {
+    return this.lid.opmerking2.find((k) => k.naam === keuze.naam);
   }
 }
 </script>

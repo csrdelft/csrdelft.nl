@@ -101,7 +101,7 @@ class Icon
 		$key,
 		$hover = null,
 		$title = null,
-		$class = null,
+		$class = null
 	) {
 		$icon = self::get($key);
 
