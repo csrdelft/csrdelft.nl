@@ -59,7 +59,7 @@
 				{% endfor %}
 				{% if app.debug and is_granted('ROLE_ADMIN') %}
 					<div class="commit-hash">
-						<a href="{{ commitLink() }}" target="_blank" class="not-external">{{ commitHash() }}</a>
+						<a href="{{ commitLink() }}" target="_blank" rel="noopener" class="not-external">{{ commitHash() }}</a>
 					</div>
 				{% endif %}
 			</nav>

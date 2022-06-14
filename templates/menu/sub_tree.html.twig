@@ -11,7 +11,7 @@
 	{% else %}
 		<li>
 			<a class="dropdown-item"
-				 href="{{ item.link }}" {% if item.link starts with 'http' %} target="_blank" {% endif %}>
+				 href="{{ item.link }}" {% if item.link starts with 'http' %} target="_blank" rel="noopener" {% endif %}>
 				{{ item.tekst | raw }}
 			</a>
 		</li>

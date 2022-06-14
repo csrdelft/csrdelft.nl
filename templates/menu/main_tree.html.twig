@@ -12,7 +12,7 @@
 			</li>
 		{% else %}
 			<li class="nav-item">
-				<a class="nav-link" href="{{ item.link }}" {% if item.link starts with 'http' %} target="_blank" {% endif %}>
+				<a class="nav-link" href="{{ item.link }}" {% if item.link starts with 'http' %} target="_blank" rel="noopener" {% endif %}>
 					{{ item.tekst | raw }}
 				</a>
 			</li>
