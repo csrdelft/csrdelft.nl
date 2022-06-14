@@ -125,22 +125,6 @@ abstract class GroepRepository extends AbstractRepository
 			}
 
 			return 1 === (int) $qb->getQuery()->getSingleScalarResult();
-
-			return 1 ===
-				(int) $this->_em
-					->createQuery(
-						<<<'EOF'
-SELECT COUNT(g)
-FROM CsrDelft\entity\groepen\Woonoord g
-JOIN g.leden l
-WHERE ((g.familie = :familie AND g.status = 'ht') OR g.oudId = :familie) AND l.uid = :uid
-EOF
-					)
-					->setParameters([
-						'familie' => $familie,
-						'uid' => $user->getUserIdentifier(),
-					])
-					->getSingleScalarResult();
 		} catch (NoResultException | NonUniqueResultException $e) {
 			return false;
 		}
