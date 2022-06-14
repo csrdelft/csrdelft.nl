@@ -30,3 +30,11 @@ De fixtures bevatten ook het account `x101` met wachtwoord `stek open u voor mij
 Met de maker bundle kun je makkelijk nieuwe fixtures genereren. Run `php bin/console make:fixtures` om nieuwe fixtures te maken. In de map `lib/DataFixtures` staan alle fixtures. Je kan hier afkijken hoe het gedaan wordt.
 
 Voor fixtures kun je ook `fzaninotto/faker` gebruiken om fake data te genereren.
+
+## Fixtures in tests
+
+In tests kun je gebruik maken van de data gegenereerd in de fixtures. Bijvoorbeeld de AccountFixtures, als je naar een fixture wil verwijzen maak dan een const met de id of uid van de data waar je het over hebt.
+
+Zie als voorbeeld `GeslachtVoterTest`, in de fixtures wordt de boel goed gezet en in de test wordt naar de specifieke accounts die hier goed gezet zijn verwezen.
+
+Je kan er bij een test altijd vanuit gaan dat er een verse database staat, maar probeer alsnog de database netjes achter te laten na een test.
