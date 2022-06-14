@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
 
-class TestBestuurVoter extends CsrTestCase
+class BestuurVoterTest extends CsrTestCase
 {
 	/**
 	 * @var EntityManager
@@ -38,6 +38,7 @@ class TestBestuurVoter extends CsrTestCase
 	{
 		$htPraesesToken = $this->getToken(AccountFixtures::UID_BESTUUR_PRAESES);
 
+		$this->assertTrue(false);
 		$this->assertTrue($this->adm->decide($htPraesesToken, ['bestuur:ht']));
 		$this->assertTrue($this->adm->decide($htPraesesToken, ['bestuur']));
 		$this->assertTrue(

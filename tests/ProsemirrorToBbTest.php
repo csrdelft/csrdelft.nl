@@ -4,7 +4,7 @@ declare(strict_types=1);
 use CsrDelft\tests\CsrTestCase;
 use CsrDelft\view\bbcode\ProsemirrorToBb;
 
-class TestProsemirrorToBb extends CsrTestCase
+class ProsemirrorToBbTest extends CsrTestCase
 {
 	/**
 	 * @var ProsemirrorToBb
@@ -15,7 +15,7 @@ class TestProsemirrorToBb extends CsrTestCase
 	{
 		parent::setUp();
 
-		$this->converter = new ProsemirrorToBb();
+		$this->converter = $this->getContainer()->get(ProsemirrorToBb::class);
 	}
 
 	public function testSingleTag()
