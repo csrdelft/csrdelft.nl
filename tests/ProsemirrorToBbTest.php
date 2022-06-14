@@ -4,7 +4,7 @@ declare(strict_types=1);
 use CsrDelft\tests\CsrTestCase;
 use CsrDelft\view\bbcode\ProsemirrorToBb;
 
-class TestProsemirrorToBb extends CsrTestCase
+class ProsemirrorToBbTest extends CsrTestCase
 {
 	/**
 	 * @var ProsemirrorToBb
@@ -15,7 +15,7 @@ class TestProsemirrorToBb extends CsrTestCase
 	{
 		parent::setUp();
 
-		$this->converter = new ProsemirrorToBb();
+		$this->converter = $this->getContainer()->get(ProsemirrorToBb::class);
 	}
 
 	public function testSingleTag()
@@ -27,7 +27,7 @@ class TestProsemirrorToBb extends CsrTestCase
 				'content' => [
 					[
 						'type' => 'text',
-						'marks' => [['type' => 'bold']],
+						'marks' => [['type' => 'strong']],
 						'text' => 'vetgedrukt',
 					],
 				],
@@ -48,12 +48,12 @@ class TestProsemirrorToBb extends CsrTestCase
 				'content' => [
 					[
 						'type' => 'text',
-						'marks' => [['type' => 'bold']],
+						'marks' => [['type' => 'strong']],
 						'text' => 'vetgedrukt en ',
 					],
 					[
 						'type' => 'text',
-						'marks' => [['type' => 'bold'], ['type' => 'italic']],
+						'marks' => [['type' => 'strong'], ['type' => 'em']],
 						'text' => 'schuingedrukt',
 					],
 				],

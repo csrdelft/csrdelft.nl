@@ -12,12 +12,15 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use ReflectionClass;
 use ReflectionProperty;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 
 /**
@@ -85,6 +88,42 @@ abstract class GroepRepository extends AbstractRepository
 		}
 
 		return parent::findBy($criteria, $orderBy, $limit, $offset);
+	}
+
+	public function isLid(
+		UserInterface $user,
+		$familie,
+		$status = 'ht',
+		$role = null
+	): bool {
+		try {
+			$qb = $this->createQueryBuilder('groep')
+				->select('COUNT(groep)')
+				->join('groep.leden', 'leden')
+				->where('leden.uid = :uid')
+				->setParameter('uid', $user->getUserIdentifier())
+				->andWhere('groep.familie = :familie')
+				->setParameter('familie', $familie);
+
+			if (in_array(strtolower($status), GroepStatus::getEnumValues())) {
+				$qb = $qb
+					->andWhere('groep.status = :status')
+					->setParameter('status', strtolower($status));
+			} elseif (!$role) {
+				// Role op de status positie
+				$role = $status;
+			}
+
+			if ($role) {
+				$qb = $qb
+					->andWhere('leden.opmerking = :role')
+					->setParameter('role', $role);
+			}
+
+			return 1 === (int) $qb->getQuery()->getSingleScalarResult();
+		} catch (NoResultException | NonUniqueResultException $e) {
+			return false;
+		}
 	}
 
 	/**

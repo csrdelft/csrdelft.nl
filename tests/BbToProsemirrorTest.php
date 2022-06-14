@@ -5,7 +5,7 @@ use CsrDelft\tests\CsrTestCase;
 use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\bbcode\CsrBB;
 
-final class TestBbToProsemirror extends CsrTestCase
+final class BbToProsemirrorTest extends CsrTestCase
 {
 	protected $parser;
 	/**
@@ -17,8 +17,8 @@ final class TestBbToProsemirror extends CsrTestCase
 	{
 		parent::setUp();
 
-		$this->parser = new CsrBB(self::$container);
-		$this->converter = self::$container->get(BbToProsemirror::class);
+		$this->parser = new CsrBB($this->getContainer());
+		$this->converter = $this->getContainer()->get(BbToProsemirror::class);
 	}
 
 	public function testString()

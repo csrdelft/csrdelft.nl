@@ -182,3 +182,13 @@ services:
 
   CsrDelft\common\Security\Voter\:
     resource: '../lib/common/Security/Voter'
+
+  CsrDelft\DataFixtures\Purger\DisableForeignKeysORMPurgerFactory: ~
+
+  doctrine.fixtures_load_command.custom:
+    decorates: doctrine.fixtures_load_command
+    class: Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand
+    arguments:
+      - '@doctrine.fixtures.loader'
+      - '@doctrine'
+      - { default: '@CsrDelft\DataFixtures\Purger\DisableForeignKeysORMPurgerFactory' }

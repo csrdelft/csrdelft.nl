@@ -1,12 +1,11 @@
 <?php
 declare(strict_types=1);
 
-use CsrDelft\common\ContainerFacade;
+use CsrDelft\tests\CsrTestCase;
 use CsrDelft\view\bbcode\CsrBB;
 use Spatie\Snapshots\MatchesSnapshots;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-final class BbTest extends KernelTestCase
+final class BbTest extends CsrTestCase
 {
 	use MatchesSnapshots;
 
@@ -14,9 +13,8 @@ final class BbTest extends KernelTestCase
 
 	public function setUp(): void
 	{
-		self::bootKernel();
-		ContainerFacade::init(self::$container);
-		$this->parser = new CsrBB(self::$container);
+		parent::setUp();
+		$this->parser = new CsrBB($this->getContainer());
 	}
 
 	public function testBbSpotify(): void
