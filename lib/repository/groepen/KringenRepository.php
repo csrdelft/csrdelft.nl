@@ -35,7 +35,7 @@ class KringenRepository extends GroepRepository
 		$familie,
 		$status = 'ht',
 		$role = null
-	) {
+	): bool {
 		try {
 			list($verticale, $kringNummer) = explode('.', $familie);
 			if ($verticale && $kringNummer) {

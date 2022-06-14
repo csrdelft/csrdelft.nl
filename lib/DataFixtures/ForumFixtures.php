@@ -8,10 +8,11 @@ use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumPost;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as Faker;
 
-class ForumFixtures extends Fixture
+class ForumFixtures extends Fixture implements DependentFixtureInterface
 {
 	public function load(ObjectManager $manager)
 	{
@@ -79,5 +80,10 @@ class ForumFixtures extends Fixture
 		}
 
 		$manager->flush();
+	}
+
+	public function getDependencies()
+	{
+		return [AccountFixtures::class, ProfielFixtures::class];
 	}
 }

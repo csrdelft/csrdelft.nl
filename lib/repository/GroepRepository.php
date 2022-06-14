@@ -102,7 +102,7 @@ abstract class GroepRepository extends AbstractRepository
 		$familie,
 		$status = 'ht',
 		$role = null
-	) {
+	): bool {
 		try {
 			$qb = $this->createQueryBuilder('groep')
 				->select('COUNT(groep)')
@@ -116,6 +116,9 @@ abstract class GroepRepository extends AbstractRepository
 				$qb = $qb
 					->andWhere('groep.status = :status')
 					->setParameter('status', strtolower($status));
+			} elseif (!$role) {
+				// Role op de status positie
+				$role = $status;
 			}
 
 			if ($role) {

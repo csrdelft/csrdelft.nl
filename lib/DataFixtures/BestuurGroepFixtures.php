@@ -2,10 +2,8 @@
 
 namespace CsrDelft\DataFixtures;
 
+use CsrDelft\DataFixtures\Util\GroepFixtureUtil;
 use CsrDelft\entity\groepen\enum\GroepStatus;
-use CsrDelft\entity\groepen\Groep;
-use CsrDelft\entity\groepen\GroepLid;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\groepen\BesturenRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -56,93 +54,93 @@ class BestuurGroepFixtures extends Fixture implements DependentFixtureInterface
 		$manager->persist($bestuurFt);
 		$manager->flush();
 
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuur,
 			$this->getReference(AccountFixtures::UID_BESTUUR_PRAESES),
 			'Praeses'
 		);
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuur,
 			$this->getReference(AccountFixtures::UID_BESTUUR_ABACTIS),
 			'Abactis'
 		);
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuur,
 			$this->getReference(AccountFixtures::UID_BESTUUR_FISCUS),
 			'Fiscus'
 		);
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuur,
 			$this->getReference(AccountFixtures::UID_BESTUUR_VICEABACTIS),
 			'Vice-Abactis'
 		);
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuur,
 			$this->getReference(AccountFixtures::UID_BESTUUR_VICEPRAESES),
 			'Vice-Praeses'
 		);
 
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuurOt,
 			$this->getReference(AccountFixtures::UID_BESTUUR_OT_PRAESES),
 			'Praeses'
 		);
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuurOt,
 			$this->getReference(AccountFixtures::UID_BESTUUR_OT_ABACTIS),
 			'Abactis'
 		);
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuurOt,
 			$this->getReference(AccountFixtures::UID_BESTUUR_OT_FISCUS),
 			'Fiscus'
 		);
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuurOt,
 			$this->getReference(AccountFixtures::UID_BESTUUR_OT_VICEABACTIS),
 			'Vice-Abactis'
 		);
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuurOt,
 			$this->getReference(AccountFixtures::UID_BESTUUR_OT_VICEPRAESES),
 			'Vice-Praeses'
 		);
 
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuurFt,
 			$this->getReference(AccountFixtures::UID_BESTUUR_FT_PRAESES),
 			'Praeses'
 		);
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuurFt,
 			$this->getReference(AccountFixtures::UID_BESTUUR_FT_ABACTIS),
 			'Abactis'
 		);
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuurFt,
 			$this->getReference(AccountFixtures::UID_BESTUUR_FT_FISCUS),
 			'Fiscus'
 		);
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuurFt,
 			$this->getReference(AccountFixtures::UID_BESTUUR_FT_VICEABACTIS),
 			'Vice-Abactis'
 		);
-		$this->maakGroepLid(
+		GroepFixtureUtil::maakGroepLid(
 			$manager,
 			$bestuurFt,
 			$this->getReference(AccountFixtures::UID_BESTUUR_FT_VICEPRAESES),
@@ -150,25 +148,6 @@ class BestuurGroepFixtures extends Fixture implements DependentFixtureInterface
 		);
 
 		$manager->flush();
-	}
-
-	private function maakGroepLid(
-		ObjectManager $manager,
-		Groep $groep,
-		Profiel $profiel,
-		string $opmerking
-	) {
-		$groepLid = new GroepLid();
-		$groepLid->uid = $profiel->uid;
-		$groepLid->profiel = $profiel;
-		$groepLid->groep = $groep;
-		$groepLid->groepId = $groep->id;
-		$groepLid->opmerking = $opmerking;
-		$groepLid->lidSinds = date_create_immutable();
-		$groepLid->doorProfiel = $this->getReference(AccountFixtures::UID_PUBCIE);
-		$groepLid->doorUid = $groepLid->doorProfiel->uid;
-
-		$manager->persist($groepLid);
 	}
 
 	public function getDependencies()

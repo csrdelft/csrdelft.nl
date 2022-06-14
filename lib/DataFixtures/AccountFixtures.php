@@ -2,11 +2,8 @@
 
 namespace CsrDelft\DataFixtures;
 
-use CsrDelft\DataFixtures\Util\AccountFixtureUtil;
 use CsrDelft\DataFixtures\Util\ProfielFixtureUtil;
 use CsrDelft\entity\Geslacht;
-use CsrDelft\entity\MenuItem;
-use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AccessRole;
@@ -20,6 +17,9 @@ use Symfony\Component\Uid\Uuid;
 
 class AccountFixtures extends Fixture
 {
+	/**
+	 * Gebruik deze consts om naar accounts/profielen te verwijzen in tests.
+	 */
 	const UID_BESTUUR_PRAESES = 'x001';
 	const UID_BESTUUR_ABACTIS = 'x002';
 	const UID_BESTUUR_FISCUS = 'x003';
@@ -35,6 +35,10 @@ class AccountFixtures extends Fixture
 	const UID_BESTUUR_FT_FISCUS = 'x013';
 	const UID_BESTUUR_FT_VICEABACTIS = 'x014';
 	const UID_BESTUUR_FT_VICEPRAESES = 'x015';
+	const UID_LID_MAN = 'x016';
+	const UID_LID_VROUW = 'x017';
+	const UID_SOCCIE_PRAESES = 'x018';
+	const UID_SOCCIE_FISCUS = 'x019';
 	const UID_PUBCIE = 'x101';
 
 	/**
@@ -72,12 +76,31 @@ class AccountFixtures extends Fixture
 		$account->perm_role = AccessRole::PubCie;
 
 		// Maak een bestuur
-
-		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_PRAESES);
-		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_ABACTIS);
-		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_FISCUS);
-		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_VICEABACTIS);
-		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_VICEPRAESES);
+		$this->maakProfielEnAccount(
+			$manager,
+			self::UID_BESTUUR_PRAESES,
+			AccessRole::Bestuur
+		);
+		$this->maakProfielEnAccount(
+			$manager,
+			self::UID_BESTUUR_ABACTIS,
+			AccessRole::Bestuur
+		);
+		$this->maakProfielEnAccount(
+			$manager,
+			self::UID_BESTUUR_FISCUS,
+			AccessRole::Bestuur
+		);
+		$this->maakProfielEnAccount(
+			$manager,
+			self::UID_BESTUUR_VICEABACTIS,
+			AccessRole::Bestuur
+		);
+		$this->maakProfielEnAccount(
+			$manager,
+			self::UID_BESTUUR_VICEPRAESES,
+			AccessRole::Bestuur
+		);
 
 		// Maak een o.t. bestuur
 		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_OT_PRAESES);
@@ -93,9 +116,18 @@ class AccountFixtures extends Fixture
 		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_FT_VICEABACTIS);
 		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_FT_VICEPRAESES);
 
-		$pubcieMenu = new MenuItem();
-		$pubcieMenu->tekst = 'x101';
-		$pubcieMenu->rechten_bekijken = 'x101';
+		// Maak een doodgewoon lid
+		$man = $this->maakProfielEnAccount($manager, self::UID_LID_MAN);
+		$man->geslacht = Geslacht::Man();
+		$vrouw = $this->maakProfielEnAccount($manager, self::UID_LID_VROUW);
+		$vrouw->geslacht = Geslacht::Vrouw();
+
+		$this->maakProfielEnAccount($manager, self::UID_SOCCIE_PRAESES);
+		$this->maakProfielEnAccount(
+			$manager,
+			self::UID_SOCCIE_FISCUS,
+			AccessRole::Fiscaat
+		);
 
 		$manager->flush();
 	}
@@ -134,26 +166,32 @@ class AccountFixtures extends Fixture
 
 	/**
 	 * @param $uid
-	 * @param $perm_role
+	 * @param $permRole
 	 * @return Account
 	 */
-	private function maakAccount($uid, $perm_role): Account
+	private function maakAccount($uid, $permRole): Account
 	{
 		$account = $this->accountService->maakAccount($uid);
-		$account->perm_role = $perm_role;
+		$account->perm_role = $permRole;
 		return $account;
 	}
 
 	/**
 	 * @param ObjectManager $manager
 	 * @param $uid
+	 * @param string $permRole
 	 * @return void
 	 */
-	private function maakProfielEnAccount(ObjectManager $manager, $uid): void
-	{
-		$profielPraeses = ProfielFixtureUtil::maakProfiel($this->faker, $uid);
-		$this->setReference($uid, $profielPraeses);
-		$manager->persist($profielPraeses);
-		$manager->persist($this->accountService->maakAccount($uid));
+	private function maakProfielEnAccount(
+		ObjectManager $manager,
+		string $uid,
+		string $permRole = AccessRole::Lid
+	): Profiel {
+		$profiel = ProfielFixtureUtil::maakProfiel($this->faker, $uid);
+		$this->setReference($uid, $profiel);
+		$manager->persist($profiel);
+		$manager->persist($this->maakAccount($uid, $permRole));
+
+		return $profiel;
 	}
 }

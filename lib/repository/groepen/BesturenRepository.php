@@ -40,7 +40,7 @@ class BesturenRepository extends GroepRepository
 		$familie,
 		$status = 'ht',
 		$role = null
-	) {
+	): bool {
 		if (GroepStatus::isValidValue(strtolower($familie))) {
 			return parent::isLid($user, 'bestuur', $familie, $status);
 		} else {

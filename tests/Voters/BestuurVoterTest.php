@@ -3,126 +3,63 @@
 namespace Voters;
 
 use CsrDelft\DataFixtures\AccountFixtures;
-use CsrDelft\entity\security\Account;
-use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\tests\CsrTestCase;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
+use CsrDelft\tests\AbstractVoterTestCase;
 
-class BestuurVoterTest extends CsrTestCase
+class BestuurVoterTest extends AbstractVoterTestCase
 {
-	/**
-	 * @var EntityManager
-	 */
-	private $em;
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
-	 * @var AccessDecisionManager
-	 */
-	private $adm;
-
-	public function setUp(): void
-	{
-		parent::setUp();
-
-		$this->em = $this->getContainer()->get('doctrine.orm.entity_manager');
-		$this->accountRepository = $this->em->getRepository(Account::class);
-		$this->adm = $this->getContainer()->get('security.access.decision_manager');
-	}
-
 	public function testBestuurHtPraeses()
 	{
 		$htPraesesToken = $this->getToken(AccountFixtures::UID_BESTUUR_PRAESES);
 
-		$this->assertTrue($this->adm->decide($htPraesesToken, ['bestuur:ht']));
-		$this->assertTrue($this->adm->decide($htPraesesToken, ['bestuur']));
-		$this->assertTrue(
-			$this->adm->decide($htPraesesToken, ['bestuur:ht:praeses'])
-		);
-		$this->assertTrue($this->adm->decide($htPraesesToken, ['bestuur:praeses']));
-		$this->assertFalse(
-			$this->adm->decide($htPraesesToken, ['bestuur:abactis'])
-		);
-		$this->assertFalse($this->adm->decide($htPraesesToken, ['bestuur:ot']));
-		$this->assertFalse($this->adm->decide($htPraesesToken, ['bestuur:ft']));
-		$this->assertFalse($this->adm->decide($htPraesesToken, ['bestuur:sjaars']));
-		$this->assertFalse(
-			$this->adm->decide($htPraesesToken, ['bestuur:ht:sjaars'])
-		);
+		$this->assertToegang($htPraesesToken, 'bestuur:ht');
+		$this->assertToegang($htPraesesToken, 'bestuur');
+		$this->assertToegang($htPraesesToken, 'bestuur:ht:praeses');
+		$this->assertToegang($htPraesesToken, 'bestuur:praeses');
+		$this->assertGeenToegang($htPraesesToken, 'bestuur:abactis');
+		$this->assertGeenToegang($htPraesesToken, 'bestuur:ot');
+		$this->assertGeenToegang($htPraesesToken, 'bestuur:ft');
+		$this->assertGeenToegang($htPraesesToken, 'bestuur:sjaars');
+		$this->assertGeenToegang($htPraesesToken, 'bestuur:ht:sjaars');
 	}
 
 	public function testBestuurHtAbactis()
 	{
 		$htAbactisToken = $this->getToken(AccountFixtures::UID_BESTUUR_ABACTIS);
 
-		$this->assertTrue($this->adm->decide($htAbactisToken, ['bestuur:ht']));
-		$this->assertTrue($this->adm->decide($htAbactisToken, ['bestuur']));
-		$this->assertTrue(
-			$this->adm->decide($htAbactisToken, ['bestuur:ht:abactis'])
-		);
-		$this->assertTrue($this->adm->decide($htAbactisToken, ['bestuur:abactis']));
-		$this->assertFalse(
-			$this->adm->decide($htAbactisToken, ['bestuur:praeses'])
-		);
-		$this->assertFalse($this->adm->decide($htAbactisToken, ['bestuur:ot']));
-		$this->assertFalse($this->adm->decide($htAbactisToken, ['bestuur:ft']));
+		$this->assertToegang($htAbactisToken, 'bestuur:ht');
+		$this->assertToegang($htAbactisToken, 'bestuur');
+		$this->assertToegang($htAbactisToken, 'bestuur:ht:abactis');
+		$this->assertToegang($htAbactisToken, 'bestuur:abactis');
+		$this->assertGeenToegang($htAbactisToken, 'bestuur:praeses');
+		$this->assertGeenToegang($htAbactisToken, 'bestuur:ot');
+		$this->assertGeenToegang($htAbactisToken, 'bestuur:ft');
 	}
 
 	public function testBestuurOtPraeses()
 	{
 		$otPraesesToken = $this->getToken(AccountFixtures::UID_BESTUUR_OT_PRAESES);
 
-		$this->assertTrue($this->adm->decide($otPraesesToken, ['bestuur:ot']));
-		$this->assertFalse($this->adm->decide($otPraesesToken, ['bestuur']));
-		$this->assertTrue(
-			$this->adm->decide($otPraesesToken, ['bestuur:ot:praeses'])
-		);
-		$this->assertFalse(
-			$this->adm->decide($otPraesesToken, ['bestuur:ot:abactis'])
-		);
-		$this->assertFalse(
-			$this->adm->decide($otPraesesToken, ['bestuur:abactis'])
-		);
-		$this->assertFalse(
-			$this->adm->decide($otPraesesToken, ['bestuur:praeses'])
-		);
-		$this->assertFalse($this->adm->decide($otPraesesToken, ['bestuur:ht']));
-		$this->assertFalse($this->adm->decide($otPraesesToken, ['bestuur:ft']));
+		$this->assertToegang($otPraesesToken, 'bestuur:ot');
+		$this->assertGeenToegang($otPraesesToken, 'bestuur');
+		$this->assertToegang($otPraesesToken, 'bestuur:ot:praeses');
+		$this->assertGeenToegang($otPraesesToken, 'bestuur:ot:abactis');
+		$this->assertGeenToegang($otPraesesToken, 'bestuur:abactis');
+		$this->assertGeenToegang($otPraesesToken, 'bestuur:praeses');
+		$this->assertGeenToegang($otPraesesToken, 'bestuur:ht');
+		$this->assertGeenToegang($otPraesesToken, 'bestuur:ft');
 	}
 
 	public function testBestuurFtPraeses()
 	{
 		$ftPraesesToken = $this->getToken(AccountFixtures::UID_BESTUUR_FT_PRAESES);
 
-		$this->assertTrue($this->adm->decide($ftPraesesToken, ['bestuur:ft']));
-		$this->assertFalse($this->adm->decide($ftPraesesToken, ['bestuur']));
-		$this->assertTrue(
-			$this->adm->decide($ftPraesesToken, ['bestuur:ft:praeses'])
-		);
-		$this->assertFalse(
-			$this->adm->decide($ftPraesesToken, ['bestuur:ft:abactis'])
-		);
-		$this->assertFalse(
-			$this->adm->decide($ftPraesesToken, ['bestuur:abactis'])
-		);
-		$this->assertFalse(
-			$this->adm->decide($ftPraesesToken, ['bestuur:praeses'])
-		);
-		$this->assertFalse($this->adm->decide($ftPraesesToken, ['bestuur:ht']));
-		$this->assertFalse($this->adm->decide($ftPraesesToken, ['bestuur:ot']));
-	}
-
-	/**
-	 * @param $uid
-	 * @return UsernamePasswordToken
-	 */
-	private function getToken(string $uid): UsernamePasswordToken
-	{
-		$account = $this->accountRepository->find($uid);
-		return new UsernamePasswordToken($account, 'main', $account->getRoles());
+		$this->assertToegang($ftPraesesToken, 'bestuur:ft');
+		$this->assertGeenToegang($ftPraesesToken, 'bestuur');
+		$this->assertToegang($ftPraesesToken, 'bestuur:ft:praeses');
+		$this->assertGeenToegang($ftPraesesToken, 'bestuur:ft:abactis');
+		$this->assertGeenToegang($ftPraesesToken, 'bestuur:abactis');
+		$this->assertGeenToegang($ftPraesesToken, 'bestuur:praeses');
+		$this->assertGeenToegang($ftPraesesToken, 'bestuur:ht');
+		$this->assertGeenToegang($ftPraesesToken, 'bestuur:ot');
 	}
 }
