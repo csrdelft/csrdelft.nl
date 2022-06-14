@@ -714,6 +714,7 @@ interface DeclaratieVerwijderenData {
 }
 
 @Component({
+  components: { Icon },
   filters: {
     bedrag(value: number) {
       const text = value.toString();

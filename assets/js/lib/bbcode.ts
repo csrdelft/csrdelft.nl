@@ -19,6 +19,11 @@ export const loadBbImage = async (el: HTMLElement): Promise<void> => {
 
 		el.replaceWith(content);
 	} catch (e) {
-		el.replaceWith(html`<div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Afbeelding kan niet geladen worden.</div>`)
+		el.replaceWith(
+			html`<div class="alert alert-danger" role="alert">
+				<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+				Afbeelding kan niet geladen worden.
+			</div>`
+		);
 	}
 };

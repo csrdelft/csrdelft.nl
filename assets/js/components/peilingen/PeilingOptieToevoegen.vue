@@ -14,7 +14,9 @@ import { Component, Prop } from 'vue-property-decorator';
 import { domUpdate } from '../../lib/domUpdate';
 import Icon from '../common/Icon.vue';
 
-@Component
+@Component({
+  components: { Icon }
+})
 export default class PeilingOptieToevoegen extends Vue {
   icon = 'plus';
   text = 'Optie toevoegen';

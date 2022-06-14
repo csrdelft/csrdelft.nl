@@ -218,7 +218,9 @@ interface Lid {
   postfix: string;
 }
 
-@Component
+@Component({
+  components: { Icon }
+})
 export default class NamenLeren extends Vue {
   @Prop()
   leden: Lid[];

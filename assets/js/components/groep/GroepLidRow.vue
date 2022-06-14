@@ -7,9 +7,9 @@
       :key="keuze.naam"
     >
       <Icon v-if="getLidKeuze(keuze) === undefined" icon="ban"></Icon>
-      <Icon v-else-if="keuze.type === GroepKeuzeType.CHECKBOX && getLidKeuze(keuze).selectie" icon="check"></Icon>
-      <Icon v-else-if="keuze.type === GroepKeuzeType.CHECKBOX && !getLidKeuze(keuze).selectie" icon="xmark"></Icon>
-      <span v-else v-html="htmlEncode(getLidKeuze(keuze).selectie)" />
+      <Icon v-else-if="isKeuzeCheckbox(keuze) && getLidKeuze(keuze).selectie" icon="check"></Icon>
+      <Icon v-else-if="isKeuzeCheckbox(keuze) && !getLidKeuze(keuze).selectie" icon="xmark"></Icon>
+      <span v-else v-html="renderSelectie(getLidKeuze(keuze))" />
     </td>
   </tr>
 </template>
@@ -19,10 +19,12 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import GroepKeuzeType from '../../enum/GroepKeuzeType';
 import { htmlEncode } from '../../lib/util';
-import { GroepLid, KeuzeOptie } from '../../model/groep';
+import { GroepKeuzeSelectie, GroepLid, KeuzeOptie } from '../../model/groep';
 import Icon from '../common/Icon.vue';
 
-@Component({})
+@Component({
+  components: { Icon }
+})
 export default class GroepLidRow extends Vue {
   @Prop()
   lid: GroepLid;
@@ -31,7 +33,15 @@ export default class GroepLidRow extends Vue {
   keuzes: KeuzeOptie[];
 
   private getLidKeuze(keuze: KeuzeOptie) {
-    return this.lid.opmerking2.find((k) => k.naam === keuze.naam);
+    return this.lid.opmerking2 ? this.lid.opmerking2.find((k) => k.naam === keuze.naam) : undefined;
+  }
+
+  private isKeuzeCheckbox(keuze: KeuzeOptie) {
+    return keuze.type === GroepKeuzeType.CHECKBOX
+  }
+
+  private renderSelectie(lidKeuze: GroepKeuzeSelectie) {
+    return htmlEncode(lidKeuze.selectie);
   }
 }
 </script>
