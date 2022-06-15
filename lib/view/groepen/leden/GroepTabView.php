@@ -13,6 +13,7 @@ use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\Icon;
 
 abstract class GroepTabView extends GroepOmschrijvingView
 {
@@ -29,7 +30,9 @@ abstract class GroepTabView extends GroepOmschrijvingView
 			$html .=
 				'<li class="geschiedenis"><a class="btn" href="' .
 				$this->groep->getUrl() .
-				'" title="Bekijk geschiedenis"><span class="fas fa-clock-rotate-left"></span></a></li>';
+				'" title="Bekijk geschiedenis">' .
+				Icon::getTag('clock-rotate-left') .
+				'</a></li>';
 		}
 
 		$html .=
@@ -41,7 +44,9 @@ abstract class GroepTabView extends GroepOmschrijvingView
 			GroepTab::Pasfotos .
 			'" title="' .
 			GroepTab::Pasfotos()->getDescription() .
-			' tonen"><span class="fas fa-user"></span></a></li>';
+			' tonen">' .
+			Icon::getTag('user') .
+			'</a></li>';
 
 		$html .=
 			'<li><a class="btn post noanim ' .
@@ -52,7 +57,9 @@ abstract class GroepTabView extends GroepOmschrijvingView
 			GroepTab::Lijst .
 			'" title="' .
 			GroepTab::Lijst()->getDescription() .
-			' tonen"><span class="fas fa-list"></span></a></li>';
+			' tonen">' .
+			Icon::getTag('list') .
+			'</a></li>';
 
 		$html .=
 			'<li><a class="btn post noanim ' .
@@ -63,7 +70,9 @@ abstract class GroepTabView extends GroepOmschrijvingView
 			GroepTab::Statistiek .
 			'" title="' .
 			GroepTab::Statistiek()->getDescription() .
-			' tonen"><span class="fas fa-chart-pie"></span></a></li>';
+			' tonen">' .
+			Icon::getTag('chart-pie') .
+			'</a></li>';
 
 		$html .=
 			'<li><a class="btn post noanim ' .
@@ -74,7 +83,9 @@ abstract class GroepTabView extends GroepOmschrijvingView
 			GroepTab::Emails .
 			'" title="' .
 			GroepTab::Emails()->getDescription() .
-			' tonen"><span class="fas fa-envelope"></span></a></li>';
+			' tonen">' .
+			Icon::getTag('envelope') .
+			'</a></li>';
 
 		$html .=
 			'<li><a class="btn post noanim ' .
@@ -85,7 +96,9 @@ abstract class GroepTabView extends GroepOmschrijvingView
 			GroepTab::Eetwens .
 			'" title="' .
 			GroepTab::Eetwens()->getDescription() .
-			' tonen"><span class="fas fa-heartbeat"></span></a></li>';
+			' tonen">' .
+			Icon::getTag('heartbeat') .
+			'</a></li>';
 
 		$onclick =
 			"$('#groep-" . $this->groep->id . "').toggleClass('leden-uitgeklapt');";
@@ -96,7 +109,9 @@ abstract class GroepTabView extends GroepOmschrijvingView
 			$this->groep->id .
 			'" title="Uitklappen" onclick="' .
 			$onclick .
-			'"><span class="fas fa-expand"></span></a>';
+			'">' .
+			Icon::getTag('expand') .
+			'</a>';
 
 		$html .=
 			'</ul><div id="groep-leden-content-' .
@@ -110,7 +125,9 @@ abstract class GroepTabView extends GroepOmschrijvingView
 			$this->groep->id .
 			'" class="dropdown-menu" role="menu"><li><a id="groep-lid-remove-' .
 			$this->groep->id .
-			'" tabindex="-1"><span class="fas fa-user-times"></span> &nbsp; Uit de ketzer halen</a></li></ul>';
+			'" tabindex="-1">' .
+			Icon::getTag('verwijderen') .
+			' &nbsp; Uit de ketzer halen</a></li></ul>';
 
 		$html .= $this->getTabContent();
 

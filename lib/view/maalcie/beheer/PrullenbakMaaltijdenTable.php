@@ -45,7 +45,7 @@ class PrullenbakMaaltijdenTable extends DataTable
 				'/maaltijden/beheer/herstel',
 				'Herstellen',
 				'Deze maaltijd herstellen',
-				'arrow_undo'
+				'undo'
 			)
 		);
 		$this->addKnop(
@@ -54,7 +54,7 @@ class PrullenbakMaaltijdenTable extends DataTable
 				'/corvee/beheer/maaltijd/:maaltijd_id',
 				'Corvee bewerken',
 				'Gekoppelde corveetaken bewerken',
-				'chart_organisation'
+				'folder-tree'
 			)
 		);
 
@@ -64,7 +64,7 @@ class PrullenbakMaaltijdenTable extends DataTable
 				'/maaltijden/lijst/:maaltijd_id',
 				'Maaltijdlijst',
 				'Maaltijdlijst bekijken',
-				'table_normal'
+				'tabel'
 			)
 		);
 
@@ -74,7 +74,7 @@ class PrullenbakMaaltijdenTable extends DataTable
 				'/maaltijden/beheer/verwijder',
 				'Verwijderen',
 				'Maaltijd definitief verwijderen',
-				'cross'
+				'verwijderen'
 			)
 		);
 	}

@@ -4,7 +4,7 @@
 		{{ maaltijd.datum | datetime_format_long }} {{ maaltijd.tijd | time_format }}
 		{% if maaltijd.magBekijken(app.user.uid) %}
 			<div class="float-end">
-				{{ icon("paintcan", null, maaltijd.maaltijdcorvee.corveeFunctie.naam) }}
+				{{ icon("bucket", null, maaltijd.maaltijdcorvee.corveeFunctie.naam) }}
 			</div>
 		{% endif %}
 	</td>
@@ -15,13 +15,13 @@
 			<div class="float-end">
 				{% set prijs = maaltijd.prijs | format_bedrag %}
 				{% if aanmelding is defined and aanmelding is not empty and aanmelding.saldoStatus < 0 %}
-					{{ icon("money_delete", null, "U hebt een negatief CiviSaldo!&#013;Maaltijdprijs: " ~ prijs) }}
+					{{ icon("ban", null, "U hebt een negatief CiviSaldo!&#013;Maaltijdprijs: " ~ prijs) }}
 				{% elseif aanmelding is defined and aanmelding is not empty and aanmelding.saldoStatus < 2 %}
-					{{ icon("money_delete", null, "Uw CiviSaldo is te laag!&#013;Maaltijdprijs: " ~ prijs) }}
+					{{ icon("ban", null, "Uw CiviSaldo is te laag!&#013;Maaltijdprijs: " ~ prijs) }}
 				{% elseif maaltijd.prijs != standaardprijs %}
-					{{ icon("money", null, "Afwijkende maaltijdprijs: " ~ prijs) }}
+					{{ icon("money-bill", null, "Afwijkende maaltijdprijs: " ~ prijs) }}
 				{% else %}
-					{{ icon("money_euro", null, "Maaltijdprijs: " ~ prijs) }}
+					{{ icon("money-bill-wave", null, "Maaltijdprijs: " ~ prijs) }}
 				{% endif %}
 			</div>
 		</div>
@@ -33,7 +33,7 @@
 			<div class="float-end">
 				<a href="{{ url('csrdelft_maalcie_mijnmaaltijden_lijst', {maaltijd_id: maaltijd.maaltijd_id}) }}"
 					 title="Toon maaltijdlijst" class="btn">
-					{{ icon("table") }}
+					{{ icon("tabel") }}
 				</a>
 			</div>
 		{% endif %}
@@ -43,7 +43,7 @@
 			<td class="maaltijd-aangemeld">
 			Ja {% if aanmelding.abonnementRepetitie %}(abo){% endif %}
 			<div class="float-end">
-				{{ icon("lock", null, "Maaltijd is gesloten om " ~ (maaltijd.laatst_gesloten | time_format) ~ "") }}
+				{{ icon("slotje", null, "Maaltijd is gesloten om " ~ (maaltijd.laatst_gesloten | time_format) ~ "") }}
 			</div>
 		{% else %}
 			<td class="maaltijd-aangemeld">
@@ -66,8 +66,8 @@
 						{{ csrfField() }}
 						<input type="text" name="aantal_gasten" value="{{ aanmelding.aantal_gasten }}"
 									 origvalue="{{ aanmelding.aantal_gasten }}" class="FormElement" maxlength="4" size="4"/>
-						<a class="btn submit" title="Wijzigingen opslaan">{{ icon("accept") }}</a>
-						<a class="btn reset cancel" title="Annuleren">{{ icon("delete") }}</a>
+						<a class="btn btn-primary submit" title="Wijzigingen opslaan">{{ icon("goedkeuren") }}</a>
+						<a class="btn btn-secondary reset cancel" title="Annuleren">{{ icon("verwijderen") }}</a>
 					</form>
 				</div>
 			{% endif %}
@@ -75,16 +75,16 @@
 		<td>
 			{% if maaltijd.gesloten %}
 				{% if aanmelding.gasten_eetwens %}
-					{{ icon("comment", null, aanmelding.gasten_eetwens) }}
+					{{ icon("message", null, aanmelding.gasten_eetwens) }}
 				{% endif %}
 			{% else %}
 				{% if aanmelding.aantal_gasten > 0 %}
 					<div class="InlineForm">
 						<div class="InlineFormToggle" title="{{ aanmelding.gasten_eetwens }}">
 							{% if aanmelding.gasten_eetwens %}
-								<a class="btn">{{ icon("comment_edit", null, aanmelding.gasten_eetwens) }}</a>
+								<a class="btn">{{ icon("bewerken", null, aanmelding.gasten_eetwens) }}</a>
 							{% else %}
-								<a class="btn">{{ icon("comment_add", null, "Gasten allergie/diëet") }}</a>
+								<a class="btn">{{ icon("toevoegen", null, "Gasten allergie/diëet") }}</a>
 							{% endif %}
 						</div>
 						<form action="{{ url('csrdelft_maalcie_mijnmaaltijden_opmerking_mijn', {maaltijd_id: maaltijd.maaltijd_id}) }}"
@@ -93,8 +93,8 @@
 							{{ csrfField("/maaltijden/ketzer/opmerking/" ~ maaltijd.maaltijd_id) }}
 							<input type="text" name="gasten_eetwens" value="{{ aanmelding.gasten_eetwens }}"
 										 origvalue="{{ aanmelding.gasten_eetwens }}" class="FormElement" maxlength="255" size="20"/>
-							<a class="btn submit" title="Wijzigingen opslaan">{{ icon("accept") }}</a>
-							<a class="btn reset cancel" title="Annuleren">{{ icon("delete") }}</a>
+							<a class="btn submit" title="Wijzigingen opslaan">{{ icon("goedkeuren") }}</a>
+							<a class="btn reset cancel" title="Annuleren">{{ icon("verwijderen") }}</a>
 						</form>
 					</div>
 				{% endif %}
@@ -109,7 +109,7 @@
 				Nee
 				{% if maaltijd.gesloten %}
 				<span class="float-end">
-				{{ icon("lock", null, "Maaltijd is gesloten om " ~ (maaltijd.laatst_gesloten | time_format) ~ "") }}
+				{{ icon("slotje", null, "Maaltijd is gesloten om " ~ (maaltijd.laatst_gesloten | time_format) ~ "") }}
 				</span>
 			{% endif %}
 		{% else %}

@@ -5,9 +5,7 @@ namespace CsrDelft\view;
 /**
  * Icon dingetje voor csrdelft.nl.
  *
- * Gaat samen met 'layout/css/icons.less' en 'layout/css/icons.png'
- *
- * Icon::getTag('bewerken'); geeft <span class="ico pencil"></span>
+ * Icon::getTag('bewerken'); geeft <i class="fas fa-pencil"></i>
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
@@ -18,68 +16,69 @@ class Icon
 	//in de lijst met icons.
 	public static $alias = [
 		// algemeen
-		'toevoegen' => 'add',
+		'toevoegen' => 'plus',
 		'bewerken' => 'pencil',
-		'verwijderen' => 'cross',
+		'verwijderen' => 'trash',
+		'goedkeuren' => 'circle-check',
+		'verjaardag' => 'cake-candles',
+		'vraagteken' => 'circle-question',
+		'tonen' => 'eye',
+		'verbergen' => 'eye-slash',
+		'sluiten' => 'xmark',
+		'kopieren' => 'clipboard',
+		'undo' => 'arrow-rotate-left',
+		'redo' => 'arrow-rotate-right',
 		'alert' => 'stop',
-		'goedkeuren' => 'tick',
-		'verjaardag' => 'cake',
-		'vraagteken' => 'help',
-		'fout' => 'error',
-		'show' => 'eye',
+		'stop' => 'ban',
 		//documumenten
-		'mime-onbekend' => 'page_white',
-		'mime-audio' => 'sound',
-		'mime-html' => 'page_white_world',
-		'mime-word' => 'page_white_word',
-		'mime-excel' => 'page_white_excel',
-		'mime-powerpoint' => 'page_white_powerpoint',
-		'mime-image' => 'page_white_picture',
-		'mime-pdf' => 'page_white_acrobat',
-		'mime-plain' => 'page_white_text',
-		'mime-zip' => 'page_white_zip',
+		'mime-onbekend' => 'file-circle-exclamation',
+		'mime-audio' => 'file-audio',
+		'mime-html' => 'file-code',
+		'mime-word' => 'file-word',
+		'mime-excel' => 'file-excel',
+		'mime-powerpoint' => 'file-powerpoint',
+		'mime-image' => 'file-image',
+		'mime-pdf' => 'file-pdf',
+		'mime-plain' => 'file-lines',
+		'mime-zip' => 'file-zipper',
 		// forum
-		'citeren' => 'comments',
+		'citeren' => 'quote-left',
 		'slotje' => 'lock',
-		'plakkerig' => 'note',
-		'belangrijk' => 'asterisk_orange',
-		// corvee
-		'taken_bewerken' => 'text_list_bullets',
-		'punten_bewerken' => 'award_star_gold_1',
-		'punten_bewerken_toegekend' => 'award_star_gold_2',
-		'gemaild' => 'email_go',
-		'gemaildoranje' => 'email_go_orange',
-		'niet_gemaild' => 'email',
+		'plakkerig' => 'note-sticky',
+		'belangrijk' => 'star',
+		'ruby' => 'gem',
+		'asterisk_orange' => 'star',
+		'flag_red' => 'flag', // Backwards compatibility
+		'flag_orange' => 'flag',
+		'flag_green' => 'flag',
+		'flag_blue' => 'flag',
 		// profiel
-		'stats' => 'server_chart',
-		'su' => 'user_go',
-		'resetpassword' => 'user_gray',
-		'instellingen' => 'cog',
-		// mededelingen
-		'legenda' => 'tag_yellow',
-		// Melding
-		'alert-danger' => 'exclamation',
-		'alert-info' => 'information',
-		'alert-success' => 'accept',
+		'stats' => 'chart-line',
+		'resetpassword' => 'user-lock',
+		'instellingen' => 'gear',
+		// melding
+		'alert-danger' => 'bell-exclamation',
+		'alert-info' => 'bell-on',
+		'alert-success' => 'circle-check',
 		'alert-warning' => 'bell',
-		// Overig
-		'table' => 'table_normal',
-		'log' => 'report',
-	];
+		// overig
+		'tabel' => 'table',
+		'log' => 'rectangle-terminal',
+		'prullenbak' => 'dumpster',
 
-	public static $fa = [
-		'calendar' => 'fa fa-calendar',
-		'forum' => 'fa fa-comments',
-		'profiel' => 'fa fa-user',
-		'fotoalbum' => 'fa fa-camera',
-		'document' => 'fa fa-file',
-		'Woonoord' => 'fa fa-home',
-		'Commissie' => 'fa fa-users',
-		'Ondervereniging' => 'fa fa-users',
-		'Kring' => 'fa fa-circle-notch',
-		'note' => 'fa fa-sticky-note',
-		'boek' => 'fa fa-book',
-		'wiki' => 'fa fa-atlas',
+		'calendar' => 'calendar',
+		'forum' => 'comments',
+		'profiel' => 'user',
+		'adres' => 'location-dot',
+		'fotoalbum' => 'images',
+		'document' => 'file',
+		'woonoord' => 'home',
+		'commissie' => 'users',
+		'ondervereniging' => 'users',
+		'kring' => 'circle-notch',
+		'boek' => 'book',
+		'wiki' => 'book-atlas',
+		'rechten' => 'key',
 	];
 
 	public static function get($key)
@@ -94,46 +93,42 @@ class Icon
 	/**
 	 * @param string $key Naam van het icoon, mag een alias zijn
 	 * @param null $hover string Naam van het icoon bij muis-over
-	 * @param null $title string Titel van het icoon
+	 * @param string $title string Titel van het icoon
 	 * @param string $class
-	 * @param null $content string Inhoud van dit icoon, is verborgen in de browser, maar wordt wel
-	 * geselecteerd en door eventuele schermlezers opgevangen
 	 * @return string
 	 */
 	public static function getTag(
 		$key,
 		$hover = null,
 		$title = null,
-		$class = null,
-		$content = null
+		$class = null
 	) {
 		$icon = self::get($key);
-
-		if (isset(static::$fa[$icon])) {
-			return sprintf(
-				'<span class="%s %s" title="%s">%s</span>',
-				static::$fa[$icon],
-				htmlspecialchars($class),
-				htmlspecialchars($title),
-				htmlspecialchars($content)
-			);
-		}
 
 		if ($hover !== null) {
 			$hover = 'hover-' . self::get($hover);
 		}
 		if ($title !== null) {
-			$title =
-				'title="' . str_replace('&amp;', '&', htmlspecialchars($title)) . '" ';
+			$title = str_replace('&amp;', '&', htmlspecialchars($title));
 		}
 
-		return sprintf(
-			'<span class="ico %s %s %s" %s>%s</span>',
-			htmlspecialchars($icon),
-			htmlspecialchars($hover),
-			htmlspecialchars($class),
-			$title,
-			htmlspecialchars($content)
-		);
+		// Test if string contains the a fa brands tag.
+		if (strpos($icon, 'fab fa-') !== false) {
+			return sprintf(
+				'<i class="%s %s %s" title="%s" aria-hidden="true"></i>',
+				htmlspecialchars($icon),
+				htmlspecialchars($hover),
+				htmlspecialchars($class),
+				$title
+			);
+		} else {
+			return sprintf(
+				'<i class="fas fa-%s %s %s" title="%s" aria-hidden="true"></i>',
+				htmlspecialchars($icon),
+				htmlspecialchars($hover),
+				htmlspecialchars($class),
+				$title
+			);
+		}
 	}
 }

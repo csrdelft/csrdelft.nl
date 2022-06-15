@@ -171,7 +171,8 @@ export const markItem = (
 export const linkItem = (markType: MarkType<EditorSchema>): MenuItem =>
 	new MenuItem({
 		title: 'Maak of verwijder link',
-		icon: { dom: html`<i class="fa fa-link"></i>` },
+		// TODO: maak een helper functie voor icoontjes
+		icon: { dom: html`<i class="fa fa-link" aria-hidden="true"></i>` },
 		active(state) {
 			return markActive(state, markType);
 		},

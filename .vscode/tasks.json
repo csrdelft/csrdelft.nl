@@ -5,31 +5,43 @@
 			"label": "[yarn] Build (DEV)",
 			"type": "npm",
 			"script": "dev",
-			"detail": "yarn run development"
+			"detail": "yarn run development",
+			"problemMatcher": ["$node-sass"]
 		},
 		{
 			"label": "[yarn] Build (PROD)",
 			"type": "npm",
 			"script": "prod",
-			"detail": "yarn run production"
+			"detail": "yarn run production",
+			"problemMatcher": []
 		},
 		{
 			"label": "[yarn] Install",
 			"type": "npm",
 			"script": "install",
-			"detail": "yarn install"
+			"detail": "yarn install",
+			"problemMatcher": []
 		},
 		{
 			"label": "[yarn] Startup",
 			"type": "npm",
 			"script": "startup",
-			"detail": "yarn run startup"
+			"detail": "yarn run startup",
+			"problemMatcher": []
 		},
 		{
 			"label": "[yarn] Watch",
 			"type": "npm",
 			"script": "watch",
-			"detail": "yarn run watch"
+			"detail": "yarn run watch",
+			"problemMatcher": ["$node-sass"]
+		},
+		{
+			"label": "[yarn] Prettier",
+			"type": "shell",
+			"command": "yarn prettier-all",
+			"detail": "yarn prettier-all",
+			"problemMatcher": []
 		},
 		{
 			"label": "[composer] Analyze",

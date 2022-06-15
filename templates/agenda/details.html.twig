@@ -6,15 +6,13 @@
 					{% if item is profiel %}
 						{{ icon('verjaardag') }} {{ item.link | raw }}
 					{% elseif item is maaltijd %}
-						<img src="{{ absolute_url('/images/maalcie/cutlery.png') }}" width="16" height="16" alt="cutlery"
-								 class="icon"/>
+						{{ icon('utensils') }}
 						<a href="{{ item.url }}">{{ item.titel }}</a>
 					{% elseif item is corveetaak %}
 						{% if 'klus' in item.corveeFunctie.naam %}
-							<img src="{{ absolute_url('/images/maalcie/drill.png') }}" width="16" height="16" alt="drill"
-									 class="icon"/>
+							{{ icon('hammer-crash') }}
 						{% else %}
-							{{ icon('paintcan') }}
+							{{ icon('bucket') }}
 						{% endif %}
 						<a href="{{ item.url }}">{{ item.titel }}</a>
 					{% elseif item is agendeerbaar %}
@@ -29,39 +27,34 @@
 			<div class="col-auto">
 				<div class="btn-group btn-group-sm">
 					{% if verborgen %}
-						<a href="{{ url('csrdelft_agenda_verbergen', {refuuid: item.uUID}) }}" class="btn beheren post"
-							 title="Toon dit agenda item in ical">
-							{{ icon('shading') }}
+						<a href="{{ url('csrdelft_agenda_verbergen', {refuuid: item.uUID}) }}" class="btn beheren post">
+							{{ icon('tonen', null, 'Toon dit agenda item in ical') }}
 						</a>
 					{% else %}
-						<a href="{{ url('csrdelft_agenda_verbergen', {refuuid: item.uUID}) }}" class="btn beheren post"
-							 title="Verberg dit agenda item in ical">
-							{{ icon('eye') }}
+						<a href="{{ url('csrdelft_agenda_verbergen', {refuuid: item.uUID}) }}" class="btn beheren post">
+							{{ icon('verbergen', null, 'Verberg dit agenda item in ical') }}
 						</a>
 					{% endif %}
 
-					<a href="{{ url('csrdelft_agenda_export', {uuid: item.uUID}) }}" class="btn"
-						 title="Exporteer dit agenda item">
-						{{ icon('date_go') }}
+					<a href="{{ url('csrdelft_agenda_export', {uuid: item.uUID}) }}" class="btn">
+						{{ icon('calendar-plus', null, 'Exporteer dit agenda item') }}
 					</a>
 
 					{% if item is abstractgroep and item.magWijzigen %}
 						<a href="{{ item.url }}/wijzigen" class="beheren btn" title="Wijzig {{ item.naam }}">
-							{{ icon('bewerken') }}
+							{{ icon('bewerken', null, 'Bewerk dit agenda item') }}
 						</a>
 					{% elseif item is agendaitem and item.magBeheren %}
-						<a href="{{ url('csrdelft_agenda_bewerken', {aid: item.item_id}) }}" class="btn beheren post popup"
-							 title="Dit agenda-item bewerken">
-							{{ icon('bewerken') }}
+						<a href="{{ url('csrdelft_agenda_bewerken', {aid: item.item_id}) }}" class="btn beheren post popup">
+							{{ icon('bewerken', null, 'Bewerk dit agenda item') }}
 						</a>
 						<a href="{{ url('csrdelft_agenda_verwijderen', {aid: item.item_id}) }}"
-							 class="btn beheren post confirm ReloadAgenda"
-							 title="Dit agenda-item definitief verwijderen">
-							{{ icon('bin') }}
+							 class="btn beheren post confirm ReloadAgenda">
+							{{ icon('verwijderen', null, 'Dit agenda item definitief verwijderen') }}
 						</a>
 					{% endif %}
 					<a href="#" class="btn close" title="Sluiten">
-						<i class="fas fa-times"></i>
+						{{ icon('sluiten') }}
 					</a>
 				</div>
 			</div>

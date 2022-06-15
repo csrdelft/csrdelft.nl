@@ -35,7 +35,10 @@
 					<span class="dropdown-menu">
 						<a href="{{ menuItem.link }}"
 							 class="nav-link dropdown-link {% if app.request.requestUri starts with menuItem.link %} is-active {% endif %}">
-							{{ menuItem.tekst }} <span class="expand-dropdown"><i class="fa fa-plus"></i></span>
+							{{ menuItem.tekst }}
+							<span class="expand-dropdown">
+								{{ icon('caret-down') }}
+							</span>
 						</a>
 						<span class="dropdown">
 							{% for childMenuItem in menuItem.children %}
@@ -74,10 +77,14 @@
 		</nav>
 		<nav class="nav-login">
 			{% block loginbutton %}
-				<a class="login-knop" href="#login"><i class="fa fa-2x fa-fw fa-user"></i></a>
+				<a class="login-knop" href="#login">
+					{{ icon('user', null, 'Inloggen', 'fa-2x') }}
+				</a>
 				<a class="nav-link inloggen" href="#login">{% trans %}Inloggen{% endtrans %}</a>
 			{% endblock %}
-			<a href="#menu" class="menu-knop"><i class="fa fa-2x fa-fw fa-bars"></i></a>
+			<a href="#menu" class="menu-knop">
+				{{ icon('bars', null, 'Open menu', 'fa-2x') }}
+			</a>
 		</nav>
 	</header>
 
@@ -88,7 +95,12 @@
 			<div class="inner">
 				<h2>{% trans %}Inloggen{% endtrans %}</h2>
 				{{ login_form() }}
-				<a href="#_" class="close">{% trans %}Sluiten{% endtrans %}</a>
+				<a href="#_" class="close">
+					{{ icon('sluiten') }}
+					<span class="sr-only">
+						{% trans %}Sluiten{% endtrans %}
+					</span>
+				</a>
 			</div>
 		</nav>
 	{% endblock %}

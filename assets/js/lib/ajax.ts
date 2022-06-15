@@ -19,7 +19,7 @@ export function ajaxRequest(
 	if (source) {
 		if (!source.classList.contains('noanim')) {
 			const img = $(
-				`<img alt="Laden" id="${source.id}" title="${url}" src="/images/loading-arrows.gif" />`
+				`<i class="fas fa-spinner fa-spin" title="Laden: ${url}" aria-hidden="true"></i>`
 			);
 			$(source).replaceWith(img);
 			source = img.get(0);

@@ -28,7 +28,7 @@
 				</a>
 			{% else %}
 				Ja
-				<span class="float-end">{{ icon("lock") }}</span>
+				<span class="float-end">{{ icon("slotje") }}</span>
 			{% endif %}
 		</td>
 	{% else %}
@@ -40,7 +40,7 @@
 				</a>
 			{% else %}
 				Nee
-				<span class="float-end">{{ icon("lock") }}</span>
+				<span class="float-end">{{ icon("slotje") }}</span>
 			{% endif %}
 		</td>
 	{% endif %}
@@ -58,8 +58,8 @@
 					{{ csrfField() }}
 					<input type="text" name="aantal" value="{{ activiteit.aantalGasten }}"
 								 origvalue="{{ activiteit.aantalGasten }}" class="FormElement" max="{{ activiteit.maxGasten }}" size="4"/>
-					<a class="btn submit" title="Wijzigingen opslaan">{{ icon("accept") }}</a>
-					<a class="btn reset cancel" title="Annuleren">{{ icon("delete") }}</a>
+					<a class="btn submit" title="Wijzigingen opslaan">{{ icon("goedkeuren") }}</a>
+					<a class="btn reset cancel" title="Annuleren">{{ icon("verwijderen") }}</a>
 				</form>
 			</div>
 		{% endif %}

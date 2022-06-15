@@ -59,7 +59,9 @@ export const initDropzone = (el: HTMLFormElement): void => {
 						await axios.post(coverUrl, 'foto=' + file.name);
 
 						coverBtn.replaceWith(
-							html`<span><span class="fas fa-check"></span> Omslag</span>`
+							html`<span
+								><i class="fas fa-check" aria-hidden="true"></i>Omslag</span
+							>`
 						);
 					} catch (e) {
 						throw new Error(e);
@@ -72,7 +74,8 @@ export const initDropzone = (el: HTMLFormElement): void => {
 	});
 
 	const showExisting = html`<a href="#"
-		><span class="ico photos"></span> Toon bestaande foto's in dit album</a
+		><i class="fas fa-images" aria-hidden="true"></i> Toon bestaande foto's in
+		dit album</a
 	>`;
 	el.appendChild(showExisting);
 	showExisting.addEventListener('click', async function (e) {

@@ -41,19 +41,15 @@
 	}
 
 	.close {
-		background: url("../../images/close.svg") no-repeat;
-		background-size: 4em 4em;
-		border: 0;
-		content: "";
-		display: block;
-		overflow: hidden;
+		display: grid;
+		place-content: center;
 		position: absolute;
 		right: 0;
-		text-align: center;
-		text-indent: 4em;
 		top: 0;
-		width: 4em;
-		height: 4em;
+		width: 2.4em;
+		height: 2.4em;
+		font-size: 1.65em;
+		text-align: center;
 	}
 
 	.links {

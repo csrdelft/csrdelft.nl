@@ -226,18 +226,34 @@
 				{# <h2 class="major">Interesseformulier</h2> #}
 				{# @include('layout-extern.form') #}
 				<ul class="contact zonder-interesseformulier">
-					<li class="fa-home">
-						Soci&euml;teit Confide <br/>
-						Oude Delft 9<br/>
-						2611 BA Delft
+					<li>
+						{{ icon('home') }}
+						<span>
+							Soci&euml;teit Confide <br/>
+							Oude Delft 9<br/>
+							2611 BA Delft
+						</span>
 					</li>
-					<li class="fa-phone">06-19470413</li>
-					<li class="fa-envelope"><a href="mailto:{{ email_abactis }}">{{ email_abactis }}</a></li>
-					<li class="fa-instagram">
+					<li>
+						{{ icon('phone') }}
+						<a href="tel:0031619470413">
+							06-19470413
+						</a>
+					</li>
+					<li>
+						{{ icon('envelope') }}
+						<a href="mailto:{{ email_abactis }}">
+							{{ email_abactis }}
+						</a>
+					</li>
+					<li>
+						{{ icon('fab fa-instagram') }}
 						<a href="https://www.instagram.com/csrdelft/" target="_blank" rel="noopener noreferrer">
 							{% trans %}Like onze foto's op Instagram en volg de laatste posts{% endtrans %}
-						</a></li>
-					<li class="fa-map-marker">
+						</a>
+					</li>
+					<li>
+						{{ icon('map-marker') }}
 						<noscript class="lazy-load">
 							<iframe title="Confide op Google Maps" height="300" frameborder="0" style="border:0"
 											src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2456.0445350385166!2d4.360246300000008!3d52.0060664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5b5c03dabb5b3%3A0xea6a437036970629!2sOude+Delft+9!5e0!3m2!1sen!2s!4v1404470858468">

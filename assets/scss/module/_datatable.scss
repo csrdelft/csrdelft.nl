@@ -36,6 +36,11 @@ h2.vliegende-knoppen + div > .dt-buttons {
 	top: 58px;
 }
 
+.dt-button-ico::before {
+	@extend %fa-icon;
+	@extend .fa-solid;
+}
+
 button,
 a,
 div {

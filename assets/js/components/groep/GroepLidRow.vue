@@ -2,11 +2,18 @@
   <!-- eslint-disable vue/no-v-html -->
   <tr>
     <td class="text-nowrap" v-html="lid.link" />
-    <td
-      v-for="keuze in keuzes"
-      :key="keuze.naam"
-      v-html="renderSelectie(keuze)"
-    />
+    <td v-for="keuze in keuzes" :key="keuze.naam">
+      <Icon v-if="getLidKeuze(keuze) === undefined" icon="ban"></Icon>
+      <Icon
+        v-else-if="isKeuzeCheckbox(keuze) && getLidKeuze(keuze).selectie"
+        icon="check"
+      ></Icon>
+      <Icon
+        v-else-if="isKeuzeCheckbox(keuze) && !getLidKeuze(keuze).selectie"
+        icon="xmark"
+      ></Icon>
+      <span v-else v-html="renderSelectie(getLidKeuze(keuze))" />
+    </td>
   </tr>
 </template>
 
@@ -15,9 +22,12 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import GroepKeuzeType from '../../enum/GroepKeuzeType';
 import { htmlEncode } from '../../lib/util';
-import { GroepLid, KeuzeOptie } from '../../model/groep';
+import { GroepKeuzeSelectie, GroepLid, KeuzeOptie } from '../../model/groep';
+import Icon from '../common/Icon.vue';
 
-@Component({})
+@Component({
+  components: { Icon },
+})
 export default class GroepLidRow extends Vue {
   @Prop()
   lid: GroepLid;
@@ -25,21 +35,18 @@ export default class GroepLidRow extends Vue {
   @Prop()
   keuzes: KeuzeOptie[];
 
-  private renderSelectie(keuze: KeuzeOptie) {
-    const lidKeuze = this.lid.opmerking2.find((k) => k.naam === keuze.naam);
+  private getLidKeuze(keuze: KeuzeOptie) {
+    return this.lid.opmerking2
+      ? this.lid.opmerking2.find((k) => k.naam === keuze.naam)
+      : undefined;
+  }
 
-    if (lidKeuze === undefined) {
-      return '<span class="ico bullet_error"></span>';
-    }
+  private isKeuzeCheckbox(keuze: KeuzeOptie) {
+    return keuze.type === GroepKeuzeType.CHECKBOX;
+  }
 
-    switch (keuze.type) {
-      case GroepKeuzeType.CHECKBOX:
-        return lidKeuze.selectie
-          ? '<span class="ico tick"></span>'
-          : '<span class="ico cross"></span>';
-      default:
-        return htmlEncode(lidKeuze.selectie);
-    }
+  private renderSelectie(lidKeuze: GroepKeuzeSelectie) {
+    return htmlEncode(lidKeuze.selectie);
   }
 }
 </script>

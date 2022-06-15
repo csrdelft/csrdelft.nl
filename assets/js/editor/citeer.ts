@@ -43,7 +43,7 @@ const getCiteerDiv = () => {
 		style="display: none"
 	>
 		<button type="button" class="btn" data-selectie="">
-			<i class="fas fa-quote-left"></i>
+			<i class="fas fa-quote-left" aria-hidden="true"></i>
 			Citeren
 		</button>
 	</div>`;

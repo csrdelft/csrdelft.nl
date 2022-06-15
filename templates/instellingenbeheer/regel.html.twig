@@ -7,7 +7,9 @@
 			form.parent().find('.InstellingToggle').toggle();
 			$(this).toggle();
 			}
-			">{{ icon('pencil') }}</a>
+		">
+			{{ icon('bewerken') }}
+		</a>
 	</td>
 	<td>{{ instelling.instelling | replace({'_': ' '}) }}</td>
 	<td>
@@ -22,12 +24,14 @@
 					{{- instelling.waarde -}}
 				</textarea>
 				<div class="input-group">
-					<a class="btn submit" title="Wijzigingen opslaan">{{ icon('accept') }} Opslaan</a>
+					<a class="btn submit" title="Wijzigingen opslaan">
+						Opslaan
+					</a>
 					<a class="btn reset cancel" title="Annuleren" onclick="
 						$(this).parents('.InlineForm').find('.InstellingToggle').toggle();
 						$('#instelling-row-{{ instelling.id }}').find('.wijzigknop').toggle();
-						">
-						{{ icon('delete') }} Annuleren
+					">
+						Annuleren
 					</a>
 				</div>
 			</form>
@@ -36,7 +40,7 @@
 	<td class="col-del">
 		<a href="{{ url('csrdelft_instellingenbeheer_reset', {module: instelling.module, id: instelling.instelling}) }}" title="Instelling resetten"
 			 class="btn post confirm">
-			{{ icon('arrow_rotate_anticlockwise') }}
+			{{ icon('arrows-rotate') }}
 		</a>
 	</td>
 </tr>
