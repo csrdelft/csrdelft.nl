@@ -81,7 +81,7 @@ export default class Icon extends Vue {
 
   private get iconClass() {
     if (this.icon.includes('fab fa-')) {
-	  return this.icon;
+      return this.icon;
     } else if (this.icon in this.alias) {
       return `fas fa-${this.alias[this.icon]}`;
     } else {
