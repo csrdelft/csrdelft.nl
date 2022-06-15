@@ -406,6 +406,7 @@
           @click="bonUploaden = true"
         >
           <Icon icon="toevoegen" />
+          Nieuwe bon
         </div>
       </div>
       <div class="voorbeeld">
@@ -1099,7 +1100,6 @@ export default class DeclaratieVue extends Vue {
         text-align: center;
         font-size: 21px;
         padding: 14px 0 33px;
-        color: #2ecc71;
         cursor: pointer;
       }
 

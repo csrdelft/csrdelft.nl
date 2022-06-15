@@ -115,7 +115,7 @@ class Icon
 		// Test if string contains the a fa brands tag.
 		if (strpos($icon, 'fab fa-') !== false) {
 			return sprintf(
-				'<i class="%s %s %s" title="%s" aria-hidden="true" />',
+				'<i class="%s %s %s" title="%s" aria-hidden="true"></i>',
 				htmlspecialchars($icon),
 				htmlspecialchars($hover),
 				htmlspecialchars($class),
@@ -123,7 +123,7 @@ class Icon
 			);
 		} else {
 			return sprintf(
-				'<i class="fas fa-%s %s %s" title="%s" aria-hidden="true" />',
+				'<i class="fas fa-%s %s %s" title="%s" aria-hidden="true"></i>',
 				htmlspecialchars($icon),
 				htmlspecialchars($hover),
 				htmlspecialchars($class),
