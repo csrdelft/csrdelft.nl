@@ -115,6 +115,10 @@ i.fab {
 	}
 
 	.forum-post {
+		p:empty {
+			display: none;
+		}
+		
 		.forumpostKnoppen {
 			min-height: 70px;
 

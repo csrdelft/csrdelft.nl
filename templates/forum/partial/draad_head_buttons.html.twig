@@ -10,7 +10,7 @@
 			Opties
 		</button>
 		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-			{% if deel.magPosten %}
+			{% if deel is defined and deel.magPosten %}
 			<li>
 				<a class="dropdown-item" href="#forumForm">
 					{{ icon('toevoegen') }}
@@ -92,7 +92,7 @@
 		role="toolbar"
 		aria-label="Toolbar with button groups"
 	>
-		{% if deel.magPosten %}
+		{% if deel is defined and deel.magPosten %}
 		<div class="btn-group me-2" role="group">
 			<a class="btn btn-secondary text-white" href="#forumForm" title="Nieuw draadje">
 				{{ icon('toevoegen') }}
