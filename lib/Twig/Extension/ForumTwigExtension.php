@@ -122,12 +122,15 @@ class ForumTwigExtension extends AbstractExtension
 		)->tekst;
 
 		// Filter alle bb-tags uit de tekst
-		$regex = "/\[p\]([^\[\]]+)\[\/p\]/i";
-		if(preg_match_all($regex, $tekst, $matches) && count($matches) > 0) {
+		$regexTekst = "/\[p\]([^\[\]]+)\[\/p\]/i";
+		$regexPlaatjes = "/(\[p\]\[img=[^\]]+\]\[\/p\])/i";
+		$tekst = preg_replace($regexPlaatjes, '📷', $tekst);
+
+		if(preg_match_all($regexTekst, $tekst, $matches) && count($matches) > 0) {
 			$filter_tekst = implode(' ', $matches[1]);
 			return $filter_tekst;
 		}
-
+		
 		return $tekst;
 	}
 
