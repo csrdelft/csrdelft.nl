@@ -112,9 +112,12 @@ img.pasfoto {
 	object-fit: cover;
 }
 @include media-breakpoint-down(sm) {
-	.forum-draad img.pasfoto {
-		width: 2rem;
-		height: 2rem;
+	.forum-draad,
+	#forumPosten {
+		img.pasfoto {
+			width: 2rem;
+			height: 2rem;
+		}
 	}
 }
 

@@ -1,6 +1,6 @@
 i.fas,
 i.fab {
-	&:not(.neus2013) {
+	&:not(.neus2013):not(.pagination) {
 		margin-right: $spacer * 0.25;
 	}
 }

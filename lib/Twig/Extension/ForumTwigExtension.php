@@ -5,6 +5,7 @@ namespace CsrDelft\Twig\Extension;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\view\Icon;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -192,7 +193,7 @@ class ForumTwigExtension extends AbstractExtension
 		$pagecount = 0;
 		$curpage = 0;
 		$baseurl = '';
-		$linknum = 5;
+		$linknum = 3;
 		$urlAppend = '';
 		$txtPrev = '<';
 		$separator = '';
@@ -281,7 +282,9 @@ class ForumTwigExtension extends AbstractExtension
 					$urlAppend .
 					'" ' .
 					$cssClass .
-					' aria-label="Vorige"><i class="fas fa-chevron-left"></i></a></li>';
+					' aria-label="Vorige">' .
+					Icon::getTag('chevron-left', null, 'Vorige', 'pagination') .
+					'</a></li>';
 			}
 
 			$retval .= $separator;
@@ -373,7 +376,9 @@ class ForumTwigExtension extends AbstractExtension
 					$urlAppend .
 					'" ' .
 					$cssClass .
-					' aria-label="Volgende"><i class="fas fa-chevron-right"></i></a></li>';
+					' aria-label="Volgende">' .
+					Icon::getTag('chevron-right', null, 'Volgende', 'pagination') .
+					'</a></li>';
 			}
 		}
 		return $retval;

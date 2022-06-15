@@ -25,7 +25,7 @@
 						href="/forum/beheren/{{ deel.forum_id }}"
 						class="dropdown-item post popup"
 					>
-						<i class="fas fa-wrench"></i>
+						{{ icon('wrench') }}
 						Deelforum beheren
 					</a>
 				</li>
@@ -35,7 +35,7 @@
 				<li>
 					<a href="{{ url('csrdelft_forum_forumdeel_wacht') }}"
 						class="dropdown-item">
-						<i class="fas fa-hourglass me-1"></i>
+						{{ icon('hourglass', null, 'me-1') }}
 						{{ getAantalWachtOpGoedkeuring() }}
 						reacties wachten op goedkeuring
 					</a>
@@ -44,7 +44,7 @@
 			<li>
 				<a href="{{ url('csrdelft_forum_forumdradenverbergen_toonalles') }}"
 					class="dropdown-item post confirm ReloadPage">
-					<i class="fas fa-eye me-1"></i>
+					{{ icon('eye', null, 'me-1') }}
 					{{ getAantalVerborgenVoorLid() }} verborgen onderwerpen laten zien
 				</a>
 			</li>
@@ -55,7 +55,7 @@
 					data-bs-toggle="modal"
 					data-bs-target="#filterModal"
 				>
-					<i class="fas fa-filter"></i>
+					{{ icon('filter') }}
 					Filter
 				</a>
 			</li> #}
@@ -78,13 +78,13 @@
 				{% if deel.lidWilMeldingVoorDeel %}
 				<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
 					class="dropdown-item post ReloadPage melding-nooit">
-					<i class="fas fa-bell-slash"></i>
+					{{ icon('bell-slash') }}
 					Geen meldingen
 				</a>
 				{% else %}
 				<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
 					class="dropdown-item post ReloadPage melding-altijd">
-					<i class="fas fa-bell-plus"></i>
+					{{ icon('bell-plus') }}
 					Meldingen
 				</a>
 				{% endif %}
@@ -113,7 +113,7 @@
 					class="btn btn-primary post popup"
 					title="Deelforum beheren"
 				>
-					<i class="fas fa-wrench"></i>
+					{{ icon('wrench') }}
 					<span class="visually-hidden">Deelforum beheren</span>
 				</a>
 			</div>
@@ -124,7 +124,7 @@
 				<a href="{{ url('csrdelft_forum_forumdeel_wacht') }}"
 					class="btn btn-primary"
 					title="Reacties die wachten op goedkeuring">
-					<i class="fas fa-hourglass me-1"></i>
+					{{ icon('hourglass', null, 'me-1') }}
 					{{ getAantalWachtOpGoedkeuring() }}
 					<span class="visually-hidden">reacties die wachten op goedkeuring</span>
 				</a>
@@ -132,7 +132,7 @@
 			<a href="{{ url('csrdelft_forum_forumdradenverbergen_toonalles') }}"
 				class="btn btn-primary post confirm ReloadPage"
 				title="Verborgen onderwerpen weer laten zien">
-				<i class="fas fa-eye me-1"></i>
+				{{ icon('eye', null, 'me-1') }}
 				{{ getAantalVerborgenVoorLid() }}
 				<span class="visually-hidden">verborgen onderwerpen weer laten zien</span>
 			</a>
@@ -147,7 +147,7 @@
 				data-bs-target="#filterModal"
 				title="Filter"
 			>
-				<i class="fas fa-filter"></i>
+				{{ icon('filter') }}
 				<span class="visually-hidden">Filter</span>
 			</button> #}
 
@@ -172,14 +172,14 @@
 					<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
 						class="btn btn-primary post ReloadPage melding-nooit"
 						title="Geen meldingen voor forumdeel onvangen">
-						<i class="fas fa-bell-slash"></i>
+						{{ icon('bell-slash') }}
 						<span class="visually-hidden">Geen meldingen voor forumdeel onvangen</span>
 					</a>
 				{% else %}
 					<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
 						class="btn btn-primary post ReloadPage melding-altijd"
 						title="Meldingen ontvangen voor nieuwe berichten in forumdeel">
-						<i class="fas fa-bell-plus"></i>
+						{{ icon('bell-plus') }}
 						<span class="visually-hidden">Meldingen ontvangen voor nieuwe berichten in forumdeel</span>
 					</a>
 				{% endif %}
