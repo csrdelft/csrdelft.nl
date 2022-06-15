@@ -9,6 +9,7 @@ use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
 use CsrDelft\service\forum\ForumDelenService;
 use CsrDelft\service\security\LoginService;
@@ -115,7 +116,7 @@ class VoorpaginaController extends AbstractController
 		// Komende verjaardagen
 		if (LoginService::mag(P_LOGGED_IN)) {
 			return $this->render('voorpagina/verjaardagen.html.twig', [
-				'verjaardagen' => $verjaardagenService->getKomende(6),
+				'verjaardagen' => $verjaardagenService->getKomende(10),
 				true,
 			]);
 		}
@@ -140,6 +141,28 @@ class VoorpaginaController extends AbstractController
 		}
 
 		throw $this->createNotFoundException();
+	}
+
+	/**
+	 * @param MaaltijdenRepository $maaltijdenRepository
+	 * @return Response
+	 * @Route("/voorpagina/maaltijden")
+	 */
+	public function maaltijden(MaaltijdenRepository $maaltijdenRepository): Response
+	{
+		$maaltijden = $maaltijdenRepository->getKomendeMaaltijdenVoorLid(
+			LoginService::getUid()
+		);
+		
+		$maaltijd = reset($maaltijden);
+
+		$aantal = sizeof($maaltijden);
+
+		return $this->render('voorpagina/maaltijden.html.twig', [
+			'maaltijden' => $maaltijden,
+			'maaltijd' => $maaltijd,
+			'aantal' => $aantal,
+		]);
 	}
 
 	/**

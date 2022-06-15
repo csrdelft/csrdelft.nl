@@ -12,13 +12,15 @@
 
 .grid-container {
 	display: grid;
-	grid-template-columns: 1fr 2fr 1fr 1fr;
-	grid-template-rows: 1fr 2fr 2fr 1fr;
+	grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: repeat(6, 1fr);
 	grid-template-areas:
-		"agenda posters foto-albums civi-saldo"
-		"agenda posters foto-albums verjaardagen"
-		"agenda forum overig verjaardagen"
-		"agenda forum is-het-al verjaardagen";
+		"maaltijden posters posters foto-albums civi-saldo"
+		"maaltijden posters posters foto-albums verjaardagen"
+		"agenda posters posters foto-albums verjaardagen"
+		"agenda forum forum overig verjaardagen"
+		"agenda forum forum overig verjaardagen"
+		"agenda forum forum is-het-al verjaardagen";
 	gap: 1rem;
 
 	// Set font-size for the grid
@@ -80,10 +82,12 @@
 
 @include media-breakpoint-only(md) {
 	.grid-container {
-		grid-template-columns: 1fr 1fr 1fr 1fr;
-		grid-template-rows: 2fr 2fr 1fr;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: repeat(5, 1fr);
 		grid-template-areas:
-			"agenda posters posters foto-albums"
+			"maaltijden posters posters foto-albums"
+			"maaltijden posters posters foto-albums"
+			"agenda forum forum verjaardagen"
 			"agenda forum forum verjaardagen"
 			"overig overig civi-saldo is-het-al";
 	}
@@ -106,6 +110,9 @@
 			object-fit: contain;
 		}
 	}
+}
+.cell-maaltijden {
+	grid-area: maaltijden;
 }
 
 .cell-agenda {

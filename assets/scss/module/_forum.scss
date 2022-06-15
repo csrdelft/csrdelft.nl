@@ -26,6 +26,10 @@ i.fab {
 @include media-breakpoint-up(sm) {
 	.forum-deel > .list-group-item {
 		max-width: calc(100% - $spacer * 1.5);
+
+		p {
+			color: $gray-500;
+		}
 	}
 }
 
