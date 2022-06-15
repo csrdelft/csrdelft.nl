@@ -1,4 +1,4 @@
-{% if mag('P_LOGGED_IN') %}
+{% if is_granted('ROLE_LOGGED_IN') %}
 	<div class="dropdown d-block d-md-none">
 		<button
 			class="btn btn-primary dropdown-toggle"
@@ -21,7 +21,7 @@
 				</a>
 			</li>
 			<li><hr class="dropdown-divider" /></li>
-			{% if mag('P_ADMIN') and deel is defined and deel.forum_id is not empty %}
+			{% if is_granted('ROLE_ADMIN') and deel is defined and deel.forum_id is not empty %}
 				<li>
 					<a
 						href="/forum/beheren/{{ deel.forum_id }}"
@@ -107,7 +107,7 @@
 			</button>
 		</div>
 
-		{% if mag('P_ADMIN') and deel is defined and deel.forum_id is not empty %}
+		{% if is_granted('ROLE_ADMIN') and deel is defined and deel.forum_id is not empty %}
 			<div class="btn-group me-2" role="group">
 				<a
 					href="/forum/beheren/{{ deel.forum_id }}"

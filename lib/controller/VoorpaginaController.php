@@ -11,7 +11,6 @@ use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
 use CsrDelft\service\forum\ForumDelenService;
-use CsrDelft\service\security\CsrSecurity;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\cms\CmsPaginaView;
@@ -23,17 +22,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class VoorpaginaController extends AbstractController
 {
 	/**
-	 * @param CsrSecurity $security
 	 * @param CmsPaginaRepository $cmsPaginaRepository
 	 * @return Response
 	 * @Route("/")
 	 * @Auth(P_PUBLIC)
 	 */
 	public function voorpagina(
-		CsrSecurity $security,
 		CmsPaginaRepository $cmsPaginaRepository
 	): Response {
-		if ($security->mag(P_LOGGED_IN)) {
+		if ($this->isGranted(P_LOGGED_IN)) {
 			return $this->render('voorpagina.html.twig', []);
 		} else {
 			return $this->render('extern/index.html.twig', [
