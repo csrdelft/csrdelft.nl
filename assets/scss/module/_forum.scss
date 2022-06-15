@@ -24,7 +24,7 @@ i.fab {
 	width: 100%;
 }
 @include media-breakpoint-up(sm) {
-	.list-group-item {
+	.forum-deel > .list-group-item {
 		max-width: calc(100% - $spacer * 1.5);
 	}
 }
@@ -118,7 +118,7 @@ i.fab {
 		p:empty {
 			display: none;
 		}
-		
+
 		.forumpostKnoppen {
 			min-height: 70px;
 

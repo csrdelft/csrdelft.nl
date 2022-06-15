@@ -52,7 +52,7 @@
 			<p>{{ deel.omschrijving }}</p>
 		</div>
 
-		{{ include('forum/partial/draad_head_buttons.html.twig') }}
+		{{ include('forum/partial/deel_head_buttons.html.twig') }}
 	</header>
 
 	<section class="forum-deel list-group list-group-flush">
@@ -83,7 +83,4 @@
 			{{ include('forum/partial/post_form.html.twig', {draad: null}) }}
 		{% endif %}
 	</section>
-
-	{# FIXME: naar deel modal #}
-	{# {{ include('forum/partial/rss_link.html.twig') }} #}
 {% endblock %}

@@ -34,6 +34,10 @@ Primary style
 		}
 	}
 
+	.navbar-nav {
+		align-items: center;
+	}
+
 	.navbar-brand {
 		padding: 0;
 		display: flex;
@@ -59,5 +63,6 @@ Primary style
 @include media-breakpoint-down(md) {
 	#menu .navbar-nav {
 		width: 100%;
+		align-items: baseline;
 	}
 }

@@ -1,6 +1,5 @@
 <h2 class="h6 fw-bolder mt-1">
-	{# TODO: URL #}
-	<a href="/forum/recent">Forum</a>
+	<a href="{{ url('csrdelft_forum_forum_recent') }}">Forum</a>
 	{% if is_granted('ROLE_FORUM_MOD') and aantalWacht > 0 %}
 		<a href="{{ url('csrdelft_forum_forumdeel_wacht') }}" class="badge rounded-pill bg-accent text-white" title="{{ aantalWacht }} wachten op goedkeuring">
 			{{ aantalWacht }}
@@ -27,11 +26,14 @@
 				</span>
 				{{ draad.titel | raw }}
 			</p>
-			{# {{#if this.nieuweBerichten}}
-			<span class="badge rounded-pill bg-secondary"
-				>{{ this.aantalNieuw }}</span
-			>
-			{{/if}} #}
+			{% if draad.aantalOngelezenPosts > 0 %}
+				<span class="badge rounded-pill bg-accent text-white" title="{{ draad.aantalOngelezenPosts }} ongelezen berichten">
+					{{ draad.aantalOngelezenPosts }}
+					<span class="sr-only">
+						ongelezen berichten
+					</span>
+				</span>
+			{% endif %}
 		</a>
 	</div>
 {% endfor %}

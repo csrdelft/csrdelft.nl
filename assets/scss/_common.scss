@@ -6,6 +6,11 @@
 .breadcrumb {
 	max-width: 800px;
 	padding: 0;
+
+	.breadcrumb-item {
+		display: flex;
+		align-items: center;
+	}
 }
 
 .breadcrumb .form-control {

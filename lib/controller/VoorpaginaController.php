@@ -27,9 +27,8 @@ class VoorpaginaController extends AbstractController
 	 * @Route("/")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function voorpagina(
-		CmsPaginaRepository $cmsPaginaRepository
-	): Response {
+	public function voorpagina(CmsPaginaRepository $cmsPaginaRepository): Response
+	{
 		if ($this->isGranted(P_LOGGED_IN)) {
 			return $this->render('voorpagina.html.twig', []);
 		} else {

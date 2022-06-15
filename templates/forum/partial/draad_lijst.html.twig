@@ -48,9 +48,9 @@
 		</p>
 
 		{% if app.user and draad.aantalOngelezenPosts > 0 %}
-		<span class="badge rounded-pill bg-accent text-white">
+		<span class="badge rounded-pill bg-accent text-white" title="{{ draad.aantalOngelezenPosts }} ongelezen berichten">
 			{{ draad.aantalOngelezenPosts }}
-			<span class="visually-hidden">
+			<span class="sr-only">
 				ongelezen berichten
 			</span>
 		</span>
