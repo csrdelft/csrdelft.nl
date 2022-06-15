@@ -116,10 +116,19 @@ class ForumTwigExtension extends AbstractExtension
 
 	public function draadGetLaatstePost($draad_id)
 	{
-		return $this->forumPostsRepository->findOneBy(
+		$tekst = $this->forumPostsRepository->findOneBy(
 			['draad_id' => $draad_id, 'verwijderd' => false],
 			['datum_tijd' => 'DESC']
 		)->tekst;
+
+		// Filter alle bb-tags uit de tekst
+		$regex = "/\[p\]([^\[\]]+)\[\/p\]/i";
+		if(preg_match_all($regex, $tekst, $matches) && count($matches) > 0) {
+			$filter_tekst = implode(' ', $matches[1]);
+			return $filter_tekst;
+		}
+
+		return $tekst;
 	}
 
 	public function highlight_zoekterm(
