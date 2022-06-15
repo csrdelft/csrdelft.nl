@@ -10,7 +10,9 @@ export default {
 	ul: { dom: html`<i class="fas fa-list-ul" aria-hidden="true"></i>` },
 	quote: { dom: html`<i class="fas fa-quote-left" aria-hidden="true"></i>` },
 	underline: { dom: html`<i class="fas fa-underline" aria-hidden="true"></i>` },
-	selectParentNode: { dom: html`<i class="fas fa-object-group" aria-hidden="true"></i>` },
+	selectParentNode: {
+		dom: html`<i class="fas fa-object-group" aria-hidden="true"></i>`,
+	},
 	lift: { dom: html`<i class="fas fa-outdent" aria-hidden="true"></i>` },
 	prive: { dom: html`<i class="fas fa-user-shield" aria-hidden="true"></i>` },
 	join: { dom: html`<i class="fas fa-caret-up" aria-hidden="true"></i>` },

@@ -1,9 +1,6 @@
 <template>
   <div>
-    <a @click="toevoegen">
-      <Icon :icon="icon" />
-	    {{ text }}
-    </a>
+    <a @click="toevoegen"> <Icon :icon="icon" /> {{ text }} </a>
   </div>
 </template>
 
@@ -15,7 +12,7 @@ import { domUpdate } from '../../lib/domUpdate';
 import Icon from '../common/Icon.vue';
 
 @Component({
-  components: { Icon }
+  components: { Icon },
 })
 export default class PeilingOptieToevoegen extends Vue {
   icon = 'plus';

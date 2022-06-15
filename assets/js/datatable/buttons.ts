@@ -37,18 +37,12 @@ declare global {
 }
 
 // Zet de icons van de default buttons
-$.fn.dataTable.ext.buttons.copyHtml5.className +=
-	' dt-button-ico fa-file-code';
-$.fn.dataTable.ext.buttons.copyFlash.className +=
-	' dt-button-ico fa-file-code';
-$.fn.dataTable.ext.buttons.csvHtml5.className +=
-	' dt-button-ico fa-file-csv';
-$.fn.dataTable.ext.buttons.csvFlash.className +=
-	' dt-button-ico fa-file-csv';
-$.fn.dataTable.ext.buttons.pdfHtml5.className +=
-	' dt-button-ico fa-file-pdf';
-$.fn.dataTable.ext.buttons.pdfFlash.className +=
-	' dt-button-ico fa-file-pdf';
+$.fn.dataTable.ext.buttons.copyHtml5.className += ' dt-button-ico fa-file-code';
+$.fn.dataTable.ext.buttons.copyFlash.className += ' dt-button-ico fa-file-code';
+$.fn.dataTable.ext.buttons.csvHtml5.className += ' dt-button-ico fa-file-csv';
+$.fn.dataTable.ext.buttons.csvFlash.className += ' dt-button-ico fa-file-csv';
+$.fn.dataTable.ext.buttons.pdfHtml5.className += ' dt-button-ico fa-file-pdf';
+$.fn.dataTable.ext.buttons.pdfFlash.className += ' dt-button-ico fa-file-pdf';
 $.fn.dataTable.ext.buttons.excelHtml5.className +=
 	' dt-button-ico fa-file-excel';
 $.fn.dataTable.ext.buttons.excelFlash.className +=

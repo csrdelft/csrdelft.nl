@@ -32,7 +32,11 @@ class CiviSaldoTable extends AbstractDataTableType
 
 	public function getBreadcrumbs()
 	{
-		return '<a href="/" title="Startpagina">' . Icon::getTag('home', null, 'Voorpagina', 'module-icon') . '</a> » <a href="/fiscaat">' . Icon::getTag('money-bill', null, 'Fiscaat', 'module-icon') . '</a> » <span class="active">Saldo</span>';
+		return '<a href="/" title="Startpagina">' .
+			Icon::getTag('home', null, 'Voorpagina', 'module-icon') .
+			'</a> » <a href="/fiscaat">' .
+			Icon::getTag('money-bill', null, 'Fiscaat', 'module-icon') .
+			'</a> » <span class="active">Saldo</span>';
 	}
 
 	public function createDataTable(

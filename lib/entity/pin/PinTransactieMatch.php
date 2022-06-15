@@ -180,8 +180,7 @@ class PinTransactieMatch implements DataTableEntry
 				'&nbsp;' . Icon::getTag('message', null, $this->bestelling->comment);
 		}
 		if ($this->notitie) {
-			$desc .=
-				'&nbsp;' . Icon::getTag('circle-info', null, $this->notitie);
+			$desc .= '&nbsp;' . Icon::getTag('circle-info', null, $this->notitie);
 		}
 		return $desc;
 	}

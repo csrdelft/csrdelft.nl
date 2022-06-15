@@ -14,7 +14,7 @@ class Icon
 {
 	//handige dingen die we graag gebruiken in csrdelft.nl. Moeten geen namen zijn die al voorkomen
 	//in de lijst met icons.
-	public static $alias = array(
+	public static $alias = [
 		// algemeen
 		'toevoegen' => 'plus',
 		'bewerken' => 'pencil',
@@ -78,8 +78,8 @@ class Icon
 		'kring' => 'circle-notch',
 		'boek' => 'book',
 		'wiki' => 'book-atlas',
-		'rechten' => 'key'
-	);
+		'rechten' => 'key',
+	];
 
 	public static function get($key)
 	{
@@ -112,18 +112,18 @@ class Icon
 			$title = str_replace('&amp;', '&', htmlspecialchars($title));
 		}
 
-		// Test if string contains the a fa brands tag. 
-		if(strpos($icon, 'fab fa-') !== false) {
+		// Test if string contains the a fa brands tag.
+		if (strpos($icon, 'fab fa-') !== false) {
 			return sprintf(
-				'<i class="%s %s %s" title="%s" aria-hidden="true"></i>',
+				'<i class="%s %s %s" title="%s" aria-hidden="true" />',
 				htmlspecialchars($icon),
 				htmlspecialchars($hover),
 				htmlspecialchars($class),
 				$title
 			);
-		} else{
+		} else {
 			return sprintf(
-				'<i class="fas fa-%s %s %s" title="%s" aria-hidden="true"></i>',
+				'<i class="fas fa-%s %s %s" title="%s" aria-hidden="true" />',
 				htmlspecialchars($icon),
 				htmlspecialchars($hover),
 				htmlspecialchars($class),

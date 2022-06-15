@@ -37,6 +37,13 @@
 			"problemMatcher": ["$node-sass"]
 		},
 		{
+			"label": "[yarn] Prettier",
+			"type": "shell",
+			"command": "yarn prettier-all",
+			"detail": "yarn prettier-all",
+			"problemMatcher": []
+		},
+		{
 			"label": "[composer] Analyze",
 			"type": "shell",
 			"command": "composer analyze",

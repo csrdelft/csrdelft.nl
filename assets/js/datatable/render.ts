@@ -24,7 +24,11 @@ export default {
 		return formatBedrag(data);
 	},
 	check(data) {
-		return '<i class="fas fa-' + (data ? 'check' : 'xmark') + '" aria-hidden="true"></i>';
+		return (
+			'<i class="fas fa-' +
+			(data ? 'check' : 'xmark') +
+			'" aria-hidden="true"></i>'
+		);
 	},
 	aanmeldFilter(data) {
 		return data

@@ -28,7 +28,9 @@ class FotoAlbumBreadcrumbs
 		$self
 	) {
 		$breadcrumbs =
-			'<li class="breadcrumb-item"><a href="/">' . Icon::getTag('home') . '</a></li>';
+			'<li class="breadcrumb-item"><a href="/">' .
+			Icon::getTag('home') .
+			'</a></li>';
 
 		if ($album->subdir == 'fotoalbum/') {
 			// Geen subdir

@@ -227,11 +227,7 @@
           bedragen van de bon of het factuur over.
         </p>
         <div class="buttons">
-          <button
-            v-if="uploading"
-            class="loading blue"
-            disabled
-          >
+          <button v-if="uploading" class="loading blue" disabled>
             <Icon icon="spinner fa-spin" />
           </button>
           <template v-else>
@@ -603,10 +599,7 @@
       </a>
     </div>
 
-    <div
-      v-if="submitting"
-      class="opslaan"
-    >
+    <div v-if="submitting" class="opslaan">
       <Icon icon="spinner fa-spin" />
     </div>
   </div>

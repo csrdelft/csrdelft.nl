@@ -148,31 +148,31 @@ ul.nobullets li {
 }
 
 .fas {
-  :not(.fa-5x),
-  :not(.fa-4x),
-  :not(.fa-2x),
-  :not(.fa-3x) {
-    font-size: $spacer * 1.1;
-		margin-right: $spacer * .5;
-  }
+	:not(.fa-5x),
+	:not(.fa-4x),
+	:not(.fa-2x),
+	:not(.fa-3x) {
+		font-size: $spacer * 1.1;
+		margin-right: $spacer * 0.5;
+	}
 }
 .dt-button-ico::before {
-  font-size: $spacer * 1.1;
-  margin-right: $spacer * .5;
+	font-size: $spacer * 1.1;
+	margin-right: $spacer * 0.5;
 }
 
 .fas {
-  :not(.fa-5x),
-  :not(.fa-4x),
-  :not(.fa-2x),
-  :not(.fa-3x) {
-    font-size: $spacer * 1.1;
-		margin-right: $spacer * .5;
-  }
+	:not(.fa-5x),
+	:not(.fa-4x),
+	:not(.fa-2x),
+	:not(.fa-3x) {
+		font-size: $spacer * 1.1;
+		margin-right: $spacer * 0.5;
+	}
 }
 .dt-button-ico::before {
-  font-size: $spacer * 1.1;
-  margin-right: $spacer * .5;
+	font-size: $spacer * 1.1;
+	margin-right: $spacer * 0.5;
 }
 
 .instelling:target {

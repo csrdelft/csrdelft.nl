@@ -98,6 +98,10 @@ class CiviProductTable extends DataTable
 
 	public function getBreadcrumbs()
 	{
-		return '<a href="/" title="Startpagina">' . Icon::getTag('home', null, 'Voorpagina', 'module-icon') . '</a> » <a href="/fiscaat">' . Icon::getTag('money-bill', null, 'Fiscaat', 'module-icon') . '</a> » <span class="active">Producten</span>';
+		return '<a href="/" title="Startpagina">' .
+			Icon::getTag('home', null, 'Voorpagina', 'module-icon') .
+			'</a> » <a href="/fiscaat">' .
+			Icon::getTag('money-bill', null, 'Fiscaat', 'module-icon') .
+			'</a> » <span class="active">Producten</span>';
 	}
 }

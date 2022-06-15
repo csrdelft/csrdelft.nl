@@ -48,7 +48,9 @@ class ProfielForm extends Formulier
 {
 	public function getBreadcrumbs()
 	{
-		return '<ol class="breadcrumb"><li class="breadcrumb-item"><a href="/">' . Icon::getTag('home') . '</a></li>' .
+		return '<ol class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
+			Icon::getTag('home') .
+			'</a></li>' .
 			'<li class="breadcrumb-item"><a href="/ledenlijst">Leden</a></li>' .
 			'<li class="breadcrumb-item">' .
 			$this->model->getLink('civitas') .

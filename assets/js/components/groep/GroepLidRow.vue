@@ -2,13 +2,16 @@
   <!-- eslint-disable vue/no-v-html -->
   <tr>
     <td class="text-nowrap" v-html="lid.link" />
-    <td
-      v-for="keuze in keuzes"
-      :key="keuze.naam"
-    >
+    <td v-for="keuze in keuzes" :key="keuze.naam">
       <Icon v-if="getLidKeuze(keuze) === undefined" icon="ban"></Icon>
-      <Icon v-else-if="isKeuzeCheckbox(keuze) && getLidKeuze(keuze).selectie" icon="check"></Icon>
-      <Icon v-else-if="isKeuzeCheckbox(keuze) && !getLidKeuze(keuze).selectie" icon="xmark"></Icon>
+      <Icon
+        v-else-if="isKeuzeCheckbox(keuze) && getLidKeuze(keuze).selectie"
+        icon="check"
+      ></Icon>
+      <Icon
+        v-else-if="isKeuzeCheckbox(keuze) && !getLidKeuze(keuze).selectie"
+        icon="xmark"
+      ></Icon>
       <span v-else v-html="renderSelectie(getLidKeuze(keuze))" />
     </td>
   </tr>
@@ -23,7 +26,7 @@ import { GroepKeuzeSelectie, GroepLid, KeuzeOptie } from '../../model/groep';
 import Icon from '../common/Icon.vue';
 
 @Component({
-  components: { Icon }
+  components: { Icon },
 })
 export default class GroepLidRow extends Vue {
   @Prop()
@@ -33,11 +36,13 @@ export default class GroepLidRow extends Vue {
   keuzes: KeuzeOptie[];
 
   private getLidKeuze(keuze: KeuzeOptie) {
-    return this.lid.opmerking2 ? this.lid.opmerking2.find((k) => k.naam === keuze.naam) : undefined;
+    return this.lid.opmerking2
+      ? this.lid.opmerking2.find((k) => k.naam === keuze.naam)
+      : undefined;
   }
 
   private isKeuzeCheckbox(keuze: KeuzeOptie) {
-    return keuze.type === GroepKeuzeType.CHECKBOX
+    return keuze.type === GroepKeuzeType.CHECKBOX;
   }
 
   private renderSelectie(lidKeuze: GroepKeuzeSelectie) {

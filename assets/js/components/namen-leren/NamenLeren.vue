@@ -219,7 +219,7 @@ interface Lid {
 }
 
 @Component({
-  components: { Icon }
+  components: { Icon },
 })
 export default class NamenLeren extends Vue {
   @Prop()

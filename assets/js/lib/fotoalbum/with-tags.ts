@@ -55,7 +55,9 @@ const withTags: GalleryDecorator = (constructor) =>
 
 			this.tagContainer = createElement(`<div class="tag-container"></div>`);
 			this.previewElement.appendChild(this.tagContainer);
-			const tagIcon = createElement('<i class="fas fa-face-grin" aria-hidden="true"></i>');
+			const tagIcon = createElement(
+				'<i class="fas fa-face-grin" aria-hidden="true"></i>'
+			);
 
 			const tagButton = createElement(`<span class="j-gallery-icon"></span>`, {
 				children: [tagIcon],
