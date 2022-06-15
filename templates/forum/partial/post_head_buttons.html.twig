@@ -12,7 +12,8 @@
 		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 			<li>
 				<a class="dropdown-item" href="#forumForm">
-					{{ icon('plus-circle') }} Nieuw bericht
+					{{ icon('toevoegen') }}
+					Nieuw bericht
 				</a>
 			</li>
 			<li>
@@ -65,8 +66,9 @@
 				</li>
 				<li>
 					<a href="{{ url('csrdelft_forum_forumdradenverbergen_tonen', {draad_id: draad.draad_id}) }}"
-						 class="btn btn-primary post ReloadPage tonenAan"
-						 title="Onderwerp tonen in zijbalk">{{ icon('folder-plus') }}</a>
+						 class="dropdown-item post ReloadPage tonenAan">
+						{{ icon('folder-plus') }} Onderwerp tonen in zijbalk
+					</a>
 				</li>
 			{% elseif draad.magVerbergen %}
 				<li>
@@ -74,8 +76,9 @@
 				</li>
 				<li>
 					<a href="{{ url('csrdelft_forum_forumdradenverbergen_verbergen', {draad_id: draad.draad_id}) }}"
-						 class="btn btn-primary post ReloadPage tonenUit"
-						 title="Onderwerp verbergen in zijbalk">{{ icon('folder-minus') }}</a>
+						 class="dropdown-item post ReloadPage tonenUit">
+						{{ icon('folder-minus') }} Onderwerp verbergen in zijbalk
+					</a>
 				</li>
 			{% endif %}
 			<li>
@@ -100,7 +103,7 @@
 		aria-label="Toolbar with button groups"
 	>
 		<div class="btn-group me-2" role="group">
-			<a class="btn btn-secondary text-white" href="#forumForm">
+			<a class="btn btn-secondary text-white" href="#forumForm" title="Nieuw bericht">
 				<i class="fas fa-plus-circle"></i>
 				Nieuw
 			</a>

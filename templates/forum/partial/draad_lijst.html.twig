@@ -7,7 +7,7 @@
 {% endif %}
 
 <div
-	class="list-group-item px-0 position-relative w-100"
+	class="list-group-item px-0 py-3 position-relative {% if loop.last %}border-0{% endif %} ms-sm-4"
 >
 	<span class="position-absolute top-50 start-0 translate-begin">
 		{% if draad.belangrijk %}

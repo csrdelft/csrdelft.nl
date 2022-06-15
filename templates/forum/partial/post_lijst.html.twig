@@ -13,7 +13,7 @@
 					{{ get_profiel(post.uid).link('user') | raw }}
 				</span>
 
-				<p class="text-black-50 m-0 fw-light">
+				<p class="text-black-50 m-0 fw-light text-truncate">
 					{% if lid_instelling('forum', 'datumWeergave') == 'relatief' %}
 						{{ post.datum_tijd | reldate }}
 					{% else %}

@@ -55,33 +55,34 @@
 		{{ include('forum/partial/draad_head_buttons.html.twig') }}
 	</header>
 
-	<section class="forum-deel list-group list-group-flush ps-sm-4">
+	<section class="forum-deel list-group list-group-flush">
 		{% if not deel.forumDraden %}
 			<div class="list-group-item">Dit forum is nog leeg.</div>
 		{% endif %}
 
 		{% for draad in deel.forumDraden %}
-			{{ include('forum/partial/draad_lijst.html.twig', {draad: draad}) }}
+			{{ include('forum/partial/draad_lijst.html.twig', { draad: draad }) }}
 		{% endfor %}
-	</section>
 
-	{% if paging is defined %}
-		{{ include('forum/partial/pagination.html.twig') }}
-	{% endif %}
-
-
-	{% if deel.magPosten %}
-		{{ include('forum/partial/draad_reageren.html.twig') }}
-		{% if app.user %}
-			<div class="meldingen">
-				<div id="draad-melding" class="alert alert-warning">
-					Hier kunt u een onderwerp toevoegen in deze categorie van het forum.
-					Kijkt u vooraf goed of het onderwerp waarover u post hier wel thuishoort.
-				</div>
-			</div>
+		{% if paging is defined %}
+			{{ include('forum/partial/pagination.html.twig') }}
 		{% endif %}
-		{{ include('forum/partial/post_form.html.twig', {draad: null}) }}
-	{% endif %}
+
+		{% if deel.magPosten %}
+			<hr class="tussenschot"></hr>
+
+			{{ include('forum/partial/draad_reageren.html.twig') }}
+			{% if app.user %}
+				<div class="meldingen">
+					<div id="draad-melding" class="alert alert-warning">
+						Hier kunt u een onderwerp toevoegen in deze categorie van het forum.
+						Kijkt u vooraf goed of het onderwerp waarover u post hier wel thuishoort.
+					</div>
+				</div>
+			{% endif %}
+			{{ include('forum/partial/post_form.html.twig', {draad: null}) }}
+		{% endif %}
+	</section>
 
 	{# FIXME: naar deel modal #}
 	{# {{ include('forum/partial/rss_link.html.twig') }} #}

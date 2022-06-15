@@ -21,6 +21,12 @@ i.fab {
 
 .list-group-item {
 	background-color: transparent;
+	width: 100%;
+}
+@include media-breakpoint-up(sm) {
+	.list-group-item {
+		max-width: calc(100% - $spacer * 1.5);
+	}
 }
 
 .draad-readonly {

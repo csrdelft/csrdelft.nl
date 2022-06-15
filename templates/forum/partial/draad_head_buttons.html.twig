@@ -10,17 +10,15 @@
 			Opties
 		</button>
 		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+			{% if deel.magPosten %}
 			<li>
-				<a
-					class="dropdown-item"
-					data-bs-toggle="modal"
-					data-bs-target="#nieuwDraadjeModal"
-				>
-					<i class="fas fa-plus-circle"></i>
+				<a class="dropdown-item" href="#forumForm">
+					{{ icon('toevoegen') }}
 					Nieuw draadje
 				</a>
 			</li>
 			<li><hr class="dropdown-divider" /></li>
+			{% endif %}
 			{% if is_granted('ROLE_ADMIN') and deel is defined and deel.forum_id is not empty %}
 				<li>
 					<a
@@ -94,18 +92,14 @@
 		role="toolbar"
 		aria-label="Toolbar with button groups"
 	>
+		{% if deel.magPosten %}
 		<div class="btn-group me-2" role="group">
-			<button
-				type="button"
-				class="btn btn-secondary text-white"
-				data-bs-toggle="modal"
-				data-bs-target="#nieuwDraadjeModal"
-				title="Nieuw draadje"
-			>
-				<i class="fas fa-plus-circle"></i>
+			<a class="btn btn-secondary text-white" href="#forumForm" title="Nieuw draadje">
+				{{ icon('toevoegen') }}
 				Nieuw
-			</button>
+			</a>
 		</div>
+		{% endif %}
 
 		{% if is_granted('ROLE_ADMIN') and deel is defined and deel.forum_id is not empty %}
 			<div class="btn-group me-2" role="group">

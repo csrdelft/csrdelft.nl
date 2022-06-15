@@ -36,13 +36,13 @@
 					method="post">
 					{{ csrfField() }}
 					{% if not app.user %}
-						<input type="text" name="email" class="FormElement TextField forumEmail form-control"
+						<input type="text" name="email" class="my-2 FormElement TextField forumEmail form-control"
 									placeholder="E-mailadres"/>
-						<input type="text" name="firstname" value="" class="FormElement TextField verborgen"/>
+						<input type="text" name="firstname" value="" class="my-2 FormElement TextField verborgen"/>
 						{# spam trap, must be kept empty! #}
 					{% endif %}
 					{% if draad is empty %}
-						<input type="text" id="nieuweTitel" name="titel" class="FormElement TextField form-control" tabindex="1"
+						<input type="text" id="nieuweTitel" name="titel" class="my-2 FormElement TextField form-control" tabindex="1"
 									placeholder="Onderwerp titel" value="{{ post_form_titel }}" origvalue="{{ post_form_titel }}"/>
 					{% endif %}
 					<input type="hidden" name="forumBericht" id="forumBericht" value="{{ post_form_tekst|json_encode }}">
