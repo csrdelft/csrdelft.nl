@@ -14,14 +14,6 @@
 	<header class="d-flex justify-content-between align-items-center">
 		<h1>Forum</h1>
 
-		{# TODO: De plus knop ook in head_buttons #}
-		{# {% if is_granted('ROLE_ADMIN') %}
-			<div class="btn-group me-2">
-				<a href="{{ url('csrdelft_forum_forumdeel_aanmaken') }}" class="btn btn-secondary post popup"
-					title="Deelforum aanmaken">{{ icon('add') }} Nieuw</a>
-			</div>
-		{% endif %} #}
-
 		{{ include('forum/partial/deel_head_buttons.html.twig') }}
 	</header>
 
