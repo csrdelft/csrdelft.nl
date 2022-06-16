@@ -28,7 +28,7 @@ class PeilingOptieTable extends DataTable
 				'/peilingen/opties/' . $id . '/toevoegen',
 				'Toevoegen',
 				'Optie toevoegen',
-				'add'
+				'toevoegen'
 			)
 		);
 		$this->addRowKnop(

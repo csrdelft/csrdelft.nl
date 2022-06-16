@@ -85,7 +85,7 @@ class CiviSaldoTable extends AbstractDataTableType
 					'csrdelft_fiscaat_beheercivisaldo_inleggen'
 				),
 				'Saldo van lid ophogen',
-				'coins_add'
+				'coins'
 			)
 		);
 		$builder->addRowKnop(
@@ -94,7 +94,7 @@ class CiviSaldoTable extends AbstractDataTableType
 					'csrdelft_fiscaat_beheercivisaldo_verwijderen'
 				),
 				'Saldo van lid verwijderen',
-				'bin',
+				'verwijderen',
 				'confirm'
 			)
 		);

@@ -43,7 +43,7 @@ class PinTransactieMatchTableType extends AbstractDataTableType
 			Multiplicity::None(),
 			'Weergave',
 			'Weergave van de tabel',
-			'cart'
+			'cart-shopping'
 		);
 		$weergave->addKnop(
 			new SourceChangeDataTableKnop(
@@ -53,7 +53,7 @@ class PinTransactieMatchTableType extends AbstractDataTableType
 				),
 				'Met fouten',
 				'Fouten weergeven',
-				'cart_error'
+				'xmark'
 			)
 		);
 		$weergave->addKnop(
@@ -64,7 +64,7 @@ class PinTransactieMatchTableType extends AbstractDataTableType
 				),
 				'Alles',
 				'Alles weergeven',
-				'cart'
+				'tonen'
 			)
 		);
 		$builder->addKnop($weergave);
@@ -75,7 +75,7 @@ class PinTransactieMatchTableType extends AbstractDataTableType
 				$this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_verwerk'),
 				'Verwerk',
 				'Dit probleem verwerken',
-				'cart_edit'
+				'cart-arrow-down'
 			)
 		);
 		$builder->addKnop(
@@ -86,7 +86,7 @@ class PinTransactieMatchTableType extends AbstractDataTableType
 				),
 				'Ontkoppel',
 				'Ontkoppel bestelling en transactie',
-				'arrow_divide'
+				'code-branch'
 			)
 		);
 		$builder->addKnop(
@@ -95,7 +95,7 @@ class PinTransactieMatchTableType extends AbstractDataTableType
 				$this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_koppel'),
 				'Koppel',
 				'Koppel een bestelling en transactie',
-				'arrow_join'
+				'code-merge'
 			)
 		);
 		$builder->addKnop(
@@ -104,7 +104,7 @@ class PinTransactieMatchTableType extends AbstractDataTableType
 				$this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_info'),
 				'Info',
 				'Bekijk informatie over de gekoppelde bestelling',
-				'magnifier'
+				'search'
 			)
 		);
 		$builder->addKnop(
@@ -113,7 +113,7 @@ class PinTransactieMatchTableType extends AbstractDataTableType
 				$this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_negeer'),
 				'Negeer',
 				'Negeer match(es)',
-				'delete'
+				'verwijderen'
 			)
 		);
 		$builder->addKnop(
@@ -124,7 +124,7 @@ class PinTransactieMatchTableType extends AbstractDataTableType
 				),
 				'Heroverweeg',
 				'Controleer op veranderingen in andere systemen',
-				'cart_go'
+				'arrow-right'
 			)
 		);
 

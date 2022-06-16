@@ -37,7 +37,7 @@ class EetplanHuizenTable extends AbstractDataTableType
 			new DataTableRowKnop(
 				$this->urlGenerator->generate('csrdelft_eetplan_woonoorden_toggle'),
 				'Woonoord aan/af melden voor eetplan',
-				'arrow_refresh'
+				'arrows-rotate'
 			)
 		);
 	}

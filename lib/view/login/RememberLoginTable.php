@@ -33,7 +33,7 @@ class RememberLoginTable extends DataTable
 				'/session/forget-all',
 				'Alles verwijderen',
 				'Automatisch inloggen van alle apparaten verwijderen',
-				'delete'
+				'verwijderen'
 			)
 		);
 		$this->addKnop(
@@ -42,7 +42,7 @@ class RememberLoginTable extends DataTable
 				'/session/remember',
 				'Toevoegen',
 				'Automatisch inloggen vanaf dit apparaat',
-				'add'
+				'toevoegen'
 			)
 		);
 
@@ -50,21 +50,21 @@ class RememberLoginTable extends DataTable
 			new DataTableRowKnop(
 				'/session/remember',
 				'Wijzig naam van apparaat',
-				'pencil'
+				'bewerken'
 			)
 		);
 		$this->addRowKnop(
 			new DataTableRowKnop(
 				'/session/lockip',
 				'(Ont)Koppel IP, alleen inloggen vanaf bepaald IP-adres',
-				'lock'
+				'slotje'
 			)
 		);
 		$this->addRowKnop(
 			new DataTableRowKnop(
 				'/session/forget',
 				'Stop automatische login voor dit apparaat',
-				'delete'
+				'verwijderen'
 			)
 		);
 	}

@@ -22,7 +22,7 @@ class OAuth2RefreshTokenTable extends DataTable
 			new DataTableRowKnop(
 				'/session/oauth2-refresh-token-revoke/:identifier',
 				'Revoke',
-				'delete'
+				'verwijderen'
 			)
 		);
 	}

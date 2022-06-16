@@ -49,7 +49,7 @@ class OAuth2RememberTable implements DataTableTypeInterface
 					['id' => ':id']
 				),
 				'Verwijderen',
-				'cross',
+				'verwijderen',
 				'confirm'
 			)
 		);

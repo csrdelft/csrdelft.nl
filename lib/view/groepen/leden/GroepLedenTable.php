@@ -41,21 +41,21 @@ class GroepLedenTable extends DataTable
 					$groep->getUrl() . '/aanmelden',
 					'Aanmelden',
 					'Lid toevoegen',
-					'user_add'
+					'user-plus'
 				)
 			);
 			$this->addRowKnop(
 				new DataTableRowKnop(
 					$groep->getUrl() . '/bewerken/:uid',
 					'Lidmaatschap bewerken',
-					'user_edit'
+					'user-pen'
 				)
 			);
 			$this->addRowKnop(
 				new DataTableRowKnop(
 					$groep->getUrl() . '/afmelden/:uid',
 					'Leden verwijderen',
-					'user_delete',
+					'user-minus',
 					'confirm'
 				)
 			);
@@ -64,7 +64,7 @@ class GroepLedenTable extends DataTable
 					new DataTableRowKnop(
 						$groep->getUrl() . '/naar_ot/:uid',
 						'Naar o.t. groep verplaatsen',
-						'user_go',
+						'folder-tree',
 						'confirm'
 					)
 				);
