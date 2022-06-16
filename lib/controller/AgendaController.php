@@ -176,9 +176,9 @@ class AgendaController extends AbstractController
 		$result = [];
 		foreach ($items as $item) {
 			$begin = $item->getBeginMoment();
-			$d = date('d', $begin);
-			$m = date('m', $begin);
-			$y = date('Y', $begin);
+			$d = $begin->format('d');
+			$m = $begin->format('m');
+			$y = $begin->format('Y');
 			if ($item->getUrl()) {
 				$url = $item->getUrl();
 			} else {
@@ -187,7 +187,7 @@ class AgendaController extends AbstractController
 			$result[] = [
 				'icon' => Icon::getTag('calendar'),
 				'url' => $url,
-				'label' => $d . ' ' . strftime('%b', $begin) . ' ' . $y,
+				'label' => $d . ' ' . date_format_intl($begin, 'LLLL') . ' ' . $y,
 				'value' => $item->getTitel(),
 			];
 		}
@@ -437,20 +437,20 @@ class AgendaController extends AbstractController
 			// Zet eindmoment naar dag erna als activiteit tot 23:59 duurt en allDay is
 			if (
 				$event->isHeledag() &&
-				date('H:i', $event->getEindMoment()) === '23:59'
+				$event->getEindMoment()->format('H:i') === '23:59'
 			) {
-				$eind = date_create_immutable('@' . $event->getEindMoment())
+				$eind = $event
+					->getEindMoment()
 					->add(new DateInterval('P1D'))
-					->setTime(0, 0, 0)
-					->getTimestamp();
+					->setTime(0, 0, 0);
 			} else {
 				$eind = $event->getEindMoment();
 			}
 
 			$eventsJson[] = [
 				'title' => $event->getTitel(),
-				'start' => date('c', $event->getBeginMoment()),
-				'end' => date('c', $eind),
+				'start' => $event->getBeginMoment()->format('c'),
+				'end' => $eind->format('c'),
 				'allDay' => $event->isHeledag(),
 				'id' => $event->getUUID(),
 				'textColor' => '#FFF',

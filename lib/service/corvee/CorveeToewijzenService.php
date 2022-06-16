@@ -117,10 +117,9 @@ class CorveeToewijzenService
 			if (
 				$corveePuntenOverzichten[$uid]->laatste !== null &&
 				$corveePuntenOverzichten[$uid]->laatste->getBeginMoment() >=
-					strtotime(
-						instelling('corvee', 'suggesties_recent_verbergen'),
-						$taak->getBeginMoment()
-					)
+					$taak
+						->getBeginMoment()
+						->modify(instelling('corvee', 'suggesties_recent_verbergen'))
 			) {
 				$corveePuntenOverzichten[$uid]->recent = true;
 			} else {

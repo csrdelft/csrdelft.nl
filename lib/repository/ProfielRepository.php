@@ -395,7 +395,7 @@ class ProfielRepository extends AbstractRepository
 			$change = new ProfielLogCoveeTakenVerwijderChange([]);
 			foreach ($taken as $taak) {
 				$change->corveetaken[] =
-					strftime('%a %e-%m-%Y', $taak->getBeginMoment()) .
+					date_format_intl($taak->getBeginMoment(), 'E d-MM yyyy') .
 					' ' .
 					$taak->corveeFunctie->naam;
 			}

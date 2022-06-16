@@ -2,11 +2,15 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
+/**
+ * Implementeerd @see HeeftAanmeldRechten
+ */
 trait GroepAanmeldRechten
 {
 	/**
@@ -16,6 +20,16 @@ trait GroepAanmeldRechten
 	 * @Serializer\Groups("datatable")
 	 */
 	public $rechtenAanmelden;
+
+	public function getAanmeldRechten()
+	{
+		return $this->rechtenAanmelden;
+	}
+
+	public function setAanmeldRechten($rechten)
+	{
+		$this->rechtenAanmelden = $rechten;
+	}
 
 	/**
 	 * Has permission for action?

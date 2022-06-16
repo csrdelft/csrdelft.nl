@@ -8,6 +8,9 @@ use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\groepen\enum\CommissieFunctie;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuze;
@@ -252,21 +255,21 @@ class Groep implements DataTableEntry, DisplayEntity
 		}
 
 		if (
-			in_array(GroepAanmeldLimiet::class, class_uses($this)) &&
+			$this instanceof HeeftAanmeldLimiet &&
 			!$this->magAanmeldLimiet($action)
 		) {
 			return false;
 		}
 
 		if (
-			in_array(GroepAanmeldMoment::class, class_uses($this)) &&
+			$this instanceof HeeftAanmeldMoment &&
 			!$this->magAanmeldMoment($action)
 		) {
 			return false;
 		}
 
 		if (
-			in_array(GroepAanmeldRechten::class, class_uses($this)) &&
+			$this instanceof HeeftAanmeldRechten &&
 			!$this->magAanmeldRechten($action)
 		) {
 			return false;

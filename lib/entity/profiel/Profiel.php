@@ -581,7 +581,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 *
 	 * @return int timestamp
 	 */
-	public function getBeginMoment()
+	public function getBeginMoment(): DateTimeImmutable
 	{
 		$dag = $this->gebdatum->format('m-d');
 		if (isset($GLOBALS['agenda_van'], $GLOBALS['agenda_tot'])) {
@@ -607,12 +607,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		} else {
 			$datum = date_create_immutable(date('Y') . '-' . $dag . ' 00:00:00');
 		}
-		return $datum->getTimestamp();
+		return $datum;
 	}
 
-	public function getEindMoment()
+	public function getEindMoment(): DateTimeImmutable
 	{
-		return $this->getBeginMoment() + 3600;
+		return $this->getBeginMoment()->add(new \DateInterval('PT1H'));
 	}
 
 	public function isHeledag()
@@ -628,8 +628,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	public function getBeschrijving()
 	{
 		$leeftijd =
-			date('Y', $this->getBeginMoment()) -
-			date('Y', $this->gebdatum->getTimestamp());
+			$this->getBeginMoment()->format('Y') - $this->gebdatum->format('Y');
 
 		if ($leeftijd == 0) {
 			return $this->getTitel() . ' wordt geboren';

@@ -222,7 +222,7 @@ function escape_ical($string)
 }
 
 /**
- * Zie http://userguide.icu-project.org/formatparse/datetime voor de geaccepteerde formats
+ * Zie https://unicode-org.github.io/icu/userguide/format_parse/datetime/#date-field-symbol-table voor de geaccepteerde formats
  *
  * @param DateTimeInterface $date
  * @param $format

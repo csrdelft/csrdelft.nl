@@ -74,17 +74,17 @@ class AgendaItem implements Agendeerbaar
 	 */
 	public $link;
 
-	public function getBeginMoment()
+	public function getBeginMoment(): DateTimeImmutable
 	{
-		return $this->begin_moment->getTimestamp();
+		return $this->begin_moment;
 	}
 
-	public function getEindMoment()
+	public function getEindMoment(): DateTimeImmutable
 	{
-		if ($this->eind_moment and $this->eind_moment !== $this->begin_moment) {
-			return $this->eind_moment->getTimestamp();
+		if ($this->eind_moment && $this->eind_moment !== $this->begin_moment) {
+			return $this->eind_moment;
 		}
-		return $this->getBeginMoment() + 1800;
+		return $this->getBeginMoment()->add(new \DateInterval('PT30M'));
 	}
 
 	public function getTitel()
@@ -109,9 +109,9 @@ class AgendaItem implements Agendeerbaar
 
 	public function isHeledag()
 	{
-		$begin = date('H:i', $this->getBeginMoment());
-		$eind = date('H:i', $this->getEindMoment());
-		return $begin == '00:00' and ($eind == '23:59' or $eind == '00:00');
+		$begin = $this->getBeginMoment()->format('H:i');
+		$eind = $this->getEindMoment()->format('H:i');
+		return $begin == '00:00' && ($eind == '23:59' || $eind == '00:00');
 	}
 
 	public function magBekijken($ical = false)

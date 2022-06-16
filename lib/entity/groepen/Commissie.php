@@ -4,6 +4,7 @@ namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\Enum;
 use CsrDelft\entity\groepen\enum\CommissieSoort;
+use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
@@ -20,7 +21,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\CommissiesRepository")
  */
-class Commissie extends Groep implements HeeftSoort
+class Commissie extends Groep implements HeeftSoort, HeeftMoment
 {
 	use GroepMoment;
 	/**

@@ -81,7 +81,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 	) {
 		if (
 			!$maaltijd->gesloten &&
-			$maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))
+			$maaltijd->getBeginMoment() < date_create_immutable()
 		) {
 			ContainerFacade::getContainer()
 				->get(MaaltijdenRepository::class)
@@ -283,7 +283,10 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 		if (!$this->getIsAangemeld($maaltijd->maaltijd_id, $profiel->uid)) {
 			throw new CsrGebruikerException('Niet aangemeld');
 		}
-		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
+		if (
+			!$maaltijd->gesloten &&
+			$maaltijd->getBeginMoment() < date_create_immutable()
+		) {
 			ContainerFacade::getContainer()
 				->get(MaaltijdenRepository::class)
 				->sluitMaaltijd($maaltijd);
@@ -485,7 +488,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 		$bestelling->moment = new DateTime();
 		$bestelling->comment = sprintf(
 			'Datum maaltijd: %s',
-			date('Y-M-d', $aanmelding->maaltijd->getBeginMoment())
+			$aanmelding->maaltijd->getBeginMoment()->format('Y-M-d')
 		);
 
 		$inhoud = new CiviBestellingInhoud();

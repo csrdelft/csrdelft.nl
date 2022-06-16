@@ -10,6 +10,7 @@ use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\service\security\LoginService;
@@ -47,7 +48,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdenRepository")
  * @ORM\Table("mlt_maaltijden")
  */
-class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
+class Maaltijd implements Agendeerbaar, DisplayEntity
 {
 	/**
 	 * @var integer
@@ -252,14 +253,14 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity
 		return $this->titel;
 	}
 
-	public function getBeginMoment()
+	public function getBeginMoment(): DateTimeImmutable
 	{
-		return $this->getMoment()->getTimestamp();
+		return $this->getMoment();
 	}
 
-	public function getEindMoment()
+	public function getEindMoment(): DateTimeImmutable
 	{
-		return $this->getBeginMoment() + 7200;
+		return $this->getBeginMoment()->add(new \DateInterval('PT1H30M'));
 	}
 
 	public function getBeschrijving()

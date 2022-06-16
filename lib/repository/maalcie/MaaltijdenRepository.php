@@ -250,7 +250,7 @@ class MaaltijdenRepository extends AbstractRepository
 				'm.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum'
 			)
 			->setParameter('van_datum', $timestamp)
-			->setParameter('tot_datum', date_create())
+			->setParameter('tot_datum', date_create_immutable())
 			->setMaxResults($limit)
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
@@ -259,7 +259,7 @@ class MaaltijdenRepository extends AbstractRepository
 		$maaltijdenById = [];
 		foreach ($maaltijden as $maaltijd) {
 			// Sla over als maaltijd nog niet voorbij is
-			if ($maaltijd->getEindMoment() > time()) {
+			if ($maaltijd->getEindMoment() > date_create_immutable()) {
 				continue;
 			}
 			$maaltijdenById[$maaltijd->maaltijd_id] = $maaltijd;
@@ -327,7 +327,10 @@ class MaaltijdenRepository extends AbstractRepository
 		} else {
 			$this->_em->persist($maaltijd);
 			$this->_em->flush();
-			if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
+			if (
+				!$maaltijd->gesloten &&
+				$maaltijd->getBeginMoment() < date_create_immutable()
+			) {
 				$this->sluitMaaltijd($maaltijd);
 			}
 			if (
@@ -432,17 +435,20 @@ class MaaltijdenRepository extends AbstractRepository
 		$result = [];
 		foreach ($maaltijden as $maaltijd) {
 			// Verberg afgelopen maaltijd
-			if ($verbergVerleden && $maaltijd->getEindMoment() < time()) {
+			if (
+				$verbergVerleden &&
+				$maaltijd->getEindMoment() < date_create_immutable()
+			) {
 				continue;
 			}
 
 			// Kan en mag aanmelden of mag maaltijdlijst zien en sluiten? Dan maaltijd ook zien.
 			if (
-				$maaltijd->aanmeld_limiet > 0 and
+				($maaltijd->aanmeld_limiet > 0 &&
 					$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
 						$uid,
 						$maaltijd->aanmeld_filter
-					) or
+					)) ||
 				$maaltijd->magBekijken($uid)
 			) {
 				$result[$maaltijd->maaltijd_id] = $maaltijd;

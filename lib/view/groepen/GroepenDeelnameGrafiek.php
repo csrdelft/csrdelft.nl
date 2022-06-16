@@ -5,6 +5,7 @@ namespace CsrDelft\view\groepen;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepMoment;
+use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
@@ -43,9 +44,8 @@ class GroepenDeelnameGrafiek implements View, ToResponse
 			$aantalVrouwen[] = $vrouwen;
 			$groepNamen[] = $groep->naam;
 
-			if (in_array(GroepMoment::class, class_uses($groep))) {
-				/** @var GroepMoment $groep */
-				$groepJaren[] = $groep->beginMoment->format('Y');
+			if ($groep instanceof HeeftMoment) {
+				$groepJaren[] = $groep->getBeginMoment()->format('Y');
 			} else {
 				$groepJaren[] = '000' . $index++;
 			}

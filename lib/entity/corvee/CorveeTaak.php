@@ -241,14 +241,14 @@ class CorveeTaak implements Agendeerbaar
 		return $this->taak_id . '@corveetaak.csrdelft.nl';
 	}
 
-	public function getBeginMoment()
+	public function getBeginMoment(): DateTimeImmutable
 	{
-		return $this->datum->getTimestamp();
+		return $this->datum;
 	}
 
-	public function getEindMoment()
+	public function getEindMoment(): DateTimeImmutable
 	{
-		return $this->getBeginMoment() + 7200;
+		return $this->getBeginMoment()->add(new DateInterval('PT1H30M'));
 	}
 
 	public function getTitel()
