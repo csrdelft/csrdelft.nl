@@ -1,4 +1,12 @@
 {% if app.user %}
+	{% if app.user and app.user.privateToken %}
+		{% set rss_link = absolute_url(app.user.rssLink) %}
+	{% elseif not app.user %}
+		{% set rss_link = url('csrdelft_forum_forum_rss') %}
+	{% else %}
+		{% set rss_link = null %}
+	{% endif %}
+
 	<div class="dropdown d-block d-md-none">
 		<button
 			class="btn btn-primary dropdown-toggle"
@@ -88,6 +96,7 @@
 				<button
 					type="button"
 					class="dropdown-item rssFeedButton"
+					data-rss-link="{{ rss_link }}"
 				>
 					{{ icon('feed') }} RSS feed link delen
 				</button>
@@ -95,6 +104,7 @@
 				<button
 					type="button"
 					class="dropdown-item forumLinkButton"
+					data-forum-link="{{ app.request.getUri() }}"
 				>
 					{{ icon('share-alt') }} Draadje link delen
 				</button>
@@ -112,20 +122,20 @@
 		role="toolbar"
 		aria-label="Toolbar with button groups"
 	>
-		<div class="btn-group me-2" role="group">
+		<div class="btn-group me-2 mt-1" role="group">
 			<a class="btn btn-secondary text-white" href="#forumForm" title="Nieuw bericht">
 				{{ icon('toevoegen') }}
 				Nieuw
 			</a>
 		</div>
 
-		<div class="btn-group me-2" role="group">
+		<div class="btn-group me-2 mt-1" role="group">
 			<a title="Onderwerp toevoegen aan favorieten" class="btn btn-primary post popup addfav"
 				 href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: 'favoriet'}) }}">{{ icon('heart-circle-plus') }}</a>
 		</div>
 
 		{% if statistiek is none and draad.magStatistiekBekijken %}
-			<div class="btn-group me-2" role="group">
+			<div class="btn-group me-2 mt-1" role="group">
 				<a
 					href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, pagina: getHuidigePagina(), statistiek: 'statistiek'}) }}"
 					class="btn btn-primary" title="Toon statistieken">{{ icon('chart-line') }}</a>
@@ -133,7 +143,7 @@
 		{% endif %}
 
 		{% if draad.magModereren %}
-			<div class="btn-group me-2" role="group">
+			<div class="btn-group me-2 mt-1" role="group">
 				<button type="button" class="btn btn-primary modfuncties" title="Moderatie-functies weergeven"
 								data-bs-toggle="modal" data-bs-target="#modereren">
 					{{ icon('wrench') }}
@@ -152,13 +162,13 @@
 		{% endif %}
 
 		{% if draad.verborgen %}
-			<div class="btn-group me-2">
+			<div class="btn-group me-2 mt-1">
 				<a href="{{ url('csrdelft_forum_forumdradenverbergen_tonen', {draad_id: draad.draad_id}) }}"
 					 class="btn btn-primary post ReloadPage tonenAan"
 					 title="Onderwerp tonen in zijbalk">{{ icon('folder-plus') }}</a>
 			</div>
 		{% elseif draad.magVerbergen %}
-			<div class="btn-group me-2">
+			<div class="btn-group me-2 mt-1">
 				<a href="{{ url('csrdelft_forum_forumdradenverbergen_verbergen', {draad_id: draad.draad_id}) }}"
 					 class="btn btn-primary post ReloadPage tonenUit"
 					 title="Onderwerp verbergen in zijbalk">{{ icon('folder-minus') }}</a>
@@ -166,7 +176,7 @@
 		{% endif %}
 
 		{# {% if draad.magMeldingKrijgen %}
-            <div class="btn-group me-2">
+            <div class="btn-group me-2 mt-1">
                 <a href="{{ url('csrdelft_forum_meldingsniveau', {draad_id: draad.draad_id, niveau: 'nooit'}) }}"
                         class="btn btn-primary post ReloadPage melding-nooit {% if draad.meldingsNiveau.isNOOIT %}active{% endif %}"
                         title="Nooit meldingen ontvangen">{{ icon('email_delete', 'email_delete') }}</a>
@@ -184,6 +194,7 @@
 				type="button"
 				class="btn btn-primary rssFeedButton"
 				title="RSS feed link delen"
+				data-rss-link="{{ rss_link }}"
 			>
 				{{ icon('feed') }}
 			</button>
@@ -192,6 +203,7 @@
 				type="button"
 				class="btn btn-primary forumLinkButton"
 				title="Draadje link delen"
+				data-forum-link="{{ app.request.getUri() }}"
 			>
 				{{ icon('share-alt') }}
 			</button>
@@ -237,6 +249,4 @@
 			</div>
 		</div>
 	{% endif %}
-
-	{{ include('forum/partial/delen_buttons.html.twig') }}
 {% endif %}

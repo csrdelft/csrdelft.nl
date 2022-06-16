@@ -69,3 +69,82 @@ for (const citeerKnop of selectAll<HTMLElement>('a.citeren')) {
 		forumCiteren(citeerKnop.dataset.citeren)
 	);
 }
+
+const berichtLinkButtons = selectAll<HTMLElement>('.berichtLinkButton');
+
+// Event listener om forum feed te delen
+berichtLinkButtons.forEach((item) => {
+	const berichtLink = item.dataset.berichtLink;
+	
+	item.addEventListener('click', async () => {
+		try {
+			if ('share' in navigator) {
+				await navigator.share({
+					title: 'C.S.R. Delft Forum',
+					url: berichtLink,
+				});
+			} else if ('clipboard' in navigator) {
+				await navigator.clipboard.writeText(berichtLink);
+				alert('Bericht link is gekopieerd naar het clipboard'); // TODO: kan eleganter
+			} else {
+				throw new Error('Kan niets met bericht link');
+			}
+		} catch (err) {
+			console.error(err.message);
+		}
+	});
+});
+
+const rssFeedButtons = selectAll<HTMLElement>('.rssFeedButton');
+const forumLinkButtons = selectAll<HTMLElement>('.forumLinkButton');
+
+// Event listener om RSS feed te delen
+rssFeedButtons.forEach((item) => {
+	const rssLink = item.dataset.rssLink;
+
+	item.addEventListener('click', async () => {
+		console.log('rss', rssLink);
+		try {
+			if (rssLink === null) {
+				await location.assign('/profiel/{{ app.user.uid }}#tokenaanvragen');
+			} else if ('share' in navigator) {
+				await navigator.share({
+					title: 'C.S.R. Delft Forum RSS feed',
+					url: rssLink,
+				});
+			} else if ('clipboard' in navigator) {
+				await navigator.clipboard.writeText(rssLink);
+				alert('RSS feed link is gekopieerd naar het clipboard'); // TODO: kan eleganter
+			} else {
+				throw new Error('Kan niets met RSS feed');
+			}
+		} catch (err) {
+			console.error(err.message);
+		}
+	});
+});
+
+// Event listener om forum feed te delen
+forumLinkButtons.forEach((item) => {
+	const forumLink = item.dataset.forumLink;
+
+	item.addEventListener('click', async () => {
+		console.log('forum', forumLink);
+
+		try {
+			if ('share' in navigator) {
+				await navigator.share({
+					title: 'C.S.R. Delft Forum',
+					url: forumLink,
+				});
+			} else if ('clipboard' in navigator) {
+				await navigator.clipboard.writeText(forumLink);
+				alert('Forum link is gekopieerd naar het clipboard'); // TODO: kan eleganter
+			} else {
+				throw new Error('Kan niets met forum link');
+			}
+		} catch (err) {
+			console.error(err.message);
+		}
+	});
+});

@@ -59,35 +59,6 @@
 			{% endif %}
 		{% endfor %}
 
-		{# FIXME: in javascript file #}
-		<script type="text/javascript">
-			const berichtLinkButtons = document.querySelectorAll('.berichtLinkButton');
-
-			// Event listener om forum feed te delen
-			berichtLinkButtons.forEach((item) => {
-				console.log(item.dataset);
-				const berichtLink = item.dataset.berichtLink;
-				item.addEventListener('click', async () => {
-					try {
-						if ('share' in navigator) {
-							await navigator.share({
-								title: 'C.S.R. Delft Forum',
-								url: berichtLink
-							});
-						} else if ('clipboard' in navigator) {
-							await navigator.clipboard.writeText(berichtLink);
-							alert('Bericht link is gekopieerd naar het clipboard'); // TODO: kan eleganter
-						} else {
-							throw new Error('Kan niets met bericht link');
-						}
-
-					} catch(err) {
-						console.error(err.message);
-					}
-				});
-			});
-		</script>
-
 		{# Paginering onderaan pagina #}
 		{% if paging %}
 			{% block paginering %}
