@@ -51,8 +51,8 @@ class BbLocatie extends BbTag
 		return '<span class="hoverIntent"><a href="' .
 			$url .
 			'">' .
-			$address .
 			Icon::getTag('map', null, 'Kaart', 'text') .
+			$address .
 			'</a><span class="hoverIntentContent">' .
 			$map .
 			'</span></span>';
