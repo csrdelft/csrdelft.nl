@@ -148,12 +148,13 @@ class VoorpaginaController extends AbstractController
 	 * @return Response
 	 * @Route("/voorpagina/maaltijden")
 	 */
-	public function maaltijden(MaaltijdenRepository $maaltijdenRepository): Response
-	{
+	public function maaltijden(
+		MaaltijdenRepository $maaltijdenRepository
+	): Response {
 		$maaltijden = $maaltijdenRepository->getKomendeMaaltijdenVoorLid(
 			LoginService::getUid()
 		);
-		
+
 		$maaltijd = reset($maaltijden);
 
 		$aantal = sizeof($maaltijden);
