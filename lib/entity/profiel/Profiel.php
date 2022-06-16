@@ -929,9 +929,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return safe_combine_path(PASFOTO_PATH, $path);
 	}
 
-	public function getPasfotoTag($cssClass = 'pasfoto')
+	public function getPasfotoTag($cssClass = '')
 	{
-		return '<img class="' .
+		return '<img class="pasfoto ' .
 			htmlspecialchars($cssClass) .
 			'" src="' .
 			$this->getPasfotoPath() .
@@ -942,11 +942,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 
 	public function getPasfotoRounded()
 	{
-		return '<img class="pasfoto rounded-circle flex-shrink-0" src="' .
-			$this->getPasfotoPath() .
-			'" alt="Pasfoto van ' .
-			$this->getNaam() .
-			'" />';
+		return $this->getPasfotoTag('rounded-circle flex-shrink-0');
 	}
 
 	public function getPasfotoLink()
