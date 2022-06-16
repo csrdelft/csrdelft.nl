@@ -105,6 +105,10 @@ abstract class GroepRepository extends AbstractRepository
 				->andWhere('groep.familie = :familie')
 				->setParameter('familie', $familie);
 
+			if ($status == null) {
+				$status = 'ht';
+			}
+
 			if (in_array(strtolower($status), GroepStatus::getEnumValues())) {
 				$qb = $qb
 					->andWhere('groep.status = :status')
