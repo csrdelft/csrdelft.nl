@@ -63,7 +63,7 @@ $forum-bericht1-bg: darken($body-bg, 4%) !default;
 
 /* main menu */
 $menu-primary-hover: #0a338d !default;
-$menu-bg: #ffffff !default;
+$menu-bg: $primary !default;
 $menu-color: #000000 !default;
 $menu-small-bg: #0a338d !default;
 $menu-small-color: #ffffff !default;
