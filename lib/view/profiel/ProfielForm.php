@@ -39,6 +39,7 @@ use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\keuzevelden\VerticaleField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
+use CsrDelft\view\Icon;
 
 /**
  * @property ProfielRepository $model
@@ -47,7 +48,9 @@ class ProfielForm extends Formulier
 {
 	public function getBreadcrumbs()
 	{
-		return '<ol class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>' .
+		return '<ol class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
+			Icon::getTag('home') .
+			'</a></li>' .
 			'<li class="breadcrumb-item"><a href="/ledenlijst">Leden</a></li>' .
 			'<li class="breadcrumb-item">' .
 			$this->model->getLink('civitas') .

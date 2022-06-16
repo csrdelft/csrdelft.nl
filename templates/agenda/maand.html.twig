@@ -43,7 +43,7 @@
 			 data-creator="{{ creator ? "true" : "false" }}"></div>
 	<div id="ICAL" class="input-group mt-2" title="Houd deze url privé!&#013;Nieuwe aanvragen: zie je profiel">
 		<label class="input-group-text" for="ical-link">
-			<img src="{{ absolute_url('/images/ical.gif') }}" alt="ICAL"/>
+			{{ icon('calendar-check') }}
 		</label>
 		{% if app.user.privateToken %}
 			<input class="form-control" type="text" id="ical-link"

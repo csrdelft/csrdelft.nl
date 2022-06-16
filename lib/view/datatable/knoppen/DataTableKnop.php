@@ -67,6 +67,6 @@ class DataTableKnop implements JsonSerializable
 	 */
 	protected function getIconClass(): string
 	{
-		return $this->icon ? 'dt-button-ico dt-ico-' . Icon::get($this->icon) : '';
+		return $this->icon ? 'dt-button-ico fa-' . Icon::get($this->icon) : '';
 	}
 }

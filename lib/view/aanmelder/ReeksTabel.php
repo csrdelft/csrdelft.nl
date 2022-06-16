@@ -33,7 +33,7 @@ class ReeksTabel extends DataTable
 					'/aanmelder/beheer/reeks/nieuw',
 					'Nieuw',
 					'Nieuwe reeks aanmaken',
-					'add'
+					'toevoegen'
 				)
 			);
 		}
@@ -43,7 +43,7 @@ class ReeksTabel extends DataTable
 				'/aanmelder/beheer/reeks/bewerken',
 				'Bewerken',
 				'Deze reeks bewerken',
-				'pencil'
+				'bewerken'
 			)
 		);
 		if (Reeks::magAanmaken()) {
@@ -53,7 +53,7 @@ class ReeksTabel extends DataTable
 					'/aanmelder/beheer/reeks/verwijderen',
 					'Verwijderen',
 					'Activiteit verwijderen',
-					'cross'
+					'verwijderen'
 				)
 			);
 		}

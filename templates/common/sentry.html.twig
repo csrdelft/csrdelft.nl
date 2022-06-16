@@ -1,0 +1,6 @@
+{# Configuratie voor Sentry, zie sentry.ts #}
+{{ sentry_trace_meta() }}
+<meta name="sentry-app-env" content="{{ app.environment }}"/>
+<meta name="sentry-dsn" content="{{ sentry_dsn }}"/>
+<meta name="sentry-user" content="{{ app.user.uid }}"/>
+{{ js_asset('sentry') }}

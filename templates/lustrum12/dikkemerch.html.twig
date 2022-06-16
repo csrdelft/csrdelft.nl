@@ -17,13 +17,7 @@
 	{{ css_asset('common') }}
 	{{ css_asset('lustrummerch') }}
 
-	<script>
-		{# Configuratie voor Sentry, zie sentry.ts #}
-		APP_ENV = "{{ app.environment }}";
-		SENTRY_DSN_JS = "{{ sentry_dsn }}";
-		USER = "{{ app.user.uid }}";
-	</script>
-	{{ js_asset('sentry') }}
+	{% include 'common/sentry.html.twig' %}
 
 	<link rel="icon" href="/lustrum12/favicon.ico">
 </head>

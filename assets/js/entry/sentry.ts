@@ -1,19 +1,22 @@
 import * as Sentry from '@sentry/browser';
+import { BrowserTracing } from '@sentry/tracing';
+import { Integration } from '@sentry/types';
 
-declare global {
-	interface Window {
-		APP_ENV: string;
-		SENTRY_DSN_JS: string;
-		USER: string;
-	}
+const meta = document.getElementsByTagName('meta');
+
+const username = meta['sentry-user'].content;
+const environment = meta['sentry-app-env'].content;
+const dsn = meta['sentry-dsn'].content;
+
+if (username && environment && dsn) {
+	Sentry.init({
+		dsn,
+		environment,
+		integrations: [new BrowserTracing() as unknown as Integration],
+		tracesSampleRate: 1.0,
+	});
+
+	Sentry.setUser({
+		username,
+	});
 }
-
-Sentry.init({
-	dsn: window.SENTRY_DSN_JS,
-	environment: window.APP_ENV,
-	ignoreErrors: [/ChunkLoadError/],
-});
-
-Sentry.setUser({
-	username: window.USER,
-});

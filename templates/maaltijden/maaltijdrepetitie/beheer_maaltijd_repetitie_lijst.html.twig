@@ -1,9 +1,9 @@
 <tr id="repetitie-row-{{ repetitie.mlt_repetitie_id }}">
 	<td>
 		<a href="{{ url('csrdelft_maalcie_maaltijdrepetities_bewerk', {mlt_repetitie_id: repetitie.mlt_repetitie_id}) }}"
-			 title="Maaltijdrepetitie wijzigen" class="btn post popup">{{ icon("pencil") }}</a>
+			 title="Maaltijdrepetitie wijzigen" class="btn post popup">{{ icon("bewerken") }}</a>
 		<a href="{{ url('csrdelft_maalcie_corveerepetities_maaltijd', {mlt_repetitie_id: repetitie.mlt_repetitie_id}) }}"
-			 title="Corveebeheer maaltijdrepetitie" class="btn popup">{{ icon("chart_organisation") }}</a>
+			 title="Corveebeheer maaltijdrepetitie" class="btn popup">{{ icon("file-pen") }}</a>
 	</td>
 	<td>{{ repetitie.standaard_titel }}</td>
 	<td>{{ repetitie.dagVanDeWeekText }}</td>
@@ -11,10 +11,10 @@
 	<td>{{ repetitie.standaard_tijd | time_format }}</td>
 	<td>{{ repetitie.standaardPrijs | format_bedrag }}</td>
 	<td>{{ repetitie.standaard_limiet }}</td>
-	<td>{% if repetitie.abonneerbaar %}{{ icon("tick", null, "Abonneerbaar") }}{% endif %}</td>
+	<td>{% if repetitie.abonneerbaar %}{{ icon("check", null, "Abonneerbaar") }}{% endif %}</td>
 	<td>{{ repetitie.abonnement_filter }}</td>
 	<td class="col-del">
 		<a href="{{ url('csrdelft_maalcie_maaltijdrepetities_verwijder', {mlt_repetitie_id: repetitie.mlt_repetitie_id}) }}"
-			 title="Maaltijdrepetitie definitief verwijderen" class="btn post confirm">{{ icon("cross") }}</a>
+			 title="Maaltijdrepetitie definitief verwijderen" class="btn post confirm">{{ icon("verwijderen") }}</a>
 	</td>
 </tr>

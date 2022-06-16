@@ -10,10 +10,8 @@
 
 	{{ csrfMetaTag() }}
 
+	{% include 'common/sentry.html.twig' %}
 	<script>
-		APP_ENV = "{{ app.environment }}";
-		SENTRY_DSN_JS = "{{ sentry_dsn }}";
-		USER = "{{ app.user.uid }}";
 		setTimeout(function () {
 			document.getElementById('bottom').scrollIntoView();
 		}, 2000);

@@ -60,7 +60,9 @@ class GroepenView implements View
 
 	public function getBreadcrumbs()
 	{
-		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>' .
+		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
+			Icon::getTag('home') .
+			'</a></li>' .
 			'<li class="breadcrumb-item"><a href="/groepen">Groepen</a></li>' .
 			'<li class="breadcrumb-item active">' .
 			$this->getTitel() .
@@ -89,7 +91,7 @@ class GroepenView implements View
 				'/nieuw/' .
 				($this->soort ? $this->soort->getValue() : '') .
 				'">' .
-				Icon::getTag('add') .
+				Icon::getTag('toevoegen') .
 				' Toevoegen</a>';
 		}
 		$html .=
@@ -105,7 +107,7 @@ class GroepenView implements View
 				'/' .
 				$this->geschiedenis .
 				'/deelnamegrafiek">' .
-				Icon::getTag('chart_bar') .
+				Icon::getTag('chart-line') .
 				' Deelnamegrafiek</a>';
 		}
 		$view = new CmsPaginaView($this->pagina);

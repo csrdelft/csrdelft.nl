@@ -12,6 +12,7 @@ use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\knoppen\SourceChangeDataTableKnop;
 use CsrDelft\view\datatable\Multiplicity;
+use CsrDelft\view\Icon;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -97,6 +98,10 @@ class CiviProductTable extends DataTable
 
 	public function getBreadcrumbs()
 	{
-		return '<a href="/" title="Startpagina"><span class="fas fa-home module-icon"></span></a> » <a href="/fiscaat"><span class="fas fa-eur module-icon"></span></a> » <span class="active">Producten</span>';
+		return '<a href="/" title="Startpagina">' .
+			Icon::getTag('home', null, 'Voorpagina', 'module-icon') .
+			'</a> » <a href="/fiscaat">' .
+			Icon::getTag('money-bill', null, 'Fiscaat', 'module-icon') .
+			'</a> » <span class="active">Producten</span>';
 	}
 }

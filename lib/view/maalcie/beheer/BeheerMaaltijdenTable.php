@@ -68,7 +68,7 @@ class BeheerMaaltijdenTable extends DataTable
 				$this->dataUrl,
 				'Toekomst',
 				'Toekomst weergeven',
-				'time_go'
+				'arrow-rotate-right'
 			)
 		);
 		$weergave->addKnop(
@@ -76,7 +76,7 @@ class BeheerMaaltijdenTable extends DataTable
 				$this->dataUrl . '?filter=alles',
 				'Alles',
 				'Alles weergeven',
-				'time'
+				'clock'
 			)
 		);
 		$this->addKnop($weergave);
@@ -85,7 +85,7 @@ class BeheerMaaltijdenTable extends DataTable
 			Multiplicity::None(),
 			'Nieuw',
 			'Nieuwe maaltijd aanmaken',
-			'add'
+			'toevoegen'
 		);
 
 		foreach ($repetities as $repetitie) {
@@ -105,7 +105,7 @@ class BeheerMaaltijdenTable extends DataTable
 				$this->dataUrl . '/nieuw',
 				'Anders',
 				'Maaltijd zonder repetitie aanmaken',
-				'calendar_edit'
+				'file-pen'
 			)
 		);
 		$this->addKnop($nieuw);
@@ -123,7 +123,7 @@ class BeheerMaaltijdenTable extends DataTable
 			Multiplicity::One(),
 			'Aanmeldingen',
 			'Aanmeldingen bewerken',
-			'user'
+			'user-pen'
 		);
 		$aanmeldingen->addKnop(
 			new DataTableKnop(
@@ -131,7 +131,7 @@ class BeheerMaaltijdenTable extends DataTable
 				$this->dataUrl . '/aanmelden',
 				'Toevoegen',
 				'Aanmelding toevoegen',
-				'user_add'
+				'user-plus'
 			)
 		);
 		$aanmeldingen->addKnop(
@@ -140,7 +140,7 @@ class BeheerMaaltijdenTable extends DataTable
 				$this->dataUrl . '/afmelden',
 				'Verwijderen',
 				'Aanmelding verwijderen',
-				'user_delete'
+				'user-minus'
 			)
 		);
 
@@ -152,7 +152,7 @@ class BeheerMaaltijdenTable extends DataTable
 				$this->dataUrl . '/bewerk',
 				'Bewerken',
 				'Maaltijd bewerken',
-				'pencil'
+				'bewerken'
 			)
 		);
 		$this->addKnop(
@@ -161,7 +161,7 @@ class BeheerMaaltijdenTable extends DataTable
 				'/corvee/beheer/maaltijd/:maaltijd_id',
 				'Corvee bewerken',
 				'Gekoppelde corveetaken bewerken',
-				'chart_organisation'
+				'folder-tree'
 			)
 		);
 		$this->addKnop(
@@ -170,7 +170,7 @@ class BeheerMaaltijdenTable extends DataTable
 				$this->dataUrl . '/verwijder',
 				'Verwijderen',
 				'Maaltijd verwijderen',
-				'cross'
+				'verwijderen'
 			)
 		);
 
@@ -180,7 +180,7 @@ class BeheerMaaltijdenTable extends DataTable
 				'/maaltijden/lijst/:maaltijd_id',
 				'Maaltijdlijst',
 				'Maaltijdlijst bekijken',
-				'table_normal'
+				'tabel'
 			)
 		);
 	}

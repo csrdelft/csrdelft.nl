@@ -39,9 +39,13 @@
 					</a>
 					<ul class="dropdown-menu" aria-labelledby="menu-favorieten">
 						{{ include('menu/sub_tree.html.twig', {parent: favorieten}) }}
-						<li><a href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: 'favoriet'}) }}"
-									 class="dropdown-item post popup addfav"
-									 title="Huidige pagina toevoegen aan favorieten"><i class="fas fa-plus"></i> Favoriet toevoegen</a>
+						<li>
+							<a href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: 'favoriet'}) }}"
+								 class="dropdown-item post popup addfav"
+								 title="Huidige pagina toevoegen aan favorieten">
+								{{ icon('toevoegen') }}
+								Favoriet toevoegen
+							</a>
 						</li>
 					</ul>
 				</li>

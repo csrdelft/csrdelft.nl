@@ -44,7 +44,7 @@ class AanmeldActiviteitTabel extends DataTable
 				$this->dataUrl,
 				'Toekomst',
 				'Toekomst weergeven',
-				'time_go'
+				'arrow-rotate-right'
 			)
 		);
 		$weergave->addKnop(
@@ -52,7 +52,7 @@ class AanmeldActiviteitTabel extends DataTable
 				$this->dataUrl . '?filter=alles',
 				'Alles',
 				'Alles weergeven',
-				'time'
+				'clock'
 			)
 		);
 		$this->addKnop($weergave);
@@ -73,7 +73,7 @@ class AanmeldActiviteitTabel extends DataTable
 					'/aanmelder/beheer/activiteiten/nieuw/' . $reeks->getId(),
 					'Nieuw',
 					'Nieuwe activiteit aanmaken',
-					'add'
+					'toevoegen'
 				)
 			);
 			$this->addKnop(
@@ -82,7 +82,7 @@ class AanmeldActiviteitTabel extends DataTable
 					'/aanmelder/beheer/activiteiten/bewerken',
 					'Bewerken',
 					'Deze activiteit bewerken',
-					'pencil'
+					'bewerken'
 				)
 			);
 			$this->addKnop(
@@ -91,7 +91,7 @@ class AanmeldActiviteitTabel extends DataTable
 					'/aanmelder/beheer/activiteiten/verwijderen',
 					'Verwijderen',
 					'Activiteit verwijderen',
-					'cross'
+					'verwijderen'
 				)
 			);
 		}

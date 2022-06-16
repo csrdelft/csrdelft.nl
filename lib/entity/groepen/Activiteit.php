@@ -63,34 +63,19 @@ class Activiteit extends Groep implements
 		if ($soort && $soort instanceof ActiviteitSoort) {
 			switch ($soort) {
 				case ActiviteitSoort::OWee():
-					if (
-						LoginService::mag(
-							'commissie:OWeeCie',
-							$allowedAuthenticationMethods
-						)
-					) {
+					if (LoginService::mag('commissie:OWeeCie')) {
 						return true;
 					}
 					break;
 
 				case ActiviteitSoort::Dies():
-					if (
-						LoginService::mag(
-							'commissie:DiesCie',
-							$allowedAuthenticationMethods
-						)
-					) {
+					if (LoginService::mag('commissie:DiesCie')) {
 						return true;
 					}
 					break;
 
 				case ActiviteitSoort::Lustrum():
-					if (
-						LoginService::mag(
-							'commissie:LustrumCie',
-							$allowedAuthenticationMethods
-						)
-					) {
+					if (LoginService::mag('commissie:LustrumCie')) {
 						return true;
 					}
 					break;

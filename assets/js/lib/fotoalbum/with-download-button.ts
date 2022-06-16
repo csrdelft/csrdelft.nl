@@ -13,7 +13,7 @@ const withDownloadButton: GalleryDecorator = (constructor) =>
 
 			const downloadIcon = withTooltip(
 				createElement(
-					`<span class="j-gallery-icon"><i class="fas fa-download"></i></span>`
+					`<span class="j-gallery-icon"><i class="fas fa-download" aria-hidden="true"></i></span>`
 				),
 				{
 					style: {

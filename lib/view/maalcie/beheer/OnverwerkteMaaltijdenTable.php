@@ -59,7 +59,7 @@ class OnverwerkteMaaltijdenTable extends DataTable
 				'/maaltijden/fiscaat/verwerk',
 				'Verwerken',
 				'Maaltijd verwerken',
-				'cog_go'
+				'gear'
 			)
 		);
 
@@ -69,7 +69,7 @@ class OnverwerkteMaaltijdenTable extends DataTable
 				'/maaltijden/beheer/verwijder',
 				'Verwijderen',
 				'Maaltijd verwijderen',
-				'cross'
+				'verwijderen'
 			)
 		);
 		$this->addKnop(
@@ -78,7 +78,7 @@ class OnverwerkteMaaltijdenTable extends DataTable
 				'/maaltijden/lijst/:maaltijd_id',
 				'Maaltijdlijst',
 				'Maaltijdlijst bekijken',
-				'table_normal'
+				'tabel'
 			)
 		);
 
@@ -86,7 +86,7 @@ class OnverwerkteMaaltijdenTable extends DataTable
 			Multiplicity::One(),
 			'Aanmeldingen',
 			'Aanmeldingen bewerken',
-			'user'
+			'user-pen'
 		);
 		$aanmeldingen->addKnop(
 			new DataTableKnop(
@@ -94,7 +94,7 @@ class OnverwerkteMaaltijdenTable extends DataTable
 				'/maaltijden/beheer/aanmelden',
 				'Toevoegen',
 				'Aanmelding toevoegen',
-				'user_add'
+				'user-plus'
 			)
 		);
 		$aanmeldingen->addKnop(
@@ -103,7 +103,7 @@ class OnverwerkteMaaltijdenTable extends DataTable
 				'/maaltijden/beheer/afmelden',
 				'Verwijderen',
 				'Aanmelding verwijderen',
-				'user_delete'
+				'user-minus'
 			)
 		);
 

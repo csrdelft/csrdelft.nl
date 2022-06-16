@@ -19,9 +19,9 @@ class PinTransactieDownloader
 	 */
 	const POST_FIELD_LOGIN_USERNAME = 'login.username';
 	const POST_FIELD_LOGIN_PASSWORD = 'login.password';
-	const POST_FIELD_PERIOD_FROM_DATE_DATE = 'period.from_date:date';
-	const POST_FIELD_PERIOD_FROM_DATE_HOURS = 'period.from_date:hours';
-	const POST_FIELD_PERIOD_FROM_DATE_MINUTES = 'period.from_date:minutes';
+	const POST_FIELD_PERIOD_FROM_DATE_DATE = 'period.from.container:period.from_date:date';
+	const POST_FIELD_PERIOD_FROM_DATE_HOURS = 'period.from.container:period.from_date:hours';
+	const POST_FIELD_PERIOD_FROM_DATE_MINUTES = 'period.from.container:period.from_date:minutes';
 	const POST_FIELD_PERIOD_DURATION = 'period.duration';
 	const POST_FIELD_STORE = 'select.store.container:select.store';
 
@@ -100,7 +100,7 @@ class PinTransactieDownloader
 		$xml->loadHTML($result);
 		$xpath = new DOMXPath($xml);
 		$merchantTransactionsUrl = $xpath
-			->query('//a[@title = "Merchant transactions"]/@href')
+			->query('//a[@title = "Store transactions"]/@href')
 			->item(0)->nodeValue;
 
 		//5. GET Merchant Transactions Url

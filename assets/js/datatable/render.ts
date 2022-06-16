@@ -24,11 +24,15 @@ export default {
 		return formatBedrag(data);
 	},
 	check(data) {
-		return '<span class="ico ' + (data ? 'tick' : 'cross') + '"></span>';
+		return (
+			'<i class="fas fa-' +
+			(data ? 'check' : 'xmark') +
+			'" aria-hidden="true"></i>'
+		);
 	},
 	aanmeldFilter(data) {
 		return data
-			? `<span class="ico group_key" title="Aanmeld filter actief: '${data}'"></span>`
+			? `<i class="fas fa-key" title="Aanmeld filter actief: '${data}'" aria-hidden="true"></i>`
 			: '';
 	},
 	aanmeldingen(data, type, row) {

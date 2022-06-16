@@ -16,14 +16,28 @@
 		</tr>
 		{% for noviet in novieten %}
 			<tr>
-				<td><a href="{{ url('csrdelft_profiel_profiel', {uid: noviet.uid}) }}">{{ noviet.uid }}</a></td>
+				<td>
+					<a href="{{ url('csrdelft_profiel_profiel', {uid: noviet.uid}) }}">
+						{{ noviet.uid }}
+					</a>
+				</td>
 				<td>{{ noviet.voornaam }}</td>
 				<td>{{ noviet.tussenvoegsel }}</td>
 				<td>{{ noviet.achternaam }}</td>
 				<td>{{ noviet.mobiel }}</td>
 				<td>{{ noviet.studie }}</td>
-				<td>{% if noviet.novietSoort == '1' %}{{ icon('tick') }}{% else %}{{ icon('cross') }}{% endif %}</td>
-				<td>{% if noviet.matrixPlek is not none %}{{ ['Voor', 'Midden', 'Achter'][noviet.matrixPlek] }}{% endif %}</td>
+				<td>
+					{% if noviet.novietSoort == '1' %}
+						{{ icon('check', null, 'Ja', 'text-success') }}
+					{% else %}
+						{{ icon('cross', null, 'Nee', 'text-danger') }}
+					{% endif %}
+				</td>
+				<td>
+					{% if noviet.matrixPlek is not none %}
+						{{ ['Voor', 'Midden', 'Achter'][noviet.matrixPlek] }}
+					{% endif %}
+				</td>
 			</tr>
 		{% endfor %}
 	</table>

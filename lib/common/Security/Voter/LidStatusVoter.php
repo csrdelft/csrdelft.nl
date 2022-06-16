@@ -10,17 +10,17 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 /**
  * Heeft het lid deze status?
  */
-class LidStatusVoter extends Voter
+class LidStatusVoter extends PrefixVoter
 {
-	use CacheableVoterSupportsTrait;
-
-	public function supportsAttribute(string $attribute): bool
+	public function supportsPrefix($attribute): bool
 	{
-		return LidStatus::isValidValue('S_' . strtoupper($attribute));
+		return $attribute === 'STATUS';
 	}
 
-	protected function voteOnAttribute(
-		string $attribute,
+	protected function voteOnPrefix(
+		string $prefix,
+		$gevraagd,
+		$role,
 		$subject,
 		TokenInterface $token
 	) {
@@ -33,7 +33,7 @@ class LidStatusVoter extends Voter
 
 		$profiel = $user->profiel;
 
-		$gevraagd = 'S_' . strtoupper($attribute);
+		$gevraagd = 'S_' . strtoupper($gevraagd);
 
 		if ($gevraagd == $profiel->status) {
 			return true;

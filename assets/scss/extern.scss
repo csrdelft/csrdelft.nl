@@ -93,26 +93,10 @@ a {
 			margin: 0 0 2em 0;
 			text-transform: uppercase;
 
+			@include fa-icon-solid($fa-var-angle-right);
+
 			&:before {
-				-moz-osx-font-smoothing: grayscale;
-				-webkit-font-smoothing: antialiased;
-				font-family: "Font Awesome 6 Free";
-				font-style: normal;
-				font-weight: 900;
-				text-transform: none !important;
-				transition: background-color 0.2s ease-in-out;
-				border-radius: 100%;
-				border: solid 2px rgba(255, 255, 255, 0.5);
-				content: fa-content($fa-var-angle-right);
-				display: inline-block;
-				font-size: 1.25em;
-				height: 2em;
-				line-height: 1.65em;
 				margin-right: 0.85em;
-				text-align: center;
-				text-indent: 0.15em;
-				vertical-align: middle;
-				width: 2em;
 			}
 
 			&:hover:before {

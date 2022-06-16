@@ -4,7 +4,11 @@
 
 {% block breadcrumbs %}
 	<ol class="breadcrumb bg-transparent">
-		<li class="breadcrumb-item"><a href="{{ url('default') }}" title="Thuis"><i class="fas fa-house"></i></a></li>
+		<li class="breadcrumb-item">
+			<a href="{{ url('default') }}" title="Thuis">
+				{{ icon('home') }}
+			</a>
+		</li>
 		<li class="breadcrumb-item"><a href="{{ url('csrdelft_forum_forum_forum') }}">Forum</a></li>
 		<li class="breadcrumb-item active" aria-current="page">
 			<select name="forum_id" class="form-select form-select-sm w-auto"

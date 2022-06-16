@@ -10,23 +10,31 @@
 		{% if taak.verwijderd %}
 			<a href="{{ url('csrdelft_maalcie_beheertaken_herstel', {taak_id: taak.taak_id}) }}" title="Corveetaak herstellen"
 				 class="btn post">
-				{{ icon("arrow_undo") }}
+				{{ icon("undo") }}
 			</a>
 		{% else %}
 			<a href="{{ url('csrdelft_maalcie_beheertaken_bewerk', {taak_id: taak.taak_id}) }}" title="Taak wijzigen"
-				 class="btn post popup">{{ icon("pencil") }}</a>
+				 class="btn post popup"
+			>
+				{{ icon("bewerken") }}
+			</a>
 			{% if taak.corveeRepetitie %}
 				<a
 					href="{{ url('csrdelft_maalcie_corveerepetities_beheer', {crv_repetitie_id: taak.corveeRepetitie.crv_repetitie_id}) }}"
 					title="Wijzig gekoppelde corveerepetitie"
-					class="btn popup">{{ icon("calendar_edit") }}</a>
+					class="btn popup"
+				>
+					{{ icon("file-pen") }}
+				</a>
 			{% else %}
 				<div class="inline" style="width: 28px;"></div>
 			{% endif %}
 		{% endif %}
 		{% if maaltijd is not defined and taak.maaltijd %}
 			<a href="{{ url('csrdelft_maalcie_beheertaken_maaltijd', {maaltijd_id: taak.maaltijd.maaltijd_id}) }}"
-				 title="Beheer maaltijdcorvee" class="btn">{{ icon("cup_link") }}</a>
+				 title="Beheer maaltijdcorvee" class="btn">
+				{{ icon("link") }}
+			</a>
 		{% endif %}
 	</td>
 	<td class="text-center" style="width: 50px;">
@@ -44,15 +52,15 @@
 				{% endif %}
 				{% endif %}
 				{% if taak.isTelaatGemaild %}
-					{{ icon("email_error", null, "Laatste herinnering te laat verstuurd!&#013;" ~ taak.wanneer_gemaild ~ "") }}
+					{{ icon("circle-exclamation", null, "Laatste herinnering te laat verstuurd!&#013;" ~ taak.wanneer_gemaild ~ "") }}
 				{% elseif aantal < 1 %}
 					{% if taak.profiel %}
-						{{ icon("email", null, "Niet gemaild") }}
+						{{ icon("envelope", null, "Niet gemaild") }}
 					{% endif %}
 				{% elseif aantal == 1 %}
-					{{ icon("email_go", null, taak.wanneer_gemaild) }}
+					{{ icon("envelope-circle-check", null, taak.wanneer_gemaild) }}
 				{% elseif aantal > 1 %}
-					{{ icon("email_open", null, taak.wanneer_gemaild) }}
+					{{ icon("envelope-open", null, taak.wanneer_gemaild) }}
 				{% endif %}
 				{% if wijzigbaar is defined %}
 				{% if taak.profiel %}
@@ -77,10 +85,11 @@ taak-open
 			<a href="{{ url('csrdelft_maalcie_beheertaken_toewijzen', {taak_id: taak.taak_id}) }}"
 				 id="taak-{{ taak.taak_id }}"
 				 title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="btn post popup dragobject ruilen"
-				 style="position: static;" {% if taak.profiel %}uid="{{ taak.profiel.uid }}">
-				{{ icon("user_green") }}
+				 style="position: static;"
+				{% if taak.profiel %}
+					uid="{{ taak.profiel.uid }}"> {{ icon("user-check") }}
 				{% else %}
-					> {{ icon("user_red") }}
+					> {{ icon("user-xmark") }}
 				{% endif %}
 			</a>
 		{% endif %}
@@ -111,12 +120,12 @@ taak-open
 			{% if taak.wanneer_toegekend %}
 				<a href="{{ url('csrdelft_maalcie_beheertaken_puntenintrekken', {taak_id: taak.taak_id}) }}"
 					 title="Punten intrekken" class="btn post">
-					{{ icon("medal_silver_delete") }}
+					{{ icon("minus") }}
 				</a>
 			{% else %}
 				<a href="{{ url('csrdelft_maalcie_beheertaken_puntentoekennen', {taak_id: taak.taak_id}) }}"
 					 title="Punten toekennen" class="btn post">
-					{{ icon("award_star_add") }}
+					{{ icon("plus") }}
 				</a>
 			{% endif %}
 			{% endif %}
@@ -126,12 +135,14 @@ taak-open
 		{% if taak.verwijderd %}
 			<a href="{{ url('csrdelft_maalcie_beheertaken_verwijder', {taak_id: taak.taak_id}) }}"
 				 title="Corveetaak definitief verwijderen" class="btn post confirm range">
-				<input type=checkbox id="box-{{ taak.taak_id }}" name="del-taak"/> {{ icon("cross") }}
+				<input type=checkbox id="box-{{ taak.taak_id }}" name="del-taak"/>
+				{{ icon("verwijderen") }}
 			</a>
 		{% else %}
 			<a href="{{ url('csrdelft_maalcie_beheertaken_verwijder', {taak_id: taak.taak_id}) }}"
 				 title="Corveetaak naar de prullenbak verplaatsen" class="btn post range">
-				<input type=checkbox id="box-{{ taak.taak_id }}" name="del-taak"/>{{ icon("bin_closed") }}</a>
+				<input type=checkbox id="box-{{ taak.taak_id }}" name="del-taak"/>
+				{{ icon("prullenbak") }}</a>
 		{% endif %}
 	</td>
 </tr>

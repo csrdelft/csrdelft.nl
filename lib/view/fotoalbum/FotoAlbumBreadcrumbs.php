@@ -5,6 +5,7 @@ namespace CsrDelft\view\fotoalbum;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
+use CsrDelft\view\Icon;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -27,7 +28,9 @@ class FotoAlbumBreadcrumbs
 		$self
 	) {
 		$breadcrumbs =
-			'<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>';
+			'<li class="breadcrumb-item"><a href="/">' .
+			Icon::getTag('home') .
+			'</a></li>';
 
 		if ($album->subdir == 'fotoalbum/') {
 			// Geen subdir

@@ -27,7 +27,7 @@ class RowButtons {
 				class="btn btn-light noanim btn-sm DataTableRowKnop ${btn.method} ${btn.css}"
 				title="${btn.title}"
 			>
-				<i class="${btn.icon}"></i>
+				<i class="${btn.icon}" aria-hidden="true"></i>
 			</a>`;
 			btnGroup.append(newButton);
 		}
