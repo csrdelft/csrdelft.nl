@@ -236,7 +236,7 @@ span.curpage {
 }
 
 /* Forum deel */
-.auteur {
+.forum-post {
 	flex: 0 0 200px; /* vast */
 	padding: 4px;
 
@@ -248,60 +248,73 @@ span.curpage {
 		display: none;
 	}
 
-	.postpijl {
-		grid-column: 2;
-		grid-row: 1;
-		justify-self: end;
-		align-self: start;
+	.berichtLinkButton {
+		display: inline-block;
+		font-weight: 400;
+		line-height: 1.5;
+		text-align: center;
+		text-decoration: none;
+		vertical-align: middle;
+		cursor: pointer;
+		user-select: none;
+		padding: 0.25rem 0.5rem;
+		margin-block: 1.5rem;
+		border-radius: 0.2rem;
+		color: white;
+		background-color: transparent;
+		border-color: white;
+		border-width: 1px;
 
-		a {
-			border: 0;
-
-			&:hover {
-				color: black;
-				text-decoration: none;
-			}
+		&:hover {
+			background-color: white;
+			color: $donkerblauw;
 		}
-	}
-
-	.naam,
-	.moment,
-	.forumpostKnoppen {
-		grid-column: 1;
-	}
-
-	.forumpasfoto {
-		grid-column: 2;
-		grid-row-start: 2;
-		grid-row-end: 4;
 	}
 }
 
 .forum-deel {
-	display: grid;
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	
+	> .list-group-item {
+		width: 100%;
+		padding: 1.5rem 1rem;
+		background-color: transparent;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.125);
 
-	grid-template-columns: auto 1fr auto;
+		.text-truncate {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+		.badge {
+			display: inline-block;
+			padding: 0.35em 0.65em;
+			margin-inline: 0.5em;
+			font-size: 0.75em;
+			font-weight: 500;
+			line-height: 1;
+			text-align: center;
+			white-space: nowrap;
+			vertical-align: baseline;
+			border-radius: 0.25rem;
+			background: white;
+			color: $donkerblauw;
+		}
 
-	// CSS grid ondersteund niet echt gekleurde rows.
-	// Dit is second-best. Er zijn 3 divs per row,
-	// iedere 6e moet een kleurtje krijgen, en de divs daarna.
-	.alternate-row {
-		padding: 0.7em;
-		&:nth-child(6n + 1),
-		&:nth-child(6n + 2),
-		&:nth-child(6n + 3) {
-			background-color: $kleur4;
+		> div {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+
+		}
+		
+		p {
+			margin: 0;
 		}
 	}
-
-	.paging,
-	.meldingen,
-	.forumdeel-omschrijving,
-	.forum-posten,
-	.forum-reageren {
-		grid-column: 1 / span 3;
-	}
-
 	.paging,
 	.header {
 		font-weight: bold;
