@@ -14,7 +14,7 @@ class CancelKnop extends FormulierKnop
 		$action = 'cancel',
 		$label = 'Annuleren',
 		$title = 'Niet opslaan en terugkeren',
-		$icon = 'delete'
+		$icon = 'xmark'
 	) {
 		parent::__construct($url, $action, $label, $title, $icon);
 	}

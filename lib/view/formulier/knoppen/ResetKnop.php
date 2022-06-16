@@ -14,7 +14,7 @@ class ResetKnop extends FormulierKnop
 		$action = 'reset',
 		$label = 'Reset',
 		$title = 'Reset naar opgeslagen gegevens',
-		$icon = 'arrow_rotate_anticlockwise'
+		$icon = 'undo'
 	) {
 		parent::__construct($url, $action, $label, $title, $icon);
 	}

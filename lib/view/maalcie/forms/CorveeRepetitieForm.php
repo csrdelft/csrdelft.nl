@@ -128,7 +128,7 @@ class CorveeRepetitieForm extends ModalForm
 			'submit',
 			'Alles bijwerken',
 			'Opslaan & alle taken bijwerken',
-			'disk_multiple'
+			'opslaan'
 		);
 
 		if ($repetitie->crv_repetitie_id !== 0) {

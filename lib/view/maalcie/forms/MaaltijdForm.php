@@ -98,7 +98,7 @@ class MaaltijdForm extends ModalForm
 			'redirect',
 			'Nieuw product',
 			'Nieuw product aanmaken',
-			''
+			'toevoegen'
 		);
 		$fields[] = new RequiredIntField(
 			'aanmeld_limiet',
