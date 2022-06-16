@@ -36,7 +36,7 @@ class DataTableRowKnop implements JsonSerializable
 		return [
 			'action' => $this->action,
 			'title' => $this->title,
-			'icon' => 'ico ' . Icon::get($this->icon),
+			'icon' => 'fas fa-' . Icon::get($this->icon),
 			'css' => $this->css,
 			'method' => $this->method,
 		];
