@@ -117,12 +117,22 @@ class Formulier implements View, Validator, ToResponse
 	{
 		$fieldName = $field->getName();
 		if ($this->model) {
-			if (method_exists($this->model, 'set' . ucfirst($fieldName))) {
-				call_user_func(
-					[$this->model, 'set' . ucfirst($fieldName)],
-					$field->getFormattedValue()
-				);
-			} elseif (property_exists($this->model, $fieldName)) {
+			$class = new \ReflectionClass($this->model);
+			$setterMethod = 'set' . ucfirst($fieldName);
+			if ($class->hasMethod($setterMethod)) {
+				$method = $class->getMethod($setterMethod);
+				if ($field->getFormattedValue() == null) {
+					// Als het veld null is en de method geen null accepteert
+					if (
+						$method->getReturnType() != null &&
+						$method->getReturnType()->allowsNull()
+					) {
+						$method->invoke($this->model, $field->getFormattedValue());
+					}
+				} else {
+					$method->invoke($this->model, $field->getFormattedValue());
+				}
+			} elseif ($class->hasProperty($fieldName)) {
 				$this->model->$fieldName = $field->getFormattedValue();
 			}
 		}
