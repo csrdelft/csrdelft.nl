@@ -103,7 +103,7 @@ class PinTransactiesDownloadenCommand extends Command
 			$input->isInteractive() && !$input->getOption('no-interaction');
 
 		if ($this->interactive) {
-			$vanaf = DateTime::createFromFormat(
+			$vanaf = \DateTimeImmutable::createFromFormat(
 				'Y-m-d',
 				$input->getArgument('vanaf')
 			);
@@ -138,12 +138,17 @@ class PinTransactiesDownloadenCommand extends Command
 				return 1;
 			}
 
-			/** @var DateTime $cur */
-			for ($cur = $vanaf; $cur <= $tot; $cur->add(new DateInterval('P1D'))) {
+			for (
+				$cur = $vanaf;
+				$cur <= $tot;
+				$cur = $cur->add(new DateInterval('P1D'))
+			) {
 				$date = $cur->format('Y-m-d');
 				$output->writeln('<info>' . $date . '</info>');
-				$from = date_format_intl($cur, DATE_FORMAT) . ' 00:00:00';
-				$to = date_format_intl($cur, DATE_FORMAT) . ' 23:59:59';
+				$from = date_format_intl($cur, DATE_FORMAT) . ' 12:00:00';
+				$to =
+					date_format_intl($cur->add(new DateInterval('P1D')), DATE_FORMAT) .
+					' 12:00:00';
 				$this->downloadDag($output, $from, $to);
 			}
 		} else {
