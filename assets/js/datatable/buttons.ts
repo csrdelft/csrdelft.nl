@@ -149,7 +149,7 @@ $.fn.dataTable.ext.buttons.confirm = {
 					action: config.action,
 					name: 'confirm' + config.text,
 					className:
-						'dt-button-ico fas fa-circle-exclamation dt-button-warning',
+						'dt-button-ico fa-circle-exclamation dt-button-warning',
 					extend: 'default',
 					href: config.href,
 					multiplicity: '', // altijd mogelijk
