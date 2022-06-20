@@ -2,14 +2,21 @@
 @import "~bootstrap/scss/mixins/breakpoints";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
+$groen: #3eb9b1;
+$licht-rose: #ef8080;
+$rose: #ec6363;
+$donker-rose: #da3f3f;
+
 // Zet hier de OWee kleuren
-$primary: $donkerblauw; //#b2d4f0;
-$secondary: $lichtblauw; // #002e54;
-$tertiary: $grijs; // #486b87;
-$accent: $geel; // #f6b585;
-$youtubeRed: #ff0000;
-$whatsappGreen: #25d366;
+$primary: $rose; // $donkerblauw;
+$secondary: $donker-rose; // #002e54;
+$tertiary: $licht-rose; // #486b87;
+$accent: $groen; // #f6b585;
+$youtubeRed: $donker-rose;
+$whatsappGreen: $groen;
 $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
+
+$basiskleur: $donker-rose;
 
 @font-face {
 	font-family: "Tw Cen MT";
@@ -64,6 +71,7 @@ $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
 body {
 	width: 100%;
 	overflow-x: hidden;
+	background-color: $donker-rose;
 }
 
 .owee-pagina {
@@ -119,7 +127,7 @@ body {
 		font-weight: 300;
 		font-size: 1.2rem;
 		line-height: 140%;
-		color: black;
+		color: white;
 	}
 
 	.iframe-container {
@@ -174,12 +182,11 @@ body {
 	}
 
 	.hero {
-		background: url("https://csrdelft.nl/fotoalbum/Publiek/Startkamp.jpg")
-			no-repeat center bottom;
-		background-size: cover;
+		background: $rose url("../images/owee2022-banner.jpg") no-repeat center bottom;
+		background-size: contain;
 
 		img {
-			max-height: 70vh;
+			max-height: 100vh;
 			margin: -8vh auto 3vh auto;
 			display: block;
 			max-width: 60vw;
@@ -285,7 +292,7 @@ body {
 	}
 
 	.interest {
-		background: $secondary;
+		background: $primary;
 		text-align: center;
 
 		h2 {
