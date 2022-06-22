@@ -116,7 +116,7 @@ body {
 
 	h1,
 	h2 {
-		color: $secondary;
+		color: white;
 		font-size: 1.5rem;
 		text-transform: uppercase;
 		font-family: $headingFont;
@@ -239,6 +239,9 @@ body {
 	}
 
 	.videos {
+		background: $primary;
+		width: 100%;
+
 		a {
 			position: relative;
 			display: block;
@@ -291,8 +294,23 @@ body {
 		}
 	}
 
-	.interest {
+	.contact {
 		background: $primary;
+	}
+
+	.info {
+		background: $secondary;
+		text-align: center;
+		h2 {
+			color: white;
+		}
+		p {
+			color: white;
+		}
+	}
+
+	.interest{
+		background: $secondary;
 		text-align: center;
 
 		h2 {
@@ -436,10 +454,10 @@ body {
 
 			p {
 				font-size: 1.1rem;
-				color: $tertiary;
+				color: white;
 
 				a {
-					color: $primary;
+					color: black;
 				}
 			}
 
@@ -454,7 +472,7 @@ body {
 			}
 
 			input {
-				background-color: rgba($tertiary, 0.2);
+				background-color: $donker-rose;
 				font-size: 1rem;
 				border: none;
 				border-radius: 0;
@@ -500,7 +518,7 @@ body {
 			background: $primary;
 
 			a {
-				color: white;
+				color: black;
 			}
 
 			.lid-worden,
@@ -525,7 +543,7 @@ body {
 			background: $secondary;
 
 			a {
-				color: white;
+				color: black;
 			}
 
 			.lid-worden,
@@ -570,4 +588,5 @@ body {
 
 #footer .inner {
 	padding-top: 0;
+	color: white;
 }
