@@ -26,6 +26,23 @@ $basiskleur: $donker-rose;
 	src: url("../fonts/owee2021/TCM.woff") format("woff");
 }
 
+@font-face {
+	font-family: "Playbill";
+	font-style: normal;
+	font-weight: normal;
+	src: url("../fonts/owee2022/Playbill.ttf");
+}
+
+@font-face {
+	font-family: "Freestyle Script";
+	font-style: normal;
+	font-weight: normal;
+	src: url("../fonts/owee2022/Freestyle Script.TTF");
+}
+
+$header-font-p1: Playbill, Arial, Helvetica, sans-serif;
+$header-font-p2: Freestyle Script, Regular, Arial, Helvetica, sans-serif;
+
 @mixin triangle($kleur, $top, $left) {
 	width: 0;
 	height: 0;
@@ -142,6 +159,18 @@ body {
 			width: 100%;
 			height: 100%;
 		}
+	}
+
+	.header-p1 {
+		font-family: $header-font-p1;
+		font-size: 5.5rem;
+		vertical-align: text-bottom;
+	}
+
+	.header-p2 {
+		font-family: $header-font-p2;
+		font-size: 3.5rem;
+		//vertical-align: tex;
 	}
 
 	.cta {
@@ -369,6 +398,7 @@ body {
 			right: 2rem;
 			height: 240px;
 			background: url("../images/owee2022_app_ellen.jpg");
+			background-repeat: no-repeat;
 			background-size: contain;
 
 
