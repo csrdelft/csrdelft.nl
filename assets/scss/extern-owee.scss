@@ -6,6 +6,7 @@ $groen: #3eb9b1;
 $licht-rose: #ef8080;
 $rose: #ec6363;
 $donker-rose: #da3f3f;
+$erg-donker-rose: darken($donker-rose, 15%);
 
 // Zet hier de OWee kleuren
 $primary: $rose; // $donkerblauw;
@@ -146,7 +147,7 @@ body {
 	.cta {
 		&.primary {
 			background: $primary;
-			color: $tertiary;
+			color: white;
 
 			&:hover {
 				background: darken($primary, 10%);
@@ -154,11 +155,11 @@ body {
 		}
 
 		&.secondary {
-			background: $secondary;
+			background: $accent;
 			color: white;
 
 			&:hover {
-				background: darken($secondary, 10%);
+				background: darken($accent, 10%);
 			}
 		}
 
@@ -367,7 +368,9 @@ body {
 			left: 2rem;
 			right: 2rem;
 			height: 240px;
+			background: url("../images/owee2022_app_ellen.jpg");
 			background-size: contain;
+
 
 			@include media-breakpoint-down(md) {
 				right: 2rem;
@@ -419,7 +422,7 @@ body {
 			}
 
 			&[for="lid-spreken"] {
-				background: $primary;
+				background: $erg-donker-rose;
 			}
 
 			&[for="open-avond"] {
@@ -515,7 +518,7 @@ body {
 		}
 
 		#lid-spreken:checked ~ .interesseformulier {
-			background: $primary;
+			background: $erg-donker-rose;
 
 			a {
 				color: black;
