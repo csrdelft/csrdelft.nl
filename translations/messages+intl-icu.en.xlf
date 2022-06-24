@@ -584,6 +584,82 @@
         <source>Schrijf je nu in!</source>
         <target>Register now!</target>
       </trans-unit>
+      <trans-unit id="uG9ZeLv" resname="Word lid">
+        <source>Word lid</source>
+        <target>Become a member</target>
+      </trans-unit>
+      <trans-unit id="eSQSBpw" resname="van C.S.R.">
+        <source>van C.S.R.</source>
+        <target>of C.S.R.</target>
+      </trans-unit>
+      <trans-unit id="aMkB6nB" resname="Owee">
+        <source>Owee</source>
+        <target>Owee</target>
+      </trans-unit>
+      <trans-unit id="J1OqlBV" resname="21 t/m 25 augustus">
+        <source>21 t/m 25 augustus</source>
+        <target>August 21 to 25 </target>
+      </trans-unit>
+      <trans-unit id="bOSD8h7" resname="C.S.R.">
+        <source>C.S.R.</source>
+        <target>C.S.R.</target>
+      </trans-unit>
+      <trans-unit id="nwLrqUi" resname="op YouTube">
+        <source>op YouTube</source>
+        <target>on YouTube</target>
+      </trans-unit>
+      <trans-unit id="Cnh4XAn" resname="Interesse in">
+        <source>Interesse in</source>
+        <target>Interessed in</target>
+      </trans-unit>
+      <trans-unit id="fYaU10_" resname="C.S.R.?">
+        <source>C.S.R.?</source>
+        <target>C.S.R.?</target>
+      </trans-unit>
+      <trans-unit id="8UbUaib" resname="Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden:">
+        <source>Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.
+										Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze
+										dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden:</source>
+        <target>To get a better view of C.S.R. you can join a member of C.S.R. for a day. More info can be found here: </target>
+      </trans-unit>
+      <trans-unit id="jV35IPr" resname="We hebben twee keer dit jaar een open avond waarbij je kan komen kijken&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De eerstvolgende open avond is op 2 juni, de inschrijvingen daarvoor gaan 2 weken van tevoren open.">
+        <source>We hebben twee keer dit jaar een open avond waarbij je kan komen kijken
+										hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
+										De eerstvolgende open avond is op 2 juni, de inschrijvingen daarvoor gaan 2 weken van tevoren open.</source>
+        <target>We will have two open nights this year where you can come and see how an evening in our clubhouse look like. You can come for dinner, participate in a praise hour, and have a drink.</target>
+      </trans-unit>
+      <trans-unit id="qBjOOCs" resname="Met het verzenden van dit formulier ga je akkoord met de &lt;a&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;href=&quot;/download/Privacyverklaring C.S.R. Delft - Extern - 25-/05-2018.pdf&quot;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;target=&quot;_blank&quot;&gt;privacyverklaring van C.S.R. Delft&lt;/a&gt;.">
+        <source>Met het verzenden van dit formulier ga je akkoord met de &lt;a
+											href="/download/Privacyverklaring C.S.R. Delft - Extern - 25-/05-2018.pdf"
+											target="_blank"&gt;privacyverklaring van C.S.R. Delft&lt;/a&gt;.</source>
+        <target><![CDATA[By submitting this form you agree with the <a
+										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
+										target="_blank">privacy statement of C.S.R. Delft</a>.]]></target>
+      </trans-unit>
+      <trans-unit id="_GbOAWh" resname="Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De novitiaatsweek vindt plaats van 29 augustus t/m 4 september, dus zorg dat je die week vrijhoudt!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;In deze week zal je elkaar, de vereniging en haar leden leren kennen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.">
+        <source>Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT).
+							De novitiaatsweek vindt plaats van 29 augustus t/m 4 september, dus zorg dat je die week vrijhoudt!
+							In deze week zal je elkaar, de vereniging en haar leden leren kennen.
+							De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.</source>
+        <target> When you want to become a member of C.S.R. you will join the introduction week (also
+					called new members period). This will take place during the week after the Owee. In this week
+					you will get to know each other as new members, the members of C.S.R. and all ins and outs about our association.
+					The activities during this new members period will always be done in a respectful and safe manner.
+				</target>
+      </trans-unit>
+      <trans-unit id="d.1j7Qk" resname="C.S.R. heeft samen met de andere grote studentenverenigingen (DSC, Virgiel,&#10;&#9;&#9;&#9;&#9;&#9;&#9;Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin&#10;&#9;&#9;&#9;&#9;&#9;&#9;afspraken staan waar we elkaar aan zullen houden. Hierin staan afspraken hoe&#10;&#9;&#9;&#9;&#9;&#9;&#9;we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een&#10;&#9;&#9;&#9;&#9;&#9;&#9;KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de&#10;&#9;&#9;&#9;&#9;&#9;&#9;afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.">
+        <source>C.S.R. heeft samen met de andere grote studentenverenigingen (DSC, Virgiel,
+						Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin
+						afspraken staan waar we elkaar aan zullen houden. Hierin staan afspraken hoe
+						we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een
+						KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de
+						afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.</source>
+        <target> Together with the other big student associations (DSC, Virgiel, Sint Jansbrug and DSB)
+					and the TU Delft C.S.R. has written a code of conduct for which we hold each other accountable. This states the agreements on how
+					we want to treat each other within the association and during the new members period. In the
+					three documents below you can read the agreements that we as C.S.R. made with the TU Delft.
+				</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

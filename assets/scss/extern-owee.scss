@@ -2,14 +2,22 @@
 @import "~bootstrap/scss/mixins/breakpoints";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
+$groen: #3eb9b1;
+$licht-rose: #ef8080;
+$rose: #ec6363;
+$donker-rose: #da3f3f;
+$medium-donker-rose: darken($rose, 4%);
+
 // Zet hier de OWee kleuren
-$primary: $donkerblauw; //#b2d4f0;
-$secondary: $lichtblauw; // #002e54;
-$tertiary: $grijs; // #486b87;
-$accent: $geel; // #f6b585;
-$youtubeRed: #ff0000;
-$whatsappGreen: #25d366;
+$primary: $rose; // $donkerblauw;
+$secondary: $donker-rose; // #002e54;
+$tertiary: $licht-rose; // #486b87;
+$accent: $groen; // #f6b585;
+$youtubeRed: $donker-rose;
+$whatsappGreen: $groen;
 $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
+
+$basiskleur: $donker-rose;
 
 @font-face {
 	font-family: "Tw Cen MT";
@@ -17,6 +25,23 @@ $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
 	font-weight: normal;
 	src: url("../fonts/owee2021/TCM.woff") format("woff");
 }
+
+@font-face {
+	font-family: "Playbill";
+	font-style: normal;
+	font-weight: normal;
+	src: url("../fonts/owee2022/Playbill.ttf");
+}
+
+@font-face {
+	font-family: "Freestyle Script";
+	font-style: normal;
+	font-weight: normal;
+	src: url("../fonts/owee2022/Freestyle Script.TTF");
+}
+
+$header-font-p1: Playbill, Arial, Helvetica, sans-serif;
+$header-font-p2: Freestyle Script, Regular, Arial, Helvetica, sans-serif;
 
 @mixin triangle($kleur, $top, $left) {
 	width: 0;
@@ -64,6 +89,7 @@ $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
 body {
 	width: 100%;
 	overflow-x: hidden;
+	background-color: $donker-rose;
 }
 
 .owee-pagina {
@@ -108,7 +134,7 @@ body {
 
 	h1,
 	h2 {
-		color: $secondary;
+		color: white;
 		font-size: 1.5rem;
 		text-transform: uppercase;
 		font-family: $headingFont;
@@ -119,7 +145,7 @@ body {
 		font-weight: 300;
 		font-size: 1.2rem;
 		line-height: 140%;
-		color: black;
+		color: white;
 	}
 
 	.iframe-container {
@@ -135,10 +161,22 @@ body {
 		}
 	}
 
+	.header-p1 {
+		font-family: $header-font-p1;
+		font-size: 5.5rem;
+		vertical-align: text-bottom;
+	}
+
+	.header-p2 {
+		font-family: $header-font-p2;
+		font-size: 3.5rem;
+		//vertical-align: tex;
+	}
+
 	.cta {
 		&.primary {
 			background: $primary;
-			color: $tertiary;
+			color: white;
 
 			&:hover {
 				background: darken($primary, 10%);
@@ -146,11 +184,11 @@ body {
 		}
 
 		&.secondary {
-			background: $secondary;
+			background: $accent;
 			color: white;
 
 			&:hover {
-				background: darken($secondary, 10%);
+				background: darken($accent, 10%);
 			}
 		}
 
@@ -174,12 +212,12 @@ body {
 	}
 
 	.hero {
-		background: url("https://csrdelft.nl/fotoalbum/Publiek/Startkamp.jpg")
-			no-repeat center bottom;
-		background-size: cover;
+		background: $rose url("../images/owee2022-banner.jpg") no-repeat center
+			bottom;
+		background-size: contain;
 
 		img {
-			max-height: 70vh;
+			max-height: 100vh;
 			margin: -8vh auto 3vh auto;
 			display: block;
 			max-width: 60vw;
@@ -232,6 +270,11 @@ body {
 	}
 
 	.videos {
+		background: $primary url("../images/owee2022-achtergrond.png") no-repeat
+			left center;
+		background-size: cover;
+		width: 100%;
+
 		a {
 			position: relative;
 			display: block;
@@ -284,6 +327,21 @@ body {
 		}
 	}
 
+	.contact {
+		background: $primary;
+	}
+
+	.info {
+		background: $secondary;
+		text-align: center;
+		h2 {
+			color: white;
+		}
+		p {
+			color: white;
+		}
+	}
+
 	.interest {
 		background: $secondary;
 		text-align: center;
@@ -325,6 +383,7 @@ body {
 			line-height: 130%;
 			position: relative;
 			z-index: 1;
+			min-height: 200px;
 
 			@include media-breakpoint-down(sm) {
 				font-size: 1.5rem;
@@ -342,7 +401,6 @@ body {
 			left: 2rem;
 			right: 2rem;
 			height: 240px;
-			background-size: contain;
 
 			@include media-breakpoint-down(md) {
 				right: 2rem;
@@ -394,7 +452,7 @@ body {
 			}
 
 			&[for="lid-spreken"] {
-				background: $primary;
+				background: $medium-donker-rose;
 			}
 
 			&[for="open-avond"] {
@@ -429,10 +487,10 @@ body {
 
 			p {
 				font-size: 1.1rem;
-				color: $tertiary;
+				color: white;
 
 				a {
-					color: $primary;
+					color: black;
 				}
 			}
 
@@ -447,7 +505,7 @@ body {
 			}
 
 			input {
-				background-color: rgba($tertiary, 0.2);
+				background-color: $donker-rose;
 				font-size: 1rem;
 				border: none;
 				border-radius: 0;
@@ -490,10 +548,10 @@ body {
 		}
 
 		#lid-spreken:checked ~ .interesseformulier {
-			background: $primary;
+			background: $medium-donker-rose;
 
 			a {
-				color: white;
+				color: black;
 			}
 
 			.lid-worden,
@@ -518,7 +576,7 @@ body {
 			background: $secondary;
 
 			a {
-				color: white;
+				color: black;
 			}
 
 			.lid-worden,
@@ -563,4 +621,5 @@ body {
 
 #footer .inner {
 	padding-top: 0;
+	color: white;
 }
