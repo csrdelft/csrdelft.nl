@@ -632,7 +632,7 @@
         <source>Met het verzenden van dit formulier ga je akkoord met de &lt;a
 											href="/download/Privacyverklaring C.S.R. Delft - Extern - 25-/05-2018.pdf"
 											target="_blank"&gt;privacyverklaring van C.S.R. Delft&lt;/a&gt;.</source>
-				<target><![CDATA[By submitting this form you agree with the <a
+        <target><![CDATA[By submitting this form you agree with the <a
 										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
 										target="_blank">privacy statement of C.S.R. Delft</a>.]]></target>
       </trans-unit>
@@ -641,12 +641,12 @@
 							De novitiaatsweek vindt plaats van 29 augustus t/m 4 september, dus zorg dat je die week vrijhoudt!
 							In deze week zal je elkaar, de vereniging en haar leden leren kennen.
 							De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.</source>
-				<target> When you want to become a member of C.S.R. you will join the introduction week (also
+        <target> When you want to become a member of C.S.R. you will join the introduction week (also
 					called new members period). This will take place during the week after the Owee. In this week
 					you will get to know each other as new members, the members of C.S.R. and all ins and outs about our association.
 					The activities during this new members period will always be done in a respectful and safe manner.
 				</target>
-			</trans-unit>
+      </trans-unit>
       <trans-unit id="d.1j7Qk" resname="C.S.R. heeft samen met de andere grote studentenverenigingen (DSC, Virgiel,&#10;&#9;&#9;&#9;&#9;&#9;&#9;Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin&#10;&#9;&#9;&#9;&#9;&#9;&#9;afspraken staan waar we elkaar aan zullen houden. Hierin staan afspraken hoe&#10;&#9;&#9;&#9;&#9;&#9;&#9;we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een&#10;&#9;&#9;&#9;&#9;&#9;&#9;KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de&#10;&#9;&#9;&#9;&#9;&#9;&#9;afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.">
         <source>C.S.R. heeft samen met de andere grote studentenverenigingen (DSC, Virgiel,
 						Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin
@@ -654,12 +654,12 @@
 						we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een
 						KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de
 						afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.</source>
-				<target> Together with the other big student associations (DSC, Virgiel, Sint Jansbrug and DSB)
+        <target> Together with the other big student associations (DSC, Virgiel, Sint Jansbrug and DSB)
 					and the TU Delft C.S.R. has written a code of conduct for which we hold each other accountable. This states the agreements on how
 					we want to treat each other within the association and during the new members period. In the
 					three documents below you can read the agreements that we as C.S.R. made with the TU Delft.
 				</target>
-			</trans-unit>
+      </trans-unit>
     </body>
   </file>
 </xliff>
