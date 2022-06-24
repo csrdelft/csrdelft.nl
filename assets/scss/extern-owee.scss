@@ -6,7 +6,7 @@ $groen: #3eb9b1;
 $licht-rose: #ef8080;
 $rose: #ec6363;
 $donker-rose: #da3f3f;
-$erg-donker-rose: darken($donker-rose, 15%);
+$medium-donker-rose: darken($rose, 4%);
 
 // Zet hier de OWee kleuren
 $primary: $rose; // $donkerblauw;
@@ -399,7 +399,7 @@ body {
 			left: 2rem;
 			right: 2rem;
 			height: 240px;
-			
+
 			@include media-breakpoint-down(md) {
 				right: 2rem;
 				left: auto;
@@ -450,7 +450,7 @@ body {
 			}
 
 			&[for="lid-spreken"] {
-				background: $erg-donker-rose;
+				background: $medium-donker-rose;
 			}
 
 			&[for="open-avond"] {
@@ -546,7 +546,7 @@ body {
 		}
 
 		#lid-spreken:checked ~ .interesseformulier {
-			background: $erg-donker-rose;
+			background: $medium-donker-rose;
 
 			a {
 				color: black;
