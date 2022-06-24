@@ -381,6 +381,7 @@ body {
 			line-height: 130%;
 			position: relative;
 			z-index: 1;
+			min-height: 200px;
 
 			@include media-breakpoint-down(sm) {
 				font-size: 1.5rem;
@@ -398,11 +399,7 @@ body {
 			left: 2rem;
 			right: 2rem;
 			height: 240px;
-			background: url("../images/owee2022_app_ellen.jpg");
-			background-repeat: no-repeat;
-			background-size: contain;
-
-
+			
 			@include media-breakpoint-down(md) {
 				right: 2rem;
 				left: auto;
