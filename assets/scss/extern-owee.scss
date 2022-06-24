@@ -212,7 +212,8 @@ body {
 	}
 
 	.hero {
-		background: $rose url("../images/owee2022-banner.jpg") no-repeat center bottom;
+		background: $rose url("../images/owee2022-banner.jpg") no-repeat center
+			bottom;
 		background-size: contain;
 
 		img {
@@ -269,7 +270,8 @@ body {
 	}
 
 	.videos {
-		background: $primary url("../images/owee2022-achtergrond.png") no-repeat left center;
+		background: $primary url("../images/owee2022-achtergrond.png") no-repeat
+			left center;
 		background-size: cover;
 		width: 100%;
 
@@ -340,7 +342,7 @@ body {
 		}
 	}
 
-	.interest{
+	.interest {
 		background: $secondary;
 		text-align: center;
 
