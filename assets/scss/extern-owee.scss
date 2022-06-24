@@ -269,7 +269,8 @@ body {
 	}
 
 	.videos {
-		background: $primary;
+		background: $primary url("../images/owee2022-achtergrond.png") no-repeat left center;
+		background-size: cover;
 		width: 100%;
 
 		a {
