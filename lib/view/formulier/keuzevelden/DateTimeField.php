@@ -14,6 +14,7 @@ use CsrDelft\view\formulier\invoervelden\TextField;
  */
 class DateTimeField extends TextField
 {
+	protected $datetime_value;
 	public $from_datetime;
 	public $to_datetime;
 	protected $max_jaar;
@@ -26,7 +27,14 @@ class DateTimeField extends TextField
 		$maxyear = null,
 		$minyear = null
 	) {
-		parent::__construct($name, $value, $description);
+		parent::__construct($name, null, $description);
+
+		if ($value == '0000-00-00' or empty($value)) {
+			$this->datetime_value = null;
+		} else {
+			$this->datetime_value = date('Y-m-d H:i', strtotime($value));
+		}
+
 		if (is_int($maxyear)) {
 			$this->max_jaar = $maxyear;
 		} else {
@@ -88,8 +96,6 @@ class DateTimeField extends TextField
 			'id',
 			'name',
 			'class',
-			'value',
-			'origvalue',
 			'disabled',
 			'readonly',
 			'maxlength',
@@ -121,6 +127,8 @@ class DateTimeField extends TextField
 <input
  {$attributes}
  type="datetime-local"
+ value="{$this->datetime_value}"
+ origvalue="{$this->datetime_value}"
  min="{$minValue}"
  max="{$maxValue}"
  pattern="[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"
