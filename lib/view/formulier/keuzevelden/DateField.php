@@ -18,6 +18,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  */
 class DateField extends InputField
 {
+	protected $date_value;
 	protected $max_jaar;
 	protected $min_jaar;
 
@@ -28,7 +29,10 @@ class DateField extends InputField
 		$maxyear = null,
 		$minyear = null
 	) {
-		parent::__construct($name, $value, $description);
+		parent::__construct($name, null, $description);
+
+		$this->date_value = date('Y-m-d', strtotime($value));
+
 		if (is_int($maxyear)) {
 			$this->max_jaar = $maxyear;
 		} else {
@@ -56,7 +60,7 @@ class DateField extends InputField
 			return false;
 		}
 
-		$date = \DateTimeImmutable::createFromFormat('!YYYY-MM-DD', $this->value);
+		$date = \DateTimeImmutable::createFromFormat('!Y-m-d', $this->value);
 
 		if ($this->value == '0000-00-00' or empty($this->value)) {
 			if ($this->required) {
@@ -85,8 +89,6 @@ class DateField extends InputField
 			'id',
 			'name',
 			'class',
-			'value',
-			'origvalue',
 			'disabled',
 			'readonly',
 			'maxlength',
@@ -95,6 +97,7 @@ class DateField extends InputField
 		]);
 
 		$minValue = $maxValue = null;
+		// $value = $this->date_value;
 
 		if ($this->min_jaar) {
 			$minValue = $this->min_jaar . '-01-01';
@@ -108,6 +111,8 @@ class DateField extends InputField
 <input
  {$attributes}
  type="date"
+ value="{$this->date_value}"
+ origvalue="{$this->date_value}"
  min="{$minValue}"
  max="{$maxValue}"
  pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
