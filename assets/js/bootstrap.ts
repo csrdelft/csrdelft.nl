@@ -9,7 +9,6 @@ import {
 	registerBbContext,
 	registerClipboardContext,
 	registerDataTableContext,
-	registerFlatpickrContext,
 	registerFormulierContext,
 	registerGlobalContext,
 	registerGrafiekContext,
@@ -119,7 +118,7 @@ Dropzone.autoDiscover = false;
 		registerKnopContext(),
 		registerDataTableContext(),
 		registerBbContext(),
-		registerFlatpickrContext(),
+		registerLidInstellingenContext(),
 	]);
 
 	docReady(() => {

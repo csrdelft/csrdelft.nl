@@ -56,7 +56,7 @@ class DateField extends InputField
 			return false;
 		}
 
-		$date = \DateTimeImmutable::createFromFormat('!Y-m-d', $this->value);
+		$date = \DateTimeImmutable::createFromFormat('!YYYY-MM-DD', $this->value);
 
 		if ($this->value == '0000-00-00' or empty($this->value)) {
 			if ($this->required) {
@@ -82,7 +82,6 @@ class DateField extends InputField
 	public function getHtml()
 	{
 		$attributes = $this->getInputAttribute([
-			'type',
 			'id',
 			'name',
 			'class',
@@ -98,19 +97,20 @@ class DateField extends InputField
 		$minValue = $maxValue = null;
 
 		if ($this->min_jaar) {
-			$minValue = $this->min_jaar . '-01-01 00:00';
+			$minValue = $this->min_jaar . '-01-01';
 		}
 
 		if ($this->max_jaar) {
-			$maxValue = $this->max_jaar + 1 . '-01-01 00:00';
+			$maxValue = $this->max_jaar + 1 . '-01-01';
 		}
 
 		return <<<HTML
 <input
  {$attributes}
- data-min-date="{$minValue}"
- data-max-date="{$maxValue}"
- data-readonly="{$this->readonly}"
+ type="date"
+ min="{$minValue}"
+ max="{$maxValue}"
+ pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
 />
 HTML;
 	}

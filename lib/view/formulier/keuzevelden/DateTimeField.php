@@ -85,7 +85,6 @@ class DateTimeField extends TextField
 	public function getHtml()
 	{
 		$attributes = $this->getInputAttribute([
-			'type',
 			'id',
 			'name',
 			'class',
@@ -121,11 +120,12 @@ class DateTimeField extends TextField
 		return <<<HTML
 <input
  {$attributes}
- data-min-date="{$minValue}"
- data-max-date="{$maxValue}"
+ type="datetime-local"
+ min="{$minValue}"
+ max="{$maxValue}"
+ pattern="[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"
  data-after="{$after}"
  data-before="{$before}"
- data-readonly="{$this->readonly}"
 />
 HTML;
 	}
