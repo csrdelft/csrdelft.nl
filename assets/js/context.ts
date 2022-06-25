@@ -117,17 +117,6 @@ export const registerGlobalContext = async (): Promise<void> => {
 	});
 };
 
-export const registerFlatpickrContext = async (): Promise<void> => {
-	const { initDateTimePicker, initDatePicker } = await import(
-		'./lib/datepicker'
-	);
-
-	ctx.addHandlers({
-		'.DateTimeField': initDateTimePicker,
-		'.DateField': initDatePicker,
-	});
-};
-
 export const registerLidInstellingenContext = async (): Promise<void> => {
 	const { instellingOpslaan } = await import('./page/instellingen');
 
