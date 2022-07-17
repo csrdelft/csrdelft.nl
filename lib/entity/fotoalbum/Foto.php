@@ -14,6 +14,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fotoalbum\FotoRepository")
  * @ORM\Table("fotos")
+ * @ORM\EntityListeners({"CsrDelft\events\FotoListener"})
  */
 class Foto extends Afbeelding
 {
@@ -58,10 +59,7 @@ class Foto extends Afbeelding
 		FotoAlbum $album = null,
 		$parse = false
 	) {
-		if ($filename === true) {
-			// called from PersistenceModel
-			$this->directory = join_paths(PHOTOALBUM_PATH, $this->subdir);
-		} elseif ($album !== null) {
+		if ($album !== null) {
 			$this->filename = $filename;
 			$this->directory = $album->path;
 			$this->subdir = $album->subdir;
