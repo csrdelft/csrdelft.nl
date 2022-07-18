@@ -98,21 +98,6 @@
 								</div>
 							</div>
 						</noscript>
-
-						{% trans %}
-						<p>
-							De OWee gaat er anders uitzien, voor meer informatie zie de <a href="https://owee.nl">OWee
-								website</a>.<br>
-							Maar wij willen je wel vast digitaal een beetje van C.S.R. laten zien.
-							We willen jou daar goede handvaten voor geven. De belangrijkste informatie wordt gedeeld via deze website
-							dus kijk even rond.
-							Wil je meer weten? Kijk op ons <a href="https://www.youtube.com/user/CivitasFilms">YouTube kanaal</a>,
-							onze <a href="https://www.instagram.com/csrdelft">Instagram pagina</a> en de <a
-								href="https://www.owee.nl"> OWee </a> website.
-						</p>
-						<p>We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.</p>
-						<p>Liefs,<br>OWeeCie en PromoCie</p>
-						{% endtrans %}
 					</div>
 				</div>
 			</div>
@@ -141,7 +126,7 @@
 		<section id="four" class="wrapper alt kleur4">
 			<div class="inner">
 				<noscript class="lazy-load">
-						<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/OweeCie.jpg"
+						<span class="image"><img src="/images/owee/oweecie2022.jpg"
 																						 alt="Owee Commissie"/></span>
 				</noscript>
 				<div class="content">
@@ -150,11 +135,11 @@
 							om onze sociëteit Confide aan de Oude Delft 9 te bezoeken.
 					{% endtrans %}
 
-					<p class="lidworden">{% trans with {'{lidworden}': url('default', {naam: 'lidworden', _fragment: 'owee-form'})} %}Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).
-							Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
-							opgenomen.
-							Doe dit door <a href="{lidworden}">hier</a> te
-																													klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek{% endtrans %}</p>
+					<p class="lidworden">{% trans with {'{lidworden}': url('default', {naam: 'lidworden', _fragment: 'owee-form'})} %}
+							Wil je lid worden? Inschrijven kan in de OWee (21 t/m 25 augustus).
+							Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden	opgenomen.
+							Doe dit door <a href="{lidworden}">hier</a> te klikken.
+						  Zorg ervoor dat je de week van 29 augustus t/m 2 september vrij houdt voor de novitiaatsweek.{% endtrans %}</p>
 					<a href="{{ url('default', {naam: 'lidworden'}) }}" class="special">{% trans %}Meer informatie over lid worden{% endtrans %}</a>
 				</div>
 			</div>

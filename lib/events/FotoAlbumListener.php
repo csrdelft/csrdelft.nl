@@ -8,9 +8,11 @@ use Doctrine\ORM\Mapping\PostLoad;
 /**
  * Verantwoordelijk voor laden van path in fotoalbum bij ophalen uit database
  */
-class FotoAlbumListener {
+class FotoAlbumListener
+{
 	/** @PostLoad */
-	public function postLoadHandler(FotoAlbum $album) {
+	public function postLoadHandler(FotoAlbum $album)
+	{
 		$album->path = realpathunix(join_paths(PHOTOALBUM_PATH, $album->subdir));
 	}
 }

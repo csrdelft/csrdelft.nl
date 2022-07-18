@@ -660,6 +660,16 @@
 					three documents below you can read the agreements that we as C.S.R. made with the TU Delft.
 				</target>
       </trans-unit>
+      <trans-unit id="ZKiia_6" resname="Wil je lid worden? Inschrijven kan in de OWee (21 t/m 25 augustus).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden&#9;opgenomen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Doe dit door &lt;a href=&quot;{lidworden}&quot;&gt;hier&lt;/a&gt; te klikken.&#10;&#9;&#9;&#9;&#9;&#9;&#9;  Zorg ervoor dat je de week van 29 augustus t/m 2 september vrij houdt voor de novitiaatsweek.">
+        <source>Wil je lid worden? Inschrijven kan in de OWee (21 t/m 25 augustus).
+							Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden	opgenomen.
+							Doe dit door &lt;a href="{lidworden}"&gt;hier&lt;/a&gt; te klikken.
+						  Zorg ervoor dat je de week van 29 augustus t/m 2 september vrij houdt voor de novitiaatsweek.</source>
+        <target><![CDATA[Do you want to become a member?
+							Registration is open during the Owee (August 21 - 25). It is also possible
+        			to register in advance so that we can get in contact with you right when the OWee starts. Join us by clicking  <a href="{lidworden}">here</a>.
+        			Make sure to reserve the week of August 29 to September 2 for the introduction week of C.S.R. ]]></target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
