@@ -665,7 +665,7 @@
 							Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden	opgenomen.
 							Doe dit door &lt;a href="{lidworden}"&gt;hier&lt;/a&gt; te klikken.
 						  Zorg ervoor dat je de week van 29 augustus t/m 2 september vrij houdt voor de novitiaatsweek.</source>
-				<target><![CDATA[Do you want to become a member?
+        <target><![CDATA[Do you want to become a member?
 							Registration is open during the Owee (August 21 - 25). It is also possible
         			to register in advance so that we can get in contact with you right when the OWee starts. Join us by clicking  <a href="{lidworden}">here</a>.
         			Make sure to reserve the week of August 29 to September 2 for the introduction week of C.S.R. ]]></target>
