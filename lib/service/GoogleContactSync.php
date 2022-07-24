@@ -72,9 +72,10 @@ class GoogleContactSync
 	 */
 	private $initialized = false;
 
-	public function __construct(GoogleAuthenticator $authenticator,
-															ProfielRepository   $profielRepository)
-	{
+	public function __construct(
+		GoogleAuthenticator $authenticator,
+		ProfielRepository $profielRepository
+	) {
 		$this->authenticator = $authenticator;
 
 		$this->groepNaam = trim(lid_instelling('googleContacts', 'groepnaam'));
@@ -96,13 +97,15 @@ class GoogleContactSync
 		while (count($groups) < $max) {
 			$options = [
 				'pageSize' => 2,
-				'groupFields' => 'name,memberCount'
+				'groupFields' => 'name,memberCount',
 			];
 			if ($pageToken) {
 				$options['pageToken'] = $pageToken;
 			}
 
-			$contactGroups = $this->peopleService->contactGroups->listContactGroups($options);
+			$contactGroups = $this->peopleService->contactGroups->listContactGroups(
+				$options
+			);
 			$groups = array_merge($groups, $contactGroups->getContactGroups());
 			$pageToken = $contactGroups->getNextPageToken();
 			$max = $contactGroups->getTotalItems();
@@ -138,7 +141,9 @@ class GoogleContactSync
 			$contactGroup->setName($this->groepNaam);
 			$createContactGroupRequest = new CreateContactGroupRequest();
 			$createContactGroupRequest->setContactGroup($contactGroup);
-			$group = $this->peopleService->contactGroups->create($createContactGroupRequest);
+			$group = $this->peopleService->contactGroups->create(
+				$createContactGroupRequest
+			);
 		}
 
 		$this->csrGroupResourceName = $group->getResourceName();
@@ -151,9 +156,12 @@ class GoogleContactSync
 	private function getCSRContactGroupMemberIDs(): array
 	{
 		$contactGroup = $this->getOrCreateCSRContactGroup();
-		$contactGroupDetails = $this->peopleService->contactGroups->get($contactGroup->getResourceName(), [
-			'maxMembers' => 100000,
-		]);
+		$contactGroupDetails = $this->peopleService->contactGroups->get(
+			$contactGroup->getResourceName(),
+			[
+				'maxMembers' => 100000,
+			]
+		);
 
 		return $contactGroupDetails->getMemberResourceNames();
 	}
@@ -225,14 +233,20 @@ class GoogleContactSync
 			// membership
 			$csrGroupMembership = new Membership();
 			$contactGroupMembership = new ContactGroupMembership();
-			$contactGroupMembership->setContactGroupResourceName($this->csrGroupResourceName);
+			$contactGroupMembership->setContactGroupResourceName(
+				$this->csrGroupResourceName
+			);
 			$csrGroupMembership->setContactGroupMembership($contactGroupMembership);
 			$person->setMemberships([$csrGroupMembership]);
 		}
 
 		// names
 		$name = new Name();
-		$name->setGivenName(trim(!empty($profiel->voornaam) ? $profiel->voornaam : $profiel->voorletters));
+		$name->setGivenName(
+			trim(
+				!empty($profiel->voornaam) ? $profiel->voornaam : $profiel->voorletters
+			)
+		);
 		$name->setMiddleName(trim($profiel->tussenvoegsel));
 		$name->setFamilyName(trim($profiel->achternaam));
 		$person->setNames([$name]);
@@ -255,12 +269,17 @@ class GoogleContactSync
 		// genders
 		if ($profiel->geslacht) {
 			$gender = new Gender();
-			$gender->setValue($profiel->geslacht == Geslacht::Man ? 'male' : 'female');
+			$gender->setValue(
+				$profiel->geslacht == Geslacht::Man ? 'male' : 'female'
+			);
 			$person->setGenders([$gender]);
 		}
 
 		// birthdays
-		if ($profiel->gebdatum && date_format_intl($profiel->gebdatum, DATE_FORMAT) != '0000-00-00') {
+		if (
+			$profiel->gebdatum &&
+			date_format_intl($profiel->gebdatum, DATE_FORMAT) != '0000-00-00'
+		) {
 			$birthday = new Birthday();
 			$birthdayDate = new Date();
 			$birthdayDate->setDay($profiel->gebdatum->format('j'));
@@ -335,10 +354,7 @@ class GoogleContactSync
 		$person->setPhoneNumbers($phoneNumbers);
 
 		// emailAddresses
-		$emailList = [
-			['email', 'home', true],
-			['sec_email', 'other', false],
-		];
+		$emailList = [['email', 'home', true], ['sec_email', 'other', false]];
 		$emailAddresses = [];
 
 		foreach ($emailList as $email) {
@@ -360,7 +376,11 @@ class GoogleContactSync
 
 		// urls
 		$urlList = [
-			[getCsrRoot() . '/profiel/' . $profiel->uid, 'C.S.R. webstek profiel', true],
+			[
+				getCsrRoot() . '/profiel/' . $profiel->uid,
+				'C.S.R. webstek profiel',
+				true,
+			],
 			[$profiel->website, 'Website', false],
 			[$profiel->linkedin, 'LinkedIn', false],
 		];
@@ -417,14 +437,18 @@ class GoogleContactSync
 
 			// Maak contacten aan
 			$batchCreateContactsRequest->setReadMask(self::READ_MASK);
-			$inserted = $this->peopleService->people->batchCreateContacts($batchCreateContactsRequest);
+			$inserted = $this->peopleService->people->batchCreateContacts(
+				$batchCreateContactsRequest
+			);
 
 			// Zet resourceNames in currentContactMap
 			foreach ($inserted->getCreatedPeople() as $created) {
 				if ($created->getHttpStatusCode() === 200) {
 					$uid = self::getContactCsrUid($created->getPerson());
 					if ($uid) {
-						$this->currentContactMap[$uid] = $created->getPerson()->getResourceName();
+						$this->currentContactMap[$uid] = $created
+							->getPerson()
+							->getResourceName();
 					}
 				}
 			}
@@ -453,7 +477,9 @@ class GoogleContactSync
 			// Update contacten
 			$batchUpdateContactsRequest->setUpdateMask(self::UPDATE_MASK);
 			$batchUpdateContactsRequest->setReadMask(self::READ_MASK);
-			$this->peopleService->people->batchUpdateContacts($batchUpdateContactsRequest);
+			$this->peopleService->people->batchUpdateContacts(
+				$batchUpdateContactsRequest
+			);
 		}
 	}
 
@@ -471,7 +497,10 @@ class GoogleContactSync
 				$updateContactPhotoRequest = new UpdateContactPhotoRequest();
 				$updateContactPhotoRequest->setPhotoBytes($photoBytes);
 
-				$this->peopleService->people->updateContactPhoto($resourceId, $updateContactPhotoRequest);
+				$this->peopleService->people->updateContactPhoto(
+					$resourceId,
+					$updateContactPhotoRequest
+				);
 			}
 		}
 	}
@@ -518,9 +547,13 @@ class GoogleContactSync
 		try {
 			// Maak lijst van profielen
 			/** @var Profiel[] $profielBatch */
-			$profielBatch = array_filter(array_map(function ($profiel) {
-				return $profiel instanceof Profiel ? $profiel : $this->profielRepository->find($profiel);
-			}, $leden));
+			$profielBatch = array_filter(
+				array_map(function ($profiel) {
+					return $profiel instanceof Profiel
+						? $profiel
+						: $this->profielRepository->find($profiel);
+				}, $leden)
+			);
 
 			// Bepaal inserts/updates
 			$toUpdate = [];
@@ -545,7 +578,7 @@ class GoogleContactSync
 
 			// Upload foto's
 			// Disabled: Google staat standaard maar 60 uploads per seconde toe
-		 	//$this->updatePhotos($profielBatch);
+			//$this->updatePhotos($profielBatch);
 
 			// Stel melding in
 			$aantalAangemaakt = count($toInsert);
@@ -553,10 +586,16 @@ class GoogleContactSync
 			$aantalBijgewerkt = count($toUpdate);
 			$meervoudBijgewerkt = $aantalBijgewerkt === 1 ? 'contact' : 'contacten';
 			return "$aantalAangemaakt $meervoudAangemaakt aangemaakt, $aantalBijgewerkt $meervoudBijgewerkt bijgewerkt";
-		} /** @noinspection PhpRedundantCatchClauseInspection */ catch (Google_Service_Exception $exception) {
+		}/** @noinspection PhpRedundantCatchClauseInspection */  catch (Google_Service_Exception $exception) {
 			$exceptionJson = json_decode($exception->getMessage());
-			if (json_last_error() === JSON_ERROR_NONE && isset($exceptionJson->error) && isset($exceptionJson->error->message)) {
-				throw new CsrGebruikerException('Google sync mislukt: ' . $exceptionJson->error->message);
+			if (
+				json_last_error() === JSON_ERROR_NONE &&
+				isset($exceptionJson->error) &&
+				isset($exceptionJson->error->message)
+			) {
+				throw new CsrGebruikerException(
+					'Google sync mislukt: ' . $exceptionJson->error->message
+				);
 			} else {
 				throw new CsrGebruikerException('Google sync mislukt');
 			}

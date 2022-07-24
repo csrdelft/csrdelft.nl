@@ -37,8 +37,11 @@ class GoogleController extends AbstractController
 	 * @Route("/google/callback", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function callback(Request $request, EntityManagerInterface $manager, GoogleAuthenticator $googleAuthenticator): RedirectResponse
-	{
+	public function callback(
+		Request $request,
+		EntityManagerInterface $manager,
+		GoogleAuthenticator $googleAuthenticator
+	): RedirectResponse {
 		$state = urldecode($request->query->get('state', null));
 
 		if (!str_starts_with($state, $request->getSchemeAndHttpHost())) {

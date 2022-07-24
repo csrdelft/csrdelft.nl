@@ -34,13 +34,12 @@ class LedenLijstController extends AbstractController
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function lijst(
-		Request             $request,
+		Request $request,
 		CmsPaginaRepository $cmsPaginaRepository,
-		LidZoekerService    $lidZoeker,
-		GoogleContactSync   $googleSync,
-		Environment         $twig
-	)
-	{
+		LidZoekerService $lidZoeker,
+		GoogleContactSync $googleSync,
+		Environment $twig
+	) {
 		if (!$this->mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));

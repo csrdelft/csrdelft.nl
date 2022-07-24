@@ -27,10 +27,11 @@ class GoogleAuthenticator
 	 */
 	private $requestStack;
 
-	public function __construct(GoogleTokenRepository $googleTokenRepository,
-															LoginService          $loginService,
-															RequestStack          $requestStack)
-	{
+	public function __construct(
+		GoogleTokenRepository $googleTokenRepository,
+		LoginService $loginService,
+		RequestStack $requestStack
+	) {
 		$this->googleTokenRepository = $googleTokenRepository;
 		$this->loginService = $loginService;
 		$this->requestStack = $requestStack;
@@ -66,7 +67,7 @@ class GoogleAuthenticator
 		$token = $this->googleTokenRepository->find($this->loginService->_getUid());
 
 		if (!$token) {
-			throw new CsrException("getToken aangeroepen terwijl deze niet bestaat");
+			throw new CsrException('getToken aangeroepen terwijl deze niet bestaat');
 		} else {
 			return $token;
 		}

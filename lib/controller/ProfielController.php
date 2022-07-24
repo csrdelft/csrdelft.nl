@@ -602,8 +602,10 @@ class ProfielController extends AbstractController
 	 * @Route("/profiel/{uid}/addToGoogleContacts", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function addToGoogleContacts($uid, GoogleContactSync $googleContactSync): RedirectResponse
-	{
+	public function addToGoogleContacts(
+		$uid,
+		GoogleContactSync $googleContactSync
+	): RedirectResponse {
 		$profiel = $this->profielRepository->find($uid);
 
 		if (!$profiel) {
