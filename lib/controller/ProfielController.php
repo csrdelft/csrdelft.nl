@@ -619,7 +619,7 @@ class ProfielController extends AbstractController
 		);
 		$googleContactSync->initialize($addToContactsUrl);
 		$msg = $googleContactSync->syncLid($profiel);
-		setMelding('Opgeslagen in Google Contacts: ' . $msg, 1);
+		setMelding('Opgeslagen in Google Contacten: ' . $msg, 1);
 		return $this->redirectToRoute('csrdelft_profiel_profiel', [
 			'uid' => $profiel->uid,
 		]);

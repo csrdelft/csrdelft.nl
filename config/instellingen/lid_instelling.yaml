@@ -210,7 +210,7 @@ instellingen:
       beschrijving: 'De groep waaruit suggesties worden gedaan tijdens het etiketteren in het fotoalbum.'
   googleContacts:
     groepnaam:
-      titel: 'Naam van groep voor contacten in Google contacts'
+      titel: 'Naam van groep voor contacten in Google Contacten'
       type: String
       opties: [1, 100]
       default: 'C.S.R.-leden'

@@ -54,11 +54,11 @@ class GoogleContactSync
 	/**
 	 * @var string[]
 	 */
-	private $currentContactMap;
+	private $currentContactMap = [];
 	/**
 	 * @var string[]
 	 */
-	private $currentEtagMap;
+	private $currentEtagMap = [];
 	/**
 	 * @var ProfielRepository
 	 */
@@ -163,7 +163,7 @@ class GoogleContactSync
 			]
 		);
 
-		return $contactGroupDetails->getMemberResourceNames();
+		return $contactGroupDetails->getMemberResourceNames() ?: [];
 	}
 
 	/**
