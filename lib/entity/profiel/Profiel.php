@@ -872,7 +872,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		if (!is_zichtbaar($this, 'profielfoto', 'intern')) {
 			return '/images/geen-foto.jpg';
 		}
-		$path = $this->getPasfotoInternalPath(false, $vorm);
+		$path = $this->getPasfotoInternalPath($vorm);
 		if ($path === null) {
 			return '/images/geen-foto.jpg';
 		}
@@ -884,7 +884,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return "/profiel/pasfoto/$this->uid.jpg";
 	}
 
-	public function getPasfotoInternalPath($vierkant = false, $vorm = 'user')
+	public function getPasfotoInternalPath($vorm = 'user')
 	{
 		$path = null;
 		if (LoginService::mag(P_OUDLEDEN_READ)) {

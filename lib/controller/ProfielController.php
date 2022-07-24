@@ -35,7 +35,7 @@ use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\fiscaat\SaldoGrafiekService;
-use CsrDelft\service\GoogleSync;
+use CsrDelft\service\GoogleContactSync;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenType;
@@ -71,21 +71,15 @@ class ProfielController extends AbstractController
 	 * @var AccountRepository
 	 */
 	private $accountRepository;
-	/**
-	 * @var GoogleSync
-	 */
-	private $googleSync;
 
 	public function __construct(
 		ProfielRepository $profielRepository,
 		AccountRepository $accountRepository,
-		LidToestemmingRepository $lidToestemmingRepository,
-		GoogleSync $googleSync
+		LidToestemmingRepository $lidToestemmingRepository
 	) {
 		$this->profielRepository = $profielRepository;
 		$this->accountRepository = $accountRepository;
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
-		$this->googleSync = $googleSync;
 	}
 
 	/**
@@ -603,29 +597,29 @@ class ProfielController extends AbstractController
 
 	/**
 	 * @param $uid
+	 * @param GoogleContactSync $googleContactSync
 	 * @return RedirectResponse
 	 * @Route("/profiel/{uid}/addToGoogleContacts", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function addToGoogleContacts($uid): RedirectResponse
-	{
-		$profiel = $this->profielRepository->get($uid);
+	public function addToGoogleContacts(
+		$uid,
+		GoogleContactSync $googleContactSync
+	): RedirectResponse {
+		$profiel = $this->profielRepository->find($uid);
 
 		if (!$profiel) {
 			throw new NotFoundHttpException();
 		}
-		try {
-			$addToContactsUrl = $this->generateUrl(
-				'csrdelft_profiel_addtogooglecontacts',
-				['uid' => $profiel->uid],
-				UrlGeneratorInterface::ABSOLUTE_URL
-			);
-			$this->googleSync->doRequestToken($addToContactsUrl);
-			$msg = $this->googleSync->syncLid($profiel);
-			setMelding('Opgeslagen in Google Contacts: ' . $msg, 1);
-		} catch (CsrException $e) {
-			setMelding('Opslaan in Google Contacts mislukt: ' . $e->getMessage(), -1);
-		}
+
+		$addToContactsUrl = $this->generateUrl(
+			'csrdelft_profiel_addtogooglecontacts',
+			['uid' => $profiel->uid],
+			UrlGeneratorInterface::ABSOLUTE_URL
+		);
+		$googleContactSync->initialize($addToContactsUrl);
+		$msg = $googleContactSync->syncLid($profiel);
+		setMelding('Opgeslagen in Google Contacten: ' . $msg, 1);
 		return $this->redirectToRoute('csrdelft_profiel_profiel', [
 			'uid' => $profiel->uid,
 		]);
