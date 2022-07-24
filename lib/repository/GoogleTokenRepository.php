@@ -3,8 +3,6 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\entity\GoogleToken;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -27,19 +25,8 @@ class GoogleTokenRepository extends AbstractRepository
 	 * @param $uid
 	 * @return bool
 	 */
-	public function exists($uid)
+	public function exists($uid): bool
 	{
 		return $this->find($uid) != null;
-	}
-
-	/**
-	 * @param GoogleToken $token
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function delete(GoogleToken $token)
-	{
-		$this->getEntityManager()->remove($token);
-		$this->getEntityManager()->flush();
 	}
 }

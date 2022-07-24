@@ -25,7 +25,7 @@ class PasfotoController extends AbstractController
 		if (
 			$profiel &&
 			is_zichtbaar($profiel, 'profielfoto', 'intern') &&
-			($path = $profiel->getPasfotoInternalPath(false, $vorm)) != null
+			($path = $profiel->getPasfotoInternalPath($vorm)) != null
 		) {
 			$image = new Afbeelding($path);
 			return new BinaryFileResponse($image->getFullPath(), 200, [], false);

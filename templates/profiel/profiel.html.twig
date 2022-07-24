@@ -40,19 +40,11 @@
 
 				<div class="col-auto">
 					<div class="list-group">
-						{% if isInGoogleContacts(profiel) %}
-							<a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}" class="list-group-item"
-								 title="Dit profiel opdateren in mijn google adresboek">
-								{{ icon('fab fa-google', null, 'Opdateren in Google contacts') }}
-								Google Contacten
-							</a>
-						{% else %}
-							<a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}" class="list-group-item"
-								 title="Dit profiel toevoegen aan mijn google adresboek">
-								{{ icon('fab fa-google', null, 'Toevoegen aan Google contacts') }}
-								Google Contacten
-							</a>
-						{% endif %}
+						<a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}" class="list-group-item"
+							 title="Dit profiel toevoegen aan mijn google adresboek">
+							{{ icon('fab fa-google', null, 'Toevoegen aan Google contacts') }}
+							Google Contacten
+						</a>
 						<a href="{{ url('csrdelft_profiel_vcard', {uid: profiel.uid}) }}" class="list-group-item"
 							 title="Dit profiel opslaan in lokaal adresboek">
 							{{ icon('address-card') }}

@@ -5,9 +5,8 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\repository\CmsPaginaRepository;
-use CsrDelft\service\GoogleSync;
+use CsrDelft\service\GoogleContactSync;
 use CsrDelft\service\LidZoekerService;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,7 +24,7 @@ class LedenLijstController extends AbstractController
 	 * @param Request $request
 	 * @param CmsPaginaRepository $cmsPaginaRepository
 	 * @param LidZoekerService $lidZoeker
-	 * @param GoogleSync $googleSync
+	 * @param GoogleContactSync $googleSync
 	 * @param Environment $twig
 	 * @return RedirectResponse|Response
 	 * @throws LoaderError
@@ -35,12 +34,13 @@ class LedenLijstController extends AbstractController
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function lijst(
-		Request $request,
+		Request             $request,
 		CmsPaginaRepository $cmsPaginaRepository,
-		LidZoekerService $lidZoeker,
-		GoogleSync $googleSync,
-		Environment $twig
-	) {
+		LidZoekerService    $lidZoeker,
+		GoogleContactSync   $googleSync,
+		Environment         $twig
+	)
+	{
 		if (!$this->mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
@@ -76,25 +76,9 @@ class LedenLijstController extends AbstractController
 
 		if (isset($_GET['addToGoogleContacts'])) {
 			try {
-				$googleSync->doRequestToken($request->getUri());
-
-				$start = microtime(true);
-				$message = $googleSync->syncLidBatch($lidZoeker->getLeden());
-				$elapsed = microtime(true) - $start;
-
-				setMelding(
-					'<h3>Google-sync-resultaat:</h3>' .
-						$message .
-						'<br />' .
-						'<a href="/ledenlijst?q=' .
-						htmlspecialchars($_GET['q'] ?? '') .
-						'">Terug naar de ledenlijst...</a>',
-					0
-				);
-
-				if ($this->mag(P_ADMIN)) {
-					setMelding('Tijd nodig voor deze sync: ' . $elapsed . 's', 0);
-				}
+				$googleSync->initialize($request->getUri());
+				$msg = $googleSync->syncLidBatch($lidZoeker->getLeden());
+				$message = '<h3>Google-sync-resultaat:</h3>' . $msg;
 			} catch (CsrGebruikerException $e) {
 				setMelding($e->getMessage(), -1);
 			}
