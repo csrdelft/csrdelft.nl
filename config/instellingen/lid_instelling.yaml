@@ -215,6 +215,16 @@ instellingen:
       opties: [1, 100]
       default: 'C.S.R.-leden'
       beschrijving: ''
+    ouderAdres:
+      titel: 'Exporteer adressen van ouders naar Google Contacten'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'nee'
+    ouderTelefoonnummer:
+      titel: 'Exporteer telefoonnummers van ouders naar Google Contacten'
+      type: Enumeration
+      opties: [ 'ja', 'nee' ]
+      default: 'nee'
   zijbalk:
     breedte:
       titel: 'Zijbalk weergave'

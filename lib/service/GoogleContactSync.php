@@ -312,10 +312,10 @@ class GoogleContactSync
 			$addresses[] = $address;
 		}
 
-		if ($profiel->o_adres) {
+		if ($profiel->o_adres && (!$profiel->adres || lid_instelling('googleContacts', 'ouderAdres') === 'ja')) {
 			$address = new Address();
 			$metadata = new FieldMetadata();
-			$metadata->setSourcePrimary(false);
+			$metadata->setSourcePrimary(!$profiel->adres);
 			$address->setMetadata($metadata);
 			$address->setType('Ouders');
 			$address->setStreetAddress($profiel->o_adres);
@@ -332,8 +332,12 @@ class GoogleContactSync
 		$phoneNumberList = [
 			['mobiel', 'mobile', true],
 			['telefoon', 'home', false],
-			['o_telefoon', 'Ouders', false],
 		];
+
+		if (lid_instelling('googleContacts', 'ouderTelefoonnummer') === 'ja') {
+			$phoneNumberList[] = ['o_telefoon', 'Ouders', false];
+		}
+
 		$phoneNumbers = [];
 
 		foreach ($phoneNumberList as $pn) {
