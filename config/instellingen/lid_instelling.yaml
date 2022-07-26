@@ -223,7 +223,7 @@ instellingen:
     ouderTelefoonnummer:
       titel: 'Exporteer telefoonnummers van ouders naar Google Contacten'
       type: Enumeration
-      opties: [ 'ja', 'nee' ]
+      opties: ['ja', 'nee']
       default: 'nee'
   zijbalk:
     breedte:

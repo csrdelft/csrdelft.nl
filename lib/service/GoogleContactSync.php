@@ -312,7 +312,11 @@ class GoogleContactSync
 			$addresses[] = $address;
 		}
 
-		if ($profiel->o_adres && (!$profiel->adres || lid_instelling('googleContacts', 'ouderAdres') === 'ja')) {
+		if (
+			$profiel->o_adres &&
+			(!$profiel->adres ||
+				lid_instelling('googleContacts', 'ouderAdres') === 'ja')
+		) {
 			$address = new Address();
 			$metadata = new FieldMetadata();
 			$metadata->setSourcePrimary(!$profiel->adres);
