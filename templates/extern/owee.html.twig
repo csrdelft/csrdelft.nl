@@ -36,6 +36,8 @@
 					<p>{% trans %}C.S.R. Delft is de grootste christelijke vereniging van Delft. Lid zijn van onze studentenvereniging betekent voor jou dat je nieuwe vriendschappen maakt voor het leven en samen geniet van de activiteiten die de vereniging biedt.
 							Het	betekent dat je je geloof blijft voeden en je kan verdiepen met kringen, bidgroepjes en worshipavonden.
 							Lid zijn zorgt voor prachtige momenten tijdens je studententijd die je je leven lang niet gaat vergeten!{% endtrans %}</p>
+					<p>{% trans %}Bij C.S.R. zijn we verbonden door het christelijk geloof, maar wel allemaal erg verschillend.
+							Iedereen is welkom bij ons ongeacht je kerkelijke achtergrond, culturele achtergrond, geaardheid of hoe je je identificeert.{% endtrans %}</p>
 					<div class="mt-4">
 						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">
 							{% trans %}Ik wil lid worden!{% endtrans %}
@@ -43,9 +45,9 @@
 						<a href="#contact" class="cta primary" onclick="document.getElementById('lid-spreken').checked = true">
 							{% trans %}Eerst een lid spreken{% endtrans %}
 						</a>
-						<a href="https://forms.gle/TjRCndkQ6iekoZ2X7" target="_blank" rel="noopener" class="cta secondary">
-							{% trans %}Open avond bezoeken{% endtrans %}
-						</a>
+{#						<a target="_blank" rel="noopener" class="cta secondary">#}
+{#							{% trans %}Open avond bezoeken{% endtrans %}#}
+{#						</a>#}
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -62,27 +64,27 @@
 			<div class="content">
 				<div class="row pt-4">
 					<a class="col-6 col-md-4 mb-4" href="{{ url('default', {naam: 'vereniging', subnaam: 'geloof'}) }}">
-						<img src="{{ absolute_url('/images/owee/geloof.png') }}" alt="{% trans %}Geloof{% endtrans %}">
+						<img src="{{ absolute_url('/images/owee/geloof.jpg') }}" alt="{% trans %}Geloof{% endtrans %}">
 						<span class="overlay">{% trans %}Geloof{% endtrans %}</span>
 					</a>
 					<a class="col-6 col-md-4 mb-4" href="{{ url('default', {naam: 'vereniging', subnaam: 'vorming'}) }}">
-						<img src="{{ absolute_url('/images/owee/vorming.png') }}" alt="{% trans %}Vorming{% endtrans %}">
+						<img src="{{ absolute_url('/images/owee/vorming.jpg') }}" alt="{% trans %}Vorming{% endtrans %}">
 						<span class="overlay">{% trans %}Vorming{% endtrans %}</span>
 					</a>
 					<a class="col-6 col-md-4 mb-4" href="{{ url('default', {naam: 'vereniging', subnaam: 'gezelligheid'}) }}">
-						<img src="{{ absolute_url('/images/owee/gezelligheid.png') }}" alt="{% trans %}Gezelligheid{% endtrans %}">
+						<img src="{{ absolute_url('/images/owee/gezelligheid.jpg') }}" alt="{% trans %}Gezelligheid{% endtrans %}">
 						<span class="overlay">{% trans %}Gezelligheid{% endtrans %}</span>
 					</a>
 					<a class="col-6 col-md-4 mb-4" href="{{ url('default', {naam: 'vereniging', subnaam: 'sport'}) }}">
-						<img src="{{ absolute_url('/images/owee/sport.png') }}" alt="{% trans %}Sport{% endtrans %}">
+						<img src="{{ absolute_url('/images/owee/sport.jpg') }}" alt="{% trans %}Sport{% endtrans %}">
 						<span class="overlay">{% trans %}Sport{% endtrans %}</span>
 					</a>
 					<a class="col-6 col-md-4 mb-4" href="{{ url('default', {naam: 'vereniging', subnaam: 'ontspanning'}) }}">
-						<img src="{{ absolute_url('/images/owee/ontspanning.png') }}" alt="{% trans %}Ontspanning{% endtrans %}">
+						<img src="{{ absolute_url('/images/owee/ontspanning.jpg') }}" alt="{% trans %}Ontspanning{% endtrans %}">
 						<span class="overlay">{% trans %}Ontspanning{% endtrans %}</span>
 					</a>
 					<a class="col-6 col-md-4 mb-4" href="{{ url('default', {naam: 'vereniging', subnaam: 'societeit'}) }}">
-						<img src="{{ absolute_url('/images/owee/societeit.png') }}" alt="{% trans %}Societeit{% endtrans %}">
+						<img src="{{ absolute_url('/images/owee/societeit.jpg') }}" alt="{% trans %}Societeit{% endtrans %}">
 						<span class="overlay">{% trans %}Soci&euml;teit{% endtrans %}</span>
 					</a>
 				</div>
@@ -161,8 +163,8 @@
 						<span class="header-p2">{% trans %}C.S.R.?{% endtrans %}</span>
 					</h1>
 					<p>{% trans %}Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws
-							over activiteiten, zoals open avonden en de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan je hieronder
-							ook je gegevens achterlaten voor je voorinschrijving{% endtrans %}</p>
+							over activiteiten, zoals open avonden en de OWee. Wanneer je al weet dat je lid wilt worden komend jaar, kan je hieronder
+							ook je gegevens achterlaten voor de voorinschrijving.{% endtrans %}</p>
 				</div>
 			</div>
 		</div>
@@ -209,12 +211,12 @@
 							{{ csrfField() }}
 							<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden" checked>
 							<label for="lid-worden" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil </span>lid worden{% endtrans %}</label>
-							<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken">
-							<label for="lid-spreken" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil een dagje </span>met een lid meelopen{% endtrans %}</label>
+							<input hidden id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken">
+							<label hidden for="lid-spreken" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil een dagje </span>met een lid meelopen{% endtrans %}</label>
 							<input hidden id="open-avond" class="owee" type="radio" name="optie" value="open-avond">
 							<label hidden for="open-avond" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil naar een </span>open avond<span class="d-none d-md-inline"> komen</span>{% endtrans %}</label>
 							<div class="interesseformulier">
-								<h6 class="lid-worden">{% trans %}Ben je overtuigd om volgend studiejaar lid te worden bij C.S.R? Wat mooi! Officieel lid worden kan tijdens de introductieweek in augustus. Geef hier alvast je interesse door, dan houden wij je op de hoogte van leuke evenementen en precieze data en tijden.{% endtrans %}</h6>
+								<h6 class="lid-worden">{% trans %}Ben je overtuigd om komend studiejaar lid te worden bij C.S.R? Wat mooi! Officieel lid worden kan tijdens de introductieweek in augustus. Geef hier alvast je interesse door, dan houden wij je op de hoogte van leuke evenementen en precieze data en tijden.{% endtrans %}</h6>
 								<h6 class="lid-spreken">{% trans %}Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.
 										Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze
 										dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden: {% endtrans %}

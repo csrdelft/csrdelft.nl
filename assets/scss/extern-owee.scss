@@ -401,6 +401,7 @@ body {
 			left: 2rem;
 			right: 2rem;
 			height: 240px;
+			//background: $primary url("../images/owee2022_app_ellen.jpg") no-repeat center top;
 
 			@include media-breakpoint-down(md) {
 				right: 2rem;
