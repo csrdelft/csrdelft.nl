@@ -690,6 +690,18 @@
         <target>If you have an interest in joining C.S.R. you can leave your information down below.
 					We will keep you in touch of upcoming activities, like open evenings and the OWee.</target>
       </trans-unit>
+      <trans-unit id="vRPfrz6" resname="Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;over activiteiten, zoals open avonden en de OWee. Wanneer je al weet dat je lid wilt worden komend jaar, kan je hieronder&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;ook je gegevens achterlaten voor de voorinschrijving.">
+        <source>Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws
+							over activiteiten, zoals open avonden en de OWee. Wanneer je al weet dat je lid wilt worden komend jaar, kan je hieronder
+							ook je gegevens achterlaten voor de voorinschrijving.</source>
+        <target>If you are interested you can indicate your interest by filling in the form below. That way we can keep you up to date
+					with the latest updates of open days or the OWee. Also if you already know you want to become a member next year you can
+					fill out the form for preregistration.</target>
+      </trans-unit>
+      <trans-unit id="8qhw3_4" resname="Ben je overtuigd om komend studiejaar lid te worden bij C.S.R? Wat mooi! Officieel lid worden kan tijdens de introductieweek in augustus. Geef hier alvast je interesse door, dan houden wij je op de hoogte van leuke evenementen en precieze data en tijden.">
+        <source>Ben je overtuigd om komend studiejaar lid te worden bij C.S.R? Wat mooi! Officieel lid worden kan tijdens de introductieweek in augustus. Geef hier alvast je interesse door, dan houden wij je op de hoogte van leuke evenementen en precieze data en tijden.</source>
+        <target>Are you convinced to become a member of C.S.R. next study year? That is great to hear! You can become an official member during the introduction week in august. However, by declaring your interest through the form, we can keep you up to date on interesting events and dates.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
