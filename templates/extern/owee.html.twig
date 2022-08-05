@@ -36,6 +36,8 @@
 					<p>{% trans %}C.S.R. Delft is de grootste christelijke vereniging van Delft. Lid zijn van onze studentenvereniging betekent voor jou dat je nieuwe vriendschappen maakt voor het leven en samen geniet van de activiteiten die de vereniging biedt.
 							Het	betekent dat je je geloof blijft voeden en je kan verdiepen met kringen, bidgroepjes en worshipavonden.
 							Lid zijn zorgt voor prachtige momenten tijdens je studententijd die je je leven lang niet gaat vergeten!{% endtrans %}</p>
+					<p>{% trans %}Bij C.S.R. zijn we verbonden door het christelijk geloof, maar wel allemaal erg verschillend.
+							Iedereen is welkom bij ons ongeacht je kerkelijke achtergrond, culturele achtergrond, geaardheid of hoe je je identificeert.{% endtrans %}</p>
 					<div class="mt-4">
 						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">
 							{% trans %}Ik wil lid worden!{% endtrans %}
@@ -43,9 +45,9 @@
 						<a href="#contact" class="cta primary" onclick="document.getElementById('lid-spreken').checked = true">
 							{% trans %}Eerst een lid spreken{% endtrans %}
 						</a>
-						<a href="https://forms.gle/TjRCndkQ6iekoZ2X7" target="_blank" rel="noopener" class="cta secondary">
-							{% trans %}Open avond bezoeken{% endtrans %}
-						</a>
+{#						<a target="_blank" rel="noopener" class="cta secondary">#}
+{#							{% trans %}Open avond bezoeken{% endtrans %}#}
+{#						</a>#}
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -162,7 +164,7 @@
 					</h1>
 					<p>{% trans %}Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws
 							over activiteiten, zoals open avonden en de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan je hieronder
-							ook je gegevens achterlaten voor je voorinschrijving{% endtrans %}</p>
+							ook je gegevens achterlaten voor de voorinschrijving.{% endtrans %}</p>
 				</div>
 			</div>
 		</div>
@@ -209,8 +211,8 @@
 							{{ csrfField() }}
 							<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden" checked>
 							<label for="lid-worden" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil </span>lid worden{% endtrans %}</label>
-							<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken">
-							<label for="lid-spreken" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil een dagje </span>met een lid meelopen{% endtrans %}</label>
+							<input hidden id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken">
+							<label hidden for="lid-spreken" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil een dagje </span>met een lid meelopen{% endtrans %}</label>
 							<input hidden id="open-avond" class="owee" type="radio" name="optie" value="open-avond">
 							<label hidden for="open-avond" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil naar een </span>open avond<span class="d-none d-md-inline"> komen</span>{% endtrans %}</label>
 							<div class="interesseformulier">

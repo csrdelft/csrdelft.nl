@@ -232,10 +232,10 @@
         <source>Interesse in C.S.R.?</source>
         <target>Interested in C.S.R.?</target>
       </trans-unit>
-      <trans-unit id="EuC0Bfa" resname="Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met&#10;&#9;&#9;&#9;&#9;&#9;&#9;nieuws over bijvoorbeeld open avonden of de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan&#10;&#9;&#9;&#9;&#9;&#9;&#9;je hieronder ook je gegevens achterlaten voor je voorinschrijving.">
+      <trans-unit id="wRaftz7" resname="Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met&#10;&#9;&#9;&#9;&#9;&#9;&#9;nieuws over bijvoorbeeld open avonden of de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan&#10;&#9;&#9;&#9;&#9;&#9;&#9;je hieronder ook je gegevens achterlaten voor de voorinschrijving.">
         <source>Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met
 						nieuws over bijvoorbeeld open avonden of de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan
-						je hieronder ook je gegevens achterlaten voor je voorinschrijving.</source>
+						je hieronder ook je gegevens achterlaten voor de voorinschrijving.</source>
         <target>
 					If you are interested you can indicate your interest by filling in the form below. That way we can keep you up to date
 					with the latest updates of open days or the OWee. Also if you already know you want to become a member next year you can
@@ -669,6 +669,26 @@
 							Registration is open during the Owee (August 21 - 25). It is also possible
         			to register in advance so that we can get in contact with you right when the OWee starts. Join us by clicking  <a href="{lidworden}">here</a>.
         			Make sure to reserve the week of August 29 to September 2 for the introduction week of C.S.R. ]]></target>
+      </trans-unit>
+      <trans-unit id="nHFE2Hj" resname="Bij C.S.R. zijn we verbonden door het christelijk geloof, maar wel allemaal erg verschillend.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Iedereen is welkom bij ons ongeacht je kerkelijke achtergrond, culturele achtergrond, geaardheid of hoe je je identificeert.">
+        <source>Bij C.S.R. zijn we verbonden door het christelijk geloof, maar wel allemaal erg verschillend.
+							Iedereen is welkom bij ons ongeacht je kerkelijke achtergrond, culturele achtergrond, geaardheid of hoe je je identificeert.</source>
+        <target>At C.S.R. we are connected through our christian faith, although we all are completely different.
+							Everyone is welcome at C.S.R. regardless of your church background, cultural background, sexual orientation or how you identify.</target>
+      </trans-unit>
+      <trans-unit id="8oKmyai" resname="Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;over activiteiten, zoals open avonden en de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan je hieronder&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;ook je gegevens achterlaten voor de voorinschrijving">
+        <source>Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws
+							over activiteiten, zoals open avonden en de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan je hieronder
+							ook je gegevens achterlaten voor de voorinschrijving</source>
+        <target>If you have an interest in joining C.S.R. you can leave your information down below.
+					We will keep you in touch of upcoming activities, like open evenings and the OWee.</target>
+      </trans-unit>
+      <trans-unit id="Hv88Rf." resname="Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;over activiteiten, zoals open avonden en de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan je hieronder&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;ook je gegevens achterlaten voor de voorinschrijving.">
+        <source>Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws
+							over activiteiten, zoals open avonden en de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan je hieronder
+							ook je gegevens achterlaten voor de voorinschrijving.</source>
+        <target>If you have an interest in joining C.S.R. you can leave your information down below.
+					We will keep you in touch of upcoming activities, like open evenings and the OWee.</target>
       </trans-unit>
     </body>
   </file>
