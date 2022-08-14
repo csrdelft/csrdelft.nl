@@ -130,6 +130,10 @@ body {
 
 	.content {
 		@extend .container;
+
+		.programma {
+			width: 100%;
+		}
 	}
 
 	h1,
