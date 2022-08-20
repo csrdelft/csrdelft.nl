@@ -150,7 +150,10 @@ De PubCie.
 		if ($type === 'lid-worden') {
 			$typeaanduiding = 'Ik wil lid worden';
 			$commissie = 'NovCie en OweeCie';
-			$bestemming = [$_ENV['EMAIL_NOVCIE'] => 'NovCie', $_ENV['EMAIL_OWEECIE'] => 'OweeCie'];
+			$bestemming = [
+				$_ENV['EMAIL_NOVCIE'] => 'NovCie',
+				$_ENV['EMAIL_OWEECIE'] => 'OweeCie',
+			];
 		} elseif ($type === 'lid-spreken') {
 			$typeaanduiding = 'Eerst een lid spreken';
 			$commissie = 'OweeCie';
