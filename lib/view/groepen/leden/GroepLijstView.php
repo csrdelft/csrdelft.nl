@@ -47,7 +47,7 @@ class GroepLijstView extends GroepTabView
 					'<a href="' .
 					$this->groep->getUrl() .
 					'/ketzer/afmelden" class="post confirm float-start" title="Afmelden">' .
-					Icon::getTag('bullet_delete') .
+					Icon::getTag('circle-minus') .
 					'</a>';
 			}
 			$html .= ProfielRepository::getLink($lid->uid, 'civitas');
