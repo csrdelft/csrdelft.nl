@@ -12,7 +12,7 @@ body.met-owee-banner {
 	position: relative;
 	min-height: 250px;
 	width: 100%;
-	background: url("../../images/owee2020-achtergrond.png") no-repeat center
+	background: url("../../images/owee2022-banner-achtergrond.jpg") no-repeat center
 		bottom;
 	background-size: cover;
 	display: flex;
@@ -23,8 +23,11 @@ body.met-owee-banner {
 
 	.logo {
 		width: 230px;
-		padding-right: 50px;
+		//padding-right: 50px;
 
+		img {
+			width: 100%;
+		}
 		@media (max-width: 550px) {
 			display: none;
 		}
@@ -48,8 +51,10 @@ body.met-owee-banner {
 			font-weight: bold;
 			text-transform: uppercase;
 			display: inline-block;
+			color: #49B8B1;
 			background: white;
-			color: #713e89;
+
+
 			padding: 0.4rem 1.2rem;
 
 			@media (max-width: 550px) {
@@ -59,8 +64,8 @@ body.met-owee-banner {
 			}
 
 			&:hover {
-				background: #5f377d;
-				color: white;
+				color: whitesmoke;
+				background: #49B8B1;
 			}
 		}
 	}
