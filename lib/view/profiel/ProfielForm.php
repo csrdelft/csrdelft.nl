@@ -385,7 +385,7 @@ class ProfielForm extends Formulier
 
 		$fields[] = new Subkopje('Studie');
 		$fields['studie'] = new StudieField('studie', $profiel->studie, 'Studie');
-		$fields['studie']->title = "Onderwijsinstelling - Studie";
+		$fields['studie']->title = 'Onderwijsinstelling - Studie';
 		$fields['studiejaar'] = new IntField(
 			'studiejaar',
 			(int) $profiel->studiejaar,
