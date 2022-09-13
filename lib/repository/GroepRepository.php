@@ -117,13 +117,14 @@ abstract class GroepRepository extends AbstractRepository
 			} elseif (!$role) {
 				// Role op de status positie
 				$role = $status;
+				$qb = $qb
+					->andWhere('groep.status = :status')
+					->setParameter('status', GroepStatus::HT);
 			}
 
 			if ($role) {
 				$qb = $qb
-					->andWhere('groep.status = :status')
 					->andWhere('leden.opmerking = :role')
-					->setParameter('status', GroepStatus::HT)
 					->setParameter('role', $role);
 			}
 
