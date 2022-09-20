@@ -27,7 +27,7 @@ class OAuth2Scope
 		self::BAR_NORMAAL => 'ROLE_ADMIN',
 		self::BAR_BEHEER => 'ROLE_ADMIN',
 		self::BAR_TRUST => 'ROLE_ADMIN',
-		self::WIKI_BESTUUR => 'bestuur:ft,bestuur',
+		self::WIKI_BESTUUR => 'bestuur:ft,bestuur,bestuur:ot',
 	];
 
 	// Optionele scopes
