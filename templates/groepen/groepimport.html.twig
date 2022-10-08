@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block titel %}Bulk aanmelden in groepen{% endblock %}
+
+{% block content %}
+	<h2>Bulk aanmelden in groepen</h2>
+	<p>
+		Met deze tool kan je op basis van een CSV-lijst leden aanmelden in groepen.
+		Download hiervoor het template, vul de gegevens in en upload het bestand. <b>Laat de kolomkoppen staan.</b>
+		Na een controle wordt elke regel verwerkt
+		en worden de leden aangemeld in de groepen.
+	</p>
+
+	<b>groepID</b>
+	<p>Dit is het ID van de groep waarvoor het lid aangemeld moet worden.</p>
+
+	<b>uid</b>
+	<p>Dit is het lidnummer van het profiel dat aangemeld moet worden.</p>
+
+	<b>opmerking</b>
+	<p>Dit is de opmerking die te zien zal zijn achter de naam van het lid in de groepweergave.</p>
+
+	<a href="{{ url('groepimport_template') }}" class="btn btn-secondary">
+		Download template
+	</a>
+
+	<form action="{{ url('groepimport_upload') }}" method="post" class="mt-4" enctype="multipart/form-data">
+		<div class="mb-3">
+			<label for="uploadVeld">Upload hier je ingevulde CSV:</label>
+			<input id="uploadVeld" name="csv" type="file" accept=".csv,text/csv" class="form-control-file">
+		</div>
+		{{ csrfField() }}
+		<input class="btn btn-primary" type="submit" value="Volgende">
+	</form>
+{% endblock %}

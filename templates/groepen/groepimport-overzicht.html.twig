@@ -1,8 +1,8 @@
-{% extends 'fiscaat/base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block titel %}Bulk afschrijven CiviSaldo - Controle{% endblock %}
+{% block titel %}Bulk aanmelden in groepen - Controle{% endblock %}
 
-{% block civisaldocontent %}
+{% block content %}
 	<h2>Controleer de lijst</h2>
 	<p>Controleer onderstaande lijst en klik op verwerk als deze klopt.</p>
 
@@ -11,34 +11,21 @@
 			<thead>
 			<tr>
 				<th></th>
-				<th>Account</th>
-				<th>Product</th>
-				<th>Aantal</th>
-				<th>Totaal</th>
-				<th>Nieuw saldo</th>
-				<th>Beschrijving</th>
+				<th>Groep</th>
+				<th>Lid</th>
+				<th>Opmerking</th>
 				<th></th>
 			</tr>
 			</thead>
 			<tbody>
-			{% for afschrift in afschriften %}
-				<tr class="{% if not afschrift.succes %}table-warning{% endif %}">
-					<td><input type="checkbox" {% if afschrift.succes %}checked{% endif %} disabled></td>
-					<td>{{ afschrift.accountNaam }}</td>
-					<td>{{ afschrift.productNaam }}</td>
-					<td>{{ afschrift.regel.aantal }}</td>
-					<td style="{% if afschrift.totaal < 0 %}color: red;{% endif %}">{{ afschrift.totaal | format_bedrag }}</td>
-					{% if afschrift.succes %}
-						<td
-							style="{% if afschrift.nieuwSaldo < 0 %}color: red;{% endif %}">{{ afschrift.nieuwSaldo | format_bedrag }}</td>
-					{% else %}
-						<td></td>
-					{% endif %}
-					<td>{{ afschrift.regel.beschrijving }}</td>
+			{% for groeplidRegel in groeplidRegels %}
+				<tr class="{% if not groeplidRegel.succes %}table-warning{% endif %}">
+					<td><input type="checkbox" {% if groeplidRegel.succes %}checked{% endif %} disabled></td>
+					<td>{{ groeplidRegel.groepnaam }}</td>
+					<td>{{ groeplidRegel.lidnaam }}</td>
+					<td>{{ groeplidRegel.opmerking }}</td>
 					<td>
-						{% for regel in afschrift.waarschuwing %}
-							{{ regel }}<br/>
-						{% endfor %}
+						{{ groeplidRegel.waarschuwing|raw }}
 					</td>
 				</tr>
 			{% endfor %}
@@ -46,7 +33,7 @@
 		</table>
 	</div>
 
-	<form action="{{ url('csrdelft_fiscaat_civisaldoafschrijven_verwerk', {key: key}) }}" method="post" class="mt-4">
+	<form action="{{ url('groepimport_verwerk', {key: key}) }}" method="post" class="mt-4">
 		<div class="form-check">
 			<input onclick="checkDone()" type="checkbox" class="form-check-input" id="gecheckt" name="gecheckt">
 			<label class="form-check-label" for="gecheckt">Ik heb bovenstaande lijst gecheckt.</label>
@@ -61,7 +48,7 @@
 			<input type="hidden" name="foutenAkkoord" value="1">
 		{% endif %}
 		{{ csrfField() }}
-		<input class="btn btn-primary mt-2" id="verwerkKnop" type="submit" value="Verwerk {{ aantalSucces }} afschrijvingen"
+		<input class="btn btn-primary mt-2" id="verwerkKnop" type="submit" value="Verwerk {{ aantalSucces }} aanmeldingen"
 					 disabled>
 	</form>
 	<script>

@@ -77,7 +77,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 		$data = $csv->data;
 
 		// Controleer of er regels zijn en eerste regel geldige keys heeft
-		if (empty($data) === 0) {
+		if (empty($data)) {
 			return $this->quickMelding('Geen regels gevonden', 2);
 		}
 		if (
