@@ -75,8 +75,8 @@ const berichtLinkButtons = selectAll<HTMLElement>('.berichtLinkButton');
 // Event listener om forum feed te delen
 berichtLinkButtons.forEach((item) => {
 	const berichtLink = item.dataset.berichtLink;
-	const nav = navigator
-	
+	const nav = navigator;
+
 	item.addEventListener('click', async () => {
 		try {
 			if ('share' in nav) {
@@ -102,7 +102,7 @@ const forumLinkButtons = selectAll<HTMLElement>('.forumLinkButton');
 // Event listener om RSS feed te delen
 rssFeedButtons.forEach((item) => {
 	const rssLink = item.dataset.rssLink;
-	const nav = navigator
+	const nav = navigator;
 
 	item.addEventListener('click', async () => {
 		console.log('rss', rssLink);
@@ -129,7 +129,7 @@ rssFeedButtons.forEach((item) => {
 // Event listener om forum feed te delen
 forumLinkButtons.forEach((item) => {
 	const forumLink = item.dataset.forumLink;
-	const nav = navigator
+	const nav = navigator;
 
 	item.addEventListener('click', async () => {
 		console.log('forum', forumLink);

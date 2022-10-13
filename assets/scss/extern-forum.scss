@@ -276,7 +276,7 @@ span.curpage {
 	display: flex;
 	flex-direction: column;
 	margin: 0;
-	
+
 	> .list-group-item {
 		width: 100%;
 		padding: 1.5rem 1rem;
@@ -308,9 +308,8 @@ span.curpage {
 			flex-direction: row;
 			justify-content: space-between;
 			align-items: center;
-
 		}
-		
+
 		p {
 			margin: 0;
 		}

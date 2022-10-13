@@ -55,7 +55,10 @@ class ForumTwigExtension extends AbstractExtension
 			new TwigFunction('getHuidigePagina', [$this, 'getHuidigePagina']),
 			new TwigFunction('getAantalPaginas', [$this, 'getAantalPaginas']),
 			new TwigFunction('getBelangrijkOpties', [$this, 'getBelangrijkOpties']),
-			new TwigFunction('getPreviousNextIterator', [$this, 'getPreviousNextIterator']),
+			new TwigFunction('getPreviousNextIterator', [
+				$this,
+				'getPreviousNextIterator',
+			]),
 			new TwigFunction('draadGetAantalPaginas', [
 				$this,
 				'draadGetAantalPaginas',
@@ -89,7 +92,7 @@ class ForumTwigExtension extends AbstractExtension
 
 	public function getPreviousNextIterator($forum_draden)
 	{
-		return new PreviousNextIterator($forum_draden);;
+		return new PreviousNextIterator($forum_draden);
 	}
 
 	public function getAantalVerborgenVoorLid()
