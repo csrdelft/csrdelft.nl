@@ -64,8 +64,13 @@
 			<div class="list-group-item">Dit forum is nog leeg.</div>
 		{% endif %}
 
-		{% for draad in deel.forumDraden %}
-			{{ include('forum/partial/draad_lijst.html.twig', { draad: draad }) }}
+		{# Custom iterator om de vorige en ook volgende draden in de lijst te krijgen #}
+		{% set dradenMetPreviousNext = getPreviousNextIterator(deel.forumDraden) %}
+		{% for draad in dradenMetPreviousNext %}
+			{% set vorige = dradenMetPreviousNext.getPreviousElement() %}
+			{% set volgende = dradenMetPreviousNext.getNextElement() %}
+
+			{{ include('forum/partial/draad_lijst.html.twig', { draad: draad, vorige: vorige, volgende: volgende }) }}
 		{% endfor %}
 
 		{% if paging is defined %}

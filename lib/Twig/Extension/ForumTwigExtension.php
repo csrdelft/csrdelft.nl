@@ -2,6 +2,7 @@
 
 namespace CsrDelft\Twig\Extension;
 
+use CsrDelft\common\PreviousNextIterator;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
@@ -54,6 +55,7 @@ class ForumTwigExtension extends AbstractExtension
 			new TwigFunction('getHuidigePagina', [$this, 'getHuidigePagina']),
 			new TwigFunction('getAantalPaginas', [$this, 'getAantalPaginas']),
 			new TwigFunction('getBelangrijkOpties', [$this, 'getBelangrijkOpties']),
+			new TwigFunction('getPreviousNextIterator', [$this, 'getPreviousNextIterator']),
 			new TwigFunction('draadGetAantalPaginas', [
 				$this,
 				'draadGetAantalPaginas',
@@ -83,6 +85,11 @@ class ForumTwigExtension extends AbstractExtension
 	public function getBelangrijkOpties()
 	{
 		return ForumDradenRepository::$belangrijk_opties;
+	}
+
+	public function getPreviousNextIterator($forum_draden)
+	{
+		return new PreviousNextIterator($forum_draden);;
 	}
 
 	public function getAantalVerborgenVoorLid()

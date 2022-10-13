@@ -75,15 +75,16 @@ const berichtLinkButtons = selectAll<HTMLElement>('.berichtLinkButton');
 // Event listener om forum feed te delen
 berichtLinkButtons.forEach((item) => {
 	const berichtLink = item.dataset.berichtLink;
+	const nav = navigator
 	
 	item.addEventListener('click', async () => {
 		try {
-			if ('share' in navigator) {
+			if ('share' in nav) {
 				await navigator.share({
 					title: 'C.S.R. Delft Forum',
 					url: berichtLink,
 				});
-			} else if ('clipboard' in navigator) {
+			} else if ('clipboard' in nav) {
 				await navigator.clipboard.writeText(berichtLink);
 				alert('Bericht link is gekopieerd naar het clipboard'); // TODO: kan eleganter
 			} else {
@@ -101,18 +102,19 @@ const forumLinkButtons = selectAll<HTMLElement>('.forumLinkButton');
 // Event listener om RSS feed te delen
 rssFeedButtons.forEach((item) => {
 	const rssLink = item.dataset.rssLink;
+	const nav = navigator
 
 	item.addEventListener('click', async () => {
 		console.log('rss', rssLink);
 		try {
 			if (rssLink === null) {
 				await location.assign('/profiel/{{ app.user.uid }}#tokenaanvragen');
-			} else if ('share' in navigator) {
+			} else if ('share' in nav) {
 				await navigator.share({
 					title: 'C.S.R. Delft Forum RSS feed',
 					url: rssLink,
 				});
-			} else if ('clipboard' in navigator) {
+			} else if ('clipboard' in nav) {
 				await navigator.clipboard.writeText(rssLink);
 				alert('RSS feed link is gekopieerd naar het clipboard'); // TODO: kan eleganter
 			} else {
@@ -127,17 +129,18 @@ rssFeedButtons.forEach((item) => {
 // Event listener om forum feed te delen
 forumLinkButtons.forEach((item) => {
 	const forumLink = item.dataset.forumLink;
+	const nav = navigator
 
 	item.addEventListener('click', async () => {
 		console.log('forum', forumLink);
 
 		try {
-			if ('share' in navigator) {
+			if ('share' in nav) {
 				await navigator.share({
 					title: 'C.S.R. Delft Forum',
 					url: forumLink,
 				});
-			} else if ('clipboard' in navigator) {
+			} else if ('clipboard' in nav) {
 				await navigator.clipboard.writeText(forumLink);
 				alert('Forum link is gekopieerd naar het clipboard'); // TODO: kan eleganter
 			} else {

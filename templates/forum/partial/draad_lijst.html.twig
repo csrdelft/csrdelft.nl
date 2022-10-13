@@ -22,8 +22,21 @@
 	<div class="d-flex justify-content-between align-items-center ps-24">
 		<span>
 			{% set ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave') %}
+
+			{# Stel de ids van de draden er omheen in voor gebruik in de query params #}
+			{% if vorige and vorige.draad_id %}
+				{% set vorige_id = vorige.draad_id %}
+			{% else %}
+				{% set vorige_id = null %}
+			{% endif %}
+			{% if volgende and volgende.draad_id %}
+				{% set volgende_id = volgende.draad_id %}
+			{% else %}
+				{% set volgende_id = null %}
+			{% endif %}
+
 			<a id="{{ draad.draad_id }}" {% if app.user and draad.ongelezen %}class="{{ ongelezenWeergave }}"{% endif %}
-				href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}">
+				href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, volgende_id: volgende_id, vorige_id: vorige_id, _fragment: urlHash}) }}">
 				{{ draad.titel | raw }}
 			</a>
 
