@@ -17,9 +17,9 @@ class ArroController extends AbstractController
 	public function arro()
 	{
 		$now = new DateTimeImmutable();
-		$date = new DateTimeImmutable("2022-11-10T21:00:00Z");
+		$date = new DateTimeImmutable('2022-11-10T21:00:00Z');
 		if ($now < $date) {
-			return $this->redirect("/documenten/categorie/5");
+			return $this->redirect('/documenten/categorie/5');
 		}
 		return $this->render('arro/index.html.twig');
 	}
