@@ -52,7 +52,7 @@ self.addEventListener('fetch', (event) => {
 			})()
 		);
 	} else {
-		console.log(`[Service Worker] Fetched resource ${e.request.url}`);
+		console.log(`[Service Worker] Fetched resource ${event.request.url}`);
 	}
 });
 
