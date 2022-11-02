@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\CmsPaginaRepository;
@@ -98,7 +99,7 @@ class VoorpaginaController extends AbstractController
 			}
 
 			return $this->render('voorpagina/agenda.html.twig', [
-				'items' => $groups,
+				'groups' => $groups,
 			]);
 		}
 

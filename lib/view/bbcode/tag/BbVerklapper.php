@@ -29,7 +29,7 @@ class BbVerklapper extends BbTag
 
 		return <<<HTML
 <div class="card">
-	<a class="btn btn-secondary btn-sm" data-bs-toggle="collapse" href="#$id">Verklapper</a>
+	<a class="btn btn-primary btn-sm" data-bs-toggle="collapse" href="#$id">Verklapper</a>
 	<div id="$id" class="collapse"><div class="card-body">{$this->getContent()}</div></div>
 </div>
 HTML;

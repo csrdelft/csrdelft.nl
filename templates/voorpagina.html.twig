@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block titel %}Vereniging van Christenstudenten{% endblock %}
+
 {% block body_inner %}
 	<main class="container-fluid p-3 min-vh-100">
 		<div class="cd-page-content voorpagina container px-0 ratio ratio-3x2">
@@ -7,7 +9,6 @@
 			<div class="grid-container p-0 p-md-3">
 				<div class="cell cell-posters ratio ratio-3x2">{{ render(path('csrdelft_voorpagina_posters')) }}</div>
 				<div class="cell cell-forum cell-overflow">{{ render(path('csrdelft_voorpagina_forum')) }}</div>
-				<div class="cell cell-maaltijden">{{ render(path('csrdelft_voorpagina_maaltijden')) }}</div>
 				<div class="cell cell-agenda cell-overflow">{{ render(path('csrdelft_voorpagina_agenda')) }}</div>
 				<div class="cell cell-verjaardagen cell-overflow">{{ render(path('csrdelft_voorpagina_verjaardagen')) }}</div>
 				<div class="cell cell-foto-albums">{{ render(path('csrdelft_voorpagina_fotoalbum')) }}</div>
@@ -18,7 +19,9 @@
 		</div>
 		<div class="container p-0 p-md-3 mt-5">
 			{# TODO: advertenties #}
-			<div class="cell cell-advertenties gap-2">{{ cms('voorpagina_advertenties') }}</div>
+			<div class="cell cell-advertenties gap-2">
+				{{ cms('voorpagina_advertenties') }}
+			</div>
 		</div>
 	</main>
 

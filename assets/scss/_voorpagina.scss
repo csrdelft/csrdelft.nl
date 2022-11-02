@@ -15,8 +15,8 @@
 	grid-template-columns: repeat(5, 1fr);
 	grid-template-rows: repeat(6, 1fr);
 	grid-template-areas:
-		"maaltijden posters posters foto-albums civi-saldo"
-		"maaltijden posters posters foto-albums verjaardagen"
+		"agenda posters posters foto-albums civi-saldo"
+		"agenda posters posters foto-albums verjaardagen"
 		"agenda posters posters foto-albums verjaardagen"
 		"agenda forum forum overig verjaardagen"
 		"agenda forum forum overig verjaardagen"
@@ -85,8 +85,8 @@
 		grid-template-columns: repeat(4, 1fr);
 		grid-template-rows: repeat(5, 1fr);
 		grid-template-areas:
-			"maaltijden posters posters foto-albums"
-			"maaltijden posters posters foto-albums"
+			"agenda posters posters foto-albums"
+			"agenda posters posters foto-albums"
 			"agenda forum forum verjaardagen"
 			"agenda forum forum verjaardagen"
 			"overig overig civi-saldo is-het-al";
@@ -110,9 +110,6 @@
 			object-fit: contain;
 		}
 	}
-}
-.cell-maaltijden {
-	grid-area: maaltijden;
 }
 
 .cell-agenda {
