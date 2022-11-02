@@ -7,6 +7,7 @@ use CsrDelft\repository\pin\PinTransactieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
 use DOMXPath;
+use Psr\Log\LoggerInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -63,13 +64,19 @@ class PinTransactieDownloader
 	 * @var bool
 	 */
 	public $disableSSL = true;
+	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
 
 	public function __construct(
 		PinTransactieRepository $pinTransactieRepository,
-		EntityManagerInterface $entityManager
+		EntityManagerInterface $entityManager,
+		LoggerInterface $logger
 	) {
 		$this->pinTransactieRepository = $pinTransactieRepository;
 		$this->entityManager = $entityManager;
+		$this->logger = $logger;
 	}
 
 	public function download($moment, $baseUrl, $store, $username, $password)
@@ -136,6 +143,18 @@ class PinTransactieDownloader
 		$xml->loadHTML($result);
 		$xpath = new DOMXPath($xml);
 		$tableRow = $xpath->query('//table[@class="table"]/tbody/tr');
+
+		$errorObject = $xpath->query('//span[@class="feedbackPanelERROR"]');
+		if ($errorObject->length > 0) {
+			$errorValue = $xpath
+				->query('//span[@class="feedbackPanelERROR"]')
+				->item(0)->nodeValue;
+			if (!empty($errorValue)) {
+				$this->logger->error(
+					'Error bij ophalen pintransacties: ' . $errorValue
+				);
+			}
+		}
 
 		$pinTransacties = [];
 		foreach ($tableRow as $row) {
