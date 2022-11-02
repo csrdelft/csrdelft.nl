@@ -25,6 +25,8 @@ class PinTransactieDownloader
 	const POST_FIELD_PERIOD_FROM_DATE_MINUTES = 'period.from.container:period.from_date:minutes';
 	const POST_FIELD_PERIOD_DURATION = 'period.duration';
 	const POST_FIELD_STORE = 'select.store.container:select.store';
+	const POST_FIELD_TXTYPE = 'select.txtype';
+	const TXTYPE = '0';
 
 	/**
 	 * Settings constants.
@@ -130,6 +132,7 @@ class PinTransactieDownloader
 			self::POST_FIELD_PERIOD_FROM_DATE_MINUTES => self::DATE_START_MINUTES,
 			self::POST_FIELD_PERIOD_DURATION => self::DURATION_DAY,
 			self::POST_FIELD_NUM_ROWS => 2,
+			self::POST_FIELD_TXTYPE => self::TXTYPE,
 			self::POST_FIELD_STORE => $store,
 		];
 		$result = $this->postPage(
