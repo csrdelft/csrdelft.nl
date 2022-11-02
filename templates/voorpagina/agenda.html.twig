@@ -20,51 +20,8 @@
 			</a>
 
 			{% if item is maaltijd %}
-				<div id="maaltijdketzer-{{ item.maaltijd_id }}" class="ms-1 media maaltijdketzer-{{ item.maaltijd_id }}" data-maaltijdnaam="{{ item.titel }}">
-					{% set aanmelding = get_maaltijd_aanmelding(item.maaltijd_id) %}
-					{# <input
-						class="form-check-input"
-						type="checkbox"
-						role="button"
-						value="..."
-					/> #}
-
-					{% if is_granted('ROLE_MAAL_IK') %}
-					{% if not item.gesloten %}
-						{% if aanmelding is defined and aanmelding is not none %}
-							<a
-								onclick="window.ketzerAjax('{{ url('csrdelft_maalcie_mijnmaaltijden_afmelden', {maaltijd_id: item.maaltijd_id}) }}', '.maaltijdketzer-{{ item.maaltijd_id }}');"
-								class="aanmeldbtn" tabindex="0" title="Aangemeld">
-								<input class="form-check-input" type="checkbox" checked />
-							</a>
-
-						{% elseif item.aantalAanmeldingen >= item.aanmeld_limiet %}
-							<div class="btn btn-danger disabled">
-								{{ icon("ban", null, "Maaltijd is vol") }}
-							</div>
-						{% else %}
-							<a
-								onclick="window.ketzerAjax('{{ url('csrdelft_maalcie_mijnmaaltijden_aanmelden', {maaltijd_id: item.maaltijd_id}) }}', '.maaltijdketzer-{{ item.maaltijd_id }}');"
-								class="aanmeldbtn" tabindex="0" title="Niet aangemeld">
-								<input class="form-check-input" type="checkbox" />
-							</a>
-						{% endif %}
-					{% endif %}
-
-					{% if aanmelding is defined and aanmelding is not none and aanmelding.aantal_gasten > 0 %}
-						+{{ aanmelding.aantal_gasten }}
-					{% endif %}
-
-					{% if aanmelding is defined and aanmelding is not none and aanmelding.gasten_eetwens %}
-						{{ icon("comment", null, aanmelding.gasten_eetwens) }}
-					{% endif %}
-
-					{% if item.gesloten and item.eindMoment > date().timestamp %}
-						{% set date = item.laatst_gesloten | time_format %}
-						{{ icon("lock", null, "Maaltijd is gesloten om " ~ date) }}
-					{% endif %}
-				{% endif %}
-				</div>
+				{% set aanmelding = get_maaltijd_aanmelding(item.maaltijd_id) %}
+				{{ include('voorpagina/agenda_maaltijd_ketzer.html.twig', {maaltijd: item}) }}
 			{% endif %}
 		</div>
 		{% endfor %}
