@@ -2,7 +2,7 @@
 
 namespace CsrDelft\Twig\Extension;
 
-use CsrDelft\common\PreviousNextIterator;
+use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
@@ -55,10 +55,7 @@ class ForumTwigExtension extends AbstractExtension
 			new TwigFunction('getHuidigePagina', [$this, 'getHuidigePagina']),
 			new TwigFunction('getAantalPaginas', [$this, 'getAantalPaginas']),
 			new TwigFunction('getBelangrijkOpties', [$this, 'getBelangrijkOpties']),
-			new TwigFunction('getPreviousNextIterator', [
-				$this,
-				'getPreviousNextIterator',
-			]),
+			new TwigFunction('getForumDradenIds', [$this, 'getForumDradenIds']),
 			new TwigFunction('draadGetAantalPaginas', [
 				$this,
 				'draadGetAantalPaginas',
@@ -90,9 +87,23 @@ class ForumTwigExtension extends AbstractExtension
 		return ForumDradenRepository::$belangrijk_opties;
 	}
 
-	public function getPreviousNextIterator($forum_draden)
+	public function getForumDradenIds($forum_draden)
 	{
-		return new PreviousNextIterator($forum_draden);
+		$ids_from_draden = function (ForumDraad $draad): int {
+			return $draad->draad_id;
+		};
+
+		// Check of het een Array is (zoals bij 'forum/recent/') of een ArrayIterator (zoals bij deelfora) want array_map moet een Array hebben
+		if (is_array($forum_draden)) {
+			$forum_draden_ids = array_map($ids_from_draden, $forum_draden);
+		} else {
+			$forum_draden_ids = array_map(
+				$ids_from_draden,
+				iterator_to_array($forum_draden)
+			);
+		}
+
+		return implode(',', $forum_draden_ids);
 	}
 
 	public function getAantalVerborgenVoorLid()

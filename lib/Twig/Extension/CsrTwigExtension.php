@@ -82,7 +82,10 @@ class CsrTwigExtension extends AbstractExtension
 			),
 			new TwigFunction('vereniging_leeftijd', [$this, 'vereniging_leeftijd']),
 			new TwigFunction('get_profiel', [$this, 'get_profiel']),
-			new TwigFunction('get_maaltijd_aanmelding', [$this, 'get_maaltijd_aanmelding']),
+			new TwigFunction('get_maaltijd_aanmelding', [
+				$this,
+				'get_maaltijd_aanmelding',
+			]),
 			new TwigFunction('huidige_jaargang', [$this, 'huidige_jaargang']),
 			new TwigFunction('gethostbyaddr', 'gethostbyaddr'),
 			new TwigFunction('cms', [$this, 'cms'], ['is_safe' => ['html']]),

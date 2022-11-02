@@ -59,18 +59,15 @@
 		{{ include('forum/partial/deel_head_buttons.html.twig') }}
 	</header>
 
-	<section class="forum-deel list-group list-group-flush">
+	<section class="forum-deel list-group list-group-flush"
+	 data-delen-list="{{ getForumDradenIds(deel.forumDraden) }}"
+	>
 		{% if not deel.forumDraden %}
 			<div class="list-group-item">Dit forum is nog leeg.</div>
 		{% endif %}
 
-		{# Custom iterator om de vorige en ook volgende draden in de lijst te krijgen #}
-		{% set dradenMetPreviousNext = getPreviousNextIterator(deel.forumDraden) %}
-		{% for draad in dradenMetPreviousNext %}
-			{% set vorige = dradenMetPreviousNext.getPreviousElement() %}
-			{% set volgende = dradenMetPreviousNext.getNextElement() %}
-
-			{{ include('forum/partial/draad_lijst.html.twig', { draad: draad, vorige: vorige, volgende: volgende }) }}
+		{% for draad in deel.forumDraden %}
+			{{ include('forum/partial/draad_lijst.html.twig', { draad: draad }) }}
 		{% endfor %}
 
 		{% if paging is defined %}

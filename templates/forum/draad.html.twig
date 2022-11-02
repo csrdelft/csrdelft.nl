@@ -103,27 +103,22 @@
 		{% if draad.magPosten %}
 			{{ include('forum/partial/draad_reageren.html.twig') }}
 			{{ include('forum/partial/post_form.html.twig', {deel: draad.deel}) }}
+
+			<hr class="tussenschot my-4"></hr>
 		{% endif %}
 	</section>
 
-	<section>
-		{% if lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen' %}
-			{% set urlHash = 'ongelezen' %}
-		{% elseif lid_instelling('forum', 'open_draad_op_pagina') == 'laatste' %}
-			{% set urlHash = 'reageren' %}
-		{% else %}
-			{% set urlHash = '' %}
-		{% endif %}
+	<footer class="d-flex w-full gap-3">
+		{# Als er geen vorig of volgend onderwerp is moet de gebruiker weer terug naar deelforum #}
+		<a href="javascript:history.go(-1)" class="btn btn-outline-primary flex-fill vorige-button">
+			{{ icon('angle-left') }}
+			<span>Vorige</span>
+		</a>
+		<a href="javascript:history.go(-1)" class="btn btn-outline-primary flex-fill volgende-button">
+			<span>Volgende</span>
+			{{ icon('angle-right') }}
+		</a>
+	</footer>
 
-		{% set vorigeDraadId = app.request.query.get('vorige_id') %}
-		{% if vorigeDraadId %}
-			<a href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: vorigeDraadId, _fragment: urlHash}) }}">Vorige</a>
-		{% endif %}
-
-		{% set volgendeDraadId = app.request.query.get('volgende_id') %}
-		{% if volgendeDraadId %}
-			<a href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: volgendeDraadId, _fragment: urlHash}) }}">Volgende</a>
-		{% endif %}
-	</section>
 	{# {{ include('forum/partial/rss_link.html.twig') }} #}
 {% endblock %}
