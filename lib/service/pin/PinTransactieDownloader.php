@@ -150,7 +150,7 @@ class PinTransactieDownloader
 				->query('//span[@class="feedbackPanelERROR"]')
 				->item(0)->nodeValue;
 			if (!empty($errorValue)) {
-				$this->logger->error(
+				$this->logger->critical(
 					'Error bij ophalen pintransacties: ' . $errorValue
 				);
 			}
