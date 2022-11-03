@@ -85,6 +85,10 @@ class CmsPaginaController extends AbstractController
 				'body' => $body,
 			]);
 		} else {
+			if ($pagina->naam === 'thuis') {
+				return $this->render('voorpagina.html.twig', []);
+			}
+
 			return $this->render('cms/pagina.html.twig', ['body' => $body]);
 		}
 	}
