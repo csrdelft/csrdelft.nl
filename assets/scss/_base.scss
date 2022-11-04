@@ -205,10 +205,6 @@ ul.nobullets li {
 }
 
 @include media-breakpoint-down(md) {
-	body {
-		margin-left: 0;
-	}
-
 	.ads img {
 		width: 100%;
 	}
