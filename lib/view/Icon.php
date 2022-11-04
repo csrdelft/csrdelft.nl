@@ -109,12 +109,27 @@ class Icon
 			$hover = 'hover-' . self::get($hover);
 		}
 
-		return sprintf(
-			'<i class="fas fa-%s %s %s" title="%s"></i>',
-			htmlspecialchars($icon),
-			htmlspecialchars($hover),
-			htmlspecialchars($class),
-			htmlspecialchars($title)
-		);
+		if ($title !== null) {
+			$title = str_replace('&amp;', '&', htmlspecialchars($title));
+		}
+
+		// Test if string contains the a fa brands tag.
+		if (strpos($icon, 'fab fa-') !== false) {
+			return sprintf(
+				'<i class="%s %s %s" title="%s" aria-hidden="true"></i>',
+				htmlspecialchars($icon),
+				htmlspecialchars($hover),
+				htmlspecialchars($class),
+				$title
+			);
+		} else {
+			return sprintf(
+				'<i class="fas fa-%s %s %s" title="%s" aria-hidden="true"></i>',
+				htmlspecialchars($icon),
+				htmlspecialchars($hover),
+				htmlspecialchars($class),
+				$title
+			);
+		}
 	}
 }
