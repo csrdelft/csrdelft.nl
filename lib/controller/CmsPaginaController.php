@@ -66,7 +66,7 @@ class CmsPaginaController extends AbstractController
 		$this->denyAccessUnlessGranted(CmsPaginaVoter::BEKIJKEN, $pagina);
 		$body = new CmsPaginaView($pagina);
 		if (!$this->mag(P_LOGGED_IN)) {
-			// nieuwe layout altijd voor uitgelogde bezoekers
+			// Nieuwe layout altijd voor uitgelogde bezoekers
 			if ($pagina->naam === 'thuis') {
 				return $this->render('extern/index.html.twig', [
 					'titel' => $body->getTitel(),
@@ -85,6 +85,7 @@ class CmsPaginaController extends AbstractController
 				'body' => $body,
 			]);
 		} else {
+			// Nieuwe layout ook voor ingelogde bezoekers
 			if ($pagina->naam === 'thuis') {
 				return $this->render('voorpagina.html.twig', []);
 			}

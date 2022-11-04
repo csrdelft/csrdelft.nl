@@ -24,25 +24,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class VoorpaginaController extends AbstractController
 {
 	/**
-	 * @param CmsPaginaRepository $cmsPaginaRepository
-	 * @return Response
-	 * @Route("/")
-	 * @Auth(P_PUBLIC)
-	 */
-	public function voorpagina(CmsPaginaRepository $cmsPaginaRepository): Response
-	{
-		if ($this->isGranted(P_LOGGED_IN)) {
-			return $this->render('voorpagina.html.twig', []);
-		} else {
-			return $this->render('extern/index.html.twig', [
-				'titel' => (new CmsPaginaView(
-					$cmsPaginaRepository->find('thuis')
-				))->getTitel(),
-			]);
-		}
-	}
-
-	/**
 	 * @param ForumDelenService $forumDelenService
 	 * @param ForumPostsRepository $forumPostsRepository
 	 * @return Response
