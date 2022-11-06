@@ -59,32 +59,43 @@ class PinTransactieDownloader
 	 * @throws DecodingExceptionInterface
 	 * @throws PinDownloadException
 	 */
-	public function download($moment, $pinURL, $clientID, $certificatePath, $privateKeyPath)
-	{
+	public function download(
+		$moment,
+		$pinURL,
+		$clientID,
+		$certificatePath,
+		$privateKeyPath
+	) {
 		$momentStart = date_create_immutable($moment);
 		$momentEnd = $momentStart->modify('+1 day');
 
 		$request = $this->httpClient->request('POST', $pinURL, [
 			'headers' => [
-				self::CLIENT_ID_HEADER => $clientID
+				self::CLIENT_ID_HEADER => $clientID,
 			],
 			'local_cert' => $certificatePath,
 			'local_pk' => $privateKeyPath,
 			'body' => json_encode([
-				"limit" => 5000,
-				"start_datetime" => $momentStart->format('c'),
-				"end_datetime" => $momentEnd->format('c'),
-				"payment_channels" => ["PIN"],
-				"transaction_statuses" => ["ACCEPTED", "NEW", "SETTLED", "SUCCESS"],
-				"transaction_types" => ["PAYMENT"]
-			])
+				'limit' => 5000,
+				'start_datetime' => $momentStart->format('c'),
+				'end_datetime' => $momentEnd->format('c'),
+				'payment_channels' => ['PIN'],
+				'transaction_statuses' => ['ACCEPTED', 'NEW', 'SETTLED', 'SUCCESS'],
+				'transaction_types' => ['PAYMENT'],
+			]),
 		]);
-
 
 		if ($request->getStatusCode() !== 200) {
 			$content = $request->toArray(false);
-			throw new PinDownloadException("Pin transacties ophalen mislukt (" . $request->getStatusCode() . "): "
-				. $content['errors'][0]['error_message'] . "(" . $content['errors'][0]['error_code'] . ")");
+			throw new PinDownloadException(
+				'Pin transacties ophalen mislukt (' .
+					$request->getStatusCode() .
+					'): ' .
+					$content['errors'][0]['error_message'] .
+					'(' .
+					$content['errors'][0]['error_code'] .
+					')'
+			);
 		}
 
 		$content = json_decode($request->getContent());
@@ -105,9 +116,7 @@ class PinTransactieDownloader
 	{
 		$pinTransactie = new PinTransactie();
 
-		$pinTransactie->datetime = date_create_immutable(
-			$transaction->date_time
-		);
+		$pinTransactie->datetime = date_create_immutable($transaction->date_time);
 		$pinTransactie->brand = $transaction->payment_brand;
 		$pinTransactie->merchant = $transaction->merchant_name;
 		$pinTransactie->store = $transaction->shop_name;
@@ -118,9 +127,10 @@ class PinTransactieDownloader
 		$pinTransactie->type = $transaction->transaction_type;
 		$amount = floatval($transaction->transaction_amount->amount);
 		$formattedAmount = number_format($amount, 2, ',', '');
-		$pinTransactie->amount = $transaction->transaction_amount->currency . ' ' . $formattedAmount;
+		$pinTransactie->amount =
+			$transaction->transaction_amount->currency . ' ' . $formattedAmount;
 		$pinTransactie->AUTRSP = $transaction->reference;
-		$pinTransactie->STAN = '' ; // TODO: checken of productie een veld teruggeeft wat lijkt op oude STAN veld.
+		$pinTransactie->STAN = ''; // TODO: checken of productie een veld teruggeeft wat lijkt op oude STAN veld.
 
 		return $pinTransactie;
 	}
