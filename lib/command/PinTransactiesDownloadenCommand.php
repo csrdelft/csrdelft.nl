@@ -181,9 +181,9 @@ class PinTransactiesDownloadenCommand extends Command
 		$pintransacties = $this->pinTransactieDownloader->download(
 			$from,
 			$_ENV['PIN_URL'],
-			$_ENV['PIN_STORE'],
-			$_ENV['PIN_USERNAME'],
-			$_ENV['PIN_PASSWORD']
+			$_ENV['PIN_CLIENT_ID'],
+			$_ENV['PIN_CERTIFICATE_PATH'],
+			$_ENV['PIN_PRIVATE_KEY_PATH']
 		);
 
 		// Haal pinbestellingen op.
