@@ -26,6 +26,13 @@
 				<span class="forum-item-moment d-inline-block">
 					{{ draad.laatst_gewijzigd | zijbalk_date_format }}
 				</span>
+				{% if draad.belangrijk %}
+			{{ icon('star', null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
+		{% elseif draad.plakkerig %}
+			{{ icon('note-sticky', null, 'Dit onderwerp is plakkerig, het blijft bovenaan') }}
+		{% elseif draad.gesloten %}
+			{{ icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
+		{% endif %}
 				{{ draad.titel | raw }}
 			</p>
 			{% if draad.aantalOngelezenPosts > 0 %}
