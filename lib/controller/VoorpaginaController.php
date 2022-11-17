@@ -33,15 +33,12 @@ class VoorpaginaController extends AbstractController
 		ForumDelenService $forumDelenService,
 		ForumPostsRepository $forumPostsRepository
 	): Response {
-		$belangrijk = true;
-
 		return $this->render('voorpagina/forum.html.twig', [
 			'draden' => $forumDelenService->getRecenteForumDraden(
 				(int) lid_instelling('zijbalk', 'forum'),
-				$belangrijk
+				false
 			),
 			'aantalWacht' => $forumPostsRepository->getAantalWachtOpGoedkeuring(),
-			'belangrijk' => $belangrijk,
 		]);
 	}
 
