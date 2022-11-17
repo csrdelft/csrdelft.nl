@@ -21,21 +21,21 @@ class LoginTest extends PantherTestCase
 	{
 		$this->markTestSkipped('Todo. Nieuwe voorpagina mist label.');
 
-		$client = static::createPantherClient();
-
-		$crawler = $client->request('GET', '/');
-
-		$crawler->selectLink('Inloggen')->click();
-
-		$form = $crawler->selectButton('Inloggen')->form();
-
-		$form['_username'] = AccountFixtures::UID_PUBCIE;
-		$form['_password'] = 'stek open u voor mij!';
-
-		$crawler = $client->submit($form);
-
-		$pageContent = $crawler->filter('.cd-page-content')->text();
-
-		$this->assertStringContainsString('Dit is de voorpagina.', $pageContent);
+		//		$client = static::createPantherClient();
+		//
+		//		$crawler = $client->request('GET', '/');
+		//
+		//		$crawler->selectLink('Inloggen')->click();
+		//
+		//		$form = $crawler->selectButton('Inloggen')->form();
+		//
+		//		$form['_username'] = AccountFixtures::UID_PUBCIE;
+		//		$form['_password'] = 'stek open u voor mij!';
+		//
+		//		$crawler = $client->submit($form);
+		//
+		//		$pageContent = $crawler->filter('.cd-page-content')->text();
+		//
+		//		$this->assertStringContainsString('Dit is de voorpagina.', $pageContent);
 	}
 }
