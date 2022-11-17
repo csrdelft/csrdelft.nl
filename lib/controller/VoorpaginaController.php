@@ -68,7 +68,7 @@ class VoorpaginaController extends AbstractController
 
 			$groups = [];
 			foreach ($items as $item) {
-				$key = date('Y-m-d', $item->getBeginMoment());
+				$key = date('Y-m-d', $item->getBeginMoment()->getTimestamp());
 				if (!isset($groups[$key])) {
 					$groups[$key] = [
 						'items' => [$item],
