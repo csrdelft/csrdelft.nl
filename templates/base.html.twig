@@ -23,7 +23,8 @@
 	<title>C.S.R. Delft - {% block titel %}{% endblock %}</title>
 	<link rel="manifest" href="{{ absolute_url('/manifest.json') }}">
 	<link rel="shortcut icon" href="{{ absolute_url('/favicon.ico') }}"/>
-	<meta name="theme-color" content="#122A4D">
+	<meta name="theme-color" content="#122A4D" media="(prefers-color-scheme: light)">
+	<meta name="theme-color" content="#22262A" media="(prefers-color-scheme: dark)">
 	<meta name="mobile-web-app-capable" content="yes"/>
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta name="apple-mobile-web-app-title" content="C.S.R."/>
