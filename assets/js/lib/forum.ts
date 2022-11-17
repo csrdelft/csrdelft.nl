@@ -184,9 +184,7 @@ export async function forumCiteren(postId: string): Promise<false> {
 	return false;
 }
 
-export const slaOpForumIds = (
-	parentSelector = 'section.forum-deel'
-) => {
+export const slaOpForumIds = (parentSelector = 'section.forum-deel') => {
 	// Sla alle ids van forumDraden uit section.forum-deel (alleen op deelfora) op in localStorage voor previous-next functies
 	try {
 		const forumDeel = select<HTMLElement>(parentSelector);
