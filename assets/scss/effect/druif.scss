@@ -15,7 +15,7 @@
 }
 
 // Forum
-body .auteur .forumpasfoto.druif {
+.forum-draad .pasfoto.druif {
 	position: relative;
 	a[href^="/profiel/20"]::after {
 		content: "";
@@ -31,7 +31,7 @@ body .auteur .forumpasfoto.druif {
 	}
 }
 
-body .auteur .forumpasfoto.start-druifeffect {
+.forum-draad .pasfoto.start-druifeffect {
 	position: relative;
 	a[href^="/profiel/20"]::after {
 		position: absolute;

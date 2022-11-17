@@ -292,10 +292,9 @@ div.hoverIntentContent {
 	width: 330px;
 	color: $body-color;
 
-	img {
-		width: 100px;
-		object-fit: contain;
-		object-position: top;
+	img.pasfoto {
+		width: 5rem !important;
+		height: 6.5rem !important;
 	}
 
 	p a {
