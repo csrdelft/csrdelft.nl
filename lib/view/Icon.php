@@ -65,6 +65,7 @@ class Icon
 		'tabel' => 'table',
 		'log' => 'rectangle-terminal',
 		'prullenbak' => 'dumpster',
+		'opslaan' => 'floppy-disk',
 
 		'calendar' => 'calendar',
 		'forum' => 'comments',

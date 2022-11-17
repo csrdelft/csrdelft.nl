@@ -6,9 +6,13 @@ use CsrDelft\common\Enum;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
+use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -22,6 +26,9 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 class Activiteit extends Groep implements
 	Agendeerbaar,
 	HeeftAanmeldLimiet,
+	HeeftAanmeldRechten,
+	HeeftAanmeldMoment,
+	HeeftMoment,
 	HeeftSoort
 {
 	use GroepMoment;
@@ -128,22 +135,9 @@ class Activiteit extends Groep implements
 
 	public function isHeledag()
 	{
-		$begin = date('H:i', $this->getBeginMoment());
-		$eind = date('H:i', $this->getEindMoment());
+		$begin = $this->getBeginMoment()->format('H:i');
+		$eind = $this->getEindMoment()->format('H:i');
 		return $begin == '00:00' && ($eind == '23:59' || $eind == '00:00');
-	}
-
-	public function getBeginMoment()
-	{
-		return $this->beginMoment->getTimestamp();
-	}
-
-	public function getEindMoment()
-	{
-		if ($this->eindMoment && $this->eindMoment !== $this->beginMoment) {
-			return $this->eindMoment->getTimestamp();
-		}
-		return $this->getBeginMoment() + 1800;
 	}
 
 	public function getAanmeldLimiet()

@@ -14,7 +14,7 @@ class SubmitKnop extends FormulierKnop
 		$action = 'submit',
 		$label = 'Opslaan',
 		$title = 'Invoer opslaan',
-		$icon = 'disk'
+		$icon = 'opslaan'
 	) {
 		parent::__construct($url, $action, $label, $title, $icon);
 	}

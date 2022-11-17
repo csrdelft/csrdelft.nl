@@ -14,7 +14,7 @@ class DeleteKnop extends FormulierKnop
 		$action = 'post confirm redirect',
 		$label = 'Verwijderen',
 		$title = 'Definitief verwijderen',
-		$icon = 'cross'
+		$icon = 'verwijderen'
 	) {
 		parent::__construct($url, $action, $label, $title, $icon);
 	}

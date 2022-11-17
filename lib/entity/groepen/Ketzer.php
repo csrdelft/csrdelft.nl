@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
 use CsrDelft\entity\security\enum\AccessAction;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\KetzersRepository")
  */
-class Ketzer extends Groep implements HeeftAanmeldLimiet
+class Ketzer extends Groep implements HeeftAanmeldLimiet, HeeftAanmeldMoment
 {
 	use GroepAanmeldMoment;
 	use GroepAanmeldLimiet;

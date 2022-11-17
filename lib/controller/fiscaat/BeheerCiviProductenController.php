@@ -69,19 +69,6 @@ class BeheerCiviProductenController extends AbstractController
 	}
 
 	/**
-	 * @return GenericDataTableResponse
-	 * @Route("/fiscaat/producten/{cie}", defaults={"cie": null}, methods={"POST"})
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function lijst($cie)
-	{
-		if ($cie) {
-			return $this->tableData($this->civiProductRepository->findByCie($cie));
-		}
-		return $this->tableData($this->civiProductRepository->findAll());
-	}
-
-	/**
 	 * @return Response
 	 * @Route("/fiscaat/producten", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
@@ -190,5 +177,18 @@ class BeheerCiviProductenController extends AbstractController
 		}
 
 		return $form;
+	}
+
+	/**
+	 * @return GenericDataTableResponse
+	 * @Route("/fiscaat/producten/{cie}", defaults={"cie": null}, methods={"POST"})
+	 * @Auth(P_FISCAAT_READ)
+	 */
+	public function lijst($cie)
+	{
+		if ($cie) {
+			return $this->tableData($this->civiProductRepository->findByCie($cie));
+		}
+		return $this->tableData($this->civiProductRepository->findAll());
 	}
 }

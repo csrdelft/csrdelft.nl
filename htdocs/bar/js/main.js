@@ -47,7 +47,7 @@ $(function () {
      /*************************************************************************************************/
 
 		var now = new Date();
-		var isStartkamp = new Date("2021-08-27") < now && new Date("2021-08-30") > now;
+		var isStartkamp = new Date("2022-09-02") < now && new Date("2022-09-05") > now;
 		// Feestmodus: niemand mag rood komen te staan
 		var isFeestmodus = new Date("2022-04-21") < now && new Date("2022-04-23") > now;
 

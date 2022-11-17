@@ -2,8 +2,8 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
 use CsrDelft\entity\security\enum\AccessAction;
-use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Een groep beperkt voor rechten.
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\RechtenGroepenRepository")
  */
-class RechtenGroep extends Groep
+class RechtenGroep extends Groep implements HeeftAanmeldRechten
 {
 	use GroepAanmeldRechten;
 

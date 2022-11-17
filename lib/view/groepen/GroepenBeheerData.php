@@ -3,7 +3,7 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\entity\groepen\Groep;
-use CsrDelft\entity\groepen\GroepMoment;
+use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\view\datatable\DataTableResponse;
 use Exception;
 
@@ -28,7 +28,7 @@ class GroepenBeheerData extends DataTableResponse
 			}
 		}
 		$array['naam'] = '<span title="' . $title . '">' . $groep->naam . '</span>';
-		if (in_array(GroepMoment::class, class_uses($groep))) {
+		if ($groep instanceof HeeftMoment) {
 			$array['status'] = $groep->status->getDescription();
 		} else {
 			$array['status'] = null;

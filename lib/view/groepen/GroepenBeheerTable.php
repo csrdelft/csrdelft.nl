@@ -70,7 +70,7 @@ class GroepenBeheerTable extends DataTable
 			new DataTableRowKnop(
 				$repository->getUrl() . '/:id/voorbeeld',
 				'Voorbeeldweergave van de ketzer',
-				'show'
+				'tonen'
 			)
 		);
 
@@ -105,7 +105,7 @@ class GroepenBeheerTable extends DataTable
 				new DataTableRowKnop(
 					$repository->getUrl() . '/:id/sluiten',
 					'Inschrijvingen nu sluiten',
-					'lock'
+					'slotje'
 				)
 			);
 		}
@@ -114,7 +114,7 @@ class GroepenBeheerTable extends DataTable
 			new DataTableRowKnop(
 				$repository->getUrl() . '/:id/opvolging',
 				'Familienaam en groepstatus instellen',
-				'timeline_marker'
+				'timeline'
 			)
 		);
 
@@ -122,7 +122,7 @@ class GroepenBeheerTable extends DataTable
 			new DataTableRowKnop(
 				$repository->getUrl() . '/:id/converteren',
 				'Converteer naar ander soort groep',
-				'lightning'
+				'bolt-lightning'
 			)
 		);
 
@@ -130,7 +130,7 @@ class GroepenBeheerTable extends DataTable
 			new DataTableRowKnop(
 				$repository->getUrl() . '/:id/verwijderen',
 				'Definitief verwijderen (groep moet hier voor leeg zijn)',
-				'delete',
+				'verwijderen',
 				'confirm'
 			)
 		);

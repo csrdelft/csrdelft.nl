@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
@@ -15,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WerkgroepenRepository")
  */
-class Werkgroep extends Groep
+class Werkgroep extends Groep implements HeeftMoment
 {
 	use GroepMoment;
 

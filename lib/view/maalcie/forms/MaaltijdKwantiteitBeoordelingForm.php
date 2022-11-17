@@ -37,7 +37,9 @@ class MaaltijdKwantiteitBeoordelingForm extends InlineForm
 		$field->click_submit = true;
 		$field->readonly =
 			$maaltijd->getBeginMoment() <
-			strtotime(instelling('maaltijden', 'beoordeling_periode'));
+			date_create_immutable()->modify(
+				instelling('maaltijden', 'beoordeling_periode')
+			);
 
 		parent::__construct(
 			$beoordeling,

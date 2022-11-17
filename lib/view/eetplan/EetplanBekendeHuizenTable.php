@@ -47,7 +47,7 @@ class EetplanBekendeHuizenTable extends DataTable
 			new DataTableRowKnop(
 				$this->dataUrl . '/bewerken',
 				'Opmerking bewerken',
-				'pencil'
+				'bewerken'
 			)
 		);
 	}

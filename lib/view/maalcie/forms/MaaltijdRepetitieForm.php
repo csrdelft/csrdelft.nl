@@ -106,7 +106,7 @@ class MaaltijdRepetitieForm extends ModalForm
 			'submit',
 			'Alles bijwerken',
 			'Opslaan & alle maaltijden bijwerken',
-			'disk_multiple'
+			'opslaan'
 		);
 
 		if ($model->mlt_repetitie_id !== 0) {

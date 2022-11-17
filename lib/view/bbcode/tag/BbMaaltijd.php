@@ -111,7 +111,7 @@ class BbMaaltijd extends BbTag
 			// Beoordelingen ophalen
 			$kwaliteit = null;
 			$kwantiteit = null;
-			if ($maaltijd->getEindMoment() < time()) {
+			if ($maaltijd->getEindMoment() < date_create_immutable()) {
 				$beoordeling = $this->maaltijdBeoordelingenRepository->find([
 					'maaltijd_id' => $maaltijd->maaltijd_id,
 					'uid' => LoginService::getUid(),

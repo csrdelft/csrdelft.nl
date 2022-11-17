@@ -76,21 +76,21 @@ class CiviProductTable extends DataTable
 				$this->dataUrl . '/bewerken',
 				'Nieuw',
 				'Nieuw product toevoegen',
-				'add'
+				'toevoegen'
 			)
 		);
 		$this->addRowKnop(
 			new DataTableRowKnop(
 				$this->dataUrl . '/bewerken',
 				'Product bewerken',
-				'pencil'
+				'bewerken'
 			)
 		);
 		$this->addRowKnop(
 			new DataTableRowKnop(
 				$this->dataUrl . '/verwijderen',
 				'Product verwijderen',
-				'bin',
+				'verwijderen',
 				'confirm'
 			)
 		);

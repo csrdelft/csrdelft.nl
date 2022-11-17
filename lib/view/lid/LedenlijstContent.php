@@ -121,9 +121,9 @@ class LedenlijstContent implements View
 			$html .=
 				'<a href="' .
 				htmlspecialchars($url) .
-				'" class="btn float-end" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' .
+				'" class="btn float-end" title="Huidige selectie exporteren naar Google Contacten" onclick="return confirm(\'Weet u zeker dat u deze ' .
 				$this->lidzoeker->count() .
-				' leden wilt importeren in uw Google-contacts?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts" /></a>';
+				' leden wilt importeren in uw Google Contacten?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google Contacten" /></a>';
 			if (strstr($requestUri, '?') !== false) {
 				$url = $requestUri . '&exportVcf=true';
 			} else {

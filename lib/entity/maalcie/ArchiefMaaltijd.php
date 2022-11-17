@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\maalcie;
 
 use CsrDelft\entity\agenda\Agendeerbaar;
+use DateInterval;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -107,12 +108,12 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return $this->titel;
 	}
 
-	public function getEindMoment()
+	public function getEindMoment(): DateTimeImmutable
 	{
-		return $this->getBeginMoment() + 7200;
+		return $this->getBeginMoment()->add(new DateInterval('PT1H30M'));
 	}
 
-	public function getBeginMoment()
+	public function getBeginMoment(): DateTimeImmutable
 	{
 		return $this->datum->setTime(
 			$this->tijd->format('H'),

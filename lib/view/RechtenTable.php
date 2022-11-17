@@ -50,7 +50,7 @@ class RechtenTable extends DataTable
 			'/rechten/aanmaken/' . $environment . '/' . $resource,
 			'Instellen',
 			'Rechten instellen',
-			'key_add'
+			'toevoegen'
 		);
 		$this->addKnop($create);
 
@@ -59,7 +59,7 @@ class RechtenTable extends DataTable
 			'/rechten/wijzigen',
 			'Wijzigen',
 			'Rechten wijzigen',
-			'key_edit'
+			'bewerken'
 		);
 		$this->addKnop($update);
 
@@ -68,7 +68,7 @@ class RechtenTable extends DataTable
 			'/rechten/verwijderen',
 			'Intrekken',
 			'Rechten intrekken',
-			'key_delete'
+			'verwijderen'
 		);
 		$this->addKnop($delete);
 	}

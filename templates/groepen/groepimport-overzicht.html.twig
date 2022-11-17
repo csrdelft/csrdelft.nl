@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block titel %}Bulk aanmelden in groepen - Controle{% endblock %}
+
+{% block content %}
+	<h2>Controleer de lijst</h2>
+	<p>Controleer onderstaande lijst en klik op verwerk als deze klopt.</p>
+
+	<div class="table-responsive-md">
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<th></th>
+				<th>Groep</th>
+				<th>Lid</th>
+				<th>Opmerking</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for groeplidRegel in groeplidRegels %}
+				<tr class="{% if not groeplidRegel.succes %}table-warning{% endif %}">
+					<td><input type="checkbox" {% if groeplidRegel.succes %}checked{% endif %} disabled></td>
+					<td>{{ groeplidRegel.groepnaam }}</td>
+					<td>{{ groeplidRegel.lidnaam }}</td>
+					<td>{{ groeplidRegel.opmerking }}</td>
+					<td>
+						{{ groeplidRegel.waarschuwing|raw }}
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<form action="{{ url('groepimport_verwerk', {key: key}) }}" method="post" class="mt-4">
+		<div class="form-check">
+			<input onclick="checkDone()" type="checkbox" class="form-check-input" id="gecheckt" name="gecheckt">
+			<label class="form-check-label" for="gecheckt">Ik heb bovenstaande lijst gecheckt.</label>
+		</div>
+		{% if aantalGefaald > 0 %}
+			<div class="form-check">
+				<input onclick="checkDone()" type="checkbox" class="form-check-input" id="foutenAkkoord" name="foutenAkkoord">
+				<label class="form-check-label" for="foutenAkkoord">Ik begrijp dat {{ aantalGefaald }} regels met fouten niet
+					verwerkt worden.</label>
+			</div>
+		{% else %}
+			<input type="hidden" name="foutenAkkoord" value="1">
+		{% endif %}
+		{{ csrfField() }}
+		<input class="btn btn-primary mt-2" id="verwerkKnop" type="submit" value="Verwerk {{ aantalSucces }} aanmeldingen"
+					 disabled>
+	</form>
+	<script>
+		function checkDone() {
+			const gecheckt = document.getElementById("gecheckt");
+			const foutenAkkoord = document.getElementById("foutenAkkoord");
+			const knop = document.getElementById("verwerkKnop");
+			knop.disabled = (foutenAkkoord && !foutenAkkoord.checked) || !gecheckt.checked;
+		}
+	</script>
+{% endblock %}

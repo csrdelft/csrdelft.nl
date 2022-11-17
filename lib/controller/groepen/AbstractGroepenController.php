@@ -12,8 +12,9 @@ use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\groepen\GroepAanmeldMoment;
-use CsrDelft\entity\groepen\GroepAanmeldRechten;
 use CsrDelft\entity\groepen\GroepLid;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
@@ -407,10 +408,10 @@ abstract class AbstractGroepenController extends AbstractController implements
 			$groep->samenvatting = $vorige->samenvatting;
 			$groep->omschrijving = $vorige->omschrijving;
 			if (
-				in_array(GroepAanmeldRechten::class, class_uses($groep)) &&
-				in_array(GroepAanmeldRechten::class, class_uses($vorige))
+				$groep instanceof HeeftAanmeldRechten &&
+				$vorige instanceof HeeftAanmeldRechten
 			) {
-				$groep->rechtenAanmelden = $vorige->rechtenAanmelden;
+				$groep->setAanmeldRechten($vorige->getAanmeldRechten());
 			}
 		}
 
@@ -645,17 +646,17 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$groep = $this->repository->retrieveByUUID($id);
 		if (
 			$groep &&
-			in_array(GroepAanmeldMoment::class, class_uses($groep)) &&
-			date_create_immutable() <= $groep->aanmeldenTot &&
+			$groep instanceof HeeftAanmeldMoment &&
+			date_create_immutable() <= $groep->getAanmeldenTot() &&
 			$groep->mag(AccessAction::Wijzigen())
 		) {
 			$this->changeLogRepository->log(
 				$groep,
 				'aanmelden_tot',
-				$groep->aanmeldenTot,
+				$groep->getAanmeldenTot(),
 				date_create_immutable()
 			);
-			$groep->aanmeldenTot = date_create_immutable();
+			$groep->setAanmeldenTot(date_create_immutable());
 			$this->repository->update($groep);
 			$response[] = $groep;
 		}

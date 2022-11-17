@@ -5,8 +5,8 @@ namespace CsrDelft\view\groepen\formulier;
 use CsrDelft\entity\groepen\enum\HuisStatus;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Activiteit;
-use CsrDelft\entity\groepen\GroepAanmeldMoment;
-use CsrDelft\entity\groepen\GroepMoment;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
+use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\groepen\Kring;
@@ -69,7 +69,7 @@ class GroepForm extends ModalForm
 		$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
 		$fields['omschrijving']->description = 'Meer lezen';
 
-		if (in_array(GroepMoment::class, class_uses($groep))) {
+		if ($groep instanceof HeeftMoment) {
 			$fields['beginMoment']->to_datetime = $fields['eindMoment'];
 			$fields['eindMoment']->from_datetime = $fields['beginMoment'];
 		}
@@ -78,11 +78,11 @@ class GroepForm extends ModalForm
 			$fields['eindMoment']->required = true;
 		}
 
-		if (in_array(GroepAanmeldMoment::class, class_uses($groep))) {
+		if ($groep instanceof HeeftAanmeldMoment) {
 			$fields['aanmeldenVanaf']->to_datetime = $fields['aanmeldenTot'];
 			$fields['aanmeldenTot']->from_datetime = $fields['aanmeldenVanaf'];
 
-			if (in_array(GroepMoment::class, class_uses($groep))) {
+			if ($groep instanceof HeeftMoment) {
 				$fields['beginMoment']->title =
 					'Dit is NIET het moment van openstellen voor aanmeldingen';
 				$fields['eindMoment']->title =

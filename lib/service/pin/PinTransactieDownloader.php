@@ -7,6 +7,7 @@ use CsrDelft\repository\pin\PinTransactieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
 use DOMXPath;
+use Psr\Log\LoggerInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -24,6 +25,8 @@ class PinTransactieDownloader
 	const POST_FIELD_PERIOD_FROM_DATE_MINUTES = 'period.from.container:period.from_date:minutes';
 	const POST_FIELD_PERIOD_DURATION = 'period.duration';
 	const POST_FIELD_STORE = 'select.store.container:select.store';
+	const POST_FIELD_TXTYPE = 'select.txtype';
+	const TXTYPE = '0';
 
 	/**
 	 * Settings constants.
@@ -63,13 +66,19 @@ class PinTransactieDownloader
 	 * @var bool
 	 */
 	public $disableSSL = true;
+	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
 
 	public function __construct(
 		PinTransactieRepository $pinTransactieRepository,
-		EntityManagerInterface $entityManager
+		EntityManagerInterface $entityManager,
+		LoggerInterface $logger
 	) {
 		$this->pinTransactieRepository = $pinTransactieRepository;
 		$this->entityManager = $entityManager;
+		$this->logger = $logger;
 	}
 
 	public function download($moment, $baseUrl, $store, $username, $password)
@@ -123,6 +132,7 @@ class PinTransactieDownloader
 			self::POST_FIELD_PERIOD_FROM_DATE_MINUTES => self::DATE_START_MINUTES,
 			self::POST_FIELD_PERIOD_DURATION => self::DURATION_DAY,
 			self::POST_FIELD_NUM_ROWS => 2,
+			self::POST_FIELD_TXTYPE => self::TXTYPE,
 			self::POST_FIELD_STORE => $store,
 		];
 		$result = $this->postPage(
@@ -136,6 +146,18 @@ class PinTransactieDownloader
 		$xml->loadHTML($result);
 		$xpath = new DOMXPath($xml);
 		$tableRow = $xpath->query('//table[@class="table"]/tbody/tr');
+
+		$errorObject = $xpath->query('//span[@class="feedbackPanelERROR"]');
+		if ($errorObject->length > 0) {
+			$errorValue = $xpath
+				->query('//span[@class="feedbackPanelERROR"]')
+				->item(0)->nodeValue;
+			if (!empty($errorValue)) {
+				$this->logger->critical(
+					'Error bij ophalen pintransacties: ' . $errorValue
+				);
+			}
+		}
 
 		$pinTransacties = [];
 		foreach ($tableRow as $row) {

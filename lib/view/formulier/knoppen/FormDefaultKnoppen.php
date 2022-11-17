@@ -26,7 +26,7 @@ class FormDefaultKnoppen extends FormKnoppen
 
 		$this->submit = new SubmitKnop();
 		if ($cancel_reset) {
-			$this->submit->icon = 'accept';
+			$this->submit->icon = 'goedkeuren';
 		}
 		if ($submit_reset) {
 			$this->submit->action .= ' reset';

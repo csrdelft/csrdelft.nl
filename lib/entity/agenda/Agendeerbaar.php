@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\agenda;
 
+use DateTimeImmutable;
+
 /**
  * Agendeerbaar.interface.php
  *
@@ -17,12 +19,12 @@ interface Agendeerbaar
 	/**
 	 * Timestamp van beginmoment.
 	 */
-	public function getBeginMoment();
+	public function getBeginMoment(): DateTimeImmutable;
 
 	/**
 	 * Timestamp van eindmoment.
 	 */
-	public function getEindMoment();
+	public function getEindMoment(): DateTimeImmutable;
 
 	public function getTitel();
 

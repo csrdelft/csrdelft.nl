@@ -8,6 +8,7 @@ use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\entity\groepen\GroepStatistiekDTO;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
@@ -82,7 +83,7 @@ abstract class GroepRepository extends AbstractRepository
 	) {
 		// Eerst sorteren op FT/HT/OT
 		$orderBy = ['status' => 'DESC'] + ($orderBy ?? []);
-		if (in_array(GroepMoment::class, class_uses($this->entityClass))) {
+		if ($this->entityClass instanceof HeeftMoment) {
 			// Als er een moment is daarna daarop sorteren
 			$orderBy = ['beginMoment' => 'DESC'] + ($orderBy ?? []);
 		}
@@ -105,6 +106,10 @@ abstract class GroepRepository extends AbstractRepository
 				->andWhere('groep.familie = :familie')
 				->setParameter('familie', $familie);
 
+			if ($status == null) {
+				$status = 'ht';
+			}
+
 			if (in_array(strtolower($status), GroepStatus::getEnumValues())) {
 				$qb = $qb
 					->andWhere('groep.status = :status')
@@ -112,6 +117,9 @@ abstract class GroepRepository extends AbstractRepository
 			} elseif (!$role) {
 				// Role op de status positie
 				$role = $status;
+				$qb = $qb
+					->andWhere('groep.status = :status')
+					->setParameter('status', GroepStatus::HT);
 			}
 
 			if ($role) {
@@ -279,7 +287,7 @@ abstract class GroepRepository extends AbstractRepository
 	{
 		$qb = $this->createQueryBuilder('ag');
 
-		if (in_array(GroepMoment::class, class_uses($this->entityClass))) {
+		if ($this->entityClass instanceof HeeftMoment) {
 			$qb = $qb->orderBy('ag.beginMoment', 'DESC');
 		}
 
@@ -466,7 +474,7 @@ abstract class GroepRepository extends AbstractRepository
 	public function findOt(Groep $groep)
 	{
 		$sortBy = [];
-		if (in_array(GroepMoment::class, class_uses($groep))) {
+		if ($groep instanceof HeeftMoment) {
 			$sortBy = ['eindMoment' => 'DESC'];
 		}
 		return $this->findOneBy(

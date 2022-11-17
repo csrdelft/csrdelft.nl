@@ -189,6 +189,14 @@ class ForumDraadController extends AbstractController
 		} else {
 			$concept = $requestStack->getSession()->remove('forum_bericht');
 		}
+
+		$draad_ongelezen = $gelezen ? $draad->isOngelezen() : true;
+		$gelezen_moment = $gelezen ? $gelezen->datum_tijd : false;
+
+		if ($this->mag(P_LOGGED_IN)) {
+			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad);
+		}
+
 		$view = $this->render('forum/draad.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'draad' => $draad,
@@ -205,13 +213,9 @@ class ForumDraadController extends AbstractController
 			),
 			'statistiek' =>
 				$statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
-			'draad_ongelezen' => $gelezen ? $draad->isOngelezen() : true,
-			'gelezen_moment' => $gelezen ? $gelezen->datum_tijd : false,
+			'draad_ongelezen' => $draad_ongelezen,
+			'gelezen_moment' => $gelezen_moment,
 		]);
-
-		if ($this->mag(P_LOGGED_IN)) {
-			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad);
-		}
 
 		return $view;
 	}

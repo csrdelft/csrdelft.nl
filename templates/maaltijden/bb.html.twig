@@ -22,7 +22,7 @@
 						Inschrijvingen: <em>{{ maaltijd.aantalAanmeldingen }}</em> van <em>{{ maaltijd.aanmeld_limiet }}</em>
 						{% if maaltijd.magSluiten(app.user.uid) %}
 					</a>
-					{% if maaltijd.eindMoment < date().timestamp %}
+					{% if maaltijd.eindMoment < date() %}
 						<br>
 						<a href="{{ url('csrdelft_maalcie_beheermaaltijden_get_beoordelingen') }}" title="Toon beoordelingen">
 							Bekijk beoordelingen
@@ -61,7 +61,7 @@
 
 					{% else %}
 						{% if aanmelding is defined and aanmelding is not none %}
-							{% if maaltijd.eindMoment > date().timestamp %}
+							{% if maaltijd.eindMoment > date() %}
 								<div class="btn btn-success disabled">
 									Aangemeld {% if aanmelding.abonnementRepetitie %}(abo){% endif %}</div>
 							{% else %}
@@ -83,7 +83,7 @@
 						{{ icon("comment", null, aanmelding.gasten_eetwens) }}
 					{% endif %}
 
-					{% if maaltijd.gesloten and maaltijd.eindMoment > date().timestamp %}
+					{% if maaltijd.gesloten and maaltijd.eindMoment > date() %}
 						{% set date = maaltijd.laatst_gesloten | time_format %}
 						{{ icon("lock", null, "Maaltijd is gesloten om " ~ date) }}
 					{% endif %}

@@ -30,14 +30,14 @@ class EetplanBekendenTable extends DataTable
 				$this->dataUrl . '/toevoegen',
 				'Toevoegen',
 				'Bekenden toevoegen',
-				'add'
+				'toevoegen'
 			)
 		);
 		$this->addRowKnop(
 			new DataTableRowKnop(
 				$this->dataUrl . '/verwijderen',
 				'Bekenden verwijderen',
-				'cross',
+				'verwijderen',
 				'confirm'
 			)
 		);
@@ -45,7 +45,7 @@ class EetplanBekendenTable extends DataTable
 			new DataTableRowKnop(
 				$this->dataUrl . '/bewerken',
 				'Bewerk opmerking',
-				'pencil'
+				'bewerken'
 			)
 		);
 	}

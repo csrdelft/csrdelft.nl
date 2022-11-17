@@ -1,6 +1,8 @@
 <?php
 namespace CsrDelft\entity\groepen\interfaces;
 
+use CsrDelft\entity\security\enum\AccessAction;
+
 /**
  * Interface HeeftAanmeldLimiet
  *
@@ -11,4 +13,5 @@ namespace CsrDelft\entity\groepen\interfaces;
 interface HeeftAanmeldLimiet
 {
 	function getAanmeldLimiet();
+	function magAanmeldLimiet(AccessAction $action);
 }

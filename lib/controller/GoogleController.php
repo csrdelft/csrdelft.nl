@@ -7,7 +7,8 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\GoogleToken;
 use CsrDelft\repository\GoogleTokenRepository;
-use CsrDelft\service\GoogleSync;
+use CsrDelft\service\GoogleAuthenticator;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,12 +32,16 @@ class GoogleController extends AbstractController
 
 	/**
 	 * @param Request $request
+	 * @param EntityManagerInterface $manager
 	 * @return RedirectResponse
 	 * @Route("/google/callback", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function callback(Request $request)
-	{
+	public function callback(
+		Request $request,
+		EntityManagerInterface $manager,
+		GoogleAuthenticator $googleAuthenticator
+	): RedirectResponse {
 		$state = urldecode($request->query->get('state', null));
 
 		if (!str_starts_with($state, $request->getSchemeAndHttpHost())) {
@@ -46,13 +51,12 @@ class GoogleController extends AbstractController
 		$code = $request->query->get('code', null);
 		$error = $request->query->get('error', null);
 		if ($code) {
-			$client = GoogleSync::createGoogleCLient();
+			$client = $googleAuthenticator->createClient();
 			$client->fetchAccessTokenWithAuthCode($code);
 
 			$existingToken = $this->googleTokenModel->findOneBy([
 				'uid' => $this->getUid(),
 			]);
-			$manager = $this->getDoctrine()->getManager();
 
 			if (!$existingToken) {
 				$googleToken = new GoogleToken();

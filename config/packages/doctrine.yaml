@@ -68,4 +68,4 @@ doctrine:
         class: CsrDelft\common\Doctrine\VerbergNovietenFilter
         enabled: false
         parameters:
-          jaar: 2020
+          jaar: 2022

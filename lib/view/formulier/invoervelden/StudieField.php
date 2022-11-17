@@ -13,7 +13,7 @@ class StudieField extends AutocompleteField
 {
 	public function __construct($name, $value, $description)
 	{
-		parent::__construct($name, $value, $description, 100);
+		parent::__construct($name, $value, $description);
 		$tustudies = [
 			'BK',
 			'CT',

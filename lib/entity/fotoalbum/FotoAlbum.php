@@ -18,6 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fotoalbum\FotoAlbumRepository")
  * @ORM\Table("fotoalbums")
+ * @ORM\EntityListeners({"CsrDelft\events\FotoAlbumListener"})
  */
 class FotoAlbum extends Map
 {
@@ -59,7 +60,6 @@ class FotoAlbum extends Map
 	public function __construct($path = null, $absolute = false)
 	{
 		if ($path === null) {
-			// called from PersistenceModel
 			$this->path = realpathunix(join_paths(PHOTOALBUM_PATH, $this->subdir));
 		} elseif (
 			$absolute == true &&
