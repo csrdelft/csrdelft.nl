@@ -1,0 +1,141 @@
+<div
+    class="btn-toolbar"
+    role="toolbar"
+    aria-label="Toolbar with button groups"
+>
+    <div
+        class="btn-group me-2 mt-1"
+        role="group"
+        aria-label="First group"
+    >
+        <a
+            class="btn btn-outline-primary btn-sm berichtLinkButton"
+            title="Berichtje link delen"
+            data-bericht-link="{{ url('csrdelft_forum_forumdraad_reactie', {post_id: post.post_id, _fragment: post.post_id}) }}"
+        >
+            {{ icon('link') }}
+            Link kopiëren
+        </a>
+    </div>
+
+    {% if post.wacht_goedkeuring %}
+        <div
+            class="btn-group me-2 mt-1"
+            role="group"
+        >
+            <a href="{{ url('csrdelft_forum_forumpost_goedkeuren', {post_id: post.post_id}) }}"
+                class="btn btn-outline-primary btn-sm post noanim confirm"
+                title="Bericht goedkeuren"
+            >
+                {{ icon('check') }}
+            </a>
+
+            <a href="/forum/verwijderen/{{ post.post_id }}"
+                class="btn btn-outline-primary btn-sm post noanim confirm"
+                title="Verwijder bericht of draad"
+            >
+                {{ icon('xmark') }}
+            </a>
+        </div>
+
+        {% if post.magBewerken %}
+            <div
+                class="btn-group me-2 mt-1"
+                role="group"
+            >
+                <a href="#{{ post.post_id }}"
+                    class="btn btn-outline-primary btn-sm {% if app.user and app.user.uid != post.uid and not post.wacht_goedkeuring %}forummodknop{% endif %}"
+                    onclick="window.forum.forumBewerken({{ post.post_id }});"
+                    title="Bewerk bericht"
+                >
+                    {{ icon('bewerken') }}
+                </a>
+            </div>
+        {% endif %}
+    {% else %}
+        {% if post.verwijderd %}
+            <div
+                class="btn-group me-2 mt-1"
+                role="group"
+                aria-label="Second group"
+            >
+                <div class="post-verwijderd">Deze reactie is verwijderd.</div>
+                <a href="/forum/verwijderen/{{ post.post_id }}"
+                    class="btn btn-outline-primary btn-sm post noanim"
+                    title="Bericht herstellen"
+                >
+                    {{ icon('arrow_undo') }}
+                </a>
+            </div>
+        {% endif %}
+
+
+        {% if post.magCiteren %}
+            <div
+                class="btn-group me-2 mt-1"
+                role="group"
+                aria-label="Second group"
+            >
+                <a href="#reageren" class="btn btn-outline-primary btn-sm citeren"
+                    data-citeren="{{ post.post_id }}"
+                    title="Bericht citeren"
+                >
+                    {{ icon('quote-left') }}
+                    Bericht citeren
+                </a>
+            </div>
+        {% endif %}
+
+
+        <div
+            class="btn-group me-2 mt-1"
+            role="group"
+            aria-label="Second group"
+        >
+            {% if post.magBewerken %}
+                <a href="#{{ post.post_id }}"
+                    class="btn btn-outline-primary btn-sm {% if app.user and app.user.uid != post.uid and not post.wacht_goedkeuring %}forummodknop{% endif %}"
+                    onclick="window.forum.forumBewerken({{ post.post_id }});"
+                    title="Bewerk bericht"
+                >
+                    {{ icon('bewerken') }}
+                </a>
+            {% endif %}
+            {% if app.user %}
+                {% set timestamp = post.datum_tijd.timestamp %}
+                <a id="timestamp{{ timestamp }}" href="{{ url('csrdelft_forum_forum_bladwijzer', {draad_id: post.draad_id}) }}"
+                    class="btn btn-outline-primary btn-sm post noanim forummodknop bladwijzer"
+                    data="timestamp={{ timestamp }}"
+                    title="Bladwijzer bij dit bericht leggen"
+                >
+                    {{ icon('bookmark') }}
+                </a>
+            {% endif %}
+            {% if post.draad.magModereren %}
+                <a href="/forum/offtopic/{{ post.post_id }}"
+                    class="btn btn-outline-primary btn-sm post noanim confirm {% if not post.wacht_goedkeuring %}forummodknop{% endif %}"
+                    title="Offtopic markeren"
+                >
+                    {{ icon('thumbs-down') }}
+                </a>
+                
+                {% if not post.verwijderd %}
+                    <a href="/forum/verwijderen/{{ post.post_id }}"
+                        class="btn btn-outline-primary btn-sm post noanim confirm {% if not post.wacht_goedkeuring %}forummodknop{% endif %}"
+                        title="Verwijder bericht"
+                    >
+                        {{ icon('verwijderen') }}
+                    </a>
+                {% endif %}
+                
+                <a href="/forum/verplaatsen/{{ post.post_id }}"
+                    class="btn btn-outline-primary btn-sm post noanim prompt {% if not post.wacht_goedkeuring %}forummodknop{% endif %}"
+                    title="Verplaats bericht"
+                    data="draad_id={{ post.draad_id }}"
+                >
+                    {{ icon('folder-tree') }}
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

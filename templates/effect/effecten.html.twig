@@ -14,9 +14,6 @@
 {% elseif lid_instelling('layout', 'fx') == 'space' %}
 	{{ js_asset('fxspace') }}
 {% endif %}
-{% if lid_instelling('zijbalk', 'meescrollen') != 'nee' %}
-	{{ js_asset('zijbalk-scroll') }}
-{% endif %}
 {% if lid_instelling('layout', 'trein') != 'nee' %}
 	{{ include('effect/trein.html.twig') }}
 {% endif %}

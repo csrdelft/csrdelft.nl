@@ -1,5 +1,7 @@
 @import "~@fortawesome/fontawesome-free/scss/functions";
 @import "~@fortawesome/fontawesome-free/scss/variables";
+@import "~@fortawesome/fontawesome-free/scss/mixins";
+@import "~@fortawesome/fontawesome-free/scss/core";
 @import "~datatables.net-dt/css/jquery.dataTables.css";
 @import "~datatables.net-autofill-dt/css/autoFill.dataTables.css";
 @import "~datatables.net-buttons-dt/css/buttons.dataTables.css";
@@ -89,31 +91,27 @@ div {
 				cursor: url("../../images/edit.png"), cell;
 			}
 
-			td.toggle-childrow::before {
-				font-size: 1.1em;
-				font-weight: 400;
-				font-family: "Font Awesome 6 Free";
-				content: fa-content($fa-var-plus-square);
+			td.toggle-childrow {
+				@include fa-icon-solid($fa-var-plus);
 			}
-		}
-		tr:hover {
-			cursor: default;
 
-			td.toggle-childrow::before {
-				font-weight: 900;
-				content: fa-content($fa-var-plus-square);
+			&:hover {
+				cursor: default;
+
+				td.toggle-childrow:before {
+					font-weight: 900;
+				}
 			}
 		}
 		tr.expanded {
-			td.toggle-childrow::before {
-				font-weight: 400;
-				content: fa-content($fa-var-minus-square);
+			td.toggle-childrow {
+				@include fa-icon-solid($fa-var-minus);
 			}
-		}
-		tr.expanded:hover {
-			td.toggle-childrow::before {
-				font-weight: 900;
-				content: fa-content($fa-var-minus-square);
+
+			&:hover {
+				td.toggle-childrow:before {
+					font-weight: 900;
+				}
 			}
 		}
 		tr.loading {

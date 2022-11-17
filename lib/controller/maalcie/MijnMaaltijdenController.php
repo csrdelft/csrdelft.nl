@@ -194,6 +194,12 @@ class MijnMaaltijdenController extends AbstractController
 					),
 				]
 			);
+		} elseif ($request->query->get('size') == 'klein') {
+			// Aparte ketzer voor de agenda op de voorpagina
+			return $this->render('voorpagina/agenda_maaltijd_ketzer.html.twig', [
+				'maaltijd' => $aanmelding->maaltijd,
+				'aanmelding' => $aanmelding,
+			]);
 		} else {
 			return $this->render('maaltijden/bb.html.twig', [
 				'maaltijd' => $aanmelding->maaltijd,
@@ -230,6 +236,11 @@ class MijnMaaltijdenController extends AbstractController
 					),
 				]
 			);
+		} elseif ($request->query->get('size') == 'klein') {
+			// Aparte ketzer voor de agenda op de voorpagina
+			return $this->render('voorpagina/agenda_maaltijd_ketzer.html.twig', [
+				'maaltijd' => $maaltijd,
+			]);
 		} else {
 			return $this->render('maaltijden/bb.html.twig', [
 				'maaltijd' => $maaltijd,

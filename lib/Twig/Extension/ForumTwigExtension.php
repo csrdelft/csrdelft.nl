@@ -2,9 +2,11 @@
 
 namespace CsrDelft\Twig\Extension;
 
+use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\view\Icon;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -53,6 +55,7 @@ class ForumTwigExtension extends AbstractExtension
 			new TwigFunction('getHuidigePagina', [$this, 'getHuidigePagina']),
 			new TwigFunction('getAantalPaginas', [$this, 'getAantalPaginas']),
 			new TwigFunction('getBelangrijkOpties', [$this, 'getBelangrijkOpties']),
+			new TwigFunction('getForumDradenIds', [$this, 'getForumDradenIds']),
 			new TwigFunction('draadGetAantalPaginas', [
 				$this,
 				'draadGetAantalPaginas',
@@ -61,6 +64,7 @@ class ForumTwigExtension extends AbstractExtension
 				$this,
 				'draadGetHuidigePagina',
 			]),
+			new TwigFunction('draadGetLaatstePost', [$this, 'draadGetLaatstePost']),
 		];
 	}
 
@@ -81,6 +85,25 @@ class ForumTwigExtension extends AbstractExtension
 	public function getBelangrijkOpties()
 	{
 		return ForumDradenRepository::$belangrijk_opties;
+	}
+
+	public function getForumDradenIds($forum_draden)
+	{
+		$ids_from_draden = function (ForumDraad $draad): int {
+			return $draad->draad_id;
+		};
+
+		// Check of het een Array is (zoals bij 'forum/recent/') of een ArrayIterator (zoals bij deelfora) want array_map moet een Array hebben
+		if (is_array($forum_draden)) {
+			$forum_draden_ids = array_map($ids_from_draden, $forum_draden);
+		} else {
+			$forum_draden_ids = array_map(
+				$ids_from_draden,
+				iterator_to_array($forum_draden)
+			);
+		}
+
+		return implode(',', $forum_draden_ids);
 	}
 
 	public function getAantalVerborgenVoorLid()
@@ -111,6 +134,26 @@ class ForumTwigExtension extends AbstractExtension
 	public function draadGetHuidigePagina()
 	{
 		return $this->forumPostsRepository->getHuidigePagina();
+	}
+
+	public function draadGetLaatstePost($draad_id)
+	{
+		$tekst = $this->forumPostsRepository->findOneBy(
+			['draad_id' => $draad_id, 'verwijderd' => false],
+			['datum_tijd' => 'DESC']
+		)->tekst;
+
+		// Filter alle bb-tags uit de tekst
+		$regexTekst = '/\[p\]([^\[\]]+)\[\/p\]/i';
+		$regexPlaatjes = '/(\[p\]\[img=[^\]]+\]\[\/p\])/i';
+		$tekst = preg_replace($regexPlaatjes, '📷', $tekst);
+
+		if (preg_match_all($regexTekst, $tekst, $matches) && count($matches) > 0) {
+			$filter_tekst = implode(' ', $matches[1]);
+			return $filter_tekst;
+		}
+
+		return $tekst;
 	}
 
 	public function highlight_zoekterm(
@@ -171,14 +214,14 @@ class ForumTwigExtension extends AbstractExtension
 		$pagecount = 0;
 		$curpage = 0;
 		$baseurl = '';
-		$linknum = 5;
+		$linknum = 3;
 		$urlAppend = '';
 		$txtPrev = '<';
-		$separator = ' ';
+		$separator = '';
 		$txtNext = '>';
 		$txtSkip = '…';
 		$cssClass = '';
-		$showPrevNext = false;
+		$showPrevNext = true;
 
 		/* Import parameters */
 		extract($params);
@@ -241,31 +284,56 @@ class ForumTwigExtension extends AbstractExtension
 		$retval = '';
 		$cssClass = $cssClass ? 'class="' . $cssClass . '"' : '';
 		if ($curpage > 1 && $showPrevNext) {
-			$retval .=
-				'<a href="' .
-				$baseurl .
-				($curpage - 1) .
-				$urlAppend .
-				'" ' .
-				$cssClass .
-				'>' .
-				$txtPrev .
-				'</a>';
+			if ($txtPrev != '<') {
+				$retval .=
+					'<li class="page-item"><a class="page-link" href="' .
+					$baseurl .
+					($curpage - 1) .
+					$urlAppend .
+					'" ' .
+					$cssClass .
+					'>' .
+					$txtPrev .
+					'</a></li>';
+			} else {
+				$retval .=
+					'<li class="page-item"><a class="page-link" href="' .
+					$baseurl .
+					($curpage - 1) .
+					$urlAppend .
+					'" ' .
+					$cssClass .
+					' aria-label="Vorige">' .
+					Icon::getTag('chevron-left', null, 'Vorige', 'pagination') .
+					'</a></li>';
+			}
+
 			$retval .= $separator;
 		}
 		if ($links[0] != 1) {
 			$retval .=
-				'<a href="' . $baseurl . '1' . $urlAppend . '" ' . $cssClass . '>1</a>';
+				'<li class="page-item"><a class="page-link" href="' .
+				$baseurl .
+				'1' .
+				$urlAppend .
+				'" ' .
+				$cssClass .
+				'>1</a></li>';
 			if ($links[0] == 2) {
 				$retval .= $separator;
 			} else {
-				$retval .= $separator . $txtSkip . $separator;
+				$retval .=
+					$separator .
+					'<li class="page-item"><span class="page-link">' .
+					$txtSkip .
+					'</span></li>' .
+					$separator;
 			}
 		}
 		for ($i = 0; $i < sizeof($links); $i++) {
 			if ($links[$i] != $curpage) {
 				$retval .=
-					'<a href="' .
+					'<li class="page-item"><a class="page-link" href="' .
 					$baseurl .
 					$links[$i] .
 					$urlAppend .
@@ -273,9 +341,12 @@ class ForumTwigExtension extends AbstractExtension
 					$cssClass .
 					'>' .
 					$links[$i] .
-					'</a>';
+					'</a></li>';
 			} else {
-				$retval .= '<span class="curpage">' . $links[$i] . '</span>';
+				$retval .=
+					'<li class="page-item active" aria-current="page"><span class="page-link">' .
+					$links[$i] .
+					'</span></li>';
 			}
 
 			if ($i < sizeof($links) - 1) {
@@ -284,12 +355,17 @@ class ForumTwigExtension extends AbstractExtension
 		}
 		if ($links[sizeof($links) - 1] != $pagecount) {
 			if ($links[sizeof($links) - 2] != $pagecount - 1) {
-				$retval .= $separator . $txtSkip . $separator;
+				$retval .=
+					$separator .
+					'<li class="page-item"><span class="page-link">' .
+					$txtSkip .
+					'</span></li>' .
+					$separator;
 			} else {
 				$retval .= $separator;
 			}
 			$retval .=
-				'<a href="' .
+				'<li class="page-item"><a class="page-link" href="' .
 				$baseurl .
 				$pagecount .
 				$urlAppend .
@@ -297,20 +373,34 @@ class ForumTwigExtension extends AbstractExtension
 				$cssClass .
 				'>' .
 				$pagecount .
-				'</a>';
+				'</a></li>';
 		}
 		if ($curpage != $pagecount && $showPrevNext) {
 			$retval .= $separator;
-			$retval .=
-				'<a href="' .
-				$baseurl .
-				($curpage + 1) .
-				$urlAppend .
-				'" ' .
-				$cssClass .
-				'>' .
-				$txtNext .
-				'</a>';
+
+			if ($txtNext != '>') {
+				$retval .=
+					'<li class="page-item"><a class="page-link" href="' .
+					$baseurl .
+					($curpage + 1) .
+					$urlAppend .
+					'" ' .
+					$cssClass .
+					'>' .
+					$txtNext .
+					'</a></li>';
+			} else {
+				$retval .=
+					'<li class="page-item"><a class="page-link" href="' .
+					$baseurl .
+					($curpage + 1) .
+					$urlAppend .
+					'" ' .
+					$cssClass .
+					' aria-label="Volgende">' .
+					Icon::getTag('chevron-right', null, 'Volgende', 'pagination') .
+					'</a></li>';
+			}
 		}
 		return $retval;
 	}

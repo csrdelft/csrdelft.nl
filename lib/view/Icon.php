@@ -109,6 +109,7 @@ class Icon
 		if ($hover !== null) {
 			$hover = 'hover-' . self::get($hover);
 		}
+
 		if ($title !== null) {
 			$title = str_replace('&amp;', '&', htmlspecialchars($title));
 		}

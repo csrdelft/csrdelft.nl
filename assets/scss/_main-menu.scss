@@ -12,14 +12,14 @@ Primary style
 -------------------------------- */
 #menu {
 	top: 0;
-	background: $donkerblauw;
-	border-bottom: 3px solid $orange;
+	background: $menu-bg;
+	border-bottom: 3px solid $secondary;
 	position: sticky;
 	z-index: $zindex-menu;
 
-	.pasfoto-menu {
-		height: 32px;
-		clip-path: circle();
+	.pasfoto {
+		width: 2rem;
+		height: 2rem;
 	}
 
 	.navbar-search {
@@ -34,23 +34,23 @@ Primary style
 		}
 	}
 
+	.navbar-nav {
+		align-items: center;
+	}
+
 	.navbar-brand {
-		width: 200px;
-		margin-right: 1rem;
-		margin-left: -1rem;
-		padding: 0 20px;
+		padding: 0;
 		display: flex;
 		align-items: center;
 		justify-content: space-around;
 
-		h2 {
+		span {
 			font-size: 1.5rem;
-			margin-bottom: 0;
 		}
 
-		img {
-			height: 50px;
-			margin: -10px 0;
+		svg.logo {
+			display: inline-block;
+			height: 2.5rem;
 		}
 	}
 
@@ -63,15 +63,6 @@ Primary style
 @include media-breakpoint-down(md) {
 	#menu .navbar-nav {
 		width: 100%;
-	}
-
-	#menu .navbar-brand {
-		margin-left: 0;
-	}
-}
-
-@include media-breakpoint-up(lg) {
-	#menu {
-		margin-left: -200px;
+		align-items: baseline;
 	}
 }

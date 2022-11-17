@@ -55,13 +55,6 @@ $body-bg: $kleur-secundair;
 $body-color: $kleur-text-hover;
 $headings-color: $kleur-textheader;
 
-$zijbalk-bg: $kleur-primair;
-$zijbalk-border: $kleur-text-hover;
-$zijbalk-kopje: $kleur-textheader;
-
-$zijbalk-ishetal-ja: $lustrum-kleur-wit;
-$zijbalk-ishetal-nee: $lustrum-kleur-licht-rood;
-
 $bb-block-bg: $kleur-primair;
 
 $card-bg: $kleur-primair;
@@ -116,17 +109,6 @@ h6 {
 	color: $kleur-textheader;
 }
 
-// zijbalk links
-#zijbalk .blok {
-	.item a {
-		color: $kleur-textheader;
-	}
-	.zijbalk-kopje a {
-		color: $kleur-textheader;
-		font-family: $headings-font-family;
-		text-transform: uppercase;
-	}
-}
 // is-het-al tekst
 .ishetal {
 	color: $kleur-text;

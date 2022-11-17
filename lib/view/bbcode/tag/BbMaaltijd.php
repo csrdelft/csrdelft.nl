@@ -95,7 +95,7 @@ class BbMaaltijd extends BbTag
 
 	public function render()
 	{
-		$result = '<div class="my-3 p-3 maaltijdketzer-wrapper rounded shadow-sm">';
+		$result = '<div class="my-3 p-3 maaltijdketzer-wrapper rounded">';
 		foreach ($this->maaltijden as $maaltijd) {
 			// Aanmeldingen
 			$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid(

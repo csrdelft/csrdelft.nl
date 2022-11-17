@@ -1,0 +1,201 @@
+{% if is_granted('ROLE_LOGGED_IN') %}
+	{% if app.user and app.user.privateToken %}
+		{% set rss_link = absolute_url(app.user.rssLink) %}
+	{% elseif not app.user %}
+		{% set rss_link = url('csrdelft_forum_forum_rss') %}
+	{% else %}
+		{% set rss_link = null %}
+	{% endif %}
+
+	<div class="dropdown d-block d-md-none">
+		<button
+			class="btn btn-primary dropdown-toggle"
+			type="button"
+			id="dropdownMenuButton1"
+			data-bs-toggle="dropdown"
+			aria-expanded="false"
+		>
+			Opties
+		</button>
+		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+			{% if deel is defined and deel.magPosten %}
+			<li>
+				<a class="dropdown-item" href="#forumForm">
+					{{ icon('toevoegen') }}
+					Nieuw draadje
+				</a>
+			</li>
+			<li><hr class="dropdown-divider" /></li>
+			{% endif %}
+			{% if is_granted('ROLE_ADMIN') and deel is defined and deel.forum_id is not empty %}
+				<li>
+					<a
+						href="/forum/beheren/{{ deel.forum_id }}"
+						class="dropdown-item post popup"
+					>
+						{{ icon('wrench') }}
+						Deelforum beheren
+					</a>
+				</li>
+			{% endif %}
+			<li><hr class="dropdown-divider" /></li>
+			{% if deel is not defined or (deel.forum_id is not empty and deel.magModereren) %}
+				<li>
+					<a href="{{ url('csrdelft_forum_forumdeel_wacht') }}"
+						class="dropdown-item">
+						{{ icon('hourglass', null, 'me-1') }}
+						{{ getAantalWachtOpGoedkeuring() }}
+						reacties wachten op goedkeuring
+					</a>
+				</li>
+			{% endif %}
+			<li>
+				<a href="{{ url('csrdelft_forum_forumdradenverbergen_toonalles') }}"
+					class="dropdown-item post confirm ReloadPage">
+					{{ icon('eye', null, 'me-1') }}
+					{{ getAantalVerborgenVoorLid() }} verborgen onderwerpen laten zien
+				</a>
+			</li>
+			<li><hr class="dropdown-divider" /></li>
+			{# <li>
+				<a
+					class="dropdown-item"
+					data-bs-toggle="modal"
+					data-bs-target="#filterModal"
+				>
+					{{ icon('filter') }}
+					Filter
+				</a>
+			</li> #}
+			<li>	
+				<button
+					type="button"
+					class="dropdown-item rssFeedButton"
+					data-rss-link="{{ rss_link }}"
+				>
+					{{ icon('feed') }} RSS feed link delen
+				</button>
+	
+				<button
+					type="button"
+					class="dropdown-item forumLinkButton"
+					data-forum-link="{{ app.request.getUri() }}"
+				>
+					{{ icon('share-alt') }} Draadje link delen
+				</button>
+			</li>
+			{% if deel is defined and deel.magMeldingKrijgen %}
+				{% if deel.lidWilMeldingVoorDeel %}
+				<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
+					class="dropdown-item post ReloadPage melding-nooit">
+					{{ icon('bell-slash') }}
+					Geen meldingen
+				</a>
+				{% else %}
+				<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
+					class="dropdown-item post ReloadPage melding-altijd">
+					{{ icon('bell-plus') }}
+					Meldingen
+				</a>
+				{% endif %}
+			{% endif %}
+		</ul>
+	</div>
+
+	<div
+		class="btn-toolbar d-none d-md-block"
+		role="toolbar"
+		aria-label="Toolbar with button groups"
+	>
+		{% if deel is defined and deel.magPosten %}
+		<div class="btn-group me-2 mt-1" role="group">
+			<a class="btn btn-secondary text-white" href="#forumForm" title="Nieuw draadje">
+				{{ icon('toevoegen') }}
+				Nieuw
+			</a>
+		</div>
+		{% endif %}
+
+		{% if is_granted('ROLE_ADMIN') and deel is defined and deel.forum_id is not empty %}
+			<div class="btn-group me-2 mt-1" role="group">
+				<a
+					href="/forum/beheren/{{ deel.forum_id }}"
+					class="btn btn-primary post popup"
+					title="Deelforum beheren"
+				>
+					{{ icon('wrench') }}
+					<span class="visually-hidden">Deelforum beheren</span>
+				</a>
+			</div>
+		{% endif %}
+
+		<div class="btn-group me-2 mt-1" role="group">
+			{% if deel is not defined or (deel.forum_id is not empty and deel.magModereren) %}
+				<a href="{{ url('csrdelft_forum_forumdeel_wacht') }}"
+					class="btn btn-primary"
+					title="Reacties die wachten op goedkeuring">
+					{{ icon('hourglass', null, 'me-1') }}
+					{{ getAantalWachtOpGoedkeuring() }}
+					<span class="visually-hidden">reacties die wachten op goedkeuring</span>
+				</a>
+			{% endif %}
+			<a href="{{ url('csrdelft_forum_forumdradenverbergen_toonalles') }}"
+				class="btn btn-primary post confirm ReloadPage"
+				title="Verborgen onderwerpen weer laten zien">
+				{{ icon('eye', null, 'me-1') }}
+				{{ getAantalVerborgenVoorLid() }}
+				<span class="visually-hidden">verborgen onderwerpen weer laten zien</span>
+			</a>
+		</div>
+
+		<div class="btn-group mt-1" role="group">
+			{# TODO: toevoegen dat je kunt filteren #}
+			{# <button
+				type="button"
+				class="btn btn-primary"
+				data-bs-toggle="modal"
+				data-bs-target="#filterModal"
+				title="Filter"
+			>
+				{{ icon('filter') }}
+				<span class="visually-hidden">Filter</span>
+			</button> #}
+
+			<button
+				type="button"
+				class="btn btn-primary rssFeedButton"
+				title="RSS feed link delen"
+				data-rss-link="{{ rss_link }}"
+			>
+				{{ icon('feed') }}
+			</button>
+
+			<button
+				type="button"
+				class="btn btn-primary forumLinkButton"
+				title="Draadje link delen"
+				data-forum-link="{{ app.request.getUri() }}"
+			>
+				{{ icon('share-alt') }}
+			</button>
+
+			{% if deel is defined and deel.magMeldingKrijgen %}
+				{% if deel.lidWilMeldingVoorDeel %}
+					<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'uit'}) }}"
+						class="btn btn-primary post ReloadPage melding-nooit"
+						title="Geen meldingen voor forumdeel onvangen">
+						{{ icon('bell-slash') }}
+						<span class="visually-hidden">Geen meldingen voor forumdeel onvangen</span>
+					</a>
+				{% else %}
+					<a href="{{ url('csrdelft_forum_forummelding_deelmelding', {forum_id: deel.forum_id, niveau: 'aan'}) }}"
+						class="btn btn-primary post ReloadPage melding-altijd"
+						title="Meldingen ontvangen voor nieuwe berichten in forumdeel">
+						{{ icon('bell-plus') }}
+						<span class="visually-hidden">Meldingen ontvangen voor nieuwe berichten in forumdeel</span>
+					</a>
+				{% endif %}
+			{% endif %}
+		</div>
+	</div>
+{% endif %}

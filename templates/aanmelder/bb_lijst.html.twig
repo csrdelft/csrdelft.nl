@@ -1,5 +1,5 @@
 {% if activiteiten|length %}
-	<div class="my-3 p-3 maaltijdketzer-wrapper rounded shadow-sm">
+	<div class="my-3 maaltijdketzer-wrapper rounded">
 		{% for activiteit in activiteiten %}
 			{% include 'aanmelder/bb_activiteit.html.twig' with { border: (not loop.last) or toonMeer } %}
 		{% endfor %}

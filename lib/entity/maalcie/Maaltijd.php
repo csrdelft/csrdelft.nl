@@ -265,7 +265,11 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	public function getBeschrijving()
 	{
-		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
+		return 'Maaltijd met ' .
+			$this->getAantalAanmeldingen() .
+			' eters (max. ' .
+			$this->getAanmeldLimiet() .
+			')';
 	}
 
 	public function getLocatie()

@@ -1,5 +1,5 @@
 {% if deel.openbaar %}
-	<div class="meldingen">
+	<div class="list-group-item meldingen">
 		<div id="public-melding" class="alert alert-danger">
 			<strong>Openbaar forum</strong>
 			Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br/>
@@ -19,60 +19,53 @@
 	</div>
 {% endif %}
 
-<div id="forumPosten" class="forum-posten">
-	<div class="auteur">
-		<div class="postpijl">
-			<a class="postanchor"></a>
-			<a class="postlink">&rarr;</a>
+<div id="forumPosten" class="list-group-item border-0 py-3 px-0 px-sm-3">
+	<div class="d-flex flex-row gap-3">
+		{% if app.user is defined and app.user is not null %}
+		<div class="pasfoto">
+			{{ app.user.profiel.pasfotoRounded | raw }}
 		</div>
-
-		{% if app.user %}
-			<div class="naam">
+		{% endif %}
+		<div class="bericht0 flex-grow-1">
+		{% if app.user is defined and app.user is not null %}
+			<div class="d-flex justify-content-between align-items-center">
 				{{ app.user.profiel.naam('user') }}
 			</div>
-			<div class="forumpasfoto">{{ app.user.profiel.link('pasfoto') | raw }}</div>
-		{% else %}
-			<div class="naam">
-				Niet ingelogd
-			</div>
 		{% endif %}
-	</div>
-
-	<div class="bericht0 flex-grow-1">
-		<form id="forumForm" class="Formulier"
+			<div class="draad-post fw-light my-1">
+				<form id="forumForm" class="Formulier"
 					action="{{ url('csrdelft_forum_forumdraad_posten', {forum_id: deel.forum_id, draad_id: draad is not none ? draad.draad_id : null}) }}"
 					method="post">
-			{{ csrfField() }}
-			{% if not app.user %}
-				<input type="text" name="email" class="FormElement TextField forumEmail form-control"
-							 placeholder="E-mailadres"/>
-				<input type="text" name="firstname" value="" class="FormElement TextField verborgen"/>
-				{# spam trap, must be kept empty! #}
-			{% endif %}
-			{% if draad is empty %}
-				<input type="text" id="nieuweTitel" name="titel" class="FormElement TextField form-control" tabindex="1"
-							 placeholder="Onderwerp titel" value="{{ post_form_titel }}" origvalue="{{ post_form_titel }}"/>
-			{% endif %}
-			<input type="hidden" name="forumBericht" id="forumBericht" value="{{ post_form_tekst|json_encode }}">
-			<div id="editor" class="pm-editor" data-prosemirror-doc="forumBericht"></div>
-			<div class="butn">
-				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" class="btn btn-primary"/>
-				{% if app.user %}
-					<input type="button" value="Concept opslaan" id="forumConcept" class="btn btn-secondary"
-								 onclick="window.forum.saveConceptForumBericht();"
-								 data-url="{{ url('csrdelft_forum_forumpost_concept', {forum_id: deel.forum_id, draad_id: draad is none ? null : draad.draad_id}) }}"/>
-					<div class="float-end">
-						<a href="{{ url('csrdelft_documenten_toevoegen') }}" target="_blank">Document opladen</a>
-						<a href="{{ url('csrdelft_fotoalbum_uploaden', {dir: huidige_jaargang() ~ '/Posters'}) }}" target="_blank">
-							Poster opladen
-						</a>
-						<a href="{{ url('csrdelft_groep_activiteiten_nieuw') }}" class="post popup">Ketzer maken</a>
+					{{ csrfField() }}
+					{% if not app.user %}
+						<input type="text" name="email" class="my-2 FormElement TextField forumEmail form-control"
+									placeholder="E-mailadres"/>
+						<input type="text" name="firstname" value="" class="my-2 FormElement TextField verborgen"/>
+						{# spam trap, must be kept empty! #}
+					{% endif %}
+					{% if draad is empty %}
+						<input type="text" id="nieuweTitel" name="titel" class="my-2 FormElement TextField form-control" tabindex="1"
+									placeholder="Onderwerp titel" value="{{ post_form_titel }}" origvalue="{{ post_form_titel }}"/>
+					{% endif %}
+					<input type="hidden" name="forumBericht" id="forumBericht" value="{{ post_form_tekst|json_encode }}">
+					<div id="editor" class="pm-editor" data-prosemirror-doc="forumBericht"></div>
+					<div class="butn">
+						<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" class="btn btn-primary"/>
+						{% if app.user %}
+							<input type="button" value="Concept opslaan" id="forumConcept" class="btn btn-light"
+										onclick="window.forum.saveConceptForumBericht();"
+										data-url="{{ url('csrdelft_forum_forumpost_concept', {forum_id: deel.forum_id, draad_id: draad is none ? null : draad.draad_id}) }}"/>
+							<div class="float-end">
+								<a href="{{ url('csrdelft_documenten_toevoegen') }}" target="_blank">Document opladen</a>
+								<a href="{{ url('csrdelft_fotoalbum_uploaden', {dir: huidige_jaargang() ~ '/Posters'}) }}" target="_blank">
+									Poster opladen
+								</a>
+								<a href="{{ url('csrdelft_groep_activiteiten_nieuw') }}" class="post popup">Ketzer maken</a>
+							</div>
+						{% endif %}
 					</div>
-				{% endif %}
-
+				</form>
 			</div>
-
-		</form>
+		</div>
 	</div>
-
 </div>

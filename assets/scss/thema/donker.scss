@@ -1,7 +1,4 @@
-$dark-grey: #1e1f23;
-$darker-grey: #101011;
-
-$white: #000;
+$white: #0b0d0e;
 $gray-900: #f8f9fa !default;
 $gray-800: #e9ecef !default;
 $gray-700: #dee2e6 !default;
@@ -10,16 +7,16 @@ $gray-500: #adb5bd !default;
 $gray-400: #6c757d !default;
 $gray-300: #495057 !default;
 $gray-200: #343a40 !default;
-$gray-100: #212529 !default;
+$gray-100: #22262a !default;
 $black: #fff;
 
-$body-bg: $dark-grey !default;
+$body-bg: $gray-100 !default;
 $body-color: darken($black, 7%) !default;
 $headings-color: inherit;
 
-$primary: #009ffd !default;
-$secondary: lighten($body-bg, 20%) !default;
-$light: $gray-100 !default;
+$primary: #006efd !default;
+$secondary: #e59200 !default;
+$light: $white !default;
 $dark: $gray-800 !default;
 $yiq-text-dark: $white !default;
 $yiq-text-light: $gray-900 !default;
@@ -47,40 +44,19 @@ $yiq-text-light: $gray-900 !default;
 
 /** Stek specifieke variabelen. */
 
-/* zijbalk */
-$beeldmerk: url(../images/beeldmerk-wit.png) !default;
-
-$zijbalk-bg: darken($body-bg, 5%) !default;
-$zijbalk-border: darken($primary, 12%) !default;
-$zijbalk-kopje: $primary !default;
-$zijbalk-ishetal-nee: red !default;
-$zijbalk-ishetal-ja: green !default;
-$zindex-zijbalk: 800 !default;
-
-.zijbalk-kopje {
-	a {
-		font-size: 1.25em;
-	}
-}
-
-#zijbalk .blok .item {
-	font-family: "Ubuntu-Light", sans-serif;
-}
-
 /* Modals */
 $modal-content-bg: $body-bg !default;
 
 /* bbcode */
-$bb-block-bg: $secondary !default;
+$bb-block-bg: $gray-200 !default;
 
 /* forum */
 $forum-bericht0-bg: $body-bg !default;
 $forum-bericht1-bg: darken($body-bg, 4%) !default;
-$ongelezen-lijn: #e8cf2a !default;
 
 /* main menu */
 $menu-primary-hover: $primary !default;
-$menu-bg: $body-bg !default;
+$menu-bg: $gray-100 !default;
 $menu-color: $body-color !default;
 $menu-small-bg: #0a338d !default;
 $menu-small-color: #ffffff !default;
@@ -100,6 +76,10 @@ $card-border-color: rgba(0, 0, 0, 0.3) !default;
 /* importeer basis */
 @import "../base";
 @import "~flatpickr/dist/themes/dark.css";
+
+:root {
+	color-scheme: dark;
+}
 
 .navbar-dark .navbar-brand {
 	color: $black;
@@ -151,7 +131,7 @@ div#pubciemail_form {
 }
 
 /* Peiling uitslag van de peilingen niet meer wit */
-.list-group-item {
+.peiling .list-group-item {
 	background-color: lighten($body-bg, 4%);
 }
 

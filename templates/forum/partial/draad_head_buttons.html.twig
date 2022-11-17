@@ -1,0 +1,252 @@
+{% if app.user %}
+	{% if app.user and app.user.privateToken %}
+		{% set rss_link = absolute_url(app.user.rssLink) %}
+	{% elseif not app.user %}
+		{% set rss_link = url('csrdelft_forum_forum_rss') %}
+	{% else %}
+		{% set rss_link = null %}
+	{% endif %}
+
+	<div class="dropdown d-block d-md-none">
+		<button
+			class="btn btn-primary dropdown-toggle"
+			type="button"
+			id="dropdownMenuButton1"
+			data-bs-toggle="dropdown"
+			aria-expanded="false"
+		>
+			Opties
+		</button>
+		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+			<li>
+				<a class="dropdown-item" href="#forumForm">
+					{{ icon('toevoegen') }}
+					Nieuw bericht
+				</a>
+			</li>
+			<li>
+				<hr class="dropdown-divider"/>
+			</li>
+			<li>
+				<a title="Onderwerp toevoegen aan favorieten" class="dropdown-item post popup addfav"
+					 href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: 'favoriet'}) }}">
+					{{ icon('heart-circle-plus') }} Favoriet
+				</a>
+			</li>
+			{% if statistiek is none and draad.magStatistiekBekijken %}
+				<li>
+					<hr class="dropdown-divider"/>
+				</li>
+				<li>
+					<a
+						href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, pagina: getHuidigePagina(), statistiek: 'statistiek'}) }}"
+						class="btn btn-primary" title="Toon statistieken">{{ icon('chart-line') }}</a>
+				</li>
+			{% endif %}
+			{% if draad.magModereren %}
+				<li>
+					<hr class="dropdown-divider"/>
+				</li>
+				<li>
+					<a class="dropdown-item" title="Moderatie-functies weergeven"
+						 data-bs-toggle="modal" data-bs-target="#modereren">
+						{{ icon('wrench') }} Modereren
+					</a>
+
+					{% if draad.gesloten %}
+						<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
+							 class="dropdown-item post ReloadPage slotjeUit"
+							 title="Openen (reactie mogelijk)">
+							{{ icon('lock-open') }} Openen
+						</a>
+					{% else %}
+						<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
+							 class="dropdown-item post ReloadPage slotjeAan"
+							 title="Sluiten (geen reactie mogelijk)">
+							{{ icon('lock') }} Sluiten
+						</a>
+					{% endif %}
+				</li>
+			{% endif %}
+			{% if draad.verborgen %}
+				<li>
+					<hr class="dropdown-divider"/>
+				</li>
+				<li>
+					<a href="{{ url('csrdelft_forum_forumdradenverbergen_tonen', {draad_id: draad.draad_id}) }}"
+						 class="dropdown-item post ReloadPage tonenAan">
+						{{ icon('folder-plus') }} Onderwerp tonen in zijbalk
+					</a>
+				</li>
+			{% elseif draad.magVerbergen %}
+				<li>
+					<hr class="dropdown-divider"/>
+				</li>
+				<li>
+					<a href="{{ url('csrdelft_forum_forumdradenverbergen_verbergen', {draad_id: draad.draad_id}) }}"
+						 class="dropdown-item post ReloadPage tonenUit">
+						{{ icon('folder-minus') }} Onderwerp verbergen in zijbalk
+					</a>
+				</li>
+			{% endif %}
+			<li>
+				<hr class="dropdown-divider"/>
+			</li>
+			<li>	
+				<button
+					type="button"
+					class="dropdown-item rssFeedButton"
+					data-rss-link="{{ rss_link }}"
+				>
+					{{ icon('feed') }} RSS feed link delen
+				</button>
+	
+				<button
+					type="button"
+					class="dropdown-item forumLinkButton"
+					data-forum-link="{{ app.request.getUri() }}"
+				>
+					{{ icon('share-alt') }} Draadje link delen
+				</button>
+			</li>
+			<li>
+				<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#meldingModal">
+					{{ icon('bell') }} Notificaties
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<div
+		class="btn-toolbar d-none d-md-flex justify-content-end align-items-center flex-grow-1"
+		role="toolbar"
+		aria-label="Toolbar with button groups"
+	>
+		<div class="btn-group me-2 mt-1" role="group">
+			<a class="btn btn-secondary text-white" href="#forumForm" title="Nieuw bericht">
+				{{ icon('toevoegen') }}
+				Nieuw
+			</a>
+		</div>
+
+		<div class="btn-group me-2 mt-1" role="group">
+			<a title="Onderwerp toevoegen aan favorieten" class="btn btn-primary post popup addfav"
+				 href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: 'favoriet'}) }}">{{ icon('heart-circle-plus') }}</a>
+		</div>
+
+		{% if statistiek is none and draad.magStatistiekBekijken %}
+			<div class="btn-group me-2 mt-1" role="group">
+				<a
+					href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, pagina: getHuidigePagina(), statistiek: 'statistiek'}) }}"
+					class="btn btn-primary" title="Toon statistieken">{{ icon('chart-line') }}</a>
+			</div>
+		{% endif %}
+
+		{% if draad.magModereren %}
+			<div class="btn-group me-2 mt-1" role="group">
+				<button type="button" class="btn btn-primary modfuncties" title="Moderatie-functies weergeven"
+								data-bs-toggle="modal" data-bs-target="#modereren">
+					{{ icon('wrench') }}
+				</button>
+
+				{% if draad.gesloten %}
+					<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
+						 class="btn btn-primary post ReloadPage slotjeUit"
+						 title="Openen (reactie mogelijk)">{{ icon('lock-open') }}</a>
+				{% else %}
+					<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
+						 class="btn btn-primary post ReloadPage slotjeAan"
+						 title="Sluiten (geen reactie mogelijk)">{{ icon('lock') }}</a>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		{% if draad.verborgen %}
+			<div class="btn-group me-2 mt-1">
+				<a href="{{ url('csrdelft_forum_forumdradenverbergen_tonen', {draad_id: draad.draad_id}) }}"
+					 class="btn btn-primary post ReloadPage tonenAan"
+					 title="Onderwerp tonen in zijbalk">{{ icon('folder-plus') }}</a>
+			</div>
+		{% elseif draad.magVerbergen %}
+			<div class="btn-group me-2 mt-1">
+				<a href="{{ url('csrdelft_forum_forumdradenverbergen_verbergen', {draad_id: draad.draad_id}) }}"
+					 class="btn btn-primary post ReloadPage tonenUit"
+					 title="Onderwerp verbergen in zijbalk">{{ icon('folder-minus') }}</a>
+			</div>
+		{% endif %}
+
+		{# {% if draad.magMeldingKrijgen %}
+            <div class="btn-group me-2 mt-1">
+                <a href="{{ url('csrdelft_forum_meldingsniveau', {draad_id: draad.draad_id, niveau: 'nooit'}) }}"
+                        class="btn btn-primary post ReloadPage melding-nooit {% if draad.meldingsNiveau.isNOOIT %}active{% endif %}"
+                        title="Nooit meldingen ontvangen">{{ icon('email_delete', 'email_delete') }}</a>
+                <a href="{{ url('csrdelft_forum_meldingsniveau', {draad_id: draad.draad_id, niveau: 'vermelding'}) }}"
+                        class="btn btn-primary post ReloadPage melding-vermelding {% if draad.meldingsNiveau.isVERMELDING %}active{% endif %}"
+                        title="Melding ontvangen als ik genoemd word">{{ icon('email_error', 'email_error') }}</a>
+                <a href="{{ url('csrdelft_forum_meldingsniveau', {draad_id: draad.draad_id, niveau: 'altijd'}) }}"
+                        class="btn btn-primary post ReloadPage melding-altijd {% if draad.meldingsNiveau.isALTIJD %}active{% endif %}"
+                        title="Melding ontvangen bij elk nieuw bericht">{{ icon('email_add', 'email_add') }}</a>
+            </div>
+        {% endif %} #}
+
+		<div class="btn-group mt-1" role="group">
+			<button
+				type="button"
+				class="btn btn-primary rssFeedButton"
+				title="RSS feed link delen"
+				data-rss-link="{{ rss_link }}"
+			>
+				{{ icon('feed') }}
+			</button>
+
+			<button
+				type="button"
+				class="btn btn-primary forumLinkButton"
+				title="Draadje link delen"
+				data-forum-link="{{ app.request.getUri() }}"
+			>
+				{{ icon('share-alt') }}
+			</button>
+
+			{% if draad.magMeldingKrijgen %}
+				<button type="button" class="btn btn-primary"
+								data-bs-toggle="modal"
+								data-bs-target="#meldingModal"
+				>
+					{{ icon('bell') }}
+				</button>
+			{% endif %}
+		</div>
+	</div>
+
+	{% if draad.magMeldingKrijgen %}
+		<div class="modal fade" id="meldingModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="btn-group me-2">
+							<a
+								href="{{ url('csrdelft_forum_forummelding_meldingsniveau', {draad_id: draad.draad_id, niveau: 'nooit'}) }}"
+								class="btn btn-outline-primary post ReloadPage melding-nooit {% if draad.meldingsNiveau.isNOOIT %}active{% endif %}"
+								title="Nooit meldingen ontvangen">
+								{{ icon('envelope') }} Nooit meldingen ontvangen
+							</a>
+							<a
+								href="{{ url('csrdelft_forum_forummelding_meldingsniveau', {draad_id: draad.draad_id, niveau: 'vermelding'}) }}"
+								class="btn btn-outline-primary post ReloadPage melding-vermelding {% if draad.meldingsNiveau.isVERMELDING %}active{% endif %}"
+								title="Melding ontvangen als ik genoemd word">
+								{{ icon('envelope') }} Melding ontvangen als ik genoemd word
+							</a>
+							<a
+								href="{{ url('csrdelft_forum_forummelding_meldingsniveau', {draad_id: draad.draad_id, niveau: 'altijd'}) }}"
+								class="btn btn-outline-primary post ReloadPage melding-altijd {% if draad.meldingsNiveau.isALTIJD %}active{% endif %}"
+								title="Melding ontvangen bij elk nieuw bericht">
+								{{ icon('envelope') }} Melding ontvangen bij elk nieuw bericht
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+{% endif %}

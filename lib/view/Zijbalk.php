@@ -199,7 +199,7 @@ class Zijbalk
 	{
 		// Nieuwste belangrijke forumberichten
 		if (lid_instelling('zijbalk', 'forum_belangrijk') > 0) {
-			return $this->twig->render('forum/partial/draad_zijbalk.html.twig', [
+			return $this->twig->render('voorpagina.html.twig', [
 				'draden' => $this->forumDelenService->getRecenteForumDraden(
 					(int) lid_instelling('zijbalk', 'forum_belangrijk'),
 					true
@@ -218,7 +218,7 @@ class Zijbalk
 		if (lid_instelling('zijbalk', 'forum') > 0) {
 			$belangrijk =
 				lid_instelling('zijbalk', 'forum_belangrijk') > 0 ? false : null;
-			return $this->twig->render('forum/partial/draad_zijbalk.html.twig', [
+			return $this->twig->render('voorpagina.html.twig', [
 				'draden' => $this->forumDelenService->getRecenteForumDraden(
 					(int) lid_instelling('zijbalk', 'forum'),
 					$belangrijk
@@ -254,7 +254,7 @@ class Zijbalk
 		if (lid_instelling('zijbalk', 'fotoalbum') == 'ja') {
 			$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();
 			if ($album !== null) {
-				return $this->twig->render('fotoalbum/zijbalk.html.twig', [
+				return $this->twig->render('voorpagina.html.twig', [
 					'album' => $album,
 					'jaargang' => LichtingenRepository::getHuidigeJaargang(),
 				]);
@@ -271,7 +271,7 @@ class Zijbalk
 			LoginService::mag(P_LOGGED_IN) &&
 			lid_instelling('zijbalk', 'verjaardagen') > 0
 		) {
-			return $this->twig->render('verjaardagen/komende.html.twig', [
+			return $this->twig->render('voorpagina.html.twig', [
 				'verjaardagen' => $this->verjaardagenService->getKomende(
 					(int) lid_instelling('zijbalk', 'verjaardagen')
 				),

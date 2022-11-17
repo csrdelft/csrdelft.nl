@@ -12,7 +12,9 @@ use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\service\CsrfService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\CsrfField;
@@ -36,6 +38,10 @@ class CsrTwigExtension extends AbstractExtension
 	 */
 	private $profielRepository;
 	/**
+	 * @var MaaltijdAanmeldingenRepository
+	 */
+	private $maaltijdAanmeldingenRepository;
+	/**
 	 * @var CmsPaginaRepository
 	 */
 	private $cmsPaginaRepository;
@@ -48,10 +54,12 @@ class CsrTwigExtension extends AbstractExtension
 		CsrfService $csrfService,
 		Security $security,
 		CmsPaginaRepository $cmsPaginaRepository,
-		ProfielRepository $profielRepository
+		ProfielRepository $profielRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
 	) {
 		$this->csrfService = $csrfService;
 		$this->profielRepository = $profielRepository;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 		$this->security = $security;
 	}
@@ -74,6 +82,10 @@ class CsrTwigExtension extends AbstractExtension
 			),
 			new TwigFunction('vereniging_leeftijd', [$this, 'vereniging_leeftijd']),
 			new TwigFunction('get_profiel', [$this, 'get_profiel']),
+			new TwigFunction('get_maaltijd_aanmelding', [
+				$this,
+				'get_maaltijd_aanmelding',
+			]),
 			new TwigFunction('huidige_jaargang', [$this, 'huidige_jaargang']),
 			new TwigFunction('gethostbyaddr', 'gethostbyaddr'),
 			new TwigFunction('cms', [$this, 'cms'], ['is_safe' => ['html']]),
@@ -89,6 +101,14 @@ class CsrTwigExtension extends AbstractExtension
 	public function get_profiel($uid)
 	{
 		return $this->profielRepository->find($uid);
+	}
+
+	public function get_maaltijd_aanmelding($maaltijd_id)
+	{
+		return $this->maaltijdAanmeldingenRepository->find([
+			'maaltijd_id' => $maaltijd_id,
+			'uid' => LoginService::getUid(),
+		]);
 	}
 
 	public function csrfField($path = '', $method = 'post')

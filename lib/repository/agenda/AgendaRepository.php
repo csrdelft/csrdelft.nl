@@ -224,6 +224,7 @@ class AgendaRepository extends AbstractRepository
 
 		// Maaltijden
 		if (lid_instelling('agenda', 'toonMaaltijden') === 'ja') {
+			// TODO: Dit moet altijd aanstaan
 			$result = array_merge(
 				$result,
 				$this->maaltijdenRepository->getMaaltijdenVoorAgenda(

@@ -10,39 +10,24 @@
 {% endblock %}
 
 {% block content %}
+	{{ getMelding() }}
+	<header class="d-flex justify-content-between align-items-center">
+		<h1>Forum</h1>
 
-{{ getMelding() }}
+		{{ include('forum/partial/deel_head_buttons.html.twig') }}
+	</header>
 
-<div class="forum-header btn-toolbar">
-	{% if is_granted('ROLE_ADMIN') %}
-		<div class="btn-group me-2">
-			<a href="{{ url('csrdelft_forum_forumdeel_aanmaken') }}" class="btn btn-light post popup"
-				 title="Deelforum aanmaken">
-				{{ icon('plus') }}
-			</a>
+	{% for categorie in categorien %}
+		<div class="forumcategorie">
+			<h3><a name="{{ categorie.categorie_id }}">{{ categorie.titel }}</a></h3>
+			<div class="forumdelen">
+				{% for deel in categorie.forum_delen %}
+					<div class="forumdeel">
+						<h4><a href="{{ url('csrdelft_forum_forumdeel_deel', {forum_id: deel.forum_id}) }}">{{ deel.titel }}</a></h4>
+						<p class="forumdeel-omschrijving">{{ deel.omschrijving }}</p>
+					</div>
+				{% endfor %}
+			</div>
 		</div>
-	{% endif %}
-
-	{{ include('forum/partial/head_buttons.html.twig') }}
-
-	{{ zoekform | raw }}
-</div>
-
-<h1>Forum</h1>
-
-{% for categorie in categorien %}
-	<div class="forumcategorie">
-		<h3><a name="{{ categorie.categorie_id }}">{{ categorie.titel }}</a></h3>
-		<div class="forumdelen">
-			{% for deel in categorie.forum_delen %}
-				<div class="forumdeel">
-					<h4><a href="{{ url('csrdelft_forum_forumdeel_deel', {forum_id: deel.forum_id}) }}">{{ deel.titel }}</a></h4>
-					<p class="forumdeel-omschrijving">{{ deel.omschrijving }}</p>
-				</div>
-			{% endfor %}
-		</div>
-	</div>
-{% endfor %}
-
-{{ include('forum/partial/rss_link.html.twig') }}
+	{% endfor %}
 {% endblock %}

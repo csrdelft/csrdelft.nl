@@ -3,14 +3,14 @@
 {% block titel %}{{ deel.titel | raw }}{% endblock %}
 
 {% block breadcrumbs %}
-	<ol class="breadcrumb">
+	<ol class="breadcrumb bg-transparent">
 		<li class="breadcrumb-item">
 			<a href="{{ url('default') }}" title="Thuis">
 				{{ icon('home') }}
 			</a>
 		</li>
 		<li class="breadcrumb-item"><a href="{{ url('csrdelft_forum_forum_forum') }}">Forum</a></li>
-		<li class="breadcrumb-item active">
+		<li class="breadcrumb-item active" aria-current="page">
 			<select name="forum_id" class="form-select form-select-sm w-auto"
 							onchange="if (this.value.substr(0,4) === 'http') { window.open(this.value); } else { window.location.href = this.value; }">
 				<option value="{{ url('csrdelft_forum_forum_belangrijk') }}"
@@ -43,86 +43,40 @@
 						</optgroup>
 					{% endif %}
 				{% endfor %}
-			</select></li>
+			</select>
+		</li>
 	</ol>
 {% endblock %}
 
 {% block content %}
 	{{ getMelding() }}
-	<div class="forum-header btn-toolbar">
-		{% if is_granted('ROLE_ADMIN') and deel.forum_id is not empty %}
-			<div class="btn-group me-2">
-				<a href="/forum/beheren/{{ deel.forum_id }}" class="btn btn-light post popup"
-					 title="Deelforum beheren">
-					{{ icon('wrench') }}
-					Beheren
-				</a>
-			</div>
-		{% endif %}
-		{{ include('forum/partial/head_buttons.html.twig') }}
-		{{ zoekform | raw }}
-	</div>
+	<header class="d-flex justify-content-between align-items-baseline mb-4">
+		<div>
+			<h1>{{ deel.titel }}</h1>
+			<p>{{ deel.omschrijving }}</p>
+		</div>
 
-	<h1>{{ deel.titel }}</h1>
+		{{ include('forum/partial/deel_head_buttons.html.twig') }}
+	</header>
 
-	<div class="forum-deel">
-		<div class="header">Titel</div>
-		<div class="header">Laatste wijziging</div>
-		<div class="header"></div>
-
+	<section class="forum-deel list-group list-group-flush"
+	 data-delen-list="{{ getForumDradenIds(deel.forumDraden) }}"
+	>
 		{% if not deel.forumDraden %}
-			<div>Dit forum is nog leeg.</div>
+			<div class="list-group-item">Dit forum is nog leeg.</div>
 		{% endif %}
 
 		{% for draad in deel.forumDraden %}
-			{{ include('forum/partial/draad_lijst.html.twig', {draad: draad}) }}
+			{{ include('forum/partial/draad_lijst.html.twig', { draad: draad }) }}
 		{% endfor %}
 
 		{% if paging is defined %}
-			<div class="paging">
-				{% if deel is none or deel.forum_id is none %}
-					{{ sliding_pager({
-						baseurl: url('csrdelft_forum_forum_recent') ~ '/',
-						url_append: belangrijk,
-						pagecount: getAantalPaginas(),
-						curpage: getHuidigePagina(),
-						separator: ' &nbsp;'
-					}) }}
-					&nbsp;
-					<a href="/forum/recent/{{ getAantalPaginas() }}{{ belangrijk }}">verder terug</a>
-				{% else %}
-					{{ sliding_pager({
-						baseurl: url('csrdelft_forum_forumdeel_deel', {forum_id: deel.forum_id}) ~ '/',
-						pagecount: getAantalPaginas(deel.forum_id),
-						curpage: getHuidigePagina(),
-						separator: ' &nbsp;',
-						show_prev_next: true
-					}) }}
-				{% endif %}
-			</div>
+			{{ include('forum/partial/pagination.html.twig') }}
 		{% endif %}
 
-
-		<div class="forumdeel-omschrijving">
-			<div class="breadcrumbs">{{ block('breadcrumbs') }}</div>
-			<h2>{{ deel.titel }}</h2>
-			{{ deel.omschrijving }}
-
-			{% if app.user and deel.forum_id is empty %}
-				<div>
-					Berichten per dag:
-					<div class="grafiek">
-						{# forum.ts pikt dit op en vult met een grafiekje. #}
-						<div id="stats_grafiek_overview" class="ctx-graph-line"
-								 data-url="{{ url('csrdelft_forum_forumdeel_grafiekdata', {type: 'overview'}) }}"
-								 style="height: 200px;"></div>
-					</div>
-				</div>
-			{% endif %}
-		</div>
-
-
 		{% if deel.magPosten %}
+			<hr class="tussenschot"></hr>
+
 			{{ include('forum/partial/draad_reageren.html.twig') }}
 			{% if app.user %}
 				<div class="meldingen">
@@ -134,8 +88,5 @@
 			{% endif %}
 			{{ include('forum/partial/post_form.html.twig', {draad: null}) }}
 		{% endif %}
-	</div>
-
-	{{ include('forum/partial/rss_link.html.twig') }}
-
+	</section>
 {% endblock %}

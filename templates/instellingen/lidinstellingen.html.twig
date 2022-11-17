@@ -53,7 +53,7 @@
 									<div class="btn-group-vertical btn-group-toggle d-inline-flex d-sm-none" data-buttons="radio">
 										{% for optieId, optie in instelling.opties %}
 											{% set optieId = optieId is numeric ? optie : optieId %}
-											<a class="noanim instellingKnop btn btn-secondary {% if optieId == keuze %}active{% endif %}"
+											<a class="noanim instellingKnop btn btn-light {% if optieId == keuze %}active{% endif %}"
 												 href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id, waarde: optieId}) }}">{{ optie |title }}</a>
 										{% endfor %}
 									</div>
@@ -62,7 +62,7 @@
 											 data-buttons="radio">
 										{% for optieId, optie in instelling.opties %}
 											{% set optieId = optieId is numeric ? optie : optieId %}
-											<a class="noanim instellingKnop btn btn-secondary {% if optieId == keuze %}active{% endif %}"
+											<a class="noanim instellingKnop btn btn-light {% if optieId == keuze %}active{% endif %}"
 												 href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id, waarde: optieId}) }}">{{ optie |title }}</a>
 										{% endfor %}
 									</div>

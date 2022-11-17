@@ -1,14 +1,16 @@
-@import "defaults";
+@import "_defaults";
 @import "fonts";
+
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-vue/dist/bootstrap-vue.css"; // Moet na Bootstrap geladen worden.
+
 @import "_common";
 @import "main-menu";
 @import "bbcode";
-@import "zijbalk";
 @import "module/maalcie";
 @import "zoeken";
 @import "overlay";
+@import "voorpagina";
 @import "module/agenda";
 @import "module/bibliotheek";
 @import "module/aanmelder";
@@ -22,20 +24,33 @@
 @import "module/menubeheer";
 @import "module/profiel";
 @import "module/stamboom";
+
 @import "~flatpickr/dist/flatpickr.css";
+
+:root {
+	accent-color: $primary;
+}
 
 body {
 	height: auto;
 	position: relative;
-	margin-left: 200px;
 
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
+	font-family: "Source Sans Pro", sans-serif;
 }
 
 main {
-	background: $body-bg;
+	background-color: $gray-200;
+
+	padding-inline: $spacer;
+	padding-top: $spacer;
+	padding-bottom: $spacer * 3;
+
+	.cd-page-content.container:not(.voorpagina) {
+		background-color: $body-bg;
+	}
 }
 
 /* Standaard Kleuren */
@@ -92,11 +107,20 @@ main {
 
 /* Pasfotos */
 img.pasfoto {
-	float: left;
-	width: 55px;
-	height: 73px;
-	margin: 1px 0 0 1px;
+	width: 2.5rem;
+	height: 2.5rem;
+	object-fit: cover;
 }
+@include media-breakpoint-down(sm) {
+	.forum-draad,
+	#forumPosten {
+		img.pasfoto {
+			width: 2rem;
+			height: 2rem;
+		}
+	}
+}
+
 .lidLink img {
 	transition: all 0.4s ease-out;
 }
@@ -181,10 +205,6 @@ ul.nobullets li {
 }
 
 @include media-breakpoint-down(md) {
-	body {
-		margin-left: 0;
-	}
-
 	.ads img {
 		width: 100%;
 	}

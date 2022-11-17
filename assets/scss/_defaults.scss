@@ -2,7 +2,8 @@
  * Standaardwaarden voor variabelen, kunnen vanuit een thema aangepast worden.
  */
 
-/* Variabelen uit Bootstrap */
+$primary: #122a4d !default;
+$secondary: #e59200 !default;
 
 /* kleuren */
 $white: #fff !default;
@@ -28,20 +29,22 @@ $green: #28a745 !default;
 $teal: #20c997 !default;
 $cyan: #17a2b8 !default;
 
-$primary: $blue !default;
-$secondary: $gray-600 !default;
 $success: $green !default;
 $info: $cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
-$light: $gray-100 !default;
+$light: $gray-300 !default;
 $dark: $gray-800 !default;
 
 $body-bg: $white !default;
 $body-color: $black !default;
 $headings-color: inherit !default;
 
-$zijbalk-color: $body-color !default;
+$font-size-root: null;
+$font-size-base: 0.9rem;
+$font-size-lg: $font-size-base * 2;
+$font-size-sm: $font-size-base * 0.875;
+$font-size-xs: $font-size-base * 0.75;
 
 $headings-font-family: "Source Sans Pro", Helvetica, Arial, sans-serif !default;
 
@@ -49,30 +52,18 @@ $headings-font-family: "Source Sans Pro", Helvetica, Arial, sans-serif !default;
 $donkerblauw: #122a4d !default;
 $lichtblauw: #4e698b;
 
-/* zijbalk */
-$beeldmerk: url(../images/beeldmerk.png) !default;
-
-$zijbalk-bg: #f5f5f5 !default;
-$zijbalk-border: $donkerblauw !default;
-$zijbalk-kopje: $donkerblauw !default;
-
-$zijbalk-ishetal-nee: red !default;
-$zijbalk-ishetal-ja: green !default;
-
-$zindex-zijbalk: 800 !default;
 $zindex-menu: 1000 !default;
 
 /* bbcode */
-$bb-block-bg: #f5f5f5 !default;
+$bb-block-bg: $gray-100 !default;
 
 /* forum */
 $forum-bericht0-bg: $body-bg !default;
 $forum-bericht1-bg: darken($body-bg, 4%) !default;
-$ongelezen-lijn: $yellow !default;
 
 /* main menu */
 $menu-primary-hover: #0a338d !default;
-$menu-bg: #ffffff !default;
+$menu-bg: $primary !default;
 $menu-color: #000000 !default;
 $menu-small-bg: #0a338d !default;
 $menu-small-color: #ffffff !default;
@@ -93,6 +84,9 @@ $tabel-regel-licht: $gray-100 !default;
 $tabel-regel-donker: $gray-200 !default;
 
 // geen breadcrumb bg, ziet er lelijk uit op cms pagina's
-$breadcrumb-bg: $body-bg;
 $footer-background: $gray-100 !default;
 $maaltijdketzer-bg: $white !default;
+
+/* Variabelen uit Bootstrap */
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/_variables";

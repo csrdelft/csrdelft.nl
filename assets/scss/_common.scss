@@ -1,12 +1,3 @@
-html {
-	//font-size: 12px;
-	font-size: 0.8rem;
-}
-
-.container {
-	background: $body-bg;
-}
-
 .dropdown-menu {
 	cursor: default;
 	z-index: 9999999;
@@ -15,6 +6,11 @@ html {
 .breadcrumb {
 	max-width: 800px;
 	padding: 0;
+
+	.breadcrumb-item {
+		display: flex;
+		align-items: center;
+	}
 }
 
 .breadcrumb .form-control {
@@ -81,16 +77,6 @@ html * {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	border-collapse: collapse;
-}
-
-//html {
-//  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
-//  font-size: 12px;
-//}
-
-body {
-	//color: $;
-	//background-color: #fff;
 }
 
 h1,
@@ -260,7 +246,7 @@ position: relative element
 
 .lidLink i.neus2013 {
 	color: $red-500;
-	// font-size: $font-size-xs;
+	font-size: $font-size-xs;
 }
 
 /* --------------------------------

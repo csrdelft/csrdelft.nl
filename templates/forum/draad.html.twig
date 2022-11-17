@@ -13,109 +13,45 @@
 
 {% block content %}
 	{{ getMelding() }}
-	<div class="forum-header btn-toolbar">
 
-		{% block kop %}
-			{% if app.user %}
-				{% if statistiek is none and draad.magStatistiekBekijken %}
-					<div class="btn-group me-2">
-						<a
-							href="{{ url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id, pagina: getHuidigePagina(), statistiek: 'statistiek'}) }}"
-							class="btn btn-light" title="Toon statistieken">{{ icon('chart-line') }}</a>
-					</div>
-				{% endif %}
-				<div class="btn-group me-2">
-					<a class="btn btn-light post popup addfav"
-						 href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: 'favoriet'}) }}">
-						{{ icon('heart-circle-plus', null, 'Onderwerp toevoegen aan favorieten') }}
-					</a>
-				</div>
-
-				{% if draad.magMeldingKrijgen %}
-					<div class="btn-group me-2">
-						<a href="{{ url('csrdelft_forum_forummelding_meldingsniveau', {draad_id: draad.draad_id, niveau: 'nooit'}) }}"
-							 class="btn btn-light post ReloadPage melding-nooit {% if draad.meldingsNiveau.isNOOIT %}active{% endif %}"
-							 title="Nooit meldingen ontvangen">{{ icon('bell-slash') }}</a>
-						<a href="{{ url('csrdelft_forum_forummelding_meldingsniveau', {draad_id: draad.draad_id, niveau: 'vermelding'}) }}"
-							 class="btn btn-light post ReloadPage melding-vermelding {% if draad.meldingsNiveau.isVERMELDING %}active{% endif %}"
-							 title="Melding ontvangen als ik genoemd word">{{ icon('bell-concierge') }}</a>
-						<a href="{{ url('csrdelft_forum_forummelding_meldingsniveau', {draad_id: draad.draad_id, niveau: 'altijd'}) }}"
-							 class="btn btn-light post ReloadPage melding-altijd {% if draad.meldingsNiveau.isALTIJD %}active{% endif %}"
-							 title="Melding ontvangen bij elk nieuw bericht">{{ icon('bell') }}</a>
-					</div>
-				{% endif %}
-
-				{% if draad.verborgen %}
-					<div class="btn-group me-2">
-						<a href="{{ url('csrdelft_forum_forumdradenverbergen_tonen', {draad_id: draad.draad_id}) }}"
-							 class="btn btn-light post ReloadPage tonenAan"
-							 title="Onderwerp tonen in zijbalk">{{ icon('folder-plus') }}</a>
-					</div>
-				{% elseif draad.magVerbergen %}
-					<div class="btn-group me-2">
-						<a href="{{ url('csrdelft_forum_forumdradenverbergen_verbergen', {draad_id: draad.draad_id}) }}"
-							 class="btn btn-light post ReloadPage tonenUit"
-							 title="Onderwerp verbergen in zijbalk">{{ icon('folder-minus') }}</a>
-					</div>
-				{% endif %}
-
-				{% if draad.magModereren %}
-					<div class="btn-group me-2">
-						{% if draad.gesloten %}
-							<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
-								 class="btn btn-light post ReloadPage slotjeUit"
-								 title="Openen (reactie mogelijk)">{{ icon('lock-open') }}</a>
-						{% else %}
-							<a href="{{ url('csrdelft_forum_forumdraad_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
-								 class="btn btn-light post ReloadPage slotjeAan"
-								 title="Sluiten (geen reactie mogelijk)">{{ icon('lock') }}</a>
-						{% endif %}
-					</div>
-
-					<div class="btn-group me-2">
-						<a href="#modereren" class="btn btn-light modfuncties" title="Moderatie-functies weergeven"
-							 data-bs-toggle="collapse"
-							 onclick="">
-							{{ icon('wrench') }}
-							Modereren
-						</a>
-					</div>
-
-				{% endif %}
-			{% endif %}
-		{% endblock %}
-
-		{{ zoekform | raw }}
-	</div>
 	{% if draad.magModereren %}
 		{{ include('forum/partial/draad_mod.html.twig') }}
 	{% endif %}
-	<h1>
-		{{ draad.titel | raw }}
-		{% if statistiek %}
+	<header class="d-flex justify-content-between align-items-baseline ps-sm-4">
+		<div class="position-relative">
+			<span class="position-absolute top-50 start-0 translate-begin">
+				{% if draad.belangrijk %}
+					{{ icon('star', null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
+				{% elseif draad.plakkerig %}
+					{{ icon('note-sticky', null, 'Dit onderwerp is plakkerig, het blijft bovenaan') }}
+				{% elseif draad.gesloten %}
+					{{ icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
+				{% endif %}
+			</span>
+			<h1 class="ps-24 d-block">{{ draad.titel | raw }}</h1>
+		</div>
+
+		{{ include('forum/partial/draad_head_buttons.html.twig') }}
+
+		{# {% if statistiek %}
 			&nbsp;&nbsp;&nbsp;
 			<span class="lichtgrijs small" title="Aantal lezers">{{ draad.aantalLezers }} lezers</span>
-		{% endif %}
-	</h1>
+		{% endif %} #}
+	</header>
 
-	<div class="forum-draad">
-		{# Paginering boven eerste post op de pagina als de eerste post van het draadje niet plakkerig is of dit de eerste pagina is #}
-		{% if paging and (not draad.eerste_post_plakkerig or draadGetHuidigePagina() == 1) %}
-			{{ block('paginering') }}
-		{% endif %}
-
+	<section class="forum-draad list-group list-group-flush">
 		{% set vanaf = false %}
 		{% for post in draad.forumPosts %}
 
 			{# Als posts gewijzigd zijn zonder draad gewijzigd te triggeren voorkomt $draad->isOngelezen() dat de gele lijn wordt getoond #}
 			{% if not vanaf and draad_ongelezen and (not gelezen_moment or post.laatst_gewijzigd > gelezen_moment) %}
 				{% set vanaf = true %}
-				<div class="tussenschot ongelezenvanaf"><a id="ongelezen"></a></div>
-			{% else %}
-				<div class="tussenschot"></div>
+				<hr class="tussenschot ongelezenvanaf"><a id="ongelezen"></a></hr>
+			{% elseif not loop.first %}
+				<hr class="tussenschot"></hr>
 			{% endif %}
 
-			{{ include('forum/partial/post_lijst.html.twig', {post: post}) }}
+			{{ include('forum/partial/post_lijst.html.twig', { post: post }) }}
 
 			{# Paginering onder eerste plakkerige post op alle pagina's behalve de eerste #}
 			{% if paging and draad.eerste_post_plakkerig and draadGetHuidigePagina() != 1 and loop.first %}
@@ -126,28 +62,27 @@
 		{# Paginering onderaan pagina #}
 		{% if paging %}
 			{% block paginering %}
-				<div class="tussenschot"></div>
-				<div class="forum-paginering">
-					{% if draad.pagina_per_post %}Bericht: {% else %}Pagina: {% endif %}
-					{{ sliding_pager({
-						baseurl: url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id}) ~ '/',
-						url_append: statistiek ? '/statistiek': '',
-						pagecount: draadGetAantalPaginas(draad.draad_id),
-						curpage: draadGetHuidigePagina()
-					}) }}
-				</div>
+				<nav aria-label="Forum pagination">
+					<ul class="pagination justify-content-center">
+						{{ sliding_pager({
+							baseurl: url('csrdelft_forum_forumdraad_onderwerp', {draad_id: draad.draad_id}) ~ '/',
+							url_append: statistiek ? '/statistiek': '',
+							pagecount: draadGetAantalPaginas(draad.draad_id),
+							curpage: draadGetHuidigePagina()
+						}) }}
+					</ul>
+				</nav>
 			{% endblock %}
 		{% endif %}
 
 		{# Geen ongelezen berichten op de laatste pagina betekend in het geheel geen ongelezen berichten #}
-
 		{% if not vanaf and draadGetHuidigePagina() == draadGetAantalPaginas(draad.draad_id) %}
-			<div class="tussenschot ongelezenvanaf"><a id="ongelezen"></a></div>
+			<hr class="tussenschot ongelezenvanaf"><a id="ongelezen"></a></hr>
 		{% else %}
-			<div class="tussenschot"></div>
+			<hr class="tussenschot"></hr>
 		{% endif %}
 
-		<div class="magreageren">
+		<div class="list-group-item border-0 magreageren">
 			{% block magreageren %}
 				{% if draad.verwijderd %}
 					<div class="draad-verwijderd">Dit onderwerp is verwijderd.</div>
@@ -165,13 +100,25 @@
 			{% endblock %}
 		</div>
 
-		<div class="breadcrumbs">{{ block('breadcrumbs') }}</div>
-		<div class="forum-footer">{{ block('kop') }}</div>
-
 		{% if draad.magPosten %}
 			{{ include('forum/partial/draad_reageren.html.twig') }}
 			{{ include('forum/partial/post_form.html.twig', {deel: draad.deel}) }}
+
+			<hr class="tussenschot my-4"></hr>
 		{% endif %}
-	</div>
-	{{ include('forum/partial/rss_link.html.twig') }}
+	</section>
+
+	<footer class="d-flex w-full gap-3">
+		{# Als er geen vorig of volgend onderwerp is moet de gebruiker weer terug naar deelforum #}
+		<a href="javascript:history.go(-1)" class="btn btn-outline-primary flex-fill vorige-button">
+			{{ icon('angle-left') }}
+			<span>Vorige</span>
+		</a>
+		<a href="javascript:history.go(-1)" class="btn btn-outline-primary flex-fill volgende-button">
+			<span>Volgende</span>
+			{{ icon('angle-right') }}
+		</a>
+	</footer>
+
+	{# {{ include('forum/partial/rss_link.html.twig') }} #}
 {% endblock %}

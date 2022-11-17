@@ -8,17 +8,12 @@ use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\view\formulier\InstantSearchForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\login\LoginForm;
-use CsrDelft\view\Zijbalk;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class LayoutTwigExtension extends AbstractExtension
 {
-	/**
-	 * @var Zijbalk
-	 */
-	private $zijbalk;
 	/**
 	 * @var MenuItemRepository
 	 */
@@ -34,11 +29,9 @@ class LayoutTwigExtension extends AbstractExtension
 
 	public function __construct(
 		RequestStack $requestStack,
-		Zijbalk $zijbalk,
 		MenuItemRepository $menuItemRepository,
 		FormulierFactory $formulierFactory
 	) {
-		$this->zijbalk = $zijbalk;
 		$this->menuItemRepository = $menuItemRepository;
 		$this->requestStack = $requestStack;
 		$this->formulierFactory = $formulierFactory;
@@ -55,11 +48,6 @@ class LayoutTwigExtension extends AbstractExtension
 			new TwigFunction('get_breadcrumbs', [$this, 'get_breadcrumbs']),
 			new TwigFunction('get_menu', [$this, 'get_menu']),
 			new TwigFunction('getMelding', 'getMelding', ['is_safe' => ['html']]),
-			new TwigFunction(
-				'get_zijbalk',
-				[$this, 'get_zijbalk'],
-				['is_safe' => ['html']]
-			),
 			new TwigFunction(
 				'instant_search_form',
 				[$this, 'instant_search_form'],
@@ -110,11 +98,6 @@ class LayoutTwigExtension extends AbstractExtension
 	public function instant_search_form()
 	{
 		return (new InstantSearchForm())->__toString();
-	}
-
-	public function get_zijbalk()
-	{
-		return $this->zijbalk->getZijbalk();
 	}
 
 	public function login_form()
