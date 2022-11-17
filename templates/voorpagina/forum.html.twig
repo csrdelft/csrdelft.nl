@@ -7,7 +7,9 @@
 	{% endif %}
 </h2>
 
-<div class="list-group list-group-flush">
+<div class="list-group list-group-flush"
+	data-delen-list="{{ getForumDradenIds(draden) }}"
+>
 {% for draad in draden %}
 	{% if lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen' %}
 		{% set urlHash = 'ongelezen' %}

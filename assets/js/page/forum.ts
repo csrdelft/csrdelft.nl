@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import axios from 'axios';
 import { domUpdate } from '../lib/domUpdate';
-import { forumCiteren } from '../lib/forum';
+import { forumCiteren, laadForumIds, slaOpForumIds } from '../lib/forum';
 import hoverintent from 'hoverintent';
 import { select, selectAll } from '../lib/dom';
 
@@ -64,56 +64,8 @@ selectAll('.auteur').forEach((auteur) => {
 	);
 });
 
-// Sla alle ids van forumDraden uit section.forum-deel (alleen op deelfora) op in localStorage voor previous-next functies
-try {
-	const forumDeel = select<HTMLElement>('section.forum-deel');
-	if (forumDeel) {
-		localStorage.setItem('forum_draden_ids', forumDeel.dataset.delenList);
-	}
-} catch (error) {
-	console.error(error);
-}
-
-// Laad de ids van vorige en volgende forumDraden (alleen op draadjes) uit localStorage voor previous-next functies
-try {
-	const vorigOnderwerpButton = select<HTMLAnchorElement>('a.vorige-button');
-	const volgendOnderwerpButton = select<HTMLAnchorElement>('a.volgende-button');
-	const onderwerpRegex = /\d+/g;
-
-	if (volgendOnderwerpButton && vorigOnderwerpButton) {
-		const forumDradenIds = localStorage.getItem('forum_draden_ids');
-
-		if (forumDradenIds) {
-			// Haal id van huidig onderwerp uit de pathname
-			const huidigOnderwerp = window.location.pathname.match(onderwerpRegex);
-
-			if (huidigOnderwerp[0]) {
-				const ids = forumDradenIds.split(',');
-				const huidigeIndex = ids.indexOf(huidigOnderwerp[0]);
-
-				const vorigeId = ids[huidigeIndex - 1];
-				const volgendeId = ids[huidigeIndex + 1];
-
-				if (vorigeId) {
-					vorigOnderwerpButton.setAttribute(
-						'href',
-						window.location.pathname.replace(onderwerpRegex, vorigeId) +
-							window.location.hash
-					);
-				}
-				if (volgendeId) {
-					volgendOnderwerpButton.setAttribute(
-						'href',
-						window.location.pathname.replace(onderwerpRegex, volgendeId) +
-							window.location.hash
-					);
-				}
-			}
-		}
-	}
-} catch (error) {
-	console.error(error);
-}
+slaOpForumIds('section.forum-deel');
+laadForumIds();
 
 for (const citeerKnop of selectAll<HTMLElement>('a.citeren')) {
 	citeerKnop.addEventListener('click', () =>
