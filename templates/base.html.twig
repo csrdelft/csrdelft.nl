@@ -16,7 +16,7 @@
 	<meta property="og:url" content="{{ app.request.uri }}"/>
 	<meta property="og:title" content="C.S.R. Delft | {{ block('titel') }}"/>
 	<meta property="og:locale" content="nl_nl"/>
-	<meta property="og:image" content="{{ absolute_url('/images/beeldmerk.png') }}"/>
+	<meta property="og:image" content="{{ absolute_url('images/beeldmerk.png') }}"/>
 	<meta property="og:description" content="{{ instelling('stek', 'beschrijving') }}"/>
 	{{ csrfMetaTag() }}
 	<meta property="X-CSR-LOGGEDIN" content="{{ is_granted('ROLE_LOGGED_IN') ? 'true' : 'false' }}"/>
