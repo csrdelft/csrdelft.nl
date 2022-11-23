@@ -120,7 +120,7 @@ class PinTransactieDownloader
 		$pinTransactie->brand = $transaction->payment_brand;
 		$pinTransactie->merchant = $transaction->merchant_name;
 		$pinTransactie->store = $transaction->shop_name;
-		$pinTransactie->terminal = $transaction->terminal_id; // TODO: checken of productie een veld teruggeeft wat lijkt op oude terminal veld.
+		$pinTransactie->terminal = $transaction->terminal_id;
 		$pinTransactie->TID = $transaction->terminal_id;
 		$pinTransactie->MID = $transaction->shop_id;
 		$pinTransactie->ref = $transaction->omnikassa_transaction_id;
@@ -130,7 +130,7 @@ class PinTransactieDownloader
 		$pinTransactie->amount =
 			$transaction->transaction_amount->currency . ' ' . $formattedAmount;
 		$pinTransactie->AUTRSP = $transaction->reference;
-		$pinTransactie->STAN = ''; // TODO: checken of productie een veld teruggeeft wat lijkt op oude STAN veld.
+		$pinTransactie->STAN = '';
 
 		return $pinTransactie;
 	}

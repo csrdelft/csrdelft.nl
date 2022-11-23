@@ -20,6 +20,7 @@ etc/*.kdbx
 etc/bot.htpasswd
 etc/csrdelft.nl.csr
 etc/csrdelft.nl.key
+etc/**/*.pem
 htdocs/download
 htdocs/enquete
 htdocs/google*.html
@@ -34,6 +35,7 @@ sessie/*
 /tmp
 tmp/*
 /wiki
+config/keys/*
 
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
