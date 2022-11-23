@@ -17,7 +17,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  * @since 22/02/2018
  *
  * In november 2022 aangepast om de Rabo Smart Pay Merchant Services API v3.2.12 te gebruiken i.p.v. Payplaza.
- * https://developer-sandbox.rabobank.nl/product/48928/api/48925
+ * Zie documentatie in /docs/onderdelen/pinmatchtool.md.
  */
 class PinTransactieDownloader
 {
