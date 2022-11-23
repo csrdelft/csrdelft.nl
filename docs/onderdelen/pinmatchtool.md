@@ -19,6 +19,7 @@ De pinmatchtool haalt pinbestellingen uit het SocCie-systeem op en probeert deze
 te matchen aan pintransacties van het pinapparaat.
 
 ## Ophalen pintransacties
+
 Tot november 2022 werden pintransacties opgehaald van PayPlaza. Dit gebeurde door
 hun portaal te scrapen. Omdat dit bij veranderingen aan het portaal problemen opleverde
 en dus onbetrouwbaar was, is dit vervangen door een koppeling met de
