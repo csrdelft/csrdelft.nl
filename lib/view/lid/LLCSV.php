@@ -63,7 +63,7 @@ HTML;
 			$return = '';
 			switch ($veld) {
 				case 'adres':
-					$return .= $profiel->adres . ';';
+					$return .= str_replace('#', '', $profiel->adres) . ';';
 					$return .= $profiel->postcode . ';';
 					$return .= $profiel->woonplaats;
 					break;
