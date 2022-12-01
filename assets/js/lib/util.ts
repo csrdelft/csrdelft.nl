@@ -65,7 +65,13 @@ export function basename(path: string, suffix = ''): string {
 }
 
 export function route(path: string, cb: () => void): void {
-	if (window.location.pathname.startsWith(path)) {
+	const regex = /\/(en|nl)?$/g;
+	const isVoorpagina = regex.test(window.location.pathname);
+
+	// Zorgt ervoor dat de cb voor de voorpagina alleen runt op de voorpagina
+	if (isVoorpagina && path === '/') {
+		cb();
+	} else if (window.location.pathname.startsWith(path) && path !== '/') {
 		cb();
 	}
 }

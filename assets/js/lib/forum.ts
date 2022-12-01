@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Fragment, NodeType, Slice } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { EditorSchema } from '../editor/schema';
+import { select, selectAll } from '../lib/dom';
 
 export function toggleForumConceptBtn(enable: boolean): void {
 	const conceptButton = document.getElementById(
@@ -182,3 +183,59 @@ export async function forumCiteren(postId: string): Promise<false> {
 	// Het werkt dan dus nog wel als javascript uit staat.
 	return false;
 }
+
+export const slaOpForumIds = (parentSelector = 'section.forum-deel') => {
+	// Sla alle ids van forumDraden uit section.forum-deel (alleen op deelfora) op in localStorage voor previous-next functies
+	try {
+		const forumDeel = select<HTMLElement>(parentSelector);
+		if (forumDeel) {
+			localStorage.setItem('forum_draden_ids', forumDeel.dataset.delenList);
+		}
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export const laadForumIds = () => {
+	// Laad de ids van vorige en volgende forumDraden (alleen op draadjes) uit localStorage voor previous-next functies
+	try {
+		const vorigOnderwerpButton = select<HTMLAnchorElement>('a.vorige-button');
+		const volgendOnderwerpButton =
+			select<HTMLAnchorElement>('a.volgende-button');
+		const onderwerpRegex = /\d+/g;
+
+		if (volgendOnderwerpButton && vorigOnderwerpButton) {
+			const forumDradenIds = localStorage.getItem('forum_draden_ids');
+
+			if (forumDradenIds) {
+				// Haal id van huidig onderwerp uit de pathname
+				const huidigOnderwerp = window.location.pathname.match(onderwerpRegex);
+
+				if (huidigOnderwerp[0]) {
+					const ids = forumDradenIds.split(',');
+					const huidigeIndex = ids.indexOf(huidigOnderwerp[0]);
+
+					const vorigeId = ids[huidigeIndex - 1];
+					const volgendeId = ids[huidigeIndex + 1];
+
+					if (vorigeId) {
+						vorigOnderwerpButton.setAttribute(
+							'href',
+							window.location.pathname.replace(onderwerpRegex, vorigeId) +
+								window.location.hash
+						);
+					}
+					if (volgendeId) {
+						volgendOnderwerpButton.setAttribute(
+							'href',
+							window.location.pathname.replace(onderwerpRegex, volgendeId) +
+								window.location.hash
+						);
+					}
+				}
+			}
+		}
+	} catch (error) {
+		console.error(error);
+	}
+};

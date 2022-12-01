@@ -33,15 +33,12 @@ class VoorpaginaController extends AbstractController
 		ForumDelenService $forumDelenService,
 		ForumPostsRepository $forumPostsRepository
 	): Response {
-		$belangrijk = true;
-
 		return $this->render('voorpagina/forum.html.twig', [
 			'draden' => $forumDelenService->getRecenteForumDraden(
 				(int) lid_instelling('zijbalk', 'forum'),
-				$belangrijk
+				null
 			),
 			'aantalWacht' => $forumPostsRepository->getAantalWachtOpGoedkeuring(),
-			'belangrijk' => $belangrijk,
 		]);
 	}
 
@@ -68,7 +65,7 @@ class VoorpaginaController extends AbstractController
 
 			$groups = [];
 			foreach ($items as $item) {
-				$key = date('Y-m-d', $item->getBeginMoment());
+				$key = date('Y-m-d', $item->getBeginMoment()->getTimestamp());
 				if (!isset($groups[$key])) {
 					$groups[$key] = [
 						'items' => [$item],

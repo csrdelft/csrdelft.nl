@@ -144,7 +144,6 @@
 	}
 }
 
-
 @include media-breakpoint-down(md) {
 	.cell-agenda {
 		.form-check-input {
@@ -180,7 +179,8 @@
 		align-items: stretch;
 		justify-items: stretch;
 	}
-	img.album-cell {
+	.album-cell {
+		display: block;
 		min-width: 0;
 		min-height: 0;
 	}

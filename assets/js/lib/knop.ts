@@ -172,7 +172,7 @@ export function knopVergroot(event: Event, el: Element): void {
 		throw new Error('Knop vergroot heeft geen data-vergroot');
 	}
 
-	const icon = target.querySelector('span.fa');
+	const icon = target.querySelector('i.fas');
 
 	if (!icon) {
 		throw new Error('knopVergroot heeft geen icon');

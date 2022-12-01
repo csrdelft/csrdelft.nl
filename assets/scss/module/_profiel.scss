@@ -55,7 +55,10 @@
 	}
 
 	.pasfoto {
-		margin: 25px;
+		width: 9rem;
+		height: 12rem;
+		object-fit: cover;
+		margin: 2rem;
 		box-shadow: 0 0 11px #000;
 	}
 
