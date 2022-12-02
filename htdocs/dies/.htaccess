@@ -7,6 +7,6 @@ RewriteEngine on
 RewriteCond %{REQUEST_URI} ^/dies/2022
 RewriteRule (.*) /tijdloos/dies [R=302,L]
 
-#Redirect /dies/2023 to /dies
+#Redirect /dies/2023 to /dies2023
 RewriteCond %{REQUEST_URI} ^/dies/2023
-RewriteRule (.*) /dies [R=302,L]
+RewriteRule (.*) /dies2023 [R=302,L]

@@ -6,11 +6,11 @@ use CsrDelft\common\Annotation\Auth;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class Dies61Controller extends AbstractController
+class Dies2023Controller extends AbstractController
 {
 	/**
 	 * @return Response
-	 * @Route("/dies")
+	 * @Route("/dies2023")
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function lustrum()
