@@ -267,13 +267,6 @@ table.groep-lijst {
 		width: 50%;
 		vertical-align: top !important;
 	}
-
-	tr:nth-child(even) {
-		background-color: $bb-alt-bg;
-	}
-	tr:hover {
-		background-color: $bb-hover-bg;
-	}
 }
 
 .pie-chart-label {
@@ -423,17 +416,17 @@ pre.bbcode {
 .bb-table {
 	padding: 0;
 	border-collapse: collapse;
-}
 
-.bb-table tr {
-	margin: 0;
-	padding: 0;
-}
+	tr {
+		margin: 0;
+		padding: 0;
+	}
 
-.bb-table td,
-.bb-table th {
-	margin: 0;
-	padding: 2px;
+	td,
+	th {
+		margin: 0;
+		padding: 2px;
+	}
 }
 
 .bb-fotoalbum img.compact {

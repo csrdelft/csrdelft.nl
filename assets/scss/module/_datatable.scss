@@ -21,8 +21,19 @@
 
 .dataTables_wrapper {
 	.dataTables_info {
+		color: $gray-500;
 		clear: none;
 		margin-left: 10%;
+	}
+
+	.dataTables_paginate {
+		a.paginate_button {
+			color: $gray-500 !important;
+
+			&.disabled {
+				color: $gray-300 !important;
+			}
+		}
 	}
 	.dataTables_length {
 		padding-top: 0.755em;
@@ -66,12 +77,16 @@ div {
 .dataTable {
 	width: 100% !important;
 
-	.document {
-		color: #000;
-	}
-
 	tbody {
-		color: #000;
+		color: $black;
+
+		.document {
+			background-color: inherit;
+	
+			a:not(:hover) {
+				text-decoration: none;
+			}
+		}
 
 		.innerDetails {
 			margin-left: 30px;
@@ -93,6 +108,24 @@ div {
 
 			td.toggle-childrow {
 				@include fa-icon-solid($fa-var-plus);
+			}
+
+			/* Voor om-en-om kleuren in de tabellen */
+			:is(table.groep-lijst tr, &) {
+				&:nth-child(odd) {
+					background-color: $gray-200 !important;
+					
+					td.sorting_1 {
+						background-color: $gray-300 !important;
+					}
+				}
+				&:nth-child(even) {
+					background-color: $gray-100 !important;
+					
+					td.sorting_1 {
+						background-color: $gray-200 !important;
+					}
+				}
 			}
 
 			&:hover {

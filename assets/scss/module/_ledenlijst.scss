@@ -25,21 +25,20 @@ table.zoekResultaat {
 	width: 100%;
 	border-collapse: collapse;
 	clear: both;
-}
-table.zoekResultaat thead tr th {
-	border-bottom: 1px solid $black;
-}
-table.zoekResultaat tfoot tr th {
-	border-top: 1px solid $black;
-}
-table.zoekResultaat tr td {
-	border-top: 1px solid $gray-300;
-	margin: 0;
-	padding: 2px 4px;
-	text-align: left;
-}
-table.zoekResultaat tr.odd td {
-	background-color: $gray-200;
+
+	thead tr th {
+		border-bottom: 1px solid $black;
+	}
+	tfoot tr th {
+		border-top: 1px solid $black;
+	}
+
+	tr td {
+		border-top: 1px solid $gray-300;
+		margin: 0;
+		padding: 2px 4px;
+		text-align: left;
+	}
 }
 .dataTables_filter {
 	padding-bottom: 10px;

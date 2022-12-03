@@ -81,23 +81,8 @@ $card-border-color: rgba(0, 0, 0, 0.3) !default;
 	color-scheme: dark;
 }
 
-.navbar-dark .navbar-brand {
-	color: $black;
-}
-
 .close {
 	color: $white;
-}
-
-/* Pas om-en-om kleuren in de lichtingen, vertikalen, kringen, etc. aan */
-table.groep-lijst tr:nth-child(even) {
-	background-color: $secondary;
-}
-
-/* Pas "icoontje" in de breadcrubs aan */
-.module-icon {
-	color: white;
-	opacity: 0.3;
 }
 
 .forum-deel {
@@ -139,22 +124,6 @@ div#pubciemail_form {
 	label,
 	input {
 		color: #fff;
-	}
-}
-.dataTable {
-	width: 100% !important;
-
-	.document {
-		color: #fff;
-		background-color: inherit;
-
-		a {
-			color: #fff;
-
-			&:not(:hover) {
-				text-decoration: none;
-			}
-		}
 	}
 }
 
