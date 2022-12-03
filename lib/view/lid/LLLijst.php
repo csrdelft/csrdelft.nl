@@ -152,6 +152,10 @@ class LLLijst extends LLWeergave
 						'</a>';
 					break;
 
+				case 'geslacht':
+					$html .= htmlspecialchars($profiel->geslacht->getValue());
+					break;
+
 				default:
 					try {
 						if ($profiel->$veld instanceof DateTimeInterface) {

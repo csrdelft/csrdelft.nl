@@ -118,6 +118,10 @@ HTML;
 					}
 					break;
 
+				case 'geslacht':
+					$return .= $profiel->geslacht->getValue();
+					break;
+
 				default:
 					try {
 						$return .= $profiel->$veld;
