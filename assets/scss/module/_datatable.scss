@@ -82,7 +82,7 @@ div {
 
 		.document {
 			background-color: inherit;
-	
+
 			a:not(:hover) {
 				text-decoration: none;
 			}
@@ -114,14 +114,14 @@ div {
 			:is(table.groep-lijst tr, &) {
 				&:nth-child(odd) {
 					background-color: $gray-200 !important;
-					
+
 					td.sorting_1 {
 						background-color: $gray-300 !important;
 					}
 				}
 				&:nth-child(even) {
 					background-color: $gray-100 !important;
-					
+
 					td.sorting_1 {
 						background-color: $gray-200 !important;
 					}
