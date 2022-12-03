@@ -119,7 +119,9 @@ HTML;
 					break;
 
 				case 'geslacht':
-					$return .= $profiel->geslacht->getValue();
+					if ($profiel->geslacht) {
+						$return .= $profiel->geslacht->getValue();
+					}
 					break;
 
 				default:

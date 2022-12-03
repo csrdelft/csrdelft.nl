@@ -153,7 +153,9 @@ class LLLijst extends LLWeergave
 					break;
 
 				case 'geslacht':
-					$html .= htmlspecialchars($profiel->geslacht->getValue());
+					if ($profiel->geslacht) {
+						$html .= htmlspecialchars($profiel->geslacht->getValue());
+					}
 					break;
 
 				default:
