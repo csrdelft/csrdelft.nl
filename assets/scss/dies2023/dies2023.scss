@@ -1,0 +1,310 @@
+@import "style.scss";
+@import "colls";
+
+
+
+$dies-uppereast-font: Arial, Helvetica, sans-serif;
+
+$bordeaux-rood: #53110f;
+$Lila: #b8aee3;
+
+$rose: #d29ec4;
+$dark-rose: #3f2f3a;
+$gray-transparant: #473d4594;
+$lightgray-transparant: #473d454f;
+$darkgray-transparant: #473d45ba;
+
+$oranje: #ffaf02;
+$bruin: #2a1c02;
+
+$kleur-rood: #6e1321;
+$kleur-donkerrood: #310c16;
+$kleur-goud0: #ebb803;
+$kleur-goud1: #fadd00;
+$kleur-goud2: #f5d500;
+$kleur-goud3: #8f5a14;
+$kleur-wit: #ffffff;
+$kleur-zwart: #000000;
+
+/* nav */
+nav {
+	//background: $dark-rose !important;
+	color: $bordeaux-rood;
+
+	.dies-logo-titel {
+		top: 50px;
+		height: 100%;
+		left: -3px;
+		@media screen and (max-width: 768px) {
+			visibility: hidden;
+		}
+	}
+	a {
+		/* Header text */
+		color: $oranje;
+		text-transform: uppercase;
+		text-decoration: none;
+		font-size: 24px;
+		transition: ease-in-out color 0.15s;
+
+		&:hover {
+			color: $Lila;
+			text-decoration: none;
+		}
+	}
+}
+
+.titel {
+	color: $bordeaux-rood;
+	font-size: 4rem;
+}
+
+.ondertitel {
+	text-transform: none;
+	text-align: center;
+	font-size: 2rem;
+}
+
+.helemaal-boven {
+	margin-top: 60px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	color: $bordeaux-rood;
+	//text-transform: uppercase;
+	font-weight: bold;
+}
+
+body {
+	background-color: $rose;
+	background-image: url("../../images/lustrum12/dies-achtergrond.jpg");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+a {
+	text-decoration: none;
+}
+
+.dies-poster {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	img {
+		max-width: 100%;
+	}
+}
+
+/* video */
+.video-container {
+	width: 100%;
+	.youtube-container {
+		display: flex;
+		justify-content: center;
+		width: 100%;
+		height: 100%;
+	}
+}
+
+section {
+	margin-bottom: 10px;
+	margin-top: 10px;
+	max-width: 1320px;
+	width: 100%;
+	align-self: center;
+	background: $gray-transparant;
+	padding: 20px;
+	border-radius: 25px;
+	border: 1px solid $Lila;
+	box-shadow: 0px 0px 20px $Lila;
+
+	.poster img {
+		width: 100%;
+		height: 100%;
+		max-height: 100%;
+		max-width: 100%;
+	}
+}
+
+/* 3 / 1 columns */
+.column-overzicht {
+	h1 {
+		font-size: 4rem;
+		text-transform: uppercase;
+	}
+	.container {
+		h3 {
+			text-align: left;
+			font-size: 2.4rem;
+			color: $bordeaux-rood;
+		}
+		h4 {
+			font-size: 2rem;
+			text-align: left;
+			color: $bordeaux-rood;
+			text-transform: none;
+		}
+	}
+}
+
+/* Etiquette section */
+.etiquette {
+	p {
+		font-size: 1rem;
+	}
+}
+
+/* Ketzers */
+.ketzers {
+	align-items: center;
+
+	.ketzer {
+		max-width: 1320px;
+		color: white;
+		.bb-block {
+			padding: 5px;
+			border-radius: 5px;
+			background-color: $darkgray-transparant;
+			table.groep-lijst tr:nth-child(2n) {
+				background-color: $gray-transparant;
+			}
+		}
+		.btn-primary {
+			background-color: $oranje;
+			border-color: $oranje;
+		}
+		a:not(.btn) {
+			color: $oranje;
+		}
+		.dropdown-menu {
+			background-color: $oranje;
+		}
+		a[id*="groep-lid-remove"] {
+			color: $kleur-wit;
+			background-color: $oranje;
+		}
+		h3 {
+			color: $oranje;
+			font-weight: bold;
+			font-family: $dies-uppereast-font;
+			text-transform: uppercase;
+			font-size: 2rem;
+		}
+		h4 {
+			color: $oranje;
+			font-family: $dies-uppereast-font;
+			text-transform: uppercase;
+		}
+		.GroepStatistiekView {
+			background-color: $bordeaux-rood;
+			padding: 20px;
+			border-radius: 25px;
+		}
+		.progress-bar {
+			background-color: $bordeaux-rood;
+		}
+		.GroupAanmeldenForm {
+			input.FormElement {
+				background-color: $bordeaux-rood;
+			}
+		}
+	}
+}
+
+.programma {
+	text-align: center;
+	background-color: $gray-transparant; //$lightgray-transparant;
+	.dag {
+		padding: 20px;
+		border-radius: 20px;
+		//background-color: $lightgray-transparant;
+		border-color: $Lila;
+		box-shadow: 0px 0px 20px $Lila;
+
+		margin-top: 20px;
+		margin-bottom: 20px;
+		h2 {
+			//text-transform: uppercase;
+			//font-family: $dies-uppereast-font;
+			text-align: center;
+			font-size: 3rem;
+			.cijfer {
+				font-family: $dies-uppereast-font;
+				font-weight: normal;
+			}
+		}
+		hr {
+			border-top: 1px solid $Lila;
+		}
+		.activiteit {
+			//padding: 20px;
+			//border: 1px solid $Lila;
+			//box-shadow: 0px 0px 10px $Lila;
+			//border-radius: 25px;
+
+			margin-bottom: 40px;
+			h3 {
+				font-family: $dies-uppereast-font;
+				text-transform: uppercase;
+				text-align: center;
+				font-size: 2.4rem;
+			}
+			.beschrijving {
+				a {
+					color: $oranje;
+				}
+				a:hover {
+					color: $Lila;
+				}
+			}
+			.dies-activiteit-ketzers {
+				.toggler {
+					color: $oranje;
+					cursor: pointer;
+					user-select: none;
+				}
+				.toggler:hover {
+					color: $Lila;
+				}
+				.verborgen {
+					display: none;
+				}
+				.ketzers {
+					.ketzer {
+						.maaltijdketzer-wrapper {
+							padding: 20px;
+							border-radius: 20px;
+							background: $gray-transparant;
+							h6 {
+								color: $oranje;
+							}
+							.btn-danger {
+								background: $gray-transparant;
+								border-color: transparent;
+							}
+							.btn-success {
+								background: $gray-transparant;
+								border-color: $bordeaux-rood;
+							}
+							.form-check-input {
+								background-color: transparent;
+								border-color: $bordeaux-rood;
+							}
+							.form-check-input:checked {
+								background-color: $bordeaux-rood;
+								border-color: $bordeaux-rood;
+							}
+						}
+						h3 {
+							font-size: 1.8rem;
+						}
+					}
+				}
+			}
+		}
+	}
+}
