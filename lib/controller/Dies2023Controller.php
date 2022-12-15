@@ -10,7 +10,7 @@ class Dies2023Controller extends AbstractController
 {
 	/**
 	 * @return Response
-	 * @Route("/dies2023")
+	 * @Route("/magnumopus")
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function lustrum()

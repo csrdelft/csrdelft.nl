@@ -1,21 +1,45 @@
 /* variables */
 
 // $kleur-rood: #7e1621;
-$kleur-rood: #6e1321;
-$kleur-donkerrood: #310c16;
-$kleur-goud0: #ebb803;
-$kleur-goud1: #fadd00;
-$kleur-goud2: #f5d500;
-$kleur-goud3: #8f5a14;
+$kleur-blauw-1: #0f1432;
+$kleur-blauw-2: #1e2050;
+$kleur-blauw-3: #45496e;
+$kleur-blauw-4: #4b81a7;
+$kleur-blauw-5: #8cc2de;
+
+$kleur-paars-6: #31163f;
+$kleur-paars-7: #632f7a;
+$kleur-paars-8: #8752a2;
+$kleur-paars-9: #b28abf;
+$kleur-paars-10: #ccb7d8;
+
+$kleur-blauw-11: #6da9dd;
+$kleur-blauw-12: #7db7e4;
+$kleur-blauw-13: #85c6ea;
+$kleur-blauw-14: #a9e0f5;
+$kleur-blauw-15: #bfe6f7;
+
+$kleur-geel-16: #ffd37a;
+$kleur-geel-17: #faea95;
+$kleur-geel-18: #f9f498;
+$kleur-geel-19: #fbf9c9;
+$kleur-geel-20: #fdfbe2;
+
+$kleur-oranje-21: #d75c38;
+$kleur-oranje-22: #fabd5c;
+$kleur-oranje-23: #f9c76b;
+$kleur-oranje-24: #eedda2;
+$kleur-oranje-25: #fcfae0;
+
 $kleur-wit: #ffffff;
 $kleur-zwart: #000000;
 
 $font-header: Helvetica, sans-serif;
 $font-text: Arial, Helvetica, sans-serif;
 
-$primary: $kleur-donkerrood !default;
-$secondary: $kleur-rood !default;
-$font-color-primary: $kleur-goud0 !default;
+$primary: $kleur-blauw-1 !default;
+$secondary: $kleur-geel-20 !default;
+$font-color-primary: $kleur-wit !default;
 $font-color-secondary: #ffffff !default;
 
 $theme-colors: (
