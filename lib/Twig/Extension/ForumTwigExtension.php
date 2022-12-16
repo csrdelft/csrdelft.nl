@@ -143,17 +143,29 @@ class ForumTwigExtension extends AbstractExtension
 			['datum_tijd' => 'DESC']
 		)->tekst;
 
-		// Filter alle bb-tags uit de tekst
-		$regexTekst = '/\[p\]([^\[\]]+)\[\/p\]/i';
-		$regexPlaatjes = '/(\[p\]\[img=[^\]]+\]\[\/p\])/i';
-		$tekst = preg_replace($regexPlaatjes, '📷', $tekst);
+		// Filter alle bb-tags uit de tekst met Regex
+		$regexTekst = '/\[\/?p\]/i';
+		$tekst = preg_replace($regexTekst, ' ', $tekst);
+		
+		$regexPlaatje = '/\[plaatje=[^\]]+\]/i';
+		$tekst = preg_replace($regexPlaatje, ' 📷 ', $tekst);
 
-		if (preg_match_all($regexTekst, $tekst, $matches) && count($matches) > 0) {
-			$filter_tekst = implode(' ', $matches[1]);
-			return $filter_tekst;
-		}
+		$regexVideo = '/\[(video|youtube)(=[^\]]*)?\][^\[]*\[\/(video|youtube)\]/i';
+		$tekst = preg_replace($regexVideo, ' 📹 ', $tekst);
 
-		return $tekst;
+		$regexPeiling = '/\[(peiling|activiteit)(=[^\]]*)?\]/i';
+		$tekst = preg_replace($regexPeiling, ' 🗳️ ', $tekst);
+
+		$regexCitaat = '/\[citaat(?:=[^\]]*)?\][^\[]*\[\/citaat\]/i';
+		$tekst = preg_replace($regexCitaat, ' 🗣️ ', $tekst);
+
+		$regexHtml = '/\[html\][^\[]*\[\/html\]/i';
+		$tekst = preg_replace($regexHtml, ' ', $tekst);
+
+		$regexOverig = '/\[\/?\w+(?:=[^\]]*)?\]/i';
+		$tekst = preg_replace($regexOverig, ' ', $tekst);
+
+		return substr($tekst, 0 , 150) . (strlen($tekst) > 150 ? "..." : "");
 	}
 
 	public function highlight_zoekterm(
