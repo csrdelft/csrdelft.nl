@@ -170,8 +170,10 @@ nav {
 .divider {
 	display: flex;
 	flex-direction: column;
-
-	align-items: center;
+	border-bottom: 2px solid $kleur-geel-19;
+	box-shadow: 0px 6px 6px -6px $kleur-geel-20;
+	margin-bottom: 15px;
+	margin-top: 15px;
 	img {
 		max-width: 738px;
 		width: 100%;
@@ -256,7 +258,4 @@ nav {
 	.ketzers-container {
 		max-width: 100%;
 	}
-}
-.minimize{
-	height: 5rem;
 }

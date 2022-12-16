@@ -48,7 +48,7 @@ nav {
 		margin-top: 0px;
 	}
 	.logo {
-		width: 70px;
+		width: 130px!important;
 		height: 100%;
 		@media screen and (max-width: 768px) {
 			margin: auto;
@@ -233,16 +233,16 @@ section {
 			text-transform: uppercase;
 		}
 		.GroepStatistiekView {
-			// background-color: $bordeaux-rood;
+			background-color: $kleur-blauw-1;
 			padding: 20px;
 			border-radius: 25px;
 		}
 		.progress-bar {
-			// background-color: $bordeaux-rood;
+			background-color: $kleur-blauw-1;
 		}
 		.GroupAanmeldenForm {
 			input.FormElement {
-				// background-color: $bordeaux-rood;
+				background-color: $kleur-blauw-1;
 			}
 		}
 	}
@@ -261,6 +261,7 @@ section {
 
 			.activiteit {
 				padding: 20px;
+				overflow: hidden;
 				border: 1px solid $kleur-geel-19;
 				box-shadow: 0px 0px 10px $kleur-geel-20;
 				border-radius: 10px;
@@ -299,6 +300,7 @@ section {
 				}
 
 				.dies-activiteit-ketzers {
+					overflow: hidden;
 					.toggler {
 						// color: $oranje;
 						cursor: pointer;
