@@ -1,10 +1,13 @@
 .ratio-3x2 {
-	--bs-aspect-ratio: 67%;
+	--bs-aspect-ratio: 65%;
+}
+.ratio-5x4 {
+	--bs-aspect-ratio: 80%;
 }
 // Have a square ratio at breakpoint MD
 @include media-breakpoint-only(md) {
 	.ratio-3x2,
-	.ratio-4x3,
+	.ratio-5x4,
 	.ratio-16x9 {
 		--bs-aspect-ratio: 100%;
 	}
@@ -95,6 +98,7 @@
 
 .cell-posters {
 	grid-area: posters;
+	padding: 0;
 
 	.carousel {
 		position: absolute;
