@@ -146,7 +146,7 @@ class ForumTwigExtension extends AbstractExtension
 		// Filter alle bb-tags uit de tekst met Regex
 		$regexTekst = '/\[\/?p\]/i';
 		$tekst = preg_replace($regexTekst, ' ', $tekst);
-		
+
 		$regexPlaatje = '/\[plaatje=[^\]]+\]/i';
 		$tekst = preg_replace($regexPlaatje, ' 📷 ', $tekst);
 
@@ -165,7 +165,7 @@ class ForumTwigExtension extends AbstractExtension
 		$regexOverig = '/\[\/?\w+(?:=[^\]]*)?\]/i';
 		$tekst = preg_replace($regexOverig, ' ', $tekst);
 
-		return substr($tekst, 0 , 150) . (strlen($tekst) > 150 ? "..." : "");
+		return substr($tekst, 0, 150) . (strlen($tekst) > 150 ? '...' : '');
 	}
 
 	public function highlight_zoekterm(
