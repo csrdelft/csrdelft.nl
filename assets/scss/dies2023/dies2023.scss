@@ -1,0 +1,344 @@
+@import "style.scss";
+@import "colls";
+
+$kleur-blauw-1: #0f1432;
+$kleur-blauw-2: #1e2050;
+$kleur-blauw-3: #45496e;
+$kleur-blauw-4: #4b81a7;
+$kleur-blauw-5: #8cc2de;
+
+$kleur-paars-6: #31163f;
+$kleur-paars-7: #632f7a;
+$kleur-paars-8: #8752a2;
+$kleur-paars-9: #b28abf;
+$kleur-paars-10: #ccb7d8;
+
+$kleur-blauw-11: #6da9dd;
+$kleur-blauw-12: #7db7e4;
+$kleur-blauw-13: #85c6ea;
+$kleur-blauw-14: #a9e0f5;
+$kleur-blauw-15: #bfe6f7;
+
+$kleur-geel-16: #ffd37a;
+$kleur-geel-17: #faea95;
+$kleur-geel-18: #f9f498;
+$kleur-geel-19: #fbf9c9;
+$kleur-geel-20: #fdfbe2;
+
+$transparant-geel-19: rgba(251, 249, 201, 0.4);
+
+$kleur-oranje-21: #d75c38;
+$kleur-oranje-22: #fabd5c;
+$kleur-oranje-23: #f9c76b;
+$kleur-oranje-24: #eedda2;
+$kleur-oranje-25: #fcfae0;
+
+$kleur-wit: #ffffff;
+$kleur-zwart: #000000;
+
+/* nav */
+nav {
+	background-color: $kleur-geel-19;
+	box-shadow: 0 2px 10px $kleur-geel-20; /* inner white */
+	// 0 0 100px 60px #f0f, /* middle magenta */
+	// 0 0 140px 90px #0ff; /* outer cyan */
+	.container {
+		height: 50px;
+		margin-top: 0px;
+	}
+	.logo {
+		width: 130px !important;
+		height: 100%;
+		@media screen and (max-width: 768px) {
+			margin: auto;
+		}
+	}
+	a {
+		/* Header text */
+		color: $kleur-blauw-1;
+		font-family: $font-gaistro;
+		text-transform: uppercase;
+		text-decoration: none;
+		font-size: 19px;
+		transition: ease-in-out color 0.15s;
+
+		&:hover {
+			color: $kleur-blauw-4;
+			text-decoration: none;
+		}
+	}
+}
+.py-1 {
+	padding-top: 0.25rem !important;
+}
+.py-2 {
+	padding-top: 0.5rem !important;
+}
+.px-1 {
+	padding-right: 0.25rem !important;
+	padding-left: 0.25rem !important;
+}
+.px-2 {
+	padding-right: 0.5rem !important;
+	padding-left: 0.5rem !important;
+}
+
+.poster-boven {
+	margin-top: 50px;
+	padding: 0%;
+	margin-bottom: -36px;
+}
+
+body {
+	background-color: $kleur-blauw-1;
+	// background-image: url("../../images/lustrum12/dies-achtergrond.jpg");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+a {
+	text-decoration: none;
+}
+
+.dies-poster {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	img {
+		max-width: 100%;
+	}
+}
+
+/* video */
+.size-16x9 {
+	aspect-ratio: 16 / 9 !important;
+}
+
+.filmpje {
+	background-color: $kleur-blauw-3;
+	.video-container {
+		width: 100%;
+		height: 100%;
+		max-width: 1140px;
+		max-height: 641px;
+		.youtube-container {
+			display: flex;
+			justify-content: center;
+			width: 100%;
+			height: 100%;
+		}
+	}
+}
+.poster img {
+	width: 100%;
+}
+section {
+	width: 100%;
+	align-self: center;
+	padding: 30px;
+	margin-bottom: 0px;
+	.poster img {
+		width: 100%;
+		height: 100%;
+		max-height: 100%;
+		max-width: 100%;
+	}
+}
+
+/* 3 / 1 columns */
+.column-overzicht {
+	h1 {
+		font-size: 4rem;
+		text-transform: uppercase;
+	}
+	.container {
+		h3 {
+			text-align: left;
+			font-size: 2.4rem;
+			// color: $bordeaux-rood;
+		}
+		h4 {
+			font-size: 2rem;
+			text-align: left;
+			// color: $bordeaux-rood;
+			text-transform: none;
+		}
+	}
+}
+
+/* Etiquette section */
+.etiquette {
+	background-color: $kleur-blauw-3;
+	p {
+		font-size: 1rem;
+		color: $kleur-geel-19;
+	}
+	.margin-bottom {
+		margin-bottom: 2rem;
+	}
+
+	h4 {
+		color: $kleur-geel-19;
+	}
+	h2 {
+		color: $kleur-geel-19;
+	}
+	h3 {
+		color: $kleur-geel-19;
+	}
+}
+
+/* Ketzers */
+.ketzers {
+	align-items: center;
+
+	.ketzer {
+		width: 100%;
+		color: $kleur-blauw-1;
+		.bb-block {
+			padding: 5px;
+			border-radius: 5px;
+			background-color: $kleur-geel-19;
+			table.groep-lijst tr:nth-child(2n) {
+				// background-color: $gray-transparant;
+			}
+		}
+		.btn-primary {
+			// background-color: $oranje;
+			// border-color: $oranje;
+		}
+		a:not(.btn) {
+			// color: $oranje;
+		}
+		.dropdown-menu {
+			// background-color: $oranje;
+		}
+		a[id*="groep-lid-remove"] {
+			color: $kleur-wit;
+			// background-color: $oranje;
+		}
+		h3 {
+			// color: $oranje;
+			font-weight: bold;
+			font-family: $font-gaistro;
+			text-transform: uppercase;
+			font-size: 2rem;
+		}
+		h4 {
+			// color: $oranje;
+			font-family: $font-gaistro;
+			text-transform: uppercase;
+		}
+		.GroepStatistiekView {
+			background-color: $kleur-blauw-1;
+			padding: 20px;
+			border-radius: 25px;
+		}
+		.progress-bar {
+			background-color: $kleur-blauw-1;
+		}
+		.GroupAanmeldenForm {
+			input.FormElement {
+				background-color: $kleur-blauw-1;
+			}
+		}
+	}
+}
+.verborgen {
+	display: none;
+}
+.programma {
+	text-align: center;
+	background-color: $kleur-blauw-1; //$lightgray-transparant;
+	.container {
+		.dag {
+			background-color: $kleur-blauw-1;
+			padding: 20px;
+			border-radius: 5px;
+
+			.activiteit {
+				padding: 20px;
+				overflow: hidden;
+				border: 1px solid $kleur-geel-19;
+				box-shadow: 0px 0px 10px $kleur-geel-20;
+				border-radius: 10px;
+				background-color: $transparant-geel-19;
+				margin-bottom: 40px;
+				width: 80%;
+				align-self: center;
+				align-items: center;
+
+				h3 {
+					font-family: $font-gaistro;
+					text-transform: uppercase;
+					text-align: center;
+					color: $kleur-geel-19;
+					font-size: 2.4rem;
+					margin: 0;
+					padding: 0;
+				}
+
+				p {
+					// font-family: ;
+					color: $kleur-geel-19;
+					text-align: left;
+				}
+
+				> .btn {
+					font-size: large;
+
+					i {
+						transition: transform 0.3s;
+					}
+					&:not(.collapsed) i {
+						transform: rotate(-180deg);
+					}
+				}
+
+				.dies-activiteit-ketzers {
+					overflow: hidden;
+					.toggler {
+						// color: $oranje;
+						cursor: pointer;
+						user-select: none;
+					}
+					.toggler:hover {
+						color: $kleur-blauw-12;
+					}
+
+					.ketzers {
+						.ketzer {
+							.maaltijdketzer-wrapper {
+								padding: 20px;
+								border-radius: 20px;
+								h6 {
+									// color: $oranje;
+								}
+								.btn-danger {
+									// background: $gray-transparant;
+									// border-color: transparent;
+								}
+								.btn-success {
+									// background: $gray-transparant;
+									// border-color: $bordeaux-rood;
+								}
+								.form-check-input {
+									// background-color: transparent;
+									// border-color: $bordeaux-rood;
+								}
+								.form-check-input:checked {
+									// background-color: $bordeaux-rood;
+									// border-color: $bordeaux-rood;
+								}
+							}
+							h3 {
+								font-size: 1.8rem;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
