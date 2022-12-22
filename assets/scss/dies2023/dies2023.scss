@@ -200,20 +200,20 @@ section {
 			padding: 5px;
 			border-radius: 5px;
 			background-color: $kleur-geel-19;
-			table.groep-lijst tr:nth-child(2n) {
-				// background-color: $gray-transparant;
-			}
+			// table.groep-lijst tr:nth-child(2n) {
+			// 	// background-color: $gray-transparant;
+			// }
 		}
-		.btn-primary {
-			// background-color: $oranje;
-			// border-color: $oranje;
-		}
-		a:not(.btn) {
-			// color: $oranje;
-		}
-		.dropdown-menu {
-			// background-color: $oranje;
-		}
+		// .btn-primary {
+		// 	// background-color: $oranje;
+		// 	// border-color: $oranje;
+		// }
+		// a:not(.btn) {
+		// 	// color: $oranje;
+		// }
+		// .dropdown-menu {
+		// 	// background-color: $oranje;
+		// }
 		a[id*="groep-lid-remove"] {
 			color: $kleur-wit;
 			// background-color: $oranje;
@@ -316,22 +316,22 @@ section {
 								h6 {
 									color: $kleur-blauw-1;
 								}
-								.btn-danger {
-									// background: $gray-transparant;
-									// border-color: transparent;
-								}
-								.btn-success {
-									// background: $gray-transparant;
-									// border-color: $bordeaux-rood;
-								}
-								.form-check-input {
-									// background-color: transparent;
-									// border-color: $bordeaux-rood;
-								}
-								.form-check-input:checked {
-									// background-color: $bordeaux-rood;
-									// border-color: $bordeaux-rood;
-								}
+								// .btn-danger {
+								// 	// background: $gray-transparant;
+								// 	// border-color: transparent;
+								// }
+								// .btn-success {
+								// 	// background: $gray-transparant;
+								// 	// border-color: $bordeaux-rood;
+								// }
+								// .form-check-input {
+								// 	// background-color: transparent;
+								// 	// border-color: $bordeaux-rood;
+								// }
+								// .form-check-input:checked {
+								// 	// background-color: $bordeaux-rood;
+								// 	// border-color: $bordeaux-rood;
+								// }
 							}
 							h3 {
 								font-size: 1.8rem;
