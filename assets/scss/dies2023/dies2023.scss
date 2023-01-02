@@ -251,6 +251,12 @@ section {
 .programma {
 	text-align: center;
 	background-color: $kleur-blauw-1; //$lightgray-transparant;
+	.programma-container {
+		@media screen and (max-width: 768px) {
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+	}
 	.container {
 		.dag {
 			background-color: $kleur-blauw-1;
@@ -266,6 +272,9 @@ section {
 				background-color: $transparant-geel-19;
 				margin-bottom: 40px;
 				width: 80%;
+				@media screen and (max-width: 768px) {
+					width: 100%;
+				}
 				align-self: center;
 				align-items: center;
 
