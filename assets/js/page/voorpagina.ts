@@ -10,7 +10,7 @@ const indicatorButton = select('.carousel-indicators > button');
 const carouselItems = selectAll('.carousel-inner > *');
 
 for (let n = 1; n < carouselItems.length; n++) {
-	let clone = indicatorButton.cloneNode(true) as HTMLElement;
+	const clone = indicatorButton.cloneNode(true) as HTMLElement;
 	clone.setAttribute('data-bs-slide-to', String(n));
 	clone.setAttribute('aria-current', String(false));
 	clone.setAttribute('aria-label', `Slide ${n + 1}`);
