@@ -19,7 +19,7 @@
 		</thead>
 		<tbody>
 		{% for pagina in paginas %}
-			{% if pagina.titel and is_granted('CmsPagina_bekijken', pagina) %}
+			{% if pagina.titel and is_granted('bekijken', pagina) %}
 				<tr>
 					<td>/pagina/{{ pagina.naam }}</td>
 					<td>{{ pagina.titel }}</td>
