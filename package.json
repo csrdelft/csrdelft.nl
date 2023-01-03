@@ -127,7 +127,7 @@
 		"inputmask": "^5.0.6",
 		"jgallery": "https://github.com/csrdelft/jgallery",
 		"jquery": "^3.4",
-		"jquery-ui": "^1.13.0",
+		"jquery-ui": "^1.13.2",
 		"jquery.maskedinput": "^1.4.1",
 		"jquery.scrollto": "^2.1.2",
 		"jqueryui": "^1.11.1",
