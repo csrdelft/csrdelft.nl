@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
-use Trikoder\Bundle\OAuth2Bundle\Security\Authentication\Token\OAuth2Token;
+use League\Bundle\OAuth2ServerBundle\Security\Authentication\Token\OAuth2Token;
 
 class ApiInfoController extends AbstractController
 {
@@ -25,9 +25,7 @@ class ApiInfoController extends AbstractController
 			throw new BadRequestHttpException();
 		}
 
-		$scopes = $token
-			->getAttribute('server_request')
-			->getAttribute('oauth_scopes', []);
+		$scopes = $token->getScopes();
 
 		$user = $this->getUser();
 

@@ -85,7 +85,7 @@ Update in ieder geval de volgende waardes in `LocalSettings.php`
 Ga hiervoor naar de map van je **Test Stek** in een terminal en voer het volgende commando uit:
 
 ```
-php bin/console trikoder:oauth2:create-client --redirect-uri=http://wiki.dev-csrdelft.nl/wiki/Special:PluggableAuthLogin --scope=PROFIEL:EMAIL --scope=WIKI:BESTUUR wiki-local
+php bin/console league:oauth2-server:create-client --redirect-uri=http://wiki.dev-csrdelft.nl/wiki/Special:PluggableAuthLogin --scope=PROFIEL:EMAIL --scope=WIKI:BESTUUR wiki-local
 ```
 
 Hier wordt een secret terug gegeven, vul deze in in `$wgOAuthClientSecret` in `LocalSettings.php`

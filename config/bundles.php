@@ -23,8 +23,7 @@ return [
 	Sentry\SentryBundle\SentryBundle::class => ['all' => true],
 	Symfony\Bundle\SecurityBundle\SecurityBundle::class => ['all' => true],
 	Twig\Extra\TwigExtraBundle\TwigExtraBundle::class => ['all' => true],
-	Trikoder\Bundle\OAuth2Bundle\TrikoderOAuth2Bundle::class => ['all' => true],
-	Ajgarlag\Bundle\PsrHttpMessageBundle\AjgarlagPsrHttpMessageBundle::class => [
+	League\Bundle\OAuth2ServerBundle\LeagueOAuth2ServerBundle::class => [
 		'all' => true,
 	],
 	Nelmio\CorsBundle\NelmioCorsBundle::class => ['all' => true],

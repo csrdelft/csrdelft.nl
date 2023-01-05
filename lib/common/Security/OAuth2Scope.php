@@ -3,10 +3,14 @@
 namespace CsrDelft\common\Security;
 
 use CsrDelft\common\CsrException;
-use Trikoder\Bundle\OAuth2Bundle\Model\Scope;
+use League\Bundle\OAuth2ServerBundle\ValueObject\Scope;
 
+/**
+ * Houdt in sync met config/packages/league_oauth2_server.yaml
+ */
 class OAuth2Scope
 {
+	const STANDAARD = 'STANDAARD';
 	const PROFIEL_EMAIL = 'PROFIEL:EMAIL';
 	const BAR_NORMAAL = 'BAR:NORMAAL';
 	const BAR_BEHEER = 'BAR:BEHEER';
@@ -14,6 +18,8 @@ class OAuth2Scope
 	const WIKI_BESTUUR = 'WIKI:BESTUUR';
 
 	const BESCHRIJVING = [
+		self::STANDAARD =>
+			'Als er niet om een scope wordt gevraagd wordt deze scope gebruikt',
 		self::PROFIEL_EMAIL => 'Lezen van primair emailadres',
 		self::BAR_NORMAAL => 'Het bar systeem gebruiken om drankjes te strepen.',
 		self::BAR_BEHEER =>
@@ -23,6 +29,7 @@ class OAuth2Scope
 	];
 
 	const MAG = [
+		self::STANDAARD => 'ROLE_LOGGED_IN',
 		self::PROFIEL_EMAIL => 'ROLE_LOGGED_IN',
 		self::BAR_NORMAAL => 'ROLE_ADMIN',
 		self::BAR_BEHEER => 'ROLE_ADMIN',

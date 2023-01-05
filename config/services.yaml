@@ -147,9 +147,7 @@ services:
 
   CsrDelft\events\UserResolveListener:
     tags:
-      - { name: kernel.event_listener, event: trikoder.oauth2.user_resolve, method: onUserResolve }
-
-  Trikoder\Bundle\OAuth2Bundle\Security\Guard\Authenticator\OAuth2Authenticator:
+      - { name: kernel.event_listener, event: league.oauth2_server.event.user_resolve, method: onUserResolve }
 
   CsrDelft\events\LogEventListener:
     arguments:

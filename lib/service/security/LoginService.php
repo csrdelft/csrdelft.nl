@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
-use Trikoder\Bundle\OAuth2Bundle\Security\Authentication\Token\OAuth2Token;
+use League\Bundle\OAuth2ServerBundle\Security\Authentication\Token\OAuth2Token;
 
 /**
  * Deze service verteld je dingen over de op dit moment ingelogde gebruiker.

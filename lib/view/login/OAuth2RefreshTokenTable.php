@@ -5,7 +5,7 @@ namespace CsrDelft\view\login;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
-use Trikoder\Bundle\OAuth2Bundle\Model\RefreshToken;
+use League\Bundle\OAuth2ServerBundle\Model\RefreshToken;
 
 class OAuth2RefreshTokenTable extends DataTable
 {

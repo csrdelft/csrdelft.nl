@@ -14,8 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Trikoder\Bundle\OAuth2Bundle\Model\AccessToken;
-use Trikoder\Bundle\OAuth2Bundle\Model\RefreshToken;
+use League\Bundle\OAuth2ServerBundle\Model\AccessToken;
+use League\Bundle\OAuth2ServerBundle\Model\RefreshToken;
 
 /**
  * Beheren van OAuth2 refresh tokens en vertrouwde applicaties

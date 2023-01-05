@@ -53,8 +53,6 @@
 		"twig/intl-extra": "^3.2",
 		"twig/extra-bundle": "^3.2",
 		"twig/cssinliner-extra": "^3.3",
-		"trikoder/oauth2-bundle": "3.x-dev",
-		"nyholm/psr7": "^1.4",
 		"symfony/uid": "^5.0",
 		"endroid/qr-code": "^4.1",
 		"nelmio/cors-bundle": "^2.1",
@@ -70,7 +68,8 @@
 		"phpdocumentor/reflection-docblock": "^5.2",
 		"symfony/property-access": "^5.0",
 		"symfony/property-info": "^5.0",
-		"symfony/serializer": "^5.0"
+		"symfony/serializer": "^5.0",
+		"league/oauth2-server-bundle": "^0.4.1"
 	},
 	"config": {
 		"platform": {

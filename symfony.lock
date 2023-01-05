@@ -1,7 +1,4 @@
 {
-    "ajgarlag/psr-http-message-bundle": {
-        "version": "1.2.0"
-    },
     "amphp/amp": {
         "version": "v2.5.2"
     },
@@ -206,6 +203,19 @@
     },
     "league/oauth2-server": {
         "version": "8.2.4"
+    },
+    "league/oauth2-server-bundle": {
+        "version": "0.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "0.4",
+            "ref": "7f26963037fce3b69c1b3f6a75a3265edb1e1caa"
+        },
+        "files": [
+            "./config/packages/league_oauth2_server.yaml",
+            "./config/routes/league_oauth2_server.yaml"
+        ]
     },
     "maknz/slack": {
         "version": "1.7.0"
@@ -770,19 +780,6 @@
     },
     "tijsverkoyen/css-to-inline-styles": {
         "version": "2.2.3"
-    },
-    "trikoder/oauth2-bundle": {
-        "version": "3.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "3.0",
-            "ref": "a7511afeb7841ed7da530b0e11a82d245f00fb0e"
-        },
-        "files": [
-            "./config/packages/trikoder_oauth2.yaml",
-            "./config/routes/trikoder_oauth2.yaml"
-        ]
     },
     "twig/cssinliner-extra": {
         "version": "v3.3.0"

@@ -6,14 +6,14 @@ use CsrDelft\common\Security\OAuth2Scope;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\RememberOAuthRepository;
 use CsrDelft\service\AccessService;
-use Nyholm\Psr7\Response;
+use League\Bundle\OAuth2ServerBundle\ValueObject\Scope;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
-use Trikoder\Bundle\OAuth2Bundle\Event\AuthorizationRequestResolveEvent;
-use Trikoder\Bundle\OAuth2Bundle\Event\ScopeResolveEvent;
-use Trikoder\Bundle\OAuth2Bundle\Model\Scope;
-use Trikoder\Bundle\OAuth2Bundle\OAuth2Events;
+use League\Bundle\OAuth2ServerBundle\Event\AuthorizationRequestResolveEvent;
+use League\Bundle\OAuth2ServerBundle\Event\ScopeResolveEvent;
+use League\Bundle\OAuth2ServerBundle\OAuth2Events;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -202,8 +202,6 @@ class OAuth2Subscriber implements EventSubscriberInterface
 			(isset($redirect_uri['port']) ? ':' . $redirect_uri['port'] : '');
 
 		$response = new Response(
-			200,
-			[],
 			$this->twig->render('oauth2/authorize.html.twig', [
 				'client_id' => $event->getClient()->getIdentifier(),
 				'redirect_uri' => $request->get('redirect_uri'),
@@ -213,7 +211,9 @@ class OAuth2Subscriber implements EventSubscriberInterface
 				'state' => $request->get('state'),
 				'scope' => $request->get('scope'),
 				'scopes' => $scopeBeschrijving,
-			])
+			]),
+			200,
+			[]
 		);
 
 		$event->setResponse($response);
