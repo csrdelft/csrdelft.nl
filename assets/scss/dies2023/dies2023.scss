@@ -1,7 +1,7 @@
 @import "style";
 @import "colls";
 
-$kleur-blauw-1: #0f1432;
+$kleur-blauw-1: #121534;
 $kleur-blauw-2: #1e2050;
 $kleur-blauw-3: #45496e;
 $kleur-blauw-4: #4b81a7;
@@ -34,7 +34,7 @@ $kleur-oranje-24: #eedda2;
 $kleur-oranje-25: #fcfae0;
 
 $kleur-wit: #ffffff;
-$kleur-zwart: #000000;
+$kleur-zwart: #121534;
 
 /* nav */
 nav {
@@ -47,10 +47,13 @@ nav {
 		margin-top: 0px;
 	}
 	.logo {
-		width: 130px !important;
+		width: 130px;
 		height: 100%;
 		@media screen and (max-width: 768px) {
 			margin: auto;
+		}
+		img {
+			width: 100%;
 		}
 	}
 	a {
@@ -269,7 +272,7 @@ section {
 				border: 1px solid $kleur-geel-19;
 				box-shadow: 0px 0px 10px $kleur-geel-20;
 				border-radius: 10px;
-				background-color: $transparant-geel-19;
+				background-color: $kleur-paars-9;
 				margin-bottom: 40px;
 				width: 80%;
 				@media screen and (max-width: 768px) {
@@ -318,12 +321,19 @@ section {
 
 					.ketzers {
 						.ketzer {
+							div {
+								background-color: $kleur-geel-19;
+								a{
+									color: #121534;
+								}
+							}
 							.maaltijdketzer-wrapper {
 								padding: 20px;
 								border-radius: 20px;
 								color: $kleur-geel-19;
-								h6 {
-									color: $kleur-blauw-1;
+								background-color: $kleur-blauw-1;
+								a {
+									color: $kleur-geel-19;
 								}
 								// .btn-danger {
 								// 	// background: $gray-transparant;
