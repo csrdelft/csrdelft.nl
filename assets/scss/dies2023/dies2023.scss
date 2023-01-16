@@ -322,7 +322,6 @@ section {
 					.ketzers {
 						.ketzer {
 							div {
-								background-color: $kleur-geel-19;
 								a {
 									color: #121534;
 								}
@@ -331,7 +330,7 @@ section {
 								padding: 20px;
 								border-radius: 20px;
 								color: $kleur-geel-19;
-								background-color: $kleur-blauw-1;
+								background-color: $kleur-blauw-1!important;
 								a {
 									color: $kleur-geel-19;
 								}
