@@ -183,7 +183,19 @@ yarn dev
 
 </details>
 
-### 2.3: Database instellen
+### 2.3: Git hook installeren
+
+We gebruiken [Prettier](https://prettier.io/) om de code netjes te houden, er worden checks uitgevoerd of de code netjes is, en als dit niet het geval is gaat de build zeuren.
+
+Je kan de Git Hook installeren met het volgende commando:
+
+<pre>
+yarn prepare
+</pre>
+
+Hier mee wordt ervoor gezorgd dat alle checks worden uitgevoerd voordat je commit. Zie de `.husky` map voor meer info.
+
+### 2.4: Database instellen
 
 _Dit gaat er vanuit dat je database een gebruiker `root` heeft zonder wachtwoord, dit is standaard bij een installatie van MySQL. Heb je je database beveiligd kopieer dan het `DATABASE_URL` veld uit `.env` naar `.env.local` en zet de gegevens goed._
 

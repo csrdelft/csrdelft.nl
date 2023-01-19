@@ -13,7 +13,7 @@
 		"lint": "yarn run eslint --ext .vue,.ts assets/js",
 		"prettier-all": "yarn run prettier --write . --plugin=@prettier/plugin-php",
 		"prettier-check-all": "yarn run prettier --check . --plugin=@prettier/plugin-php",
-		"prepare": "cross-env husky install"
+		"prepare": "yarnpkg husky install"
 	},
 	"devDependencies": {
 		"@prettier/plugin-php": "^0.18.7",

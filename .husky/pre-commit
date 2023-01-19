@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-yarn dlx -q lint-staged
+# Voer de linter uit:
+yarnpkg lint-staged

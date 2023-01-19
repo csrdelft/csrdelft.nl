@@ -15,6 +15,8 @@ Als je veranderingen maakt, commit ze dan naar een branch en maak een Pull Reque
 
 In principe kun je alle git dingen in GitHub desktop doen. Wil je graag beter begrijpen wat git doet, dan kun je de [Learn Git Branching](https://learngitbranching.js.org/) lessenserie volgen.
 
+Installeer de
+
 ## PhpStorm
 
 PhpStorm is een heel erg krachtige IDE met super veel functies. Langzaamaan zul je meer functies ontdekken, maar er zijn een aantal functies die handig zijn vanaf het begin.
