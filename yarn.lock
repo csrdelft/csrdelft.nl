@@ -292,67 +292,69 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "@sentry/browser@npm:7.1.1"
+"@sentry/browser@npm:^7.29.0":
+  version: 7.29.0
+  resolution: "@sentry/browser@npm:7.29.0"
   dependencies:
-    "@sentry/core": 7.1.1
-    "@sentry/types": 7.1.1
-    "@sentry/utils": 7.1.1
+    "@sentry/core": 7.29.0
+    "@sentry/replay": 7.29.0
+    "@sentry/types": 7.29.0
+    "@sentry/utils": 7.29.0
     tslib: ^1.9.3
-  checksum: 7a2dc5a1ea4822dab09e02d739783b35c341659586f1d4aa23f335bb48758af5af754daecb873e1797ed88c9e636778c2bc0474b7566556521cd84ae8273ad76
+  checksum: 136b9d03a9ff38e72f4d8fd335f23469341d0095d1f075a36d85ef2cd6bd0763635a7e1cbc7abe14508291e88cffe549eda6016c858564b55c1d4e81ef67882f
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:7.1.1":
-  version: 7.1.1
-  resolution: "@sentry/core@npm:7.1.1"
+"@sentry/core@npm:7.29.0":
+  version: 7.29.0
+  resolution: "@sentry/core@npm:7.29.0"
   dependencies:
-    "@sentry/hub": 7.1.1
-    "@sentry/types": 7.1.1
-    "@sentry/utils": 7.1.1
+    "@sentry/types": 7.29.0
+    "@sentry/utils": 7.29.0
     tslib: ^1.9.3
-  checksum: 687d46e7a0960cf595ae7ce392aaad2157653513cd1f92bf2bbcbfe6663365fab874a53f63220fcf1ad1312abe27bc871bc1e84abe5b60cd661642e661be4b6c
+  checksum: d9330ed3528f2328b524cb237e400368dcb6c36b8afb791d28141e98ab5c0b56dc306a65cfc7164108cb5616346dabe793a39a140257f723906dc25a03b7ebcd
   languageName: node
   linkType: hard
 
-"@sentry/hub@npm:7.1.1":
-  version: 7.1.1
-  resolution: "@sentry/hub@npm:7.1.1"
+"@sentry/replay@npm:7.29.0":
+  version: 7.29.0
+  resolution: "@sentry/replay@npm:7.29.0"
   dependencies:
-    "@sentry/types": 7.1.1
-    "@sentry/utils": 7.1.1
-    tslib: ^1.9.3
-  checksum: ddc61b31aa0f45ee9ea3f32173d6e49fa93fa8b83eb7d5ab0c53758f31731e1ae70a0730212ed3a0889ea47372e5919f511ad7c056dae2c18d31049caeb0c38c
+    "@sentry/core": 7.29.0
+    "@sentry/types": 7.29.0
+    "@sentry/utils": 7.29.0
+  peerDependencies:
+    "@sentry/browser": ">=7.24.0"
+  checksum: 539e18c128bb7966c9d4ea91ebd9cde6d42f42f96fa648d7ead5bff699e643f3792f57a344376586fab26f659f5e1431176faf0e12e6ea53508fd48ba928dd12
   languageName: node
   linkType: hard
 
-"@sentry/tracing@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "@sentry/tracing@npm:7.1.1"
+"@sentry/tracing@npm:^7.29.0":
+  version: 7.29.0
+  resolution: "@sentry/tracing@npm:7.29.0"
   dependencies:
-    "@sentry/hub": 7.1.1
-    "@sentry/types": 7.1.1
-    "@sentry/utils": 7.1.1
+    "@sentry/core": 7.29.0
+    "@sentry/types": 7.29.0
+    "@sentry/utils": 7.29.0
     tslib: ^1.9.3
-  checksum: 3b11cc36eaf99c716185ccd80a0ec2e5b042a38cf4419ce5a0eeda7f81c7d097134e94c4aa6dfa45b23c83d8563b20ac6ad9cd47bbd164f363039672b971b87d
+  checksum: 7ad9040664a8c65693aba2bdd9cecc8334ce25a296c01727d38649c7141106b78c92142626ce8e44983b4272e0f411010a3df99843a1af6d4f89e4f67ce6f57e
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:7.1.1, @sentry/types@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "@sentry/types@npm:7.1.1"
-  checksum: 3f1b43782ca93c6520589b3739d4833cd00afb0f3ff72f5afaa42d4224c63163b1ef6bd167143b7d72667d0711f09fc4a42d36418ee242898a9cbd979dbac65d
+"@sentry/types@npm:7.29.0, @sentry/types@npm:^7.29.0":
+  version: 7.29.0
+  resolution: "@sentry/types@npm:7.29.0"
+  checksum: 53815b66662a193cfd7024b9fb2477afb8178a771aa59f3bef10578cc940a9d7207722f9f04e2ca65a8e118cef012ac42f4936aa921aacdfc00a914bec88b009
   languageName: node
   linkType: hard
 
-"@sentry/utils@npm:7.1.1":
-  version: 7.1.1
-  resolution: "@sentry/utils@npm:7.1.1"
+"@sentry/utils@npm:7.29.0":
+  version: 7.29.0
+  resolution: "@sentry/utils@npm:7.29.0"
   dependencies:
-    "@sentry/types": 7.1.1
+    "@sentry/types": 7.29.0
     tslib: ^1.9.3
-  checksum: b36d0e03b007229cad81dc8db517c4bf58c8e7636aa80a575dc91fb605028c1a0b61e5f090704e04b5e9021fd8ec95b1a6f1465449f2a1a6c657b283295add71
+  checksum: 9914a2129692a5713453437d75b957a18ad5a4ef8085776e5499208ad329dea8da27ee2e2b74fdc089a3831b4e2929f8e6c0f3bc75528f41023d85de5077f462
   languageName: node
   linkType: hard
 
@@ -6013,9 +6015,9 @@ fsevents@~2.3.1:
     "@fullcalendar/timegrid": ^5.11.0
     "@popperjs/core": ^2.6.0
     "@prettier/plugin-php": ^0.18.7
-    "@sentry/browser": ^7.1.1
-    "@sentry/tracing": ^7.1.1
-    "@sentry/types": ^7.1.1
+    "@sentry/browser": ^7.29.0
+    "@sentry/tracing": ^7.29.0
+    "@sentry/types": ^7.29.0
     "@types/bootstrap": ^5.0.0
     "@types/chart.js": ^2.7.42
     "@types/datatables.net": ^1.10.21

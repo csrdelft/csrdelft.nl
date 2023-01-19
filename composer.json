@@ -47,7 +47,7 @@
 		"symfony/mime": "^5.0",
 		"symfony/security-bundle": "^5.0",
 		"symfony/yaml": "^5.0",
-		"sentry/sentry-symfony": "^4.3",
+		"sentry/sentry-symfony": "^4.5",
 		"symfony/form": "^5.0",
 		"symfony/translation": "^5.0",
 		"twig/intl-extra": "^3.2",
