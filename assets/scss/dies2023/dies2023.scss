@@ -272,7 +272,7 @@ section {
 				border: 1px solid $kleur-geel-19;
 				box-shadow: 0px 0px 10px $kleur-geel-20;
 				border-radius: 10px;
-				background-color: $kleur-paars-9;
+				background-color: $kleur-geel-19;
 				margin-bottom: 40px;
 				width: 80%;
 				@media screen and (max-width: 768px) {
@@ -285,7 +285,7 @@ section {
 					font-family: $font-gaistro;
 					text-transform: uppercase;
 					text-align: center;
-					color: $kleur-geel-19;
+					color: $kleur-blauw-1;
 					font-size: 2.4rem;
 					margin: 0;
 					padding: 0;
@@ -293,7 +293,7 @@ section {
 
 				p {
 					// font-family: ;
-					color: $kleur-geel-19;
+					color: $kleur-blauw-1;
 					text-align: left;
 				}
 
@@ -360,4 +360,7 @@ section {
 			}
 		}
 	}
+}
+#di-14-feb {
+	
 }
