@@ -19,6 +19,18 @@
                     <input class="form-check-input" type="checkbox" role="button" />
                 </a>
             {% endif %}
+        {% else %}
+            {% if aanmelding is defined and aanmelding is not none %}
+                {% if maaltijd.eindMoment > date() %}
+                    <div class="btn btn-success disabled" title="Aangemeld">
+                        {% if aanmelding.abonnementRepetitie %}(abo){% endif %}</div>
+                {% else %}
+                    <span class="beoordeling-label bg-white">Kwaliteit:</span>
+                    {{ kwaliteit | raw }}
+                    <span class="beoordeling-label bg-white">Kwantiteit:</span>
+                    {{ kwantiteit | raw }}
+                {% endif %}
+            {% endif %}
         {% endif %}
 
         {% if aanmelding is defined and aanmelding is not none and aanmelding.aantal_gasten > 0 %}
@@ -29,9 +41,9 @@
             {{ icon("comment", null, aanmelding.gasten_eetwens) }}
         {% endif %}
 
-        {% if maaltijd.gesloten and maaltijd.eindMoment > date().timestamp %}
+        {% if maaltijd.gesloten and maaltijd.eindMoment > date() %}
             {% set date = maaltijd.laatst_gesloten | time_format %}
-            {{ icon("lock", null, "Maaltijd is gesloten om " ~ date) }}
+            {{ icon("lock", null, "Maaltijd is gesloten om " ~ date, "text-danger") }}
         {% endif %}
     {% endif %}
 </div>
