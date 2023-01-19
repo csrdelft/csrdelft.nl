@@ -41,8 +41,6 @@ class CorveeKwalificatieVoter extends PrefixVoter
 			return false;
 		}
 
-		$profiel = $user->profiel;
-
 		if (is_numeric($gevraagd)) {
 			$functieId = (int) $gevraagd;
 		} else {
@@ -69,6 +67,6 @@ class CorveeKwalificatieVoter extends PrefixVoter
 
 		return $this->em
 			->getRepository(CorveeKwalificatie::class)
-			->isLidGekwalificeerdVoorFunctie($profiel->uid, $functieId);
+			->isLidGekwalificeerdVoorFunctie($user->getUserIdentifier(), $functieId);
 	}
 }
