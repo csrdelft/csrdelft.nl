@@ -31,7 +31,6 @@ Dependencies die worden gebruikt als de stek draait.
 | jakeasmith/http_build_url            | ^1         | Wordt in curl_follow_location gebruikt (Moet verwijderd worden)              |
 | maknz/slack                          | ^1.7       | Errors naar slack                                                            |
 | nelmio/cors-bundle                   | ^2.1       |
-| nyholm/psr7                          | ^1.4       | psr7 is een request standaard, wordt gebruikt in de oauth2 code.             |
 | parsecsv/php-parsecsv                | ^1.2       | Parsed csv voor de civisaldo afschrijven tool.                               |
 | phpdocumentor/reflection-docblock    | ^5.2       |
 | sensio/framework-extra-bundle        | ^5.5       | Makkelijkere controllers in symfony                                          |
@@ -59,7 +58,7 @@ Dependencies die worden gebruikt als de stek draait.
 | symfony/var-dumper                   | ^5.0       |
 | symfony/yaml                         | ^5.0       | Yaml lezer                                                                   |
 | tecnickcom/tcpdf                     | ^6.4       | Genereert pdfs voor declaraties                                              |
-| trikoder/oauth2-bundle               | 3.x-dev    | OAuth2 integratie in de stek                                                 |
+| league/oauth2-server-bundle          | ^0.4.1     | OAuth2 integratie in de stek                                                 |
 | twig/cssinliner-extra                | ^3.3       |
 | twig/extra-bundle                    | ^3.2       | Aantal coole goodies voor twig.                                              |
 | twig/intl-extra                      | ^3.2       | Standaard ext-intl functies in twig                                          |

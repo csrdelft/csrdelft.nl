@@ -1,0 +1,10 @@
+oauth2_authorize:
+  path: /authorize
+  controller: league.oauth2_server.controller.authorization::indexAction
+  methods: GET
+
+oauth2_token:
+  path: /api/v3/token
+  controller: league.oauth2_server.controller.token::indexAction
+  methods: POST
+  defaults: { _csrfUnsafe: ja }

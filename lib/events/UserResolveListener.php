@@ -6,7 +6,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Trikoder\Bundle\OAuth2Bundle\Event\UserResolveEvent;
+use League\Bundle\OAuth2ServerBundle\Event\UserResolveEvent;
 
 final class UserResolveListener
 {

@@ -30,8 +30,8 @@ class AccessControlEventListener
 		'CsrDelft\controller\ErrorController::handleException' => true,
 		'twig.controller.exception::showAction' => true,
 		'Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction' => true,
-		'Trikoder\Bundle\OAuth2Bundle\Controller\TokenController::indexAction' => true,
-		'Trikoder\Bundle\OAuth2Bundle\Controller\AuthorizationController::indexAction' => true,
+		'league.oauth2_server.controller.token::indexAction' => true,
+		'league.oauth2_server.controller.authorization::indexAction' => true,
 	];
 	/**
 	 * @var CsrfService

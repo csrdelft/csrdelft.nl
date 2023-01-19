@@ -12,15 +12,13 @@ security:
       security: false
     # Achter deze firewall zitten requests voor de api.
     oauth_token:
-      pattern: ^/token$
+      pattern: ^/api/v3/token$
       security: false
     oauth:
       pattern: ^/api/v3/
       security: true
       stateless: true
-      guard:
-        authenticators:
-          - Trikoder\Bundle\OAuth2Bundle\Security\Guard\Authenticator\OAuth2Authenticator
+      oauth2: true
     api:
       pattern: ^/API/2.0/
       stateless: true

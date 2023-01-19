@@ -1,0 +1,25 @@
+league_oauth2_server:
+  authorization_server:
+    private_key: '%env(resolve:OAUTH2_PRIVATE_KEY_PATH)%'
+    private_key_passphrase: '%env(resolve:OAUTH2_PASSPHRASE)%'
+    encryption_key: '%env(resolve:OAUTH2_ENCRYPTION_KEY)%'
+  resource_server:
+    public_key: '%env(resolve:OAUTH2_PUBLIC_KEY_PATH)%'
+  scopes:
+    available:
+      [
+        STANDAARD,
+        PROFIEL:EMAIL,
+        BAR:NORMAAL,
+        BAR:BEHEER,
+        BAR:TRUST,
+        WIKI:BESTUUR,
+      ]
+    default: [STANDAARD]
+  persistence:
+    doctrine: null
+
+when@test:
+  league_oauth2_server:
+    persistence:
+      in_memory: null
