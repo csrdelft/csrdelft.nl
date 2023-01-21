@@ -4,7 +4,7 @@
             {% if aanmelding is defined and aanmelding is not none %}
                 <a
                     onclick="window.ketzerAjax('{{ url('csrdelft_maalcie_mijnmaaltijden_afmelden', {maaltijd_id: maaltijd.maaltijd_id, size: 'klein'}) }}', '.maaltijdketzer-{{ maaltijd.maaltijd_id }}');"
-                    class="btn p-0 aanmeldbtn" tabindex="0" title="Aangemeld">
+                    class="btn p-0 lh-1 aanmeldbtn" tabindex="0" title="Aangemeld">
                     <input class="form-check-input" type="checkbox" role="button" checked />
                 </a>
 
@@ -15,7 +15,7 @@
             {% else %}
                 <a
                     onclick="window.ketzerAjax('{{ url('csrdelft_maalcie_mijnmaaltijden_aanmelden', {maaltijd_id: maaltijd.maaltijd_id, size: 'klein'}) }}', '.maaltijdketzer-{{ maaltijd.maaltijd_id }}');"
-                    class="btn p-0 aanmeldbtn" tabindex="0" title="Niet aangemeld">
+                    class="btn p-0 lh-1 aanmeldbtn" tabindex="0" title="Niet aangemeld">
                     <input class="form-check-input" type="checkbox" role="button" />
                 </a>
             {% endif %}
@@ -43,7 +43,7 @@
 
         {% if maaltijd.gesloten and maaltijd.eindMoment > date() %}
             {% set date = maaltijd.laatst_gesloten | time_format %}
-            {{ icon("lock", null, "Maaltijd is gesloten om " ~ date, "text-danger") }}
+            {{ icon("lock", null, "Maaltijd is gesloten om " ~ date, "text-danger-emphasis") }}
         {% endif %}
     {% endif %}
 </div>
