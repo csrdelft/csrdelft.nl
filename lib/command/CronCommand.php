@@ -163,7 +163,7 @@ class CronCommand extends Command
 
 		// Verwijder verlopen oauth2 tokens
 		$this->getApplication()
-			->find(ClearExpiredTokensCommand::getDefaultName())
+			->find('league:oauth2-server:clear-expired-tokens')
 			->run(new ArrayInput([]), $output);
 
 		$finish = microtime(true) - $start;
