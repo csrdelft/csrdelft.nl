@@ -287,7 +287,7 @@ abstract class GroepRepository extends AbstractRepository
 	{
 		$qb = $this->createQueryBuilder('ag');
 
-		if ($this->entityClass instanceof HeeftMoment) {
+		if (in_array(HeeftMoment::class, class_implements($this->entityClass))) {
 			$qb = $qb->orderBy('ag.beginMoment', 'DESC');
 		}
 
