@@ -82,8 +82,8 @@ abstract class GroepRepository extends AbstractRepository
 		$offset = null
 	) {
 		// Eerst sorteren op FT/HT/OT
-		$orderBy = ['status' => 'DESC'] + ($orderBy ?? []);
-		if ($this->entityClass instanceof HeeftMoment) {
+		$orderBy = ['status' => 'ASC'] + ($orderBy ?? []);
+		if (in_array(HeeftMoment::class, class_implements($this->entityClass))) {
 			// Als er een moment is daarna daarop sorteren
 			$orderBy = ['beginMoment' => 'DESC'] + ($orderBy ?? []);
 		}
