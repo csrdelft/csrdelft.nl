@@ -36,6 +36,9 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\fiscaat\SaldoGrafiekService;
 use CsrDelft\service\GoogleContactSync;
+use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
+use CsrDelft\service\profiel\LidStatusService;
+use CsrDelft\service\ProfielService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenType;
@@ -71,15 +74,21 @@ class ProfielController extends AbstractController
 	 * @var AccountRepository
 	 */
 	private $accountRepository;
+	/**
+	 * @var LidStatusService
+	 */
+	private $lidStatusService;
 
 	public function __construct(
 		ProfielRepository $profielRepository,
+		LidStatusService $lidStatusService,
 		AccountRepository $accountRepository,
 		LidToestemmingRepository $lidToestemmingRepository
 	) {
 		$this->profielRepository = $profielRepository;
 		$this->accountRepository = $accountRepository;
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
+		$this->lidStatusService = $lidStatusService;
 	}
 
 	/**
@@ -150,7 +159,7 @@ class ProfielController extends AbstractController
 		ForumPostsRepository $forumPostsRepository,
 		FotoTagsRepository $fotoTagsRepository,
 		CorveeKwalificatiesRepository $corveeKwalificatiesRepository,
-		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
+		MaaltijdAbonnementenService $maaltijdAbonnementenService,
 		Profiel $profiel = null
 	): Response {
 		if (!$profiel) {
@@ -219,7 +228,7 @@ class ProfielController extends AbstractController
 				$profiel->uid,
 				date_create_immutable(instelling('maaltijden', 'recent_lidprofiel'))
 			),
-			'abos' => $maaltijdAbonnementenRepository->getAbonnementenVoorLid(
+			'abos' => $maaltijdAbonnementenService->getAbonnementenVoorLid(
 				$profiel->uid
 			),
 			'gerecenseerdeboeken' => $boekRecensieRepository->getVoorLid(
@@ -280,7 +289,7 @@ class ProfielController extends AbstractController
 					if ($change->property === 'status') {
 						array_push(
 							$changeEntry->entries,
-							...$this->profielRepository->wijzig_lidstatus(
+							...$this->lidStatusService->wijzig_lidstatus(
 								$profiel,
 								$change->old_value
 							)
@@ -454,7 +463,7 @@ class ProfielController extends AbstractController
 				if ($change->property === 'status') {
 					array_push(
 						$changeEntry->entries,
-						...$this->profielRepository->wijzig_lidstatus(
+						...$this->lidStatusService->wijzig_lidstatus(
 							$profiel,
 							$change->old_value
 						)
