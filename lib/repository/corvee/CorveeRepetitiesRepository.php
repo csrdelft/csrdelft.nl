@@ -2,8 +2,6 @@
 
 namespace CsrDelft\repository\corvee;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\AbstractRepository;
@@ -19,17 +17,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CorveeRepetitiesRepository extends AbstractRepository
 {
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-
-	public function __construct(
-		ManagerRegistry $registy,
-		CorveeTakenRepository $corveeTakenRepository
-	) {
+	public function __construct(ManagerRegistry $registy)
+	{
 		parent::__construct($registy, CorveeRepetitie::class);
-		$this->corveeTakenRepository = $corveeTakenRepository;
 	}
 
 	public function nieuw(MaaltijdRepetitie $maaltijdRepetitie = null)
@@ -104,31 +94,6 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	public function getRepetitie($crid)
 	{
 		return $this->find($crid);
-	}
-
-	public function verwijderRepetitie($crid)
-	{
-		if (!is_numeric($crid) || $crid <= 0) {
-			throw new CsrGebruikerException(
-				'Verwijder corvee-repetitie faalt: Invalid $crid =' . $crid
-			);
-		}
-		if ($this->corveeTakenRepository->existRepetitieTaken($crid)) {
-			$this->corveeTakenRepository->verwijderRepetitieTaken($crid); // delete corveetaken first (foreign key)
-			throw new CsrGebruikerException(
-				'Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!'
-			);
-		}
-
-		return $this->_em->transactional(function () use ($crid) {
-			$aantal = ContainerFacade::getContainer()
-				->get(CorveeVoorkeurenRepository::class)
-				->verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)
-			$repetitie = $this->find($crid);
-			$this->_em->remove($repetitie);
-			$this->_em->flush();
-			return $aantal;
-		});
 	}
 
 	// Maaltijd-Repetitie-Corvee ############################################################

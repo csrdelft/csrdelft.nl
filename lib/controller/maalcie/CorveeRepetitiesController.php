@@ -10,6 +10,7 @@ use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
+use CsrDelft\service\corvee\CorveeRepetitiesService;
 use CsrDelft\view\maalcie\forms\CorveeRepetitieForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
@@ -44,12 +45,17 @@ class CorveeRepetitiesController extends AbstractController
 	 * @var EntityManagerInterface
 	 */
 	private $entityManager;
+	/**
+	 * @var CorveeRepetitiesService
+	 */
+	private $corveeRepetitiesService;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
 		CorveeRepetitiesRepository $corveeRepetitiesRepository,
 		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
 		CorveeTakenRepository $corveeTakenRepository,
+		CorveeRepetitiesService $corveeRepetitiesService,
 		CorveeVoorkeurenRepository $corveeVoorkeurenRepository
 	) {
 		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
@@ -57,6 +63,7 @@ class CorveeRepetitiesController extends AbstractController
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
 		$this->entityManager = $entityManager;
+		$this->corveeRepetitiesService = $corveeRepetitiesService;
 	}
 
 	/**
@@ -189,7 +196,7 @@ class CorveeRepetitiesController extends AbstractController
 	 */
 	public function verwijder(CorveeRepetitie $corveeRepetitie)
 	{
-		$aantal = $this->corveeRepetitiesRepository->verwijderRepetitie(
+		$aantal = $this->corveeRepetitiesService->verwijderRepetitie(
 			$corveeRepetitie->crv_repetitie_id
 		);
 		if ($aantal > 0) {

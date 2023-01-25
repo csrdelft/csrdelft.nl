@@ -2,7 +2,6 @@
 
 namespace CsrDelft\service\corvee;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveePuntenOverzichtDTO;
 use CsrDelft\entity\corvee\CorveeTaak;
@@ -24,13 +23,25 @@ class CorveeToewijzenService
 	 * @var CorveeVrijstellingenRepository
 	 */
 	private $corveeVrijstellingenRepository;
+	/**
+	 * @var CorveeTakenRepository
+	 */
+	private $corveeTakenRepository;
+	/**
+	 * @var CorveeVoorkeurenRepository
+	 */
+	private $corveeVoorkeurenRepository;
 
 	public function __construct(
-		CorveeVrijstellingenRepository $corveeVrijstellingenModel,
+		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
+		CorveeTakenRepository $corveeTakenRepository,
+		CorveeVoorkeurenRepository $corveeVoorkeurenRepository,
 		CorveePuntenService $corveePuntenService
 	) {
 		$this->corveePuntenService = $corveePuntenService;
-		$this->corveeVrijstellingenRepository = $corveeVrijstellingenModel;
+		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
+		$this->corveeTakenRepository = $corveeTakenRepository;
+		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
 	}
 
 	/**
@@ -111,9 +122,9 @@ class CorveeToewijzenService
 			$sorteer = 'sorteerPrognose';
 		}
 		foreach ($corveePuntenOverzichten as $uid => $punten) {
-			$corveePuntenOverzichten[$uid]->laatste = ContainerFacade::getContainer()
-				->get(CorveeTakenRepository::class)
-				->getLaatsteTaakVanLid($uid);
+			$corveePuntenOverzichten[
+				$uid
+			]->laatste = $this->corveeTakenRepository->getLaatsteTaakVanLid($uid);
 			if (
 				$corveePuntenOverzichten[$uid]->laatste !== null &&
 				$corveePuntenOverzichten[$uid]->laatste->getBeginMoment() >=
@@ -128,9 +139,10 @@ class CorveeToewijzenService
 			if ($taak->corveeRepetitie !== null) {
 				$corveePuntenOverzichten[
 					$uid
-				]->voorkeur = ContainerFacade::getContainer()
-					->get(CorveeVoorkeurenRepository::class)
-					->getHeeftVoorkeur($taak->corveeRepetitie->crv_repetitie_id, $uid);
+				]->voorkeur = $this->corveeVoorkeurenRepository->getHeeftVoorkeur(
+					$taak->corveeRepetitie->crv_repetitie_id,
+					$uid
+				);
 			} else {
 				$corveePuntenOverzichten[$uid]->voorkeur = false;
 			}
