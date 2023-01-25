@@ -283,22 +283,19 @@ class MaaltijdAbonnementenService
 		$abonneerbaar = false,
 		$uitgeschakeld = false
 	) {
-		$lijst = $this->_em->transactional(function () use (
+		$lijst = $this->entityManager->wrapInTransaction(function () use (
 			$uid,
 			$abonneerbaar,
 			$uitgeschakeld
 		) {
 			$lijst = [];
 
-			$maaltijdRepetitiesRepository = ContainerFacade::getContainer()->get(
-				MaaltijdRepetitiesRepository::class
-			);
 			if ($abonneerbaar) {
-				$repById = $maaltijdRepetitiesRepository->getAbonneerbareRepetitiesVoorLid(
+				$repById = $this->maaltijdRepetitiesRepository->getAbonneerbareRepetitiesVoorLid(
 					$uid
 				); // grouped by mrid
 			} else {
-				$repById = $maaltijdRepetitiesRepository->getAlleRepetities(true); // grouped by mrid
+				$repById = $this->maaltijdRepetitiesRepository->getAlleRepetities(true); // grouped by mrid
 			}
 			$abos = $this->findBy(['uid' => $uid]);
 			foreach ($abos as $abo) {
@@ -306,7 +303,9 @@ class MaaltijdAbonnementenService
 				$mrid = $abo->mlt_repetitie_id;
 				if (!array_key_exists($mrid, $repById)) {
 					// ingeschakelde abonnementen altijd weergeven
-					$repById[$mrid] = $maaltijdRepetitiesRepository->getRepetitie($mrid);
+					$repById[$mrid] = $this->maaltijdRepetitiesRepository->getRepetitie(
+						$mrid
+					);
 				}
 				$abo->maaltijd_repetitie = $repById[$mrid];
 				$abo->van_uid = $uid;
