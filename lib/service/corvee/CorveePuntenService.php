@@ -2,7 +2,6 @@
 
 namespace CsrDelft\service\corvee;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveePuntenOverzichtDTO;
@@ -142,9 +141,7 @@ class CorveePuntenService
 		if (is_int($bonus_malus)) {
 			$profiel->corvee_punten_bonus = $bonus_malus;
 		}
-		ContainerFacade::getContainer()
-			->get(ProfielRepository::class)
-			->update($profiel);
+		$this->profielRepository->update($profiel);
 	}
 
 	/**

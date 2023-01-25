@@ -5,6 +5,7 @@ namespace CsrDelft\view\maalcie\forms;
 use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredDoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
@@ -88,7 +89,7 @@ class MaaltijdRepetitieForm extends ModalForm
 			CiviProduct::class,
 			'/fiscaat/producten/suggesties?q='
 		);
-		$fields[] = new IntField(
+		$fields[] = new RequiredIntField(
 			'standaard_limiet',
 			$model->standaard_limiet,
 			'Standaard limiet',

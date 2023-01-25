@@ -10,6 +10,7 @@ use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
@@ -29,13 +30,19 @@ class BeheerAbonnementenController extends AbstractController
 	 * @var MaaltijdRepetitiesRepository
 	 */
 	private $maaltijdRepetitiesRepository;
+	/**
+	 * @var MaaltijdAbonnementenService
+	 */
+	private $maaltijdAbonnementenService;
 
 	public function __construct(
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
-		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository
+		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
+		MaaltijdAbonnementenService $maaltijdAbonnementenService
 	) {
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
+		$this->maaltijdAbonnementenService = $maaltijdAbonnementenService;
 	}
 
 	/**
@@ -47,7 +54,7 @@ class BeheerAbonnementenController extends AbstractController
 	 */
 	public function waarschuwingen()
 	{
-		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenWaarschuwingenMatrix();
+		$matrix_repetities = $this->maaltijdAbonnementenService->getAbonnementenWaarschuwingenMatrix();
 
 		return $this->render(
 			'maaltijden/abonnement/beheer_abonnementen.html.twig',
@@ -70,7 +77,7 @@ class BeheerAbonnementenController extends AbstractController
 	 */
 	public function ingeschakeld()
 	{
-		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenMatrix();
+		$matrix_repetities = $this->maaltijdAbonnementenService->getAbonnementenMatrix();
 
 		return $this->render(
 			'maaltijden/abonnement/beheer_abonnementen.html.twig',
@@ -93,7 +100,7 @@ class BeheerAbonnementenController extends AbstractController
 	 */
 	public function abonneerbaar()
 	{
-		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenAbonneerbaarMatrix();
+		$matrix_repetities = $this->maaltijdAbonnementenService->getAbonnementenAbonneerbaarMatrix();
 
 		return $this->render(
 			'maaltijden/abonnement/beheer_abonnementen.html.twig',
@@ -121,7 +128,7 @@ class BeheerAbonnementenController extends AbstractController
 		$aantal = $this->maaltijdAbonnementenRepository->inschakelenAbonnementVoorNovieten(
 			$repetitie
 		);
-		$matrix = $this->maaltijdAbonnementenRepository->getAbonnementenVanNovieten();
+		$matrix = $this->maaltijdAbonnementenService->getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
 		setMelding(
 			$aantal .

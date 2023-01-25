@@ -36,14 +36,14 @@ use Throwable;
 abstract class GroepRepository extends AbstractRepository
 {
 	/**
-	 * @var Groep
+	 * @var Groep|string
 	 */
 	public $entityClass;
 
 	/**
 	 * AbstractGroepenModel constructor.
 	 * @param ManagerRegistry $managerRegistry
-	 * @param $entityClass
+	 * @param Groep|string $entityClass
 	 */
 	public function __construct(ManagerRegistry $managerRegistry, $entityClass)
 	{
