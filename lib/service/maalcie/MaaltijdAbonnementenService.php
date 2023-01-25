@@ -297,7 +297,7 @@ class MaaltijdAbonnementenService
 			} else {
 				$repById = $this->maaltijdRepetitiesRepository->getAlleRepetities(true); // grouped by mrid
 			}
-			$abos = $this->findBy(['uid' => $uid]);
+			$abos = $this->maaltijdAbonnementenRepository->findBy(['uid' => $uid]);
 			foreach ($abos as $abo) {
 				// ingeschakelde abonnementen
 				$mrid = $abo->mlt_repetitie_id;
