@@ -19,23 +19,23 @@ class LoginTest extends PantherTestCase
 
 	public function testLogin()
 	{
-		$this->markTestSkipped('Todo. Nieuwe voorpagina mist label.');
+		$client = static::createPantherClient();
 
-		//		$client = static::createPantherClient();
-		//
-		//		$crawler = $client->request('GET', '/');
-		//
-		//		$crawler->selectLink('Inloggen')->click();
-		//
-		//		$form = $crawler->selectButton('Inloggen')->form();
-		//
-		//		$form['_username'] = AccountFixtures::UID_PUBCIE;
-		//		$form['_password'] = 'stek open u voor mij!';
-		//
-		//		$crawler = $client->submit($form);
-		//
-		//		$pageContent = $crawler->filter('.cd-page-content')->text();
-		//
-		//		$this->assertStringContainsString('Dit is de voorpagina.', $pageContent);
+		$crawler = $client->request('GET', '/');
+
+		$crawler->selectLink('Inloggen')->click();
+
+		$form = $crawler->selectButton('Inloggen')->form();
+
+		$form['_username'] = AccountFixtures::UID_PUBCIE;
+		$form['_password'] = 'stek open u voor mij!';
+
+		$crawler = $client->submit($form);
+
+		$civiSaldoCell = $crawler->filter('.cell-civi-saldo')->text();
+
+		$this->assertStringContainsString('Civisaldo', $civiSaldoCell);
+		$this->assertStringContainsString('€ 0,00', $civiSaldoCell);
+		$this->assertStringContainsString('Inleggen?', $civiSaldoCell);
 	}
 }
