@@ -52,10 +52,11 @@ JS;
 	 */
 	private function addSuggestions($list)
 	{
+		$uid = LoginService::getUid();
 		foreach ($list as $item) {
 			$parent = $item->parent;
 			if ($parent && $parent->tekst != 'main') {
-				if ($parent->tekst == LoginService::getUid()) {
+				if ($parent->tekst == $uid) {
 					// werkomheen
 					$parent->tekst = 'Favorieten';
 				}
@@ -79,7 +80,7 @@ JS;
 		);
 		foreach ($lidInstellingenRepository->getModuleKeys('zoeken') as $option) {
 			$html .= '<a class="dropdown-item disabled" href="#">';
-			$instelling = lid_instelling('zoeken', $option);
+			$instelling = $lidInstellingenRepository->getValue('zoeken', $option);
 			if ($instelling !== 'nee') {
 				$html .= Icon::getTag('check', null, '', 'fa-fw me-2') . ' ';
 				if ($option === 'leden') {

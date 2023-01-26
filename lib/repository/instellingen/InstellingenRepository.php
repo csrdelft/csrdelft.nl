@@ -10,6 +10,7 @@ use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
 use Symfony\Component\Config\Exception\LoaderLoadException;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * InstellingenModel.class.php
@@ -26,12 +27,18 @@ class InstellingenRepository extends AbstractRepository
 	use YamlInstellingen;
 
 	/**
+	 * @var CacheInterface
+	 */
+	private $cache;
+
+	/**
 	 * InstellingenModel constructor.
 	 * @param ManagerRegistry $manager
+	 * @param CacheInterface $cache
 	 * @throws FileLoaderImportCircularReferenceException
 	 * @throws LoaderLoadException
 	 */
-	public function __construct(ManagerRegistry $manager)
+	public function __construct(ManagerRegistry $manager, CacheInterface $cache)
 	{
 		parent::__construct($manager, Instelling::class);
 
@@ -39,6 +46,7 @@ class InstellingenRepository extends AbstractRepository
 			'instellingen/stek_instelling.yaml',
 			new InstellingConfiguration()
 		);
+		$this->cache = $cache;
 	}
 
 	/**
@@ -63,21 +71,26 @@ class InstellingenRepository extends AbstractRepository
 	 */
 	public function getInstelling($module, $id)
 	{
-		$entity = $this->findOneBy(['module' => $module, 'instelling' => $id]);
-		if ($this->hasKey($module, $id) && $entity != null) {
-			return $entity;
-		} elseif ($this->hasKey($module, $id)) {
-			return $this->newInstelling($module, $id);
-		} else {
-			if ($entity != null) {
-				$entityManager = $this->getEntityManager();
-				$entityManager->remove($entity);
-				$entityManager->flush();
+		return $this->cache->get($this->getCacheKey($module, $id), function () use (
+			$module,
+			$id
+		) {
+			$entity = $this->findOneBy(['module' => $module, 'instelling' => $id]);
+			if ($this->hasKey($module, $id) && $entity != null) {
+				return $entity;
+			} elseif ($this->hasKey($module, $id)) {
+				return $this->newInstelling($module, $id);
+			} else {
+				if ($entity != null) {
+					$entityManager = $this->getEntityManager();
+					$entityManager->remove($entity);
+					$entityManager->flush();
+				}
+				throw new CsrException(
+					sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module)
+				);
 			}
-			throw new CsrException(
-				sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module)
-			);
-		}
+		});
 	}
 
 	/**
@@ -122,6 +135,7 @@ class InstellingenRepository extends AbstractRepository
 	 */
 	public function wijzigInstelling($module, $id, $waarde)
 	{
+		$this->cache->delete($this->getCacheKey($module, $id));
 		$instelling = $this->getInstelling($module, $id);
 		$instelling->waarde = $waarde;
 		$entityManager = $this->getEntityManager();
@@ -150,5 +164,15 @@ class InstellingenRepository extends AbstractRepository
 			->setParameter('instellingen', $instellingen)
 			->getQuery()
 			->execute();
+	}
+
+	/**
+	 * @param string $module
+	 * @param string $id
+	 * @return string
+	 */
+	private function getCacheKey(string $module, string $id): string
+	{
+		return 'instelling_' . $module . '_' . $id;
 	}
 }

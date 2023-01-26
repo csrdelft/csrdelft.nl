@@ -14,8 +14,10 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
 use Symfony\Component\Config\Exception\LoaderLoadException;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -32,18 +34,32 @@ class LidInstellingenRepository extends AbstractRepository
 	use YamlInstellingen;
 
 	/**
+	 * @var LoginService
+	 */
+	private $loginService;
+	/**
+	 * @var CacheInterface
+	 */
+	private $cache;
+
+	/**
 	 * @param ManagerRegistry $registry
 	 * @throws FileLoaderImportCircularReferenceException
 	 * @throws LoaderLoadException
 	 */
-	public function __construct(ManagerRegistry $registry)
-	{
+	public function __construct(
+		ManagerRegistry $registry,
+		LoginService $loginService,
+		CacheInterface $cache
+	) {
 		parent::__construct($registry, LidInstelling::class);
 
 		$this->load(
 			'instellingen/lid_instelling.yaml',
 			new InstellingConfiguration()
 		);
+		$this->loginService = $loginService;
+		$this->cache = $cache;
 	}
 
 	/**
@@ -88,37 +104,46 @@ class LidInstellingenRepository extends AbstractRepository
 	 * @param string|null $uid
 	 * @return LidInstelling
 	 * @throws CsrException indien de default waarde ontbreekt (de instelling bestaat niet)
+	 * @throws InvalidArgumentException
 	 */
 	protected function getInstelling($module, $id, $uid = null)
 	{
 		if (!$uid) {
-			$uid = $this->getUid() ?? LoginService::UID_EXTERN;
+			$uid = $this->getUid();
 		}
-		$instelling = $this->findOneBy([
-			'module' => $module,
-			'instelling' => $id,
-			'profiel' => $uid,
-		]);
-		if ($this->hasKey($module, $id)) {
-			if (!$instelling) {
-				$instelling = $this->newInstelling($module, $id, $uid);
+
+		return $this->cache->get(
+			$this->getCacheKey($module, $id, $uid),
+			function () use ($module, $id, $uid) {
+				/** @var LidInstelling $instelling */
+				$instelling = $this->findOneBy([
+					'module' => $module,
+					'instelling' => $id,
+					'profiel' => $uid,
+				]);
+
+				if ($this->hasKey($module, $id)) {
+					if (!$instelling) {
+						$instelling = $this->newInstelling($module, $id, $uid);
+					}
+					return $instelling;
+				} else {
+					if ($instelling) {
+						// Haal niet-bestaande instelling uit de database
+						$this->_em->remove($instelling);
+						$this->_em->flush();
+					}
+					throw new CsrException(
+						sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module)
+					);
+				}
 			}
-			return $instelling;
-		} else {
-			if ($instelling) {
-				// Haal niet-bestaande instelling uit de database
-				$this->_em->remove($instelling);
-				$this->_em->flush();
-			}
-			throw new CsrException(
-				sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module)
-			);
-		}
+		);
 	}
 
 	private function getUid()
 	{
-		return LoginService::getUid();
+		return $this->loginService->_getUid();
 	}
 
 	protected function newInstelling($module, $id, $uid)
@@ -168,6 +193,7 @@ class LidInstellingenRepository extends AbstractRepository
 				if (!$this->isValidValue($module, $id, $waarde)) {
 					$waarde = $this->getDefault($module, $id);
 				}
+				$this->cache->delete($this->getCacheKey($module, $id, $this->getUid()));
 				$instelling = new LidInstelling();
 				$instelling->module = $module;
 				$instelling->instelling = $id;
@@ -203,7 +229,7 @@ class LidInstellingenRepository extends AbstractRepository
 		return $this->getField($module, $id, InstellingConfiguration::FIELD_OPTIES);
 	}
 
-	public function resetFOrUser(Profiel $profiel)
+	public function resetForUser(Profiel $profiel)
 	{
 		$this->createQueryBuilder('i')
 			->andWhere('i.profiel = :profiel')
@@ -250,6 +276,14 @@ class LidInstellingenRepository extends AbstractRepository
 				"Instelling '{$entity->instelling}' uit module '{$entity->module}' niet gevonden."
 			);
 		}
+
+		$this->cache->delete(
+			$this->getCacheKey(
+				$entity->module,
+				$entity->instelling,
+				$entity->profiel->uid
+			)
+		);
 
 		$type = $this->getTypeOptions($entity->module, $entity->instelling);
 		$typeOptions = $this->getTypeOptions($entity->module, $entity->instelling);
@@ -318,5 +352,16 @@ class LidInstellingenRepository extends AbstractRepository
 			->setParameter('instellingen', $instellingen)
 			->getQuery()
 			->execute();
+	}
+
+	/**
+	 * @param string $module
+	 * @param string $id
+	 * @param string|null $uid
+	 * @return string
+	 */
+	private function getCacheKey(string $module, string $id, ?string $uid): string
+	{
+		return 'lidInstelling_' . $module . '_' . $id . '_' . $uid;
 	}
 }
