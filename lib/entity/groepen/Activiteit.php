@@ -154,4 +154,9 @@ class Activiteit extends Groep implements
 	{
 		$this->activiteitSoort = $soort;
 	}
+
+	public function setSoortString($soort)
+	{
+		$this->activiteitSoort = ActiviteitSoort::from($soort);
+	}
 }

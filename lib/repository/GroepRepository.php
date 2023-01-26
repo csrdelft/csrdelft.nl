@@ -4,8 +4,6 @@ namespace CsrDelft\repository;
 
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\Groep;
-use CsrDelft\entity\groepen\GroepLid;
-use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\entity\groepen\GroepStatistiekDTO;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
@@ -13,10 +11,10 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use ReflectionClass;
@@ -209,38 +207,18 @@ abstract class GroepRepository extends AbstractRepository
 			) {
 				// groep converteren
 				$newgroep = $this->nieuw($soort);
-				$rc = new ReflectionClass($newgroep);
-				foreach (
-					$rc->getProperties(ReflectionProperty::IS_PUBLIC)
-					as $attribute => $value
-				) {
-					if (property_exists($newgroep, $value->getName())) {
-						$newgroep->{$value->getName()} = $oldgroep->{$value->getName()};
+				$rc = new ReflectionClass($oldgroep);
+				foreach ($rc->getProperties(ReflectionProperty::IS_PUBLIC) as $field) {
+					if (property_exists($newgroep, $field->getName())) {
+						$newgroep->{$field->getName()} = $oldgroep->{$field->getName()};
 					}
 				}
 				$newgroep->id = null;
 				$this->_em->persist($newgroep);
 
-				// leden converteren
-				$ledenmodel = $this->_em->getRepository(GroepLid::class);
-				foreach ($oldgroep->getLeden() as $oldlid) {
-					$newlid = $ledenmodel->nieuw($newgroep, $oldlid->uid);
-					$oldlidRc = new ReflectionClass($oldlid);
-					foreach (
-						$oldlidRc->getProperties(ReflectionProperty::IS_PUBLIC)
-						as $attribute => $value
-					) {
-						if (property_exists($newlid, $value->getName())) {
-							$newlid->{$value->getName()} = $oldgroep->{$value->getName()};
-						}
-					}
-					$newlid->groep_id = $newgroep->id;
-					$this->_em->persist($newlid);
-				}
-
-				// leden verwijderen
-				foreach ($oldgroep->getLeden() as $oldlid) {
-					$this->_em->remove($oldlid);
+				foreach ($oldgroep->getLeden() as $lid) {
+					$lid->groep = $newgroep;
+					$newgroep->getLeden()->add($lid);
 				}
 
 				// groep verwijderen
@@ -262,7 +240,7 @@ abstract class GroepRepository extends AbstractRepository
 	public function nieuw(
 		/* @noinspection PhpUnusedParameterInspection */ $soort = null
 	) {
-		$orm = $this->entityClass;
+		$orm = $this->getClassName();
 		$groep = new $orm();
 		$groep->naam = null;
 		$groep->familie = null;

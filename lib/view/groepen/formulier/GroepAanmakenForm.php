@@ -6,11 +6,15 @@ use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 class GroepAanmakenForm extends ModalForm
 {
-	public function __construct(GroepRepository $huidig, $soort = null)
-	{
+	public function __construct(
+		ManagerRegistry $doctrine,
+		GroepRepository $huidig,
+		$soort = null
+	) {
 		$groep = $huidig->nieuw($soort);
 		parent::__construct(
 			$groep,
@@ -19,13 +23,19 @@ class GroepAanmakenForm extends ModalForm
 		);
 		$this->css_classes[] = 'redirect';
 
-		$default = get_class($huidig);
+		$default = $huidig->getClassName();
 		if ($groep instanceof HeeftSoort) {
 			$default .= '_' . $groep->getSoort()->getDescription();
 		}
 
 		$fields = [];
-		$fields[] = new KetzerSoortField('model', $default, null, $groep);
+		$fields[] = new KetzerSoortField(
+			$doctrine,
+			'model',
+			$default,
+			null,
+			$groep
+		);
 
 		$this->addFields($fields);
 

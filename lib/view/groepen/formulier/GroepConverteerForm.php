@@ -6,22 +6,27 @@ use CsrDelft\entity\groepen\Groep;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
+use Doctrine\Persistence\ManagerRegistry;
 
 class GroepConverteerForm extends ModalForm
 {
-	public function __construct(Groep $groep, GroepRepository $huidig)
-	{
+	public function __construct(
+		ManagerRegistry $doctrine,
+		Groep $groep,
+		GroepRepository $huidig
+	) {
 		parent::__construct(
 			$groep,
-			$huidig->getUrl() . '/converteren',
+			$huidig->getUrl() . '/' . $groep->getId() . '/converteren',
 			$huidig->entityClass . ' converteren',
 			true
 		);
 
 		$fields = [];
 		$fields[] = new GroepSoortField(
+			$doctrine,
 			'model',
-			get_class($huidig),
+			$huidig->getClassName(),
 			'Converteren naar',
 			$groep
 		);

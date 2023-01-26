@@ -2,7 +2,6 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
@@ -11,7 +10,6 @@ use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;
-use CsrDelft\entity\groepen\GroepAanmeldMoment;
 use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
@@ -44,8 +42,8 @@ use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use CsrDelft\view\Icon;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -549,10 +547,9 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$groep = $this->repository->retrieveByUUID($id);
 		$form = new GroepOpvolgingForm(
 			$groep,
-			$this->repository->getUrl() . '/opvolging'
+			"{$this->repository->getUrl()}/{$id}/opvolging"
 		);
 		if ($form->validate()) {
-			$values = $form->getValues();
 			$response = [];
 			$groep = $this->repository->retrieveByUUID($id);
 			if ($groep && $groep->mag(AccessAction::Opvolging())) {
@@ -560,16 +557,16 @@ abstract class AbstractGroepenController extends AbstractController implements
 					$groep,
 					'familie',
 					$groep->familie,
-					$values['familie']
+					$form->getFamilie()
 				);
 				$this->changeLogRepository->log(
 					$groep,
 					'status',
-					$groep->status,
-					$values['status']
+					$groep->status->getValue(),
+					$form->getStatus()->getValue()
 				);
-				$groep->familie = $values['familie'];
-				$groep->status = $values['status'];
+				$groep->familie = $form->getFamilie();
+				$groep->status = $form->getStatus();
 				$this->repository->update($groep);
 				$response[] = $groep;
 			}
@@ -585,14 +582,14 @@ abstract class AbstractGroepenController extends AbstractController implements
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function converteren($id)
+	public function converteren(ManagerRegistry $doctrine, $id)
 	{
 		$groep = $this->repository->retrieveByUUID($id);
-		$form = new GroepConverteerForm($groep, $this->repository);
+		$form = new GroepConverteerForm($doctrine, $groep, $this->repository);
 		if ($form->validate()) {
 			$values = $form->getValues();
 			/** @var GroepRepository $model */
-			$model = ContainerFacade::getContainer()->get($values['model']);
+			$model = $doctrine->getRepository($values['model']);
 			$converteer = get_class($model) !== get_class($this->repository);
 			$response = [];
 			$groep = $this->repository->retrieveByUUID($id);
@@ -620,10 +617,10 @@ abstract class AbstractGroepenController extends AbstractController implements
 					$this->changeLogRepository->log(
 						$groep,
 						'soort',
-						$groep->getSoort(),
+						$groep->getSoort()->getValue(),
 						$values['soort']
 					);
-					$groep->setSoort($values['soort']);
+					$groep->setSoortString($values['soort']);
 					$this->repository->update($groep);
 					$response[] = $groep;
 				}

@@ -12,4 +12,6 @@ interface HeeftSoort
 	public function getSoort();
 
 	public function setSoort($soort);
+
+	public function setSoortString($soort);
 }

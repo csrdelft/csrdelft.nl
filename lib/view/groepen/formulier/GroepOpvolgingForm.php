@@ -12,19 +12,28 @@ use CsrDelft\view\formulier\ModalForm;
 
 class GroepOpvolgingForm extends ModalForm
 {
+	/**
+	 * @var EnumSelectField
+	 */
+	private $groepStatusField;
+	/**
+	 * @var AutocompleteField
+	 */
+	private $familieField;
+
 	public function __construct(Groep $groep, $action)
 	{
 		parent::__construct($groep, $action, 'Opvolging instellen', true);
 
 		$fields = [];
-		$fields['fam'] = new AutocompleteField(
+		$this->familieField = $fields['fam'] = new AutocompleteField(
 			'familie',
 			$groep->familie,
 			'Familienaam'
 		);
 		$fields['fam']->suggestions[] = $groep->getFamilieSuggesties();
 
-		$fields[] = new EnumSelectField(
+		$this->groepStatusField = $fields[] = new EnumSelectField(
 			'status',
 			$groep->status,
 			'Status',
@@ -34,5 +43,15 @@ class GroepOpvolgingForm extends ModalForm
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen();
+	}
+
+	public function getStatus(): GroepStatus
+	{
+		return $this->groepStatusField->getValue();
+	}
+
+	public function getFamilie(): string
+	{
+		return $this->familieField->getValue();
 	}
 }

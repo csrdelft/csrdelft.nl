@@ -4,11 +4,18 @@ namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Enum;
+use CsrDelft\entity\groepen\Activiteit;
+use CsrDelft\entity\groepen\Bestuur;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\CommissieSoort;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
+use CsrDelft\entity\groepen\Ketzer;
+use CsrDelft\entity\groepen\Ondervereniging;
+use CsrDelft\entity\groepen\RechtenGroep;
+use CsrDelft\entity\groepen\Werkgroep;
+use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\BesturenRepository;
@@ -20,6 +27,7 @@ use CsrDelft\repository\groepen\WerkgroepenRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\RadioField;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 class GroepSoortField extends RadioField
 {
@@ -30,9 +38,18 @@ class GroepSoortField extends RadioField
 	 * @var Groep
 	 */
 	private $groep;
+	/**
+	 * @var ManagerRegistry
+	 */
+	private $doctrine;
 
-	public function __construct($name, $value, $description, Groep $groep)
-	{
+	public function __construct(
+		ManagerRegistry $doctrine,
+		$name,
+		$value,
+		$description,
+		Groep $groep
+	) {
 		parent::__construct($name, $value, $description, []);
 
 		if (
@@ -73,25 +90,26 @@ $('#{$this->getId()}Option_CommissiesRepository').click();
 JS;
 
 		$this->options = [
-			ActiviteitenRepository::class => $this->activiteit,
-			KetzersRepository::class => 'Aanschafketzer',
-			WerkgroepenRepository::class => 'Werkgroep',
-			RechtenGroepenRepository::class => 'Groep (overig)',
-			OnderverenigingenRepository::class => 'Ondervereniging',
-			WoonoordenRepository::class => 'Woonoord',
-			BesturenRepository::class => 'Bestuur',
-			CommissiesRepository::class => $this->commissie,
+			Activiteit::class => $this->activiteit,
+			Ketzer::class => 'Aanschafketzer',
+			Werkgroep::class => 'Werkgroep',
+			RechtenGroep::class => 'Groep (overig)',
+			Ondervereniging::class => 'Ondervereniging',
+			Woonoord::class => 'Woonoord',
+			Bestuur::class => 'Bestuur',
+			Commissie::class => $this->commissie,
 		];
 		$this->groep = $groep;
+		$this->doctrine = $doctrine;
 	}
 
 	public function getSoort()
 	{
 		switch (parent::getValue()) {
-			case 'ActiviteitenRepository':
+			case Activiteit::class:
 				return $this->activiteit->getValue();
 
-			case 'CommissiesRepository':
+			case Commissie::class:
 				return $this->commissie->getValue();
 
 			default:
@@ -105,7 +123,7 @@ JS;
 			return false;
 		}
 		$class = $this->value;
-		$model = ContainerFacade::getContainer()->get($class);
+		$model = $this->doctrine->getRepository($class);
 		/** @var Enum $soort */
 		$soort = $this->getSoort();
 		/**

@@ -23,24 +23,28 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class KetzersController extends AbstractGroepenController
 {
+	/**
+	 * @var ManagerRegistry
+	 */
+	private $registry;
+
 	public function __construct(
 		ManagerRegistry $registry,
 		$groepType = Ketzer::class
 	) {
 		parent::__construct($registry, $groepType);
+		$this->registry = $registry;
 	}
 
 	public function nieuw(Request $request, $id = null, $soort = null)
 	{
-		$form = new GroepAanmakenForm($this->repository, $soort);
+		$form = new GroepAanmakenForm($this->registry, $this->repository, $soort);
 		if ($request->getMethod() == 'GET') {
 			return $this->beheren($request);
 		} elseif ($form->validate()) {
 			$values = $form->getValues();
 			$redirect =
-				ContainerFacade::getContainer()
-					->get($values['model'])
-					->getUrl() .
+				$this->registry->getRepository($values['model'])->getUrl() .
 				'/aanmaken/' .
 				$values['soort'];
 			return new JsonResponse($redirect);
