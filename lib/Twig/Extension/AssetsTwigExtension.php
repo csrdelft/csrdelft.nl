@@ -7,6 +7,12 @@ use Symfony\Component\Security\Core\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+/**
+ * `yarn prod`/`yarn dev` genereert unieke bestandsnamen voor iedere versie, om te voorkomen dat er per ongeluk naar
+ * oude versies van bestanden gekeken wordt. Om de bestanden terug te vinden wordt ook
+ * `htdocs/dist/assets-manifest.json` gegenereert. In dit bestand staat waar bestanden te vinden zijn in de
+ * `htdocs/dist` map. Deze extensie helpt bij het vinden van deze bestanden.
+ */
 class AssetsTwigExtension extends AbstractExtension
 {
 	/**

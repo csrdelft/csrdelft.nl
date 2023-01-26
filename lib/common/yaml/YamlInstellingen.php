@@ -69,7 +69,7 @@ trait YamlInstellingen
 	}
 
 	/**
-	 * @return string[]
+	 * @return string[][]
 	 */
 	public function getAll()
 	{
