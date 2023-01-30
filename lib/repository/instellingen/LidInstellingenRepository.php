@@ -260,8 +260,10 @@ class LidInstellingenRepository extends AbstractRepository
 	public function wijzigInstelling($module, $id, $waarde)
 	{
 		$instelling = $this->getInstelling($module, $id);
+		$this->cache->delete($this->getCacheKey($module, $id, $this->getUid()));
 		$instelling->waarde = $waarde;
 		$this->update($instelling);
+		$this->cache->delete($this->getCacheKey($module, $id, $this->getUid()));
 		return $instelling;
 	}
 
@@ -276,14 +278,6 @@ class LidInstellingenRepository extends AbstractRepository
 				"Instelling '{$entity->instelling}' uit module '{$entity->module}' niet gevonden."
 			);
 		}
-
-		$this->cache->delete(
-			$this->getCacheKey(
-				$entity->module,
-				$entity->instelling,
-				$entity->profiel->uid
-			)
-		);
 
 		$type = $this->getTypeOptions($entity->module, $entity->instelling);
 		$typeOptions = $this->getTypeOptions($entity->module, $entity->instelling);
