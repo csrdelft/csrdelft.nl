@@ -259,9 +259,14 @@ class LidInstellingenRepository extends AbstractRepository
 	 */
 	public function wijzigInstelling($module, $id, $waarde)
 	{
-		$instelling = $this->getInstelling($module, $id);
-		$this->cache->delete($this->getCacheKey($module, $id, $this->getUid()));
+		// Skip de cache
+		$instelling = $this->findOneBy([
+			'module' => $module,
+			'instelling' => $id,
+			'profiel' => $this->getUid(),
+		]);
 		$instelling->waarde = $waarde;
+
 		$this->update($instelling);
 		$this->cache->delete($this->getCacheKey($module, $id, $this->getUid()));
 		return $instelling;

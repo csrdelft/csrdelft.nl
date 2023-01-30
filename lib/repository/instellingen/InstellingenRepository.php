@@ -135,12 +135,11 @@ class InstellingenRepository extends AbstractRepository
 	 */
 	public function wijzigInstelling($module, $id, $waarde)
 	{
-		$this->cache->delete($this->getCacheKey($module, $id));
-		$instelling = $this->getInstelling($module, $id);
+		// Skip de cache
+		$instelling = $this->findOneBy(['module' => $module, 'instelling' => $id]);
 		$instelling->waarde = $waarde;
-		$entityManager = $this->getEntityManager();
-		$entityManager->persist($instelling);
-		$entityManager->flush();
+		$this->cache->delete($this->getCacheKey($module, $id));
+		$this->_em->flush();
 		return $instelling;
 	}
 
