@@ -53,12 +53,12 @@ class CsrfService
 		if ($request->isMethodSafe()) {
 			return true;
 		}
-		$id = $request->server->get('HTTP_X_CSRF_ID');
-		$value = $request->server->get('HTTP_X_CSRF_VALUE');
+		$id = $request->request->get('X-CSRF-ID');
+		$value = $request->request->get('X-CSRF-VALUE');
 
 		if ($id == null || $value == null) {
-			$id = $request->request->get('X-CSRF-ID');
-			$value = $request->request->get('X-CSRF-VALUE');
+			$id = $request->server->get('HTTP_X_CSRF_ID');
+			$value = $request->server->get('HTTP_X_CSRF_VALUE');
 		}
 		$url = $request->getRequestUri();
 		if ($id != null && $value != null) {
@@ -79,9 +79,6 @@ class CsrfService
 	 */
 	public function isValid($token, string $path, string $method): bool
 	{
-		if (session_status() == PHP_SESSION_NONE || $token == null) {
-			return false;
-		}
 		return $this->manager->isTokenValid($token);
 	}
 }

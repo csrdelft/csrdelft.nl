@@ -56,6 +56,7 @@ HTML;
 				{$this->getFormKnoppen()->getHtml()}
 			</div>
 		</div>
+		{$this->getCsrfField()->getHtml()}
 	</form>
 	{$this->getScriptTag()}
 </div>
