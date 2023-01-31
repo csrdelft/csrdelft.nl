@@ -121,6 +121,13 @@ jobs:
           PANTHER_NO_SANDBOX: '1'
         run: php bin/phpunit
 
+      - name: 📤 Upload screenshot van fout
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshot
+          path: screenshot
+
   deploy:
     name: Push naar productie
     runs-on: ubuntu-latest
