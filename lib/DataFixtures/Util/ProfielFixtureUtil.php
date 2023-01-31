@@ -65,16 +65,20 @@ class ProfielFixtureUtil
 		$profiel->postcode = $faker->postcode;
 		$profiel->woonplaats = $faker->city;
 		$profiel->land = $faker->country;
-		$profiel->telefoon = $faker->phoneNumber;
+		$profiel->telefoon = str_replace(['(', ')', ' '], '', $faker->phoneNumber);
 		$profiel->o_adres = $faker->streetAddress;
 		$profiel->o_postcode = $faker->postcode;
 		$profiel->o_woonplaats = $faker->city;
 		$profiel->o_land = $faker->country;
-		$profiel->o_telefoon = $faker->phoneNumber;
+		$profiel->o_telefoon = str_replace(
+			['(', ')', ' '],
+			'',
+			$faker->phoneNumber
+		);
 		// contact
 		$profiel->email = $faker->email;
 		$profiel->sec_email = $faker->email;
-		$profiel->mobiel = $faker->phoneNumber;
+		$profiel->mobiel = str_replace(['(', ')', ' '], '', $faker->phoneNumber);
 		$profiel->linkedin = null;
 		$profiel->website = null;
 		// studie

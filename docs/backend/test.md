@@ -9,13 +9,23 @@ title: Tests
 
 Er zijn twee soorten tests in de stek, unit tests en functionele tests. Unit tests testen bijvoorbeeld een functie. Functionele tests testen of pagina's bezoekbaar zijn en of klikken op linkjes werkt zoals verwacht.
 
+Chromedriver is te downloaden van https://chromedriver.chromium.org/
+
 ## Tests runnen
 
-1. Stel een andere database in dan de database waar je normaal op test, door `DATABASE_URL` te zetten in `.env.local`.
+1. Voeg `APP_ENV=test` toe aan je `.env.local` bestand.
+2. Maak een `.env.test.local` bestand aan.
+
    ```
-   DATABASE_URL=mysql://root@127.0.0.1:3306/csrdelft_test
+     DATABASE_URL=mysql://root@127.0.0.1:3306/csrdelft_test
+
+     PANTHER_CHROME_BINARY="C:\Program Files\Google\Chrome\Application\chrome.exe"
+     PANTHER_CHROME_DRIVER_BINARY="<path naar chromedriver>\chromedriver.exe"
+     PANTHER_NO_HEADLESS=true
+     PANTHER_WEB_SERVER_DIR=<path naar project>\csrdelft.nl\htdocs
    ```
-1. Maak een db in te test environment
+
+3. Maak een db in te test environment
    ```shell script
    # Maak de database
    php bin/console doctrine:database:create
@@ -24,19 +34,13 @@ Er zijn twee soorten tests in de stek, unit tests en functionele tests. Unit tes
    # Vul de tabellen met testdata. Als de database al bestaat is allen het volgende commando genoeg om de data te verversen.
    php bin/console doctrine:fixtures:load
    ```
-1. Run `php bin/phpunit` om alle tests te runnen. PhpStorm kan ook losse tests uitvoeren.
+4. Run `php bin/phpunit` om alle tests te runnen. PhpStorm kan ook losse tests uitvoeren.
+
+Vergeet niet om je `APP_ENV` weer terug te zetten om naar de `dev` instellingen te gaan.
 
 ### Panther (Browser) tests
 
-Om Panther tests te runnen moet je Panther naar chrome en chromedriver wijzen. Dit kun je instellen in `.env.test.local`
-
-```
-PANTHER_CHROME_BINARY="C:\Program Files\Google\Chrome\Application\chrome.exe"
-PANTHER_CHROME_DRIVER_BINARY="<path naar chromedriver>\chromedriver.exe"
-PANTHER_NO_HEADLESS=true
-```
-
-Chromedriver is te downloaden van https://chromedriver.chromium.org/
+Panther is gebasseerd op php-webdriver en dit maakt weer gebruik van Selenium.
 
 ## Tests maken
 
