@@ -26,14 +26,16 @@ Chromedriver is te downloaden van https://chromedriver.chromium.org/
    ```
 
 3. Maak een db in te test environment
+
    ```shell script
-   # Maak de database
-   php bin/console doctrine:database:create
-   # Maak de tabellen
-   php bin/console doctrine:migrations:migrate
-   # Vul de tabellen met testdata. Als de database al bestaat is allen het volgende commando genoeg om de data te verversen.
-   php bin/console doctrine:fixtures:load
+     # Maak de database
+     php bin/console doctrine:database:create
+     # Maak de tabellen
+     php bin/console doctrine:migrations:migrate
+     # Vul de tabellen met testdata. Als de database al bestaat is allen het volgende commando genoeg om de data te verversen.
+     php bin/console doctrine:fixtures:load
    ```
+
 4. Run `php bin/phpunit` om alle tests te runnen. PhpStorm kan ook losse tests uitvoeren.
 
 Vergeet niet om je `APP_ENV` weer terug te zetten om naar de `dev` instellingen te gaan.
