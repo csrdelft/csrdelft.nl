@@ -67,16 +67,16 @@ class ProfielFixtureUtil
 		$profiel->postcode = $faker->postcode;
 		$profiel->woonplaats = $faker->city;
 		$profiel->land = $faker->country;
-		$profiel->telefoon = self::cleanPhoneNumber($faker->phoneNumber);
+		$profiel->telefoon = $faker->e164PhoneNumber; // We hebben strenge telefoonnummer eisen
 		$profiel->o_adres = $faker->streetAddress;
 		$profiel->o_postcode = $faker->postcode;
 		$profiel->o_woonplaats = $faker->city;
 		$profiel->o_land = $faker->country;
-		$profiel->o_telefoon = self::cleanPhoneNumber($faker->phoneNumber);
+		$profiel->o_telefoon = $faker->e164PhoneNumber;
 		// contact
 		$profiel->email = $faker->email;
 		$profiel->sec_email = $faker->email;
-		$profiel->mobiel = self::cleanPhoneNumber($faker->phoneNumber);
+		$profiel->mobiel = $faker->e164PhoneNumber;
 		$profiel->linkedin = null;
 		$profiel->website = null;
 		// studie
@@ -124,14 +124,5 @@ class ProfielFixtureUtil
 	private static function getVerticale($faker)
 	{
 		return $faker->randomElement(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']);
-	}
-
-	/**
-	 * @param $phoneNumber
-	 * @return array|string|string[]
-	 */
-	private static function cleanPhoneNumber($phoneNumber)
-	{
-		return str_replace(['(', ')', ' ', '-'], '', $phoneNumber);
 	}
 }

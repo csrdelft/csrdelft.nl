@@ -69,6 +69,8 @@ class AccountFixtures extends Fixture
 			'Cie',
 			'P.'
 		);
+		$profielPubCie->email = 'test-mail@csrdelft.nl';
+		$profielPubCie->sec_email = 'test-mail2@csrdelft.nl';
 		$this->setReference(self::UID_PUBCIE, $profielPubCie);
 		$manager->persist($profielPubCie);
 		$account = $this->accountService->maakAccount(self::UID_PUBCIE);
