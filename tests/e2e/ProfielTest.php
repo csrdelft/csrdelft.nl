@@ -31,7 +31,7 @@ class ProfielTest extends BrowserTestCase
 		$crawler = $this->clickLink('Opslaan');
 
 		$this->assertStringEndsWith(
-			'/profiel/x1012',
+			'/profiel/x101',
 			$this->client->getCurrentURL(),
 			'Niet terug gekomen op de profiel pagina' . $crawler->text()
 		);
