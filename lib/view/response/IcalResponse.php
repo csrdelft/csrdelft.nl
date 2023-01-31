@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\response;
 
+use CsrDelft\common\Util\TextUtil;
 use Symfony\Component\HttpFoundation\Response;
 
 class IcalResponse extends Response
@@ -21,7 +22,7 @@ class IcalResponse extends Response
 				$this->content .= wordwrap(trim($line), 59, "\n ", true) . "\n";
 			}
 
-			$this->content = crlf_endings($this->content);
+			$this->content = TextUtil::crlf_endings($this->content);
 		}
 		return $this;
 	}

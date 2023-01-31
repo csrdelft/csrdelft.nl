@@ -4,6 +4,7 @@ namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\groepen\enum\CommissieFunctie;
 use CsrDelft\entity\groepen\enum\GroepStatus;
@@ -373,7 +374,10 @@ class Groep implements DataTableEntry, DisplayEntity
 
 	public function getUUID()
 	{
-		return $this->id . '@' . short_class($this) . '.csrdelft.nl';
+		return $this->id .
+			'@' .
+			ReflectionUtil::short_class($this) .
+			'.csrdelft.nl';
 	}
 
 	public function getId()

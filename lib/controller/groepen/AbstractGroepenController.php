@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\ChangeLogEntry;
@@ -328,7 +329,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$groepen = $this->repository->zoeken($zoekterm, $limit, $status);
 
 		foreach ($groepen as $groep) {
-			$type = classNameZonderNamespace(get_class($groep));
+			$type = ReflectionUtil::classNameZonderNamespace(get_class($groep));
 			$result[] = [
 				'url' => $groep->getUrl() . '#' . $groep->id,
 				'label' => 'Groepen',

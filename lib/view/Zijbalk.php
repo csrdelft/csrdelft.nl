@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view;
 
+use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
@@ -99,7 +100,7 @@ class Zijbalk
 	 */
 	public function getZijbalk()
 	{
-		return array_filter_empty([
+		return ArrayUtil::array_filter_empty([
 			$this->blockIsHetAl(),
 			$this->blockLustrum(),
 			$this->blockFavorieten(),

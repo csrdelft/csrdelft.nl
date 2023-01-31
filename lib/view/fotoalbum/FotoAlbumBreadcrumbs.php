@@ -3,6 +3,7 @@
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\view\Icon;
@@ -56,7 +57,7 @@ class FotoAlbumBreadcrumbs
 						break;
 					}
 				}
-				$subdir = join_paths($subdir, $albumnaam);
+				$subdir = PathUtil::join_paths($subdir, $albumnaam);
 				$breadcrumbs .=
 					'<li class="breadcrumb-item"><a href="/fotoalbum/' .
 					$subdir .
@@ -78,7 +79,7 @@ class FotoAlbumBreadcrumbs
 			$dropdown = '<select onchange="location.href=this.value;">';
 			foreach ($albums as $album) {
 				$dropdown .= '<option value="' . $album->getUrl() . '"';
-				if ($album->subdir === join_paths($subdir, $albumnaam)) {
+				if ($album->subdir === PathUtil::join_paths($subdir, $albumnaam)) {
 					$dropdown .= ' selected="selected"';
 				}
 				$dropdown .= '>' . $album->dirname . '</option>';

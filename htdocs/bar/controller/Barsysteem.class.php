@@ -1,5 +1,6 @@
 <?php
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\model\entity\LidStatus;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -199,7 +200,7 @@ SQL
 		$totaal = $this->getBestellingTotaal($bestelId);
 		$q = $this->db->prepare("UPDATE civi_saldo SET saldo = saldo - :totaal, laatst_veranderd = :laatstVeranderd WHERE uid=:socCieId ;");
 		$q->bindValue(":totaal", $totaal, PDO::PARAM_INT);
-		$q->bindValue(":laatstVeranderd", getDateTime());
+		$q->bindValue(":laatstVeranderd", DateUtil::getDateTime());
 
 		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_STR);
 		$q->execute();
@@ -228,12 +229,12 @@ SQL
 		}
 
 		if ($begin == "") {
-			$begin = getDateTime(time() - 15 * 3600);
+			$begin = DateUtil::getDateTime(time() - 15 * 3600);
 		} else {
 			$begin = $this->parseDate($begin) . " 00:00:00";
 		}
 		if ($eind == "") {
-			$eind = getDateTime();
+			$eind = DateUtil::getDateTime();
 		} else {
 			$eind = $this->parseDate($eind) . " 23:59:59";
 		}
@@ -284,7 +285,7 @@ SQL
 		// Substract new order from saldo
 		$q = $this->db->prepare("UPDATE civi_saldo SET saldo = saldo - :bestelTotaal, laatst_veranderd = :laatstVeranderd WHERE uid=:socCieId;");
 		$q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
-		$q->bindValue(":laatstVeranderd", getDateTime());
+		$q->bindValue(":laatstVeranderd", DateUtil::getDateTime());
 		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_STR);
 		$q->execute();
 

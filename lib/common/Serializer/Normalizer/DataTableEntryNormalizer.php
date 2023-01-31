@@ -2,6 +2,7 @@
 
 namespace CsrDelft\common\Serializer\Normalizer;
 
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
@@ -41,7 +42,7 @@ class DataTableEntryNormalizer implements ContextAwareNormalizerInterface
 			sprintf(
 				'%s@%s.csrdelft.nl',
 				implode('.', $metadata->getIdentifierValues($topic)),
-				short_class($topic)
+				ReflectionUtil::short_class($topic)
 			)
 		);
 

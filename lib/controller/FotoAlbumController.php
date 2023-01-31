@@ -6,13 +6,13 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
+use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\repository\fotoalbum\FotoTagsRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\fotoalbum\FotoAlbumBreadcrumbs;
 use CsrDelft\view\fotoalbum\FotoAlbumToevoegenForm;
 use CsrDelft\view\fotoalbum\FotosDropzone;
@@ -101,8 +101,8 @@ class FotoAlbumController extends AbstractController
 		$formulier = new FotoAlbumToevoegenForm($album);
 		if ($request->getMethod() == 'POST' && $formulier->validate()) {
 			$subalbum = $formulier->findByName('subalbum')->getValue();
-			$album->path = join_paths($album->path, $subalbum);
-			$album->subdir = join_paths($album->subdir, $subalbum);
+			$album->path = PathUtil::join_paths($album->path, $subalbum);
+			$album->subdir = PathUtil::join_paths($album->subdir, $subalbum);
 			if (!$album->exists()) {
 				$this->fotoAlbumRepository->create($album);
 			}
@@ -455,7 +455,9 @@ class FotoAlbumController extends AbstractController
 		if (!preg_match('/\.(JPE?G|PNG|jpe?g|png)/', $foto)) {
 			throw $this->createNotFoundException();
 		}
-		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto))) {
+		if (
+			!PathUtil::path_valid(PHOTOALBUM_PATH, PathUtil::join_paths($dir, $foto))
+		) {
 			throw $this->createNotFoundException();
 		}
 	}

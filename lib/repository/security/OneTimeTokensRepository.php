@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\security;
 
+use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\OneTimeToken;
 use CsrDelft\repository\AbstractRepository;
@@ -104,7 +105,7 @@ class OneTimeTokensRepository extends AbstractRepository
 	 */
 	public function createToken(Account $account, $url)
 	{
-		$rand = crypto_rand_token(255);
+		$rand = CryptoUtil::crypto_rand_token(255);
 		$token = new OneTimeToken();
 		$token->account = $account;
 		$token->uid = $account->uid;

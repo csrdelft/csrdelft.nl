@@ -4,6 +4,7 @@ namespace CsrDelft\entity\pin;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
@@ -154,7 +155,11 @@ class PinTransactieMatch implements DataTableEntry
 	public function getUUID()
 	{
 		return strtolower(
-			sprintf('%s@%s.csrdelft.nl', $this->id, short_class($this))
+			sprintf(
+				'%s@%s.csrdelft.nl',
+				$this->id,
+				ReflectionUtil::short_class($this)
+			)
 		);
 	}
 

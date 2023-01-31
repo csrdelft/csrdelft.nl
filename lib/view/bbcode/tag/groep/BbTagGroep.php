@@ -4,6 +4,7 @@ namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Util\TextUtil;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\security\enum\AccessAction;
@@ -135,7 +136,7 @@ abstract class BbTagGroep extends BbTag
 
 			return vsprintf(
 				'<groep class="vue-context" :groep="%s" :settings="%s"></groep>',
-				[$groepJson, vue_encode($settings)]
+				[$groepJson, TextUtil::vue_encode($settings)]
 			);
 		}
 		$view = new GroepView($groep, null, false, true);

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\agenda;
 
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
@@ -149,7 +150,7 @@ class AgendaItem implements Agendeerbaar
 			sprintf(
 				'%s@%s.csrdelft.nl',
 				implode('.', [$this->item_id]),
-				short_class($this)
+				ReflectionUtil::short_class($this)
 			)
 		);
 	}

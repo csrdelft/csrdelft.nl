@@ -3,6 +3,7 @@
 namespace CsrDelft\service;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\fiscaat\CiviProduct;
@@ -187,7 +188,7 @@ SQL
 			'UPDATE civi_saldo SET saldo = saldo - :totaal, laatst_veranderd = :laatstVeranderd WHERE uid=:socCieId ;'
 		);
 		$q->bindValue(':totaal', $totaal, PDO::PARAM_INT);
-		$q->bindValue(':laatstVeranderd', getDateTime());
+		$q->bindValue(':laatstVeranderd', DateUtil::getDateTime());
 
 		$q->bindValue(':socCieId', $data->persoon->socCieId, PDO::PARAM_STR);
 		$q->execute();

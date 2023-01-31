@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\common\Util\UrlUtil;
+
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -30,7 +32,10 @@ class UrlField extends TextField
 			return true;
 		}
 		// controleren of het een geldige url is
-		if (!url_like($this->value) && !str_starts_with($this->value, '/')) {
+		if (
+			!UrlUtil::url_like($this->value) &&
+			!str_starts_with($this->value, '/')
+		) {
 			$this->error = 'Geen geldige url';
 		}
 		return $this->error === '';

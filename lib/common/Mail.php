@@ -2,6 +2,9 @@
 
 namespace CsrDelft\common;
 
+use CsrDelft\common\Util\HostUtil;
+use CsrDelft\common\Util\UrlUtil;
+
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -42,7 +45,7 @@ class Mail
 	public function addTo(array $to)
 	{
 		foreach ($to as $email => $name) {
-			if (!email_like($email)) {
+			if (!UrlUtil::email_like($email)) {
 				throw new CsrGebruikerException(
 					'Invalid e-mailadres in TO "' . $email . '"'
 				);
@@ -72,13 +75,13 @@ class Mail
 
 	public function inDebugMode(): bool
 	{
-		return !isSyrinx();
+		return !HostUtil::isSyrinx();
 	}
 
 	public function addBcc(array $bcc)
 	{
 		foreach ($bcc as $email => $name) {
-			if (!email_like($email)) {
+			if (!UrlUtil::email_like($email)) {
 				throw new CsrGebruikerException(
 					'Invalid e-mailadres in BCC "' . $email . '"'
 				);
@@ -111,7 +114,7 @@ class Mail
 	 */
 	public function setFrom(string $email, string $name = null)
 	{
-		if (!email_like($email)) {
+		if (!UrlUtil::email_like($email)) {
 			throw new CsrGebruikerException(
 				'Emailadres in $from geen valide e-mailadres'
 			);
@@ -136,7 +139,7 @@ class Mail
 
 	public function setReplyTo(string $email, string $name = null)
 	{
-		if (!email_like($email)) {
+		if (!UrlUtil::email_like($email)) {
 			throw new CsrGebruikerException(
 				'Emailadres in $reply_to geen valide e-mailadres'
 			);

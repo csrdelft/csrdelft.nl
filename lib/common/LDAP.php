@@ -13,6 +13,8 @@ namespace CsrDelft\common;
 // van de ldap_escape_(dn|attribute) functies!
 // -------------------------------------------------------------------
 
+use CsrDelft\common\Util\TextUtil;
+
 class LDAP
 {
 	//## private ###
@@ -84,7 +86,7 @@ class LDAP
 		}
 
 		// sanitaire controle
-		if (!is_utf8($user) || !is_utf8($pass)) {
+		if (!TextUtil::is_utf8($user) || !TextUtil::is_utf8($pass)) {
 			return false;
 		}
 

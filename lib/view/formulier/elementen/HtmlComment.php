@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\formulier\elementen;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\view\formulier\FormElement;
 
 /**
@@ -54,6 +55,6 @@ class HtmlComment implements FormElement
 
 	public function getType()
 	{
-		return classNameZonderNamespace(get_class($this));
+		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}
 }

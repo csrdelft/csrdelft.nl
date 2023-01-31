@@ -5,6 +5,8 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\profiel\Profiel;
@@ -386,7 +388,7 @@ class ProfielController extends AbstractController
 				$values['email'],
 				$values['mobiel'],
 			]);
-			$token = base64url_encode($string);
+			$token = UrlUtil::base64url_encode($string);
 			$link = $this->generateUrl(
 				'extern-inschrijven',
 				['pre' => $token],
@@ -415,7 +417,7 @@ class ProfielController extends AbstractController
 		string $pre,
 		EntityManagerInterface $em
 	): Response {
-		if (isDatumVoorbij('2021-08-28 00:00:00')) {
+		if (DateUtil::isDatumVoorbij('2021-08-28 00:00:00')) {
 			return $this->render('extern-inschrijven/tekstpagina.html.twig', [
 				'titel' => 'C.S.R. Delft - Inschrijven',
 				'content' => '
@@ -436,7 +438,7 @@ class ProfielController extends AbstractController
 		if (empty($pre)) {
 			throw new NotFoundHttpException();
 		}
-		$data = base64url_decode($pre);
+		$data = UrlUtil::base64url_decode($pre);
 		if (!$data) {
 			throw new NotFoundHttpException();
 		}

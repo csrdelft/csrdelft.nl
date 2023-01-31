@@ -3,10 +3,10 @@
 namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Map;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
-use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -60,21 +60,26 @@ class FotoAlbum extends Map
 	public function __construct($path = null, $absolute = false)
 	{
 		if ($path === null) {
-			$this->path = realpathunix(join_paths(PHOTOALBUM_PATH, $this->subdir));
+			$this->path = PathUtil::realpathunix(
+				PathUtil::join_paths(PHOTOALBUM_PATH, $this->subdir)
+			);
 		} elseif (
 			$absolute == true &&
-			str_starts_with(realpathunix($path), realpathunix(PHOTOALBUM_PATH))
+			str_starts_with(
+				PathUtil::realpathunix($path),
+				PathUtil::realpathunix(PHOTOALBUM_PATH)
+			)
 		) {
 			// Check that $path is inside PHOTOALBUM_PATH
 			$this->path = rtrim($path, '/');
 			$this->subdir = substr(
 				$this->path,
-				strlen(realpathunix(PHOTOALBUM_PATH) . '/')
+				strlen(PathUtil::realpathunix(PHOTOALBUM_PATH) . '/')
 			);
-		} elseif (path_valid(PHOTOALBUM_PATH, $path)) {
+		} elseif (PathUtil::path_valid(PHOTOALBUM_PATH, $path)) {
 			// Check if $path not trying to traverse outside PHOTOALBUM_PATH
 			$this->path = rtrim(
-				realpathunix(join_paths(PHOTOALBUM_PATH, $path)),
+				PathUtil::realpathunix(PathUtil::join_paths(PHOTOALBUM_PATH, $path)),
 				'/'
 			);
 			//We verwijderen het beginstuk van de string
@@ -87,7 +92,7 @@ class FotoAlbum extends Map
 
 	public function getPath()
 	{
-		return $this->path ?? join_paths(PHOTOALBUM_PATH, $this->subdir);
+		return $this->path ?? PathUtil::join_paths(PHOTOALBUM_PATH, $this->subdir);
 	}
 
 	/**
@@ -105,7 +110,7 @@ class FotoAlbum extends Map
 
 	public function getUrl()
 	{
-		return '/fotoalbum/' . direncode($this->subdir);
+		return '/fotoalbum/' . PathUtil::direncode($this->subdir);
 	}
 
 	public function isEmpty()
@@ -135,7 +140,7 @@ class FotoAlbum extends Map
 				return [];
 			}
 			foreach ($scan as $entry) {
-				if (is_file(join_paths($this->path, $entry))) {
+				if (is_file(PathUtil::join_paths($this->path, $entry))) {
 					$foto = new Foto($entry, $this);
 					if ($foto->isComplete()) {
 						$this->fotos[] = $foto;
@@ -179,11 +184,11 @@ class FotoAlbum extends Map
 				if (
 					substr($entry, 0, 1) !== '.' &&
 					substr($entry, 0, 1) !== '_' &&
-					is_dir(join_paths($this->path, $entry))
+					is_dir(PathUtil::join_paths($this->path, $entry))
 				) {
 					$subalbum = ContainerFacade::getContainer()
 						->get(FotoAlbumRepository::class)
-						->getFotoAlbum(join_paths($this->subdir, $entry));
+						->getFotoAlbum(PathUtil::join_paths($this->subdir, $entry));
 					if ($subalbum) {
 						$this->subalbums[] = $subalbum;
 						if ($recursive) {

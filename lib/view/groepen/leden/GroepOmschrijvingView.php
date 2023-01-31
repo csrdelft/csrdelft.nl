@@ -8,6 +8,7 @@
 
 namespace CsrDelft\view\groepen\leden;
 
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\FormElement;
@@ -34,7 +35,7 @@ class GroepOmschrijvingView implements FormElement, ToResponse
 
 	public function getType()
 	{
-		return classNameZonderNamespace(get_class($this));
+		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}
 
 	public function getModel()

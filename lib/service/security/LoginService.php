@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Security\JwtToken;
 use CsrDelft\common\Security\PrivateTokenToken;
 use CsrDelft\common\Security\TemporaryToken;
+use CsrDelft\common\Util\HostUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
@@ -86,7 +87,7 @@ class LoginService
 
 	public function _getUid()
 	{
-		if (isCLI()) {
+		if (HostUtil::isCLI()) {
 			return static::$cliUid;
 		}
 
@@ -136,7 +137,7 @@ class LoginService
 	 */
 	public function getAuthenticationMethod()
 	{
-		if (isCLI()) {
+		if (HostUtil::isCLI()) {
 			return AuthenticationMethod::password_login;
 		}
 

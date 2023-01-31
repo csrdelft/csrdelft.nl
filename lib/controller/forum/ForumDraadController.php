@@ -4,6 +4,7 @@ namespace CsrDelft\controller\forum;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\SimpleSpamFilter;
+use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
@@ -408,7 +409,7 @@ class ForumDraadController extends AbstractController
 
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-			if (!email_like($mailadres)) {
+			if (!UrlUtil::email_like($mailadres)) {
 				setMelding('U moet een geldig e-mailadres opgeven!', -1);
 				$requestStack->getSession()->set('forum_bericht', $tekst);
 				return $redirect;

@@ -3,6 +3,8 @@
 namespace CsrDelft\view\formulier\uploadvelden;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\FileUtil;
+use CsrDelft\common\Util\PathUtil;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\view\formulier\invoervelden\InputField;
@@ -62,7 +64,7 @@ class UploadFileField extends InputField
 		} elseif ($this->value['error'] == UPLOAD_ERR_INI_SIZE) {
 			$this->error =
 				'Bestand is te groot: Maximaal ' .
-				format_filesize(getMaximumFileUploadSize());
+				FileUtil::format_filesize(FileUtil::getMaximumFileUploadSize());
 		} elseif ($this->value['error'] != UPLOAD_ERR_OK) {
 			$this->error = 'Upload-error: code ' . $this->value['error'];
 		} elseif (
@@ -79,7 +81,9 @@ class UploadFileField extends InputField
 			$this->error =
 				'Bestandstype niet toegestaan: ' .
 				htmlspecialchars($this->model->mimetype);
-		} elseif (!checkMimetype($this->model->filename, $this->model->mimetype)) {
+		} elseif (
+			!FileUtil::checkMimetype($this->model->filename, $this->model->mimetype)
+		) {
 			$this->error =
 				'Bestandstype komt niet overeen met bestandsnaam: ' .
 				$this->model->mimetype;
@@ -92,17 +96,17 @@ class UploadFileField extends InputField
 		parent::opslaan($directory, $filename, $overwrite);
 		$moved = @move_uploaded_file(
 			$this->value['tmp_name'],
-			join_paths($directory, $filename)
+			PathUtil::join_paths($directory, $filename)
 		);
 		if (!$moved) {
 			throw new CsrException(
 				'Verplaatsen mislukt: ' . htmlspecialchars($this->value['tmp_name'])
 			);
 		}
-		if (false === @chmod(join_paths($directory, $filename), 0644)) {
+		if (false === @chmod(PathUtil::join_paths($directory, $filename), 0644)) {
 			throw new CsrException(
 				'Geen eigenaar van bestand: ' .
-					htmlspecialchars(join_paths($directory, $filename))
+					htmlspecialchars(PathUtil::join_paths($directory, $filename))
 			);
 		}
 		$this->model->directory = $directory;
@@ -129,14 +133,14 @@ class UploadFileField extends InputField
 			' accept="' .
 			$accept .
 			'" data-max-size="' .
-			getMaximumFileUploadSize() .
+			FileUtil::getMaximumFileUploadSize() .
 			'" />';
 	}
 
 	public function getJavascript()
 	{
-		$max = getMaximumFileUploadSize();
-		$format = format_filesize($max);
+		$max = FileUtil::getMaximumFileUploadSize();
+		$format = FileUtil::format_filesize($max);
 		return parent::getJavascript() .
 			<<<JS
 

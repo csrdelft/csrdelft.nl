@@ -3,6 +3,7 @@
 namespace CsrDelft\common\Serializer\Normalizer;
 
 use ArrayObject;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
@@ -53,7 +54,7 @@ class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface
 				sprintf(
 					'%s@%s.csrdelft.nl',
 					implode('.', $id),
-					short_class($removed->getClass())
+					ReflectionUtil::short_class($removed->getClass())
 				)
 			),
 			'remove' => true,

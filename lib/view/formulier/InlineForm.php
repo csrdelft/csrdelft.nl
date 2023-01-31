@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier;
 
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormKnoppen;
@@ -98,7 +99,7 @@ abstract class InlineForm extends Formulier implements FormElement
 
 	public function getType()
 	{
-		return classNameZonderNamespace(get_class($this));
+		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}
 
 	/**

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\command;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\repository\DebugLogRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\instellingen\InstellingenRepository;
@@ -168,7 +169,7 @@ class CronCommand extends Command
 
 		$finish = microtime(true) - $start;
 		$output->writeln(
-			getDateTime() . ' Finished in ' . (int) $finish . ' seconds',
+			DateUtil::getDateTime() . ' Finished in ' . (int) $finish . ' seconds',
 			OutputInterface::VERBOSITY_VERBOSE
 		);
 
