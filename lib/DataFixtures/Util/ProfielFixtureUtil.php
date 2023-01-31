@@ -12,10 +12,12 @@ use Faker\Generator;
 class ProfielFixtureUtil
 {
 	/**
+	 * @param Generator $faker
+	 * @param $uid
+	 * @param string|null $nickname
+	 * @param string|null $voornaam
+	 * @param string|null $achternaam
 	 * @param string $voorletters
-	 * @param string $achternaam
-	 * @param string $voornaam
-	 * @param string $nickname
 	 * @return void
 	 */
 	public static function maakProfiel(
@@ -65,20 +67,16 @@ class ProfielFixtureUtil
 		$profiel->postcode = $faker->postcode;
 		$profiel->woonplaats = $faker->city;
 		$profiel->land = $faker->country;
-		$profiel->telefoon = str_replace(['(', ')', ' '], '', $faker->phoneNumber);
+		$profiel->telefoon = self::cleanPhoneNumber($faker->phoneNumber);
 		$profiel->o_adres = $faker->streetAddress;
 		$profiel->o_postcode = $faker->postcode;
 		$profiel->o_woonplaats = $faker->city;
 		$profiel->o_land = $faker->country;
-		$profiel->o_telefoon = str_replace(
-			['(', ')', ' '],
-			'',
-			$faker->phoneNumber
-		);
+		$profiel->o_telefoon = self::cleanPhoneNumber($faker->phoneNumber);
 		// contact
 		$profiel->email = $faker->email;
 		$profiel->sec_email = $faker->email;
-		$profiel->mobiel = str_replace(['(', ')', ' '], '', $faker->phoneNumber);
+		$profiel->mobiel = self::cleanPhoneNumber($faker->phoneNumber);
 		$profiel->linkedin = null;
 		$profiel->website = null;
 		// studie
@@ -126,5 +124,14 @@ class ProfielFixtureUtil
 	private static function getVerticale($faker)
 	{
 		return $faker->randomElement(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']);
+	}
+
+	/**
+	 * @param $phoneNumber
+	 * @return array|string|string[]
+	 */
+	private static function cleanPhoneNumber($phoneNumber)
+	{
+		return str_replace(['(', ')', ' ', '-'], '', $phoneNumber);
 	}
 }

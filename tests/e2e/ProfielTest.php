@@ -30,6 +30,12 @@ class ProfielTest extends BrowserTestCase
 		$this->updateField($crawler, 'studie', 'TestStudie');
 		$crawler = $this->clickLink('Opslaan');
 
+		$this->assertStringEndsWith(
+			'/profiel',
+			$this->client->getCurrentURL(),
+			'Niet terug gekomen op de profiel pagina'
+		);
+
 		$this->assertEquals(
 			'TestStudie',
 			$this->getProfielValue($crawler, 'Studie')
