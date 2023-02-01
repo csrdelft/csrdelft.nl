@@ -332,7 +332,11 @@ section {
 					.toggler:hover {
 						color: $kleur-blauw-12;
 					}
-
+					.bb-block {
+						border: 2px solid $kleur-blauw-1;
+						background-color: $kleur-geel-19;
+						box-shadow: 2px 2px 10px $kleur-blauw-1;
+					}
 					.ketzers {
 						.ketzer {
 							div {
