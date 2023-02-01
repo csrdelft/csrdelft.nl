@@ -40,7 +40,8 @@
 <section class="poster-boven size-16x9">
 	<a id="poster" class="anchor"></a>
 		<div class="poster">
-			<img src="/images/dies2023/posterLiggend.png" alt="Logo menu" />
+		{# MAGNUM_OPUS_themaposter_liggend_stek-01.jpg #}
+			<img src="/images/dies2023/posterBovenS.png" alt="Logo menu" />
 		</div>
 	<br/>
 </section>
@@ -72,12 +73,15 @@
 		</div>
 
 		<div class="poster">
-			<img src="/images/dies2023/MAHNUM_OPUS_programmaposter_DiesCievanBaalen_stek-01.png" alt="Logo menu" />
+			<img src="/images/dies2023/themaPoster.png" alt="Logo menu" />
 			<a class="d-none posterLink" href"#14feb"></a>
 		</div>
-
+		<div id="anchor-14-feb"></div>
+		
 		<div class="divider">
 		</div>
+
+		<a class="anchor" id="14-feb"></a>
 		<div class="d-flex dag flex-column">
 			<h2 class="ondertitel col-md-12">Dinsdag 14 februari</h2>
 			<div class="activiteit row">
@@ -136,6 +140,14 @@
 					<div class="d-flex row">
 						<p class="col-md-12">Na de OpeningsLeO bent u van harte welkom om op Confide te blijven om gezellig te borrelen. Ook zullen dan de eerste debatten van
 						het debatteertoernooi plaatsvinden onder leiding van am. Debatmeester. Een mooie gelegenheid om het academische debat aan te zwengelen!</p>
+					</div>
+					<div class="dies-activiteit-ketzers col-md-12">
+						{# <a class="toggler btn btn-primary">Laat ketzers zien</a> #}
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=12132]' | bbcode }}
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -466,14 +478,20 @@
 						<p class="col-md-12">
 							De eerste dag van de week wilt u natuurlijk goed afsluiten met een heerlijk diner verzorgt door huize Van Speijk. Bijkomend voordeel: vervolgens kunt u gelijk door naar de H.V!
 						</p>
-						{# <div class="dies-activiteit-ketzers col-md-12"> #}
-							{# <a class="toggler btn btn-primary">Laat ketzers zien</a> #}
-							{# <div class="ketzers"> #}
-								{# <div class="ketzer"> #}
-									{# {{ '[activiteit=??]' | bbcode }} #}
-								{# </div> #}
-							{# </div> #}
-						{# </div> #}
+						<div class="dies-activiteit-ketzers col-md-12">
+							<div class="ketzers">
+								<div class="ketzer">
+									{{ '[maaltijd=2423]' | bbcode }}
+								</div>
+							</div>
+						</div>
+						<div class="dies-activiteit-ketzers col-md-12">
+							<div class="ketzers">
+								<div class="ketzer">
+									{{ '[maaltijd=2424]' | bbcode }}
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -508,14 +526,13 @@
 						<p class="col-md-12">
 							Bereid uw buikspieren maar voor, want het is weer tijd voor de jaarlijkse cabaretavond. Onder leiding van CaCie Nel zal deze avond in het teken staan van een vleugje humor, maar vooral veel kaas.
 						</p>
-						{# <div class="dies-activiteit-ketzers col-md-12"> #}
-							{# <a class="toggler btn btn-primary">Laat ketzers zien</a> #}
-							{# <div class="ketzers"> #}
-								{# <div class="ketzer"> #}
-									{# {{ '[activiteit]' | bbcode }} #}
-								{# </div> #}
-							{# </div> #}
-						{# </div> #}
+						<div class="dies-activiteit-ketzers col-md-12">
+							<div class="ketzers">
+								<div class="ketzer">
+									{{ '[activiteit=12126]' | bbcode }}
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -748,5 +765,8 @@
 			</p>
 		</div>
 	</div>
+</section>
+<section class="sponsor">
+	<img src="/images/dies2023/galjemaSponsor.png" alt="Galjema sponsor"/>
 </section>
 </body>
