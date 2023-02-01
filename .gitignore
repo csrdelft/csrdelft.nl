@@ -20,6 +20,7 @@ etc/*.kdbx
 etc/bot.htpasswd
 etc/csrdelft.nl.csr
 etc/csrdelft.nl.key
+etc/**/*.pem
 htdocs/download
 htdocs/enquete
 htdocs/google*.html
