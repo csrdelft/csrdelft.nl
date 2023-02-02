@@ -15,13 +15,13 @@
 			<div class="float-end">
 				{% set prijs = maaltijd.prijs | format_bedrag %}
 				{% if aanmelding is defined and aanmelding is not empty and aanmelding.saldoStatus < 0 %}
-					{{ icon("ban", null, "U hebt een negatief CiviSaldo!&#013;Maaltijdprijs: " ~ prijs) }}
+					{{ icon("sack-xmark", null, "U hebt een negatief CiviSaldo!&#013;Maaltijdprijs: " ~ prijs, "text-danger") }}
 				{% elseif aanmelding is defined and aanmelding is not empty and aanmelding.saldoStatus < 2 %}
-					{{ icon("ban", null, "Uw CiviSaldo is te laag!&#013;Maaltijdprijs: " ~ prijs) }}
+					{{ icon("sack-xmark", null, "Uw CiviSaldo is te laag!&#013;Maaltijdprijs: " ~ prijs, "text-danger") }}
 				{% elseif maaltijd.prijs != standaardprijs %}
-					{{ icon("money-bill", null, "Afwijkende maaltijdprijs: " ~ prijs) }}
+					{{ icon("money-bill-trend-up", null, "Afwijkende maaltijdprijs: " ~ prijs) }}
 				{% else %}
-					{{ icon("money-bill-wave", null, "Maaltijdprijs: " ~ prijs) }}
+					{{ icon("money-bill", null, "Maaltijdprijs: " ~ prijs) }}
 				{% endif %}
 			</div>
 		</div>

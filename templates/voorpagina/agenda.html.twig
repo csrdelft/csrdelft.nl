@@ -10,7 +10,7 @@
 		</h3>
 		{% for item in group.items %}
 		<div class="list-group-item list-group-item-action d-flex flex-row align-items-center p-0 border-0">
-			<a href="{{ item.url }}" title="{{ item.beschrijving }}" class="d-block flex-grow-1">
+			<a href="{{ item.url }}" title="{{ item.beschrijving }}" class="d-block flex-grow-1" style="min-width: 0;">
 				<p class="text-truncate flex-grow-1">
 					<span class="agenda-item-moment d-inline-block">
 						{{ date(item.beginMoment) | time_format }}
