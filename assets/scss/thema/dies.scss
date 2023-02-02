@@ -95,7 +95,6 @@ $kleur-geel-18: #f9f498;
 $kleur-geel-19: #fbf9c9;
 $kleur-geel-20: #fdfbe2;
 
-
 $white: $kleur-blauw-1;
 $gray-900: $kleur-geel-20 !default;
 $gray-800: $kleur-geel-19 !default;
@@ -233,5 +232,5 @@ nav {
 	box-shadow: 0 2px 10px $kleur-geel-20; /* inner white */
 }
 a {
-	color: $kleur-geel-19!important;
+	color: $kleur-geel-19 !important;
 }
