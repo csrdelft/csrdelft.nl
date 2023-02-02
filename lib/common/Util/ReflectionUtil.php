@@ -3,6 +3,7 @@
 namespace CsrDelft\common\Util;
 
 use InvalidArgumentException;
+use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 
