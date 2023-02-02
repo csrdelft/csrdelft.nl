@@ -189,7 +189,7 @@ export const slaOpForumIds = (parentSelector = 'section.forum-deel') => {
 	try {
 		const forumDeel = select<HTMLElement>(parentSelector);
 		if (forumDeel) {
-			localStorage.setItem('forum_draden_ids', forumDeel.dataset.delenList);
+			localStorage.setItem('forum_draden', forumDeel.dataset.delenList);
 		}
 	} catch (error) {
 		console.error(error);
@@ -205,31 +205,51 @@ export const laadForumIds = () => {
 		const onderwerpRegex = /\d+/g;
 
 		if (volgendOnderwerpButton && vorigOnderwerpButton) {
-			const forumDradenIds = localStorage.getItem('forum_draden_ids');
+			const forumDraden = localStorage.getItem('forum_draden');
 
-			if (forumDradenIds) {
+			if (forumDraden) {
 				// Haal id van huidig onderwerp uit de pathname
 				const huidigOnderwerp = window.location.pathname.match(onderwerpRegex);
 
 				if (huidigOnderwerp[0]) {
-					const ids = forumDradenIds.split(',');
-					const huidigeIndex = ids.indexOf(huidigOnderwerp[0]);
+					type ForumDraad = { id: number; titel: string };
+					const draden: ForumDraad[] = JSON.parse(forumDraden);
+					const huidigeIndex = draden.findIndex(
+						(d) => String(d.id) === huidigOnderwerp[0]
+					);
 
-					const vorigeId = ids[huidigeIndex - 1];
-					const volgendeId = ids[huidigeIndex + 1];
+					if (huidigeIndex === -1) throw new Error('Index niet gevonden');
 
-					if (vorigeId) {
+					const vorigeDraad = draden[huidigeIndex - 1];
+					const volgendeDraad = draden[huidigeIndex + 1];
+
+					if (vorigeDraad) {
 						vorigOnderwerpButton.setAttribute(
 							'href',
-							window.location.pathname.replace(onderwerpRegex, vorigeId) +
-								window.location.hash
+							window.location.pathname.replace(
+								onderwerpRegex,
+								String(vorigeDraad.id)
+							) + window.location.hash
+						);
+					} else {
+						vorigOnderwerpButton.setAttribute(
+							'href',
+							window.location.origin + '/forum/recent' + window.location.hash
 						);
 					}
-					if (volgendeId) {
+
+					if (volgendeDraad) {
 						volgendOnderwerpButton.setAttribute(
 							'href',
-							window.location.pathname.replace(onderwerpRegex, volgendeId) +
-								window.location.hash
+							window.location.pathname.replace(
+								onderwerpRegex,
+								String(volgendeDraad.id)
+							) + window.location.hash
+						);
+					} else {
+						volgendOnderwerpButton.setAttribute(
+							'href',
+							window.location.origin + '/forum/recent' + window.location.hash
 						);
 					}
 				}

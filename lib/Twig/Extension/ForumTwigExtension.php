@@ -89,21 +89,27 @@ class ForumTwigExtension extends AbstractExtension
 
 	public function getForumDradenIds($forum_draden)
 	{
-		$ids_from_draden = function (ForumDraad $draad): int {
-			return $draad->draad_id;
+		$ids_from_draden = function (ForumDraad $draad) {
+			return [
+				'id' => $draad->draad_id,
+				'titel' => $draad->titel,
+			];
 		};
 
 		// Check of het een Array is (zoals bij 'forum/recent/') of een ArrayIterator (zoals bij deelfora) want array_map moet een Array hebben
 		if (is_array($forum_draden)) {
-			$forum_draden_ids = array_map($ids_from_draden, $forum_draden);
+			$forum_draden_ids = array_map(
+				$ids_from_draden,
+				array_values($forum_draden)
+			);
 		} else {
 			$forum_draden_ids = array_map(
 				$ids_from_draden,
-				iterator_to_array($forum_draden)
+				array_values(iterator_to_array($forum_draden))
 			);
 		}
 
-		return implode(',', $forum_draden_ids);
+		return json_encode((array) $forum_draden_ids);
 	}
 
 	public function getAantalVerborgenVoorLid()
