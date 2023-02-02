@@ -1,12 +1,3 @@
-// $kleur-primair: #903921;
-// $kleur-secundair: #c8611a;
-// $kleur-textheader: #d08976;
-// $kleur-text: #fffbfa;
-// $kleur-hover: #e9600b;
-
-// $kleur-groen: #abd1b5;
-// $kleur-rood: #b0413e;
-
 @font-face {
 	font-family: "valentino";
 	src: url("../../fonts/dies2023/valentino.otf");
@@ -16,60 +7,15 @@ $font: Calibri, sans-serif;
 $font-family-base: $font;
 $headings-font-family: "valentino" ($font, uppercase);
 
-// $theme-colors: (
-// 	"primary": $kleur-primair,
-// 	"danger": #e54b4b,
-// 	"white": $kleur-text,
-// );
-
-// $card-bg: $kleur-primair;
-// $list-group-bg: $kleur-primair;
-
-// $link-color: $kleur-text;
-// $link-hover-color: $kleur-hover;
-// $body-bg: $kleur-secundair;
-// $body-color: $kleur-text;
-
-// $bb-block-bg: $kleur-primair;
-// $bb-alt-bg: darken($body-bg, 4%);
-// $bb-hover-bg: $kleur-hover;
-// $menu-primary-hover: $kleur-textheader;
-// $menu-bg: $body-bg;
-// $menu-color: $body-color;
-// $menu-small-bg: $body-bg;
-// $menu-small-color: $body-color;
-
-// $modal-content-bg: $kleur-secundair;
-
-// $zoeken-active-bg: lighten($body-bg, 10%);
-
-// $tabel-header: $kleur-secundair;
-// $tabel-regel-licht: $kleur-secundair;
-// $tabel-regel-donker: lighten($kleur-secundair, 5%);
-// $tabel-hover: darken($kleur-secundair, 5%);
-
-// $footer-background: darken($kleur-primair, 5%);
-// $maaltijdketzer-bg: $kleur-primair;
-
-// $list-group-action-color: $kleur-text;
-// $list-group-hover-bg: $kleur-textheader;
-// $text-muted: #fffbfa;
-
-// /* importeer basis */
-// @import "../base";
-
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-	font-family: "valentino", cursive; // sans-serif;
+	font-family: "valentino", cursive;
 }
 
-// h5 {
-// 	color: $kleur-textheader;
-// }
 
 $kleur-blauw-1: #121534;
 $kleur-blauw-2: #1e2050;
@@ -82,12 +28,6 @@ $kleur-paars-7: #632f7a;
 $kleur-paars-8: #8752a2;
 $kleur-paars-9: #b28abf;
 $kleur-paars-10: #ccb7d8;
-
-$kleur-blauw-11: #6da9dd;
-$kleur-blauw-12: #7db7e4;
-$kleur-blauw-13: #85c6ea;
-$kleur-blauw-14: #a9e0f5;
-$kleur-blauw-15: #bfe6f7;
 
 $kleur-geel-16: #ffd37a;
 $kleur-geel-17: #faea95;
@@ -117,27 +57,6 @@ $light: $kleur-blauw-1 !default;
 $dark: $gray-800 !default;
 $yiq-text-dark: black !default;
 $yiq-text-light: $gray-900 !default;
-
-// @if not variable-exists("headings-font-family") {
-// 	@font-face {
-// 		font-family: "Ubuntu-Light";
-// 		src: url("../../fonts/dark-mode/Ubuntu-Light.ttf") format("truetype"),
-// 			url("../../fonts/dark-mode/Ubuntu-Light.ttf") format("truetype");
-// 		font-weight: normal;
-// 		font-style: normal;
-// 	}
-
-// 	@font-face {
-// 		font-family: "Ubuntu-Medium";
-// 		src: url("../../fonts/dark-mode/Ubuntu-Medium.ttf") format("truetype"),
-// 			url("../../fonts/dark-mode/Ubuntu-Medium.ttf") format("truetype");
-// 		font-weight: normal;
-// 		font-style: normal;
-// 	}
-
-// 	$font-family-base: "Ubuntu-Medium", sans-serif !default;
-// 	$headings-font-family: "Ubuntu-Medium", sans-serif !default;
-// }
 
 /** Stek specifieke variabelen. */
 
