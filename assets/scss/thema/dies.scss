@@ -1,62 +1,11 @@
-$kleur-primair: #903921;
-$kleur-secundair: #c8611a;
-$kleur-textheader: #d08976;
-$kleur-text: #fffbfa;
-$kleur-hover: #e9600b;
-
-$kleur-groen: #abd1b5;
-$kleur-rood: #b0413e;
-
 @font-face {
-	font-family: BossaNovaMVB;
-	src: url("../../fonts/dies-2021/BossaNovaMVB.otf");
+	font-family: "valentino";
+	src: url("../../fonts/dies2023/valentino.otf");
 }
 
 $font: Calibri, sans-serif;
 $font-family-base: $font;
-$headings-font-family: ($font, uppercase);
-
-$theme-colors: (
-	"primary": $kleur-primair,
-	"danger": #e54b4b,
-	"white": $kleur-text,
-);
-
-$card-bg: $kleur-primair;
-$list-group-bg: $kleur-primair;
-
-$link-color: $kleur-text;
-$link-hover-color: $kleur-hover;
-$body-bg: $kleur-secundair;
-$body-color: $kleur-text;
-
-$bb-block-bg: $kleur-primair;
-$bb-alt-bg: darken($body-bg, 4%);
-$bb-hover-bg: $kleur-hover;
-$menu-primary-hover: $kleur-textheader;
-$menu-bg: $body-bg;
-$menu-color: $body-color;
-$menu-small-bg: $body-bg;
-$menu-small-color: $body-color;
-
-$modal-content-bg: $kleur-secundair;
-
-$zoeken-active-bg: lighten($body-bg, 10%);
-
-$tabel-header: $kleur-secundair;
-$tabel-regel-licht: $kleur-secundair;
-$tabel-regel-donker: lighten($kleur-secundair, 5%);
-$tabel-hover: darken($kleur-secundair, 5%);
-
-$footer-background: darken($kleur-primair, 5%);
-$maaltijdketzer-bg: $kleur-primair;
-
-$list-group-action-color: $kleur-text;
-$list-group-hover-bg: $kleur-textheader;
-$text-muted: #fffbfa;
-
-/* importeer basis */
-@import "../base";
+$headings-font-family: "valentino" ($font, uppercase);
 
 h1,
 h2,
@@ -64,9 +13,142 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: BossaNovaMVB, Calibri, sans-serif;
+	font-family: "valentino", cursive;
 }
 
-h5 {
-	color: $kleur-textheader;
+$kleur-blauw-1: #121534;
+$kleur-blauw-2: #1e2050;
+$kleur-blauw-3: #45496e;
+$kleur-blauw-4: #4b81a7;
+$kleur-blauw-5: #8cc2de;
+
+$kleur-paars-6: #31163f;
+$kleur-paars-7: #632f7a;
+$kleur-paars-8: #8752a2;
+$kleur-paars-9: #b28abf;
+$kleur-paars-10: #ccb7d8;
+
+$kleur-geel-16: #ffd37a;
+$kleur-geel-17: #faea95;
+$kleur-geel-18: #f9f498;
+$kleur-geel-19: #fbf9c9;
+$kleur-geel-20: #fdfbe2;
+
+$white: $kleur-blauw-1;
+$gray-900: $kleur-geel-20 !default;
+$gray-800: $kleur-geel-19 !default;
+$gray-700: $kleur-geel-19 !default;
+$gray-600: $kleur-geel-18 !default;
+$gray-500: $kleur-geel-18 !default;
+$gray-400: $kleur-blauw-4 !default;
+$gray-300: $kleur-blauw-3 !default;
+$gray-200: $kleur-blauw-2 !default;
+$gray-100: $kleur-blauw-1 !default;
+$black: #fff;
+
+$body-bg: $gray-100 !default;
+$body-color: darken($black, 7%) !default;
+$headings-color: inherit;
+
+$primary: $kleur-blauw-2 !default;
+$secondary: $kleur-geel-18 !default;
+$light: $kleur-blauw-1 !default;
+$dark: $gray-800 !default;
+$yiq-text-dark: black !default;
+$yiq-text-light: $gray-900 !default;
+
+/** Stek specifieke variabelen. */
+
+/* Modals */
+$modal-content-bg: $body-bg !default;
+
+/* bbcode */
+$bb-block-bg: $gray-200 !default;
+
+/* forum */
+$forum-bericht0-bg: $body-bg !default;
+$forum-bericht1-bg: darken($body-bg, 4%) !default;
+
+/* main menu */
+$menu-primary-hover: $primary !default;
+$menu-bg: $gray-100 !default;
+$menu-color: $body-color !default;
+$menu-small-bg: #0a338d !default;
+$menu-small-color: #ffffff !default;
+
+/* zoeken */
+$zoeken-active-bg: #428bca !default;
+
+/* maalcie-tabel */
+$tabel-header: darken($body-bg, 5%) !default;
+$tabel-regel-donker: lighten($body-bg, 4%) !default;
+$tabel-regel-licht: lighten($body-bg, 12%) !default;
+
+/* cards */
+$card-bg: darken($body-bg, 5%) !default;
+$card-border-color: rgba(0, 0, 0, 0.3) !default;
+
+/* importeer basis */
+@import "../base";
+@import "~flatpickr/dist/themes/dark.css";
+
+:root {
+	color-scheme: dark;
+}
+
+.close {
+	color: $white;
+}
+
+.forum-deel {
+	.alternate-row {
+		&:nth-child(6n + 1),
+		&:nth-child(6n + 2),
+		&:nth-child(6n + 3) {
+			background-color: $secondary;
+		}
+	}
+}
+
+.forumdeel-omschrijving {
+	background-color: #3f4149;
+}
+
+/* Pas achtergrond in de fotogallerij aan */
+.jgallery {
+	background-color: lighten($body-bg, 4%) !important;
+
+	&-thumbnails {
+		background-color: lighten($body-bg, 4%) !important;
+	}
+}
+
+/* Pas achtergrond van, onder andere het courant formulier, aan */
+div#pubciemail_form {
+	background-color: transparent;
+	border: 1px solid #d3d3d3;
+	padding: 10px;
+}
+
+/* Peiling uitslag van de peilingen niet meer wit */
+.peiling .list-group-item {
+	background-color: lighten($body-bg, 4%);
+}
+
+.dataTables_filter {
+	label,
+	input {
+		color: #fff;
+	}
+}
+
+span.curpage {
+	color: white;
+}
+// Glowing effect
+nav {
+	box-shadow: 0 2px 10px $kleur-geel-20; /* inner white */
+}
+a {
+	color: $kleur-geel-19 !important;
 }
