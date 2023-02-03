@@ -80,7 +80,7 @@
 					{% endif %}
 
 					{% if aanmelding is defined and aanmelding is not none and aanmelding.gasten_eetwens %}
-						{{ icon("comment", null, aanmelding.gasten_eetwens) }}
+						{{ icon("comment", null, "Eetwens gasten: " ~ aanmelding.gasten_eetwens) }}
 					{% endif %}
 
 					{% if maaltijd.gesloten and maaltijd.eindMoment > date() %}

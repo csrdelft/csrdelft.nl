@@ -7,7 +7,7 @@ laadForumIds();
 // Carousel indicators
 const indicatorContainer = select('.carousel-indicators');
 const indicatorButton = select('.carousel-indicators > button');
-const carouselItems = selectAll('.carousel-inner > *');
+const carouselItems = selectAll('.carousel-inner > .carousel-item');
 
 for (let n = 1; n < carouselItems.length; n++) {
 	const clone = indicatorButton.cloneNode(true) as HTMLElement;

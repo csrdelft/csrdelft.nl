@@ -13,11 +13,14 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\CsrfService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\CsrfField;
+use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
+use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -42,6 +45,10 @@ class CsrTwigExtension extends AbstractExtension
 	 */
 	private $maaltijdAanmeldingenRepository;
 	/**
+	 * @var MaaltijdBeoordelingenRepository
+	 */
+	private $maaltijdBeoordelingenRepository;
+	/**
 	 * @var CmsPaginaRepository
 	 */
 	private $cmsPaginaRepository;
@@ -55,11 +62,13 @@ class CsrTwigExtension extends AbstractExtension
 		Security $security,
 		CmsPaginaRepository $cmsPaginaRepository,
 		ProfielRepository $profielRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository
 	) {
 		$this->csrfService = $csrfService;
 		$this->profielRepository = $profielRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 		$this->security = $security;
 	}
@@ -86,6 +95,10 @@ class CsrTwigExtension extends AbstractExtension
 				$this,
 				'get_maaltijd_aanmelding',
 			]),
+			new TwigFunction('get_maaltijd_beoordeling', [
+				$this,
+				'get_maaltijd_beoordeling',
+			]),
 			new TwigFunction('huidige_jaargang', [$this, 'huidige_jaargang']),
 			new TwigFunction('gethostbyaddr', 'gethostbyaddr'),
 			new TwigFunction('cms', [$this, 'cms'], ['is_safe' => ['html']]),
@@ -109,6 +122,30 @@ class CsrTwigExtension extends AbstractExtension
 			'maaltijd_id' => $maaltijd_id,
 			'uid' => LoginService::getUid(),
 		]);
+	}
+
+	public function get_maaltijd_beoordeling($maaltijd)
+	{
+		$beoordeling = $this->maaltijdBeoordelingenRepository->find([
+			'maaltijd_id' => $maaltijd->maaltijd_id,
+			'uid' => LoginService::getUid(),
+		]);
+		if (!$beoordeling) {
+			$beoordeling = $this->maaltijdBeoordelingenRepository->nieuw($maaltijd);
+		}
+		$kwantiteit = (new MaaltijdKwantiteitBeoordelingForm(
+			$maaltijd,
+			$beoordeling
+		))->getHtml();
+		$kwaliteit = (new MaaltijdKwaliteitBeoordelingForm(
+			$maaltijd,
+			$beoordeling
+		))->getHtml();
+
+		return [
+			'kwaliteit' => $kwaliteit,
+			'kwantiteit' => $kwantiteit,
+		];
 	}
 
 	public function csrfField($path = '', $method = 'post')

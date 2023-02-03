@@ -188,13 +188,18 @@ class MaaltijdenRepository extends AbstractRepository
 				'Invalid timestamp: $tot getMaaltijdenVoorAgenda()'
 			);
 		}
+
+		// Zet de tijd naar 00:00, omdat maaltijden apart de tijd opslaan
+		$van_datum_0000 = date_create_immutable("@$van")->setTime(0, 0, 0, 0);
+		$tot_datum_0000 = date_create_immutable("@$tot")->setTime(0, 0, 0, 0);
+
 		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->createQueryBuilder('m')
 			->where(
 				'm.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum'
 			)
-			->setParameter('van_datum', date_create_immutable("@$van"))
-			->setParameter('tot_datum', date_create_immutable("@$tot"))
+			->setParameter('van_datum', $van_datum_0000)
+			->setParameter('tot_datum', $tot_datum_0000)
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
 			->getQuery()

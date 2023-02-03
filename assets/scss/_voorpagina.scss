@@ -124,7 +124,21 @@
 	}
 
 	.agenda-item-moment {
-		width: 2.5rem;
+		min-width: 2.5rem;
+	}
+	.agenda-item-titel {
+		min-width: 0;
+	}
+
+	.beoordeling-cell {
+		background-color: $gray-200;
+
+		.form-control {
+			background: none;
+			border: none;
+
+			text-decoration: none !important;
+		}
 	}
 
 	.form-check-input {

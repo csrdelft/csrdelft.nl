@@ -9,20 +9,19 @@
 			{{ date(group.beginMoment) | datetime_format_long }}
 		</h3>
 		{% for item in group.items %}
-		<div class="list-group-item list-group-item-action d-flex flex-row align-items-center p-0 border-0">
-			<a href="{{ item.url }}" title="{{ item.beschrijving }}" class="d-block flex-grow-1">
-				<p class="text-truncate flex-grow-1">
-					<span class="agenda-item-moment d-inline-block">
-						{{ date(item.beginMoment) | time_format }}
-					</span>
-					{{ item.titel }}
-				</p>
-			</a>
+		<div class="list-group-item list-group-item-action d-flex flex-row align-items-baseline p-0 border-0">
+			<p class="agenda-item-moment">
+				{{ date(item.beginMoment) | time_format }}
+			</p>
+			<div class="agenda-item-titel flex-grow-1">
+				<a href="{% if item.url is not null %}{{ item.url }}{% else %}/agenda{% endif %}" title="{{ item.beschrijving }}" class="w-100">
+					<p class="w-100 text-truncate">{{ item.titel }}</p>
+				</a>
 
-			{% if item is maaltijd %}
-				{% set aanmelding = get_maaltijd_aanmelding(item.maaltijd_id) %}
-				{{ include('voorpagina/agenda_maaltijd_ketzer.html.twig', {maaltijd: item}) }}
-			{% endif %}
+				{% if item is maaltijd %}
+					{{ include('voorpagina/agenda_maaltijd_ketzer.html.twig', {maaltijd: item}) }}
+				{% endif %}
+			</div>
 		</div>
 		{% endfor %}
   	</div>
