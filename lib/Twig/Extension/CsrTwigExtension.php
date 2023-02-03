@@ -120,7 +120,7 @@ class CsrTwigExtension extends AbstractExtension
 	{
 		return $this->maaltijdAanmeldingenRepository->find([
 			'maaltijd_id' => $maaltijd_id,
-			'uid' => LoginService::getUid(),
+			'uid' => $this->security->getUser()->getUserIdentifier(),
 		]);
 	}
 
@@ -128,7 +128,7 @@ class CsrTwigExtension extends AbstractExtension
 	{
 		$beoordeling = $this->maaltijdBeoordelingenRepository->find([
 			'maaltijd_id' => $maaltijd->maaltijd_id,
-			'uid' => LoginService::getUid(),
+			'uid' => $this->security->getUser()->getUserIdentifier(),
 		]);
 		if (!$beoordeling) {
 			$beoordeling = $this->maaltijdBeoordelingenRepository->nieuw($maaltijd);
