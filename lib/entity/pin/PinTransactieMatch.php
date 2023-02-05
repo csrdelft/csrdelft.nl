@@ -4,6 +4,7 @@ namespace CsrDelft\entity\pin;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\fiscaat\CiviBestelling;
@@ -14,6 +15,7 @@ use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\view\Icon;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -266,11 +268,11 @@ class PinTransactieMatch implements DataTableEntry
 	 */
 	public static function renderMoment(DateTimeImmutable $moment, $link = true)
 	{
-		$formatted = date_format_intl($moment, DATETIME_FORMAT);
+		$formatted = DateUtil::dateFormatIntl($moment, DATETIME_FORMAT);
 		if (!$link) {
 			return $formatted;
 		}
-		$dag = date_format_intl($moment, 'cccc');
+		$dag = DateUtil::dateFormatIntl($moment, 'cccc');
 		$agendaLink = "/agenda/{$moment->format('Y')}/{$moment->format('m')}";
 		return "<a data-moment='{$formatted}' target='_blank' href='{$agendaLink}' title='{$dag}'>{$formatted}</a>"; // Data attribuut voor sortering
 	}

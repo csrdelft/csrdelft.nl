@@ -2,9 +2,11 @@
 
 namespace CsrDelft\repository;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\courant\Courant;
 use CsrDelft\service\security\LoginService;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
 
@@ -47,7 +49,7 @@ class CourantRepository extends AbstractRepository
 	public function verzenden($email, $inhoud)
 	{
 		$csrMailPassword = $_ENV['CSRMAIL_PASSWORD'];
-		$datum = date_format_intl(date_create_immutable(), 'd MMMM y');
+		$datum = DateUtil::dateFormatIntl(date_create_immutable(), 'd MMMM y');
 		$headers = <<<HEAD
 From: PubCie <pubcie@csrdelft.nl>
 To: leden@csrdelft.nl

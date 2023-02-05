@@ -4,9 +4,11 @@ namespace CsrDelft\command;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\BedragUtil;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Command\Command;
@@ -86,7 +88,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command
 				'- ' .
 					$maaltijd->titel .
 					' ' .
-					date_format_intl($maaltijd->datum, DATE_FORMAT)
+					DateUtil::dateFormatIntl($maaltijd->datum, DATE_FORMAT)
 			);
 		}
 

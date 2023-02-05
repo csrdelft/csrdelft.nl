@@ -2,10 +2,12 @@
 
 namespace CsrDelft\entity\eetplan;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -79,7 +81,7 @@ class Eetplan implements DataTableEntry
 	public function getDataTableAvond()
 	{
 		if ($this->avond) {
-			return date_format_intl($this->avond, DATE_FORMAT);
+			return DateUtil::dateFormatIntl($this->avond, DATE_FORMAT);
 		} else {
 			return null;
 		}

@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\lid;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
@@ -161,7 +162,7 @@ class LLLijst extends LLWeergave
 				default:
 					try {
 						if ($profiel->$veld instanceof DateTimeInterface) {
-							$html .= date_format_intl($profiel->$veld, DATE_FORMAT);
+							$html .= DateUtil::dateFormatIntl($profiel->$veld, DATE_FORMAT);
 						} else {
 							$html .= htmlspecialchars($profiel->$veld);
 						}

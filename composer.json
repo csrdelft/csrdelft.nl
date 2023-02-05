@@ -85,8 +85,7 @@
 			"CsrDelft\\tests\\": "tests/lib/"
 		},
 		"files": [
-			"lib/common/common.functions.php",
-			"lib/common/common.view.functions.php"
+			"lib/common/common.functions.php"
 		]
 	},
 	"include-path": [

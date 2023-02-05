@@ -4,6 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\corvee\CorveeRepetitie;
@@ -18,6 +19,7 @@ use CsrDelft\view\formulier\invoervelden\LidObjectField;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\TaakForm;
 use CsrDelft\view\maalcie\forms\ToewijzenForm;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -100,10 +102,15 @@ class BeheerTakenController extends AbstractController
 		if (isset($taken)) {
 			foreach ($taken as $taak) {
 				$datum = $taak->datum;
-				if (!array_key_exists(date_format_intl($datum, DATE_FORMAT), $model)) {
-					$model[date_format_intl($datum, DATE_FORMAT)] = [];
+				if (
+					!array_key_exists(
+						DateUtil::dateFormatIntl($datum, DATE_FORMAT),
+						$model
+					)
+				) {
+					$model[DateUtil::dateFormatIntl($datum, DATE_FORMAT)] = [];
 				}
-				$model[date_format_intl($datum, DATE_FORMAT)][
+				$model[DateUtil::dateFormatIntl($datum, DATE_FORMAT)][
 					$taak->corveeFunctie->functie_id
 				][] = $taak;
 			}
@@ -144,10 +151,12 @@ class BeheerTakenController extends AbstractController
 		$model = [];
 		foreach ($taken as $taak) {
 			$datum = $taak->datum;
-			if (!array_key_exists(date_format_intl($datum, DATE_FORMAT), $model)) {
-				$model[date_format_intl($datum, DATE_FORMAT)] = [];
+			if (
+				!array_key_exists(DateUtil::dateFormatIntl($datum, DATE_FORMAT), $model)
+			) {
+				$model[DateUtil::dateFormatIntl($datum, DATE_FORMAT)] = [];
 			}
-			$model[date_format_intl($datum, DATE_FORMAT)][
+			$model[DateUtil::dateFormatIntl($datum, DATE_FORMAT)][
 				$taak->corveeFunctie->functie_id
 			][] = $taak;
 		}

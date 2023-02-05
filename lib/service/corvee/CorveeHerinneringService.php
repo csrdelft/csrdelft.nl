@@ -4,12 +4,14 @@ namespace CsrDelft\service\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\MailService;
 use DateInterval;
+use DateTimeInterface;
 use Twig\Environment;
 
 /**
@@ -57,7 +59,7 @@ class CorveeHerinneringService
 
 	public function stuurHerinnering(CorveeTaak $taak)
 	{
-		$datum = date_format_intl($taak->datum, DATE_FORMAT);
+		$datum = DateUtil::dateFormatIntl($taak->datum, DATE_FORMAT);
 		if (!$taak->profiel) {
 			throw new CsrGebruikerException(
 				$datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!'

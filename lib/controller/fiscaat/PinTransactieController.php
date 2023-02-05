@@ -7,6 +7,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Mail;
 use CsrDelft\common\Util\BedragUtil;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
@@ -27,6 +28,7 @@ use CsrDelft\view\fiscaat\pin\PinBestellingVeranderenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchNegerenForm;
 use CsrDelft\view\formulier\FoutmeldingForm;
 use CsrDelft\view\table\PinTransactieMatchTableType;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -235,7 +237,7 @@ class PinTransactieController extends AbstractController
 			});
 
 			if ($values['stuurMail']) {
-				$datum = date_format_intl(
+				$datum = DateUtil::dateFormatIntl(
 					$nieuwePinTransactieMatch->transactie->datetime,
 					'cccc d MMMM y H:mm'
 				);
@@ -498,7 +500,7 @@ class PinTransactieController extends AbstractController
 			});
 
 			if ($values['stuurMail']) {
-				$datum = date_format_intl(
+				$datum = DateUtil::dateFormatIntl(
 					$oudePinTransactieMatch->bestelling->moment,
 					'cccc d MMMM y H:mm'
 				);
@@ -611,7 +613,7 @@ class PinTransactieController extends AbstractController
 			});
 
 			if ($values['stuurMail']) {
-				$datum = date_format_intl(
+				$datum = DateUtil::dateFormatIntl(
 					$oudePinTransactieMatch->transactie->datetime,
 					'cccc d MMMM y H:mm'
 				);

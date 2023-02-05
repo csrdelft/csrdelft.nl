@@ -5,6 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
@@ -13,6 +14,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
+use DateTimeInterface;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
@@ -89,7 +91,7 @@ class BbMaaltijd extends BbTag
 			'maaltijd',
 			$url,
 			$maaltijd->titel,
-			date_format_intl($maaltijd->getMoment(), DATETIME_FORMAT)
+			DateUtil::dateFormatIntl($maaltijd->getMoment(), DATETIME_FORMAT)
 		);
 	}
 

@@ -3,8 +3,10 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\LidZoekerService;
+use DateTimeInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,7 +65,10 @@ class ApiLedenController
 				'formeel' => $profiel->getNaam('civitas'),
 			],
 			'pasfoto' => $profiel->getPasfotoPath('vierkant'),
-			'geboortedatum' => date_format_intl($profiel->gebdatum, DATE_FORMAT),
+			'geboortedatum' => DateUtil::dateFormatIntl(
+				$profiel->gebdatum,
+				DATE_FORMAT
+			),
 			'email' => $profiel->email,
 			'mobiel' => $profiel->mobiel,
 			'huis' => [

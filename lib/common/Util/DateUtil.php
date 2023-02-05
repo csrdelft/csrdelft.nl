@@ -3,6 +3,7 @@
 namespace CsrDelft\common\Util;
 
 use DateTimeInterface;
+use IntlDateFormatter;
 
 final class DateUtil
 {
@@ -53,5 +54,20 @@ final class DateUtil
 			$timestamp = time();
 		}
 		return date('Y-m-d H:i:s', $timestamp);
+	}
+
+	/**
+	 * Zie https://unicode-org.github.io/icu/userguide/format_parse/datetime/#date-field-symbol-table voor de geaccepteerde formats
+	 *
+	 * @param DateTimeInterface $date
+	 * @param $format
+	 * @return false|string
+	 */
+	public static function dateFormatIntl(DateTimeInterface $date, $format)
+	{
+		$fmt = new IntlDateFormatter('nl', null, null);
+		$fmt->setPattern($format);
+
+		return $fmt->format($date);
 	}
 }

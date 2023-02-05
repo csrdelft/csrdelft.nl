@@ -4,6 +4,7 @@ namespace CsrDelft\entity\profiel;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\FileUtil;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\common\Util\TextUtil;
@@ -27,6 +28,7 @@ use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
 use CsrDelft\view\formulier\DisplayEntity;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Mapping as ORM;
@@ -526,7 +528,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	public function isJarig()
 	{
 		return $this->gebdatum != null &&
-			substr(date_format_intl($this->gebdatum, DATE_FORMAT), 5, 5) ===
+			substr(DateUtil::dateFormatIntl($this->gebdatum, DATE_FORMAT), 5, 5) ===
 				date('m-d');
 	}
 

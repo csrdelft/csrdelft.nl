@@ -5,6 +5,7 @@ namespace CsrDelft\repository\forum;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadGelezen;
@@ -15,6 +16,7 @@ use CsrDelft\repository\Paging;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use DateInterval;
+use DateTimeInterface;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -390,7 +392,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 			'offtopic door [lid=' .
 			LoginService::getUid() .
 			'] [reldate]' .
-			date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) .
+			DateUtil::dateFormatIntl($post->laatst_gewijzigd, DATETIME_FORMAT) .
 			'[/reldate]' .
 			"\n";
 		try {

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
+use CsrDelft\common\Util\DateUtil;
 use DateTimeInterface;
 
 class TimeObjectField extends TimeField
@@ -9,7 +10,7 @@ class TimeObjectField extends TimeField
 	public function __construct($name, $value, $description, $minutensteps = null)
 	{
 		if ($value instanceof DateTimeInterface) {
-			$value = date_format_intl($value, TIME_FORMAT);
+			$value = DateUtil::dateFormatIntl($value, TIME_FORMAT);
 		}
 		parent::__construct($name, $value, $description, $minutensteps);
 	}

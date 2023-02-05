@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\declaratie;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\declaratie\DeclaratieRepository;
 use CsrDelft\service\security\LoginService;
@@ -465,22 +466,22 @@ class Declaratie
 	{
 		return [
 			'ingediendOp' => $this->isIngediend()
-				? date_format_intl($this->ingediend, 'dd-MM-yyyy')
+				? DateUtil::dateFormatIntl($this->ingediend, 'dd-MM-yyyy')
 				: null,
 			'ingediendDoor' => $this->indiener->getNaam(),
 			'goedgekeurdOp' =>
 				$this->isBeoordeeld() && $this->isGoedgekeurd()
-					? date_format_intl($this->beoordeeld, 'dd-MM-yyyy')
+					? DateUtil::dateFormatIntl($this->beoordeeld, 'dd-MM-yyyy')
 					: null,
 			'afgekeurdOp' =>
 				$this->isBeoordeeld() && !$this->isGoedgekeurd()
-					? date_format_intl($this->beoordeeld, 'dd-MM-yyyy')
+					? DateUtil::dateFormatIntl($this->beoordeeld, 'dd-MM-yyyy')
 					: null,
 			'beoordeeldDoor' => $this->beoordelaar
 				? $this->beoordelaar->getNaam()
 				: null,
 			'uitbetaaldOp' => $this->isUitbetaald()
-				? date_format_intl($this->uitbetaald, 'dd-MM-yyyy')
+				? DateUtil::dateFormatIntl($this->uitbetaald, 'dd-MM-yyyy')
 				: null,
 			'magBeoordelen' => $this->magBeoordelen(),
 			'magUitbetalen' => $this->magUitbetalen(),
@@ -498,7 +499,7 @@ class Declaratie
 		return [
 			'id' => $this->id,
 			'datum' => $this->isIngediend()
-				? date_format_intl($this->getIngediend(), 'dd-MM-yyyy')
+				? DateUtil::dateFormatIntl($this->getIngediend(), 'dd-MM-yyyy')
 				: null,
 			'categorie' => $this->getCategorie()->getId(),
 			'omschrijving' => $this->omschrijving,

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\pin;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
@@ -9,6 +10,7 @@ use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
+use DateTimeInterface;
 
 abstract class PinBestellingCorrectieForm extends ModalForm
 {
@@ -41,7 +43,7 @@ abstract class PinBestellingCorrectieForm extends ModalForm
 				$pinTransactieMatch->bestelling->comment ?:
 				$this->voltooidDeelwoord .
 					' op ' .
-					date_format_intl(date_create_immutable(), DATE_FORMAT);
+					DateUtil::dateFormatIntl(date_create_immutable(), DATE_FORMAT);
 			$internOud = $pinTransactieMatch->notitie ?: '';
 			$commentNieuw =
 				$this->commentNieuw .

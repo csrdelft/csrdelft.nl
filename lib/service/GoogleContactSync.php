@@ -8,6 +8,7 @@ use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
+use DateTimeInterface;
 use Google\Service\PeopleService;
 use Google\Service\PeopleService\Address;
 use Google\Service\PeopleService\BatchCreateContactsRequest;
@@ -279,7 +280,7 @@ class GoogleContactSync
 		// birthdays
 		if (
 			$profiel->gebdatum &&
-			date_format_intl($profiel->gebdatum, DATE_FORMAT) != '0000-00-00'
+			DateUtil::dateFormatIntl($profiel->gebdatum, DATE_FORMAT) != '0000-00-00'
 		) {
 			$birthday = new Birthday();
 			$birthdayDate = new Date();

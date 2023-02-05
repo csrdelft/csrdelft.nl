@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
+use CsrDelft\common\Util\DateUtil;
 use DateTimeInterface;
 
 /**
@@ -22,7 +23,7 @@ class DateTimeObjectField extends DateTimeField
 		$minyear = null
 	) {
 		if ($value instanceof DateTimeInterface) {
-			$value = date_format_intl($value, 'y-MM-dd HH:mm');
+			$value = DateUtil::dateFormatIntl($value, 'y-MM-dd HH:mm');
 		}
 		parent::__construct($name, $value, $description, $maxyear, $minyear);
 	}

@@ -2,11 +2,13 @@
 
 namespace CsrDelft\view\eetplan;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
+use DateTimeInterface;
 
 class VerwijderEetplanForm extends ModalForm
 {
@@ -25,8 +27,8 @@ class VerwijderEetplanForm extends ModalForm
 		$avondenLijst = [];
 		foreach ($avonden as $eetplan) {
 			$avondenLijst[
-				date_format_intl($eetplan->avond, DATE_FORMAT)
-			] = date_format_intl($eetplan->avond, DATE_FORMAT);
+				DateUtil::dateFormatIntl($eetplan->avond, DATE_FORMAT)
+			] = DateUtil::dateFormatIntl($eetplan->avond, DATE_FORMAT);
 		}
 
 		$fields[] = new RequiredSelectField('avond', null, 'Avond', $avondenLijst);

@@ -3,6 +3,7 @@
 namespace CsrDelft\service\profiel;
 
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\profiel\Profiel;
@@ -19,6 +20,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use CsrDelft\service\MailService;
 use DateTime;
+use DateTimeInterface;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
@@ -165,7 +167,7 @@ class LidStatusService
 			$change = new ProfielLogCoveeTakenVerwijderChange([]);
 			foreach ($taken as $taak) {
 				$change->corveetaken[] =
-					date_format_intl($taak->getBeginMoment(), 'E d-MM yyyy') .
+					DateUtil::dateFormatIntl($taak->getBeginMoment(), 'E d-MM yyyy') .
 					' ' .
 					$taak->corveeFunctie->naam;
 			}

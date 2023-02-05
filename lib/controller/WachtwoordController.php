@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\security\Account;
 use CsrDelft\repository\security\AccountRepository;
@@ -14,6 +15,7 @@ use CsrDelft\service\MailService;
 use CsrDelft\service\security\WachtwoordResetAuthenticator;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
+use DateTimeInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -195,7 +197,7 @@ class WachtwoordController extends AbstractController
 		$url = $this->generateUrl('wachtwoord_reset', ['token' => $token[0]]);
 		$bericht = $this->renderView('mail/bericht/wachtwoord_vergeten.mail.twig', [
 			'naam' => $profiel->getNaam('civitas'),
-			'mogelijkTot' => date_format_intl($token[1], DATETIME_FORMAT),
+			'mogelijkTot' => DateUtil::dateFormatIntl($token[1], DATETIME_FORMAT),
 			'url' => $url,
 		]);
 		$emailNaam = $profiel->getNaam('volledig', true); // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'

@@ -5,6 +5,7 @@ namespace CsrDelft\repository\corvee;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\corvee\RepetitieTakenUpdateDTO;
@@ -48,7 +49,9 @@ class CorveeTakenRepository extends AbstractRepository
 	 */
 	public function updateGemaild(CorveeTaak $taak)
 	{
-		$taak->setWanneerGemaild(date_format_intl(date_create(), DATETIME_FORMAT));
+		$taak->setWanneerGemaild(
+			DateUtil::dateFormatIntl(date_create(), DATETIME_FORMAT)
+		);
 		$this->_em->persist($taak);
 		$this->_em->flush();
 	}
@@ -636,7 +639,9 @@ class CorveeTakenRepository extends AbstractRepository
 						$takenPerMaaltijd[$taak->maaltijd->maaltijd_id][] = $taak;
 					}
 				} else {
-					$takenPerDatum[date_format_intl($datum, DATE_FORMAT)][] = $taak;
+					$takenPerDatum[
+						DateUtil::dateFormatIntl($datum, DATE_FORMAT)
+					][] = $taak;
 				}
 			}
 			// standaard aantal aanvullen

@@ -4,6 +4,7 @@ namespace CsrDelft\repository\maalcie;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
@@ -534,7 +535,7 @@ class MaaltijdenRepository extends AbstractRepository
 					)
 				) {
 					MeldingUtil::setMelding(
-						date_format_intl($maaltijd->getMoment(), DATETIME_FORMAT) .
+						DateUtil::dateFormatIntl($maaltijd->getMoment(), DATETIME_FORMAT) .
 							' heeft nog gekoppelde corveetaken!',
 						2
 					);

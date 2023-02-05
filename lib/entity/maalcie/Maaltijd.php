@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Eisen;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\fiscaat\CiviProduct;
@@ -362,7 +363,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 */
 	public function getDataTableTijd()
 	{
-		return date_format_intl($this->tijd, TIME_FORMAT);
+		return DateUtil::dateFormatIntl($this->tijd, TIME_FORMAT);
 	}
 
 	/**
@@ -372,7 +373,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 */
 	public function getDataTableDatum()
 	{
-		return date_format_intl($this->datum, DATE_FORMAT);
+		return DateUtil::dateFormatIntl($this->datum, DATE_FORMAT);
 	}
 
 	public function getAanmeldLimiet()
@@ -418,9 +419,9 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		if ($this->datum) {
 			return $this->titel .
 				' op ' .
-				date_format_intl($this->datum, DATE_FORMAT) .
+				DateUtil::dateFormatIntl($this->datum, DATE_FORMAT) .
 				' om ' .
-				date_format_intl($this->getMoment(), TIME_FORMAT);
+				DateUtil::dateFormatIntl($this->getMoment(), TIME_FORMAT);
 		} else {
 			return $this->titel ?? '';
 		}

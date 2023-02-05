@@ -3,6 +3,7 @@
 namespace CsrDelft\command;
 
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\repository\pin\PinTransactieRepository;
@@ -11,6 +12,7 @@ use CsrDelft\service\pin\PinTransactieDownloader;
 use CsrDelft\service\pin\PinTransactieMatcher;
 use DateInterval;
 use DateTime;
+use DateTimeInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -145,18 +147,22 @@ class PinTransactiesDownloadenCommand extends Command
 			) {
 				$date = $cur->format('Y-m-d');
 				$output->writeln('<info>' . $date . '</info>');
-				$from = date_format_intl($cur, DATE_FORMAT) . ' 12:00:00';
+				$from = DateUtil::dateFormatIntl($cur, DATE_FORMAT) . ' 12:00:00';
 				$to =
-					date_format_intl($cur->add(new DateInterval('P1D')), DATE_FORMAT) .
-					' 12:00:00';
+					DateUtil::dateFormatIntl(
+						$cur->add(new DateInterval('P1D')),
+						DATE_FORMAT
+					) . ' 12:00:00';
 				$this->downloadDag($output, $from, $to);
 			}
 		} else {
 			$moment = date_create_immutable()->sub(new DateInterval('P1D'));
 			$from =
-				date_format_intl($moment->sub(new DateInterval('P1D')), DATE_FORMAT) .
-				' 12:00:00';
-			$to = date_format_intl($moment, DATE_FORMAT) . ' 12:00:00';
+				DateUtil::dateFormatIntl(
+					$moment->sub(new DateInterval('P1D')),
+					DATE_FORMAT
+				) . ' 12:00:00';
+			$to = DateUtil::dateFormatIntl($moment, DATE_FORMAT) . ' 12:00:00';
 			$output->writeln("Downloaden van $from tot $to");
 			$this->downloadDag($output, $from, $to);
 		}

@@ -3,6 +3,7 @@
 namespace CsrDelft\service\forum;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumPost;
@@ -14,6 +15,7 @@ use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ForumPostsService
@@ -80,7 +82,7 @@ class ForumPostsService
 			'verplaatst door [lid=' .
 			LoginService::getUid() .
 			'] [reldate]' .
-			date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) .
+			DateUtil::dateFormatIntl($post->laatst_gewijzigd, DATETIME_FORMAT) .
 			'[/reldate]' .
 			"\n";
 		$this->entityManager->persist($post);
@@ -147,7 +149,7 @@ class ForumPostsService
 			'bewerkt door [lid=' .
 			LoginService::getUid() .
 			'] [reldate]' .
-			date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) .
+			DateUtil::dateFormatIntl($post->laatst_gewijzigd, DATETIME_FORMAT) .
 			'[/reldate]';
 		if ($reden !== '') {
 			$bewerkt .= ': [tekst]' . CsrBB::escapeUbbOff($reden) . '[/tekst]';
@@ -207,7 +209,7 @@ class ForumPostsService
 				'[prive=P_FORUM_MOD]Goedgekeurd door [lid=' .
 				LoginService::getUid() .
 				'] [reldate]' .
-				date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) .
+				DateUtil::dateFormatIntl($post->laatst_gewijzigd, DATETIME_FORMAT) .
 				'[/reldate][/prive]' .
 				"\n";
 			$this->entityManager->persist($post);
