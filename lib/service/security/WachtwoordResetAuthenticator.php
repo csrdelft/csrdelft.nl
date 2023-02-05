@@ -3,6 +3,7 @@
 namespace CsrDelft\service\security;
 
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\WachtwoordController;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
@@ -92,7 +93,7 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 			// wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
 			if ($this->accountService->wijzigWachtwoord($user, $pass_plain)) {
-				setMelding('Wachtwoord instellen geslaagd', 1);
+				MeldingUtil::setMelding('Wachtwoord instellen geslaagd', 1);
 			}
 
 			// token verbruikt

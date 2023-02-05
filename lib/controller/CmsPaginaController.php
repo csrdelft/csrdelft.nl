@@ -5,6 +5,7 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\Security\Voter\Entity\CmsPaginaVoter;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\CmsPagina;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\security\LoginService;
@@ -122,7 +123,7 @@ class CmsPaginaController extends AbstractController
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($pagina);
 			$manager->flush();
-			setMelding('Bijgewerkt: ' . $pagina->naam, 1);
+			MeldingUtil::setMelding('Bijgewerkt: ' . $pagina->naam, 1);
 			return $this->redirectToRoute('csrdelft_cmspagina_bekijken', [
 				'naam' => $pagina->naam,
 			]);
@@ -152,7 +153,7 @@ class CmsPaginaController extends AbstractController
 		$manager = $this->getDoctrine()->getManager();
 		$manager->remove($pagina);
 		$manager->flush();
-		setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
+		MeldingUtil::setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
 
 		return new JsonResponse($this->generateUrl('default')); // redirect
 	}

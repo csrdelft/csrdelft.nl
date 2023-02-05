@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
@@ -92,7 +93,7 @@ class MaaltijdRepetitiesController extends AbstractController
 
 			$aantal = $this->maaltijdRepetitiesRepository->saveRepetitie($repetitie);
 			if ($aantal > 0) {
-				setMelding(
+				MeldingUtil::setMelding(
 					$aantal .
 						' abonnement' .
 						($aantal !== 1 ? 'en' : '') .
@@ -125,7 +126,7 @@ class MaaltijdRepetitiesController extends AbstractController
 		);
 
 		if ($aantal > 0) {
-			setMelding(
+			MeldingUtil::setMelding(
 				$aantal .
 					' abonnement' .
 					($aantal !== 1 ? 'en' : '') .
@@ -134,7 +135,9 @@ class MaaltijdRepetitiesController extends AbstractController
 			);
 		}
 
-		echo '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' .
+			MeldingUtil::getMelding() .
+			'</td></tr>';
 		echo '<tr id="repetitie-row-' .
 			$repetitie->mlt_repetitie_id .
 			'" class="remove"></tr>';
@@ -159,7 +162,7 @@ class MaaltijdRepetitiesController extends AbstractController
 				$this->repetitie,
 				$verplaats
 			);
-			setMelding(
+			MeldingUtil::setMelding(
 				$updated_aanmeldingen[0] .
 					' maaltijd' .
 					($updated_aanmeldingen[0] !== 1 ? 'en' : '') .
@@ -168,7 +171,7 @@ class MaaltijdRepetitiesController extends AbstractController
 				1
 			);
 			if ($updated_aanmeldingen[1] > 0) {
-				setMelding(
+				MeldingUtil::setMelding(
 					$updated_aanmeldingen[1] .
 						' aanmelding' .
 						($updated_aanmeldingen[1] !== 1 ? 'en' : '') .

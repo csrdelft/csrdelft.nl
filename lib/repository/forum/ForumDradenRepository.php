@@ -3,6 +3,7 @@
 namespace CsrDelft\repository\forum;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumZoeken;
@@ -216,7 +217,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		try {
 			$results = $qb->getQuery()->getResult();
 		} catch (SyntaxErrorException $ex) {
-			setMelding('Op deze term kan niet gezocht worden', -1);
+			MeldingUtil::setMelding('Op deze term kan niet gezocht worden', -1);
 			// Syntax error in de MATCH in BOOLEAN MODE
 			return [];
 		}

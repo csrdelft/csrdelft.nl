@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
@@ -34,7 +35,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 
 	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven')
 	{
-		setMelding($melding, $code);
+		MeldingUtil::setMelding($melding, $code);
 		return $this->redirect($url);
 	}
 

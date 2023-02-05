@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository;
 
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\DebugLogEntry;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
@@ -83,8 +84,11 @@ class DebugLogRepository extends AbstractRepository
 				->getConnection()
 				->isTransactionActive()
 		) {
-			setMelding('Debug log may not be committed: database transaction', 2);
-			setMelding($dump, 0);
+			MeldingUtil::setMelding(
+				'Debug log may not be committed: database transaction',
+				2
+			);
+			MeldingUtil::setMelding($dump, 0);
 		}
 		$this->getEntityManager()->flush();
 		return $entry;

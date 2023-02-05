@@ -4,6 +4,7 @@ namespace CsrDelft\view\formulier;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\repository\ChangeLogRepository;
@@ -204,7 +205,7 @@ class Formulier implements View, Validator, ToResponse
 	{
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField and !$field->isPosted()) {
-				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
+				//MeldingUtil::setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}
 		}
@@ -323,7 +324,7 @@ HTML;
 		$string = '';
 
 		if ($this->showMelding) {
-			$string .= getMelding();
+			$string .= MeldingUtil::getMelding();
 		}
 		$string .= $this->getFormTag();
 		$titel = $this->getTitel();

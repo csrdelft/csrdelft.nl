@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\groepen\enum\HuisStatus;
 use CsrDelft\entity\groepen\Groep;
@@ -142,7 +143,7 @@ class GroepForm extends ModalForm
 				} else {
 					$naam = ReflectionUtil::classNameZonderNamespace(get_class($groep));
 				}
-				setMelding('U mag geen ' . $naam . ' aanmaken', -1);
+				MeldingUtil::setMelding('U mag geen ' . $naam . ' aanmaken', -1);
 				return false;
 			} /**
 			 * Omdat wijzigen wel is toegestaan met hetzelfde formulier
@@ -158,7 +159,7 @@ class GroepForm extends ModalForm
 					$this->findByName('huisStatus')->getOrigValue()
 				);
 				if ($vorigeHuisStatus !== $soort) {
-					setMelding('U mag de huisstatus niet wijzigen', -1);
+					MeldingUtil::setMelding('U mag de huisstatus niet wijzigen', -1);
 					return false;
 				}
 			}

@@ -4,6 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\Maaltijd;
@@ -213,7 +214,7 @@ class BeheerMaaltijdenController extends AbstractController
 				$maaltijd
 			);
 			if ($aanmeldingen > 0) {
-				setMelding(
+				MeldingUtil::setMelding(
 					$aanmeldingen .
 						' aanmelding' .
 						($aanmeldingen !== 1 ? 'en' : '') .
@@ -391,7 +392,7 @@ class BeheerMaaltijdenController extends AbstractController
 	public function leegmaken()
 	{
 		$aantal = $this->maaltijdenRepository->prullenbakLeegmaken();
-		setMelding(
+		MeldingUtil::setMelding(
 			$aantal .
 				($aantal === 1 ? ' maaltijd' : ' maaltijden') .
 				' definitief verwijderd.',

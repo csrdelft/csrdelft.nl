@@ -4,6 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
@@ -130,7 +131,7 @@ class BeheerAbonnementenController extends AbstractController
 		);
 		$matrix = $this->maaltijdAbonnementenService->getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
-		setMelding(
+		MeldingUtil::setMelding(
 			$aantal .
 				' abonnement' .
 				($aantal !== 1 ? 'en' : '') .
@@ -175,7 +176,7 @@ class BeheerAbonnementenController extends AbstractController
 				$aantal .
 				' maaltijd' .
 				($aantal === 1 ? '' : 'en');
-			setMelding($melding, 2);
+			MeldingUtil::setMelding($melding, 2);
 		}
 		return $this->render('maaltijden/abonnement/beheer_abonnement.html.twig', [
 			'abonnement' => $abo,
@@ -207,7 +208,7 @@ class BeheerAbonnementenController extends AbstractController
 				$abo_aantal[1] .
 				' maaltijd' .
 				($abo_aantal[1] === 1 ? '' : 'en');
-			setMelding($melding, 2);
+			MeldingUtil::setMelding($melding, 2);
 		}
 		return $this->render('maaltijden/abonnement/beheer_abonnement.html.twig', [
 			'abonnement' => $abo_aantal[0],

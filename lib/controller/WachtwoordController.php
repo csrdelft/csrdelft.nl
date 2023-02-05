@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\security\Account;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
@@ -85,7 +86,7 @@ class WachtwoordController extends AbstractController
 			// wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
 			$this->accountService->wijzigWachtwoord($account, $pass_plain);
-			setMelding('Wachtwoord instellen geslaagd', 1);
+			MeldingUtil::setMelding('Wachtwoord instellen geslaagd', 1);
 		}
 		return $this->render('default.html.twig', ['content' => $form]);
 	}
@@ -159,7 +160,7 @@ class WachtwoordController extends AbstractController
 				!$account ||
 				!$this->accessService->isUserGranted($account, 'ROLE_LOGGED_IN')
 			) {
-				setMelding('E-mailadres onjuist', -1);
+				MeldingUtil::setMelding('E-mailadres onjuist', -1);
 
 				return $this->render('default.html.twig', ['content' => $form]);
 			}
@@ -182,7 +183,7 @@ class WachtwoordController extends AbstractController
 			// stuur resetmail
 			$this->verzendResetMail($account, $token);
 
-			setMelding('Wachtwoord reset email verzonden', 1);
+			MeldingUtil::setMelding('Wachtwoord reset email verzonden', 1);
 		}
 		return $this->render('default.html.twig', ['content' => $form]);
 	}

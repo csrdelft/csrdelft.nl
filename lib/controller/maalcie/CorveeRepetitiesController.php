@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
@@ -170,7 +171,7 @@ class CorveeRepetitiesController extends AbstractController
 				);
 
 				if ($aantal > 0) {
-					setMelding(
+					MeldingUtil::setMelding(
 						$aantal .
 							' voorkeur' .
 							($aantal !== 1 ? 'en' : '') .
@@ -200,12 +201,14 @@ class CorveeRepetitiesController extends AbstractController
 			$corveeRepetitie->crv_repetitie_id
 		);
 		if ($aantal > 0) {
-			setMelding(
+			MeldingUtil::setMelding(
 				$aantal . ' voorkeur' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.',
 				2
 			);
 		}
-		echo '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
+		echo '<tr id="maalcie-melding"><td>' .
+			MeldingUtil::getMelding() .
+			'</td></tr>';
 		echo '<tr id="repetitie-row-' .
 			$corveeRepetitie->crv_repetitie_id .
 			'" class="remove"></tr>';
@@ -235,7 +238,7 @@ class CorveeRepetitiesController extends AbstractController
 			if ($aantal->update < $aantal->day) {
 				$aantal->update = $aantal->day;
 			}
-			setMelding(
+			MeldingUtil::setMelding(
 				$aantal->update .
 					' corveeta' .
 					($aantal->update !== 1 ? 'ken' : 'ak') .
@@ -245,7 +248,7 @@ class CorveeRepetitiesController extends AbstractController
 				1
 			);
 			$aantal->datum += $aantal->maaltijd;
-			setMelding(
+			MeldingUtil::setMelding(
 				$aantal->datum .
 					' corveeta' .
 					($aantal->datum !== 1 ? 'ken' : 'ak') .

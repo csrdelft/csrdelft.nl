@@ -4,6 +4,7 @@ namespace CsrDelft\repository\maalcie;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\AbstractRepository;
@@ -368,7 +369,7 @@ class MaaltijdenRepository extends AbstractRepository
 				$this->verwijderMaaltijd($maaltijd);
 				$aantal++;
 			} catch (CsrGebruikerException $e) {
-				setMelding($e->getMessage(), -1);
+				MeldingUtil::setMelding($e->getMessage(), -1);
 			}
 		}
 		return $aantal;
@@ -532,7 +533,7 @@ class MaaltijdenRepository extends AbstractRepository
 						$maaltijd->maaltijd_id
 					)
 				) {
-					setMelding(
+					MeldingUtil::setMelding(
 						date_format_intl($maaltijd->getMoment(), DATETIME_FORMAT) .
 							' heeft nog gekoppelde corveetaken!',
 						2
@@ -540,7 +541,7 @@ class MaaltijdenRepository extends AbstractRepository
 				}
 			} catch (CsrGebruikerException $e) {
 				$errors[] = $e;
-				setMelding($e->getMessage(), -1);
+				MeldingUtil::setMelding($e->getMessage(), -1);
 			}
 		}
 		return [$errors, count($maaltijden)];

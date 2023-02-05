@@ -3,6 +3,7 @@
 namespace CsrDelft\service\profiel;
 
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessRole;
@@ -154,7 +155,10 @@ class LidStatusService
 			$profiel->uid
 		);
 		if (sizeof($taken) !== $aantal) {
-			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
+			MeldingUtil::setMelding(
+				'Niet alle toekomstige corveetaken zijn verwijderd!',
+				-1
+			);
 		}
 		$changes = [];
 		if ($aantal > 0) {

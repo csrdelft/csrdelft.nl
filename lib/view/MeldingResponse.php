@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view;
 
+use CsrDelft\common\Util\MeldingUtil;
 use Symfony\Component\HttpFoundation\Response;
 
 class MeldingResponse implements ToResponse, View
@@ -26,11 +27,11 @@ class MeldingResponse implements ToResponse, View
 
 	public function toResponse(): Response
 	{
-		return new Response(getMelding());
+		return new Response(MeldingUtil::getMelding());
 	}
 
 	public function __toString()
 	{
-		return getMelding();
+		return MeldingUtil::getMelding();
 	}
 }

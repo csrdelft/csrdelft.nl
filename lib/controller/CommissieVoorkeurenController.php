@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurOpmerking;
@@ -177,7 +178,7 @@ class CommissieVoorkeurenController extends AbstractController
 			$manager->persist($commissie);
 			$manager->flush();
 
-			setMelding('Aanpassingen commissie opgeslagen', 1);
+			MeldingUtil::setMelding('Aanpassingen commissie opgeslagen', 1);
 		}
 		return $this->redirectToRoute(
 			'csrdelft_commissievoorkeuren_updatecommissie',
@@ -289,9 +290,15 @@ class CommissieVoorkeurenController extends AbstractController
 			$manager = $this->getDoctrine()->getManager();
 			$manager->remove($categorie);
 			$manager->flush();
-			setMelding("Categorie '{$categorie->naam}' succesvol verwijderd", 1);
+			MeldingUtil::setMelding(
+				"Categorie '{$categorie->naam}' succesvol verwijderd",
+				1
+			);
 		} else {
-			setMelding('Kan categorie niet verwijderen: is niet leeg', 2);
+			MeldingUtil::setMelding(
+				'Kan categorie niet verwijderen: is niet leeg',
+				2
+			);
 		}
 
 		return $this->redirectToRoute('csrdelft_commissievoorkeuren_overzicht');

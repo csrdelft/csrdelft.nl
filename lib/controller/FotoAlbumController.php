@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
@@ -74,7 +75,7 @@ class FotoAlbumController extends AbstractController
 
 		$this->denyAccessUnlessGranted(FotoAlbumVoter::AANPASSEN, $album);
 		if ($album->dirname === 'fotoalbum') {
-			setMelding('Niet het complete fotoalbum verwerken', -1);
+			MeldingUtil::setMelding('Niet het complete fotoalbum verwerken', -1);
 		} else {
 			$this->fotoAlbumRepository->verwerkFotos($album);
 		}
@@ -301,10 +302,10 @@ class FotoAlbumController extends AbstractController
 		if ($album->isEmpty()) {
 			try {
 				$this->fotoAlbumRepository->delete($album);
-				setMelding('Fotoalbum verwijderen geslaagd', 1);
+				MeldingUtil::setMelding('Fotoalbum verwijderen geslaagd', 1);
 				return new JsonResponse(dirname($album->getUrl()));
 			} catch (ORMException $ex) {
-				setMelding('Fotoalbum verwijderen mislukt', -1);
+				MeldingUtil::setMelding('Fotoalbum verwijderen mislukt', -1);
 				return new JsonResponse($album->getUrl());
 			}
 		}

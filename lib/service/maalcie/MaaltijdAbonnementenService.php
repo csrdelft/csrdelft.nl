@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service\maalcie;
 
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\entity\profiel\Profiel;
@@ -251,17 +252,20 @@ class MaaltijdAbonnementenService
 	 */
 	public function verwijderAbonnementenVoorLid($uid)
 	{
-		return $this->_em->transactional(function () use ($uid) {
+		return $this->entityManager->transactional(function () use ($uid) {
 			$abos = $this->getAbonnementenVoorLid($uid);
 			$aantal = 0;
 			foreach ($abos as $abo) {
 				$aantal++;
-				$this->_em->remove($abo);
+				$this->entityManager->remove($abo);
 			}
-			$this->_em->flush();
+			$this->entityManager->flush();
 
 			if (sizeof($abos) !== $aantal) {
-				setMelding('Niet alle abonnementen zijn uitgeschakeld!', -1);
+				MeldingUtil::setMelding(
+					'Niet alle abonnementen zijn uitgeschakeld!',
+					-1
+				);
 			}
 			return $aantal;
 		});

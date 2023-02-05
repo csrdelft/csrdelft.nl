@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\view\login\OAuth2RefreshTokenTable;
 use CsrDelft\view\login\OAuth2RememberTable;
@@ -90,7 +91,7 @@ class LidInstellingenController extends AbstractController
 	public function opslaan()
 	{
 		$this->lidInstellingenRepository->saveAll(); // fetches $_POST values itself
-		setMelding('Instellingen opgeslagen', 1);
+		MeldingUtil::setMelding('Instellingen opgeslagen', 1);
 		return $this->redirectToRoute('csrdelft_lidinstellingen_beheer');
 	}
 
@@ -104,7 +105,7 @@ class LidInstellingenController extends AbstractController
 	public function reset($module, $key)
 	{
 		$this->lidInstellingenRepository->resetForAll($module, $key);
-		setMelding(
+		MeldingUtil::setMelding(
 			'Voor iedereen de instelling ge-reset naar de standaard waarde',
 			1
 		);
@@ -120,7 +121,7 @@ class LidInstellingenController extends AbstractController
 		$account = $this->getUser();
 
 		if (!$account) {
-			setMelding('Geen account', -1);
+			MeldingUtil::setMelding('Geen account', -1);
 			return new Response(
 				$this->redirectToRoute(
 					'csrdelft_lidinstellingen_beheer'
@@ -130,7 +131,7 @@ class LidInstellingenController extends AbstractController
 
 		$this->lidInstellingenRepository->resetForUser($account->profiel);
 
-		setMelding('Instellingen terug gezet', 1);
+		MeldingUtil::setMelding('Instellingen terug gezet', 1);
 		return new Response(
 			$this->redirectToRoute('csrdelft_lidinstellingen_beheer')->getTargetUrl()
 		);

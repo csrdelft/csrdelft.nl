@@ -232,7 +232,7 @@ class VoorbeeldController extends Controller {
             $form = new MijnForm($voorbeeld);
             if ($form->validate()) {
                 VoorbeeldModel::instance()->create($voorbeeld);
-                setMelding("Voorbeeld met succes aangemaakt", 1);
+                MeldingUtil::setMelding("Voorbeeld met succes aangemaakt", 1);
                 $this->view = new MijnForm(new Voorbeeld());
             } else {
                 $this->view = $form;

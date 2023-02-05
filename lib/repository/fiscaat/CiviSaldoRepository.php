@@ -4,6 +4,7 @@ namespace CsrDelft\repository\fiscaat;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\fiscaat\enum\CiviSaldoLogEnum;
 use CsrDelft\repository\AbstractRepository;
@@ -447,7 +448,7 @@ SQL;
 		$result = $nativeQuery->getResult();
 
 		if (count($result) > 1000) {
-			setMelding(
+			MeldingUtil::setMelding(
 				'Te veel (>1000) resultaten. Stel specifiekere filters in.',
 				-1
 			);

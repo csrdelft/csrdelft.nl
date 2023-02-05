@@ -5,6 +5,7 @@ namespace CsrDelft\repository\fotoalbum;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
@@ -205,7 +206,7 @@ class FotoAlbumRepository extends AbstractRepository
 				if (defined('RESIZE_OUTPUT')) {
 					debugprint($e->getMessage());
 				} else {
-					setMelding($e->getMessage(), -1);
+					MeldingUtil::setMelding($e->getMessage(), -1);
 				}
 			}
 		}
@@ -216,7 +217,7 @@ HTML;
 			echo '<br />' . $msg;
 			exit();
 		} else {
-			setMelding($msg, $errors > 0 ? 2 : 1);
+			MeldingUtil::setMelding($msg, $errors > 0 ? 2 : 1);
 		}
 	}
 

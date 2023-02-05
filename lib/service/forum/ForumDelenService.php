@@ -3,6 +3,7 @@
 namespace CsrDelft\service\forum;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
@@ -114,10 +115,10 @@ class ForumDelenService
 				if (count($draad->getForumPosts()) === 0) {
 					$draad->verwijderd = true;
 					$melding .= 'verwijderd (bevat geen berichten)';
-					setMelding($melding, 2);
+					MeldingUtil::setMelding($melding, 2);
 				} else {
 					$melding .= 'goedgekeurd';
-					setMelding($melding, 2);
+					MeldingUtil::setMelding($melding, 2);
 				}
 				$this->forumDradenRepository->update($draad);
 			}
@@ -132,7 +133,7 @@ class ForumDelenService
 			empty($dradenById) &&
 			$this->forumPostsRepository->getAantalWachtOpGoedkeuring() > 0
 		) {
-			setMelding(
+			MeldingUtil::setMelding(
 				'U heeft onvoldoende rechten om de berichten goed te keuren',
 				0
 			);

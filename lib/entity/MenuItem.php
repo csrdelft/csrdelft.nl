@@ -4,6 +4,7 @@ namespace CsrDelft\entity;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\DisplayEntity;
@@ -114,7 +115,7 @@ class MenuItem implements DisplayEntity
 				$draad = $forumDradenRepository->get((int) $draad_id);
 				return $draad->isOngelezen();
 			} catch (CsrException $e) {
-				setMelding(
+				MeldingUtil::setMelding(
 					'Uw favoriete forumdraadje bestaat helaas niet meer: ' .
 						htmlspecialchars($this->tekst),
 					2

@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Security\Voter\Entity\MenuItemVoter;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\GenericSuggestiesResponse;
@@ -73,7 +74,7 @@ class MenuBeheerController extends AbstractController
 		if ($form->validate()) {
 			// form checks if hidden fields are modified
 			$this->menuItemRepository->persist($item);
-			setMelding('Toegevoegd: ' . $item->tekst, 1);
+			MeldingUtil::setMelding('Toegevoegd: ' . $item->tekst, 1);
 			return new MeldingResponse();
 		} else {
 			return $form;
@@ -95,9 +96,9 @@ class MenuBeheerController extends AbstractController
 			// form checks if hidden fields are modified
 			try {
 				$this->menuItemRepository->persist($item);
-				setMelding($item->tekst . ' bijgewerkt', 1);
+				MeldingUtil::setMelding($item->tekst . ' bijgewerkt', 1);
 			} catch (Exception $e) {
-				setMelding($item->tekst . ' ongewijzigd', 0);
+				MeldingUtil::setMelding($item->tekst . ' ongewijzigd', 0);
 			}
 			return new JsonResponse(true);
 		} else {
@@ -116,9 +117,12 @@ class MenuBeheerController extends AbstractController
 		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
 		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $item);
 		$rowCount = $this->menuItemRepository->removeMenuItem($item);
-		setMelding($item->tekst . ' verwijderd', 1);
+		MeldingUtil::setMelding($item->tekst . ' verwijderd', 1);
 		if ($rowCount > 0) {
-			setMelding($rowCount . ' menu-items niveau omhoog verplaatst.', 2);
+			MeldingUtil::setMelding(
+				$rowCount . ' menu-items niveau omhoog verplaatst.',
+				2
+			);
 		}
 		return new JsonResponse(true);
 	}
@@ -137,7 +141,7 @@ class MenuBeheerController extends AbstractController
 		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $item);
 		$item->zichtbaar = !$item->zichtbaar;
 		$this->menuItemRepository->persist($item);
-		setMelding(
+		MeldingUtil::setMelding(
 			$item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt',
 			1
 		);

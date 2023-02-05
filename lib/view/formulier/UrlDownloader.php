@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\formulier;
 
+use CsrDelft\common\Util\MeldingUtil;
+
 /**
  * UrlDownloader.class.php
  *
@@ -151,7 +153,7 @@ class UrlDownloader
 		if ($success) {
 			return $data;
 		} else {
-			setMelding($error, -1);
+			MeldingUtil::setMelding($error, -1);
 			return '';
 		}
 	}

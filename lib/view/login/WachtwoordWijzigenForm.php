@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\login;
 
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\security\Account;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
 use CsrDelft\view\formulier\Formulier;
@@ -20,7 +21,7 @@ class WachtwoordWijzigenForm extends Formulier
 
 		$fields = [];
 		if ($account->email == '') {
-			setMelding(
+			MeldingUtil::setMelding(
 				'Vul uw e-mailadres in om uw wachtwoord te kunnen resetten als u deze bent vergeten.',
 				0
 			);

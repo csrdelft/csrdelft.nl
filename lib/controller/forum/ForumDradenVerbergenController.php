@@ -4,6 +4,7 @@ namespace CsrDelft\controller\forum;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
@@ -71,7 +72,7 @@ class ForumDradenVerbergenController extends AbstractController
 		$this->forumDradenVerbergenRepository->toonAllesVoorLeden([
 			$this->getUid(),
 		]);
-		setMelding(
+		MeldingUtil::setMelding(
 			$aantal .
 				' onderwerp' .
 				($aantal === 1 ? ' wordt' : 'en worden') .

@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Security\Voter\Entity\CourantBerichtVoter;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\courant\Courant;
 use CsrDelft\entity\courant\CourantBericht;
 use CsrDelft\entity\courant\CourantCategorie;
@@ -104,7 +105,7 @@ class CourantController extends AbstractController
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($bericht);
 			$manager->flush();
-			setMelding(
+			MeldingUtil::setMelding(
 				'Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.',
 				1
 			);
@@ -138,7 +139,7 @@ class CourantController extends AbstractController
 			$this->getDoctrine()
 				->getManager()
 				->flush();
-			setMelding('Bericht is bewerkt', 1);
+			MeldingUtil::setMelding('Bericht is bewerkt', 1);
 			return $this->redirectToRoute('csrdelft_courant_toevoegen');
 		}
 
@@ -163,9 +164,9 @@ class CourantController extends AbstractController
 			$manager->remove($bericht);
 			$manager->flush();
 
-			setMelding('Uw bericht is verwijderd.', 1);
+			MeldingUtil::setMelding('Uw bericht is verwijderd.', 1);
 		} catch (Exception $exception) {
-			setMelding('Uw bericht is niet verwijderd.', -1);
+			MeldingUtil::setMelding('Uw bericht is niet verwijderd.', -1);
 		}
 		return $this->redirectToRoute('csrdelft_courant_toevoegen');
 	}
@@ -180,7 +181,7 @@ class CourantController extends AbstractController
 	public function verzenden($iedereen = null)
 	{
 		if (count($this->courantBerichtRepository->findAll()) < 1) {
-			setMelding('Lege courant kan niet worden verzonden', 0);
+			MeldingUtil::setMelding('Lege courant kan niet worden verzonden', 0);
 			return $this->redirectToRoute('csrdelft_courant_toevoegen');
 		}
 
@@ -212,16 +213,16 @@ class CourantController extends AbstractController
 				$manager->flush();
 				$conn->commit();
 
-				setMelding('De courant is verzonden naar iedereen', 1);
+				MeldingUtil::setMelding('De courant is verzonden naar iedereen', 1);
 			} catch (Exception $exception) {
 				$conn->rollBack();
-				setMelding('Courant niet verzonden', -1);
+				MeldingUtil::setMelding('Courant niet verzonden', -1);
 			}
 
 			return new PlainView(
 				'<div id="courantKnoppenContainer">' .
 					$response .
-					getMelding() .
+					MeldingUtil::getMelding() .
 					'<strong>Aan iedereen verzonden</strong></div>'
 			);
 		} else {
@@ -229,11 +230,11 @@ class CourantController extends AbstractController
 				$_ENV['EMAIL_PUBCIE'],
 				$courant->inhoud
 			);
-			setMelding('Verzonden naar de PubCie', 1);
+			MeldingUtil::setMelding('Verzonden naar de PubCie', 1);
 			return new PlainView(
 				'<div id="courantKnoppenContainer">' .
 					$response .
-					getMelding() .
+					MeldingUtil::getMelding() .
 					'<a class="btn btn-primary post confirm" title="Courant aan iedereen verzenden" href="/courant/verzenden/iedereen">Aan iedereen verzenden</a></div>'
 			);
 		}

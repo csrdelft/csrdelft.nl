@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
@@ -38,7 +39,7 @@ class GroepPreviewForm extends ModalForm implements FormElement
 	public function getHtml()
 	{
 		$this->css_classes[] = 'ModalForm';
-		$html = getMelding();
+		$html = MeldingUtil::getMelding();
 		$html .= $this->getFormTag();
 		if ($this->getTitel()) {
 			$html .= '<h1 class="Titel">' . $this->getTitel() . '</h1>';

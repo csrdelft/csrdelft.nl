@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\groepen\enum\GroepStatus;
@@ -281,7 +282,7 @@ class ProfielController extends AbstractController
 		if ($form->validate()) {
 			$diff = $form->diff();
 			if (empty($diff)) {
-				setMelding('Geen wijzigingen', 0);
+				MeldingUtil::setMelding('Geen wijzigingen', 0);
 			} else {
 				$nieuw =
 					$profiel->uid === null ||
@@ -322,22 +323,25 @@ class ProfielController extends AbstractController
 							}
 							$conn->commit();
 						} catch (Exception $e) {
-							setMelding($e->getMessage(), -1);
+							MeldingUtil::setMelding($e->getMessage(), -1);
 							$conn->rollBack();
 						} finally {
 							$conn->setAutoCommit(true);
 						}
 					} catch (CsrException $ex) {
-						setMelding($ex->getMessage(), -1);
+						MeldingUtil::setMelding($ex->getMessage(), -1);
 					}
 
-					setMelding(
+					MeldingUtil::setMelding(
 						'Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid,
 						1
 					);
 				} else {
 					$this->profielRepository->update($profiel);
-					setMelding(count($diff) . ' wijziging(en) succesvol opgeslagen', 1);
+					MeldingUtil::setMelding(
+						count($diff) . ' wijziging(en) succesvol opgeslagen',
+						1
+					);
 				}
 			}
 			return $this->redirectToRoute('csrdelft_profiel_profiel', [
@@ -497,7 +501,7 @@ class ProfielController extends AbstractController
 						throw new CsrException('Vul de toestemmingen in');
 					}
 				} catch (Exception $e) {
-					setMelding($e->getMessage(), -1);
+					MeldingUtil::setMelding($e->getMessage(), -1);
 					if ($conn->isTransactionActive()) {
 						$conn->rollBack();
 					}
@@ -505,7 +509,7 @@ class ProfielController extends AbstractController
 					$conn->setAutoCommit(true);
 				}
 			} catch (CsrException $ex) {
-				setMelding($ex->getMessage(), -1);
+				MeldingUtil::setMelding($ex->getMessage(), -1);
 			}
 
 			if ($succes) {
@@ -593,7 +597,7 @@ class ProfielController extends AbstractController
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($opmerking);
 			$manager->flush();
-			setMelding('Voorkeuren opgeslagen', 1);
+			MeldingUtil::setMelding('Voorkeuren opgeslagen', 1);
 			return $this->redirectToRoute('csrdelft_profiel_voorkeuren', [
 				'uid' => $uid,
 			]);
@@ -630,7 +634,7 @@ class ProfielController extends AbstractController
 		);
 		$googleContactSync->initialize($addToContactsUrl);
 		$msg = $googleContactSync->syncLid($profiel);
-		setMelding('Opgeslagen in Google Contacten: ' . $msg, 1);
+		MeldingUtil::setMelding('Opgeslagen in Google Contacten: ' . $msg, 1);
 		return $this->redirectToRoute('csrdelft_profiel_profiel', [
 			'uid' => $profiel->uid,
 		]);

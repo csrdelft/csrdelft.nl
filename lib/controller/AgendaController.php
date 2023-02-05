@@ -5,6 +5,7 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\Activiteit;
@@ -249,7 +250,7 @@ class AgendaController extends AbstractController
 			$this->agendaRepository->save($item);
 			if ($datum === 'doorgaan') {
 				$_POST = []; // clear post values of previous input
-				setMelding(
+				MeldingUtil::setMelding(
 					'Toegevoegd: ' .
 						$item->titel .
 						' (' .

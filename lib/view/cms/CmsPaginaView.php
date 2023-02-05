@@ -4,6 +4,7 @@ namespace CsrDelft\view\cms;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Security\Voter\Entity\CmsPaginaVoter;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\CmsPagina;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\Icon;
@@ -48,7 +49,7 @@ class CmsPaginaView implements View, ToResponse
 	{
 		$security = ContainerFacade::getContainer()->get('security');
 		$html = '';
-		$html .= getMelding();
+		$html .= MeldingUtil::getMelding();
 		if ($security->isGranted(CmsPaginaVoter::BEWERKEN, $this->pagina)) {
 			$html .=
 				'<a href="/pagina/bewerken/' .

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository;
 
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\Groep;
@@ -229,7 +230,7 @@ abstract class GroepRepository extends AbstractRepository
 				return $newgroep;
 			});
 		} catch (Throwable $ex) {
-			setMelding($ex->getMessage(), -1);
+			MeldingUtil::setMelding($ex->getMessage(), -1);
 			return false;
 		}
 	}

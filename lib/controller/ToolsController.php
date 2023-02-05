@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\LDAP;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\VerticalenRepository;
@@ -418,7 +419,7 @@ class ToolsController extends AbstractController
 		if (DEBUG || $this->mag(P_ADMIN) || $suService->isSued()) {
 			ob_start();
 
-			echo getMelding();
+			echo MeldingUtil::getMelding();
 			echo '<h1>MemCache statistieken</h1>';
 			try {
 				$memcached = MemcachedAdapter::createConnection(
