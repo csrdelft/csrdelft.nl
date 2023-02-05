@@ -9,6 +9,7 @@ use CsrDelft\entity\pin\PinTransactie;
 use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -115,11 +116,30 @@ class PinTransactieMatcher
 		return $distanceMatrix;
 	}
 
+	private static function compareDate(?DateTimeInterface $a, ?DateTimeInterface $b): int {
+		if ($a === null && $b === null) {
+			return 0;
+		} elseif ($a === null) {
+			return 1;
+		} elseif ($b === null) {
+			return -1;
+		}
+		return $b->getTimestamp() - $a->getTimestamp();
+	}
+
 	/**
 	 * @throws CsrException
 	 */
 	public function match()
 	{
+		// Sorteer beide op volgorde van moment
+		usort($this->pinBestellingen, function(CiviBestelling $a, CiviBestelling $b) {
+			return self::compareDate($a->moment, $b->moment);
+		});
+		usort($this->pinTransacties, function (PinTransactie $a, PinTransactie $b) {
+			return self::compareDate($a->datetime, $b->datetime);
+		});
+
 		$pinTransacties = $this->pinTransacties;
 		$pinBestellingen = $this->pinBestellingen;
 		$distanceMatrix = $this->levenshteinMatrix(
@@ -147,10 +167,9 @@ class PinTransactieMatcher
 			switch ($distance) {
 				case $matchDistance:
 					if ($matchCost > 0) {
-						$matches[] = PinTransactieMatch::verkeerdBedrag(
-							$pinTransacties[$indexTransactie],
-							$pinBestellingen[$indexBestelling]
-						);
+						// Maak geen matches meer met verkeerde bedragen: moeten handmatig opgelost worden
+						$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexBestelling]);
+						$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexTransactie]);
 					} else {
 						$matches[] = PinTransactieMatch::match(
 							$pinTransacties[$indexTransactie],
