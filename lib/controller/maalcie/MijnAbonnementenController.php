@@ -67,9 +67,7 @@ class MijnAbonnementenController extends AbstractController
 		$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
 		$abo->maaltijd_repetitie = $repetitie;
 		$abo->uid = $this->getUid();
-		$aantal = $this->maaltijdAbonnementenRepository->inschakelenAbonnement(
-			$abo
-		);
+		$aantal = $this->maaltijdAbonnementenService->inschakelenAbonnement($abo);
 		if ($aantal > 0) {
 			$melding =
 				'Automatisch aangemeld voor ' .
@@ -93,7 +91,7 @@ class MijnAbonnementenController extends AbstractController
 	 */
 	public function uitschakelen(MaaltijdRepetitie $repetitie)
 	{
-		$abo_aantal = $this->maaltijdAbonnementenRepository->uitschakelenAbonnement(
+		$abo_aantal = $this->maaltijdAbonnementenService->uitschakelenAbonnement(
 			$repetitie,
 			$this->getUid()
 		);

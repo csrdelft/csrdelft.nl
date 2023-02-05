@@ -7,6 +7,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
+use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -104,7 +105,7 @@ class MaaltijdRepetitiesRepository extends AbstractRepository
 			if (!$repetitie->abonneerbaar) {
 				// niet (meer) abonneerbaar
 				$abos = ContainerFacade::getContainer()
-					->get(MaaltijdAbonnementenRepository::class)
+					->get(MaaltijdAbonnementenService::class)
 					->verwijderAbonnementen($repetitie);
 			}
 			return $abos;
@@ -144,7 +145,7 @@ class MaaltijdRepetitiesRepository extends AbstractRepository
 			);
 		}
 		$aantalAbos = ContainerFacade::getContainer()
-			->get(MaaltijdAbonnementenRepository::class)
+			->get(MaaltijdAbonnementenService::class)
 			->verwijderAbonnementen($repetitie);
 		$this->_em->remove($repetitie);
 		$this->_em->flush();

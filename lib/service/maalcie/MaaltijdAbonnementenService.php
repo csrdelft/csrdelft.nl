@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
@@ -338,5 +339,174 @@ class MaaltijdAbonnementenService
 		}
 
 		return $lijst;
+	}
+
+	/**
+	 * @param $abo MaaltijdAbonnement
+	 * @return false|int
+	 * @throws CsrGebruikerException
+	 * @throws Throwable
+	 */
+	public function inschakelenAbonnement($abo)
+	{
+		return $this->entityManager->transactional(function () use ($abo) {
+			if (!$abo->maaltijd_repetitie->abonneerbaar) {
+				throw new CsrGebruikerException('Niet abonneerbaar');
+			}
+			if (
+				$this->maaltijdAbonnementenRepository->find([
+					'mlt_repetitie_id' => $abo->mlt_repetitie_id,
+					'uid' => $abo->uid,
+				])
+			) {
+				throw new CsrGebruikerException('Abonnement al ingeschakeld');
+			}
+			if (
+				!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
+					$abo->uid,
+					$abo->maaltijd_repetitie->abonnement_filter
+				)
+			) {
+				throw new CsrGebruikerException(
+					'Niet toegestaan vanwege aanmeldrestrictie: ' .
+						$abo->maaltijd_repetitie->abonnement_filter
+				);
+			}
+
+			$abo->van_uid = $abo->uid;
+			$abo->wanneer_ingeschakeld = date_create_immutable();
+			$this->entityManager->persist($abo);
+			$this->entityManager->flush();
+
+			return $this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden(
+				$abo->maaltijd_repetitie,
+				$abo->uid
+			);
+		});
+	}
+
+	/**
+	 * @param MaaltijdRepetitie $repetitie
+	 * @return bool|mixed
+	 * @throws Throwable
+	 */
+	public function inschakelenAbonnementVoorNovieten(
+		MaaltijdRepetitie $repetitie
+	) {
+		return $this->entityManager->wrapInTransaction(function () use (
+			$repetitie
+		) {
+			$novieten = $this->profielRepository->findBy([
+				'status' => LidStatus::Noviet,
+			]);
+
+			$aantal = 0;
+			foreach ($novieten as $noviet) {
+				if (
+					!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
+						$noviet->uid,
+						$repetitie->abonnement_filter
+					)
+				) {
+					continue;
+				}
+
+				$abo = new MaaltijdAbonnement();
+				$abo->maaltijd_repetitie = $repetitie;
+				$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+				$abo->uid = $noviet->uid;
+				$abo->wanneer_ingeschakeld = date_create_immutable();
+
+				if (
+					$this->maaltijdAbonnementenRepository->find([
+						'mlt_repetitie_id' => $abo->mlt_repetitie_id,
+						'uid' => $abo->uid,
+					])
+				) {
+					continue;
+				}
+				$this->entityManager->persist($abo);
+				$this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden(
+					$repetitie,
+					$noviet->uid
+				);
+				$aantal += 1;
+			}
+
+			$this->entityManager->flush();
+
+			return $aantal;
+		});
+	}
+
+	/**
+	 * @param MaaltijdRepetitie $repetitie
+	 * @param $uid
+	 * @return bool|mixed
+	 * @throws Throwable
+	 */
+	public function uitschakelenAbonnement(MaaltijdRepetitie $repetitie, $uid)
+	{
+		return $this->entityManager->wrapInTransaction(function () use (
+			$repetitie,
+			$uid
+		) {
+			if (
+				!$this->maaltijdAbonnementenRepository->getHeeftAbonnement(
+					$repetitie,
+					$uid
+				)
+			) {
+				throw new CsrGebruikerException('Abonnement al uitgeschakeld');
+			}
+
+			$abo = $this->maaltijdAbonnementenRepository->getAbonnement(
+				$repetitie,
+				$uid
+			);
+			$rep = $abo->maaltijd_repetitie;
+			$this->entityManager->remove($abo);
+			$this->entityManager->flush();
+
+			$abo = new MaaltijdAbonnement();
+			$abo->maaltijd_repetitie = $repetitie;
+			$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+			$abo->maaltijd_repetitie = $rep;
+			$abo->van_uid = $uid;
+
+			$aantal = $this->maaltijdAanmeldingenRepository->afmeldenDoorAbonnement(
+				$repetitie,
+				$uid
+			);
+			return [$abo, $aantal];
+		});
+	}
+
+	/**
+	 * Called when a MaaltijdRepetitie is being deleted.
+	 * This is only possible after all MaaltijdAanmeldingen are deleted of this MaaltijdAbonnement,
+	 * by deleting the Maaltijden (db foreign key door_abonnement)
+	 *
+	 * @param $mrid
+	 * @return int amount of deleted abos
+	 * @throws Throwable
+	 */
+	public function verwijderAbonnementen(MaaltijdRepetitie $mrid)
+	{
+		return $this->entityManager->wrapInTransaction(function () use ($mrid) {
+			$abos = $this->maaltijdAbonnementenRepository->getAbonnementenVoorRepetitie(
+				$mrid
+			);
+			$aantal = count($abos);
+			foreach ($abos as $abo) {
+				$this->maaltijdAanmeldingenRepository->afmeldenDoorAbonnement(
+					$mrid,
+					$abo->uid
+				);
+				$this->entityManager->remove($abo);
+			}
+			$this->entityManager->flush();
+			return $aantal;
+		});
 	}
 }

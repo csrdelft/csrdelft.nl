@@ -126,7 +126,7 @@ class BeheerAbonnementenController extends AbstractController
 	{
 		$mrid = filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
 		$repetitie = $this->maaltijdRepetitiesRepository->find($mrid);
-		$aantal = $this->maaltijdAbonnementenRepository->inschakelenAbonnementVoorNovieten(
+		$aantal = $this->maaltijdAbonnementenService->inschakelenAbonnementVoorNovieten(
 			$repetitie
 		);
 		$matrix = $this->maaltijdAbonnementenService->getAbonnementenVanNovieten();
@@ -167,9 +167,7 @@ class BeheerAbonnementenController extends AbstractController
 		$abo->maaltijd_repetitie = $repetitie;
 		$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
 		$abo->uid = $uid;
-		$aantal = $this->maaltijdAbonnementenRepository->inschakelenAbonnement(
-			$abo
-		);
+		$aantal = $this->maaltijdAbonnementenService->inschakelenAbonnement($abo);
 		if ($aantal > 0) {
 			$melding =
 				'Automatisch aangemeld voor ' .
@@ -198,7 +196,7 @@ class BeheerAbonnementenController extends AbstractController
 				sprintf('Lid met uid "%s" bestaat niet.', $uid)
 			);
 		}
-		$abo_aantal = $this->maaltijdAbonnementenRepository->uitschakelenAbonnement(
+		$abo_aantal = $this->maaltijdAbonnementenService->uitschakelenAbonnement(
 			$repetitie,
 			$uid
 		);
