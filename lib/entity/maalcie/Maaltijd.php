@@ -7,6 +7,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Eisen;
 use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\fiscaat\CiviProduct;
@@ -204,13 +205,16 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	{
 		$aantal = $this->getAantalAanmeldingen();
 		$marge = floor(
-			$aantal / floatval(instelling('maaltijden', 'marge_gasten_verhouding'))
+			$aantal /
+				floatval(
+					InstellingUtil::instelling('maaltijden', 'marge_gasten_verhouding')
+				)
 		);
-		$min = intval(instelling('maaltijden', 'marge_gasten_min'));
+		$min = intval(InstellingUtil::instelling('maaltijden', 'marge_gasten_min'));
 		if ($marge < $min) {
 			$marge = $min;
 		}
-		$max = intval(instelling('maaltijden', 'marge_gasten_max'));
+		$max = intval(InstellingUtil::instelling('maaltijden', 'marge_gasten_max'));
 		if ($marge > $max) {
 			$marge = $max;
 		}
@@ -226,7 +230,8 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	{
 		$budget = $this->getAantalAanmeldingen() + $this->getMarge();
 		$budget *=
-			$this->getPrijs() - intval(instelling('maaltijden', 'budget_maalcie'));
+			$this->getPrijs() -
+			intval(InstellingUtil::instelling('maaltijden', 'budget_maalcie'));
 		return $budget;
 	}
 
@@ -291,8 +296,8 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	public function isTransparant()
 	{
 		// Toon als transparant (vrij) als lid dat wil of lid niet ingeketzt is
-		return lid_instelling('agenda', 'transparantICal') === 'ja' ||
-			!$this->getIsAangemeld(LoginService::getUid());
+		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
+			'ja' || !$this->getIsAangemeld(LoginService::getUid());
 	}
 
 	// Controller ############################################################
@@ -363,7 +368,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 */
 	public function getDataTableTijd()
 	{
-		return DateUtil::dateFormatIntl($this->tijd, TIME_FORMAT);
+		return DateUtil::dateFormatIntl($this->tijd, DateUtil::TIME_FORMAT);
 	}
 
 	/**
@@ -373,7 +378,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 */
 	public function getDataTableDatum()
 	{
-		return DateUtil::dateFormatIntl($this->datum, DATE_FORMAT);
+		return DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT);
 	}
 
 	public function getAanmeldLimiet()
@@ -419,9 +424,9 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		if ($this->datum) {
 			return $this->titel .
 				' op ' .
-				DateUtil::dateFormatIntl($this->datum, DATE_FORMAT) .
+				DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT) .
 				' om ' .
-				DateUtil::dateFormatIntl($this->getMoment(), TIME_FORMAT);
+				DateUtil::dateFormatIntl($this->getMoment(), DateUtil::TIME_FORMAT);
 		} else {
 			return $this->titel ?? '';
 		}

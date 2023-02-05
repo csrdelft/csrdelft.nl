@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\controller\forum\ForumController;
 use CsrDelft\controller\groepen\CommissiesController;
@@ -28,71 +29,73 @@ class ZoekController extends AbstractController
 		$zoekterm = $request->query->get('q');
 		$resultaat = [];
 
-		$instelling = lid_instelling('zoeken', 'leden');
+		$instelling = InstellingUtil::lid_instelling('zoeken', 'leden');
 		if ($instelling !== 'nee') {
 			$resultaat[] = $this->forward(
 				ToolsController::class . '::naamsuggesties',
 				['zoekin' => 'leden', 'zoekterm' => $zoekterm]
 			);
 		}
-		if (lid_instelling('zoeken', 'commissies') === 'ja') {
+		if (InstellingUtil::lid_instelling('zoeken', 'commissies') === 'ja') {
 			$resultaat[] = $this->forward(CommissiesController::class . '::zoeken', [
 				'zoekterm' => $zoekterm,
 			]);
 		}
-		if (lid_instelling('zoeken', 'kringen') === 'ja') {
+		if (InstellingUtil::lid_instelling('zoeken', 'kringen') === 'ja') {
 			$resultaat[] = $this->forward(KringenController::class . '::zoeken', [
 				'zoekterm' => $zoekterm,
 			]);
 		}
-		if (lid_instelling('zoeken', 'onderverenigingen') === 'ja') {
+		if (
+			InstellingUtil::lid_instelling('zoeken', 'onderverenigingen') === 'ja'
+		) {
 			$resultaat[] = $this->forward(
 				OnderverenigingenController::class . '::zoeken',
 				['zoekterm' => $zoekterm]
 			);
 		}
-		if (lid_instelling('zoeken', 'werkgroepen') === 'ja') {
+		if (InstellingUtil::lid_instelling('zoeken', 'werkgroepen') === 'ja') {
 			$resultaat[] = $this->forward(WerkgroepenController::class . '::zoeken', [
 				'zoekterm' => $zoekterm,
 			]);
 		}
-		if (lid_instelling('zoeken', 'woonoorden') === 'ja') {
+		if (InstellingUtil::lid_instelling('zoeken', 'woonoorden') === 'ja') {
 			$resultaat[] = $this->forward(WoonoordenController::class . '::zoeken', [
 				'zoekterm' => $zoekterm,
 			]);
 		}
-		if (lid_instelling('zoeken', 'groepen') === 'ja') {
+		if (InstellingUtil::lid_instelling('zoeken', 'groepen') === 'ja') {
 			$resultaat[] = $this->forward(
 				RechtengroepenController::class . '::zoeken',
 				['zoekterm' => $zoekterm]
 			);
 		}
-		if (lid_instelling('zoeken', 'forum') === 'ja') {
+		if (InstellingUtil::lid_instelling('zoeken', 'forum') === 'ja') {
 			$resultaat[] = $this->forward(ForumController::class . '::titelzoeken', [
 				'zoekterm' => $zoekterm,
 			]);
 		}
-		if (lid_instelling('zoeken', 'fotoalbum') === 'ja') {
+		if (InstellingUtil::lid_instelling('zoeken', 'fotoalbum') === 'ja') {
 			$resultaat[] = $this->forward(FotoAlbumController::class . '::zoeken', [
 				'zoekterm' => $zoekterm,
 			]);
 		}
-		if (lid_instelling('zoeken', 'agenda') === 'ja') {
+		if (InstellingUtil::lid_instelling('zoeken', 'agenda') === 'ja') {
 			$resultaat[] = $this->forward(AgendaController::class . '::zoeken', [
 				'zoekterm' => $zoekterm,
 			]);
 		}
-		if (lid_instelling('zoeken', 'documenten') === 'ja') {
+		if (InstellingUtil::lid_instelling('zoeken', 'documenten') === 'ja') {
 			$resultaat[] = $this->forward(DocumentenController::class . '::zoeken', [
 				'zoekterm' => $zoekterm,
 			]);
 		}
-		if (lid_instelling('zoeken', 'boeken') === 'ja') {
+		if (InstellingUtil::lid_instelling('zoeken', 'boeken') === 'ja') {
 			$resultaat[] = $this->forward(BibliotheekController::class . '::zoeken', [
 				'zoekterm' => $zoekterm,
 			]);
 		}
-		if (lid_instelling('zoeken', 'wiki') === 'ja') {
+		if (InstellingUtil::lid_instelling('zoeken', 'wiki') === 'ja') {
 			$resultaat[] = $this->forward(ZoekController::class . '::wikizoek', [
 				'zoekterm' => $zoekterm,
 			]);

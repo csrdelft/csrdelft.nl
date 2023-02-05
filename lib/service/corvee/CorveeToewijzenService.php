@@ -3,6 +3,7 @@
 namespace CsrDelft\service\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\corvee\CorveePuntenOverzichtDTO;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
@@ -130,7 +131,12 @@ class CorveeToewijzenService
 				$corveePuntenOverzichten[$uid]->laatste->getBeginMoment() >=
 					$taak
 						->getBeginMoment()
-						->modify(instelling('corvee', 'suggesties_recent_verbergen'))
+						->modify(
+							InstellingUtil::instelling(
+								'corvee',
+								'suggesties_recent_verbergen'
+							)
+						)
 			) {
 				$corveePuntenOverzichten[$uid]->recent = true;
 			} else {

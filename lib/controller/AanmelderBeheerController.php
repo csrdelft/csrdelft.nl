@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\entity\aanmelder\AanmeldActiviteit;
 use CsrDelft\entity\aanmelder\Deelnemer;
@@ -476,7 +477,7 @@ class AanmelderBeheerController extends AbstractController
 		return $this->render('aanmelder/onderdelen/deelnemer.html.twig', [
 			'activiteit' => $activiteit,
 			'deelnemer' => $deelnemer,
-			'naamweergave' => instelling(
+			'naamweergave' => InstellingUtil::instelling(
 				'maaltijden',
 				'weergave_ledennamen_maaltijdlijst'
 			),
@@ -510,7 +511,7 @@ class AanmelderBeheerController extends AbstractController
 		return $this->render('aanmelder/onderdelen/deelnemer.html.twig', [
 			'activiteit' => $activiteit,
 			'deelnemer' => $deelnemer,
-			'naamweergave' => instelling(
+			'naamweergave' => InstellingUtil::instelling(
 				'maaltijden',
 				'weergave_ledennamen_maaltijdlijst'
 			),

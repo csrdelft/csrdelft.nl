@@ -6,6 +6,7 @@ use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
@@ -91,7 +92,10 @@ class BbMaaltijd extends BbTag
 			'maaltijd',
 			$url,
 			$maaltijd->titel,
-			DateUtil::dateFormatIntl($maaltijd->getMoment(), DATETIME_FORMAT)
+			DateUtil::dateFormatIntl(
+				$maaltijd->getMoment(),
+				DateUtil::DATETIME_FORMAT
+			)
 		);
 	}
 
@@ -196,7 +200,7 @@ class BbMaaltijd extends BbTag
 				}
 			} elseif ($mid === 'beoordeling') {
 				$timestamp = date_create_immutable(
-					instelling('maaltijden', 'beoordeling_periode')
+					InstellingUtil::instelling('maaltijden', 'beoordeling_periode')
 				);
 				$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(
 					LoginService::getUid(),

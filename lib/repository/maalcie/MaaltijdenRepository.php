@@ -5,6 +5,7 @@ namespace CsrDelft\repository\maalcie;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\maalcie\Maaltijd;
@@ -231,7 +232,9 @@ class MaaltijdenRepository extends AbstractRepository
 			->setParameter('van_datum', date_create('-1 day'))
 			->setParameter(
 				'tot_datum',
-				date_create(instelling('maaltijden', 'toon_ketzer_vooraf'))
+				date_create(
+					InstellingUtil::instelling('maaltijden', 'toon_ketzer_vooraf')
+				)
 			)
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
@@ -536,8 +539,10 @@ class MaaltijdenRepository extends AbstractRepository
 					)
 				) {
 					MeldingUtil::setMelding(
-						DateUtil::dateFormatIntl($maaltijd->getMoment(), DATETIME_FORMAT) .
-							' heeft nog gekoppelde corveetaken!',
+						DateUtil::dateFormatIntl(
+							$maaltijd->getMoment(),
+							DateUtil::DATETIME_FORMAT
+						) . ' heeft nog gekoppelde corveetaken!',
 						2
 					);
 				}

@@ -104,13 +104,13 @@ class BeheerTakenController extends AbstractController
 				$datum = $taak->datum;
 				if (
 					!array_key_exists(
-						DateUtil::dateFormatIntl($datum, DATE_FORMAT),
+						DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT),
 						$model
 					)
 				) {
-					$model[DateUtil::dateFormatIntl($datum, DATE_FORMAT)] = [];
+					$model[DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT)] = [];
 				}
-				$model[DateUtil::dateFormatIntl($datum, DATE_FORMAT)][
+				$model[DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT)][
 					$taak->corveeFunctie->functie_id
 				][] = $taak;
 			}
@@ -152,11 +152,14 @@ class BeheerTakenController extends AbstractController
 		foreach ($taken as $taak) {
 			$datum = $taak->datum;
 			if (
-				!array_key_exists(DateUtil::dateFormatIntl($datum, DATE_FORMAT), $model)
+				!array_key_exists(
+					DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT),
+					$model
+				)
 			) {
-				$model[DateUtil::dateFormatIntl($datum, DATE_FORMAT)] = [];
+				$model[DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT)] = [];
 			}
-			$model[DateUtil::dateFormatIntl($datum, DATE_FORMAT)][
+			$model[DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT)][
 				$taak->corveeFunctie->functie_id
 			][] = $taak;
 		}

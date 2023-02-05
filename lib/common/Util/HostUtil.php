@@ -2,6 +2,8 @@
 
 namespace CsrDelft\common\Util;
 
+use CsrDelft\common\ContainerFacade;
+
 final class HostUtil
 {
 	/**

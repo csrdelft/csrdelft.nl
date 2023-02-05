@@ -75,7 +75,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 	 */
 	public function getTijdFormatted()
 	{
-		return DateUtil::dateFormatIntl($this->tijd, TIME_FORMAT);
+		return DateUtil::dateFormatIntl($this->tijd, DateUtil::TIME_FORMAT);
 	}
 
 	/**
@@ -85,7 +85,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 	 */
 	public function getDatumFormatted()
 	{
-		return DateUtil::dateFormatIntl($this->datum, DATE_FORMAT);
+		return DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT);
 	}
 
 	/**

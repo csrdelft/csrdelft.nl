@@ -197,7 +197,10 @@ class WachtwoordController extends AbstractController
 		$url = $this->generateUrl('wachtwoord_reset', ['token' => $token[0]]);
 		$bericht = $this->renderView('mail/bericht/wachtwoord_vergeten.mail.twig', [
 			'naam' => $profiel->getNaam('civitas'),
-			'mogelijkTot' => DateUtil::dateFormatIntl($token[1], DATETIME_FORMAT),
+			'mogelijkTot' => DateUtil::dateFormatIntl(
+				$token[1],
+				DateUtil::DATETIME_FORMAT
+			),
 			'url' => $url,
 		]);
 		$emailNaam = $profiel->getNaam('volledig', true); // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'

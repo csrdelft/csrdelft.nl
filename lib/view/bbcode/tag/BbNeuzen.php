@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\view\Icon;
 
 /**
@@ -20,7 +21,7 @@ class BbNeuzen extends BbTag
 	public function render()
 	{
 		$content = $this->getContent();
-		if (lid_instelling('layout', 'neuzen') != 'nee') {
+		if (InstellingUtil::lid_instelling('layout', 'neuzen') != 'nee') {
 			$neus = Icon::getTag('circle', null, 'Neus 2013', 'neus2013');
 			$content = str_replace('o', $neus, $content);
 		}

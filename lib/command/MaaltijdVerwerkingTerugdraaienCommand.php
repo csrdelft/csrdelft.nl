@@ -88,7 +88,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command
 				'- ' .
 					$maaltijd->titel .
 					' ' .
-					DateUtil::dateFormatIntl($maaltijd->datum, DATE_FORMAT)
+					DateUtil::dateFormatIntl($maaltijd->datum, DateUtil::DATE_FORMAT)
 			);
 		}
 

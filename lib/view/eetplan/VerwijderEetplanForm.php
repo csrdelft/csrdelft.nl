@@ -27,8 +27,8 @@ class VerwijderEetplanForm extends ModalForm
 		$avondenLijst = [];
 		foreach ($avonden as $eetplan) {
 			$avondenLijst[
-				DateUtil::dateFormatIntl($eetplan->avond, DATE_FORMAT)
-			] = DateUtil::dateFormatIntl($eetplan->avond, DATE_FORMAT);
+				DateUtil::dateFormatIntl($eetplan->avond, DateUtil::DATE_FORMAT)
+			] = DateUtil::dateFormatIntl($eetplan->avond, DateUtil::DATE_FORMAT);
 		}
 
 		$fields[] = new RequiredSelectField('avond', null, 'Avond', $avondenLijst);

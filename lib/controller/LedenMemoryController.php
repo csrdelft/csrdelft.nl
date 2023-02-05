@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Lichting;
@@ -21,6 +22,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use const P_LEDEN_MOD;
 
 class LedenMemoryController extends AbstractController
 {
@@ -217,8 +219,12 @@ class LedenMemoryController extends AbstractController
 			},
 			array_filter($profielen, function ($profiel) {
 				$path = $profiel->getPasfotoInternalPath();
-				return is_zichtbaar($profiel, 'profielfoto', 'intern') &&
-					$path !== null;
+				return InstellingUtil::is_zichtbaar(
+					$profiel,
+					'profielfoto',
+					'intern',
+					P_LEDEN_MOD
+				) && $path !== null;
 			})
 		);
 

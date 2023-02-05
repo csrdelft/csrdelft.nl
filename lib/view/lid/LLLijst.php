@@ -162,7 +162,10 @@ class LLLijst extends LLWeergave
 				default:
 					try {
 						if ($profiel->$veld instanceof DateTimeInterface) {
-							$html .= DateUtil::dateFormatIntl($profiel->$veld, DATE_FORMAT);
+							$html .= DateUtil::dateFormatIntl(
+								$profiel->$veld,
+								DateUtil::DATE_FORMAT
+							);
 						} else {
 							$html .= htmlspecialchars($profiel->$veld);
 						}

@@ -82,7 +82,10 @@ class ForumPostsService
 			'verplaatst door [lid=' .
 			LoginService::getUid() .
 			'] [reldate]' .
-			DateUtil::dateFormatIntl($post->laatst_gewijzigd, DATETIME_FORMAT) .
+			DateUtil::dateFormatIntl(
+				$post->laatst_gewijzigd,
+				DateUtil::DATETIME_FORMAT
+			) .
 			'[/reldate]' .
 			"\n";
 		$this->entityManager->persist($post);
@@ -149,7 +152,10 @@ class ForumPostsService
 			'bewerkt door [lid=' .
 			LoginService::getUid() .
 			'] [reldate]' .
-			DateUtil::dateFormatIntl($post->laatst_gewijzigd, DATETIME_FORMAT) .
+			DateUtil::dateFormatIntl(
+				$post->laatst_gewijzigd,
+				DateUtil::DATETIME_FORMAT
+			) .
 			'[/reldate]';
 		if ($reden !== '') {
 			$bewerkt .= ': [tekst]' . CsrBB::escapeUbbOff($reden) . '[/tekst]';
@@ -209,7 +215,10 @@ class ForumPostsService
 				'[prive=P_FORUM_MOD]Goedgekeurd door [lid=' .
 				LoginService::getUid() .
 				'] [reldate]' .
-				DateUtil::dateFormatIntl($post->laatst_gewijzigd, DATETIME_FORMAT) .
+				DateUtil::dateFormatIntl(
+					$post->laatst_gewijzigd,
+					DateUtil::DATETIME_FORMAT
+				) .
 				'[/reldate][/prive]' .
 				"\n";
 			$this->entityManager->persist($post);

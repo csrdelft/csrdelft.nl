@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\fotoalbum;
 
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
@@ -42,7 +43,7 @@ class FotoBBView implements ToResponse, View
 		}
 		if (
 			!$this->groot and
-			lid_instelling('forum', 'fotoWeergave') == 'boven bericht'
+			InstellingUtil::lid_instelling('forum', 'fotoWeergave') == 'boven bericht'
 		) {
 			$html .=
 				' hoverIntent"><div class="hoverIntentContent"><span class="bb-img-loading" data-src="' .
@@ -53,8 +54,9 @@ class FotoBBView implements ToResponse, View
 		}
 		$html .= '<div class="bb-img-loading" data-src="';
 		if (
-			$this->groot and lid_instelling('forum', 'fotoWeergave') != 'nee' or
-			lid_instelling('forum', 'fotoWeergave') == 'in bericht'
+			$this->groot and
+				InstellingUtil::lid_instelling('forum', 'fotoWeergave') != 'nee' or
+			InstellingUtil::lid_instelling('forum', 'fotoWeergave') == 'in bericht'
 		) {
 			$html .= $this->model->getResizedUrl();
 		} else {

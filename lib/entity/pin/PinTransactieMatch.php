@@ -268,7 +268,7 @@ class PinTransactieMatch implements DataTableEntry
 	 */
 	public static function renderMoment(DateTimeImmutable $moment, $link = true)
 	{
-		$formatted = DateUtil::dateFormatIntl($moment, DATETIME_FORMAT);
+		$formatted = DateUtil::dateFormatIntl($moment, DateUtil::DATETIME_FORMAT);
 		if (!$link) {
 			return $formatted;
 		}

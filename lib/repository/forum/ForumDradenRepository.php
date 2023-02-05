@@ -4,6 +4,7 @@ namespace CsrDelft\repository\forum;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
@@ -99,7 +100,10 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	public function getAantalPerPagina()
 	{
 		if (!$this->per_pagina) {
-			$this->per_pagina = (int) lid_instelling('forum', 'draden_per_pagina');
+			$this->per_pagina = (int) InstellingUtil::lid_instelling(
+				'forum',
+				'draden_per_pagina'
+			);
 		}
 		return $this->per_pagina;
 	}
@@ -327,12 +331,14 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 			$qb->setParameter(
 				'laatst_gewijzigd_gesloten',
 				date_create_immutable(
-					instelling('forum', 'externen_geentoegang_gesloten')
+					InstellingUtil::instelling('forum', 'externen_geentoegang_gesloten')
 				)
 			);
 			$qb->setParameter(
 				'laatst_gewijzigd_open',
-				date_create_immutable(instelling('forum', 'externen_geentoegang_open'))
+				date_create_immutable(
+					InstellingUtil::instelling('forum', 'externen_geentoegang_open')
+				)
 			);
 		}
 	}

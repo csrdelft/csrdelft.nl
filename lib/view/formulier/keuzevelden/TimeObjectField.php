@@ -10,7 +10,7 @@ class TimeObjectField extends TimeField
 	public function __construct($name, $value, $description, $minutensteps = null)
 	{
 		if ($value instanceof DateTimeInterface) {
-			$value = DateUtil::dateFormatIntl($value, TIME_FORMAT);
+			$value = DateUtil::dateFormatIntl($value, DateUtil::TIME_FORMAT);
 		}
 		parent::__construct($name, $value, $description, $minutensteps);
 	}

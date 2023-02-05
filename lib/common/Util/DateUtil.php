@@ -7,6 +7,11 @@ use IntlDateFormatter;
 
 final class DateUtil
 {
+	public const LONG_DATE_FORMAT = 'EE d MMM'; // Ma 3 Jan
+	public const DATE_FORMAT = 'y-MM-dd';
+	public const DATETIME_FORMAT = 'y-MM-dd HH:mm:ss';
+	public const TIME_FORMAT = 'HH:mm';
+
 	public static function reldate($datum)
 	{
 		if ($datum instanceof DateTimeInterface) {

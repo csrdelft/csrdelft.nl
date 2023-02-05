@@ -50,7 +50,7 @@ class CorveeTakenRepository extends AbstractRepository
 	public function updateGemaild(CorveeTaak $taak)
 	{
 		$taak->setWanneerGemaild(
-			DateUtil::dateFormatIntl(date_create(), DATETIME_FORMAT)
+			DateUtil::dateFormatIntl(date_create(), DateUtil::DATETIME_FORMAT)
 		);
 		$this->_em->persist($taak);
 		$this->_em->flush();
@@ -640,7 +640,7 @@ class CorveeTakenRepository extends AbstractRepository
 					}
 				} else {
 					$takenPerDatum[
-						DateUtil::dateFormatIntl($datum, DATE_FORMAT)
+						DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT)
 					][] = $taak;
 				}
 			}

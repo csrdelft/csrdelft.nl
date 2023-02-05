@@ -6,6 +6,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\HostUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
@@ -81,7 +82,9 @@ class GoogleContactSync
 	) {
 		$this->authenticator = $authenticator;
 
-		$this->groepNaam = trim(lid_instelling('googleContacts', 'groepnaam'));
+		$this->groepNaam = trim(
+			InstellingUtil::lid_instelling('googleContacts', 'groepnaam')
+		);
 		if (empty($this->groepNaam)) {
 			$this->groepNaam = self::DEFAULT_GROEPNAAM;
 		}
@@ -281,7 +284,8 @@ class GoogleContactSync
 		// birthdays
 		if (
 			$profiel->gebdatum &&
-			DateUtil::dateFormatIntl($profiel->gebdatum, DATE_FORMAT) != '0000-00-00'
+			DateUtil::dateFormatIntl($profiel->gebdatum, DateUtil::DATE_FORMAT) !=
+				'0000-00-00'
 		) {
 			$birthday = new Birthday();
 			$birthdayDate = new Date();
@@ -318,7 +322,7 @@ class GoogleContactSync
 		if (
 			$profiel->o_adres &&
 			(!$profiel->adres ||
-				lid_instelling('googleContacts', 'ouderAdres') === 'ja')
+				InstellingUtil::lid_instelling('googleContacts', 'ouderAdres') === 'ja')
 		) {
 			$address = new Address();
 			$metadata = new FieldMetadata();
@@ -341,7 +345,12 @@ class GoogleContactSync
 			['telefoon', 'home', false],
 		];
 
-		if (lid_instelling('googleContacts', 'ouderTelefoonnummer') === 'ja') {
+		if (
+			InstellingUtil::lid_instelling(
+				'googleContacts',
+				'ouderTelefoonnummer'
+			) === 'ja'
+		) {
 			$phoneNumberList[] = ['o_telefoon', 'Ouders', false];
 		}
 

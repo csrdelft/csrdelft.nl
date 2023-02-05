@@ -147,11 +147,12 @@ class PinTransactiesDownloadenCommand extends Command
 			) {
 				$date = $cur->format('Y-m-d');
 				$output->writeln('<info>' . $date . '</info>');
-				$from = DateUtil::dateFormatIntl($cur, DATE_FORMAT) . ' 12:00:00';
+				$from =
+					DateUtil::dateFormatIntl($cur, DateUtil::DATE_FORMAT) . ' 12:00:00';
 				$to =
 					DateUtil::dateFormatIntl(
 						$cur->add(new DateInterval('P1D')),
-						DATE_FORMAT
+						DateUtil::DATE_FORMAT
 					) . ' 12:00:00';
 				$this->downloadDag($output, $from, $to);
 			}
@@ -160,9 +161,10 @@ class PinTransactiesDownloadenCommand extends Command
 			$from =
 				DateUtil::dateFormatIntl(
 					$moment->sub(new DateInterval('P1D')),
-					DATE_FORMAT
+					DateUtil::DATE_FORMAT
 				) . ' 12:00:00';
-			$to = DateUtil::dateFormatIntl($moment, DATE_FORMAT) . ' 12:00:00';
+			$to =
+				DateUtil::dateFormatIntl($moment, DateUtil::DATE_FORMAT) . ' 12:00:00';
 			$output->writeln("Downloaden van $from tot $to");
 			$this->downloadDag($output, $from, $to);
 		}

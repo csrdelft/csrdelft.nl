@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\entity\fotoalbum\Foto;
@@ -224,12 +225,14 @@ class ProfielController extends AbstractController
 			),
 			'forumrecent' => $forumPostsRepository->getRecenteForumPostsVanLid(
 				$profiel->uid,
-				(int) lid_instelling('forum', 'draden_per_pagina')
+				(int) InstellingUtil::lid_instelling('forum', 'draden_per_pagina')
 			),
 			'boeken' => $boekExemplaarRepository->getEigendom($profiel->uid),
 			'recenteAanmeldingen' => $maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(
 				$profiel->uid,
-				date_create_immutable(instelling('maaltijden', 'recent_lidprofiel'))
+				date_create_immutable(
+					InstellingUtil::instelling('maaltijden', 'recent_lidprofiel')
+				)
 			),
 			'abos' => $maaltijdAbonnementenService->getAbonnementenVoorLid(
 				$profiel->uid

@@ -24,7 +24,7 @@ class DateObjectField extends DateField
 		$minyear = null
 	) {
 		if ($value instanceof DateTimeInterface) {
-			$value = DateUtil::dateFormatIntl($value, DATE_FORMAT);
+			$value = DateUtil::dateFormatIntl($value, DateUtil::DATE_FORMAT);
 		}
 		parent::__construct($name, $value, $description, $maxyear, $minyear);
 	}

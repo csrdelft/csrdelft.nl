@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\profiel\Profiel;
@@ -166,15 +167,20 @@ class CorveeTaak implements Agendeerbaar
 		}
 
 		for (
-			$i = intval(instelling('corvee', 'herinnering_aantal_mails'));
+			$i = intval(
+				InstellingUtil::instelling('corvee', 'herinnering_aantal_mails')
+			);
 			$i > 0;
 			$i--
 		) {
 			$herinnering_email_uiterlijk = DateInterval::createFromDateString(
-				instelling('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk')
+				InstellingUtil::instelling(
+					'corvee',
+					'herinnering_' . $i . 'e_mail_uiterlijk'
+				)
 			);
 			$herinnering_email = DateInterval::createFromDateString(
-				instelling('corvee', 'herinnering_' . $i . 'e_mail')
+				InstellingUtil::instelling('corvee', 'herinnering_' . $i . 'e_mail')
 			);
 			if (
 				$aantal < $i &&
@@ -201,13 +207,18 @@ class CorveeTaak implements Agendeerbaar
 		$moeten = 0;
 
 		for (
-			$i = intval(instelling('corvee', 'herinnering_aantal_mails'));
+			$i = intval(
+				InstellingUtil::instelling('corvee', 'herinnering_aantal_mails')
+			);
 			$i > 0;
 			$i--
 		) {
 			$uiterlijk = $datum->add(
 				DateInterval::createFromDateString(
-					instelling('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk')
+					InstellingUtil::instelling(
+						'corvee',
+						'herinnering_' . $i . 'e_mail_uiterlijk'
+					)
 				)
 			);
 			if ($nu >= $uiterlijk) {

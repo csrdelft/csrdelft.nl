@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\FileUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\common\Util\TextUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
@@ -33,6 +34,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Persistence\Proxy;
+use const P_LEDEN_MOD;
 
 /**
  * Profiel.class.php
@@ -528,8 +530,11 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	public function isJarig()
 	{
 		return $this->gebdatum != null &&
-			substr(DateUtil::dateFormatIntl($this->gebdatum, DATE_FORMAT), 5, 5) ===
-				date('m-d');
+			substr(
+				DateUtil::dateFormatIntl($this->gebdatum, DateUtil::DATE_FORMAT),
+				5,
+				5
+			) === date('m-d');
 	}
 
 	/**
@@ -685,7 +690,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		}
 		if (
 			$vorm !== 'pasfoto' &&
-			lid_instelling('layout', 'visitekaartjes') == 'ja'
+			InstellingUtil::lid_instelling('layout', 'visitekaartjes') == 'ja'
 		) {
 			$title = '';
 		} else {
@@ -705,7 +710,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			'">';
 		if (
 			$vorm !== 'pasfoto' &&
-			lid_instelling('layout', 'visitekaartjes') == 'ja'
+			InstellingUtil::lid_instelling('layout', 'visitekaartjes') == 'ja'
 		) {
 			return '<span data-visite="' .
 				$this->uid .
@@ -746,7 +751,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	public function getNaam($vorm = 'volledig', $force = false)
 	{
 		if ($vorm === 'user') {
-			$vorm = lid_instelling('forum', 'naamWeergave');
+			$vorm = InstellingUtil::lid_instelling('forum', 'naamWeergave');
 		}
 		if ($vorm != 'civitas' && !$force && !LoginService::mag(P_LOGGED_IN)) {
 			$vorm = 'civitas';
@@ -872,10 +877,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	public function getPasfotoPath($vorm = 'user')
 	{
 		if ($vorm === 'user') {
-			$vorm = lid_instelling('forum', 'naamWeergave');
+			$vorm = InstellingUtil::lid_instelling('forum', 'naamWeergave');
 		}
 
-		if (!is_zichtbaar($this, 'profielfoto', 'intern')) {
+		if (
+			!InstellingUtil::is_zichtbaar($this, 'profielfoto', 'intern', P_LEDEN_MOD)
+		) {
 			return '/images/geen-foto.jpg';
 		}
 		$path = $this->getPasfotoInternalPath($vorm);

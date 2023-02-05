@@ -67,7 +67,7 @@ class ApiLedenController
 			'pasfoto' => $profiel->getPasfotoPath('vierkant'),
 			'geboortedatum' => DateUtil::dateFormatIntl(
 				$profiel->gebdatum,
-				DATE_FORMAT
+				DateUtil::DATE_FORMAT
 			),
 			'email' => $profiel->email,
 			'mobiel' => $profiel->mobiel,

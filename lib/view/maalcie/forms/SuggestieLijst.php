@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\corvee\CorveePuntenOverzichtDTO;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\repository\groepen\LichtingenRepository;
@@ -42,14 +43,23 @@ class SuggestieLijst implements ToResponse, FormElement
 		}
 
 		if ($taak->corveeFunctie->kwalificatie_benodigd) {
-			$this->voorkeur = instelling(
+			$this->voorkeur = InstellingUtil::instelling(
 				'corvee',
 				'suggesties_voorkeur_kwali_filter'
 			);
-			$this->recent = instelling('corvee', 'suggesties_recent_kwali_filter');
+			$this->recent = InstellingUtil::instelling(
+				'corvee',
+				'suggesties_recent_kwali_filter'
+			);
 		} else {
-			$this->voorkeur = instelling('corvee', 'suggesties_voorkeur_filter');
-			$this->recent = instelling('corvee', 'suggesties_recent_filter');
+			$this->voorkeur = InstellingUtil::instelling(
+				'corvee',
+				'suggesties_voorkeur_filter'
+			);
+			$this->recent = InstellingUtil::instelling(
+				'corvee',
+				'suggesties_recent_filter'
+			);
 		}
 		$this->twig = $twig;
 	}

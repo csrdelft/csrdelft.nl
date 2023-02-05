@@ -91,7 +91,10 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 	 */
 	public function getStartDataTable(): string
 	{
-		return DateUtil::dateFormatIntl($this->getStart(), DATETIME_FORMAT);
+		return DateUtil::dateFormatIntl(
+			$this->getStart(),
+			DateUtil::DATETIME_FORMAT
+		);
 	}
 
 	public function setStart(DateTimeImmutable $start): self
@@ -112,7 +115,10 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 	 */
 	public function getEindeDataTable(): string
 	{
-		return DateUtil::dateFormatIntl($this->getEinde(), DATETIME_FORMAT);
+		return DateUtil::dateFormatIntl(
+			$this->getEinde(),
+			DateUtil::DATETIME_FORMAT
+		);
 	}
 
 	public function setEinde(DateTimeImmutable $einde): self

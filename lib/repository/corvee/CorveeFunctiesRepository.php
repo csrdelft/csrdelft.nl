@@ -4,6 +4,7 @@ namespace CsrDelft\repository\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\repository\AbstractRepository;
@@ -62,7 +63,7 @@ class CorveeFunctiesRepository extends AbstractRepository
 	public function nieuw()
 	{
 		$functie = new CorveeFunctie();
-		$functie->kwalificatie_benodigd = (bool) instelling(
+		$functie->kwalificatie_benodigd = (bool) InstellingUtil::instelling(
 			'corvee',
 			'standaard_kwalificatie'
 		);

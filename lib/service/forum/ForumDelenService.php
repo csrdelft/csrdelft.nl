@@ -4,6 +4,7 @@ namespace CsrDelft\service\forum;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDeel;
@@ -335,7 +336,8 @@ class ForumDelenService
 			} else {
 				if (
 					!isset($pagina) ||
-					lid_instelling('forum', 'belangrijkBijRecent') === 'nee'
+					InstellingUtil::lid_instelling('forum', 'belangrijkBijRecent') ===
+						'nee'
 				) {
 					$qb->andWhere('d.belangrijk is null');
 				}

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\forum;
 
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadReageren;
@@ -69,7 +70,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 				'draad_id' => $draad->draad_id,
 				'uid' => LoginService::getUid(),
 				'datum_tijd' => date_create_immutable(
-					instelling('forum', 'reageren_tijd')
+					InstellingUtil::instelling('forum', 'reageren_tijd')
 				),
 			])
 			->getQuery()
@@ -86,7 +87,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 				'forum_id' => $deel->forum_id,
 				'uid' => LoginService::getUid(),
 				'datum_tijd' => date_create_immutable(
-					instelling('forum', 'reageren_tijd')
+					InstellingUtil::instelling('forum', 'reageren_tijd')
 				),
 			])
 			->getQuery()
@@ -99,7 +100,9 @@ class ForumDradenReagerenRepository extends AbstractRepository
 			->where('r.concept IS NULL and r.datum_tijd < :datum_tijd')
 			->setParameter(
 				'datum_tijd',
-				date_create_immutable(instelling('forum', 'reageren_tijd'))
+				date_create_immutable(
+					InstellingUtil::instelling('forum', 'reageren_tijd')
+				)
 			)
 			->delete()
 			->getQuery()

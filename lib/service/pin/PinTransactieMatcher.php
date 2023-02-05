@@ -231,7 +231,7 @@ class PinTransactieMatcher
 					$verschil += $pinTransactie->getBedragInCenten();
 					$moment = DateUtil::dateFormatIntl(
 						$pinTransactie->datetime,
-						DATETIME_FORMAT
+						DateUtil::DATETIME_FORMAT
 					);
 
 					printf(
@@ -250,7 +250,7 @@ class PinTransactieMatcher
 					$verschil -= $pinBestellingInhoud->aantal;
 					$moment = DateUtil::dateFormatIntl(
 						$pinBestelling->moment,
-						DATETIME_FORMAT
+						DateUtil::DATETIME_FORMAT
 					);
 
 					printf(
@@ -273,7 +273,7 @@ class PinTransactieMatcher
 						$pinTransactie->getBedragInCenten() - $pinBestellingInhoud->aantal;
 					$moment = DateUtil::dateFormatIntl(
 						$pinTransactie->datetime,
-						DATETIME_FORMAT
+						DateUtil::DATETIME_FORMAT
 					);
 
 					printf(
@@ -284,13 +284,19 @@ class PinTransactieMatcher
 						" - %s Transactie %d om %s.\n",
 						$pinTransactie->amount,
 						$pinTransactie->STAN,
-						DateUtil::dateFormatIntl($pinTransactie->datetime, DATETIME_FORMAT)
+						DateUtil::dateFormatIntl(
+							$pinTransactie->datetime,
+							DateUtil::DATETIME_FORMAT
+						)
 					);
 					printf(
 						" - EUR %.2f Bestelling %d om %s door %s.\n",
 						$pinBestellingInhoud->aantal / 100,
 						$pinBestelling->id,
-						DateUtil::dateFormatIntl($pinBestelling->moment, DATETIME_FORMAT),
+						DateUtil::dateFormatIntl(
+							$pinBestelling->moment,
+							DateUtil::DATETIME_FORMAT
+						),
 						$pinBestelling->uid
 					);
 					break;

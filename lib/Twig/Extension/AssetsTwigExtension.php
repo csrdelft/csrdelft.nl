@@ -3,6 +3,7 @@
 namespace CsrDelft\Twig\Extension;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\InstellingUtil;
 use Symfony\Component\Security\Core\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -58,15 +59,18 @@ class AssetsTwigExtension extends AbstractExtension
 		$modules = [];
 
 		//voeg modules toe afhankelijk van instelling
-		$modules[] = 'thema-' . lid_instelling('layout', 'opmaak');
+		$modules[] = 'thema-' . InstellingUtil::lid_instelling('layout', 'opmaak');
 
 		// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
 
-		if (lid_instelling('layout', 'toegankelijk') == 'bredere letters') {
+		if (
+			InstellingUtil::lid_instelling('layout', 'toegankelijk') ==
+			'bredere letters'
+		) {
 			$modules[] = 'bredeletters';
 		}
 
-		if (lid_instelling('layout', 'fx') == 'civisaldo') {
+		if (InstellingUtil::lid_instelling('layout', 'fx') == 'civisaldo') {
 			$modules[] = 'effect-civisaldo';
 		}
 

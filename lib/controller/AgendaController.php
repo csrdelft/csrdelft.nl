@@ -257,7 +257,10 @@ class AgendaController extends AbstractController
 					'Toegevoegd: ' .
 						$item->titel .
 						' (' .
-						DateUtil::dateFormatIntl($item->begin_moment, DATETIME_FORMAT) .
+						DateUtil::dateFormatIntl(
+							$item->begin_moment,
+							DateUtil::DATETIME_FORMAT
+						) .
 						')',
 					1
 				);

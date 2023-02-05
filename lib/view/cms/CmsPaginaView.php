@@ -55,7 +55,7 @@ class CmsPaginaView implements View, ToResponse
 				'<a href="/pagina/bewerken/' .
 				$this->pagina->naam .
 				'" class="btn float-end" title="Bewerk pagina&#013;' .
-				$this->pagina->laatstGewijzigd->format(DATETIME_FORMAT) .
+				$this->pagina->laatstGewijzigd->format(DateUtil::DATETIME_FORMAT) .
 				'">' .
 				Icon::getTag('bewerken') .
 				'</a>';

@@ -106,7 +106,10 @@ if (!HostUtil::isCLI()) {
 	// Sync lifetime of FS based PHP session with DB based C.S.R. session
 	ini_set(
 		'session.gc_maxlifetime',
-		(int) instelling('beveiliging', 'session_lifetime_seconds')
+		(int) \CsrDelft\common\Util\InstellingUtil::instelling(
+			'beveiliging',
+			'session_lifetime_seconds'
+		)
 	);
 	ini_set('session.use_strict_mode', true);
 	ini_set('session.use_cookies', true);

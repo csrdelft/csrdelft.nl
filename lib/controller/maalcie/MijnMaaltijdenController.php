@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
@@ -64,7 +65,7 @@ class MijnMaaltijdenController extends AbstractController
 			$this->getUid()
 		);
 		$timestamp = date_create_immutable(
-			instelling('maaltijden', 'beoordeling_periode')
+			InstellingUtil::instelling('maaltijden', 'beoordeling_periode')
 		);
 		$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(
 			$this->getUid(),
@@ -103,7 +104,9 @@ class MijnMaaltijdenController extends AbstractController
 			);
 		}
 		return $this->render('maaltijden/maaltijd/mijn_maaltijden.html.twig', [
-			'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs')),
+			'standaardprijs' => intval(
+				InstellingUtil::instelling('maaltijden', 'standaard_prijs')
+			),
 			'maaltijden' => $maaltijden,
 			'aanmeldingen' => $aanmeldingen,
 			'beoordelen' => $beoordelen,
@@ -190,7 +193,7 @@ class MijnMaaltijdenController extends AbstractController
 					'maaltijd' => $aanmelding->maaltijd,
 					'aanmelding' => $aanmelding,
 					'standaardprijs' => intval(
-						instelling('maaltijden', 'standaard_prijs')
+						InstellingUtil::instelling('maaltijden', 'standaard_prijs')
 					),
 				]
 			);
@@ -232,7 +235,7 @@ class MijnMaaltijdenController extends AbstractController
 				[
 					'maaltijd' => $maaltijd,
 					'standaardprijs' => intval(
-						instelling('maaltijden', 'standaard_prijs')
+						InstellingUtil::instelling('maaltijden', 'standaard_prijs')
 					),
 				]
 			);
@@ -303,7 +306,9 @@ class MijnMaaltijdenController extends AbstractController
 		return $this->render('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', [
 			'maaltijd' => $aanmelding->maaltijd,
 			'aanmelding' => $aanmelding,
-			'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs')),
+			'standaardprijs' => intval(
+				InstellingUtil::instelling('maaltijden', 'standaard_prijs')
+			),
 		]);
 	}
 
@@ -356,7 +361,9 @@ class MijnMaaltijdenController extends AbstractController
 		return $this->render('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', [
 			'maaltijd' => $aanmelding->maaltijd,
 			'aanmelding' => $aanmelding,
-			'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs')),
+			'standaardprijs' => intval(
+				InstellingUtil::instelling('maaltijden', 'standaard_prijs')
+			),
 		]);
 	}
 

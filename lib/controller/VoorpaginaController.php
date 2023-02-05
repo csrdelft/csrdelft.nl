@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\repository\agenda\AgendaRepository;
@@ -35,7 +36,7 @@ class VoorpaginaController extends AbstractController
 	): Response {
 		return $this->render('voorpagina/forum.html.twig', [
 			'draden' => $forumDelenService->getRecenteForumDraden(
-				(int) lid_instelling('zijbalk', 'forum'),
+				(int) InstellingUtil::lid_instelling('zijbalk', 'forum'),
 				null
 			),
 			'aantalWacht' => $forumPostsRepository->getAantalWachtOpGoedkeuring(),
@@ -51,7 +52,7 @@ class VoorpaginaController extends AbstractController
 	{
 		// Agenda
 		if (LoginService::mag(P_AGENDA_READ)) {
-			$aantalWeken = lid_instelling('zijbalk', 'agendaweken');
+			$aantalWeken = InstellingUtil::lid_instelling('zijbalk', 'agendaweken');
 			$items = $agendaRepository->getAllAgendeerbaar(
 				date_create_immutable(),
 				date_create_immutable('next saturday + ' . $aantalWeken . ' weeks'),
@@ -182,7 +183,7 @@ class VoorpaginaController extends AbstractController
 			$requestStack,
 			$agendaRepository,
 			$woordVanDeDagRepository,
-			lid_instelling('zijbalk', 'ishetal')
+			InstellingUtil::lid_instelling('zijbalk', 'ishetal')
 		);
 		return $isHetAlView->toResponse();
 

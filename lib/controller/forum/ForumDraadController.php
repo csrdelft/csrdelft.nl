@@ -4,6 +4,7 @@ namespace CsrDelft\controller\forum;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\SimpleSpamFilter;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\controller\AbstractController;
@@ -164,7 +165,7 @@ class ForumDraadController extends AbstractController
 			$gelezen = null;
 		}
 		if ($pagina === null) {
-			$pagina = lid_instelling('forum', 'open_draad_op_pagina');
+			$pagina = InstellingUtil::lid_instelling('forum', 'open_draad_op_pagina');
 		}
 		$paging = true;
 		if ($pagina === 'ongelezen' && $gelezen) {
@@ -476,7 +477,10 @@ class ForumDraadController extends AbstractController
 				($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd',
 				1
 			);
-			if ($nieuw && lid_instelling('forum', 'meldingEigenDraad') === 'ja') {
+			if (
+				$nieuw &&
+				InstellingUtil::lid_instelling('forum', 'meldingEigenDraad') === 'ja'
+			) {
 				$this->forumDradenMeldingRepository->setNiveauVoorLid(
 					$draad,
 					ForumDraadMeldingNiveau::ALTIJD()

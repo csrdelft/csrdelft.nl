@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\corvee;
 
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\corvee\CorveeVrijstelling;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
@@ -43,7 +44,10 @@ class CorveeVrijstellingenRepository extends AbstractRepository
 		$vrijstelling->eind_datum = $eind;
 		if ($percentage === null) {
 			$percentage = intval(
-				instelling('corvee', 'standaard_vrijstelling_percentage')
+				InstellingUtil::instelling(
+					'corvee',
+					'standaard_vrijstelling_percentage'
+				)
 			);
 		}
 		$vrijstelling->percentage = $percentage;

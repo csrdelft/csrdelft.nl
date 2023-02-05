@@ -7,6 +7,7 @@ use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\LDAP;
 use CsrDelft\common\Util\DebugUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
@@ -328,7 +329,7 @@ class ToolsController extends AbstractController
 			$zoekin = $_GET['zoekin'];
 		}
 		if (isset($_GET['zoekin']) && $_GET['zoekin'] === 'voorkeur') {
-			$zoekin = lid_instelling('forum', 'lidSuggesties');
+			$zoekin = InstellingUtil::lid_instelling('forum', 'lidSuggesties');
 		}
 
 		if (empty($query) && isset($_GET['q'])) {

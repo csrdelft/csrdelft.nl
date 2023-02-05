@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
@@ -68,7 +69,7 @@ class BbIsHetAl extends BbTag
 	{
 		$this->value = $this->readMainArgument($arguments);
 		if ($this->value == '') {
-			$this->value = lid_instelling('zijbalk', 'ishetal');
+			$this->value = InstellingUtil::lid_instelling('zijbalk', 'ishetal');
 		}
 	}
 

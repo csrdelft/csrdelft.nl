@@ -42,22 +42,22 @@ class DateTimeTwigExtension extends AbstractExtension
 
 	public function twig_date_format($date)
 	{
-		return DateUtil::dateFormatIntl($date, DATE_FORMAT);
+		return DateUtil::dateFormatIntl($date, DateUtil::DATE_FORMAT);
 	}
 
 	public function twig_time_format($date)
 	{
-		return DateUtil::dateFormatIntl($date, TIME_FORMAT);
+		return DateUtil::dateFormatIntl($date, DateUtil::TIME_FORMAT);
 	}
 
 	public function twig_datetime_format($datetime)
 	{
-		return DateUtil::dateFormatIntl($datetime, DATETIME_FORMAT);
+		return DateUtil::dateFormatIntl($datetime, DateUtil::DATETIME_FORMAT);
 	}
 
 	public function twig_datetime_format_long($datetime)
 	{
-		return DateUtil::dateFormatIntl($datetime, LONG_DATE_FORMAT);
+		return DateUtil::dateFormatIntl($datetime, DateUtil::LONG_DATE_FORMAT);
 	}
 
 	/**

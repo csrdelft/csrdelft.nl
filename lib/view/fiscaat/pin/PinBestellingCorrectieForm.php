@@ -43,7 +43,10 @@ abstract class PinBestellingCorrectieForm extends ModalForm
 				$pinTransactieMatch->bestelling->comment ?:
 				$this->voltooidDeelwoord .
 					' op ' .
-					DateUtil::dateFormatIntl(date_create_immutable(), DATE_FORMAT);
+					DateUtil::dateFormatIntl(
+						date_create_immutable(),
+						DateUtil::DATE_FORMAT
+					);
 			$internOud = $pinTransactieMatch->notitie ?: '';
 			$commentNieuw =
 				$this->commentNieuw .

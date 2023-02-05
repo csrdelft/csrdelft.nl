@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\agenda;
 
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\AgendaVerbergen;
@@ -111,8 +112,10 @@ class AgendaRepository extends AbstractRepository
 	{
 		return $this->filterVerborgen(
 			$this->getAllAgendeerbaar(
-				date_create_immutable(instelling('agenda', 'ical_from')),
-				date_create_immutable(instelling('agenda', 'ical_to')),
+				date_create_immutable(
+					InstellingUtil::instelling('agenda', 'ical_from')
+				),
+				date_create_immutable(InstellingUtil::instelling('agenda', 'ical_to')),
 				true
 			)
 		);
@@ -224,7 +227,7 @@ class AgendaRepository extends AbstractRepository
 		}
 
 		// Maaltijden
-		if (lid_instelling('agenda', 'toonMaaltijden') === 'ja') {
+		if (InstellingUtil::lid_instelling('agenda', 'toonMaaltijden') === 'ja') {
 			// TODO: Dit moet altijd aanstaan
 			$result = array_merge(
 				$result,
@@ -236,12 +239,14 @@ class AgendaRepository extends AbstractRepository
 		}
 
 		// CorveeTaken
-		if (lid_instelling('agenda', 'toonCorvee') === 'iedereen') {
+		if (InstellingUtil::lid_instelling('agenda', 'toonCorvee') === 'iedereen') {
 			$result = array_merge(
 				$result,
 				$this->corveeTakenRepository->getTakenVoorAgenda($van, $tot, true)
 			);
-		} elseif (lid_instelling('agenda', 'toonCorvee') === 'eigen') {
+		} elseif (
+			InstellingUtil::lid_instelling('agenda', 'toonCorvee') === 'eigen'
+		) {
 			$result = array_merge(
 				$result,
 				$this->corveeTakenRepository->getTakenVoorAgenda($van, $tot, false)
@@ -253,7 +258,7 @@ class AgendaRepository extends AbstractRepository
 		if (
 			!$zijbalk &&
 			LoginService::mag(P_VERJAARDAGEN, $auth) &&
-			lid_instelling('agenda', $toonVerjaardagen) === 'ja'
+			InstellingUtil::lid_instelling('agenda', $toonVerjaardagen) === 'ja'
 		) {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
@@ -308,7 +313,10 @@ class AgendaRepository extends AbstractRepository
 			? date_create_immutable($eindMoment)
 			: date_create_immutable()->add(new DateInterval('P2D'));
 		if (LoginService::mag(P_AGENDA_MOD)) {
-			$item->rechten_bekijken = instelling('agenda', 'standaard_rechten');
+			$item->rechten_bekijken = InstellingUtil::instelling(
+				'agenda',
+				'standaard_rechten'
+			);
 		} else {
 			$item->rechten_bekijken =
 				'verticale:' . $this->security->getUser()->profiel->verticale;

@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadGelezen;
@@ -99,7 +100,10 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 	public function getAantalPerPagina()
 	{
 		if (!$this->per_pagina) {
-			$this->per_pagina = (int) lid_instelling('forum', 'posts_per_pagina');
+			$this->per_pagina = (int) InstellingUtil::lid_instelling(
+				'forum',
+				'posts_per_pagina'
+			);
 		}
 		return $this->per_pagina;
 	}
@@ -129,7 +133,10 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 			if ($draad->pagina_per_post) {
 				$this->per_pagina = 1;
 			} else {
-				$this->per_pagina = (int) lid_instelling('forum', 'posts_per_pagina');
+				$this->per_pagina = (int) InstellingUtil::lid_instelling(
+					'forum',
+					'posts_per_pagina'
+				);
 			}
 			$this->aantal_paginas[$draad_id] = (int) ceil(
 				$this->count([
@@ -392,7 +399,10 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 			'offtopic door [lid=' .
 			LoginService::getUid() .
 			'] [reldate]' .
-			DateUtil::dateFormatIntl($post->laatst_gewijzigd, DATETIME_FORMAT) .
+			DateUtil::dateFormatIntl(
+				$post->laatst_gewijzigd,
+				DateUtil::DATETIME_FORMAT
+			) .
 			'[/reldate]' .
 			"\n";
 		try {
@@ -418,7 +428,9 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		$qb->where('fp.datum_tijd > :terug');
 		$qb->setParameter(
 			'terug',
-			date_create_immutable(instelling('forum', 'grafiek_stats_periode'))
+			date_create_immutable(
+				InstellingUtil::instelling('forum', 'grafiek_stats_periode')
+			)
 		);
 		$qb->groupBy('timestamp');
 		$stats = $qb->getQuery()->getResult();
@@ -461,7 +473,7 @@ SQL
 			->setParameters([
 				'forum_id' => $deel->forum_id,
 				'datum_tijd' => date_create_immutable(
-					instelling('forum', 'grafiek_stats_periode')
+					InstellingUtil::instelling('forum', 'grafiek_stats_periode')
 				),
 			])
 			->getResult();
@@ -480,7 +492,7 @@ SQL
 			'terug',
 			$draad->laatst_gewijzigd->add(
 				DateInterval::createFromDateString(
-					instelling('forum', 'grafiek_draad_recent')
+					InstellingUtil::instelling('forum', 'grafiek_draad_recent')
 				)
 			)
 		);

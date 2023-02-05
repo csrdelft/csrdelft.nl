@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdBeoordeling;
 use CsrDelft\view\formulier\InlineForm;
@@ -24,7 +25,7 @@ class MaaltijdKwaliteitBeoordelingForm extends InlineForm
 		$field->readonly =
 			$maaltijd->getBeginMoment() <
 			date_create_immutable()->modify(
-				instelling('maaltijden', 'beoordeling_periode')
+				InstellingUtil::instelling('maaltijden', 'beoordeling_periode')
 			);
 
 		parent::__construct(
