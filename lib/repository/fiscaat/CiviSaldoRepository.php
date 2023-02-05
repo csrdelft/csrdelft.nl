@@ -4,6 +4,8 @@ namespace CsrDelft\repository\fiscaat;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\fiscaat\enum\CiviSaldoLogEnum;
 use CsrDelft\repository\AbstractRepository;
@@ -235,7 +237,7 @@ class CiviSaldoRepository extends AbstractRepository
 			->andWhere(
 				'cs.uid LIKE :query OR cs.naam LIKE :query OR cs.uid in (:uids)'
 			)
-			->setParameter('query', sql_contains($query))
+			->setParameter('query', SqlUtil::sql_contains($query))
 			->setParameter('uids', $uids)
 			->getQuery()
 			->getResult();
@@ -447,7 +449,7 @@ SQL;
 		$result = $nativeQuery->getResult();
 
 		if (count($result) > 1000) {
-			setMelding(
+			MeldingUtil::setMelding(
 				'Te veel (>1000) resultaten. Stel specifiekere filters in.',
 				-1
 			);

@@ -4,6 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\Maaltijd;
@@ -15,6 +16,7 @@ use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
+use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\GenericSuggestiesResponse;
@@ -54,15 +56,21 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @var MaaltijdAanmeldingenRepository
 	 */
 	private $maaltijdAanmeldingenRepository;
+	/**
+	 * @var MaaltijdAanmeldingenService
+	 */
+	private $maaltijdAanmeldingenService;
 
 	public function __construct(
 		MaaltijdenRepository $maaltijdenRepository,
 		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
+		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
 	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	/**
@@ -213,7 +221,7 @@ class BeheerMaaltijdenController extends AbstractController
 				$maaltijd
 			);
 			if ($aanmeldingen > 0) {
-				setMelding(
+				MeldingUtil::setMelding(
 					$aanmeldingen .
 						' aanmelding' .
 						($aanmeldingen !== 1 ? 'en' : '') .
@@ -344,7 +352,7 @@ class BeheerMaaltijdenController extends AbstractController
 		$aanmelding = new MaaltijdAanmeldingDTO();
 		$form = new AanmeldingForm($aanmelding, true); // fetches POST values itself
 		if ($form->validate()) {
-			$this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd(
+			$this->maaltijdAanmeldingenService->aanmeldenVoorMaaltijd(
 				$maaltijd,
 				$aanmelding->voor_lid,
 				$this->getProfiel(),
@@ -372,7 +380,7 @@ class BeheerMaaltijdenController extends AbstractController
 		$aanmelding = new MaaltijdAanmeldingDTO();
 		$form = new AanmeldingForm($aanmelding, false); // fetches POST values itself
 		if ($form->validate()) {
-			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid(
+			$this->maaltijdAanmeldingenService->afmeldenDoorLid(
 				$maaltijd,
 				$aanmelding->voor_lid,
 				true
@@ -391,7 +399,7 @@ class BeheerMaaltijdenController extends AbstractController
 	public function leegmaken()
 	{
 		$aantal = $this->maaltijdenRepository->prullenbakLeegmaken();
-		setMelding(
+		MeldingUtil::setMelding(
 			$aantal .
 				($aantal === 1 ? ' maaltijd' : ' maaltijden') .
 				' definitief verwijderd.',

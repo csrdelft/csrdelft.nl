@@ -3,6 +3,7 @@
 namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\entity\security\Account;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccountService;
@@ -58,7 +59,7 @@ class WachtwoordWijzigenField extends InputField
 		$this->blacklist[] = $profiel->mobiel;
 
 		// wis lege waarden
-		$this->blacklist = array_filter_empty($this->blacklist);
+		$this->blacklist = ArrayUtil::array_filter_empty($this->blacklist);
 
 		// algemene blacklist
 		$this->blacklist[] = '1234';

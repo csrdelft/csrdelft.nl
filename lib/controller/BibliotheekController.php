@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\bibliotheek\BiebAuteur;
 use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\entity\bibliotheek\BoekExemplaar;
@@ -100,7 +101,7 @@ class BibliotheekController extends AbstractController
 				$manager = $this->getDoctrine()->getManager();
 				$manager->persist($recensie);
 				$manager->flush();
-				setMelding('Recensie opgeslagen', 0);
+				MeldingUtil::setMelding('Recensie opgeslagen', 0);
 			}
 		}
 		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
@@ -288,13 +289,13 @@ class BibliotheekController extends AbstractController
 	{
 		$recensie = $this->boekRecensieRepository->get($boek, $profiel);
 		if (!$recensie->magVerwijderen()) {
-			setMelding('Onvoldoende rechten voor deze actie.', -1);
+			MeldingUtil::setMelding('Onvoldoende rechten voor deze actie.', -1);
 			throw $this->createAccessDeniedException();
 		} else {
 			$manager = $this->getDoctrine()->getManager();
 			$manager->remove($recensie);
 			$manager->flush();
-			setMelding('Recensie met succes verwijderd.', 1);
+			MeldingUtil::setMelding('Recensie met succes verwijderd.', 1);
 		}
 		exit();
 	}
@@ -310,7 +311,7 @@ class BibliotheekController extends AbstractController
 	public function verwijderboek(Boek $boek): RedirectResponse
 	{
 		if (!$boek->magVerwijderen()) {
-			setMelding(
+			MeldingUtil::setMelding(
 				'Onvoldoende rechten voor deze actie. Biebcontrllr::addbeschrijving',
 				-1
 			);
@@ -319,7 +320,7 @@ class BibliotheekController extends AbstractController
 			$manager = $this->getDoctrine()->getManager();
 			$manager->remove($boek);
 			$manager->flush();
-			setMelding('Boek met succes verwijderd.', 1);
+			MeldingUtil::setMelding('Boek met succes verwijderd.', 1);
 			return $this->redirectToRoute('csrdelft_bibliotheek_catalogustonen');
 		}
 	}
@@ -363,7 +364,7 @@ class BibliotheekController extends AbstractController
 		Profiel $profiel = null
 	): RedirectResponse {
 		if (!$boek->magBekijken()) {
-			setMelding(
+			MeldingUtil::setMelding(
 				'Onvoldoende rechten voor deze actie. Biebcontrllr::addexemplaar()',
 				-1
 			);
@@ -382,7 +383,7 @@ class BibliotheekController extends AbstractController
 		}
 		$this->boekExemplaarRepository->addExemplaar($boek, $profiel);
 
-		setMelding('Exemplaar met succes toegevoegd.', 1);
+		MeldingUtil::setMelding('Exemplaar met succes toegevoegd.', 1);
 		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
 			'boek' => $boek->id,
 		]);
@@ -401,9 +402,9 @@ class BibliotheekController extends AbstractController
 			$manager = $this->getDoctrine()->getManager();
 			$manager->remove($exemplaar);
 			$manager->flush();
-			setMelding('Exemplaar met succes verwijderd.', 1);
+			MeldingUtil::setMelding('Exemplaar met succes verwijderd.', 1);
 		} else {
-			setMelding('Onvoldoende rechten voor deze actie.', -1);
+			MeldingUtil::setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
 		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
 			'boek' => $exemplaar->boek->id,
@@ -421,12 +422,12 @@ class BibliotheekController extends AbstractController
 	{
 		if ($exemplaar->isEigenaar()) {
 			if ($this->boekExemplaarRepository->setVermist($exemplaar)) {
-				setMelding('Exemplaar gemarkeerd als vermist.', 1);
+				MeldingUtil::setMelding('Exemplaar gemarkeerd als vermist.', 1);
 			} else {
-				setMelding('Exemplaar markeren als vermist mislukt. ', -1);
+				MeldingUtil::setMelding('Exemplaar markeren als vermist mislukt. ', -1);
 			}
 		} else {
-			setMelding('Onvoldoende rechten voor deze actie.', -1);
+			MeldingUtil::setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
 		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
 			'boek' => $exemplaar->boek->id,
@@ -444,12 +445,15 @@ class BibliotheekController extends AbstractController
 	{
 		if ($exemplaar->isEigenaar()) {
 			if ($this->boekExemplaarRepository->setGevonden($exemplaar)) {
-				setMelding('Exemplaar gemarkeerd als gevonden.', 1);
+				MeldingUtil::setMelding('Exemplaar gemarkeerd als gevonden.', 1);
 			} else {
-				setMelding('Exemplaar markeren als gevonden mislukt. ', -1);
+				MeldingUtil::setMelding(
+					'Exemplaar markeren als gevonden mislukt. ',
+					-1
+				);
 			}
 		} else {
-			setMelding('Onvoldoende rechten voor deze actie.', -1);
+			MeldingUtil::setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
 		return new JsonResponse(
 			$this->generateUrl('csrdelft_bibliotheek_boek', [
@@ -471,16 +475,16 @@ class BibliotheekController extends AbstractController
 	): RedirectResponse {
 		$uid = $request->request->get('lener_uid');
 		if (!$exemplaar->isEigenaar()) {
-			setMelding('Alleen de eigenaar mag boeken uitlenen', -1);
+			MeldingUtil::setMelding('Alleen de eigenaar mag boeken uitlenen', -1);
 		} elseif (!ProfielRepository::existsUid($uid)) {
-			setMelding('Incorrecte lener', -1);
+			MeldingUtil::setMelding('Incorrecte lener', -1);
 		} elseif ($this->boekExemplaarRepository->leen($exemplaar, $uid)) {
 			return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
 				'boek' => $exemplaar->boek->id,
 				'_fragment' => 'exemplaren',
 			]);
 		} else {
-			setMelding('Kan dit exemplaar niet lenen', -1);
+			MeldingUtil::setMelding('Kan dit exemplaar niet lenen', -1);
 		}
 
 		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
@@ -497,7 +501,7 @@ class BibliotheekController extends AbstractController
 	public function exemplaarlenen(BoekExemplaar $exemplaar): RedirectResponse
 	{
 		if (!$this->boekExemplaarRepository->leen($exemplaar, $this->getUid())) {
-			setMelding('Kan dit exemplaar niet lenen', -1);
+			MeldingUtil::setMelding('Kan dit exemplaar niet lenen', -1);
 		}
 		return $this->redirectToRoute('csrdelft_bibliotheek_boek', [
 			'boek' => $exemplaar->boek->id,
@@ -521,12 +525,15 @@ class BibliotheekController extends AbstractController
 			$exemplaar->uitgeleend_uid == $this->getUid()
 		) {
 			if ($this->boekExemplaarRepository->terugGegeven($exemplaar)) {
-				setMelding('Exemplaar is teruggegeven.', 1);
+				MeldingUtil::setMelding('Exemplaar is teruggegeven.', 1);
 			} else {
-				setMelding('Teruggave van exemplaar melden is mislukt. ', -1);
+				MeldingUtil::setMelding(
+					'Teruggave van exemplaar melden is mislukt. ',
+					-1
+				);
 			}
 		} else {
-			setMelding('Onvoldoende rechten voor deze actie. ', -1);
+			MeldingUtil::setMelding('Onvoldoende rechten voor deze actie. ', -1);
 		}
 		return new JsonResponse(
 			$this->generateUrl('csrdelft_bibliotheek_boek', [
@@ -552,12 +559,15 @@ class BibliotheekController extends AbstractController
 			($exemplaar->isUitgeleend() || $exemplaar->isTeruggegeven())
 		) {
 			if ($this->boekExemplaarRepository->terugOntvangen($exemplaar)) {
-				setMelding('Exemplaar terugontvangen.', 1);
+				MeldingUtil::setMelding('Exemplaar terugontvangen.', 1);
 			} else {
-				setMelding('Exemplaar terugontvangen melden is mislukt. ', -1);
+				MeldingUtil::setMelding(
+					'Exemplaar terugontvangen melden is mislukt. ',
+					-1
+				);
 			}
 		} else {
-			setMelding(
+			MeldingUtil::setMelding(
 				'Onvoldoende rechten voor deze actie. Biebcontrllr::exemplaarterugontvangen()',
 				-1
 			);

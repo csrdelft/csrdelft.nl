@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\formulier;
 
+use CsrDelft\common\Util\MeldingUtil;
+
 /**
  * Form as modal content.
  *
@@ -38,7 +40,7 @@ HTML;
 HTML;
 		}
 		if ($this->showMelding) {
-			$html .= getMelding();
+			$html .= MeldingUtil::getMelding();
 		}
 		$html .= <<<HTML
 			<div class="modal-body">

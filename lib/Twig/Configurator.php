@@ -2,6 +2,7 @@
 
 namespace CsrDelft\Twig;
 
+use CsrDelft\common\Util\TextUtil;
 use Symfony\Bundle\TwigBundle\DependencyInjection\Configurator\EnvironmentConfigurator;
 use Twig\Environment;
 use Twig\Extension\EscaperExtension;
@@ -35,7 +36,7 @@ class Configurator
 
 	public function escape_ical($twig, $string, $charset)
 	{
-		return escape_ical($string);
+		return TextUtil::escape_ical($string);
 	}
 
 	public function escape_xml($twig, $string, $charset)

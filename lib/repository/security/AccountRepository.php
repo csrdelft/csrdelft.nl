@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\security;
 
+use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\repository\AbstractRepository;
@@ -79,7 +80,7 @@ class AccountRepository extends AbstractRepository implements
 	 */
 	public function resetPrivateToken(Account $account)
 	{
-		$account->private_token = crypto_rand_token(150);
+		$account->private_token = CryptoUtil::crypto_rand_token(150);
 		$account->private_token_since = date_create_immutable();
 		$this->_em->persist($account);
 		$this->_em->flush();

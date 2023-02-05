@@ -3,6 +3,7 @@
 namespace CsrDelft\service\pin;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\entity\pin\PinTransactie;
@@ -246,7 +247,10 @@ class PinTransactieMatcher
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING:
 					$pinTransactie = $match->transactie;
 					$verschil += $pinTransactie->getBedragInCenten();
-					$moment = date_format_intl($pinTransactie->datetime, DATETIME_FORMAT);
+					$moment = DateUtil::dateFormatIntl(
+						$pinTransactie->datetime,
+						DateUtil::DATETIME_FORMAT
+					);
 
 					printf(
 						"%s - Missende bestelling voor pintransactie %d om %s van %s.\n",
@@ -262,7 +266,10 @@ class PinTransactieMatcher
 						CiviProductTypeEnum::PINTRANSACTIE
 					);
 					$verschil -= $pinBestellingInhoud->aantal;
-					$moment = date_format_intl($pinBestelling->moment, DATETIME_FORMAT);
+					$moment = DateUtil::dateFormatIntl(
+						$pinBestelling->moment,
+						DateUtil::DATETIME_FORMAT
+					);
 
 					printf(
 						"%s - Missende transactie voor bestelling %d om %s van EUR %.2f door %d.\n",
@@ -282,7 +289,10 @@ class PinTransactieMatcher
 
 					$verschil +=
 						$pinTransactie->getBedragInCenten() - $pinBestellingInhoud->aantal;
-					$moment = date_format_intl($pinTransactie->datetime, DATETIME_FORMAT);
+					$moment = DateUtil::dateFormatIntl(
+						$pinTransactie->datetime,
+						DateUtil::DATETIME_FORMAT
+					);
 
 					printf(
 						"%s - Bestelling en transactie hebben geen overeenkomend bedrag.\n",
@@ -292,13 +302,19 @@ class PinTransactieMatcher
 						" - %s Transactie %d om %s.\n",
 						$pinTransactie->amount,
 						$pinTransactie->STAN,
-						date_format_intl($pinTransactie->datetime, DATETIME_FORMAT)
+						DateUtil::dateFormatIntl(
+							$pinTransactie->datetime,
+							DateUtil::DATETIME_FORMAT
+						)
 					);
 					printf(
 						" - EUR %.2f Bestelling %d om %s door %s.\n",
 						$pinBestellingInhoud->aantal / 100,
 						$pinBestelling->id,
-						date_format_intl($pinBestelling->moment, DATETIME_FORMAT),
+						DateUtil::dateFormatIntl(
+							$pinBestelling->moment,
+							DateUtil::DATETIME_FORMAT
+						),
 						$pinBestelling->uid
 					);
 					break;

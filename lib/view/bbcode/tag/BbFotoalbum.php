@@ -5,6 +5,8 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
+use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\HostUtil;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
@@ -91,7 +93,7 @@ class BbFotoalbum extends BbTag
 	{
 		$album = $this->album;
 		$beschrijving = count($album->getFotos()) . ' foto\'s';
-		$cover = getCsrRoot() . $album->getCoverUrl();
+		$cover = HostUtil::getCsrRoot() . $album->getCoverUrl();
 		return BbHelper::lightLinkBlock(
 			'fotoalbum',
 			$album->getUrl(),
@@ -107,7 +109,7 @@ class BbFotoalbum extends BbTag
 		$arguments = $this->arguments;
 		if (isset($arguments['slider'])) {
 			return $this->twig->render('fotoalbum/slider.html.twig', [
-				'fotos' => array_shuffle($album->getFotos()),
+				'fotos' => ArrayUtil::array_shuffle($album->getFotos()),
 			]);
 		} else {
 			$view = new FotoAlbumBBView($album);
@@ -147,7 +149,7 @@ class BbFotoalbum extends BbTag
 				$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();
 			} else {
 				//vervang url met pad
-				$url = str_ireplace(getCsrRoot(), '', $url);
+				$url = str_ireplace(HostUtil::getCsrRoot(), '', $url);
 				//check fotoalbum in url
 				$url = str_ireplace('fotoalbum/', '', $url);
 				//check slash voor pad

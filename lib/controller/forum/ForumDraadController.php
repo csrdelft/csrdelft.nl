@@ -4,6 +4,9 @@ namespace CsrDelft\controller\forum;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\SimpleSpamFilter;
+use CsrDelft\common\Util\InstellingUtil;
+use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
@@ -127,7 +130,7 @@ class ForumDraadController extends AbstractController
 	public function reactie(RequestStack $requestStack, ForumPost $post): Response
 	{
 		if ($post->verwijderd) {
-			setMelding('Deze reactie is verwijderd', 0);
+			MeldingUtil::setMelding('Deze reactie is verwijderd', 0);
 		}
 		return $this->onderwerp(
 			$requestStack,
@@ -162,7 +165,7 @@ class ForumDraadController extends AbstractController
 			$gelezen = null;
 		}
 		if ($pagina === null) {
-			$pagina = lid_instelling('forum', 'open_draad_op_pagina');
+			$pagina = InstellingUtil::lid_instelling('forum', 'open_draad_op_pagina');
 		}
 		$paging = true;
 		if ($pagina === 'ongelezen' && $gelezen) {
@@ -278,7 +281,7 @@ class ForumDraadController extends AbstractController
 		} else {
 			$wijziging = $property . ' = ' . $value;
 		}
-		setMelding('Wijziging geslaagd: ' . $wijziging, 1);
+		MeldingUtil::setMelding('Wijziging geslaagd: ' . $wijziging, 1);
 		if (
 			$property === 'belangrijk' ||
 			$property === 'forum_id' ||
@@ -342,7 +345,7 @@ class ForumDraadController extends AbstractController
 		);
 
 		if (empty($tekst)) {
-			setMelding('Bericht mag niet leeg zijn', -1);
+			MeldingUtil::setMelding('Bericht mag niet leeg zijn', -1);
 			return $redirect;
 		}
 
@@ -351,7 +354,7 @@ class ForumDraadController extends AbstractController
 			isset($_SESSION['forum_laatste_post_tekst']) &&
 			$_SESSION['forum_laatste_post_tekst'] === $tekst
 		) {
-			setMelding('Uw reactie is al geplaatst', 0);
+			MeldingUtil::setMelding('Uw reactie is al geplaatst', 0);
 
 			// concept wissen
 			if ($nieuw) {
@@ -402,20 +405,20 @@ class ForumDraadController extends AbstractController
 					[$deel->forum_id, $draad->draad_id],
 					'SPAM ' . $tekst
 				);
-				setMelding('SPAM', -1);
+				MeldingUtil::setMelding('SPAM', -1);
 				throw $this->createAccessDeniedException('');
 			}
 
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-			if (!email_like($mailadres)) {
-				setMelding('U moet een geldig e-mailadres opgeven!', -1);
+			if (!UrlUtil::email_like($mailadres)) {
+				MeldingUtil::setMelding('U moet een geldig e-mailadres opgeven!', -1);
 				$requestStack->getSession()->set('forum_bericht', $tekst);
 				return $redirect;
 			}
 			if ($filter->isSpam($mailadres)) {
 				//TODO: logging
-				setMelding('SPAM', -1);
+				MeldingUtil::setMelding('SPAM', -1);
 				throw $this->createAccessDeniedException('SPAM');
 			}
 		}
@@ -423,7 +426,7 @@ class ForumDraadController extends AbstractController
 		// post in nieuw draadje?
 		if ($nieuw) {
 			if (empty($titel)) {
-				setMelding('U moet een titel opgeven!', -1);
+				MeldingUtil::setMelding('U moet een titel opgeven!', -1);
 				return $redirect;
 			}
 			// maak draad
@@ -445,7 +448,7 @@ class ForumDraadController extends AbstractController
 
 		// bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht?
 		if ($wacht_goedkeuring) {
-			setMelding(
+			MeldingUtil::setMelding(
 				'Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.',
 				1
 			);
@@ -470,8 +473,14 @@ class ForumDraadController extends AbstractController
 			if ($nieuw) {
 				$this->forumMeldingenService->stuurDeelMeldingen($post);
 			}
-			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
-			if ($nieuw && lid_instelling('forum', 'meldingEigenDraad') === 'ja') {
+			MeldingUtil::setMelding(
+				($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd',
+				1
+			);
+			if (
+				$nieuw &&
+				InstellingUtil::lid_instelling('forum', 'meldingEigenDraad') === 'ja'
+			) {
 				$this->forumDradenMeldingRepository->setNiveauVoorLid(
 					$draad,
 					ForumDraadMeldingNiveau::ALTIJD()

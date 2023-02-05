@@ -5,6 +5,7 @@ namespace CsrDelft\service\security;
 use CsrDelft\common\Security\JwtToken;
 use CsrDelft\common\Security\JwtTokenBadge;
 use CsrDelft\common\Security\PersistentTokenProvider;
+use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\entity\security\Account;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccountService;
@@ -186,8 +187,8 @@ class ApiAuthenticator extends AbstractAuthenticator
 		$token = $this->createJwtToken($user->uid);
 
 		// Generate a refresh token
-		$series = crypto_rand_token(255);
-		$rand = crypto_rand_token(255);
+		$series = CryptoUtil::crypto_rand_token(255);
+		$rand = CryptoUtil::crypto_rand_token(255);
 
 		$_SERVER['HTTP_USER_AGENT'] =
 			'API 2.0: ' .

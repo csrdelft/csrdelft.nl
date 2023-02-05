@@ -3,6 +3,11 @@
 namespace CsrDelft\Twig\Extension;
 
 use CsrDelft\common\Security\Voter\Entity\CmsPaginaVoter;
+use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\BedragUtil;
+use CsrDelft\common\Util\CryptoUtil;
+use CsrDelft\common\Util\FileUtil;
+use CsrDelft\common\Util\TextUtil;
 use CsrDelft\Component\DataTable\DataTableView;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
@@ -77,8 +82,8 @@ class CsrTwigExtension extends AbstractExtension
 	{
 		return [
 			new TwigFunction('dragobject_coords', [$this, 'dragobject_coords']),
-			new TwigFunction('commitHash', 'commitHash'),
-			new TwigFunction('commitLink', 'commitLink'),
+			new TwigFunction('commitHash', [$this, 'commitHash']),
+			new TwigFunction('commitLink', [$this, 'commitLink']),
 			new TwigFunction(
 				'csrfMetaTag',
 				[$this, 'csrfMetaTag'],
@@ -185,7 +190,7 @@ class CsrTwigExtension extends AbstractExtension
 	public function getFilters()
 	{
 		return [
-			new TwigFilter('escape_ical', 'escape_ical'),
+			new TwigFilter('escape_ical', [TextUtil::class, 'escape_ical']),
 			new TwigFilter('file_base64', [$this, 'file_base64']),
 			new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
 			new TwigFilter(
@@ -194,13 +199,13 @@ class CsrTwigExtension extends AbstractExtension
 				['is_safe' => ['html']]
 			),
 			new TwigFilter('uniqid', function ($prefix) {
-				return uniqid_safe($prefix);
+				return CryptoUtil::uniqid_safe($prefix);
 			}),
-			new TwigFilter('format_bedrag', 'format_bedrag'),
-			new TwigFilter('format_euro', 'format_euro'),
-			new TwigFilter('truncate', 'truncate'),
-			new TwigFilter('format_filesize', 'format_filesize'),
-			new TwigFilter('shuffle', 'array_shuffle'),
+			new TwigFilter('format_bedrag', [BedragUtil::class, 'format_bedrag']),
+			new TwigFilter('format_euro', [BedragUtil::class, 'format_euro']),
+			new TwigFilter('truncate', [TextUtil::class, 'truncate']),
+			new TwigFilter('format_filesize', [FileUtil::class, 'format_filesize']),
+			new TwigFilter('shuffle', [ArrayUtil::class, 'array_shuffle']),
 		];
 	}
 
@@ -295,5 +300,20 @@ class CsrTwigExtension extends AbstractExtension
 	public function table(DataTableView $table): string
 	{
 		return (string) $table;
+	}
+
+	public function commitLink()
+	{
+		return 'https://github.com/csrdelft/productie/commit/' .
+			$this->commitHash(true);
+	}
+
+	public function commitHash($full = false)
+	{
+		if ($full) {
+			return trim(`git rev-parse HEAD`);
+		} else {
+			return trim(`git rev-parse --short HEAD`);
+		}
 	}
 }

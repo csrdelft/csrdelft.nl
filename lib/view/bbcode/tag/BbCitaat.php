@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\BbHelper;
@@ -116,7 +117,8 @@ class BbCitaat extends BbTag
 			$text .= ' van ' . $this->bron_profiel->getLink('user');
 		} elseif ($this->bron_text != null) {
 			if ($this->bron_url != null) {
-				$text .= ' van ' . external_url($this->bron_url, $this->bron_text);
+				$text .=
+					' van ' . UrlUtil::external_url($this->bron_url, $this->bron_text);
 			} else {
 				$text .= ' van ' . $this->bron_text;
 			}
@@ -147,7 +149,7 @@ class BbCitaat extends BbTag
 				$this->bron_text = str_replace('_', ' ', $bron);
 			}
 		}
-		if (isset($arguments['url']) && url_like($arguments['url'])) {
+		if (isset($arguments['url']) && UrlUtil::url_like($arguments['url'])) {
 			$this->bron_url = $arguments['url'];
 		}
 	}

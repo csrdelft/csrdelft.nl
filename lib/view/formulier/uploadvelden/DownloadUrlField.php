@@ -3,6 +3,8 @@
 namespace CsrDelft\view\formulier\uploadvelden;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\PathUtil;
+use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\view\formulier\invoervelden\UrlField;
@@ -31,7 +33,7 @@ class DownloadUrlField extends UrlField
 		$this->filterMime = $filterMime;
 		$this->downloader = new UrlDownloader();
 		if ($this->isPosted()) {
-			if (!url_like($this->value)) {
+			if (!UrlUtil::url_like($this->value)) {
 				return;
 			}
 			$data = $this->downloader->file_get_contents($this->value);
@@ -76,7 +78,7 @@ class DownloadUrlField extends UrlField
 		if (!$this->isAvailable()) {
 			$this->error =
 				'PHP.ini configuratie: fsocked, cURL of allow_url_fopen moet aan staan.';
-		} elseif (!url_like($this->value)) {
+		} elseif (!UrlUtil::url_like($this->value)) {
 			$this->error = 'Ongeldige url';
 		} elseif (
 			!$this->model instanceof Bestand or
@@ -98,32 +100,38 @@ class DownloadUrlField extends UrlField
 	{
 		parent::opslaan($directory, $filename, $overwrite);
 		$copied = copy(
-			join_paths($this->model->directory, $this->model->filename),
-			join_paths($directory, $filename)
+			PathUtil::join_paths($this->model->directory, $this->model->filename),
+			PathUtil::join_paths($directory, $filename)
 		);
 		if (!$copied) {
 			throw new CsrException(
 				'Bestand kopieren mislukt: ' .
 					htmlspecialchars(
-						join_paths($this->model->directory, $this->model->filename)
+						PathUtil::join_paths(
+							$this->model->directory,
+							$this->model->filename
+						)
 					)
 			);
 		}
 		$moved = unlink(
-			join_paths($this->model->directory, $this->model->filename)
+			PathUtil::join_paths($this->model->directory, $this->model->filename)
 		);
 		if (!$moved) {
 			throw new CsrException(
 				'Verplaatsen mislukt: ' .
 					htmlspecialchars(
-						join_paths($this->model->directory, $this->model->filename)
+						PathUtil::join_paths(
+							$this->model->directory,
+							$this->model->filename
+						)
 					)
 			);
 		}
-		if (false === @chmod(join_paths($directory, $filename), 0644)) {
+		if (false === @chmod(PathUtil::join_paths($directory, $filename), 0644)) {
 			throw new CsrException(
 				'Geen eigenaar van bestand: ' .
-					htmlspecialchars(join_paths($directory, $filename))
+					htmlspecialchars(PathUtil::join_paths($directory, $filename))
 			);
 		}
 		$this->model->directory = $directory;

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier;
 
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\View;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -46,7 +47,7 @@ class CsrfField implements View, FormElement
 
 	public function getType()
 	{
-		return short_class(static::class);
+		return ReflectionUtil::short_class(static::class);
 	}
 
 	public function getHtml()

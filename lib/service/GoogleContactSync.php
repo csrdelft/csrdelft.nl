@@ -4,9 +4,13 @@ namespace CsrDelft\service;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\HostUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
+use DateTimeInterface;
 use Google\Service\PeopleService;
 use Google\Service\PeopleService\Address;
 use Google\Service\PeopleService\BatchCreateContactsRequest;
@@ -78,7 +82,9 @@ class GoogleContactSync
 	) {
 		$this->authenticator = $authenticator;
 
-		$this->groepNaam = trim(lid_instelling('googleContacts', 'groepnaam'));
+		$this->groepNaam = trim(
+			InstellingUtil::lid_instelling('googleContacts', 'groepnaam')
+		);
 		if (empty($this->groepNaam)) {
 			$this->groepNaam = self::DEFAULT_GROEPNAAM;
 		}
@@ -278,7 +284,8 @@ class GoogleContactSync
 		// birthdays
 		if (
 			$profiel->gebdatum &&
-			date_format_intl($profiel->gebdatum, DATE_FORMAT) != '0000-00-00'
+			DateUtil::dateFormatIntl($profiel->gebdatum, DateUtil::DATE_FORMAT) !=
+				'0000-00-00'
 		) {
 			$birthday = new Birthday();
 			$birthdayDate = new Date();
@@ -315,7 +322,7 @@ class GoogleContactSync
 		if (
 			$profiel->o_adres &&
 			(!$profiel->adres ||
-				lid_instelling('googleContacts', 'ouderAdres') === 'ja')
+				InstellingUtil::lid_instelling('googleContacts', 'ouderAdres') === 'ja')
 		) {
 			$address = new Address();
 			$metadata = new FieldMetadata();
@@ -338,7 +345,12 @@ class GoogleContactSync
 			['telefoon', 'home', false],
 		];
 
-		if (lid_instelling('googleContacts', 'ouderTelefoonnummer') === 'ja') {
+		if (
+			InstellingUtil::lid_instelling(
+				'googleContacts',
+				'ouderTelefoonnummer'
+			) === 'ja'
+		) {
 			$phoneNumberList[] = ['o_telefoon', 'Ouders', false];
 		}
 
@@ -347,7 +359,9 @@ class GoogleContactSync
 		foreach ($phoneNumberList as $pn) {
 			if ($profiel->{$pn[0]}) {
 				$phoneNumber = new PhoneNumber();
-				$phoneNumber->setValue(internationalizePhonenumber($profiel->{$pn[0]}));
+				$phoneNumber->setValue(
+					$this->internationalizePhonenumber($profiel->{$pn[0]})
+				);
 				$phoneNumber->setType($pn[1]);
 				if ($pn[2]) {
 					$fieldMetadata = new FieldMetadata();
@@ -385,7 +399,7 @@ class GoogleContactSync
 		// urls
 		$urlList = [
 			[
-				getCsrRoot() . '/profiel/' . $profiel->uid,
+				HostUtil::getCsrRoot() . '/profiel/' . $profiel->uid,
 				'C.S.R. webstek profiel',
 				true,
 			],
@@ -414,7 +428,7 @@ class GoogleContactSync
 		// userDefined
 		$update = new UserDefined();
 		$update->setKey('update');
-		$update->setValue(getDateTime());
+		$update->setValue(DateUtil::getDateTime());
 
 		$csrUid = new UserDefined();
 		$csrUid->setKey('csruid');
@@ -607,6 +621,28 @@ class GoogleContactSync
 			} else {
 				throw new CsrGebruikerException('Google sync mislukt');
 			}
+		}
+	}
+
+	/**
+	 * Voeg landcode toe als nummer met 0 begint of vervang 00 met +
+	 *
+	 * @param string $phonenumber
+	 * @param string $prefix
+	 *
+	 * @return string
+	 */
+	private function internationalizePhonenumber($phonenumber, $prefix = '+31')
+	{
+		$number = str_replace([' ', '-'], '', $phonenumber);
+		if ($number[0] === '0') {
+			// vergelijken met == 0 levert problemen op want (int) '+' = 0 dankzij php
+			if ($number[1] === '0') {
+				return '+' . substr($number, 2);
+			}
+			return $prefix . substr($number, 1);
+		} else {
+			return $phonenumber;
 		}
 	}
 }

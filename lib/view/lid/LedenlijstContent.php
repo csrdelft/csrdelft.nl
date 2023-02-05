@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\lid;
 
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\service\LidZoekerService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\Icon;
@@ -136,7 +137,7 @@ class LedenlijstContent implements View
 				Icon::getTag('vcard_add') .
 				'</a>';
 		}
-		$html .= getMelding();
+		$html .= MeldingUtil::getMelding();
 		$html .=
 			'<h1>' .
 			(LoginService::getProfiel()->isOudlid() ? 'Oud-leden en l' : 'L') .

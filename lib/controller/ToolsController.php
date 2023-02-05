@@ -6,6 +6,9 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\LDAP;
+use CsrDelft\common\Util\DebugUtil;
+use CsrDelft\common\Util\InstellingUtil;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\VerticalenRepository;
@@ -326,7 +329,7 @@ class ToolsController extends AbstractController
 			$zoekin = $_GET['zoekin'];
 		}
 		if (isset($_GET['zoekin']) && $_GET['zoekin'] === 'voorkeur') {
-			$zoekin = lid_instelling('forum', 'lidSuggesties');
+			$zoekin = InstellingUtil::lid_instelling('forum', 'lidSuggesties');
 		}
 
 		if (empty($query) && isset($_GET['q'])) {
@@ -418,14 +421,14 @@ class ToolsController extends AbstractController
 		if (DEBUG || $this->mag(P_ADMIN) || $suService->isSued()) {
 			ob_start();
 
-			echo getMelding();
+			echo MeldingUtil::getMelding();
 			echo '<h1>MemCache statistieken</h1>';
 			try {
 				$memcached = MemcachedAdapter::createConnection(
 					$this->getParameter('memcached_url')
 				);
 
-				debugprint(current($memcached->getStats()));
+				DebugUtil::debugprint(current($memcached->getStats()), 'pubcie_debug');
 			} catch (ServiceNotFoundException $ex) {
 				echo 'Memcache is niet ingesteld.';
 			}

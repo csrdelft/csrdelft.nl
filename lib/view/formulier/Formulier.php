@@ -3,6 +3,10 @@
 namespace CsrDelft\view\formulier;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\CryptoUtil;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\service\CsrfService;
@@ -56,8 +60,8 @@ class Formulier implements View, Validator, ToResponse
 		$dataTableId = false
 	) {
 		$this->model = $model;
-		$this->formId = uniqid_safe(
-			classNameZonderNamespace(
+		$this->formId = CryptoUtil::uniqid_safe(
+			ReflectionUtil::classNameZonderNamespace(
 				get_class($this->model == null ? $this : $this->model)
 			)
 		);
@@ -202,7 +206,7 @@ class Formulier implements View, Validator, ToResponse
 	{
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField and !$field->isPosted()) {
-				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
+				//MeldingUtil::setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}
 		}
@@ -321,7 +325,7 @@ HTML;
 		$string = '';
 
 		if ($this->showMelding) {
-			$string .= getMelding();
+			$string .= MeldingUtil::getMelding();
 		}
 		$string .= $this->getFormTag();
 		$titel = $this->getTitel();
@@ -399,7 +403,7 @@ HTML;
 				'[div]Bewerking van [lid=' .
 				LoginService::getUid() .
 				'] op [reldate]' .
-				getDatetime() .
+				DateUtil::getDatetime() .
 				'[/reldate][br]';
 			foreach ($diff as $change) {
 				$changelog .=

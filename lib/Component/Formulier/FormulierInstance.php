@@ -3,6 +3,9 @@
 namespace CsrDelft\Component\Formulier;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\CryptoUtil;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\service\CsrfService;
@@ -52,7 +55,7 @@ class FormulierInstance
 		$validationMethods = [],
 		$post = true
 	) {
-		$this->formId = uniqid_safe('Formulier_');
+		$this->formId = CryptoUtil::uniqid_safe('Formulier_');
 		$this->action = $action;
 		$this->formKnoppen = $formKnoppen;
 		$this->fields = $fields;
@@ -69,7 +72,7 @@ class FormulierInstance
 	{
 		$html = '';
 		if ($this->showMelding) {
-			$html .= getMelding();
+			$html .= MeldingUtil::getMelding();
 		}
 		$html .= $this->getFormTag();
 		$titel = $this->titel;
@@ -175,7 +178,7 @@ HTML;
 HTML;
 		}
 		if ($this->showMelding) {
-			$html .= getMelding();
+			$html .= MeldingUtil::getMelding();
 		}
 		$html .= <<<HTML
 			<div class="modal-body">
@@ -270,7 +273,7 @@ HTML;
 	{
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField && !$field->isPosted()) {
-				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
+				//MeldingUtil::setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}
 		}
@@ -320,7 +323,7 @@ HTML;
 				'[div]Bewerking van [lid=' .
 				LoginService::getUid() .
 				'] op [reldate]' .
-				getDatetime() .
+				DateUtil::getDatetime() .
 				'[/reldate][br]';
 			foreach ($diff as $change) {
 				$changelog .=

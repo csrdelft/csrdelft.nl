@@ -2,6 +2,8 @@
 
 namespace CsrDelft\repository\security;
 
+use CsrDelft\common\Util\CryptoUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\OneTimeToken;
 use CsrDelft\repository\AbstractRepository;
@@ -104,14 +106,14 @@ class OneTimeTokensRepository extends AbstractRepository
 	 */
 	public function createToken(Account $account, $url)
 	{
-		$rand = crypto_rand_token(255);
+		$rand = CryptoUtil::crypto_rand_token(255);
 		$token = new OneTimeToken();
 		$token->account = $account;
 		$token->uid = $account->uid;
 		$token->url = $url;
 		$token->token = hash('sha512', $rand);
 		$token->expire = date_create_immutable(
-			instelling('beveiliging', 'one_time_token_expire_after')
+			InstellingUtil::instelling('beveiliging', 'one_time_token_expire_after')
 		);
 		$token->verified = false;
 		$this->getEntityManager()->persist($token);

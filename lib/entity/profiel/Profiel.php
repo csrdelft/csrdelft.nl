@@ -3,6 +3,12 @@
 namespace CsrDelft\entity\profiel;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\FileUtil;
+use CsrDelft\common\Util\InstellingUtil;
+use CsrDelft\common\Util\PathUtil;
+use CsrDelft\common\Util\TextUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\enum\GroepStatus;
@@ -23,10 +29,12 @@ use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
 use CsrDelft\view\formulier\DisplayEntity;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Persistence\Proxy;
+use const P_LEDEN_MOD;
 
 /**
  * Profiel.class.php
@@ -485,7 +493,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 */
 	public function getContactgegevens()
 	{
-		return array_filter_empty([
+		return ArrayUtil::array_filter_empty([
 			'Email' => $this->getPrimaryEmail(),
 			'LinkedIn' => $this->linkedin,
 			'Website' => $this->website,
@@ -522,8 +530,11 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	public function isJarig()
 	{
 		return $this->gebdatum != null &&
-			substr(date_format_intl($this->gebdatum, DATE_FORMAT), 5, 5) ===
-				date('m-d');
+			substr(
+				DateUtil::dateFormatIntl($this->gebdatum, DateUtil::DATE_FORMAT),
+				5,
+				5
+			) === date('m-d');
 	}
 
 	/**
@@ -679,7 +690,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		}
 		if (
 			$vorm !== 'pasfoto' &&
-			lid_instelling('layout', 'visitekaartjes') == 'ja'
+			InstellingUtil::lid_instelling('layout', 'visitekaartjes') == 'ja'
 		) {
 			$title = '';
 		} else {
@@ -699,7 +710,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			'">';
 		if (
 			$vorm !== 'pasfoto' &&
-			lid_instelling('layout', 'visitekaartjes') == 'ja'
+			InstellingUtil::lid_instelling('layout', 'visitekaartjes') == 'ja'
 		) {
 			return '<span data-visite="' .
 				$this->uid .
@@ -740,7 +751,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	public function getNaam($vorm = 'volledig', $force = false)
 	{
 		if ($vorm === 'user') {
-			$vorm = lid_instelling('forum', 'naamWeergave');
+			$vorm = InstellingUtil::lid_instelling('forum', 'naamWeergave');
 		}
 		if ($vorm != 'civitas' && !$force && !LoginService::mag(P_LOGGED_IN)) {
 			$vorm = 'civitas';
@@ -838,7 +849,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 				break;
 
 			case 'aaidrom': // voor een 1 aprilgrap ooit
-				$naam = aaidrom(
+				$naam = TextUtil::aaidrom(
 					$this->voornaam,
 					$this->tussenvoegsel,
 					$this->achternaam
@@ -866,10 +877,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	public function getPasfotoPath($vorm = 'user')
 	{
 		if ($vorm === 'user') {
-			$vorm = lid_instelling('forum', 'naamWeergave');
+			$vorm = InstellingUtil::lid_instelling('forum', 'naamWeergave');
 		}
 
-		if (!is_zichtbaar($this, 'profielfoto', 'intern')) {
+		if (
+			!InstellingUtil::is_zichtbaar($this, 'profielfoto', 'intern', P_LEDEN_MOD)
+		) {
 			return '/images/geen-foto.jpg';
 		}
 		$path = $this->getPasfotoInternalPath($vorm);
@@ -921,11 +934,11 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		if ($vorm == 'vierkant') {
 			$crop = '' . $this->uid . '.vierkant.png';
 			if (!file_exists(PASFOTO_PATH . $crop)) {
-				square_crop(PASFOTO_PATH . $path, PASFOTO_PATH . $crop, 150);
+				FileUtil::square_crop(PASFOTO_PATH . $path, PASFOTO_PATH . $crop, 150);
 			}
 			$path = $crop;
 		}
-		return safe_combine_path(PASFOTO_PATH, $path);
+		return PathUtil::safe_combine_path(PASFOTO_PATH, $path);
 	}
 
 	public function getPasfotoTag($cssClass = '')

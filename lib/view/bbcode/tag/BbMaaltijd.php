@@ -5,14 +5,18 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
+use DateTimeInterface;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
@@ -56,12 +60,17 @@ class BbMaaltijd extends BbTag
 	 * @var Security
 	 */
 	private $security;
+	/**
+	 * @var MaaltijdAanmeldingenService
+	 */
+	private $maaltijdAanmeldingenService;
 
 	public function __construct(
 		Environment $twig,
 		Security $security,
 		MaaltijdenRepository $maaltijdenRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
 		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository
 	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
@@ -69,6 +78,7 @@ class BbMaaltijd extends BbTag
 		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
 		$this->twig = $twig;
 		$this->security = $security;
+		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	public static function getTagName()
@@ -89,7 +99,10 @@ class BbMaaltijd extends BbTag
 			'maaltijd',
 			$url,
 			$maaltijd->titel,
-			date_format_intl($maaltijd->getMoment(), DATETIME_FORMAT)
+			DateUtil::dateFormatIntl(
+				$maaltijd->getMoment(),
+				DateUtil::DATETIME_FORMAT
+			)
 		);
 	}
 
@@ -194,9 +207,9 @@ class BbMaaltijd extends BbTag
 				}
 			} elseif ($mid === 'beoordeling') {
 				$timestamp = date_create_immutable(
-					instelling('maaltijden', 'beoordeling_periode')
+					InstellingUtil::instelling('maaltijden', 'beoordeling_periode')
 				);
-				$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(
+				$recent = $this->maaltijdAanmeldingenService->getRecenteAanmeldingenVoorLid(
 					LoginService::getUid(),
 					$timestamp
 				);

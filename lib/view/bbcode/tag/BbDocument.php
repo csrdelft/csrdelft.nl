@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Util\FileUtil;
 use CsrDelft\entity\documenten\Document;
 use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\view\bbcode\BbHelper;
@@ -59,7 +60,7 @@ class BbDocument extends BbTag
 			$beschrijving =
 				$this->document->getFriendlyMimetype() .
 				' (' .
-				format_filesize((int) $this->document->filesize) .
+				FileUtil::format_filesize((int) $this->document->filesize) .
 				')';
 			return BbHelper::lightLinkBlock(
 				'document',

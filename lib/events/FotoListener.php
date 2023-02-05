@@ -2,6 +2,7 @@
 
 namespace CsrDelft\events;
 
+use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use Doctrine\ORM\Mapping\PostLoad;
 
@@ -13,6 +14,6 @@ class FotoListener
 	/** @PostLoad */
 	public function postLoadHandler(Foto $foto)
 	{
-		$foto->directory = join_paths(PHOTOALBUM_PATH, $foto->subdir);
+		$foto->directory = PathUtil::join_paths(PHOTOALBUM_PATH, $foto->subdir);
 	}
 }

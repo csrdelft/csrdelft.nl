@@ -4,6 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
@@ -119,14 +120,14 @@ class BeheerPuntenController extends AbstractController
 			$errors,
 		) = $this->corveePuntenService->resetCorveejaar();
 		$view = $this->beheer();
-		setMelding(
+		MeldingUtil::setMelding(
 			$aantal .
 				' vrijstelling' .
 				($aantal !== 1 ? 'en' : '') .
 				' verwerkt en verwijderd',
 			1
 		);
-		setMelding(
+		MeldingUtil::setMelding(
 			$taken .
 				' ta' .
 				($taken !== 1 ? 'ken' : 'ak') .
@@ -134,7 +135,7 @@ class BeheerPuntenController extends AbstractController
 			0
 		);
 		foreach ($errors as $error) {
-			setMelding($error->getMessage(), -1);
+			MeldingUtil::setMelding($error->getMessage(), -1);
 		}
 
 		return $view;

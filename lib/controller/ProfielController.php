@@ -5,6 +5,10 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\InstellingUtil;
+use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\profiel\Profiel;
@@ -36,6 +40,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\fiscaat\SaldoGrafiekService;
 use CsrDelft\service\GoogleContactSync;
+use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use CsrDelft\service\profiel\LidStatusService;
 use CsrDelft\service\ProfielService;
@@ -154,7 +159,7 @@ class ProfielController extends AbstractController
 		BoekExemplaarRepository $boekExemplaarRepository,
 		BoekRecensieRepository $boekRecensieRepository,
 		FotoRepository $fotoRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
 		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
 		ForumPostsRepository $forumPostsRepository,
 		FotoTagsRepository $fotoTagsRepository,
@@ -221,12 +226,14 @@ class ProfielController extends AbstractController
 			),
 			'forumrecent' => $forumPostsRepository->getRecenteForumPostsVanLid(
 				$profiel->uid,
-				(int) lid_instelling('forum', 'draden_per_pagina')
+				(int) InstellingUtil::lid_instelling('forum', 'draden_per_pagina')
 			),
 			'boeken' => $boekExemplaarRepository->getEigendom($profiel->uid),
-			'recenteAanmeldingen' => $maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(
+			'recenteAanmeldingen' => $maaltijdAanmeldingenService->getRecenteAanmeldingenVoorLid(
 				$profiel->uid,
-				date_create_immutable(instelling('maaltijden', 'recent_lidprofiel'))
+				date_create_immutable(
+					InstellingUtil::instelling('maaltijden', 'recent_lidprofiel')
+				)
 			),
 			'abos' => $maaltijdAbonnementenService->getAbonnementenVoorLid(
 				$profiel->uid
@@ -279,7 +286,7 @@ class ProfielController extends AbstractController
 		if ($form->validate()) {
 			$diff = $form->diff();
 			if (empty($diff)) {
-				setMelding('Geen wijzigingen', 0);
+				MeldingUtil::setMelding('Geen wijzigingen', 0);
 			} else {
 				$nieuw =
 					$profiel->uid === null ||
@@ -320,22 +327,25 @@ class ProfielController extends AbstractController
 							}
 							$conn->commit();
 						} catch (Exception $e) {
-							setMelding($e->getMessage(), -1);
+							MeldingUtil::setMelding($e->getMessage(), -1);
 							$conn->rollBack();
 						} finally {
 							$conn->setAutoCommit(true);
 						}
 					} catch (CsrException $ex) {
-						setMelding($ex->getMessage(), -1);
+						MeldingUtil::setMelding($ex->getMessage(), -1);
 					}
 
-					setMelding(
+					MeldingUtil::setMelding(
 						'Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid,
 						1
 					);
 				} else {
 					$this->profielRepository->update($profiel);
-					setMelding(count($diff) . ' wijziging(en) succesvol opgeslagen', 1);
+					MeldingUtil::setMelding(
+						count($diff) . ' wijziging(en) succesvol opgeslagen',
+						1
+					);
 				}
 			}
 			return $this->redirectToRoute('csrdelft_profiel_profiel', [
@@ -386,7 +396,7 @@ class ProfielController extends AbstractController
 				$values['email'],
 				$values['mobiel'],
 			]);
-			$token = base64url_encode($string);
+			$token = UrlUtil::base64url_encode($string);
 			$link = $this->generateUrl(
 				'extern-inschrijven',
 				['pre' => $token],
@@ -415,7 +425,7 @@ class ProfielController extends AbstractController
 		string $pre,
 		EntityManagerInterface $em
 	): Response {
-		if (isDatumVoorbij('2021-08-28 00:00:00')) {
+		if (DateUtil::isDatumVoorbij('2021-08-28 00:00:00')) {
 			return $this->render('extern-inschrijven/tekstpagina.html.twig', [
 				'titel' => 'C.S.R. Delft - Inschrijven',
 				'content' => '
@@ -436,7 +446,7 @@ class ProfielController extends AbstractController
 		if (empty($pre)) {
 			throw new NotFoundHttpException();
 		}
-		$data = base64url_decode($pre);
+		$data = UrlUtil::base64url_decode($pre);
 		if (!$data) {
 			throw new NotFoundHttpException();
 		}
@@ -495,7 +505,7 @@ class ProfielController extends AbstractController
 						throw new CsrException('Vul de toestemmingen in');
 					}
 				} catch (Exception $e) {
-					setMelding($e->getMessage(), -1);
+					MeldingUtil::setMelding($e->getMessage(), -1);
 					if ($conn->isTransactionActive()) {
 						$conn->rollBack();
 					}
@@ -503,7 +513,7 @@ class ProfielController extends AbstractController
 					$conn->setAutoCommit(true);
 				}
 			} catch (CsrException $ex) {
-				setMelding($ex->getMessage(), -1);
+				MeldingUtil::setMelding($ex->getMessage(), -1);
 			}
 
 			if ($succes) {
@@ -591,7 +601,7 @@ class ProfielController extends AbstractController
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($opmerking);
 			$manager->flush();
-			setMelding('Voorkeuren opgeslagen', 1);
+			MeldingUtil::setMelding('Voorkeuren opgeslagen', 1);
 			return $this->redirectToRoute('csrdelft_profiel_voorkeuren', [
 				'uid' => $uid,
 			]);
@@ -628,7 +638,7 @@ class ProfielController extends AbstractController
 		);
 		$googleContactSync->initialize($addToContactsUrl);
 		$msg = $googleContactSync->syncLid($profiel);
-		setMelding('Opgeslagen in Google Contacten: ' . $msg, 1);
+		MeldingUtil::setMelding('Opgeslagen in Google Contacten: ' . $msg, 1);
 		return $this->redirectToRoute('csrdelft_profiel_profiel', [
 			'uid' => $profiel->uid,
 		]);

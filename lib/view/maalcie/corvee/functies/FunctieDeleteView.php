@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\maalcie\corvee\functies;
 
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
@@ -27,7 +28,10 @@ class FunctieDeleteView implements ToResponse, View
 			'<tr id="corveefunctie-row-' .
 			$this->functieId .
 			'" class="remove"></tr>';
-		$html .= '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
+		$html .=
+			'<tr id="maalcie-melding"><td>' .
+			MeldingUtil::getMelding() .
+			'</td></tr>';
 
 		return $html;
 	}

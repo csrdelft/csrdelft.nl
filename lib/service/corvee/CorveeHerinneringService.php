@@ -4,12 +4,15 @@ namespace CsrDelft\service\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\MailService;
 use DateInterval;
+use DateTimeInterface;
 use Twig\Environment;
 
 /**
@@ -57,7 +60,7 @@ class CorveeHerinneringService
 
 	public function stuurHerinnering(CorveeTaak $taak)
 	{
-		$datum = date_format_intl($taak->datum, DATE_FORMAT);
+		$datum = DateUtil::dateFormatIntl($taak->datum, DateUtil::DATE_FORMAT);
 		if (!$taak->profiel) {
 			throw new CsrGebruikerException(
 				$datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!'
@@ -74,9 +77,9 @@ class CorveeHerinneringService
 				$taak->profiel->uid
 			);
 			if ($aangemeld) {
-				$eten = instelling('corvee', 'mail_wel_meeeten');
+				$eten = InstellingUtil::instelling('corvee', 'mail_wel_meeeten');
 			} else {
-				$eten = instelling('corvee', 'mail_niet_meeeten');
+				$eten = InstellingUtil::instelling('corvee', 'mail_niet_meeeten');
 			}
 		}
 		$bericht = str_replace(
@@ -109,7 +112,7 @@ class CorveeHerinneringService
 		$vooraf = str_replace(
 			'-',
 			'+',
-			instelling('corvee', 'herinnering_1e_mail')
+			InstellingUtil::instelling('corvee', 'herinnering_1e_mail')
 		);
 		$van = date_create();
 		$tot = date_create_immutable()->add(

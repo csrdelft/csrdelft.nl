@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\Enum;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
@@ -128,7 +129,8 @@ class Activiteit extends Groep implements
 	public function isTransparant()
 	{
 		// Toon als transparant (vrij) als lid dat wil, activiteit hele dag(en) duurt of lid niet ingeketzt is
-		return lid_instelling('agenda', 'transparantICal') === 'ja' ||
+		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
+			'ja' ||
 			$this->isHeledag() ||
 			!$this->getLid(LoginService::getUid());
 	}

@@ -4,6 +4,8 @@ namespace CsrDelft\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
+use CsrDelft\common\Util\InstellingUtil;
+use CsrDelft\common\Util\TextUtil;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
@@ -230,7 +232,7 @@ class ForumDraad
 				$this->gesloten &&
 				$this->laatst_gewijzigd <
 					date_create_immutable(
-						instelling('forum', 'externen_geentoegang_gesloten')
+						InstellingUtil::instelling('forum', 'externen_geentoegang_gesloten')
 					)
 			) {
 				return false;
@@ -238,7 +240,9 @@ class ForumDraad
 
 			if (
 				$this->laatst_gewijzigd <
-				date_create_immutable(instelling('forum', 'externen_geentoegang_open'))
+				date_create_immutable(
+					InstellingUtil::instelling('forum', 'externen_geentoegang_open')
+				)
 			) {
 				return false;
 			}
@@ -314,7 +318,7 @@ class ForumDraad
 	{
 		$laatste = $this->laatste_post;
 		$parseMail = strip_tags(CsrBB::parseMail($laatste->tekst));
-		return truncate($parseMail, 100);
+		return TextUtil::truncate($parseMail, 100);
 	}
 
 	/**

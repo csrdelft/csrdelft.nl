@@ -4,6 +4,8 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\corvee\CorveeTaak;
@@ -17,6 +19,7 @@ use CsrDelft\view\formulier\invoervelden\LidObjectField;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\TaakForm;
 use CsrDelft\view\maalcie\forms\ToewijzenForm;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -99,10 +102,15 @@ class BeheerTakenController extends AbstractController
 		if (isset($taken)) {
 			foreach ($taken as $taak) {
 				$datum = $taak->datum;
-				if (!array_key_exists(date_format_intl($datum, DATE_FORMAT), $model)) {
-					$model[date_format_intl($datum, DATE_FORMAT)] = [];
+				if (
+					!array_key_exists(
+						DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT),
+						$model
+					)
+				) {
+					$model[DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT)] = [];
 				}
-				$model[date_format_intl($datum, DATE_FORMAT)][
+				$model[DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT)][
 					$taak->corveeFunctie->functie_id
 				][] = $taak;
 			}
@@ -143,10 +151,15 @@ class BeheerTakenController extends AbstractController
 		$model = [];
 		foreach ($taken as $taak) {
 			$datum = $taak->datum;
-			if (!array_key_exists(date_format_intl($datum, DATE_FORMAT), $model)) {
-				$model[date_format_intl($datum, DATE_FORMAT)] = [];
+			if (
+				!array_key_exists(
+					DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT),
+					$model
+				)
+			) {
+				$model[DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT)] = [];
 			}
-			$model[date_format_intl($datum, DATE_FORMAT)][
+			$model[DateUtil::dateFormatIntl($datum, DateUtil::DATE_FORMAT)][
 				$taak->corveeFunctie->functie_id
 			][] = $taak;
 		}
@@ -172,7 +185,7 @@ class BeheerTakenController extends AbstractController
 		$aantal = sizeof($verstuurd);
 		$count = sizeof($errors);
 		if ($count > 0) {
-			setMelding(
+			MeldingUtil::setMelding(
 				$count .
 					' herinnering' .
 					($count !== 1 ? 'en' : '') .
@@ -180,19 +193,19 @@ class BeheerTakenController extends AbstractController
 				-1
 			);
 			foreach ($errors as $error) {
-				setMelding($error->getMessage(), 2); // toon wat fout is gegaan
+				MeldingUtil::setMelding($error->getMessage(), 2); // toon wat fout is gegaan
 			}
 		}
 		if ($aantal > 0) {
-			setMelding(
+			MeldingUtil::setMelding(
 				$aantal . ' herinnering' . ($aantal !== 1 ? 'en' : '') . ' verstuurd!',
 				1
 			);
 			foreach ($verstuurd as $melding) {
-				setMelding($melding, 1); // toon wat goed is gegaan
+				MeldingUtil::setMelding($melding, 1); // toon wat goed is gegaan
 			}
 		} else {
-			setMelding('Geen herinneringen verstuurd.', 0);
+			MeldingUtil::setMelding('Geen herinneringen verstuurd.', 0);
 		}
 		return $this->redirectToRoute('csrdelft_maalcie_beheertaken_beheer');
 	}
@@ -444,7 +457,7 @@ class BeheerTakenController extends AbstractController
 	public function leegmaken()
 	{
 		$aantal = $this->corveeTakenRepository->prullenbakLeegmaken();
-		setMelding(
+		MeldingUtil::setMelding(
 			$aantal .
 				($aantal === 1 ? ' taak' : ' taken') .
 				' definitief verwijderd.',

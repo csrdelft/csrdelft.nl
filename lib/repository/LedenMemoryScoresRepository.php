@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\LedenMemoryScore;
 use CsrDelft\service\security\LoginService;
@@ -34,7 +35,7 @@ class LedenMemoryScoresRepository extends AbstractRepository
 	{
 		$score = new LedenMemoryScore();
 		$score->door_uid = LoginService::getUid();
-		$score->wanneer = getDateTime();
+		$score->wanneer = DateUtil::getDateTime();
 		return $score;
 	}
 

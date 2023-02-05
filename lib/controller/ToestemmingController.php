@@ -3,6 +3,8 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
@@ -52,7 +54,7 @@ class ToestemmingController extends AbstractController
 
 		if ($form->isPosted() && $form->validate()) {
 			$this->lidToestemmingRepository->saveForLid();
-			setMelding('Toestemming opgeslagen', 1);
+			MeldingUtil::setMelding('Toestemming opgeslagen', 1);
 			return new CmsPaginaView($this->cmsPaginaRepository->find('thuis'));
 		} else {
 			return $form;
@@ -129,7 +131,7 @@ class ToestemmingController extends AbstractController
 				'iedereen' => LidStatus::getEnumValues(),
 			];
 
-			$toestemming = group_by(
+			$toestemming = ArrayUtil::group_by(
 				'uid',
 				$this->lidToestemmingRepository->getToestemmingForIds($ids)
 			);

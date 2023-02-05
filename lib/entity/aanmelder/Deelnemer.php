@@ -2,9 +2,11 @@
 
 namespace CsrDelft\entity\aanmelder;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\aanmelder\DeelnemerRepository;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -119,7 +121,9 @@ class Deelnemer
 
 	public function getAanwezigTijd(): string
 	{
-		return $this->isAanwezig() ? date_format_intl($this->aanwezig, 'H:mm') : '';
+		return $this->isAanwezig()
+			? DateUtil::dateFormatIntl($this->aanwezig, 'H:mm')
+			: '';
 	}
 
 	public function setAanwezig()

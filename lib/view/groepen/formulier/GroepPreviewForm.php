@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
 use CsrDelft\view\formulier\elementen\HtmlComment;
@@ -19,7 +21,9 @@ class GroepPreviewForm extends ModalForm implements FormElement
 		$fields = [];
 		$fields[] = new HtmlBbComment(
 			'<div style="max-width: 580px;">Gebruik de volgende code in uw forumbericht voor onderstaand resultaat: [code][' .
-				strtolower(classNameZonderNamespace(get_class($groep))) .
+				strtolower(
+					ReflectionUtil::classNameZonderNamespace(get_class($groep))
+				) .
 				'=' .
 				$groep->id .
 				'][/code][rn]'
@@ -35,7 +39,7 @@ class GroepPreviewForm extends ModalForm implements FormElement
 	public function getHtml()
 	{
 		$this->css_classes[] = 'ModalForm';
-		$html = getMelding();
+		$html = MeldingUtil::getMelding();
 		$html .= $this->getFormTag();
 		if ($this->getTitel()) {
 			$html .= '<h1 class="Titel">' . $this->getTitel() . '</h1>';
@@ -54,6 +58,6 @@ class GroepPreviewForm extends ModalForm implements FormElement
 
 	public function getType()
 	{
-		return classNameZonderNamespace(get_class($this->model));
+		return ReflectionUtil::classNameZonderNamespace(get_class($this->model));
 	}
 }

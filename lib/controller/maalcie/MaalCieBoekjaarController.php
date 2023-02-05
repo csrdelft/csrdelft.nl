@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\maalcie\forms\BoekjaarSluitenForm;
@@ -54,7 +55,7 @@ class MaalCieBoekjaarController extends AbstractController
 				strtotime($values['einddatum'])
 			);
 			if (count($errors_aantal[0]) === 0) {
-				setMelding(
+				MeldingUtil::setMelding(
 					'Boekjaar succesvol gesloten: ' .
 						$errors_aantal[1] .
 						' maaltijden naar het archief verplaatst.',

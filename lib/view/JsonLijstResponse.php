@@ -8,13 +8,15 @@
 
 namespace CsrDelft\view;
 
+use CsrDelft\common\Util\ArrayUtil;
+
 abstract class JsonLijstResponse extends JsonResponse
 {
 	public function getModel()
 	{
 		return array_map(function ($element) {
 			return $this->renderElement($element);
-		}, as_array($this->model));
+		}, ArrayUtil::as_array($this->model));
 	}
 
 	abstract public function renderElement($element);

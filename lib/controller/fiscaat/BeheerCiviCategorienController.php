@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\repository\fiscaat\CiviCategorieRepository;
 use CsrDelft\view\fiscaat\CiviCategorieSuggestiesResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,7 @@ class BeheerCiviCategorienController
 	public function suggesties(Request $request)
 	{
 		$suggesties = $this->civiCategorieRepository->suggesties(
-			sql_contains($request->query->get('q'))
+			SqlUtil::sql_contains($request->query->get('q'))
 		);
 
 		return new CiviCategorieSuggestiesResponse($suggesties);

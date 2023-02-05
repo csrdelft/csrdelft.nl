@@ -3,6 +3,9 @@
 namespace CsrDelft\view\formulier\uploadvelden;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\FileUtil;
+use CsrDelft\common\Util\HostUtil;
+use CsrDelft\common\Util\PathUtil;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\view\formulier\invoervelden\InputField;
@@ -61,7 +64,10 @@ class BestandBehouden extends InputField
 		parent::opslaan($directory, $filename, $overwrite);
 		if (
 			false ===
-			@chmod(join_paths($this->model->directory, $this->model->filename), 0644)
+			@chmod(
+				PathUtil::join_paths($this->model->directory, $this->model->filename),
+				0644
+			)
 		) {
 			throw new CsrException(
 				'Geen eigenaar van bestand: ' .
@@ -77,7 +83,7 @@ class BestandBehouden extends InputField
 			'>' .
 			$this->model->filename .
 			' (' .
-			format_filesize($this->model->filesize) .
+			FileUtil::format_filesize($this->model->filesize) .
 			')</div>';
 	}
 
@@ -89,7 +95,7 @@ class BestandBehouden extends InputField
 				'" class="previewDiv"><img src="' .
 				str_replace(
 					PHOTOALBUM_PATH,
-					getCsrRoot() . '/plaetjes/',
+					HostUtil::getCsrRoot() . '/plaetjes/',
 					$this->model->directory
 				) .
 				$this->model->filename .

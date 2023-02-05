@@ -3,6 +3,9 @@
 namespace CsrDelft\service\forum;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\InstellingUtil;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
@@ -83,14 +86,14 @@ class ForumDelenService
 	 */
 	public function getWachtOpGoedkeuring()
 	{
-		$postsByDraadId = group_by(
+		$postsByDraadId = ArrayUtil::group_by(
 			'draad_id',
 			$this->forumPostsRepository->findBy([
 				'wacht_goedkeuring' => true,
 				'verwijderd' => false,
 			])
 		);
-		$dradenById = group_by_distinct(
+		$dradenById = ArrayUtil::group_by_distinct(
 			'draad_id',
 			$this->forumDradenRepository->findBy([
 				'wacht_goedkeuring' => true,
@@ -114,10 +117,10 @@ class ForumDelenService
 				if (count($draad->getForumPosts()) === 0) {
 					$draad->verwijderd = true;
 					$melding .= 'verwijderd (bevat geen berichten)';
-					setMelding($melding, 2);
+					MeldingUtil::setMelding($melding, 2);
 				} else {
 					$melding .= 'goedgekeurd';
-					setMelding($melding, 2);
+					MeldingUtil::setMelding($melding, 2);
 				}
 				$this->forumDradenRepository->update($draad);
 			}
@@ -132,7 +135,7 @@ class ForumDelenService
 			empty($dradenById) &&
 			$this->forumPostsRepository->getAantalWachtOpGoedkeuring() > 0
 		) {
-			setMelding(
+			MeldingUtil::setMelding(
 				'U heeft onvoldoende rechten om de berichten goed te keuren',
 				0
 			);
@@ -317,7 +320,9 @@ class ForumDelenService
 		$verbergen = $this->forumDradenVerbergenRepository->findBy([
 			'uid' => LoginService::getUid(),
 		]);
-		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
+		$draden_ids = array_keys(
+			ArrayUtil::group_by_distinct('draad_id', $verbergen)
+		);
 		if (count($draden_ids) > 0) {
 			$qb->andWhere('d.draad_id not in (:draden_ids)');
 			$qb->setParameter('draden_ids', $draden_ids);
@@ -331,14 +336,18 @@ class ForumDelenService
 			} else {
 				if (
 					!isset($pagina) ||
-					lid_instelling('forum', 'belangrijkBijRecent') === 'nee'
+					InstellingUtil::lid_instelling('forum', 'belangrijkBijRecent') ===
+						'nee'
 				) {
 					$qb->andWhere('d.belangrijk is null');
 				}
 			}
 		}
 		$this->forumDradenRepository->filterLaatstGewijzigdExtern($qb);
-		$dradenById = group_by_distinct('draad_id', $qb->getQuery()->getResult());
+		$dradenById = ArrayUtil::group_by_distinct(
+			'draad_id',
+			$qb->getQuery()->getResult()
+		);
 		$count = count($dradenById);
 		if ($count > 0) {
 			$draden_ids = array_keys($dradenById);
@@ -352,7 +361,7 @@ class ForumDelenService
 	 */
 	public function getForumIndelingVoorLid()
 	{
-		$delenByCategorieId = group_by(
+		$delenByCategorieId = ArrayUtil::group_by(
 			'categorie_id',
 			$this->forumDelenRepository->getForumDelenVoorLid()
 		);

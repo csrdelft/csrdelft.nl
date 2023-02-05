@@ -3,6 +3,7 @@
 namespace CsrDelft\service\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveePuntenOverzichtDTO;
 use CsrDelft\entity\corvee\CorveeTaak;
@@ -91,7 +92,9 @@ class CorveePuntenService
 							);
 						}
 					}
-					$punten -= intval(instelling('corvee', 'punten_per_jaar'));
+					$punten -= intval(
+						InstellingUtil::instelling('corvee', 'punten_per_jaar')
+					);
 					$this->savePuntenVoorLid($profiel, $punten, 0);
 				} catch (CsrGebruikerException $e) {
 					$errors[] = $e;
@@ -236,7 +239,8 @@ class CorveePuntenService
 		$suggestie->prognoseColor = $this->rgbCalculate($suggestie->prognose);
 		if ($profiel->isLid()) {
 			$suggestie->tekort =
-				instelling('corvee', 'punten_per_jaar') - $suggestie->prognose;
+				InstellingUtil::instelling('corvee', 'punten_per_jaar') -
+				$suggestie->prognose;
 		} else {
 			$suggestie->tekort = 0 - $suggestie->prognose;
 		}
@@ -290,7 +294,7 @@ class CorveePuntenService
 	 */
 	private function rgbCalculate($punten, $tekort = false)
 	{
-		$perjaar = intval(instelling('corvee', 'punten_per_jaar'));
+		$perjaar = intval(InstellingUtil::instelling('corvee', 'punten_per_jaar'));
 		if (!$tekort) {
 			$punten = $perjaar - $punten;
 		}

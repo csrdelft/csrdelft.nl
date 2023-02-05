@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\security\AccountRepository;
@@ -76,11 +77,11 @@ class AccountController extends AbstractController
 		}
 
 		if ($account) {
-			setMelding('Account bestaat al', 0);
+			MeldingUtil::setMelding('Account bestaat al', 0);
 		} else {
 			$account = $this->accountService->maakAccount($uid);
 			if ($account) {
-				setMelding('Account succesvol aangemaakt', 1);
+				MeldingUtil::setMelding('Account succesvol aangemaakt', 1);
 			} else {
 				throw new CsrGebruikerException('Account aanmaken gefaald');
 			}
@@ -108,7 +109,7 @@ class AccountController extends AbstractController
 		}
 		$account = $this->accountRepository->find($uid);
 		if (!$account) {
-			setMelding('Account bestaat niet', -1);
+			MeldingUtil::setMelding('Account bestaat niet', -1);
 			throw $this->createAccessDeniedException();
 		}
 		// Het is alleen toegestaan om een account te bewerken als er recent met een wachtwoord is ingelogd.
@@ -136,7 +137,7 @@ class AccountController extends AbstractController
 			) {
 				$this->loginService->setRecentLoginToken();
 			} else {
-				setMelding(
+				MeldingUtil::setMelding(
 					'U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.',
 					2
 				);
@@ -146,7 +147,7 @@ class AccountController extends AbstractController
 			}
 		}
 		if (!$this->accessService->isUserGranted($account, 'ROLE_LOGGED_IN')) {
-			setMelding('Account mag niet inloggen', 2);
+			MeldingUtil::setMelding('Account mag niet inloggen', 2);
 		}
 		$form = $this->createFormulier(AccountForm::class, $account, [
 			'action' => $this->generateUrl('csrdelft_account_bewerken', [
@@ -160,7 +161,7 @@ class AccountController extends AbstractController
 			}
 			// username, email & wachtwoord opslaan
 			$this->accountService->wijzigWachtwoord($account, $account->pass_plain);
-			setMelding('Inloggegevens wijzigen geslaagd', 1);
+			MeldingUtil::setMelding('Inloggegevens wijzigen geslaagd', 1);
 		}
 		$account->eraseCredentials();
 		return $this->render('default.html.twig', [
@@ -196,13 +197,13 @@ class AccountController extends AbstractController
 		}
 		$account = $this->accountRepository->find($uid);
 		if (!$account) {
-			setMelding('Account bestaat niet', -1);
+			MeldingUtil::setMelding('Account bestaat niet', -1);
 		} else {
 			try {
 				$this->accountRepository->delete($account);
-				setMelding('Account succesvol verwijderd', 1);
+				MeldingUtil::setMelding('Account succesvol verwijderd', 1);
 			} catch (Exception $exception) {
-				setMelding('Account verwijderen mislukt', -1);
+				MeldingUtil::setMelding('Account verwijderen mislukt', -1);
 			}
 		}
 		return new JsonResponse('/profiel/' . $uid); // redirect

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\corvee;
 
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\AbstractRepository;
@@ -29,17 +30,17 @@ class CorveeRepetitiesRepository extends AbstractRepository
 		$repetitie->maaltijdRepetitie = $maaltijdRepetitie;
 		$repetitie->mlt_repetitie_id = $maaltijdRepetitie->mlt_repetitie_id ?? null;
 		$repetitie->dag_vd_week = intval(
-			instelling('corvee', 'standaard_repetitie_weekdag')
+			InstellingUtil::instelling('corvee', 'standaard_repetitie_weekdag')
 		);
 		$repetitie->periode_in_dagen = intval(
-			instelling('corvee', 'standaard_repetitie_periode')
+			InstellingUtil::instelling('corvee', 'standaard_repetitie_periode')
 		);
 		$repetitie->corveeFunctie = null;
 		$repetitie->standaard_punten = 0;
 		$repetitie->standaard_aantal = intval(
-			instelling('corvee', 'standaard_aantal_corveers')
+			InstellingUtil::instelling('corvee', 'standaard_aantal_corveers')
 		);
-		$repetitie->voorkeurbaar = ((bool) instelling(
+		$repetitie->voorkeurbaar = ((bool) InstellingUtil::instelling(
 			'corvee',
 			'standaard_voorkeurbaar'
 		));

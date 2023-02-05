@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\common\Util\UrlUtil;
+
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -19,7 +21,7 @@ class EmailField extends TextField
 			return true;
 		}
 		// check format
-		if (!email_like($this->value)) {
+		if (!UrlUtil::email_like($this->value)) {
 			$this->error = 'Ongeldig e-mailadres';
 		}
 		// check dns record

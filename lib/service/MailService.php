@@ -3,6 +3,7 @@
 namespace CsrDelft\service;
 
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\MeldingUtil;
 use Twig\Environment;
 
 class MailService
@@ -49,7 +50,7 @@ MAIL;
 		$body = str_replace("\n", "\r\n", $body);
 
 		if ($mail->inDebugMode()) {
-			setMelding($htmlBody, 0);
+			MeldingUtil::setMelding($htmlBody, 0);
 			return false;
 		}
 		return mail(

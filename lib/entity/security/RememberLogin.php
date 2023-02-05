@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\view\Icon;
@@ -104,7 +105,7 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	 */
 	public function getDataTableRememberSince()
 	{
-		return reldate($this->remember_since);
+		return DateUtil::reldate($this->remember_since);
 	}
 
 	/**
@@ -114,7 +115,7 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	 */
 	public function getDataTableLastUsed()
 	{
-		return reldate($this->last_used);
+		return DateUtil::reldate($this->last_used);
 	}
 
 	public function getClass()

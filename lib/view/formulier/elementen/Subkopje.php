@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\formulier\elementen;
 
+use CsrDelft\common\Util\ReflectionUtil;
+
 /**
  * Subkopje.class.php
  *
@@ -18,7 +20,7 @@ class Subkopje extends HtmlComment
 		return '<h' .
 			$this->h .
 			' class="' .
-			classNameZonderNamespace(get_class($this)) .
+			ReflectionUtil::classNameZonderNamespace(get_class($this)) .
 			'">' .
 			$this->comment .
 			'</h' .

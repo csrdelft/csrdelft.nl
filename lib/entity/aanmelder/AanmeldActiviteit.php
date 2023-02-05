@@ -3,11 +3,13 @@
 namespace CsrDelft\entity\aanmelder;
 
 use CsrDelft\common\Eisen;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\repository\aanmelder\AanmeldActiviteitRepository;
 use CsrDelft\service\security\LoginService;
 use DateInterval;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -89,7 +91,10 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 	 */
 	public function getStartDataTable(): string
 	{
-		return date_format_intl($this->getStart(), DATETIME_FORMAT);
+		return DateUtil::dateFormatIntl(
+			$this->getStart(),
+			DateUtil::DATETIME_FORMAT
+		);
 	}
 
 	public function setStart(DateTimeImmutable $start): self
@@ -110,7 +115,10 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 	 */
 	public function getEindeDataTable(): string
 	{
-		return date_format_intl($this->getEinde(), DATETIME_FORMAT);
+		return DateUtil::dateFormatIntl(
+			$this->getEinde(),
+			DateUtil::DATETIME_FORMAT
+		);
 	}
 
 	public function setEinde(DateTimeImmutable $einde): self

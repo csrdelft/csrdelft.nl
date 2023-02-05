@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\forum;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\repository\forum\ForumCategorieRepository;
@@ -188,7 +189,7 @@ class ForumDeelController extends AbstractController
 			$this->forumDradenRepository->findBy(['forum_id' => $deel->forum_id])
 		);
 		if ($count > 0) {
-			setMelding(
+			MeldingUtil::setMelding(
 				'Verwijder eerst alle ' .
 					$count .
 					' draadjes van dit deelforum uit de database!',
@@ -196,7 +197,7 @@ class ForumDeelController extends AbstractController
 			);
 		} else {
 			$this->forumDelenService->verwijderForumDeel($deel->forum_id);
-			setMelding('Deelforum verwijderd', 1);
+			MeldingUtil::setMelding('Deelforum verwijderd', 1);
 		}
 		return new JsonResponse('/forum'); // redirect
 	}

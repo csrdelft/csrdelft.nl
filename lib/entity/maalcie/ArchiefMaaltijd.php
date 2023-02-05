@@ -2,9 +2,11 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use DateInterval;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -73,7 +75,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 	 */
 	public function getTijdFormatted()
 	{
-		return date_format_intl($this->tijd, TIME_FORMAT);
+		return DateUtil::dateFormatIntl($this->tijd, DateUtil::TIME_FORMAT);
 	}
 
 	/**
@@ -83,7 +85,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 	 */
 	public function getDatumFormatted()
 	{
-		return date_format_intl($this->datum, DATE_FORMAT);
+		return DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT);
 	}
 
 	/**

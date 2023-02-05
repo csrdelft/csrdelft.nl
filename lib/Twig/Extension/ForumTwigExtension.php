@@ -2,6 +2,7 @@
 
 namespace CsrDelft\Twig\Extension;
 
+use CsrDelft\common\Util\TextUtil;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
@@ -76,9 +77,13 @@ class ForumTwigExtension extends AbstractExtension
 				[$this, 'highlight_zoekterm'],
 				['is_safe' => ['html']]
 			),
-			new TwigFilter('split_on_keyword', 'split_on_keyword', [
-				'is_safe' => ['html'],
-			]),
+			new TwigFilter(
+				'split_on_keyword',
+				[TextUtil::class, 'split_on_keyword'],
+				[
+					'is_safe' => ['html'],
+				]
+			),
 		];
 	}
 

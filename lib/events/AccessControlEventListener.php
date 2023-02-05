@@ -5,6 +5,7 @@ namespace CsrDelft\events;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\controller\LoginController;
 use CsrDelft\service\CsrfService;
 use CsrDelft\service\security\LoginService;
@@ -76,7 +77,9 @@ class AccessControlEventListener
 			return;
 		}
 
-		$reflectionMethod = createReflectionMethod($event->getController());
+		$reflectionMethod = ReflectionUtil::createReflectionMethod(
+			$event->getController()
+		);
 
 		$csrfUnsafeAttribute = $request->attributes->get('_csrfUnsafe');
 		/** @var CsrfUnsafe $authAnnotation */

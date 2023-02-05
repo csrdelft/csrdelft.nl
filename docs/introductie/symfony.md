@@ -26,7 +26,7 @@ Omdat Symfony in stappen is/wordt geintroduceerd in de stek is (nog) niet alles 
 - Geen `symfony/mailer`, misschien nog overstappen, huidige mailoplossing werkt nog prima.
 - Nog maar op een paar plekken `symfony/form`, overstap gaat stroef, een aantal formfields moeten hier nog naar geport worden
 - Geen `symfony/ldap`, eigen implementatie, zou misschien vervangen kunnen worden.
-- Geen Symfony flash messages, eigen implementatie met `getMelding/setMelding`, moet nog omgebouwd worden.
+- Geen Symfony flash messages, eigen implementatie in `MeldingUtil`, moet nog omgebouwd worden.
 
 ## Kernel
 

@@ -4,6 +4,7 @@ namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Security\Voter\Entity\MenuItemVoter;
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\MenuItem;
@@ -469,7 +470,7 @@ class MenuItemRepository extends AbstractRepository
 	{
 		return $this->createQueryBuilder('menuItem')
 			->where('menuItem.tekst like :query or menuItem.link like :query')
-			->setParameter('query', sql_contains($query))
+			->setParameter('query', SqlUtil::sql_contains($query))
 			->setMaxResults(20)
 			->getQuery()
 			->getResult();

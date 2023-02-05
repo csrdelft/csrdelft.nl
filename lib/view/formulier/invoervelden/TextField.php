@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\common\Util\TextUtil;
+
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -65,7 +67,7 @@ class TextField extends InputField
 			$this->error =
 				'Dit veld moet minimaal ' . $this->min_len . ' tekens lang zijn';
 		}
-		if ($this->value !== null and !is_utf8($this->value)) {
+		if ($this->value !== null and !TextUtil::is_utf8($this->value)) {
 			$this->error = 'Ongeldige karakters, gebruik reguliere tekst';
 		}
 		return $this->error === '';

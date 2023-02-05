@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
@@ -66,16 +67,14 @@ class MijnAbonnementenController extends AbstractController
 		$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
 		$abo->maaltijd_repetitie = $repetitie;
 		$abo->uid = $this->getUid();
-		$aantal = $this->maaltijdAbonnementenRepository->inschakelenAbonnement(
-			$abo
-		);
+		$aantal = $this->maaltijdAbonnementenService->inschakelenAbonnement($abo);
 		if ($aantal > 0) {
 			$melding =
 				'Automatisch aangemeld voor ' .
 				$aantal .
 				' maaltijd' .
 				($aantal === 1 ? '' : 'en');
-			setMelding($melding, 2);
+			MeldingUtil::setMelding($melding, 2);
 		}
 		return $this->render('maaltijden/abonnement/mijn_abonnement.html.twig', [
 			'uid' => $abo->uid,
@@ -92,7 +91,7 @@ class MijnAbonnementenController extends AbstractController
 	 */
 	public function uitschakelen(MaaltijdRepetitie $repetitie)
 	{
-		$abo_aantal = $this->maaltijdAbonnementenRepository->uitschakelenAbonnement(
+		$abo_aantal = $this->maaltijdAbonnementenService->uitschakelenAbonnement(
 			$repetitie,
 			$this->getUid()
 		);
@@ -102,7 +101,7 @@ class MijnAbonnementenController extends AbstractController
 				$abo_aantal[1] .
 				' maaltijd' .
 				($abo_aantal[1] === 1 ? '' : 'en');
-			setMelding($melding, 2);
+			MeldingUtil::setMelding($melding, 2);
 		}
 		$abo = $abo_aantal[0];
 		return $this->render('maaltijden/abonnement/mijn_abonnement.html.twig', [

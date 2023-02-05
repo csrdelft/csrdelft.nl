@@ -3,6 +3,8 @@
 namespace CsrDelft\controller\forum;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\InstellingUtil;
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumZoeken;
@@ -267,7 +269,7 @@ class ForumController extends AbstractController
 		$forumCategories = $this->forumCategorieRepository
 			->createQueryBuilder('c')
 			->where('c.titel LIKE :zoekterm')
-			->setParameter('zoekterm', sql_contains($zoekterm))
+			->setParameter('zoekterm', SqlUtil::sql_contains($zoekterm))
 			->getQuery()
 			->getResult();
 		return new GenericSuggestiesResponse($forumCategories);
@@ -308,9 +310,15 @@ class ForumController extends AbstractController
 	{
 		$url = '/forum/onderwerp/' . $draad->draad_id;
 
-		if (lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen') {
+		if (
+			InstellingUtil::lid_instelling('forum', 'open_draad_op_pagina') ==
+			'ongelezen'
+		) {
 			$url .= '#ongelezen';
-		} elseif (lid_instelling('forum', 'open_draad_op_pagina') == 'laatste') {
+		} elseif (
+			InstellingUtil::lid_instelling('forum', 'open_draad_op_pagina') ==
+			'laatste'
+		) {
 			$url .= '#reageren';
 		}
 

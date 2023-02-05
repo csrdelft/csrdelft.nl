@@ -6,6 +6,8 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\BedragUtil;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
@@ -26,6 +28,7 @@ use CsrDelft\view\fiscaat\pin\PinBestellingVeranderenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchNegerenForm;
 use CsrDelft\view\formulier\FoutmeldingForm;
 use CsrDelft\view\table\PinTransactieMatchTableType;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -234,11 +237,11 @@ class PinTransactieController extends AbstractController
 			});
 
 			if ($values['stuurMail']) {
-				$datum = date_format_intl(
+				$datum = DateUtil::dateFormatIntl(
 					$nieuwePinTransactieMatch->transactie->datetime,
 					'cccc d MMMM y H:mm'
 				);
-				$bedrag = format_bedrag_kaal(
+				$bedrag = BedragUtil::format_bedrag_kaal(
 					$nieuwePinTransactieMatch->bestelling->totaal / -1
 				);
 				$this->stuurMail(
@@ -497,11 +500,11 @@ class PinTransactieController extends AbstractController
 			});
 
 			if ($values['stuurMail']) {
-				$datum = date_format_intl(
+				$datum = DateUtil::dateFormatIntl(
 					$oudePinTransactieMatch->bestelling->moment,
 					'cccc d MMMM y H:mm'
 				);
-				$bedrag = format_bedrag_kaal(
+				$bedrag = BedragUtil::format_bedrag_kaal(
 					$nieuwePinTransactieMatch->bestelling->totaal
 				);
 				$this->stuurMail(
@@ -610,19 +613,19 @@ class PinTransactieController extends AbstractController
 			});
 
 			if ($values['stuurMail']) {
-				$datum = date_format_intl(
+				$datum = DateUtil::dateFormatIntl(
 					$oudePinTransactieMatch->transactie->datetime,
 					'cccc d MMMM y H:mm'
 				);
-				$foutBedrag = format_bedrag_kaal(
+				$foutBedrag = BedragUtil::format_bedrag_kaal(
 					$oudePinTransactieMatch->bestelling->getProduct(
 						CiviProductTypeEnum::PINTRANSACTIE
 					)->aantal
 				);
-				$correctBedrag = format_bedrag_kaal(
+				$correctBedrag = BedragUtil::format_bedrag_kaal(
 					$oudePinTransactieMatch->transactie->getBedragInCenten()
 				);
-				$bedrag = format_bedrag_kaal(
+				$bedrag = BedragUtil::format_bedrag_kaal(
 					abs($nieuwePinTransactieMatch->bestelling->totaal)
 				);
 				$actie =
@@ -777,7 +780,7 @@ class PinTransactieController extends AbstractController
 		}
 		$bcc = $this->getProfiel();
 		$civiSaldo = $ontvanger->getCiviSaldo() * 100;
-		$saldo = format_bedrag_kaal($civiSaldo);
+		$saldo = BedragUtil::format_bedrag_kaal($civiSaldo);
 		$saldoMelding = $civiSaldo < 0 ? ' Leg a.u.b. in.' : '';
 
 		$bericht = "Beste {$ontvanger->getNaam('civitas')},

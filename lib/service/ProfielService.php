@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service;
 
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
@@ -49,7 +50,7 @@ class ProfielService
 	) {
 		$queryBuilder = $this->profielRepository->createQueryBuilder('p');
 		$expr = $queryBuilder->expr();
-		$containsZonderSpatiesZoekterm = sql_contains(
+		$containsZonderSpatiesZoekterm = SqlUtil::sql_contains(
 			str_replace(' ', '', $zoekterm)
 		);
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
@@ -70,18 +71,21 @@ class ProfielService
 								->add('p.nickname LIKE :containsZoekterm')
 								->add('p.uid LIKE :containsZoekterm')
 						)
-						->setParameter('voornaam', sql_contains($zoekdelen[0]))
-						->setParameter('achternaam', sql_contains($zoekdelen[1]))
-						->setParameter('containsZoekterm', sql_contains($zoekterm));
+						->setParameter('voornaam', SqlUtil::sql_contains($zoekdelen[0]))
+						->setParameter('achternaam', SqlUtil::sql_contains($zoekdelen[1]))
+						->setParameter(
+							'containsZoekterm',
+							SqlUtil::sql_contains($zoekterm)
+						);
 				} else {
 					$queryBuilder
 						->where(
 							'p.voornaam LIKE :voornaam and p.achternaam LIKE :achternaam'
 						)
-						->setParameter('voornaam', sql_contains($zoekdelen[0]))
+						->setParameter('voornaam', SqlUtil::sql_contains($zoekdelen[0]))
 						->setParameter(
 							'achternaam',
-							sql_contains($zoekdelen[$iZoekdelen - 1])
+							SqlUtil::sql_contains($zoekdelen[$iZoekdelen - 1])
 						);
 				}
 			} else {
@@ -94,7 +98,7 @@ class ProfielService
 							->add('p.nickname LIKE :containsZoekterm')
 							->add('p.uid LIKE :containsZoekterm')
 					)
-					->setParameter('containsZoekterm', sql_contains($zoekterm));
+					->setParameter('containsZoekterm', SqlUtil::sql_contains($zoekterm));
 			}
 
 			$queryBuilder
@@ -102,7 +106,7 @@ class ProfielService
 					'CONCAT_WS(\' \', p.voornaam, p.tussenvoegsel, p.achternaam) LIKE :naam'
 				)
 				->orWhere('CONCAT_WS(\' \', p.voornaam, p.achternaam) LIKE :naam')
-				->setParameter('naam', sql_contains($zoekterm));
+				->setParameter('naam', SqlUtil::sql_contains($zoekterm));
 		} elseif ($zoekveld == 'adres') {
 			$queryBuilder
 				->where(
@@ -115,7 +119,7 @@ class ProfielService
 							'REPLACE(p.postcode, \' \', \'\') LIKE :containsZonderSpatiesZoekterm'
 						)
 				)
-				->setParameter('containsZoekterm', sql_contains($zoekterm))
+				->setParameter('containsZoekterm', SqlUtil::sql_contains($zoekterm))
 				->setParameter(
 					'containsZonderSpatiesZoekterm',
 					$containsZonderSpatiesZoekterm
@@ -132,7 +136,7 @@ class ProfielService
 			} else {
 				$queryBuilder
 					->where("p.{$zoekveld} LIKE :containsZoekterm")
-					->setParameter('containsZoekterm', sql_contains($zoekterm));
+					->setParameter('containsZoekterm', SqlUtil::sql_contains($zoekterm));
 			}
 		}
 

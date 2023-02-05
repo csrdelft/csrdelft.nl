@@ -3,6 +3,9 @@
 namespace CsrDelft\service\profiel;
 
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\HostUtil;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessRole;
@@ -18,6 +21,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use CsrDelft\service\MailService;
 use DateTime;
+use DateTimeInterface;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
@@ -154,14 +158,17 @@ class LidStatusService
 			$profiel->uid
 		);
 		if (sizeof($taken) !== $aantal) {
-			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
+			MeldingUtil::setMelding(
+				'Niet alle toekomstige corveetaken zijn verwijderd!',
+				-1
+			);
 		}
 		$changes = [];
 		if ($aantal > 0) {
 			$change = new ProfielLogCoveeTakenVerwijderChange([]);
 			foreach ($taken as $taak) {
 				$change->corveetaken[] =
-					date_format_intl($taak->getBeginMoment(), 'E d-MM yyyy') .
+					DateUtil::dateFormatIntl($taak->getBeginMoment(), 'E d-MM yyyy') .
 					' ' .
 					$taak->corveeFunctie->naam;
 			}
@@ -249,12 +256,12 @@ class LidStatusService
 				$bkncsr['aantal']++;
 				$bkncsr['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
 				$bkncsr['lijst'] .=
-					' - ' . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
+					' - ' . HostUtil::getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
 			} else {
 				$bknleden['aantal']++;
 				$bknleden['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
 				$bknleden['lijst'] .=
-					' - ' . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
+					' - ' . HostUtil::getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
 				$naam = $exemplaar->eigenaar->getNaam('volledig');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}

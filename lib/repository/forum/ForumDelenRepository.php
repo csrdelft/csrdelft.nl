@@ -4,6 +4,7 @@ namespace CsrDelft\repository\forum;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
@@ -82,7 +83,7 @@ class ForumDelenRepository extends AbstractRepository
 	public function getForumDelenVoorLid($rss = false)
 	{
 		/** @var ForumDeel[] $delen */
-		$delen = group_by_distinct(
+		$delen = ArrayUtil::group_by_distinct(
 			'forum_id',
 			$this->findBy([], ['volgorde' => 'ASC'])
 		);

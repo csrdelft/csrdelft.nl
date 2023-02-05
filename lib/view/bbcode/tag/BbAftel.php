@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Util\CryptoUtil;
 
 class BbAftel extends BbTag
 {
@@ -21,7 +22,7 @@ class BbAftel extends BbTag
 			return '';
 		}
 
-		$id = uniqid_safe('flipdown_');
+		$id = CryptoUtil::uniqid_safe('flipdown_');
 		return <<<HTML
 <link rel="stylesheet" href="https://unpkg.com/flipdown@0.3.2/dist/flipdown.min.css">
 <script src="https://unpkg.com/flipdown@0.3.2/dist/flipdown.min.js"></script>

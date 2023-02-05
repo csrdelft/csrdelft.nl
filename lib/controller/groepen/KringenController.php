@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\groepen\Kring;
 use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\view\Icon;
@@ -42,7 +43,7 @@ class KringenController extends AbstractGroepenController
 		$kringen = $this->repository
 			->createQueryBuilder('k')
 			->where('k.naam LIKE :zoekterm')
-			->setParameter('zoekterm', sql_contains($zoekterm))
+			->setParameter('zoekterm', SqlUtil::sql_contains($zoekterm))
 			->setMaxResults($limit)
 			->getQuery()
 			->getResult();

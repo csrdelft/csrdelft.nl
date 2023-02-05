@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\agenda;
 
+use CsrDelft\common\Util\InstellingUtil;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
@@ -139,8 +141,8 @@ class AgendaItem implements Agendeerbaar
 	public function isTransparant()
 	{
 		// Toon als transparant (vrij) als lid dat wil of activiteit hele dag(en) duurt
-		return lid_instelling('agenda', 'transparantICal') === 'ja' ||
-			$this->isHeledag();
+		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
+			'ja' || $this->isHeledag();
 	}
 
 	public function getUUID()
@@ -149,7 +151,7 @@ class AgendaItem implements Agendeerbaar
 			sprintf(
 				'%s@%s.csrdelft.nl',
 				implode('.', [$this->item_id]),
-				short_class($this)
+				ReflectionUtil::short_class($this)
 			)
 		);
 	}

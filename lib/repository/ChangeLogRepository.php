@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository;
 
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping\MappingException;
@@ -85,7 +86,7 @@ class ChangeLogRepository extends AbstractRepository
 			$change->subject =
 				implode('.', $meta->getIdentifierValues($subject)) .
 				'@' .
-				strtolower(short_class(get_class($subject))) .
+				strtolower(ReflectionUtil::short_class(get_class($subject))) .
 				'.csrdelft.nl';
 		} catch (MappingException $ex) {
 			// ignore

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\command;
 
+use CsrDelft\common\Util\UrlUtil;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -72,7 +73,7 @@ class SponsorAffiliateDownloadCommand extends Command
 		$scrapeUrl = $PAGE_URL . $this->sponsorClubId;
 
 		//1. GET JSON
-		$result = curl_request($scrapeUrl, [
+		$result = UrlUtil::curl_request($scrapeUrl, [
 			CURLOPT_USERAGENT => $this->sponsorUserAgent . 'a',
 		]);
 

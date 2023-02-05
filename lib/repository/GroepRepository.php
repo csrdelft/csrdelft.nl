@@ -2,6 +2,9 @@
 
 namespace CsrDelft\repository;
 
+use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\ReflectionUtil;
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepStatistiekDTO;
@@ -61,7 +64,7 @@ abstract class GroepRepository extends AbstractRepository
 			str_replace(
 				'Repository',
 				'',
-				classNameZonderNamespace(get_called_class())
+				ReflectionUtil::classNameZonderNamespace(get_called_class())
 			)
 		);
 	}
@@ -228,7 +231,7 @@ abstract class GroepRepository extends AbstractRepository
 				return $newgroep;
 			});
 		} catch (Throwable $ex) {
-			setMelding($ex->getMessage(), -1);
+			MeldingUtil::setMelding($ex->getMessage(), -1);
 			return false;
 		}
 	}
@@ -384,7 +387,7 @@ abstract class GroepRepository extends AbstractRepository
 		if ($zoekterm != '') {
 			$query = $query
 				->andWhere('g.familie LIKE :zoekterm or g.naam LIKE :zoekterm')
-				->setParameter('zoekterm', sql_contains($zoekterm));
+				->setParameter('zoekterm', SqlUtil::sql_contains($zoekterm));
 		}
 
 		$query = $query->orderBy('g.id', 'DESC');

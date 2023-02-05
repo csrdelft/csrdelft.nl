@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\view\bbcode\BbHelper;
 
@@ -68,7 +69,7 @@ class BbBijbel extends BbTag
 			$vertaling1 = null;
 		}
 		if ($vertaling1 === null) {
-			$vertaling1 = lid_instelling('algemeen', 'bijbel');
+			$vertaling1 = InstellingUtil::lid_instelling('algemeen', 'bijbel');
 		}
 		$link =
 			'https://www.debijbel.nl/bijbel/' .

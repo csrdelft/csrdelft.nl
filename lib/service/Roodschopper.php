@@ -15,6 +15,7 @@ namespace CsrDelft\service;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\BedragUtil;
 use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
@@ -143,7 +144,7 @@ h.t. Fiscus.';
 	{
 		return str_replace(
 			['LID', 'SALDO'],
-			[$profiel->getNaam('volledig'), format_bedrag($saldo)],
+			[$profiel->getNaam('volledig'), BedragUtil::format_bedrag($saldo)],
 			$invoer
 		);
 	}

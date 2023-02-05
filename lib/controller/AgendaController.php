@@ -5,6 +5,8 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\Activiteit;
@@ -23,6 +25,7 @@ use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\Icon;
 use CsrDelft\view\response\IcalResponse;
 use DateInterval;
+use DateTimeInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -187,7 +190,8 @@ class AgendaController extends AbstractController
 			$result[] = [
 				'icon' => Icon::getTag('calendar'),
 				'url' => $url,
-				'label' => $d . ' ' . date_format_intl($begin, 'LLLL') . ' ' . $y,
+				'label' =>
+					$d . ' ' . DateUtil::dateFormatIntl($begin, 'LLLL') . ' ' . $y,
 				'value' => $item->getTitel(),
 			];
 		}
@@ -249,11 +253,14 @@ class AgendaController extends AbstractController
 			$this->agendaRepository->save($item);
 			if ($datum === 'doorgaan') {
 				$_POST = []; // clear post values of previous input
-				setMelding(
+				MeldingUtil::setMelding(
 					'Toegevoegd: ' .
 						$item->titel .
 						' (' .
-						date_format_intl($item->begin_moment, DATETIME_FORMAT) .
+						DateUtil::dateFormatIntl(
+							$item->begin_moment,
+							DateUtil::DATETIME_FORMAT
+						) .
 						')',
 					1
 				);

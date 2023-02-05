@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\groepen;
 
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\repository\GroepRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -46,7 +47,7 @@ class VerticalenRepository extends GroepRepository
 	{
 		return $this->createQueryBuilder('v')
 			->where('v.naam LIKE :naam')
-			->setParameter('naam', sql_contains($naam))
+			->setParameter('naam', SqlUtil::sql_contains($naam))
 			->setMaxResults(1)
 			->getQuery()
 			->getOneOrNullResult();

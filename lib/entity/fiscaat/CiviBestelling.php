@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use CsrDelft\common\Util\BedragUtil;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -109,13 +110,14 @@ class CiviBestelling
 				CiviProductTypeEnum::PINCORRECTIE
 			);
 			if ($pinCorrectieProduct) {
-				return format_bedrag($pinCorrectieProduct->aantal) . ' pincorrectie';
+				return BedragUtil::format_bedrag($pinCorrectieProduct->aantal) .
+					' pincorrectie';
 			} else {
 				return '';
 			}
 		}
 
-		$beschrijving = format_bedrag($pinProduct->aantal) . ' PIN';
+		$beschrijving = BedragUtil::format_bedrag($pinProduct->aantal) . ' PIN';
 
 		$aantalInhoud = count($this->inhoud);
 

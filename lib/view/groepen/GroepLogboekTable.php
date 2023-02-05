@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\groepen;
 
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\view\datatable\DataTable;
@@ -26,6 +27,6 @@ class GroepLogboekTable extends DataTable
 
 	public function getType()
 	{
-		return className($this);
+		return ReflectionUtil::className($this);
 	}
 }

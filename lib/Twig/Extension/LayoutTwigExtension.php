@@ -2,6 +2,7 @@
 
 namespace CsrDelft\Twig\Extension;
 
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\Component\Formulier\FormulierFactory;
 use CsrDelft\entity\MenuItem;
 use CsrDelft\repository\MenuItemRepository;
@@ -47,7 +48,11 @@ class LayoutTwigExtension extends AbstractExtension
 			),
 			new TwigFunction('get_breadcrumbs', [$this, 'get_breadcrumbs']),
 			new TwigFunction('get_menu', [$this, 'get_menu']),
-			new TwigFunction('getMelding', 'getMelding', ['is_safe' => ['html']]),
+			new TwigFunction(
+				'getMelding',
+				[MeldingUtil::class, 'getMelding'],
+				['is_safe' => ['html']]
+			),
 			new TwigFunction(
 				'instant_search_form',
 				[$this, 'instant_search_form'],

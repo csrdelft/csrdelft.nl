@@ -3,6 +3,7 @@
 namespace CsrDelft\Component\DataTable;
 
 use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
@@ -212,7 +213,7 @@ class DataTableBuilder
 			/*
 			  //TODO: sort by other column
 			  { "iDataSort": 1 },
-			  reldate(getDateTime());
+			  reldate(DateUtil::getDateTime());
 			 */
 		];
 		if ($order_by !== null) {
@@ -380,7 +381,7 @@ class DataTableBuilder
 
 	public function getType()
 	{
-		return classNameZonderNamespace(get_class($this));
+		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}
 
 	public function getTable()

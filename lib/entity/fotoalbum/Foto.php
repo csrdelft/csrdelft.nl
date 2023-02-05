@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Afbeelding;
 use Doctrine\ORM\Mapping as ORM;
@@ -64,7 +65,12 @@ class Foto extends Afbeelding
 			$this->directory = $album->path;
 			$this->subdir = $album->subdir;
 
-			if (!path_valid(PHOTOALBUM_PATH, join_paths($album->subdir, $filename))) {
+			if (
+				!PathUtil::path_valid(
+					PHOTOALBUM_PATH,
+					PathUtil::join_paths($album->subdir, $filename)
+				)
+			) {
 				throw new NotFoundHttpException(); // Voorkom traversal door filename
 			}
 		}
@@ -73,7 +79,7 @@ class Foto extends Afbeelding
 
 	public function getUUID()
 	{
-		return join_paths($this->subdir, $this->filename) .
+		return PathUtil::join_paths($this->subdir, $this->filename) .
 			'@' .
 			get_class($this) .
 			'.csrdelft.nl';
@@ -81,7 +87,7 @@ class Foto extends Afbeelding
 
 	public function getThumbPath()
 	{
-		return join_paths(
+		return PathUtil::join_paths(
 			PHOTOALBUM_PATH,
 			$this->subdir,
 			self::THUMBS_DIR,
@@ -91,7 +97,7 @@ class Foto extends Afbeelding
 
 	public function getResizedPath()
 	{
-		return join_paths(
+		return PathUtil::join_paths(
 			PHOTOALBUM_PATH,
 			$this->subdir,
 			self::RESIZED_DIR,
@@ -101,7 +107,9 @@ class Foto extends Afbeelding
 
 	public function getAlbumUrl()
 	{
-		return direncode(join_paths(self::FOTOALBUM_ROOT, $this->subdir));
+		return PathUtil::direncode(
+			PathUtil::join_paths(self::FOTOALBUM_ROOT, $this->subdir)
+		);
 	}
 	public function getAlbum()
 	{
@@ -109,15 +117,15 @@ class Foto extends Afbeelding
 	}
 	public function getFullUrl()
 	{
-		return direncode(
-			join_paths(self::FOTOALBUM_ROOT, $this->subdir, $this->filename)
+		return PathUtil::direncode(
+			PathUtil::join_paths(self::FOTOALBUM_ROOT, $this->subdir, $this->filename)
 		);
 	}
 
 	public function getThumbUrl()
 	{
-		return direncode(
-			join_paths(
+		return PathUtil::direncode(
+			PathUtil::join_paths(
 				self::FOTOALBUM_ROOT,
 				$this->subdir,
 				self::THUMBS_DIR,
@@ -128,8 +136,8 @@ class Foto extends Afbeelding
 
 	public function getResizedUrl()
 	{
-		return direncode(
-			join_paths(
+		return PathUtil::direncode(
+			PathUtil::join_paths(
 				self::FOTOALBUM_ROOT,
 				$this->subdir,
 				self::RESIZED_DIR,
@@ -152,7 +160,11 @@ class Foto extends Afbeelding
 
 	public function createThumb()
 	{
-		$path = join_paths(PHOTOALBUM_PATH, $this->subdir, self::THUMBS_DIR);
+		$path = PathUtil::join_paths(
+			PHOTOALBUM_PATH,
+			$this->subdir,
+			self::THUMBS_DIR
+		);
 		if (!file_exists($path)) {
 			mkdir($path, 0755, true);
 		}
@@ -178,7 +190,11 @@ class Foto extends Afbeelding
 
 	public function createResized()
 	{
-		$path = join_paths(PHOTOALBUM_PATH, $this->subdir, self::RESIZED_DIR);
+		$path = PathUtil::join_paths(
+			PHOTOALBUM_PATH,
+			$this->subdir,
+			self::RESIZED_DIR
+		);
 		if (!file_exists($path)) {
 			mkdir($path, 0755, true);
 		}

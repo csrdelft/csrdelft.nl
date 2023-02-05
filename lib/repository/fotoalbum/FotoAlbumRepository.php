@@ -5,6 +5,9 @@ namespace CsrDelft\repository\fotoalbum;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
+use CsrDelft\common\Util\DebugUtil;
+use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\entity\fotoalbum\FotoTagAlbum;
@@ -202,9 +205,9 @@ class FotoAlbumRepository extends AbstractRepository
 			} catch (Exception $e) {
 				$errors++;
 				if (defined('RESIZE_OUTPUT')) {
-					debugprint($e->getMessage());
+					DebugUtil::debugprint($e->getMessage(), 'pubcie_debug');
 				} else {
-					setMelding($e->getMessage(), -1);
+					MeldingUtil::setMelding($e->getMessage(), -1);
 				}
 			}
 		}
@@ -215,7 +218,7 @@ HTML;
 			echo '<br />' . $msg;
 			exit();
 		} else {
-			setMelding($msg, $errors > 0 ? 2 : 1);
+			MeldingUtil::setMelding($msg, $errors > 0 ? 2 : 1);
 		}
 	}
 
@@ -231,7 +234,7 @@ HTML;
 
 	public function hernoemAlbum(FotoAlbum $album, $newName)
 	{
-		if (!valid_filename($newName)) {
+		if (!PathUtil::valid_filename($newName)) {
 			throw new CsrGebruikerException('Ongeldige naam');
 		}
 		// controleer rechten

@@ -2,13 +2,19 @@
 
 namespace CsrDelft\repository\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\InstellingUtil;
+use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CsrDelft\service\maalcie\MaaltijdRepetitieAanmeldingenService;
 use CsrDelft\service\security\LoginService;
 use DateInterval;
 use DateTimeInterface;
@@ -228,7 +234,9 @@ class MaaltijdenRepository extends AbstractRepository
 			->setParameter('van_datum', date_create('-1 day'))
 			->setParameter(
 				'tot_datum',
-				date_create(instelling('maaltijden', 'toon_ketzer_vooraf'))
+				date_create(
+					InstellingUtil::instelling('maaltijden', 'toon_ketzer_vooraf')
+				)
 			)
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
@@ -368,7 +376,7 @@ class MaaltijdenRepository extends AbstractRepository
 				$this->verwijderMaaltijd($maaltijd);
 				$aantal++;
 			} catch (CsrGebruikerException $e) {
-				setMelding($e->getMessage(), -1);
+				MeldingUtil::setMelding($e->getMessage(), -1);
 			}
 		}
 		return $aantal;
@@ -483,11 +491,13 @@ class MaaltijdenRepository extends AbstractRepository
 					)
 				) {
 					if (
-						$this->maaltijdAanmeldingenRepository->aanmeldenDoorAbonnement(
-							$maaltijd,
-							$abo->maaltijd_repetitie,
-							$abo->uid
-						)
+						ContainerFacade::getContainer()
+							->get(MaaltijdRepetitieAanmeldingenService::class)
+							->aanmeldenDoorAbonnement(
+								$maaltijd,
+								$abo->maaltijd_repetitie,
+								$abo->uid
+							)
 					) {
 						$aantal++;
 					}
@@ -532,15 +542,17 @@ class MaaltijdenRepository extends AbstractRepository
 						$maaltijd->maaltijd_id
 					)
 				) {
-					setMelding(
-						date_format_intl($maaltijd->getMoment(), DATETIME_FORMAT) .
-							' heeft nog gekoppelde corveetaken!',
+					MeldingUtil::setMelding(
+						DateUtil::dateFormatIntl(
+							$maaltijd->getMoment(),
+							DateUtil::DATETIME_FORMAT
+						) . ' heeft nog gekoppelde corveetaken!',
 						2
 					);
 				}
 			} catch (CsrGebruikerException $e) {
 				$errors[] = $e;
-				setMelding($e->getMessage(), -1);
+				MeldingUtil::setMelding($e->getMessage(), -1);
 			}
 		}
 		return [$errors, count($maaltijden)];
@@ -768,7 +780,7 @@ class MaaltijdenRepository extends AbstractRepository
 			->where(
 				'm.titel like :query or date_format(m.datum, \'%Y-%m-%d\') like :query or m.maaltijd_id like :query'
 			)
-			->setParameter('query', sql_contains($query))
+			->setParameter('query', SqlUtil::sql_contains($query))
 			->getQuery()
 			->getResult();
 	}

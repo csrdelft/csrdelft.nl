@@ -3,12 +3,14 @@
 namespace CsrDelft\repository\eetplan;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\EetplanFactory;
+use DateTimeInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -108,8 +110,12 @@ class EetplanRepository extends AbstractRepository
 				'woonoord' => $sessie->woonoord->naam,
 			];
 
-			if (!isset($avonden[date_format_intl($sessie->avond, self::FMT_DATE)])) {
-				$avonden[date_format_intl($sessie->avond, self::FMT_DATE)] =
+			if (
+				!isset(
+					$avonden[DateUtil::dateFormatIntl($sessie->avond, self::FMT_DATE)]
+				)
+			) {
+				$avonden[DateUtil::dateFormatIntl($sessie->avond, self::FMT_DATE)] =
 					$sessie->avond;
 			}
 		}
@@ -192,7 +198,7 @@ class EetplanRepository extends AbstractRepository
 			$sessies,
 			function (array $accumulator, Eetplan $eetplan) {
 				$accumulator[
-					date_format_intl($eetplan->avond, self::FMT_DATE)
+					DateUtil::dateFormatIntl($eetplan->avond, self::FMT_DATE)
 				][] = $eetplan;
 
 				return $accumulator;

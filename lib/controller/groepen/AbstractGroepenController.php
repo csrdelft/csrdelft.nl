@@ -3,6 +3,9 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\ChangeLogEntry;
@@ -328,7 +331,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$groepen = $this->repository->zoeken($zoekterm, $limit, $status);
 
 		foreach ($groepen as $groep) {
-			$type = classNameZonderNamespace(get_class($groep));
+			$type = ReflectionUtil::classNameZonderNamespace(get_class($groep));
 			$result[] = [
 				'url' => $groep->getUrl() . '#' . $groep->id,
 				'label' => 'Groepen',
@@ -441,7 +444,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 				$response[] = $vorige;
 			}
 			$view = $this->tableData($response);
-			setMelding(get_class($groep) . ' succesvol aangemaakt!', 1);
+			MeldingUtil::setMelding(get_class($groep) . ' succesvol aangemaakt!', 1);
 			$form = new GroepPreviewForm($groep);
 			$view->modal = $form->__toString();
 			return $view;
@@ -788,7 +791,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$lid = $this->groepLidRepository->nieuw($groep, null);
 		$lid->groep = $groep;
 		$lid->groep_id = $groep->id;
-		$leden = group_by_distinct('uid', $groep->getLeden());
+		$leden = ArrayUtil::group_by_distinct('uid', $groep->getLeden());
 		$form = new GroepLidBeheerForm(
 			$lid,
 			$groep->getUrl() . '/aanmelden',

@@ -2,6 +2,9 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\common\Util\CryptoUtil;
+use CsrDelft\common\Util\TextUtil;
+
 class AutocompleteField extends TextField
 {
 	/**
@@ -28,7 +31,7 @@ class AutocompleteField extends TextField
 
 		// Formatteer suggesties zodat ze met Bloodhound opgepikt kunnen worden.
 		foreach ($this->suggestions as $name => $source) {
-			$dataset[$name] = uniqid_safe($this->name);
+			$dataset[$name] = CryptoUtil::uniqid_safe($this->name);
 
 			if (is_array($source)) {
 				$suggestions = array_values($source);
@@ -49,7 +52,7 @@ class AutocompleteField extends TextField
 			}
 		}
 
-		$sourcesJSON = vue_encode($sources);
+		$sourcesJSON = TextUtil::vue_encode($sources);
 
 		$clickToGo = array_search('clicktogo', $this->css_classes)
 			? 'true'

@@ -3,6 +3,7 @@
 namespace CsrDelft\model\entity;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\PathUtil;
 
 /**
  * Afbeelding.class.php
@@ -38,7 +39,7 @@ class Afbeelding extends Bestand
 	 */
 	public function getFullPath()
 	{
-		return join_paths($this->directory, $this->filename);
+		return PathUtil::join_paths($this->directory, $this->filename);
 	}
 
 	/**

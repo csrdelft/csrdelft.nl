@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier;
 
+use CsrDelft\common\Util\FileUtil;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
@@ -84,7 +85,7 @@ class Dropzone extends Formulier
 		}
 		$action = htmlspecialchars($this->action);
 		$className = implode(' ', $this->css_classes);
-		$maxsize = getMaximumFileUploadSize() / 1024 / 1024; // MB
+		$maxsize = FileUtil::getMaximumFileUploadSize() / 1024 / 1024; // MB
 		$delete = str_replace('uploaden', 'verwijderen', $this->action);
 		$existing = str_replace('uploaden', 'bestaande', $this->action);
 		$cover = str_replace('uploaden', 'albumcover', $this->action);

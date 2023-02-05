@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepLedenImportDTO;
@@ -33,7 +34,7 @@ class GroepLedenImportController extends AbstractController
 
 	private function quickMelding($melding, $url = null): RedirectResponse
 	{
-		setMelding($melding, 2);
+		MeldingUtil::setMelding($melding, 2);
 		if (!$url) {
 			$url = $this->generateUrl('groepimport');
 		}

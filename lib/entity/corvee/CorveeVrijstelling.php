@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\corvee;
 
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -61,7 +62,8 @@ class CorveeVrijstelling
 	public function getPunten()
 	{
 		return (int) ceil(
-			($this->percentage * intval(instelling('corvee', 'punten_per_jaar'))) /
+			($this->percentage *
+				intval(InstellingUtil::instelling('corvee', 'punten_per_jaar'))) /
 				100
 		);
 	}

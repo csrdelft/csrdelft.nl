@@ -3,6 +3,7 @@
 namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\MenuItem;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\MenuItemRepository;
@@ -32,12 +33,12 @@ JS;
 				MenuItemRepository::class
 			);
 
-			if (lid_instelling('zoeken', 'favorieten') === 'ja') {
+			if (InstellingUtil::lid_instelling('zoeken', 'favorieten') === 'ja') {
 				$this->addSuggestions(
 					$menuRepository->getMenu(LoginService::getUid())->children
 				);
 			}
-			if (lid_instelling('zoeken', 'menu') === 'ja') {
+			if (InstellingUtil::lid_instelling('zoeken', 'menu') === 'ja') {
 				$this->addSuggestions(
 					$menuRepository->flattenMenu($menuRepository->getMenu('main'))
 				);

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\declaratie;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\declaratie\DeclaratieRepository;
 use CsrDelft\service\security\LoginService;
@@ -456,31 +457,53 @@ class Declaratie
 		if ($this->isIngediend() && $this->getCategorie()) {
 			return $this->getCategorie()
 				->getWachtrij()
-				->getPrefix() . boekjaar($this->getIngediend(), true);
+				->getPrefix() . static::getBoekjaar($this->getIngediend(), true);
 		}
 		return '';
+	}
+
+	/**
+	 * @param DateTimeInterface|null $date Datum om van te bepalen, bij null: vandaag
+	 * @param bool $substr Of alleen de laatste twee cijfers gegeven moeten worden
+	 * @return string Startjaar van boekjaar van gegeven datum
+	 */
+	private static function getBoekjaar(
+		DateTimeInterface $date = null,
+		bool $substr = false
+	): string {
+		if ($date === null) {
+			$date = date_create_immutable();
+		}
+
+		$jaar = intval($date->format('Y'));
+		$wisseling = date_create_immutable('16-05-' . $jaar);
+		if ($date < $wisseling) {
+			$jaar--;
+		}
+
+		return $substr ? substr($jaar, 2, 2) : $jaar;
 	}
 
 	public function naarStatusData(): array
 	{
 		return [
 			'ingediendOp' => $this->isIngediend()
-				? date_format_intl($this->ingediend, 'dd-MM-yyyy')
+				? DateUtil::dateFormatIntl($this->ingediend, 'dd-MM-yyyy')
 				: null,
 			'ingediendDoor' => $this->indiener->getNaam(),
 			'goedgekeurdOp' =>
 				$this->isBeoordeeld() && $this->isGoedgekeurd()
-					? date_format_intl($this->beoordeeld, 'dd-MM-yyyy')
+					? DateUtil::dateFormatIntl($this->beoordeeld, 'dd-MM-yyyy')
 					: null,
 			'afgekeurdOp' =>
 				$this->isBeoordeeld() && !$this->isGoedgekeurd()
-					? date_format_intl($this->beoordeeld, 'dd-MM-yyyy')
+					? DateUtil::dateFormatIntl($this->beoordeeld, 'dd-MM-yyyy')
 					: null,
 			'beoordeeldDoor' => $this->beoordelaar
 				? $this->beoordelaar->getNaam()
 				: null,
 			'uitbetaaldOp' => $this->isUitbetaald()
-				? date_format_intl($this->uitbetaald, 'dd-MM-yyyy')
+				? DateUtil::dateFormatIntl($this->uitbetaald, 'dd-MM-yyyy')
 				: null,
 			'magBeoordelen' => $this->magBeoordelen(),
 			'magUitbetalen' => $this->magUitbetalen(),
@@ -498,7 +521,7 @@ class Declaratie
 		return [
 			'id' => $this->id,
 			'datum' => $this->isIngediend()
-				? date_format_intl($this->getIngediend(), 'dd-MM-yyyy')
+				? DateUtil::dateFormatIntl($this->getIngediend(), 'dd-MM-yyyy')
 				: null,
 			'categorie' => $this->getCategorie()->getId(),
 			'omschrijving' => $this->omschrijving,

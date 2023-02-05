@@ -3,6 +3,7 @@
 namespace CsrDelft\events;
 
 use CsrDelft\common\Security\OAuth2Scope;
+use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\RememberOAuthRepository;
 use CsrDelft\service\AccessService;
@@ -151,7 +152,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 
 		// Maak een tijdelijke token aan om te voorkomen dat een applicatie voor de gebruiker kan approven.
 		if (!$request->getSession()->has('token')) {
-			$request->getSession()->set('token', uniqid_safe('token_'));
+			$request->getSession()->set('token', CryptoUtil::uniqid_safe('token_'));
 		}
 
 		if ($request->get('cancel')) {

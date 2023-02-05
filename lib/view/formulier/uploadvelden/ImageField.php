@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\uploadvelden;
 
+use CsrDelft\common\Util\DebugUtil;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Map;
 
@@ -130,11 +131,11 @@ class ImageField extends FileField
 						escapeshellarg($resized);
 				}
 				if (defined('RESIZE_OUTPUT')) {
-					debugprint($command);
+					DebugUtil::debugprint($command, 'pubcie_debug');
 				}
 				$output = shell_exec($command);
 				if (defined('RESIZE_OUTPUT')) {
-					debugprint($output);
+					DebugUtil::debugprint($output, 'pubcie_debug');
 				}
 				if (false === @chmod($resized, 0644)) {
 					$this->getUploader()->error = $resize;
