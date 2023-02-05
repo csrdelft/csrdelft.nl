@@ -303,7 +303,7 @@ class PinTransactieMatch implements DataTableEntry
 	 */
 	public static function renderTijd(DateTimeImmutable $moment)
 	{
-		return date_format_intl($moment, FULL_TIME_FORMAT);
+		return DateUtil::dateFormatIntl($moment, DateUtil::FULL_TIME_FORMAT);
 	}
 
 	/**

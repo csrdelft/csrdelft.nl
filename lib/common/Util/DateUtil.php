@@ -11,6 +11,7 @@ final class DateUtil
 	public const DATE_FORMAT = 'y-MM-dd';
 	public const DATETIME_FORMAT = 'y-MM-dd HH:mm:ss';
 	public const TIME_FORMAT = 'HH:mm';
+	public const FULL_TIME_FORMAT = 'HH:mm:ss';
 
 	public static function reldate($datum)
 	{
