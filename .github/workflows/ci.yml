@@ -71,7 +71,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: vendor
-          key: ${{ runner.os }}-composer-dev-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-dev-${{ hashFiles('**/composer.lock', '**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-composer-dev-
 
@@ -80,7 +80,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: bin/.phpunit
-          key: ${{ runner.os }}-phpunit-dev-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-phpunit-dev-${{ hashFiles('**/composer.lock', '**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-phpunit-dev-
 
@@ -146,7 +146,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: main/vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock', '**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
@@ -197,7 +197,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: vendor
-          key: ${{ runner.os }}-composer-dev-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-dev-${{ hashFiles('**/composer.lock', '**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-composer-dev-
 
