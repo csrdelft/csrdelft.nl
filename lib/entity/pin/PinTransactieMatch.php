@@ -247,7 +247,9 @@ class PinTransactieMatch implements DataTableEntry
 	 */
 	public function getDataTableTransactieTijd()
 	{
-		return $this->transactie ? self::renderTijd($this->transactie->datetime) : '';
+		return $this->transactie
+			? self::renderTijd($this->transactie->datetime)
+			: '';
 	}
 
 	/**
@@ -260,7 +262,10 @@ class PinTransactieMatch implements DataTableEntry
 		if (!$this->transactie || !$this->bestelling) {
 			return '-';
 		} else {
-			return abs($this->transactie->datetime->getTimestamp() - $this->bestelling->moment->getTimestamp()) . 's';
+			return abs(
+				$this->transactie->datetime->getTimestamp() -
+					$this->bestelling->moment->getTimestamp()
+			) . 's';
 		}
 	}
 

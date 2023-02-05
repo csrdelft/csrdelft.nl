@@ -168,38 +168,38 @@ final class PinTransactieMatcherTest extends TestCase
 	public function testRealLifeExample()
 	{
 		$transacties = [
-			$this->trans(0, 18, "2023-02-02 16:23:48"),
-			$this->trans(1, 2000, "2023-02-02 21:02:53"),
-			$this->trans(2, 3000, "2023-02-02 22:14:51"),
-			$this->trans(3, 5000, "2023-02-02 22:18:45"),
-			$this->trans(4, 1000, "2023-02-02 22:21:15"),
-			$this->trans(5, 10000, "2023-02-02 22:27:48"),
-			$this->trans(6, 360, "2023-02-02 22:33:24"),
-			$this->trans(7, 4000, "2023-02-02 22:38:51"),
-			$this->trans(8, 6000, "2023-02-02 22:57:32"),
-			$this->trans(9, 2000, "2023-02-02 23:32:27"),
-			$this->trans(10, 10000, "2023-02-02 23:59:41"),
-			$this->trans(11, 6919, "2023-02-03 00:24:41"),
-			$this->trans(12, 3000, "2023-02-03 00:38:52"),
-			$this->trans(13, 5000, "2023-02-03 02:44:32"),
+			$this->trans(0, 18, '2023-02-02 16:23:48'),
+			$this->trans(1, 2000, '2023-02-02 21:02:53'),
+			$this->trans(2, 3000, '2023-02-02 22:14:51'),
+			$this->trans(3, 5000, '2023-02-02 22:18:45'),
+			$this->trans(4, 1000, '2023-02-02 22:21:15'),
+			$this->trans(5, 10000, '2023-02-02 22:27:48'),
+			$this->trans(6, 360, '2023-02-02 22:33:24'),
+			$this->trans(7, 4000, '2023-02-02 22:38:51'),
+			$this->trans(8, 6000, '2023-02-02 22:57:32'),
+			$this->trans(9, 2000, '2023-02-02 23:32:27'),
+			$this->trans(10, 10000, '2023-02-02 23:59:41'),
+			$this->trans(11, 6919, '2023-02-03 00:24:41'),
+			$this->trans(12, 3000, '2023-02-03 00:38:52'),
+			$this->trans(13, 5000, '2023-02-03 02:44:32'),
 		];
 
 		$bestellingen = [
-			$this->best(0, 2235, "2023-02-02 14:37:50"),
-			$this->best(1, 18, "2023-02-02 16:24:10"),
-			$this->best(2, 2000, "2023-02-02 21:03:19"),
-			$this->best(3, 3000, "2023-02-02 22:16:30"),
-			$this->best(4, 5000, "2023-02-02 22:18:34"),
-			$this->best(5, 1000, "2023-02-02 22:21:15"),
-			$this->best(6, 10000, "2023-02-02 22:28:25"),
-			$this->best(7, 360, "2023-02-02 22:34:11"),
-			$this->best(8, 4000, "2023-02-02 22:38:27"),
-			$this->best(9, 6000, "2023-02-02 22:57:37"),
-			$this->best(10, 2000, "2023-02-02 23:32:13"),
-			$this->best(11, 10000, "2023-02-02 23:59:40"),
-			$this->best(12, 6919, "2023-02-03 00:25:05"),
-			$this->best(13, 3000, "2023-02-03 00:38:53"),
-			$this->best(14, 5000, "2023-02-03 02:45:39")
+			$this->best(0, 2235, '2023-02-02 14:37:50'),
+			$this->best(1, 18, '2023-02-02 16:24:10'),
+			$this->best(2, 2000, '2023-02-02 21:03:19'),
+			$this->best(3, 3000, '2023-02-02 22:16:30'),
+			$this->best(4, 5000, '2023-02-02 22:18:34'),
+			$this->best(5, 1000, '2023-02-02 22:21:15'),
+			$this->best(6, 10000, '2023-02-02 22:28:25'),
+			$this->best(7, 360, '2023-02-02 22:34:11'),
+			$this->best(8, 4000, '2023-02-02 22:38:27'),
+			$this->best(9, 6000, '2023-02-02 22:57:37'),
+			$this->best(10, 2000, '2023-02-02 23:32:13'),
+			$this->best(11, 10000, '2023-02-02 23:59:40'),
+			$this->best(12, 6919, '2023-02-03 00:25:05'),
+			$this->best(13, 3000, '2023-02-03 00:38:53'),
+			$this->best(14, 5000, '2023-02-03 02:45:39'),
 		];
 
 		$matcher = $this->createMatcher();
@@ -240,7 +240,10 @@ final class PinTransactieMatcherTest extends TestCase
 		$transactie->id = $id;
 		$transactie->amount = 'EUR ' . $bedrag;
 		if ($date != null) {
-			$transactie->datetime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $date);
+			$transactie->datetime = DateTimeImmutable::createFromFormat(
+				'Y-m-d H:i:s',
+				$date
+			);
 		}
 		return $transactie;
 	}
@@ -256,7 +259,10 @@ final class PinTransactieMatcherTest extends TestCase
 		$bestelling->id = $id;
 		$bestelling->inhoud->add($bestellingInhoud);
 		if ($date != null) {
-			$bestelling->moment = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $date);
+			$bestelling->moment = DateTimeImmutable::createFromFormat(
+				'Y-m-d H:i:s',
+				$date
+			);
 		}
 
 		return $bestelling;
@@ -266,8 +272,10 @@ final class PinTransactieMatcherTest extends TestCase
 	{
 		$transactieT = $transactie ? 'transactie ' . $transactie->id : '';
 		$bestellingT = $bestelling ? 'bestelling ' . $bestelling->id : '';
-		$this->assertTrue($this->hasMatch($matches, $transactie, $bestelling, $status),
-			"Verwachte match niet gevonden: {$transactieT} {$status} {$bestellingT}");
+		$this->assertTrue(
+			$this->hasMatch($matches, $transactie, $bestelling, $status),
+			"Verwachte match niet gevonden: {$transactieT} {$status} {$bestellingT}"
+		);
 	}
 
 	/**
