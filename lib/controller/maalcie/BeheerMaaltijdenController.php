@@ -16,6 +16,7 @@ use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
+use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\GenericSuggestiesResponse;
@@ -55,15 +56,21 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @var MaaltijdAanmeldingenRepository
 	 */
 	private $maaltijdAanmeldingenRepository;
+	/**
+	 * @var MaaltijdAanmeldingenService
+	 */
+	private $maaltijdAanmeldingenService;
 
 	public function __construct(
 		MaaltijdenRepository $maaltijdenRepository,
 		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
+		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
 	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	/**
@@ -345,7 +352,7 @@ class BeheerMaaltijdenController extends AbstractController
 		$aanmelding = new MaaltijdAanmeldingDTO();
 		$form = new AanmeldingForm($aanmelding, true); // fetches POST values itself
 		if ($form->validate()) {
-			$this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd(
+			$this->maaltijdAanmeldingenService->aanmeldenVoorMaaltijd(
 				$maaltijd,
 				$aanmelding->voor_lid,
 				$this->getProfiel(),
@@ -373,7 +380,7 @@ class BeheerMaaltijdenController extends AbstractController
 		$aanmelding = new MaaltijdAanmeldingDTO();
 		$form = new AanmeldingForm($aanmelding, false); // fetches POST values itself
 		if ($form->validate()) {
-			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid(
+			$this->maaltijdAanmeldingenService->afmeldenDoorLid(
 				$maaltijd,
 				$aanmelding->voor_lid,
 				true

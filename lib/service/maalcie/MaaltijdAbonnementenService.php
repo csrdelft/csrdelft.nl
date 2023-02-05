@@ -37,12 +37,17 @@ class MaaltijdAbonnementenService
 	 * @var MaaltijdAbonnementenRepository
 	 */
 	private $maaltijdAbonnementenRepository;
+	/**
+	 * @var MaaltijdRepetitieAanmeldingenService
+	 */
+	private $maaltijdRepetitieAanmeldingenService;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
 		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdRepetitieAanmeldingenService $maaltijdRepetitieAanmeldingenService,
 		ProfielRepository $profielRepository
 	) {
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
@@ -50,6 +55,7 @@ class MaaltijdAbonnementenService
 		$this->profielRepository = $profielRepository;
 		$this->entityManager = $entityManager;
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
+		$this->maaltijdRepetitieAanmeldingenService = $maaltijdRepetitieAanmeldingenService;
 	}
 
 	/**
@@ -378,7 +384,7 @@ class MaaltijdAbonnementenService
 			$this->entityManager->persist($abo);
 			$this->entityManager->flush();
 
-			return $this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden(
+			return $this->maaltijdRepetitieAanmeldingenService->aanmeldenVoorKomendeRepetitieMaaltijden(
 				$abo->maaltijd_repetitie,
 				$abo->uid
 			);
@@ -426,7 +432,7 @@ class MaaltijdAbonnementenService
 					continue;
 				}
 				$this->entityManager->persist($abo);
-				$this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden(
+				$this->maaltijdRepetitieAanmeldingenService->aanmeldenVoorKomendeRepetitieMaaltijden(
 					$repetitie,
 					$noviet->uid
 				);

@@ -11,6 +11,8 @@ use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
+use CsrDelft\service\maalcie\MaaltijdGastAanmeldingenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
@@ -34,17 +36,29 @@ class MijnMaaltijdenController extends AbstractController
 	private $maaltijdBeoordelingenRepository;
 	/** @var MaaltijdAanmeldingenRepository */
 	private $maaltijdAanmeldingenRepository;
+	/**
+	 * @var MaaltijdAanmeldingenService
+	 */
+	private $maaltijdAanmeldingenService;
+	/**
+	 * @var MaaltijdGastAanmeldingenService
+	 */
+	private $maaltijdGastAanmeldingenService;
 
 	public function __construct(
 		MaaltijdenRepository $maaltijdenRepository,
 		CorveeTakenRepository $corveeTakenRepository,
 		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository,
+		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
+		MaaltijdGastAanmeldingenService $maaltijdGastAanmeldingenService,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
 	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
+		$this->maaltijdGastAanmeldingenService = $maaltijdGastAanmeldingenService;
 	}
 
 	/**
@@ -67,7 +81,7 @@ class MijnMaaltijdenController extends AbstractController
 		$timestamp = date_create_immutable(
 			InstellingUtil::instelling('maaltijden', 'beoordeling_periode')
 		);
-		$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(
+		$recent = $this->maaltijdAanmeldingenService->getRecenteAanmeldingenVoorLid(
 			$this->getUid(),
 			$timestamp
 		);
@@ -181,7 +195,7 @@ class MijnMaaltijdenController extends AbstractController
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
 		}
-		$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd(
+		$aanmelding = $this->maaltijdAanmeldingenService->aanmeldenVoorMaaltijd(
 			$maaltijd,
 			$this->getProfiel(),
 			$this->getProfiel()
@@ -225,7 +239,7 @@ class MijnMaaltijdenController extends AbstractController
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
 		}
-		$this->maaltijdAanmeldingenRepository->afmeldenDoorLid(
+		$this->maaltijdAanmeldingenService->afmeldenDoorLid(
 			$maaltijd,
 			$this->getProfiel()
 		);
@@ -269,7 +283,7 @@ class MijnMaaltijdenController extends AbstractController
 			'aantal_gasten',
 			FILTER_SANITIZE_NUMBER_INT
 		);
-		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGasten(
+		$aanmelding = $this->maaltijdGastAanmeldingenService->saveGasten(
 			$maaltijd->maaltijd_id,
 			$this->getUid(),
 			$gasten
@@ -298,7 +312,7 @@ class MijnMaaltijdenController extends AbstractController
 			'aantal_gasten',
 			FILTER_SANITIZE_NUMBER_INT
 		);
-		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGasten(
+		$aanmelding = $this->maaltijdGastAanmeldingenService->saveGasten(
 			$maaltijd->maaltijd_id,
 			$this->getUid(),
 			$gasten
@@ -327,7 +341,7 @@ class MijnMaaltijdenController extends AbstractController
 			'gasten_eetwens',
 			FILTER_SANITIZE_STRING
 		);
-		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGastenEetwens(
+		$aanmelding = $this->maaltijdGastAanmeldingenService->saveGastenEetwens(
 			$maaltijd_id,
 			$this->getUid(),
 			$opmerking
@@ -353,7 +367,7 @@ class MijnMaaltijdenController extends AbstractController
 			'gasten_eetwens',
 			FILTER_SANITIZE_STRING
 		);
-		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGastenEetwens(
+		$aanmelding = $this->maaltijdGastAanmeldingenService->saveGastenEetwens(
 			$maaltijd_id,
 			$this->getUid(),
 			$opmerking

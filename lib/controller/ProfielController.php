@@ -40,6 +40,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\fiscaat\SaldoGrafiekService;
 use CsrDelft\service\GoogleContactSync;
+use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use CsrDelft\service\profiel\LidStatusService;
 use CsrDelft\service\ProfielService;
@@ -158,7 +159,7 @@ class ProfielController extends AbstractController
 		BoekExemplaarRepository $boekExemplaarRepository,
 		BoekRecensieRepository $boekRecensieRepository,
 		FotoRepository $fotoRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
 		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
 		ForumPostsRepository $forumPostsRepository,
 		FotoTagsRepository $fotoTagsRepository,
@@ -228,7 +229,7 @@ class ProfielController extends AbstractController
 				(int) InstellingUtil::lid_instelling('forum', 'draden_per_pagina')
 			),
 			'boeken' => $boekExemplaarRepository->getEigendom($profiel->uid),
-			'recenteAanmeldingen' => $maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(
+			'recenteAanmeldingen' => $maaltijdAanmeldingenService->getRecenteAanmeldingenVoorLid(
 				$profiel->uid,
 				date_create_immutable(
 					InstellingUtil::instelling('maaltijden', 'recent_lidprofiel')

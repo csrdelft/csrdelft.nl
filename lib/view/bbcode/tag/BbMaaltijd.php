@@ -11,6 +11,7 @@ use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
@@ -59,12 +60,17 @@ class BbMaaltijd extends BbTag
 	 * @var Security
 	 */
 	private $security;
+	/**
+	 * @var MaaltijdAanmeldingenService
+	 */
+	private $maaltijdAanmeldingenService;
 
 	public function __construct(
 		Environment $twig,
 		Security $security,
 		MaaltijdenRepository $maaltijdenRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
 		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository
 	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
@@ -72,6 +78,7 @@ class BbMaaltijd extends BbTag
 		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
 		$this->twig = $twig;
 		$this->security = $security;
+		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	public static function getTagName()
@@ -202,7 +209,7 @@ class BbMaaltijd extends BbTag
 				$timestamp = date_create_immutable(
 					InstellingUtil::instelling('maaltijden', 'beoordeling_periode')
 				);
-				$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(
+				$recent = $this->maaltijdAanmeldingenService->getRecenteAanmeldingenVoorLid(
 					LoginService::getUid(),
 					$timestamp
 				);

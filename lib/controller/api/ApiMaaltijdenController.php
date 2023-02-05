@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
 use Exception;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,13 +14,19 @@ class ApiMaaltijdenController extends AbstractController
 {
 	private $maaltijdenRepository;
 	private $maaltijdAanmeldingenRepository;
+	/**
+	 * @var MaaltijdAanmeldingenService
+	 */
+	private $maaltijdAanmeldingenService;
 
 	public function __construct(
 		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
 	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	/**
@@ -30,7 +37,7 @@ class ApiMaaltijdenController extends AbstractController
 	{
 		try {
 			$maaltijd = $this->maaltijdenRepository->getMaaltijd($id);
-			$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd(
+			$aanmelding = $this->maaltijdAanmeldingenService->aanmeldenVoorMaaltijd(
 				$maaltijd,
 				$this->getProfiel(),
 				$this->getProfiel()
@@ -49,7 +56,7 @@ class ApiMaaltijdenController extends AbstractController
 	{
 		try {
 			$maaltijd = $this->maaltijdenRepository->getMaaltijd($id);
-			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid(
+			$this->maaltijdAanmeldingenService->afmeldenDoorLid(
 				$maaltijd,
 				$this->getProfiel()
 			);

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\DateUtil;
@@ -13,6 +14,7 @@ use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CsrDelft\service\maalcie\MaaltijdRepetitieAanmeldingenService;
 use CsrDelft\service\security\LoginService;
 use DateInterval;
 use DateTimeInterface;
@@ -489,11 +491,13 @@ class MaaltijdenRepository extends AbstractRepository
 					)
 				) {
 					if (
-						$this->maaltijdAanmeldingenRepository->aanmeldenDoorAbonnement(
-							$maaltijd,
-							$abo->maaltijd_repetitie,
-							$abo->uid
-						)
+						ContainerFacade::getContainer()
+							->get(MaaltijdRepetitieAanmeldingenService::class)
+							->aanmeldenDoorAbonnement(
+								$maaltijd,
+								$abo->maaltijd_repetitie,
+								$abo->uid
+							)
 					) {
 						$aantal++;
 					}

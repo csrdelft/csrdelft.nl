@@ -12,6 +12,7 @@ use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
@@ -42,10 +43,15 @@ class MaaltijdenFiscaatController extends AbstractController
 	 * @var CiviSaldoRepository
 	 */
 	private $civiSaldoRepository;
+	/**
+	 * @var MaaltijdAanmeldingenService
+	 */
+	private $maaltijdAanmeldingenService;
 
 	public function __construct(
 		MaaltijdenRepository $maaltijdenRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
 		CiviBestellingRepository $civiBestellingRepository,
 		CiviSaldoRepository $civiSaldoRepository
 	) {
@@ -53,6 +59,7 @@ class MaaltijdenFiscaatController extends AbstractController
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->civiBestellingRepository = $civiBestellingRepository;
 		$this->civiSaldoRepository = $civiSaldoRepository;
+		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	/**
@@ -129,7 +136,7 @@ class MaaltijdenFiscaatController extends AbstractController
 			$bestellingen = [];
 			# Maak een bestelling voor deze persoon
 			foreach ($aanmeldingen as $aanmelding) {
-				$bestellingen[] = $this->maaltijdAanmeldingenRepository->maakCiviBestelling(
+				$bestellingen[] = $this->maaltijdAanmeldingenService->maakCiviBestelling(
 					$aanmelding
 				);
 			}
