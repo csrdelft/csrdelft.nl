@@ -83,10 +83,7 @@
 		"psr-4": {
 			"CsrDelft\\": "lib/",
 			"CsrDelft\\tests\\": "tests/lib/"
-		},
-		"files": [
-			"lib/common/common.functions.php"
-		]
+		}
 	},
 	"include-path": [
 		"lib/"
