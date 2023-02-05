@@ -129,6 +129,9 @@ class PinTransactieMatchTableType extends AbstractDataTableType
 		);
 
 		$builder->addColumn('moment');
+		$builder->addColumn('transactie_tijd');
+		$builder->addColumn('bestelling_tijd');
+		$builder->addColumn('tijdsverschil');
 		$builder->addColumn('transactie');
 		$builder->addColumn('bestelling');
 
@@ -138,7 +141,8 @@ class PinTransactieMatchTableType extends AbstractDataTableType
 		$builder->setOrder(['moment' => 'desc']);
 
 		$builder->searchColumn('status');
-		$builder->searchColumn('moment');
+		$builder->searchColumn('bestelling_tijd');
+		$builder->searchColumn('transactie_tijd');
 		$builder->searchColumn('transactie');
 		$builder->searchColumn('bestelling');
 	}

@@ -18,6 +18,7 @@ define('LONG_DATE_FORMAT', 'EE d MMM'); // Ma 3 Jan
 define('DATE_FORMAT', 'y-MM-dd');
 define('DATETIME_FORMAT', 'y-MM-dd HH:mm:ss');
 define('TIME_FORMAT', 'HH:mm');
+define('FULL_TIME_FORMAT', 'HH:mm:ss');
 
 if (!function_exists('str_starts_with')) {
 	/**

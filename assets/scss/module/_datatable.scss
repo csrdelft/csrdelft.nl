@@ -74,7 +74,9 @@ div {
 	}
 }
 
-.dataTable {
+table.dataTable,
+table.dataTable.stripe,
+table.dataTable.display {
 	width: 100% !important;
 
 	tbody {
@@ -111,25 +113,27 @@ div {
 			}
 
 			/* Voor om-en-om kleuren in de tabellen */
-			:is(table.groep-lijst tr, &) {
-				&:nth-child(odd) {
-					background-color: $gray-200 !important;
+			&.odd {
+				background-color: $gray-200;
 
-					td.sorting_1 {
-						background-color: $gray-300 !important;
-					}
-				}
-				&:nth-child(even) {
-					background-color: $gray-100 !important;
-
-					td.sorting_1 {
-						background-color: $gray-200 !important;
-					}
+				td.sorting_1 {
+					background-color: $gray-300;
 				}
 			}
 
-			&:hover {
+			&.even {
+				background-color: $gray-100;
+
+				td.sorting_1 {
+					background-color: $gray-200;
+				}
+			}
+
+			&:hover,
+			&.selected,
+			&.selected:hover {
 				cursor: default;
+				background-color: $tabel-hover !important;
 
 				td.toggle-childrow:before {
 					font-weight: 900;

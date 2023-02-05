@@ -224,6 +224,40 @@ class PinTransactieMatch implements DataTableEntry
 	}
 
 	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("bestelling_tijd")
+	 */
+	public function getDataTableBestellingTijd()
+	{
+		return $this->bestelling ? self::renderTijd($this->bestelling->moment) : '';
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("transactie_tijd")
+	 */
+	public function getDataTableTransactieTijd()
+	{
+		return $this->transactie ? self::renderTijd($this->transactie->datetime) : '';
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("tijdsverschil")
+	 */
+	public function getDataTableTijdsverschil()
+	{
+		if (!$this->transactie || !$this->bestelling) {
+			return '-';
+		} else {
+			return abs($this->transactie->datetime->getTimestamp() - $this->bestelling->moment->getTimestamp()) . 's';
+		}
+	}
+
+	/**
 	 * @return DateTimeImmutable
 	 * @throws CsrException
 	 */
@@ -241,20 +275,6 @@ class PinTransactieMatch implements DataTableEntry
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("bestelling_moment")
-	 */
-	public function getDataTableBestellingMoment()
-	{
-		if ($this->bestelling !== null) {
-			return self::renderMoment($this->bestelling->moment);
-		} else {
-			return '';
-		}
-	}
-
-	/**
 	 * @param DateTimeImmutable $moment
 	 * @param bool $link
 	 * @return string
@@ -268,6 +288,15 @@ class PinTransactieMatch implements DataTableEntry
 		$dag = date_format_intl($moment, 'cccc');
 		$agendaLink = "/agenda/{$moment->format('Y')}/{$moment->format('m')}";
 		return "<a data-moment='{$formatted}' target='_blank' href='{$agendaLink}' title='{$dag}'>{$formatted}</a>"; // Data attribuut voor sortering
+	}
+
+	/**
+	 * @param DateTimeImmutable $moment
+	 * @return string
+	 */
+	public static function renderTijd(DateTimeImmutable $moment)
+	{
+		return date_format_intl($moment, FULL_TIME_FORMAT);
 	}
 
 	/**
