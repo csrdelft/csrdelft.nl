@@ -35,7 +35,7 @@ class DateTimeTwigExtension extends AbstractExtension
 				[$this, 'twig_zijbalk_date_format'],
 				['is_safe' => ['html']]
 			),
-			new TwigFilter('date_format_intl', 'date_format_intl'),
+			new TwigFilter('date_format_intl', [DateUtil::class, 'dateFormatIntl']),
 			new TwigFilter('date_create', [$this, 'twig_date_create']),
 		];
 	}
