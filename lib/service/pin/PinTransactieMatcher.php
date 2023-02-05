@@ -117,7 +117,10 @@ class PinTransactieMatcher
 		return $distanceMatrix;
 	}
 
-	private static function compareDate(?DateTimeInterface $a, ?DateTimeInterface $b): int {
+	private static function compareDate(
+		?DateTimeInterface $a,
+		?DateTimeInterface $b
+	): int {
 		if ($a === null && $b === null) {
 			return 0;
 		} elseif ($a === null) {
@@ -134,7 +137,10 @@ class PinTransactieMatcher
 	public function match()
 	{
 		// Sorteer beide op volgorde van moment
-		usort($this->pinBestellingen, function(CiviBestelling $a, CiviBestelling $b) {
+		usort($this->pinBestellingen, function (
+			CiviBestelling $a,
+			CiviBestelling $b
+		) {
 			return self::compareDate($a->moment, $b->moment);
 		});
 		usort($this->pinTransacties, function (PinTransactie $a, PinTransactie $b) {
@@ -169,8 +175,12 @@ class PinTransactieMatcher
 				case $matchDistance:
 					if ($matchCost > 0) {
 						// Maak geen matches meer met verkeerde bedragen: moeten handmatig opgelost worden
-						$matches[] = PinTransactieMatch::missendeTransactie($pinBestellingen[$indexBestelling]);
-						$matches[] = PinTransactieMatch::missendeBestelling($pinTransacties[$indexTransactie]);
+						$matches[] = PinTransactieMatch::missendeTransactie(
+							$pinBestellingen[$indexBestelling]
+						);
+						$matches[] = PinTransactieMatch::missendeBestelling(
+							$pinTransacties[$indexTransactie]
+						);
 					} else {
 						$matches[] = PinTransactieMatch::match(
 							$pinTransacties[$indexTransactie],
