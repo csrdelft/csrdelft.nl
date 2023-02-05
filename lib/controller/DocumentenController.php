@@ -3,6 +3,8 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\FileUtil;
+use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\documenten\Document;
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\model\entity\Bestand;
@@ -90,7 +92,7 @@ class DocumentenController extends AbstractController
 		if (
 			$document->mimetype == 'text/html' ||
 			$document->mimetype == 'text/javascript' ||
-			!checkMimetype($document->filename, $document->mimetype)
+			!FileUtil::checkMimetype($document->filename, $document->mimetype)
 		) {
 			setMelding('Dit type bestand kan niet worden getoond', -1);
 			return $this->redirectToRoute('csrdelft_documenten_recenttonen');
@@ -300,7 +302,7 @@ class DocumentenController extends AbstractController
 			/** @var Bestand $bestand */
 			$bestand = $form->getField('uploader')->getModel();
 
-			$document->filename = filter_filename($bestand->filename);
+			$document->filename = PathUtil::direncode($bestand->filename);
 			$document->mimetype = $bestand->mimetype;
 			$document->filesize = $bestand->filesize;
 

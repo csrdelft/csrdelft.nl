@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -51,7 +52,7 @@ class BbUrl extends BbTag
 
 	public function render()
 	{
-		return external_url($this->url, $this->getContent());
+		return UrlUtil::external_url($this->url, $this->getContent());
 	}
 
 	/**

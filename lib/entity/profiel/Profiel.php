@@ -3,6 +3,10 @@
 namespace CsrDelft\entity\profiel;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\FileUtil;
+use CsrDelft\common\Util\PathUtil;
+use CsrDelft\common\Util\TextUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\enum\GroepStatus;
@@ -485,7 +489,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 */
 	public function getContactgegevens()
 	{
-		return array_filter_empty([
+		return ArrayUtil::array_filter_empty([
 			'Email' => $this->getPrimaryEmail(),
 			'LinkedIn' => $this->linkedin,
 			'Website' => $this->website,
@@ -838,7 +842,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 				break;
 
 			case 'aaidrom': // voor een 1 aprilgrap ooit
-				$naam = aaidrom(
+				$naam = TextUtil::aaidrom(
 					$this->voornaam,
 					$this->tussenvoegsel,
 					$this->achternaam
@@ -921,11 +925,11 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		if ($vorm == 'vierkant') {
 			$crop = '' . $this->uid . '.vierkant.png';
 			if (!file_exists(PASFOTO_PATH . $crop)) {
-				square_crop(PASFOTO_PATH . $path, PASFOTO_PATH . $crop, 150);
+				FileUtil::square_crop(PASFOTO_PATH . $path, PASFOTO_PATH . $crop, 150);
 			}
 			$path = $crop;
 		}
-		return safe_combine_path(PASFOTO_PATH, $path);
+		return PathUtil::safe_combine_path(PASFOTO_PATH, $path);
 	}
 
 	public function getPasfotoTag($cssClass = '')

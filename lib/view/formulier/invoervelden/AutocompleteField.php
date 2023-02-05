@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\common\Util\TextUtil;
+
 class AutocompleteField extends TextField
 {
 	/**
@@ -49,7 +51,7 @@ class AutocompleteField extends TextField
 			}
 		}
 
-		$sourcesJSON = vue_encode($sources);
+		$sourcesJSON = TextUtil::vue_encode($sources);
 
 		$clickToGo = array_search('clicktogo', $this->css_classes)
 			? 'true'

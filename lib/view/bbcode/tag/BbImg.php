@@ -4,6 +4,7 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Util\UrlUtil;
 
 /**
  * Image
@@ -108,7 +109,7 @@ class BbImg extends BbTag
 
 		if (
 			!$this->url ||
-			(!url_like($this->url) && !str_starts_with($this->url, '/'))
+			(!UrlUtil::url_like($this->url) && !str_starts_with($this->url, '/'))
 		) {
 			throw new BbException('Wrong url ' . $this->url);
 		}

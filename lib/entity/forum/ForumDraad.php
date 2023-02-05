@@ -4,6 +4,7 @@ namespace CsrDelft\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
+use CsrDelft\common\Util\TextUtil;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
@@ -314,7 +315,7 @@ class ForumDraad
 	{
 		$laatste = $this->laatste_post;
 		$parseMail = strip_tags(CsrBB::parseMail($laatste->tekst));
-		return truncate($parseMail, 100);
+		return TextUtil::truncate($parseMail, 100);
 	}
 
 	/**

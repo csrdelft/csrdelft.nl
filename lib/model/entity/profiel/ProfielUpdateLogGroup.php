@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\profiel;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\repository\ProfielRepository;
 
 /**
@@ -42,7 +43,7 @@ class ProfielUpdateLogGroup extends ProfielLogGroup
 			' ' .
 			($this->timestamp === null
 				? '?'
-				: reldate($this->timestamp->format('Y-m-d H:i:s'))) .
+				: DateUtil::reldate($this->timestamp->format('Y-m-d H:i:s'))) .
 			"</div>
 			" .
 			implode($changesHtml) .

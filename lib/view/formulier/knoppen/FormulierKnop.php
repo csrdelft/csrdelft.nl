@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\knoppen;
 
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\Icon;
 
@@ -55,7 +56,7 @@ class FormulierKnop implements FormElement
 
 	public function getType()
 	{
-		return classNameZonderNamespace(get_class($this));
+		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}
 
 	public function getHtml()

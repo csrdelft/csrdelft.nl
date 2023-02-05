@@ -2,6 +2,7 @@
 
 namespace CsrDelft\command;
 
+use CsrDelft\common\Util\FileUtil;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -57,7 +58,7 @@ class FlushMemcacheCommand extends Command
 		}
 
 		try {
-			delTree(CONFIG_CACHE_PATH);
+			FileUtil::delTree(CONFIG_CACHE_PATH);
 
 			$output->writeln('Instelling cache succesvol verwijderd');
 		} catch (\ErrorException $exception) {

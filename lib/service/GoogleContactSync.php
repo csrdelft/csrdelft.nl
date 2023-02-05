@@ -4,6 +4,7 @@ namespace CsrDelft\service;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
@@ -347,7 +348,9 @@ class GoogleContactSync
 		foreach ($phoneNumberList as $pn) {
 			if ($profiel->{$pn[0]}) {
 				$phoneNumber = new PhoneNumber();
-				$phoneNumber->setValue(internationalizePhonenumber($profiel->{$pn[0]}));
+				$phoneNumber->setValue(
+					$this->internationalizePhonenumber($profiel->{$pn[0]})
+				);
 				$phoneNumber->setType($pn[1]);
 				if ($pn[2]) {
 					$fieldMetadata = new FieldMetadata();
@@ -414,7 +417,7 @@ class GoogleContactSync
 		// userDefined
 		$update = new UserDefined();
 		$update->setKey('update');
-		$update->setValue(getDateTime());
+		$update->setValue(DateUtil::getDateTime());
 
 		$csrUid = new UserDefined();
 		$csrUid->setKey('csruid');
@@ -607,6 +610,28 @@ class GoogleContactSync
 			} else {
 				throw new CsrGebruikerException('Google sync mislukt');
 			}
+		}
+	}
+
+	/**
+	 * Voeg landcode toe als nummer met 0 begint of vervang 00 met +
+	 *
+	 * @param string $phonenumber
+	 * @param string $prefix
+	 *
+	 * @return string
+	 */
+	private function internationalizePhonenumber($phonenumber, $prefix = '+31')
+	{
+		$number = str_replace([' ', '-'], '', $phonenumber);
+		if ($number[0] === '0') {
+			// vergelijken met == 0 levert problemen op want (int) '+' = 0 dankzij php
+			if ($number[1] === '0') {
+				return '+' . substr($number, 2);
+			}
+			return $prefix . substr($number, 1);
+		} else {
+			return $phonenumber;
 		}
 	}
 }

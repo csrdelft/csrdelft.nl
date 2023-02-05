@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\common\Util\PathUtil;
+
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -24,7 +26,7 @@ class FileNameField extends TextField
 		if (!parent::validate()) {
 			return false;
 		}
-		if ($this->value !== '' and !valid_filename($this->value)) {
+		if ($this->value !== '' and !PathUtil::valid_filename($this->value)) {
 			$this->error = 'Ongeldige bestandsnaam';
 		}
 		return $this->error === '';

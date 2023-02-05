@@ -5,6 +5,7 @@ namespace CsrDelft\repository\fotoalbum;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
+use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\entity\fotoalbum\FotoTagAlbum;
@@ -231,7 +232,7 @@ HTML;
 
 	public function hernoemAlbum(FotoAlbum $album, $newName)
 	{
-		if (!valid_filename($newName)) {
+		if (!PathUtil::valid_filename($newName)) {
 			throw new CsrGebruikerException('Ongeldige naam');
 		}
 		// controleer rechten

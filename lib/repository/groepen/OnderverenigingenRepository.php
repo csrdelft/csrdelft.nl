@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\groepen;
 
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\OnderverenigingStatus;
 use CsrDelft\entity\groepen\Ondervereniging;
@@ -28,7 +29,7 @@ class OnderverenigingenRepository extends GroepRepository
 			' door [lid=' .
 			LoginService::getUid() .
 			'] op [reldate]' .
-			getDatetime() .
+			DateUtil::getDatetime() .
 			'[/reldate][/div][hr]';
 		return $ondervereniging;
 	}

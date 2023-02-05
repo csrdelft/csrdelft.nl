@@ -9,6 +9,7 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepTab;
 use CsrDelft\entity\security\enum\AccessAction;
@@ -163,6 +164,6 @@ class GroepView implements FormElement, ToResponse
 
 	public function getType()
 	{
-		return classNameZonderNamespace(get_class($this->groep));
+		return ReflectionUtil::classNameZonderNamespace(get_class($this->groep));
 	}
 }

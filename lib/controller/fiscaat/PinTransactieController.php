@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Mail;
+use CsrDelft\common\Util\BedragUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
@@ -238,7 +239,7 @@ class PinTransactieController extends AbstractController
 					$nieuwePinTransactieMatch->transactie->datetime,
 					'cccc d MMMM y H:mm'
 				);
-				$bedrag = format_bedrag_kaal(
+				$bedrag = BedragUtil::format_bedrag_kaal(
 					$nieuwePinTransactieMatch->bestelling->totaal / -1
 				);
 				$this->stuurMail(
@@ -501,7 +502,7 @@ class PinTransactieController extends AbstractController
 					$oudePinTransactieMatch->bestelling->moment,
 					'cccc d MMMM y H:mm'
 				);
-				$bedrag = format_bedrag_kaal(
+				$bedrag = BedragUtil::format_bedrag_kaal(
 					$nieuwePinTransactieMatch->bestelling->totaal
 				);
 				$this->stuurMail(
@@ -614,15 +615,15 @@ class PinTransactieController extends AbstractController
 					$oudePinTransactieMatch->transactie->datetime,
 					'cccc d MMMM y H:mm'
 				);
-				$foutBedrag = format_bedrag_kaal(
+				$foutBedrag = BedragUtil::format_bedrag_kaal(
 					$oudePinTransactieMatch->bestelling->getProduct(
 						CiviProductTypeEnum::PINTRANSACTIE
 					)->aantal
 				);
-				$correctBedrag = format_bedrag_kaal(
+				$correctBedrag = BedragUtil::format_bedrag_kaal(
 					$oudePinTransactieMatch->transactie->getBedragInCenten()
 				);
-				$bedrag = format_bedrag_kaal(
+				$bedrag = BedragUtil::format_bedrag_kaal(
 					abs($nieuwePinTransactieMatch->bestelling->totaal)
 				);
 				$actie =
@@ -777,7 +778,7 @@ class PinTransactieController extends AbstractController
 		}
 		$bcc = $this->getProfiel();
 		$civiSaldo = $ontvanger->getCiviSaldo() * 100;
-		$saldo = format_bedrag_kaal($civiSaldo);
+		$saldo = BedragUtil::format_bedrag_kaal($civiSaldo);
 		$saldoMelding = $civiSaldo < 0 ? ' Leg a.u.b. in.' : '';
 
 		$bericht = "Beste {$ontvanger->getNaam('civitas')},

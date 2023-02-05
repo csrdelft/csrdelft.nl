@@ -2,6 +2,7 @@
 
 namespace CsrDelft\Twig\Extension;
 
+use CsrDelft\common\Util\DateUtil;
 use DateTime;
 use DateTimeInterface;
 use Twig\Extension\AbstractExtension;
@@ -12,7 +13,11 @@ class DateTimeTwigExtension extends AbstractExtension
 	public function getFilters()
 	{
 		return [
-			new TwigFilter('reldate', 'reldate', ['is_safe' => ['html']]),
+			new TwigFilter(
+				'reldate',
+				[DateUtil::class, 'reldate'],
+				['is_safe' => ['html']]
+			),
 			new TwigFilter('date_format', [$this, 'twig_date_format']),
 			new TwigFilter('datetime_format', [$this, 'twig_datetime_format']),
 			new TwigFilter('datetime_format_long', [

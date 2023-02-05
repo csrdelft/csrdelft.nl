@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\fotoalbum;
 
+use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\view\formulier\invoervelden\required\RequiredFileNameField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -13,7 +14,7 @@ class FotoAlbumToevoegenForm extends ModalForm
 	{
 		parent::__construct(
 			$album,
-			join_paths('/fotoalbum/toevoegen', $album->subdir)
+			PathUtil::join_paths('/fotoalbum/toevoegen', $album->subdir)
 		);
 		$this->titel = 'Fotoalbum toevoegen in: ' . $album->dirname;
 		$this->css_classes[] = 'redirect';

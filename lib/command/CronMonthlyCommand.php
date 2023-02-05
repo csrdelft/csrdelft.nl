@@ -2,6 +2,7 @@
 
 namespace CsrDelft\command;
 
+use CsrDelft\common\Util\DateUtil;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,7 +23,7 @@ class CronMonthlyCommand extends Command
 	): int {
 		$start = microtime(true);
 
-		$output->writeln(getDateTime() . ' stek:cron:monthly');
+		$output->writeln(DateUtil::getDateTime() . ' stek:cron:monthly');
 
 		$this->getApplication()
 			->find(SponsorAffiliateDownloadCommand::getDefaultName())
@@ -31,7 +32,7 @@ class CronMonthlyCommand extends Command
 		$finish = microtime(true) - $start;
 
 		$output->writeln(
-			getDateTime() . ' Finished in ' . (int) $finish . ' seconds.'
+			DateUtil::getDateTime() . ' Finished in ' . (int) $finish . ' seconds.'
 		);
 
 		return Command::SUCCESS;

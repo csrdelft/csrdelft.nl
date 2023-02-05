@@ -3,6 +3,7 @@
 namespace CsrDelft\command;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\BedragUtil;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
@@ -111,7 +112,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command
 		$output->writeln(
 			count($leden) .
 				' leden krijgen totaal ' .
-				format_bedrag($som) .
+				BedragUtil::format_bedrag($som) .
 				" teruggestort op hun CiviSaldo doordat {$aantal} bestellingen teruggedraaid worden."
 		);
 		$output->writeln('');

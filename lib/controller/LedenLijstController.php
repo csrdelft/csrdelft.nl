@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\TextUtil;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\GoogleContactSync;
 use CsrDelft\service\LidZoekerService;
@@ -90,7 +91,7 @@ class LedenLijstController extends AbstractController
 				]);
 			}
 
-			$response = new Response(crlf_endings($responseBody), 200, [
+			$response = new Response(TextUtil::crlf_endings($responseBody), 200, [
 				'Content-Type' => 'text/x-vcard',
 				'Content-Disposition' => 'attachment; filename="ledenlijst.vcf"',
 			]);

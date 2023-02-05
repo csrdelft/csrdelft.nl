@@ -12,6 +12,7 @@
  */
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\HostUtil;
 use CsrDelft\Kernel;
 use CsrDelft\repository\security\AccountRepository;
 use Symfony\Component\ErrorHandler\Debug;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 // Zet omgeving klaar.
 require __DIR__ . '/../config/bootstrap.php';
 
-if (!isCI() && !isCLI() && DEBUG) {
+if (!HostUtil::isCI() && !HostUtil::isCLI() && DEBUG) {
 	umask(0000);
 
 	Debug::enable();
@@ -70,8 +71,8 @@ if (FORCE_HTTPS) {
 			isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) &&
 			$_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https'
 		) &&
-		!isCI() &&
-		!isCLI()
+		!HostUtil::isCI() &&
+		!HostUtil::isCLI()
 	) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
@@ -93,11 +94,11 @@ if (FORCE_HTTPS) {
 	}
 }
 
-if (isCI() && isSyrinx()) {
+if (HostUtil::isCI() && HostUtil::isSyrinx()) {
 	die('Syrinx is geen Travis!');
 }
 
-if (!isCLI()) {
+if (!HostUtil::isCLI()) {
 	// Sessie configureren
 	ini_set('session.name', 'CSRSESSID');
 	ini_set('session.save_path', SESSION_PATH);

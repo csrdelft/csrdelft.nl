@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\entity\profiel\Profiel;
 
 class ProfielEntityField extends DoctrineEntityField
@@ -23,7 +24,7 @@ class ProfielEntityField extends DoctrineEntityField
 	{
 		if (
 			is_array($this->blacklist) &&
-			in_array_i($this->value, $this->blacklist)
+			ArrayUtil::in_array_i($this->value, $this->blacklist)
 		) {
 			$this->error =
 				'Dit profiel mag niet gekozen worden: ' .

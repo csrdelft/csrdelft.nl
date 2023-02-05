@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Util\DateUtil;
 
 /**
  * Relatieve datum zoals geparsed door php's strtotime
@@ -24,7 +25,7 @@ class BbReldate extends BbTag
 	{
 		return vsprintf("<span class=\"bb-tag-reldate\" title=\"%s\">%s</span>", [
 			htmlspecialchars($this->getContent()),
-			reldate($this->getContent()),
+			DateUtil::reldate($this->getContent()),
 		]);
 	}
 

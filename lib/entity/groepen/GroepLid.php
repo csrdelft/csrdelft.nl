@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\groepen\enum\CommissieFunctie;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
@@ -31,7 +32,7 @@ class GroepLid
 			'.' .
 			$this->uid .
 			'@' .
-			strtolower(short_class($this)) .
+			strtolower(ReflectionUtil::short_class($this)) .
 			'.csrdelft.nl';
 	}
 	/**

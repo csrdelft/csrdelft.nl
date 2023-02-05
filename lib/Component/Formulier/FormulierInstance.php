@@ -3,6 +3,7 @@
 namespace CsrDelft\Component\Formulier;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\service\CsrfService;
@@ -320,7 +321,7 @@ HTML;
 				'[div]Bewerking van [lid=' .
 				LoginService::getUid() .
 				'] op [reldate]' .
-				getDatetime() .
+				DateUtil::getDatetime() .
 				'[/reldate][br]';
 			foreach ($diff as $change) {
 				$changelog .=

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository;
 
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepStatistiekDTO;
@@ -61,7 +62,7 @@ abstract class GroepRepository extends AbstractRepository
 			str_replace(
 				'Repository',
 				'',
-				classNameZonderNamespace(get_called_class())
+				ReflectionUtil::classNameZonderNamespace(get_called_class())
 			)
 		);
 	}

@@ -4,6 +4,9 @@ namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\PathUtil;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\uploadvelden\BestandBehouden;
@@ -86,7 +89,9 @@ abstract class InputField implements FormElement, Validator
 		}
 		$this->description = $description;
 		// add *Field classname to css_classes
-		$this->css_classes[] = classNameZonderNamespace(get_class($this));
+		$this->css_classes[] = ReflectionUtil::classNameZonderNamespace(
+			get_class($this)
+		);
 
 		if ($description === null) {
 			$this->labelClassName .= ' d-none';
@@ -178,7 +183,7 @@ abstract class InputField implements FormElement, Validator
 		// als blacklist is gezet dan controleren
 		if (
 			is_array($this->blacklist) &&
-			in_array_i($this->value, $this->blacklist)
+			ArrayUtil::in_array_i($this->value, $this->blacklist)
 		) {
 			$this->error =
 				'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
@@ -186,7 +191,7 @@ abstract class InputField implements FormElement, Validator
 		// als whitelist is gezet dan controleren
 		if (
 			is_array($this->whitelist) &&
-			!in_array_i($this->value, $this->whitelist)
+			!ArrayUtil::in_array_i($this->value, $this->whitelist)
 		) {
 			$this->error =
 				'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
@@ -214,7 +219,7 @@ abstract class InputField implements FormElement, Validator
 		if (!$this->validate()) {
 			throw new CsrGebruikerException($this->getError());
 		}
-		if (!valid_filename($filename)) {
+		if (!PathUtil::valid_filename($filename)) {
 			throw new CsrGebruikerException(
 				'Ongeldige bestandsnaam: ' . htmlspecialchars($filename)
 			);
@@ -232,18 +237,18 @@ abstract class InputField implements FormElement, Validator
 				'Doelmap is niet beschrijfbaar: ' . htmlspecialchars($directory)
 			);
 		}
-		if (file_exists(join_paths($directory, $filename))) {
+		if (file_exists(PathUtil::join_paths($directory, $filename))) {
 			if ($overwrite) {
-				if (!unlink(join_paths($directory, $filename))) {
+				if (!unlink(PathUtil::join_paths($directory, $filename))) {
 					throw new CsrException(
 						'Overschrijven mislukt: ' .
-							htmlspecialchars(join_paths($directory, $filename))
+							htmlspecialchars(PathUtil::join_paths($directory, $filename))
 					);
 				}
 			} elseif (!$this instanceof BestandBehouden) {
 				throw new CsrGebruikerException(
 					'Bestandsnaam al in gebruik: ' .
-						htmlspecialchars(join_paths($directory, $filename))
+						htmlspecialchars(PathUtil::join_paths($directory, $filename))
 				);
 			}
 		}

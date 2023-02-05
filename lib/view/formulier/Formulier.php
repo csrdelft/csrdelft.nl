@@ -3,6 +3,8 @@
 namespace CsrDelft\view\formulier;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\service\CsrfService;
@@ -57,7 +59,7 @@ class Formulier implements View, Validator, ToResponse
 	) {
 		$this->model = $model;
 		$this->formId = uniqid_safe(
-			classNameZonderNamespace(
+			ReflectionUtil::classNameZonderNamespace(
 				get_class($this->model == null ? $this : $this->model)
 			)
 		);
@@ -399,7 +401,7 @@ HTML;
 				'[div]Bewerking van [lid=' .
 				LoginService::getUid() .
 				'] op [reldate]' .
-				getDatetime() .
+				DateUtil::getDatetime() .
 				'[/reldate][br]';
 			foreach ($diff as $change) {
 				$changelog .=
