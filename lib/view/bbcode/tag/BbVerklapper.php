@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Util\CryptoUtil;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -25,7 +26,7 @@ class BbVerklapper extends BbTag
 
 	public function render()
 	{
-		$id = uniqid_safe('verklapper_');
+		$id = CryptoUtil::uniqid_safe('verklapper_');
 
 		return <<<HTML
 <div class="card">

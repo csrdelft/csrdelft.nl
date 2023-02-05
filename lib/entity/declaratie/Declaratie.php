@@ -457,9 +457,31 @@ class Declaratie
 		if ($this->isIngediend() && $this->getCategorie()) {
 			return $this->getCategorie()
 				->getWachtrij()
-				->getPrefix() . boekjaar($this->getIngediend(), true);
+				->getPrefix() . static::getBoekjaar($this->getIngediend(), true);
 		}
 		return '';
+	}
+
+	/**
+	 * @param DateTimeInterface|null $date Datum om van te bepalen, bij null: vandaag
+	 * @param bool $substr Of alleen de laatste twee cijfers gegeven moeten worden
+	 * @return string Startjaar van boekjaar van gegeven datum
+	 */
+	private static function getBoekjaar(
+		DateTimeInterface $date = null,
+		bool $substr = false
+	): string {
+		if ($date === null) {
+			$date = date_create_immutable();
+		}
+
+		$jaar = intval($date->format('Y'));
+		$wisseling = date_create_immutable('16-05-' . $jaar);
+		if ($date < $wisseling) {
+			$jaar--;
+		}
+
+		return $substr ? substr($jaar, 2, 2) : $jaar;
 	}
 
 	public function naarStatusData(): array

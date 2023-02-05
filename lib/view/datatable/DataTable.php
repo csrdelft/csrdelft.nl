@@ -4,6 +4,7 @@ namespace CsrDelft\view\datatable;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
+use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\CustomDataTableEntry;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
@@ -87,7 +88,7 @@ class DataTable implements View, FormElement, ToResponse
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
-		$this->dataTableId = uniqid_safe(
+		$this->dataTableId = CryptoUtil::uniqid_safe(
 			ReflectionUtil::classNameZonderNamespace($orm)
 		);
 		$this->groupByColumn = $groupByColumn;

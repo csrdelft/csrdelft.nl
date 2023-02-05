@@ -4,6 +4,7 @@ namespace CsrDelft\view\formulier\uploadvelden;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\FileUtil;
+use CsrDelft\common\Util\HostUtil;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
@@ -94,7 +95,7 @@ class BestandBehouden extends InputField
 				'" class="previewDiv"><img src="' .
 				str_replace(
 					PHOTOALBUM_PATH,
-					getCsrRoot() . '/plaetjes/',
+					HostUtil::getCsrRoot() . '/plaetjes/',
 					$this->model->directory
 				) .
 				$this->model->filename .

@@ -5,6 +5,7 @@ namespace CsrDelft\view\formulier\invoervelden;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\service\security\LoginService;
@@ -78,7 +79,7 @@ abstract class InputField implements FormElement, Validator
 
 	public function __construct($name, $value, $description, $model = null)
 	{
-		$this->id = uniqid_safe('field_');
+		$this->id = CryptoUtil::uniqid_safe('field_');
 		$this->model = $model;
 		$this->name = $name;
 		$this->origvalue = $value;

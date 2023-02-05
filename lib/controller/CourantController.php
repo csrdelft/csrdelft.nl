@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Security\Voter\Entity\CourantBerichtVoter;
+use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\courant\Courant;
 use CsrDelft\entity\courant\CourantBericht;
@@ -54,7 +55,10 @@ class CourantController extends AbstractController
 	public function archief(): Response
 	{
 		return $this->render('courant/archief.html.twig', [
-			'couranten' => group_by('getJaar', $this->courantRepository->findAll()),
+			'couranten' => ArrayUtil::group_by(
+				'getJaar',
+				$this->courantRepository->findAll()
+			),
 		]);
 	}
 

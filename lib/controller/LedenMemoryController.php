@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\entity\groepen\Verticale;
@@ -120,7 +121,7 @@ class LedenMemoryController extends AbstractController
 			$verticale = $this->verticalenRepository
 				->createQueryBuilder('v')
 				->where('v.naam LIKE :naam')
-				->setParameter('naam', sql_contains($v))
+				->setParameter('naam', SqlUtil::sql_contains($v))
 				->setMaxResults(1)
 				->getQuery()
 				->getOneOrNullResult();

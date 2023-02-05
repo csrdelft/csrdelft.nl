@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\HostUtil;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Map;
@@ -277,7 +278,7 @@ class FotoAlbum extends Map
 		foreach ($this->getFotos() as $foto) {
 			$fotos[] = [
 				'url' => $foto->getResizedUrl(),
-				'fullUrl' => getCsrRoot() . $foto->getFullUrl(),
+				'fullUrl' => HostUtil::getCsrRoot() . $foto->getFullUrl(),
 				'thumbUrl' => $foto->getThumbUrl(),
 				'title' => '',
 				'hash' => str_replace(' ', '%20', urldecode($foto->getFullUrl())),
@@ -311,7 +312,7 @@ class FotoAlbum extends Map
 		foreach ($this->getFotos() as $foto) {
 			$fotos[] = [
 				'url' => $foto->getResizedUrl(),
-				'fullUrl' => getCsrRoot() . $foto->getFullUrl(),
+				'fullUrl' => HostUtil::getCsrRoot() . $foto->getFullUrl(),
 				'thumbUrl' => $foto->getThumbUrl(),
 				'title' => '',
 				'hash' => str_replace(' ', '%20', urldecode($foto->getFullUrl())),

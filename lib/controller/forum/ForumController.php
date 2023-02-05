@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\forum;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumZoeken;
@@ -267,7 +268,7 @@ class ForumController extends AbstractController
 		$forumCategories = $this->forumCategorieRepository
 			->createQueryBuilder('c')
 			->where('c.titel LIKE :zoekterm')
-			->setParameter('zoekterm', sql_contains($zoekterm))
+			->setParameter('zoekterm', SqlUtil::sql_contains($zoekterm))
 			->getQuery()
 			->getResult();
 		return new GenericSuggestiesResponse($forumCategories);

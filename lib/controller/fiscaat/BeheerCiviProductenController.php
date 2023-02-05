@@ -4,6 +4,7 @@ namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviProduct;
@@ -63,7 +64,7 @@ class BeheerCiviProductenController extends AbstractController
 	{
 		return new CiviProductSuggestiesResponse(
 			$this->civiProductRepository->getSuggesties(
-				sql_contains($request->query->get('q'))
+				SqlUtil::sql_contains($request->query->get('q'))
 			)
 		);
 	}

@@ -3,6 +3,7 @@
 namespace CsrDelft\view\formulier;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\ReflectionUtil;
@@ -59,7 +60,7 @@ class Formulier implements View, Validator, ToResponse
 		$dataTableId = false
 	) {
 		$this->model = $model;
-		$this->formId = uniqid_safe(
+		$this->formId = CryptoUtil::uniqid_safe(
 			ReflectionUtil::classNameZonderNamespace(
 				get_class($this->model == null ? $this : $this->model)
 			)

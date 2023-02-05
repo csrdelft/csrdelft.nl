@@ -3,6 +3,8 @@
 namespace CsrDelft\common\Util;
 
 use CsrDelft\common\CsrException;
+use Exception;
+use PDOStatement;
 use Traversable;
 
 final class ArrayUtil
@@ -62,5 +64,57 @@ final class ArrayUtil
 	public static function not_empty($value)
 	{
 		return $value != '';
+	}
+
+	/**
+	 * Group by object property
+	 *
+	 * @param string $prop
+	 * @param array|PDOStatement $in
+	 * @param boolean $del delete from $in array
+	 *
+	 * @return array $out
+	 */
+	public static function group_by($prop, $in, $del = true)
+	{
+		$del &= is_array($in);
+		$out = [];
+		foreach ($in as $i => $obj) {
+			if (property_exists($obj, $prop)) {
+				$key = $obj->$prop;
+			} elseif (method_exists($obj, $prop)) {
+				$key = $obj->$prop();
+			} else {
+				throw new Exception('Veld bestaat niet');
+			}
+
+			$out[$key][] = $obj; // add to array
+			if ($del) {
+				unset($in[$i]);
+			}
+		}
+		return $out;
+	}
+
+	/**
+	 * Group by distinct object property
+	 *
+	 * @param string $prop
+	 * @param array|PDOStatement $in
+	 * @param boolean $del delete from $in array
+	 *
+	 * @return array $out
+	 */
+	public static function group_by_distinct($prop, $in, $del = true)
+	{
+		$del &= is_array($in);
+		$out = [];
+		foreach ($in as $i => $obj) {
+			$out[$obj->$prop] = $obj; // overwrite existing
+			if ($del) {
+				unset($in[$i]);
+			}
+		}
+		return $out;
 	}
 }

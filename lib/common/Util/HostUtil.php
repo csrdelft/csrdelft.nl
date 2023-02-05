@@ -22,4 +22,17 @@ final class HostUtil
 	{
 		return getenv('CI');
 	}
+
+	/**
+	 * @return string
+	 * @deprecated Gebruik relatieve url of request_stack
+	 */
+	public static function getCsrRoot()
+	{
+		$request = ContainerFacade::getContainer()
+			->get('request_stack')
+			->getCurrentRequest();
+
+		return $request->getSchemeAndHttpHost();
+	}
 }

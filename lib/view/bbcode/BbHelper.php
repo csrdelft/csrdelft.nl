@@ -4,6 +4,7 @@ namespace CsrDelft\view\bbcode;
 
 use CsrDelft\bb\BbEnv;
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\HostUtil;
 
 /**
  * Een paar helper functies voor bb.
@@ -25,7 +26,7 @@ final class BbHelper
 	{
 		if (isset($url[0]) && $url[0] === '/') {
 			// Zorg voor werkende link in e-mail
-			$url = getCsrRoot() . $url;
+			$url = HostUtil::getCsrRoot() . $url;
 		}
 
 		return <<<HTML

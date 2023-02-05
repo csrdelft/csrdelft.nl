@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service;
 
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\profiel\ProfielToestemmingProxy;
 use CsrDelft\model\entity\LidStatus;
@@ -385,7 +386,10 @@ class LidZoekerService
 				$queryBuilder->where(
 					$queryBuilder->expr()->like('p.' . $veld, ':zoekterm')
 				);
-				$queryBuilder->setParameter('zoekterm', sql_contains($parts[1]));
+				$queryBuilder->setParameter(
+					'zoekterm',
+					SqlUtil::sql_contains($parts[1])
+				);
 			}
 		} else {
 			//als niets van hierboven toepasselijk is zoeken we in zo ongeveer alles
@@ -418,7 +422,7 @@ class LidZoekerService
 			}
 
 			$queryBuilder->where($zoekExpr);
-			$queryBuilder->setParameter('zoekterm', sql_contains($zoekterm));
+			$queryBuilder->setParameter('zoekterm', SqlUtil::sql_contains($zoekterm));
 		}
 
 		return $queryBuilder;

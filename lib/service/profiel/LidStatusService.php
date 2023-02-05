@@ -4,6 +4,7 @@ namespace CsrDelft\service\profiel;
 
 use CsrDelft\common\Mail;
 use CsrDelft\common\Util\DateUtil;
+use CsrDelft\common\Util\HostUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\profiel\Profiel;
@@ -255,12 +256,12 @@ class LidStatusService
 				$bkncsr['aantal']++;
 				$bkncsr['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
 				$bkncsr['lijst'] .=
-					' - ' . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
+					' - ' . HostUtil::getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
 			} else {
 				$bknleden['aantal']++;
 				$bknleden['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
 				$bknleden['lijst'] .=
-					' - ' . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
+					' - ' . HostUtil::getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
 				$naam = $exemplaar->eigenaar->getNaam('volledig');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}

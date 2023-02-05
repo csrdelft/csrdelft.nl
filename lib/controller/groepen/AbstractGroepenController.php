@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
@@ -790,7 +791,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$lid = $this->groepLidRepository->nieuw($groep, null);
 		$lid->groep = $groep;
 		$lid->groep_id = $groep->id;
-		$leden = group_by_distinct('uid', $groep->getLeden());
+		$leden = ArrayUtil::group_by_distinct('uid', $groep->getLeden());
 		$form = new GroepLidBeheerForm(
 			$lid,
 			$groep->getUrl() . '/aanmelden',

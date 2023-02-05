@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\common\Util\HostUtil;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -140,7 +141,7 @@ class ForumPost
 
 	public function getLink($external = false)
 	{
-		return ($external ? getCsrRoot() : '') .
+		return ($external ? HostUtil::getCsrRoot() : '') .
 			'/forum/reactie/' .
 			$this->post_id .
 			'#' .

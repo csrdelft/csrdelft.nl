@@ -9,6 +9,7 @@
 namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ProfielRepository;
@@ -33,7 +34,7 @@ class GroepLijstView extends GroepTabView
 			$html .= $form->getHtml();
 			$html .= '</td></tr>';
 		}
-		$leden = group_by_distinct('uid', $this->groep->getLeden());
+		$leden = ArrayUtil::group_by_distinct('uid', $this->groep->getLeden());
 		if (empty($leden)) {
 			return $html . '</tbody></table>';
 		}

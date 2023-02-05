@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\CmsPaginaRepository;
@@ -130,7 +131,7 @@ class ToestemmingController extends AbstractController
 				'iedereen' => LidStatus::getEnumValues(),
 			];
 
-			$toestemming = group_by(
+			$toestemming = ArrayUtil::group_by(
 				'uid',
 				$this->lidToestemmingRepository->getToestemmingForIds($ids)
 			);

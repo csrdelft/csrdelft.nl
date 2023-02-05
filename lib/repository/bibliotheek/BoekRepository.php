@@ -3,6 +3,7 @@
 namespace CsrDelft\repository\bibliotheek;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -43,7 +44,7 @@ class BoekRepository extends AbstractRepository
 			->select("b.$zoekveld")
 			->distinct()
 			->where("b.$zoekveld LIKE :zoekterm")
-			->setParameter('zoekterm', sql_contains($zoekterm))
+			->setParameter('zoekterm', SqlUtil::sql_contains($zoekterm))
 			->getQuery()
 			->getScalarResult();
 	}
@@ -57,7 +58,7 @@ class BoekRepository extends AbstractRepository
 	{
 		$qb = $this->createQueryBuilder('boek');
 		$qb->where($qb->expr()->like('boek.titel', ':zoekterm'));
-		$qb->setParameters(['zoekterm' => sql_contains($zoekterm)]);
+		$qb->setParameters(['zoekterm' => SqlUtil::sql_contains($zoekterm)]);
 		return $qb->getQuery()->getResult();
 	}
 }

@@ -4,7 +4,7 @@ namespace CsrDelft\common\Util;
 
 use CsrDelft\view\Icon;
 
-class MeldingUtil
+final class MeldingUtil
 {
 	/**
 	 * Stores a message.

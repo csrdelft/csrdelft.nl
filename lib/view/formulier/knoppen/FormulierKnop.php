@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\knoppen;
 
+use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\Icon;
@@ -24,7 +25,7 @@ class FormulierKnop implements FormElement
 
 	public function __construct($url, $action, $label, $title, $icon)
 	{
-		$this->id = uniqid_safe('knop_');
+		$this->id = CryptoUtil::uniqid_safe('knop_');
 		$this->url = $url;
 		$this->action = $action;
 		$this->label = $label;

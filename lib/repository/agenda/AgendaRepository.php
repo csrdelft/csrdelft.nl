@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\agenda;
 
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\AgendaVerbergen;
 use CsrDelft\entity\agenda\Agendeerbaar;
@@ -162,7 +163,7 @@ class AgendaRepository extends AbstractRepository
 			)
 			->setParameter('van', $van, Types::DATE_IMMUTABLE)
 			->setParameter('tot', $tot, Types::DATE_IMMUTABLE)
-			->setParameter('query', sql_contains($query))
+			->setParameter('query', SqlUtil::sql_contains($query))
 			->orderBy('a.begin_moment', 'ASC')
 			->addOrderBy('a.titel', 'ASC')
 			->setMaxResults($limiet)

@@ -2,6 +2,9 @@
 
 namespace CsrDelft\common\Util;
 
+use CsrDelft\common\ContainerFacade;
+use Exception;
+
 final class UrlUtil
 {
 	/**
@@ -43,7 +46,8 @@ final class UrlUtil
 		$url = filter_var($url, FILTER_SANITIZE_URL);
 		if (
 			$url &&
-			(UrlUtil::url_like($url) || UrlUtil::url_like(getCsrRoot() . $url))
+			(UrlUtil::url_like($url) ||
+				UrlUtil::url_like(HostUtil::getCsrRoot() . $url))
 		) {
 			if (
 				str_starts_with($url, 'http://') ||
@@ -153,5 +157,25 @@ final class UrlUtil
 		return base64_decode(
 			str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT)
 		);
+	}
+
+	/**
+	 * Shorthand for a curl request.
+	 * @param $url String The url for the request
+	 * @param array $options curl options
+	 * @return mixed The curl_exec result
+	 */
+	public static function curl_request($url, $options = [])
+	{
+		$curl = curl_init($url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt_array($curl, $options);
+		$resp = curl_exec($curl);
+
+		if ($resp == false) {
+			throw new Exception(curl_error($curl));
+		}
+
+		return $resp;
 	}
 }

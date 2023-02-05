@@ -5,6 +5,7 @@ namespace CsrDelft\repository\fiscaat;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\fiscaat\enum\CiviSaldoLogEnum;
 use CsrDelft\repository\AbstractRepository;
@@ -236,7 +237,7 @@ class CiviSaldoRepository extends AbstractRepository
 			->andWhere(
 				'cs.uid LIKE :query OR cs.naam LIKE :query OR cs.uid in (:uids)'
 			)
-			->setParameter('query', sql_contains($query))
+			->setParameter('query', SqlUtil::sql_contains($query))
 			->setParameter('uids', $uids)
 			->getQuery()
 			->getResult();

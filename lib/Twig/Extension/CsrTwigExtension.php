@@ -5,6 +5,7 @@ namespace CsrDelft\Twig\Extension;
 use CsrDelft\common\Security\Voter\Entity\CmsPaginaVoter;
 use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\common\Util\BedragUtil;
+use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\FileUtil;
 use CsrDelft\common\Util\TextUtil;
 use CsrDelft\Component\DataTable\DataTableView;
@@ -198,7 +199,7 @@ class CsrTwigExtension extends AbstractExtension
 				['is_safe' => ['html']]
 			),
 			new TwigFilter('uniqid', function ($prefix) {
-				return uniqid_safe($prefix);
+				return CryptoUtil::uniqid_safe($prefix);
 			}),
 			new TwigFilter('format_bedrag', [BedragUtil::class, 'format_bedrag']),
 			new TwigFilter('format_euro', [BedragUtil::class, 'format_euro']),

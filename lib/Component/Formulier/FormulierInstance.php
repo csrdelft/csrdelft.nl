@@ -3,6 +3,7 @@
 namespace CsrDelft\Component\Formulier;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\ChangeLogEntry;
@@ -54,7 +55,7 @@ class FormulierInstance
 		$validationMethods = [],
 		$post = true
 	) {
-		$this->formId = uniqid_safe('Formulier_');
+		$this->formId = CryptoUtil::uniqid_safe('Formulier_');
 		$this->action = $action;
 		$this->formKnoppen = $formKnoppen;
 		$this->fields = $fields;

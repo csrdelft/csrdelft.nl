@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\LDAP;
+use CsrDelft\common\Util\DebugUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
@@ -426,7 +427,7 @@ class ToolsController extends AbstractController
 					$this->getParameter('memcached_url')
 				);
 
-				debugprint(current($memcached->getStats()));
+				DebugUtil::debugprint(current($memcached->getStats()), 'pubcie_debug');
 			} catch (ServiceNotFoundException $ex) {
 				echo 'Memcache is niet ingesteld.';
 			}

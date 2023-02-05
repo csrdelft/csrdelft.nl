@@ -3,6 +3,8 @@
 namespace CsrDelft\repository\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -54,7 +56,7 @@ class CorveeFunctiesRepository extends AbstractRepository
 	 */
 	public function getAlleFuncties()
 	{
-		return group_by_distinct('functie_id', $this->findAll());
+		return ArrayUtil::group_by_distinct('functie_id', $this->findAll());
 	}
 
 	public function nieuw()
@@ -96,7 +98,7 @@ class CorveeFunctiesRepository extends AbstractRepository
 	{
 		return $this->createQueryBuilder('f')
 			->where('f.naam LIKE :query')
-			->setParameter('query', sql_contains($query))
+			->setParameter('query', SqlUtil::sql_contains($query))
 			->getQuery()
 			->getResult();
 	}

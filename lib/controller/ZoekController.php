@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\controller\forum\ForumController;
 use CsrDelft\controller\groepen\CommissiesController;
 use CsrDelft\controller\groepen\KringenController;
@@ -135,7 +136,7 @@ class ZoekController extends AbstractController
 			]);
 
 		$response = json_decode(
-			curl_request($url, [CURLOPT_FOLLOWLOCATION => true]),
+			UrlUtil::curl_request($url, [CURLOPT_FOLLOWLOCATION => true]),
 			true
 		);
 

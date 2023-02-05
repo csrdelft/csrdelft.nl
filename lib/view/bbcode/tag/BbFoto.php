@@ -5,6 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
+use CsrDelft\common\Util\HostUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\view\bbcode\BbHelper;
@@ -70,7 +71,7 @@ class BbFoto extends BbTag
 		return BbHelper::lightLinkThumbnail(
 			'foto',
 			$this->foto->getAlbumUrl() . '#' . $this->foto->getResizedUrl(),
-			getCsrRoot() . $this->foto->getThumbUrl()
+			HostUtil::getCsrRoot() . $this->foto->getThumbUrl()
 		);
 	}
 

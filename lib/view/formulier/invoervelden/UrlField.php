@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\common\Util\HostUtil;
 use CsrDelft\common\Util\UrlUtil;
 
 /**
@@ -16,8 +17,8 @@ class UrlField extends TextField
 	public function getValue()
 	{
 		$this->value = parent::getValue();
-		if ($this->value && str_starts_with($this->value, getCsrRoot())) {
-			$this->value = str_replace(getCsrRoot(), '', $this->value);
+		if ($this->value && str_starts_with($this->value, HostUtil::getCsrRoot())) {
+			$this->value = str_replace(HostUtil::getCsrRoot(), '', $this->value);
 		}
 		return $this->value;
 	}

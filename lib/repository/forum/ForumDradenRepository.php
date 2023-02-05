@@ -3,6 +3,7 @@
 namespace CsrDelft\repository\forum;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
@@ -279,7 +280,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 			->setParameter('ids', $ids)
 			->getQuery()
 			->getResult();
-		return group_by_distinct('draad_id', $draden);
+		return ArrayUtil::group_by_distinct('draad_id', $draden);
 	}
 
 	public function maakForumDraad($deel, $titel, $wacht_goedkeuring)
