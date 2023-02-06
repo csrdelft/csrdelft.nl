@@ -31,15 +31,31 @@ class ActiviteitenRepository extends KetzersRepository
 		return $activiteit;
 	}
 
-	public function overzicht(string $soort = null)
+	public function overzicht(int $limit, int $offset, string $soort = null)
 	{
 		if ($soort && ActiviteitSoort::isValidValue($soort)) {
-			return $this->findBy([
+			return $this->findBy(
+				[
+					'status' => GroepStatus::HT(),
+					'activiteitSoort' => ActiviteitSoort::from($soort),
+				],
+				null,
+				$limit,
+				$offset
+			);
+		}
+		return parent::overzicht($limit, $offset, $soort);
+	}
+
+	public function overzichtAantal(string $soort = null)
+	{
+		if ($soort && ActiviteitSoort::isValidValue($soort)) {
+			return $this->count([
 				'status' => GroepStatus::HT(),
 				'activiteitSoort' => ActiviteitSoort::from($soort),
 			]);
 		}
-		return parent::overzicht($soort);
+		return parent::overzichtAantal($soort);
 	}
 
 	public function beheer(string $soort = null)

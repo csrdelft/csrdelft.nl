@@ -4,12 +4,12 @@ namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Enum;
-use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepTab;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\security\enum\AccessAction;
-use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\groepen\BesturenRepository;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\Icon;
 use CsrDelft\view\ToHtmlResponse;
@@ -31,11 +31,28 @@ class GroepenView implements View
 	private $geschiedenis;
 	private $tab;
 	private $pagina;
+	private $paginaNummer;
+	/**
+	 * @var int
+	 */
+	private $paginaGrootte;
+	/**
+	 * @var int
+	 */
+	private $totaal;
+	/**
+	 * @var callable|null
+	 */
+	private $urlGetter;
 
 	public function __construct(
 		GroepRepository $model,
 		$groepen,
 		$soort = null,
+		$paginaNummer = 0,
+		$paginaGrootte = 0,
+		$totaal = 0,
+		callable $urlGetter = null,
 		$geschiedenis = false
 	) {
 		$this->model = $model;
@@ -56,6 +73,10 @@ class GroepenView implements View
 		if (!$this->pagina) {
 			$this->pagina = $cmsPaginaRepository->find('');
 		}
+		$this->paginaNummer = $paginaNummer;
+		$this->paginaGrootte = $paginaGrootte;
+		$this->totaal = $totaal;
+		$this->urlGetter = $urlGetter;
 	}
 
 	public function getBreadcrumbs()
@@ -81,8 +102,7 @@ class GroepenView implements View
 
 	public function __toString()
 	{
-		$model = $this->model;
-		$orm = $model->entityClass;
+		$orm = $this->model->entityClass;
 		$html = '';
 		if ($orm::magAlgemeen(AccessAction::Aanmaken(), $this->soort)) {
 			$html .=
@@ -122,6 +142,61 @@ class GroepenView implements View
 			$html .= $view->__toString();
 		}
 
+		// Alleen pagination laten zien als nodig.
+		if ($this->totaal != $this->paginaGrootte) {
+			$html .= $this->getPagination();
+		}
+
+		return $html;
+	}
+
+	private function url($paginaNummer)
+	{
+		$getter = $this->urlGetter;
+		return $getter($paginaNummer);
+	}
+
+	/**
+	 * @param string $html
+	 * @return string
+	 */
+	private function getPagination(): string
+	{
+		$html = '';
+		if ($this->paginaNummer == 1) {
+			$vorigeDisabledClass = ' disabled';
+			$vorigeLink = '';
+		} else {
+			$vorigeDisabledClass = '';
+			$vorigeLink = $this->url($this->paginaNummer - 1);
+		}
+		if ($this->paginaNummer == ceil($this->totaal / $this->paginaGrootte)) {
+			$volgendeDisabledClass = ' disabled';
+			$volgendeLink = '';
+		} else {
+			$volgendeDisabledClass = '';
+			$volgendeLink = $this->url($this->paginaNummer + 1);
+		}
+
+		$html .= <<<HTML
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item{$vorigeDisabledClass}"><a class="page-link" href="{$vorigeLink}">Vorige</a></li>
+HTML;
+		for ($i = 1; $i <= ceil($this->totaal / $this->paginaGrootte); $i++) {
+			$activeClass = $this->paginaNummer == $i ? ' active' : '';
+			$html .= <<<HTML
+    <li class="page-item{$activeClass}"><a class="page-link" href="{$this->url(
+				$i
+			)}">{$i}</a></li>
+HTML;
+		}
+
+		$html .= <<<HTML
+    <li class="page-item{$volgendeDisabledClass}"><a class="page-link" href="{$volgendeLink}">Volgende</a></li>
+  </ul>
+</nav>
+HTML;
 		return $html;
 	}
 }

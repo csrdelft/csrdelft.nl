@@ -53,6 +53,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -202,12 +203,34 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return $routes;
 	}
 
-	public function overzicht($soort = null)
+	public function overzicht(Request $request, $soort = null)
 	{
-		$groepen = $this->repository->overzicht($soort);
+		$pagina = (int) $request->get('pagina', 1);
+		$limit = 20;
+		$offset = ($pagina - 1) * $limit;
+		$aantal = $this->repository->overzichtAantal($soort);
+		if ($offset >= $aantal) {
+			throw new NotFoundHttpException();
+		}
+		$groepen = $this->repository->overzicht($limit, $offset, $soort);
 		$soortEnum = $this->repository->parseSoort($soort);
+
+		$paginaUrl = function ($paginaNummer) use ($soort) {
+			return $this->generateUrl(
+				'csrdelft_groep_' . $this->repository::getNaam() . '_overzicht',
+				['soort' => $soort, 'pagina' => $paginaNummer]
+			);
+		};
 		// controleert rechten bekijken per groep
-		$body = new GroepenView($this->repository, $groepen, $soortEnum);
+		$body = new GroepenView(
+			$this->repository,
+			$groepen,
+			$soortEnum,
+			$pagina,
+			$limit,
+			$aantal,
+			$paginaUrl
+		);
 		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
@@ -226,7 +249,18 @@ abstract class AbstractGroepenController extends AbstractController implements
 			$soort = null;
 		}
 		// controleert rechten bekijken per groep
-		$body = new GroepenView($this->repository, $groepen, $soort, $groep->id);
+		$body = new GroepenView(
+			$this->repository,
+			$groepen,
+			$soort,
+			0,
+			count($groepen),
+			count($groepen),
+			function () {
+				return '';
+			},
+			$groep->id
+		);
 		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
