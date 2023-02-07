@@ -29,8 +29,11 @@ class CommissiesRepository extends GroepRepository
 		return $commissie;
 	}
 
-	public function overzicht(int $limit, int $offset, string $soort = null)
-	{
+	public function overzicht(
+		int $limit = null,
+		int $offset = null,
+		string $soort = null
+	) {
 		if ($soort && CommissieSoort::isValidValue($soort)) {
 			return $this->findBy(
 				[

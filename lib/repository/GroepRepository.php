@@ -437,13 +437,16 @@ abstract class GroepRepository extends AbstractRepository
 	/**
 	 * Laat een specifieke implementatie ook filteren op soort
 	 *
-	 * @param int $limit
-	 * @param int $offset
+	 * @param int|null $limit
+	 * @param int|null $offset
 	 * @param string|null $soort
-	 * @return Groep[]
+	 * @return Groep
 	 */
-	public function overzicht(int $limit, int $offset, string $soort = null)
-	{
+	public function overzicht(
+		int $limit = null,
+		int $offset = null,
+		string $soort = null
+	) {
 		return $this->findBy(
 			['status' => GroepStatus::HT()],
 			null,
