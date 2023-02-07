@@ -10,9 +10,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class VerticalenRepository extends GroepRepository
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getEntityClassName()
 	{
-		parent::__construct($registry, Verticale::class);
+		return Verticale::class;
 	}
 
 	public function get($letter)

@@ -18,7 +18,7 @@ class GroepConverteerForm extends ModalForm
 		parent::__construct(
 			$groep,
 			$huidig->getUrl() . '/' . $groep->getId() . '/converteren',
-			$huidig->entityClass . ' converteren',
+			$huidig->getEntityClassName() . ' converteren',
 			true
 		);
 

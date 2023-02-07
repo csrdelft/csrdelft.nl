@@ -12,9 +12,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class OnderverenigingenRepository extends GroepRepository
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getEntityClassName()
 	{
-		parent::__construct($registry, Ondervereniging::class);
+		return Ondervereniging::class;
 	}
 
 	public function nieuw($soort = null)
@@ -48,17 +48,6 @@ class OnderverenigingenRepository extends GroepRepository
 			);
 		}
 		return parent::overzicht($limit, $offset, $soort);
-	}
-
-	public function overzichtAantal(string $soort = null)
-	{
-		if ($soort && OnderverenigingStatus::isValidValue($soort)) {
-			return $this->count([
-				'status' => GroepStatus::HT(),
-				'onderverenigingStatus' => OnderverenigingStatus::from($soort),
-			]);
-		}
-		return parent::overzichtAantal($soort);
 	}
 
 	public function beheer(string $soort = null)

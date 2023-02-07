@@ -12,9 +12,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class WoonoordenRepository extends GroepRepository
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getEntityClassName()
 	{
-		parent::__construct($registry, Woonoord::class);
+		return Woonoord::class;
 	}
 
 	public function nieuw($soort = null)
@@ -47,17 +47,6 @@ class WoonoordenRepository extends GroepRepository
 			);
 		}
 		return parent::overzicht($limit, $offset, $soort);
-	}
-
-	public function overzichtAantal(string $soort = null)
-	{
-		if ($soort && HuisStatus::isValidValue($soort)) {
-			return $this->count([
-				'status' => GroepStatus::HT(),
-				'huisStatus' => HuisStatus::from($soort),
-			]);
-		}
-		return parent::overzichtAantal($soort);
 	}
 
 	public function beheer(string $soort = null)

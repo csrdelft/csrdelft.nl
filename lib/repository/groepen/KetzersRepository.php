@@ -8,11 +8,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class KetzersRepository extends GroepRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		$entityClass = Ketzer::class
-	) {
-		parent::__construct($registry, $entityClass);
+	public function getEntityClassName()
+	{
+		return Ketzer::class;
 	}
 
 	public function nieuw($soort = null)

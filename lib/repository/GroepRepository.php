@@ -37,21 +37,19 @@ use Throwable;
 abstract class GroepRepository extends AbstractRepository
 {
 	/**
-	 * @var Groep|string
-	 */
-	public $entityClass;
-
-	/**
 	 * AbstractGroepenModel constructor.
 	 * @param ManagerRegistry $managerRegistry
 	 * @param Groep|string $entityClass
 	 */
-	public function __construct(ManagerRegistry $managerRegistry, $entityClass)
+	public function __construct(ManagerRegistry $managerRegistry)
 	{
-		parent::__construct($managerRegistry, $entityClass);
-
-		$this->entityClass = $entityClass;
+		parent::__construct($managerRegistry, $this->getEntityClassName());
 	}
+
+	/**
+	 * @return Groep|string
+	 */
+	abstract public function getEntityClassName();
 
 	public static function getUrl()
 	{
@@ -84,7 +82,12 @@ abstract class GroepRepository extends AbstractRepository
 	) {
 		// Eerst sorteren op FT/HT/OT
 		$orderBy = ['status' => 'ASC'] + ($orderBy ?? []);
-		if (in_array(HeeftMoment::class, class_implements($this->entityClass))) {
+		if (
+			in_array(
+				HeeftMoment::class,
+				class_implements($this->getEntityClassName())
+			)
+		) {
 			// Als er een moment is daarna daarop sorteren
 			$orderBy = ['beginMoment' => 'DESC'] + ($orderBy ?? []);
 		}
@@ -268,7 +271,12 @@ abstract class GroepRepository extends AbstractRepository
 	{
 		$qb = $this->createQueryBuilder('ag');
 
-		if (in_array(HeeftMoment::class, class_implements($this->entityClass))) {
+		if (
+			in_array(
+				HeeftMoment::class,
+				class_implements($this->getEntityClassName())
+			)
+		) {
 			$qb = $qb->orderBy('ag.beginMoment', 'DESC');
 		}
 
@@ -446,7 +454,16 @@ abstract class GroepRepository extends AbstractRepository
 
 	public function overzichtAantal(string $soort = null)
 	{
-		return $this->count(['status' => GroepStatus::HT()]);
+		$activiteiten = $this->overzicht(null, null, $soort);
+
+		$aantal = 0;
+		foreach ($activiteiten as $activiteit) {
+			if ($activiteit->mag(AccessAction::Bekijken())) {
+				$aantal++;
+			}
+		}
+
+		return $aantal;
 	}
 
 	public function beheer(string $soort = null)

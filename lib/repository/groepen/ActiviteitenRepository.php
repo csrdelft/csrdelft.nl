@@ -5,13 +5,14 @@ namespace CsrDelft\repository\groepen;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\security\enum\AccessAction;
 use Doctrine\Persistence\ManagerRegistry;
 
 class ActiviteitenRepository extends KetzersRepository
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getEntityClassName()
 	{
-		parent::__construct($registry, Activiteit::class);
+		return Activiteit::class;
 	}
 
 	public function nieuw($soort = null)
@@ -31,8 +32,11 @@ class ActiviteitenRepository extends KetzersRepository
 		return $activiteit;
 	}
 
-	public function overzicht(int $limit, int $offset, string $soort = null)
-	{
+	public function overzicht(
+		int $limit = null,
+		int $offset = null,
+		string $soort = null
+	) {
 		if ($soort && ActiviteitSoort::isValidValue($soort)) {
 			return $this->findBy(
 				[
@@ -45,17 +49,6 @@ class ActiviteitenRepository extends KetzersRepository
 			);
 		}
 		return parent::overzicht($limit, $offset, $soort);
-	}
-
-	public function overzichtAantal(string $soort = null)
-	{
-		if ($soort && ActiviteitSoort::isValidValue($soort)) {
-			return $this->count([
-				'status' => GroepStatus::HT(),
-				'activiteitSoort' => ActiviteitSoort::from($soort),
-			]);
-		}
-		return parent::overzichtAantal($soort);
 	}
 
 	public function beheer(string $soort = null)

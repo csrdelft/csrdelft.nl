@@ -636,7 +636,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 						$groep,
 						'class',
 						get_class($groep),
-						$model->entityClass
+						$model->getEntityClassName()
 					);
 					$nieuw = $model->converteer(
 						$groep,

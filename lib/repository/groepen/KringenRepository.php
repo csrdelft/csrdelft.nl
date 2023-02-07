@@ -11,9 +11,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class KringenRepository extends GroepRepository
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getEntityClassName()
 	{
-		parent::__construct($registry, Kring::class);
+		return Kring::class;
 	}
 
 	public function findBy(

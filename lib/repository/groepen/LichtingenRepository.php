@@ -10,9 +10,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class LichtingenRepository extends GroepRepository
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getEntityClassName()
 	{
-		parent::__construct($registry, Lichting::class);
+		return Lichting::class;
 	}
 
 	public function get($lidjaar)

@@ -24,11 +24,16 @@ class RechtenGroepenRepository extends GroepRepository
 		GroepLidRepository $groepLidRepository,
 		ManagerRegistry $registry
 	) {
-		parent::__construct($registry, RechtenGroep::class);
+		parent::__construct($registry);
 
 		$this->besturenRepository = $besturenRepository;
 		$this->commissiesRepository = $commissiesRepository;
 		$this->groepLidRepository = $groepLidRepository;
+	}
+
+	public function getEntityClassName()
+	{
+		return RechtenGroep::class;
 	}
 
 	public function nieuw($soort = null)

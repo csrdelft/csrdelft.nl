@@ -28,7 +28,7 @@ class GroepenBeheerTable extends DataTable
 	public function __construct(GroepRepository $repository)
 	{
 		parent::__construct(
-			$repository->entityClass,
+			$repository->getEntityClassName(),
 			$repository->getUrl() . '/beheren',
 			null
 		);
@@ -100,7 +100,7 @@ class GroepenBeheerTable extends DataTable
 			)
 		);
 
-		if (property_exists($repository->entityClass, 'aanmelden_vanaf')) {
+		if (property_exists($repository->getEntityClassName(), 'aanmelden_vanaf')) {
 			$this->addRowKnop(
 				new DataTableRowKnop(
 					$repository->getUrl() . '/:id/sluiten',

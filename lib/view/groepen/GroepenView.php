@@ -102,7 +102,7 @@ class GroepenView implements View
 
 	public function __toString()
 	{
-		$orm = $this->model->entityClass;
+		$orm = $this->model->getEntityClassName();
 		$html = '';
 		if ($orm::magAlgemeen(AccessAction::Aanmaken(), $this->soort)) {
 			$html .=

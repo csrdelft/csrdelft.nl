@@ -10,9 +10,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class CommissiesRepository extends GroepRepository
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getEntityClassName()
 	{
-		parent::__construct($registry, Commissie::class);
+		return Commissie::class;
 	}
 
 	public function nieuw($soort = null)
@@ -43,17 +43,6 @@ class CommissiesRepository extends GroepRepository
 			);
 		}
 		return parent::overzicht($limit, $offset, $soort);
-	}
-
-	public function overzichtAantal(string $soort = null)
-	{
-		if ($soort && CommissieSoort::isValidValue($soort)) {
-			return $this->count([
-				'status' => GroepStatus::HT(),
-				'commissieSoort' => CommissieSoort::from($soort),
-			]);
-		}
-		return parent::overzichtAantal($soort);
 	}
 
 	public function beheer(string $soort = null)
