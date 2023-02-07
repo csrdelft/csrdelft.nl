@@ -5,6 +5,8 @@ namespace CsrDelft\controller\groepen;
 use CsrDelft\entity\groepen\Bestuur;
 use CsrDelft\view\groepen\GroepenView;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * BesturenController.class.php
@@ -20,12 +22,33 @@ class BesturenController extends AbstractGroepenController
 		parent::__construct($registry, Bestuur::class);
 	}
 
-	public function overzicht($soort = null)
+	public function overzicht(Request $request, $soort = null)
 	{
+		$pagina = $request->get('pagina');
+		$limit = 20;
+		$offset = $pagina * $limit;
+		$aantal = $this->repository->count([]);
+		if ($offset >= $aantal) {
+			throw new NotFoundHttpException();
+		}
 		// Zoek ook op ot,ft
-		$groepen = $this->repository->findBy([]);
+		$groepen = $this->repository->findBy([], null, $limit, $offset);
+		$paginaUrl = function ($paginaNummer) use ($soort) {
+			return $this->generateUrl(
+				'csrdelft_groep_' . $this->repository::getNaam() . '_overzicht',
+				['soort' => $soort, 'pagina' => $paginaNummer]
+			);
+		};
 		// controleert rechten bekijken per groep
-		$body = new GroepenView($this->repository, $groepen);
+		$body = new GroepenView(
+			$this->repository,
+			$groepen,
+			null,
+			$pagina,
+			$limit,
+			$aantal,
+			$paginaUrl
+		);
 		return $this->render('default.html.twig', ['content' => $body]);
 	}
 }
