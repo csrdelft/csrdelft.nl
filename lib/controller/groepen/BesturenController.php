@@ -41,6 +41,7 @@ class BesturenController extends AbstractGroepenController
 		};
 		// controleert rechten bekijken per groep
 		$body = new GroepenView(
+			$this->container->get('twig'),
 			$this->repository,
 			$groepen,
 			null,

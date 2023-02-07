@@ -13,6 +13,9 @@ use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\groepen\Groep;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
+use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\CmsPaginaRepository;
@@ -24,6 +27,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\service\CsrfService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\CsrfField;
+use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -108,7 +112,17 @@ class CsrTwigExtension extends AbstractExtension
 			new TwigFunction('gethostbyaddr', 'gethostbyaddr'),
 			new TwigFunction('cms', [$this, 'cms'], ['is_safe' => ['html']]),
 			new TwigFunction('table', [$this, 'table'], ['is_safe' => ['html']]),
+			new TwigFunction(
+				'groep_bewerken_form',
+				[$this, 'groepBewerkenForm'],
+				['is_safe' => ['html']]
+			),
 		];
+	}
+
+	public function groepBewerkenForm($lid, $groep)
+	{
+		return new GroepBewerkenForm($lid, $groep);
 	}
 
 	public function huidige_jaargang()
@@ -206,7 +220,22 @@ class CsrTwigExtension extends AbstractExtension
 			new TwigFilter('truncate', [TextUtil::class, 'truncate']),
 			new TwigFilter('format_filesize', [FileUtil::class, 'format_filesize']),
 			new TwigFilter('shuffle', [ArrayUtil::class, 'array_shuffle']),
+			new TwigFilter('pluralize', [$this, 'pluralize']),
 		];
+	}
+
+	public function pluralize(
+		int $count,
+		string $singular,
+		string $plural,
+		string $zero = null
+	): string {
+		if ($count > 1) {
+			return str_replace('{}', $count, $plural);
+		} elseif ($count <= 0 && null !== $zero) {
+			return $zero; // No string replacement required for zero
+		}
+		return str_replace('{}', $count, $singular);
 	}
 
 	public function getTests()
@@ -240,6 +269,15 @@ class CsrTwigExtension extends AbstractExtension
 			}),
 			new TwigTest('agendaitem', function ($value) {
 				return $value instanceof AgendaItem;
+			}),
+			new TwigTest('verticale', function ($value) {
+				return $value instanceof Verticale;
+			}),
+			new TwigTest('heeftaanmeldlimiet', function ($value) {
+				return $value instanceof HeeftAanmeldLimiet;
+			}),
+			new TwigTest('heeftaanmeldmoment', function ($value) {
+				return $value instanceof HeeftAanmeldMoment;
 			}),
 		];
 	}

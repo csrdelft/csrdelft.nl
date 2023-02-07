@@ -10,6 +10,7 @@ namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ProfielRepository;
@@ -17,53 +18,40 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
 use CsrDelft\view\Icon;
+use CsrDelft\view\ToHtmlResponse;
+use CsrDelft\view\ToResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
-class GroepLijstView extends GroepTabView
+class GroepLijstView implements ToResponse
 {
-	public function getTabContent()
+	use ToHtmlResponse;
+
+	/**
+	 * @var Environment
+	 */
+	private $twig;
+	/**
+	 * @var Groep
+	 */
+	private $groep;
+
+	public function __construct(Environment $twig, Groep $groep)
+	{
+		$this->twig = $twig;
+		$this->groep = $groep;
+	}
+
+	public function __toString()
 	{
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+		$lid = $em
+			->getRepository(GroepLid::class)
+			->nieuw($this->groep, LoginService::getUid());
 
-		$html = '<table class="groep-lijst"><tbody>';
-		if ($this->groep->mag(AccessAction::Aanmelden())) {
-			$html .= '<tr><td colspan="2">';
-			$lid = $em
-				->getRepository(GroepLid::class)
-				->nieuw($this->groep, LoginService::getUid());
-			$form = new GroepAanmeldenForm($lid, $this->groep, false);
-			$html .= $form->getHtml();
-			$html .= '</td></tr>';
-		}
-		$leden = ArrayUtil::group_by_distinct('uid', $this->groep->getLeden());
-		if (empty($leden)) {
-			return $html . '</tbody></table>';
-		}
-		foreach ($this->groep->getLedenOpAchternaamGesorteerd() as $lid) {
-			$html .= '<tr><td>';
-			if (
-				$lid->uid === LoginService::getUid() and
-				$this->groep->mag(AccessAction::Afmelden())
-			) {
-				$html .=
-					'<a href="' .
-					$this->groep->getUrl() .
-					'/ketzer/afmelden" class="post confirm float-start" title="Afmelden">' .
-					Icon::getTag('circle-minus') .
-					'</a>';
-			}
-			$html .= ProfielRepository::getLink($lid->uid, 'civitas');
-			$html .= '</td><td>';
-			if (
-				$lid->uid === LoginService::getUid() and
-				$this->groep->mag(AccessAction::Bewerken())
-			) {
-				$form = new GroepBewerkenForm($lid, $this->groep);
-				$html .= $form->getHtml();
-			} else {
-				$html .= $lid->opmerking;
-			}
-			$html .= '</td></tr>';
-		}
-		return $html . '</tbody></table>';
+		return $this->twig->render('groep/lijst.html.twig', [
+			'groep' => $this->groep,
+			'aanmeldForm' => new GroepAanmeldenForm($lid, $this->groep, false),
+		]);
 	}
 }

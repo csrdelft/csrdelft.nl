@@ -1,0 +1,113 @@
+{% set type = block('type') %}
+
+<div id="groep-leden-{{ groep.id }}" class="groep-leden">
+	<ul class="groep-tabs nobullets">
+		{% if groep is not verticale %}
+			<li class="geschiedenis"><a class="btn" href="{{ groep.url }}" title="Bekijk geschiedenis">
+					{{ icon('clock-rotate-left') }}
+				</a></li>
+		{% endif %}
+
+		<li><a class="btn post noanim{% if type == 'pasfotos' %} btn-primary{% endif %}" href="{{ groep.url }}/pasfotos"
+					 title="Pasfoto's tonen">{{ icon('user') }}
+			</a></li>
+
+		<li><a class="btn post noanim {% if type == 'lijst' %} btn-primary{% endif %}" href="{{ groep.url }}/lijst"
+					 title="Lijst tonen">
+				{{ icon('list') }}
+			</a></li>
+
+		<li><a class="btn post noanim {% if type == 'statistiek' %}btn-primary{% endif %}" href="{{ groep.url }}/stats"
+					 title="Statistiek tonen">
+				{{ icon('chart-pie') }}
+			</a></li>
+
+		<li><a class="btn post noanim {% if type == 'emails' %} btn-primary{% endif %}"
+					 href="{{ groep.url }}/emails" title="E-mails tonen">
+				{{ icon('envelope') }}
+			</a></li>
+
+		<li><a class="btn post noanim {% if type == 'eetwens' %} btn-primary{% endif %}" href="{{ groep.url }}/eetwens"
+					 title="Allergie/dieet tonen">
+				{{ icon('heartbeat') }}
+			</a></li>
+
+		<li class="knop-vergroot"><a class="btn vergroot" id="groep-vergroot-{{ groep.id }}"
+																 data-vergroot="#groep-leden-content-{{ groep.id }}" title="Uitklappen"
+																 onclick="$('#groep-{{ groep.id }}').toggleClass('leden-uitgeklapt');">
+				{{ icon('expand') }}
+			</a>
+		</li>
+
+	</ul>
+	<div id="groep-leden-content-{{ groep.id }}" class="groep-tab-content {{ type }}">
+
+		<ul id="groep-context-menu-{{ groep.id }}" class="dropdown-menu" role="menu">
+			<li><a id="groep-lid-remove-{{ groep.id }}" tabindex="-1">{{ icon('verwijderen') }} &nbsp; Uit de ketzer halen</a>
+			</li>
+		</ul>
+
+		{% block tabcontent %}{% endblock %}
+
+		<script type="text/javascript">
+			$(document).ready(function () {
+				var tabContent = $('#groep-leden-content-{{ groep.id }}');
+				var availableHeight = tabContent.parent().parent().height() - tabContent.prev('ul.groep-tabs').height();
+				if ($('#groep-{{ groep.id }}').hasClass('leden-uitgeklapt')) {
+					tabContent.height(tabContent.prop('scrollHeight') + 1);
+					var knop = $('#groep-vergroot-{{ groep.id }}');
+					knop.attr('title', 'Inklappen');
+					knop.find('span.fa').removeClass('fa-expand').addClass('fa-compress');
+					knop.attr('data-vergroot-oud', availableHeight);
+				} else {
+					tabContent.height(availableHeight);
+				}
+
+				{% if groep.magTwig('beheren') %}
+
+				$('#groep-leden-content-{{ groep.id }} a.lidLink').contextMenu({
+					menuSelector: "#groep-context-menu-{{ groep.id }}",
+					menuSelected: function (invokedOn, selectedMenu) {
+						var a = $(invokedOn).closest('a.lidLink').parent();
+						if (confirm('Weet u zeker dat u ' + a.attr('title') + ' uit de ketzer wilt halen?')) {
+							$.post('{{ groep.url }}' + '/ketzer/afmelden/' + a.data('lid'), {}, window.context.domUpdate);
+						}
+					}
+				});
+				{% endif %}
+			});
+		</script>
+	</div>
+
+	{% if groep is heeftaanmeldlimiet and groep.aanmeldLimiet is not none %}
+		{# Progress bar #}
+		{% set aantal = groep.aantalLeden %}
+		{% set percent = ((aantal * 100) / groep.aanmeldLimiet) | round %}
+
+		{# Aanmelden mogelijk? #}
+		{% if groep is heeftaanmeldmoment and groep.magTwig('aanmelden') %}
+			{% set verschil = groep.aanmeldLimiet - aantal %}
+			{% if verschil == 0 %}
+				{% set title = 'Inschrijvingen vol!' %}
+				{% set color = ' progress-bar-info' %}
+			{% else %}
+				{% set title = 'Inschrijvingen geopend!' ~ (verschil | pluralize('Nog {} plek vrij.', 'Nog {} plekken vrij.')) %}
+				{% set color = ' progress-bar-success' %}
+			{% endif %}
+			{# bewerken mogelijk? #}
+		{% elseif groep is heeftaanmeldmoment and groep.magTwig('bewerken') %}
+			{% set title = 'Inschrijvingen gesloten! Inschrijving bewerken is nog wel toegestaan.' %}
+			{% set color = ' progress-bar-warning' %}
+		{% else %}
+			{% set title = 'Inschrijvingen gesloten!' %}
+			{% set color = ' progress-bar-info' %}
+		{% endif %}
+		<br/>
+		<div class="progress" title="{{ title }}">
+			<div class="progress-bar{{ color }}" role="progressbar" aria-valuenow="{{ percent }}" aria-valuemin="0"
+					 aria-valuemax="100" style="width: {{ percent }}%;">
+				{{ percent }}%
+			</div>
+		</div>
+	{% endif %}
+</div>

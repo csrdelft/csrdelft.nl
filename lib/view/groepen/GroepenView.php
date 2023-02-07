@@ -14,6 +14,7 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\Icon;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\View;
+use Twig\Environment;
 
 class GroepenView implements View
 {
@@ -44,8 +45,13 @@ class GroepenView implements View
 	 * @var callable|null
 	 */
 	private $urlGetter;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
 	public function __construct(
+		Environment $twig,
 		GroepRepository $model,
 		$groepen,
 		$soort = null,
@@ -77,6 +83,7 @@ class GroepenView implements View
 		$this->paginaGrootte = $paginaGrootte;
 		$this->totaal = $totaal;
 		$this->urlGetter = $urlGetter;
+		$this->twig = $twig;
 	}
 
 	public function getBreadcrumbs()
@@ -138,7 +145,12 @@ class GroepenView implements View
 				continue;
 			}
 			$html .= '<hr>';
-			$view = new GroepView($groep, $this->tab, $this->geschiedenis);
+			$view = new GroepView(
+				$this->twig,
+				$groep,
+				$this->tab,
+				$this->geschiedenis
+			);
 			$html .= $view->__toString();
 		}
 

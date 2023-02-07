@@ -24,6 +24,7 @@ use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\Icon;
+use Twig\Environment;
 
 class GroepView implements FormElement, ToResponse
 {
@@ -34,6 +35,7 @@ class GroepView implements FormElement, ToResponse
 	private $bbAan;
 
 	public function __construct(
+		Environment $twig,
 		Groep $groep,
 		$tab = null,
 		$geschiedenis = false,
@@ -44,11 +46,11 @@ class GroepView implements FormElement, ToResponse
 		$this->bbAan = $bbAan;
 		switch ($tab) {
 			case GroepTab::Pasfotos:
-				$this->leden = new GroepPasfotosView($groep);
+				$this->leden = new GroepPasfotosView($twig, $groep);
 				break;
 
 			case GroepTab::Lijst:
-				$this->leden = new GroepLijstView($groep);
+				$this->leden = new GroepLijstView($twig, $groep);
 				break;
 
 			case GroepTab::Statistiek:
@@ -57,22 +59,22 @@ class GroepView implements FormElement, ToResponse
 					->get('doctrine.orm.entity_manager')
 					->getRepository(get_class($groep));
 				$statistiek = $repository->getStatistieken($groep);
-				$this->leden = new GroepStatistiekView($groep, $statistiek);
+				$this->leden = new GroepStatistiekView($twig, $groep, $statistiek);
 				break;
 
 			case GroepTab::Emails:
-				$this->leden = new GroepEmailsView($groep);
+				$this->leden = new GroepEmailsView($twig, $groep);
 				break;
 
 			case GroepTab::Eetwens:
-				$this->leden = new GroepEetwensView($groep);
+				$this->leden = new GroepEetwensView($twig, $groep);
 				break;
 
 			default:
 				if ($groep->keuzelijst) {
-					$this->leden = new GroepLijstView($groep);
+					$this->leden = new GroepLijstView($twig, $groep);
 				} else {
-					$this->leden = new GroepPasfotosView($groep);
+					$this->leden = new GroepPasfotosView($twig, $groep);
 				}
 		}
 	}
@@ -147,7 +149,7 @@ class GroepView implements FormElement, ToResponse
 				'/omschrijving">Meer lezen »</a>';
 		}
 		$html .= '</div>';
-		$html .= $this->leden->getHtml();
+		$html .= $this->leden->__toString();
 		$html .= '<div class="clear">&nbsp</div></div>';
 		return $html;
 	}

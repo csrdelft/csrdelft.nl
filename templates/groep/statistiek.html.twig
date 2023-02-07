@@ -1,0 +1,16 @@
+{% extends 'groep/tab.html.twig' %}
+
+{% block type %}statistiek{% endblock %}
+
+{% block tabcontent %}
+	<h4>Verticale</h4>
+	<div class="ctx-graph-pie" data-data="{{ verticale }}"></div>
+	<h4>Geslacht</h4>
+	<div class="ctx-graph-pie" data-data="{{ geslacht }}"></div>
+	<h4>Lichting</h4>
+	<div class="ctx-graph-bar" data-data="{{ lichting }}"></div>
+	<h4>Tijd</h4>
+	<div class="ctx-graph-line" data-data="{{ tijd }}"></div>
+	<h4>Totaal</h4>
+	{{ totaal }}
+{% endblock %}

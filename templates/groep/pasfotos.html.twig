@@ -1,0 +1,13 @@
+{% extends 'groep/tab.html.twig' %}
+
+{% block type %}pasfotos{% endblock %}
+
+{% block tabcontent %}
+	{% if groep.magTwig('aanmelden') %}
+		{{ aanmeldForm | raw }}
+	{% endif %}
+
+	{% for lid in groep.leden %}
+		{{ lid.profiel.link('pasfoto') | raw }}
+	{% endfor %}
+{% endblock %}

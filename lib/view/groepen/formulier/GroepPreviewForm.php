@@ -11,10 +11,11 @@ use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\knoppen\ModalCloseButtons;
 use CsrDelft\view\formulier\ModalForm;
 use CsrDelft\view\groepen\GroepView;
+use Twig\Environment;
 
 class GroepPreviewForm extends ModalForm implements FormElement
 {
-	public function __construct(Groep $groep)
+	public function __construct(Environment $twig, Groep $groep)
 	{
 		parent::__construct($groep, null, 'Voorbeeldweergave');
 
@@ -28,7 +29,7 @@ class GroepPreviewForm extends ModalForm implements FormElement
 				$groep->id .
 				'][/code][rn]'
 		);
-		$fields[] = new GroepView($groep, null, false, true);
+		$fields[] = new GroepView($twig, $groep, null, false, true);
 		$fields[] = new HtmlComment('</div>');
 
 		$this->addFields($fields);

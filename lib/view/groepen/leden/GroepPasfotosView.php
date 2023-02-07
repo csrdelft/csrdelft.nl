@@ -14,24 +14,38 @@ use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
+use CsrDelft\view\ToHtmlResponse;
+use CsrDelft\view\ToResponse;
+use Twig\Environment;
 
-class GroepPasfotosView extends GroepTabView
+class GroepPasfotosView implements ToResponse
 {
-	protected function getTabContent()
+	use ToHtmlResponse;
+
+	/**
+	 * @var Environment
+	 */
+	private $twig;
+	private $groep;
+
+	public function __construct(Environment $twig, $groep)
 	{
-		$html = '';
-		if ($this->groep->mag(AccessAction::Aanmelden())) {
-			$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
-			$lid = $em
-				->getRepository(GroepLid::class)
-				->nieuw($this->groep, LoginService::getUid());
-			$form = new GroepAanmeldenForm($lid, $this->groep);
-			$form->css_classes[] = 'pasfotos';
-			$html .= $form->getHtml();
-		}
-		foreach ($this->groep->getLeden() as $lid) {
-			$html .= ProfielRepository::getLink($lid->uid, 'pasfoto');
-		}
-		return $html;
+		$this->twig = $twig;
+		$this->groep = $groep;
+	}
+
+	public function __toString()
+	{
+		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+		$lid = $em
+			->getRepository(GroepLid::class)
+			->nieuw($this->groep, LoginService::getUid());
+		$form = new GroepAanmeldenForm($lid, $this->groep);
+		$form->css_classes[] = 'pasfotos';
+
+		return $this->twig->render('groep/pasfotos.html.twig', [
+			'groep' => $this->groep,
+			'aanmeldForm' => $form,
+		]);
 	}
 }

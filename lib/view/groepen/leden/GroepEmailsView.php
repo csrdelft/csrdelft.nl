@@ -2,20 +2,34 @@
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\repository\ProfielRepository;
-use CsrDelft\view\groepen;
+use CsrDelft\entity\groepen\Groep;
+use CsrDelft\view\ToHtmlResponse;
+use CsrDelft\view\ToResponse;
+use Twig\Environment;
 
-class GroepEmailsView extends groepen\leden\GroepTabView
+class GroepEmailsView implements ToResponse
 {
-	public function getTabContent()
+	use ToHtmlResponse;
+
+	/**
+	 * @var Environment
+	 */
+	private $twig;
+	/**
+	 * @var Groep
+	 */
+	private $groep;
+
+	public function __construct(Environment $twig, Groep $groep)
 	{
-		$html = '';
-		foreach ($this->groep->getLeden() as $lid) {
-			$profiel = ProfielRepository::get($lid->uid);
-			if ($profiel and $profiel->getPrimaryEmail() != '') {
-				$html .= $profiel->getPrimaryEmail() . '; ';
-			}
-		}
-		return $html;
+		$this->twig = $twig;
+		$this->groep = $groep;
+	}
+
+	public function __toString()
+	{
+		return $this->twig->render('groep/emails.html.twig', [
+			'groep' => $this->groep,
+		]);
 	}
 }
