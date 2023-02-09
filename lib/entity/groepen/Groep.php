@@ -243,6 +243,17 @@ class Groep implements DataTableEntry, DisplayEntity
 		return $this->mag(AccessAction::Wijzigen());
 	}
 
+	public function magTwig($action)
+	{
+		$actionMap = [
+			'bewerken' => AccessAction::Bewerken(),
+			'afmelden' => AccessAction::Afmelden(),
+			'beheren' => AccessAction::Beheren(),
+			'aanmelden' => AccessAction::Aanmelden(),
+		];
+		return $this->mag($actionMap[$action]);
+	}
+
 	/**
 	 * Has permission for action?
 	 *

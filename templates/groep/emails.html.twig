@@ -1,0 +1,11 @@
+{% extends 'groep/tab.html.twig' %}
+
+{% block type %}emails{% endblock %}
+
+{% block tabcontent %}
+	{% for lid in groep.leden %}
+		{% if lid.profiel is not none and lid.profiel.primaryEmail is not none %}
+			{{ lid.profiel.primaryEmail }};
+		{% endif %}
+	{% endfor %}
+{% endblock %}

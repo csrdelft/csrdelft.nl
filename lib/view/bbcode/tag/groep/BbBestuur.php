@@ -2,8 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag\groep;
 
-use CsrDelft\repository\groepen\BesturenRepository;
-use Symfony\Component\Serializer\SerializerInterface;
+use CsrDelft\entity\groepen\Bestuur;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -11,11 +10,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class BbBestuur extends BbTagGroep
 {
-	public function __construct(
-		BesturenRepository $model,
-		SerializerInterface $serializer
-	) {
-		parent::__construct($model, $serializer);
+	public function getEntityClass(): string
+	{
+		return Bestuur::class;
 	}
 
 	public static function getTagName()

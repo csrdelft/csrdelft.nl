@@ -2,8 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag\groep;
 
-use CsrDelft\repository\groepen\WoonoordenRepository;
-use Symfony\Component\Serializer\SerializerInterface;
+use CsrDelft\entity\groepen\Woonoord;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -11,11 +10,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class BbWoonoord extends BbTagGroep
 {
-	public function __construct(
-		WoonoordenRepository $model,
-		SerializerInterface $serializer
-	) {
-		parent::__construct($model, $serializer);
+	public function getEntityClass(): string
+	{
+		return Woonoord::class;
 	}
 
 	public static function getTagName()

@@ -1,0 +1,20 @@
+{% extends 'groep/tab.html.twig' %}
+
+{% block type %}eetwens{% endblock %}
+
+{% block tabcontent %}
+	<table class="groep-lijst" role="presentation">
+		<tbody>
+		{% for lid in groep.leden %}
+			{% if lid.profiel is not none and lid.profiel.eetwens is not empty %}
+				<tr>
+					<td>
+						{{ lid.link | raw }} </td>
+					<td> {{ lid.profiel.eetwens }}
+					</td>
+				</tr>
+			{% endif %}
+		{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

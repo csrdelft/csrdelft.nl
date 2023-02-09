@@ -1,0 +1,34 @@
+{% extends 'groep/tab.html.twig' %}
+
+{% block type %}lijst{% endblock %}
+
+{% block tabcontent %}
+	<table class="groep-lijst" role="presentation">
+		<tbody>
+		{% if groep.magTwig('aanmelden') %}
+			<tr>
+				<td colspan="2">
+					{{ aanmeldForm|raw }}
+
+				</td>
+			</tr>
+		{% endif %}
+
+		{% for lid in groep.ledenOpAchternaamGesorteerd %}
+			<tr>
+				<td>
+					{% if groep.magTwig('afmelden') %}
+						<a href="{{ groep.url }}/ketzer/afmelden" class="post confirm float-start" title="Afmelden">' .
+							{{ icon('circle-minus') }}
+						</a>
+					{% endif %}
+					{{ lid.link | raw }}
+					{% if groep.magTwig('bewerken') %}
+						{{ groep_bewerken_form(lid, groep) }}
+					{% endif %}
+				</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

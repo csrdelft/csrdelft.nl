@@ -2,8 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag\groep;
 
-use CsrDelft\repository\groepen\ActiviteitenRepository;
-use Symfony\Component\Serializer\SerializerInterface;
+use CsrDelft\entity\groepen\Activiteit;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -11,11 +10,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class BbActiviteit extends BbTagGroep
 {
-	public function __construct(
-		ActiviteitenRepository $model,
-		SerializerInterface $serializer
-	) {
-		parent::__construct($model, $serializer);
+	public function getEntityClass(): string
+	{
+		return Activiteit::class;
 	}
 
 	public static function getTagName()

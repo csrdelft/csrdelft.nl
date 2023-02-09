@@ -1,0 +1,9 @@
+<div id="groep-omschrijving-{{ groep.id }}">
+	{{ groep.omschrijving | bbcode }}
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#groep-omschrijving-{{ groep.id }}').hide().slideDown(600);
+		});
+	</script>
+</div>

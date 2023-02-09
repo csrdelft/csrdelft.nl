@@ -4,6 +4,7 @@ namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\TextUtil;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepVersie;
@@ -13,7 +14,10 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\groepen\GroepView;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Serializer\SerializerInterface;
+use Twig\Environment;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -22,10 +26,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 abstract class BbTagGroep extends BbTag
 {
 	/**
-	 * @var GroepRepository
-	 */
-	private $model;
-	/**
 	 * @var SerializerInterface
 	 */
 	private $serializer;
@@ -33,13 +33,23 @@ abstract class BbTagGroep extends BbTag
 	 * @var string
 	 */
 	private $id;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $entityManager;
 
 	public function __construct(
-		GroepRepository $model,
+		EntityManagerInterface $entityManager,
+		Environment $twig,
 		SerializerInterface $serializer
 	) {
-		$this->model = $model;
 		$this->serializer = $serializer;
+		$this->twig = $twig;
+		$this->entityManager = $entityManager;
 	}
 
 	public function getId()
@@ -63,7 +73,7 @@ abstract class BbTagGroep extends BbTag
 	private function getGroep()
 	{
 		$this->id = (int) $this->id;
-		$groep = $this->model->get($this->id);
+		$groep = $this->getRepository()->get($this->id);
 		if (!$groep) {
 			throw new BbException("Groep met id $this->id bestaat niet");
 		}
@@ -81,7 +91,7 @@ abstract class BbTagGroep extends BbTag
 		if ($groep) {
 			return $this->groepLight($groep, 'ketzer', $this->getLidNaam());
 		} else {
-			$url = $this->model->getUrl();
+			$url = $this->getRepository()->getUrl();
 			return vsprintf(
 				"%s met id=%s bestaat niet. <a href=\"%s/beheren\">Zoeken</a>",
 				[ucfirst($this->getTagName()), htmlspecialchars($this->id), $url]
@@ -102,6 +112,11 @@ abstract class BbTagGroep extends BbTag
 	abstract public function getLidNaam();
 
 	/**
+	 * @return Groep|string
+	 */
+	abstract public function getEntityClass(): string;
+
+	/**
 	 * @return string
 	 * @throws BbException
 	 */
@@ -109,7 +124,7 @@ abstract class BbTagGroep extends BbTag
 	{
 		$groep = $this->getGroep();
 		if (!$groep) {
-			$url = $this->model->getUrl();
+			$url = $this->getRepository()->getUrl();
 			throw new BbException(
 				vsprintf(
 					"%s met id=%s bestaat niet. <a href=\"%s/beheren\">Zoeken</a>",
@@ -139,7 +154,26 @@ abstract class BbTagGroep extends BbTag
 				[$groepJson, TextUtil::vue_encode($settings)]
 			);
 		}
-		$view = new GroepView($groep, null, false, true);
+		$view = new GroepView($this->twig, $groep, null, false, true);
 		return $view->getHtml();
+	}
+
+	/**
+	 * @return GroepRepository
+	 */
+	private function getRepository(): GroepRepository
+	{
+		$objectRepository = $this->entityManager->getRepository(
+			$this->getEntityClass()
+		);
+
+		if ($objectRepository instanceof GroepRepository) {
+			return $objectRepository;
+		}
+
+		throw new CsrException(
+			'Entity verwijst niet naar een GroepRepository: ' .
+				$this->getEntityClass()
+		);
 	}
 }
