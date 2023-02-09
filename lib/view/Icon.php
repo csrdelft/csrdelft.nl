@@ -57,7 +57,7 @@ class Icon
 		'resetpassword' => 'user-lock',
 		'instellingen' => 'gear',
 		// melding
-		'alert-danger' => 'bell-exclamation',
+		'alert-danger' => 'triangle-exclamation',
 		'alert-info' => 'bell-on',
 		'alert-success' => 'circle-check',
 		'alert-warning' => 'bell',

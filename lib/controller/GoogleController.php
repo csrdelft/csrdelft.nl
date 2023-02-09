@@ -5,7 +5,8 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\GoogleToken;
 use CsrDelft\repository\GoogleTokenRepository;
 use CsrDelft\service\GoogleAuthenticator;
@@ -74,7 +75,10 @@ class GoogleController extends AbstractController
 		}
 
 		if ($error) {
-			MeldingUtil::setMelding('Verbinding met Google niet geaccepteerd', 2);
+			$this->addFlash(
+				FlashType::WARNING,
+				'Verbinding met Google niet geaccepteerd'
+			);
 			$state = substr(strstr($state, 'addToGoogleContacts', true), 0, -1);
 
 			return $this->redirect($state);

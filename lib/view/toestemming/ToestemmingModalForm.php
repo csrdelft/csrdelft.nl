@@ -3,7 +3,7 @@
 namespace CsrDelft\view\toestemming;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\LidToestemming;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\service\security\LoginService;
@@ -144,7 +144,7 @@ class ToestemmingModalForm extends ModalForm
 			return true;
 		}
 
-		MeldingUtil::setMelding('Maak een keuze', -1);
+		FlashUtil::setFlashWithContainerFacade('Maak een keuze', -1);
 		return false;
 	}
 }

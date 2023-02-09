@@ -3,7 +3,8 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
@@ -93,12 +94,12 @@ class MaaltijdRepetitiesController extends AbstractController
 
 			$aantal = $this->maaltijdRepetitiesRepository->saveRepetitie($repetitie);
 			if ($aantal > 0) {
-				MeldingUtil::setMelding(
+				$this->addFlash(
+					FlashType::WARNING,
 					$aantal .
 						' abonnement' .
 						($aantal !== 1 ? 'en' : '') .
-						' uitgeschakeld.',
-					2
+						' uitgeschakeld.'
 				);
 			}
 			$this->repetitie = $repetitie;
@@ -126,17 +127,17 @@ class MaaltijdRepetitiesController extends AbstractController
 		);
 
 		if ($aantal > 0) {
-			MeldingUtil::setMelding(
+			$this->addFlash(
+				FlashType::WARNING,
 				$aantal .
 					' abonnement' .
 					($aantal !== 1 ? 'en' : '') .
-					' uitgeschakeld.',
-				2
+					' uitgeschakeld.'
 			);
 		}
 
 		echo '<tr id="maalcie-melding"><td>' .
-			MeldingUtil::getMelding() .
+			FlashUtil::getFlashUsingContainerFacade() .
 			'</td></tr>';
 		echo '<tr id="repetitie-row-' .
 			$repetitie->mlt_repetitie_id .
@@ -162,22 +163,22 @@ class MaaltijdRepetitiesController extends AbstractController
 				$this->repetitie,
 				$verplaats
 			);
-			MeldingUtil::setMelding(
+			$this->addFlash(
+				FlashType::SUCCESS,
 				$updated_aanmeldingen[0] .
 					' maaltijd' .
 					($updated_aanmeldingen[0] !== 1 ? 'en' : '') .
 					' bijgewerkt' .
-					($verplaats ? ' en eventueel verplaatst.' : '.'),
-				1
+					($verplaats ? ' en eventueel verplaatst.' : '.')
 			);
 			if ($updated_aanmeldingen[1] > 0) {
-				MeldingUtil::setMelding(
+				$this->addFlash(
+					FlashType::WARNING,
 					$updated_aanmeldingen[1] .
 						' aanmelding' .
 						($updated_aanmeldingen[1] !== 1 ? 'en' : '') .
 						' verwijderd vanwege aanmeldrestrictie: ' .
-						$view->getModel()->abonnement_filter,
-					2
+						$view->getModel()->abonnement_filter
 				);
 			}
 		}

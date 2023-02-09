@@ -8,7 +8,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\LDAP;
 use CsrDelft\common\Util\DebugUtil;
 use CsrDelft\common\Util\InstellingUtil;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\VerticalenRepository;
@@ -421,7 +421,7 @@ class ToolsController extends AbstractController
 		if (DEBUG || $this->mag(P_ADMIN) || $suService->isSued()) {
 			ob_start();
 
-			echo MeldingUtil::getMelding();
+			echo FlashUtil::getFlashUsingContainerFacade();
 			echo '<h1>MemCache statistieken</h1>';
 			try {
 				$memcached = MemcachedAdapter::createConnection(

@@ -59,7 +59,7 @@
 				</nav>
 			</div>
 			<div class="cd-page-content container rounded p-3">
-				{{ getMelding() }}
+				{% include 'melding.html.twig' %}
 				{% block content %}{% endblock %}
 			</div>
 		</main>

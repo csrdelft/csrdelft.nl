@@ -21,7 +21,7 @@
 	};
 </script>
 <form method="post" id="contact-form" action="{{ url('csrdelft_contactformulier_interesse') }}">
-	{{ getMelding() }}
+	{% include 'melding.html.twig' %}
 	{{ csrfField() }}
 	<div class="field">
 		<label for="naam">Naam</label>

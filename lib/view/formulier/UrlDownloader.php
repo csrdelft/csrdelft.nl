@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier;
 
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 
 /**
  * UrlDownloader.class.php
@@ -153,7 +153,7 @@ class UrlDownloader
 		if ($success) {
 			return $data;
 		} else {
-			MeldingUtil::setMelding($error, -1);
+			FlashUtil::setFlashWithContainerFacade($error, -1);
 			return '';
 		}
 	}

@@ -3,10 +3,9 @@
 namespace CsrDelft\controller\forum;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\forum\ForumDeel;
-use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
@@ -189,15 +188,15 @@ class ForumDeelController extends AbstractController
 			$this->forumDradenRepository->findBy(['forum_id' => $deel->forum_id])
 		);
 		if ($count > 0) {
-			MeldingUtil::setMelding(
+			$this->addFlash(
+				FlashType::ERROR,
 				'Verwijder eerst alle ' .
 					$count .
-					' draadjes van dit deelforum uit de database!',
-				-1
+					' draadjes van dit deelforum uit de database!'
 			);
 		} else {
 			$this->forumDelenService->verwijderForumDeel($deel->forum_id);
-			MeldingUtil::setMelding('Deelforum verwijderd', 1);
+			$this->addFlash(FlashType::SUCCESS, 'Deelforum verwijderd');
 		}
 		return new JsonResponse('/forum'); // redirect
 	}

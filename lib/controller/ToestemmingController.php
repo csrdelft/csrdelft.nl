@@ -3,8 +3,9 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\FlashType;
 use CsrDelft\common\Util\ArrayUtil;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
@@ -54,7 +55,7 @@ class ToestemmingController extends AbstractController
 
 		if ($form->isPosted() && $form->validate()) {
 			$this->lidToestemmingRepository->saveForLid();
-			MeldingUtil::setMelding('Toestemming opgeslagen', 1);
+			$this->addFlash(FlashType::SUCCESS, 'Toestemming opgeslagen');
 			return new CmsPaginaView($this->cmsPaginaRepository->find('thuis'));
 		} else {
 			return $form;

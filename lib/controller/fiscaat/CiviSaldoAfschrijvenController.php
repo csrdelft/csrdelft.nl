@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
@@ -35,7 +35,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 
 	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven')
 	{
-		MeldingUtil::setMelding($melding, $code);
+		$this->addFlash($code, $melding);
 		return $this->redirect($url);
 	}
 
@@ -50,14 +50,14 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	{
 		// Kijk of bestand meegegeven is
 		if (!$request->files->has('csv')) {
-			return $this->quickMelding('Upload een CSV', 2);
+			return $this->quickMelding('Upload een CSV', FlashType::WARNING);
 		}
 
 		// Kijk of bestand CSV is
 		/** @var UploadedFile $file */
 		$file = $request->files->get('csv');
 		if (!$file) {
-			return $this->quickMelding('Geen bestand gekozen', 2);
+			return $this->quickMelding('Geen bestand gekozen', FlashType::WARNING);
 		}
 
 		if (
@@ -67,24 +67,33 @@ class CiviSaldoAfschrijvenController extends AbstractController
 				'application/vnd.ms-excel',
 			])
 		) {
-			return $this->quickMelding('Alleen een CSV is toegestaan', 2);
+			return $this->quickMelding(
+				'Alleen een CSV is toegestaan',
+				FlashType::WARNING
+			);
 		}
 
 		// Parse CSV
 		$csv = new Csv();
 		if ($csv->auto($file->getPathname()) === false) {
-			return $this->quickMelding('Fout bij inlezen van CSV', 2);
+			return $this->quickMelding(
+				'Fout bij inlezen van CSV',
+				FlashType::WARNING
+			);
 		}
 		$data = $csv->data;
 
 		// Controleer of er regels zijn en eerste regel geldige keys heeft
 		if (empty($data)) {
-			return $this->quickMelding('Geen regels gevonden', 2);
+			return $this->quickMelding('Geen regels gevonden', FlashType::WARNING);
 		}
 		if (
 			array_keys($data[0]) !== ['uid', 'productID', 'aantal', 'beschrijving']
 		) {
-			return $this->quickMelding('Ongeldige kolommen in de CSV', 2);
+			return $this->quickMelding(
+				'Ongeldige kolommen in de CSV',
+				FlashType::WARNING
+			);
 		}
 
 		// Sla data op in sessie
@@ -114,7 +123,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 		if (!$session->has("afschrijven-{$key}")) {
 			return $this->quickMelding(
 				'Er ging iets fout bij het inladen van de CSV',
-				2
+				FlashType::WARNING
 			);
 		}
 		$data = $session->get("afschrijven-{$key}");
@@ -240,10 +249,13 @@ class CiviSaldoAfschrijvenController extends AbstractController
 		if (!$session->has("afschrijven-{$key}")) {
 			return $this->quickMelding(
 				'Er ging iets fout bij het verwerken van de CSV',
-				2
+				FlashType::WARNING
 			);
 		} elseif ($session->has("afschrijven-{$key}-locked")) {
-			return $this->quickMelding('Deze CSV wordt al verwerkt', 2);
+			return $this->quickMelding(
+				'Deze CSV wordt al verwerkt',
+				FlashType::WARNING
+			);
 		} else {
 			$session->set("afschrijven-{$key}-locked", true);
 		}
@@ -256,7 +268,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 			$session->remove("afschrijven-{$key}-locked");
 			return $this->quickMelding(
 				'Geef akkoord voor verwerking',
-				2,
+				FlashType::WARNING,
 				"/fiscaat/afschrijven/controle/{$key}"
 			);
 		}

@@ -3,7 +3,8 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
@@ -171,12 +172,12 @@ class CorveeRepetitiesController extends AbstractController
 				);
 
 				if ($aantal > 0) {
-					MeldingUtil::setMelding(
+					$this->addFlash(
+						FlashType::WARNING,
 						$aantal .
 							' voorkeur' .
 							($aantal !== 1 ? 'en' : '') .
-							' uitgeschakeld.',
-						2
+							' uitgeschakeld.'
 					);
 				}
 			}
@@ -201,13 +202,13 @@ class CorveeRepetitiesController extends AbstractController
 			$corveeRepetitie->crv_repetitie_id
 		);
 		if ($aantal > 0) {
-			MeldingUtil::setMelding(
-				$aantal . ' voorkeur' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.',
-				2
+			$this->addFlash(
+				FlashType::WARNING,
+				$aantal . ' voorkeur' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.'
 			);
 		}
 		echo '<tr id="maalcie-melding"><td>' .
-			MeldingUtil::getMelding() .
+			FlashUtil::getFlashUsingContainerFacade() .
 			'</td></tr>';
 		echo '<tr id="repetitie-row-' .
 			$corveeRepetitie->crv_repetitie_id .
@@ -238,24 +239,24 @@ class CorveeRepetitiesController extends AbstractController
 			if ($aantal->update < $aantal->day) {
 				$aantal->update = $aantal->day;
 			}
-			MeldingUtil::setMelding(
+			$this->addFlash(
+				FlashType::SUCCESS,
 				$aantal->update .
 					' corveeta' .
 					($aantal->update !== 1 ? 'ken' : 'ak') .
 					' bijgewerkt waarvan ' .
 					$aantal->day .
-					' van dag verschoven.',
-				1
+					' van dag verschoven.'
 			);
 			$aantal->datum += $aantal->maaltijd;
-			MeldingUtil::setMelding(
+			$this->addFlash(
+				FlashType::SUCCESS,
 				$aantal->datum .
 					' corveeta' .
 					($aantal->datum !== 1 ? 'ken' : 'ak') .
 					' aangemaakt waarvan ' .
 					$aantal->maaltijd .
-					' maaltijdcorvee.',
-				1
+					' maaltijdcorvee.'
 			);
 		}
 

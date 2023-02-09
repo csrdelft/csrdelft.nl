@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-	{{ getMelding() }}
+	{% include 'melding.html.twig' %}
 	<h1>Wacht op goedkeuring</h1>
 
 	{% if resultaten is not empty %}

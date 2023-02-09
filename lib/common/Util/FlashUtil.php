@@ -5,7 +5,7 @@ namespace CsrDelft\common\Util;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\view\Icon;
 
-final class MeldingUtil
+final class FlashUtil
 {
 	/**
 	 * Stores a message.
@@ -17,12 +17,12 @@ final class MeldingUtil
 	 *  1 success
 	 *  2 warning / notify
 	 *
-	 * @see    getMelding()
-	 * gebaseerd op DokuWiki code
 	 * @param string $msg
 	 * @param int $lvl
+	 * @see    getFlashUsingContainerFacade()
+	 * @deprecated gebruik FlashBag
 	 */
-	public static function setMelding(string $msg, int $lvl)
+	public static function setFlashWithContainerFacade(string $msg, int $lvl)
 	{
 		$flashBag = ContainerFacade::getContainer()
 			->get('session')
@@ -45,36 +45,38 @@ final class MeldingUtil
 	 * Geeft berichten weer die opgeslagen zijn in de sessie met met MeldingUtil::setMelding($msg, $lvl)
 	 *
 	 * @return string html van melding(en) of lege string
+	 * @deprecated Gebruik FlashBag direct of een twig template
+	 * @see melding.html.twig
 	 */
-	public static function getMelding()
+	public static function getFlashUsingContainerFacade()
 	{
 		$flashBag = ContainerFacade::getContainer()
 			->get('session')
 			->getFlashBag();
 
+		$flashes = $flashBag->all();
+		return self::format($flashes);
+	}
+
+	/**
+	 * @param array $flashes
+	 * @return string
+	 */
+	public static function format(array $flashes): string
+	{
 		$melding = '';
-		foreach ($flashBag->all() as $type => $meldingen) {
+		foreach ($flashes as $type => $meldingen) {
 			foreach ($meldingen as $msg) {
-				$melding .= static::formatMelding($msg, $type);
+				$icon = Icon::getTag('alert-' . $type);
+
+				$melding .= <<<HTML
+<div class="alert alert-$type">
+${icon}$msg
+</div>
+HTML;
 			}
 		}
 
 		return '<div id="melding">' . $melding . '</div>';
-	}
-
-	/**
-	 * @param string $msg
-	 * @param string $lvl
-	 * @return string
-	 */
-	private static function formatMelding(string $msg, string $lvl)
-	{
-		$icon = Icon::getTag('alert-' . $lvl);
-
-		return <<<HTML
-<div class="alert alert-${lvl}">
-${icon}${msg}
-</div>
-HTML;
 	}
 }

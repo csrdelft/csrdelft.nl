@@ -4,7 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\Maaltijd;
@@ -17,7 +17,6 @@ use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\GenericSuggestiesResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
@@ -221,13 +220,13 @@ class BeheerMaaltijdenController extends AbstractController
 				$maaltijd
 			);
 			if ($aanmeldingen > 0) {
-				MeldingUtil::setMelding(
+				$this->addFlash(
+					FlashType::WARNING,
 					$aanmeldingen .
 						' aanmelding' .
 						($aanmeldingen !== 1 ? 'en' : '') .
 						' verwijderd vanwege aanmeldrestrictie: ' .
-						$maaltijd->aanmeld_filter,
-					2
+						$maaltijd->aanmeld_filter
 				);
 			}
 			return $this->tableData([$maaltijd]);
@@ -399,11 +398,11 @@ class BeheerMaaltijdenController extends AbstractController
 	public function leegmaken()
 	{
 		$aantal = $this->maaltijdenRepository->prullenbakLeegmaken();
-		MeldingUtil::setMelding(
+		$this->addFlash(
+			$aantal == 0 ? FlashType::INFO : FlashType::SUCCESS,
 			$aantal .
 				($aantal === 1 ? ' maaltijd' : ' maaltijden') .
-				' definitief verwijderd.',
-			$aantal === 0 ? 0 : 1
+				' definitief verwijderd.'
 		);
 		return $this->redirectToRoute(
 			'csrdelft_maalcie_beheermaaltijden_get_prullenbak'

@@ -4,7 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
@@ -120,22 +120,22 @@ class BeheerPuntenController extends AbstractController
 			$errors,
 		) = $this->corveePuntenService->resetCorveejaar();
 		$view = $this->beheer();
-		MeldingUtil::setMelding(
+		$this->addFlash(
+			FlashType::SUCCESS,
 			$aantal .
 				' vrijstelling' .
 				($aantal !== 1 ? 'en' : '') .
-				' verwerkt en verwijderd',
-			1
+				' verwerkt en verwijderd'
 		);
-		MeldingUtil::setMelding(
+		$this->addFlash(
+			FlashType::INFO,
 			$taken .
 				' ta' .
 				($taken !== 1 ? 'ken' : 'ak') .
-				' naar de prullenbak verplaatst',
-			0
+				' naar de prullenbak verplaatst'
 		);
 		foreach ($errors as $error) {
-			MeldingUtil::setMelding($error->getMessage(), -1);
+			$this->addFlash(FlashType::ERROR, $error->getMessage());
 		}
 
 		return $view;

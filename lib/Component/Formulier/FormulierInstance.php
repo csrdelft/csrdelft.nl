@@ -5,7 +5,7 @@ namespace CsrDelft\Component\Formulier;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\DateUtil;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\service\CsrfService;
@@ -72,7 +72,7 @@ class FormulierInstance
 	{
 		$html = '';
 		if ($this->showMelding) {
-			$html .= MeldingUtil::getMelding();
+			$html .= FlashUtil::getFlashUsingContainerFacade();
 		}
 		$html .= $this->getFormTag();
 		$titel = $this->titel;
@@ -178,7 +178,7 @@ HTML;
 HTML;
 		}
 		if ($this->showMelding) {
-			$html .= MeldingUtil::getMelding();
+			$html .= FlashUtil::getFlashUsingContainerFacade();
 		}
 		$html .= <<<HTML
 			<div class="modal-body">

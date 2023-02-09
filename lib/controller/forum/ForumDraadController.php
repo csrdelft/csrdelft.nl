@@ -3,9 +3,9 @@
 namespace CsrDelft\controller\forum;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\FlashType;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\common\Util\InstellingUtil;
-use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\forum\ForumDeel;
@@ -23,7 +23,6 @@ use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\service\forum\ForumDelenService;
 use CsrDelft\service\forum\ForumMeldingenService;
 use CsrDelft\service\forum\ForumPostsService;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\bbcode\ProsemirrorToBb;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
@@ -130,7 +129,7 @@ class ForumDraadController extends AbstractController
 	public function reactie(RequestStack $requestStack, ForumPost $post): Response
 	{
 		if ($post->verwijderd) {
-			MeldingUtil::setMelding('Deze reactie is verwijderd', 0);
+			$this->addFlash(FlashType::INFO, 'Deze reactie is verwijderd');
 		}
 		return $this->onderwerp(
 			$requestStack,
@@ -281,7 +280,7 @@ class ForumDraadController extends AbstractController
 		} else {
 			$wijziging = $property . ' = ' . $value;
 		}
-		MeldingUtil::setMelding('Wijziging geslaagd: ' . $wijziging, 1);
+		$this->addFlash(FlashType::SUCCESS, 'Wijziging geslaagd: ' . $wijziging);
 		if (
 			$property === 'belangrijk' ||
 			$property === 'forum_id' ||
@@ -345,7 +344,7 @@ class ForumDraadController extends AbstractController
 		);
 
 		if (empty($tekst)) {
-			MeldingUtil::setMelding('Bericht mag niet leeg zijn', -1);
+			$this->addFlash(FlashType::ERROR, 'Bericht mag niet leeg zijn');
 			return $redirect;
 		}
 
@@ -354,7 +353,7 @@ class ForumDraadController extends AbstractController
 			isset($_SESSION['forum_laatste_post_tekst']) &&
 			$_SESSION['forum_laatste_post_tekst'] === $tekst
 		) {
-			MeldingUtil::setMelding('Uw reactie is al geplaatst', 0);
+			$this->addFlash(FlashType::INFO, 'Uw reactie is al geplaatst');
 
 			// concept wissen
 			if ($nieuw) {
@@ -405,20 +404,23 @@ class ForumDraadController extends AbstractController
 					[$deel->forum_id, $draad->draad_id],
 					'SPAM ' . $tekst
 				);
-				MeldingUtil::setMelding('SPAM', -1);
+				$this->addFlash(FlashType::ERROR, 'SPAM');
 				throw $this->createAccessDeniedException('');
 			}
 
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!UrlUtil::email_like($mailadres)) {
-				MeldingUtil::setMelding('U moet een geldig e-mailadres opgeven!', -1);
+				$this->addFlash(
+					FlashType::ERROR,
+					'U moet een geldig e-mailadres opgeven!'
+				);
 				$requestStack->getSession()->set('forum_bericht', $tekst);
 				return $redirect;
 			}
 			if ($filter->isSpam($mailadres)) {
 				//TODO: logging
-				MeldingUtil::setMelding('SPAM', -1);
+				$this->addFlash(FlashType::ERROR, 'SPAM');
 				throw $this->createAccessDeniedException('SPAM');
 			}
 		}
@@ -426,7 +428,7 @@ class ForumDraadController extends AbstractController
 		// post in nieuw draadje?
 		if ($nieuw) {
 			if (empty($titel)) {
-				MeldingUtil::setMelding('U moet een titel opgeven!', -1);
+				$this->addFlash(FlashType::ERROR, 'U moet een titel opgeven!');
 				return $redirect;
 			}
 			// maak draad
@@ -448,9 +450,9 @@ class ForumDraadController extends AbstractController
 
 		// bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht?
 		if ($wacht_goedkeuring) {
-			MeldingUtil::setMelding(
-				'Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.',
-				1
+			$this->addFlash(
+				FlashType::SUCCESS,
+				'Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.'
 			);
 
 			$url = $this->generateUrl('csrdelft_forum_forumdraad_onderwerp', [
@@ -473,9 +475,9 @@ class ForumDraadController extends AbstractController
 			if ($nieuw) {
 				$this->forumMeldingenService->stuurDeelMeldingen($post);
 			}
-			MeldingUtil::setMelding(
-				($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd',
-				1
+			$this->addFlash(
+				FlashType::SUCCESS,
+				($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd'
 			);
 			if (
 				$nieuw &&

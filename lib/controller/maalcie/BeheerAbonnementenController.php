@@ -4,7 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
@@ -131,7 +131,8 @@ class BeheerAbonnementenController extends AbstractController
 		);
 		$matrix = $this->maaltijdAbonnementenService->getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
-		MeldingUtil::setMelding(
+		$this->addFlash(
+			FlashType::SUCCESS,
 			$aantal .
 				' abonnement' .
 				($aantal !== 1 ? 'en' : '') .
@@ -139,8 +140,7 @@ class BeheerAbonnementenController extends AbstractController
 				$novieten .
 				' noviet' .
 				($novieten !== 1 ? 'en' : '') .
-				'.',
-			1
+				'.'
 		);
 		return $this->render(
 			'maaltijden/abonnement/beheer_abonnementen_lijst.html.twig',
@@ -174,7 +174,7 @@ class BeheerAbonnementenController extends AbstractController
 				$aantal .
 				' maaltijd' .
 				($aantal === 1 ? '' : 'en');
-			MeldingUtil::setMelding($melding, 2);
+			$this->addFlash(FlashType::WARNING, $melding);
 		}
 		return $this->render('maaltijden/abonnement/beheer_abonnement.html.twig', [
 			'abonnement' => $abo,
@@ -206,7 +206,7 @@ class BeheerAbonnementenController extends AbstractController
 				$abo_aantal[1] .
 				' maaltijd' .
 				($abo_aantal[1] === 1 ? '' : 'en');
-			MeldingUtil::setMelding($melding, 2);
+			$this->addFlash(FlashType::WARNING, $melding);
 		}
 		return $this->render('maaltijden/abonnement/beheer_abonnement.html.twig', [
 			'abonnement' => $abo_aantal[0],

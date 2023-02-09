@@ -3,7 +3,8 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
@@ -74,7 +75,7 @@ class MijnAbonnementenController extends AbstractController
 				$aantal .
 				' maaltijd' .
 				($aantal === 1 ? '' : 'en');
-			MeldingUtil::setMelding($melding, 2);
+			$this->addFlash(FlashType::WARNING, $melding);
 		}
 		return $this->render('maaltijden/abonnement/mijn_abonnement.html.twig', [
 			'uid' => $abo->uid,
@@ -101,7 +102,7 @@ class MijnAbonnementenController extends AbstractController
 				$abo_aantal[1] .
 				' maaltijd' .
 				($abo_aantal[1] === 1 ? '' : 'en');
-			MeldingUtil::setMelding($melding, 2);
+			$this->addFlash(FlashType::WARNING, $melding);
 		}
 		$abo = $abo_aantal[0];
 		return $this->render('maaltijden/abonnement/mijn_abonnement.html.twig', [

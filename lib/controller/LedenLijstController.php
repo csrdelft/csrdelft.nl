@@ -4,7 +4,8 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\TextUtil;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\GoogleContactSync;
@@ -81,7 +82,7 @@ class LedenLijstController extends AbstractController
 				$msg = $googleSync->syncLidBatch($lidZoeker->getLeden());
 				$message = '<h3>Google-sync-resultaat:</h3>' . $msg;
 			} catch (CsrGebruikerException $e) {
-				MeldingUtil::setMelding($e->getMessage(), -1);
+				$this->addFlash(FlashType::ERROR, $e->getMessage());
 			}
 		} elseif (isset($_GET['exportVcf'])) {
 			$responseBody = '';
@@ -111,7 +112,7 @@ class LedenLijstController extends AbstractController
 		}
 
 		if ($message != '') {
-			MeldingUtil::setMelding($message, 0);
+			$this->addFlash(FlashType::INFO, $message);
 		}
 
 		return $this->render('default.html.twig', [

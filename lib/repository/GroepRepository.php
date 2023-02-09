@@ -2,7 +2,7 @@
 
 namespace CsrDelft\repository;
 
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\groepen\enum\GroepStatus;
@@ -234,7 +234,7 @@ abstract class GroepRepository extends AbstractRepository
 				return $newgroep;
 			});
 		} catch (Throwable $ex) {
-			MeldingUtil::setMelding($ex->getMessage(), -1);
+			FlashUtil::setFlashWithContainerFacade($ex->getMessage(), -1);
 			return false;
 		}
 	}

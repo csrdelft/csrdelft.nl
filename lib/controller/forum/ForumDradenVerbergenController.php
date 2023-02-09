@@ -4,7 +4,7 @@ namespace CsrDelft\controller\forum;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
@@ -72,12 +72,12 @@ class ForumDradenVerbergenController extends AbstractController
 		$this->forumDradenVerbergenRepository->toonAllesVoorLeden([
 			$this->getUid(),
 		]);
-		MeldingUtil::setMelding(
+		$this->addFlash(
+			FlashType::SUCCESS,
 			$aantal .
 				' onderwerp' .
 				($aantal === 1 ? ' wordt' : 'en worden') .
-				' weer getoond in de zijbalk',
-			1
+				' weer getoond in de zijbalk'
 		);
 		return new JsonResponse(true);
 	}

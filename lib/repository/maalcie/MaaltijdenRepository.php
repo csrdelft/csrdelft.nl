@@ -7,7 +7,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\InstellingUtil;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
@@ -376,7 +376,7 @@ class MaaltijdenRepository extends AbstractRepository
 				$this->verwijderMaaltijd($maaltijd);
 				$aantal++;
 			} catch (CsrGebruikerException $e) {
-				MeldingUtil::setMelding($e->getMessage(), -1);
+				FlashUtil::setFlashWithContainerFacade($e->getMessage(), -1);
 			}
 		}
 		return $aantal;
@@ -542,7 +542,7 @@ class MaaltijdenRepository extends AbstractRepository
 						$maaltijd->maaltijd_id
 					)
 				) {
-					MeldingUtil::setMelding(
+					FlashUtil::setFlashWithContainerFacade(
 						DateUtil::dateFormatIntl(
 							$maaltijd->getMoment(),
 							DateUtil::DATETIME_FORMAT
@@ -552,7 +552,7 @@ class MaaltijdenRepository extends AbstractRepository
 				}
 			} catch (CsrGebruikerException $e) {
 				$errors[] = $e;
-				MeldingUtil::setMelding($e->getMessage(), -1);
+				FlashUtil::setFlashWithContainerFacade($e->getMessage(), -1);
 			}
 		}
 		return [$errors, count($maaltijden)];

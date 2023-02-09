@@ -3,9 +3,10 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\FlashType;
 use CsrDelft\common\Security\Voter\Entity\CourantBerichtVoter;
 use CsrDelft\common\Util\ArrayUtil;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\courant\Courant;
 use CsrDelft\entity\courant\CourantBericht;
 use CsrDelft\entity\courant\CourantCategorie;
@@ -109,9 +110,9 @@ class CourantController extends AbstractController
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($bericht);
 			$manager->flush();
-			MeldingUtil::setMelding(
-				'Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.',
-				1
+			$this->addFlash(
+				FlashType::SUCCESS,
+				'Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.'
 			);
 
 			return $this->redirectToRoute('csrdelft_courant_toevoegen');
@@ -143,7 +144,7 @@ class CourantController extends AbstractController
 			$this->getDoctrine()
 				->getManager()
 				->flush();
-			MeldingUtil::setMelding('Bericht is bewerkt', 1);
+			$this->addFlash(FlashType::SUCCESS, 'Bericht is bewerkt');
 			return $this->redirectToRoute('csrdelft_courant_toevoegen');
 		}
 
@@ -168,9 +169,9 @@ class CourantController extends AbstractController
 			$manager->remove($bericht);
 			$manager->flush();
 
-			MeldingUtil::setMelding('Uw bericht is verwijderd.', 1);
+			$this->addFlash(FlashType::SUCCESS, 'Uw bericht is verwijderd.');
 		} catch (Exception $exception) {
-			MeldingUtil::setMelding('Uw bericht is niet verwijderd.', -1);
+			$this->addFlash(FlashType::ERROR, 'Uw bericht is niet verwijderd.');
 		}
 		return $this->redirectToRoute('csrdelft_courant_toevoegen');
 	}
@@ -185,7 +186,10 @@ class CourantController extends AbstractController
 	public function verzenden($iedereen = null)
 	{
 		if (count($this->courantBerichtRepository->findAll()) < 1) {
-			MeldingUtil::setMelding('Lege courant kan niet worden verzonden', 0);
+			$this->addFlash(
+				FlashType::INFO,
+				'Lege courant kan niet worden verzonden'
+			);
 			return $this->redirectToRoute('csrdelft_courant_toevoegen');
 		}
 
@@ -217,16 +221,19 @@ class CourantController extends AbstractController
 				$manager->flush();
 				$conn->commit();
 
-				MeldingUtil::setMelding('De courant is verzonden naar iedereen', 1);
+				$this->addFlash(
+					FlashType::SUCCESS,
+					'De courant is verzonden naar iedereen'
+				);
 			} catch (Exception $exception) {
 				$conn->rollBack();
-				MeldingUtil::setMelding('Courant niet verzonden', -1);
+				$this->addFlash(FlashType::ERROR, 'Courant niet verzonden');
 			}
 
 			return new PlainView(
 				'<div id="courantKnoppenContainer">' .
 					$response .
-					MeldingUtil::getMelding() .
+					FlashUtil::getFlashUsingContainerFacade() .
 					'<strong>Aan iedereen verzonden</strong></div>'
 			);
 		} else {
@@ -234,11 +241,11 @@ class CourantController extends AbstractController
 				$_ENV['EMAIL_PUBCIE'],
 				$courant->inhoud
 			);
-			MeldingUtil::setMelding('Verzonden naar de PubCie', 1);
+			$this->addFlash(FlashType::SUCCESS, 'Verzonden naar de PubCie');
 			return new PlainView(
 				'<div id="courantKnoppenContainer">' .
 					$response .
-					MeldingUtil::getMelding() .
+					FlashUtil::getFlashUsingContainerFacade() .
 					'<a class="btn btn-primary post confirm" title="Courant aan iedereen verzenden" href="/courant/verzenden/iedereen">Aan iedereen verzenden</a></div>'
 			);
 		}

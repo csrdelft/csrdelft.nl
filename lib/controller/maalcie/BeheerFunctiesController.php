@@ -3,7 +3,8 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveeKwalificatie;
@@ -86,7 +87,7 @@ class BeheerFunctiesController extends AbstractController
 			$this->entityManager->persist($functie);
 			$this->entityManager->flush();
 
-			MeldingUtil::setMelding('Toegevoegd', 1);
+			$this->addFlash(FlashType::SUCCESS, 'Toegevoegd');
 
 			return $this->render('maaltijden/functie/beheer_functie.html.twig', [
 				'functie' => $functie,
@@ -107,7 +108,7 @@ class BeheerFunctiesController extends AbstractController
 		$form = new FunctieForm($functie, 'bewerken'); // fetches POST values itself
 		if ($form->validate()) {
 			$this->entityManager->flush();
-			MeldingUtil::setMelding('Bijgewerkt', 1);
+			$this->addFlash(FlashType::SUCCESS, 'Bijgewerkt');
 			return $this->render('maaltijden/functie/beheer_functie.html.twig', [
 				'functie' => $functie,
 			]);
@@ -128,7 +129,7 @@ class BeheerFunctiesController extends AbstractController
 	{
 		$functieId = $functie->functie_id;
 		$this->corveeFunctiesRepository->removeFunctie($functie);
-		MeldingUtil::setMelding('Verwijderd', 1);
+		$this->addFlash(FlashType::SUCCESS, 'Verwijderd');
 		return new FunctieDeleteView($functieId);
 	}
 

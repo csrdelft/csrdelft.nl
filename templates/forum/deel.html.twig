@@ -49,7 +49,7 @@
 {% endblock %}
 
 {% block content %}
-	{{ getMelding() }}
+	{% include 'melding.html.twig' %}
 	<header class="d-flex justify-content-between align-items-baseline mb-4">
 		<div>
 			<h1>{{ deel.titel }}</h1>

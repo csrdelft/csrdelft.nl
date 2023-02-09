@@ -4,7 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\security\AccountRepository;
@@ -77,11 +77,11 @@ class AccountController extends AbstractController
 		}
 
 		if ($account) {
-			MeldingUtil::setMelding('Account bestaat al', 0);
+			$this->addFlash(FlashType::INFO, 'Account bestaat al');
 		} else {
 			$account = $this->accountService->maakAccount($uid);
 			if ($account) {
-				MeldingUtil::setMelding('Account succesvol aangemaakt', 1);
+				$this->addFlash('Account succesvol aangemaakt', FlashType::SUCCESS);
 			} else {
 				throw new CsrGebruikerException('Account aanmaken gefaald');
 			}
@@ -109,7 +109,7 @@ class AccountController extends AbstractController
 		}
 		$account = $this->accountRepository->find($uid);
 		if (!$account) {
-			MeldingUtil::setMelding('Account bestaat niet', -1);
+			$this->addFlash(FlashType::ERROR, 'Account bestaat niet');
 			throw $this->createAccessDeniedException();
 		}
 		// Het is alleen toegestaan om een account te bewerken als er recent met een wachtwoord is ingelogd.
@@ -137,9 +137,9 @@ class AccountController extends AbstractController
 			) {
 				$this->loginService->setRecentLoginToken();
 			} else {
-				MeldingUtil::setMelding(
-					'U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.',
-					2
+				$this->addFlash(
+					FlashType::WARNING,
+					'U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.'
 				);
 				return $this->render('default.html.twig', [
 					'content' => new UpdateLoginForm($action),
@@ -147,7 +147,7 @@ class AccountController extends AbstractController
 			}
 		}
 		if (!$this->accessService->isUserGranted($account, 'ROLE_LOGGED_IN')) {
-			MeldingUtil::setMelding('Account mag niet inloggen', 2);
+			$this->addFlash(FlashType::WARNING, 'Account mag niet inloggen');
 		}
 		$form = $this->createFormulier(AccountForm::class, $account, [
 			'action' => $this->generateUrl('csrdelft_account_bewerken', [
@@ -161,7 +161,7 @@ class AccountController extends AbstractController
 			}
 			// username, email & wachtwoord opslaan
 			$this->accountService->wijzigWachtwoord($account, $account->pass_plain);
-			MeldingUtil::setMelding('Inloggegevens wijzigen geslaagd', 1);
+			$this->addFlash(FlashType::INFO, 'Inloggegevens wijzigen geslaagd');
 		}
 		$account->eraseCredentials();
 		return $this->render('default.html.twig', [
@@ -197,13 +197,13 @@ class AccountController extends AbstractController
 		}
 		$account = $this->accountRepository->find($uid);
 		if (!$account) {
-			MeldingUtil::setMelding('Account bestaat niet', -1);
+			$this->addFlash(FlashType::ERROR, 'Account bestaat niet');
 		} else {
 			try {
 				$this->accountRepository->delete($account);
-				MeldingUtil::setMelding('Account succesvol verwijderd', 1);
+				$this->addFlash(FlashType::SUCCESS, 'Account succesvol verwijderd');
 			} catch (Exception $exception) {
-				MeldingUtil::setMelding('Account verwijderen mislukt', -1);
+				$this->addFlash(FlashType::ERROR, 'Account verwijderen mislukt');
 			}
 		}
 		return new JsonResponse('/profiel/' . $uid); // redirect
