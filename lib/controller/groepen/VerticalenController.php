@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\entity\groepen\Verticale;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,9 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class VerticalenController extends AbstractGroepenController
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getGroepType()
 	{
-		parent::__construct($registry, Verticale::class);
+		return Verticale::class;
 	}
 
 	public function zoeken(Request $request, $zoekterm = null)

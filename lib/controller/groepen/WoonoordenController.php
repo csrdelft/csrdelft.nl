@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\entity\groepen\Woonoord;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * WoonoordenController.class.php
@@ -14,8 +13,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class WoonoordenController extends AbstractGroepenController
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getGroepType()
 	{
-		parent::__construct($registry, Woonoord::class);
+		return Woonoord::class;
 	}
 }

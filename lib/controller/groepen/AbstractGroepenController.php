@@ -13,6 +13,7 @@ use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
@@ -40,7 +41,6 @@ use CsrDelft\view\groepen\leden\GroepEetwensView;
 use CsrDelft\view\groepen\leden\GroepEmailsView;
 use CsrDelft\view\groepen\leden\GroepLedenTable;
 use CsrDelft\view\groepen\leden\GroepLijstView;
-use CsrDelft\view\groepen\leden\GroepOmschrijvingView;
 use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use CsrDelft\view\Icon;
@@ -77,14 +77,19 @@ abstract class AbstractGroepenController extends AbstractController implements
 	/** @var GroepLidRepository */
 	private $groepLidRepository;
 
-	public function __construct(ManagerRegistry $registry, $groepType)
+	public function __construct(ManagerRegistry $registry)
 	{
-		$this->repository = $registry->getRepository($groepType);
+		$this->repository = $registry->getRepository($this->getGroepType());
 		$this->changeLogRepository = $registry->getRepository(
 			ChangeLogEntry::class
 		);
 		$this->groepLidRepository = $registry->getRepository(GroepLid::class);
 	}
+
+	/**
+	 * @return Groep|string
+	 */
+	abstract public function getGroepType();
 
 	/**
 	 * Alle routes die groepen controllers aan gaan @return RouteCollection

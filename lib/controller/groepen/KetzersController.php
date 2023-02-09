@@ -2,10 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Ketzer;
-use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\KetzersRepository;
 use CsrDelft\view\groepen\formulier\GroepAanmakenForm;
 use Doctrine\Persistence\ManagerRegistry;
@@ -28,12 +25,15 @@ class KetzersController extends AbstractGroepenController
 	 */
 	private $registry;
 
-	public function __construct(
-		ManagerRegistry $registry,
-		$groepType = Ketzer::class
-	) {
-		parent::__construct($registry, $groepType);
+	public function __construct(ManagerRegistry $registry)
+	{
+		parent::__construct($registry);
 		$this->registry = $registry;
+	}
+
+	public function getGroepType()
+	{
+		return Ketzer::class;
 	}
 
 	public function nieuw(Request $request, $id = null, $soort = null)

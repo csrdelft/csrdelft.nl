@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\entity\groepen\Ondervereniging;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * OnderverenigingenController.class.php
@@ -14,8 +13,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class OnderverenigingenController extends AbstractGroepenController
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getGroepType()
 	{
-		parent::__construct($registry, Ondervereniging::class);
+		return Ondervereniging::class;
 	}
 }

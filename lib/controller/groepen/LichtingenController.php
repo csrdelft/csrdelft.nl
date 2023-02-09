@@ -4,7 +4,6 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\repository\groepen\LichtingenRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,9 +18,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class LichtingenController extends AbstractGroepenController
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getGroepType()
 	{
-		parent::__construct($registry, Lichting::class);
+		return Lichting::class;
 	}
 
 	public function zoeken(Request $request, $zoekterm = null)

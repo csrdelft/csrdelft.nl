@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\entity\groepen\Commissie;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * CommissiesController.class.php
@@ -14,8 +13,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CommissiesController extends AbstractGroepenController
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getGroepType()
 	{
-		parent::__construct($registry, Commissie::class);
+		return Commissie::class;
 	}
 }

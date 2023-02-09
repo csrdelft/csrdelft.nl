@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\entity\groepen\Activiteit;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * ApiActiviteitenController.class.php
@@ -14,8 +13,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ActiviteitenController extends KetzersController
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getGroepType()
 	{
-		parent::__construct($registry, Activiteit::class);
+		return Activiteit::class;
 	}
 }

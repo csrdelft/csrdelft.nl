@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\entity\groepen\RechtenGroep;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * RechtengroepenController.class.php
@@ -14,8 +13,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class RechtengroepenController extends AbstractGroepenController
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getGroepType()
 	{
-		parent::__construct($registry, RechtenGroep::class);
+		return RechtenGroep::class;
 	}
 }

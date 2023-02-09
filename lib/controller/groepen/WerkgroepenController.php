@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\entity\groepen\Werkgroep;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * WerkgroepenController.class.php
@@ -16,8 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class WerkgroepenController extends AbstractGroepenController
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getGroepType()
 	{
-		parent::__construct($registry, Werkgroep::class);
+		return Werkgroep::class;
 	}
 }

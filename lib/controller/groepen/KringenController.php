@@ -6,7 +6,6 @@ use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\groepen\Kring;
 use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\view\Icon;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,9 +20,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class KringenController extends AbstractGroepenController
 {
-	public function __construct(ManagerRegistry $registry)
+	public function getGroepType()
 	{
-		parent::__construct($registry, Kring::class);
+		return Kring::class;
 	}
 
 	public function zoeken(Request $request, $zoekterm = null)
