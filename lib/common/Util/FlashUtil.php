@@ -68,10 +68,11 @@ final class FlashUtil
 		foreach ($flashes as $type => $meldingen) {
 			foreach ($meldingen as $msg) {
 				$icon = Icon::getTag('alert-' . $type);
+				$msgSafe = htmlentities($msg);
 
 				$melding .= <<<HTML
 <div class="alert alert-$type">
-${icon}$msg
+${icon}$msgSafe
 </div>
 HTML;
 			}
