@@ -2,6 +2,7 @@
 
 namespace CsrDelft\common\Util;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\view\Icon;
 
 final class MeldingUtil
@@ -23,6 +24,10 @@ final class MeldingUtil
 	 */
 	public static function setMelding(string $msg, int $lvl)
 	{
+		$flashBag = ContainerFacade::getContainer()
+			->get('session')
+			->getFlashBag();
+
 		$levels[-1] = 'danger';
 		$levels[0] = 'info';
 		$levels[1] = 'success';
@@ -32,14 +37,7 @@ final class MeldingUtil
 			!empty($msg) &&
 			($lvl === -1 || $lvl === 0 || $lvl === 1 || $lvl === 2)
 		) {
-			if (!isset($_SESSION['melding'])) {
-				$_SESSION['melding'] = [];
-			}
-			// gooit verouderde gegevens weg
-			if (is_string($_SESSION['melding'])) {
-				$_SESSION['melding'] = [];
-			}
-			$_SESSION['melding'][] = ['lvl' => $levels[$lvl], 'msg' => $msg];
+			$flashBag->add($levels[$lvl], $msg);
 		}
 	}
 
@@ -50,15 +48,15 @@ final class MeldingUtil
 	 */
 	public static function getMelding()
 	{
-		if (isset($_SESSION['melding']) && is_array($_SESSION['melding'])) {
-			$melding = '';
-			foreach ($_SESSION['melding'] as $msg) {
-				$melding .= static::formatMelding($msg['msg'], $msg['lvl']);
+		$flashBag = ContainerFacade::getContainer()
+			->get('session')
+			->getFlashBag();
+
+		$melding = '';
+		foreach ($flashBag->all() as $type => $meldingen) {
+			foreach ($meldingen as $msg) {
+				$melding .= static::formatMelding($msg, $type);
 			}
-			// de melding maar één keer tonen.
-			unset($_SESSION['melding']);
-		} else {
-			$melding = '';
 		}
 
 		return '<div id="melding">' . $melding . '</div>';
