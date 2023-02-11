@@ -53,7 +53,7 @@ class ToestemmingController extends AbstractController
 		if ($form->isPosted() && $form->validate()) {
 			$this->lidToestemmingRepository->saveForLid();
 			$this->addFlash(FlashType::SUCCESS, 'Toestemming opgeslagen');
-			return $this->render('cms/pagina.html.twig', [
+			return $this->render('cms/pagina-inhoud.html.twig', [
 				'pagina' => $this->cmsPaginaRepository->find('thuis'),
 			]);
 		} else {
