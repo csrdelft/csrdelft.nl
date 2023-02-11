@@ -1,0 +1,10 @@
+{% include 'melding.html.twig' %}
+
+{% if is_granted('bewerken', pagina) %}
+	<a href="/pagina/bewerken/{{ pagina.naam }}" class="btn float-end"
+		 title="Bewerk pagina&#013;{{ pagina.laatstGewijzigd.format('y-MM-dd HH:mm:ss') }}">
+		{{ icon('bewerken') }}
+	</a>
+{% endif %}
+
+{{ pagina.inhoud | bbcode('html', pagina.inlineHtml) }}

@@ -3,10 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Util\InstellingUtil;
-use CsrDelft\entity\maalcie\Maaltijd;
-use CsrDelft\common\Annotation\Auth;
 use CsrDelft\repository\agenda\AgendaRepository;
-use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
@@ -16,7 +13,6 @@ use CsrDelft\repository\WoordVanDeDagRepository;
 use CsrDelft\service\forum\ForumDelenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
-use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\IsHetAlView;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;

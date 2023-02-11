@@ -22,7 +22,6 @@ use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableResponse;
 use CsrDelft\view\bibliotheek\BoekExemplaarFormulier;
 use CsrDelft\view\bibliotheek\BoekFormulier;
 use CsrDelft\view\bibliotheek\BoekRecensieFormulier;
-use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\Icon;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -115,10 +114,8 @@ class BibliotheekController extends AbstractController
 	 */
 	public function rubrieken(): Response
 	{
-		return $this->render('default.html.twig', [
-			'content' => new CmsPaginaView(
-				$this->cmsPaginaRepository->find('rubrieken')
-			),
+		return $this->render('cms/pagina.html.twig', [
+			'pagina' => $this->cmsPaginaRepository->find('rubrieken'),
 		]);
 	}
 
@@ -129,10 +126,8 @@ class BibliotheekController extends AbstractController
 	 */
 	public function wenslijst(): Response
 	{
-		return $this->render('default.html.twig', [
-			'content' => new CmsPaginaView(
-				$this->cmsPaginaRepository->find('wenslijst')
-			),
+		return $this->render('cms/pagina.html.twig', [
+			'pagina' => $this->cmsPaginaRepository->find('wenslijst'),
 		]);
 	}
 

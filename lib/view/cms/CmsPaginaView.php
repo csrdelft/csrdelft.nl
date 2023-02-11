@@ -12,6 +12,7 @@ use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 use CsrDelft\common\Util\DateUtil;
+use Twig\Environment;
 
 /**
  * CmsPaginaView.php
@@ -48,23 +49,10 @@ class CmsPaginaView implements View, ToResponse
 
 	public function __toString()
 	{
-		$security = ContainerFacade::getContainer()->get('security');
-		$html = '';
-		$html .= FlashUtil::getFlashUsingContainerFacade();
-		if ($security->isGranted(CmsPaginaVoter::BEWERKEN, $this->pagina)) {
-			$html .=
-				'<a href="/pagina/bewerken/' .
-				$this->pagina->naam .
-				'" class="btn float-end" title="Bewerk pagina&#013;' .
-				$this->pagina->laatstGewijzigd->format(DateUtil::DATETIME_FORMAT) .
-				'">' .
-				Icon::getTag('bewerken') .
-				'</a>';
-		}
-		$html .= CsrBB::parseHtml(
-			htmlspecialchars_decode($this->pagina->inhoud),
-			$this->pagina->inlineHtml
-		);
-		return $html;
+		return ContainerFacade::getContainer()
+			->get(Environment::class)
+			->render('cms/pagina-inhoud.html.twig', [
+				'pagina' => $this->pagina,
+			]);
 	}
 }

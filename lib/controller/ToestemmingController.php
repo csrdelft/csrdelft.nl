@@ -5,13 +5,10 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\FlashType;
 use CsrDelft\common\Util\ArrayUtil;
-use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
-use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\toestemming\ToestemmingLijstResponse;
 use CsrDelft\view\toestemming\ToestemmingLijstTable;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
@@ -56,7 +53,9 @@ class ToestemmingController extends AbstractController
 		if ($form->isPosted() && $form->validate()) {
 			$this->lidToestemmingRepository->saveForLid();
 			$this->addFlash(FlashType::SUCCESS, 'Toestemming opgeslagen');
-			return new CmsPaginaView($this->cmsPaginaRepository->find('thuis'));
+			return $this->render('cms/pagina.html.twig', [
+				'pagina' => $this->cmsPaginaRepository->find('thuis'),
+			]);
 		} else {
 			return $form;
 		}
@@ -70,22 +69,24 @@ class ToestemmingController extends AbstractController
 	 */
 	public function GET_overzicht(): Response
 	{
-		return $this->render('default.html.twig', [
-			'content' => new CmsPaginaView($this->cmsPaginaRepository->find('thuis')),
+		return $this->render('cms/pagina.html.twig', [
+			'pagina' => $this->cmsPaginaRepository->find('thuis'),
 			'modal' => new ToestemmingModalForm($this->lidToestemmingRepository),
 		]);
 	}
 
 	/**
-	 * @return CmsPaginaView
+	 * @return Response
 	 * @Route("/toestemming/annuleren", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function POST_annuleren(): CmsPaginaView
+	public function POST_annuleren(): Response
 	{
 		$_SESSION['stop_nag'] = time();
 
-		return new CmsPaginaView($this->cmsPaginaRepository->find('thuis'));
+		return $this->render('cms/pagina-inhoud.html.twig', [
+			'pagina' => $this->cmsPaginaRepository->find('thuis'),
+		]);
 	}
 
 	/**

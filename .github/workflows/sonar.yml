@@ -43,7 +43,7 @@ jobs:
         continue-on-error: true
 
       - name: SonarCloud Scan
-        if: github.repository == 'csrdelft/csrdelft.nl'
+        if: env.SONAR_TOKEN != ''
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

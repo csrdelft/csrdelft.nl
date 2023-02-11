@@ -1,7 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block titel %}{{ body.titel }}{% endblock %}
+{% block titel %}{{ pagina.titel }}{% endblock %}
 
 {% block content %}
-{{ body | raw }}
+	{% include 'cms/pagina-inhoud.html.twig' %}
+{% endblock %}
+
+{% block modal %}
+	{% if modal is defined %}
+		{{ modal.__toString | raw }}
+	{% else %}
+		<div id="modal" tabindex="-1"></div>
+	{% endif %}
 {% endblock %}

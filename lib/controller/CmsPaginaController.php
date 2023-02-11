@@ -6,12 +6,9 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\FlashType;
 use CsrDelft\common\Security\Voter\Entity\CmsPaginaVoter;
-use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\CmsPagina;
 use CsrDelft\repository\CmsPaginaRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaType;
-use CsrDelft\view\cms\CmsPaginaView;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,25 +63,22 @@ class CmsPaginaController extends AbstractController
 			throw new NotFoundHttpException();
 		}
 		$this->denyAccessUnlessGranted(CmsPaginaVoter::BEKIJKEN, $pagina);
-		$body = new CmsPaginaView($pagina);
 		if (!$this->mag(P_LOGGED_IN)) {
 			// Nieuwe layout altijd voor uitgelogde bezoekers
 			if ($pagina->naam === 'thuis') {
 				return $this->render('extern/index.html.twig', [
-					'titel' => $body->getTitel(),
+					'titel' => $pagina->titel,
 				]);
 			} elseif ($naam === 'vereniging') {
 				return $this->render('extern/content.html.twig', [
-					'titel' => $body->getTitel(),
-					'body' => $body,
+					'pagina' => $pagina,
 				]);
 			} elseif ($naam === 'lidworden') {
 				return $this->render('extern/owee.html.twig');
 			}
 
 			return $this->render('extern/content.html.twig', [
-				'titel' => $body->getTitel(),
-				'body' => $body,
+				'pagina' => $pagina,
 			]);
 		} else {
 			// Nieuwe layout ook voor ingelogde bezoekers
@@ -92,7 +86,7 @@ class CmsPaginaController extends AbstractController
 				return $this->render('voorpagina.html.twig', []);
 			}
 
-			return $this->render('cms/pagina.html.twig', ['body' => $body]);
+			return $this->render('cms/pagina.html.twig', ['pagina' => $pagina]);
 		}
 	}
 

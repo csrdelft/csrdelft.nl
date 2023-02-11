@@ -295,10 +295,13 @@ class CsrTwigExtension extends AbstractExtension
 		return ['top' => $top, 'left' => $left];
 	}
 
-	public function bbcode(string $string, string $mode = 'normal')
-	{
+	public function bbcode(
+		string $string,
+		string $mode = 'normal',
+		bool $inlineHtml = false
+	) {
 		if ($mode === 'html') {
-			return CsrBB::parseHtml($string);
+			return CsrBB::parseHtml($string, $inlineHtml);
 		} elseif ($mode == 'mail') {
 			return CsrBB::parseMail($string);
 		} elseif ($mode == 'plain') {

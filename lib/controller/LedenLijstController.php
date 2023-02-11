@@ -5,12 +5,9 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
-use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\TextUtil;
-use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\GoogleContactSync;
 use CsrDelft\service\LidZoekerService;
-use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +22,6 @@ class LedenLijstController extends AbstractController
 {
 	/**
 	 * @param Request $request
-	 * @param CmsPaginaRepository $cmsPaginaRepository
 	 * @param LidZoekerService $lidZoeker
 	 * @param GoogleContactSync $googleSync
 	 * @param Environment $twig
@@ -38,17 +34,10 @@ class LedenLijstController extends AbstractController
 	 */
 	public function lijst(
 		Request $request,
-		CmsPaginaRepository $cmsPaginaRepository,
 		LidZoekerService $lidZoeker,
 		GoogleContactSync $googleSync,
 		Environment $twig
 	) {
-		if (!$this->mag(P_OUDLEDEN_READ)) {
-			# geen rechten
-			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
-			return $this->render('default.html.twig', ['content' => $body]);
-		}
-
 		$message = '';
 
 		if (isset($_GET['q'])) {
