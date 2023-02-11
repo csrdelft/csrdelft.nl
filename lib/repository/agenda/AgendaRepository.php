@@ -13,7 +13,7 @@ use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
-use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\maalcie\MaaltijdenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use DateInterval;
@@ -46,10 +46,6 @@ class AgendaRepository extends AbstractRepository
 	 */
 	private $corveeTakenRepository;
 	/**
-	 * @var MaaltijdenRepository
-	 */
-	private $maaltijdenRepository;
-	/**
 	 * @var VerjaardagenService
 	 */
 	private $verjaardagenService;
@@ -57,6 +53,10 @@ class AgendaRepository extends AbstractRepository
 	 * @var Security
 	 */
 	private $security;
+	/**
+	 * @var MaaltijdenService
+	 */
+	private $maaltijdenService;
 
 	public function __construct(
 		ManagerRegistry $registry,
@@ -64,7 +64,7 @@ class AgendaRepository extends AbstractRepository
 		AgendaVerbergenRepository $agendaVerbergenRepository,
 		ActiviteitenRepository $activiteitenRepository,
 		CorveeTakenRepository $corveeTakenRepository,
-		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdenService $maaltijdenService,
 		VerjaardagenService $verjaardagenService
 	) {
 		parent::__construct($registry, AgendaItem::class);
@@ -72,9 +72,9 @@ class AgendaRepository extends AbstractRepository
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
 		$this->activiteitenRepository = $activiteitenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->verjaardagenService = $verjaardagenService;
 		$this->security = $security;
+		$this->maaltijdenService = $maaltijdenService;
 	}
 
 	/**
@@ -230,7 +230,7 @@ class AgendaRepository extends AbstractRepository
 			// TODO: Dit moet altijd aanstaan
 			$result = array_merge(
 				$result,
-				$this->maaltijdenRepository->getMaaltijdenVoorAgenda(
+				$this->maaltijdenService->getMaaltijdenVoorAgenda(
 					$van->getTimestamp(),
 					$tot->getTimestamp()
 				)

@@ -4,6 +4,7 @@ namespace CsrDelft\service\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\FlashUtil;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\entity\profiel\Profiel;
@@ -13,6 +14,8 @@ use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Throwable;
 
 class MaaltijdAbonnementenService
@@ -514,5 +517,40 @@ class MaaltijdAbonnementenService
 			$this->entityManager->flush();
 			return $aantal;
 		});
+	}
+
+	/**
+	 * @param Maaltijd $maaltijd
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function meldAboAan($maaltijd)
+	{
+		$aantal = 0;
+		// aanmelden van leden met abonnement op deze repetitie
+		if (!$maaltijd->gesloten && $maaltijd->repetitie !== null) {
+			$abonnementen = $this->maaltijdAbonnementenRepository->getAbonnementenVoorRepetitie(
+				$maaltijd->repetitie
+			);
+			foreach ($abonnementen as $abo) {
+				if (
+					$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
+						$abo->uid,
+						$maaltijd->aanmeld_filter
+					)
+				) {
+					if (
+						$this->maaltijdRepetitieAanmeldingenService->aanmeldenDoorAbonnement(
+							$maaltijd,
+							$abo->maaltijd_repetitie,
+							$abo->uid
+						)
+					) {
+						$aantal++;
+					}
+				}
+			}
+		}
+		$maaltijd->aantal_aanmeldingen = $aantal;
 	}
 }

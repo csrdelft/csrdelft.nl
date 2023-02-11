@@ -11,6 +11,7 @@ use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
 use CsrDelft\service\forum\ForumDelenService;
+use CsrDelft\service\maalcie\MaaltijdenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\IsHetAlView;
@@ -124,10 +125,9 @@ class VoorpaginaController extends AbstractController
 	 * @return Response
 	 * @Route("/voorpagina/maaltijden")
 	 */
-	public function maaltijden(
-		MaaltijdenRepository $maaltijdenRepository
-	): Response {
-		$maaltijden = $maaltijdenRepository->getKomendeMaaltijdenVoorLid(
+	public function maaltijden(MaaltijdenService $maaltijdenService): Response
+	{
+		$maaltijden = $maaltijdenService->getKomendeMaaltijdenVoorLid(
 			LoginService::getUid()
 		);
 
