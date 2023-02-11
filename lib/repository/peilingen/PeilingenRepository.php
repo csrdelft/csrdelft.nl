@@ -4,7 +4,7 @@ namespace CsrDelft\repository\peilingen;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\peilingen\PeilingStem;
 use CsrDelft\repository\AbstractRepository;
@@ -123,7 +123,7 @@ class PeilingenRepository extends AbstractRepository
 			$manager->persist($optie);
 			$manager->flush();
 		} else {
-			MeldingUtil::setMelding('Stemmen niet toegestaan', -1);
+			FlashUtil::setFlashWithContainerFacade('Stemmen niet toegestaan', -1);
 		}
 	}
 

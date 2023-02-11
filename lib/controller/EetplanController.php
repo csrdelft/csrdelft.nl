@@ -4,7 +4,8 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
@@ -182,7 +183,10 @@ class EetplanController extends AbstractController
 				'woonoord' => $eetplan->woonoord,
 			]) != null
 		) {
-			MeldingUtil::setMelding('Deze noviet is al eens op dit huis geweest', -1);
+			$this->addFlash(
+				FlashType::ERROR,
+				'Deze noviet is al eens op dit huis geweest'
+			);
 			return new Response($form->createModalView());
 		} else {
 			$this->eetplanRepository->save($eetplan);
@@ -303,7 +307,7 @@ class EetplanController extends AbstractController
 		if (!$form->validate()) {
 			return new Response($form->createModalView());
 		} elseif ($this->eetplanBekendenRepository->exists($eetplanbekenden)) {
-			MeldingUtil::setMelding('Bekenden bestaan al', -1);
+			$this->addFlash(FlashType::ERROR, 'Bekenden bestaan al');
 			return new Response($form->createModalView());
 		} else {
 			$this->eetplanBekendenRepository->save($eetplanbekenden);
@@ -404,7 +408,10 @@ class EetplanController extends AbstractController
 				date_create_immutable($form->getValues()['avond'])
 			)
 		) {
-			MeldingUtil::setMelding('Er bestaat al een eetplan met deze datum', -1);
+			$this->addFlash(
+				FlashType::ERROR,
+				'Er bestaat al een eetplan met deze datum'
+			);
 			return $form;
 		} else {
 			$avond = $form->getValues()['avond'];

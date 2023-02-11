@@ -3,12 +3,10 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\FlashType;
 use CsrDelft\common\Security\Voter\Entity\MenuItemVoter;
-use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\repository\MenuItemRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\GenericSuggestiesResponse;
-use CsrDelft\view\MeldingResponse;
 use CsrDelft\view\menubeheer\MenuItemForm;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -54,7 +52,7 @@ class MenuBeheerController extends AbstractController
 
 	/**
 	 * @param $parentId
-	 * @return MeldingResponse|MenuItemForm
+	 * @return MenuItemForm
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/menubeheer/toevoegen/{parentId}", methods={"POST"})
@@ -74,8 +72,8 @@ class MenuBeheerController extends AbstractController
 		if ($form->validate()) {
 			// form checks if hidden fields are modified
 			$this->menuItemRepository->persist($item);
-			MeldingUtil::setMelding('Toegevoegd: ' . $item->tekst, 1);
-			return new MeldingResponse();
+			$this->addFlash(FlashType::SUCCESS, 'Toegevoegd: ' . $item->tekst);
+			return $this->render('melding.html.twig');
 		} else {
 			return $form;
 		}
@@ -96,9 +94,9 @@ class MenuBeheerController extends AbstractController
 			// form checks if hidden fields are modified
 			try {
 				$this->menuItemRepository->persist($item);
-				MeldingUtil::setMelding($item->tekst . ' bijgewerkt', 1);
+				$this->addFlash(FlashType::SUCCESS, $item->tekst . ' bijgewerkt');
 			} catch (Exception $e) {
-				MeldingUtil::setMelding($item->tekst . ' ongewijzigd', 0);
+				$this->addFlash(FlashType::INFO, $item->tekst . ' ongewijzigd');
 			}
 			return new JsonResponse(true);
 		} else {
@@ -117,11 +115,11 @@ class MenuBeheerController extends AbstractController
 		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
 		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $item);
 		$rowCount = $this->menuItemRepository->removeMenuItem($item);
-		MeldingUtil::setMelding($item->tekst . ' verwijderd', 1);
+		$this->addFlash(FlashType::SUCCESS, $item->tekst . ' verwijderd');
 		if ($rowCount > 0) {
-			MeldingUtil::setMelding(
-				$rowCount . ' menu-items niveau omhoog verplaatst.',
-				2
+			$this->addFlash(
+				FlashType::WARNING,
+				$rowCount . ' menu-items niveau omhoog verplaatst.'
 			);
 		}
 		return new JsonResponse(true);
@@ -141,9 +139,9 @@ class MenuBeheerController extends AbstractController
 		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $item);
 		$item->zichtbaar = !$item->zichtbaar;
 		$this->menuItemRepository->persist($item);
-		MeldingUtil::setMelding(
-			$item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt',
-			1
+		$this->addFlash(
+			FlashType::SUCCESS,
+			$item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt'
 		);
 		return new JsonResponse(true);
 	}

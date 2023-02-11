@@ -4,8 +4,8 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\FlashType;
 use CsrDelft\common\Util\DateUtil;
-use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\corvee\CorveeTaak;
@@ -19,7 +19,6 @@ use CsrDelft\view\formulier\invoervelden\LidObjectField;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\TaakForm;
 use CsrDelft\view\maalcie\forms\ToewijzenForm;
-use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -185,27 +184,27 @@ class BeheerTakenController extends AbstractController
 		$aantal = sizeof($verstuurd);
 		$count = sizeof($errors);
 		if ($count > 0) {
-			MeldingUtil::setMelding(
+			$this->addFlash(
+				FlashType::ERROR,
 				$count .
 					' herinnering' .
 					($count !== 1 ? 'en' : '') .
-					' niet kunnen versturen!',
-				-1
+					' niet kunnen versturen!'
 			);
 			foreach ($errors as $error) {
-				MeldingUtil::setMelding($error->getMessage(), 2); // toon wat fout is gegaan
+				$this->addFlash(FlashType::WARNING, $error->getMessage()); // toon wat fout is gegaan
 			}
 		}
 		if ($aantal > 0) {
-			MeldingUtil::setMelding(
-				$aantal . ' herinnering' . ($aantal !== 1 ? 'en' : '') . ' verstuurd!',
-				1
+			$this->addFlash(
+				FlashType::SUCCESS,
+				$aantal . ' herinnering' . ($aantal !== 1 ? 'en' : '') . ' verstuurd!'
 			);
 			foreach ($verstuurd as $melding) {
-				MeldingUtil::setMelding($melding, 1); // toon wat goed is gegaan
+				$this->addFlash(FlashType::SUCCESS, $melding); // toon wat goed is gegaan
 			}
 		} else {
-			MeldingUtil::setMelding('Geen herinneringen verstuurd.', 0);
+			$this->addFlash(FlashType::INFO, 'Geen herinneringen verstuurd.');
 		}
 		return $this->redirectToRoute('csrdelft_maalcie_beheertaken_beheer');
 	}
@@ -457,11 +456,9 @@ class BeheerTakenController extends AbstractController
 	public function leegmaken()
 	{
 		$aantal = $this->corveeTakenRepository->prullenbakLeegmaken();
-		MeldingUtil::setMelding(
-			$aantal .
-				($aantal === 1 ? ' taak' : ' taken') .
-				' definitief verwijderd.',
-			$aantal === 0 ? 0 : 1
+		$this->addFlash(
+			$aantal == 0 ? FlashType::INFO : FlashType::SUCCESS,
+			$aantal . ($aantal === 1 ? ' taak' : ' taken') . ' definitief verwijderd.'
 		);
 		return $this->redirectToRoute('csrdelft_maalcie_beheertaken_prullenbak');
 	}

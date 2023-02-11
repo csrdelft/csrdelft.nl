@@ -2,8 +2,10 @@
 
 namespace CsrDelft\service;
 
+use CsrDelft\common\FlashType;
 use CsrDelft\common\Mail;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
 class MailService
@@ -12,10 +14,17 @@ class MailService
 	 * @var Environment
 	 */
 	private $environment;
+	/**
+	 * @var RequestStack
+	 */
+	private $requestStack;
 
-	public function __construct(Environment $environment)
-	{
+	public function __construct(
+		Environment $environment,
+		RequestStack $requestStack
+	) {
 		$this->environment = $environment;
+		$this->requestStack = $requestStack;
 	}
 
 	public function send(Mail $mail): bool
@@ -50,7 +59,10 @@ MAIL;
 		$body = str_replace("\n", "\r\n", $body);
 
 		if ($mail->inDebugMode()) {
-			MeldingUtil::setMelding($htmlBody, 0);
+			$this->requestStack
+				->getSession()
+				->getFlashBag()
+				->add(FlashType::HTML, $htmlBody);
 			return false;
 		}
 		return mail(

@@ -9,6 +9,7 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Environment;
 
 class FormulierBuilder
 {
@@ -41,12 +42,17 @@ class FormulierBuilder
 	 * @var RequestStack
 	 */
 	private $requestStack;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
-	public function __construct(RequestStack $requestStack)
+	public function __construct(RequestStack $requestStack, Environment $twig)
 	{
 		$this->css_classes[] = 'Formulier';
 		$this->formKnoppen = new FormDefaultKnoppen();
 		$this->requestStack = $requestStack;
+		$this->twig = $twig;
 	}
 
 	public function setShowMelding($showMelding)
@@ -158,6 +164,7 @@ class FormulierBuilder
 	public function getFormulier()
 	{
 		return new FormulierInstance(
+			$this->twig,
 			$this->action,
 			$this->titel,
 			$this->dataTableId,

@@ -5,7 +5,7 @@ namespace CsrDelft\view\formulier;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\DateUtil;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\repository\ChangeLogRepository;
@@ -325,7 +325,7 @@ HTML;
 		$string = '';
 
 		if ($this->showMelding) {
-			$string .= MeldingUtil::getMelding();
+			$string .= FlashUtil::getFlashUsingContainerFacade();
 		}
 		$string .= $this->getFormTag();
 		$titel = $this->getTitel();

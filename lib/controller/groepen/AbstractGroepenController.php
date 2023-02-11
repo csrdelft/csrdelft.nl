@@ -3,8 +3,9 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\FlashType;
 use CsrDelft\common\Util\ArrayUtil;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
@@ -489,7 +490,10 @@ abstract class AbstractGroepenController extends AbstractController implements
 				$response[] = $vorige;
 			}
 			$view = $this->tableData($response);
-			MeldingUtil::setMelding(get_class($groep) . ' succesvol aangemaakt!', 1);
+			$this->addFlash(
+				FlashType::SUCCESS,
+				get_class($groep) . ' succesvol aangemaakt!'
+			);
 			$form = new GroepPreviewForm($groep);
 			$view->modal = $form->__toString();
 			return $view;

@@ -4,7 +4,7 @@ namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\LDAP;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
@@ -172,7 +172,7 @@ class ProfielRepository extends AbstractRepository
 		try {
 			$this->save_ldap($profiel);
 		} catch (Exception $e) {
-			MeldingUtil::setMelding($e->getMessage(), -1); //TODO: logging
+			FlashUtil::setFlashWithContainerFacade($e->getMessage(), -1); //TODO: logging
 		}
 		$this->save($profiel);
 	}

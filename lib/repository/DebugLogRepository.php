@@ -2,10 +2,9 @@
 
 namespace CsrDelft\repository;
 
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
 use CsrDelft\entity\DebugLogEntry;
 use CsrDelft\service\security\LoginService;
-use CsrDelft\service\security\SuService;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -84,11 +83,12 @@ class DebugLogRepository extends AbstractRepository
 				->getConnection()
 				->isTransactionActive()
 		) {
-			MeldingUtil::setMelding(
-				'Debug log may not be committed: database transaction',
-				2
+			$flashBag = $this->requestStack->getSession()->getFlashBag();
+			$flashBag->add(
+				FlashType::WARNING,
+				'Debug log may not be committed: database transaction'
 			);
-			MeldingUtil::setMelding($dump, 0);
+			$flashBag->add(FlashType::INFO, $dump);
 		}
 		$this->getEntityManager()->flush();
 		return $entry;

@@ -5,9 +5,9 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
+use CsrDelft\common\FlashType;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\InstellingUtil;
-use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\groepen\enum\GroepStatus;
@@ -286,7 +286,7 @@ class ProfielController extends AbstractController
 		if ($form->validate()) {
 			$diff = $form->diff();
 			if (empty($diff)) {
-				MeldingUtil::setMelding('Geen wijzigingen', 0);
+				$this->addFlash(FlashType::INFO, 'Geen wijzigingen');
 			} else {
 				$nieuw =
 					$profiel->uid === null ||
@@ -327,24 +327,24 @@ class ProfielController extends AbstractController
 							}
 							$conn->commit();
 						} catch (Exception $e) {
-							MeldingUtil::setMelding($e->getMessage(), -1);
+							$this->addFlash(FlashType::ERROR, $e->getMessage());
 							$conn->rollBack();
 						} finally {
 							$conn->setAutoCommit(true);
 						}
 					} catch (CsrException $ex) {
-						MeldingUtil::setMelding($ex->getMessage(), -1);
+						$this->addFlash(FlashType::ERROR, $ex->getMessage());
 					}
 
-					MeldingUtil::setMelding(
-						'Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid,
-						1
+					$this->addFlash(
+						FlashType::SUCCESS,
+						'Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid
 					);
 				} else {
 					$this->profielRepository->update($profiel);
-					MeldingUtil::setMelding(
-						count($diff) . ' wijziging(en) succesvol opgeslagen',
-						1
+					$this->addFlash(
+						FlashType::SUCCESS,
+						count($diff) . ' wijziging(en) succesvol opgeslagen'
 					);
 				}
 			}
@@ -505,7 +505,7 @@ class ProfielController extends AbstractController
 						throw new CsrException('Vul de toestemmingen in');
 					}
 				} catch (Exception $e) {
-					MeldingUtil::setMelding($e->getMessage(), -1);
+					$this->addFlash(FlashType::ERROR, $e->getMessage());
 					if ($conn->isTransactionActive()) {
 						$conn->rollBack();
 					}
@@ -513,7 +513,7 @@ class ProfielController extends AbstractController
 					$conn->setAutoCommit(true);
 				}
 			} catch (CsrException $ex) {
-				MeldingUtil::setMelding($ex->getMessage(), -1);
+				$this->addFlash(FlashType::ERROR, $ex->getMessage());
 			}
 
 			if ($succes) {
@@ -601,7 +601,7 @@ class ProfielController extends AbstractController
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($opmerking);
 			$manager->flush();
-			MeldingUtil::setMelding('Voorkeuren opgeslagen', 1);
+			$this->addFlash(FlashType::SUCCESS, 'Voorkeuren opgeslagen');
 			return $this->redirectToRoute('csrdelft_profiel_voorkeuren', [
 				'uid' => $uid,
 			]);
@@ -638,7 +638,10 @@ class ProfielController extends AbstractController
 		);
 		$googleContactSync->initialize($addToContactsUrl);
 		$msg = $googleContactSync->syncLid($profiel);
-		MeldingUtil::setMelding('Opgeslagen in Google Contacten: ' . $msg, 1);
+		$this->addFlash(
+			FlashType::SUCCESS,
+			'Opgeslagen in Google Contacten: ' . $msg
+		);
 		return $this->redirectToRoute('csrdelft_profiel_profiel', [
 			'uid' => $profiel->uid,
 		]);

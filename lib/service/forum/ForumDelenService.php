@@ -3,9 +3,9 @@
 namespace CsrDelft\service\forum;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\FlashType;
 use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\common\Util\InstellingUtil;
-use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
@@ -20,6 +20,7 @@ use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ForumDelenService
 {
@@ -51,9 +52,14 @@ class ForumDelenService
 	 * @var ForumCategorieRepository
 	 */
 	private $forumCategorieRepository;
+	/**
+	 * @var RequestStack
+	 */
+	private $requestStack;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
+		RequestStack $requestStack,
 		ForumDelenRepository $forumDelenRepository,
 		ForumPostsRepository $forumPostsRepository,
 		ForumDradenRepository $forumDradenRepository,
@@ -68,6 +74,7 @@ class ForumDelenService
 		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumCategorieRepository = $forumCategorieRepository;
+		$this->requestStack = $requestStack;
 	}
 
 	public function verwijderForumDeel($id)
@@ -117,10 +124,16 @@ class ForumDelenService
 				if (count($draad->getForumPosts()) === 0) {
 					$draad->verwijderd = true;
 					$melding .= 'verwijderd (bevat geen berichten)';
-					MeldingUtil::setMelding($melding, 2);
+					$this->requestStack
+						->getSession()
+						->getFlashBag()
+						->add(FlashType::WARNING, $melding);
 				} else {
 					$melding .= 'goedgekeurd';
-					MeldingUtil::setMelding($melding, 2);
+					$this->requestStack
+						->getSession()
+						->getFlashBag()
+						->add(FlashType::WARNING, $melding);
 				}
 				$this->forumDradenRepository->update($draad);
 			}
@@ -135,10 +148,13 @@ class ForumDelenService
 			empty($dradenById) &&
 			$this->forumPostsRepository->getAantalWachtOpGoedkeuring() > 0
 		) {
-			MeldingUtil::setMelding(
-				'U heeft onvoldoende rechten om de berichten goed te keuren',
-				0
-			);
+			$this->requestStack
+				->getSession()
+				->getFlashBag()
+				->add(
+					FlashType::INFO,
+					'U heeft onvoldoende rechten om de berichten goed te keuren'
+				);
 		}
 		return $dradenById;
 	}

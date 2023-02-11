@@ -3,8 +3,9 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\FlashType;
 use CsrDelft\common\Util\FileUtil;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\documenten\Document;
 use CsrDelft\entity\documenten\DocumentCategorie;
@@ -67,7 +68,7 @@ class DocumentenController extends AbstractController
 		if ($document->magVerwijderen()) {
 			$this->documentRepository->remove($document);
 		} else {
-			MeldingUtil::setMelding('Mag document niet verwijderen', -1);
+			$this->addFlash(FlashType::ERROR, 'Mag document niet verwijderen');
 			return new JsonResponse(false);
 		}
 
@@ -95,14 +96,17 @@ class DocumentenController extends AbstractController
 			$document->mimetype == 'text/javascript' ||
 			!FileUtil::checkMimetype($document->filename, $document->mimetype)
 		) {
-			MeldingUtil::setMelding('Dit type bestand kan niet worden getoond', -1);
+			$this->addFlash(
+				FlashType::ERROR,
+				'Dit type bestand kan niet worden getoond'
+			);
 			return $this->redirectToRoute('csrdelft_documenten_recenttonen');
 		}
 
 		if ($document->hasFile()) {
 			return new BinaryFileResponse($document->getFullPath());
 		} else {
-			MeldingUtil::setMelding('Document heeft geen bestand.', -1);
+			$this->addFlash(FlashType::ERROR, 'Document heeft geen bestand.');
 			return $this->redirectToRoute('csrdelft_documenten_recenttonen');
 		}
 	}
@@ -127,7 +131,7 @@ class DocumentenController extends AbstractController
 			);
 			return $response;
 		} else {
-			MeldingUtil::setMelding('Document heeft geen bestand.', -1);
+			$this->addFlash(FlashType::ERROR, 'Document heeft geen bestand.');
 			return $this->redirectToRoute('csrdelft_documenten_recenttonen');
 		}
 	}

@@ -4,11 +4,10 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurOpmerking;
-use CsrDelft\entity\commissievoorkeuren\VoorkeurVoorkeur;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
 use CsrDelft\repository\commissievoorkeuren\VoorkeurCommissieRepository;
@@ -178,7 +177,7 @@ class CommissieVoorkeurenController extends AbstractController
 			$manager->persist($commissie);
 			$manager->flush();
 
-			MeldingUtil::setMelding('Aanpassingen commissie opgeslagen', 1);
+			$this->addFlash(FlashType::SUCCESS, 'Aanpassingen commissie opgeslagen');
 		}
 		return $this->redirectToRoute(
 			'csrdelft_commissievoorkeuren_updatecommissie',
@@ -290,14 +289,14 @@ class CommissieVoorkeurenController extends AbstractController
 			$manager = $this->getDoctrine()->getManager();
 			$manager->remove($categorie);
 			$manager->flush();
-			MeldingUtil::setMelding(
-				"Categorie '{$categorie->naam}' succesvol verwijderd",
-				1
+			$this->addFlash(
+				FlashType::SUCCESS,
+				"Categorie '{$categorie->naam}' succesvol verwijderd"
 			);
 		} else {
-			MeldingUtil::setMelding(
-				'Kan categorie niet verwijderen: is niet leeg',
-				2
+			$this->addFlash(
+				FlashType::WARNING,
+				'Kan categorie niet verwijderen: is niet leeg'
 			);
 		}
 

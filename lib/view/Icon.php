@@ -57,7 +57,7 @@ class Icon
 		'resetpassword' => 'user-lock',
 		'instellingen' => 'gear',
 		// melding
-		'alert-danger' => 'bell-exclamation',
+		'alert-danger' => 'triangle-exclamation',
 		'alert-info' => 'bell-on',
 		'alert-success' => 'circle-check',
 		'alert-warning' => 'bell',
@@ -110,8 +110,9 @@ class Icon
 			$hover = 'hover-' . self::get($hover);
 		}
 
+		$titleSafe = '';
 		if ($title !== null) {
-			$title = str_replace('&amp;', '&', htmlspecialchars($title));
+			$titleSafe = str_replace('&amp;', '&', htmlspecialchars($title));
 		}
 
 		// Test if string contains the a fa brands tag.
@@ -121,7 +122,7 @@ class Icon
 				htmlspecialchars($icon),
 				htmlspecialchars($hover),
 				htmlspecialchars($class),
-				$title
+				$titleSafe
 			);
 		} else {
 			return sprintf(
@@ -129,7 +130,7 @@ class Icon
 				htmlspecialchars($icon),
 				htmlspecialchars($hover),
 				htmlspecialchars($class),
-				$title
+				$titleSafe
 			);
 		}
 	}

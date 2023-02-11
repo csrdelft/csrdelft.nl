@@ -1,0 +1,17 @@
+<div id="melding">
+	{# Speciaal voor debug meldingen #}
+	{% if app.debug %}
+		{% for message in app.flashes('html') %}
+			<div class="alert alert-info">
+				{{ icon('alert-info') }}{{ message | raw }}
+			</div>
+		{% endfor %}
+	{% endif %}
+	{% for label, messages in app.flashes %}
+		{% for message in messages %}
+			<div class="alert alert-{{ label }}">
+				{{ icon('alert-' ~ label) }}{{ message }}
+			</div>
+		{% endfor %}
+	{% endfor %}
+</div>

@@ -4,7 +4,7 @@ namespace CsrDelft\service\forum;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\DateUtil;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
@@ -197,7 +197,7 @@ class ForumPostsService
 			$draad->laatste_wijziging_uid = null;
 			$draad->laatst_gewijzigd = null;
 			$draad->verwijderd = true;
-			MeldingUtil::setMelding(
+			FlashUtil::setFlashWithContainerFacade(
 				'Enige bericht in draad verwijderd: draad ook verwijderd',
 				2
 			);

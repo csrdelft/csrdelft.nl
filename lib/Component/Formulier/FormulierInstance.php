@@ -5,7 +5,7 @@ namespace CsrDelft\Component\Formulier;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\DateUtil;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\service\CsrfService;
@@ -16,6 +16,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\Validator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -42,8 +43,13 @@ class FormulierInstance
 	private $dataTableId;
 	private $modalBreedte;
 	private $validationMethods;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
 	public function __construct(
+		Environment $twig,
 		$action,
 		$titel,
 		$dataTableId,
@@ -66,13 +72,14 @@ class FormulierInstance
 		$this->css_classes = $css_classes;
 		$this->dataTableId = $dataTableId;
 		$this->validationMethods = $validationMethods;
+		$this->twig = $twig;
 	}
 
 	public function createView()
 	{
 		$html = '';
 		if ($this->showMelding) {
-			$html .= MeldingUtil::getMelding();
+			$html .= $this->twig->render('melding.html.twig');
 		}
 		$html .= $this->getFormTag();
 		$titel = $this->titel;
@@ -178,7 +185,7 @@ HTML;
 HTML;
 		}
 		if ($this->showMelding) {
-			$html .= MeldingUtil::getMelding();
+			$html .= $this->twig->render('melding.html.twig');
 		}
 		$html .= <<<HTML
 			<div class="modal-body">

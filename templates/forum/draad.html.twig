@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-	{{ getMelding() }}
+	{% include 'melding.html.twig' %}
 
 	{% if draad.magModereren %}
 		{{ include('forum/partial/draad_mod.html.twig') }}

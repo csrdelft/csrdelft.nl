@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier;
 
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 
 /**
  * Form as modal content.
@@ -40,7 +40,7 @@ HTML;
 HTML;
 		}
 		if ($this->showMelding) {
-			$html .= MeldingUtil::getMelding();
+			$html .= FlashUtil::getFlashUsingContainerFacade();
 		}
 		$html .= <<<HTML
 			<div class="modal-body">

@@ -3,7 +3,7 @@
 namespace CsrDelft\service\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\entity\profiel\Profiel;
@@ -269,7 +269,7 @@ class MaaltijdAbonnementenService
 			$this->entityManager->flush();
 
 			if (sizeof($abos) !== $aantal) {
-				MeldingUtil::setMelding(
+				FlashUtil::setFlashWithContainerFacade(
 					'Niet alle abonnementen zijn uitgeschakeld!',
 					-1
 				);

@@ -5,8 +5,8 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\FlashType;
 use CsrDelft\common\Util\DateUtil;
-use CsrDelft\common\Util\MeldingUtil;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\Activiteit;
@@ -19,13 +19,11 @@ use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\agenda\AgendaItemForm;
 use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\Icon;
 use CsrDelft\view\response\IcalResponse;
 use DateInterval;
-use DateTimeInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -253,7 +251,8 @@ class AgendaController extends AbstractController
 			$this->agendaRepository->save($item);
 			if ($datum === 'doorgaan') {
 				$_POST = []; // clear post values of previous input
-				MeldingUtil::setMelding(
+				$this->addFlash(
+					FlashType::SUCCESS,
 					'Toegevoegd: ' .
 						$item->titel .
 						' (' .
@@ -261,8 +260,7 @@ class AgendaController extends AbstractController
 							$item->begin_moment,
 							DateUtil::DATETIME_FORMAT
 						) .
-						')',
-					1
+						')'
 				);
 				$item->item_id = null;
 				return new Response(

@@ -3,7 +3,7 @@
 {% block titel %}Bibliotheek - Boek: {{ boek.titel }}{% endblock %}
 
 {% block content %}
-	<div class="foutje">{{ getMelding() }}</div>
+	<div class="foutje">{% include 'melding.html.twig' %}</div>
 	<ul class="horizontal">
 		<li>
 			<a href="{{ url('csrdelft_bibliotheek_catalogustonen') }}" title="Naar de catalogus">Catalogus</a>

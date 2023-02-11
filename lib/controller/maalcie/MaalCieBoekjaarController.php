@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\maalcie\forms\BoekjaarSluitenForm;
@@ -55,11 +55,11 @@ class MaalCieBoekjaarController extends AbstractController
 				strtotime($values['einddatum'])
 			);
 			if (count($errors_aantal[0]) === 0) {
-				MeldingUtil::setMelding(
+				$this->addFlash(
+					FlashType::SUCCESS,
 					'Boekjaar succesvol gesloten: ' .
 						$errors_aantal[1] .
-						' maaltijden naar het archief verplaatst.',
-					1
+						' maaltijden naar het archief verplaatst.'
 				);
 			}
 			return $this->render('maaltijden/boekjaar_sluiten.html.twig');

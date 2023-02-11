@@ -5,7 +5,7 @@ namespace CsrDelft\service\profiel;
 use CsrDelft\common\Mail;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\HostUtil;
-use CsrDelft\common\Util\MeldingUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessRole;
@@ -158,7 +158,7 @@ class LidStatusService
 			$profiel->uid
 		);
 		if (sizeof($taken) !== $aantal) {
-			MeldingUtil::setMelding(
+			FlashUtil::setFlashWithContainerFacade(
 				'Niet alle toekomstige corveetaken zijn verwijderd!',
 				-1
 			);
