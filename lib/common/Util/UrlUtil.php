@@ -2,7 +2,6 @@
 
 namespace CsrDelft\common\Util;
 
-use CsrDelft\common\ContainerFacade;
 use Exception;
 
 final class UrlUtil

@@ -4,7 +4,6 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\FlashType;
-use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepLedenImportDTO;

@@ -43,7 +43,6 @@ use CsrDelft\service\GoogleContactSync;
 use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use CsrDelft\service\profiel\LidStatusService;
-use CsrDelft\service\ProfielService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenType;

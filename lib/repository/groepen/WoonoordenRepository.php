@@ -8,7 +8,6 @@ use CsrDelft\entity\groepen\enum\HuisStatus;
 use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\service\security\LoginService;
-use Doctrine\Persistence\ManagerRegistry;
 
 class WoonoordenRepository extends GroepRepository
 {

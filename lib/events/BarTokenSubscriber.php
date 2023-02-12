@@ -4,7 +4,6 @@ namespace CsrDelft\events;
 
 use CsrDelft\controller\api\v3\BarSysteemController;
 use CsrDelft\entity\bar\BarLocatie;
-use CsrDelft\service\AccessService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;

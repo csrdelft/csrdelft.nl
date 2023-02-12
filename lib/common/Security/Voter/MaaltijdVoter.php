@@ -9,7 +9,6 @@ use CsrDelft\entity\security\Account;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Is een lid aangemeld voor een bepaalde maaltijd?

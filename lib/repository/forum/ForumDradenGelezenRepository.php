@@ -5,7 +5,6 @@ namespace CsrDelft\repository\forum;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadGelezen;
 use CsrDelft\repository\AbstractRepository;
-use CsrDelft\service\security\LoginService;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;

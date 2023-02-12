@@ -2,8 +2,6 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
-use CsrDelft\bb\BbTag;
-use CsrDelft\bb\internal\BbString;
 use CsrDelft\bb\tag\BbHeading;
 use CsrDelft\bb\tag\BbNode;
 

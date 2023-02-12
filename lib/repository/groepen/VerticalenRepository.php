@@ -6,7 +6,6 @@ use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\repository\GroepRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\Persistence\ManagerRegistry;
 
 class VerticalenRepository extends GroepRepository
 {

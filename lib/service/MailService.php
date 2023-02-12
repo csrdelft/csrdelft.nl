@@ -4,7 +4,6 @@ namespace CsrDelft\service;
 
 use CsrDelft\common\FlashType;
 use CsrDelft\common\Mail;
-use CsrDelft\common\Util\FlashUtil;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 

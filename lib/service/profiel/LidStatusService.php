@@ -21,7 +21,6 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use CsrDelft\service\MailService;
 use DateTime;
-use DateTimeInterface;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 

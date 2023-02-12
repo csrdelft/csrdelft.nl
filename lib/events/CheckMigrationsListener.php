@@ -5,7 +5,6 @@ namespace CsrDelft\events;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Metadata\AvailableMigration;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Log\Logger;
 
 class CheckMigrationsListener

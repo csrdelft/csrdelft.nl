@@ -4,7 +4,6 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
 use CsrDelft\service\AccessService;
-use CsrDelft\service\security\LoginService;
 use Symfony\Component\Security\Core\Security;
 
 /**

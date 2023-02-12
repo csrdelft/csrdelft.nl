@@ -2,15 +2,9 @@
 
 namespace CsrDelft\repository\forum;
 
-use CsrDelft\common\Mail;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDeelMelding;
-use CsrDelft\entity\forum\ForumDraad;
-use CsrDelft\entity\forum\ForumPost;
-use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\entity\security\Account;
 use CsrDelft\repository\AbstractRepository;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\MailService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;

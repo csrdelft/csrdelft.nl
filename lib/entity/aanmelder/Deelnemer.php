@@ -6,7 +6,6 @@ use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\aanmelder\DeelnemerRepository;
 use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

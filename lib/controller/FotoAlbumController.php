@@ -7,7 +7,6 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
 use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
-use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;

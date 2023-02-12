@@ -4,7 +4,6 @@ namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeTaak;
-use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\LidObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;

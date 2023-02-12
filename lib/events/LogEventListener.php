@@ -4,7 +4,6 @@ namespace CsrDelft\events;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\Security\Core\Security;
 
 class LogEventListener
 {

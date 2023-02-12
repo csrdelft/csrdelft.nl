@@ -5,7 +5,6 @@ namespace CsrDelft\repository\groepen;
 use CsrDelft\entity\groepen\Bestuur;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\repository\GroepRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class BesturenRepository extends GroepRepository

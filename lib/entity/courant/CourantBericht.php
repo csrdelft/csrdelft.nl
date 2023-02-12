@@ -3,7 +3,6 @@
 namespace CsrDelft\entity\courant;
 
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 

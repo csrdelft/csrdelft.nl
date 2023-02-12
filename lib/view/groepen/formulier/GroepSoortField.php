@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Enum;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Bestuur;
@@ -18,12 +17,7 @@ use CsrDelft\entity\groepen\Werkgroep;
 use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
-use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\repository\groepen\CommissiesRepository;
-use CsrDelft\repository\groepen\KetzersRepository;
-use CsrDelft\repository\groepen\OnderverenigingenRepository;
-use CsrDelft\repository\groepen\RechtenGroepenRepository;
-use CsrDelft\repository\groepen\WerkgroepenRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\RadioField;

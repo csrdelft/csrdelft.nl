@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\maalcie\beheer;
 
-use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdBeoordelingDTO;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\DataTable;

@@ -13,7 +13,6 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
-use Psr\Log\LoggerInterface;
 
 /**
  * ForumDraad.class.php

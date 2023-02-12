@@ -5,7 +5,6 @@ namespace CsrDelft\common\Security\Voter;
 use CsrDelft\entity\profiel\Profiel;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Is de gebruiker man of vrouw?

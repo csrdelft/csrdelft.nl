@@ -7,7 +7,6 @@ use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 

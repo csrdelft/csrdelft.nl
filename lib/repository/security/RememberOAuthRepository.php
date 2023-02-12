@@ -2,11 +2,8 @@
 
 namespace CsrDelft\repository\security;
 
-use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\RememberOAuth;
 use CsrDelft\repository\AbstractRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 

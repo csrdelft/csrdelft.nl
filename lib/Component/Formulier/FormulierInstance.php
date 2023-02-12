@@ -5,7 +5,6 @@ namespace CsrDelft\Component\Formulier;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\DateUtil;
-use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\service\CsrfService;
@@ -15,7 +14,6 @@ use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\Validator;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**

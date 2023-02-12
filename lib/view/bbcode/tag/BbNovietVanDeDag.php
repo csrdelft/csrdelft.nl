@@ -5,7 +5,6 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbTag;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 

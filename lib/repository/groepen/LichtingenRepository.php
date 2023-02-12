@@ -6,7 +6,6 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
-use Doctrine\Persistence\ManagerRegistry;
 
 class LichtingenRepository extends GroepRepository
 {

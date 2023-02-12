@@ -5,9 +5,7 @@ namespace CsrDelft\entity\groepen;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
-use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Werkgroep.class.php

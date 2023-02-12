@@ -6,7 +6,6 @@ use CsrDelft\common\CsrException;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Bestuur;
 use CsrDelft\entity\groepen\Commissie;
-use CsrDelft\entity\groepen\enum\CommissieFunctie;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\groepen\Kring;

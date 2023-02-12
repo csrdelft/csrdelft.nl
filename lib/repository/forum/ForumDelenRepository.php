@@ -2,14 +2,10 @@
 
 namespace CsrDelft\repository\forum;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDeel;
-use CsrDelft\entity\forum\ForumDraad;
-use CsrDelft\entity\forum\ForumPost;
-use CsrDelft\entity\forum\ForumZoeken;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

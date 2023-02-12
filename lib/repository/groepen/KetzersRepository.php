@@ -4,7 +4,6 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\repository\GroepRepository;
-use Doctrine\Persistence\ManagerRegistry;
 
 class KetzersRepository extends GroepRepository
 {

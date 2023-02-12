@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
-use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\entity\maalcie\RepetitieMaaltijdMaken;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\keuzevelden\DateObjectField;

@@ -5,7 +5,6 @@ namespace CsrDelft\view\bbcode\tag\groep;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\groepen\VerticalenRepository;
-use CsrDelft\service\security\LoginService;
 use Symfony\Component\Security\Core\Security;
 
 /**

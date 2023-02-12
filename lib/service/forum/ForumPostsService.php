@@ -15,7 +15,6 @@ use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
-use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ForumPostsService

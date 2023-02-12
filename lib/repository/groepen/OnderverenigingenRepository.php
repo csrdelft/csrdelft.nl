@@ -8,7 +8,6 @@ use CsrDelft\entity\groepen\enum\OnderverenigingStatus;
 use CsrDelft\entity\groepen\Ondervereniging;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\service\security\LoginService;
-use Doctrine\Persistence\ManagerRegistry;
 
 class OnderverenigingenRepository extends GroepRepository
 {

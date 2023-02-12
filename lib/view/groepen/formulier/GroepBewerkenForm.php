@@ -6,7 +6,6 @@ use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\view\formulier\InlineForm;
 use CsrDelft\view\formulier\invoervelden\AutocompleteField;
-use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\MultiSelectField;
 
 class GroepBewerkenForm extends InlineForm

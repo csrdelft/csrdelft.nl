@@ -2,23 +2,12 @@
 
 namespace CsrDelft\repository\forum;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Mail;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadMelding;
 use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
-use CsrDelft\entity\forum\ForumPost;
-use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\entity\security\Account;
 use CsrDelft\repository\AbstractRepository;
-use CsrDelft\repository\instellingen\LidInstellingenRepository;
-use CsrDelft\repository\ProfielRepository;
-use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\service\MailService;
 use CsrDelft\service\security\LoginService;
-use CsrDelft\service\security\SuService;
 use Doctrine\Persistence\ManagerRegistry;
-use Twig\Environment;
 
 /**
  * Model voor bijhouden, bewerken en verzenden van meldingen voor forumberichten

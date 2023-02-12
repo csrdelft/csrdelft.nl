@@ -6,7 +6,6 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\DateUtil;
-use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\corvee\RepetitieTakenUpdateDTO;
 use CsrDelft\entity\corvee\CorveeTaak;
@@ -14,17 +13,14 @@ use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
 use CsrDelft\service\security\LoginService;
 use DateInterval;
-use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
-use PDOStatement;
 use Throwable;
 
 /**

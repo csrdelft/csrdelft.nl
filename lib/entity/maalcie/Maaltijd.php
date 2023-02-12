@@ -4,17 +4,13 @@ namespace CsrDelft\entity\maalcie;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Eisen;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\fiscaat\CiviProduct;
-use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
-use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\DisplayEntity;
 use DateTimeImmutable;

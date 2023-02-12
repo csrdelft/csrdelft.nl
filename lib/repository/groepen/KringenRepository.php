@@ -6,7 +6,6 @@ use CsrDelft\entity\groepen\Kring;
 use CsrDelft\repository\GroepRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class KringenRepository extends GroepRepository

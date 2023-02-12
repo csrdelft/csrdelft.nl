@@ -10,7 +10,6 @@ use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\EetplanFactory;
-use DateTimeInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

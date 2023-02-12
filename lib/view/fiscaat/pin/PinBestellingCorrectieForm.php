@@ -10,7 +10,6 @@ use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
-use DateTimeInterface;
 
 abstract class PinBestellingCorrectieForm extends ModalForm
 {

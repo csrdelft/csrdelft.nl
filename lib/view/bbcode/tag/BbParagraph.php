@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 
 class BbParagraph extends BbTag

@@ -9,7 +9,6 @@ use CsrDelft\common\yaml\YamlInstellingen;
 use CsrDelft\entity\LidToestemming;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;

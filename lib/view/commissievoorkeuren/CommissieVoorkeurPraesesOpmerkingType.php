@@ -9,9 +9,6 @@
 namespace CsrDelft\view\commissievoorkeuren;
 
 use CsrDelft\entity\commissievoorkeuren\VoorkeurOpmerking;
-use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\invoervelden\TextareaField;
-use CsrDelft\view\formulier\knoppen\SubmitKnop;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;

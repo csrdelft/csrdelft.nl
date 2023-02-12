@@ -3,7 +3,6 @@
 namespace CsrDelft\view\bbcode;
 
 use CsrDelft\bb\BbEnv;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\HostUtil;
 
 /**

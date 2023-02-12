@@ -17,7 +17,6 @@ use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\ProfielService;
 use CsrDelft\service\Roodschopper;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use CsrDelft\view\Icon;
 use CsrDelft\view\PlainView;

@@ -5,7 +5,6 @@ namespace CsrDelft\view\formulier\invoervelden;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\entity\security\Account;
-use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccountService;
 
 /**

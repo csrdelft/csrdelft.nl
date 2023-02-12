@@ -4,7 +4,6 @@ namespace CsrDelft\repository\documenten;
 
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\repository\AbstractRepository;
-use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
 

@@ -10,7 +10,6 @@ use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
-use stdClass;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>

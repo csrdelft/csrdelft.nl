@@ -16,7 +16,6 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
-use DateTimeInterface;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 

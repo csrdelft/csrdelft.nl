@@ -4,7 +4,6 @@ namespace CsrDelft\view\ledenmemory;
 
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\LedenMemoryScore;
-use CsrDelft\repository\LedenMemoryScoresRepository;
 use CsrDelft\view\datatable\DataTable;
 
 class LedenMemoryScoreTable extends DataTable

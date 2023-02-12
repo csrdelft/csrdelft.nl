@@ -5,8 +5,6 @@ namespace CsrDelft\repository\groepen;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
-use CsrDelft\entity\security\enum\AccessAction;
-use Doctrine\Persistence\ManagerRegistry;
 
 class ActiviteitenRepository extends KetzersRepository
 {

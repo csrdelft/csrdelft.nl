@@ -10,7 +10,6 @@ use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
-use DateTimeInterface;
 use Google\Service\PeopleService;
 use Google\Service\PeopleService\Address;
 use Google\Service\PeopleService\BatchCreateContactsRequest;

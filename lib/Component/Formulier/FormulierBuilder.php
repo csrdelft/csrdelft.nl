@@ -4,7 +4,6 @@ namespace CsrDelft\Component\Formulier;
 
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
-use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;

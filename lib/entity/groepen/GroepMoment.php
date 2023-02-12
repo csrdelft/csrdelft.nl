@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;

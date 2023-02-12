@@ -13,7 +13,6 @@ use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
 use CsrDelft\service\maalcie\MaaltijdGastAanmeldingenService;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
 use Doctrine\ORM\OptimisticLockException;

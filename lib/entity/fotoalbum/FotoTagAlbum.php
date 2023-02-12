@@ -6,7 +6,6 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\repository\fotoalbum\FotoTagsRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
 
 /**
  * FotoTagAlbum.class.php

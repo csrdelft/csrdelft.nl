@@ -4,7 +4,6 @@ namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\fotoalbum\Foto;
-use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\Response;

@@ -8,7 +8,6 @@ use CsrDelft\entity\courant\CourantBericht;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\Security;
 
 class CourantBerichtVoter extends Voter
 {

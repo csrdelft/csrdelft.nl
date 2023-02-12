@@ -2,16 +2,13 @@
 
 namespace CsrDelft\view\documenten;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\Component\Formulier\FormulierBuilder;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
-use CsrDelft\entity\documenten\Document;
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\model\entity\Map;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
-use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\EntitySelectField;

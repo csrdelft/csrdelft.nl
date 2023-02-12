@@ -4,9 +4,7 @@ namespace CsrDelft\repository;
 
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\courant\Courant;
-use CsrDelft\service\security\LoginService;
 use DateTime;
-use DateTimeInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
 

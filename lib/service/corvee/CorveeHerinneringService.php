@@ -12,7 +12,6 @@ use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\MailService;
 use DateInterval;
-use DateTimeInterface;
 use Twig\Environment;
 
 /**

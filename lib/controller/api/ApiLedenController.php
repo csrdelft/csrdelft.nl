@@ -6,7 +6,6 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\LidZoekerService;
-use DateTimeInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;

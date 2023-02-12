@@ -17,7 +17,6 @@ use CsrDelft\repository\Paging;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use DateInterval;
-use DateTimeInterface;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Query\ResultSetMapping;

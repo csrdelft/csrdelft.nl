@@ -10,8 +10,6 @@ namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\GroepLid;
-use CsrDelft\entity\security\enum\AccessAction;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\ToHtmlResponse;

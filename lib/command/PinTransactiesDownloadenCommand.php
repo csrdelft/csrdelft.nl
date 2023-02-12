@@ -12,7 +12,6 @@ use CsrDelft\service\pin\PinTransactieDownloader;
 use CsrDelft\service\pin\PinTransactieMatcher;
 use DateInterval;
 use DateTime;
-use DateTimeInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

@@ -8,7 +8,6 @@ use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\formulier\Dropzone;
 use CsrDelft\view\formulier\uploadvelden\ImageField;
-use CsrDelft\view\Icon;
 
 class FotosDropzone extends Dropzone
 {

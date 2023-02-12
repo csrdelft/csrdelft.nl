@@ -6,7 +6,6 @@ use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\groepen\Woonoord;
-use CsrDelft\repository\ProfielRepository;
 
 /**
  * EetplanFactory.class.php

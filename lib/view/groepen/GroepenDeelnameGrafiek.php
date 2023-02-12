@@ -4,7 +4,6 @@ namespace CsrDelft\view\groepen;
 
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\Groep;
-use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\ToResponse;
