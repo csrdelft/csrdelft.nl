@@ -548,7 +548,7 @@ ORDER BY yearweek DESC
 		if (!empty($uid)) {
 			$q->bindValue(':uid', $uid, PDO::PARAM_STR);
 		} else {
-			$latest = $this->db->query("SELECT uid FROM civi_saldo WHERE uid LIKE 'c%' ORDER BY uid DESC LIMIT 1")->fetchFirstColumn();
+			$latest = $this->db->query("SELECT uid FROM civi_saldo WHERE uid LIKE 'c%' ORDER BY uid DESC LIMIT 1")->fetchFirstColumn()[0];
 			$q->bindValue(':uid', ++$latest, PDO::PARAM_STR);
 		}
 
