@@ -9,7 +9,6 @@
 	z-index: 10001;
 	align-items: center;
 	justify-content: center;
-	pointer-events: none;
 	user-select: none;
 	-webkit-tap-highlight-color: transparent;
 	background: rgba(46, 49, 65, 0.8);
@@ -22,6 +21,10 @@
 	top: 0;
 	visibility: hidden;
 	width: 100%;
+
+	> .overlay {
+		pointer-events: none;
+	}
 
 	.inner {
 		padding: 1em;
