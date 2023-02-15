@@ -37,9 +37,14 @@ class MaaltijdenService
 	 * @var MaaltijdAbonnementenService
 	 */
 	private $maaltijdAbonnementenService;
+	/**
+	 * @var MaaltijdAanmeldingenService
+	 */
+	private $maaltijdAanmeldingenService;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
+		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
 		MaaltijdenRepository $maaltijdenRepository,
 		MaaltijdAbonnementenService $maaltijdAbonnementenService,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
@@ -50,6 +55,7 @@ class MaaltijdenService
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->maaltijdAbonnementenService = $maaltijdAbonnementenService;
+		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	/**
@@ -80,7 +86,7 @@ class MaaltijdenService
 				!$maaltijd->verwijderd &&
 				!empty($maaltijd->filter)
 			) {
-				$verwijderd = $this->maaltijdAanmeldingenRepository->checkAanmeldingenFilter(
+				$verwijderd = $this->maaltijdAanmeldingenService->checkAanmeldingenFilter(
 					$maaltijd->filter,
 					[$maaltijd]
 				);
@@ -171,7 +177,7 @@ class MaaltijdenService
 			// Kan en mag aanmelden of mag maaltijdlijst zien en sluiten? Dan maaltijd ook zien.
 			if (
 				($maaltijd->aanmeld_limiet > 0 &&
-					$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
+					$this->maaltijdAanmeldingenService->checkAanmeldFilter(
 						$uid,
 						$maaltijd->aanmeld_filter
 					)) ||

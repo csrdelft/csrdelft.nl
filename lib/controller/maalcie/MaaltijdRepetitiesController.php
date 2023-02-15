@@ -100,7 +100,7 @@ class MaaltijdRepetitiesController extends AbstractController
 		if ($view->validate()) {
 			$repetitie = $view->getModel();
 
-			$aantal = $this->maaltijdRepetitiesRepository->saveRepetitie($repetitie);
+			$aantal = $this->maaltijdRepetitiesService->saveRepetitie($repetitie);
 			if ($aantal > 0) {
 				$this->addFlash(
 					FlashType::WARNING,
@@ -130,9 +130,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 */
 	public function verwijder(MaaltijdRepetitie $repetitie)
 	{
-		$aantal = $this->maaltijdRepetitiesRepository->verwijderRepetitie(
-			$repetitie
-		);
+		$aantal = $this->maaltijdRepetitiesService->verwijderRepetitie($repetitie);
 
 		if ($aantal > 0) {
 			$this->addFlash(

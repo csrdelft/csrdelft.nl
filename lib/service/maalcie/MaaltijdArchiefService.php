@@ -6,8 +6,11 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\FlashUtil;
+use CsrDelft\entity\maalcie\ArchiefMaaltijd;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
@@ -27,15 +30,53 @@ class MaaltijdArchiefService
 	 * @var CorveeTakenRepository
 	 */
 	private $corveeTakenRepository;
+	/**
+	 * @var MaaltijdAanmeldingenRepository
+	 */
+	private $maaltijdAanmeldingenRepository;
 
 	public function __construct(
 		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		ArchiefMaaltijdenRepository $archiefMaaltijdenRepository,
 		CorveeTakenRepository $corveeTakenRepository
 	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->archiefMaaltijdenRepository = $archiefMaaltijdenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+	}
+
+	public function vanMaaltijd(Maaltijd $maaltijd)
+	{
+		$archief = new ArchiefMaaltijd();
+		$archief->maaltijd_id = $maaltijd->maaltijd_id;
+		$archief->titel = $maaltijd->titel;
+		$archief->datum = $maaltijd->datum;
+		$archief->tijd = $maaltijd->tijd;
+		$archief->prijs = $maaltijd->getPrijs();
+		$archief->aanmeldingen = '';
+		foreach (
+			$this->maaltijdAanmeldingenRepository->getAanmeldingenVoorMaaltijd(
+				$maaltijd
+			)
+			as $aanmelding
+		) {
+			if (!$aanmelding->uid) {
+				$archief->aanmeldingen .= 'gast';
+			} else {
+				$archief->aanmeldingen .= $aanmelding->uid;
+			}
+			if ($aanmelding->abonnementRepetitie) {
+				$archief->aanmeldingen .= '_abo';
+			}
+			if ($aanmelding->door_uid !== null) {
+				$archief->aanmeldingen .= '_' . $aanmelding->door_uid;
+			}
+			$archief->aanmeldingen .= ',';
+		}
+
+		return $archief;
 	}
 
 	/**
@@ -54,7 +95,7 @@ class MaaltijdArchiefService
 		$maaltijden = $this->maaltijdenRepository->getMaaltijdenTussen($van, $tot);
 		foreach ($maaltijden as $maaltijd) {
 			try {
-				$archief = $this->archiefMaaltijdenRepository->vanMaaltijd($maaltijd);
+				$archief = $this->vanMaaltijd($maaltijd);
 				$this->archiefMaaltijdenRepository->create($archief);
 				if (
 					$this->corveeTakenRepository->existMaaltijdCorvee(

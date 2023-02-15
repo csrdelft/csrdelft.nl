@@ -2,14 +2,10 @@
 
 namespace CsrDelft\repository\maalcie;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
-use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\AbstractRepository;
-use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\service\AccessService;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -24,41 +20,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MaaltijdAanmeldingenRepository extends AbstractRepository
 {
-	/**
-	 * @var AccessService
-	 */
-	private $accessService;
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-
-	public function __construct(
-		ManagerRegistry $registry,
-		AccessService $accessService,
-		AccountRepository $accountRepository
-	) {
-		parent::__construct($registry, MaaltijdAanmelding::class);
-		$this->accessService = $accessService;
-		$this->accountRepository = $accountRepository;
-	}
-
-	/**
-	 * @param string $uid
-	 * @param string $filter
-	 * @return bool Of de gebruiker voldoet aan het filter
-	 * @throws CsrGebruikerException Als de gebruiker niet bestaat
-	 */
-	public function checkAanmeldFilter($uid, $filter)
+	public function __construct(ManagerRegistry $registry)
 	{
-		$account = $this->accountRepository->find($uid); // false if account does not exist
-		if (!$account) {
-			throw new CsrGebruikerException('Lid bestaat niet: $uid =' . $uid);
-		}
-		if (empty($filter)) {
-			return true;
-		}
-		return $this->accessService->isUserGranted($account, $filter);
+		parent::__construct($registry, MaaltijdAanmelding::class);
 	}
 
 	public function getIsAangemeld($mid, $uid)
@@ -80,47 +44,6 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 			);
 		}
 		return $aanmelding;
-	}
-
-	/**
-	 * Called when a MaaltijdAbonnement is being deleted (turned off) or a MaaltijdRepetitie is being deleted.
-	 *
-	 * @param MaaltijdRepetitie $repetitie
-	 * @param string $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
-	 *
-	 * @return int|null
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function afmeldenDoorAbonnement(MaaltijdRepetitie $repetitie, $uid)
-	{
-		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
-		$maaltijden = ContainerFacade::getContainer()
-			->get(MaaltijdenRepository::class)
-			->getKomendeOpenRepetitieMaaltijden($repetitie->mlt_repetitie_id);
-		if (empty($maaltijden)) {
-			return 0;
-		}
-		$byMid = [];
-		foreach ($maaltijden as $maaltijd) {
-			if (!$maaltijd->gesloten && !$maaltijd->verwijderd) {
-				$byMid[$maaltijd->maaltijd_id] = $maaltijd;
-			}
-		}
-		$aanmeldingen = $this->getAanmeldingenVoorLid($byMid, $uid);
-		$aantal = 0;
-		foreach ($aanmeldingen as $mid => $aanmelding) {
-			if (
-				$aanmelding->abonnementRepetitie &&
-				$repetitie->mlt_repetitie_id ===
-					$aanmelding->abonnementRepetitie->mlt_repetitie_id
-			) {
-				$this->getEntityManager()->remove($aanmelding);
-				$aantal++;
-			}
-		}
-		$this->getEntityManager()->flush();
-		return $aantal;
 	}
 
 	/**
@@ -175,6 +98,11 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 		return $lijst;
 	}
 
+	public function findVoorMaaltijd(Maaltijd $maaltijd)
+	{
+		return $this->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
+	}
+
 	/**
 	 * Called when a Maaltijd is being deleted.
 	 *
@@ -189,46 +117,5 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 			$this->getEntityManager()->remove($aanmelding);
 		}
 		$this->getEntityManager()->flush();
-	}
-
-	/**
-	 * Controleer of alle aanmeldingen voor de maaltijden nog in overeenstemming zijn met het aanmeldfilter.
-	 *
-	 * @param string $filter
-	 * @param Maaltijd[] $maaltijden
-	 * @return int
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function checkAanmeldingenFilter($filter, $maaltijden)
-	{
-		$mids = [];
-		foreach ($maaltijden as $maaltijd) {
-			if (!$maaltijd->gesloten && !$maaltijd->verwijderd) {
-				$mids[] = $maaltijd->maaltijd_id;
-			}
-		}
-		if (empty($mids)) {
-			return 0;
-		}
-		$aantal = 0;
-		$aanmeldingen = [];
-		foreach ($mids as $mid) {
-			$aanmeldingen = array_merge(
-				$aanmeldingen,
-				$this->findBy(['maaltijd_id' => $mid])
-			);
-		}
-		foreach ($aanmeldingen as $aanmelding) {
-			// check filter voor elk aangemeld lid
-			$uid = $aanmelding->uid;
-			if (!$this->checkAanmeldFilter($uid, $filter)) {
-				// verwijder aanmelding indien niet toegestaan
-				$aantal += 1 + $aanmelding->aantal_gasten;
-				$this->getEntityManager()->remove($aanmelding);
-			}
-		}
-		$this->getEntityManager()->flush();
-		return $aantal;
 	}
 }

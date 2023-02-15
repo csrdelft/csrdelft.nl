@@ -7,11 +7,12 @@ use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
-use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use DateInterval;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Exception;
 
 class MaaltijdRepetitiesService
@@ -33,18 +34,18 @@ class MaaltijdRepetitiesService
 	 */
 	private $corveeTakenRepository;
 	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
-	/**
 	 * @var MaaltijdAbonnementenService
 	 */
 	private $maaltijdAbonnementenService;
+	/**
+	 * @var MaaltijdAanmeldingenService
+	 */
+	private $maaltijdAanmeldingenService;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
 		MaaltijdenRepository $maaltijdenRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
 		MaaltijdAbonnementenService $maaltijdAbonnementenService,
 		CorveeRepetitiesRepository $corveeRepetitiesRepository,
 		CorveeTakenRepository $corveeTakenRepository
@@ -53,8 +54,8 @@ class MaaltijdRepetitiesService
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdAbonnementenService = $maaltijdAbonnementenService;
+		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	/**
@@ -153,7 +154,7 @@ class MaaltijdRepetitiesService
 			]);
 			$filter = $repetitie->abonnement_filter;
 			if (!empty($filter)) {
-				$aanmeldingen = $this->maaltijdAanmeldingenRepository->checkAanmeldingenFilter(
+				$aanmeldingen = $this->maaltijdAanmeldingenService->checkAanmeldingenFilter(
 					$filter,
 					$maaltijden
 				);
@@ -185,5 +186,65 @@ class MaaltijdRepetitiesService
 			}
 			return [$updated, $aanmeldingen];
 		});
+	}
+
+	/**
+	 * @param $repetitie MaaltijdRepetitie
+	 * @return array
+	 */
+	public function saveRepetitie($repetitie)
+	{
+		return $this->entityManager->wrapInTransaction(function () use (
+			$repetitie
+		) {
+			$abos = 0;
+			$this->entityManager->persist($repetitie);
+			$this->entityManager->flush();
+			if (!$repetitie->abonneerbaar) {
+				// niet (meer) abonneerbaar
+				$abos = $this->maaltijdAbonnementenService->verwijderAbonnementen(
+					$repetitie
+				);
+			}
+			return $abos;
+		});
+	}
+
+	/**
+	 * @param MaaltijdRepetitie $repetitie
+	 * @return int
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function verwijderRepetitie(MaaltijdRepetitie $repetitie)
+	{
+		if (
+			$this->corveeRepetitiesRepository->existMaaltijdRepetitieCorvee(
+				$repetitie->mlt_repetitie_id
+			)
+		) {
+			throw new CsrGebruikerException(
+				'Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!'
+			);
+		}
+		if (
+			$this->maaltijdenRepository->existRepetitieMaaltijden(
+				$repetitie->mlt_repetitie_id
+			)
+		) {
+			// delete maaltijden first (foreign key)
+			$this->maaltijdenRepository->verwijderRepetitieMaaltijden(
+				$repetitie->mlt_repetitie_id
+			);
+			throw new CsrGebruikerException(
+				'Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!'
+			);
+		}
+		$aantalAbos = $this->maaltijdAbonnementenService->verwijderAbonnementen(
+			$repetitie
+		);
+		$this->entityManager->remove($repetitie);
+		$this->entityManager->flush();
+		return $aantalAbos;
 	}
 }

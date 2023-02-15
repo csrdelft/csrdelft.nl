@@ -8,6 +8,7 @@ use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
@@ -31,10 +32,15 @@ class MaaltijdRepetitieAanmeldingenService
 	 * @var MaaltijdAanmeldingenService
 	 */
 	private $maaltijdAanmeldingenService;
+	/**
+	 * @var MaaltijdRepetitiesRepository
+	 */
+	private $maaltijdRepetitiesRepository;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
 		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		MaaltijdAanmeldingenService $maaltijdAanmeldingenService
 	) {
@@ -42,6 +48,7 @@ class MaaltijdRepetitieAanmeldingenService
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
+		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 	}
 
 	/**
@@ -58,7 +65,7 @@ class MaaltijdRepetitieAanmeldingenService
 		$uid
 	) {
 		if (
-			!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
+			!$this->maaltijdAanmeldingenService->checkAanmeldFilter(
 				$uid,
 				$repetitie->abonnement_filter
 			)
@@ -143,5 +150,29 @@ class MaaltijdRepetitieAanmeldingenService
 		}
 
 		return false;
+	}
+
+	/**
+	 * Filtert de repetities met het abonnement-filter van de maaltijd-repetitie op de permissies van het ingelogde lid.
+	 *
+	 * @param string $uid
+	 * @return MaaltijdRepetitie[]
+	 * @internal param MaaltijdRepetitie[] $repetities
+	 */
+	public function getAbonneerbareRepetitiesVoorLid($uid)
+	{
+		$repetities = $this->maaltijdRepetitiesRepository->getAbboneerbareRepetities();
+		$result = [];
+		foreach ($repetities as $repetitie) {
+			if (
+				$this->maaltijdAanmeldingenService->checkAanmeldFilter(
+					$uid,
+					$repetitie->abonnement_filter
+				)
+			) {
+				$result[$repetitie->mlt_repetitie_id] = $repetitie;
+			}
+		}
+		return $result;
 	}
 }
