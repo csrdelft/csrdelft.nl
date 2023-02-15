@@ -10,12 +10,14 @@ use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\fiscaat\CiviProduct;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\DisplayEntity;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -151,10 +153,29 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @var CorveeTaak
 	 */
 	public $maaltijdcorvee;
+	/**
+	 * @var CorveeTaak[]|ArrayCollection
+	 * @ORM\OneToMany(targetEntity="CsrDelft\entity\corvee\CorveeTaak", mappedBy="maaltijd")
+	 */
+	public $taken;
 
 	public function __construct()
 	{
 		$this->aanmeldingen = new ArrayCollection();
+		$this->taken = new ArrayCollection();
+	}
+
+	public function getAanmelding(Profiel $profiel): ?MaaltijdAanmelding
+	{
+		$aanmelding = $this->aanmeldingen->matching(
+			Eisen::voorGebruiker($profiel->uid)
+		);
+
+		if ($aanmelding->count() == 1) {
+			return $aanmelding->get(0);
+		}
+
+		return null;
 	}
 
 	public function getPrijsFloat()
@@ -239,13 +260,19 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 */
 	public function getCorveeTaken($functieID)
 	{
-		return ContainerFacade::getContainer()
-			->get(CorveeTakenRepository::class)
-			->findBy([
-				'corveeFunctie' => $functieID,
-				'maaltijd_id' => $this->maaltijd_id,
-				'verwijderd' => false,
-			]);
+		return $this->taken->matching(
+			Criteria::create()
+				->where(Criteria::expr()->eq('corveeFunctie', $functieID))
+				->andWhere(Criteria::expr()->eq('maaltijd_id', $this->maaltijd_id))
+				->andWhere(Criteria::expr()->eq('verwijderd', false))
+		);
+	}
+
+	public function getActieveCorveeTaken()
+	{
+		return $this->taken->matching(
+			Criteria::create()->where(Criteria::expr()->eq('verwijderd', false))
+		);
 	}
 
 	// Agendeerbaar ############################################################

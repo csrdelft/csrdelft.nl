@@ -89,10 +89,7 @@ class BeheerTakenController extends AbstractController
 			$modal = $this->bewerk($taak);
 		}
 		if ($maaltijd) {
-			$taken = $this->corveeTakenRepository->getTakenVoorMaaltijd(
-				$maaltijd->maaltijd_id,
-				true
-			);
+			$taken = $maaltijd->taken;
 		} else {
 			$taken = $this->corveeTakenRepository->getAlleTaken();
 			$maaltijd = null;

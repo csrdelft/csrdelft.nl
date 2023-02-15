@@ -393,51 +393,27 @@ class CorveeTakenRepository extends AbstractRepository
 	// Maaltijd-Corvee ############################################################
 
 	/**
-	 * Haalt de taken op die gekoppeld zijn aan een maaltijd.
-	 * Eventueel ook alle verwijderde taken.
-	 *
-	 * @param int $mid
-	 * @param bool $verwijderd
-	 * @return CorveeTaak[]
-	 * @throws CsrGebruikerException
-	 */
-	public function getTakenVoorMaaltijd($mid, $verwijderd = false)
-	{
-		if ($mid <= 0) {
-			throw new CsrGebruikerException(
-				'Load taken voor maaltijd faalt: Invalid $mid =' . $mid
-			);
-		}
-		if ($verwijderd) {
-			return $this->findBy(['maaltijd_id' => $mid], ['datum' => 'ASC']);
-		}
-		return $this->findBy(
-			['verwijderd' => false, 'maaltijd_id' => $mid],
-			['datum' => 'ASC']
-		);
-	}
-
-	/**
 	 * Called when a Maaltijd is going to be deleted.
 	 *
-	 * @param int $mid
+	 * @param Maaltijd $maaltijd
 	 * @return bool
 	 */
-	public function existMaaltijdCorvee($mid)
+	public function existMaaltijdCorvee(Maaltijd $maaltijd)
 	{
-		return count($this->findBy(['maaltijd_id' => $mid])) > 0;
+		return count($this->findBy(['maaltijd' => $maaltijd])) > 0;
 	}
 
 	/**
 	 * Called when a Maaltijd is going to be deleted.
 	 *
-	 * @param int $mid
+	 * @param Maaltijd $maaltijd
 	 * @return int
 	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
-	public function verwijderMaaltijdCorvee($mid)
+	public function verwijderMaaltijdCorvee(Maaltijd $maaltijd)
 	{
-		$taken = $this->findBy(['maaltijd_id' => $mid]);
+		$taken = $this->findBy(['maaltijd' => $maaltijd]);
 		foreach ($taken as $taak) {
 			$taak->verwijderd = true;
 			$this->_em->persist($taak);

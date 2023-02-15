@@ -25,27 +25,6 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 		parent::__construct($registry, MaaltijdAanmelding::class);
 	}
 
-	public function getIsAangemeld($mid, $uid)
-	{
-		return $this->find(['maaltijd_id' => $mid, 'uid' => $uid]) != null;
-	}
-
-	/**
-	 * @param $mid
-	 * @param $uid
-	 * @return MaaltijdAanmelding
-	 */
-	public function loadAanmelding($mid, $uid)
-	{
-		$aanmelding = $this->find(['maaltijd_id' => $mid, 'uid' => $uid]);
-		if ($aanmelding == null) {
-			throw new CsrGebruikerException(
-				'Load aanmelding faalt: Not found $mid =' . $mid
-			);
-		}
-		return $aanmelding;
-	}
-
 	/**
 	 * @param $maaltijdenById
 	 * @param $uid
@@ -96,11 +75,6 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 		}
 		ksort($lijst);
 		return $lijst;
-	}
-
-	public function findVoorMaaltijd(Maaltijd $maaltijd)
-	{
-		return $this->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 	}
 
 	/**

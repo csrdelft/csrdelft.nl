@@ -2,9 +2,7 @@
 
 namespace CsrDelft\common\Security\Voter;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\entity\maalcie\Maaltijd;
-use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\entity\security\Account;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -56,28 +54,26 @@ class MaaltijdVoter extends PrefixVoter
 		if (!is_numeric($gevraagd)) {
 			return false;
 		}
+
+		$maaltijd = $this->em->getRepository(Maaltijd::class)->find($gevraagd);
+
+		if (!$maaltijd) {
+			return false;
+		}
+
+		$aanmelding = $maaltijd->getAanmelding($profiel);
+
 		// Aangemeld voor maaltijd?
-		if (
-			!$role &&
-			$this->em
-				->getRepository(MaaltijdAanmelding::class)
-				->getIsAangemeld((int) $gevraagd, $profiel->uid)
-		) {
+		if (!$role && $aanmelding) {
 			return true;
 		} elseif ($role === 'SLUITEN') {
 			// Mag maaltijd sluiten?
 			if ($this->accessDecisionManager->decide($token, ['ROLE_MAAL_MOD'])) {
 				return true;
 			}
-			try {
-				$maaltijd = $this->em
-					->getRepository(Maaltijd::class)
-					->getMaaltijd((int) $gevraagd);
-				if ($maaltijd && $maaltijd->magSluiten($profiel->uid)) {
-					return true;
-				}
-			} catch (CsrException $e) {
-				// Maaltijd bestaat niet
+
+			if ($maaltijd->magSluiten($profiel->uid)) {
+				return true;
 			}
 		}
 

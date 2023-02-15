@@ -86,9 +86,9 @@
 			</div>
 			<div class="col-md-8">
 				<h3>Corvee</h3>
-				{% if corveetaken %}
+				{% if maaltijd.actieveCorveeTaken is not empty %}
 					<div style="column-count: 2">
-						{% for taak in corveetaken %}
+						{% for taak in maaltijd.actieveCorveeTaken %}
 							<div>
 								{% if taak.profiel %}
 									{{ taak.profiel.link(naamweergave) | raw }}

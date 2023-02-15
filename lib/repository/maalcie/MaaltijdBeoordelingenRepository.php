@@ -35,6 +35,7 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository
 	public function nieuw(Maaltijd $maaltijd)
 	{
 		$b = new MaaltijdBeoordeling();
+		$b->maaltijd = $maaltijd;
 		$b->maaltijd_id = $maaltijd->maaltijd_id;
 		$b->uid = LoginService::getUid();
 		$b->kwantiteit = null;

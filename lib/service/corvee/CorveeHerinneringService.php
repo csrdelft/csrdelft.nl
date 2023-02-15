@@ -71,11 +71,7 @@ class CorveeHerinneringService
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
 		$eten = '';
 		if ($taak->maaltijd !== null) {
-			$aangemeld = $this->maaltijdAanmeldingenRepository->getIsAangemeld(
-				$taak->maaltijd->maaltijd_id,
-				$taak->profiel->uid
-			);
-			if ($aangemeld) {
+			if ($taak->maaltijd->getAanmelding($taak->profiel)) {
 				$eten = InstellingUtil::instelling('corvee', 'mail_wel_meeeten');
 			} else {
 				$eten = InstellingUtil::instelling('corvee', 'mail_niet_meeeten');

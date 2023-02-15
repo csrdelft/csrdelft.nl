@@ -44,4 +44,11 @@ class MaaltijdBeoordeling
 	 * @ORM\Column(type="float", nullable=true)
 	 */
 	public $kwaliteit;
+
+	/**
+	 * @var Maaltijd
+	 * @ORM\ManyToOne(targetEntity="Maaltijd")
+	 * @ORM\JoinColumn(name="maaltijd_id", referencedColumnName="maaltijd_id")
+	 */
+	public $maaltijd;
 }

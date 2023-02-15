@@ -91,15 +91,13 @@ class MaaltijdAanmeldingenService
 			$this->assertMagAanmelden($maaltijd, $profiel->uid);
 		}
 
-		if ($maaltijd->getIsAangemeld($profiel->uid)) {
+		$aanmelding = $maaltijd->getAanmelding($profiel);
+
+		if ($aanmelding) {
 			if (!$beheer) {
 				throw new CsrGebruikerException('Al aangemeld');
 			}
 			// aanmelding van lid updaten met aantal gasten door beheerder
-			$aanmelding = $this->maaltijdAanmeldingenRepository->loadAanmelding(
-				$maaltijd->maaltijd_id,
-				$profiel->uid
-			);
 			$verschil = $aantalGasten - $aanmelding->aantal_gasten;
 			$aanmelding->aantal_gasten = $aantalGasten;
 			$aanmelding->laatst_gewijzigd = date_create_immutable();
@@ -185,12 +183,8 @@ class MaaltijdAanmeldingenService
 		Profiel $profiel,
 		$beheer = false
 	) {
-		if (
-			!$this->maaltijdAanmeldingenRepository->getIsAangemeld(
-				$maaltijd->maaltijd_id,
-				$profiel->uid
-			)
-		) {
+		$aanmelding = $maaltijd->getAanmelding($profiel);
+		if (!$aanmelding) {
 			throw new CsrGebruikerException('Niet aangemeld');
 		}
 		if (
@@ -202,10 +196,7 @@ class MaaltijdAanmeldingenService
 		if (!$beheer && $maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is gesloten');
 		}
-		$aanmelding = $this->maaltijdAanmeldingenRepository->loadAanmelding(
-			$maaltijd->maaltijd_id,
-			$profiel->uid
-		);
+
 		$this->entityManager->remove($aanmelding);
 		$this->entityManager->flush();
 		$maaltijd->aantal_aanmeldingen =
@@ -275,10 +266,7 @@ class MaaltijdAanmeldingenService
 		$aantal = 0;
 		$aanmeldingen = [];
 		foreach ($maaltijdenFiltered as $maaltijd) {
-			$aanmeldingen = array_merge(
-				$aanmeldingen,
-				$this->maaltijdAanmeldingenRepository->findVoorMaaltijd($maaltijd)
-			);
+			$aanmeldingen = array_merge($aanmeldingen, $maaltijd->aanmeldingen);
 		}
 		foreach ($aanmeldingen as $aanmelding) {
 			// check filter voor elk aangemeld lid

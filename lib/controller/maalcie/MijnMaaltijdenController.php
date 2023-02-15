@@ -159,9 +159,7 @@ class MijnMaaltijdenController extends AbstractController
 			'aanmeldingen' => $aanmeldingen,
 			'eterstotaal' =>
 				$maaltijd->getAantalAanmeldingen() + $maaltijd->getMarge(),
-			'corveetaken' => $this->corveeTakenRepository->getTakenVoorMaaltijd(
-				$maaltijd->maaltijd_id
-			),
+			'corveetaken' => $maaltijd->getActieveCorveeTaken(),
 			'maaltijd' => $maaltijd,
 			'prijs' => sprintf('%.2f', $maaltijd->getPrijsFloat()),
 		]);
@@ -290,8 +288,8 @@ class MijnMaaltijdenController extends AbstractController
 			FILTER_SANITIZE_NUMBER_INT
 		);
 		$aanmelding = $this->maaltijdGastAanmeldingenService->saveGasten(
-			$maaltijd->maaltijd_id,
-			$this->getUid(),
+			$maaltijd,
+			$this->getProfiel(),
 			$gasten
 		);
 		return $this->render('maaltijden/bb.html.twig', [
@@ -319,8 +317,8 @@ class MijnMaaltijdenController extends AbstractController
 			FILTER_SANITIZE_NUMBER_INT
 		);
 		$aanmelding = $this->maaltijdGastAanmeldingenService->saveGasten(
-			$maaltijd->maaltijd_id,
-			$this->getUid(),
+			$maaltijd,
+			$this->getProfiel(),
 			$gasten
 		);
 		return $this->render('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', [
@@ -340,7 +338,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/ketzer/opmerking/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function opmerking($maaltijd_id)
+	public function opmerking(Maaltijd $maaltijd)
 	{
 		$opmerking = filter_input(
 			INPUT_POST,
@@ -348,8 +346,8 @@ class MijnMaaltijdenController extends AbstractController
 			FILTER_SANITIZE_STRING
 		);
 		$aanmelding = $this->maaltijdGastAanmeldingenService->saveGastenEetwens(
-			$maaltijd_id,
-			$this->getUid(),
+			$maaltijd,
+			$this->getProfiel(),
 			$opmerking
 		);
 		return $this->render('maaltijden/bb.html.twig', [
@@ -366,7 +364,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/mijn/opmerking/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function opmerking_mijn($maaltijd_id)
+	public function opmerking_mijn(Maaltijd $maaltijd)
 	{
 		$opmerking = filter_input(
 			INPUT_POST,
@@ -374,8 +372,8 @@ class MijnMaaltijdenController extends AbstractController
 			FILTER_SANITIZE_STRING
 		);
 		$aanmelding = $this->maaltijdGastAanmeldingenService->saveGastenEetwens(
-			$maaltijd_id,
-			$this->getUid(),
+			$maaltijd,
+			$this->getProfiel(),
 			$opmerking
 		);
 		return $this->render('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', [

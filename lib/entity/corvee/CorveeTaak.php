@@ -70,7 +70,7 @@ class CorveeTaak implements Agendeerbaar
 	public $maaltijd_id;
 	/**
 	 * @var Maaltijd|null
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\maalcie\Maaltijd")
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\maalcie\Maaltijd", inversedBy="taken")
 	 * @ORM\JoinColumn(name="maaltijd_id", referencedColumnName="maaltijd_id", nullable=true)
 	 */
 	public $maaltijd;

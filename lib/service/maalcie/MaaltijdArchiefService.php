@@ -97,11 +97,7 @@ class MaaltijdArchiefService
 			try {
 				$archief = $this->vanMaaltijd($maaltijd);
 				$this->archiefMaaltijdenRepository->create($archief);
-				if (
-					$this->corveeTakenRepository->existMaaltijdCorvee(
-						$maaltijd->maaltijd_id
-					)
-				) {
+				if ($this->corveeTakenRepository->existMaaltijdCorvee($maaltijd)) {
 					FlashUtil::setFlashWithContainerFacade(
 						DateUtil::dateFormatIntl(
 							$maaltijd->getMoment(),

@@ -125,15 +125,9 @@ class MaaltijdenService
 	public function verwijderMaaltijd(Maaltijd $maaltijd)
 	{
 		// delete corveetaken first (foreign key)
-		$this->corveeTakenRepository->verwijderMaaltijdCorvee(
-			$maaltijd->maaltijd_id
-		);
+		$this->corveeTakenRepository->verwijderMaaltijdCorvee($maaltijd);
 		if ($maaltijd->verwijderd) {
-			if (
-				$this->corveeTakenRepository->existMaaltijdCorvee(
-					$maaltijd->maaltijd_id
-				)
-			) {
+			if ($this->corveeTakenRepository->existMaaltijdCorvee($maaltijd)) {
 				throw new CsrGebruikerException(
 					'Er zitten nog bijbehorende corveetaken in de prullenbak. Verwijder die eerst definitief!'
 				);
