@@ -10,8 +10,8 @@ use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
-use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
+use CsrDelft\service\maalcie\MaaltijdenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
@@ -44,10 +44,6 @@ class BbMaaltijd extends BbTag
 	 */
 	private $maaltijdBeoordelingenRepository;
 	/**
-	 * @var MaaltijdenRepository
-	 */
-	private $maaltijdenRepository;
-	/**
 	 * @var Environment
 	 */
 	private $twig;
@@ -63,21 +59,25 @@ class BbMaaltijd extends BbTag
 	 * @var MaaltijdAanmeldingenService
 	 */
 	private $maaltijdAanmeldingenService;
+	/**
+	 * @var MaaltijdenService
+	 */
+	private $maaltijdenService;
 
 	public function __construct(
 		Environment $twig,
 		Security $security,
-		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdenService $maaltijdenService,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
 		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository
 	) {
-		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
 		$this->twig = $twig;
 		$this->security = $security;
 		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
+		$this->maaltijdenService = $maaltijdenService;
 	}
 
 	public static function getTagName()
@@ -190,7 +190,7 @@ class BbMaaltijd extends BbTag
 				$mid === 'next2' ||
 				$mid === 'eerstvolgende2'
 			) {
-				$maaltijden = $this->maaltijdenRepository->getKomendeMaaltijdenVoorLid(
+				$maaltijden = $this->maaltijdenService->getKomendeMaaltijdenVoorLid(
 					LoginService::getUid()
 				); // met filter
 				$aantal = sizeof($maaltijden);
@@ -226,9 +226,7 @@ class BbMaaltijd extends BbTag
 					$maaltijd2 = array_values($recent)[1];
 				}
 			} elseif (preg_match('/\d+/', $mid)) {
-				$maaltijd = $this->maaltijdenRepository->getMaaltijdVoorKetzer(
-					(int) $mid
-				); // met filter
+				$maaltijd = $this->maaltijdenService->getMaaltijdVoorKetzer((int) $mid); // met filter
 
 				if (!$maaltijd) {
 					throw new BbException('');

@@ -12,6 +12,7 @@ use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
+use CsrDelft\service\maalcie\MaaltijdenService;
 use CsrDelft\service\maalcie\MaaltijdGastAanmeldingenService;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
@@ -43,9 +44,14 @@ class MijnMaaltijdenController extends AbstractController
 	 * @var MaaltijdGastAanmeldingenService
 	 */
 	private $maaltijdGastAanmeldingenService;
+	/**
+	 * @var MaaltijdenService
+	 */
+	private $maaltijdenService;
 
 	public function __construct(
 		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdenService $maaltijdenService,
 		CorveeTakenRepository $corveeTakenRepository,
 		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository,
 		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
@@ -58,6 +64,7 @@ class MijnMaaltijdenController extends AbstractController
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 		$this->maaltijdGastAanmeldingenService = $maaltijdGastAanmeldingenService;
+		$this->maaltijdenService = $maaltijdenService;
 	}
 
 	/**
@@ -70,7 +77,7 @@ class MijnMaaltijdenController extends AbstractController
 	 */
 	public function ketzer()
 	{
-		$maaltijden = $this->maaltijdenRepository->getKomendeMaaltijdenVoorLid(
+		$maaltijden = $this->maaltijdenService->getKomendeMaaltijdenVoorLid(
 			$this->getUid()
 		);
 		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid(

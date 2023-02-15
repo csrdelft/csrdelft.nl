@@ -5,7 +5,7 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
-use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\maalcie\MaaltijdArchiefService;
 use CsrDelft\view\maalcie\forms\BoekjaarSluitenForm;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -17,12 +17,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MaalCieBoekjaarController extends AbstractController
 {
-	/** @var MaaltijdenRepository  */
-	private $maaltijdenRepository;
+	/**
+	 * @var MaaltijdArchiefService
+	 */
+	private $maaltijdArchiefService;
 
-	public function __construct(MaaltijdenRepository $maaltijdenRepository)
+	public function __construct(MaaltijdArchiefService $maaltijdArchiefService)
 	{
-		$this->maaltijdenRepository = $maaltijdenRepository;
+		$this->maaltijdArchiefService = $maaltijdArchiefService;
 	}
 
 	/**
@@ -50,7 +52,7 @@ class MaalCieBoekjaarController extends AbstractController
 		); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$errors_aantal = $this->maaltijdenRepository->archiveerOudeMaaltijden(
+			$errors_aantal = $this->maaltijdArchiefService->archiveerOudeMaaltijden(
 				strtotime($values['begindatum']),
 				strtotime($values['einddatum'])
 			);

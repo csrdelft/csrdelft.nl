@@ -9,6 +9,7 @@ use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
+use CsrDelft\service\maalcie\MaaltijdRepetitiesService;
 use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -21,18 +22,25 @@ use Throwable;
  */
 class MaaltijdRepetitiesController extends AbstractController
 {
+	/** @var null MaaltijdRepetitie|null */
 	private $repetitie = null;
 	/** @var MaaltijdRepetitiesRepository */
 	private $maaltijdRepetitiesRepository;
 	/** @var MaaltijdenRepository */
 	private $maaltijdenRepository;
+	/**
+	 * @var MaaltijdRepetitiesService
+	 */
+	private $maaltijdRepetitiesService;
 
 	public function __construct(
 		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
+		MaaltijdRepetitiesService $maaltijdRepetitiesService,
 		MaaltijdenRepository $maaltijdenRepository
 	) {
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
+		$this->maaltijdRepetitiesService = $maaltijdRepetitiesService;
 	}
 
 	/**
@@ -92,7 +100,7 @@ class MaaltijdRepetitiesController extends AbstractController
 		if ($view->validate()) {
 			$repetitie = $view->getModel();
 
-			$aantal = $this->maaltijdRepetitiesRepository->saveRepetitie($repetitie);
+			$aantal = $this->maaltijdRepetitiesService->saveRepetitie($repetitie);
 			if ($aantal > 0) {
 				$this->addFlash(
 					FlashType::WARNING,
@@ -122,9 +130,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 */
 	public function verwijder(MaaltijdRepetitie $repetitie)
 	{
-		$aantal = $this->maaltijdRepetitiesRepository->verwijderRepetitie(
-			$repetitie
-		);
+		$aantal = $this->maaltijdRepetitiesService->verwijderRepetitie($repetitie);
 
 		if ($aantal > 0) {
 			$this->addFlash(
@@ -159,7 +165,7 @@ class MaaltijdRepetitiesController extends AbstractController
 		if ($this->repetitie) {
 			// opslaan succesvol
 			$verplaats = isset($_POST['verplaats_dag']);
-			$updated_aanmeldingen = $this->maaltijdenRepository->updateRepetitieMaaltijden(
+			$updated_aanmeldingen = $this->maaltijdRepetitiesService->updateRepetitieMaaltijden(
 				$this->repetitie,
 				$verplaats
 			);

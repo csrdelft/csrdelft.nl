@@ -17,6 +17,8 @@ use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
+use CsrDelft\service\maalcie\MaaltijdenService;
+use CsrDelft\service\maalcie\MaaltijdRepetitiesService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\GenericSuggestiesResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
@@ -52,16 +54,22 @@ class BeheerMaaltijdenController extends AbstractController
 	 */
 	private $maaltijdRepetitiesRepository;
 	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
-	/**
 	 * @var MaaltijdAanmeldingenService
 	 */
 	private $maaltijdAanmeldingenService;
+	/**
+	 * @var MaaltijdRepetitiesService
+	 */
+	private $maaltijdRepetitiesService;
+	/**
+	 * @var MaaltijdenService
+	 */
+	private $maaltijdenService;
 
 	public function __construct(
 		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdenService $maaltijdenService,
+		MaaltijdRepetitiesService $maaltijdRepetitiesService,
 		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
 		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
@@ -70,6 +78,8 @@ class BeheerMaaltijdenController extends AbstractController
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
+		$this->maaltijdRepetitiesService = $maaltijdRepetitiesService;
+		$this->maaltijdenService = $maaltijdenService;
 	}
 
 	/**
@@ -216,7 +226,7 @@ class BeheerMaaltijdenController extends AbstractController
 		$form = new MaaltijdForm($maaltijd, 'nieuw');
 
 		if ($form->validate()) {
-			[$maaltijd, $aanmeldingen] = $this->maaltijdenRepository->saveMaaltijd(
+			[$maaltijd, $aanmeldingen] = $this->maaltijdenService->saveMaaltijd(
 				$maaltijd
 			);
 			if ($aanmeldingen > 0) {
@@ -397,7 +407,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 */
 	public function leegmaken()
 	{
-		$aantal = $this->maaltijdenRepository->prullenbakLeegmaken();
+		$aantal = $this->maaltijdenService->prullenbakLeegmaken();
 		$this->addFlash(
 			$aantal == 0 ? FlashType::INFO : FlashType::SUCCESS,
 			$aantal .
@@ -468,7 +478,7 @@ class BeheerMaaltijdenController extends AbstractController
 
 		$form = new RepetitieMaaltijdenForm($repetitieMaaltijdMaken); // fetches POST values itself
 		if ($form->validate()) {
-			$maaltijden = $this->maaltijdenRepository->maakRepetitieMaaltijden(
+			$maaltijden = $this->maaltijdRepetitiesService->maakRepetitieMaaltijden(
 				$repetitie,
 				$repetitieMaaltijdMaken->begin_moment,
 				$repetitieMaaltijdMaken->eind_moment

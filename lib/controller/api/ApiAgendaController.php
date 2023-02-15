@@ -13,6 +13,7 @@ use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\GroepLidRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\maalcie\MaaltijdenService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,23 +26,25 @@ class ApiAgendaController extends AbstractController
 	private $agendaRepository;
 	/** @var GroepLidRepository */
 	private $groepLidRepository;
-	/** @var MaaltijdenRepository */
-	private $maaltijdenRepository;
 	/** @var MaaltijdAanmeldingenRepository */
 	private $maaltijdAanmeldingenRepository;
+	/**
+	 * @var MaaltijdenService
+	 */
+	private $maaltijdenService;
 
 	public function __construct(
 		AgendaRepository $agendaRepository,
 		ActiviteitenRepository $activiteitenRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdenService $maaltijdenService,
 		GroepLidRepository $groepLidRepository
 	) {
 		$this->agendaRepository = $agendaRepository;
 		$this->activiteitenRepository = $activiteitenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->groepLidRepository = $groepLidRepository;
+		$this->maaltijdenService = $maaltijdenService;
 	}
 
 	/**
@@ -110,10 +113,7 @@ class ApiAgendaController extends AbstractController
 		}
 
 		// Maaltijden
-		$maaltijden = $this->maaltijdenRepository->getMaaltijdenVoorAgenda(
-			$from,
-			$to
-		);
+		$maaltijden = $this->maaltijdenService->getMaaltijdenVoorAgenda($from, $to);
 
 		// Maaltijd aanmeldingen
 		$mids = [];

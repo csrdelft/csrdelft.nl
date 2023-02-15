@@ -11,6 +11,8 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\AccessService;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,9 +37,19 @@ class MaaltijdAanmeldingenService
 	 * @var EntityManagerInterface
 	 */
 	private $entityManager;
+	/**
+	 * @var AccountRepository
+	 */
+	private $accountRepository;
+	/**
+	 * @var AccessService
+	 */
+	private $accessService;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
+		AccessService $accessService,
+		AccountRepository $accountRepository,
 		MaaltijdenRepository $maaltijdenRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		CiviSaldoRepository $civiSaldoRepository
@@ -46,6 +58,8 @@ class MaaltijdAanmeldingenService
 		$this->civiSaldoRepository = $civiSaldoRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->entityManager = $entityManager;
+		$this->accountRepository = $accountRepository;
+		$this->accessService = $accessService;
 	}
 
 	/**
@@ -126,12 +140,7 @@ class MaaltijdAanmeldingenService
 				'Aanmelden voor maaltijden niet toegestaan, geen CiviSaldo.'
 			);
 		}
-		if (
-			!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
-				$uid,
-				$maaltijd->aanmeld_filter
-			)
-		) {
+		if (!$this->checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) {
 			throw new CsrGebruikerException(
 				'Niet toegestaan vanwege aanmeldrestrictie: ' .
 					$maaltijd->aanmeld_filter
@@ -143,6 +152,24 @@ class MaaltijdAanmeldingenService
 		if ($maaltijd->getAantalAanmeldingen() >= $maaltijd->aanmeld_limiet) {
 			throw new CsrGebruikerException('Maaltijd zit al vol');
 		}
+	}
+
+	/**
+	 * @param string $uid
+	 * @param string $filter
+	 * @return bool Of de gebruiker voldoet aan het filter
+	 * @throws CsrGebruikerException Als de gebruiker niet bestaat
+	 */
+	public function checkAanmeldFilter($uid, $filter)
+	{
+		$account = $this->accountRepository->find($uid); // false if account does not exist
+		if (!$account) {
+			throw new CsrGebruikerException('Lid bestaat niet: $uid =' . $uid);
+		}
+		if (empty($filter)) {
+			return true;
+		}
+		return $this->accessService->isUserGranted($account, $filter);
 	}
 
 	/**
@@ -223,5 +250,46 @@ class MaaltijdAanmeldingenService
 			(1 + $aanmelding->aantal_gasten);
 
 		return $bestelling;
+	}
+
+	/**
+	 * Controleer of alle aanmeldingen voor de maaltijden nog in overeenstemming zijn met het aanmeldfilter.
+	 *
+	 * @param string $filter
+	 * @param Maaltijd[] $maaltijden
+	 * @return int
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function checkAanmeldingenFilter($filter, $maaltijden)
+	{
+		$maaltijdenFiltered = [];
+		foreach ($maaltijden as $maaltijd) {
+			if (!$maaltijd->gesloten && !$maaltijd->verwijderd) {
+				$maaltijdenFiltered[] = $maaltijd;
+			}
+		}
+		if (empty($maaltijdenFiltered)) {
+			return 0;
+		}
+		$aantal = 0;
+		$aanmeldingen = [];
+		foreach ($maaltijdenFiltered as $maaltijd) {
+			$aanmeldingen = array_merge(
+				$aanmeldingen,
+				$this->maaltijdAanmeldingenRepository->findVoorMaaltijd($maaltijd)
+			);
+		}
+		foreach ($aanmeldingen as $aanmelding) {
+			// check filter voor elk aangemeld lid
+			$uid = $aanmelding->uid;
+			if (!$this->checkAanmeldFilter($uid, $filter)) {
+				// verwijder aanmelding indien niet toegestaan
+				$aantal += 1 + $aanmelding->aantal_gasten;
+				$this->entityManager->remove($aanmelding);
+			}
+		}
+		$this->entityManager->flush();
+		return $aantal;
 	}
 }

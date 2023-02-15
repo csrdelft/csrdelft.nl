@@ -2,16 +2,10 @@
 
 namespace CsrDelft\repository\maalcie;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\AbstractRepository;
-use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
-use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
-use Throwable;
 
 /**
  * MaaltijdRepetitiesRepository  |  P.W.G. Brussee (brussee@live.nl)
@@ -24,42 +18,15 @@ use Throwable;
 class MaaltijdRepetitiesRepository extends AbstractRepository
 {
 	protected $default_order = '(periode_in_dagen = 0) ASC, periode_in_dagen ASC, dag_vd_week ASC, standaard_titel ASC';
-	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(
-		ManagerRegistry $registry,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
-	) {
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, MaaltijdRepetitie::class);
-
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
-	/**
-	 * Filtert de repetities met het abonnement-filter van de maaltijd-repetitie op de permissies van het ingelogde lid.
-	 *
-	 * @param string $uid
-	 * @return MaaltijdRepetitie[]
-	 * @internal param MaaltijdRepetitie[] $repetities
-	 */
-	public function getAbonneerbareRepetitiesVoorLid($uid)
+	public function getAbboneerbareRepetities()
 	{
-		$repetities = $this->findBy(['abonneerbaar' => 'true']);
-		$result = [];
-		foreach ($repetities as $repetitie) {
-			if (
-				$this->maaltijdAanmeldingenRepository->checkAanmeldFilter(
-					$uid,
-					$repetitie->abonnement_filter
-				)
-			) {
-				$result[$repetitie->mlt_repetitie_id] = $repetitie;
-			}
-		}
-		return $result;
+		return $this->findBy(['abonneerbaar' => 'true']);
 	}
 
 	public function getAlleRepetities($groupById = false)
@@ -89,66 +56,5 @@ class MaaltijdRepetitiesRepository extends AbstractRepository
 			);
 		}
 		return $repetitie;
-	}
-
-	/**
-	 * @param $repetitie MaaltijdRepetitie
-	 * @return array
-	 * @throws Throwable
-	 */
-	public function saveRepetitie($repetitie)
-	{
-		return $this->_em->transactional(function () use ($repetitie) {
-			$abos = 0;
-			$this->_em->persist($repetitie);
-			$this->_em->flush();
-			if (!$repetitie->abonneerbaar) {
-				// niet (meer) abonneerbaar
-				$abos = ContainerFacade::getContainer()
-					->get(MaaltijdAbonnementenService::class)
-					->verwijderAbonnementen($repetitie);
-			}
-			return $abos;
-		});
-	}
-
-	/**
-	 * @param MaaltijdRepetitie $repetitie
-	 * @return int
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function verwijderRepetitie(MaaltijdRepetitie $repetitie)
-	{
-		if (
-			ContainerFacade::getContainer()
-				->get(CorveeRepetitiesRepository::class)
-				->existMaaltijdRepetitieCorvee($repetitie->mlt_repetitie_id)
-		) {
-			throw new CsrGebruikerException(
-				'Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!'
-			);
-		}
-		$maaltijdenRepository = ContainerFacade::getContainer()->get(
-			MaaltijdenRepository::class
-		);
-		if (
-			$maaltijdenRepository->existRepetitieMaaltijden(
-				$repetitie->mlt_repetitie_id
-			)
-		) {
-			$maaltijdenRepository->verwijderRepetitieMaaltijden(
-				$repetitie->mlt_repetitie_id
-			); // delete maaltijden first (foreign key)
-			throw new CsrGebruikerException(
-				'Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!'
-			);
-		}
-		$aantalAbos = ContainerFacade::getContainer()
-			->get(MaaltijdAbonnementenService::class)
-			->verwijderAbonnementen($repetitie);
-		$this->_em->remove($repetitie);
-		$this->_em->flush();
-		return $aantalAbos;
 	}
 }
