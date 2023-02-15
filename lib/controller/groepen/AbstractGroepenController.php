@@ -493,7 +493,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 				FlashType::SUCCESS,
 				get_class($groep) . ' succesvol aangemaakt!'
 			);
-			$form = new GroepPreviewForm($groep);
+			$form = new GroepPreviewForm($this->container->get('twig'), $groep);
 			$view->modal = $form->__toString();
 			return $view;
 		} else {
