@@ -4,8 +4,8 @@
 
 {% block body_inner %}
 	<main class="container-fluid p-3 min-vh-100">
+		{% include 'melding.html.twig' %}
 		<div class="cd-page-content voorpagina container px-0 ratio ratio-3x2">
-			{% include 'melding.html.twig' %}
 			<div class="grid-container p-0 p-md-3">
 				<div class="cell cell-posters ratio ratio-5x4">{{ render(path('csrdelft_voorpagina_posters')) }}</div>
 				<div class="cell cell-forum cell-overflow">{{ render(path('csrdelft_voorpagina_forum')) }}</div>

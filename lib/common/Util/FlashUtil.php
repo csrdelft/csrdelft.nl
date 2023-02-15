@@ -68,7 +68,7 @@ final class FlashUtil
 		foreach ($flashes as $type => $meldingen) {
 			foreach ($meldingen as $msg) {
 				$icon = Icon::getTag('alert-' . $type);
-				$msgSafe = htmlentities($msg);
+				$msgSafe = $type == 'html' ? $msg : htmlentities($msg);
 
 				$melding .= <<<HTML
 <div class="alert alert-$type">
