@@ -40,66 +40,77 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
 import { init } from '../../ctx';
 import ProgressBar from '../common/ProgressBar.vue';
 
-@Component({
-  components: { ProgressBar },
-})
-export default class PeilingOptie extends Vue {
-  @Prop()
-  id: string;
-  @Prop()
-  peilingId: number;
-  @Prop()
-  titel: string;
-  @Prop()
-  beschrijving: string;
-  @Prop()
-  stemmen: number;
-  @Prop()
-  magStemmen: boolean;
-  @Prop()
-  aantalGestemd: number;
-  @Prop()
-  heeftGestemd: boolean;
-  @Prop()
-  keuzesOver: boolean;
-  @Prop()
-  selected: boolean;
-
-  private mounted() {
+export default Vue.extend({
+  components: {
+    ProgressBar,
+  },
+  props: {
+    id: {
+      default: 0,
+      type: Number,
+    },
+    peilingId: {
+      default: 0,
+      type: Number,
+    },
+    titel: {
+      default: '',
+      type: String,
+    },
+    beschrijving: {
+      default: '',
+      type: String,
+    },
+    stemmen: {
+      default: 0,
+      type: Number,
+    },
+    magStemmen: Boolean,
+    aantalGestemd: {
+      default: 0,
+      type: Number,
+    },
+    heeftGestemd: Boolean,
+    keuzesOver: Boolean,
+    selected: Boolean,
+  },
+  computed: {
+    kanStemmen() {
+      return this.magStemmen && !this.heeftGestemd;
+    },
+    progress() {
+      return ((this.stemmen / this.aantalGestemd) * 100).toFixed(2);
+    },
+    progressText() {
+      return `${this.progress}% (${this.stemmen})`;
+    },
+    isDisabled() {
+      return !this.selected && !this.keuzesOver;
+    },
+  },
+  watch: {
+    kanStemmen() {
+      this.initBeschrijvingContext();
+    },
+  },
+  mounted() {
     this.initBeschrijvingContext();
-  }
-
-  @Watch('kanStemmen')
-  private initBeschrijvingContext() {
-    setTimeout(() => {
-      if (this.kanStemmen) {
-        init(this.$refs.beschrijving as HTMLElement);
-      } else {
-        init(this.$refs.beschrijving_gestemd as HTMLElement);
-      }
-    });
-  }
-
-  private get kanStemmen() {
-    return this.magStemmen && !this.heeftGestemd;
-  }
-
-  private get progress() {
-    return ((this.stemmen / this.aantalGestemd) * 100).toFixed(2);
-  }
-
-  private get progressText() {
-    return `${this.progress}% (${this.stemmen})`;
-  }
-
-  private get isDisabled() {
-    return !this.selected && !this.keuzesOver;
-  }
-}
+  },
+  methods: {
+    initBeschrijvingContext() {
+      setTimeout(() => {
+        if (this.kanStemmen) {
+          init(this.$refs.beschrijving as HTMLElement);
+        } else {
+          init(this.$refs.beschrijving_gestemd as HTMLElement);
+        }
+      });
+    },
+  },
+});
 </script>
 
 <style scoped></style>

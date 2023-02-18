@@ -8,15 +8,15 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
 
-@Component
-export default class ProgressBar extends Vue {
-  @Prop({
-    type: [Number, String],
-  })
-  progress: number | string; // Liever een nummer, maar een string kunnen we ook mee overweg.
-}
+export default Vue.extend({
+  props: {
+    progress: {
+      default: 0,
+      type: [Number, String],
+    },
+  },
+});
 </script>
 
 <style scoped></style>
