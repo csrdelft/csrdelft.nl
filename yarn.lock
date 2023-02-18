@@ -5967,10 +5967,8 @@ fsevents@~2.3.1:
     typescript: ^4.1.3
     v-money: ^0.8.1
     vue: ^2.6.12
-    vue-class-component: ^6.3.2
     vue-eslint-parser: ^7.1.0
     vue-loader: ^15.9.6
-    vue-property-decorator: ^7.3.0
     vue-template-compiler: ^2.6.12
     vue-typescript-import-dts: ^4.0.0
     webpack: ^5.75.0
@@ -6967,13 +6965,6 @@ typescript@^4.1.3:
   languageName: node
   linkType: hard
 
-"vue-class-component@npm:^6.2.0, vue-class-component@npm:^6.3.2":
-  version: 6.3.2
-  resolution: "vue-class-component@npm:6.3.2"
-  checksum: d92b011b8968c64fdad70c515c509a29f2080512052147520f82fc78feaedf700f4abbe742badd2a510df8bc0bdf0dfb973ede507394f99cea0a8723e92a9228
-  languageName: node
-  linkType: hard
-
 "vue-eslint-parser@npm:^7.1.0":
   version: 7.1.0
   resolution: "vue-eslint-parser@npm:7.1.0"
@@ -7038,15 +7029,6 @@ typescript@^4.1.3:
     vue-template-compiler:
       optional: true
   checksum: 753a6b6da29e8c0dc328365424cc43757573a2242b0dced5cf36aab775818b622a2bb831c053b43eabfc604755b6b957c196520a66da19bc634b245cb7b44a2b
-  languageName: node
-  linkType: hard
-
-"vue-property-decorator@npm:^7.3.0":
-  version: 7.3.0
-  resolution: "vue-property-decorator@npm:7.3.0"
-  dependencies:
-    vue-class-component: ^6.2.0
-  checksum: 27b40a238b0b5715c9a50aa0eafbf15851434f0fcd8784d33d7103b20f094cf2205c7fcbf21ede6910c5f7f7c37bdf99e90ff81ab57d4b391730ffec41840325
   languageName: node
   linkType: hard
 

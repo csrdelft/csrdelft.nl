@@ -270,7 +270,7 @@
             </div>
             <div class="right">
               <div class="title">
-                &euro; {{ berekening(bon).totaalIncl | bedrag }}
+                &euro; {{ bedrag(berekening(bon).totaalIncl) }}
               </div>
               <div class="btw">incl. btw</div>
             </div>
@@ -370,7 +370,7 @@
               <div class="regels-row totaal streep">
                 <div class="onderdeel">Totaal excl. btw</div>
                 <div class="bedrag">
-                  {{ berekening(bon).totaalExcl | bedrag }}
+                  {{ bedrag(berekening(bon).totaalExcl) }}
                 </div>
               </div>
               <div
@@ -379,7 +379,7 @@
               >
                 <div class="onderdeel">Btw 9%</div>
                 <div class="bedrag">
-                  {{ berekening(bon).btw[9] | bedrag }}
+                  {{ bedrag(berekening(bon).btw[9]) }}
                 </div>
               </div>
               <div
@@ -388,13 +388,13 @@
               >
                 <div class="onderdeel">Btw 21%</div>
                 <div class="bedrag">
-                  {{ berekening(bon).btw[21] | bedrag }}
+                  {{ bedrag(berekening(bon).btw[21]) }}
                 </div>
               </div>
               <div class="regels-row totaal totaalBold">
                 <div class="onderdeel">Totaal incl. btw</div>
                 <div class="bedrag">
-                  {{ berekening(bon).totaalIncl | bedrag }}
+                  {{ bedrag(berekening(bon).totaalIncl) }}
                 </div>
               </div>
             </div>
@@ -430,7 +430,7 @@
     <div v-if="totaal > 0" class="totaal">
       <div class="left">Totaal</div>
       <div class="right">
-        <div class="title">&euro; {{ totaal | bedrag }}</div>
+        <div class="title">&euro; {{ bedrag(totaal) }}</div>
         <div class="btw">incl. btw</div>
       </div>
     </div>
@@ -609,9 +609,7 @@
 
 <script lang="ts">
 import axios from 'axios';
-import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
-import Icon from '../common/Icon.vue';
+import Vue, { PropType } from 'vue';
 
 type status =
   | 'concept'
@@ -641,7 +639,7 @@ interface Declaratie {
   eigenRekening?: boolean;
   rekening?: string;
   tnv?: string;
-  bonnen?: Bon[];
+  bonnen: Bon[];
   opmerkingen: string;
   status: status;
   statusData?: StatusData;
@@ -666,7 +664,7 @@ const legeRegel: () => Regel = () => ({
   btw: '',
 });
 
-const legeBon: (string, number) => Bon = (bon, id) => ({
+const legeBon: (bon: string, id: number) => Bon = (bon, id) => ({
   id: id,
   bestandsnaam: bon,
   datum: '',
@@ -708,9 +706,255 @@ interface DeclaratieVerwijderenData {
   redirect: string;
 }
 
-@Component({
-  components: { Icon },
-  filters: {
+export default Vue.extend({
+  props: {
+    type: {
+      required: true,
+      type: String as PropType<'nieuw' | 'bewerken'>,
+    },
+    categorieen: {
+      required: true,
+      type: Object as PropType<Record<string, number>>,
+    },
+    declaratieinput: {
+      default: legeDeclaratie(),
+      type: Object as PropType<Declaratie>,
+    },
+    iban: {
+      required: true,
+      type: String,
+    },
+    tenaamstelling: {
+      required: true,
+      type: String,
+    },
+    email: {
+      required: true,
+      type: String,
+    },
+  },
+  data: () => ({
+    declaratie: legeDeclaratie(),
+    bonUploaden: false,
+    uploading: false,
+    geselecteerdeBon: 0,
+    money: { precision: 2, decimal: ',', thousands: ' ', prefix: '€ ' },
+    submitting: false,
+    editing: false,
+    errors: [] as string[],
+    isZoomFit: true,
+  }),
+  computed: {
+    veldenDisabled() {
+      return (
+        this.submitting ||
+        (this.declaratie.status !== 'concept' && !this.editing)
+      );
+    },
+    heeftBonnen() {
+      return this.declaratie.bonnen && this.declaratie.bonnen.length > 0;
+    },
+    totaal(): number {
+      let totaal = 0;
+      for (let bon of this.declaratie.bonnen) {
+        totaal += this.berekening(bon).totaalIncl;
+      }
+      return this.round(totaal);
+    },
+  },
+  created() {
+    this.declaratie = this.declaratieinput;
+    this.bonUploaden = this.declaratie.bonnen?.length === 0;
+  },
+  methods: {
+    zoomFit() {
+      this.isZoomFit = !this.isZoomFit;
+    },
+    nieuweBon(file: string, id: number): void {
+      this.declaratie.bonnen.push(legeBon(file, id));
+      this.geselecteerdeBon = this.declaratie.bonnen?.length - 1;
+    },
+    bonVerwijderen(index: number): void {
+      this.declaratie.bonnen.splice(index, 1);
+    },
+    nieuweRegel(bon: Bon): void {
+      bon.regels.push(legeRegel());
+    },
+    regelVerwijderen(bon: Bon, regel: number): void {
+      bon.regels.splice(regel, 1);
+    },
+    round(toRound: number) {
+      return Math.round((toRound + Number.EPSILON) * 100) / 100;
+    },
+    berekening(bon: Bon): {
+      totaalExcl: number;
+      totaalIncl: number;
+      btw: { 0: number; 9: number; 21: number };
+    } {
+      const ret = {
+        totaalExcl: 0,
+        totaalIncl: 0,
+        btw: {
+          0: 0,
+          9: 0,
+          21: 0,
+        } as Record<number, number>,
+      };
+
+      for (const regel of bon.regels) {
+        if (regel.btw && regel.bedrag) {
+          regel.bedrag = parseFloat(regel.bedrag.toString());
+          const incl = regel.btw.substr(0, 4) === 'incl';
+          const percentage = parseInt(regel.btw.substr(6).replace('%', ''), 10);
+          const perunage = percentage / 100;
+
+          if (incl) {
+            ret.totaalExcl += regel.bedrag / (1 + perunage);
+            ret.btw[percentage] += (regel.bedrag / (1 + perunage)) * perunage;
+            ret.totaalIncl += regel.bedrag;
+          } else {
+            ret.totaalExcl += regel.bedrag;
+            ret.btw[percentage] += regel.bedrag * perunage;
+            ret.totaalIncl += regel.bedrag * (1 + perunage);
+          }
+        }
+      }
+
+      return {
+        totaalExcl: this.round(ret.totaalExcl),
+        totaalIncl: this.round(ret.totaalIncl),
+        btw: {
+          0: this.round(ret.btw[0]),
+          9: this.round(ret.btw[9]),
+          21: this.round(ret.btw[21]),
+        },
+      };
+    },
+    uploadBon(files: FileList): void {
+      const formData = new FormData();
+
+      if (files.length !== 1) {
+        return;
+      }
+
+      this.uploading = true;
+      formData.append('bon', files[0], files[0].name);
+
+      axios({
+        method: 'post',
+        url: '/declaratie/upload',
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then((res) => {
+          this.uploading = false;
+          this.bonUploaden = false;
+          this.nieuweBon(res.data.file, res.data.id);
+        })
+        .catch((err) => {
+          this.uploading = false;
+          alert(err?.response?.data?.detail ?? err);
+        });
+    },
+    declaratieOpslaan(indienen: boolean): void {
+      this.submitting = true;
+      this.errors = [];
+
+      axios
+        .request<DeclaratieOpslaanData, DeclaratieOpslaanResponse>({
+          method: 'post',
+          url: '/declaratie/opslaan',
+          data: {
+            declaratie: this.declaratie,
+            indienen: this.declaratie.status === 'concept' && indienen === true,
+          },
+        })
+        .then(this.processAjaxResponse)
+        .catch((err) => {
+          this.submitting = false;
+          alert(err?.response?.data?.detail ?? err);
+        });
+    },
+    setStatus(status: string): void {
+      this.submitting = true;
+      this.errors = [];
+
+      axios
+        .request<DeclaratieOpslaanData, DeclaratieOpslaanResponse>({
+          method: 'post',
+          url: '/declaratie/status/' + this.declaratie.id,
+          data: {
+            status: status,
+            nummer: this.declaratie.nummer,
+          },
+        })
+        .then(this.processAjaxResponse)
+        .catch((err) => {
+          this.submitting = false;
+          alert(err?.response?.data?.detail ?? err);
+        });
+    },
+    processAjaxResponse(res: DeclaratieOpslaanResponse): void {
+      const { data } = res;
+      if (data.id) {
+        this.declaratie.id = data.id;
+        this.declaratie.status = data.status;
+        this.declaratie.statusData = data.statusData;
+        if (this.declaratie.statusData.ingediendOp) {
+          this.declaratie.datum = this.declaratie.statusData.ingediendOp;
+        }
+        if (window.location.pathname.endsWith('nieuw')) {
+          window.history.pushState(
+            'Declaratie ' + data.id,
+            'Declaratie',
+            '/declaratie/' + data.id
+          );
+        }
+      }
+      this.errors = data.messages;
+      this.submitting = false;
+      this.editing = false;
+      if (data.success) {
+        window.scrollTo(0, 0);
+      }
+    },
+    reload(): void {
+      window.location.reload();
+    },
+    declaratieBewerken(): void {
+      this.editing = true;
+    },
+    vulNummer(value: string): void {
+      if (!this.declaratie.nummer) {
+        this.declaratie.nummer = value;
+      }
+    },
+    removeNummer(value: string): void {
+      if (this.declaratie.nummer === value) {
+        this.declaratie.nummer = undefined;
+      }
+    },
+    conceptVerwijderen(): void {
+      const confirm = window.confirm('Wil je deze declaratie verwijderen?');
+      if (confirm) {
+        this.submitting = true;
+
+        axios
+          .request<DeclaratieVerwijderenData, DeclaratieVerwijderenResponse>({
+            method: 'post',
+            url: '/declaratie/verwijderen/' + this.declaratie.id,
+          })
+          .then((data) => {
+            window.location.replace(data.data.redirect);
+          })
+          .catch((err) => {
+            this.submitting = false;
+            alert(err?.response?.data?.detail ?? err);
+          });
+      }
+    },
     bedrag(value: number) {
       const text = value.toString();
       const split = text.split('.');
@@ -721,253 +965,7 @@ interface DeclaratieVerwijderenData {
       }
     },
   },
-})
-export default class DeclaratieVue extends Vue {
-  @Prop()
-  private type: 'nieuw' | 'bewerken';
-  @Prop()
-  private categorieen: Record<string, number>;
-  @Prop({ default: legeDeclaratie })
-  private declaratieinput!: Declaratie;
-  @Prop()
-  private iban: string;
-  @Prop()
-  private tenaamstelling: string;
-  @Prop()
-  private email: string;
-
-  private declaratie = this.declaratieinput;
-  private bonUploaden = this.declaratie.bonnen.length === 0;
-  private uploading = false;
-  private geselecteerdeBon = 0;
-  private money = { precision: 2, decimal: ',', thousands: ' ', prefix: '€ ' };
-  private submitting = false;
-  private editing = false;
-  private errors = [];
-  private isZoomFit = true;
-
-  public zoomFit() {
-    this.isZoomFit = !this.isZoomFit;
-  }
-
-  private get veldenDisabled() {
-    return (
-      this.submitting || (this.declaratie.status !== 'concept' && !this.editing)
-    );
-  }
-
-  private get heeftBonnen() {
-    return this.declaratie.bonnen && this.declaratie.bonnen.length > 0;
-  }
-
-  public nieuweBon(file: string, id: number): void {
-    this.declaratie.bonnen.push(legeBon(file, id));
-    this.geselecteerdeBon = this.declaratie.bonnen?.length - 1;
-  }
-
-  public bonVerwijderen(index: number): void {
-    this.declaratie.bonnen.splice(index, 1);
-  }
-
-  public nieuweRegel(bon: Bon): void {
-    bon.regels.push(legeRegel());
-  }
-
-  public regelVerwijderen(bon: Bon, regel: number): void {
-    bon.regels.splice(regel, 1);
-  }
-
-  public get totaal(): number {
-    let totaal = 0;
-    for (let bon of this.declaratie.bonnen) {
-      totaal += this.berekening(bon).totaalIncl;
-    }
-    return this.round(totaal);
-  }
-
-  public round(toRound: number) {
-    return Math.round((toRound + Number.EPSILON) * 100) / 100;
-  }
-
-  public berekening(bon: Bon): {
-    totaalExcl: number;
-    totaalIncl: number;
-    btw: { 0: number; 9: number; 21: number };
-  } {
-    const ret = {
-      totaalExcl: 0,
-      totaalIncl: 0,
-      btw: {
-        0: 0,
-        9: 0,
-        21: 0,
-      },
-    };
-
-    for (const regel of bon.regels) {
-      if (regel.btw && regel.bedrag) {
-        regel.bedrag = parseFloat(regel.bedrag.toString());
-        const incl = regel.btw.substr(0, 4) === 'incl';
-        const percentage = parseInt(regel.btw.substr(6).replace('%', ''), 10);
-        const perunage = percentage / 100;
-
-        if (incl) {
-          ret.totaalExcl += regel.bedrag / (1 + perunage);
-          ret.btw[percentage] += (regel.bedrag / (1 + perunage)) * perunage;
-          ret.totaalIncl += regel.bedrag;
-        } else {
-          ret.totaalExcl += regel.bedrag;
-          ret.btw[percentage] += regel.bedrag * perunage;
-          ret.totaalIncl += regel.bedrag * (1 + perunage);
-        }
-      }
-    }
-
-    return {
-      totaalExcl: this.round(ret.totaalExcl),
-      totaalIncl: this.round(ret.totaalIncl),
-      btw: {
-        0: this.round(ret.btw[0]),
-        9: this.round(ret.btw[9]),
-        21: this.round(ret.btw[21]),
-      },
-    };
-  }
-
-  public uploadBon(files: FileList): void {
-    const formData = new FormData();
-
-    if (files.length !== 1) {
-      return;
-    }
-
-    this.uploading = true;
-    formData.append('bon', files[0], files[0].name);
-
-    axios({
-      method: 'post',
-      url: '/declaratie/upload',
-      data: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then((res) => {
-        this.uploading = false;
-        this.bonUploaden = false;
-        this.nieuweBon(res.data.file, res.data.id);
-      })
-      .catch((err) => {
-        this.uploading = false;
-        alert(err?.response?.data?.detail ?? err);
-      });
-  }
-
-  public declaratieOpslaan(indienen: boolean): void {
-    this.submitting = true;
-    this.errors = [];
-
-    axios
-      .request<DeclaratieOpslaanData, DeclaratieOpslaanResponse>({
-        method: 'post',
-        url: '/declaratie/opslaan',
-        data: {
-          declaratie: this.declaratie,
-          indienen: this.declaratie.status === 'concept' && indienen === true,
-        },
-      })
-      .then(this.processAjaxResponse)
-      .catch((err) => {
-        this.submitting = false;
-        alert(err?.response?.data?.detail ?? err);
-      });
-  }
-
-  public setStatus(status: string): void {
-    this.submitting = true;
-    this.errors = [];
-
-    axios
-      .request<DeclaratieOpslaanData, DeclaratieOpslaanResponse>({
-        method: 'post',
-        url: '/declaratie/status/' + this.declaratie.id,
-        data: {
-          status: status,
-          nummer: this.declaratie.nummer,
-        },
-      })
-      .then(this.processAjaxResponse)
-      .catch((err) => {
-        this.submitting = false;
-        alert(err?.response?.data?.detail ?? err);
-      });
-  }
-
-  private processAjaxResponse(res: DeclaratieOpslaanResponse): void {
-    const { data } = res;
-    if (data.id) {
-      this.declaratie.id = data.id;
-      this.declaratie.status = data.status;
-      this.declaratie.statusData = data.statusData;
-      if (this.declaratie.statusData.ingediendOp) {
-        this.declaratie.datum = this.declaratie.statusData.ingediendOp;
-      }
-      if (window.location.pathname.endsWith('nieuw')) {
-        window.history.pushState(
-          'Declaratie ' + data.id,
-          'Declaratie',
-          '/declaratie/' + data.id
-        );
-      }
-    }
-    this.errors = data.messages;
-    this.submitting = false;
-    this.editing = false;
-    if (data.success) {
-      window.scrollTo(0, 0);
-    }
-  }
-
-  public reload(): void {
-    window.location.reload();
-  }
-
-  public declaratieBewerken(): void {
-    this.editing = true;
-  }
-
-  public vulNummer(value: string): void {
-    if (!this.declaratie.nummer) {
-      this.declaratie.nummer = value;
-    }
-  }
-
-  public removeNummer(value: string): void {
-    if (this.declaratie.nummer === value) {
-      this.declaratie.nummer = null;
-    }
-  }
-
-  public conceptVerwijderen(): void {
-    const confirm = window.confirm('Wil je deze declaratie verwijderen?');
-    if (confirm) {
-      this.submitting = true;
-
-      axios
-        .request<DeclaratieVerwijderenData, DeclaratieVerwijderenResponse>({
-          method: 'post',
-          url: '/declaratie/verwijderen/' + this.declaratie.id,
-        })
-        .then((data) => {
-          window.location.replace(data.data.redirect);
-        })
-        .catch((err) => {
-          this.submitting = false;
-          alert(err?.response?.data?.detail ?? err);
-        });
-    }
-  }
-}
+});
 </script>
 
 <style scoped lang="scss">

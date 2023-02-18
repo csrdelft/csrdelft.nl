@@ -169,8 +169,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import Vue, { PropType } from 'vue';
 import Icon from '../common/Icon.vue';
 
 const shuffle = <T>(array: T[]) => {
@@ -218,216 +217,212 @@ interface Lid {
   postfix: string;
 }
 
-@Component({
+export default Vue.extend({
   components: { Icon },
-})
-export default class NamenLeren extends Vue {
-  @Prop()
-  leden: Lid[];
+  props: {
+    leden: {
+      required: true,
+      type: Array as PropType<Lid[]>,
+    },
+  },
+  data: () => ({
+    // Config
+    alleLichtingen: false,
+    alleVerticalen: true,
+    lichtingSelectie: [] as string[],
+    verticaleSelectie: [] as string[],
+    antwoordMethode: 'voornaam',
+    aantalPerKeer: 5,
 
-  // Config
-  alleLichtingen = false;
-  alleVerticalen = true;
-  lichtingSelectie: string[] = [];
-  verticaleSelectie: string[] = [];
-  antwoordMethode = 'voornaam';
-  aantalPerKeer = 5;
-
-  // Game state
-  verbergOnderkant = true;
-  started = false;
-  finished = false;
-  goed: Lid[] = [];
-  opnieuw: Lid[] = [];
-  fout: Lid[] = [];
-  todo: Lid[] = [];
-  laatste: Lid | null = null;
-  laatsteGoed: boolean | null = null;
-  huidig: Lid | null = null;
-  ingevuld = '';
-  titel = '';
-
-  private get aantal() {
-    return this.gefilterdeLeden.length;
-  }
-
-  private get gefilterdeLeden() {
-    return this.leden.filter(
-      (lid: Lid) =>
-        (this.alleLichtingen || this.lichtingSelectie.includes(lid.lichting)) &&
-        (this.alleVerticalen || this.verticaleSelectie.includes(lid.verticale))
-    );
-  }
-
-  private get lichtingen() {
-    return uniq(this.leden.map((lid) => lid.lichting)).sort();
-  }
-
-  private get verticalen() {
-    return uniq(this.leden.map((lid) => lid.verticale)).sort();
-  }
-
-  private get klaarVoorDeStart() {
-    return this.gefilterdeLeden.length > 0;
-  }
-
-  private get totaalAantal() {
-    return (
-      this.todo.length +
-      this.goed.length +
-      this.opnieuw.length +
-      this.fout.length
-    );
-  }
-
-  private get percentageGoed() {
-    return this.totaalAantal > 0
-      ? (this.goed.length / this.totaalAantal) * 100
-      : 0;
-  }
-
-  private get percentageOpnieuw() {
-    return this.totaalAantal > 0
-      ? (this.opnieuw.length / this.totaalAantal) * 100
-      : 0;
-  }
-
-  private get percentageFout() {
-    return this.totaalAantal > 0
-      ? (this.fout.length / this.totaalAantal) * 100
-      : 0;
-  }
-
-  private start() {
-    if (!this.klaarVoorDeStart) {
-      return;
-    }
-    this.started = true;
-    this.goed = [];
-    this.opnieuw = [];
-    this.fout = [];
-    this.todo = this.gefilterdeLeden;
-    shuffle(this.todo);
-    this.huidig = null;
-    this.laatste = null;
-    this.finished = false;
-    this.volgende();
-    this.titel = this.bouwTitel();
-    document.title = `C.S.R. Delft - Namen ${this.titel} leren`;
-    window.scrollTo(0, 0);
-  }
-
-  private volgende() {
-    const choice = this.fout.concat(
-      this.todo.slice(0, Math.max(this.aantalPerKeer - this.fout.length, 0))
-    );
-    const pickable = choice.filter(
-      (lid) =>
-        choice.length === 1 || !this.huidig || lid.uid !== this.huidig.uid
-    );
-    if (pickable.length > 0) {
-      for (const lid of pickable) {
-        preloadImage('/profiel/pasfoto/' + lid.uid + '.jpg');
+    // Game state
+    verbergOnderkant: true,
+    started: false,
+    finished: false,
+    goed: [] as Lid[],
+    opnieuw: [] as Lid[],
+    fout: [] as Lid[],
+    todo: [] as Lid[],
+    laatste: null as Lid | null,
+    laatsteGoed: null as boolean | null,
+    huidig: null as Lid | null,
+    ingevuld: '',
+    titel: '',
+  }),
+  computed: {
+    aantal() {
+      return this.gefilterdeLeden.length;
+    },
+    gefilterdeLeden() {
+      return this.leden.filter(
+        (lid: Lid) =>
+          (this.alleLichtingen ||
+            this.lichtingSelectie.includes(lid.lichting)) &&
+          (this.alleVerticalen ||
+            this.verticaleSelectie.includes(lid.verticale))
+      );
+    },
+    lichtingen() {
+      return uniq(this.leden.map((lid) => lid.lichting)).sort();
+    },
+    verticalen() {
+      return uniq(this.leden.map((lid) => lid.verticale)).sort();
+    },
+    klaarVoorDeStart() {
+      return this.gefilterdeLeden.length > 0;
+    },
+    totaalAantal() {
+      return (
+        this.todo.length +
+        this.goed.length +
+        this.opnieuw.length +
+        this.fout.length
+      );
+    },
+    percentageGoed() {
+      return this.totaalAantal > 0
+        ? (this.goed.length / this.totaalAantal) * 100
+        : 0;
+    },
+    percentageOpnieuw() {
+      return this.totaalAantal > 0
+        ? (this.opnieuw.length / this.totaalAantal) * 100
+        : 0;
+    },
+    percentageFout() {
+      return this.totaalAantal > 0
+        ? (this.fout.length / this.totaalAantal) * 100
+        : 0;
+    },
+  },
+  methods: {
+    start() {
+      if (!this.klaarVoorDeStart) {
+        return;
       }
-      this.huidig = pickable[Math.floor(Math.random() * pickable.length)];
-      this.ingevuld = '';
-    } else {
-      this.finished = true;
-      this.started = false;
-    }
-  }
-
-  private controleer() {
-    if (this.huidig == null) {
-      throw new Error('huidig niet gezet');
-    }
-    // Antwoord vormen
-    const onderdelen = [];
-    if (
-      this.antwoordMethode === 'voornaam' ||
-      this.antwoordMethode === 'combi'
-    ) {
-      onderdelen.push(this.huidig.voornaam);
-    }
-    if (
-      this.antwoordMethode === 'achternaam' ||
-      this.antwoordMethode === 'combi' ||
-      this.antwoordMethode === 'civi'
-    ) {
-      if (this.huidig.tussenvoegsel) {
-        onderdelen.push(this.huidig.tussenvoegsel);
-      }
-      onderdelen.push(this.huidig.achternaam);
-    }
-    if (this.antwoordMethode === 'civi') {
-      if (this.huidig.postfix) {
-        onderdelen.push(this.huidig.postfix);
-      }
-    }
-    const antwoord = onderdelen.map((s) => s.trim()).join(' ');
-
-    // Antwoord checken
-    this.laatste = this.huidig;
-    this.laatsteGoed =
-      antwoord.toLowerCase().replace('.', '') ===
-      this.ingevuld.toLowerCase().replace('.', '');
-
-    // Verwijderen uit oude lijst en toevoegen aan nieuwe lijst
-    let index = this.todo.findIndex((lid) => lid.uid === this.huidig?.uid);
-    if (index === -1) {
-      // Fout lijst
-      if (this.laatsteGoed) {
-        index = this.fout.findIndex((lid) => lid.uid === this.huidig?.uid);
-        this.fout.splice(index, 1);
-        this.opnieuw.push(this.huidig);
-      }
-    } else {
-      // Te doen lijst
-      this.todo.splice(index, 1);
-      if (this.laatsteGoed) {
-        this.goed.push(this.huidig);
+      this.started = true;
+      this.goed = [];
+      this.opnieuw = [];
+      this.fout = [];
+      this.todo = this.gefilterdeLeden;
+      shuffle(this.todo);
+      this.huidig = null;
+      this.laatste = null;
+      this.finished = false;
+      this.volgende();
+      this.titel = this.bouwTitel();
+      document.title = `C.S.R. Delft - Namen ${this.titel} leren`;
+      window.scrollTo(0, 0);
+    },
+    volgende() {
+      const choice = this.fout.concat(
+        this.todo.slice(0, Math.max(this.aantalPerKeer - this.fout.length, 0))
+      );
+      const pickable = choice.filter(
+        (lid) =>
+          choice.length === 1 || !this.huidig || lid.uid !== this.huidig.uid
+      );
+      if (pickable.length > 0) {
+        for (const lid of pickable) {
+          preloadImage('/profiel/pasfoto/' + lid.uid + '.jpg');
+        }
+        this.huidig = pickable[Math.floor(Math.random() * pickable.length)];
+        this.ingevuld = '';
       } else {
-        this.fout.push(this.huidig);
+        this.finished = true;
+        this.started = false;
       }
-    }
-
-    this.volgende();
-  }
-
-  private bouwTitel() {
-    if (this.alleLichtingen && this.alleVerticalen) {
-      return 'Alle leden';
-    }
-
-    let titel = '';
-    if (!this.alleLichtingen) {
-      this.lichtingSelectie.sort();
-      titel += 'Lichting ';
-      titel += this.lichtingSelectie
-        .slice(0, this.lichtingSelectie.length - 1)
-        .join(', ');
-      if (this.lichtingSelectie.length > 1) {
-        titel += ' & ';
+    },
+    controleer() {
+      if (this.huidig == null) {
+        throw new Error('huidig niet gezet');
       }
-      titel += this.lichtingSelectie[this.lichtingSelectie.length - 1];
-    }
-    if (!this.alleVerticalen) {
-      if (titel) {
-        titel += ', ';
+      // Antwoord vormen
+      const onderdelen = [];
+      if (
+        this.antwoordMethode === 'voornaam' ||
+        this.antwoordMethode === 'combi'
+      ) {
+        onderdelen.push(this.huidig.voornaam);
       }
-      this.verticaleSelectie.sort();
-      titel += this.verticaleSelectie
-        .slice(0, this.verticaleSelectie.length - 1)
-        .join(', ');
-      if (this.verticaleSelectie.length > 1) {
-        titel += ' & ';
+      if (
+        this.antwoordMethode === 'achternaam' ||
+        this.antwoordMethode === 'combi' ||
+        this.antwoordMethode === 'civi'
+      ) {
+        if (this.huidig.tussenvoegsel) {
+          onderdelen.push(this.huidig.tussenvoegsel);
+        }
+        onderdelen.push(this.huidig.achternaam);
       }
-      titel += this.verticaleSelectie[this.verticaleSelectie.length - 1];
-    }
+      if (this.antwoordMethode === 'civi') {
+        if (this.huidig.postfix) {
+          onderdelen.push(this.huidig.postfix);
+        }
+      }
+      const antwoord = onderdelen.map((s) => s.trim()).join(' ');
 
-    return titel;
-  }
-}
+      // Antwoord checken
+      this.laatste = this.huidig;
+      this.laatsteGoed =
+        antwoord.toLowerCase().replace('.', '') ===
+        this.ingevuld.toLowerCase().replace('.', '');
+
+      // Verwijderen uit oude lijst en toevoegen aan nieuwe lijst
+      let index = this.todo.findIndex((lid) => lid.uid === this.huidig?.uid);
+      if (index === -1) {
+        // Fout lijst
+        if (this.laatsteGoed) {
+          index = this.fout.findIndex((lid) => lid.uid === this.huidig?.uid);
+          this.fout.splice(index, 1);
+          this.opnieuw.push(this.huidig);
+        }
+      } else {
+        // Te doen lijst
+        this.todo.splice(index, 1);
+        if (this.laatsteGoed) {
+          this.goed.push(this.huidig);
+        } else {
+          this.fout.push(this.huidig);
+        }
+      }
+
+      this.volgende();
+    },
+    bouwTitel() {
+      if (this.alleLichtingen && this.alleVerticalen) {
+        return 'Alle leden';
+      }
+
+      let titel = '';
+      if (!this.alleLichtingen) {
+        this.lichtingSelectie.sort();
+        titel += 'Lichting ';
+        titel += this.lichtingSelectie
+          .slice(0, this.lichtingSelectie.length - 1)
+          .join(', ');
+        if (this.lichtingSelectie.length > 1) {
+          titel += ' & ';
+        }
+        titel += this.lichtingSelectie[this.lichtingSelectie.length - 1];
+      }
+      if (!this.alleVerticalen) {
+        if (titel) {
+          titel += ', ';
+        }
+        this.verticaleSelectie.sort();
+        titel += this.verticaleSelectie
+          .slice(0, this.verticaleSelectie.length - 1)
+          .join(', ');
+        if (this.verticaleSelectie.length > 1) {
+          titel += ' & ';
+        }
+        titel += this.verticaleSelectie[this.verticaleSelectie.length - 1];
+      }
+
+      return titel;
+    },
+  },
+});
 </script>
 
 <style scoped>

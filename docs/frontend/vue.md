@@ -7,11 +7,13 @@ title: Vue
 
 # Vue
 
-Vue is een nieuwere manier van frontend dingen bouwen. Peilingen, namen leren en een beginnetje van groepen is in Vue gebouwd.
+Vue is een nieuwere manier van frontend dingen bouwen. Peilingen, namen leren en een beginnetje van groepen is in Vue
+gebouwd.
 
 ## Waarom Vue?
 
-Kijk op [vuejs.org](https://vuejs.org/) voor meer uitleg. Maar het komt er eigenlijk op neer dat als je een component wil maken met veel gebruikers interactie, dat Vue dan een goede optie is.
+Kijk op [vuejs.org](https://vuejs.org/) voor meer uitleg. Maar het komt er eigenlijk op neer dat als je een component
+wil maken met veel gebruikers interactie, dat Vue dan een goede optie is.
 
 ## Een vue component maken
 
@@ -25,46 +27,49 @@ Om een nieuw component te maken maak je een nieuw `.vue` bestand aan met dezelfd
 <template></template>
 
 <script lang="ts">
-import Vue from 'docs/frontend/vue';
-import { Component, Prop } from 'vue-property-decorator';
+import Vue, { PropType } from 'vue';
 
-@Component({ components: {} })
-export default class MijnComponent extends Vue {
-	/// Props
-	@Prop()
-	private settings: { id: number };
-
-	/// Data
-	private id: number = 0;
-
-	protected created() {
+export default Vue.extend({
+	props: {
+		settings: {
+			required: true,
+			type: Object as PropType<{ id: number }>,
+		},
+	},
+	data: () => ({
+		id: 0,
+	}),
+	created() {
 		this.id = this.settings.id;
-	}
-
-	/// Getters
-	private get mooiId() {
-		return `Mijn id is ${this.id}`;
-	}
-
-	/// Methods
-	protected veranderId(event: Event) {
-		this.id = 13;
-	}
-}
+	},
+	computed: {
+		mooiId() {
+			return `Mijn id is ${this.id}`;
+		},
+	},
+	methods: {
+		veranderId() {
+			this.id = 13;
+		},
+	},
+});
 </script>
 
 <style scoped></style>
 ```
 
-Tussen de template tags kun je je template definieren, tussen de script tags kun je je component definieren en tussen de style tags kun je css definieren.
+Tussen de template tags kun je je template definieren, tussen de script tags kun je je component definieren en tussen de
+style tags kun je css definieren.
 
 ### Template
 
-Hier kun je een normaal Vue template in kwijt. Je kan hier classnames gebruiken die je onderaan het bestand definieert of die ergens in de css van de stek staan.
+Hier kun je een normaal Vue template in kwijt. Je kan hier classnames gebruiken die je onderaan het bestand definieert
+of die ergens in de css van de stek staan.
 
 ### Script
 
-Houdt er rekening mee dat je hier dezelfde TypeScript regels hebt als in de rest van de stek. PhpStorm is niet zo goed in deze errors checken, maar `yarn dev` kan ze je wel vertellen.
+Houdt er rekening mee dat je hier dezelfde TypeScript regels hebt als in de rest van de stek. PhpStorm is niet zo goed
+in deze errors checken, maar `yarn dev` kan ze je wel vertellen.
 
 In de `@Component` decorator kun je aangeven op welke componenten jouw component depend.
 
@@ -78,10 +83,12 @@ In `register-vue.ts` kun je je component registreren in de algemene Vue instance
 
 ## Component opstarten
 
-Als je een component hebt geregistreerd, bijvoorbeeld `mijn-component` dan kun je in de php code de volgende html terug geven.
+Als je een component hebt geregistreerd, bijvoorbeeld `mijn-component` dan kun je in de php code de volgende html terug
+geven.
 
 ```html
 <mijn-component class="vue-context" :settings="{id: 10}" />
 ```
 
-Door de `.vue-context` klasse wordt op die html tag vue geïnitialiseerd. Zie [TypeScript](typescript.md) voor meer uitleg over hoe de context werkt.
+Door de `.vue-context` klasse wordt op die html tag vue geïnitialiseerd. Zie [TypeScript](typescript.md) voor meer
+uitleg over hoe de context werkt.
