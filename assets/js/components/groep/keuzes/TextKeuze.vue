@@ -12,18 +12,21 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import Vue, { PropType } from 'vue';
 import { KeuzeOptie } from '../../../model/groep';
 
-@Component({})
-export default class TextKeuze extends Vue {
-  @Prop()
-  keuze: KeuzeOptie;
-
-  @Prop()
-  value: string;
-}
+export default Vue.extend({
+  props: {
+    keuze: {
+      required: true,
+      type: Object as PropType<KeuzeOptie>,
+    },
+    value: {
+      required: true,
+      type: String,
+    },
+  },
+});
 </script>
 
 <style scoped></style>

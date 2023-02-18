@@ -36,8 +36,7 @@
 
 <script lang="ts">
 import axios from 'axios';
-import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import Vue, { PropType } from 'vue';
 import {
   GroepInstance,
   GroepKeuzeSelectie,
@@ -49,34 +48,53 @@ import GroepAanmeldForm from './GroepAanmeldForm.vue';
 import GroepHeaderRow from './GroepHeaderRow.vue';
 import GroepLidRow from './GroepLidRow.vue';
 
-// noinspection JSUnusedGlobalSymbols
-@Component({ components: { GroepAanmeldForm, GroepLidRow, GroepHeaderRow } })
-export default class Groep extends Vue {
-  /// Props
-  @Prop()
-  settings: GroepSettings;
-  @Prop()
-  groep: GroepInstance;
+export default Vue.extend({
+  components: { GroepAanmeldForm, GroepLidRow, GroepHeaderRow },
+  props: {
+    settings: {
+      required: true,
+      type: Object as PropType<GroepSettings>,
+    },
+    groep: {
+      required: true,
+      type: Object as PropType<GroepInstance>,
+    },
+  },
+  data: () => ({
+    id: 0,
+    naam: '',
+    familie: '',
+    beginMoment: new Date(),
+    eindMoment: new Date(),
+    status: '',
+    samenvatting: '',
+    omschrijving: '',
+    makerUid: '',
+    versie: '',
+    keuzelijst2: [] as KeuzeOptie[],
+    leden: [] as GroepLid[],
+    mijnUid: '',
+    mijnLink: '',
+    aanmeldUrl: '',
+    mijnOpmerking: [] as GroepKeuzeSelectie[],
+  }),
+  computed: {
+    mijnAanmelding() {
+      return this.leden.find((lid) => lid.uid === this.mijnUid);
+    },
+    aangemeld() {
+      return this.mijnAanmelding !== undefined;
+    },
+    magAanmelden() {
+      console.log(this.groep.aanmeldenTot, new Date());
+      if (this.groep.aanmeldenTot) {
+        return new Date(this.groep.aanmeldenTot) > new Date();
+      }
 
-  /// Data
-  id = 0;
-  naam = '';
-  familie = '';
-  beginMoment: Date = new Date();
-  eindMoment: Date = new Date();
-  status = '';
-  samenvatting = '';
-  omschrijving = '';
-  makerUid = '';
-  versie = '';
-  keuzelijst2: KeuzeOptie[] = [];
-  leden: GroepLid[] = [];
-  mijnUid = '';
-  mijnLink = '';
-  aanmeldUrl = '';
-  mijnOpmerking: GroepKeuzeSelectie[] = [];
-
-  private created() {
+      return true;
+    },
+  },
+  created() {
     this.id = this.groep.id;
     this.naam = this.groep.naam;
     this.familie = this.groep.familie;
@@ -102,39 +120,21 @@ export default class Groep extends Vue {
         naam: value.naam,
       }));
     }
-  }
+  },
+  methods: {
+    aanmelden() {
+      if (!this.aangemeld) {
+        this.leden.push({
+          uid: this.mijnUid,
+          link: this.mijnLink,
+          opmerking2: this.mijnOpmerking,
+        });
 
-  /// Getters
-  private get mijnAanmelding() {
-    return this.leden.find((lid) => lid.uid === this.mijnUid);
-  }
-
-  private get aangemeld() {
-    return this.mijnAanmelding !== undefined;
-  }
-
-  private get magAanmelden() {
-    console.log(this.groep.aanmeldenTot, new Date());
-    if (this.groep.aanmeldenTot) {
-      return new Date(this.groep.aanmeldenTot) > new Date();
-    }
-
-    return true;
-  }
-
-  /// Methods
-  private aanmelden() {
-    if (!this.aangemeld) {
-      this.leden.push({
-        uid: this.mijnUid,
-        link: this.mijnLink,
-        opmerking2: this.mijnOpmerking,
-      });
-
-      axios.post(this.aanmeldUrl, { opmerking2: this.mijnOpmerking });
-    }
-  }
-}
+        axios.post(this.aanmeldUrl, { opmerking2: this.mijnOpmerking });
+      }
+    },
+  },
+});
 </script>
 
 <style scoped>

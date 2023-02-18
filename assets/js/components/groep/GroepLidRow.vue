@@ -18,37 +18,38 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import Vue, { PropType } from 'vue';
 import GroepKeuzeType from '../../enum/GroepKeuzeType';
 import { htmlEncode } from '../../lib/util';
 import { GroepKeuzeSelectie, GroepLid, KeuzeOptie } from '../../model/groep';
 import Icon from '../common/Icon.vue';
 
-@Component({
+export default Vue.extend({
   components: { Icon },
-})
-export default class GroepLidRow extends Vue {
-  @Prop()
-  lid: GroepLid;
-
-  @Prop()
-  keuzes: KeuzeOptie[];
-
-  private getLidKeuze(keuze: KeuzeOptie) {
-    return this.lid.opmerking2
-      ? this.lid.opmerking2.find((k) => k.naam === keuze.naam)
-      : undefined;
-  }
-
-  private isKeuzeCheckbox(keuze: KeuzeOptie) {
-    return keuze.type === GroepKeuzeType.CHECKBOX;
-  }
-
-  private renderSelectie(lidKeuze: GroepKeuzeSelectie) {
-    return htmlEncode(lidKeuze.selectie);
-  }
-}
+  props: {
+    lid: {
+      required: true,
+      type: Object as PropType<GroepLid>,
+    },
+    keuzes: {
+      required: true,
+      type: Array as PropType<KeuzeOptie[]>,
+    },
+  },
+  methods: {
+    getLidKeuze(keuze: KeuzeOptie) {
+      return this.lid.opmerking2
+        ? this.lid.opmerking2.find((k) => k.naam === keuze.naam)
+        : undefined;
+    },
+    isKeuzeCheckbox(keuze: KeuzeOptie) {
+      return keuze.type === GroepKeuzeType.CHECKBOX;
+    },
+    renderSelectie(lidKeuze: GroepKeuzeSelectie) {
+      return htmlEncode(lidKeuze.selectie);
+    },
+  },
+});
 </script>
 
 <style scoped></style>
