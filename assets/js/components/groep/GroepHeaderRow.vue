@@ -10,15 +10,17 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import Vue, { PropType } from 'vue';
 import { KeuzeOptie } from '../../model/groep';
 
-@Component({})
-export default class GroepHeaderRow extends Vue {
-  @Prop()
-  keuzes: KeuzeOptie[];
-}
+export default Vue.extend({
+  props: {
+    keuzes: {
+      required: true,
+      type: Array as PropType<KeuzeOptie[]>,
+    },
+  },
+});
 </script>
 
 <style scoped></style>

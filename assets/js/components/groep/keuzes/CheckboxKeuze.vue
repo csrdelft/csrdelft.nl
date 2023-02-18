@@ -16,18 +16,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import Vue, { PropType } from 'vue';
 import { KeuzeOptie } from '../../../model/groep';
 
-@Component({})
-export default class CheckboxKeuze extends Vue {
-  @Prop()
-  keuze: KeuzeOptie;
-
-  @Prop()
-  value: boolean;
-}
+export default Vue.extend({
+  props: {
+    keuze: {
+      required: true,
+      type: Object as PropType<KeuzeOptie>,
+    },
+    value: Boolean,
+  },
+});
 </script>
 
 <style scoped></style>

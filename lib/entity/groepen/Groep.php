@@ -364,7 +364,11 @@ class Groep implements DataTableEntry, DisplayEntity
 		foreach ($keuzes as $keuze) {
 			foreach ($this->keuzelijst2 as $optie) {
 				// TODO: vaststellen waarom deze niet als object uit doctrine komt
-				$optieNaam = $optie['naam'] ?? $optie->naam;
+				if (is_array($optie)) {
+					$optieNaam = $optie['naam'];
+				} else {
+					$optieNaam = $optie->naam;
+				}
 				if ($optieNaam == $keuze->naam && !in_array($keuze, $correct)) {
 					$correct[] = $keuze;
 				}
