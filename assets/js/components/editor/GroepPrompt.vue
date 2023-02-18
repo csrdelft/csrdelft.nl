@@ -86,8 +86,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import Vue, { PropType } from 'vue';
 import axios, { CancelTokenSource } from 'axios';
 
 interface GroepZoekResponse {
@@ -99,66 +98,68 @@ interface GroepZoekResponse {
   id: number;
 }
 
-@Component
-export default class GroepPrompt extends Vue {
-  @Prop()
-  type: string;
-
-  @Prop()
-  selectgroep: (naam: string, id: number) => void;
-
-  @Prop()
-  close: () => void;
-
-  groepen: GroepZoekResponse[] = [];
-  ingevuld = '';
-
-  zoekHt = true;
-  zoekFt = true;
-  zoekOt = false;
-
-  loading = false;
-
-  source: CancelTokenSource = null;
-
-  public created(): void {
+export default Vue.extend({
+  props: {
+    type: {
+      required: true,
+      type: String,
+    },
+    selectgroep: {
+      required: true,
+      type: Function as PropType<(naam: string, id: number) => void>,
+    },
+    close: {
+      required: true,
+      type: Function as PropType<() => void>,
+    },
+  },
+  data: () => ({
+    groepen: [] as GroepZoekResponse[],
+    ingevuld: '',
+    zoekHt: true,
+    zoekFt: true,
+    zoekOt: false,
+    loading: false,
+    source: null as CancelTokenSource,
+  }),
+  created() {
     this.update();
-  }
+  },
+  methods: {
+    update(): void {
+      this.loading = true;
+      // Cancel vorige request en maak een nieuwe cancel source
+      this.source?.cancel('Stop zoeken');
+      this.source = axios.CancelToken.source();
 
-  public update(): void {
-    this.loading = true;
-    // Cancel vorige request en maak een nieuwe cancel source
-    this.source?.cancel('Stop zoeken');
-    this.source = axios.CancelToken.source();
+      const status = [];
+      if (this.zoekHt) status.push('ht');
+      if (this.zoekFt) status.push('ft');
+      if (this.zoekOt) status.push('ot');
 
-    const status = [];
-    if (this.zoekHt) status.push('ht');
-    if (this.zoekFt) status.push('ft');
-    if (this.zoekOt) status.push('ot');
+      const zoekStatus = status.join(',');
 
-    const zoekStatus = status.join(',');
-
-    axios
-      .get<GroepZoekResponse[]>(
-        `/groepen/${this.type}/zoeken?status=${zoekStatus}&q=${this.ingevuld}`,
-        { cancelToken: this.source.token }
-      )
-      .then((groepen) => {
-        this.groepen = groepen.data;
-        // Loading wordt alleen weer false als er daadwerkelijk een request eindigt
-        this.loading = false;
-      })
-      .catch(() => {
-        /* Maakt niet uit, voorkom log naar console */
-      });
-  }
-
-  public sluiten(e: MouseEvent): void {
-    if (e.target instanceof Element && e.target.className == 'modal') {
-      this.close();
-    }
-  }
-}
+      axios
+        .get<GroepZoekResponse[]>(
+          `/groepen/${this.type}/zoeken?status=${zoekStatus}&q=${this.ingevuld}`,
+          { cancelToken: this.source.token }
+        )
+        .then((groepen) => {
+          this.groepen = groepen.data;
+          // Loading wordt alleen weer false als er daadwerkelijk een request eindigt
+          this.loading = false;
+        })
+        .catch(() => {
+          /* Maakt niet uit, voorkom log naar console */
+        });
+    },
+    sluiten(e: MouseEvent): void {
+      if (e.target instanceof Element && e.target.className == 'modal') {
+        this.close();
+      }
+    },
+  },
+});
 </script>
 
 <style scoped></style>
