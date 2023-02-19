@@ -15,7 +15,8 @@ import { toggleMark } from 'prosemirror-commands';
 import { wrapInList } from 'prosemirror-schema-list';
 import { startImageUpload } from './forum-plaatje';
 import { html, ucfirst, uidLike } from '../lib/util';
-import Vue from 'vue';
+import { createApp } from 'vue';
+import { createDefaultApp } from '../register-vue';
 
 export function canInsert(
 	state: EditorState<EditorSchema>,
@@ -397,11 +398,10 @@ export const groepPrompt = (
 
 			const el = document.body.appendChild(document.createElement('div'));
 
-			new Vue({
-				el,
+			createDefaultApp({
 				template: `
 				<groepprompt :close="close" :selectgroep="selectGroep" :type="type"/>`,
-				data: { type },
+				data: () => ({ type }),
 				methods: {
 					close() {
 						this.$el.remove();
@@ -424,7 +424,7 @@ export const groepPrompt = (
 						view.focus();
 					},
 				},
-			});
+			}).mount(el);
 		},
 	});
 

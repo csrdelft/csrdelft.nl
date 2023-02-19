@@ -609,7 +609,9 @@
 
 <script lang="ts">
 import axios from 'axios';
-import Vue, { PropType } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
+import Icon from '../common/Icon.vue';
 
 type status =
   | 'concept'
@@ -706,7 +708,8 @@ interface DeclaratieVerwijderenData {
   redirect: string;
 }
 
-export default Vue.extend({
+export default defineComponent({
+  components: { Icon },
   props: {
     type: {
       required: true,

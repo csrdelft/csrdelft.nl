@@ -169,7 +169,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import Icon from '../common/Icon.vue';
 
 const shuffle = <T>(array: T[]) => {
@@ -217,7 +218,7 @@ interface Lid {
   postfix: string;
 }
 
-export default Vue.extend({
+export default defineComponent({
   components: { Icon },
   props: {
     leden: {

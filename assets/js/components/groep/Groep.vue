@@ -36,7 +36,8 @@
 
 <script lang="ts">
 import axios from 'axios';
-import Vue, { PropType } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import {
   GroepInstance,
   GroepKeuzeSelectie,
@@ -48,7 +49,7 @@ import GroepAanmeldForm from './GroepAanmeldForm.vue';
 import GroepHeaderRow from './GroepHeaderRow.vue';
 import GroepLidRow from './GroepLidRow.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: { GroepAanmeldForm, GroepLidRow, GroepHeaderRow },
   props: {
     settings: {

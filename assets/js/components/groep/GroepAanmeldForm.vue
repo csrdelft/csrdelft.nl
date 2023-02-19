@@ -14,7 +14,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import GroepKeuzeType from '../../enum/GroepKeuzeType';
 import { GroepKeuzeSelectie, KeuzeOptie } from '../../model/groep';
 import CheckboxKeuze from './keuzes/CheckboxKeuze.vue';
@@ -22,7 +23,7 @@ import DropDownKeuze from './keuzes/DropDownKeuze.vue';
 import MultiSelectKeuze from './keuzes/MultiSelectKeuze.vue';
 import TextKeuze from './keuzes/TextKeuze.vue';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     keuzes: {
       required: true,

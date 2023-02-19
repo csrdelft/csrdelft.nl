@@ -46,7 +46,7 @@
             />
           </li>
         </ul>
-        <b-pagination
+        <BPagination
           v-if="optiesFiltered.length > paginaSize"
           v-model="huidigePagina"
           size="md"
@@ -75,7 +75,9 @@
 
 <script lang="ts">
 import axios from 'axios';
-import Vue, { PropType } from 'vue';
+import { BPagination } from 'bootstrap-vue';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import Icon from '../common/Icon.vue';
 import PeilingOptie from './PeilingOptie.vue';
 import PeilingOptieToevoegen from './PeilingOptieToevoegen.vue';
@@ -102,8 +104,8 @@ interface PeilingOptieSettings {
   stemmen: number;
 }
 
-export default Vue.extend({
-  components: { Icon, PeilingOptie, PeilingOptieToevoegen },
+export default defineComponent({
+  components: { Icon, PeilingOptie, PeilingOptieToevoegen, BPagination },
   props: {
     settings: {
       default: () => ({}),

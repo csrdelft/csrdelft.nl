@@ -86,7 +86,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import axios, { CancelTokenSource } from 'axios';
 
 interface GroepZoekResponse {
@@ -98,7 +99,7 @@ interface GroepZoekResponse {
   id: number;
 }
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     type: {
       required: true,

@@ -1,5 +1,6 @@
 import BootstrapVue from 'bootstrap-vue';
-import Vue from 'vue';
+import { createApp } from 'vue';
+import type { Component } from 'vue';
 import Icon from './components/common/Icon.vue';
 import Declaratie from './components/declaratie/Declaratie.vue';
 import Groep from './components/groep/Groep.vue';
@@ -10,18 +11,25 @@ import GroepPrompt from './components/editor/GroepPrompt.vue';
 import Inputmask from 'inputmask';
 import money from 'v-money';
 
-Vue.component('icon', Icon);
-Vue.component('peiling', Peiling);
-Vue.component('peilingoptie', PeilingOptie);
-Vue.component('groep', Groep);
-Vue.component('namenleren', NamenLeren);
-Vue.component('declaratie', Declaratie);
-Vue.component('groepprompt', GroepPrompt);
+export const createDefaultApp = (rootComponent: Component) => {
+	const app = createApp(rootComponent);
 
-Vue.directive('input-mask', {
-	bind: function (el) {
-		new Inputmask().mask(el);
-	},
-});
-Vue.use(money, { precision: 2, decimal: ',', thousands: ' ', prefix: '€ ' });
-Vue.use(BootstrapVue);
+	// Via @vue/compat
+	app.use(BootstrapVue);
+	app.directive('input-mask', {
+		beforeMount: function (el) {
+			new Inputmask().mask(el);
+		},
+	});
+	app.component('icon', Icon);
+	app.component('peiling', Peiling);
+	app.component('peilingoptie', PeilingOptie);
+	app.component('groep', Groep);
+	app.component('namenleren', NamenLeren);
+	app.component('declaratie', Declaratie);
+	app.component('groepprompt', GroepPrompt);
+
+	app.use(money, { precision: 2, decimal: ',', thousands: ' ', prefix: '€ ' });
+
+	return app;
+};

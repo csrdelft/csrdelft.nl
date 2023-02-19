@@ -9,11 +9,11 @@
 
 <script lang="ts">
 import axios from 'axios';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { domUpdate } from '../../lib/domUpdate';
 import Icon from '../common/Icon.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: { Icon },
   props: {
     id: {

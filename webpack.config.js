@@ -5,7 +5,7 @@ const contextPath = path.resolve(__dirname, 'assets');
 const terserPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
-const VuePlugin = require('vue-loader/lib/plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 
@@ -85,7 +85,7 @@ module.exports = (env, argv) => {
 			// Vanuit javascript kun je automatisch .js en .ts bestanden includen.
 			extensions: ['.ts', '.js'],
 			alias: {
-				vue$: 'vue/dist/vue.esm.js',
+				vue$: '@vue/compat/dist/vue.esm-bundler.js',
 			},
 			fallback: {
 				stream: false,
@@ -110,7 +110,7 @@ module.exports = (env, argv) => {
 						: 'css/[name].[contenthash].css',
 			}),
 			new RemoveEmptyScriptsPlugin(),
-			new VuePlugin(),
+			new VueLoaderPlugin(),
 			new WebpackAssetsManifest({
 				entrypoints: true,
 				integrity: true,
@@ -146,7 +146,14 @@ module.exports = (env, argv) => {
 				},
 				{
 					test: /\.vue$/,
-					use: 'vue-loader',
+					loader: 'vue-loader',
+					options: {
+						compilerOptions: {
+							compatConfig: {
+								MODE: 2,
+							},
+						},
+					},
 				},
 				// Verwerk sass bestanden.
 				// `sass-loader` >
