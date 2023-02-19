@@ -3,7 +3,7 @@
 {% block type %}lijst{% endblock %}
 
 {% block tabcontent %}
-	<table class="groep-lijst" role="presentation">
+	<table class="groep-lijst table table-sm table-striped" role="presentation">
 		<tbody>
 		{% if groep.magTwig('aanmelden') %}
 			<tr>
@@ -23,8 +23,11 @@
 						</a>
 					{% endif %}
 					{{ lid.link | raw }}
+				</td><td>
 					{% if groep.magTwig('bewerken') %}
 						{{ groep_bewerken_form(lid, groep) }}
+					{% else %}
+						{{ lid.opmerking }}
 					{% endif %}
 				</td>
 			</tr>
