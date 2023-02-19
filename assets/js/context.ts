@@ -111,7 +111,6 @@ export const registerGlobalContext = async (): Promise<void> => {
 				() => $(select('.hoverIntentContent', el)).fadeIn(),
 				() => $(select('.hoverIntentContent', el)).fadeOut()
 			).options({ timeout: 250 }),
-		'.vue-context': (el) => createDefaultApp({}).mount(el.parentElement),
 		'.vue-component': (el) =>
 			createDefaultApp(
 				getVueComponent(el.dataset.naam),
