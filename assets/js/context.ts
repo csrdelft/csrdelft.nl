@@ -95,7 +95,7 @@ export const registerGlobalContext = async (): Promise<void> => {
 	const [
 		{ default: hoverintent },
 		{ initKaartjes },
-		{ createDefaultApp },
+		{ createDefaultApp, getVueComponent },
 		{ default: $ },
 	] = await Promise.all([
 		import('hoverintent'),
@@ -112,6 +112,11 @@ export const registerGlobalContext = async (): Promise<void> => {
 				() => $(select('.hoverIntentContent', el)).fadeOut()
 			).options({ timeout: 250 }),
 		'.vue-context': (el) => createDefaultApp({}).mount(el.parentElement),
+		'.vue-component': (el) =>
+			createDefaultApp(
+				getVueComponent(el.dataset.naam),
+				JSON.parse(el.dataset.props)
+			).mount(el),
 		'[data-visite]': initKaartjes,
 		'.AutoSize': autosizeTextarea,
 	});

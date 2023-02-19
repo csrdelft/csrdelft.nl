@@ -4,9 +4,11 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\Util\VueUtil;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\view\bbcode\BbHelper;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Twig\Environment;
 
@@ -25,30 +27,24 @@ class BbPeiling extends BbTag
 	 */
 	private $peiling;
 	/**
-	 * @var SerializerInterface
-	 */
-	private $serializer;
-	/**
 	 * @var PeilingenRepository
 	 */
 	private $peilingenRepository;
 	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
 	 * @var string
 	 */
 	private $id;
+	/**
+	 * @var NormalizerInterface
+	 */
+	private $normalizer;
 
 	public function __construct(
-		SerializerInterface $serializer,
-		PeilingenRepository $peilingenRepository,
-		Environment $twig
+		NormalizerInterface $normalizer,
+		PeilingenRepository $peilingenRepository
 	) {
-		$this->serializer = $serializer;
 		$this->peilingenRepository = $peilingenRepository;
-		$this->twig = $twig;
+		$this->normalizer = $normalizer;
 	}
 
 	public static function getTagName()
@@ -73,8 +69,8 @@ class BbPeiling extends BbTag
 
 	public function render()
 	{
-		return $this->twig->render('peilingen/peiling.html.twig', [
-			'peiling' => $this->serializer->serialize($this->peiling, 'json', [
+		return VueUtil::vueComponent('peiling', [
+			'settings' => $this->normalizer->normalize($this->peiling, 'json', [
 				'groups' => 'vue',
 			]),
 		]);

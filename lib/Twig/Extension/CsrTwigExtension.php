@@ -8,6 +8,7 @@ use CsrDelft\common\Util\BedragUtil;
 use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\FileUtil;
 use CsrDelft\common\Util\TextUtil;
+use CsrDelft\common\Util\VueUtil;
 use CsrDelft\Component\DataTable\DataTableView;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
@@ -113,6 +114,11 @@ class CsrTwigExtension extends AbstractExtension
 			new TwigFunction(
 				'groep_bewerken_form',
 				[$this, 'groepBewerkenForm'],
+				['is_safe' => ['html']]
+			),
+			new TwigFunction(
+				'vue',
+				[VueUtil::class, 'vueComponent'],
 				['is_safe' => ['html']]
 			),
 		];

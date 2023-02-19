@@ -766,7 +766,9 @@ export default defineComponent({
     },
   },
   created() {
-    this.declaratie = this.declaratieinput;
+    if (this.declaratieinput) {
+      this.declaratie = this.declaratieinput;
+    }
     this.bonUploaden = this.declaratie.bonnen?.length === 0;
   },
   methods: {

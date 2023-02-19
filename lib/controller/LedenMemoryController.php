@@ -199,38 +199,40 @@ class LedenMemoryController extends AbstractController
 			LidStatus::getLidLike()
 		);
 
-		// Bouw infostructuur.
-		$leden = array_map(
-			function ($profiel) {
-				/** @var $profiel Profiel */
-				return [
-					'uid' => $profiel->uid,
-					'voornaam' => $profiel->voornaam,
-					'tussenvoegsel' => $profiel->tussenvoegsel,
-					'achternaam' => $profiel->achternaam,
-					'postfix' => $profiel->postfix,
-					'lichting' => $profiel->lidjaar,
-					'verticale' => $profiel->verticale
-						? $profiel->getVerticale()->naam
-						: 'Geen',
-					'geslacht' => $profiel->geslacht->getValue(),
-					'studie' => $profiel->studie,
-				];
-			},
-			array_filter($profielen, function ($profiel) {
-				$path = $profiel->getPasfotoInternalPath();
-				return InstellingUtil::is_zichtbaar(
-					$profiel,
-					'profielfoto',
-					'intern',
-					P_LEDEN_MOD
-				) && $path !== null;
-			})
+		// Bouw infostructuur. array_values om array te resetten voor json_encode
+		$leden = array_values(
+			array_map(
+				function ($profiel) {
+					/** @var $profiel Profiel */
+					return [
+						'uid' => $profiel->uid,
+						'voornaam' => $profiel->voornaam,
+						'tussenvoegsel' => $profiel->tussenvoegsel,
+						'achternaam' => $profiel->achternaam,
+						'postfix' => $profiel->postfix,
+						'lichting' => $profiel->lidjaar,
+						'verticale' => $profiel->verticale
+							? $profiel->getVerticale()->naam
+							: 'Geen',
+						'geslacht' => $profiel->geslacht->getValue(),
+						'studie' => $profiel->studie,
+					];
+				},
+				array_filter($profielen, function ($profiel) {
+					$path = $profiel->getPasfotoInternalPath();
+					return InstellingUtil::is_zichtbaar(
+						$profiel,
+						'profielfoto',
+						'intern',
+						P_LEDEN_MOD
+					) && $path !== null;
+				})
+			)
 		);
 
 		// Laad Vue app.
 		return $this->render('namenleren.html.twig', [
-			'leden' => json_encode($leden),
+			'leden' => $leden,
 		]);
 	}
 }
