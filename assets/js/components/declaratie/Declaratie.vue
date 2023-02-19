@@ -263,7 +263,7 @@
             @click="geselecteerdeBon = bonIndex"
           >
             <div class="left">
-              <div class="title">Bon {{ bonIndex + 1 }}</div>
+              <div class="title">Bon {{ Number(bonIndex) + 1 }}</div>
               <div class="date">
                 {{ bon.datum }}
               </div>
@@ -287,7 +287,7 @@
             >
               <Icon icon="verwijderen" />
             </div>
-            <div class="title">Bon {{ bonIndex + 1 }}</div>
+            <div class="title">Bon {{ Number(bonIndex) + 1 }}</div>
 
             <div class="field">
               <label :for="'bon' + bonIndex + '_datum'">Datum</label>

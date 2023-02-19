@@ -1,4 +1,3 @@
-import BootstrapVue from 'bootstrap-vue';
 import { createApp } from 'vue';
 import type { Component } from 'vue';
 import Icon from './components/common/Icon.vue';
@@ -14,8 +13,6 @@ import money from 'v-money';
 export const createDefaultApp = (rootComponent: Component) => {
 	const app = createApp(rootComponent);
 
-	// Via @vue/compat
-	app.use(BootstrapVue);
 	app.directive('input-mask', {
 		beforeMount: function (el) {
 			new Inputmask().mask(el);
