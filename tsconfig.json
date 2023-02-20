@@ -4,9 +4,8 @@
 		"module": "esnext",
 		"lib": ["DOM", "ES2019"],
 		"moduleResolution": "node",
-		"experimentalDecorators": true,
 		"removeComments": false,
-		"types": ["vue-typescript-import-dts", "@types/jqueryui"],
+		"types": ["@types/jqueryui"],
 		"allowSyntheticDefaultImports": true,
 		"skipLibCheck": true
 	},

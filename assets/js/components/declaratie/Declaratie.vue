@@ -263,7 +263,7 @@
             @click="geselecteerdeBon = bonIndex"
           >
             <div class="left">
-              <div class="title">Bon {{ bonIndex + 1 }}</div>
+              <div class="title">Bon {{ Number(bonIndex) + 1 }}</div>
               <div class="date">
                 {{ bon.datum }}
               </div>
@@ -287,7 +287,7 @@
             >
               <Icon icon="verwijderen" />
             </div>
-            <div class="title">Bon {{ bonIndex + 1 }}</div>
+            <div class="title">Bon {{ Number(bonIndex) + 1 }}</div>
 
             <div class="field">
               <label :for="'bon' + bonIndex + '_datum'">Datum</label>
@@ -609,7 +609,9 @@
 
 <script lang="ts">
 import axios from 'axios';
-import Vue, { PropType } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
+import Icon from '../common/Icon.vue';
 
 type status =
   | 'concept'
@@ -706,7 +708,8 @@ interface DeclaratieVerwijderenData {
   redirect: string;
 }
 
-export default Vue.extend({
+export default defineComponent({
+  components: { Icon },
   props: {
     type: {
       required: true,
@@ -763,7 +766,9 @@ export default Vue.extend({
     },
   },
   created() {
-    this.declaratie = this.declaratieinput;
+    if (this.declaratieinput) {
+      this.declaratie = this.declaratieinput;
+    }
     this.bonUploaden = this.declaratie.bonnen?.length === 0;
   },
   methods: {

@@ -21,10 +21,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
 import { KeuzeOptie } from '../../../model/groep';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     keuze: {
       required: true,

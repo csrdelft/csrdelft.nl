@@ -5,9 +5,9 @@ namespace CsrDelft\view\bbcode\tag\groep;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
-use CsrDelft\common\Util\TextUtil;
-use CsrDelft\entity\groepen\Groep;
+use CsrDelft\common\Util\VueUtil;
 use CsrDelft\entity\groepen\enum\GroepVersie;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -15,6 +15,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\groepen\GroepView;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Twig\Environment;
 
@@ -24,10 +25,6 @@ use Twig\Environment;
  */
 abstract class BbTagGroep extends BbTag
 {
-	/**
-	 * @var SerializerInterface
-	 */
-	private $serializer;
 	/**
 	 * @var string
 	 */
@@ -40,15 +37,19 @@ abstract class BbTagGroep extends BbTag
 	 * @var EntityManagerInterface
 	 */
 	private $entityManager;
+	/**
+	 * @var NormalizerInterface
+	 */
+	private $normalizer;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
 		Environment $twig,
-		SerializerInterface $serializer
+		NormalizerInterface $normalizer
 	) {
-		$this->serializer = $serializer;
 		$this->twig = $twig;
 		$this->entityManager = $entityManager;
+		$this->normalizer = $normalizer;
 	}
 
 	public function getId()
@@ -144,14 +145,12 @@ abstract class BbTagGroep extends BbTag
 				'aanmeld_url' => $groep->getUrl() . '/aanmelden2/' . $uid,
 			];
 
-			$groepJson = htmlspecialchars(
-				$this->serializer->serialize($groep, 'json', ['groups' => ['vue']])
-			);
-
-			return vsprintf(
-				'<groep class="vue-context" :groep="%s" :settings="%s"></groep>',
-				[$groepJson, TextUtil::vue_encode($settings)]
-			);
+			return VueUtil::vueComponent('groep', [
+				'groep' => $this->normalizer->normalize($groep, 'json', [
+					'groups' => ['vue'],
+				]),
+				'settings' => $settings,
+			]);
 		}
 		$view = new GroepView($this->twig, $groep, null, false, true);
 		return $view->getHtml();

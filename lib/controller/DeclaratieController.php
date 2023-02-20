@@ -124,7 +124,7 @@ class DeclaratieController extends AbstractController
 			'iban' => $lid->bankrekening,
 			'tenaamstelling' => $lid->getNaam('voorletters'),
 			'email' => $lid->getPrimaryEmail(),
-			'declaratie' => false,
+			'declaratie' => null,
 		]);
 	}
 

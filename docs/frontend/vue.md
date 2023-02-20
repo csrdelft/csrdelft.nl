@@ -24,12 +24,15 @@ Het volgen van de [Guide](https://vuejs.org/v2/guide/) van Vue is aangeraden als
 Om een nieuw component te maken maak je een nieuw `.vue` bestand aan met dezelfde structuur als hier onder beschreven.
 
 ```vue
-<template></template>
+<template>
+	<div>{{ mooiId }}</div>
+</template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
 	props: {
 		settings: {
 			required: true,
@@ -71,8 +74,6 @@ of die ergens in de css van de stek staan.
 Houdt er rekening mee dat je hier dezelfde TypeScript regels hebt als in de rest van de stek. PhpStorm is niet zo goed
 in deze errors checken, maar `yarn dev` kan ze je wel vertellen.
 
-In de `@Component` decorator kun je aangeven op welke componenten jouw component depend.
-
 ### Style
 
 De styles die je hier definieert zijn alleen maar beschikbaar in dit component.
@@ -86,9 +87,11 @@ In `register-vue.ts` kun je je component registreren in de algemene Vue instance
 Als je een component hebt geregistreerd, bijvoorbeeld `mijn-component` dan kun je in de php code de volgende html terug
 geven.
 
-```html
-<mijn-component class="vue-context" :settings="{id: 10}" />
+```php
+\CsrDelft\common\Util\VueUtil::vueComponent('mijn-component', [
+	'settings' => ['id' => 10],
+]);
 ```
 
-Door de `.vue-context` klasse wordt op die html tag vue geïnitialiseerd. Zie [TypeScript](typescript.md) voor meer
+Door de `.vue-component` klasse wordt op die html tag vue geïnitialiseerd. Zie [TypeScript](typescript.md) voor meer
 uitleg over hoe de context werkt.

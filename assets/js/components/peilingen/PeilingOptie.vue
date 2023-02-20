@@ -39,11 +39,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { init } from '../../ctx';
 import ProgressBar from '../common/ProgressBar.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     ProgressBar,
   },

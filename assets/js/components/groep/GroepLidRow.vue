@@ -18,13 +18,14 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import GroepKeuzeType from '../../enum/GroepKeuzeType';
 import { htmlEncode } from '../../lib/util';
 import { GroepKeuzeSelectie, GroepLid, KeuzeOptie } from '../../model/groep';
 import Icon from '../common/Icon.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: { Icon },
   props: {
     lid: {

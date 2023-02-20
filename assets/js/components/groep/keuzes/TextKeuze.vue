@@ -12,10 +12,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import { KeuzeOptie } from '../../../model/groep';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     keuze: {
       required: true,
