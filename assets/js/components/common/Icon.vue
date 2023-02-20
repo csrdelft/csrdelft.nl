@@ -4,7 +4,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Vue, { compile } from 'vue';
 
 const alias = {
   // algemeen
