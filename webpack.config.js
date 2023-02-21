@@ -8,6 +8,8 @@ const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 const { VueLoaderPlugin } = require('vue-loader');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
+const ESLintPlugin = require('eslint-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = (env, argv) => {
 	let styleEntries = {
@@ -84,9 +86,6 @@ module.exports = (env, argv) => {
 		resolve: {
 			// Vanuit javascript kun je automatisch .js en .ts bestanden includen.
 			extensions: ['.ts', '.js'],
-			alias: {
-				vue$: '@vue/compat',
-			},
 			fallback: {
 				stream: false,
 				util: false,
@@ -111,6 +110,9 @@ module.exports = (env, argv) => {
 			}),
 			new RemoveEmptyScriptsPlugin(),
 			new VueLoaderPlugin(),
+			new ESLintPlugin({
+				files: ['assets/js/**/*.ts', 'assets/js/**/*.vue'],
+			}),
 			new WebpackAssetsManifest({
 				entrypoints: true,
 				integrity: true,
@@ -119,17 +121,14 @@ module.exports = (env, argv) => {
 			new MomentLocalesPlugin({
 				localesToKeep: ['nl'],
 			}),
+			new webpack.DefinePlugin({
+				__VUE_OPTIONS_API__: true,
+				__VUE_PROD_DEVTOOLS__: false,
+			}),
 		],
 		module: {
 			// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
 			rules: [
-				// Controleer .js bestanden met ESLint. Zie ook .eslintrc.yaml
-				{
-					enforce: 'pre',
-					test: /\.(js|jsx)$/,
-					exclude: [/node_modules/, /lib\/external/],
-					use: 'eslint-loader',
-				},
 				// Verwerk .ts (typescript) bestanden en maak er javascript van.
 				{
 					test: /\.ts$/,
@@ -147,13 +146,6 @@ module.exports = (env, argv) => {
 				{
 					test: /\.vue$/,
 					loader: 'vue-loader',
-					options: {
-						compilerOptions: {
-							compatConfig: {
-								MODE: 2,
-							},
-						},
-					},
 				},
 				// Verwerk sass bestanden.
 				// `sass-loader` >

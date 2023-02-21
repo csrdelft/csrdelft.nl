@@ -322,9 +322,9 @@
                   />
                 </div>
                 <div class="field">
-                  <money
+                  <money3
                     v-model="regel.bedrag"
-                    v-money="money"
+                    v-money3="money"
                     style="text-align: right"
                     :disabled="veldenDisabled"
                   />

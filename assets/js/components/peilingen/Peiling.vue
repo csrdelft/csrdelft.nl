@@ -42,7 +42,6 @@
               :heeft-gestemd="heeftGestemd"
               :aantal-gestemd="aantalGestemd"
               :keuzes-over="keuzesOver"
-              :selected="optie.selected"
             />
           </li>
         </ul>
@@ -75,7 +74,7 @@
 
 <script lang="ts">
 import axios from 'axios';
-import { BPagination } from 'bootstrap-vue';
+import { BPagination } from 'bootstrap-vue-next';
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import Icon from '../common/Icon.vue';

@@ -5,7 +5,7 @@ import Groep from './components/groep/Groep.vue';
 import NamenLeren from './components/namen-leren/NamenLeren.vue';
 import Peiling from './components/peilingen/Peiling.vue';
 import Inputmask from 'inputmask';
-import money from 'v-money';
+import money from 'v-money3';
 
 // Map naam naar vue component
 const vueMap = {
@@ -28,7 +28,7 @@ export const createDefaultApp = (
 			new Inputmask().mask(el);
 		},
 	});
-	app.use(money, { precision: 2, decimal: ',', thousands: ' ', prefix: '€ ' });
+	app.use(money);
 
 	return app;
 };
