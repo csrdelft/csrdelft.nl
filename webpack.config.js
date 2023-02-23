@@ -84,9 +84,6 @@ module.exports = (env, argv) => {
 		resolve: {
 			// Vanuit javascript kun je automatisch .js en .ts bestanden includen.
 			extensions: ['.ts', '.js'],
-			alias: {
-				vue$: '@vue/compat',
-			},
 			fallback: {
 				stream: false,
 				util: false,
@@ -147,13 +144,6 @@ module.exports = (env, argv) => {
 				{
 					test: /\.vue$/,
 					loader: 'vue-loader',
-					options: {
-						compilerOptions: {
-							compatConfig: {
-								MODE: 2,
-							},
-						},
-					},
 				},
 				// Verwerk sass bestanden.
 				// `sass-loader` >

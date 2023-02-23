@@ -5,8 +5,8 @@
       :id="'customCheck' + keuze.naam"
       type="text"
       class="form-control"
-      :value="value"
-      @input="$emit('input', $event.target.value)"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
     />
   </div>
 </template>
@@ -22,11 +22,12 @@ export default defineComponent({
       required: true,
       type: Object as PropType<KeuzeOptie>,
     },
-    value: {
+    modelValue: {
       required: true,
       type: String,
     },
   },
+  emits: ['update:modelValue'],
 });
 </script>
 
