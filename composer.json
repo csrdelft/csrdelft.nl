@@ -24,7 +24,7 @@
 		"ext-openssl": "*",
 		"ext-pdo_mysql": "*",
 		"ext-simplexml": "*",
-		"firebase/php-jwt": "^5.0",
+		"firebase/php-jwt": "^6.0",
 		"globalcitizen/php-iban": "^2.6",
 		"google/apiclient": "^2.0",
 		"maknz/slack": "^1.7",
