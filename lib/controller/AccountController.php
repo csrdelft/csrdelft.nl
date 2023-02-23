@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -47,8 +48,13 @@ class AccountController extends AbstractController
 	 * @var AccountService
 	 */
 	private $accountService;
+	/**
+	 * @var CacheInterface
+	 */
+	private $cache;
 
 	public function __construct(
+		CacheInterface $cache,
 		AccessService $accessService,
 		AccountRepository $accountRepository,
 		AccountService $accountService,
@@ -60,6 +66,7 @@ class AccountController extends AbstractController
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 		$this->loginService = $loginService;
 		$this->accountService = $accountService;
+		$this->cache = $cache;
 	}
 
 	/**
@@ -154,6 +161,7 @@ class AccountController extends AbstractController
 				'uid' => $account->uid,
 			]),
 		]);
+		$role = $account->perm_role;
 		$form->handleRequest($request);
 		if ($form->validate()) {
 			if ($account->username == '') {
@@ -162,6 +170,12 @@ class AccountController extends AbstractController
 			// username, email & wachtwoord opslaan
 			$this->accountService->wijzigWachtwoord($account, $account->pass_plain);
 			$this->addFlash(FlashType::INFO, 'Inloggegevens wijzigen geslaagd');
+			if ($account->perm_role != $role) {
+				// Flush alle caches
+				// Dit zorgt er voor dat alle rechten en menus opnieuw worden berekend.
+				// Op dit moment is het niet mogelijk om gedeeltes van de cache weggooien.
+				$this->cache->clear();
+			}
 		}
 		$account->eraseCredentials();
 		return $this->render('default.html.twig', [
