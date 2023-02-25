@@ -26,8 +26,8 @@
           name="optie"
           :value="id"
           :disabled="isDisabled"
-          :checked="selected"
-          @change="$emit('input', $event.target.checked)"
+          :checked="modelValue"
+          @change="$emit('update:modelValue', $event.target.checked)"
         />
         <label :for="'PeilingOptie' + id" class="form-check-label">{{
           titel
@@ -75,8 +75,9 @@ export default defineComponent({
     },
     heeftGestemd: Boolean,
     keuzesOver: Boolean,
-    selected: Boolean,
+    modelValue: Boolean,
   },
+  emits: ['update:modelValue'],
   computed: {
     kanStemmen() {
       return this.magStemmen && !this.heeftGestemd;
@@ -88,7 +89,7 @@ export default defineComponent({
       return `${this.progress}% (${this.stemmen})`;
     },
     isDisabled() {
-      return !this.selected && !this.keuzesOver;
+      return !this.modelValue && !this.keuzesOver;
     },
   },
   watch: {

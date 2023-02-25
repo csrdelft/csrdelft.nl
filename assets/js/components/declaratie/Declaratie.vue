@@ -322,9 +322,9 @@
                   />
                 </div>
                 <div class="field">
-                  <money
+                  <money3
+                    v-bind="money"
                     v-model="regel.bedrag"
-                    v-money="money"
                     style="text-align: right"
                     :disabled="veldenDisabled"
                   />
@@ -612,6 +612,7 @@ import axios from 'axios';
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import Icon from '../common/Icon.vue';
+import { Money3Component } from 'v-money3';
 
 type status =
   | 'concept'
@@ -709,7 +710,7 @@ interface DeclaratieVerwijderenData {
 }
 
 export default defineComponent({
-  components: { Icon },
+  components: { Icon, money3: Money3Component },
   props: {
     type: {
       required: true,

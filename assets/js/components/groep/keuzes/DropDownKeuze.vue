@@ -5,13 +5,13 @@
       <select
         class="form-select"
         :name="'DropDownKeuze-' + keuze.naam"
-        @input="$emit('input', $event.target.value)"
+        @input="$emit('update:modelValue', $event.target.value)"
       >
         <option
           v-for="(optie, i) in keuze.opties"
           :key="i"
           :value="optie"
-          :selected="optie === value"
+          :selected="optie === modelValue"
         >
           {{ optie }}
         </option>
@@ -31,11 +31,12 @@ export default defineComponent({
       required: true,
       type: Object as PropType<KeuzeOptie>,
     },
-    value: {
+    modelValue: {
       required: true,
       type: String,
     },
   },
+  emits: ['update:modelValue'],
 });
 </script>
 

@@ -5,15 +5,18 @@
       <label
         v-for="(optie, i) in keuze.opties"
         :key="i"
-        :class="{ 'btn btn-outline-primary': true, active: optie === value }"
+        :class="{
+          'btn btn-outline-primary': true,
+          active: optie === modelValue,
+        }"
       >
         <input
           type="radio"
           :name="'MultiSelectKeuze-' + keuze.naam"
           class="d-none"
           :value="optie"
-          :checked="optie === value"
-          @input="$emit('input', $event.target.value)"
+          :checked="optie === modelValue"
+          @input="$emit('update:modelValue', $event.target.value)"
         />{{ optie }}
       </label>
     </div>
@@ -31,11 +34,12 @@ export default defineComponent({
       required: true,
       type: Object as PropType<KeuzeOptie>,
     },
-    value: {
+    modelValue: {
       required: true,
       type: String,
     },
   },
+  emits: ['update:modelValue'],
 });
 </script>
 

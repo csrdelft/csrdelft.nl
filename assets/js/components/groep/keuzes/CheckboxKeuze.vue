@@ -5,8 +5,8 @@
         :id="`customCheck${keuze.naam}`"
         type="checkbox"
         class="custom-control-input"
-        :checked="value"
-        @input="$emit('input', $event.target.checked)"
+        :checked="modelValue"
+        @input="$emit('update:modelValue', $event.target.checked)"
       />
       <label class="custom-control-label" :for="`customCheck${keuze.naam}`">{{
         keuze.description
@@ -26,8 +26,9 @@ export default defineComponent({
       required: true,
       type: Object as PropType<KeuzeOptie>,
     },
-    value: Boolean,
+    modelValue: Boolean,
   },
+  emits: ['update:modelValue'],
 });
 </script>
 

@@ -42,13 +42,16 @@
               :heeft-gestemd="heeftGestemd"
               :aantal-gestemd="aantalGestemd"
               :keuzes-over="keuzesOver"
-              :selected="optie.selected"
             />
           </li>
         </ul>
-        <BPagination
+        <paginate
           v-if="optiesFiltered.length > paginaSize"
           v-model="huidigePagina"
+          :page-count="Math.ceil(optiesFiltered.length / paginaSize)"
+          :prev-text="'Vorige'"
+          :next-text="'Volgende'"
+          :click-handler="zetHuidigePagina"
           size="md"
           align="center"
           :limit="15"
@@ -75,7 +78,7 @@
 
 <script lang="ts">
 import axios from 'axios';
-import { BPagination } from 'bootstrap-vue';
+import Paginate from 'vuejs-paginate-next';
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import Icon from '../common/Icon.vue';
@@ -105,7 +108,7 @@ interface PeilingOptieSettings {
 }
 
 export default defineComponent({
-  components: { Icon, PeilingOptie, PeilingOptieToevoegen, BPagination },
+  components: { Icon, PeilingOptie, PeilingOptieToevoegen, Paginate },
   props: {
     settings: {
       default: () => ({}),
@@ -194,6 +197,9 @@ export default defineComponent({
       axios.post(`/peilingen/opties/${this.id}`).then((response) => {
         this.opties = response.data.data;
       });
+    },
+    zetHuidigePagina(paginaNum) {
+      this.huidigePagina = paginaNum;
     },
   },
 });

@@ -89,11 +89,9 @@
 		"@sentry/browser": "^7.29.0",
 		"@sentry/tracing": "^7.29.0",
 		"@types/orderedmap": "^1.0.0",
-		"@vue/compat": "^3.2.47",
 		"@vue/runtime-dom": "^3.2.47",
 		"axios": "^0.21.4",
 		"bootstrap": "^5.0.0",
-		"bootstrap-vue": "^2.23.1",
 		"chart.js": "^2.7.3",
 		"corejs-typeahead": "^1.2.1",
 		"datatables.net": "^1.11.3",
@@ -150,7 +148,9 @@
 		"three": "^0.117.0",
 		"timeago.js": "^4.0.2",
 		"v-money": "^0.8.1",
-		"vue": "^3.1.0"
+		"v-money3": "^3.23.0",
+		"vue": "^3.1.0",
+		"vuejs-paginate-next": "^1.0.2"
 	},
 	"lint-staged": {
 		"*": "yarn dlx -q prettier --write --ignore-unknown --plugin=@prettier/plugin-php"
