@@ -1,52 +1,43 @@
 <template>
   <div>
     <a @click="toevoegen">
-      <Icon :icon="icon" />
-      {{ text }}
+      <Icon :icon="data.icon" />
+      {{ data.text }}
     </a>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import axios from 'axios';
-import { defineComponent } from 'vue';
+import { computed, reactive } from 'vue';
 import { domUpdate } from '../../lib/domUpdate';
 import Icon from '../common/Icon.vue';
 
-export default defineComponent({
-  components: { Icon },
-  props: {
-    id: {
-      default: 0,
-      type: Number,
-    },
-  },
-  data: () => ({
-    icon: 'plus',
-    text: 'Optie toevoegen',
-  }),
-  computed: {
-    optieToevoegenUrl() {
-      return `/peilingen/opties/${this.id}/toevoegen`;
-    },
-  },
-  methods: {
-    toevoegen(event: MouseEvent) {
-      event.preventDefault();
-      this.icon = 'spinner fa-spin';
-      axios
-        .post(this.optieToevoegenUrl.toString())
-        .then((response) => {
-          domUpdate(response.data);
-          this.icon = 'plus';
-        })
-        .catch(() => {
-          this.icon = 'ban';
-          this.text = 'Mag geen optie meer toevoegen';
-        });
-    },
-  },
+const props = defineProps<{ id: number }>();
+
+const data = reactive({
+  icon: 'plus',
+  text: 'Optie toevoegen',
 });
+
+const optieToevoegenUrl = computed(
+  () => `/peilingen/opties/${props.id}/toevoegen`
+);
+
+const toevoegen = (event: MouseEvent) => {
+  event.preventDefault();
+  data.icon = 'spinner fa-spin';
+  axios
+    .post(optieToevoegenUrl.value.toString())
+    .then((response) => {
+      domUpdate(response.data);
+      data.icon = 'plus';
+    })
+    .catch(() => {
+      data.icon = 'ban';
+      data.text = 'Mag geen optie meer toevoegen';
+    });
+};
 </script>
 
 <style scoped></style>
