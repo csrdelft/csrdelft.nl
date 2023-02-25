@@ -2,8 +2,8 @@
   <i :class="iconClass" aria-hidden="true" />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 
 const alias = {
   // algemeen
@@ -72,24 +72,16 @@ const alias = {
   rechten: 'key',
 };
 
-export default defineComponent({
-  props: {
-    icon: {
-      default: '',
-      type: String,
-    },
-  },
-  computed: {
-    iconClass() {
-      if (this.icon.includes('fab fa-')) {
-        return this.icon;
-      } else if (this.icon in alias) {
-        return `fas fa-${alias[this.icon]}`;
-      } else {
-        return `fas fa-${this.icon}`;
-      }
-    },
-  },
+const props = defineProps<{ icon: string }>();
+
+const iconClass = computed(() => {
+  if (props.icon.includes('fab fa-')) {
+    return props.icon;
+  } else if (props.icon in alias) {
+    return `fas fa-${alias[props.icon]}`;
+  } else {
+    return `fas fa-${props.icon}`;
+  }
 });
 </script>
 

@@ -6,17 +6,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  props: {
-    progress: {
-      default: 0,
-      type: [Number, String],
-    },
-  },
-});
+<script setup lang="ts">
+defineProps<{ progress: number | string }>();
 </script>
 
 <style scoped></style>
