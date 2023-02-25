@@ -1,6 +1,6 @@
 @mixin fade-in($duration, $translate, $filter) {
 	transition: opacity $duration ease, transform $duration ease,
-		filter $duration/2 ease;
+		filter calc($duration/2) ease;
 	transform: none;
 	transition-delay: 0s;
 
