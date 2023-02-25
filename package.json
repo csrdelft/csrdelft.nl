@@ -91,7 +91,7 @@
 		"@types/orderedmap": "^1.0.0",
 		"@vue/runtime-dom": "^3.2.47",
 		"axios": "^0.21.4",
-		"bootstrap": "^5.0.0",
+		"bootstrap": "^5.2.3",
 		"chart.js": "^2.7.3",
 		"corejs-typeahead": "^1.2.1",
 		"datatables.net": "^1.11.3",
