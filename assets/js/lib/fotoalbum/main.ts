@@ -3,7 +3,6 @@ import { Size } from 'jgallery/src/preview';
 import withDownloadButton from './with-download-button';
 import withFullSizePreview from './with-full-size-preview';
 import withFullscreenButton from './with-fullscreen-button';
-import withHotkeys from './with-hotkeys';
 import withPreload from './with-preload';
 
 declare module 'jgallery/types/album-item' {
@@ -32,7 +31,6 @@ export const loadFotoAlbum = async (): Promise<void> => {
 		const decorators = [
 			withFullscreenButton,
 			withDownloadButton,
-			withHotkeys,
 			withPreload,
 			withFullSizePreview,
 		];

@@ -3861,8 +3861,8 @@ fsevents@~2.3.1:
 
 "jgallery@https://github.com/csrdelft/jgallery":
   version: 2.2.1
-  resolution: "jgallery@https://github.com/csrdelft/jgallery.git#commit=cf28c15b3adf20a6c157b83cacfe9f616896c192"
-  checksum: d0c443b4cecf5012e5df7a0640ebed914259efb2af88a671b06e38c39261d87674d01dbbf83ffddb47d6b17250bc0185d431c288c6d07f0fb4ed2840563f94fd
+  resolution: "jgallery@https://github.com/csrdelft/jgallery.git#commit=d02d8c203536c9ab6e123601785ea94265f18371"
+  checksum: 7b43bb1caa563b3081f7705fff5b786bf4296afeff05586d97a7fd164242ef9a387094fcb7bb1a8593d91dee17502a0cf5d30671f6865712664bb19aa032caa8
   languageName: node
   linkType: hard
 
