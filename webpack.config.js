@@ -8,6 +8,7 @@ const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 const { VueLoaderPlugin } = require('vue-loader');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = (env, argv) => {
 	let styleEntries = {
@@ -108,6 +109,7 @@ module.exports = (env, argv) => {
 			}),
 			new RemoveEmptyScriptsPlugin(),
 			new VueLoaderPlugin(),
+			new ESLintPlugin(),
 			new WebpackAssetsManifest({
 				entrypoints: true,
 				integrity: true,
@@ -120,13 +122,6 @@ module.exports = (env, argv) => {
 		module: {
 			// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
 			rules: [
-				// Controleer .js bestanden met ESLint. Zie ook .eslintrc.yaml
-				{
-					enforce: 'pre',
-					test: /\.(js|jsx)$/,
-					exclude: [/node_modules/, /lib\/external/],
-					use: 'eslint-loader',
-				},
 				// Verwerk .ts (typescript) bestanden en maak er javascript van.
 				{
 					test: /\.ts$/,

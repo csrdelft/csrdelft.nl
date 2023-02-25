@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { docReady } from '../lib/util';
 
 /**
  * Code voor de /instellingen pagina

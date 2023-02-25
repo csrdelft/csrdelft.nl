@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th scope="col" />
-      <th scope="col" v-for="keuze in keuzes" :key="keuze.description">
+      <th v-for="keuze in keuzes" :key="keuze.description" scope="col">
         {{ keuze.description }}
       </th>
     </tr>

@@ -416,11 +416,11 @@
           :key="'voorbeeld-' + bonIndex"
         >
           <iframe
+            v-if="bon.bestandsnaam.toLowerCase().endsWith('.pdf')"
             :src="bon.bestandsnaam"
             title="Bon"
-            v-if="bon.bestandsnaam.toLowerCase().endsWith('.pdf')"
           />
-          <div class="imageContainer" :class="{ zoomFit: isZoomFit }" v-else>
+          <div v-else class="imageContainer" :class="{ zoomFit: isZoomFit }">
             <img :src="bon.bestandsnaam" alt="Bon" @click="zoomFit()" />
           </div>
         </div>

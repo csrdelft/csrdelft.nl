@@ -130,8 +130,8 @@
             <span>{{ laatste.studie }}</span>
           </div>
         </div>
-        <Icon icon="check" v-if="laatsteGoed" />
-        <Icon icon="xmark" v-else />
+        <Icon v-if="laatsteGoed" icon="check" />
+        <Icon v-else icon="xmark" />
       </div>
       <div
         class="pasfotoContainer"
