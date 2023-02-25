@@ -11,7 +11,7 @@
       {{ progressText }}
     </div>
     <div
-      ref="beschrijving_gestemd"
+      ref="beschrijvingGestemdRef"
       class="col text-muted pt-2"
       v-html="beschrijving"
     />
@@ -34,84 +34,63 @@
         }}</label>
       </div>
     </div>
-    <div ref="beschrijving" class="col-md-12 pt-2" v-html="beschrijving" />
+    <div ref="beschrijvingRef" class="col-md-12 pt-2" v-html="beschrijving" />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from 'vue';
 import { init } from '../../ctx';
 import ProgressBar from '../common/ProgressBar.vue';
 
-export default defineComponent({
-  components: {
-    ProgressBar,
-  },
-  props: {
-    id: {
-      default: 0,
-      type: Number,
-    },
-    peilingId: {
-      default: 0,
-      type: Number,
-    },
-    titel: {
-      default: '',
-      type: String,
-    },
-    beschrijving: {
-      default: '',
-      type: String,
-    },
-    stemmen: {
-      default: 0,
-      type: Number,
-    },
-    magStemmen: Boolean,
-    aantalGestemd: {
-      default: 0,
-      type: Number,
-    },
-    heeftGestemd: Boolean,
-    keuzesOver: Boolean,
-    modelValue: Boolean,
-  },
-  emits: ['update:modelValue'],
-  computed: {
-    kanStemmen() {
-      return this.magStemmen && !this.heeftGestemd;
-    },
-    progress() {
-      return ((this.stemmen / this.aantalGestemd) * 100).toFixed(2);
-    },
-    progressText() {
-      return `${this.progress}% (${this.stemmen})`;
-    },
-    isDisabled() {
-      return !this.modelValue && !this.keuzesOver;
-    },
-  },
-  watch: {
-    kanStemmen() {
-      this.initBeschrijvingContext();
-    },
-  },
-  mounted() {
-    this.initBeschrijvingContext();
-  },
-  methods: {
-    initBeschrijvingContext() {
-      setTimeout(() => {
-        if (this.kanStemmen) {
-          init(this.$refs.beschrijving as HTMLElement);
-        } else {
-          init(this.$refs.beschrijving_gestemd as HTMLElement);
-        }
-      });
-    },
-  },
+const props = defineProps<{
+  id: number;
+  peilingId: number;
+  titel: string;
+  beschrijving: string;
+  stemmen: number;
+  magStemmen: boolean;
+  aantalGestemd: number;
+  heeftGestemd: boolean;
+  keuzesOver: boolean;
+  modelValue?: boolean;
+}>();
+
+defineEmits<{
+  (event: 'update:modelValue', checked: number): void;
+}>();
+
+const beschrijvingRef = ref<HTMLElement | null>(null);
+const beschrijvingGestemdRef = ref<HTMLElement | null>(null);
+
+const kanStemmen = computed(() => {
+  return props.magStemmen && !props.heeftGestemd;
 });
+const progress = computed(() => {
+  return ((props.stemmen / props.aantalGestemd) * 100).toFixed(2);
+});
+const progressText = computed(() => {
+  return `${progress.value}% (${props.stemmen})`;
+});
+const isDisabled = computed(() => {
+  return !props.modelValue && !props.keuzesOver;
+});
+
+watch(kanStemmen, () => {
+  initBeschrijvingContext();
+});
+
+onMounted(() => initBeschrijvingContext());
+
+const initBeschrijvingContext = () => {
+  setTimeout(() => {
+    if (kanStemmen.value && beschrijvingRef.value instanceof HTMLElement) {
+      init(beschrijvingRef.value as HTMLElement);
+    } else if (beschrijvingGestemdRef.value instanceof HTMLElement) {
+      init(beschrijvingGestemdRef.value as HTMLElement);
+    }
+  });
+};
 </script>
 
 <style scoped></style>
