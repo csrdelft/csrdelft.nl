@@ -1,24 +1,24 @@
 <template>
   <div class="card peiling">
     <div class="card-body">
-      <a v-if="isMod" :href="beheerUrl" class="bewerken">
+      <a v-if="data.isMod" :href="beheerUrl" class="bewerken">
         <Icon icon="pencil" />
       </a>
       <span class="totaal">{{ strAantalGestemd }}</span>
       <h3 class="card-title">
-        {{ titel }}
+        {{ data.titel }}
       </h3>
       <!-- eslint-disable-next-line vue/no-v-html vue/max-attributes-per-line -->
-      <p class="card-text pt-2" v-html="beschrijving" />
+      <p class="card-text pt-2" v-html="data.beschrijving" />
     </div>
     <div>
-      <div v-if="heeftGestemd && !resultaatZichtbaar">
+      <div v-if="data.heeftGestemd && !data.resultaatZichtbaar">
         <div class="card-body">Bedankt voor het stemmen!</div>
       </div>
       <div v-else class="card-body">
         <div v-if="zoekbalkZichtbaar" class="pb-2">
           <input
-            v-model="zoekterm"
+            v-model="data.zoekterm"
             type="text"
             placeholder="Zoeken"
             class="form-control"
@@ -34,21 +34,20 @@
               :id="optie.id"
               :key="optie.id"
               v-model="optie.selected"
-              :peiling-id="id"
               :titel="optie.titel"
               :beschrijving="optie.beschrijving_formatted"
               :stemmen="optie.stemmen"
-              :mag-stemmen="magStemmen"
-              :heeft-gestemd="heeftGestemd"
-              :aantal-gestemd="aantalGestemd"
+              :mag-stemmen="data.magStemmen"
+              :heeft-gestemd="data.heeftGestemd"
+              :aantal-gestemd="data.aantalGestemd"
               :keuzes-over="keuzesOver"
             />
           </li>
         </ul>
         <paginate
-          v-if="optiesFiltered.length > paginaSize"
-          v-model="huidigePagina"
-          :page-count="Math.ceil(optiesFiltered.length / paginaSize)"
+          v-if="optiesFiltered.length > data.paginaSize"
+          v-model="data.huidigePagina"
+          :page-count="Math.ceil(optiesFiltered.length / data.paginaSize)"
           :prev-text="'Vorige'"
           :next-text="'Volgende'"
           :click-handler="zetHuidigePagina"
@@ -56,14 +55,17 @@
           align="center"
           :limit="15"
           :total-rows="optiesFiltered.length"
-          :per-page="paginaSize"
+          :per-page="data.paginaSize"
         />
       </div>
     </div>
 
-    <div v-if="!heeftGestemd && magStemmen" class="card-footer footer">
+    <div
+      v-if="!data.heeftGestemd && data.magStemmen"
+      class="card-footer footer"
+    >
       <div>{{ strKeuzes }}</div>
-      <PeilingOptieToevoegen v-if="aantalVoorstellen > 0" :id="id" />
+      <PeilingOptieToevoegen v-if="data.aantalVoorstellen > 0" :id="data.id" />
 
       <input
         type="button"
@@ -76,11 +78,10 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import axios from 'axios';
 import Paginate from 'vuejs-paginate-next';
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
+import { computed, onMounted, reactive } from 'vue';
 import Icon from '../common/Icon.vue';
 import PeilingOptie from './PeilingOptie.vue';
 import PeilingOptieToevoegen from './PeilingOptieToevoegen.vue';
@@ -107,101 +108,83 @@ interface PeilingOptieSettings {
   stemmen: number;
 }
 
-export default defineComponent({
-  components: { Icon, PeilingOptie, PeilingOptieToevoegen, Paginate },
-  props: {
-    settings: {
-      default: () => ({}),
-      type: Object as PropType<PeilingSettings>,
-    },
-  },
-  data: () => ({
-    id: '',
-    titel: '',
-    beschrijving: '',
-    resultaatZichtbaar: false,
-    aantalVoorstellen: 0,
-    aantalStemmen: 0,
-    aantalGestemd: 0,
-    isMod: false,
-    heeftGestemd: false,
-    magStemmen: false,
-    opties: [] as PeilingOptieSettings[],
-    zoekterm: '',
-    huidigePagina: 1,
-    paginaSize: 10,
-  }),
-  computed: {
-    beheerUrl() {
-      return `/peilingen/beheer/${this.id}`;
-    },
-    selected() {
-      return this.opties.filter((o) => o.selected);
-    },
-    optiesFiltered() {
-      return this.opties.filter((o) =>
-        o.titel.toLowerCase().includes(this.zoekterm.toLowerCase())
-      );
-    },
-    optiesZichtbaar() {
-      const begin = (this.huidigePagina - 1) * this.paginaSize;
-      const eind = begin + this.paginaSize;
+const props = defineProps<{ settings: PeilingSettings }>();
 
-      return this.optiesFiltered.slice(begin, eind);
-    },
-    keuzesOver() {
-      return this.aantalStemmen - this.selected.length > 0;
-    },
-    strKeuzes() {
-      return `${this.selected.length} van de ${this.aantalStemmen} geselecteerd`;
-    },
-    strAantalGestemd() {
-      return this.aantalGestemd > 0
-        ? `(${this.aantalGestemd} stem${this.aantalGestemd > 1 ? 'men' : ''})`
-        : '';
-    },
-    zoekbalkZichtbaar() {
-      return this.opties.length > 10;
-    },
-  },
-  created() {
-    this.id = this.settings.id;
-    this.titel = this.settings.titel;
-    this.beschrijving = this.settings.beschrijving;
-    this.resultaatZichtbaar = this.settings.resultaat_zichtbaar;
-    this.aantalVoorstellen = this.settings.aantal_voorstellen;
-    this.aantalStemmen = this.settings.aantal_stemmen;
-    this.aantalGestemd = this.settings.aantal_gestemd;
-    this.isMod = this.settings.is_mod;
-    this.heeftGestemd = this.settings.heeft_gestemd;
-    this.magStemmen = this.settings.mag_stemmen;
-    this.opties = this.settings.opties;
+const data = reactive({
+  id: '',
+  titel: '',
+  beschrijving: '',
+  resultaatZichtbaar: false,
+  aantalVoorstellen: 0,
+  aantalStemmen: 0,
+  aantalGestemd: 0,
+  isMod: false,
+  heeftGestemd: false,
+  magStemmen: false,
+  opties: [] as PeilingOptieSettings[],
+  zoekterm: '',
+  huidigePagina: 1,
+  paginaSize: 10,
+});
 
-    // Als er op deze pagina een modal gesloten wordt is dat misschien die van
-    // de optie toevoegen modal. Dit is de enige manier om dit te weten op dit moment
-    document.addEventListener('modalClose', () => this.reload());
-  },
-  methods: {
-    stem() {
-      axios
-        .post(`/peilingen/stem/${this.id}`, {
-          opties: this.selected.map((o) => o.id),
-        })
-        .then(() => {
-          this.heeftGestemd = true;
-          this.aantalGestemd = this.aantalGestemd + this.selected.length;
-          this.reload();
-        });
-    },
-    reload() {
-      axios.post(`/peilingen/opties/${this.id}`).then((response) => {
-        this.opties = response.data.data;
-      });
-    },
-    zetHuidigePagina(paginaNum) {
-      this.huidigePagina = paginaNum;
-    },
-  },
+const beheerUrl = computed(() => `/peilingen/beheer/${data.id}`);
+const selected = computed(() => data.opties.filter((o) => o.selected));
+const optiesFiltered = computed(() =>
+  data.opties.filter((o) =>
+    o.titel.toLowerCase().includes(data.zoekterm.toLowerCase())
+  )
+);
+const optiesZichtbaar = computed(() => {
+  const begin = (data.huidigePagina - 1) * data.paginaSize;
+  const eind = begin + data.paginaSize;
+
+  return optiesFiltered.value.slice(begin, eind);
+});
+const keuzesOver = computed(
+  () => data.aantalStemmen - selected.value.length > 0
+);
+const strKeuzes = computed(
+  () => `${selected.value.length} van de ${data.aantalStemmen} geselecteerd`
+);
+const strAantalGestemd = computed(() =>
+  data.aantalGestemd > 0
+    ? `(${data.aantalGestemd} stem${data.aantalGestemd > 1 ? 'men' : ''})`
+    : ''
+);
+const zoekbalkZichtbaar = computed(() => data.opties.length > 10);
+
+const stem = () =>
+  axios
+    .post(`/peilingen/stem/${data.id}`, {
+      opties: selected.value.map((o) => o.id),
+    })
+    .then(() => {
+      data.heeftGestemd = true;
+      data.aantalGestemd = data.aantalGestemd + selected.value.length;
+      reload();
+    });
+const reload = () =>
+  axios.post(`/peilingen/opties/${data.id}`).then((response) => {
+    data.opties = response.data.data;
+  });
+const zetHuidigePagina = (paginaNum) => (data.huidigePagina = paginaNum);
+
+onMounted(() => {
+  data.id = props.settings.id;
+  data.titel = props.settings.titel;
+  data.beschrijving = props.settings.beschrijving;
+  data.resultaatZichtbaar = props.settings.resultaat_zichtbaar;
+  data.aantalVoorstellen = props.settings.aantal_voorstellen;
+  data.aantalStemmen = props.settings.aantal_stemmen;
+  data.aantalGestemd = props.settings.aantal_gestemd;
+  data.isMod = props.settings.is_mod;
+  data.heeftGestemd = props.settings.heeft_gestemd;
+  data.magStemmen = props.settings.mag_stemmen;
+  data.opties = props.settings.opties;
+
+  // Als er op deze pagina een modal gesloten wordt is dat misschien die van
+  // de optie toevoegen modal. Dit is de enige manier om dit te weten op dit moment
+  document.addEventListener('modalClose', () => reload());
 });
 </script>
 

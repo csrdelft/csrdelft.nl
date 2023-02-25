@@ -45,7 +45,6 @@ import ProgressBar from '../common/ProgressBar.vue';
 
 const props = defineProps<{
   id: number;
-  peilingId: number;
   titel: string;
   beschrijving: string;
   stemmen: number;
@@ -63,26 +62,18 @@ defineEmits<{
 const beschrijvingRef = ref<HTMLElement | null>(null);
 const beschrijvingGestemdRef = ref<HTMLElement | null>(null);
 
-const kanStemmen = computed(() => {
-  return props.magStemmen && !props.heeftGestemd;
-});
-const progress = computed(() => {
-  return ((props.stemmen / props.aantalGestemd) * 100).toFixed(2);
-});
-const progressText = computed(() => {
-  return `${progress.value}% (${props.stemmen})`;
-});
-const isDisabled = computed(() => {
-  return !props.modelValue && !props.keuzesOver;
-});
+const kanStemmen = computed(() => props.magStemmen && !props.heeftGestemd);
+const progress = computed(() =>
+  ((props.stemmen / props.aantalGestemd) * 100).toFixed(2)
+);
+const progressText = computed(() => `${progress.value}% (${props.stemmen})`);
+const isDisabled = computed(() => !props.modelValue && !props.keuzesOver);
 
-watch(kanStemmen, () => {
-  initBeschrijvingContext();
-});
+watch(kanStemmen, () => initBeschrijvingContext());
 
 onMounted(() => initBeschrijvingContext());
 
-const initBeschrijvingContext = () => {
+const initBeschrijvingContext = () =>
   setTimeout(() => {
     if (kanStemmen.value && beschrijvingRef.value instanceof HTMLElement) {
       init(beschrijvingRef.value as HTMLElement);
@@ -90,7 +81,6 @@ const initBeschrijvingContext = () => {
       init(beschrijvingGestemdRef.value as HTMLElement);
     }
   });
-};
 </script>
 
 <style scoped></style>
