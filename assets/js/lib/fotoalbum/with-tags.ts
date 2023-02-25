@@ -8,6 +8,9 @@ import Params from 'jgallery/types/gallery/parameters';
 import $ from 'jquery';
 import { basename, dirname } from '../util';
 import { select } from '../dom';
+import cancellablePromise, {
+	CancellablePromise,
+} from 'jgallery/src/utils/cancellable-promise';
 
 interface Position {
 	x: number;
@@ -153,13 +156,22 @@ const withTags: GalleryDecorator = (constructor) =>
 			});
 		}
 
-		protected goToItem(item: AlbumItem) {
+		protected goToItem(item: AlbumItem): CancellablePromise<void> {
 			this.currentItem = item;
-			return super.goToItem(item).then(() => {
-				if (this.tagMode) {
-					this.duringTagMode();
-				}
-				this.loadTags();
+			return cancellablePromise((resolve, reject, onCancel, onSkip) => {
+				const promise = super.goToItem(item);
+
+				onSkip(() => promise?.skip());
+				onCancel(() => promise?.cancel());
+
+				promise.then(() => {
+					if (this.tagMode) {
+						this.duringTagMode();
+					}
+					this.loadTags();
+
+					resolve();
+				});
 			});
 		}
 
