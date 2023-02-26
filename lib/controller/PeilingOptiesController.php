@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Security\Voter\Entity\PeilingVoter;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\peilingen\PeilingOptie;
@@ -12,6 +13,7 @@ use CsrDelft\service\PeilingenService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\peilingen\PeilingOptieForm;
 use CsrDelft\view\peilingen\PeilingOptieTable;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -22,17 +24,12 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PeilingOptiesController extends AbstractController
 {
-	/** @var PeilingenService */
-	private $peilingenService;
 	/** @var PeilingOptiesRepository */
 	private $peilingOptiesRepository;
 
-	public function __construct(
-		PeilingOptiesRepository $peilingOptiesRepository,
-		PeilingenService $peilingenService
-	) {
+	public function __construct(PeilingOptiesRepository $peilingOptiesRepository)
+	{
 		$this->peilingOptiesRepository = $peilingOptiesRepository;
-		$this->peilingenService = $peilingenService;
 	}
 
 	/**
@@ -51,11 +48,12 @@ class PeilingOptiesController extends AbstractController
 	 * @return GenericDataTableResponse
 	 * @Route("/peilingen/opties/{id}", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_EDIT)
+	 * @IsGranted("bekijken", subject="peiling")
 	 */
-	public function lijst($id): GenericDataTableResponse
+	public function lijst(Peiling $peiling): GenericDataTableResponse
 	{
 		return $this->tableData(
-			$this->peilingOptiesRepository->findBy(['peiling_id' => $id])
+			$this->peilingOptiesRepository->findBy(['peiling_id' => $peiling->id])
 		);
 	}
 
@@ -69,9 +67,11 @@ class PeilingOptiesController extends AbstractController
 	{
 		$form = new PeilingOptieForm(new PeilingOptie(), $peiling->id);
 
-		if (!$this->peilingenService->magOptieToevoegen($peiling)) {
-			throw new CsrGebruikerException('Mag geen opties meer toevoegen!');
-		}
+		$this->denyAccessUnlessGranted(
+			PeilingVoter::TOEVOEGEN,
+			$peiling,
+			'Mag geen opties meer toevoegen'
+		);
 
 		if ($form->isPosted() && $form->validate()) {
 			/** @var PeilingOptie $optie */
@@ -104,6 +104,11 @@ class PeilingOptiesController extends AbstractController
 		/** @var PeilingOptie|false $peilingOptie */
 		$peilingOptie = $this->peilingOptiesRepository->retrieveByUUID(
 			$selection[0]
+		);
+
+		$this->denyAccessUnlessGranted(
+			PeilingVoter::BEWERKEN,
+			$peilingOptie->peiling
 		);
 
 		if ($peilingOptie && $peilingOptie->stemmen == 0) {

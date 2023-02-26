@@ -6,10 +6,9 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\peilingen\PeilingStem;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\repository\peilingen\PeilingOptiesRepository;
-use CsrDelft\repository\peilingen\PeilingStemmenRepository;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
@@ -29,10 +28,6 @@ class PeilingenService
 	 */
 	private $peilingOptiesRepository;
 	/**
-	 * @var PeilingStemmenRepository
-	 */
-	private $peilingStemmenRepository;
-	/**
 	 * @var EntityManagerInterface
 	 */
 	private $entityManager;
@@ -40,12 +35,10 @@ class PeilingenService
 	public function __construct(
 		PeilingenRepository $peilingenRepository,
 		PeilingOptiesRepository $peilingOptiesRepository,
-		PeilingStemmenRepository $peilingStemmenRepository,
 		EntityManagerInterface $entityManager
 	) {
 		$this->peilingenRepository = $peilingenRepository;
 		$this->peilingOptiesRepository = $peilingOptiesRepository;
-		$this->peilingStemmenRepository = $peilingStemmenRepository;
 		$this->entityManager = $entityManager;
 	}
 
@@ -55,12 +48,7 @@ class PeilingenService
 			return true;
 		}
 
-		if (
-			$this->peilingStemmenRepository->heeftGestemd(
-				$peiling->id,
-				LoginService::getUid()
-			)
-		) {
+		if ($peiling->getStem(LoginService::getProfiel())) {
 			return false;
 		}
 
@@ -75,13 +63,13 @@ class PeilingenService
 		return $aantalVoorgesteld < $peiling->aantal_voorstellen;
 	}
 
-	public function stem($peilingId, $opties, $uid)
+	public function stem(Peiling $peiling, $opties, Profiel $profiel)
 	{
 		try {
 			$this->entityManager->beginTransaction();
 
-			if ($this->isGeldigeStem($peilingId, $opties, $uid)) {
-				$opties = $this->valideerOpties($peilingId, $opties);
+			if ($this->isGeldigeStem($peiling, $opties, $profiel)) {
+				$opties = $this->valideerOpties($peiling, $opties);
 
 				foreach ($opties as $optieId) {
 					$optie = $this->peilingOptiesRepository->find($optieId);
@@ -91,13 +79,10 @@ class PeilingenService
 				}
 
 				$stem = new PeilingStem();
-				$stem->peiling_id = $peilingId;
-				$stem->peiling = $this->entityManager->getReference(
-					Peiling::class,
-					$peilingId
-				);
-				$stem->profiel = ProfielRepository::get($uid);
-				$stem->uid = $uid;
+				$stem->peiling_id = $peiling->id;
+				$stem->peiling = $peiling;
+				$stem->profiel = $profiel;
+				$stem->uid = $profiel->uid;
 				$stem->aantal = count($opties);
 				$this->entityManager->persist($stem);
 				$this->entityManager->flush();
@@ -120,14 +105,11 @@ class PeilingenService
 	 * @param int[] $opties
 	 * @return int[]
 	 */
-	public function valideerOpties($peilingId, $opties)
+	public function valideerOpties(Peiling $peiling, $opties)
 	{
-		$mogelijkeOpties = $this->peilingOptiesRepository->findBy([
-			'peiling_id' => $peilingId,
-		]);
 		$mogelijkeOptieIds = array_map(function ($optie) {
 			return $optie->id;
-		}, $mogelijkeOpties);
+		}, $peiling->opties->toArray());
 		return array_intersect($mogelijkeOptieIds, $opties);
 	}
 
@@ -138,19 +120,9 @@ class PeilingenService
 	 * @return bool
 	 * @throws CsrGebruikerException
 	 */
-	public function isGeldigeStem($peilingId, $opties, $uid)
+	public function isGeldigeStem(Peiling $peiling, $opties, Profiel $profiel)
 	{
-		$peiling = $this->peilingenRepository->getPeilingById($peilingId);
-
-		if (!$peiling) {
-			throw new CsrGebruikerException('Deze peiling bestaat niet');
-		}
-
-		if (!$peiling->getMagStemmen()) {
-			throw new CsrGebruikerException('Mag niet op deze peiling stemmen.');
-		}
-
-		if ($this->peilingStemmenRepository->heeftGestemd($peilingId, $uid)) {
+		if ($peiling->getStem($profiel)) {
 			throw new CsrGebruikerException('Alreeds gestemd.');
 		}
 
@@ -158,7 +130,7 @@ class PeilingenService
 			throw new CsrGebruikerException('Selecteer tenminste een optie.');
 		}
 
-		$geldigeOptieIds = $this->valideerOpties($peilingId, $opties);
+		$geldigeOptieIds = $this->valideerOpties($peiling, $opties);
 
 		if (count($geldigeOptieIds) > $peiling->aantal_stemmen) {
 			throw new CsrGebruikerException(
