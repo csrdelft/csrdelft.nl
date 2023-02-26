@@ -204,6 +204,7 @@ interface Lid {
   achternaam: string;
   voornaam: string;
   postfix: string;
+  studie: string;
 }
 
 type AntwoordMethode = 'voornaam' | 'achternaam' | 'civi' | 'combi';
