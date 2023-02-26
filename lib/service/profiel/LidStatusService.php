@@ -133,7 +133,7 @@ class LidStatusService
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus)
 	{
 		$aantal = $this->maaltijdAbonnementenService->verwijderAbonnementenVoorLid(
-			$profiel->uid
+			$profiel
 		);
 		if ($aantal > 0) {
 			return [

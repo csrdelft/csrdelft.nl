@@ -7,7 +7,6 @@ use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,18 +19,14 @@ use Throwable;
  */
 class MijnAbonnementenController extends AbstractController
 {
-	/** @var MaaltijdAbonnementenRepository  */
-	private $maaltijdAbonnementenRepository;
 	/**
 	 * @var MaaltijdAbonnementenService
 	 */
 	private $maaltijdAbonnementenService;
 
 	public function __construct(
-		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
 		MaaltijdAbonnementenService $maaltijdAbonnementenService
 	) {
-		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 		$this->maaltijdAbonnementenService = $maaltijdAbonnementenService;
 	}
 
@@ -44,7 +39,7 @@ class MijnAbonnementenController extends AbstractController
 	public function mijn()
 	{
 		$abonnementen = $this->maaltijdAbonnementenService->getAbonnementenVoorLid(
-			$this->getUid(),
+			$this->getProfiel(),
 			true,
 			true
 		);

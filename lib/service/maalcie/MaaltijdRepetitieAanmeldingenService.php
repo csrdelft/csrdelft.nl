@@ -6,10 +6,9 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
-use CsrDelft\repository\ProfielRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -20,10 +19,6 @@ class MaaltijdRepetitieAanmeldingenService
 	 * @var EntityManagerInterface
 	 */
 	private $entityManager;
-	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
 	/**
 	 * @var MaaltijdenRepository
 	 */
@@ -41,11 +36,9 @@ class MaaltijdRepetitieAanmeldingenService
 		EntityManagerInterface $entityManager,
 		MaaltijdenRepository $maaltijdenRepository,
 		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		MaaltijdAanmeldingenService $maaltijdAanmeldingenService
 	) {
 		$this->entityManager = $entityManager;
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
@@ -62,11 +55,11 @@ class MaaltijdRepetitieAanmeldingenService
 	 */
 	public function aanmeldenVoorKomendeRepetitieMaaltijden(
 		MaaltijdRepetitie $repetitie,
-		$uid
+		Profiel $profiel
 	) {
 		if (
 			!$this->maaltijdAanmeldingenService->checkAanmeldFilter(
-				$uid,
+				$profiel,
 				$repetitie->abonnement_filter
 			)
 		) {
@@ -92,13 +85,8 @@ class MaaltijdRepetitieAanmeldingenService
 			->getResult();
 
 		foreach ($maaltijden as $maaltijd) {
-			if (
-				!$this->maaltijdAanmeldingenRepository->find([
-					'maaltijd_id' => $maaltijd->maaltijd_id,
-					'uid' => $uid,
-				])
-			) {
-				if ($this->aanmeldenDoorAbonnement($maaltijd, $repetitie, $uid)) {
+			if (!$maaltijd->getAanmelding($profiel)) {
+				if ($this->aanmeldenDoorAbonnement($maaltijd, $repetitie, $profiel)) {
 					$aantal++;
 				}
 			}
@@ -117,24 +105,21 @@ class MaaltijdRepetitieAanmeldingenService
 	public function aanmeldenDoorAbonnement(
 		Maaltijd $maaltijd,
 		MaaltijdRepetitie $repetitie,
-		$uid
+		Profiel $profiel
 	) {
-		if (
-			!$this->maaltijdAanmeldingenRepository->find([
-				'maaltijd_id' => $maaltijd->maaltijd_id,
-				'uid' => $uid,
-			])
-		) {
+		if (!$maaltijd->getAanmelding($profiel)) {
 			try {
-				$this->maaltijdAanmeldingenService->assertMagAanmelden($maaltijd, $uid);
+				$this->maaltijdAanmeldingenService->assertMagAanmelden(
+					$maaltijd,
+					$profiel
+				);
 
-				$profiel = ProfielRepository::get($uid);
 				$aanmelding = new MaaltijdAanmelding();
 				$aanmelding->maaltijd = $maaltijd;
 				$aanmelding->maaltijd_id = $maaltijd->maaltijd_id;
-				$aanmelding->uid = $uid;
+				$aanmelding->uid = $profiel->uid;
 				$aanmelding->profiel = $profiel;
-				$aanmelding->door_uid = $uid;
+				$aanmelding->door_uid = $profiel->uid;
 				$aanmelding->door_profiel = $profiel;
 				$aanmelding->abonnementRepetitie = $repetitie;
 				$aanmelding->laatst_gewijzigd = date_create_immutable();
@@ -155,18 +140,18 @@ class MaaltijdRepetitieAanmeldingenService
 	/**
 	 * Filtert de repetities met het abonnement-filter van de maaltijd-repetitie op de permissies van het ingelogde lid.
 	 *
-	 * @param string $uid
+	 * @param Profiel $profiel
 	 * @return MaaltijdRepetitie[]
 	 * @internal param MaaltijdRepetitie[] $repetities
 	 */
-	public function getAbonneerbareRepetitiesVoorLid($uid)
+	public function getAbonneerbareRepetitiesVoorLid(Profiel $profiel)
 	{
 		$repetities = $this->maaltijdRepetitiesRepository->getAbboneerbareRepetities();
 		$result = [];
 		foreach ($repetities as $repetitie) {
 			if (
 				$this->maaltijdAanmeldingenService->checkAanmeldFilter(
-					$uid,
+					$profiel,
 					$repetitie->abonnement_filter
 				)
 			) {

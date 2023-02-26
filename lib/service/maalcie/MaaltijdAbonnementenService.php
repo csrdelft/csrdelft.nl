@@ -91,7 +91,7 @@ class MaaltijdAbonnementenService
 				);
 				if (
 					!$this->maaltijdAanmeldingenService->checkAanmeldFilter(
-						$abo->uid,
+						$abo->profiel,
 						$repetitie->abonnement_filter
 					)
 				) {
@@ -135,14 +135,12 @@ class MaaltijdAbonnementenService
 
 			$matrix = [];
 			foreach ($leden as $lid) {
-				$abos = $this->maaltijdAbonnementenRepository->findBy([
-					'uid' => $lid->uid,
-				]);
+				$abos = $this->maaltijdAbonnementenRepository->voorLid($lid);
 				foreach ($abos as $abo) {
 					$rep = $repById[$abo->mlt_repetitie_id];
 					if (
 						!$this->maaltijdAanmeldingenService->checkAanmeldFilter(
-							$lid->uid,
+							$lid,
 							$rep->abonnement_filter
 						)
 					) {
@@ -202,9 +200,7 @@ class MaaltijdAbonnementenService
 				// Skip oudleden
 				if (
 					!LidStatus::isLidLike($profiel->status) &&
-					$this->maaltijdAbonnementenRepository->count([
-						'uid' => $profiel->uid,
-					]) == 0
+					$this->maaltijdAbonnementenRepository->countVoorLid($profiel) == 0
 				) {
 					continue;
 				}
@@ -212,10 +208,7 @@ class MaaltijdAbonnementenService
 				$matrix[$profiel->uid] = [];
 
 				foreach ($repById as $rep) {
-					$abo = $this->maaltijdAbonnementenRepository->find([
-						'uid' => $profiel->uid,
-						'mlt_repetitie_id' => $rep->mlt_repetitie_id,
-					]);
+					$abo = $rep->getAbonnementVoor($profiel->uid);
 
 					if (!$abo) {
 						$abo = new MaaltijdAbonnement();
@@ -227,7 +220,7 @@ class MaaltijdAbonnementenService
 						$abo->foutmelding = 'Geen huidig lid';
 					} elseif (
 						!$this->maaltijdAanmeldingenService->checkAanmeldFilter(
-							$profiel->uid,
+							$profiel,
 							$rep->abonnement_filter
 						)
 					) {
@@ -273,10 +266,10 @@ class MaaltijdAbonnementenService
 	 * @return int amount of deleted abos
 	 * @throws Throwable
 	 */
-	public function verwijderAbonnementenVoorLid($uid)
+	public function verwijderAbonnementenVoorLid(Profiel $profiel)
 	{
-		return $this->entityManager->transactional(function () use ($uid) {
-			$abos = $this->getAbonnementenVoorLid($uid);
+		return $this->entityManager->wrapInTransaction(function () use ($profiel) {
+			$abos = $this->getAbonnementenVoorLid($profiel);
 			$aantal = 0;
 			foreach ($abos as $abo) {
 				$aantal++;
@@ -306,12 +299,12 @@ class MaaltijdAbonnementenService
 	 * @throws Throwable
 	 */
 	public function getAbonnementenVoorLid(
-		$uid,
+		$profiel,
 		$abonneerbaar = false,
 		$uitgeschakeld = false
 	) {
 		$lijst = $this->entityManager->wrapInTransaction(function () use (
-			$uid,
+			$profiel,
 			$abonneerbaar,
 			$uitgeschakeld
 		) {
@@ -319,12 +312,13 @@ class MaaltijdAbonnementenService
 
 			if ($abonneerbaar) {
 				$repById = $this->maaltijdRepetitieAanmeldingenService->getAbonneerbareRepetitiesVoorLid(
-					$uid
-				); // grouped by mrid
+					$profiel
+				);
+				// grouped by mrid
 			} else {
 				$repById = $this->maaltijdRepetitiesRepository->getAlleRepetities(true); // grouped by mrid
 			}
-			$abos = $this->maaltijdAbonnementenRepository->findBy(['uid' => $uid]);
+			$abos = $this->maaltijdAbonnementenRepository->voorLid($profiel);
 			foreach ($abos as $abo) {
 				// ingeschakelde abonnementen
 				$mrid = $abo->mlt_repetitie_id;
@@ -335,7 +329,7 @@ class MaaltijdAbonnementenService
 					);
 				}
 				$abo->maaltijd_repetitie = $repById[$mrid];
-				$abo->van_uid = $uid;
+				$abo->van_uid = $profiel->uid;
 				$lijst[$mrid] = $abo;
 			}
 			if ($uitgeschakeld) {
@@ -346,7 +340,7 @@ class MaaltijdAbonnementenService
 						$abo = new MaaltijdAbonnement();
 						$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
 						$abo->maaltijd_repetitie = $repetitie;
-						$abo->van_uid = $uid;
+						$abo->van_uid = $profiel->uid;
 						$lijst[$mrid] = $abo;
 					}
 				}
@@ -371,7 +365,7 @@ class MaaltijdAbonnementenService
 	 */
 	public function inschakelenAbonnement($abo)
 	{
-		return $this->entityManager->transactional(function () use ($abo) {
+		return $this->entityManager->wrapInTransaction(function () use ($abo) {
 			if (!$abo->maaltijd_repetitie->abonneerbaar) {
 				throw new CsrGebruikerException('Niet abonneerbaar');
 			}
@@ -385,7 +379,7 @@ class MaaltijdAbonnementenService
 			}
 			if (
 				!$this->maaltijdAanmeldingenService->checkAanmeldFilter(
-					$abo->uid,
+					$abo->profiel,
 					$abo->maaltijd_repetitie->abonnement_filter
 				)
 			) {
@@ -402,7 +396,7 @@ class MaaltijdAbonnementenService
 
 			return $this->maaltijdRepetitieAanmeldingenService->aanmeldenVoorKomendeRepetitieMaaltijden(
 				$abo->maaltijd_repetitie,
-				$abo->uid
+				$abo->profiel
 			);
 		});
 	}
@@ -426,7 +420,7 @@ class MaaltijdAbonnementenService
 			foreach ($novieten as $noviet) {
 				if (
 					!$this->maaltijdAanmeldingenService->checkAanmeldFilter(
-						$noviet->uid,
+						$noviet,
 						$repetitie->abonnement_filter
 					)
 				) {
@@ -450,7 +444,7 @@ class MaaltijdAbonnementenService
 				$this->entityManager->persist($abo);
 				$this->maaltijdRepetitieAanmeldingenService->aanmeldenVoorKomendeRepetitieMaaltijden(
 					$repetitie,
-					$noviet->uid
+					$noviet
 				);
 				$aantal += 1;
 			}
@@ -473,19 +467,11 @@ class MaaltijdAbonnementenService
 			$repetitie,
 			$uid
 		) {
-			if (
-				!$this->maaltijdAbonnementenRepository->getHeeftAbonnement(
-					$repetitie,
-					$uid
-				)
-			) {
+			$abo = $repetitie->getAbonnementVoor($uid);
+			if (!$abo) {
 				throw new CsrGebruikerException('Abonnement al uitgeschakeld');
 			}
 
-			$abo = $this->maaltijdAbonnementenRepository->getAbonnement(
-				$repetitie,
-				$uid
-			);
 			$rep = $abo->maaltijd_repetitie;
 			$this->entityManager->remove($abo);
 			$this->entityManager->flush();
@@ -513,9 +499,7 @@ class MaaltijdAbonnementenService
 	public function verwijderAbonnementen(MaaltijdRepetitie $mrid)
 	{
 		return $this->entityManager->wrapInTransaction(function () use ($mrid) {
-			$abos = $this->maaltijdAbonnementenRepository->getAbonnementenVoorRepetitie(
-				$mrid
-			);
+			$abos = $mrid->abonnementen;
 			$aantal = count($abos);
 			foreach ($abos as $abo) {
 				$this->afmeldenDoorAbonnement($mrid, $abo->uid);
@@ -536,13 +520,11 @@ class MaaltijdAbonnementenService
 		$aantal = 0;
 		// aanmelden van leden met abonnement op deze repetitie
 		if (!$maaltijd->gesloten && $maaltijd->repetitie !== null) {
-			$abonnementen = $this->maaltijdAbonnementenRepository->getAbonnementenVoorRepetitie(
-				$maaltijd->repetitie
-			);
+			$abonnementen = $maaltijd->repetitie->abonnementen;
 			foreach ($abonnementen as $abo) {
 				if (
 					$this->maaltijdAanmeldingenService->checkAanmeldFilter(
-						$abo->uid,
+						$abo->profiel,
 						$maaltijd->aanmeld_filter
 					)
 				) {
@@ -550,7 +532,7 @@ class MaaltijdAbonnementenService
 						$this->maaltijdRepetitieAanmeldingenService->aanmeldenDoorAbonnement(
 							$maaltijd,
 							$abo->maaltijd_repetitie,
-							$abo->uid
+							$abo->profiel
 						)
 					) {
 						$aantal++;

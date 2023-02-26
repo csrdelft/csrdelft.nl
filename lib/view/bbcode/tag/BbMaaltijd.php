@@ -191,7 +191,7 @@ class BbMaaltijd extends BbTag
 				$mid === 'eerstvolgende2'
 			) {
 				$maaltijden = $this->maaltijdenService->getKomendeMaaltijdenVoorLid(
-					LoginService::getUid()
+					LoginService::getProfiel()
 				); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
