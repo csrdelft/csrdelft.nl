@@ -357,3 +357,25 @@ export const ucfirst = (str: string): string =>
 export const cut = <T>(list: T[]): T[] => list.filter((_) => _);
 
 export const uidLike = (str: string): boolean => str.length == 4;
+
+export const shuffle = <T>(array: T[]) => {
+	let currentIndex = array.length;
+	let temporaryValue;
+	let randomIndex;
+
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+
+		// And swap it with the current element.
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
+
+	return array;
+};
+
+export const uniq: <T>(arr: T[]) => T[] = (arr) => Array.from(new Set(arr));

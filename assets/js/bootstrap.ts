@@ -19,7 +19,7 @@ import {
 import { init } from './ctx';
 import { ketzerAjax } from './lib/ajax';
 import { importAgenda, importSponsor } from './lib/courant';
-import { initSluitMeldingen } from './lib/csrdelft';
+import { initSluitMeldingen } from './lib/melding';
 import { domUpdate } from './lib/domUpdate';
 import { formCancel, formInlineToggle, formSubmit } from './lib/formulier';
 import { forumBewerken, saveConceptForumBericht } from './lib/forum';

@@ -1,18 +1,13 @@
-import $ from 'jquery';
 import { Node } from 'prosemirror-model';
+import axios from 'axios';
 
-export function importAgenda(): void {
-	$.ajax({
-		cache: false,
-		data: '',
-		type: 'POST',
-		url: '/agenda/courant',
-	}).done((data) => {
-		const editor = window.currentEditor;
-		const node = Node.fromJSON(editor.state.schema, data[0]);
+export async function importAgenda(): Promise<void> {
+	const response = await axios.post('/agenda/courant');
 
-		editor.dispatch(editor.state.tr.replaceSelectionWith(node));
-	});
+	const editor = window.currentEditor;
+	const node = Node.fromJSON(editor.state.schema, response.data[0]);
+
+	editor.dispatch(editor.state.tr.replaceSelectionWith(node));
 }
 
 export function importSponsor(bb: string): void {

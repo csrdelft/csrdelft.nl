@@ -1,17 +1,19 @@
-import $ from 'jquery';
 import { Modal } from 'bootstrap';
+import { select } from './dom';
 
 export function modalOpen(htmlString = ''): boolean {
 	const modalEl = document.getElementById('modal');
 	const modal = Modal.getInstance(modalEl) ?? new Modal(modalEl);
-	const modalBackdrop = $('.modal-backdrop');
 
 	if (modalEl.innerHTML === '' && htmlString === '') {
 		return false;
 	}
 
-	if (modalBackdrop.length) {
-		modalBackdrop.remove();
+	try {
+		// Verwijder mogelijk bestaande backdrop
+		select('.modal-backdrop').remove();
+	} catch (e) {
+		// negeer
 	}
 
 	if (htmlString !== '') {

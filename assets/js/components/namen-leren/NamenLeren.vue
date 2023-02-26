@@ -1,36 +1,36 @@
 <template>
   <div>
-    <div v-if="finished" class="score-blok">
+    <div v-if="data.finished" class="score-blok">
       <div class="titel">
-        {{ titel }}
+        {{ data.titel }}
       </div>
       <div class="score-titel">Jouw score:</div>
       <div class="score">{{ Math.round(percentageGoed) }}%</div>
     </div>
-    <div v-if="!started">
+    <div v-if="!data.started">
       <div class="row">
         <div class="col-sm-6">
           <strong class="mb-1 block">Lichting(en)</strong>
           <div>
             <input
               id="alleLichtingen"
-              v-model="alleLichtingen"
+              v-model="data.alleLichtingen"
               type="checkbox"
             />
             <label for="alleLichtingen">Alle lichtingen</label>
           </div>
           <div v-for="lichting in lichtingen" :key="lichting">
             <input
-              v-if="!alleLichtingen"
+              v-if="!data.alleLichtingen"
               :id="'lichting' + lichting"
-              v-model="lichtingSelectie"
+              v-model="data.lichtingSelectie"
               type="checkbox"
               :value="lichting"
             />
             <input
-              v-if="alleLichtingen"
+              v-if="data.alleLichtingen"
               type="checkbox"
-              :checked="alleLichtingen"
+              :checked="data.alleLichtingen"
               disabled
             />
             <label :for="'lichting' + lichting">{{ lichting }}</label>
@@ -41,23 +41,23 @@
           <div>
             <input
               id="alleVerticalen"
-              v-model="alleVerticalen"
+              v-model="data.alleVerticalen"
               type="checkbox"
             />
             <label for="alleVerticalen">Alle verticalen</label>
           </div>
           <div v-for="verticale in verticalen" :key="verticale">
             <input
-              v-if="!alleVerticalen"
+              v-if="!data.alleVerticalen"
               :id="'verticale' + verticale"
-              v-model="verticaleSelectie"
+              v-model="data.verticaleSelectie"
               type="checkbox"
               :value="verticale"
             />
             <input
-              v-if="alleVerticalen"
+              v-if="data.alleVerticalen"
               type="checkbox"
-              :checked="alleVerticalen"
+              :checked="data.alleVerticalen"
               disabled
             />
             <label :for="'verticale' + verticale">{{ verticale }}</label>
@@ -69,14 +69,14 @@
         <div>
           <input
             id="verbergOnderkant"
-            v-model="verbergOnderkant"
+            v-model="data.verbergOnderkant"
             type="checkbox"
           />
           <label for="verbergOnderkant">Voorkom leesbare namen op foto's</label>
         </div>
       </div>
       <strong class="mt-3 mb-1 block">Antwoordmethode</strong>
-      <select v-model="antwoordMethode" class="form-control">
+      <select v-model="data.antwoordMethode" class="form-control">
         <option value="voornaam">Voornaam</option>
         <option value="achternaam">Achternaam</option>
         <option value="combi">Voor- en achternaam</option>
@@ -87,111 +87,103 @@
         class="btn btn-primary btn-block mt-3"
         :class="{ disabled: !klaarVoorDeStart }"
         @click.prevent="start"
-        >Start met {{ aantal }} {{ aantal === 1 ? 'lid' : 'leden' }}</a
       >
+        Start met {{ aantal }} {{ aantal === 1 ? 'lid' : 'leden' }}
+      </a>
     </div>
-    <div v-else-if="!finished">
+    <div v-else-if="!data.finished">
       <div class="progress">
         <div class="correct" :style="{ width: percentageGoed + '%' }" />
         <div class="again" :style="{ width: percentageOpnieuw + '%' }" />
         <div class="wrong" :style="{ width: percentageFout + '%' }" />
       </div>
-      <div v-if="laatste" class="laatste" :class="{ goed: laatsteGoed }">
-        <img :src="'/profiel/pasfoto/' + laatste.uid + '.jpg'" alt="" />
+      <div
+        v-if="data.laatste"
+        class="laatste"
+        :class="{ goed: data.laatsteGoed }"
+      >
+        <img :src="'/profiel/pasfoto/' + data.laatste.uid + '.jpg'" alt="" />
         <div class="info">
           <div class="naam">
             <span
               :class="{
                 bold:
-                  antwoordMethode === 'voornaam' || antwoordMethode === 'combi',
+                  data.antwoordMethode === 'voornaam' ||
+                  data.antwoordMethode === 'combi',
               }"
-              >{{ laatste.voornaam }}</span
             >
+              {{ data.laatste.voornaam }}
+            </span>
             <span
               :class="{
                 bold:
-                  antwoordMethode === 'achternaam' ||
-                  antwoordMethode === 'combi' ||
-                  antwoordMethode === 'civi',
+                  data.antwoordMethode === 'achternaam' ||
+                  data.antwoordMethode === 'combi' ||
+                  data.antwoordMethode === 'civi',
               }"
-              >{{ laatste.tussenvoegsel }} {{ laatste.achternaam }}</span
             >
+              {{ data.laatste.tussenvoegsel }} {{ data.laatste.achternaam }}
+            </span>
             <span
-              v-if="laatste.postfix"
-              :class="{ bold: antwoordMethode === 'civi' }"
-              >{{ laatste.postfix }}</span
+              v-if="data.laatste.postfix"
+              :class="{ bold: data.antwoordMethode === 'civi' }"
             >
+              {{ data.laatste.postfix }}
+            </span>
           </div>
           <div class="tekst">
-            <span>{{ laatste.lichting }}</span>
-            <span v-if="laatste.verticale && laatste.verticale !== 'Geen'">{{
-              laatste.verticale
-            }}</span>
-            <span>{{ laatste.studie }}</span>
+            <span>{{ data.laatste.lichting }}</span>
+            <span
+              v-if="data.laatste.verticale && data.laatste.verticale !== 'Geen'"
+            >
+              {{ data.laatste.verticale }}
+            </span>
+            <span>{{ data.laatste.studie }}</span>
           </div>
         </div>
-        <Icon v-if="laatsteGoed" icon="check" />
+        <Icon v-if="data.laatsteGoed" icon="check" />
         <Icon v-else icon="xmark" />
       </div>
       <div
         class="pasfotoContainer"
-        :class="{ onderkantVerbergen: verbergOnderkant }"
+        :class="{ onderkantVerbergen: data.verbergOnderkant }"
       >
         <div
           :style="{
-            'background-image': 'url(/profiel/pasfoto/' + huidig.uid + '.jpg)',
+            'background-image':
+              'url(/profiel/pasfoto/' + data.huidig.uid + '.jpg)',
           }"
           class="pasfoto"
         />
       </div>
-      <strong v-if="antwoordMethode === 'voornaam'" class="mb-1 block"
-        >Voornaam:</strong
-      >
-      <strong v-if="antwoordMethode === 'achternaam'" class="mb-1 block"
-        >Achternaam:</strong
-      >
-      <strong v-if="antwoordMethode === 'combi'" class="mb-1 block"
-        >Voor- en achternaam:</strong
-      >
-      <strong v-if="antwoordMethode === 'civi'" class="mb-1 block"
-        >Achternaam en achtervoegsel:</strong
-      >
+      <strong v-if="data.antwoordMethode === 'voornaam'" class="mb-1 block">
+        Voornaam:
+      </strong>
+      <strong v-if="data.antwoordMethode === 'achternaam'" class="mb-1 block">
+        Achternaam:
+      </strong>
+      <strong v-if="data.antwoordMethode === 'combi'" class="mb-1 block">
+        Voor- en achternaam:
+      </strong>
+      <strong v-if="data.antwoordMethode === 'civi'" class="mb-1 block">
+        Achternaam en achtervoegsel:
+      </strong>
       <input
         type="text"
         class="form-control"
-        :value="ingevuld"
+        :value="data.ingevuld"
         autofocus
-        @input="ingevuld = $event.target.value"
+        @input="data.ingevuld = $event.target.value"
         @keydown.enter="controleer"
       />
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { computed, reactive } from 'vue';
 import Icon from '../common/Icon.vue';
-
-const shuffle = <T>(array: T[]) => {
-  let currentIndex = array.length;
-  let temporaryValue;
-  let randomIndex;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-};
+import { shuffle, uniq } from '../../lib/util';
 
 const preloaded: string[] = [];
 
@@ -204,10 +196,6 @@ const preloadImage = (url: string) => {
   img.src = url;
 };
 
-const uniq: <T>(arr: T[]) => T[] = (arr) => {
-  return Array.from(new Set(arr));
-};
-
 interface Lid {
   uid: string;
   lichting: string;
@@ -218,212 +206,185 @@ interface Lid {
   postfix: string;
 }
 
-export default defineComponent({
-  components: { Icon },
-  props: {
-    leden: {
-      required: true,
-      type: Array as PropType<Lid[]>,
-    },
-  },
-  data: () => ({
-    // Config
-    alleLichtingen: false,
-    alleVerticalen: true,
-    lichtingSelectie: [] as string[],
-    verticaleSelectie: [] as string[],
-    antwoordMethode: 'voornaam',
-    aantalPerKeer: 5,
+type AntwoordMethode = 'voornaam' | 'achternaam' | 'civi' | 'combi';
 
-    // Game state
-    verbergOnderkant: true,
-    started: false,
-    finished: false,
-    goed: [] as Lid[],
-    opnieuw: [] as Lid[],
-    fout: [] as Lid[],
-    todo: [] as Lid[],
-    laatste: null as Lid | null,
-    laatsteGoed: null as boolean | null,
-    huidig: null as Lid | null,
-    ingevuld: '',
-    titel: '',
-  }),
-  computed: {
-    aantal() {
-      return this.gefilterdeLeden.length;
-    },
-    gefilterdeLeden() {
-      return this.leden.filter(
-        (lid: Lid) =>
-          (this.alleLichtingen ||
-            this.lichtingSelectie.includes(lid.lichting)) &&
-          (this.alleVerticalen ||
-            this.verticaleSelectie.includes(lid.verticale))
-      );
-    },
-    lichtingen() {
-      return uniq(this.leden.map((lid) => lid.lichting)).sort();
-    },
-    verticalen() {
-      return uniq(this.leden.map((lid) => lid.verticale)).sort();
-    },
-    klaarVoorDeStart() {
-      return this.gefilterdeLeden.length > 0;
-    },
-    totaalAantal() {
-      return (
-        this.todo.length +
-        this.goed.length +
-        this.opnieuw.length +
-        this.fout.length
-      );
-    },
-    percentageGoed() {
-      return this.totaalAantal > 0
-        ? (this.goed.length / this.totaalAantal) * 100
-        : 0;
-    },
-    percentageOpnieuw() {
-      return this.totaalAantal > 0
-        ? (this.opnieuw.length / this.totaalAantal) * 100
-        : 0;
-    },
-    percentageFout() {
-      return this.totaalAantal > 0
-        ? (this.fout.length / this.totaalAantal) * 100
-        : 0;
-    },
-  },
-  methods: {
-    start() {
-      if (!this.klaarVoorDeStart) {
-        return;
-      }
-      this.started = true;
-      this.goed = [];
-      this.opnieuw = [];
-      this.fout = [];
-      this.todo = this.gefilterdeLeden;
-      shuffle(this.todo);
-      this.huidig = null;
-      this.laatste = null;
-      this.finished = false;
-      this.volgende();
-      this.titel = this.bouwTitel();
-      document.title = `C.S.R. Delft - Namen ${this.titel} leren`;
-      window.scrollTo(0, 0);
-    },
-    volgende() {
-      const choice = this.fout.concat(
-        this.todo.slice(0, Math.max(this.aantalPerKeer - this.fout.length, 0))
-      );
-      const pickable = choice.filter(
-        (lid) =>
-          choice.length === 1 || !this.huidig || lid.uid !== this.huidig.uid
-      );
-      if (pickable.length > 0) {
-        for (const lid of pickable) {
-          preloadImage('/profiel/pasfoto/' + lid.uid + '.jpg');
-        }
-        this.huidig = pickable[Math.floor(Math.random() * pickable.length)];
-        this.ingevuld = '';
-      } else {
-        this.finished = true;
-        this.started = false;
-      }
-    },
-    controleer() {
-      if (this.huidig == null) {
-        throw new Error('huidig niet gezet');
-      }
-      // Antwoord vormen
-      const onderdelen = [];
-      if (
-        this.antwoordMethode === 'voornaam' ||
-        this.antwoordMethode === 'combi'
-      ) {
-        onderdelen.push(this.huidig.voornaam);
-      }
-      if (
-        this.antwoordMethode === 'achternaam' ||
-        this.antwoordMethode === 'combi' ||
-        this.antwoordMethode === 'civi'
-      ) {
-        if (this.huidig.tussenvoegsel) {
-          onderdelen.push(this.huidig.tussenvoegsel);
-        }
-        onderdelen.push(this.huidig.achternaam);
-      }
-      if (this.antwoordMethode === 'civi') {
-        if (this.huidig.postfix) {
-          onderdelen.push(this.huidig.postfix);
-        }
-      }
-      const antwoord = onderdelen.map((s) => s.trim()).join(' ');
+const props = defineProps<{ leden: Lid[] }>();
 
-      // Antwoord checken
-      this.laatste = this.huidig;
-      this.laatsteGoed =
-        antwoord.toLowerCase().replace('.', '') ===
-        this.ingevuld.toLowerCase().replace('.', '');
+const data = reactive({
+  // Config
+  alleLichtingen: false,
+  alleVerticalen: true,
+  lichtingSelectie: [] as string[],
+  verticaleSelectie: [] as string[],
+  antwoordMethode: 'voornaam' as AntwoordMethode,
+  aantalPerKeer: 5,
 
-      // Verwijderen uit oude lijst en toevoegen aan nieuwe lijst
-      let index = this.todo.findIndex((lid) => lid.uid === this.huidig?.uid);
-      if (index === -1) {
-        // Fout lijst
-        if (this.laatsteGoed) {
-          index = this.fout.findIndex((lid) => lid.uid === this.huidig?.uid);
-          this.fout.splice(index, 1);
-          this.opnieuw.push(this.huidig);
-        }
-      } else {
-        // Te doen lijst
-        this.todo.splice(index, 1);
-        if (this.laatsteGoed) {
-          this.goed.push(this.huidig);
-        } else {
-          this.fout.push(this.huidig);
-        }
-      }
-
-      this.volgende();
-    },
-    bouwTitel() {
-      if (this.alleLichtingen && this.alleVerticalen) {
-        return 'Alle leden';
-      }
-
-      let titel = '';
-      if (!this.alleLichtingen) {
-        this.lichtingSelectie.sort();
-        titel += 'Lichting ';
-        titel += this.lichtingSelectie
-          .slice(0, this.lichtingSelectie.length - 1)
-          .join(', ');
-        if (this.lichtingSelectie.length > 1) {
-          titel += ' & ';
-        }
-        titel += this.lichtingSelectie[this.lichtingSelectie.length - 1];
-      }
-      if (!this.alleVerticalen) {
-        if (titel) {
-          titel += ', ';
-        }
-        this.verticaleSelectie.sort();
-        titel += this.verticaleSelectie
-          .slice(0, this.verticaleSelectie.length - 1)
-          .join(', ');
-        if (this.verticaleSelectie.length > 1) {
-          titel += ' & ';
-        }
-        titel += this.verticaleSelectie[this.verticaleSelectie.length - 1];
-      }
-
-      return titel;
-    },
-  },
+  // Game state
+  verbergOnderkant: true,
+  started: false,
+  finished: false,
+  goed: [] as Lid[],
+  opnieuw: [] as Lid[],
+  fout: [] as Lid[],
+  todo: [] as Lid[],
+  laatste: null as Lid | null,
+  laatsteGoed: null as boolean | null,
+  huidig: null as Lid | null,
+  ingevuld: '',
+  titel: '',
 });
+
+const aantal = computed(() => gefilterdeLeden.value.length);
+const gefilterdeLeden = computed(() =>
+  props.leden.filter(
+    (lid: Lid) =>
+      (data.alleLichtingen || data.lichtingSelectie.includes(lid.lichting)) &&
+      (data.alleVerticalen || data.verticaleSelectie.includes(lid.verticale))
+  )
+);
+const lichtingen = computed(() =>
+  uniq(props.leden.map((lid) => lid.lichting)).sort()
+);
+const verticalen = computed(() =>
+  uniq(props.leden.map((lid) => lid.verticale)).sort()
+);
+const klaarVoorDeStart = computed(() => gefilterdeLeden.value.length > 0);
+const totaalAantal = computed(
+  () =>
+    data.todo.length + data.goed.length + data.opnieuw.length + data.fout.length
+);
+const percentageGoed = computed(() =>
+  totaalAantal.value > 0 ? (data.goed.length / totaalAantal.value) * 100 : 0
+);
+const percentageOpnieuw = computed(() =>
+  totaalAantal.value > 0 ? (data.opnieuw.length / totaalAantal.value) * 100 : 0
+);
+const percentageFout = computed(() =>
+  totaalAantal.value > 0 ? (data.fout.length / totaalAantal.value) * 100 : 0
+);
+
+const start = () => {
+  if (!klaarVoorDeStart.value) {
+    return;
+  }
+  data.started = true;
+  data.goed = [];
+  data.opnieuw = [];
+  data.fout = [];
+  data.todo = gefilterdeLeden.value;
+  shuffle(data.todo);
+  data.huidig = null;
+  data.laatste = null;
+  data.finished = false;
+  volgende();
+  data.titel = bouwTitel();
+  document.title = `C.S.R. Delft - Namen ${data.titel} leren`;
+  window.scrollTo(0, 0);
+};
+const volgende = () => {
+  const choice = data.fout.concat(
+    data.todo.slice(0, Math.max(data.aantalPerKeer - data.fout.length, 0))
+  );
+  const pickable = choice.filter(
+    (lid) => choice.length === 1 || !data.huidig || lid.uid !== data.huidig.uid
+  );
+  if (pickable.length > 0) {
+    for (const lid of pickable) {
+      preloadImage('/profiel/pasfoto/' + lid.uid + '.jpg');
+    }
+    data.huidig = pickable[Math.floor(Math.random() * pickable.length)];
+    data.ingevuld = '';
+  } else {
+    data.finished = true;
+    data.started = false;
+  }
+};
+const controleer = () => {
+  if (data.huidig == null) {
+    throw new Error('huidig niet gezet');
+  }
+  // Antwoord vormen
+  const onderdelen = [];
+  if (data.antwoordMethode === 'voornaam' || data.antwoordMethode === 'combi') {
+    onderdelen.push(data.huidig.voornaam);
+  }
+  if (
+    data.antwoordMethode === 'achternaam' ||
+    data.antwoordMethode === 'combi' ||
+    data.antwoordMethode === 'civi'
+  ) {
+    if (data.huidig.tussenvoegsel) {
+      onderdelen.push(data.huidig.tussenvoegsel);
+    }
+    onderdelen.push(data.huidig.achternaam);
+  }
+  if (data.antwoordMethode === 'civi') {
+    if (data.huidig.postfix) {
+      onderdelen.push(data.huidig.postfix);
+    }
+  }
+  const antwoord = onderdelen.map((s) => s.trim()).join(' ');
+
+  // Antwoord checken
+  data.laatste = data.huidig;
+  data.laatsteGoed =
+    antwoord.toLowerCase().replace('.', '') ===
+    data.ingevuld.toLowerCase().replace('.', '');
+
+  // Verwijderen uit oude lijst en toevoegen aan nieuwe lijst
+  let index = data.todo.findIndex((lid) => lid.uid === data.huidig?.uid);
+  if (index === -1) {
+    // Fout lijst
+    if (data.laatsteGoed) {
+      index = data.fout.findIndex((lid) => lid.uid === data.huidig?.uid);
+      data.fout.splice(index, 1);
+      data.opnieuw.push(data.huidig);
+    }
+  } else {
+    // Te doen lijst
+    data.todo.splice(index, 1);
+    if (data.laatsteGoed) {
+      data.goed.push(data.huidig);
+    } else {
+      data.fout.push(data.huidig);
+    }
+  }
+
+  volgende();
+};
+const bouwTitel = () => {
+  if (data.alleLichtingen && data.alleVerticalen) {
+    return 'Alle leden';
+  }
+
+  let titel = '';
+  if (!data.alleLichtingen) {
+    data.lichtingSelectie.sort();
+    titel += 'Lichting ';
+    titel += data.lichtingSelectie
+      .slice(0, data.lichtingSelectie.length - 1)
+      .join(', ');
+    if (data.lichtingSelectie.length > 1) {
+      titel += ' & ';
+    }
+    titel += data.lichtingSelectie[data.lichtingSelectie.length - 1];
+  }
+  if (!data.alleVerticalen) {
+    if (titel) {
+      titel += ', ';
+    }
+    data.verticaleSelectie.sort();
+    titel += data.verticaleSelectie
+      .slice(0, data.verticaleSelectie.length - 1)
+      .join(', ');
+    if (data.verticaleSelectie.length > 1) {
+      titel += ' & ';
+    }
+    titel += data.verticaleSelectie[data.verticaleSelectie.length - 1];
+  }
+
+  return titel;
+};
 </script>
 
 <style scoped>

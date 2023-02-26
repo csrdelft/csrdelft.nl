@@ -31,6 +31,7 @@ export const lazyLoad = (selector: string): void => {
 		}
 	};
 
+	// Laad pas als de gebruiker scrollt.
 	if (window.scrollY === 0) {
 		const listener = () => {
 			load();
