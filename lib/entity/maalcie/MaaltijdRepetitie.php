@@ -2,8 +2,10 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\common\Eisen;
 use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\view\formulier\DisplayEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Monolog\DateTimeImmutable;
 
@@ -91,6 +93,11 @@ class MaaltijdRepetitie implements DisplayEntity
 	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $abonnement_filter;
+	/**
+	 * @var MaaltijdAbonnement[]|ArrayCollection
+	 * @ORM\OneToMany(targetEntity="MaaltijdAbonnement", mappedBy="maaltijd_repetitie")
+	 */
+	public $abonnementen;
 
 	public function getStandaardPrijs()
 	{
@@ -144,5 +151,14 @@ class MaaltijdRepetitie implements DisplayEntity
 	public function getWeergave(): string
 	{
 		return $this->standaard_titel ?? '';
+	}
+
+	/**
+	 * @param $uid
+	 * @return MaaltijdAbonnement|false
+	 */
+	public function getAbonnementVoor($uid)
+	{
+		return $this->abonnementen->matching(Eisen::voorGebruiker($uid))->first();
 	}
 }

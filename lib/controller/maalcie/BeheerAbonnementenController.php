@@ -8,7 +8,6 @@ use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
@@ -24,10 +23,6 @@ use Throwable;
 class BeheerAbonnementenController extends AbstractController
 {
 	/**
-	 * @var MaaltijdAbonnementenRepository
-	 */
-	private $maaltijdAbonnementenRepository;
-	/**
 	 * @var MaaltijdRepetitiesRepository
 	 */
 	private $maaltijdRepetitiesRepository;
@@ -37,11 +32,9 @@ class BeheerAbonnementenController extends AbstractController
 	private $maaltijdAbonnementenService;
 
 	public function __construct(
-		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
 		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
 		MaaltijdAbonnementenService $maaltijdAbonnementenService
 	) {
-		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 		$this->maaltijdAbonnementenService = $maaltijdAbonnementenService;
 	}

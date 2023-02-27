@@ -78,7 +78,7 @@ class MijnMaaltijdenController extends AbstractController
 	public function ketzer()
 	{
 		$maaltijden = $this->maaltijdenService->getKomendeMaaltijdenVoorLid(
-			$this->getUid()
+			$this->getProfiel()
 		);
 		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid(
 			$maaltijden,
@@ -340,7 +340,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/ketzer/opmerking/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function opmerking($maaltijd_id)
+	public function opmerking(Maaltijd $maaltijd)
 	{
 		$opmerking = filter_input(
 			INPUT_POST,
@@ -348,8 +348,8 @@ class MijnMaaltijdenController extends AbstractController
 			FILTER_SANITIZE_STRING
 		);
 		$aanmelding = $this->maaltijdGastAanmeldingenService->saveGastenEetwens(
-			$maaltijd_id,
-			$this->getUid(),
+			$maaltijd,
+			$this->getProfiel(),
 			$opmerking
 		);
 		return $this->render('maaltijden/bb.html.twig', [
@@ -366,7 +366,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/mijn/opmerking/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function opmerking_mijn($maaltijd_id)
+	public function opmerking_mijn(Maaltijd $maaltijd)
 	{
 		$opmerking = filter_input(
 			INPUT_POST,
@@ -374,8 +374,8 @@ class MijnMaaltijdenController extends AbstractController
 			FILTER_SANITIZE_STRING
 		);
 		$aanmelding = $this->maaltijdGastAanmeldingenService->saveGastenEetwens(
-			$maaltijd_id,
-			$this->getUid(),
+			$maaltijd,
+			$this->getProfiel(),
 			$opmerking
 		);
 		return $this->render('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', [

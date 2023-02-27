@@ -3,7 +3,9 @@
 namespace CsrDelft\service\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -90,38 +92,27 @@ class MaaltijdGastAanmeldingenService
 	}
 
 	/**
-	 * @param int $mid
-	 * @param string $uid
+	 * @param Maaltijd $maaltijd
+	 * @param Profiel $profiel
 	 * @param string $opmerking
 	 * @return MaaltijdAanmelding
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 */
-	public function saveGastenEetwens($mid, $uid, $opmerking)
-	{
-		if (!is_numeric($mid) || $mid <= 0) {
-			throw new CsrGebruikerException(
-				'Save gasten eetwens faalt: Invalid $mid =' . $mid
-			);
-		}
-		$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
-		if (!$maaltijd->getIsAangemeld($uid)) {
+	public function saveGastenEetwens(
+		Maaltijd $maaltijd,
+		Profiel $profiel,
+		$opmerking
+	) {
+		$aanmelding = $maaltijd->getAanmelding($profiel);
+		if (!$aanmelding) {
 			throw new CsrGebruikerException('Niet aangemeld');
 		}
-
 		if ($maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is gesloten');
 		}
-		$aanmelding = $this->maaltijdAanmeldingenRepository->loadAanmelding(
-			$mid,
-			$uid
-		);
 		if ($aanmelding->aantal_gasten <= 0) {
 			throw new CsrGebruikerException('Geen gasten aangemeld');
 		}
-		$aanmelding->maaltijd = $maaltijd;
 		$aanmelding->gasten_eetwens = $opmerking;
-		$this->entityManager->persist($aanmelding);
 		$this->entityManager->flush();
 		return $aanmelding;
 	}

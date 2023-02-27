@@ -7,6 +7,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
@@ -161,7 +162,7 @@ class MaaltijdenService
 	 */
 	private function filterMaaltijdenVoorLid(
 		$maaltijden,
-		$uid,
+		Profiel $profiel,
 		$verbergVerleden = false
 	) {
 		$result = [];
@@ -178,10 +179,10 @@ class MaaltijdenService
 			if (
 				($maaltijd->aanmeld_limiet > 0 &&
 					$this->maaltijdAanmeldingenService->checkAanmeldFilter(
-						$uid,
+						$profiel,
 						$maaltijd->aanmeld_filter
 					)) ||
-				$maaltijd->magBekijken($uid)
+				$maaltijd->magBekijken($profiel->uid)
 			) {
 				$result[$maaltijd->maaltijd_id] = $maaltijd;
 			}
@@ -222,7 +223,7 @@ class MaaltijdenService
 
 		$maaltijden = $this->filterMaaltijdenVoorLid(
 			$maaltijden,
-			LoginService::getUid()
+			LoginService::getProfiel()
 		);
 		return $maaltijden;
 	}
@@ -234,7 +235,7 @@ class MaaltijdenService
 	 *
 	 * @return Maaltijd[]
 	 */
-	public function getKomendeMaaltijdenVoorLid($uid)
+	public function getKomendeMaaltijdenVoorLid(Profiel $profiel)
 	{
 		$maaltijden = $this->maaltijdenRepository->getMaaltijdenTussen(
 			date_create('-1 day'),
@@ -243,7 +244,7 @@ class MaaltijdenService
 			)
 		);
 
-		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, $uid, true);
+		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, $profiel, true);
 		return $maaltijden;
 	}
 
@@ -258,7 +259,7 @@ class MaaltijdenService
 		$maaltijden = [$this->maaltijdenRepository->getMaaltijd($mid)];
 		$maaltijden = $this->filterMaaltijdenVoorLid(
 			$maaltijden,
-			LoginService::getUid()
+			LoginService::getProfiel()
 		);
 		if (!empty($maaltijden)) {
 			return reset($maaltijden);

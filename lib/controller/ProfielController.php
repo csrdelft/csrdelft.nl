@@ -34,8 +34,6 @@ use CsrDelft\repository\groepen\OnderverenigingenRepository;
 use CsrDelft\repository\groepen\RechtenGroepenRepository;
 use CsrDelft\repository\groepen\WerkgroepenRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
-use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
-use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\fiscaat\SaldoGrafiekService;
@@ -132,12 +130,12 @@ class ProfielController extends AbstractController
 	 * @param BoekExemplaarRepository $boekExemplaarRepository
 	 * @param BoekRecensieRepository $boekRecensieRepository
 	 * @param FotoRepository $fotoRepository
-	 * @param MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
+	 * @param MaaltijdAanmeldingenService $maaltijdAanmeldingenService
 	 * @param CorveeVrijstellingenRepository $corveeVrijstellingenRepository
 	 * @param ForumPostsRepository $forumPostsRepository
 	 * @param FotoTagsRepository $fotoTagsRepository
 	 * @param CorveeKwalificatiesRepository $corveeKwalificatiesRepository
-	 * @param MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository
+	 * @param MaaltijdAbonnementenService $maaltijdAbonnementenService
 	 * @param Profiel|null $profiel
 	 * @return Response
 	 * @throws Throwable
@@ -234,9 +232,7 @@ class ProfielController extends AbstractController
 					InstellingUtil::instelling('maaltijden', 'recent_lidprofiel')
 				)
 			),
-			'abos' => $maaltijdAbonnementenService->getAbonnementenVoorLid(
-				$profiel->uid
-			),
+			'abos' => $maaltijdAbonnementenService->getAbonnementenVoorLid($profiel),
 			'gerecenseerdeboeken' => $boekRecensieRepository->getVoorLid(
 				$profiel->uid
 			),
