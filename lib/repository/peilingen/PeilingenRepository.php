@@ -91,43 +91,6 @@ class PeilingenRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param int $peiling_id
-	 * @param int $optie_id
-	 * @throws \Doctrine\ORM\ORMException
-	 */
-	public function stem($peiling_id, $optie_id)
-	{
-		$peiling = $this->getPeilingById((int) $peiling_id);
-		if (
-			$peiling->getMagStemmen() &&
-			!$this->peilingStemmenModel->heeftGestemd($peiling_id, $optie_id)
-		) {
-			$optie = $this->peilingOptiesModel->findOneBy([
-				'peiling_id' => $peiling_id,
-				'id' => $optie_id,
-			]);
-			if (!$optie) {
-				throw new CsrGebruikerException('Peiling optie bestaat niet.');
-			}
-
-			$optie->stemmen += 1;
-
-			$stem = new PeilingStem();
-			$stem->peiling_id = $peiling->id;
-			$stem->uid = LoginService::getUid();
-			$stem->profiel = LoginService::getProfiel();
-
-			$manager = $this->getEntityManager();
-
-			$manager->persist($stem);
-			$manager->persist($optie);
-			$manager->flush();
-		} else {
-			FlashUtil::setFlashWithContainerFacade('Stemmen niet toegestaan', -1);
-		}
-	}
-
-	/**
 	 * @param $peiling_id
 	 * @return Peiling|false
 	 */
