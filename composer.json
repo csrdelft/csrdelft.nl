@@ -69,7 +69,8 @@
 		"symfony/property-access": "^5.0",
 		"symfony/property-info": "^5.0",
 		"symfony/serializer": "^5.0",
-		"league/oauth2-server-bundle": "^0.4.1"
+		"league/oauth2-server-bundle": "^0.4.1",
+		"minishlink/web-push": "^7.0"
 	},
 	"config": {
 		"platform": {
