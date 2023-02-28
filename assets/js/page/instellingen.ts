@@ -72,13 +72,13 @@ const pushAbboneer = async () => {
 
 				return response.json();
 			})
-			.then( (responseData) =>{
+			.then((responseData) => {
 				if (!(responseData && responseData.success)) {
 					throw new Error('Bad response from server.');
 				}
-			}).catch(async ()=>{
-
-	await subscription?.unsubscribe();
+			})
+			.catch(async () => {
+				await subscription?.unsubscribe();
 			});
 
 		console.info('Successfully subscribed to push notifications.');
