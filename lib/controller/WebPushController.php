@@ -27,30 +27,39 @@ class WebPushController extends AbstractController
 				$endpoint = $request->request->get('endpoint');
 				$keys = $request->request->get('keys');
 
-				$item = $webPushRepository->nieuw();
-				$item->clientEndpoint = $endpoint;
-				$item->clientKeys = json_encode($keys);
+				$subscription = $webPushRepository->findOneBy([
+					'clientEndpoint' => $endpoint,
+				]);
+				if ($subscription) {
+					// Voor nu is er maar een subscription per account toegestaan
+					return new JsonResponse(['success' => false]);
+				}
 
-				$webPushRepository->save($item);
+				$subscription = $webPushRepository->nieuw();
+				$subscription->clientEndpoint = $endpoint;
+				$subscription->clientKeys = json_encode($keys);
+
+				$webPushRepository->save($subscription);
 				return new JsonResponse(['success' => true]);
 			case 'PUT':
 				$endpoint = $request->request->get('endpoint');
 				$keys = $request->request->get('keys');
 
-				$item = $webPushRepository->findOneBy([
-					'uid' => LoginService::getUid(),
+				$subscription = $webPushRepository->findOneBy([
+					'client_endpoint' => $endpoint,
 				]);
-				$item->clientEndpoint = $endpoint;
-				$item->clientKeys = json_encode($keys);
+				$subscription->clientKeys = json_encode($keys);
 
-				$webPushRepository->save($item);
+				$webPushRepository->save($subscription);
 				return new JsonResponse(['success' => true]);
 			case 'DELETE':
-				$item = $webPushRepository->findOneBy([
-					'uid' => LoginService::getUid(),
+				$endpoint = $request->request->get('endpoint');
+
+				$subscription = $webPushRepository->findOneBy([
+					'client_endpoint' => $endpoint,
 				]);
 
-				$webPushRepository->remove($item);
+				$webPushRepository->remove($subscription);
 				return new JsonResponse(['success' => true]);
 			default:
 				return new JsonResponse(['success' => false]);

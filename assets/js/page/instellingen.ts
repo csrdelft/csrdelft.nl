@@ -97,6 +97,7 @@ const pushDeabboneer = async () => {
 		headers: {
 			'Content-Type': 'application/json',
 		},
+		body: JSON.stringify({ endpoint: subscription.endpoint }),
 	})
 		.then((response) => {
 			if (!response.ok) {
@@ -186,9 +187,6 @@ export const instellingOpslaan = async (ev: Event) => {
 
 	if (href.includes('meldingPush')) {
 		const antwoord = /meldingPush\/(\w+)/g.exec(href);
-		console.log('🚀 -------------------------------------------🚀');
-		console.log('🚀 ~ instellingOpslaan ~ antwoord:', antwoord[1]);
-		console.log('🚀 -------------------------------------------🚀');
 		await pushMeldingenVeranderd(antwoord[1]);
 	}
 
