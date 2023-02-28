@@ -34,9 +34,14 @@ class WebPushController extends AbstractController
 				$webPushRepository->save($item);
 				return new JsonResponse(['success' => true]);
 			case 'PUT':
-				$item = $webPushRepository->nieuw();
-				$item->clientEndpoint = '';
-				$item->clientKeys = '';
+				$endpoint = $request->request->get('endpoint');
+				$keys = $request->request->get('keys');
+
+				$item = $webPushRepository->findOneBy([
+					'uid' => LoginService::getUid(),
+				]);
+				$item->clientEndpoint = $endpoint;
+				$item->clientKeys = json_encode($keys);
 
 				$webPushRepository->save($item);
 				return new JsonResponse(['success' => true]);

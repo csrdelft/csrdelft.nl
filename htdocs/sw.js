@@ -57,42 +57,76 @@ self.addEventListener('fetch', (event) => {
 });
 
 // Laat een notificatie zien als het een bericht krijgt van de WebPush API
-self.addEventListener('push', (e) => {
-	const data = e.data.json();
-	self.registration.showNotification(data.title, {
-		body: data.body,
-		icon: '/favicon.ico',
-		image: data.image,
-		tag: data.tag,
-		data: data.url,
-	});
+self.addEventListener("push", (event) => {
+    let messageData = event.data.json();
+
+    event.waitUntil(
+        self.registration.showNotification(messageData.title, {
+            tag: messageData.tag,
+            body: messageData.body,
+            icon: "/favicon.ico",
+            image: messageData.imageURL ? messageData.imageURL : undefined,
+            data: messageData.url,
+        })
+    );
 });
 
 // Om de link van het stek bericht in de browser te openen
 self.addEventListener(
-	'notificationclick',
-	function (event) {
-		console.log('On notification click: ', event.notification.tag);
+    "notificationclick",
+    async (event) => {
+        event.notification.close();
 
-		event.notification.close();
-		
-		const url = event.notification.data;
-		event.waitUntil( 
+        const urlToOpen = new URL(event.notification.data, self.location.origin)
+            .href;
+
 			// Check of de pagina open is
-			clients.matchAll().then((matchedClients) => {
-				for (let client of matchedClients) { 
-					if (client.url.indexOf(url) >= 0) { 
-						return client.focus();
-					} 
-				}
+        const promiseChain = clients
+            .matchAll({
+                type: "window",
+                includeUncontrolled: true,
+            })
+            .then((windowClients) => {
+                let matchingClient = null;
+
+                for (let i = 0; i < windowClients.length; i++) {
+                    const windowClient = windowClients[i];
+                    if (windowClient.url === urlToOpen) {
+                        matchingClient = windowClient;
+                        break;
+                    }
+                }
 
 				// Als pagina niet open is, open het
-				return clients.openWindow(url).then(
-				function (client) {
-					client.focus();
-				});
-			})
-		);
-	},
-	false
+                if (matchingClient) {
+                    return matchingClient.focus();
+                } else {
+                    return clients.openWindow(urlToOpen);
+                }
+            });
+
+        event.waitUntil(promiseChain);
+    },
+    false
+);
+
+// Update gegevens in database als de subscription verandert
+self.addEventListener(
+    "pushsubscriptionchange",
+    (event) => {
+        event.waitUntil(
+            swRegistration.pushManager
+                .subscribe(event.oldSubscription.options)
+                .then((subscription) => {
+                    return fetch("/webpush-subscription", {
+                        method: "PUT",
+                        body: JSON.stringify(subscription),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                })
+        );
+    },
+    false
 );
