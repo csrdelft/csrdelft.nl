@@ -13,8 +13,11 @@ use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\WebPushRepository;
 use CsrDelft\service\MailService;
 use CsrDelft\service\security\SuService;
+use Minishlink\WebPush\WebPush;
+use Minishlink\WebPush\Subscription;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -55,6 +58,19 @@ class ForumMeldingenService
 	 * @var Security
 	 */
 	private $security;
+	/**
+	 * @var WebPush
+	 */
+	private $webPush;
+	/**
+	 * @var WebPushRepository
+	 */
+	private $webPushRepository;
+
+	/**
+	 * @var String
+	 */
+	private $applicationServerKey = 'BK6nL-UD-kjzpFWXJ6NFkiPEzUEH4diS2BkXBr4ctRz2NU4nyUWZzxLTF2Dulf5spE4EEYVMY2jNmkXhUBTFz2k';
 
 	public function __construct(
 		Environment $twig,
@@ -64,7 +80,8 @@ class ForumMeldingenService
 		ProfielRepository $profielRepository,
 		LidInstellingenRepository $lidInstellingenRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		ForumDelenMeldingRepository $forumDelenMeldingRepository
+		ForumDelenMeldingRepository $forumDelenMeldingRepository,
+		WebPushRepository $webPushRepository
 	) {
 		$this->suService = $suService;
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
@@ -73,7 +90,21 @@ class ForumMeldingenService
 		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 		$this->profielRepository = $profielRepository;
+		$this->webPushRepository = $webPushRepository;
 		$this->security = $security;
+
+		$auth = [
+			'VAPID' => [
+				'subject' => 'mailto:pubcie@csrdelft.nl',
+				'publicKey' => file_get_contents(
+					__DIR__ . '/../../../data/vapid_public_key.txt'
+				),
+				'privateKey' => file_get_contents(
+					__DIR__ . '/../../../data/vapid_private_key.txt'
+				),
+			],
+		];
+		$this->webPush = new WebPush($auth);
 	}
 
 	public function stuurDraadMeldingen(ForumPost $post)
@@ -118,6 +149,12 @@ class ForumMeldingenService
 				);
 			}
 		}
+
+		/**
+		 * Verstuur alle pushberichten in de wachtrij
+		 * @var MessageSentReport $report
+		 */
+		foreach ($this->webPush->flush() as $report) { continue; }
 	}
 
 	/**
@@ -167,6 +204,12 @@ class ForumMeldingenService
 				'mail/bericht/forumvermeldingmelding.mail.twig'
 			);
 		}
+
+		/**
+		 * Verstuur alle pushberichten in de wachtrij
+		 * @var MessageSentReport $report
+		 */
+		foreach ($this->webPush->flush() as $report) { continue; }
 	}
 
 	/**
@@ -208,6 +251,50 @@ class ForumMeldingenService
 	}
 
 	/**
+	 * Laad push bericht
+	 * 
+	 * @param Account $ontvanger
+	 * @param Profiel $auteur
+	 * @param ForumPost $post
+	 * @param ForumDraad $draad
+	 * @throws LoaderError
+	 * @throws RuntimeError
+	 * @throws SyntaxError
+	 */
+	 private function laadPushBericht(
+		Account $ontvanger,
+		Profiel $auteur,
+		ForumPost $post,
+		ForumDraad $draad
+	) {
+		$subscription = $this->webPushRepository->findOneBy([
+			'uid' => $ontvanger->getUserIdentifier(),
+		]);
+		$keys = json_decode($subscription->clientKeys);
+
+		$this->webPush->queueNotification(
+			Subscription::create([
+				'endpoint' => $subscription->clientEndpoint,
+				'publicKey' => $this->applicationServerKey,
+				'keys' => [
+					'p256dh' => $keys->p256dh,
+					'auth' => $keys->auth,
+				],
+			]),
+			json_encode([
+				'tag' => 'csr-' . $post->post_id,
+				'title' => $draad->titel,
+				'body' =>
+					$auteur->getNaam('civitas') .
+					': ' .
+					str_replace('\r\n', "\n", $post->tekst),
+				'icon' => '/favicon.ico',
+				'url' => $post->getLink(true),
+			])
+		);
+	}
+
+	/**
 	 * Verzendt mail
 	 *
 	 * @param Account $ontvanger
@@ -234,20 +321,36 @@ class ForumMeldingenService
 			$draad,
 			$template
 		) {
-			$bericht = $this->twig->render($template, [
-				'naam' => $ontvanger->profiel->getNaam('civitas'),
-				'auteur' => $auteur->getNaam('civitas'),
-				'postlink' => $post->getLink(true),
-				'titel' => $draad->titel,
-				'tekst' => str_replace('\r\n', "\n", $post->tekst),
-			]);
-
-			$mail = new Mail(
-				$ontvanger->profiel->getEmailOntvanger(),
-				'C.S.R. Forum: nieuwe reactie op ' . $draad->titel,
-				$bericht
+			$wilMeldingViaEmail = $this->lidInstellingenRepository->getInstellingVoorLid(
+				'forum',
+				'meldingEmail',
+				$ontvanger->getUserIdentifier()
 			);
-			$this->mailService->send($mail);
+			if ($wilMeldingViaEmail === 'ja') {
+				$bericht = $this->twig->render($template, [
+					'naam' => $ontvanger->profiel->getNaam('civitas'),
+					'auteur' => $auteur->getNaam('civitas'),
+					'postlink' => $post->getLink(true),
+					'titel' => $draad->titel,
+					'tekst' => str_replace('\r\n', "\n", $post->tekst),
+				]);
+
+				$mail = new Mail(
+					$ontvanger->profiel->getEmailOntvanger(),
+					'C.S.R. Forum: nieuwe reactie op ' . $draad->titel,
+					$bericht
+				);
+				$this->mailService->send($mail);
+			}
+
+			$wilMeldingViaPush = $this->lidInstellingenRepository->getInstellingVoorLid(
+				'forum',
+				'meldingPush',
+				$ontvanger->getUserIdentifier()
+			);
+			if ($wilMeldingViaPush === 'ja') {
+				$this->laadPushBericht($ontvanger, $auteur, $post, $draad);
+			}
 		});
 	}
 
@@ -284,18 +387,26 @@ class ForumMeldingenService
 			$auteur,
 			$post
 		) {
-			$bericht = $this->twig->render(
-				'mail/bericht/forumdeelmelding.mail.twig',
-				[
-					'naam' => $ontvanger->profiel->getNaam('civitas'),
-					'auteur' => $auteur->getNaam('civitas'),
-					'postlink' => $post->getLink(true),
-					'titel' => $draad->titel,
-					'forumdeel' => $deel->titel,
-					'tekst' => str_replace('\r\n', "\n", $post->tekst),
-				]
+			if (!$draad->magMeldingKrijgen()) { return; }
+
+			$wilMeldingViaEmail = $this->lidInstellingenRepository->getInstellingVoorLid(
+				'forum',
+				'meldingEmail',
+				$ontvanger->getUserIdentifier()
 			);
-			if ($draad->magMeldingKrijgen()) {
+			if ($wilMeldingViaEmail === 'ja') {
+				$bericht = $this->twig->render(
+					'mail/bericht/forumdeelmelding.mail.twig',
+					[
+						'naam' => $ontvanger->profiel->getNaam('civitas'),
+						'auteur' => $auteur->getNaam('civitas'),
+						'postlink' => $post->getLink(true),
+						'titel' => $draad->titel,
+						'forumdeel' => $deel->titel,
+						'tekst' => str_replace('\r\n', "\n", $post->tekst),
+					]
+				);
+
 				$mail = new Mail(
 					$ontvanger->profiel->getEmailOntvanger(),
 					'C.S.R. Forum: nieuw draadje in ' .
@@ -305,6 +416,15 @@ class ForumMeldingenService
 					$bericht
 				);
 				$this->mailService->send($mail);
+			}
+
+			$wilMeldingViaPush = $this->lidInstellingenRepository->getInstellingVoorLid(
+				'forum',
+				'meldingPush',
+				$ontvanger->getUserIdentifier()
+			);
+			if ($wilMeldingViaPush === 'ja') {
+				$this->laadPushBericht($ontvanger, $auteur, $post, $draad);
 			}
 		});
 	}
@@ -337,5 +457,11 @@ class ForumMeldingenService
 				$this->stuurDeelMelding($account, $auteur, $post, $draad, $deel);
 			}
 		}
+
+		/**
+		 * Verstuur alle pushberichten in de wachtrij
+		 * @var MessageSentReport $report
+		 */
+		foreach ($this->webPush->flush() as $report) { continue; }
 	}
 }
