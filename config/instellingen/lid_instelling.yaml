@@ -190,17 +190,29 @@ instellingen:
       default: 'boven bericht'
       beschrijving: 'Weergave van fotos op het forum.'
     meldingStandaard:
-      titel: 'E-mail bij vermelding'
+      titel: 'Bericht bij citeren/vermelding'
       type: Enumeration
       opties: ['ja', 'nee']
       default: 'ja'
-      beschrijving: 'Ontvang een e-mail als iemand u noemt of citeert in een draadje, ook in en uit te schakelen per draadje.'
+      beschrijving: 'Ontvang een melding als iemand u noemt of citeert in een draadje, ook in en uit te schakelen per draadje.'
     meldingEigenDraad:
-      titel: 'Meldingen voor eigen draadjes'
+      titel: 'Berichten voor eigen draadjes'
       type: Enumeration
       opties: ['ja', 'nee']
       default: 'ja'
-      beschrijving: 'Zet meldingen voor draadjes die u maakt standaard aan.'
+      beschrijving: 'Zet berichten voor draadjes die u maakt standaard aan.'
+    meldingEmail:
+      titel: 'Berichten via e-mail'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'ja'
+      beschrijving: 'Ontvang berichten via de e-mail.'
+    meldingPush:
+      titel: 'Berichten via pushbericht'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'nee'
+      beschrijving: 'Ontvang berichten via pushbericht op uw apparaten.'
   fotoalbum:
     tag_suggestions:
       titel: 'Etiket suggesties'
