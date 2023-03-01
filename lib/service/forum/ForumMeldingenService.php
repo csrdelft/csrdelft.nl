@@ -154,7 +154,9 @@ class ForumMeldingenService
 		 * Verstuur alle pushberichten in de wachtrij
 		 * @var MessageSentReport $report
 		 */
-		foreach ($this->webPush->flush() as $report) { continue; }
+		foreach ($this->webPush->flush() as $report) {
+			continue;
+		}
 	}
 
 	/**
@@ -209,7 +211,9 @@ class ForumMeldingenService
 		 * Verstuur alle pushberichten in de wachtrij
 		 * @var MessageSentReport $report
 		 */
-		foreach ($this->webPush->flush() as $report) { continue; }
+		foreach ($this->webPush->flush() as $report) {
+			continue;
+		}
 	}
 
 	/**
@@ -252,7 +256,7 @@ class ForumMeldingenService
 
 	/**
 	 * Laad push bericht
-	 * 
+	 *
 	 * @param Account $ontvanger
 	 * @param Profiel $auteur
 	 * @param ForumPost $post
@@ -261,7 +265,7 @@ class ForumMeldingenService
 	 * @throws RuntimeError
 	 * @throws SyntaxError
 	 */
-	 private function laadPushBericht(
+	private function laadPushBericht(
 		Account $ontvanger,
 		Profiel $auteur,
 		ForumPost $post,
@@ -387,7 +391,9 @@ class ForumMeldingenService
 			$auteur,
 			$post
 		) {
-			if (!$draad->magMeldingKrijgen()) { return; }
+			if (!$draad->magMeldingKrijgen()) {
+				return;
+			}
 
 			$wilMeldingViaEmail = $this->lidInstellingenRepository->getInstellingVoorLid(
 				'forum',
@@ -462,6 +468,8 @@ class ForumMeldingenService
 		 * Verstuur alle pushberichten in de wachtrij
 		 * @var MessageSentReport $report
 		 */
-		foreach ($this->webPush->flush() as $report) { continue; }
+		foreach ($this->webPush->flush() as $report) {
+			continue;
+		}
 	}
 }
