@@ -58,30 +58,30 @@ const pushAbboneer = async () => {
 	);
 
 	if (subscription) {
-		await fetch('/webpush-subscription', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(subscription),
-		})
-			.then((response) => {
+		try {
+			
+			const response = await fetch('/push-abonnement', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(subscription),
+			})
 				if (!response.ok) {
 					throw new Error('Bad status code from server.');
 				}
-
-				return response.json();
-			})
-			.then((responseData) => {
-				if (!(responseData && responseData.success)) {
+				
+				const data:{success: boolean} = await response.json();
+				if (!(data && data.success)) {
 					throw new Error('Bad response from server.');
 				}
-			})
-			.catch(async () => {
-				await subscription?.unsubscribe();
-			});
-
-		console.info('Successfully subscribed to push notifications.');
+				
+				console.info('Successfully subscribed to push notifications.');
+		} catch (error) {
+			await subscription?.unsubscribe();
+			throw error;
+				
+		}
 	}
 };
 const pushDeabboneer = async () => {
@@ -92,25 +92,22 @@ const pushDeabboneer = async () => {
 		(await registration?.pushManager.getSubscription()) ?? null;
 	if (!subscription) throw new Error('No existing subscription');
 
-	await fetch('/webpush-subscription', {
+const response =	await fetch('/push-abonnement', {
 		method: 'DELETE',
 		headers: {
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify({ endpoint: subscription.endpoint }),
 	})
-		.then((response) => {
+
 			if (!response.ok) {
 				throw new Error('Bad status code from server.');
 			}
 
-			return response.json();
-		})
-		.then((responseData) => {
-			if (!(responseData && responseData.success)) {
+			const data:{success: boolean} = await response.json();
+			if (!(data && data.success)) {
 				throw new Error('Bad response from server.');
 			}
-		});
 
 	const existingSubscription = await subscription?.unsubscribe();
 	if (existingSubscription) {
@@ -120,11 +117,9 @@ const pushDeabboneer = async () => {
 const pushMeldingenVeranderd = async (ant: string) => {
 	switch (ant) {
 		case 'ja':
-			await pushAbboneer();
-			break;
+			return pushAbboneer();
 		case 'nee':
-			await pushDeabboneer();
-			break;
+return  pushDeabboneer();
 	}
 };
 
@@ -185,16 +180,23 @@ export const instellingOpslaan = async (ev: Event) => {
 		throw new Error('Geen url gevonden voor instelling');
 	}
 
-	if (href.includes('meldingPush')) {
-		const antwoord = /meldingPush\/(\w+)/g.exec(href);
-		await pushMeldingenVeranderd(antwoord[1]);
+	try {
+		
+		if (href.includes('meldingPush')) {
+			const antwoord = /meldingPush\/(\w+)/g.exec(href);
+
+			await pushMeldingenVeranderd(antwoord[1]);
+		}
+		
+		await axios.post(href, { waarde });
+		
+		instellingVeranderd();
+		
+		input.classList.remove('loading');
+		
+	} catch (error) {
+console.error(error);
+
 	}
-
-	await axios.post(href, { waarde });
-
-	instellingVeranderd();
-
-	input.classList.remove('loading');
-
 	return false;
 };

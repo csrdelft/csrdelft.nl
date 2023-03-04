@@ -118,7 +118,7 @@ self.addEventListener(
             swRegistration.pushManager
                 .subscribe(event.oldSubscription.options)
                 .then((subscription) => {
-                    return fetch("/webpush-subscription", {
+                    return fetch("/push-abonnement", {
                         method: "PUT",
                         body: JSON.stringify(subscription),
                         headers: {

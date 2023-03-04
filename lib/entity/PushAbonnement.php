@@ -32,23 +32,16 @@ class PushAbonnement
 	public $uid;
 
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\security\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 * @var string
+	 * @ORM\Column(type="string")
+	 * @Serializer\Groups("datatable")
 	 */
-	public $profiel;
+	public $client_endpoint;
 
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
 	 * @Serializer\Groups("datatable")
 	 */
-	public $clientEndpoint;
-
-	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $clientKeys;
+	public $client_keys;
 }
