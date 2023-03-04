@@ -265,6 +265,15 @@ class LidInstellingenRepository extends AbstractRepository
 			'instelling' => $id,
 			'profiel' => $this->getUid(),
 		]);
+
+		if ($instelling == null) {
+			$instelling = new LidInstelling();
+			$instelling->module = $module;
+			$instelling->instelling = $id;
+			$instelling->profiel = $this->loginService->_getAccount()->profiel;
+			$this->_em->persist($instelling);
+		}
+
 		$instelling->waarde = $waarde;
 
 		$this->update($instelling);
