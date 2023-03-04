@@ -30,8 +30,8 @@ class PushAbonnementRepository extends AbstractRepository
 	{
 		$item = new PushAbonnement();
 		$item->uid = LoginService::getUid();
-		$item->clientEndpoint = null;
-		$item->clientKeys = null;
+		$item->client_endpoint = null;
+		$item->client_keys = null;
 		return $item;
 	}
 }

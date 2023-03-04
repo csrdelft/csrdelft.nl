@@ -274,11 +274,11 @@ class ForumMeldingenService
 		$subscription = $this->pushAbonnementRepository->findOneBy([
 			'uid' => $ontvanger->getUserIdentifier(),
 		]);
-		$keys = json_decode($subscription->clientKeys);
+		$keys = json_decode($subscription->client_keys);
 
 		$this->webPush->queueNotification(
 			Subscription::create([
-				'endpoint' => $subscription->clientEndpoint,
+				'endpoint' => $subscription->client_endpoint,
 				'publicKey' => $this->applicationServerKey,
 				'keys' => [
 					'p256dh' => $keys->p256dh,
