@@ -67,11 +67,6 @@ class ForumMeldingenService
 	 */
 	private $pushAbonnementRepository;
 
-	/**
-	 * @var String
-	 */
-	private $applicationServerKey = 'BK6nL-UD-kjzpFWXJ6NFkiPEzUEH4diS2BkXBr4ctRz2NU4nyUWZzxLTF2Dulf5spE4EEYVMY2jNmkXhUBTFz2k';
-
 	public function __construct(
 		Environment $twig,
 		Security $security,
@@ -95,13 +90,9 @@ class ForumMeldingenService
 
 		$auth = [
 			'VAPID' => [
-				'subject' => 'mailto:pubcie@csrdelft.nl',
-				'publicKey' => file_get_contents(
-					__DIR__ . '/../../../data/vapid_public_key.txt'
-				),
-				'privateKey' => file_get_contents(
-					__DIR__ . '/../../../data/vapid_private_key.txt'
-				),
+				'subject' => $_ENV['VAPID_SUBJECT'],
+				'publicKey' => $_ENV['VAPID_PUBLIC_KEY'],
+				'privateKey' => $_ENV['VAPID_PRIVATE_KEY'],
 			],
 		];
 		$this->webPush = new WebPush($auth);
@@ -274,12 +265,18 @@ class ForumMeldingenService
 		$subscription = $this->pushAbonnementRepository->findOneBy([
 			'uid' => $ontvanger->getUserIdentifier(),
 		]);
+		if (!$subscription) {
+			throw new RuntimeError(
+				'No subscription found for ' . $ontvanger->getUserIdentifier()
+			);
+		}
+
 		$keys = json_decode($subscription->client_keys);
 
 		$this->webPush->queueNotification(
 			Subscription::create([
 				'endpoint' => $subscription->client_endpoint,
-				'publicKey' => $this->applicationServerKey,
+				'publicKey' => $_ENV['VAPID_PUBLIC_KEY'],
 				'keys' => [
 					'p256dh' => $keys->p256dh,
 					'auth' => $keys->auth,

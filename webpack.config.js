@@ -9,6 +9,7 @@ const { VueLoaderPlugin } = require('vue-loader');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = (env, argv) => {
 	let styleEntries = {
@@ -117,6 +118,9 @@ module.exports = (env, argv) => {
 			}),
 			new MomentLocalesPlugin({
 				localesToKeep: ['nl'],
+			}),
+			new Dotenv({
+				path: env.goal ? `./.env.${env.goal}` : './.env',
 			}),
 		],
 		module: {

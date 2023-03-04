@@ -25,8 +25,7 @@ const urlBase64ToUint8Array = (base64String: string) => {
 	return outputArray;
 };
 
-const applicationServerKey =
-	'BK6nL-UD-kjzpFWXJ6NFkiPEzUEH4diS2BkXBr4ctRz2NU4nyUWZzxLTF2Dulf5spE4EEYVMY2jNmkXhUBTFz2k';
+const applicationServerKey = process.env.VAPID_PUBLIC_KEY;
 let isPushAvailable = false;
 
 const pushAbboneer = async () => {
@@ -59,28 +58,26 @@ const pushAbboneer = async () => {
 
 	if (subscription) {
 		try {
-			
 			const response = await fetch('/push-abonnement', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify(subscription),
-			})
-				if (!response.ok) {
-					throw new Error('Bad status code from server.');
-				}
-				
-				const data:{success: boolean} = await response.json();
-				if (!(data && data.success)) {
-					throw new Error('Bad response from server.');
-				}
-				
-				console.info('Successfully subscribed to push notifications.');
+			});
+			if (!response.ok) {
+				throw new Error('Bad status code from server.');
+			}
+
+			const data: { success: boolean } = await response.json();
+			if (!(data && data.success)) {
+				throw new Error('Bad response from server.');
+			}
+
+			console.info('Successfully subscribed to push notifications.');
 		} catch (error) {
 			await subscription?.unsubscribe();
 			throw error;
-				
 		}
 	}
 };
@@ -92,22 +89,22 @@ const pushDeabboneer = async () => {
 		(await registration?.pushManager.getSubscription()) ?? null;
 	if (!subscription) throw new Error('No existing subscription');
 
-const response =	await fetch('/push-abonnement', {
+	const response = await fetch('/push-abonnement', {
 		method: 'DELETE',
 		headers: {
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify({ endpoint: subscription.endpoint }),
-	})
+	});
 
-			if (!response.ok) {
-				throw new Error('Bad status code from server.');
-			}
+	if (!response.ok) {
+		throw new Error('Bad status code from server.');
+	}
 
-			const data:{success: boolean} = await response.json();
-			if (!(data && data.success)) {
-				throw new Error('Bad response from server.');
-			}
+	const data: { success: boolean } = await response.json();
+	if (!(data && data.success)) {
+		throw new Error('Bad response from server.');
+	}
 
 	const existingSubscription = await subscription?.unsubscribe();
 	if (existingSubscription) {
@@ -119,7 +116,7 @@ const pushMeldingenVeranderd = async (ant: string) => {
 		case 'ja':
 			return pushAbboneer();
 		case 'nee':
-return  pushDeabboneer();
+			return pushDeabboneer();
 	}
 };
 
@@ -181,22 +178,19 @@ export const instellingOpslaan = async (ev: Event) => {
 	}
 
 	try {
-		
 		if (href.includes('meldingPush')) {
 			const antwoord = /meldingPush\/(\w+)/g.exec(href);
 
 			await pushMeldingenVeranderd(antwoord[1]);
 		}
-		
-		await axios.post(href, { waarde });
-		
-		instellingVeranderd();
-		
-		input.classList.remove('loading');
-		
-	} catch (error) {
-console.error(error);
 
+		await axios.post(href, { waarde });
+
+		instellingVeranderd();
+
+		input.classList.remove('loading');
+	} catch (error) {
+		console.error(error);
 	}
 	return false;
 };
