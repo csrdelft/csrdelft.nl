@@ -265,7 +265,7 @@ class ForumMeldingenService
 	 * @throws RuntimeError
 	 * @throws SyntaxError
 	 */
-	private function laadPushBericht(
+	private function stuurPushBericht(
 		Account $ontvanger,
 		Profiel $auteur,
 		ForumPost $post,
@@ -353,7 +353,7 @@ class ForumMeldingenService
 				$ontvanger->getUserIdentifier()
 			);
 			if ($wilMeldingViaPush === 'ja') {
-				$this->laadPushBericht($ontvanger, $auteur, $post, $draad);
+				$this->stuurPushBericht($ontvanger, $auteur, $post, $draad);
 			}
 		});
 	}
@@ -430,7 +430,7 @@ class ForumMeldingenService
 				$ontvanger->getUserIdentifier()
 			);
 			if ($wilMeldingViaPush === 'ja') {
-				$this->laadPushBericht($ontvanger, $auteur, $post, $draad);
+				$this->stuurPushBericht($ontvanger, $auteur, $post, $draad);
 			}
 		});
 	}
