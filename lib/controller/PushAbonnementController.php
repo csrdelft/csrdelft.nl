@@ -26,7 +26,7 @@ class PushAbonnementController extends AbstractController
 		$keys = $request->request->get('keys');
 
 		$subscription = $pushAbonnementRepository->findOneBy([
-			'clientEndpoint' => $endpoint,
+			'client_endpoint' => $endpoint,
 		]);
 		if ($subscription) {
 			// Voor nu is er maar een subscription per account toegestaan
@@ -58,6 +58,10 @@ class PushAbonnementController extends AbstractController
 		$subscription = $pushAbonnementRepository->findOneBy([
 			'client_endpoint' => $endpoint,
 		]);
+		if (!$subscription) {
+			return new JsonResponse(['success' => false]);
+		}
+
 		$subscription->client_keys = json_encode($keys);
 
 		$pushAbonnementRepository->save($subscription);
@@ -80,6 +84,9 @@ class PushAbonnementController extends AbstractController
 		$subscription = $pushAbonnementRepository->findOneBy([
 			'client_endpoint' => $endpoint,
 		]);
+		if (!$subscription) {
+			return new JsonResponse(['success' => false]);
+		}
 
 		$pushAbonnementRepository->remove($subscription);
 		return new JsonResponse(['success' => true]);
