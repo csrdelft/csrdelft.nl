@@ -61,14 +61,14 @@ i.fab {
 	cursor: default;
 }
 
-.forum-header,
 .forum-footer {
-	.form-group {
-		margin-bottom: 0;
-	}
+	display: flex;
+	width: 100%;
 
-	h1 {
-		width: 100%;
+	a {
+		display: flex;
+		flex-direction: column;
+		max-width: 50%;
 	}
 }
 

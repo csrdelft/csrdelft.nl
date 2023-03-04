@@ -8,7 +8,11 @@
 </h2>
 
 <div class="list-group list-group-flush"
-	data-delen-list="{{ getForumDradenIds(draden) }}"
+	{# de lijst van draden #}
+	data-draden-list="{{ getForumDradenData(draden) }}"
+	{# de URL voor de vorige/volgende pagina knoppen in draden #}
+	data-draden-vorige-url=""
+	data-draden-volgende-url="{{ url('csrdelft_forum_forum_recent_1') }}"
 >
 {% for draad in draden %}
 	{% if lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen' %}

@@ -248,11 +248,10 @@ export const laadForumDraden = () => {
 								String(vorigeDraad.id)
 							) + window.location.hash
 						);
+						vorigOnderwerpButton.querySelector('strong').textContent =
+							vorigeDraad.titel;
 					} else {
-						vorigOnderwerpButton.setAttribute(
-							'href',
-							window.location.origin + '/forum/recent' + window.location.hash
-						);
+						vorigOnderwerpButton.setAttribute('href', vorigeURL);
 					}
 
 					if (volgendeDraad) {
@@ -263,11 +262,10 @@ export const laadForumDraden = () => {
 								String(volgendeDraad.id)
 							) + window.location.hash
 						);
+						volgendOnderwerpButton.querySelector('strong').textContent =
+							volgendeDraad.titel;
 					} else {
-						volgendOnderwerpButton.setAttribute(
-							'href',
-							window.location.origin + '/forum/recent' + window.location.hash
-						);
+						volgendOnderwerpButton.setAttribute('href', volgendeURL);
 					}
 				}
 			}
