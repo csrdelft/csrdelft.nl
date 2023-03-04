@@ -120,7 +120,7 @@ module.exports = (env, argv) => {
 				localesToKeep: ['nl'],
 			}),
 			new Dotenv({
-				path: env.goal ? `./.env.${env.goal}` : './.env',
+				path: './.env.local',
 			}),
 		],
 		module: {

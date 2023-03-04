@@ -2,8 +2,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "yarn run development",
-		"development": "cross-env webpack --progress --mode=development --env goal=local",
-		"watch": "cross-env webpack --watch --progress --mode=development --env goal=local",
+		"development": "cross-env webpack --progress --mode=development",
+		"watch": "cross-env webpack --watch --progress --mode=development",
 		"watch-poll": "yarn run watch",
 		"hot": "cross-env webpack-dev-server --inline --hot",
 		"prod": "yarn run production",
