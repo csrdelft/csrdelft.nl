@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import axios from 'axios';
 import { domUpdate } from '../lib/domUpdate';
-import { forumCiteren, laadForumIds, slaOpForumIds } from '../lib/forum';
+import { forumCiteren, laadForumDraden, slaOpForumDraden } from '../lib/forum';
 import hoverintent from 'hoverintent';
 import { select, selectAll } from '../lib/dom';
 
@@ -64,8 +64,10 @@ selectAll('.auteur').forEach((auteur) => {
 	);
 });
 
-slaOpForumIds('section.forum-deel');
-laadForumIds();
+setTimeout(async () => {
+	await slaOpForumDraden('section.forum-deel');
+	laadForumDraden();
+}, 1000);
 
 for (const citeerKnop of selectAll<HTMLElement>('a.citeren')) {
 	citeerKnop.addEventListener('click', () =>
