@@ -10,9 +10,9 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * De informatie die nodig is voor de web-push notificaties.
  *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\WebPushRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\PushAbonnementRepository")
  */
-class WebPush
+class PushAbonnement
 {
 	/**
 	 * Primary key
@@ -30,6 +30,13 @@ class WebPush
 	 * @Serializer\Groups("datatable")
 	 */
 	public $uid;
+
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\security\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
 
 	/**
 	 * @var string

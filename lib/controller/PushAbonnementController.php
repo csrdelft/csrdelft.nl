@@ -3,23 +3,23 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\repository\WebPushRepository;
+use CsrDelft\repository\PushAbonnementRepository;
 use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WebPushController extends AbstractController
+class PushAbonnementController extends AbstractController
 {
 	/**
-	 * @param WebPushRepository $webPushRepository
+	 * @param PushAbonnementRepository $pushAbonnementRepository
 	 * @param Request $request
 	 * @return JsonResponse
 	 * @Route("/webpush-subscription", methods={"POST", "PUT", "DELETE"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function subscription(
-		WebPushRepository $webPushRepository,
+		PushAbonnementRepository $pushAbonnementRepository,
 		Request $request
 	) {
 		switch ($request->getMethod()) {
@@ -27,7 +27,7 @@ class WebPushController extends AbstractController
 				$endpoint = $request->request->get('endpoint');
 				$keys = $request->request->get('keys');
 
-				$subscription = $webPushRepository->findOneBy([
+				$subscription = $pushAbonnementRepository->findOneBy([
 					'clientEndpoint' => $endpoint,
 				]);
 				if ($subscription) {
@@ -35,31 +35,31 @@ class WebPushController extends AbstractController
 					return new JsonResponse(['success' => false]);
 				}
 
-				$subscription = $webPushRepository->nieuw();
+				$subscription = $pushAbonnementRepository->nieuw();
 				$subscription->clientEndpoint = $endpoint;
 				$subscription->clientKeys = json_encode($keys);
 
-				$webPushRepository->save($subscription);
+				$pushAbonnementRepository->save($subscription);
 				return new JsonResponse(['success' => true]);
 			case 'PUT':
 				$endpoint = $request->request->get('endpoint');
 				$keys = $request->request->get('keys');
 
-				$subscription = $webPushRepository->findOneBy([
+				$subscription = $pushAbonnementRepository->findOneBy([
 					'client_endpoint' => $endpoint,
 				]);
 				$subscription->clientKeys = json_encode($keys);
 
-				$webPushRepository->save($subscription);
+				$pushAbonnementRepository->save($subscription);
 				return new JsonResponse(['success' => true]);
 			case 'DELETE':
 				$endpoint = $request->request->get('endpoint');
 
-				$subscription = $webPushRepository->findOneBy([
+				$subscription = $pushAbonnementRepository->findOneBy([
 					'client_endpoint' => $endpoint,
 				]);
 
-				$webPushRepository->remove($subscription);
+				$pushAbonnementRepository->remove($subscription);
 				return new JsonResponse(['success' => true]);
 			default:
 				return new JsonResponse(['success' => false]);

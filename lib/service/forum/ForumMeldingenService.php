@@ -13,7 +13,7 @@ use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\repository\WebPushRepository;
+use CsrDelft\repository\PushAbonnementRepository;
 use CsrDelft\service\MailService;
 use CsrDelft\service\security\SuService;
 use Minishlink\WebPush\WebPush;
@@ -63,9 +63,9 @@ class ForumMeldingenService
 	 */
 	private $webPush;
 	/**
-	 * @var WebPushRepository
+	 * @var PushAbonnementRepository
 	 */
-	private $webPushRepository;
+	private $pushAbonnementRepository;
 
 	/**
 	 * @var String
@@ -81,7 +81,7 @@ class ForumMeldingenService
 		LidInstellingenRepository $lidInstellingenRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
 		ForumDelenMeldingRepository $forumDelenMeldingRepository,
-		WebPushRepository $webPushRepository
+		PushAbonnementRepository $pushAbonnementRepository
 	) {
 		$this->suService = $suService;
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
@@ -90,7 +90,7 @@ class ForumMeldingenService
 		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 		$this->profielRepository = $profielRepository;
-		$this->webPushRepository = $webPushRepository;
+		$this->pushAbonnementRepository = $pushAbonnementRepository;
 		$this->security = $security;
 
 		$auth = [
@@ -271,7 +271,7 @@ class ForumMeldingenService
 		ForumPost $post,
 		ForumDraad $draad
 	) {
-		$subscription = $this->webPushRepository->findOneBy([
+		$subscription = $this->pushAbonnementRepository->findOneBy([
 			'uid' => $ontvanger->getUserIdentifier(),
 		]);
 		$keys = json_decode($subscription->clientKeys);
