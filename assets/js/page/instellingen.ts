@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { select } from '../lib/dom';
+import { urlBase64ToUint8Array } from '../lib/util';
 
 /**
  * Code voor de /instellingen pagina
@@ -8,21 +9,6 @@ const instellingVeranderd = () => {
 	document
 		.querySelectorAll('.instellingen-bericht')
 		.forEach((el) => el.classList.remove('d-none'));
-};
-
-const urlBase64ToUint8Array = (base64String: string) => {
-	const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-	const base64 = (base64String + padding)
-		.replace(/\-/g, '+')
-		.replace(/_/g, '/');
-
-	const rawData = window.atob(base64);
-	const outputArray = new Uint8Array(rawData.length);
-
-	for (let i = 0; i < rawData.length; ++i) {
-		outputArray[i] = rawData.charCodeAt(i);
-	}
-	return outputArray;
 };
 
 const applicationServerKey = process.env.VAPID_PUBLIC_KEY;
