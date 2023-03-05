@@ -40,5 +40,4 @@ export const instellingOpslaan = async (ev: Event) => {
 
 	input.classList.remove('loading');
 
-	return false;
 };
