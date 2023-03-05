@@ -8,7 +8,11 @@
 </h2>
 
 <div class="list-group list-group-flush"
-	data-delen-list="{{ getForumDradenIds(draden) }}"
+	{# de lijst van draden #}
+	data-draden-list="{{ getForumDradenData(draden) }}"
+	{# de URL voor de vorige/volgende pagina knoppen in draden #}
+	data-draden-vorige-url="{{ url('csrdelft_forum_forum_recent') }}"
+	data-draden-volgende-url="{{ url('csrdelft_forum_forum_recent_1') }}"
 >
 {% for draad in draden %}
 	{% if lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen' %}
@@ -27,12 +31,12 @@
 					{{ draad.laatst_gewijzigd | zijbalk_date_format }}
 				</span>
 				{% if draad.belangrijk %}
-			{{ icon('star', null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
-		{% elseif draad.plakkerig %}
-			{{ icon('note-sticky', null, 'Dit onderwerp is plakkerig, het blijft bovenaan') }}
-		{% elseif draad.gesloten %}
-			{{ icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
-		{% endif %}
+					{{ icon('star', null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
+				{% elseif draad.plakkerig %}
+					{{ icon('note-sticky', null, 'Dit onderwerp is plakkerig, het blijft bovenaan') }}
+				{% elseif draad.gesloten %}
+					{{ icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
+				{% endif %}
 				{{ draad.titel | raw }}
 			</p>
 			{% if draad.aantalOngelezenPosts > 0 %}

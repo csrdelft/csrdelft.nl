@@ -2,12 +2,15 @@
 
 namespace CsrDelft\entity\peilingen;
 
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Eisen;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -88,14 +91,14 @@ class Peiling implements DataTableEntry
 	public $sluitingsdatum;
 
 	/**
-	 * @var PeilingOptie[]
+	 * @var PeilingOptie[]|ArrayCollection
 	 * @ORM\OneToMany(targetEntity="PeilingOptie", mappedBy="peiling")
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public $opties;
 
 	/**
-	 * @var PeilingStem[]
+	 * @var PeilingStem[]|ArrayCollection
 	 * @ORM\OneToMany(targetEntity="PeilingStem", mappedBy="peiling")
 	 * @ORM\JoinColumn(name="id", referencedColumnName="peiling_id")
 	 */
@@ -118,11 +121,11 @@ class Peiling implements DataTableEntry
 			return 0;
 		}
 
-		$stemmen = 0;
+		$aantalGestemd = 0;
 		foreach ($this->opties as $optie) {
-			$stemmen += $optie->stemmen;
+			$aantalGestemd += $optie->stemmen;
 		}
-		return $stemmen;
+		return $aantalGestemd;
 	}
 
 	/**
@@ -130,17 +133,16 @@ class Peiling implements DataTableEntry
 	 */
 	public function getHeeftGestemd()
 	{
-		if (!$this->stemmen) {
-			return false;
-		}
+		return (bool) $this->stemmen
+			->matching(Eisen::voorIngelogdeGebruiker())
+			->first();
+	}
 
-		foreach ($this->stemmen as $stem) {
-			if ($stem->uid == LoginService::getUid()) {
-				return true;
-			}
-		}
-
-		return false;
+	public function getStem(Profiel $profiel)
+	{
+		return $this->stemmen
+			->matching(Eisen::voorGebruiker($profiel->uid))
+			->first();
 	}
 
 	/**
@@ -149,8 +151,9 @@ class Peiling implements DataTableEntry
 	 */
 	public function getMagBewerken()
 	{
-		//Elk BASFCie-lid heeft voorlopig peilingbeheerrechten.
-		return LoginService::mag(P_ADMIN . ',bestuur,commissie:BASFCie');
+		return ContainerFacade::getContainer()
+			->get('security')
+			->isGranted('bewerken', $this);
 	}
 
 	/**
@@ -159,8 +162,7 @@ class Peiling implements DataTableEntry
 	 */
 	public function getIsMod()
 	{
-		return LoginService::mag(P_PEILING_MOD) ||
-			LoginService::getUid() == $this->eigenaar;
+		return $this->getMagBewerken();
 	}
 
 	/**
@@ -169,11 +171,9 @@ class Peiling implements DataTableEntry
 	 */
 	public function getMagStemmen()
 	{
-		return LoginService::mag(P_PEILING_VOTE) &&
-			($this->eigenaar == LoginService::getUid() ||
-				empty(trim($this->rechten_stemmen)) ||
-				LoginService::mag($this->rechten_stemmen)) &&
-			$this->isPeilingOpen();
+		return ContainerFacade::getContainer()
+			->get('security')
+			->isGranted('stemmen', $this);
 	}
 
 	/**
@@ -201,7 +201,7 @@ class Peiling implements DataTableEntry
 	/**
 	 * @return bool
 	 */
-	private function isPeilingOpen()
+	public function isPeilingOpen()
 	{
 		return $this->sluitingsdatum == null ||
 			time() < $this->sluitingsdatum->getTimestamp();
@@ -212,7 +212,9 @@ class Peiling implements DataTableEntry
 	 */
 	public function magBekijken()
 	{
-		return LoginService::mag(P_LOGGED_IN);
+		return ContainerFacade::getContainer()
+			->get('security')
+			->isGranted('bekijken', $this);
 	}
 
 	/**

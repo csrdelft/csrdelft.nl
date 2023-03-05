@@ -137,6 +137,14 @@ class InstellingenRepository extends AbstractRepository
 	{
 		// Skip de cache
 		$instelling = $this->findOneBy(['module' => $module, 'instelling' => $id]);
+
+		if ($instelling == null) {
+			$instelling = new Instelling();
+			$instelling->module = $module;
+			$instelling->instelling = $id;
+			$this->_em->persist($instelling);
+		}
+
 		$instelling->waarde = $waarde;
 
 		$this->cache->delete($this->getCacheKey($module, $id));

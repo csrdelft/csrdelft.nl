@@ -192,5 +192,4 @@ export const instellingOpslaan = async (ev: Event) => {
 	} catch (error) {
 		console.error(error);
 	}
-	return false;
 };

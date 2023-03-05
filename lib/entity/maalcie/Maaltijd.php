@@ -10,6 +10,7 @@ use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\fiscaat\CiviProduct;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\DisplayEntity;
@@ -426,5 +427,12 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		} else {
 			return $this->titel ?? '';
 		}
+	}
+
+	public function getAanmelding(Profiel $profiel)
+	{
+		return $this->aanmeldingen
+			->matching(Eisen::voorGebruiker($profiel->uid))
+			->first();
 	}
 }

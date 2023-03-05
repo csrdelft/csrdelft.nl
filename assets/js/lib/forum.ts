@@ -184,19 +184,34 @@ export async function forumCiteren(postId: string): Promise<false> {
 	return false;
 }
 
-export const slaOpForumIds = (parentSelector = 'section.forum-deel') => {
+export const slaOpForumDraden = async (
+	parentSelector = 'section.forum-deel'
+) => {
 	// Sla alle ids van forumDraden uit section.forum-deel (alleen op deelfora) op in localStorage voor previous-next functies
 	try {
-		const forumDeel = select<HTMLElement>(parentSelector);
-		if (forumDeel) {
-			localStorage.setItem('forum_draden', forumDeel.dataset.delenList);
-		}
+		await new Promise<void>((resolve, reject) => {
+			const forumDeel = select<HTMLElement>(parentSelector);
+			if (forumDeel) {
+				localStorage.setItem('forum_draden', forumDeel.dataset.dradenList);
+				localStorage.setItem(
+					'forum_vorige_url',
+					forumDeel.dataset.dradenVorigeUrl
+				);
+				localStorage.setItem(
+					'forum_volgende_url',
+					forumDeel.dataset.dradenVolgendeUrl
+				);
+				resolve();
+			} else {
+				reject('Forum deel sectie niet gevonden');
+			}
+		});
 	} catch (error) {
 		console.error(error);
 	}
 };
 
-export const laadForumIds = () => {
+export const laadForumDraden = () => {
 	// Laad de ids van vorige en volgende forumDraden (alleen op draadjes) uit localStorage voor previous-next functies
 	try {
 		const vorigOnderwerpButton = select<HTMLAnchorElement>('a.vorige-button');
@@ -205,23 +220,25 @@ export const laadForumIds = () => {
 		const onderwerpRegex = /\d+/g;
 
 		if (volgendOnderwerpButton && vorigOnderwerpButton) {
-			const forumDraden = localStorage.getItem('forum_draden');
+			const draden = localStorage.getItem('forum_draden');
+			const vorigeURL = localStorage.getItem('forum_vorige_url');
+			const volgendeURL = localStorage.getItem('forum_volgende_url');
 
-			if (forumDraden) {
+			if (draden) {
 				// Haal id van huidig onderwerp uit de pathname
 				const huidigOnderwerp = window.location.pathname.match(onderwerpRegex);
 
 				if (huidigOnderwerp[0]) {
 					type ForumDraad = { id: number; titel: string };
-					const draden: ForumDraad[] = JSON.parse(forumDraden);
-					const huidigeIndex = draden.findIndex(
+					const dradenArray: ForumDraad[] = JSON.parse(draden);
+					const huidigeIndex = dradenArray.findIndex(
 						(d) => String(d.id) === huidigOnderwerp[0]
 					);
 
 					if (huidigeIndex === -1) throw new Error('Index niet gevonden');
 
-					const vorigeDraad = draden[huidigeIndex - 1];
-					const volgendeDraad = draden[huidigeIndex + 1];
+					const vorigeDraad = dradenArray[huidigeIndex - 1];
+					const volgendeDraad = dradenArray[huidigeIndex + 1];
 
 					if (vorigeDraad) {
 						vorigOnderwerpButton.setAttribute(
@@ -231,11 +248,10 @@ export const laadForumIds = () => {
 								String(vorigeDraad.id)
 							) + window.location.hash
 						);
+						vorigOnderwerpButton.querySelector('strong').textContent =
+							vorigeDraad.titel;
 					} else {
-						vorigOnderwerpButton.setAttribute(
-							'href',
-							window.location.origin + '/forum/recent' + window.location.hash
-						);
+						vorigOnderwerpButton.setAttribute('href', vorigeURL);
 					}
 
 					if (volgendeDraad) {
@@ -246,11 +262,10 @@ export const laadForumIds = () => {
 								String(volgendeDraad.id)
 							) + window.location.hash
 						);
+						volgendOnderwerpButton.querySelector('strong').textContent =
+							volgendeDraad.titel;
 					} else {
-						volgendOnderwerpButton.setAttribute(
-							'href',
-							window.location.origin + '/forum/recent' + window.location.hash
-						);
+						volgendOnderwerpButton.setAttribute('href', volgendeURL);
 					}
 				}
 			}

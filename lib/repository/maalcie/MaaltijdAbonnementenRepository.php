@@ -4,6 +4,7 @@ namespace CsrDelft\repository\maalcie;
 
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -22,21 +23,21 @@ class MaaltijdAbonnementenRepository extends AbstractRepository
 		parent::__construct($registry, MaaltijdAbonnement::class);
 	}
 
-	public function getAbonnementenVoorRepetitie(MaaltijdRepetitie $repetitie)
+	/**
+	 * @param Profiel $lid
+	 * @return MaaltijdAbonnement[]
+	 */
+	public function voorLid(Profiel $lid)
 	{
-		return $this->findBy(['maaltijd_repetitie' => $repetitie]);
+		return $this->findBy(['uid' => $lid->uid]);
 	}
 
-	public function getAbonnement(MaaltijdRepetitie $maaltijdRepetitie, $uid)
+	/**
+	 * @param Profiel $lid
+	 * @return int
+	 */
+	public function countVoorLid(Profiel $lid)
 	{
-		return $this->find([
-			'mlt_repetitie_id' => $maaltijdRepetitie->mlt_repetitie_id,
-			'uid' => $uid,
-		]);
-	}
-
-	public function getHeeftAbonnement(MaaltijdRepetitie $maaltijdRepetitie, $uid)
-	{
-		return $this->getAbonnement($maaltijdRepetitie, $uid) != null;
+		return $this->count(['uid' => $lid->uid]);
 	}
 }

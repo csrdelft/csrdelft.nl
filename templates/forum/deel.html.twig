@@ -59,8 +59,27 @@
 		{{ include('forum/partial/deel_head_buttons.html.twig') }}
 	</header>
 
+	{# de lijst van draden #}
+	{% set forum_draden = getForumDradenData(deel.forumDraden) %}
+	{# de URL voor de vorige/volgende pagina knoppen in draden #}
+	{% if app.request.attributes.get('_route_params').forum_id is defined %}
+		{% set vorigeURL = url(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+		{% set volgendeURL = url(app.request.attributes.get('_route'), {
+			forum_id: app.request.attributes.get('_route_params').forum_id,
+			pagina: app.request.attributes.get('_route_params')['pagina'] + 1
+		}) %}
+	{% else %}
+		{% set vorigeURL = url('csrdelft_forum_forum_recent', {
+			pagina: app.request.attributes.get('_route_params')['pagina']
+		}) %}
+		{% set volgendeURL = url('csrdelft_forum_forum_recent', {
+			pagina: app.request.attributes.get('_route_params')['pagina'] + 1
+		}) %}
+	{% endif %}
 	<section class="forum-deel list-group list-group-flush"
-		data-delen-list="{{ getForumDradenIds(deel.forumDraden) }}"
+		data-draden-list="{{ forum_draden }}"
+		data-draden-vorige-url="{{ vorigeURL }}"
+		data-draden-volgende-url="{{ volgendeURL }}"
 	>
 		{% if not deel.forumDraden %}
 			<div class="list-group-item">Dit forum is nog leeg.</div>

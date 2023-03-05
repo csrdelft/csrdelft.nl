@@ -38,10 +38,6 @@ class MaaltijdAanmeldingenService
 	 */
 	private $entityManager;
 	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
 	 * @var AccessService
 	 */
 	private $accessService;
@@ -49,7 +45,6 @@ class MaaltijdAanmeldingenService
 	public function __construct(
 		EntityManagerInterface $entityManager,
 		AccessService $accessService,
-		AccountRepository $accountRepository,
 		MaaltijdenRepository $maaltijdenRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		CiviSaldoRepository $civiSaldoRepository
@@ -58,7 +53,6 @@ class MaaltijdAanmeldingenService
 		$this->civiSaldoRepository = $civiSaldoRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->entityManager = $entityManager;
-		$this->accountRepository = $accountRepository;
 		$this->accessService = $accessService;
 	}
 
@@ -88,18 +82,14 @@ class MaaltijdAanmeldingenService
 			$this->maaltijdenRepository->sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer) {
-			$this->assertMagAanmelden($maaltijd, $profiel->uid);
+			$this->assertMagAanmelden($maaltijd, $profiel);
 		}
 
-		if ($maaltijd->getIsAangemeld($profiel->uid)) {
+		$aanmelding = $maaltijd->getAanmelding($profiel);
+		if ($aanmelding) {
 			if (!$beheer) {
 				throw new CsrGebruikerException('Al aangemeld');
 			}
-			// aanmelding van lid updaten met aantal gasten door beheerder
-			$aanmelding = $this->maaltijdAanmeldingenRepository->loadAanmelding(
-				$maaltijd->maaltijd_id,
-				$profiel->uid
-			);
 			$verschil = $aantalGasten - $aanmelding->aantal_gasten;
 			$aanmelding->aantal_gasten = $aantalGasten;
 			$aanmelding->laatst_gewijzigd = date_create_immutable();
@@ -133,14 +123,14 @@ class MaaltijdAanmeldingenService
 	 * @param string $uid
 	 * @throws CsrGebruikerException
 	 */
-	public function assertMagAanmelden(Maaltijd $maaltijd, $uid)
+	public function assertMagAanmelden(Maaltijd $maaltijd, Profiel $profiel)
 	{
-		if (!$this->civiSaldoRepository->getSaldo($uid)) {
+		if (!$this->civiSaldoRepository->getSaldo($profiel->uid)) {
 			throw new CsrGebruikerException(
 				'Aanmelden voor maaltijden niet toegestaan, geen CiviSaldo.'
 			);
 		}
-		if (!$this->checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) {
+		if (!$this->checkAanmeldFilter($profiel, $maaltijd->aanmeld_filter)) {
 			throw new CsrGebruikerException(
 				'Niet toegestaan vanwege aanmeldrestrictie: ' .
 					$maaltijd->aanmeld_filter
@@ -155,16 +145,17 @@ class MaaltijdAanmeldingenService
 	}
 
 	/**
-	 * @param string $uid
+	 * @param Profiel $profiel
 	 * @param string $filter
 	 * @return bool Of de gebruiker voldoet aan het filter
-	 * @throws CsrGebruikerException Als de gebruiker niet bestaat
 	 */
-	public function checkAanmeldFilter($uid, $filter)
+	public function checkAanmeldFilter(Profiel $profiel, $filter)
 	{
-		$account = $this->accountRepository->find($uid); // false if account does not exist
+		$account = $profiel->account;
 		if (!$account) {
-			throw new CsrGebruikerException('Lid bestaat niet: $uid =' . $uid);
+			throw new CsrGebruikerException(
+				'Lid bestaat niet: $uid =' . $profiel->uid
+			);
 		}
 		if (empty($filter)) {
 			return true;
@@ -185,12 +176,8 @@ class MaaltijdAanmeldingenService
 		Profiel $profiel,
 		$beheer = false
 	) {
-		if (
-			!$this->maaltijdAanmeldingenRepository->getIsAangemeld(
-				$maaltijd->maaltijd_id,
-				$profiel->uid
-			)
-		) {
+		$aanmelding = $maaltijd->getAanmelding($profiel);
+		if (!$aanmelding) {
 			throw new CsrGebruikerException('Niet aangemeld');
 		}
 		if (
@@ -202,10 +189,6 @@ class MaaltijdAanmeldingenService
 		if (!$beheer && $maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is gesloten');
 		}
-		$aanmelding = $this->maaltijdAanmeldingenRepository->loadAanmelding(
-			$maaltijd->maaltijd_id,
-			$profiel->uid
-		);
 		$this->entityManager->remove($aanmelding);
 		$this->entityManager->flush();
 		$maaltijd->aantal_aanmeldingen =
@@ -273,6 +256,7 @@ class MaaltijdAanmeldingenService
 			return 0;
 		}
 		$aantal = 0;
+		/** @var MaaltijdAanmelding[] $aanmeldingen */
 		$aanmeldingen = [];
 		foreach ($maaltijdenFiltered as $maaltijd) {
 			$aanmeldingen = array_merge(
@@ -282,8 +266,7 @@ class MaaltijdAanmeldingenService
 		}
 		foreach ($aanmeldingen as $aanmelding) {
 			// check filter voor elk aangemeld lid
-			$uid = $aanmelding->uid;
-			if (!$this->checkAanmeldFilter($uid, $filter)) {
+			if (!$this->checkAanmeldFilter($aanmelding->profiel, $filter)) {
 				// verwijder aanmelding indien niet toegestaan
 				$aantal += 1 + $aanmelding->aantal_gasten;
 				$this->entityManager->remove($aanmelding);

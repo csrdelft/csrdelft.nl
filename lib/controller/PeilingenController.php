@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Security\Voter\Entity\PeilingVoter;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\repository\peilingen\PeilingenRepository;
@@ -11,6 +12,7 @@ use CsrDelft\service\PeilingenService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingTable;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,6 +48,8 @@ class PeilingenController extends AbstractController
 		if ($peiling) {
 			$table = new PeilingTable();
 			$table->setSearch($peiling->titel);
+
+			$this->denyAccessUnlessGranted(PeilingVoter::BEWERKEN, $peiling);
 
 			$form = $this->createFormulier(PeilingForm::class, $peiling, [
 				'action' => $this->generateUrl('csrdelft_peilingen_bewerken'),
@@ -123,16 +127,18 @@ class PeilingenController extends AbstractController
 
 		if ($selection) {
 			$peiling = $this->peilingenRepository->retrieveByUUID($selection[0]);
-
-			if (!$this->peilingenRepository->magBewerken($peiling)) {
-				throw new CsrGebruikerException('Je mag deze peiling niet bewerken!');
-			}
 		} else {
 			// Hier is de id in post gezet
 			//			$peiling = new Peiling();
 			$id = $request->request->get('id');
 			$peiling = $this->peilingenRepository->find($id);
 		}
+
+		$this->denyAccessUnlessGranted(
+			PeilingVoter::BEWERKEN,
+			$peiling,
+			'Je mag deze peiling niet bewerken!'
+		);
 
 		$form = $this->createFormulier(PeilingForm::class, $peiling, [
 			'action' => $this->generateUrl('csrdelft_peilingen_bewerken'),
@@ -167,6 +173,8 @@ class PeilingenController extends AbstractController
 		$peiling = $this->peilingenRepository->retrieveByUUID($selection[0]);
 		$removed = new RemoveDataTableEntry($peiling->id, Peiling::class);
 
+		$this->denyAccessUnlessGranted(PeilingVoter::BEWERKEN, $peiling);
+
 		$this->peilingenRepository->delete($peiling);
 
 		return $this->tableData([$removed]);
@@ -178,12 +186,13 @@ class PeilingenController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/peilingen/stem/{id}", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_VOTE)
+	 * @IsGranted("stemmen", subject="peiling")
 	 */
-	public function stem(Request $request, int $id): JsonResponse
+	public function stem(Request $request, Peiling $peiling): JsonResponse
 	{
 		$ids = $request->request->filter('opties', [], FILTER_VALIDATE_INT);
 
-		if ($this->peilingenService->stem($id, $ids, $this->getUid())) {
+		if ($this->peilingenService->stem($peiling, $ids, $this->getProfiel())) {
 			return new JsonResponse(true);
 		} else {
 			return new JsonResponse(false, 400);

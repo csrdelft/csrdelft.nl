@@ -56,12 +56,7 @@ class MaaltijdArchiefService
 		$archief->tijd = $maaltijd->tijd;
 		$archief->prijs = $maaltijd->getPrijs();
 		$archief->aanmeldingen = '';
-		foreach (
-			$this->maaltijdAanmeldingenRepository->getAanmeldingenVoorMaaltijd(
-				$maaltijd
-			)
-			as $aanmelding
-		) {
+		foreach ($maaltijd->aanmeldingen as $aanmelding) {
 			if (!$aanmelding->uid) {
 				$archief->aanmeldingen .= 'gast';
 			} else {

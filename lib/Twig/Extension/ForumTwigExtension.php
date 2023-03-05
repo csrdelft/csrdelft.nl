@@ -56,7 +56,7 @@ class ForumTwigExtension extends AbstractExtension
 			new TwigFunction('getHuidigePagina', [$this, 'getHuidigePagina']),
 			new TwigFunction('getAantalPaginas', [$this, 'getAantalPaginas']),
 			new TwigFunction('getBelangrijkOpties', [$this, 'getBelangrijkOpties']),
-			new TwigFunction('getForumDradenIds', [$this, 'getForumDradenIds']),
+			new TwigFunction('getForumDradenData', [$this, 'getForumDradenData']),
 			new TwigFunction('draadGetAantalPaginas', [
 				$this,
 				'draadGetAantalPaginas',
@@ -92,7 +92,7 @@ class ForumTwigExtension extends AbstractExtension
 		return ForumDradenRepository::$belangrijk_opties;
 	}
 
-	public function getForumDradenIds($forum_draden)
+	public function getForumDradenData($forum_draden)
 	{
 		$ids_from_draden = function (ForumDraad $draad) {
 			return [

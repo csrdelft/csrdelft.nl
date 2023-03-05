@@ -97,7 +97,8 @@ input[type="button"]::-moz-focus-inner {
 	color: transparent !important; // een specifieke knop geeft ook een color mee
 }
 
-.btn.loading {
+.btn.loading,
+.loading + .btn {
 	@extend .btn-loading;
 }
 
