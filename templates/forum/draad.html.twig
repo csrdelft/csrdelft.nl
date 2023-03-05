@@ -108,15 +108,21 @@
 		{% endif %}
 	</section>
 
-	<footer class="d-flex w-full gap-3">
+	<footer class="forum-footer gap-3">
 		{# Als er geen vorig of volgend onderwerp is moet de gebruiker weer terug naar deelforum #}
-		<a href="#" class="btn btn-outline-primary flex-fill vorige-button">
-			{{ icon('angle-left') }}
-			<span>Vorige</span>
+		<a href="#" class="btn btn-outline-primary flex-fill px-3 align-self-start align-items-start vorige-button">
+			<strong class="text-start"></strong>
+			<div>
+				{{ icon('angle-left') }}
+				<span>Vorige</span>
+			</div>
 		</a>
-		<a href="#" class="btn btn-outline-primary flex-fill volgende-button">
-			<span>Volgende</span>
-			{{ icon('angle-right') }}
+		<a href="#" class="btn btn-outline-primary flex-fill px-3 align-self-end align-items-end volgende-button">
+			<strong class="text-end"></strong>
+			<div>
+				<span>Volgende</span>
+				{{ icon('angle-right') }}
+			</div>
 		</a>
 	</footer>
 

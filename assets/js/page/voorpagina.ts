@@ -1,8 +1,10 @@
 import { select, selectAll } from '../lib/dom';
-import { laadForumIds, slaOpForumIds } from '../lib/forum';
+import { laadForumDraden, slaOpForumDraden } from '../lib/forum';
 
-slaOpForumIds('.cell-forum > div');
-laadForumIds();
+setTimeout(async () => {
+	await slaOpForumDraden('.cell-forum > div');
+	laadForumDraden();
+}, 1000);
 
 // Carousel indicators
 const indicatorContainer = select('.carousel-indicators');
