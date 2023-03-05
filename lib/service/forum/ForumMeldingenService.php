@@ -88,6 +88,7 @@ class ForumMeldingenService
 		$this->pushAbonnementRepository = $pushAbonnementRepository;
 		$this->security = $security;
 
+		// Initialiseren van de WebPush class met de VAPID (oftewel application server) keys uit .env
 		$auth = [
 			'VAPID' => [
 				'subject' => $_ENV['VAPID_SUBJECT'],
