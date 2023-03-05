@@ -39,5 +39,4 @@ export const instellingOpslaan = async (ev: Event) => {
 	instellingVeranderd();
 
 	input.classList.remove('loading');
-
 };
