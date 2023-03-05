@@ -28,6 +28,7 @@
 				<h2 id="instelling-{{ module }}">{{ module | title }}</h2>
 
 				{% for id, instelling in moduleInstellingen %}
+					{% if id != 'meldingPush' or is_granted('ROLE_ADMIN') %}
 					{% set keuze = instellingen[module][id] is defined ? instellingen[module][id] : defaultInstellingen[module][id].default %}
 					<div class="row instelling mb-3" id="instelling-{{ module }}-{{ id }}">
 						<label class="col-md-3 col-form-label" for="inst_{{ module }}_{{ id }}">{{ instelling.titel | raw }}</label>
@@ -79,6 +80,7 @@
 							</div>
 						</div>
 					</div>
+					{% endif %}
 				{% endfor %}
 			{% endfor %}
 
