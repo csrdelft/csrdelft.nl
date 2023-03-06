@@ -15,13 +15,14 @@
 }
 
 // Forum
-.forum-draad .pasfoto.druif {
+.forum-draad .pasfoto-container.druif {
 	position: relative;
-	a[href^="/profiel/20"]::after {
+
+	&::after {
 		content: "";
 		position: absolute;
-		top: 53px;
-		right: -10px;
+		top: 1.25rem;
+		right: -0.75rem;
 		width: 28px;
 		height: 32px;
 		visibility: visible;
@@ -29,14 +30,13 @@
 		background-size: contain;
 		z-index: 1;
 	}
-}
 
-.forum-draad .pasfoto.start-druifeffect {
-	position: relative;
-	a[href^="/profiel/20"]::after {
-		position: absolute;
-		bottom: 0;
-		visibility: hidden;
-		animation: example 1s ease-in;
+	&.start-druifeffect {
+		&::after {
+			position: absolute;
+			bottom: 0;
+			visibility: hidden;
+			animation: example 1s ease-in;
+		}
 	}
 }
