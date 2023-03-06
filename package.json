@@ -48,7 +48,6 @@
 		"autoprefixer": "^9.1.1",
 		"cross-env": "^7.0.3",
 		"css-loader": "^6.7.1",
-		"dotenv-webpack": "^8.0.1",
 		"eslint": "^8.34.0",
 		"eslint-config-prettier": "^8.6.0",
 		"eslint-formatter-json-relative": "^0.1.0",
