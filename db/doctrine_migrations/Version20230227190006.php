@@ -19,7 +19,7 @@ final class Version20230227190006 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE push_abonnement (id INT AUTO_INCREMENT NOT NULL, uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, client_endpoint VARCHAR(255) NOT NULL, client_keys VARCHAR(255) NOT NULL, INDEX IDX_BVRODGMKX13C5GFL (uid), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_general_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE push_abonnement (id INT AUTO_INCREMENT NOT NULL, uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, client_endpoint VARCHAR(255) NOT NULL, client_keys VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_general_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema): void
