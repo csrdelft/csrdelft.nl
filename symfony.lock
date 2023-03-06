@@ -11,6 +11,9 @@
     "beberlei/doctrineextensions": {
         "version": "v1.2.6"
     },
+    "brick/math": {
+        "version": "0.9.3"
+    },
     "clegginabox/pdf-merger": {
         "version": "dev-master"
     },
@@ -141,6 +144,9 @@
     "felixfbecker/language-server-protocol": {
         "version": "1.5.1"
     },
+    "fgrosse/phpasn1": {
+        "version": "v2.5.0"
+    },
     "firebase/php-jwt": {
         "version": "v5.0.0"
     },
@@ -219,6 +225,9 @@
     },
     "maknz/slack": {
         "version": "1.7.0"
+    },
+    "minishlink/web-push": {
+        "version": "v7.0.0"
     },
     "monolog/monolog": {
         "version": "1.25.2"
@@ -446,6 +455,9 @@
     },
     "spatie/phpunit-snapshot-assertions": {
         "version": "3.0.0"
+    },
+    "spomky-labs/base64url": {
+        "version": "v2.0.4"
     },
     "symfony/browser-kit": {
         "version": "v5.1.5"
@@ -792,6 +804,21 @@
     },
     "vimeo/psalm": {
         "version": "4.7.1"
+    },
+    "web-token/jwt-core": {
+        "version": "v2.2.11"
+    },
+    "web-token/jwt-key-mgmt": {
+        "version": "v2.2.11"
+    },
+    "web-token/jwt-signature": {
+        "version": "v2.2.11"
+    },
+    "web-token/jwt-signature-algorithm-ecdsa": {
+        "version": "v2.2.11"
+    },
+    "web-token/jwt-util-ecc": {
+        "version": "v2.2.11"
     },
     "webmozart/assert": {
         "version": "1.5.0"

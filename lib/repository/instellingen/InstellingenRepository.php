@@ -146,6 +146,7 @@ class InstellingenRepository extends AbstractRepository
 		}
 
 		$instelling->waarde = $waarde;
+
 		$this->cache->delete($this->getCacheKey($module, $id));
 		$this->_em->flush();
 		return $instelling;
