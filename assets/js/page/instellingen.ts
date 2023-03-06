@@ -11,7 +11,8 @@ const instellingVeranderd = () => {
 		.forEach((el) => el.classList.remove('d-none'));
 };
 
-const applicationServerKey = process.env.VAPID_PUBLIC_KEY;
+const meta = document.getElementsByTagName('meta');
+const applicationServerKey = meta['vapid-public-key'].content;
 let isPushAvailable = false;
 
 const pushAbboneer = async () => {
