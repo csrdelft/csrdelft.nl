@@ -54,12 +54,16 @@
 		text-align: center;
 	}
 
-	.pasfoto {
-		width: 9rem;
-		height: 12rem;
-		object-fit: cover;
-		margin: 2rem;
-		box-shadow: 0 0 11px #000;
+	.pasfoto-container {
+		padding: 2rem;
+		display: inline-block;
+
+		.pasfoto {
+			width: 9rem;
+			height: 12rem;
+			object-fit: cover;
+			box-shadow: 0 0 11px #000;
+		}
 	}
 
 	.naam {
