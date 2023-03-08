@@ -1,29 +1,34 @@
-body.scrolling .forum-draad .pasfoto-container.raket {
-	position: relative;
+body.scrolling {
+	.forum-draad,
+	#forumPosten {
+		.pasfoto-container.raket {
+			position: relative;
 
-	&::after {
-		content: "";
-		position: absolute;
-		top: 2.5rem;
-		left: 0;
-		width: 2.5rem;
-		height: 4.5rem;
-		background: url("../../images/raket.gif") no-repeat top center;
-		background-size: contain;
+			&::after {
+				content: "";
+				position: absolute;
+				top: 100%;
+				left: 0;
+				width: 100%;
+				height: 200%;
+				background: url("../../images/raket.gif") no-repeat top center;
+				background-size: contain;
+			}
+		}
 	}
-}
 
-body.scrolling #profiel.lichting-2019 .pasfoto-container {
-	position: relative;
+	#profiel.lichting-2019 .pasfoto-container {
+		position: relative;
 
-	&::after {
-		content: "";
-		position: absolute;
-		top: 14rem;
-		left: 0;
-		width: 100%;
-		height: 14rem;
-		background: url("../../images/raket.gif") no-repeat top center;
-		background-size: contain;
+		&::after {
+			content: "";
+			position: absolute;
+			top: 14rem;
+			left: 0;
+			width: 100%;
+			height: 14rem;
+			background: url("../../images/raket.gif") no-repeat top center;
+			background-size: contain;
+		}
 	}
 }

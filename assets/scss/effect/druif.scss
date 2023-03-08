@@ -15,29 +15,38 @@
 }
 
 // Forum
-.forum-draad .pasfoto-container.druif {
-	position: relative;
+.forum-draad {
+	.pasfoto-container.druif {
+		position: relative;
 
-	&::after {
-		content: "";
-		position: absolute;
-		top: 1.25rem;
-		right: -0.75rem;
-		width: 28px;
-		height: 32px;
-		visibility: visible;
-		pointer-events: none;
-		background: url("../../images/druif.png") no-repeat top center;
-		background-size: contain;
-		z-index: 1;
-	}
-
-	&.start-druifeffect {
 		&::after {
+			content: "";
 			position: absolute;
-			bottom: 0;
-			visibility: hidden;
-			animation: example 1s ease-in;
+			top: 50%;
+			right: -33%;
+			width: 28px;
+			height: 32px;
+			visibility: visible;
+			pointer-events: none;
+			background: url("../../images/druif.png") no-repeat top center;
+			background-size: contain;
+			z-index: 1;
+		}
+
+		&.start-druifeffect {
+			&::after {
+				position: absolute;
+				bottom: 0;
+				visibility: hidden;
+				animation: example 1s ease-in;
+			}
 		}
 	}
 }
+// @include media-breakpoint-down(sm) {
+// 	.forum-draad .pasfoto-container.druif::after {
+// 		top: 1rem;
+// 		width: 2rem;
+// 		height: 3.5rem;
+// 	}
+// }

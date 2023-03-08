@@ -105,6 +105,13 @@ main {
 }
 
 /* Pasfotos */
+.forum-draad,
+#forumPosten {
+	div.pasfoto-container {
+		width: 2.5rem;
+		height: 2.5rem;
+	}
+}
 img.pasfoto {
 	width: 2.5rem;
 	height: 2.5rem;
@@ -113,6 +120,10 @@ img.pasfoto {
 @include media-breakpoint-down(sm) {
 	.forum-draad,
 	#forumPosten {
+		div.pasfoto-container {
+			width: 2rem;
+			height: 2rem;
+		}
 		img.pasfoto {
 			width: 2rem;
 			height: 2rem;
