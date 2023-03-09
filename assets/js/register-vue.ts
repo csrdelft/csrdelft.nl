@@ -8,7 +8,7 @@ import Inputmask from 'inputmask';
 import money from 'v-money3';
 
 // Map naam naar vue component
-const vueMap = {
+const vueMap: Record<string, Component> = {
 	peiling: Peiling,
 	groep: Groep,
 	namenleren: NamenLeren,

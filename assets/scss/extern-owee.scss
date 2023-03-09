@@ -1,6 +1,6 @@
 @import "extern/variables";
-@import "~bootstrap/scss/mixins/breakpoints";
-@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "bootstrap/scss/mixins/breakpoints";
+@import "@fortawesome/fontawesome-free/scss/brands";
 
 $groen: #3eb9b1;
 $licht-rose: #ef8080;
@@ -94,7 +94,7 @@ body {
 
 .owee-pagina {
 	font-size: 0;
-	@import "~bootstrap/scss/bootstrap";
+	@import "bootstrap/scss/bootstrap";
 
 	.btl {
 		@include triangle-before($basiskleur, true, true);

@@ -8,7 +8,7 @@ import { route } from '../lib/util';
 import { select } from '../lib/dom';
 import { lazyLoad } from '../lib/lazy-load';
 
-require('fslightbox');
+import('fslightbox');
 
 const contexts = [];
 

@@ -1,14 +1,13 @@
 import * as Sentry from '@sentry/browser';
 import { BrowserTracing } from '@sentry/tracing';
 import { Integration } from '@sentry/types';
+import { select } from '../lib/dom';
 
-const meta = document.getElementsByTagName('meta');
+try {
+	const username = select<HTMLMetaElement>('meta[sentry-user]').content;
+	const environment = select<HTMLMetaElement>('meta[sentry-app-env]').content;
+	const dsn = select<HTMLMetaElement>('meta[sentry-dsn]').content;
 
-const username = meta['sentry-user'].content;
-const environment = meta['sentry-app-env'].content;
-const dsn = meta['sentry-dsn'].content;
-
-if (username && environment && dsn) {
 	Sentry.init({
 		dsn,
 		environment,
@@ -19,4 +18,6 @@ if (username && environment && dsn) {
 	Sentry.setUser({
 		username,
 	});
+} catch (e) {
+	// ignored
 }

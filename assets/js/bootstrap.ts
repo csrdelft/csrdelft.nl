@@ -38,19 +38,19 @@ window.$ = window.jQuery = $;
 /**
  * jQuery extensies registreren zichzelf aan bovenstaande jQuery.
  */
-require('bootstrap');
-require('./ajax-csrf');
-require('jquery.scrollto');
-require('jquery-ui');
-require('jquery-ui/ui/effect');
-require('jquery-ui/ui/effects/effect-highlight');
-require('jquery-ui/ui/effects/effect-fade');
-require('jquery-ui/ui/widgets/slider');
-require('./lib/external/jquery.contextMenu');
-require('raty-js');
-require('jquery.maskedinput');
-require('fslightbox');
-require('corejs-typeahead/dist/typeahead.jquery.js');
+import('bootstrap');
+import('./ajax-csrf');
+import('jquery.scrollto');
+import('jquery-ui');
+import('jquery-ui/ui/effect');
+import('jquery-ui/ui/effects/effect-highlight');
+import('jquery-ui/ui/effects/effect-fade');
+import('jquery-ui/ui/widgets/slider');
+import('./lib/external/jquery.contextMenu');
+import('raty-js');
+import('jquery.maskedinput');
+import('fslightbox');
+import('corejs-typeahead/dist/typeahead.jquery.js');
 
 declare global {
 	interface Window {

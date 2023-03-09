@@ -59,7 +59,7 @@ class AssetsTwigExtension extends AbstractExtension
 		$modules = [];
 
 		//voeg modules toe afhankelijk van instelling
-		$modules[] = 'thema-' . InstellingUtil::lid_instelling('layout', 'opmaak');
+		$modules[] = 'thema/' . InstellingUtil::lid_instelling('layout', 'opmaak');
 
 		// de algemene module gevraagd, ook worden modules gekoppeld aan instellingen opgezocht
 
@@ -103,7 +103,7 @@ class AssetsTwigExtension extends AbstractExtension
 		$assetString = '';
 
 		foreach ($this->module_asset($module, 'js') as $asset) {
-			$assetString .= "<script type=\"text/javascript\" src=\"{$asset[0]}\" integrity=\"{$asset[1]}\"></script>\n";
+			$assetString .= "<script type=\"module\" src=\"{$asset[0]}\" integrity=\"{$asset[1]}\"></script>\n";
 		}
 
 		return $assetString;
@@ -113,24 +113,42 @@ class AssetsTwigExtension extends AbstractExtension
 	{
 		$manifest = $this->readManifest();
 
+		if ($extension == 'css') {
+			return [
+				['/dist/' . $manifest['assets/scss/' . $module . '.scss']['file'], ''],
+			];
+		}
+
+		$newExtension = $extension == 'js' ? 'ts' : 'scss';
+
+		return [
+			[
+				'/dist/' .
+				$manifest[
+					'assets/' . $extension . '/entry/' . $module . '.' . $newExtension
+				]['file'],
+				'',
+			],
+		];
+
 		$relevantAssets = [];
 
-		$entrypoints = $manifest['entrypoints'];
+		$entrypoints = $manifest;
 
 		if (!isset($entrypoints[$module])) {
 			throw new CsrException("Entrypoint met naam {$module} bestaat niet.");
 		}
 
-		if (!isset($entrypoints[$module]['assets'][$extension])) {
+		if (!isset($entrypoints[$module . '.' . $extension])) {
 			throw new CsrException(
 				"Entrypoint met naam {$module} heeft geen extensie {$extension}"
 			);
 		}
 
-		$assets = $manifest['entrypoints'][$module]['assets'][$extension];
+		$assets = $manifest[$module]['assets'][$extension];
 
 		foreach ($assets as $asset) {
-			$relevantAssets[] = ['/dist/' . $asset['src'], $asset['integrity']];
+			$relevantAssets[] = ['/dist/' . $asset['file'], $asset['integrity']];
 		}
 
 		return $relevantAssets;
@@ -154,14 +172,14 @@ class AssetsTwigExtension extends AbstractExtension
 	 */
 	private function readManifest()
 	{
-		if (!file_exists(HTDOCS_PATH . 'dist/assets-manifest.json')) {
+		if (!file_exists(HTDOCS_PATH . 'dist/manifest.json')) {
 			throw new CsrException(
-				'htdocs/dist/assets-manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.'
+				'htdocs/dist/manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.'
 			);
 		}
 
 		$manifest = json_decode(
-			file_get_contents(HTDOCS_PATH . 'dist/assets-manifest.json'),
+			file_get_contents(HTDOCS_PATH . 'dist/manifest.json'),
 			true
 		);
 		return $manifest;

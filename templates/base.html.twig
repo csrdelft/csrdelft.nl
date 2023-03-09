@@ -38,7 +38,7 @@
 		{{ css_asset(sheet) }}
 	{% endfor %}
 	{% if lid_instelling('layout', 'automatischDonker') == 'ja' %}
-		{{ css_asset('thema-donker', 'screen and (prefers-color-scheme: dark') }}
+		{{ css_asset('thema/donker', 'screen and (prefers-color-scheme: dark') }}
 	{% endif %}
 	{{ js_asset('sentry') }}
 	{% block styles %}{% endblock %}

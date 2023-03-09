@@ -1,3 +1,5 @@
+import 'vite/modulepreload-polyfill';
+
 import '../bootstrap';
 import '../dragobject';
 import '../main-menu';

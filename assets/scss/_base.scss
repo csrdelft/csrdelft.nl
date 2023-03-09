@@ -1,7 +1,7 @@
 @import "_defaults";
 @import "fonts";
 
-@import "~bootstrap/scss/bootstrap";
+@import "bootstrap/scss/bootstrap";
 
 @import "_common";
 @import "main-menu";
@@ -24,7 +24,7 @@
 @import "module/profiel";
 @import "module/stamboom";
 
-@import "~flatpickr/dist/flatpickr.css";
+@import "flatpickr/dist/flatpickr.css";
 
 :root {
 	accent-color: $primary;

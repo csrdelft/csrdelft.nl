@@ -1,9 +1,9 @@
-@import "~@fortawesome/fontawesome-free/scss/functions";
-@import "~@fortawesome/fontawesome-free/scss/variables";
+@import "@fortawesome/fontawesome-free/scss/functions";
+@import "@fortawesome/fontawesome-free/scss/variables";
 @import "variables";
-@import "~prosemirror-view/style/prosemirror.css";
-@import "~prosemirror-menu/style/menu.css";
-@import "~prosemirror-example-setup/style/style.css";
+@import "prosemirror-view/style/prosemirror.css";
+@import "prosemirror-menu/style/menu.css";
+@import "prosemirror-example-setup/style/style.css";
 @import "../lib/prosemirror";
 
 .ProseMirror .bb-prive {

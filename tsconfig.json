@@ -1,14 +1,18 @@
 {
 	"compilerOptions": {
-		"target": "es2017",
-		"module": "esnext",
-		"lib": ["DOM", "ES2019"],
-		"moduleResolution": "node",
-		"removeComments": false,
-		"types": ["@types/jqueryui"],
-		"allowSyntheticDefaultImports": true,
-		"skipLibCheck": true
+		"target": "ESNext",
+		"useDefineForClassFields": true,
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"strict": true,
+		"jsx": "preserve",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"lib": ["ESNext", "DOM"],
+		"skipLibCheck": true,
+		"noEmit": true
 	},
 	"include": ["assets/js/**/*.ts", "assets/js/**/*.vue"],
-	"compileOnSave": false
+	"references": [{ "path": "./tsconfig.node.json" }]
 }

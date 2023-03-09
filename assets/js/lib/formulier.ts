@@ -16,7 +16,7 @@ import Bloodhound, {
 	TypeaheadDataset,
 } from 'corejs-typeahead';
 
-require('../editor');
+import('../editor');
 
 export function formIsChanged(form: HTMLFormElement): boolean {
 	let changed = false;
