@@ -14,7 +14,6 @@ import {
 	registerGlobalContext,
 	registerGrafiekContext,
 	registerKnopContext,
-	registerLidInstellingenContext,
 } from './context';
 import { init } from './ctx';
 import { ketzerAjax } from './lib/ajax';
@@ -121,7 +120,6 @@ Dropzone.autoDiscover = false;
 		registerDataTableContext(),
 		registerBbContext(),
 		registerFlatpickrContext(),
-		registerLidInstellingenContext(),
 	]);
 
 	docReady(() => {
