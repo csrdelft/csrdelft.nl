@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { select } from '../lib/dom';
 import { urlBase64ToUint8Array } from '../lib/util';
+import ctx from '../ctx';
 
 /**
  * Code voor de /instellingen pagina
@@ -108,27 +109,27 @@ const pushMeldingenVeranderd = async (ant: string) => {
 };
 
 const checkPushAvailability = async () => {
-	const registration = await navigator.serviceWorker.ready;
+	const supportsPushManager =
+		'serviceWorker' in navigator && 'PushManager' in window;
 
-	const hasPushManager =
-		'serviceWorker' in navigator &&
-		'PushManager' in window &&
-		registration !== undefined &&
-		'pushManager' in registration;
+	if (supportsPushManager) {
+		const registration = await navigator.serviceWorker.ready;
+		const hasPushManager =
+			registration !== undefined && 'pushManager' in registration;
+		if (hasPushManager) {
+			const isIos =
+				navigator.userAgent.includes('iPhone') ||
+				(navigator.userAgent.includes('Macintosh') && 'ontouchend' in document);
 
-	if (hasPushManager) {
-		const isIos =
-			navigator.userAgent.includes('iPhone') ||
-			(navigator.userAgent.includes('Macintosh') && 'ontouchend' in document);
+			if (isIos) {
+				const isStandalone =
+					window.matchMedia('(display-mode: fullscreen)').matches ||
+					window.matchMedia('(display-mode: standalone)').matches;
 
-		if (isIos) {
-			const isStandalone =
-				window.matchMedia('(display-mode: fullscreen)').matches ||
-				window.matchMedia('(display-mode: standalone)').matches;
-
-			isPushAvailable = isStandalone;
-		} else {
-			isPushAvailable = true;
+				isPushAvailable = isStandalone;
+			} else {
+				isPushAvailable = true;
+			}
 		}
 	}
 
@@ -139,7 +140,7 @@ const checkPushAvailability = async () => {
 };
 checkPushAvailability();
 
-export const instellingOpslaan = async (ev: Event) => {
+const instellingOpslaan = async (ev: Event) => {
 	ev.preventDefault();
 
 	const input = ev.target as HTMLElement;
@@ -180,3 +181,10 @@ export const instellingOpslaan = async (ev: Event) => {
 		console.error(error);
 	}
 };
+
+ctx.addHandler('.instellingKnop', (el) =>
+	el.addEventListener('click', instellingOpslaan)
+);
+ctx.addHandler('.change-opslaan', (el) =>
+	el.addEventListener('change', instellingOpslaan)
+);
