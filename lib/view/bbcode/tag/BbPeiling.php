@@ -56,6 +56,11 @@ class BbPeiling extends BbTag
 		return $this->peiling->magBekijken();
 	}
 
+	public function renderPreview()
+	{
+		return '🗳️ ';
+	}
+
 	public function renderLight()
 	{
 		$url = '#/peiling/' . urlencode($this->id);

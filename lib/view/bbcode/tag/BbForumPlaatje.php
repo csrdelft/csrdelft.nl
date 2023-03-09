@@ -55,6 +55,11 @@ class BbForumPlaatje extends BbImg
 		return $this->plaatje->getUrl(true);
 	}
 
+	public function renderPreview()
+	{
+		return ' 📷 ';
+	}
+
 	public function renderPlain()
 	{
 		return 'Plaatje (' . $this->getLinkUrl() . ')';

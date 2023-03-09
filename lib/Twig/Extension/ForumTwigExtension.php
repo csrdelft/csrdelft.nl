@@ -149,34 +149,10 @@ class ForumTwigExtension extends AbstractExtension
 
 	public function draadGetLaatstePost($draad_id)
 	{
-		$tekst = $this->forumPostsRepository->findOneBy(
+		return $this->forumPostsRepository->findOneBy(
 			['draad_id' => $draad_id, 'verwijderd' => false],
 			['datum_tijd' => 'DESC']
 		)->tekst;
-
-		// Filter alle bb-tags uit de tekst met Regex
-		$regexTekst = '/\[\/?p\]/i';
-		$tekst = preg_replace($regexTekst, ' ', $tekst);
-
-		$regexPlaatje = '/\[plaatje=[^\]]+\]/i';
-		$tekst = preg_replace($regexPlaatje, ' 📷 ', $tekst);
-
-		$regexVideo = '/\[(video|youtube)(=[^\]]*)?\][^\[]*\[\/(video|youtube)\]/i';
-		$tekst = preg_replace($regexVideo, ' 📹 ', $tekst);
-
-		$regexPeiling = '/\[(peiling|activiteit)(=[^\]]*)?\]/i';
-		$tekst = preg_replace($regexPeiling, ' 🗳️ ', $tekst);
-
-		$regexCitaat = '/\[citaat(?:=[^\]]*)?\][^\[]*\[\/citaat\]/i';
-		$tekst = preg_replace($regexCitaat, ' 🗣️ ', $tekst);
-
-		$regexHtml = '/\[html\][^\[]*\[\/html\]/i';
-		$tekst = preg_replace($regexHtml, ' ', $tekst);
-
-		$regexOverig = '/\[\/?\w+(?:=[^\]]*)?\]/i';
-		$tekst = preg_replace($regexOverig, ' ', $tekst);
-
-		return substr($tekst, 0, 150) . (strlen($tekst) > 150 ? '...' : '');
 	}
 
 	public function highlight_zoekterm(

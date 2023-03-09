@@ -58,6 +58,21 @@ class BbCitaat extends BbTag
 		return $text . ":\n " . trim($this->getContent());
 	}
 
+	public function renderPreview()
+	{
+		$text = '🗣️ ';
+		if ($this->bron_profiel != null) {
+			$text .= '[' . $this->bron_profiel->getNaam('user') . '] ';
+		} elseif ($this->bron_text != null) {
+			if ($this->bron_url != null) {
+				$text .= '[' . $this->bron_text . '] ';
+			} else {
+				$text .= '[' . $this->bron_url . '] ';
+			}
+		}
+		return $text;
+	}
+
 	public function renderLight()
 	{
 		$text = '<div class="citaatContainer bb-tag-citaat">Citaat';

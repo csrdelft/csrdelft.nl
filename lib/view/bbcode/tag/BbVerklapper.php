@@ -16,6 +16,11 @@ class BbVerklapper extends BbTag
 		return ['spoiler', 'verklapper'];
 	}
 
+	public function renderPreview()
+	{
+		return '';
+	}
+
 	public function renderLight()
 	{
 		$content = str_replace('[br]', '<br />', $this->getContent());

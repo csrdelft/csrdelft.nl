@@ -16,6 +16,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\PushAbonnementRepository;
 use CsrDelft\service\MailService;
 use CsrDelft\service\security\SuService;
+use CsrDelft\view\bbcode\CsrBB;
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
 use Symfony\Component\Security\Core\Security;
@@ -273,6 +274,8 @@ class ForumMeldingenService
 		}
 
 		$keys = json_decode($subscription->client_keys);
+		$bericht =
+			$auteur->getNaam('civitas') . ': ' . CsrBB::parsePreview($post->tekst);
 
 		$this->webPush->queueNotification(
 			Subscription::create([
@@ -287,9 +290,7 @@ class ForumMeldingenService
 				'tag' => 'csr-' . $post->post_id,
 				'title' => $draad->titel,
 				'body' =>
-					$auteur->getNaam('civitas') .
-					': ' .
-					str_replace('\r\n', "\n", $post->tekst),
+					substr($bericht, 0, 300) . (strlen($bericht) > 300 ? '...' : ''),
 				'icon' => '/favicon.ico',
 				'url' => $post->getLink(true),
 			])

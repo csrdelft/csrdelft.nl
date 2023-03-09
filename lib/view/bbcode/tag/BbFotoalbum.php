@@ -89,6 +89,11 @@ class BbFotoalbum extends BbTag
 			($this->album == null && $this->security->isGranted('ROLE_LOGGED_IN'));
 	}
 
+	public function renderPreview()
+	{
+		return ' 📷 ';
+	}
+
 	public function renderLight()
 	{
 		$album = $this->album;

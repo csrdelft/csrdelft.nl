@@ -28,6 +28,11 @@ class BbYoutube extends BbTag
 		return 'youtube';
 	}
 
+	public function renderPreview()
+	{
+		return '📹';
+	}
+
 	public function renderLight()
 	{
 		$this->assertId($this->id);
