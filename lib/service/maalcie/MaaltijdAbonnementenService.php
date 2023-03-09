@@ -102,9 +102,7 @@ class MaaltijdAbonnementenService
 				} elseif (!$repetitie->abonneerbaar) {
 					$abo->foutmelding = 'Niet abonneerbaar';
 					$waarschuwingen[$abo->uid][$abo->mlt_repetitie_id] = $abo;
-				} elseif (
-					!LidStatus::isLidLike(ProfielRepository::get($abo->uid)->status)
-				) {
+				} elseif (!LidStatus::isLidLike($abo->getProfiel()->status)) {
 					$abo->waarschuwing = 'Geen huidig lid';
 					$waarschuwingen[$abo->uid][$abo->mlt_repetitie_id] = $abo;
 				}
@@ -390,7 +388,7 @@ class MaaltijdAbonnementenService
 			}
 
 			$abo->van_uid = $abo->uid;
-			$abo->wanneer_ingeschakeld = date_create_immutable();
+			$abo->setWanneerIngeschakeld(date_create_immutable());
 			$this->entityManager->persist($abo);
 			$this->entityManager->flush();
 
@@ -428,10 +426,9 @@ class MaaltijdAbonnementenService
 				}
 
 				$abo = new MaaltijdAbonnement();
-				$abo->maaltijd_repetitie = $repetitie;
-				$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
-				$abo->uid = $noviet->uid;
-				$abo->wanneer_ingeschakeld = date_create_immutable();
+				$abo->setMaaltijdRepetitie($repetitie);
+				$abo->setProfiel($noviet);
+				$abo->setWanneerIngeschakeld(date_create_immutable());
 
 				if (
 					$this->maaltijdAbonnementenRepository->find([

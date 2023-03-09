@@ -8,6 +8,7 @@ use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
@@ -149,17 +150,11 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/inschakelen/{mlt_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function inschakelen(MaaltijdRepetitie $repetitie, $uid)
+	public function inschakelen(MaaltijdRepetitie $repetitie, Profiel $profiel)
 	{
-		if (!ProfielRepository::existsUid($uid)) {
-			throw new CsrGebruikerException(
-				sprintf('Lid met uid "%s" bestaat niet.', $uid)
-			);
-		}
 		$abo = new MaaltijdAbonnement();
-		$abo->maaltijd_repetitie = $repetitie;
-		$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
-		$abo->uid = $uid;
+		$abo->setMaaltijdRepetitie($repetitie);
+		$abo->setProfiel($profiel);
 		$aantal = $this->maaltijdAbonnementenService->inschakelenAbonnement($abo);
 		if ($aantal > 0) {
 			$melding =

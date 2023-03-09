@@ -59,9 +59,8 @@ class MijnAbonnementenController extends AbstractController
 	public function inschakelen(MaaltijdRepetitie $repetitie)
 	{
 		$abo = new MaaltijdAbonnement();
-		$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
-		$abo->maaltijd_repetitie = $repetitie;
-		$abo->uid = $this->getUid();
+		$abo->setMaaltijdRepetitie($repetitie);
+		$abo->setProfiel($this->getProfiel());
 		$aantal = $this->maaltijdAbonnementenService->inschakelenAbonnement($abo);
 		if ($aantal > 0) {
 			$melding =
