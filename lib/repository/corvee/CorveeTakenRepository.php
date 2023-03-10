@@ -137,7 +137,7 @@ class CorveeTakenRepository extends AbstractRepository
 	{
 		return $this->createQueryBuilder('ct')
 			->where('ct.verwijderd = false and ct.datum >= :datum')
-			->setParameter('datum', date_create())
+			->setParameter('datum', date_create_immutable('today'))
 			->orderBy('ct.datum', 'ASC')
 			->getQuery()
 			->getResult();
@@ -150,7 +150,7 @@ class CorveeTakenRepository extends AbstractRepository
 	{
 		return $this->createQueryBuilder('ct')
 			->where('ct.verwijderd = false and ct.datum < :datum')
-			->setParameter('datum', date_create())
+			->setParameter('datum', date_create_immutable('today'))
 			->orderBy('ct.datum', 'ASC')
 			->getQuery()
 			->getResult();
