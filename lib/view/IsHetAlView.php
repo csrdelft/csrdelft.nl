@@ -134,6 +134,12 @@ class IsHetAlView implements View
 				$session->set('studeren', $tijd);
 				break;
 
+			case 'kring':
+				// Matcht 'kring 42', 'loremipsumkring', 'kringlezing', maar niet 'kringleidersinstructie'.
+				$vandaag = $agendaRepository->zoekRegexAgenda('/kring(?: \d+|\b|lezing\b)/i');
+				$this->ja = $vandaag instanceof AgendaItem;
+				break;
+
 			default:
 				$vandaag = $agendaRepository->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
