@@ -8,12 +8,10 @@ import { base64toFile } from '../../lib/util';
  * Verwijderd plaatjes zonder url. (Extern)
  * @param schema
  */
-export const imageRemovePlugin = (
-	schema: EditorSchema
-): Plugin<unknown, EditorSchema> =>
-	new Plugin<unknown, EditorSchema>({
+export const imageRemovePlugin = (schema: EditorSchema): Plugin<unknown> =>
+	new Plugin<unknown>({
 		appendTransaction(trs, oldState, newState) {
-			let newTransaction: Transaction<EditorSchema> = null;
+			let newTransaction: Transaction = null;
 			newState.doc.descendants((node, pos) => {
 				if (
 					node.type == schema.nodes.image &&
@@ -34,18 +32,16 @@ export const imageRemovePlugin = (
  * Upload plaatjes zonder url. (Intern)
  * @param schema
  */
-export const imageUploadPlugin = (
-	schema: EditorSchema
-): Plugin<unknown, EditorSchema> => {
+export const imageUploadPlugin = (schema: EditorSchema): Plugin<unknown> => {
 	let view = null;
-	return new Plugin<unknown, EditorSchema>({
+	return new Plugin<unknown>({
 		view: (newView) => {
 			view = newView;
 
 			return {};
 		},
 		appendTransaction(trs, oldState, newState) {
-			let newTransaction: Transaction<EditorSchema> = null;
+			let newTransaction: Transaction = null;
 			newState.doc.descendants((node, pos) => {
 				if (
 					node.type == schema.nodes.image &&

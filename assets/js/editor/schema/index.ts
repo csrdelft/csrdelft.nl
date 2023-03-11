@@ -1,10 +1,4 @@
-import {
-	DOMOutputSpec,
-	MarkSpec,
-	Node,
-	NodeSpec,
-	Schema,
-} from 'prosemirror-model';
+import { DOMOutputSpec, MarkSpec, NodeSpec, Schema } from 'prosemirror-model';
 import {
 	activiteit,
 	bestuur,
@@ -174,7 +168,7 @@ export const nodes = RecordWithType<NodeSpec>()({
 				},
 			},
 		],
-		toDOM: (node: Node) => {
+		toDOM: (node) => {
 			const { src, alt, title } = node.attrs;
 			return ['img', { src, alt, title }];
 		},
@@ -197,7 +191,7 @@ export const nodes = RecordWithType<NodeSpec>()({
 				}),
 			},
 		],
-		toDOM: (node: Node) => [
+		toDOM: (node) => [
 			'div',
 			{
 				'data-plaatje': node.attrs.key,
@@ -386,9 +380,7 @@ export const marks = RecordWithType<MarkSpec>()({
 	},
 });
 
-const nodesMap = OrderedMap.from(nodes) as
-	| OrderedMap<NodeSpec>
-	| Record<keyof typeof nodes, NodeSpec>;
+const nodesMap = OrderedMap.from(nodes);
 
 export const schema = new Schema({
 	nodes: addListNodes(nodesMap, 'paragraph block*', 'block'),

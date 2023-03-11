@@ -1,6 +1,10 @@
-import { suggest, Suggester } from 'prosemirror-suggest';
 import axios, { CancelToken } from 'axios';
 import { EditorView } from 'prosemirror-view';
+import autocomplete, {
+	ActionKind,
+	FromTo,
+	Options,
+} from 'prosemirror-autocomplete';
 
 let selectedIndex = 0;
 let lidList: NaamSuggestie[] = [];
@@ -42,11 +46,7 @@ const updateLidHintsPosition = (
 	lidHints.style.top = pos.bottom - viewPos.top + 'px';
 };
 
-const createLidHints = (
-	command,
-	view: EditorView,
-	pos: { left: number; right: number; top: number; bottom: number }
-) => {
+const createLidHints = (view: EditorView, range: FromTo) => {
 	Array.from(document.querySelectorAll('.lid-hints')).forEach((hint) =>
 		hint.remove()
 	);
@@ -60,14 +60,14 @@ const createLidHints = (
 		lidDiv.classList.add('list-group-item', 'list-group-item-action');
 
 		lidDiv.addEventListener('click', () => {
-			command(lid);
+			insertLid(view, range, lid);
 		});
 		lidDiv.textContent = lid.value;
 	}
 
 	view.dom.parentElement.appendChild(lidHints);
 
-	updateLidHintsPosition(view, pos);
+	updateLidHintsPosition(view, view.coordsAtPos(range.to));
 	updateLidHints();
 };
 
@@ -80,6 +80,8 @@ const removeLidHints = () => {
 const updateLidHints = () => {
 	const lidHints = document.querySelector('.lid-hints');
 
+	if (!lidHints) return;
+
 	for (const hint of Array.from(lidHints.children)) {
 		hint.classList.remove('active');
 	}
@@ -89,77 +91,85 @@ const updateLidHints = () => {
 	if (lidHint) lidHint.classList.add('active');
 };
 
-const suggestLeden: Suggester = {
-	noDecorations: true,
-	char: '@',
-	name: 'lid-hint',
-	appendText: '',
+const insertLid = (view: EditorView, range: FromTo, lid?: NaamSuggestie) => {
+	if (!lid) {
+		return false;
+	}
 
-	keyBindings: {
-		ArrowUp: () => {
-			selectedIndex = (selectedIndex - 1 + lidList.length) % lidList.length;
-			updateLidHints();
-		},
-		ArrowDown: () => {
-			selectedIndex = (selectedIndex + 1) % lidList.length;
-			updateLidHints();
-		},
-		// Enter wordt niet opgepikt.
-		Enter: ({ command, event }) => {
-			event.preventDefault();
-			command(lidList[selectedIndex]);
-		},
-		Tab: ({ command, event }) => {
-			event.preventDefault();
-			command(lidList[selectedIndex]);
-		},
-		Esc: () => {
-			removeLidHints();
-		},
-	},
+	const { from, to } = range;
+	view.dispatch(
+		view.state.tr.replaceWith(
+			from,
+			to,
+			view.state.schema.nodes.lid.createAndFill({
+				uid: lid.uid,
+				naam: lid.value,
+			})
+		)
+	);
 
-	onChange: async ({ command, queryText, range, view }) => {
-		updateLidHintsPosition(view, view.coordsAtPos(range.end));
+	onExit();
 
-		cancel.cancel();
-		cancel = axios.CancelToken.source();
-		try {
-			lidList = await search(queryText.full, cancel.token);
-			selectedIndex = 0;
-			createLidHints(command, view, view.coordsAtPos(range.end));
-		} catch {
-			// noop, cancelled
-		}
-	},
+	return true;
+};
 
-	onExit: () => {
-		cancel.cancel();
-		removeLidHints();
-		lidList = [];
+const onExit = () => {
+	lidList = [];
+	selectedIndex = 0;
+	removeLidHints();
+
+	cancel.cancel();
+};
+
+const triggerLidHints = async (filter: string, view, range: FromTo) => {
+	cancel.cancel();
+	cancel = axios.CancelToken.source();
+	try {
+		lidList = await search(filter, cancel.token);
 		selectedIndex = 0;
+		createLidHints(view, range);
+	} catch {
+		// noop, cancelled
+	}
+};
+
+// Create autocomplete with triggers and specified handers:
+const options: Partial<Options> = {
+	triggers: [{ name: 'mention', trigger: '@' }],
+	onOpen: ({ view, range, trigger }) => {
+		triggerLidHints(trigger, view, range);
+
+		return true;
 	},
+	onArrow: ({ kind }) => {
+		switch (kind) {
+			case ActionKind.down:
+				selectedIndex = (selectedIndex + 1) % lidList.length;
+				updateLidHints();
+				break;
+			case ActionKind.up:
+				selectedIndex = (selectedIndex - 1 + lidList.length) % lidList.length;
+				updateLidHints();
+				break;
+		}
 
-	// Create a  function that is passed into the change, exit and keybinding handlers.
-	// This is useful when these handlers are called in a different part of the app.
-	createCommand: ({ match, view }) => {
-		return (lid: NaamSuggestie) => {
-			if (!lid) {
-				return;
-			}
+		return true;
+	},
+	onFilter: ({ view, filter, range }) => {
+		triggerLidHints(filter, view, range);
 
-			const tr = view.state.tr;
-			const { from, to } = match.range;
-			tr.replaceWith(
-				from,
-				to,
-				view.state.schema.nodes.lid.createAndFill({
-					uid: lid.uid,
-					naam: lid.value,
-				})
-			);
-			view.dispatch(tr);
-		};
+		return true;
+	},
+	onEnter: ({ view, range }) => {
+		insertLid(view, range, lidList[selectedIndex]);
+
+		return true;
+	},
+	onClose: () => {
+		onExit();
+
+		return true;
 	},
 };
 
-export const lidHintPlugin = suggest(suggestLeden);
+export const lidHintPlugin = autocomplete(options);

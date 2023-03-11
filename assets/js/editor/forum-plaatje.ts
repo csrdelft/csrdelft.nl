@@ -1,6 +1,5 @@
 import { findPlaceholder, placeholderPlugin } from './plugin/placeholder';
 import { EditorView } from 'prosemirror-view';
-import { EditorSchema } from './schema';
 import axios from 'axios';
 import { preloadImage } from '../lib/util';
 
@@ -25,7 +24,7 @@ async function uploadFile(file: File) {
 }
 
 export async function startImageUpload(
-	view: EditorView<EditorSchema>,
+	view: EditorView,
 	file: File
 ): Promise<void> {
 	// A fresh object to act as the ID for this upload
@@ -41,7 +40,7 @@ export async function startImageUpload(
 }
 
 export async function imageUpload(
-	view: EditorView<EditorSchema>,
+	view: EditorView,
 	file: File,
 	id: unknown
 ): Promise<void> {

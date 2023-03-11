@@ -8,5 +8,7 @@ export const trackChangesPlugin = (input: HTMLInputElement): Plugin =>
 	new Plugin({
 		appendTransaction(trs, oldState, newState) {
 			input.value = JSON.stringify(newState.doc.toJSON());
+
+			return null;
 		},
 	});

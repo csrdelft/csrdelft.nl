@@ -1,4 +1,3 @@
-import { EditorSchema } from './schema';
 import { bbPrompt } from './bb-prompt';
 import { EditorState, NodeSelection } from 'prosemirror-state';
 import { MarkType, NodeType } from 'prosemirror-model';
@@ -18,10 +17,7 @@ import { html, ucfirst, uidLike } from '../lib/util';
 import { createDefaultApp } from '../register-vue';
 import GroepPrompt from '../components/editor/GroepPrompt.vue';
 
-export function canInsert(
-	state: EditorState<EditorSchema>,
-	nodeType: NodeType<EditorSchema>
-): boolean {
+export function canInsert(state: EditorState, nodeType: NodeType): boolean {
 	const $from = state.selection.$from;
 	for (let d = $from.depth; d >= 0; d--) {
 		const index = $from.index(d);
@@ -34,7 +30,7 @@ export function canInsert(
  * Alleen voor externen
  * @param nodeType
  */
-export const insertImageItem = (nodeType: NodeType<EditorSchema>): MenuItem =>
+export const insertImageItem = (nodeType: NodeType): MenuItem =>
 	new MenuItem({
 		title: 'Afbeelding invoegen',
 		label: 'Afbeelding',
@@ -148,17 +144,14 @@ function cmdItem(
 	return new MenuItem(passedOptions);
 }
 
-function markActive(
-	state: EditorState<EditorSchema>,
-	type: MarkType<EditorSchema>
-) {
+function markActive(state: EditorState, type: MarkType) {
 	const { from, $from, to, empty } = state.selection;
 	if (empty) return !!type.isInSet(state.storedMarks || $from.marks());
 	else return state.doc.rangeHasMark(from, to, type);
 }
 
 export const markItem = (
-	markType: MarkType<EditorSchema>,
+	markType: MarkType,
 	options: Partial<MenuItemSpec>
 ): MenuItem =>
 	cmdItem(toggleMark(markType), {
@@ -169,7 +162,7 @@ export const markItem = (
 		...options,
 	});
 
-export const linkItem = (markType: MarkType<EditorSchema>): MenuItem =>
+export const linkItem = (markType: MarkType): MenuItem =>
 	new MenuItem({
 		title: 'Maak of verwijder link',
 		// TODO: maak een helper functie voor icoontjes
@@ -249,7 +242,7 @@ export const linkItem = (markType: MarkType<EditorSchema>): MenuItem =>
 	});
 
 export const wrapListItem = (
-	nodeType: NodeType<EditorSchema>,
+	nodeType: NodeType,
 	options: Partial<MenuItemSpec>
 ): MenuItem => cmdItem(wrapInList(nodeType, null), options);
 
@@ -277,7 +270,7 @@ export const priveItem = (markType: MarkType): MenuItem =>
 		},
 	});
 
-export const lidInsert = (nodeType: NodeType<EditorSchema>): MenuItem =>
+export const lidInsert = (nodeType: NodeType): MenuItem =>
 	new MenuItem({
 		title: 'Lid invoegen',
 		label: 'Lid',
@@ -325,7 +318,7 @@ export const lidInsert = (nodeType: NodeType<EditorSchema>): MenuItem =>
 	});
 
 export const blockTypeItemPrompt = (
-	nodeType: NodeType<EditorSchema>,
+	nodeType: NodeType,
 	label: string,
 	title: string,
 	description = ''
@@ -377,7 +370,7 @@ export const blockTypeItemPrompt = (
 	});
 
 export const groepPrompt = (
-	nodeType: NodeType<EditorSchema>,
+	nodeType: NodeType,
 	label: string,
 	title: string,
 	type: string
@@ -423,7 +416,7 @@ export const groepPrompt = (
 	});
 
 export const youtubeItemPrompt = (
-	nodeType: NodeType<EditorSchema>,
+	nodeType: NodeType,
 	label: string,
 	title: string,
 	description = ''
@@ -471,10 +464,8 @@ export const youtubeItemPrompt = (
 		},
 	});
 
-export const bbInsert = (
-	nodeType: NodeType<EditorSchema>
-): MenuItem<EditorSchema> =>
-	new MenuItem<EditorSchema>({
+export const bbInsert = (nodeType: NodeType): MenuItem =>
+	new MenuItem({
 		title: 'BB code als platte tekst invoegen',
 		label: 'BB code',
 		enable: (state) => canInsert(state, nodeType),
@@ -493,10 +484,10 @@ export const bbInsert = (
 	});
 
 export const insertPlaatjeItem = (
-	nodeType: NodeType<EditorSchema>,
-	imageType: NodeType<EditorSchema>
-): MenuItem<EditorSchema> =>
-	new MenuItem<EditorSchema>({
+	nodeType: NodeType,
+	imageType: NodeType
+): MenuItem =>
+	new MenuItem({
 		title: 'Afbeelding invoegen',
 		label: 'Afbeelding',
 		enable: (state) =>
