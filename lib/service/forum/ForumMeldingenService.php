@@ -90,14 +90,20 @@ class ForumMeldingenService
 		$this->security = $security;
 
 		// Initialiseren van de WebPush class met de VAPID (oftewel application server) keys uit .env
-		$auth = [
-			'VAPID' => [
-				'subject' => $_ENV['VAPID_SUBJECT'],
-				'publicKey' => $_ENV['VAPID_PUBLIC_KEY'],
-				'privateKey' => $_ENV['VAPID_PRIVATE_KEY'],
-			],
-		];
-		$this->webPush = new WebPush($auth);
+		if (
+			$_ENV['VAPID_SUBJECT'] &&
+			$_ENV['VAPID_PUBLIC_KEY'] &&
+			$_ENV['VAPID_PRIVATE_KEY']
+		) {
+			$auth = [
+				'VAPID' => [
+					'subject' => $_ENV['VAPID_SUBJECT'],
+					'publicKey' => $_ENV['VAPID_PUBLIC_KEY'],
+					'privateKey' => $_ENV['VAPID_PRIVATE_KEY'],
+				],
+			];
+			$this->webPush = new WebPush($auth);
+		}
 	}
 
 	public function stuurDraadMeldingen(ForumPost $post)
@@ -351,7 +357,7 @@ class ForumMeldingenService
 				'meldingPush',
 				$ontvanger->getUserIdentifier()
 			);
-			if ($wilMeldingViaPush === 'ja') {
+			if ($wilMeldingViaPush === 'ja' && $this->webPush) {
 				$this->stuurPushBericht($ontvanger, $auteur, $post, $draad);
 			}
 		});
@@ -428,7 +434,7 @@ class ForumMeldingenService
 				'meldingPush',
 				$ontvanger->getUserIdentifier()
 			);
-			if ($wilMeldingViaPush === 'ja') {
+			if ($wilMeldingViaPush === 'ja' && $this->webPush) {
 				$this->stuurPushBericht($ontvanger, $auteur, $post, $draad);
 			}
 		});

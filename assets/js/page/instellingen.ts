@@ -109,6 +109,11 @@ const pushMeldingenVeranderd = async (ant: string) => {
 };
 
 const checkPushAvailability = async () => {
+	if (!applicationServerKey) {
+		isPushAvailable = false;
+		return;
+	}
+
 	const supportsPushManager =
 		'serviceWorker' in navigator && 'PushManager' in window;
 
