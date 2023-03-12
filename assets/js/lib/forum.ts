@@ -5,8 +5,7 @@ import { html, throwError } from './util';
 import axios from 'axios';
 import { Fragment, NodeType, Slice } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
-import { EditorSchema } from '../editor/schema';
-import { select, selectAll } from '../lib/dom';
+import { select } from '../lib/dom';
 
 export function toggleForumConceptBtn(enable: boolean): void {
 	const conceptButton = document.getElementById(
@@ -38,7 +37,7 @@ export function saveConceptForumBericht(): void {
 let bewerkContainer: HTMLElement | null = null;
 let bewerkContainerInnerHTML: string | null = null;
 // Houdt een verwijzing naar de standaard editor in deze pagina voor bij bewerken.
-let oldEditor: EditorView<EditorSchema> | null = null;
+let oldEditor: EditorView | null = null;
 
 /**
  * @see inline in forumBewerken

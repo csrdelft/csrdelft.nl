@@ -1,8 +1,9 @@
-import { EditorState } from 'prosemirror-state';
+import { EditorState, Plugin } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { Node } from 'prosemirror-model';
-import { EditorSchema, schema } from './schema';
-import { exampleSetup } from 'prosemirror-example-setup';
+import { schema } from './schema';
+import { history } from 'prosemirror-history';
+import { buildInputRules, buildKeymap } from 'prosemirror-example-setup';
 import { buildMenuItems } from './menu';
 import { htmlDecode } from '../lib/util';
 import { bbPrompt } from './bb-prompt';
@@ -13,11 +14,16 @@ import { lidHintPlugin } from './plugin/lid-hint';
 import { imageRemovePlugin, imageUploadPlugin } from './plugin/image-upload';
 
 import './citeer';
+import { baseKeymap } from 'prosemirror-commands';
+import { dropCursor } from 'prosemirror-dropcursor';
+import { gapCursor } from 'prosemirror-gapcursor';
+import { keymap } from 'prosemirror-keymap';
+import { menuBar } from 'prosemirror-menu';
 
 declare global {
 	interface Window {
 		// Huidige editor, referentie voor citeren enzo
-		currentEditor: EditorView<EditorSchema>;
+		currentEditor: EditorView;
 	}
 }
 
@@ -30,17 +36,28 @@ ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
 	);
 	const text = htmlDecode(input.value.replace(/&quot;/g, '\\"'));
 
-	window.currentEditor = new EditorView<EditorSchema>(el, {
+	window.currentEditor = new EditorView(el, {
 		state: EditorState.create({
 			doc: Node.fromJSON(schema, JSON.parse(text)),
 			plugins: [
-				lidHintPlugin,
+				...lidHintPlugin,
 				window.loggedIn && !extern
 					? imageUploadPlugin(schema)
 					: imageRemovePlugin(schema),
-				...exampleSetup({
-					schema,
-					menuContent,
+				buildInputRules(schema),
+				keymap(buildKeymap(schema, null)),
+				keymap(baseKeymap),
+				dropCursor(),
+				gapCursor(),
+				history(),
+				menuBar({
+					floating: true,
+					content: menuContent,
+				}),
+				new Plugin({
+					props: {
+						attributes: { class: 'ProseMirror-example-setup-style' },
+					},
 				}),
 				placeholderPlugin,
 				trackChangesPlugin(input),

@@ -1,11 +1,7 @@
 import { EditorState, Plugin } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
-import { EditorSchema } from '../schema';
 
-export const placeholderPlugin = new Plugin<
-	DecorationSet<EditorSchema>,
-	EditorSchema
->({
+export const placeholderPlugin = new Plugin<DecorationSet>({
 	state: {
 		init() {
 			return DecorationSet.empty;
@@ -38,7 +34,7 @@ export const placeholderPlugin = new Plugin<
 });
 
 export const findPlaceholder = (
-	state: EditorState<EditorSchema>,
+	state: EditorState,
 	id: unknown
 ): number | null => {
 	const decorations = placeholderPlugin.getState(state);
