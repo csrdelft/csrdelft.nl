@@ -11,8 +11,8 @@
 		"docker": "yarn install && yarn run watch-poll",
 		"startup": "yarn run dev",
 		"lint": "yarn run eslint --ext .vue,.ts assets/js",
-		"prettier-all": "yarn run prettier --write . --plugin=@prettier/plugin-php",
-		"prettier-check-all": "yarn run prettier --check . --plugin=@prettier/plugin-php",
+		"prettier-all": "yarn run prettier --write .",
+		"prettier-check-all": "yarn run prettier --check .",
 		"prepare": "yarnpkg husky install"
 	},
 	"devDependencies": {
@@ -155,7 +155,7 @@
 		"vuejs-paginate-next": "^1.0.2"
 	},
 	"lint-staged": {
-		"*": "yarn dlx -q prettier --write --ignore-unknown --plugin=@prettier/plugin-php"
+		"*": "yarn dlx -q prettier --write --ignore-unknown"
 	},
 	"packageManager": "yarn@3.2.2"
 }
