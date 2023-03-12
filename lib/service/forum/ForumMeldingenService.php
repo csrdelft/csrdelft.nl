@@ -8,6 +8,7 @@ use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\PushAbonnement;
 use CsrDelft\entity\security\Account;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
@@ -270,37 +271,39 @@ class ForumMeldingenService
 		ForumPost $post,
 		ForumDraad $draad
 	) {
-		$subscription = $this->pushAbonnementRepository->findOneBy([
+		$allSubscriptions = $this->pushAbonnementRepository->findAll([
 			'uid' => $ontvanger->getUserIdentifier(),
 		]);
-		if (!$subscription) {
+		if (!$allSubscriptions || count($allSubscriptions) <= 0) {
 			throw new RuntimeError(
-				'No subscription found for ' . $ontvanger->getUserIdentifier()
+				'No subscriptions found for ' . $ontvanger->getUserIdentifier()
 			);
 		}
 
-		$keys = json_decode($subscription->client_keys);
-		$bericht =
-			$auteur->getNaam('civitas') . ': ' . CsrBB::parsePreview($post->tekst);
+		foreach ($allSubscriptions as $subscription) {
+			$keys = json_decode($subscription->client_keys);
+			$bericht =
+				$auteur->getNaam('civitas') . ': ' . CsrBB::parsePreview($post->tekst);
 
-		$this->webPush->queueNotification(
-			Subscription::create([
-				'endpoint' => $subscription->client_endpoint,
-				'publicKey' => $_ENV['VAPID_PUBLIC_KEY'],
-				'keys' => [
-					'p256dh' => $keys->p256dh,
-					'auth' => $keys->auth,
-				],
-			]),
-			json_encode([
-				'tag' => 'csr-' . $post->post_id,
-				'title' => $draad->titel,
-				'body' =>
-					substr($bericht, 0, 300) . (strlen($bericht) > 300 ? '...' : ''),
-				'icon' => '/favicon.ico',
-				'url' => $post->getLink(true),
-			])
-		);
+			$this->webPush->queueNotification(
+				Subscription::create([
+					'endpoint' => $subscription->client_endpoint,
+					'publicKey' => $_ENV['VAPID_PUBLIC_KEY'],
+					'keys' => [
+						'p256dh' => $keys->p256dh,
+						'auth' => $keys->auth,
+					],
+				]),
+				json_encode([
+					'tag' => 'csr-' . $post->post_id,
+					'title' => $draad->titel,
+					'body' =>
+						substr($bericht, 0, 300) . (strlen($bericht) > 300 ? '...' : ''),
+					'icon' => '/favicon.ico',
+					'url' => $post->getLink(true),
+				])
+			);
+		}
 	}
 
 	/**

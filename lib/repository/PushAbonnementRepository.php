@@ -14,6 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method PushAbonnement|null findOneBy(array $criteria, array $orderBy = null)
  * @method PushAbonnement[]    findAll()
  * @method PushAbonnement[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method int                 count(array $criteria)
  */
 class PushAbonnementRepository extends AbstractRepository
 {

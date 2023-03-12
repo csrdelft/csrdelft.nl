@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\PushAbonnementRepository;
 use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,6 +14,7 @@ class PushAbonnementController extends AbstractController
 {
 	/**
 	 * @param PushAbonnementRepository $pushAbonnementRepository
+	 * @param LidInstellingenRepository $lidInstellingenRepository
 	 * @param Request $request
 	 * @return JsonResponse
 	 * @Route("/push-abonnement", methods={"POST"})
@@ -20,6 +22,7 @@ class PushAbonnementController extends AbstractController
 	 */
 	public function nieuw(
 		PushAbonnementRepository $pushAbonnementRepository,
+		LidInstellingenRepository $lidInstellingenRepository,
 		Request $request
 	) {
 		$endpoint = $request->request->get('endpoint');
@@ -28,9 +31,9 @@ class PushAbonnementController extends AbstractController
 		$subscription = $pushAbonnementRepository->findOneBy([
 			'client_endpoint' => $endpoint,
 		]);
-		if ($subscription) {
-			// Voor nu is er maar een subscription per account toegestaan
-			return new JsonResponse(['success' => false]);
+		// De endpoint kan niet vaker voorkomen
+		if ($subscription !== null) {
+			return new JsonResponse(['success' => false], 400);
 		}
 
 		$subscription = $pushAbonnementRepository->nieuw();
@@ -38,6 +41,9 @@ class PushAbonnementController extends AbstractController
 		$subscription->client_keys = json_encode($keys);
 
 		$pushAbonnementRepository->save($subscription);
+
+		$lidInstellingenRepository->wijzigInstelling('forum', 'meldingPush', 'ja');
+
 		return new JsonResponse(['success' => $subscription]);
 	}
 
@@ -58,8 +64,9 @@ class PushAbonnementController extends AbstractController
 		$subscription = $pushAbonnementRepository->findOneBy([
 			'client_endpoint' => $endpoint,
 		]);
-		if (!$subscription) {
-			return new JsonResponse(['success' => false]);
+		// Kan niet aanpassen als de endpoint niet bestaat
+		if ($subscription === null) {
+			return new JsonResponse(['success' => false], 400);
 		}
 
 		$subscription->client_keys = json_encode($keys);
@@ -70,6 +77,7 @@ class PushAbonnementController extends AbstractController
 
 	/**
 	 * @param PushAbonnementRepository $pushAbonnementRepository
+	 * @param LidInstellingenRepository $lidInstellingenRepository
 	 * @param Request $request
 	 * @return JsonResponse
 	 * @Route("/push-abonnement", methods={"DELETE"})
@@ -77,6 +85,7 @@ class PushAbonnementController extends AbstractController
 	 */
 	public function verwijderen(
 		PushAbonnementRepository $pushAbonnementRepository,
+		LidInstellingenRepository $lidInstellingenRepository,
 		Request $request
 	) {
 		$endpoint = $request->request->get('endpoint');
@@ -84,11 +93,24 @@ class PushAbonnementController extends AbstractController
 		$subscription = $pushAbonnementRepository->findOneBy([
 			'client_endpoint' => $endpoint,
 		]);
-		if (!$subscription) {
-			return new JsonResponse(['success' => false]);
+		// Kan niet verwijderen als de endpoint niet bestaat
+		if ($subscription === null) {
+			return new JsonResponse(['success' => false], 400);
 		}
 
 		$pushAbonnementRepository->remove($subscription);
+
+		$subscriptionCount = $pushAbonnementRepository->count([
+			'uid' => $subscription->uid,
+		]);
+		if ($subscriptionCount <= 0) {
+			$lidInstellingenRepository->wijzigInstelling(
+				'forum',
+				'meldingPush',
+				'nee'
+			);
+		}
+
 		return new JsonResponse(['success' => true]);
 	}
 }
