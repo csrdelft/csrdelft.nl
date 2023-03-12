@@ -136,7 +136,9 @@ class IsHetAlView implements View
 
 			case 'kring':
 				// Matcht 'kring 42', 'loremipsumkring', 'kringlezing', maar niet 'kringleidersinstructie'.
-				$vandaag = $agendaRepository->zoekRegexAgenda('/kring(?: \d+|\b|lezing\b)/i');
+				$vandaag = $agendaRepository->zoekRegexAgenda(
+					'/kring(?: \d+|\b|lezing\b)/i'
+				);
 				$this->ja = $vandaag instanceof AgendaItem;
 				break;
 
