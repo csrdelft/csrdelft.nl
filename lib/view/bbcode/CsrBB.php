@@ -203,6 +203,14 @@ class CsrBB extends Parser
 		return $parser->getHtml($bbcode);
 	}
 
+	public static function parsePreview($bbcode)
+	{
+		$env = new BbEnv();
+		$env->mode = 'preview';
+		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
+		return $parser->getHtml($bbcode);
+	}
+
 	public static function parsePlain($bbcode)
 	{
 		$env = new BbEnv();

@@ -211,11 +211,6 @@ class CsrTwigExtension extends AbstractExtension
 			new TwigFilter('escape_ical', [TextUtil::class, 'escape_ical']),
 			new TwigFilter('file_base64', [$this, 'file_base64']),
 			new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
-			new TwigFilter(
-				'bbcode_light',
-				[$this, 'bbcode_light'],
-				['is_safe' => ['html']]
-			),
 			new TwigFilter('uniqid', function ($prefix) {
 				return CryptoUtil::uniqid_safe($prefix);
 			}),
@@ -308,16 +303,15 @@ class CsrTwigExtension extends AbstractExtension
 			return CsrBB::parseHtml($string, $inlineHtml);
 		} elseif ($mode == 'mail') {
 			return CsrBB::parseMail($string);
+		} elseif ($mode == 'light') {
+			return CsrBB::parseLight($string);
+		} elseif ($mode == 'preview') {
+			return CsrBB::parsePreview($string);
 		} elseif ($mode == 'plain') {
 			return CsrBB::parsePlain($string);
 		} else {
 			return CsrBB::parse($string);
 		}
-	}
-
-	public function bbcode_light($string)
-	{
-		return CsrBB::parseLight($string);
 	}
 
 	public function file_base64($filename)

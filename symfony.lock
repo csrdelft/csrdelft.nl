@@ -799,6 +799,9 @@
     "twig/intl-extra": {
         "version": "v3.2.1"
     },
+    "twig/string-extra": {
+        "version": "v3.5.1"
+    },
     "twig/twig": {
         "version": "v2.12.0"
     },

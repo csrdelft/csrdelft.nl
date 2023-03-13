@@ -54,6 +54,11 @@ class BbDocument extends BbTag
 		return $this->document == false || $this->document->magBekijken();
 	}
 
+	public function renderPreview()
+	{
+		return ' 📄 ';
+	}
+
 	public function renderLight()
 	{
 		if ($this->document) {

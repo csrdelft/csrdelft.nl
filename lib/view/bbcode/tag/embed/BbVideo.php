@@ -31,6 +31,11 @@ class BbVideo extends BbTag
 		return 'video';
 	}
 
+	public function renderPreview()
+	{
+		return '📹';
+	}
+
 	public function renderLight()
 	{
 		list($src, $type) = $this->processVideo();

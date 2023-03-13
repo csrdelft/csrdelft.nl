@@ -66,6 +66,11 @@ class BbFoto extends BbTag
 		);
 	}
 
+	public function renderPreview()
+	{
+		return ' 📷 ';
+	}
+
 	public function renderLight()
 	{
 		return BbHelper::lightLinkThumbnail(

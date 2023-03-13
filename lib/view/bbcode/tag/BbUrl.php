@@ -35,6 +35,11 @@ class BbUrl extends BbTag
 		}
 	}
 
+	public function renderPreview()
+	{
+		return $this->getContent() . ' 🔗 ';
+	}
+
 	public function renderPlain()
 	{
 		return $this->getContent() . ' (' . $this->url . ')';

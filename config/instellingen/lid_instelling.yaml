@@ -208,11 +208,11 @@ instellingen:
       default: 'ja'
       beschrijving: 'Ontvang berichten via de e-mail.'
     meldingPush:
-      titel: 'Berichten via pushbericht'
+      titel: 'Berichten via push op DIT apparaat'
       type: Enumeration
       opties: ['ja', 'nee']
       default: 'nee'
-      beschrijving: 'Ontvang berichten via pushbericht op uw apparaten.'
+      beschrijving: 'Ontvang berichten via pushbericht op DIT apparaat.'
   fotoalbum:
     tag_suggestions:
       titel: 'Etiket suggesties'

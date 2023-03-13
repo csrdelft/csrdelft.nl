@@ -14,7 +14,9 @@ const instellingVeranderd = () => {
 
 const meta = document.getElementsByTagName('meta');
 const applicationServerKey = meta['vapid-public-key'].content;
+
 let isPushAvailable = false;
+let registration: ServiceWorkerRegistration | undefined;
 
 const pushAbboneer = async () => {
 	if (!isPushAvailable) return;
@@ -27,7 +29,7 @@ const pushAbboneer = async () => {
 		console.info('The user accepted the permission request.');
 	}
 
-	const registration = await navigator.serviceWorker.ready;
+	registration = await navigator.serviceWorker.ready;
 	const existingSubscription =
 		await registration?.pushManager.getSubscription();
 	if (existingSubscription) {
@@ -72,7 +74,7 @@ const pushAbboneer = async () => {
 const pushDeabboneer = async () => {
 	if (!isPushAvailable) return;
 
-	const registration = await navigator.serviceWorker.ready;
+	registration = await navigator.serviceWorker.ready;
 	const subscription =
 		(await registration?.pushManager.getSubscription()) ?? null;
 	if (!subscription) throw new Error('No existing subscription');
@@ -94,28 +96,37 @@ const pushDeabboneer = async () => {
 		throw new Error('Bad response from server.');
 	}
 
-	const existingSubscription = await subscription?.unsubscribe();
-	if (existingSubscription) {
+	const isUnsubscribed = await subscription?.unsubscribe();
+	if (isUnsubscribed) {
 		console.info('Successfully unsubscribed from push notifications.');
 	}
 };
 const pushMeldingenVeranderd = async (ant: string) => {
 	switch (ant) {
 		case 'ja':
-			return pushAbboneer();
+			return await pushAbboneer();
 		case 'nee':
-			return pushDeabboneer();
+			return await pushDeabboneer();
 	}
 };
 
 const checkPushAvailability = async () => {
+	if (!applicationServerKey) {
+		isPushAvailable = false;
+		return;
+	}
+
+	const instellingJa = select<HTMLInputElement>('#inst_forum_meldingPush_ja');
+	const instellingNee = select<HTMLInputElement>('#inst_forum_meldingPush_nee');
+
 	const supportsPushManager =
 		'serviceWorker' in navigator && 'PushManager' in window;
 
 	if (supportsPushManager) {
-		const registration = await navigator.serviceWorker.ready;
+		registration = await navigator.serviceWorker.ready;
 		const hasPushManager =
 			registration !== undefined && 'pushManager' in registration;
+
 		if (hasPushManager) {
 			const isIos =
 				navigator.userAgent.includes('iPhone') ||
@@ -133,9 +144,29 @@ const checkPushAvailability = async () => {
 		}
 	}
 
+	// Maak de knoppen disabled als push niet beschikbaar is
 	if (!isPushAvailable) {
-		const instellingRow = select('#instelling-forum-meldingPush');
-		instellingRow.classList.add('d-none');
+		const instellingGroup = select<HTMLDivElement>(
+			'#instelling-forum-meldingPush > div > div.btn-group'
+		);
+		instellingGroup.setAttribute(
+			'title',
+			'Push is niet beschikbaar op dit apparaat'
+		);
+
+		instellingJa.disabled = true;
+		instellingNee.disabled = true;
+
+		instellingNee.checked = true;
+	} else {
+		// Update de knoppen op basis van bestaande abonnement
+		const existingSubscription =
+			await registration?.pushManager.getSubscription();
+		if (existingSubscription) {
+			instellingJa.checked = true;
+		} else {
+			instellingNee.checked = true;
+		}
 	}
 };
 checkPushAvailability();
@@ -166,15 +197,16 @@ const instellingOpslaan = async (ev: Event) => {
 	}
 
 	try {
+		// Als de instelling meldingPush is moet er meer gebeuren en de instelling wordt op een andere manier geüpdatet
 		if (href.includes('meldingPush')) {
 			const antwoord = /meldingPush\/(\w+)/g.exec(href);
 
 			await pushMeldingenVeranderd(antwoord[1]);
+		} else {
+			await axios.post(href, { waarde });
+
+			instellingVeranderd();
 		}
-
-		await axios.post(href, { waarde });
-
-		instellingVeranderd();
 
 		input.classList.remove('loading');
 	} catch (error) {
