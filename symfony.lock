@@ -223,9 +223,6 @@
             "./config/routes/league_oauth2_server.yaml"
         ]
     },
-    "maknz/slack": {
-        "version": "1.7.0"
-    },
     "minishlink/web-push": {
         "version": "v7.0.0"
     },
