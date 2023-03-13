@@ -211,6 +211,7 @@ const instellingOpslaan = async (ev: Event) => {
 		input.classList.remove('loading');
 	} catch (error) {
 		console.error(error);
+		alert('WP Error: ' + error.message);
 	}
 };
 

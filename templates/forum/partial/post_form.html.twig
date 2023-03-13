@@ -22,16 +22,16 @@
 <div id="forumPosten" class="list-group-item border-0 py-3 px-0 px-sm-3">
 	<div class="d-flex flex-row gap-3">
 		{% if app.user is defined and app.user is not null %}
-		<div class="pasfoto">
-			{{ app.user.profiel.pasfotoRounded | raw }}
-		</div>
-		{% endif %}
-		<div class="bericht0 flex-grow-1">
-		{% if app.user is defined and app.user is not null %}
-			<div class="d-flex justify-content-between align-items-center">
-				{{ app.user.profiel.naam('user') }}
+			<div class="pasfoto-container">
+				{{ app.user.profiel.pasfotoRounded | raw }}
 			</div>
 		{% endif %}
+		<div class="bericht0 flex-grow-1">
+			{% if app.user is defined and app.user is not null %}
+				<div class="d-flex justify-content-between align-items-center">
+					{{ app.user.profiel.naam('user') }}
+				</div>
+			{% endif %}
 			<div class="draad-post fw-light my-1">
 				<form id="forumForm" class="Formulier"
 					action="{{ url('csrdelft_forum_forumdraad_posten', {forum_id: deel.forum_id, draad_id: draad is not none ? draad.draad_id : null}) }}"

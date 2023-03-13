@@ -3,6 +3,7 @@ import {
 	Dropdown,
 	DropdownSubmenu,
 	MenuItem,
+	MenuElement,
 	wrapItem,
 } from 'prosemirror-menu';
 import { EditorSchema } from './schema';
@@ -35,7 +36,7 @@ import { joinUp, lift, selectParentNode } from 'prosemirror-commands';
 export function buildMenuItems(
 	schema: EditorSchema,
 	loggedIn: boolean
-): (MenuItem | Dropdown)[][] {
+): MenuElement[][] {
 	return [
 		cut([
 			markItem(schema.marks.strong, {

@@ -281,15 +281,26 @@ class AgendaRepository extends AbstractRepository
 	 * Zoek in de activiteiten (titel en beschrijving) van vandaag
 	 * naar het woord $woord, geef de eerste terug.
 	 * @param $woord string
-	 * @return mixed|null
+	 * @return Agendeerbaar|null
 	 */
 	public function zoekWoordAgenda($woord)
 	{
-		$beginDag = date_create_immutable()->setTime(0, 0, 0);
+		return $this->zoekRegexAgenda('/' . preg_quote($woord, '/') . '/iu');
+	}
+
+	/**
+	 * Vind de eerste activiteit van vandaag waarvan de
+	 * titel of omschrijving wordt gematcht door $patroon.
+	 * @param $patroon string
+	 * @return Agendeerbaar|null
+	 */
+	public function zoekRegexAgenda($patroon)
+	{
+		$beginDag = date_create_immutable('today');
 		foreach ($this->getItemsByDay($beginDag) as $item) {
 			if (
-				stristr($item->getTitel(), $woord) !== false ||
-				stristr($item->getBeschrijving(), $woord) !== false
+				preg_match($patroon, $item->getTitel()) ||
+				preg_match($patroon, $item->getBeschrijving())
 			) {
 				return $item;
 			}

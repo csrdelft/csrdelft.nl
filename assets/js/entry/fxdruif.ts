@@ -5,7 +5,9 @@ import { ontstuiter } from '../lib/util';
 class DruifRomeinen {
 	private static laadAnimatie() {
 		document
-			.querySelectorAll(".forumpasfoto a[href^='/profiel/20']")
+			.querySelectorAll(
+				".forum-draad .pasfoto-container img.pasfoto[src^='/profiel/pasfoto/20']"
+			)
 			.forEach((profiel) => {
 				profiel.parentElement.classList.add('druif');
 				profiel.addEventListener('mouseover', () =>

@@ -67,4 +67,36 @@ class MaaltijdAbonnement
 	public $van_uid;
 	public $waarschuwing;
 	public $foutmelding;
+
+	public function getMaaltijdRepetitie(): MaaltijdRepetitie
+	{
+		return $this->maaltijd_repetitie;
+	}
+
+	public function setMaaltijdRepetitie(MaaltijdRepetitie $maaltijdRepetitie)
+	{
+		$this->maaltijd_repetitie = $maaltijdRepetitie;
+		$this->mlt_repetitie_id = $maaltijdRepetitie->getId();
+	}
+
+	public function getProfiel(): Profiel
+	{
+		return $this->profiel;
+	}
+
+	public function setProfiel(Profiel $profiel)
+	{
+		$this->profiel = $profiel;
+		$this->uid = $profiel->getId();
+	}
+
+	public function setWanneerIngeschakeld(DateTimeImmutable $wanneerIngeschakeld)
+	{
+		$this->wanneer_ingeschakeld = $wanneerIngeschakeld;
+	}
+
+	public function getWanneerIngeschakeld(): DateTimeImmutable
+	{
+		return $this->wanneer_ingeschakeld;
+	}
 }
