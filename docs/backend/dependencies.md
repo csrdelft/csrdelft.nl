@@ -29,7 +29,6 @@ Dependencies die worden gebruikt als de stek draait.
 | globalcitizen/php-iban               | ^2.6       | IBAN check                                                                   |
 | google/apiclient                     | ^2.0       | Google Contacts Sync                                                         |
 | jakeasmith/http_build_url            | ^1         | Wordt in curl_follow_location gebruikt (Moet verwijderd worden)              |
-| maknz/slack                          | ^1.7       | Errors naar slack                                                            |
 | nelmio/cors-bundle                   | ^2.1       |
 | parsecsv/php-parsecsv                | ^1.2       | Parsed csv voor de civisaldo afschrijven tool.                               |
 | phpdocumentor/reflection-docblock    | ^5.2       |
