@@ -82,11 +82,6 @@ class BrowserTestCase extends PantherTestCase
 
 	protected function setUp(): void
 	{
-		// Voorpagina crasht als er geen fotoalbum dir is.
-		if (!file_exists(PHOTOALBUM_PATH)) {
-			mkdir(PHOTOALBUM_PATH, 0777, true);
-		}
-
 		$this->client = static::createPantherClient();
 	}
 
