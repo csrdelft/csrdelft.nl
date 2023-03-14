@@ -117,7 +117,7 @@ class VoorpaginaController extends AbstractController
 			]);
 		}
 
-		throw $this->createNotFoundException();
+		return new Response();
 	}
 
 	/**
