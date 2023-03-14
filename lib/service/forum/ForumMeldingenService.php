@@ -154,8 +154,10 @@ class ForumMeldingenService
 		 * Verstuur alle pushberichten in de wachtrij
 		 * @var MessageSentReport $report
 		 */
-		foreach ($this->webPush->flush() as $report) {
-			continue;
+		if ($this->webPush) {
+			foreach ($this->webPush->flush() as $report) {
+				continue;
+			}
 		}
 	}
 
@@ -211,8 +213,10 @@ class ForumMeldingenService
 		 * Verstuur alle pushberichten in de wachtrij
 		 * @var MessageSentReport $report
 		 */
-		foreach ($this->webPush->flush() as $report) {
-			continue;
+		if ($this->webPush) {
+			foreach ($this->webPush->flush() as $report) {
+				continue;
+			}
 		}
 	}
 
@@ -476,8 +480,10 @@ class ForumMeldingenService
 		 * Verstuur alle pushberichten in de wachtrij
 		 * @var MessageSentReport $report
 		 */
-		foreach ($this->webPush->flush() as $report) {
-			continue;
+		if ($this->webPush) {
+			foreach ($this->webPush->flush() as $report) {
+				continue;
+			}
 		}
 	}
 }
