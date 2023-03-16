@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\groepen\leden;
 
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\GroepLid;
@@ -19,7 +21,7 @@ use CsrDelft\view\datatable\Multiplicity;
  */
 class GroepLedenTable extends DataTable
 {
-	public function __construct(Groep $groep)
+	public function __construct(Groep $groep, bool $magBeheren)
 	{
 		parent::__construct(
 			GroepLid::class,
@@ -34,7 +36,7 @@ class GroepLedenTable extends DataTable
 		$this->setColumnTitle('lid', 'Lidnaam');
 		$this->setColumnTitle('door_uid', 'Aangemeld door');
 
-		if ($groep->mag(AccessAction::Beheren())) {
+		if ($magBeheren) {
 			$this->addKnop(
 				new DataTableKnop(
 					Multiplicity::Zero(),

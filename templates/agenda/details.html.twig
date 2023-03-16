@@ -40,7 +40,7 @@
 						{{ icon('calendar-plus', null, 'Exporteer dit agenda item') }}
 					</a>
 
-					{% if item is abstractgroep and item.magWijzigen %}
+					{% if item is abstractgroep and is_granted('groep.wijzigen', item) %}
 						<a href="{{ item.url }}/wijzigen" class="beheren btn" title="Wijzig {{ item.naam }}">
 							{{ icon('bewerken', null, 'Bewerk dit agenda item') }}
 						</a>

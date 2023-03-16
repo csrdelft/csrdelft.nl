@@ -4,6 +4,8 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
+use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
+use CsrDelft\common\Security\Voter\Entity\GroepLidVoter;
 use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
@@ -279,7 +281,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			throw $this->createNotFoundException();
 		}
 
-		if (!$groep->mag(AccessAction::Bekijken())) {
+		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 
@@ -297,7 +299,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	public function omschrijving($id)
 	{
 		$groep = $this->repository->get($id);
-		if (!$groep->mag(AccessAction::Bekijken())) {
+		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 		return $this->render('groep/omschrijving.html.twig', ['groep' => $groep]);
@@ -306,7 +308,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	public function pasfotos($id)
 	{
 		$groep = $this->repository->get($id);
-		if (!$groep->mag(AccessAction::Bekijken())) {
+		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 		return new GroepPasfotosView($this->container->get('twig'), $groep);
@@ -315,7 +317,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	public function lijst($id)
 	{
 		$groep = $this->repository->get($id);
-		if (!$groep->mag(AccessAction::Bekijken())) {
+		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 		return new GroepLijstView($this->container->get('twig'), $groep);
@@ -324,7 +326,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	public function stats($id)
 	{
 		$groep = $this->repository->get($id);
-		if (!$groep->mag(AccessAction::Bekijken())) {
+		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 
@@ -340,7 +342,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	public function emails($id)
 	{
 		$groep = $this->repository->get($id);
-		if (!$groep->mag(AccessAction::Bekijken())) {
+		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 		return new GroepEmailsView($this->container->get('twig'), $groep);
@@ -349,7 +351,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	public function eetwens($id)
 	{
 		$groep = $this->repository->get($id);
-		if (!$groep->mag(AccessAction::Bekijken())) {
+		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 		return new GroepEetwensView($this->container->get('twig'), $groep);
@@ -532,7 +534,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			throw $this->createNotFoundException();
 		}
 
-		if (!$groep->mag(AccessAction::Wijzigen())) {
+		if (!$this->isGranted(AbstractGroepVoter::WIJZIGEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 		// checks rechten wijzigen
@@ -571,7 +573,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$groep = $this->repository->retrieveByUUID($id);
 		if (
 			$groep &&
-			$groep->mag(AccessAction::Verwijderen()) &&
+			$this->isGranted(AbstractGroepVoter::VERWIJDEREN, $groep) &&
 			count($groep->getLeden()) === 0
 		) {
 			$old = $serializer->serialize($groep, 'json', [
@@ -603,7 +605,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		if ($form->validate()) {
 			$response = [];
 			$groep = $this->repository->retrieveByUUID($id);
-			if ($groep && $groep->mag(AccessAction::Opvolging())) {
+			if ($this->isGranted(AbstractGroepVoter::OPVOLGING, $groep)) {
 				$this->changeLogRepository->log(
 					$groep,
 					'familie',
@@ -644,7 +646,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			$converteer = get_class($model) !== get_class($this->repository);
 			$response = [];
 			$groep = $this->repository->retrieveByUUID($id);
-			if ($groep && $groep->mag(AccessAction::Wijzigen())) {
+			if ($this->isGranted(AbstractGroepVoter::WIJZIGEN, $groep)) {
 				if ($converteer) {
 					$this->changeLogRepository->log(
 						$groep,
@@ -696,7 +698,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			$groep &&
 			$groep instanceof HeeftAanmeldMoment &&
 			date_create_immutable() <= $groep->getAanmeldenTot() &&
-			$groep->mag(AccessAction::Wijzigen())
+			$this->isGranted(AbstractGroepVoter::WIJZIGEN, $groep)
 		) {
 			$this->changeLogRepository->log(
 				$groep,
@@ -714,7 +716,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	public function voorbeeld($id)
 	{
 		$groep = $this->repository->retrieveByUUID($id);
-		if (!$groep || !$groep->mag(AccessAction::Bekijken())) {
+		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 		return new GroepPreviewForm($this->container->get('twig'), $groep);
@@ -730,7 +732,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		// data request
 		if ($request->getMethod() == 'POST') {
 			$groep = $this->repository->get($id);
-			if (!$groep->mag(AccessAction::Bekijken())) {
+			if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 				throw $this->createAccessDeniedException();
 			}
 			$data = $this->changeLogRepository->findBy([
@@ -741,7 +743,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		// popup request
 		else {
 			$groep = $this->repository->retrieveByUUID($id);
-			if (!$groep || !$groep->mag(AccessAction::Bekijken())) {
+			if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 				throw $this->createAccessDeniedException('Kan logboek niet vinden');
 			}
 			return new GroepLogboekForm($groep);
@@ -751,13 +753,16 @@ abstract class AbstractGroepenController extends AbstractController implements
 	public function leden(Request $request, $id)
 	{
 		$groep = $this->repository->get($id);
-		if (!$groep->mag(AccessAction::Bekijken())) {
+		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 		if ($request->getMethod() == 'POST') {
 			return $this->tableData($groep->getLeden());
 		} else {
-			return new GroepLedenTable($groep);
+			return new GroepLedenTable(
+				$groep,
+				$this->isGranted(AbstractGroepVoter::BEHEREN, $groep)
+			);
 		}
 	}
 
@@ -776,7 +781,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			throw new BadRequestHttpException('Groep is niet van versie 2.');
 		}
 
-		if (!$groep->mag(AccessAction::Aanmelden())) {
+		if (!$this->isGranted(AbstractGroepVoter::AANMELDEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 		$lid = $this->groepLidRepository->nieuw($groep, $uid);
@@ -809,7 +814,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			throw new BadRequestHttpException('Groep is niet van versie 1.');
 		}
 
-		if (!$groep->mag(AccessAction::Aanmelden())) {
+		if (!$this->isGranted(AbstractGroepVoter::AANMELDEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 
@@ -832,7 +837,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	{
 		$groep = $this->repository->get($id);
 
-		if (!$groep->mag(AccessAction::Beheren())) {
+		if (!$this->isGranted(AbstractGroepVoter::BEHEREN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 
@@ -868,7 +873,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$groep = $this->repository->get($id);
 
 		$lid = $groep->getLid($uid);
-		if (!$groep->magLid(AccessAction::Bewerken(), $lid)) {
+		if (!$this->isGranted(AbstractGroepVoter::BEWERKEN, $lid)) {
 			throw $this->createAccessDeniedException();
 		}
 		$form = new GroepBewerkenForm($lid, $groep);
@@ -896,7 +901,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			throw $this->createAccessDeniedException();
 		}
 
-		if (!$groep->magLid(AccessAction::Beheren(), $lid)) {
+		if (!$this->isGranted(AbstractGroepVoter::BEHEREN, $lid)) {
 			throw $this->createAccessDeniedException();
 		}
 
@@ -923,7 +928,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	{
 		$groep = $this->repository->get($id);
 
-		if ($uid && !$groep->mag(AccessAction::Beheren())) {
+		if ($uid && !$this->isGranted(AbstractGroepVoter::BEHEREN, $groep)) {
 			throw $this->createAccessDeniedException(
 				'Mag niet afmelden via context menu'
 			);
@@ -941,8 +946,8 @@ abstract class AbstractGroepenController extends AbstractController implements
 		}
 
 		if (
-			!$groep->magLid(AccessAction::Afmelden(), $lid) &&
-			!$groep->magLid(AccessAction::Beheren(), $lid)
+			!$this->isGranted(AbstractGroepVoter::AFMELDEN, $lid) &&
+			!$this->isGranted(AbstractGroepVoter::BEHEREN, $lid)
 		) {
 			throw $this->createAccessDeniedException();
 		}
@@ -958,7 +963,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	{
 		$groep = $this->repository->get($id);
 
-		if (!$groep->mag(AccessAction::Beheren())) {
+		if (!$this->isGranted(AbstractGroepVoter::BEHEREN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
 
@@ -989,9 +994,9 @@ abstract class AbstractGroepenController extends AbstractController implements
 
 		// A::Beheren voor afmelden via context-menu
 		if (
-			!$groep->mag(AccessAction::Afmelden()) &&
-			!$groep->mag(AccessAction::Beheren()) &&
-			!$otGroep->mag(AccessAction::Aanmelden())
+			!$this->isGranted(AbstractGroepVoter::AFMELDEN, $groep) &&
+			!$this->isGranted(AbstractGroepVoter::BEHEREN, $groep) &&
+			!$this->isGranted(AbstractGroepVoter::AANMAKEN, $otGroep)
 		) {
 			throw new CsrGebruikerException();
 		}

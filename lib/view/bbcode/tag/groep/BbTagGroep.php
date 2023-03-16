@@ -5,18 +5,18 @@ namespace CsrDelft\view\bbcode\tag\groep;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Util\VueUtil;
 use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\groepen\Groep;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\groepen\GroepView;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 use Twig\Environment;
 
 /**
@@ -41,8 +41,13 @@ abstract class BbTagGroep extends BbTag
 	 * @var NormalizerInterface
 	 */
 	private $normalizer;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
+		Security $security,
 		EntityManagerInterface $entityManager,
 		Environment $twig,
 		NormalizerInterface $normalizer
@@ -50,6 +55,7 @@ abstract class BbTagGroep extends BbTag
 		$this->twig = $twig;
 		$this->entityManager = $entityManager;
 		$this->normalizer = $normalizer;
+		$this->security = $security;
 	}
 
 	public function getId()
@@ -63,7 +69,10 @@ abstract class BbTagGroep extends BbTag
 	 */
 	public function isAllowed()
 	{
-		return $this->getGroep()->mag(AccessAction::Bekijken());
+		return $this->security->isGranted(
+			AbstractGroepVoter::BEKIJKEN,
+			$this->getGroep()
+		);
 	}
 
 	/**

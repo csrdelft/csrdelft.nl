@@ -9,6 +9,7 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepTab;
@@ -114,7 +115,8 @@ class GroepView implements FormElement, ToResponse
 			'"><div id="groep-samenvatting-' .
 			$this->groep->id .
 			'" class="groep-samenvatting">';
-		if ($this->groep->mag(AccessAction::Wijzigen())) {
+		$security = ContainerFacade::getContainer()->get('security');
+		if ($security->isGranted(AbstractGroepVoter::WIJZIGEN, $this->groep)) {
 			$html .=
 				'<div class="float-end"><a class="btn" href="' .
 				$this->groep->getUrl() .

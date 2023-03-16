@@ -3,7 +3,7 @@
 {% block type %}pasfotos{% endblock %}
 
 {% block tabcontent %}
-	{% if groep.magTwig('aanmelden') %}
+	{% if is_granted('groep.aanmelden', groep) %}
 		{{ aanmeldForm | raw }}
 	{% endif %}
 

@@ -4,6 +4,7 @@ namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Enum;
+use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\entity\groepen\enum\GroepTab;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\security\enum\AccessAction;
@@ -139,9 +140,10 @@ class GroepenView implements View
 		}
 		$view = new CmsPaginaView($this->pagina);
 		$html .= $view->__toString();
+		$security = ContainerFacade::getContainer()->get('security');
 		foreach ($this->groepen as $groep) {
 			// Controleer rechten
-			if (!$groep->mag(AccessAction::Bekijken())) {
+			if (!$security->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 				continue;
 			}
 			$html .= '<hr>';
