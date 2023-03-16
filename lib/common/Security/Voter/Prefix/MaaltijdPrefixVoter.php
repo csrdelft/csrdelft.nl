@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\common\Security\Voter;
+namespace CsrDelft\common\Security\Voter\Prefix;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\maalcie\Maaltijd;
@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface
 /**
  * Is een lid aangemeld voor een bepaalde maaltijd?
  */
-class MaaltijdVoter extends PrefixVoter
+class MaaltijdPrefixVoter extends PrefixVoter
 {
 	/**
 	 * @var EntityManagerInterface

@@ -1,11 +1,11 @@
 <?php
 
-namespace CsrDelft\common\Security\Voter;
+namespace CsrDelft\common\Security\Voter\Prefix;
 
 use CsrDelft\entity\security\Account;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class LichtingVoter extends PrefixVoter
+class LichtingPrefixVoter extends PrefixVoter
 {
 	const PREFIX_LICHTING = 'LICHTING';
 	const PREFIX_LIDJAAR = 'LIDJAAR';

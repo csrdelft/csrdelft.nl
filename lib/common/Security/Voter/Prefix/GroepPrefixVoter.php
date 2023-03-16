@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\common\Security\Voter;
+namespace CsrDelft\common\Security\Voter\Prefix;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\groepen\Activiteit;
@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  * groep met die korte naam erbij, als het getal is uiteraard de groep met dat id.
  * Met de toevoeging ':Fiscus' kan ook specifieke functie geëist worden binnen een groep.
  */
-class GroepVoter extends PrefixVoter
+class GroepPrefixVoter extends PrefixVoter
 {
 	const PREFIX_ACTIVITEIT = 'ACTIVITEIT';
 	const PREFIX_BESTUUR = 'BESTUUR';

@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\common\Security\Voter;
+namespace CsrDelft\common\Security\Voter\Prefix;
 
 use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\LidStatus;
@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 /**
  * Heeft het lid deze status?
  */
-class LidStatusVoter extends PrefixVoter
+class LidStatusPrefixVoter extends PrefixVoter
 {
 	public function supportsPrefix($attribute): bool
 	{

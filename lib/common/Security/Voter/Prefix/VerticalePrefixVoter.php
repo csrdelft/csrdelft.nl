@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\common\Security\Voter;
+namespace CsrDelft\common\Security\Voter\Prefix;
 
 use CsrDelft\entity\security\Account;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 /**
  *  Behoort een lid tot een bepaalde verticale?
  */
-class VerticaleVoter extends PrefixVoter
+class VerticalePrefixVoter extends PrefixVoter
 {
 	protected function supportsPrefix($prefix)
 	{

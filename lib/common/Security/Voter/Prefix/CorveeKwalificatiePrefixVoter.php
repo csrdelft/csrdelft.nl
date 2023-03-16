@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\common\Security\Voter;
+namespace CsrDelft\common\Security\Voter\Prefix;
 
 use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveeKwalificatie;
@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 /**
  * Heeft een lid een kwalficatie voor een functie in het covee-systeem?
  */
-class CorveeKwalificatieVoter extends PrefixVoter
+class CorveeKwalificatiePrefixVoter extends PrefixVoter
 {
 	/**
 	 * @var EntityManagerInterface

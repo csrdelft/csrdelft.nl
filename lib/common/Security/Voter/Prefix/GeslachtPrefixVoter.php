@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\common\Security\Voter;
+namespace CsrDelft\common\Security\Voter\Prefix;
 
 use CsrDelft\entity\profiel\Profiel;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
