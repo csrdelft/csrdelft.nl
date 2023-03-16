@@ -13,6 +13,7 @@ use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
@@ -252,6 +253,35 @@ class Groep implements DataTableEntry, DisplayEntity
 			'aanmelden' => AccessAction::Aanmelden(),
 		];
 		return $this->mag($actionMap[$action]);
+	}
+
+	public function magTwigLid($action, GroepLid $lid)
+	{
+		$actionMap = [
+			'bewerken' => AccessAction::Bewerken(),
+			'afmelden' => AccessAction::Afmelden(),
+			'beheren' => AccessAction::Beheren(),
+			'aanmelden' => AccessAction::Aanmelden(),
+		];
+
+		return $this->magLid($actionMap[$action], $lid);
+	}
+
+	public function magLid(AccessAction $action, GroepLid $lid)
+	{
+		if (!$this->mag($action)) {
+			return false;
+		}
+
+		if ($lid->uid == LoginService::getUid()) {
+			return true;
+		}
+
+		if (LoginService::mag(P_LEDEN_MOD)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

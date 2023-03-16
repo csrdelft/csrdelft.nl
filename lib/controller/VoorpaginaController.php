@@ -128,7 +128,7 @@ class VoorpaginaController extends AbstractController
 	public function maaltijden(MaaltijdenService $maaltijdenService): Response
 	{
 		$maaltijden = $maaltijdenService->getKomendeMaaltijdenVoorLid(
-			LoginService::getProfiel()
+			$this->getProfiel()
 		);
 
 		$maaltijd = reset($maaltijden);

@@ -17,14 +17,14 @@
 		{% for lid in groep.ledenOpAchternaamGesorteerd %}
 			<tr>
 				<td>
-					{% if groep.magTwig('afmelden') %}
+					{% if groep.magTwigLid('afmelden', lid) %}
 						<a href="{{ groep.url }}/ketzer/afmelden" class="post confirm float-start" title="Afmelden">' .
 							{{ icon('circle-minus') }}
 						</a>
 					{% endif %}
 					{{ lid.link | raw }}
 				</td><td>
-					{% if groep.magTwig('bewerken') %}
+					{% if groep.magTwigLid('bewerken', lid) %}
 						{{ groep_bewerken_form(lid, groep) }}
 					{% else %}
 						{{ lid.opmerking }}

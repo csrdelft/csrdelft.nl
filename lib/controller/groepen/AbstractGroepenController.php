@@ -867,10 +867,10 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$uid = $this->getUid();
 		$groep = $this->repository->get($id);
 
-		if (!$groep->mag(AccessAction::Bewerken())) {
+		$lid = $groep->getLid($uid);
+		if (!$groep->magLid(AccessAction::Bewerken(), $lid)) {
 			throw $this->createAccessDeniedException();
 		}
-		$lid = $groep->getLid($uid);
 		$form = new GroepBewerkenForm($lid, $groep);
 
 		if ($form->validate()) {
@@ -896,7 +896,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			throw $this->createAccessDeniedException();
 		}
 
-		if (!$groep->mag(AccessAction::Beheren())) {
+		if (!$groep->magLid(AccessAction::Beheren(), $lid)) {
 			throw $this->createAccessDeniedException();
 		}
 
@@ -934,17 +934,17 @@ abstract class AbstractGroepenController extends AbstractController implements
 		}
 
 		// A::Beheren voor afmelden via context-menu
-		if (
-			!$groep->mag(AccessAction::Afmelden()) &&
-			!$groep->mag(AccessAction::Beheren())
-		) {
-			throw $this->createAccessDeniedException();
-		}
-
 		$lid = $groep->getLid($uid);
 
 		if (!$lid) {
 			throw $this->createAccessDeniedException('Niet aangemeld');
+		}
+
+		if (
+			!$groep->magLid(AccessAction::Afmelden(), $lid) &&
+			!$groep->magLid(AccessAction::Beheren(), $lid)
+		) {
+			throw $this->createAccessDeniedException();
 		}
 
 		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
