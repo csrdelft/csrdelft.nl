@@ -467,7 +467,8 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$form = new GroepForm(
 			$groep,
 			$this->repository->getUrl() . '/aanmaken',
-			AccessAction::Aanmaken()
+			$this->isGranted(AbstractGroepVoter::AANMAKEN, $groep),
+			false
 		);
 		if ($request->getMethod() == 'GET') {
 			$table = new GroepenBeheerTable($this->repository);
@@ -541,7 +542,8 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$form = new GroepForm(
 			$groep,
 			$groep->getUrl() . '/wijzigen',
-			AccessAction::Wijzigen()
+			$this->isGranted(AbstractGroepVoter::WIJZIGEN, $groep),
+			true
 		);
 		if ($request->getMethod() == 'GET') {
 			$this->beheren($request);

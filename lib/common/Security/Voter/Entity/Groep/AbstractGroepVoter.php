@@ -95,12 +95,15 @@ abstract class AbstractGroepVoter extends Voter
 
 			default:
 				// Maker van groep mag alles
-				if ($subject->maker->uid === $token->getUserIdentifier()) {
+				if (
+					$subject->maker &&
+					$subject->maker->uid === $token->getUserIdentifier()
+				) {
 					return true;
 				}
 				break;
 		}
-		return $this->magAlgemeen($attribute, $token);
+		return $this->magAlgemeen($attribute, $subject, $token);
 	}
 
 	protected function magAanmeldLimiet(
@@ -108,6 +111,9 @@ abstract class AbstractGroepVoter extends Voter
 		HeeftAanmeldLimiet $groep
 	): bool {
 		if ($attribute != self::AANMELDEN) {
+			return true;
+		}
+		if ($groep->getAanmeldLimiet() == null) {
 			return true;
 		}
 		// Controleer maximum leden
@@ -153,8 +159,11 @@ abstract class AbstractGroepVoter extends Voter
 		return true;
 	}
 
-	protected function magAlgemeen(string $attribute, TokenInterface $token): bool
-	{
+	protected function magAlgemeen(
+		string $attribute,
+		$subject,
+		TokenInterface $token
+	): bool {
 		switch ($attribute) {
 			case self::BEKIJKEN:
 				return $this->accessDecisionManager->decide($token, [

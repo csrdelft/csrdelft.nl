@@ -15,8 +15,48 @@ class ActiviteitGroepVoter extends AbstractGroepVoter
 		return Activiteit::class;
 	}
 
-	protected function magAlgemeen(string $attribute, TokenInterface $token): bool
-	{
+	/**
+	 * @param string $attribute
+	 * @param Activiteit $subject
+	 * @param TokenInterface $token
+	 * @return bool
+	 */
+	protected function magAlgemeen(
+		string $attribute,
+		$subject,
+		TokenInterface $token
+	): bool {
+		if ($subject->getSoort() instanceof ActiviteitSoort) {
+			switch ($subject->getSoort()) {
+				case ActiviteitSoort::OWee():
+					if (
+						$this->accessDecisionManager->decide($token, ['commissie:OWeeCie'])
+					) {
+						return true;
+					}
+					break;
+
+				case ActiviteitSoort::Dies():
+					if (
+						$this->accessDecisionManager->decide($token, ['commissie:DiesCie'])
+					) {
+						return true;
+					}
+					break;
+
+				case ActiviteitSoort::Lustrum():
+					if (
+						$this->accessDecisionManager->decide($token, [
+							'commissie:LustrumCie',
+						])
+					) {
+						return true;
+					}
+					break;
+				default:
+					break;
+			}
+		}
 		switch ($attribute) {
 			case self::AANMAKEN:
 			case self::AANMELDEN:
@@ -24,7 +64,7 @@ class ActiviteitGroepVoter extends AbstractGroepVoter
 			case self::AFMELDEN:
 				return true;
 			default:
-				return parent::magAlgemeen($attribute, $token);
+				return parent::magAlgemeen($attribute, $subject, $token);
 		}
 	}
 }

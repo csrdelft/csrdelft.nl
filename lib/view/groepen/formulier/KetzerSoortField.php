@@ -2,9 +2,13 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
+use CsrDelft\common\Security\Voter\Entity\Groep\ActiviteitGroepVoter;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\Groep;
+use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
@@ -59,7 +63,15 @@ class KetzerSoortField extends GroepSoortField
 		$model = $this->doctrine->getRepository($class[0]);
 		/** @var Groep|string $orm */
 		$orm = $model->getClassName();
-		if (!$orm::magAlgemeen(AccessAction::Aanmaken(), $soort)) {
+
+		$security = ContainerFacade::getContainer()->get('security');
+		$entity = new $orm();
+		// Maak een dummy entity met de soort om een rechtencheck te kunnen doen
+		if ($entity instanceof HeeftSoort) {
+			$entity->setSoort($soort);
+		}
+
+		if (!$security->isGranted(AbstractGroepVoter::AANMAKEN, $entity)) {
 			if ($model instanceof ActiviteitenRepository) {
 				$naam = ActiviteitSoort::from($soort)->getDescription();
 			} else {

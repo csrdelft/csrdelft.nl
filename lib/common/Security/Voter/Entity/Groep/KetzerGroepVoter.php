@@ -13,8 +13,11 @@ class KetzerGroepVoter extends AbstractGroepVoter
 		return Ketzer::class;
 	}
 
-	protected function magAlgemeen(string $attribute, TokenInterface $token): bool
-	{
+	protected function magAlgemeen(
+		string $attribute,
+		$subject,
+		TokenInterface $token
+	): bool {
 		switch ($attribute) {
 			case self::AANMAKEN:
 			case self::AANMELDEN:
@@ -22,7 +25,7 @@ class KetzerGroepVoter extends AbstractGroepVoter
 			case self::AFMELDEN:
 				return true;
 			default:
-				return parent::magAlgemeen($attribute, $token);
+				return parent::magAlgemeen($attribute, $subject, $token);
 		}
 	}
 }

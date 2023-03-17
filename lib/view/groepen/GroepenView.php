@@ -7,6 +7,7 @@ use CsrDelft\common\Enum;
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\entity\groepen\enum\GroepTab;
 use CsrDelft\entity\groepen\Groep;
+use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\groepen\BesturenRepository;
@@ -112,7 +113,13 @@ class GroepenView implements View
 	{
 		$orm = $this->model->getEntityClassName();
 		$html = '';
-		if ($orm::magAlgemeen(AccessAction::Aanmaken(), $this->soort)) {
+		$security = ContainerFacade::getContainer()->get('security');
+		$entity = new $orm();
+		// Maak een dummy entity met de soort om een rechtencheck te kunnen doen
+		if ($entity instanceof HeeftSoort) {
+			$entity->setSoort($this->soort);
+		}
+		if ($security->isGranted(AbstractGroepVoter::AANMAKEN, $entity)) {
 			$html .=
 				'<a class="btn" href="' .
 				$this->model->getUrl() .

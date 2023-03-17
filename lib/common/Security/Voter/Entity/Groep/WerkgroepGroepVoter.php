@@ -12,8 +12,11 @@ class WerkgroepGroepVoter extends AbstractGroepVoter
 		return Werkgroep::class;
 	}
 
-	protected function magAlgemeen(string $attribute, TokenInterface $token): bool
-	{
+	protected function magAlgemeen(
+		string $attribute,
+		$subject,
+		TokenInterface $token
+	): bool {
 		if (
 			$attribute == self::AANMAKEN &&
 			!$this->accessDecisionManager->decide($token, ['ROLE_LEDEN_MOD'])
@@ -21,6 +24,6 @@ class WerkgroepGroepVoter extends AbstractGroepVoter
 			return false;
 		}
 
-		return parent::magAlgemeen($attribute, $token);
+		return parent::magAlgemeen($attribute, $subject, $token);
 	}
 }

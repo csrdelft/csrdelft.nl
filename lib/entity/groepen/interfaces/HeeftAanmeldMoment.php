@@ -6,8 +6,6 @@ use DateTimeImmutable;
 
 interface HeeftAanmeldMoment
 {
-	function magAanmeldMoment($action);
-
 	/**
 	 * @return DateTimeImmutable
 	 */

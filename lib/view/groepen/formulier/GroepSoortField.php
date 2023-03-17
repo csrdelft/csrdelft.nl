@@ -2,7 +2,9 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Enum;
+use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Bestuur;
 use CsrDelft\entity\groepen\Commissie;
@@ -123,7 +125,14 @@ JS;
 		/**
 		 * @Warning: Duplicate function in GroepForm->validate()
 		 */
-		if (!$this->groep->magAlgemeen(AccessAction::Beheren(), $soort)) {
+		$security = ContainerFacade::getContainer()->get('security');
+
+		$testGroep = new $class();
+		if ($testGroep instanceof HeeftSoort) {
+			$testGroep->setSoort($soort);
+		}
+
+		if (!$security->isGranted(AbstractGroepVoter::BEHEREN, $testGroep)) {
 			if ($model instanceof ActiviteitenRepository) {
 				$naam = $soort->getDescription();
 			} elseif ($model instanceof CommissiesRepository) {

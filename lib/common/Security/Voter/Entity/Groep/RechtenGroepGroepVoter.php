@@ -12,8 +12,11 @@ class RechtenGroepGroepVoter extends AbstractGroepVoter
 		return RechtenGroep::class;
 	}
 
-	protected function magAlgemeen(string $attribute, TokenInterface $token): bool
-	{
+	protected function magAlgemeen(
+		string $attribute,
+		$subject,
+		TokenInterface $token
+	): bool {
 		switch ($attribute) {
 			case self::AANMAKEN:
 			case self::AANMELDEN:
@@ -21,7 +24,7 @@ class RechtenGroepGroepVoter extends AbstractGroepVoter
 			case self::AFMELDEN:
 				return true;
 			default:
-				return parent::magAlgemeen($attribute, $token);
+				return parent::magAlgemeen($attribute, $subject, $token);
 		}
 	}
 }
