@@ -17,14 +17,17 @@ class CommissieGroepVoter extends AbstractGroepVoter
 	 * @param string $attribute
 	 * @param Commissie $subject
 	 * @param TokenInterface $token
-	 * @return bool|void
+	 * @return bool
 	 */
 	protected function magAlgemeen(
 		string $attribute,
 		$subject,
 		TokenInterface $token
 	): bool {
-		if ($subject->getSoort() == CommissieSoort::SjaarCie()) {
+		if (
+			$subject->getSoort() === CommissieSoort::SjaarCie() &&
+			$this->accessDecisionManager->decide($token, ['commissie:NovCie'])
+		) {
 			return true;
 		}
 

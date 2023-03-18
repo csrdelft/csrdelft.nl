@@ -417,6 +417,10 @@ abstract class AbstractGroepenController extends AbstractController implements
 		if (!$id) {
 			$vorige = null;
 			$groep = $this->repository->nieuw($soort);
+			// Rechtencheck op lege groep
+			if (!$this->isGranted(AbstractGroepVoter::AANMAKEN, $groep)) {
+				throw $this->createAccessDeniedException();
+			}
 			$profiel = $this->getProfiel();
 			if ($groep instanceof Activiteit && empty($groep->rechtenAanmelden)) {
 				switch ($groep->activiteitSoort) {
@@ -451,6 +455,10 @@ abstract class AbstractGroepenController extends AbstractController implements
 				$soort = $vorige->getSoort();
 			}
 			$groep = $this->repository->nieuw($soort);
+			// Rechtencheck op lege groep
+			if (!$this->isGranted(AbstractGroepVoter::AANMAKEN, $groep)) {
+				throw $this->createAccessDeniedException();
+			}
 			$groep->naam = $vorige->naam;
 			$groep->familie = $vorige->familie;
 			$groep->samenvatting = $vorige->samenvatting;

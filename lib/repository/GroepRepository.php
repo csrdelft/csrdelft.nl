@@ -12,7 +12,6 @@ use CsrDelft\entity\groepen\GroepStatistiekDTO;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Exception\ORMException;
@@ -253,9 +252,8 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param null $soort
 	 * @return Groep
 	 */
-	public function nieuw(
-		/* @noinspection PhpUnusedParameterInspection */ $soort = null
-	) {
+	public function nieuw($soort = null)
+	{
 		$orm = $this->getClassName();
 		$groep = new $orm();
 		$groep->naam = null;

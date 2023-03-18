@@ -159,23 +159,25 @@ class GroepForm extends ModalForm
 					-1
 				);
 				return false;
-			} /**
-			 * Omdat wijzigen wel is toegestaan met hetzelfde formulier
-			 * en groep->mag() @runtime niet weet wat de orig value was (door form auto property set)
-			 * op moment van uitvoeren van deze funtie, hier een extra check:
-			 *
-			 * N.B.: Deze check staat binnen de !magAlgemeen zodat P_LEDEN_MOD deze check overslaat
-			 */ elseif ($this->isWijzigen && $groep instanceof Woonoord) {
-				$vorigeHuisStatus = HuisStatus::from(
-					$this->findByName('huisStatus')->getOrigValue()
+			}
+		}
+		/**
+		 * Voorkom wijzigen van huis status door bewoners.
+		 * Bewoners mogen wel een Woonoord beheren, maar niet zomaar de huisstatus aanpassen.
+		 */
+		if ($this->isWijzigen && $groep instanceof Woonoord) {
+			$vorigeHuisStatus = HuisStatus::from(
+				$this->findByName('huisStatus')->getOrigValue()
+			);
+			if (
+				$vorigeHuisStatus !== $soort &&
+				!$security->isGranted('ROLE_LEDEN_MOD')
+			) {
+				FlashUtil::setFlashWithContainerFacade(
+					'U mag de huisstatus niet wijzigen',
+					-1
 				);
-				if ($vorigeHuisStatus !== $soort) {
-					FlashUtil::setFlashWithContainerFacade(
-						'U mag de huisstatus niet wijzigen',
-						-1
-					);
-					return false;
-				}
+				return false;
 			}
 		}
 

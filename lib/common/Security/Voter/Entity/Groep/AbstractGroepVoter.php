@@ -94,8 +94,9 @@ abstract class AbstractGroepVoter extends Voter
 				break;
 
 			default:
-				// Maker van groep mag alles
+				// Maker van groep mag alles, behalve bij nieuwe groepen
 				if (
+					$subject->id &&
 					$subject->maker &&
 					$subject->maker->uid === $token->getUserIdentifier()
 				) {
