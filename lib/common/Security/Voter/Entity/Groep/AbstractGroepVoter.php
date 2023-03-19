@@ -132,9 +132,9 @@ abstract class AbstractGroepVoter extends Voter
 					$nu <= $groep->getAanmeldenTot() &&
 					$nu >= $groep->getAanmeldenVanaf();
 			case self::BEWERKEN:
-				return $nu <= $groep->getBewerkenTot();
+				return !$groep->getBewerkenTot() || $nu <= $groep->getBewerkenTot();
 			case self::AFMELDEN:
-				return $nu <= $groep->getAfmeldenTot();
+				return !$groep->getAfmeldenTot() || $nu <= $groep->getAfmeldenTot();
 			default:
 				return true;
 		}
