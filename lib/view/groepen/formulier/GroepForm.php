@@ -58,7 +58,6 @@ class GroepForm extends ModalForm
 			ReflectionUtil::classNameZonderNamespace(get_class($groep)),
 			true
 		);
-		$this->magWijzigen = $magWijzigen;
 		if ($groep->id) {
 			$this->titel .= ' wijzigen';
 		} else {
@@ -136,51 +135,6 @@ class GroepForm extends ModalForm
 		 * @var Groep $groep
 		 */
 		$groep = $this->getModel();
-		if ($groep instanceof HeeftSoort) {
-			$soort = $groep->getSoort();
-		} else {
-			$soort = null;
-		}
-
-		$security = ContainerFacade::getContainer()->get('security');
-		/**
-		 * @Notice: Similar function in GroepSoortField->validate()
-		 */
-		if (!$security->isGranted(AbstractGroepVoter::BEHEREN, $groep)) {
-			if (!$this->magWijzigen) {
-				// beide aanroepen vanwege niet doorsturen van param $soort door mag() naar magAlgemeen()
-				if ($soort) {
-					$naam = $soort->getDescription();
-				} else {
-					$naam = ReflectionUtil::classNameZonderNamespace(get_class($groep));
-				}
-				FlashUtil::setFlashWithContainerFacade(
-					'U mag geen ' . $naam . ' aanmaken',
-					-1
-				);
-				return false;
-			}
-		}
-		/**
-		 * Voorkom wijzigen van huis status door bewoners.
-		 * Bewoners mogen wel een Woonoord beheren, maar niet zomaar de huisstatus aanpassen.
-		 */
-		if ($this->isWijzigen && $groep instanceof Woonoord) {
-			$vorigeHuisStatus = HuisStatus::from(
-				$this->findByName('huisStatus')->getOrigValue()
-			);
-			if (
-				$vorigeHuisStatus !== $soort &&
-				!$security->isGranted('ROLE_LEDEN_MOD')
-			) {
-				FlashUtil::setFlashWithContainerFacade(
-					'U mag de huisstatus niet wijzigen',
-					-1
-				);
-				return false;
-			}
-		}
-
 		$fields = $this->getFields();
 		if (
 			isset($fields['eindMoment']) &&

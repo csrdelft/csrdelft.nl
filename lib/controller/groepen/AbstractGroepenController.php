@@ -7,6 +7,7 @@ use CsrDelft\common\FlashType;
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Security\Voter\Entity\GroepLidVoter;
 use CsrDelft\common\Util\ArrayUtil;
+use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
@@ -15,11 +16,13 @@ use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;
+use CsrDelft\entity\groepen\enum\HuisStatus;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
+use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\ChangeLogRepository;
@@ -562,6 +565,23 @@ abstract class AbstractGroepenController extends AbstractController implements
 				'modal' => $form,
 			]);
 		} elseif ($form->validate()) {
+			/**
+			 * Voorkom wijzigen van huis status door bewoners.
+			 * Bewoners mogen wel een Woonoord beheren, maar niet zomaar de huisstatus aanpassen.
+			 */
+			if ($groep instanceof Woonoord) {
+				$vorigeHuisStatus = HuisStatus::from(
+					$form->findByName('huisStatus')->getOrigValue()
+				);
+				if (
+					$vorigeHuisStatus !== $groep->getSoort() &&
+					!$this->isGranted('ROLE_LEDEN_MOD')
+				) {
+					$this->addFlash('danger', 'U mag de huisstatus niet wijzigen');
+					throw $this->createAccessDeniedException();
+				}
+			}
+
 			$this->changeLogRepository->logChanges($form->diff());
 			$this->repository->update($groep);
 			return $this->tableData([$groep]);
