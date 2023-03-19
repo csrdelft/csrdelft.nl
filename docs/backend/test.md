@@ -9,6 +9,8 @@ title: Tests
 
 Er zijn twee soorten tests in de stek, unit tests en functionele tests. Unit tests testen bijvoorbeeld een functie. Functionele tests testen of pagina's bezoekbaar zijn en of klikken op linkjes werkt zoals verwacht.
 
+Veel tests maken gebruik van de database, zorg hier voor dat de [Fixtures](./fixtures.md) geladen zijn.
+
 Chromedriver is te downloaden van https://chromedriver.chromium.org/
 
 ## Tests runnen

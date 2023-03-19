@@ -72,7 +72,7 @@ abstract class AbstractGroepVoter extends Voter
 		}
 
 		if (
-			$this instanceof HeeftAanmeldRechten &&
+			$subject instanceof HeeftAanmeldRechten &&
 			!$this->magAanmeldRechten($attribute, $subject, $token)
 		) {
 			return false;
@@ -128,7 +128,8 @@ abstract class AbstractGroepVoter extends Voter
 		$nu = date_create_immutable();
 		switch ($attribute) {
 			case self::AANMELDEN:
-				return $nu <= $groep->getAanmeldenTot() &&
+				return $groep->getAanmeldenTot() &&
+					$nu <= $groep->getAanmeldenTot() &&
 					$nu >= $groep->getAanmeldenVanaf();
 			case self::BEWERKEN:
 				return $nu <= $groep->getBewerkenTot();
@@ -144,6 +145,9 @@ abstract class AbstractGroepVoter extends Voter
 		HeeftAanmeldRechten $groep,
 		TokenInterface $token
 	): bool {
+		if (!$groep->getAanmeldRechten()) {
+			return true;
+		}
 		$beschermdeActies = [
 			AbstractGroepVoter::BEKIJKEN,
 			AbstractGroepVoter::AANMELDEN,

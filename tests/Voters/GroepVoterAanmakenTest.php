@@ -4,10 +4,11 @@ namespace Voters;
 
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\DataFixtures\AccountFixtures;
+use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\tests\AbstractVoterTestCase;
 
-class GroepVoterTest extends AbstractVoterTestCase
+class GroepVoterAanmakenTest extends AbstractVoterTestCase
 {
 	public function testCommissieAanmaken()
 	{
@@ -23,6 +24,23 @@ class GroepVoterTest extends AbstractVoterTestCase
 			$this->getToken(AccountFixtures::UID_BESTUUR_FISCUS),
 			AbstractGroepVoter::AANMAKEN,
 			$commissie
+		);
+	}
+
+	public function testActiviteitAanmaken()
+	{
+		$activiteit = new Activiteit();
+		// Lid mag activiteit maken
+		$this->assertToegang(
+			$this->getToken(AccountFixtures::UID_LID_MAN),
+			AbstractGroepVoter::AANMAKEN,
+			$activiteit
+		);
+		// Bestuur mag activiteit maken
+		$this->assertToegang(
+			$this->getToken(AccountFixtures::UID_BESTUUR_FISCUS),
+			AbstractGroepVoter::AANMAKEN,
+			$activiteit
 		);
 	}
 }
