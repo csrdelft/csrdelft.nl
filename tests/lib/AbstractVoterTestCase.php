@@ -39,14 +39,20 @@ abstract class AbstractVoterTestCase extends CsrTestCase
 		$this->adm = $this->getContainer()->get('security.access.decision_manager');
 	}
 
-	protected function assertToegang(UsernamePasswordToken $token, $permissie)
-	{
-		$this->assertTrue($this->adm->decide($token, [$permissie]));
+	protected function assertToegang(
+		UsernamePasswordToken $token,
+		$permissie,
+		$subject = null
+	) {
+		$this->assertTrue($this->adm->decide($token, [$permissie], $subject));
 	}
 
-	protected function assertGeenToegang(UsernamePasswordToken $token, $permissie)
-	{
-		$this->assertFalse($this->adm->decide($token, [$permissie]));
+	protected function assertGeenToegang(
+		UsernamePasswordToken $token,
+		$permissie,
+		$subject = null
+	) {
+		$this->assertFalse($this->adm->decide($token, [$permissie], $subject));
 	}
 
 	/**

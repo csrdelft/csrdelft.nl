@@ -3,7 +3,6 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,17 +24,6 @@ class Lichting extends Groep
 	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $lidjaar;
-
-	/**
-	 * Read-only: generated group
-	 * @param $action
-	 * @param null $soort
-	 * @return bool
-	 */
-	public static function magAlgemeen(AccessAction $action, $soort = null)
-	{
-		return AccessAction::isBekijken($action);
-	}
 
 	/**
 	 * Stiekem hebben we helemaal geen leden
@@ -69,16 +57,5 @@ class Lichting extends Groep
 	public function getUrl()
 	{
 		return '/groepen/lichtingen/' . $this->lidjaar;
-	}
-
-	/**
-	 * Read-only: generated group
-	 * @param AccessAction $action
-	 * @param null $allowedAuthenticationMethods
-	 * @return bool
-	 */
-	public function mag(AccessAction $action)
-	{
-		return AccessAction::isBekijken($action);
 	}
 }

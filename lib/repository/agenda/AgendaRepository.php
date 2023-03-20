@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\agenda;
 
+use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\agenda\AgendaItem;
@@ -220,7 +221,9 @@ class AgendaRepository extends AbstractRepository
 			$tot
 		);
 		foreach ($activiteiten as $activiteit) {
-			if ($activiteit->mag(AccessAction::Bekijken(), $auth)) {
+			if (
+				$this->security->isGranted(AbstractGroepVoter::BEKIJKEN, $activiteit)
+			) {
 				$result[] = $activiteit;
 			}
 		}

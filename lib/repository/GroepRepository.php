@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository;
 
+use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\common\Util\SqlUtil;
@@ -11,7 +12,6 @@ use CsrDelft\entity\groepen\GroepStatistiekDTO;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Exception\ORMException;
@@ -22,6 +22,7 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use ReflectionClass;
 use ReflectionProperty;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 
@@ -37,13 +38,21 @@ use Throwable;
 abstract class GroepRepository extends AbstractRepository
 {
 	/**
+	 * @var Security
+	 */
+	private $security;
+
+	/**
 	 * AbstractGroepenModel constructor.
 	 * @param ManagerRegistry $managerRegistry
 	 * @param Groep|string $entityClass
 	 */
-	public function __construct(ManagerRegistry $managerRegistry)
-	{
+	public function __construct(
+		ManagerRegistry $managerRegistry,
+		Security $security
+	) {
 		parent::__construct($managerRegistry, $this->getEntityClassName());
+		$this->security = $security;
 	}
 
 	/**
@@ -243,9 +252,8 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param null $soort
 	 * @return Groep
 	 */
-	public function nieuw(
-		/* @noinspection PhpUnusedParameterInspection */ $soort = null
-	) {
+	public function nieuw($soort = null)
+	{
 		$orm = $this->getClassName();
 		$groep = new $orm();
 		$groep->naam = null;
@@ -405,7 +413,9 @@ abstract class GroepRepository extends AbstractRepository
 		$num = 0;
 		while ($num < $limit && ($object = $result->next()) !== false) {
 			/** @var $object Groep[] */
-			if ($object[0]->mag(AccessAction::Bekijken())) {
+			if (
+				$this->security->isGranted(AbstractGroepVoter::BEKIJKEN, $object[0])
+			) {
 				$num++;
 				yield $object[0];
 			}
@@ -461,7 +471,9 @@ abstract class GroepRepository extends AbstractRepository
 
 		$aantal = 0;
 		foreach ($activiteiten as $activiteit) {
-			if ($activiteit->mag(AccessAction::Bekijken())) {
+			if (
+				$this->security->isGranted(AbstractGroepVoter::BEKIJKEN, $activiteit)
+			) {
 				$aantal++;
 			}
 		}

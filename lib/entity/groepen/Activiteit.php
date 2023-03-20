@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\common\Enum;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
@@ -11,7 +10,6 @@ use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -57,46 +55,6 @@ class Activiteit extends Groep implements
 	 * @Serializer\Groups("datatable")
 	 */
 	public $inAgenda;
-
-	/**
-	 * Rechten voor de gehele klasse of soort groep?
-	 *
-	 * @param AccessAction $action
-	 * @param Enum $soort
-	 * @return boolean
-	 */
-	public static function magAlgemeen($action, $soort = null)
-	{
-		if ($soort && $soort instanceof ActiviteitSoort) {
-			switch ($soort) {
-				case ActiviteitSoort::OWee():
-					if (LoginService::mag('commissie:OWeeCie')) {
-						return true;
-					}
-					break;
-
-				case ActiviteitSoort::Dies():
-					if (LoginService::mag('commissie:DiesCie')) {
-						return true;
-					}
-					break;
-
-				case ActiviteitSoort::Lustrum():
-					if (LoginService::mag('commissie:LustrumCie')) {
-						return true;
-					}
-					break;
-			}
-		}
-		switch ($action) {
-			case AccessAction::Aanmaken():
-			case AccessAction::Aanmelden():
-			case AccessAction::Bewerken():
-			case AccessAction::Afmelden():
-				return true;
-		}
-		return parent::magAlgemeen($action, $soort);
-	}
 
 	public function getUUID()
 	{

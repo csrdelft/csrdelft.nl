@@ -9,16 +9,10 @@ use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\groepen\enum\CommissieFunctie;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;
-use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
-use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
-use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\entity\security\Account;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\GroepRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -239,109 +233,6 @@ class Groep implements DataTableEntry, DisplayEntity
 		return $suggesties;
 	}
 
-	public function magWijzigen()
-	{
-		return $this->mag(AccessAction::Wijzigen());
-	}
-
-	public function magTwig($action)
-	{
-		$actionMap = [
-			'bewerken' => AccessAction::Bewerken(),
-			'afmelden' => AccessAction::Afmelden(),
-			'beheren' => AccessAction::Beheren(),
-			'aanmelden' => AccessAction::Aanmelden(),
-		];
-		return $this->mag($actionMap[$action]);
-	}
-
-	public function magTwigLid($action, GroepLid $lid)
-	{
-		$actionMap = [
-			'bewerken' => AccessAction::Bewerken(),
-			'afmelden' => AccessAction::Afmelden(),
-			'beheren' => AccessAction::Beheren(),
-			'aanmelden' => AccessAction::Aanmelden(),
-		];
-
-		return $this->magLid($actionMap[$action], $lid);
-	}
-
-	public function magLid(AccessAction $action, GroepLid $lid)
-	{
-		if (!$this->mag($action)) {
-			return false;
-		}
-
-		if ($lid->uid == LoginService::getUid()) {
-			return true;
-		}
-
-		if (LoginService::mag(P_LEDEN_MOD)) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Has permission for action?
-	 *
-	 * @param AccessAction $action
-	 * @return boolean
-	 */
-	public function mag(AccessAction $action)
-	{
-		if (!LoginService::mag(P_LOGGED_IN)) {
-			return false;
-		}
-
-		if (
-			$this instanceof HeeftAanmeldLimiet &&
-			!$this->magAanmeldLimiet($action)
-		) {
-			return false;
-		}
-
-		if (
-			$this instanceof HeeftAanmeldMoment &&
-			!$this->magAanmeldMoment($action)
-		) {
-			return false;
-		}
-
-		if (
-			$this instanceof HeeftAanmeldRechten &&
-			!$this->magAanmeldRechten($action)
-		) {
-			return false;
-		}
-
-		$aangemeld = $this->getLid(LoginService::getUid()) != null;
-		switch ($action) {
-			case AccessAction::Aanmelden():
-				if ($aangemeld) {
-					return false;
-				}
-				break;
-
-			case AccessAction::Bewerken():
-			case AccessAction::Afmelden():
-				if (!$aangemeld) {
-					return false;
-				}
-				break;
-
-			default:
-				// Maker van groep mag alles
-				if ($this->maker->uid === LoginService::getUid()) {
-					return true;
-				}
-				break;
-		}
-		return static::magAlgemeen($action);
-	}
-
 	/**
 	 * Is lid van deze groep?
 	 *
@@ -357,29 +248,6 @@ class Groep implements DataTableEntry, DisplayEntity
 		return $this->getLeden()
 			->matching(Eisen::voorGebruiker($uid))
 			->first();
-	}
-
-	/**
-	 * Rechten voor de gehele klasse of soort groep?
-	 *
-	 * @param AccessAction $action
-	 * @param null $soort
-	 * @return boolean
-	 */
-	public static function magAlgemeen(AccessAction $action, $soort = null)
-	{
-		switch ($action) {
-			case AccessAction::Bekijken():
-				return LoginService::mag(P_LEDEN_READ);
-
-			// Voorkom dat moderators overal een normale aanmeldknop krijgen
-			case AccessAction::Aanmelden():
-			case AccessAction::Bewerken():
-			case AccessAction::Afmelden():
-				return false;
-		}
-		// Moderators mogen alles
-		return LoginService::mag(P_LEDEN_MOD . ',groep:P_GROEP:_MOD');
 	}
 
 	/**

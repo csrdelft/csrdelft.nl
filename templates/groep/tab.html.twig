@@ -63,7 +63,7 @@
 					tabContent.height(availableHeight);
 				}
 
-				{% if groep.magTwig('beheren') %}
+				{% if is_granted('groep.beheren', groep) %}
 
 				$('#groep-leden-content-{{ groep.id }} a.lidLink').contextMenu({
 					menuSelector: "#groep-context-menu-{{ groep.id }}",
@@ -85,7 +85,7 @@
 		{% set percent = ((aantal * 100) / groep.aanmeldLimiet) | round %}
 
 		{# Aanmelden mogelijk? #}
-		{% if groep is heeftaanmeldmoment and groep.magTwig('aanmelden') %}
+		{% if groep is heeftaanmeldmoment and is_granted('groep.aanmelden', groep) %}
 			{% set verschil = groep.aanmeldLimiet - aantal %}
 			{% if verschil == 0 %}
 				{% set title = 'Inschrijvingen vol!' %}
@@ -95,7 +95,7 @@
 				{% set color = ' progress-bar-success' %}
 			{% endif %}
 			{# bewerken mogelijk? #}
-		{% elseif groep is heeftaanmeldmoment and groep.magTwig('bewerken') %}
+		{% elseif groep is heeftaanmeldmoment and is_granted('groep.bewerken', groep) %}
 			{% set title = 'Inschrijvingen gesloten! Inschrijving bewerken is nog wel toegestaan.' %}
 			{% set color = ' progress-bar-warning' %}
 		{% else %}

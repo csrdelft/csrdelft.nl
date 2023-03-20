@@ -3,6 +3,8 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
+use CsrDelft\common\Security\Voter\Entity\Groep\ActiviteitGroepVoter;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ChangeLogRepository;
@@ -41,11 +43,11 @@ class ApiActiviteitenController extends AbstractController
 	{
 		$activiteit = $this->activiteitenRepository->get($id);
 
-		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken())) {
-			throw new NotFoundHttpException('Activiteit bestaat niet');
+		if (!$this->isGranted(ActiviteitGroepVoter::BEKIJKEN, $activiteit)) {
+			throw $this->createNotFoundException('Activiteit bestaat niet');
 		}
 
-		if (!$activiteit->mag(AccessAction::Aanmelden())) {
+		if (!$this->isGranted(ActiviteitGroepVoter::AANMELDEN, $activiteit)) {
 			throw $this->createAccessDeniedException('Aanmelden niet mogelijk');
 		}
 
@@ -70,11 +72,11 @@ class ApiActiviteitenController extends AbstractController
 	{
 		$activiteit = $this->activiteitenRepository->get($id);
 
-		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken())) {
+		if (!$this->isGranted(ActiviteitGroepVoter::BEKIJKEN, $activiteit)) {
 			throw new NotFoundHttpException('Activiteit bestaat niet');
 		}
 
-		if (!$activiteit->mag(AccessAction::Afmelden())) {
+		if (!$this->isGranted(ActiviteitGroepVoter::AFMELDEN, $activiteit)) {
 			throw $this->createAccessDeniedException('Afmelden niet mogelijk');
 		}
 

@@ -4,7 +4,6 @@ namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -74,39 +73,5 @@ class Verticale extends Groep
 	public function getUrl()
 	{
 		return '/groepen/verticalen/' . $this->letter;
-	}
-
-	/**
-	 * Limit functionality: leden generated
-	 * @param AccessAction $action
-	 * @param null $allowedAuthenticationMethods
-	 * @return bool
-	 */
-	public function mag(AccessAction $action)
-	{
-		switch ($action) {
-			case AccessAction::Bekijken():
-			case AccessAction::Aanmaken():
-			case AccessAction::Wijzigen():
-				return parent::mag($action);
-		}
-		return false;
-	}
-
-	/**
-	 * Limit functionality: leden generated
-	 * @param AccessAction $action
-	 * @param null $soort
-	 * @return bool
-	 */
-	public static function magAlgemeen(AccessAction $action, $soort = null)
-	{
-		switch ($action) {
-			case AccessAction::Bekijken():
-			case AccessAction::Aanmaken():
-			case AccessAction::Wijzigen():
-				return parent::magAlgemeen($action, $soort);
-		}
-		return false;
 	}
 }

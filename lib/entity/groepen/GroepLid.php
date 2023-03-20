@@ -35,6 +35,7 @@ class GroepLid
 			strtolower(ReflectionUtil::short_class($this)) .
 			'.csrdelft.nl';
 	}
+
 	/**
 	 * Shared primary key
 	 * Foreign key
@@ -98,6 +99,7 @@ class GroepLid
 	 * @ORM\JoinColumn(name="groep_id", referencedColumnName="id")
 	 */
 	public $groep;
+
 	/**
 	 * @return string|null
 	 * @Serializer\Groups("datatable")
@@ -153,5 +155,11 @@ class GroepLid
 		} else {
 			return '';
 		}
+	}
+
+	public function setProfiel(Profiel $profiel)
+	{
+		$this->profiel = $profiel;
+		$this->uid = $profiel->uid;
 	}
 }

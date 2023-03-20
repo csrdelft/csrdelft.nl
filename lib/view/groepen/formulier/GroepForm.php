@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\groepen\enum\HuisStatus;
@@ -30,9 +32,10 @@ class GroepForm extends ModalForm
 {
 	/**
 	 * Aanmaken/Wijzigen
-	 * @var AccessAction
+	 * @var bool
 	 */
-	private $mode;
+	private $magWijzigen;
+	private $isWijzigen;
 
 	/**
 	 * GroepForm constructor.
@@ -42,15 +45,19 @@ class GroepForm extends ModalForm
 	 * @param false $nocancel
 	 * @throws \Exception
 	 */
-	public function __construct(Groep $groep, $action, $mode, $nocancel = false)
-	{
+	public function __construct(
+		Groep $groep,
+		$action,
+		$magWijzigen,
+		$isWijzigen,
+		$nocancel = false
+	) {
 		parent::__construct(
 			$groep,
 			$action,
 			ReflectionUtil::classNameZonderNamespace(get_class($groep)),
 			true
 		);
-		$this->mode = $mode;
 		if ($groep->id) {
 			$this->titel .= ' wijzigen';
 		} else {
@@ -119,6 +126,7 @@ class GroepForm extends ModalForm
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen($nocancel ? false : null);
+		$this->isWijzigen = $isWijzigen;
 	}
 
 	public function validate()
@@ -127,50 +135,6 @@ class GroepForm extends ModalForm
 		 * @var Groep $groep
 		 */
 		$groep = $this->getModel();
-		if ($groep instanceof HeeftSoort) {
-			$soort = $groep->getSoort();
-		} else {
-			$soort = null;
-		}
-		/**
-		 * @Notice: Similar function in GroepSoortField->validate()
-		 */
-		if (!$groep->magAlgemeen($this->mode, $soort)) {
-			if (!$groep->mag($this->mode)) {
-				// beide aanroepen vanwege niet doorsturen van param $soort door mag() naar magAlgemeen()
-				if ($soort) {
-					$naam = $soort->getDescription();
-				} else {
-					$naam = ReflectionUtil::classNameZonderNamespace(get_class($groep));
-				}
-				FlashUtil::setFlashWithContainerFacade(
-					'U mag geen ' . $naam . ' aanmaken',
-					-1
-				);
-				return false;
-			} /**
-			 * Omdat wijzigen wel is toegestaan met hetzelfde formulier
-			 * en groep->mag() @runtime niet weet wat de orig value was (door form auto property set)
-			 * op moment van uitvoeren van deze funtie, hier een extra check:
-			 *
-			 * N.B.: Deze check staat binnen de !magAlgemeen zodat P_LEDEN_MOD deze check overslaat
-			 */ elseif (
-				AccessAction::isWijzigen($this->mode) &&
-				$groep instanceof Woonoord
-			) {
-				$vorigeHuisStatus = HuisStatus::from(
-					$this->findByName('huisStatus')->getOrigValue()
-				);
-				if ($vorigeHuisStatus !== $soort) {
-					FlashUtil::setFlashWithContainerFacade(
-						'U mag de huisstatus niet wijzigen',
-						-1
-					);
-					return false;
-				}
-			}
-		}
-
 		$fields = $this->getFields();
 		if (
 			isset($fields['eindMoment']) &&

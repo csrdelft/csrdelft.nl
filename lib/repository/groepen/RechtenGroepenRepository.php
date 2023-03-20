@@ -8,6 +8,7 @@ use CsrDelft\repository\GroepLidRepository;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 class RechtenGroepenRepository extends GroepRepository
 {
@@ -22,9 +23,10 @@ class RechtenGroepenRepository extends GroepRepository
 		BesturenRepository $besturenRepository,
 		CommissiesRepository $commissiesRepository,
 		GroepLidRepository $groepLidRepository,
+		Security $security,
 		ManagerRegistry $registry
 	) {
-		parent::__construct($registry);
+		parent::__construct($registry, $security);
 
 		$this->besturenRepository = $besturenRepository;
 		$this->commissiesRepository = $commissiesRepository;

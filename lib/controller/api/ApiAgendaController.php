@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\groepen\Activiteit;
@@ -96,7 +97,7 @@ class ApiAgendaController extends AbstractController
 					ActiviteitSoort::Extern(),
 					ActiviteitSoort::OWee(),
 					ActiviteitSoort::IFES(),
-				]) or $activiteit->mag(AccessAction::Bekijken())
+				]) or $this->isGranted(AbstractGroepVoter::BEKIJKEN, $activiteit)
 			) {
 				$activiteitenFiltered[] = $activiteit;
 			}
