@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\bibliotheek\BoekRepository;
 use CsrDelft\view\bbcode\BbHelper;
@@ -51,12 +51,12 @@ class BbBoek extends BbTag
 	{
 		return 'boek';
 	}
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->security->isGranted('ROLE_BIEB_READ');
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		try {
 			$boek = $this->boekRepository->find($this->id);
@@ -71,10 +71,10 @@ class BbBoek extends BbTag
 		}
 	}
 
-	public function render()
+	public function render(): string
 	{
 		if (!$this->security->isGranted('ROLE_BIEB_READ')) {
-			return null;
+			return '';
 		}
 
 		try {
@@ -90,7 +90,7 @@ class BbBoek extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->id = $this->readMainArgument($arguments);
 	}

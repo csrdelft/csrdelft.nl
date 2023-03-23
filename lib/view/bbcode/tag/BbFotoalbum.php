@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbException;
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbException;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
 use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\common\Util\HostUtil;
@@ -82,19 +82,19 @@ class BbFotoalbum extends BbTag
 	{
 		return 'fotoalbum';
 	}
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return ($this->album != null &&
 			$this->security->isGranted(FotoAlbumVoter::BEKIJKEN, $this->album)) ||
 			($this->album == null && $this->security->isGranted('ROLE_LOGGED_IN'));
 	}
 
-	public function renderPreview()
+	public function renderPreview(): string
 	{
 		return ' 📷 ';
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$album = $this->album;
 		$beschrijving = count($album->getFotos()) . ' foto\'s';
@@ -108,7 +108,7 @@ class BbFotoalbum extends BbTag
 		);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$album = $this->album;
 		$arguments = $this->arguments;
@@ -172,7 +172,7 @@ class BbFotoalbum extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->albumUrl = $this->readMainArgument($arguments);
 		$this->arguments = $arguments;

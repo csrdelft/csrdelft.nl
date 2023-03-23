@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\Util\CryptoUtil;
 
 class BbAftel extends BbTag
@@ -12,7 +12,7 @@ class BbAftel extends BbTag
 		return ['aftel'];
 	}
 
-	public function render()
+	public function render(): string
 	{
 		if (
 			!isset($_ENV['AFTEL_START']) ||
@@ -54,7 +54,7 @@ HTML;
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 	}
 }

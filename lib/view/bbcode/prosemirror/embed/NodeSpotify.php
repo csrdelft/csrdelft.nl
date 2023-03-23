@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\prosemirror\embed;
 
-use CsrDelft\bb\tag\BbNode;
+use CsrDelft\Lib\Bb\Tag\BbNode;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use CsrDelft\view\bbcode\tag\embed\BbSpotify;
 

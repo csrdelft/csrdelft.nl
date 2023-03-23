@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "54be3ed29233d6ecf5c883a82f337e80",
+    "content-hash": "27701e7e885af7969ad411114be9ecd1",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -358,16 +358,16 @@
         },
         {
             "name": "csrdelft/bb",
-            "version": "v1.3.6",
+            "version": "dev-type-hints",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/bb.git",
-                "reference": "7e53278686035af6cfc013c5518639050e9e4b50"
+                "reference": "140f25b29a29a1b147ee98a31a9acb974b01b483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/bb/zipball/7e53278686035af6cfc013c5518639050e9e4b50",
-                "reference": "7e53278686035af6cfc013c5518639050e9e4b50",
+                "url": "https://api.github.com/repos/csrdelft/bb/zipball/140f25b29a29a1b147ee98a31a9acb974b01b483",
+                "reference": "140f25b29a29a1b147ee98a31a9acb974b01b483",
                 "shasum": ""
             },
             "require": {
@@ -380,8 +380,8 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "CsrDelft\\bb\\": "src/",
-                    "CsrDelft\\bb\\test\\": "tests/lib/"
+                    "CsrDelft\\Lib\\Bb\\": "src/",
+                    "CsrDelft\\Lib\\Bb\\Test\\": "tests/lib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -398,9 +398,9 @@
             "homepage": "https://csrdelft.github.io/bb",
             "support": {
                 "issues": "https://github.com/csrdelft/bb/issues",
-                "source": "https://github.com/csrdelft/bb/tree/v1.3.6"
+                "source": "https://github.com/csrdelft/bb/tree/type-hints"
             },
-            "time": "2023-03-09T22:59:39+00:00"
+            "time": "2023-03-20T22:19:00+00:00"
         },
         {
             "name": "dasprid/enum",
@@ -14673,7 +14673,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "clegginabox/pdf-merger": 20
+        "clegginabox/pdf-merger": 20,
+        "csrdelft/bb": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode;
 
-use CsrDelft\bb\BbEnv;
+use CsrDelft\Lib\Bb\BbEnv;
 use CsrDelft\view\bbcode\prosemirror\Mark;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use Psr\Container\ContainerInterface;
@@ -37,14 +37,12 @@ class BbToProsemirror
 	 */
 	private $nodesRegistry;
 
-	public function __construct(
-		$marksRegistry,
-		$nodesRegistry,
-		ContainerInterface $container
-	) {
+	public function __construct($marksRegistry, $nodesRegistry, CsrBB $csrBB)
+	{
 		$env = new BbEnv();
 		$env->prosemirror = true;
-		$this->csrBB = new CsrBB($container, $env);
+		$this->csrBB = $csrBB;
+		$this->csrBB->setEnv($env);
 		$this->marksRegistry = $marksRegistry;
 		$this->nodesRegistry = $nodesRegistry;
 	}
@@ -111,16 +109,13 @@ class BbToProsemirror
 					]);
 				}
 
-				array_push($nodes, $item);
+				$nodes[] = $item;
 			} elseif ($this->marksRegistry->has(get_class($child))) {
 				/** @var Mark $class */
 				$class = $this->marksRegistry->get(get_class($child));
-				array_push(
-					$this->storedMarks,
-					array_merge(
-						['type' => $class::getMarkType()],
-						$class->getData($child)
-					)
+				$this->storedMarks[] = array_merge(
+					['type' => $class::getMarkType()],
+					$class->getData($child)
 				);
 
 				if (!empty($child->getChildren())) {

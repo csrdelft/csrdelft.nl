@@ -15,6 +15,7 @@ use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepTab;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\GroepRepository;
+use CsrDelft\view\bbcode\BbUtil;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\groepen\leden\GroepEetwensView;
@@ -141,7 +142,7 @@ class GroepView implements FormElement, ToResponse
 				'</a>';
 		}
 		$html .= '</h3>';
-		$html .= CsrBB::parse($this->groep->samenvatting);
+		$html .= BbUtil::parse($this->groep->samenvatting);
 		if (!empty($this->groep->omschrijving)) {
 			$html .=
 				'<div class="clear">&nbsp;</div><a id="groep-omschrijving-' .

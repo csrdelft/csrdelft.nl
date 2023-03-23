@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\elementen;
 
+use CsrDelft\view\bbcode\BbUtil;
 use CsrDelft\view\bbcode\CsrBB;
 
 /**
@@ -18,6 +19,6 @@ class HtmlBbComment extends HtmlComment
 {
 	public function getHtml()
 	{
-		return CsrBB::parseHtml($this->comment, true);
+		return BbUtil::parseHtml($this->comment, true);
 	}
 }

@@ -7,6 +7,7 @@ use CsrDelft\common\Eisen;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\bbcode\BbUtil;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
 use DateTimeImmutable;
@@ -223,6 +224,6 @@ class Peiling implements DataTableEntry
 	 */
 	public function getBeschrijving()
 	{
-		return CsrBB::parse($this->beschrijving);
+		return BbUtil::parse($this->beschrijving);
 	}
 }

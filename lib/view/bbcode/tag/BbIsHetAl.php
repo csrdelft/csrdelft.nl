@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
@@ -57,7 +57,7 @@ class BbIsHetAl extends BbTag
 		return 'ishetal';
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
@@ -65,7 +65,7 @@ class BbIsHetAl extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->value = $this->readMainArgument($arguments);
 		if ($this->value == '') {
@@ -73,7 +73,7 @@ class BbIsHetAl extends BbTag
 		}
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$html = '';
 		$html .= '<div class="my-3 p-3 bg-white rounded shadow-sm">';

@@ -25,6 +25,7 @@ use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\bbcode\BbUtil;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
 use CsrDelft\view\formulier\DisplayEntity;
@@ -685,7 +686,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		if ($vorm === 'pasfoto') {
 			$naam = $this->getPasfotoTag();
 		} elseif ($this->lidjaar === 2013) {
-			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
+			$naam = BbUtil::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
 		if (
 			$vorm !== 'pasfoto' &&

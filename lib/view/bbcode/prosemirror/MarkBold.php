@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
-use CsrDelft\bb\tag\BbBold;
-use CsrDelft\bb\tag\BbNode;
+use CsrDelft\Lib\Bb\Tag\BbBold;
+use CsrDelft\Lib\Bb\Tag\BbNode;
 
 class MarkBold implements Mark
 {

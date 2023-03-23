@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag\embed;
 
-use CsrDelft\bb\BbException;
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbException;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -29,7 +29,7 @@ class BbTwitter extends BbTag
 		return 'twitter';
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		return BbHelper::lightLinkBlock(
 			'twitter',
@@ -39,7 +39,7 @@ class BbTwitter extends BbTag
 		);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		// widget size
 		$width = 580;
@@ -77,7 +77,7 @@ HTML;
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->url = $this->readMainArgument($arguments);
 		if (str_starts_with($this->url, '@')) {

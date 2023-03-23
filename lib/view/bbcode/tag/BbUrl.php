@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\view\bbcode\BbHelper;
 
@@ -19,12 +19,12 @@ class BbUrl extends BbTag
 {
 	public $url;
 
-	public static function getTagName()
+	public static function getTagName(): array
 	{
 		return ['url', 'rul'];
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->url = $this->getUrl($arguments);
 		if ($this->url == null) {
@@ -35,17 +35,17 @@ class BbUrl extends BbTag
 		}
 	}
 
-	public function renderPreview()
+	public function renderPreview(): string
 	{
 		return $this->getContent() . ' 🔗 ';
 	}
 
-	public function renderPlain()
+	public function renderPlain(): string
 	{
 		return $this->getContent() . ' (' . $this->url . ')';
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		return BbHelper::lightLinkInline(
 			$this->env,
@@ -55,7 +55,7 @@ class BbUrl extends BbTag
 		);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		return UrlUtil::external_url($this->url, $this->getContent());
 	}

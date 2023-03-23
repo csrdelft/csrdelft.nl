@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbException;
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbException;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\Util\VueUtil;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\repository\peilingen\PeilingenRepository;
@@ -51,17 +51,17 @@ class BbPeiling extends BbTag
 	{
 		return 'peiling';
 	}
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->peiling->magBekijken();
 	}
 
-	public function renderPreview()
+	public function renderPreview(): string
 	{
 		return '🗳️ ';
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$url = '#/peiling/' . urlencode($this->id);
 		return BbHelper::lightLinkBlock(
@@ -72,7 +72,7 @@ class BbPeiling extends BbTag
 		);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		return VueUtil::vueComponent('peiling', [
 			'settings' => $this->normalizer->normalize($this->peiling, 'json', [
@@ -102,7 +102,7 @@ class BbPeiling extends BbTag
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->id = $this->readMainArgument($arguments);
 		$this->peiling = $this->getPeiling($this->id);

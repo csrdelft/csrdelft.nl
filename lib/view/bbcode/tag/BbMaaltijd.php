@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbException;
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbException;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\common\Util\InstellingUtil;
@@ -85,12 +85,12 @@ class BbMaaltijd extends BbTag
 		return 'maaltijd';
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$maaltijd = $this->maaltijden[0];
 		$url = $maaltijd->getUrl() . '#' . $maaltijd->maaltijd_id;
@@ -105,7 +105,7 @@ class BbMaaltijd extends BbTag
 		);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$result = '<div class="my-3 p-3 maaltijdketzer-wrapper rounded">';
 		foreach ($this->maaltijden as $maaltijd) {
@@ -162,7 +162,7 @@ class BbMaaltijd extends BbTag
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->id = $this->readMainArgument($arguments);
 		$this->maaltijden = [];

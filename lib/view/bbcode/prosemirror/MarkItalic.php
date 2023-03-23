@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
-use CsrDelft\bb\tag\BbItalic;
-use CsrDelft\bb\tag\BbNode;
+use CsrDelft\Lib\Bb\Tag\BbItalic;
+use CsrDelft\Lib\Bb\Tag\BbNode;
 
 class MarkItalic implements Mark
 {

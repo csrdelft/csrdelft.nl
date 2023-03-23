@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag\embed;
 
-use CsrDelft\bb\BbException;
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbException;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -27,7 +27,7 @@ class BbSpotify extends BbTag
 		return 'spotify';
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$url =
 			'https://open.spotify.com/' .
@@ -40,7 +40,7 @@ class BbSpotify extends BbTag
 		);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$this->uri\" frameborder=\"0\" allowtransparency=\"true\"";
 
@@ -58,7 +58,7 @@ class BbSpotify extends BbTag
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->formaat = $arguments['formaat'] ?? null;
 		$url = $this->readMainArgument($arguments);

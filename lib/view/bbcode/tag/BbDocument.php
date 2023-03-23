@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\Util\FileUtil;
 use CsrDelft\entity\documenten\Document;
 use CsrDelft\repository\documenten\DocumentRepository;
@@ -49,17 +49,17 @@ class BbDocument extends BbTag
 		return 'document';
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->document == false || $this->document->magBekijken();
 	}
 
-	public function renderPreview()
+	public function renderPreview(): string
 	{
 		return ' 📄 ';
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		if ($this->document) {
 			$beschrijving =
@@ -80,7 +80,7 @@ class BbDocument extends BbTag
 		}
 	}
 
-	public function render()
+	public function render(): string
 	{
 		if ($this->document) {
 			return $this->twig->render('documenten/document_bb.html.twig', [
@@ -96,7 +96,7 @@ class BbDocument extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->id = $this->readMainArgument($arguments);
 		$this->document = $this->documentRepository->get($this->id);

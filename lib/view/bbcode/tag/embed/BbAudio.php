@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag\embed;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 
 class BbAudio extends BbTag
 {
@@ -16,12 +16,12 @@ class BbAudio extends BbTag
 		return ['audio', 'geluid'];
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->url = $this->readMainArgument($arguments);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$src = htmlspecialchars($this->url);
 

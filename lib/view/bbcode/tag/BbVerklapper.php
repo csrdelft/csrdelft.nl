@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\Util\CryptoUtil;
 
 /**
@@ -11,17 +11,17 @@ use CsrDelft\common\Util\CryptoUtil;
  */
 class BbVerklapper extends BbTag
 {
-	public static function getTagName()
+	public static function getTagName(): array
 	{
 		return ['spoiler', 'verklapper'];
 	}
 
-	public function renderPreview()
+	public function renderPreview(): string
 	{
 		return '';
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$content = str_replace('[br]', '<br />', $this->getContent());
 		return '<a class="bb-tag-spoiler" href="#/verklapper/' .
@@ -29,7 +29,7 @@ class BbVerklapper extends BbTag
 			'">Toon verklapper</a>';
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$id = CryptoUtil::uniqid_safe('verklapper_');
 
@@ -44,7 +44,7 @@ HTML;
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->readContent();
 	}

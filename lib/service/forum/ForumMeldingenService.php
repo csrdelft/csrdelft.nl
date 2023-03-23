@@ -68,10 +68,15 @@ class ForumMeldingenService
 	 * @var PushAbonnementRepository
 	 */
 	private $pushAbonnementRepository;
+	/**
+	 * @var CsrBB
+	 */
+	private $bb;
 
 	public function __construct(
 		Environment $twig,
 		Security $security,
+		CsrBB $bb,
 		MailService $mailService,
 		SuService $suService,
 		ProfielRepository $profielRepository,
@@ -105,6 +110,7 @@ class ForumMeldingenService
 			];
 			$this->webPush = new WebPush($auth);
 		}
+		$this->bb = $bb;
 	}
 
 	public function stuurDraadMeldingen(ForumPost $post)
@@ -287,7 +293,9 @@ class ForumMeldingenService
 		foreach ($allSubscriptions as $subscription) {
 			$keys = json_decode($subscription->client_keys);
 			$bericht =
-				$auteur->getNaam('civitas') . ': ' . CsrBB::parsePreview($post->tekst);
+				$auteur->getNaam('civitas') .
+				': ' .
+				$this->bb->parsePreview($post->tekst);
 
 			$this->webPush->queueNotification(
 				Subscription::create([

@@ -111,7 +111,11 @@ services:
     public: true
 
   CsrDelft\view\bbcode\CsrBB:
+    shared: false
     public: true
+    arguments:
+      - !tagged_locator  { tag: csr.editor.tag }
+
 
   csr.formulier.factory:
     alias: CsrDelft\Component\Formulier\FormulierFactory
@@ -132,7 +136,7 @@ services:
     arguments:
       - !tagged_locator { tag: csr.editor.mark, default_index_method: getBbTagType }
       - !tagged_locator { tag: csr.editor.node, default_index_method: getBbTagType }
-      - '@Psr\Container\ContainerInterface'
+      - '@CsrDelft\view\bbcode\CsrBB'
 
   CsrDelft\view\bbcode\ProsemirrorToBb:
     public: true

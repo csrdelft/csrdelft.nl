@@ -2,9 +2,9 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
-use CsrDelft\bb\BbTag;
-use CsrDelft\bb\internal\BbString;
-use CsrDelft\bb\tag\BbNode;
+use CsrDelft\Lib\Bb\BbTag;
+use CsrDelft\Lib\Bb\Internal\BbString;
+use CsrDelft\Lib\Bb\Tag\BbNode;
 
 interface Node
 {

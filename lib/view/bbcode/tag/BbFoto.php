@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbException;
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbException;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\Security\Voter\Entity\FotoAlbumVoter;
 use CsrDelft\common\Util\HostUtil;
 use CsrDelft\entity\fotoalbum\Foto;
@@ -58,7 +58,7 @@ class BbFoto extends BbTag
 		return 'foto';
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->security->isGranted(
 			FotoAlbumVoter::BEKIJKEN,
@@ -66,12 +66,12 @@ class BbFoto extends BbTag
 		);
 	}
 
-	public function renderPreview()
+	public function renderPreview(): string
 	{
 		return ' 📷 ';
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		return BbHelper::lightLinkThumbnail(
 			'foto',
@@ -80,7 +80,7 @@ class BbFoto extends BbTag
 		);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$url = $this->fotoUrl;
 		$parts = explode('/', $url);
@@ -95,7 +95,7 @@ class BbFoto extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->responsive = isset($arguments['responsive']);
 		$this->fotoUrl = $this->readMainArgument($arguments);

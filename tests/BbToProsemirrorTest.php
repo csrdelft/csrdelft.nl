@@ -17,7 +17,7 @@ final class BbToProsemirrorTest extends CsrTestCase
 	{
 		parent::setUp();
 
-		$this->parser = new CsrBB($this->getContainer());
+		$this->parser = $this->getContainer()->get(CsrBB::class);
 		$this->converter = $this->getContainer()->get(BbToProsemirror::class);
 	}
 

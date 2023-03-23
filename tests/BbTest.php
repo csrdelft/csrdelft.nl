@@ -14,7 +14,7 @@ final class BbTest extends CsrTestCase
 	public function setUp(): void
 	{
 		parent::setUp();
-		$this->parser = new CsrBB($this->getContainer());
+		$this->parser = $this->getContainer()->get(CsrBB::class);
 	}
 
 	public function testBbSpotify(): void
