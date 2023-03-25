@@ -9,15 +9,15 @@ $donker-rose: #da3f3f;
 $medium-donker-rose: darken($rose, 4%);
 
 // Zet hier de OWee kleuren
-$primary: $rose; // $donkerblauw;
-$secondary: $donker-rose; // #002e54;
-$tertiary: $licht-rose; // #486b87;
-$accent: $groen; // #f6b585;
-$youtubeRed: $donker-rose;
+$primary: $middenblauw; //$rose; 
+$secondary: $donkerblauw; //$donker-rose; 
+$tertiary: $lichtblauw; //$licht-rose; // 
+$accent: $geel; //$groen;
+$youtubeRed: rgb(170, 1, 1);
 $whatsappGreen: $groen;
 $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
 
-$basiskleur: $donker-rose;
+$basiskleur: $donkerblauw;
 
 @font-face {
 	font-family: "Tw Cen MT";
@@ -89,7 +89,7 @@ $header-font-p2: Freestyle Script, Regular, Arial, Helvetica, sans-serif;
 body {
 	width: 100%;
 	overflow-x: hidden;
-	background-color: $donker-rose;
+	background-color: $donkerblauw;
 }
 
 .owee-pagina {
@@ -179,7 +179,7 @@ body {
 
 	.cta {
 		&.primary {
-			background: $primary;
+			background: $secondary;
 			color: white;
 
 			&:hover {
@@ -216,13 +216,15 @@ body {
 	}
 
 	.hero {
-		background: $rose url("../images/owee2022-banner.jpg") no-repeat center
-			bottom;
+		background: $lichtblauw;
 		background-size: contain;
+		
 
 		img {
+			width: 154px!important;
 			max-height: 100vh;
-			margin: -8vh auto 3vh auto;
+			margin: -9vh auto 3vh auto;
+			padding-top: 15vh;
 			display: block;
 			max-width: 60vw;
 		}
@@ -274,8 +276,9 @@ body {
 	}
 
 	.videos {
-		background: $primary url("../images/owee2022-achtergrond.png") no-repeat
-			left center;
+		//background: $primary url("../images/owee2022-achtergrond.png") no-repeat
+		//	left center;
+		background-color: $lichtblauw;
 		background-size: cover;
 		width: 100%;
 
@@ -332,7 +335,7 @@ body {
 	}
 
 	.contact {
-		background: $primary;
+		background-color: $primary;
 	}
 
 	.info {
@@ -457,7 +460,7 @@ body {
 			}
 
 			&[for="lid-spreken"] {
-				background: $medium-donker-rose;
+				background: $donkerblauw;
 			}
 
 			&[for="open-avond"] {
@@ -510,7 +513,7 @@ body {
 			}
 
 			input {
-				background-color: $donker-rose;
+				background-color: $donkerblauw;
 				font-size: 1rem;
 				border: none;
 				border-radius: 0;
