@@ -9,9 +9,9 @@ $donker-rose: #da3f3f;
 $medium-donker-rose: darken($rose, 4%);
 
 // Zet hier de OWee kleuren
-$primary: $middenblauw; //$rose; 
-$secondary: $donkerblauw; //$donker-rose; 
-$tertiary: $lichtblauw; //$licht-rose; // 
+$primary: $middenblauw; //$rose;
+$secondary: $donkerblauw; //$donker-rose;
+$tertiary: $lichtblauw; //$licht-rose; //
 $accent: $geel; //$groen;
 $youtubeRed: rgb(170, 1, 1);
 $whatsappGreen: $groen;
@@ -218,10 +218,9 @@ body {
 	.hero {
 		background: $lichtblauw;
 		background-size: contain;
-		
 
 		img {
-			width: 154px!important;
+			width: 154px !important;
 			max-height: 100vh;
 			margin: -9vh auto 3vh auto;
 			padding-top: 15vh;
