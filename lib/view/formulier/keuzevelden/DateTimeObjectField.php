@@ -23,7 +23,7 @@ class DateTimeObjectField extends DateTimeField
 		$minyear = null
 	) {
 		if ($value instanceof DateTimeInterface) {
-			$value = DateUtil::dateFormatIntl($value, 'YYYY-MM-DDTHH:mm');
+			$value = DateUtil::dateFormatIntl($value, 'y-MM-dd HH:mm');
 		}
 		parent::__construct($name, $value, $description, $maxyear, $minyear);
 	}
