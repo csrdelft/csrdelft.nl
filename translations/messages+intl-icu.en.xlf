@@ -517,16 +517,16 @@
 					The next open evening is on June 2, of which the registrations open 2 weeks in advance.</target>
       </trans-unit>
       <trans-unit id=".Hsl_ux" resname="OWee: 21 t/m 25 augustus">
-        <source>OWee: 21 t/m 25 augustus</source>
-        <target>OWee: 21 t/m 25 August:</target>
+        <source>OWee: 13 t/m 16 augustus</source>
+        <target>OWee: 13-16 August</target>
       </trans-unit>
       <trans-unit id="dPhqpCC" resname="Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Dit jaar duurt de OWee van 21 t/m 25 augustus.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Tijdens deze week is er de uitgelezen kans om&#9;kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel&#9;meer!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Al deze groepen en instanties zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;C.S.R. heeft gedurende deze week veel interessante en&#9;gezellige activiteiten, waar je kan kennis maken met de vereniging!">
         <source>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.
-							Dit jaar duurt de OWee van 21 t/m 25 augustus.
+							Dit jaar duurt de OWee van 13 t/m 16 augustus.
 							Tijdens deze week is er de uitgelezen kans om	kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel	meer!
 							Al deze groepen en instanties zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
 							C.S.R. heeft gedurende deze week veel interessante en	gezellige activiteiten, waar je kan kennis maken met de vereniging!</source>
-        <target>The OWee is a week that is organized every year. This year is will be from the 21th until the 25th of August.
+        <target>The OWee is a week that is organized every year. This year is will be from the 13th until the 16th of August.
 					During this week you can get to know the TU, applied sciences studies, study association, student associations, sports associations etc.!
 					These groups will present themselves during this week. C.S.R. will organize a lot of fun and interesting activities during the week where you can get to know our association and our members.
 					We hope to see you in the OWee!</target>
@@ -635,7 +635,7 @@
 								hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
 								De eerstvolgende open avond is donderdag 6 april 2023. Je kan je opgeven via deze</source>
         <target>We will have two open evenings this year where you can come and experience an evening in our association building. You can come for dinner, participate in a praise hour, and have a drink.
-        The next open evening will be on the 6th of April 2023. You can register for it via this</target>
+                The next open evening will be on the 6th of April 2023. You can register for it via this</target>
       </trans-unit>
       <trans-unit id="qBjOOCs" resname="Met het verzenden van dit formulier ga je akkoord met de &lt;a&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;href=&quot;/download/Privacyverklaring C.S.R. Delft - Extern - 25-/05-2018.pdf&quot;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;target=&quot;_blank&quot;&gt;privacyverklaring van C.S.R. Delft&lt;/a&gt;.">
         <source>Met het verzenden van dit formulier ga je akkoord met de &lt;a
