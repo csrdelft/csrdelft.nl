@@ -335,17 +335,6 @@
         <source>Verzenden</source>
         <target>Send</target>
       </trans-unit>
-      <trans-unit id="O3gMvQi" resname="Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,&#10;&#9;&#9;&#9;&#9;&#9;&#9;studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al&#10;&#9;&#9;&#9;&#9;&#9;&#9;deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Ook C.S.R. doet mee aan deze gezellige week. Van 16 t/m 20 augustus heb je de gelegenheid om de sfeer van C.S.R. en Delft te proeven!">
-        <source>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.
-						Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,
-						studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
-						deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
-						Ook C.S.R. doet mee aan deze gezellige week. Van 16 t/m 20 augustus heb je de gelegenheid om de sfeer van C.S.R. en Delft te proeven!</source>
-        <target>At the beginning of each study year an opening weeks, OWee, is organized.
-						This week is the best way to get to know the university, student associations, study associations, sports associations, churches and more!
-						All these mentioned groups have their own way of introducing themselves to the students and C.S.R. is also part of the fun.
-						During the week of 16-20 August, you have the chance to get to know C.S.R. better!</target>
-      </trans-unit>
       <trans-unit id="mAH_Zp3" resname="Beste scholier of student, &lt;br&gt;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Wat onwijs leuk dat je een kijkje neemt op onze website! Hier kan je veel informatie en foto’s&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;vinden die een goede sfeerimpressie van C.S.R. en het studentenleven geven. Om&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;geïnteresseerden een nog beter beeld te geven van C.S.R., bieden wij meeloopdagen aan.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;dag zal volledig op jouw wensen en voorkeuren worden aangepast. Zo heb je bijvoorbeeld&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;de keuze om een paar colleges mee te kijken, mee te eten en/of een drankje te doen op een&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;C.S.R. huis. Er is ook de mogelijkheid om samen met iemand te komen. Wij zullen je een zo&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;goed mogelijk beeld proberen te geven tijdens deze meeloopdag van het studentenleven bij&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;C.S.R. Daarnaast staan we klaar om al je vragen te beantwoorden.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Om deel te nemen aan een meeloopdag kun je het volgende formulier invullen:">
         <source>Beste scholier of student, &lt;br&gt;
 							Wat onwijs leuk dat je een kijkje neemt op onze website! Hier kan je veel informatie en foto’s
@@ -546,10 +535,29 @@
         <source>C.S.R. Delft is de grootste christelijke vereniging van Delft. Lid zijn van onze studentenvereniging betekent voor jou dat je nieuwe vriendschappen maakt voor het leven en samen geniet van de activiteiten die de vereniging biedt.
 							Het	betekent dat je je geloof blijft voeden en je kan verdiepen met kringen, bidgroepjes en worshipavonden.
 							Lid zijn zorgt voor prachtige momenten tijdens je studententijd die je je leven lang niet gaat vergeten!</source>
-        <target>C.S.R. Delft is the biggest student association in Delft.
+        <target>C.S.R. Delft is the biggest Christian student association in Delft.
 					Becoming a member will give you a chance to make friends for life and enjoy the numerous activities we organize.
 					You have the opportunity to keep investing in your faith and strengthen it with our bible studies, prayer groups and worship sessions.
 					Being a member will ensure you of beautiful moments that you won’t forget.</target>
+      </trans-unit>
+      <trans-unit id="OpenAvondButton">
+        <source>Ik wil naar een open avond!</source>
+        <target>I would like to go to an open evening!</target>
+      </trans-unit>
+      <trans-unit id="OweeInfoBlokTitel">
+        <source>13 t/m 16 augustus</source>
+        <target>13-16 August</target>
+      </trans-unit>
+      <trans-unit id="OweeInfoBlokTekst">
+        <source>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.
+							Dit jaar duurt de OWee van 13 t/m 16 augustus.
+							Tijdens deze week is er de uitgelezen kans om	kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer!
+							Al deze groepen en instanties zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
+							C.S.R. heeft gedurende deze week veel interessante en	gezellige activiteiten, waar je kan kennis maken met de vereniging!</source>
+        <target>At the beginning of each study year an opening weeks, OWee, is organized.
+						This week is the best way to get to know the university, student associations, study associations, sports associations, churches and more!
+						All these mentioned groups have their own way of introducing themselves to the students and C.S.R. is also part of the fun.
+						During the week of 13-16 August, you have the chance to get to know C.S.R. better!</target>
       </trans-unit>
       <trans-unit id="jPBu5g." resname="Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;over activiteiten, zoals open avonden en de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan je hieronder&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;ook je gegevens achterlaten voor je voorinschrijving">
         <source>Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws
@@ -610,7 +618,7 @@
       </trans-unit>
       <trans-unit id="Cnh4XAn" resname="Interesse in">
         <source>Interesse in</source>
-        <target>Interessed in</target>
+        <target>Interested in</target>
       </trans-unit>
       <trans-unit id="fYaU10_" resname="C.S.R.?">
         <source>C.S.R.?</source>
@@ -622,11 +630,12 @@
 										dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden:</source>
         <target>To get a better view of C.S.R. you can join a member of C.S.R. for a day. More info can be found here: </target>
       </trans-unit>
-      <trans-unit id="jV35IPr" resname="We hebben twee keer dit jaar een open avond waarbij je kan komen kijken&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De eerstvolgende open avond is op 2 juni, de inschrijvingen daarvoor gaan 2 weken van tevoren open.">
+      <trans-unit id="jV35IPr">
         <source>We hebben twee keer dit jaar een open avond waarbij je kan komen kijken
-										hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
-										De eerstvolgende open avond is op 2 juni, de inschrijvingen daarvoor gaan 2 weken van tevoren open.</source>
-        <target>We will have two open nights this year where you can come and see how an evening in our clubhouse look like. You can come for dinner, participate in a praise hour, and have a drink.</target>
+								hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
+								De eerstvolgende open avond is donderdag 6 april 2023. Je kan je opgeven via deze</source>
+        <target>We will have two open evenings this year where you can come and experience an evening in our association building. You can come for dinner, participate in a praise hour, and have a drink.
+        The next open evening will be on the 6th of April 2023. You can register for it via this</target>
       </trans-unit>
       <trans-unit id="qBjOOCs" resname="Met het verzenden van dit formulier ga je akkoord met de &lt;a&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;href=&quot;/download/Privacyverklaring C.S.R. Delft - Extern - 25-/05-2018.pdf&quot;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;target=&quot;_blank&quot;&gt;privacyverklaring van C.S.R. Delft&lt;/a&gt;.">
         <source>Met het verzenden van dit formulier ga je akkoord met de &lt;a
