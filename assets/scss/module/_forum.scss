@@ -123,6 +123,10 @@ i.fab {
 	}
 
 	.forum-post {
+		.text-container {
+			min-width: 1px;
+		}
+
 		p:empty {
 			display: none;
 		}
