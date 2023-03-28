@@ -540,15 +540,15 @@
 					You have the opportunity to keep investing in your faith and strengthen it with our bible studies, prayer groups and worship sessions.
 					Being a member will ensure you of beautiful moments that you won’t forget.</target>
       </trans-unit>
-      <trans-unit id="OpenAvondButton">
+      <trans-unit id="OpenAvondButton" resname="Ik wil naar een open avond!">
         <source>Ik wil naar een open avond!</source>
         <target>I would like to go to an open evening!</target>
       </trans-unit>
-      <trans-unit id="OweeInfoBlokTitel">
+      <trans-unit id="OweeInfoBlokTitel" resname="13 t/m 16 augustus">
         <source>13 t/m 16 augustus</source>
         <target>13-16 August</target>
       </trans-unit>
-      <trans-unit id="OweeInfoBlokTekst">
+      <trans-unit id="OweeInfoBlokTekst" resname="Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Dit jaar duurt de OWee van 13 t/m 16 augustus.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Tijdens deze week is er de uitgelezen kans om	kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Al deze groepen en instanties zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;C.S.R. heeft gedurende deze week veel interessante en	gezellige activiteiten, waar je kan kennis maken met de vereniging!">
         <source>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.
 							Dit jaar duurt de OWee van 13 t/m 16 augustus.
 							Tijdens deze week is er de uitgelezen kans om	kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer!
@@ -630,7 +630,7 @@
 										dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden:</source>
         <target>To get a better view of C.S.R. you can join a member of C.S.R. for a day. More info can be found here: </target>
       </trans-unit>
-      <trans-unit id="jV35IPr">
+      <trans-unit id="jV35IPr" resname="We hebben twee keer dit jaar een open avond waarbij je kan komen kijken&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De eerstvolgende open avond is donderdag 6 april 2023. Je kan je opgeven via deze">
         <source>We hebben twee keer dit jaar een open avond waarbij je kan komen kijken
 								hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
 								De eerstvolgende open avond is donderdag 6 april 2023. Je kan je opgeven via deze</source>
