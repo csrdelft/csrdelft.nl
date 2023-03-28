@@ -11,7 +11,7 @@ De externe stek is ook beschikbaar in het Engels. Op de meeste plekken wordt de 
 
 Zie ook de documentatie van [`symfony/translation`](https://symfony.com/doc/current/translation.html) voor meer informatie.
 
-## Vertalignen gebruiken
+## Vertalingen gebruiken
 
 ### Vertalingen in templates
 
@@ -37,7 +37,7 @@ function __construct(
 }
 ```
 
-### Vertalingen in CMS paginas en menus
+### Vertalingen in CMS pagina`s en menus
 
 Menus worden op basis van de huidige locale geladen. De standaard locale is `nl`, voor deze locale wordt het menu met de gevraagde naam geladen. Voor alle andere locales wordt gezocht of het menu met de naam gevolgd door `_<locale>` bestaat, als dit het geval is wordt deze geladen.
 
@@ -58,7 +58,7 @@ Gebruik het volgende commando om alle vertalingen die in de broncode gebruikt wo
 php bin/console translation:update en --force --domain=messages
 ```
 
-Dit zorgt ervoor dat het bestand `translations/messages+intl-icu.en.xlf` wordt geupdate. Zorg er in dit bestand voor dat alle `<target>` tags gevuld zijn met de vertaalde teksten. (Als alles vertaald is kun je geen `__` meer vinden in het bestand.)
+Dit zorgt ervoor dat het bestand `translations/messages+intl-icu.en.xlf` wordt geüpdatet. Zorg er in dit bestand voor dat alle `<target>` tags gevuld zijn met de vertaalde teksten. (Als alles vertaald is kun je geen `__` meer vinden in het bestand.)
 
 ## Variabelen in vertalingen
 
