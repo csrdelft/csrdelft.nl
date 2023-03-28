@@ -55,7 +55,7 @@ In Cms pagina's kun je gebruik maken van de `[taal=...]` bb tag om bepaalde teks
 Gebruik het volgende commando om alle vertalingen die in de broncode gebruikt worden in het centrale vertalingen bestand te zetten:
 
 ```shell
-php bin/console translation:update en --force --domain=messages
+php bin/console translation:extract en --force --domain=messages
 ```
 
 Dit zorgt ervoor dat het bestand `translations/messages+intl-icu.en.xlf` wordt geüpdatet. Zorg er in dit bestand voor dat alle `<target>` tags gevuld zijn met de vertaalde teksten. (Als alles vertaald is kun je geen `__` meer vinden in het bestand.)
