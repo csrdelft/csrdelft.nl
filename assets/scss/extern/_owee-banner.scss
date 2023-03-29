@@ -10,10 +10,10 @@ body.met-owee-banner {
 
 .owee-banner {
 	position: relative;
-	min-height: 250px;
+	// min-height: 250px;
 	width: 100%;
-	background: url("../../images/owee2022-banner-achtergrond.jpg") no-repeat
-		center bottom;
+	// background: url("../../images/beeldmerk.png") no-repeat
+	// center bottom;
 	background-size: cover;
 	display: flex;
 	justify-content: center;
@@ -22,7 +22,7 @@ body.met-owee-banner {
 	margin-bottom: 15px;
 
 	.logo {
-		width: 230px;
+		width: 154px;
 		//padding-right: 50px;
 
 		img {

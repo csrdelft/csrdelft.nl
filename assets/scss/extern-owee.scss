@@ -2,22 +2,16 @@
 @import "~bootstrap/scss/mixins/breakpoints";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
-$groen: #3eb9b1;
-$licht-rose: #ef8080;
-$rose: #ec6363;
-$donker-rose: #da3f3f;
-$medium-donker-rose: darken($rose, 4%);
-
 // Zet hier de OWee kleuren
-$primary: $rose; // $donkerblauw;
-$secondary: $donker-rose; // #002e54;
-$tertiary: $licht-rose; // #486b87;
-$accent: $groen; // #f6b585;
-$youtubeRed: $donker-rose;
-$whatsappGreen: $groen;
+$primary: $middenblauw;
+$secondary: $donkerblauw;
+$tertiary: $lichtblauw;
+$accent: $geel;
+$youtubeRed: rgb(170, 1, 1);
+$whatsappGreen: rgb(14, 214, 14);
 $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
 
-$basiskleur: $donker-rose;
+$basiskleur: $donkerblauw;
 
 @font-face {
 	font-family: "Tw Cen MT";
@@ -89,7 +83,7 @@ $header-font-p2: Freestyle Script, Regular, Arial, Helvetica, sans-serif;
 body {
 	width: 100%;
 	overflow-x: hidden;
-	background-color: $donker-rose;
+	background-color: $secondary;
 }
 
 .owee-pagina {
@@ -179,7 +173,7 @@ body {
 
 	.cta {
 		&.primary {
-			background: $primary;
+			background: $secondary;
 			color: white;
 
 			&:hover {
@@ -216,13 +210,14 @@ body {
 	}
 
 	.hero {
-		background: $rose url("../images/owee2022-banner.jpg") no-repeat center
-			bottom;
+		background: $tertiary;
 		background-size: contain;
 
 		img {
+			width: 154px !important;
 			max-height: 100vh;
-			margin: -8vh auto 3vh auto;
+			margin: -15vh auto 3vh auto;
+			padding-top: 18vh;
 			display: block;
 			max-width: 60vw;
 		}
@@ -274,8 +269,9 @@ body {
 	}
 
 	.videos {
-		background: $primary url("../images/owee2022-achtergrond.png") no-repeat
-			left center;
+		//background: $primary url("../images/owee2022-achtergrond.png") no-repeat
+		//	left center;
+		background-color: $tertiary;
 		background-size: cover;
 		width: 100%;
 
@@ -332,7 +328,7 @@ body {
 	}
 
 	.contact {
-		background: $primary;
+		background-color: $primary;
 	}
 
 	.info {
@@ -457,7 +453,7 @@ body {
 			}
 
 			&[for="lid-spreken"] {
-				background: $medium-donker-rose;
+				background: $secondary;
 			}
 
 			&[for="open-avond"] {
@@ -510,7 +506,7 @@ body {
 			}
 
 			input {
-				background-color: $donker-rose;
+				background-color: $secondary;
 				font-size: 1rem;
 				border: none;
 				border-radius: 0;
@@ -553,7 +549,7 @@ body {
 		}
 
 		#lid-spreken:checked ~ .interesseformulier {
-			background: $medium-donker-rose;
+			background: $primary;
 
 			a {
 				color: black;
