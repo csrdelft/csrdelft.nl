@@ -13,6 +13,7 @@ import {
 	registerGlobalContext,
 	registerGrafiekContext,
 	registerKnopContext,
+	registerLidInstellingenContext
 } from './context';
 import { init } from './ctx';
 import { ketzerAjax } from './lib/ajax';
