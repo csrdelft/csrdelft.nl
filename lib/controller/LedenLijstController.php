@@ -50,16 +50,16 @@ class LedenLijstController extends AbstractController
 					if ($query['status'] == 'LEDEN') {
 						$query['status'] = 'LEDEN|OUDLEDEN';
 						$message =
-							'Zoekterm gaf geen resultaten met gegeven statusfilter, gezocht in <em>leden &amp; oudleden</em>.';
+							'Zoekterm gaf geen resultaten met gegeven statusfilter, gezocht in <em>leden &amp; oudleden</em> Om alle leden en novieten weer te geven zoek met %.';
 					} elseif ($query['status'] == 'LEDEN|OUDLEDEN') {
 						$query['status'] = 'ALL';
 						$message =
-							'Zoekterm gaf geen resultaten met gegeven statusfilter, gezocht in <em>alle leden</em>.';
+							'Zoekterm gaf geen resultaten met gegeven statusfilter, gezocht in <em>alle leden</em>. Om alle leden en novieten weer te geven zoek met %.';
 					}
 				} else {
 					$query['status'] = 'LEDEN|OUDLEDEN';
 					$message =
-						'Zoekterm gaf geen resultaten met gegeven statusfilter, gezocht in <em>leden &amp; oudleden</em>.';
+						'Zoekterm gaf geen resultaten met gegeven statusfilter, gezocht in <em>leden &amp; oudleden</em>. Om alle leden en novieten weer te geven zoek met %.';
 				}
 				$lidZoeker->parseQuery($query);
 			}
