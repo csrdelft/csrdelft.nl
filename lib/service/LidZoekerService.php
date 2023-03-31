@@ -25,7 +25,7 @@ class LidZoekerService
 {
 	//velden die door gewone leden geselecteerd mogen worden.
 	public $veldNamen = [
-		'telefoon' => 'Nummer',
+		'telefoon' => 'Telefoonnummer',
 		'mobiel' => 'Pauper',
 		'studie' => 'Studie',
 		'gebdatum' => 'Geb.datum',
@@ -33,6 +33,7 @@ class LidZoekerService
 		'machtiging' => 'Machtiging getekend?',
 		'adresseringechtpaar' => 'Post echtpaar t.n.v.',
 		'linkedin' => 'LinkedIn',
+		'adres_ouders' => 'Adres (ouders)',
 	];
 	//velden die ook door mensen met P_LEDEN_MOD bekeken mogen worden
 	//(merge in de constructor)
@@ -63,6 +64,7 @@ class LidZoekerService
 	//deze velden kunnen we niet selecteren voor de ledenlijst, ze zijn wel te
 	//filteren en te sorteren.
 	private $allowVeldenLEDENMOD = [
+		'adres_ouders',
 		'eetwens',
 		'moot',
 		'muziek',
