@@ -82,6 +82,10 @@ class LLLijst extends LLWeergave
 					$html .= htmlspecialchars($profiel->getAdres());
 					break;
 
+				case 'adres_ouders':
+					$html .= htmlspecialchars($profiel->getAdresOuders());
+					break;
+
 				case 'kring':
 					$kring = $profiel->getKring();
 					if ($kring) {

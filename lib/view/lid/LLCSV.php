@@ -20,6 +20,14 @@ class LLCSV extends LLWeergave
 					$html .= 'adres;';
 					$html .= 'postcode;';
 					$html .= 'woonplaats;';
+					$html .= 'land;';
+					break;
+
+				case 'adres_ouders':
+					$html .= 'adres_ouders;';
+					$html .= 'postcode_ouders;';
+					$html .= 'woonplaats_ouders;';
+					$html .= 'land_ouders;';
 					break;
 
 				case 'naam':
@@ -65,7 +73,15 @@ HTML;
 				case 'adres':
 					$return .= str_replace('#', '', $profiel->adres) . ';';
 					$return .= $profiel->postcode . ';';
-					$return .= $profiel->woonplaats;
+					$return .= $profiel->woonplaats . ';';
+					$return .= $profiel->land;
+					break;
+
+				case 'adres_ouders':
+					$return .= str_replace('#', '', $profiel->o_adres) . ';';
+					$return .= $profiel->o_postcode . ';';
+					$return .= $profiel->o_woonplaats . ';';
+					$return .= $profiel->o_land;
 					break;
 
 				case 'naam':
