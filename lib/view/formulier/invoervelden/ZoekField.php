@@ -49,10 +49,13 @@ JS;
 	}
 
 	/**
-	 * @param MenuItem[] $list
+	 * @param MenuItem[]|null $list
 	 */
 	private function addSuggestions($list)
 	{
+		if (!$list) {
+			return;
+		}
 		$uid = LoginService::getUid();
 		foreach ($list as $item) {
 			$parent = $item->parent;
