@@ -6,6 +6,7 @@ import { route } from './lib/util';
 
 route('/', () => import('./page/voorpagina'));
 route('/instellingen', () => import('./page/instellingen'));
+route('/profiel/voorkeuren', () => import('./page/instellingen'));
 route('/documenten', () => import('./page/documenten'));
 route('/fotoalbum', () => import('./page/fotoalbum'));
 route('/bibliotheek', () => import('./page/bibliotheek'));
