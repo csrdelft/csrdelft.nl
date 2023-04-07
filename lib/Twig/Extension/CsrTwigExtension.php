@@ -295,10 +295,14 @@ class CsrTwigExtension extends AbstractExtension
 	}
 
 	public function bbcode(
-		string $string,
+		?string $string,
 		string $mode = 'normal',
 		bool $inlineHtml = false
 	) {
+		if (!$string) {
+			return '';
+		}
+
 		if ($mode === 'html') {
 			return CsrBB::parseHtml($string, $inlineHtml);
 		} elseif ($mode == 'mail') {
