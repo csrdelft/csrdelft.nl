@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\view\lid;
+use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
 use Exception;
@@ -137,6 +138,15 @@ HTML;
 				case 'geslacht':
 					if ($profiel->geslacht) {
 						$return .= $profiel->geslacht->getValue();
+					}
+					break;
+
+				case 'gebdatum':
+					if ($profiel->gebdatum) {
+						$return .= DateUtil::dateFormatIntl(
+							$profiel->gebdatum,
+							DateUtil::DATETIME_FORMAT
+						);
 					}
 					break;
 
