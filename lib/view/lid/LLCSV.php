@@ -145,7 +145,7 @@ HTML;
 					if ($profiel->gebdatum) {
 						$return .= DateUtil::dateFormatIntl(
 							$profiel->gebdatum,
-							DateUtil::DATETIME_FORMAT
+							DateUtil::DATE_FORMAT
 						);
 					}
 					break;
