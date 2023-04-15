@@ -201,7 +201,13 @@ class GoogleContactSync
 	 */
 	private static function getContactCsrUid(Person $contact): ?string
 	{
-		foreach ($contact->getUserDefined() as $property) {
+		$velden = $contact->getUserDefined();
+
+		if (!is_array($velden)) {
+			return null;
+		}
+
+		foreach ($velden as $property) {
 			if ($property->getKey() === 'csruid') {
 				return $property->getValue();
 			}
