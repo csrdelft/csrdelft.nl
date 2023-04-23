@@ -24,488 +24,717 @@
 </head>
 
 <body>
-{#	{%  include 'lustrum12/zandloper.html.twig' %}#}
-	{{ cms('lustrum-dies') }}
-{#	<nav class="site-header">#}
-{#		<a class="logo-titel d-inline-block" href="./">#}
-{#			<img src="/images/lustrum12/themaheader.png"#}
-{#					 alt="Logo menu" />#}
-{#		</a>#}
-{#		<a class="logo-titel dies-logo-titel d-inline-block" href="./">#}
-{#			<img src="/images/lustrum12/dies-bord.png"#}
-{#					 alt="Logo menu" />#}
-{#		</a>#}
-{#		<div class="container">#}
-{#			<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center headerbuttons">#}
-{#				<a class="d-none d-md-inline-block" href="./">Home</a>#}
-{#				<a class="d-none d-md-inline-block" href="#thema">Thema</a>#}
-{#				<a class="d-none d-md-inline-block" href="#programma">Programma</a>#}
-{#				<a class="d-none d-md-inline-block" href="#ketzers">Ketzers</a>#}
-{#				<a class="d-none d-md-inline-block" href="/tijdloos/dies/gala">Gala</a>#}
-{#				<a class="d-none d-md-inline-block" href="/tijdloos/dies/etiquette">Etiquette</a>#}
-{#			</div>#}
-{#		</div>#}
-{#	</nav>#}
+<nav class="site-header">
+	<a class="logo-titel d-inline-block" href="./">
+		<img src="/images/lustrum12/themaheader.png"
+				 alt="Logo menu" />
+	</a>
+	<a class="logo-titel dies-logo-titel d-inline-block" href="./">
+		<img src="/images/lustrum12/dies-bord.png"
+				 alt="Logo menu" />
+	</a>
+	<div class="container">
+		<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center headerbuttons">
+			<a class="d-none d-md-inline-block" href="./">Home</a>
+			<a class="d-none d-md-inline-block" href="#thema">Thema</a>
+			<a class="d-none d-md-inline-block" href="#programma">Programma</a>
+			<a class="d-none d-md-inline-block" href="#ketzers">Ketzers</a>
+			<a class="d-none d-md-inline-block" href="#gala">Gala</a>
+			<a class="d-none d-md-inline-block" href="/tijdloos/dies/etiquette">Etiquette</a>
+		</div>
+	</div>
+</nav>
 
-{#	<a id="thema"></a>#}
-{#	<section class="helemaal-boven">#}
-{#		<h1 class="titel">Thema</h1>#}
-{#		<div class="poster">#}
-{#			<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />#}
-{#		</div>#}
-{#		<br>#}
+<a id="thema"></a>
+<section class="helemaal-boven">
+	<h1 class="titel">Thema</h1>
+	<div class="poster">
+		<img src="/images/lustrum12/diesposter.jpg" alt="Logo menu" />
+	</div>
+	<br>
 
-{#		<div class="video">#}
-{#			<div class="container video-container">#}
-{#				<div class="youtube-container closed">#}
-{#					<div class="embed-responsive ratio ratio-16x9" id="player">#}
-{#						<iframe src="https://www.youtube-nocookie.com/embed/iery2Lp7daA?controls=0" frameborder="0" 	allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>#}
-{#						</iframe>#}
-{#					</div>#}
-{#				</div>#}
-{#			</div>#}
-{#		</div>#}
-{#		<br>#}
-{#		<h2 class="titel ondertitel"><a class="titel ondertitel" href="/tijdloos/dies/etiquette"><u>Hier</u></a> kan u uw kennis van de gala etiquette weer helemaal opfrissen.</h2>#}
-{#	</section>#}
+	<div class="video">
+		<div class="container video-container">
+			<div class="youtube-container closed">
+				<div class="embed-responsive ratio ratio-16x9" id="player">
+					<iframe src="https://www.youtube-nocookie.com/embed/iery2Lp7daA?controls=0" frameborder="0"
+									allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+					</iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<h2 class="titel ondertitel"><a class="titel ondertitel" href="/tijdloos/dies/etiquette"><u>Hier</u></a> kan u uw
+		kennis van de gala etiquette weer helemaal opfrissen.</h2>
+</section>
 
-{#	<div id="programma" class="divider">#}
-{#		<img class="tussen" src="/images/lustrum12/DiesDividerLarge.png">#}
-{#	</div>#}
+<div id="programma" class="divider">
+	<img class="tussen" src="/images/lustrum12/DiesDividerLarge.png">
+</div>
 
-{#	<section class="programma container gx-5">#}
-{#		<h1 class="titel">Programma</h1>#}
-{#		<div class="poster">#}
-{#			<img src="/images/lustrum12/dies-programma.jpg" alt="Logo menu" />#}
-{#		</div>#}
-{#	</section>#}
+<section class="programma container gx-5">
+	<h1 class="titel">Programma</h1>
+	<div class="poster">
+		<img src="https://csrdelft.nl/forum/plaatjes/bekijken/570489c08f000aff66eaf6f28e09429a?resized=1"
+				 alt="Programma Poster" />
+	</div>
+</section>
 
-{#	<div id="ketzers" class="divider">#}
-{#		<img class="tussen" src="/images/lustrum12/DiesDividerLarge.png">#}
-{#	</div>#}
+<div id="ketzers" class="divider">
+	<img class="tussen" src="/images/lustrum12/DiesDividerLarge.png">
+</div>
 
-{#	<section class="programma container gx-5">#}
+<section class="programma container gx-5">
 
-{#		<h1 class="divider titel">Ketzers</h1>#}
-{#		<h2 class="titel ondertitel">Het gala heeft een eigen pagina die u <a class="titel ondertitel" href="/tijdloos/dies/gala"><u>hier</u></a> kan vinden.</h2>#}
+	<h1 class="divider titel">Ketzers</h1>
 
-{#		<div class="row gx-5">#}
-{#			<div class="col-xl-6">#}
-{#				<div class="dag">#}
-{#					<h2>Maandag <span class="cijfer">7</span> Februari</h2>#}
-{#					<hr>#}
+	<div class="row gx-5">
+		<div class="col-xl-6">
+			<div class="dag">
+				<h2>Maandag <span class="cijfer">7</span> Februari</h2>
+				<hr>
 
-{#					<div class="activiteit">#}
-{#						<h3>La première</h3>#}
-{#						<div class="beschrijving">#}
-{#							C.S.R.-film#}
-{#						</div>#}
-{#					</div>#}
+				<div class="activiteit">
+					<h3>20:00 La bande annonce</h3>
+					<div class="beschrijving">
+						Wanneer Mats Louwerse eindelijk als informant voor de AIVD aan de slag mag, wordt zijn beoordelingsvermogen
+						gelijk op de proef gesteld. De twee smokkelaars die hij moet schaduwen zijn namelijk niet van het soort dat
+						Mats had zien aankomen. Bloed zweet en tranen staan hem te wachten tijdens reis over de lange smokkelroute.
+						De achtervolging wordt nog complexer wanneer Mats ineens zit opgescheept met een lifter waar hij niet vanaf
+						komt.
+						Meer informatie is <a href="/civitasproducties"><u>de civitasproductiesstek</u></a> te vinden.
+					</div>
+					<div id="annonce" class="video">
+						<div class="container video-container">
+							<div class="youtube-container closed">
+								<div class="embed-responsive ratio ratio-16x9" id="player">
+									<iframe src="https://www.youtube-nocookie.com/embed/SfK4_fCNvn0?controls=0" frameborder="0"
+													allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+													allowfullscreen>
+									</iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>22:00 Santé et Debatter</h3>#}
-{#						<div class="beschrijving">#}
-{#							Debat en borrelen#}
-{#						</div>#}
-{#					</div>#}
 
-{#				</div>#}
-{#			</div>#}
+				<div class="activiteit">
+					<h3>20:30 Jeu de Bowl</h3>
+					<div class="beschrijving">
+						Gezellig een uurtje bowlen bij Race Planet van 21:00 tot 22:00. Kosten: €4.50.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11728]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#			<div class="col-xl-6">#}
-{#				<div class="dag">#}
-{#					<h2>Dinsdag <span class="cijfer">8</span> Februari</h2>#}
-{#					<hr>#}
+			</div>
+		</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>18:30 Dromerig Diner </h3>#}
-{#						<div class="beschrijving">#}
-{#							Openingsdiner#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[maaltijd=2363]#}
-{#									[maaltijd=2364]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
+		<div class="col-xl-6">
+			<div class="dag">
+				<h2>Dinsdag <span class="cijfer">8</span> Februari</h2>
+				<hr>
 
-{#					<div class="activiteit">#}
-{#						<h3>20:00 Louer et Prayer - LeP</h3>#}
-{#						<div class="beschrijving">#}
-{#							Openings LeO#}
-{#						</div>#}
-{#					</div>#}
 
-{#					<div class="activiteit">#}
-{#						<h3>22:00 Santé et Debatter</h3>#}
-{#						<div class="beschrijving">#}
-{#							Debat en borrelen#}
-{#						</div>#}
-{#					</div>#}
+				<div class="activiteit">
+					<h3>16:00 Santé et Debater - Mibo en Debat </h3>
+					<div class="beschrijving">
+						Kom gezellig borrelen op Confide! Tegelijkertijd zullen er enkele debatten plaatsvinden onder leiding van
+						Am. Debatmeester.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[aanmelder=68]'|bbcode }}
+								{{ '[activiteit=11724]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#				</div>#}
-{#			</div>#}
+				<div class="activiteit">
+					<h3>17:30 Dromerig Diner </h3>
+					<div class="beschrijving">
+						<p>
+							Vier de opening van de Dies bij u thuis onder het genot van een verukkelijk driegangen diner.
+							Het driegangenmenu is tussen 17:30 en 18:00 op te halen op Confide met bijpassende wijn.
 
-{#			<div class="col-xl-6">#}
-{#				<div class="dag">#}
-{#					<h2>Woensdag <span class="cijfer">9</span> Februari</h2>#}
-{#					<hr>#}
+							In de wijnketzer kan worden ingeketzd voor wijn passend bij het voorgerecht (links) en wijn passend bij
+							het hoofdgerecht (rechts).
+							De kosten liggen rond de 5 euro per fles.
 
-{#					<div class="activiteit">#}
-{#						<h3>14:00 Externe Receptie</h3>#}
-{#						<div class="beschrijving">#}
-{#							Externe Receptie#}
-{#						</div>#}
-{#					</div>#}
+							Voor huisplan kan u <a
+								href="https://docs.google.com/spreadsheets/d/1LaHx91U12LlEPOwzvs-9JNuGMzif4muaGawDmgEEzrA/edit#gid=0"
+								target="_blank">hier</a> aangeven of u als huis leden wil ontvangen en of u graag op bezoek gaat bij een
+							huis.
+						</p>
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[maaltijd=2363]'|bbcode }}
+								{{ '[activiteit=11726]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>20:00 Interne Receptie</h3>#}
-{#						<div class="beschrijving">#}
-{#							Interne Receptie#}
-{#						</div>#}
-{#					</div>#}
+				<div id="LeP" class="activiteit">
+					<h3>20:00 Louer et Prayer - LeP</h3>
+					<div class="beschrijving">
+						Openings LeP! Wat leip! Kom de dies openbreken met God onder leiding van onze eigen Leo-band.
+						De LeP zal plaatsvinden in Kerk DelfGauw. Dit is helaas wel een tijdje fietsen, dus vertrek op tijd. We
+						beginnen stipt 20 uur!
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11729]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>20:00 Boutique - Rokkostuum passen</h3>#}
-{#						<div class="beschrijving">#}
-{#							Voor het gala moet u uiteraard goed gekleed komen in een rokkostuum. De AcqCie heeft elke jaar een mooie deal met Gents om u te voorzien van een rokkostuum voor een zacht studentenprijsje met korting. Deze kunt op deze avond passen en wordt voor het gala geleverd.#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[activiteit=11687]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
+			</div>
+		</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>22:00 Santé et Debatter</h3>#}
-{#						<div class="beschrijving">#}
-{#							Kom debatteren en borrelen#}
-{#						</div>#}
-{#					</div>#}
+		<div class="col-xl-6">
+			<div class="dag">
+				<h2>Woensdag <span class="cijfer">9</span> Februari</h2>
+				<hr>
 
-{#				</div>#}
-{#			</div>#}
+				<div class="activiteit">
+					<h3>16:00 - 22:00 Santé et Debater - Borrel en Debat </h3>
+					<div class="beschrijving">
+						Kom gezellig borrelen op Confide! Tegelijkertijd zullen er enkele debatten plaatsvinden onder leiding van
+						Am. Debatmeester.
+						Er zijn voor deze borrel twee shifts: een van 16 tot 19 uur en een van 19 tot 22 uur. Ketz je in!
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[aanmelder=76]'|bbcode }}
+								{{ '[aanmelder=77]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#			<div class="col-xl-6">#}
-{#				<div class="dag">#}
-{#					<h2>Donderdag <span class="cijfer">10</span> Februari</h2>#}
-{#					<hr>#}
+				<div id="Boutique" class="activiteit">
+					<h3>Boutique - Rokkostuum passen</h3>
+					<div class="beschrijving">
+						<p>Voor het gala moet u uiteraard goed gekleed komen in een rokkostuum. De AcqCie heeft elke jaar een mooie
+							deal met Gents om u te voorzien van een rokkostuum voor een zacht studentenprijsje met korting.
+							Deze kan de hele eerste dies-week worden gepast bij <a href="https://www.gents.nl/winkels/delft"
+																																		 target="_blank">Gents</a>. Laat hier even weten dat
+							je van C.S.R. komt om korting te krijgen! </p>
+						<img src="https://csrdelft.nl/forum/plaatjes/bekijken/0cf3110d36ee81830434a333077d157f"
+								 alt="Haal uw rokcostuum bij Gents." />
 
-{#					<div class="activiteit">#}
-{#						<h3>8:00 Croissant et jus d'orange</h3>#}
-{#						<div class="beschrijving">#}
-{#							Na de interne receptie gaat er de volgende ochtend niks boven een klassiek Frans ontbijt, het enige verschil is dat u de 'boulangerie' ruilt voor het prachtige Confide.#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[activiteit=11688]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11687]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>18:30 Dies Kring</h3>#}
-{#						<div class="beschrijving">#}
-{#							Dies kring!#}
-{#						</div>#}
-{#					</div>#}
+			</div>
+		</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>21:00 Polonaise - Intern Feest</h3>#}
-{#						<div class="beschrijving">#}
-{#							Intern Feest#}
-{#						</div>#}
-{#					</div>#}
-{#				</div>#}
-{#			</div>#}
+		<div id="croissant" class="col-xl-6">
+			<div class="dag">
+				<h2>Donderdag <span class="cijfer">10</span> Februari</h2>
+				<hr>
 
-{#			<div class="col-xl-6">#}
-{#				<div class="dag">#}
-{#					<h2>Vrijdag <span class="cijfer">11</span> Februari</h2>#}
-{#					<hr>#}
+				<div class="activiteit">
+					<h3>8:00 Croissant et jus d'orange</h3>
+					<div class="beschrijving">
+						Na de interne receptie gaat er 's ochtends niks boven een klassiek Frans ontbijt. Het enige verschil is dat
+						u de 'boulangerie' ruilt voor het prachtige Confide. Kortom: kom ontbijten of Confide voor een zacht prijsje
+						(+- 2 euro)!
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11688]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>9:00 Vive la Revolution - Verticalestrijd</h3>#}
-{#						<div class="beschrijving">#}
-{#							Strijd der Verticalen#}
-{#						</div>#}
+				<div class="activiteit">
+					<h3>16:00 Santé et Debater - Geboorteborrel</h3>
+					<div class="beschrijving">
+						De laatste novieten zullen tijdens deze middagborrel voor het eerst het licht der Civitas zien. Kom
+						meegenieten van dit prachtige moment tijdens deze mibo. Ook zullen er een aantal debatten plaatsvinden onder
+						leiding van Am. Debatmeester.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[aanmelder=69]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					</div>#}
+				<div id="polonaise" class="activiteit">
+					<h3>18:00 Polonaise - Running borrel</h3>
+					<div class="beschrijving">
+						Kom gezellig met je kring de polonaise lopen door Delft! Voor je gaat kringen kun je namelijk langs drie
+						horecagelegenheden je avondeten bij elkaar sprokkelen door middel van smakelijke hapjes en goede drankjes.
+						Confide zal die avond een friettent zijn voor uw aller plezier, zodat u goed gevuld aan uw kring kunt
+						beginnen. Kosten: 13,50.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11725]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>16:00 Chanter et Santé - VrijMiBo</h3>#}
-{#						<div class="beschrijving">#}
-{#							Met Karaoke!#}
-{#						</div>#}
-{#					</div>#}
+				<div id="kring" class="activiteit">
+					<h3>20:30 Dies Kring</h3>
+					<div class="beschrijving">
+						<p> Duik samen in <a href="/documenten/bekijken/1738/dieskring.pdf"><u>deze</u></a> speciale dies-kring
+							voorbereid door Am. VAb.</p>
 
-{#					<div class="activiteit">#}
-{#						<h3>22:00 Santé et Debatter</h3>#}
-{#						<div class="beschrijving">#}
-{#							Debat en borrelen#}
-{#						</div>#}
-{#					</div>#}
+					</div>
+				</div>
 
-{#				</div>#}
-{#			</div>#}
+			</div>
+		</div>
 
-{#			<div class="col-xl-6">#}
-{#				<div class="dag">#}
-{#					<h2>Zaterdag <span class="cijfer">12</span> Februari</h2>#}
-{#					<hr>#}
+		<div class="col-xl-6">
+			<div class="dag">
+				<h2>Vrijdag <span class="cijfer">11</span> Februari</h2>
+				<hr>
 
-{#					<div class="activiteit">#}
-{#						<h3>14:00 Les Brusjes</h3>#}
-{#						<div class="beschrijving">#}
-{#							Wat is er mooier dan je avonturen delen met anderen?! Neem je brusjes mee naar een dag vol activiteiten waarin ze de mores en uithoeken van Delft en de Civitas leren kennen. Vul het aantal brusjes in de ketzer in. Kosten liggen rond de 7,50 pp inclusief eten en activiteiten.#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[activiteit=11689]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
+				<div class="activiteit">
+					<h3>9:00 Vive la Revolution - Verticalestrijd</h3>
+					<div class="beschrijving">
+						Altijd al de bevestiging willen hebben dat uw verticale inderdaad de beste is? Ga met uw verticale de strijd
+						aan met de andere verticalen en wie weet gaat u naar huis met de winst.
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>20:30 In Seine Gezet - Filmavond</h3>#}
-{#						<div class="beschrijving">#}
-{#							Bijkomen van de drukke diesweek met een meeslepende film en popcorn#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[activiteit=11690]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
-{#				</div>#}
-{#			</div>#}
+				<div class="activiteit">
+					<h3>16:00 Chanter et Santé - VrijMiBo</h3>
+					<div class="beschrijving">
+						Weet u de Zing Mee nog? Déjà Vu! Kom gezellig meeblèren tijdens deze karaoke mibo.
+						Afhankelijk van de planning van Am. Debatmeester, zullen er tijdens deze mibo ook nog enkele debatten
+						plaatsvinden.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[aanmelder=70]'|bbcode }}
+								{{ '[aanmelder=78]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#			<div class="col-xl-6">#}
-{#				<div class="dag">#}
-{#					<h2>Zondag <span class="cijfer">13</span> Februari</h2>#}
-{#					<hr>#}
+			</div>
+		</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>10:00 Le Sacre Coeur - Kerkplan</h3>#}
-{#						<div class="beschrijving">#}
-{#							Zondag met z'n allen naar de kerk#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[activiteit=11691]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
+		<div class="col-xl-6">
+			<div class="dag">
+				<h2>Zaterdag <span class="cijfer">12</span> Februari</h2>
+				<hr>
 
-{#					<div class="activiteit">#}
-{#						<h3>14:00 À la plage - Strandwandeling</h3>#}
-{#						<div class="beschrijving">#}
-{#							Uitwaaien op het strand en genieten van de prachtige natuur. De exacte locatie zal later worden gedeeld.#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[activiteit=11692]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
+				<div class="activiteit">
+					<h3>13:30 Les Brusjes</h3>
+					<div class="beschrijving">
+						Wat is er mooier dan je avonturen delen met anderen? Neem je brusjes mee naar een dag vol activiteiten
+						waarin ze de mores en uithoeken van Delft en de Civitas leren kennen. Vul het aantal brusjes in de ketzer
+						in. Kosten liggen rond de 7,50 pp.
+						De dag zal om 12:00/12:45 (zie e-mail) beginnen en zal tot ongeveer 17:00/18:00 duren.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11689]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#				</div>#}
-{#			</div>#}
+				<div class="activiteit">
+					<h3>20:00 In Seine Gezet - Filmavond</h3>
+					<div class="beschrijving">
+						Even bijkomen van de drukke diesweek? Kom op Confide ontspannen met een meeslepende film en popcorn.
+						Smikkelen!
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11690]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-{#			<div class="col-xl-6">#}
-{#				<div class="dag">#}
-{#					<h2>Maandag <span class="cijfer">14</span> Februari</h2>#}
-{#					<hr>#}
+		<div class="col-xl-6">
+			<div class="dag">
+				<h2>Zondag <span class="cijfer">13</span> Februari</h2>
+				<hr>
 
-{#					<div class="activiteit">#}
-{#						<h3>18:30 Van Speijk valentijns diner</h3>#}
-{#						<div class="beschrijving">#}
-{#							Kom de liefde vieren met Van Speijk#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[maaltijd=2366]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
+				<div id="Kerkplan" class="activiteit">
+					<h3>10:00 Le Sacre Coeur - Kerkplan</h3>
+					<div class="beschrijving">
+						Op zondag gaan we met zijn allen naar de kerk. We zijn welkom bij de Binnenstad-Vrijenban in de Nieuwe Kerk.
+						Ketz je in!
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11691]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>20:00 Quarantaine - Installatie HV</h3>#}
-{#						<div class="beschrijving">#}
-{#							Quarantaine editie#}
-{#						</div>#}
-{#					</div>#}
+				<div class="activiteit">
+					<h3>14:00 À la plage - Strandwandeling</h3>
+					<div class="beschrijving">
+						Kom gezellig uitwaaien op het strand en genieten van de prachtige natuur. De exacte locatie zal later worden
+						gedeeld.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11692]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#				</div>#}
-{#			</div>#}
+			</div>
+		</div>
 
-{#			<div class="col-xl-6">#}
-{#				<div class="dag">#}
-{#					<h2>Dinsdag <span class="cijfer">15</span> Februari</h2>#}
-{#					<hr>#}
+		<div class="col-xl-6">
+			<div class="dag">
+				<h2>Maandag <span class="cijfer">14</span> Februari</h2>
+				<hr>
 
-{#					<div class="activiteit">#}
-{#						<h3>20:00 Cabaretteketet - Op de Planken</h3>#}
-{#						<div class="beschrijving">#}
-{#							De jaarlijkse cabaret voorstelling keert terug!  Onder leiding van CaCie Duister zullen er voorstellingen plaatsvinden voor het vermaak van de vereniging. Vul uw de naam van u act in de beschrijving in.#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[activiteit=11693]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
+				<div class="activiteit">
+					<h3>16:00 Santé et Debater - MiBo</h3>
+					<div class="beschrijving">
+						Kom gezellig borrelen op Confide! Tegelijkertijd zullen er enkele debatten plaatsvinden onder leiding van
+						Am. Debatmeester.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[aanmelder=71]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>22:00 Santé et Debatter</h3>#}
-{#						<div class="beschrijving">#}
-{#							Debat en borrelen#}
-{#						</div>#}
-{#					</div>#}
+				<div class="activiteit">
+					<h3>18:00 Van Speijk valentijns diner</h3>
+					<div class="beschrijving">
+						Kom de liefde vieren met Van Speijk. Het diner zal op Confide plaatsvinden en start om 18 uur.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[maaltijd=2366]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#				</div>#}
-{#			</div>#}
+				<div class="activiteit">
+					<h3>20:00 Quarantaine - Installatie HV</h3>
+					<div class="beschrijving">
+						Het mooiste moment van het jaar waarbij novieten de kans krijgen volwaardig lid te worden.
+					</div>
+				</div>
 
-{#			<div class="col-xl-6">#}
-{#				<div class="dag">#}
-{#					<h2>Woensdag 16 Februari</h2>#}
-{#					<hr>#}
+			</div>
+		</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>14:00 Les Bijoux - DéDé corsage klussen</h3>#}
-{#						<div class="beschrijving">#}
-{#							Naar het gala zonder corsage kan uiteraard niet. Lukt het in de drukke weken voor het gala niet om uw date te voorzien van een ludieke corsage? De dames van DéDé helpen u wel tijdens deze klus sessie.#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[activiteit=11694]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
+		<div class="col-xl-6">
+			<div class="dag">
+				<h2>Dinsdag <span class="cijfer">15</span> Februari</h2>
+				<hr>
 
-{#					<div class="activiteit">#}
-{#						<h3>20:30 Bierberonner - Bierproeverij van LuBieCie</h3>#}
-{#						<div class="beschrijving">#}
-{#							De LuBieCie zal u meenemen in de wereld van speciaalbiertjes en het één en ander vertellen over de verschillende biertjes. Naar verwachting tussen de 5 en 10 euro.#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[activiteit=11695]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
+				<div class="activiteit">
+					<h3>16:00 Santé et Debater - MiBo</h3>
+					<div class="beschrijving">
+						Kom gezellig borrelen op Confide! Tegelijkertijd zullen er enkele debatten plaatsvinden onder leiding van
+						Am. Debatmeester.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[aanmelder=72]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>22:00 Santé et Debatter</h3>#}
-{#						<div class="beschrijving">#}
-{#							Debat en borrelen#}
-{#						</div>#}
-{#					</div>#}
+				<div class="activiteit">
+					<h3>20:00 Cabaretteketet - Op de Planken</h3>
+					<div class="beschrijving">
+						De jaarlijkse cabaret voorstelling keert terug! Onder leiding van CaCie Duister zullen er voorstellingen
+						plaatsvinden voor het vermaak van de vereniging. Vul uw de naam van u act in de beschrijving in.
+					</div>
+					<div class="video">
+						<div class="container video-container">
+							<div class="youtube-container closed">
+								<div class="embed-responsive ratio ratio-16x9" id="player">
+									<iframe src="https://www.youtube-nocookie.com/embed/ldsOPEbmVT8?controls=0" frameborder="0"
+													allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+													allowfullscreen>
+									</iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11693]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#				</div>#}
-{#			</div>#}
+			</div>
+		</div>
 
-{#			<div class="col-xl-6">#}
-{#				<div class="dag">#}
-{#					<h2>Donderdag <span class="cijfer">17</span> Februari</h2>#}
-{#					<hr>#}
+		<div class="col-xl-6">
+			<div class="dag">
+				<h2>Woensdag 16 Februari</h2>
+				<hr>
 
-{#					<div class="activiteit">#}
-{#						<h3>16:00 AcqCie training</h3>#}
-{#						<div class="beschrijving">#}
-{#							De AcqCie fixt een arbeidsbemiddelingsbureau dat graag langs komt om een training te geven over vaardigheden die belangrijk zijn op de arbeidsmarkt, zoals soliciteren. Daarnaast ontvangt C.S.R. 10 euro per persoon die aanwezig is! Dus kom langs en leer over een handige  vaardigheid.#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[activiteit=11696]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
+				<div id="Corsage" class="activiteit">
+					<h3>14:00 Les Bijoux - DéDé corsage klussen</h3>
+					<div class="beschrijving">
+						Naar het gala zonder corsage kan uiteraard niet. Lukt het in de drukke weken voor het gala niet om uw date
+						te voorzien van een ludieke corsage? De dames van DéDé helpen u wel tijdens deze klus sessie.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11694]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>18:30 Tous à Table</h3>#}
-{#						<div class="beschrijving">#}
-{#							Tijdloos genieten van een oudwetse maatlijd op confide.#}
-{#						</div>#}
-{#						<div class="dies-activiteit-ketzers">#}
-{#							<a class="toggler">Laat ketzers zien</a>#}
-{#							<div class="ketzers verborgen">#}
-{#								<div class="ketzer">#}
-{#									[maaltijd=2355]#}
-{#								</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
+				<div class="activiteit">
+					<h3>16:00 Santé et Debater - MiBo</h3>
+					<div class="beschrijving">
+						Kom gezellig borrelen op Confide! Tegelijkertijd zullen er enkele debatten plaatsvinden onder leiding van
+						Am. Debatmeester.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[aanmelder=73]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>20:30 Dies lezing - Ted Parle</h3>#}
-{#						<div class="beschrijving">#}
-{#							Kom luisteren en naar de expertise en wijsheden die de Civitas rijk is!#}
-{#						</div>#}
-{#					</div>#}
+				<div class="activiteit">
+					<h3>20:00 Bierberonner - Bierproeverij van LuBieCie</h3>
+					<div class="beschrijving">
+						<p>
+							De LuBieCie zal u meenemen in de wereld van speciaalbiertjes en het één en ander vertellen over de
+							verschillende biertjes.
+							Dit kan fysiek van 20:00 tot 22:00 of u kan een pakket afhalen.
+							Fysiek zal u vier halve biertjes krijgen voor 5 euro. Ketz je voor de borrel en de biertjes beide in.
+							Borrelen zonder mee te doen aan de proeverij kan ook.
+							Het afhaalpakket is 10 en 20 euro voor het kleine en grote pakket respectievelijk.
+							Afhalen kan 16:00 - 22:00.
+							Meer informatie over de biertjes is <a href="/forum/reactie/132097#132097"><u>hier</u></a> te vinden.
+						</p>
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11695]'|bbcode }}
+								{{ '[activiteit=11730]'|bbcode }}
+								{{ '[aanmelder=74]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>22:00 Santé et Debatter</h3>#}
-{#						<div class="beschrijving">#}
-{#							Debat en borrelen#}
-{#						</div>#}
-{#					</div>#}
+			</div>
+		</div>
 
-{#				</div>#}
-{#			</div>#}
+		<div class="col-xl-6">
+			<div class="dag">
+				<h2>Donderdag <span class="cijfer">17</span> Februari</h2>
+				<hr>
 
-{#			<div class="col-xl-6">#}
-{#				<div class="dag">#}
-{#					<h2>Vrijdag <span class="cijfer">18</span> Februari</h2>#}
-{#					<hr>#}
+				<div id="YER" class="activiteit">
+					<h3>16:00 YER training - Verplaatst naar elders</h3>
+					<div class="beschrijving">
+						We onderhandelen elke dag: of het nu gaat over wat jij en je huisgenoten ’s avonds gaan eten, over wie welke
+						taak op zich neemt binnen je commissie of over je salaris. Tijdens deze training leer jij hoe je zowel voor
+						je eigen belangen op kan komen als ervoor kan zorgen dat de uitkomst optimaal is voor beide partijen.
+						Kortom: een win-win situatie!
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11696]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#					<div class="activiteit">#}
-{#						<h3>14:00 Le Moment Suprême </h3>#}
-{#						<div class="beschrijving">#}
-{#							<a href="/tijdloos/dies/gala"><u>Bezoek de aparte gala pagina.</u></a>#}
-{#						</div>#}
-{#					</div>#}
-{#				</div>#}
+				<div class="activiteit">
+					<h3>16:00 Santé - MiBo</h3>
+					<div class="beschrijving">
+						Kom gezellig borrelen op Confide!
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[aanmelder=85]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
 
-{#			</div>#}
-{#		</div>#}
-{#	</section>#}
+				<div class="activiteit">
+					<h3>18:30 Tous à Table</h3>
+					<div class="beschrijving">
+						Tijdloos genieten van een oudwetse maatlijd op confide.
+						Er is plaats voor 30 man op Confide en er kan voor 70 man een maaltijd worden afgehaald.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[maaltijd=2356]'|bbcode }}
+								{{ '[maaltijd=2370]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="TED" class="activiteit">
+					<h3>20:00 Dies lezing - Ted Parle</h3>
+					<div class="beschrijving">
+						Kom luisteren naar de expertise en wijsheden die de Civitas rijk is!
+						Er is plek voor 30 man op Confide en zal ook in de vorm van een levensstroom te volgen zijn.
+					</div>
+					<div class="video">
+						<div class="container video-container">
+							<div class="youtube-container closed">
+								<div class="embed-responsive ratio ratio-16x9" id="player">
+									<iframe src="https://www.youtube-nocookie.com/embed/kp6VDGeryzg?controls=0" frameborder="0"
+													allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+													allowfullscreen>
+									</iframe>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11727]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="gala" class="col-xl-6">
+			<div class="dag">
+				<h2>Vrijdag <span class="cijfer">18</span> Februari</h2>
+				<hr>
+
+				<div id="pregala" class="activiteit">
+					<h3>14:00 Schuilen</h3>
+					<div class="beschrijving">
+						Kom schuilen voor Eunisch indien u hinder ervaart.
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11748]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="Gala" class="activiteit">
+					<h3>16:00 Le Moment Suprême </h3>
+					<div class="beschrijving">
+						De LustrumCie is volop bezig met de voorbereidingen voor de dies.
+						Zoals jullie weten wordt het gala bij Kasteel de Berckt verzet naar oktober.
+						Maar niet getreurd! Op 18 februari zal er een intern dies gala (met dates!) gehouden worden zonder
+						oud-leden.
+						Het gala zal zijn in de vorm van een lopend buffet op een externe locatie.
+						Omdat de horeca waarschijnlijk 22:00 moet sluiten gaan we bijtijds per bus naar de locatie. Zorg dat u klaar
+						staat om 16:00. Na het diner gaan we weer met de bus richting Delft. Nadere informatie zal in de loop van de
+						volgende twee weken volgen.
+
+						<b>Datum en tijd:</b>18 februari 16:00
+						<b>Kosten:</b>Rond de 50 euro voor onbeperkt diner en busreis
+					</div>
+					<div class="dies-activiteit-ketzers">
+						<a class="toggler">Verberg ketzers</a>
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=11656]'|bbcode }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 </body>

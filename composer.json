@@ -77,7 +77,8 @@
 			"php": "7.3.14"
 		},
 		"allow-plugins": {
-			"symfony/flex": true
+			"symfony/flex": true,
+			"composer/package-versions-deprecated": true
 		}
 	},
 	"autoload": {
