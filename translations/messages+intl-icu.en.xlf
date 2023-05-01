@@ -717,13 +717,13 @@
 							Doe dit door <a href="{lidworden}">hier</a> te klikken.
 						  Zorg ervoor dat je de week van 29 augustus t/m 2 september vrij houdt voor de novitiaatsweek.]]></target>
       </trans-unit>
-      <trans-unit id="31BZeZJ" resname="Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De novitiaatsweek vindt plaats van 21 augustus t/m 25 september, dus zorg dat je die week vrijhoudt!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;In deze week zal je elkaar, de vereniging en haar leden leren kennen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.">
+      <trans-unit id="31BZeZJ" resname="Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De novitiaatsweek vindt plaats van 21 augustus t/m 26 augustus, dus zorg dat je die week vrijhoudt!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;In deze week zal je elkaar, de vereniging en haar leden leren kennen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.">
         <source>Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT).
-							De novitiaatsweek vindt plaats van 21 augustus t/m 25 september, dus zorg dat je die week vrijhoudt!
+							De novitiaatsweek vindt plaats van 21 augustus t/m 26 augustus, dus zorg dat je die week vrijhoudt!
 							In deze week zal je elkaar, de vereniging en haar leden leren kennen.
 							De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.</source>
         <target>When you want to become a member of C.S.R. you will join the introduction week (also
-             	called new members period). This will take place during the week after the Owee. In this week
+             	called new members period). This will take place during the week of August 21 until August 26. In this week
               you will get to know each other as new members, the members of C.S.R. and all ins and outs about our association.
               The activities during this new members period will always be done in a respectful and safe manner.</target>
       </trans-unit>
