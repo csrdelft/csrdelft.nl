@@ -295,7 +295,7 @@ class ForumController extends AbstractController
 		) {
 			echo '<img id="timestamp' .
 				$timestamp .
-				'" src="/plaetjes/famfamfam/tick.png" class="icon" title="Bladwijzer succesvol geplaatst">';
+				'" src="/plaetjes/famfamfam/tick.png" class="icon" title="Succesvol gemarkeerd als ongelezen">';
 		}
 		exit(); //TODO: JsonResponse
 	}
