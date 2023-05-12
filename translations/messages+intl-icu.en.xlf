@@ -717,7 +717,7 @@
 							Doe dit door <a href="{lidworden}">hier</a> te klikken.
 						  Zorg ervoor dat je de week van 29 augustus t/m 2 september vrij houdt voor de novitiaatsweek.]]></target>
       </trans-unit>
-      <trans-unit id="31BZeZJ" resname="Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De novitiaatsweek vindt plaats van 21 augustus t/m 26 augustus, dus zorg dat je die week vrijhoudt!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;In deze week zal je elkaar, de vereniging en haar leden leren kennen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.">
+      <trans-unit id="4zSbXkW" resname="Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De novitiaatsweek vindt plaats van 21 augustus t/m 26 augustus, dus zorg dat je die week vrijhoudt!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;In deze week zal je elkaar, de vereniging en haar leden leren kennen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.">
         <source>Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT).
 							De novitiaatsweek vindt plaats van 21 augustus t/m 26 augustus, dus zorg dat je die week vrijhoudt!
 							In deze week zal je elkaar, de vereniging en haar leden leren kennen.
@@ -726,6 +726,26 @@
              	called new members period). This will take place during the week of August 21 until August 26. In this week
               you will get to know each other as new members, the members of C.S.R. and all ins and outs about our association.
               The activities during this new members period will always be done in a respectful and safe manner.</target>
+      </trans-unit>
+      <trans-unit id="_MHEWzu" resname="Volgend jaar lid worden bij C.S.R. Delft?">
+        <source>Volgend jaar lid worden bij C.S.R. Delft?</source>
+        <target>Planning on becoming a member of C.S.R. Delft?</target>
+      </trans-unit>
+      <trans-unit id="tlgZEjK" resname="Zet alvast de volgende data in je agenda:">
+        <source>Zet alvast de volgende data in je agenda:</source>
+        <target>Make sure you keep the following dates free:</target>
+      </trans-unit>
+      <trans-unit id="oBDloPA" resname="OWee: 13 tot 17 augustus">
+        <source>OWee: 13 tot 17 augustus</source>
+        <target>OWee: August 13 to 17</target>
+      </trans-unit>
+      <trans-unit id="8uhqee8" resname="Novitiaatsweek: 21 tot 26 augustus">
+        <source>Novitiaatsweek: 21 tot 26 augustus</source>
+        <target>Introduction week: August 21 to 26</target>
+      </trans-unit>
+      <trans-unit id="7wO2DzJ" resname="Startweekend: 8 tot 10 september">
+        <source>Startweekend: 8 tot 10 september</source>
+        <target>Association weekend: September 8 to 10</target>
       </trans-unit>
     </body>
   </file>

@@ -20,11 +20,11 @@ body.met-owee-banner {
 	align-items: center;
 	padding: 2rem;
 	margin-bottom: 15px;
-
+	background-color: $kleur1;
+	white-space: initial;
 	.logo {
 		width: 154px;
-		//padding-right: 50px;
-
+		padding-right: 20px;
 		img {
 			width: 100%;
 		}
@@ -34,11 +34,11 @@ body.met-owee-banner {
 	}
 
 	.tekst {
+		h2 {
+			margin-bottom: 0.5rem;
+		}
 		p {
-			font-size: 1.2rem;
-			line-height: 150%;
-			margin-bottom: 2rem;
-
+			margin-bottom: 0.2rem;
 			@media (max-width: 550px) {
 				br {
 					display: none;
@@ -46,7 +46,7 @@ body.met-owee-banner {
 			}
 		}
 
-		div {
+		.knop {
 			font-size: 1rem;
 			font-weight: bold;
 			text-transform: uppercase;
