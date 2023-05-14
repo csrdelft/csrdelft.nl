@@ -34,9 +34,10 @@ JS;
 			);
 
 			if (InstellingUtil::lid_instelling('zoeken', 'favorieten') === 'ja') {
-				$this->addSuggestions(
-					$menuRepository->getMenu(LoginService::getUid())->children
-				);
+				$favorietenMenu = $menuRepository->getMenu(LoginService::getUid());
+				if ($favorietenMenu) {
+					$this->addSuggestions($favorietenMenu->children);
+				}
 			}
 			if (InstellingUtil::lid_instelling('zoeken', 'menu') === 'ja') {
 				$this->addSuggestions(

@@ -62,6 +62,9 @@ class MenuBeheerController extends AbstractController
 	{
 		if ($parentId == 'favoriet') {
 			$parent = $this->menuItemRepository->getMenuRoot($this->getUid());
+			if ($parent == null) {
+				$parent = $this->menuItemRepository->nieuwFavorietMenu($this->getUid());
+			}
 		} else {
 			$parent = $this->menuItemRepository->getMenuItem((int) $parentId);
 		}
