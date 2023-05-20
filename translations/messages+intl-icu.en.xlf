@@ -626,7 +626,7 @@
 										dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden:</source>
         <target>To get a better view of C.S.R. you can join a member of C.S.R. for a day. More info can be found here: </target>
       </trans-unit>
-      <trans-unit id="5vZPof8" resname="We hebben twee keer dit jaar een open avond waarbij je kan komen kijken&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De eerstvolgende open avond is donderdag 8 juni 2023. Je kan je opgeven via deze">
+      <trans-unit id="sBZ1WcN" resname="We hebben twee keer dit jaar een open avond waarbij je kan komen kijken&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De eerstvolgende open avond is donderdag 8 juni 2023. Je kan je opgeven via deze">
         <source>We hebben twee keer dit jaar een open avond waarbij je kan komen kijken
 										hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
 										De eerstvolgende open avond is donderdag 8 juni 2023. Je kan je opgeven via deze</source>
@@ -746,6 +746,13 @@
       <trans-unit id="7wO2DzJ" resname="Startweekend: 8 tot 10 september">
         <source>Startweekend: 8 tot 10 september</source>
         <target>Association weekend: September 8 to 10</target>
+      </trans-unit>
+      <trans-unit id="HtGvDbY" resname="We hebben twee keer dit jaar een open avond waarbij je kan komen kijken&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De eerstvolgende open avond is donderdag 8 juni 2023. Je kan je opgeven via deze">
+        <source>We hebben twee keer dit jaar een open avond waarbij je kan komen kijken
+								hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
+								De eerstvolgende open avond is donderdag 8 juni 2023. Je kan je opgeven via deze</source>
+        <target>We will have two open evenings this year where you can come and experience an evening in our association building. You can come for dinner, participate in a praise hour, and have a drink.
+                The next open evening will be on the 8th of Juni 2023. You can register for it via this</target>
       </trans-unit>
     </body>
   </file>
