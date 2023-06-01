@@ -16,12 +16,14 @@ class TurfGroepRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param string $groepnaam
+	 * @param string $groepnaam Naam van groep
+	 * @param bool $openbaar Durf je je turfjes de hele Civitas te laten zien?
 	 */
-	public function nieuw($groepnaam): TurfGroep
+	public function nieuw($groepnaam, $openbaar): TurfGroep
 	{
 		$groep = new TurfGroep();
 		$groep->naam = $groepnaam;
+		$groep->openbaar = $openbaar;
 		return $groep;
 	}
 }
