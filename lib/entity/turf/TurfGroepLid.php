@@ -15,9 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Goedhart
  * @ORM\Table("TurfGroep"}
  *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\turf\TurfGroepRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\turf\TurfGroepLidRepository")
  */
-class TurfGroep
+class TurfGroepLid
 {
 	/**
 	 * @ORM\Id()
