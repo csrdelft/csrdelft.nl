@@ -1,11 +1,12 @@
 <?php
 
-namespace CsrDelft\repository;
+namespace CsrDelft\repository\turf;
 
+use CsrDelft\repository\AbstractRepository;
 use CsrDelft\entity\turf\TurfGroep;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
+/** @author Huisman
  */
 class TurfGroepRepository extends AbstractRepository
 {
