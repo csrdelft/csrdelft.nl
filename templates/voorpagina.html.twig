@@ -14,8 +14,13 @@
 						<iframe class="radio" src="https://radio.csrdelft.nl/public/csrdelft/embed?theme=dark"
 										title="C.S.R. Radio"></iframe>
 					{% elseif theme == "normaal" %}
-						<iframe class="radio" src="https://radio.csrdelft.nl/public/csrdelft/embed"
-										title="C.S.R. Radio"></iframe>
+						{% if lid_instelling('layout', 'automatischDonker')  == "ja" %}
+							<iframe class="radio" src="https://radio.csrdelft.nl/public/csrdelft/embed"
+											title="C.S.R. Radio"></iframe>
+						{% else %}
+							<iframe class="radio" src="https://radio.csrdelft.nl/public/csrdelft/embed?theme=light"
+											title="C.S.R. Radio"></iframe>
+						{% endif %}
 					{% elseif theme == "dies" %}
 						<iframe class="radio" src="https://radio.csrdelft.nl/public/csrdelft/embed?theme=dark"
 										title="C.S.R. Radio"></iframe>
