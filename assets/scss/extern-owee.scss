@@ -4,14 +4,15 @@
 
 // Zet hier de OWee kleuren
 $primary: $middenblauw;
-$secondary: $donkerblauw;
-$tertiary: $lichtblauw;
-$accent: $geel;
+$secondary: #3fa34d;
+$tertiary: #3f8c4d;
+$accent: #ff9eca;
 $youtubeRed: rgb(170, 1, 1);
 $whatsappGreen: rgb(14, 214, 14);
 $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
 
-$basiskleur: $donkerblauw;
+$basiskleur: #3fa34d;
+$lijnkleur: #ffc4de;
 
 @font-face {
 	font-family: "Tw Cen MT";
@@ -21,20 +22,13 @@ $basiskleur: $donkerblauw;
 }
 
 @font-face {
-	font-family: "Playbill";
-	font-style: normal;
-	font-weight: normal;
-	src: url("../fonts/owee2022/Playbill.ttf");
-}
-
-@font-face {
 	font-family: "Freestyle Script";
 	font-style: normal;
 	font-weight: normal;
 	src: url("../fonts/owee2022/Freestyle Script.TTF");
 }
 
-$header-font-p1: Playbill, Arial, Helvetica, sans-serif;
+$header-font-p1: Georgia, Arial, Helvetica, sans-serif;
 $header-font-p2: Freestyle Script, Regular, Arial, Helvetica, sans-serif;
 
 @mixin triangle($kleur, $top, $left) {
@@ -63,6 +57,7 @@ $header-font-p2: Freestyle Script, Regular, Arial, Helvetica, sans-serif;
 		content: "";
 		@include triangle($kleur, $left, $top);
 	}
+
 	.content {
 		margin-top: -7vw;
 		padding-top: 7vw;
@@ -74,9 +69,46 @@ $header-font-p2: Freestyle Script, Regular, Arial, Helvetica, sans-serif;
 		content: "";
 		@include triangle($kleur, $left, $top);
 	}
+
 	.content {
 		margin-bottom: -7vw;
 		padding-bottom: 7vw;
+	}
+}
+
+@mixin line-before($kleur, $left) {
+	&:before {
+		content: "";
+		width: 102vw;
+		border: 2px solid $kleur;
+		position: absolute;
+		display: block;
+		left: -1vw;
+		margin-top: -3.5vw;
+
+		@if $left {
+			transform: rotate(0.0698860016rad);
+		} @else {
+			transform: rotate(-0.0698860016rad);
+		}
+	}
+}
+
+@mixin line-after($kleur, $left) {
+	&:after {
+		content: "";
+		width: 102vw;
+		border: 2px solid $kleur;
+		position: absolute;
+		display: block;
+		left: -1vw;
+		margin-top: calc(3rem + 3.5vw);
+
+		@if $left {
+			transform: rotate(0.0698860016rad);
+		} @else {
+			transform: rotate(-0.0698860016rad);
+		}
 	}
 }
 
@@ -122,6 +154,14 @@ body {
 		@include triangle-after($basiskleur, false, false);
 	}
 
+	.lbl {
+		@include line-before($lijnkleur, true);
+	}
+
+	.lar {
+		@include line-after($lijnkleur, false);
+	}
+
 	.content {
 		@extend .container;
 
@@ -161,7 +201,7 @@ body {
 
 	.header-p1 {
 		font-family: $header-font-p1;
-		font-size: 5.5rem;
+		font-size: 4.5rem;
 		vertical-align: text-bottom;
 	}
 
@@ -334,9 +374,11 @@ body {
 	.info {
 		background: $secondary;
 		text-align: center;
+
 		h2 {
 			color: white;
 		}
+
 		p {
 			color: white;
 		}
