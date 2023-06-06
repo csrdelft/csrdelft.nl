@@ -3,7 +3,7 @@
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
 // Zet hier de OWee kleuren
-$primary: $middenblauw;
+$primary: #ffc4de;
 $secondary: #3fa34d;
 $tertiary: #3f8c4d;
 $accent: #ff9eca;
@@ -12,7 +12,7 @@ $whatsappGreen: rgb(14, 214, 14);
 $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
 
 $basiskleur: #3fa34d;
-$lijnkleur: #ffc4de;
+$lijnkleur: #ff9eca;
 
 @font-face {
 	font-family: "Tw Cen MT";
@@ -21,15 +21,8 @@ $lijnkleur: #ffc4de;
 	src: url("../fonts/owee2021/TCM.woff") format("woff");
 }
 
-@font-face {
-	font-family: "Freestyle Script";
-	font-style: normal;
-	font-weight: normal;
-	src: url("../fonts/owee2022/Freestyle Script.TTF");
-}
-
-$header-font-p1: Georgia, Arial, Helvetica, sans-serif;
-$header-font-p2: Freestyle Script, Regular, Arial, Helvetica, sans-serif;
+$header-font-p1: "Source Sans Pro", sans-serif, Arial, Helvetica;
+$header-font-p2: Georgia, Regular, Arial, Helvetica, sans-serif;
 
 @mixin triangle($kleur, $top, $left) {
 	width: 0;
@@ -174,7 +167,7 @@ body {
 	h2 {
 		color: white;
 		font-size: 1.5rem;
-		text-transform: uppercase;
+		text-transform: unset;
 		font-family: $headingFont;
 		margin-bottom: 1rem;
 	}
@@ -203,6 +196,7 @@ body {
 		font-family: $header-font-p1;
 		font-size: 4.5rem;
 		vertical-align: text-bottom;
+		font-weight: bold;
 	}
 
 	.header-p2 {

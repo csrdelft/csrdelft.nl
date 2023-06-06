@@ -754,6 +754,10 @@
         <target>We will have two open evenings this year where you can come and experience an evening in our association building. You can come for dinner, participate in a praise hour, and have a drink.
                 The next open evening will be on the 8th of Juni 2023. You can register for it via this</target>
       </trans-unit>
+      <trans-unit id="5KAPH3m" resname="OWee">
+        <source>OWee</source>
+        <target>OWee</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
