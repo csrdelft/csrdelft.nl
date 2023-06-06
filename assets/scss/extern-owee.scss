@@ -73,11 +73,12 @@ $header-font-p2: Georgia, Regular, Arial, Helvetica, sans-serif;
 	&:before {
 		content: "";
 		width: 102vw;
-		border: 2px solid $kleur;
+		height: 4px;
 		position: absolute;
 		display: block;
 		left: -1vw;
-		margin-top: -3.5vw;
+		margin-top: calc(-3.5vw - 2px);
+		background-color: $lijnkleur;
 
 		@if $left {
 			transform: rotate(0.0698860016rad);
@@ -91,11 +92,12 @@ $header-font-p2: Georgia, Regular, Arial, Helvetica, sans-serif;
 	&:after {
 		content: "";
 		width: 102vw;
-		border: 2px solid $kleur;
+		height: 4px;
 		position: absolute;
 		display: block;
 		left: -1vw;
-		margin-top: calc(3rem + 3.5vw);
+		margin-top: calc(3rem + 3.5vw - 2px);
+		background-color: $lijnkleur;
 
 		@if $left {
 			transform: rotate(0.0698860016rad);
