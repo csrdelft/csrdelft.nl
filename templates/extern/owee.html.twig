@@ -10,26 +10,26 @@
 
 {% block body %}
 	<!-- Banner -->
-{#	<section id="banner">#}
-{#		<div class="inner">#}
-{#			<a href="/">#}
-{#				<img src="{{ absolute_url('/images/c.s.r.logo.svg') }}" alt="Beeldmerk van de vereniging">#}
-{#				<h1>C.S.R. Delft</h1>#}
-{#			</a>#}
-{#		</div>#}
-{#	</section>#}
+	{#  <section id="banner"> #}
+	{#    <div class="inner"> #}
+	{#      <a href="/"> #}
+	{#        <img src="{{ absolute_url('/images/c.s.r.logo.svg') }}" alt="Beeldmerk van de vereniging"> #}
+	{#        <h1>C.S.R. Delft</h1> #}
+	{#      </a> #}
+	{#    </div> #}
+	{#  </section> #}
 
 	<div class="owee-pagina">
 		<div class="atl hero" style="margin-top:70px;">
-			{#	Hier kan de Owee banner als het nieuwe thema bekend is. #}
+			{#  Hier kan de OWee banner als het nieuwe thema bekend ismargin-bottom: -10vw; . #}
 			<a href="../">
-				<div class="content" style="height: 30vw;">
-					<img src="{{ absolute_url('/images/beeldmerk-wit.png') }}" alt="Beeldmerk van de vereniging">
+				<div class="content" style="transform: scale(1.5); margin-bottom: calc(-10vw + 3rem)">
+					<img src="{{ absolute_url('/images/owee/owee2023.png') }}" alt="Beeldmerk van de vereniging">
 				</div>
 			</a>
 		</div>
 
-		<div class="content pt-5 pb-5">
+		<div class="content pb-5 lbl lar">
 			<div class="row align-items-center">
 				<div class="col-md-6 mb-4 mb-md-0">
 					<h1>
@@ -38,7 +38,7 @@
 					</h1>
 
 					<p>{% trans %}C.S.R. Delft is de grootste christelijke vereniging van Delft. Lid zijn van onze studentenvereniging betekent voor jou dat je nieuwe vriendschappen maakt voor het leven en samen geniet van de activiteiten die de vereniging biedt.
-							Het	betekent dat je je geloof blijft voeden en je kan verdiepen met kringen, bidgroepjes en worshipavonden.
+							Het  betekent dat je je geloof blijft voeden en je kan verdiepen met kringen, bidgroepjes en worshipavonden.
 							Lid zijn zorgt voor prachtige momenten tijdens je studententijd die je je leven lang niet gaat vergeten!{% endtrans %}</p>
 					<p>{% trans %}Bij C.S.R. zijn we verbonden door het christelijk geloof, maar wel allemaal erg verschillend.
 							Iedereen is welkom bij ons ongeacht je kerkelijke achtergrond, culturele achtergrond, geaardheid of hoe je je identificeert.{% endtrans %}</p>
@@ -49,9 +49,9 @@
 						{# <a href="#contact" class="cta primary" onclick="document.getElementById('lid-spreken').checked = true">
 							{% trans %}Eerst een lid spreken{% endtrans %}
 						</a> #}
-{#						<a target="_blank" rel="noopener" class="cta secondary">#}
-{#							{% trans %}Open avond bezoeken{% endtrans %}#}
-{#						</a>#}
+						{# <a target="_blank" rel="noopener" class="cta secondary">
+							{% trans %}Open avond bezoeken{% endtrans %}
+						</a> #}
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -95,27 +95,27 @@
 			</div>
 		</div>
 
-{#		<div class="content pt-5 pb-5">#}
-{#			<div class="row align-items-center">#}
-{#				<div class="col-md-6 mb-4 mb-md-0">#}
-{#					#}
-{#				</div>#}
-{#			</div>#}
-{#		</div>#}
+		{#    <div class="content pb-5"> #}
+		{#      <div class="row align-items-center"> #}
+		{#        <div class="col-md-6 mb-4 mb-md-0"> #}
+		{#          #}
+		{#        </div> #}
+		{#      </div> #}
+		{#    </div> #}
 
-		<div class="content pt-5 pb-5">
+		<div class="content pb-5 lbl lar">
 			<div class="row align-items-center">
 				<div class="col-md-6 mb-4 mb-md-0">
 					<h1>
-						<span class="header-p1">{% trans %}Owee{% endtrans %} </span>
+						<span class="header-p1">{% trans %}OWee{% endtrans %} </span>
 						<span class="header-p2">{% trans %}13 t/m 17 augustus{% endtrans %}</span>
 					</h1>
 
 					<p>{% trans %} Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.
 							Dit jaar duurt de OWee van 13 t/m 17 augustus.
-							Tijdens deze week is er de uitgelezen kans om	kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer!
+							Tijdens deze week is er de uitgelezen kans om  kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer!
 							Al deze groepen en instanties zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
-							C.S.R. heeft gedurende deze week veel interessante en	gezellige activiteiten, waar je kan kennis maken met de vereniging!
+							C.S.R. heeft gedurende deze week veel interessante en  gezellige activiteiten, waar je kan kennis maken met de vereniging!
 						{% endtrans %}</p>
 
 
@@ -140,12 +140,14 @@
 						<div class="iframe-container">
 							<iframe
 								src="https://www.youtube-nocookie.com/embed/videoseries?list=PLXBOhyG24-WnNgg2RloapxC5X73J1Zxvi&hl=nl"
-								allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+								allowfullscreen></iframe>
 						</div>
 					</div>
 					<div class="col-12 col-sm-6 col-md-4 mb-4">
 						<div class="iframe-container">
-							<iframe src="https://www.youtube.com/embed/9fRaXRnBuLY"
+							<iframe src="https://youtube.com/embed/kIiR_76Hwb0"
+											title="OWee thema presentatie"
 											allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
 											allowfullscreen></iframe>
 						</div>
@@ -167,19 +169,20 @@
 
 		<a id="contact"></a>
 
-		<div class="interest">
+		<div class="interest lbl">
 			<div class="content">
-				<div class="pt-5 pt-md-4 pb-4 pb-sm-2">
+				<div class="pb-4 pb-sm-2">
 					<h1>
 						<span class="header-p1">{% trans %}Interesse in{% endtrans %} </span>
 						<span class="header-p2">{% trans %}C.S.R.?{% endtrans %}</span>
 					</h1>
 					<p>{% trans %}We hebben twee keer dit jaar een open avond waarbij je kan komen kijken
-								hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
-								De eerstvolgende open avond is donderdag 8 juni 2023. Je kan je opgeven via deze
+							hoe een avond in onze sociëteit eruit ziet. Je kan komen eten, meedoen met een worshipavond en komen borrelen.
+							De eerstvolgende open avond is donderdag 8 juni 2023. Je kan je opgeven via deze
 						{% endtrans %}
-						<a href="https://docs.google.com/forms/d/e/1FAIpQLSe_C0RPkwO_Eg5Mce84YJUckVUoKxw6gAJ0BrfCZDJGrQx45A/viewform?usp=sf_link">link</a>
-						</p>
+						<a
+							href="https://docs.google.com/forms/d/e/1FAIpQLSe_C0RPkwO_Eg5Mce84YJUckVUoKxw6gAJ0BrfCZDJGrQx45A/viewform?usp=sf_link">link</a>
+					</p>
 					{# <p>{% trans %}Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws
 							over activiteiten, zoals open avonden en de OWee. Wanneer je al weet dat je lid wilt worden komend jaar, kan je hieronder
 							ook je gegevens achterlaten voor de voorinschrijving.{% endtrans %}</p> #}
@@ -198,7 +201,7 @@
 							<div class="cta">0613793890</div>
 						</a>
 					</div> #}
-					{# <div class=" col-md-7 col-lg-8 col-md-12">
+		{# <div class=" col-md-7 col-lg-8 col-md-12">
 						<script type="text/javascript">
 							var captchaLoaded = false;
 
@@ -222,7 +225,7 @@
 							};
 
 						</script> #}
-						{# <form action="" class="formulieren" id="owee-form">
+		{# <form action="" class="formulieren" id="owee-form">
 							{{ csrfField() }}
 							<input hidden id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden" checked>
 							<label hidden for="lid-worden" class="owee tab">{% trans %}<span class="d-none d-md-inline">Ik wil </span>lid worden{% endtrans %}</label>
@@ -313,11 +316,11 @@
 				<div class="col-md-6">
 					<h2>{% trans %}Documenten{% endtrans %}</h2>
 					<p>{% trans %}C.S.R. heeft samen met de andere grote studentenverenigingen (DSC, Virgiel,
-						Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin
-						afspraken staan waar we elkaar aan zullen houden. Hierin staan afspraken hoe
-						we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een
-						KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de
-						afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.{% endtrans %}</p>
+							Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin
+							afspraken staan waar we elkaar aan zullen houden. Hierin staan afspraken hoe
+							we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een
+							KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de
+							afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.{% endtrans %}</p>
 					<ul>
 						<li><a href="https://csrdelft.nl/download/Code%20of%20Ethics%202016-2017.pdf" target="_blank">Code Of
 								Ethics</a></li>
