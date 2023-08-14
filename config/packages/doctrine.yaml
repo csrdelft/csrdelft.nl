@@ -66,6 +66,6 @@ doctrine:
     filters:
       verbergNovieten:
         class: CsrDelft\common\Doctrine\VerbergNovietenFilter
-        enabled: false
+        enabled: true
         parameters:
           jaar: 2022
