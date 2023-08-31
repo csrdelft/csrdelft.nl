@@ -249,6 +249,18 @@ class MenuItemRepository extends AbstractRepository
 		return $item;
 	}
 
+	public function nieuwFavorietMenu($uid)
+	{
+		$item = $this->nieuw(null);
+		$item->tekst = $uid;
+		$item->link = '/menubeheer/beheer/' . $uid;
+
+		$this->_em->persist($item);
+		$this->_em->flush();
+
+		return $item;
+	}
+
 	/**
 	 * Flatten tree structure.
 	 *

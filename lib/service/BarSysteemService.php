@@ -60,7 +60,7 @@ class BarSysteemService
 	 */
 	public function getPersonen()
 	{
-		return $this->civiSaldoRepository->findBy(['deleted' => false]);
+		return $this->civiSaldoRepository->findBy(['deleted' => false], ['laatst_veranderd' => 'DESC']);
 	}
 
 	public function getProfiel($uid)
@@ -234,10 +234,11 @@ SQL
 		}
 
 		if ($persoon == 'alles') {
-			return $this->civiBestellingRepository->findTussen($begin, $eind, [
-				'soccie',
-				'oweecie',
-			]);
+			return $this->civiBestellingRepository->findTussen(
+				$begin,
+				$eind,
+				['soccie', 'oweecie'],
+			);
 		} else {
 			return $this->civiBestellingRepository->findTussen(
 				$begin,
