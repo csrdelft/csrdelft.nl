@@ -3018,13 +3018,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flatpickr@npm:^4.6.6":
-  version: 4.6.6
-  resolution: "flatpickr@npm:4.6.6"
-  checksum: 2bf4c28b29bb10962e557ce0ca55976f605e736218ecf759dda34439ac74adb6973f041ebbcf02497efb029350894f325c1e31a55777659eef8913283ba41342
-  languageName: node
-  linkType: hard
-
 "flatted@npm:^3.1.0":
   version: 3.2.7
   resolution: "flatted@npm:3.2.7"
@@ -5812,7 +5805,6 @@ fsevents@~2.3.1:
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-vue: ^9.9.0
     eslint-webpack-plugin: ^4.0.0
-    flatpickr: ^4.6.6
     fslightbox: ^3.3.1
     get-video-id: ^3.2.0
     google-palette: ^1.1.0

@@ -24,12 +24,6 @@
 @import "module/profiel";
 @import "module/stamboom";
 
-@import "~flatpickr/dist/flatpickr.css";
-
-:root {
-	accent-color: $primary;
-}
-
 body {
 	height: auto;
 	position: relative;

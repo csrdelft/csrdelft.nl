@@ -171,7 +171,7 @@ const checkPushAvailability = async () => {
 };
 checkPushAvailability();
 
-const instellingOpslaan = async (ev: Event) => {
+export const instellingOpslaan = async (ev: Event) => {
 	ev.preventDefault();
 
 	const input = ev.target as HTMLElement;

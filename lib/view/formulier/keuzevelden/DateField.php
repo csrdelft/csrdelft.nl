@@ -18,6 +18,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  */
 class DateField extends InputField
 {
+	protected $date_value;
 	protected $max_jaar;
 	protected $min_jaar;
 
@@ -28,7 +29,10 @@ class DateField extends InputField
 		$maxyear = null,
 		$minyear = null
 	) {
-		parent::__construct($name, $value, $description);
+		parent::__construct($name, null, $description);
+
+		$this->date_value = date('Y-m-d', strtotime($value));
+
 		if (is_int($maxyear)) {
 			$this->max_jaar = $maxyear;
 		} else {
@@ -82,12 +86,9 @@ class DateField extends InputField
 	public function getHtml()
 	{
 		$attributes = $this->getInputAttribute([
-			'type',
 			'id',
 			'name',
 			'class',
-			'value',
-			'origvalue',
 			'disabled',
 			'readonly',
 			'maxlength',
@@ -96,21 +97,25 @@ class DateField extends InputField
 		]);
 
 		$minValue = $maxValue = null;
+		// $value = $this->date_value;
 
 		if ($this->min_jaar) {
-			$minValue = $this->min_jaar . '-01-01 00:00';
+			$minValue = $this->min_jaar . '-01-01';
 		}
 
 		if ($this->max_jaar) {
-			$maxValue = $this->max_jaar + 1 . '-01-01 00:00';
+			$maxValue = $this->max_jaar + 1 . '-01-01';
 		}
 
 		return <<<HTML
 <input
  {$attributes}
- data-min-date="{$minValue}"
- data-max-date="{$maxValue}"
- data-readonly="{$this->readonly}"
+ type="date"
+ value="{$this->date_value}"
+ origvalue="{$this->date_value}"
+ min="{$minValue}"
+ max="{$maxValue}"
+ pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
 />
 HTML;
 	}
