@@ -80,7 +80,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: '8.2'
           tools: composer:v2
           extensions: pdo_mysql
 
@@ -146,7 +146,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: '8.2'
           tools: composer:v2
           extensions: pdo_mysql
 
@@ -204,7 +204,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: '8.2'
           tools: composer:v2
           extensions: pdo_mysql
 

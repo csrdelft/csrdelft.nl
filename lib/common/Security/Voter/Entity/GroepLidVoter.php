@@ -34,7 +34,7 @@ class GroepLidVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		if (
 			!$this->accessDecisionManager->decide(
 				$token,
