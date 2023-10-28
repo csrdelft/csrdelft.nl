@@ -13,7 +13,7 @@ class IcalResponse extends Response
 		$this->setCharset('UTF-8');
 	}
 
-	public function setContent(?string $content)
+	public function setContent(?string $content): static
 	{
 		$this->content = '';
 

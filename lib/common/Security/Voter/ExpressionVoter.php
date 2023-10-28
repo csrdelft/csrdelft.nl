@@ -40,7 +40,7 @@ class ExpressionVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		// OR
 		if (strpos($attribute, ',') !== false) {
 			/**

@@ -6,8 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\bar\BarLocatie;
 use CsrDelft\service\BarSysteemService;
-use DateTimeImmutable;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,10 +45,10 @@ class BarSysteemController extends AbstractController
 		);
 	}
 
+	#[IsGranted("ROLE_OAUTH2_BAR:TRUST")]
 	/**
 	 * @Route("/trust", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
-	 * @IsGranted("ROLE_OAUTH2_BAR:TRUST")
 	 * @param Request $request
 	 * @return JsonResponse
 	 */
@@ -81,8 +80,8 @@ class BarSysteemController extends AbstractController
 	/**
 	 * @Route("/updatePerson", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
 	public function updatePerson(Request $request)
 	{
 		$id = $request->request->get('id');
@@ -96,8 +95,8 @@ class BarSysteemController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/personen", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
 	public function personen()
 	{
 		return $this->json($this->barSysteemService->getPersonen());
@@ -107,8 +106,8 @@ class BarSysteemController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/producten", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
 	public function producten()
 	{
 		return $this->json($this->barSysteemService->getProducten());
@@ -122,8 +121,8 @@ class BarSysteemController extends AbstractController
 	 * @throws \Doctrine\DBAL\Exception
 	 * @Route("/bestelling", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
 	public function bestelling(Request $request)
 	{
 		$uid = $request->request->get('uid');
@@ -150,8 +149,8 @@ class BarSysteemController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/saldo", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
 	public function saldo(Request $request)
 	{
 		$soccieSaldoId = $request->request->get('saldoSocCieId');
@@ -163,8 +162,8 @@ class BarSysteemController extends AbstractController
 	 * @return Response
 	 * @Route("/verwijderBestelling", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
 	public function verwijderBestelling(Request $request)
 	{
 		$this->barSysteemService->log('remove', $_POST);
@@ -181,8 +180,8 @@ class BarSysteemController extends AbstractController
 	 * @return Response
 	 * @Route("/undoVerwijderBestelling", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
 	public function undoVerwijderBestelling(Request $request)
 	{
 		$this->barSysteemService->log('remove', $_POST);
@@ -198,8 +197,8 @@ class BarSysteemController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/laadLaatste", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
 	public function laadLaatste(Request $request)
 	{
 		$persoon = $request->request->get('aantal');

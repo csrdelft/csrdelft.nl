@@ -12,7 +12,7 @@ use CsrDelft\service\PeilingenService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingTable;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -186,8 +186,8 @@ class PeilingenController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/peilingen/stem/{id}", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_VOTE)
-	 * @IsGranted("stemmen", subject="peiling")
 	 */
+	#[IsGranted("stemmen", subject: "peiling")]
 	public function stem(Request $request, Peiling $peiling): JsonResponse
 	{
 		$ids = $request->request->filter('opties', [], FILTER_VALIDATE_INT);

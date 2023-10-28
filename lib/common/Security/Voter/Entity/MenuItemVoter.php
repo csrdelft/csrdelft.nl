@@ -46,7 +46,7 @@ class MenuItemVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		switch ($attribute) {
 			case self::BEKIJKEN:
 				return $subject->zichtbaar &&
