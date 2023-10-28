@@ -6,7 +6,9 @@ use CsrDelft\common\Util\DateUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\view\Icon;
+use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -112,7 +114,7 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	}
 
 	/**
-	 * @return string
+	 * @return string|false
 	 */
 	#[Serializer\SerializedName('last_used')]
 	#[Serializer\Groups('datatable')]

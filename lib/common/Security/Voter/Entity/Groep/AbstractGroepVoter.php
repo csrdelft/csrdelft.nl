@@ -52,7 +52,7 @@ abstract class AbstractGroepVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		if (!$this->accessDecisionManager->decide($token, ['ROLE_LOGGED_IN'])) {
 			return false;
 		}
