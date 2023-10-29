@@ -13,7 +13,7 @@ use CsrDelft\service\PeilingenService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\peilingen\PeilingOptieForm;
 use CsrDelft\view\peilingen\PeilingOptieTable;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -48,8 +48,8 @@ class PeilingOptiesController extends AbstractController
 	 * @return GenericDataTableResponse
 	 * @Route("/peilingen/opties/{id}", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_EDIT)
-	 * @IsGranted("bekijken", subject="peiling")
 	 */
+	#[IsGranted("bekijken", subject: "peiling")]
 	public function lijst(Peiling $peiling): GenericDataTableResponse
 	{
 		return $this->tableData(

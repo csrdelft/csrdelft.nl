@@ -5,7 +5,7 @@ namespace CsrDelft\controller\api\v3;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\service\BarSysteemService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,8 +31,8 @@ class BarSysteemBeheerController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/grootboek", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
 	public function grootboek()
 	{
 		return $this->json($this->barSysteemService->getGrootboekInvoer());
@@ -42,8 +42,8 @@ class BarSysteemBeheerController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/grootboeken", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
 	public function grootboeken()
 	{
 		return $this->json($this->barSysteemService->getGrootboeken());
@@ -53,8 +53,8 @@ class BarSysteemBeheerController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/tools", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
 	public function tools()
 	{
 		return $this->json($this->barSysteemService->getToolData());
@@ -65,8 +65,8 @@ class BarSysteemBeheerController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/addProduct", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
 	public function addProduct(Request $request)
 	{
 		$name = $request->request->get('name');
@@ -83,8 +83,8 @@ class BarSysteemBeheerController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/updatePrice", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
 	public function updatePrice(Request $request)
 	{
 		$productId = $request->request->get('productId');
@@ -100,8 +100,8 @@ class BarSysteemBeheerController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/updateVisibility", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
 	public function updateVisibility(Request $request)
 	{
 		$visibility = $request->request->get('visibility');
@@ -117,8 +117,8 @@ class BarSysteemBeheerController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/addPerson", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
 	public function addPerson(Request $request)
 	{
 		$name = $request->request->get('name');
@@ -135,8 +135,8 @@ class BarSysteemBeheerController extends AbstractController
 	 * @return JsonResponse
 	 * @Route("/removePerson", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
-	 * @IsGranted("ROLE_OAUTH2_BAR:BEHEER")
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
 	public function removePerson(Request $request)
 	{
 		$id = $request->request->get('id');

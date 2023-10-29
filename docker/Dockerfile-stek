@@ -1,16 +1,16 @@
-FROM php:7.3-apache
+FROM php:8.1-apache
 
 # update
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends sendmail libpng-dev libjpeg-dev libfreetype6-dev imagemagick memcached libmemcached-dev libicu-dev git \
+	&& apt-get install -y --no-install-recommends sendmail libpng-dev libjpeg-dev libfreetype6-dev imagemagick memcached libmemcached-dev libssl-dev libicu-dev git \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
 
 # install php extensions
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-	&& docker-php-ext-install mysqli pdo pdo_mysql hash exif gd opcache intl \
+RUN docker-php-ext-configure gd \
+	&& docker-php-ext-install mysqli pdo pdo_mysql exif gd opcache intl \
 	# Laatste versie van xdebug werkt alleen met PHP 8
-	&& pecl install xdebug-3.1.5 \
+	&& pecl install xdebug \
 	&& pecl install memcached \
 	&& docker-php-ext-enable xdebug memcached
 

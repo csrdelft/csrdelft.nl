@@ -24,7 +24,7 @@ use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\Icon;
 use CsrDelft\view\response\IcalResponse;
 use DateInterval;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -115,8 +115,8 @@ class AgendaController extends AbstractController
 	/**
 	 * @return Response
 	 * @Route("/agenda/ical/{private_auth_token}/csrdelft.ics", methods={"GET"})
-	 * @IsGranted("ROLE_LOGGED_IN")
 	 */
+	#[IsGranted("ROLE_LOGGED_IN")]
 	public function ical(): Response
 	{
 		return $this->render(

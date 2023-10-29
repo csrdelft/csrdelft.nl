@@ -30,7 +30,7 @@ abstract class PrefixVoter extends Voter
 		TokenInterface $token
 	);
 
-	protected function supports(string $attribute, $subject)
+	protected function supports(string $attribute, $subject): bool
 	{
 		if (preg_match('/[|,+]/', $attribute)) {
 			// ExpressionVoter mag eerst!
@@ -52,7 +52,7 @@ abstract class PrefixVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		// Altijd uppercase
 		$attribute = strtoupper($attribute);
 		// splits permissie in type, waarde en rol

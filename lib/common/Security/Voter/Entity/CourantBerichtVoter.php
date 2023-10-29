@@ -45,7 +45,7 @@ class CourantBerichtVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		switch ($attribute) {
 			case self::BEHEREN:
 				return $this->accessDecisionManager->decide($token, [

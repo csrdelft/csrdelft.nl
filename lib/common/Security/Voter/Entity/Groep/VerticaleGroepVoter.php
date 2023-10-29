@@ -17,7 +17,7 @@ class VerticaleGroepVoter extends AbstractGroepVoter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		switch ($attribute) {
 			case self::BEKIJKEN:
 			case self::AANMAKEN:

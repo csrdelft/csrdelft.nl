@@ -5,7 +5,7 @@ namespace CsrDelft\common\Serializer\Normalizer;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
  *
  * @package CsrDelft\common
  */
-class DataTableEntryNormalizer implements ContextAwareNormalizerInterface
+class DataTableEntryNormalizer implements NormalizerInterface
 {
 	/**
 	 * @var EntityManagerInterface
@@ -53,7 +53,7 @@ class DataTableEntryNormalizer implements ContextAwareNormalizerInterface
 		$data,
 		string $format = null,
 		array $context = []
-	) {
+	): bool {
 		return $data instanceof DataTableEntry;
 	}
 }
