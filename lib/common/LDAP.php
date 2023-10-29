@@ -19,7 +19,7 @@ class LDAP
 {
 	//## private ###
 
-	/** @var resource|bool */
+	/** @var \LDAP\Connection|resource|bool */
 	private $conn = false;
 	private $baseLeden;
 	private $baseGroepen;
