@@ -3,13 +3,14 @@
 namespace CsrDelft\service;
 
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -27,17 +28,24 @@ class VerjaardagenService
 	 */
 	private $em;
 
+	/**
+	 * @var Security
+	 */
+	private $security;
+
 	public function __construct(
+		Security $security,
 		ProfielRepository $profielRepository,
 		EntityManagerInterface $em
 	) {
+		$this->security = $security;
 		$this->profielRepository = $profielRepository;
 		$this->em = $em;
 	}
 
 	private function getFilterByToestemmingSql()
 	{
-		return LoginService::mag(P_LEDEN_MOD) ? '' : self::FILTER_BY_TOESTEMMING;
+		return $this->security->isGranted(P_LEDEN_MOD) ? '' : self::FILTER_BY_TOESTEMMING;
 	}
 
 	private function getNovietenFilter()
@@ -83,7 +91,7 @@ class VerjaardagenService
 			->setParameter('maand', $maand)
 			->orderBy('DAY(p.gebdatum)');
 
-		if (!LoginService::mag(P_LEDEN_MOD)) {
+		if (!$this->security->isGranted(P_LEDEN_MOD)) {
 			static::filterByToestemming($qb, 'profiel', 'gebdatum');
 		}
 
@@ -114,6 +122,8 @@ class VerjaardagenService
 	{
 		$rsm = new ResultSetMappingBuilder($this->em);
 		$rsm->addRootEntityFromClassMetadata(Profiel::class, 'p');
+		$rsm->addJoinedEntityFromClassMetadata(Account::class, 'a', 'p', 'account', ['uid' => 'account_uid', 'email' => 'account_email']);
+
 		$select = $rsm->generateSelectClause(['p' => 'T2']);
 
 		$lidstatus =
@@ -135,6 +145,7 @@ FROM (
         {$this->getNovietenFilter()}
         ) AS T1
     ) AS T2
+LEFT JOIN accounts a using (uid)
 {$this->getFilterByToestemmingSql()}
 ORDER BY distance
 LIMIT :limit
@@ -162,9 +173,15 @@ SQL;
 		$limiet = null
 	) {
 		$rsm = new ResultSetMappingBuilder($this->em);
+		// We selecteren eerst een profiel.
 		$rsm->addRootEntityFromClassMetadata(Profiel::class, 'p');
+		// Voeg een joined entity toe, want de OneToOne relatie tussen Profiel en account _moet_ geladen worden omdat Profiel de owner is.
+		// Hernoem kolommen die in beide entities voorkomen.
+		$rsm->addJoinedEntityFromClassMetadata(Account::class, 'a', 'p', 'account', ['uid' => 'account_uid', 'email' => 'account_email']);
 
+		// Genereer een select, alle profiel ('p') velden zijn te vinden in 'T2' in de query, en account ('a') in 'a'.
 		$select = $rsm->generateSelectClause(['p' => 'T2']);
+
 		$lidstatus =
 			"'" .
 			implode(
@@ -184,6 +201,7 @@ FROM (
         {$this->getNovietenFilter()}
         ) AS T1
     ) AS T2
+LEFT JOIN accounts a using (uid)
 {$this->getFilterByToestemmingSql()}
 WHERE volgende_verjaardag >= DATE(:van_datum) AND volgende_verjaardag <= DATE(:tot_datum)
 ORDER BY volgende_verjaardag
