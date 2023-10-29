@@ -120,41 +120,7 @@ class VerjaardagenService
 	 */
 	public function getKomende($aantal = 10)
 	{
-		$rsm = new ResultSetMappingBuilder($this->em);
-		$rsm->addRootEntityFromClassMetadata(Profiel::class, 'p');
-		$rsm->addJoinedEntityFromClassMetadata(Account::class, 'a', 'p', 'account', ['uid' => 'account_uid', 'email' => 'account_email']);
-
-		$select = $rsm->generateSelectClause(['p' => 'T2']);
-
-		$lidstatus =
-			"'" .
-			implode(
-				"', '",
-				array_merge(LidStatus::getLidLike(), [LidStatus::Kringel])
-			) .
-			"'";
-
-		$query = <<<SQL
-SELECT $select, DATEDIFF(volgende_verjaardag, NOW()) AS distance
-FROM (
-    SELECT *, ADDDATE(verjaardag, INTERVAL verjaardag < DATE(NOW()) YEAR) AS volgende_verjaardag
-    FROM (
-        SELECT profielen.*, ADDDATE(gebdatum, INTERVAL YEAR(NOW()) - YEAR(gebdatum) YEAR) AS verjaardag
-        FROM profielen
-        WHERE status IN ($lidstatus)
-        {$this->getNovietenFilter()}
-        ) AS T1
-    ) AS T2
-LEFT JOIN accounts a using (uid)
-{$this->getFilterByToestemmingSql()}
-ORDER BY distance
-LIMIT :limit
-SQL;
-
-		return $this->em
-			->createNativeQuery($query, $rsm)
-			->setParameter('limit', $aantal)
-			->getResult();
+		return $this->getVerjaardagen(date_create_immutable(), null, $aantal);
 	}
 
 	/**
@@ -172,6 +138,13 @@ SQL;
 		DateTimeInterface $tot,
 		$limiet = null
 	) {
+		return $this->getVerjaardagen($van, $tot, $limiet);
+	}
+
+	/**
+	 * Selecteer verjaardagen tussen twee data.
+	 */
+	private function getVerjaardagen($van, $tot = null, $limiet = null) {
 		$rsm = new ResultSetMappingBuilder($this->em);
 		// We selecteren eerst een profiel.
 		$rsm->addRootEntityFromClassMetadata(Profiel::class, 'p');
@@ -190,12 +163,22 @@ SQL;
 			) .
 			"'";
 
+		if ($tot == null) {
+			// Als er geen tot is, sorteer dan op volgorde van afstand tot vandaag
+			$where = "";
+			$orderBy = "ORDER BY distance ";
+		} else {
+			// Als er wel een tot is, geef dan alle verjaardagen tussen de gegeven momenten
+			$where = "WHERE volgende_verjaardag >= DATE(:van_datum) AND volgende_verjaardag <= DATE(:tot_datum) ";
+			$orderBy = "ORDER BY volgende_verjaardag ";
+		}
+
 		$query = <<<SQL
 SELECT $select
 FROM (
-    SELECT *, ADDDATE(verjaardag, INTERVAL verjaardag < DATE(:van_datum) YEAR) AS volgende_verjaardag
+    SELECT *, DATEDIFF(volgende_verjaardag, DATE(:van_datum)) AS distance
     FROM (
-        SELECT profielen.*, ADDDATE(gebdatum, INTERVAL YEAR(DATE(:van_datum)) - YEAR(gebdatum) YEAR) AS verjaardag
+        SELECT profielen.*, DATE_ADD(gebdatum, INTERVAL YEAR(:van_datum) - YEAR(gebdatum) + IF(DAYOFYEAR(:van_datum) > DAYOFYEAR(gebdatum), 1, 0) YEAR) as volgende_verjaardag
         FROM profielen
         WHERE status IN ($lidstatus)
         {$this->getNovietenFilter()}
@@ -203,12 +186,12 @@ FROM (
     ) AS T2
 LEFT JOIN accounts a using (uid)
 {$this->getFilterByToestemmingSql()}
-WHERE volgende_verjaardag >= DATE(:van_datum) AND volgende_verjaardag <= DATE(:tot_datum)
-ORDER BY volgende_verjaardag
+{$where}
+{$orderBy}
 SQL;
 
 		if ($limiet != null) {
-			$query .= 'LIMIT ' . (int) $limiet;
+			$query .= ' LIMIT ' . (int) $limiet;
 		}
 
 		return $this->em
