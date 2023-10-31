@@ -1,6 +1,7 @@
 <?php
 
 namespace CsrDelft\model\entity\profiel;
+use CsrDelft\view\bbcode\BbUtil;
 use CsrDelft\view\bbcode\CsrBB;
 
 /**
@@ -32,7 +33,7 @@ class UnparsedProfielLogGroup extends ProfielLogGroup
 	public function toHtml()
 	{
 		return "<div class='ProfielLogEntry'>" .
-			CsrBB::parse($this->content) .
+			BbUtil::parse($this->content) .
 			'</div>';
 	}
 }

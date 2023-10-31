@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbException;
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbException;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\entity\SavedQueryResult;
 use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\view\bbcode\BbHelper;
@@ -44,12 +44,12 @@ class BbQuery extends BbTag
 		return 'query';
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->query->query->magBekijken();
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$url = '/tools/query?id=' . urlencode($this->id);
 		return BbHelper::lightLinkBlock(
@@ -60,7 +60,7 @@ class BbQuery extends BbTag
 		);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$sqc = new SavedQueryContent($this->query);
 		return $sqc->render_queryResult();
@@ -70,7 +70,7 @@ class BbQuery extends BbTag
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->id = $this->readMainArgument($arguments);
 		$this->id = (int) $this->id;

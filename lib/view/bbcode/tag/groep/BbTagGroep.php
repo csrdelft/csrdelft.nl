@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag\groep;
 
-use CsrDelft\bb\BbException;
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbException;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Util\VueUtil;
@@ -67,7 +67,7 @@ abstract class BbTagGroep extends BbTag
 	 * @return bool
 	 * @throws BbException
 	 */
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->security->isGranted(
 			AbstractGroepVoter::BEKIJKEN,
@@ -89,12 +89,12 @@ abstract class BbTagGroep extends BbTag
 		return $groep;
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->id = $this->readMainArgument($arguments);
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$groep = $this->getGroep();
 		if ($groep) {
@@ -129,7 +129,7 @@ abstract class BbTagGroep extends BbTag
 	 * @return string
 	 * @throws BbException
 	 */
-	public function render()
+	public function render(): string
 	{
 		$groep = $this->getGroep();
 		if (!$groep) {

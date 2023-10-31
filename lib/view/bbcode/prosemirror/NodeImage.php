@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
-use CsrDelft\bb\tag\BbNode;
+use CsrDelft\Lib\Bb\Tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbImg;
 
 class NodeImage implements Node

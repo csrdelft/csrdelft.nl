@@ -3,7 +3,7 @@
 namespace CsrDelft\view\bbcode\prosemirror;
 
 use CsrDelft\bb\internal\BbString;
-use CsrDelft\bb\tag\BbNode;
+use CsrDelft\Lib\Bb\Tag\BbNode;
 
 class NodeString implements Node
 {

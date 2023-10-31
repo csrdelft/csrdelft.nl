@@ -4,6 +4,7 @@ namespace CsrDelft;
 
 use CsrDelft\Component\DataTable\DataTableTypeInterface;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\view\bbcode\prosemirror\Mark;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -68,6 +69,9 @@ class Kernel extends BaseKernel
 		$builder
 			->registerForAutoconfiguration(Node::class)
 			->addTag('csr.editor.node');
+		$builder
+			->registerForAutoconfiguration(BbTag::class)
+			->addTag('csr.editor.tag');
 		$builder
 			->registerForAutoconfiguration(DataTableTypeInterface::class)
 			->addTag('csr.table.type');

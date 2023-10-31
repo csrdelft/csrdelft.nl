@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
-use CsrDelft\bb\tag\BbNode;
-use CsrDelft\bb\tag\BbUnderline;
+use CsrDelft\Lib\Bb\Tag\BbNode;
+use CsrDelft\Lib\Bb\Tag\BbUnderline;
 
 class MarkUnderline implements Mark
 {

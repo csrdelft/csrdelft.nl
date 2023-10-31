@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\repository\groepen\LichtingenRepository;
@@ -50,12 +50,12 @@ class BbLedenmemoryscores extends BbTag
 		return 'ledenmemoryscores';
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		return BbHelper::lightLinkBlock(
 			'ledenmemoryscores',
@@ -68,7 +68,7 @@ class BbLedenmemoryscores extends BbTag
 	/**
 	 * @param $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$groep = null;
 		$titel = null;
@@ -98,7 +98,7 @@ class BbLedenmemoryscores extends BbTag
 		$this->titel = $titel;
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$table = new LedenMemoryScoreTable($this->groep, $this->titel);
 		return $table->getHtml();

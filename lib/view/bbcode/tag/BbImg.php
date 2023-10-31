@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbException;
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbException;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\Util\UrlUtil;
 
 /**
@@ -34,7 +34,7 @@ class BbImg extends BbTag
 		return 'img';
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$arguments = $this->arguments;
 
@@ -100,7 +100,7 @@ class BbImg extends BbTag
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->url = filter_var(
 			$this->readMainArgument($arguments),

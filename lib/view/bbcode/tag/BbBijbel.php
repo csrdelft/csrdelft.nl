@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\view\bbcode\BbHelper;
@@ -31,13 +31,13 @@ class BbBijbel extends BbTag
 		return 'bijbel';
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		list($stukje, $link) = $this->getLink();
 		return BbHelper::lightLinkInline($this->env, 'bijbel', $link, $stukje);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		list($stukje, $link) = $this->getLink();
 		return '<a href="' . $link . '" target="_blank">' . $stukje . '</a>';
@@ -82,7 +82,7 @@ class BbBijbel extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->readContent();
 		$this->bijbel = $arguments['bijbel'] ?? null;

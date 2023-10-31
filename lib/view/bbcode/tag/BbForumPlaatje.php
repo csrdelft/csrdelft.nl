@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbException;
+use CsrDelft\Lib\Bb\BbException;
 use CsrDelft\entity\ForumPlaatje;
 use CsrDelft\repository\ForumPlaatjeRepository;
 use Symfony\Component\Security\Core\Security;
@@ -35,7 +35,7 @@ class BbForumPlaatje extends BbImg
 		return 'plaatje';
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
@@ -55,12 +55,12 @@ class BbForumPlaatje extends BbImg
 		return $this->plaatje->getUrl(true);
 	}
 
-	public function renderPreview()
+	public function renderPreview(): string
 	{
 		return ' 📷 ';
 	}
 
-	public function renderPlain()
+	public function renderPlain(): string
 	{
 		return 'Plaatje (' . $this->getLinkUrl() . ')';
 	}
@@ -69,7 +69,7 @@ class BbForumPlaatje extends BbImg
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$key = $this->readMainArgument($arguments);
 		$this->plaatje = $this->forumPlaatjeRepository->getByKey($key);

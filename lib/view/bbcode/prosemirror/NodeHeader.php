@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
-use CsrDelft\bb\tag\BbHeading;
-use CsrDelft\bb\tag\BbNode;
+use CsrDelft\Lib\Bb\Tag\BbHeading;
+use CsrDelft\Lib\Bb\Tag\BbNode;
 
 class NodeHeader implements Node
 {

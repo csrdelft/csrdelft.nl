@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 
 class BbOrderedList extends BbTag
 {
@@ -14,7 +14,7 @@ class BbOrderedList extends BbTag
 		return 'ol';
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		if (isset($arguments['ol'])) {
 			$this->type = htmlspecialchars($arguments['ol']);
@@ -25,7 +25,7 @@ class BbOrderedList extends BbTag
 		$this->readContent();
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$attrs = '';
 		if ($this->order) {

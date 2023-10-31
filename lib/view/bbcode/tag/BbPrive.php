@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\service\AccessService;
 use Symfony\Component\Security\Core\Security;
 
@@ -37,7 +37,7 @@ class BbPrive extends BbTag
 		$this->accessService = $accessService;
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->security->isGranted(
 			$this->accessService->converteerPermissie($this->permissie)
@@ -49,7 +49,7 @@ class BbPrive extends BbTag
 		return 'prive';
 	}
 
-	public function render()
+	public function render(): string
 	{
 		return '<span class="bb-prive bb-tag-prive">' .
 			$this->getContent() .
@@ -59,7 +59,7 @@ class BbPrive extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->readContent();
 		$this->permissie = $arguments['prive'] ?? 'ROLE_LOGGED_IN';

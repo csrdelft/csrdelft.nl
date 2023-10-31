@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\view\Icon;
 
@@ -18,7 +18,7 @@ class BbNeuzen extends BbTag
 		return 'neuzen';
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$content = $this->getContent();
 		if (InstellingUtil::lid_instelling('layout', 'neuzen') != 'nee') {
@@ -29,7 +29,7 @@ class BbNeuzen extends BbTag
 		return '<span data-neuzen>' . $content . '</span>';
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->readContent([], false);
 	}

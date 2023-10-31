@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\peilingen;
 
 use CsrDelft\Component\DataTable\DataTableEntry;
+use CsrDelft\view\bbcode\BbUtil;
 use CsrDelft\view\bbcode\CsrBB;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -88,6 +89,6 @@ class PeilingOptie implements DataTableEntry
 	 */
 	public function getBeschrijvingFormatted()
 	{
-		return CsrBB::parse($this->beschrijving);
+		return BbUtil::parse($this->beschrijving);
 	}
 }

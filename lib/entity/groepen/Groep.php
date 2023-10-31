@@ -13,6 +13,7 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\GroepRepository;
+use CsrDelft\view\bbcode\BbUtil;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -282,7 +283,7 @@ class Groep implements DataTableEntry, DisplayEntity
 	 */
 	public function getSamenvattingHtml()
 	{
-		return CsrBB::parse($this->samenvatting);
+		return BbUtil::parse($this->samenvatting);
 	}
 
 	public function getUUID()

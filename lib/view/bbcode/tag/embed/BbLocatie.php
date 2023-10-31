@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag\embed;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\Icon;
 use function trim;
@@ -24,14 +24,14 @@ class BbLocatie extends BbTag
 		return ['map', 'kaart', 'locatie'];
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$address = $this->getContent();
 		$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
 		return BbHelper::lightLinkInline($this->env, 'locatie', $url, $address);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$address = $this->getContent();
 		$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
@@ -58,7 +58,7 @@ class BbLocatie extends BbTag
 			'</span></span>';
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		// Hoogte maakt niet veel uit
 		if (isset($arguments['h']) && $arguments['h'] <= 900) {

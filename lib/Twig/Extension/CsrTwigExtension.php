@@ -64,9 +64,14 @@ class CsrTwigExtension extends AbstractExtension
 	 * @var Security
 	 */
 	private $security;
+	/**
+	 * @var CsrBB
+	 */
+	private $bb;
 
 	public function __construct(
 		CsrfService $csrfService,
+		CsrBB $bb,
 		Security $security,
 		CmsPaginaRepository $cmsPaginaRepository,
 		ProfielRepository $profielRepository,
@@ -79,6 +84,7 @@ class CsrTwigExtension extends AbstractExtension
 		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 		$this->security = $security;
+		$this->bb = $bb;
 	}
 
 	public function getFunctions()
@@ -199,7 +205,7 @@ class CsrTwigExtension extends AbstractExtension
 		}
 
 		if ($this->security->isGranted(CmsPaginaVoter::BEKIJKEN, $pagina)) {
-			return CsrBB::parseHtml($pagina->inhoud, $pagina->inlineHtml);
+			return $this->bb->parseHtml($pagina->inhoud, $pagina->inlineHtml);
 		}
 
 		return '';
@@ -304,17 +310,17 @@ class CsrTwigExtension extends AbstractExtension
 		}
 
 		if ($mode === 'html') {
-			return CsrBB::parseHtml($string, $inlineHtml);
+			return $this->bb->parseHtml($string, $inlineHtml);
 		} elseif ($mode == 'mail') {
-			return CsrBB::parseMail($string);
+			return $this->bb->parseMail($string);
 		} elseif ($mode == 'light') {
-			return CsrBB::parseLight($string);
+			return $this->bb->parseLight($string);
 		} elseif ($mode == 'preview') {
-			return CsrBB::parsePreview($string);
+			return $this->bb->parsePreview($string);
 		} elseif ($mode == 'plain') {
-			return CsrBB::parsePlain($string);
+			return $this->bb->parsePlain($string);
 		} else {
-			return CsrBB::parse($string);
+			return $this->bb->parse($string);
 		}
 	}
 

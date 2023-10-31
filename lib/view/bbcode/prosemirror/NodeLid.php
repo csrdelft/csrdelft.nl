@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
-use CsrDelft\bb\BbException;
-use CsrDelft\bb\tag\BbNode;
+use CsrDelft\Lib\Bb\BbException;
+use CsrDelft\Lib\Bb\Tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbLid;
 
 class NodeLid implements Node

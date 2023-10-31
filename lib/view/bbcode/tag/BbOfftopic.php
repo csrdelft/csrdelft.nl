@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -15,7 +15,7 @@ class BbOfftopic extends BbTag
 		return ['ot', 'offtopic', 'vanonderwerp'];
 	}
 
-	public function render()
+	public function render(): string
 	{
 		return '<span data-offtopic class="offtopic bb-tag-offtopic">' .
 			$this->getContent() .
@@ -25,7 +25,7 @@ class BbOfftopic extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->readContent();
 	}

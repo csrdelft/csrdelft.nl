@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
@@ -62,7 +62,7 @@ class BbForum extends BbTag
 		return 'forum';
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		if ($this->id == 'recent' || $this->id == 'belangrijk') {
 			return $this->security->isGranted('ROLE_LOGGED_IN');
@@ -75,7 +75,7 @@ class BbForum extends BbTag
 	 * @return mixed
 	 * @throws Exception
 	 */
-	public function render()
+	public function render(): string
 	{
 		if (!$this->security->isGranted('ROLE_LOGGED_IN')) {
 			return 'Geen toegang';
@@ -90,7 +90,7 @@ class BbForum extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->id = $this->readMainArgument($arguments);
 		if (isset($arguments['num'])) {

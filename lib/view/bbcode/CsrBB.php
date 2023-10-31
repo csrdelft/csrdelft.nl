@@ -2,33 +2,34 @@
 
 namespace CsrDelft\view\bbcode;
 
-use CsrDelft\bb\BbEnv;
-use CsrDelft\bb\Parser;
-use CsrDelft\bb\tag\BbBold;
-use CsrDelft\bb\tag\BbClear;
-use CsrDelft\bb\tag\BbCode;
-use CsrDelft\bb\tag\BbCommentaar;
-use CsrDelft\bb\tag\BbDiv;
-use CsrDelft\bb\tag\BbEmail;
-use CsrDelft\bb\tag\BbHeading;
-use CsrDelft\bb\tag\BbHorizontalRule;
-use CsrDelft\bb\tag\BbItalic;
-use CsrDelft\bb\tag\BbLeet;
-use CsrDelft\bb\tag\BbLishort;
-use CsrDelft\bb\tag\BbList;
-use CsrDelft\bb\tag\BbListItem;
-use CsrDelft\bb\tag\BbMe;
-use CsrDelft\bb\tag\BbNewline;
-use CsrDelft\bb\tag\BbNobold;
-use CsrDelft\bb\tag\BbQuote;
-use CsrDelft\bb\tag\BbStrikethrough;
-use CsrDelft\bb\tag\BbSubscript;
-use CsrDelft\bb\tag\BbSuperscript;
-use CsrDelft\bb\tag\BbTable;
-use CsrDelft\bb\tag\BbTableCell;
-use CsrDelft\bb\tag\BbTableHeader;
-use CsrDelft\bb\tag\BbTableRow;
-use CsrDelft\bb\tag\BbUnderline;
+use CsrDelft\Lib\Bb\BbEnv;
+use CsrDelft\Lib\Bb\BbTag;
+use CsrDelft\Lib\Bb\Parser;
+use CsrDelft\Lib\Bb\Tag\BbBold;
+use CsrDelft\Lib\Bb\Tag\BbClear;
+use CsrDelft\Lib\Bb\Tag\BbCode;
+use CsrDelft\Lib\Bb\Tag\BbCommentaar;
+use CsrDelft\Lib\Bb\Tag\BbDiv;
+use CsrDelft\Lib\Bb\Tag\BbEmail;
+use CsrDelft\Lib\Bb\Tag\BbHeading;
+use CsrDelft\Lib\Bb\Tag\BbHorizontalRule;
+use CsrDelft\Lib\Bb\Tag\BbItalic;
+use CsrDelft\Lib\Bb\Tag\BbLeet;
+use CsrDelft\Lib\Bb\Tag\BbLishort;
+use CsrDelft\Lib\Bb\Tag\BbList;
+use CsrDelft\Lib\Bb\Tag\BbListItem;
+use CsrDelft\Lib\Bb\Tag\BbMe;
+use CsrDelft\Lib\Bb\Tag\BbNewline;
+use CsrDelft\Lib\Bb\Tag\BbNobold;
+use CsrDelft\Lib\Bb\Tag\BbQuote;
+use CsrDelft\Lib\Bb\Tag\BbStrikethrough;
+use CsrDelft\Lib\Bb\Tag\BbSubscript;
+use CsrDelft\Lib\Bb\Tag\BbSuperscript;
+use CsrDelft\Lib\Bb\Tag\BbTable;
+use CsrDelft\Lib\Bb\Tag\BbTableCell;
+use CsrDelft\Lib\Bb\Tag\BbTableHeader;
+use CsrDelft\Lib\Bb\Tag\BbTableRow;
+use CsrDelft\Lib\Bb\Tag\BbUnderline;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\view\bbcode\tag\BbAftel;
 use CsrDelft\view\bbcode\tag\BbBijbel;
@@ -77,6 +78,7 @@ use CsrDelft\view\bbcode\tag\groep\BbVerticale;
 use CsrDelft\view\bbcode\tag\groep\BbWerkgroep;
 use CsrDelft\view\bbcode\tag\groep\BbWoonoord;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use function substr_count;
 
 /**
@@ -86,112 +88,115 @@ use function substr_count;
  */
 class CsrBB extends Parser
 {
-	protected $tags = [
-		// Standard
-		BbBold::class,
-		BbClear::class,
-		BbCode::class,
-		BbCommentaar::class,
-		BbDiv::class,
-		BbEmail::class,
-		BbHeading::class,
-		BbHorizontalRule::class,
-		BbItalic::class,
-		BbLeet::class,
-		BbLishort::class,
-		BbList::class,
-		BbListItem::class,
-		BbMe::class,
-		BbNewline::class,
-		BbNobold::class,
-		BbQuote::class,
-		BbStrikethrough::class,
-		BbSubscript::class,
-		BbSuperscript::class,
-		BbTable::class,
-		BbTableCell::class,
-		BbTableHeader::class,
-		BbTableRow::class,
-		BbUnderline::class,
-		// Custom
-		BbBb::class,
-		BbActiviteit::class,
-		BbAudio::class,
-		BbBestuur::class,
-		BbBijbel::class,
-		BbBoek::class,
-		BbCitaat::class,
-		BbCodeInline::class,
-		BbCommissie::class,
-		BbDocument::class,
-		BbForum::class,
-		BbForumPlaatje::class,
-		BbFoto::class,
-		BbFotoalbum::class,
-		BbGroep::class,
-		BbImg::class,
-		BbInstelling::class,
-		BbIsHetAl::class,
-		BbKetzer::class,
-		BbLedenmemoryscores::class,
-		BbLid::class,
-		BbLocatie::class,
-		BbMaaltijd::class,
-		BbNeuzen::class,
-		BbOfftopic::class,
-		BbOndervereniging::class,
-		BbOrderedList::class,
-		BbParagraph::class,
-		BbPeiling::class,
-		BbPrive::class,
-		BbQuery::class,
-		BbReldate::class,
-		BbSpotify::class,
-		BbTaal::class,
-		BbTwitter::class,
-		BbUbboff::class,
-		BbUrl::class,
-		BbVerklapper::class,
-		BbVerticale::class,
-		BbVideo::class,
-		BbWerkgroep::class,
-		BbWoonoord::class,
-		BbYoutube::class,
-		BbNovietVanDeDag::class,
-		BbAanmelder::class,
-		BbAftel::class,
-	];
+	public function getTags()
+	{
+		return [
+			// Standard
+			BbBold::class,
+			BbClear::class,
+			BbCode::class,
+			BbCommentaar::class,
+			BbDiv::class,
+			BbEmail::class,
+			BbHeading::class,
+			BbHorizontalRule::class,
+			BbItalic::class,
+			BbLeet::class,
+			BbLishort::class,
+			BbList::class,
+			BbListItem::class,
+			BbMe::class,
+			BbNewline::class,
+			BbNobold::class,
+			BbQuote::class,
+			BbStrikethrough::class,
+			BbSubscript::class,
+			BbSuperscript::class,
+			BbTable::class,
+			BbTableCell::class,
+			BbTableHeader::class,
+			BbTableRow::class,
+			BbUnderline::class,
+			BbBb::class,
+			BbActiviteit::class,
+			BbAudio::class,
+			BbBestuur::class,
+			BbBijbel::class,
+			BbBoek::class,
+			BbCitaat::class,
+			BbCodeInline::class,
+			BbCommissie::class,
+			BbDocument::class,
+			BbForum::class,
+			BbForumPlaatje::class,
+			BbFoto::class,
+			BbFotoalbum::class,
+			BbGroep::class,
+			BbImg::class,
+			BbInstelling::class,
+			BbIsHetAl::class,
+			BbKetzer::class,
+			BbLedenmemoryscores::class,
+			BbLid::class,
+			BbLocatie::class,
+			BbMaaltijd::class,
+			BbNeuzen::class,
+			BbOfftopic::class,
+			BbOndervereniging::class,
+			BbOrderedList::class,
+			BbParagraph::class,
+			BbPeiling::class,
+			BbPrive::class,
+			BbQuery::class,
+			BbReldate::class,
+			BbSpotify::class,
+			BbTaal::class,
+			BbTwitter::class,
+			BbUbboff::class,
+			BbUrl::class,
+			BbVerklapper::class,
+			BbVerticale::class,
+			BbVideo::class,
+			BbWerkgroep::class,
+			BbWoonoord::class,
+			BbYoutube::class,
+			BbNovietVanDeDag::class,
+			BbAanmelder::class,
+			BbAftel::class,
+		];
+	}
 	/**
-	 * @var ContainerInterface
+	 * @var ContainerInterface (bevat alleen CsrDelft\view\bbcode\tags)
 	 */
 	private $container;
 
-	public function __construct(ContainerInterface $container, $env = null)
+	public function __construct(ServiceLocator $container)
 	{
-		parent::__construct($env);
+		parent::__construct();
 
 		$this->container = $container;
 	}
 
-	public static function parse($bbcode)
+	public function parse($bbcode)
 	{
-		$parser = new CsrBB(ContainerFacade::getContainer());
-		return $parser->getHtml($bbcode);
+		$this->allow_html = false;
+		$this->standard_html = false;
+		return $this->getHtml($bbcode);
 	}
 
-	public static function parseHtml($bbcode, $inline = false)
+	public function parseHtml($bbcode, $inline = false)
 	{
-		$parser = new CsrBB(ContainerFacade::getContainer());
-		$parser->allow_html = true;
-		$parser->standard_html = $inline;
-		return $parser->getHtml($bbcode);
+		$this->allow_html = true;
+		$this->standard_html = $inline;
+		return $this->getHtml($bbcode);
 	}
 
 	public static function parseMail($bbcode)
 	{
 		$env = new BbEnv();
 		$env->mode = 'light';
-		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
+		$parser = ContainerFacade::getContainer()->get(CsrBB::class);
+		$parser->setEnv($env);
 		return $parser->getHtml($bbcode);
 	}
 
@@ -199,7 +204,8 @@ class CsrBB extends Parser
 	{
 		$env = new BbEnv();
 		$env->mode = 'light';
-		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
+		$parser = ContainerFacade::getContainer()->get(CsrBB::class);
+		$parser->setEnv($env);
 		return $parser->getHtml($bbcode);
 	}
 
@@ -207,16 +213,17 @@ class CsrBB extends Parser
 	{
 		$env = new BbEnv();
 		$env->mode = 'preview';
-		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
+		$parser = ContainerFacade::getContainer()->get(CsrBB::class);
+		$parser->setEnv($env);
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parsePlain($bbcode)
+	public function parsePlain($bbcode)
 	{
 		$env = new BbEnv();
 		$env->mode = 'plain';
-		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
-		return $parser->getHtml($bbcode);
+		$this->setEnv($env);
+		return $this->getHtml($bbcode);
 	}
 
 	/**
@@ -284,7 +291,7 @@ class CsrBB extends Parser
 		);
 	}
 
-	protected function createTagInstance(string $tag, Parser $parser, $env)
+	protected function createTagInstance(string $tag, Parser $parser, $env): BbTag
 	{
 		if ($this->container->has($tag)) {
 			$tag = $this->container->get($tag);

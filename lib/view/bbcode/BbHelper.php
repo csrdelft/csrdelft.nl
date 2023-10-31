@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode;
 
-use CsrDelft\bb\BbEnv;
+use CsrDelft\Lib\Bb\BbEnv;
 use CsrDelft\common\Util\HostUtil;
 
 /**

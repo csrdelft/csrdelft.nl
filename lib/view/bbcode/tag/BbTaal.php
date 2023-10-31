@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -26,18 +26,18 @@ class BbTaal extends BbTag
 		$this->requestStack = $requestStack;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): array
 	{
 		return ['taal'];
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->taal = $arguments['taal'];
 		$this->readContent();
 	}
 
-	public function render()
+	public function render(): string
 	{
 		if ($this->requestStack->getCurrentRequest()->getLocale() == $this->taal) {
 			return $this->getContent();

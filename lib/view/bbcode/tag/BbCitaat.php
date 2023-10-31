@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
@@ -43,7 +43,7 @@ class BbCitaat extends BbTag
 		return 'citaat';
 	}
 
-	public function renderPlain()
+	public function renderPlain(): string
 	{
 		$text = 'Citaat';
 		if ($this->bron_profiel != null) {
@@ -58,7 +58,7 @@ class BbCitaat extends BbTag
 		return $text . ":\n " . trim($this->getContent());
 	}
 
-	public function renderPreview()
+	public function renderPreview(): string
 	{
 		$text = '🗣️ ';
 		if ($this->bron_profiel != null) {
@@ -73,7 +73,7 @@ class BbCitaat extends BbTag
 		return $text;
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$text = '<div class="citaatContainer bb-tag-citaat">Citaat';
 		if ($this->bron_profiel != null) {
@@ -116,7 +116,7 @@ class BbCitaat extends BbTag
 	 * @example [citaat]Citaat[/citaat]
 	 * @example [citaat=1234]Citaat[/citaat]
 	 */
-	public function render($arguments = [])
+	public function render(): string
 	{
 		if (!$this->hidden) {
 			$content = $this->getContent();
@@ -145,7 +145,7 @@ class BbCitaat extends BbTag
 			'</blockquote></div>';
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->env->quote_level++;
 		$this->readContent();

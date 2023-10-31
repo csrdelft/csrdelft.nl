@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use Symfony\Component\Security\Core\Security;
@@ -36,7 +36,7 @@ class BbInstelling extends BbTag
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
@@ -46,7 +46,7 @@ class BbInstelling extends BbTag
 		return 'instelling';
 	}
 
-	public function render()
+	public function render(): string
 	{
 		if ($this->instelling == null) {
 			return 'Geen instelling opgegeven';
@@ -70,7 +70,7 @@ class BbInstelling extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->readContent();
 		if (

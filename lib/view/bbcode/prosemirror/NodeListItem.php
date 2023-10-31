@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
-use CsrDelft\bb\tag\BbListItem;
-use CsrDelft\bb\tag\BbNode;
+use CsrDelft\Lib\Bb\Tag\BbListItem;
+use CsrDelft\Lib\Bb\Tag\BbNode;
 
 class NodeListItem implements Node
 {

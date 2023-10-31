@@ -26,7 +26,7 @@
 		"beberlei/doctrineextensions": "^1.2",
 		"clegginabox/pdf-merger": "dev-master",
 		"composer/package-versions-deprecated": "1.11.99.1",
-		"csrdelft/bb": "^1.3",
+		"csrdelft/bb": "dev-type-hints",
 		"doctrine/annotations": "^1.0",
 		"doctrine/doctrine-bundle": "^2.3",
 		"doctrine/doctrine-migrations-bundle": "^3.1",

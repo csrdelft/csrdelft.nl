@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag\groep;
 
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use Symfony\Component\Security\Core\Security;
@@ -48,12 +48,12 @@ class BbVerticale extends BbTag
 		return 'verticale';
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
-	public function render()
+	public function render(): string
 	{
 		try {
 			$verticale = $this->verticalenRepository->get($this->letter);
@@ -72,7 +72,7 @@ class BbVerticale extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->letter = $this->readMainArgument($arguments);
 	}

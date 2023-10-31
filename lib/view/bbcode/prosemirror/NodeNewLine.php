@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
-use CsrDelft\bb\tag\BbNewline;
-use CsrDelft\bb\tag\BbNode;
+use CsrDelft\Lib\Bb\Tag\BbNewline;
+use CsrDelft\Lib\Bb\Tag\BbNode;
 
 class NodeNewLine implements Node
 {

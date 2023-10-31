@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag\embed;
 
-use CsrDelft\bb\BbException;
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbException;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -31,12 +31,12 @@ class BbVideo extends BbTag
 		return 'video';
 	}
 
-	public function renderPreview()
+	public function renderPreview(): string
 	{
 		return '📹';
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		list($src, $type) = $this->processVideo();
 
@@ -47,7 +47,7 @@ class BbVideo extends BbTag
 	 * @return string
 	 * @throws BbException
 	 */
-	public function render()
+	public function render(): string
 	{
 		list($src, $type) = $this->processVideo();
 
@@ -125,7 +125,7 @@ HTML;
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->url = $this->readMainArgument($arguments);
 	}

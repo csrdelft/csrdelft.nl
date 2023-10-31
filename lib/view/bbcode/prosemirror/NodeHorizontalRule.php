@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
-use CsrDelft\bb\tag\BbHorizontalRule;
-use CsrDelft\bb\tag\BbNode;
+use CsrDelft\Lib\Bb\Tag\BbHorizontalRule;
+use CsrDelft\Lib\Bb\Tag\BbNode;
 
 class NodeHorizontalRule implements Node
 {

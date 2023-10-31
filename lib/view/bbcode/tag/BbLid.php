@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbException;
-use CsrDelft\bb\BbTag;
+use CsrDelft\Lib\Bb\BbException;
+use CsrDelft\Lib\Bb\BbTag;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\BbHelper;
@@ -45,13 +45,13 @@ class BbLid extends BbTag
 		return 'lid';
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->security->isGranted('ROLE_LEDEN_READ') ||
 			$this->security->isGranted('ROLE_OUDLEDEN_READ');
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$profiel = $this->getProfiel();
 		return BbHelper::lightLinkInline(
@@ -83,7 +83,7 @@ class BbLid extends BbTag
 	 * @return string
 	 * @throws BbException
 	 */
-	public function render()
+	public function render(): string
 	{
 		$profiel = $this->getProfiel();
 		return $profiel->getLink('user');
@@ -92,7 +92,7 @@ class BbLid extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->uid = $this->readMainArgument($arguments);
 	}

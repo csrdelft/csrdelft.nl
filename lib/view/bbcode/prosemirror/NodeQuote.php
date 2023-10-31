@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
-use CsrDelft\bb\tag\BbNode;
-use CsrDelft\bb\tag\BbQuote;
+use CsrDelft\Lib\Bb\Tag\BbNode;
+use CsrDelft\Lib\Bb\Tag\BbQuote;
 
 class NodeQuote implements Node
 {
