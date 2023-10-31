@@ -6,6 +6,7 @@ use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
+use CsrDelft\service\AgendaService;
 use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -42,7 +43,7 @@ class IsHetAlView implements View
 	public function __construct(
 		LidInstellingenRepository $lidInstellingenRepository,
 		RequestStack $requestStack,
-		AgendaRepository $agendaRepository,
+		AgendaService $agendaService,
 		WoordVanDeDagRepository $woordVanDeDagRepository,
 		$ishetal
 	) {
@@ -136,14 +137,14 @@ class IsHetAlView implements View
 
 			case 'kring':
 				// Matcht 'kring 42', 'loremipsumkring', 'kringlezing', maar niet 'kringleidersinstructie'.
-				$vandaag = $agendaRepository->zoekRegexAgenda(
+				$vandaag = $agendaService->zoekRegexAgenda(
 					'/kring(?: \d+|\b|lezing\b)/i'
 				);
 				$this->ja = $vandaag instanceof AgendaItem;
 				break;
 
 			default:
-				$vandaag = $agendaRepository->zoekWoordAgenda($this->model);
+				$vandaag = $agendaService->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
 					$this->ja = true;
 					/*

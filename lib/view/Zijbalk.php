@@ -12,6 +12,7 @@ use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
+use CsrDelft\service\AgendaService;
 use CsrDelft\service\forum\ForumDelenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
@@ -33,13 +34,9 @@ class Zijbalk
 	 */
 	private $menuItemRepository;
 	/**
-	 * @var ForumDradenRepository
+	 * @var AgendaService
 	 */
-	private $forumDradenRepository;
-	/**
-	 * @var AgendaRepository
-	 */
-	private $agendaRepository;
+	private $agendaService;
 	/**
 	 * @var ForumPostsRepository
 	 */
@@ -73,9 +70,8 @@ class Zijbalk
 		RequestStack $requestStack,
 		Environment $twig,
 		MenuItemRepository $menuItemRepository,
-		ForumDradenRepository $forumDradenRepository,
 		ForumDelenService $forumDelenService,
-		AgendaRepository $agendaRepository,
+		AgendaService $agendaService,
 		ForumPostsRepository $forumPostsRepository,
 		FotoAlbumRepository $fotoAlbumRepository,
 		VerjaardagenService $verjaardagenService,
@@ -84,8 +80,7 @@ class Zijbalk
 	) {
 		$this->twig = $twig;
 		$this->menuItemRepository = $menuItemRepository;
-		$this->forumDradenRepository = $forumDradenRepository;
-		$this->agendaRepository = $agendaRepository;
+		$this->agendaService = $agendaService;
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
 		$this->verjaardagenService = $verjaardagenService;
@@ -128,7 +123,7 @@ class Zijbalk
 			return (new IsHetAlView(
 				$this->lidInstellingenRepository,
 				$this->requestStack,
-				$this->agendaRepository,
+				$this->agendaService,
 				$this->woordVanDeDagRepository,
 				InstellingUtil::lid_instelling('zijbalk', 'ishetal')
 			))->__toString();
@@ -177,7 +172,7 @@ class Zijbalk
 			InstellingUtil::lid_instelling('zijbalk', 'agenda_max') > 0
 		) {
 			$aantalWeken = InstellingUtil::lid_instelling('zijbalk', 'agendaweken');
-			$items = $this->agendaRepository->getAllAgendeerbaar(
+			$items = $this->agendaService->getAllAgendeerbaar(
 				date_create_immutable(),
 				date_create_immutable('next saturday + ' . $aantalWeken . ' weeks'),
 				false,
