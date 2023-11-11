@@ -15,7 +15,6 @@ use CsrDelft\repository\eetplan\EetplanRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\EetplanService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenForm;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenTable;
@@ -42,8 +41,6 @@ class EetplanController extends AbstractController
 {
 	/** @var string */
 	private $lidjaar;
-	/** @var EetplanService */
-	private $eetplanService;
 	/** @var EetplanRepository */
 	private $eetplanRepository;
 	/** @var EetplanBekendenRepository */
@@ -52,12 +49,10 @@ class EetplanController extends AbstractController
 	private $woonoordenRepository;
 
 	public function __construct(
-		EetplanService $eetplanService,
 		EetplanRepository $eetplanRepository,
 		EetplanBekendenRepository $eetplanBekendenRepository,
 		WoonoordenRepository $woonoordenRepository
 	) {
-		$this->eetplanService = $eetplanService;
 		$this->eetplanRepository = $eetplanRepository;
 		$this->eetplanBekendenRepository = $eetplanBekendenRepository;
 		$this->woonoordenRepository = $woonoordenRepository;
@@ -419,7 +414,7 @@ class EetplanController extends AbstractController
 			return $form;
 		} else {
 			$avond = $form->getValues()['avond'];
-			$eetplan = $this->eetplanService->maakEetplan($avond, $this->lidjaar);
+			$eetplan = $this->eetplanRepository->maakEetplan($avond, $this->lidjaar);
 
 			foreach ($eetplan as $sessie) {
 				$this->eetplanRepository->save($sessie);

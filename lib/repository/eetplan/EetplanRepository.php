@@ -2,9 +2,14 @@
 
 namespace CsrDelft\repository\eetplan;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\eetplan\Eetplan;
+use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\groepen\WoonoordenRepository;
+use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\EetplanFactory;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -23,8 +28,24 @@ class EetplanRepository extends AbstractRepository
 {
 	const FMT_DATE = 'dd-MM-Y';
 
-	public function __construct(ManagerRegistry $registry) {
+	/**
+	 * @var EetplanBekendenRepository
+	 */
+	private $eetplanBekendenRepository;
+	/**
+	 * @var ProfielRepository
+	 */
+	private $profielRepository;
+
+	public function __construct(
+		EetplanBekendenRepository $eetplanBekendenRepository,
+		ProfielRepository $profielRepository,
+		ManagerRegistry $registry
+	) {
 		parent::__construct($registry, Eetplan::class);
+
+		$this->eetplanBekendenRepository = $eetplanBekendenRepository;
+		$this->profielRepository = $profielRepository;
 	}
 
 	public function avondHasEetplan($avond)
@@ -102,6 +123,37 @@ class EetplanRepository extends AbstractRepository
 			'novieten' => array_values($eetplanFeut),
 			'avonden' => array_values($avonden),
 		];
+	}
+
+	/**
+	 * @param string $avond
+	 * @param integer $lidjaar
+	 *
+	 * @return Eetplan[]
+	 */
+	public function maakEetplan($avond, $lidjaar)
+	{
+		$factory = new EetplanFactory();
+
+		$bekenden = $this->eetplanBekendenRepository->getBekendenVoorLidjaar(
+			$lidjaar
+		);
+		$factory->setBekenden($bekenden);
+
+		$bezocht = $this->getBezocht($lidjaar);
+		$factory->setBezocht($bezocht);
+
+		$novieten = $this->profielRepository->getNovietenVanLaatsteLidjaar(
+			$lidjaar
+		);
+		$factory->setNovieten($novieten);
+
+		$huizen = ContainerFacade::getContainer()
+			->get(WoonoordenRepository::class)
+			->findBy(['eetplan' => true, 'status' => GroepStatus::HT()]);
+		$factory->setHuizen($huizen);
+
+		return $factory->genereer($avond, true);
 	}
 
 	/**

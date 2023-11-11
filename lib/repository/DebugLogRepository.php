@@ -72,12 +72,8 @@ class DebugLogRepository extends AbstractRepository
 		}
 		$entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '127.0.0.1';
 		$entry->referer = @$_SERVER['HTTP_REFERER'] ?: 'CLI';
-		if ($this->requestStack->getCurrentRequest()) {
-			$entry->request =
-				$this->requestStack->getCurrentRequest()->getRequestUri() ?: 'CLI';
-		} else {
-			$entry->request = 'CLI';
-		}
+		$entry->request =
+			$this->requestStack->getCurrentRequest()->getRequestUri() ?: 'CLI';
 		$entry->user_agent = @$_SERVER['HTTP_USER_AGENT'] ?: 'CLI';
 
 		$this->getEntityManager()->persist($entry);

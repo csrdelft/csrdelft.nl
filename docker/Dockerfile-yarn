@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:12-alpine
 
 RUN apk add --no-cache \
 	git \
@@ -15,4 +15,5 @@ RUN npm install -g cross-env webpack-cli
 
 WORKDIR /app
 
-CMD yarn install && yarn docker
+ENTRYPOINT ["yarn"]
+CMD ["run", "docker"]
