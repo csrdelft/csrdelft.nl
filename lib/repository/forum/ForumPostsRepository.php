@@ -218,7 +218,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		$results = $this->createQueryBuilder('fp')
 			->addSelect('MATCH(fp.tekst) AGAINST (:query) AS score')
 			->where(
-				'fp.wacht_goedkeuring = false and fp.verwijderd = false and fp.laatst_gewijzigd >= :van and fp.laatst_gewijzigd <= :tot'
+				'fp.wacht_goedkeuring = false and fp.verwijderd = false and fp.laatst_gewijzigd >= :van and fp.laatst_gewijzigd <= :tot and MATCH(fp.tekst) AGAINST (:query) > 0'
 			)
 			->setParameter('query', $forumZoeken->zoekterm)
 			->setParameter('van', $forumZoeken->van)

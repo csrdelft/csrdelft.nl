@@ -74,6 +74,18 @@ class ProfielToestemmingProxy extends Profiel
 
 	public function __get(string $name)
 	{
+		if (! $this->zichtbaar($name)) {
+			return null;
+		}
+
+		// Als profiel->get... bestaat, gebruik de getter
+		// Voor compatibiliteit met twig, want daar is geen verschil tussen
+		// een getter en een property.
+		$getter = 'get' . ucfirst($name);
+		if (method_exists($this, $getter)) {
+			return $this->profiel->{$getter}();
+		}
+
 		return $this->zichtbaar($name) ? $this->profiel->$name : null;
 	}
 
