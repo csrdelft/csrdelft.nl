@@ -106,3 +106,8 @@ package-lock.json
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 csrdelft.nl.code-workspace
+
+# Devenv
+.devenv*
+devenv.local.nix
+
