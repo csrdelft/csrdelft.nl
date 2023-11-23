@@ -9,7 +9,7 @@ use CsrDelft\common\Util\UrlUtil;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * Alle mailadressen in to of bcc zullen als de host niet syrinx is
+ * Alle mailadressen in to of bcc zullen als de host niet production is
  * worden aangepast naar pubcie@csrdelft.nl
  */
 class Mail
@@ -59,7 +59,7 @@ class Mail
 	}
 
 	/**
-	 * Mails uit testomgevingen moet en niet naar andere dingen dan naar
+	 * Mails uit testomgevingen moeten niet naar andere dingen dan naar
 	 * het pubcie-mailadres.
 	 * @param string $email
 	 * @return string
@@ -75,9 +75,7 @@ class Mail
 
 	public function inDebugMode(): bool
 	{
-		// Dirty fix voor veiligheidslek... Welke feut heeft dit geprogrammeerd ;)
-		// return !HostUtil::isSyrinx();
-		return false;
+		return !HostUtil::isProduction();
 	}
 
 	public function addBcc(array $bcc)

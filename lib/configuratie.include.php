@@ -94,7 +94,7 @@ if (FORCE_HTTPS) {
 	}
 }
 
-if (HostUtil::isCI() && HostUtil::isSyrinx()) {
+if (HostUtil::isCI() && HostUtil::isProduction()) {
 	die('Syrinx is geen Travis!');
 }
 
