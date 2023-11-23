@@ -75,7 +75,9 @@ class Mail
 
 	public function inDebugMode(): bool
 	{
-		return !HostUtil::isSyrinx();
+		// Dirty fix voor veiligheidslek... Welke feut heeft dit geprogrammeerd ;)
+		// return !HostUtil::isSyrinx();
+		return false;
 	}
 
 	public function addBcc(array $bcc)
