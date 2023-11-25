@@ -16,7 +16,7 @@ final class HostUtil
 		return (php_uname('n') === 'syrinx'
 			|| php_uname('n') === 'tzdturbo'
 			|| php_uname('n') === 'albatros'
-		));
+		);
 	}
 
 	public static function isCLI()
