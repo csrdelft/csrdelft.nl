@@ -14,7 +14,6 @@ final class HostUtil
 	public static function isProduction()
 	{
 		// Controleer voor alle namen die de production server had/heeft/zal hebben
-
 		return !ContainerFacade::getContainer()->get('kernel')->isDebug();
 	}
 
