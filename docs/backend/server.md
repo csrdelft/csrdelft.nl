@@ -41,13 +41,18 @@ Hier kun je de nieuwe key toevoegen.
 Als je meerdere bestanden wilt opladen, zoals bijvoorbeeld de novietenfoto's, is het handig om een meer visuele interface te hebben. 
 Je kan hiervoor bijvoobeeld FileZilla gebruiken, hiermee kan je gewoon bestanden vanaf je eigen computer naar de server slepen. 
 Om te verbinden, ga je naar File -> Site manager. Gebruik dan deze instellingen:
+
 ![Filezilla!](/assets/images/Filezilla.png)
+
 Vul dan bij Host hetzelfde in als wat je doet bij het verbinden over SSH, en gebruik de Key File waarmee je ook op de server kan.
 
 ## Verbinden met de database
 **Hiermee kan aanpassingen maken aan de databases van de Stek, dit heeft direct effect op de live Stek! Doe dit dus alleen als je weet wat je doet.**
 
 Om de database te managen kan je bijvoorbeeld HeidiSQL gebruiken. Voeg een nieuwe sessie toe, en gebruik de volgende instellingen:
+
 ![HeidiSQL!](/assets/images/Heidi1.png)
+
 ![HeidiSQL!](/assets/images/Heidi1.png)
+
 Het wachtwoord kun je op de server vinden, vraag hiervoor een PubCie lid. Vul bij Host wederom etzelfde in als wat je doet bij het verbinden over SSH, en gebruik de Key File waarmee je ook op de server kan.
