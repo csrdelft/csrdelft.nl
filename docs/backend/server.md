@@ -22,6 +22,12 @@ Als dit niet direct werkt, is de server migratie uit 2023 waarschijnlijk nog gaa
 
 Als alles goed is gegaan krijg je tzdturbo te zien op je scherm, en nog wat meer login informatie. Hier kan je met de gebruikelijke command line commands doorheen lopen.
 
+## GitHub Veranderingen doorvoeren
+
+Als je nieuwe code hebt toegevoegd en hebt gemerged met de master branch op GitHub, moeten die nog doorgevoerd worden op de server. Gebruik simpelweg:
+
+'composer update-prod'
+
 ## Key toevoegen
 
 Als je toegang hebt tot de server zal je Private Key al toegevoegd zijn. Als je een nieuwe key wilt toevoegen, gebruik:
