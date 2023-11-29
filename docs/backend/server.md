@@ -42,7 +42,7 @@ Als je meerdere bestanden wilt opladen, zoals bijvoorbeeld de novietenfoto's, is
 Je kan hiervoor bijvoobeeld FileZilla gebruiken, hiermee kan je gewoon bestanden vanaf je eigen computer naar de server slepen. 
 Om te verbinden, ga je naar File -> Site manager. Gebruik dan deze instellingen:
 
-![Filezilla!](/assets/images/Filezilla.png)
+![Filezilla!](https://github.com/csrdelft/csrdelft.nl/blob/3b7b40f391ffb33fc8328fcc3d4faa6562e952a8/assets/images/Filezilla.png)
 
 Vul dan bij Host hetzelfde in als wat je doet bij het verbinden over SSH, en gebruik de Key File waarmee je ook op de server kan.
 
@@ -51,8 +51,8 @@ Vul dan bij Host hetzelfde in als wat je doet bij het verbinden over SSH, en geb
 
 Om de database te managen kan je bijvoorbeeld HeidiSQL gebruiken. Voeg een nieuwe sessie toe, en gebruik de volgende instellingen:
 
-![HeidiSQL!](/assets/images/Heidi1.png)
+![HeidiSQL!](https://github.com/csrdelft/csrdelft.nl/blob/3b7b40f391ffb33fc8328fcc3d4faa6562e952a8/assets/images/Heidi1.png)
 
-![HeidiSQL!](/assets/images/Heidi1.png)
+![HeidiSQL!](https://github.com/csrdelft/csrdelft.nl/blob/3b7b40f391ffb33fc8328fcc3d4faa6562e952a8/assets/images/Heidi2.png)
 
 Het wachtwoord kun je op de server vinden, vraag hiervoor een PubCie lid. Vul bij Host wederom etzelfde in als wat je doet bij het verbinden over SSH, en gebruik de Key File waarmee je ook op de server kan.
