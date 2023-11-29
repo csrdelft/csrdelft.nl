@@ -113,11 +113,12 @@ class FotoAlbumRepository extends AbstractRepository
 	 */
 	public function delete(FotoAlbum $album)
 	{
-		$path = $album->path . '_resized';
+		
+		$path = rtrim($album->path, "/") . '/_resized';
 		if (file_exists($path)) {
 			rmdir($path);
 		}
-		$path = $album->path . '_thumbs';
+		$path = rtrim($album->path, "/") . '/_thumbs';
 		if (file_exists($path)) {
 			rmdir($path);
 		}
