@@ -9,7 +9,7 @@ title: Server
 
 ## Verbinden over SSH
 
-Directe verbinding met de server kan relatief eenvoudig over SSH. Hiervoor moet wel je Public Key toegevoegd zijn, zie bijvoorbeeld [deze](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) tutorial van GitHub hiervoor. 
+Directe verbinding met de server kan relatief eenvoudig over SSH. Hiervoor moet wel je Public Key toegevoegd zijn, zie bijvoorbeeld [deze](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) tutorial van GitHub hiervoor.
 Voor de veiligheid kan alleen iemand met toegang tot de server deze key toevoegen, vraag daarvoor dus even een huidig PubCie lid.
 
 Als je key is toegevoegd kan je via Windows Powershell of een andere Command Prompt verbinden met het commando:
@@ -46,8 +46,8 @@ Hier kun je de nieuwe key toevoegen.
 
 ## Bestanden opladen
 
-Als je meerdere bestanden wilt opladen, zoals bijvoorbeeld de novietenfoto's, is het handig om een meer visuele interface te hebben. 
-Je kan hiervoor bijvoobeeld FileZilla gebruiken, hiermee kan je gewoon bestanden vanaf je eigen computer naar de server slepen. 
+Als je meerdere bestanden wilt opladen, zoals bijvoorbeeld de novietenfoto's, is het handig om een meer visuele interface te hebben.
+Je kan hiervoor bijvoobeeld FileZilla gebruiken, hiermee kan je gewoon bestanden vanaf je eigen computer naar de server slepen.
 Om te verbinden, ga je naar File -> Site manager. Gebruik dan deze instellingen:
 
 ![Filezilla!](https://i.imgur.com/NuWpdDn.png)
@@ -55,6 +55,7 @@ Om te verbinden, ga je naar File -> Site manager. Gebruik dan deze instellingen:
 Vul dan bij Host hetzelfde in als wat je doet bij het verbinden over SSH, en gebruik de Key File waarmee je ook op de server kan.
 
 ## Verbinden met de database
+
 **Hiermee kan aanpassingen maken aan de databases van de Stek, dit heeft direct effect op de live Stek! Doe dit dus alleen als je weet wat je doet.**
 
 Om de database te managen kan je bijvoorbeeld HeidiSQL gebruiken. Voeg een nieuwe sessie toe, en gebruik de volgende instellingen:
