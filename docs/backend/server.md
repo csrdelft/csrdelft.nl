@@ -14,11 +14,15 @@ Voor de veiligheid kan alleen iemand met toegang tot de server deze key toevoege
 
 Als je key is toegevoegd kan je via Windows Powershell of een andere Command Prompt verbinden met het commando:
 
-'ssh csrdelft@csrdelft.nl'
+<pre>
+ssh csrdelft@csrdelft.nl
+</pre>
 
 Als dit niet direct werkt, is de server migratie uit 2023 waarschijnlijk nog gaande, probeer dan:
 
-'ssh csrdelft@tzdturbo.knorrie.org'
+<pre>
+ssh csrdelft@tzdturbo.knorrie.org
+</pre>
 
 Als alles goed is gegaan krijg je tzdturbo te zien op je scherm, en nog wat meer login informatie. Hier kan je met de gebruikelijke command line commands doorheen lopen.
 
@@ -26,13 +30,17 @@ Als alles goed is gegaan krijg je tzdturbo te zien op je scherm, en nog wat meer
 
 Als je nieuwe code hebt toegevoegd en hebt gemerged met de master branch op GitHub, moeten die nog doorgevoerd worden op de server. Gebruik simpelweg:
 
-'composer update-prod'
+<pre>
+composer update-prod
+</pre>
 
 ## Key toevoegen
 
 Als je toegang hebt tot de server zal je Private Key al toegevoegd zijn. Als je een nieuwe key wilt toevoegen, gebruik:
 
-'nano /home/csrdelft/.ssh/authorized_keys'
+<pre>
+nano /home/csrdelft/.ssh/authorized_keys
+</pre>
 
 Hier kun je de nieuwe key toevoegen.
 
@@ -42,7 +50,7 @@ Als je meerdere bestanden wilt opladen, zoals bijvoorbeeld de novietenfoto's, is
 Je kan hiervoor bijvoobeeld FileZilla gebruiken, hiermee kan je gewoon bestanden vanaf je eigen computer naar de server slepen. 
 Om te verbinden, ga je naar File -> Site manager. Gebruik dan deze instellingen:
 
-![Filezilla!](https://github.com/csrdelft/csrdelft.nl/blob/3b7b40f391ffb33fc8328fcc3d4faa6562e952a8/assets/images/Filezilla.png)
+![Filezilla!](https://i.imgur.com/NuWpdDn.png)
 
 Vul dan bij Host hetzelfde in als wat je doet bij het verbinden over SSH, en gebruik de Key File waarmee je ook op de server kan.
 
@@ -51,8 +59,7 @@ Vul dan bij Host hetzelfde in als wat je doet bij het verbinden over SSH, en geb
 
 Om de database te managen kan je bijvoorbeeld HeidiSQL gebruiken. Voeg een nieuwe sessie toe, en gebruik de volgende instellingen:
 
-![HeidiSQL!](https://github.com/csrdelft/csrdelft.nl/blob/3b7b40f391ffb33fc8328fcc3d4faa6562e952a8/assets/images/Heidi1.png)
+![HeidiSQL!](https://i.imgur.com/NBHvVRN.png)
 
-![HeidiSQL!](https://github.com/csrdelft/csrdelft.nl/blob/3b7b40f391ffb33fc8328fcc3d4faa6562e952a8/assets/images/Heidi2.png)
-
+![HeidiSQL!](https://i.imgur.com/OkDbkpj.png)
 Het wachtwoord kun je op de server vinden, vraag hiervoor een PubCie lid. Vul bij Host wederom etzelfde in als wat je doet bij het verbinden over SSH, en gebruik de Key File waarmee je ook op de server kan.
