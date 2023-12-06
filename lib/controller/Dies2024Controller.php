@@ -10,7 +10,7 @@ class Dies2024Controller extends AbstractController
 {
 	/**
 	 * @return Response
-	 * @Route("/premiere")
+	 * @Route("/lumiere")
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function lustrum()
