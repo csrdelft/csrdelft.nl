@@ -265,7 +265,8 @@ section {
 }
 .programma {
 	text-align: center;
-	background-color: $kleur-blauw-1; //$lightgray-transparant;
+	background: url("../../images/dies2024/Achtergrond.svg");
+
 	@media screen and (max-width: 768px) {
 		padding-left: 0px;
 		padding-right: 0px;
@@ -282,7 +283,6 @@ section {
 	}
 	.container {
 		.dag {
-			background-color: $kleur-blauw-1;
 			padding: 20px;
 			border-radius: 5px;
 			h2 {
