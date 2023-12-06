@@ -12,6 +12,8 @@ $kleur-paars-7: #632f7a;
 $kleur-paars-8: #8752a2;
 $kleur-paars-9: #b28abf;
 $kleur-paars-10: #ccb7d8;
+$kleur-paars-11: #7054a3;
+
 
 $kleur-blauw-11: #6da9dd;
 $kleur-blauw-12: #7db7e4;
@@ -298,10 +300,9 @@ section {
 			.activiteit {
 				padding: 20px;
 				overflow: hidden;
-				border: 1px solid $kleur-geel-19;
-				box-shadow: 0px 0px 10px $kleur-geel-20;
+
 				border-radius: 10px;
-				background-color: $kleur-geel-19;
+				background-color: $kleur-paars-11;
 				margin-bottom: 40px;
 				width: 80%;
 				@media screen and (max-width: 768px) {
@@ -314,7 +315,7 @@ section {
 					font-family: $font-gaistro;
 					text-transform: uppercase;
 					text-align: center;
-					color: $kleur-blauw-1;
+					color: $kleur-text-wit;
 					font-size: 2.4rem;
 					margin: 0;
 					padding: 0;
