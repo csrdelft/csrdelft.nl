@@ -197,10 +197,16 @@ section {
 		color: $kleur-geel-19;
 	}
 	h2 {
-		color: $kleur-geel-19;
+		color: $kleur-text-blauw;
 	}
 	h3 {
 		color: $kleur-geel-19;
+	}
+	.titel {
+		color: $kleur-text-blauw
+	}
+	.subkopje-etiquette {
+		color: $kleur-text-blauw
 	}
 }
 
@@ -280,6 +286,9 @@ section {
 			margin-left: 0px;
 			margin-right: 0px;
 		}
+	}
+	.titel {
+		color: $kleur-text-wit;
 	}
 	.container {
 		.dag {
