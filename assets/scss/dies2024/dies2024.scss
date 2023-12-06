@@ -144,8 +144,21 @@ a {
 			height: 100%;
 		}
 	}
-	.titel {
-		color: $kleur-text-blauw;
+
+	.titel-container {
+		height: 114px;
+	}
+
+	.container {
+		display: flex;
+		flex-direction: column;
+
+		.titel {
+			color: $kleur-text-blauw;
+			background: url("../../images/dies2024/Kader_donker.png");
+			height: 162px;
+			margin: -30px;
+		}
 	}
 }
 section {
@@ -206,6 +219,11 @@ section {
 	}
 	h3 {
 		color: $kleur-oranje-1;
+	}
+
+	.titel {
+		background: url("../../images/dies2024/Kader_donker.png");
+		height: 185px;
 	}
 }
 
@@ -287,8 +305,13 @@ section {
 	}
 	.titel {
 		color: $kleur-text-wit;
+		background: url("../../images/dies2024/Kader_licht.png");
+		height: 195px;
 	}
 	.container {
+		display: flex;
+		flex-direction: column;
+
 		.dag {
 			padding: 20px;
 			border-radius: 5px;
