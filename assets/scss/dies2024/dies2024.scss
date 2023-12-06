@@ -36,9 +36,10 @@ $kleur-oranje-25: #fcfae0;
 $kleur-wit: #ffffff;
 $kleur-zwart: #121534;
 
-$kleur-text-wit: #fBf8cc;
+$kleur-text-wit: #fbf8cc;
 $kleur-text-wit-onhover: #d3d1ad;
 $kleur-text-blauw: #39358a;
+$kleur-text-zwart: #0e143b;
 $kleur-oranje-1: #ed8a22;
 $kleur-oranje-2: #f1b770;
 $kleur-oranje-3: #fad9a8;
@@ -96,6 +97,8 @@ nav {
 	margin-top: 50px;
 	padding: 0%;
 	margin-bottom: -36px;
+	background: url("../../images/dies2024/Achtergrond.svg");
+	background-size: 100%;
 }
 
 body {
@@ -187,26 +190,20 @@ section {
 	background-color: $kleur-oranje-3;
 	p {
 		font-size: 1rem;
-		color: $kleur-geel-19;
+		color: $kleur-text-zwart;
 	}
 	.margin-bottom {
 		margin-bottom: 2rem;
 	}
 
 	h4 {
-		color: $kleur-geel-19;
+		color: $kleur-text-zwart;
 	}
-	h2 {
+	h2, .titel {
 		color: $kleur-text-blauw;
 	}
 	h3 {
-		color: $kleur-geel-19;
-	}
-	.titel {
-		color: $kleur-text-blauw
-	}
-	.subkopje-etiquette {
-		color: $kleur-text-blauw
+		color: $kleur-oranje-1;
 	}
 }
 
