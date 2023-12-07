@@ -12,7 +12,6 @@ $kleur-paars-7: #632f7a;
 $kleur-paars-8: #8752a2;
 $kleur-paars-9: #b28abf;
 $kleur-paars-10: #ccb7d8;
-$kleur-paars-11: #7054a3;
 
 $kleur-blauw-11: #6da9dd;
 $kleur-blauw-12: #7db7e4;
@@ -44,19 +43,22 @@ $kleur-text-zwart: #0e143b;
 $kleur-oranje-1: #ed8a22;
 $kleur-oranje-2: #f1b770;
 $kleur-oranje-3: #fad9a8;
+$kleur-paars-1: #9b86be;
+$kleur-paars-2: #7054a3;
 
 /* nav */
 nav {
 	background-color: $kleur-oranje-1;
+	@media screen and (max-width: 768px) {
+		display: none;
+	}
 	.container {
 		margin-top: 0px;
 	}
 	.logo {
 		width: 130px;
 		height: 100%;
-		@media screen and (max-width: 768px) {
-			margin: auto;
-		}
+		
 		img {
 			width: 100%;
 		}
@@ -92,11 +94,15 @@ nav {
 }
 
 .poster-boven {
-	margin-top: 50px;
+	margin-top: 68px;
 	padding: 0%;
 	margin-bottom: -36px;
 	background: url("../../images/dies2024/Achtergrond.svg");
 	background-size: 100%;
+
+	@media screen and (max-width: 768px) {
+		margin-top: 0;
+	}
 }
 
 body {
@@ -203,10 +209,11 @@ section {
 	}
 	h2 {
 		color: $kleur-text-blauw;
-		font-family: $font-adriane;
+		font-family: $font-copasetic;
 		text-transform: uppercase;
 	}
 	h3 {
+		font-family: $font-adriane;
 		color: $kleur-oranje-1;
 	}
 
@@ -321,7 +328,7 @@ section {
 				overflow: hidden;
 
 				border-radius: 10px;
-				background-color: $kleur-paars-11;
+				background-color: $kleur-paars-1;
 				margin-bottom: 40px;
 				width: 80%;
 				@media screen and (max-width: 768px) {
@@ -347,8 +354,8 @@ section {
 
 				> .btn {
 					font-size: large;
-					background-color: $kleur-oranje-1;
-					border-color: $kleur-oranje-1;
+					background-color: $kleur-paars-2;
+					border-color: $kleur-paars-2;
 
 					i {
 						transition: transform 0.3s;
