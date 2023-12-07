@@ -14,7 +14,6 @@ $kleur-paars-9: #b28abf;
 $kleur-paars-10: #ccb7d8;
 $kleur-paars-11: #7054a3;
 
-
 $kleur-blauw-11: #6da9dd;
 $kleur-blauw-12: #7db7e4;
 $kleur-blauw-13: #85c6ea;
@@ -49,8 +48,6 @@ $kleur-oranje-3: #fad9a8;
 /* nav */
 nav {
 	background-color: $kleur-oranje-1;
-	// 0 0 100px 60px #f0f, /* middle magenta */
-	// 0 0 140px 90px #0ff; /* outer cyan */
 	.container {
 		margin-top: 0px;
 	}
@@ -104,7 +101,6 @@ nav {
 
 body {
 	background-color: $kleur-blauw-1;
-	// background-image: url("../../images/lustrum12/dies-achtergrond.jpg"); !!!!!!!!!!!!!!!!
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
@@ -113,15 +109,6 @@ body {
 a {
 	text-decoration: none;
 }
-
-// .dies-poster {
-// 	display: flex;
-// 	flex-direction: column;
-// 	align-items: center;
-// 	img {
-
-// 	}
-// }
 
 /* video */
 .size-16x9 {
@@ -190,12 +177,10 @@ section {
 		h3 {
 			text-align: left;
 			font-size: 2.4rem;
-			// color: $bordeaux-rood;
 		}
 		h4 {
 			font-size: 2rem;
 			text-align: left;
-			// color: $bordeaux-rood;
 			text-transform: none;
 		}
 	}
@@ -246,24 +231,13 @@ section {
 			padding: 5px;
 			border-radius: 5px;
 			background-color: $kleur-geel-19;
-			// table.groep-lijst tr:nth-child(2n) {
-			// 	// background-color: $gray-transparant;
-			// }
 		}
-		// .btn-primary {
-		// 	// background-color: $oranje;
-		// 	// border-color: $oranje;
-		// }
-		// a:not(.btn) {
-		// 	// color: $oranje;
-		// }
-		// .dropdown-menu {
-		// 	// background-color: $oranje;
-		// }
+
 		a[id*="groep-lid-remove"] {
 			color: $kleur-wit;
 			// background-color: $oranje;
 		}
+
 		h3 {
 			// color: $oranje;
 			font-weight: bold;
@@ -271,19 +245,23 @@ section {
 			text-transform: uppercase;
 			font-size: 2rem;
 		}
+
 		h4 {
 			// color: $oranje;
 			font-family: $font-copasetic;
 			text-transform: uppercase;
 		}
+
 		.GroepStatistiekView {
 			background-color: $kleur-blauw-1;
 			padding: 20px;
 			border-radius: 25px;
 		}
+
 		.progress-bar {
 			background-color: $kleur-blauw-1;
 		}
+
 		.GroupAanmeldenForm {
 			input.FormElement {
 				background-color: $kleur-blauw-1;
@@ -291,9 +269,11 @@ section {
 		}
 	}
 }
+
 .verborgen {
 	display: none;
 }
+
 .programma {
 	text-align: center;
 	background: url("../../images/dies2024/Achtergrond.svg");
@@ -312,11 +292,13 @@ section {
 			margin-right: 0px;
 		}
 	}
+
 	.titel {
 		color: $kleur-text-wit;
 		background: url("../../images/dies2024/Kader_licht.png");
 		height: 195px;
 	}
+
 	.container {
 		display: flex;
 		flex-direction: column;
@@ -324,6 +306,7 @@ section {
 		.dag {
 			padding: 20px;
 			border-radius: 5px;
+
 			h2 {
 				color: $kleur-oranje-1;
 				font-size: 2.5rem;
@@ -332,6 +315,7 @@ section {
 					font-size: 3rem;
 				}
 			}
+
 			.activiteit {
 				padding: 20px;
 				overflow: hidden;
@@ -357,7 +341,6 @@ section {
 				}
 
 				p {
-					// font-family: ;
 					color: $kleur-blauw-1;
 					text-align: left;
 				}
@@ -370,6 +353,7 @@ section {
 					i {
 						transition: transform 0.3s;
 					}
+
 					&:not(.collapsed) i {
 						transform: rotate(-180deg);
 					}
@@ -377,19 +361,22 @@ section {
 
 				.dies-activiteit-ketzers {
 					overflow: hidden;
+
 					.toggler {
-						// color: $oranje;
 						cursor: pointer;
 						user-select: none;
 					}
+
 					.toggler:hover {
 						color: $kleur-blauw-12;
 					}
+
 					.bb-block {
 						border: 2px solid $kleur-blauw-1;
 						background-color: $kleur-geel-19;
 						box-shadow: 2px 2px 10px $kleur-blauw-1;
 					}
+
 					.ketzers {
 						.ketzer {
 							div {
@@ -397,31 +384,18 @@ section {
 									color: #121534;
 								}
 							}
+
 							.maaltijdketzer-wrapper {
 								padding: 20px;
 								border-radius: 20px;
 								color: $kleur-geel-19;
 								background-color: $kleur-blauw-1 !important;
+
 								a {
 									color: $kleur-geel-19;
 								}
-								// .btn-danger {
-								// 	// background: $gray-transparant;
-								// 	// border-color: transparent;
-								// }
-								// .btn-success {
-								// 	// background: $gray-transparant;
-								// 	// border-color: $bordeaux-rood;
-								// }
-								// .form-check-input {
-								// 	// background-color: transparent;
-								// 	// border-color: $bordeaux-rood;
-								// }
-								// .form-check-input:checked {
-								// 	// background-color: $bordeaux-rood;
-								// 	// border-color: $bordeaux-rood;
-								// }
 							}
+
 							h3 {
 								font-size: 1.8rem;
 							}
@@ -431,9 +405,4 @@ section {
 			}
 		}
 	}
-}
-.sponsor {
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }
