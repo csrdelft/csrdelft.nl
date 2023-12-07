@@ -52,7 +52,6 @@ nav {
 	// 0 0 100px 60px #f0f, /* middle magenta */
 	// 0 0 140px 90px #0ff; /* outer cyan */
 	.container {
-		height: 60px;
 		margin-top: 0px;
 	}
 	.logo {
@@ -68,10 +67,10 @@ nav {
 	a {
 		/* Header text */
 		color: $kleur-text-wit;
-		font-family: $font-gaistro;
-		text-transform: uppercase;
+		font-family: $font-copasetic;
+		text-transform: none;
 		text-decoration: none;
-		font-size: 19px;
+		font-size: 2rem;
 		transition: ease-in-out color 0.15s;
 
 		&:hover {
@@ -105,7 +104,7 @@ nav {
 
 body {
 	background-color: $kleur-blauw-1;
-	// background-image: url("../../images/lustrum12/dies-achtergrond.jpg");
+	// background-image: url("../../images/lustrum12/dies-achtergrond.jpg"); !!!!!!!!!!!!!!!!
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
@@ -155,6 +154,8 @@ a {
 
 		.titel {
 			color: $kleur-text-blauw;
+			font-family: $font-copasetic;
+			font-size: $h2-font-size;
 			background: url("../../images/dies2024/Kader_donker.png");
 			height: 162px;
 			margin: -30px;
@@ -205,6 +206,7 @@ section {
 	background-color: $kleur-oranje-3;
 	p {
 		font-size: 1rem;
+		font-family: $font-adriane;
 		color: $kleur-text-zwart;
 	}
 	.margin-bottom {
@@ -214,8 +216,10 @@ section {
 	h4 {
 		color: $kleur-text-zwart;
 	}
-	h2, .titel {
+	h2 {
 		color: $kleur-text-blauw;
+		font-family: $font-adriane;
+		text-transform: uppercase;
 	}
 	h3 {
 		color: $kleur-oranje-1;
@@ -224,6 +228,10 @@ section {
 	.titel {
 		background: url("../../images/dies2024/Kader_donker.png");
 		height: 185px;
+
+		h1 {
+			color: $kleur-text-blauw;
+		}
 	}
 }
 
@@ -259,13 +267,13 @@ section {
 		h3 {
 			// color: $oranje;
 			font-weight: bold;
-			font-family: $font-gaistro;
+			font-family: $font-copasetic;
 			text-transform: uppercase;
 			font-size: 2rem;
 		}
 		h4 {
 			// color: $oranje;
-			font-family: $font-gaistro;
+			font-family: $font-copasetic;
 			text-transform: uppercase;
 		}
 		.GroepStatistiekView {
@@ -316,6 +324,9 @@ section {
 			padding: 20px;
 			border-radius: 5px;
 			h2 {
+				color: $kleur-oranje-1;
+				font-size: 2.5rem;
+
 				@media screen and (max-width: 768px) {
 					font-size: 3rem;
 				}
@@ -335,7 +346,7 @@ section {
 				align-items: center;
 
 				h3 {
-					font-family: $font-gaistro;
+					font-family: $font-copasetic;
 					text-transform: uppercase;
 					text-align: center;
 					color: $kleur-text-wit;
