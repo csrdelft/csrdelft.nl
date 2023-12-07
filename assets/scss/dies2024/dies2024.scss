@@ -297,6 +297,7 @@ section {
 .programma {
 	text-align: center;
 	background: url("../../images/dies2024/Achtergrond.svg");
+	justify-content: center;
 
 	@media screen and (max-width: 768px) {
 		padding-left: 0px;
@@ -364,6 +365,7 @@ section {
 				> .btn {
 					font-size: large;
 					background-color: $kleur-oranje-1;
+					border-color: $kleur-oranje-1;
 
 					i {
 						transition: transform 0.3s;
