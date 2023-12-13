@@ -13,6 +13,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\MailService;
 use DateInterval;
 use Twig\Environment;
+use DateTime;
 
 /**
  * CorveeHerinneringenModel.class.php
@@ -59,16 +60,23 @@ class CorveeHerinneringService
 
 	public function stuurHerinnering(CorveeTaak $taak)
 	{
-		$datum = DateUtil::dateFormatIntl($taak->datum, DateUtil::DATE_FORMAT);
+		$datumCorvee = DateUtil::dateFormatIntl($taak->datum, DateUtil::DATE_FORMAT);
+		$now = new DateTime();
+		$datumAfmelden = DateUtil::dateFormatIntl(
+			$now->add(
+				DateInterval::createFromDateString('+5 days')
+			),
+			DateUtil::DATE_FORMAT
+		);
 		if (!$taak->profiel) {
 			throw new CsrGebruikerException(
-				$datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!'
+				$datumCorvee . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!'
 			);
 		}
 		$lidnaam = $taak->profiel->getNaam('civitas');
 		$to = $taak->profiel->getEmailOntvanger();
 		$from = $_ENV['EMAIL_CC'];
-		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
+		$onderwerp = 'C.S.R. Delft corvee ' . $datumCorvee;
 		$eten = '';
 		if ($taak->maaltijd !== null) {
 			$aangemeld = $this->maaltijdAanmeldingenRepository->getIsAangemeld(
@@ -82,8 +90,8 @@ class CorveeHerinneringService
 			}
 		}
 		$bericht = str_replace(
-			['LIDNAAM', 'DATUM', 'MEEETEN'],
-			[$lidnaam, $datum, $eten],
+			['LIDNAAM', 'DATUM_CORVEE', 'MEEETEN', 'DATUM_AFMELDEN'],
+			[$lidnaam, $datumCorvee, $eten, $datumAfmelden],
 			$taak->corveeFunctie->email_bericht
 		);
 		$mail = new Mail($to, $onderwerp, $bericht);
@@ -93,7 +101,7 @@ class CorveeHerinneringService
 			if (!$mail->inDebugMode()) {
 				$this->corveeTakenRepository->updateGemaild($taak);
 			}
-			return $datum .
+			return $datumCorvee .
 				' ' .
 				$taak->corveeFunctie->naam .
 				' verstuurd! (' .
@@ -101,7 +109,7 @@ class CorveeHerinneringService
 				')';
 		} else {
 			throw new CsrGebruikerException(
-				$datum . ' ' . $taak->corveeFunctie->naam . ' faalt! (' . $lidnaam . ')'
+				$datumCorvee . ' ' . $taak->corveeFunctie->naam . ' faalt! (' . $lidnaam . ')'
 			);
 		}
 	}
