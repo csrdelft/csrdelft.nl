@@ -32,12 +32,22 @@ $kleur-oranje-25: #fcfae0;
 $kleur-wit: #ffffff;
 $kleur-zwart: #000000;
 
+$kleur-text-wit: #fbf8cc;
+$kleur-text-wit-onhover: #d3d1ad;
+$kleur-text-blauw: #39358a;
+$kleur-text-zwart: #0e143b;
+$kleur-oranje-1: #ed8a22;
+$kleur-oranje-2: #f1b770;
+$kleur-oranje-3: #fad9a8;
+$kleur-paars-1: #9b86be;
+$kleur-paars-2: #7054a3;
+
 $font-header: Helvetica, sans-serif;
 $font-text: Arial, Helvetica, sans-serif;
 
-$primary: $kleur-blauw-1 !default;
-$secondary: $kleur-geel-20 !default;
-$font-color-primary: $kleur-wit !default;
+$primary: $kleur-oranje-1 !default;
+$secondary: $kleur-paars-2 !default;
+$font-color-primary: $kleur-text-wit !default;
 $font-color-secondary: #ffffff !default;
 
 $theme-colors: (

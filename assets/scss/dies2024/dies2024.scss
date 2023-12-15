@@ -251,12 +251,12 @@ section {
 
 	.ketzer {
 		width: 100%;
-		color: $kleur-blauw-1;
+		color: $kleur-text-wit;
 
 		.bb-block {
 			padding: 5px;
 			border-radius: 5px;
-			background-color: $kleur-geel-19;
+			background-color: $kleur-paars-2;
 		}
 
 		a[id*="groep-lid-remove"] {
@@ -279,18 +279,18 @@ section {
 		}
 
 		.GroepStatistiekView {
-			background-color: $kleur-blauw-1;
+			background-color: $kleur-text-blauw;
 			padding: 20px;
 			border-radius: 25px;
 		}
 
 		.progress-bar {
-			background-color: $kleur-blauw-1;
+			background-color: $kleur-text-blauw;
 		}
 
 		.GroupAanmeldenForm {
 			input.FormElement {
-				background-color: $kleur-blauw-1;
+				background-color: $kleur-text-blauw;
 			}
 		}
 	}
@@ -396,31 +396,37 @@ section {
 					}
 
 					.toggler:hover {
-						color: $kleur-blauw-12;
+						color: $kleur-oranje-2;
 					}
 
 					.bb-block {
-						border: 2px solid $kleur-blauw-1;
-						background-color: $kleur-geel-19;
-						box-shadow: 2px 2px 10px $kleur-blauw-1;
+						border: 2px solid $kleur-text-wit;
+						background-color: $kleur-paars-2;
+						box-shadow: 2px 2px 10px $kleur-text-wit;
 					}
 
 					.ketzers {
 						.ketzer {
 							div {
 								a {
-									color: #121534;
+									color: $kleur-text-blauw;
 								}
 							}
 
 							.maaltijdketzer-wrapper {
 								padding: 20px;
 								border-radius: 20px;
-								color: $kleur-geel-19;
-								background-color: $kleur-blauw-1 !important;
+								color: $kleur-text-wit;
+								background-color: $kleur-paars-2 !important;
+								border: 2px solid $kleur-text-wit;
+								box-shadow: 2px 2px 10px $kleur-text-wit;
+
+								.FormElement, span {
+									background-color: $kleur-paars-2 !important;
+								}
 
 								a {
-									color: $kleur-geel-19;
+									color: $kleur-text-wit;
 								}
 							}
 
