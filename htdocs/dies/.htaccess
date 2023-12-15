@@ -1,13 +1,5 @@
 RewriteEngine on
 
-#Redirect /dies/2022 to /tijdloos/dies
-RewriteCond %{REQUEST_URI} ^/dies/2022
-RewriteRule (.*) /tijdloos/dies [R=302,L]
-
-#Redirect /dies/2023 to /magnumopus
-RewriteCond %{REQUEST_URI} ^/dies/2023
-RewriteRule (.*) /magnumopus [R=302,L]
-
-# Redirect /dies to /dies/2023
-RewriteCond %{REQUEST_URI} ^/dies$
-RewriteRule (.*) /magnumopus [R=302,L]
+#Redirect /dies/2024 to /lumiere
+RewriteCond %{REQUEST_URI} ^/dies/2024
+RewriteRule (.*) /lumiere [R=302,L]

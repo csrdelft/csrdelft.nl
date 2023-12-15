@@ -1,0 +1,112 @@
+@import "vars";
+
+@font-face {
+	font-family: copasetic;
+	src: url("../../fonts/dies2024/copasetic.otf") format("opentype");
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: adrianeRegular;
+	src: url("../../fonts/dies2024/Adriane Text Regular.otf") format("opentype");
+	font-weight: normal;
+}
+
+$font-copasetic: "copasetic", Arial, Helvetica, sans-serif;
+$font-adriane: "adrianeRegular", Arial, Helvetica, sans-serif;
+
+a {
+	text-decoration: none;
+}
+
+.anchor {
+	display: block;
+	position: relative;
+	top: -70px;
+	visibility: hidden;
+}
+
+section {
+	margin-bottom: 100px;
+}
+
+body {
+	background-size: 600px, 1100px, 950px, 600px, 1300px, 700px, 100% 100%;
+	font-size: 1.5rem;
+}
+
+.container {
+	background: transparent;
+}
+
+// Shared page functionality
+
+/* nav */
+nav {
+	height: 68px;
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	z-index: 1000;
+
+	.container {
+		max-width: 1040px;
+	}
+
+	.menu {
+		height: 50px;
+	}
+}
+
+/* Kopjes */
+.titel {
+	h1 {
+		font-family: $font-copasetic;
+		font-size: $h2-font-size;
+		text-align: center;
+	}
+
+	width: 440px;
+	margin: -40px;
+	align-self: center;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+	background-size: 100% !important;
+	text-transform: none;
+}
+
+.ondertitel {
+	color: $kleur-geel-19;
+	font-family: $font-adriane;
+	text-transform: uppercase;
+	text-align: center;
+	margin-bottom: 10px;
+	font-size: 3rem;
+}
+
+/* Dividers */
+.divider {
+	display: flex;
+	flex-direction: column;
+	border-bottom: 2px solid $kleur-geel-19;
+	box-shadow: 0px 6px 6px -6px $kleur-geel-20;
+	margin-bottom: 15px;
+	margin-top: 15px;
+
+	.helemaal-boven {
+		margin-top: 60px;
+		margin-bottom: 10px;
+	}
+	.boven {
+		margin-top: 10px;
+	}
+	.tussen {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	.onder {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+}
