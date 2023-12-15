@@ -19,6 +19,7 @@ use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\AgendaService;
 use CsrDelft\view\agenda\AgendaItemForm;
 use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\Icon;
@@ -39,6 +40,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class AgendaController extends AbstractController
 {
 	const SECONDEN_IN_JAAR = 31557600;
+	/**
+	 * @var AgendaService
+	 */
+	private $agendaService;
 	/**
 	 * @var AgendaRepository
 	 */
@@ -65,6 +70,7 @@ class AgendaController extends AbstractController
 	private $profielRepository;
 
 	public function __construct(
+		AgendaService $agendaService,
 		AgendaRepository $agendaRepository,
 		AgendaVerbergenRepository $agendaVerbergenRepository,
 		ActiviteitenRepository $activiteitenRepository,
@@ -72,6 +78,7 @@ class AgendaController extends AbstractController
 		MaaltijdenRepository $maaltijdenRepository,
 		ProfielRepository $profielRepository
 	) {
+		$this->agendaService = $agendaService;
 		$this->agendaRepository = $agendaRepository;
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
 		$this->activiteitenRepository = $activiteitenRepository;
@@ -122,7 +129,7 @@ class AgendaController extends AbstractController
 		return $this->render(
 			'agenda/icalendar.ical.twig',
 			[
-				'items' => $this->agendaRepository->getICalendarItems(),
+				'items' => $this->agendaService->getICalendarItems(),
 				'published' => $this->icalDate(),
 			],
 			new IcalResponse()
@@ -204,7 +211,7 @@ class AgendaController extends AbstractController
 	 */
 	public function courant(BbToProsemirror $bbToProsemirror)
 	{
-		$items = $this->agendaRepository->getAllAgendeerbaar(
+		$items = $this->agendaService->getAllAgendeerbaar(
 			date_create_immutable(),
 			date_create_immutable('next saturday + 2 weeks'),
 			false,
@@ -360,7 +367,7 @@ class AgendaController extends AbstractController
 		if (!$item) {
 			throw $this->createAccessDeniedException();
 		}
-		$this->agendaVerbergenRepository->toggleVerbergen($item);
+		$this->agendaVerbergenRepository->toggleVerbergen($this->getUid(), $item);
 		return new JsonResponse(true);
 	}
 
@@ -421,7 +428,7 @@ class AgendaController extends AbstractController
 			);
 		}
 
-		$events = $this->agendaRepository->getAllAgendeerbaar(
+		$events = $this->agendaService->getAllAgendeerbaar(
 			$startMoment,
 			$eindMoment
 		);
@@ -491,7 +498,7 @@ class AgendaController extends AbstractController
 
 		return $this->render('agenda/details.html.twig', [
 			'item' => $item,
-			'verborgen' => $this->agendaVerbergenRepository->isVerborgen($item),
+			'verborgen' => $this->agendaVerbergenRepository->isVerborgen($this->getUid(), $item),
 		]);
 	}
 

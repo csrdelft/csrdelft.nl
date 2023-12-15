@@ -10,6 +10,7 @@ use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
+use CsrDelft\service\AgendaService;
 use CsrDelft\service\forum\ForumDelenService;
 use CsrDelft\service\maalcie\MaaltijdenService;
 use CsrDelft\service\security\LoginService;
@@ -41,16 +42,16 @@ class VoorpaginaController extends AbstractController
 	}
 
 	/**
-	 * @param AgendaRepository $agendaRepository
+	 * @param AgendaService $agendaService
 	 * @return Response
 	 * @Route("/voorpagina/agenda")
 	 */
-	public function agenda(AgendaRepository $agendaRepository): Response
+	public function agenda(AgendaService $agendaService): Response
 	{
 		// Agenda
 		if (LoginService::mag(P_AGENDA_READ)) {
 			$aantalWeken = InstellingUtil::lid_instelling('zijbalk', 'agendaweken');
-			$items = $agendaRepository->getAllAgendeerbaar(
+			$items = $agendaService->getAllAgendeerbaar(
 				date_create_immutable(),
 				date_create_immutable('next saturday + ' . $aantalWeken . ' weeks'),
 				false,
@@ -171,13 +172,13 @@ class VoorpaginaController extends AbstractController
 	public function ishetal(
 		LidInstellingenRepository $lidInstellingenRepository,
 		RequestStack $requestStack,
-		AgendaRepository $agendaRepository,
+		AgendaService $agendaService,
 		WoordVanDeDagRepository $woordVanDeDagRepository
 	): Response {
 		$isHetAlView = new IsHetAlView(
 			$lidInstellingenRepository,
 			$requestStack,
-			$agendaRepository,
+			$agendaService,
 			$woordVanDeDagRepository,
 			InstellingUtil::lid_instelling('zijbalk', 'ishetal')
 		);

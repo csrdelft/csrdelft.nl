@@ -9,7 +9,6 @@ use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\AgendaVerbergen;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\Activiteit;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
@@ -35,47 +34,17 @@ use Symfony\Component\Security\Core\Security;
 class AgendaRepository extends AbstractRepository
 {
 	/**
-	 * @var AgendaVerbergenRepository
-	 */
-	private $agendaVerbergenRepository;
-	/**
-	 * @var ActiviteitenRepository
-	 */
-	private $activiteitenRepository;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var VerjaardagenService
-	 */
-	private $verjaardagenService;
-	/**
 	 * @var Security
 	 */
 	private $security;
-	/**
-	 * @var MaaltijdenService
-	 */
-	private $maaltijdenService;
 
 	public function __construct(
 		ManagerRegistry $registry,
 		Security $security,
-		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenRepository $activiteitenRepository,
-		CorveeTakenRepository $corveeTakenRepository,
-		MaaltijdenService $maaltijdenService,
-		VerjaardagenService $verjaardagenService
 	) {
 		parent::__construct($registry, AgendaItem::class);
 
-		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
-		$this->activiteitenRepository = $activiteitenRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->verjaardagenService = $verjaardagenService;
 		$this->security = $security;
-		$this->maaltijdenService = $maaltijdenService;
 	}
 
 	/**
@@ -108,44 +77,6 @@ class AgendaRepository extends AbstractRepository
 		return $this->find($itemId);
 	}
 
-	public function getICalendarItems()
-	{
-		return $this->filterVerborgen(
-			$this->getAllAgendeerbaar(
-				date_create_immutable(
-					InstellingUtil::instelling('agenda', 'ical_from')
-				),
-				date_create_immutable(InstellingUtil::instelling('agenda', 'ical_to')),
-				true
-			)
-		);
-	}
-
-	public function filterVerborgen(array $items)
-	{
-		// Items verbergen
-		$itemsByUUID = [];
-		foreach ($items as $index => $item) {
-			$itemsByUUID[$item->getUUID()] = $item;
-			unset($items[$index]);
-		}
-		if (!empty($itemsByUUID)) {
-			/** @var AgendaVerbergen[] $verborgen */
-			$verborgen = $this->agendaVerbergenRepository
-				->createQueryBuilder('av')
-				->where('av.uid = :uid and av.refuuid in (:uuids)')
-				->setParameter('uid', LoginService::getUid())
-				->setParameter('uuids', array_keys($itemsByUUID))
-				->getQuery()
-				->getResult();
-
-			foreach ($verborgen as $verbergen) {
-				unset($itemsByUUID[$verbergen->refuuid]);
-			}
-		}
-		return $itemsByUUID;
-	}
-
 	/**
 	 * @param DateTimeImmutable $van
 	 * @param DateTimeImmutable $tot
@@ -175,23 +106,11 @@ class AgendaRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param DateTimeImmutable $van
-	 * @param DateTimeImmutable $tot
-	 * @param bool $ical
-	 * @param bool $zijbalk
-	 * @return Agendeerbaar[]
+	 * @return AgendaItem[]
 	 */
-	public function getAllAgendeerbaar(
-		DateTimeImmutable $van,
-		DateTimeImmutable $tot,
-		$ical = false,
-		$zijbalk = false
-	) {
-		$result = [];
-
-		// AgendaItems
-		/** @var AgendaItem[] $items */
-		$items = $this->createQueryBuilder('a')
+	public function getAgendaItems(DateTimeImmutable $van, DateTimeImmutable $tot)
+	{
+		return $this->createQueryBuilder('a')
 			->where(
 				'a.begin_moment >= :begin_moment and a.begin_moment < :eind_moment'
 			)
@@ -206,114 +125,6 @@ class AgendaRepository extends AbstractRepository
 			)
 			->getQuery()
 			->getResult();
-		foreach ($items as $item) {
-			if ($item->magBekijken($ical)) {
-				$result[] = $item;
-			}
-		}
-
-		$auth = $ical ? AuthenticationMethod::getEnumValues() : null;
-
-		// Activiteiten
-		/** @var Activiteit[] $activiteiten */
-		$activiteiten = $this->activiteitenRepository->getGroepenVoorAgenda(
-			$van,
-			$tot
-		);
-		foreach ($activiteiten as $activiteit) {
-			if (
-				$this->security->isGranted(AbstractGroepVoter::BEKIJKEN, $activiteit)
-			) {
-				$result[] = $activiteit;
-			}
-		}
-
-		// Maaltijden
-		if (InstellingUtil::lid_instelling('agenda', 'toonMaaltijden') === 'ja') {
-			// TODO: Dit moet altijd aanstaan
-			$result = array_merge(
-				$result,
-				$this->maaltijdenService->getMaaltijdenVoorAgenda(
-					$van->getTimestamp(),
-					$tot->getTimestamp()
-				)
-			);
-		}
-
-		// CorveeTaken
-		if (InstellingUtil::lid_instelling('agenda', 'toonCorvee') === 'iedereen') {
-			$result = array_merge(
-				$result,
-				$this->corveeTakenRepository->getTakenVoorAgenda($van, $tot, true)
-			);
-		} elseif (
-			InstellingUtil::lid_instelling('agenda', 'toonCorvee') === 'eigen'
-		) {
-			$result = array_merge(
-				$result,
-				$this->corveeTakenRepository->getTakenVoorAgenda($van, $tot, false)
-			);
-		}
-
-		// Verjaardagen
-		$toonVerjaardagen = $ical ? 'toonVerjaardagenICal' : 'toonVerjaardagen';
-		if (
-			!$zijbalk &&
-			LoginService::mag(P_VERJAARDAGEN, $auth) &&
-			InstellingUtil::lid_instelling('agenda', $toonVerjaardagen) === 'ja'
-		) {
-			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
-			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
-			//doen we hier even een vieze hack waardoor het wel soort van werkt.
-			$GLOBALS['agenda_van'] = $van;
-			$GLOBALS['agenda_tot'] = $tot;
-
-			$result = array_merge(
-				$result,
-				$this->verjaardagenService->getTussen($van, $tot)
-			);
-		}
-
-		// Sorteren
-		usort($result, [AgendaRepository::class, 'vergelijkAgendeerbaars']);
-
-		return $result;
-	}
-
-	/**
-	 * Zoek in de activiteiten (titel en beschrijving) van vandaag
-	 * naar het woord $woord, geef de eerste terug.
-	 * @param $woord string
-	 * @return Agendeerbaar|null
-	 */
-	public function zoekWoordAgenda($woord)
-	{
-		return $this->zoekRegexAgenda('/' . preg_quote($woord, '/') . '/iu');
-	}
-
-	/**
-	 * Vind de eerste activiteit van vandaag waarvan de
-	 * titel of omschrijving wordt gematcht door $patroon.
-	 * @param $patroon string
-	 * @return Agendeerbaar|null
-	 */
-	public function zoekRegexAgenda($patroon)
-	{
-		$beginDag = date_create_immutable('today');
-		foreach ($this->getItemsByDay($beginDag) as $item) {
-			if (
-				preg_match($patroon, $item->getTitel()) ||
-				preg_match($patroon, $item->getBeschrijving())
-			) {
-				return $item;
-			}
-		}
-		return null;
-	}
-
-	public function getItemsByDay(DateTimeImmutable $dag)
-	{
-		return $this->getAllAgendeerbaar($dag, $dag);
 	}
 
 	public function nieuw($beginMoment, $eindMoment)

@@ -7,6 +7,7 @@ use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
+use CsrDelft\service\AgendaService;
 use CsrDelft\view\IsHetAlView;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
@@ -18,9 +19,9 @@ class BbIsHetAl extends BbTag
 	 */
 	private $requestStack;
 	/**
-	 * @var AgendaRepository
+	 * @var AgendaService
 	 */
-	private $agendaRepository;
+	private $agendaService;
 	/**
 	 * @var LidInstellingenRepository
 	 */
@@ -41,11 +42,11 @@ class BbIsHetAl extends BbTag
 	public function __construct(
 		RequestStack $requestStack,
 		Security $security,
-		AgendaRepository $agendaRepository,
+		AgendaService $agendaService,
 		LidInstellingenRepository $lidInstellingenRepository,
 		WoordVanDeDagRepository $woordVanDeDagRepository
 	) {
-		$this->agendaRepository = $agendaRepository;
+		$this->agendaService = $agendaService;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 		$this->woordVanDeDagRepository = $woordVanDeDagRepository;
 		$this->requestStack = $requestStack;
@@ -80,7 +81,7 @@ class BbIsHetAl extends BbTag
 		$html .= (new IsHetAlView(
 			$this->lidInstellingenRepository,
 			$this->requestStack,
-			$this->agendaRepository,
+			$this->agendaService,
 			$this->woordVanDeDagRepository,
 			$this->value
 		))->__toString();

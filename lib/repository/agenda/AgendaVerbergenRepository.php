@@ -5,7 +5,6 @@ namespace CsrDelft\repository\agenda;
 use CsrDelft\entity\agenda\AgendaVerbergen;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\repository\AbstractRepository;
-use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -23,15 +22,15 @@ class AgendaVerbergenRepository extends AbstractRepository
 		parent::__construct($registry, AgendaVerbergen::class);
 	}
 
-	public function toggleVerbergen(Agendeerbaar $item)
+	public function toggleVerbergen($uid, Agendeerbaar $item)
 	{
 		$verborgen = $this->find([
-			'uid' => LoginService::getUid(),
+			'uid' => $uid,
 			'refuuid' => $item->getUUID(),
 		]);
 		if (!$verborgen) {
 			$verborgen = new AgendaVerbergen();
-			$verborgen->uid = LoginService::getUid();
+			$verborgen->uid = $uid;
 			$verborgen->refuuid = $item->getUUID();
 			$this->save($verborgen);
 		} else {
@@ -39,11 +38,24 @@ class AgendaVerbergenRepository extends AbstractRepository
 		}
 	}
 
-	public function isVerborgen(Agendeerbaar $item)
+	public function isVerborgen($uid, Agendeerbaar $item)
 	{
 		return $this->find([
-			'uid' => LoginService::getUid(),
+			'uid' => $uid,
 			'refuuid' => $item->getUUID(),
 		]);
+	}
+
+	/**
+	 * @return AgendaVerbergen[]
+	 */
+	public function getVerborgen($uid, $uuids) {
+		return $this
+				->createQueryBuilder('av')
+				->where('av.uid = :uid and av.refuuid in (:uuids)')
+				->setParameter('uid', $uid)
+				->setParameter('uuids', $uuids)
+				->getQuery()
+				->getResult();
 	}
 }
