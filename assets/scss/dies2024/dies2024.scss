@@ -421,7 +421,10 @@ section {
 								border: 2px solid $kleur-text-wit;
 								box-shadow: 2px 2px 10px $kleur-text-wit;
 
-								.FormElement,
+								.FormElement {
+									background-color: $kleur-paars-2 !important;
+								}
+								
 								span {
 									background-color: $kleur-paars-2 !important;
 								}
