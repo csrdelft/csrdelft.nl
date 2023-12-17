@@ -74,6 +74,18 @@ nav {
 	align-items: center;
 	background-size: 100% !important;
 	text-transform: none;
+
+	@media screen and (max-width: 768px) {
+		transform: scale(0.9);
+	}
+
+	@media screen and (max-width: 400px) {
+		transform: scale(0.85);
+	}
+
+	@media screen and (max-width: 375px) {
+		transform: scale(0.8);
+	}
 }
 
 .ondertitel {
@@ -98,13 +110,16 @@ nav {
 		margin-top: 60px;
 		margin-bottom: 10px;
 	}
+
 	.boven {
 		margin-top: 10px;
 	}
+
 	.tussen {
 		margin-top: 10px;
 		margin-bottom: 10px;
 	}
+
 	.onder {
 		margin-top: 10px;
 		margin-bottom: 10px;
