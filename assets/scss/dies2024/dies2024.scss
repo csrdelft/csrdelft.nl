@@ -407,6 +407,14 @@ section {
 
 					.ketzers {
 						.ketzer {
+							/* Regels voor lay-out maaltijdenketzer */
+							h6 a {
+								font-family: $font-copasetic;
+								font-size: 1.8rem;
+								text-transform: uppercase;
+							}
+
+
 							div {
 								a {
 									color: $kleur-text-blauw;
