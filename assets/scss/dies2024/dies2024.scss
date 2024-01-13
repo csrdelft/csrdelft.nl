@@ -303,6 +303,8 @@ section {
 .programma {
 	text-align: center;
 	background: url("../../images/dies2024/Achtergrond.svg");
+	background-size: cover;
+	will-change: transform;
 	justify-content: center;
 
 	@media screen and (max-width: 768px) {
