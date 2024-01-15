@@ -61,10 +61,9 @@ class CorveeHerinneringService
 	public function stuurHerinnering(CorveeTaak $taak)
 	{
 		$datumCorvee = DateUtil::dateFormatIntl($taak->datum, DateUtil::DATE_FORMAT);
-		$now = new DateTime();
 		$datumAfmelden = DateUtil::dateFormatIntl(
-			$now->add(
-				DateInterval::createFromDateString('+5 days')
+			$taak->datum->add(
+				DateInterval::createFromDateString('-22 days')
 			),
 			DateUtil::DATE_FORMAT
 		);
