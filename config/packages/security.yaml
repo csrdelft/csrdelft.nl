@@ -10,6 +10,9 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+    prakcie_teller_api:
+      pattern: ^/api/v3/bar/prakciePilsjes
+      security: false
     # Achter deze firewall zitten requests voor de api.
     oauth_token:
       pattern: ^/api/v3/token$
