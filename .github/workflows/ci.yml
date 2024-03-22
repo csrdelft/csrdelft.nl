@@ -217,7 +217,7 @@ jobs:
 
       - name: Install Composer packages
         if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: composer install
+        run: php -v && composer install
 
       - name: Check translations
         run: |
