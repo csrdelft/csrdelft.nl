@@ -84,6 +84,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-phpunit-dev-
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.3
+          tools: composer:v2
+          extensions: pdo_mysql
+
       - name: Install Composer packages
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install
@@ -93,13 +100,6 @@ jobs:
         with:
           name: js
           path: htdocs/dist
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.3
-          tools: composer:v2
-          extensions: pdo_mysql
 
       - name: 💽 Setup database
         run: |
@@ -149,6 +149,13 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock', '**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-composer-
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.3
+          tools: composer:v2
+          extensions: pdo_mysql
 
       - name: Install Composer packages
         working-directory: main
@@ -201,16 +208,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-dev-
 
-      - name: Install Composer packages
-        if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: composer install
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.3
           tools: composer:v2
           extensions: pdo_mysql
+
+      - name: Install Composer packages
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install
 
       - name: Check translations
         run: |
