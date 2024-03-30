@@ -78,8 +78,8 @@ class IsHetAlView implements View
 			// TODO: Weghalen dat sponsorkliks wordt laten zien
 
 			case 'dies':
-				$begin = strtotime('2023-02-13');
-				$einde = strtotime('2023-02-24');
+				$begin = strtotime('2024-02-13');
+				$einde = strtotime('2024-02-23');
 				$nu = strtotime(date('Y-m-d'));
 				if ($nu > $einde) {
 					$begin = strtotime('+1 year', $begin);
