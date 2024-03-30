@@ -208,7 +208,7 @@ class MaaltijdenRepository extends AbstractRepository
 			->setParameter('van_datum', $van)
 			->setParameter('tot_datum', $tot)
 			->orderBy('m.datum', 'ASC')
-			->orderBy('m.tijd', 'ASC')
+			->addOrderBy('m.tijd', 'ASC')
 			->getQuery()
 			->getResult();
 	}
