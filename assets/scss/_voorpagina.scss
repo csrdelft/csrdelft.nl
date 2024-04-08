@@ -1,9 +1,11 @@
 .ratio-3x2 {
 	--bs-aspect-ratio: 65%;
 }
+
 .ratio-5x4 {
 	--bs-aspect-ratio: 80%;
 }
+
 // Have a square ratio at breakpoint MD
 @include media-breakpoint-only(md) {
 	.ratio-3x2,
@@ -45,12 +47,14 @@
 		padding: 0.5rem 0;
 	}
 }
+
 .cell {
 	border-radius: 0.25rem;
 	background-color: $body-bg;
 	box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 	padding: 0.75rem;
 }
+
 @include media-breakpoint-up(sm) {
 	.cell {
 		overflow: hidden;
@@ -64,6 +68,7 @@
 		overflow-y: scroll;
 	}
 }
+
 @include media-breakpoint-down(md) {
 	.grid-container {
 		display: flex;
@@ -126,6 +131,7 @@
 	.agenda-item-moment {
 		min-width: 2.5rem;
 	}
+
 	.agenda-item-titel {
 		min-width: 0;
 	}
@@ -197,6 +203,7 @@
 		align-items: stretch;
 		justify-items: stretch;
 	}
+
 	.album-cell {
 		display: block;
 		min-width: 0;
@@ -228,6 +235,7 @@
 		gap: 0.5rem;
 		height: calc(100% - 1.8rem);
 	}
+
 	.overig-cell {
 		display: flex;
 		justify-content: center;
@@ -240,6 +248,7 @@
 			font-size: $font-size-lg;
 		}
 	}
+
 	@include media-breakpoint-up(sm) {
 		.overig-cell {
 			// Keep cells from expanding
@@ -252,14 +261,22 @@
 		flex-direction: row;
 		grid-column: 1 / span 2;
 	}
+
 	.overig-cell-sponserkliks {
 		flex-direction: column;
 		grid-column: 2 / span 1;
 	}
-	.overig-cell-rijbewijs {
+
+	.overig-cell-gulpener {
 		flex-direction: column;
 		grid-column: 1 / span 1;
 	}
+
+	.overig-cell-dies {
+		flex-direction: column;
+		grid-column: 1 / span 1;
+	}
+
 	@include media-breakpoint-only(md) {
 		.overig-grid-container {
 			display: flex;
@@ -304,6 +321,7 @@
 		}
 	}
 }
+
 @include media-breakpoint-down(sm) {
 	.cell-advertenties img {
 		height: auto;

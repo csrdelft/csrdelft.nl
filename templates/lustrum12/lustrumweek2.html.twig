@@ -23,65 +23,100 @@
 </head>
 
 <body class="zijbalk_verborgen">
-	{%  include 'lustrum12/zandloper.html.twig' %}
-	{{ cms('lustrum-activiteiten-terugindetoekomst') }}
+{% include 'lustrum12/zandloper.html.twig' %}
+<nav class="site-header">
+	<a class="logo-titel d-inline-block" href="./">
+		<img src="/images/lustrum12/themaheader.png"
+				 alt="Logo menu" />
+	</a>
+	<div class="container">
+		<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">
+			<a class="d-none d-md-inline-block" href="#top">Top</a>
+			<a class="d-none d-md-inline-block" href="#activiteiten">Activiteiten</a>
+			<a class="d-none d-md-inline-block" href="#ketzers">Ketzers</a>
+			<a class="d-none d-md-inline-block" href="#fotos">Foto's</a>
+		</div>
+	</div>
+</nav>
 
-{#<nav class="site-header">#}
-{#	<a class="logo-titel d-inline-block" href="./">#}
-{#		<img src="/images/lustrum12/themaheader.png"#}
-{#				 alt="Logo menu" />#}
-{#	</a>#}
-{#	<div class="container">#}
-{#		<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">#}
-{#			<a class="d-none d-md-inline-block" href="./">Home</a>#}
-{#			<a class="d-none d-md-inline-block" href="#top">Top</a>#}
-{#			<a class="d-none d-md-inline-block" href="#poster">Poster</a>#}
-{#			<a class="d-none d-md-inline-block" href="#activiteiten">Activiteiten</a>#}
-{#			<a class="d-none d-md-inline-block" href="#ketzers">Ketzers</a>#}
-{#		</div>#}
-{#	</div>#}
-{#</nav>#}
+<div id="top"></div>
 
-{#<div id="top"> </div>#}
+<div id="poster" class="poster-container">
+	<div class="divider">
+		<img class="tussen" src="/images/lustrum12/05_lustrumweek_tndt/lustrumweek2_divider.png">
+	</div>
+	<h1 class="titel">Poster</h1>
+	<div class="poster">
+		<img src="/images/lustrum12/05_lustrumweek_tndt/lustrumweek2_poster.jpg" alt="Logo menu" />
+	</div>
+</div>
 
-{#<div id="poster" class="poster-container">#}
-{#	<div class="divider">#}
-{#		<img class="tussen" src="/images/lustrum12/lw2-divider.png">#}
-{#	</div>#}
-{#	<h1 class="titel">Poster</h1>#}
-{#	<div class="poster">#}
-{#		<img src="/images/lustrum12/lw2-poster.jpg" alt="Logo menu" />#}
-{#	</div>#}
-{#</div>#}
+<div id="activiteiten" class="divider">
+	<img class="tussen" src="/images/lustrum12/05_lustrumweek_tndt/lustrumweek2_divider.png">
+</div>
 
-{#<div id="activiteiten" class="divider">#}
-{#	<img class="tussen" src="/images/lustrum12/lw2-divider.png">#}
-{#</div>#}
+<div class="activiteiten">
+	<h1 class="titel">Activiteiten</h1>
+	<div id="poster" class="poster">
+		<img src="/images/lustrum12/05_lustrumweek_tndt/lustrumweek2_activiteiten_overzicht.jpg" alt="Activiteiten overzicht" />
+		<p></p>
+		<h3 class="titel">Maandag</h3>
+		<img src="/images/lustrum12/05_lustrumweek_tndt/lustrumweek2_activiteiten_maandag.jpg" alt="Activiteiten maandag" />
+		<p></p>
+		<h3 class="titel">Donderdag</h3>
+		<img src="/images/lustrum12/05_lustrumweek_tndt/lustrumweek2_activiteiten_donderdag.jpg" alt="Activiteiten donderdag" />
 
-{#<div class="activiteiten">#}
-{#	<h1 class="titel">Activiteiten</h1>#}
-{#	<div id="poster" class="poster">#}
-{#		<img src="/images/lustrum12/lw2-activiteiten.jpg" alt="Logo menu" />#}
-{#	</div>#}
-{#</div>#}
+	</div>
+</div>
 
-{#<div class="divider">#}
-{#	<img id="ketzers" class="tussen" src="/images/lustrum12/lw2-divider.png">#}
-{#</div>#}
+<div class="divider">
+	<img id="ketzers" class="tussen" src="/images/lustrum12/05_lustrumweek_tndt/lustrumweek2_divider.png">
+</div>
 
-{#<div class="ketzers">#}
-{#	<h1 class="titel">Ketzers</h1>#}
+<div class="ketzers">
+	<h1 class="titel">Ketzers</h1>
 
-{#	<h3 class="titel">Theater Bezoek</h3>#}
-{#	<div class="ketzer">[activiteit=2200]</div>#}
+	<h3 class="titel">Theatervoorstelling woensdag</h3>
 
-{#	<h3 class="titel">Intern Feest</h3>#}
-{#	<div class="ketzer">[activiteit=2202]'</div>#}
+	<a href="https://csrdelft.nl/forum/reactie/130822#130822">
+		<h4 class="titel">
+			<u>Kijk voor meer info in het lezingen
+				draadje (klik)</u>
+		</h4>
+	</a>
+</div>
 
-{#	<h3 class="titel">Laser Gamen</h3>#}
-{#	<div class="ketzer">[activiteit=2203]</div>#}
-{#	<div class="ketzer">[activiteit=2204]</div>#}
-{#	<div class="ketzer">[activiteit=2205]</div>#}
-{#</div>#}
+<div class="divider">
+	<img id="lasergamen" class="tussen" src="/images/lustrum12/05_lustrumweek_tndt/lustrumweek2_divider.png">
+</div>
+
+<div class="ketzers">
+	<br>
+	<h3 class="titel">Lasergamen</h3>
+	<h6 class="titel">Er zijn per dag twee slots beschikbaar om zo veel mogelijk mensen de kans te geven. <p></p>
+		Waarschijnlijk doen we meerdere potjes van 4 tegen 4 gedurend het uur. <p></p> Wij verzorgen geen lunch. Neem een
+		geldige QR code en ID mee.
+	</h6>
+</div>
+
+<div class="divider">
+	<img id="lasergamen" class="tussen" src="/images/lustrum12/05_lustrumweek_tndt/lustrumweek2_divider.png">
+</div>
+
+<div id="fotos" class="ketzers">
+	<h2 class="titel">Foto's</h2>
+	<div class="ketzers-container overflow-hidden ketzer">
+		<div class="bb-block bb-fotoalbum">
+			<a href="/fotoalbum/2021-2022/21-11-08 tot 21-11-12 Lustrumweek Terug Naar de Toekomst/21-11-08 Pyjamaborrel" class="sml" style=" left: 456px; top: 76px;">
+				21-11-08 Pyjamaborrel
+			</a>
+		</div>
+		<div class="bb-block bb-fotoalbum">
+			<a href="/fotoalbum/2021-2022/21-11-08 tot 21-11-12 Lustrumweek Terug Naar de Toekomst/21-11-11 Lustrumfeest" class="sml" style=" left: 456px; top: 76px;">
+				21-11-11 Lustrumfeest
+			</a>
+		</div>
+	</div>
+</div>
 
 </body>

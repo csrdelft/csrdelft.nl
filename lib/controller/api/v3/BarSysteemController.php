@@ -221,4 +221,19 @@ class BarSysteemController extends AbstractController
 			)
 		);
 	}
+
+	/**
+	 * @param Request $request
+	 * @return Response
+	 * @Route("/prakciePilsjes")
+	 * @Auth(P_PUBLIC)
+	 */
+	public function prakciePilsjes(Request $request)
+	{
+		$vanaf = date_create_immutable($request->query->get('vanaf', 'now'));
+		$pilsjes = $this->barSysteemService->getPrakCiePilsjes($vanaf);
+		$res = new Response((string)$pilsjes, 200);
+		$res->headers->set('Content-Type', 'text/plain');
+		return $res;
+	}
 }

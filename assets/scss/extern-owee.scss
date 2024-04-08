@@ -2,22 +2,17 @@
 @import "~bootstrap/scss/mixins/breakpoints";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
-$groen: #3eb9b1;
-$licht-rose: #ef8080;
-$rose: #ec6363;
-$donker-rose: #da3f3f;
-$medium-donker-rose: darken($rose, 4%);
-
 // Zet hier de OWee kleuren
-$primary: $rose; // $donkerblauw;
-$secondary: $donker-rose; // #002e54;
-$tertiary: $licht-rose; // #486b87;
-$accent: $groen; // #f6b585;
-$youtubeRed: $donker-rose;
-$whatsappGreen: $groen;
+$primary: #ffc4de;
+$secondary: #3fa34d;
+$tertiary: #3f8c4d;
+$accent: #ff9eca;
+$youtubeRed: rgb(170, 1, 1);
+$whatsappGreen: rgb(14, 214, 14);
 $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
 
-$basiskleur: $donker-rose;
+$basiskleur: #3fa34d;
+$lijnkleur: #ff9eca;
 
 @font-face {
 	font-family: "Tw Cen MT";
@@ -26,22 +21,8 @@ $basiskleur: $donker-rose;
 	src: url("../fonts/owee2021/TCM.woff") format("woff");
 }
 
-@font-face {
-	font-family: "Playbill";
-	font-style: normal;
-	font-weight: normal;
-	src: url("../fonts/owee2022/Playbill.ttf");
-}
-
-@font-face {
-	font-family: "Freestyle Script";
-	font-style: normal;
-	font-weight: normal;
-	src: url("../fonts/owee2022/Freestyle Script.TTF");
-}
-
-$header-font-p1: Playbill, Arial, Helvetica, sans-serif;
-$header-font-p2: Freestyle Script, Regular, Arial, Helvetica, sans-serif;
+$header-font-p1: "Source Sans Pro", sans-serif, Arial, Helvetica;
+$header-font-p2: Georgia, Regular, Arial, Helvetica, sans-serif;
 
 @mixin triangle($kleur, $top, $left) {
 	width: 0;
@@ -69,6 +50,7 @@ $header-font-p2: Freestyle Script, Regular, Arial, Helvetica, sans-serif;
 		content: "";
 		@include triangle($kleur, $left, $top);
 	}
+
 	.content {
 		margin-top: -7vw;
 		padding-top: 7vw;
@@ -80,16 +62,55 @@ $header-font-p2: Freestyle Script, Regular, Arial, Helvetica, sans-serif;
 		content: "";
 		@include triangle($kleur, $left, $top);
 	}
+
 	.content {
 		margin-bottom: -7vw;
 		padding-bottom: 7vw;
 	}
 }
 
+@mixin line-before($kleur, $left) {
+	&:before {
+		content: "";
+		width: 102vw;
+		height: 4px;
+		position: absolute;
+		display: block;
+		left: -1vw;
+		margin-top: calc(-3.5vw - 2px);
+		background-color: $lijnkleur;
+
+		@if $left {
+			transform: rotate(0.0698860016rad);
+		} @else {
+			transform: rotate(-0.0698860016rad);
+		}
+	}
+}
+
+@mixin line-after($kleur, $left) {
+	&:after {
+		content: "";
+		width: 102vw;
+		height: 4px;
+		position: absolute;
+		display: block;
+		left: -1vw;
+		margin-top: calc(3rem + 3.5vw - 2px);
+		background-color: $lijnkleur;
+
+		@if $left {
+			transform: rotate(0.0698860016rad);
+		} @else {
+			transform: rotate(-0.0698860016rad);
+		}
+	}
+}
+
 body {
 	width: 100%;
 	overflow-x: hidden;
-	background-color: $donker-rose;
+	background-color: $secondary;
 }
 
 .owee-pagina {
@@ -128,6 +149,14 @@ body {
 		@include triangle-after($basiskleur, false, false);
 	}
 
+	.lbl {
+		@include line-before($lijnkleur, true);
+	}
+
+	.lar {
+		@include line-after($lijnkleur, false);
+	}
+
 	.content {
 		@extend .container;
 
@@ -140,7 +169,7 @@ body {
 	h2 {
 		color: white;
 		font-size: 1.5rem;
-		text-transform: uppercase;
+		text-transform: unset;
 		font-family: $headingFont;
 		margin-bottom: 1rem;
 	}
@@ -167,8 +196,9 @@ body {
 
 	.header-p1 {
 		font-family: $header-font-p1;
-		font-size: 5.5rem;
+		font-size: 4.5rem;
 		vertical-align: text-bottom;
+		font-weight: bold;
 	}
 
 	.header-p2 {
@@ -179,7 +209,7 @@ body {
 
 	.cta {
 		&.primary {
-			background: $primary;
+			background: $secondary;
 			color: white;
 
 			&:hover {
@@ -216,13 +246,14 @@ body {
 	}
 
 	.hero {
-		background: $rose url("../images/owee2022-banner.jpg") no-repeat center
-			bottom;
+		background: $tertiary;
 		background-size: contain;
 
 		img {
+			width: 154px !important;
 			max-height: 100vh;
-			margin: -8vh auto 3vh auto;
+			margin: -15vh auto 3vh auto;
+			padding-top: 18vh;
 			display: block;
 			max-width: 60vw;
 		}
@@ -274,8 +305,9 @@ body {
 	}
 
 	.videos {
-		background: $primary url("../images/owee2022-achtergrond.png") no-repeat
-			left center;
+		//background: $primary url("../images/owee2022-achtergrond.png") no-repeat
+		//	left center;
+		background-color: $tertiary;
 		background-size: cover;
 		width: 100%;
 
@@ -332,15 +364,17 @@ body {
 	}
 
 	.contact {
-		background: $primary;
+		background-color: $primary;
 	}
 
 	.info {
 		background: $secondary;
 		text-align: center;
+
 		h2 {
 			color: white;
 		}
+
 		p {
 			color: white;
 		}
@@ -457,7 +491,7 @@ body {
 			}
 
 			&[for="lid-spreken"] {
-				background: $medium-donker-rose;
+				background: $secondary;
 			}
 
 			&[for="open-avond"] {
@@ -510,7 +544,7 @@ body {
 			}
 
 			input {
-				background-color: $donker-rose;
+				background-color: $secondary;
 				font-size: 1rem;
 				border: none;
 				border-radius: 0;
@@ -553,7 +587,7 @@ body {
 		}
 
 		#lid-spreken:checked ~ .interesseformulier {
-			background: $medium-donker-rose;
+			background: $primary;
 
 			a {
 				color: black;

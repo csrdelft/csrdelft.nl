@@ -122,7 +122,10 @@
                   data.antwoordMethode === 'civi',
               }"
             >
-              {{ data.laatste.tussenvoegsel }} {{ data.laatste.achternaam }}
+              <span v-if="data.laatste.tussenvoegsel">
+                &#8203;{{ data.laatste.tussenvoegsel }}
+              </span>
+              {{ data.laatste.achternaam }}
             </span>
             <span
               v-if="data.laatste.postfix"

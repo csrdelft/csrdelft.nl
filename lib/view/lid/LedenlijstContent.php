@@ -134,7 +134,7 @@ class LedenlijstContent implements View
 				htmlspecialchars($url) .
 				'" class="btn float-end" title="Huidige selectie exporteren als vcard">' .
 				Icon::getTag('vcard_add') .
-				'</a>';
+				'<img src="/images/download_icon.png" width="20" height="20" alt="Contacten downloaden om te importeren" /></a>';
 		}
 		$html .= FlashUtil::getFlashUsingContainerFacade();
 		$html .=

@@ -501,7 +501,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 
 	public function getAdres()
 	{
-		return $this->adres . ' ' . $this->postcode . ' ' . $this->woonplaats;
+		return $this->adres . ', ' . $this->postcode . ', ' . $this->woonplaats . ', ' . $this->land;
+	}
+
+	public function getAdresOuders()
+	{
+		return $this->o_adres . ', ' . $this->o_postcode . ', ' . $this->o_woonplaats . ', ' . $this->o_land;
 	}
 
 	public function getFormattedAddress()

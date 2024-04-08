@@ -78,6 +78,9 @@ $menu-small-color: #ffffff !default;
 
 /* zoeken */
 $zoeken-active-bg: #428bca !default;
+span.twitter-typeahead .tt-menu {
+	background-color: #121534 !important;
+}
 
 /* maalcie-tabel */
 $tabel-header: darken($body-bg, 5%) !default;
@@ -144,10 +147,12 @@ div#pubciemail_form {
 span.curpage {
 	color: white;
 }
+
 // Glowing effect
 nav {
 	box-shadow: 0 2px 10px $kleur-geel-20; /* inner white */
 }
+
 a {
 	color: $kleur-geel-19 !important;
 }

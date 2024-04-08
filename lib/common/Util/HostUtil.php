@@ -6,13 +6,15 @@ use CsrDelft\common\ContainerFacade;
 
 final class HostUtil
 {
+
 	/**
-	 * Is de huidige host genaamd 'syrinx'?
+	 * Is de huidige host de production server?
 	 * @return boolean
 	 */
-	public static function isSyrinx()
+	public static function isProduction()
 	{
-		return 'syrinx' === php_uname('n');
+		// Controleer voor alle namen die de production server had/heeft/zal hebben
+		return !ContainerFacade::getContainer()->get('kernel')->isDebug();
 	}
 
 	public static function isCLI()

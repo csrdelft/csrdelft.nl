@@ -34,9 +34,10 @@ JS;
 			);
 
 			if (InstellingUtil::lid_instelling('zoeken', 'favorieten') === 'ja') {
-				$this->addSuggestions(
-					$menuRepository->getMenu(LoginService::getUid())->children
-				);
+				$favorietenMenu = $menuRepository->getMenu(LoginService::getUid());
+				if ($favorietenMenu) {
+					$this->addSuggestions($favorietenMenu->children);
+				}
 			}
 			if (InstellingUtil::lid_instelling('zoeken', 'menu') === 'ja') {
 				$this->addSuggestions(
@@ -49,10 +50,13 @@ JS;
 	}
 
 	/**
-	 * @param MenuItem[] $list
+	 * @param MenuItem[]|null $list
 	 */
 	private function addSuggestions($list)
 	{
+		if (!$list) {
+			return;
+		}
 		$uid = LoginService::getUid();
 		foreach ($list as $item) {
 			$parent = $item->parent;
