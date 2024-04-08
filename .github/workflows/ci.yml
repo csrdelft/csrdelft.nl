@@ -221,5 +221,5 @@ jobs:
 
       - name: Check translations
         run: |
-          php bin/console translation:update en --force
-          git diff --exit-code || exit 1
+          php bin/console translation:extract en --force --domain=messages
+          git diff --exit-code
