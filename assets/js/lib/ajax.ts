@@ -62,7 +62,8 @@ export function ajaxRequest(
 			if (source) {
 				$(source).replaceWith(
 					'<img alt="Mislukt" title="' +
-						error.message +
+						// Dit was error.message, maar dan krijg je momenteel stek inception.
+						"mislukt" +
 						'" src="/plaetjes/famfamfam/cancel.png" />'
 				);
 			} else {
