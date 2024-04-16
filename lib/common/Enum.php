@@ -123,7 +123,7 @@ abstract class Enum
 	{
 		if (!static::isValidValue($value)) {
 			throw new InvalidArgumentException(
-				'Invalid enum value: ' . $value . ' in ' . get_class(static::class)
+				'Invalid enum value: ' . $value . ' in ' . static::class
 			);
 		}
 
