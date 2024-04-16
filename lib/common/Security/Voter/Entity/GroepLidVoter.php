@@ -52,6 +52,7 @@ class GroepLidVoter extends Voter
 		}
 		switch ($attribute) {
 			case AbstractGroepVoter::AFMELDEN:
+			case AbstractGroepVoter::BEHEREN:
 			case AbstractGroepVoter::BEWERKEN:
 				return $this->magLid($token, $subject);
 			default:
