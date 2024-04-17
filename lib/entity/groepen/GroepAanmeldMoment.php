@@ -56,7 +56,7 @@ trait GroepAanmeldMoment
 	/**
 	 * @return DateTimeImmutable
 	 */
-	public function getAanmeldenTot(): DateTimeImmutable
+	public function getAanmeldenTot(): ?DateTimeImmutable
 	{
 		return $this->aanmeldenTot;
 	}
