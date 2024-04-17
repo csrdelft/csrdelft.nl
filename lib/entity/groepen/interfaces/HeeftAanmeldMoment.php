@@ -19,7 +19,7 @@ interface HeeftAanmeldMoment
 	/**
 	 * @return DateTimeImmutable
 	 */
-	public function getAanmeldenTot(): DateTimeImmutable;
+	public function getAanmeldenTot(): ?DateTimeImmutable;
 
 	/**
 	 * @param DateTimeImmutable $aanmeldenTot
