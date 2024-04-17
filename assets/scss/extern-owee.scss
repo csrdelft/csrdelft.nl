@@ -3,16 +3,16 @@
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
 // Zet hier de OWee kleuren
-$primary: #ffc4de;
-$secondary: #3fa34d;
-$tertiary: #3f8c4d;
-$accent: #ff9eca;
+$primary: $donkerblauw;
+$secondary: $donkerblauw;
+$tertiary: $grijs;
+$accent: $geel;
 $youtubeRed: rgb(170, 1, 1);
 $whatsappGreen: rgb(14, 214, 14);
 $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
 
-$basiskleur: #3fa34d;
-$lijnkleur: #ff9eca;
+$basiskleur: $donkerblauw;
+$lijnkleur: $geel;
 
 @font-face {
 	font-family: "Tw Cen MT";
@@ -307,7 +307,7 @@ body {
 	.videos {
 		//background: $primary url("../images/owee2022-achtergrond.png") no-repeat
 		//	left center;
-		background-color: $tertiary;
+		background-color: $secondary;
 		background-size: cover;
 		width: 100%;
 
