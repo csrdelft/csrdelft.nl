@@ -18,6 +18,11 @@ User-agent: Applebot
 User-agent: facebookexternalhit
 # Yahoo
 User-agent: Slurp
+User-agent: Twitterbot
+User-agent: LinkedInBot
+# Wayback machine
+User-agent: ia_archiver
+
 Disallow: /tools/
 Disallow: /forum/posten/
 Disallow: /fotoalbum/
