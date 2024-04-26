@@ -29,20 +29,10 @@ class Barsysteem {
 	}
 
 	function isBeheer() {
-		// Tijdelijk
-		if (
-			isset($_COOKIE['barsysteem']) && md5('my_salt_is_strong' . $_COOKIE['barsysteem']) == '8f700ce34a77ef4ef9db9bbdde9e97d8'
-			|| $this->beheer = isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) == '5367b4668337c47a02cf87793a6a05d5'
-		) {
-			$this->beheer = true;
-		} else $this->beheer = false;
+		if (!$this->beheer)
+			$this->beheer = isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) == '5367b4668337c47a02cf87793a6a05d5';
 
 		return $this->beheer;
-
-//		if (!$this->beheer)
-//			$this->beheer = isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) == '5367b4668337c47a02cf87793a6a05d5';
-//
-//		return $this->beheer;
 	}
 
 	function getCsrfToken() {
