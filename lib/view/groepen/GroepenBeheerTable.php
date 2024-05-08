@@ -146,7 +146,7 @@ class GroepenBeheerTable extends DataTable
 		);
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
 			Icon::getTag('home') .

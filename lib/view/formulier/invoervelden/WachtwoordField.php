@@ -12,7 +12,7 @@ class WachtwoordField extends TextField
 	public $type = 'password';
 
 	// Override TextField getValue as passwords do not need to be sanitised here
-	public function getValue()
+	public function getValue(): ?string
 	{
 		if ($this->isPosted()) {
 			$this->value = $_POST[$this->name];

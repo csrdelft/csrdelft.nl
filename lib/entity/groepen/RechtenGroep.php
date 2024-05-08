@@ -17,7 +17,7 @@ class RechtenGroep extends Groep implements HeeftAanmeldRechten
 {
 	use GroepAanmeldRechten;
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/overig/' . $this->id;
 	}

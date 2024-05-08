@@ -105,7 +105,7 @@ class CorveePuntenService
 		});
 	}
 
-	public function puntenToekennen(Profiel $profiel, $punten, $bonus_malus)
+	public function puntenToekennen(Profiel $profiel, $punten, $bonus_malus): void
 	{
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Punten toekennen faalt: geen integer');
@@ -120,7 +120,7 @@ class CorveePuntenService
 		}
 	}
 
-	public function puntenIntrekken(Profiel $profiel, $punten, $bonus_malus)
+	public function puntenIntrekken(Profiel $profiel, $punten, $bonus_malus): void
 	{
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Punten intrekken faalt: geen integer');
@@ -128,11 +128,7 @@ class CorveePuntenService
 		$this->puntenToekennen($profiel, -$punten, -$bonus_malus);
 	}
 
-	public function savePuntenVoorLid(
-		Profiel $profiel,
-		$punten = null,
-		$bonus_malus = null
-	) {
+	public function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null): void {
 		if (!is_int($punten) && !is_int($bonus_malus)) {
 			throw new CsrGebruikerException(
 				'Save punten voor lid ' . $profiel->uid . ' faalt: geen integer'
@@ -150,7 +146,7 @@ class CorveePuntenService
 	/**
 	 * @return array|CorveePuntenOverzichtDTO[]
 	 */
-	public function loadPuntenTotaalVoorAlleLeden()
+	public function loadPuntenTotaalVoorAlleLeden(): array
 	{
 		$leden = $this->profielRepository->findByLidStatus([
 			LidStatus::Lid,
@@ -172,7 +168,7 @@ class CorveePuntenService
 	 * @param null $functies
 	 * @return CorveePuntenOverzichtDTO[]
 	 */
-	public function loadPuntenVoorAlleLeden($functies = null)
+	public function loadPuntenVoorAlleLeden($functies = null): array
 	{
 		$taken = $this->corveeTakenRepository->getAlleTaken(true); // grouped by uid
 		$leden = $this->profielRepository->findByLidStatus([
@@ -202,12 +198,7 @@ class CorveePuntenService
 	 * @param bool $vrijstelling
 	 * @return CorveePuntenOverzichtDTO
 	 */
-	public function loadPuntenVoorLid(
-		Profiel $profiel,
-		$functies = null,
-		$lidtaken = null,
-		$vrijstelling = null
-	) {
+	public function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = null): CorveePuntenOverzichtDTO {
 		if ($lidtaken === null) {
 			$lidtaken = $this->corveeTakenRepository->getTakenVoorLid($profiel);
 			$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling(
@@ -256,7 +247,7 @@ class CorveePuntenService
 	 * @param CorveeTaak[] $taken
 	 * @return CorveePuntenOverzichtDTO
 	 */
-	private function sumPuntenPerFunctie($functies, $taken)
+	private function sumPuntenPerFunctie($functies, $taken): CorveePuntenOverzichtDTO
 	{
 		$sumAantal = [];
 		$sumPunten = [];

@@ -11,7 +11,7 @@ use Faker\Factory as Faker;
 
 class VerticalenFixtures extends Fixture implements DependentFixtureInterface
 {
-	public function load(ObjectManager $manager)
+	public function load(ObjectManager $manager): void
 	{
 		$faker = Faker::create('nl_NL');
 
@@ -35,7 +35,7 @@ class VerticalenFixtures extends Fixture implements DependentFixtureInterface
 		$manager->flush();
 	}
 
-	public function getDependencies()
+	public function getDependencies(): array
 	{
 		return [AccountFixtures::class];
 	}

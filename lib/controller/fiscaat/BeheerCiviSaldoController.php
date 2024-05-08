@@ -62,7 +62,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Auth(P_FISCAAT_READ)
 	 * @throws ExceptionInterface
 	 */
-	public function overzicht(Request $request)
+	public function overzicht(Request $request): Response
 	{
 		$table = $this->createDataTable(CiviSaldoTable::class);
 
@@ -85,7 +85,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/inleggen/{uid}", defaults={"uid"=null}, methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function inleggen(EntityManagerInterface $em, $uid)
+	public function inleggen(EntityManagerInterface $em, $uid): GenericDataTableResponse|InleggenForm
 	{
 		if ($uid) {
 			$civisaldo = $this->civiSaldoRepository->find($uid);
@@ -131,7 +131,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/verwijderen", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function verwijderen()
+	public function verwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -164,7 +164,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/registreren", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function registreren()
+	public function registreren(): GenericDataTableResponse|LidRegistratieForm
 	{
 		$form = new LidRegistratieForm(new CiviSaldo());
 
@@ -202,7 +202,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/som", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function som()
+	public function som(): Response
 	{
 		$momentString = filter_input(INPUT_POST, 'moment', FILTER_SANITIZE_STRING);
 		$moment = DateTime::createFromFormat('Y-m-d H:i', $momentString);
@@ -226,7 +226,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/zoek", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function zoek(Request $request)
+	public function zoek(Request $request): JsonResponse
 	{
 		$zoekterm = $request->query->get('q');
 

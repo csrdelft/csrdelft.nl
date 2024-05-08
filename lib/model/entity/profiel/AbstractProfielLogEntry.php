@@ -13,7 +13,7 @@ abstract class AbstractProfielLogEntry
 {
 	abstract public function toHtml();
 
-	public function censureerVeld($naam)
+	public function censureerVeld($naam): AbstractProfielLogEntry
 	{
 		return $this;
 	}

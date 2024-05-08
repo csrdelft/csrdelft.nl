@@ -6,6 +6,7 @@ use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * LichtingenController.class.php
@@ -18,12 +19,12 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class LichtingenController extends AbstractGroepenController
 {
-	public function getGroepType()
+	public function getGroepType(): string
 	{
 		return Lichting::class;
 	}
 
-	public function zoeken(Request $request, $zoekterm = null)
+	public function zoeken(Request $request, $zoekterm = null): JsonResponse
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
@@ -50,7 +51,7 @@ class LichtingenController extends AbstractGroepenController
 		return new JsonResponse($result);
 	}
 
-	public function beheren(Request $request, $soort = null)
+	public function beheren(Request $request, $soort = null): Response
 	{
 		throw $this->createNotFoundException('Kan geen lichtingen beheren');
 	}

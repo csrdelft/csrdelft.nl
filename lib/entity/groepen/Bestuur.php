@@ -24,7 +24,7 @@ class Bestuur extends Groep implements HeeftMoment
 	 */
 	public $bijbeltekst;
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/besturen/' . $this->id;
 	}

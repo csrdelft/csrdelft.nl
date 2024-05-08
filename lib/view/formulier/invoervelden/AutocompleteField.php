@@ -85,7 +85,7 @@ class AutocompleteField extends TextField
 			' />';
 	}
 
-	protected function getInputAttribute($attribute)
+	protected function getInputAttribute($attribute): string
 	{
 		switch ($attribute) {
 			case 'autocomplete':

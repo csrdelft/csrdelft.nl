@@ -30,7 +30,7 @@ class ArchiefMaaltijdenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(ArchiefMaaltijd $archiefMaaltijd)
+	public function create(ArchiefMaaltijd $archiefMaaltijd): void
 	{
 		$this->_em->persist($archiefMaaltijd);
 		$this->_em->flush();

@@ -39,7 +39,7 @@ class BoekRecensieRepository extends AbstractRepository
 	 * @param $uid
 	 * @return BoekRecensie[]
 	 */
-	public function getVoorLid($uid)
+	public function getVoorLid($uid): array
 	{
 		return $this->findBy(['schrijver_uid' => $uid]);
 	}

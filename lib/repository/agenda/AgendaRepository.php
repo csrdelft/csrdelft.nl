@@ -21,7 +21,7 @@ use DateInterval;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -84,10 +84,7 @@ class AgendaRepository extends AbstractRepository
 	 * @param Agendeerbaar $bar
 	 * @return int
 	 */
-	public static function vergelijkAgendeerbaars(
-		Agendeerbaar $foo,
-		Agendeerbaar $bar
-	) {
+	public static function vergelijkAgendeerbaars(Agendeerbaar $foo, Agendeerbaar $bar): int {
 		$a = $foo->getBeginMoment();
 		$b = $bar->getBeginMoment();
 		if ($a > $b) {
@@ -103,7 +100,7 @@ class AgendaRepository extends AbstractRepository
 	 * @param $itemId
 	 * @return AgendaItem|null
 	 */
-	public function getAgendaItem($itemId)
+	public function getAgendaItem($itemId): AgendaItem
 	{
 		return $this->find($itemId);
 	}
@@ -121,7 +118,7 @@ class AgendaRepository extends AbstractRepository
 		);
 	}
 
-	public function filterVerborgen(array $items)
+	public function filterVerborgen(array $items): array
 	{
 		// Items verbergen
 		$itemsByUUID = [];
@@ -153,12 +150,7 @@ class AgendaRepository extends AbstractRepository
 	 * @param $limiet
 	 * @return AgendaItem[]
 	 */
-	public function zoeken(
-		DateTimeImmutable $van,
-		DateTimeImmutable $tot,
-		$query,
-		$limiet
-	) {
+	public function zoeken(DateTimeImmutable $van, DateTimeImmutable $tot, $query, $limiet): mixed {
 		return $this->createQueryBuilder('a')
 			->where('a.eind_moment >= :van and a.begin_moment <= :tot')
 			->andWhere(
@@ -181,12 +173,7 @@ class AgendaRepository extends AbstractRepository
 	 * @param bool $zijbalk
 	 * @return Agendeerbaar[]
 	 */
-	public function getAllAgendeerbaar(
-		DateTimeImmutable $van,
-		DateTimeImmutable $tot,
-		$ical = false,
-		$zijbalk = false
-	) {
+	public function getAllAgendeerbaar(DateTimeImmutable $van, DateTimeImmutable $tot, $ical = false, $zijbalk = false): array {
 		$result = [];
 
 		// AgendaItems
@@ -286,7 +273,7 @@ class AgendaRepository extends AbstractRepository
 	 * @param $woord string
 	 * @return Agendeerbaar|null
 	 */
-	public function zoekWoordAgenda($woord)
+	public function zoekWoordAgenda($woord): ?Agendeerbaar
 	{
 		return $this->zoekRegexAgenda('/' . preg_quote($woord, '/') . '/iu');
 	}
@@ -311,12 +298,12 @@ class AgendaRepository extends AbstractRepository
 		return null;
 	}
 
-	public function getItemsByDay(DateTimeImmutable $dag)
+	public function getItemsByDay(DateTimeImmutable $dag): array
 	{
 		return $this->getAllAgendeerbaar($dag, $dag);
 	}
 
-	public function nieuw($beginMoment, $eindMoment)
+	public function nieuw($beginMoment, $eindMoment): AgendaItem
 	{
 		$item = new AgendaItem();
 		$item->begin_moment = $beginMoment

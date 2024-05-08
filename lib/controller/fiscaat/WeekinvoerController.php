@@ -21,10 +21,7 @@ class WeekinvoerController extends AbstractController
 	 * @return Response
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function weekinvoer(
-		Request $request,
-		CiviSaldoRepository $civiSaldoRepository
-	) {
+	public function weekinvoer(Request $request, CiviSaldoRepository $civiSaldoRepository): Response {
 		$from = new DateTimeImmutable();
 		$from = $from->sub(new DateInterval('P1M'));
 

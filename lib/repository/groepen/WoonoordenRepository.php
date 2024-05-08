@@ -3,6 +3,7 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\common\Util\DateUtil;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\HuisStatus;
 use CsrDelft\entity\groepen\Woonoord;
@@ -11,12 +12,12 @@ use CsrDelft\service\security\LoginService;
 
 class WoonoordenRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Woonoord::class;
 	}
 
-	public function nieuw($soort = null)
+	public function nieuw($soort = null): Woonoord
 	{
 		/** @var Woonoord $woonoord */
 		$woonoord = parent::nieuw();
@@ -32,11 +33,7 @@ class WoonoordenRepository extends GroepRepository
 		return $woonoord;
 	}
 
-	public function overzicht(
-		int $limit = null,
-		int $offset = null,
-		string $soort = null
-	) {
+	public function overzicht(int $limit = null, int $offset = null, string $soort = null): array {
 		if ($soort && HuisStatus::isValidValue($soort)) {
 			return $this->findBy(
 				[
@@ -51,7 +48,7 @@ class WoonoordenRepository extends GroepRepository
 		return parent::overzicht($limit, $offset, $soort);
 	}
 
-	public function beheer(string $soort = null)
+	public function beheer(string $soort = null): array
 	{
 		if ($soort && HuisStatus::isValidValue($soort)) {
 			return $this->findBy(['huisStatus' => HuisStatus::from($soort)]);
@@ -59,7 +56,7 @@ class WoonoordenRepository extends GroepRepository
 		return parent::beheer($soort);
 	}
 
-	public function parseSoort(string $soort = null)
+	public function parseSoort(string $soort = null): ?HuisStatus
 	{
 		if ($soort && HuisStatus::isValidValue($soort)) {
 			return HuisStatus::from($soort);

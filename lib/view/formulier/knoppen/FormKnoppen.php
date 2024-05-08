@@ -34,7 +34,7 @@ abstract class FormKnoppen implements FormElement
 		return array_merge($this->knoppen_left, $this->knoppen_right);
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): null
 	{
 		return null;
 	}
@@ -44,12 +44,12 @@ abstract class FormKnoppen implements FormElement
 		return $this->getType();
 	}
 
-	public function getType()
+	public function getType(): string
 	{
 		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}
 
-	public function addKnop(FormulierKnop $knop, $left = false, $prepend = false)
+	public function addKnop(FormulierKnop $knop, $left = false, $prepend = false): void
 	{
 		if ($left) {
 			if ($prepend) {

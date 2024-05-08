@@ -16,11 +16,7 @@ class DocumentCategorieForm implements FormulierTypeInterface
 	 * @param DocumentCategorie $data
 	 * @param array $options
 	 */
-	public function createFormulier(
-		FormulierBuilder $builder,
-		$data,
-		$options = []
-	) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
 		$builder->setTitel('Categorie bewerken');
 
 		$fields = [];

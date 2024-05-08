@@ -105,24 +105,24 @@ class Foto extends Afbeelding
 		);
 	}
 
-	public function getAlbumUrl()
+	public function getAlbumUrl(): string
 	{
 		return PathUtil::direncode(
 			PathUtil::join_paths(self::FOTOALBUM_ROOT, $this->subdir)
 		);
 	}
-	public function getAlbum()
+	public function getAlbum(): FotoAlbum
 	{
 		return new FotoAlbum($this->subdir);
 	}
-	public function getFullUrl()
+	public function getFullUrl(): string
 	{
 		return PathUtil::direncode(
 			PathUtil::join_paths(self::FOTOALBUM_ROOT, $this->subdir, $this->filename)
 		);
 	}
 
-	public function getThumbUrl()
+	public function getThumbUrl(): string
 	{
 		return PathUtil::direncode(
 			PathUtil::join_paths(
@@ -134,7 +134,7 @@ class Foto extends Afbeelding
 		);
 	}
 
-	public function getResizedUrl()
+	public function getResizedUrl(): string
 	{
 		return PathUtil::direncode(
 			PathUtil::join_paths(
@@ -146,19 +146,19 @@ class Foto extends Afbeelding
 		);
 	}
 
-	public function hasThumb()
+	public function hasThumb(): bool
 	{
 		$path = $this->getThumbPath();
 		return file_exists($path) && is_file($path);
 	}
 
-	public function hasResized()
+	public function hasResized(): bool
 	{
 		$path = $this->getResizedPath();
 		return file_exists($path) && is_file($path);
 	}
 
-	public function createThumb()
+	public function createThumb(): void
 	{
 		$path = PathUtil::join_paths(
 			PHOTOALBUM_PATH,
@@ -188,7 +188,7 @@ class Foto extends Afbeelding
 		}
 	}
 
-	public function createResized()
+	public function createResized(): void
 	{
 		$path = PathUtil::join_paths(
 			PHOTOALBUM_PATH,
@@ -218,7 +218,7 @@ class Foto extends Afbeelding
 		}
 	}
 
-	public function isComplete()
+	public function isComplete(): bool
 	{
 		return $this->hasThumb() && $this->hasResized();
 	}

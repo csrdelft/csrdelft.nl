@@ -53,13 +53,13 @@ class CorveeVrijstelling
 	 */
 	public $profiel;
 
-	public function setProfiel($profiel)
+	public function setProfiel($profiel): void
 	{
 		$this->profiel = $profiel;
 		$this->uid = $profiel->uid ?? null;
 	}
 
-	public function getPunten()
+	public function getPunten(): int
 	{
 		return (int) ceil(
 			($this->percentage *

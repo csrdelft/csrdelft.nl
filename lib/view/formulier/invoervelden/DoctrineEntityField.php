@@ -108,7 +108,7 @@ class DoctrineEntityField extends TextField
 		return $this->name;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;
@@ -167,7 +167,7 @@ class DoctrineEntityField extends TextField
 	 *
 	 * @return bool Of alles gepost is
 	 */
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		if (
 			null === filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)

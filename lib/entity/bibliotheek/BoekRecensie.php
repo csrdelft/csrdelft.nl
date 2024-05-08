@@ -60,7 +60,7 @@ class BoekRecensie
 	 */
 	public $boek;
 
-	public function getBoek()
+	public function getBoek(): Boek
 	{
 		return $this->boek;
 	}
@@ -82,7 +82,7 @@ class BoekRecensie
 		return $this->isSchrijver();
 	}
 
-	public function isSchrijver($uid = null)
+	public function isSchrijver($uid = null): bool
 	{
 		if (!LoginService::mag(P_LOGGED_IN)) {
 			return false;

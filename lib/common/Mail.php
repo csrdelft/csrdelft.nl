@@ -42,7 +42,7 @@ class Mail
 		$this->addTo($to);
 	}
 
-	public function addTo(array $to)
+	public function addTo(array $to): void
 	{
 		foreach ($to as $email => $name) {
 			if (!UrlUtil::email_like($email)) {
@@ -78,7 +78,7 @@ class Mail
 		return !HostUtil::isProduction();
 	}
 
-	public function addBcc(array $bcc)
+	public function addBcc(array $bcc): void
 	{
 		foreach ($bcc as $email => $name) {
 			if (!UrlUtil::email_like($email)) {
@@ -98,7 +98,7 @@ class Mail
 	 * @param bool $emailOnly
 	 * @return int|string|null
 	 */
-	public function getFrom($emailOnly = false)
+	public function getFrom($emailOnly = false): int|string|null
 	{
 		$name = reset($this->from);
 		$email = key($this->from);
@@ -112,7 +112,7 @@ class Mail
 	 * @param string $email
 	 * @param string|null $name
 	 */
-	public function setFrom(string $email, string $name = null)
+	public function setFrom(string $email, string $name = null): void
 	{
 		if (!UrlUtil::email_like($email)) {
 			throw new CsrGebruikerException(
@@ -137,7 +137,7 @@ class Mail
 		return $name . ' <' . $email . '>';
 	}
 
-	public function setReplyTo(string $email, string $name = null)
+	public function setReplyTo(string $email, string $name = null): void
 	{
 		if (!UrlUtil::email_like($email)) {
 			throw new CsrGebruikerException(

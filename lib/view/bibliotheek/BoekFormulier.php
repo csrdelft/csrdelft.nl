@@ -43,11 +43,7 @@ class BoekFormulier implements FormulierTypeInterface
 	 * @param Boek $data
 	 * @param array $options
 	 */
-	public function createFormulier(
-		FormulierBuilder $builder,
-		$data,
-		$options = []
-	) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
 		$builder->setAction(
 			$this->urlGenerator->generate('csrdelft_bibliotheek_boek', [
 				'boek' => $data->id,

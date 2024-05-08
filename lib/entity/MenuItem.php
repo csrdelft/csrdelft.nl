@@ -83,7 +83,7 @@ class MenuItem implements DisplayEntity
 	 */
 	public $children;
 
-	public function hasChildren()
+	public function hasChildren(): bool|int
 	{
 		if (!$this->children) {
 			return false;
@@ -96,7 +96,7 @@ class MenuItem implements DisplayEntity
 		return $this->children->count();
 	}
 
-	public function isOngelezen()
+	public function isOngelezen(): bool
 	{
 		$prefix = '/forum/onderwerp/';
 		if (str_starts_with($this->link, $prefix)) {
@@ -124,7 +124,7 @@ class MenuItem implements DisplayEntity
 		return false;
 	}
 
-	public function getId()
+	public function getId(): int
 	{
 		return $this->item_id;
 	}

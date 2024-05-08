@@ -36,22 +36,22 @@ class Woonoord extends Groep implements HeeftSoort, HeeftMoment
 	 */
 	public $eetplan;
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/woonoorden/' . $this->id;
 	}
 
-	public function getSoort()
+	public function getSoort(): HuisStatus
 	{
 		return $this->huisStatus;
 	}
 
-	public function setSoort($soort)
+	public function setSoort($soort): void
 	{
 		$this->huisStatus = $soort;
 	}
 
-	public function setSoortString($soort)
+	public function setSoortString($soort): void
 	{
 		$this->huisStatus = HuisStatus::from($soort);
 	}

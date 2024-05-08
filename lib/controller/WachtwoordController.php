@@ -189,7 +189,7 @@ class WachtwoordController extends AbstractController
 		return $this->render('default.html.twig', ['content' => $form]);
 	}
 
-	private function verzendResetMail(Account $account, $token)
+	private function verzendResetMail(Account $account, $token): void
 	{
 		$profiel = $account->profiel;
 

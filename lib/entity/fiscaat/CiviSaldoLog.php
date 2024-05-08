@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

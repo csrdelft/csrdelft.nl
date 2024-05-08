@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -52,7 +52,7 @@ class MenuItemRepository extends AbstractRepository
 	 * Haal menu op voor beheer, checkt geen rechten.
 	 * @param $naam
 	 */
-	public function getMenuBeheer($naam)
+	public function getMenuBeheer($naam): null
 	{
 		if (empty($naam)) {
 			return null;
@@ -83,7 +83,7 @@ class MenuItemRepository extends AbstractRepository
 	 * @param string $naam
 	 * @return MenuItem root
 	 */
-	public function getMenu($naam)
+	public function getMenu($naam): MenuItem
 	{
 		if (empty($naam)) {
 			return null;
@@ -125,7 +125,7 @@ class MenuItemRepository extends AbstractRepository
 	 *
 	 * @return MenuItem|null
 	 */
-	public function getMenuRoot($naam)
+	public function getMenuRoot($naam): ?MenuItem
 	{
 		return $this->findOneBy(['parent' => null, 'tekst' => $naam]);
 	}
@@ -137,7 +137,7 @@ class MenuItemRepository extends AbstractRepository
 	 * @param MenuItem $parent
 	 * @return MenuItem
 	 */
-	private function getExtendedTree(MenuItem $parent, $checkRechten)
+	private function getExtendedTree(MenuItem $parent, $checkRechten): MenuItem
 	{
 		// Check leesrechten op de boom
 		if ($parent->children) {
@@ -239,7 +239,7 @@ class MenuItemRepository extends AbstractRepository
 	 *
 	 * @return MenuItem
 	 */
-	public function nieuw($parent)
+	public function nieuw($parent): MenuItem
 	{
 		$item = new MenuItem();
 		$item->parent = $parent;
@@ -249,7 +249,7 @@ class MenuItemRepository extends AbstractRepository
 		return $item;
 	}
 
-	public function nieuwFavorietMenu($uid)
+	public function nieuwFavorietMenu($uid): MenuItem
 	{
 		$item = $this->nieuw(null);
 		$item->tekst = $uid;
@@ -286,7 +286,7 @@ class MenuItemRepository extends AbstractRepository
 			($user ? $user->getUsername() : '');
 	}
 
-	private function flattenMenuInternal(MenuItem $root)
+	private function flattenMenuInternal(MenuItem $root): array
 	{
 		$list = [$root];
 
@@ -306,7 +306,7 @@ class MenuItemRepository extends AbstractRepository
 	 *
 	 * @return MenuItem[]|false
 	 */
-	public function getMenuBeheerLijst()
+	public function getMenuBeheerLijst(): array|bool
 	{
 		if (LoginService::mag(P_ADMIN)) {
 			return $this->findBy(['parent' => null]);
@@ -321,7 +321,7 @@ class MenuItemRepository extends AbstractRepository
 	 * @param int $id
 	 * @return MenuItem|false
 	 */
-	public function getMenuItem($id)
+	public function getMenuItem($id): ?MenuItem
 	{
 		return $this->find($id);
 	}
@@ -331,7 +331,7 @@ class MenuItemRepository extends AbstractRepository
 	 *
 	 * @return int
 	 */
-	public function removeMenuItem(MenuItem $item)
+	public function removeMenuItem(MenuItem $item): int
 	{
 		$manager = $this->getEntityManager();
 		$manager->beginTransaction();
@@ -363,7 +363,7 @@ class MenuItemRepository extends AbstractRepository
 	 * @param MenuItem[] $breadcrumbs
 	 * @return string
 	 */
-	public function renderBreadcrumbs($breadcrumbs)
+	public function renderBreadcrumbs($breadcrumbs): string
 	{
 		if (empty($breadcrumbs)) {
 			return '';
@@ -416,7 +416,7 @@ class MenuItemRepository extends AbstractRepository
 	 * @param $link
 	 * @return MenuItem[]
 	 */
-	public function getBreadcrumbs($link)
+	public function getBreadcrumbs($link): array
 	{
 		if ($link == '/') {
 			return [
@@ -449,7 +449,7 @@ class MenuItemRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function persist(MenuItem $item)
+	public function persist(MenuItem $item): void
 	{
 		$this->getEntityManager()->persist($item);
 		$this->getEntityManager()->flush();
@@ -457,7 +457,7 @@ class MenuItemRepository extends AbstractRepository
 		$this->deleteItemFromCache($item);
 	}
 
-	public function deleteItemFromCache(MenuItem $item)
+	public function deleteItemFromCache(MenuItem $item): void
 	{
 		do {
 			$this->cache->delete($this->createCacheKey($item->tekst));
@@ -470,7 +470,7 @@ class MenuItemRepository extends AbstractRepository
 	 *
 	 * @return MenuItem
 	 */
-	public function getRoot(MenuItem $item)
+	public function getRoot(MenuItem $item): MenuItem
 	{
 		if (!$item->parent) {
 			return $item;
@@ -478,7 +478,7 @@ class MenuItemRepository extends AbstractRepository
 		return $this->getRoot($item->parent);
 	}
 
-	public function getSuggesties($query)
+	public function getSuggesties($query): mixed
 	{
 		return $this->createQueryBuilder('menuItem')
 			->where('menuItem.tekst like :query or menuItem.link like :query')

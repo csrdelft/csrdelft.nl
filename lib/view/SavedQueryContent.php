@@ -22,22 +22,22 @@ class SavedQueryContent implements View
 		$this->sq = $sq;
 	}
 
-	public function getModel()
+	public function getModel(): SavedQueryResult
 	{
 		return $this->sq;
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): ?string
 	{
 		return null;
 	}
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return 'Opgeslagen query\'s';
 	}
 
-	public static function render_header($name)
+	public static function render_header($name): string
 	{
 		switch ($name) {
 			case 'uid_naam':
@@ -58,7 +58,7 @@ class SavedQueryContent implements View
 		return $name;
 	}
 
-	public static function render_field($name, $contents)
+	public static function render_field($name, $contents): null|string
 	{
 		if ($name == 'uid_naam') {
 			return ProfielRepository::getLink($contents, 'volledig');
@@ -81,7 +81,7 @@ class SavedQueryContent implements View
 		return htmlspecialchars($contents);
 	}
 
-	public function render_queryResult()
+	public function render_queryResult(): string
 	{
 		if ($this->sq && !$this->sq->error) {
 			$sq = $this->sq;

@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\embed\BbVideo;
 
 class NodeVideo implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbVideo::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'video';
 	}
 
-	public function getData(BbNode $node)
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbVideo) {
 			throw new \InvalidArgumentException();
@@ -31,14 +31,14 @@ class NodeVideo implements Node
 		];
 	}
 
-	public function getTagAttributes($node)
+	public function getTagAttributes($node): array
 	{
 		return [
 			'video' => $node->attrs->url,
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

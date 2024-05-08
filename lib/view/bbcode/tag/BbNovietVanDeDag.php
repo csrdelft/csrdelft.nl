@@ -5,7 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbTag;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 
 class BbNovietVanDeDag extends BbTag
@@ -33,7 +33,7 @@ class BbNovietVanDeDag extends BbTag
 		$this->security = $security;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'novietvandedag';
 	}
@@ -43,12 +43,12 @@ class BbNovietVanDeDag extends BbTag
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		// geen argumenten
 	}
 
-	public function render()
+	public function render(): string
 	{
 		// Haal profielen van novieten op
 		$profielen = $this->profielRepository->findByLidStatus([LidStatus::Noviet]);
@@ -86,7 +86,7 @@ class BbNovietVanDeDag extends BbTag
 		}
 	}
 
-	public function renderLight()
+	public function renderLight(): void
 	{
 		// Niet light te renderen
 	}

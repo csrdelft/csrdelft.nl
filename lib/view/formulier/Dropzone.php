@@ -45,7 +45,7 @@ class Dropzone extends Formulier
 		$this->addFields($fields);
 	}
 
-	public function getPostedUploader()
+	public function getPostedUploader(): ImageField|FileField|null
 	{
 		if ($this->dropzone->isPosted()) {
 			return $this->dropzone;
@@ -55,7 +55,7 @@ class Dropzone extends Formulier
 		return null;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!$this->isPosted()) {
 			return false;
@@ -68,7 +68,7 @@ class Dropzone extends Formulier
 		return false;
 	}
 
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		if ($this->dropzone->isPosted()) {
 			return true;
@@ -78,7 +78,7 @@ class Dropzone extends Formulier
 		return false;
 	}
 
-	protected function getFormTag()
+	protected function getFormTag(): string
 	{
 		if ($this->dataTableId) {
 			$this->css_classes[] = 'DataTableResponse';

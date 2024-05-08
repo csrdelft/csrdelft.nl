@@ -7,17 +7,17 @@ use CsrDelft\view\bbcode\tag\BbOrderedList;
 
 class NodeOrderedList implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbOrderedList::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'ordered_list';
 	}
 
-	public function getData(BbNode $node)
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbOrderedList) {
 			throw new \InvalidArgumentException();
@@ -30,14 +30,14 @@ class NodeOrderedList implements Node
 		];
 	}
 
-	public function getTagAttributes($node)
+	public function getTagAttributes($node): array
 	{
 		return [
 			'order' => $node->attrs->order,
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return false;
 	}

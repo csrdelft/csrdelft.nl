@@ -51,7 +51,7 @@ class StreeplijstController extends AbstractController
 	 * @Route("/streeplijst", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function overzicht()
+	public function overzicht(): Response
 	{
 		return $this->render('streeplijst/overzicht.html.twig', [
 			'streeplijstoverzicht' => $this->streeplijstRepository->getAlleStreeplijsten(),
@@ -74,7 +74,7 @@ class StreeplijstController extends AbstractController
 	 * @Route("/streeplijst/aanmaken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function aanmaken(Request $request)
+	public function aanmaken(Request $request): RedirectResponse
 	{
 		$inhoud_streeplijst = $request->query->get('inhoud_streeplijst');
 		$leden_streeplijst = $request->query->get('leden_streeplijst');
@@ -96,7 +96,7 @@ class StreeplijstController extends AbstractController
 	 * @Route("/streeplijst/bewerken/{id}", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken($id)
+	public function bewerken($id): Response
 	{
 		$streeplijst = $this->streeplijstRepository->find($id);
 		return $this->render('streeplijst/overzicht.html.twig', [
@@ -115,7 +115,7 @@ class StreeplijstController extends AbstractController
 	 * @Route("/streeplijst/verwijderen/{id}", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verwijderen($id)
+	public function verwijderen($id): RedirectResponse
 	{
 		$streeplijst = $this->streeplijstRepository->find($id);
 		$manager = $this->getDoctrine()->getManager();
@@ -130,7 +130,7 @@ class StreeplijstController extends AbstractController
 	 * @Route("/streeplijst/selectie", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function selectie(Request $request)
+	public function selectie(Request $request): Response
 	{
 		$verticale = $request->request->get('verticale');
 		$lichting = $request->request->get('lichting');
@@ -189,7 +189,7 @@ class StreeplijstController extends AbstractController
 	 * @Route("/streeplijst/genereren/{id}", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function genereren($id)
+	public function genereren($id): Response
 	{
 		$streeplijst = $this->streeplijstRepository->find($id);
 
@@ -204,7 +204,7 @@ class StreeplijstController extends AbstractController
 	 * @Route("/streeplijst/genererenZonderId", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function genererenZonderId(Request $request)
+	public function genererenZonderId(Request $request): Response
 	{
 		$naam_streeplijst = $request->query->get('naam_streeplijst');
 		$leden_streeplijst = $request->query->get('leden_streeplijst');
@@ -226,7 +226,7 @@ class StreeplijstController extends AbstractController
 	 * @Route("/streeplijst/genererenHVPresentielijst", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function genererenHVPresentielijst(Request $request)
+	public function genererenHVPresentielijst(Request $request): Response
 	{
 		$naam_HVlijst = $request->query->get('naam_HVlijst');
 		$arrayStreeplijsten = [];

@@ -36,7 +36,7 @@ class InstellingenTwigExtension extends AbstractExtension
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
 	}
 
-	public function getFunctions()
+	public function getFunctions(): array
 	{
 		return [
 			new TwigFunction('instelling', [$this, 'instelling']),
@@ -46,7 +46,7 @@ class InstellingenTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function getFilters()
+	public function getFilters(): array
 	{
 		return [new TwigFilter('is_zichtbaar', [$this, 'is_zichtbaar'])];
 	}
@@ -56,7 +56,7 @@ class InstellingenTwigExtension extends AbstractExtension
 		return $this->lidInstellingenRepository->getValue($module, $key);
 	}
 
-	public function instelling($module, $key)
+	public function instelling($module, $key): string
 	{
 		return $this->instellingenRepository->getValue($module, $key);
 	}
@@ -66,7 +66,7 @@ class InstellingenTwigExtension extends AbstractExtension
 		return $this->lidToestemmingRepository->toestemmingGegeven();
 	}
 
-	public function toestemming_form()
+	public function toestemming_form(): ToestemmingModalForm
 	{
 		return new ToestemmingModalForm($this->lidToestemmingRepository);
 	}
@@ -78,12 +78,7 @@ class InstellingenTwigExtension extends AbstractExtension
 	 * @param string $uitzondering Sommige commissie mogen wel dit veld zien.
 	 * @return bool
 	 */
-	public function is_zichtbaar(
-		$profiel,
-		$key,
-		$cat = 'profiel',
-		$uitzondering = P_LEDEN_MOD
-	) {
+	public function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_MOD): bool {
 		if (is_array($key)) {
 			foreach ($key as $item) {
 				if (

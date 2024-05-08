@@ -29,7 +29,7 @@ class Lichting extends Groep
 	 * Stiekem hebben we helemaal geen leden
 	 * @return GroepLid[]|ArrayCollection
 	 */
-	public function getLeden()
+	public function getLeden(): ArrayCollection
 	{
 		$profielRepository = ContainerFacade::getContainer()->get(
 			ProfielRepository::class
@@ -54,7 +54,7 @@ class Lichting extends Groep
 		return new ArrayCollection($leden);
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/lichtingen/' . $this->lidjaar;
 	}

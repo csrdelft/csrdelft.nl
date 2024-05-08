@@ -22,18 +22,12 @@ class GeslachtPrefixVoter extends PrefixVoter
 		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
-	protected function supportsPrefix($prefix)
+	protected function supportsPrefix($prefix): bool
 	{
 		return strtoupper($prefix) == 'GESLACHT';
 	}
 
-	protected function voteOnPrefix(
-		string $prefix,
-		$gevraagd,
-		$role,
-		$subject,
-		TokenInterface $token
-	) {
+	protected function voteOnPrefix(string $prefix, $gevraagd, $role, $subject, TokenInterface $token): bool {
 		// Niet ingelogd heeft geslacht m dus check of ingelogd
 		if (!$this->accessDecisionManager->decide($token, ['ROLE_LOGGED_IN'])) {
 			return false;

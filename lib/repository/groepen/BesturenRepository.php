@@ -9,12 +9,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class BesturenRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Bestuur::class;
 	}
 
-	public function nieuw($soort = null)
+	public function nieuw($soort = null): Bestuur
 	{
 		/** @var Bestuur $bestuur */
 		$bestuur = parent::nieuw();

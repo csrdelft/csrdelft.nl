@@ -64,7 +64,7 @@ class SuggestieLijst implements ToResponse, FormElement
 		$this->twig = $twig;
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		return $this->twig->render(
 			'maaltijden/corveetaak/suggesties_lijst.html.twig',
@@ -90,12 +90,12 @@ class SuggestieLijst implements ToResponse, FormElement
 		return $this->getType();
 	}
 
-	public function getType()
+	public function getType(): string
 	{
 		return get_class($this);
 	}
 
-	public function getJavascript()
+	public function getJavascript(): string
 	{
 		$js = <<<JS
 
@@ -112,7 +112,7 @@ JS;
 		return $js;
 	}
 
-	public function getModel()
+	public function getModel(): array
 	{
 		return $this->suggesties;
 	}
@@ -122,7 +122,7 @@ JS;
 		return new Response($this->getHtml());
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return '';
 	}

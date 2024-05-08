@@ -24,13 +24,13 @@ abstract class AbstractRepository extends ServiceEntityRepository
 		);
 	}
 
-	public function save($entity)
+	public function save($entity): void
 	{
 		$this->_em->persist($entity);
 		$this->_em->flush();
 	}
 
-	public function remove($entity)
+	public function remove($entity): void
 	{
 		$this->_em->remove($entity);
 		$this->_em->flush();

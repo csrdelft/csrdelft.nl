@@ -27,7 +27,7 @@ class CommissieVoorkeurRepository extends AbstractRepository
 	 * @param Profiel $profiel
 	 * @return VoorkeurVoorkeur[]|false
 	 */
-	public function getVoorkeurenVoorLid(Profiel $profiel)
+	public function getVoorkeurenVoorLid(Profiel $profiel): array
 	{
 		return $this->findBy(['uid' => $profiel->uid]);
 	}
@@ -37,10 +37,7 @@ class CommissieVoorkeurRepository extends AbstractRepository
 	 * @param int $minVoorkeurWaarde
 	 * @return VoorkeurVoorkeur[]|false
 	 */
-	public function getVoorkeurenVoorCommissie(
-		VoorkeurCommissie $commissie,
-		int $minVoorkeurWaarde = 1
-	) {
+	public function getVoorkeurenVoorCommissie(VoorkeurCommissie $commissie, int $minVoorkeurWaarde = 1): mixed {
 		$qb = $this->createQueryBuilder('v');
 		$qb->andWhere('v.cid = :cid');
 		$qb->andWhere('v.voorkeur >= :minVoorkeur');
@@ -57,7 +54,7 @@ class CommissieVoorkeurRepository extends AbstractRepository
 	 * @param VoorkeurCommissie $commissie
 	 * @return VoorkeurVoorkeur|null
 	 */
-	public function getVoorkeur(Profiel $profiel, VoorkeurCommissie $commissie)
+	public function getVoorkeur(Profiel $profiel, VoorkeurCommissie $commissie): ?VoorkeurVoorkeur
 	{
 		$voorkeur = $this->find(['uid' => $profiel->uid, 'cid' => $commissie->id]);
 		if ($voorkeur == null) {

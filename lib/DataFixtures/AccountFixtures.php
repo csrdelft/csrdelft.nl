@@ -13,6 +13,7 @@ use CsrDelft\service\security\LoginService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as Faker;
+use Faker\Generator;
 use Symfony\Component\Uid\Uuid;
 
 class AccountFixtures extends Fixture
@@ -56,7 +57,7 @@ class AccountFixtures extends Fixture
 		$this->faker = Faker::create('nl_NL');
 	}
 
-	public function load(ObjectManager $manager)
+	public function load(ObjectManager $manager): void
 	{
 		$this->maakExternAccount($manager);
 

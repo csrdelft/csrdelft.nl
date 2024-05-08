@@ -22,7 +22,7 @@ class InstellingConfiguration implements ConfigurationInterface
 	 *
 	 * @return TreeBuilder The tree builder
 	 */
-	public function getConfigTreeBuilder()
+	public function getConfigTreeBuilder(): TreeBuilder
 	{
 		$treeBuilder = new TreeBuilder('instellingen');
 		$rootNode = $treeBuilder->getRootNode();

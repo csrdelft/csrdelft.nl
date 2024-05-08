@@ -15,7 +15,7 @@ class CiviProductSuggestiesResponse extends JsonLijstResponse
 	 * @param CiviProduct $entity
 	 * @return array
 	 */
-	public function renderElement($entity)
+	public function renderElement($entity): array
 	{
 		return [
 			'url' => '/fiscaat/producten',

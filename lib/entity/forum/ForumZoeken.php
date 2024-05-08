@@ -51,7 +51,7 @@ class ForumZoeken
 		$this->limit = 20;
 	}
 
-	public static function nieuw($zoekterm, $limit, $zoek_in)
+	public static function nieuw($zoekterm, $limit, $zoek_in): ForumZoeken
 	{
 		$forumZoeken = new static();
 		$forumZoeken->zoekterm = $zoekterm;

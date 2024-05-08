@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Controlleer access op route niveau.
@@ -66,7 +66,7 @@ class AccessControlEventListener
 	 * @param ControllerEvent $event
 	 * @throws \ReflectionException
 	 */
-	public function onKernelController(ControllerEvent $event)
+	public function onKernelController(ControllerEvent $event): void
 	{
 		$request = $event->getRequest();
 

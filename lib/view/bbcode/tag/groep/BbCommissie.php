@@ -15,12 +15,12 @@ class BbCommissie extends BbTagGroep
 		return Commissie::class;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'commissie';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'leden';
 	}

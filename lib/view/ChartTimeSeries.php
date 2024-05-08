@@ -7,7 +7,7 @@ namespace CsrDelft\view;
  */
 class ChartTimeSeries extends JsonResponse
 {
-	public function getModel()
+	public function getModel(): array
 	{
 		$array = [];
 		$minimum = time();

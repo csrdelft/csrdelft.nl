@@ -29,11 +29,7 @@ class BoekRecensieFormulier implements FormulierTypeInterface
 	 * @param BoekRecensie $data
 	 * @param array $options
 	 */
-	public function createFormulier(
-		FormulierBuilder $builder,
-		$data,
-		$options = []
-	) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
 		$builder->setAction(
 			$this->urlGenerator->generate('csrdelft_bibliotheek_recensie', [
 				'boek' => $data->boek->id,

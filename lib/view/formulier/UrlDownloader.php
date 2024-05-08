@@ -17,7 +17,7 @@ class UrlDownloader
 	 * Is er uberhaupt een methode beschikbaar
 	 * @return bool
 	 */
-	public function isAvailable()
+	public function isAvailable(): bool
 	{
 		return $this->file_get_contents_available() or
 			function_exists('curl_init') or
@@ -30,7 +30,7 @@ class UrlDownloader
 	 * @param $url
 	 * @return mixed|string
 	 */
-	public function file_get_contents($url)
+	public function file_get_contents($url): mixed
 	{
 		if ($this->file_get_contents_available()) {
 			return @file_get_contents($url);
@@ -44,7 +44,7 @@ class UrlDownloader
 	 *
 	 * @return bool
 	 */
-	protected function file_get_contents_available()
+	protected function file_get_contents_available(): array
 	{
 		return in_array(ini_get('allow_url_fopen'), ['On', 'Yes', 1]);
 	}
@@ -70,7 +70,7 @@ class UrlDownloader
 	 * @return string
 	 * @see SimplePie_File
 	 */
-	protected function fsocket_file_get_contents($url)
+	protected function fsocket_file_get_contents($url): string
 	{
 		$timeout = 10;
 		$useragent = null;

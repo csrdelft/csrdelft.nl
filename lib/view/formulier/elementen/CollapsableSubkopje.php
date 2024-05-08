@@ -21,7 +21,7 @@ class CollapsableSubkopje extends Subkopje
 		$this->collapsed = $collapsed;
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$className = $this->collapsed ? 'collapse' : 'collapse show';
 		$expanded = $this->collapsed ? 'false' : 'true';

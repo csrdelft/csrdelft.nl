@@ -12,7 +12,7 @@ final class UrlUtil
 	 *
 	 * @return bool
 	 */
-	public static function email_like($email)
+	public static function email_like($email): false|int
 	{
 		if (empty($email)) {
 			return false;
@@ -29,7 +29,7 @@ final class UrlUtil
 	 *
 	 * @return bool
 	 */
-	public static function url_like($url)
+	public static function url_like($url): false|int
 	{
 		if (empty($url)) {
 			return false;
@@ -72,7 +72,7 @@ final class UrlUtil
 		return $result;
 	}
 
-	public static function url2absolute($baseurl, $relativeurl)
+	public static function url2absolute($baseurl, $relativeurl): string|bool
 	{
 		// if the relative URL is scheme relative then treat it differently
 		if (substr($relativeurl, 0, 2) === '//') {
@@ -146,12 +146,12 @@ final class UrlUtil
 	}
 
 	// Base64url functies van https://www.php.net/manual/en/function.base64-encode.php#103849
-	public static function base64url_encode($data)
+	public static function base64url_encode($data): string
 	{
 		return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
 	}
 
-	public static function base64url_decode($data)
+	public static function base64url_decode($data): string|false
 	{
 		return base64_decode(
 			str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT)

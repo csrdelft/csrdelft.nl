@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\groep\BbWerkgroep;
 
 class NodeWerkgroep implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbWerkgroep::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'werkgroep';
 	}
 
-	public function getData(BbNode $node)
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbWerkgroep) {
 			throw new \InvalidArgumentException();
@@ -29,14 +29,14 @@ class NodeWerkgroep implements Node
 		];
 	}
 
-	public function getTagAttributes($node)
+	public function getTagAttributes($node): array
 	{
 		return [
 			'werkgroep' => $node->attrs->id,
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

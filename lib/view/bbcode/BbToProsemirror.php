@@ -61,7 +61,7 @@ class BbToProsemirror
 		return $this->nodeToProseMirror($this->csrBB->parseString($bbCode));
 	}
 
-	public function toProseMirror($bbCode)
+	public function toProseMirror($bbCode): array
 	{
 		$content = $this->toProseMirrorFragment($bbCode);
 
@@ -76,7 +76,7 @@ class BbToProsemirror
 		];
 	}
 
-	private function nodeToProseMirror($children)
+	private function nodeToProseMirror($children): array
 	{
 		$nodes = [];
 

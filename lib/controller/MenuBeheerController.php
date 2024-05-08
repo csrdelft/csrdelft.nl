@@ -58,7 +58,7 @@ class MenuBeheerController extends AbstractController
 	 * @Route("/menubeheer/toevoegen/{parentId}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function toevoegen($parentId)
+	public function toevoegen($parentId): Response|MenuItemForm
 	{
 		if ($parentId == 'favoriet') {
 			$parent = $this->menuItemRepository->getMenuRoot($this->getUid());
@@ -88,7 +88,7 @@ class MenuBeheerController extends AbstractController
 	 * @Route("/menubeheer/bewerken/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken($itemId)
+	public function bewerken($itemId): JsonResponse|MenuItemForm
 	{
 		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
 		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $item);

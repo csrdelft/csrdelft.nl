@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use ParseCsv\Csv;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -28,12 +29,12 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @return Response
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function afschrijven()
+	public function afschrijven(): Response
 	{
 		return $this->render('fiscaat/afschrijven.html.twig', []);
 	}
 
-	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven')
+	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven'): RedirectResponse
 	{
 		$this->addFlash($code, $melding);
 		return $this->redirect($url);
@@ -46,7 +47,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @param Session $session
 	 * @return Response
 	 */
-	public function upload(Request $request, Session $session)
+	public function upload(Request $request, Session $session): RedirectResponse
 	{
 		// Kijk of bestand meegegeven is
 		if (!$request->files->has('csv')) {
@@ -113,12 +114,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @param CiviProductRepository $civiProductRepository
 	 * @return Response
 	 */
-	public function controle(
-		string $key,
-		Session $session,
-		CiviSaldoRepository $civiSaldoRepository,
-		CiviProductRepository $civiProductRepository
-	) {
+	public function controle(string $key, Session $session, CiviSaldoRepository $civiSaldoRepository, CiviProductRepository $civiProductRepository): Response {
 		// Haal data op
 		if (!$session->has("afschrijven-{$key}")) {
 			return $this->quickMelding(
@@ -236,15 +232,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @param EntityManagerInterface $em
 	 * @return Response
 	 */
-	public function verwerk(
-		string $key,
-		Session $session,
-		CiviSaldoRepository $civiSaldoRepository,
-		CiviProductRepository $civiProductRepository,
-		CiviBestellingRepository $civiBestellingRepository,
-		Request $request,
-		EntityManagerInterface $em
-	) {
+	public function verwerk(string $key, Session $session, CiviSaldoRepository $civiSaldoRepository, CiviProductRepository $civiProductRepository, CiviBestellingRepository $civiBestellingRepository, Request $request, EntityManagerInterface $em): Response {
 		// Haal data op
 		if (!$session->has("afschrijven-{$key}")) {
 			return $this->quickMelding(
@@ -373,7 +361,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @Auth(P_FISCAAT_MOD)
 	 * @return Response
 	 */
-	public function downloadTemplate()
+	public function downloadTemplate(): Response
 	{
 		$template = "uid;productID;aantal;beschrijving\r\nx101;32;100;Lunch";
 		$response = new Response($template);

@@ -3,6 +3,7 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\common\Util\DateUtil;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\OnderverenigingStatus;
 use CsrDelft\entity\groepen\Ondervereniging;
@@ -11,12 +12,12 @@ use CsrDelft\service\security\LoginService;
 
 class OnderverenigingenRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Ondervereniging::class;
 	}
 
-	public function nieuw($soort = null)
+	public function nieuw($soort = null): Ondervereniging
 	{
 		/** @var Ondervereniging $ondervereniging */
 		$ondervereniging = parent::nieuw();
@@ -33,11 +34,7 @@ class OnderverenigingenRepository extends GroepRepository
 		return $ondervereniging;
 	}
 
-	public function overzicht(
-		int $limit = null,
-		int $offset = null,
-		string $soort = null
-	) {
+	public function overzicht(int $limit = null, int $offset = null, string $soort = null): array {
 		if ($soort && OnderverenigingStatus::isValidValue($soort)) {
 			return $this->findBy(
 				[
@@ -52,7 +49,7 @@ class OnderverenigingenRepository extends GroepRepository
 		return parent::overzicht($limit, $offset, $soort);
 	}
 
-	public function beheer(string $soort = null)
+	public function beheer(string $soort = null): array
 	{
 		if ($soort && OnderverenigingStatus::isValidValue($soort)) {
 			return $this->findBy([
@@ -62,7 +59,7 @@ class OnderverenigingenRepository extends GroepRepository
 		return parent::beheer($soort);
 	}
 
-	public function parseSoort(string $soort = null)
+	public function parseSoort(string $soort = null): ?OnderverenigingStatus
 	{
 		if ($soort && OnderverenigingStatus::isValidValue($soort)) {
 			return OnderverenigingStatus::from($soort);

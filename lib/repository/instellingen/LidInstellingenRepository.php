@@ -70,7 +70,7 @@ class LidInstellingenRepository extends AbstractRepository
 	 * @param string $uid
 	 * @return string[]
 	 */
-	public function getAllForLid(string $uid)
+	public function getAllForLid(string $uid): array
 	{
 		$result = [];
 		foreach ($this->findBy(['profiel' => $uid]) as $instelling) {
@@ -84,7 +84,7 @@ class LidInstellingenRepository extends AbstractRepository
 		return $result;
 	}
 
-	public function getValue($module, $id)
+	public function getValue($module, $id): int|string
 	{
 		$instelling = $this->getInstelling($module, $id);
 
@@ -146,7 +146,7 @@ class LidInstellingenRepository extends AbstractRepository
 		return $this->loginService->_getUid();
 	}
 
-	protected function newInstelling($module, $id, $uid)
+	protected function newInstelling($module, $id, $uid): LidInstelling
 	{
 		$instelling = new LidInstelling();
 		$instelling->module = $module;
@@ -180,7 +180,7 @@ class LidInstellingenRepository extends AbstractRepository
 	/**
 	 * @throws Exception
 	 */
-	public function saveAll()
+	public function saveAll(): void
 	{
 		foreach ($this->getAll() as $module => $instellingen) {
 			foreach ($instellingen as $id => $waarde) {
@@ -205,7 +205,7 @@ class LidInstellingenRepository extends AbstractRepository
 		$this->_em->flush();
 	}
 
-	public function isValidValue($module, $id, $waarde)
+	public function isValidValue($module, $id, $waarde): bool
 	{
 		$options = $this->getTypeOptions($module, $id);
 		switch ($this->getType($module, $id)) {
@@ -229,7 +229,7 @@ class LidInstellingenRepository extends AbstractRepository
 		return $this->getField($module, $id, InstellingConfiguration::FIELD_OPTIES);
 	}
 
-	public function resetForUser(Profiel $profiel)
+	public function resetForUser(Profiel $profiel): void
 	{
 		$this->createQueryBuilder('i')
 			->andWhere('i.profiel = :profiel')
@@ -239,7 +239,7 @@ class LidInstellingenRepository extends AbstractRepository
 			->execute();
 	}
 
-	public function resetForAll($module, $id)
+	public function resetForAll($module, $id): void
 	{
 		$this->createQueryBuilder('i')
 			->andWhere('i.module = :module')
@@ -257,7 +257,7 @@ class LidInstellingenRepository extends AbstractRepository
 	 *
 	 * @return LidInstelling
 	 */
-	public function wijzigInstelling($module, $id, $waarde)
+	public function wijzigInstelling($module, $id, $waarde): ?LidInstelling
 	{
 		// Skip de cache
 		$instelling = $this->findOneBy([
@@ -285,7 +285,7 @@ class LidInstellingenRepository extends AbstractRepository
 	 * @param LidInstelling $entity
 	 * @throws CsrGebruikerException
 	 */
-	public function update($entity)
+	public function update($entity): void
 	{
 		if (!$this->hasKey($entity->module, $entity->instelling)) {
 			throw new CsrGebruikerException(
@@ -335,14 +335,14 @@ class LidInstellingenRepository extends AbstractRepository
 	 * @param int $uid
 	 * @return string
 	 */
-	public function getInstellingVoorLid($module, $id, $uid)
+	public function getInstellingVoorLid($module, $id, $uid): string
 	{
 		return $this->getInstelling($module, $id, $uid)->waarde;
 	}
 
 	/**
 	 */
-	public function opschonen()
+	public function opschonen(): void
 	{
 		$instellingen = [];
 		foreach ($this->getModules() as $module) {

@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\groep\BbActiviteit;
 
 class NodeActiviteit implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbActiviteit::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'activiteit';
 	}
 
-	public function getData(BbNode $node)
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbActiviteit) {
 			throw new \InvalidArgumentException();
@@ -29,14 +29,14 @@ class NodeActiviteit implements Node
 		];
 	}
 
-	public function getTagAttributes($node)
+	public function getTagAttributes($node): array
 	{
 		return [
 			'activiteit' => $node->attrs->id,
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

@@ -24,22 +24,22 @@ class TimeField extends InputField
 		}
 	}
 
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		return isset($_POST[$this->name . '_uur'], $_POST[$this->name . '_minuut']);
 	}
 
-	public function getUur()
+	public function getUur(): string
 	{
 		return $_POST[$this->name . '_uur'];
 	}
 
-	public function getMinuut()
+	public function getMinuut(): string
 	{
 		return $_POST[$this->name . '_minuut'];
 	}
 
-	public function getValue()
+	public function getValue(): string
 	{
 		$this->value = parent::getValue();
 		if ($this->isPosted()) {
@@ -48,7 +48,7 @@ class TimeField extends InputField
 		return $this->value;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;

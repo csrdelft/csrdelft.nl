@@ -7,22 +7,22 @@ use CsrDelft\bb\tag\BbUnderline;
 
 class MarkUnderline implements Mark
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbUnderline::class;
 	}
 
-	public function getData(BbNode $node)
+	public function getData(BbNode $node): array
 	{
 		return [];
 	}
 
-	public static function getMarkType()
+	public static function getMarkType(): string
 	{
 		return 'underline';
 	}
 
-	public function getTagAttributes($mark)
+	public function getTagAttributes($mark): array
 	{
 		return [];
 	}

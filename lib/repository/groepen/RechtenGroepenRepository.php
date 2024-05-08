@@ -8,7 +8,7 @@ use CsrDelft\repository\GroepLidRepository;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class RechtenGroepenRepository extends GroepRepository
 {
@@ -33,12 +33,12 @@ class RechtenGroepenRepository extends GroepRepository
 		$this->groepLidRepository = $groepLidRepository;
 	}
 
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return RechtenGroep::class;
 	}
 
-	public function nieuw($soort = null)
+	public function nieuw($soort = null): RechtenGroep
 	{
 		/** @var RechtenGroep $groep */
 		$groep = parent::nieuw();
@@ -46,7 +46,7 @@ class RechtenGroepenRepository extends GroepRepository
 		return $groep;
 	}
 
-	public static function getNaam()
+	public static function getNaam(): string
 	{
 		return 'overig';
 	}
@@ -57,7 +57,7 @@ class RechtenGroepenRepository extends GroepRepository
 	 * @param string $uid
 	 * @return array
 	 */
-	public function getWikiToegang($uid)
+	public function getWikiToegang($uid): array
 	{
 		$result = [];
 		$profiel = ProfielRepository::get($uid);

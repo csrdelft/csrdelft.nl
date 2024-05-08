@@ -7,22 +7,22 @@ use CsrDelft\view\bbcode\tag\BbCodeInline;
 
 class MarkCode implements Mark
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbCodeInline::class;
 	}
 
-	public static function getMarkType()
+	public static function getMarkType(): string
 	{
 		return 'code';
 	}
 
-	public function getTagAttributes($mark)
+	public function getTagAttributes($mark): array
 	{
 		return [];
 	}
 
-	public function getData(BbNode $node)
+	public function getData(BbNode $node): array
 	{
 		return [];
 	}

@@ -60,7 +60,7 @@ class FotoTag implements JsonSerializable
 	 */
 	public $size;
 
-	public function jsonSerialize()
+	public function jsonSerialize(): array
 	{
 		$array = (array) $this;
 		$array['name'] = ProfielRepository::getNaam($this->keyword, 'user');

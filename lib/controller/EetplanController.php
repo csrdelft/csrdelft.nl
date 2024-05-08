@@ -169,7 +169,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/bekendehuizen/toevoegen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen_toevoegen(Request $request)
+	public function bekendehuizen_toevoegen(Request $request): Response|GenericDataTableResponse
 	{
 		$eetplan = new Eetplan();
 		$form = $this->createFormulier(EetplanBekendeHuizenForm::class, $eetplan, [
@@ -207,7 +207,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/bekendehuizen/bewerken/{uuid}", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen_bewerken(Request $request, $uuid = null)
+	public function bekendehuizen_bewerken(Request $request, $uuid = null): GenericDataTableResponse|Response
 	{
 		if (!$uuid) {
 			$uuid = $this->getDataTableSelection()[0];
@@ -294,7 +294,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/novietrelatie/toevoegen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function novietrelatie_toevoegen(Request $request)
+	public function novietrelatie_toevoegen(Request $request): Response|GenericDataTableResponse
 	{
 		$eetplanbekenden = new EetplanBekenden();
 		$form = $this->createFormulier(
@@ -328,7 +328,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/novietrelatie/bewerken/{uuid}", methods={"POST"}, defaults={"uuid": null})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function novietrelatie_bewerken(Request $request, $uuid)
+	public function novietrelatie_bewerken(Request $request, $uuid): GenericDataTableResponse|Response
 	{
 		if (!$uuid) {
 			$uuid = $this->getDataTableSelection()[0];
@@ -401,7 +401,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/nieuw", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function nieuw()
+	public function nieuw(): NieuwEetplanForm|Response
 	{
 		$form = new NieuwEetplanForm();
 
@@ -436,7 +436,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/verwijderen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function verwijderen()
+	public function verwijderen(): VerwijderEetplanForm|Response
 	{
 		$avonden = $this->eetplanRepository->getAvonden($this->lidjaar);
 		$form = new VerwijderEetplanForm($avonden);

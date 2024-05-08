@@ -16,7 +16,7 @@ final class ReflectionUtil
 	 * @return ReflectionMethod
 	 * @throws ReflectionException
 	 */
-	public static function createReflectionMethod(callable $fn)
+	public static function createReflectionMethod(callable $fn): ReflectionMethod
 	{
 		if (is_callable($fn)) {
 			if (is_array($fn)) {
@@ -44,7 +44,7 @@ final class ReflectionUtil
 	 *
 	 * @return string
 	 */
-	public static function short_class($class)
+	public static function short_class($class): string
 	{
 		return (new \ReflectionClass($class))->getShortName();
 	}
@@ -56,7 +56,7 @@ final class ReflectionUtil
 	 *
 	 * @return string
 	 */
-	public static function classNameZonderNamespace($className)
+	public static function classNameZonderNamespace($className): string
 	{
 		try {
 			return (new ReflectionClass($className))->getShortName();
@@ -72,7 +72,7 @@ final class ReflectionUtil
 	 *
 	 * @return string
 	 */
-	public static function className($className)
+	public static function className($className): string|array|null
 	{
 		return preg_replace('/\\\\/', '-', $className);
 	}

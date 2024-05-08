@@ -12,7 +12,7 @@ class InstellingType
 	const Integer = 'Integer';
 	const String = 'String';
 
-	public static function getTypeOptions()
+	public static function getTypeOptions(): array
 	{
 		return [
 			self::Enumeration => self::Enumeration,

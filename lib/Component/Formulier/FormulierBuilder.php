@@ -2,6 +2,7 @@
 
 namespace CsrDelft\Component\Formulier;
 
+use Closure;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -54,12 +55,12 @@ class FormulierBuilder
 		$this->twig = $twig;
 	}
 
-	public function setShowMelding($showMelding)
+	public function setShowMelding($showMelding): void
 	{
 		$this->showMelding = $showMelding;
 	}
 
-	public function setFormId($formId)
+	public function setFormId($formId): void
 	{
 		$this->formId = $formId;
 	}
@@ -80,7 +81,7 @@ class FormulierBuilder
 	 *
 	 * @param string|bool $dataTableId
 	 */
-	public function setDataTableId($dataTableId)
+	public function setDataTableId($dataTableId): void
 	{
 		// Link with DataTable?
 		if ($dataTableId === true) {
@@ -110,17 +111,17 @@ class FormulierBuilder
 		return $this->model;
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): null
 	{
 		return null;
 	}
 
-	public function getFields()
+	public function getFields(): array
 	{
 		return $this->fields;
 	}
 
-	public function hasFields()
+	public function hasFields(): bool
 	{
 		return !empty($this->fields);
 	}
@@ -131,7 +132,7 @@ class FormulierBuilder
 	 * @param string $fieldName
 	 * @return InputField|false if not found
 	 */
-	public function findByName($fieldName)
+	public function findByName($fieldName): InputField|FileField|bool
 	{
 		foreach ($this->fields as $field) {
 			if (
@@ -144,23 +145,23 @@ class FormulierBuilder
 		return false;
 	}
 
-	public function addFields(array $fields)
+	public function addFields(array $fields): void
 	{
 		$this->fields = array_merge($this->fields, $fields);
 	}
 
-	public function insertAtPos($pos, FormElement $field)
+	public function insertAtPos($pos, FormElement $field): void
 	{
 		array_splice($this->fields, $pos, 0, [$field]);
 	}
 
-	public function removeField(FormElement $field)
+	public function removeField(FormElement $field): void
 	{
 		$pos = array_search($field, $this->fields);
 		unset($this->fields[$pos]);
 	}
 
-	public function getFormulier()
+	public function getFormulier(): FormulierInstance
 	{
 		return new FormulierInstance(
 			$this->twig,
@@ -201,7 +202,7 @@ class FormulierBuilder
 	/**
 	 * @param \Closure $param Kan alle velden controleren als er false wordt gereturned is ($fields: FormElement[]) => boolean
 	 */
-	public function addValidationMethod(\Closure $param)
+	public function addValidationMethod(\Closure $param): void
 	{
 		$this->validationMethods[] = $param;
 	}

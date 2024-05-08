@@ -27,7 +27,7 @@ class EetplanRepository extends AbstractRepository
 		parent::__construct($registry, Eetplan::class);
 	}
 
-	public function avondHasEetplan($avond)
+	public function avondHasEetplan($avond): bool
 	{
 		return count($this->findBy(['avond' => $avond])) > 0;
 	}
@@ -39,7 +39,7 @@ class EetplanRepository extends AbstractRepository
 	 *
 	 * @return Eetplan[] Lijst met eetplan objecten met alleen een avond.
 	 */
-	public function getAvonden($lidjaar)
+	public function getAvonden($lidjaar): mixed
 	{
 		return $this->createQueryBuilder('e')
 			->join('e.noviet', 'n')
@@ -59,7 +59,7 @@ class EetplanRepository extends AbstractRepository
 	 *
 	 * @return array Het eetplan
 	 */
-	public function getEetplan($lidjaar)
+	public function getEetplan($lidjaar): array
 	{
 		// Avond null wordt gebruikt voor novieten die huizen kennen
 		// Orderen bij avond, zodat de avondvolgorde per noviet klopt
@@ -109,7 +109,7 @@ class EetplanRepository extends AbstractRepository
 	 *
 	 * @return Eetplan[]|false lijst van eetplansessies voor deze feut, gesorteerd op datum (oplopend)
 	 */
-	public function getEetplanVoorNoviet($uid)
+	public function getEetplanVoorNoviet($uid): mixed
 	{
 		return $this->createQueryBuilder('e')
 			->join('e.noviet', 'n')
@@ -126,7 +126,7 @@ class EetplanRepository extends AbstractRepository
 	 *
 	 * @return Eetplan[] lijst van eetplansessies voor dit huis, gegroepeerd op avond (oplopend)
 	 */
-	public function getEetplanVoorHuis($woonoord_id, $lidjaar)
+	public function getEetplanVoorHuis($woonoord_id, $lidjaar): mixed
 	{
 		/** @var Eetplan[] $sessies */
 		$sessies = $this->createQueryBuilder('e')
@@ -159,7 +159,7 @@ class EetplanRepository extends AbstractRepository
 	 *
 	 * @return Eetplan[]
 	 */
-	public function getBekendeHuizen($lidjaar)
+	public function getBekendeHuizen($lidjaar): mixed
 	{
 		return $this->createQueryBuilder('e')
 			->join('e.noviet', 'n')
@@ -173,7 +173,7 @@ class EetplanRepository extends AbstractRepository
 	 * @param string $avond
 	 * @param string $lichting
 	 */
-	public function verwijderEetplan($avond, $lichting)
+	public function verwijderEetplan($avond, $lichting): void
 	{
 		$alleEetplan = $this->getEetplanVoorAvond($avond, $lichting);
 
@@ -188,7 +188,7 @@ class EetplanRepository extends AbstractRepository
 	 * @param $lidjaar
 	 * @return Eetplan[]
 	 */
-	public function getEetplanVoorAvond($avond, $lidjaar)
+	public function getEetplanVoorAvond($avond, $lidjaar): mixed
 	{
 		return $this->createQueryBuilder('e')
 			->join('e.noviet', 'n')
@@ -203,7 +203,7 @@ class EetplanRepository extends AbstractRepository
 	 * @param int $lidjaar
 	 * @return int|mixed|string
 	 */
-	public function getBezocht(int $lidjaar)
+	public function getBezocht(int $lidjaar): mixed
 	{
 		return $this->createQueryBuilder('e')
 			->join('e.noviet', 'n')

@@ -93,7 +93,7 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	 * @Serializer\SerializedName("lock_ip")
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getDataTableLockIp()
+	public function getDataTableLockIp(): string
 	{
 		return $this->lock_ip
 			? Icon::getTag('lock', null, 'Gekoppeld aan IP-adres')
@@ -125,7 +125,7 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 		return Account::class;
 	}
 
-	public function getUsername()
+	public function getUsername(): string
 	{
 		return $this->uid;
 	}

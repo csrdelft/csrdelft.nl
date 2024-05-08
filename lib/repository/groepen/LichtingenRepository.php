@@ -3,23 +3,24 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
 
 class LichtingenRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Lichting::class;
 	}
 
-	public function get($lidjaar)
+	public function get($lidjaar): Groep
 	{
 		return $this->nieuw($lidjaar);
 	}
 
-	public function nieuw($lidjaar = null)
+	public function nieuw($lidjaar = null): Lichting
 	{
 		if ($lidjaar === null) {
 			$lidjaar = date('Y');
@@ -36,12 +37,7 @@ class LichtingenRepository extends GroepRepository
 		return $lichting;
 	}
 
-	public function findBy(
-		array $criteria,
-		array $orderBy = null,
-		$limit = null,
-		$offset = null
-	) {
+	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): array {
 		$jongste = static::getJongsteLidjaar();
 		$oudste = static::getOudsteLidjaar();
 		$lichtingen = [];
@@ -61,7 +57,7 @@ class LichtingenRepository extends GroepRepository
 		return $jaar . '-' . ($jaar + 1);
 	}
 
-	public static function getJongsteLidjaar()
+	public static function getJongsteLidjaar(): int
 	{
 		$profielRepository = ContainerFacade::getContainer()->get(
 			ProfielRepository::class
@@ -73,7 +69,7 @@ class LichtingenRepository extends GroepRepository
 			->getSingleScalarResult();
 	}
 
-	public static function getOudsteLidjaar()
+	public static function getOudsteLidjaar(): int
 	{
 		$profielRepository = ContainerFacade::getContainer()->get(
 			ProfielRepository::class

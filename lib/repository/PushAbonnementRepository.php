@@ -27,7 +27,7 @@ class PushAbonnementRepository extends AbstractRepository
 	 * @param null $soort
 	 * @return PushAbonnement
 	 */
-	public function nieuw()
+	public function nieuw(): PushAbonnement
 	{
 		$item = new PushAbonnement();
 		$item->uid = LoginService::getUid();

@@ -5,7 +5,7 @@ namespace CsrDelft\view\bbcode\tag\groep;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\groepen\VerticalenRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Geeft een link naar de verticale.
@@ -30,7 +30,7 @@ class BbVerticale extends BbTag
 	 */
 	private $security;
 
-	public function getLetter()
+	public function getLetter(): string
 	{
 		return $this->letter;
 	}
@@ -43,7 +43,7 @@ class BbVerticale extends BbTag
 		$this->security = $security;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'verticale';
 	}
@@ -72,7 +72,7 @@ class BbVerticale extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->letter = $this->readMainArgument($arguments);
 	}

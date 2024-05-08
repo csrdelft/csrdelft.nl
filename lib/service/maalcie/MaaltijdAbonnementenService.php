@@ -78,7 +78,7 @@ class MaaltijdAbonnementenService
 	 * @return bool|mixed
 	 * @throws Throwable
 	 */
-	public function getAbonnementenWaarschuwingenMatrix()
+	public function getAbonnementenWaarschuwingenMatrix(): mixed
 	{
 		return $this->entityManager->wrapInTransaction(function () {
 			$abos = $this->maaltijdAbonnementenRepository->findAll();
@@ -118,7 +118,7 @@ class MaaltijdAbonnementenService
 	 * @return array
 	 * @throws Throwable
 	 */
-	public function getAbonnementenAbonneerbaarMatrix()
+	public function getAbonnementenAbonneerbaarMatrix(): mixed
 	{
 		return $this->entityManager->wrapInTransaction(function () {
 			$repById = $this->maaltijdRepetitiesRepository->getAlleRepetities(true); // grouped by mrid
@@ -160,7 +160,7 @@ class MaaltijdAbonnementenService
 	 * @param bool $ingeschakeld
 	 * @return array
 	 */
-	private function fillHoles($matrix, $repById, $ingeschakeld = false)
+	private function fillHoles($matrix, $repById, $ingeschakeld = false): array
 	{
 		foreach ($repById as $mrid => $repetitie) {
 			// vul gaten in matrix vanwege uitgeschakelde abonnementen
@@ -185,7 +185,7 @@ class MaaltijdAbonnementenService
 	 * @return MaaltijdAbonnement[][] 2d matrix met eerst uid, en dan repetitie id
 	 * @throws Throwable
 	 */
-	public function getAbonnementenMatrix()
+	public function getAbonnementenMatrix(): mixed
 	{
 		return $this->entityManager->wrapInTransaction(function () {
 			/** @var MaaltijdRepetitie[] $repById */
@@ -239,7 +239,7 @@ class MaaltijdAbonnementenService
 	 * @return MaaltijdAbonnement[][]
 	 * @throws Throwable
 	 */
-	public function getAbonnementenVanNovieten()
+	public function getAbonnementenVanNovieten(): mixed
 	{
 		return $this->entityManager->wrapInTransaction(function () {
 			$novieten = $this->profielRepository->findBy([
@@ -264,7 +264,7 @@ class MaaltijdAbonnementenService
 	 * @return int amount of deleted abos
 	 * @throws Throwable
 	 */
-	public function verwijderAbonnementenVoorLid(Profiel $profiel)
+	public function verwijderAbonnementenVoorLid(Profiel $profiel): mixed
 	{
 		return $this->entityManager->wrapInTransaction(function () use ($profiel) {
 			$abos = $this->getAbonnementenVoorLid($profiel);
@@ -296,11 +296,7 @@ class MaaltijdAbonnementenService
 	 * @return MaaltijdAbonnement[]
 	 * @throws Throwable
 	 */
-	public function getAbonnementenVoorLid(
-		$profiel,
-		$abonneerbaar = false,
-		$uitgeschakeld = false
-	) {
+	public function getAbonnementenVoorLid($profiel, $abonneerbaar = false, $uitgeschakeld = false): mixed {
 		$lijst = $this->entityManager->wrapInTransaction(function () use (
 			$profiel,
 			$abonneerbaar,
@@ -361,7 +357,7 @@ class MaaltijdAbonnementenService
 	 * @throws CsrGebruikerException
 	 * @throws Throwable
 	 */
-	public function inschakelenAbonnement($abo)
+	public function inschakelenAbonnement($abo): mixed
 	{
 		return $this->entityManager->wrapInTransaction(function () use ($abo) {
 			if (!$abo->maaltijd_repetitie->abonneerbaar) {
@@ -404,9 +400,7 @@ class MaaltijdAbonnementenService
 	 * @return bool|mixed
 	 * @throws Throwable
 	 */
-	public function inschakelenAbonnementVoorNovieten(
-		MaaltijdRepetitie $repetitie
-	) {
+	public function inschakelenAbonnementVoorNovieten(MaaltijdRepetitie $repetitie): mixed {
 		return $this->entityManager->wrapInTransaction(function () use (
 			$repetitie
 		) {
@@ -458,7 +452,7 @@ class MaaltijdAbonnementenService
 	 * @return bool|mixed
 	 * @throws Throwable
 	 */
-	public function uitschakelenAbonnement(MaaltijdRepetitie $repetitie, $uid)
+	public function uitschakelenAbonnement(MaaltijdRepetitie $repetitie, $uid): mixed
 	{
 		return $this->entityManager->wrapInTransaction(function () use (
 			$repetitie,
@@ -493,7 +487,7 @@ class MaaltijdAbonnementenService
 	 * @return int amount of deleted abos
 	 * @throws Throwable
 	 */
-	public function verwijderAbonnementen(MaaltijdRepetitie $mrid)
+	public function verwijderAbonnementen(MaaltijdRepetitie $mrid): mixed
 	{
 		return $this->entityManager->wrapInTransaction(function () use ($mrid) {
 			$abos = $mrid->abonnementen;
@@ -512,7 +506,7 @@ class MaaltijdAbonnementenService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function meldAboAan($maaltijd)
+	public function meldAboAan($maaltijd): void
 	{
 		$aantal = 0;
 		// aanmelden van leden met abonnement op deze repetitie
@@ -550,7 +544,7 @@ class MaaltijdAbonnementenService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function afmeldenDoorAbonnement(MaaltijdRepetitie $repetitie, $uid)
+	public function afmeldenDoorAbonnement(MaaltijdRepetitie $repetitie, $uid): int
 	{
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
 		$maaltijden = $this->maaltijdenRepository->getKomendeOpenRepetitieMaaltijden(

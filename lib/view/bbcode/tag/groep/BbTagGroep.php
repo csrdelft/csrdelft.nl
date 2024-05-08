@@ -15,7 +15,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\groepen\GroepView;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Twig\Environment;
 
@@ -58,7 +58,7 @@ abstract class BbTagGroep extends BbTag
 		$this->security = $security;
 	}
 
-	public function getId()
+	public function getId(): string
 	{
 		return $this->id;
 	}
@@ -79,7 +79,7 @@ abstract class BbTagGroep extends BbTag
 	 * @return Groep
 	 * @throws BbException
 	 */
-	private function getGroep()
+	private function getGroep(): Groep
 	{
 		$this->id = (int) $this->id;
 		$groep = $this->getRepository()->get($this->id);
@@ -89,12 +89,12 @@ abstract class BbTagGroep extends BbTag
 		return $groep;
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->id = $this->readMainArgument($arguments);
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$groep = $this->getGroep();
 		if ($groep) {
@@ -108,7 +108,7 @@ abstract class BbTagGroep extends BbTag
 		}
 	}
 
-	protected function groepLight(Groep $groep, $tag, $leden)
+	protected function groepLight(Groep $groep, $tag, $leden): string
 	{
 		return BbHelper::lightLinkBlock(
 			$tag,
@@ -144,7 +144,7 @@ abstract class BbTagGroep extends BbTag
 		return $this->groep($groep);
 	}
 
-	protected function groep(Groep $groep)
+	protected function groep(Groep $groep): string
 	{
 		if ($groep->versie == GroepVersie::V2()) {
 			$uid = LoginService::getUid();

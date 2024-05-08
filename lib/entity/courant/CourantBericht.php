@@ -58,7 +58,7 @@ class CourantBericht
 	 */
 	public $datumTijd;
 
-	public function setVolgorde()
+	public function setVolgorde(): void
 	{
 		if ($this->cat == null) {
 			return;

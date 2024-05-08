@@ -29,7 +29,7 @@ class AanmeldActiviteitRepository extends AbstractRepository
 	 * @param Reeks $reeks
 	 * @return Collection|AanmeldActiviteit[]
 	 */
-	public function getKomendeActiviteiten(Reeks $reeks)
+	public function getKomendeActiviteiten(Reeks $reeks): Collection
 	{
 		return $reeks
 			->getActiviteiten()
@@ -38,7 +38,7 @@ class AanmeldActiviteitRepository extends AbstractRepository
 			});
 	}
 
-	public function delete(AanmeldActiviteit $activiteit)
+	public function delete(AanmeldActiviteit $activiteit): void
 	{
 		$em = $this->getEntityManager();
 
@@ -53,7 +53,7 @@ class AanmeldActiviteitRepository extends AbstractRepository
 		}
 	}
 
-	public function sluit(AanmeldActiviteit $activiteit, bool $sluit = true)
+	public function sluit(AanmeldActiviteit $activiteit, bool $sluit = true): void
 	{
 		try {
 			$activiteit->setGesloten($sluit);

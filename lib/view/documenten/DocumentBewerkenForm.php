@@ -49,11 +49,7 @@ class DocumentBewerkenForm implements FormulierTypeInterface
 	 * @param Document $data
 	 * @param array $options
 	 */
-	public function createFormulier(
-		FormulierBuilder $builder,
-		$data,
-		$options = []
-	) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
 		$builder->setTitel('Document bewerken');
 		$fields = [];
 		$fields['categorie'] = new EntitySelectField(

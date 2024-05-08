@@ -50,7 +50,7 @@ class CorveeVoorkeurenRepository extends AbstractRepository
 	 * @param boolean $uitgeschakeld
 	 * @return CorveeVoorkeur[]
 	 */
-	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false)
+	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false): array
 	{
 		$repById = $this->corveeRepetitiesRepository->getVoorkeurbareRepetities(); // grouped by crid
 		$lijst = [];
@@ -94,7 +94,7 @@ class CorveeVoorkeurenRepository extends AbstractRepository
 	 *
 	 * @return CorveeVoorkeur[][]
 	 */
-	public function getVoorkeurenMatrix()
+	public function getVoorkeurenMatrix(): array
 	{
 		$repById = $this->corveeRepetitiesRepository->getVoorkeurbareRepetities(); // grouped by crid
 		$leden_voorkeuren = $this->loadLedenVoorkeuren();
@@ -143,7 +143,7 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function inschakelenVoorkeur(CorveeVoorkeur $voorkeur)
+	public function inschakelenVoorkeur(CorveeVoorkeur $voorkeur): CorveeVoorkeur
 	{
 		if ($this->getHeeftVoorkeur($voorkeur->crv_repetitie_id, $voorkeur->uid)) {
 			throw new CsrGebruikerException('Voorkeur al ingeschakeld');
@@ -180,7 +180,7 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function uitschakelenVoorkeur(CorveeVoorkeur $voorkeur)
+	public function uitschakelenVoorkeur(CorveeVoorkeur $voorkeur): CorveeVoorkeur
 	{
 		if (!$this->getHeeftVoorkeur($voorkeur->crv_repetitie_id, $voorkeur->uid)) {
 			throw new CsrGebruikerException('Voorkeur al uitgeschakeld');
@@ -203,7 +203,7 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderVoorkeuren($crid)
+	public function verwijderVoorkeuren($crid): int
 	{
 		$voorkeuren = $this->findBy(['corveeRepetitie' => $crid]);
 		$num = count($voorkeuren);
@@ -223,7 +223,7 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderVoorkeurenVoorLid($uid)
+	public function verwijderVoorkeurenVoorLid($uid): int
 	{
 		$voorkeuren = $this->findBy(['uid' => $uid]);
 		$num = count($voorkeuren);
@@ -235,7 +235,7 @@ DQL
 		return $num;
 	}
 
-	public function getVoorkeur($crid, $uid)
+	public function getVoorkeur($crid, $uid): ?CorveeVoorkeur
 	{
 		return $this->find(['uid' => $uid, 'crv_repetitie_id' => $crid]);
 	}

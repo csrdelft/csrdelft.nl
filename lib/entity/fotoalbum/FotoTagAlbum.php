@@ -33,32 +33,32 @@ class FotoTagAlbum extends FotoAlbum
 			'Foto\'s met ' . ProfielRepository::getNaam($uid, 'civitas');
 	}
 
-	public function modified()
+	public function modified(): int
 	{
 		return time();
 	}
 
-	public function getParentName()
+	public function getParentName(): string
 	{
 		return null;
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/fotoalbum/' . $this->uid;
 	}
 
-	public function exists()
+	public function exists(): bool
 	{
 		return true;
 	}
 
-	public function isEmpty()
+	public function isEmpty(): bool
 	{
 		return false;
 	}
 
-	public function hasFotos($incompleet = false)
+	public function hasFotos($incompleet = false): bool
 	{
 		return true;
 	}
@@ -67,7 +67,7 @@ class FotoTagAlbum extends FotoAlbum
 	 * @param false $incompleet
 	 * @return Foto[]
 	 */
-	public function getFotos($incompleet = false)
+	public function getFotos($incompleet = false): array
 	{
 		if (!isset($this->fotos)) {
 			// find tagged fotos

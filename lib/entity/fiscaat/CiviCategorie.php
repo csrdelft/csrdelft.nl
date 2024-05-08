@@ -44,12 +44,12 @@ class CiviCategorie implements DisplayEntity
 	 */
 	public $cie;
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		return sprintf('%s (%s)', $this->type, $this->cie);
 	}
 
-	public function getId()
+	public function getId(): integer
 	{
 		return $this->id;
 	}

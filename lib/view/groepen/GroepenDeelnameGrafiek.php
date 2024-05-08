@@ -67,7 +67,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse
 		];
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): null
 	{
 		return null;
 	}
@@ -77,12 +77,12 @@ class GroepenDeelnameGrafiek implements View, ToResponse
 		return $this->series;
 	}
 
-	public function getTitel()
+	public function getTitel(): null
 	{
 		return null;
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$step = htmlspecialchars(json_encode($this->step));
 

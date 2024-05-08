@@ -25,7 +25,7 @@ class VoorkeurOpmerkingRepository extends AbstractRepository
 	 * @param Profiel $profiel
 	 * @return VoorkeurOpmerking
 	 */
-	public function getOpmerkingVoorLid(Profiel $profiel)
+	public function getOpmerkingVoorLid(Profiel $profiel): ?VoorkeurOpmerking
 	{
 		$result = $this->find($profiel->uid);
 		if ($result == false) {

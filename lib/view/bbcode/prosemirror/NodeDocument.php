@@ -7,17 +7,17 @@ use CsrDelft\view\bbcode\tag\BbDocument;
 
 class NodeDocument implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbDocument::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'document';
 	}
 
-	public function getData(BbNode $node)
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbDocument) {
 			throw new \InvalidArgumentException();
@@ -30,14 +30,14 @@ class NodeDocument implements Node
 		];
 	}
 
-	public function getTagAttributes($node)
+	public function getTagAttributes($node): array
 	{
 		return [
 			'document' => $node->attrs->id,
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

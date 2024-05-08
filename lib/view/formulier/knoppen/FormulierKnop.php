@@ -40,12 +40,12 @@ class FormulierKnop implements FormElement
 		return $this->id;
 	}
 
-	public function getModel()
+	public function getModel(): null
 	{
 		return null;
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): null
 	{
 		return null;
 	}
@@ -55,7 +55,7 @@ class FormulierKnop implements FormElement
 		return $this->getType();
 	}
 
-	public function getType()
+	public function getType(): string
 	{
 		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}
@@ -89,7 +89,7 @@ class FormulierKnop implements FormElement
 		return $this->getHtml();
 	}
 
-	public function getJavascript()
+	public function getJavascript(): string
 	{
 		return <<<JS
 

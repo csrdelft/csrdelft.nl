@@ -15,12 +15,12 @@ class BbWoonoord extends BbTagGroep
 		return Woonoord::class;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'woonoord';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'bewoners';
 	}

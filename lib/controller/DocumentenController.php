@@ -61,7 +61,7 @@ class DocumentenController extends AbstractController
 	 * @Route("/documenten/verwijderen/{id}", methods={"POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */
-	public function verwijderen(Document $document)
+	public function verwijderen(Document $document): JsonResponse|PlainView
 	{
 		$id = $document->id;
 		if ($document->magVerwijderen()) {
@@ -82,7 +82,7 @@ class DocumentenController extends AbstractController
 	 * @Route("/documenten/bekijken/{id}/{bestandsnaam}", methods={"GET"})
 	 * @Auth(P_DOCS_READ)
 	 */
-	public function bekijken(Document $document)
+	public function bekijken(Document $document): RedirectResponse|BinaryFileResponse
 	{
 		if (!$document->magBekijken()) {
 			throw $this->createAccessDeniedException();
@@ -116,7 +116,7 @@ class DocumentenController extends AbstractController
 	 * @Route("/documenten/download/{id}/{bestandsnaam}", methods={"GET"})
 	 * @Auth(P_DOCS_READ)
 	 */
-	public function download(Document $document)
+	public function download(Document $document): BinaryFileResponse|RedirectResponse
 	{
 		if (!$document->magBekijken()) {
 			throw $this->createAccessDeniedException();
@@ -161,10 +161,7 @@ class DocumentenController extends AbstractController
 	 * @Route("/documenten/categorie/{id}/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */
-	public function categorieBewerken(
-		Request $request,
-		DocumentCategorie $categorie
-	) {
+	public function categorieBewerken(Request $request, DocumentCategorie $categorie): JsonResponse|Response {
 		$form = $this->createFormulier(DocumentCategorieForm::class, $categorie, [
 			'action' => $this->generateUrl('csrdelft_documenten_categoriebewerken', [
 				'id' => $categorie->id,
@@ -193,7 +190,7 @@ class DocumentenController extends AbstractController
 	 * @Auth(P_DOCS_MOD)
 	 * @return JsonResponse|Response
 	 */
-	public function categorieAanmaken(Request $request)
+	public function categorieAanmaken(Request $request): JsonResponse|Response
 	{
 		$categorie = new DocumentCategorie();
 		$form = $this->createFormulier(DocumentCategorieForm::class, $categorie, [

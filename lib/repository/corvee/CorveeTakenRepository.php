@@ -43,7 +43,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function updateGemaild(CorveeTaak $taak)
+	public function updateGemaild(CorveeTaak $taak): void
 	{
 		$taak->setWanneerGemaild(
 			DateUtil::dateFormatIntl(date_create(), DateUtil::DATETIME_FORMAT)
@@ -60,11 +60,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function taakToewijzenAanLid(
-		CorveeTaak $taak,
-		Profiel $vorigProfiel = null,
-		Profiel $profiel = null
-	) {
+	public function taakToewijzenAanLid(CorveeTaak $taak, Profiel $vorigProfiel = null, Profiel $profiel = null): bool {
 		if ($taak->profiel && $taak->profiel->uid === $profiel) {
 			return false;
 		}
@@ -91,7 +87,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param CorveeTaak $taak
 	 * @param Profiel $profiel
 	 */
-	public function puntenToekennen(CorveeTaak $taak, Profiel $profiel)
+	public function puntenToekennen(CorveeTaak $taak, Profiel $profiel): void
 	{
 		ContainerFacade::getContainer()
 			->get(CorveePuntenService::class)
@@ -105,7 +101,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param CorveeTaak $taak
 	 * @param Profiel $profiel
 	 */
-	public function puntenIntrekken(CorveeTaak $taak, Profiel $profiel)
+	public function puntenIntrekken(CorveeTaak $taak, Profiel $profiel): void
 	{
 		ContainerFacade::getContainer()
 			->get(CorveePuntenService::class)
@@ -119,7 +115,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param CorveeTaak[] $taken
 	 * @return array
 	 */
-	public function getRoosterMatrix(array $taken)
+	public function getRoosterMatrix(array $taken): array
 	{
 		$matrix = [];
 		foreach ($taken as $taak) {
@@ -133,7 +129,7 @@ class CorveeTakenRepository extends AbstractRepository
 	/**
 	 * @return CorveeTaak[]
 	 */
-	public function getKomendeTaken()
+	public function getKomendeTaken(): mixed
 	{
 		return $this->createQueryBuilder('ct')
 			->where('ct.verwijderd = false and ct.datum >= :datum')
@@ -146,7 +142,7 @@ class CorveeTakenRepository extends AbstractRepository
 	/**
 	 * @return CorveeTaak[]
 	 */
-	public function getVerledenTaken()
+	public function getVerledenTaken(): mixed
 	{
 		return $this->createQueryBuilder('ct')
 			->where('ct.verwijderd = false and ct.datum < :datum')
@@ -156,7 +152,7 @@ class CorveeTakenRepository extends AbstractRepository
 			->getResult();
 	}
 
-	public function getAlleTaken($groupByUid = false)
+	public function getAlleTaken($groupByUid = false): array
 	{
 		$taken = $this->findBy(['verwijderd' => false], ['datum' => 'ASC']);
 		if ($groupByUid) {
@@ -171,7 +167,7 @@ class CorveeTakenRepository extends AbstractRepository
 		return $taken;
 	}
 
-	public function getVerwijderdeTaken()
+	public function getVerwijderdeTaken(): array
 	{
 		return $this->findBy(['verwijderd' => true], ['datum' => 'ASC']);
 	}
@@ -185,11 +181,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @return CorveeTaak[]
 	 * @throws CsrException
 	 */
-	public function getTakenVoorAgenda(
-		DateTimeInterface $van,
-		DateTimeInterface $tot,
-		$iedereen = false
-	) {
+	public function getTakenVoorAgenda(DateTimeInterface $van, DateTimeInterface $tot, $iedereen = false): mixed {
 		$qb = $this->createQueryBuilder('ct');
 		$qb->where(
 			'ct.verwijderd = false and ct.datum >= :van_datum and ct.datum <= :tot_datum'
@@ -209,7 +201,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param Profiel $profiel
 	 * @return CorveeTaak[]
 	 */
-	public function getTakenVoorLid(Profiel $profiel)
+	public function getTakenVoorLid(Profiel $profiel): array
 	{
 		return $this->findBy(
 			['verwijderd' => false, 'profiel' => $profiel],
@@ -223,7 +215,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param string $uid
 	 * @return CorveeTaak
 	 */
-	public function getLaatsteTaakVanLid($uid)
+	public function getLaatsteTaakVanLid($uid): ?CorveeTaak
 	{
 		return $this->findOneBy(
 			['verwijderd' => false, 'uid' => $uid],
@@ -237,7 +229,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param Profiel $profiel
 	 * @return CorveeTaak[]
 	 */
-	public function getKomendeTakenVoorLid(Profiel $profiel)
+	public function getKomendeTakenVoorLid(Profiel $profiel): mixed
 	{
 		return $this->createQueryBuilder('ct')
 			->where(
@@ -287,7 +279,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function prullenbakLeegmaken()
+	public function prullenbakLeegmaken(): int
 	{
 		$taken = $this->findBy(['verwijderd' => true]);
 		foreach ($taken as $taak) {
@@ -302,7 +294,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderOudeTaken()
+	public function verwijderOudeTaken(): int
 	{
 		/** @var CorveeTaak[] $taken */
 		$taken = $this->createQueryBuilder('ct')
@@ -347,12 +339,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param int $bonus_malus
 	 * @return CorveeTaak
 	 */
-	public function vanRepetitie(
-		CorveeRepetitie $repetitie,
-		$datum,
-		$maaltijd = null,
-		$bonus_malus = 0
-	) {
+	public function vanRepetitie(CorveeRepetitie $repetitie, $datum, $maaltijd = null, $bonus_malus = 0): CorveeTaak {
 		$taak = new CorveeTaak();
 		$taak->taak_id = null;
 		$taak->corveeFunctie = $repetitie->corveeFunctie;
@@ -376,7 +363,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	private function newTaak(CorveeTaak $taak)
+	private function newTaak(CorveeTaak $taak): CorveeTaak
 	{
 		$taak->punten_toegekend = 0;
 		$taak->bonus_toegekend = 0;
@@ -401,7 +388,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @return CorveeTaak[]
 	 * @throws CsrGebruikerException
 	 */
-	public function getTakenVoorMaaltijd($mid, $verwijderd = false)
+	public function getTakenVoorMaaltijd($mid, $verwijderd = false): array
 	{
 		if ($mid <= 0) {
 			throw new CsrGebruikerException(
@@ -423,7 +410,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param int $mid
 	 * @return bool
 	 */
-	public function existMaaltijdCorvee($mid)
+	public function existMaaltijdCorvee($mid): bool
 	{
 		return count($this->findBy(['maaltijd_id' => $mid])) > 0;
 	}
@@ -435,7 +422,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @return int
 	 * @throws ORMException
 	 */
-	public function verwijderMaaltijdCorvee($mid)
+	public function verwijderMaaltijdCorvee($mid): int
 	{
 		$taken = $this->findBy(['maaltijd_id' => $mid]);
 		foreach ($taken as $taak) {
@@ -454,7 +441,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param int $fid
 	 * @return bool
 	 */
-	public function existFunctieTaken($fid)
+	public function existFunctieTaken($fid): bool
 	{
 		return count($this->findBy(['functie_id' => $fid])) > 0;
 	}
@@ -505,12 +492,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function newRepetitieTaken(
-		CorveeRepetitie $repetitie,
-		DateTimeInterface $beginDatum,
-		DateTimeInterface $eindDatum,
-		$maaltijd = null
-	) {
+	public function newRepetitieTaken(CorveeRepetitie $repetitie, DateTimeInterface $beginDatum, DateTimeInterface $eindDatum, $maaltijd = null): array {
 		// start at first occurence
 		$shift = $repetitie->dag_vd_week - $beginDatum->format('w') + 7;
 		$shift %= 7;
@@ -545,7 +527,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderRepetitieTaken($crid)
+	public function verwijderRepetitieTaken($crid): int
 	{
 		$taken = $this->findBy(['corveeRepetitie' => $crid]);
 		foreach ($taken as $taak) {
@@ -564,7 +546,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param int $crid
 	 * @return bool
 	 */
-	public function existRepetitieTaken($crid)
+	public function existRepetitieTaken($crid): bool
 	{
 		return count($this->findBy(['corveeRepetitie' => $crid])) > 0;
 	}

@@ -105,7 +105,7 @@ class GroepLid
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("lid")
 	 */
-	public function getDatatableLid()
+	public function getDatatableLid(): ?string
 	{
 		return ProfielRepository::getLink($this->uid);
 	}
@@ -133,7 +133,7 @@ class GroepLid
 	 * @return string
 	 * @Serializer\Groups("vue")
 	 */
-	public function getNaam()
+	public function getNaam(): string
 	{
 		return $this->profiel->getNaam();
 	}
@@ -143,7 +143,7 @@ class GroepLid
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("opmerking2")
 	 */
-	public function getOpmerking2String()
+	public function getOpmerking2String(): string
 	{
 		if (is_array($this->opmerking2)) {
 			return implode(
@@ -157,7 +157,7 @@ class GroepLid
 		}
 	}
 
-	public function setProfiel(Profiel $profiel)
+	public function setProfiel(Profiel $profiel): void
 	{
 		$this->profiel = $profiel;
 		$this->uid = $profiel->uid;

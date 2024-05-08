@@ -20,11 +20,7 @@ class PushAbonnementController extends AbstractController
 	 * @Route("/push-abonnement", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function nieuw(
-		PushAbonnementRepository $pushAbonnementRepository,
-		LidInstellingenRepository $lidInstellingenRepository,
-		Request $request
-	) {
+	public function nieuw(PushAbonnementRepository $pushAbonnementRepository, LidInstellingenRepository $lidInstellingenRepository, Request $request): JsonResponse {
 		$endpoint = $request->request->get('endpoint');
 		$keys = $request->request->get('keys');
 
@@ -54,10 +50,7 @@ class PushAbonnementController extends AbstractController
 	 * @Route("/push-abonnement", methods={"PUT"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function aanpassen(
-		PushAbonnementRepository $pushAbonnementRepository,
-		Request $request
-	) {
+	public function aanpassen(PushAbonnementRepository $pushAbonnementRepository, Request $request): JsonResponse {
 		$endpoint = $request->request->get('endpoint');
 		$keys = $request->request->get('keys');
 
@@ -83,11 +76,7 @@ class PushAbonnementController extends AbstractController
 	 * @Route("/push-abonnement", methods={"DELETE"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verwijderen(
-		PushAbonnementRepository $pushAbonnementRepository,
-		LidInstellingenRepository $lidInstellingenRepository,
-		Request $request
-	) {
+	public function verwijderen(PushAbonnementRepository $pushAbonnementRepository, LidInstellingenRepository $lidInstellingenRepository, Request $request): JsonResponse {
 		$endpoint = $request->request->get('endpoint');
 
 		$subscription = $pushAbonnementRepository->findOneBy([

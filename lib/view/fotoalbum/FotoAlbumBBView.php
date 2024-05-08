@@ -40,7 +40,7 @@ class FotoAlbumBBView implements View
 		$this->model = $fotoalbum;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		if (count($this->model->getFotos()) < 1) {
@@ -54,17 +54,17 @@ class FotoAlbumBBView implements View
 		return $html;
 	}
 
-	public function makeCompact()
+	public function makeCompact(): void
 	{
 		$this->compact = true;
 	}
 
-	public function setRows($rows)
+	public function setRows($rows): void
 	{
 		$this->rows = $rows;
 	}
 
-	public function setPerRow($per_row)
+	public function setPerRow($per_row): void
 	{
 		$this->per_row = $per_row;
 	}
@@ -78,7 +78,7 @@ class FotoAlbumBBView implements View
 	 *
 	 * @param string $index
 	 */
-	public function setBig($index)
+	public function setBig($index): void
 	{
 		if (in_array($index, ['a', 'b', 'c'])) {
 			switch ($index) {
@@ -108,7 +108,7 @@ class FotoAlbumBBView implements View
 	 * The index is saved together with the object for correct reference
 	 * in case the image is moved one left or one up in the grid at borders.
 	 */
-	private function getGrid()
+	private function getGrid(): array
 	{
 		$fotos = $this->model->getFotos();
 		$grid = array_fill(0, $this->rows, array_fill(0, $this->per_row, null));
@@ -235,12 +235,12 @@ class FotoAlbumBBView implements View
 			'</div>';
 	}
 
-	public function getTitel()
+	public function getTitel(): void
 	{
 		// Niet boeiend
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): void
 	{
 		// Niet boeiend
 	}

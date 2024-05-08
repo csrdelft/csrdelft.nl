@@ -36,7 +36,7 @@ class Verticale extends Groep
 	public $naam;
 
 	// Stiekem hebben we helemaal geen leden.
-	public function getLeden()
+	public function getLeden(): ArrayCollection
 	{
 		$leden = [];
 		$container = ContainerFacade::getContainer();
@@ -70,7 +70,7 @@ class Verticale extends Groep
 		return new ArrayCollection($leden);
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/verticalen/' . $this->letter;
 	}

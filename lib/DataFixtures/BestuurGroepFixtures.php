@@ -21,7 +21,7 @@ class BestuurGroepFixtures extends Fixture implements DependentFixtureInterface
 		$this->besturenRepository = $besturenRepository;
 	}
 
-	public function load(ObjectManager $manager)
+	public function load(ObjectManager $manager): void
 	{
 		$bestuur = $this->besturenRepository->nieuw();
 		$bestuur->naam = 'Bestuur 1';
@@ -150,7 +150,7 @@ class BestuurGroepFixtures extends Fixture implements DependentFixtureInterface
 		$manager->flush();
 	}
 
-	public function getDependencies()
+	public function getDependencies(): array
 	{
 		return [AccountFixtures::class];
 	}

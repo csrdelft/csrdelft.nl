@@ -25,7 +25,7 @@ class ProfielFixtures extends Fixture
 		$this->faker = Faker::create('nl_NL');
 	}
 
-	public function load(ObjectManager $manager)
+	public function load(ObjectManager $manager): void
 	{
 		$lichtingen = range(
 			FixtureHelpers::LIDJAAR_START,

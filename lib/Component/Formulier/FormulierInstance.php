@@ -73,7 +73,7 @@ class FormulierInstance
 		$this->twig = $twig;
 	}
 
-	public function createView()
+	public function createView(): FormulierView
 	{
 		$html = '';
 		if ($this->showMelding) {
@@ -122,7 +122,7 @@ class FormulierInstance
 			'">';
 	}
 
-	public function getCsrfField()
+	public function getCsrfField(): ?CsrfField
 	{
 		if (!$this->preventCsrf) {
 			return null;
@@ -132,12 +132,12 @@ class FormulierInstance
 		return new CsrfField($token);
 	}
 
-	public function getMethod()
+	public function getMethod(): string
 	{
 		return $this->post ? 'post' : 'get';
 	}
 
-	protected function getScriptTag()
+	protected function getScriptTag(): string
 	{
 		$js = $this->getJavascript();
 		if (trim($js) == '') {
@@ -162,7 +162,7 @@ HTML;
 		return $javascript;
 	}
 
-	public function createModalView()
+	public function createModalView(): FormulierView
 	{
 		$html = '';
 		$this->css_classes[] = 'ModalForm';
@@ -211,7 +211,7 @@ HTML;
 	/**
 	 * Geeft waardes van de formuliervelden terug.
 	 */
-	public function getValues()
+	public function getValues(): array
 	{
 		$values = [];
 		foreach ($this->fields as $field) {
@@ -225,7 +225,7 @@ HTML;
 	/**
 	 * Geeft errors van de formuliervelden terug.
 	 */
-	public function getError()
+	public function getError(): ?array
 	{
 		$errors = [];
 		foreach ($this->fields as $field) {
@@ -246,7 +246,7 @@ HTML;
 	 * Alle valideer-functies kunnen het model gebruiken bij het valideren
 	 * dat meegegeven is bij de constructie van het InputField.
 	 */
-	public function validate()
+	public function validate(): bool
 	{
 		if (!$this->isPosted()) {
 			return false;
@@ -274,7 +274,7 @@ HTML;
 	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField && !$field->isPosted()) {
@@ -290,7 +290,7 @@ HTML;
 	 *
 	 * @returns ChangeLogEntry[]
 	 */
-	public function diff()
+	public function diff(): array
 	{
 		$changeLogRepository = ContainerFacade::getContainer()->get(
 			ChangeLogRepository::class
@@ -320,7 +320,7 @@ HTML;
 	 * @param ChangeLogEntry[] $diff
 	 * @return string
 	 */
-	public function changelog(array $diff)
+	public function changelog(array $diff): string
 	{
 		$changelog = '';
 		if (!empty($diff)) {
@@ -345,7 +345,7 @@ HTML;
 		return $changelog;
 	}
 
-	public function handleRequest(Request $request)
+	public function handleRequest(Request $request): void
 	{
 		if ($this->isPosted()) {
 			foreach ($this->fields as $field) {
@@ -356,7 +356,7 @@ HTML;
 		}
 	}
 
-	private function loadProperty(InputField $field)
+	private function loadProperty(InputField $field): void
 	{
 		$fieldName = $field->getName();
 		if ($this->model) {
@@ -379,7 +379,7 @@ HTML;
 		$this->model = $model;
 	}
 
-	public function getField($name)
+	public function getField($name): FormElement
 	{
 		return $this->fields[$name];
 	}

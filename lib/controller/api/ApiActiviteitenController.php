@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Security\Voter\Entity\Groep\ActiviteitGroepVoter;
 use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
@@ -39,7 +40,7 @@ class ApiActiviteitenController extends AbstractController
 	 * @Route("/API/2.0/activiteiten/{id}/aanmelden", methods={"POST"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function activiteitAanmelden($id)
+	public function activiteitAanmelden($id): array
 	{
 		$activiteit = $this->activiteitenRepository->get($id);
 
@@ -68,7 +69,7 @@ class ApiActiviteitenController extends AbstractController
 	 * @Route("/API/2.0/activiteiten/{id}/afmelden", methods={"POST"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function activiteitAfmelden($id)
+	public function activiteitAfmelden($id): array
 	{
 		$activiteit = $this->activiteitenRepository->get($id);
 

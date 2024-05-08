@@ -4,7 +4,7 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
 use CsrDelft\service\AccessService;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Tekst binnen de privé-tag wordt enkel weergegeven voor leden met
@@ -44,7 +44,7 @@ class BbPrive extends BbTag
 		);
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'prive';
 	}
@@ -59,13 +59,13 @@ class BbPrive extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->readContent();
 		$this->permissie = $arguments['prive'] ?? 'ROLE_LOGGED_IN';
 	}
 
-	public function getPermissie()
+	public function getPermissie(): string
 	{
 		return $this->permissie;
 	}

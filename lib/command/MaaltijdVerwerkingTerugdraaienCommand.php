@@ -38,15 +38,15 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command
 		parent::__construct();
 	}
 
-	protected function configure()
+	protected function configure(): void
 	{
 		$this->setName('maalcie:fiscaat:terugdraaien')->setDescription(
 			'Draai verwerking van maaltijden op bepaalde datum terug. Let op: hiermee wordt ook civi-saldo teruggestort naar oud-leden.'
 		);
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
-	{
+	protected function execute(InputInterface $input, OutputInterface $output): int
+{
 		$helper = $this->getHelper('question');
 
 		// Bepaal datum

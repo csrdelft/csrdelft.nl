@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\pin;
 
 use CsrDelft\common\CsrException;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -85,7 +86,7 @@ class PinTransactie
 	 * @return int
 	 * @throws CsrException
 	 */
-	public function getBedragInCenten()
+	public function getBedragInCenten(): int
 	{
 		list($valuta, $bedrag) = explode(' ', $this->amount);
 
@@ -104,7 +105,7 @@ class PinTransactie
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function getKorteBeschrijving()
+	public function getKorteBeschrijving(): string
 	{
 		return sprintf('€%.2f', $this->getBedragInCenten() / 100);
 	}

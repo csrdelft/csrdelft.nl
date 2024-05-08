@@ -26,7 +26,7 @@ class GroepEmailsView implements ToResponse
 		$this->groep = $groep;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->twig->render('groep/emails.html.twig', [
 			'groep' => $this->groep,

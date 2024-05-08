@@ -17,12 +17,7 @@ final class InstellingUtil
 	 * @param string $uitzondering Sommige commissie mogen wel dit veld zien.
 	 * @return bool
 	 */
-	public static function is_zichtbaar(
-		$profiel,
-		$key,
-		$cat = 'profiel',
-		$uitzondering = P_LEDEN_MOD
-	) {
+	public static function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_MOD): bool {
 		$lidToestemmingRepository = ContainerFacade::getContainer()->get(
 			LidToestemmingRepository::class
 		);

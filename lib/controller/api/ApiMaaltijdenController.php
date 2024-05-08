@@ -4,6 +4,7 @@ namespace CsrDelft\controller\api;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
@@ -33,7 +34,7 @@ class ApiMaaltijdenController extends AbstractController
 	 * @Route("/API/2.0/maaltijden/{id}/aanmelden", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function maaltijdAanmelden($id)
+	public function maaltijdAanmelden($id): array
 	{
 		try {
 			$maaltijd = $this->maaltijdenRepository->getMaaltijd($id);
@@ -52,7 +53,7 @@ class ApiMaaltijdenController extends AbstractController
 	 * @Route("/API/2.0/maaltijden/{id}/afmelden", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function maaltijdAfmelden($id)
+	public function maaltijdAfmelden($id): array
 	{
 		try {
 			$maaltijd = $this->maaltijdenRepository->getMaaltijd($id);

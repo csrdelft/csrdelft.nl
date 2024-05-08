@@ -122,7 +122,7 @@ class DataTable implements View, FormElement, ToResponse
 		return $this->dataTableId;
 	}
 
-	public function setSearch($searchString)
+	public function setSearch($searchString): void
 	{
 		$this->settings['search'] = ['search' => $searchString];
 	}
@@ -173,23 +173,23 @@ class DataTable implements View, FormElement, ToResponse
 	/**
 	 * @param DataTableKnop $knop
 	 */
-	protected function addKnop(DataTableKnop $knop)
+	protected function addKnop(DataTableKnop $knop): void
 	{
 		$knop->setDataTableId($this->dataTableId);
 		$this->settings['userButtons'][] = $knop;
 	}
 
-	protected function addRowKnop(DataTableRowKnop $knop)
+	protected function addRowKnop(DataTableRowKnop $knop): void
 	{
 		$this->settings['rowButtons'][] = $knop;
 	}
 
-	protected function columnPosition($name)
+	protected function columnPosition($name): int|string|false
 	{
 		return array_search($name, array_keys($this->columns));
 	}
 
-	protected function setOrder($names)
+	protected function setOrder($names): void
 	{
 		$orders = [];
 		foreach ($names as $name => $order) {
@@ -207,15 +207,7 @@ class DataTable implements View, FormElement, ToResponse
 	 * @param CellType|null $type
 	 * @param string|null $data The data source for the column. Defaults to the column name.
 	 */
-	protected function addColumn(
-		$newName,
-		$before = null,
-		$defaultContent = null,
-		CellRender $render = null,
-		$order_by = null,
-		CellType $type = null,
-		$data = null
-	) {
+	protected function addColumn($newName, $before = null, $defaultContent = null, CellRender $render = null, $order_by = null, CellType $type = null, $data = null): void {
 		$type = $type ?: CellType::String();
 		$render = $render ?: CellRender::Default();
 
@@ -261,7 +253,7 @@ class DataTable implements View, FormElement, ToResponse
 	 *
 	 * @param string $name
 	 */
-	protected function deleteColumn($name)
+	protected function deleteColumn($name): void
 	{
 		if (isset($this->columns[$name])) {
 			array_splice($this->columns, $this->columnPosition($name), 1);
@@ -272,7 +264,7 @@ class DataTable implements View, FormElement, ToResponse
 	 * @param string $name
 	 * @param bool $hide
 	 */
-	protected function hideColumn($name, $hide = true)
+	protected function hideColumn($name, $hide = true): void
 	{
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['visible'] = !$hide;
@@ -283,7 +275,7 @@ class DataTable implements View, FormElement, ToResponse
 	 * @param string $name
 	 * @param bool $searchable
 	 */
-	protected function searchColumn($name, $searchable = true)
+	protected function searchColumn($name, $searchable = true): void
 	{
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['searchable'] = (bool) $searchable;
@@ -294,7 +286,7 @@ class DataTable implements View, FormElement, ToResponse
 	 * @param string $name
 	 * @param string $title
 	 */
-	protected function setColumnTitle($name, $title)
+	protected function setColumnTitle($name, $title): void
 	{
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['title'] = $title;
@@ -391,7 +383,7 @@ class DataTable implements View, FormElement, ToResponse
 		return $this->titel;
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return $this->titel;
 	}
@@ -399,17 +391,17 @@ class DataTable implements View, FormElement, ToResponse
 	/**
 	 * Hiermee wordt gepoogt af te dwingen dat een view een model heeft om te tonen
 	 */
-	public function getModel()
+	public function getModel(): null
 	{
 		return null;
 	}
 
-	public function getType()
+	public function getType(): string
 	{
 		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$id = str_replace(' ', '-', strtolower($this->getTitel()));
 
@@ -425,7 +417,7 @@ class DataTable implements View, FormElement, ToResponse
 HTML;
 	}
 
-	public function getJavascript()
+	public function getJavascript(): string
 	{
 		//Nothing should be returned here because the script is already embedded in getView
 		return '';

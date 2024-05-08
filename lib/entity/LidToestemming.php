@@ -48,7 +48,7 @@ class LidToestemming
 	 */
 	public $profiel;
 
-	public function uid()
+	public function uid(): string
 	{
 		return $this->profiel->uid;
 	}

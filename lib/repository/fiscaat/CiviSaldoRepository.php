@@ -8,6 +8,7 @@ use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\fiscaat\enum\CiviSaldoLogEnum;
+use CsrDelft\entity\fiscaat\integer;
 use CsrDelft\repository\AbstractRepository;
 use DateInterval;
 use DateTime;
@@ -52,7 +53,7 @@ class CiviSaldoRepository extends AbstractRepository
 	 * @param bool $alleenActief
 	 * @return CiviSaldo|null
 	 */
-	public function getSaldo($uid, $alleenActief = false)
+	public function getSaldo($uid, $alleenActief = false): ?CiviSaldo
 	{
 		$critera = ['uid' => $uid];
 		if ($alleenActief) {
@@ -66,7 +67,7 @@ class CiviSaldoRepository extends AbstractRepository
 	 *
 	 * @return CiviSaldo
 	 */
-	public function maakSaldo($uid)
+	public function maakSaldo($uid): CiviSaldo
 	{
 		$saldo = new CiviSaldo();
 		$saldo->uid = $uid;
@@ -117,7 +118,7 @@ class CiviSaldoRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function ophogen($uid, $bedrag)
+	public function ophogen($uid, $bedrag): integer
 	{
 		if ($bedrag < 0) {
 			throw new CsrGebruikerException(
@@ -144,7 +145,7 @@ class CiviSaldoRepository extends AbstractRepository
 	 * @return int Nieuwe saldo
 	 * @throws CsrGebruikerException
 	 */
-	public function verlagen($uid, $bedrag)
+	public function verlagen($uid, $bedrag): integer
 	{
 		if ($bedrag < 0) {
 			throw new CsrGebruikerException(
@@ -170,7 +171,7 @@ class CiviSaldoRepository extends AbstractRepository
 	 * @return int
 	 * @throws CsrGebruikerException
 	 */
-	public function delete(CiviSaldo $entity)
+	public function delete(CiviSaldo $entity): void
 	{
 		if ($entity->saldo !== 0) {
 			throw new CsrGebruikerException(
@@ -190,7 +191,7 @@ class CiviSaldoRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(CiviSaldo $entity)
+	public function create(CiviSaldo $entity): string
 	{
 		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::CREATE_SALDO, $entity);
 
@@ -200,7 +201,7 @@ class CiviSaldoRepository extends AbstractRepository
 		return $entity->uid;
 	}
 
-	public function findLaatsteCommissie()
+	public function findLaatsteCommissie(): mixed
 	{
 		return $this->createQueryBuilder('s')
 			->where('s.uid LIKE \'c%\'')
@@ -217,7 +218,7 @@ class CiviSaldoRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function update(CiviSaldo $entity)
+	public function update(CiviSaldo $entity): void
 	{
 		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::UPDATE_SALDO, $entity);
 
@@ -225,12 +226,12 @@ class CiviSaldoRepository extends AbstractRepository
 		$this->_em->flush();
 	}
 
-	public function existsByUid(string $uid)
+	public function existsByUid(string $uid): bool
 	{
 		return count($this->findBy(['uid' => $uid])) == 1;
 	}
 
-	public function zoeken($uids, $query)
+	public function zoeken($uids, $query): mixed
 	{
 		return $this->createQueryBuilder('cs')
 			->where('cs.deleted = false')
@@ -247,7 +248,7 @@ class CiviSaldoRepository extends AbstractRepository
 	 * @param int $saldogrens
 	 * @return CiviSaldo[]
 	 */
-	public function getRoodstaandeLeden($saldogrens)
+	public function getRoodstaandeLeden($saldogrens): mixed
 	{
 		return $this->createQueryBuilder('cs')
 			->where('cs.saldo < :saldogrens')
@@ -307,7 +308,7 @@ SQL;
 		return self::formatWeekinvoer($nativeQuery->getResult());
 	}
 
-	private static function formatWeekinvoer($result)
+	private static function formatWeekinvoer($result): stdClass
 	{
 		$weekinvoeren = new stdClass();
 		// Standaard volgorde categorieën
@@ -369,14 +370,7 @@ SQL;
 	 * @param bool $groeperen
 	 * @return int|mixed|string
 	 */
-	public function zoekBestellingen(
-		DateTimeImmutable $from,
-		DateTimeImmutable $until,
-		string $cie,
-		int $categorie,
-		int $product,
-		bool $groeperen
-	) {
+	public function zoekBestellingen(DateTimeImmutable $from, DateTimeImmutable $until, string $cie, int $categorie, int $product, bool $groeperen): array {
 		$rsm = new ResultSetMapping();
 		$rsm->addScalarResult('moment', 'moment', 'datetime_immutable');
 		$rsm->addScalarResult('cie', 'cie');

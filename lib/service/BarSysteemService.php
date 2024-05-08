@@ -60,12 +60,12 @@ class BarSysteemService
 	/**
 	 * @return CiviSaldo[]
 	 */
-	public function getPersonen()
+	public function getPersonen(): array
 	{
 		return $this->civiSaldoRepository->findBy(['deleted' => false], ['laatst_veranderd' => 'DESC']);
 	}
 
-	public function getProfiel($uid)
+	public function getProfiel($uid): mixed
 	{
 		$q = $this->db->prepare(
 			<<<SQL
@@ -96,7 +96,7 @@ SQL
 		return $naam;
 	}
 
-	public function getGrootboeken()
+	public function getGrootboeken(): array|false
 	{
 		$q = $this->db->prepare(
 			"SELECT id, type FROM civi_categorie WHERE cie='soccie'"
@@ -160,12 +160,12 @@ SQL
 	/**
 	 * @return CiviProduct[]
 	 */
-	public function getProducten()
+	public function getProducten(): array
 	{
 		return $this->civiProductRepository->findByCie('soccie');
 	}
 
-	public function verwerkBestellingVoorCommissie($data, $cie = 'soccie')
+	public function verwerkBestellingVoorCommissie($data, $cie = 'soccie'): bool
 	{
 		$this->db->beginTransaction();
 
@@ -208,7 +208,7 @@ SQL
 		return true;
 	}
 
-	private function getBestellingTotaal($bestelId)
+	private function getBestellingTotaal($bestelId): mixed
 	{
 		$q = $this->db->prepare(
 			'SELECT SUM(prijs * aantal) FROM civi_bestelling_inhoud AS I JOIN civi_prijs AS P USING (product_id) WHERE bestelling_id = :bestelId AND tot IS NULL'
@@ -218,12 +218,7 @@ SQL
 		return $q->fetchColumn();
 	}
 
-	public function getBestellingLaatste(
-		$persoon,
-		\DateTimeImmutable $begin = null,
-		\DateTimeImmutable $eind = null,
-		$productIDs = []
-	) {
+	public function getBestellingLaatste($persoon, \DateTimeImmutable $begin = null, \DateTimeImmutable $eind = null, $productIDs = []): array {
 		if ($begin == null) {
 			$begin = date_create_immutable()->add(new \DateInterval('P15H'));
 		} else {
@@ -256,7 +251,7 @@ SQL
 	 * @param integer $bestelId
 	 * @param $inhoud
 	 */
-	public function updateBestelling($uid, $bestelId, $inhoud)
+	public function updateBestelling($uid, $bestelId, $inhoud): void
 	{
 		$em = $this->entityManager;
 
@@ -307,7 +302,7 @@ SQL
 		});
 	}
 
-	public function getSaldo($socCieId)
+	public function getSaldo($socCieId): mixed
 	{
 		$q = $this->db->prepare(
 			'SELECT saldo FROM civi_saldo WHERE uid = :socCieId'
@@ -317,7 +312,7 @@ SQL
 		return $q->fetchColumn();
 	}
 
-	public function verwijderBestelling($bestelId)
+	public function verwijderBestelling($bestelId): void
 	{
 		$em = $this->entityManager;
 
@@ -338,7 +333,7 @@ SQL
 		});
 	}
 
-	public function undoVerwijderBestelling($bestelId)
+	public function undoVerwijderBestelling($bestelId): void
 	{
 		$em = $this->entityManager;
 
@@ -361,7 +356,7 @@ SQL
 
 	// Beheer
 
-	public function getGrootboekInvoer()
+	public function getGrootboekInvoer(): array
 	{
 		// GROUP BY week
 		$q = $this->db->prepare("
@@ -411,7 +406,7 @@ ORDER BY yearweek DESC
 		return $weeks;
 	}
 
-	public function getToolData()
+	public function getToolData(): array
 	{
 		$data = [];
 
@@ -422,7 +417,7 @@ ORDER BY yearweek DESC
 		return $data;
 	}
 
-	private function sumSaldi($profielOnly = false)
+	private function sumSaldi($profielOnly = false): mixed
 	{
 		$after = $profielOnly ? "AND uid NOT LIKE 'c%'" : '';
 
@@ -433,7 +428,7 @@ ORDER BY yearweek DESC
 			->fetch(PDO::FETCH_ASSOC);
 	}
 
-	private function getRed()
+	private function getRed(): array
 	{
 		$result = [];
 
@@ -454,7 +449,7 @@ ORDER BY yearweek DESC
 		return $result;
 	}
 
-	public function addProduct($name, $price, $type)
+	public function addProduct($name, $price, $type): bool
 	{
 		if ($type < 1) {
 			return false;
@@ -484,7 +479,7 @@ ORDER BY yearweek DESC
 		return true;
 	}
 
-	public function updatePerson($id, $name)
+	public function updatePerson($id, $name): void
 	{
 		$civiSaldo = $this->civiSaldoRepository->find($id);
 		$civiSaldo->naam = $name;
@@ -492,7 +487,7 @@ ORDER BY yearweek DESC
 		$this->civiSaldoRepository->update($civiSaldo);
 	}
 
-	public function removePerson($id)
+	public function removePerson($id): int
 	{
 		$q = $this->db->prepare(
 			'UPDATE civi_saldo SET deleted = 1 WHERE uid = :id AND saldo = 0'
@@ -502,7 +497,7 @@ ORDER BY yearweek DESC
 		return $q->rowCount();
 	}
 
-	public function addPerson($name, $saldo, $uid)
+	public function addPerson($name, $saldo, $uid): bool
 	{
 		$q = $this->db->prepare(
 			'INSERT INTO civi_saldo (naam, saldo, uid) VALUES (:naam, :saldo, :uid)'
@@ -523,7 +518,7 @@ ORDER BY yearweek DESC
 		return $q->execute();
 	}
 
-	public function updatePrice($productId, $price)
+	public function updatePrice($productId, $price): bool
 	{
 		$this->db->beginTransaction();
 
@@ -548,7 +543,7 @@ ORDER BY yearweek DESC
 		return true;
 	}
 
-	public function updateVisibility($productId, $visibility)
+	public function updateVisibility($productId, $visibility): bool
 	{
 		$this->db->beginTransaction();
 
@@ -568,7 +563,7 @@ ORDER BY yearweek DESC
 	}
 
 	// Log action by type
-	public function log($type, $data)
+	public function log($type, $data): void
 	{
 		$value = [];
 		foreach ($data as $key => $item) {
@@ -590,7 +585,7 @@ ORDER BY yearweek DESC
 	 *
 	 * @return int Het aantal prakciepilsjes dat besteld is
 	 */
-	public function getPrakCiePilsjes(DateTimeImmutable $vanaf)
+	public function getPrakCiePilsjes(DateTimeImmutable $vanaf): int
 	{
 		$q =  $this->db->prepare(
 			"select sum(cbi.aantal) from civi_bestelling_inhoud cbi" .

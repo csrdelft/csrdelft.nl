@@ -231,7 +231,7 @@ class ForumDraadController extends AbstractController
 	 * @Route("/forum/wijzigen/{draad_id}/{property}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function wijzigen(ForumDraad $draad, $property)
+	public function wijzigen(ForumDraad $draad, $property): RedirectResponse|JsonResponse
 	{
 		// gedeelde moderators mogen dit niet
 		if (!$draad->deel->magModereren()) {
@@ -305,11 +305,7 @@ class ForumDraadController extends AbstractController
 	 * @Route("/forum/posten/{forum_id}/{draad_id}", methods={"POST"}, defaults={"draad_id"=null})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function posten(
-		RequestStack $requestStack,
-		ForumDeel $deel,
-		ForumDraad $draad = null
-	) {
+	public function posten(RequestStack $requestStack, ForumDeel $deel, ForumDraad $draad = null): RedirectResponse {
 		// post in bestaand draadje?
 		$titel = null;
 		if ($draad !== null) {

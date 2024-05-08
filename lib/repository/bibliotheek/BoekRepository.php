@@ -21,7 +21,7 @@ class BoekRepository extends AbstractRepository
 		parent::__construct($registry, Boek::class);
 	}
 
-	public function existsTitel($value)
+	public function existsTitel($value): bool
 	{
 		return count($this->findBy(['titel' => $value])) > 0;
 	}
@@ -32,7 +32,7 @@ class BoekRepository extends AbstractRepository
 	 * @return string[][]
 	 * @throws CsrGebruikerException
 	 */
-	public function autocompleteProperty(string $zoekveld, string $zoekterm)
+	public function autocompleteProperty(string $zoekveld, string $zoekterm): array
 	{
 		$allowedFields = ['titel', 'auteur', 'taal'];
 		if (!in_array($zoekveld, $allowedFields)) {
@@ -54,7 +54,7 @@ class BoekRepository extends AbstractRepository
 	 * @return Boek[]
 	 * @throws CsrGebruikerException
 	 */
-	public function autocompleteBoek(string $zoekterm)
+	public function autocompleteBoek(string $zoekterm): mixed
 	{
 		$qb = $this->createQueryBuilder('boek');
 		$qb->where($qb->expr()->like('boek.titel', ':zoekterm'));

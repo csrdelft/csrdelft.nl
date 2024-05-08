@@ -46,7 +46,7 @@ class ToestemmingController extends AbstractController
 	 * @Route("/toestemming", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function POST_overzicht()
+	public function POST_overzicht(): Response|ToestemmingModalForm
 	{
 		$form = new ToestemmingModalForm($this->lidToestemmingRepository);
 
@@ -108,7 +108,7 @@ class ToestemmingController extends AbstractController
 	 * @Auth({P_LEDEN_MOD,P_ALBUM_MOD,"commissie:promocie:ht"})
 	 * @throws Exception
 	 */
-	public function lijst(Request $request)
+	public function lijst(Request $request): ToestemmingLijstResponse|Response
 	{
 		if ($this->mag(P_LEDEN_MOD)) {
 			$ids = ['foto_intern', 'foto_extern', 'vereniging', 'bijzonder'];

@@ -75,7 +75,7 @@ class PinTransactiesDownloadenCommand extends Command
 		$this->mailService = $mailService;
 	}
 
-	protected function configure()
+	protected function configure(): void
 	{
 		$this->setDescription(
 			'Download pintransacties van aangegeven periode en probeer te matchen met bestellingen.'
@@ -98,7 +98,7 @@ class PinTransactiesDownloadenCommand extends Command
 			);
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$this->interactive =
 			$input->isInteractive() && !$input->getOption('no-interaction');
@@ -171,7 +171,7 @@ class PinTransactiesDownloadenCommand extends Command
 		return 0;
 	}
 
-	private function downloadDag(OutputInterface $output, $from, $to)
+	private function downloadDag(OutputInterface $output, $from, $to): void
 	{
 		// Verwijder eerdere download.
 		$vorigePinTransacties = $this->pinTransactieRepository->getPinTransactieInMoment(

@@ -12,7 +12,7 @@ class ViewEventListener
 	 * Deze wordt dan in een Response gewrapped.
 	 * @param ViewEvent $event
 	 */
-	public function onKernelView(ViewEvent $event)
+	public function onKernelView(ViewEvent $event): void
 	{
 		$value = $event->getControllerResult();
 

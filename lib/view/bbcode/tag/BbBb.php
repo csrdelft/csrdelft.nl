@@ -6,12 +6,12 @@ use CsrDelft\bb\BbTag;
 
 class BbBb extends BbTag
 {
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'bb';
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		if (@$this->env->prosemirror) {
 			$this->readContent([], false);
@@ -20,7 +20,7 @@ class BbBb extends BbTag
 		}
 	}
 
-	public function render()
+	public function render(): string
 	{
 		return $this->getContent();
 	}

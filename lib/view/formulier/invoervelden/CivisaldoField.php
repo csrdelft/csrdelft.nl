@@ -24,7 +24,7 @@ class CivisaldoField extends AutocompleteField
 		$this->suggestions[ucfirst($this->zoekin)] = '/fiscaat/saldo/zoek?q=';
 	}
 
-	public function getValue()
+	public function getValue(): ?string
 	{
 		$this->value = parent::getValue();
 		if ($this->empty_null and empty($this->value)) {
@@ -48,7 +48,7 @@ class CivisaldoField extends AutocompleteField
 		return $this->value;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;
@@ -71,14 +71,14 @@ class CivisaldoField extends AutocompleteField
 		return $this->error === '';
 	}
 
-	public function getPreviewDiv()
+	public function getPreviewDiv(): string
 	{
 		return '<div class="col-md-4 col-form-label" id="lidPreview_' .
 			$this->getId() .
 			'"></div>';
 	}
 
-	public function getJavascript()
+	public function getJavascript(): string
 	{
 		return /** @lang JavaScript */
 			parent::getJavascript() .

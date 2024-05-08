@@ -5,6 +5,7 @@ namespace CsrDelft\controller\groepen;
 use CsrDelft\entity\groepen\Bestuur;
 use CsrDelft\view\groepen\GroepenView;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -16,12 +17,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class BesturenController extends AbstractGroepenController
 {
-	public function getGroepType()
+	public function getGroepType(): string
 	{
 		return Bestuur::class;
 	}
 
-	public function overzicht(Request $request, $soort = null)
+	public function overzicht(Request $request, $soort = null): Response
 	{
 		$pagina = $request->get('pagina');
 		$limit = 20;

@@ -47,7 +47,7 @@ class MaaltijdArchiefService
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
-	public function vanMaaltijd(Maaltijd $maaltijd)
+	public function vanMaaltijd(Maaltijd $maaltijd): ArchiefMaaltijd
 	{
 		$archief = new ArchiefMaaltijd();
 		$archief->maaltijd_id = $maaltijd->maaltijd_id;
@@ -81,7 +81,7 @@ class MaaltijdArchiefService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function archiveerOudeMaaltijden($van, $tot)
+	public function archiveerOudeMaaltijden($van, $tot): array
 	{
 		if (!is_int($van) || !is_int($tot)) {
 			throw new CsrException('Invalid timestamp: archiveerOudeMaaltijden()');

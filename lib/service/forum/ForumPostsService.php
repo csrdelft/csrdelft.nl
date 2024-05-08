@@ -72,7 +72,7 @@ class ForumPostsService
 		$this->forumMeldingenService = $forumMeldingenService;
 	}
 
-	public function verplaatsForumPost(ForumDraad $nieuwDraad, ForumPost $post)
+	public function verplaatsForumPost(ForumDraad $nieuwDraad, ForumPost $post): void
 	{
 		$oudeDraad = $post->draad;
 		$post->draad = $nieuwDraad;
@@ -98,7 +98,7 @@ class ForumPostsService
 		}
 	}
 
-	public function wijzigForumDraad(ForumDraad $draad, $property, $value)
+	public function wijzigForumDraad(ForumDraad $draad, $property, $value): void
 	{
 		if (!property_exists($draad, $property)) {
 			throw new CsrException('Property undefined: ' . $property);
@@ -133,7 +133,7 @@ class ForumPostsService
 		}
 	}
 
-	public function verwijderForumPost(ForumPost $post)
+	public function verwijderForumPost(ForumPost $post): void
 	{
 		$post->verwijderd = !$post->verwijderd;
 		$this->entityManager->persist($post);
@@ -142,7 +142,7 @@ class ForumPostsService
 		$this->resetLastPost($post->draad);
 	}
 
-	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post)
+	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post): void
 	{
 		similar_text($post->tekst, $nieuwe_tekst, $gelijkheid);
 		$post->tekst = $nieuwe_tekst;
@@ -176,7 +176,7 @@ class ForumPostsService
 		}
 	}
 
-	public function resetLastPost(ForumDraad $draad)
+	public function resetLastPost(ForumDraad $draad): void
 	{
 		// reset last post
 		$last_post = $this->forumPostsRepository->findBy(
@@ -205,7 +205,7 @@ class ForumPostsService
 		$this->entityManager->flush();
 	}
 
-	public function goedkeurenForumPost(ForumPost $post)
+	public function goedkeurenForumPost(ForumPost $post): void
 	{
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;

@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\groep\BbWoonoord;
 
 class NodeWoonoord implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbWoonoord::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'woonoord';
 	}
 
-	public function getData(BbNode $node)
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbWoonoord) {
 			throw new \InvalidArgumentException();
@@ -29,14 +29,14 @@ class NodeWoonoord implements Node
 		];
 	}
 
-	public function getTagAttributes($node)
+	public function getTagAttributes($node): array
 	{
 		return [
 			'woonoord' => $node->attrs->id,
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

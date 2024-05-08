@@ -39,7 +39,7 @@ class Roodschopper
 
 	public $verzenden;
 
-	public static function getDefaults()
+	public static function getDefaults(): Roodschopper
 	{
 		$return = new Roodschopper();
 		$return->from = $_ENV['EMAIL_FISCUS'];
@@ -61,7 +61,7 @@ h.t. Fiscus.';
 	 * Geef een array van Lid-objecten terug van de te schoppen leden.
 	 *
 	 */
-	public function getLeden()
+	public function getLeden(): array
 	{
 		if ($this->teschoppen === null) {
 			$this->generateMails();
@@ -78,7 +78,7 @@ h.t. Fiscus.';
 	/**
 	 * @return CiviSaldo[]
 	 */
-	public function getSaldi()
+	public function getSaldi(): array
 	{
 		if ($this->doelgroep == 'oudleden') {
 			$status = LidStatus::getFiscaalOudlidLike();
@@ -115,7 +115,7 @@ h.t. Fiscus.';
 	/**
 	 * Voor een simulatierun uit. Er worden dan geen mails gestuurd.
 	 */
-	public function generateMails()
+	public function generateMails(): int
 	{
 		$this->teschoppen = [];
 		foreach ($this->getSaldi() as $saldo) {
@@ -153,7 +153,7 @@ h.t. Fiscus.';
 	 * Geef een lijstje met het onderwerp en de body van de te verzenden
 	 * mails.
 	 */
-	public function preview()
+	public function preview(): void
 	{
 		if ($this->teschoppen === null) {
 			$this->generateMails();
@@ -170,7 +170,7 @@ h.t. Fiscus.';
 	/**
 	 * Verstuurt uiteindelijk de mails.
 	 */
-	public function sendMails()
+	public function sendMails(): void
 	{
 		if ($this->teschoppen === null) {
 			$this->generateMails();

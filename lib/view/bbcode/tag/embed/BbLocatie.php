@@ -19,12 +19,12 @@ class BbLocatie extends BbTag
 	 */
 	private $height;
 
-	public static function getTagName()
+	public static function getTagName(): array
 	{
 		return ['map', 'kaart', 'locatie'];
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$address = $this->getContent();
 		$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
@@ -58,7 +58,7 @@ class BbLocatie extends BbTag
 			'</span></span>';
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		// Hoogte maakt niet veel uit
 		if (isset($arguments['h']) && $arguments['h'] <= 900) {

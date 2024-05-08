@@ -126,7 +126,7 @@ class LidStatus extends Enum
 	/**
 	 * @return string[]
 	 */
-	public static function getLidLike()
+	public static function getLidLike(): array
 	{
 		return array_values(static::$lidlike);
 	}
@@ -134,7 +134,7 @@ class LidStatus extends Enum
 	/**
 	 * @return LidStatus[]
 	 */
-	public static function getLidLikeObject()
+	public static function getLidLikeObject(): array
 	{
 		return array_map(function ($val) {
 			return static::from($val);
@@ -144,7 +144,7 @@ class LidStatus extends Enum
 	/**
 	 * @return string[]
 	 */
-	public static function getOudlidLike()
+	public static function getOudlidLike(): array
 	{
 		return array_values(static::$oudlidlike);
 	}
@@ -152,7 +152,7 @@ class LidStatus extends Enum
 	/**
 	 * @return LidStatus[]
 	 */
-	public static function getOudLidLikeObject()
+	public static function getOudLidLikeObject(): array
 	{
 		return array_map(function ($val) {
 			return static::from($val);
@@ -162,7 +162,7 @@ class LidStatus extends Enum
 	/**
 	 * @return string[]
 	 */
-	public static function getFiscaalLidLike()
+	public static function getFiscaalLidLike(): array
 	{
 		return array_values(static::$fiscaalLidlike);
 	}
@@ -170,7 +170,7 @@ class LidStatus extends Enum
 	/**
 	 * @return string[]
 	 */
-	public static function getFiscaalOudlidLike()
+	public static function getFiscaalOudlidLike(): array
 	{
 		return array_values(static::$fiscaalOudlidlike);
 	}
@@ -195,17 +195,17 @@ class LidStatus extends Enum
 		return isset(static::$oudlidlike[$option]);
 	}
 
-	public static function getZoekenLidLike()
+	public static function getZoekenLidLike(): array
 	{
 		return array_values(static::$zoekenLidlike);
 	}
 
-	public static function getZoekenOudlidLike()
+	public static function getZoekenOudlidLike(): array
 	{
 		return array_values(static::$zoekenOudlidlike);
 	}
 
-	public static function getZoekenExlidLike()
+	public static function getZoekenExlidLike(): array
 	{
 		return array_values(static::$zoekenExlidlike);
 	}

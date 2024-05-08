@@ -37,11 +37,7 @@ class ForumDeelForm implements FormulierTypeInterface
 	 * @param ForumDeel $data
 	 * @param array $options
 	 */
-	public function createFormulier(
-		FormulierBuilder $builder,
-		$data,
-		$options = []
-	) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
 		$aanmaken = $options['aanmaken'];
 		$builder->setTitel('Deelforum ' . $aanmaken ? 'aanmaken' : 'beheren');
 		$builder->addCssClass('ReloadPage PreventUnchanged');

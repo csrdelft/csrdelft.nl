@@ -55,7 +55,7 @@ class FileField extends RadioField
 		parent::__construct($name, $default, $description, $opties);
 	}
 
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		if (!parent::isPosted()) {
 			return false;
@@ -94,7 +94,7 @@ class FileField extends RadioField
 		return $this->getUploader()->getError();
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;
@@ -102,7 +102,7 @@ class FileField extends RadioField
 		return $this->getUploader()->validate();
 	}
 
-	public function opslaan($directory, $filename, $overwrite = false)
+	public function opslaan($directory, $filename, $overwrite = false): void
 	{
 		$this->getUploader()->opslaan($directory, $filename, $overwrite);
 	}
@@ -125,7 +125,7 @@ class FileField extends RadioField
 		return $html . '</div>';
 	}
 
-	public function getJavascript()
+	public function getJavascript(): string
 	{
 		$js =
 			parent::getJavascript() .

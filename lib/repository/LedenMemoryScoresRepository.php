@@ -31,7 +31,7 @@ class LedenMemoryScoresRepository extends AbstractRepository
 	 */
 	protected $default_order = 'tijd ASC, beurten DESC';
 
-	public function nieuw()
+	public function nieuw(): LedenMemoryScore
 	{
 		$score = new LedenMemoryScore();
 		$score->door_uid = LoginService::getUid();
@@ -39,7 +39,7 @@ class LedenMemoryScoresRepository extends AbstractRepository
 		return $score;
 	}
 
-	public function getGroepTopScores(Groep $groep, $limit = 10)
+	public function getGroepTopScores(Groep $groep, $limit = 10): array
 	{
 		return $this->findBy(
 			['eerlijk' => true, 'groep' => $groep->getUUID()],
@@ -48,13 +48,13 @@ class LedenMemoryScoresRepository extends AbstractRepository
 		);
 	}
 
-	public function create(LedenMemoryScore $ledenMemoryScore)
+	public function create(LedenMemoryScore $ledenMemoryScore): void
 	{
 		$this->_em->persist($ledenMemoryScore);
 		$this->_em->flush();
 	}
 
-	public function getAllTopScores()
+	public function getAllTopScores(): mixed
 	{
 		return $this->createQueryBuilder('s')
 			->where('s.eerlijk = true')

@@ -4,10 +4,12 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\repository\groepen\KetzersRepository;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmakenForm;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * KetzersController.class.php
@@ -31,12 +33,12 @@ class KetzersController extends AbstractGroepenController
 		$this->registry = $registry;
 	}
 
-	public function getGroepType()
+	public function getGroepType(): string
 	{
 		return Ketzer::class;
 	}
 
-	public function nieuw(Request $request, $id = null, $soort = null)
+	public function nieuw(Request $request, $id = null, $soort = null): GenericDataTableResponse|Response|JsonResponse|GroepAanmakenForm
 	{
 		$form = new GroepAanmakenForm($this->registry, $this->repository, $soort);
 		if ($request->getMethod() == 'GET') {

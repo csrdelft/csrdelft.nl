@@ -7,7 +7,7 @@ use CsrDelft\common\Util\UrlUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\BbHelper;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -38,12 +38,12 @@ class BbCitaat extends BbTag
 		$this->security = $security;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'citaat';
 	}
 
-	public function renderPlain()
+	public function renderPlain(): string
 	{
 		$text = 'Citaat';
 		if ($this->bron_profiel != null) {
@@ -58,7 +58,7 @@ class BbCitaat extends BbTag
 		return $text . ":\n " . trim($this->getContent());
 	}
 
-	public function renderPreview()
+	public function renderPreview(): string
 	{
 		$text = '🗣️ ';
 		if ($this->bron_profiel != null) {
@@ -145,7 +145,7 @@ class BbCitaat extends BbTag
 			'</blockquote></div>';
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->env->quote_level++;
 		$this->readContent();

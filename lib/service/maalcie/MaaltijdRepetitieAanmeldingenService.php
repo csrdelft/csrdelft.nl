@@ -53,10 +53,7 @@ class MaaltijdRepetitieAanmeldingenService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function aanmeldenVoorKomendeRepetitieMaaltijden(
-		MaaltijdRepetitie $repetitie,
-		Profiel $profiel
-	) {
+	public function aanmeldenVoorKomendeRepetitieMaaltijden(MaaltijdRepetitie $repetitie, Profiel $profiel): int {
 		if (
 			!$this->maaltijdAanmeldingenService->checkAanmeldFilter(
 				$profiel,
@@ -102,11 +99,7 @@ class MaaltijdRepetitieAanmeldingenService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function aanmeldenDoorAbonnement(
-		Maaltijd $maaltijd,
-		MaaltijdRepetitie $repetitie,
-		Profiel $profiel
-	) {
+	public function aanmeldenDoorAbonnement(Maaltijd $maaltijd, MaaltijdRepetitie $repetitie, Profiel $profiel): bool {
 		if (!$maaltijd->getAanmelding($profiel)) {
 			try {
 				$this->maaltijdAanmeldingenService->assertMagAanmelden(
@@ -144,7 +137,7 @@ class MaaltijdRepetitieAanmeldingenService
 	 * @return MaaltijdRepetitie[]
 	 * @internal param MaaltijdRepetitie[] $repetities
 	 */
-	public function getAbonneerbareRepetitiesVoorLid(Profiel $profiel)
+	public function getAbonneerbareRepetitiesVoorLid(Profiel $profiel): array
 	{
 		$repetities = $this->maaltijdRepetitiesRepository->getAbboneerbareRepetities();
 		$result = [];

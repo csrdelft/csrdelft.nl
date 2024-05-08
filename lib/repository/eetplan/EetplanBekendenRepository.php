@@ -28,7 +28,7 @@ class EetplanBekendenRepository extends AbstractRepository
 	 *
 	 * @return EetplanBekenden[]
 	 */
-	public function getBekendenVoorLidjaar($lidjaar)
+	public function getBekendenVoorLidjaar($lidjaar): mixed
 	{
 		return $this->createQueryBuilder('b')
 			->join('b.noviet1', 'n')
@@ -43,7 +43,7 @@ class EetplanBekendenRepository extends AbstractRepository
 	 *
 	 * @return bool
 	 */
-	public function exists($entity)
+	public function exists($entity): bool
 	{
 		return count(
 			$this->findBy([

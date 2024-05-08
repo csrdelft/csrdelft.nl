@@ -129,7 +129,7 @@ class GroepForm extends ModalForm
 		$this->isWijzigen = $isWijzigen;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		/**
 		 * @var Groep $groep

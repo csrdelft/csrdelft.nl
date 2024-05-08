@@ -43,7 +43,7 @@ abstract class Enum
 		$this->value = $value;
 	}
 
-	public static function isValidValue($value)
+	public static function isValidValue($value): array
 	{
 		$values = array_values(self::getConstants());
 		return in_array($value, $values, $strict = true);
@@ -61,7 +61,7 @@ abstract class Enum
 		return self::$constCacheArray[static::class];
 	}
 
-	public static function getEnumValues()
+	public static function getEnumValues(): array
 	{
 		return array_values(self::getConstants());
 	}
@@ -82,7 +82,7 @@ abstract class Enum
 	 * @psalm-pure
 	 * @throws \BadMethodCallException
 	 */
-	public static function __callStatic($name, $arguments)
+	public static function __callStatic($name, $arguments): Enum
 	{
 		if (str_starts_with($name, 'is') && count($arguments) == 1) {
 			$enumName = substr($name, 2);
@@ -102,7 +102,7 @@ abstract class Enum
 		);
 	}
 
-	public function __call($name, $arguments)
+	public function __call($name, $arguments): Enum|bool
 	{
 		if (str_starts_with($name, 'is')) {
 			$enumName = substr($name, 2);
@@ -151,7 +151,7 @@ abstract class Enum
 	/**
 	 * @return Enum[]
 	 */
-	public static function all()
+	public static function all(): array
 	{
 		return array_map(['static', 'from'], static::getEnumValues());
 	}

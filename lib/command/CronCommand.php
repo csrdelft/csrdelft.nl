@@ -43,7 +43,7 @@ class CronCommand extends Command
 	 */
 	private $forumService;
 
-	protected function configure()
+	protected function configure(): void
 	{
 		$this->setDescription('Voer alle periodieke taken uit');
 	}

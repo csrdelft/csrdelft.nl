@@ -3,18 +3,19 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Commissie;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\CommissieSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\repository\GroepRepository;
 
 class CommissiesRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Commissie::class;
 	}
 
-	public function nieuw($soort = null)
+	public function nieuw($soort = null): Commissie
 	{
 		if (is_string($soort)) {
 			$soort = $this->parseSoort($soort);
@@ -28,11 +29,7 @@ class CommissiesRepository extends GroepRepository
 		return $commissie;
 	}
 
-	public function overzicht(
-		int $limit = null,
-		int $offset = null,
-		string $soort = null
-	) {
+	public function overzicht(int $limit = null, int $offset = null, string $soort = null): array {
 		if ($soort && CommissieSoort::isValidValue($soort)) {
 			return $this->findBy(
 				[
@@ -47,7 +44,7 @@ class CommissiesRepository extends GroepRepository
 		return parent::overzicht($limit, $offset, $soort);
 	}
 
-	public function beheer(string $soort = null)
+	public function beheer(string $soort = null): array
 	{
 		if ($soort && CommissieSoort::isValidValue($soort)) {
 			return $this->findBy(['commissieSoort' => CommissieSoort::from($soort)]);
@@ -55,7 +52,7 @@ class CommissiesRepository extends GroepRepository
 		return parent::beheer($soort);
 	}
 
-	public function parseSoort(string $soort = null)
+	public function parseSoort(string $soort = null): CommissieSoort
 	{
 		if ($soort && CommissieSoort::isValidValue($soort)) {
 			return CommissieSoort::from($soort);

@@ -46,3 +46,10 @@ trait DateTimeImmutableTypeTrait
 		return DateTimeImmutable::createFromMutable($value);
 	}
 }
+
+class DateTimeImmutableTypeTrait
+{
+    public function convertToPHPValue(): ?DateTimeImmutable
+    {
+    }
+}

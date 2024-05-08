@@ -25,7 +25,7 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 		parent::__construct($registry, CorveeKwalificatie::class);
 	}
 
-	public function getKwalificatiesVoorFunctie($fid)
+	public function getKwalificatiesVoorFunctie($fid): array
 	{
 		return $this->findBy(['functie_id' => $fid]);
 	}
@@ -36,7 +36,7 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 	 * @param string $uid
 	 * @return CorveeKwalificatie[]
 	 */
-	public function getKwalificatiesVanLid($uid)
+	public function getKwalificatiesVanLid($uid): array
 	{
 		return $this->findBy(['uid' => $uid]);
 	}
@@ -46,7 +46,7 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 		return $this->find(['uid' => $uid, 'functie_id' => $fid]) != null;
 	}
 
-	public function nieuw(CorveeFunctie $functie)
+	public function nieuw(CorveeFunctie $functie): CorveeKwalificatie
 	{
 		$kwalificatie = new CorveeKwalificatie();
 		$kwalificatie->setCorveeFunctie($functie);
@@ -59,7 +59,7 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function kwalificatieToewijzen(CorveeKwalificatie $kwali)
+	public function kwalificatieToewijzen(CorveeKwalificatie $kwali): void
 	{
 		if (
 			$this->find([
@@ -79,7 +79,7 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function kwalificatieIntrekken(CorveeKwalificatie $kwalificatie)
+	public function kwalificatieIntrekken(CorveeKwalificatie $kwalificatie): void
 	{
 		$this->_em->remove($kwalificatie);
 		$this->_em->flush();
@@ -90,7 +90,7 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 	 * @param $fid
 	 * @return CorveeKwalificatie|null
 	 */
-	public function getKwalificatie($uid, $fid)
+	public function getKwalificatie($uid, $fid): ?CorveeKwalificatie
 	{
 		return $this->find(['uid' => $uid, 'functie_id' => $fid]);
 	}

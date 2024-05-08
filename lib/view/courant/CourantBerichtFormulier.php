@@ -36,11 +36,7 @@ class CourantBerichtFormulier implements FormulierTypeInterface
 	 * @param CourantBericht $data
 	 * @param array $options
 	 */
-	public function createFormulier(
-		FormulierBuilder $builder,
-		$data,
-		$options = []
-	) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
 		$builder->setTitel('Courant bericht');
 
 		$fields = [];

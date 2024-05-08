@@ -44,7 +44,7 @@ class VoorkeurVoorkeur
 	/**
 	 * @ORM\PreUpdate
 	 */
-	public function setTimestamp()
+	public function setTimestamp(): void
 	{
 		$this->timestamp = new DateTimeImmutable();
 	}
@@ -63,12 +63,12 @@ class VoorkeurVoorkeur
 	 */
 	public $commissie;
 
-	public function getCommissieNaam()
+	public function getCommissieNaam(): string
 	{
 		return $this->commissie->naam;
 	}
 
-	public function getCategorieNaam()
+	public function getCategorieNaam(): string
 	{
 		return $this->commissie->categorie->naam;
 	}
@@ -78,7 +78,7 @@ class VoorkeurVoorkeur
 	 *
 	 * @param VoorkeurCommissie $commissie
 	 */
-	public function setCommissie(VoorkeurCommissie $commissie)
+	public function setCommissie(VoorkeurCommissie $commissie): void
 	{
 		$this->commissie = $commissie;
 		$this->cid = $commissie->id;
@@ -89,7 +89,7 @@ class VoorkeurVoorkeur
 	 *
 	 * @param Profiel $profiel
 	 */
-	public function setProfiel(Profiel $profiel)
+	public function setProfiel(Profiel $profiel): void
 	{
 		$this->profiel = $profiel;
 		$this->uid = $profiel->uid;
@@ -109,7 +109,7 @@ class VoorkeurVoorkeur
 			);
 	}
 
-	public function getVoorkeurTekst()
+	public function getVoorkeurTekst(): string
 	{
 		return ['', 'nee', 'ja', 'misschien'][$this->voorkeur];
 	}

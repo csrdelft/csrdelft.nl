@@ -95,16 +95,13 @@ class CorveeRepetitie implements DisplayEntity
 	 */
 	public $corveeFunctie;
 
-	/**
-	* @return string
-	*/
-	public function getDagVanDeWeekText()
+	public function getDagVanDeWeekText(): string|false
 	{
 		$weekDagen = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
 		return $weekDagen[$this->dag_vd_week];
 	}
 
-	public function getPeriodeInDagenText()
+	public function getPeriodeInDagenText(): string
 	{
 		switch ($this->periode_in_dagen) {
 			case 0:
@@ -122,7 +119,7 @@ class CorveeRepetitie implements DisplayEntity
 		}
 	}
 
-	public function getId()
+	public function getId(): integer
 	{
 		return $this->crv_repetitie_id;
 	}

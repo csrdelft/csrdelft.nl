@@ -6,7 +6,7 @@ use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\bibliotheek\BoekRepository;
 use CsrDelft\view\bbcode\BbHelper;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 
 /**
@@ -47,7 +47,7 @@ class BbBoek extends BbTag
 		$this->security = $security;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'boek';
 	}
@@ -56,7 +56,7 @@ class BbBoek extends BbTag
 		return $this->security->isGranted('ROLE_BIEB_READ');
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		try {
 			$boek = $this->boekRepository->find($this->id);
@@ -71,7 +71,7 @@ class BbBoek extends BbTag
 		}
 	}
 
-	public function render()
+	public function render(): null|string
 	{
 		if (!$this->security->isGranted('ROLE_BIEB_READ')) {
 			return null;
@@ -90,7 +90,7 @@ class BbBoek extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->id = $this->readMainArgument($arguments);
 	}

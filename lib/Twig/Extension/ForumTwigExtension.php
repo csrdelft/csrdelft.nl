@@ -37,7 +37,7 @@ class ForumTwigExtension extends AbstractExtension
 		$this->forumDradenRepository = $forumDradenRepository;
 	}
 
-	public function getFunctions()
+	public function getFunctions(): array
 	{
 		return [
 			new TwigFunction('getAantalVerborgenVoorLid', [
@@ -69,7 +69,7 @@ class ForumTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function getFilters()
+	public function getFilters(): array
 	{
 		return [
 			new TwigFilter(
@@ -92,7 +92,7 @@ class ForumTwigExtension extends AbstractExtension
 		return ForumDradenRepository::$belangrijk_opties;
 	}
 
-	public function getForumDradenData($forum_draden)
+	public function getForumDradenData($forum_draden): string|false
 	{
 		$ids_from_draden = function (ForumDraad $draad) {
 			return [
@@ -117,37 +117,37 @@ class ForumTwigExtension extends AbstractExtension
 		return json_encode((array) $forum_draden_ids);
 	}
 
-	public function getAantalVerborgenVoorLid()
+	public function getAantalVerborgenVoorLid(): int
 	{
 		return $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
 	}
 
-	public function getAantalWachtOpGoedkeuring()
+	public function getAantalWachtOpGoedkeuring(): int
 	{
 		return $this->forumPostsRepository->getAantalWachtOpGoedkeuring();
 	}
 
-	public function getHuidigePagina()
+	public function getHuidigePagina(): int
 	{
 		return $this->forumDradenRepository->getHuidigePagina();
 	}
 
-	public function getAantalPaginas($forum_id = null)
+	public function getAantalPaginas($forum_id = null): mixed
 	{
 		return $this->forumDradenRepository->getAantalPaginas($forum_id);
 	}
 
-	public function draadGetAantalPaginas($draad_id)
+	public function draadGetAantalPaginas($draad_id): mixed
 	{
 		return $this->forumPostsRepository->getAantalPaginas($draad_id);
 	}
 
-	public function draadGetHuidigePagina()
+	public function draadGetHuidigePagina(): int
 	{
 		return $this->forumPostsRepository->getHuidigePagina();
 	}
 
-	public function draadGetLaatstePost($draad_id)
+	public function draadGetLaatstePost($draad_id): string
 	{
 		return $this->forumPostsRepository->findOneBy(
 			['draad_id' => $draad_id, 'verwijderd' => false],
@@ -155,12 +155,7 @@ class ForumTwigExtension extends AbstractExtension
 		)->tekst;
 	}
 
-	public function highlight_zoekterm(
-		$bericht,
-		$zoekterm,
-		$before = null,
-		$after = null
-	) {
+	public function highlight_zoekterm($bericht, $zoekterm, $before = null, $after = null): string|array|null {
 		$before =
 			$before ?: '<span style="background-color: rgba(255,255,0,0.4);">';
 		$after = $after ?: '</span>';
@@ -186,7 +181,7 @@ class ForumTwigExtension extends AbstractExtension
 	 * @param array $params
 	 * @return string
 	 */
-	public function sliding_pager($params)
+	public function sliding_pager($params): string
 	{
 		/*
 			@param  mixed   $pagecount          - number of pages to browse

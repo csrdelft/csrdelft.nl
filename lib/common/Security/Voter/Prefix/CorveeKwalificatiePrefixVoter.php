@@ -23,18 +23,12 @@ class CorveeKwalificatiePrefixVoter extends PrefixVoter
 		$this->em = $em;
 	}
 
-	protected function supportsPrefix($prefix)
+	protected function supportsPrefix($prefix): bool
 	{
 		return strtoupper($prefix) == 'KWALIFICATIE';
 	}
 
-	protected function voteOnPrefix(
-		string $prefix,
-		$gevraagd,
-		$role,
-		$subject,
-		TokenInterface $token
-	) {
+	protected function voteOnPrefix(string $prefix, $gevraagd, $role, $subject, TokenInterface $token): bool {
 		/** @var Account $user */
 		$user = $token->getUser();
 		if (!$user) {

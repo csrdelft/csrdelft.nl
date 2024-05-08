@@ -55,13 +55,13 @@ class CorveeKwalificatie
 	 */
 	public $corveeFunctie;
 
-	public function setCorveeFunctie(CorveeFunctie $corveeFunctie = null)
+	public function setCorveeFunctie(CorveeFunctie $corveeFunctie = null): void
 	{
 		$this->corveeFunctie = $corveeFunctie;
 		$this->functie_id = $corveeFunctie->functie_id ?? null;
 	}
 
-	public function setProfiel(Profiel $profiel = null)
+	public function setProfiel(Profiel $profiel = null): void
 	{
 		$this->profiel = $profiel;
 		$this->uid = $profiel->uid ?? null;

@@ -19,12 +19,12 @@ trait GroepAanmeldRechten
 	 */
 	public $rechtenAanmelden;
 
-	public function getAanmeldRechten()
+	public function getAanmeldRechten(): ?string
 	{
 		return $this->rechtenAanmelden;
 	}
 
-	public function setAanmeldRechten($rechten)
+	public function setAanmeldRechten($rechten): void
 	{
 		$this->rechtenAanmelden = $rechten;
 	}

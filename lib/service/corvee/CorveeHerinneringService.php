@@ -113,7 +113,7 @@ class CorveeHerinneringService
 		}
 	}
 
-	public function stuurHerinneringen()
+	public function stuurHerinneringen(): array
 	{
 		$vooraf = str_replace(
 			'-',

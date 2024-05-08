@@ -9,7 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -38,7 +38,7 @@ class DebugLogRepository extends AbstractRepository
 
 	/**
 	 */
-	public function opschonen()
+	public function opschonen(): void
 	{
 		$this->createQueryBuilder('l')
 			->delete()
@@ -56,7 +56,7 @@ class DebugLogRepository extends AbstractRepository
 	 *
 	 * @return DebugLogEntry
 	 */
-	public function log($class, $function, array $args = [], $dump = null)
+	public function log($class, $function, array $args = [], $dump = null): DebugLogEntry
 	{
 		$entry = new DebugLogEntry();
 		$entry->class_function =

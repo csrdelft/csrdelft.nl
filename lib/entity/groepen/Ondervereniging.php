@@ -25,7 +25,7 @@ class Ondervereniging extends Groep implements HeeftMoment
 	 */
 	public $onderverenigingStatus;
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/onderverenigingen/' . $this->id;
 	}

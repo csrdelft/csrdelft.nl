@@ -54,7 +54,7 @@ class CorveeToewijzenService
 	 * @return array
 	 * @throws CsrGebruikerException
 	 */
-	public function getSuggesties(CorveeTaak $taak)
+	public function getSuggesties(CorveeTaak $taak): array
 	{
 		$vrijstellingen = $this->corveeVrijstellingenRepository->getAlleVrijstellingen(
 			true
@@ -163,10 +163,7 @@ class CorveeToewijzenService
 	 * @param CorveePuntenOverzichtDTO $b
 	 * @return int
 	 */
-	public function sorteerKwali(
-		CorveePuntenOverzichtDTO $a,
-		CorveePuntenOverzichtDTO $b
-	) {
+	public function sorteerKwali(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b): int {
 		if (!$a->laatste && !$b->laatste) {
 			$a = $a->aantal;
 			$b = $b->aantal;
@@ -188,10 +185,7 @@ class CorveeToewijzenService
 		}
 	}
 
-	public function sorteerPrognose(
-		CorveePuntenOverzichtDTO $a,
-		CorveePuntenOverzichtDTO $b
-	) {
+	public function sorteerPrognose(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b): int {
 		$a = $a->prognose;
 		$b = $b->prognose;
 		if ($a === $b) {

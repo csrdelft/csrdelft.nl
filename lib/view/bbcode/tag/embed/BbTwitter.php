@@ -24,12 +24,12 @@ class BbTwitter extends BbTag
 	 */
 	public $url;
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'twitter';
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		return BbHelper::lightLinkBlock(
 			'twitter',
@@ -39,7 +39,7 @@ class BbTwitter extends BbTag
 		);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		// widget size
 		$width = 580;
@@ -77,7 +77,7 @@ HTML;
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->url = $this->readMainArgument($arguments);
 		if (str_starts_with($this->url, '@')) {

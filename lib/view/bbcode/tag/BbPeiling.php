@@ -47,21 +47,21 @@ class BbPeiling extends BbTag
 		$this->normalizer = $normalizer;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'peiling';
 	}
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->peiling->magBekijken();
 	}
 
-	public function renderPreview()
+	public function renderPreview(): string
 	{
 		return '🗳️ ';
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$url = '#/peiling/' . urlencode($this->id);
 		return BbHelper::lightLinkBlock(
@@ -72,7 +72,7 @@ class BbPeiling extends BbTag
 		);
 	}
 
-	public function render()
+	public function render(): string
 	{
 		return VueUtil::vueComponent('peiling', [
 			'settings' => $this->normalizer->normalize($this->peiling, 'json', [
@@ -102,13 +102,13 @@ class BbPeiling extends BbTag
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->id = $this->readMainArgument($arguments);
 		$this->peiling = $this->getPeiling($this->id);
 	}
 
-	public function getId()
+	public function getId(): string
 	{
 		return $this->id;
 	}

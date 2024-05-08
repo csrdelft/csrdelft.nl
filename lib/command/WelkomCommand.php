@@ -61,7 +61,7 @@ class WelkomCommand extends Command
 		$this->accountService = $accountService;
 	}
 
-	protected function configure()
+	protected function configure(): void
 	{
 		$this->setDescription('Add a short description for your command')
 			->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')

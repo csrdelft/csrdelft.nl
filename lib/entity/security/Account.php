@@ -110,12 +110,12 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 	 */
 	public $profiel;
 
-	public function hasPrivateToken()
+	public function hasPrivateToken(): bool
 	{
 		return !empty($this->private_token);
 	}
 
-	public function getICalLink()
+	public function getICalLink(): string
 	{
 		$url = '/agenda/ical/';
 		if (empty($this->private_token)) {
@@ -125,7 +125,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 		}
 	}
 
-	public function getRssLink()
+	public function getRssLink(): string
 	{
 		$url = '/forum/rss/';
 		if (empty($this->private_token)) {
@@ -135,7 +135,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 		}
 	}
 
-	public function getEmail()
+	public function getEmail(): string
 	{
 		return $this->email;
 	}
@@ -154,12 +154,12 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 		return $this->pass_hash;
 	}
 
-	public function getSalt()
+	public function getSalt(): string
 	{
 		return '';
 	}
 
-	public function getUsername()
+	public function getUsername(): string
 	{
 		return $this->uid;
 	}
@@ -171,7 +171,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public $pass_plain;
 
-	public function eraseCredentials()
+	public function eraseCredentials(): void
 	{
 		$this->pass_plain = null;
 	}

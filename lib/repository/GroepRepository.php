@@ -20,9 +20,10 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
+use Generator;
 use ReflectionClass;
 use ReflectionProperty;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 
@@ -60,12 +61,12 @@ abstract class GroepRepository extends AbstractRepository
 	 */
 	abstract public function getEntityClassName();
 
-	public static function getUrl()
+	public static function getUrl(): string
 	{
 		return '/groepen/' . static::getNaam();
 	}
 
-	public static function getNaam()
+	public static function getNaam(): string
 	{
 		return strtolower(
 			str_replace(
@@ -83,12 +84,7 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param null $offset
 	 * @return Groep[]
 	 */
-	public function findBy(
-		array $criteria,
-		array $orderBy = null,
-		$limit = null,
-		$offset = null
-	) {
+	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): array {
 		// Eerst sorteren op FT/HT/OT
 		$orderBy = ['status' => 'ASC'] + ($orderBy ?? []);
 		if (
@@ -149,9 +145,9 @@ abstract class GroepRepository extends AbstractRepository
 
 	/**
 	 * @param $id
-	 * @return Groep|false
+	 * @return Groep|null
 	 */
-	public function get($id)
+	public function get($id): ?Groep
 	{
 		if (is_numeric($id)) {
 			$groep = $this->find($id);
@@ -173,7 +169,7 @@ abstract class GroepRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(Groep $groep)
+	public function create(Groep $groep): void
 	{
 		$this->_em->persist($groep);
 		$this->_em->flush();
@@ -184,7 +180,7 @@ abstract class GroepRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function update(Groep $groep)
+	public function update(Groep $groep): void
 	{
 		$this->_em->persist($groep);
 		$this->_em->flush();
@@ -195,7 +191,7 @@ abstract class GroepRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function delete(Groep $groep)
+	public function delete(Groep $groep): void
 	{
 		$this->_em->remove($groep);
 		$this->_em->flush();
@@ -209,11 +205,7 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param string $soort
 	 * @return Groep|bool
 	 */
-	public function converteer(
-		Groep $oldgroep,
-		GroepRepository $oldmodel,
-		$soort = null
-	) {
+	public function converteer(Groep $oldgroep, GroepRepository $oldmodel, $soort = null): bool {
 		try {
 			return $this->_em->transactional(function () use (
 				$oldgroep,
@@ -275,7 +267,7 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param GroepStatus|array $status
 	 * @return Groep[]
 	 */
-	public function getGroepenVoorLid(Profiel $uid, $status = null)
+	public function getGroepenVoorLid(Profiel $uid, $status = null): mixed
 	{
 		$qb = $this->createQueryBuilder('ag');
 
@@ -308,7 +300,7 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param Groep $groep
 	 * @return GroepStatistiekDTO
 	 */
-	public function getStatistieken(Groep $groep)
+	public function getStatistieken(Groep $groep): GroepStatistiekDTO
 	{
 		if ($groep->aantalLeden() == 0) {
 			return new GroepStatistiekDTO(0, [], [], [], []);
@@ -386,7 +378,7 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param string[] $status
 	 * @return Groep[]
 	 */
-	public function zoeken($zoekterm, $limit, $status)
+	public function zoeken($zoekterm, $limit, $status): Generator
 	{
 		foreach ($status as $item) {
 			if (!GroepStatus::isValidValue($item)) {
@@ -429,10 +421,7 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param $tot
 	 * @return Groep[]
 	 */
-	public function getGroepenVoorAgenda(
-		\DateTimeImmutable $van,
-		\DateTimeImmutable $tot
-	) {
+	public function getGroepenVoorAgenda(\DateTimeImmutable $van, \DateTimeImmutable $tot): mixed {
 		return $this->createQueryBuilder('a')
 			->where('a.inAgenda = true')
 			->andWhere(
@@ -450,13 +439,9 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param int|null $limit
 	 * @param int|null $offset
 	 * @param string|null $soort
-	 * @return Groep
+	 * @return Groep[]
 	 */
-	public function overzicht(
-		int $limit = null,
-		int $offset = null,
-		string $soort = null
-	) {
+	public function overzicht(int $limit = null, int $offset = null, string $soort = null): array {
 		return $this->findBy(
 			['status' => GroepStatus::HT()],
 			null,
@@ -465,7 +450,7 @@ abstract class GroepRepository extends AbstractRepository
 		);
 	}
 
-	public function overzichtAantal(string $soort = null)
+	public function overzichtAantal(string $soort = null): int
 	{
 		$activiteiten = $this->overzicht(null, null, $soort);
 
@@ -481,12 +466,12 @@ abstract class GroepRepository extends AbstractRepository
 		return $aantal;
 	}
 
-	public function beheer(string $soort = null)
+	public function beheer(string $soort = null): array
 	{
 		return $this->findBy([]);
 	}
 
-	public function parseSoort(string $soort = null)
+	public function parseSoort(string $soort = null): mixed
 	{
 		return null;
 	}
@@ -496,7 +481,7 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param Groep $groep
 	 * @return Groep|null
 	 */
-	public function findOt(Groep $groep)
+	public function findOt(Groep $groep): ?Groep
 	{
 		$sortBy = [];
 		if ($groep instanceof HeeftMoment) {

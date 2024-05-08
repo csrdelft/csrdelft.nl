@@ -10,6 +10,7 @@ use CsrDelft\view\login\OAuth2RememberTable;
 use CsrDelft\view\login\RememberLoginTable;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,7 +36,7 @@ class LidInstellingenController extends AbstractController
 	 * @Route("/instellingen", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function beheer()
+	public function beheer(): Response
 	{
 		return $this->render('instellingen/lidinstellingen.html.twig', [
 			'defaultInstellingen' => $this->lidInstellingenRepository->getAll(),
@@ -59,7 +60,7 @@ class LidInstellingenController extends AbstractController
 	 * @Route("/instellingen/update/{module}/{instelling}/{waarde}", methods={"POST"}, defaults={"waarde": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function update(Request $request, $module, $instelling, $waarde = null)
+	public function update(Request $request, $module, $instelling, $waarde = null): JsonResponse
 	{
 		if ($waarde === null) {
 			$waarde = $request->request->get('waarde');
@@ -88,7 +89,7 @@ class LidInstellingenController extends AbstractController
 	 * @Route("/instellingen/opslaan", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function opslaan()
+	public function opslaan(): RedirectResponse
 	{
 		$this->lidInstellingenRepository->saveAll(); // fetches $_POST values itself
 		$this->addFlash(FlashType::SUCCESS, 'Instellingen opgeslagen');
@@ -102,7 +103,7 @@ class LidInstellingenController extends AbstractController
 	 * @Route("/instellingen/reset/{module}/{key}", methods={"POST"})
 	 * @Auth(P_ADMIN)
 	 */
-	public function reset($module, $key)
+	public function reset($module, $key): JsonResponse
 	{
 		$this->lidInstellingenRepository->resetForAll($module, $key);
 		$this->addFlash(
@@ -116,7 +117,7 @@ class LidInstellingenController extends AbstractController
 	 * @Route("/instellingen/reset/mijn", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function resetUser()
+	public function resetUser(): Response
 	{
 		$account = $this->getUser();
 

@@ -9,12 +9,12 @@ class BbOrderedList extends BbTag
 	private $type;
 	private $order;
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'ol';
 	}
 
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		if (isset($arguments['ol'])) {
 			$this->type = htmlspecialchars($arguments['ol']);
@@ -25,7 +25,7 @@ class BbOrderedList extends BbTag
 		$this->readContent();
 	}
 
-	public function render()
+	public function render(): string
 	{
 		$attrs = '';
 		if ($this->order) {

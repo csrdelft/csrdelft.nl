@@ -89,40 +89,40 @@ class AgendaItem implements Agendeerbaar
 		return $this->getBeginMoment()->add(new \DateInterval('PT30M'));
 	}
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return $this->titel;
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		return $this->beschrijving;
 	}
 
-	public function getLocatie()
+	public function getLocatie(): string
 	{
 		return $this->locatie;
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return $this->link;
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		$begin = $this->getBeginMoment()->format('H:i');
 		$eind = $this->getEindMoment()->format('H:i');
 		return $begin == '00:00' && ($eind == '23:59' || $eind == '00:00');
 	}
 
-	public function magBekijken($ical = false)
+	public function magBekijken($ical = false): bool
 	{
 		$auth = $ical ? AuthenticationMethod::getEnumValues() : null;
 		return LoginService::mag($this->rechten_bekijken, $auth);
 	}
 
-	public function magBeheren($ical = false)
+	public function magBeheren($ical = false): bool
 	{
 		$auth = $ical ? AuthenticationMethod::getEnumValues() : null;
 		if (LoginService::mag(P_AGENDA_MOD, $auth)) {
@@ -138,14 +138,14 @@ class AgendaItem implements Agendeerbaar
 		return false;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		// Toon als transparant (vrij) als lid dat wil of activiteit hele dag(en) duurt
 		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
 			'ja' || $this->isHeledag();
 	}
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return strtolower(
 			sprintf(

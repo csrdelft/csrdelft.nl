@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\BbBb;
 
 class NodeBb implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbBb::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'bb';
 	}
 
-	public function getData(BbNode $node)
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbBb) {
 			throw new \InvalidArgumentException();
@@ -38,12 +38,12 @@ class NodeBb implements Node
 		];
 	}
 
-	public function getTagAttributes($node)
+	public function getTagAttributes($node): array
 	{
 		return [$node->attrs->bb];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return false;
 	}

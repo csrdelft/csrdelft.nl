@@ -24,11 +24,7 @@ class EetplanBekendeHuizenForm implements FormulierTypeInterface
 	 * @param Eetplan $data
 	 * @param array $options
 	 */
-	public function createFormulier(
-		FormulierBuilder $builder,
-		$data,
-		$options = []
-	) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
 		$builder->setDataTableId(true);
 		$builder->setTitel('Noviet die een huis kent toevoegen');
 		$builder->setAction($options['action']);

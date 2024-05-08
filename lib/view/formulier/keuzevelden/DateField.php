@@ -50,7 +50,7 @@ class DateField extends InputField
 		$this->css_classes[] = 'DateField';
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;
@@ -79,7 +79,7 @@ class DateField extends InputField
 		return $this->error === '';
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$attributes = $this->getInputAttribute([
 			'type',

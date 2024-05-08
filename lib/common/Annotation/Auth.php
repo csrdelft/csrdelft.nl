@@ -47,12 +47,12 @@ class Auth
 		}
 	}
 
-	public function setMag($mag)
+	public function setMag($mag): void
 	{
 		$this->mag = $mag;
 	}
 
-	public function getMag()
+	public function getMag(): string
 	{
 		return $this->mag;
 	}

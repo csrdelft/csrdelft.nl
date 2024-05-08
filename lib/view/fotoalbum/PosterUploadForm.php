@@ -38,7 +38,7 @@ class PosterUploadForm extends Formulier
 		$this->addFields($fields);
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return '<ul class="breadcrumb">' .
 			FotoAlbumBreadcrumbs::getBreadcrumbs($this->model, false, true) .

@@ -32,12 +32,7 @@ class LedenLijstController extends AbstractController
 	 * @Route("/ledenlijst", methods={"GET", "POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function lijst(
-		Request $request,
-		LidZoekerService $lidZoeker,
-		GoogleContactSync $googleSync,
-		Environment $twig
-	) {
+	public function lijst(Request $request, LidZoekerService $lidZoeker, GoogleContactSync $googleSync, Environment $twig): Response|RedirectResponse {
 		$message = '';
 
 		if (isset($_GET['q'])) {

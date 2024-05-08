@@ -71,7 +71,7 @@ class WachtwoordWijzigenField extends InputField
 		$this->blacklist[] = 'wachtwoord';
 	}
 
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		if ($this->require_current && !isset($_POST[$this->name . '_current'])) {
 			return false;
@@ -80,7 +80,7 @@ class WachtwoordWijzigenField extends InputField
 			isset($_POST[$this->name . '_confirm']);
 	}
 
-	public function getValue()
+	public function getValue(): ?bool
 	{
 		if ($this->isPosted()) {
 			$this->value = $_POST[$this->name . '_new'];
@@ -93,7 +93,7 @@ class WachtwoordWijzigenField extends InputField
 		return $this->value;
 	}
 
-	public function checkZwarteLijst($pass_plain)
+	public function checkZwarteLijst($pass_plain): bool
 	{
 		foreach ($this->blacklist as $disallowed) {
 			if (stripos($pass_plain, $disallowed) !== false) {
@@ -104,7 +104,7 @@ class WachtwoordWijzigenField extends InputField
 		return false;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		$accountService = ContainerFacade::getContainer()->get(
 			AccountService::class
@@ -177,7 +177,7 @@ class WachtwoordWijzigenField extends InputField
 		return $this->error === '';
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$html = '';
 		if ($this->error !== '') {
@@ -220,7 +220,7 @@ HTML;
 		return $html;
 	}
 
-	public function getErrorDiv()
+	public function getErrorDiv(): string
 	{
 		if ($this->getError() != '') {
 			return '<div class="d-block invalid-feedback">' .

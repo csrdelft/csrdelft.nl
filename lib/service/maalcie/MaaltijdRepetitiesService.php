@@ -68,11 +68,7 @@ class MaaltijdRepetitiesService
 	 *
 	 * @return Maaltijd[]
 	 */
-	public function maakRepetitieMaaltijden(
-		MaaltijdRepetitie $repetitie,
-		DateTimeInterface $beginDatum,
-		DateTimeInterface $eindDatum
-	) {
+	public function maakRepetitieMaaltijden(MaaltijdRepetitie $repetitie, DateTimeInterface $beginDatum, DateTimeInterface $eindDatum): mixed {
 		return $this->entityManager->wrapInTransaction(function () use (
 			$repetitie,
 			$beginDatum,
@@ -137,10 +133,7 @@ class MaaltijdRepetitiesService
 	 * @param $verplaats
 	 * @return bool|mixed
 	 */
-	public function updateRepetitieMaaltijden(
-		MaaltijdRepetitie $repetitie,
-		$verplaats
-	) {
+	public function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $verplaats): mixed {
 		return $this->entityManager->wrapInTransaction(function () use (
 			$repetitie,
 			$verplaats
@@ -192,7 +185,7 @@ class MaaltijdRepetitiesService
 	 * @param $repetitie MaaltijdRepetitie
 	 * @return array
 	 */
-	public function saveRepetitie($repetitie)
+	public function saveRepetitie($repetitie): mixed
 	{
 		return $this->entityManager->wrapInTransaction(function () use (
 			$repetitie
@@ -216,7 +209,7 @@ class MaaltijdRepetitiesService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderRepetitie(MaaltijdRepetitie $repetitie)
+	public function verwijderRepetitie(MaaltijdRepetitie $repetitie): int
 	{
 		if (
 			$this->corveeRepetitiesRepository->existMaaltijdRepetitieCorvee(

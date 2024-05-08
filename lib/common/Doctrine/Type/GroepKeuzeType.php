@@ -9,12 +9,12 @@ class GroepKeuzeType extends SafeJsonType
 	/**
 	 * @inheritDoc
 	 */
-	public function getName()
+	public function getName(): string
 	{
 		return 'groepkeuze';
 	}
 
-	protected function getAcceptedTypes()
+	protected function getAcceptedTypes(): array
 	{
 		return [GroepKeuze::class];
 	}

@@ -33,7 +33,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
-	public function grootboek()
+	public function grootboek(): JsonResponse
 	{
 		return $this->json($this->barSysteemService->getGrootboekInvoer());
 	}
@@ -44,7 +44,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
-	public function grootboeken()
+	public function grootboeken(): JsonResponse
 	{
 		return $this->json($this->barSysteemService->getGrootboeken());
 	}
@@ -55,7 +55,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
-	public function tools()
+	public function tools(): JsonResponse
 	{
 		return $this->json($this->barSysteemService->getToolData());
 	}
@@ -67,7 +67,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
-	public function addProduct(Request $request)
+	public function addProduct(Request $request): JsonResponse
 	{
 		$name = $request->request->get('name');
 		$price = $request->request->get('price');
@@ -85,7 +85,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
-	public function updatePrice(Request $request)
+	public function updatePrice(Request $request): JsonResponse
 	{
 		$productId = $request->request->get('productId');
 		$price = $request->request->get('price');
@@ -102,7 +102,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
-	public function updateVisibility(Request $request)
+	public function updateVisibility(Request $request): JsonResponse
 	{
 		$visibility = $request->request->get('visibility');
 		$productId = $request->request->get('productId');
@@ -119,7 +119,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
-	public function addPerson(Request $request)
+	public function addPerson(Request $request): JsonResponse
 	{
 		$name = $request->request->get('name');
 		$saldo = $request->request->get('saldo');
@@ -137,7 +137,7 @@ class BarSysteemBeheerController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
-	public function removePerson(Request $request)
+	public function removePerson(Request $request): JsonResponse
 	{
 		$id = $request->request->get('id');
 

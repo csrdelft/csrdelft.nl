@@ -14,7 +14,7 @@ use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * LidZoeker
@@ -152,7 +152,7 @@ class LidZoekerService
 		$this->verticalenRepository = $verticalenRepository;
 	}
 
-	public function parseQuery($query)
+	public function parseQuery($query): void
 	{
 		$this->result = null; //nieuwe parameters, oude resultaat wegmikken.
 
@@ -234,7 +234,7 @@ class LidZoekerService
 
 	//lijst met velden die bruikbaar zijn in een '<veld>:=?<zoekterm>'-zoekopdracht.
 
-	public function getSelectableVelden()
+	public function getSelectableVelden(): array
 	{
 		$return = [];
 		foreach ($this->allowVelden as $veld) {
@@ -250,7 +250,7 @@ class LidZoekerService
 		return $return;
 	}
 
-	public function addFilter($field, $value)
+	public function addFilter($field, $value): void
 	{
 		if (is_array($value)) {
 			$this->filters[$field] = $value;
@@ -264,7 +264,7 @@ class LidZoekerService
 		return $this->sortable;
 	}
 
-	public function count()
+	public function count(): int
 	{
 		if ($this->result === null) {
 			$this->search();
@@ -275,7 +275,7 @@ class LidZoekerService
 	/**
 	 * Doe de zoektocht.
 	 */
-	public function search()
+	public function search(): void
 	{
 		$this->result = [];
 		$qb = $this->profielRepository->createQueryBuilder('p');
@@ -306,7 +306,7 @@ class LidZoekerService
 	 * @param $zoekterm
 	 * @return QueryBuilder
 	 */
-	private function defaultSearch(QueryBuilder $queryBuilder, $zoekterm)
+	private function defaultSearch(QueryBuilder $queryBuilder, $zoekterm): QueryBuilder
 	{
 		if (preg_match('/^groep:([0-9]+|[a-z]+)$/i', $zoekterm)) {
 			//leden van een groep
@@ -430,7 +430,7 @@ class LidZoekerService
 		return $queryBuilder;
 	}
 
-	private function getDBVeldenAllowed()
+	private function getDBVeldenAllowed(): array
 	{
 		//hier staat eigenlijk $a - $b, maar die heeft php niet.
 		return array_intersect(
@@ -439,7 +439,7 @@ class LidZoekerService
 		);
 	}
 
-	public function getFilterSQL(QueryBuilder $queryBuilder)
+	public function getFilterSQL(QueryBuilder $queryBuilder): QueryBuilder
 	{
 		$andExpr = $queryBuilder->expr()->andX();
 
@@ -463,7 +463,7 @@ class LidZoekerService
 	 * @param string $query
 	 * @return bool
 	 */
-	private function magProfielVinden(Profiel $profiel, string $query)
+	private function magProfielVinden(Profiel $profiel, string $query): bool
 	{
 		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
 		$zoekvelden = $this->lidToestemmingRepository->getModuleKeys('profiel');
@@ -529,7 +529,7 @@ class LidZoekerService
 		return $this->weergave;
 	}
 
-	public function getRawQuery($key)
+	public function getRawQuery($key): bool
 	{
 		if (!isset($this->rawQuery[$key])) {
 			return false;

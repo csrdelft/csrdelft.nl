@@ -22,11 +22,7 @@ class EetplanBekendenForm implements FormulierTypeInterface
 	 * @param EetplanBekenden $data
 	 * @param array $options
 	 */
-	public function createFormulier(
-		FormulierBuilder $builder,
-		$data,
-		$options = []
-	) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
 		$builder->setAction($options['action']);
 		$builder->setDataTableId(true);
 		$builder->setTitel('Novieten die elkaar kennen toevoegen');

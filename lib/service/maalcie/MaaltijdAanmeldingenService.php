@@ -67,14 +67,7 @@ class MaaltijdAanmeldingenService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function aanmeldenVoorMaaltijd(
-		Maaltijd $maaltijd,
-		Profiel $profiel,
-		Profiel $doorProfiel,
-		$aantalGasten = 0,
-		$beheer = false,
-		$gastenEetwens = ''
-	) {
+	public function aanmeldenVoorMaaltijd(Maaltijd $maaltijd, Profiel $profiel, Profiel $doorProfiel, $aantalGasten = 0, $beheer = false, $gastenEetwens = ''): MaaltijdAanmelding {
 		if (
 			!$maaltijd->gesloten &&
 			$maaltijd->getBeginMoment() < date_create_immutable()
@@ -123,7 +116,7 @@ class MaaltijdAanmeldingenService
 	 * @param string $uid
 	 * @throws CsrGebruikerException
 	 */
-	public function assertMagAanmelden(Maaltijd $maaltijd, Profiel $profiel)
+	public function assertMagAanmelden(Maaltijd $maaltijd, Profiel $profiel): void
 	{
 		if (!$this->civiSaldoRepository->getSaldo($profiel->uid)) {
 			throw new CsrGebruikerException(
@@ -149,7 +142,7 @@ class MaaltijdAanmeldingenService
 	 * @param string $filter
 	 * @return bool Of de gebruiker voldoet aan het filter
 	 */
-	public function checkAanmeldFilter(Profiel $profiel, $filter)
+	public function checkAanmeldFilter(Profiel $profiel, $filter): bool
 	{
 		$account = $profiel->account;
 		if (!$account) {
@@ -171,11 +164,7 @@ class MaaltijdAanmeldingenService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function afmeldenDoorLid(
-		Maaltijd $maaltijd,
-		Profiel $profiel,
-		$beheer = false
-	) {
+	public function afmeldenDoorLid(Maaltijd $maaltijd, Profiel $profiel, $beheer = false): Maaltijd {
 		$aanmelding = $maaltijd->getAanmelding($profiel);
 		if (!$aanmelding) {
 			throw new CsrGebruikerException('Niet aangemeld');
@@ -196,10 +185,7 @@ class MaaltijdAanmeldingenService
 		return $maaltijd;
 	}
 
-	public function getRecenteAanmeldingenVoorLid(
-		$uid,
-		DateTimeInterface $timestamp
-	) {
+	public function getRecenteAanmeldingenVoorLid($uid, DateTimeInterface $timestamp): array {
 		$maaltijdenById = $this->maaltijdenRepository->getRecenteMaaltijden(
 			$timestamp
 		);
@@ -209,7 +195,7 @@ class MaaltijdAanmeldingenService
 		);
 	}
 
-	public function maakCiviBestelling(MaaltijdAanmelding $aanmelding)
+	public function maakCiviBestelling(MaaltijdAanmelding $aanmelding): CiviBestelling
 	{
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = $aanmelding->maaltijd->product->categorie->cie;
@@ -244,7 +230,7 @@ class MaaltijdAanmeldingenService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function checkAanmeldingenFilter($filter, $maaltijden)
+	public function checkAanmeldingenFilter($filter, $maaltijden): int
 	{
 		$maaltijdenFiltered = [];
 		foreach ($maaltijden as $maaltijd) {

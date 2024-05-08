@@ -10,7 +10,7 @@ class AutoEscapeService
 	const STRATEGY_XML = 'xml';
 	const STRATEGY_MAIL = 'mail';
 
-	public function guess(string $name)
+	public function guess(string $name): string|false
 	{
 		if (str_ends_with($name, '.ical.twig')) {
 			return self::STRATEGY_ICAL;

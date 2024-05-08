@@ -50,7 +50,7 @@ class MijnCorveeController extends AbstractController
 	 * @Route("/corvee", methods={"GET"})
 	 * @Auth(P_CORVEE_IK)
 	 */
-	public function mijn()
+	public function mijn(): Response
 	{
 		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid(
 			$this->getProfiel()
@@ -77,7 +77,7 @@ class MijnCorveeController extends AbstractController
 	 * @Route("/corvee/rooster", methods={"GET"})
 	 * @Auth(P_CORVEE_IK)
 	 */
-	public function rooster()
+	public function rooster(): Response
 	{
 		$taken = $this->corveeTakenRepository->getKomendeTaken();
 		$toonverleden = $this->mag(P_CORVEE_MOD);
@@ -93,7 +93,7 @@ class MijnCorveeController extends AbstractController
 	 * @Route("/corvee/rooster/verleden", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function roosterVerleden()
+	public function roosterVerleden(): Response
 	{
 		$taken = $this->corveeTakenRepository->getVerledenTaken();
 		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);

@@ -21,7 +21,7 @@ final class BbHelper
 	 * @param string $content
 	 * @return string
 	 */
-	public static function lightLinkInline($env, $tag, $url, $content)
+	public static function lightLinkInline($env, $tag, $url, $content): string
 	{
 		if (isset($url[0]) && $url[0] === '/') {
 			// Zorg voor werkende link in e-mail
@@ -41,13 +41,7 @@ HTML;
 	 * @param string $thumbnail
 	 * @return string
 	 */
-	public static function lightLinkBlock(
-		$tag,
-		$url,
-		$titel,
-		$beschrijving,
-		$thumbnail = ''
-	) {
+	public static function lightLinkBlock($tag, $url, $titel, $beschrijving, $thumbnail = ''): string {
 		$titel = htmlspecialchars($titel);
 		$beschrijving = htmlspecialchars($beschrijving);
 		if ($thumbnail !== '') {
@@ -68,7 +62,7 @@ HTML;
 	 * @param string $thumbnail
 	 * @return string
 	 */
-	public static function lightLinkThumbnail($tag, $url, $thumbnail)
+	public static function lightLinkThumbnail($tag, $url, $thumbnail): string
 	{
 		return <<<HTML
 			<a class="bb-link-thumbnail bb-tag-{$tag}" href="{$url}">

@@ -52,7 +52,7 @@ JS;
 	/**
 	 * @param MenuItem[]|null $list
 	 */
-	private function addSuggestions($list)
+	private function addSuggestions($list): void
 	{
 		if (!$list) {
 			return;
@@ -77,7 +77,7 @@ JS;
 		}
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$lidInstellingenRepository = ContainerFacade::getContainer()->get(

@@ -13,10 +13,7 @@ use Doctrine\ORM\Query\Filter\SQLFilter;
  */
 class VerbergNovietenFilter extends SQLFilter
 {
-	public function addFilterConstraint(
-		ClassMetadata $targetEntity,
-		$targetTableAlias
-	) {
+	public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias): string {
 		if ($targetEntity->getReflectionClass()->name !== Profiel::class) {
 			return '';
 		} else {

@@ -36,7 +36,7 @@ class SafeJsonSerializer extends JsonSerializer
 	 * @return array
 	 * @throws \ReflectionException
 	 */
-	protected function serializeObject($value)
+	protected function serializeObject($value): array
 	{
 		$ref = new ReflectionClass($value);
 		$className = $ref->getName();
@@ -65,7 +65,7 @@ class SafeJsonSerializer extends JsonSerializer
 	 * Whether this classname is allowed to be (un)serialized.
 	 * @param $className
 	 */
-	protected function classAllowed($className)
+	protected function classAllowed($className): bool
 	{
 		return $this->allowedClasses === null ||
 			in_array($className, $this->allowedClasses);

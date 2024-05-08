@@ -39,7 +39,7 @@ class SavedQuery
 	 */
 	public $categorie;
 
-	public function magBekijken()
+	public function magBekijken(): bool
 	{
 		return LoginService::mag($this->permissie) || LoginService::mag(P_ADMIN);
 	}

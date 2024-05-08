@@ -1,0 +1,4 @@
+{
+    "$schema": "/home/nathan/.local/share/kickstart/mason/packages/phpactor/phpactor.schema.json",
+    "language_server_psalm.enabled": true
+}

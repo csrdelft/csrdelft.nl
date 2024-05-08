@@ -28,7 +28,7 @@ class PeilingOptiesRepository extends AbstractRepository
 	 * @param $peilingId
 	 * @return PeilingOptie[]
 	 */
-	public function getByPeilingId($peilingId)
+	public function getByPeilingId($peilingId): array
 	{
 		return $this->findBy(['peiling_id' => $peilingId]);
 	}

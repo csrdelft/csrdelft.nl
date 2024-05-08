@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\embed\BbAudio;
 
 class NodeAudio implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbAudio::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'audio';
 	}
 
-	public function getData(BbNode $node)
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbAudio) {
 			throw new \InvalidArgumentException();
@@ -30,14 +30,14 @@ class NodeAudio implements Node
 		];
 	}
 
-	public function getTagAttributes($node)
+	public function getTagAttributes($node): array
 	{
 		return [
 			'audio' => $node->attrs->url,
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

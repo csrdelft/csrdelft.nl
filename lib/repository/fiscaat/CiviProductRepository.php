@@ -26,7 +26,7 @@ class CiviProductRepository extends AbstractRepository
 	 * @param string ...$cie
 	 * @return CiviProduct[]
 	 */
-	public function findByCie(...$cie)
+	public function findByCie(...$cie): mixed
 	{
 		return $this->createQueryBuilder('civi_product')
 			->join('civi_product.categorie', 'categorie')
@@ -42,7 +42,7 @@ class CiviProductRepository extends AbstractRepository
 	 *
 	 * @return CiviProduct
 	 */
-	public function getProduct($id)
+	public function getProduct($id): ?CiviProduct
 	{
 		$product = $this->find($id);
 		$product->tmpPrijs = $product->getPrijs()->prijs;
@@ -54,7 +54,7 @@ class CiviProductRepository extends AbstractRepository
 	 * @param $query
 	 * @return CiviProduct[]
 	 */
-	public function getSuggesties($query)
+	public function getSuggesties($query): mixed
 	{
 		return $this->createQueryBuilder('cp')
 			->where('cp.beschrijving LIKE :query')

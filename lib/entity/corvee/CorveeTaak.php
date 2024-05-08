@@ -122,7 +122,7 @@ class CorveeTaak implements Agendeerbaar
 	 */
 	public $corveeFunctie;
 
-	public function getPuntenPrognose()
+	public function getPuntenPrognose(): int
 	{
 		return $this->punten +
 			$this->bonus_malus -
@@ -130,7 +130,7 @@ class CorveeTaak implements Agendeerbaar
 			$this->bonus_toegekend;
 	}
 
-	public function getLaatstGemaildDate()
+	public function getLaatstGemaildDate(): null|DateTimeImmutable|false
 	{
 		if ($this->wanneer_gemaild === null) {
 			return null;
@@ -147,7 +147,7 @@ class CorveeTaak implements Agendeerbaar
 	 *
 	 * @return int
 	 */
-	public function getAantalKeerGemaild()
+	public function getAantalKeerGemaild(): int
 	{
 		if ($this->wanneer_gemaild === null) {
 			return 0;
@@ -160,7 +160,7 @@ class CorveeTaak implements Agendeerbaar
 	 *
 	 * @return boolean
 	 */
-	public function getMoetHerinneren()
+	public function getMoetHerinneren(): bool
 	{
 		$aantal = $this->getAantalKeerGemaild();
 		$datum = $this->datum;
@@ -203,7 +203,7 @@ class CorveeTaak implements Agendeerbaar
 	 *
 	 * @return boolean
 	 */
-	public function getIsTelaatGemaild()
+	public function getIsTelaatGemaild(): bool
 	{
 		$aantal = $this->getAantalKeerGemaild();
 		$datum = $this->datum;
@@ -239,7 +239,7 @@ class CorveeTaak implements Agendeerbaar
 		return false;
 	}
 
-	public function setWanneerGemaild($datumtijd)
+	public function setWanneerGemaild($datumtijd): void
 	{
 		if (!is_string($datumtijd)) {
 			throw new CsrGebruikerException('Geen string: wanneer gemaild');
@@ -277,7 +277,7 @@ class CorveeTaak implements Agendeerbaar
 		return 'Corvee vacature (' . $this->corveeFunctie->naam . ')';
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		if ($this->profiel) {
 			return $this->corveeFunctie->naam;
@@ -285,22 +285,22 @@ class CorveeTaak implements Agendeerbaar
 		return 'Nog niet ingedeeld';
 	}
 
-	public function getLocatie()
+	public function getLocatie(): string
 	{
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/corvee/rooster';
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		return true;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		return true;
 	}

@@ -96,7 +96,7 @@ class CiviProductTable extends DataTable
 		);
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return '<a href="/" title="Startpagina">' .
 			Icon::getTag('home', null, 'Voorpagina', 'module-icon') .

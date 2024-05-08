@@ -80,7 +80,7 @@ class GoogleAuthenticator
 	 * De url zonder `addToGoogleContacts` wordt gebruikt als de authenticatie mislukt.
 	 * @throws CsrException
 	 */
-	public function doRequestToken(string $state)
+	public function doRequestToken(string $state): void
 	{
 		if (!$this->isAuthenticated()) {
 			$client = $this->createClient();
@@ -93,7 +93,7 @@ class GoogleAuthenticator
 		}
 	}
 
-	public function deleteToken()
+	public function deleteToken(): void
 	{
 		$token = $this->getToken();
 		$this->googleTokenRepository->remove($token);

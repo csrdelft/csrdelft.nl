@@ -89,7 +89,7 @@ class EetplanFactory
 	/**
 	 * @param EetplanBekenden[] $bekenden
 	 */
-	public function setBekenden($bekenden)
+	public function setBekenden($bekenden): void
 	{
 		$this->bekenden = [];
 
@@ -104,7 +104,7 @@ class EetplanFactory
 	/**
 	 * @param Eetplan[] $bezochten
 	 */
-	public function setBezocht($bezochten)
+	public function setBezocht($bezochten): void
 	{
 		$this->bezocht = [];
 		$this->bezocht_ah = [];
@@ -119,7 +119,7 @@ class EetplanFactory
 	/**
 	 * @param Profiel[] $novieten
 	 */
-	public function setNovieten($novieten)
+	public function setNovieten($novieten): void
 	{
 		$this->novieten = $novieten;
 	}
@@ -127,7 +127,7 @@ class EetplanFactory
 	/**
 	 * @param Woonoord[] $huizen
 	 */
-	public function setHuizen($huizen)
+	public function setHuizen($huizen): void
 	{
 		$this->huizen = $huizen;
 	}
@@ -139,7 +139,7 @@ class EetplanFactory
 	 * @param bool $random
 	 * @return Eetplan[]
 	 */
-	public function genereer($avond, $random = false)
+	public function genereer($avond, $random = false): array
 	{
 		assert(isset($this->novieten), 'Veld novieten is niet gezet');
 		assert(isset($this->huizen), 'Veld huizen is niet gezet');

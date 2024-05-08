@@ -16,11 +16,7 @@ class AanmeldActiviteitAanmeldForm implements FormulierTypeInterface
 	 * @param AanmeldActiviteit $data
 	 * @param array $options
 	 */
-	public function createFormulier(
-		FormulierBuilder $builder,
-		$data,
-		$options = []
-	) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
 		$fields = [];
 		$fields['lid'] = new RequiredLidObjectField('lid', null, 'Lid');
 		$fields['aantal'] = new RequiredIntField('aantal', 1, 'Aantal personen', 1);

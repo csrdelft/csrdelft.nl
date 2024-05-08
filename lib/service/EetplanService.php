@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service;
 
+use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\repository\eetplan\EetplanBekendenRepository;
 use CsrDelft\repository\eetplan\EetplanRepository;
@@ -37,7 +38,7 @@ class EetplanService
 	 *
 	 * @return Eetplan[]
 	 */
-	public function maakEetplan($avond, $lidjaar)
+	public function maakEetplan($avond, $lidjaar): array
 	{
 		$factory = new EetplanFactory();
 

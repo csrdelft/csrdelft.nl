@@ -57,7 +57,7 @@ class ForumPlaatje
 		return $this->getAfbeelding()->exists();
 	}
 
-	public function getAfbeelding($resize = false)
+	public function getAfbeelding($resize = false): Afbeelding
 	{
 		return new Afbeelding($this->getPath($resize));
 	}
@@ -67,13 +67,13 @@ class ForumPlaatje
 		return PLAATJES_PATH . ($resize ? 'resized/' : '') . strval($this->id);
 	}
 
-	public function getUrl($resized = false)
+	public function getUrl($resized = false): string
 	{
 		return "/forum/plaatjes/bekijken/$this->access_key" .
 			($resized ? '/resized' : '');
 	}
 
-	public function createResized()
+	public function createResized(): void
 	{
 		// Resize the smallest side of the image to at most 1024px
 		$command =
@@ -90,7 +90,7 @@ class ForumPlaatje
 		}
 	}
 
-	public function hasResized()
+	public function hasResized(): bool
 	{
 		$path = $this->getPath(true);
 		return file_exists($path) && is_file($path);

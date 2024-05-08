@@ -52,12 +52,12 @@ class Streeplijst
 	 */
 	public $naam_streeplijst;
 
-	public function getLeden()
+	public function getLeden(): array|false
 	{
 		return explode(';', $this->leden_streeplijst);
 	}
 
-	public function getInhoud()
+	public function getInhoud(): array|false
 	{
 		return explode(';', $this->inhoud_streeplijst);
 	}

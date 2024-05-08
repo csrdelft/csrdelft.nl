@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\embed\BbYoutube;
 
 class NodeYoutube implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbYoutube::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'youtube';
 	}
 
-	public function getData(BbNode $node)
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbYoutube) {
 			throw new \InvalidArgumentException();
@@ -30,14 +30,14 @@ class NodeYoutube implements Node
 		];
 	}
 
-	public function getTagAttributes($node)
+	public function getTagAttributes($node): array
 	{
 		return [
 			'youtube' => $node->attrs->id,
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

@@ -10,7 +10,7 @@ use CsrDelft\bb\BbTag;
  */
 class BbOfftopic extends BbTag
 {
-	public static function getTagName()
+	public static function getTagName(): array
 	{
 		return ['ot', 'offtopic', 'vanonderwerp'];
 	}
@@ -25,7 +25,7 @@ class BbOfftopic extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->readContent();
 	}

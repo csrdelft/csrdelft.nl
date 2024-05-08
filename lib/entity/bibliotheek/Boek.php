@@ -97,22 +97,22 @@ class Boek
 	 */
 	protected $categorie;
 
-	public function getRubriek()
+	public function getRubriek(): ?BiebRubriek
 	{
 		return $this->categorie;
 	}
 
-	public function setCategorie(BiebRubriek $biebRubriek)
+	public function setCategorie(BiebRubriek $biebRubriek): void
 	{
 		$this->categorie = $biebRubriek;
 	}
 
-	public function getStatus()
+	public function getStatus(): string
 	{
 		return '';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/bibliotheek/boek/' . $this->id;
 	}
@@ -120,7 +120,7 @@ class Boek
 	/**
 	 * Iedereen met extra rechten en zij met BIEB_READ mogen
 	 */
-	public function magBekijken()
+	public function magBekijken(): bool
 	{
 		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
 	}
@@ -131,7 +131,7 @@ class Boek
 	 * @return  bool
 	 *    boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
 	 */
-	public function magBewerken()
+	public function magBewerken(): bool
 	{
 		return LoginService::mag(P_BIEB_EDIT) ||
 			$this->isEigenaar() ||
@@ -149,7 +149,7 @@ class Boek
 	 *      false
 	 *        geen geen resultaat of niet de eigenaar
 	 */
-	public function isEigenaar($uid = null)
+	public function isEigenaar($uid = null): bool
 	{
 		foreach ($this->getExemplaren() as $exemplaar) {
 			if ($uid != null) {
@@ -168,7 +168,7 @@ class Boek
 	 *
 	 * @return BoekExemplaar[]
 	 */
-	public function getExemplaren()
+	public function getExemplaren(): array
 	{
 		return $this->exemplaren ?? [];
 	}
@@ -179,12 +179,12 @@ class Boek
 	 * @return  bool
 	 *    boek mag alleen door admins verwijdert worden
 	 */
-	public function magVerwijderen()
+	public function magVerwijderen(): bool
 	{
 		return LoginService::mag('commissie:BASFCie,' . P_BIEB_MOD . ',' . P_ADMIN);
 	}
 
-	public function isBiebBoek()
+	public function isBiebBoek(): bool
 	{
 		foreach ($this->getExemplaren() as $exemplaar) {
 			if ($exemplaar->isBiebBoek()) {
@@ -197,7 +197,7 @@ class Boek
 	/**
 	 * @return BoekRecensie[]
 	 */
-	public function getRecensies()
+	public function getRecensies(): array
 	{
 		return $this->recensies ?? [];
 	}

@@ -46,7 +46,7 @@ class LLCSV extends LLWeergave
 		return $html;
 	}
 
-	public function viewFooter()
+	public function viewFooter(): string
 	{
 		$html = '';
 		$html .= '</textarea>';
@@ -64,7 +64,7 @@ HTML;
 		return $html;
 	}
 
-	public function viewLid(Profiel $profiel)
+	public function viewLid(Profiel $profiel): string
 	{
 		$html = '';
 

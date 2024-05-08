@@ -50,17 +50,17 @@ class DocumentCategorie implements ISelectEntity, DisplayEntity
 	 */
 	public $documenten;
 
-	public function magBekijken()
+	public function magBekijken(): bool
 	{
 		return LoginService::mag($this->leesrechten);
 	}
 
-	public function getValue()
+	public function getValue(): string
 	{
 		return $this->naam;
 	}
 
-	public function getId()
+	public function getId(): int
 	{
 		return $this->id;
 	}

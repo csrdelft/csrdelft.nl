@@ -94,13 +94,13 @@ class Document extends Bestand
 	 *
 	 * @return bool
 	 */
-	public function exists()
+	public function exists(): bool
 	{
 		return @is_readable($this->directory . '/' . $this->filename) and
 			is_file($this->directory . '/' . $this->filename);
 	}
 
-	public function hasFile()
+	public function hasFile(): bool
 	{
 		if (!$this->magBekijken()) {
 			return false;
@@ -108,23 +108,23 @@ class Document extends Bestand
 		return $this->filename != '' and file_exists($this->getFullPath());
 	}
 
-	public function isEigenaar()
+	public function isEigenaar(): bool
 	{
 		return LoginService::getUid() === $this->eigenaar;
 	}
 
-	public function magBekijken()
+	public function magBekijken(): bool
 	{
 		return LoginService::mag($this->leesrechten) &&
 			LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function magBewerken()
+	public function magBewerken(): bool
 	{
 		return $this->isEigenaar() or LoginService::mag(P_DOCS_MOD);
 	}
 
-	public function magVerwijderen()
+	public function magVerwijderen(): bool
 	{
 		return LoginService::mag(P_DOCS_MOD);
 	}
@@ -166,12 +166,12 @@ class Document extends Bestand
 			rawurlencode($this->filename);
 	}
 
-	public function getMimetypeIcon()
+	public function getMimetypeIcon(): string
 	{
 		return Icon::getTag('mime-' . $this->getFriendlyMimetype());
 	}
 
-	public function getFriendlyMimetype()
+	public function getFriendlyMimetype(): string
 	{
 		$mimetypeMap = [
 			'application/pdf' => 'pdf',
@@ -224,7 +224,7 @@ class Document extends Bestand
 	 * @return bool
 	 * @throws CsrException
 	 */
-	public function deleteFile($throwWhenNotFound = true)
+	public function deleteFile($throwWhenNotFound = true): bool
 	{
 		if (!$this->hasFile()) {
 			if ($throwWhenNotFound) {

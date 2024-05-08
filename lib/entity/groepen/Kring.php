@@ -32,7 +32,7 @@ class Kring extends Groep implements HeeftMoment
 	 */
 	public $kringNummer;
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/kringen/' . $this->verticale . '.' . $this->kringNummer;
 	}

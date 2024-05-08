@@ -12,7 +12,7 @@ namespace CsrDelft\service;
  */
 class DragObjectService
 {
-	public static function getCoords($id, $top, $left)
+	public static function getCoords($id, $top, $left): array
 	{
 		if (isset($_SESSION['dragobject'][$id])) {
 			$top = (int) $_SESSION['dragobject'][$id]['top'];

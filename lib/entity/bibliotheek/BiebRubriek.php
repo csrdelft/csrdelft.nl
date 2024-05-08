@@ -36,7 +36,7 @@ class BiebRubriek
 	 */
 	protected $parent;
 
-	public function __toString()
+	public function __toString(): string
 	{
 		if ($this->p_id == $this->id) {
 			return '';

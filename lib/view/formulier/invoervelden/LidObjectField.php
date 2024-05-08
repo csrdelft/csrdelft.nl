@@ -19,7 +19,7 @@ class LidObjectField extends LidField
 	/**
 	 * @return Profiel|null
 	 */
-	public function getFormattedValue()
+	public function getFormattedValue(): ?Profiel
 	{
 		if ($this->getValue()) {
 			$entityManager = ContainerFacade::getContainer()->get(

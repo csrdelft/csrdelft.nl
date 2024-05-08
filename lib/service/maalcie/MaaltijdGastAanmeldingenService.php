@@ -48,7 +48,7 @@ class MaaltijdGastAanmeldingenService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function saveGasten($mid, $uid, $gasten)
+	public function saveGasten($mid, $uid, $gasten): MaaltijdAanmelding
 	{
 		if (!is_numeric($mid) || $mid <= 0) {
 			throw new CsrGebruikerException(
@@ -97,11 +97,7 @@ class MaaltijdGastAanmeldingenService
 	 * @param string $opmerking
 	 * @return MaaltijdAanmelding
 	 */
-	public function saveGastenEetwens(
-		Maaltijd $maaltijd,
-		Profiel $profiel,
-		$opmerking
-	) {
+	public function saveGastenEetwens(Maaltijd $maaltijd, Profiel $profiel, $opmerking): mixed {
 		$aanmelding = $maaltijd->getAanmelding($profiel);
 		if (!$aanmelding) {
 			throw new CsrGebruikerException('Niet aangemeld');

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service\forum;
 
+use Closure;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
 use CsrDelft\common\Util\ArrayUtil;
@@ -77,7 +78,7 @@ class ForumDelenService
 		$this->requestStack = $requestStack;
 	}
 
-	public function verwijderForumDeel($id)
+	public function verwijderForumDeel($id): void
 	{
 		$this->forumDelenMeldingRepository->stopMeldingenVoorIedereen($id);
 		$this->entityManager->remove($this->forumDelenRepository->find($id));
@@ -91,7 +92,7 @@ class ForumDelenService
 	 * @return ForumDraad[]
 	 * @throws Exception
 	 */
-	public function getWachtOpGoedkeuring()
+	public function getWachtOpGoedkeuring(): array
 	{
 		$postsByDraadId = ArrayUtil::group_by(
 			'draad_id',
@@ -159,7 +160,7 @@ class ForumDelenService
 		return $dradenById;
 	}
 
-	public function getRecent($belangrijk = null)
+	public function getRecent($belangrijk = null): ForumDeel
 	{
 		$deel = new ForumDeel();
 		if ($belangrijk) {
@@ -185,7 +186,7 @@ class ForumDelenService
 	 * @param $offset
 	 * @return ForumDraad[]
 	 */
-	public function zoeken(ForumZoeken $forumZoeken)
+	public function zoeken(ForumZoeken $forumZoeken): array
 	{
 		$zoek_in = $forumZoeken->zoek_in;
 
@@ -268,7 +269,7 @@ class ForumDelenService
 		return $gevonden_draden;
 	}
 
-	public function laatstGewijzigd($posts)
+	public function laatstGewijzigd($posts): mixed
 	{
 		return max(
 			array_map(function (ForumPost $post) {
@@ -277,7 +278,7 @@ class ForumDelenService
 		);
 	}
 
-	private function sorteerFunctie($sorteerOp)
+	private function sorteerFunctie($sorteerOp): Closure
 	{
 		switch ($sorteerOp) {
 			case 'aangemaakt_op':
@@ -309,12 +310,7 @@ class ForumDelenService
 	 * @param int $offset
 	 * @return ForumDraad[]
 	 */
-	public function getRecenteForumDraden(
-		$aantal,
-		$belangrijk,
-		$rss = false,
-		$offset = 0
-	) {
+	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false, $offset = 0): array {
 		if (!is_int($aantal)) {
 			$aantal = $this->forumDradenRepository->getAantalPerPagina();
 			$pagina = $this->forumDradenRepository->getHuidigePagina();
@@ -375,7 +371,7 @@ class ForumDelenService
 	/**
 	 * @return ForumCategorie[]
 	 */
-	public function getForumIndelingVoorLid()
+	public function getForumIndelingVoorLid(): array
 	{
 		$delenByCategorieId = ArrayUtil::group_by(
 			'categorie_id',

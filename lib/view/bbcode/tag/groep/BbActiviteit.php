@@ -15,12 +15,12 @@ class BbActiviteit extends BbTagGroep
 		return Activiteit::class;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'activiteit';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'aanmeldingen';
 	}

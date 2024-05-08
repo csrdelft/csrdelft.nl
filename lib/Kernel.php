@@ -32,7 +32,7 @@ class Kernel extends BaseKernel
 	/**
 	 * @param ContainerConfigurator $container
 	 */
-	protected function configureContainer(ContainerConfigurator $container)
+	protected function configureContainer(ContainerConfigurator $container): void
 	{
 		$container->import('../config/{packages}/*.yaml');
 		$container->import(
@@ -50,14 +50,14 @@ class Kernel extends BaseKernel
 	/**
 	 * @param RoutingConfigurator $routes
 	 */
-	protected function configureRoutes(RoutingConfigurator $routes)
+	protected function configureRoutes(RoutingConfigurator $routes): void
 	{
 		$routes->import('../config/{routes}/' . $this->environment . '/**/*.yaml');
 		$routes->import('../config/{routes}/*.yaml');
 		$routes->import('../config/{routes}.yaml');
 	}
 
-	protected function build(ContainerBuilder $builder)
+	protected function build(ContainerBuilder $builder): void
 	{
 		$builder
 			->registerForAutoconfiguration(FormulierTypeInterface::class)

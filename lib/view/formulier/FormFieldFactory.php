@@ -47,7 +47,7 @@ class FormFieldFactory
 	 * @return InputField[]
 	 * @throws Exception
 	 */
-	public static function generateFields($model)
+	public static function generateFields($model): array
 	{
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
@@ -137,7 +137,7 @@ class FormFieldFactory
 	 * @return InputField
 	 * @throws Exception
 	 */
-	private static function getFieldByType(string $fieldName, $value, $type)
+	private static function getFieldByType(string $fieldName, $value, $type): RechtenField|VerticaleField|EnumSelectField|IntField|TextField|DateTimeObjectField|TextareaField|SafeJsonField|LidField|JaNeeField|FloatField|TimeObjectField
 	{
 		$desc = ucfirst(str_replace('_', ' ', $fieldName));
 

@@ -8,12 +8,12 @@ use CsrDelft\entity\profiel\Profiel;
  */
 class LLKaartje extends LLWeergave
 {
-	public function viewHeader()
+	public function viewHeader(): string
 	{
 		return '';
 	}
 
-	public function viewFooter()
+	public function viewFooter(): string
 	{
 		return '';
 	}

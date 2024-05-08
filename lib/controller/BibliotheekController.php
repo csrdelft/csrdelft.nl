@@ -279,7 +279,7 @@ class BibliotheekController extends AbstractController
 	 * @Route("/bibliotheek/verwijderbeschrijving/{boek}/{profiel}", methods={"POST"}, requirements={"boek": "\d+", "profiel": ".{4}"})
 	 * @Auth(P_BIEB_READ)
 	 */
-	public function verwijderbeschrijving(Boek $boek, Profiel $profiel)
+	public function verwijderbeschrijving(Boek $boek, Profiel $profiel): void
 	{
 		$recensie = $this->boekRecensieRepository->get($boek, $profiel);
 		if (!$recensie->magVerwijderen()) {

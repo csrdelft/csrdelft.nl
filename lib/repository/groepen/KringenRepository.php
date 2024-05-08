@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\groepen;
 
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Kring;
 use CsrDelft\repository\GroepRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -10,17 +11,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class KringenRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Kring::class;
 	}
 
-	public function findBy(
-		array $criteria,
-		array $orderBy = null,
-		$limit = null,
-		$offset = null
-	) {
+	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): array {
 		return parent::findBy(
 			$criteria,
 			['verticale' => 'ASC', 'kringNummer' => 'ASC'] + ($orderBy ?? []),
@@ -62,7 +58,7 @@ EOF
 		}
 	}
 
-	public function get($id)
+	public function get($id): ?Groep
 	{
 		if (is_numeric($id)) {
 			return parent::get($id);
@@ -74,7 +70,7 @@ EOF
 		]);
 	}
 
-	public function nieuw($letter = null)
+	public function nieuw($letter = null): Kring
 	{
 		/** @var Kring $kring */
 		$kring = parent::nieuw();

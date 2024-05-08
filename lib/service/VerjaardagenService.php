@@ -10,7 +10,7 @@ use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -43,12 +43,12 @@ class VerjaardagenService
 		$this->em = $em;
 	}
 
-	private function getFilterByToestemmingSql()
+	private function getFilterByToestemmingSql(): string
 	{
 		return $this->security->isGranted(P_LEDEN_MOD) ? '' : self::FILTER_BY_TOESTEMMING;
 	}
 
-	private function getNovietenFilter()
+	private function getNovietenFilter(): string
 	{
 		if ($this->em->getFilters()->isEnabled('verbergNovieten')) {
 			$jaar = intval(
@@ -69,7 +69,7 @@ class VerjaardagenService
 	/**
 	 * @return Profiel[][]
 	 */
-	public function getJaar()
+	public function getJaar(): array
 	{
 		return array_map([$this, 'get'], range(1, 12));
 	}
@@ -79,7 +79,7 @@ class VerjaardagenService
 	 *
 	 * @return Profiel[]
 	 */
-	public function get($maand)
+	public function get($maand): mixed
 	{
 		$qb = $this->profielRepository
 			->createQueryBuilder('p')
@@ -98,12 +98,7 @@ class VerjaardagenService
 		return $qb->getQuery()->getResult();
 	}
 
-	public static function filterByToestemming(
-		QueryBuilder $queryBuilder,
-		$module,
-		$instelling,
-		$profielAlias = 'p'
-	) {
+	public static function filterByToestemming(QueryBuilder $queryBuilder, $module, $instelling, $profielAlias = 'p'): QueryBuilder {
 		return $queryBuilder
 			->andWhere(
 				't.waarde = \'ja\' and t.module = :t_module and t.instelling = :t_instelling'
@@ -144,7 +139,7 @@ class VerjaardagenService
 	/**
 	 * Selecteer verjaardagen tussen twee data.
 	 */
-	private function getVerjaardagen($van, $tot = null, $limiet = null) {
+	private function getVerjaardagen($van, $tot = null, $limiet = null): mixed {
 		$rsm = new ResultSetMappingBuilder($this->em);
 		// We selecteren eerst een profiel.
 		$rsm->addRootEntityFromClassMetadata(Profiel::class, 'p');

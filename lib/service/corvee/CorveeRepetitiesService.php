@@ -42,7 +42,7 @@ class CorveeRepetitiesService
 		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 	}
 
-	public function verwijderRepetitie($crid)
+	public function verwijderRepetitie($crid): mixed
 	{
 		if (!is_numeric($crid) || $crid <= 0) {
 			throw new CsrGebruikerException(

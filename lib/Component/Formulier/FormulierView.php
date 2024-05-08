@@ -25,12 +25,12 @@ class FormulierView
 		return $this->titel;
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): void
 	{
 		throw new CsrException('Niet geimplementeerd');
 	}
 
-	public function getModel()
+	public function getModel(): void
 	{
 		throw new CsrException('Niet geimplementeerd');
 	}

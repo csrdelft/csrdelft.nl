@@ -3,6 +3,7 @@
 namespace CsrDelft\view\formulier\keuzevelden;
 
 use CsrDelft\common\Util\DateUtil;
+use DateTimeImmutable;
 use DateTimeInterface;
 
 /**
@@ -29,7 +30,7 @@ class DateObjectField extends DateField
 		parent::__construct($name, $value, $description, $maxyear, $minyear);
 	}
 
-	public function getFormattedValue()
+	public function getFormattedValue(): DateTimeImmutable|false
 	{
 		return date_create_immutable($this->getValue());
 	}

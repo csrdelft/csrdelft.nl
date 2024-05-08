@@ -63,7 +63,7 @@ class AccessControl
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("resource")
 	 */
-	public function getDataTableResource()
+	public function getDataTableResource(): string
 	{
 		if ($this->resource === '*') {
 			return 'Elke ' . lcfirst($this->environment);

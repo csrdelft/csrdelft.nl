@@ -37,7 +37,7 @@ class DataTableFactory
 	 * @param $options
 	 * @return DataTableBuilder
 	 */
-	public function create($type, $options)
+	public function create($type, $options): DataTableBuilder
 	{
 		$type = $this->getType($type);
 

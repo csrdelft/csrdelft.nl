@@ -15,12 +15,12 @@ class BbKetzer extends BbTagGroep
 		return Ketzer::class;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'ketzer';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'aanmeldingen';
 	}

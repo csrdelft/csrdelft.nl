@@ -27,7 +27,7 @@ class DeclaratiePDFGenerator
 		$this->filesystem = $filesystem;
 	}
 
-	private function correctImageOrientation($filename)
+	private function correctImageOrientation($filename): void
 	{
 		if (function_exists('exif_read_data')) {
 			$exif = exif_read_data($filename);
@@ -129,7 +129,7 @@ class DeclaratiePDFGenerator
 		return $pdf->Output('declaratie.pdf', 'S');
 	}
 
-	public function genereerDeclaratie(Declaratie $declaratie)
+	public function genereerDeclaratie(Declaratie $declaratie): array
 	{
 		$location = $this->filesystem->tempnam(TMP_PATH, 'decla_');
 		$declaInfo = $this->genereerDeclaratieInfo($declaratie);

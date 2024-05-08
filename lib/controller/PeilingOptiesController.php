@@ -63,7 +63,7 @@ class PeilingOptiesController extends AbstractController
 	 * @Route("/peilingen/opties/{id}/toevoegen", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_VOTE)
 	 */
-	public function toevoegen(Peiling $peiling)
+	public function toevoegen(Peiling $peiling): GenericDataTableResponse|PeilingOptieForm
 	{
 		$form = new PeilingOptieForm(new PeilingOptie(), $peiling->id);
 

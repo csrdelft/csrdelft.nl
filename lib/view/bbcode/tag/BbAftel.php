@@ -7,12 +7,12 @@ use CsrDelft\common\Util\CryptoUtil;
 
 class BbAftel extends BbTag
 {
-	public static function getTagName()
+	public static function getTagName(): array
 	{
 		return ['aftel'];
 	}
 
-	public function render()
+	public function render(): string
 	{
 		if (
 			!isset($_ENV['AFTEL_START']) ||
@@ -54,7 +54,7 @@ HTML;
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 	}
 }

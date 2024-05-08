@@ -86,7 +86,7 @@ class PeilingenController extends AbstractController
 	 * @Route("/peilingen/nieuw", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function nieuw(Request $request)
+	public function nieuw(Request $request): GenericDataTableResponse|Response
 	{
 		$peiling = new Peiling();
 
@@ -121,7 +121,7 @@ class PeilingenController extends AbstractController
 	 * @Route("/peilingen/bewerken", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function bewerken(Request $request)
+	public function bewerken(Request $request): GenericDataTableResponse|Response
 	{
 		$selection = $this->getDataTableSelection();
 

@@ -30,12 +30,12 @@ class TemporaryToken extends AbstractToken
 		$this->originalToken = $originalToken;
 	}
 
-	public function getOriginalToken()
+	public function getOriginalToken(): TokenInterface
 	{
 		return $this->originalToken;
 	}
 
-	public function getCredentials()
+	public function getCredentials(): string
 	{
 		return '';
 	}

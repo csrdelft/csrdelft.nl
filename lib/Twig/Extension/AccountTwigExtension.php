@@ -9,6 +9,7 @@ use CsrDelft\entity\security\Account;
 use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\repository\groepen\CommissiesRepository;
 use CsrDelft\service\security\SuService;
+use Generator;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -38,12 +39,12 @@ class AccountTwigExtension extends AbstractExtension
 		$this->commissiesRepository = $commissiesRepository;
 	}
 
-	public function getFilters()
+	public function getFilters(): array
 	{
 		return [new TwigFilter('may_su_to', [$this, 'may_su_to'])];
 	}
 
-	public function getFunctions()
+	public function getFunctions(): array
 	{
 		return [
 			new TwigFunction('getBestuurslid', [$this, 'getBestuurslid']),
@@ -60,7 +61,7 @@ class AccountTwigExtension extends AbstractExtension
 	 * @param Profiel $profiel
 	 * @return GroepLid|null
 	 */
-	public function getBestuurslid(Profiel $profiel)
+	public function getBestuurslid(Profiel $profiel): ?GroepLid
 	{
 		$besturen = $this->besturenRepository->getGroepenVoorLid($profiel, [
 			GroepStatus::OT,
@@ -77,7 +78,7 @@ class AccountTwigExtension extends AbstractExtension
 	 * @param Profiel $profiel
 	 * @return GroepLid[]|\Generator
 	 */
-	public function getCommissielid(Profiel $profiel)
+	public function getCommissielid(Profiel $profiel): Generator
 	{
 		$commissies = $this->commissiesRepository->getGroepenVoorLid($profiel);
 		foreach ($commissies as $commissie) {

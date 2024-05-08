@@ -43,7 +43,7 @@ class Courant
 	 */
 	public $verzender_profiel;
 
-	public function getJaar()
+	public function getJaar(): string
 	{
 		return $this->verzendMoment->format('Y');
 	}

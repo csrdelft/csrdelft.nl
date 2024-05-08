@@ -17,7 +17,7 @@ class ContainerFacade
 	/** @var ContainerInterface */
 	private static $container;
 
-	public static function init(ContainerInterface $container)
+	public static function init(ContainerInterface $container): void
 	{
 		static::$container = $container;
 	}

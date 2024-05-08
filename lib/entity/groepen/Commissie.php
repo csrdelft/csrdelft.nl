@@ -28,22 +28,22 @@ class Commissie extends Groep implements HeeftSoort, HeeftMoment
 	 */
 	public $commissieSoort;
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/commissies/' . $this->id;
 	}
 
-	public function getSoort()
+	public function getSoort(): CommissieSoort
 	{
 		return $this->commissieSoort;
 	}
 
-	public function setSoort($soort)
+	public function setSoort($soort): void
 	{
 		$this->commissieSoort = $soort;
 	}
 
-	public function setSoortString($soort)
+	public function setSoortString($soort): void
 	{
 		$this->commissieSoort = CommissieSoort::from($soort);
 	}

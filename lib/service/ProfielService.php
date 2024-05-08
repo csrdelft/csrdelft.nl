@@ -6,7 +6,7 @@ use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -40,14 +40,7 @@ class ProfielService
 	 * @param int $limiet
 	 * @return Profiel[]
 	 */
-	public function zoekLeden(
-		string $zoekterm,
-		string $zoekveld,
-		string $verticale,
-		string $sort,
-		$zoekstatus = '',
-		int $limiet = 0
-	) {
+	public function zoekLeden(string $zoekterm, string $zoekveld, string $verticale, string $sort, $zoekstatus = '', int $limiet = 0): mixed {
 		$queryBuilder = $this->profielRepository->createQueryBuilder('p');
 		$expr = $queryBuilder->expr();
 		$containsZonderSpatiesZoekterm = SqlUtil::sql_contains(

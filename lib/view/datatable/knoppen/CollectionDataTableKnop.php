@@ -19,12 +19,12 @@ class CollectionDataTableKnop extends DataTableKnop
 		parent::__construct($multiplicity, '', $label, $title, $icon, 'collection');
 	}
 
-	public function jsonSerialize()
+	public function jsonSerialize(): array
 	{
 		return array_merge(parent::jsonSerialize(), ['buttons' => $this->buttons]);
 	}
 
-	public function addKnop(DataTableKnop $knop)
+	public function addKnop(DataTableKnop $knop): void
 	{
 		if ($this->tableId) {
 			$knop->setDataTableId($this->tableId);

@@ -44,7 +44,7 @@ class DeclaratieRepository extends AbstractRepository
 		$this->mailService = $mailService;
 	}
 
-	public function verwijderen(Declaratie $declaratie)
+	public function verwijderen(Declaratie $declaratie): void
 	{
 		foreach ($declaratie->getBonnen() as $bon) {
 			foreach ($bon->getRegels() as $regel) {
@@ -58,7 +58,7 @@ class DeclaratieRepository extends AbstractRepository
 		$this->getEntityManager()->flush();
 	}
 
-	public function mijnDeclaraties(Profiel $profiel)
+	public function mijnDeclaraties(Profiel $profiel): array
 	{
 		return array_filter(
 			$this->findBy(
@@ -73,7 +73,7 @@ class DeclaratieRepository extends AbstractRepository
 		);
 	}
 
-	public function stuurMail(Declaratie $declaratie)
+	public function stuurMail(Declaratie $declaratie): void
 	{
 		$wachtrij = $declaratie->getCategorie()->getWachtrij();
 

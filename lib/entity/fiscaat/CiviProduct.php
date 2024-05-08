@@ -4,6 +4,7 @@ namespace CsrDelft\entity\fiscaat;
 
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\view\formulier\DisplayEntity;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -78,7 +79,7 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	 * @Serializer\SerializedName("categorie")
 	 * @Serializer\Groups("bar")
 	 */
-	public function getCategorieString()
+	public function getCategorieString(): string
 	{
 		return $this->categorie->getWeergave();
 	}
@@ -87,7 +88,7 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	 * @return string
 	 * @Serializer\Groups("bar")
 	 */
-	public function getCie()
+	public function getCie(): string
 	{
 		return $this->categorie->cie;
 	}
@@ -105,7 +106,7 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	/**
 	 * @return CiviPrijs
 	 */
-	public function getPrijs()
+	public function getPrijs(): mixed
 	{
 		return $this->prijzen->last();
 	}
@@ -115,7 +116,7 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	 * @Serializer\Groups({"datatable", "bar"})
 	 * @Serializer\SerializedName("prijs")
 	 */
-	public function getPrijsInt()
+	public function getPrijsInt(): ?integer
 	{
 		if ($prijs = $this->getPrijs()) {
 			return $prijs->prijs;
@@ -130,7 +131,7 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	 * @param \DateTimeInterface $moment
 	 * @return false|mixed
 	 */
-	public function getPrijsOpMoment(\DateTimeInterface $moment)
+	public function getPrijsOpMoment(\DateTimeInterface $moment): integer
 	{
 		$vanExpr = Criteria::expr()->lt('van', $moment);
 		$totExpr = Criteria::expr()->orX(
@@ -152,12 +153,12 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("categorie")
 	 */
-	public function getDataTableCategorie()
+	public function getDataTableCategorie(): string
 	{
 		return $this->categorie->getBeschrijving();
 	}
 
-	public function getBeschrijvingFormatted()
+	public function getBeschrijvingFormatted(): string
 	{
 		return sprintf(
 			'%s (€%.2f)',
@@ -166,7 +167,7 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 		);
 	}
 
-	public function getId()
+	public function getId(): integer
 	{
 		return $this->id;
 	}

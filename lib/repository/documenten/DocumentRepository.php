@@ -26,7 +26,7 @@ class DocumentRepository extends AbstractRepository
 	 *
 	 * @return Document|false
 	 */
-	public function get($id)
+	public function get($id): ?Document
 	{
 		return $this->find($id);
 	}
@@ -37,7 +37,7 @@ class DocumentRepository extends AbstractRepository
 	 *
 	 * @return Document[]
 	 */
-	public function zoek($zoekterm, $limiet = null)
+	public function zoek($zoekterm, $limiet = null): mixed
 	{
 		return $this->createQueryBuilder('d')
 			->where('MATCH(d.naam, d.filename) AGAINST (:zoekterm) > 0')

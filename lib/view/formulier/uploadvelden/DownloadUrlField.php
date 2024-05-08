@@ -72,7 +72,7 @@ class DownloadUrlField extends UrlField
 		return $this->filterMime;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		parent::validate();
 		if (!$this->isAvailable()) {
@@ -96,7 +96,7 @@ class DownloadUrlField extends UrlField
 		return $this->error === '';
 	}
 
-	public function opslaan($directory, $filename, $overwrite = false)
+	public function opslaan($directory, $filename, $overwrite = false): void
 	{
 		parent::opslaan($directory, $filename, $overwrite);
 		$copied = copy(

@@ -7,17 +7,17 @@ use CsrDelft\view\bbcode\tag\BbMaaltijd;
 
 class NodeMaaltijd implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbMaaltijd::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'maaltijd';
 	}
 
-	public function getData(BbNode $node)
+	public function getData(BbNode $node): array
 	{
 		if (!($node instanceof BbMaaltijd)) {
 			throw new \InvalidArgumentException();
@@ -28,14 +28,14 @@ class NodeMaaltijd implements Node
 		];
 	}
 
-	public function getTagAttributes($node)
+	public function getTagAttributes($node): array
 	{
 		return [
 			'maaltijd' => $node->attrs->id,
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

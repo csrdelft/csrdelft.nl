@@ -95,7 +95,7 @@ class MaaltijdAanmelding
 	 *
 	 * @return float if lid exists, false otherwise
 	 */
-	public function getSaldo()
+	public function getSaldo(): float
 	{
 		return $this->profiel->getCiviSaldo();
 	}
@@ -115,7 +115,7 @@ class MaaltijdAanmelding
 	 *
 	 * @return int
 	 */
-	public function getSaldoStatus()
+	public function getSaldoStatus(): int
 	{
 		$saldo = $this->getSaldo();
 		$prijs = $this->maaltijd->getPrijsFloat();
@@ -142,7 +142,7 @@ class MaaltijdAanmelding
 	 *
 	 * @return String
 	 */
-	public function getSaldoMelding()
+	public function getSaldoMelding(): string
 	{
 		$status = $this->getSaldoStatus();
 		$prijs = sprintf('%.2f', $this->maaltijd->getPrijsFloat());

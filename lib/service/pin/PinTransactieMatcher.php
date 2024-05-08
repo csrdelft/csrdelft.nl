@@ -58,19 +58,19 @@ class PinTransactieMatcher
 		$this->entityManager = $entityManager;
 	}
 
-	public function setPinTransacties(array $pinTransacties)
+	public function setPinTransacties(array $pinTransacties): void
 	{
 		$this->pinTransacties = $pinTransacties;
 	}
 
-	public function setPinBestellingen(array $pinBestellingen)
+	public function setPinBestellingen(array $pinBestellingen): void
 	{
 		$this->pinBestellingen = $pinBestellingen;
 	}
 
 	/**
 	 */
-	public function clean()
+	public function clean(): void
 	{
 		$ids = array_map(function (CiviBestelling $inhoud) {
 			return $inhoud->id;
@@ -84,10 +84,7 @@ class PinTransactieMatcher
 	 * @return int[][]
 	 * @throws CsrException
 	 */
-	protected function levenshteinMatrix(
-		array $pinTransacties,
-		array $pinBestellingen
-	) {
+	protected function levenshteinMatrix(array $pinTransacties, array $pinBestellingen): array {
 		$pinTransactiesCount = count($pinTransacties);
 		$pinBestellingenCount = count($pinBestellingen);
 
@@ -134,7 +131,7 @@ class PinTransactieMatcher
 	/**
 	 * @throws CsrException
 	 */
-	public function match()
+	public function match(): void
 	{
 		// Sorteer beide op volgorde van moment
 		usort($this->pinBestellingen, function (
@@ -231,7 +228,7 @@ class PinTransactieMatcher
 	/**
 	 * @return bool
 	 */
-	public function bevatFouten()
+	public function bevatFouten(): bool
 	{
 		foreach ($this->matches as $match) {
 			if ($match->status !== PinTransactieMatchStatusEnum::STATUS_MATCH) {
@@ -246,7 +243,7 @@ class PinTransactieMatcher
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function genereerReport()
+	public function genereerReport(): string|false
 	{
 		ob_start();
 
@@ -345,7 +342,7 @@ class PinTransactieMatcher
 
 	/**
 	 */
-	public function save()
+	public function save(): void
 	{
 		foreach ($this->matches as $match) {
 			$this->entityManager->persist($match);
@@ -356,12 +353,12 @@ class PinTransactieMatcher
 	/**
 	 * @return PinTransactieMatch[]
 	 */
-	public function getMatches()
+	public function getMatches(): array
 	{
 		return $this->matches;
 	}
 
-	private function matchCost($i, $j)
+	private function matchCost($i, $j): int
 	{
 		if (
 			$this->pinTransacties[$i]->getBedragInCenten() ==

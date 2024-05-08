@@ -32,7 +32,7 @@ class ForumDradenVerbergenController extends AbstractController
 	 * @Route("/forum/verbergen/{draad_id}", methods={"POST"}))
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verbergen(ForumDraad $draad)
+	public function verbergen(ForumDraad $draad): JsonResponse
 	{
 		if (!$draad->magVerbergen()) {
 			throw new CsrGebruikerException('Onderwerp mag niet verborgen worden');
@@ -52,7 +52,7 @@ class ForumDradenVerbergenController extends AbstractController
 	 * @Route("/forum/tonen/{draad_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function tonen(ForumDraad $draad)
+	public function tonen(ForumDraad $draad): JsonResponse
 	{
 		if (!$draad->isVerborgen()) {
 			throw new CsrGebruikerException('Onderwerp is niet verborgen');
@@ -66,7 +66,7 @@ class ForumDradenVerbergenController extends AbstractController
 	 * @Route("/forum/toonalles", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function toonalles()
+	public function toonalles(): JsonResponse
 	{
 		$aantal = $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
 		$this->forumDradenVerbergenRepository->toonAllesVoorLeden([

@@ -7,7 +7,7 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use DateInterval;
 use DateTime;
 use Exception;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class SaldoGrafiekService
 {
@@ -40,7 +40,7 @@ class SaldoGrafiekService
 	 * @return array|null
 	 * @throws Exception
 	 */
-	public function getDataPoints($uid, $timespan)
+	public function getDataPoints($uid, $timespan): ?array
 	{
 		if (!$this->magGrafiekZien($uid)) {
 			return null;

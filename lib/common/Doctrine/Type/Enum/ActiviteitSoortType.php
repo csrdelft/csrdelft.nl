@@ -6,12 +6,12 @@ use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 
 class ActiviteitSoortType extends EnumType
 {
-	public function getEnumClass()
+	public function getEnumClass(): string
 	{
 		return ActiviteitSoort::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumActiviteitSoort';
 	}

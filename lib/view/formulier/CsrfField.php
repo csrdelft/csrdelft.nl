@@ -30,27 +30,27 @@ class CsrfField implements View, FormElement
 		return $this->getHtml();
 	}
 
-	public function getTitel()
+	public function getTitel(): null
 	{
 		return null;
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): null
 	{
 		return null;
 	}
 
-	public function getModel()
+	public function getModel(): CsrfToken
 	{
 		return $this->token;
 	}
 
-	public function getType()
+	public function getType(): string
 	{
 		return ReflectionUtil::short_class(static::class);
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		if ($this->token === null) {
 			return '';
@@ -67,7 +67,7 @@ class CsrfField implements View, FormElement
 			'"  />';
 	}
 
-	public function getJavascript()
+	public function getJavascript(): string
 	{
 		return '';
 	}

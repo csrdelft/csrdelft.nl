@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
+use CsrDelft\entity\fiscaat\integer;
 use CsrDelft\repository\AbstractRepository;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
@@ -61,7 +62,7 @@ class CiviBestellingRepository extends AbstractRepository
 	 * @param int $id
 	 * @return CiviBestelling
 	 */
-	public function get($id)
+	public function get($id): ?CiviBestelling
 	{
 		return $this->find($id);
 	}
@@ -72,7 +73,7 @@ class CiviBestellingRepository extends AbstractRepository
 	 * @param array $cie
 	 * @return CiviBestelling[]
 	 */
-	public function findTussen($van, $tot, $cie = [], $uid = null)
+	public function findTussen($van, $tot, $cie = [], $uid = null): mixed
 	{
 		$qb = $this->createQueryBuilder('cb')
 			->where('cb.moment > :van and cb.moment < :tot')
@@ -95,7 +96,7 @@ class CiviBestellingRepository extends AbstractRepository
 	 * @param string $to
 	 * @return CiviBestelling[]
 	 */
-	public function getPinBestellingInMoment($from, $to)
+	public function getPinBestellingInMoment($from, $to): array
 	{
 		/** @var CiviBestelling[] $bestellingen */
 		$bestellingen = $this->createQueryBuilder('b')
@@ -151,7 +152,7 @@ class CiviBestellingRepository extends AbstractRepository
 	 *
 	 * @return CiviBestelling[]
 	 */
-	public function getBestellingenVoorLid($uid, $limit = null)
+	public function getBestellingenVoorLid($uid, $limit = null): array
 	{
 		return $this->findBy(
 			['uid' => $uid, 'deleted' => false],
@@ -168,7 +169,7 @@ class CiviBestellingRepository extends AbstractRepository
 	 * @throws NoResultException
 	 * @throws NonUniqueResultException
 	 */
-	public function getSomBestellingenVanaf(DateTime $date, $profielOnly = false)
+	public function getSomBestellingenVanaf(DateTime $date, $profielOnly = false): int
 	{
 		$qb = $this->createQueryBuilder('cb')
 			->select('SUM(cb.totaal)')
@@ -182,7 +183,7 @@ class CiviBestellingRepository extends AbstractRepository
 		return (int) $qb->getQuery()->getSingleScalarResult();
 	}
 
-	public function vanBedragInCenten($bedrag, $uid)
+	public function vanBedragInCenten($bedrag, $uid): CiviBestelling
 	{
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'anders';
@@ -213,7 +214,7 @@ class CiviBestellingRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(CiviBestelling $entity)
+	public function create(CiviBestelling $entity): integer
 	{
 		// Persist bestelling eerst zonder inhoud
 		$inhoud = $entity->inhoud;

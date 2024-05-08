@@ -15,12 +15,12 @@ class BbGroep extends BbTagGroep
 		return RechtenGroep::class;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'groep';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'personen';
 	}

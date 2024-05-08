@@ -161,17 +161,17 @@ class IsHetAlView implements View
 		}
 	}
 
-	public function getModel()
+	public function getModel(): string
 	{
 		return $this->model;
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): null
 	{
 		return null;
 	}
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return $this->model;
 	}

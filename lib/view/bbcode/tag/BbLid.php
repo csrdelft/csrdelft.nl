@@ -7,7 +7,7 @@ use CsrDelft\bb\BbTag;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\BbHelper;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.
@@ -40,18 +40,18 @@ class BbLid extends BbTag
 		$this->security = $security;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'lid';
 	}
 
-	public function isAllowed()
+	public function isAllowed(): bool
 	{
 		return $this->security->isGranted('ROLE_LEDEN_READ') ||
 			$this->security->isGranted('ROLE_OUDLEDEN_READ');
 	}
 
-	public function renderLight()
+	public function renderLight(): string
 	{
 		$profiel = $this->getProfiel();
 		return BbHelper::lightLinkInline(
@@ -66,7 +66,7 @@ class BbLid extends BbTag
 	 * @return Profiel
 	 * @throws BbException
 	 */
-	public function getProfiel()
+	public function getProfiel(): Profiel
 	{
 		$profiel = $this->profielRepository->find($this->uid);
 
@@ -92,7 +92,7 @@ class BbLid extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->uid = $this->readMainArgument($arguments);
 	}

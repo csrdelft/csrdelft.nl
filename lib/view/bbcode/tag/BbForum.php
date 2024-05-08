@@ -8,7 +8,7 @@ use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\service\forum\ForumDelenService;
 use Exception;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 
 class BbForum extends BbTag
@@ -57,7 +57,7 @@ class BbForum extends BbTag
 		$this->security = $security;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'forum';
 	}
@@ -90,7 +90,7 @@ class BbForum extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
+	public function parse($arguments = []): void
 	{
 		$this->id = $this->readMainArgument($arguments);
 		if (isset($arguments['num'])) {
