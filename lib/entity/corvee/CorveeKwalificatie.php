@@ -15,45 +15,45 @@ use Doctrine\ORM\Mapping as ORM;
  * Dit is benodigd voor sommige CorveeFuncties zoals kwalikok.
  *
  * Zie ook CorveeFunctie.class.php
- * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeKwalificatiesRepository")
- * @ORM\Table("crv_kwalificaties")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
+#[ORM\Table('crv_kwalificaties')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\corvee\CorveeKwalificatiesRepository::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class CorveeKwalificatie
 {
 	/**
-	 * Lidnummer
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
-	 */
-	public $uid;
+  * Lidnummer
+  * @var string
+  */
+ #[ORM\Column(type: 'uid')]
+ #[ORM\Id]
+ public $uid;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 */
-	public $functie_id;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ public $functie_id;
 	/**
-	 * Datum en tijd
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $wanneer_toegewezen;
+  * Datum en tijd
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime')]
+ public $wanneer_toegewezen;
 
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-	 */
-	public $profiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ public $profiel;
 
 	/**
-	 * @var CorveeFunctie
-	 * @ORM\ManyToOne(targetEntity="CorveeFunctie", inversedBy="kwalificaties")
-	 * @ORM\JoinColumn(name="functie_id", referencedColumnName="functie_id")
-	 */
-	public $corveeFunctie;
+  * @var CorveeFunctie
+  */
+ #[ORM\JoinColumn(name: 'functie_id', referencedColumnName: 'functie_id')]
+ #[ORM\ManyToOne(targetEntity: \CorveeFunctie::class, inversedBy: 'kwalificaties')]
+ public $corveeFunctie;
 
 	public function setCorveeFunctie(CorveeFunctie $corveeFunctie = null): void
 	{

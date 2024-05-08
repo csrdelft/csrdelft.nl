@@ -11,46 +11,45 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class ForumPlaatje
  * @package CsrDelft\entity
- * @ORM\Entity(repositoryClass="CsrDelft\repository\ForumPlaatjeRepository")
- * @ORM\Table("forumplaatjes", indexes={
- *   @ORM\Index(name="access_key", columns={"access_key"})
- * })
  */
+#[ORM\Table('forumplaatjes')]
+#[ORM\Index(name: 'access_key', columns: ['access_key'])]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\ForumPlaatjeRepository::class)]
 class ForumPlaatje
 {
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $id;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 */
-	public $access_key;
+  * @var string
+  */
+ #[ORM\Column(type: 'stringkey')]
+ public $access_key;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $datum_toegevoegd;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime')]
+ public $datum_toegevoegd;
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid", nullable=true)
-	 */
-	public $maker;
+  * @var string
+  */
+ #[ORM\Column(type: 'uid', nullable: true)]
+ public $maker;
 	/**
-	 * @var Profiel|null
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="maker", referencedColumnName="uid", nullable=true)
-	 */
-	public $maker_profiel;
+  * @var Profiel|null
+  */
+ #[ORM\JoinColumn(name: 'maker', referencedColumnName: 'uid', nullable: true)]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ public $maker_profiel;
 	/**
-	 * @var string
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	public $source_url;
+  * @var string
+  */
+ #[ORM\Column(type: 'text', nullable: true)]
+ public $source_url;
 
 	public function exists()
 	{

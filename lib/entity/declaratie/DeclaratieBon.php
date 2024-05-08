@@ -12,44 +12,32 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/**
- * @ORM\Entity(repositoryClass=DeclaratieBonRepository::class)
- */
+#[ORM\Entity(repositoryClass: DeclaratieBonRepository::class)]
 class DeclaratieBon
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
-	private $id;
+	#[ORM\Id]
+ #[ORM\GeneratedValue]
+ #[ORM\Column(type: 'integer')]
+ private $id;
+
+	#[ORM\Column(type: 'string', length: 255)]
+ private $bestand;
+
+	#[ORM\ManyToOne(targetEntity: Declaratie::class, inversedBy: 'bonnen')]
+ private $declaratie;
 
 	/**
-	 * @ORM\Column(type="string", length=255)
-	 */
-	private $bestand;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(nullable: false, referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ private $maker;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Declaratie::class, inversedBy="bonnen")
-	 */
-	private $declaratie;
+	#[ORM\Column(type: 'datetime', nullable: true)]
+ private $datum;
 
-	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(nullable=false, referencedColumnName="uid")
-	 */
-	private $maker;
-
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	private $datum;
-
-	/**
-	 * @ORM\OneToMany(targetEntity=DeclaratieRegel::class, mappedBy="bon")
-	 */
-	private $regels;
+	#[ORM\OneToMany(targetEntity: DeclaratieRegel::class, mappedBy: 'bon')]
+ private $regels;
 
 	public function __construct()
 	{

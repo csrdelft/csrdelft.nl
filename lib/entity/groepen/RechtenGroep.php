@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Een groep beperkt voor rechten.
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\RechtenGroepenRepository")
  */
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\groepen\RechtenGroepenRepository::class)]
 class RechtenGroep extends Groep implements HeeftAanmeldRechten
 {
 	use GroepAanmeldRechten;

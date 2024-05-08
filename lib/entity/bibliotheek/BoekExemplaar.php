@@ -9,77 +9,77 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package CsrDelft\model\entity\bibliotheek
- * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BoekExemplaarRepository")
- * @ORM\Table("biebexemplaar")
  */
+#[ORM\Table('biebexemplaar')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\bibliotheek\BoekExemplaarRepository::class)]
 class BoekExemplaar
 {
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $id;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer", options={"default"=0})
-	 */
-	public $boek_id;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer', options: ['default' => 0])]
+ public $boek_id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 */
-	public $eigenaar_uid;
+  * @var string
+  */
+ #[ORM\Column(type: 'uid')]
+ public $eigenaar_uid;
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="eigenaar_uid", referencedColumnName="uid")
-	 */
-	public $eigenaar;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'eigenaar_uid', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ public $eigenaar;
 	/**
-	 * @var string
-	 * @ORM\Column(type="text")
-	 */
-	public $opmerking;
+  * @var string
+  */
+ #[ORM\Column(type: 'text')]
+ public $opmerking;
 
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid", nullable=true)
-	 */
-	public $uitgeleend_uid;
+  * @var string
+  */
+ #[ORM\Column(type: 'uid', nullable: true)]
+ public $uitgeleend_uid;
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uitgeleend_uid", referencedColumnName="uid")
-	 */
-	public $uitgeleend;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'uitgeleend_uid', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ public $uitgeleend;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $toegevoegd;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime')]
+ public $toegevoegd;
 	/**
-	 * @var BoekExemplaarStatus
-	 * @ORM\Column(type="enumBoekExemplaarStatus")
-	 */
-	public $status;
+  * @var BoekExemplaarStatus
+  */
+ #[ORM\Column(type: 'enumBoekExemplaarStatus')]
+ public $status;
 	/**
-	 * @var DateTimeImmutable|null
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	public $uitleendatum;
+  * @var DateTimeImmutable|null
+  */
+ #[ORM\Column(type: 'datetime', nullable: true)]
+ public $uitleendatum;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer", options={"default"=0})
-	 */
-	public $leningen;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer', options: ['default' => 0])]
+ public $leningen;
 
 	/**
-	 * @var Boek
-	 * @ORM\ManyToOne(targetEntity="Boek", inversedBy="exemplaren")
-	 */
-	public $boek;
+  * @var Boek
+  */
+ #[ORM\ManyToOne(targetEntity: \Boek::class, inversedBy: 'exemplaren')]
+ public $boek;
 
 	public function isBiebBoek(): bool
 	{

@@ -7,95 +7,95 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package CsrDelft\entity\bibliotheek
- * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BoekRepository")
- * @ORM\Table("biebboek")
  */
+#[ORM\Table('biebboek')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\bibliotheek\BoekRepository::class)]
 class Boek
 {
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $id;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $titel;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $titel;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $auteur;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $auteur;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $uitgavejaar;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $uitgavejaar;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string", nullable=true)
-	 */
-	public $uitgeverij;
+  * @var string
+  */
+ #[ORM\Column(type: 'string', nullable: true)]
+ public $uitgeverij;
 	/**
-	 * @var int|null
-	 * @ORM\Column(type="integer", nullable=true)
-	 */
-	public $paginas;
+  * @var int|null
+  */
+ #[ORM\Column(type: 'integer', nullable: true)]
+ public $paginas;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $taal = 'Nederlands';
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $taal = 'Nederlands';
 	/**
-	 * @var string|null
-	 * @ORM\Column(type="string", nullable=true)
-	 */
-	public $isbn;
+  * @var string|null
+  */
+ #[ORM\Column(type: 'string', nullable: true)]
+ public $isbn;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $code;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $code;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer", nullable=true)
-	 */
-	public $categorie_id;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer', nullable: true)]
+ public $categorie_id;
 
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer", options={"default"=0})
-	 */
-	public $auteur_id = 0;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer', options: ['default' => 0])]
+ public $auteur_id = 0;
 
 	/**
-	 * @var BiebAuteur
-	 * @ORM\ManyToOne(targetEntity="BiebAuteur")
-	 * @ORM\JoinColumn(name="auteur_id", referencedColumnName="id")
-	 */
-	public $auteur2;
+  * @var BiebAuteur
+  */
+ #[ORM\JoinColumn(name: 'auteur_id', referencedColumnName: 'id')]
+ #[ORM\ManyToOne(targetEntity: \BiebAuteur::class)]
+ public $auteur2;
 
 	/**
-	 * @var BoekRecensie[]
-	 * @ORM\OneToMany(targetEntity="BoekRecensie", mappedBy="boek")
-	 */
-	protected $recensies;
+  * @var BoekRecensie[]
+  */
+ #[ORM\OneToMany(targetEntity: \BoekRecensie::class, mappedBy: 'boek')]
+ protected $recensies;
 
 	/**
-	 * @var BoekExemplaar[]
-	 * @ORM\OneToMany(targetEntity="BoekExemplaar", mappedBy="boek")
-	 */
-	protected $exemplaren;
+  * @var BoekExemplaar[]
+  */
+ #[ORM\OneToMany(targetEntity: \BoekExemplaar::class, mappedBy: 'boek')]
+ protected $exemplaren;
 
 	/**
-	 * @var BiebRubriek|null
-	 * @ORM\ManyToOne(targetEntity="BiebRubriek")
-	 * @ORM\JoinColumn(name="categorie_id", referencedColumnName="id")
-	 */
-	protected $categorie;
+  * @var BiebRubriek|null
+  */
+ #[ORM\JoinColumn(name: 'categorie_id', referencedColumnName: 'id')]
+ #[ORM\ManyToOne(targetEntity: \BiebRubriek::class)]
+ protected $categorie;
 
 	public function getRubriek(): ?BiebRubriek
 	{

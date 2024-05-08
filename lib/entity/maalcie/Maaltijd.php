@@ -43,110 +43,109 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  *
  * Zie ook MaaltijdAanmelding.class.php
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdenRepository")
- * @ORM\Table("mlt_maaltijden")
  */
+#[ORM\Table('mlt_maaltijden')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\maalcie\MaaltijdenRepository::class)]
 class Maaltijd implements Agendeerbaar, DisplayEntity
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
-	 */
-	public $maaltijd_id;
+  * @var integer
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $maaltijd_id;
 	/**
-	 * @var integer|null
-	 * @ORM\Column(type="integer", nullable=true)
-	 * @Serializer\Groups("datatable")
-	 */
-	public $mlt_repetitie_id;
+  * @var integer|null
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'integer', nullable: true)]
+ public $mlt_repetitie_id;
 	/**
-	 * @var MaaltijdRepetitie|null
-	 * @ORM\ManyToOne(targetEntity="MaaltijdRepetitie")
-	 * @ORM\JoinColumn(name="mlt_repetitie_id", referencedColumnName="mlt_repetitie_id", nullable=true)
-	 */
-	public $repetitie;
+  * @var MaaltijdRepetitie|null
+  */
+ #[ORM\JoinColumn(name: 'mlt_repetitie_id', referencedColumnName: 'mlt_repetitie_id', nullable: true)]
+ #[ORM\ManyToOne(targetEntity: \MaaltijdRepetitie::class)]
+ public $repetitie;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $product_id;
+  * @var integer
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'integer')]
+ public $product_id;
 	/**
-	 * @var CiviProduct
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\fiscaat\CiviProduct")
-	 */
-	public $product;
+  * @var CiviProduct
+  */
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\fiscaat\CiviProduct::class)]
+ public $product;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $titel;
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'string')]
+ public $titel;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $aanmeld_limiet;
+  * @var int
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'integer')]
+ public $aanmeld_limiet;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="date")
-	 */
-	public $datum;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'date')]
+ public $datum;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="time")
-	 */
-	public $tijd;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'time')]
+ public $tijd;
 	/**
-	 * @var bool
-	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $gesloten = false;
+  * @var bool
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'boolean')]
+ public $gesloten = false;
 	/**
-	 * @var DateTimeInterface|null
-	 * @ORM\Column(type="datetime", nullable=true)
-	 * @Serializer\Groups("datatable")
-	 */
-	public $laatst_gesloten;
+  * @var DateTimeInterface|null
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'datetime', nullable: true)]
+ public $laatst_gesloten;
 	/**
-	 * @var bool
-	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $verwijderd = false;
+  * @var bool
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'boolean')]
+ public $verwijderd = false;
 	/**
-	 * @var string|null
-	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups("datatable")
-	 */
-	public $aanmeld_filter;
+  * @var string|null
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'string', nullable: true)]
+ public $aanmeld_filter;
 	/**
-	 * @var string|null
-	 * @ORM\Column(type="text", nullable=true)
-	 * @Serializer\Groups("datatable")
-	 */
-	public $omschrijving;
+  * @var string|null
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'text', nullable: true)]
+ public $omschrijving;
 	/**
 	 * @var integer
 	 */
 	public $aantal_aanmeldingen;
 	/**
-	 * @var bool
-	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $verwerkt = false;
+  * @var bool
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'boolean')]
+ public $verwerkt = false;
 	/**
-	 * @var MaaltijdAanmelding[]|ArrayCollection
-	 * @ORM\OneToMany(targetEntity="MaaltijdAanmelding", mappedBy="maaltijd")
-	 */
-	public $aanmeldingen;
+  * @var MaaltijdAanmelding[]|ArrayCollection
+  */
+ #[ORM\OneToMany(targetEntity: \MaaltijdAanmelding::class, mappedBy: 'maaltijd')]
+ public $aanmeldingen;
 	/**
 	 * De taak die rechten geeft voor het bekijken en sluiten van de maaltijd(-lijst)
 	 * @var CorveeTaak

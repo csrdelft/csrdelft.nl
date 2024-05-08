@@ -7,33 +7,23 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=DeclaratieCategorieRepository::class)
- */
+#[ORM\Entity(repositoryClass: DeclaratieCategorieRepository::class)]
 class DeclaratieCategorie
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
-	private $id;
+	#[ORM\Id]
+ #[ORM\GeneratedValue]
+ #[ORM\Column(type: 'integer')]
+ private $id;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 */
-	private $naam;
+	#[ORM\Column(type: 'string', length: 255)]
+ private $naam;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=DeclaratieWachtrij::class, inversedBy="categorieen")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	private $wachtrij;
+	#[ORM\JoinColumn(nullable: false)]
+ #[ORM\ManyToOne(targetEntity: DeclaratieWachtrij::class, inversedBy: 'categorieen')]
+ private $wachtrij;
 
-	/**
-	 * @ORM\OneToMany(targetEntity=Declaratie::class, mappedBy="categorie")
-	 */
-	private $declaraties;
+	#[ORM\OneToMany(targetEntity: Declaratie::class, mappedBy: 'categorie')]
+ private $declaraties;
 
 	public function __construct()
 	{

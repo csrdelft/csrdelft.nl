@@ -17,52 +17,50 @@ use Doctrine\ORM\PersistentCollection;
  *
  * Een menu-item instantie beschrijft een menu onderdeel van een menu-boom
  * en heeft daarom een parent.
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\MenuItemRepository")
- * @ORM\Table("menus", indexes={
- *   @ORM\Index(name="prioriteit", columns={"volgorde"})
- * })
  */
+#[ORM\Table('menus')]
+#[ORM\Index(name: 'prioriteit', columns: ['volgorde'])]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\MenuItemRepository::class)]
 class MenuItem implements DisplayEntity
 {
 	/**
-	 * Primary key
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $item_id;
+  * Primary key
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $item_id;
 	/**
-	 * Volgorde van weergave
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $volgorde;
+  * Volgorde van weergave
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $volgorde;
 	/**
-	 * Link tekst
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $tekst;
+  * Link tekst
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $tekst;
 	/**
-	 * Link url
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $link;
+  * Link url
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $link;
 	/**
-	 * LoginModel::mag
-	 * @var string
-	 * @ORM\Column(type="string", nullable=true)
-	 */
-	public $rechten_bekijken;
+  * LoginModel::mag
+  * @var string
+  */
+ #[ORM\Column(type: 'string', nullable: true)]
+ public $rechten_bekijken;
 	/**
-	 * Zichtbaar of verborgen
-	 * @var boolean
-	 * @ORM\Column(type="boolean")
-	 */
-	public $zichtbaar;
+  * Zichtbaar of verborgen
+  * @var boolean
+  */
+ #[ORM\Column(type: 'boolean')]
+ public $zichtbaar;
 	/**
 	 * State of menu GUI
 	 * @var boolean
@@ -70,18 +68,18 @@ class MenuItem implements DisplayEntity
 	public $active;
 
 	/**
-	 * @var MenuItem|null
-	 * @ORM\ManyToOne(targetEntity="MenuItem", inversedBy="children")
-	 * @ORM\JoinColumn(fieldName="parent_id", referencedColumnName="item_id")
-	 */
-	public $parent;
+  * @var MenuItem|null
+  */
+ #[ORM\JoinColumn(fieldName: 'parent_id', referencedColumnName: 'item_id')]
+ #[ORM\ManyToOne(targetEntity: \MenuItem::class, inversedBy: 'children')]
+ public $parent;
 	/**
-	 * De sub-items van dit menu-item
-	 * @var MenuItem[]|PersistentCollection
-	 * @ORM\OneToMany(targetEntity="MenuItem", mappedBy="parent")
-	 * @ORM\OrderBy({"volgorde": "ASC", "tekst": "ASC"})
-	 */
-	public $children;
+  * De sub-items van dit menu-item
+  * @var MenuItem[]|PersistentCollection
+  */
+ #[ORM\OneToMany(targetEntity: \MenuItem::class, mappedBy: 'parent')]
+ #[ORM\OrderBy(['volgorde' => 'ASC', 'tekst' => 'ASC'])]
+ public $children;
 
 	public function hasChildren(): bool|int
 	{

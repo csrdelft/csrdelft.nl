@@ -16,63 +16,63 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Bevat een @see CiviPrijs
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviProductRepository")
  */
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\fiscaat\CiviProductRepository::class)]
 class CiviProduct implements DataTableEntry, DisplayEntity
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"datatable", "bar"})
-	 */
-	public $id;
+  * @var integer
+  * @Serializer\Groups({"datatable", "bar"})
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "bar"})
-	 */
-	public $status;
+  * @var integer
+  * @Serializer\Groups({"datatable", "bar"})
+  */
+ #[ORM\Column(type: 'integer')]
+ public $status;
 	/**
-	 * @var string
-	 * @ORM\Column(type="text")
-	 * @Serializer\Groups({"datatable", "bar"})
-	 */
-	public $beschrijving;
+  * @var string
+  * @Serializer\Groups({"datatable", "bar"})
+  */
+ #[ORM\Column(type: 'text')]
+ public $beschrijving;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "bar"})
-	 */
-	public $prioriteit;
+  * @var integer
+  * @Serializer\Groups({"datatable", "bar"})
+  */
+ #[ORM\Column(type: 'integer')]
+ public $prioriteit;
 	/**
-	 * @var boolean
-	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups({"datatable", "bar"})
-	 */
-	public $beheer;
+  * @var boolean
+  * @Serializer\Groups({"datatable", "bar"})
+  */
+ #[ORM\Column(type: 'boolean')]
+ public $beheer;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 */
-	public $categorie_id;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ public $categorie_id;
 	/**
-	 * @var CiviCategorie
-	 * @ORM\ManyToOne(targetEntity="CiviCategorie")
-	 */
-	public $categorie;
+  * @var CiviCategorie
+  */
+ #[ORM\ManyToOne(targetEntity: \CiviCategorie::class)]
+ public $categorie;
 	/**
 	 * Tijdelijke placeholder
 	 * @var integer
 	 */
 	public $tmpPrijs;
 	/**
-	 * @var CiviPrijs[]|ArrayCollection
-	 * @ORM\OneToMany(targetEntity="CiviPrijs", mappedBy="product")
-	 * @ORM\OrderBy({"van" = "ASC"})
-	 */
-	public $prijzen;
+  * @var CiviPrijs[]|ArrayCollection
+  */
+ #[ORM\OneToMany(targetEntity: \CiviPrijs::class, mappedBy: 'product')]
+ #[ORM\OrderBy(['van' => 'ASC'])]
+ public $prijzen;
 
 	/**
 	 * @return string

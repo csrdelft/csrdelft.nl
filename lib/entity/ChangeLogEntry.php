@@ -10,60 +10,60 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * ChangeLogEntry.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- * @ORM\Entity(repositoryClass="CsrDelft\repository\ChangeLogRepository")
- * @ORM\Table("changelog")
  */
+#[ORM\Table('changelog')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\ChangeLogRepository::class)]
 class ChangeLogEntry
 {
 	/**
-	 * Primary key
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
-	 */
-	public $id;
+  * Primary key
+  * @var int
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * The moment it changed
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $moment;
+  * The moment it changed
+  * @var DateTimeImmutable
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'datetime')]
+ public $moment;
 	/**
-	 * The thing that changed
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $subject;
+  * The thing that changed
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'string')]
+ public $subject;
 	/**
-	 * The property that changed
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $property;
+  * The property that changed
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'string')]
+ public $property;
 	/**
-	 * The value before
-	 * @var string
-	 * @ORM\Column(type="text", nullable=true)
-	 * @Serializer\Groups("datatable")
-	 */
-	public $old_value;
+  * The value before
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'text', nullable: true)]
+ public $old_value;
 	/**
-	 * The value after
-	 * @var string
-	 * @ORM\Column(type="text", nullable=true)
-	 * @Serializer\Groups("datatable")
-	 */
-	public $new_value;
+  * The value after
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'text', nullable: true)]
+ public $new_value;
 	/**
-	 * Lidnummer of who did it
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $uid;
+  * Lidnummer of who did it
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'uid')]
+ public $uid;
 }

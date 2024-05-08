@@ -21,54 +21,54 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 23/02/2018
- * @ORM\Entity(repositoryClass="CsrDelft\repository\pin\PinTransactieMatchRepository")
- * @ORM\Table("pin_transactie_match")
  */
+#[ORM\Table('pin_transactie_match')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\pin\PinTransactieMatchRepository::class)]
 class PinTransactieMatch implements DataTableEntry
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
-	 */
-	public $id;
+  * @var integer
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $status;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $status;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer", nullable=true)
-	 * @Serializer\Groups("datatable")
-	 */
-	public $transactie_id;
+  * @var integer
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'integer', nullable: true)]
+ public $transactie_id;
 	/**
-	 * @var PinTransactie|null
-	 * @ORM\ManyToOne(targetEntity="PinTransactie")
-	 * @ORM\JoinColumn(nullable=true)
-	 */
-	public $transactie;
+  * @var PinTransactie|null
+  */
+ #[ORM\JoinColumn(nullable: true)]
+ #[ORM\ManyToOne(targetEntity: \PinTransactie::class)]
+ public $transactie;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer", nullable=true)
-	 * @Serializer\Groups("datatable")
-	 */
-	public $bestelling_id;
+  * @var integer
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'integer', nullable: true)]
+ public $bestelling_id;
 	/**
-	 * @var CiviBestelling|null
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\fiscaat\CiviBestelling")
-	 * @ORM\JoinColumn(nullable=true)
-	 */
-	public $bestelling;
+  * @var CiviBestelling|null
+  */
+ #[ORM\JoinColumn(nullable: true)]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\fiscaat\CiviBestelling::class)]
+ public $bestelling;
 	/**
-	 * @var string
-	 * @ORM\Column(type="text", length=65535, nullable=true)
-	 * @Serializer\Groups("datatable")
-	 */
-	public $notitie;
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'text', length: 65535, nullable: true)]
+ public $notitie;
 
 	/**
 	 * @param PinTransactie $pinTransactie

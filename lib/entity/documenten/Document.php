@@ -13,76 +13,75 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Table("document", indexes={
- *   @ORM\Index(name="Zoeken", columns={"naam", "filename"}, flags={"fulltext"}),
- *   @ORM\Index(name="toegevoegd", columns={"toegevoegd"})
- * })
- * @ORM\Entity(repositoryClass="CsrDelft\repository\documenten\DocumentRepository")
  */
+#[ORM\Table('document')]
+#[ORM\Index(name: 'Zoeken', columns: ['naam', 'filename'], flags: ['fulltext'])]
+#[ORM\Index(name: 'toegevoegd', columns: ['toegevoegd'])]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\documenten\DocumentRepository::class)]
 class Document extends Bestand
 {
 	/**
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="integer")
-	 * @var int
-	 */
-	public $id;
+  * @var int
+  */
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ #[ORM\Column(type: 'integer')]
+ public $id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $naam;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $naam;
 	/**
-	 * @var DocumentCategorie
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\documenten\DocumentCategorie", inversedBy="documenten")
-	 */
-	public $categorie;
+  * @var DocumentCategorie
+  */
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\documenten\DocumentCategorie::class, inversedBy: 'documenten')]
+ public $categorie;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $categorie_id;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $categorie_id;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $toegevoegd;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime')]
+ public $toegevoegd;
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 */
-	public $eigenaar;
+  * @var string
+  */
+ #[ORM\Column(type: 'uid')]
+ public $eigenaar;
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="eigenaar", referencedColumnName="uid")
-	 */
-	public $eigenaar_profiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'eigenaar', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ public $eigenaar_profiel;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $leesrechten = P_LOGGED_IN;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $leesrechten = P_LOGGED_IN;
 
 	/**
-	 * Bestandsnaam
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $filename;
+  * Bestandsnaam
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $filename;
 	/**
-	 * Bestandsgrootte in bytes
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $filesize;
+  * Bestandsgrootte in bytes
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $filesize;
 	/**
-	 * Mime-type van het bestand
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $mimetype;
+  * Mime-type van het bestand
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $mimetype;
 	/**
 	 * Locatie van bestand
 	 * @var string

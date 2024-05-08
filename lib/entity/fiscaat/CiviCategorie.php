@@ -13,36 +13,34 @@ use Doctrine\ORM\Mapping as ORM;
  * Als er veel gebruik gemaakt gaat worden van categorien en commissies moet hier uitgebreid worden.
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviCategorieRepository")
- * @ORM\Table("civi_categorie", indexes={
- *   @ORM\Index(name="cie", columns={"cie"})
- * })
  */
+#[ORM\Table('civi_categorie')]
+#[ORM\Index(name: 'cie', columns: ['cie'])]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\fiscaat\CiviCategorieRepository::class)]
 class CiviCategorie implements DisplayEntity
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $id;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $type;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $type;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 */
-	public $status;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ public $status;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * TODO Dit is een CiviSaldoCommissieEnum
-	 */
-	public $cie;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')] // TODO Dit is een CiviSaldoCommissieEnum
+ public $cie;
 
 	public function getBeschrijving(): string
 	{

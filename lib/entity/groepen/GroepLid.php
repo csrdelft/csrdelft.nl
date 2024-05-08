@@ -14,11 +14,10 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 /**
  * Class GroepLid
  * @package CsrDelft\entity\groepen2
- * @ORM\Entity(repositoryClass="CsrDelft\repository\GroepLidRepository")
- * @ORM\Table("groep_lid", indexes={
- *   @ORM\Index(name="lid_sinds", columns={"lid_sinds"})
- * })
  */
+#[ORM\Table('groep_lid')]
+#[ORM\Index(name: 'lid_sinds', columns: ['lid_sinds'])]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\GroepLidRepository::class)]
 class GroepLid
 {
 	/**
@@ -37,68 +36,68 @@ class GroepLid
 	}
 
 	/**
-	 * Shared primary key
-	 * Foreign key
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @Serializer\Groups("datatable")
-	 */
-	public $groepId;
+  * Shared primary key
+  * Foreign key
+  * @var int
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ public $groepId;
 	/**
-	 * Lidnummer
-	 * Shared primary key
-	 * Foreign key
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $uid;
+  * Lidnummer
+  * Shared primary key
+  * Foreign key
+  * @var string
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'uid')]
+ #[ORM\Id]
+ public $uid;
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-	 */
-	public $profiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ public $profiel;
 	/**
-	 * CommissieFunctie of opmerking bij lidmaatschap
-	 * @var CommissieFunctie|string
-	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups("datatable")
-	 */
-	public $opmerking;
+  * CommissieFunctie of opmerking bij lidmaatschap
+  * @var CommissieFunctie|string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'string', nullable: true)]
+ public $opmerking;
 	/**
-	 * @var GroepKeuzeSelectie[]
-	 * @ORM\Column(type="groepkeuzeselectie", nullable=true)
-	 * @Serializer\Groups("vue")
-	 */
-	public $opmerking2;
+  * @var GroepKeuzeSelectie[]
+  * @Serializer\Groups("vue")
+  */
+ #[ORM\Column(type: 'groepkeuzeselectie', nullable: true)]
+ public $opmerking2;
 	/**
-	 * Datum en tijd van aanmelden
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $lidSinds;
+  * Datum en tijd van aanmelden
+  * @var DateTimeImmutable
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'datetime')]
+ public $lidSinds;
 	/**
-	 * Lidnummer van aanmelder
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 */
-	public $doorUid;
+  * Lidnummer van aanmelder
+  * @var string
+  */
+ #[ORM\Column(type: 'uid')]
+ public $doorUid;
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="door_uid", referencedColumnName="uid")
-	 */
-	public $doorProfiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'door_uid', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ public $doorProfiel;
 	/**
-	 * @var Groep
-	 * @ORM\ManyToOne(targetEntity="Groep", inversedBy="leden")
-	 * @ORM\JoinColumn(name="groep_id", referencedColumnName="id")
-	 */
-	public $groep;
+  * @var Groep
+  */
+ #[ORM\JoinColumn(name: 'groep_id', referencedColumnName: 'id')]
+ #[ORM\ManyToOne(targetEntity: \Groep::class, inversedBy: 'leden')]
+ public $groep;
 
 	/**
 	 * @return string|null

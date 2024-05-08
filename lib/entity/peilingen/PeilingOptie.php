@@ -9,60 +9,59 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Entity(repositoryClass="CsrDelft\repository\peilingen\PeilingOptiesRepository")
- * @ORM\Table("peiling_optie", indexes={
- *   @ORM\Index(name="optie", columns={"titel"})
- * })
  */
+#[ORM\Table('peiling_optie')]
+#[ORM\Index(name: 'optie', columns: ['titel'])]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\peilingen\PeilingOptiesRepository::class)]
 class PeilingOptie implements DataTableEntry
 {
 	/**
-	 * Primary key
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $id;
+  * Primary key
+  * @var int
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * Foreign key
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $peiling_id;
+  * Foreign key
+  * @var int
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'integer')]
+ public $peiling_id;
 	/**
-	 * Titel
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $titel;
+  * Titel
+  * @var string
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'string')]
+ public $titel;
 	/**
-	 * @var string
-	 * @ORM\Column(type="text", nullable=true)
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $beschrijving;
+  * @var string
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'text', nullable: true)]
+ public $beschrijving;
 	/**
-	 * Aantal stemmen
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable"})
-	 */
-	public $stemmen = 0;
+  * Aantal stemmen
+  * @var int
+  * @Serializer\Groups({"datatable"})
+  */
+ #[ORM\Column(type: 'integer')]
+ public $stemmen = 0;
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid", nullable=true)
-	 * @Serializer\Groups({"datatable"})
-	 */
-	public $ingebracht_door;
+  * @var string
+  * @Serializer\Groups({"datatable"})
+  */
+ #[ORM\Column(type: 'uid', nullable: true)]
+ public $ingebracht_door;
 	/**
-	 * @var Peiling
-	 * @ORM\ManyToOne(targetEntity="Peiling", inversedBy="opties")
-	 */
-	public $peiling;
+  * @var Peiling
+  */
+ #[ORM\ManyToOne(targetEntity: \Peiling::class, inversedBy: 'opties')]
+ public $peiling;
 
 	/**
 	 * @return int

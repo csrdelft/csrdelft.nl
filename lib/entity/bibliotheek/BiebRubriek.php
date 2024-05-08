@@ -6,35 +6,35 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package CsrDelft\entity\bibliotheek
- * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BiebRubriekRepository")
- * @ORM\Table("biebcategorie")
  */
+#[ORM\Table('biebcategorie')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\bibliotheek\BiebRubriekRepository::class)]
 class BiebRubriek
 {
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $id;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * @var int parent rubriek
-	 * @ORM\Column(type="integer", nullable=true)
-	 */
-	public $p_id;
+  * @var int parent rubriek
+  */
+ #[ORM\Column(type: 'integer', nullable: true)]
+ public $p_id;
 	/**
-	 * @var string naam
-	 * @ORM\Column(type="string")
-	 */
-	public $categorie;
+  * @var string naam
+  */
+ #[ORM\Column(type: 'string')]
+ public $categorie;
 
 	/**
-	 * @var BiebRubriek
-	 * @ORM\ManyToOne(targetEntity="BiebRubriek")
-	 * @ORM\JoinColumn(name="p_id", referencedColumnName="id")
-	 */
-	protected $parent;
+  * @var BiebRubriek
+  */
+ #[ORM\JoinColumn(name: 'p_id', referencedColumnName: 'id')]
+ #[ORM\ManyToOne(targetEntity: \BiebRubriek::class)]
+ protected $parent;
 
 	public function __toString(): string
 	{

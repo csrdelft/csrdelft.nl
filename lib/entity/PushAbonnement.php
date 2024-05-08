@@ -9,39 +9,38 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author S. Benjamins <sebastiaan@benjami.in>
  *
  * De informatie die nodig is voor de web-push notificaties.
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\PushAbonnementRepository")
  */
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\PushAbonnementRepository::class)]
 class PushAbonnement
 {
 	/**
-	 * Primary key
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
-	 */
-	public $id;
+  * Primary key
+  * @var int
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $uid;
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'uid')]
+ public $uid;
 
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $client_endpoint;
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'string')]
+ public $client_endpoint;
 
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $client_keys;
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'string')]
+ public $client_keys;
 }

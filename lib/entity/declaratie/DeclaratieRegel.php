@@ -6,43 +6,29 @@ use CsrDelft\repository\declaratie\DeclaratieRegelRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-/**
- * @ORM\Entity(repositoryClass=DeclaratieRegelRepository::class)
- */
+#[ORM\Entity(repositoryClass: DeclaratieRegelRepository::class)]
 class DeclaratieRegel
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
-	private $id;
+	#[ORM\Id]
+ #[ORM\GeneratedValue]
+ #[ORM\Column(type: 'integer')]
+ private $id;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=DeclaratieBon::class, inversedBy="regels")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	private $bon;
+	#[ORM\JoinColumn(nullable: false)]
+ #[ORM\ManyToOne(targetEntity: DeclaratieBon::class, inversedBy: 'regels')]
+ private $bon;
 
-	/**
-	 * @ORM\Column(type="float", nullable=true)
-	 */
-	private $bedrag;
+	#[ORM\Column(type: 'float', nullable: true)]
+ private $bedrag;
 
-	/**
-	 * @ORM\Column(type="boolean", nullable=true)
-	 */
-	private $inclBtw;
+	#[ORM\Column(type: 'boolean', nullable: true)]
+ private $inclBtw;
 
-	/**
-	 * @ORM\Column(type="integer", nullable=true)
-	 */
-	private $btw;
+	#[ORM\Column(type: 'integer', nullable: true)]
+ private $btw;
 
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 */
-	private $omschrijving;
+	#[ORM\Column(type: 'string', length: 255, nullable: true)]
+ private $omschrijving;
 
 	public function getId(): ?int
 	{

@@ -10,27 +10,26 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Kring.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\KringenRepository")
  */
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\groepen\KringenRepository::class)]
 class Kring extends Groep implements HeeftMoment
 {
 	use GroepMoment;
 
 	/**
-	 * Verticaleletter
-	 * @var string
-	 * @ORM\Column(type="string", length=1, options={"fixed"=true})
-	 * @Serializer\Groups({"datatable", "log"})
-	 */
-	public $verticale;
+  * Verticaleletter
+  * @var string
+  * @Serializer\Groups({"datatable", "log"})
+  */
+ #[ORM\Column(type: 'string', length: 1, options: ['fixed' => true])]
+ public $verticale;
 	/**
-	 * Kringnummer
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "log"})
-	 */
-	public $kringNummer;
+  * Kringnummer
+  * @var int
+  * @Serializer\Groups({"datatable", "log"})
+  */
+ #[ORM\Column(type: 'integer')]
+ public $kringNummer;
 
 	public function getUrl(): string
 	{

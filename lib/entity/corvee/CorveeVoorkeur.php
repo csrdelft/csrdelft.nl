@@ -11,36 +11,35 @@ use Doctrine\ORM\Mapping as ORM;
  * Een crv_voorkeur instantie beschrijft een voorkeur van een lid om een periodieke taak uit te voeren.
  *
  * @see CorveeRepetitie
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeVoorkeurenRepository")
- * @ORM\Table("crv_voorkeuren")
  */
+#[ORM\Table('crv_voorkeuren')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\corvee\CorveeVoorkeurenRepository::class)]
 class CorveeVoorkeur
 {
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
-	 */
-	public $uid;
+  * @var string
+  */
+ #[ORM\Column(type: 'uid')]
+ #[ORM\Id]
+ public $uid;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 */
-	public $crv_repetitie_id;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ public $crv_repetitie_id;
 	/**
-	 * @var CorveeRepetitie
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\corvee\CorveeRepetitie")
-	 * @ORM\JoinColumn(name="crv_repetitie_id", referencedColumnName="crv_repetitie_id")
-	 */
-	public $corveeRepetitie;
+  * @var CorveeRepetitie
+  */
+ #[ORM\JoinColumn(name: 'crv_repetitie_id', referencedColumnName: 'crv_repetitie_id')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\corvee\CorveeRepetitie::class)]
+ public $corveeRepetitie;
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-	 */
-	public $profiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ public $profiel;
 
 	public $van_uid;
 

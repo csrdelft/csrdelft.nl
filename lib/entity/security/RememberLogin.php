@@ -17,76 +17,75 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * RememberLogin.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\security\RememberLoginRepository")
- * @ORM\Table("login_remember")
  */
+#[ORM\Table('login_remember')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\security\RememberLoginRepository::class)]
 class RememberLogin implements DataTableEntry, PersistentTokenInterface
 {
 	/**
-	 * Primary key
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
-	 */
-	public $id;
+  * Primary key
+  * @var int
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $series;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $series;
 	/**
-	 * Token string
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $token;
+  * Token string
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $token;
 	/**
-	 * Lidnummer
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $uid;
+  * Lidnummer
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'uid')]
+ public $uid;
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-	 */
-	public $profiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ public $profiel;
 	/**
-	 * DateTime
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $remember_since;
+  * DateTime
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime')]
+ public $remember_since;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $last_used;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime')]
+ public $last_used;
 	/**
-	 * Device name
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $device_name;
+  * Device name
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'string')]
+ public $device_name;
 	/**
-	 * IP address
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $ip;
+  * IP address
+  * @var string
+  * @Serializer\Groups("datatable")
+  */
+ #[ORM\Column(type: 'string')]
+ public $ip;
 	/**
-	 * Sessie koppelen aan ip
-	 * @var boolean
-	 * @ORM\Column(type="boolean")
-	 */
-	public $lock_ip;
+  * Sessie koppelen aan ip
+  * @var boolean
+  */
+ #[ORM\Column(type: 'boolean')]
+ public $lock_ip;
 
 	/**
 	 * @return string|null

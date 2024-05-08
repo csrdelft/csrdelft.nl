@@ -15,100 +15,99 @@ use Symfony\Component\Uid\Uuid;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Login account.
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\security\AccountRepository")
- * @ORM\Table("accounts")
  */
+#[ORM\Table('accounts')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\security\AccountRepository::class)]
 class Account implements UserInterface, PasswordAuthenticatedUserInterface
 {
 	/**
-	 * Lidnummer
-	 * Foreign key
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
-	 */
-	public $uid;
+  * Lidnummer
+  * Foreign key
+  * @var string
+  */
+ #[ORM\Column(type: 'uid')]
+ #[ORM\Id]
+ public $uid;
 
 	/**
-	 * Unieke id voor externe applicaties
-	 * @var Uuid
-	 * @ORM\Column(type="uuid", unique=true)
-	 */
-	public $uuid;
+  * Unieke id voor externe applicaties
+  * @var Uuid
+  */
+ #[ORM\Column(type: 'uuid', unique: true)]
+ public $uuid;
 	/**
-	 * Gebruikersnaam
-	 * @var string
-	 * @ORM\Column(type="stringkey", unique=true)
-	 */
-	public $username;
+  * Gebruikersnaam
+  * @var string
+  */
+ #[ORM\Column(type: 'stringkey', unique: true)]
+ public $username;
 	/**
-	 * E-mail address
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $email;
+  * E-mail address
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $email;
 	/**
-	 * Password hash
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $pass_hash;
+  * Password hash
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $pass_hash;
 	/**
-	 * DateTime last change
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	public $pass_since;
+  * DateTime last change
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime', nullable: true)]
+ public $pass_since;
 	/**
-	 * DateTime last successful login
-	 * @var DateTimeImmutable|null
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	public $last_login_success;
+  * DateTime last successful login
+  * @var DateTimeImmutable|null
+  */
+ #[ORM\Column(type: 'datetime', nullable: true)]
+ public $last_login_success;
 	/**
-	 * DateTime last login attempt
-	 * @var DateTimeImmutable|null
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	public $last_login_attempt;
+  * DateTime last login attempt
+  * @var DateTimeImmutable|null
+  */
+ #[ORM\Column(type: 'datetime', nullable: true)]
+ public $last_login_attempt;
 	/**
-	 * Amount of failed login attempts
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $failed_login_attempts;
+  * Amount of failed login attempts
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $failed_login_attempts;
 	/**
-	 * Reden van blokkering
-	 * @var string|null
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	public $blocked_reason;
+  * Reden van blokkering
+  * @var string|null
+  */
+ #[ORM\Column(type: 'text', nullable: true)]
+ public $blocked_reason;
 	/**
-	 * RBAC permissions role
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $perm_role;
+  * RBAC permissions role
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $perm_role;
 	/**
-	 * RSS & ICAL token
-	 * @var string|null
-	 * @ORM\Column(type="string", nullable=true)
-	 */
-	public $private_token;
+  * RSS & ICAL token
+  * @var string|null
+  */
+ #[ORM\Column(type: 'string', nullable: true)]
+ public $private_token;
 	/**
-	 * DateTime last change
-	 * @var DateTimeImmutable|null
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	public $private_token_since;
+  * DateTime last change
+  * @var DateTimeImmutable|null
+  */
+ #[ORM\Column(type: 'datetime', nullable: true)]
+ public $private_token_since;
 
 	/**
-	 * @var Profiel
-	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel", inversedBy="account")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-	 */
-	public $profiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
+ #[ORM\OneToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class, inversedBy: 'account')]
+ public $profiel;
 
 	public function hasPrivateToken(): bool
 	{

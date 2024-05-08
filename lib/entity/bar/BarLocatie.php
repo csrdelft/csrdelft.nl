@@ -9,43 +9,43 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 /**
  * Class BarLocatie
  * @package CsrDelft\entity\bar
- * @ORM\Entity()
  */
+#[ORM\Entity]
 class BarLocatie
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\GeneratedValue()
-	 * @ORM\Id()
-	 */
-	public $id;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\GeneratedValue]
+ #[ORM\Id]
+ public $id;
 
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\security\Account")
-	 * @ORM\JoinColumn(referencedColumnName="uid")
-	 */
-	public $doorAccount;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\security\Account::class)]
+ public $doorAccount;
 
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("json")
-	 */
-	public $ip;
+  * @var string
+  * @Serializer\Groups("json")
+  */
+ #[ORM\Column(type: 'string')]
+ public $ip;
 
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("json")
-	 */
-	public $naam;
+  * @var string
+  * @Serializer\Groups("json")
+  */
+ #[ORM\Column(type: 'string')]
+ public $naam;
 
 	/**
-	 * @var string
-	 * @ORM\Column(type="uuid")
-	 * @Serializer\Groups("json")
-	 */
-	public $sleutel;
+  * @var string
+  * @Serializer\Groups("json")
+  */
+ #[ORM\Column(type: 'uuid')]
+ public $sleutel;
 }

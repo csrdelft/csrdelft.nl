@@ -33,94 +33,93 @@ use Doctrine\ORM\Mapping as ORM;
  *
  *
  * Zie ook MaaltijdCorvee.class.php
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeTakenRepository")
- * @ORM\Table("crv_taken")
  */
+#[ORM\Table('crv_taken')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\corvee\CorveeTakenRepository::class)]
 class CorveeTaak implements Agendeerbaar
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $taak_id;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $taak_id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid", nullable=true)
-	 */
-	public $uid;
+  * @var string
+  */
+ #[ORM\Column(type: 'uid', nullable: true)]
+ public $uid;
 	/**
-	 * @var Profiel|null
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid", nullable=true)
-	 */
-	public $profiel;
+  * @var Profiel|null
+  */
+ #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid', nullable: true)]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ public $profiel;
 	/**
-	 * @var CorveeRepetitie|null
-	 * @ORM\ManyToOne(targetEntity="CorveeRepetitie")
-	 * @ORM\JoinColumn(name="crv_repetitie_id", referencedColumnName="crv_repetitie_id", nullable=true)
-	 */
-	public $corveeRepetitie;
+  * @var CorveeRepetitie|null
+  */
+ #[ORM\JoinColumn(name: 'crv_repetitie_id', referencedColumnName: 'crv_repetitie_id', nullable: true)]
+ #[ORM\ManyToOne(targetEntity: \CorveeRepetitie::class)]
+ public $corveeRepetitie;
 	/**
-	 * @ORM\Column(type="integer", nullable=true)
-	 * @var int
-	 */
-	public $maaltijd_id;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer', nullable: true)]
+ public $maaltijd_id;
 	/**
-	 * @var Maaltijd|null
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\maalcie\Maaltijd")
-	 * @ORM\JoinColumn(name="maaltijd_id", referencedColumnName="maaltijd_id", nullable=true)
-	 */
-	public $maaltijd;
+  * @var Maaltijd|null
+  */
+ #[ORM\JoinColumn(name: 'maaltijd_id', referencedColumnName: 'maaltijd_id', nullable: true)]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\maalcie\Maaltijd::class)]
+ public $maaltijd;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="date")
-	 */
-	public $datum;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'date')]
+ public $datum;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 */
-	public $punten;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ public $punten;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $bonus_malus = 0;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $bonus_malus = 0;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $punten_toegekend = 0;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $punten_toegekend = 0;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $bonus_toegekend = 0;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $bonus_toegekend = 0;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	public $wanneer_toegekend;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime', nullable: true)]
+ public $wanneer_toegekend;
 	/**
-	 * @var string
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	public $wanneer_gemaild;
+  * @var string
+  */
+ #[ORM\Column(type: 'text', nullable: true)]
+ public $wanneer_gemaild;
 	/**
-	 * @var bool
-	 * @ORM\Column(type="boolean")
-	 */
-	public $verwijderd = false;
+  * @var bool
+  */
+ #[ORM\Column(type: 'boolean')]
+ public $verwijderd = false;
 
 	/**
-	 * @var CorveeFunctie
-	 * @ORM\ManyToOne(targetEntity="CorveeFunctie")
-	 * @ORM\JoinColumn(name="functie_id", referencedColumnName="functie_id", nullable=false)
-	 */
-	public $corveeFunctie;
+  * @var CorveeFunctie
+  */
+ #[ORM\JoinColumn(name: 'functie_id', referencedColumnName: 'functie_id', nullable: false)]
+ #[ORM\ManyToOne(targetEntity: \CorveeFunctie::class)]
+ public $corveeFunctie;
 
 	public function getPuntenPrognose(): int
 	{

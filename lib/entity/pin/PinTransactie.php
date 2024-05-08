@@ -9,78 +9,78 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 06/09/2017
- * @ORM\Entity(repositoryClass="CsrDelft\repository\pin\PinTransactieRepository")
- * @ORM\Table("pin_transacties")
  */
+#[ORM\Table('pin_transacties')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\pin\PinTransactieRepository::class)]
 class PinTransactie
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $id;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * @var \DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $datetime;
+  * @var \DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime')]
+ public $datetime;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $brand;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $brand;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $merchant;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $merchant;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $store;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $store;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $terminal;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $terminal;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $TID;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $TID;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $MID;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $MID;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $ref;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $ref;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $type;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $type;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $amount;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $amount;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $AUTRSP;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $AUTRSP;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $STAN;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $STAN;
 
 	/**
 	 * @return int

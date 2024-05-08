@@ -16,100 +16,99 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\peilingen\PeilingenRepository")
- * @ORM\Table("peiling")
  */
+#[ORM\Table('peiling')]
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\peilingen\PeilingenRepository::class)]
 class Peiling implements DataTableEntry
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $id;
+  * @var integer
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $titel;
+  * @var string
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'string')]
+ public $titel;
 	/**
-	 * @var string
-	 * @ORM\Column(type="text")
-	 */
-	public $beschrijving;
+  * @var string
+  */
+ #[ORM\Column(type: 'text')]
+ public $beschrijving;
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid", nullable=true)
-	 * @Serializer\Groups("vue")
-	 */
-	public $eigenaar;
+  * @var string
+  * @Serializer\Groups("vue")
+  */
+ #[ORM\Column(type: 'uid', nullable: true)]
+ public $eigenaar;
 	/**
-	 * @var boolean
-	 * @ORM\Column(type="boolean", options={"default"=false})
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $mag_bewerken;
+  * @var boolean
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'boolean', options: ['default' => false])]
+ public $mag_bewerken;
 	/**
-	 * @var boolean
-	 * @ORM\Column(type="boolean", options={"default"=true})
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $resultaat_zichtbaar;
+  * @var boolean
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'boolean', options: ['default' => true])]
+ public $resultaat_zichtbaar;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer", options={"default"=0})
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $aantal_voorstellen;
+  * @var integer
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'integer', options: ['default' => 0])]
+ public $aantal_voorstellen;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer", options={"default"=1})
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $aantal_stemmen;
+  * @var integer
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'integer', options: ['default' => 1])]
+ public $aantal_stemmen;
 	/**
-	 * @var string|null
-	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $rechten_stemmen;
+  * @var string|null
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'string', nullable: true)]
+ public $rechten_stemmen;
 	/**
-	 * @var string|null
-	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $rechten_mod;
+  * @var string|null
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'string', nullable: true)]
+ public $rechten_mod;
 	/**
-	 * @var DateTimeImmutable|null
-	 * @ORM\Column(type="datetime", nullable=true)
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $sluitingsdatum;
+  * @var DateTimeImmutable|null
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\Column(type: 'datetime', nullable: true)]
+ public $sluitingsdatum;
 
 	/**
-	 * @var PeilingOptie[]|ArrayCollection
-	 * @ORM\OneToMany(targetEntity="PeilingOptie", mappedBy="peiling")
-	 * @Serializer\Groups({"datatable", "vue"})
-	 */
-	public $opties;
+  * @var PeilingOptie[]|ArrayCollection
+  * @Serializer\Groups({"datatable", "vue"})
+  */
+ #[ORM\OneToMany(targetEntity: \PeilingOptie::class, mappedBy: 'peiling')]
+ public $opties;
 
 	/**
-	 * @var PeilingStem[]|ArrayCollection
-	 * @ORM\OneToMany(targetEntity="PeilingStem", mappedBy="peiling")
-	 * @ORM\JoinColumn(name="id", referencedColumnName="peiling_id")
-	 */
-	public $stemmen;
+  * @var PeilingStem[]|ArrayCollection
+  */
+ #[ORM\JoinColumn(name: 'id', referencedColumnName: 'peiling_id')]
+ #[ORM\OneToMany(targetEntity: \PeilingStem::class, mappedBy: 'peiling')]
+ public $stemmen;
 
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="eigenaar", referencedColumnName="uid", nullable=true)
-	 */
-	public $eigenaarProfiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'eigenaar', referencedColumnName: 'uid', nullable: true)]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ public $eigenaarProfiel;
 
 	/**
 	 * @return int

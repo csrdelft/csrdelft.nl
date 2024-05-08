@@ -13,97 +13,67 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/**
- * @ORM\Entity(repositoryClass=DeclaratieRepository::class)
- */
+#[ORM\Entity(repositoryClass: DeclaratieRepository::class)]
 class Declaratie
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
-	private $id;
+	#[ORM\Id]
+ #[ORM\GeneratedValue]
+ #[ORM\Column(type: 'integer')]
+ private $id;
 
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(nullable=false, referencedColumnName="uid")
-	 */
-	private $indiener;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(nullable: false, referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ private $indiener;
+
+	#[ORM\JoinColumn(nullable: false)]
+ #[ORM\ManyToOne(targetEntity: DeclaratieCategorie::class, inversedBy: 'declaraties')]
+ private $categorie;
+
+	#[ORM\Column(type: 'string', length: 255, nullable: true)]
+ private $omschrijving;
+
+	#[ORM\Column(type: 'boolean', nullable: true)]
+ private $csrPas;
+
+	#[ORM\Column(type: 'string', length: 255, nullable: true)]
+ private $rekening;
+
+	#[ORM\Column(type: 'string', length: 255, nullable: true)]
+ private $naam;
+
+	#[ORM\Column(type: 'text', nullable: true)]
+ private $opmerkingen;
+
+	#[ORM\Column(type: 'float')]
+ private $totaal;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity=DeclaratieCategorie::class, inversedBy="declaraties")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	private $categorie;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ private $beoordelaar;
 
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 */
-	private $omschrijving;
+	#[ORM\Column(type: 'string', length: 255, nullable: true)]
+ private $nummer;
 
-	/**
-	 * @ORM\Column(type="boolean", nullable=true)
-	 */
-	private $csrPas;
+	#[ORM\Column(type: 'datetime', nullable: true)]
+ private $ingediend;
 
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 */
-	private $rekening;
+	#[ORM\Column(type: 'datetime', nullable: true)]
+ private $beoordeeld;
 
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 */
-	private $naam;
+	#[ORM\Column(type: 'datetime', nullable: true)]
+ private $uitbetaald;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	private $opmerkingen;
+	#[ORM\Column(type: 'boolean')]
+ private $goedgekeurd = false;
 
-	/**
-	 * @ORM\Column(type="float")
-	 */
-	private $totaal;
-
-	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(referencedColumnName="uid")
-	 */
-	private $beoordelaar;
-
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 */
-	private $nummer;
-
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	private $ingediend;
-
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	private $beoordeeld;
-
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	private $uitbetaald;
-
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
-	private $goedgekeurd = false;
-
-	/**
-	 * @ORM\OneToMany(targetEntity=DeclaratieBon::class, mappedBy="declaratie")
-	 */
-	private $bonnen;
+	#[ORM\OneToMany(targetEntity: DeclaratieBon::class, mappedBy: 'declaratie')]
+ private $bonnen;
 
 	public function __construct()
 	{
