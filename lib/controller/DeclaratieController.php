@@ -164,7 +164,11 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/download/{path}", name="declaratie_download", methods={"GET"}, requirements={"filename"="[a-f0-9]+.[a-z]+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function download(string $path, Filesystem $filesystem, DeclaratieBonRepository $bonRepository): BinaryFileResponse {
+	public function download(
+		string $path,
+		Filesystem $filesystem,
+		DeclaratieBonRepository $bonRepository
+	) {
 		$filename = DECLARATIE_PATH . $path;
 		if (!$filesystem->exists($filename)) {
 			throw $this->createAccessDeniedException();
@@ -189,7 +193,10 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/upload", name="declaratie_upload", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function upload(Request $request, DeclaratieBonRepository $bonRepository): JsonResponse {
+	public function upload(
+		Request $request,
+		DeclaratieBonRepository $bonRepository
+	) {
 		$key = bin2hex(random_bytes(16));
 
 		/** @var File $file */
@@ -250,7 +257,13 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/opslaan", name="declaratie_opslaan", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function opslaan(Request $request, DeclaratieRepository $declaratieRepository, DeclaratieBonRepository $bonRepository, DeclaratieCategorieRepository $categorieRepository, EntityManagerInterface $entityManager): JsonResponse {
+	public function opslaan(
+		Request $request,
+		DeclaratieRepository $declaratieRepository,
+		DeclaratieBonRepository $bonRepository,
+		DeclaratieCategorieRepository $categorieRepository,
+		EntityManagerInterface $entityManager
+	) {
 		$data = $request->request->get('declaratie');
 		if (!empty($data)) {
 			$data = new ParameterBag($data);
@@ -381,7 +394,11 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/status/{declaratie}", name="declaratie_status", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function setStatus(Declaratie $declaratie, Request $request, EntityManagerInterface $entityManager): JsonResponse {
+	public function setStatus(
+		Declaratie $declaratie,
+		Request $request,
+		EntityManagerInterface $entityManager
+	) {
 		$status = $request->request->getAlpha('status');
 		$vanNaar = $declaratie->getStatus() . '-' . $status;
 

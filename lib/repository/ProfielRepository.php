@@ -17,7 +17,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -42,7 +42,7 @@ class ProfielRepository extends AbstractRepository
 		$this->security = $security;
 	}
 
-	public static function changelog(array $diff, $uid): ?ProfielUpdateLogGroup
+	public static function changelog(array $diff, $uid)
 	{
 		if (empty($diff)) {
 			return null;
@@ -80,7 +80,7 @@ class ProfielRepository extends AbstractRepository
 	 * @return string|null
 	 * @deprecated Gebruik Profiel::getNaam($vorm)
 	 */
-	public static function getNaam($uid, $vorm = 'civitas'): ?string
+	public static function getNaam($uid, $vorm = 'civitas')
 	{
 		$profiel = static::get($uid);
 		if (!$profiel) {
@@ -109,7 +109,7 @@ class ProfielRepository extends AbstractRepository
 	 * @return bool
 	 * @deprecated Doe een null check op ProfielRepository::find($uid)
 	 */
-	public static function existsUid($uid): bool
+	public static function existsUid($uid)
 	{
 		if (!ctype_alnum($uid) || strlen($uid) != 4) {
 			return false;
@@ -118,12 +118,12 @@ class ProfielRepository extends AbstractRepository
 		return $model->find($uid) !== null;
 	}
 
-	public function existsDuck($duck): bool
+	public function existsDuck($duck)
 	{
 		return count($this->findBy(['duckname' => $duck])) !== 0;
 	}
 
-	public function nieuw($lidjaar, $lidstatus): Profiel
+	public function nieuw($lidjaar, $lidstatus)
 	{
 		$user = $this->security->getUser();
 
@@ -144,7 +144,7 @@ class ProfielRepository extends AbstractRepository
 	 * @param Profiel $profiel
 	 * @throws NonUniqueResultException
 	 */
-	public function create(Profiel $profiel): void
+	public function create(Profiel $profiel)
 	{
 		// Lichting zijn de laatste 2 cijfers van lidjaar
 		$jj = substr($profiel->lidjaar, 2, 2);
@@ -167,7 +167,7 @@ class ProfielRepository extends AbstractRepository
 	/**
 	 * @param Profiel $profiel
 	 */
-	public function update(Profiel $profiel): void
+	public function update(Profiel $profiel)
 	{
 		try {
 			$this->save_ldap($profiel);
@@ -184,7 +184,7 @@ class ProfielRepository extends AbstractRepository
 	 * @param LDAP $ldap persistent connection
 	 * @return bool success
 	 */
-	public function save_ldap(Profiel $profiel, LDAP $ldap = null): bool
+	public function save_ldap(Profiel $profiel, LDAP $ldap = null)
 	{
 		$success = true;
 
@@ -270,7 +270,7 @@ class ProfielRepository extends AbstractRepository
 	 * @param null $lidjaar
 	 * @return int|mixed|string
 	 */
-	public function getNovietenVanLaatsteLidjaar($lidjaar = null): mixed
+	public function getNovietenVanLaatsteLidjaar($lidjaar = null)
 	{
 		if (empty($lidjaar)) {
 			return $this->createQueryBuilder('p')
@@ -292,7 +292,7 @@ class ProfielRepository extends AbstractRepository
 	 * @param $toegestaan
 	 * @return Profiel[]
 	 */
-	public function findByLidStatus($toegestaan): mixed
+	public function findByLidStatus($toegestaan)
 	{
 		return $this->createQueryBuilder('p')
 			->where('p.status in (:toegestaan)')
@@ -301,7 +301,7 @@ class ProfielRepository extends AbstractRepository
 			->getResult();
 	}
 
-	public function setEetwens(Profiel $profiel, $eetwens): void
+	public function setEetwens(Profiel $profiel, $eetwens)
 	{
 		if ($profiel->eetwens === $eetwens) {
 			return;

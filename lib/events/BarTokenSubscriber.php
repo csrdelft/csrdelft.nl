@@ -9,7 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Uid\Uuid;
 
 class BarTokenSubscriber implements EventSubscriberInterface
@@ -29,12 +29,12 @@ class BarTokenSubscriber implements EventSubscriberInterface
 		$this->manager = $manager;
 	}
 
-	public static function getSubscribedEvents(): array
+	public static function getSubscribedEvents()
 	{
 		return [KernelEvents::CONTROLLER];
 	}
 
-	public function onKernelController(ControllerEvent $event): void
+	public function onKernelController(ControllerEvent $event)
 	{
 		$controller = $event->getController();
 		$request = $event->getRequest();

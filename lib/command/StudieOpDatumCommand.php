@@ -24,14 +24,14 @@ class StudieOpDatumCommand extends Command
 		parent::__construct();
 	}
 
-	protected function configure(): void
+	protected function configure()
 	{
 		$this->setName('leden:studie:datum')->setDescription(
 			'Haal de studies van leden op op een bepaalde datum.'
 		);
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): int
+	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$helper = $this->getHelper('question');
 

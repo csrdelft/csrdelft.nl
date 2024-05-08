@@ -18,7 +18,6 @@ use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\entity\maalcie\Maaltijd;
-use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
@@ -33,7 +32,7 @@ use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -82,7 +81,7 @@ class CsrTwigExtension extends AbstractExtension
 		$this->security = $security;
 	}
 
-	public function getFunctions(): array
+	public function getFunctions()
 	{
 		return [
 			new TwigFunction('dragobject_coords', [$this, 'dragobject_coords']),
@@ -125,7 +124,7 @@ class CsrTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function groepBewerkenForm($lid, $groep): GroepBewerkenForm
+	public function groepBewerkenForm($lid, $groep)
 	{
 		return new GroepBewerkenForm($lid, $groep);
 	}
@@ -135,12 +134,12 @@ class CsrTwigExtension extends AbstractExtension
 		return LichtingenRepository::getHuidigeJaargang();
 	}
 
-	public function get_profiel($uid): ?Profiel
+	public function get_profiel($uid)
 	{
 		return $this->profielRepository->find($uid);
 	}
 
-	public function get_maaltijd_aanmelding($maaltijd_id): ?MaaltijdAanmelding
+	public function get_maaltijd_aanmelding($maaltijd_id)
 	{
 		return $this->maaltijdAanmeldingenRepository->find([
 			'maaltijd_id' => $maaltijd_id,
@@ -148,7 +147,7 @@ class CsrTwigExtension extends AbstractExtension
 		]);
 	}
 
-	public function get_maaltijd_beoordeling($maaltijd): array
+	public function get_maaltijd_beoordeling($maaltijd)
 	{
 		$beoordeling = $this->maaltijdBeoordelingenRepository->find([
 			'maaltijd_id' => $maaltijd->maaltijd_id,
@@ -172,7 +171,7 @@ class CsrTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function csrfField($path = '', $method = 'post'): string
+	public function csrfField($path = '', $method = 'post')
 	{
 		return (new CsrfField(
 			$this->csrfService->generateToken($path, $method)
@@ -189,7 +188,7 @@ class CsrTwigExtension extends AbstractExtension
 			'" />';
 	}
 
-	public function cms($id): string
+	public function cms($id)
 	{
 		$pagina = $this->cmsPaginaRepository->find($id);
 
@@ -206,7 +205,7 @@ class CsrTwigExtension extends AbstractExtension
 		return '';
 	}
 
-	public function getFilters(): array
+	public function getFilters()
 	{
 		return [
 			new TwigFilter('escape_ical', [TextUtil::class, 'escape_ical']),
@@ -238,7 +237,7 @@ class CsrTwigExtension extends AbstractExtension
 		return str_replace('{}', $count, $singular);
 	}
 
-	public function getTests(): array
+	public function getTests()
 	{
 		/**
 		 * @param Agendeerbaar $value
@@ -282,7 +281,7 @@ class CsrTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function dragobject_coords(SessionInterface $session, $id, $top, $left): array
+	public function dragobject_coords(SessionInterface $session, $id, $top, $left)
 	{
 		if ($session->has("dragobject_$id")) {
 			$dragObject = $session->get("dragobject_$id");
@@ -295,7 +294,11 @@ class CsrTwigExtension extends AbstractExtension
 		return ['top' => $top, 'left' => $left];
 	}
 
-	public function bbcode(?string $string, string $mode = 'normal', bool $inlineHtml = false): string {
+	public function bbcode(
+		?string $string,
+		string $mode = 'normal',
+		bool $inlineHtml = false
+	) {
 		if (!$string) {
 			return '';
 		}
@@ -315,7 +318,7 @@ class CsrTwigExtension extends AbstractExtension
 		}
 	}
 
-	public function file_base64($filename): string
+	public function file_base64($filename)
 	{
 		if (file_exists($filename)) {
 			return base64_encode(file_get_contents($filename));
@@ -328,7 +331,7 @@ class CsrTwigExtension extends AbstractExtension
 	 *
 	 * @return int
 	 */
-	public function vereniging_leeftijd(): int
+	public function vereniging_leeftijd()
 	{
 		$oprichting = date_create_immutable('1961-06-16');
 
@@ -342,13 +345,13 @@ class CsrTwigExtension extends AbstractExtension
 		return (string) $table;
 	}
 
-	public function commitLink(): string
+	public function commitLink()
 	{
 		return 'https://github.com/csrdelft/productie/commit/' .
 			$this->commitHash(true);
 	}
 
-	public function commitHash($full = false): string
+	public function commitHash($full = false)
 	{
 		if ($full) {
 			return trim(`git rev-parse HEAD`);

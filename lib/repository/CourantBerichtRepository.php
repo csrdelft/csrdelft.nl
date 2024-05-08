@@ -19,7 +19,7 @@ class CourantBerichtRepository extends AbstractRepository
 		parent::__construct($registry, CourantBericht::class);
 	}
 
-	public function getBerichtenVoorGebruiker(): array
+	public function getBerichtenVoorGebruiker()
 	{
 		//mods en bestuur zien alle berichten
 		if (LoginService::mag(P_MAIL_COMPOSE) || LoginService::mag('bestuur')) {
@@ -35,7 +35,7 @@ class CourantBerichtRepository extends AbstractRepository
 	/**
 	 * @return CourantBericht[]
 	 */
-	public function findAll(): array
+	public function findAll()
 	{
 		return $this->findBy([], ['volgorde' => 'ASC']);
 	}

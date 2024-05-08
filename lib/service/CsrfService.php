@@ -36,7 +36,7 @@ class CsrfService
 	 * @param string $method
 	 * @return CsrfToken|null
 	 */
-	public function generateToken($path, string $method): CsrfToken
+	public function generateToken($path, string $method)
 	{
 		return $this->manager->getToken('global');
 	}
@@ -47,7 +47,7 @@ class CsrfService
 	 * @param Request $request
 	 * @return bool
 	 */
-	public function preventCsrf(Request $request): bool
+	public function preventCsrf(Request $request)
 	{
 		// Safe: GET, OPTIONS, HEAD, TRACE
 		if ($request->isMethodSafe()) {

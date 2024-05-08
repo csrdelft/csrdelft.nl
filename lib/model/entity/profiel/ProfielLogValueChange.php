@@ -40,14 +40,14 @@ class ProfielLogValueChange extends AbstractProfielLogValueChangeEntry
 			htmlspecialchars($this->newValue ?? '');
 	}
 
-	public function censureer(): ProfielLogValueChangeCensuur
+	public function censureer()
 	{
 		$oldEmpty = trim($this->oldValue) === '';
 		$newEmpty = trim($this->newValue) === '';
 		return new ProfielLogValueChangeCensuur($this->field, $oldEmpty, $newEmpty);
 	}
 
-	public function censureerVeld($naam): ProfielLogValueChange
+	public function censureerVeld($naam)
 	{
 		if ($this->field == $naam) {
 			return $this->censureer();

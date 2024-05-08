@@ -59,7 +59,7 @@ class FotoTag implements JsonSerializable
  #[ORM\Column(type: 'float')]
  public $size;
 
-	public function jsonSerialize(): array
+	public function jsonSerialize()
 	{
 		$array = (array) $this;
 		$array['name'] = ProfielRepository::getNaam($this->keyword, 'user');

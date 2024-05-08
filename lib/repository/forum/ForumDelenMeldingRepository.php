@@ -47,7 +47,7 @@ class ForumDelenMeldingRepository extends AbstractRepository
 		$this->mailService = $mailService;
 	}
 
-	protected function maakForumDeelMelding(ForumDeel $deel, $uid): ForumDeelMelding
+	protected function maakForumDeelMelding(ForumDeel $deel, $uid)
 	{
 		$melding = new ForumDeelMelding();
 		$melding->deel = $deel;
@@ -68,7 +68,7 @@ class ForumDelenMeldingRepository extends AbstractRepository
 	 * @param bool $actief of lid meldingen wil ontvangen
 	 * @param string $uid uid van lid, standaard huidig ingelogd lid
 	 */
-	public function setMeldingVoorLid(ForumDeel $deel, $actief, $uid = null): void
+	public function setMeldingVoorLid(ForumDeel $deel, $actief, $uid = null)
 	{
 		if ($uid === null) {
 			$uid = LoginService::getUid();
@@ -90,7 +90,7 @@ class ForumDelenMeldingRepository extends AbstractRepository
 	 * Verwijder alle te ontvangen meldingen voor gegeven lid
 	 * @param $uids
 	 */
-	public function stopAlleMeldingenVoorLeden($uids): void
+	public function stopAlleMeldingenVoorLeden($uids)
 	{
 		$this->createQueryBuilder('fdm')
 			->delete()
@@ -104,7 +104,7 @@ class ForumDelenMeldingRepository extends AbstractRepository
 	 * Verwijder alle te ontvangen meldingen voor gegeven forumdeel.
 	 * @param ForumDeel|int $deel
 	 */
-	public function stopMeldingenVoorIedereen($deel): void
+	public function stopMeldingenVoorIedereen($deel)
 	{
 		$id = $deel instanceof ForumDeel ? $deel->forum_id : $deel;
 		$manager = $this->getEntityManager();

@@ -3,19 +3,18 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\common\Util\SqlUtil;
-use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\repository\GroepRepository;
 use Doctrine\ORM\NonUniqueResultException;
 
 class VerticalenRepository extends GroepRepository
 {
-	public function getEntityClassName(): string
+	public function getEntityClassName()
 	{
 		return Verticale::class;
 	}
 
-	public function get($letter): ?Groep
+	public function get($letter)
 	{
 		if ($verticale = $this->findOneBy(['letter' => $letter])) {
 			return $verticale;
@@ -24,7 +23,12 @@ class VerticalenRepository extends GroepRepository
 		return parent::get($letter);
 	}
 
-	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): array {
+	public function findBy(
+		array $criteria,
+		array $orderBy = null,
+		$limit = null,
+		$offset = null
+	) {
 		return parent::findBy(
 			$criteria,
 			['letter' => 'ASC'] + ($orderBy ?? []),
@@ -38,7 +42,7 @@ class VerticalenRepository extends GroepRepository
 	 * @return Verticale|null
 	 * @throws NonUniqueResultException
 	 */
-	public function searchByNaam($naam): mixed
+	public function searchByNaam($naam)
 	{
 		return $this->createQueryBuilder('v')
 			->where('v.naam LIKE :naam')
@@ -48,7 +52,7 @@ class VerticalenRepository extends GroepRepository
 			->getOneOrNullResult();
 	}
 
-	public function nieuw($soort = null): Verticale
+	public function nieuw($soort = null)
 	{
 		/** @var Verticale $verticale */
 		$verticale = parent::nieuw();

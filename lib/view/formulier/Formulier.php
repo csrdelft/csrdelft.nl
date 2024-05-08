@@ -97,7 +97,7 @@ class Formulier implements View, Validator, ToResponse
 	 *
 	 * @param string $dataTableId
 	 */
-	public function setDataTableId($dataTableId): void
+	public function setDataTableId($dataTableId)
 	{
 		$this->dataTableId = $dataTableId;
 	}
@@ -112,12 +112,12 @@ class Formulier implements View, Validator, ToResponse
 		return $this->model;
 	}
 
-	public function getBreadcrumbs(): ?string
+	public function getBreadcrumbs()
 	{
 		return null;
 	}
 
-	private function loadProperty(InputField $field): void
+	private function loadProperty(InputField $field)
 	{
 		$fieldName = $field->getName();
 		if ($this->model) {
@@ -142,12 +142,12 @@ class Formulier implements View, Validator, ToResponse
 		}
 	}
 
-	public function getFields(): array
+	public function getFields()
 	{
 		return $this->fields;
 	}
 
-	public function hasFields(): bool
+	public function hasFields()
 	{
 		return !empty($this->fields);
 	}
@@ -157,7 +157,7 @@ class Formulier implements View, Validator, ToResponse
 	 * @param string $fieldName
 	 * @return InputField|false if not found
 	 */
-	public function findByName($fieldName): InputField|FileField|bool
+	public function findByName($fieldName)
 	{
 		foreach ($this->fields as $field) {
 			if (
@@ -170,7 +170,7 @@ class Formulier implements View, Validator, ToResponse
 		return false;
 	}
 
-	public function addFields(array $fields): void
+	public function addFields(array $fields)
 	{
 		foreach ($fields as $field) {
 			if ($field instanceof InputField) {
@@ -180,7 +180,7 @@ class Formulier implements View, Validator, ToResponse
 		$this->fields = array_merge($this->fields, $fields);
 	}
 
-	public function insertAtPos($pos, FormElement $field): void
+	public function insertAtPos($pos, FormElement $field)
 	{
 		if ($field instanceof InputField) {
 			$this->loadProperty($field);
@@ -188,7 +188,7 @@ class Formulier implements View, Validator, ToResponse
 		array_splice($this->fields, $pos, 0, [$field]);
 	}
 
-	public function removeField(FormElement $field): void
+	public function removeField(FormElement $field)
 	{
 		$pos = array_search($field, $this->fields);
 		unset($this->fields[$pos]);
@@ -202,7 +202,7 @@ class Formulier implements View, Validator, ToResponse
 	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */
-	public function isPosted(): bool
+	public function isPosted()
 	{
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField and !$field->isPosted()) {
@@ -217,7 +217,7 @@ class Formulier implements View, Validator, ToResponse
 	 * Alle valideer-functies kunnen het model gebruiken bij het valideren
 	 * dat meegegeven is bij de constructie van het InputField.
 	 */
-	public function validate(): bool
+	public function validate()
 	{
 		if (!$this->isPosted()) {
 			return false;
@@ -238,7 +238,7 @@ class Formulier implements View, Validator, ToResponse
 	/**
 	 * Geeft waardes van de formuliervelden terug.
 	 */
-	public function getValues(): array
+	public function getValues()
 	{
 		$values = [];
 		foreach ($this->fields as $field) {
@@ -252,7 +252,7 @@ class Formulier implements View, Validator, ToResponse
 	/**
 	 * Geeft errors van de formuliervelden terug.
 	 */
-	public function getError(): ?array
+	public function getError()
 	{
 		$errors = [];
 		foreach ($this->fields as $field) {
@@ -297,7 +297,7 @@ class Formulier implements View, Validator, ToResponse
 			'">';
 	}
 
-	protected function getScriptTag(): string
+	protected function getScriptTag()
 	{
 		$js = $this->getJavascript();
 
@@ -350,7 +350,7 @@ HTML;
 		return $string;
 	}
 
-	public function getCsrfField(): ?CsrfField
+	public function getCsrfField()
 	{
 		if (!$this->preventCsrf) {
 			return null;
@@ -365,7 +365,7 @@ HTML;
 	 *
 	 * @returns ChangeLogEntry[]
 	 */
-	public function diff(): array
+	public function diff()
 	{
 		$changeLogRepository = ContainerFacade::getContainer()->get(
 			ChangeLogRepository::class
@@ -395,7 +395,7 @@ HTML;
 	 * @param ChangeLogEntry[] $diff
 	 * @return string
 	 */
-	public function changelog(array $diff): string
+	public function changelog(array $diff)
 	{
 		$changelog = '';
 		if (!empty($diff)) {
@@ -420,7 +420,7 @@ HTML;
 		return $changelog;
 	}
 
-	public function getMethod(): string
+	public function getMethod()
 	{
 		return $this->post ? 'post' : 'get';
 	}

@@ -19,12 +19,12 @@ class ChangeLogType extends SafeJsonType
 	/**
 	 * @inheritDoc
 	 */
-	public function getName(): string
+	public function getName()
 	{
 		return 'changelog';
 	}
 
-	protected function getAcceptedTypes(): array
+	protected function getAcceptedTypes()
 	{
 		return [
 			ProfielLogGroup::class,

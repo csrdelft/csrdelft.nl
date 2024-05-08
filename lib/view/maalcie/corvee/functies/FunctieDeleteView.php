@@ -36,12 +36,12 @@ class FunctieDeleteView implements ToResponse, View
 		return $html;
 	}
 
-	public function getTitel(): string
+	public function getTitel()
 	{
 		return '';
 	}
 
-	public function getBreadcrumbs(): string
+	public function getBreadcrumbs()
 	{
 		return '';
 	}

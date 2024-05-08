@@ -52,12 +52,12 @@ class GroepPreviewForm extends ModalForm implements FormElement
 		return $html . '</form>';
 	}
 
-	public function getJavascript(): void
+	public function getJavascript()
 	{
 		parent::getJavascript();
 	}
 
-	public function getType(): string
+	public function getType()
 	{
 		return ReflectionUtil::classNameZonderNamespace(get_class($this->model));
 	}

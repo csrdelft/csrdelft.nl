@@ -26,7 +26,12 @@ class ForumDradenReagerenRepository extends AbstractRepository
 		parent::__construct($registry, ForumDraadReageren::class);
 	}
 
-	protected function maakForumDraadReageren(ForumDeel $deel, $draad_id = null, $concept = null, $titel = null): ForumDraadReageren {
+	protected function maakForumDraadReageren(
+		ForumDeel $deel,
+		$draad_id = null,
+		$concept = null,
+		$titel = null
+	) {
 		$reageren = new ForumDraadReageren();
 		$reageren->forum_id = $deel->forum_id;
 		$reageren->draad_id = (int) $draad_id;
@@ -46,7 +51,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 	 * @param int $draad_id
 	 * @return ForumDraadReageren
 	 */
-	protected function getReagerenDoorLid(ForumDeel $deel, $draad_id = null): ?ForumDraadReageren
+	protected function getReagerenDoorLid(ForumDeel $deel, $draad_id = null)
 	{
 		return $this->find([
 			'forum_id' => (int) $deel->forum_id,
@@ -55,7 +60,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 		]);
 	}
 
-	public function getReagerenVoorDraad(ForumDraad $draad): mixed
+	public function getReagerenVoorDraad(ForumDraad $draad)
 	{
 		return $this->createQueryBuilder('r')
 			->where(
@@ -72,7 +77,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 			->getResult();
 	}
 
-	public function getReagerenVoorDeel(ForumDeel $deel): mixed
+	public function getReagerenVoorDeel(ForumDeel $deel)
 	{
 		return $this->createQueryBuilder('r')
 			->where(
@@ -89,7 +94,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 			->getResult();
 	}
 
-	public function verwijderLegeConcepten(): void
+	public function verwijderLegeConcepten()
 	{
 		$this->createQueryBuilder('r')
 			->where('r.concept IS NULL and r.datum_tijd < :datum_tijd')
@@ -104,7 +109,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 			->execute();
 	}
 
-	public function verwijderReagerenVoorDraad(array $draadIds): void
+	public function verwijderReagerenVoorDraad(array $draadIds)
 	{
 		$this->createQueryBuilder('r')
 			->where('r.draad_id in (:draad_ids)')
@@ -114,7 +119,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 			->execute();
 	}
 
-	public function verwijderReagerenVoorLeden($uids): void
+	public function verwijderReagerenVoorLeden($uids)
 	{
 		$this->createQueryBuilder('r')
 			->where('r.uid in (:uids)')
@@ -124,7 +129,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 			->execute();
 	}
 
-	public function setWanneerReagerenDoorLid(ForumDeel $deel, $draad_id = null): void
+	public function setWanneerReagerenDoorLid(ForumDeel $deel, $draad_id = null)
 	{
 		$reageren = $this->getReagerenDoorLid($deel, $draad_id);
 		if ($reageren) {
@@ -136,7 +141,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 		}
 	}
 
-	public function getConcept(ForumDeel $deel, $draad_id = null): ?string
+	public function getConcept(ForumDeel $deel, $draad_id = null)
 	{
 		$reageren = $this->getReagerenDoorLid($deel, $draad_id);
 		if ($reageren) {
@@ -145,7 +150,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 		return null;
 	}
 
-	public function getConceptTitel(ForumDeel $deel): ?string
+	public function getConceptTitel(ForumDeel $deel)
 	{
 		$reageren = $this->getReagerenDoorLid($deel);
 		if ($reageren) {
@@ -154,7 +159,12 @@ class ForumDradenReagerenRepository extends AbstractRepository
 		return null;
 	}
 
-	public function setConcept(ForumDeel $deel, $draad_id = null, $concept = null, $titel = null): void {
+	public function setConcept(
+		ForumDeel $deel,
+		$draad_id = null,
+		$concept = null,
+		$titel = null
+	) {
 		$reageren = $this->getReagerenDoorLid($deel, $draad_id);
 		if (empty($concept)) {
 			if ($reageren) {

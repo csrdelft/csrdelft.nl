@@ -16,12 +16,12 @@ use CsrDelft\common\Util\DateUtil;
  */
 class BbReldate extends BbTag
 {
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'reldate';
 	}
 
-	public function render(): string
+	public function render()
 	{
 		return vsprintf("<span class=\"bb-tag-reldate\" title=\"%s\">%s</span>", [
 			htmlspecialchars($this->getContent()),
@@ -32,7 +32,7 @@ class BbReldate extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->readContent([], false);
 	}

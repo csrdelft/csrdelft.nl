@@ -52,13 +52,13 @@ class CorveeVrijstelling
  #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
  public $profiel;
 
-	public function setProfiel($profiel): void
+	public function setProfiel($profiel)
 	{
 		$this->profiel = $profiel;
 		$this->uid = $profiel->uid ?? null;
 	}
 
-	public function getPunten(): int
+	public function getPunten()
 	{
 		return (int) ceil(
 			($this->percentage *

@@ -27,7 +27,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository
 	 * @param Profiel $lid
 	 * @return MaaltijdAbonnement[]
 	 */
-	public function voorLid(Profiel $lid): array
+	public function voorLid(Profiel $lid)
 	{
 		return $this->findBy(['uid' => $lid->uid]);
 	}
@@ -36,7 +36,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository
 	 * @param Profiel $lid
 	 * @return int
 	 */
-	public function countVoorLid(Profiel $lid): int
+	public function countVoorLid(Profiel $lid)
 	{
 		return $this->count(['uid' => $lid->uid]);
 	}

@@ -15,12 +15,12 @@ class BbWerkgroep extends BbTagGroep
 		return Werkgroep::class;
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'werkgroep';
 	}
 
-	public function getLidNaam(): string
+	public function getLidNaam()
 	{
 		return 'aanmeldingen';
 	}

@@ -56,6 +56,9 @@
     "doctrine/collections": {
         "version": "v1.4.0"
     },
+    "doctrine/common": {
+        "version": "v2.7.3"
+    },
     "doctrine/data-fixtures": {
         "version": "1.4.3"
     },
@@ -141,8 +144,17 @@
     "felixfbecker/language-server-protocol": {
         "version": "1.5.1"
     },
+    "fgrosse/phpasn1": {
+        "version": "v2.5.0"
+    },
     "firebase/php-jwt": {
         "version": "v5.0.0"
+    },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.3"
+    },
+    "fzaninotto/faker": {
+        "version": "v1.9.1"
     },
     "globalcitizen/php-iban": {
         "version": "v2.7.2"
@@ -179,6 +191,15 @@
     },
     "jean85/pretty-package-versions": {
         "version": "1.5.0"
+    },
+    "laminas/laminas-code": {
+        "version": "3.4.1"
+    },
+    "laminas/laminas-eventmanager": {
+        "version": "3.3.0"
+    },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.1.1"
     },
     "lcobucci/jwt": {
         "version": "3.4.5"
@@ -613,6 +634,9 @@
     "symfony/property-info": {
         "version": "v5.0.4"
     },
+    "symfony/proxy-manager-bridge": {
+        "version": "v5.2.2"
+    },
     "symfony/psr-http-message-bridge": {
         "version": "v2.1.0"
     },
@@ -661,6 +685,9 @@
     },
     "symfony/string": {
         "version": "v5.1.2"
+    },
+    "symfony/templating": {
+        "version": "v3.4.32"
     },
     "symfony/translation": {
         "version": "3.3",
@@ -750,6 +777,9 @@
     },
     "vimeo/psalm": {
         "version": "4.7.1"
+    },
+    "web-token/jwt-core": {
+        "version": "v2.2.11"
     },
     "web-token/jwt-key-mgmt": {
         "version": "v2.2.11"

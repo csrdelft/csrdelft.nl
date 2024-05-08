@@ -15,12 +15,12 @@ class BbOndervereniging extends BbTagGroep
 		return Ondervereniging::class;
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'ondervereniging';
 	}
 
-	public function getLidNaam(): string
+	public function getLidNaam()
 	{
 		return 'leden';
 	}

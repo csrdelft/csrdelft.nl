@@ -27,7 +27,7 @@ class TemplateFormKnoppen extends FormKnoppen
 		$this->options = $options;
 	}
 
-	public function getHtml(): string
+	public function getHtml()
 	{
 		return $this->twig->render($this->template, $this->options);
 	}

@@ -40,7 +40,7 @@ class SponsorAffiliateDownloadCommand extends Command
 		$this->sponsorUserAgent = $sponsorUserAgent;
 	}
 
-	protected function configure(): void
+	protected function configure()
 	{
 		$this->setDescription('Download sponsorlinks');
 	}

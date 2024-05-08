@@ -14,7 +14,7 @@ use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\DeleteKnop;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 class AccountForm implements FormulierTypeInterface
 {
@@ -40,7 +40,11 @@ class AccountForm implements FormulierTypeInterface
 	 * @param Account $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
+	public function createFormulier(
+		FormulierBuilder $builder,
+		$data,
+		$options = []
+	) {
 		$builder->setTitel('Inloggegevens aanpassen');
 		$fields = [];
 

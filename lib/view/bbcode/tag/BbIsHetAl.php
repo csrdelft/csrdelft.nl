@@ -9,7 +9,7 @@ use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
 use CsrDelft\view\IsHetAlView;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 class BbIsHetAl extends BbTag
 {
@@ -52,7 +52,7 @@ class BbIsHetAl extends BbTag
 		$this->security = $security;
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'ishetal';
 	}
@@ -65,7 +65,7 @@ class BbIsHetAl extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->value = $this->readMainArgument($arguments);
 		if ($this->value == '') {

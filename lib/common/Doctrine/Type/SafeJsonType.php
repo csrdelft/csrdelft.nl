@@ -13,10 +13,13 @@ abstract class SafeJsonType extends Type
 	/**
 	 * @inheritDoc
 	 */
-	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string {
+	public function getSQLDeclaration(
+		array $fieldDeclaration,
+		AbstractPlatform $platform
+	) {
 		return sprintf('TEXT COMMENT \'(DC2Type:%s)\'', $this->getName());
 	}
-	public function convertToPHPValue($value, AbstractPlatform $platform): mixed
+	public function convertToPHPValue($value, AbstractPlatform $platform)
 	{
 		if (!$value) {
 			return $value;
@@ -25,7 +28,7 @@ abstract class SafeJsonType extends Type
 		return $serializer->unserialize($value);
 	}
 
-	public function convertToDatabaseValue($value, AbstractPlatform $platform): string
+	public function convertToDatabaseValue($value, AbstractPlatform $platform)
 	{
 		$serializer = new SafeJsonSerializer($this->getAcceptedTypes());
 		return $serializer->serialize($value);

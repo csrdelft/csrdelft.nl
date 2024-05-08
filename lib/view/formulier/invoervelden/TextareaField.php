@@ -33,7 +33,7 @@ class TextareaField extends TextField
 		$this->css_classes[] = 'textarea-transition';
 	}
 
-	protected function getInputAttribute($attribute): string
+	protected function getInputAttribute($attribute)
 	{
 		if ($attribute == 'rows' && is_int($this->rows)) {
 			return 'rows="' . $this->rows . '"';

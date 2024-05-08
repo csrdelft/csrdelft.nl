@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class CmsPaginaFixtures extends Fixture
 {
-	public function load(ObjectManager $manager): void
+	public function load(ObjectManager $manager)
 	{
 		$legePagina = new CmsPagina();
 

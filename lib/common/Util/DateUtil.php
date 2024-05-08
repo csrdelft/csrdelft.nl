@@ -72,7 +72,7 @@ final class DateUtil
 	 *
 	 * @return string current DateTime formatted Y-m-d H:i:s
 	 */
-	public static function getDateTime($timestamp = null): string|false
+	public static function getDateTime($timestamp = null)
 	{
 		if ($timestamp === null) {
 			$timestamp = time();
@@ -87,7 +87,7 @@ final class DateUtil
 	 * @param $format
 	 * @return false|string
 	 */
-	public static function dateFormatIntl(DateTimeInterface $date, $format): string|false
+	public static function dateFormatIntl(DateTimeInterface $date, $format)
 	{
 		$fmt = new IntlDateFormatter('nl', IntlDateFormatter::NONE, IntlDateFormatter::NONE);
 		$fmt->setPattern($format);

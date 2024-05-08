@@ -43,7 +43,7 @@ class Courant
  #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
  public $verzender_profiel;
 
-	public function getJaar(): string
+	public function getJaar()
 	{
 		return $this->verzendMoment->format('Y');
 	}

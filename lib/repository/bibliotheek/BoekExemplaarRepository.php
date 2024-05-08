@@ -27,12 +27,12 @@ class BoekExemplaarRepository extends AbstractRepository
 	 * @param $id
 	 * @return BoekExemplaar|null
 	 */
-	public function get($id): ?BoekExemplaar
+	public function get($id)
 	{
 		return $this->find($id);
 	}
 
-	public function getExemplaren(Boek $boek): ?BoekExemplaar
+	public function getExemplaren(Boek $boek)
 	{
 		return $this->find('boek_id = ?', [$boek->id]);
 	}
@@ -41,7 +41,7 @@ class BoekExemplaarRepository extends AbstractRepository
 	 * @param Profiel $profiel
 	 * @return BoekExemplaar[]
 	 */
-	public function getGeleend(Profiel $profiel): array
+	public function getGeleend(Profiel $profiel)
 	{
 		return $this->findBy(['uitgeleend_uid' => $profiel->uid]);
 	}
@@ -50,12 +50,12 @@ class BoekExemplaarRepository extends AbstractRepository
 	 * @param $uid
 	 * @return BoekExemplaar[]
 	 */
-	public function getEigendom($uid): array
+	public function getEigendom($uid)
 	{
 		return $this->findBy(['eigenaar_uid' => $uid]);
 	}
 
-	public function leen(BoekExemplaar $exemplaar, string $uid): bool
+	public function leen(BoekExemplaar $exemplaar, string $uid)
 	{
 		if (!$exemplaar->kanLenen($uid)) {
 			return false;
@@ -69,7 +69,7 @@ class BoekExemplaarRepository extends AbstractRepository
 		}
 	}
 
-	public function addExemplaar(Boek $boek, Profiel $profiel): void
+	public function addExemplaar(Boek $boek, Profiel $profiel)
 	{
 		$exemplaar = new BoekExemplaar();
 		$exemplaar->boek = $boek;
@@ -84,7 +84,7 @@ class BoekExemplaarRepository extends AbstractRepository
 		$this->getEntityManager()->flush();
 	}
 
-	public function terugGegeven(BoekExemplaar $exemplaar): bool
+	public function terugGegeven(BoekExemplaar $exemplaar)
 	{
 		if ($exemplaar->isUitgeleend()) {
 			$exemplaar->status = BoekExemplaarStatus::teruggegeven();
@@ -96,7 +96,7 @@ class BoekExemplaarRepository extends AbstractRepository
 		}
 	}
 
-	public function terugOntvangen(BoekExemplaar $exemplaar): bool
+	public function terugOntvangen(BoekExemplaar $exemplaar)
 	{
 		if ($exemplaar->isUitgeleend() || $exemplaar->isTeruggegeven()) {
 			$exemplaar->status = BoekExemplaarStatus::beschikbaar();
@@ -108,7 +108,7 @@ class BoekExemplaarRepository extends AbstractRepository
 		}
 	}
 
-	public function setVermist(BoekExemplaar $exemplaar): bool
+	public function setVermist(BoekExemplaar $exemplaar)
 	{
 		if ($exemplaar->isBeschikbaar()) {
 			$exemplaar->status = BoekExemplaarStatus::vermist();
@@ -120,7 +120,7 @@ class BoekExemplaarRepository extends AbstractRepository
 		}
 	}
 
-	public function setGevonden(BoekExemplaar $exemplaar): bool
+	public function setGevonden(BoekExemplaar $exemplaar)
 	{
 		if ($exemplaar->isVermist()) {
 			$exemplaar->status = BoekExemplaarStatus::beschikbaar();

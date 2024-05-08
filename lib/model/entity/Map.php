@@ -36,7 +36,7 @@ class Map
 	/**
 	 * Bestaat er een map met het pad.
 	 */
-	public function exists(): bool
+	public function exists()
 	{
 		return @is_readable($this->path) and is_dir($this->path);
 	}

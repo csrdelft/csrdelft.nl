@@ -40,7 +40,7 @@ class SelectField extends InputField
 		return $this->options;
 	}
 
-	public function getValue(): mixed
+	public function getValue()
 	{
 		$this->value = parent::getValue();
 		if ($this->empty_null and $this->value == '') {
@@ -49,7 +49,7 @@ class SelectField extends InputField
 		return $this->value;
 	}
 
-	public function validate(): bool
+	public function validate()
 	{
 		if (!parent::validate()) {
 			return false;

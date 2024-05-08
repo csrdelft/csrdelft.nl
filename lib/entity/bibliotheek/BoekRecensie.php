@@ -60,7 +60,7 @@ class BoekRecensie
  #[ORM\ManyToOne(targetEntity: \Boek::class, inversedBy: 'recensies')]
  public $boek;
 
-	public function getBoek(): Boek
+	public function getBoek()
 	{
 		return $this->boek;
 	}
@@ -82,7 +82,7 @@ class BoekRecensie
 		return $this->isSchrijver();
 	}
 
-	public function isSchrijver($uid = null): bool
+	public function isSchrijver($uid = null)
 	{
 		if (!LoginService::mag(P_LOGGED_IN)) {
 			return false;

@@ -13,7 +13,7 @@ abstract class DataTableResponse extends JsonLijstResponse
 	public $autoUpdate = false;
 	public $modal = null;
 
-	public function getModel(): array
+	public function getModel()
 	{
 		return [
 			'modal' => $this->modal,

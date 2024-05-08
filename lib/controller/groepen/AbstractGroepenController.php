@@ -28,7 +28,6 @@ use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\GroepLidRepository;
 use CsrDelft\repository\GroepRepository;
-use CsrDelft\view\ToResponse;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
@@ -101,7 +100,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	 * Alle routes die groepen controllers aan gaan @return RouteCollection
 	 * @see config/routes/groepen.yaml
 	 */
-	public function loadRoutes(): RouteCollection
+	public function loadRoutes()
 	{
 		$routes = new RouteCollection();
 		$prefix = 'csrdelft_groep_' . $this->repository::getNaam();
@@ -214,7 +213,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return $routes;
 	}
 
-	public function overzicht(Request $request, $soort = null): Response
+	public function overzicht(Request $request, $soort = null)
 	{
 		$pagina = (int) $request->get('pagina', 1);
 		$limit = 20;
@@ -246,7 +245,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
-	public function bekijken($id): Response
+	public function bekijken($id)
 	{
 		$groep = $this->repository->get($id);
 
@@ -277,7 +276,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
-	public function info($id): JsonResponse
+	public function info($id)
 	{
 		$groep = $this->repository->get($id);
 
@@ -292,7 +291,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return $this->json($groep, 200, [], ['groups' => 'vue']);
 	}
 
-	public function deelnamegrafiek($id): GroepenDeelnameGrafiek
+	public function deelnamegrafiek($id)
 	{
 		$groep = $this->repository->get($id);
 		$groepen = $this->repository->findBy(['familie' => $groep->familie]);
@@ -300,7 +299,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return new GroepenDeelnameGrafiek($groepen);
 	}
 
-	public function omschrijving($id): Response
+	public function omschrijving($id)
 	{
 		$groep = $this->repository->get($id);
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
@@ -309,7 +308,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return $this->render('groep/omschrijving.html.twig', ['groep' => $groep]);
 	}
 
-	public function pasfotos($id): GroepPasfotosView
+	public function pasfotos($id)
 	{
 		$groep = $this->repository->get($id);
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
@@ -318,7 +317,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return new GroepPasfotosView($this->container->get('twig'), $groep);
 	}
 
-	public function lijst($id): GroepLijstView
+	public function lijst($id)
 	{
 		$groep = $this->repository->get($id);
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
@@ -327,7 +326,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return new GroepLijstView($this->container->get('twig'), $groep);
 	}
 
-	public function stats($id): GroepStatistiekView
+	public function stats($id)
 	{
 		$groep = $this->repository->get($id);
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
@@ -343,7 +342,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		);
 	}
 
-	public function emails($id): GroepEmailsView
+	public function emails($id)
 	{
 		$groep = $this->repository->get($id);
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
@@ -352,7 +351,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return new GroepEmailsView($this->container->get('twig'), $groep);
 	}
 
-	public function eetwens($id): GroepEetwensView
+	public function eetwens($id)
 	{
 		$groep = $this->repository->get($id);
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
@@ -361,7 +360,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return new GroepEetwensView($this->container->get('twig'), $groep);
 	}
 
-	public function zoeken(Request $request, $zoekterm = null): JsonResponse
+	public function zoeken(Request $request, $zoekterm = null)
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
@@ -403,7 +402,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function nieuw(Request $request, $id = null, $soort = null): GenericDataTableResponse|GroepForm|Response|ToResponse
+	public function nieuw(Request $request, $id = null, $soort = null)
 	{
 		return $this->aanmaken($request, $id, $soort);
 	}
@@ -416,7 +415,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function aanmaken(Request $request, $id = null, $soort = null): Response|GenericDataTableResponse|GroepPreviewForm|ToResponse
+	public function aanmaken(Request $request, $id = null, $soort = null)
 	{
 		if (!$id) {
 			$vorige = null;
@@ -516,7 +515,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		}
 	}
 
-	public function beheren(Request $request, $soort = null): GenericDataTableResponse|Response
+	public function beheren(Request $request, $soort = null)
 	{
 		if ($request->getMethod() == 'POST') {
 			$soortEnum = $this->repository->parseSoort($soort);
@@ -539,7 +538,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function wijzigen(Request $request, $id): Response|GenericDataTableResponse|GroepForm
+	public function wijzigen(Request $request, $id)
 	{
 		$groep = $this->repository->get($id);
 
@@ -598,7 +597,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderen(SerializerInterface $serializer, $id): GenericDataTableResponse
+	public function verwijderen(SerializerInterface $serializer, $id)
 	{
 		$response = [];
 		$groep = $this->repository->retrieveByUUID($id);
@@ -626,7 +625,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function opvolging($id): GenericDataTableResponse|GroepOpvolgingForm
+	public function opvolging($id)
 	{
 		$groep = $this->repository->retrieveByUUID($id);
 		$form = new GroepOpvolgingForm(
@@ -666,7 +665,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function converteren(ManagerRegistry $doctrine, $id): GenericDataTableResponse|GroepConverteerForm
+	public function converteren(ManagerRegistry $doctrine, $id)
 	{
 		$groep = $this->repository->retrieveByUUID($id);
 		$form = new GroepConverteerForm($doctrine, $groep, $this->repository);
@@ -721,7 +720,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function sluiten($id): GenericDataTableResponse
+	public function sluiten($id)
 	{
 		$response = [];
 		$groep = $this->repository->retrieveByUUID($id);
@@ -744,7 +743,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return $this->tableData($response);
 	}
 
-	public function voorbeeld($id): GroepPreviewForm
+	public function voorbeeld($id)
 	{
 		$groep = $this->repository->retrieveByUUID($id);
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
@@ -758,7 +757,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	 * @param $id
 	 * @return GenericDataTableResponse|GroepLogboekForm
 	 */
-	public function logboek(Request $request, $id): GenericDataTableResponse|GroepLogboekForm
+	public function logboek(Request $request, $id)
 	{
 		// data request
 		if ($request->getMethod() == 'POST') {
@@ -781,7 +780,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		}
 	}
 
-	public function leden(Request $request, $id): GenericDataTableResponse|GroepLedenTable
+	public function leden(Request $request, $id)
 	{
 		$groep = $this->repository->get($id);
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
@@ -800,7 +799,12 @@ abstract class AbstractGroepenController extends AbstractController implements
 	/*
 	 * Voor groepen V2
 	 */
-	public function aanmelden2(Request $request, EntityManagerInterface $em, $id, $uid): JsonResponse {
+	public function aanmelden2(
+		Request $request,
+		EntityManagerInterface $em,
+		$id,
+		$uid
+	) {
 		$groep = $this->repository->get($id);
 
 		if ($groep->versie !== GroepVersie::V2()) {
@@ -831,7 +835,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return new JsonResponse(['success' => true]);
 	}
 
-	public function ketzer_aanmelden(EntityManagerInterface $em, $id): GroepPasfotosView|GroepAanmeldenForm
+	public function ketzer_aanmelden(EntityManagerInterface $em, $id)
 	{
 		$uid = $this->getUid();
 		$groep = $this->repository->get($id);
@@ -859,7 +863,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		}
 	}
 
-	public function aanmelden(EntityManagerInterface $em, $id): GenericDataTableResponse|GroepLidBeheerForm
+	public function aanmelden(EntityManagerInterface $em, $id)
 	{
 		$groep = $this->repository->get($id);
 
@@ -893,7 +897,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		}
 	}
 
-	public function ketzer_bewerken(EntityManagerInterface $em, $id): GroepBewerkenForm
+	public function ketzer_bewerken(EntityManagerInterface $em, $id)
 	{
 		$uid = $this->getUid();
 		$groep = $this->repository->get($id);
@@ -913,7 +917,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return $form;
 	}
 
-	public function bewerken(EntityManagerInterface $em, $id, $uid = null): GenericDataTableResponse|GroepLidBeheerForm
+	public function bewerken(EntityManagerInterface $em, $id, $uid = null)
 	{
 		$groep = $this->repository->get($id);
 
@@ -950,7 +954,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		}
 	}
 
-	public function ketzer_afmelden(EntityManagerInterface $em, $id, $uid = null): GroepView
+	public function ketzer_afmelden(EntityManagerInterface $em, $id, $uid = null)
 	{
 		$groep = $this->repository->get($id);
 
@@ -985,7 +989,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return new GroepView($this->container->get('twig'), $groep);
 	}
 
-	public function afmelden(EntityManagerInterface $em, $id, $uid): GenericDataTableResponse
+	public function afmelden(EntityManagerInterface $em, $id, $uid)
 	{
 		$groep = $this->repository->get($id);
 
@@ -1005,7 +1009,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return $this->tableData([$response]);
 	}
 
-	public function naar_ot(EntityManagerInterface $em, $id, $uid = null): GenericDataTableResponse
+	public function naar_ot(EntityManagerInterface $em, $id, $uid = null)
 	{
 		$groep = $this->repository->get($id);
 		$otGroep = $this->repository->findOt($groep);

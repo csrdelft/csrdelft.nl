@@ -15,7 +15,7 @@ class Werkgroep extends Groep implements HeeftMoment
 {
 	use GroepMoment;
 
-	public function getUrl(): string
+	public function getUrl()
 	{
 		return '/groepen/werkgroepen/' . $this->id;
 	}

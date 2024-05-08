@@ -71,7 +71,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("tijd")
 	 */
-	public function getTijdFormatted(): false|string
+	public function getTijdFormatted()
 	{
 		return DateUtil::dateFormatIntl($this->tijd, DateUtil::TIME_FORMAT);
 	}
@@ -81,7 +81,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("datum")
 	 */
-	public function getDatumFormatted(): false|string
+	public function getDatumFormatted()
 	{
 		return DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT);
 	}
@@ -91,19 +91,19 @@ class ArchiefMaaltijd implements Agendeerbaar
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("aanmeldingen")
 	 */
-	public function getAantalAanmelding(): int
+	public function getAantalAanmelding()
 	{
 		return count($this->getAanmeldingenArray());
 	}
 
 	// Agendeerbaar ############################################################
 
-	public function getPrijsFloat(): float
+	public function getPrijsFloat()
 	{
 		return (float) $this->prijs / 100.0;
 	}
 
-	public function getTitel(): string
+	public function getTitel()
 	{
 		return $this->titel;
 	}
@@ -127,39 +127,39 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
 
-	public function getAantalAanmeldingen(): int
+	public function getAantalAanmeldingen()
 	{
 		return substr_count($this->aanmeldingen, ',');
 	}
 
-	public function getLocatie(): string
+	public function getLocatie()
 	{
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl(): string
+	public function getUrl()
 	{
 		return '/maaltijdenbeheer/archief';
 	}
 
-	public function isHeledag(): bool
+	public function isHeledag()
 	{
 		return false;
 	}
 
-	public function isTransparant(): bool
+	public function isTransparant()
 	{
 		return true;
 	}
 
-	public function jsonSerialize(): array
+	public function jsonSerialize()
 	{
 		$json = (array) $this;
 		$json['aanmeldingen'] = count($this->getAanmeldingenArray());
 		return $json;
 	}
 
-	public function getAanmeldingenArray(): array
+	public function getAanmeldingenArray()
 	{
 		$result = [];
 		$aanmeldingen = explode(',', $this->aanmeldingen);

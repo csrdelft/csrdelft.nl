@@ -6,7 +6,6 @@ use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\AbstractRepository;
-use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -24,7 +23,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 		parent::__construct($registy, CorveeRepetitie::class);
 	}
 
-	public function nieuw(MaaltijdRepetitie $maaltijdRepetitie = null): CorveeRepetitie
+	public function nieuw(MaaltijdRepetitie $maaltijdRepetitie = null)
 	{
 		$repetitie = new CorveeRepetitie();
 		$repetitie->crv_repetitie_id = null;
@@ -49,7 +48,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 		return $repetitie;
 	}
 
-	public function getFirstOccurrence(CorveeRepetitie $repetitie): DateTimeImmutable|false
+	public function getFirstOccurrence(CorveeRepetitie $repetitie)
 	{
 		$datum = time();
 		$shift = $repetitie->dag_vd_week - date('w', $datum) + 7;
@@ -63,7 +62,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	/**
 	 * @return CorveeRepetitie[]
 	 */
-	public function getVoorkeurbareRepetities(): array
+	public function getVoorkeurbareRepetities()
 	{
 		$repetities = $this->findBy(['voorkeurbaar' => true]);
 		$result = [];
@@ -73,7 +72,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 		return $result;
 	}
 
-	public function getAlleRepetities(): array
+	public function getAlleRepetities()
 	{
 		return $this->findAll();
 	}
@@ -84,7 +83,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	 * @param int $mrid
 	 * @return CorveeRepetitie[]
 	 */
-	public function getRepetitiesVoorMaaltijdRepetitie($mrid): array
+	public function getRepetitiesVoorMaaltijdRepetitie($mrid)
 	{
 		return $this->findBy(['mlt_repetitie_id' => $mrid]);
 	}
@@ -93,7 +92,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	 * @param $crid
 	 * @return CorveeRepetitie|null
 	 */
-	public function getRepetitie($crid): ?CorveeRepetitie
+	public function getRepetitie($crid)
 	{
 		return $this->find($crid);
 	}
@@ -106,7 +105,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	 * @param int $mrid
 	 * @return bool
 	 */
-	public function existMaaltijdRepetitieCorvee($mrid): bool
+	public function existMaaltijdRepetitieCorvee($mrid)
 	{
 		return count($this->findBy(['mlt_repetitie_id' => $mrid])) > 0;
 	}
@@ -119,7 +118,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	 * @param int $fid
 	 * @return bool
 	 */
-	public function existFunctieRepetities($fid): bool
+	public function existFunctieRepetities($fid)
 	{
 		return count($this->findBy(['functie_id' => $fid])) > 0;
 	}

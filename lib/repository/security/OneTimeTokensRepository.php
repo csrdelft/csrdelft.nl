@@ -46,7 +46,7 @@ class OneTimeTokensRepository extends AbstractRepository
 	 * @param string $token
 	 * @return Account|null
 	 */
-	public function verifyToken($url, $token): ?Account
+	public function verifyToken($url, $token)
 	{
 		$qb = $this->createQueryBuilder('t');
 		$qb->andWhere('t.url = :url');
@@ -70,7 +70,7 @@ class OneTimeTokensRepository extends AbstractRepository
 	 * @param string $url
 	 * @return boolean
 	 */
-	public function isVerified($uid, $url): bool
+	public function isVerified($uid, $url)
 	{
 		$token = $this->find(['uid' => $uid, 'url' => $url]);
 		if ($token) {
@@ -85,7 +85,7 @@ class OneTimeTokensRepository extends AbstractRepository
 	 * @param string $uid
 	 * @param string $url
 	 */
-	public function discardToken($uid, $url): void
+	public function discardToken($uid, $url)
 	{
 		$this->getEntityManager()->remove(
 			$this->getEntityManager()->getReference(OneTimeToken::class, [
@@ -104,7 +104,7 @@ class OneTimeTokensRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function createToken(Account $account, $url): array
+	public function createToken(Account $account, $url)
 	{
 		$rand = CryptoUtil::crypto_rand_token(255);
 		$token = new OneTimeToken();
@@ -124,7 +124,7 @@ class OneTimeTokensRepository extends AbstractRepository
 
 	/**
 	 */
-	public function opschonen(): void
+	public function opschonen()
 	{
 		$this->createQueryBuilder('t')
 			->delete()

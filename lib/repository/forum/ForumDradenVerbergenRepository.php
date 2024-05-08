@@ -24,7 +24,7 @@ class ForumDradenVerbergenRepository extends AbstractRepository
 		parent::__construct($registry, ForumDraadVerbergen::class);
 	}
 
-	protected function maakForumDraadVerbergen(ForumDraad $draad): ForumDraadVerbergen
+	protected function maakForumDraadVerbergen(ForumDraad $draad)
 	{
 		$verbergen = new ForumDraadVerbergen();
 		$verbergen->draad = $draad;
@@ -35,12 +35,12 @@ class ForumDradenVerbergenRepository extends AbstractRepository
 		return $verbergen;
 	}
 
-	public function getAantalVerborgenVoorLid(): int
+	public function getAantalVerborgenVoorLid()
 	{
 		return count($this->findBy(['uid' => LoginService::getUid()]));
 	}
 
-	public function getVerbergenVoorLid(ForumDraad $draad): ?ForumDraadVerbergen
+	public function getVerbergenVoorLid(ForumDraad $draad)
 	{
 		return $this->find([
 			'draad_id' => $draad->draad_id,
@@ -48,7 +48,7 @@ class ForumDradenVerbergenRepository extends AbstractRepository
 		]);
 	}
 
-	public function setVerbergenVoorLid(ForumDraad $draad, $verbergen = true): void
+	public function setVerbergenVoorLid(ForumDraad $draad, $verbergen = true)
 	{
 		if ($verbergen) {
 			if (!$this->getVerbergenVoorLid($draad)) {
@@ -60,7 +60,7 @@ class ForumDradenVerbergenRepository extends AbstractRepository
 		}
 	}
 
-	public function toonAllesVoorLeden(array $uids): void
+	public function toonAllesVoorLeden(array $uids)
 	{
 		$this->createQueryBuilder('v')
 			->delete()
@@ -70,7 +70,7 @@ class ForumDradenVerbergenRepository extends AbstractRepository
 			->execute();
 	}
 
-	public function toonDraadVoorIedereen(array $draadIds): void
+	public function toonDraadVoorIedereen(array $draadIds)
 	{
 		$this->createQueryBuilder('v')
 			->delete()

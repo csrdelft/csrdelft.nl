@@ -43,13 +43,13 @@ class CorveeVoorkeur
 
 	public $van_uid;
 
-	public function setProfiel(Profiel $profiel = null): void
+	public function setProfiel(Profiel $profiel = null)
 	{
 		$this->profiel = $profiel;
 		$this->uid = $profiel->uid ?? null;
 	}
 
-	public function setCorveeRepetitie(CorveeRepetitie $corveeRepetitie = null): void
+	public function setCorveeRepetitie(CorveeRepetitie $corveeRepetitie = null)
 	{
 		$this->corveeRepetitie = $corveeRepetitie;
 		$this->crv_repetitie_id = $corveeRepetitie->crv_repetitie_id ?? null;

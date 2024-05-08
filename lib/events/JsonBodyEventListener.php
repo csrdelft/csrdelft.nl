@@ -11,7 +11,7 @@ class JsonBodyEventListener
 	 *
 	 * @param RequestEvent $event
 	 */
-	public function onKernelRequest(RequestEvent $event): void
+	public function onKernelRequest(RequestEvent $event)
 	{
 		$request = $event->getRequest();
 		if (

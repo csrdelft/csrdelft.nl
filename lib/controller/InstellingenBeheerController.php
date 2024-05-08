@@ -24,14 +24,14 @@ class InstellingenBeheerController extends AbstractController
 		$this->instellingenRepository = $instellingenRepository;
 	}
 
-	protected function assertToegang($module = null): void
+	protected function assertToegang($module = null)
 	{
 		if (!$this->magModuleZien($module)) {
 			throw $this->createAccessDeniedException();
 		}
 	}
 
-	protected function magModuleZien($module = null): bool
+	protected function magModuleZien($module = null)
 	{
 		if ($module) {
 			switch ($module) {
@@ -55,7 +55,7 @@ class InstellingenBeheerController extends AbstractController
 	 * @Route("/instellingenbeheer", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function module($module = null): Response
+	public function module($module = null)
 	{
 		$this->assertToegang($module);
 
@@ -85,7 +85,7 @@ class InstellingenBeheerController extends AbstractController
 	 * @Route("/instellingenbeheer/opslaan/{module}/{id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function opslaan($module, $id): Response
+	public function opslaan($module, $id)
 	{
 		$this->assertToegang($module);
 
@@ -108,7 +108,7 @@ class InstellingenBeheerController extends AbstractController
 	 * @Route("/instellingenbeheer/reset/{module}/{id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function reset($module, $id): Response
+	public function reset($module, $id)
 	{
 		$this->assertToegang($module);
 

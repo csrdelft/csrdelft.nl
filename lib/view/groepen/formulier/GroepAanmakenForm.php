@@ -44,7 +44,7 @@ class GroepAanmakenForm extends ModalForm
 		$this->formKnoppen->submit->label = 'Aanmaken';
 	}
 
-	public function getValues(): array
+	public function getValues()
 	{
 		$return = [];
 		$value = $this->findByName('model')->getValue();

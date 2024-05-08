@@ -37,7 +37,7 @@ class SavedQuery
  #[ORM\Column(type: 'string', options: ['default' => 'Overig'])]
  public $categorie;
 
-	public function magBekijken(): bool
+	public function magBekijken()
 	{
 		return LoginService::mag($this->permissie) || LoginService::mag(P_ADMIN);
 	}

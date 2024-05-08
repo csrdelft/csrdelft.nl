@@ -123,7 +123,7 @@ class GoogleContactSync
 	 * Haal ContactGroup met ingestelde naam op.
 	 * @return false|ContactGroup
 	 */
-	private function getCSRContactGroup(): ContactGroup|bool
+	private function getCSRContactGroup()
 	{
 		foreach ($this->getContactGroups() as $group) {
 			if ($group->getName() === $this->groepNaam) {
@@ -138,7 +138,7 @@ class GoogleContactSync
 	 * Haal ContactGroup met ingestelde naam op. Maakt nieuwe aan als deze niet bestaat.
 	 * @return false|ContactGroup
 	 */
-	private function getOrCreateCSRContactGroup(): false|ContactGroup
+	private function getOrCreateCSRContactGroup()
 	{
 		$group = $this->getCSRContactGroup();
 		if (!$group) {
@@ -216,7 +216,7 @@ class GoogleContactSync
 		return null;
 	}
 
-	private function loadCurrentContacts(): void
+	private function loadCurrentContacts()
 	{
 		$contacts = $this->getCurrentContacts();
 		foreach ($contacts as $contact) {
@@ -514,7 +514,7 @@ class GoogleContactSync
 	 * @param Profiel[] $profielBatch
 	 * @return void
 	 */
-	private function updatePhotos(array $profielBatch): void
+	private function updatePhotos(array $profielBatch)
 	{
 		foreach ($profielBatch as $profiel) {
 			$pasfotoPath = $profiel->getPasfotoInternalPath('vierkant');
@@ -536,7 +536,7 @@ class GoogleContactSync
 	 * @param string $redirectURL
 	 * @return void
 	 */
-	public function initialize(string $redirectURL): void
+	public function initialize(string $redirectURL)
 	{
 		if ($this->initialized) {
 			return;
@@ -637,7 +637,7 @@ class GoogleContactSync
 	 *
 	 * @return string
 	 */
-	private function internationalizePhonenumber($phonenumber, $prefix = '+31'): string
+	private function internationalizePhonenumber($phonenumber, $prefix = '+31')
 	{
 		$number = str_replace([' ', '-'], '', $phonenumber);
 		if ($number[0] === '0') {

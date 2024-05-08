@@ -8,6 +8,8 @@ use CsrDelft\service\AccessService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
+use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
+
 /**
  * Class VoorkeurVoorkeur
  * @package CsrDelft\model\entity\commissievoorkeuren
@@ -42,7 +44,7 @@ class VoorkeurVoorkeur
  public $timestamp;
 
 	#[ORM\PreUpdate]
- public function setTimestamp(): void
+	public function setTimestamp()
 	{
 		$this->timestamp = new DateTimeImmutable();
 	}
@@ -58,15 +60,15 @@ class VoorkeurVoorkeur
   * @var VoorkeurCommissie
   */
  #[ORM\JoinColumn(name: 'cid')]
- #[ORM\ManyToOne(targetEntity: \VoorkeurCommissie::class)]
+ #[ORM\ManyToOne(targetEntity: VoorkeurCommissie::class)]
  public $commissie;
 
-	public function getCommissieNaam(): string
+	public function getCommissieNaam()
 	{
 		return $this->commissie->naam;
 	}
 
-	public function getCategorieNaam(): string
+	public function getCategorieNaam()
 	{
 		return $this->commissie->categorie->naam;
 	}
@@ -76,7 +78,7 @@ class VoorkeurVoorkeur
 	 *
 	 * @param VoorkeurCommissie $commissie
 	 */
-	public function setCommissie(VoorkeurCommissie $commissie): void
+	public function setCommissie(VoorkeurCommissie $commissie)
 	{
 		$this->commissie = $commissie;
 		$this->cid = $commissie->id;
@@ -87,7 +89,7 @@ class VoorkeurVoorkeur
 	 *
 	 * @param Profiel $profiel
 	 */
-	public function setProfiel(Profiel $profiel): void
+	public function setProfiel(Profiel $profiel)
 	{
 		$this->profiel = $profiel;
 		$this->uid = $profiel->uid;
@@ -107,7 +109,7 @@ class VoorkeurVoorkeur
 			);
 	}
 
-	public function getVoorkeurTekst(): string
+	public function getVoorkeurTekst()
 	{
 		return ['', 'nee', 'ja', 'misschien'][$this->voorkeur];
 	}

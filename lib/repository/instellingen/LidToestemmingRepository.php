@@ -14,7 +14,7 @@ use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -73,7 +73,7 @@ class LidToestemmingRepository extends AbstractRepository
 	 * @param boolean $islid
 	 * @return array
 	 */
-	public function getRelevantToestemmingCategories($islid): array
+	public function getRelevantToestemmingCategories($islid)
 	{
 		$toestemmingen = [];
 
@@ -96,7 +96,7 @@ class LidToestemmingRepository extends AbstractRepository
 		return $toestemmingen;
 	}
 
-	protected function newToestemming($module, $id, $uid): LidToestemming
+	protected function newToestemming($module, $id, $uid)
 	{
 		$toestemming = new LidToestemming();
 		$toestemming->module = $module;
@@ -108,7 +108,7 @@ class LidToestemmingRepository extends AbstractRepository
 		return $toestemming;
 	}
 
-	public function toestemmingGegeven(): bool
+	public function toestemmingGegeven()
 	{
 		$requestUri = $this->requestStack->getCurrentRequest()->getRequestUri();
 		$stopNag = $this->requestStack
@@ -153,7 +153,12 @@ class LidToestemmingRepository extends AbstractRepository
 		return true;
 	}
 
-	public function toestemming($profiel, $id, $cat = 'profiel', $except = 'ROLE_LEDEN_MOD'): bool {
+	public function toestemming(
+		$profiel,
+		$id,
+		$cat = 'profiel',
+		$except = 'ROLE_LEDEN_MOD'
+	) {
 		if (!$this->security->isGranted('ROLE_LEDEN_READ')) {
 			return false;
 		}
@@ -179,7 +184,7 @@ class LidToestemmingRepository extends AbstractRepository
 		return $toestemming->waarde == 'ja';
 	}
 
-	public function toestemmingUid($uid, $id, $except = 'ROLE_LEDEN_MOD'): bool
+	public function toestemmingUid($uid, $id, $except = 'ROLE_LEDEN_MOD')
 	{
 		if ($uid == $this->security->getUser()->getUserIdentifier()) {
 			return true;
@@ -226,7 +231,7 @@ class LidToestemmingRepository extends AbstractRepository
 		return $this->getField($module, $id, 'default');
 	}
 
-	public function isValidValue($module, $id, $waarde): bool
+	public function isValidValue($module, $id, $waarde)
 	{
 		$options = $this->getTypeOptions($module, $id);
 		if ($this->getType($module, $id) == InstellingType::Enumeration) {
@@ -248,7 +253,7 @@ class LidToestemmingRepository extends AbstractRepository
 		return $this->getToestemming($module, $id)->waarde;
 	}
 
-	protected function getToestemming($module, $id, $uid = null): ?LidToestemming
+	protected function getToestemming($module, $id, $uid = null)
 	{
 		if ($uid == null) {
 			$uid = $this->security->getUser()->getUserIdentifier();
@@ -275,7 +280,7 @@ class LidToestemmingRepository extends AbstractRepository
 		}
 	}
 
-	public function getToestemmingForIds($ids, $waardes = ['ja', 'nee']): array
+	public function getToestemmingForIds($ids, $waardes = ['ja', 'nee'])
 	{
 		return $this->findBy(
 			[self::FIELD_INSTELLING => $ids, self::FIELD_WAARDE => $waardes],
@@ -287,7 +292,7 @@ class LidToestemmingRepository extends AbstractRepository
 	 * @param null $uid Sla op voor uid
 	 * @throws Exception
 	 */
-	public function saveForLid($uid = null): void
+	public function saveForLid($uid = null)
 	{
 		// create matrix for sqlInsertMultiple
 		foreach ($this->defaults as $module => $instellingen) {

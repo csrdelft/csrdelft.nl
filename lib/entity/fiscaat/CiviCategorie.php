@@ -42,12 +42,12 @@ class CiviCategorie implements DisplayEntity
  #[ORM\Column(type: 'string')] // TODO Dit is een CiviSaldoCommissieEnum
  public $cie;
 
-	public function getBeschrijving(): string
+	public function getBeschrijving()
 	{
 		return sprintf('%s (%s)', $this->type, $this->cie);
 	}
 
-	public function getId(): integer
+	public function getId()
 	{
 		return $this->id;
 	}

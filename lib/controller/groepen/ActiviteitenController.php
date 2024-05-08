@@ -13,7 +13,7 @@ use CsrDelft\entity\groepen\Activiteit;
  */
 class ActiviteitenController extends KetzersController
 {
-	public function getGroepType(): string
+	public function getGroepType()
 	{
 		return Activiteit::class;
 	}

@@ -66,13 +66,13 @@ class ProfielToestemmingProxy extends Profiel
 		}
 	}
 
-	private function zichtbaar(string $name): bool
+	private function zichtbaar(string $name)
 	{
 		return !in_array($name, $this->filterVelden) ||
 			$this->lidToestemmingRepository->toestemming($this->profiel, $name);
 	}
 
-	public function __get(string $name): ?string
+	public function __get(string $name)
 	{
 		if (! $this->zichtbaar($name)) {
 			return null;
@@ -94,7 +94,7 @@ class ProfielToestemmingProxy extends Profiel
 		return $this->zichtbaar($name);
 	}
 
-	public function __set($name, $value): void
+	public function __set($name, $value)
 	{
 		throw new CsrException('Kan geen velden zetten op ProfielToestemmingProxy');
 	}

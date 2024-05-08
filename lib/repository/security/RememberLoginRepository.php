@@ -28,7 +28,7 @@ class RememberLoginRepository extends AbstractRepository
 	/**
 	 * @return RememberLogin
 	 */
-	public function nieuw(): RememberLogin
+	public function nieuw()
 	{
 		$remember = new RememberLogin();
 		$remember->uid = LoginService::getUid();
@@ -53,7 +53,7 @@ class RememberLoginRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijder($token): void
+	public function verwijder($token)
 	{
 		$rememberLogin = $this->findOneBy(['token' => $token]);
 		if ($rememberLogin) {

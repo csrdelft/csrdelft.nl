@@ -42,12 +42,12 @@ class LedenlijstContent implements View
 		$this->requestStack = $requestStack;
 	}
 
-	public function getModel(): LidZoekerService
+	public function getModel()
 	{
 		return $this->lidzoeker;
 	}
 
-	public function getBreadcrumbs(): string
+	public function getBreadcrumbs()
 	{
 		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
 			Icon::getTag('home') .
@@ -55,7 +55,7 @@ class LedenlijstContent implements View
 			'<li class="breadcrumb-item active">Ledenlijst der Civitas</li></ul>';
 	}
 
-	public function getTitel(): string
+	public function getTitel()
 	{
 		return 'Ledenlijst der Civitas';
 	}

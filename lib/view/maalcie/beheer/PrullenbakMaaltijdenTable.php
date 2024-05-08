@@ -79,7 +79,7 @@ class PrullenbakMaaltijdenTable extends DataTable
 		);
 	}
 
-	public function getBreadcrumbs(): string
+	public function getBreadcrumbs()
 	{
 		return 'Maaltijden / Beheer / Prullenbak';
 	}

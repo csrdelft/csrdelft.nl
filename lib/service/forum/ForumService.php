@@ -68,7 +68,7 @@ class ForumService
 		$this->forumDradenRepository = $forumDradenRepository;
 	}
 
-	public function opschonen(): void
+	public function opschonen()
 	{
 		// Oude lege concepten verwijderen
 		$this->forumDradenReagerenRepository->verwijderLegeConcepten();

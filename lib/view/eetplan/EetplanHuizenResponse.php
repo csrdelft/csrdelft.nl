@@ -15,7 +15,7 @@ class EetplanHuizenResponse extends DataTableResponse
 	/**
 	 * @param Woonoord $entity
 	 */
-	public function renderElement($entity): array
+	public function renderElement($entity)
 	{
 		return [
 			'UUID' => $entity->getUUID(),

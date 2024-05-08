@@ -27,7 +27,11 @@ class PeilingForm implements FormulierTypeInterface
 	 * @param Peiling $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
+	public function createFormulier(
+		FormulierBuilder $builder,
+		$data,
+		$options = []
+	) {
 		//$url = $nieuw ? '/peilingen/nieuw' : '/peilingen/bewerken';
 
 		$builder->setTitel(

@@ -67,7 +67,7 @@ class MaaltijdenFiscaatController extends AbstractController
 	 * @Route("/maaltijden/fiscaat", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function GET_overzicht(): Response
+	public function GET_overzicht()
 	{
 		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Overzicht verwerkte maaltijden',
@@ -80,7 +80,7 @@ class MaaltijdenFiscaatController extends AbstractController
 	 * @Route("/maaltijden/fiscaat", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function POST_overzicht(): GenericDataTableResponse
+	public function POST_overzicht()
 	{
 		$data = $this->maaltijdenRepository->findBy(['verwerkt' => true]);
 
@@ -92,7 +92,7 @@ class MaaltijdenFiscaatController extends AbstractController
 	 * @Route("/maaltijden/fiscaat/onverwerkt", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function GET_onverwerkt(): Response
+	public function GET_onverwerkt()
 	{
 		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Onverwerkte Maaltijden',
@@ -106,7 +106,7 @@ class MaaltijdenFiscaatController extends AbstractController
 	 * @Route("/maaltijden/fiscaat/verwerk", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function POST_verwerk(EntityManagerInterface $em): GenericDataTableResponse
+	public function POST_verwerk(EntityManagerInterface $em)
 	{
 		// Haal maaltijd op
 		$selection = $this->getDataTableSelection();

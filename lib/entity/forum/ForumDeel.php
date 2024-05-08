@@ -93,19 +93,19 @@ class ForumDeel
 		$this->meldingen = new ArrayCollection();
 	}
 
-	public function magLezen($rss = false): bool
+	public function magLezen($rss = false)
 	{
 		return LoginService::mag(P_FORUM_READ) &&
 			LoginService::mag($this->rechten_lezen) &&
 			$this->categorie->magLezen();
 	}
 
-	public function magPosten(): bool
+	public function magPosten()
 	{
 		return LoginService::mag($this->rechten_posten);
 	}
 
-	public function magModereren(): bool
+	public function magModereren()
 	{
 		return LoginService::mag($this->rechten_modereren);
 	}
@@ -125,7 +125,7 @@ class ForumDeel
 	 *
 	 * @return ForumDraad[]
 	 */
-	public function getForumDraden(): array
+	public function getForumDraden()
 	{
 		if (!isset($this->forum_draden)) {
 			$this->setForumDraden(
@@ -137,7 +137,7 @@ class ForumDeel
 		return $this->forum_draden;
 	}
 
-	public function hasForumDraden(): bool
+	public function hasForumDraden()
 	{
 		$this->getForumDraden();
 		return !empty($this->forum_draden);
@@ -148,7 +148,7 @@ class ForumDeel
 	 *
 	 * @param array $forum_draden
 	 */
-	public function setForumDraden($forum_draden): void
+	public function setForumDraden($forum_draden)
 	{
 		$this->forum_draden = $forum_draden;
 	}

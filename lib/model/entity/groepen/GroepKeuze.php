@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class GroepKeuze
 {
-	public function __wakeup(): void
+	public function __wakeup()
 	{
 		assert(in_array($this->type, GroepKeuzeType::getEnumValues()));
 	}

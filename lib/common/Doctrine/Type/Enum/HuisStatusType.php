@@ -6,12 +6,12 @@ use CsrDelft\entity\groepen\enum\HuisStatus;
 
 class HuisStatusType extends EnumType
 {
-	public function getEnumClass(): string
+	public function getEnumClass()
 	{
 		return HuisStatus::class;
 	}
 
-	public function getName(): string
+	public function getName()
 	{
 		return 'enumHuisStatus';
 	}

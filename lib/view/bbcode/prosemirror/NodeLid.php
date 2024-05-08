@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\BbLid;
 
 class NodeLid implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbLid::class;
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'lid';
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbLid) {
 			throw new \InvalidArgumentException();
@@ -43,14 +43,14 @@ class NodeLid implements Node
 		}
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [
 			'lid' => $node->attrs->uid,
 		];
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return true;
 	}

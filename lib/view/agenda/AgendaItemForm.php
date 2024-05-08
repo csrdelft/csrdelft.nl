@@ -21,7 +21,11 @@ class AgendaItemForm implements FormulierTypeInterface
 	 * @param AgendaItem $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
+	public function createFormulier(
+		FormulierBuilder $builder,
+		$data,
+		$options = []
+	) {
 		$builder->setAction(
 			'/agenda/' .
 				$options['actie'] .

@@ -13,7 +13,7 @@ class Dies2023Controller extends AbstractController
 	 * @Route("/magnumopus")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lustrum(): Response
+	public function lustrum()
 	{
 		return $this->render('dies2023/dies2023.html.twig');
 	}

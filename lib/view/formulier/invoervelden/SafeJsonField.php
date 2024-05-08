@@ -21,7 +21,7 @@ class SafeJsonField extends TextareaField
 			$min_len
 		);
 	}
-	public function getFormattedValue(): mixed
+	public function getFormattedValue()
 	{
 		return json_decode(
 			htmlspecialchars_decode(parent::getFormattedValue()),

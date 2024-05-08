@@ -28,7 +28,7 @@ class HtmlComment implements FormElement
 		return $this->comment;
 	}
 
-	public function getBreadcrumbs(): null
+	public function getBreadcrumbs()
 	{
 		return null;
 	}
@@ -43,7 +43,7 @@ class HtmlComment implements FormElement
 		return '<div>' . $this->getHtml() . '</div>';
 	}
 
-	public function getJavascript(): string
+	public function getJavascript()
 	{
 		return '';
 	}
@@ -53,7 +53,7 @@ class HtmlComment implements FormElement
 		return $this->getType();
 	}
 
-	public function getType(): string
+	public function getType()
 	{
 		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}

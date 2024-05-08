@@ -11,18 +11,18 @@ final class HostUtil
 	 * Is de huidige host de production server?
 	 * @return boolean
 	 */
-	public static function isProduction(): bool
+	public static function isProduction()
 	{
 		// Controleer voor alle namen die de production server had/heeft/zal hebben
 		return !ContainerFacade::getContainer()->get('kernel')->isDebug();
 	}
 
-	public static function isCLI(): bool
+	public static function isCLI()
 	{
 		return PHP_SAPI == 'cli' && $_SERVER['APP_ENV'] != 'test';
 	}
 
-	public static function isCI(): string|array|false
+	public static function isCI()
 	{
 		return getenv('CI');
 	}

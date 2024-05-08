@@ -29,7 +29,7 @@ class VoorkeurCommissieRepository extends AbstractRepository
 		$this->voorkeurCommissieCategorieModel = $voorkeurCommissieCategorieRepository;
 	}
 
-	public function getByCategorie(): array
+	public function getByCategorie()
 	{
 		$categorien = $this->voorkeurCommissieCategorieModel->findAll();
 		$cat2commissie = [];

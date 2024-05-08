@@ -14,7 +14,7 @@ final class DebugUtil
 	 * @param mixed $sString
 	 * @param string $cssID
 	 */
-	public static function debugprint($sString, $cssID = 'pubcie_debug'): void
+	public static function debugprint($sString, $cssID = 'pubcie_debug')
 	{
 		if (
 			DEBUG ||

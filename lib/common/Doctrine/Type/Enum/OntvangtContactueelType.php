@@ -6,12 +6,12 @@ use CsrDelft\entity\OntvangtContactueel;
 
 class OntvangtContactueelType extends EnumType
 {
-	public function getEnumClass(): string
+	public function getEnumClass()
 	{
 		return OntvangtContactueel::class;
 	}
 
-	public function getName(): string
+	public function getName()
 	{
 		return 'enumOntvangtContactueel';
 	}

@@ -11,7 +11,7 @@ use League\Bundle\OAuth2ServerBundle\ValueObject\Scope;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use League\Bundle\OAuth2ServerBundle\Event\AuthorizationRequestResolveEvent;
 use League\Bundle\OAuth2ServerBundle\Event\ScopeResolveEvent;
 use League\Bundle\OAuth2ServerBundle\OAuth2Events;
@@ -63,7 +63,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		$this->security = $security;
 	}
 
-	public static function getSubscribedEvents(): array
+	public static function getSubscribedEvents()
 	{
 		return [
 			OAuth2Events::SCOPE_RESOLVE => 'onScopeResolve',
@@ -71,7 +71,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		];
 	}
 
-	public function onScopeResolve(ScopeResolveEvent $event): void
+	public function onScopeResolve(ScopeResolveEvent $event)
 	{
 		$rememberOAuth = $this->rememberOAuthRepository->findByUser(
 			$event->getUserIdentifier(),

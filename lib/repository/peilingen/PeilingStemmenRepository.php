@@ -27,7 +27,7 @@ class PeilingStemmenRepository extends AbstractRepository
 	 *
 	 * @return bool
 	 */
-	public function heeftGestemd($peiling_id, $uid): bool
+	public function heeftGestemd($peiling_id, $uid)
 	{
 		return count($this->findBy(['peiling_id' => $peiling_id, 'uid' => $uid])) !=
 			0;

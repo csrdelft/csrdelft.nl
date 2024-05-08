@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\groep\BbKetzer;
 
 class NodeKetzer implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbKetzer::class;
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'ketzer';
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbKetzer) {
 			throw new \InvalidArgumentException();
@@ -29,14 +29,14 @@ class NodeKetzer implements Node
 		];
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [
 			'ketzer' => $node->attrs->id,
 		];
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return true;
 	}

@@ -37,7 +37,7 @@ class AccountRepository extends AbstractRepository implements
 	 * @param $uid
 	 * @return bool
 	 */
-	public static function isValidUid($uid): bool
+	public static function isValidUid($uid)
 	{
 		return is_string($uid) && preg_match('/^[a-z0-9]{4}$/', $uid);
 	}
@@ -62,7 +62,7 @@ class AccountRepository extends AbstractRepository implements
 		return $this->findOneBy(['username' => $name]) != null;
 	}
 
-	public function findAdmins(): mixed
+	public function findAdmins()
 	{
 		return $this->createQueryBuilder('a')
 			->where('a.perm_role NOT IN (:admin_perm_roles)')
@@ -79,7 +79,7 @@ class AccountRepository extends AbstractRepository implements
 	/**
 	 * @param Account $account
 	 */
-	public function resetPrivateToken(Account $account): void
+	public function resetPrivateToken(Account $account)
 	{
 		$account->private_token = CryptoUtil::crypto_rand_token(150);
 		$account->private_token_since = date_create_immutable();
@@ -92,7 +92,7 @@ class AccountRepository extends AbstractRepository implements
 	 *
 	 * @return int
 	 */
-	public function moetWachten(Account $account): int
+	public function moetWachten(Account $account)
 	{
 		/**
 		 * @source OWASP best-practice
@@ -124,7 +124,7 @@ class AccountRepository extends AbstractRepository implements
 	/**
 	 * @param Account $account
 	 */
-	public function failedLoginAttempt(Account $account): void
+	public function failedLoginAttempt(Account $account)
 	{
 		$account->failed_login_attempts++;
 		$account->last_login_attempt = date_create_immutable();
@@ -135,7 +135,7 @@ class AccountRepository extends AbstractRepository implements
 	/**
 	 * @param Account $account
 	 */
-	public function successfulLoginAttempt(Account $account): void
+	public function successfulLoginAttempt(Account $account)
 	{
 		$account->failed_login_attempts = 0;
 		$account->last_login_attempt = date_create_immutable();
@@ -144,7 +144,7 @@ class AccountRepository extends AbstractRepository implements
 		$this->_em->flush();
 	}
 
-	public function delete(Account $account): void
+	public function delete(Account $account)
 	{
 		$this->_em->remove($account);
 		$this->_em->flush();
@@ -165,7 +165,7 @@ class AccountRepository extends AbstractRepository implements
 		return $this->findOneByUsername($identifier);
 	}
 
-	public function findOneByUsername($username): ?Account
+	public function findOneByUsername($username)
 	{
 		return $this->find($username) ??
 			($this->findOneBy(['username' => $username]) ??
@@ -176,7 +176,7 @@ class AccountRepository extends AbstractRepository implements
 	 * @param $email
 	 * @return Account|null
 	 */
-	public function findOneByEmail($email): ?Account
+	public function findOneByEmail($email)
 	{
 		if (empty($email)) {
 			return null;

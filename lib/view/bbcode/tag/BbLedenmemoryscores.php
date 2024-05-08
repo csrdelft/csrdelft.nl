@@ -9,7 +9,7 @@ use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -45,7 +45,7 @@ class BbLedenmemoryscores extends BbTag
 		$this->security = $security;
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'ledenmemoryscores';
 	}
@@ -55,7 +55,7 @@ class BbLedenmemoryscores extends BbTag
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
-	public function renderLight(): string
+	public function renderLight()
 	{
 		return BbHelper::lightLinkBlock(
 			'ledenmemoryscores',
@@ -68,7 +68,7 @@ class BbLedenmemoryscores extends BbTag
 	/**
 	 * @param $arguments
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$groep = null;
 		$titel = null;

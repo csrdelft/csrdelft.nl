@@ -22,7 +22,7 @@ class ReeksRepository extends AbstractRepository
 		parent::__construct($registry, Reeks::class);
 	}
 
-	public function delete(Reeks $reeks): void
+	public function delete(Reeks $reeks)
 	{
 		$em = $this->getEntityManager();
 

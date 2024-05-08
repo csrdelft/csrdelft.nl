@@ -37,12 +37,12 @@ class BbAanmelder extends BbTag
 		$this->twig = $twig;
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'aanmelder';
 	}
 
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		if (isset($arguments['aanmelder'])) {
 			$this->activiteit = intval($arguments['aanmelder']);
@@ -52,7 +52,7 @@ class BbAanmelder extends BbTag
 		}
 	}
 
-	public function render(): string
+	public function render()
 	{
 		if (isset($this->reeks)) {
 			$reeks = $this->reeksRepository->find($this->reeks);

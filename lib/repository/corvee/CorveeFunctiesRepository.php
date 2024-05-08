@@ -45,7 +45,7 @@ class CorveeFunctiesRepository extends AbstractRepository
 	 * @param int $fid
 	 * @return CorveeFunctie|null
 	 */
-	public function get($fid): ?CorveeFunctie
+	public function get($fid)
 	{
 		return $this->find($fid);
 	}
@@ -55,12 +55,12 @@ class CorveeFunctiesRepository extends AbstractRepository
 	 *
 	 * @return CorveeFunctie[]
 	 */
-	public function getAlleFuncties(): array
+	public function getAlleFuncties()
 	{
 		return ArrayUtil::group_by_distinct('functie_id', $this->findAll());
 	}
 
-	public function nieuw(): CorveeFunctie
+	public function nieuw()
 	{
 		$functie = new CorveeFunctie();
 		$functie->kwalificatie_benodigd = (bool) InstellingUtil::instelling(
@@ -70,7 +70,7 @@ class CorveeFunctiesRepository extends AbstractRepository
 		return $functie;
 	}
 
-	public function removeFunctie(CorveeFunctie $functie): void
+	public function removeFunctie(CorveeFunctie $functie)
 	{
 		if ($this->corveeTakenRepository->existFunctieTaken($functie->functie_id)) {
 			throw new CsrGebruikerException(
@@ -95,7 +95,7 @@ class CorveeFunctiesRepository extends AbstractRepository
 		$this->_em->flush();
 	}
 
-	public function getSuggesties($query): mixed
+	public function getSuggesties($query)
 	{
 		return $this->createQueryBuilder('f')
 			->where('f.naam LIKE :query')

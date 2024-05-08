@@ -23,17 +23,17 @@ class PlainView implements View, ToResponse
 		return $this->body;
 	}
 
-	public function getTitel(): string
+	public function getTitel()
 	{
 		return '';
 	}
 
-	public function getBreadcrumbs(): string
+	public function getBreadcrumbs()
 	{
 		return '';
 	}
 
-	public function getModel(): null
+	public function getModel()
 	{
 		return null;
 	}

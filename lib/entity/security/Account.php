@@ -109,12 +109,12 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
  #[ORM\OneToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class, inversedBy: 'account')]
  public $profiel;
 
-	public function hasPrivateToken(): bool
+	public function hasPrivateToken()
 	{
 		return !empty($this->private_token);
 	}
 
-	public function getICalLink(): string
+	public function getICalLink()
 	{
 		$url = '/agenda/ical/';
 		if (empty($this->private_token)) {
@@ -124,7 +124,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 		}
 	}
 
-	public function getRssLink(): string
+	public function getRssLink()
 	{
 		$url = '/forum/rss/';
 		if (empty($this->private_token)) {
@@ -134,7 +134,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 		}
 	}
 
-	public function getEmail(): string
+	public function getEmail()
 	{
 		return $this->email;
 	}
@@ -153,12 +153,12 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 		return $this->pass_hash;
 	}
 
-	public function getSalt(): string
+	public function getSalt()
 	{
 		return '';
 	}
 
-	public function getUsername(): string
+	public function getUsername()
 	{
 		return $this->uid;
 	}
@@ -170,7 +170,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public $pass_plain;
 
-	public function eraseCredentials(): void
+	public function eraseCredentials()
 	{
 		$this->pass_plain = null;
 	}

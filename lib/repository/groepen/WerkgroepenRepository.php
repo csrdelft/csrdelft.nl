@@ -6,7 +6,7 @@ use CsrDelft\entity\groepen\Werkgroep;
 
 class WerkgroepenRepository extends KetzersRepository
 {
-	public function getEntityClassName(): string
+	public function getEntityClassName()
 	{
 		return Werkgroep::class;
 	}

@@ -114,7 +114,7 @@ class Peiling implements DataTableEntry
 	 * @return int
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
-	public function getAantalGestemd(): int
+	public function getAantalGestemd()
 	{
 		if (!$this->opties) {
 			return 0;
@@ -130,14 +130,14 @@ class Peiling implements DataTableEntry
 	/**
 	 * @Serializer\Groups("vue")
 	 */
-	public function getHeeftGestemd(): bool
+	public function getHeeftGestemd()
 	{
 		return (bool) $this->stemmen
 			->matching(Eisen::voorIngelogdeGebruiker())
 			->first();
 	}
 
-	public function getStem(Profiel $profiel): mixed
+	public function getStem(Profiel $profiel)
 	{
 		return $this->stemmen
 			->matching(Eisen::voorGebruiker($profiel->uid))
@@ -159,7 +159,7 @@ class Peiling implements DataTableEntry
 	 * @return bool
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
-	public function getIsMod(): bool
+	public function getIsMod()
 	{
 		return $this->getMagBewerken();
 	}
@@ -192,7 +192,7 @@ class Peiling implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("detailSource")
 	 */
-	public function getDetailSource(): string
+	public function getDetailSource()
 	{
 		return '/peilingen/opties/' . $this->id;
 	}
@@ -200,7 +200,7 @@ class Peiling implements DataTableEntry
 	/**
 	 * @return bool
 	 */
-	public function isPeilingOpen(): bool
+	public function isPeilingOpen()
 	{
 		return $this->sluitingsdatum == null ||
 			time() < $this->sluitingsdatum->getTimestamp();
@@ -220,7 +220,7 @@ class Peiling implements DataTableEntry
 	 * @return string|null
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
-	public function getBeschrijving(): string
+	public function getBeschrijving()
 	{
 		return CsrBB::parse($this->beschrijving);
 	}

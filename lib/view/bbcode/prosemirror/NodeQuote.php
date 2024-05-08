@@ -7,27 +7,27 @@ use CsrDelft\bb\tag\BbQuote;
 
 class NodeQuote implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbQuote::class;
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'blockquote';
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		return [];
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [];
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return false;
 	}

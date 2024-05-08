@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use DateTimeImmutable;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,7 +14,7 @@ class ArroController extends AbstractController
 	 * @Route("/arro")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function arro(): RedirectResponse|Response
+	public function arro()
 	{
 		$now = new DateTimeImmutable();
 		$date = new DateTimeImmutable('2023-02-03T21:00:00Z');

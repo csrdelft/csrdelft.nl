@@ -5,7 +5,6 @@ namespace CsrDelft\entity\fiscaat;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\formulier\DisplayEntity;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -69,7 +68,7 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	 * @return integer
 	 * @Serializer\Groups("bar")
 	 */
-	public function getRecent(): int
+	public function getRecent()
 	{
 		$eb = Criteria::expr();
 		$criteria = Criteria::create()
@@ -101,12 +100,12 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("naam")
 	 */
-	public function getDataTableNaam(): string
+	public function getDataTableNaam()
 	{
 		return $this->getWeergave();
 	}
 
-	public function getId(): string
+	public function getId()
 	{
 		return $this->uid;
 	}

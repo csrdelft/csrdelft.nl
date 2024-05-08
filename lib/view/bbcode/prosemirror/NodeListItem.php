@@ -7,27 +7,27 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeListItem implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbListItem::class;
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'list_item';
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		return [];
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [];
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return false;
 	}

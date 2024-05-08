@@ -80,7 +80,7 @@ class RadioField extends SelectField
 		return $html;
 	}
 
-	public function getJavascript(): string
+	public function getJavascript()
 	{
 		$js = parent::getJavascript();
 		foreach ($this->options as $value => $description) {

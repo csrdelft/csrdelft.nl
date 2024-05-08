@@ -54,7 +54,7 @@ class Eetplan implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("woonoord")
 	 */
-	public function getDataTableWoonoord(): string
+	public function getDataTableWoonoord()
 	{
 		return $this->woonoord->naam;
 	}
@@ -64,7 +64,7 @@ class Eetplan implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("naam")
 	 */
-	public function getDataTableNaam(): string
+	public function getDataTableNaam()
 	{
 		return $this->noviet->getNaam();
 	}
@@ -74,7 +74,7 @@ class Eetplan implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("avond")
 	 */
-	public function getDataTableAvond(): false|string|null
+	public function getDataTableAvond()
 	{
 		if ($this->avond) {
 			return DateUtil::dateFormatIntl($this->avond, DateUtil::DATE_FORMAT);

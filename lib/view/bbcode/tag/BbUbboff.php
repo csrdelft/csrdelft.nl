@@ -14,12 +14,12 @@ use CsrDelft\bb\BbTag;
  */
 class BbUbboff extends BbTag
 {
-	public static function getTagName(): array
+	public static function getTagName()
 	{
 		return ['ubboff', 'tekst'];
 	}
 
-	public function render(): string
+	public function render()
 	{
 		return $this->getContent();
 	}
@@ -27,14 +27,14 @@ class BbUbboff extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->parser->bb_mode = false;
 		$this->readContent();
 		$this->parser->bb_mode = true;
 	}
 
-	protected function getStoppers(): array
+	protected function getStoppers()
 	{
 		// De [/] tag werkt niet hier
 		return ['[/tekst]', '[/uboff]'];

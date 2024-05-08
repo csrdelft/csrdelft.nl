@@ -7,22 +7,22 @@ use CsrDelft\bb\tag\BbNode;
 
 class MarkItalic implements Mark
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbItalic::class;
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		return [];
 	}
 
-	public static function getMarkType(): string
+	public static function getMarkType()
 	{
 		return 'em';
 	}
 
-	public function getTagAttributes($mark): array
+	public function getTagAttributes($mark)
 	{
 		return [];
 	}

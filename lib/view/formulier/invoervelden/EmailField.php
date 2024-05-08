@@ -11,7 +11,7 @@ use CsrDelft\common\Util\UrlUtil;
  */
 class EmailField extends TextField
 {
-	public function validate(): bool
+	public function validate()
 	{
 		if (!parent::validate()) {
 			return false;
@@ -39,7 +39,7 @@ class EmailField extends TextField
 	 *
 	 * @return string
 	 */
-	public function getValue(): string
+	public function getValue()
 	{
 		return trim(parent::getValue());
 	}

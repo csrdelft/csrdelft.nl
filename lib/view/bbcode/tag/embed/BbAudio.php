@@ -11,17 +11,17 @@ class BbAudio extends BbTag
 	 */
 	public $url;
 
-	public static function getTagName(): array
+	public static function getTagName()
 	{
 		return ['audio', 'geluid'];
 	}
 
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->url = $this->readMainArgument($arguments);
 	}
 
-	public function render(): string
+	public function render()
 	{
 		$src = htmlspecialchars($this->url);
 

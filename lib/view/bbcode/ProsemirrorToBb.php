@@ -38,7 +38,7 @@ class ProsemirrorToBb
 		$this->nodesRegistry = $nodesRegistry;
 	}
 
-	public function convertToBb($value): string
+	public function convertToBb($value)
 	{
 		$this->document($value);
 
@@ -55,7 +55,7 @@ class ProsemirrorToBb
 		return implode('', $bb);
 	}
 
-	private function document($value): ProsemirrorToBb
+	private function document($value)
 	{
 		if (is_string($value)) {
 			$value = json_decode($value);
@@ -68,7 +68,7 @@ class ProsemirrorToBb
 		return $this;
 	}
 
-	private function convertNodeToBb($node): string
+	private function convertNodeToBb($node)
 	{
 		$bb = [];
 
@@ -129,7 +129,7 @@ class ProsemirrorToBb
 		return implode('', $bb);
 	}
 
-	private function renderOpeningTag($tagName, $tagAttributes): string
+	private function renderOpeningTag($tagName, $tagAttributes)
 	{
 		// A bb tag can define multiple allowed tag names, we choose the first.
 		if (is_array($tagName)) {
@@ -162,7 +162,7 @@ class ProsemirrorToBb
 		return "[{$tagName}{$attrs}]{$content}";
 	}
 
-	private function renderClosingTag($tagName): string
+	private function renderClosingTag($tagName)
 	{
 		// A bb tag can define multiple allowed tag names, we choose the first.
 		if (is_array($tagName)) {

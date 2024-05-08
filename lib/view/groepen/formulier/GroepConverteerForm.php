@@ -38,7 +38,7 @@ class GroepConverteerForm extends ModalForm
 		$this->formKnoppen->submit->label = 'Converteren';
 	}
 
-	public function getValues(): array
+	public function getValues()
 	{
 		$values = parent::getValues();
 		$values['soort'] = $this->findByName('model')->getSoort();

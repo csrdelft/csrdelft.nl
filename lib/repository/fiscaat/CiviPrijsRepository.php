@@ -34,7 +34,7 @@ class CiviPrijsRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderVoorProduct(CiviProduct $product): void
+	public function verwijderVoorProduct(CiviProduct $product)
 	{
 		if (!$this->_em->getConnection()->isTransactionActive()) {
 			throw new CsrException(

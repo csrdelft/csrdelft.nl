@@ -15,7 +15,7 @@ class PrivateTokenToken extends AbstractToken
 		$this->setAuthenticated(true);
 	}
 
-	public function getCredentials(): string
+	public function getCredentials()
 	{
 		return '';
 	}

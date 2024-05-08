@@ -3,7 +3,6 @@
 namespace CsrDelft\entity\security;
 
 use CsrDelft\entity\security\enum\RemoteLoginStatus;
-use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation as Serializer;

@@ -6,12 +6,12 @@ use CsrDelft\entity\Geslacht;
 
 class GeslachtType extends EnumType
 {
-	public function getEnumClass(): string
+	public function getEnumClass()
 	{
 		return Geslacht::class;
 	}
 
-	public function getName(): string
+	public function getName()
 	{
 		return 'enumGeslacht';
 	}

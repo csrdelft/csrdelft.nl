@@ -4,7 +4,7 @@ namespace CsrDelft\common\Security\Voter;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * ROLE_PUBLIC is een synoniem van PUBLIC_ACCESS

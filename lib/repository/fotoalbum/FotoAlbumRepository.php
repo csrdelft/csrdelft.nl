@@ -20,7 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -59,7 +59,7 @@ class FotoAlbumRepository extends AbstractRepository
 	 * @param int $limit
 	 * @return FotoAlbum[]
 	 */
-	public function zoeken($dir, $limit): mixed
+	public function zoeken($dir, $limit)
 	{
 		return $this->createQueryBuilder('fa')
 			->where('fa.subdir LIKE :subdir')
@@ -74,7 +74,7 @@ class FotoAlbumRepository extends AbstractRepository
 	 * @param string $subdir
 	 * @return FotoAlbum[]
 	 */
-	public function findBySubdir($subdir): mixed
+	public function findBySubdir($subdir)
 	{
 		return $this->createQueryBuilder('fa')
 			->where('fa.subdir LIKE :subdir')
@@ -88,7 +88,7 @@ class FotoAlbumRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(FotoAlbum $album): void
+	public function create(FotoAlbum $album)
 	{
 		if (!file_exists($album->getPath())) {
 			mkdir($album->getPath());
@@ -111,7 +111,7 @@ class FotoAlbumRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function delete(FotoAlbum $album): void
+	public function delete(FotoAlbum $album)
 	{
 		$path = $album->path . '_resized';
 		if (file_exists($path)) {
@@ -129,7 +129,7 @@ class FotoAlbumRepository extends AbstractRepository
 		$this->getEntityManager()->flush();
 	}
 
-	public function getFotoAlbum($path): FotoTagAlbum|FotoAlbum
+	public function getFotoAlbum($path)
 	{
 		if (
 			AccountRepository::isValidUid($path) and
@@ -148,7 +148,7 @@ class FotoAlbumRepository extends AbstractRepository
 		return $album;
 	}
 
-	public function verwerkFotos(FotoAlbum $fotoalbum): void
+	public function verwerkFotos(FotoAlbum $fotoalbum)
 	{
 		// verwijder niet bestaande subalbums en fotos uit de database
 		$this->opschonen($fotoalbum);
@@ -232,7 +232,7 @@ HTML;
 		}
 	}
 
-	public function hernoemAlbum(FotoAlbum $album, $newName): bool
+	public function hernoemAlbum(FotoAlbum $album, $newName)
 	{
 		if (!PathUtil::valid_filename($newName)) {
 			throw new CsrGebruikerException('Ongeldige naam');
@@ -296,7 +296,7 @@ HTML;
 		return true;
 	}
 
-	public function setAlbumCover(FotoAlbum $album, Foto $cover): bool
+	public function setAlbumCover(FotoAlbum $album, Foto $cover)
 	{
 		$success = true;
 		// find old cover
@@ -354,7 +354,7 @@ HTML;
 		return $success;
 	}
 
-	public function opschonen(FotoAlbum $fotoalbum): void
+	public function opschonen(FotoAlbum $fotoalbum)
 	{
 		foreach ($this->findBySubdir($fotoalbum->subdir) as $album) {
 			/** @var FotoAlbum $album */

@@ -12,7 +12,7 @@ abstract class EnumType extends Type
 
 	abstract public function getEnumClass();
 
-	public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+	public function getSQLDeclaration(array $column, AbstractPlatform $platform)
 	{
 		$values = array_map(function ($val) {
 			return "'" . $val . "'";
@@ -25,7 +25,7 @@ abstract class EnumType extends Type
 		);
 	}
 
-	public function convertToPHPValue($value, AbstractPlatform $platform): mixed
+	public function convertToPHPValue($value, AbstractPlatform $platform)
 	{
 		if ($value == null) {
 			return null;
@@ -47,7 +47,7 @@ abstract class EnumType extends Type
 		}
 	}
 
-	public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+	public function requiresSQLCommentHint(AbstractPlatform $platform)
 	{
 		return true;
 	}

@@ -14,11 +14,9 @@ use CsrDelft\repository\Paging;
 use CsrDelft\service\security\LoginService;
 use Doctrine\DBAL\Exception\SyntaxErrorException;
 use Doctrine\ORM\PersistentCollection;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
-use Traversable;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -90,7 +88,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	 * @return ForumDraad
 	 * @throws CsrGebruikerException
 	 */
-	public function get($id): ForumDraad
+	public function get($id)
 	{
 		$draad = $this->find($id);
 		if (!$draad) {
@@ -99,7 +97,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return $draad;
 	}
 
-	public function getAantalPerPagina(): int
+	public function getAantalPerPagina()
 	{
 		if (!$this->per_pagina) {
 			$this->per_pagina = (int) InstellingUtil::lid_instelling(
@@ -110,17 +108,17 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return $this->per_pagina;
 	}
 
-	public function setAantalPerPagina($aantal): void
+	public function setAantalPerPagina($aantal)
 	{
 		$this->per_pagina = (int) $aantal;
 	}
 
-	public function getHuidigePagina(): int
+	public function getHuidigePagina()
 	{
 		return $this->pagina;
 	}
 
-	public function setHuidigePagina($pagina, $forum_id): void
+	public function setHuidigePagina($pagina, $forum_id)
 	{
 		if (!is_int($pagina) || $pagina < 1) {
 			$pagina = 1;
@@ -130,7 +128,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		$this->pagina = $pagina;
 	}
 
-	public function getAantalPaginas($forum_id = null): mixed
+	public function getAantalPaginas($forum_id = null)
 	{
 		if (!isset($forum_id)) {
 			// recent en zoeken hebben onbeperkte paginas
@@ -154,24 +152,24 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return max(1, $this->aantal_paginas[$forum_id]);
 	}
 
-	public function createQueryBuilder($alias, $indexBy = null): QueryBuilder
+	public function createQueryBuilder($alias, $indexBy = null)
 	{
 		return parent::createQueryBuilder($alias, $indexBy)
 			->orderBy($alias . '.plakkerig', 'DESC')
 			->addOrderBy($alias . '.laatst_gewijzigd', 'DESC');
 	}
 
-	public function createQueryBuilderWithoutOrder($alias, $indexBy = null): QueryBuilder
+	public function createQueryBuilderWithoutOrder($alias, $indexBy = null)
 	{
 		return parent::createQueryBuilder($alias, $indexBy);
 	}
 
-	public function setLaatstePagina($forum_id): void
+	public function setLaatstePagina($forum_id)
 	{
 		$this->pagina = $this->getAantalPaginas($forum_id);
 	}
 
-	public function getPaginaVoorDraad(ForumDraad $draad): int
+	public function getPaginaVoorDraad(ForumDraad $draad)
 	{
 		if ($draad->plakkerig) {
 			return 1;
@@ -198,7 +196,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return (int) ceil($count / $this->getAantalPerPagina());
 	}
 
-	public function zoeken(ForumZoeken $forumZoeken): mixed
+	public function zoeken(ForumZoeken $forumZoeken)
 	{
 		$qb = $this->createQueryBuilder('draad');
 		// Als er geen spatie in de zoekterm zit, doe dan keyword search met '<zoekterm>*'
@@ -234,7 +232,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return $results;
 	}
 
-	public function getPrullenbakVoorDeel(ForumDeel $deel): PersistentCollection|array
+	public function getPrullenbakVoorDeel(ForumDeel $deel)
 	{
 		return $this->findBy(
 			['forum_id' => $deel->forum_id, 'verwijderd' => true],
@@ -242,7 +240,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		);
 	}
 
-	public function getBelangrijkeForumDradenVoorDeel(ForumDeel $deel): mixed
+	public function getBelangrijkeForumDradenVoorDeel(ForumDeel $deel)
 	{
 		$qb = $this->createQueryBuilder('d');
 		$qb->where(
@@ -255,7 +253,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return $qb->getQuery()->getResult();
 	}
 
-	public function getForumDradenVoorDeel(ForumDeel $deel): Traversable
+	public function getForumDradenVoorDeel(ForumDeel $deel)
 	{
 		$qb = $this->createQueryBuilder('d');
 		$qb->where(
@@ -277,7 +275,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	 * @param array $ids
 	 * @return array|ForumDraad[]
 	 */
-	public function getForumDradenById(array $ids): array
+	public function getForumDradenById(array $ids)
 	{
 		$count = count($ids);
 		if ($count < 1) {
@@ -292,7 +290,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return ArrayUtil::group_by_distinct('draad_id', $draden);
 	}
 
-	public function maakForumDraad($deel, $titel, $wacht_goedkeuring): ForumDraad
+	public function maakForumDraad($deel, $titel, $wacht_goedkeuring)
 	{
 		$draad = new ForumDraad();
 		$draad->deel = $deel;
@@ -315,7 +313,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return $draad;
 	}
 
-	public function update(ForumDraad $draad): int
+	public function update(ForumDraad $draad)
 	{
 		try {
 			$this->getEntityManager()->persist($draad);
@@ -327,7 +325,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		}
 	}
 
-	public function filterLaatstGewijzigdExtern($qb, $alias = 'd'): void
+	public function filterLaatstGewijzigdExtern($qb, $alias = 'd')
 	{
 		if (!LoginService::mag(P_LOGGED_IN)) {
 			$qb->andWhere(

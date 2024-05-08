@@ -22,7 +22,7 @@ class ProfielLogVeldenVerwijderChange extends AbstractProfielLogChangeEntry
 		$this->velden = $velden;
 	}
 
-	public function toHtml(): string
+	public function toHtml()
 	{
 		return 'Verwijder velden: ' . implode(', ', $this->velden);
 	}

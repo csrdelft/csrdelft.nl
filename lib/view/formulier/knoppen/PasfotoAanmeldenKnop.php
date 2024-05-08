@@ -11,7 +11,7 @@ use CsrDelft\service\security\LoginService;
  */
 class PasfotoAanmeldenKnop extends SubmitKnop
 {
-	public function getHtml(): string|array
+	public function getHtml()
 	{
 		if (($i = array_search('btn btn-primary', $this->css_classes)) !== false) {
 			unset($this->css_classes[$i]);

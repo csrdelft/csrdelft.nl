@@ -16,12 +16,12 @@ class LedenMemoryZijbalkView implements View
 		$this->titel = $titel;
 	}
 
-	public function getTitel(): string
+	public function getTitel()
 	{
 		return 'Topscores ' . $this->titel;
 	}
 
-	public function getBreadcrumbs(): null
+	public function getBreadcrumbs()
 	{
 		return null;
 	}

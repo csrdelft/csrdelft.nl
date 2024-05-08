@@ -29,12 +29,12 @@ class BbImg extends BbTag
 	 */
 	private $url;
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'img';
 	}
 
-	public function render(): string
+	public function render()
 	{
 		$arguments = $this->arguments;
 
@@ -86,12 +86,12 @@ class BbImg extends BbTag
 		);
 	}
 
-	public function getSourceUrl(): mixed
+	public function getSourceUrl()
 	{
 		return $this->url;
 	}
 
-	public function getLinkUrl(): mixed
+	public function getLinkUrl()
 	{
 		return $this->url;
 	}
@@ -100,7 +100,7 @@ class BbImg extends BbTag
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->url = filter_var(
 			$this->readMainArgument($arguments),

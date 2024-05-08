@@ -38,7 +38,7 @@ class CiviSaldoLogRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function log($type, $data): void
+	public function log($type, $data)
 	{
 		$logEntry = new CiviSaldoLog();
 		// Don't use filter_input for $_SERVER when PHP runs through FastCGI:

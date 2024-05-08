@@ -60,29 +60,29 @@ class Activiteit extends Groep implements
 		return $this->id . '@activiteit.csrdelft.nl';
 	}
 
-	public function getUrl(): string
+	public function getUrl()
 	{
 		return '/groepen/activiteiten/' . $this->id;
 	}
 
 	// Agendeerbaar:
 
-	public function getTitel(): string
+	public function getTitel()
 	{
 		return $this->naam;
 	}
 
-	public function getBeschrijving(): string
+	public function getBeschrijving()
 	{
 		return $this->samenvatting;
 	}
 
-	public function getLocatie(): string
+	public function getLocatie()
 	{
 		return $this->locatie;
 	}
 
-	public function isTransparant(): bool
+	public function isTransparant()
 	{
 		// Toon als transparant (vrij) als lid dat wil, activiteit hele dag(en) duurt of lid niet ingeketzt is
 		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
@@ -91,29 +91,29 @@ class Activiteit extends Groep implements
 			!$this->getLid(LoginService::getUid());
 	}
 
-	public function isHeledag(): bool
+	public function isHeledag()
 	{
 		$begin = $this->getBeginMoment()->format('H:i');
 		$eind = $this->getEindMoment()->format('H:i');
 		return $begin == '00:00' && ($eind == '23:59' || $eind == '00:00');
 	}
 
-	public function getAanmeldLimiet(): string
+	public function getAanmeldLimiet()
 	{
 		return $this->aanmeldLimiet;
 	}
 
-	public function getSoort(): ActiviteitSoort
+	public function getSoort()
 	{
 		return $this->activiteitSoort;
 	}
 
-	public function setSoort($soort): void
+	public function setSoort($soort)
 	{
 		$this->activiteitSoort = $soort;
 	}
 
-	public function setSoortString($soort): void
+	public function setSoortString($soort)
 	{
 		$this->activiteitSoort = ActiviteitSoort::from($soort);
 	}

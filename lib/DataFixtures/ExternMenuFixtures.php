@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class ExternMenuFixtures extends Fixture
 {
-	public function load(ObjectManager $manager): void
+	public function load(ObjectManager $manager)
 	{
 		$externMenuItem = $this->nieuwMenuItem(
 			null,
@@ -34,7 +34,14 @@ class ExternMenuFixtures extends Fixture
 		$manager->flush();
 	}
 
-	private function nieuwMenuItem($parent, $volgorde, $tekst, $link, $zichtbaar, $rechten_bekijken): MenuItem {
+	private function nieuwMenuItem(
+		$parent,
+		$volgorde,
+		$tekst,
+		$link,
+		$zichtbaar,
+		$rechten_bekijken
+	) {
 		$menuItem = new MenuItem();
 		$menuItem->parent = $parent;
 		$menuItem->volgorde = $volgorde;

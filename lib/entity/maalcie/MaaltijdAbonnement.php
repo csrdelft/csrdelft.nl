@@ -73,7 +73,7 @@ class MaaltijdAbonnement
 		return $this->maaltijd_repetitie;
 	}
 
-	public function setMaaltijdRepetitie(MaaltijdRepetitie $maaltijdRepetitie): void
+	public function setMaaltijdRepetitie(MaaltijdRepetitie $maaltijdRepetitie)
 	{
 		$this->maaltijd_repetitie = $maaltijdRepetitie;
 		$this->mlt_repetitie_id = $maaltijdRepetitie->getId();
@@ -84,13 +84,13 @@ class MaaltijdAbonnement
 		return $this->profiel;
 	}
 
-	public function setProfiel(Profiel $profiel): void
+	public function setProfiel(Profiel $profiel)
 	{
 		$this->profiel = $profiel;
 		$this->uid = $profiel->getId();
 	}
 
-	public function setWanneerIngeschakeld(DateTimeImmutable $wanneerIngeschakeld): void
+	public function setWanneerIngeschakeld(DateTimeImmutable $wanneerIngeschakeld)
 	{
 		$this->wanneer_ingeschakeld = $wanneerIngeschakeld;
 	}

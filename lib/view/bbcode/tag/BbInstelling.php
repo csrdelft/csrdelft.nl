@@ -5,7 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Toont content als instelling een bepaalde waarde heeft, standaard 'ja';
@@ -41,12 +41,12 @@ class BbInstelling extends BbTag
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'instelling';
 	}
 
-	public function render(): string
+	public function render()
 	{
 		if ($this->instelling == null) {
 			return 'Geen instelling opgegeven';
@@ -70,7 +70,7 @@ class BbInstelling extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->readContent();
 		if (

@@ -15,14 +15,14 @@ class RemoteLoginRepository extends AbstractRepository
 		parent::__construct($registry, RemoteLogin::class);
 	}
 
-	public function refresh($remoteLogin): void
+	public function refresh($remoteLogin)
 	{
 		$remoteLogin->status = RemoteLoginStatus::PENDING();
 		$remoteLogin->expires = date_create_immutable('+1 minute');
 		$remoteLogin->uuid = Uuid::v4();
 	}
 
-	public function nieuw(): RemoteLogin
+	public function nieuw()
 	{
 		$remoteLogin = new RemoteLogin();
 
@@ -34,7 +34,7 @@ class RemoteLoginRepository extends AbstractRepository
 	/**
 	 * Gooi alle oude sessies weg.
 	 */
-	public function opschonen(): void
+	public function opschonen()
 	{
 		$this->createQueryBuilder('rl')
 			->delete()

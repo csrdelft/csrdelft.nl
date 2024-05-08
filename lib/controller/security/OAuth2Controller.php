@@ -29,7 +29,7 @@ class OAuth2Controller extends AbstractController
 	 * @Route("/session/oauth2-refresh-token", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function oauth2Data(ManagerRegistry $managerRegistry): GenericDataTableResponse
+	public function oauth2Data(ManagerRegistry $managerRegistry)
 	{
 		$accessTokens = $managerRegistry
 			->getRepository(AccessToken::class)
@@ -68,7 +68,10 @@ class OAuth2Controller extends AbstractController
 	 * @param RefreshToken $refreshToken
 	 * @return GenericDataTableResponse
 	 */
-	public function oauth2RefreshTokenRevoke(ManagerRegistry $managerRegistry, RefreshToken $refreshToken): GenericDataTableResponse {
+	public function oauth2RefreshTokenRevoke(
+		ManagerRegistry $managerRegistry,
+		RefreshToken $refreshToken
+	) {
 		$refreshToken->revoke();
 		$refreshToken->getAccessToken()->revoke();
 
@@ -95,7 +98,9 @@ class OAuth2Controller extends AbstractController
 	 * @return Response
 	 * @throws ExceptionInterface
 	 */
-	public function oauth2RememberTokenData(RememberOAuthRepository $rememberOAuthRepository): Response {
+	public function oauth2RememberTokenData(
+		RememberOAuthRepository $rememberOAuthRepository
+	) {
 		return $this->createDataTable(OAuth2RememberTable::class)->createData(
 			$rememberOAuthRepository->findBy(['uid' => $this->getUid()])
 		);

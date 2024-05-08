@@ -29,7 +29,12 @@ class FotoTagsRepository extends AbstractRepository
 	 * @param null $offset
 	 * @return FotoTag[]
 	 */
-	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): array {
+	public function findBy(
+		array $criteria,
+		array $orderBy = null,
+		$limit = null,
+		$offset = null
+	) {
 		if (!$orderBy) {
 			$orderBy = ['wanneer' => 'DESC'];
 		}
@@ -39,17 +44,17 @@ class FotoTagsRepository extends AbstractRepository
 	/**
 	 * @return FotoTag[]
 	 */
-	public function findAll(): array
+	public function findAll()
 	{
 		return parent::findBy([]);
 	}
 
-	public function getTags(Foto $foto): array
+	public function getTags(Foto $foto)
 	{
 		return $this->findBy(['refuuid' => $foto->getUUID()]);
 	}
 
-	public function addTag(Foto $foto, $uid, $x, $y, $size): FotoTag
+	public function addTag(Foto $foto, $uid, $x, $y, $size)
 	{
 		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException('Profiel bestaat niet');
@@ -73,7 +78,7 @@ class FotoTagsRepository extends AbstractRepository
 		return $tag;
 	}
 
-	public function removeTag($refuuid, $keyword): void
+	public function removeTag($refuuid, $keyword)
 	{
 		$tag = $this->find(['refuuid' => $refuuid, 'keyword' => $keyword]);
 		if ($tag) {
@@ -82,7 +87,7 @@ class FotoTagsRepository extends AbstractRepository
 		}
 	}
 
-	public function verwijderFotoTags(Foto $foto): void
+	public function verwijderFotoTags(Foto $foto)
 	{
 		$this->createQueryBuilder('t')
 			->delete()
@@ -92,13 +97,13 @@ class FotoTagsRepository extends AbstractRepository
 			->execute();
 	}
 
-	public function create(FotoTag $tag): void
+	public function create(FotoTag $tag)
 	{
 		$this->getEntityManager()->persist($tag);
 		$this->getEntityManager()->flush();
 	}
 
-	public function delete(FotoTag $tag): void
+	public function delete(FotoTag $tag)
 	{
 		$this->getEntityManager()->remove($tag);
 		$this->getEntityManager()->flush();

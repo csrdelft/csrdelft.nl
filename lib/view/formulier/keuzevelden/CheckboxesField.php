@@ -22,7 +22,7 @@ class CheckboxesField extends InputField
 		parent::__construct($name, $value, $description, null);
 	}
 
-	public function getHtml(): string
+	public function getHtml()
 	{
 		$html = '';
 		foreach ($this->opties as $value => $description) {
@@ -40,7 +40,7 @@ HTML;
 		return $html;
 	}
 
-	public function isPosted(): bool
+	public function isPosted()
 	{
 		foreach ($this->opties as $value => $description) {
 			if (!isset($_POST[$this->name . '_' . $value])) {
@@ -51,7 +51,7 @@ HTML;
 		return true;
 	}
 
-	public function getValue(): array
+	public function getValue()
 	{
 		if ($this->isPosted()) {
 			$values = [];

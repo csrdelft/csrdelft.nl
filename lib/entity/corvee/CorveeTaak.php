@@ -121,7 +121,7 @@ class CorveeTaak implements Agendeerbaar
  #[ORM\ManyToOne(targetEntity: \CorveeFunctie::class)]
  public $corveeFunctie;
 
-	public function getPuntenPrognose(): int
+	public function getPuntenPrognose()
 	{
 		return $this->punten +
 			$this->bonus_malus -
@@ -129,7 +129,7 @@ class CorveeTaak implements Agendeerbaar
 			$this->bonus_toegekend;
 	}
 
-	public function getLaatstGemaildDate(): null|DateTimeImmutable|false
+	public function getLaatstGemaildDate()
 	{
 		if ($this->wanneer_gemaild === null) {
 			return null;
@@ -146,7 +146,7 @@ class CorveeTaak implements Agendeerbaar
 	 *
 	 * @return int
 	 */
-	public function getAantalKeerGemaild(): int
+	public function getAantalKeerGemaild()
 	{
 		if ($this->wanneer_gemaild === null) {
 			return 0;
@@ -159,7 +159,7 @@ class CorveeTaak implements Agendeerbaar
 	 *
 	 * @return boolean
 	 */
-	public function getMoetHerinneren(): bool
+	public function getMoetHerinneren()
 	{
 		$aantal = $this->getAantalKeerGemaild();
 		$datum = $this->datum;
@@ -202,7 +202,7 @@ class CorveeTaak implements Agendeerbaar
 	 *
 	 * @return boolean
 	 */
-	public function getIsTelaatGemaild(): bool
+	public function getIsTelaatGemaild()
 	{
 		$aantal = $this->getAantalKeerGemaild();
 		$datum = $this->datum;
@@ -238,7 +238,7 @@ class CorveeTaak implements Agendeerbaar
 		return false;
 	}
 
-	public function setWanneerGemaild($datumtijd): void
+	public function setWanneerGemaild($datumtijd)
 	{
 		if (!is_string($datumtijd)) {
 			throw new CsrGebruikerException('Geen string: wanneer gemaild');
@@ -276,7 +276,7 @@ class CorveeTaak implements Agendeerbaar
 		return 'Corvee vacature (' . $this->corveeFunctie->naam . ')';
 	}
 
-	public function getBeschrijving(): string
+	public function getBeschrijving()
 	{
 		if ($this->profiel) {
 			return $this->corveeFunctie->naam;
@@ -284,22 +284,22 @@ class CorveeTaak implements Agendeerbaar
 		return 'Nog niet ingedeeld';
 	}
 
-	public function getLocatie(): string
+	public function getLocatie()
 	{
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl(): string
+	public function getUrl()
 	{
 		return '/corvee/rooster';
 	}
 
-	public function isHeledag(): bool
+	public function isHeledag()
 	{
 		return true;
 	}
 
-	public function isTransparant(): bool
+	public function isTransparant()
 	{
 		return true;
 	}

@@ -19,12 +19,12 @@ class BbUrl extends BbTag
 {
 	public $url;
 
-	public static function getTagName(): array
+	public static function getTagName()
 	{
 		return ['url', 'rul'];
 	}
 
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->url = $this->getUrl($arguments);
 		if ($this->url == null) {
@@ -45,7 +45,7 @@ class BbUrl extends BbTag
 		return $this->getContent() . ' (' . $this->url . ')';
 	}
 
-	public function renderLight(): string
+	public function renderLight()
 	{
 		return BbHelper::lightLinkInline(
 			$this->env,

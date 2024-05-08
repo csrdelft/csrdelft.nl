@@ -85,7 +85,7 @@ class PinTransactieController extends AbstractController
 	 * @Auth(P_FISCAAT_READ)
 	 * @return GenericDataTableResponse
 	 */
-	public function overzicht(Request $request): Response
+	public function overzicht(Request $request)
 	{
 		$table = $this->createDataTable(PinTransactieMatchTableType::class);
 
@@ -117,7 +117,7 @@ class PinTransactieController extends AbstractController
 	 * @Route("/fiscaat/pin/verwerk", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function verwerk(): FoutmeldingForm|PinBestellingAanmakenForm|PinBestellingCrediterenForm|PinBestellingVeranderenForm
+	public function verwerk()
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -168,7 +168,7 @@ class PinTransactieController extends AbstractController
 	 * @Route("/fiscaat/pin/aanmaken", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function aanmaken(): GenericDataTableResponse|PinBestellingAanmakenForm
+	public function aanmaken()
 	{
 		$form = new PinBestellingAanmakenForm();
 
@@ -266,7 +266,7 @@ class PinTransactieController extends AbstractController
 	 * @Route("/fiscaat/pin/ontkoppel", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function ontkoppel(): GenericDataTableResponse
+	public function ontkoppel()
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -323,7 +323,7 @@ class PinTransactieController extends AbstractController
 	 * @Route("/fiscaat/pin/koppel", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function koppel(): GenericDataTableResponse
+	public function koppel()
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -427,7 +427,7 @@ class PinTransactieController extends AbstractController
 	 * @Route("/fiscaat/pin/crediteer", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function crediteer(): GenericDataTableResponse|PinBestellingCrediterenForm
+	public function crediteer()
 	{
 		$form = new PinBestellingCrediterenForm();
 
@@ -530,7 +530,7 @@ class PinTransactieController extends AbstractController
 	 * @Route("/fiscaat/pin/update", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function update(): GenericDataTableResponse|PinBestellingVeranderenForm
+	public function update()
 	{
 		$form = new PinBestellingVeranderenForm();
 
@@ -654,7 +654,7 @@ class PinTransactieController extends AbstractController
 	 * @Route("/fiscaat/pin/info", methods={"POST"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function info(): GenericDataTableResponse|PinBestellingInfoForm
+	public function info()
 	{
 		$form = new PinBestellingInfoForm(new PinTransactieMatch());
 
@@ -691,7 +691,7 @@ class PinTransactieController extends AbstractController
 	 * @Route("/fiscaat/pin/negeer", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function negeer(): GenericDataTableResponse|PinTransactieMatchNegerenForm
+	public function negeer()
 	{
 		$selection = $this->getDataTableSelection();
 		$form = new PinTransactieMatchNegerenForm($selection);
@@ -737,7 +737,7 @@ class PinTransactieController extends AbstractController
 	 * @Route("/fiscaat/pin/heroverweeg", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function heroverweeg(): GenericDataTableResponse
+	public function heroverweeg()
 	{
 		$deleted = $this->em->transactional(function () {
 			$alleMatches = $this->pinTransactieMatchRepository->findAll();
@@ -771,7 +771,7 @@ class PinTransactieController extends AbstractController
 		return $this->tableData($deleted === true ? [] : $deleted);
 	}
 
-	private function stuurMail($uid, $onderwerp, $melding): void
+	private function stuurMail($uid, $onderwerp, $melding)
 	{
 		$ontvanger = ProfielRepository::get($uid);
 		if (!$ontvanger) {

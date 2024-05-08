@@ -41,7 +41,7 @@ class SterrenField extends FloatField
 		$this->css_classes[] = 'SterrenField';
 	}
 
-	public function getHtml(): string
+	public function getHtml()
 	{
 		$attributes = $this->getInputAttribute(['id', 'name', 'class']);
 		$config = htmlspecialchars(

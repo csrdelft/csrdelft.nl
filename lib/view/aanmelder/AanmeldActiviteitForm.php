@@ -21,7 +21,11 @@ class AanmeldActiviteitForm implements FormulierTypeInterface
 	 * @param AanmeldActiviteit $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
+	public function createFormulier(
+		FormulierBuilder $builder,
+		$data,
+		$options = []
+	) {
 		$builder->setTitel(
 			$options['nieuw'] ? 'Nieuwe activiteit' : 'Activiteit bewerken'
 		);

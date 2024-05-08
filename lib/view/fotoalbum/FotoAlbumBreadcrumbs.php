@@ -69,7 +69,7 @@ class FotoAlbumBreadcrumbs
 		return $breadcrumbs;
 	}
 
-	private static function getDropDown($subdir, $albumnaam): string
+	private static function getDropDown($subdir, $albumnaam)
 	{
 		try {
 			$parent = ContainerFacade::getContainer()

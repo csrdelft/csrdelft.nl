@@ -17,7 +17,7 @@ class StringKeyType extends Type
 	/**
 	 * @inheritDoc
 	 */
-	public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+	public function getSQLDeclaration(array $column, AbstractPlatform $platform)
 	{
 		return 'VARCHAR(191) COMMENT \'(DC2Type:stringkey)\'';
 	}
@@ -25,7 +25,7 @@ class StringKeyType extends Type
 	/**
 	 * @inheritDoc
 	 */
-	public function getName(): string
+	public function getName()
 	{
 		return 'stringkey';
 	}

@@ -98,7 +98,7 @@ class Zijbalk
 	/**
 	 * @return string[]
 	 */
-	public function getZijbalk(): array
+	public function getZijbalk()
 	{
 		return ArrayUtil::array_filter_empty([
 			$this->blockIsHetAl(),
@@ -114,12 +114,12 @@ class Zijbalk
 		]);
 	}
 
-	private function blockLustrum(): string
+	private function blockLustrum()
 	{
 		return $this->twig->render('menu/lustrumblock.html.twig');
 	}
 
-	private function blockIsHetAl(): ?string
+	private function blockIsHetAl()
 	{
 		// Is het al...
 		if (
@@ -137,7 +137,7 @@ class Zijbalk
 		return null;
 	}
 
-	private function blockFavorieten(): ?string
+	private function blockFavorieten()
 	{
 		// Favorieten menu
 		if (
@@ -152,7 +152,7 @@ class Zijbalk
 		return null;
 	}
 
-	private function blockSponsors(): ?string
+	private function blockSponsors()
 	{
 		// Sponsors
 		if (LoginService::mag(P_LOGGED_IN)) {
@@ -168,7 +168,7 @@ class Zijbalk
 		return null;
 	}
 
-	private function blockAgenda(): ?string
+	private function blockAgenda()
 	{
 		// Agenda
 		if (
@@ -200,7 +200,7 @@ class Zijbalk
 		return null;
 	}
 
-	private function blockForumNieuwsteBelangrijkBerichten(): ?string
+	private function blockForumNieuwsteBelangrijkBerichten()
 	{
 		// Nieuwste belangrijke forumberichten
 		if (InstellingUtil::lid_instelling('zijbalk', 'forum_belangrijk') > 0) {
@@ -217,7 +217,7 @@ class Zijbalk
 		return null;
 	}
 
-	private function blockForumNieuwsteBerichten(): ?string
+	private function blockForumNieuwsteBerichten()
 	{
 		// Nieuwste forumberichten
 		if (InstellingUtil::lid_instelling('zijbalk', 'forum') > 0) {
@@ -238,7 +238,7 @@ class Zijbalk
 		return null;
 	}
 
-	private function blockForumZelfgepost(): ?string
+	private function blockForumZelfgepost()
 	{
 		// Zelfgeposte forumberichten
 		if (InstellingUtil::lid_instelling('zijbalk', 'forum_zelf') > 0) {
@@ -255,7 +255,7 @@ class Zijbalk
 		return null;
 	}
 
-	private function blockNieuwsteFotoAlbum(): ?string
+	private function blockNieuwsteFotoAlbum()
 	{
 		// Nieuwste fotoalbum
 		if (InstellingUtil::lid_instelling('zijbalk', 'fotoalbum') == 'ja') {
@@ -271,7 +271,7 @@ class Zijbalk
 		return null;
 	}
 
-	private function blockKomendeVerjaardagen(): ?string
+	private function blockKomendeVerjaardagen()
 	{
 		// Komende verjaardagen
 		if (

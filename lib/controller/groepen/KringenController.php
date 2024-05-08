@@ -20,12 +20,12 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class KringenController extends AbstractGroepenController
 {
-	public function getGroepType(): string
+	public function getGroepType()
 	{
 		return Kring::class;
 	}
 
-	public function zoeken(Request $request, $zoekterm = null): JsonResponse
+	public function zoeken(Request $request, $zoekterm = null)
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();

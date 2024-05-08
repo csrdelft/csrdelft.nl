@@ -32,7 +32,7 @@ class ForumPlaatjesController extends AbstractController
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function uploadJson(): JsonResponse
+	public function uploadJson()
 	{
 		$form = new PlaatjesUploadModalForm();
 		if ($form->isPosted()) {
@@ -60,7 +60,7 @@ class ForumPlaatjesController extends AbstractController
 	 * @Route("/forum/plaatjes/bekijken/{id}/resized", methods={"GET"}, requirements={"id"="[a-zA-Z0-9]*"}, defaults={"resized"=true})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bekijken($id, $resized = false): BinaryFileResponse
+	public function bekijken($id, $resized = false)
 	{
 		$plaatje = $this->forumPlaatjeRepository->getByKey($id);
 		if (!$plaatje) {

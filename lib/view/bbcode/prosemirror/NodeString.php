@@ -7,29 +7,29 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeString implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbString::class;
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		return [
 			'text' => $node->getContent(),
 		];
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'text';
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [];
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return true;
 	}

@@ -7,17 +7,17 @@ use CsrDelft\view\bbcode\tag\BbPeiling;
 
 class NodePeiling implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbPeiling::class;
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'peiling';
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbPeiling) {
 			throw new \InvalidArgumentException();
@@ -30,14 +30,14 @@ class NodePeiling implements Node
 		];
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [
 			'peiling' => $node->attrs->id,
 		];
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return true;
 	}

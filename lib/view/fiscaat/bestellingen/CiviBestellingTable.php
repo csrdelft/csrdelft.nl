@@ -40,7 +40,7 @@ class CiviBestellingTable extends DataTable
 		$this->setOrder(['moment' => 'desc']);
 	}
 
-	public function getBreadcrumbs(): string
+	public function getBreadcrumbs()
 	{
 		return '<a href="/" title="Startpagina">' .
 			Icon::getTag('home', null, 'Voorpagina', 'module-icon') .

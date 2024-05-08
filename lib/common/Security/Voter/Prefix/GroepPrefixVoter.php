@@ -63,7 +63,13 @@ class GroepPrefixVoter extends PrefixVoter
 		return isset(self::CLASS_MAP[$prefix]);
 	}
 
-	protected function voteOnPrefix(string $prefix, $gevraagd, $role, $subject, TokenInterface $token): bool {
+	protected function voteOnPrefix(
+		string $prefix,
+		$gevraagd,
+		$role,
+		$subject,
+		TokenInterface $token
+	) {
 		$user = $token->getUser();
 
 		if (!$user) {

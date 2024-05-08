@@ -23,17 +23,17 @@ class BbYoutube extends BbTag
 	 */
 	public $id;
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'youtube';
 	}
 
-	public function renderPreview(): string
+	public function renderPreview()
 	{
 		return '📹';
 	}
 
-	public function renderLight(): string
+	public function renderLight()
 	{
 		$this->assertId($this->id);
 
@@ -50,7 +50,7 @@ class BbYoutube extends BbTag
 	 * @param string|null $id
 	 * @throws BbException
 	 */
-	private function assertId($id): void
+	private function assertId($id)
 	{
 		if (!preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
 			throw new BbException(
@@ -63,7 +63,7 @@ class BbYoutube extends BbTag
 	 * @return string
 	 * @throws BbException
 	 */
-	public function render(): string
+	public function render()
 	{
 		$this->assertId($this->id);
 
@@ -89,7 +89,7 @@ HTML;
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->id = $this->readMainArgument($arguments);
 	}

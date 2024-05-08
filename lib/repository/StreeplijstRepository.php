@@ -26,7 +26,7 @@ class StreeplijstRepository extends ServiceEntityRepository
 	/**
 	 * @return Streeplijst[]
 	 */
-	public function getAlleStreeplijsten(): array
+	public function getAlleStreeplijsten()
 	{
 		return $this->findBy(
 			['maker' => LoginService::getUid()],
@@ -40,7 +40,11 @@ class StreeplijstRepository extends ServiceEntityRepository
 	 * @param string $inhoud_streeplijst
 	 * @return Streeplijst
 	 */
-	public function nieuw($naam_streeplijst, $leden_streeplijst, $inhoud_streeplijst): Streeplijst {
+	public function nieuw(
+		$naam_streeplijst,
+		$leden_streeplijst,
+		$inhoud_streeplijst
+	) {
 		$streeplijst = new Streeplijst();
 		$streeplijst->maker = LoginService::getUid();
 		$streeplijst->aanmaakdatum = date_create_immutable();
@@ -54,7 +58,7 @@ class StreeplijstRepository extends ServiceEntityRepository
 	 * @param int $id
 	 * @param string $naam_streeplijst
 	 */
-	public function updateNaam($id, $naam_streeplijst): void
+	public function updateNaam($id, $naam_streeplijst)
 	{
 		$streeplijst = $this->find($id);
 		$streeplijst->naam_streeplijst = $naam_streeplijst;
@@ -65,7 +69,7 @@ class StreeplijstRepository extends ServiceEntityRepository
 	 * @param string $leden_streeplijst
 	 * @param string $inhoud_streeplijst
 	 */
-	public function updateInhoud($id, $leden_streeplijst, $inhoud_streeplijst): void
+	public function updateInhoud($id, $leden_streeplijst, $inhoud_streeplijst)
 	{
 		$streeplijst = $this->find($id);
 		$streeplijst->inhoud_streeplijst = $inhoud_streeplijst;

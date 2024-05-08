@@ -61,7 +61,7 @@ class AccountService
 	 * @return Account
 	 * @throws CsrGebruikerException
 	 */
-	public function maakAccount($uid): Account
+	public function maakAccount($uid)
 	{
 		$profiel = ProfielRepository::get($uid);
 		if (!$profiel) {
@@ -108,7 +108,11 @@ class AccountService
 	 * @param bool $isVeranderd
 	 * @return bool
 	 */
-	public function wijzigWachtwoord(Account $account, $passPlain, bool $isVeranderd = true): bool {
+	public function wijzigWachtwoord(
+		Account $account,
+		$passPlain,
+		bool $isVeranderd = true
+	) {
 		if ($passPlain != '') {
 			$account->pass_hash = $this->maakWachtwoord($account, $passPlain);
 			if ($isVeranderd) {
@@ -137,7 +141,7 @@ class AccountService
 	 * @param string $passPlain
 	 * @return string
 	 */
-	public function maakWachtwoord(Account $account, $passPlain): string
+	public function maakWachtwoord(Account $account, $passPlain)
 	{
 		return $this->passwordHasherFactory
 			->getPasswordHasher($account)
@@ -151,7 +155,7 @@ class AccountService
 	 * @param string $passPlain
 	 * @return boolean
 	 */
-	public function controleerWachtwoord(UserInterface $account, $passPlain): bool
+	public function controleerWachtwoord(UserInterface $account, $passPlain)
 	{
 		// Controleer of het wachtwoord klopt
 		return $this->passwordHasherFactory

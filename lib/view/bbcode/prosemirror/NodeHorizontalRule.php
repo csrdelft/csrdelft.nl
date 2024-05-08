@@ -7,27 +7,27 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeHorizontalRule implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbHorizontalRule::class;
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'horizontal_rule';
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		return [];
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [];
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return true;
 	}

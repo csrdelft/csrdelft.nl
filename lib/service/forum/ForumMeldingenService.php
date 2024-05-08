@@ -20,7 +20,7 @@ use CsrDelft\service\security\SuService;
 use CsrDelft\view\bbcode\CsrBB;
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -107,7 +107,7 @@ class ForumMeldingenService
 		}
 	}
 
-	public function stuurDraadMeldingen(ForumPost $post): void
+	public function stuurDraadMeldingen(ForumPost $post)
 	{
 		$this->stuurDraadMeldingenNaarVolgers($post);
 		$this->stuurDraadMeldingenNaarGenoemden($post);
@@ -118,7 +118,7 @@ class ForumMeldingenService
 	 *
 	 * @param ForumPost $post
 	 */
-	private function stuurDraadMeldingenNaarVolgers(ForumPost $post): void
+	private function stuurDraadMeldingenNaarVolgers(ForumPost $post)
 	{
 		$auteur = $this->profielRepository->find($post->uid);
 		// Laad meldingsbericht in
@@ -166,7 +166,7 @@ class ForumMeldingenService
 	 *
 	 * @param ForumPost $post
 	 */
-	public function stuurDraadMeldingenNaarGenoemden(ForumPost $post): void
+	public function stuurDraadMeldingenNaarGenoemden(ForumPost $post)
 	{
 		$auteur = $this->profielRepository->find($post->uid);
 		$draad = $post->draad;
@@ -226,7 +226,7 @@ class ForumMeldingenService
 	 * @param string $bericht
 	 * @return string[]
 	 */
-	public function zoekGenoemdeLeden($bericht): array
+	public function zoekGenoemdeLeden($bericht)
 	{
 		$regex = '/\[(?:lid|citaat)=?\s*]?\s*([[:alnum:]]+)\s*[\[\]]/';
 		preg_match_all($regex, $bericht, $leden);
@@ -234,7 +234,7 @@ class ForumMeldingenService
 		return array_unique($leden[1]);
 	}
 
-	public function getDraadMeldingNiveauVoorLid(ForumDraad $draad, $uid = null): ForumDraadMeldingNiveau
+	public function getDraadMeldingNiveauVoorLid(ForumDraad $draad, $uid = null)
 	{
 		if ($uid === null && $this->security->getUser()) {
 			$uid = $this->security->getUser()->getUserIdentifier();
@@ -269,7 +269,12 @@ class ForumMeldingenService
 	 * @throws RuntimeError
 	 * @throws SyntaxError
 	 */
-	private function stuurPushBericht(Account $ontvanger, Profiel $auteur, ForumPost $post, ForumDraad $draad): void {
+	private function stuurPushBericht(
+		Account $ontvanger,
+		Profiel $auteur,
+		ForumPost $post,
+		ForumDraad $draad
+	) {
 		$allSubscriptions = $this->pushAbonnementRepository->findAll([
 			'uid' => $ontvanger->getUserIdentifier(),
 		]);
@@ -317,7 +322,13 @@ class ForumMeldingenService
 	 * @throws RuntimeError
 	 * @throws SyntaxError
 	 */
-	private function stuurDraadMelding(Account $ontvanger, Profiel $auteur, ForumPost $post, ForumDraad $draad, $template): void {
+	private function stuurDraadMelding(
+		Account $ontvanger,
+		Profiel $auteur,
+		ForumPost $post,
+		ForumDraad $draad,
+		$template
+	) {
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
 		$this->suService->alsLid($ontvanger, function () use (
 			$ontvanger,
@@ -363,7 +374,7 @@ class ForumMeldingenService
 	 * Stuur alle meldingen rondom forumdelen.
 	 * @param ForumPost $post
 	 */
-	public function stuurDeelMeldingen(ForumPost $post): void
+	public function stuurDeelMeldingen(ForumPost $post)
 	{
 		$this->stuurDeelMeldingenNaarVolgers($post);
 	}
@@ -377,7 +388,13 @@ class ForumMeldingenService
 	 * @param ForumDraad $draad
 	 * @param ForumDeel $deel
 	 */
-	private function stuurDeelMelding(Account $ontvanger, Profiel $auteur, ForumPost $post, ForumDraad $draad, ForumDeel $deel): void {
+	private function stuurDeelMelding(
+		Account $ontvanger,
+		Profiel $auteur,
+		ForumPost $post,
+		ForumDraad $draad,
+		ForumDeel $deel
+	) {
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
 		$this->suService->alsLid($ontvanger, function () use (
 			$draad,
@@ -435,7 +452,7 @@ class ForumMeldingenService
 	 *
 	 * @param ForumPost $post
 	 */
-	private function stuurDeelMeldingenNaarVolgers(ForumPost $post): void
+	private function stuurDeelMeldingenNaarVolgers(ForumPost $post)
 	{
 		$auteur = ProfielRepository::get($post->uid);
 		$draad = $post->draad;

@@ -40,7 +40,7 @@ class RechtenController extends AbstractController
 	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"GET"}, defaults={"environment"=null,"resource"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bekijken($environment = null, $resource = null): Response
+	public function bekijken($environment = null, $resource = null)
 	{
 		return $this->render('default.html.twig', [
 			'content' => new RechtenTable(
@@ -58,7 +58,7 @@ class RechtenController extends AbstractController
 	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function data($environment = null, $resource = null): GenericDataTableResponse
+	public function data($environment = null, $resource = null)
 	{
 		return $this->tableData(
 			$this->accessRepository->getTree($environment, $resource)
@@ -74,7 +74,7 @@ class RechtenController extends AbstractController
 	 * @Route("/rechten/aanmaken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function aanmaken($environment = null, $resource = null): GenericDataTableResponse|RechtenForm
+	public function aanmaken($environment = null, $resource = null)
 	{
 		$ac = $this->accessRepository->nieuw($environment, $resource);
 		$form = new RechtenForm($ac, 'aanmaken');
@@ -95,7 +95,7 @@ class RechtenController extends AbstractController
 	 * @Route("/rechten/wijzigen", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function wijzigen(): GenericDataTableResponse|RechtenForm
+	public function wijzigen()
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -124,7 +124,7 @@ class RechtenController extends AbstractController
 	 * @Route("/rechten/verwijderen", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verwijderen(): GenericDataTableResponse
+	public function verwijderen()
 	{
 		$selection = $this->getDataTableSelection();
 		$response = [];

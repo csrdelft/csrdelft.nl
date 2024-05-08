@@ -8,7 +8,7 @@ use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -57,14 +57,14 @@ class ChangeLogRepository extends AbstractRepository
 	 *
 	 * @return ChangeLogEntry
 	 */
-	public function log($subject, $property, $old, $new): ChangeLogEntry
+	public function log($subject, $property, $old, $new)
 	{
 		$change = $this->nieuw($subject, $property, $old, $new);
 		$this->create($change);
 		return $change;
 	}
 
-	public function serialize($value): string
+	public function serialize($value)
 	{
 		return $this->serializer->serialize($value, 'json', ['groups' => 'log']);
 	}
@@ -77,7 +77,7 @@ class ChangeLogRepository extends AbstractRepository
 	 *
 	 * @return ChangeLogEntry
 	 */
-	public function nieuw($subject, $property, $old, $new): ChangeLogEntry
+	public function nieuw($subject, $property, $old, $new)
 	{
 		$change = new ChangeLogEntry();
 		$change->moment = date_create_immutable();
@@ -111,7 +111,7 @@ class ChangeLogRepository extends AbstractRepository
 	 * @param ChangeLogEntry $change
 	 * @return void
 	 */
-	public function create(ChangeLogEntry $change): void
+	public function create(ChangeLogEntry $change)
 	{
 		$this->getEntityManager()->persist($change);
 		$this->getEntityManager()->flush();
@@ -120,7 +120,7 @@ class ChangeLogRepository extends AbstractRepository
 	/**
 	 * @param ChangeLogEntry[] $diff
 	 */
-	public function logChanges(array $diff): void
+	public function logChanges(array $diff)
 	{
 		foreach ($diff as $change) {
 			$this->create($change);

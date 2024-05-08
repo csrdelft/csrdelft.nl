@@ -28,12 +28,12 @@ class BbTextType extends AbstractType
 		$this->prosemirrorToBb = $prosemirrorToBb;
 	}
 
-	public function getParent(): string
+	public function getParent()
 	{
 		return TextareaType::class;
 	}
 
-	public function buildForm(FormBuilderInterface $builder, array $options): void
+	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder->addModelTransformer(
 			new CallbackTransformer(

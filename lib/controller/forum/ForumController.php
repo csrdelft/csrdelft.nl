@@ -84,7 +84,7 @@ class ForumController extends AbstractController
 	 * @Route("/forum", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function forum(): Response
+	public function forum()
 	{
 		return $this->render('forum/overzicht.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
@@ -98,7 +98,7 @@ class ForumController extends AbstractController
 	 * @Route("/forum/rss/{private_auth_token}/csrdelft.xml", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function rss(): Response
+	public function rss()
 	{
 		$response = new Response(null, 200, [
 			'Content-Type' => 'application/rss+xml; charset=UTF-8',
@@ -128,7 +128,7 @@ class ForumController extends AbstractController
 	 * @Route("/forum/zoeken/{query}/{pagina<\d+>}", methods={"GET", "POST"}, defaults={"query"=null,"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function zoeken($query = null, int $pagina = 1): Response
+	public function zoeken($query = null, int $pagina = 1)
 	{
 		$this->forumPostsRepository->setHuidigePagina($pagina, 0);
 		$this->forumDradenRepository->setHuidigePagina($pagina, 0);
@@ -160,7 +160,7 @@ class ForumController extends AbstractController
 	 * @Route("/forum/titelzoeken", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function titelzoeken(Request $request, $zoekterm = null): JsonResponse
+	public function titelzoeken(Request $request, $zoekterm = null)
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			return new JsonResponse([]);
@@ -203,7 +203,7 @@ class ForumController extends AbstractController
 	 * @Route("/forum/belangrijk/{pagina<\d+>}", methods={"GET"}, defaults={"pagina"=1})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function belangrijk(RequestStack $requestStack, int $pagina = 1): Response
+	public function belangrijk(RequestStack $requestStack, int $pagina = 1)
 	{
 		return $this->recent($requestStack, $pagina, 'belangrijk');
 	}
@@ -218,7 +218,11 @@ class ForumController extends AbstractController
 	 * @Route("/forum/recent/{pagina<\d+>}/belangrijk", methods={"GET"}, defaults={"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function recent(RequestStack $requestStack, $pagina = 1, $belangrijk = null): Response {
+	public function recent(
+		RequestStack $requestStack,
+		$pagina = 1,
+		$belangrijk = null
+	) {
 		$this->forumDradenRepository->setHuidigePagina((int) $pagina, 0);
 		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
 		$deel = $this->forumDelenService->getRecent($belangrijk);
@@ -257,7 +261,7 @@ class ForumController extends AbstractController
 	 * @Route("/forum/categorie/suggestie")
 	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function forumCategorieSuggestie(Request $request): GenericSuggestiesResponse
+	public function forumCategorieSuggestie(Request $request)
 	{
 		$zoekterm = $request->query->get('q');
 		$forumCategories = $this->forumCategorieRepository
@@ -276,7 +280,7 @@ class ForumController extends AbstractController
 	 * @Route("/forum/bladwijzer/{draad_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bladwijzer(ForumDraad $draad): void
+	public function bladwijzer(ForumDraad $draad)
 	{
 		$timestamp = (int) filter_input(
 			INPUT_POST,
@@ -300,7 +304,7 @@ class ForumController extends AbstractController
 	 * @param ForumDraad $draad
 	 * @return array
 	 */
-	private function draadAutocompleteArray(ForumDraad $draad): array
+	private function draadAutocompleteArray(ForumDraad $draad)
 	{
 		$url = '/forum/onderwerp/' . $draad->draad_id;
 

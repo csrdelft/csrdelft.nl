@@ -68,7 +68,7 @@ class PeilingOptie implements DataTableEntry
 	 * @Serializer\Groups("vue")
 	 * @Serializer\SerializedName("stemmen")
 	 */
-	public function getVueStemmen(): int
+	public function getVueStemmen()
 	{
 		$magStemmenZien =
 			($this->peiling->getHeeftGestemd() || !$this->peiling->getMagStemmen()) &&
@@ -85,7 +85,7 @@ class PeilingOptie implements DataTableEntry
 	 * @return string
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
-	public function getBeschrijvingFormatted(): string
+	public function getBeschrijvingFormatted()
 	{
 		return CsrBB::parse($this->beschrijving);
 	}

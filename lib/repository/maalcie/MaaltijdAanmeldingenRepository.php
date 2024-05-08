@@ -35,7 +35,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 	 * @param $uid
 	 * @return MaaltijdAanmelding
 	 */
-	public function loadAanmelding($mid, $uid): null
+	public function loadAanmelding($mid, $uid)
 	{
 		$aanmelding = $this->find(['maaltijd_id' => $mid, 'uid' => $uid]);
 		if ($aanmelding == null) {
@@ -51,7 +51,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 	 * @param $uid
 	 * @return MaaltijdAanmelding[]
 	 */
-	public function getAanmeldingenVoorLid($maaltijdenById, $uid): array
+	public function getAanmeldingenVoorLid($maaltijdenById, $uid)
 	{
 		if (empty($maaltijdenById)) {
 			return $maaltijdenById; // array()
@@ -79,7 +79,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 	 * @param Maaltijd $maaltijd
 	 * @return MaaltijdAanmelding[]
 	 */
-	public function getAanmeldingenVoorMaaltijd(Maaltijd $maaltijd): array
+	public function getAanmeldingenVoorMaaltijd(Maaltijd $maaltijd)
 	{
 		$aanmeldingen = $this->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 		$lijst = [];
@@ -98,7 +98,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 		return $lijst;
 	}
 
-	public function findVoorMaaltijd(Maaltijd $maaltijd): array
+	public function findVoorMaaltijd(Maaltijd $maaltijd)
 	{
 		return $this->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 	}
@@ -110,7 +110,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function deleteAanmeldingenVoorMaaltijd($mid): void
+	public function deleteAanmeldingenVoorMaaltijd($mid)
 	{
 		$aanmeldingen = $this->findBy(['maaltijd_id', $mid]);
 		foreach ($aanmeldingen as $aanmelding) {

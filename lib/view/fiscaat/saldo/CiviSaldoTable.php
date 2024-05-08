@@ -29,7 +29,7 @@ class CiviSaldoTable extends AbstractDataTableType
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function getBreadcrumbs(): string
+	public function getBreadcrumbs()
 	{
 		return '<a href="/" title="Startpagina">' .
 			Icon::getTag('home', null, 'Voorpagina', 'module-icon') .

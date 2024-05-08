@@ -90,7 +90,7 @@ class GroepView implements FormElement, ToResponse
 		return $this->groep->naam;
 	}
 
-	public function getBreadcrumbs(): null
+	public function getBreadcrumbs()
 	{
 		return null;
 	}
@@ -161,12 +161,12 @@ class GroepView implements FormElement, ToResponse
 		return $this->getHtml();
 	}
 
-	public function getJavascript(): null
+	public function getJavascript()
 	{
 		return null;
 	}
 
-	public function getType(): string
+	public function getType()
 	{
 		return ReflectionUtil::classNameZonderNamespace(get_class($this->groep));
 	}

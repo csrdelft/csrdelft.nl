@@ -36,7 +36,7 @@ class BiebRubriek
  #[ORM\ManyToOne(targetEntity: \BiebRubriek::class)]
  protected $parent;
 
-	public function __toString(): string
+	public function __toString()
 	{
 		if ($this->p_id == $this->id) {
 			return '';

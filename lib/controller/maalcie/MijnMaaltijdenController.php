@@ -75,7 +75,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/ketzer", methods={"GET"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function ketzer(): Response
+	public function ketzer()
 	{
 		$maaltijden = $this->maaltijdenService->getKomendeMaaltijdenVoorLid(
 			$this->getProfiel()
@@ -141,7 +141,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/lijst/{maaltijd_id}", methods={"GET"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function lijst(Maaltijd $maaltijd): Response
+	public function lijst(Maaltijd $maaltijd)
 	{
 		if (!$maaltijd->magSluiten($this->getUid()) && !$this->mag(P_MAAL_MOD)) {
 			throw $this->createAccessDeniedException();
@@ -174,7 +174,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/lijst/sluit/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function sluit(Maaltijd $maaltijd): void
+	public function sluit(Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
@@ -196,7 +196,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/ketzer/aanmelden/{maaltijd_id}", methods={"GET","POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function aanmelden(Request $request, Maaltijd $maaltijd): Response
+	public function aanmelden(Request $request, Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
@@ -240,7 +240,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/ketzer/afmelden/{maaltijd_id}", methods={"GET","POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function afmelden(Request $request, Maaltijd $maaltijd): Response
+	public function afmelden(Request $request, Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
@@ -279,7 +279,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/ketzer/gasten/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function gasten(Maaltijd $maaltijd): Response
+	public function gasten(Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
@@ -308,7 +308,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/mijn/gasten/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function gasten_mijn(Maaltijd $maaltijd): Response
+	public function gasten_mijn(Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
@@ -340,7 +340,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/ketzer/opmerking/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function opmerking(Maaltijd $maaltijd): Response
+	public function opmerking(Maaltijd $maaltijd)
 	{
 		$opmerking = filter_input(
 			INPUT_POST,
@@ -366,7 +366,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/mijn/opmerking/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function opmerking_mijn(Maaltijd $maaltijd): Response
+	public function opmerking_mijn(Maaltijd $maaltijd)
 	{
 		$opmerking = filter_input(
 			INPUT_POST,
@@ -395,7 +395,7 @@ class MijnMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/ketzer/beoordeling/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function beoordeling(Maaltijd $maaltijd): JsonResponse
+	public function beoordeling(Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();

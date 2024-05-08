@@ -50,17 +50,17 @@ class DocumentCategorie implements ISelectEntity, DisplayEntity
  #[ORM\OrderBy(['toegevoegd' => 'DESC'])]
  public $documenten;
 
-	public function magBekijken(): bool
+	public function magBekijken()
 	{
 		return LoginService::mag($this->leesrechten);
 	}
 
-	public function getValue(): string
+	public function getValue()
 	{
 		return $this->naam;
 	}
 
-	public function getId(): int
+	public function getId()
 	{
 		return $this->id;
 	}

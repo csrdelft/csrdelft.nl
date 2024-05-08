@@ -6,12 +6,12 @@ use CsrDelft\entity\security\enum\RemoteLoginStatus;
 
 class RemoteLoginStatusType extends EnumType
 {
-	public function getEnumClass(): string
+	public function getEnumClass()
 	{
 		return RemoteLoginStatus::class;
 	}
 
-	public function getName(): string
+	public function getName()
 	{
 		return 'enumRemoteLoginStatus';
 	}

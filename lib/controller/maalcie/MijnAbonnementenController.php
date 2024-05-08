@@ -36,7 +36,7 @@ class MijnAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen", methods={"GET"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function mijn(): Response
+	public function mijn()
 	{
 		$abonnementen = $this->maaltijdAbonnementenService->getAbonnementenVoorLid(
 			$this->getProfiel(),
@@ -56,7 +56,7 @@ class MijnAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/inschakelen/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function inschakelen(MaaltijdRepetitie $repetitie): Response
+	public function inschakelen(MaaltijdRepetitie $repetitie)
 	{
 		$abo = new MaaltijdAbonnement();
 		$abo->setMaaltijdRepetitie($repetitie);
@@ -83,7 +83,7 @@ class MijnAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/uitschakelen/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
-	public function uitschakelen(MaaltijdRepetitie $repetitie): Response
+	public function uitschakelen(MaaltijdRepetitie $repetitie)
 	{
 		$abo_aantal = $this->maaltijdAbonnementenService->uitschakelenAbonnement(
 			$repetitie,

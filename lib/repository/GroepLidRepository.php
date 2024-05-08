@@ -31,7 +31,7 @@ class GroepLidRepository extends AbstractRepository
 	 *
 	 * @return GroepLid|null
 	 */
-	public function get(Groep $groep, $uid): ?GroepLid
+	public function get(Groep $groep, $uid)
 	{
 		return $this->find(['groep_id' => $groep->id, 'uid' => $uid]);
 	}
@@ -42,7 +42,7 @@ class GroepLidRepository extends AbstractRepository
 	 *
 	 * @return GroepLid
 	 */
-	public function nieuw(Groep $groep, $uid): GroepLid
+	public function nieuw(Groep $groep, $uid)
 	{
 		$lid = new GroepLid();
 		$lid->groep = $groep;

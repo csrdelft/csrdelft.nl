@@ -31,7 +31,7 @@ class Kring extends Groep implements HeeftMoment
  #[ORM\Column(type: 'integer')]
  public $kringNummer;
 
-	public function getUrl(): string
+	public function getUrl()
 	{
 		return '/groepen/kringen/' . $this->verticale . '.' . $this->kringNummer;
 	}

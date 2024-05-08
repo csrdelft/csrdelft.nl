@@ -73,7 +73,7 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/citeren/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function citeren(ForumPost $post): JsonResponse
+	public function citeren(ForumPost $post)
 	{
 		if (!$post->magCiteren()) {
 			throw $this->createAccessDeniedException('Mag niet citeren');
@@ -92,7 +92,7 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/tekst/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function tekst(ForumPost $post): JsonResponse
+	public function tekst(ForumPost $post)
 	{
 		if (!$post->magBewerken()) {
 			throw $this->createAccessDeniedException('Mag niet bewerken');
@@ -109,7 +109,7 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/bewerken/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken(ForumPost $post): Response
+	public function bewerken(ForumPost $post)
 	{
 		if (!$post->magBewerken()) {
 			throw $this->createAccessDeniedException('Mag niet bewerken');
@@ -136,7 +136,7 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/verplaatsen/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verplaatsen(ForumPost $post): Response
+	public function verplaatsen(ForumPost $post)
 	{
 		$oudDraad = $post->draad;
 		if (!$oudDraad->magModereren()) {
@@ -160,7 +160,7 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/verwijderen/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verwijderen(ForumPost $post): Response
+	public function verwijderen(ForumPost $post)
 	{
 		if (!$post->draad->magModereren()) {
 			throw $this->createAccessDeniedException('Geen moderator');
@@ -177,7 +177,7 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/offtopic/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function offtopic(ForumPost $post): Response
+	public function offtopic(ForumPost $post)
 	{
 		if (!$post->draad->magModereren()) {
 			throw $this->createAccessDeniedException('Geen moderator');
@@ -194,7 +194,7 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/goedkeuren/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function goedkeuren(ForumPost $post): Response
+	public function goedkeuren(ForumPost $post)
 	{
 		if (!$post->draad->magModereren()) {
 			throw $this->createAccessDeniedException('Geen moderator');
@@ -213,7 +213,7 @@ class ForumPostController extends AbstractController
 	 * @Route("/forum/concept/{forum_id}/{draad_id}", methods={"POST"}, defaults={"draad_id"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function concept(ForumDeel $deel, ForumDraad $draad = null): Response
+	public function concept(ForumDeel $deel, ForumDraad $draad = null)
 	{
 		$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
 		$concept = $this->prosemirrorToBb->convertToBb(

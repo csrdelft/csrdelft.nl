@@ -60,7 +60,7 @@ class BeheerCiviProductenController extends AbstractController
 	 * @Route("/fiscaat/producten/suggesties", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function suggesties(Request $request): CiviProductSuggestiesResponse
+	public function suggesties(Request $request)
 	{
 		return new CiviProductSuggestiesResponse(
 			$this->civiProductRepository->getSuggesties(
@@ -74,7 +74,7 @@ class BeheerCiviProductenController extends AbstractController
 	 * @Route("/fiscaat/producten", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function overzicht(): Response
+	public function overzicht()
 	{
 		return $this->render('fiscaat/pagina.html.twig', [
 			'titel' => 'Producten beheer',
@@ -87,7 +87,7 @@ class BeheerCiviProductenController extends AbstractController
 	 * @Route("/fiscaat/producten/bewerken", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function bewerken(): CiviProductForm
+	public function bewerken()
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -106,7 +106,7 @@ class BeheerCiviProductenController extends AbstractController
 	 * @Route("/fiscaat/producten/verwijderen", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function verwijderen(): GenericDataTableResponse
+	public function verwijderen()
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -155,7 +155,7 @@ class BeheerCiviProductenController extends AbstractController
 	 * @Route("/fiscaat/producten/opslaan", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function opslaan(Request $request): GenericDataTableResponse|CiviProductForm
+	public function opslaan(Request $request)
 	{
 		$id = $request->request->getInt('id');
 
@@ -185,7 +185,7 @@ class BeheerCiviProductenController extends AbstractController
 	 * @Route("/fiscaat/producten/{cie}", defaults={"cie": null}, methods={"POST"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function lijst($cie): GenericDataTableResponse
+	public function lijst($cie)
 	{
 		if ($cie) {
 			return $this->tableData($this->civiProductRepository->findByCie($cie));

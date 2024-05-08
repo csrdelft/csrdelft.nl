@@ -10,7 +10,7 @@ class GenericSuggestiesResponse extends JsonLijstResponse
 	 * @param DisplayEntity $entity
 	 * @return array
 	 */
-	public function renderElement($entity): array
+	public function renderElement($entity)
 	{
 		return [
 			'value' => $entity->getWeergave(),

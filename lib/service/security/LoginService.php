@@ -87,7 +87,7 @@ class LoginService
 			->_getUid();
 	}
 
-	public function _getUid(): string
+	public function _getUid()
 	{
 		if (HostUtil::isCLI()) {
 			return static::$cliUid;
@@ -113,7 +113,7 @@ class LoginService
 			->_getAccount();
 	}
 
-	public function _getAccount(): UserInterface|null|Account
+	public function _getAccount()
 	{
 		return $this->security->getUser() ??
 			$this->accountRepository->find(self::UID_EXTERN);
@@ -123,7 +123,7 @@ class LoginService
 	 * @return Profiel|null
 	 * @deprecated Gebruik CsrSecurity::getProfiel
 	 */
-	public static function getProfiel(): ?Profiel
+	public static function getProfiel()
 	{
 		$account = static::getAccount();
 		if ($account) {
@@ -137,7 +137,7 @@ class LoginService
 	 * worden Permissies hierdoor beperkt voor de veiligheid.
 	 * @return string|null uit AuthenticationMethod
 	 */
-	public function getAuthenticationMethod(): ?string
+	public function getAuthenticationMethod()
 	{
 		if (HostUtil::isCLI()) {
 			return AuthenticationMethod::password_login;
@@ -177,7 +177,7 @@ class LoginService
 	/**
 	 * Maak de gebruiker opnieuw recent ingelogd
 	 */
-	public function setRecentLoginToken(): void
+	public function setRecentLoginToken()
 	{
 		$token = $this->security->getToken();
 

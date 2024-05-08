@@ -6,12 +6,12 @@ use CsrDelft\entity\groepen\enum\GroepVersie;
 
 class GroepVersieType extends EnumType
 {
-	public function getEnumClass(): string
+	public function getEnumClass()
 	{
 		return GroepVersie::class;
 	}
 
-	public function getName(): string
+	public function getName()
 	{
 		return 'enumGroepVersie';
 	}

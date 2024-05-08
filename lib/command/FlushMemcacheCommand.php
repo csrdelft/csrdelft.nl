@@ -26,12 +26,12 @@ class FlushMemcacheCommand extends Command
 		$this->systemCache = $system;
 	}
 
-	public function configure(): void
+	public function configure()
 	{
 		$this->setName('stek:cache:flush')->setDescription('Flush de memcache');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): int
+	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		if ($this->appCache == null) {
 			$output->writeln('Geen cache geinstalleerd');

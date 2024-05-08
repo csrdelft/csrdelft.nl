@@ -22,7 +22,7 @@ class ToestemmingLijstResponse extends DataTableResponse
 	/**
 	 * @param LidToestemming[] $entity
 	 */
-	public function renderElement($entity): array
+	public function renderElement($entity)
 	{
 		$profiel = $entity[0]->profiel;
 

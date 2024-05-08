@@ -21,7 +21,7 @@ class FotosDropzone extends Dropzone
 		);
 	}
 
-	public function getBreadcrumbs(): string
+	public function getBreadcrumbs()
 	{
 		return '<ul class="breadcrumb">' .
 			FotoAlbumBreadcrumbs::getBreadcrumbs($this->model, false, true) .

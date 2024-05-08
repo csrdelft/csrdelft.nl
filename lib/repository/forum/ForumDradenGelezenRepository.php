@@ -7,7 +7,7 @@ use CsrDelft\entity\forum\ForumDraadGelezen;
 use CsrDelft\repository\AbstractRepository;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * ForumDradenGelezenModel.class.php
@@ -33,7 +33,7 @@ class ForumDradenGelezenRepository extends AbstractRepository
 		$this->security = $security;
 	}
 
-	protected function maakForumDraadGelezen(ForumDraad $draad): ForumDraadGelezen
+	protected function maakForumDraadGelezen(ForumDraad $draad)
 	{
 		$gelezen = new ForumDraadGelezen();
 		$gelezen->draad = $draad;
@@ -50,7 +50,7 @@ class ForumDradenGelezenRepository extends AbstractRepository
 	 * @param ForumDraad $draad
 	 * @param DateTime $moment
 	 */
-	public function setWanneerGelezenDoorLid(ForumDraad $draad, $moment = null): void
+	public function setWanneerGelezenDoorLid(ForumDraad $draad, $moment = null)
 	{
 		$gelezen = $this->find([
 			'draad_id' => $draad->draad_id,
@@ -75,7 +75,7 @@ class ForumDradenGelezenRepository extends AbstractRepository
 		$this->getEntityManager()->clear();
 	}
 
-	public function verwijderDraadGelezen(array $draadIds): void
+	public function verwijderDraadGelezen(array $draadIds)
 	{
 		$this->createQueryBuilder('fdg')
 			->delete()
@@ -85,7 +85,7 @@ class ForumDradenGelezenRepository extends AbstractRepository
 			->execute();
 	}
 
-	public function verwijderDraadGelezenVoorLeden(array $uids): void
+	public function verwijderDraadGelezenVoorLeden(array $uids)
 	{
 		$this->createQueryBuilder('fdg')
 			->delete()

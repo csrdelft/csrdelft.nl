@@ -87,17 +87,17 @@ class CorveeFunctie implements ISelectEntity, DisplayEntity
  #[ORM\OneToMany(targetEntity: \CorveeKwalificatie::class, mappedBy: 'corveeFunctie')]
  public $kwalificaties;
 
-	public function hasKwalificaties(): bool
+	public function hasKwalificaties()
 	{
 		return sizeof($this->kwalificaties) > 0;
 	}
 
-	public function getValue(): string
+	public function getValue()
 	{
 		return $this->naam;
 	}
 
-	public function getId(): int
+	public function getId()
 	{
 		return $this->functie_id;
 	}

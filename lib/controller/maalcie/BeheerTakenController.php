@@ -70,7 +70,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/maaltijd/{maaltijd_id}", methods={"GET"}, defaults={"maaltijd_id"=null})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function maaltijd(Maaltijd $maaltijd): Response
+	public function maaltijd(Maaltijd $maaltijd)
 	{
 		return $this->beheer(null, $maaltijd);
 	}
@@ -82,7 +82,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/{taak_id<\d*>}/{maaltijd_id<\d*>}", methods={"GET"}, defaults={"taak_id"=null,"maaltijd_id"=null})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function beheer(CorveeTaak $taak = null, Maaltijd $maaltijd = null): Response
+	public function beheer(CorveeTaak $taak = null, Maaltijd $maaltijd = null)
 	{
 		$modal = null;
 		if ($taak) {
@@ -130,7 +130,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/bewerk/{taak_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function bewerk(CorveeTaak $taak): TaakForm
+	public function bewerk(CorveeTaak $taak)
 	{
 		if ($taak->verwijderd) {
 			throw new CsrGebruikerException('Maaltijd is verwijderd');
@@ -144,7 +144,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/prullenbak", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function prullenbak(): Response
+	public function prullenbak()
 	{
 		$taken = $this->corveeTakenRepository->getVerwijderdeTaken();
 		$model = [];
@@ -176,7 +176,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheren/herinneren", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function herinneren(): RedirectResponse
+	public function herinneren()
 	{
 		$verstuurd_errors = $this->corveeHerinneringService->stuurHerinneringen();
 		$verstuurd = $verstuurd_errors[0];
@@ -216,7 +216,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/opslaan/{taak_id}", methods={"POST"}, defaults={"taak_id"=null})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function opslaan(CorveeTaak $taak = null): Response|TaakForm|RepetitieCorveeForm
+	public function opslaan(CorveeTaak $taak = null)
 	{
 		if ($taak) {
 			$view = $this->bewerk($taak);
@@ -260,7 +260,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/nieuw/{maaltijd_id}", methods={"POST"}, defaults={"maaltijd_id"=null})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function nieuw(Maaltijd $maaltijd = null): RepetitieCorveeForm|TaakForm
+	public function nieuw(Maaltijd $maaltijd = null)
 	{
 		$beginDatum = null;
 		if ($maaltijd) {
@@ -304,7 +304,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/verwijder/{taak_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function verwijder(CorveeTaak $taak): void
+	public function verwijder(CorveeTaak $taak)
 	{
 		if ($taak->verwijderd) {
 			$this->entityManager->remove($taak);
@@ -322,7 +322,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/herstel/{taak_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function herstel(CorveeTaak $taak): void
+	public function herstel(CorveeTaak $taak)
 	{
 		if (!$taak->verwijderd) {
 			throw new CsrGebruikerException('Corveetaak is niet verwijderd');
@@ -344,7 +344,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/toewijzen/{taak_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function toewijzen(Environment $twig, CorveeTaak $taak): Response|ToewijzenForm
+	public function toewijzen(Environment $twig, CorveeTaak $taak)
 	{
 		if ($taak->verwijderd) {
 			throw new CsrGebruikerException('Corveetaak is verwijderd');
@@ -378,7 +378,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/puntentoekennen/{taak_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function puntentoekennen(CorveeTaak $taak): Response
+	public function puntentoekennen(CorveeTaak $taak)
 	{
 		if ($taak->verwijderd) {
 			throw new CsrGebruikerException('Corveetaak is verwijderd');
@@ -404,7 +404,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/puntenintrekken/{taak_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function puntenintrekken(CorveeTaak $taak): Response
+	public function puntenintrekken(CorveeTaak $taak)
 	{
 		if ($taak->verwijderd) {
 			throw new CsrGebruikerException('Corveetaak is verwijderd');
@@ -430,7 +430,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/email/{taak_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function email(CorveeTaak $taak): Response
+	public function email(CorveeTaak $taak)
 	{
 		if ($taak->verwijderd) {
 			throw new CsrGebruikerException('Corveetaak is verwijderd');
@@ -453,7 +453,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/leegmaken", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function leegmaken(): RedirectResponse
+	public function leegmaken()
 	{
 		$aantal = $this->corveeTakenRepository->prullenbakLeegmaken();
 		$this->addFlash(
@@ -472,7 +472,7 @@ class BeheerTakenController extends AbstractController
 	 * @Route("/corvee/beheer/aanmaken/{crv_repetitie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function aanmaken(CorveeRepetitie $corveeRepetitie): Response|RepetitieCorveeForm
+	public function aanmaken(CorveeRepetitie $corveeRepetitie)
 	{
 		$form = new RepetitieCorveeForm($corveeRepetitie); // fetches POST values itself
 

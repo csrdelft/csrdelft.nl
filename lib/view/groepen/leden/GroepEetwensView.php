@@ -26,7 +26,7 @@ class GroepEetwensView implements ToResponse
 		$this->groep = $groep;
 	}
 
-	public function __toString(): string
+	public function __toString()
 	{
 		return $this->twig->render('groep/eetwens.html.twig', [
 			'groep' => $this->groep,

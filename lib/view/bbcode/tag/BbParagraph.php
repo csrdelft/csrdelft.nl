@@ -6,17 +6,17 @@ use CsrDelft\bb\BbTag;
 
 class BbParagraph extends BbTag
 {
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->readContent();
 	}
 
-	public function render(): string
+	public function render()
 	{
 		return "<p>{$this->getContent()}</p>";
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'p';
 	}

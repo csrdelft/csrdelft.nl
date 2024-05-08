@@ -25,7 +25,7 @@ class LogProcessor implements ProcessorInterface
 		$this->security = $security;
 	}
 
-	public function __invoke(LogRecord $record): LogRecord
+	public function __invoke(LogRecord $record)
 	{
 		$request = $this->requestStack->getCurrentRequest();
 

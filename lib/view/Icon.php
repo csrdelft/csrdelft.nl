@@ -98,7 +98,12 @@ class Icon
 	 * @param string $class
 	 * @return string
 	 */
-	public static function getTag($key, $hover = null, $title = null, $class = null): string {
+	public static function getTag(
+		$key,
+		$hover = null,
+		$title = null,
+		$class = null
+	) {
 		$icon = self::get($key);
 
 		if ($hover !== null) {

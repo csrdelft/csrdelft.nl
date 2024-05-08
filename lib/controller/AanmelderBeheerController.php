@@ -81,7 +81,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/reeks/nieuw", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function reeksNieuw(Request $request): GenericDataTableResponse|Response
+	public function reeksNieuw(Request $request)
 	{
 		if (!Reeks::magAanmaken()) {
 			throw new CsrGebruikerException('Mag geen reeks aanmaken');
@@ -117,7 +117,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/reeks/bewerken", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function reeksBewerken(Request $request): GenericDataTableResponse|Response
+	public function reeksBewerken(Request $request)
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -191,7 +191,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/activiteiten/bewerken", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function activiteitBewerken(Request $request): GenericDataTableResponse|Response
+	public function activiteitBewerken(Request $request)
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -261,7 +261,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/activiteiten/nieuw/{reeks}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function activiteitNieuw(Request $request, Reeks $reeks): GenericDataTableResponse|Response
+	public function activiteitNieuw(Request $request, Reeks $reeks)
 	{
 		if (!$reeks->magActiviteitenBeheren()) {
 			throw new CsrGebruikerException(

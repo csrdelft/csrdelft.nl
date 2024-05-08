@@ -97,22 +97,22 @@ class Boek
  #[ORM\ManyToOne(targetEntity: \BiebRubriek::class)]
  protected $categorie;
 
-	public function getRubriek(): ?BiebRubriek
+	public function getRubriek()
 	{
 		return $this->categorie;
 	}
 
-	public function setCategorie(BiebRubriek $biebRubriek): void
+	public function setCategorie(BiebRubriek $biebRubriek)
 	{
 		$this->categorie = $biebRubriek;
 	}
 
-	public function getStatus(): string
+	public function getStatus()
 	{
 		return '';
 	}
 
-	public function getUrl(): string
+	public function getUrl()
 	{
 		return '/bibliotheek/boek/' . $this->id;
 	}
@@ -120,7 +120,7 @@ class Boek
 	/**
 	 * Iedereen met extra rechten en zij met BIEB_READ mogen
 	 */
-	public function magBekijken(): bool
+	public function magBekijken()
 	{
 		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
 	}
@@ -131,7 +131,7 @@ class Boek
 	 * @return  bool
 	 *    boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
 	 */
-	public function magBewerken(): bool
+	public function magBewerken()
 	{
 		return LoginService::mag(P_BIEB_EDIT) ||
 			$this->isEigenaar() ||
@@ -149,7 +149,7 @@ class Boek
 	 *      false
 	 *        geen geen resultaat of niet de eigenaar
 	 */
-	public function isEigenaar($uid = null): bool
+	public function isEigenaar($uid = null)
 	{
 		foreach ($this->getExemplaren() as $exemplaar) {
 			if ($uid != null) {
@@ -168,7 +168,7 @@ class Boek
 	 *
 	 * @return BoekExemplaar[]
 	 */
-	public function getExemplaren(): array
+	public function getExemplaren()
 	{
 		return $this->exemplaren ?? [];
 	}
@@ -179,12 +179,12 @@ class Boek
 	 * @return  bool
 	 *    boek mag alleen door admins verwijdert worden
 	 */
-	public function magVerwijderen(): bool
+	public function magVerwijderen()
 	{
 		return LoginService::mag('commissie:BASFCie,' . P_BIEB_MOD . ',' . P_ADMIN);
 	}
 
-	public function isBiebBoek(): bool
+	public function isBiebBoek()
 	{
 		foreach ($this->getExemplaren() as $exemplaar) {
 			if ($exemplaar->isBiebBoek()) {
@@ -197,7 +197,7 @@ class Boek
 	/**
 	 * @return BoekRecensie[]
 	 */
-	public function getRecensies(): array
+	public function getRecensies()
 	{
 		return $this->recensies ?? [];
 	}

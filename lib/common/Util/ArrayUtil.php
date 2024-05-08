@@ -13,7 +13,7 @@ final class ArrayUtil
 	 * @param Traversable|array
 	 * @return array
 	 */
-	public static function as_array($value): array
+	public static function as_array($value)
 	{
 		if (is_array($value)) {
 			return $value;
@@ -29,7 +29,7 @@ final class ArrayUtil
 	 * @param array $arr
 	 * @return array
 	 */
-	public static function array_shuffle(array $arr): array
+	public static function array_shuffle(array $arr)
 	{
 		shuffle($arr);
 
@@ -45,7 +45,7 @@ final class ArrayUtil
 	 *
 	 * @return boolean
 	 */
-	public static function in_array_i($needle, array $haystack): array
+	public static function in_array_i($needle, array $haystack)
 	{
 		return in_array(strtolower($needle), array_map('strtolower', $haystack));
 	}
@@ -56,7 +56,7 @@ final class ArrayUtil
 	 *
 	 * @return array
 	 */
-	public static function array_filter_empty($array): array
+	public static function array_filter_empty($array)
 	{
 		return array_filter($array, [ArrayUtil::class, 'not_empty']);
 	}
@@ -75,7 +75,7 @@ final class ArrayUtil
 	 *
 	 * @return array $out
 	 */
-	public static function group_by($prop, $in, $del = true): array
+	public static function group_by($prop, $in, $del = true)
 	{
 		$del &= is_array($in);
 		$out = [];
@@ -105,7 +105,7 @@ final class ArrayUtil
 	 *
 	 * @return array $out
 	 */
-	public static function group_by_distinct($prop, $in, $del = true): array
+	public static function group_by_distinct($prop, $in, $del = true)
 	{
 		$del &= is_array($in);
 		$out = [];

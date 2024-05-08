@@ -11,7 +11,7 @@ final class FileUtil
 	 * @param string $mime
 	 * @return bool
 	 */
-	public static function checkMimetype($filename, $mime): bool|array
+	public static function checkMimetype($filename, $mime)
 	{
 		$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
@@ -126,7 +126,7 @@ final class FileUtil
 		}
 	}
 
-	public static function delTree($dir): bool
+	public static function delTree($dir)
 	{
 		$files = array_diff(scandir($dir), ['.', '..']);
 		foreach ($files as $file) {
@@ -146,7 +146,7 @@ final class FileUtil
 		return round($size, 1) . $units[$i];
 	}
 
-	public static function getMaximumFileUploadSize(): mixed
+	public static function getMaximumFileUploadSize()
 	{
 		return min(
 			FileUtil::convertPHPSizeToBytes(ini_get('post_max_size')),
@@ -199,7 +199,12 @@ final class FileUtil
 	 * @param int $jpg_quality
 	 * @return bool
 	 */
-	public static function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 90): bool {
+	public static function square_crop(
+		$src_image,
+		$dest_image,
+		$thumb_size = 64,
+		$jpg_quality = 90
+	) {
 		// Get dimensions of existing image
 		$image = getimagesize($src_image);
 

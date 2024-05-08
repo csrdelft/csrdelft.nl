@@ -44,7 +44,7 @@ class ApiForumController extends AbstractController
 	 * @Auth(P_OUDLEDEN_READ)
 	 * @return JsonResponse
 	 */
-	public function getRecent(): JsonResponse
+	public function getRecent()
 	{
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
@@ -77,7 +77,7 @@ class ApiForumController extends AbstractController
 	 * @param int limit
 	 * @return JsonResponse
 	 */
-	public function getOnderwerp($id): JsonResponse
+	public function getOnderwerp($id)
 	{
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;

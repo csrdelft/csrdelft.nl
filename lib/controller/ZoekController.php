@@ -24,7 +24,7 @@ class ZoekController extends AbstractController
 	 * @Route("/zoeken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function zoeken(Request $request): JsonResponse
+	public function zoeken(Request $request)
 	{
 		$zoekterm = $request->query->get('q');
 		$resultaat = [];
@@ -118,7 +118,7 @@ class ZoekController extends AbstractController
 	 * @Route("/wikizoek", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function wikizoek(Request $request, $zoekterm = null): JsonResponse
+	public function wikizoek(Request $request, $zoekterm = null)
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();

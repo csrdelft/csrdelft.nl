@@ -16,7 +16,7 @@ class EetplanHuizenZoekenResponse extends JsonLijstResponse
 	 * @param Woonoord $entity
 	 *
 	 */
-	public function renderElement($entity): array
+	public function renderElement($entity)
 	{
 		return [
 			'url' => $entity->getUrl(),

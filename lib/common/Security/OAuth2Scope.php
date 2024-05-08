@@ -56,7 +56,7 @@ class OAuth2Scope
 		throw new CsrException("Scope $scope heeft geen rechten gedefinieerd");
 	}
 
-	public static function isOptioneel($scope): bool
+	public static function isOptioneel($scope)
 	{
 		if (isset(self::OPTIONAL[(string) $scope])) {
 			return true;
@@ -69,7 +69,7 @@ class OAuth2Scope
 	 * @param Scope|string $scope
 	 * @return string
 	 */
-	public static function getBeschrijving($scope): string
+	public static function getBeschrijving($scope)
 	{
 		if (isset(self::BESCHRIJVING[(string) $scope])) {
 			return self::BESCHRIJVING[(string) $scope];

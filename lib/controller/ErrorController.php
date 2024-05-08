@@ -12,7 +12,10 @@ class ErrorController extends AbstractController
 {
 	use TargetPathTrait;
 
-	public function handleException(RequestStack $requestStack, Throwable $exception): Response|RedirectResponse {
+	public function handleException(
+		RequestStack $requestStack,
+		Throwable $exception
+	) {
 		$request = $requestStack->getMainRequest();
 
 		$statusCode = 500;

@@ -25,7 +25,10 @@ class ForumDradenMeldingRepository extends AbstractRepository
 		parent::__construct($registry, ForumDraadMelding::class);
 	}
 
-	public function setNiveauVoorLid(ForumDraad $draad, ForumDraadMeldingNiveau $niveau): void {
+	public function setNiveauVoorLid(
+		ForumDraad $draad,
+		ForumDraadMeldingNiveau $niveau
+	) {
 		$uid = LoginService::getUid();
 		$voorkeur = $this->find(['draad_id' => $draad->draad_id, 'uid' => $uid]);
 		if ($voorkeur) {
@@ -37,7 +40,11 @@ class ForumDradenMeldingRepository extends AbstractRepository
 		}
 	}
 
-	protected function maakForumDraadMelding(ForumDraad $draad, $uid, ForumDraadMeldingNiveau $niveau): ForumDraadMelding {
+	protected function maakForumDraadMelding(
+		ForumDraad $draad,
+		$uid,
+		ForumDraadMeldingNiveau $niveau
+	) {
 		$melding = new ForumDraadMelding();
 		$melding->draad = $draad;
 		$melding->draad_id = $draad->draad_id;
@@ -49,7 +56,7 @@ class ForumDradenMeldingRepository extends AbstractRepository
 		return $melding;
 	}
 
-	public function stopAlleMeldingenVoorLeden(array $uids): void
+	public function stopAlleMeldingenVoorLeden(array $uids)
 	{
 		$this->createQueryBuilder('m')
 			->where('m.uid in (:uids)')
@@ -59,7 +66,7 @@ class ForumDradenMeldingRepository extends AbstractRepository
 			->execute();
 	}
 
-	public function stopMeldingenVoorIedereen(array $draadIds): void
+	public function stopMeldingenVoorIedereen(array $draadIds)
 	{
 		$this->createQueryBuilder('m')
 			->where('m.draad_id in (:draad_ids)')
@@ -69,7 +76,7 @@ class ForumDradenMeldingRepository extends AbstractRepository
 			->execute();
 	}
 
-	public function getAltijdMeldingVoorDraad(ForumDraad $draad): array
+	public function getAltijdMeldingVoorDraad(ForumDraad $draad)
 	{
 		return $this->findBy([
 			'draad_id' => $draad->draad_id,

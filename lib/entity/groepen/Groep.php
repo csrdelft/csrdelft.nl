@@ -148,12 +148,12 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * De URL van de groep
 	 * @return string
 	 */
-	public function getUrl(): string
+	public function getUrl()
 	{
 		return '/groepen/groep/' . $this->id;
 	}
 
-	public function aantalLeden(): int
+	public function aantalLeden()
 	{
 		return $this->getLeden()->count();
 	}
@@ -163,12 +163,12 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * @return GroepLid[]|ArrayCollection
 	 * @Serializer\Groups("vue")
 	 */
-	public function getLeden(): array|ArrayCollection
+	public function getLeden()
 	{
 		return $this->leden;
 	}
 
-	public function getLedenOpAchternaamGesorteerd(): array|ArrayCollection
+	public function getLedenOpAchternaamGesorteerd()
 	{
 		$leden = $this->getLeden();
 		try {
@@ -183,7 +183,7 @@ class Groep implements DataTableEntry, DisplayEntity
 		return new ArrayCollection(iterator_to_array($iterator));
 	}
 
-	public function getFamilieSuggesties(): array
+	public function getFamilieSuggesties()
 	{
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
@@ -201,7 +201,7 @@ class Groep implements DataTableEntry, DisplayEntity
 		}, $result);
 	}
 
-	public function getOpmerkingSuggesties(): array
+	public function getOpmerkingSuggesties()
 	{
 		if (isset($this->keuzelijst)) {
 			$suggesties = [];
@@ -225,7 +225,7 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * @param string $uid
 	 * @return GroepLid|null
 	 */
-	public function getLid($uid): mixed
+	public function getLid($uid)
 	{
 		if ($this->getLeden() == null) {
 			return null;
@@ -242,7 +242,7 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * @param GroepKeuzeSelectie[] $keuzes
 	 * @return bool
 	 */
-	public function valideerOpmerking(array $keuzes): bool
+	public function valideerOpmerking(array $keuzes)
 	{
 		$correct = [];
 		foreach ($keuzes as $keuze) {
@@ -266,7 +266,7 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * @return string|null
 	 * @Serializer\Groups("vue")
 	 */
-	public function getSamenvattingHtml(): string
+	public function getSamenvattingHtml()
 	{
 		return CsrBB::parse($this->samenvatting);
 	}
@@ -279,7 +279,7 @@ class Groep implements DataTableEntry, DisplayEntity
 			'.csrdelft.nl';
 	}
 
-	public function getId(): int
+	public function getId()
 	{
 		return $this->id;
 	}

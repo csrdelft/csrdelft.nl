@@ -9,7 +9,12 @@ use Doctrine\Persistence\ObjectManager;
 
 class GroepFixtureUtil
 {
-	public static function maakGroepLid(ObjectManager $manager, Groep $groep, Profiel $profiel, string $opmerking = null): void {
+	public static function maakGroepLid(
+		ObjectManager $manager,
+		Groep $groep,
+		Profiel $profiel,
+		string $opmerking = null
+	) {
 		$groepLid = new GroepLid();
 		$groepLid->uid = $profiel->uid;
 		$groepLid->profiel = $profiel;

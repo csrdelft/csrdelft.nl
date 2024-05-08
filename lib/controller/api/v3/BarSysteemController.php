@@ -52,7 +52,7 @@ class BarSysteemController extends AbstractController
 	 * @param Request $request
 	 * @return JsonResponse
 	 */
-	public function trust(Request $request): JsonResponse
+	public function trust(Request $request)
 	{
 		// maak een nieuwe BarSysteemTrust object en sla op.
 
@@ -82,7 +82,7 @@ class BarSysteemController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
-	public function updatePerson(Request $request): Response
+	public function updatePerson(Request $request)
 	{
 		$id = $request->request->get('id');
 		$name = $request->request->get('name');
@@ -97,7 +97,7 @@ class BarSysteemController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
-	public function personen(): JsonResponse
+	public function personen()
 	{
 		return $this->json($this->barSysteemService->getPersonen());
 	}
@@ -108,7 +108,7 @@ class BarSysteemController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
-	public function producten(): JsonResponse
+	public function producten()
 	{
 		return $this->json($this->barSysteemService->getProducten());
 	}
@@ -123,7 +123,7 @@ class BarSysteemController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
-	public function bestelling(Request $request): Response
+	public function bestelling(Request $request)
 	{
 		$uid = $request->request->get('uid');
 		$inhoud = $request->request->get('inhoud');
@@ -151,7 +151,7 @@ class BarSysteemController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
-	public function saldo(Request $request): JsonResponse
+	public function saldo(Request $request)
 	{
 		$soccieSaldoId = $request->request->get('saldoSocCieId');
 		return $this->json($this->barSysteemService->getSaldo($soccieSaldoId));
@@ -164,7 +164,7 @@ class BarSysteemController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
-	public function verwijderBestelling(Request $request): Response
+	public function verwijderBestelling(Request $request)
 	{
 		$this->barSysteemService->log('remove', $_POST);
 
@@ -182,7 +182,7 @@ class BarSysteemController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
-	public function undoVerwijderBestelling(Request $request): Response
+	public function undoVerwijderBestelling(Request $request)
 	{
 		$this->barSysteemService->log('remove', $_POST);
 		$data = $request->request->get('undoVerwijderBestelling');
@@ -199,7 +199,7 @@ class BarSysteemController extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
-	public function laadLaatste(Request $request): JsonResponse
+	public function laadLaatste(Request $request)
 	{
 		$persoon = $request->request->get('aantal');
 		$begin = date_create_immutable($request->request->get('begin'));
@@ -228,7 +228,7 @@ class BarSysteemController extends AbstractController
 	 * @Route("/prakciePilsjes")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function prakciePilsjes(Request $request): Response
+	public function prakciePilsjes(Request $request)
 	{
 		$vanaf = date_create_immutable($request->query->get('vanaf', 'now'));
 		if ($vanaf === false) {

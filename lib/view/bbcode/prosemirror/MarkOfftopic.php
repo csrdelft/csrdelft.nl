@@ -7,22 +7,22 @@ use CsrDelft\view\bbcode\tag\BbOfftopic;
 
 class MarkOfftopic implements Mark
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbOfftopic::class;
 	}
 
-	public static function getMarkType(): string
+	public static function getMarkType()
 	{
 		return 'offtopic';
 	}
 
-	public function getTagAttributes($mark): array
+	public function getTagAttributes($mark)
 	{
 		return [];
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		return [];
 	}

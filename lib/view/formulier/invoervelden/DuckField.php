@@ -17,7 +17,7 @@ class DuckField extends TextField
 		parent::__construct($name, $value, 'Duckstad-naam');
 	}
 
-	public function validate(): bool
+	public function validate()
 	{
 		if (!parent::validate()) {
 			return false;

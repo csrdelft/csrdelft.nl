@@ -6,12 +6,12 @@ use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 
 class ForumDraadMeldingNiveauType extends EnumType
 {
-	public function getEnumClass(): string
+	public function getEnumClass()
 	{
 		return ForumDraadMeldingNiveau::class;
 	}
 
-	public function getName(): string
+	public function getName()
 	{
 		return 'enumForumDraadMeldingNiveau';
 	}

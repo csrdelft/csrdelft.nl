@@ -7,7 +7,7 @@ use CsrDelft\view\datatable\DataTableResponse;
 
 class GroepLedenData extends DataTableResponse
 {
-	public function renderElement($lid): array
+	public function renderElement($lid)
 	{
 		$array = (array) $lid;
 

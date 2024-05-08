@@ -7,7 +7,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\peilingen\PeilingStem;
-use CsrDelft\entity\peilingen\integer;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\ORMException;
@@ -50,7 +49,7 @@ class PeilingenRepository extends AbstractRepository
 	 * @param Peiling $entity
 	 * @return void
 	 */
-	public function delete(Peiling $entity): void
+	public function delete(Peiling $entity)
 	{
 		$manager = $this->getEntityManager();
 
@@ -81,7 +80,7 @@ class PeilingenRepository extends AbstractRepository
 	 * @param Peiling $entity
 	 * @return string
 	 */
-	public function create(Peiling $entity): integer
+	public function create(Peiling $entity)
 	{
 		$manager = $this->getEntityManager();
 
@@ -95,7 +94,7 @@ class PeilingenRepository extends AbstractRepository
 	 * @param $peiling_id
 	 * @return Peiling|false
 	 */
-	public function getPeilingById($peiling_id): ?Peiling
+	public function getPeilingById($peiling_id)
 	{
 		return $this->find($peiling_id);
 	}
@@ -106,7 +105,7 @@ class PeilingenRepository extends AbstractRepository
 	 * @return string
 	 * @throws CsrGebruikerException
 	 */
-	public function validate(Peiling $entity): string
+	public function validate(Peiling $entity)
 	{
 		$errors = '';
 		if ($entity == null) {
@@ -124,7 +123,7 @@ class PeilingenRepository extends AbstractRepository
 		return $errors;
 	}
 
-	public function getPeilingenVoorBeheer(): array
+	public function getPeilingenVoorBeheer()
 	{
 		$peilingen = $this->findAll();
 		if (LoginService::mag(P_PEILING_MOD)) {
@@ -150,7 +149,7 @@ class PeilingenRepository extends AbstractRepository
 		}
 	}
 
-	public function magBewerken($peiling): bool
+	public function magBewerken($peiling)
 	{
 		if (
 			LoginService::mag(P_PEILING_MOD) ||
@@ -166,7 +165,7 @@ class PeilingenRepository extends AbstractRepository
 	/**
 	 * @return Peiling[]
 	 */
-	public function getLijst(): array
+	public function getLijst()
 	{
 		return $this->findBy([], ['id' => 'DESC']);
 	}

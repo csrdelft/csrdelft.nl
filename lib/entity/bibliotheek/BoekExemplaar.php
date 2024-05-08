@@ -101,7 +101,7 @@ class BoekExemplaar
 		return $this->isEigenaar();
 	}
 
-	public function magBekijken(): bool
+	public function magBekijken()
 	{
 		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
 	}
@@ -111,7 +111,7 @@ class BoekExemplaar
 		return $this->status === BoekExemplaarStatus::beschikbaar();
 	}
 
-	public function kanLenen(string $uid): bool
+	public function kanLenen(string $uid)
 	{
 		return $this->eigenaar_uid != $uid && $this->isBeschikbaar();
 	}

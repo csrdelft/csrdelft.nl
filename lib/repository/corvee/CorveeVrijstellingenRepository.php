@@ -25,7 +25,12 @@ class CorveeVrijstellingenRepository extends AbstractRepository
 		parent::__construct($registry, CorveeVrijstelling::class);
 	}
 
-	public function nieuw($profiel = null, $begin = null, $eind = null, $percentage = 0): CorveeVrijstelling {
+	public function nieuw(
+		$profiel = null,
+		$begin = null,
+		$eind = null,
+		$percentage = 0
+	) {
 		$vrijstelling = new CorveeVrijstelling();
 		$vrijstelling->profiel = $profiel;
 		$vrijstelling->uid = $profiel->uid ?? null;
@@ -50,7 +55,7 @@ class CorveeVrijstellingenRepository extends AbstractRepository
 		return $vrijstelling;
 	}
 
-	public function getAlleVrijstellingen($groupByUid = false): array
+	public function getAlleVrijstellingen($groupByUid = false)
 	{
 		$vrijstellingen = $this->findAll();
 		if ($groupByUid) {
@@ -67,7 +72,7 @@ class CorveeVrijstellingenRepository extends AbstractRepository
 	 * @param $uid
 	 * @return CorveeVrijstelling|null
 	 */
-	public function getVrijstelling($uid): ?CorveeVrijstelling
+	public function getVrijstelling($uid)
 	{
 		return $this->find($uid);
 	}
@@ -108,7 +113,7 @@ class CorveeVrijstellingenRepository extends AbstractRepository
 		});
 	}
 
-	public function verwijderVrijstelling($uid): void
+	public function verwijderVrijstelling($uid)
 	{
 		$this->createQueryBuilder('v')
 			->delete()

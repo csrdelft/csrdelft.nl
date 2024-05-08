@@ -3,18 +3,17 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Activiteit;
-use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 
 class ActiviteitenRepository extends KetzersRepository
 {
-	public function getEntityClassName(): string
+	public function getEntityClassName()
 	{
 		return Activiteit::class;
 	}
 
-	public function nieuw($soort = null): Activiteit
+	public function nieuw($soort = null)
 	{
 		if (is_string($soort)) {
 			$soort = $this->parseSoort($soort);
@@ -31,7 +30,11 @@ class ActiviteitenRepository extends KetzersRepository
 		return $activiteit;
 	}
 
-	public function overzicht(int $limit = null, int $offset = null, string $soort = null): array {
+	public function overzicht(
+		int $limit = null,
+		int $offset = null,
+		string $soort = null
+	) {
 		if ($soort && ActiviteitSoort::isValidValue($soort)) {
 			return $this->findBy(
 				[
@@ -46,7 +49,7 @@ class ActiviteitenRepository extends KetzersRepository
 		return parent::overzicht($limit, $offset, $soort);
 	}
 
-	public function beheer(string $soort = null): array
+	public function beheer(string $soort = null)
 	{
 		if ($soort && ActiviteitSoort::isValidValue($soort)) {
 			return $this->findBy([
@@ -56,7 +59,7 @@ class ActiviteitenRepository extends KetzersRepository
 		return parent::beheer($soort);
 	}
 
-	public function parseSoort(string $soort = null): ActiviteitSoort
+	public function parseSoort(string $soort = null)
 	{
 		if ($soort && ActiviteitSoort::isValidValue($soort)) {
 			return ActiviteitSoort::from($soort);

@@ -12,7 +12,7 @@ class CronMonthlyCommand extends Command
 {
 	protected static $defaultName = 'stek:cron:monthly';
 
-	protected function configure(): void
+	protected function configure()
 	{
 		$this->setDescription('Voer maandelijkse acties uit');
 	}

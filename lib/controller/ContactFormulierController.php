@@ -31,7 +31,7 @@ class ContactFormulierController extends AbstractController
 	 * @Route("/contactformulier/interesse", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function interesse(): PlainView
+	public function interesse()
 	{
 		$resp = $this->checkCaptcha(
 			filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING)
@@ -123,7 +123,7 @@ De PubCie.
 	 * @Route("/contactformulier/owee", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function owee(): PlainView
+	public function owee()
 	{
 		$resp = $this->checkCaptcha(
 			filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING)
@@ -189,7 +189,7 @@ De PubCie.
 	 * @Auth(P_PUBLIC)
 	 * @CsrfUnsafe
 	 */
-	public function civitasproducties(): PlainView
+	public function civitasproducties()
 	{
 		$resp = $this->checkCaptcha(
 			filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING)
@@ -234,7 +234,7 @@ De PubCie.
 		);
 	}
 
-	private function isSpam(...$input): bool
+	private function isSpam(...$input)
 	{
 		$filter = new SimpleSpamFilter();
 		foreach ($input as $item) {

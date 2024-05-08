@@ -26,12 +26,12 @@ class CellType
 		return $this->choice;
 	}
 
-	public static function String(): CellType
+	public static function String()
 	{
 		return new static(self::STRING);
 	}
 
-	public static function FormattedNumber(): CellType
+	public static function FormattedNumber()
 	{
 		return new static(self::FORMATTED_NUMBER);
 	}

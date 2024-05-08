@@ -28,7 +28,7 @@ class PinTransactieMatchRepository extends AbstractRepository
 	/**
 	 * @return PinTransactieMatch[]
 	 */
-	public function metFout(): mixed
+	public function metFout()
 	{
 		return $this->createQueryBuilder('m')
 			->where('m.status != \'match\' and m.status != \'verwijderd\'')
@@ -39,7 +39,7 @@ class PinTransactieMatchRepository extends AbstractRepository
 	/**
 	 * @param int[] $ids
 	 */
-	public function cleanByBestellingIds($ids): void
+	public function cleanByBestellingIds($ids)
 	{
 		$this->createQueryBuilder('m')
 			->delete()
@@ -52,7 +52,7 @@ class PinTransactieMatchRepository extends AbstractRepository
 	/**
 	 * @param int[] $ids
 	 */
-	public function cleanByTransactieIds($ids): void
+	public function cleanByTransactieIds($ids)
 	{
 		$this->createQueryBuilder('m')
 			->delete()

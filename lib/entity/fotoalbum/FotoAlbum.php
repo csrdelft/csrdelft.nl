@@ -90,7 +90,7 @@ class FotoAlbum extends Map
 		$this->dirname = basename($this->path);
 	}
 
-	public function getPath(): string
+	public function getPath()
 	{
 		return $this->path ?? PathUtil::join_paths(PHOTOALBUM_PATH, $this->subdir);
 	}
@@ -98,28 +98,28 @@ class FotoAlbum extends Map
 	/**
 	 * File modification time van het album.
 	 */
-	public function modified(): int|false
+	public function modified()
 	{
 		return filemtime($this->path);
 	}
 
-	public function getParentName(): string
+	public function getParentName()
 	{
 		return ucfirst(basename(dirname($this->subdir)));
 	}
 
-	public function getUrl(): string
+	public function getUrl()
 	{
 		return '/fotoalbum/' . PathUtil::direncode($this->subdir);
 	}
 
-	public function isEmpty(): bool
+	public function isEmpty()
 	{
 		$subalbums = $this->getSubAlbums();
 		return empty($subalbums) && !$this->hasFotos(true);
 	}
 
-	public function hasFotos($incompleet = false): bool
+	public function hasFotos($incompleet = false)
 	{
 		$fotos = $this->getFotos($incompleet);
 		return !empty($fotos);
@@ -129,7 +129,7 @@ class FotoAlbum extends Map
 	 * @param false $incompleet
 	 * @return Foto[]
 	 */
-	public function getFotos($incompleet = false): array
+	public function getFotos($incompleet = false)
 	{
 		if (!isset($this->fotos)) {
 			$this->fotos = [];
@@ -157,7 +157,7 @@ class FotoAlbum extends Map
 		}
 	}
 
-	public function orderByDateModified(): void
+	public function orderByDateModified()
 	{
 		$order = [];
 		foreach ($this->getFotos() as $i => $foto) {
@@ -171,7 +171,7 @@ class FotoAlbum extends Map
 		$this->fotos = $result;
 	}
 
-	public function getSubAlbums($recursive = false): bool|array
+	public function getSubAlbums($recursive = false)
 	{
 		if (!isset($this->subalbums)) {
 			$this->subalbums = [];
@@ -204,7 +204,7 @@ class FotoAlbum extends Map
 	/**
 	 * @return string[]
 	 */
-	public function getCoverUrls(): array
+	public function getCoverUrls()
 	{
 		$fotos = [];
 		$fotos[] = $this->getCoverUrl();
@@ -214,7 +214,7 @@ class FotoAlbum extends Map
 		return $fotos;
 	}
 
-	public function getRandomCover(): string
+	public function getRandomCover()
 	{
 		if ($this->hasFotos()) {
 			// Anders een willekeurige foto:
@@ -234,7 +234,7 @@ class FotoAlbum extends Map
 		return '/plaetjes/_geen_thumb.jpg';
 	}
 
-	public function getCoverUrl(): string
+	public function getCoverUrl()
 	{
 		if ($this->hasFotos() && $this->dirname !== 'Posters') {
 			foreach ($this->getFotos() as $foto) {
@@ -246,7 +246,7 @@ class FotoAlbum extends Map
 		return $this->getRandomCover();
 	}
 
-	public function getMostRecentSubAlbum(): FotoAlbum
+	public function getMostRecentSubAlbum()
 	{
 		$recent = $this;
 		foreach ($this->getSubAlbums() as $subalbum) {
@@ -271,7 +271,7 @@ class FotoAlbum extends Map
 	 *
 	 * @return string[][]
 	 */
-	public function getAlbumArrayRecursive(): array
+	public function getAlbumArrayRecursive()
 	{
 		$fotos = [];
 		foreach ($this->getFotos() as $foto) {
@@ -305,7 +305,7 @@ class FotoAlbum extends Map
 	 *
 	 * @return string[][]
 	 */
-	public function getAlbumArray(): array
+	public function getAlbumArray()
 	{
 		$fotos = [];
 		foreach ($this->getFotos() as $foto) {

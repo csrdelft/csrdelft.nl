@@ -26,17 +26,17 @@ class BbVideo extends BbTag
 	 */
 	public $url;
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'video';
 	}
 
-	public function renderPreview(): string
+	public function renderPreview()
 	{
 		return '📹';
 	}
 
-	public function renderLight(): string
+	public function renderLight()
 	{
 		list($src, $type) = $this->processVideo();
 
@@ -47,7 +47,7 @@ class BbVideo extends BbTag
 	 * @return string
 	 * @throws BbException
 	 */
-	public function render(): string
+	public function render()
 	{
 		list($src, $type) = $this->processVideo();
 
@@ -125,7 +125,7 @@ HTML;
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->url = $this->readMainArgument($arguments);
 	}

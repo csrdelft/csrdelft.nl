@@ -114,7 +114,7 @@ abstract class InputField implements FormElement, Validator
 		return $this->model;
 	}
 
-	public function getBreadcrumbs(): null
+	public function getBreadcrumbs()
 	{
 		return null;
 	}
@@ -144,7 +144,7 @@ abstract class InputField implements FormElement, Validator
 		return $this->origvalue;
 	}
 
-	public function getValue(): mixed
+	public function getValue()
 	{
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_UNSAFE_RAW);
@@ -167,7 +167,7 @@ abstract class InputField implements FormElement, Validator
 	 * Kindertjes van deze classe kunnen deze methode overloaden om specifiekere
 	 * testen mogelijk te maken.
 	 */
-	public function validate(): bool
+	public function validate()
 	{
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
@@ -210,7 +210,7 @@ abstract class InputField implements FormElement, Validator
 	 * @param boolean $overwrite allowed to overwrite existing file
 	 * @throws CsrException Ongeldige bestandsnaam, doelmap niet schrijfbaar of naam ingebruik
 	 */
-	public function opslaan($directory, $filename, $overwrite = false): void
+	public function opslaan($directory, $filename, $overwrite = false)
 	{
 		if (!$this->isAvailable()) {
 			throw new CsrException(
@@ -274,7 +274,7 @@ abstract class InputField implements FormElement, Validator
 	/**
 	 * Elk veld heeft een label, geef de html voor het label
 	 */
-	public function getLabel(): string
+	public function getLabel()
 	{
 		if (!empty($this->description)) {
 			$required = '';
@@ -308,7 +308,7 @@ abstract class InputField implements FormElement, Validator
 	/**
 	 * Geef een div met de foutmelding voor dit veld terug.
 	 */
-	public function getErrorDiv(): string
+	public function getErrorDiv()
 	{
 		if ($this->getError() != '') {
 			return '<div class="display-block invalid-feedback">' .
@@ -318,7 +318,7 @@ abstract class InputField implements FormElement, Validator
 		return '';
 	}
 
-	public function getPreviewDiv(): string
+	public function getPreviewDiv()
 	{
 		return '';
 	}
@@ -326,7 +326,7 @@ abstract class InputField implements FormElement, Validator
 	/**
 	 * Geef lijst van allerlei CSS-classes voor dit veld terug.
 	 */
-	protected function getCssClasses(): array
+	protected function getCssClasses()
 	{
 		if ($this->required) {
 			if ($this->leden_mod && LoginService::mag(P_LEDEN_MOD)) {
@@ -353,7 +353,7 @@ abstract class InputField implements FormElement, Validator
 	 * elke instantie dan bijvoorbeeld de prefix van het id-veld te
 	 * moeten aanpassen. Niet meer nodig dus.
 	 */
-	protected function getInputAttribute($attribute): string
+	protected function getInputAttribute($attribute)
 	{
 		if (is_array($attribute)) {
 			$return = '';
@@ -433,7 +433,7 @@ abstract class InputField implements FormElement, Validator
 			' />';
 	}
 
-	public function getHelpDiv(): string
+	public function getHelpDiv()
 	{
 		if ($this->title) {
 			return '<div class="form-text">' . $this->title . '</div>';
@@ -474,7 +474,7 @@ abstract class InputField implements FormElement, Validator
 	 * )
 	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
 	 */
-	public function getJavascript(): string
+	public function getJavascript()
 	{
 		$js = '';
 		if ($this->readonly) {

@@ -53,7 +53,7 @@ class ApiAgendaController extends AbstractController
 	 * @Auth(P_AGENDA_READ)
 	 * @return JsonResponse
 	 */
-	public function getAgenda(): JsonResponse
+	public function getAgenda()
 	{
 		if (!isset($_GET['from']) || !isset($_GET['to'])) {
 			throw new BadRequestHttpException();

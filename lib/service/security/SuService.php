@@ -8,8 +8,8 @@ use CsrDelft\entity\security\Account;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 
 class SuService
 {
@@ -51,7 +51,7 @@ class SuService
 	/**
 	 * @return bool
 	 */
-	public function isSued(): bool
+	public function isSued()
 	{
 		return $this->security->getToken() &&
 			$this->security->isGranted('IS_IMPERSONATOR');
@@ -86,7 +86,7 @@ class SuService
 	 * @throws CsrException als er al een tijdelijke schakeling actief is.
 	 * @see SuService::alsLid() voor een veilige methode
 	 */
-	public function overrideUid(Account $account): void
+	public function overrideUid(Account $account)
 	{
 		$token = $this->security->getToken();
 		if ($token instanceof TemporaryToken) {
@@ -105,7 +105,7 @@ class SuService
 	 * @throws CsrException als er geen tijdelijke schakeling actief is.
 	 * @see SuService::alsLid() voor een veilige methode
 	 */
-	public function resetUid(): void
+	public function resetUid()
 	{
 		$token = $this->security->getToken();
 		if (!($token instanceof TemporaryToken)) {
@@ -117,7 +117,7 @@ class SuService
 		$this->tokenStorage->setToken($token->getOriginalToken());
 	}
 
-	public function maySuTo(UserInterface $suNaar): bool
+	public function maySuTo(UserInterface $suNaar)
 	{
 		return $this->security->isGranted('ROLE_ALLOWED_TO_SWITCH') && // Mag switchen
 		!$this->security->isGranted('IS_IMPERSONATOR') && // Is niet al geswitched

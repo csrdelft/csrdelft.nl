@@ -113,12 +113,12 @@ class Deelnemer
 			: '';
 	}
 
-	public function setAanwezig(): void
+	public function setAanwezig()
 	{
 		$this->aanwezig = date_create_immutable();
 	}
 
-	public function setNietAanwezig(): void
+	public function setNietAanwezig()
 	{
 		$this->aanwezig = null;
 	}

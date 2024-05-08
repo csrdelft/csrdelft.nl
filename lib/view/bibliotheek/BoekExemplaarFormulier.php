@@ -26,7 +26,11 @@ class BoekExemplaarFormulier implements FormulierTypeInterface
 	 * @param BoekExemplaar $data
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
+	public function createFormulier(
+		FormulierBuilder $builder,
+		$data,
+		$options = []
+	) {
 		$builder->setAction(
 			$this->urlGenerator->generate('csrdelft_bibliotheek_exemplaar', [
 				'exemplaar' => $data->id,

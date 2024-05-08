@@ -25,7 +25,12 @@ class BestellingZoeker extends AbstractController
 	 * @return Response
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function bestellingZoeker(Request $request, CiviCategorieRepository $civiCategorieRepository, CiviProductRepository $civiProductRepository, CiviSaldoRepository $civiSaldoRepository): Response {
+	public function bestellingZoeker(
+		Request $request,
+		CiviCategorieRepository $civiCategorieRepository,
+		CiviProductRepository $civiProductRepository,
+		CiviSaldoRepository $civiSaldoRepository
+	) {
 		$from = new DateTimeImmutable();
 		$from = $from->sub(new DateInterval('P1W'));
 

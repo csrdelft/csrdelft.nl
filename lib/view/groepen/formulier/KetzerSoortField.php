@@ -46,7 +46,7 @@ class KetzerSoortField extends GroepSoortField
 	 * Pretty ugly
 	 * @return boolean
 	 */
-	public function validate(): bool
+	public function validate()
 	{
 		$class = explode('_', $this->value, 2);
 

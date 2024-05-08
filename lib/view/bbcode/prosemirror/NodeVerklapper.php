@@ -7,27 +7,27 @@ use CsrDelft\view\bbcode\tag\BbVerklapper;
 
 class NodeVerklapper implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbVerklapper::class;
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		return [];
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'verklapper';
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [];
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return false;
 	}

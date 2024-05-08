@@ -5,7 +5,7 @@ namespace CsrDelft\repository;
 use CsrDelft\common\Security\Voter\Entity\CmsPaginaVoter;
 use CsrDelft\entity\CmsPagina;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -33,7 +33,7 @@ class CmsPaginaRepository extends AbstractRepository
 	/**
 	 * @return CmsPagina[]
 	 */
-	public function getAllePaginas(): array
+	public function getAllePaginas()
 	{
 		/** @var CmsPagina[] $paginas */
 		$paginas = $this->findBy([], ['titel' => 'ASC']);
@@ -52,7 +52,7 @@ class CmsPaginaRepository extends AbstractRepository
 	 *
 	 * @return CmsPagina
 	 */
-	public function nieuw($naam): CmsPagina
+	public function nieuw($naam)
 	{
 		$pagina = new CmsPagina();
 		$pagina->naam = $naam;

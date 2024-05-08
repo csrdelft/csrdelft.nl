@@ -16,7 +16,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
 /**
@@ -80,7 +80,7 @@ class BbMaaltijd extends BbTag
 		$this->maaltijdenService = $maaltijdenService;
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'maaltijd';
 	}
@@ -90,7 +90,7 @@ class BbMaaltijd extends BbTag
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
-	public function renderLight(): string
+	public function renderLight()
 	{
 		$maaltijd = $this->maaltijden[0];
 		$url = $maaltijd->getUrl() . '#' . $maaltijd->maaltijd_id;
@@ -105,7 +105,7 @@ class BbMaaltijd extends BbTag
 		);
 	}
 
-	public function render(): string
+	public function render()
 	{
 		$result = '<div class="my-3 p-3 maaltijdketzer-wrapper rounded">';
 		foreach ($this->maaltijden as $maaltijd) {
@@ -162,7 +162,7 @@ class BbMaaltijd extends BbTag
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->id = $this->readMainArgument($arguments);
 		$this->maaltijden = [];
@@ -252,7 +252,7 @@ class BbMaaltijd extends BbTag
 		return [$maaltijd, $maaltijd2];
 	}
 
-	public function getId(): string
+	public function getId()
 	{
 		return $this->id;
 	}

@@ -26,12 +26,12 @@ class BbBijbel extends BbTag
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'bijbel';
 	}
 
-	public function renderLight(): string
+	public function renderLight()
 	{
 		list($stukje, $link) = $this->getLink();
 		return BbHelper::lightLinkInline($this->env, 'bijbel', $link, $stukje);
@@ -82,7 +82,7 @@ class BbBijbel extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->readContent();
 		$this->bijbel = $arguments['bijbel'] ?? null;

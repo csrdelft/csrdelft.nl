@@ -2,18 +2,17 @@
 
 namespace CsrDelft\repository\groepen;
 
-use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\repository\GroepRepository;
 
 class KetzersRepository extends GroepRepository
 {
-	public function getEntityClassName(): string
+	public function getEntityClassName()
 	{
 		return Ketzer::class;
 	}
 
-	public function nieuw($soort = null): Groep
+	public function nieuw($soort = null)
 	{
 		/** @var Ketzer $ketzer */
 		$ketzer = parent::nieuw();

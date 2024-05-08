@@ -36,7 +36,7 @@ class GroepLijstView implements ToResponse
 		$this->groep = $groep;
 	}
 
-	public function __toString(): string
+	public function __toString()
 	{
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 		$lid = $em

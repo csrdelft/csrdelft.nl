@@ -44,7 +44,7 @@ class UploadFileField extends InputField
 		return isset($_FILES[$this->name]);
 	}
 
-	public function isAvailable(): bool
+	public function isAvailable()
 	{
 		return true;
 	}
@@ -54,7 +54,7 @@ class UploadFileField extends InputField
 		return $this->filterMime;
 	}
 
-	public function validate(): bool
+	public function validate()
 	{
 		parent::validate();
 		if ($this->value['error'] == UPLOAD_ERR_NO_FILE) {
@@ -91,7 +91,7 @@ class UploadFileField extends InputField
 		return $this->error === '';
 	}
 
-	public function opslaan($directory, $filename, $overwrite = false): void
+	public function opslaan($directory, $filename, $overwrite = false)
 	{
 		parent::opslaan($directory, $filename, $overwrite);
 		$moved = @move_uploaded_file(
@@ -137,7 +137,7 @@ class UploadFileField extends InputField
 			'" />';
 	}
 
-	public function getJavascript(): string
+	public function getJavascript()
 	{
 		$max = FileUtil::getMaximumFileUploadSize();
 		$format = FileUtil::format_filesize($max);

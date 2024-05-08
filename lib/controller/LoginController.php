@@ -105,7 +105,7 @@ class LoginController extends AbstractController
 	 * @Route("/{_locale<%app.supported_locales%>}/login_check", name="app_login_check", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function login_check(): void
+	public function login_check()
 	{
 		throw new LogicException(
 			'Deze route wordt opgevangen door de firewall, zie security.firewalls.main.form_login.check_path in config/packages/security.yaml'
@@ -116,7 +116,7 @@ class LoginController extends AbstractController
 	 * @Route("/logout", name="app_logout")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function logout(): void
+	public function logout()
 	{
 		throw new LogicException(
 			'Deze route wordt opgevangen door de firewall, zie security.firewalls.main.logout.path config/packages/security.yaml'

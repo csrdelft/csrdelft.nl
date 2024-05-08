@@ -54,7 +54,7 @@ class RepetitieMaaltijdenForm extends ModalForm
 		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
-	public function validate(): bool
+	public function validate()
 	{
 		$valid = parent::validate();
 		$fields = $this->getFields();

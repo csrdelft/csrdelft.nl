@@ -173,13 +173,13 @@ class CsrBB extends Parser
 		$this->container = $container;
 	}
 
-	public static function parse($bbcode): string
+	public static function parse($bbcode)
 	{
 		$parser = new CsrBB(ContainerFacade::getContainer());
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseHtml($bbcode, $inline = false): string
+	public static function parseHtml($bbcode, $inline = false)
 	{
 		$parser = new CsrBB(ContainerFacade::getContainer());
 		$parser->allow_html = true;
@@ -187,7 +187,7 @@ class CsrBB extends Parser
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseMail($bbcode): string
+	public static function parseMail($bbcode)
 	{
 		$env = new BbEnv();
 		$env->mode = 'light';
@@ -195,7 +195,7 @@ class CsrBB extends Parser
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseLight($bbcode): string
+	public static function parseLight($bbcode)
 	{
 		$env = new BbEnv();
 		$env->mode = 'light';
@@ -203,7 +203,7 @@ class CsrBB extends Parser
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parsePreview($bbcode): string
+	public static function parsePreview($bbcode)
 	{
 		$env = new BbEnv();
 		$env->mode = 'preview';
@@ -211,7 +211,7 @@ class CsrBB extends Parser
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parsePlain($bbcode): string
+	public static function parsePlain($bbcode)
 	{
 		$env = new BbEnv();
 		$env->mode = 'plain';
@@ -243,7 +243,7 @@ class CsrBB extends Parser
 	 * @param string $bbcode
 	 * @return string
 	 */
-	public static function escapeUbbOff($bbcode): string|array
+	public static function escapeUbbOff($bbcode)
 	{
 		return str_replace(['[/ubboff]', '[/tekst]'], ['[/]', '[/]'], $bbcode);
 	}
@@ -254,7 +254,7 @@ class CsrBB extends Parser
 	 * @param string $bbcode
 	 * @return string
 	 */
-	public static function filterPrive($bbcode): string|array|null
+	public static function filterPrive($bbcode)
 	{
 		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
 		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
@@ -270,7 +270,7 @@ class CsrBB extends Parser
 	 * @param string $bbcode
 	 * @return string
 	 */
-	public static function filterCommentaar($bbcode): string|array|null
+	public static function filterCommentaar($bbcode)
 	{
 		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
 		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
@@ -284,7 +284,7 @@ class CsrBB extends Parser
 		);
 	}
 
-	protected function createTagInstance(string $tag, Parser $parser, $env): mixed
+	protected function createTagInstance(string $tag, Parser $parser, $env)
 	{
 		if ($this->container->has($tag)) {
 			$tag = $this->container->get($tag);

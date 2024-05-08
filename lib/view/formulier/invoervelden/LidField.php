@@ -44,7 +44,7 @@ class LidField extends AutocompleteField
 			'/tools/naamsuggesties?zoekin=' . $this->zoekin . '&q=';
 	}
 
-	public function getValue(): ?string
+	public function getValue()
 	{
 		$this->value = parent::getValue();
 		if ($this->empty_null and empty($this->value)) {
@@ -68,7 +68,7 @@ class LidField extends AutocompleteField
 		return $this->value;
 	}
 
-	public function validate(): bool
+	public function validate()
 	{
 		if (!parent::validate()) {
 			return false;
@@ -107,12 +107,12 @@ class LidField extends AutocompleteField
 		return $this->error === '';
 	}
 
-	public function getPreviewDiv(): string
+	public function getPreviewDiv()
 	{
 		return '<div id="lidPreview_' . $this->getId() . '"></div>';
 	}
 
-	public function getJavascript(): string
+	public function getJavascript()
 	{
 		return /** @lang JavaScript */
 			parent::getJavascript() .

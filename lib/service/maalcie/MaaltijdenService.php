@@ -66,7 +66,7 @@ class MaaltijdenService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function saveMaaltijd($maaltijd): array
+	public function saveMaaltijd($maaltijd)
 	{
 		$verwijderd = 0;
 		if (!$maaltijd->maaltijd_id) {
@@ -103,7 +103,7 @@ class MaaltijdenService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function prullenbakLeegmaken(): int
+	public function prullenbakLeegmaken()
 	{
 		$aantal = 0;
 		$maaltijden = $this->maaltijdenRepository->getVerwijderdeMaaltijden();
@@ -123,7 +123,7 @@ class MaaltijdenService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderMaaltijd(Maaltijd $maaltijd): void
+	public function verwijderMaaltijd(Maaltijd $maaltijd)
 	{
 		// delete corveetaken first (foreign key)
 		$this->corveeTakenRepository->verwijderMaaltijdCorvee(
@@ -160,7 +160,11 @@ class MaaltijdenService
 	 *
 	 * @return Maaltijd[]
 	 */
-	private function filterMaaltijdenVoorLid($maaltijden, Profiel $profiel, $verbergVerleden = false): array {
+	private function filterMaaltijdenVoorLid(
+		$maaltijden,
+		Profiel $profiel,
+		$verbergVerleden = false
+	) {
 		$result = [];
 		foreach ($maaltijden as $maaltijd) {
 			// Verberg afgelopen maaltijd
@@ -195,7 +199,7 @@ class MaaltijdenService
 	 * @return Maaltijd[] implements Agendeerbaar
 	 * @throws CsrException
 	 */
-	public function getMaaltijdenVoorAgenda($van, $tot): array
+	public function getMaaltijdenVoorAgenda($van, $tot)
 	{
 		if (!is_int($van)) {
 			throw new CsrException(
@@ -231,7 +235,7 @@ class MaaltijdenService
 	 *
 	 * @return Maaltijd[]
 	 */
-	public function getKomendeMaaltijdenVoorLid(Profiel $profiel): array
+	public function getKomendeMaaltijdenVoorLid(Profiel $profiel)
 	{
 		$maaltijden = $this->maaltijdenRepository->getMaaltijdenTussen(
 			date_create('-1 day'),
@@ -250,7 +254,7 @@ class MaaltijdenService
 	 * @param int $mid
 	 * @return Maaltijd|false
 	 */
-	public function getMaaltijdVoorKetzer($mid): mixed
+	public function getMaaltijdVoorKetzer($mid)
 	{
 		$maaltijden = [$this->maaltijdenRepository->getMaaltijd($mid)];
 		$maaltijden = $this->filterMaaltijdenVoorLid(

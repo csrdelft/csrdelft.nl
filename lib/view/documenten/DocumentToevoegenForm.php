@@ -56,7 +56,11 @@ class DocumentToevoegenForm implements FormulierTypeInterface
 		return $this->uploader;
 	}
 
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
+	public function createFormulier(
+		FormulierBuilder $builder,
+		$data,
+		$options = []
+	) {
 		$builder->setTitel('Document toevoegen');
 
 		$map = new Map();

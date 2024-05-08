@@ -39,7 +39,7 @@ class BbQuery extends BbTag
 		$this->savedQueryRepository = $savedQueryRepository;
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'query';
 	}
@@ -49,7 +49,7 @@ class BbQuery extends BbTag
 		return $this->query->query->magBekijken();
 	}
 
-	public function renderLight(): string
+	public function renderLight()
 	{
 		$url = '/tools/query?id=' . urlencode($this->id);
 		return BbHelper::lightLinkBlock(
@@ -70,7 +70,7 @@ class BbQuery extends BbTag
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->id = $this->readMainArgument($arguments);
 		$this->id = (int) $this->id;
@@ -86,7 +86,7 @@ class BbQuery extends BbTag
 	 * @param int $queryID
 	 * @throws BbException
 	 */
-	private function assertId(int $queryID): void
+	private function assertId(int $queryID)
 	{
 		if ($queryID == 0) {
 			throw new BbException('[query] Geen geldig query-id opgegeven');

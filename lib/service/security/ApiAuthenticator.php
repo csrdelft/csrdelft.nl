@@ -93,7 +93,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 		return null;
 	}
 
-	private function isAuthorizePath(Request $request): bool
+	private function isAuthorizePath(Request $request)
 	{
 		return $request->isMethod('POST') &&
 			$this->httpUtils->checkRequestPath($request, '/API/2.0/auth/authorize') &&
@@ -101,7 +101,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 			$request->request->has('pass');
 	}
 
-	private function isRefreshPath(Request $request): bool
+	private function isRefreshPath(Request $request)
 	{
 		return $request->isMethod('POST') &&
 			$this->httpUtils->checkRequestPath($request, '/API/2.0/auth/token') &&
@@ -125,7 +125,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 		throw new LogicException('This request is not supported.');
 	}
 
-	private function authenticateHeader(Request $request): SelfValidatingPassport
+	private function authenticateHeader(Request $request)
 	{
 		$authHeader = $request->server->get('HTTP_X_CSR_AUTHORIZATION');
 
@@ -152,7 +152,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 		return new SelfValidatingPassport(new UserBadge($user->getUserIdentifier()));
 	}
 
-	private function authorizeRequest(Request $request): Passport
+	private function authorizeRequest(Request $request)
 	{
 		$credentials = [
 			'username' => $request->request->get('user'),
@@ -233,12 +233,12 @@ class ApiAuthenticator extends AbstractAuthenticator
 		return JWT::encode($data, $_ENV['JWT_SECRET'], 'HS512');
 	}
 
-	private function createRefreshToken(string $series, string $token): string
+	private function createRefreshToken(string $series, string $token)
 	{
 		return base64_encode(implode(':', [$series, $token]));
 	}
 
-	private function refreshRequest(Request $request): SelfValidatingPassport
+	private function refreshRequest(Request $request)
 	{
 		// Filter posted data
 		$refresh_token = filter_var(
@@ -261,7 +261,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 		return new SelfValidatingPassport($user, [new JwtTokenBadge($token, null)]);
 	}
 
-	private function unpackRefreshToken(string $refreshToken): array|false
+	private function unpackRefreshToken(string $refreshToken)
 	{
 		return explode(':', base64_decode($refreshToken));
 	}

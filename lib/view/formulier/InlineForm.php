@@ -97,7 +97,7 @@ abstract class InlineForm extends Formulier implements FormElement
 		return $this->field;
 	}
 
-	public function getType(): string
+	public function getType()
 	{
 		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}

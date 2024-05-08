@@ -153,5 +153,5 @@
 	"lint-staged": {
 		"*": "yarn dlx -q prettier --write --ignore-unknown"
 	},
-	"packageManager": "yarn@3.8.2+sha256.3f5aa2dfdb5c56e4f21f0f2f66804de4446a429cab39a9d4d40f5d8be8b33f79"
+	"packageManager": "yarn@3.2.2"
 }

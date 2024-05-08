@@ -81,7 +81,7 @@ class MenuItem implements DisplayEntity
  #[ORM\OrderBy(['volgorde' => 'ASC', 'tekst' => 'ASC'])]
  public $children;
 
-	public function hasChildren(): bool|int
+	public function hasChildren()
 	{
 		if (!$this->children) {
 			return false;
@@ -94,7 +94,7 @@ class MenuItem implements DisplayEntity
 		return $this->children->count();
 	}
 
-	public function isOngelezen(): bool
+	public function isOngelezen()
 	{
 		$prefix = '/forum/onderwerp/';
 		if (str_starts_with($this->link, $prefix)) {
@@ -122,7 +122,7 @@ class MenuItem implements DisplayEntity
 		return false;
 	}
 
-	public function getId(): int
+	public function getId()
 	{
 		return $this->item_id;
 	}

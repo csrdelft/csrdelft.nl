@@ -183,7 +183,7 @@ class CourantController extends AbstractController
 	 * @Route("/courant/verzenden/{iedereen}", methods={"POST"}, defaults={"iedereen": null})
 	 * @Auth(P_MAIL_SEND)
 	 */
-	public function verzenden($iedereen = null): RedirectResponse|PlainView
+	public function verzenden($iedereen = null)
 	{
 		if (count($this->courantBerichtRepository->findAll()) < 1) {
 			$this->addFlash(

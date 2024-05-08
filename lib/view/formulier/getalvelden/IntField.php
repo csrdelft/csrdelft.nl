@@ -44,7 +44,7 @@ class IntField extends InputField
 		}
 	}
 
-	public function getValue(): null
+	public function getValue()
 	{
 		if ($this->isPosted()) {
 			$this->value = filter_input(
@@ -62,7 +62,7 @@ class IntField extends InputField
 		return $this->value;
 	}
 
-	public function validate(): bool
+	public function validate()
 	{
 		if ($this->value === 0) {
 			return true;

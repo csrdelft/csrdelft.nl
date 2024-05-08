@@ -7,7 +7,7 @@ use CsrDelft\controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use League\Bundle\OAuth2ServerBundle\Security\Authentication\Token\OAuth2Token;
 
 class ApiInfoController extends AbstractController

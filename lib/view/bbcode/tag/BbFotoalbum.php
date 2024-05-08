@@ -13,7 +13,7 @@ use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
 /**
@@ -78,23 +78,23 @@ class BbFotoalbum extends BbTag
 		$this->security = $security;
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'fotoalbum';
 	}
-	public function isAllowed(): bool
+	public function isAllowed()
 	{
 		return ($this->album != null &&
 			$this->security->isGranted(FotoAlbumVoter::BEKIJKEN, $this->album)) ||
 			($this->album == null && $this->security->isGranted('ROLE_LOGGED_IN'));
 	}
 
-	public function renderPreview(): string
+	public function renderPreview()
 	{
 		return ' 📷 ';
 	}
 
-	public function renderLight(): string
+	public function renderLight()
 	{
 		$album = $this->album;
 		$beschrijving = count($album->getFotos()) . ' foto\'s';
@@ -108,7 +108,7 @@ class BbFotoalbum extends BbTag
 		);
 	}
 
-	public function render(): string
+	public function render()
 	{
 		$album = $this->album;
 		$arguments = $this->arguments;
@@ -147,7 +147,7 @@ class BbFotoalbum extends BbTag
 	 * @return bool|FotoAlbum|FotoTagAlbum|null
 	 * @throws BbException
 	 */
-	private function getAlbum(string $url): null
+	private function getAlbum(string $url)
 	{
 		try {
 			if ($url === 'laatste') {
@@ -172,7 +172,7 @@ class BbFotoalbum extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->albumUrl = $this->readMainArgument($arguments);
 		$this->arguments = $arguments;

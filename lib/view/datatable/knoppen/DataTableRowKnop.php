@@ -31,7 +31,7 @@ class DataTableRowKnop implements JsonSerializable
 		$this->css = $css;
 	}
 
-	public function jsonSerialize(): array
+	public function jsonSerialize()
 	{
 		return [
 			'action' => $this->action,

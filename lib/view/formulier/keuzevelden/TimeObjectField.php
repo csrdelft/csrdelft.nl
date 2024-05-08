@@ -3,7 +3,6 @@
 namespace CsrDelft\view\formulier\keuzevelden;
 
 use CsrDelft\common\Util\DateUtil;
-use DateTimeImmutable;
 use DateTimeInterface;
 
 class TimeObjectField extends TimeField
@@ -16,7 +15,7 @@ class TimeObjectField extends TimeField
 		parent::__construct($name, $value, $description, $minutensteps);
 	}
 
-	public function getFormattedValue(): DateTimeImmutable|false|null
+	public function getFormattedValue()
 	{
 		return $this->value ? date_create_immutable($this->value) : null;
 	}

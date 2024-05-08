@@ -13,7 +13,7 @@ use CsrDelft\view\Icon;
  */
 class BbNeuzen extends BbTag
 {
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'neuzen';
 	}
@@ -29,7 +29,7 @@ class BbNeuzen extends BbTag
 		return '<span data-neuzen>' . $content . '</span>';
 	}
 
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->readContent([], false);
 	}

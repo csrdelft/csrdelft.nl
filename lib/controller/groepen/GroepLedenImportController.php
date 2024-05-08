@@ -104,7 +104,12 @@ class GroepLedenImportController extends AbstractController
 	 * @param EntityManagerInterface $em
 	 * @return Response
 	 */
-	public function controle(string $key, Session $session, ProfielRepository $profielRepository, EntityManagerInterface $em): RedirectResponse|Response {
+	public function controle(
+		string $key,
+		Session $session,
+		ProfielRepository $profielRepository,
+		EntityManagerInterface $em
+	) {
 		$groepRepository = $em->getRepository(Groep::class);
 
 		// Haal data op

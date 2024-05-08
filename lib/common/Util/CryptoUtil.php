@@ -9,7 +9,7 @@ final class CryptoUtil
 	 * @param $length
 	 * @return string
 	 */
-	public static function crypto_rand_token($length): string
+	public static function crypto_rand_token($length)
 	{
 		$token = '';
 		$codeAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -57,7 +57,7 @@ final class CryptoUtil
 	 * @param string $prefix
 	 * @return string
 	 */
-	public static function uniqid_safe($prefix = ''): string|array
+	public static function uniqid_safe($prefix = '')
 	{
 		return str_replace('.', '_', uniqid($prefix, true));
 	}

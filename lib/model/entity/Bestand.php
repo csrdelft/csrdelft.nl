@@ -50,7 +50,7 @@ class Bestand
 	 *
 	 * @return bool
 	 */
-	public function exists(): bool
+	public function exists()
 	{
 		return @is_readable($this->directory . '/' . $this->filename) and
 			is_file($this->directory . '/' . $this->filename);

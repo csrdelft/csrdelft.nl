@@ -15,12 +15,12 @@ class BbBestuur extends BbTagGroep
 		return Bestuur::class;
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'bestuur';
 	}
 
-	public function getLidNaam(): string
+	public function getLidNaam()
 	{
 		return 'personen';
 	}

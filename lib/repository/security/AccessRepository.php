@@ -52,7 +52,7 @@ class AccessRepository extends AbstractRepository
 	 *
 	 * @return array
 	 */
-	public function getTree($environment, $resource): mixed
+	public function getTree($environment, $resource)
 	{
 		$resources = [$resource, '*'];
 
@@ -89,7 +89,7 @@ class AccessRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function setAcl($environment, $resource, array $acl): bool
+	public function setAcl($environment, $resource, array $acl)
 	{
 		// Has permission to change permissions?
 		if (!LoginService::mag(P_ADMIN)) {
@@ -163,7 +163,7 @@ class AccessRepository extends AbstractRepository
 	 *
 	 * @return null|string
 	 */
-	public function getSubject($environment, $action, $resource): ?string
+	public function getSubject($environment, $action, $resource)
 	{
 		$ac = $this->find([
 			'environment' => $environment,
@@ -182,7 +182,7 @@ class AccessRepository extends AbstractRepository
 	 *
 	 * @return AccessControl
 	 */
-	public function nieuw($environment, $resource): AccessControl
+	public function nieuw($environment, $resource)
 	{
 		$ac = new AccessControl();
 		$ac->environment = $environment;

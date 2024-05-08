@@ -6,12 +6,12 @@ use CsrDelft\Component\DataTable\CustomDataTableEntry;
 
 class EetplanHuizenData implements CustomDataTableEntry
 {
-	public static function getIdentifierFieldNames(): array
+	public static function getIdentifierFieldNames()
 	{
 		return ['id'];
 	}
 
-	public static function getFieldNames(): array
+	public static function getFieldNames()
 	{
 		return ['id', 'naam', 'soort', 'eetplan'];
 	}

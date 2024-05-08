@@ -46,7 +46,7 @@ class LidToestemming
  #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class, inversedBy: 'toestemmingen')]
  public $profiel;
 
-	public function uid(): string
+	public function uid()
 	{
 		return $this->profiel->uid;
 	}

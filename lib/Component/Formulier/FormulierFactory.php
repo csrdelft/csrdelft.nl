@@ -30,7 +30,7 @@ class FormulierFactory
 		$this->requestStack = $requestStack;
 	}
 
-	public function create(string $type, $data, $options): FormulierInstance
+	public function create(string $type, $data, $options)
 	{
 		/** @var FormulierTypeInterface $typeInstance */
 		$typeInstance = $this->registry->get($type);

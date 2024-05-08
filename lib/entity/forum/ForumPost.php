@@ -99,12 +99,12 @@ class ForumPost
  #[ORM\ManyToOne(targetEntity: \ForumDraad::class)]
  public $draad;
 
-	public function magCiteren(): bool
+	public function magCiteren()
 	{
 		return LoginService::mag(P_LOGGED_IN) && $this->draad->magPosten();
 	}
 
-	public function magBewerken(): bool
+	public function magBewerken()
 	{
 		$draad = $this->draad;
 		if ($draad->magModereren()) {
@@ -117,12 +117,12 @@ class ForumPost
 			LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function getGelezenPercentage(): int
+	public function getGelezenPercentage()
 	{
 		return ($this->getAantalGelezen() * 100) / $this->draad->getAantalLezers();
 	}
 
-	public function getAantalGelezen(): int
+	public function getAantalGelezen()
 	{
 		if (!isset($this->aantal_gelezen)) {
 			$this->aantal_gelezen = 0;

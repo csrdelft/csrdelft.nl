@@ -26,18 +26,18 @@ class BbTaal extends BbTag
 		$this->requestStack = $requestStack;
 	}
 
-	public static function getTagName(): array
+	public static function getTagName()
 	{
 		return ['taal'];
 	}
 
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->taal = $arguments['taal'];
 		$this->readContent();
 	}
 
-	public function render(): string
+	public function render()
 	{
 		if ($this->requestStack->getCurrentRequest()->getLocale() == $this->taal) {
 			return $this->getContent();

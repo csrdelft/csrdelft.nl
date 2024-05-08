@@ -98,18 +98,18 @@ class MaaltijdRepetitie implements DisplayEntity
  #[ORM\OneToMany(targetEntity: \MaaltijdAbonnement::class, mappedBy: 'maaltijd_repetitie')]
  public $abonnementen;
 
-	public function getStandaardPrijs(): int
+	public function getStandaardPrijs()
 	{
 		return $this->product->getPrijsInt();
 	}
 
-	public function getDagVanDeWeekText(): string|false
+	public function getDagVanDeWeekText()
 	{
 		$weekDagen = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
 		return $weekDagen[$this->dag_vd_week];
 	}
 
-	public function getPeriodeInDagenText(): string
+	public function getPeriodeInDagenText()
 	{
 		switch ($this->periode_in_dagen) {
 			case 0:
@@ -127,12 +127,12 @@ class MaaltijdRepetitie implements DisplayEntity
 		}
 	}
 
-	public function getStandaardPrijsFloat(): float
+	public function getStandaardPrijsFloat()
 	{
 		return (float) $this->getStandaardPrijs() / 100.0;
 	}
 
-	public function getFirstOccurrence(): string|false
+	public function getFirstOccurrence()
 	{
 		$datum = time();
 		$shift = $this->dag_vd_week - date('w', $datum) + 7;
@@ -143,7 +143,7 @@ class MaaltijdRepetitie implements DisplayEntity
 		return date('Y-m-d', $datum);
 	}
 
-	public function getId(): int
+	public function getId()
 	{
 		return $this->mlt_repetitie_id;
 	}
@@ -157,7 +157,7 @@ class MaaltijdRepetitie implements DisplayEntity
 	 * @param $uid
 	 * @return MaaltijdAbonnement|false
 	 */
-	public function getAbonnementVoor($uid): mixed
+	public function getAbonnementVoor($uid)
 	{
 		return $this->abonnementen->matching(Eisen::voorGebruiker($uid))->first();
 	}

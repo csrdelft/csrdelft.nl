@@ -40,7 +40,7 @@ class EnumSelectField extends SelectField
 		$this->enumClass = $enumClass;
 	}
 
-	public function getFormattedValue(): ?Enum
+	public function getFormattedValue()
 	{
 		if ($this->value == null) {
 			return null;

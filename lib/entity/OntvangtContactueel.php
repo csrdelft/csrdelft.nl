@@ -19,17 +19,17 @@ class OntvangtContactueel extends Enum
 	const Digitaal = 'digitaal';
 	const Nee = 'nee';
 
-	public static function Nee(): OntvangtContactueel
+	public static function Nee()
 	{
 		return static::from(self::Nee);
 	}
 
-	public static function Digitaal(): OntvangtContactueel
+	public static function Digitaal()
 	{
 		return static::from(self::Digitaal);
 	}
 
-	public static function Ja(): OntvangtContactueel
+	public static function Ja()
 	{
 		return static::from(self::Ja);
 	}

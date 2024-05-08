@@ -74,7 +74,7 @@ class ForumDeelController extends AbstractController
 	 * @Route("/forum/deel/{forum_id}/{pagina<\d+>}", methods={"GET","POST"}, defaults={"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function deel(RequestStack $requestStack, ForumDeel $deel, $pagina = 1): Response
+	public function deel(RequestStack $requestStack, ForumDeel $deel, $pagina = 1)
 	{
 		if (!$deel->magLezen()) {
 			throw $this->createAccessDeniedException();
@@ -129,7 +129,7 @@ class ForumDeelController extends AbstractController
 	 * @Route("/forum/aanmaken", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function aanmaken(Request $request): JsonResponse|Response
+	public function aanmaken(Request $request)
 	{
 		$deel = $this->forumDelenRepository->nieuwForumDeel();
 		$form = $this->createFormulier(ForumDeelForm::class, $deel, [
@@ -156,7 +156,7 @@ class ForumDeelController extends AbstractController
 	 * @Route("/forum/beheren/{forum_id}", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function beheren(Request $request, ForumDeel $deel): JsonResponse|Response
+	public function beheren(Request $request, ForumDeel $deel)
 	{
 		$form = $this->createFormulier(ForumDeelForm::class, $deel, [
 			'action' => $this->generateUrl('csrdelft_forum_forumdeel_beheren', [
@@ -182,7 +182,7 @@ class ForumDeelController extends AbstractController
 	 * @Route("/forum/opheffen/{forum_id}", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function opheffen(ForumDeel $deel): JsonResponse
+	public function opheffen(ForumDeel $deel)
 	{
 		$count = count(
 			$this->forumDradenRepository->findBy(['forum_id' => $deel->forum_id])
@@ -207,7 +207,7 @@ class ForumDeelController extends AbstractController
 	 * @Route("/forum/grafiekdata/{type}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function grafiekdata($type): ChartTimeSeries
+	public function grafiekdata($type)
 	{
 		$datasets = [];
 		if ($type == 'details') {
@@ -227,7 +227,7 @@ class ForumDeelController extends AbstractController
 	 * @Route("/forum/wacht", methods={"GET"})
 	 * @Auth(P_FORUM_MOD)
 	 */
-	public function wacht(): Response
+	public function wacht()
 	{
 		return $this->render('forum/wacht.html.twig', [
 			'resultaten' => $this->forumDelenService->getWachtOpGoedkeuring(),

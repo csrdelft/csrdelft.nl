@@ -45,7 +45,7 @@ class RememberOAuthRepository extends AbstractRepository
 		return $remember;
 	}
 
-	public function findByUser(string $userIdentifier, string $clientIdentifier): ?RememberOAuth
+	public function findByUser(string $userIdentifier, string $clientIdentifier)
 	{
 		return $this->findOneBy([
 			'clientIdentifier' => $clientIdentifier,

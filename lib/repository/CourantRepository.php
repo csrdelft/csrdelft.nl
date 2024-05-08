@@ -6,7 +6,7 @@ use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\courant\Courant;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * CourantModel.class.php
@@ -34,7 +34,7 @@ class CourantRepository extends AbstractRepository
 		$this->security = $security;
 	}
 
-	public function nieuwCourant(): Courant
+	public function nieuwCourant()
 	{
 		$courant = new Courant();
 		$courant->verzendMoment = new DateTime();

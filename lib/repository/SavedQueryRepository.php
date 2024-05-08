@@ -28,7 +28,7 @@ class SavedQueryRepository extends AbstractRepository
 		parent::__construct($registry, SavedQuery::class);
 	}
 
-	public function get($id): ?SavedQuery
+	public function get($id)
 	{
 		return $this->find($id);
 	}
@@ -36,12 +36,12 @@ class SavedQueryRepository extends AbstractRepository
 	/**
 	 * @return SavedQuery[]
 	 */
-	public function getQueries(): array
+	public function getQueries()
 	{
 		return $this->findBy([], ['categorie' => 'ASC']);
 	}
 
-	public function loadQuery($queryId): SavedQueryResult
+	public function loadQuery($queryId)
 	{
 		$query = $this->find($queryId);
 

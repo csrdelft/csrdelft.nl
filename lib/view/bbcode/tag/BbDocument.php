@@ -44,22 +44,22 @@ class BbDocument extends BbTag
 		$this->twig = $twig;
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'document';
 	}
 
-	public function isAllowed(): bool
+	public function isAllowed()
 	{
 		return $this->document == false || $this->document->magBekijken();
 	}
 
-	public function renderPreview(): string
+	public function renderPreview()
 	{
 		return ' 📄 ';
 	}
 
-	public function renderLight(): string
+	public function renderLight()
 	{
 		if ($this->document) {
 			$beschrijving =
@@ -80,7 +80,7 @@ class BbDocument extends BbTag
 		}
 	}
 
-	public function render(): string
+	public function render()
 	{
 		if ($this->document) {
 			return $this->twig->render('documenten/document_bb.html.twig', [
@@ -96,7 +96,7 @@ class BbDocument extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->id = $this->readMainArgument($arguments);
 		$this->document = $this->documentRepository->get($this->id);

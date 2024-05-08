@@ -23,7 +23,7 @@ class Bestuur extends Groep implements HeeftMoment
  #[ORM\Column(type: 'text')]
  public $bijbeltekst;
 
-	public function getUrl(): string
+	public function getUrl()
 	{
 		return '/groepen/besturen/' . $this->id;
 	}

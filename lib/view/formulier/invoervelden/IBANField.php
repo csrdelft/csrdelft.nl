@@ -10,7 +10,7 @@ namespace CsrDelft\view\formulier\invoervelden;
  */
 class IBANField extends TextField
 {
-	public function validate(): bool
+	public function validate()
 	{
 		if (!parent::validate()) {
 			return false;

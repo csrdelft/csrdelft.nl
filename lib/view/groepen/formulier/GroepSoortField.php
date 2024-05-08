@@ -99,7 +99,7 @@ JS;
 		$this->doctrine = $doctrine;
 	}
 
-	public function getSoort(): ?string
+	public function getSoort()
 	{
 		switch (parent::getValue()) {
 			case Activiteit::class:
@@ -113,7 +113,7 @@ JS;
 		}
 	}
 
-	public function validate(): bool
+	public function validate()
 	{
 		if (!parent::validate()) {
 			return false;

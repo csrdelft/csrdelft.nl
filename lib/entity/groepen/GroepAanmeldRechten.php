@@ -19,12 +19,12 @@ trait GroepAanmeldRechten
  #[ORM\Column(type: 'string', nullable: true)]
  public $rechtenAanmelden;
 
-	public function getAanmeldRechten(): ?string
+	public function getAanmeldRechten()
 	{
 		return $this->rechtenAanmelden;
 	}
 
-	public function setAanmeldRechten($rechten): void
+	public function setAanmeldRechten($rechten)
 	{
 		$this->rechtenAanmelden = $rechten;
 	}

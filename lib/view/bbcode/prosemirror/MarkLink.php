@@ -7,24 +7,24 @@ use CsrDelft\view\bbcode\tag\BbUrl;
 
 class MarkLink implements Mark
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbUrl::class;
 	}
 
-	public static function getMarkType(): string
+	public static function getMarkType()
 	{
 		return 'link';
 	}
 
-	public function getTagAttributes($mark): array
+	public function getTagAttributes($mark)
 	{
 		return [
 			'url' => $mark->attrs->href,
 		];
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbUrl) {
 			throw new \InvalidArgumentException();

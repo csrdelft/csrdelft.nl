@@ -27,22 +27,22 @@ class Commissie extends Groep implements HeeftSoort, HeeftMoment
  #[ORM\Column(type: 'enumCommissieSoort')]
  public $commissieSoort;
 
-	public function getUrl(): string
+	public function getUrl()
 	{
 		return '/groepen/commissies/' . $this->id;
 	}
 
-	public function getSoort(): CommissieSoort
+	public function getSoort()
 	{
 		return $this->commissieSoort;
 	}
 
-	public function setSoort($soort): void
+	public function setSoort($soort)
 	{
 		$this->commissieSoort = $soort;
 	}
 
-	public function setSoortString($soort): void
+	public function setSoortString($soort)
 	{
 		$this->commissieSoort = CommissieSoort::from($soort);
 	}

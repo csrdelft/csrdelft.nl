@@ -19,7 +19,7 @@ class Configurator
 		$this->configurator = $configurator;
 	}
 
-	public function configure(Environment $environment): void
+	public function configure(Environment $environment)
 	{
 		$environment
 			->getExtension(EscaperExtension::class)
@@ -34,12 +34,12 @@ class Configurator
 		$this->configurator->configure($environment);
 	}
 
-	public function escape_ical($twig, $string, $charset): string
+	public function escape_ical($twig, $string, $charset)
 	{
 		return TextUtil::escape_ical($string);
 	}
 
-	public function escape_xml($twig, $string, $charset): string
+	public function escape_xml($twig, $string, $charset)
 	{
 		return htmlspecialchars($string, ENT_XML1, 'UTF-8');
 	}

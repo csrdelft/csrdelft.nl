@@ -195,7 +195,7 @@ class VoorpaginaController extends AbstractController
 	 * @return Response
 	 * @Route("/voorpagina/overig")
 	 */
-	public function overig(): Response
+	public function overig()
 	{
 		return $this->render('voorpagina/overig.html.twig');
 	}

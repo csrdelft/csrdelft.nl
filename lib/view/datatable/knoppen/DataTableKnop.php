@@ -39,7 +39,7 @@ class DataTableKnop implements JsonSerializable
 		$this->buttons = [];
 	}
 
-	public function jsonSerialize(): array
+	public function jsonSerialize()
 	{
 		return [
 			'text' => $this->label,
@@ -53,7 +53,7 @@ class DataTableKnop implements JsonSerializable
 		];
 	}
 
-	public function setDataTableId($dataTableId): void
+	public function setDataTableId($dataTableId)
 	{
 		$this->tableId = $dataTableId;
 

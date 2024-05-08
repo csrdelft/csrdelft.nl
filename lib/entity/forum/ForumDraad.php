@@ -182,7 +182,7 @@ class ForumDraad
 		$this->meldingen = new ArrayCollection();
 	}
 
-	public function magPosten(): bool
+	public function magPosten()
 	{
 		if ($this->verwijderd || $this->gesloten) {
 			return false;
@@ -191,25 +191,25 @@ class ForumDraad
 			($this->isGedeeld() && $this->gedeeld_met_deel->magPosten());
 	}
 
-	public function isGedeeld(): bool
+	public function isGedeeld()
 	{
 		return !empty($this->gedeeld_met);
 	}
 
-	public function magStatistiekBekijken(): bool
+	public function magStatistiekBekijken()
 	{
 		return $this->magModereren() ||
 			($this->uid != LoginService::UID_EXTERN &&
 				$this->uid === LoginService::getUid());
 	}
 
-	public function magModereren(): bool
+	public function magModereren()
 	{
 		return $this->deel->magModereren() ||
 			($this->isGedeeld() && $this->gedeeld_met_deel->magModereren());
 	}
 
-	public function magVerbergen(): bool
+	public function magVerbergen()
 	{
 		return !$this->belangrijk && LoginService::mag(P_LOGGED_IN);
 	}
@@ -219,7 +219,7 @@ class ForumDraad
 		return $this->magLezen();
 	}
 
-	public function magLezen(): bool
+	public function magLezen()
 	{
 		if ($this->verwijderd && !$this->magModereren()) {
 			return false;
@@ -255,12 +255,12 @@ class ForumDraad
 			->first() != null;
 	}
 
-	public function getAantalLezers(): int
+	public function getAantalLezers()
 	{
 		return count($this->lezers);
 	}
 
-	public function isOngelezen(): bool
+	public function isOngelezen()
 	{
 		if ($gelezen = $this->getWanneerGelezen()) {
 			// Omdat this en gelezen uit de cache _kunnen_ komen kunnen de milliseconden in
@@ -281,12 +281,12 @@ class ForumDraad
 	 *
 	 * @return ForumDraadGelezen|null $gelezen
 	 */
-	public function getWanneerGelezen(): mixed
+	public function getWanneerGelezen()
 	{
 		return $this->lezers->matching(Eisen::voorIngelogdeGebruiker())->first();
 	}
 
-	public function hasForumPosts(): bool
+	public function hasForumPosts()
 	{
 		return !empty($this->getForumPosts());
 	}
@@ -296,7 +296,7 @@ class ForumDraad
 	 *
 	 * @return ForumPost[]
 	 */
-	public function getForumPosts(): array
+	public function getForumPosts()
 	{
 		if (!isset($this->forum_posts)) {
 			$this->setForumPosts(
@@ -311,7 +311,7 @@ class ForumDraad
 	/**
 	 * @return string
 	 */
-	public function getLaatstePostSamenvatting(): string
+	public function getLaatstePostSamenvatting()
 	{
 		$laatste = $this->laatste_post;
 		$parseMail = strip_tags(CsrBB::parseMail($laatste->tekst));
@@ -323,7 +323,7 @@ class ForumDraad
 	 *
 	 * @param array $forum_posts
 	 */
-	public function setForumPosts(array $forum_posts): void
+	public function setForumPosts(array $forum_posts)
 	{
 		$this->forum_posts = $forum_posts;
 	}
@@ -344,7 +344,7 @@ class ForumDraad
 	/**
 	 * @return ForumDraadMeldingNiveau
 	 */
-	public function getMeldingsNiveau(): ForumDraadMeldingNiveau
+	public function getMeldingsNiveau()
 	{
 		if (!$this->magLezen()) {
 			return ForumDraadMeldingNiveau::NOOIT();

@@ -116,7 +116,7 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("detailSource")
 	 */
-	public function getDetailSource(): string
+	public function getDetailSource()
 	{
 		return '/aanmelder/beheer/activiteiten/' . $this->id;
 	}

@@ -55,13 +55,13 @@ class CorveeKwalificatie
  #[ORM\ManyToOne(targetEntity: \CorveeFunctie::class, inversedBy: 'kwalificaties')]
  public $corveeFunctie;
 
-	public function setCorveeFunctie(CorveeFunctie $corveeFunctie = null): void
+	public function setCorveeFunctie(CorveeFunctie $corveeFunctie = null)
 	{
 		$this->corveeFunctie = $corveeFunctie;
 		$this->functie_id = $corveeFunctie->functie_id ?? null;
 	}
 
-	public function setProfiel(Profiel $profiel = null): void
+	public function setProfiel(Profiel $profiel = null)
 	{
 		$this->profiel = $profiel;
 		$this->uid = $profiel->uid ?? null;

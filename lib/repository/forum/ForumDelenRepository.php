@@ -30,7 +30,7 @@ class ForumDelenRepository extends AbstractRepository
 	 * @return ForumDeel
 	 * @throws CsrGebruikerException
 	 */
-	public function get($id): ForumDeel
+	public function get($id)
 	{
 		$deel = $this->find($id);
 		if (!$deel) {
@@ -43,14 +43,14 @@ class ForumDelenRepository extends AbstractRepository
 	 * @param ForumDeel $entity
 	 * @return int
 	 */
-	public function create(ForumDeel $entity): int
+	public function create(ForumDeel $entity)
 	{
 		$this->getEntityManager()->persist($entity);
 		$this->getEntityManager()->flush();
 		return $entity->forum_id;
 	}
 
-	public function nieuwForumDeel(): ForumDeel
+	public function nieuwForumDeel()
 	{
 		$deel = new ForumDeel();
 		$deel->categorie_id = 0;
@@ -68,7 +68,7 @@ class ForumDelenRepository extends AbstractRepository
 		return $this->findBy($id) !== null;
 	}
 
-	public function getForumDelenVoorCategorie(ForumCategorie $categorie): array
+	public function getForumDelenVoorCategorie(ForumCategorie $categorie)
 	{
 		return $this->findBy(
 			['categorie_id' => $categorie->categorie_id],
@@ -76,7 +76,7 @@ class ForumDelenRepository extends AbstractRepository
 		);
 	}
 
-	public function getForumDelenVoorLid($rss = false): array
+	public function getForumDelenVoorLid($rss = false)
 	{
 		/** @var ForumDeel[] $delen */
 		$delen = ArrayUtil::group_by_distinct(
@@ -97,7 +97,7 @@ class ForumDelenRepository extends AbstractRepository
 	 * @param ForumDeel $deel
 	 * @return ForumDeel[]
 	 */
-	public function getForumDelenOptiesOmTeDelen(ForumDeel $deel): mixed
+	public function getForumDelenOptiesOmTeDelen(ForumDeel $deel)
 	{
 		$qb = $this->createQueryBuilder('r')
 			->where(
@@ -117,7 +117,7 @@ class ForumDelenRepository extends AbstractRepository
 		return $qb->getQuery()->getResult();
 	}
 
-	public function update(ForumDeel $deel): void
+	public function update(ForumDeel $deel)
 	{
 		$this->getEntityManager()->persist($deel);
 		$this->getEntityManager()->flush();

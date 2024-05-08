@@ -47,19 +47,19 @@ class CiviBestellingInhoud
  #[ORM\Column(type: 'integer')]
  public $aantal;
 
-	public function setProduct(CiviProduct $product = null): void
+	public function setProduct(CiviProduct $product = null)
 	{
 		$this->product = $product;
 		$this->product_id = $product->id ?? null;
 	}
 
-	public function setBestelling(CiviBestelling $bestelling = null): void
+	public function setBestelling(CiviBestelling $bestelling = null)
 	{
 		$this->bestelling = $bestelling;
 		$this->bestelling_id = $bestelling->id ?? null;
 	}
 
-	public function getBeschrijving(): string
+	public function getBeschrijving()
 	{
 		return sprintf('%d %s', $this->aantal, $this->product->beschrijving);
 	}
@@ -67,7 +67,7 @@ class CiviBestellingInhoud
 	/**
 	 * @return int
 	 */
-	public function getPrijs(): int
+	public function getPrijs()
 	{
 		return $this->product->getPrijsInt() * $this->aantal;
 	}
@@ -76,7 +76,7 @@ class CiviBestellingInhoud
 	 * @return string
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getStukprijs(): string
+	public function getStukprijs()
 	{
 		return sprintf('€%.2f', $this->product->getPrijsInt() / 100);
 	}
@@ -85,7 +85,7 @@ class CiviBestellingInhoud
 	 * @return string
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getTotaalprijs(): string
+	public function getTotaalprijs()
 	{
 		return sprintf('€%.2f', $this->getPrijs() / 100);
 	}
@@ -95,7 +95,7 @@ class CiviBestellingInhoud
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("product")
 	 */
-	public function getDataTableProduct(): string
+	public function getDataTableProduct()
 	{
 		return $this->product->beschrijving;
 	}

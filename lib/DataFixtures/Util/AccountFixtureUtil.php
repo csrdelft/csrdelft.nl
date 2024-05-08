@@ -9,7 +9,11 @@ use Symfony\Component\Uid\Uuid;
 
 class AccountFixtureUtil
 {
-	public static function maakAccount(Generator $faker, $profiel, $accessRole = null): Account {
+	public static function maakAccount(
+		Generator $faker,
+		$profiel,
+		$accessRole = null
+	) {
 		$account = new Account();
 		$account->uuid = Uuid::v4();
 		$account->username = '';

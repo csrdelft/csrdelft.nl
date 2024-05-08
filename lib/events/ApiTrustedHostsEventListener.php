@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class ApiTrustedHostsEventListener
 {
-	public function onKernelRequest(RequestEvent $event): void
+	public function onKernelRequest(RequestEvent $event)
 	{
 		$request = $event->getRequest();
 

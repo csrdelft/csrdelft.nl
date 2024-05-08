@@ -4,7 +4,7 @@ namespace CsrDelft\events;
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 class CacheControlEventListener
 {
@@ -18,7 +18,7 @@ class CacheControlEventListener
 		$this->security = $security;
 	}
 
-	public function onKernelResponse(ResponseEvent $event): void
+	public function onKernelResponse(ResponseEvent $event)
 	{
 		// Voorkom caching van interne bestanden, zolang ze geen bestanden zijn.
 		if (

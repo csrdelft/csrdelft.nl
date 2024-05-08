@@ -29,7 +29,7 @@ class GroepOmschrijvingView implements ToResponse
 		$this->twig = $twig;
 	}
 
-	public function __toString(): string
+	public function __toString()
 	{
 		return $this->twig->render('groep/omschrijving.html.twig', [
 			'groep' => $this->groep,

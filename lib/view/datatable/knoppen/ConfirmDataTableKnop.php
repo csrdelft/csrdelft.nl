@@ -20,7 +20,7 @@ class ConfirmDataTableKnop extends DataTableKnop
 		parent::__construct($multiplicity, $url, $label, $title, $icon, 'confirm');
 	}
 
-	public function jsonSerialize(): array
+	public function jsonSerialize()
 	{
 		return array_merge(parent::jsonSerialize(), ['buttons' => []]);
 	}

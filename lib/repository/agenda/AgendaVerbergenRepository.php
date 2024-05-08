@@ -23,7 +23,7 @@ class AgendaVerbergenRepository extends AbstractRepository
 		parent::__construct($registry, AgendaVerbergen::class);
 	}
 
-	public function toggleVerbergen(Agendeerbaar $item): void
+	public function toggleVerbergen(Agendeerbaar $item)
 	{
 		$verborgen = $this->find([
 			'uid' => LoginService::getUid(),
@@ -39,7 +39,7 @@ class AgendaVerbergenRepository extends AbstractRepository
 		}
 	}
 
-	public function isVerborgen(Agendeerbaar $item): ?AgendaVerbergen
+	public function isVerborgen(Agendeerbaar $item)
 	{
 		return $this->find([
 			'uid' => LoginService::getUid(),

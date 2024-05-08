@@ -202,7 +202,7 @@ class AgendaController extends AbstractController
 	 * @Route("/agenda/courant", methods={"POST"})
 	 * @Auth(P_MAIL_COMPOSE)
 	 */
-	public function courant(BbToProsemirror $bbToProsemirror): JsonResponse
+	public function courant(BbToProsemirror $bbToProsemirror)
 	{
 		$items = $this->agendaRepository->getAllAgendeerbaar(
 			date_create_immutable(),
@@ -224,7 +224,7 @@ class AgendaController extends AbstractController
 	 * @Route("/agenda/toevoegen/{datum}", methods={"POST"}, defaults={"datum": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function toevoegen(Request $request, $datum = null): Response|JsonResponse
+	public function toevoegen(Request $request, $datum = null)
 	{
 		$profiel = $this->getProfiel();
 		if (!$this->mag(P_AGENDA_ADD) && !$profiel->verticaleleider) {
@@ -283,7 +283,7 @@ class AgendaController extends AbstractController
 	 * @Route("/agenda/bewerken/{aid}", methods={"POST"}, requirements={"aid": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken(Request $request, $aid): JsonResponse|Response
+	public function bewerken(Request $request, $aid)
 	{
 		$item = $this->agendaRepository->getAgendaItem((int) $aid);
 		if (!$item || !$item->magBeheren()) {
@@ -368,7 +368,7 @@ class AgendaController extends AbstractController
 	 * @param $refuuid
 	 * @return Agendeerbaar|null
 	 */
-	private function getAgendaItemByUuid($refuuid): ?Agendeerbaar
+	private function getAgendaItemByUuid($refuuid)
 	{
 		$parts = explode('@', $refuuid, 2);
 		$module = explode('.', $parts[1], 2);

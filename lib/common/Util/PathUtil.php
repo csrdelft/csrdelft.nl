@@ -4,7 +4,7 @@ namespace CsrDelft\common\Util;
 
 final class PathUtil
 {
-	public static function to_unix_path($path): string|array
+	public static function to_unix_path($path)
 	{
 		return str_replace(DIRECTORY_SEPARATOR, '/', $path);
 	}
@@ -16,7 +16,7 @@ final class PathUtil
 	 * @param $subpath
 	 * @return string|null
 	 */
-	public static function safe_combine_path($folder, $subpath): ?string
+	public static function safe_combine_path($folder, $subpath)
 	{
 		if ($folder == null || $subpath == null) {
 			return null;
@@ -37,7 +37,7 @@ final class PathUtil
 		return PathUtil::to_unix_path(realpath($path));
 	}
 
-	public static function join_paths(...$args): string|array|null
+	public static function join_paths(...$args)
 	{
 		$paths = [];
 
@@ -57,7 +57,7 @@ final class PathUtil
 	 * @param $path
 	 * @return bool
 	 */
-	public static function path_valid($prefix, $path): bool
+	public static function path_valid($prefix, $path)
 	{
 		return str_starts_with(
 			PathUtil::realpathunix(PathUtil::join_paths($prefix, $path)),
@@ -72,7 +72,7 @@ final class PathUtil
 	 *
 	 * @return string
 	 */
-	public static function direncode($url): string|array
+	public static function direncode($url)
 	{
 		return str_replace('%2F', '/', rawurlencode($url));
 	}
@@ -83,7 +83,7 @@ final class PathUtil
 	 *
 	 * @return bool
 	 */
-	public static function filter_filename($name): string|array|null
+	public static function filter_filename($name)
 	{
 		//Remove dots in front of filename to prevent directory traversal
 		$name = ltrim($name, '.');
@@ -96,7 +96,7 @@ final class PathUtil
 	 *
 	 * @return bool
 	 */
-	public static function valid_filename($name): int|false
+	public static function valid_filename($name)
 	{
 		return preg_match('/^(?:[a-z0-9 \-_()éê]|\.(?!\.))+$/iD', $name);
 	}

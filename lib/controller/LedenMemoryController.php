@@ -135,7 +135,7 @@ class LedenMemoryController extends AbstractController
 	 * @param Request $request
 	 * @return Groep|null
 	 */
-	private function getLichting(Request $request): ?Groep
+	private function getLichting(Request $request)
 	{
 		$l = $request->query->getInt('lichting');
 		$min = LichtingenRepository::getOudsteLidjaar();
@@ -153,7 +153,7 @@ class LedenMemoryController extends AbstractController
 	 * @Route("/leden/memoryscore", methods={"POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function memoryscore(): JsonResponse
+	public function memoryscore()
 	{
 		$score = $this->ledenMemoryScoresModel->nieuw();
 		$form = new LedenMemoryScoreForm($score);
@@ -169,7 +169,7 @@ class LedenMemoryController extends AbstractController
 	 * @Route("/leden/memoryscores/{groep}", methods={"POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function memoryscores($groepUuid = null): LedenMemoryScoreResponse
+	public function memoryscores($groepUuid = null)
 	{
 		$parts = explode('@', $groepUuid);
 		if (isset($parts[0], $parts[1])) {
@@ -192,7 +192,7 @@ class LedenMemoryController extends AbstractController
 	 * @Route("/leden/namen-leren", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function namenleren(): Response
+	public function namenleren()
 	{
 		// Haal alle (adspirant-/gast-)leden op.
 		$profielen = $this->profielRepository->findByLidStatus(

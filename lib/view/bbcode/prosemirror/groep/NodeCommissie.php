@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\groep\BbCommissie;
 
 class NodeCommissie implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbCommissie::class;
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'commissie';
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbCommissie) {
 			throw new \InvalidArgumentException();
@@ -29,14 +29,14 @@ class NodeCommissie implements Node
 		];
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [
 			'commissie' => $node->attrs->id,
 		];
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return true;
 	}

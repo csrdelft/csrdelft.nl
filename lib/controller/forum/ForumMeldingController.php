@@ -41,7 +41,7 @@ class ForumMeldingController extends AbstractController
 	 * @Route("/forum/meldingsniveau/{draad_id}/{niveau}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function meldingsniveau(ForumDraad $draad, $niveau): JsonResponse
+	public function meldingsniveau(ForumDraad $draad, $niveau)
 	{
 		if (!$draad || !$draad->magLezen() || !$draad->magMeldingKrijgen()) {
 			throw $this->createAccessDeniedException(
@@ -70,7 +70,7 @@ class ForumMeldingController extends AbstractController
 	 * @Route("/forum/deelmelding/{forum_id}/{niveau}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function deelmelding(ForumDeel $deel, $niveau): JsonResponse
+	public function deelmelding(ForumDeel $deel, $niveau)
 	{
 		if (!$deel || !$deel->magLezen() || !$deel->magMeldingKrijgen()) {
 			throw $this->createAccessDeniedException(

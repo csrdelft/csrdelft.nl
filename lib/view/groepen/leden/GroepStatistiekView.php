@@ -37,7 +37,7 @@ class GroepStatistiekView implements ToResponse
 		$this->groep = $groep;
 	}
 
-	public function __toString(): string
+	public function __toString()
 	{
 		return $this->twig->render('groep/statistiek.html.twig', [
 			'groep' => $this->groep,
@@ -49,7 +49,7 @@ class GroepStatistiekView implements ToResponse
 		]);
 	}
 
-	private function verticale($data): string|false
+	private function verticale($data)
 	{
 		$verticalen = [];
 		$deelnemers = [];
@@ -69,7 +69,7 @@ class GroepStatistiekView implements ToResponse
 		]);
 	}
 
-	private function geslacht($data): string|false
+	private function geslacht($data)
 	{
 		$mannen = 0;
 		$vrouwen = 0;
@@ -95,7 +95,7 @@ class GroepStatistiekView implements ToResponse
 		]);
 	}
 
-	private function lichting($data): string|false
+	private function lichting($data)
 	{
 		$aantal = [];
 		$lichting = [];
@@ -115,7 +115,7 @@ class GroepStatistiekView implements ToResponse
 		]);
 	}
 
-	private function tijd($data): string|false
+	private function tijd($data)
 	{
 		$totaal = 0;
 		$series = [];

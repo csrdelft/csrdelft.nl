@@ -17,7 +17,7 @@ class EnumNormalizer implements NormalizerInterface
 	 * @param array $context
 	 * @return array|ArrayObject|bool|float|int|string|null
 	 */
-	public function normalize($enum, string $format = null, array $context = []): ArrayObject|array|string|int|float|bool|null
+	public function normalize($enum, string $format = null, array $context = [])
 	{
 		return $enum->getDescription();
 	}
@@ -26,14 +26,7 @@ class EnumNormalizer implements NormalizerInterface
 		$data,
 		string $format = null,
 		array $context = []
-	): bool {
+	) {
 		return $data instanceof Enum;
-	}
-
-	public function getSupportedTypes(?string $format): array
-	{
-		return [
-			"*" => true
-		];
 	}
 }

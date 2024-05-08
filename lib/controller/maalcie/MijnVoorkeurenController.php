@@ -41,7 +41,7 @@ class MijnVoorkeurenController extends AbstractController
 	 * @Route("/corvee/voorkeuren", methods={"GET"})
 	 * @Auth(P_CORVEE_IK)
 	 */
-	public function mijn(): Response
+	public function mijn()
 	{
 		$voorkeuren = $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid(
 			$this->getUid(),
@@ -61,7 +61,7 @@ class MijnVoorkeurenController extends AbstractController
 	 * @Route("/corvee/voorkeuren/inschakelen/{crv_repetitie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_IK)
 	 */
-	public function inschakelen(CorveeRepetitie $repetitie): Response
+	public function inschakelen(CorveeRepetitie $repetitie)
 	{
 		$voorkeur = new CorveeVoorkeur();
 		$voorkeur->setProfiel($this->getProfiel());
@@ -83,7 +83,7 @@ class MijnVoorkeurenController extends AbstractController
 	 * @Route("/corvee/voorkeuren/uitschakelen/{crv_repetitie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_IK)
 	 */
-	public function uitschakelen($crv_repetitie_id): Response
+	public function uitschakelen($crv_repetitie_id)
 	{
 		$voorkeur = $this->corveeVoorkeurenRepository->getVoorkeur(
 			$crv_repetitie_id,
@@ -102,7 +102,7 @@ class MijnVoorkeurenController extends AbstractController
 	 * @Route("/corvee/voorkeuren/eetwens", methods={"POST"})
 	 * @Auth(P_CORVEE_IK)
 	 */
-	public function eetwens(): EetwensForm
+	public function eetwens()
 	{
 		$form = new EetwensForm();
 		if ($form->validate()) {

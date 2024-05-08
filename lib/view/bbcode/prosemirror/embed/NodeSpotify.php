@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\embed\BbSpotify;
 
 class NodeSpotify implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbSpotify::class;
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'spotify';
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbSpotify) {
 			throw new \InvalidArgumentException();
@@ -32,7 +32,7 @@ class NodeSpotify implements Node
 		];
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [
 			'spotify' => $node->attrs->url,
@@ -40,7 +40,7 @@ class NodeSpotify implements Node
 		];
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return true;
 	}

@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\embed\BbTwitter;
 
 class NodeTwitter implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbTwitter::class;
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'twitter';
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbTwitter) {
 			throw new \InvalidArgumentException();
@@ -31,14 +31,14 @@ class NodeTwitter implements Node
 		];
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [
 			'twitter' => $node->attrs->url,
 		];
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return true;
 	}

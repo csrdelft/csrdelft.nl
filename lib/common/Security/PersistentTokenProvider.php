@@ -5,8 +5,6 @@ namespace CsrDelft\common\Security;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface;
 use Symfony\Component\Security\Core\Authentication\RememberMe\TokenProviderInterface;
@@ -37,7 +35,7 @@ class PersistentTokenProvider implements TokenProviderInterface
 		$this->profielRepository = $profielRepository;
 	}
 
-	public function loadTokenBySeries(string $series): RememberLogin
+	public function loadTokenBySeries(string $series)
 	{
 		$token = $this->rememberLoginRepository->findOneBy(['series' => $series]);
 
@@ -48,7 +46,7 @@ class PersistentTokenProvider implements TokenProviderInterface
 		return $token;
 	}
 
-	public function deleteTokenBySeries(string $series): void
+	public function deleteTokenBySeries(string $series)
 	{
 		$token = $this->loadTokenBySeries($series);
 		if ($token) {
@@ -57,7 +55,11 @@ class PersistentTokenProvider implements TokenProviderInterface
 		}
 	}
 
-	public function updateToken(string $series, string $tokenValue, DateTimeInterface $lastUsed): void {
+	public function updateToken(
+		string $series,
+		string $tokenValue,
+		\DateTime $lastUsed
+	) {
 		$token = $this->loadTokenBySeries($series);
 		$token->token = $tokenValue;
 		$token->last_used = $lastUsed;
@@ -65,7 +67,7 @@ class PersistentTokenProvider implements TokenProviderInterface
 		$this->entityManager->flush();
 	}
 
-	public function createNewToken(PersistentTokenInterface $token): void
+	public function createNewToken(PersistentTokenInterface $token)
 	{
 		$persistentToken = new RememberLogin();
 		$persistentToken->token = $token->getTokenValue();

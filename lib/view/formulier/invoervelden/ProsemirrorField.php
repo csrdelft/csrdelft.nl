@@ -18,7 +18,7 @@ class ProsemirrorField extends InputField
 	 */
 	public $extern = false;
 
-	public function getHtml(): string
+	public function getHtml()
 	{
 		$attribute = $this->getInputAttribute([
 			'id',
@@ -40,7 +40,7 @@ class ProsemirrorField extends InputField
 HTML;
 	}
 
-	public function getValue(): ?string
+	public function getValue()
 	{
 		if ($this->isPosted()) {
 			$converter = ContainerFacade::getContainer()->get(ProsemirrorToBb::class);

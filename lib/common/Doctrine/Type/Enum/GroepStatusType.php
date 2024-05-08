@@ -6,12 +6,12 @@ use CsrDelft\entity\groepen\enum\GroepStatus;
 
 class GroepStatusType extends EnumType
 {
-	public function getEnumClass(): string
+	public function getEnumClass()
 	{
 		return GroepStatus::class;
 	}
 
-	public function getName(): string
+	public function getName()
 	{
 		return 'enumGroepStatus';
 	}

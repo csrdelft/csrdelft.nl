@@ -40,7 +40,11 @@ class RemoveDataTableEntryNormalizer implements NormalizerInterface
 	 * @param array $context
 	 * @return array|ArrayObject|bool|float|int|string|null
 	 */
-	public function normalize($removed, string $format = null, array $context = []): array {
+	public function normalize(
+		$removed,
+		string $format = null,
+		array $context = []
+	) {
 		$id = $removed->getId();
 
 		if (!is_array($id)) {
@@ -64,12 +68,5 @@ class RemoveDataTableEntryNormalizer implements NormalizerInterface
 		array $context = []
 	): bool {
 		return $data instanceof RemoveDataTableEntry;
-	}
-
-	public function getSupportedTypes(?string $format): array
-	{
-		return [
-			"*" => true
-		];
 	}
 }

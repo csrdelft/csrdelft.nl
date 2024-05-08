@@ -5,7 +5,7 @@ namespace CsrDelft\repository\documenten;
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class DocumentCategorieModel.
@@ -34,7 +34,7 @@ class DocumentCategorieRepository extends AbstractRepository
 	 *
 	 * @return DocumentCategorie|null
 	 */
-	public function get($id): ?DocumentCategorie
+	public function get($id)
 	{
 		return $this->find($id);
 	}
@@ -42,7 +42,7 @@ class DocumentCategorieRepository extends AbstractRepository
 	/**
 	 * @return array
 	 */
-	public function getCategorieNamen(): array
+	public function getCategorieNamen()
 	{
 		$categorien = $this->findAll();
 
@@ -55,7 +55,7 @@ class DocumentCategorieRepository extends AbstractRepository
 		return $return;
 	}
 
-	public function findMetSchijfrechtenVoorLid(): array
+	public function findMetSchijfrechtenVoorLid()
 	{
 		return array_filter($this->findAll(), function ($categorie) {
 			return $this->security->isGranted($categorie->schrijfrechten);

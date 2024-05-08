@@ -9,7 +9,7 @@ class DataTableView
 	 */
 	private $data;
 
-	public function __toString(): string
+	public function __toString()
 	{
 		return $this->data;
 	}

@@ -37,7 +37,7 @@ class FotoRepository extends AbstractRepository
 	/**
 	 * @override parent::retrieveByUUID($UUID)
 	 */
-	public function retrieveByUUID($UUID): ?Foto
+	public function retrieveByUUID($UUID)
 	{
 		$parts = explode('@', $UUID, 2);
 		$path = explode('/', $parts[0]);
@@ -51,7 +51,7 @@ class FotoRepository extends AbstractRepository
 	 * @param $filename
 	 * @return Foto|null
 	 */
-	public function get($subdir, $filename): ?Foto
+	public function get($subdir, $filename)
 	{
 		return $this->find(['subdir' => $subdir, 'filename' => $filename]);
 	}
@@ -61,7 +61,7 @@ class FotoRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(Foto $foto): void
+	public function create(Foto $foto)
 	{
 		$dbFoto = $this->find([
 			'subdir' => $foto->subdir,
@@ -79,7 +79,7 @@ class FotoRepository extends AbstractRepository
 		$this->getEntityManager()->flush();
 	}
 
-	public function delete(Foto $foto): void
+	public function delete(Foto $foto)
 	{
 		// Sta toe om een detached foto entity te verwijderen.
 		$this->createQueryBuilder('foto')
@@ -95,7 +95,7 @@ class FotoRepository extends AbstractRepository
 	 * @param Foto $foto
 	 * @throws CsrException
 	 */
-	public function verwerkFoto(Foto $foto): void
+	public function verwerkFoto(Foto $foto)
 	{
 		if (
 			!$this->find(['subdir' => $foto->subdir, 'filename' => $foto->filename])
@@ -119,7 +119,7 @@ class FotoRepository extends AbstractRepository
 	 * @param Foto $foto
 	 * @return bool
 	 */
-	public function verwijderFoto(Foto $foto): bool
+	public function verwijderFoto(Foto $foto)
 	{
 		$ret = true;
 		$ret &= unlink($foto->getFullPath());
@@ -145,7 +145,7 @@ class FotoRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function rotate(Foto $foto, $degrees): void
+	public function rotate(Foto $foto, $degrees)
 	{
 		$foto->rotation += $degrees;
 		$foto->rotation %= 360;
@@ -167,7 +167,7 @@ class FotoRepository extends AbstractRepository
 	 * @param string|null $subdir
 	 * @return Foto[]
 	 */
-	public function findBySubdir(?string $subdir): mixed
+	public function findBySubdir(?string $subdir)
 	{
 		return $this->createQueryBuilder('foto')
 			->where('foto.subdir like :subdir')

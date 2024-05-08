@@ -86,7 +86,11 @@ class AccessService
 	 * @param $subject
 	 * @return bool
 	 */
-	public function isUserGranted(UserInterface $user, $attribute, $subject = null): bool {
+	public function isUserGranted(
+		UserInterface $user,
+		$attribute,
+		$subject = null
+	) {
 		$token = new UsernamePasswordToken(
 			$user,
 			'none',
@@ -103,7 +107,7 @@ class AccessService
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function getDefaultPermissionRole($lidstatus): string
+	public function getDefaultPermissionRole($lidstatus)
 	{
 		switch ($lidstatus) {
 			case LidStatus::Kringel:
@@ -127,7 +131,7 @@ class AccessService
 	/**
 	 * @return string[]
 	 */
-	public function getPermissionSuggestions(): array
+	public function getPermissionSuggestions()
 	{
 		$suggestions = [];
 		$suggestions[] = 'bestuur';
@@ -144,7 +148,7 @@ class AccessService
 	 * @param string $permissions
 	 * @return array empty if no errors; substring(s) of $permissions containing error(s) otherwise
 	 */
-	public function getPermissionStringErrors($permissions): array
+	public function getPermissionStringErrors($permissions)
 	{
 		$errors = [];
 		// OR
@@ -170,7 +174,7 @@ class AccessService
 	 *
 	 * @return bool
 	 */
-	public function isValidPermission($permission): bool
+	public function isValidPermission($permission)
 	{
 		// case insensitive
 		$permission = strtoupper($permission);
@@ -211,7 +215,7 @@ class AccessService
 	 * @param $permissie
 	 * @return array|string|string[]|null
 	 */
-	public function converteerPermissie($permissie): string|array|null
+	public function converteerPermissie($permissie)
 	{
 		return preg_replace('/P_/', 'ROLE_', $permissie);
 	}

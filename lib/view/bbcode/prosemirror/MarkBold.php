@@ -7,22 +7,22 @@ use CsrDelft\bb\tag\BbNode;
 
 class MarkBold implements Mark
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbBold::class;
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		return [];
 	}
 
-	public static function getMarkType(): string
+	public static function getMarkType()
 	{
 		return 'strong';
 	}
 
-	public function getTagAttributes($mark): array
+	public function getTagAttributes($mark)
 	{
 		return [];
 	}

@@ -75,12 +75,12 @@ class MaaltijdBeoordelingDTO implements CustomDataTableEntry
 	 */
 	public $koks;
 
-	public static function getIdentifierFieldNames(): array
+	public static function getIdentifierFieldNames()
 	{
 		return ['maaltijd_id'];
 	}
 
-	public static function getFieldNames(): array
+	public static function getFieldNames()
 	{
 		return [
 			'maaltijd_id',
@@ -103,7 +103,7 @@ class MaaltijdBeoordelingDTO implements CustomDataTableEntry
 		return $this->kwantiteitAantal . ', ' . $this->kwaliteitAantal;
 	}
 
-	public function setMaaltijd(Maaltijd $maaltijd): void
+	public function setMaaltijd(Maaltijd $maaltijd)
 	{
 		$this->maaltijd_id = $maaltijd->maaltijd_id;
 		$this->datum = $maaltijd->getDataTableDatum();

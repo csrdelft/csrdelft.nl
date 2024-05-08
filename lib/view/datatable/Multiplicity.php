@@ -33,7 +33,7 @@ class Multiplicity
 	 *
 	 * @return static
 	 */
-	public static function None(): Multiplicity
+	public static function None()
 	{
 		return new static(self::NONE);
 	}
@@ -43,7 +43,7 @@ class Multiplicity
 	 *
 	 * @return static
 	 */
-	public static function Zero(): Multiplicity
+	public static function Zero()
 	{
 		return new static(self::ZERO);
 	}
@@ -53,7 +53,7 @@ class Multiplicity
 	 *
 	 * @return static
 	 */
-	public static function One(): Multiplicity
+	public static function One()
 	{
 		return new static(self::ONE);
 	}
@@ -63,7 +63,7 @@ class Multiplicity
 	 *
 	 * @return static
 	 */
-	public static function Two(): Multiplicity
+	public static function Two()
 	{
 		return new static(self::TWO);
 	}
@@ -73,7 +73,7 @@ class Multiplicity
 	 *
 	 * @return static
 	 */
-	public static function Any(): Multiplicity
+	public static function Any()
 	{
 		return new static(self::ANY);
 	}

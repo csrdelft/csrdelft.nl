@@ -30,7 +30,7 @@ class PinTransactieRepository extends AbstractRepository
 	 * @param string $to
 	 * @return int[]
 	 */
-	public function getPinTransactieInMoment($from, $to): mixed
+	public function getPinTransactieInMoment($from, $to)
 	{
 		return $this->createQueryBuilder('t')
 			->select('t.id')
@@ -45,7 +45,7 @@ class PinTransactieRepository extends AbstractRepository
 	/**
 	 * @param int[] $ids
 	 */
-	public function clean($ids): void
+	public function clean($ids)
 	{
 		$this->createQueryBuilder('m')
 			->delete()
@@ -60,7 +60,7 @@ class PinTransactieRepository extends AbstractRepository
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function getKorteBeschrijving($pinTransactie): string
+	public function getKorteBeschrijving($pinTransactie)
 	{
 		return sprintf('€%.2f', $pinTransactie->getBedragInCenten() / 100);
 	}
@@ -69,7 +69,7 @@ class PinTransactieRepository extends AbstractRepository
 	 * @param int $id
 	 * @return PinTransactie
 	 */
-	public function get($id): ?PinTransactie
+	public function get($id)
 	{
 		return $this->find($id);
 	}

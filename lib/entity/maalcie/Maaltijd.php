@@ -157,7 +157,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		$this->aanmeldingen = new ArrayCollection();
 	}
 
-	public function getPrijsFloat(): float
+	public function getPrijsFloat()
 	{
 		return (float) $this->getPrijs() / 100.0;
 	}
@@ -166,12 +166,12 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @return integer
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getPrijs(): int
+	public function getPrijs()
 	{
 		return $this->product->getPrijsInt();
 	}
 
-	public function getIsAangemeld($uid): bool
+	public function getIsAangemeld($uid)
 	{
 		return $this->aanmeldingen->matching(Eisen::voorGebruiker($uid))->count() ==
 			1;
@@ -197,7 +197,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 *
 	 * @return int
 	 */
-	public function getMarge(): float|false|int
+	public function getMarge()
 	{
 		$aantal = $this->getAantalAanmeldingen();
 		$marge = floor(
@@ -222,7 +222,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 *
 	 * @return integer
 	 */
-	public function getBudget(): int
+	public function getBudget()
 	{
 		$budget = $this->getAantalAanmeldingen() + $this->getMarge();
 		$budget *=
@@ -250,7 +250,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	// Agendeerbaar ############################################################
 
-	public function getTitel(): string
+	public function getTitel()
 	{
 		return $this->titel;
 	}
@@ -274,22 +274,22 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 			')';
 	}
 
-	public function getLocatie(): string
+	public function getLocatie()
 	{
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl(): string
+	public function getUrl()
 	{
 		return '/maaltijden';
 	}
 
-	public function isHeledag(): bool
+	public function isHeledag()
 	{
 		return false;
 	}
 
-	public function isTransparant(): bool
+	public function isTransparant()
 	{
 		// Toon als transparant (vrij) als lid dat wil of lid niet ingeketzt is
 		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
@@ -305,7 +305,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @return boolean
 	 * @throws CsrException
 	 */
-	public function magBekijken($uid): bool
+	public function magBekijken($uid)
 	{
 		if (!isset($this->maaltijdcorvee)) {
 			// Zoek op datum, want er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is.
@@ -341,7 +341,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @return boolean
 	 * @throws CsrException
 	 */
-	public function magSluiten($uid): bool
+	public function magSluiten($uid)
 	{
 		return $this->magBekijken($uid) &&
 			$this->maaltijdcorvee->corveeFunctie->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
@@ -352,7 +352,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @Serializer\SerializedName("repetitie_naam")
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getRepetitieNaam(): string
+	public function getRepetitieNaam()
 	{
 		return $this->repetitie ? $this->repetitie->standaard_titel : null;
 	}
@@ -362,7 +362,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("tijd")
 	 */
-	public function getDataTableTijd(): false|string
+	public function getDataTableTijd()
 	{
 		return DateUtil::dateFormatIntl($this->tijd, DateUtil::TIME_FORMAT);
 	}
@@ -372,12 +372,12 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("datum")
 	 */
-	public function getDataTableDatum(): false|string
+	public function getDataTableDatum()
 	{
 		return DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT);
 	}
 
-	public function getAanmeldLimiet(): int
+	public function getAanmeldLimiet()
 	{
 		return $this->aanmeld_limiet;
 	}
@@ -386,7 +386,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @return int
 	 * @Serializer\Groups("datatable-fiscaat")
 	 */
-	public function getTotaal(): int
+	public function getTotaal()
 	{
 		return $this->getAantalAanmeldingen() + $this->getPrijs();
 	}
@@ -401,7 +401,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		return $this->maaltijd_id . '@maaltijd.csrdelft.nl';
 	}
 
-	public function getMoment(): DateTimeImmutable|false
+	public function getMoment()
 	{
 		return $this->datum->setTime(
 			$this->tijd->format('H'),
@@ -410,7 +410,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		);
 	}
 
-	public function getId(): integer
+	public function getId()
 	{
 		return $this->maaltijd_id;
 	}
@@ -428,7 +428,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		}
 	}
 
-	public function getAanmelding(Profiel $profiel): mixed
+	public function getAanmelding(Profiel $profiel)
 	{
 		return $this->aanmeldingen
 			->matching(Eisen::voorGebruiker($profiel->uid))

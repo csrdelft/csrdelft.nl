@@ -49,12 +49,12 @@ class EntitySelectField extends InputField
 		$this->options = $this->repository->findAll();
 	}
 
-	public function getOptions(): array
+	public function getOptions()
 	{
 		return $this->options;
 	}
 
-	public function validate(): bool
+	public function validate()
 	{
 		if (!parent::validate()) {
 			return false;
@@ -134,7 +134,7 @@ class EntitySelectField extends InputField
 		$this->options = $options;
 	}
 
-	public function getOptionIds(): array
+	public function getOptionIds()
 	{
 		return array_map(function ($option) {
 			return $option->getId();

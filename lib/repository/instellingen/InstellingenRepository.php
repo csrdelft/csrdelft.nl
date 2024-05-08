@@ -55,7 +55,7 @@ class InstellingenRepository extends AbstractRepository
 	 *
 	 * @return string
 	 */
-	public function getValue($module, $id): string
+	public function getValue($module, $id)
 	{
 		return $this->getInstelling($module, $id)->waarde;
 	}
@@ -99,7 +99,7 @@ class InstellingenRepository extends AbstractRepository
 	 *
 	 * @return Instelling
 	 */
-	protected function newInstelling($module, $id): Instelling
+	protected function newInstelling($module, $id)
 	{
 		$instelling = new Instelling();
 		$instelling->module = $module;
@@ -133,7 +133,7 @@ class InstellingenRepository extends AbstractRepository
 	 *
 	 * @return Instelling
 	 */
-	public function wijzigInstelling($module, $id, $waarde): ?Instelling
+	public function wijzigInstelling($module, $id, $waarde)
 	{
 		// Skip de cache
 		$instelling = $this->findOneBy(['module' => $module, 'instelling' => $id]);
@@ -154,7 +154,7 @@ class InstellingenRepository extends AbstractRepository
 
 	/**
 	 */
-	public function opschonen(): void
+	public function opschonen()
 	{
 		$instellingen = [];
 		foreach ($this->getModules() as $module) {

@@ -49,7 +49,7 @@ class BeheerMaaltijdenBeoordelingenTable extends DataTable
 		$this->searchColumn('datum');
 	}
 
-	public function getBreadcrumbs(): string
+	public function getBreadcrumbs()
 	{
 		return 'Maaltijden / Beheer / Beoordelingen';
 	}

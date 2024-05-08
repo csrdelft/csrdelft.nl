@@ -7,12 +7,12 @@ use CsrDelft\view\bbcode\tag\BbImg;
 
 class NodeImage implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbImg::class;
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbImg) {
 			throw new \InvalidArgumentException();
@@ -27,19 +27,19 @@ class NodeImage implements Node
 		];
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [
 			'img' => $node->attrs->src,
 		];
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'image';
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return true;
 	}

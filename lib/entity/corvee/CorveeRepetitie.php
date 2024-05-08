@@ -94,13 +94,13 @@ class CorveeRepetitie implements DisplayEntity
  #[ORM\ManyToOne(targetEntity: \CorveeFunctie::class)]
  public $corveeFunctie;
 
-	public function getDagVanDeWeekText(): string|false
+	public function getDagVanDeWeekText()
 	{
 		$weekDagen = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
 		return $weekDagen[$this->dag_vd_week];
 	}
 
-	public function getPeriodeInDagenText(): string
+	public function getPeriodeInDagenText()
 	{
 		switch ($this->periode_in_dagen) {
 			case 0:
@@ -118,7 +118,7 @@ class CorveeRepetitie implements DisplayEntity
 		}
 	}
 
-	public function getId(): integer
+	public function getId()
 	{
 		return $this->crv_repetitie_id;
 	}

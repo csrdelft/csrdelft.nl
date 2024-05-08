@@ -16,7 +16,13 @@ class LidStatusPrefixVoter extends PrefixVoter
 		return $attribute === 'STATUS';
 	}
 
-	protected function voteOnPrefix(string $prefix, $gevraagd, $role, $subject, TokenInterface $token): bool {
+	protected function voteOnPrefix(
+		string $prefix,
+		$gevraagd,
+		$role,
+		$subject,
+		TokenInterface $token
+	) {
 		/** @var Account $user */
 		$user = $token->getUser();
 

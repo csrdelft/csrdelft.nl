@@ -21,7 +21,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use CsrDelft\service\MailService;
 use DateTime;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
 /**
@@ -76,7 +76,7 @@ class LidStatusService
 		$this->boekExemplaarRepository = $boekExemplaarRepository;
 	}
 
-	public function wijzig_lidstatus(Profiel $profiel, $oudestatus): array
+	public function wijzig_lidstatus(Profiel $profiel, $oudestatus)
 	{
 		$changes = [];
 		// Maaltijd en corvee bijwerken
@@ -130,7 +130,7 @@ class LidStatusService
 	 * @param $oudestatus
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
-	private function disableMaaltijdabos(Profiel $profiel, $oudestatus): array
+	private function disableMaaltijdabos(Profiel $profiel, $oudestatus)
 	{
 		$aantal = $this->maaltijdAbonnementenService->verwijderAbonnementenVoorLid(
 			$profiel
@@ -150,7 +150,7 @@ class LidStatusService
 	 * @param $oudestatus
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
-	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus): array
+	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus)
 	{
 		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($profiel);
 		$aantal = $this->corveeTakenRepository->verwijderTakenVoorLid(
@@ -204,7 +204,7 @@ class LidStatusService
 	 * @param $oudestatus
 	 * @return bool mailen is wel/niet verzonden
 	 */
-	private function notifyFisci(Profiel $profiel, $oudestatus): bool
+	private function notifyFisci(Profiel $profiel, $oudestatus)
 	{
 		// Saldi ophalen
 		$saldi = '';
@@ -237,7 +237,7 @@ class LidStatusService
 	 * @param $oudestatus
 	 * @return bool mailen is wel/niet verzonden
 	 */
-	private function notifyBibliothecaris(Profiel $profiel, $oudestatus): bool
+	private function notifyBibliothecaris(Profiel $profiel, $oudestatus)
 	{
 		$geleend = $this->boekExemplaarRepository->getGeleend($profiel);
 		if (!is_array($geleend)) {
@@ -320,7 +320,7 @@ class LidStatusService
 	 * @param Profiel $profiel
 	 * @return AbstractProfielLogEntry[]  Een logentry als er wijzigingen zijn.
 	 */
-	private function verwijderVelden(Profiel $profiel): array
+	private function verwijderVelden(Profiel $profiel)
 	{
 		$velden_verwijderd = [];
 		foreach (Profiel::$properties_lidstatus as $key => $status_allowed) {
@@ -346,7 +346,7 @@ class LidStatusService
 	 * Verwijder onnodige velden van het profiel. Slaat wijzigingen op in database.
 	 * @param Profiel $profiel
 	 */
-	public function verwijderVeldenUpdate(Profiel $profiel): bool
+	public function verwijderVeldenUpdate(Profiel $profiel)
 	{
 		$changes = $this->verwijderVelden($profiel);
 		if (empty($changes)) {

@@ -4,7 +4,6 @@ namespace CsrDelft\entity\fiscaat;
 
 use CsrDelft\common\Util\BedragUtil;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -88,7 +87,7 @@ class CiviBestelling
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("inhoud")
 	 */
-	public function getInhoudTekst(): string
+	public function getInhoudTekst()
 	{
 		$bestellingenInhoud = [];
 		foreach ($this->inhoud as $item) {
@@ -100,7 +99,7 @@ class CiviBestelling
 	/**
 	 * @return string
 	 */
-	public function getPinBeschrijving(): string
+	public function getPinBeschrijving()
 	{
 		$pinProduct = $this->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 
@@ -133,7 +132,7 @@ class CiviBestelling
 	 * @param $product_id
 	 * @return CiviBestellingInhoud|null
 	 */
-	public function getProduct($product_id): mixed
+	public function getProduct($product_id)
 	{
 		$product = $this->inhoud->matching(
 			Criteria::create()
@@ -153,7 +152,7 @@ class CiviBestelling
 	 *
 	 * @return int
 	 */
-	public function berekenTotaal(): int
+	public function berekenTotaal()
 	{
 		$totaal = 0;
 

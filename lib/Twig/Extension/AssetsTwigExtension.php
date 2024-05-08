@@ -4,7 +4,7 @@ namespace CsrDelft\Twig\Extension;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\InstellingUtil;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -26,7 +26,7 @@ class AssetsTwigExtension extends AbstractExtension
 		$this->security = $security;
 	}
 
-	public function getFunctions(): array
+	public function getFunctions()
 	{
 		return [
 			new TwigFunction('user_modules', [$this, 'getUserModules']),
@@ -50,7 +50,7 @@ class AssetsTwigExtension extends AbstractExtension
 	 *
 	 * @return array
 	 */
-	public function getUserModules(): array
+	public function getUserModules()
 	{
 		if (!$this->security->isGranted('ROLE_LOGGED_IN')) {
 			return [];
@@ -83,7 +83,7 @@ class AssetsTwigExtension extends AbstractExtension
 	 * @param string $asset
 	 * @return string
 	 */
-	public function css_asset(string $module, $media = null): string
+	public function css_asset(string $module, $media = null)
 	{
 		$assetString = '';
 
@@ -98,7 +98,7 @@ class AssetsTwigExtension extends AbstractExtension
 		return $assetString;
 	}
 
-	public function js_asset(string $module): string
+	public function js_asset(string $module)
 	{
 		$assetString = '';
 
@@ -109,7 +109,7 @@ class AssetsTwigExtension extends AbstractExtension
 		return $assetString;
 	}
 
-	private function module_asset(string $module, string $extension): array
+	private function module_asset(string $module, string $extension)
 	{
 		$manifest = $this->readManifest();
 
@@ -136,7 +136,7 @@ class AssetsTwigExtension extends AbstractExtension
 		return $relevantAssets;
 	}
 
-	public function asset_url($name): string
+	public function asset_url($name)
 	{
 		$manifest = $this->readManifest();
 

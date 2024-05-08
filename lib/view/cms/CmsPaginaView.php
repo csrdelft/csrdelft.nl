@@ -32,7 +32,7 @@ class CmsPaginaView implements View, ToResponse
 		return $this->pagina;
 	}
 
-	public function getBreadcrumbs(): null
+	public function getBreadcrumbs()
 	{
 		return null;
 	}

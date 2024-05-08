@@ -52,7 +52,7 @@ class ForumPlaatjeRepository extends AbstractRepository
 		return $plaatje;
 	}
 
-	private static function generate(): ForumPlaatje
+	private static function generate()
 	{
 		$plaatje = new ForumPlaatje();
 		$plaatje->datum_toegevoegd = date_create_immutable();
@@ -64,7 +64,7 @@ class ForumPlaatjeRepository extends AbstractRepository
 	 * @param $key
 	 * @return ForumPlaatje|null
 	 */
-	public function getByKey($key): ?ForumPlaatje
+	public function getByKey($key)
 	{
 		if (!self::isValidKey($key)) {
 			return null;
@@ -72,7 +72,7 @@ class ForumPlaatjeRepository extends AbstractRepository
 		return $this->findOneBy(['access_key' => $key]);
 	}
 
-	public static function isValidKey($key): int|false
+	public static function isValidKey($key)
 	{
 		return preg_match('/^[a-zA-Z0-9]{32}$/', $key);
 	}

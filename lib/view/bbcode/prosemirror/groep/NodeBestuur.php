@@ -8,17 +8,17 @@ use CsrDelft\view\bbcode\tag\groep\BbBestuur;
 
 class NodeBestuur implements Node
 {
-	public static function getBbTagType(): string
+	public static function getBbTagType()
 	{
 		return BbBestuur::class;
 	}
 
-	public static function getNodeType(): string
+	public static function getNodeType()
 	{
 		return 'bestuur';
 	}
 
-	public function getData(BbNode $node): array
+	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbBestuur) {
 			throw new \InvalidArgumentException();
@@ -29,14 +29,14 @@ class NodeBestuur implements Node
 		];
 	}
 
-	public function getTagAttributes($node): array
+	public function getTagAttributes($node)
 	{
 		return [
 			'bestuur' => $node->attrs->id,
 		];
 	}
 
-	public function selfClosing(): bool
+	public function selfClosing()
 	{
 		return true;
 	}

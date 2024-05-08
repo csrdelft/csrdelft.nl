@@ -36,12 +36,12 @@ class BestandBehouden extends InputField
 		return $this->isAvailable();
 	}
 
-	public function isAvailable(): bool
+	public function isAvailable()
 	{
 		return $this->model instanceof Bestand and $this->model->exists();
 	}
 
-	public function validate(): bool
+	public function validate()
 	{
 		parent::validate();
 		if (!$this->isAvailable() or empty($this->model->filesize)) {
@@ -59,7 +59,7 @@ class BestandBehouden extends InputField
 		return $this->error === '';
 	}
 
-	public function opslaan($directory, $filename, $overwrite = false): void
+	public function opslaan($directory, $filename, $overwrite = false)
 	{
 		parent::opslaan($directory, $filename, $overwrite);
 		if (
@@ -87,7 +87,7 @@ class BestandBehouden extends InputField
 			')</div>';
 	}
 
-	public function getPreviewDiv(): string
+	public function getPreviewDiv()
 	{
 		if ($this->model instanceof Afbeelding) {
 			return '<div id="imagePreview_' .

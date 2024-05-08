@@ -38,7 +38,7 @@ class CellRender
 	/**
 	 * @return string
 	 */
-	public function getChoice(): string
+	public function getChoice()
 	{
 		return $this->choice;
 	}
@@ -46,7 +46,7 @@ class CellRender
 	/**
 	 * @return static
 	 */
-	public static function Default(): CellRender
+	public static function Default()
 	{
 		return new static(self::DEFAULT);
 	}
@@ -54,7 +54,7 @@ class CellRender
 	/**
 	 * @return static
 	 */
-	public static function Check(): CellRender
+	public static function Check()
 	{
 		return new static(self::CHECK);
 	}
@@ -62,7 +62,7 @@ class CellRender
 	/**
 	 * @return static
 	 */
-	public static function Bedrag(): CellRender
+	public static function Bedrag()
 	{
 		return new static(self::BEDRAG);
 	}
@@ -70,7 +70,7 @@ class CellRender
 	/**
 	 * @return static
 	 */
-	public static function AanmeldFilter(): CellRender
+	public static function AanmeldFilter()
 	{
 		return new static(self::AANMELD_FILTER);
 	}
@@ -78,7 +78,7 @@ class CellRender
 	/**
 	 * @return static
 	 */
-	public static function Aanmeldingen(): CellRender
+	public static function Aanmeldingen()
 	{
 		return new static(self::AANMELDINGEN);
 	}
@@ -86,7 +86,7 @@ class CellRender
 	/**
 	 * @return static
 	 */
-	public static function TotaalPrijs(): CellRender
+	public static function TotaalPrijs()
 	{
 		return new static(self::TOTAAL_PRIJS);
 	}
@@ -94,7 +94,7 @@ class CellRender
 	/**
 	 * @return static
 	 */
-	public static function Timeago(): CellRender
+	public static function Timeago()
 	{
 		return new static(self::TIMEAGO);
 	}
@@ -102,21 +102,21 @@ class CellRender
 	/**
 	 * @return static
 	 */
-	public static function Filesize(): CellRender
+	public static function Filesize()
 	{
 		return new static(self::FILESIZE);
 	}
 
-	public static function DateTime(): CellRender
+	public static function DateTime()
 	{
 		return new static(self::DATETIME);
 	}
 
-	public static function Date(): CellRender
+	public static function Date()
 	{
 		return new static(self::DATE);
 	}
-	public static function Time(): CellRender
+	public static function Time()
 	{
 		return new static(self::TIME);
 	}

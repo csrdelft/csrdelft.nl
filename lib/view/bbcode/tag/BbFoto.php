@@ -11,7 +11,7 @@ use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Toont de thumbnail van een foto met link naar fotoalbum.
@@ -53,7 +53,7 @@ class BbFoto extends BbTag
 		$this->security = $security;
 	}
 
-	public static function getTagName(): string
+	public static function getTagName()
 	{
 		return 'foto';
 	}
@@ -66,12 +66,12 @@ class BbFoto extends BbTag
 		);
 	}
 
-	public function renderPreview(): string
+	public function renderPreview()
 	{
 		return ' 📷 ';
 	}
 
-	public function renderLight(): string
+	public function renderLight()
 	{
 		return BbHelper::lightLinkThumbnail(
 			'foto',
@@ -95,7 +95,7 @@ class BbFoto extends BbTag
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = []): void
+	public function parse($arguments = [])
 	{
 		$this->responsive = isset($arguments['responsive']);
 		$this->fotoUrl = $this->readMainArgument($arguments);

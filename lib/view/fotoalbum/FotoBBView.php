@@ -70,17 +70,17 @@ class FotoBBView implements ToResponse, View
 		return new Response($this->getHtml());
 	}
 
-	public function getTitel(): string
+	public function getTitel()
 	{
 		return '';
 	}
 
-	public function getBreadcrumbs(): string
+	public function getBreadcrumbs()
 	{
 		return '';
 	}
 
-	public function getModel(): null
+	public function getModel()
 	{
 		return null;
 	}

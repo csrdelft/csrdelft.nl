@@ -49,7 +49,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 * @Route("/maaltijden/repetities/{mlt_repetitie_id}", methods={"GET"}, defaults={"mlt_repetitie_id"=null})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function beheer(MaaltijdRepetitie $repetitie = null): Response
+	public function beheer(MaaltijdRepetitie $repetitie = null)
 	{
 		return $this->render(
 			'maaltijden/maaltijdrepetitie/beheer_maaltijd_repetities.html.twig',
@@ -65,7 +65,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 * @Route("/maaltijden/repetities/nieuw", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function nieuw(): MaaltijdRepetitieForm
+	public function nieuw()
 	{
 		return new MaaltijdRepetitieForm(new MaaltijdRepetitie()); // fetches POST values itself
 	}
@@ -76,7 +76,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 * @Route("/maaltijden/repetities/bewerk/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function bewerk(MaaltijdRepetitie $repetitie): MaaltijdRepetitieForm
+	public function bewerk(MaaltijdRepetitie $repetitie)
 	{
 		return new MaaltijdRepetitieForm($repetitie); // fetches POST values itself
 	}
@@ -89,7 +89,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 * @Route("/maaltijden/repetities/opslaan/", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function opslaan(MaaltijdRepetitie $repetitie = null): Response|MaaltijdRepetitieForm
+	public function opslaan(MaaltijdRepetitie $repetitie = null)
 	{
 		if ($repetitie) {
 			$view = $this->bewerk($repetitie);
@@ -128,7 +128,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 * @Route("/maaltijden/repetities/verwijder/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function verwijder(MaaltijdRepetitie $repetitie): void
+	public function verwijder(MaaltijdRepetitie $repetitie)
 	{
 		$aantal = $this->maaltijdRepetitiesService->verwijderRepetitie($repetitie);
 
@@ -158,7 +158,7 @@ class MaaltijdRepetitiesController extends AbstractController
 	 * @Route("/maaltijden/repetities/bijwerken/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function bijwerken(MaaltijdRepetitie $repetitie): MaaltijdRepetitieForm|Response
+	public function bijwerken(MaaltijdRepetitie $repetitie)
 	{
 		$view = $this->opslaan($repetitie);
 

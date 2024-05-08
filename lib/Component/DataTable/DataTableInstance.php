@@ -39,7 +39,7 @@ class DataTableInstance
 		$this->beschrijving = $beschrijving;
 	}
 
-	public function createView(): DataTableView
+	public function createView()
 	{
 		$id = str_replace(' ', '-', strtolower($this->titel));
 
@@ -63,7 +63,7 @@ class DataTableInstance
 	 * @return Response
 	 * @throws ExceptionInterface
 	 */
-	public function createData($data, $modal = null, $autoUpdate = false): Response
+	public function createData($data, $modal = null, $autoUpdate = false)
 	{
 		$normalizedData = $this->normalizer->normalize($data, 'json', [
 			AbstractNormalizer::GROUPS => ['datatable'],

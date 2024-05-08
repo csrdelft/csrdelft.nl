@@ -51,7 +51,7 @@ class ImageField extends FileField
 		$this->maxHeight = $maxHeight;
 	}
 
-	public function validate(): bool
+	public function validate()
 	{
 		if (!parent::validate()) {
 			return false;

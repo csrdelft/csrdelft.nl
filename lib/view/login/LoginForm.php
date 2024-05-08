@@ -59,7 +59,10 @@ class LoginForm implements FormulierTypeInterface
 	 * @param AuthenticationException $exception
 	 * @return string
 	 */
-	private function formatError(AuthenticationException $exception, $lastUsername): string {
+	private function formatError(
+		AuthenticationException $exception,
+		$lastUsername
+	) {
 		switch ($exception->getMessageKey()) {
 			case 'Username could not be found.':
 				$errorString = $this->translator->trans(
@@ -78,13 +81,17 @@ class LoginForm implements FormulierTypeInterface
 		return strtr($errorString, $exception->getMessageData());
 	}
 
-	protected function getScriptTag(): string
+	protected function getScriptTag()
 	{
 		// er is geen javascript
 		return '';
 	}
 
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []): void {
+	public function createFormulier(
+		FormulierBuilder $builder,
+		$data,
+		$options = []
+	) {
 		$builder->setAction($this->urlGenerator->generate('app_login_check'));
 
 		$builder->setFormId('loginform');
