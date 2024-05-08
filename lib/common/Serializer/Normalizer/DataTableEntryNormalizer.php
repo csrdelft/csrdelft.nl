@@ -32,7 +32,7 @@ class DataTableEntryNormalizer implements NormalizerInterface
 		$this->normalizer = $normalizer;
 	}
 
-	public function normalize($topic, string $format = null, array $context = [])
+	public function normalize($topic, string $format = null, array $context = []): string|int|float|bool|\ArrayObject|array|null
 	{
 		$metadata = $this->entityManager->getClassMetadata(get_class($topic));
 
@@ -55,5 +55,10 @@ class DataTableEntryNormalizer implements NormalizerInterface
 		array $context = []
 	): bool {
 		return $data instanceof DataTableEntry;
+	}
+
+	public function getSupportedTypes(?string $format): array
+	{
+		return $this->normalizer->getSupportedTypes($format);
 	}
 }
