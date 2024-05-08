@@ -42,7 +42,7 @@ class GroepLidRepository extends AbstractRepository
 	 *
 	 * @return GroepLid
 	 */
-	public function nieuw(Groep $groep, $uid)
+	public function nieuw(Groep $groep, $uid): GroepLid
 	{
 		$lid = new GroepLid();
 		$lid->groep = $groep;

@@ -2,6 +2,8 @@
 
 namespace CsrDelft\repository\forum;
 
+use Doctrine\ORM\QueryBuilder;
+use Traversable;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\common\Util\InstellingUtil;
@@ -152,14 +154,14 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return max(1, $this->aantal_paginas[$forum_id]);
 	}
 
-	public function createQueryBuilder($alias, $indexBy = null)
+	public function createQueryBuilder($alias, $indexBy = null): QueryBuilder
 	{
 		return parent::createQueryBuilder($alias, $indexBy)
 			->orderBy($alias . '.plakkerig', 'DESC')
 			->addOrderBy($alias . '.laatst_gewijzigd', 'DESC');
 	}
 
-	public function createQueryBuilderWithoutOrder($alias, $indexBy = null)
+	public function createQueryBuilderWithoutOrder($alias, $indexBy = null): QueryBuilder
 	{
 		return parent::createQueryBuilder($alias, $indexBy);
 	}
@@ -169,7 +171,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		$this->pagina = $this->getAantalPaginas($forum_id);
 	}
 
-	public function getPaginaVoorDraad(ForumDraad $draad)
+	public function getPaginaVoorDraad(ForumDraad $draad): int
 	{
 		if ($draad->plakkerig) {
 			return 1;
@@ -253,7 +255,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return $qb->getQuery()->getResult();
 	}
 
-	public function getForumDradenVoorDeel(ForumDeel $deel)
+	public function getForumDradenVoorDeel(ForumDeel $deel): Traversable
 	{
 		$qb = $this->createQueryBuilder('d');
 		$qb->where(
@@ -275,7 +277,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	 * @param array $ids
 	 * @return array|ForumDraad[]
 	 */
-	public function getForumDradenById(array $ids)
+	public function getForumDradenById(array $ids): array
 	{
 		$count = count($ids);
 		if ($count < 1) {
@@ -290,7 +292,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return ArrayUtil::group_by_distinct('draad_id', $draden);
 	}
 
-	public function maakForumDraad($deel, $titel, $wacht_goedkeuring)
+	public function maakForumDraad($deel, $titel, $wacht_goedkeuring): ForumDraad
 	{
 		$draad = new ForumDraad();
 		$draad->deel = $deel;

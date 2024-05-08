@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\entity\profiel\Profiel;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Table('lidtoestemmingen')]
 #[ORM\UniqueConstraint(name: 'uid_module_instelling', columns: ['uid', 'module', 'instelling'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\instellingen\LidToestemmingRepository::class)]
+#[ORM\Entity(repositoryClass: LidToestemmingRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class LidToestemming
 {
@@ -43,7 +44,7 @@ class LidToestemming
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid', nullable: false)]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class, inversedBy: 'toestemmingen')]
+ #[ORM\ManyToOne(targetEntity: Profiel::class, inversedBy: 'toestemmingen')]
  public $profiel;
 
 	public function uid()

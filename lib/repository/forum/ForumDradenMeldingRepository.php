@@ -44,7 +44,7 @@ class ForumDradenMeldingRepository extends AbstractRepository
 		ForumDraad $draad,
 		$uid,
 		ForumDraadMeldingNiveau $niveau
-	) {
+	): ForumDraadMelding {
 		$melding = new ForumDraadMelding();
 		$melding->draad = $draad;
 		$melding->draad_id = $draad->draad_id;

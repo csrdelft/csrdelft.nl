@@ -386,7 +386,7 @@ class ToolsController extends AbstractController
 			];
 		}
 
-		usort($scoredProfielen, function ($a, $b) {
+		usort($scoredProfielen, function ($a, $b): int {
 			return $b['score'] - $a['score'];
 		});
 

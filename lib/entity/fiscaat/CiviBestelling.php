@@ -2,6 +2,10 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use CsrDelft\repository\fiscaat\CiviBestellingRepository;
+use DateTimeImmutable;
+use CiviBestellingInhoud;
+use CiviSaldo;
 use CsrDelft\common\Util\BedragUtil;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,7 +20,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\fiscaat\CiviBestellingRepository::class)]
+#[ORM\Entity(repositoryClass: CiviBestellingRepository::class)]
 class CiviBestelling
 {
 	/**
@@ -46,7 +50,7 @@ class CiviBestelling
  #[ORM\Column(type: 'boolean', options: ['default' => false])]
  public $deleted;
 	/**
-  * @var \DateTimeImmutable
+  * @var DateTimeImmutable
   * @Serializer\Groups({"datatable", "bar"})
   */
  #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
@@ -67,14 +71,14 @@ class CiviBestelling
   * @var CiviBestellingInhoud[]|ArrayCollection
   * @Serializer\Groups("bar")
   */
- #[ORM\OneToMany(targetEntity: \CiviBestellingInhoud::class, mappedBy: 'bestelling')]
+ #[ORM\OneToMany(targetEntity: CiviBestellingInhoud::class, mappedBy: 'bestelling')]
  public $inhoud;
 
 	/**
   * @var CiviSaldo
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CiviSaldo::class, inversedBy: 'bestellingen')]
+ #[ORM\ManyToOne(targetEntity: CiviSaldo::class, inversedBy: 'bestellingen')]
  public $civiSaldo;
 
 	public function __construct()
@@ -87,7 +91,7 @@ class CiviBestelling
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("inhoud")
 	 */
-	public function getInhoudTekst()
+	public function getInhoudTekst(): string
 	{
 		$bestellingenInhoud = [];
 		foreach ($this->inhoud as $item) {
@@ -99,7 +103,7 @@ class CiviBestelling
 	/**
 	 * @return string
 	 */
-	public function getPinBeschrijving()
+	public function getPinBeschrijving(): string
 	{
 		$pinProduct = $this->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 

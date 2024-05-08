@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 #[ORM\Table('fotoalbums')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\fotoalbum\FotoAlbumRepository::class)]
+#[ORM\Entity(repositoryClass: FotoAlbumRepository::class)]
 #[ORM\EntityListeners(['CsrDelft\events\FotoAlbumListener'])]
 class FotoAlbum extends Map
 {
@@ -54,7 +54,7 @@ class FotoAlbum extends Map
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'owner', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $owner_profiel;
 
 	public function __construct($path = null, $absolute = false)
@@ -98,28 +98,28 @@ class FotoAlbum extends Map
 	/**
 	 * File modification time van het album.
 	 */
-	public function modified()
+	public function modified(): int|false
 	{
 		return filemtime($this->path);
 	}
 
-	public function getParentName()
+	public function getParentName(): ?string
 	{
 		return ucfirst(basename(dirname($this->subdir)));
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/fotoalbum/' . PathUtil::direncode($this->subdir);
 	}
 
-	public function isEmpty()
+	public function isEmpty(): bool
 	{
 		$subalbums = $this->getSubAlbums();
 		return empty($subalbums) && !$this->hasFotos(true);
 	}
 
-	public function hasFotos($incompleet = false)
+	public function hasFotos($incompleet = false): bool
 	{
 		$fotos = $this->getFotos($incompleet);
 		return !empty($fotos);
@@ -204,7 +204,7 @@ class FotoAlbum extends Map
 	/**
 	 * @return string[]
 	 */
-	public function getCoverUrls()
+	public function getCoverUrls(): array
 	{
 		$fotos = [];
 		$fotos[] = $this->getCoverUrl();
@@ -261,7 +261,7 @@ class FotoAlbum extends Map
 	 * Zegt of dit album publiek toegankelijk is.
 	 * @return bool
 	 */
-	public function isPubliek()
+	public function isPubliek(): bool
 	{
 		return preg_match('/Publiek\/?.*$/', $this->subdir) == 1;
 	}
@@ -271,7 +271,7 @@ class FotoAlbum extends Map
 	 *
 	 * @return string[][]
 	 */
-	public function getAlbumArrayRecursive()
+	public function getAlbumArrayRecursive(): array
 	{
 		$fotos = [];
 		foreach ($this->getFotos() as $foto) {
@@ -305,7 +305,7 @@ class FotoAlbum extends Map
 	 *
 	 * @return string[][]
 	 */
-	public function getAlbumArray()
+	public function getAlbumArray(): array
 	{
 		$fotos = [];
 		foreach ($this->getFotos() as $foto) {

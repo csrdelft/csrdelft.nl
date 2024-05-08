@@ -62,7 +62,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Auth(P_FISCAAT_READ)
 	 * @throws ExceptionInterface
 	 */
-	public function overzicht(Request $request)
+	public function overzicht(Request $request): Response
 	{
 		$table = $this->createDataTable(CiviSaldoTable::class);
 
@@ -104,7 +104,7 @@ class BeheerCiviSaldoController extends AbstractController
 				$values['saldo'] == $civisaldo->saldo
 			) {
 				$inleg = $values['inleg'];
-				$em->transactional(function () use ($inleg, $civisaldo) {
+				$em->transactional(function () use ($inleg, $civisaldo): void {
 					$bestelling = $this->civiBestellingRepository->vanBedragInCenten(
 						$inleg,
 						$civisaldo->uid
@@ -131,7 +131,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/verwijderen", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function verwijderen()
+	public function verwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -202,7 +202,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/som", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function som()
+	public function som(): Response
 	{
 		$momentString = filter_input(INPUT_POST, 'moment', FILTER_SANITIZE_STRING);
 		$moment = DateTime::createFromFormat('Y-m-d H:i', $momentString);
@@ -226,7 +226,7 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @Route("/fiscaat/saldo/zoek", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function zoek(Request $request)
+	public function zoek(Request $request): JsonResponse
 	{
 		$zoekterm = $request->query->get('q');
 

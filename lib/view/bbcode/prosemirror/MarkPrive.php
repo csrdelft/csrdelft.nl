@@ -2,17 +2,18 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbPrive;
 
 class MarkPrive implements Mark
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbPrive::class;
 	}
 
-	public static function getMarkType()
+	public static function getMarkType(): string
 	{
 		return 'prive';
 	}
@@ -27,7 +28,7 @@ class MarkPrive implements Mark
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbPrive) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		return [

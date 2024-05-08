@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
@@ -19,7 +20,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\groepen\ActiviteitenRepository::class)]
+#[ORM\Entity(repositoryClass: ActiviteitenRepository::class)]
 class Activiteit extends Groep implements
 	Agendeerbaar,
 	HeeftAanmeldLimiet,
@@ -55,12 +56,12 @@ class Activiteit extends Groep implements
  #[ORM\Column(type: 'boolean')]
  public $inAgenda;
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->id . '@activiteit.csrdelft.nl';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/activiteiten/' . $this->id;
 	}
@@ -82,7 +83,7 @@ class Activiteit extends Groep implements
 		return $this->locatie;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		// Toon als transparant (vrij) als lid dat wil, activiteit hele dag(en) duurt of lid niet ingeketzt is
 		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
@@ -91,7 +92,7 @@ class Activiteit extends Groep implements
 			!$this->getLid(LoginService::getUid());
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		$begin = $this->getBeginMoment()->format('H:i');
 		$eind = $this->getEindMoment()->format('H:i');

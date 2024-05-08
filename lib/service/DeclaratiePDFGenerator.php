@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service;
 
+use Exception;
 use Clegginabox\PDFMerger\PDFMerger;
 use CsrDelft\entity\declaratie\Declaratie;
 use CsrDelft\entity\declaratie\DeclaratieBon;
@@ -129,7 +130,7 @@ class DeclaratiePDFGenerator
 		return $pdf->Output('declaratie.pdf', 'S');
 	}
 
-	public function genereerDeclaratie(Declaratie $declaratie)
+	public function genereerDeclaratie(Declaratie $declaratie): array
 	{
 		$location = $this->filesystem->tempnam(TMP_PATH, 'decla_');
 		$declaInfo = $this->genereerDeclaratieInfo($declaratie);
@@ -158,7 +159,7 @@ class DeclaratiePDFGenerator
 			}
 
 			return ['pdf', $merged];
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			//			$zipTmp = tempnam(sys_get_temp_dir(), "zip");
 			//			$zip = new ZipArchive();
 			//			$zip->open($zipTmp, ZipArchive::OVERWRITE);

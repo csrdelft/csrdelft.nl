@@ -60,7 +60,7 @@ class FormulierKnop implements FormElement
 		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$this->css_classes[] = $this->action;
 		$html =
@@ -84,12 +84,12 @@ class FormulierKnop implements FormElement
 		return $html . '</a> ';
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->getHtml();
 	}
 
-	public function getJavascript()
+	public function getJavascript(): string
 	{
 		return <<<JS
 

@@ -9,7 +9,7 @@ use CsrDelft\repository\ProfielRepository;
 
 class LichtingenRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Lichting::class;
 	}
@@ -41,7 +41,7 @@ class LichtingenRepository extends GroepRepository
 		array $orderBy = null,
 		$limit = null,
 		$offset = null
-	) {
+	): array {
 		$jongste = static::getJongsteLidjaar();
 		$oudste = static::getOudsteLidjaar();
 		$lichtingen = [];
@@ -51,7 +51,7 @@ class LichtingenRepository extends GroepRepository
 		return $lichtingen;
 	}
 
-	public static function getHuidigeJaargang()
+	public static function getHuidigeJaargang(): string
 	{
 		$jaar = (int) date('Y');
 		$maand = (int) date('m');
@@ -61,7 +61,7 @@ class LichtingenRepository extends GroepRepository
 		return $jaar . '-' . ($jaar + 1);
 	}
 
-	public static function getJongsteLidjaar()
+	public static function getJongsteLidjaar(): int
 	{
 		$profielRepository = ContainerFacade::getContainer()->get(
 			ProfielRepository::class
@@ -73,7 +73,7 @@ class LichtingenRepository extends GroepRepository
 			->getSingleScalarResult();
 	}
 
-	public static function getOudsteLidjaar()
+	public static function getOudsteLidjaar(): int
 	{
 		$profielRepository = ContainerFacade::getContainer()->get(
 			ProfielRepository::class

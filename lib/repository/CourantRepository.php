@@ -34,7 +34,7 @@ class CourantRepository extends AbstractRepository
 		$this->security = $security;
 	}
 
-	public function nieuwCourant()
+	public function nieuwCourant(): Courant
 	{
 		$courant = new Courant();
 		$courant->verzendMoment = new DateTime();
@@ -44,7 +44,7 @@ class CourantRepository extends AbstractRepository
 		return $courant;
 	}
 
-	public function verzenden($email, $inhoud)
+	public function verzenden($email, $inhoud): string
 	{
 		$csrMailPassword = $_ENV['CSRMAIL_PASSWORD'];
 		$datum = DateUtil::dateFormatIntl(date_create_immutable(), 'd MMMM y');

@@ -73,7 +73,7 @@ class LidToestemmingRepository extends AbstractRepository
 	 * @param boolean $islid
 	 * @return array
 	 */
-	public function getRelevantToestemmingCategories($islid)
+	public function getRelevantToestemmingCategories($islid): array
 	{
 		$toestemmingen = [];
 
@@ -96,7 +96,7 @@ class LidToestemmingRepository extends AbstractRepository
 		return $toestemmingen;
 	}
 
-	protected function newToestemming($module, $id, $uid)
+	protected function newToestemming($module, $id, $uid): LidToestemming
 	{
 		$toestemming = new LidToestemming();
 		$toestemming->module = $module;
@@ -108,7 +108,7 @@ class LidToestemmingRepository extends AbstractRepository
 		return $toestemming;
 	}
 
-	public function toestemmingGegeven()
+	public function toestemmingGegeven(): bool
 	{
 		$requestUri = $this->requestStack->getCurrentRequest()->getRequestUri();
 		$stopNag = $this->requestStack
@@ -158,7 +158,7 @@ class LidToestemmingRepository extends AbstractRepository
 		$id,
 		$cat = 'profiel',
 		$except = 'ROLE_LEDEN_MOD'
-	) {
+	): bool {
 		if (!$this->security->isGranted('ROLE_LEDEN_READ')) {
 			return false;
 		}
@@ -184,7 +184,7 @@ class LidToestemmingRepository extends AbstractRepository
 		return $toestemming->waarde == 'ja';
 	}
 
-	public function toestemmingUid($uid, $id, $except = 'ROLE_LEDEN_MOD')
+	public function toestemmingUid($uid, $id, $except = 'ROLE_LEDEN_MOD'): bool
 	{
 		if ($uid == $this->security->getUser()->getUserIdentifier()) {
 			return true;
@@ -231,7 +231,7 @@ class LidToestemmingRepository extends AbstractRepository
 		return $this->getField($module, $id, 'default');
 	}
 
-	public function isValidValue($module, $id, $waarde)
+	public function isValidValue($module, $id, $waarde): bool
 	{
 		$options = $this->getTypeOptions($module, $id);
 		if ($this->getType($module, $id) == InstellingType::Enumeration) {

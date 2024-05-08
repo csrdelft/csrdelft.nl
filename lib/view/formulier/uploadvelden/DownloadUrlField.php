@@ -72,7 +72,7 @@ class DownloadUrlField extends UrlField
 		return $this->filterMime;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		parent::validate();
 		if (!$this->isAvailable()) {
@@ -138,7 +138,7 @@ class DownloadUrlField extends UrlField
 		$this->model->filename = $filename;
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		return '<input ' .
 			$this->getInputAttribute([

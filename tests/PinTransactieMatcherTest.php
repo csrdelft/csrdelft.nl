@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 final class PinTransactieMatcherTest extends TestCase
 {
-	private function createMatcher()
+	private function createMatcher(): PinTransactieMatcher
 	{
 		return new PinTransactieMatcher(
 			$this->createMock(EntityManagerInterface::class),
@@ -234,7 +234,7 @@ final class PinTransactieMatcherTest extends TestCase
 		);
 	}
 
-	private function trans($id, $bedrag, $date = null)
+	private function trans($id, $bedrag, $date = null): PinTransactie
 	{
 		$transactie = new PinTransactie();
 		$transactie->id = $id;
@@ -248,7 +248,7 @@ final class PinTransactieMatcherTest extends TestCase
 		return $transactie;
 	}
 
-	private function best($id, $bedrag, $date = null)
+	private function best($id, $bedrag, $date = null): CiviBestelling
 	{
 		$bestellingInhoud = new CiviBestellingInhoud();
 		$bestellingInhoud->aantal = $bedrag;
@@ -285,7 +285,7 @@ final class PinTransactieMatcherTest extends TestCase
 	 * @param $status
 	 * @return bool
 	 */
-	private function hasMatch($matches, $transactie, $bestelling, $status)
+	private function hasMatch($matches, $transactie, $bestelling, $status): bool
 	{
 		foreach ($matches as $match) {
 			if (

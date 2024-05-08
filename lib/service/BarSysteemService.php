@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service;
 
+use DateInterval;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\fiscaat\CiviBestelling;
@@ -81,7 +82,7 @@ SQL
 		return $q->fetch(PDO::FETCH_ASSOC);
 	}
 
-	public function getNaam($profiel)
+	public function getNaam($profiel): string
 	{
 		if (empty($profiel['voornaam'])) {
 			$naam = $profiel['voorletters'] . ' ';
@@ -165,7 +166,7 @@ SQL
 		return $this->civiProductRepository->findByCie('soccie');
 	}
 
-	public function verwerkBestellingVoorCommissie($data, $cie = 'soccie')
+	public function verwerkBestellingVoorCommissie($data, $cie = 'soccie'): bool
 	{
 		$this->db->beginTransaction();
 
@@ -220,12 +221,12 @@ SQL
 
 	public function getBestellingLaatste(
 		$persoon,
-		\DateTimeImmutable $begin = null,
-		\DateTimeImmutable $eind = null,
+		DateTimeImmutable $begin = null,
+		DateTimeImmutable $eind = null,
 		$productIDs = []
 	) {
 		if ($begin == null) {
-			$begin = date_create_immutable()->add(new \DateInterval('P15H'));
+			$begin = date_create_immutable()->add(new DateInterval('P15H'));
 		} else {
 			$begin = $begin->setTime(0, 0, 0);
 		}
@@ -260,7 +261,7 @@ SQL
 	{
 		$em = $this->entityManager;
 
-		$em->transactional(function () use ($em, $uid, $bestelId, $inhoud) {
+		$em->transactional(function () use ($em, $uid, $bestelId, $inhoud): void {
 			$civiBestelling = $this->civiBestellingRepository->find($bestelId);
 			$civiSaldo = $this->civiSaldoRepository->find($uid);
 
@@ -321,7 +322,7 @@ SQL
 	{
 		$em = $this->entityManager;
 
-		$em->transactional(function () use ($em, $bestelId) {
+		$em->transactional(function () use ($em, $bestelId): void {
 			$civiBestelling = $this->civiBestellingRepository->find($bestelId);
 
 			if ($civiBestelling->deleted) {
@@ -342,7 +343,7 @@ SQL
 	{
 		$em = $this->entityManager;
 
-		$em->transactional(function () use ($em, $bestelId) {
+		$em->transactional(function () use ($em, $bestelId): void {
 			$civiBestelling = $this->civiBestellingRepository->find($bestelId);
 
 			if (!$civiBestelling->deleted) {
@@ -360,8 +361,10 @@ SQL
 	}
 
 	// Beheer
-
-	public function getGrootboekInvoer()
+ /**
+  * @return array<mixed, array<'content'|'title', \non-empty-array<\int<0, \max>, array{\type: \mixed, \total: \mixed}>|non-falsy-string>>
+  */
+ public function getGrootboekInvoer(): array
 	{
 		// GROUP BY week
 		$q = $this->db->prepare("
@@ -411,7 +414,7 @@ ORDER BY yearweek DESC
 		return $weeks;
 	}
 
-	public function getToolData()
+	public function getToolData(): array
 	{
 		$data = [];
 
@@ -433,7 +436,10 @@ ORDER BY yearweek DESC
 			->fetch(PDO::FETCH_ASSOC);
 	}
 
-	private function getRed()
+	/**
+  * @return array<mixed, array<'email'|'naam'|'saldo'|'status', mixed>>
+  */
+ private function getRed(): array
 	{
 		$result = [];
 
@@ -454,7 +460,7 @@ ORDER BY yearweek DESC
 		return $result;
 	}
 
-	public function addProduct($name, $price, $type)
+	public function addProduct($name, $price, $type): bool
 	{
 		if ($type < 1) {
 			return false;
@@ -523,7 +529,7 @@ ORDER BY yearweek DESC
 		return $q->execute();
 	}
 
-	public function updatePrice($productId, $price)
+	public function updatePrice($productId, $price): bool
 	{
 		$this->db->beginTransaction();
 
@@ -548,7 +554,7 @@ ORDER BY yearweek DESC
 		return true;
 	}
 
-	public function updateVisibility($productId, $visibility)
+	public function updateVisibility($productId, $visibility): bool
 	{
 		$this->db->beginTransaction();
 
@@ -590,7 +596,7 @@ ORDER BY yearweek DESC
 	 *
 	 * @return int Het aantal prakciepilsjes dat besteld is
 	 */
-	public function getPrakCiePilsjes(DateTimeImmutable $vanaf)
+	public function getPrakCiePilsjes(DateTimeImmutable $vanaf): int
 	{
 		$q =  $this->db->prepare(
 			"select sum(cbi.aantal) from civi_bestelling_inhoud cbi" .

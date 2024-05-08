@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\corvee;
 
+use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Zie ook CorveeFunctie.class.php
  */
 #[ORM\Table('crv_kwalificaties')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\corvee\CorveeKwalificatiesRepository::class)]
+#[ORM\Entity(repositoryClass: CorveeKwalificatiesRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class CorveeKwalificatie
 {
@@ -45,7 +46,7 @@ class CorveeKwalificatie
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $profiel;
 
 	/**

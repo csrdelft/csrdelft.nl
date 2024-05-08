@@ -2,13 +2,14 @@
 
 namespace CsrDelft\entity\bibliotheek;
 
+use CsrDelft\repository\bibliotheek\BiebRubriekRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package CsrDelft\entity\bibliotheek
  */
 #[ORM\Table('biebcategorie')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\bibliotheek\BiebRubriekRepository::class)]
+#[ORM\Entity(repositoryClass: BiebRubriekRepository::class)]
 class BiebRubriek
 {
 	/**
@@ -36,7 +37,7 @@ class BiebRubriek
  #[ORM\ManyToOne(targetEntity: \BiebRubriek::class)]
  protected $parent;
 
-	public function __toString()
+	public function __toString(): string
 	{
 		if ($this->p_id == $this->id) {
 			return '';

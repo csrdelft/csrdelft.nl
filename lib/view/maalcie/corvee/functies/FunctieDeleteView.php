@@ -21,7 +21,7 @@ class FunctieDeleteView implements ToResponse, View
 		$this->functieId = $functieId;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .=
@@ -36,12 +36,12 @@ class FunctieDeleteView implements ToResponse, View
 		return $html;
 	}
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return '';
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return '';
 	}

@@ -314,7 +314,7 @@ class AanmelderBeheerController extends AbstractController
 		} else {
 			$activiteiten = $reeks
 				->getActiviteiten()
-				->filter(function (AanmeldActiviteit $activiteit) {
+				->filter(function (AanmeldActiviteit $activiteit): bool {
 					return $activiteit->isInToekomst();
 				})
 				->getValues();
@@ -336,7 +336,7 @@ class AanmelderBeheerController extends AbstractController
 		}
 
 		$deelnemers = $activiteit->getDeelnemers()->getValues();
-		usort($deelnemers, function (Deelnemer $deelnemerA, Deelnemer $deelnemerB) {
+		usort($deelnemers, function (Deelnemer $deelnemerA, Deelnemer $deelnemerB): int {
 			return $deelnemerA->getLid()->achternaam <=>
 				$deelnemerB->getLid()->achternaam ?:
 				$deelnemerA->getLid()->voornaam <=> $deelnemerB->getLid()->voornaam;

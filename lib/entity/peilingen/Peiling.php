@@ -2,6 +2,9 @@
 
 namespace CsrDelft\entity\peilingen;
 
+use CsrDelft\repository\peilingen\PeilingenRepository;
+use PeilingOptie;
+use PeilingStem;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
 use CsrDelft\Component\DataTable\DataTableEntry;
@@ -18,7 +21,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 #[ORM\Table('peiling')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\peilingen\PeilingenRepository::class)]
+#[ORM\Entity(repositoryClass: PeilingenRepository::class)]
 class Peiling implements DataTableEntry
 {
 	/**
@@ -93,21 +96,21 @@ class Peiling implements DataTableEntry
   * @var PeilingOptie[]|ArrayCollection
   * @Serializer\Groups({"datatable", "vue"})
   */
- #[ORM\OneToMany(targetEntity: \PeilingOptie::class, mappedBy: 'peiling')]
+ #[ORM\OneToMany(targetEntity: PeilingOptie::class, mappedBy: 'peiling')]
  public $opties;
 
 	/**
   * @var PeilingStem[]|ArrayCollection
   */
  #[ORM\JoinColumn(name: 'id', referencedColumnName: 'peiling_id')]
- #[ORM\OneToMany(targetEntity: \PeilingStem::class, mappedBy: 'peiling')]
+ #[ORM\OneToMany(targetEntity: PeilingStem::class, mappedBy: 'peiling')]
  public $stemmen;
 
 	/**
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'eigenaar', referencedColumnName: 'uid', nullable: true)]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $eigenaarProfiel;
 
 	/**
@@ -130,7 +133,7 @@ class Peiling implements DataTableEntry
 	/**
 	 * @Serializer\Groups("vue")
 	 */
-	public function getHeeftGestemd()
+	public function getHeeftGestemd(): bool
 	{
 		return (bool) $this->stemmen
 			->matching(Eisen::voorIngelogdeGebruiker())
@@ -192,7 +195,7 @@ class Peiling implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("detailSource")
 	 */
-	public function getDetailSource()
+	public function getDetailSource(): string
 	{
 		return '/peilingen/opties/' . $this->id;
 	}
@@ -200,7 +203,7 @@ class Peiling implements DataTableEntry
 	/**
 	 * @return bool
 	 */
-	public function isPeilingOpen()
+	public function isPeilingOpen(): bool
 	{
 		return $this->sluitingsdatum == null ||
 			time() < $this->sluitingsdatum->getTimestamp();

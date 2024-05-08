@@ -139,7 +139,7 @@ class EetplanFactory
 	 * @param bool $random
 	 * @return Eetplan[]
 	 */
-	public function genereer($avond, $random = false)
+	public function genereer($avond, $random = false): array
 	{
 		assert(isset($this->novieten), 'Veld novieten is niet gezet');
 		assert(isset($this->huizen), 'Veld huizen is niet gezet');

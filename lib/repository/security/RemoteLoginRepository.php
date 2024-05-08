@@ -22,7 +22,7 @@ class RemoteLoginRepository extends AbstractRepository
 		$remoteLogin->uuid = Uuid::v4();
 	}
 
-	public function nieuw()
+	public function nieuw(): RemoteLogin
 	{
 		$remoteLogin = new RemoteLogin();
 

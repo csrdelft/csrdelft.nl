@@ -39,7 +39,7 @@ class CheckboxField extends InputField
 	 *
 	 * @return boolean
 	 */
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		if (parent::isPosted()) {
 			return true;
@@ -61,7 +61,7 @@ class CheckboxField extends InputField
 		return $this->value;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!$this->value and $this->required) {
 			if ($this->leden_mod and LoginService::mag(P_LEDEN_MOD)) {
@@ -73,7 +73,7 @@ class CheckboxField extends InputField
 		return $this->error === '';
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$html =
 			'<input ' .

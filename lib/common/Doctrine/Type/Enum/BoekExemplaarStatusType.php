@@ -6,12 +6,12 @@ use CsrDelft\entity\bibliotheek\BoekExemplaarStatus;
 
 class BoekExemplaarStatusType extends EnumType
 {
-	public function getEnumClass()
+	public function getEnumClass(): string
 	{
 		return BoekExemplaarStatus::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumBoekExemplaarStatus';
 	}

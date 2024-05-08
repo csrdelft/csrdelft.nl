@@ -31,17 +31,17 @@ class BestandBehouden extends InputField
 		$this->filterMime = $filterMime;
 	}
 
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		return $this->isAvailable();
 	}
 
-	public function isAvailable()
+	public function isAvailable(): bool
 	{
 		return $this->model instanceof Bestand and $this->model->exists();
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		parent::validate();
 		if (!$this->isAvailable() or empty($this->model->filesize)) {
@@ -76,7 +76,7 @@ class BestandBehouden extends InputField
 		}
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		return '<div ' .
 			$this->getInputAttribute(['id', 'name', 'class']) .
@@ -87,7 +87,7 @@ class BestandBehouden extends InputField
 			')</div>';
 	}
 
-	public function getPreviewDiv()
+	public function getPreviewDiv(): string
 	{
 		if ($this->model instanceof Afbeelding) {
 			return '<div id="imagePreview_' .

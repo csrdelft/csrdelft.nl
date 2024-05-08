@@ -2,6 +2,12 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumDradenRepository;
+use ForumPost;
+use ForumDraadGelezen;
+use ForumDeel;
+use ForumDraadVerbergen;
+use ForumDraadMelding;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
 use CsrDelft\common\Util\InstellingUtil;
@@ -28,7 +34,7 @@ use Doctrine\ORM\PersistentCollection;
 #[ORM\Index(name: 'laatst_gewijzigd', columns: ['laatst_gewijzigd'])]
 #[ORM\Index(name: 'titel', columns: ['titel'], flags: ['fulltext'])]
 #[ORM\Index(name: 'wacht_goedkeuring', columns: ['wacht_goedkeuring'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\forum\ForumDradenRepository::class)]
+#[ORM\Entity(repositoryClass: ForumDradenRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class ForumDraad
 {
@@ -86,7 +92,7 @@ class ForumDraad
   * @var ForumPost
   */
  #[ORM\JoinColumn(name: 'laatste_post_id', referencedColumnName: 'post_id', nullable: true)]
- #[ORM\OneToOne(targetEntity: \ForumPost::class)]
+ #[ORM\OneToOne(targetEntity: ForumPost::class)]
  public $laatste_post;
 	/**
   * Uid van de auteur van de laatst geplaatste of gewijzigde post
@@ -140,20 +146,20 @@ class ForumDraad
   * Lijst van lezers (wanneer)
   * @var PersistentCollection|ForumDraadGelezen[]
   */
- #[ORM\OneToMany(targetEntity: \ForumDraadGelezen::class, mappedBy: 'draad')]
+ #[ORM\OneToMany(targetEntity: ForumDraadGelezen::class, mappedBy: 'draad')]
  #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
  public $lezers;
 	/**
   * @var ForumDeel
   */
  #[ORM\JoinColumn(name: 'forum_id', referencedColumnName: 'forum_id')]
- #[ORM\ManyToOne(targetEntity: \ForumDeel::class)]
+ #[ORM\ManyToOne(targetEntity: ForumDeel::class)]
  public $deel;
 	/**
   * @var ForumDeel
   */
  #[ORM\JoinColumn(name: 'gedeeld_met', referencedColumnName: 'forum_id', nullable: true)]
- #[ORM\ManyToOne(targetEntity: \ForumDeel::class)]
+ #[ORM\ManyToOne(targetEntity: ForumDeel::class)]
  public $gedeeld_met_deel;
 	/**
 	 * ForumPosts
@@ -168,12 +174,12 @@ class ForumDraad
 	/**
   * @var PersistentCollection|ForumDraadVerbergen[]
   */
- #[ORM\OneToMany(targetEntity: \ForumDraadVerbergen::class, mappedBy: 'draad')]
+ #[ORM\OneToMany(targetEntity: ForumDraadVerbergen::class, mappedBy: 'draad')]
  private $verbergen;
 	/**
   * @var PersistentCollection|ForumDraadMelding[]
   */
- #[ORM\OneToMany(targetEntity: \ForumDraadMelding::class, mappedBy: 'draad')]
+ #[ORM\OneToMany(targetEntity: ForumDraadMelding::class, mappedBy: 'draad')]
  private $meldingen;
 
 	public function __construct()
@@ -182,7 +188,7 @@ class ForumDraad
 		$this->meldingen = new ArrayCollection();
 	}
 
-	public function magPosten()
+	public function magPosten(): bool
 	{
 		if ($this->verwijderd || $this->gesloten) {
 			return false;
@@ -191,25 +197,25 @@ class ForumDraad
 			($this->isGedeeld() && $this->gedeeld_met_deel->magPosten());
 	}
 
-	public function isGedeeld()
+	public function isGedeeld(): bool
 	{
 		return !empty($this->gedeeld_met);
 	}
 
-	public function magStatistiekBekijken()
+	public function magStatistiekBekijken(): bool
 	{
 		return $this->magModereren() ||
 			($this->uid != LoginService::UID_EXTERN &&
 				$this->uid === LoginService::getUid());
 	}
 
-	public function magModereren()
+	public function magModereren(): bool
 	{
 		return $this->deel->magModereren() ||
 			($this->isGedeeld() && $this->gedeeld_met_deel->magModereren());
 	}
 
-	public function magVerbergen()
+	public function magVerbergen(): bool
 	{
 		return !$this->belangrijk && LoginService::mag(P_LOGGED_IN);
 	}
@@ -219,7 +225,7 @@ class ForumDraad
 		return $this->magLezen();
 	}
 
-	public function magLezen()
+	public function magLezen(): bool
 	{
 		if ($this->verwijderd && !$this->magModereren()) {
 			return false;
@@ -248,19 +254,19 @@ class ForumDraad
 			($this->isGedeeld() && $this->gedeeld_met_deel->magLezen());
 	}
 
-	public function isVerborgen()
+	public function isVerborgen(): bool
 	{
 		return $this->verbergen
 			->matching(Eisen::voorIngelogdeGebruiker())
 			->first() != null;
 	}
 
-	public function getAantalLezers()
+	public function getAantalLezers(): int
 	{
 		return count($this->lezers);
 	}
 
-	public function isOngelezen()
+	public function isOngelezen(): bool
 	{
 		if ($gelezen = $this->getWanneerGelezen()) {
 			// Omdat this en gelezen uit de cache _kunnen_ komen kunnen de milliseconden in
@@ -286,7 +292,7 @@ class ForumDraad
 		return $this->lezers->matching(Eisen::voorIngelogdeGebruiker())->first();
 	}
 
-	public function hasForumPosts()
+	public function hasForumPosts(): bool
 	{
 		return !empty($this->getForumPosts());
 	}

@@ -31,7 +31,7 @@ class InstellingenBeheerController extends AbstractController
 		}
 	}
 
-	protected function magModuleZien($module = null)
+	protected function magModuleZien($module = null): bool
 	{
 		if ($module) {
 			switch ($module) {
@@ -55,7 +55,7 @@ class InstellingenBeheerController extends AbstractController
 	 * @Route("/instellingenbeheer", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function module($module = null)
+	public function module($module = null): Response
 	{
 		$this->assertToegang($module);
 
@@ -85,7 +85,7 @@ class InstellingenBeheerController extends AbstractController
 	 * @Route("/instellingenbeheer/opslaan/{module}/{id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function opslaan($module, $id)
+	public function opslaan($module, $id): Response
 	{
 		$this->assertToegang($module);
 
@@ -108,7 +108,7 @@ class InstellingenBeheerController extends AbstractController
 	 * @Route("/instellingenbeheer/reset/{module}/{id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function reset($module, $id)
+	public function reset($module, $id): Response
 	{
 		$this->assertToegang($module);
 

@@ -50,7 +50,7 @@ class ForumDelenRepository extends AbstractRepository
 		return $entity->forum_id;
 	}
 
-	public function nieuwForumDeel()
+	public function nieuwForumDeel(): ForumDeel
 	{
 		$deel = new ForumDeel();
 		$deel->categorie_id = 0;
@@ -63,7 +63,7 @@ class ForumDelenRepository extends AbstractRepository
 		return $deel;
 	}
 
-	public function bestaatForumDeel($id)
+	public function bestaatForumDeel($id): bool
 	{
 		return $this->findBy($id) !== null;
 	}

@@ -13,7 +13,7 @@ use Exception;
  */
 class LLLijst extends LLWeergave
 {
-	private function viewVeldnamen()
+	private function viewVeldnamen(): string
 	{
 		$html = '';
 		$html .= '<tr>';
@@ -24,7 +24,7 @@ class LLLijst extends LLWeergave
 		return $html;
 	}
 
-	public function viewHeader()
+	public function viewHeader(): string
 	{
 		$html = '';
 		$html .= '<table class="zoekResultaat ctx-offline-datatable"
@@ -35,7 +35,7 @@ class LLLijst extends LLWeergave
 		return $html;
 	}
 
-	public function viewFooter()
+	public function viewFooter(): string
 	{
 		$html = '';
 		$html .= "</tbody>\n<tfoot>";
@@ -64,7 +64,7 @@ class LLLijst extends LLWeergave
 		return $html;
 	}
 
-	public function viewLid(Profiel $profiel)
+	public function viewLid(Profiel $profiel): string
 	{
 		$html = '';
 		$html .= '<tr id="lid' . $profiel->uid . '">';

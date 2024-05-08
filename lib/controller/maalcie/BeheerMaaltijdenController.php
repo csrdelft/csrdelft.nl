@@ -87,7 +87,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/beheer/prullenbak", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function GET_prullenbak()
+	public function GET_prullenbak(): Response
 	{
 		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Prullenbak maaltijdenbeheer',
@@ -100,7 +100,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/beheer/prullenbak", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function POST_prullenbak()
+	public function POST_prullenbak(): GenericDataTableResponse
 	{
 		$data = $this->maaltijdenRepository->findByVerwijderd(true);
 
@@ -113,7 +113,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/beheer", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function POST_beheer(Request $request)
+	public function POST_beheer(Request $request): GenericDataTableResponse
 	{
 		$filter = $request->query->get('filter', '');
 		switch ($filter) {
@@ -147,7 +147,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/beheer/{maaltijd_id<\d*>}", methods={"GET"}, defaults={"maaltijd_id"=null})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function GET_beheer($maaltijd_id = null)
+	public function GET_beheer($maaltijd_id = null): Response
 	{
 		$modal = null;
 		if ($maaltijd_id !== null) {
@@ -166,7 +166,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/beheer/archief", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function GET_archief()
+	public function GET_archief(): Response
 	{
 		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Archief maaltijdenbeheer',
@@ -182,7 +182,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 */
 	public function POST_archief(
 		ArchiefMaaltijdenRepository $archiefMaaltijdenRepository
-	) {
+	): GenericDataTableResponse {
 		$data = $archiefMaaltijdenRepository->findAll();
 		return $this->tableData($data);
 	}
@@ -195,7 +195,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/beheer/toggle/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function toggle($maaltijd_id)
+	public function toggle($maaltijd_id): GenericDataTableResponse
 	{
 		$maaltijd = $this->maaltijdenRepository->getMaaltijd($maaltijd_id);
 
@@ -301,7 +301,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/beheer/verwijder", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function verwijder()
+	public function verwijder(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
@@ -329,7 +329,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/beheer/herstel", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function herstel()
+	public function herstel(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
@@ -405,7 +405,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function leegmaken()
+	public function leegmaken(): RedirectResponse
 	{
 		$aantal = $this->maaltijdenService->prullenbakLeegmaken();
 		$this->addFlash(
@@ -424,7 +424,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/beheer/beoordelingen", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function GET_beoordelingen()
+	public function GET_beoordelingen(): Response
 	{
 		return $this->render(
 			'maaltijden/maaltijd/maaltijd_beoordelingen.html.twig',
@@ -441,7 +441,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 */
 	public function POST_beoordelingen(
 		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository
-	) {
+	): GenericDataTableResponse {
 		$maaltijden = $this->maaltijdenRepository->getMaaltijdenHistorie();
 		if (!$this->mag(P_MAAL_MOD)) {
 			// Als bekijker geen MaalCie-rechten heeft, toon alleen maaltijden waarvoor persoon sluitrechten had (kok)
@@ -499,7 +499,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/beheer/onverwerkt", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function onverwerkt()
+	public function onverwerkt(): Response
 	{
 		return $this->render(
 			'maaltijden/maaltijd/maaltijd_beoordelingen.html.twig',
@@ -516,7 +516,7 @@ class BeheerMaaltijdenController extends AbstractController
 	 * @Route("/maaltijden/beheer/suggesties", methods={"GET", "POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function suggesties(Request $request)
+	public function suggesties(Request $request): GenericSuggestiesResponse
 	{
 		return new GenericSuggestiesResponse(
 			$this->maaltijdenRepository->getSuggesties($request->query->get('q'))

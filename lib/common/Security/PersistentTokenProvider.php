@@ -2,9 +2,11 @@
 
 namespace CsrDelft\common\Security;
 
+use DateTime;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface;
 use Symfony\Component\Security\Core\Authentication\RememberMe\TokenProviderInterface;
@@ -58,7 +60,7 @@ class PersistentTokenProvider implements TokenProviderInterface
 	public function updateToken(
 		string $series,
 		string $tokenValue,
-		\DateTime $lastUsed
+		DateTimeInterface $lastUsed
 	) {
 		$token = $this->loadTokenBySeries($series);
 		$token->token = $tokenValue;

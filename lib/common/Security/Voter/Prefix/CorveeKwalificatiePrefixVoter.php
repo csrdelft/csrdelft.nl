@@ -23,7 +23,7 @@ class CorveeKwalificatiePrefixVoter extends PrefixVoter
 		$this->em = $em;
 	}
 
-	protected function supportsPrefix($prefix)
+	protected function supportsPrefix($prefix): bool
 	{
 		return strtoupper($prefix) == 'KWALIFICATIE';
 	}

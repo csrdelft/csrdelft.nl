@@ -2,18 +2,19 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
+use InvalidArgumentException;
 use CsrDelft\bb\internal\BbString;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbBb;
 
 class NodeBb implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbBb::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'bb';
 	}
@@ -21,7 +22,7 @@ class NodeBb implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbBb) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 		$content = $node->getChildren();
 		$node->setChildren([]);
@@ -43,7 +44,7 @@ class NodeBb implements Node
 		return [$node->attrs->bb];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return false;
 	}

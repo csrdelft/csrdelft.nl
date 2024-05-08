@@ -65,7 +65,7 @@ abstract class InlineForm extends Formulier implements FormElement
 		$this->addFields($fields);
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$html = '<div id="wrapper_' . $this->formId . '" class="InlineForm">';
 		if ($this->toggle) {
@@ -87,7 +87,7 @@ abstract class InlineForm extends Formulier implements FormElement
 		return $html . '</form></div>';
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->getHtml();
 	}

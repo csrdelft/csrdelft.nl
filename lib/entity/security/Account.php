@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +18,7 @@ use Symfony\Component\Uid\Uuid;
  * Login account.
  */
 #[ORM\Table('accounts')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\security\AccountRepository::class)]
+#[ORM\Entity(repositoryClass: AccountRepository::class)]
 class Account implements UserInterface, PasswordAuthenticatedUserInterface
 {
 	/**
@@ -106,15 +107,15 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\OneToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class, inversedBy: 'account')]
+ #[ORM\OneToOne(targetEntity: Profiel::class, inversedBy: 'account')]
  public $profiel;
 
-	public function hasPrivateToken()
+	public function hasPrivateToken(): bool
 	{
 		return !empty($this->private_token);
 	}
 
-	public function getICalLink()
+	public function getICalLink(): string
 	{
 		$url = '/agenda/ical/';
 		if (empty($this->private_token)) {
@@ -124,7 +125,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 		}
 	}
 
-	public function getRssLink()
+	public function getRssLink(): string
 	{
 		$url = '/forum/rss/';
 		if (empty($this->private_token)) {
@@ -153,7 +154,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 		return $this->pass_hash;
 	}
 
-	public function getSalt()
+	public function getSalt(): string
 	{
 		return '';
 	}
@@ -170,7 +171,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public $pass_plain;
 
-	public function eraseCredentials()
+	public function eraseCredentials(): void
 	{
 		$this->pass_plain = null;
 	}

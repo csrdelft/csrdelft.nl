@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Op basis hiervan worden statistieken bepaald waarbij de beoordelingen genormaliseerd worden.
  */
 #[ORM\Table('mlt_beoordelingen')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository::class)]
+#[ORM\Entity(repositoryClass: MaaltijdBeoordelingenRepository::class)]
 class MaaltijdBeoordeling
 {
 	/**

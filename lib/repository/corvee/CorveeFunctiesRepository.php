@@ -60,7 +60,7 @@ class CorveeFunctiesRepository extends AbstractRepository
 		return ArrayUtil::group_by_distinct('functie_id', $this->findAll());
 	}
 
-	public function nieuw()
+	public function nieuw(): CorveeFunctie
 	{
 		$functie = new CorveeFunctie();
 		$functie->kwalificatie_benodigd = (bool) InstellingUtil::instelling(

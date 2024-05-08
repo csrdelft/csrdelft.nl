@@ -134,7 +134,7 @@ abstract class InputField implements FormElement, Validator
 		return $this->id;
 	}
 
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		return isset($_POST[$this->name]);
 	}
@@ -167,7 +167,7 @@ abstract class InputField implements FormElement, Validator
 	 * Kindertjes van deze classe kunnen deze methode overloaden om specifiekere
 	 * testen mogelijk te maken.
 	 */
-	public function validate()
+	public function validate(): bool
 	{
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
@@ -258,7 +258,7 @@ abstract class InputField implements FormElement, Validator
 	/**
 	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
 	 */
-	public function getDiv()
+	public function getDiv(): string
 	{
 		$cssclass = $this->wrapperClassName;
 		if ($this->hidden) {
@@ -274,7 +274,7 @@ abstract class InputField implements FormElement, Validator
 	/**
 	 * Elk veld heeft een label, geef de html voor het label
 	 */
-	public function getLabel()
+	public function getLabel(): string
 	{
 		if (!empty($this->description)) {
 			$required = '';
@@ -308,7 +308,7 @@ abstract class InputField implements FormElement, Validator
 	/**
 	 * Geef een div met de foutmelding voor dit veld terug.
 	 */
-	public function getErrorDiv()
+	public function getErrorDiv(): string
 	{
 		if ($this->getError() != '') {
 			return '<div class="display-block invalid-feedback">' .
@@ -318,7 +318,7 @@ abstract class InputField implements FormElement, Validator
 		return '';
 	}
 
-	public function getPreviewDiv()
+	public function getPreviewDiv(): string
 	{
 		return '';
 	}
@@ -353,7 +353,7 @@ abstract class InputField implements FormElement, Validator
 	 * elke instantie dan bijvoorbeeld de prefix van het id-veld te
 	 * moeten aanpassen. Niet meer nodig dus.
 	 */
-	protected function getInputAttribute($attribute)
+	protected function getInputAttribute(string|array $attribute): string
 	{
 		if (is_array($attribute)) {
 			$return = '';
@@ -414,7 +414,7 @@ abstract class InputField implements FormElement, Validator
 		return '';
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		return '<input ' .
 			$this->getInputAttribute([
@@ -433,7 +433,7 @@ abstract class InputField implements FormElement, Validator
 			' />';
 	}
 
-	public function getHelpDiv()
+	public function getHelpDiv(): string
 	{
 		if ($this->title) {
 			return '<div class="form-text">' . $this->title . '</div>';
@@ -444,7 +444,7 @@ abstract class InputField implements FormElement, Validator
 	/**
 	 * View die zou moeten werken voor veel velden.
 	 */
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .= $this->getDiv();
@@ -474,7 +474,7 @@ abstract class InputField implements FormElement, Validator
 	 * )
 	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
 	 */
-	public function getJavascript()
+	public function getJavascript(): string
 	{
 		$js = '';
 		if ($this->readonly) {

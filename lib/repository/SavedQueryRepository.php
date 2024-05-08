@@ -41,7 +41,7 @@ class SavedQueryRepository extends AbstractRepository
 		return $this->findBy([], ['categorie' => 'ASC']);
 	}
 
-	public function loadQuery($queryId)
+	public function loadQuery($queryId): SavedQueryResult
 	{
 		$query = $this->find($queryId);
 

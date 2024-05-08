@@ -30,7 +30,7 @@ class DeclaratieBon
   * @var Profiel
   */
  #[ORM\JoinColumn(nullable: false, referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  private $maker;
 
 	#[ORM\Column(type: 'datetime', nullable: true)]

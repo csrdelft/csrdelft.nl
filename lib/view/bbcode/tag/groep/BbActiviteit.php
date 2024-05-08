@@ -20,7 +20,7 @@ class BbActiviteit extends BbTagGroep
 		return 'activiteit';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'aanmeldingen';
 	}

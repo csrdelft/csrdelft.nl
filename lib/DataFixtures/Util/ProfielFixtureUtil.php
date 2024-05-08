@@ -46,7 +46,7 @@ class ProfielFixtureUtil
 			$voorletters ??
 			implode(
 				'',
-				array_map(function ($el) {
+				array_map(function ($el): string {
 					return substr($el, 0, 1) . '.';
 				}, explode(' ', $profiel->voornamen))
 			);

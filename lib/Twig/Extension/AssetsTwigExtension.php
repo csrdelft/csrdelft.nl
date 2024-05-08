@@ -50,7 +50,7 @@ class AssetsTwigExtension extends AbstractExtension
 	 *
 	 * @return array
 	 */
-	public function getUserModules()
+	public function getUserModules(): array
 	{
 		if (!$this->security->isGranted('ROLE_LOGGED_IN')) {
 			return [];
@@ -83,7 +83,7 @@ class AssetsTwigExtension extends AbstractExtension
 	 * @param string $asset
 	 * @return string
 	 */
-	public function css_asset(string $module, $media = null)
+	public function css_asset(string $module, $media = null): string
 	{
 		$assetString = '';
 
@@ -98,7 +98,7 @@ class AssetsTwigExtension extends AbstractExtension
 		return $assetString;
 	}
 
-	public function js_asset(string $module)
+	public function js_asset(string $module): string
 	{
 		$assetString = '';
 
@@ -109,7 +109,10 @@ class AssetsTwigExtension extends AbstractExtension
 		return $assetString;
 	}
 
-	private function module_asset(string $module, string $extension)
+	/**
+  * @return mixed[][]
+  */
+ private function module_asset(string $module, string $extension): array
 	{
 		$manifest = $this->readManifest();
 
@@ -136,7 +139,7 @@ class AssetsTwigExtension extends AbstractExtension
 		return $relevantAssets;
 	}
 
-	public function asset_url($name)
+	public function asset_url($name): string
 	{
 		$manifest = $this->readManifest();
 

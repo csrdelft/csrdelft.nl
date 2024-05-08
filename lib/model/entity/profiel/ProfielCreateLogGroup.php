@@ -20,7 +20,7 @@ class ProfielCreateLogGroup extends ProfielLogGroup
 	{
 		parent::__construct($editor, $timestamp);
 	}
-	public function toHtml()
+	public function toHtml(): string
 	{
 		return "<div class='ProfielLogEntry'>Aangemaakt door " .
 			ProfielRepository::getLink($this->editor) .

@@ -31,7 +31,7 @@ class ProfielUpdateLogGroup extends ProfielLogGroup
 	/**
 	 * @return string
 	 */
-	public function toHtml()
+	public function toHtml(): string
 	{
 		$changesHtml = [];
 		foreach ($this->entries as $change) {

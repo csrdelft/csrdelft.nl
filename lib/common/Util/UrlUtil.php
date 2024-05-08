@@ -146,12 +146,12 @@ final class UrlUtil
 	}
 
 	// Base64url functies van https://www.php.net/manual/en/function.base64-encode.php#103849
-	public static function base64url_encode($data)
+	public static function base64url_encode($data): string
 	{
 		return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
 	}
 
-	public static function base64url_decode($data)
+	public static function base64url_decode($data): string|false
 	{
 		return base64_decode(
 			str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT)

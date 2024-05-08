@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class KringenRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Kring::class;
 	}
@@ -20,7 +20,7 @@ class KringenRepository extends GroepRepository
 		array $orderBy = null,
 		$limit = null,
 		$offset = null
-	) {
+	): array {
 		return parent::findBy(
 			$criteria,
 			['verticale' => 'ASC', 'kringNummer' => 'ASC'] + ($orderBy ?? []),

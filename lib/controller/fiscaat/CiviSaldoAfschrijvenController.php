@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\fiscaat;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
@@ -28,12 +29,12 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @return Response
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function afschrijven()
+	public function afschrijven(): Response
 	{
 		return $this->render('fiscaat/afschrijven.html.twig', []);
 	}
 
-	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven')
+	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven'): RedirectResponse
 	{
 		$this->addFlash($code, $melding);
 		return $this->redirect($url);
@@ -285,7 +286,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 			&$totaal,
 			$session,
 			$key
-		) {
+		): void {
 			/** @var CiviBestelling[] $bestellingen */
 			$bestellingen = [];
 			foreach ($data as $regel) {
@@ -373,7 +374,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @Auth(P_FISCAAT_MOD)
 	 * @return Response
 	 */
-	public function downloadTemplate()
+	public function downloadTemplate(): Response
 	{
 		$template = "uid;productID;aantal;beschrijving\r\nx101;32;100;Lunch";
 		$response = new Response($template);

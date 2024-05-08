@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\commissievoorkeuren;
 
+use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\AccessService;
@@ -14,7 +15,7 @@ use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
  * Class VoorkeurVoorkeur
  * @package CsrDelft\model\entity\commissievoorkeuren
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository::class)]
+#[ORM\Entity(repositoryClass: CommissieVoorkeurRepository::class)]
 class VoorkeurVoorkeur
 {
 	/**
@@ -53,7 +54,7 @@ class VoorkeurVoorkeur
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $profiel;
 
 	/**
@@ -109,7 +110,7 @@ class VoorkeurVoorkeur
 			);
 	}
 
-	public function getVoorkeurTekst()
+	public function getVoorkeurTekst(): string
 	{
 		return ['', 'nee', 'ja', 'misschien'][$this->voorkeur];
 	}

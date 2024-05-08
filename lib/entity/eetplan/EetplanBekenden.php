@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\eetplan;
 
+use CsrDelft\repository\eetplan\EetplanBekendenRepository;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\view\datatable\DataTableColumn;
@@ -14,7 +15,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 #[ORM\Table]
 #[ORM\UniqueConstraint(name: 'noviet1_noviet2', columns: ['uid1', 'uid2'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\eetplan\EetplanBekendenRepository::class)]
+#[ORM\Entity(repositoryClass: EetplanBekendenRepository::class)]
 class EetplanBekenden implements DataTableEntry
 {
 	/**
@@ -29,13 +30,13 @@ class EetplanBekenden implements DataTableEntry
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid1', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $noviet1;
 	/**
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid2', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $noviet2;
 	/**
   * @var string

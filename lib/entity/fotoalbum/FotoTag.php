@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\fotoalbum;
 
+use CsrDelft\repository\fotoalbum\FotoTagsRepository;
 use CsrDelft\repository\ProfielRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +12,7 @@ use JsonSerializable;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 #[ORM\Table('foto_tags')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\fotoalbum\FotoTagsRepository::class)]
+#[ORM\Entity(repositoryClass: FotoTagsRepository::class)]
 class FotoTag implements JsonSerializable
 {
 	/**

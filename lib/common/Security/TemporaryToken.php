@@ -35,7 +35,7 @@ class TemporaryToken extends AbstractToken
 		return $this->originalToken;
 	}
 
-	public function getCredentials()
+	public function getCredentials(): string
 	{
 		return '';
 	}

@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\corvee;
 
+use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
+use CorveeFunctie;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,7 +35,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Zie ook CorveeTaak.class.php
  */
 #[ORM\Table('crv_repetities')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\corvee\CorveeRepetitiesRepository::class)]
+#[ORM\Entity(repositoryClass: CorveeRepetitiesRepository::class)]
 class CorveeRepetitie implements DisplayEntity
 {
 	/**
@@ -52,7 +54,7 @@ class CorveeRepetitie implements DisplayEntity
   * @var MaaltijdRepetitie|null
   */
  #[ORM\JoinColumn(name: 'mlt_repetitie_id', referencedColumnName: 'mlt_repetitie_id', nullable: true)]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\maalcie\MaaltijdRepetitie::class)]
+ #[ORM\ManyToOne(targetEntity: MaaltijdRepetitie::class)]
  public $maaltijdRepetitie;
 	/**
   * 0: zondag
@@ -91,10 +93,10 @@ class CorveeRepetitie implements DisplayEntity
   * @var CorveeFunctie
   */
  #[ORM\JoinColumn(name: 'functie_id', referencedColumnName: 'functie_id')]
- #[ORM\ManyToOne(targetEntity: \CorveeFunctie::class)]
+ #[ORM\ManyToOne(targetEntity: CorveeFunctie::class)]
  public $corveeFunctie;
 
-	public function getDagVanDeWeekText()
+	public function getDagVanDeWeekText(): string|false
 	{
 		$weekDagen = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
 		return $weekDagen[$this->dag_vd_week];

@@ -26,7 +26,7 @@ class RadioField extends SelectField
 		$this->css_classes = ['FormElement', 'form-check-input'];
 	}
 
-	public function getHtml($include_hidden = true)
+	public function getHtml($include_hidden = true): string
 	{
 		$html = '';
 		if ($include_hidden) {
@@ -42,7 +42,7 @@ class RadioField extends SelectField
 		return $html . '</div>';
 	}
 
-	protected function getOptionHtml($value, $description)
+	protected function getOptionHtml($value, $description): string
 	{
 		$id = $this->getId() . 'Option_' . $value;
 		$html =
@@ -80,7 +80,7 @@ class RadioField extends SelectField
 		return $html;
 	}
 
-	public function getJavascript()
+	public function getJavascript(): string
 	{
 		$js = parent::getJavascript();
 		foreach ($this->options as $value => $description) {

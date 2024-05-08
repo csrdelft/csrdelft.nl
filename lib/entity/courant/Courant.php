@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\courant;
 
+use CsrDelft\repository\CourantRepository;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package CsrDelft\entity\courant
  */
 #[ORM\Table('courant')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\CourantRepository::class)]
+#[ORM\Entity(repositoryClass: CourantRepository::class)]
 class Courant
 {
 	/**
@@ -40,7 +41,7 @@ class Courant
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'verzender', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $verzender_profiel;
 
 	public function getJaar()

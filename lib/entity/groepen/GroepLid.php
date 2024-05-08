@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\GroepLidRepository;
+use Groep;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\groepen\enum\CommissieFunctie;
 use CsrDelft\entity\profiel\Profiel;
@@ -17,7 +19,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 #[ORM\Table('groep_lid')]
 #[ORM\Index(name: 'lid_sinds', columns: ['lid_sinds'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\GroepLidRepository::class)]
+#[ORM\Entity(repositoryClass: GroepLidRepository::class)]
 class GroepLid
 {
 	/**
@@ -25,7 +27,7 @@ class GroepLid
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("UUID")
 	 */
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->groepId .
 			'.' .
@@ -58,7 +60,7 @@ class GroepLid
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $profiel;
 	/**
   * CommissieFunctie of opmerking bij lidmaatschap
@@ -90,13 +92,13 @@ class GroepLid
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'door_uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $doorProfiel;
 	/**
   * @var Groep
   */
  #[ORM\JoinColumn(name: 'groep_id', referencedColumnName: 'id')]
- #[ORM\ManyToOne(targetEntity: \Groep::class, inversedBy: 'leden')]
+ #[ORM\ManyToOne(targetEntity: Groep::class, inversedBy: 'leden')]
  public $groep;
 
 	/**
@@ -142,7 +144,7 @@ class GroepLid
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("opmerking2")
 	 */
-	public function getOpmerking2String()
+	public function getOpmerking2String(): string
 	{
 		if (is_array($this->opmerking2)) {
 			return implode(

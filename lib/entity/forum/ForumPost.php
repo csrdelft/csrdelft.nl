@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumPostsRepository;
+use ForumDraad;
 use CsrDelft\common\Util\HostUtil;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
@@ -20,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'lid_id', columns: ['uid'])]
 #[ORM\Index(name: 'datum_tijd', columns: ['datum_tijd'])]
 #[ORM\Index(name: 'wacht_goedkeuring', columns: ['wacht_goedkeuring'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\forum\ForumPostsRepository::class)]
+#[ORM\Entity(repositoryClass: ForumPostsRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class ForumPost
 {
@@ -96,15 +98,15 @@ class ForumPost
   * @var ForumDraad
   */
  #[ORM\JoinColumn(name: 'draad_id', referencedColumnName: 'draad_id')]
- #[ORM\ManyToOne(targetEntity: \ForumDraad::class)]
+ #[ORM\ManyToOne(targetEntity: ForumDraad::class)]
  public $draad;
 
-	public function magCiteren()
+	public function magCiteren(): bool
 	{
 		return LoginService::mag(P_LOGGED_IN) && $this->draad->magPosten();
 	}
 
-	public function magBewerken()
+	public function magBewerken(): bool
 	{
 		$draad = $this->draad;
 		if ($draad->magModereren()) {
@@ -138,7 +140,7 @@ class ForumPost
 		return $this->aantal_gelezen;
 	}
 
-	public function getLink($external = false)
+	public function getLink($external = false): string
 	{
 		return ($external ? HostUtil::getCsrRoot() : '') .
 			'/forum/reactie/' .

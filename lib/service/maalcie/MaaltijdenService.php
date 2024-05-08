@@ -103,7 +103,7 @@ class MaaltijdenService
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function prullenbakLeegmaken()
+	public function prullenbakLeegmaken(): int
 	{
 		$aantal = 0;
 		$maaltijden = $this->maaltijdenRepository->getVerwijderdeMaaltijden();
@@ -164,7 +164,7 @@ class MaaltijdenService
 		$maaltijden,
 		Profiel $profiel,
 		$verbergVerleden = false
-	) {
+	): array {
 		$result = [];
 		foreach ($maaltijden as $maaltijd) {
 			// Verberg afgelopen maaltijd

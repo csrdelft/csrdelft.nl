@@ -11,7 +11,7 @@ use CsrDelft\service\security\LoginService;
 
 class WoonoordenRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Woonoord::class;
 	}

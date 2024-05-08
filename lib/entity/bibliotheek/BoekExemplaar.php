@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\bibliotheek;
 
+use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
+use Boek;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
@@ -11,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package CsrDelft\model\entity\bibliotheek
  */
 #[ORM\Table('biebexemplaar')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\bibliotheek\BoekExemplaarRepository::class)]
+#[ORM\Entity(repositoryClass: BoekExemplaarRepository::class)]
 class BoekExemplaar
 {
 	/**
@@ -35,7 +37,7 @@ class BoekExemplaar
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'eigenaar_uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $eigenaar;
 	/**
   * @var string
@@ -52,7 +54,7 @@ class BoekExemplaar
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uitgeleend_uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $uitgeleend;
 	/**
   * @var DateTimeImmutable
@@ -78,7 +80,7 @@ class BoekExemplaar
 	/**
   * @var Boek
   */
- #[ORM\ManyToOne(targetEntity: \Boek::class, inversedBy: 'exemplaren')]
+ #[ORM\ManyToOne(targetEntity: Boek::class, inversedBy: 'exemplaren')]
  public $boek;
 
 	public function isBiebBoek(): bool
@@ -101,32 +103,32 @@ class BoekExemplaar
 		return $this->isEigenaar();
 	}
 
-	public function magBekijken()
+	public function magBekijken(): bool
 	{
 		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
 	}
 
-	public function isBeschikbaar()
+	public function isBeschikbaar(): bool
 	{
 		return $this->status === BoekExemplaarStatus::beschikbaar();
 	}
 
-	public function kanLenen(string $uid)
+	public function kanLenen(string $uid): bool
 	{
 		return $this->eigenaar_uid != $uid && $this->isBeschikbaar();
 	}
 
-	public function isUitgeleend()
+	public function isUitgeleend(): bool
 	{
 		return $this->status === BoekExemplaarStatus::uitgeleend();
 	}
 
-	public function isTeruggegeven()
+	public function isTeruggegeven(): bool
 	{
 		return $this->status === BoekExemplaarStatus::teruggegeven();
 	}
 
-	public function isVermist()
+	public function isVermist(): bool
 	{
 		return $this->status === BoekExemplaarStatus::vermist();
 	}

@@ -12,7 +12,7 @@ use CsrDelft\common\Util\ArrayUtil;
 
 abstract class JsonLijstResponse extends JsonResponse
 {
-	public function getModel()
+	public function getModel(): array
 	{
 		return array_map(function ($element) {
 			return $this->renderElement($element);

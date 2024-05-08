@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\fiscaat;
 
+use DateTimeInterface;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
@@ -67,12 +68,12 @@ class CiviBestellingRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param \DateTimeInterface $van
-	 * @param \DateTimeInterface $tot
-	 * @param array $cie
-	 * @return CiviBestelling[]
-	 */
-	public function findTussen($van, $tot, $cie = [], $uid = null)
+  * @param DateTimeInterface $van
+  * @param DateTimeInterface $tot
+  * @param array $cie
+  * @return CiviBestelling[]
+  */
+ public function findTussen($van, $tot, $cie = [], $uid = null)
 	{
 		$qb = $this->createQueryBuilder('cb')
 			->where('cb.moment > :van and cb.moment < :tot')
@@ -95,7 +96,7 @@ class CiviBestellingRepository extends AbstractRepository
 	 * @param string $to
 	 * @return CiviBestelling[]
 	 */
-	public function getPinBestellingInMoment($from, $to)
+	public function getPinBestellingInMoment($from, $to): array
 	{
 		/** @var CiviBestelling[] $bestellingen */
 		$bestellingen = $this->createQueryBuilder('b')
@@ -123,7 +124,7 @@ class CiviBestellingRepository extends AbstractRepository
 	 */
 	public function revert(CiviBestelling $bestelling)
 	{
-		return $this->_em->transactional(function () use ($bestelling) {
+		return $this->_em->transactional(function () use ($bestelling): void {
 			if ($bestelling->deleted) {
 				throw new Exception('Bestelling kan niet worden teruggedraaid.');
 			}
@@ -168,7 +169,7 @@ class CiviBestellingRepository extends AbstractRepository
 	 * @throws NoResultException
 	 * @throws NonUniqueResultException
 	 */
-	public function getSomBestellingenVanaf(DateTime $date, $profielOnly = false)
+	public function getSomBestellingenVanaf(DateTime $date, $profielOnly = false): int
 	{
 		$qb = $this->createQueryBuilder('cb')
 			->select('SUM(cb.totaal)')
@@ -182,7 +183,7 @@ class CiviBestellingRepository extends AbstractRepository
 		return (int) $qb->getQuery()->getSingleScalarResult();
 	}
 
-	public function vanBedragInCenten($bedrag, $uid)
+	public function vanBedragInCenten($bedrag, $uid): CiviBestelling
 	{
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'anders';

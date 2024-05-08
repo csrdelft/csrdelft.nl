@@ -2,6 +2,9 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumDelenRepository;
+use ForumCategorie;
+use ForumDeelMelding;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
 use CsrDelft\repository\forum\ForumDradenRepository;
@@ -17,7 +20,7 @@ use Doctrine\ORM\PersistentCollection;
  */
 #[ORM\Table('forum_delen')]
 #[ORM\Index(name: 'volgorde', columns: ['volgorde'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\forum\ForumDelenRepository::class)]
+#[ORM\Entity(repositoryClass: ForumDelenRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class ForumDeel
 {
@@ -75,12 +78,12 @@ class ForumDeel
   * @var ForumCategorie
   */
  #[ORM\JoinColumn(name: 'categorie_id', referencedColumnName: 'categorie_id')]
- #[ORM\ManyToOne(targetEntity: \ForumCategorie::class, inversedBy: 'forum_delen')]
+ #[ORM\ManyToOne(targetEntity: ForumCategorie::class, inversedBy: 'forum_delen')]
  public $categorie;
 	/**
   * @var PersistentCollection|ForumDeelMelding[]
   */
- #[ORM\OneToMany(targetEntity: \ForumDeelMelding::class, mappedBy: 'deel')]
+ #[ORM\OneToMany(targetEntity: ForumDeelMelding::class, mappedBy: 'deel')]
  public $meldingen;
 	/**
 	 * Forumdraden
@@ -93,7 +96,7 @@ class ForumDeel
 		$this->meldingen = new ArrayCollection();
 	}
 
-	public function magLezen($rss = false)
+	public function magLezen($rss = false): bool
 	{
 		return LoginService::mag(P_FORUM_READ) &&
 			LoginService::mag($this->rechten_lezen) &&
@@ -115,7 +118,7 @@ class ForumDeel
 		return $this->magLezen();
 	}
 
-	public function isOpenbaar()
+	public function isOpenbaar(): bool
 	{
 		return strpos($this->rechten_lezen, P_FORUM_READ) !== false;
 	}
@@ -137,7 +140,7 @@ class ForumDeel
 		return $this->forum_draden;
 	}
 
-	public function hasForumDraden()
+	public function hasForumDraden(): bool
 	{
 		$this->getForumDraden();
 		return !empty($this->forum_draden);
@@ -153,7 +156,7 @@ class ForumDeel
 		$this->forum_draden = $forum_draden;
 	}
 
-	public function lidWilMeldingVoorDeel($uid = null)
+	public function lidWilMeldingVoorDeel($uid = null): bool
 	{
 		if ($uid === null) {
 			$uid = LoginService::getUid();

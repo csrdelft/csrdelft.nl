@@ -20,7 +20,7 @@ class BbCommissie extends BbTagGroep
 		return 'commissie';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'leden';
 	}

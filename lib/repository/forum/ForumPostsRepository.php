@@ -60,7 +60,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		$this->aantal_paginas = [];
 	}
 
-	public function findAll()
+	public function findAll(): array
 	{
 		return $this->findBy([]);
 	}
@@ -77,7 +77,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		array $orderBy = null,
 		$limit = null,
 		$offset = null
-	) {
+	): array {
 		$orderBy = $orderBy ?? ['datum_tijd' => 'ASC'];
 		return parent::findBy($criteria, $orderBy, $limit, $offset);
 	}
@@ -122,7 +122,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		$this->pagina = $this->getAantalPaginas($draad_id);
 	}
 
-	public function getAantalPaginas($draad_id)
+	public function getAantalPaginas($draad_id): int
 	{
 		if (!array_key_exists($draad_id, $this->aantal_paginas)) {
 			$forumDradenRepository = ContainerFacade::getContainer()->get(
@@ -164,7 +164,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		return $qb->getQuery()->getSingleScalarResult();
 	}
 
-	public function getPaginaVoorPost(ForumPost $post)
+	public function getPaginaVoorPost(ForumPost $post): int
 	{
 		$count = $this->createQueryBuilder('fp')
 			->select('count(fp.post_id)')
@@ -260,13 +260,13 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 	 * @param array|null $orderBy
 	 * @return ForumPost|null
 	 */
-	public function findOneBy(array $criteria, array $orderBy = null)
+	public function findOneBy(array $criteria, array $orderBy = null): ?object
 	{
 		$orderBy = $orderBy ?? ['datum_tijd' => 'ASC'];
 		return parent::findOneBy($criteria, $orderBy);
 	}
 
-	public function getAantalForumPostsVoorLid($uid)
+	public function getAantalForumPostsVoorLid($uid): int
 	{
 		return $this->count([
 			'uid' => $uid,
@@ -328,7 +328,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		$uid,
 		$aantal,
 		$draad_uniek = false
-	) {
+	): array {
 		$qb = $this->createQueryBuilder('fp')
 			->where(
 				'fp.uid = :uid and fp.wacht_goedkeuring = false and fp.verwijderd = false'
@@ -358,7 +358,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		return $posts;
 	}
 
-	public function maakForumPost($draad, $tekst, $ip, $wacht_goedkeuring, $email)
+	public function maakForumPost($draad, $tekst, $ip, $wacht_goedkeuring, $email): ForumPost
 	{
 		$post = new ForumPost();
 		$post->draad = $draad;
@@ -417,7 +417,10 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		return CsrBB::filterCommentaar(CsrBB::filterPrive($post->tekst));
 	}
 
-	public function getStatsTotal()
+	/**
+  * @return mixed[]
+  */
+ public function getStatsTotal(): array
 	{
 		$qb = $this->createQueryBuilder('fp');
 		$qb->select([

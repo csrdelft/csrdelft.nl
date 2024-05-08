@@ -29,7 +29,7 @@ class UnparsedProfielLogGroup extends ProfielLogGroup
 		$this->content = $content;
 	}
 
-	public function toHtml()
+	public function toHtml(): string
 	{
 		return "<div class='ProfielLogEntry'>" .
 			CsrBB::parse($this->content) .

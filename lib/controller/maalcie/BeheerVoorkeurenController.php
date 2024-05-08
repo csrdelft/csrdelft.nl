@@ -34,7 +34,7 @@ class BeheerVoorkeurenController extends AbstractController
 	 * @Route("/corvee/voorkeuren/beheer", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function beheer()
+	public function beheer(): Response
 	{
 		list(
 			$matrix,
@@ -55,7 +55,7 @@ class BeheerVoorkeurenController extends AbstractController
 	 * @Route("/corvee/voorkeuren/beheer/inschakelen/{crv_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function inschakelen(CorveeRepetitie $repetitie, Profiel $profiel)
+	public function inschakelen(CorveeRepetitie $repetitie, Profiel $profiel): Response
 	{
 		$voorkeur = new CorveeVoorkeur();
 		$voorkeur->setProfiel($profiel);
@@ -80,7 +80,7 @@ class BeheerVoorkeurenController extends AbstractController
 	 * @Route("/corvee/voorkeuren/beheer/uitschakelen/{crv_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function uitschakelen(CorveeVoorkeur $voorkeur)
+	public function uitschakelen(CorveeVoorkeur $voorkeur): Response
 	{
 		$voorkeur->van_uid = $voorkeur->uid;
 

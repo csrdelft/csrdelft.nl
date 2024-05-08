@@ -153,7 +153,7 @@ class LedenMemoryController extends AbstractController
 	 * @Route("/leden/memoryscore", methods={"POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function memoryscore()
+	public function memoryscore(): JsonResponse
 	{
 		$score = $this->ledenMemoryScoresModel->nieuw();
 		$form = new LedenMemoryScoreForm($score);
@@ -169,7 +169,7 @@ class LedenMemoryController extends AbstractController
 	 * @Route("/leden/memoryscores/{groep}", methods={"POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function memoryscores($groepUuid = null)
+	public function memoryscores($groepUuid = null): LedenMemoryScoreResponse
 	{
 		$parts = explode('@', $groepUuid);
 		if (isset($parts[0], $parts[1])) {
@@ -192,7 +192,7 @@ class LedenMemoryController extends AbstractController
 	 * @Route("/leden/namen-leren", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function namenleren()
+	public function namenleren(): Response
 	{
 		// Haal alle (adspirant-/gast-)leden op.
 		$profielen = $this->profielRepository->findByLidStatus(
@@ -218,7 +218,7 @@ class LedenMemoryController extends AbstractController
 						'studie' => $profiel->studie,
 					];
 				},
-				array_filter($profielen, function ($profiel) {
+				array_filter($profielen, function ($profiel): bool {
 					$path = $profiel->getPasfotoInternalPath();
 					return InstellingUtil::is_zichtbaar(
 						$profiel,

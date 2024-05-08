@@ -8,7 +8,7 @@ use CsrDelft\entity\groepen\enum\GroepStatus;
 
 class ActiviteitenRepository extends KetzersRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Activiteit::class;
 	}

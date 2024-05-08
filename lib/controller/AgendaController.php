@@ -202,7 +202,7 @@ class AgendaController extends AbstractController
 	 * @Route("/agenda/courant", methods={"POST"})
 	 * @Auth(P_MAIL_COMPOSE)
 	 */
-	public function courant(BbToProsemirror $bbToProsemirror)
+	public function courant(BbToProsemirror $bbToProsemirror): JsonResponse
 	{
 		$items = $this->agendaRepository->getAllAgendeerbaar(
 			date_create_immutable(),
@@ -498,7 +498,7 @@ class AgendaController extends AbstractController
 	/**
 	 * @return mixed
 	 */
-	public function icalDate()
+	public function icalDate(): string|array
 	{
 		return str_replace(
 			'-',

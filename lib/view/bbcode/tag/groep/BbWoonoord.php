@@ -20,7 +20,7 @@ class BbWoonoord extends BbTagGroep
 		return 'woonoord';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'bewoners';
 	}

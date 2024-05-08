@@ -124,7 +124,7 @@ class CsrTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function groepBewerkenForm($lid, $groep)
+	public function groepBewerkenForm($lid, $groep): GroepBewerkenForm
 	{
 		return new GroepBewerkenForm($lid, $groep);
 	}
@@ -178,7 +178,7 @@ class CsrTwigExtension extends AbstractExtension
 		))->__toString();
 	}
 
-	public function csrfMetaTag()
+	public function csrfMetaTag(): string
 	{
 		$token = $this->csrfService->generateToken('', 'POST');
 		return '<meta property="X-CSRF-ID" content="' .
@@ -248,34 +248,34 @@ class CsrTwigExtension extends AbstractExtension
 		 * @return bool
 		 */
 		return [
-			new TwigTest('numeric', function ($value) {
+			new TwigTest('numeric', function ($value): bool {
 				return is_numeric($value);
 			}),
-			new TwigTest('profiel', function ($value) {
+			new TwigTest('profiel', function ($value): bool {
 				return $value instanceof Profiel;
 			}),
-			new TwigTest('corveetaak', function ($value) {
+			new TwigTest('corveetaak', function ($value): bool {
 				return $value instanceof CorveeTaak;
 			}),
-			new TwigTest('maaltijd', function ($value) {
+			new TwigTest('maaltijd', function ($value): bool {
 				return $value instanceof Maaltijd;
 			}),
-			new TwigTest('agendeerbaar', function ($value) {
+			new TwigTest('agendeerbaar', function ($value): bool {
 				return $value instanceof Agendeerbaar;
 			}),
-			new TwigTest('abstractgroep', function ($value) {
+			new TwigTest('abstractgroep', function ($value): bool {
 				return $value instanceof Groep;
 			}),
-			new TwigTest('agendaitem', function ($value) {
+			new TwigTest('agendaitem', function ($value): bool {
 				return $value instanceof AgendaItem;
 			}),
-			new TwigTest('verticale', function ($value) {
+			new TwigTest('verticale', function ($value): bool {
 				return $value instanceof Verticale;
 			}),
-			new TwigTest('heeftaanmeldlimiet', function ($value) {
+			new TwigTest('heeftaanmeldlimiet', function ($value): bool {
 				return $value instanceof HeeftAanmeldLimiet;
 			}),
-			new TwigTest('heeftaanmeldmoment', function ($value) {
+			new TwigTest('heeftaanmeldmoment', function ($value): bool {
 				return $value instanceof HeeftAanmeldMoment;
 			}),
 		];
@@ -318,7 +318,7 @@ class CsrTwigExtension extends AbstractExtension
 		}
 	}
 
-	public function file_base64($filename)
+	public function file_base64($filename): string
 	{
 		if (file_exists($filename)) {
 			return base64_encode(file_get_contents($filename));
@@ -345,13 +345,13 @@ class CsrTwigExtension extends AbstractExtension
 		return (string) $table;
 	}
 
-	public function commitLink()
+	public function commitLink(): string
 	{
 		return 'https://github.com/csrdelft/productie/commit/' .
 			$this->commitHash(true);
 	}
 
-	public function commitHash($full = false)
+	public function commitHash($full = false): string
 	{
 		if ($full) {
 			return trim(`git rev-parse HEAD`);

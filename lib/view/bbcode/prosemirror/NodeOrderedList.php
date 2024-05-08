@@ -2,17 +2,18 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbOrderedList;
 
 class NodeOrderedList implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbOrderedList::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'ordered_list';
 	}
@@ -20,7 +21,7 @@ class NodeOrderedList implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbOrderedList) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		return [
@@ -37,7 +38,7 @@ class NodeOrderedList implements Node
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return false;
 	}

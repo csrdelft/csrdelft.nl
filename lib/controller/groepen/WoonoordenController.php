@@ -13,7 +13,7 @@ use CsrDelft\entity\groepen\Woonoord;
  */
 class WoonoordenController extends AbstractGroepenController
 {
-	public function getGroepType()
+	public function getGroepType(): string
 	{
 		return Woonoord::class;
 	}

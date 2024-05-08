@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\WerkgroepenRepository;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,12 +11,12 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\groepen\WerkgroepenRepository::class)]
+#[ORM\Entity(repositoryClass: WerkgroepenRepository::class)]
 class Werkgroep extends Groep implements HeeftMoment
 {
 	use GroepMoment;
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/werkgroepen/' . $this->id;
 	}

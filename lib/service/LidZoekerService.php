@@ -233,8 +233,10 @@ class LidZoekerService
 	}
 
 	//lijst met velden die bruikbaar zijn in een '<veld>:=?<zoekterm>'-zoekopdracht.
-
-	public function getSelectableVelden()
+ /**
+  * @return mixed[]
+  */
+ public function getSelectableVelden(): array
 	{
 		$return = [];
 		foreach ($this->allowVelden as $veld) {
@@ -264,7 +266,7 @@ class LidZoekerService
 		return $this->sortable;
 	}
 
-	public function count()
+	public function count(): int
 	{
 		if ($this->result === null) {
 			$this->search();
@@ -306,7 +308,7 @@ class LidZoekerService
 	 * @param $zoekterm
 	 * @return QueryBuilder
 	 */
-	private function defaultSearch(QueryBuilder $queryBuilder, $zoekterm)
+	private function defaultSearch(QueryBuilder $queryBuilder, $zoekterm): QueryBuilder
 	{
 		if (preg_match('/^groep:([0-9]+|[a-z]+)$/i', $zoekterm)) {
 			//leden van een groep
@@ -430,7 +432,7 @@ class LidZoekerService
 		return $queryBuilder;
 	}
 
-	private function getDBVeldenAllowed()
+	private function getDBVeldenAllowed(): array
 	{
 		//hier staat eigenlijk $a - $b, maar die heeft php niet.
 		return array_intersect(
@@ -439,7 +441,7 @@ class LidZoekerService
 		);
 	}
 
-	public function getFilterSQL(QueryBuilder $queryBuilder)
+	public function getFilterSQL(QueryBuilder $queryBuilder): QueryBuilder
 	{
 		$andExpr = $queryBuilder->expr()->andX();
 
@@ -463,7 +465,7 @@ class LidZoekerService
 	 * @param string $query
 	 * @return bool
 	 */
-	private function magProfielVinden(Profiel $profiel, string $query)
+	private function magProfielVinden(Profiel $profiel, string $query): bool
 	{
 		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
 		$zoekvelden = $this->lidToestemmingRepository->getModuleKeys('profiel');
@@ -496,7 +498,7 @@ class LidZoekerService
 		return true;
 	}
 
-	public function searched()
+	public function searched(): bool
 	{
 		return $this->result !== null;
 	}
@@ -542,7 +544,7 @@ class LidZoekerService
 		return $this->velden;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$return = 'Zoeker:';
 		$return .= print_r($this->rawQuery, true);

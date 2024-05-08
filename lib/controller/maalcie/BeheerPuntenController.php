@@ -42,7 +42,7 @@ class BeheerPuntenController extends AbstractController
 	 * @Route("/corvee/punten", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function beheer()
+	public function beheer(): Response
 	{
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		$matrix = $this->corveePuntenService->loadPuntenVoorAlleLeden($functies);
@@ -58,7 +58,7 @@ class BeheerPuntenController extends AbstractController
 	 * @Route("/corvee/punten/wijzigpunten/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function wijzigpunten(Profiel $profiel)
+	public function wijzigpunten(Profiel $profiel): Response
 	{
 		$punten = (int) filter_input(
 			INPUT_POST,
@@ -83,7 +83,7 @@ class BeheerPuntenController extends AbstractController
 	 * @Route("/corvee/punten/wijzigbonus/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function wijzigbonus(Profiel $profiel)
+	public function wijzigbonus(Profiel $profiel): Response
 	{
 		$bonus = (int) filter_input(
 			INPUT_POST,

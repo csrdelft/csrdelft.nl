@@ -70,7 +70,7 @@ class LidInstellingenRepository extends AbstractRepository
 	 * @param string $uid
 	 * @return string[]
 	 */
-	public function getAllForLid(string $uid)
+	public function getAllForLid(string $uid): array
 	{
 		$result = [];
 		foreach ($this->findBy(['profiel' => $uid]) as $instelling) {
@@ -146,7 +146,7 @@ class LidInstellingenRepository extends AbstractRepository
 		return $this->loginService->_getUid();
 	}
 
-	protected function newInstelling($module, $id, $uid)
+	protected function newInstelling($module, $id, $uid): LidInstelling
 	{
 		$instelling = new LidInstelling();
 		$instelling->module = $module;

@@ -47,7 +47,7 @@ class FormFieldFactory
 	 * @return InputField[]
 	 * @throws Exception
 	 */
-	public static function generateFields($model)
+	public static function generateFields($model): array
 	{
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 

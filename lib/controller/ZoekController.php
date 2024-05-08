@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Exception;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\UrlUtil;
@@ -24,7 +25,7 @@ class ZoekController extends AbstractController
 	 * @Route("/zoeken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function zoeken(Request $request)
+	public function zoeken(Request $request): JsonResponse
 	{
 		$zoekterm = $request->query->get('q');
 		$resultaat = [];
@@ -113,12 +114,12 @@ class ZoekController extends AbstractController
 	}
 
 	/**
-	 * @return JsonResponse
-	 * @throws \Exception
-	 * @Route("/wikizoek", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function wikizoek(Request $request, $zoekterm = null)
+  * @return JsonResponse
+  * @throws Exception
+  * @Route("/wikizoek", methods={"GET"})
+  * @Auth(P_LOGGED_IN)
+  */
+ public function wikizoek(Request $request, $zoekterm = null): JsonResponse
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();

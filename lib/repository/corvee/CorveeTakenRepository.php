@@ -64,7 +64,7 @@ class CorveeTakenRepository extends AbstractRepository
 		CorveeTaak $taak,
 		Profiel $vorigProfiel = null,
 		Profiel $profiel = null
-	) {
+	): bool {
 		if ($taak->profiel && $taak->profiel->uid === $profiel) {
 			return false;
 		}
@@ -119,7 +119,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param CorveeTaak[] $taken
 	 * @return array
 	 */
-	public function getRoosterMatrix(array $taken)
+	public function getRoosterMatrix(array $taken): array
 	{
 		$matrix = [];
 		foreach ($taken as $taak) {
@@ -287,7 +287,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function prullenbakLeegmaken()
+	public function prullenbakLeegmaken(): int
 	{
 		$taken = $this->findBy(['verwijderd' => true]);
 		foreach ($taken as $taak) {
@@ -302,7 +302,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderOudeTaken()
+	public function verwijderOudeTaken(): int
 	{
 		/** @var CorveeTaak[] $taken */
 		$taken = $this->createQueryBuilder('ct')
@@ -324,7 +324,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderTakenVoorLid($uid)
+	public function verwijderTakenVoorLid($uid): int
 	{
 		/** @var CorveeTaak[] $taken */
 		$taken = $this->createQueryBuilder('ct')
@@ -352,7 +352,7 @@ class CorveeTakenRepository extends AbstractRepository
 		$datum,
 		$maaltijd = null,
 		$bonus_malus = 0
-	) {
+	): CorveeTaak {
 		$taak = new CorveeTaak();
 		$taak->taak_id = null;
 		$taak->corveeFunctie = $repetitie->corveeFunctie;
@@ -376,7 +376,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	private function newTaak(CorveeTaak $taak)
+	private function newTaak(CorveeTaak $taak): CorveeTaak
 	{
 		$taak->punten_toegekend = 0;
 		$taak->bonus_toegekend = 0;
@@ -423,7 +423,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param int $mid
 	 * @return bool
 	 */
-	public function existMaaltijdCorvee($mid)
+	public function existMaaltijdCorvee($mid): bool
 	{
 		return count($this->findBy(['maaltijd_id' => $mid])) > 0;
 	}
@@ -435,7 +435,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @return int
 	 * @throws ORMException
 	 */
-	public function verwijderMaaltijdCorvee($mid)
+	public function verwijderMaaltijdCorvee($mid): int
 	{
 		$taken = $this->findBy(['maaltijd_id' => $mid]);
 		foreach ($taken as $taak) {
@@ -454,7 +454,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param int $fid
 	 * @return bool
 	 */
-	public function existFunctieTaken($fid)
+	public function existFunctieTaken($fid): bool
 	{
 		return count($this->findBy(['functie_id' => $fid])) > 0;
 	}
@@ -510,7 +510,7 @@ class CorveeTakenRepository extends AbstractRepository
 		DateTimeInterface $beginDatum,
 		DateTimeInterface $eindDatum,
 		$maaltijd = null
-	) {
+	): array {
 		// start at first occurence
 		$shift = $repetitie->dag_vd_week - $beginDatum->format('w') + 7;
 		$shift %= 7;
@@ -545,7 +545,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderRepetitieTaken($crid)
+	public function verwijderRepetitieTaken($crid): int
 	{
 		$taken = $this->findBy(['corveeRepetitie' => $crid]);
 		foreach ($taken as $taak) {
@@ -564,7 +564,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param int $crid
 	 * @return bool
 	 */
-	public function existRepetitieTaken($crid)
+	public function existRepetitieTaken($crid): bool
 	{
 		return count($this->findBy(['corveeRepetitie' => $crid])) > 0;
 	}
@@ -577,7 +577,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 */
 	public function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats)
 	{
-		return $this->_em->transactional(function () use ($repetitie, $verplaats) {
+		return $this->_em->transactional(function () use ($repetitie, $verplaats): RepetitieTakenUpdateDTO {
 			$taken = $this->findBy([
 				'verwijderd' => false,
 				'crv_repetitie_id' => $repetitie->crv_repetitie_id,

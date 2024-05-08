@@ -33,7 +33,7 @@ class CmsPaginaRepository extends AbstractRepository
 	/**
 	 * @return CmsPagina[]
 	 */
-	public function getAllePaginas()
+	public function getAllePaginas(): array
 	{
 		/** @var CmsPagina[] $paginas */
 		$paginas = $this->findBy([], ['titel' => 'ASC']);
@@ -52,7 +52,7 @@ class CmsPaginaRepository extends AbstractRepository
 	 *
 	 * @return CmsPagina
 	 */
-	public function nieuw($naam)
+	public function nieuw($naam): CmsPagina
 	{
 		$pagina = new CmsPagina();
 		$pagina->naam = $naam;

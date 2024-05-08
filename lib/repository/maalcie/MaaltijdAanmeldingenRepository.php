@@ -25,7 +25,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 		parent::__construct($registry, MaaltijdAanmelding::class);
 	}
 
-	public function getIsAangemeld($mid, $uid)
+	public function getIsAangemeld($mid, $uid): bool
 	{
 		return $this->find(['maaltijd_id' => $mid, 'uid' => $uid]) != null;
 	}
@@ -79,7 +79,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 	 * @param Maaltijd $maaltijd
 	 * @return MaaltijdAanmelding[]
 	 */
-	public function getAanmeldingenVoorMaaltijd(Maaltijd $maaltijd)
+	public function getAanmeldingenVoorMaaltijd(Maaltijd $maaltijd): array
 	{
 		$aanmeldingen = $this->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 		$lijst = [];

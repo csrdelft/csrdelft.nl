@@ -82,7 +82,7 @@ class GroepLedenImportDTO
 		return array_map(function (array $regel) use (
 			$profielRepository,
 			$groepRepository
-		) {
+		): \CsrDelft\entity\groepen\GroepLedenImportDTO {
 			return new GroepLedenImportDTO(
 				$profielRepository,
 				$groepRepository,

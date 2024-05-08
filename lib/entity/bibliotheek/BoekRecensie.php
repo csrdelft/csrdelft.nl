@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\bibliotheek;
 
+use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
+use Boek;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
@@ -11,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package CsrDelft\entity\bibliotheek
  */
 #[ORM\Table('biebbeschrijving')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\bibliotheek\BoekRecensieRepository::class)]
+#[ORM\Entity(repositoryClass: BoekRecensieRepository::class)]
 class BoekRecensie
 {
 	/**
@@ -35,7 +37,7 @@ class BoekRecensie
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'schrijver_uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $schrijver;
 	/**
   * @var string
@@ -57,7 +59,7 @@ class BoekRecensie
   * @var Boek
   */
  #[ORM\JoinColumn(name: 'boek_id', referencedColumnName: 'id')]
- #[ORM\ManyToOne(targetEntity: \Boek::class, inversedBy: 'recensies')]
+ #[ORM\ManyToOne(targetEntity: Boek::class, inversedBy: 'recensies')]
  public $boek;
 
 	public function getBoek()
@@ -82,7 +84,7 @@ class BoekRecensie
 		return $this->isSchrijver();
 	}
 
-	public function isSchrijver($uid = null)
+	public function isSchrijver($uid = null): bool
 	{
 		if (!LoginService::mag(P_LOGGED_IN)) {
 			return false;

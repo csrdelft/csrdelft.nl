@@ -7,12 +7,12 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeBulletList implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbList::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'bullet_list';
 	}
@@ -27,7 +27,7 @@ class NodeBulletList implements Node
 		return [];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return false;
 	}

@@ -40,7 +40,7 @@ class FotoAlbumBBView implements View
 		$this->model = $fotoalbum;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		if (count($this->model->getFotos()) < 1) {
@@ -103,12 +103,13 @@ class FotoAlbumBBView implements View
 	}
 
 	/**
-	 * Build a grid with Foto-objects.
-	 *
-	 * The index is saved together with the object for correct reference
-	 * in case the image is moved one left or one up in the grid at borders.
-	 */
-	private function getGrid()
+  * Build a grid with Foto-objects.
+  *
+  * The index is saved together with the object for correct reference
+  * in case the image is moved one left or one up in the grid at borders.
+  * @return mixed[]
+  */
+ private function getGrid(): array
 	{
 		$fotos = $this->model->getFotos();
 		$grid = array_fill(0, $this->rows, array_fill(0, $this->per_row, null));
@@ -185,7 +186,7 @@ class FotoAlbumBBView implements View
 		return $grid;
 	}
 
-	public function getGridHtml()
+	public function getGridHtml(): string
 	{
 		$grid = $this->getGrid();
 		$url = $this->model->getUrl();
@@ -215,7 +216,7 @@ class FotoAlbumBBView implements View
 		return $ret;
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		if ($this->compact) {
 			// compacte versie van de tag is alleen een thumbnail.

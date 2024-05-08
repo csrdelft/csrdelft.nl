@@ -160,7 +160,7 @@ class ForumTwigExtension extends AbstractExtension
 		$zoekterm,
 		$before = null,
 		$after = null
-	) {
+	): string|array|null {
 		$before =
 			$before ?: '<span style="background-color: rgba(255,255,0,0.4);">';
 		$after = $after ?: '</span>';

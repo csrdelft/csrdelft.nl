@@ -47,7 +47,7 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/waarschuwingen", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function waarschuwingen()
+	public function waarschuwingen(): Response
 	{
 		$matrix_repetities = $this->maaltijdAbonnementenService->getAbonnementenWaarschuwingenMatrix();
 
@@ -70,7 +70,7 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/ingeschakeld", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function ingeschakeld()
+	public function ingeschakeld(): Response
 	{
 		$matrix_repetities = $this->maaltijdAbonnementenService->getAbonnementenMatrix();
 
@@ -93,7 +93,7 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/abonneerbaar", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function abonneerbaar()
+	public function abonneerbaar(): Response
 	{
 		$matrix_repetities = $this->maaltijdAbonnementenService->getAbonnementenAbonneerbaarMatrix();
 
@@ -116,7 +116,7 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/novieten", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function novieten()
+	public function novieten(): Response
 	{
 		$mrid = filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
 		$repetitie = $this->maaltijdRepetitiesRepository->find($mrid);
@@ -150,7 +150,7 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/inschakelen/{mlt_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function inschakelen(MaaltijdRepetitie $repetitie, Profiel $profiel)
+	public function inschakelen(MaaltijdRepetitie $repetitie, Profiel $profiel): Response
 	{
 		$abo = new MaaltijdAbonnement();
 		$abo->setMaaltijdRepetitie($repetitie);
@@ -177,7 +177,7 @@ class BeheerAbonnementenController extends AbstractController
 	 * @Route("/maaltijden/abonnementen/beheer/uitschakelen/{mlt_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
-	public function uitschakelen(MaaltijdRepetitie $repetitie, $uid)
+	public function uitschakelen(MaaltijdRepetitie $repetitie, $uid): Response
 	{
 		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(

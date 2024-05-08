@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\ForumPlaatjeRepository;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Afbeelding;
@@ -14,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Table('forumplaatjes')]
 #[ORM\Index(name: 'access_key', columns: ['access_key'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\ForumPlaatjeRepository::class)]
+#[ORM\Entity(repositoryClass: ForumPlaatjeRepository::class)]
 class ForumPlaatje
 {
 	/**
@@ -43,7 +44,7 @@ class ForumPlaatje
   * @var Profiel|null
   */
  #[ORM\JoinColumn(name: 'maker', referencedColumnName: 'uid', nullable: true)]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $maker_profiel;
 	/**
   * @var string
@@ -56,17 +57,17 @@ class ForumPlaatje
 		return $this->getAfbeelding()->exists();
 	}
 
-	public function getAfbeelding($resize = false)
+	public function getAfbeelding($resize = false): Afbeelding
 	{
 		return new Afbeelding($this->getPath($resize));
 	}
 
-	public function getPath($resize = false)
+	public function getPath($resize = false): string
 	{
 		return PLAATJES_PATH . ($resize ? 'resized/' : '') . strval($this->id);
 	}
 
-	public function getUrl($resized = false)
+	public function getUrl($resized = false): string
 	{
 		return "/forum/plaatjes/bekijken/$this->access_key" .
 			($resized ? '/resized' : '');
@@ -89,7 +90,7 @@ class ForumPlaatje
 		}
 	}
 
-	public function hasResized()
+	public function hasResized(): bool
 	{
 		$path = $this->getPath(true);
 		return file_exists($path) && is_file($path);

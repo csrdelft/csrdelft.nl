@@ -37,7 +37,7 @@ class GroepPreviewForm extends ModalForm implements FormElement
 		$this->formKnoppen = new ModalCloseButtons();
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$this->css_classes[] = 'ModalForm';
 		$html = FlashUtil::getFlashUsingContainerFacade();

@@ -56,7 +56,7 @@ class DebugLogRepository extends AbstractRepository
 	 *
 	 * @return DebugLogEntry
 	 */
-	public function log($class, $function, array $args = [], $dump = null)
+	public function log($class, $function, array $args = [], $dump = null): DebugLogEntry
 	{
 		$entry = new DebugLogEntry();
 		$entry->class_function =

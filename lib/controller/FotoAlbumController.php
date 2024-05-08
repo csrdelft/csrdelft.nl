@@ -69,7 +69,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/verwerken/{dir}", methods={"GET"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_MOD,P_ALBUM_PUBLIC_MOD})
 	 */
-	public function verwerken($dir)
+	public function verwerken($dir): RedirectResponse
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -186,7 +186,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/bestaande/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function bestaande($dir)
+	public function bestaande($dir): JsonResponse
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -249,7 +249,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/hernoemen/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_MOD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function hernoemen(Request $request, $dir)
+	public function hernoemen(Request $request, $dir): JsonResponse
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -272,7 +272,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/albumcover/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function albumcover(Request $request, $dir)
+	public function albumcover(Request $request, $dir): JsonResponse
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -296,7 +296,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/verwijderen/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function verwijderen(Request $request, $dir)
+	public function verwijderen(Request $request, $dir): JsonResponse
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -332,7 +332,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/roteren/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
-	public function roteren(Request $request, $dir)
+	public function roteren(Request $request, $dir): JsonResponse
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -351,7 +351,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/zoeken", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function zoeken(Request $request, $zoekterm = null)
+	public function zoeken(Request $request, $zoekterm = null): JsonResponse
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
@@ -382,7 +382,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/gettags/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function gettags(Request $request, $dir)
+	public function gettags(Request $request, $dir): JsonResponse
 	{
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -435,7 +435,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/removetag", methods={"POST"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function removetag(Request $request)
+	public function removetag(Request $request): JsonResponse
 	{
 		$refuuid = $request->request->get('refuuid');
 		$keyword = $request->request->get('keyword');
@@ -474,7 +474,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/{dir}/_resized/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+"})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function raw_image_resized(Request $request, string $dir, string $foto)
+	public function raw_image_resized(Request $request, string $dir, string $foto): BinaryFileResponse
 	{
 		$this->assertValidFotoPath($dir, $foto);
 
@@ -520,7 +520,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/{dir}/_thumbs/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+"})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function raw_image_thumb(Request $request, string $dir, string $foto)
+	public function raw_image_thumb(Request $request, string $dir, string $foto): BinaryFileResponse
 	{
 		$this->assertValidFotoPath($dir, $foto);
 
@@ -566,7 +566,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/{dir}/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+\.(JPE?G|PNG|jpe?g|png)"})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function raw_image(Request $request, string $dir, string $foto)
+	public function raw_image(Request $request, string $dir, string $foto): BinaryFileResponse
 	{
 		$this->assertValidFotoPath($dir, $foto);
 
@@ -607,7 +607,7 @@ class FotoAlbumController extends AbstractController
 	 * @Route("/fotoalbum/{dir}", methods={"GET"}, requirements={"dir": ".+"}, defaults={"dir": ""})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function bekijken($dir)
+	public function bekijken($dir): Response
 	{
 		if ($dir == '' && !$this->mag(P_ALBUM_READ)) {
 			$dir = 'Publiek';

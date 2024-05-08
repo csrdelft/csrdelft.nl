@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
+use ForumDraad;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Een ForumDraad kan worden verborgen door een lid.
  */
 #[ORM\Table('forum_draden_verbergen')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\forum\ForumDradenVerbergenRepository::class)]
+#[ORM\Entity(repositoryClass: ForumDradenVerbergenRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class ForumDraadVerbergen
 {
@@ -26,7 +28,7 @@ class ForumDraadVerbergen
   * @var ForumDraad
   */
  #[ORM\JoinColumn(name: 'draad_id', referencedColumnName: 'draad_id')]
- #[ORM\ManyToOne(targetEntity: \ForumDraad::class, inversedBy: 'verbergen')]
+ #[ORM\ManyToOne(targetEntity: ForumDraad::class, inversedBy: 'verbergen')]
  public $draad;
 	/**
   * Lidnummer

@@ -24,7 +24,7 @@ class PushAbonnementController extends AbstractController
 		PushAbonnementRepository $pushAbonnementRepository,
 		LidInstellingenRepository $lidInstellingenRepository,
 		Request $request
-	) {
+	): JsonResponse {
 		$endpoint = $request->request->get('endpoint');
 		$keys = $request->request->get('keys');
 
@@ -57,7 +57,7 @@ class PushAbonnementController extends AbstractController
 	public function aanpassen(
 		PushAbonnementRepository $pushAbonnementRepository,
 		Request $request
-	) {
+	): JsonResponse {
 		$endpoint = $request->request->get('endpoint');
 		$keys = $request->request->get('keys');
 
@@ -87,7 +87,7 @@ class PushAbonnementController extends AbstractController
 		PushAbonnementRepository $pushAbonnementRepository,
 		LidInstellingenRepository $lidInstellingenRepository,
 		Request $request
-	) {
+	): JsonResponse {
 		$endpoint = $request->request->get('endpoint');
 
 		$subscription = $pushAbonnementRepository->findOneBy([

@@ -13,7 +13,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 abstract class AbstractRepository extends ServiceEntityRepository
 {
-	public function retrieveByUuid($UUID)
+	public function retrieveByUuid($UUID): ?object
 	{
 		$metadata = $this->getClassMetadata();
 

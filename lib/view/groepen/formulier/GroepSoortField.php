@@ -113,7 +113,7 @@ JS;
 		}
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;

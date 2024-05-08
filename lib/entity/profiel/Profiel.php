@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\profiel;
 
+use CsrDelft\repository\ProfielRepository;
+use DateInterval;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\common\Util\DateUtil;
@@ -49,7 +51,7 @@ use const P_LEDEN_MOD;
 #[ORM\Index(name: 'verticale', columns: ['verticale'])]
 #[ORM\Index(name: 'nickname', columns: ['nickname'])]
 #[ORM\Index(name: 'status', columns: ['status'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\ProfielRepository::class)]
+#[ORM\Entity(repositoryClass: ProfielRepository::class)]
 class Profiel implements Agendeerbaar, DisplayEntity
 {
 	public function __construct()
@@ -399,13 +401,13 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	/**
   * @var Account|null
   */
- #[ORM\OneToOne(targetEntity: \CsrDelft\entity\security\Account::class, mappedBy: 'profiel')]
+ #[ORM\OneToOne(targetEntity: Account::class, mappedBy: 'profiel')]
  public $account;
 
 	/**
   * @var LidToestemming[]
   */
- #[ORM\OneToMany(targetEntity: \CsrDelft\entity\LidToestemming::class, mappedBy: 'profiel')]
+ #[ORM\OneToMany(targetEntity: LidToestemming::class, mappedBy: 'profiel')]
  public $toestemmingen;
 
 	/**
@@ -438,12 +440,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		'huisartsTelefoon' => [LidStatus::Noviet],
 	];
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->uid . '@csrdelft.nl';
 	}
 
-	public function magBewerken()
+	public function magBewerken(): bool
 	{
 		if (LoginService::mag(P_LEDEN_MOD)) {
 			return true;
@@ -489,7 +491,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 *
 	 * TODO: aparte tabellen voor multiple email, telefoon, etc...
 	 */
-	public function getContactgegevens()
+	public function getContactgegevens(): array
 	{
 		return ArrayUtil::array_filter_empty([
 			'Email' => $this->getPrimaryEmail(),
@@ -498,17 +500,17 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		]);
 	}
 
-	public function getAdres()
+	public function getAdres(): string
 	{
 		return $this->adres . ', ' . $this->postcode . ', ' . $this->woonplaats . ', ' . $this->land;
 	}
 
-	public function getAdresOuders()
+	public function getAdresOuders(): string
 	{
 		return $this->o_adres . ', ' . $this->o_postcode . ', ' . $this->o_woonplaats . ', ' . $this->o_land;
 	}
 
-	public function getFormattedAddress()
+	public function getFormattedAddress(): string
 	{
 		return $this->adres .
 			"\n" .
@@ -519,7 +521,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			$this->land;
 	}
 
-	public function getFormattedAddressOuders()
+	public function getFormattedAddressOuders(): string
 	{
 		return $this->o_adres .
 			"\n" .
@@ -530,7 +532,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			$this->o_land;
 	}
 
-	public function isJarig()
+	public function isJarig(): bool
 	{
 		return $this->gebdatum != null &&
 			substr(
@@ -544,10 +546,10 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 * Vervormt kommagescheiden opties naar lijst,
 	 * voegt lichting toe en voegt verjaardag toe indien van toepassing.
 	 */
-	public function getProfielOpties()
+	public function getProfielOpties(): array
 	{
 		$opties = $this->profielOpties
-			? array_map(function ($a) {
+			? array_map(function ($a): string {
 				return trim($a);
 			}, explode(',', $this->profielOpties))
 			: [];
@@ -563,7 +565,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 * Vervormt kommagescheiden opties naar spatiegescheiden opties
 	 * en voegt verjaardag toe indien van toepassing.
 	 */
-	public function getProfielClasses()
+	public function getProfielClasses(): string
 	{
 		return implode(' ', $this->getProfielOpties());
 	}
@@ -626,10 +628,10 @@ class Profiel implements Agendeerbaar, DisplayEntity
 
 	public function getEindMoment(): DateTimeImmutable
 	{
-		return $this->getBeginMoment()->add(new \DateInterval('PT1H'));
+		return $this->getBeginMoment()->add(new DateInterval('PT1H'));
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		return true;
 	}
@@ -639,7 +641,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->getNaam('civitas');
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		$leeftijd =
 			$this->getBeginMoment()->format('Y') - $this->gebdatum->format('Y');
@@ -663,7 +665,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->getAdres();
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/profiel/' . $this->uid;
 	}
@@ -737,7 +739,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $l . $naam . '</a>';
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		return true;
 	}
@@ -877,7 +879,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 * @param string $vorm
 	 * @return string
 	 */
-	public function getPasfotoPath($vorm = 'user')
+	public function getPasfotoPath($vorm = 'user'): string
 	{
 		if ($vorm === 'user') {
 			$vorm = InstellingUtil::lid_instelling('forum', 'naamWeergave');
@@ -944,7 +946,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return PathUtil::safe_combine_path(PASFOTO_PATH, $path);
 	}
 
-	public function getPasfotoTag($cssClass = '')
+	public function getPasfotoTag($cssClass = ''): string
 	{
 		return '<img class="pasfoto ' .
 			htmlspecialchars($cssClass) .
@@ -991,7 +993,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
  #[ORM\OneToMany(targetEntity: \Profiel::class, mappedBy: 'patroonProfiel')]
  public $kinderen;
 
-	public function hasKinderen()
+	public function hasKinderen(): bool
 	{
 		return $this->kinderen->count() !== 0;
 	}
@@ -1073,7 +1075,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return 0;
 	}
 
-	public function propertyMogelijk(string $name)
+	public function propertyMogelijk(string $name): bool
 	{
 		if (!array_key_exists($name, Profiel::$properties_lidstatus)) {
 			return true;
@@ -1081,7 +1083,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return in_array($this->status, Profiel::$properties_lidstatus[$name]);
 	}
 
-	public function getDataTableColumn()
+	public function getDataTableColumn(): DataTableColumn
 	{
 		return new DataTableColumn(
 			$this->getLink('volledig'),

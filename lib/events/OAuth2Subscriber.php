@@ -105,7 +105,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		$request = $this->requestStack->getMainRequest();
 
 		if ($request->query->has('scopeChoice')) {
-			$requestedScopes = array_map(function ($scope) {
+			$requestedScopes = array_map(function ($scope): Scope {
 				return new Scope($scope);
 			}, (array) $request->query->get('scopeChoice'));
 		}

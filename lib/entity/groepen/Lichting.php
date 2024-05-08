@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,7 +14,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\groepen\LichtingenRepository::class)]
+#[ORM\Entity(repositoryClass: LichtingenRepository::class)]
 class Lichting extends Groep
 {
 	/**
@@ -28,7 +29,7 @@ class Lichting extends Groep
 	 * Stiekem hebben we helemaal geen leden
 	 * @return GroepLid[]|ArrayCollection
 	 */
-	public function getLeden()
+	public function getLeden(): ArrayCollection
 	{
 		$profielRepository = ContainerFacade::getContainer()->get(
 			ProfielRepository::class
@@ -53,7 +54,7 @@ class Lichting extends Groep
 		return new ArrayCollection($leden);
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/lichtingen/' . $this->lidjaar;
 	}

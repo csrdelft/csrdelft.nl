@@ -166,7 +166,7 @@ class DataTableBuilder
 		$this->settings['rowButtons'][] = $knop;
 	}
 
-	public function columnPosition($name)
+	public function columnPosition($name): int|string|false
 	{
 		return array_search($name, array_keys($this->columns));
 	}
@@ -384,7 +384,7 @@ class DataTableBuilder
 		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}
 
-	public function getTable()
+	public function getTable(): DataTableInstance
 	{
 		return new DataTableInstance(
 			$this->serializer,

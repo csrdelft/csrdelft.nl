@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use Maaltijd;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
@@ -29,7 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Zie ook MaaltijdAbonnement.class.php
  */
 #[ORM\Table('mlt_aanmeldingen')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository::class)]
+#[ORM\Entity(repositoryClass: MaaltijdAanmeldingenRepository::class)]
 class MaaltijdAanmelding
 {
 	/**
@@ -48,7 +50,7 @@ class MaaltijdAanmelding
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $profiel;
 	/**
   * @var int
@@ -74,19 +76,19 @@ class MaaltijdAanmelding
   * @var Maaltijd
   */
  #[ORM\JoinColumn(name: 'maaltijd_id', referencedColumnName: 'maaltijd_id')]
- #[ORM\ManyToOne(targetEntity: \Maaltijd::class, inversedBy: 'aanmeldingen')]
+ #[ORM\ManyToOne(targetEntity: Maaltijd::class, inversedBy: 'aanmeldingen')]
  public $maaltijd;
 	/**
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'door_uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $door_profiel;
 	/**
   * @var MaaltijdRepetitie
   */
  #[ORM\JoinColumn(name: 'door_abonnement', referencedColumnName: 'mlt_repetitie_id')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\maalcie\MaaltijdRepetitie::class)]
+ #[ORM\ManyToOne(targetEntity: MaaltijdRepetitie::class)]
  public $abonnementRepetitie;
 
 	/**

@@ -27,7 +27,7 @@ class EetplanRepository extends AbstractRepository
 		parent::__construct($registry, Eetplan::class);
 	}
 
-	public function avondHasEetplan($avond)
+	public function avondHasEetplan($avond): bool
 	{
 		return count($this->findBy(['avond' => $avond])) > 0;
 	}
@@ -126,7 +126,7 @@ class EetplanRepository extends AbstractRepository
 	 *
 	 * @return Eetplan[] lijst van eetplansessies voor dit huis, gegroepeerd op avond (oplopend)
 	 */
-	public function getEetplanVoorHuis($woonoord_id, $lidjaar)
+	public function getEetplanVoorHuis($woonoord_id, $lidjaar): array
 	{
 		/** @var Eetplan[] $sessies */
 		$sessies = $this->createQueryBuilder('e')
@@ -143,7 +143,7 @@ class EetplanRepository extends AbstractRepository
 
 		return array_reduce(
 			$sessies,
-			function (array $accumulator, Eetplan $eetplan) {
+			function (array $accumulator, Eetplan $eetplan): array {
 				$accumulator[
 					DateUtil::dateFormatIntl($eetplan->avond, self::FMT_DATE)
 				][] = $eetplan;

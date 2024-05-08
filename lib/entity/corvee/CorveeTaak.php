@@ -2,6 +2,9 @@
 
 namespace CsrDelft\entity\corvee;
 
+use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CorveeRepetitie;
+use CorveeFunctie;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
@@ -35,7 +38,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Zie ook MaaltijdCorvee.class.php
  */
 #[ORM\Table('crv_taken')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\corvee\CorveeTakenRepository::class)]
+#[ORM\Entity(repositoryClass: CorveeTakenRepository::class)]
 class CorveeTaak implements Agendeerbaar
 {
 	/**
@@ -54,13 +57,13 @@ class CorveeTaak implements Agendeerbaar
   * @var Profiel|null
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid', nullable: true)]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $profiel;
 	/**
   * @var CorveeRepetitie|null
   */
  #[ORM\JoinColumn(name: 'crv_repetitie_id', referencedColumnName: 'crv_repetitie_id', nullable: true)]
- #[ORM\ManyToOne(targetEntity: \CorveeRepetitie::class)]
+ #[ORM\ManyToOne(targetEntity: CorveeRepetitie::class)]
  public $corveeRepetitie;
 	/**
   * @var int
@@ -71,7 +74,7 @@ class CorveeTaak implements Agendeerbaar
   * @var Maaltijd|null
   */
  #[ORM\JoinColumn(name: 'maaltijd_id', referencedColumnName: 'maaltijd_id', nullable: true)]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\maalcie\Maaltijd::class)]
+ #[ORM\ManyToOne(targetEntity: Maaltijd::class)]
  public $maaltijd;
 	/**
   * @var DateTimeImmutable
@@ -118,7 +121,7 @@ class CorveeTaak implements Agendeerbaar
   * @var CorveeFunctie
   */
  #[ORM\JoinColumn(name: 'functie_id', referencedColumnName: 'functie_id', nullable: false)]
- #[ORM\ManyToOne(targetEntity: \CorveeFunctie::class)]
+ #[ORM\ManyToOne(targetEntity: CorveeFunctie::class)]
  public $corveeFunctie;
 
 	public function getPuntenPrognose()
@@ -146,7 +149,7 @@ class CorveeTaak implements Agendeerbaar
 	 *
 	 * @return int
 	 */
-	public function getAantalKeerGemaild()
+	public function getAantalKeerGemaild(): int
 	{
 		if ($this->wanneer_gemaild === null) {
 			return 0;
@@ -159,7 +162,7 @@ class CorveeTaak implements Agendeerbaar
 	 *
 	 * @return boolean
 	 */
-	public function getMoetHerinneren()
+	public function getMoetHerinneren(): bool
 	{
 		$aantal = $this->getAantalKeerGemaild();
 		$datum = $this->datum;
@@ -202,7 +205,7 @@ class CorveeTaak implements Agendeerbaar
 	 *
 	 * @return boolean
 	 */
-	public function getIsTelaatGemaild()
+	public function getIsTelaatGemaild(): bool
 	{
 		$aantal = $this->getAantalKeerGemaild();
 		$datum = $this->datum;
@@ -251,7 +254,7 @@ class CorveeTaak implements Agendeerbaar
 
 	// Agendeerbaar ############################################################
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->taak_id . '@corveetaak.csrdelft.nl';
 	}
@@ -266,7 +269,7 @@ class CorveeTaak implements Agendeerbaar
 		return $this->getBeginMoment()->add(new DateInterval('PT1H30M'));
 	}
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		if ($this->profiel) {
 			return $this->corveeFunctie->naam .
@@ -284,22 +287,22 @@ class CorveeTaak implements Agendeerbaar
 		return 'Nog niet ingedeeld';
 	}
 
-	public function getLocatie()
+	public function getLocatie(): string
 	{
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/corvee/rooster';
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		return true;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		return true;
 	}

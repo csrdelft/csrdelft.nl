@@ -87,7 +87,7 @@ class PinTransactieMatcher
 	protected function levenshteinMatrix(
 		array $pinTransacties,
 		array $pinBestellingen
-	) {
+	): array {
 		$pinTransactiesCount = count($pinTransacties);
 		$pinBestellingenCount = count($pinBestellingen);
 
@@ -140,10 +140,10 @@ class PinTransactieMatcher
 		usort($this->pinBestellingen, function (
 			CiviBestelling $a,
 			CiviBestelling $b
-		) {
+		): int {
 			return self::compareDate($a->moment, $b->moment);
 		});
-		usort($this->pinTransacties, function (PinTransactie $a, PinTransactie $b) {
+		usort($this->pinTransacties, function (PinTransactie $a, PinTransactie $b): int {
 			return self::compareDate($a->datetime, $b->datetime);
 		});
 
@@ -231,7 +231,7 @@ class PinTransactieMatcher
 	/**
 	 * @return bool
 	 */
-	public function bevatFouten()
+	public function bevatFouten(): bool
 	{
 		foreach ($this->matches as $match) {
 			if ($match->status !== PinTransactieMatchStatusEnum::STATUS_MATCH) {
@@ -361,7 +361,7 @@ class PinTransactieMatcher
 		return $this->matches;
 	}
 
-	private function matchCost($i, $j)
+	private function matchCost($i, $j): int
 	{
 		if (
 			$this->pinTransacties[$i]->getBedragInCenten() ==

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\documenten;
 
+use CsrDelft\repository\documenten\DocumentCategorieRepository;
 use CsrDelft\entity\ISelectEntity;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\DisplayEntity;
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\documenten\DocumentCategorieRepository::class)]
+#[ORM\Entity(repositoryClass: DocumentCategorieRepository::class)]
 class DocumentCategorie implements ISelectEntity, DisplayEntity
 {
 	/**
@@ -46,7 +47,7 @@ class DocumentCategorie implements ISelectEntity, DisplayEntity
 	/**
   * @var Document[]|ArrayCollection
   */
- #[ORM\OneToMany(targetEntity: \CsrDelft\entity\documenten\Document::class, mappedBy: 'categorie')]
+ #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'categorie')]
  #[ORM\OrderBy(['toegevoegd' => 'DESC'])]
  public $documenten;
 

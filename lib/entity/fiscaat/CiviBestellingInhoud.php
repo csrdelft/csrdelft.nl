@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -12,7 +13,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository::class)]
+#[ORM\Entity(repositoryClass: CiviBestellingInhoudRepository::class)]
 class CiviBestellingInhoud
 {
 	/**
@@ -59,7 +60,7 @@ class CiviBestellingInhoud
 		$this->bestelling_id = $bestelling->id ?? null;
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		return sprintf('%d %s', $this->aantal, $this->product->beschrijving);
 	}
@@ -76,7 +77,7 @@ class CiviBestellingInhoud
 	 * @return string
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getStukprijs()
+	public function getStukprijs(): string
 	{
 		return sprintf('€%.2f', $this->product->getPrijsInt() / 100);
 	}
@@ -85,7 +86,7 @@ class CiviBestellingInhoud
 	 * @return string
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getTotaalprijs()
+	public function getTotaalprijs(): string
 	{
 		return sprintf('€%.2f', $this->getPrijs() / 100);
 	}

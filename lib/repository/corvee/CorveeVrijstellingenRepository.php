@@ -30,7 +30,7 @@ class CorveeVrijstellingenRepository extends AbstractRepository
 		$begin = null,
 		$eind = null,
 		$percentage = 0
-	) {
+	): CorveeVrijstelling {
 		$vrijstelling = new CorveeVrijstelling();
 		$vrijstelling->profiel = $profiel;
 		$vrijstelling->uid = $profiel->uid ?? null;

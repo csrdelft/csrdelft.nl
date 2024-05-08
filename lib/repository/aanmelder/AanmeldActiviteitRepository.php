@@ -33,7 +33,7 @@ class AanmeldActiviteitRepository extends AbstractRepository
 	{
 		return $reeks
 			->getActiviteiten()
-			->filter(function (AanmeldActiviteit $activiteit) {
+			->filter(function (AanmeldActiviteit $activiteit): bool {
 				return $activiteit->magBekijken() && $activiteit->isInToekomst();
 			});
 	}

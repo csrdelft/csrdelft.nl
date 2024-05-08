@@ -30,7 +30,7 @@ class BestellingZoeker extends AbstractController
 		CiviCategorieRepository $civiCategorieRepository,
 		CiviProductRepository $civiProductRepository,
 		CiviSaldoRepository $civiSaldoRepository
-	) {
+	): Response {
 		$from = new DateTimeImmutable();
 		$from = $from->sub(new DateInterval('P1W'));
 

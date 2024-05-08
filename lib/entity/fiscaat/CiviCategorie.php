@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use CsrDelft\repository\fiscaat\CiviCategorieRepository;
 use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Table('civi_categorie')]
 #[ORM\Index(name: 'cie', columns: ['cie'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\fiscaat\CiviCategorieRepository::class)]
+#[ORM\Entity(repositoryClass: CiviCategorieRepository::class)]
 class CiviCategorie implements DisplayEntity
 {
 	/**
@@ -42,7 +43,7 @@ class CiviCategorie implements DisplayEntity
  #[ORM\Column(type: 'string')] // TODO Dit is een CiviSaldoCommissieEnum
  public $cie;
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		return sprintf('%s (%s)', $this->type, $this->cie);
 	}

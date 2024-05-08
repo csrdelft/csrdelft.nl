@@ -176,7 +176,7 @@ class IsHetAlView implements View
 		return $this->model;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .=

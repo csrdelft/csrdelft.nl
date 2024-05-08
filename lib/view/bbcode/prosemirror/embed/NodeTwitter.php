@@ -2,18 +2,19 @@
 
 namespace CsrDelft\view\bbcode\prosemirror\embed;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use CsrDelft\view\bbcode\tag\embed\BbTwitter;
 
 class NodeTwitter implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbTwitter::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'twitter';
 	}
@@ -21,7 +22,7 @@ class NodeTwitter implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbTwitter) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		return [
@@ -38,7 +39,7 @@ class NodeTwitter implements Node
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

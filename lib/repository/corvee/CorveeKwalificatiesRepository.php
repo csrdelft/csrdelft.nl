@@ -41,12 +41,12 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 		return $this->findBy(['uid' => $uid]);
 	}
 
-	public function isLidGekwalificeerdVoorFunctie($uid, $fid)
+	public function isLidGekwalificeerdVoorFunctie($uid, $fid): bool
 	{
 		return $this->find(['uid' => $uid, 'functie_id' => $fid]) != null;
 	}
 
-	public function nieuw(CorveeFunctie $functie)
+	public function nieuw(CorveeFunctie $functie): CorveeKwalificatie
 	{
 		$kwalificatie = new CorveeKwalificatie();
 		$kwalificatie->setCorveeFunctie($functie);

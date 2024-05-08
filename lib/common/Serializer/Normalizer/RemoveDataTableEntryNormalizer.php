@@ -44,7 +44,7 @@ class RemoveDataTableEntryNormalizer implements NormalizerInterface
 		$removed,
 		string $format = null,
 		array $context = []
-	): string|int|float|bool|\ArrayObject|array|null {
+	): string|int|float|bool|ArrayObject|array|null {
 		$id = $removed->getId();
 
 		if (!is_array($id)) {

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\repository\security\RememberOAuthRepository;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +16,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 #[ORM\Table('oauth2_remember')]
 #[ORM\UniqueConstraint(name: 'account_client', columns: ['uid', 'client_identifier'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\security\RememberOAuthRepository::class)]
+#[ORM\Entity(repositoryClass: RememberOAuthRepository::class)]
 class RememberOAuth implements DataTableEntry
 {
 	/**
@@ -44,7 +45,7 @@ class RememberOAuth implements DataTableEntry
   * @var Account
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\security\Account::class)]
+ #[ORM\ManyToOne(targetEntity: Account::class)]
  public $account;
 	/**
   * @var DateTimeImmutable

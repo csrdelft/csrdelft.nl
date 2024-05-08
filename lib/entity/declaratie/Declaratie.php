@@ -25,7 +25,7 @@ class Declaratie
   * @var Profiel
   */
  #[ORM\JoinColumn(nullable: false, referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  private $indiener;
 
 	#[ORM\JoinColumn(nullable: false)]
@@ -54,7 +54,7 @@ class Declaratie
   * @var Profiel
   */
  #[ORM\JoinColumn(referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  private $beoordelaar;
 
 	#[ORM\Column(type: 'string', length: 255, nullable: true)]

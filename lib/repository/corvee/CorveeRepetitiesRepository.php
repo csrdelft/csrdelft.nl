@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\corvee;
 
+use DateTimeImmutable;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
@@ -23,7 +24,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 		parent::__construct($registy, CorveeRepetitie::class);
 	}
 
-	public function nieuw(MaaltijdRepetitie $maaltijdRepetitie = null)
+	public function nieuw(MaaltijdRepetitie $maaltijdRepetitie = null): CorveeRepetitie
 	{
 		$repetitie = new CorveeRepetitie();
 		$repetitie->crv_repetitie_id = null;
@@ -48,7 +49,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 		return $repetitie;
 	}
 
-	public function getFirstOccurrence(CorveeRepetitie $repetitie)
+	public function getFirstOccurrence(CorveeRepetitie $repetitie): DateTimeImmutable|false
 	{
 		$datum = time();
 		$shift = $repetitie->dag_vd_week - date('w', $datum) + 7;
@@ -62,7 +63,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	/**
 	 * @return CorveeRepetitie[]
 	 */
-	public function getVoorkeurbareRepetities()
+	public function getVoorkeurbareRepetities(): array
 	{
 		$repetities = $this->findBy(['voorkeurbaar' => true]);
 		$result = [];
@@ -105,7 +106,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	 * @param int $mrid
 	 * @return bool
 	 */
-	public function existMaaltijdRepetitieCorvee($mrid)
+	public function existMaaltijdRepetitieCorvee($mrid): bool
 	{
 		return count($this->findBy(['mlt_repetitie_id' => $mrid])) > 0;
 	}
@@ -118,7 +119,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	 * @param int $fid
 	 * @return bool
 	 */
-	public function existFunctieRepetities($fid)
+	public function existFunctieRepetities($fid): bool
 	{
 		return count($this->findBy(['functie_id' => $fid])) > 0;
 	}

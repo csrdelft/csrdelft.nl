@@ -2,6 +2,10 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use MaaltijdRepetitie;
+use MaaltijdAanmelding;
+use DateInterval;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Eisen;
@@ -45,7 +49,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Zie ook MaaltijdAanmelding.class.php
  */
 #[ORM\Table('mlt_maaltijden')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\maalcie\MaaltijdenRepository::class)]
+#[ORM\Entity(repositoryClass: MaaltijdenRepository::class)]
 class Maaltijd implements Agendeerbaar, DisplayEntity
 {
 	/**
@@ -66,7 +70,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
   * @var MaaltijdRepetitie|null
   */
  #[ORM\JoinColumn(name: 'mlt_repetitie_id', referencedColumnName: 'mlt_repetitie_id', nullable: true)]
- #[ORM\ManyToOne(targetEntity: \MaaltijdRepetitie::class)]
+ #[ORM\ManyToOne(targetEntity: MaaltijdRepetitie::class)]
  public $repetitie;
 	/**
   * @var integer
@@ -77,7 +81,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	/**
   * @var CiviProduct
   */
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\fiscaat\CiviProduct::class)]
+ #[ORM\ManyToOne(targetEntity: CiviProduct::class)]
  public $product;
 	/**
   * @var string
@@ -144,7 +148,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	/**
   * @var MaaltijdAanmelding[]|ArrayCollection
   */
- #[ORM\OneToMany(targetEntity: \MaaltijdAanmelding::class, mappedBy: 'maaltijd')]
+ #[ORM\OneToMany(targetEntity: MaaltijdAanmelding::class, mappedBy: 'maaltijd')]
  public $aanmeldingen;
 	/**
 	 * De taak die rechten geeft voor het bekijken en sluiten van de maaltijd(-lijst)
@@ -157,7 +161,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		$this->aanmeldingen = new ArrayCollection();
 	}
 
-	public function getPrijsFloat()
+	public function getPrijsFloat(): float
 	{
 		return (float) $this->getPrijs() / 100.0;
 	}
@@ -171,7 +175,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		return $this->product->getPrijsInt();
 	}
 
-	public function getIsAangemeld($uid)
+	public function getIsAangemeld($uid): bool
 	{
 		return $this->aanmeldingen->matching(Eisen::voorGebruiker($uid))->count() ==
 			1;
@@ -262,10 +266,10 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	public function getEindMoment(): DateTimeImmutable
 	{
-		return $this->getBeginMoment()->add(new \DateInterval('PT1H30M'));
+		return $this->getBeginMoment()->add(new DateInterval('PT1H30M'));
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		return 'Maaltijd met ' .
 			$this->getAantalAanmeldingen() .
@@ -274,22 +278,22 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 			')';
 	}
 
-	public function getLocatie()
+	public function getLocatie(): string
 	{
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/maaltijden';
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		return false;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		// Toon als transparant (vrij) als lid dat wil of lid niet ingeketzt is
 		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
@@ -305,7 +309,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @return boolean
 	 * @throws CsrException
 	 */
-	public function magBekijken($uid)
+	public function magBekijken($uid): bool
 	{
 		if (!isset($this->maaltijdcorvee)) {
 			// Zoek op datum, want er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is.
@@ -341,7 +345,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @return boolean
 	 * @throws CsrException
 	 */
-	public function magSluiten($uid)
+	public function magSluiten($uid): bool
 	{
 		return $this->magBekijken($uid) &&
 			$this->maaltijdcorvee->corveeFunctie->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
@@ -396,12 +400,12 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("UUID")
 	 */
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->maaltijd_id . '@maaltijd.csrdelft.nl';
 	}
 
-	public function getMoment()
+	public function getMoment(): DateTimeImmutable
 	{
 		return $this->datum->setTime(
 			$this->tijd->format('H'),

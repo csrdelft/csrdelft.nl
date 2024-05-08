@@ -2,6 +2,7 @@
 
 namespace CsrDelft\tests;
 
+use Symfony\Component\Panther\Client;
 use CsrDelft\DataFixtures\AccountFixtures;
 use Facebook\WebDriver\Exception\ElementClickInterceptedException;
 use Facebook\WebDriver\Exception\NoSuchElementException;
@@ -15,9 +16,9 @@ use Symfony\Component\Panther\PantherTestCase;
 class BrowserTestCase extends PantherTestCase
 {
 	/**
-	 * @var \Symfony\Component\Panther\Client
-	 */
-	protected $client;
+  * @var Client
+  */
+ protected $client;
 
 	/**
 	 * @param Crawler $crawler

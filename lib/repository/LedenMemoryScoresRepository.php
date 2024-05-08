@@ -31,7 +31,7 @@ class LedenMemoryScoresRepository extends AbstractRepository
 	 */
 	protected $default_order = 'tijd ASC, beurten DESC';
 
-	public function nieuw()
+	public function nieuw(): LedenMemoryScore
 	{
 		$score = new LedenMemoryScore();
 		$score->door_uid = LoginService::getUid();

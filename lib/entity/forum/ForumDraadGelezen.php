@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumDradenGelezenRepository;
+use ForumDraad;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Een ForumDraad kan worden gelezen door een lid op een bepaald moment.
  */
 #[ORM\Table('forum_draden_gelezen')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\forum\ForumDradenGelezenRepository::class)]
+#[ORM\Entity(repositoryClass: ForumDradenGelezenRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class ForumDraadGelezen
 {
@@ -37,7 +39,7 @@ class ForumDraadGelezen
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $profiel;
 	/**
   * Datum en tijd van laatst gelezen
@@ -50,6 +52,6 @@ class ForumDraadGelezen
   * @var ForumDraad
   */
  #[ORM\JoinColumn(name: 'draad_id', referencedColumnName: 'draad_id')]
- #[ORM\ManyToOne(targetEntity: \ForumDraad::class, inversedBy: 'lezers')]
+ #[ORM\ManyToOne(targetEntity: ForumDraad::class, inversedBy: 'lezers')]
  public $draad;
 }

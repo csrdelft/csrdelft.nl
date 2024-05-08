@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use DateInterval;
@@ -27,7 +28,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @see Maaltijd
  */
 #[ORM\Table('mlt_archief')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository::class)]
+#[ORM\Entity(repositoryClass: ArchiefMaaltijdenRepository::class)]
 class ArchiefMaaltijd implements Agendeerbaar
 {
 	/**
@@ -91,14 +92,14 @@ class ArchiefMaaltijd implements Agendeerbaar
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("aanmeldingen")
 	 */
-	public function getAantalAanmelding()
+	public function getAantalAanmelding(): int
 	{
 		return count($this->getAanmeldingenArray());
 	}
 
 	// Agendeerbaar ############################################################
 
-	public function getPrijsFloat()
+	public function getPrijsFloat(): float
 	{
 		return (float) $this->prijs / 100.0;
 	}
@@ -122,44 +123,47 @@ class ArchiefMaaltijd implements Agendeerbaar
 		);
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
 
-	public function getAantalAanmeldingen()
+	public function getAantalAanmeldingen(): int
 	{
 		return substr_count($this->aanmeldingen, ',');
 	}
 
-	public function getLocatie()
+	public function getLocatie(): string
 	{
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/maaltijdenbeheer/archief';
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		return false;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		return true;
 	}
 
-	public function jsonSerialize()
+	public function jsonSerialize(): array
 	{
 		$json = (array) $this;
 		$json['aanmeldingen'] = count($this->getAanmeldingenArray());
 		return $json;
 	}
 
-	public function getAanmeldingenArray()
+	/**
+  * @return string[][]
+  */
+ public function getAanmeldingenArray(): array
 	{
 		$result = [];
 		$aanmeldingen = explode(',', $this->aanmeldingen);
@@ -171,7 +175,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return $result;
 	}
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->maaltijd_id . '@archiefmaaltijd.csrdelft.nl';
 	}

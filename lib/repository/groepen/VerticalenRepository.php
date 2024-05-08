@@ -9,7 +9,7 @@ use Doctrine\ORM\NonUniqueResultException;
 
 class VerticalenRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Verticale::class;
 	}
@@ -28,7 +28,7 @@ class VerticalenRepository extends GroepRepository
 		array $orderBy = null,
 		$limit = null,
 		$offset = null
-	) {
+	): array {
 		return parent::findBy(
 			$criteria,
 			['letter' => 'ASC'] + ($orderBy ?? []),

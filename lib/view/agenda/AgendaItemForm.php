@@ -104,7 +104,7 @@ class AgendaItemForm implements FormulierTypeInterface
 
 		$builder->setFormKnoppen($formKnoppen);
 
-		$builder->addValidationMethod(function ($fields) {
+		$builder->addValidationMethod(function ($fields): bool {
 			if (
 				$fields['eind_moment']->getValue() !== null &&
 				$fields['eind_moment']->getValue() < $fields['begin_moment']->getValue()

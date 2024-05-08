@@ -105,7 +105,7 @@ class Groep implements DataTableEntry, DisplayEntity
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'maker_uid', referencedColumnName: 'uid', nullable: false)]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $maker;
 	/**
   * @var GroepVersie
@@ -139,7 +139,7 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("detailSource")
 	 */
-	public function getDetailSource()
+	public function getDetailSource(): string
 	{
 		return $this->getUrl() . '/leden';
 	}
@@ -148,7 +148,7 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * De URL van de groep
 	 * @return string
 	 */
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/groep/' . $this->id;
 	}
@@ -173,7 +173,7 @@ class Groep implements DataTableEntry, DisplayEntity
 		$leden = $this->getLeden();
 		try {
 			$iterator = $leden->getIterator();
-			$iterator->uasort(function (GroepLid $a, GroepLid $b) {
+			$iterator->uasort(function (GroepLid $a, GroepLid $b): int {
 				return strcmp($a->profiel->achternaam, $b->profiel->achternaam) ?:
 					strnatcmp($a->uid, $b->uid);
 			});
@@ -183,7 +183,7 @@ class Groep implements DataTableEntry, DisplayEntity
 		return new ArrayCollection(iterator_to_array($iterator));
 	}
 
-	public function getFamilieSuggesties()
+	public function getFamilieSuggesties(): array
 	{
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
@@ -242,7 +242,7 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * @param GroepKeuzeSelectie[] $keuzes
 	 * @return bool
 	 */
-	public function valideerOpmerking(array $keuzes)
+	public function valideerOpmerking(array $keuzes): bool
 	{
 		$correct = [];
 		foreach ($keuzes as $keuze) {
@@ -271,7 +271,7 @@ class Groep implements DataTableEntry, DisplayEntity
 		return CsrBB::parse($this->samenvatting);
 	}
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->id .
 			'@' .

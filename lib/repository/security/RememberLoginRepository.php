@@ -28,7 +28,7 @@ class RememberLoginRepository extends AbstractRepository
 	/**
 	 * @return RememberLogin
 	 */
-	public function nieuw()
+	public function nieuw(): RememberLogin
 	{
 		$remember = new RememberLogin();
 		$remember->uid = LoginService::getUid();

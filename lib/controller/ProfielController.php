@@ -272,7 +272,7 @@ class ProfielController extends AbstractController
 		return $this->profielBewerken($profiel, true);
 	}
 
-	private function profielBewerken(Profiel $profiel, $alleenFormulier = false)
+	private function profielBewerken(Profiel $profiel, $alleenFormulier = false): RedirectResponse|Response
 	{
 		if (!$profiel->magBewerken()) {
 			throw $this->createAccessDeniedException();

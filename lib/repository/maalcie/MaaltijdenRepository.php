@@ -36,7 +36,7 @@ class MaaltijdenRepository extends AbstractRepository
 	public function vanRepetitie(
 		MaaltijdRepetitie $repetitie,
 		DateTimeInterface $datum
-	) {
+	): Maaltijd {
 		$maaltijd = new Maaltijd();
 		$maaltijd->repetitie = $repetitie;
 		$maaltijd->product = $repetitie->product;
@@ -57,7 +57,7 @@ class MaaltijdenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function openMaaltijd(Maaltijd $maaltijd)
+	public function openMaaltijd(Maaltijd $maaltijd): Maaltijd
 	{
 		if (!$maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is al geopend');
@@ -129,7 +129,7 @@ class MaaltijdenRepository extends AbstractRepository
 	public function getRecenteMaaltijden(
 		DateTimeInterface $timestamp,
 		$limit = null
-	) {
+	): array {
 		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->createQueryBuilder('m')
 			->where(
@@ -183,7 +183,7 @@ class MaaltijdenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function herstelMaaltijd(Maaltijd $maaltijd)
+	public function herstelMaaltijd(Maaltijd $maaltijd): Maaltijd
 	{
 		if (!$maaltijd->verwijderd) {
 			throw new CsrGebruikerException('Maaltijd is niet verwijderd');
@@ -273,7 +273,7 @@ class MaaltijdenRepository extends AbstractRepository
 	 *
 	 * @return bool
 	 */
-	public function existRepetitieMaaltijden($mrid)
+	public function existRepetitieMaaltijden($mrid): bool
 	{
 		return $this->count(['mlt_repetitie_id' => $mrid]) > 0;
 	}

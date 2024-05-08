@@ -88,7 +88,7 @@ class GroepenView implements View
 		$this->twig = $twig;
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
 			Icon::getTag('home') .
@@ -109,7 +109,7 @@ class GroepenView implements View
 		return $this->pagina->titel;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$orm = $this->model->getEntityClassName();
 		$html = '';

@@ -20,7 +20,7 @@ class BbBestuur extends BbTagGroep
 		return 'bestuur';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'personen';
 	}

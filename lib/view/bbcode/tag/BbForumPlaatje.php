@@ -30,7 +30,7 @@ class BbForumPlaatje extends BbImg
 		$this->security = $security;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'plaatje';
 	}
@@ -45,12 +45,12 @@ class BbForumPlaatje extends BbImg
 		return $this->plaatje->access_key;
 	}
 
-	public function getLinkUrl()
+	public function getLinkUrl(): string
 	{
 		return $this->plaatje->getUrl(false);
 	}
 
-	public function getSourceUrl()
+	public function getSourceUrl(): string
 	{
 		return $this->plaatje->getUrl(true);
 	}

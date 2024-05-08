@@ -90,7 +90,7 @@ class AccessService
 		UserInterface $user,
 		$attribute,
 		$subject = null
-	) {
+	): bool {
 		$token = new UsernamePasswordToken(
 			$user,
 			'none',
@@ -131,7 +131,7 @@ class AccessService
 	/**
 	 * @return string[]
 	 */
-	public function getPermissionSuggestions()
+	public function getPermissionSuggestions(): array
 	{
 		$suggestions = [];
 		$suggestions[] = 'bestuur';
@@ -148,7 +148,7 @@ class AccessService
 	 * @param string $permissions
 	 * @return array empty if no errors; substring(s) of $permissions containing error(s) otherwise
 	 */
-	public function getPermissionStringErrors($permissions)
+	public function getPermissionStringErrors($permissions): array
 	{
 		$errors = [];
 		// OR
@@ -174,7 +174,7 @@ class AccessService
 	 *
 	 * @return bool
 	 */
-	public function isValidPermission($permission)
+	public function isValidPermission($permission): bool
 	{
 		// case insensitive
 		$permission = strtoupper($permission);
@@ -215,7 +215,7 @@ class AccessService
 	 * @param $permissie
 	 * @return array|string|string[]|null
 	 */
-	public function converteerPermissie($permissie)
+	public function converteerPermissie($permissie): string|array|null
 	{
 		return preg_replace('/P_/', 'ROLE_', $permissie);
 	}

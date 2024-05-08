@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Bijhouden als iemand bezig is een reactie te schrijven.
  */
 #[ORM\Table('forum_draden_reageren')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\forum\ForumDradenReagerenRepository::class)]
+#[ORM\Entity(repositoryClass: ForumDradenReagerenRepository::class)]
 class ForumDraadReageren
 {
 	/**

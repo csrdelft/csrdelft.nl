@@ -2,6 +2,7 @@
 
 namespace CsrDelft\common;
 
+use BadMethodCallException;
 use InvalidArgumentException;
 use ReflectionClass;
 
@@ -43,7 +44,7 @@ abstract class Enum
 		$this->value = $value;
 	}
 
-	public static function isValidValue($value)
+	public static function isValidValue($value): bool
 	{
 		$values = array_values(self::getConstants());
 		return in_array($value, $values, $strict = true);
@@ -61,7 +62,7 @@ abstract class Enum
 		return self::$constCacheArray[static::class];
 	}
 
-	public static function getEnumValues()
+	public static function getEnumValues(): array
 	{
 		return array_values(self::getConstants());
 	}
@@ -72,17 +73,17 @@ abstract class Enum
 	}
 
 	/**
-	 * Returns a value when called statically like so: MyEnum::SOME_VALUE() given SOME_VALUE is a class constant
-	 * Returns if a value is part of this enum if called like MyEnum::isSOME_VALUE()
-	 *
-	 * @param string $name
-	 * @param array $arguments
-	 *
-	 * @return static|bool
-	 * @psalm-pure
-	 * @throws \BadMethodCallException
-	 */
-	public static function __callStatic($name, $arguments)
+  * Returns a value when called statically like so: MyEnum::SOME_VALUE() given SOME_VALUE is a class constant
+  * Returns if a value is part of this enum if called like MyEnum::isSOME_VALUE()
+  *
+  * @param string $name
+  * @param array $arguments
+  *
+  * @return static|bool
+  * @psalm-pure
+  * @throws BadMethodCallException
+  */
+ public static function __callStatic($name, $arguments)
 	{
 		if (str_starts_with($name, 'is') && count($arguments) == 1) {
 			$enumName = substr($name, 2);
@@ -97,7 +98,7 @@ abstract class Enum
 			return static::from($value);
 		}
 
-		throw new \BadMethodCallException(
+		throw new BadMethodCallException(
 			'Enum ' . static::class . '::' . $name . ' bestaat niet.'
 		);
 	}
@@ -151,7 +152,7 @@ abstract class Enum
 	/**
 	 * @return Enum[]
 	 */
-	public static function all()
+	public static function all(): array
 	{
 		return array_map(['static', 'from'], static::getEnumValues());
 	}

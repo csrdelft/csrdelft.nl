@@ -44,7 +44,7 @@ class StreeplijstRepository extends ServiceEntityRepository
 		$naam_streeplijst,
 		$leden_streeplijst,
 		$inhoud_streeplijst
-	) {
+	): Streeplijst {
 		$streeplijst = new Streeplijst();
 		$streeplijst->maker = LoginService::getUid();
 		$streeplijst->aanmaakdatum = date_create_immutable();

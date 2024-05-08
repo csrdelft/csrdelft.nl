@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\corvee;
 
+use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
@@ -19,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * in het buitenland zitten niet in te delen gedurende die periode.
  */
 #[ORM\Table('crv_vrijstellingen')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\corvee\CorveeVrijstellingenRepository::class)]
+#[ORM\Entity(repositoryClass: CorveeVrijstellingenRepository::class)]
 class CorveeVrijstelling
 {
 	/**
@@ -49,7 +50,7 @@ class CorveeVrijstelling
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $profiel;
 
 	public function setProfiel($profiel)
@@ -58,7 +59,7 @@ class CorveeVrijstelling
 		$this->uid = $profiel->uid ?? null;
 	}
 
-	public function getPunten()
+	public function getPunten(): int
 	{
 		return (int) ceil(
 			($this->percentage *

@@ -19,7 +19,7 @@ class ChangeLogType extends SafeJsonType
 	/**
 	 * @inheritDoc
 	 */
-	public function getName()
+	public function getName(): string
 	{
 		return 'changelog';
 	}

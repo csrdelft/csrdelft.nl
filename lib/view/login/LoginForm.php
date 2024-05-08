@@ -62,7 +62,7 @@ class LoginForm implements FormulierTypeInterface
 	private function formatError(
 		AuthenticationException $exception,
 		$lastUsername
-	) {
+	): string {
 		switch ($exception->getMessageKey()) {
 			case 'Username could not be found.':
 				$errorString = $this->translator->trans(
@@ -81,7 +81,7 @@ class LoginForm implements FormulierTypeInterface
 		return strtr($errorString, $exception->getMessageData());
 	}
 
-	protected function getScriptTag()
+	protected function getScriptTag(): string
 	{
 		// er is geen javascript
 		return '';

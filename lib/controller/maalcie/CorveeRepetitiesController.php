@@ -78,7 +78,7 @@ class CorveeRepetitiesController extends AbstractController
 	public function beheer(
 		CorveeRepetitie $corveeRepetitie = null,
 		MaaltijdRepetitie $maaltijdRepetitie = null
-	) {
+	): Response {
 		$modal = null;
 		if ($corveeRepetitie) {
 			$modal = $this->bewerk($corveeRepetitie);
@@ -117,7 +117,7 @@ class CorveeRepetitiesController extends AbstractController
 	 * @Route("/corvee/repetities/nieuw/{mlt_repetitie_id<\d*>}", methods={"POST"}, defaults={"mlt_repetitie_id"=null})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function nieuw(MaaltijdRepetitie $repetitie = null)
+	public function nieuw(MaaltijdRepetitie $repetitie = null): CorveeRepetitieForm
 	{
 		$repetitie = $this->corveeRepetitiesRepository->nieuw($repetitie);
 		return new CorveeRepetitieForm($repetitie); // fetches POST values itself
@@ -129,7 +129,7 @@ class CorveeRepetitiesController extends AbstractController
 	 * @Route("/corvee/repetities/bewerk/{crv_repetitie_id<\d+>}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function bewerk(CorveeRepetitie $corveeRepetitie)
+	public function bewerk(CorveeRepetitie $corveeRepetitie): CorveeRepetitieForm
 	{
 		return new CorveeRepetitieForm($corveeRepetitie); // fetches POST values itself
 	}

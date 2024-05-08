@@ -48,7 +48,7 @@ final class FlashUtil
 	 * @deprecated Gebruik FlashBag direct of een twig template
 	 * @see melding.html.twig
 	 */
-	public static function getFlashUsingContainerFacade()
+	public static function getFlashUsingContainerFacade(): string
 	{
 		$flashBag = ContainerFacade::getContainer()
 			->get('session')

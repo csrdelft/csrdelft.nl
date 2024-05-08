@@ -47,7 +47,7 @@ class ForumDelenMeldingRepository extends AbstractRepository
 		$this->mailService = $mailService;
 	}
 
-	protected function maakForumDeelMelding(ForumDeel $deel, $uid)
+	protected function maakForumDeelMelding(ForumDeel $deel, $uid): ForumDeelMelding
 	{
 		$melding = new ForumDeelMelding();
 		$melding->deel = $deel;

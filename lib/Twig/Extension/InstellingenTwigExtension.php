@@ -66,7 +66,7 @@ class InstellingenTwigExtension extends AbstractExtension
 		return $this->lidToestemmingRepository->toestemmingGegeven();
 	}
 
-	public function toestemming_form()
+	public function toestemming_form(): ToestemmingModalForm
 	{
 		return new ToestemmingModalForm($this->lidToestemmingRepository);
 	}

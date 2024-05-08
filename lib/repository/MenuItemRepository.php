@@ -111,7 +111,7 @@ class MenuItemRepository extends AbstractRepository
 		});
 	}
 
-	private function createCacheKey($naam)
+	private function createCacheKey($naam): string
 	{
 		$user = $this->security->getUser();
 		return 'stek.menu.' .
@@ -137,7 +137,7 @@ class MenuItemRepository extends AbstractRepository
 	 * @param MenuItem $parent
 	 * @return MenuItem
 	 */
-	private function getExtendedTree(MenuItem $parent, $checkRechten)
+	private function getExtendedTree(MenuItem $parent, $checkRechten): MenuItem
 	{
 		// Check leesrechten op de boom
 		if ($parent->children) {
@@ -239,7 +239,7 @@ class MenuItemRepository extends AbstractRepository
 	 *
 	 * @return MenuItem
 	 */
-	public function nieuw($parent)
+	public function nieuw($parent): MenuItem
 	{
 		$item = new MenuItem();
 		$item->parent = $parent;
@@ -277,7 +277,7 @@ class MenuItemRepository extends AbstractRepository
 		);
 	}
 
-	private function createFlatCacheKey($naam)
+	private function createFlatCacheKey($naam): string
 	{
 		$user = $this->security->getUser();
 		return 'stek.menu-flat.' .
@@ -286,7 +286,7 @@ class MenuItemRepository extends AbstractRepository
 			($user ? $user->getUsername() : '');
 	}
 
-	private function flattenMenuInternal(MenuItem $root)
+	private function flattenMenuInternal(MenuItem $root): array
 	{
 		$list = [$root];
 
@@ -331,7 +331,7 @@ class MenuItemRepository extends AbstractRepository
 	 *
 	 * @return int
 	 */
-	public function removeMenuItem(MenuItem $item)
+	public function removeMenuItem(MenuItem $item): int
 	{
 		$manager = $this->getEntityManager();
 		$manager->beginTransaction();
@@ -363,7 +363,7 @@ class MenuItemRepository extends AbstractRepository
 	 * @param MenuItem[] $breadcrumbs
 	 * @return string
 	 */
-	public function renderBreadcrumbs($breadcrumbs)
+	public function renderBreadcrumbs($breadcrumbs): string
 	{
 		if (empty($breadcrumbs)) {
 			return '';
@@ -416,7 +416,7 @@ class MenuItemRepository extends AbstractRepository
 	 * @param $link
 	 * @return MenuItem[]
 	 */
-	public function getBreadcrumbs($link)
+	public function getBreadcrumbs($link): array
 	{
 		if ($link == '/') {
 			return [

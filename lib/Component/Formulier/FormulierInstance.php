@@ -73,7 +73,7 @@ class FormulierInstance
 		$this->twig = $twig;
 	}
 
-	public function createView()
+	public function createView(): FormulierView
 	{
 		$html = '';
 		if ($this->showMelding) {
@@ -102,7 +102,7 @@ class FormulierInstance
 		return new FormulierView($html, $this->titel);
 	}
 
-	protected function getFormTag()
+	protected function getFormTag(): string
 	{
 		if ($this->dataTableId) {
 			$this->css_classes[] = 'DataTableResponse';
@@ -132,12 +132,12 @@ class FormulierInstance
 		return new CsrfField($token);
 	}
 
-	public function getMethod()
+	public function getMethod(): string
 	{
 		return $this->post ? 'post' : 'get';
 	}
 
-	protected function getScriptTag()
+	protected function getScriptTag(): string
 	{
 		$js = $this->getJavascript();
 		if (trim($js) == '') {
@@ -153,7 +153,7 @@ docReady(function() {
 HTML;
 	}
 
-	protected function getJavascript()
+	protected function getJavascript(): string
 	{
 		$javascript = '';
 		foreach ($this->fields as $field) {
@@ -162,7 +162,7 @@ HTML;
 		return $javascript;
 	}
 
-	public function createModalView()
+	public function createModalView(): FormulierView
 	{
 		$html = '';
 		$this->css_classes[] = 'ModalForm';
@@ -209,9 +209,10 @@ HTML;
 	}
 
 	/**
-	 * Geeft waardes van de formuliervelden terug.
-	 */
-	public function getValues()
+  * Geeft waardes van de formuliervelden terug.
+  * @return mixed[]
+  */
+ public function getValues(): array
 	{
 		$values = [];
 		foreach ($this->fields as $field) {
@@ -246,7 +247,7 @@ HTML;
 	 * Alle valideer-functies kunnen het model gebruiken bij het valideren
 	 * dat meegegeven is bij de constructie van het InputField.
 	 */
-	public function validate()
+	public function validate(): bool
 	{
 		if (!$this->isPosted()) {
 			return false;
@@ -274,7 +275,7 @@ HTML;
 	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField && !$field->isPosted()) {
@@ -286,11 +287,12 @@ HTML;
 	}
 
 	/**
-	 * Geef een array terug van de gewijzigde velden.
-	 *
-	 * @returns ChangeLogEntry[]
-	 */
-	public function diff()
+  * Geef een array terug van de gewijzigde velden.
+  *
+  * @returns ChangeLogEntry[]
+  * @return mixed[]
+  */
+ public function diff(): array
 	{
 		$changeLogRepository = ContainerFacade::getContainer()->get(
 			ChangeLogRepository::class
@@ -320,7 +322,7 @@ HTML;
 	 * @param ChangeLogEntry[] $diff
 	 * @return string
 	 */
-	public function changelog(array $diff)
+	public function changelog(array $diff): string
 	{
 		$changelog = '';
 		if (!empty($diff)) {

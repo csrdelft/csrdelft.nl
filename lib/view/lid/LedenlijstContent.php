@@ -47,7 +47,7 @@ class LedenlijstContent implements View
 		return $this->lidzoeker;
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
 			Icon::getTag('home') .
@@ -55,12 +55,12 @@ class LedenlijstContent implements View
 			'<li class="breadcrumb-item active">Ledenlijst der Civitas</li></ul>';
 	}
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return 'Ledenlijst der Civitas';
 	}
 
-	public function viewSelect($name, $options)
+	public function viewSelect($name, $options): string
 	{
 		$html = '';
 		$html .=
@@ -76,7 +76,7 @@ class LedenlijstContent implements View
 		return $html;
 	}
 
-	public function viewVeldselectie()
+	public function viewVeldselectie(): string
 	{
 		$html = '';
 		$html .= '<div class="mb-3">';
@@ -108,7 +108,7 @@ class LedenlijstContent implements View
 		return $html;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$requestUri = $this->requestStack->getRequestUri();

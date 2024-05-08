@@ -2,6 +2,10 @@
 
 namespace CsrDelft\entity\bibliotheek;
 
+use CsrDelft\repository\bibliotheek\BoekRepository;
+use BiebAuteur;
+use BoekRecensie;
+use BoekExemplaar;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package CsrDelft\entity\bibliotheek
  */
 #[ORM\Table('biebboek')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\bibliotheek\BoekRepository::class)]
+#[ORM\Entity(repositoryClass: BoekRepository::class)]
 class Boek
 {
 	/**
@@ -75,19 +79,19 @@ class Boek
   * @var BiebAuteur
   */
  #[ORM\JoinColumn(name: 'auteur_id', referencedColumnName: 'id')]
- #[ORM\ManyToOne(targetEntity: \BiebAuteur::class)]
+ #[ORM\ManyToOne(targetEntity: BiebAuteur::class)]
  public $auteur2;
 
 	/**
   * @var BoekRecensie[]
   */
- #[ORM\OneToMany(targetEntity: \BoekRecensie::class, mappedBy: 'boek')]
+ #[ORM\OneToMany(targetEntity: BoekRecensie::class, mappedBy: 'boek')]
  protected $recensies;
 
 	/**
   * @var BoekExemplaar[]
   */
- #[ORM\OneToMany(targetEntity: \BoekExemplaar::class, mappedBy: 'boek')]
+ #[ORM\OneToMany(targetEntity: BoekExemplaar::class, mappedBy: 'boek')]
  protected $exemplaren;
 
 	/**
@@ -107,12 +111,12 @@ class Boek
 		$this->categorie = $biebRubriek;
 	}
 
-	public function getStatus()
+	public function getStatus(): string
 	{
 		return '';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/bibliotheek/boek/' . $this->id;
 	}
@@ -120,7 +124,7 @@ class Boek
 	/**
 	 * Iedereen met extra rechten en zij met BIEB_READ mogen
 	 */
-	public function magBekijken()
+	public function magBekijken(): bool
 	{
 		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
 	}
@@ -131,7 +135,7 @@ class Boek
 	 * @return  bool
 	 *    boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
 	 */
-	public function magBewerken()
+	public function magBewerken(): bool
 	{
 		return LoginService::mag(P_BIEB_EDIT) ||
 			$this->isEigenaar() ||
@@ -149,7 +153,7 @@ class Boek
 	 *      false
 	 *        geen geen resultaat of niet de eigenaar
 	 */
-	public function isEigenaar($uid = null)
+	public function isEigenaar($uid = null): bool
 	{
 		foreach ($this->getExemplaren() as $exemplaar) {
 			if ($uid != null) {
@@ -184,7 +188,7 @@ class Boek
 		return LoginService::mag('commissie:BASFCie,' . P_BIEB_MOD . ',' . P_ADMIN);
 	}
 
-	public function isBiebBoek()
+	public function isBiebBoek(): bool
 	{
 		foreach ($this->getExemplaren() as $exemplaar) {
 			if ($exemplaar->isBiebBoek()) {

@@ -185,7 +185,7 @@ class BeheerMaaltijdenTable extends DataTable
 		);
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return 'Maaltijden / Beheer';
 	}

@@ -121,7 +121,10 @@ class AgendaRepository extends AbstractRepository
 		);
 	}
 
-	public function filterVerborgen(array $items)
+	/**
+  * @return mixed[]
+  */
+ public function filterVerborgen(array $items): array
 	{
 		// Items verbergen
 		$itemsByUUID = [];
@@ -186,7 +189,7 @@ class AgendaRepository extends AbstractRepository
 		DateTimeImmutable $tot,
 		$ical = false,
 		$zijbalk = false
-	) {
+	): array {
 		$result = [];
 
 		// AgendaItems
@@ -316,7 +319,7 @@ class AgendaRepository extends AbstractRepository
 		return $this->getAllAgendeerbaar($dag, $dag);
 	}
 
-	public function nieuw($beginMoment, $eindMoment)
+	public function nieuw($beginMoment, $eindMoment): AgendaItem
 	{
 		$item = new AgendaItem();
 		$item->begin_moment = $beginMoment

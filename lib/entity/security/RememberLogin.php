@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
@@ -19,7 +20,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 #[ORM\Table('login_remember')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\security\RememberLoginRepository::class)]
+#[ORM\Entity(repositoryClass: RememberLoginRepository::class)]
 class RememberLogin implements DataTableEntry, PersistentTokenInterface
 {
 	/**
@@ -53,7 +54,7 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $profiel;
 	/**
   * DateTime
@@ -104,7 +105,7 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	 * @Serializer\SerializedName("remember_since")
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getDataTableRememberSince()
+	public function getDataTableRememberSince(): string
 	{
 		return DateUtil::reldate($this->remember_since);
 	}
@@ -114,7 +115,7 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	 * @Serializer\SerializedName("last_used")
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getDataTableLastUsed()
+	public function getDataTableLastUsed(): string
 	{
 		return DateUtil::reldate($this->last_used);
 	}
@@ -139,7 +140,7 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 		return $this->token;
 	}
 
-	public function getLastUsed(): \DateTime
+	public function getLastUsed(): DateTime
 	{
 		return DateTime::createFromImmutable($this->last_used);
 	}

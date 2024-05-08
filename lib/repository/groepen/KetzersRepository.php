@@ -7,7 +7,7 @@ use CsrDelft\repository\GroepRepository;
 
 class KetzersRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Ketzer::class;
 	}

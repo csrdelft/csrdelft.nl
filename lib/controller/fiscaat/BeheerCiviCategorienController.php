@@ -28,7 +28,7 @@ class BeheerCiviCategorienController
 	 * @Route("/fiscaat/categorien/suggesties", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
-	public function suggesties(Request $request)
+	public function suggesties(Request $request): CiviCategorieSuggestiesResponse
 	{
 		$suggesties = $this->civiCategorieRepository->suggesties(
 			SqlUtil::sql_contains($request->query->get('q'))

@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\peilingen;
 
+use CsrDelft\repository\peilingen\PeilingStemmenRepository;
+use Peiling;
 use CsrDelft\entity\profiel\Profiel;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 #[ORM\Table('peiling_stemmen')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\peilingen\PeilingStemmenRepository::class)]
+#[ORM\Entity(repositoryClass: PeilingStemmenRepository::class)]
 class PeilingStem
 {
 	/**
@@ -33,7 +35,7 @@ class PeilingStem
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $profiel;
 	/**
   * @var int
@@ -43,6 +45,6 @@ class PeilingStem
 	/**
   * @var Peiling
   */
- #[ORM\ManyToOne(targetEntity: \Peiling::class, inversedBy: 'stemmen')]
+ #[ORM\ManyToOne(targetEntity: Peiling::class, inversedBy: 'stemmen')]
  public $peiling;
 }

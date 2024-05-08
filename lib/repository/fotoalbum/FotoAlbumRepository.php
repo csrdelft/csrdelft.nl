@@ -232,7 +232,7 @@ HTML;
 		}
 	}
 
-	public function hernoemAlbum(FotoAlbum $album, $newName)
+	public function hernoemAlbum(FotoAlbum $album, $newName): bool
 	{
 		if (!PathUtil::valid_filename($newName)) {
 			throw new CsrGebruikerException('Ongeldige naam');
@@ -296,7 +296,7 @@ HTML;
 		return true;
 	}
 
-	public function setAlbumCover(FotoAlbum $album, Foto $cover)
+	public function setAlbumCover(FotoAlbum $album, Foto $cover): int
 	{
 		$success = true;
 		// find old cover

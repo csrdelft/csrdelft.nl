@@ -85,7 +85,7 @@ class PinTransactieController extends AbstractController
 	 * @Auth(P_FISCAAT_READ)
 	 * @return GenericDataTableResponse
 	 */
-	public function overzicht(Request $request)
+	public function overzicht(Request $request): Response
 	{
 		$table = $this->createDataTable(PinTransactieMatchTableType::class);
 
@@ -266,7 +266,7 @@ class PinTransactieController extends AbstractController
 	 * @Route("/fiscaat/pin/ontkoppel", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function ontkoppel()
+	public function ontkoppel(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -323,7 +323,7 @@ class PinTransactieController extends AbstractController
 	 * @Route("/fiscaat/pin/koppel", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function koppel()
+	public function koppel(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -699,7 +699,7 @@ class PinTransactieController extends AbstractController
 		if ($form->validate()) {
 			$values = $form->getValues();
 
-			$updated = $this->em->transactional(function () use ($values) {
+			$updated = $this->em->transactional(function () use ($values): array {
 				$updated = [];
 				foreach (explode(',', $values['ids']) as $uuid) {
 					$pinTransactieMatch = $this->pinTransactieMatchRepository->retrieveByUuid(
@@ -737,9 +737,9 @@ class PinTransactieController extends AbstractController
 	 * @Route("/fiscaat/pin/heroverweeg", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function heroverweeg()
+	public function heroverweeg(): GenericDataTableResponse
 	{
-		$deleted = $this->em->transactional(function () {
+		$deleted = $this->em->transactional(function (): array {
 			$alleMatches = $this->pinTransactieMatchRepository->findAll();
 			$deleted = [];
 			$manager = $this->getDoctrine()->getManager();

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\FlashUtil;
@@ -20,7 +21,7 @@ use Doctrine\ORM\PersistentCollection;
  */
 #[ORM\Table('menus')]
 #[ORM\Index(name: 'prioriteit', columns: ['volgorde'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\MenuItemRepository::class)]
+#[ORM\Entity(repositoryClass: MenuItemRepository::class)]
 class MenuItem implements DisplayEntity
 {
 	/**

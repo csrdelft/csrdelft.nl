@@ -32,7 +32,7 @@ class ProfielLogValueChange extends AbstractProfielLogValueChangeEntry
 		$this->newValue = $newValue;
 	}
 
-	public function toHtml()
+	public function toHtml(): string
 	{
 		return "($this->field) " .
 			htmlspecialchars($this->oldValue ?? '') .
@@ -40,14 +40,14 @@ class ProfielLogValueChange extends AbstractProfielLogValueChangeEntry
 			htmlspecialchars($this->newValue ?? '');
 	}
 
-	public function censureer()
+	public function censureer(): ProfielLogValueChangeCensuur
 	{
 		$oldEmpty = trim($this->oldValue) === '';
 		$newEmpty = trim($this->newValue) === '';
 		return new ProfielLogValueChangeCensuur($this->field, $oldEmpty, $newEmpty);
 	}
 
-	public function censureerVeld($naam)
+	public function censureerVeld(string $naam): AbstractProfielLogEntry
 	{
 		if ($this->field == $naam) {
 			return $this->censureer();

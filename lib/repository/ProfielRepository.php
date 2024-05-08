@@ -109,7 +109,7 @@ class ProfielRepository extends AbstractRepository
 	 * @return bool
 	 * @deprecated Doe een null check op ProfielRepository::find($uid)
 	 */
-	public static function existsUid($uid)
+	public static function existsUid($uid): bool
 	{
 		if (!ctype_alnum($uid) || strlen($uid) != 4) {
 			return false;
@@ -118,12 +118,12 @@ class ProfielRepository extends AbstractRepository
 		return $model->find($uid) !== null;
 	}
 
-	public function existsDuck($duck)
+	public function existsDuck($duck): bool
 	{
 		return count($this->findBy(['duckname' => $duck])) !== 0;
 	}
 
-	public function nieuw($lidjaar, $lidstatus)
+	public function nieuw($lidjaar, $lidstatus): Profiel
 	{
 		$user = $this->security->getUser();
 
@@ -184,7 +184,7 @@ class ProfielRepository extends AbstractRepository
 	 * @param LDAP $ldap persistent connection
 	 * @return bool success
 	 */
-	public function save_ldap(Profiel $profiel, LDAP $ldap = null)
+	public function save_ldap(Profiel $profiel, LDAP $ldap = null): bool
 	{
 		$success = true;
 

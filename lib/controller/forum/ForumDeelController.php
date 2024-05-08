@@ -74,7 +74,7 @@ class ForumDeelController extends AbstractController
 	 * @Route("/forum/deel/{forum_id}/{pagina<\d+>}", methods={"GET","POST"}, defaults={"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function deel(RequestStack $requestStack, ForumDeel $deel, $pagina = 1)
+	public function deel(RequestStack $requestStack, ForumDeel $deel, $pagina = 1): Response
 	{
 		if (!$deel->magLezen()) {
 			throw $this->createAccessDeniedException();
@@ -182,7 +182,7 @@ class ForumDeelController extends AbstractController
 	 * @Route("/forum/opheffen/{forum_id}", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function opheffen(ForumDeel $deel)
+	public function opheffen(ForumDeel $deel): JsonResponse
 	{
 		$count = count(
 			$this->forumDradenRepository->findBy(['forum_id' => $deel->forum_id])
@@ -207,7 +207,7 @@ class ForumDeelController extends AbstractController
 	 * @Route("/forum/grafiekdata/{type}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function grafiekdata($type)
+	public function grafiekdata($type): ChartTimeSeries
 	{
 		$datasets = [];
 		if ($type == 'details') {
@@ -227,7 +227,7 @@ class ForumDeelController extends AbstractController
 	 * @Route("/forum/wacht", methods={"GET"})
 	 * @Auth(P_FORUM_MOD)
 	 */
-	public function wacht()
+	public function wacht(): Response
 	{
 		return $this->render('forum/wacht.html.twig', [
 			'resultaten' => $this->forumDelenService->getWachtOpGoedkeuring(),

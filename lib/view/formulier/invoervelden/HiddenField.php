@@ -14,7 +14,7 @@ class HiddenField extends InputField
 		$this->type = 'hidden';
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->getHtml();
 	}

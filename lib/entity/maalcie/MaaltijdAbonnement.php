@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,7 +33,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @see MaaltijdAanmelding
  */
 #[ORM\Table('mlt_abonnementen')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository::class)]
+#[ORM\Entity(repositoryClass: MaaltijdAbonnementenRepository::class)]
 class MaaltijdAbonnement
 {
 	/**
@@ -51,7 +52,7 @@ class MaaltijdAbonnement
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $profiel;
 	/**
   * @var DateTimeImmutable

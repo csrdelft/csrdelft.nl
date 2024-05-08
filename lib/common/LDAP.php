@@ -12,15 +12,14 @@ namespace CsrDelft\common;
 // de data die LDAP in gaat. Maak dus op de juiste manier gebruik
 // van de ldap_escape_(dn|attribute) functies!
 // -------------------------------------------------------------------
-
+use LDAP\Connection;
 use CsrDelft\common\Util\TextUtil;
 
 class LDAP
 {
 	//## private ###
-
-	/** @var \LDAP\Connection|resource|bool */
-	private $conn = false;
+ /** @var Connection|resource|bool */
+ private $conn = false;
 	private $baseLeden;
 	private $baseGroepen;
 	private $basePeople;
@@ -37,7 +36,7 @@ class LDAP
 
 	// Openen van de LDAP connectie, die we regelmatig nodig hebben...
 
-	public function connect($dobind)
+	public function connect($dobind): bool
 	{
 		// zijn we al ingelogd?
 		if ($this->conn !== false) {
@@ -76,7 +75,7 @@ class LDAP
 
 	// functie voor LDAPAuthMech (class.authmech.php) om gebruikersinlog te verifieren
 
-	public function checkBindPass($mech, $user, $pass)
+	public function checkBindPass($mech, $user, $pass): bool
 	{
 		$validbase = [
 			'people' => $this->basePeople,
@@ -103,7 +102,7 @@ class LDAP
 	//### Ledenlijst ####
 	// controleert of een gebruiker met de betreffende 'uid' voorkomt
 
-	public function isLid($uid)
+	public function isLid($uid): bool
 	{
 		$base = $this->baseLeden;
 		$filter = sprintf('(uid=%s)', $this->ldap_escape_filter($uid));
@@ -117,7 +116,7 @@ class LDAP
 
 	// een, of alle records opvragen
 
-	public function getLid($uid = '')
+	public function getLid($uid = ''): array|false
 	{
 		$base = $this->baseLeden;
 		if ($uid == '') {
@@ -133,7 +132,7 @@ class LDAP
 	// N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
 	// http://nl2.php.net/manual/en/function.ldap-add.php
 
-	public function addLid($uid, $entry)
+	public function addLid($uid, $entry): bool
 	{
 		$base = $this->baseLeden;
 		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', ' . $base;
@@ -153,14 +152,14 @@ class LDAP
 	// N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
 	// http://nl2.php.net/manual/en/function.ldap-add.php
 
-	public function modifyLid($uid, $entry)
+	public function modifyLid($uid, $entry): bool
 	{
 		$base = $this->baseLeden;
 		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', ' . $base;
 		return ldap_modify($this->conn, $dn, $entry);
 	}
 
-	public function removeLid($uid)
+	public function removeLid($uid): bool
 	{
 		$base = $this->baseLeden;
 		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', ' . $base;
@@ -170,7 +169,7 @@ class LDAP
 	//### Groepen ####
 	// controleert of een groep met de betreffende 'cn' voorkomt
 
-	public function isGroep($cn)
+	public function isGroep($cn): bool
 	{
 		$base = $this->baseGroepen;
 		$filter = sprintf('(cn=%s)', $this->ldap_escape_filter($cn));
@@ -184,7 +183,7 @@ class LDAP
 
 	// een, of alle records opvragen
 
-	public function getGroep($cn = '')
+	public function getGroep($cn = ''): array|false
 	{
 		$base = $this->baseGroepen;
 		if ($cn == '') {
@@ -217,7 +216,7 @@ class LDAP
 	 * )
 	 * )
 	 */
-	public function addGroep($cn, $entry)
+	public function addGroep($cn, $entry): bool
 	{
 		$base = $this->baseGroepen;
 		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', ' . $base;
@@ -241,7 +240,7 @@ class LDAP
 	 *
 	 * ldap_modify overschrijft de members-array in ldap met nieuwe array.
 	 */
-	public function modifyGroep($cn, $entry)
+	public function modifyGroep($cn, $entry): bool
 	{
 		$base = $this->baseGroepen;
 		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', ' . $base;
@@ -254,7 +253,7 @@ class LDAP
 	 * @param string $cn kortegroepnaam
 	 * @return bool gelukt/mislukt
 	 */
-	public function removeGroep($cn)
+	public function removeGroep($cn): bool
 	{
 		$base = $this->baseGroepen;
 		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', ' . $base;
@@ -264,7 +263,7 @@ class LDAP
 	//### Escapen van LDAP-invoer ####
 	// RFC2253
 
-	private function ldap_escape_dn($text)
+	private function ldap_escape_dn($text): string|array|null
 	{
 		// DN escaping rules
 		// A DN may contain special characters which require escaping. These characters are:
@@ -295,7 +294,7 @@ class LDAP
 	// value of the encoded character. The case of the two hexadecimal
 	// digits is not significant.
 
-	private function ldap_escape_filter($text)
+	private function ldap_escape_filter($text): string|array
 	{
 		// ascii control characters er uit gooien, die zijn niet nodig in deze applicatie
 		$text = preg_replace('/[\x00-\x1F\x7F]/', '', $text);

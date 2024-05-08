@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
+use MaaltijdAbonnement;
 use CsrDelft\common\Eisen;
 use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\view\formulier\DisplayEntity;
@@ -30,7 +32,7 @@ use Monolog\DateTimeImmutable;
  * @see MaaltijdAbonnement
  */
 #[ORM\Table('mlt_repetities')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository::class)]
+#[ORM\Entity(repositoryClass: MaaltijdRepetitiesRepository::class)]
 class MaaltijdRepetitie implements DisplayEntity
 {
 	/**
@@ -48,7 +50,7 @@ class MaaltijdRepetitie implements DisplayEntity
 	/**
   * @var CiviProduct
   */
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\fiscaat\CiviProduct::class)]
+ #[ORM\ManyToOne(targetEntity: CiviProduct::class)]
  public $product;
 	/**
   * 0: Sunday
@@ -95,7 +97,7 @@ class MaaltijdRepetitie implements DisplayEntity
 	/**
   * @var MaaltijdAbonnement[]|ArrayCollection
   */
- #[ORM\OneToMany(targetEntity: \MaaltijdAbonnement::class, mappedBy: 'maaltijd_repetitie')]
+ #[ORM\OneToMany(targetEntity: MaaltijdAbonnement::class, mappedBy: 'maaltijd_repetitie')]
  public $abonnementen;
 
 	public function getStandaardPrijs()
@@ -103,7 +105,7 @@ class MaaltijdRepetitie implements DisplayEntity
 		return $this->product->getPrijsInt();
 	}
 
-	public function getDagVanDeWeekText()
+	public function getDagVanDeWeekText(): string|false
 	{
 		$weekDagen = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
 		return $weekDagen[$this->dag_vd_week];
@@ -127,12 +129,12 @@ class MaaltijdRepetitie implements DisplayEntity
 		}
 	}
 
-	public function getStandaardPrijsFloat()
+	public function getStandaardPrijsFloat(): float
 	{
 		return (float) $this->getStandaardPrijs() / 100.0;
 	}
 
-	public function getFirstOccurrence()
+	public function getFirstOccurrence(): string
 	{
 		$datum = time();
 		$shift = $this->dag_vd_week - date('w', $datum) + 7;

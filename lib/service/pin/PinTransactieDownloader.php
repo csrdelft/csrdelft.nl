@@ -52,20 +52,21 @@ class PinTransactieDownloader
 	}
 
 	/**
-	 * @throws ClientExceptionInterface
-	 * @throws RedirectionExceptionInterface
-	 * @throws ServerExceptionInterface
-	 * @throws TransportExceptionInterface
-	 * @throws DecodingExceptionInterface
-	 * @throws PinDownloadException
-	 */
-	public function download(
+  * @throws ClientExceptionInterface
+  * @throws RedirectionExceptionInterface
+  * @throws ServerExceptionInterface
+  * @throws TransportExceptionInterface
+  * @throws DecodingExceptionInterface
+  * @throws PinDownloadException
+  * @return PinTransactie[]
+  */
+ public function download(
 		$moment,
 		$pinURL,
 		$clientID,
 		$certificatePath,
 		$privateKeyPath
-	) {
+	): array {
 		$momentStart = date_create_immutable($moment);
 		$momentEnd = $momentStart->modify('+1 day');
 

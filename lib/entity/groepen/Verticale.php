@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
@@ -15,7 +16,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\groepen\VerticalenRepository::class)]
+#[ORM\Entity(repositoryClass: VerticalenRepository::class)]
 class Verticale extends Groep
 {
 	/**
@@ -35,7 +36,7 @@ class Verticale extends Groep
  public $naam;
 
 	// Stiekem hebben we helemaal geen leden.
-	public function getLeden()
+	public function getLeden(): ArrayCollection
 	{
 		$leden = [];
 		$container = ContainerFacade::getContainer();
@@ -69,7 +70,7 @@ class Verticale extends Groep
 		return new ArrayCollection($leden);
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/verticalen/' . $this->letter;
 	}

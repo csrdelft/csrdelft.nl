@@ -27,7 +27,7 @@ class FotoAlbumBreadcrumbs
 		FotoAlbum $album,
 		$dropdown,
 		$self
-	) {
+	): string {
 		$breadcrumbs =
 			'<li class="breadcrumb-item"><a href="/">' .
 			Icon::getTag('home') .

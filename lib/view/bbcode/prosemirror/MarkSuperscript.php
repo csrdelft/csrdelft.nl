@@ -7,12 +7,12 @@ use CsrDelft\bb\tag\BbSuperscript;
 
 class MarkSuperscript implements Mark
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbSuperscript::class;
 	}
 
-	public static function getMarkType()
+	public static function getMarkType(): string
 	{
 		return 'superscript';
 	}

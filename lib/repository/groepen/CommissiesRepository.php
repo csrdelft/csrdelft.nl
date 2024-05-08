@@ -9,7 +9,7 @@ use CsrDelft\repository\GroepRepository;
 
 class CommissiesRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Commissie::class;
 	}

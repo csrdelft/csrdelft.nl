@@ -2,6 +2,7 @@
 
 namespace CsrDelft\common\Doctrine\Type\Serializer;
 
+use ReflectionException;
 use ReflectionClass;
 use Zumba\JsonSerializer\JsonSerializer;
 
@@ -32,11 +33,11 @@ class SafeJsonSerializer extends JsonSerializer
 	}
 
 	/**
-	 * @param object $value
-	 * @return array
-	 * @throws \ReflectionException
-	 */
-	protected function serializeObject($value)
+  * @param object $value
+  * @return array
+  * @throws ReflectionException
+  */
+ protected function serializeObject($value)
 	{
 		$ref = new ReflectionClass($value);
 		$className = $ref->getName();
@@ -65,7 +66,7 @@ class SafeJsonSerializer extends JsonSerializer
 	 * Whether this classname is allowed to be (un)serialized.
 	 * @param $className
 	 */
-	protected function classAllowed($className)
+	protected function classAllowed($className): bool
 	{
 		return $this->allowedClasses === null ||
 			in_array($className, $this->allowedClasses);

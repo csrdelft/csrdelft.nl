@@ -31,7 +31,7 @@ class KetzersController extends AbstractGroepenController
 		$this->registry = $registry;
 	}
 
-	public function getGroepType()
+	public function getGroepType(): string
 	{
 		return Ketzer::class;
 	}

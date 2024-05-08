@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -11,7 +12,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\groepen\BesturenRepository::class)]
+#[ORM\Entity(repositoryClass: BesturenRepository::class)]
 class Bestuur extends Groep implements HeeftMoment
 {
 	use GroepMoment;
@@ -23,7 +24,7 @@ class Bestuur extends Groep implements HeeftMoment
  #[ORM\Column(type: 'text')]
  public $bijbeltekst;
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/besturen/' . $this->id;
 	}

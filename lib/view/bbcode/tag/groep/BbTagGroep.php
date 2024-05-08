@@ -108,7 +108,7 @@ abstract class BbTagGroep extends BbTag
 		}
 	}
 
-	protected function groepLight(Groep $groep, $tag, $leden)
+	protected function groepLight(Groep $groep, $tag, $leden): string
 	{
 		return BbHelper::lightLinkBlock(
 			$tag,

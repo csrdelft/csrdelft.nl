@@ -2,6 +2,10 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
+use DateTimeImmutable;
+use CiviBestelling;
+use DateInterval;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\formulier\DisplayEntity;
@@ -21,7 +25,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 07/04/2017
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\fiscaat\CiviSaldoRepository::class)]
+#[ORM\Entity(repositoryClass: CiviSaldoRepository::class)]
 class CiviSaldo implements DataTableEntry, DisplayEntity
 {
 	/**
@@ -46,7 +50,7 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
  #[ORM\Column(type: 'integer')]
  public $saldo;
 	/**
-  * @var \DateTimeImmutable
+  * @var DateTimeImmutable
   * @Serializer\Groups({"log", "datatable"})
   */
  #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
@@ -61,7 +65,7 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	/**
   * @var CiviBestelling[]|ArrayCollection
   */
- #[ORM\OneToMany(targetEntity: \CiviBestelling::class, mappedBy: 'civiSaldo')]
+ #[ORM\OneToMany(targetEntity: CiviBestelling::class, mappedBy: 'civiSaldo')]
  public $bestellingen;
 
 	/**
@@ -77,7 +81,7 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 				$eb->gt(
 					'moment',
 					date_create_immutable()->add(
-						\DateInterval::createFromDateString('-100 days')
+						DateInterval::createFromDateString('-100 days')
 					)
 				)
 			);
@@ -90,7 +94,7 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("lichting")
 	 */
-	public function getDataTableLichting()
+	public function getDataTableLichting(): string
 	{
 		return substr($this->uid, 0, 2);
 	}
@@ -100,7 +104,7 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("naam")
 	 */
-	public function getDataTableNaam()
+	public function getDataTableNaam(): string
 	{
 		return $this->getWeergave();
 	}

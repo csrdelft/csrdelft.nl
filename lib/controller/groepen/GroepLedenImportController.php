@@ -109,7 +109,7 @@ class GroepLedenImportController extends AbstractController
 		Session $session,
 		ProfielRepository $profielRepository,
 		EntityManagerInterface $em
-	) {
+	): RedirectResponse|Response {
 		$groepRepository = $em->getRepository(Groep::class);
 
 		// Haal data op

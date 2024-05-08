@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\instellingen\InstellingenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Table('instellingen')]
 #[ORM\UniqueConstraint(name: 'module_instelling', columns: ['module', 'instelling'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\instellingen\InstellingenRepository::class)]
+#[ORM\Entity(repositoryClass: InstellingenRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class Instelling
 {

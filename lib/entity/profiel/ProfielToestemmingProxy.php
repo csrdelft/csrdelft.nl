@@ -51,7 +51,7 @@ class ProfielToestemmingProxy extends Profiel
 				ReflectionProperty::IS_STATIC
 			);
 
-			static::$publicVelden = array_map(function ($prop) {
+			static::$publicVelden = array_map(function ($prop): string {
 				return $prop->name;
 			}, array_diff($publicReflectionProperties, $staticReflectionProperties));
 		}
@@ -66,7 +66,7 @@ class ProfielToestemmingProxy extends Profiel
 		}
 	}
 
-	private function zichtbaar(string $name)
+	private function zichtbaar(string $name): bool
 	{
 		return !in_array($name, $this->filterVelden) ||
 			$this->lidToestemmingRepository->toestemming($this->profiel, $name);

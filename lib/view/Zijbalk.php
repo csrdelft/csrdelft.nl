@@ -98,7 +98,7 @@ class Zijbalk
 	/**
 	 * @return string[]
 	 */
-	public function getZijbalk()
+	public function getZijbalk(): array
 	{
 		return ArrayUtil::array_filter_empty([
 			$this->blockIsHetAl(),
@@ -114,7 +114,7 @@ class Zijbalk
 		]);
 	}
 
-	private function blockLustrum()
+	private function blockLustrum(): string
 	{
 		return $this->twig->render('menu/lustrumblock.html.twig');
 	}

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier;
 
+use ReflectionClass;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\DateUtil;
@@ -121,7 +122,7 @@ class Formulier implements View, Validator, ToResponse
 	{
 		$fieldName = $field->getName();
 		if ($this->model) {
-			$class = new \ReflectionClass($this->model);
+			$class = new ReflectionClass($this->model);
 			$setterMethod = 'set' . ucfirst($fieldName);
 			if ($class->hasMethod($setterMethod)) {
 				$method = $class->getMethod($setterMethod);
@@ -147,7 +148,7 @@ class Formulier implements View, Validator, ToResponse
 		return $this->fields;
 	}
 
-	public function hasFields()
+	public function hasFields(): bool
 	{
 		return !empty($this->fields);
 	}
@@ -202,7 +203,7 @@ class Formulier implements View, Validator, ToResponse
 	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField and !$field->isPosted()) {
@@ -217,7 +218,7 @@ class Formulier implements View, Validator, ToResponse
 	 * Alle valideer-functies kunnen het model gebruiken bij het valideren
 	 * dat meegegeven is bij de constructie van het InputField.
 	 */
-	public function validate()
+	public function validate(): bool
 	{
 		if (!$this->isPosted()) {
 			return false;
@@ -236,9 +237,10 @@ class Formulier implements View, Validator, ToResponse
 	}
 
 	/**
-	 * Geeft waardes van de formuliervelden terug.
-	 */
-	public function getValues()
+  * Geeft waardes van de formuliervelden terug.
+  * @return mixed[]
+  */
+ public function getValues(): array
 	{
 		$values = [];
 		foreach ($this->fields as $field) {
@@ -277,7 +279,7 @@ class Formulier implements View, Validator, ToResponse
 		return $this->javascript;
 	}
 
-	protected function getFormTag()
+	protected function getFormTag(): string
 	{
 		if ($this->dataTableId) {
 			$this->css_classes[] = 'DataTableResponse';
@@ -297,7 +299,7 @@ class Formulier implements View, Validator, ToResponse
 			'">';
 	}
 
-	protected function getScriptTag()
+	protected function getScriptTag(): string
 	{
 		$js = $this->getJavascript();
 
@@ -320,7 +322,7 @@ HTML;
 	 *
 	 * @return string
 	 */
-	public function __toString()
+	public function __toString(): string
 	{
 		$string = '';
 
@@ -361,11 +363,12 @@ HTML;
 	}
 
 	/**
-	 * Geef een array terug van de gewijzigde velden.
-	 *
-	 * @returns ChangeLogEntry[]
-	 */
-	public function diff()
+  * Geef een array terug van de gewijzigde velden.
+  *
+  * @returns ChangeLogEntry[]
+  * @return mixed[]
+  */
+ public function diff(): array
 	{
 		$changeLogRepository = ContainerFacade::getContainer()->get(
 			ChangeLogRepository::class
@@ -395,7 +398,7 @@ HTML;
 	 * @param ChangeLogEntry[] $diff
 	 * @return string
 	 */
-	public function changelog(array $diff)
+	public function changelog(array $diff): string
 	{
 		$changelog = '';
 		if (!empty($diff)) {
@@ -420,7 +423,7 @@ HTML;
 		return $changelog;
 	}
 
-	public function getMethod()
+	public function getMethod(): string
 	{
 		return $this->post ? 'post' : 'get';
 	}

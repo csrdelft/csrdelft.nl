@@ -31,7 +31,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 		$draad_id = null,
 		$concept = null,
 		$titel = null
-	) {
+	): ForumDraadReageren {
 		$reageren = new ForumDraadReageren();
 		$reageren->forum_id = $deel->forum_id;
 		$reageren->draad_id = (int) $draad_id;

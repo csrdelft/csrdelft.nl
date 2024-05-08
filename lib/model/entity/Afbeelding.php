@@ -37,7 +37,7 @@ class Afbeelding extends Bestand
 	/**
 	 * @return string
 	 */
-	public function getFullPath()
+	public function getFullPath(): string|array|null
 	{
 		return PathUtil::join_paths($this->directory, $this->filename);
 	}

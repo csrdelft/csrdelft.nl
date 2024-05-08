@@ -2,6 +2,7 @@
 
 namespace CsrDelft\common\Serializer\Normalizer;
 
+use ArrayObject;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,7 +33,7 @@ class DataTableEntryNormalizer implements NormalizerInterface
 		$this->normalizer = $normalizer;
 	}
 
-	public function normalize($topic, string $format = null, array $context = []): string|int|float|bool|\ArrayObject|array|null
+	public function normalize($topic, string $format = null, array $context = []): string|int|float|bool|ArrayObject|array|null
 	{
 		$metadata = $this->entityManager->getClassMetadata(get_class($topic));
 

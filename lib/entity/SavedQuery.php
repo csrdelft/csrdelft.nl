@@ -2,11 +2,12 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table('savedquery')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\SavedQueryRepository::class)]
+#[ORM\Entity(repositoryClass: SavedQueryRepository::class)]
 class SavedQuery
 {
 	/**
@@ -37,7 +38,7 @@ class SavedQuery
  #[ORM\Column(type: 'string', options: ['default' => 'Overig'])]
  public $categorie;
 
-	public function magBekijken()
+	public function magBekijken(): bool
 	{
 		return LoginService::mag($this->permissie) || LoginService::mag(P_ADMIN);
 	}

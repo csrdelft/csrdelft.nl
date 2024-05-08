@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\pin;
 
+use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\DateUtil;
@@ -23,7 +24,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @since 23/02/2018
  */
 #[ORM\Table('pin_transactie_match')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\pin\PinTransactieMatchRepository::class)]
+#[ORM\Entity(repositoryClass: PinTransactieMatchRepository::class)]
 class PinTransactieMatch implements DataTableEntry
 {
 	/**
@@ -61,7 +62,7 @@ class PinTransactieMatch implements DataTableEntry
   * @var CiviBestelling|null
   */
  #[ORM\JoinColumn(nullable: true)]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\fiscaat\CiviBestelling::class)]
+ #[ORM\ManyToOne(targetEntity: CiviBestelling::class)]
  public $bestelling;
 	/**
   * @var string
@@ -78,7 +79,7 @@ class PinTransactieMatch implements DataTableEntry
 	public static function verkeerdBedrag(
 		PinTransactie $pinTransactie,
 		CiviBestelling $pinBestelling
-	) {
+	): static {
 		$pinTransactieMatch = new static();
 		$pinTransactieMatch->status =
 			PinTransactieMatchStatusEnum::STATUS_VERKEERD_BEDRAG;
@@ -92,7 +93,7 @@ class PinTransactieMatch implements DataTableEntry
 	 * @param CiviBestelling $pinBestelling
 	 * @return static
 	 */
-	public static function missendeTransactie(CiviBestelling $pinBestelling)
+	public static function missendeTransactie(CiviBestelling $pinBestelling): static
 	{
 		$pinTransactieMatch = new static();
 		$pinTransactieMatch->status =
@@ -107,7 +108,7 @@ class PinTransactieMatch implements DataTableEntry
 	 * @param PinTransactie $pinTransactie
 	 * @return static
 	 */
-	public static function missendeBestelling(PinTransactie $pinTransactie)
+	public static function missendeBestelling(PinTransactie $pinTransactie): static
 	{
 		$pinTransactieMatch = new static();
 		$pinTransactieMatch->status =
@@ -126,7 +127,7 @@ class PinTransactieMatch implements DataTableEntry
 	public static function match(
 		PinTransactie $pinTransactie,
 		CiviBestelling $pinBestelling
-	) {
+	): static {
 		$pinTransactieMatch = new static();
 		$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_MATCH;
 		$pinTransactieMatch->transactie = $pinTransactie;
@@ -143,7 +144,7 @@ class PinTransactieMatch implements DataTableEntry
 	public static function negeer(
 		PinTransactie $pinTransactie = null,
 		CiviBestelling $pinBestelling = null
-	) {
+	): static {
 		$pinTransactieMatch = new static();
 		$pinTransactieMatch->status =
 			PinTransactieMatchStatusEnum::STATUS_GENEGEERD;
@@ -153,7 +154,7 @@ class PinTransactieMatch implements DataTableEntry
 		return $pinTransactieMatch;
 	}
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return strtolower(
 			sprintf(
@@ -169,7 +170,7 @@ class PinTransactieMatch implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("status")
 	 */
-	public function getDataTableStatus()
+	public function getDataTableStatus(): string
 	{
 		return PinTransactieMatchStatusEnum::from($this->status)->getDescription() .
 			$this->icons();
@@ -178,7 +179,7 @@ class PinTransactieMatch implements DataTableEntry
 	/**
 	 * @return string
 	 */
-	private function icons()
+	private function icons(): string
 	{
 		$desc = '';
 		if ($this->bestelling !== null && $this->bestelling->comment) {
@@ -210,7 +211,7 @@ class PinTransactieMatch implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("bestelling")
 	 */
-	public function getDataTableBestelling()
+	public function getDataTableBestelling(): string
 	{
 		if ($this->bestelling) {
 			return $this->bestelling->getPinBeschrijving();
@@ -256,7 +257,7 @@ class PinTransactieMatch implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("tijdsverschil")
 	 */
-	public function getDataTableTijdsverschil()
+	public function getDataTableTijdsverschil(): string
 	{
 		if (!$this->transactie || !$this->bestelling) {
 			return '-';
@@ -305,7 +306,7 @@ class PinTransactieMatch implements DataTableEntry
 	 * @param DateTimeImmutable $moment
 	 * @return string
 	 */
-	public static function renderTijd(DateTimeImmutable $moment)
+	public static function renderTijd(DateTimeImmutable $moment): string|false
 	{
 		return DateUtil::dateFormatIntl($moment, DateUtil::FULL_TIME_FORMAT);
 	}
@@ -315,7 +316,7 @@ class PinTransactieMatch implements DataTableEntry
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("verschil")
 	 */
-	public function getDataTableVerschil()
+	public function getDataTableVerschil(): string
 	{
 		$verschil = $this->getVerschil();
 		if ($verschil !== null) {
@@ -377,7 +378,7 @@ class PinTransactieMatch implements DataTableEntry
 		$civiProductRepository,
 		$comment = null,
 		$uid = null
-	) {
+	): CiviBestelling {
 		$bestellingInhoud = $this->bouwBestellingInhoud($civiProductRepository);
 		if (!$bestellingInhoud) {
 			throw new CsrException('Bestelling kan niet gebouwd worden');
@@ -402,7 +403,7 @@ class PinTransactieMatch implements DataTableEntry
 	 * @param CiviProductRepository $civiProductRepository
 	 * @return CiviBestellingInhoud|null
 	 */
-	public function bouwBestellingInhoud($civiProductRepository)
+	public function bouwBestellingInhoud($civiProductRepository): CiviBestellingInhoud
 	{
 		$bestellingInhoud = new CiviBestellingInhoud();
 		// Gebruik pincorrectie voor periode voor invoering tussenrekeningen, gebruik pintransactie erna

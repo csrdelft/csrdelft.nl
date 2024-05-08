@@ -146,7 +146,7 @@ class GroepenBeheerTable extends DataTable
 		);
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
 			Icon::getTag('home') .
@@ -160,7 +160,7 @@ class GroepenBeheerTable extends DataTable
 			'<li class="breadcrumb-item active">Beheren</li></ul>';
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$view = new CmsPaginaView($this->pagina);
 		return $view->__toString() . parent::__toString();

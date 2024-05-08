@@ -13,7 +13,7 @@ use CsrDelft\entity\groepen\RechtenGroep;
  */
 class RechtengroepenController extends AbstractGroepenController
 {
-	public function getGroepType()
+	public function getGroepType(): string
 	{
 		return RechtenGroep::class;
 	}

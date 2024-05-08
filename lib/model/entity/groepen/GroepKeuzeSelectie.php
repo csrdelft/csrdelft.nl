@@ -27,7 +27,7 @@ class GroepKeuzeSelectie
 		$this->selectie = $selectie;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return "$this->naam: $this->selectie";
 	}

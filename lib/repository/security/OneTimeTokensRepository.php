@@ -34,7 +34,7 @@ class OneTimeTokensRepository extends AbstractRepository
 		parent::__construct($registry, OneTimeToken::class);
 	}
 
-	public function hasToken($uid, $url)
+	public function hasToken($uid, $url): bool
 	{
 		return $this->find(['uid' => $uid, 'url' => $url]) != null;
 	}
@@ -70,7 +70,7 @@ class OneTimeTokensRepository extends AbstractRepository
 	 * @param string $url
 	 * @return boolean
 	 */
-	public function isVerified($uid, $url)
+	public function isVerified($uid, $url): bool
 	{
 		$token = $this->find(['uid' => $uid, 'url' => $url]);
 		if ($token) {

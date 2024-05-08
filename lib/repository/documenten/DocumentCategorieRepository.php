@@ -42,7 +42,7 @@ class DocumentCategorieRepository extends AbstractRepository
 	/**
 	 * @return array
 	 */
-	public function getCategorieNamen()
+	public function getCategorieNamen(): array
 	{
 		$categorien = $this->findAll();
 
@@ -55,7 +55,7 @@ class DocumentCategorieRepository extends AbstractRepository
 		return $return;
 	}
 
-	public function findMetSchijfrechtenVoorLid()
+	public function findMetSchijfrechtenVoorLid(): array
 	{
 		return array_filter($this->findAll(), function ($categorie) {
 			return $this->security->isGranted($categorie->schrijfrechten);

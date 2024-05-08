@@ -10,7 +10,7 @@
  * Configure sessions.
  * Boot framework.
  */
-
+use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\HostUtil;
 use CsrDelft\Kernel;
@@ -106,7 +106,7 @@ if (!HostUtil::isCLI()) {
 	// Sync lifetime of FS based PHP session with DB based C.S.R. session
 	ini_set(
 		'session.gc_maxlifetime',
-		(int) \CsrDelft\common\Util\InstellingUtil::instelling(
+		(int) InstellingUtil::instelling(
 			'beveiliging',
 			'session_lifetime_seconds'
 		)

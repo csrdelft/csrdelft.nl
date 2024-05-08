@@ -7,7 +7,7 @@ use CsrDelft\bb\tag\BbNode;
 
 class MarkBold implements Mark
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbBold::class;
 	}
@@ -17,7 +17,7 @@ class MarkBold implements Mark
 		return [];
 	}
 
-	public static function getMarkType()
+	public static function getMarkType(): string
 	{
 		return 'strong';
 	}

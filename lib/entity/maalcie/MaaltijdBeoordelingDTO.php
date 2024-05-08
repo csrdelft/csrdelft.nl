@@ -98,7 +98,7 @@ class MaaltijdBeoordelingDTO implements CustomDataTableEntry
 	 * @return string
 	 * @Serializer\Groups("datatable")
 	 */
-	public function getAantalBeoordelingen()
+	public function getAantalBeoordelingen(): string
 	{
 		return $this->kwantiteitAantal . ', ' . $this->kwaliteitAantal;
 	}

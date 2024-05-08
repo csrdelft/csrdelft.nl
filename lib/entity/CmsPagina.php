@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\common\Security\Voter\Entity\CmsPaginaVoter;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Content Management System Paginas zijn statische pagina's die via de front-end kunnen worden gewijzigd.
  */
 #[ORM\Table('cms_paginas')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\CmsPaginaRepository::class)]
+#[ORM\Entity(repositoryClass: CmsPaginaRepository::class)]
 class CmsPagina
 {
 	/**

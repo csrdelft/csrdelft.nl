@@ -2,6 +2,8 @@
 
 namespace CsrDelft\repository;
 
+use InvalidArgumentException;
+use DateTimeImmutable;
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\ReflectionUtil;
@@ -60,12 +62,12 @@ abstract class GroepRepository extends AbstractRepository
 	 */
 	abstract public function getEntityClassName();
 
-	public static function getUrl()
+	public static function getUrl(): string
 	{
 		return '/groepen/' . static::getNaam();
 	}
 
-	public static function getNaam()
+	public static function getNaam(): string
 	{
 		return strtolower(
 			str_replace(
@@ -88,7 +90,7 @@ abstract class GroepRepository extends AbstractRepository
 		array $orderBy = null,
 		$limit = null,
 		$offset = null
-	) {
+	): array {
 		// Eerst sorteren op FT/HT/OT
 		$orderBy = ['status' => 'ASC'] + ($orderBy ?? []);
 		if (
@@ -308,7 +310,7 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param Groep $groep
 	 * @return GroepStatistiekDTO
 	 */
-	public function getStatistieken(Groep $groep)
+	public function getStatistieken(Groep $groep): GroepStatistiekDTO
 	{
 		if ($groep->aantalLeden() == 0) {
 			return new GroepStatistiekDTO(0, [], [], [], []);
@@ -390,7 +392,7 @@ abstract class GroepRepository extends AbstractRepository
 	{
 		foreach ($status as $item) {
 			if (!GroepStatus::isValidValue($item)) {
-				throw new \InvalidArgumentException(
+				throw new InvalidArgumentException(
 					$item . ' is geen geldige groepstatus'
 				);
 			}
@@ -430,8 +432,8 @@ abstract class GroepRepository extends AbstractRepository
 	 * @return Groep[]
 	 */
 	public function getGroepenVoorAgenda(
-		\DateTimeImmutable $van,
-		\DateTimeImmutable $tot
+		DateTimeImmutable $van,
+		DateTimeImmutable $tot
 	) {
 		return $this->createQueryBuilder('a')
 			->where('a.inAgenda = true')
@@ -465,7 +467,7 @@ abstract class GroepRepository extends AbstractRepository
 		);
 	}
 
-	public function overzichtAantal(string $soort = null)
+	public function overzichtAantal(string $soort = null): int
 	{
 		$activiteiten = $this->overzicht(null, null, $soort);
 

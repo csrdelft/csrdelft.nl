@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\DebugLogRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 #[ORM\Table('debug_log')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\DebugLogRepository::class)]
+#[ORM\Entity(repositoryClass: DebugLogRepository::class)]
 class DebugLogEntry
 {
 	/**

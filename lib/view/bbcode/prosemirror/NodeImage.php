@@ -2,12 +2,13 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbImg;
 
 class NodeImage implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbImg::class;
 	}
@@ -15,7 +16,7 @@ class NodeImage implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbImg) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		return [
@@ -34,12 +35,12 @@ class NodeImage implements Node
 		];
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'image';
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

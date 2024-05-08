@@ -105,7 +105,7 @@ class CommissieVoorkeurenController extends AbstractController
 		$cid,
 		$uid,
 		$waarde
-	) {
+	): JsonResponse {
 		$profiel = $profielRepository->get($uid);
 
 		if (!$profiel) {

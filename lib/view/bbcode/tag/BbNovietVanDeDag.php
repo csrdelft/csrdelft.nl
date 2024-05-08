@@ -70,7 +70,7 @@ class BbNovietVanDeDag extends BbTag
 				$volgorde[] = @mt_rand();
 			}
 
-			uksort($profielen, function ($a, $b) use ($volgorde) {
+			uksort($profielen, function ($a, $b) use ($volgorde): int {
 				return $volgorde[$a] <=> $volgorde[$b];
 			});
 

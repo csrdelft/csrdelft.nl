@@ -32,7 +32,7 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function nieuw(Maaltijd $maaltijd)
+	public function nieuw(Maaltijd $maaltijd): MaaltijdBeoordeling
 	{
 		$b = new MaaltijdBeoordeling();
 		$b->maaltijd_id = $maaltijd->maaltijd_id;
@@ -44,7 +44,7 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository
 		return $b;
 	}
 
-	public function getBeoordelingSamenvatting(Maaltijd $maaltijd)
+	public function getBeoordelingSamenvatting(Maaltijd $maaltijd): MaaltijdBeoordelingDTO
 	{
 		// Haal beoordelingen voor deze maaltijd op
 		$beoordelingen = $this->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);

@@ -14,7 +14,7 @@ use CsrDelft\common\Util\UrlUtil;
  */
 class UrlField extends TextField
 {
-	public function getValue()
+	public function getValue(): ?string
 	{
 		$this->value = parent::getValue();
 		if ($this->value && str_starts_with($this->value, HostUtil::getCsrRoot())) {
@@ -23,7 +23,7 @@ class UrlField extends TextField
 		return $this->value;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;

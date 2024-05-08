@@ -243,7 +243,7 @@ class CsrBB extends Parser
 	 * @param string $bbcode
 	 * @return string
 	 */
-	public static function escapeUbbOff($bbcode)
+	public static function escapeUbbOff($bbcode): string|array
 	{
 		return str_replace(['[/ubboff]', '[/tekst]'], ['[/]', '[/]'], $bbcode);
 	}
@@ -254,7 +254,7 @@ class CsrBB extends Parser
 	 * @param string $bbcode
 	 * @return string
 	 */
-	public static function filterPrive($bbcode)
+	public static function filterPrive($bbcode): string|array|null
 	{
 		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
 		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
@@ -270,7 +270,7 @@ class CsrBB extends Parser
 	 * @param string $bbcode
 	 * @return string
 	 */
-	public static function filterCommentaar($bbcode)
+	public static function filterCommentaar($bbcode): string|array|null
 	{
 		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
 		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies

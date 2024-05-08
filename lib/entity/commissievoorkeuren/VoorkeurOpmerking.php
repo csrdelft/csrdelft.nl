@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\commissievoorkeuren;
 
+use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
 use CsrDelft\entity\profiel\Profiel;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class VoorkeurOpmerking
  * @package CsrDelft\entity\commissievoorkeuren
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository::class)]
+#[ORM\Entity(repositoryClass: VoorkeurOpmerkingRepository::class)]
 class VoorkeurOpmerking
 {
 	/**
@@ -35,6 +36,6 @@ class VoorkeurOpmerking
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $profiel;
 }

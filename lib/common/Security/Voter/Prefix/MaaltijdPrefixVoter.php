@@ -32,7 +32,7 @@ class MaaltijdPrefixVoter extends PrefixVoter
 		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
-	protected function supportsPrefix($prefix)
+	protected function supportsPrefix($prefix): bool
 	{
 		return strtoupper($prefix) == 'MAALTIJD';
 	}
@@ -43,7 +43,7 @@ class MaaltijdPrefixVoter extends PrefixVoter
 		$role,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		/** @var Account $user */
 		$user = $token->getUser();
 

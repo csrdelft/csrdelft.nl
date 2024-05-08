@@ -84,7 +84,7 @@ class ForumController extends AbstractController
 	 * @Route("/forum", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function forum()
+	public function forum(): Response
 	{
 		return $this->render('forum/overzicht.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
@@ -98,7 +98,7 @@ class ForumController extends AbstractController
 	 * @Route("/forum/rss/{private_auth_token}/csrdelft.xml", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function rss()
+	public function rss(): Response
 	{
 		$response = new Response(null, 200, [
 			'Content-Type' => 'application/rss+xml; charset=UTF-8',
@@ -128,7 +128,7 @@ class ForumController extends AbstractController
 	 * @Route("/forum/zoeken/{query}/{pagina<\d+>}", methods={"GET", "POST"}, defaults={"query"=null,"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function zoeken($query = null, int $pagina = 1)
+	public function zoeken($query = null, int $pagina = 1): Response
 	{
 		$this->forumPostsRepository->setHuidigePagina($pagina, 0);
 		$this->forumDradenRepository->setHuidigePagina($pagina, 0);
@@ -160,7 +160,7 @@ class ForumController extends AbstractController
 	 * @Route("/forum/titelzoeken", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function titelzoeken(Request $request, $zoekterm = null)
+	public function titelzoeken(Request $request, $zoekterm = null): JsonResponse
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			return new JsonResponse([]);
@@ -222,7 +222,7 @@ class ForumController extends AbstractController
 		RequestStack $requestStack,
 		$pagina = 1,
 		$belangrijk = null
-	) {
+	): Response {
 		$this->forumDradenRepository->setHuidigePagina((int) $pagina, 0);
 		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
 		$deel = $this->forumDelenService->getRecent($belangrijk);
@@ -261,7 +261,7 @@ class ForumController extends AbstractController
 	 * @Route("/forum/categorie/suggestie")
 	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function forumCategorieSuggestie(Request $request)
+	public function forumCategorieSuggestie(Request $request): GenericSuggestiesResponse
 	{
 		$zoekterm = $request->query->get('q');
 		$forumCategories = $this->forumCategorieRepository

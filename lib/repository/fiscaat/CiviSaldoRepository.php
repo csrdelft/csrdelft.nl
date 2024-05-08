@@ -66,7 +66,7 @@ class CiviSaldoRepository extends AbstractRepository
 	 *
 	 * @return CiviSaldo
 	 */
-	public function maakSaldo($uid)
+	public function maakSaldo($uid): CiviSaldo
 	{
 		$saldo = new CiviSaldo();
 		$saldo->uid = $uid;
@@ -225,7 +225,7 @@ class CiviSaldoRepository extends AbstractRepository
 		$this->_em->flush();
 	}
 
-	public function existsByUid(string $uid)
+	public function existsByUid(string $uid): bool
 	{
 		return count($this->findBy(['uid' => $uid])) == 1;
 	}
@@ -307,7 +307,7 @@ SQL;
 		return self::formatWeekinvoer($nativeQuery->getResult());
 	}
 
-	private static function formatWeekinvoer($result)
+	private static function formatWeekinvoer($result): stdClass
 	{
 		$weekinvoeren = new stdClass();
 		// Standaard volgorde categorieën

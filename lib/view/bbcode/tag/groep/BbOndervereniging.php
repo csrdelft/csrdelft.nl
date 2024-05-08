@@ -20,7 +20,7 @@ class BbOndervereniging extends BbTagGroep
 		return 'ondervereniging';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'leden';
 	}

@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use CsrDelft\repository\fiscaat\CiviPrijsRepository;
+use CiviProduct;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Table('civi_prijs')]
 #[ORM\UniqueConstraint(name: 'unique_van_product_id', columns: ['van', 'product_id'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\fiscaat\CiviPrijsRepository::class)]
+#[ORM\Entity(repositoryClass: CiviPrijsRepository::class)]
 class CiviPrijs
 {
 	/**
@@ -43,7 +45,7 @@ class CiviPrijs
 	/**
   * @var CiviProduct
   */
- #[ORM\ManyToOne(targetEntity: \CiviProduct::class, inversedBy: 'prijzen')]
+ #[ORM\ManyToOne(targetEntity: CiviProduct::class, inversedBy: 'prijzen')]
  public $product;
 	/**
   * @var integer

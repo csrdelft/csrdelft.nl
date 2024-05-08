@@ -2,12 +2,14 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use CsrDelft\repository\fiscaat\CiviSaldoLogRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package CsrDelft\entity\fiscaat
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\fiscaat\CiviSaldoLogRepository::class)]
+#[ORM\Entity(repositoryClass: CiviSaldoLogRepository::class)]
 class CiviSaldoLog
 {
 	/**
@@ -33,7 +35,7 @@ class CiviSaldoLog
  #[ORM\Column(type: 'text')]
  public $data;
 	/**
-  * @var \DateTimeImmutable
+  * @var DateTimeImmutable
   */
  #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
  public $timestamp;

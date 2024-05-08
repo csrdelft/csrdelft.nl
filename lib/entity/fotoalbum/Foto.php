@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\fotoalbum;
 
+use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\profiel\Profiel;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 #[ORM\Table('fotos')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\fotoalbum\FotoRepository::class)]
+#[ORM\Entity(repositoryClass: FotoRepository::class)]
 #[ORM\EntityListeners(['CsrDelft\events\FotoListener'])]
 class Foto extends Afbeelding
 {
@@ -51,7 +52,7 @@ class Foto extends Afbeelding
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'owner', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $owner_profiel;
 
 	public function __construct(
@@ -76,7 +77,7 @@ class Foto extends Afbeelding
 		parent::__construct(null, $parse);
 	}
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return PathUtil::join_paths($this->subdir, $this->filename) .
 			'@' .
@@ -110,7 +111,7 @@ class Foto extends Afbeelding
 			PathUtil::join_paths(self::FOTOALBUM_ROOT, $this->subdir)
 		);
 	}
-	public function getAlbum()
+	public function getAlbum(): FotoAlbum
 	{
 		return new FotoAlbum($this->subdir);
 	}
@@ -145,13 +146,13 @@ class Foto extends Afbeelding
 		);
 	}
 
-	public function hasThumb()
+	public function hasThumb(): bool
 	{
 		$path = $this->getThumbPath();
 		return file_exists($path) && is_file($path);
 	}
 
-	public function hasResized()
+	public function hasResized(): bool
 	{
 		$path = $this->getResizedPath();
 		return file_exists($path) && is_file($path);
@@ -217,7 +218,7 @@ class Foto extends Afbeelding
 		}
 	}
 
-	public function isComplete()
+	public function isComplete(): bool
 	{
 		return $this->hasThumb() && $this->hasResized();
 	}

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\entity\security\enum\AccessAction;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -14,7 +15,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * ACL-entry.
  */
 #[ORM\Table('acl')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\security\AccessRepository::class)]
+#[ORM\Entity(repositoryClass: AccessRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class AccessControl
 {
@@ -63,7 +64,7 @@ class AccessControl
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("resource")
 	 */
-	public function getDataTableResource()
+	public function getDataTableResource(): string
 	{
 		if ($this->resource === '*') {
 			return 'Elke ' . lcfirst($this->environment);

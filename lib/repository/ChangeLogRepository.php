@@ -64,7 +64,7 @@ class ChangeLogRepository extends AbstractRepository
 		return $change;
 	}
 
-	public function serialize($value)
+	public function serialize($value): string
 	{
 		return $this->serializer->serialize($value, 'json', ['groups' => 'log']);
 	}
@@ -77,7 +77,7 @@ class ChangeLogRepository extends AbstractRepository
 	 *
 	 * @return ChangeLogEntry
 	 */
-	public function nieuw($subject, $property, $old, $new)
+	public function nieuw($subject, $property, $old, $new): ChangeLogEntry
 	{
 		$change = new ChangeLogEntry();
 		$change->moment = date_create_immutable();

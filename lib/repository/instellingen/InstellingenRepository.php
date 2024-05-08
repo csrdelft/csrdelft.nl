@@ -99,7 +99,7 @@ class InstellingenRepository extends AbstractRepository
 	 *
 	 * @return Instelling
 	 */
-	protected function newInstelling($module, $id)
+	protected function newInstelling($module, $id): Instelling
 	{
 		$instelling = new Instelling();
 		$instelling->module = $module;

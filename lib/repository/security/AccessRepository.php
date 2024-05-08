@@ -89,7 +89,7 @@ class AccessRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function setAcl($environment, $resource, array $acl)
+	public function setAcl($environment, $resource, array $acl): bool
 	{
 		// Has permission to change permissions?
 		if (!LoginService::mag(P_ADMIN)) {
@@ -182,7 +182,7 @@ class AccessRepository extends AbstractRepository
 	 *
 	 * @return AccessControl
 	 */
-	public function nieuw($environment, $resource)
+	public function nieuw($environment, $resource): AccessControl
 	{
 		$ac = new AccessControl();
 		$ac->environment = $environment;

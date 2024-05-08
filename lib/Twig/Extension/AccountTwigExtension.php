@@ -2,6 +2,7 @@
 
 namespace CsrDelft\Twig\Extension;
 
+use Generator;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\profiel\Profiel;
@@ -51,7 +52,7 @@ class AccountTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function may_su_to(Account $account)
+	public function may_su_to(Account $account): bool
 	{
 		return $this->suService->maySuTo($account);
 	}
@@ -74,10 +75,10 @@ class AccountTwigExtension extends AbstractExtension
 	}
 
 	/**
-	 * @param Profiel $profiel
-	 * @return GroepLid[]|\Generator
-	 */
-	public function getCommissielid(Profiel $profiel)
+  * @param Profiel $profiel
+  * @return GroepLid[]|Generator
+  */
+ public function getCommissielid(Profiel $profiel)
 	{
 		$commissies = $this->commissiesRepository->getGroepenVoorLid($profiel);
 		foreach ($commissies as $commissie) {

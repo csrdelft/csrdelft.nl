@@ -49,7 +49,7 @@ final class TextUtil
 	 * @param int $offset
 	 * @return bool|int
 	 */
-	private static function first_space_before(string $string, int $offset = null)
+	private static function first_space_before(string $string, int $offset = null): int
 	{
 		return mb_strrpos(substr($string, 0, $offset), ' ') + 1;
 	}
@@ -61,7 +61,7 @@ final class TextUtil
 	 * @param int $offset
 	 * @return bool|int
 	 */
-	private static function first_space_after(string $string, int $offset = null)
+	private static function first_space_after(string $string, int $offset = null): int|false
 	{
 		return mb_strpos($string, ' ', $offset);
 	}
@@ -82,7 +82,7 @@ final class TextUtil
 		int $space_around = 100,
 		int $threshold = 10,
 		string $ellipsis = '…'
-	) {
+	): string {
 		$prevPos = $lastPos = 0;
 		$firstPos = mb_stripos($string, $keyword);
 
@@ -153,7 +153,7 @@ final class TextUtil
 	 * @author P.W.G. Brussee <brussee@live.nl>
 	 *
 	 */
-	public static function escape_ical($string)
+	public static function escape_ical($string): string|array
 	{
 		$string = str_replace('\\', '\\\\', $string);
 		$string = str_replace("\r", '', $string);
@@ -168,7 +168,7 @@ final class TextUtil
 	 * @param string input
 	 * @return string
 	 */
-	public static function crlf_endings(string $input)
+	public static function crlf_endings(string $input): string|array
 	{
 		return str_replace("\n", "\r\n", $input);
 	}
@@ -180,7 +180,7 @@ final class TextUtil
 	 *
 	 * @return string
 	 */
-	public static function aaidrom($voornaam, $tussenvoegsel, $achternaam)
+	public static function aaidrom($voornaam, $tussenvoegsel, $achternaam): string
 	{
 		$voornaam = mb_strtolower($voornaam);
 		$achternaam = mb_strtolower($achternaam);
@@ -211,7 +211,7 @@ final class TextUtil
 		return TextUtil::checkEncoding($string, 'UTF-8');
 	}
 
-	public static function checkEncoding($string, $string_encoding)
+	public static function checkEncoding($string, $string_encoding): bool
 	{
 		$fs = $string_encoding == 'UTF-8' ? 'UTF-32' : $string_encoding;
 		$ts = $string_encoding == 'UTF-32' ? 'UTF-8' : $string_encoding;
@@ -219,7 +219,7 @@ final class TextUtil
 			mb_convert_encoding(mb_convert_encoding($string, $fs, $ts), $ts, $fs);
 	}
 
-	public static function vue_encode($object)
+	public static function vue_encode($object): string
 	{
 		return htmlspecialchars(json_encode($object));
 	}

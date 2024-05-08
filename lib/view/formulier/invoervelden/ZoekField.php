@@ -77,7 +77,7 @@ JS;
 		}
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$lidInstellingenRepository = ContainerFacade::getContainer()->get(

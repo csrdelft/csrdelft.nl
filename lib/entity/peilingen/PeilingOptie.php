@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\peilingen;
 
+use CsrDelft\repository\peilingen\PeilingOptiesRepository;
+use Peiling;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\view\bbcode\CsrBB;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +14,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 #[ORM\Table('peiling_optie')]
 #[ORM\Index(name: 'optie', columns: ['titel'])]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\peilingen\PeilingOptiesRepository::class)]
+#[ORM\Entity(repositoryClass: PeilingOptiesRepository::class)]
 class PeilingOptie implements DataTableEntry
 {
 	/**
@@ -60,7 +62,7 @@ class PeilingOptie implements DataTableEntry
 	/**
   * @var Peiling
   */
- #[ORM\ManyToOne(targetEntity: \Peiling::class, inversedBy: 'opties')]
+ #[ORM\ManyToOne(targetEntity: Peiling::class, inversedBy: 'opties')]
  public $peiling;
 
 	/**

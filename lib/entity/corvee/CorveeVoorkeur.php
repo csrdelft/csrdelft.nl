@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\corvee;
 
+use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
 use CsrDelft\entity\profiel\Profiel;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @see CorveeRepetitie
  */
 #[ORM\Table('crv_voorkeuren')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\corvee\CorveeVoorkeurenRepository::class)]
+#[ORM\Entity(repositoryClass: CorveeVoorkeurenRepository::class)]
 class CorveeVoorkeur
 {
 	/**
@@ -32,13 +33,13 @@ class CorveeVoorkeur
   * @var CorveeRepetitie
   */
  #[ORM\JoinColumn(name: 'crv_repetitie_id', referencedColumnName: 'crv_repetitie_id')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\corvee\CorveeRepetitie::class)]
+ #[ORM\ManyToOne(targetEntity: CorveeRepetitie::class)]
  public $corveeRepetitie;
 	/**
   * @var Profiel
   */
  #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
- #[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
  public $profiel;
 
 	public $van_uid;

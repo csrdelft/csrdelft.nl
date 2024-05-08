@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumDradenMeldingRepository;
+use ForumDraad;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Leden kunnen meldingen krijgen voor een forumdraad
  */
 #[ORM\Table('forum_draden_volgen')]
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\forum\ForumDradenMeldingRepository::class)]
+#[ORM\Entity(repositoryClass: ForumDradenMeldingRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class ForumDraadMelding
 {
@@ -26,7 +28,7 @@ class ForumDraadMelding
   * @var ForumDraad
   */
  #[ORM\JoinColumn(name: 'draad_id', referencedColumnName: 'draad_id')]
- #[ORM\ManyToOne(targetEntity: \ForumDraad::class, inversedBy: 'meldingen')]
+ #[ORM\ManyToOne(targetEntity: ForumDraad::class, inversedBy: 'meldingen')]
  public $draad;
 	/**
   * Lidnummer

@@ -58,7 +58,7 @@ class GroepPrefixVoter extends PrefixVoter
 		$this->em = $em;
 	}
 
-	protected function supportsPrefix($prefix)
+	protected function supportsPrefix($prefix): bool
 	{
 		return isset(self::CLASS_MAP[$prefix]);
 	}

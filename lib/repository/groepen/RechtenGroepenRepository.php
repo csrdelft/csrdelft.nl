@@ -33,7 +33,7 @@ class RechtenGroepenRepository extends GroepRepository
 		$this->groepLidRepository = $groepLidRepository;
 	}
 
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return RechtenGroep::class;
 	}
@@ -46,7 +46,7 @@ class RechtenGroepenRepository extends GroepRepository
 		return $groep;
 	}
 
-	public static function getNaam()
+	public static function getNaam(): string
 	{
 		return 'overig';
 	}
@@ -57,7 +57,7 @@ class RechtenGroepenRepository extends GroepRepository
 	 * @param string $uid
 	 * @return array
 	 */
-	public function getWikiToegang($uid)
+	public function getWikiToegang($uid): array
 	{
 		$result = [];
 		$profiel = ProfielRepository::get($uid);

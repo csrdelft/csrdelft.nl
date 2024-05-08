@@ -2,6 +2,7 @@
 
 namespace CsrDelft\events;
 
+use ReflectionException;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
@@ -61,12 +62,12 @@ class AccessControlEventListener
 	}
 
 	/**
-	 * Controleer of gebruiker deze pagina mag zien.
-	 *
-	 * @param ControllerEvent $event
-	 * @throws \ReflectionException
-	 */
-	public function onKernelController(ControllerEvent $event)
+  * Controleer of gebruiker deze pagina mag zien.
+  *
+  * @param ControllerEvent $event
+  * @throws ReflectionException
+  */
+ public function onKernelController(ControllerEvent $event)
 	{
 		$request = $event->getRequest();
 

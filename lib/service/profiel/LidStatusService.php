@@ -76,7 +76,7 @@ class LidStatusService
 		$this->boekExemplaarRepository = $boekExemplaarRepository;
 	}
 
-	public function wijzig_lidstatus(Profiel $profiel, $oudestatus)
+	public function wijzig_lidstatus(Profiel $profiel, $oudestatus): array
 	{
 		$changes = [];
 		// Maaltijd en corvee bijwerken
@@ -150,7 +150,7 @@ class LidStatusService
 	 * @param $oudestatus
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
-	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus)
+	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus): array
 	{
 		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($profiel);
 		$aantal = $this->corveeTakenRepository->verwijderTakenVoorLid(
@@ -204,7 +204,7 @@ class LidStatusService
 	 * @param $oudestatus
 	 * @return bool mailen is wel/niet verzonden
 	 */
-	private function notifyFisci(Profiel $profiel, $oudestatus)
+	private function notifyFisci(Profiel $profiel, $oudestatus): bool
 	{
 		// Saldi ophalen
 		$saldi = '';
@@ -320,7 +320,7 @@ class LidStatusService
 	 * @param Profiel $profiel
 	 * @return AbstractProfielLogEntry[]  Een logentry als er wijzigingen zijn.
 	 */
-	private function verwijderVelden(Profiel $profiel)
+	private function verwijderVelden(Profiel $profiel): array
 	{
 		$velden_verwijderd = [];
 		foreach (Profiel::$properties_lidstatus as $key => $status_allowed) {
@@ -346,7 +346,7 @@ class LidStatusService
 	 * Verwijder onnodige velden van het profiel. Slaat wijzigingen op in database.
 	 * @param Profiel $profiel
 	 */
-	public function verwijderVeldenUpdate(Profiel $profiel)
+	public function verwijderVeldenUpdate(Profiel $profiel): bool
 	{
 		$changes = $this->verwijderVelden($profiel);
 		if (empty($changes)) {

@@ -33,7 +33,7 @@ class ForumDradenGelezenRepository extends AbstractRepository
 		$this->security = $security;
 	}
 
-	protected function maakForumDraadGelezen(ForumDraad $draad)
+	protected function maakForumDraadGelezen(ForumDraad $draad): ForumDraadGelezen
 	{
 		$gelezen = new ForumDraadGelezen();
 		$gelezen->draad = $draad;

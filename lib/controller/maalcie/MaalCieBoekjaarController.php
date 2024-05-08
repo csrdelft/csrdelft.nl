@@ -32,7 +32,7 @@ class MaalCieBoekjaarController extends AbstractController
 	 * @Route("/maaltijden/boekjaar", methods={"GET"})
 	 * @Auth(P_MAAL_SALDI)
 	 */
-	public function beheer()
+	public function beheer(): Response
 	{
 		return $this->render('maaltijden/boekjaar_sluiten.html.twig');
 	}

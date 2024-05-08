@@ -37,7 +37,7 @@ class AccountRepository extends AbstractRepository implements
 	 * @param $uid
 	 * @return bool
 	 */
-	public static function isValidUid($uid)
+	public static function isValidUid(mixed $uid): bool
 	{
 		return is_string($uid) && preg_match('/^[a-z0-9]{4}$/', $uid);
 	}
@@ -47,7 +47,7 @@ class AccountRepository extends AbstractRepository implements
 	 *
 	 * @return bool
 	 */
-	public function existsUid($uid)
+	public function existsUid($uid): bool
 	{
 		return $this->find($uid) != null;
 	}
@@ -57,7 +57,7 @@ class AccountRepository extends AbstractRepository implements
 	 *
 	 * @return bool
 	 */
-	public function existsUsername($name)
+	public function existsUsername($name): bool
 	{
 		return $this->findOneBy(['username' => $name]) != null;
 	}

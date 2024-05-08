@@ -76,7 +76,10 @@ class BbToProsemirror
 		];
 	}
 
-	private function nodeToProseMirror($children)
+	/**
+  * @return mixed[]
+  */
+ private function nodeToProseMirror($children): array
 	{
 		$nodes = [];
 

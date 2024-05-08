@@ -454,7 +454,7 @@ class GoogleContactSync
 		foreach (array_chunk($profielen, 200) as $toInsert) {
 			// Bouw request
 			$batchCreateContactsRequest = new BatchCreateContactsRequest();
-			$contacts = array_map(function (Profiel $profiel) {
+			$contacts = array_map(function (Profiel $profiel): ContactToCreate {
 				$contactPerson = $this->convertProfielToPerson($profiel);
 				$contactToCreate = new ContactToCreate();
 				$contactToCreate->setContactPerson($contactPerson);

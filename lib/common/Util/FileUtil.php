@@ -126,7 +126,7 @@ final class FileUtil
 		}
 	}
 
-	public static function delTree($dir)
+	public static function delTree($dir): bool
 	{
 		$files = array_diff(scandir($dir), ['.', '..']);
 		foreach ($files as $file) {
@@ -137,7 +137,7 @@ final class FileUtil
 		return rmdir($dir);
 	}
 
-	public static function format_filesize($size)
+	public static function format_filesize($size): string
 	{
 		$units = [' B', ' KB', ' MB', ' GB', ' TB'];
 		for ($i = 0; $size >= 1024 && $i < 4; $i++) {
@@ -146,7 +146,7 @@ final class FileUtil
 		return round($size, 1) . $units[$i];
 	}
 
-	public static function getMaximumFileUploadSize()
+	public static function getMaximumFileUploadSize(): int|string|false
 	{
 		return min(
 			FileUtil::convertPHPSizeToBytes(ini_get('post_max_size')),
