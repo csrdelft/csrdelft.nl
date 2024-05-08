@@ -7,7 +7,7 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use DateInterval;
 use DateTime;
 use Exception;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class SaldoGrafiekService
 {

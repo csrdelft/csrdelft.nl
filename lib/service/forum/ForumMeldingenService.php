@@ -20,7 +20,7 @@ use CsrDelft\service\security\SuService;
 use CsrDelft\view\bbcode\CsrBB;
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;

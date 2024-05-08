@@ -5,7 +5,7 @@ namespace CsrDelft\repository;
 use CsrDelft\common\Security\Voter\Entity\CmsPaginaVoter;
 use CsrDelft\entity\CmsPagina;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
