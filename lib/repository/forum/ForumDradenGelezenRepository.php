@@ -7,7 +7,7 @@ use CsrDelft\entity\forum\ForumDraadGelezen;
 use CsrDelft\repository\AbstractRepository;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * ForumDradenGelezenModel.class.php
