@@ -36,7 +36,7 @@ class WoonoordenRepository extends GroepRepository
 		int $limit = null,
 		int $offset = null,
 		string $soort = null
-	) {
+	): array {
 		if ($soort && HuisStatus::isValidValue($soort)) {
 			return $this->findBy(
 				[
@@ -51,7 +51,7 @@ class WoonoordenRepository extends GroepRepository
 		return parent::overzicht($limit, $offset, $soort);
 	}
 
-	public function beheer(string $soort = null)
+	public function beheer(string $soort = null): array
 	{
 		if ($soort && HuisStatus::isValidValue($soort)) {
 			return $this->findBy(['huisStatus' => HuisStatus::from($soort)]);

@@ -37,11 +37,11 @@ class MijnVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/corvee/voorkeuren", methods={"GET"})
-	 * @Auth(P_CORVEE_IK)
-	 */
-	public function mijn(): Response
+  * @return Response
+  * @Auth(P_CORVEE_IK)
+  */
+ #[Route(path: '/corvee/voorkeuren', methods: ['GET'])]
+ public function mijn(): Response
 	{
 		$voorkeuren = $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid(
 			$this->getUid(),
@@ -54,14 +54,14 @@ class MijnVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @param CorveeRepetitie $repetitie
-	 * @return Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/corvee/voorkeuren/inschakelen/{crv_repetitie_id}", methods={"POST"})
-	 * @Auth(P_CORVEE_IK)
-	 */
-	public function inschakelen(CorveeRepetitie $repetitie): Response
+  * @param CorveeRepetitie $repetitie
+  * @return Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_CORVEE_IK)
+  */
+ #[Route(path: '/corvee/voorkeuren/inschakelen/{crv_repetitie_id}', methods: ['POST'])]
+ public function inschakelen(CorveeRepetitie $repetitie): Response
 	{
 		$voorkeur = new CorveeVoorkeur();
 		$voorkeur->setProfiel($this->getProfiel());
@@ -76,14 +76,14 @@ class MijnVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @param $crv_repetitie_id
-	 * @return Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/corvee/voorkeuren/uitschakelen/{crv_repetitie_id}", methods={"POST"})
-	 * @Auth(P_CORVEE_IK)
-	 */
-	public function uitschakelen($crv_repetitie_id): Response
+  * @param $crv_repetitie_id
+  * @return Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_CORVEE_IK)
+  */
+ #[Route(path: '/corvee/voorkeuren/uitschakelen/{crv_repetitie_id}', methods: ['POST'])]
+ public function uitschakelen($crv_repetitie_id): Response
 	{
 		$voorkeur = $this->corveeVoorkeurenRepository->getVoorkeur(
 			$crv_repetitie_id,
@@ -98,11 +98,11 @@ class MijnVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @return EetwensForm
-	 * @Route("/corvee/voorkeuren/eetwens", methods={"POST"})
-	 * @Auth(P_CORVEE_IK)
-	 */
-	public function eetwens(): EetwensForm
+  * @return EetwensForm
+  * @Auth(P_CORVEE_IK)
+  */
+ #[Route(path: '/corvee/voorkeuren/eetwens', methods: ['POST'])]
+ public function eetwens(): EetwensForm
 	{
 		$form = new EetwensForm();
 		if ($form->validate()) {

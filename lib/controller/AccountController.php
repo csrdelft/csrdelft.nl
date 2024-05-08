@@ -70,12 +70,12 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @param null $uid
-	 * @return RedirectResponse
-	 * @Route("/account/{uid}/aanmaken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_ADMIN)
-	 */
-	public function aanmaken($uid = null): RedirectResponse
+  * @param null $uid
+  * @return RedirectResponse
+  * @Auth(P_ADMIN)
+  */
+ #[Route(path: '/account/{uid}/aanmaken', methods: ['GET', 'POST'], requirements: ['uid' => '.{4}'])]
+ public function aanmaken($uid = null): RedirectResponse
 	{
 		if ($uid == null) {
 			$account = $this->getUser();
@@ -97,15 +97,15 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param Security $security
-	 * @param null $uid
-	 * @return Response
-	 * @Route("/account/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
-	 * @Route("/account/bewerken", methods={"GET", "POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function bewerken(Request $request, $uid = null): Response
+  * @param Request $request
+  * @param Security $security
+  * @param null $uid
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/account/{uid}/bewerken', methods: ['GET', 'POST'], requirements: ['uid' => '.{4}'])]
+ #[Route(path: '/account/bewerken', methods: ['GET', 'POST'])]
+ public function bewerken(Request $request, $uid = null): Response
 	{
 		$eigenAccount = $this->getUser();
 		if ($uid == null) {
@@ -184,11 +184,11 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/account/{uid}/aanvragen", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function aanvragen(): Response
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/account/{uid}/aanvragen', methods: ['GET', 'POST'], requirements: ['uid' => '.{4}'])]
+ public function aanvragen(): Response
 	{
 		return $this->render('default.html.twig', [
 			'content' => $this->cmsPaginaRepository->find('accountaanvragen'),
@@ -196,12 +196,12 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @param null $uid
-	 * @return JsonResponse
-	 * @Route("/account/{uid}/verwijderen", methods={"POST"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function verwijderen($uid = null): JsonResponse
+  * @param null $uid
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/account/{uid}/verwijderen', methods: ['POST'], requirements: ['uid' => '.{4}'])]
+ public function verwijderen($uid = null): JsonResponse
 	{
 		if ($uid == null) {
 			$uid = $this->getUid();

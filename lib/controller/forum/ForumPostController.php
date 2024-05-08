@@ -69,11 +69,11 @@ class ForumPostController extends AbstractController
 	}
 
 	/**
-	 * @param ForumPost $post
-	 * @Route("/forum/citeren/{post_id}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function citeren(ForumPost $post): JsonResponse
+  * @param ForumPost $post
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/citeren/{post_id}', methods: ['POST'])]
+ public function citeren(ForumPost $post): JsonResponse
 	{
 		if (!$post->magCiteren()) {
 			throw $this->createAccessDeniedException('Mag niet citeren');
@@ -88,11 +88,11 @@ class ForumPostController extends AbstractController
 	}
 
 	/**
-	 * @param ForumPost $post
-	 * @Route("/forum/tekst/{post_id}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function tekst(ForumPost $post): JsonResponse
+  * @param ForumPost $post
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/tekst/{post_id}', methods: ['POST'])]
+ public function tekst(ForumPost $post): JsonResponse
 	{
 		if (!$post->magBewerken()) {
 			throw $this->createAccessDeniedException('Mag niet bewerken');
@@ -104,12 +104,12 @@ class ForumPostController extends AbstractController
 	}
 
 	/**
-	 * @param ForumPost $post
-	 * @return Response
-	 * @Route("/forum/bewerken/{post_id}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function bewerken(ForumPost $post): Response
+  * @param ForumPost $post
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/bewerken/{post_id}', methods: ['POST'])]
+ public function bewerken(ForumPost $post): Response
 	{
 		if (!$post->magBewerken()) {
 			throw $this->createAccessDeniedException('Mag niet bewerken');
@@ -131,12 +131,12 @@ class ForumPostController extends AbstractController
 	}
 
 	/**
-	 * @param ForumPost $post
-	 * @return Response
-	 * @Route("/forum/verplaatsen/{post_id}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function verplaatsen(ForumPost $post): Response
+  * @param ForumPost $post
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/verplaatsen/{post_id}', methods: ['POST'])]
+ public function verplaatsen(ForumPost $post): Response
 	{
 		$oudDraad = $post->draad;
 		if (!$oudDraad->magModereren()) {
@@ -155,12 +155,12 @@ class ForumPostController extends AbstractController
 	}
 
 	/**
-	 * @param ForumPost $post
-	 * @return Response
-	 * @Route("/forum/verwijderen/{post_id}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function verwijderen(ForumPost $post): Response
+  * @param ForumPost $post
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/verwijderen/{post_id}', methods: ['POST'])]
+ public function verwijderen(ForumPost $post): Response
 	{
 		if (!$post->draad->magModereren()) {
 			throw $this->createAccessDeniedException('Geen moderator');
@@ -172,12 +172,12 @@ class ForumPostController extends AbstractController
 	}
 
 	/**
-	 * @param ForumPost $post
-	 * @return Response
-	 * @Route("/forum/offtopic/{post_id}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function offtopic(ForumPost $post): Response
+  * @param ForumPost $post
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/offtopic/{post_id}', methods: ['POST'])]
+ public function offtopic(ForumPost $post): Response
 	{
 		if (!$post->draad->magModereren()) {
 			throw $this->createAccessDeniedException('Geen moderator');
@@ -189,12 +189,12 @@ class ForumPostController extends AbstractController
 	}
 
 	/**
-	 * @param ForumPost $post
-	 * @return Response
-	 * @Route("/forum/goedkeuren/{post_id}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function goedkeuren(ForumPost $post): Response
+  * @param ForumPost $post
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/goedkeuren/{post_id}', methods: ['POST'])]
+ public function goedkeuren(ForumPost $post): Response
 	{
 		if (!$post->draad->magModereren()) {
 			throw $this->createAccessDeniedException('Geen moderator');
@@ -206,14 +206,14 @@ class ForumPostController extends AbstractController
 	}
 
 	/**
-	 * Concept bericht opslaan
-	 * @param ForumDeel $deel
-	 * @param ForumDraad|null $draad
-	 * @return Response
-	 * @Route("/forum/concept/{forum_id}/{draad_id}", methods={"POST"}, defaults={"draad_id"=null})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function concept(ForumDeel $deel, ForumDraad $draad = null): Response
+  * Concept bericht opslaan
+  * @param ForumDeel $deel
+  * @param ForumDraad|null $draad
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/concept/{forum_id}/{draad_id}', methods: ['POST'], defaults: ['draad_id' => null])]
+ public function concept(ForumDeel $deel, ForumDraad $draad = null): Response
 	{
 		$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
 		$concept = $this->prosemirrorToBb->convertToBb(

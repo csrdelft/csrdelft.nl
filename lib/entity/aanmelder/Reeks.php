@@ -14,18 +14,14 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 #[ORM\Entity(repositoryClass: ReeksRepository::class)]
 class Reeks extends ActiviteitEigenschappen implements DataTableEntry
 {
-	/**
-  * @Serializer\Groups({"datatable"})
-  */
- #[ORM\Id]
+	#[ORM\Id]
  #[ORM\GeneratedValue]
  #[ORM\Column(type: 'integer')]
+ #[Serializer\Groups(['datatable'])]
  public $id;
 
-	/**
-  * @Serializer\Groups({"datatable"})
-  */
- #[ORM\Column(type: 'string', length: 255)]
+	#[ORM\Column(type: 'string', length: 255)]
+ #[Serializer\Groups(['datatable'])]
  private $naam;
 
 	#[ORM\Column(type: 'string', length: 255)]
@@ -112,11 +108,11 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("detailSource")
-	 */
-	public function getDetailSource(): string
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('detailSource')]
+ public function getDetailSource(): string
 	{
 		return '/aanmelder/beheer/activiteiten/' . $this->id;
 	}

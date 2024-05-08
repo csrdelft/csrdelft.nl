@@ -19,7 +19,7 @@ class FotoAlbumBreadcrumbs
 		FotoAlbum $album,
 		$dropdown = true,
 		$self = false
-	) {
+	): string {
 		return static::getBreadcrumbsDropdown($album, $dropdown, $self);
 	}
 

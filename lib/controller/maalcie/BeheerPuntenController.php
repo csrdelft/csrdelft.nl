@@ -38,11 +38,11 @@ class BeheerPuntenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/corvee/punten", methods={"GET"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function beheer(): Response
+  * @return Response
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/punten', methods: ['GET'])]
+ public function beheer(): Response
 	{
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		$matrix = $this->corveePuntenService->loadPuntenVoorAlleLeden($functies);
@@ -53,12 +53,12 @@ class BeheerPuntenController extends AbstractController
 	}
 
 	/**
-	 * @param Profiel $profiel
-	 * @return Response
-	 * @Route("/corvee/punten/wijzigpunten/{uid}", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function wijzigpunten(Profiel $profiel): Response
+  * @param Profiel $profiel
+  * @return Response
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/punten/wijzigpunten/{uid}', methods: ['POST'])]
+ public function wijzigpunten(Profiel $profiel): Response
 	{
 		$punten = (int) filter_input(
 			INPUT_POST,
@@ -78,12 +78,12 @@ class BeheerPuntenController extends AbstractController
 	}
 
 	/**
-	 * @param Profiel $profiel
-	 * @return Response
-	 * @Route("/corvee/punten/wijzigbonus/{uid}", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function wijzigbonus(Profiel $profiel): Response
+  * @param Profiel $profiel
+  * @return Response
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/punten/wijzigbonus/{uid}', methods: ['POST'])]
+ public function wijzigbonus(Profiel $profiel): Response
 	{
 		$bonus = (int) filter_input(
 			INPUT_POST,
@@ -103,11 +103,11 @@ class BeheerPuntenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/corvee/punten/resetjaar", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function resetjaar()
+  * @return Response
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/punten/resetjaar', methods: ['POST'])]
+ public function resetjaar()
 	{
 		/**
 		 * @var int $aantal

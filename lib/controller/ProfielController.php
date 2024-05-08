@@ -94,12 +94,12 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @param $uid
-	 * @return RedirectResponse
-	 * @Route("/profiel/{uid}/resetPrivateToken", methods={"GET"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_PROFIEL_EDIT)
-	 */
-	public function resetPrivateToken($uid): RedirectResponse
+  * @param $uid
+  * @return RedirectResponse
+  * @Auth(P_PROFIEL_EDIT)
+  */
+ #[Route(path: '/profiel/{uid}/resetPrivateToken', methods: ['GET'], requirements: ['uid' => '.{4}'])]
+ public function resetPrivateToken($uid): RedirectResponse
 	{
 		$profiel = $this->profielRepository->get($uid);
 
@@ -117,32 +117,32 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @param BesturenRepository $besturenRepository
-	 * @param CommissiesRepository $commissiesRepository
-	 * @param WerkgroepenRepository $werkgroepenRepository
-	 * @param OnderverenigingenRepository $onderverenigingenRepository
-	 * @param RechtenGroepenRepository $rechtenGroepenRepository
-	 * @param KetzersRepository $ketzersRepository
-	 * @param ActiviteitenRepository $activiteitenRepository
-	 * @param CiviBestellingRepository $civiBestellingRepository
-	 * @param CorveeTakenRepository $corveeTakenRepository
-	 * @param CorveeVoorkeurenRepository $corveeVoorkeurenRepository
-	 * @param BoekExemplaarRepository $boekExemplaarRepository
-	 * @param BoekRecensieRepository $boekRecensieRepository
-	 * @param FotoRepository $fotoRepository
-	 * @param MaaltijdAanmeldingenService $maaltijdAanmeldingenService
-	 * @param CorveeVrijstellingenRepository $corveeVrijstellingenRepository
-	 * @param ForumPostsRepository $forumPostsRepository
-	 * @param FotoTagsRepository $fotoTagsRepository
-	 * @param CorveeKwalificatiesRepository $corveeKwalificatiesRepository
-	 * @param MaaltijdAbonnementenService $maaltijdAbonnementenService
-	 * @param Profiel|null $profiel
-	 * @return Response
-	 * @throws Throwable
-	 * @Route("/profiel/{uid}", methods={"GET"}, defaults={"uid": null}, requirements={"uid": ".{4}"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 */
-	public function profiel(
+  * @param BesturenRepository $besturenRepository
+  * @param CommissiesRepository $commissiesRepository
+  * @param WerkgroepenRepository $werkgroepenRepository
+  * @param OnderverenigingenRepository $onderverenigingenRepository
+  * @param RechtenGroepenRepository $rechtenGroepenRepository
+  * @param KetzersRepository $ketzersRepository
+  * @param ActiviteitenRepository $activiteitenRepository
+  * @param CiviBestellingRepository $civiBestellingRepository
+  * @param CorveeTakenRepository $corveeTakenRepository
+  * @param CorveeVoorkeurenRepository $corveeVoorkeurenRepository
+  * @param BoekExemplaarRepository $boekExemplaarRepository
+  * @param BoekRecensieRepository $boekRecensieRepository
+  * @param FotoRepository $fotoRepository
+  * @param MaaltijdAanmeldingenService $maaltijdAanmeldingenService
+  * @param CorveeVrijstellingenRepository $corveeVrijstellingenRepository
+  * @param ForumPostsRepository $forumPostsRepository
+  * @param FotoTagsRepository $fotoTagsRepository
+  * @param CorveeKwalificatiesRepository $corveeKwalificatiesRepository
+  * @param MaaltijdAbonnementenService $maaltijdAbonnementenService
+  * @param Profiel|null $profiel
+  * @return Response
+  * @throws Throwable
+  * @Auth(P_OUDLEDEN_READ)
+  */
+ #[Route(path: '/profiel/{uid}', methods: ['GET'], defaults: ['uid' => null], requirements: ['uid' => '.{4}'])]
+ public function profiel(
 		BesturenRepository $besturenRepository,
 		CommissiesRepository $commissiesRepository,
 		WerkgroepenRepository $werkgroepenRepository,
@@ -241,15 +241,15 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @param $lidjaar
-	 * @param $status
-	 * @param EntityManagerInterface $em
-	 * @return RedirectResponse|Response
-	 * @Route("/profiel/{lidjaar}/nieuw/{status}", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
-	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
-	 * @CsrfUnsafe()
-	 */
-	public function nieuw($lidjaar, $status, EntityManagerInterface $em)
+  * @param $lidjaar
+  * @param $status
+  * @param EntityManagerInterface $em
+  * @return RedirectResponse|Response
+  * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
+  * @CsrfUnsafe()
+  */
+ #[Route(path: '/profiel/{lidjaar}/nieuw/{status}', methods: ['GET', 'POST'], requirements: ['uid' => '.{4}'])]
+ public function nieuw($lidjaar, $status, EntityManagerInterface $em): Response
 	{
 		if ($em->getFilters()->isEnabled('verbergNovieten')) {
 			$em->getFilters()->disable('verbergNovieten');
@@ -357,12 +357,12 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @param $uid
-	 * @return RedirectResponse|Response
-	 * @Route("/profiel/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_PROFIEL_EDIT)
-	 */
-	public function bewerken($uid)
+  * @param $uid
+  * @return RedirectResponse|Response
+  * @Auth(P_PROFIEL_EDIT)
+  */
+ #[Route(path: '/profiel/{uid}/bewerken', methods: ['GET', 'POST'], requirements: ['uid' => '.{4}'])]
+ public function bewerken($uid): Response
 	{
 		$profiel = $this->profielRepository->get($uid);
 
@@ -374,11 +374,11 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @Route("/inschrijflink", methods={"GET", "POST"}, name="inschrijflink")
-	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
-	 * @return Response
-	 */
-	public function externInschrijfLink(): Response
+  * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
+  * @return Response
+  */
+ #[Route(path: '/inschrijflink', methods: ['GET', 'POST'], name: 'inschrijflink')]
+ public function externInschrijfLink(): Response
 	{
 		$form = new InschrijfLinkForm();
 		$link = null;
@@ -408,15 +408,15 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @Route("/inschrijven/{pre}", methods={"GET", "POST"}, name="extern-inschrijven")
-	 * @Auth(P_PUBLIC)
-	 * @CsrfUnsafe()
-	 * @param string $pre
-	 * @param EntityManagerInterface $em
-	 * @return Response
-	 * @throws ConnectionException
-	 */
-	public function externInschrijfformulier(
+  * @Auth(P_PUBLIC)
+  * @CsrfUnsafe()
+  * @param string $pre
+  * @param EntityManagerInterface $em
+  * @return Response
+  * @throws ConnectionException
+  */
+ #[Route(path: '/inschrijven/{pre}', methods: ['GET', 'POST'], name: 'extern-inschrijven')]
+ public function externInschrijfformulier(
 		string $pre,
 		EntityManagerInterface $em
 	): Response {
@@ -529,11 +529,11 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/profiel/voorkeuren", methods={"GET"})
-	 * @Auth(P_PROFIEL_EDIT)
-	 */
-	public function voorkeurenNoUid(
+  * @return Response
+  * @Auth(P_PROFIEL_EDIT)
+  */
+ #[Route(path: '/profiel/voorkeuren', methods: ['GET'])]
+ public function voorkeurenNoUid(
 		Request $request,
 		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
 		CommissieVoorkeurRepository $commissieVoorkeurRepository,
@@ -549,13 +549,13 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @param $uid
-	 * @return Response
-	 * @Route("/profiel/{uid}/voorkeuren", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_PROFIEL_EDIT)
-	 * @CsrfUnsafe
-	 */
-	public function voorkeuren(
+  * @param $uid
+  * @return Response
+  * @Auth(P_PROFIEL_EDIT)
+  * @CsrfUnsafe
+  */
+ #[Route(path: '/profiel/{uid}/voorkeuren', methods: ['GET', 'POST'], requirements: ['uid' => '.{4}'])]
+ public function voorkeuren(
 		Request $request,
 		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
 		CommissieVoorkeurRepository $commissieVoorkeurRepository,
@@ -610,13 +610,13 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @param $uid
-	 * @param GoogleContactSync $googleContactSync
-	 * @return RedirectResponse
-	 * @Route("/profiel/{uid}/addToGoogleContacts", methods={"GET"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_LEDEN_READ)
-	 */
-	public function addToGoogleContacts(
+  * @param $uid
+  * @param GoogleContactSync $googleContactSync
+  * @return RedirectResponse
+  * @Auth(P_LEDEN_READ)
+  */
+ #[Route(path: '/profiel/{uid}/addToGoogleContacts', methods: ['GET'], requirements: ['uid' => '.{4}'])]
+ public function addToGoogleContacts(
 		$uid,
 		GoogleContactSync $googleContactSync
 	): RedirectResponse {
@@ -643,12 +643,12 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @param null $uid
-	 * @return Response
-	 * @Route("/profiel/{uid}/stamboom", methods={"GET"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 */
-	public function stamboom($uid = null): Response
+  * @param null $uid
+  * @return Response
+  * @Auth(P_OUDLEDEN_READ)
+  */
+ #[Route(path: '/profiel/{uid}/stamboom', methods: ['GET'], requirements: ['uid' => '.{4}'])]
+ public function stamboom($uid = null): Response
 	{
 		$profiel = $uid ? $this->profielRepository->get($uid) : $this->getProfiel();
 
@@ -658,12 +658,12 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @param VerjaardagenService $verjaardagenService
-	 * @return Response
-	 * @Route("/leden/verjaardagen", methods={"GET"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 */
-	public function verjaardagen(
+  * @param VerjaardagenService $verjaardagenService
+  * @return Response
+  * @Auth(P_OUDLEDEN_READ)
+  */
+ #[Route(path: '/leden/verjaardagen', methods: ['GET'])]
+ public function verjaardagen(
 		VerjaardagenService $verjaardagenService
 	): Response {
 		$nu = time();
@@ -675,15 +675,15 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @param $uid
-	 * @param $timespan
-	 * @param SaldoGrafiekService $saldoGrafiekService
-	 * @return JsonResponse
-	 * @throws Exception
-	 * @Route("/profiel/{uid}/saldo/{timespan}", methods={"POST"}, requirements={"uid": ".{4}", "timespan": "\d+"})
-	 * @Auth(P_LEDEN_READ)
-	 */
-	public function saldo(
+  * @param $uid
+  * @param $timespan
+  * @param SaldoGrafiekService $saldoGrafiekService
+  * @return JsonResponse
+  * @throws Exception
+  * @Auth(P_LEDEN_READ)
+  */
+ #[Route(path: '/profiel/{uid}/saldo/{timespan}', methods: ['POST'], requirements: ['uid' => '.{4}', 'timespan' => '\d+'])]
+ public function saldo(
 		$uid,
 		$timespan,
 		SaldoGrafiekService $saldoGrafiekService
@@ -698,12 +698,12 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @param $uid
-	 * @return Response
-	 * @Route("/profiel/{uid}.vcf", methods={"GET"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_LEDEN_READ)
-	 */
-	public function vcard($uid): Response
+  * @param $uid
+  * @return Response
+  * @Auth(P_LEDEN_READ)
+  */
+ #[Route(path: '/profiel/{uid}.vcf', methods: ['GET'], requirements: ['uid' => '.{4}'])]
+ public function vcard($uid): Response
 	{
 		$profiel = $this->profielRepository->get($uid);
 
@@ -721,12 +721,12 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @param $uid
-	 * @return Response
-	 * @Route("/profiel/{uid}/kaartje", methods={"GET"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_LEDEN_READ)
-	 */
-	public function kaartje($uid): Response
+  * @param $uid
+  * @return Response
+  * @Auth(P_LEDEN_READ)
+  */
+ #[Route(path: '/profiel/{uid}/kaartje', methods: ['GET'], requirements: ['uid' => '.{4}'])]
+ public function kaartje($uid): Response
 	{
 		return $this->render('profiel/kaartje.html.twig', [
 			'profiel' => $this->profielRepository->get($uid),

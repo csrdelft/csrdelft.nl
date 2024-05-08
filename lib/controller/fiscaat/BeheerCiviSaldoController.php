@@ -57,12 +57,12 @@ class BeheerCiviSaldoController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/fiscaat/saldo")
-	 * @Auth(P_FISCAAT_READ)
-	 * @throws ExceptionInterface
-	 */
-	public function overzicht(Request $request): Response
+  * @return Response
+  * @Auth(P_FISCAAT_READ)
+  * @throws ExceptionInterface
+  */
+ #[Route(path: '/fiscaat/saldo')]
+ public function overzicht(Request $request): Response
 	{
 		$table = $this->createDataTable(CiviSaldoTable::class);
 
@@ -79,13 +79,13 @@ class BeheerCiviSaldoController extends AbstractController
 	}
 
 	/**
-	 * @param EntityManagerInterface $em
-	 * @param string $uid
-	 * @return GenericDataTableResponse|InleggenForm
-	 * @Route("/fiscaat/saldo/inleggen/{uid}", defaults={"uid"=null}, methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function inleggen(EntityManagerInterface $em, $uid)
+  * @param EntityManagerInterface $em
+  * @param string $uid
+  * @return GenericDataTableResponse|InleggenForm
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/saldo/inleggen/{uid}', defaults: ['uid' => null], methods: ['POST'])]
+ public function inleggen(EntityManagerInterface $em, $uid)
 	{
 		if ($uid) {
 			$civisaldo = $this->civiSaldoRepository->find($uid);
@@ -125,13 +125,13 @@ class BeheerCiviSaldoController extends AbstractController
 	}
 
 	/**
-	 * @return GenericDataTableResponse
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/fiscaat/saldo/verwijderen", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function verwijderen(): GenericDataTableResponse
+  * @return GenericDataTableResponse
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/saldo/verwijderen', methods: ['POST'])]
+ public function verwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -158,13 +158,13 @@ class BeheerCiviSaldoController extends AbstractController
 	}
 
 	/**
-	 * @return GenericDataTableResponse|LidRegistratieForm
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/fiscaat/saldo/registreren", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function registreren()
+  * @return GenericDataTableResponse|LidRegistratieForm
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/saldo/registreren', methods: ['POST'])]
+ public function registreren()
 	{
 		$form = new LidRegistratieForm(new CiviSaldo());
 
@@ -198,11 +198,11 @@ class BeheerCiviSaldoController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/fiscaat/saldo/som", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function som(): Response
+  * @return Response
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/saldo/som', methods: ['POST'])]
+ public function som(): Response
 	{
 		$momentString = filter_input(INPUT_POST, 'moment', FILTER_SANITIZE_STRING);
 		$moment = DateTime::createFromFormat('Y-m-d H:i', $momentString);
@@ -221,12 +221,12 @@ class BeheerCiviSaldoController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/fiscaat/saldo/zoek", methods={"GET"})
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function zoek(Request $request): JsonResponse
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_FISCAAT_READ)
+  */
+ #[Route(path: '/fiscaat/saldo/zoek', methods: ['GET'])]
+ public function zoek(Request $request): JsonResponse
 	{
 		$zoekterm = $request->query->get('q');
 

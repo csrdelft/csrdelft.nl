@@ -42,11 +42,11 @@ class ToestemmingController extends AbstractController
 	}
 
 	/**
-	 * @throws Exception
-	 * @Route("/toestemming", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function POST_overzicht()
+  * @throws Exception
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/toestemming', methods: ['POST'])]
+ public function POST_overzicht()
 	{
 		$form = new ToestemmingModalForm($this->lidToestemmingRepository);
 
@@ -62,12 +62,12 @@ class ToestemmingController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @throws Exception
-	 * @Route("/toestemming", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function GET_overzicht(): Response
+  * @return Response
+  * @throws Exception
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/toestemming', methods: ['GET'])]
+ public function GET_overzicht(): Response
 	{
 		return $this->render('cms/pagina.html.twig', [
 			'pagina' => $this->cmsPaginaRepository->find('thuis'),
@@ -76,11 +76,11 @@ class ToestemmingController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/toestemming/annuleren", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function POST_annuleren(): Response
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/toestemming/annuleren', methods: ['POST'])]
+ public function POST_annuleren(): Response
 	{
 		$_SESSION['stop_nag'] = time();
 
@@ -90,11 +90,11 @@ class ToestemmingController extends AbstractController
 	}
 
 	/**
-	 * @return RedirectResponse
-	 * @Route("/toestemming/annuleren", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function GET_annuleren(): RedirectResponse
+  * @return RedirectResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/toestemming/annuleren', methods: ['GET'])]
+ public function GET_annuleren(): RedirectResponse
 	{
 		$_SESSION['stop_nag'] = time();
 
@@ -102,13 +102,13 @@ class ToestemmingController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return ToestemmingLijstResponse|Response
-	 * @Route("/toestemming/lijst", methods={"GET","POST"})
-	 * @Auth({P_LEDEN_MOD,P_ALBUM_MOD,"commissie:promocie:ht"})
-	 * @throws Exception
-	 */
-	public function lijst(Request $request)
+  * @param Request $request
+  * @return ToestemmingLijstResponse|Response
+  * @Auth({P_LEDEN_MOD,P_ALBUM_MOD,"commissie:promocie:ht"})
+  * @throws Exception
+  */
+ #[Route(path: '/toestemming/lijst', methods: ['GET', 'POST'])]
+ public function lijst(Request $request)
 	{
 		if ($this->mag(P_LEDEN_MOD)) {
 			$ids = ['foto_intern', 'foto_extern', 'vereniging', 'bijzonder'];

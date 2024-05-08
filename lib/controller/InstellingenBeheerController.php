@@ -49,13 +49,13 @@ class InstellingenBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param null $module
-	 * @return Response
-	 * @Route("/instellingenbeheer/module/{module}", methods={"GET"})
-	 * @Route("/instellingenbeheer", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function module($module = null): Response
+  * @param null $module
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/instellingenbeheer/module/{module}', methods: ['GET'])]
+ #[Route(path: '/instellingenbeheer', methods: ['GET'])]
+ public function module($module = null): Response
 	{
 		$this->assertToegang($module);
 
@@ -79,13 +79,13 @@ class InstellingenBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param $module
-	 * @param $id
-	 * @return Response
-	 * @Route("/instellingenbeheer/opslaan/{module}/{id}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function opslaan($module, $id): Response
+  * @param $module
+  * @param $id
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/instellingenbeheer/opslaan/{module}/{id}', methods: ['POST'])]
+ public function opslaan($module, $id): Response
 	{
 		$this->assertToegang($module);
 
@@ -102,13 +102,13 @@ class InstellingenBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param $module
-	 * @param $id
-	 * @return Response
-	 * @Route("/instellingenbeheer/reset/{module}/{id}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function reset($module, $id): Response
+  * @param $module
+  * @param $id
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/instellingenbeheer/reset/{module}/{id}', methods: ['POST'])]
+ public function reset($module, $id): Response
 	{
 		$this->assertToegang($module);
 

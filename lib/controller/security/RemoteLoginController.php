@@ -34,12 +34,12 @@ class RemoteLoginController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return Response
-	 * @Route("/remote-login")
-	 * @Auth(P_PUBLIC)
-	 */
-	public function remoteLogin(Request $request): Response
+  * @param Request $request
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/remote-login')]
+ public function remoteLogin(Request $request): Response
 	{
 		$remoteLogin = $this->remoteLoginRepository->nieuw();
 
@@ -53,12 +53,12 @@ class RemoteLoginController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return Response
-	 * @Route("/remote-login-refresh", methods={"POST"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function remoteLoginRefresh(Request $request): Response
+  * @param Request $request
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/remote-login-refresh', methods: ['POST'])]
+ public function remoteLoginRefresh(Request $request): Response
 	{
 		$id = $request->getSession()->get('remote_login');
 
@@ -82,14 +82,14 @@ class RemoteLoginController extends AbstractController
 	}
 
 	/**
-	 * Geeft de huidige status voor een remote_login sessie weer.
-	 *
-	 * @param Request $request
-	 * @return Response
-	 * @Route("/remote-login-status", methods={"POST"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function remoteLoginStatus(Request $request): Response
+  * Geeft de huidige status voor een remote_login sessie weer.
+  *
+  * @param Request $request
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/remote-login-status', methods: ['POST'])]
+ public function remoteLoginStatus(Request $request): Response
 	{
 		$id = $request->getSession()->get('remote_login');
 
@@ -111,12 +111,12 @@ class RemoteLoginController extends AbstractController
 	}
 
 	/**
-	 * @param $uuid
-	 * @return Response
-	 * @Route("/rla/{uuid}", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function remoteLoginAuthorizeRedirect($uuid): Response
+  * @param $uuid
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/rla/{uuid}', methods: ['GET'])]
+ public function remoteLoginAuthorizeRedirect($uuid): Response
 	{
 		return new RedirectResponse(
 			$this->generateUrl('csrdelft_security_remotelogin_remoteloginauthorize', [
@@ -126,12 +126,12 @@ class RemoteLoginController extends AbstractController
 	}
 
 	/**
-	 * @param $uuid
-	 * @return Response
-	 * @Route("/remote-login-authorize/{uuid}", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function remoteLoginAuthorize($uuid): Response
+  * @param $uuid
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/remote-login-authorize/{uuid}', methods: ['GET'])]
+ public function remoteLoginAuthorize($uuid): Response
 	{
 		$remoteLogin = $this->remoteLoginRepository->findOneBy([
 			'uuid' => Uuid::fromString($uuid),
@@ -162,13 +162,13 @@ class RemoteLoginController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param $uuid
-	 * @return Response
-	 * @Route("/remote-login-authorize/{uuid}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function remoteLoginAuthorizePost(Request $request, $uuid): Response
+  * @param Request $request
+  * @param $uuid
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/remote-login-authorize/{uuid}', methods: ['POST'])]
+ public function remoteLoginAuthorizePost(Request $request, $uuid): Response
 	{
 		$remoteLogin = $this->remoteLoginRepository->findOneBy([
 			'uuid' => Uuid::fromString($uuid),
@@ -199,22 +199,22 @@ class RemoteLoginController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/remote-login-success")
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function remoteLoginAuthorizeSuccess(): Response
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/remote-login-success')]
+ public function remoteLoginAuthorizeSuccess(): Response
 	{
 		return $this->render('security/remote_login_authorized.html.twig');
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/remote-login-final", methods={"POST"})
-	 * @Auth(P_PUBLIC)
-	 * @see RemoteLoginAuthenticator
-	 */
-	public function remoteLoginFinal(): Response
+  * @return Response
+  * @Auth(P_PUBLIC)
+  * @see RemoteLoginAuthenticator
+  */
+ #[Route(path: '/remote-login-final', methods: ['POST'])]
+ public function remoteLoginFinal(): Response
 	{
 		throw new LogicException(
 			'Moet opgevangen worden door RemoteLoginAuthenticator'
@@ -222,12 +222,12 @@ class RemoteLoginController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return Response
-	 * @Route("/remote-login-qr", methods={"GET"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function remoteLoginQr(Request $request): Response
+  * @param Request $request
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/remote-login-qr', methods: ['GET'])]
+ public function remoteLoginQr(Request $request): Response
 	{
 		$data = $request->query->get('uuid');
 

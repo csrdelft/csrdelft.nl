@@ -16,16 +16,16 @@ trait GroepMoment
 	/**
   * Datum en tijd begin
   * @var DateTimeImmutable
-  * @Serializer\Groups({"datatable", "log", "vue"})
   */
  #[ORM\Column(type: 'datetime')]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $beginMoment;
 	/**
   * Datum en tijd einde
   * @var DateTimeImmutable|null
-  * @Serializer\Groups({"datatable", "log", "vue"})
   */
  #[ORM\Column(type: 'datetime', nullable: true)]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $eindMoment;
 
 	/**

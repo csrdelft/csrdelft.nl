@@ -166,7 +166,7 @@ class Document extends Bestand
 			rawurlencode($this->filename);
 	}
 
-	public function getMimetypeIcon()
+	public function getMimetypeIcon(): string
 	{
 		return Icon::getTag('mime-' . $this->getFriendlyMimetype());
 	}

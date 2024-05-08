@@ -15,13 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class WeekinvoerController extends AbstractController
 {
 	/**
-	 * @Route("/fiscaat/weekinvoer")
-	 * @param Request $request
-	 * @param CiviSaldoRepository $civiSaldoRepository
-	 * @return Response
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function weekinvoer(
+  * @param Request $request
+  * @param CiviSaldoRepository $civiSaldoRepository
+  * @return Response
+  * @Auth(P_FISCAAT_READ)
+  */
+ #[Route(path: '/fiscaat/weekinvoer')]
+ public function weekinvoer(
 		Request $request,
 		CiviSaldoRepository $civiSaldoRepository
 	): Response {

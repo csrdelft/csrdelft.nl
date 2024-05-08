@@ -117,7 +117,7 @@ class ForumTwigExtension extends AbstractExtension
 		return json_encode((array) $forum_draden_ids);
 	}
 
-	public function getAantalVerborgenVoorLid()
+	public function getAantalVerborgenVoorLid(): int
 	{
 		return $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
 	}
@@ -137,7 +137,7 @@ class ForumTwigExtension extends AbstractExtension
 		return $this->forumDradenRepository->getAantalPaginas($forum_id);
 	}
 
-	public function draadGetAantalPaginas($draad_id)
+	public function draadGetAantalPaginas($draad_id): int
 	{
 		return $this->forumPostsRepository->getAantalPaginas($draad_id);
 	}

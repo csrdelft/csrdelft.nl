@@ -9,71 +9,71 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 class MaaltijdBeoordelingDTO implements CustomDataTableEntry
 {
 	/**
-	 * @var int
-	 * @Serializer\Groups("datatable")
-	 */
-	public $maaltijd_id;
+  * @var int
+  */
+ #[Serializer\Groups('datatable')]
+ public $maaltijd_id;
 	/**
-	 * @var float|null
-	 * @Serializer\Groups("datatable")
-	 */
-	public $kwantiteit;
+  * @var float|null
+  */
+ #[Serializer\Groups('datatable')]
+ public $kwantiteit;
 	/**
-	 * @var float|null
-	 * @Serializer\Groups("datatable")
-	 */
-	public $kwantiteitAfwijking;
+  * @var float|null
+  */
+ #[Serializer\Groups('datatable')]
+ public $kwantiteitAfwijking;
 	/**
-	 * @var int|null
-	 * @Serializer\Groups("datatable")
-	 */
-	public $kwantiteitAantal;
+  * @var int|null
+  */
+ #[Serializer\Groups('datatable')]
+ public $kwantiteitAantal;
 	/**
-	 * @var float|int|null
-	 * @Serializer\Groups("datatable")
-	 */
-	public $kwaliteit;
+  * @var float|int|null
+  */
+ #[Serializer\Groups('datatable')]
+ public $kwaliteit;
 	/**
-	 * @var float|null
-	 * @Serializer\Groups("datatable")
-	 */
-	public $kwaliteitAfwijking;
+  * @var float|null
+  */
+ #[Serializer\Groups('datatable')]
+ public $kwaliteitAfwijking;
 	/**
-	 * @var int|mixed
-	 * @Serializer\Groups("datatable")
-	 */
-	public $kwaliteitAantal;
+  * @var int|mixed
+  */
+ #[Serializer\Groups('datatable')]
+ public $kwaliteitAantal;
 
 	/**
-	 * @var string
-	 * @Serializer\Groups("datatable")
-	 */
-	public $datum;
+  * @var string
+  */
+ #[Serializer\Groups('datatable')]
+ public $datum;
 	/**
-	 * @var string
-	 * @Serializer\Groups("datatable")
-	 */
-	public $tijd;
+  * @var string
+  */
+ #[Serializer\Groups('datatable')]
+ public $tijd;
 	/**
-	 * @var string
-	 * @Serializer\Groups("datatable")
-	 */
-	public $titel;
+  * @var string
+  */
+ #[Serializer\Groups('datatable')]
+ public $titel;
 	/**
-	 * @var int
-	 * @Serializer\Groups("datatable")
-	 */
-	public $aantalAanmeldingen;
+  * @var int
+  */
+ #[Serializer\Groups('datatable')]
+ public $aantalAanmeldingen;
 	/**
-	 * @var int
-	 * @Serializer\Groups("datatable")
-	 */
-	public $aanmeldLimiet;
+  * @var int
+  */
+ #[Serializer\Groups('datatable')]
+ public $aanmeldLimiet;
 	/**
-	 * @var string
-	 * @Serializer\Groups("datatable")
-	 */
-	public $koks;
+  * @var string
+  */
+ #[Serializer\Groups('datatable')]
+ public $koks;
 
 	public static function getIdentifierFieldNames()
 	{
@@ -95,10 +95,10 @@ class MaaltijdBeoordelingDTO implements CustomDataTableEntry
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 */
-	public function getAantalBeoordelingen(): string
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ public function getAantalBeoordelingen(): string
 	{
 		return $this->kwantiteitAantal . ', ' . $this->kwaliteitAantal;
 	}

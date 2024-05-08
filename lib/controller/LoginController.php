@@ -49,14 +49,14 @@ class LoginController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param AuthenticationUtils $authenticationUtils
-	 * @return Response
-	 * @Route("/login", methods={"GET"})
-	 * @Route("/{_locale<%app.supported_locales%>}/login", methods={"GET"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function loginForm(
+  * @param Request $request
+  * @param AuthenticationUtils $authenticationUtils
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/login', methods: ['GET'])]
+ #[Route(path: '/{_locale<%app.supported_locales%>}/login', methods: ['GET'])]
+ public function loginForm(
 		Request $request,
 		AuthenticationUtils $authenticationUtils
 	): Response {
@@ -101,11 +101,11 @@ class LoginController extends AbstractController
 	}
 
 	/**
-	 * @Route("/login_check", name="app_login_check", methods={"POST"})
-	 * @Route("/{_locale<%app.supported_locales%>}/login_check", name="app_login_check", methods={"POST"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function login_check()
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/login_check', name: 'app_login_check', methods: ['POST'])]
+ #[Route(path: '/{_locale<%app.supported_locales%>}/login_check', name: 'app_login_check', methods: ['POST'])]
+ public function login_check()
 	{
 		throw new LogicException(
 			'Deze route wordt opgevangen door de firewall, zie security.firewalls.main.form_login.check_path in config/packages/security.yaml'
@@ -113,10 +113,10 @@ class LoginController extends AbstractController
 	}
 
 	/**
-	 * @Route("/logout", name="app_logout")
-	 * @Auth(P_PUBLIC)
-	 */
-	public function logout()
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/logout', name: 'app_logout')]
+ public function logout()
 	{
 		throw new LogicException(
 			'Deze route wordt opgevangen door de firewall, zie security.firewalls.main.logout.path config/packages/security.yaml'

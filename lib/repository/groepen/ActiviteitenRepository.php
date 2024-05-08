@@ -34,7 +34,7 @@ class ActiviteitenRepository extends KetzersRepository
 		int $limit = null,
 		int $offset = null,
 		string $soort = null
-	) {
+	): array {
 		if ($soort && ActiviteitSoort::isValidValue($soort)) {
 			return $this->findBy(
 				[
@@ -49,7 +49,7 @@ class ActiviteitenRepository extends KetzersRepository
 		return parent::overzicht($limit, $offset, $soort);
 	}
 
-	public function beheer(string $soort = null)
+	public function beheer(string $soort = null): array
 	{
 		if ($soort && ActiviteitSoort::isValidValue($soort)) {
 			return $this->findBy([

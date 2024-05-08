@@ -31,12 +31,12 @@ class MijnAbonnementenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen", methods={"GET"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function mijn(): Response
+  * @return Response
+  * @throws Throwable
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden/abonnementen', methods: ['GET'])]
+ public function mijn(): Response
 	{
 		$abonnementen = $this->maaltijdAbonnementenService->getAbonnementenVoorLid(
 			$this->getProfiel(),
@@ -50,13 +50,13 @@ class MijnAbonnementenController extends AbstractController
 	}
 
 	/**
-	 * @param MaaltijdRepetitie $repetitie
-	 * @return Response
-	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/inschakelen/{mlt_repetitie_id}", methods={"POST"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function inschakelen(MaaltijdRepetitie $repetitie): Response
+  * @param MaaltijdRepetitie $repetitie
+  * @return Response
+  * @throws Throwable
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden/abonnementen/inschakelen/{mlt_repetitie_id}', methods: ['POST'])]
+ public function inschakelen(MaaltijdRepetitie $repetitie): Response
 	{
 		$abo = new MaaltijdAbonnement();
 		$abo->setMaaltijdRepetitie($repetitie);
@@ -77,13 +77,13 @@ class MijnAbonnementenController extends AbstractController
 	}
 
 	/**
-	 * @param MaaltijdRepetitie $repetitie
-	 * @return Response
-	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/uitschakelen/{mlt_repetitie_id}", methods={"POST"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function uitschakelen(MaaltijdRepetitie $repetitie): Response
+  * @param MaaltijdRepetitie $repetitie
+  * @return Response
+  * @throws Throwable
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden/abonnementen/uitschakelen/{mlt_repetitie_id}', methods: ['POST'])]
+ public function uitschakelen(MaaltijdRepetitie $repetitie): Response
 	{
 		$abo_aantal = $this->maaltijdAbonnementenService->uitschakelenAbonnement(
 			$repetitie,

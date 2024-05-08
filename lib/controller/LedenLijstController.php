@@ -21,18 +21,18 @@ use Twig\Error\SyntaxError;
 class LedenLijstController extends AbstractController
 {
 	/**
-	 * @param Request $request
-	 * @param LidZoekerService $lidZoeker
-	 * @param GoogleContactSync $googleSync
-	 * @param Environment $twig
-	 * @return RedirectResponse|Response
-	 * @throws LoaderError
-	 * @throws RuntimeError
-	 * @throws SyntaxError
-	 * @Route("/ledenlijst", methods={"GET", "POST"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 */
-	public function lijst(
+  * @param Request $request
+  * @param LidZoekerService $lidZoeker
+  * @param GoogleContactSync $googleSync
+  * @param Environment $twig
+  * @return RedirectResponse|Response
+  * @throws LoaderError
+  * @throws RuntimeError
+  * @throws SyntaxError
+  * @Auth(P_OUDLEDEN_READ)
+  */
+ #[Route(path: '/ledenlijst', methods: ['GET', 'POST'])]
+ public function lijst(
 		Request $request,
 		LidZoekerService $lidZoeker,
 		GoogleContactSync $googleSync,

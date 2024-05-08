@@ -246,7 +246,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		}
 	}
 
-	public function getEerstePostVoorDraad(ForumDraad $draad)
+	public function getEerstePostVoorDraad(ForumDraad $draad): ?object
 	{
 		return $this->findOneBy([
 			'draad_id' => $draad->draad_id,
@@ -286,7 +286,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		return $this->aantal_wacht;
 	}
 
-	public function getPrullenbakVoorDraad(ForumDraad $draad)
+	public function getPrullenbakVoorDraad(ForumDraad $draad): array
 	{
 		return $this->findBy([
 			'draad_id' => $draad->draad_id,
@@ -412,7 +412,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		}
 	}
 
-	public function citeerForumPost(ForumPost $post)
+	public function citeerForumPost(ForumPost $post): string|array|null
 	{
 		return CsrBB::filterCommentaar(CsrBB::filterPrive($post->tekst));
 	}

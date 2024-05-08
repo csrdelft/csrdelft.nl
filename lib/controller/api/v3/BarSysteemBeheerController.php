@@ -13,8 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class BarSysteemBeheerController
  * @package CsrDelft\controller\api\v3
- * @Route("/api/v3/barbeheer")
  */
+#[Route(path: '/api/v3/barbeheer')]
 class BarSysteemBeheerController extends AbstractController
 {
 	/**
@@ -28,45 +28,45 @@ class BarSysteemBeheerController extends AbstractController
 	}
 
 	/**
-	 * @return JsonResponse
-	 * @Route("/grootboek", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+ #[Route(path: '/grootboek', methods: ['GET'])]
 	public function grootboek(): JsonResponse
 	{
 		return $this->json($this->barSysteemService->getGrootboekInvoer());
 	}
 
 	/**
-	 * @return JsonResponse
-	 * @Route("/grootboeken", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+ #[Route(path: '/grootboeken', methods: ['GET'])]
 	public function grootboeken(): JsonResponse
 	{
 		return $this->json($this->barSysteemService->getGrootboeken());
 	}
 
 	/**
-	 * @return JsonResponse
-	 * @Route("/tools", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+ #[Route(path: '/tools', methods: ['GET'])]
 	public function tools(): JsonResponse
 	{
 		return $this->json($this->barSysteemService->getToolData());
 	}
 
 	/**
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/addProduct", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+ #[Route(path: '/addProduct', methods: ['POST'])]
 	public function addProduct(Request $request): JsonResponse
 	{
 		$name = $request->request->get('name');
@@ -79,12 +79,12 @@ class BarSysteemBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/updatePrice", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+ #[Route(path: '/updatePrice', methods: ['POST'])]
 	public function updatePrice(Request $request): JsonResponse
 	{
 		$productId = $request->request->get('productId');
@@ -96,12 +96,12 @@ class BarSysteemBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/updateVisibility", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+ #[Route(path: '/updateVisibility', methods: ['POST'])]
 	public function updateVisibility(Request $request): JsonResponse
 	{
 		$visibility = $request->request->get('visibility');
@@ -113,12 +113,12 @@ class BarSysteemBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/addPerson", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+ #[Route(path: '/addPerson', methods: ['POST'])]
 	public function addPerson(Request $request): JsonResponse
 	{
 		$name = $request->request->get('name');
@@ -131,12 +131,12 @@ class BarSysteemBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/removePerson", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+ #[Route(path: '/removePerson', methods: ['POST'])]
 	public function removePerson(Request $request): JsonResponse
 	{
 		$id = $request->request->get('id');

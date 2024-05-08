@@ -108,7 +108,7 @@ class AgendaRepository extends AbstractRepository
 		return $this->find($itemId);
 	}
 
-	public function getICalendarItems()
+	public function getICalendarItems(): array
 	{
 		return $this->filterVerborgen(
 			$this->getAllAgendeerbaar(
@@ -314,7 +314,7 @@ class AgendaRepository extends AbstractRepository
 		return null;
 	}
 
-	public function getItemsByDay(DateTimeImmutable $dag)
+	public function getItemsByDay(DateTimeImmutable $dag): array
 	{
 		return $this->getAllAgendeerbaar($dag, $dag);
 	}

@@ -10,8 +10,8 @@ trait GroepAanmeldLimiet
 	/**
   * Maximaal aantal groepsleden
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'integer', nullable: true)]
+ #[Serializer\Groups('datatable')]
  public $aanmeldLimiet;
 }

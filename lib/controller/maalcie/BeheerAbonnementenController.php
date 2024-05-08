@@ -41,13 +41,13 @@ class BeheerAbonnementenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/beheer", methods={"GET"})
-	 * @Route("/maaltijden/abonnementen/beheer/waarschuwingen", methods={"GET"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function waarschuwingen(): Response
+  * @return Response
+  * @throws Throwable
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/abonnementen/beheer', methods: ['GET'])]
+ #[Route(path: '/maaltijden/abonnementen/beheer/waarschuwingen', methods: ['GET'])]
+ public function waarschuwingen(): Response
 	{
 		$matrix_repetities = $this->maaltijdAbonnementenService->getAbonnementenWaarschuwingenMatrix();
 
@@ -65,12 +65,12 @@ class BeheerAbonnementenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/beheer/ingeschakeld", methods={"GET"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function ingeschakeld(): Response
+  * @return Response
+  * @throws Throwable
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/abonnementen/beheer/ingeschakeld', methods: ['GET'])]
+ public function ingeschakeld(): Response
 	{
 		$matrix_repetities = $this->maaltijdAbonnementenService->getAbonnementenMatrix();
 
@@ -88,12 +88,12 @@ class BeheerAbonnementenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/beheer/abonneerbaar", methods={"GET"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function abonneerbaar(): Response
+  * @return Response
+  * @throws Throwable
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/abonnementen/beheer/abonneerbaar', methods: ['GET'])]
+ public function abonneerbaar(): Response
 	{
 		$matrix_repetities = $this->maaltijdAbonnementenService->getAbonnementenAbonneerbaarMatrix();
 
@@ -111,12 +111,12 @@ class BeheerAbonnementenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/beheer/novieten", methods={"POST"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function novieten(): Response
+  * @return Response
+  * @throws Throwable
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/abonnementen/beheer/novieten', methods: ['POST'])]
+ public function novieten(): Response
 	{
 		$mrid = filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
 		$repetitie = $this->maaltijdRepetitiesRepository->find($mrid);
@@ -143,14 +143,14 @@ class BeheerAbonnementenController extends AbstractController
 	}
 
 	/**
-	 * @param MaaltijdRepetitie $repetitie
-	 * @param string $uid
-	 * @return Response
-	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/beheer/inschakelen/{mlt_repetitie_id}/{uid}", methods={"POST"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function inschakelen(MaaltijdRepetitie $repetitie, Profiel $profiel): Response
+  * @param MaaltijdRepetitie $repetitie
+  * @param string $uid
+  * @return Response
+  * @throws Throwable
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/abonnementen/beheer/inschakelen/{mlt_repetitie_id}/{uid}', methods: ['POST'])]
+ public function inschakelen(MaaltijdRepetitie $repetitie, Profiel $profiel): Response
 	{
 		$abo = new MaaltijdAbonnement();
 		$abo->setMaaltijdRepetitie($repetitie);
@@ -170,14 +170,14 @@ class BeheerAbonnementenController extends AbstractController
 	}
 
 	/**
-	 * @param MaaltijdRepetitie $repetitie
-	 * @param string $uid
-	 * @return Response
-	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/beheer/uitschakelen/{mlt_repetitie_id}/{uid}", methods={"POST"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function uitschakelen(MaaltijdRepetitie $repetitie, $uid): Response
+  * @param MaaltijdRepetitie $repetitie
+  * @param string $uid
+  * @return Response
+  * @throws Throwable
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/abonnementen/beheer/uitschakelen/{mlt_repetitie_id}/{uid}', methods: ['POST'])]
+ public function uitschakelen(MaaltijdRepetitie $repetitie, $uid): Response
 	{
 		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(

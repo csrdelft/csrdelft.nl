@@ -32,7 +32,7 @@ final class PathUtil
 		return $combined;
 	}
 
-	public static function realpathunix($path)
+	public static function realpathunix($path): string|array
 	{
 		return PathUtil::to_unix_path(realpath($path));
 	}

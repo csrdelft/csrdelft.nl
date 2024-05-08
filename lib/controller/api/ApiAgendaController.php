@@ -49,11 +49,11 @@ class ApiAgendaController extends AbstractController
 	}
 
 	/**
-	 * @Route("/API/2.0/agenda", methods={"GET"})
-	 * @Auth(P_AGENDA_READ)
-	 * @return JsonResponse
-	 */
-	public function getAgenda(): JsonResponse
+  * @Auth(P_AGENDA_READ)
+  * @return JsonResponse
+  */
+ #[Route(path: '/API/2.0/agenda', methods: ['GET'])]
+ public function getAgenda(): JsonResponse
 	{
 		if (!isset($_GET['from']) || !isset($_GET['to'])) {
 			throw new BadRequestHttpException();

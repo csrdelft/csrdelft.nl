@@ -27,11 +27,11 @@ class ContactFormulierController extends AbstractController
 		$this->mailService = $mailService;
 	}
 	/**
-	 * @return PlainView
-	 * @Route("/contactformulier/interesse", methods={"POST"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function interesse(): PlainView
+  * @return PlainView
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/contactformulier/interesse', methods: ['POST'])]
+ public function interesse(): PlainView
 	{
 		$resp = $this->checkCaptcha(
 			filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING)
@@ -119,11 +119,11 @@ De PubCie.
 	}
 
 	/**
-	 * @return PlainView
-	 * @Route("/contactformulier/owee", methods={"POST"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function owee(): PlainView
+  * @return PlainView
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/contactformulier/owee', methods: ['POST'])]
+ public function owee(): PlainView
 	{
 		$resp = $this->checkCaptcha(
 			filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING)
@@ -184,12 +184,12 @@ De PubCie.
 	}
 
 	/**
-	 * @return PlainView
-	 * @Route("/civitasproducties/bestel", methods={"POST"})
-	 * @Auth(P_PUBLIC)
-	 * @CsrfUnsafe
-	 */
-	public function civitasproducties(): PlainView
+  * @return PlainView
+  * @Auth(P_PUBLIC)
+  * @CsrfUnsafe
+  */
+ #[Route(path: '/civitasproducties/bestel', methods: ['POST'])]
+ public function civitasproducties(): PlainView
 	{
 		$resp = $this->checkCaptcha(
 			filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING)

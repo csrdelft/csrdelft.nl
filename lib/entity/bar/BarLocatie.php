@@ -31,22 +31,22 @@ class BarLocatie
 
 	/**
   * @var string
-  * @Serializer\Groups("json")
   */
  #[ORM\Column(type: 'string')]
+ #[Serializer\Groups('json')]
  public $ip;
 
 	/**
   * @var string
-  * @Serializer\Groups("json")
   */
  #[ORM\Column(type: 'string')]
+ #[Serializer\Groups('json')]
  public $naam;
 
 	/**
   * @var string
-  * @Serializer\Groups("json")
   */
  #[ORM\Column(type: 'uuid')]
+ #[Serializer\Groups('json')]
  public $sleutel;
 }

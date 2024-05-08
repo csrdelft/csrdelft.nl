@@ -32,13 +32,13 @@ class GoogleController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param EntityManagerInterface $manager
-	 * @return RedirectResponse
-	 * @Route("/google/callback", methods={"GET", "POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function callback(
+  * @param Request $request
+  * @param EntityManagerInterface $manager
+  * @return RedirectResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/google/callback', methods: ['GET', 'POST'])]
+ public function callback(
 		Request $request,
 		EntityManagerInterface $manager,
 		GoogleAuthenticator $googleAuthenticator

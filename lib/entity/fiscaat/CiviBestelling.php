@@ -25,53 +25,53 @@ class CiviBestelling
 {
 	/**
   * @var integer
-  * @Serializer\Groups({"datatable", "bar"})
   */
  #[ORM\Column(type: 'integer')]
  #[ORM\Id]
  #[ORM\GeneratedValue]
+ #[Serializer\Groups(['datatable', 'bar'])]
  public $id;
 	/**
   * @var string
-  * @Serializer\Groups({"datatable", "bar"})
   */
  #[ORM\Column(type: 'uid')]
+ #[Serializer\Groups(['datatable', 'bar'])]
  public $uid;
 	/**
   * @var int
-  * @Serializer\Groups({"datatable", "bar"})
   */
  #[ORM\Column(type: 'integer', options: ['default' => 0])]
+ #[Serializer\Groups(['datatable', 'bar'])]
  public $totaal = 0;
 	/**
   * @var boolean
-  * @Serializer\Groups({"datatable", "bar"})
   */
  #[ORM\Column(type: 'boolean', options: ['default' => false])]
+ #[Serializer\Groups(['datatable', 'bar'])]
  public $deleted;
 	/**
   * @var DateTimeImmutable
-  * @Serializer\Groups({"datatable", "bar"})
   */
  #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
+ #[Serializer\Groups(['datatable', 'bar'])]
  public $moment;
 	/**
   * @var string
-  * @Serializer\Groups({"datatable", "bar"})
   */
  #[ORM\Column(type: 'string', nullable: true)]
+ #[Serializer\Groups(['datatable', 'bar'])]
  public $comment;
 	/**
   * @var string
-  * @Serializer\Groups({"datatable", "bar"})
   */
- #[ORM\Column(type: 'string')] // TODO dit is een CiviSaldoCommissieEnum
+ #[ORM\Column(type: 'string')]
+ #[Serializer\Groups(['datatable', 'bar'])] // TODO dit is een CiviSaldoCommissieEnum
  public $cie;
 	/**
   * @var CiviBestellingInhoud[]|ArrayCollection
-  * @Serializer\Groups("bar")
   */
  #[ORM\OneToMany(targetEntity: CiviBestellingInhoud::class, mappedBy: 'bestelling')]
+ #[Serializer\Groups('bar')]
  public $inhoud;
 
 	/**
@@ -87,11 +87,11 @@ class CiviBestelling
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("inhoud")
-	 */
-	public function getInhoudTekst(): string
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('inhoud')]
+ public function getInhoudTekst(): string
 	{
 		$bestellingenInhoud = [];
 		foreach ($this->inhoud as $item) {

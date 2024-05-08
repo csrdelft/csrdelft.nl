@@ -78,14 +78,14 @@ class PinTransactieController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return Response
-	 * @throws ExceptionInterface
-	 * @Route("/fiscaat/pin", methods={"GET", "POST"})
-	 * @Auth(P_FISCAAT_READ)
-	 * @return GenericDataTableResponse
-	 */
-	public function overzicht(Request $request): Response
+  * @param Request $request
+  * @return Response
+  * @throws ExceptionInterface
+  * @Auth(P_FISCAAT_READ)
+  * @return GenericDataTableResponse
+  */
+ #[Route(path: '/fiscaat/pin', methods: ['GET', 'POST'])]
+ public function overzicht(Request $request): Response
 	{
 		$table = $this->createDataTable(PinTransactieMatchTableType::class);
 
@@ -113,11 +113,11 @@ class PinTransactieController extends AbstractController
 	}
 
 	/**
-	 * @throws CsrException
-	 * @Route("/fiscaat/pin/verwerk", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function verwerk()
+  * @throws CsrException
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/pin/verwerk', methods: ['POST'])]
+ public function verwerk()
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -164,11 +164,11 @@ class PinTransactieController extends AbstractController
 	}
 
 	/**
-	 * @throws CsrGebruikerException
-	 * @Route("/fiscaat/pin/aanmaken", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function aanmaken()
+  * @throws CsrGebruikerException
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/pin/aanmaken', methods: ['POST'])]
+ public function aanmaken()
 	{
 		$form = new PinBestellingAanmakenForm();
 
@@ -262,11 +262,11 @@ class PinTransactieController extends AbstractController
 	}
 
 	/**
-	 * @throws CsrGebruikerException
-	 * @Route("/fiscaat/pin/ontkoppel", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function ontkoppel(): GenericDataTableResponse
+  * @throws CsrGebruikerException
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/pin/ontkoppel', methods: ['POST'])]
+ public function ontkoppel(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -319,11 +319,11 @@ class PinTransactieController extends AbstractController
 	}
 
 	/**
-	 * @throws CsrException
-	 * @Route("/fiscaat/pin/koppel", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function koppel(): GenericDataTableResponse
+  * @throws CsrException
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/pin/koppel', methods: ['POST'])]
+ public function koppel(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -423,11 +423,11 @@ class PinTransactieController extends AbstractController
 	}
 
 	/**
-	 * Crediteer pingedeelte van deze bestelling.
-	 * @Route("/fiscaat/pin/crediteer", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function crediteer()
+  * Crediteer pingedeelte van deze bestelling.
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/pin/crediteer', methods: ['POST'])]
+ public function crediteer()
 	{
 		$form = new PinBestellingCrediterenForm();
 
@@ -526,11 +526,11 @@ class PinTransactieController extends AbstractController
 	}
 
 	/**
-	 * Verander het bedrag in de bestelling.
-	 * @Route("/fiscaat/pin/update", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function update()
+  * Verander het bedrag in de bestelling.
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/pin/update', methods: ['POST'])]
+ public function update()
 	{
 		$form = new PinBestellingVeranderenForm();
 
@@ -650,11 +650,11 @@ class PinTransactieController extends AbstractController
 	}
 
 	/**
-	 * @throws CsrGebruikerException
-	 * @Route("/fiscaat/pin/info", methods={"POST"})
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function info()
+  * @throws CsrGebruikerException
+  * @Auth(P_FISCAAT_READ)
+  */
+ #[Route(path: '/fiscaat/pin/info', methods: ['POST'])]
+ public function info()
 	{
 		$form = new PinBestellingInfoForm(new PinTransactieMatch());
 
@@ -688,10 +688,10 @@ class PinTransactieController extends AbstractController
 	}
 
 	/**
-	 * @Route("/fiscaat/pin/negeer", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function negeer()
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/pin/negeer', methods: ['POST'])]
+ public function negeer()
 	{
 		$selection = $this->getDataTableSelection();
 		$form = new PinTransactieMatchNegerenForm($selection);
@@ -732,12 +732,12 @@ class PinTransactieController extends AbstractController
 	}
 
 	/**
-	 * Verwijder matches die geen bestelling en transactie hebben. Dit kan gebeuren als een probleem binnen het
-	 * socciesysteem wordt opgelost.
-	 * @Route("/fiscaat/pin/heroverweeg", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function heroverweeg(): GenericDataTableResponse
+  * Verwijder matches die geen bestelling en transactie hebben. Dit kan gebeuren als een probleem binnen het
+  * socciesysteem wordt opgelost.
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/pin/heroverweeg', methods: ['POST'])]
+ public function heroverweeg(): GenericDataTableResponse
 	{
 		$deleted = $this->em->transactional(function (): array {
 			$alleMatches = $this->pinTransactieMatchRepository->findAll();

@@ -271,7 +271,7 @@ class MenuItemRepository extends AbstractRepository
 	{
 		return $this->cache->get(
 			$this->createFlatCacheKey($root->tekst),
-			function () use ($root) {
+			function () use ($root): array {
 				return $this->flattenMenuInternal($root);
 			}
 		);

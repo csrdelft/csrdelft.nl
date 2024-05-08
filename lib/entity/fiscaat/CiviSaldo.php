@@ -32,34 +32,34 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
   * Let op, dit is geen fk naar Profiel. Er zijn CiviSaldo's die geen profiel zijn en vice versa.
   *
   * @var string
-  * @Serializer\Groups({"log", "datatable", "bar"})
   */
  #[ORM\Column(type: 'uid', unique: true)]
  #[ORM\Id]
+ #[Serializer\Groups(['log', 'datatable', 'bar'])]
  public $uid;
 	/**
   * @var string
-  * @Serializer\Groups({"log", "datatable", "bar"})
   */
  #[ORM\Column(type: 'text')]
+ #[Serializer\Groups(['log', 'datatable', 'bar'])]
  public $naam;
 	/**
   * @var integer
-  * @Serializer\Groups({"log", "datatable", "bar"})
   */
  #[ORM\Column(type: 'integer')]
+ #[Serializer\Groups(['log', 'datatable', 'bar'])]
  public $saldo;
 	/**
   * @var DateTimeImmutable
-  * @Serializer\Groups({"log", "datatable"})
   */
  #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
+ #[Serializer\Groups(['log', 'datatable'])]
  public $laatst_veranderd;
 	/**
   * @var bool
-  * @Serializer\Groups({"log", "datatable", "bar"})
   */
  #[ORM\Column(type: 'boolean', options: ['default' => false])]
+ #[Serializer\Groups(['log', 'datatable', 'bar'])]
  public $deleted = false;
 
 	/**
@@ -69,10 +69,10 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
  public $bestellingen;
 
 	/**
-	 * @return integer
-	 * @Serializer\Groups("bar")
-	 */
-	public function getRecent()
+  * @return integer
+  */
+ #[Serializer\Groups('bar')]
+ public function getRecent()
 	{
 		$eb = Criteria::expr();
 		$criteria = Criteria::create()
@@ -90,21 +90,21 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("lichting")
-	 */
-	public function getDataTableLichting(): string
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('lichting')]
+ public function getDataTableLichting(): string
 	{
 		return substr($this->uid, 0, 2);
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("naam")
-	 */
-	public function getDataTableNaam(): string
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('naam')]
+ public function getDataTableNaam(): string
 	{
 		return $this->getWeergave();
 	}
@@ -115,10 +115,10 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("bar")
-	 */
-	public function getWeergave(): string
+  * @return string
+  */
+ #[Serializer\Groups('bar')]
+ public function getWeergave(): string
 	{
 		return ProfielRepository::existsUid($this->uid)
 			? ProfielRepository::getNaam($this->uid, 'volledig')

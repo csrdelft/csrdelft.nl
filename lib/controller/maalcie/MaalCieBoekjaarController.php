@@ -28,23 +28,23 @@ class MaalCieBoekjaarController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/maaltijden/boekjaar", methods={"GET"})
-	 * @Auth(P_MAAL_SALDI)
-	 */
-	public function beheer(): Response
+  * @return Response
+  * @Auth(P_MAAL_SALDI)
+  */
+ #[Route(path: '/maaltijden/boekjaar', methods: ['GET'])]
+ public function beheer(): Response
 	{
 		return $this->render('maaltijden/boekjaar_sluiten.html.twig');
 	}
 
 	/**
-	 * @return BoekjaarSluitenForm|Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/boekjaar/sluitboekjaar", methods={"POST"})
-	 * @Auth(P_MAAL_SALDI)
-	 */
-	public function sluitboekjaar()
+  * @return BoekjaarSluitenForm|Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_MAAL_SALDI)
+  */
+ #[Route(path: '/maaltijden/boekjaar/sluitboekjaar', methods: ['POST'])]
+ public function sluitboekjaar()
 	{
 		$form = new BoekjaarSluitenForm(
 			date('Y-m-d', strtotime('-1 year')),

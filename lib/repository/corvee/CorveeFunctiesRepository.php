@@ -55,7 +55,7 @@ class CorveeFunctiesRepository extends AbstractRepository
 	 *
 	 * @return CorveeFunctie[]
 	 */
-	public function getAlleFuncties()
+	public function getAlleFuncties(): array
 	{
 		return ArrayUtil::group_by_distinct('functie_id', $this->findAll());
 	}

@@ -363,7 +363,7 @@ class MaaltijdAbonnementenService
 	 */
 	public function inschakelenAbonnement($abo)
 	{
-		return $this->entityManager->wrapInTransaction(function () use ($abo) {
+		return $this->entityManager->wrapInTransaction(function () use ($abo): int {
 			if (!$abo->maaltijd_repetitie->abonneerbaar) {
 				throw new CsrGebruikerException('Niet abonneerbaar');
 			}

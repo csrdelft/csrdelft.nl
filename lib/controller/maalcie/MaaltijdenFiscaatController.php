@@ -63,11 +63,11 @@ class MaaltijdenFiscaatController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/maaltijden/fiscaat", methods={"GET"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function GET_overzicht(): Response
+  * @return Response
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/fiscaat', methods: ['GET'])]
+ public function GET_overzicht(): Response
 	{
 		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Overzicht verwerkte maaltijden',
@@ -76,11 +76,11 @@ class MaaltijdenFiscaatController extends AbstractController
 	}
 
 	/**
-	 * @return GenericDataTableResponse
-	 * @Route("/maaltijden/fiscaat", methods={"POST"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function POST_overzicht(): GenericDataTableResponse
+  * @return GenericDataTableResponse
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/fiscaat', methods: ['POST'])]
+ public function POST_overzicht(): GenericDataTableResponse
 	{
 		$data = $this->maaltijdenRepository->findBy(['verwerkt' => true]);
 
@@ -88,11 +88,11 @@ class MaaltijdenFiscaatController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/maaltijden/fiscaat/onverwerkt", methods={"GET"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function GET_onverwerkt(): Response
+  * @return Response
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/fiscaat/onverwerkt', methods: ['GET'])]
+ public function GET_onverwerkt(): Response
 	{
 		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Onverwerkte Maaltijden',
@@ -101,12 +101,12 @@ class MaaltijdenFiscaatController extends AbstractController
 	}
 
 	/**
-	 * @param EntityManagerInterface $em
-	 * @return GenericDataTableResponse
-	 * @Route("/maaltijden/fiscaat/verwerk", methods={"POST"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function POST_verwerk(EntityManagerInterface $em): GenericDataTableResponse
+  * @param EntityManagerInterface $em
+  * @return GenericDataTableResponse
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/fiscaat/verwerk', methods: ['POST'])]
+ public function POST_verwerk(EntityManagerInterface $em): GenericDataTableResponse
 	{
 		// Haal maaltijd op
 		$selection = $this->getDataTableSelection();

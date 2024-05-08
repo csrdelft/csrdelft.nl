@@ -22,12 +22,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class VoorpaginaController extends AbstractController
 {
 	/**
-	 * @param ForumDelenService $forumDelenService
-	 * @param ForumPostsRepository $forumPostsRepository
-	 * @return Response
-	 * @Route("/voorpagina/forum")
-	 */
-	public function forum(
+  * @param ForumDelenService $forumDelenService
+  * @param ForumPostsRepository $forumPostsRepository
+  * @return Response
+  */
+ #[Route(path: '/voorpagina/forum')]
+ public function forum(
 		ForumDelenService $forumDelenService,
 		ForumPostsRepository $forumPostsRepository
 	): Response {
@@ -41,11 +41,11 @@ class VoorpaginaController extends AbstractController
 	}
 
 	/**
-	 * @param AgendaRepository $agendaRepository
-	 * @return Response
-	 * @Route("/voorpagina/agenda")
-	 */
-	public function agenda(AgendaRepository $agendaRepository): Response
+  * @param AgendaRepository $agendaRepository
+  * @return Response
+  */
+ #[Route(path: '/voorpagina/agenda')]
+ public function agenda(AgendaRepository $agendaRepository): Response
 	{
 		// Agenda
 		if (LoginService::mag(P_AGENDA_READ)) {
@@ -83,11 +83,11 @@ class VoorpaginaController extends AbstractController
 	}
 
 	/**
-	 * @param VerjaardagenService $verjaardagenService
-	 * @return Response
-	 * @Route("/voorpagina/verjaardagen")
-	 */
-	public function verjaardagen(
+  * @param VerjaardagenService $verjaardagenService
+  * @return Response
+  */
+ #[Route(path: '/voorpagina/verjaardagen')]
+ public function verjaardagen(
 		VerjaardagenService $verjaardagenService
 	): Response {
 		// Komende verjaardagen
@@ -102,11 +102,11 @@ class VoorpaginaController extends AbstractController
 	}
 
 	/**
-	 * @param FotoAlbumRepository $fotoAlbumRepository
-	 * @return Response
-	 * @Route("/voorpagina/fotoalbum")
-	 */
-	public function fotoalbum(FotoAlbumRepository $fotoAlbumRepository): Response
+  * @param FotoAlbumRepository $fotoAlbumRepository
+  * @return Response
+  */
+ #[Route(path: '/voorpagina/fotoalbum')]
+ public function fotoalbum(FotoAlbumRepository $fotoAlbumRepository): Response
 	{
 		// Nieuwste fotoalbum
 		$album = $fotoAlbumRepository->getMostRecentFotoAlbum();
@@ -121,11 +121,11 @@ class VoorpaginaController extends AbstractController
 	}
 
 	/**
-	 * @param MaaltijdenRepository $maaltijdenRepository
-	 * @return Response
-	 * @Route("/voorpagina/maaltijden")
-	 */
-	public function maaltijden(MaaltijdenService $maaltijdenService): Response
+  * @param MaaltijdenRepository $maaltijdenRepository
+  * @return Response
+  */
+ #[Route(path: '/voorpagina/maaltijden')]
+ public function maaltijden(MaaltijdenService $maaltijdenService): Response
 	{
 		$maaltijden = $maaltijdenService->getKomendeMaaltijdenVoorLid(
 			$this->getProfiel()
@@ -143,32 +143,32 @@ class VoorpaginaController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/voorpagina/posters")
-	 */
-	public function posters(): Response
+  * @return Response
+  */
+ #[Route(path: '/voorpagina/posters')]
+ public function posters(): Response
 	{
 		return $this->render('voorpagina/posters.html.twig');
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/voorpagina/civisaldo")
-	 */
-	public function civisaldo(): Response
+  * @return Response
+  */
+ #[Route(path: '/voorpagina/civisaldo')]
+ public function civisaldo(): Response
 	{
 		return $this->render('voorpagina/civisaldo.html.twig');
 	}
 
 	/**
-	 * @param LidInstellingenRepository $lidInstellingenRepository
-	 * @param RequestStack $requestStack
-	 * @param AgendaRepository $agendaRepository
-	 * @param WoordVanDeDagRepository $woordVanDeDagRepository
-	 * @return Response
-	 * @Route("/voorpagina/ishetal")
-	 */
-	public function ishetal(
+  * @param LidInstellingenRepository $lidInstellingenRepository
+  * @param RequestStack $requestStack
+  * @param AgendaRepository $agendaRepository
+  * @param WoordVanDeDagRepository $woordVanDeDagRepository
+  * @return Response
+  */
+ #[Route(path: '/voorpagina/ishetal')]
+ public function ishetal(
 		LidInstellingenRepository $lidInstellingenRepository,
 		RequestStack $requestStack,
 		AgendaRepository $agendaRepository,
@@ -192,10 +192,10 @@ class VoorpaginaController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/voorpagina/overig")
-	 */
-	public function overig(): Response
+  * @return Response
+  */
+ #[Route(path: '/voorpagina/overig')]
+ public function overig(): Response
 	{
 		return $this->render('voorpagina/overig.html.twig');
 	}

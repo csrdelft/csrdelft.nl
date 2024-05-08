@@ -61,12 +61,12 @@ class LayoutTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function csr_breadcrumbs($breadcrumbs)
+	public function csr_breadcrumbs($breadcrumbs): string
 	{
 		return $this->menuItemRepository->renderBreadcrumbs($breadcrumbs);
 	}
 
-	public function get_breadcrumbs($name)
+	public function get_breadcrumbs($name): array
 	{
 		return $this->menuItemRepository->getBreadcrumbs($name);
 	}
@@ -94,7 +94,7 @@ class LayoutTwigExtension extends AbstractExtension
 			$this->menuItemRepository->getMenu($defaultName);
 	}
 
-	public function instant_search_form()
+	public function instant_search_form(): string
 	{
 		return (new InstantSearchForm())->__toString();
 	}
@@ -113,7 +113,7 @@ class LayoutTwigExtension extends AbstractExtension
 		$title = null,
 		$class = null,
 		$content = null
-	) {
+	): string {
 		return Icon::getTag($key, $hover, $title, $class, $content);
 	}
 }

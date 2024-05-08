@@ -19,8 +19,8 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Class BarSysteemController
  * @package CsrDelft\controller\api\v3
- * @Route("/api/v3/bar")
  */
+#[Route(path: '/api/v3/bar')]
 class BarSysteemController extends AbstractController
 {
 	/**
@@ -80,10 +80,10 @@ class BarSysteemController extends AbstractController
 	}
 
 	/**
-	 * @Route("/updatePerson", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+ #[Route(path: '/updatePerson', methods: ['POST'])]
 	public function updatePerson(Request $request): Response
 	{
 		$id = $request->request->get('id');
@@ -94,22 +94,22 @@ class BarSysteemController extends AbstractController
 	}
 
 	/**
-	 * @return JsonResponse
-	 * @Route("/personen", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+ #[Route(path: '/personen', methods: ['POST'])]
 	public function personen(): JsonResponse
 	{
 		return $this->json($this->barSysteemService->getPersonen());
 	}
 
 	/**
-	 * @return JsonResponse
-	 * @Route("/producten", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+ #[Route(path: '/producten', methods: ['POST'])]
 	public function producten(): JsonResponse
 	{
 		return $this->json($this->barSysteemService->getProducten());
@@ -121,10 +121,10 @@ class BarSysteemController extends AbstractController
   * @throws ConnectionException
   * @throws Exception
   * @throws \Doctrine\DBAL\Exception
-  * @Route("/bestelling", methods={"POST"})
   * @Auth(P_LOGGED_IN)
   */
  #[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+ #[Route(path: '/bestelling', methods: ['POST'])]
 	public function bestelling(Request $request): Response
 	{
 		$uid = $request->request->get('uid');
@@ -147,12 +147,12 @@ class BarSysteemController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/saldo", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+ #[Route(path: '/saldo', methods: ['POST'])]
 	public function saldo(Request $request): JsonResponse
 	{
 		$soccieSaldoId = $request->request->get('saldoSocCieId');
@@ -160,12 +160,12 @@ class BarSysteemController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return Response
-	 * @Route("/verwijderBestelling", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+  * @param Request $request
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+ #[Route(path: '/verwijderBestelling', methods: ['POST'])]
 	public function verwijderBestelling(Request $request): Response
 	{
 		$this->barSysteemService->log('remove', $_POST);
@@ -178,12 +178,12 @@ class BarSysteemController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return Response
-	 * @Route("/undoVerwijderBestelling", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+  * @param Request $request
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+ #[Route(path: '/undoVerwijderBestelling', methods: ['POST'])]
 	public function undoVerwijderBestelling(Request $request): Response
 	{
 		$this->barSysteemService->log('remove', $_POST);
@@ -195,12 +195,12 @@ class BarSysteemController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/laadLaatste", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+ #[Route(path: '/laadLaatste', methods: ['POST'])]
 	public function laadLaatste(Request $request): JsonResponse
 	{
 		$persoon = $request->request->get('aantal');
@@ -225,12 +225,12 @@ class BarSysteemController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return Response
-	 * @Route("/prakciePilsjes")
-	 * @Auth(P_PUBLIC)
-	 */
-	public function prakciePilsjes(Request $request): Response
+  * @param Request $request
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/prakciePilsjes')]
+ public function prakciePilsjes(Request $request): Response
 	{
 		$vanaf = date_create_immutable($request->query->get('vanaf', 'now'));
 		if ($vanaf === false) {

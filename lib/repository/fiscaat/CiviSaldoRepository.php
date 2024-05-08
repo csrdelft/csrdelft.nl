@@ -264,7 +264,7 @@ class CiviSaldoRepository extends AbstractRepository
 	public function getWeekinvoer(
 		DateTimeImmutable $from,
 		DateTimeImmutable $until
-	) {
+	): stdClass {
 		// Invoer gebeurt op maandag, zoek eerste en laatse maandag (eerste inbegrepen, laatste niet)
 		$from = $from->modify('monday');
 		$until = $until->modify('next monday'); // Ook als het maandag is de volgende maandag pakken

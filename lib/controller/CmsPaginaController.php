@@ -32,11 +32,11 @@ class CmsPaginaController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/pagina")
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function overzicht(): Response
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/pagina')]
+ public function overzicht(): Response
 	{
 		return $this->render('cms/overzicht.html.twig', [
 			'paginas' => $this->cmsPaginaRepository->getAllePaginas(),
@@ -44,13 +44,13 @@ class CmsPaginaController extends AbstractController
 	}
 
 	/**
-	 * @param $naam
-	 * @param string $subnaam
-	 * @return Response
-	 * @Route("/pagina/{naam}")
-	 * @Auth(P_PUBLIC)
-	 */
-	public function bekijken($naam, $subnaam = ''): Response
+  * @param $naam
+  * @param string $subnaam
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/pagina/{naam}')]
+ public function bekijken($naam, $subnaam = ''): Response
 	{
 		$paginaNaam = $naam;
 		if ($subnaam) {
@@ -91,14 +91,14 @@ class CmsPaginaController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param $naam
-	 * @return Response
-	 * @Route("/pagina/bewerken/{naam}")
-	 * @Auth(P_LOGGED_IN)
-	 * @CsrfUnsafe
-	 */
-	public function bewerken(Request $request, $naam): Response
+  * @param Request $request
+  * @param $naam
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  * @CsrfUnsafe
+  */
+ #[Route(path: '/pagina/bewerken/{naam}')]
+ public function bewerken(Request $request, $naam): Response
 	{
 		$pagina = $this->cmsPaginaRepository->find($naam);
 		if (!$pagina) {
@@ -134,12 +134,12 @@ class CmsPaginaController extends AbstractController
 	}
 
 	/**
-	 * @param $naam
-	 * @return JsonResponse
-	 * @Route("/pagina/verwijderen/{naam}", methods={"POST"})
-	 * @Auth(P_ADMIN)
-	 */
-	public function verwijderen($naam): JsonResponse
+  * @param $naam
+  * @return JsonResponse
+  * @Auth(P_ADMIN)
+  */
+ #[Route(path: '/pagina/verwijderen/{naam}', methods: ['POST'])]
+ public function verwijderen($naam): JsonResponse
 	{
 		/** @var CmsPagina $pagina */
 		$pagina = $this->cmsPaginaRepository->find($naam);

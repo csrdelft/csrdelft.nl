@@ -29,11 +29,11 @@ class PinTransactieMatch implements DataTableEntry
 {
 	/**
   * @var integer
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'integer')]
  #[ORM\Id]
  #[ORM\GeneratedValue]
+ #[Serializer\Groups('datatable')]
  public $id;
 	/**
   * @var string
@@ -42,9 +42,9 @@ class PinTransactieMatch implements DataTableEntry
  public $status;
 	/**
   * @var integer
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'integer', nullable: true)]
+ #[Serializer\Groups('datatable')]
  public $transactie_id;
 	/**
   * @var PinTransactie|null
@@ -54,9 +54,9 @@ class PinTransactieMatch implements DataTableEntry
  public $transactie;
 	/**
   * @var integer
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'integer', nullable: true)]
+ #[Serializer\Groups('datatable')]
  public $bestelling_id;
 	/**
   * @var CiviBestelling|null
@@ -66,9 +66,9 @@ class PinTransactieMatch implements DataTableEntry
  public $bestelling;
 	/**
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'text', length: 65535, nullable: true)]
+ #[Serializer\Groups('datatable')]
  public $notitie;
 
 	/**
@@ -166,11 +166,11 @@ class PinTransactieMatch implements DataTableEntry
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("status")
-	 */
-	public function getDataTableStatus(): string
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('status')]
+ public function getDataTableStatus(): string
 	{
 		return PinTransactieMatchStatusEnum::from($this->status)->getDescription() .
 			$this->icons();
@@ -193,11 +193,11 @@ class PinTransactieMatch implements DataTableEntry
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("transactie")
-	 */
-	public function getDataTableTransactie()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('transactie')]
+ public function getDataTableTransactie(): string
 	{
 		if ($this->transactie) {
 			return $this->transactie->getKorteBeschrijving();
@@ -207,11 +207,11 @@ class PinTransactieMatch implements DataTableEntry
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("bestelling")
-	 */
-	public function getDataTableBestelling(): string
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('bestelling')]
+ public function getDataTableBestelling(): string
 	{
 		if ($this->bestelling) {
 			return $this->bestelling->getPinBeschrijving();
@@ -221,31 +221,31 @@ class PinTransactieMatch implements DataTableEntry
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("moment")
-	 */
-	public function getDataTableMoment()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('moment')]
+ public function getDataTableMoment()
 	{
 		return self::renderMoment($this->getMoment());
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("bestelling_tijd")
-	 */
-	public function getDataTableBestellingTijd()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('bestelling_tijd')]
+ public function getDataTableBestellingTijd()
 	{
 		return $this->bestelling ? self::renderTijd($this->bestelling->moment) : '';
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("transactie_tijd")
-	 */
-	public function getDataTableTransactieTijd()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('transactie_tijd')]
+ public function getDataTableTransactieTijd()
 	{
 		return $this->transactie
 			? self::renderTijd($this->transactie->datetime)
@@ -253,11 +253,11 @@ class PinTransactieMatch implements DataTableEntry
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("tijdsverschil")
-	 */
-	public function getDataTableTijdsverschil(): string
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('tijdsverschil')]
+ public function getDataTableTijdsverschil(): string
 	{
 		if (!$this->transactie || !$this->bestelling) {
 			return '-';
@@ -312,11 +312,11 @@ class PinTransactieMatch implements DataTableEntry
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("verschil")
-	 */
-	public function getDataTableVerschil(): string
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('verschil')]
+ public function getDataTableVerschil(): string
 	{
 		$verschil = $this->getVerschil();
 		if ($verschil !== null) {

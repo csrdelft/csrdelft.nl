@@ -22,24 +22,24 @@ class RememberOAuth implements DataTableEntry
 	/**
   * Primary key
   * @var int
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'integer')]
  #[ORM\Id]
  #[ORM\GeneratedValue]
+ #[Serializer\Groups('datatable')]
  public $id;
 	/**
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'uid')]
+ #[Serializer\Groups('datatable')]
  public $uid;
 	/**
   * Identifier in oauth2_client
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'string')]
+ #[Serializer\Groups('datatable')]
  public $clientIdentifier;
 	/**
   * @var Account
@@ -49,15 +49,15 @@ class RememberOAuth implements DataTableEntry
  public $account;
 	/**
   * @var DateTimeImmutable
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'datetime')]
+ #[Serializer\Groups('datatable')]
  public $rememberSince;
 	/**
   * @var DateTimeImmutable
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'datetime')]
+ #[Serializer\Groups('datatable')]
  public $lastUsed;
 	/**
   * OAuth2 scopes voor deze sessie.

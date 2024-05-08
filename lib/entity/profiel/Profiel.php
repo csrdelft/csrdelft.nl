@@ -660,7 +660,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->getTitel() . ' wordt ' . $leeftijd . ' jaar';
 	}
 
-	public function getLocatie()
+	public function getLocatie(): string
 	{
 		return $this->getAdres();
 	}
@@ -957,12 +957,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			'" />';
 	}
 
-	public function getPasfotoRounded()
+	public function getPasfotoRounded(): string
 	{
 		return $this->getPasfotoTag('rounded-circle flex-shrink-0');
 	}
 
-	public function getPasfotoLink()
+	public function getPasfotoLink(): string
 	{
 		return $this->getPasfotoPath();
 	}
@@ -1009,12 +1009,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $nageslacht;
 	}
 
-	public function isLid()
+	public function isLid(): bool
 	{
 		return LidStatus::isLidLike($this->status);
 	}
 
-	public function isOudlid()
+	public function isOudlid(): bool
 	{
 		return LidStatus::isOudlidLike($this->status);
 	}

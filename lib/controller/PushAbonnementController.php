@@ -13,14 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class PushAbonnementController extends AbstractController
 {
 	/**
-	 * @param PushAbonnementRepository $pushAbonnementRepository
-	 * @param LidInstellingenRepository $lidInstellingenRepository
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/push-abonnement", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function nieuw(
+  * @param PushAbonnementRepository $pushAbonnementRepository
+  * @param LidInstellingenRepository $lidInstellingenRepository
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/push-abonnement', methods: ['POST'])]
+ public function nieuw(
 		PushAbonnementRepository $pushAbonnementRepository,
 		LidInstellingenRepository $lidInstellingenRepository,
 		Request $request
@@ -48,13 +48,13 @@ class PushAbonnementController extends AbstractController
 	}
 
 	/**
-	 * @param PushAbonnementRepository $pushAbonnementRepository
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/push-abonnement", methods={"PUT"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function aanpassen(
+  * @param PushAbonnementRepository $pushAbonnementRepository
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/push-abonnement', methods: ['PUT'])]
+ public function aanpassen(
 		PushAbonnementRepository $pushAbonnementRepository,
 		Request $request
 	): JsonResponse {
@@ -76,14 +76,14 @@ class PushAbonnementController extends AbstractController
 	}
 
 	/**
-	 * @param PushAbonnementRepository $pushAbonnementRepository
-	 * @param LidInstellingenRepository $lidInstellingenRepository
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/push-abonnement", methods={"DELETE"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function verwijderen(
+  * @param PushAbonnementRepository $pushAbonnementRepository
+  * @param LidInstellingenRepository $lidInstellingenRepository
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/push-abonnement', methods: ['DELETE'])]
+ public function verwijderen(
 		PushAbonnementRepository $pushAbonnementRepository,
 		LidInstellingenRepository $lidInstellingenRepository,
 		Request $request

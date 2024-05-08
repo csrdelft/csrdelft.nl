@@ -27,11 +27,11 @@ class BeheerVrijstellingenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/corvee/vrijstellingen", methods={"GET"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function beheer(): Response
+  * @return Response
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/vrijstellingen', methods: ['GET'])]
+ public function beheer(): Response
 	{
 		return $this->render(
 			'maaltijden/vrijstelling/beheer_vrijstellingen.html.twig',
@@ -40,22 +40,22 @@ class BeheerVrijstellingenController extends AbstractController
 	}
 
 	/**
-	 * @return VrijstellingForm
-	 * @Route("/corvee/vrijstellingen/nieuw", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function nieuw(): VrijstellingForm
+  * @return VrijstellingForm
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/vrijstellingen/nieuw', methods: ['POST'])]
+ public function nieuw(): VrijstellingForm
 	{
 		return new VrijstellingForm($this->corveeVrijstellingenRepository->nieuw()); // fetches POST values itself
 	}
 
 	/**
-	 * @param Profiel $profiel
-	 * @return VrijstellingForm
-	 * @Route("/corvee/vrijstellingen/bewerk/{uid}", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function bewerk(Profiel $profiel): VrijstellingForm
+  * @param Profiel $profiel
+  * @return VrijstellingForm
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/vrijstellingen/bewerk/{uid}', methods: ['POST'])]
+ public function bewerk(Profiel $profiel): VrijstellingForm
 	{
 		return new VrijstellingForm(
 			$this->corveeVrijstellingenRepository->getVrijstelling($profiel->uid)
@@ -63,13 +63,13 @@ class BeheerVrijstellingenController extends AbstractController
 	}
 
 	/**
-	 * @param Profiel|null $profiel
-	 * @return VrijstellingForm|Response
-	 * @throws Throwable
-	 * @Route("/corvee/vrijstellingen/opslaan/{uid}", methods={"POST"}, defaults={"uid"=null})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function opslaan(Profiel $profiel = null)
+  * @param Profiel|null $profiel
+  * @return VrijstellingForm|Response
+  * @throws Throwable
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/vrijstellingen/opslaan/{uid}', methods: ['POST'], defaults: ['uid' => null])]
+ public function opslaan(Profiel $profiel = null)
 	{
 		if ($profiel) {
 			$view = $this->bewerk($profiel);
@@ -95,12 +95,12 @@ class BeheerVrijstellingenController extends AbstractController
 	}
 
 	/**
-	 * @param Profiel $profiel
-	 * @return PlainView
-	 * @Route("/corvee/vrijstellingen/verwijder/{uid}", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function verwijder(Profiel $profiel): PlainView
+  * @param Profiel $profiel
+  * @return PlainView
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/vrijstellingen/verwijder/{uid}', methods: ['POST'])]
+ public function verwijder(Profiel $profiel): PlainView
 	{
 		$this->corveeVrijstellingenRepository->verwijderVrijstelling($profiel->uid);
 		return new PlainView(

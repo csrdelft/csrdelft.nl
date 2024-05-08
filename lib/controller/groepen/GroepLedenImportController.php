@@ -23,11 +23,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class GroepLedenImportController extends AbstractController
 {
 	/**
-	 * @Route("/groepimport", name="groepimport")
-	 * @return Response
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function groepimport(): Response
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/groepimport', name: 'groepimport')]
+ public function groepimport(): Response
 	{
 		return $this->render('groepen/groepimport.html.twig', []);
 	}
@@ -42,13 +42,13 @@ class GroepLedenImportController extends AbstractController
 	}
 
 	/**
-	 * @Route("/groepimport/upload", name="groepimport_upload", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 * @param Request $request
-	 * @param Session $session
-	 * @return Response
-	 */
-	public function upload(Request $request, Session $session): Response
+  * @Auth(P_LOGGED_IN)
+  * @param Request $request
+  * @param Session $session
+  * @return Response
+  */
+ #[Route(path: '/groepimport/upload', name: 'groepimport_upload', methods: ['POST'])]
+ public function upload(Request $request, Session $session): Response
 	{
 		// Kijk of bestand meegegeven is
 		if (!$request->files->has('csv')) {
@@ -96,15 +96,15 @@ class GroepLedenImportController extends AbstractController
 	}
 
 	/**
-	 * @Route("/groepimport/controle/{key}", name="groepimport_controle")
-	 * @Auth(P_LOGGED_IN)
-	 * @param string $key
-	 * @param Session $session
-	 * @param ProfielRepository $profielRepository
-	 * @param EntityManagerInterface $em
-	 * @return Response
-	 */
-	public function controle(
+  * @Auth(P_LOGGED_IN)
+  * @param string $key
+  * @param Session $session
+  * @param ProfielRepository $profielRepository
+  * @param EntityManagerInterface $em
+  * @return Response
+  */
+ #[Route(path: '/groepimport/controle/{key}', name: 'groepimport_controle')]
+ public function controle(
 		string $key,
 		Session $session,
 		ProfielRepository $profielRepository,
@@ -143,18 +143,18 @@ class GroepLedenImportController extends AbstractController
 	}
 
 	/**
-	 * @Route("/groepimport/verwerk/{key}", name="groepimport_verwerk", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 * @param string $key
-	 * @param Session $session
-	 * @param ProfielRepository $profielRepository
-	 * @param GroepLidRepository $groepLidRepository
-	 * @param Request $request
-	 * @param EntityManagerInterface $em
-	 * @return Response
-	 * @throws \Doctrine\DBAL\Exception
-	 */
-	public function verwerk(
+  * @Auth(P_LOGGED_IN)
+  * @param string $key
+  * @param Session $session
+  * @param ProfielRepository $profielRepository
+  * @param GroepLidRepository $groepLidRepository
+  * @param Request $request
+  * @param EntityManagerInterface $em
+  * @return Response
+  * @throws \Doctrine\DBAL\Exception
+  */
+ #[Route(path: '/groepimport/verwerk/{key}', name: 'groepimport_verwerk', methods: ['POST'])]
+ public function verwerk(
 		string $key,
 		Session $session,
 		ProfielRepository $profielRepository,
@@ -222,11 +222,11 @@ class GroepLedenImportController extends AbstractController
 	}
 
 	/**
-	 * @Route("/groepimport/template", name="groepimport_template")
-	 * @Auth(P_LOGGED_IN)
-	 * @return Response
-	 */
-	public function downloadTemplate(): Response
+  * @Auth(P_LOGGED_IN)
+  * @return Response
+  */
+ #[Route(path: '/groepimport/template', name: 'groepimport_template')]
+ public function downloadTemplate(): Response
 	{
 		$template = "groepID;uid;opmerking\r\n1234;x101;Leider";
 		$response = new Response($template);

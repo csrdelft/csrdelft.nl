@@ -19,12 +19,10 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 class AanmeldActiviteit extends ActiviteitEigenschappen implements
 	DataTableEntry
 {
-	/**
-  * @Serializer\Groups({"datatable"})
-  */
- #[ORM\Id]
+	#[ORM\Id]
  #[ORM\GeneratedValue]
  #[ORM\Column(type: 'integer')]
+ #[Serializer\Groups(['datatable'])]
  public $id;
 
 	#[ORM\JoinColumn(nullable: false)]
@@ -74,11 +72,9 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 		return $this->start;
 	}
 
-	/**
-	 * @Serializer\Groups({"datatable"})
-	 * @Serializer\SerializedName("start")
-	 */
-	public function getStartDataTable(): string
+	#[Serializer\Groups(['datatable'])]
+ #[Serializer\SerializedName('start')]
+ public function getStartDataTable(): string
 	{
 		return DateUtil::dateFormatIntl(
 			$this->getStart(),
@@ -98,11 +94,9 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 		return $this->einde;
 	}
 
-	/**
-	 * @Serializer\Groups({"datatable"})
-	 * @Serializer\SerializedName("einde")
-	 */
-	public function getEindeDataTable(): string
+	#[Serializer\Groups(['datatable'])]
+ #[Serializer\SerializedName('einde')]
+ public function getEindeDataTable(): string
 	{
 		return DateUtil::dateFormatIntl(
 			$this->getEinde(),
@@ -288,11 +282,9 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 		return max($this->getCapaciteit() - $this->getAantalAanmeldingen(), 0);
 	}
 
-	/**
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("bezetting")
-	 */
-	public function getBezettingDataTable(): string
+	#[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('bezetting')]
+ public function getBezettingDataTable(): string
 	{
 		return $this->getAantalAanmeldingen() . ' / ' . $this->getCapaciteit();
 	}

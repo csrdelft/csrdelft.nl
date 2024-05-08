@@ -25,21 +25,21 @@ class RemoteLogin
  public $id;
 	/**
   * @var DateTimeImmutable
-  * @Serializer\Groups("json")
   */
  #[ORM\Column(type: 'datetime')]
+ #[Serializer\Groups('json')]
  public $expires;
 	/**
   * @var Uuid
-  * @Serializer\Groups("json")
   */
  #[ORM\Column(type: 'uuid')]
+ #[Serializer\Groups('json')]
  public $uuid;
 	/**
   * @var RemoteLoginStatus
-  * @Serializer\Groups("json")
   */
  #[ORM\Column(type: 'enumRemoteLoginStatus')]
+ #[Serializer\Groups('json')]
  public $status;
 	/**
   * @var Account|null

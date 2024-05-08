@@ -39,13 +39,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class ToolsController extends AbstractController
 {
 	/**
-	 * @param VerticalenRepository $verticalenRepository
-	 * @param ProfielRepository $profielRepository
-	 * @return Response
-	 * @Route("/tools/verticalelijsten", methods={"GET"})
-	 * @Auth(P_ADMIN)
-	 */
-	public function verticalelijsten(
+  * @param VerticalenRepository $verticalenRepository
+  * @param ProfielRepository $profielRepository
+  * @return Response
+  * @Auth(P_ADMIN)
+  */
+ #[Route(path: '/tools/verticalelijsten', methods: ['GET'])]
+ public function verticalelijsten(
 		VerticalenRepository $verticalenRepository,
 		ProfielRepository $profielRepository
 	): Response {
@@ -68,12 +68,12 @@ class ToolsController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return Response
-	 * @Route("/tools/roodschopper", methods={"GET", "POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function roodschopper(Request $request): Response
+  * @param Request $request
+  * @return Response
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/tools/roodschopper', methods: ['GET', 'POST'])]
+ public function roodschopper(Request $request): Response
 	{
 		if ($request->query->has('verzenden')) {
 			return $this->render('tools/roodschopper.html.twig', [
@@ -108,13 +108,13 @@ class ToolsController extends AbstractController
 	}
 
 	/**
-	 * @param ProfielRepository $profielRepository
-	 * @param SuService $suService
-	 * @return PlainView
-	 * @Route("/tools/syncldap", methods={"GET"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function syncldap(
+  * @param ProfielRepository $profielRepository
+  * @param SuService $suService
+  * @return PlainView
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/tools/syncldap', methods: ['GET'])]
+ public function syncldap(
 		ProfielRepository $profielRepository,
 		SuService $suService
 	): PlainView {
@@ -133,11 +133,11 @@ class ToolsController extends AbstractController
 	}
 
 	/**
-	 * @return PlainView
-	 * @Route("/tools/phpinfo", methods={"GET"})
-	 * @Auth(P_ADMIN)
-	 */
-	public function phpinfo(): PlainView
+  * @return PlainView
+  * @Auth(P_ADMIN)
+  */
+ #[Route(path: '/tools/phpinfo', methods: ['GET'])]
+ public function phpinfo(): PlainView
 	{
 		ob_start();
 		phpinfo();
@@ -145,12 +145,12 @@ class ToolsController extends AbstractController
 	}
 
 	/**
-	 * @return PlainView
-	 * @Route("/tools/timeout/{seconds}", methods={"GET", "POST"})
-	 * @Auth(P_ADMIN)
-	 * @CsrfUnsafe
-	 */
-	public function timeout(Request $request, $seconds): PlainView
+  * @return PlainView
+  * @Auth(P_ADMIN)
+  * @CsrfUnsafe
+  */
+ #[Route(path: '/tools/timeout/{seconds}', methods: ['GET', 'POST'])]
+ public function timeout(Request $request, $seconds): PlainView
 	{
 		if ($request->getMethod() == 'POST') {
 			for ($i = 0; $i < $seconds; $i++) {
@@ -164,12 +164,12 @@ class ToolsController extends AbstractController
 	}
 
 	/**
-	 * @param AccountRepository $accountRepository
-	 * @return Response
-	 * @Route("/tools/admins", methods={"GET"})
-	 * @Auth(P_LEDEN_READ)
-	 */
-	public function admins(AccountRepository $accountRepository): Response
+  * @param AccountRepository $accountRepository
+  * @return Response
+  * @Auth(P_LEDEN_READ)
+  */
+ #[Route(path: '/tools/admins', methods: ['GET'])]
+ public function admins(AccountRepository $accountRepository): Response
 	{
 		return $this->render('tools/admins.html.twig', [
 			'accounts' => $accountRepository->findAdmins(),
@@ -177,14 +177,14 @@ class ToolsController extends AbstractController
 	}
 
 	/**
-	 * Voor de NovCie, zorgt ervoor dat novieten bekeken kunnen worden als dat afgeschermd is op de rest van de stek.
-	 *
-	 * @param ProfielRepository $profielRepository
-	 * @return Response
-	 * @Route("/tools/novieten", methods={"GET"})
-	 * @Auth({P_ADMIN,"commissie:NovCie"})
-	 */
-	public function novieten(ProfielRepository $profielRepository): Response
+  * Voor de NovCie, zorgt ervoor dat novieten bekeken kunnen worden als dat afgeschermd is op de rest van de stek.
+  *
+  * @param ProfielRepository $profielRepository
+  * @return Response
+  * @Auth({P_ADMIN,"commissie:NovCie"})
+  */
+ #[Route(path: '/tools/novieten', methods: ['GET'])]
+ public function novieten(ProfielRepository $profielRepository): Response
 	{
 		return $this->render('tools/novieten.html.twig', [
 			'novieten' => $profielRepository->findBy([
@@ -195,12 +195,12 @@ class ToolsController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/tools/dragobject", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function dragobject(Request $request): JsonResponse
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/tools/dragobject', methods: ['POST'])]
+ public function dragobject(Request $request): JsonResponse
 	{
 		$id = $request->request->get('id');
 		$coords = $request->request->get('coords');
@@ -211,14 +211,14 @@ class ToolsController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param AccountRepository $accountRepository
-	 * @param ProfielService $profielService
-	 * @return PlainView
-	 * @Route("/tools/naamlink", methods={"GET", "POST"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 */
-	public function naamlink(
+  * @param Request $request
+  * @param AccountRepository $accountRepository
+  * @param ProfielService $profielService
+  * @return PlainView
+  * @Auth(P_OUDLEDEN_READ)
+  */
+ #[Route(path: '/tools/naamlink', methods: ['GET', 'POST'])]
+ public function naamlink(
 		Request $request,
 		AccountRepository $accountRepository,
 		ProfielService $profielService
@@ -294,14 +294,14 @@ class ToolsController extends AbstractController
 	}
 
 	/**
-	 * @param ProfielService $profielService
-	 * @param null $zoekin
-	 * @param string $query
-	 * @return JsonResponse
-	 * @Route("/tools/naamsuggesties", methods={"GET"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 */
-	public function naamsuggesties(
+  * @param ProfielService $profielService
+  * @param null $zoekin
+  * @param string $query
+  * @return JsonResponse
+  * @Auth(P_OUDLEDEN_READ)
+  */
+ #[Route(path: '/tools/naamsuggesties', methods: ['GET'])]
+ public function naamsuggesties(
 		ProfielService $profielService,
 		$zoekin = null,
 		$query = ''
@@ -410,12 +410,12 @@ class ToolsController extends AbstractController
 	}
 
 	/**
-	 * @param SuService $suService
-	 * @return PlainView
-	 * @Route("/tools/memcachestats", methods={"GET"})
-	 * @Auth(P_ADMIN)
-	 */
-	public function memcachestats(SuService $suService): PlainView
+  * @param SuService $suService
+  * @return PlainView
+  * @Auth(P_ADMIN)
+  */
+ #[Route(path: '/tools/memcachestats', methods: ['GET'])]
+ public function memcachestats(SuService $suService): PlainView
 	{
 		if (DEBUG || $this->mag(P_ADMIN) || $suService->isSued()) {
 			ob_start();
@@ -439,13 +439,13 @@ class ToolsController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param SavedQueryRepository $savedQueryRepository
-	 * @return Response
-	 * @Route("/tools/query", methods={"GET"})
-	 * @Auth(P_LEDEN_READ)
-	 */
-	public function query(
+  * @param Request $request
+  * @param SavedQueryRepository $savedQueryRepository
+  * @return Response
+  * @Auth(P_LEDEN_READ)
+  */
+ #[Route(path: '/tools/query', methods: ['GET'])]
+ public function query(
 		Request $request,
 		SavedQueryRepository $savedQueryRepository
 	): Response {

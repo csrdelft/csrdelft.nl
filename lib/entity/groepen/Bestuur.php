@@ -19,9 +19,9 @@ class Bestuur extends Groep implements HeeftMoment
 	/**
   * Bestuurstekst
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'text')]
+ #[Serializer\Groups('datatable')]
  public $bijbeltekst;
 
 	public function getUrl(): string

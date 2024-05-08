@@ -30,11 +30,11 @@ class BeheerVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/corvee/voorkeuren/beheer", methods={"GET"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function beheer(): Response
+  * @return Response
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/voorkeuren/beheer', methods: ['GET'])]
+ public function beheer(): Response
 	{
 		list(
 			$matrix,
@@ -47,15 +47,15 @@ class BeheerVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @param CorveeRepetitie $repetitie
-	 * @param Profiel $profiel
-	 * @return Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/corvee/voorkeuren/beheer/inschakelen/{crv_repetitie_id}/{uid}", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function inschakelen(CorveeRepetitie $repetitie, Profiel $profiel): Response
+  * @param CorveeRepetitie $repetitie
+  * @param Profiel $profiel
+  * @return Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/voorkeuren/beheer/inschakelen/{crv_repetitie_id}/{uid}', methods: ['POST'])]
+ public function inschakelen(CorveeRepetitie $repetitie, Profiel $profiel): Response
 	{
 		$voorkeur = new CorveeVoorkeur();
 		$voorkeur->setProfiel($profiel);
@@ -73,14 +73,14 @@ class BeheerVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @param CorveeVoorkeur $voorkeur
-	 * @return Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/corvee/voorkeuren/beheer/uitschakelen/{crv_repetitie_id}/{uid}", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function uitschakelen(CorveeVoorkeur $voorkeur): Response
+  * @param CorveeVoorkeur $voorkeur
+  * @return Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/voorkeuren/beheer/uitschakelen/{crv_repetitie_id}/{uid}', methods: ['POST'])]
+ public function uitschakelen(CorveeVoorkeur $voorkeur): Response
 	{
 		$voorkeur->van_uid = $voorkeur->uid;
 

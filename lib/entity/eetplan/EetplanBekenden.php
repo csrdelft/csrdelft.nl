@@ -20,11 +20,11 @@ class EetplanBekenden implements DataTableEntry
 {
 	/**
   * @var int
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Id]
  #[ORM\GeneratedValue]
  #[ORM\Column(type: 'integer')]
+ #[Serializer\Groups('datatable')]
  public $id;
 	/**
   * @var Profiel
@@ -40,27 +40,27 @@ class EetplanBekenden implements DataTableEntry
  public $noviet2;
 	/**
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'string', nullable: true)]
+ #[Serializer\Groups('datatable')]
  public $opmerking;
 
 	/**
-	 * @return DataTableColumn
-	 * @Serializer\SerializedName("noviet1")
-	 * @Serializer\Groups("datatable")
-	 */
-	public function getDataTableNoviet1()
+  * @return DataTableColumn
+  */
+ #[Serializer\SerializedName('noviet1')]
+ #[Serializer\Groups('datatable')]
+ public function getDataTableNoviet1(): DataTableColumn
 	{
 		return $this->noviet1->getDataTableColumn();
 	}
 
 	/**
-	 * @return DataTableColumn
-	 * @Serializer\SerializedName("noviet2")
-	 * @Serializer\Groups("datatable")
-	 */
-	public function getDataTableNoviet2()
+  * @return DataTableColumn
+  */
+ #[Serializer\SerializedName('noviet2')]
+ #[Serializer\Groups('datatable')]
+ public function getDataTableNoviet2(): DataTableColumn
 	{
 		return $this->noviet2->getDataTableColumn();
 	}

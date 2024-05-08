@@ -26,11 +26,11 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	/**
   * Primary key
   * @var int
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'integer')]
  #[ORM\Id]
  #[ORM\GeneratedValue]
+ #[Serializer\Groups('datatable')]
  public $id;
 	/**
   * @var string
@@ -46,9 +46,9 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	/**
   * Lidnummer
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'uid')]
+ #[Serializer\Groups('datatable')]
  public $uid;
 	/**
   * @var Profiel
@@ -70,16 +70,16 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	/**
   * Device name
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'string')]
+ #[Serializer\Groups('datatable')]
  public $device_name;
 	/**
   * IP address
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'string')]
+ #[Serializer\Groups('datatable')]
  public $ip;
 	/**
   * Sessie koppelen aan ip
@@ -89,11 +89,11 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
  public $lock_ip;
 
 	/**
-	 * @return string|null
-	 * @Serializer\SerializedName("lock_ip")
-	 * @Serializer\Groups("datatable")
-	 */
-	public function getDataTableLockIp()
+  * @return string|null
+  */
+ #[Serializer\SerializedName('lock_ip')]
+ #[Serializer\Groups('datatable')]
+ public function getDataTableLockIp(): string
 	{
 		return $this->lock_ip
 			? Icon::getTag('lock', null, 'Gekoppeld aan IP-adres')
@@ -101,21 +101,21 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\SerializedName("remember_since")
-	 * @Serializer\Groups("datatable")
-	 */
-	public function getDataTableRememberSince(): string
+  * @return string
+  */
+ #[Serializer\SerializedName('remember_since')]
+ #[Serializer\Groups('datatable')]
+ public function getDataTableRememberSince(): string
 	{
 		return DateUtil::reldate($this->remember_since);
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\SerializedName("last_used")
-	 * @Serializer\Groups("datatable")
-	 */
-	public function getDataTableLastUsed(): string
+  * @return string
+  */
+ #[Serializer\SerializedName('last_used')]
+ #[Serializer\Groups('datatable')]
+ public function getDataTableLastUsed(): string
 	{
 		return DateUtil::reldate($this->last_used);
 	}

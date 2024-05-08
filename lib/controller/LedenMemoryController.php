@@ -56,12 +56,12 @@ class LedenMemoryController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @throws NonUniqueResultException
-	 * @Route("/leden/memory", methods={"GET"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 */
-	public function memory(Request $request): Response
+  * @return Response
+  * @throws NonUniqueResultException
+  * @Auth(P_OUDLEDEN_READ)
+  */
+ #[Route(path: '/leden/memory', methods: ['GET'])]
+ public function memory(Request $request): Response
 	{
 		$lidstatus = array_merge(
 			LidStatus::getLidLike(),
@@ -149,11 +149,11 @@ class LedenMemoryController extends AbstractController
 	}
 
 	/**
-	 * @return JsonResponse
-	 * @Route("/leden/memoryscore", methods={"POST"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 */
-	public function memoryscore(): JsonResponse
+  * @return JsonResponse
+  * @Auth(P_OUDLEDEN_READ)
+  */
+ #[Route(path: '/leden/memoryscore', methods: ['POST'])]
+ public function memoryscore(): JsonResponse
 	{
 		$score = $this->ledenMemoryScoresModel->nieuw();
 		$form = new LedenMemoryScoreForm($score);
@@ -164,12 +164,12 @@ class LedenMemoryController extends AbstractController
 	}
 
 	/**
-	 * @param string $groepUuid
-	 * @return LedenMemoryScoreResponse
-	 * @Route("/leden/memoryscores/{groep}", methods={"POST"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 */
-	public function memoryscores($groepUuid = null): LedenMemoryScoreResponse
+  * @param string $groepUuid
+  * @return LedenMemoryScoreResponse
+  * @Auth(P_OUDLEDEN_READ)
+  */
+ #[Route(path: '/leden/memoryscores/{groep}', methods: ['POST'])]
+ public function memoryscores($groepUuid = null): LedenMemoryScoreResponse
 	{
 		$parts = explode('@', $groepUuid);
 		if (isset($parts[0], $parts[1])) {
@@ -188,11 +188,11 @@ class LedenMemoryController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/leden/namen-leren", methods={"GET"})
-	 * @Auth(P_LEDEN_READ)
-	 */
-	public function namenleren(): Response
+  * @return Response
+  * @Auth(P_LEDEN_READ)
+  */
+ #[Route(path: '/leden/namen-leren', methods: ['GET'])]
+ public function namenleren(): Response
 	{
 		// Haal alle (adspirant-/gast-)leden op.
 		$profielen = $this->profielRepository->findByLidStatus(

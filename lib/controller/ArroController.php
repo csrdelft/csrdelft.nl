@@ -11,11 +11,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArroController extends AbstractController
 {
 	/**
-	 * @return Response
-	 * @Route("/arro")
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function arro(): RedirectResponse|Response
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/arro')]
+ public function arro(): RedirectResponse|Response
 	{
 		$now = new DateTimeImmutable();
 		$date = new DateTimeImmutable('2023-02-03T21:00:00Z');

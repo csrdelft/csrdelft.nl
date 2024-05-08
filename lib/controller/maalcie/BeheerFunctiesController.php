@@ -45,12 +45,12 @@ class BeheerFunctiesController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return GenericSuggestiesResponse
-	 * @Route("/corvee/functies/suggesties", methods={"GET"}, options={"priority"=1})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function suggesties(Request $request): GenericSuggestiesResponse
+  * @param Request $request
+  * @return GenericSuggestiesResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/corvee/functies/suggesties', methods: ['GET'], options: ['priority' => 1])]
+ public function suggesties(Request $request): GenericSuggestiesResponse
 	{
 		return new GenericSuggestiesResponse(
 			$this->corveeFunctiesRepository->getSuggesties($request->query->get('q'))
@@ -58,12 +58,12 @@ class BeheerFunctiesController extends AbstractController
 	}
 
 	/**
-	 * @param CorveeFunctie|null $functie
-	 * @return Response
-	 * @Route("/corvee/functies/{functie_id}", methods={"GET"}, defaults={"functie_id"=null})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function beheer(CorveeFunctie $functie = null): Response
+  * @param CorveeFunctie|null $functie
+  * @return Response
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/functies/{functie_id}', methods: ['GET'], defaults: ['functie_id' => null])]
+ public function beheer(CorveeFunctie $functie = null): Response
 	{
 		$modal = $functie ? $this->bewerken($functie) : null;
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
@@ -74,11 +74,11 @@ class BeheerFunctiesController extends AbstractController
 	}
 
 	/**
-	 * @return FunctieForm|Response
-	 * @Route("/corvee/functies/toevoegen", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function toevoegen()
+  * @return FunctieForm|Response
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/functies/toevoegen', methods: ['POST'])]
+ public function toevoegen()
 	{
 		$functie = $this->corveeFunctiesRepository->nieuw();
 		$form = new FunctieForm($functie, 'toevoegen'); // fetches POST values itself
@@ -97,12 +97,12 @@ class BeheerFunctiesController extends AbstractController
 	}
 
 	/**
-	 * @param CorveeFunctie $functie
-	 * @return FunctieForm|Response
-	 * @Route("/corvee/functies/bewerken/{functie_id}", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function bewerken(CorveeFunctie $functie)
+  * @param CorveeFunctie $functie
+  * @return FunctieForm|Response
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/functies/bewerken/{functie_id}', methods: ['POST'])]
+ public function bewerken(CorveeFunctie $functie)
 	{
 		$form = new FunctieForm($functie, 'bewerken'); // fetches POST values itself
 		if ($form->validate()) {
@@ -119,12 +119,12 @@ class BeheerFunctiesController extends AbstractController
 	}
 
 	/**
-	 * @param CorveeFunctie $functie
-	 * @return FunctieDeleteView
-	 * @Route("/corvee/functies/verwijderen/{functie_id}", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function verwijderen(CorveeFunctie $functie): FunctieDeleteView
+  * @param CorveeFunctie $functie
+  * @return FunctieDeleteView
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/functies/verwijderen/{functie_id}', methods: ['POST'])]
+ public function verwijderen(CorveeFunctie $functie): FunctieDeleteView
 	{
 		$functieId = $functie->functie_id;
 		$this->corveeFunctiesRepository->removeFunctie($functie);
@@ -133,14 +133,14 @@ class BeheerFunctiesController extends AbstractController
 	}
 
 	/**
-	 * @param CorveeFunctie $functie
-	 * @return KwalificatieForm|Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/corvee/functies/kwalificeer/{functie_id}", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function kwalificeer(CorveeFunctie $functie)
+  * @param CorveeFunctie $functie
+  * @return KwalificatieForm|Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/functies/kwalificeer/{functie_id}', methods: ['POST'])]
+ public function kwalificeer(CorveeFunctie $functie)
 	{
 		$kwalificatie = $this->corveeKwalificatiesRepository->nieuw($functie);
 		$form = new KwalificatieForm($kwalificatie); // fetches POST values itself
@@ -157,12 +157,12 @@ class BeheerFunctiesController extends AbstractController
 	}
 
 	/**
-	 * @param CorveeKwalificatie $kwalificatie
-	 * @return Response
-	 * @Route("/corvee/functies/dekwalificeer/{functie_id}/{uid}", methods={"POST"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function dekwalificeer(CorveeKwalificatie $kwalificatie): Response
+  * @param CorveeKwalificatie $kwalificatie
+  * @return Response
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/functies/dekwalificeer/{functie_id}/{uid}', methods: ['POST'])]
+ public function dekwalificeer(CorveeKwalificatie $kwalificatie): Response
 	{
 		$functie = $kwalificatie->corveeFunctie;
 		$this->entityManager->remove($kwalificatie);

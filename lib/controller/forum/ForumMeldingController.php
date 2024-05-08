@@ -32,16 +32,16 @@ class ForumMeldingController extends AbstractController
 	}
 
 	/**
-	 * Niveau voor meldingen instellen.
-	 *
-	 * @param ForumDraad $draad
-	 * @param string $niveau
-	 *
-	 * @return JsonResponse
-	 * @Route("/forum/meldingsniveau/{draad_id}/{niveau}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function meldingsniveau(ForumDraad $draad, $niveau): JsonResponse
+  * Niveau voor meldingen instellen.
+  *
+  * @param ForumDraad $draad
+  * @param string $niveau
+  *
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/meldingsniveau/{draad_id}/{niveau}', methods: ['POST'])]
+ public function meldingsniveau(ForumDraad $draad, $niveau): JsonResponse
 	{
 		if (!$draad || !$draad->magLezen() || !$draad->magMeldingKrijgen()) {
 			throw $this->createAccessDeniedException(
@@ -61,16 +61,16 @@ class ForumMeldingController extends AbstractController
 	}
 
 	/**
-	 * Niveau voor meldingen deelforum instellen
-	 *
-	 * @param ForumDeel $deel
-	 * @param string $niveau
-	 *
-	 * @return JsonResponse
-	 * @Route("/forum/deelmelding/{forum_id}/{niveau}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function deelmelding(ForumDeel $deel, $niveau): JsonResponse
+  * Niveau voor meldingen deelforum instellen
+  *
+  * @param ForumDeel $deel
+  * @param string $niveau
+  *
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/deelmelding/{forum_id}/{niveau}', methods: ['POST'])]
+ public function deelmelding(ForumDeel $deel, $niveau): JsonResponse
 	{
 		if (!$deel || !$deel->magLezen() || !$deel->magMeldingKrijgen()) {
 			throw $this->createAccessDeniedException(

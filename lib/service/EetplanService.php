@@ -37,7 +37,7 @@ class EetplanService
 	 *
 	 * @return Eetplan[]
 	 */
-	public function maakEetplan($avond, $lidjaar)
+	public function maakEetplan($avond, $lidjaar): array
 	{
 		$factory = new EetplanFactory();
 

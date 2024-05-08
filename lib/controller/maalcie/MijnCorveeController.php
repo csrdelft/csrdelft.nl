@@ -46,11 +46,11 @@ class MijnCorveeController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/corvee", methods={"GET"})
-	 * @Auth(P_CORVEE_IK)
-	 */
-	public function mijn(): Response
+  * @return Response
+  * @Auth(P_CORVEE_IK)
+  */
+ #[Route(path: '/corvee', methods: ['GET'])]
+ public function mijn(): Response
 	{
 		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid(
 			$this->getProfiel()
@@ -73,11 +73,11 @@ class MijnCorveeController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/corvee/rooster", methods={"GET"})
-	 * @Auth(P_CORVEE_IK)
-	 */
-	public function rooster(): Response
+  * @return Response
+  * @Auth(P_CORVEE_IK)
+  */
+ #[Route(path: '/corvee/rooster', methods: ['GET'])]
+ public function rooster(): Response
 	{
 		$taken = $this->corveeTakenRepository->getKomendeTaken();
 		$toonverleden = $this->mag(P_CORVEE_MOD);
@@ -89,11 +89,11 @@ class MijnCorveeController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/corvee/rooster/verleden", methods={"GET"})
-	 * @Auth(P_CORVEE_MOD)
-	 */
-	public function roosterVerleden(): Response
+  * @return Response
+  * @Auth(P_CORVEE_MOD)
+  */
+ #[Route(path: '/corvee/rooster/verleden', methods: ['GET'])]
+ public function roosterVerleden(): Response
 	{
 		$taken = $this->corveeTakenRepository->getVerledenTaken();
 		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);

@@ -33,23 +33,23 @@ class PeilingOptiesController extends AbstractController
 	}
 
 	/**
-	 * @param $id
-	 * @return PeilingOptieTable
-	 * @Route("/peilingen/opties/{id}", methods={"GET"}, requirements={"id": "\d+"})
-	 * @Auth(P_PEILING_EDIT)
-	 */
-	public function table($id): PeilingOptieTable
+  * @param $id
+  * @return PeilingOptieTable
+  * @Auth(P_PEILING_EDIT)
+  */
+ #[Route(path: '/peilingen/opties/{id}', methods: ['GET'], requirements: ['id' => '\d+'])]
+ public function table($id): PeilingOptieTable
 	{
 		return new PeilingOptieTable($id);
 	}
 
 	/**
-	 * @param $id
-	 * @return GenericDataTableResponse
-	 * @Route("/peilingen/opties/{id}", methods={"POST"}, requirements={"id": "\d+"})
-	 * @Auth(P_PEILING_EDIT)
-	 */
-	#[IsGranted("bekijken", subject: "peiling")]
+  * @param $id
+  * @return GenericDataTableResponse
+  * @Auth(P_PEILING_EDIT)
+  */
+ #[IsGranted("bekijken", subject: "peiling")]
+ #[Route(path: '/peilingen/opties/{id}', methods: ['POST'], requirements: ['id' => '\d+'])]
 	public function lijst(Peiling $peiling): GenericDataTableResponse
 	{
 		return $this->tableData(
@@ -58,12 +58,12 @@ class PeilingOptiesController extends AbstractController
 	}
 
 	/**
-	 * @param Peiling $peiling
-	 * @return GenericDataTableResponse|PeilingOptieForm
-	 * @Route("/peilingen/opties/{id}/toevoegen", methods={"POST"}, requirements={"id": "\d+"})
-	 * @Auth(P_PEILING_VOTE)
-	 */
-	public function toevoegen(Peiling $peiling)
+  * @param Peiling $peiling
+  * @return GenericDataTableResponse|PeilingOptieForm
+  * @Auth(P_PEILING_VOTE)
+  */
+ #[Route(path: '/peilingen/opties/{id}/toevoegen', methods: ['POST'], requirements: ['id' => '\d+'])]
+ public function toevoegen(Peiling $peiling)
 	{
 		$form = new PeilingOptieForm(new PeilingOptie(), $peiling->id);
 
@@ -92,12 +92,12 @@ class PeilingOptiesController extends AbstractController
 	}
 
 	/**
-	 * @throws CsrGebruikerException
-	 * @return GenericDataTableResponse
-	 * @Route("/peilingen/opties/verwijderen", methods={"POST"})
-	 * @Auth(P_PEILING_EDIT)
-	 */
-	public function verwijderen(): GenericDataTableResponse
+  * @throws CsrGebruikerException
+  * @return GenericDataTableResponse
+  * @Auth(P_PEILING_EDIT)
+  */
+ #[Route(path: '/peilingen/opties/verwijderen', methods: ['POST'])]
+ public function verwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 

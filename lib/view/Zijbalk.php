@@ -119,7 +119,7 @@ class Zijbalk
 		return $this->twig->render('menu/lustrumblock.html.twig');
 	}
 
-	private function blockIsHetAl()
+	private function blockIsHetAl(): ?string
 	{
 		// Is het al...
 		if (

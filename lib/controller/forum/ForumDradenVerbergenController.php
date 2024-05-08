@@ -25,14 +25,13 @@ class ForumDradenVerbergenController extends AbstractController
 	}
 
 	/**
-	 * Forum draad verbergen in zijbalk.
-	 *
-	 * @param ForumDraad $draad
-	 * @return JsonResponse
-	 * @Route("/forum/verbergen/{draad_id}", methods={"POST"}))
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function verbergen(ForumDraad $draad): JsonResponse
+  * Forum draad verbergen in zijbalk.
+  *
+  * @param ForumDraad $draad
+  * @return JsonResponse
+  */
+ #[Route(path: '/forum/verbergen/{draad_id}', methods: ['POST'])] // @Auth(P_LOGGED_IN)
+ public function verbergen(ForumDraad $draad): JsonResponse
 	{
 		if (!$draad->magVerbergen()) {
 			throw new CsrGebruikerException('Onderwerp mag niet verborgen worden');
@@ -45,14 +44,14 @@ class ForumDradenVerbergenController extends AbstractController
 	}
 
 	/**
-	 * Forum draad tonen in zijbalk.
-	 *
-	 * @param ForumDraad $draad
-	 * @return JsonResponse
-	 * @Route("/forum/tonen/{draad_id}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function tonen(ForumDraad $draad): JsonResponse
+  * Forum draad tonen in zijbalk.
+  *
+  * @param ForumDraad $draad
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/tonen/{draad_id}', methods: ['POST'])]
+ public function tonen(ForumDraad $draad): JsonResponse
 	{
 		if (!$draad->isVerborgen()) {
 			throw new CsrGebruikerException('Onderwerp is niet verborgen');
@@ -62,11 +61,11 @@ class ForumDradenVerbergenController extends AbstractController
 	}
 
 	/**
-	 * Forum draden die verborgen zijn door lid weer tonen.
-	 * @Route("/forum/toonalles", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function toonalles(): JsonResponse
+  * Forum draden die verborgen zijn door lid weer tonen.
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/toonalles', methods: ['POST'])]
+ public function toonalles(): JsonResponse
 	{
 		$aantal = $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
 		$this->forumDradenVerbergenRepository->toonAllesVoorLeden([

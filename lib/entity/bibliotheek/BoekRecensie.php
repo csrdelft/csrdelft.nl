@@ -79,7 +79,7 @@ class BoekRecensie
 	 * @return bool
 	 *        een beschrijving mag door schrijver van beschrijving en door admins bewerkt worden.
 	 */
-	public function magVerwijderen()
+	public function magVerwijderen(): bool
 	{
 		return $this->isSchrijver();
 	}
@@ -98,7 +98,7 @@ class BoekRecensie
 	/**
 	 * @return bool
 	 */
-	public function magBewerken()
+	public function magBewerken(): bool
 	{
 		return $this->isSchrijver();
 	}

@@ -43,7 +43,7 @@ class BbTextType extends AbstractType
 						JSON_HEX_QUOT
 					);
 				},
-				function ($data) {
+				function ($data): string {
 					return $this->prosemirrorToBb->convertToBb(json_decode($data));
 				}
 			)

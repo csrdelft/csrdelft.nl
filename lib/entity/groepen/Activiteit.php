@@ -37,23 +37,23 @@ class Activiteit extends Groep implements
 	/**
   * Intern / Extern / SjaarsActie / etc.
   * @var ActiviteitSoort
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'enumActiviteitSoort')]
+ #[Serializer\Groups('datatable')]
  public $activiteitSoort;
 	/**
   * Locatie
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'string', nullable: true)]
+ #[Serializer\Groups('datatable')]
  public $locatie;
 	/**
   * Tonen in agenda
   * @var boolean
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'boolean')]
+ #[Serializer\Groups('datatable')]
  public $inAgenda;
 
 	public function getUUID(): string

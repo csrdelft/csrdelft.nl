@@ -113,7 +113,7 @@ class ForumDeel
 		return LoginService::mag($this->rechten_modereren);
 	}
 
-	public function magMeldingKrijgen()
+	public function magMeldingKrijgen(): bool
 	{
 		return $this->magLezen();
 	}

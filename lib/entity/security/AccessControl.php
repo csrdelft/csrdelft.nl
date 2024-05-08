@@ -22,10 +22,10 @@ class AccessControl
 	/**
   * AclController / View / etc.
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'stringkey')]
  #[ORM\Id]
+ #[Serializer\Groups('datatable')]
  public $environment;
 	/**
   * Action
@@ -44,27 +44,27 @@ class AccessControl
 	/**
   * Benodigde rechten
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'string')]
+ #[Serializer\Groups('datatable')]
  public $subject;
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("action")
-	 */
-	public function getDataTableAction()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('action')]
+ public function getDataTableAction()
 	{
 		return AccessAction::from($this->action)->getDescription();
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("resource")
-	 */
-	public function getDataTableResource(): string
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('resource')]
+ public function getDataTableResource(): string
 	{
 		if ($this->resource === '*') {
 			return 'Elke ' . lcfirst($this->environment);

@@ -66,15 +66,15 @@ class ForumDeelController extends AbstractController
 	}
 
 	/**
-	 * Deelforum laten zien met draadjes in tabel.
-	 *
-	 * @param ForumDeel $deel
-	 * @param int|string $pagina or 'laatste' or 'prullenbak'
-	 * @return Response
-	 * @Route("/forum/deel/{forum_id}/{pagina<\d+>}", methods={"GET","POST"}, defaults={"pagina"=1})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function deel(RequestStack $requestStack, ForumDeel $deel, $pagina = 1): Response
+  * Deelforum laten zien met draadjes in tabel.
+  *
+  * @param ForumDeel $deel
+  * @param int|string $pagina or 'laatste' or 'prullenbak'
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/forum/deel/{forum_id}/{pagina<\d+>}', methods: ['GET', 'POST'], defaults: ['pagina' => 1])]
+ public function deel(RequestStack $requestStack, ForumDeel $deel, $pagina = 1): Response
 	{
 		if (!$deel->magLezen()) {
 			throw $this->createAccessDeniedException();
@@ -123,13 +123,13 @@ class ForumDeelController extends AbstractController
 	}
 
 	/**
-	 * Forum deel aanmaken.
-	 * @param Request $request
-	 * @return JsonResponse|Response
-	 * @Route("/forum/aanmaken", methods={"POST"})
-	 * @Auth(P_FORUM_ADMIN)
-	 */
-	public function aanmaken(Request $request)
+  * Forum deel aanmaken.
+  * @param Request $request
+  * @return JsonResponse|Response
+  * @Auth(P_FORUM_ADMIN)
+  */
+ #[Route(path: '/forum/aanmaken', methods: ['POST'])]
+ public function aanmaken(Request $request)
 	{
 		$deel = $this->forumDelenRepository->nieuwForumDeel();
 		$form = $this->createFormulier(ForumDeelForm::class, $deel, [
@@ -148,15 +148,15 @@ class ForumDeelController extends AbstractController
 	}
 
 	/**
-	 * Forum deel bewerken.
-	 *
-	 * @param Request $request
-	 * @param ForumDeel $deel
-	 * @return View|Response
-	 * @Route("/forum/beheren/{forum_id}", methods={"POST"})
-	 * @Auth(P_FORUM_ADMIN)
-	 */
-	public function beheren(Request $request, ForumDeel $deel)
+  * Forum deel bewerken.
+  *
+  * @param Request $request
+  * @param ForumDeel $deel
+  * @return View|Response
+  * @Auth(P_FORUM_ADMIN)
+  */
+ #[Route(path: '/forum/beheren/{forum_id}', methods: ['POST'])]
+ public function beheren(Request $request, ForumDeel $deel)
 	{
 		$form = $this->createFormulier(ForumDeelForm::class, $deel, [
 			'action' => $this->generateUrl('csrdelft_forum_forumdeel_beheren', [
@@ -175,14 +175,14 @@ class ForumDeelController extends AbstractController
 	}
 
 	/**
-	 * Forum deel verwijderen.
-	 *
-	 * @param ForumDeel $deel
-	 * @return JsonResponse
-	 * @Route("/forum/opheffen/{forum_id}", methods={"POST"})
-	 * @Auth(P_FORUM_ADMIN)
-	 */
-	public function opheffen(ForumDeel $deel): JsonResponse
+  * Forum deel verwijderen.
+  *
+  * @param ForumDeel $deel
+  * @return JsonResponse
+  * @Auth(P_FORUM_ADMIN)
+  */
+ #[Route(path: '/forum/opheffen/{forum_id}', methods: ['POST'])]
+ public function opheffen(ForumDeel $deel): JsonResponse
 	{
 		$count = count(
 			$this->forumDradenRepository->findBy(['forum_id' => $deel->forum_id])
@@ -202,12 +202,12 @@ class ForumDeelController extends AbstractController
 	}
 
 	/**
-	 * @param $type
-	 * @return ChartTimeSeries
-	 * @Route("/forum/grafiekdata/{type}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function grafiekdata($type): ChartTimeSeries
+  * @param $type
+  * @return ChartTimeSeries
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/grafiekdata/{type}', methods: ['POST'])]
+ public function grafiekdata($type): ChartTimeSeries
 	{
 		$datasets = [];
 		if ($type == 'details') {
@@ -223,11 +223,11 @@ class ForumDeelController extends AbstractController
 	}
 
 	/**
-	 * Tonen van alle posts die wachten op goedkeuring.
-	 * @Route("/forum/wacht", methods={"GET"})
-	 * @Auth(P_FORUM_MOD)
-	 */
-	public function wacht(): Response
+  * Tonen van alle posts die wachten op goedkeuring.
+  * @Auth(P_FORUM_MOD)
+  */
+ #[Route(path: '/forum/wacht', methods: ['GET'])]
+ public function wacht(): Response
 	{
 		return $this->render('forum/wacht.html.twig', [
 			'resultaten' => $this->forumDelenService->getWachtOpGoedkeuring(),

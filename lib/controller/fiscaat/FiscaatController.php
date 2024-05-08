@@ -22,11 +22,11 @@ class FiscaatController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/fiscaat")
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function overzicht(): Response
+  * @return Response
+  * @Auth(P_FISCAAT_READ)
+  */
+ #[Route(path: '/fiscaat')]
+ public function overzicht(): Response
 	{
 		return $this->render('fiscaat/overzicht.html.twig', [
 			'saldisomform' => new SaldiSomForm($this->civiSaldoRepository),

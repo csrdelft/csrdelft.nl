@@ -23,12 +23,12 @@ class BeheerCiviCategorienController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return CiviCategorieSuggestiesResponse
-	 * @Route("/fiscaat/categorien/suggesties", methods={"GET"})
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function suggesties(Request $request): CiviCategorieSuggestiesResponse
+  * @param Request $request
+  * @return CiviCategorieSuggestiesResponse
+  * @Auth(P_FISCAAT_READ)
+  */
+ #[Route(path: '/fiscaat/categorien/suggesties', methods: ['GET'])]
+ public function suggesties(Request $request): CiviCategorieSuggestiesResponse
 	{
 		$suggesties = $this->civiCategorieRepository->suggesties(
 			SqlUtil::sql_contains($request->query->get('q'))

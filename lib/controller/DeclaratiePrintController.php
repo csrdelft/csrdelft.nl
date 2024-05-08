@@ -13,10 +13,10 @@ use Transliterator;
 class DeclaratiePrintController extends AbstractController
 {
 	/**
-	 * @Route("/declaratie/print/{declaratie}", name="declaratie_print", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function print(
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/declaratie/print/{declaratie}', name: 'declaratie_print', methods: ['GET'])]
+ public function print(
 		Declaratie $declaratie,
 		DeclaratiePDFGenerator $declaratiePDFGenerator
 	): Response {

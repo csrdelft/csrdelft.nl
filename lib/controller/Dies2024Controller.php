@@ -9,11 +9,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class Dies2024Controller extends AbstractController
 {
 	/**
-	 * @return Response
-	 * @Route("/lumiere")
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function lustrum(): Response
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/lumiere')]
+ public function lustrum(): Response
 	{
 		return $this->render('dies2024/dies2024.html.twig');
 	}

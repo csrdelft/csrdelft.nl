@@ -52,7 +52,7 @@ class ForumPlaatje
  #[ORM\Column(type: 'text', nullable: true)]
  public $source_url;
 
-	public function exists()
+	public function exists(): bool
 	{
 		return $this->getAfbeelding()->exists();
 	}

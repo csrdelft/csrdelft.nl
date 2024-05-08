@@ -20,9 +20,9 @@ class Ondervereniging extends Groep implements HeeftMoment
 	/**
   * (Adspirant-)Ondervereniging
   * @var OnderverenigingStatus
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'enumOnderverenigingStatus')]
+ #[Serializer\Groups('datatable')]
  public $onderverenigingStatus;
 
 	public function getUrl(): string

@@ -49,7 +49,7 @@ class FotoTagsRepository extends AbstractRepository
 		return parent::findBy([]);
 	}
 
-	public function getTags(Foto $foto)
+	public function getTags(Foto $foto): array
 	{
 		return $this->findBy(['refuuid' => $foto->getUUID()]);
 	}

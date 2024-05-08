@@ -46,54 +46,54 @@ class Groep implements DataTableEntry, DisplayEntity
 	/**
   * Primary key, groter dan 3000 in de database
   * @var int
-  * @Serializer\Groups({"datatable", "log", "vue"})
   */
  #[ORM\Column(type: 'integer')]
  #[ORM\Id]
  #[ORM\GeneratedValue]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $id;
 	/**
   * Oude ID, uniek voor type groep, kleiner dan 3000 in de database (sorry)
   * @var int
-  * @Serializer\Groups({"datatable", "vue"})
   */
  #[ORM\Column(type: 'integer', nullable: true)]
+ #[Serializer\Groups(['datatable', 'vue'])]
  public $oudId;
 
 	/**
   * Naam
   * @var string
-  * @Serializer\Groups({"datatable", "log", "vue"})
   */
  #[ORM\Column(type: 'stringkey')]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $naam;
 	/**
   * Naam voor opvolging
   * @var string
-  * @Serializer\Groups({"datatable", "log", "vue"})
   */
  #[ORM\Column(type: 'stringkey')]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $familie;
 	/**
   * o.t. / h.t. / f.t.
   * @var GroepStatus
-  * @Serializer\Groups({"datatable", "log", "vue"})
   */
  #[ORM\Column(type: 'enumGroepStatus')]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $status;
 	/**
   * Korte omschrijving
   * @var string
-  * @Serializer\Groups({"datatable", "log", "vue"})
   */
  #[ORM\Column(type: 'text')]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $samenvatting;
 	/**
   * Lange omschrijving
   * @var string
-  * @Serializer\Groups({"datatable", "log", "vue"})
   */
  #[ORM\Column(type: 'text', nullable: true)]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $omschrijving;
 	/**
   * Serialized keuzelijst(en)
@@ -109,15 +109,15 @@ class Groep implements DataTableEntry, DisplayEntity
  public $maker;
 	/**
   * @var GroepVersie
-  * @Serializer\Groups({"datatable", "log", "vue"})
   */
  #[ORM\Column(type: 'enumGroepVersie')]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $versie;
 	/**
   * @var GroepKeuze[]
-  * @Serializer\Groups("vue")
   */
  #[ORM\Column(type: 'groepkeuze', nullable: true)]
+ #[Serializer\Groups('vue')]
  public $keuzelijst2 = [];
 	/**
   * Gebruik @see Groep::getLeden om leden op te vragen.
@@ -135,11 +135,11 @@ class Groep implements DataTableEntry, DisplayEntity
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("detailSource")
-	 */
-	public function getDetailSource(): string
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('detailSource')]
+ public function getDetailSource(): string
 	{
 		return $this->getUrl() . '/leden';
 	}
@@ -159,11 +159,11 @@ class Groep implements DataTableEntry, DisplayEntity
 	}
 
 	/**
-	 * Maak het mogelijk om leden te 'faken', zie verticale/lichting
-	 * @return GroepLid[]|ArrayCollection
-	 * @Serializer\Groups("vue")
-	 */
-	public function getLeden()
+  * Maak het mogelijk om leden te 'faken', zie verticale/lichting
+  * @return GroepLid[]|ArrayCollection
+  */
+ #[Serializer\Groups('vue')]
+ public function getLeden()
 	{
 		return $this->leden;
 	}
@@ -263,10 +263,10 @@ class Groep implements DataTableEntry, DisplayEntity
 	}
 
 	/**
-	 * @return string|null
-	 * @Serializer\Groups("vue")
-	 */
-	public function getSamenvattingHtml()
+  * @return string|null
+  */
+ #[Serializer\Groups('vue')]
+ public function getSamenvattingHtml()
 	{
 		return CsrBB::parse($this->samenvatting);
 	}

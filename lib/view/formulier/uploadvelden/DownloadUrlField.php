@@ -62,7 +62,7 @@ class DownloadUrlField extends UrlField
 		}
 	}
 
-	public function isAvailable()
+	public function isAvailable(): bool
 	{
 		return $this->downloader->isAvailable();
 	}

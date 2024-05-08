@@ -85,7 +85,7 @@ class Foto extends Afbeelding
 			'.csrdelft.nl';
 	}
 
-	public function getThumbPath()
+	public function getThumbPath(): string|array|null
 	{
 		return PathUtil::join_paths(
 			PHOTOALBUM_PATH,
@@ -95,7 +95,7 @@ class Foto extends Afbeelding
 		);
 	}
 
-	public function getResizedPath()
+	public function getResizedPath(): string|array|null
 	{
 		return PathUtil::join_paths(
 			PHOTOALBUM_PATH,
@@ -105,7 +105,7 @@ class Foto extends Afbeelding
 		);
 	}
 
-	public function getAlbumUrl()
+	public function getAlbumUrl(): string|array
 	{
 		return PathUtil::direncode(
 			PathUtil::join_paths(self::FOTOALBUM_ROOT, $this->subdir)
@@ -115,14 +115,14 @@ class Foto extends Afbeelding
 	{
 		return new FotoAlbum($this->subdir);
 	}
-	public function getFullUrl()
+	public function getFullUrl(): string|array
 	{
 		return PathUtil::direncode(
 			PathUtil::join_paths(self::FOTOALBUM_ROOT, $this->subdir, $this->filename)
 		);
 	}
 
-	public function getThumbUrl()
+	public function getThumbUrl(): string|array
 	{
 		return PathUtil::direncode(
 			PathUtil::join_paths(
@@ -134,7 +134,7 @@ class Foto extends Afbeelding
 		);
 	}
 
-	public function getResizedUrl()
+	public function getResizedUrl(): string|array
 	{
 		return PathUtil::direncode(
 			PathUtil::join_paths(

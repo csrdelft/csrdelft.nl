@@ -20,9 +20,9 @@ class Lichting extends Groep
 	/**
   * Lidjaar
   * @var int
-  * @Serializer\Groups({"datatable", "log", "vue"})
   */
  #[ORM\Column(type: 'integer', unique: true)]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $lidjaar;
 
 	/**

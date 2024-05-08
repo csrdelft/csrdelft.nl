@@ -13,12 +13,12 @@ use League\Bundle\OAuth2ServerBundle\Security\Authentication\Token\OAuth2Token;
 class ApiInfoController extends AbstractController
 {
 	/**
-	 * @param Security $security
-	 * @return JsonResponse
-	 * @Route("/api/v3/profiel")
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function profiel(Security $security): JsonResponse
+  * @param Security $security
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/api/v3/profiel')]
+ public function profiel(Security $security): JsonResponse
 	{
 		$token = $security->getToken();
 		if (!$token instanceof OAuth2Token) {

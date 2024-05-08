@@ -17,31 +17,31 @@ class PushAbonnement
 	/**
   * Primary key
   * @var int
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'integer')]
  #[ORM\Id]
  #[ORM\GeneratedValue]
+ #[Serializer\Groups('datatable')]
  public $id;
 
 	/**
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'uid')]
+ #[Serializer\Groups('datatable')]
  public $uid;
 
 	/**
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'string')]
+ #[Serializer\Groups('datatable')]
  public $client_endpoint;
 
 	/**
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'string')]
+ #[Serializer\Groups('datatable')]
  public $client_keys;
 }

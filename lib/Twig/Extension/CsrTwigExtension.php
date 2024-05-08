@@ -129,7 +129,7 @@ class CsrTwigExtension extends AbstractExtension
 		return new GroepBewerkenForm($lid, $groep);
 	}
 
-	public function huidige_jaargang()
+	public function huidige_jaargang(): string
 	{
 		return LichtingenRepository::getHuidigeJaargang();
 	}
@@ -171,7 +171,7 @@ class CsrTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function csrfField($path = '', $method = 'post')
+	public function csrfField($path = '', $method = 'post'): string
 	{
 		return (new CsrfField(
 			$this->csrfService->generateToken($path, $method)
@@ -211,7 +211,7 @@ class CsrTwigExtension extends AbstractExtension
 			new TwigFilter('escape_ical', [TextUtil::class, 'escape_ical']),
 			new TwigFilter('file_base64', [$this, 'file_base64']),
 			new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
-			new TwigFilter('uniqid', function ($prefix) {
+			new TwigFilter('uniqid', function ($prefix): string|array {
 				return CryptoUtil::uniqid_safe($prefix);
 			}),
 			new TwigFilter('format_bedrag', [BedragUtil::class, 'format_bedrag']),

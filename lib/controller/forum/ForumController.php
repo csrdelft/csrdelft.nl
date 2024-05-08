@@ -80,11 +80,11 @@ class ForumController extends AbstractController
 	}
 
 	/**
-	 * Overzicht met categorien en forumdelen laten zien.
-	 * @Route("/forum", methods={"GET"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function forum(): Response
+  * Overzicht met categorien en forumdelen laten zien.
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/forum', methods: ['GET'])]
+ public function forum(): Response
 	{
 		return $this->render('forum/overzicht.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
@@ -93,12 +93,12 @@ class ForumController extends AbstractController
 	}
 
 	/**
-	 * RSS feed van recente draadjes tonen.
-	 * @Route("/forum/rss/csrdelft.xml", methods={"GET"})
-	 * @Route("/forum/rss/{private_auth_token}/csrdelft.xml", methods={"GET"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function rss(): Response
+  * RSS feed van recente draadjes tonen.
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/forum/rss/csrdelft.xml', methods: ['GET'])]
+ #[Route(path: '/forum/rss/{private_auth_token}/csrdelft.xml', methods: ['GET'])]
+ public function rss(): Response
 	{
 		$response = new Response(null, 200, [
 			'Content-Type' => 'application/rss+xml; charset=UTF-8',
@@ -120,15 +120,15 @@ class ForumController extends AbstractController
 	}
 
 	/**
-	 * Tonen van alle posts die wachten op goedkeuring.
-	 *
-	 * @param string|null $query
-	 * @param int $pagina
-	 * @return Response
-	 * @Route("/forum/zoeken/{query}/{pagina<\d+>}", methods={"GET", "POST"}, defaults={"query"=null,"pagina"=1})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function zoeken($query = null, int $pagina = 1): Response
+  * Tonen van alle posts die wachten op goedkeuring.
+  *
+  * @param string|null $query
+  * @param int $pagina
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/forum/zoeken/{query}/{pagina<\d+>}', methods: ['GET', 'POST'], defaults: ['query' => null, 'pagina' => 1])]
+ public function zoeken($query = null, int $pagina = 1): Response
 	{
 		$this->forumPostsRepository->setHuidigePagina($pagina, 0);
 		$this->forumDradenRepository->setHuidigePagina($pagina, 0);
@@ -152,15 +152,15 @@ class ForumController extends AbstractController
 	}
 
 	/**
-	 * Draden zoeken op titel voor auto-aanvullen.
-	 *
-	 * @param Request $request
-	 * @param null $zoekterm
-	 * @return JsonResponse
-	 * @Route("/forum/titelzoeken", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function titelzoeken(Request $request, $zoekterm = null): JsonResponse
+  * Draden zoeken op titel voor auto-aanvullen.
+  *
+  * @param Request $request
+  * @param null $zoekterm
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/titelzoeken', methods: ['GET'])]
+ public function titelzoeken(Request $request, $zoekterm = null): JsonResponse
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			return new JsonResponse([]);
@@ -196,29 +196,29 @@ class ForumController extends AbstractController
 	}
 
 	/**
-	 * Shortcut to /recent/1/belangrijk.
-	 *
-	 * @param int $pagina
-	 * @return Response
-	 * @Route("/forum/belangrijk/{pagina<\d+>}", methods={"GET"}, defaults={"pagina"=1})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function belangrijk(RequestStack $requestStack, int $pagina = 1)
+  * Shortcut to /recent/1/belangrijk.
+  *
+  * @param int $pagina
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/belangrijk/{pagina<\d+>}', methods: ['GET'], defaults: ['pagina' => 1])]
+ public function belangrijk(RequestStack $requestStack, int $pagina = 1): Response
 	{
 		return $this->recent($requestStack, $pagina, 'belangrijk');
 	}
 
 	/**
-	 * Recente draadjes laten zien in tabel.
-	 *
-	 * @param int|string $pagina
-	 * @param string|null $belangrijk
-	 * @return Response
-	 * @Route("/forum/recent/{pagina<\d+>}", methods={"GET"}, defaults={"pagina"=1})
-	 * @Route("/forum/recent/{pagina<\d+>}/belangrijk", methods={"GET"}, defaults={"pagina"=1})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function recent(
+  * Recente draadjes laten zien in tabel.
+  *
+  * @param int|string $pagina
+  * @param string|null $belangrijk
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/forum/recent/{pagina<\d+>}', methods: ['GET'], defaults: ['pagina' => 1])]
+ #[Route(path: '/forum/recent/{pagina<\d+>}/belangrijk', methods: ['GET'], defaults: ['pagina' => 1])]
+ public function recent(
 		RequestStack $requestStack,
 		$pagina = 1,
 		$belangrijk = null
@@ -257,11 +257,11 @@ class ForumController extends AbstractController
 	}
 
 	/**
-	 * @return GenericSuggestiesResponse
-	 * @Route("/forum/categorie/suggestie")
-	 * @Auth(P_FORUM_ADMIN)
-	 */
-	public function forumCategorieSuggestie(Request $request): GenericSuggestiesResponse
+  * @return GenericSuggestiesResponse
+  * @Auth(P_FORUM_ADMIN)
+  */
+ #[Route(path: '/forum/categorie/suggestie')]
+ public function forumCategorieSuggestie(Request $request): GenericSuggestiesResponse
 	{
 		$zoekterm = $request->query->get('q');
 		$forumCategories = $this->forumCategorieRepository
@@ -274,13 +274,13 @@ class ForumController extends AbstractController
 	}
 
 	/**
-	 * Leg bladwijzer
-	 *
-	 * @param ForumDraad $draad
-	 * @Route("/forum/bladwijzer/{draad_id}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function bladwijzer(ForumDraad $draad)
+  * Leg bladwijzer
+  *
+  * @param ForumDraad $draad
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/bladwijzer/{draad_id}', methods: ['POST'])]
+ public function bladwijzer(ForumDraad $draad)
 	{
 		$timestamp = (int) filter_input(
 			INPUT_POST,

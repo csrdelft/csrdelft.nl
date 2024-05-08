@@ -25,35 +25,35 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 {
 	/**
   * @var integer
-  * @Serializer\Groups({"datatable", "bar"})
   */
  #[ORM\Column(type: 'integer')]
  #[ORM\Id]
  #[ORM\GeneratedValue]
+ #[Serializer\Groups(['datatable', 'bar'])]
  public $id;
 	/**
   * @var integer
-  * @Serializer\Groups({"datatable", "bar"})
   */
  #[ORM\Column(type: 'integer')]
+ #[Serializer\Groups(['datatable', 'bar'])]
  public $status;
 	/**
   * @var string
-  * @Serializer\Groups({"datatable", "bar"})
   */
  #[ORM\Column(type: 'text')]
+ #[Serializer\Groups(['datatable', 'bar'])]
  public $beschrijving;
 	/**
   * @var integer
-  * @Serializer\Groups({"datatable", "bar"})
   */
  #[ORM\Column(type: 'integer')]
+ #[Serializer\Groups(['datatable', 'bar'])]
  public $prioriteit;
 	/**
   * @var boolean
-  * @Serializer\Groups({"datatable", "bar"})
   */
  #[ORM\Column(type: 'boolean')]
+ #[Serializer\Groups(['datatable', 'bar'])]
  public $beheer;
 	/**
   * @var integer
@@ -78,20 +78,20 @@ class CiviProduct implements DataTableEntry, DisplayEntity
  public $prijzen;
 
 	/**
-	 * @return string
-	 * @Serializer\SerializedName("categorie")
-	 * @Serializer\Groups("bar")
-	 */
-	public function getCategorieString(): string
+  * @return string
+  */
+ #[Serializer\SerializedName('categorie')]
+ #[Serializer\Groups('bar')]
+ public function getCategorieString(): string
 	{
 		return $this->categorie->getWeergave();
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("bar")
-	 */
-	public function getCie()
+  * @return string
+  */
+ #[Serializer\Groups('bar')]
+ public function getCie()
 	{
 		return $this->categorie->cie;
 	}
@@ -115,11 +115,11 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	}
 
 	/**
-	 * @return int
-	 * @Serializer\Groups({"datatable", "bar"})
-	 * @Serializer\SerializedName("prijs")
-	 */
-	public function getPrijsInt()
+  * @return int
+  */
+ #[Serializer\Groups(['datatable', 'bar'])]
+ #[Serializer\SerializedName('prijs')]
+ public function getPrijsInt()
 	{
 		if ($prijs = $this->getPrijs()) {
 			return $prijs->prijs;
@@ -152,11 +152,11 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("categorie")
-	 */
-	public function getDataTableCategorie()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('categorie')]
+ public function getDataTableCategorie(): string
 	{
 		return $this->categorie->getBeschrijving();
 	}

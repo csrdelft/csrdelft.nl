@@ -144,7 +144,7 @@ abstract class BbTagGroep extends BbTag
 		return $this->groep($groep);
 	}
 
-	protected function groep(Groep $groep)
+	protected function groep(Groep $groep): string
 	{
 		if ($groep->versie == GroepVersie::V2()) {
 			$uid = LoginService::getUid();

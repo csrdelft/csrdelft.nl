@@ -57,7 +57,7 @@ class DocumentCategorieRepository extends AbstractRepository
 
 	public function findMetSchijfrechtenVoorLid(): array
 	{
-		return array_filter($this->findAll(), function ($categorie) {
+		return array_filter($this->findAll(), function ($categorie): bool {
 			return $this->security->isGranted($categorie->schrijfrechten);
 		});
 	}

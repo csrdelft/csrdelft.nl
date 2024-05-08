@@ -220,7 +220,7 @@ class ForumDraad
 		return !$this->belangrijk && LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function magMeldingKrijgen()
+	public function magMeldingKrijgen(): bool
 	{
 		return $this->magLezen();
 	}

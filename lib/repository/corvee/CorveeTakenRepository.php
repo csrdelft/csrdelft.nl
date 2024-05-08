@@ -486,7 +486,7 @@ class CorveeTakenRepository extends AbstractRepository
 			$beginDatum,
 			$eindDatum,
 			$maaltijd
-		) {
+		): array {
 			return $this->newRepetitieTaken(
 				$repetitie,
 				$beginDatum,

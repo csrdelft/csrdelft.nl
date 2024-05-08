@@ -61,7 +61,7 @@ class InstellingenTwigExtension extends AbstractExtension
 		return $this->instellingenRepository->getValue($module, $key);
 	}
 
-	public function toestemming_gegeven()
+	public function toestemming_gegeven(): bool
 	{
 		return $this->lidToestemmingRepository->toestemmingGegeven();
 	}

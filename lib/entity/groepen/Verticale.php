@@ -22,17 +22,17 @@ class Verticale extends Groep
 	/**
   * Primary key
   * @var string
-  * @Serializer\Groups({"datatable", "log", "vue"})
   */
  #[ORM\Column(type: 'string', unique: true, length: 1, options: ['fixed' => true])]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $letter;
 
 	/**
   * Naam
   * @var string
-  * @Serializer\Groups({"datatable", "log", "vue"})
   */
  #[ORM\Column(type: 'stringkey', unique: true)]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $naam;
 
 	// Stiekem hebben we helemaal geen leden.

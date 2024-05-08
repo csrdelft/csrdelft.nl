@@ -53,7 +53,7 @@ class AccessRole extends Enum
 	 * @param string $from
 	 * @return string[]
 	 */
-	public static function canChangeAccessRoleTo($from)
+	public static function canChangeAccessRoleTo($from): array
 	{
 		if ($from === self::PubCie) {
 			return static::getEnumValues();

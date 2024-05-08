@@ -68,14 +68,14 @@ class MijnMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/maaltijden", methods={"GET"})
-	 * @Route("/maaltijden/ketzer", methods={"GET"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function ketzer(): Response
+  * @return Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden', methods: ['GET'])]
+ #[Route(path: '/maaltijden/ketzer', methods: ['GET'])]
+ public function ketzer(): Response
 	{
 		$maaltijden = $this->maaltijdenService->getKomendeMaaltijdenVoorLid(
 			$this->getProfiel()
@@ -136,12 +136,12 @@ class MijnMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @param Maaltijd $maaltijd
-	 * @return Response
-	 * @Route("/maaltijden/lijst/{maaltijd_id}", methods={"GET"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function lijst(Maaltijd $maaltijd): Response
+  * @param Maaltijd $maaltijd
+  * @return Response
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden/lijst/{maaltijd_id}', methods: ['GET'])]
+ public function lijst(Maaltijd $maaltijd): Response
 	{
 		if (!$maaltijd->magSluiten($this->getUid()) && !$this->mag(P_MAAL_MOD)) {
 			throw $this->createAccessDeniedException();
@@ -168,13 +168,13 @@ class MijnMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @param Maaltijd $maaltijd
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/lijst/sluit/{maaltijd_id}", methods={"POST"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function sluit(Maaltijd $maaltijd)
+  * @param Maaltijd $maaltijd
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden/lijst/sluit/{maaltijd_id}', methods: ['POST'])]
+ public function sluit(Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
@@ -188,15 +188,15 @@ class MijnMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param Maaltijd $maaltijd
-	 * @return Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/ketzer/aanmelden/{maaltijd_id}", methods={"GET","POST"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function aanmelden(Request $request, Maaltijd $maaltijd): Response
+  * @param Request $request
+  * @param Maaltijd $maaltijd
+  * @return Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden/ketzer/aanmelden/{maaltijd_id}', methods: ['GET', 'POST'])]
+ public function aanmelden(Request $request, Maaltijd $maaltijd): Response
 	{
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
@@ -232,15 +232,15 @@ class MijnMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param Maaltijd $maaltijd
-	 * @return Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/ketzer/afmelden/{maaltijd_id}", methods={"GET","POST"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function afmelden(Request $request, Maaltijd $maaltijd): Response
+  * @param Request $request
+  * @param Maaltijd $maaltijd
+  * @return Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden/ketzer/afmelden/{maaltijd_id}', methods: ['GET', 'POST'])]
+ public function afmelden(Request $request, Maaltijd $maaltijd): Response
 	{
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
@@ -272,14 +272,14 @@ class MijnMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @param Maaltijd $maaltijd
-	 * @return Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/ketzer/gasten/{maaltijd_id}", methods={"POST"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function gasten(Maaltijd $maaltijd): Response
+  * @param Maaltijd $maaltijd
+  * @return Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden/ketzer/gasten/{maaltijd_id}', methods: ['POST'])]
+ public function gasten(Maaltijd $maaltijd): Response
 	{
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
@@ -301,14 +301,14 @@ class MijnMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @param Maaltijd $maaltijd
-	 * @return Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/mijn/gasten/{maaltijd_id}", methods={"POST"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function gasten_mijn(Maaltijd $maaltijd): Response
+  * @param Maaltijd $maaltijd
+  * @return Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden/mijn/gasten/{maaltijd_id}', methods: ['POST'])]
+ public function gasten_mijn(Maaltijd $maaltijd): Response
 	{
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();
@@ -333,14 +333,14 @@ class MijnMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @param int $maaltijd_id
-	 * @return Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/ketzer/opmerking/{maaltijd_id}", methods={"POST"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function opmerking(Maaltijd $maaltijd): Response
+  * @param int $maaltijd_id
+  * @return Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden/ketzer/opmerking/{maaltijd_id}', methods: ['POST'])]
+ public function opmerking(Maaltijd $maaltijd): Response
 	{
 		$opmerking = filter_input(
 			INPUT_POST,
@@ -359,14 +359,14 @@ class MijnMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @param int $maaltijd_id
-	 * @return Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/mijn/opmerking/{maaltijd_id}", methods={"POST"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function opmerking_mijn(Maaltijd $maaltijd): Response
+  * @param int $maaltijd_id
+  * @return Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden/mijn/opmerking/{maaltijd_id}', methods: ['POST'])]
+ public function opmerking_mijn(Maaltijd $maaltijd): Response
 	{
 		$opmerking = filter_input(
 			INPUT_POST,
@@ -388,14 +388,14 @@ class MijnMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @param Maaltijd $maaltijd
-	 * @return JsonResponse
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/ketzer/beoordeling/{maaltijd_id}", methods={"POST"})
-	 * @Auth(P_MAAL_IK)
-	 */
-	public function beoordeling(Maaltijd $maaltijd): JsonResponse
+  * @param Maaltijd $maaltijd
+  * @return JsonResponse
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_MAAL_IK)
+  */
+ #[Route(path: '/maaltijden/ketzer/beoordeling/{maaltijd_id}', methods: ['POST'])]
+ public function beoordeling(Maaltijd $maaltijd): JsonResponse
 	{
 		if ($maaltijd->verwijderd) {
 			throw $this->createAccessDeniedException();

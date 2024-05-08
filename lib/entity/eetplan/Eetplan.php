@@ -18,11 +18,11 @@ class Eetplan implements DataTableEntry
 {
 	/**
   * @var int
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'integer')]
  #[ORM\Id]
  #[ORM\GeneratedValue]
+ #[Serializer\Groups('datatable')]
  public $id;
 	/**
   * @var Woonoord
@@ -39,9 +39,9 @@ class Eetplan implements DataTableEntry
   * Specifiek bedoelt voor bekende huizen.
   *
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'string', nullable: true)]
+ #[Serializer\Groups('datatable')]
  public $opmerking;
 	/**
   * @var Profiel
@@ -51,31 +51,31 @@ class Eetplan implements DataTableEntry
  public $noviet;
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("woonoord")
-	 */
-	public function getDataTableWoonoord()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('woonoord')]
+ public function getDataTableWoonoord()
 	{
 		return $this->woonoord->naam;
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("naam")
-	 */
-	public function getDataTableNaam()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('naam')]
+ public function getDataTableNaam()
 	{
 		return $this->noviet->getNaam();
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("avond")
-	 */
-	public function getDataTableAvond()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('avond')]
+ public function getDataTableAvond()
 	{
 		if ($this->avond) {
 			return DateUtil::dateFormatIntl($this->avond, DateUtil::DATE_FORMAT);

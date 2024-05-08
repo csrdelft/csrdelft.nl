@@ -26,13 +26,13 @@ class ForumPlaatjesController extends AbstractController
 	}
 
 	/**
-	 * @Route("/forum/plaatjes/upload_json", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 * @return JsonResponse
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function uploadJson(): JsonResponse
+  * @Auth(P_LOGGED_IN)
+  * @return JsonResponse
+  * @throws ORMException
+  * @throws OptimisticLockException
+  */
+ #[Route(path: '/forum/plaatjes/upload_json', methods: ['POST'])]
+ public function uploadJson(): JsonResponse
 	{
 		$form = new PlaatjesUploadModalForm();
 		if ($form->isPosted()) {
@@ -53,14 +53,14 @@ class ForumPlaatjesController extends AbstractController
 	}
 
 	/**
-	 * @param $id
-	 * @param bool $resized
-	 * @return BinaryFileResponse
-	 * @Route("/forum/plaatjes/bekijken/{id}", methods={"GET"}, requirements={"id"="[a-zA-Z0-9]*"})
-	 * @Route("/forum/plaatjes/bekijken/{id}/resized", methods={"GET"}, requirements={"id"="[a-zA-Z0-9]*"}, defaults={"resized"=true})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function bekijken($id, $resized = false): BinaryFileResponse
+  * @param $id
+  * @param bool $resized
+  * @return BinaryFileResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/plaatjes/bekijken/{id}', methods: ['GET'], requirements: ['id' => '[a-zA-Z0-9]*'])]
+ #[Route(path: '/forum/plaatjes/bekijken/{id}/resized', methods: ['GET'], requirements: ['id' => '[a-zA-Z0-9]*'], defaults: ['resized' => true])]
+ public function bekijken($id, $resized = false): BinaryFileResponse
 	{
 		$plaatje = $this->forumPlaatjeRepository->getByKey($id);
 		if (!$plaatje) {

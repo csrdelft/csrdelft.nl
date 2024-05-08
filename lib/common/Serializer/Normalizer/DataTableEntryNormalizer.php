@@ -6,6 +6,7 @@ use ArrayObject;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
@@ -21,13 +22,14 @@ class DataTableEntryNormalizer implements NormalizerInterface
 	 */
 	private $entityManager;
 	/**
-	 * @var ObjectNormalizer
+	 * @var NormalizerInterface
 	 */
 	private $normalizer;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
-		ObjectNormalizer $normalizer
+		#[Autowire(service: 'serializer.normalizer.object')]
+		NormalizerInterface $normalizer
 	) {
 		$this->entityManager = $entityManager;
 		$this->normalizer = $normalizer;

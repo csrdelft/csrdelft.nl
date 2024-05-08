@@ -58,11 +58,11 @@ class CommissieVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/commissievoorkeuren", methods={"GET"})
-	 * @Auth({"bestuur",P_ADMIN})
-	 */
-	public function overzicht(): Response
+  * @return Response
+  * @Auth({"bestuur",P_ADMIN})
+  */
+ #[Route(path: '/commissievoorkeuren', methods: ['GET'])]
+ public function overzicht(): Response
 	{
 		$commissieFormulier = $this->createForm(
 			VoorkeurCommissieType::class,
@@ -92,14 +92,14 @@ class CommissieVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param $cid
-	 * @param $waarde
-	 * @return JsonResponse
-	 * @Route("/commissievoorkeuren/update/{cid}/{uid}/{waarde}", methods={"POST"}, defaults={"waarde": null})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function lidUpdate(
+  * @param Request $request
+  * @param $cid
+  * @param $waarde
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/commissievoorkeuren/update/{cid}/{uid}/{waarde}', methods: ['POST'], defaults: ['waarde' => null])]
+ public function lidUpdate(
 		Request $request,
 		ProfielRepository $profielRepository,
 		$cid,
@@ -139,12 +139,12 @@ class CommissieVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @param VoorkeurCommissie $commissie
-	 * @return Response
-	 * @Route("/commissievoorkeuren/overzicht/{id}", methods={"GET"})
-	 * @Auth({"bestuur",P_ADMIN})
-	 */
-	public function commissie(VoorkeurCommissie $commissie): Response
+  * @param VoorkeurCommissie $commissie
+  * @return Response
+  * @Auth({"bestuur",P_ADMIN})
+  */
+ #[Route(path: '/commissievoorkeuren/overzicht/{id}', methods: ['GET'])]
+ public function commissie(VoorkeurCommissie $commissie): Response
 	{
 		$form = $this->createForm(VoorkeurCommissieType::class, $commissie);
 
@@ -158,14 +158,14 @@ class CommissieVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param VoorkeurCommissie $commissie
-	 * @return RedirectResponse
-	 * @Route("/commissievoorkeuren/overzicht/{id}", methods={"POST"})
-	 * @Auth({"bestuur",P_ADMIN})
-	 * @CsrfUnsafe
-	 */
-	public function updatecommissie(
+  * @param Request $request
+  * @param VoorkeurCommissie $commissie
+  * @return RedirectResponse
+  * @Auth({"bestuur",P_ADMIN})
+  * @CsrfUnsafe
+  */
+ #[Route(path: '/commissievoorkeuren/overzicht/{id}', methods: ['POST'])]
+ public function updatecommissie(
 		Request $request,
 		VoorkeurCommissie $commissie
 	): RedirectResponse {
@@ -186,13 +186,13 @@ class CommissieVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @throws ORMException
-	 * @Route("/commissievoorkeuren/nieuwecommissie", methods={"POST"})
-	 * @Auth({"bestuur",P_ADMIN})
-	 * @CsrfUnsafe
-	 */
-	public function nieuwecommissie(Request $request): Response
+  * @return Response
+  * @throws ORMException
+  * @Auth({"bestuur",P_ADMIN})
+  * @CsrfUnsafe
+  */
+ #[Route(path: '/commissievoorkeuren/nieuwecommissie', methods: ['POST'])]
+ public function nieuwecommissie(Request $request): Response
 	{
 		$model = new VoorkeurCommissie();
 		$commissieFormulier = $this->createForm(
@@ -234,12 +234,12 @@ class CommissieVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/commissievoorkeuren/nieuwecategorie", methods={"POST"})
-	 * @Auth({"bestuur",P_ADMIN})
-	 * @CsrfUnsafe
-	 */
-	public function nieuwecategorie(Request $request): Response
+  * @return Response
+  * @Auth({"bestuur",P_ADMIN})
+  * @CsrfUnsafe
+  */
+ #[Route(path: '/commissievoorkeuren/nieuwecategorie', methods: ['POST'])]
+ public function nieuwecategorie(Request $request): Response
 	{
 		$model = new VoorkeurCommissieCategorie();
 		$categorieFormulier = $this->createForm(
@@ -277,12 +277,12 @@ class CommissieVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @param VoorkeurCommissieCategorie $categorie
-	 * @return RedirectResponse
-	 * @Route("/commissievoorkeuren/verwijdercategorie/{id}", methods={"POST"})
-	 * @Auth({"bestuur",P_ADMIN})
-	 */
-	public function verwijdercategorie(
+  * @param VoorkeurCommissieCategorie $categorie
+  * @return RedirectResponse
+  * @Auth({"bestuur",P_ADMIN})
+  */
+ #[Route(path: '/commissievoorkeuren/verwijdercategorie/{id}', methods: ['POST'])]
+ public function verwijdercategorie(
 		VoorkeurCommissieCategorie $categorie
 	): RedirectResponse {
 		if (count($categorie->commissies) == 0) {
@@ -304,12 +304,12 @@ class CommissieVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @param Profiel $profiel
-	 * @return Response
-	 * @Route("/commissievoorkeuren/lidpagina/{uid}", methods={"GET"})
-	 * @Auth({"bestuur",P_ADMIN})
-	 */
-	public function lidpagina(Profiel $profiel): Response
+  * @param Profiel $profiel
+  * @return Response
+  * @Auth({"bestuur",P_ADMIN})
+  */
+ #[Route(path: '/commissievoorkeuren/lidpagina/{uid}', methods: ['GET'])]
+ public function lidpagina(Profiel $profiel): Response
 	{
 		$voorkeuren = $this->commissieVoorkeurRepository->getVoorkeurenVoorLid(
 			$profiel
@@ -349,14 +349,14 @@ class CommissieVoorkeurenController extends AbstractController
 	}
 
 	/**
-	 * @param $uid
-	 * @param VoorkeurOpmerking|null $opmerking
-	 * @return RedirectResponse
-	 * @Route("/commissievoorkeuren/lidpagina/{uid}", methods={"POST"})
-	 * @Auth({"bestuur",P_ADMIN})
-	 * @CsrfUnsafe
-	 */
-	public function lidpaginaopmerking(
+  * @param $uid
+  * @param VoorkeurOpmerking|null $opmerking
+  * @return RedirectResponse
+  * @Auth({"bestuur",P_ADMIN})
+  * @CsrfUnsafe
+  */
+ #[Route(path: '/commissievoorkeuren/lidpagina/{uid}', methods: ['POST'])]
+ public function lidpaginaopmerking(
 		Request $request,
 		$uid,
 		VoorkeurOpmerking $opmerking = null

@@ -458,7 +458,7 @@ abstract class GroepRepository extends AbstractRepository
 		int $limit = null,
 		int $offset = null,
 		string $soort = null
-	) {
+	): array {
 		return $this->findBy(
 			['status' => GroepStatus::HT()],
 			null,
@@ -483,7 +483,7 @@ abstract class GroepRepository extends AbstractRepository
 		return $aantal;
 	}
 
-	public function beheer(string $soort = null)
+	public function beheer(string $soort = null): array
 	{
 		return $this->findBy([]);
 	}

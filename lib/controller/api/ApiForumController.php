@@ -40,11 +40,11 @@ class ApiForumController extends AbstractController
 	}
 
 	/**
-	 * @Route("/API/2.0/forum/recent", methods={"GET"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 * @return JsonResponse
-	 */
-	public function getRecent(): JsonResponse
+  * @Auth(P_OUDLEDEN_READ)
+  * @return JsonResponse
+  */
+ #[Route(path: '/API/2.0/forum/recent', methods: ['GET'])]
+ public function getRecent(): JsonResponse
 	{
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
@@ -71,13 +71,13 @@ class ApiForumController extends AbstractController
 	}
 
 	/**
-	 * @Route("/API/2.0/forum/onderwerp/{id}", methods={"GET"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 * @param int offset
-	 * @param int limit
-	 * @return JsonResponse
-	 */
-	public function getOnderwerp($id): JsonResponse
+  * @Auth(P_OUDLEDEN_READ)
+  * @param int offset
+  * @param int limit
+  * @return JsonResponse
+  */
+ #[Route(path: '/API/2.0/forum/onderwerp/{id}', methods: ['GET'])]
+ public function getOnderwerp($id): JsonResponse
 	{
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;

@@ -34,13 +34,13 @@ class RechtenController extends AbstractController
 	}
 
 	/**
-	 * @param null $environment
-	 * @param null $resource
-	 * @return Response
-	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"GET"}, defaults={"environment"=null,"resource"=null})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function bekijken($environment = null, $resource = null): Response
+  * @param null $environment
+  * @param null $resource
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/rechten/bekijken/{environment}/{resource}', methods: ['GET'], defaults: ['environment' => null, 'resource' => null])]
+ public function bekijken($environment = null, $resource = null): Response
 	{
 		return $this->render('default.html.twig', [
 			'content' => new RechtenTable(
@@ -52,13 +52,13 @@ class RechtenController extends AbstractController
 	}
 
 	/**
-	 * @param null $environment
-	 * @param null $resource
-	 * @return GenericDataTableResponse
-	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function data($environment = null, $resource = null): GenericDataTableResponse
+  * @param null $environment
+  * @param null $resource
+  * @return GenericDataTableResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/rechten/bekijken/{environment}/{resource}', methods: ['POST'], defaults: ['environment' => null, 'resource' => null])]
+ public function data($environment = null, $resource = null): GenericDataTableResponse
 	{
 		return $this->tableData(
 			$this->accessRepository->getTree($environment, $resource)
@@ -66,15 +66,15 @@ class RechtenController extends AbstractController
 	}
 
 	/**
-	 * @param null $environment
-	 * @param null $resource
-	 * @return GenericDataTableResponse|RechtenForm
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/rechten/aanmaken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function aanmaken($environment = null, $resource = null)
+  * @param null $environment
+  * @param null $resource
+  * @return GenericDataTableResponse|RechtenForm
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/rechten/aanmaken/{environment}/{resource}', methods: ['POST'], defaults: ['environment' => null, 'resource' => null])]
+ public function aanmaken($environment = null, $resource = null)
 	{
 		$ac = $this->accessRepository->nieuw($environment, $resource);
 		$form = new RechtenForm($ac, 'aanmaken');
@@ -89,13 +89,13 @@ class RechtenController extends AbstractController
 	}
 
 	/**
-	 * @return GenericDataTableResponse|RechtenForm
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/rechten/wijzigen", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function wijzigen()
+  * @return GenericDataTableResponse|RechtenForm
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/rechten/wijzigen', methods: ['POST'])]
+ public function wijzigen()
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -118,13 +118,13 @@ class RechtenController extends AbstractController
 	}
 
 	/**
-	 * @return GenericDataTableResponse
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/rechten/verwijderen", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function verwijderen(): GenericDataTableResponse
+  * @return GenericDataTableResponse
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/rechten/verwijderen', methods: ['POST'])]
+ public function verwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 		$response = [];

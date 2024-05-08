@@ -23,10 +23,10 @@ class ApiLedenController
 	}
 
 	/**
-	 * @Route("/API/2.0/leden", methods={"GET"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 */
-	public function getLeden(): JsonResponse
+  * @Auth(P_OUDLEDEN_READ)
+  */
+ #[Route(path: '/API/2.0/leden', methods: ['GET'])]
+ public function getLeden(): JsonResponse
 	{
 		$leden = [];
 
@@ -43,10 +43,10 @@ class ApiLedenController
 	}
 
 	/**
-	 * @Route("/API/2.0/leden/{id}", methods={"GET"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 */
-	public function getLid($id): JsonResponse
+  * @Auth(P_OUDLEDEN_READ)
+  */
+ #[Route(path: '/API/2.0/leden/{id}', methods: ['GET'])]
+ public function getLid($id): JsonResponse
 	{
 		$profiel = ProfielRepository::get($id);
 

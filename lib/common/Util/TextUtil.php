@@ -206,7 +206,7 @@ final class TextUtil
 	 *
 	 * @return bool
 	 */
-	public static function is_utf8($string)
+	public static function is_utf8($string): bool
 	{
 		return TextUtil::checkEncoding($string, 'UTF-8');
 	}

@@ -44,12 +44,12 @@ class MaaltijdRepetitiesController extends AbstractController
 	}
 
 	/**
-	 * @param MaaltijdRepetitie|null $repetitie
-	 * @return Response
-	 * @Route("/maaltijden/repetities/{mlt_repetitie_id}", methods={"GET"}, defaults={"mlt_repetitie_id"=null})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function beheer(MaaltijdRepetitie $repetitie = null): Response
+  * @param MaaltijdRepetitie|null $repetitie
+  * @return Response
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/repetities/{mlt_repetitie_id}', methods: ['GET'], defaults: ['mlt_repetitie_id' => null])]
+ public function beheer(MaaltijdRepetitie $repetitie = null): Response
 	{
 		return $this->render(
 			'maaltijden/maaltijdrepetitie/beheer_maaltijd_repetities.html.twig',
@@ -61,35 +61,35 @@ class MaaltijdRepetitiesController extends AbstractController
 	}
 
 	/**
-	 * @return MaaltijdRepetitieForm
-	 * @Route("/maaltijden/repetities/nieuw", methods={"POST"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function nieuw(): MaaltijdRepetitieForm
+  * @return MaaltijdRepetitieForm
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/repetities/nieuw', methods: ['POST'])]
+ public function nieuw(): MaaltijdRepetitieForm
 	{
 		return new MaaltijdRepetitieForm(new MaaltijdRepetitie()); // fetches POST values itself
 	}
 
 	/**
-	 * @param MaaltijdRepetitie $repetitie
-	 * @return MaaltijdRepetitieForm
-	 * @Route("/maaltijden/repetities/bewerk/{mlt_repetitie_id}", methods={"POST"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function bewerk(MaaltijdRepetitie $repetitie): MaaltijdRepetitieForm
+  * @param MaaltijdRepetitie $repetitie
+  * @return MaaltijdRepetitieForm
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/repetities/bewerk/{mlt_repetitie_id}', methods: ['POST'])]
+ public function bewerk(MaaltijdRepetitie $repetitie): MaaltijdRepetitieForm
 	{
 		return new MaaltijdRepetitieForm($repetitie); // fetches POST values itself
 	}
 
 	/**
-	 * @param MaaltijdRepetitie|null $repetitie
-	 * @return MaaltijdRepetitieForm|Response
-	 * @throws Throwable
-	 * @Route("/maaltijden/repetities/opslaan/{mlt_repetitie_id}", methods={"POST"}, defaults={"mlt_repetitie_id"=null})
-	 * @Route("/maaltijden/repetities/opslaan/", methods={"POST"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function opslaan(MaaltijdRepetitie $repetitie = null)
+  * @param MaaltijdRepetitie|null $repetitie
+  * @return MaaltijdRepetitieForm|Response
+  * @throws Throwable
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/repetities/opslaan/{mlt_repetitie_id}', methods: ['POST'], defaults: ['mlt_repetitie_id' => null])]
+ #[Route(path: '/maaltijden/repetities/opslaan/', methods: ['POST'])]
+ public function opslaan(MaaltijdRepetitie $repetitie = null)
 	{
 		if ($repetitie) {
 			$view = $this->bewerk($repetitie);
@@ -121,14 +121,14 @@ class MaaltijdRepetitiesController extends AbstractController
 	}
 
 	/**
-	 * @param MaaltijdRepetitie $repetitie
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @throws Throwable
-	 * @Route("/maaltijden/repetities/verwijder/{mlt_repetitie_id}", methods={"POST"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function verwijder(MaaltijdRepetitie $repetitie)
+  * @param MaaltijdRepetitie $repetitie
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @throws Throwable
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/repetities/verwijder/{mlt_repetitie_id}', methods: ['POST'])]
+ public function verwijder(MaaltijdRepetitie $repetitie)
 	{
 		$aantal = $this->maaltijdRepetitiesService->verwijderRepetitie($repetitie);
 
@@ -152,13 +152,13 @@ class MaaltijdRepetitiesController extends AbstractController
 	}
 
 	/**
-	 * @param MaaltijdRepetitie $repetitie
-	 * @return MaaltijdRepetitieForm
-	 * @throws Throwable
-	 * @Route("/maaltijden/repetities/bijwerken/{mlt_repetitie_id}", methods={"POST"})
-	 * @Auth(P_MAAL_MOD)
-	 */
-	public function bijwerken(MaaltijdRepetitie $repetitie)
+  * @param MaaltijdRepetitie $repetitie
+  * @return MaaltijdRepetitieForm
+  * @throws Throwable
+  * @Auth(P_MAAL_MOD)
+  */
+ #[Route(path: '/maaltijden/repetities/bijwerken/{mlt_repetitie_id}', methods: ['POST'])]
+ public function bijwerken(MaaltijdRepetitie $repetitie)
 	{
 		$view = $this->opslaan($repetitie);
 

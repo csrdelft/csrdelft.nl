@@ -31,12 +31,12 @@ class BeheerCiviBestellingController extends AbstractController
 	}
 
 	/**
-	 * @param null $uid
-	 * @return Response
-	 * @Route("/fiscaat/bestellingen/{uid}", methods={"GET"}, defaults={"uid"=null})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function overzicht($uid = null): Response
+  * @param null $uid
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/fiscaat/bestellingen/{uid}', methods: ['GET'], defaults: ['uid' => null])]
+ public function overzicht($uid = null): Response
 	{
 		$this->checkToegang($uid);
 
@@ -47,13 +47,13 @@ class BeheerCiviBestellingController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param null $uid
-	 * @return GenericDataTableResponse
-	 * @Route("/fiscaat/bestellingen/{uid}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function lijst(Request $request, $uid = null): GenericDataTableResponse
+  * @param Request $request
+  * @param null $uid
+  * @return GenericDataTableResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/fiscaat/bestellingen/{uid}', methods: ['POST'])]
+ public function lijst(Request $request, $uid = null): GenericDataTableResponse
 	{
 		$this->checkToegang($uid);
 		$uid = $uid == null ? $this->getUid() : $uid;
@@ -69,12 +69,12 @@ class BeheerCiviBestellingController extends AbstractController
 	}
 
 	/**
-	 * @param $bestelling_id
-	 * @return GenericDataTableResponse
-	 * @Route("/fiscaat/bestellingen/inhoud/{bestelling_id}", methods={"POST"})
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function inhoud($bestelling_id): GenericDataTableResponse
+  * @param $bestelling_id
+  * @return GenericDataTableResponse
+  * @Auth(P_FISCAAT_READ)
+  */
+ #[Route(path: '/fiscaat/bestellingen/inhoud/{bestelling_id}', methods: ['POST'])]
+ public function inhoud($bestelling_id): GenericDataTableResponse
 	{
 		$data = $this->civiBestellingInhoudRepository->findBy([
 			'bestelling_id' => $bestelling_id,

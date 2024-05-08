@@ -33,17 +33,17 @@ class ArchiefMaaltijd implements Agendeerbaar
 {
 	/**
   * @var integer
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'integer')]
  #[ORM\Id]
  #[ORM\GeneratedValue]
+ #[Serializer\Groups('datatable')]
  public $maaltijd_id;
 	/**
   * @var string
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'string')]
+ #[Serializer\Groups('datatable')]
  public $titel;
 	/**
   * @var DateTimeImmutable
@@ -57,9 +57,9 @@ class ArchiefMaaltijd implements Agendeerbaar
  public $tijd;
 	/**
   * @var int
-  * @Serializer\Groups("datatable")
   */
  #[ORM\Column(type: 'integer')]
+ #[Serializer\Groups('datatable')]
  public $prijs;
 	/**
   * @var string
@@ -68,31 +68,31 @@ class ArchiefMaaltijd implements Agendeerbaar
  public $aanmeldingen;
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("tijd")
-	 */
-	public function getTijdFormatted()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('tijd')]
+ public function getTijdFormatted(): string|false
 	{
 		return DateUtil::dateFormatIntl($this->tijd, DateUtil::TIME_FORMAT);
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("datum")
-	 */
-	public function getDatumFormatted()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('datum')]
+ public function getDatumFormatted(): string|false
 	{
 		return DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT);
 	}
 
 	/**
-	 * @return int
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("aanmeldingen")
-	 */
-	public function getAantalAanmelding(): int
+  * @return int
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('aanmeldingen')]
+ public function getAantalAanmelding(): int
 	{
 		return count($this->getAanmeldingenArray());
 	}

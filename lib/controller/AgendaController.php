@@ -81,19 +81,14 @@ class AgendaController extends AbstractController
 	}
 
 	/**
-	 * Maandoverzicht laten zien.
-	 * @param int $jaar
-	 * @param int $maand
-	 * @return Response
-	 * @Route(
-	 *   "/agenda/{jaar}/{maand}",
-	 *   methods={"GET"},
-	 *   defaults={"jaar": null, "maand": null},
-	 *   requirements={"jaar": "\d+", "maand": "\d+"}
-	 * )
-	 * @Auth(P_AGENDA_READ)
-	 */
-	public function maand($jaar = 0, $maand = 0): Response
+  * Maandoverzicht laten zien.
+  * @param int $jaar
+  * @param int $maand
+  * @return Response
+  * @Auth(P_AGENDA_READ)
+  */
+ #[Route(path: '/agenda/{jaar}/{maand}', methods: ['GET'], defaults: ['jaar' => null, 'maand' => null], requirements: ['jaar' => '\d+', 'maand' => '\d+'])]
+ public function maand($jaar = 0, $maand = 0): Response
 	{
 		$jaar = intval($jaar);
 		if ($jaar < 1970 || $jaar > 2100) {
@@ -113,10 +108,10 @@ class AgendaController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/agenda/ical/{private_auth_token}/csrdelft.ics", methods={"GET"})
-	 */
-	#[IsGranted("ROLE_LOGGED_IN")]
+  * @return Response
+  */
+ #[IsGranted("ROLE_LOGGED_IN")]
+ #[Route(path: '/agenda/ical/{private_auth_token}/csrdelft.ics', methods: ['GET'])]
 	public function ical(): Response
 	{
 		return $this->render(
@@ -130,12 +125,12 @@ class AgendaController extends AbstractController
 	}
 
 	/**
-	 * @param $uuid
-	 * @return Response
-	 * @Route("/agenda/export/{uuid}.ics", methods={"GET"}, requirements={"uuid": ".+"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function export($uuid): Response
+  * @param $uuid
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/agenda/export/{uuid}.ics', methods: ['GET'], requirements: ['uuid' => '.+'])]
+ public function export($uuid): Response
 	{
 		return $this->render(
 			'agenda/icalendar.ical.twig',
@@ -148,13 +143,13 @@ class AgendaController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param null $zoekterm
-	 * @return JsonResponse
-	 * @Route("/agenda/zoeken", methods={"GET"})
-	 * @Auth(P_AGENDA_READ)
-	 */
-	public function zoeken(Request $request, $zoekterm = null): JsonResponse
+  * @param Request $request
+  * @param null $zoekterm
+  * @return JsonResponse
+  * @Auth(P_AGENDA_READ)
+  */
+ #[Route(path: '/agenda/zoeken', methods: ['GET'])]
+ public function zoeken(Request $request, $zoekterm = null): JsonResponse
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
@@ -197,12 +192,12 @@ class AgendaController extends AbstractController
 	}
 
 	/**
-	 * @param BbToProsemirror $bbToProsemirror
-	 * @return Response
-	 * @Route("/agenda/courant", methods={"POST"})
-	 * @Auth(P_MAIL_COMPOSE)
-	 */
-	public function courant(BbToProsemirror $bbToProsemirror): JsonResponse
+  * @param BbToProsemirror $bbToProsemirror
+  * @return Response
+  * @Auth(P_MAIL_COMPOSE)
+  */
+ #[Route(path: '/agenda/courant', methods: ['POST'])]
+ public function courant(BbToProsemirror $bbToProsemirror): JsonResponse
 	{
 		$items = $this->agendaRepository->getAllAgendeerbaar(
 			date_create_immutable(),
@@ -218,13 +213,13 @@ class AgendaController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param null $datum
-	 * @return JsonResponse|Response
-	 * @Route("/agenda/toevoegen/{datum}", methods={"POST"}, defaults={"datum": null})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function toevoegen(Request $request, $datum = null)
+  * @param Request $request
+  * @param null $datum
+  * @return JsonResponse|Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/agenda/toevoegen/{datum}', methods: ['POST'], defaults: ['datum' => null])]
+ public function toevoegen(Request $request, $datum = null)
 	{
 		$profiel = $this->getProfiel();
 		if (!$this->mag(P_AGENDA_ADD) && !$profiel->verticaleleider) {
@@ -277,13 +272,13 @@ class AgendaController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param $aid
-	 * @return JsonResponse|Response
-	 * @Route("/agenda/bewerken/{aid}", methods={"POST"}, requirements={"aid": "\d+"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function bewerken(Request $request, $aid)
+  * @param Request $request
+  * @param $aid
+  * @return JsonResponse|Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/agenda/bewerken/{aid}', methods: ['POST'], requirements: ['aid' => '\d+'])]
+ public function bewerken(Request $request, $aid)
 	{
 		$item = $this->agendaRepository->getAgendaItem((int) $aid);
 		if (!$item || !$item->magBeheren()) {
@@ -302,13 +297,13 @@ class AgendaController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param $uuid
-	 * @return JsonResponse
-	 * @Route("/agenda/verplaatsen/{uuid}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function verplaatsen(Request $request, $uuid): JsonResponse
+  * @param Request $request
+  * @param $uuid
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/agenda/verplaatsen/{uuid}', methods: ['POST'])]
+ public function verplaatsen(Request $request, $uuid): JsonResponse
 	{
 		$item = $this->getAgendaItemByUuid($uuid);
 
@@ -333,12 +328,12 @@ class AgendaController extends AbstractController
 	}
 
 	/**
-	 * @param $aid
-	 * @return JsonResponse
-	 * @Route("/agenda/verwijderen/{aid}", methods={"POST"}, requirements={"aid": "\d+"})
-	 * @Auth(P_AGENDA_MOD)
-	 */
-	public function verwijderen($aid): JsonResponse
+  * @param $aid
+  * @return JsonResponse
+  * @Auth(P_AGENDA_MOD)
+  */
+ #[Route(path: '/agenda/verwijderen/{aid}', methods: ['POST'], requirements: ['aid' => '\d+'])]
+ public function verwijderen($aid): JsonResponse
 	{
 		$item = $this->agendaRepository->getAgendaItem((int) $aid);
 		if (!$item || !$item->magBeheren()) {
@@ -349,12 +344,12 @@ class AgendaController extends AbstractController
 	}
 
 	/**
-	 * @param null $refuuid
-	 * @return JsonResponse
-	 * @Route("/agenda/verbergen/{refuuid}", methods={"POST"}, defaults={"refuuid": null})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function verbergen($refuuid = null): JsonResponse
+  * @param null $refuuid
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/agenda/verbergen/{refuuid}', methods: ['POST'], defaults: ['refuuid' => null])]
+ public function verbergen($refuuid = null): JsonResponse
 	{
 		$item = $this->getAgendaItemByUuid($refuuid);
 		if (!$item) {
@@ -401,12 +396,12 @@ class AgendaController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return JsonResponse
-	 * @Route("/agenda/feed", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function feed(Request $request): JsonResponse
+  * @param Request $request
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/agenda/feed', methods: ['GET'])]
+ public function feed(Request $request): JsonResponse
 	{
 		$startMoment = date_create_immutable($request->query->get('start'));
 		$eindMoment = date_create_immutable($request->query->get('end'));
@@ -471,12 +466,12 @@ class AgendaController extends AbstractController
 	}
 
 	/**
-	 * @param $uuid
-	 * @return Response
-	 * @Route("/agenda/details/{uuid}", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function details($uuid): Response
+  * @param $uuid
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/agenda/details/{uuid}', methods: ['GET'])]
+ public function details($uuid): Response
 	{
 		$jaar = filter_input(INPUT_GET, 'jaar', FILTER_SANITIZE_NUMBER_INT);
 
