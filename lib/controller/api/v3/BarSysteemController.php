@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\bar\BarLocatie;
 use CsrDelft\service\BarSysteemService;
+use DateTimeImmutable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -231,6 +232,9 @@ class BarSysteemController extends AbstractController
 	public function prakciePilsjes(Request $request)
 	{
 		$vanaf = date_create_immutable($request->query->get('vanaf', 'now'));
+		if ($vanaf === false) {
+			return new Response("Verkeerde formaat voor datum", 400);
+		}
 		$pilsjes = $this->barSysteemService->getPrakCiePilsjes($vanaf);
 		$res = new Response((string)$pilsjes, 200);
 		$res->headers->set('Content-Type', 'text/plain');
