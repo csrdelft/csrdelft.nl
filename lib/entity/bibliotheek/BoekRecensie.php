@@ -47,12 +47,12 @@ class BoekRecensie
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $toegevoegd;
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $bewerkdatum;
 
 	/**

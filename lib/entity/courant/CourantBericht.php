@@ -56,7 +56,7 @@ class CourantBericht
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime', name: 'datumTijd')]
+ #[ORM\Column(type: 'datetime_immutable', name: 'datumTijd')]
  public $datumTijd;
 
 	public function setVolgorde()

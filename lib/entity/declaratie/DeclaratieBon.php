@@ -33,7 +33,7 @@ class DeclaratieBon
  #[ORM\ManyToOne(targetEntity: Profiel::class)]
  private $maker;
 
-	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[ORM\Column(type: 'datetime_immutable', nullable: true)]
  private $datum;
 
 	#[ORM\OneToMany(targetEntity: DeclaratieRegel::class, mappedBy: 'bon')]

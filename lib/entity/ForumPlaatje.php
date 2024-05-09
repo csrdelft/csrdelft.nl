@@ -33,7 +33,7 @@ class ForumPlaatje
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $datum_toegevoegd;
 	/**
   * @var string

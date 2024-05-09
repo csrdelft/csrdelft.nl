@@ -58,19 +58,19 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
   * DateTime last change
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime', nullable: true)]
+ #[ORM\Column(type: 'datetime_immutable', nullable: true)]
  public $pass_since;
 	/**
   * DateTime last successful login
   * @var DateTimeImmutable|null
   */
- #[ORM\Column(type: 'datetime', nullable: true)]
+ #[ORM\Column(type: 'datetime_immutable', nullable: true)]
  public $last_login_success;
 	/**
   * DateTime last login attempt
   * @var DateTimeImmutable|null
   */
- #[ORM\Column(type: 'datetime', nullable: true)]
+ #[ORM\Column(type: 'datetime_immutable', nullable: true)]
  public $last_login_attempt;
 	/**
   * Amount of failed login attempts
@@ -100,7 +100,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
   * DateTime last change
   * @var DateTimeImmutable|null
   */
- #[ORM\Column(type: 'datetime', nullable: true)]
+ #[ORM\Column(type: 'datetime_immutable', nullable: true)]
  public $private_token_since;
 
 	/**

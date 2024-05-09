@@ -39,7 +39,7 @@ class FotoTag implements JsonSerializable
   * Gemaakt op datum en tijd
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $wanneer;
 	/**
   * X-coord

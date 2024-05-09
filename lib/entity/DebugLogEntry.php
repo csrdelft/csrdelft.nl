@@ -44,7 +44,7 @@ class DebugLogEntry
   * DateTime
   * @var string
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $moment;
 	/**
   * Lidnummer

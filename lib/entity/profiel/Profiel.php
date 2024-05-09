@@ -120,12 +120,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'date')]
+ #[ORM\Column(type: 'date_immutable')]
  public $gebdatum;
 	/**
   * @var DateTimeImmutable|null
   */
- #[ORM\Column(type: 'date', nullable: true)]
+ #[ORM\Column(type: 'date_immutable', nullable: true)]
  public $sterfdatum;
 	/**
   * @var integer
@@ -250,7 +250,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	/**
   * @var DateTimeImmutable|null
   */
- #[ORM\Column(type: 'date', nullable: true)]
+ #[ORM\Column(type: 'date_immutable', nullable: true)]
  public $lidafdatum;
 	/**
   * @var string

@@ -60,12 +60,12 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
   * DateTime
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $remember_since;
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $last_used;
 	/**
   * Device name

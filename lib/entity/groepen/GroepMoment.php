@@ -17,14 +17,14 @@ trait GroepMoment
   * Datum en tijd begin
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $beginMoment;
 	/**
   * Datum en tijd einde
   * @var DateTimeImmutable|null
   */
- #[ORM\Column(type: 'datetime', nullable: true)]
+ #[ORM\Column(type: 'datetime_immutable', nullable: true)]
  #[Serializer\Groups(['datatable', 'log', 'vue'])]
  public $eindMoment;
 

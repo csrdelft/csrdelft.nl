@@ -57,13 +57,13 @@ class ForumPost
   * Datum en tijd van aanmaken
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $datum_tijd;
 	/**
   * Datum en tijd van laatste bewerking
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $laatst_gewijzigd;
 	/**
   * Bewerking logboek

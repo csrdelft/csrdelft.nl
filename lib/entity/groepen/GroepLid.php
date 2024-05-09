@@ -79,7 +79,7 @@ class GroepLid
   * Datum en tijd van aanmelden
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  #[Serializer\Groups('datatable')]
  public $lidSinds;
 	/**

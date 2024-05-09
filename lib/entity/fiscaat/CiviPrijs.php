@@ -30,12 +30,12 @@ class CiviPrijs
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
+ #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
  public $van;
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime', nullable: true)]
+ #[ORM\Column(type: 'datetime_immutable', nullable: true)]
  public $tot;
 	/**
   * @var integer

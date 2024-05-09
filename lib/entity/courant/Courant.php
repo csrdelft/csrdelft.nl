@@ -25,7 +25,7 @@ class Courant
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime', name: 'verzendMoment')]
+ #[ORM\Column(type: 'datetime_immutable', name: 'verzendMoment')]
  public $verzendMoment;
 	/**
   * @var string

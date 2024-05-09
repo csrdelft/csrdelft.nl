@@ -45,7 +45,7 @@ class ForumDraadReageren
   * Datum en tijd van start reageren
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $datum_tijd;
 	/**
   * Opgeslagen concept bericht

@@ -31,10 +31,10 @@ class Deelnemer
 	#[ORM\Column(type: 'integer')]
  private $aantal;
 
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
  private $aangemeld;
 
-	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[ORM\Column(type: 'datetime_immutable', nullable: true)]
  private $aanwezig = null;
 
 	public function __construct(

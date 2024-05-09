@@ -29,10 +29,10 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
  #[ORM\ManyToOne(targetEntity: Reeks::class, inversedBy: 'activiteiten')]
  private $reeks;
 
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
  private $start;
 
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
  private $einde;
 
 	#[ORM\Column(type: 'boolean')]

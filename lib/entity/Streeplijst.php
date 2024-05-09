@@ -32,7 +32,7 @@ class Streeplijst
 	/**
   * @var DateTime
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $aanmaakdatum;
 
 	/**

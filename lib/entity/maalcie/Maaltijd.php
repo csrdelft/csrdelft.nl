@@ -98,7 +98,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'date')]
+ #[ORM\Column(type: 'date_immutable')]
  public $datum;
 	/**
   * @var DateTimeImmutable
@@ -114,7 +114,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	/**
   * @var DateTimeInterface|null
   */
- #[ORM\Column(type: 'datetime', nullable: true)]
+ #[ORM\Column(type: 'datetime_immutable', nullable: true)]
  #[Serializer\Groups('datatable')]
  public $laatst_gesloten;
 	/**

@@ -49,13 +49,13 @@ class AgendaItem implements Agendeerbaar
   * DateTime begin
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $begin_moment;
 	/**
   * DateTime eind
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $eind_moment;
 	/**
   * Permissie voor tonen

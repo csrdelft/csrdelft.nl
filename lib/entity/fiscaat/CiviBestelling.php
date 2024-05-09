@@ -52,7 +52,7 @@ class CiviBestelling
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
+ #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
  #[Serializer\Groups(['datatable', 'bar'])]
  public $moment;
 	/**

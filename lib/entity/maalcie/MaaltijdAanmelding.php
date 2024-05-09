@@ -70,7 +70,7 @@ class MaaltijdAanmelding
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $laatst_gewijzigd;
 	/**
   * @var Maaltijd

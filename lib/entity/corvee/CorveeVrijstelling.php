@@ -32,12 +32,12 @@ class CorveeVrijstelling
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $begin_datum;
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $eind_datum;
 	// TODO: Check percentage tussen 0 en 100 in controller
  /**

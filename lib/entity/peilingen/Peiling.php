@@ -88,7 +88,7 @@ class Peiling implements DataTableEntry
 	/**
   * @var DateTimeImmutable|null
   */
- #[ORM\Column(type: 'datetime', nullable: true)]
+ #[ORM\Column(type: 'datetime_immutable', nullable: true)]
  #[Serializer\Groups(['datatable', 'vue'])]
  public $sluitingsdatum;
 

@@ -74,13 +74,13 @@ class ForumDraad
   * Datum en tijd van aanmaken
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  public $datum_tijd;
 	/**
   * Datum en tijd van laatst geplaatste of gewijzigde post
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime', nullable: true)]
+ #[ORM\Column(type: 'datetime_immutable', nullable: true)]
  public $laatst_gewijzigd;
 	/**
   * Id van de laatst geplaatste of gewijzigde post

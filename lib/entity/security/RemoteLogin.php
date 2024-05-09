@@ -26,7 +26,7 @@ class RemoteLogin
 	/**
   * @var DateTimeImmutable
   */
- #[ORM\Column(type: 'datetime')]
+ #[ORM\Column(type: 'datetime_immutable')]
  #[Serializer\Groups('json')]
  public $expires;
 	/**

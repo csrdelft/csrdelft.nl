@@ -40,7 +40,20 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 #[ORM\Entity]
 #[ORM\InheritanceType('SINGLE_TABLE')]
 #[ORM\DiscriminatorColumn(name: 'groep_type', type: 'string')]
-#[ORM\DiscriminatorMap(['groep' => 'Groep', 'activiteit' => 'Activiteit', 'bestuur' => 'Bestuur', 'commissie' => 'Commissie', 'ketzer' => 'Ketzer', 'kring' => 'Kring', 'lichting' => 'Lichting', 'ondervereniging' => 'Ondervereniging', 'rechtengroep' => 'RechtenGroep', 'verticale' => 'Verticale', 'werkgroep' => 'Werkgroep', 'woonoord' => 'Woonoord'])]
+#[ORM\DiscriminatorMap([
+	'groep' => 'Groep',
+	'activiteit' => 'Activiteit',
+	'bestuur' => 'Bestuur',
+	'commissie' => 'Commissie',
+ 	'ketzer' => 'Ketzer',
+	'kring' => 'Kring',
+	'lichting' => 'Lichting',
+	'ondervereniging' => 'Ondervereniging',
+	'rechtengroep' => 'RechtenGroep',
+	'verticale' => 'Verticale',
+	'werkgroep' => 'Werkgroep',
+	'woonoord' => 'Woonoord'
+])]
 class Groep implements DataTableEntry, DisplayEntity
 {
 	/**
