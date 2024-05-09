@@ -16,12 +16,8 @@ use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
-<<<<<<< HEAD
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
-=======
 use Symfony\Bundle\SecurityBundle\Security;
->>>>>>> 27f8135f1 (Fix Security class import)
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**

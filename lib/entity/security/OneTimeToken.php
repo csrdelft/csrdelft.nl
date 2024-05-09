@@ -47,7 +47,7 @@ class OneTimeToken
 	 * Moment of expiration
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public $expire;
 	/**
 	 * Is verfied?

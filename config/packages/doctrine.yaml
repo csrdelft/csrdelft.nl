@@ -14,9 +14,6 @@ doctrine:
 
     url: '%env(resolve:DATABASE_URL)%'
     types:
-      date: CsrDelft\common\Doctrine\Type\DateImmutableType
-      datetime: CsrDelft\common\Doctrine\Type\DateTimeImmutableType
-      datetimetz: CsrDelft\common\Doctrine\Type\DateTimeTzImmutableType
       time: Doctrine\DBAL\Types\TimeImmutableType
       changelog: CsrDelft\common\Doctrine\Type\ChangeLogType
       groepkeuze: CsrDelft\common\Doctrine\Type\GroepKeuzeType

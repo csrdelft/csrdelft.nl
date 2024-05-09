@@ -121,7 +121,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @var DateTimeInterface|null
 	 */
 	#[Serializer\Groups('datatable')]
-	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[ORM\Column(type: 'datetime_immutable', nullable: true)]
 	public $laatst_gesloten;
 	/**
 	 * @var bool

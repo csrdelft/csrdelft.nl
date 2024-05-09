@@ -60,7 +60,7 @@ class MaaltijdAbonnement
 	/**
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public $wanneer_ingeschakeld; # datetime
 	/**
 	 * @var MaaltijdRepetitie

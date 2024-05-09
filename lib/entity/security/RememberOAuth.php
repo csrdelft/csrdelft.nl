@@ -59,13 +59,13 @@ class RememberOAuth implements DataTableEntry
 	 * @var DateTimeImmutable
 	 */
 	#[Serializer\Groups('datatable')]
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public $rememberSince;
 	/**
 	 * @var DateTimeImmutable
 	 */
 	#[Serializer\Groups('datatable')]
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public $lastUsed;
 	/**
 	 * OAuth2 scopes voor deze sessie.

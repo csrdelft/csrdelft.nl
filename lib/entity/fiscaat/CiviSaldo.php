@@ -53,7 +53,7 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	 * @var \DateTimeImmutable
 	 */
 	#[Serializer\Groups(['log', 'datatable'])]
-	#[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
+	#[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
 	public $laatst_veranderd;
 	/**
 	 * @var bool

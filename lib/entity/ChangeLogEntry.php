@@ -29,7 +29,7 @@ class ChangeLogEntry
 	 * @var DateTimeImmutable
 	 */
 	#[Serializer\Groups('datatable')]
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public $moment;
 	/**
 	 * The thing that changed

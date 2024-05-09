@@ -39,9 +39,9 @@ class AgendaItem implements Agendeerbaar
 	public string $titel;
 	#[ORM\Column(type: 'text', nullable: true)]
 	public ?string $beschrijving;
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public DateTimeImmutable $begin_moment;
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public DateTimeImmutable $eind_moment;
 	#[ORM\Column(type: 'string')]
 	public string $rechten_bekijken;

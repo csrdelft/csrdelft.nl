@@ -31,9 +31,9 @@ class Streeplijst
 	public $maker;
 
 	/**
-	 * @var DateTime
+	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public $aanmaakdatum;
 
 	/**

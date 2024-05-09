@@ -41,7 +41,7 @@ class CmsPagina
 	 * DateTime
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'datetime', name: 'laatst_gewijzigd')]
+	#[ORM\Column(type: 'datetime_immutable', name: 'laatst_gewijzigd')]
 	public $laatstGewijzigd;
 	/**
 	 * Permissie voor tonen
