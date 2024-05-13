@@ -119,17 +119,17 @@ class Icon
 		if (strpos($icon, 'fab fa-') !== false) {
 			return sprintf(
 				'<i class="%s %s %s" title="%s" aria-hidden="true"></i>',
-				htmlspecialchars($icon),
-				htmlspecialchars($hover),
-				htmlspecialchars($class),
+				htmlspecialchars($icon ?? ''),
+				htmlspecialchars($hover ?? ''),
+				htmlspecialchars($class ?? ''),
 				$titleSafe
 			);
 		} else {
 			return sprintf(
 				'<i class="fas fa-%s %s %s" title="%s" aria-hidden="true"></i>',
-				htmlspecialchars($icon),
-				htmlspecialchars($hover),
-				htmlspecialchars($class),
+				htmlspecialchars($icon ?? ''),
+				htmlspecialchars($hover ?? ''),
+				htmlspecialchars($class ?? ''),
 				$titleSafe
 			);
 		}
