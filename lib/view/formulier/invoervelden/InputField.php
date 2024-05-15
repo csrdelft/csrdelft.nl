@@ -366,11 +366,11 @@ abstract class InputField implements FormElement, Validator
 			case 'id':
 				return 'id="' . $this->getId() . '"';
 			case 'class':
-				return 'class="' . implode(' ', $this->getCssClasses()) . '"';
+				return 'class="' . implode(' ', $this->getCssClasses() ?? []) . '"';
 			case 'value':
-				return 'value="' . htmlspecialchars($this->value) . '"';
+				return 'value="' . htmlspecialchars($this->value ?? '') . '"';
 			case 'origvalue':
-				return 'origvalue="' . htmlspecialchars($this->origvalue) . '"';
+				return 'origvalue="' . htmlspecialchars($this->origvalue ?? '') . '"';
 			case 'name':
 				return 'name="' . $this->name . '"';
 			case 'type':

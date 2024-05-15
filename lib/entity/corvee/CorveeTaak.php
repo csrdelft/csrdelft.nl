@@ -132,6 +132,9 @@ class CorveeTaak implements Agendeerbaar
 
 	public function getLaatstGemaildDate()
 	{
+		if ($this->wanneer_gemaild === null) {
+			return null;
+		}
 		$pos = strpos($this->wanneer_gemaild, '&#013;');
 		if ($pos === false) {
 			return null;
@@ -146,6 +149,9 @@ class CorveeTaak implements Agendeerbaar
 	 */
 	public function getAantalKeerGemaild()
 	{
+		if ($this->wanneer_gemaild === null) {
+			return 0;
+		}
 		return substr_count($this->wanneer_gemaild, '&#013;');
 	}
 
