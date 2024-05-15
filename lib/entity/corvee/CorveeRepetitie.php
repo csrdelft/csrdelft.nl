@@ -95,9 +95,18 @@ class CorveeRepetitie implements DisplayEntity
 	 */
 	public $corveeFunctie;
 
+	/**
+	* @var array<int, string>
+	*/
+	private static $weekDagen = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
+
+	/**
+	* @return string
+	*/
 	public function getDagVanDeWeekText()
 	{
-		return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
+
+		return $this::$weekDagen[$this->dag_vd_week];
 	}
 
 	public function getPeriodeInDagenText()

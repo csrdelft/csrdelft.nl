@@ -68,9 +68,12 @@ class LoginService
 	 */
 	public static function mag($permission)
 	{
-		return ContainerFacade::getContainer()
-			->get('security')
-			->isGranted($permission);
+		return ContainerFacade::getContainer()->get(LoginService::class)->_mag($permission);
+	}
+
+	private function _mag($permission)
+	{
+		return $this->security->isGranted($permission);
 	}
 
 	/**

@@ -71,7 +71,7 @@ final class DateUtil
 	 */
 	public static function dateFormatIntl(DateTimeInterface $date, $format)
 	{
-		$fmt = new IntlDateFormatter('nl', null, null);
+		$fmt = new IntlDateFormatter('nl', IntlDateFormatter::FULL, IntlDateFormatter::FULL);
 		$fmt->setPattern($format);
 
 		return $fmt->format($date);
