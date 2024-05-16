@@ -44,8 +44,8 @@ class Lichting extends Groep
 		) {
 			/** @var GroepLid $lid */
 			$lid = $model->nieuw($this, $profiel->uid);
-			$lid->door_uid = null;
-			$lid->door_profiel = null;
+			$lid->doorUid = null;
+			$lid->doorProfiel = null;
 			$lid->lidSinds = date_create_immutable(
 				$profiel->lidjaar . '-09-01 00:00:00'
 			);

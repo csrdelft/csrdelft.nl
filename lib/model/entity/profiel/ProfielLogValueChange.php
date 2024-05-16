@@ -35,9 +35,9 @@ class ProfielLogValueChange extends AbstractProfielLogValueChangeEntry
 	public function toHtml()
 	{
 		return "($this->field) " .
-			htmlspecialchars($this->oldValue) .
+			htmlspecialchars($this->oldValue ?? '') .
 			' => ' .
-			htmlspecialchars($this->newValue);
+			htmlspecialchars($this->newValue ?? '');
 	}
 
 	public function censureer()

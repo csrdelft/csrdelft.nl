@@ -76,11 +76,11 @@ class DateTimeTwigExtension extends AbstractExtension
 		$datetime = $datetime->getTimestamp();
 
 		if (date('d-m', $datetime) === date('d-m')) {
-			return strftime('%H:%M', $datetime);
-		} elseif (strftime('%U', $datetime) === strftime('%U')) {
-			return strftime('%a&nbsp;%d', $datetime);
+			return date('H:i', $datetime);
+		} elseif (date('N', $datetime) === date('N')) {
+			return date('D d', $datetime);
 		} else {
-			return strftime('%d-%m', $datetime);
+			return date('d-m', $datetime);
 		}
 	}
 

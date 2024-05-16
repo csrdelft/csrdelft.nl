@@ -104,9 +104,13 @@ class MaaltijdRepetitie implements DisplayEntity
 		return $this->product->getPrijsInt();
 	}
 
+	/**
+	* @return string
+	*/
 	public function getDagVanDeWeekText()
 	{
-		return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
+		$weekDagen = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
+		return $weekDagen[$this->dag_vd_week];
 	}
 
 	public function getPeriodeInDagenText()
