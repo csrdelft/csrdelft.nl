@@ -187,7 +187,7 @@ abstract class InputField implements FormElement, Validator
 			ArrayUtil::in_array_i($this->value, $this->blacklist)
 		) {
 			$this->error =
-				'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
+				'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value ?? '');
 		}
 		// als whitelist is gezet dan controleren
 		if (
@@ -195,7 +195,7 @@ abstract class InputField implements FormElement, Validator
 			!ArrayUtil::in_array_i($this->value, $this->whitelist)
 		) {
 			$this->error =
-				'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
+				'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value ?? '');
 		}
 		return $this->error === '';
 	}
@@ -222,7 +222,7 @@ abstract class InputField implements FormElement, Validator
 		}
 		if (!PathUtil::valid_filename($filename)) {
 			throw new CsrGebruikerException(
-				'Ongeldige bestandsnaam: ' . htmlspecialchars($filename)
+				'Ongeldige bestandsnaam: ' . htmlspecialchars($filename ?? '')
 			);
 		}
 		if (!file_exists($directory)) {
@@ -230,12 +230,12 @@ abstract class InputField implements FormElement, Validator
 		}
 		if (false === @chmod($directory, 0755)) {
 			throw new CsrException(
-				'Geen eigenaar van map: ' . htmlspecialchars($directory)
+				'Geen eigenaar van map: ' . htmlspecialchars($directory ?? '')
 			);
 		}
 		if (!is_writable($directory)) {
 			throw new CsrException(
-				'Doelmap is niet beschrijfbaar: ' . htmlspecialchars($directory)
+				'Doelmap is niet beschrijfbaar: ' . htmlspecialchars($directory ?? '')
 			);
 		}
 		if (file_exists(PathUtil::join_paths($directory, $filename))) {
@@ -243,13 +243,13 @@ abstract class InputField implements FormElement, Validator
 				if (!unlink(PathUtil::join_paths($directory, $filename))) {
 					throw new CsrException(
 						'Overschrijven mislukt: ' .
-							htmlspecialchars(PathUtil::join_paths($directory, $filename))
+							htmlspecialchars(PathUtil::join_paths($directory, $filename) ?? '')
 					);
 				}
 			} elseif (!$this instanceof BestandBehouden) {
 				throw new CsrGebruikerException(
 					'Bestandsnaam al in gebruik: ' .
-						htmlspecialchars(PathUtil::join_paths($directory, $filename))
+						htmlspecialchars(PathUtil::join_paths($directory, $filename) ?? '')
 				);
 			}
 		}
