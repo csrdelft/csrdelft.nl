@@ -145,7 +145,7 @@ class ZoekController extends AbstractController
 
 		$result = [];
 
-		foreach ($response['query']['search'] as $item) {
+		foreach ($response['query']['search'] ?? [] as $item) {
 			if ($item['ns'] !== 0) {
 				// Alleen NS_MAIN
 				continue;
