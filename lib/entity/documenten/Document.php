@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\documenten;
 
+use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
@@ -13,76 +14,75 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Table("document", indexes={
- *   @ORM\Index(name="Zoeken", columns={"naam", "filename"}, flags={"fulltext"}),
- *   @ORM\Index(name="toegevoegd", columns={"toegevoegd"})
- * })
- * @ORM\Entity(repositoryClass="CsrDelft\repository\documenten\DocumentRepository")
  */
+#[ORM\Table('document')]
+#[ORM\Index(name: 'Zoeken', columns: ['naam', 'filename'], flags: ['fulltext'])]
+#[ORM\Index(name: 'toegevoegd', columns: ['toegevoegd'])]
+#[ORM\Entity(repositoryClass: DocumentRepository::class)]
 class Document extends Bestand
 {
 	/**
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="integer")
-	 * @var int
-	 */
-	public $id;
+  * @var int
+  */
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ #[ORM\Column(type: 'integer')]
+ public $id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $naam;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $naam;
 	/**
-	 * @var DocumentCategorie
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\documenten\DocumentCategorie", inversedBy="documenten")
-	 */
-	public $categorie;
+  * @var DocumentCategorie
+  */
+ #[ORM\ManyToOne(targetEntity: DocumentCategorie::class, inversedBy: 'documenten')]
+ public $categorie;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $categorie_id;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $categorie_id;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $toegevoegd;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime_immutable')]
+ public $toegevoegd;
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 */
-	public $eigenaar;
+  * @var string
+  */
+ #[ORM\Column(type: 'uid')]
+ public $eigenaar;
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="eigenaar", referencedColumnName="uid")
-	 */
-	public $eigenaar_profiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'eigenaar', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
+ public $eigenaar_profiel;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $leesrechten = P_LOGGED_IN;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $leesrechten = P_LOGGED_IN;
 
 	/**
-	 * Bestandsnaam
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $filename;
+  * Bestandsnaam
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $filename;
 	/**
-	 * Bestandsgrootte in bytes
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $filesize;
+  * Bestandsgrootte in bytes
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $filesize;
 	/**
-	 * Mime-type van het bestand
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $mimetype;
+  * Mime-type van het bestand
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $mimetype;
 	/**
 	 * Locatie van bestand
 	 * @var string
@@ -94,13 +94,13 @@ class Document extends Bestand
 	 *
 	 * @return bool
 	 */
-	public function exists()
+	public function exists(): bool
 	{
 		return @is_readable($this->directory . '/' . $this->filename) and
 			is_file($this->directory . '/' . $this->filename);
 	}
 
-	public function hasFile()
+	public function hasFile(): bool
 	{
 		if (!$this->magBekijken()) {
 			return false;
@@ -108,18 +108,18 @@ class Document extends Bestand
 		return $this->filename != '' and file_exists($this->getFullPath());
 	}
 
-	public function isEigenaar()
+	public function isEigenaar(): bool
 	{
 		return LoginService::getUid() === $this->eigenaar;
 	}
 
-	public function magBekijken()
+	public function magBekijken(): bool
 	{
 		return LoginService::mag($this->leesrechten) &&
 			LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function magBewerken()
+	public function magBewerken(): bool
 	{
 		return $this->isEigenaar() or LoginService::mag(P_DOCS_MOD);
 	}
@@ -132,7 +132,7 @@ class Document extends Bestand
 	/**
 	 * @return string file name on disk
 	 */
-	public function getFullFileName()
+	public function getFullFileName(): string
 	{
 		return $this->id . '_' . $this->filename;
 	}
@@ -140,17 +140,17 @@ class Document extends Bestand
 	/**
 	 * @return string location on disk
 	 */
-	public function getPath()
+	public function getPath(): string
 	{
 		return DATA_PATH . 'documenten/';
 	}
 
-	public function getFullPath()
+	public function getFullPath(): string
 	{
 		return $this->getPath() . $this->getFullFileName();
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/documenten/bekijken/' .
 			$this->id .
@@ -158,7 +158,7 @@ class Document extends Bestand
 			rawurlencode($this->filename);
 	}
 
-	public function getDownloadUrl()
+	public function getDownloadUrl(): string
 	{
 		return '/documenten/download/' .
 			$this->id .
@@ -166,12 +166,12 @@ class Document extends Bestand
 			rawurlencode($this->filename);
 	}
 
-	public function getMimetypeIcon()
+	public function getMimetypeIcon(): string
 	{
 		return Icon::getTag('mime-' . $this->getFriendlyMimetype());
 	}
 
-	public function getFriendlyMimetype()
+	public function getFriendlyMimetype(): string
 	{
 		$mimetypeMap = [
 			'application/pdf' => 'pdf',

@@ -6,12 +6,12 @@ use CsrDelft\entity\groepen\enum\CommissieSoort;
 
 class CommissieSoortType extends EnumType
 {
-	public function getEnumClass()
+	public function getEnumClass(): string
 	{
 		return CommissieSoort::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumCommissieSoort';
 	}

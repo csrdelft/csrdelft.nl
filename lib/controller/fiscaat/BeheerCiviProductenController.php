@@ -55,12 +55,12 @@ class BeheerCiviProductenController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return CiviProductSuggestiesResponse
-	 * @Route("/fiscaat/producten/suggesties", methods={"GET"})
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function suggesties(Request $request)
+  * @param Request $request
+  * @return CiviProductSuggestiesResponse
+  * @Auth(P_FISCAAT_READ)
+  */
+ #[Route(path: '/fiscaat/producten/suggesties', methods: ['GET'])]
+ public function suggesties(Request $request): CiviProductSuggestiesResponse
 	{
 		return new CiviProductSuggestiesResponse(
 			$this->civiProductRepository->getSuggesties(
@@ -70,11 +70,11 @@ class BeheerCiviProductenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/fiscaat/producten", methods={"GET"})
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function overzicht()
+  * @return Response
+  * @Auth(P_FISCAAT_READ)
+  */
+ #[Route(path: '/fiscaat/producten', methods: ['GET'])]
+ public function overzicht(): Response
 	{
 		return $this->render('fiscaat/pagina.html.twig', [
 			'titel' => 'Producten beheer',
@@ -83,11 +83,11 @@ class BeheerCiviProductenController extends AbstractController
 	}
 
 	/**
-	 * @return CiviProductForm
-	 * @Route("/fiscaat/producten/bewerken", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function bewerken()
+  * @return CiviProductForm
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/producten/bewerken', methods: ['POST'])]
+ public function bewerken(): CiviProductForm
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -102,15 +102,15 @@ class BeheerCiviProductenController extends AbstractController
 	}
 
 	/**
-	 * @return GenericDataTableResponse
-	 * @Route("/fiscaat/producten/verwijderen", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function verwijderen()
+  * @return GenericDataTableResponse
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/producten/verwijderen', methods: ['POST'])]
+ public function verwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 
-		$removed = $this->em->transactional(function () use ($selection) {
+		$removed = $this->em->transactional(function () use ($selection): array {
 			$removed = [];
 			foreach ($selection as $uuid) {
 				/** @var CiviProduct $product */
@@ -150,12 +150,12 @@ class BeheerCiviProductenController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return GenericDataTableResponse|CiviProductForm
-	 * @Route("/fiscaat/producten/opslaan", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function opslaan(Request $request)
+  * @param Request $request
+  * @return GenericDataTableResponse|CiviProductForm
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/producten/opslaan', methods: ['POST'])]
+ public function opslaan(Request $request)
 	{
 		$id = $request->request->getInt('id');
 
@@ -181,11 +181,11 @@ class BeheerCiviProductenController extends AbstractController
 	}
 
 	/**
-	 * @return GenericDataTableResponse
-	 * @Route("/fiscaat/producten/{cie}", defaults={"cie": null}, methods={"POST"})
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function lijst($cie)
+  * @return GenericDataTableResponse
+  * @Auth(P_FISCAAT_READ)
+  */
+ #[Route(path: '/fiscaat/producten/{cie}', defaults: ['cie' => null], methods: ['POST'])]
+ public function lijst($cie): GenericDataTableResponse
 	{
 		if ($cie) {
 			return $this->tableData($this->civiProductRepository->findByCie($cie));

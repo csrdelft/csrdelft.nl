@@ -51,7 +51,7 @@ class LidRegistratieForm extends ModalForm
 		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;

@@ -17,7 +17,7 @@ class UrlDownloader
 	 * Is er uberhaupt een methode beschikbaar
 	 * @return bool
 	 */
-	public function isAvailable()
+	public function isAvailable(): bool
 	{
 		return $this->file_get_contents_available() or
 			function_exists('curl_init') or
@@ -44,7 +44,7 @@ class UrlDownloader
 	 *
 	 * @return bool
 	 */
-	protected function file_get_contents_available()
+	protected function file_get_contents_available(): bool
 	{
 		return in_array(ini_get('allow_url_fopen'), ['On', 'Yes', 1]);
 	}
@@ -54,7 +54,7 @@ class UrlDownloader
 	 * @param $url
 	 * @return mixed
 	 */
-	protected function curl_file_get_contents($url)
+	protected function curl_file_get_contents($url): bool|string
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);

@@ -2,10 +2,12 @@
 
 namespace CsrDelft\common\Serializer\Normalizer;
 
+use ArrayObject;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
@@ -13,26 +15,27 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
  *
  * @package CsrDelft\common
  */
-class DataTableEntryNormalizer implements ContextAwareNormalizerInterface
+class DataTableEntryNormalizer implements NormalizerInterface
 {
 	/**
 	 * @var EntityManagerInterface
 	 */
 	private $entityManager;
 	/**
-	 * @var ObjectNormalizer
+	 * @var NormalizerInterface
 	 */
 	private $normalizer;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
-		ObjectNormalizer $normalizer
+		#[Autowire(service: 'serializer.normalizer.object')]
+		NormalizerInterface $normalizer
 	) {
 		$this->entityManager = $entityManager;
 		$this->normalizer = $normalizer;
 	}
 
-	public function normalize($topic, string $format = null, array $context = [])
+	public function normalize($topic, string $format = null, array $context = []): string|int|float|bool|ArrayObject|array|null
 	{
 		$metadata = $this->entityManager->getClassMetadata(get_class($topic));
 
@@ -53,7 +56,12 @@ class DataTableEntryNormalizer implements ContextAwareNormalizerInterface
 		$data,
 		string $format = null,
 		array $context = []
-	) {
+	): bool {
 		return $data instanceof DataTableEntry;
+	}
+
+	public function getSupportedTypes(?string $format): array
+	{
+		return $this->normalizer->getSupportedTypes($format);
 	}
 }

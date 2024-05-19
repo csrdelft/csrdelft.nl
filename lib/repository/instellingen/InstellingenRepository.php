@@ -99,7 +99,7 @@ class InstellingenRepository extends AbstractRepository
 	 *
 	 * @return Instelling
 	 */
-	protected function newInstelling($module, $id)
+	protected function newInstelling($module, $id): Instelling
 	{
 		$instelling = new Instelling();
 		$instelling->module = $module;
@@ -142,13 +142,13 @@ class InstellingenRepository extends AbstractRepository
 			$instelling = new Instelling();
 			$instelling->module = $module;
 			$instelling->instelling = $id;
-			$this->_em->persist($instelling);
+			$this->getEntityManager()->persist($instelling);
 		}
 
 		$instelling->waarde = $waarde;
 
 		$this->cache->delete($this->getCacheKey($module, $id));
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 		return $instelling;
 	}
 

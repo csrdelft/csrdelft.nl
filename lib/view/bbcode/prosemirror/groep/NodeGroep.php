@@ -2,18 +2,19 @@
 
 namespace CsrDelft\view\bbcode\prosemirror\groep;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use CsrDelft\view\bbcode\tag\groep\BbGroep;
 
 class NodeGroep implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbGroep::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'groep';
 	}
@@ -21,7 +22,7 @@ class NodeGroep implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbGroep) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		return [
@@ -36,7 +37,7 @@ class NodeGroep implements Node
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

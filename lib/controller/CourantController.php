@@ -48,12 +48,12 @@ class CourantController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/courant/archief", methods={"GET"})
-	 * @Auth(P_LEDEN_READ)
-	 * @throws Exception
-	 */
-	public function archief(): Response
+  * @return Response
+  * @Auth(P_LEDEN_READ)
+  * @throws Exception
+  */
+ #[Route(path: '/courant/archief', methods: ['GET'])]
+ public function archief(): Response
 	{
 		return $this->render('courant/archief.html.twig', [
 			'couranten' => ArrayUtil::group_by(
@@ -64,22 +64,22 @@ class CourantController extends AbstractController
 	}
 
 	/**
-	 * @param Courant $courant
-	 * @return Response
-	 * @Route("/courant/bekijken/{id}", methods={"GET"})
-	 * @Auth(P_LEDEN_READ)
-	 */
-	public function bekijken(Courant $courant): Response
+  * @param Courant $courant
+  * @return Response
+  * @Auth(P_LEDEN_READ)
+  */
+ #[Route(path: '/courant/bekijken/{id}', methods: ['GET'])]
+ public function bekijken(Courant $courant): Response
 	{
 		return new Response($courant->inhoud);
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/courant/voorbeeld", methods={"GET"})
-	 * @Auth(P_LEDEN_READ)
-	 */
-	public function voorbeeld(): Response
+  * @return Response
+  * @Auth(P_LEDEN_READ)
+  */
+ #[Route(path: '/courant/voorbeeld', methods: ['GET'])]
+ public function voorbeeld(): Response
 	{
 		return $this->render('courant/mail.html.twig', [
 			'berichten' => $this->courantBerichtRepository->findAll(),
@@ -88,12 +88,12 @@ class CourantController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @return Response
-	 * @Route("/courant", methods={"GET", "POST"})
-	 * @Auth(P_MAIL_POST)
-	 */
-	public function toevoegen(Request $request): Response
+  * @param Request $request
+  * @return Response
+  * @Auth(P_MAIL_POST)
+  */
+ #[Route(path: '/courant', methods: ['GET', 'POST'])]
+ public function toevoegen(Request $request): Response
 	{
 		$bericht = new CourantBericht();
 		$bericht->datumTijd = new DateTime();
@@ -125,13 +125,13 @@ class CourantController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param CourantBericht $bericht
-	 * @return Response
-	 * @Route("/courant/bewerken/{id}", methods={"GET", "POST"})
-	 * @Auth(P_MAIL_POST)
-	 */
-	public function bewerken(Request $request, CourantBericht $bericht): Response
+  * @param Request $request
+  * @param CourantBericht $bericht
+  * @return Response
+  * @Auth(P_MAIL_POST)
+  */
+ #[Route(path: '/courant/bewerken/{id}', methods: ['GET', 'POST'])]
+ public function bewerken(Request $request, CourantBericht $bericht): Response
 	{
 		$form = $this->createFormulier(CourantBerichtFormulier::class, $bericht, [
 			'action' => $this->generateUrl('csrdelft_courant_bewerken', [
@@ -155,12 +155,12 @@ class CourantController extends AbstractController
 	}
 
 	/**
-	 * @param CourantBericht $bericht
-	 * @return RedirectResponse
-	 * @Route("/courant/verwijderen/{id}", methods={"POST"})
-	 * @Auth(P_MAIL_POST)
-	 */
-	public function verwijderen(CourantBericht $bericht): RedirectResponse
+  * @param CourantBericht $bericht
+  * @return RedirectResponse
+  * @Auth(P_MAIL_POST)
+  */
+ #[Route(path: '/courant/verwijderen/{id}', methods: ['POST'])]
+ public function verwijderen(CourantBericht $bericht): RedirectResponse
 	{
 		$this->denyAccessUnlessGranted(CourantBerichtVoter::BEHEREN, $bericht);
 
@@ -177,13 +177,13 @@ class CourantController extends AbstractController
 	}
 
 	/**
-	 * @param null $iedereen
-	 * @return PlainView|RedirectResponse
-	 * @throws ConnectionException
-	 * @Route("/courant/verzenden/{iedereen}", methods={"POST"}, defaults={"iedereen": null})
-	 * @Auth(P_MAIL_SEND)
-	 */
-	public function verzenden($iedereen = null)
+  * @param null $iedereen
+  * @return PlainView|RedirectResponse
+  * @throws ConnectionException
+  * @Auth(P_MAIL_SEND)
+  */
+ #[Route(path: '/courant/verzenden/{iedereen}', methods: ['POST'], defaults: ['iedereen' => null])]
+ public function verzenden($iedereen = null)
 	{
 		if (count($this->courantBerichtRepository->findAll()) < 1) {
 			$this->addFlash(

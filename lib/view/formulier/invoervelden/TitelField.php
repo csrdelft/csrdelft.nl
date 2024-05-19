@@ -32,7 +32,7 @@ class TitelField extends TextField
 		$this->nieuw = $nieuw;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;

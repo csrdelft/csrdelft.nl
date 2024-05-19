@@ -35,12 +35,12 @@ class AanmelderController extends AbstractController
 	}
 
 	/**
-	 * @param ReeksRepository $reeksRepository
-	 * @return Response
-	 * @Route("/aanmelder", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function mijnActiviteiten(ReeksRepository $reeksRepository): Response
+  * @param ReeksRepository $reeksRepository
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/aanmelder', methods: ['GET'])]
+ public function mijnActiviteiten(ReeksRepository $reeksRepository): Response
 	{
 		$reeksen = [];
 		foreach ($reeksRepository->findAll() as $reeks) {
@@ -61,12 +61,12 @@ class AanmelderController extends AbstractController
 	}
 
 	/**
-	 * @param Reeks $reeks
-	 * @return Response
-	 * @Route("/aanmelder/{reeks}", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function reeksActiviteiten(Reeks $reeks): Response
+  * @param Reeks $reeks
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/aanmelder/{reeks}', methods: ['GET'])]
+ public function reeksActiviteiten(Reeks $reeks): Response
 	{
 		$alleActiviteiten = $this->activiteitRepository->getKomendeActiviteiten(
 			$reeks
@@ -78,14 +78,14 @@ class AanmelderController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param AanmeldActiviteit $activiteit
-	 * @return Response
-	 * @throws ORMException
-	 * @Route("/aanmelder/aanmelden/{activiteit}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function aanmelden(
+  * @param Request $request
+  * @param AanmeldActiviteit $activiteit
+  * @return Response
+  * @throws ORMException
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/aanmelder/aanmelden/{activiteit}', methods: ['POST'])]
+ public function aanmelden(
 		Request $request,
 		AanmeldActiviteit $activiteit
 	): Response {
@@ -99,12 +99,12 @@ class AanmelderController extends AbstractController
 	}
 
 	/**
-	 * @throws OptimisticLockException
-	 * @throws ORMException
-	 * @Route("/aanmelder/aanmelden/{activiteit}", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function aanmeldenBB(AanmeldActiviteit $activiteit): Response
+  * @throws OptimisticLockException
+  * @throws ORMException
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/aanmelder/aanmelden/{activiteit}', methods: ['GET'])]
+ public function aanmeldenBB(AanmeldActiviteit $activiteit): Response
 	{
 		$this->deelnemerRepository->aanmelden($activiteit, $this->getProfiel(), 1);
 
@@ -114,13 +114,13 @@ class AanmelderController extends AbstractController
 	}
 
 	/**
-	 * @param AanmeldActiviteit $activiteit
-	 * @return Response
-	 * @throws ORMException
-	 * @Route("/aanmelder/afmelden/{activiteit}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function afmelden(AanmeldActiviteit $activiteit): Response
+  * @param AanmeldActiviteit $activiteit
+  * @return Response
+  * @throws ORMException
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/aanmelder/afmelden/{activiteit}', methods: ['POST'])]
+ public function afmelden(AanmeldActiviteit $activiteit): Response
 	{
 		$lid = $this->getProfiel();
 		$this->deelnemerRepository->afmelden($activiteit, $lid);
@@ -131,12 +131,12 @@ class AanmelderController extends AbstractController
 	}
 
 	/**
-	 * @throws OptimisticLockException
-	 * @throws ORMException
-	 * @Route("/aanmelder/afmelden/{activiteit}", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function afmeldenBB(AanmeldActiviteit $activiteit): Response
+  * @throws OptimisticLockException
+  * @throws ORMException
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/aanmelder/afmelden/{activiteit}', methods: ['GET'])]
+ public function afmeldenBB(AanmeldActiviteit $activiteit): Response
 	{
 		$this->deelnemerRepository->afmelden($activiteit, $this->getProfiel());
 
@@ -146,14 +146,14 @@ class AanmelderController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param AanmeldActiviteit $activiteit
-	 * @return Response
-	 * @throws ORMException
-	 * @Route("/aanmelder/gasten/{activiteit}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function gasten(
+  * @param Request $request
+  * @param AanmeldActiviteit $activiteit
+  * @return Response
+  * @throws ORMException
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/aanmelder/gasten/{activiteit}', methods: ['POST'])]
+ public function gasten(
 		Request $request,
 		AanmeldActiviteit $activiteit
 	): Response {

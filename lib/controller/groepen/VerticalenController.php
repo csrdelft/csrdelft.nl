@@ -15,12 +15,12 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class VerticalenController extends AbstractGroepenController
 {
-	public function getGroepType()
+	public function getGroepType(): string
 	{
 		return Verticale::class;
 	}
 
-	public function zoeken(Request $request, $zoekterm = null)
+	public function zoeken(Request $request, $zoekterm = null): JsonResponse
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();

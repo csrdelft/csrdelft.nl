@@ -29,7 +29,7 @@ class DeclaratieBonRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function generate(string $filename, Profiel $profiel)
+	public function generate(string $filename, Profiel $profiel): DeclaratieBon
 	{
 		$bon = new DeclaratieBon();
 		$bon->setBestand($filename);

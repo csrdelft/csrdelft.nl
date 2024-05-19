@@ -10,7 +10,7 @@ class BibliotheekCatalogusDatatableResponse extends DataTableResponse
 	/**
 	 * @param Boek $entity
 	 */
-	public function renderElement($entity)
+	public function renderElement($entity): array
 	{
 		$arr = (array) $entity;
 		$arr['titel_link'] = "<a href='{$entity->getUrl()}'>$entity->titel</a>";

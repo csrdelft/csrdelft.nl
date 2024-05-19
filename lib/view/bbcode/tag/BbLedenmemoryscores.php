@@ -9,7 +9,7 @@ use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

@@ -8,10 +8,12 @@ use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\OneTimeToken;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\service\security\LoginService;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -34,7 +36,7 @@ class OneTimeTokensRepository extends AbstractRepository
 		parent::__construct($registry, OneTimeToken::class);
 	}
 
-	public function hasToken($uid, $url)
+	public function hasToken($uid, $url): bool
 	{
 		return $this->find(['uid' => $uid, 'url' => $url]) != null;
 	}
@@ -52,7 +54,10 @@ class OneTimeTokensRepository extends AbstractRepository
 		$qb->andWhere('t.url = :url');
 		$qb->andWhere('t.expire > CURRENT_DATE()');
 		$qb->andWhere('t.token = :token');
-		$qb->setParameters(['url' => $url, 'token' => hash('sha512', $token)]);
+		$qb->setParameters(new ArrayCollection([
+			new Parameter('url', $url),
+			new Parameter('token', hash('sha512', $token))
+		]));
 		try {
 			$tokenObj = $qb->getQuery()->getSingleResult();
 			return $tokenObj->account;
@@ -70,7 +75,7 @@ class OneTimeTokensRepository extends AbstractRepository
 	 * @param string $url
 	 * @return boolean
 	 */
-	public function isVerified($uid, $url)
+	public function isVerified($uid, $url): bool
 	{
 		$token = $this->find(['uid' => $uid, 'url' => $url]);
 		if ($token) {

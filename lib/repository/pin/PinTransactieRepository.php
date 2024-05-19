@@ -60,7 +60,7 @@ class PinTransactieRepository extends AbstractRepository
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function getKorteBeschrijving($pinTransactie)
+	public function getKorteBeschrijving($pinTransactie): string
 	{
 		return sprintf('€%.2f', $pinTransactie->getBedragInCenten() / 100);
 	}

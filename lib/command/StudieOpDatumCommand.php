@@ -31,7 +31,7 @@ class StudieOpDatumCommand extends Command
 		);
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$helper = $this->getHelper('question');
 
@@ -62,13 +62,13 @@ class StudieOpDatumCommand extends Command
 				$values[$field] = $lid->$field;
 			}
 
-			$logs = array_filter($lid->changelog, function ($a) {
+			$logs = array_filter($lid->changelog, function ($a): bool {
 				return $a instanceof ProfielUpdateLogGroup;
 			});
 			usort($logs, function (
 				ProfielUpdateLogGroup $a,
 				ProfielUpdateLogGroup $b
-			) {
+			): int {
 				if ($a->timestamp == $b->timestamp) {
 					return 0;
 				}

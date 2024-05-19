@@ -21,14 +21,14 @@ class FotosDropzone extends Dropzone
 		);
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return '<ul class="breadcrumb">' .
 			FotoAlbumBreadcrumbs::getBreadcrumbs($this->model, false, true) .
 			'</ul>';
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .=

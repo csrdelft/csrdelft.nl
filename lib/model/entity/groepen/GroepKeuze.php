@@ -17,30 +17,30 @@ class GroepKeuze
 	}
 
 	/**
-	 * @var string
-	 * @Serializer\Groups("vue")
-	 */
-	public $naam;
+  * @var string
+  */
+ #[Serializer\Groups('vue')]
+ public $naam;
 	/**
-	 * @var string
-	 * @Serializer\Groups("vue")
-	 */
-	public $type; // Checks, radios, dropdown, text, slider, number, date
-	/**
-	 * @var string[]
-	 * @Serializer\Groups("vue")
-	 */
-	public $opties; // String, names, name
-	/**
-	 * @var string
-	 * @Serializer\Groups("vue")
-	 */
-	public $default; // String, names, name
-	/**
-	 * @var string
-	 * @Serializer\Groups("vue")
-	 */
-	public $description;
+  * @var string
+  */
+ #[Serializer\Groups('vue')]
+ public $type; // Checks, radios, dropdown, text, slider, number, date
+ /**
+  * @var string[]
+  */
+ #[Serializer\Groups('vue')]
+ public $opties; // String, names, name
+ /**
+  * @var string
+  */
+ #[Serializer\Groups('vue')]
+ public $default; // String, names, name
+ /**
+  * @var string
+  */
+ #[Serializer\Groups('vue')]
+ public $description;
 
 	public function __construct(
 		$naam = null,

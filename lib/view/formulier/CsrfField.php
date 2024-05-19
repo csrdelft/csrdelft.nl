@@ -25,7 +25,7 @@ class CsrfField implements View, FormElement
 		$this->name = $name;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->getHtml();
 	}
@@ -45,12 +45,12 @@ class CsrfField implements View, FormElement
 		return $this->token;
 	}
 
-	public function getType()
+	public function getType(): string
 	{
 		return ReflectionUtil::short_class(static::class);
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		if ($this->token === null) {
 			return '';
@@ -67,7 +67,7 @@ class CsrfField implements View, FormElement
 			'"  />';
 	}
 
-	public function getJavascript()
+	public function getJavascript(): string
 	{
 		return '';
 	}

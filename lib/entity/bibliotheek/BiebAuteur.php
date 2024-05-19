@@ -7,21 +7,21 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class BiebAuteur
  * @package CsrDelft\entity\bibliotheek
- * @ORM\Entity()
- * @ORM\Table("biebauteur")
  */
+#[ORM\Table('biebauteur')]
+#[ORM\Entity]
 class BiebAuteur
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $id;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string", length=100, options={"default"=""})
-	 */
-	public $auteur;
+  * @var string
+  */
+ #[ORM\Column(type: 'string', length: 100, options: ['default' => ''])]
+ public $auteur;
 }

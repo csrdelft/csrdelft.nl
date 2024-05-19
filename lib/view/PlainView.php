@@ -18,17 +18,17 @@ class PlainView implements View, ToResponse
 		$this->body = $body;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->body;
 	}
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return '';
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return '';
 	}

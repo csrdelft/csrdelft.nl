@@ -5,7 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbTag;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 
 class BbNovietVanDeDag extends BbTag
@@ -70,7 +70,7 @@ class BbNovietVanDeDag extends BbTag
 				$volgorde[] = @mt_rand();
 			}
 
-			uksort($profielen, function ($a, $b) use ($volgorde) {
+			uksort($profielen, function ($a, $b) use ($volgorde): int {
 				return $volgorde[$a] <=> $volgorde[$b];
 			});
 

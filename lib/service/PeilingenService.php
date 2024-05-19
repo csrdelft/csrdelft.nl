@@ -42,7 +42,7 @@ class PeilingenService
 		$this->entityManager = $entityManager;
 	}
 
-	public function magOptieToevoegen(Peiling $peiling)
+	public function magOptieToevoegen(Peiling $peiling): bool
 	{
 		if ($this->peilingenRepository->magBewerken($peiling)) {
 			return true;
@@ -105,7 +105,7 @@ class PeilingenService
 	 * @param int[] $opties
 	 * @return int[]
 	 */
-	public function valideerOpties(Peiling $peiling, $opties)
+	public function valideerOpties(Peiling $peiling, $opties): array
 	{
 		$mogelijkeOptieIds = array_map(function ($optie) {
 			return $optie->id;
@@ -120,7 +120,7 @@ class PeilingenService
 	 * @return bool
 	 * @throws CsrGebruikerException
 	 */
-	public function isGeldigeStem(Peiling $peiling, $opties, Profiel $profiel)
+	public function isGeldigeStem(Peiling $peiling, $opties, Profiel $profiel): bool
 	{
 		if ($peiling->getStem($profiel)) {
 			throw new CsrGebruikerException('Alreeds gestemd.');

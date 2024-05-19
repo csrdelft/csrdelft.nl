@@ -64,12 +64,12 @@ class WachtwoordController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/wachtwoord/wijzigen", methods={"GET", "POST"}, name="wachtwoord_wijzigen")
-	 * @Route("/wachtwoord/verlopen", methods={"GET", "POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function wijzigen(): Response
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/wachtwoord/wijzigen', methods: ['GET', 'POST'], name: 'wachtwoord_wijzigen')]
+ #[Route(path: '/wachtwoord/verlopen', methods: ['GET', 'POST'])]
+ public function wijzigen(): Response
 	{
 		$account = $this->getUser();
 		// mag inloggen?
@@ -93,17 +93,17 @@ class WachtwoordController extends AbstractController
 	}
 
 	/**
-	 * Wordt opgevangen door WachtwoordResetAuthenticator zodra wachtwoord_reset_token in de sessie staat.
-	 *
-	 * @param Request $request
-	 * @return Response
-	 * @Route("/wachtwoord/reset", name="wachtwoord_reset")
-	 * @Auth(P_PUBLIC)
-	 * @throws NonUniqueResultException
-	 * @see WachtwoordResetAuthenticator
-	 *
-	 */
-	public function reset(Request $request): Response
+  * Wordt opgevangen door WachtwoordResetAuthenticator zodra wachtwoord_reset_token in de sessie staat.
+  *
+  * @param Request $request
+  * @return Response
+  * @Auth(P_PUBLIC)
+  * @throws NonUniqueResultException
+  * @see WachtwoordResetAuthenticator
+  *
+  */
+ #[Route(path: '/wachtwoord/reset', name: 'wachtwoord_reset')]
+ public function reset(Request $request): Response
 	{
 		$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
 
@@ -141,14 +141,14 @@ class WachtwoordController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/wachtwoord/vergeten", methods={"GET", "POST"})
-	 * @Route("/wachtwoord/aanvragen", methods={"GET", "POST"}, name="wachtwoord_aanvragen")
-	 * @Auth(P_PUBLIC)
-	 */
-	public function vergeten(): Response
+  * @return Response
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/wachtwoord/vergeten', methods: ['GET', 'POST'])]
+ #[Route(path: '/wachtwoord/aanvragen', methods: ['GET', 'POST'], name: 'wachtwoord_aanvragen')]
+ public function vergeten(): Response
 	{
 		$form = new WachtwoordVergetenForm();
 		if ($form->isPosted() && $form->validate()) {

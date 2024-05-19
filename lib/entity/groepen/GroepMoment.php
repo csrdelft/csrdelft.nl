@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use DateInterval;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,19 +14,19 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 trait GroepMoment
 {
 	/**
-	 * Datum en tijd begin
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups({"datatable", "log", "vue"})
-	 */
-	public $beginMoment;
+  * Datum en tijd begin
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime_immutable')]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
+ public $beginMoment;
 	/**
-	 * Datum en tijd einde
-	 * @var DateTimeImmutable|null
-	 * @ORM\Column(type="datetime", nullable=true)
-	 * @Serializer\Groups({"datatable", "log", "vue"})
-	 */
-	public $eindMoment;
+  * Datum en tijd einde
+  * @var DateTimeImmutable|null
+  */
+ #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+ #[Serializer\Groups(['datatable', 'log', 'vue'])]
+ public $eindMoment;
 
 	/**
 	 * @return DateTimeImmutable
@@ -51,7 +52,7 @@ trait GroepMoment
 		if ($this->eindMoment && $this->eindMoment !== $this->beginMoment) {
 			return $this->eindMoment;
 		}
-		return $this->getBeginMoment()->add(new \DateInterval('PT30M'));
+		return $this->getBeginMoment()->add(new DateInterval('PT30M'));
 	}
 
 	/**

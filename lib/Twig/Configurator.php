@@ -34,12 +34,12 @@ class Configurator
 		$this->configurator->configure($environment);
 	}
 
-	public function escape_ical($twig, $string, $charset)
+	public function escape_ical($twig, $string, $charset): string|array
 	{
 		return TextUtil::escape_ical($string);
 	}
 
-	public function escape_xml($twig, $string, $charset)
+	public function escape_xml($twig, $string, $charset): string
 	{
 		return htmlspecialchars($string, ENT_XML1, 'UTF-8');
 	}

@@ -6,12 +6,12 @@ use CsrDelft\entity\courant\CourantCategorie;
 
 class CourantCategorieType extends EnumType
 {
-	public function getEnumClass()
+	public function getEnumClass(): string
 	{
 		return CourantCategorie::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumCourantCategorie';
 	}

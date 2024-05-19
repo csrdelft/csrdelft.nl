@@ -62,7 +62,7 @@ class IntField extends InputField
 		return $this->value;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if ($this->value === 0) {
 			return true;
@@ -85,7 +85,7 @@ class IntField extends InputField
 		return $this->error === '';
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		return ' <input ' .
 			$this->getInputAttribute([

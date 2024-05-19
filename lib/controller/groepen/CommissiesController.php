@@ -13,7 +13,7 @@ use CsrDelft\entity\groepen\Commissie;
  */
 class CommissiesController extends AbstractGroepenController
 {
-	public function getGroepType()
+	public function getGroepType(): string
 	{
 		return Commissie::class;
 	}

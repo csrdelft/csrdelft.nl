@@ -99,7 +99,11 @@ services:
   Psr\Container\ContainerInterface: '@service_container'
 
   security:
-    class: Symfony\Component\Security\Core\Security
+    class: Symfony\Bundle\SecurityBundle\Security
+    public: true
+
+  security.authorization_checker:
+    class: Symfony\Component\Security\Core\Authorization\AuthorizationChecker
     public: true
 
   # Sta gebruik van twig overal toe.
@@ -189,3 +193,5 @@ services:
   CsrDelft\common\Security\Voter\:
     resource: '../lib/common/Security/Voter'
 
+  Doctrine\Common\Annotations\Reader:
+    class: Doctrine\Common\Annotations\AnnotationReader

@@ -20,7 +20,7 @@ use CsrDelft\service\security\SuService;
 use CsrDelft\view\bbcode\CsrBB;
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -226,7 +226,7 @@ class ForumMeldingenService
 	 * @param string $bericht
 	 * @return string[]
 	 */
-	public function zoekGenoemdeLeden($bericht)
+	public function zoekGenoemdeLeden($bericht): array
 	{
 		$regex = '/\[(?:lid|citaat)=?\s*]?\s*([[:alnum:]]+)\s*[\[\]]/';
 		preg_match_all($regex, $bericht, $leden);
@@ -336,7 +336,7 @@ class ForumMeldingenService
 			$post,
 			$draad,
 			$template
-		) {
+		): void {
 			$wilMeldingViaEmail = $this->lidInstellingenRepository->getInstellingVoorLid(
 				'forum',
 				'meldingEmail',
@@ -402,7 +402,7 @@ class ForumMeldingenService
 			$ontvanger,
 			$auteur,
 			$post
-		) {
+		): void {
 			if (!$draad->magMeldingKrijgen()) {
 				return;
 			}

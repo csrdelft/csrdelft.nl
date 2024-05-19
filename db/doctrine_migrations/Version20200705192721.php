@@ -13,8 +13,6 @@ final class Version20200705192721 extends AbstractMigration {
 	}
 
 	public function up(Schema $schema): void {
-		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
 		$this->addSql('ALTER TABLE CiviProduct DROP INDEX IDX_C4590238BCF5E72D, ADD INDEX IDX_C63728B3BCF5E72D (categorie_id)');
 		$this->addSql('ALTER TABLE CiviBestellingInhoud DROP INDEX IDX_30A7C75CA2E63037, ADD INDEX IDX_E800F85CA2E63037 (bestelling_id)');
 		$this->addSql('ALTER TABLE CiviBestellingInhoud DROP INDEX IDX_30A7C75C4584665A, ADD INDEX IDX_E800F85C4584665A (product_id)');
@@ -50,8 +48,6 @@ SQL
 	}
 
 	public function down(Schema $schema): void {
-		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
 		$this->addSql('ALTER TABLE civi_product DROP INDEX IDX_C63728B3BCF5E72D, ADD INDEX IDX_C4590238BCF5E72D (categorie_id)');
 		$this->addSql('ALTER TABLE civi_bestelling_inhoud DROP INDEX IDX_E800F85CA2E63037, ADD INDEX IDX_30A7C75CA2E63037 (bestelling_id)');
 		$this->addSql('ALTER TABLE civi_bestelling_inhoud DROP INDEX IDX_E800F85C4584665A, ADD INDEX IDX_30A7C75C4584665A (product_id)');

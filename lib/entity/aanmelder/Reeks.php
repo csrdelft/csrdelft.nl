@@ -10,36 +10,26 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-/**
- * @ORM\Entity(repositoryClass=ReeksRepository::class)
- * @ORM\Table(name="aanmelder_reeks")
- */
+#[ORM\Table(name: 'aanmelder_reeks')]
+#[ORM\Entity(repositoryClass: ReeksRepository::class)]
 class Reeks extends ActiviteitEigenschappen implements DataTableEntry
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable"})
-	 */
-	public $id;
+	#[ORM\Id]
+ #[ORM\GeneratedValue]
+ #[ORM\Column(type: 'integer')]
+ #[Serializer\Groups(['datatable'])]
+ public $id;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Serializer\Groups({"datatable"})
-	 */
-	private $naam;
+	#[ORM\Column(type: 'string', length: 255)]
+ #[Serializer\Groups(['datatable'])]
+ private $naam;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 */
-	private $rechtenAanmaken;
+	#[ORM\Column(type: 'string', length: 255)]
+ private $rechtenAanmaken;
 
-	/**
-	 * @ORM\OneToMany(targetEntity=AanmeldActiviteit::class, mappedBy="reeks", orphanRemoval=true)
-	 * @ORM\OrderBy({"start" = "ASC", "einde" = "ASC"})
-	 */
-	private $activiteiten;
+	#[ORM\OneToMany(targetEntity: AanmeldActiviteit::class, mappedBy: 'reeks', orphanRemoval: true)]
+ #[ORM\OrderBy(['start' => 'ASC', 'einde' => 'ASC'])]
+ private $activiteiten;
 
 	public function __construct()
 	{
@@ -118,11 +108,11 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("detailSource")
-	 */
-	public function getDetailSource()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('detailSource')]
+ public function getDetailSource(): string
 	{
 		return '/aanmelder/beheer/activiteiten/' . $this->id;
 	}

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use DateInterval;
@@ -25,81 +26,80 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  *
  * @see Maaltijd
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository")
- * @ORM\Table("mlt_archief")
  */
+#[ORM\Table('mlt_archief')]
+#[ORM\Entity(repositoryClass: ArchiefMaaltijdenRepository::class)]
 class ArchiefMaaltijd implements Agendeerbaar
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
-	 */
-	public $maaltijd_id;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ #[Serializer\Groups('datatable')]
+ public $maaltijd_id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $titel;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ #[Serializer\Groups('datatable')]
+ public $titel;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="date")
-	 */
-	public $datum;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'date_immutable')]
+ public $datum;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="time")
-	 */
-	public $tijd;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'time')]
+ public $tijd;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $prijs;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ #[Serializer\Groups('datatable')]
+ public $prijs;
 	/**
-	 * @var string
-	 * @ORM\Column(type="text")
-	 */
-	public $aanmeldingen;
+  * @var string
+  */
+ #[ORM\Column(type: 'text')]
+ public $aanmeldingen;
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("tijd")
-	 */
-	public function getTijdFormatted()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('tijd')]
+ public function getTijdFormatted(): string|false
 	{
 		return DateUtil::dateFormatIntl($this->tijd, DateUtil::TIME_FORMAT);
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("datum")
-	 */
-	public function getDatumFormatted()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('datum')]
+ public function getDatumFormatted(): string|false
 	{
 		return DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT);
 	}
 
 	/**
-	 * @return int
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("aanmeldingen")
-	 */
-	public function getAantalAanmelding()
+  * @return int
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('aanmeldingen')]
+ public function getAantalAanmelding(): int
 	{
 		return count($this->getAanmeldingenArray());
 	}
 
 	// Agendeerbaar ############################################################
 
-	public function getPrijsFloat()
+	public function getPrijsFloat(): float
 	{
 		return (float) $this->prijs / 100.0;
 	}
@@ -123,44 +123,47 @@ class ArchiefMaaltijd implements Agendeerbaar
 		);
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
 
-	public function getAantalAanmeldingen()
+	public function getAantalAanmeldingen(): int
 	{
 		return substr_count($this->aanmeldingen, ',');
 	}
 
-	public function getLocatie()
+	public function getLocatie(): string
 	{
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/maaltijdenbeheer/archief';
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		return false;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		return true;
 	}
 
-	public function jsonSerialize()
+	public function jsonSerialize(): array
 	{
 		$json = (array) $this;
 		$json['aanmeldingen'] = count($this->getAanmeldingenArray());
 		return $json;
 	}
 
-	public function getAanmeldingenArray()
+	/**
+  * @return string[][]
+  */
+ public function getAanmeldingenArray(): array
 	{
 		$result = [];
 		$aanmeldingen = explode(',', $this->aanmeldingen);
@@ -172,7 +175,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return $result;
 	}
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->maaltijd_id . '@archiefmaaltijd.csrdelft.nl';
 	}

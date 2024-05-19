@@ -47,7 +47,7 @@ class MaaltijdArchiefService
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
-	public function vanMaaltijd(Maaltijd $maaltijd)
+	public function vanMaaltijd(Maaltijd $maaltijd): ArchiefMaaltijd
 	{
 		$archief = new ArchiefMaaltijd();
 		$archief->maaltijd_id = $maaltijd->maaltijd_id;

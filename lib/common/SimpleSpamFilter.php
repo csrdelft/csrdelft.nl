@@ -29,7 +29,7 @@ class SimpleSpamFilter
 			'buy-viagra|-cialis|-levitra|boy-and-girl-kissing|squirting|\[link=|<a href=/i';
 	}
 
-	public function isSpam($string)
+	public function isSpam($string): bool
 	{
 		$score = 0;
 		// score gaat niet met meer dan 1 omhoog omdat preg_match na de eerste match stopt met zoeken.
@@ -40,7 +40,7 @@ class SimpleSpamFilter
 		return $score > 0;
 	}
 
-	private function hasOnlyLinks($str)
+	private function hasOnlyLinks($str): bool
 	{
 		// strip out all URLs from the comment
 		$str = preg_replace("'https*://(\S*)'", '', $str);

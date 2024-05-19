@@ -175,7 +175,7 @@ class MaaltijdAanmeldingenService
 		Maaltijd $maaltijd,
 		Profiel $profiel,
 		$beheer = false
-	) {
+	): Maaltijd {
 		$aanmelding = $maaltijd->getAanmelding($profiel);
 		if (!$aanmelding) {
 			throw new CsrGebruikerException('Niet aangemeld');
@@ -209,7 +209,7 @@ class MaaltijdAanmeldingenService
 		);
 	}
 
-	public function maakCiviBestelling(MaaltijdAanmelding $aanmelding)
+	public function maakCiviBestelling(MaaltijdAanmelding $aanmelding): CiviBestelling
 	{
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = $aanmelding->maaltijd->product->categorie->cie;

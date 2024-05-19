@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\fotoalbum;
 
+use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\profiel\Profiel;
@@ -12,11 +13,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\fotoalbum\FotoRepository")
- * @ORM\Table("fotos")
- * @ORM\EntityListeners({"CsrDelft\events\FotoListener"})
  */
+#[ORM\Table('fotos')]
+#[ORM\Entity(repositoryClass: FotoRepository::class)]
+#[ORM\EntityListeners(['CsrDelft\events\FotoListener'])]
 class Foto extends Afbeelding
 {
 	const FOTOALBUM_ROOT = '/fotoalbum';
@@ -24,36 +24,36 @@ class Foto extends Afbeelding
 	const RESIZED_DIR = '_resized';
 
 	/**
-	 * Relatief pad in fotoalbum
-	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
-	 */
-	public $subdir;
+  * Relatief pad in fotoalbum
+  * @var string
+  */
+ #[ORM\Column(type: 'stringkey')]
+ #[ORM\Id]
+ public $subdir;
 	/**
-	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
-	 */
-	public $filename;
+  * @var string
+  */
+ #[ORM\Column(type: 'stringkey')]
+ #[ORM\Id]
+ public $filename;
 	/**
-	 * Degrees of rotation
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $rotation;
+  * Degrees of rotation
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $rotation;
 	/**
-	 * Uploader
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 */
-	public $owner;
+  * Uploader
+  * @var string
+  */
+ #[ORM\Column(type: 'uid')]
+ public $owner;
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="owner", referencedColumnName="uid")
-	 */
-	public $owner_profiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'owner', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
+ public $owner_profiel;
 
 	public function __construct(
 		$filename = null,
@@ -77,7 +77,7 @@ class Foto extends Afbeelding
 		parent::__construct(null, $parse);
 	}
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return PathUtil::join_paths($this->subdir, $this->filename) .
 			'@' .
@@ -85,7 +85,7 @@ class Foto extends Afbeelding
 			'.csrdelft.nl';
 	}
 
-	public function getThumbPath()
+	public function getThumbPath(): string|array|null
 	{
 		return PathUtil::join_paths(
 			PHOTOALBUM_PATH,
@@ -95,7 +95,7 @@ class Foto extends Afbeelding
 		);
 	}
 
-	public function getResizedPath()
+	public function getResizedPath(): string|array|null
 	{
 		return PathUtil::join_paths(
 			PHOTOALBUM_PATH,
@@ -105,24 +105,24 @@ class Foto extends Afbeelding
 		);
 	}
 
-	public function getAlbumUrl()
+	public function getAlbumUrl(): string|array
 	{
 		return PathUtil::direncode(
 			PathUtil::join_paths(self::FOTOALBUM_ROOT, $this->subdir)
 		);
 	}
-	public function getAlbum()
+	public function getAlbum(): FotoAlbum
 	{
 		return new FotoAlbum($this->subdir);
 	}
-	public function getFullUrl()
+	public function getFullUrl(): string|array
 	{
 		return PathUtil::direncode(
 			PathUtil::join_paths(self::FOTOALBUM_ROOT, $this->subdir, $this->filename)
 		);
 	}
 
-	public function getThumbUrl()
+	public function getThumbUrl(): string|array
 	{
 		return PathUtil::direncode(
 			PathUtil::join_paths(
@@ -134,7 +134,7 @@ class Foto extends Afbeelding
 		);
 	}
 
-	public function getResizedUrl()
+	public function getResizedUrl(): string|array
 	{
 		return PathUtil::direncode(
 			PathUtil::join_paths(
@@ -146,13 +146,13 @@ class Foto extends Afbeelding
 		);
 	}
 
-	public function hasThumb()
+	public function hasThumb(): bool
 	{
 		$path = $this->getThumbPath();
 		return file_exists($path) && is_file($path);
 	}
 
-	public function hasResized()
+	public function hasResized(): bool
 	{
 		$path = $this->getResizedPath();
 		return file_exists($path) && is_file($path);
@@ -218,7 +218,7 @@ class Foto extends Afbeelding
 		}
 	}
 
-	public function isComplete()
+	public function isComplete(): bool
 	{
 		return $this->hasThumb() && $this->hasResized();
 	}

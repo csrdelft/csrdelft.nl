@@ -22,7 +22,7 @@ class InstellingConfiguration implements ConfigurationInterface
 	 *
 	 * @return TreeBuilder The tree builder
 	 */
-	public function getConfigTreeBuilder()
+	public function getConfigTreeBuilder(): TreeBuilder
 	{
 		$treeBuilder = new TreeBuilder('instellingen');
 		$rootNode = $treeBuilder->getRootNode();
@@ -65,7 +65,7 @@ class InstellingConfiguration implements ConfigurationInterface
 			->scalarNode(self::FIELD_TYPE)
 			->defaultValue(InstellingType::String)
 			->validate()
-			->ifTrue(function ($type) {
+			->ifTrue(function ($type): bool {
 				return !isset(InstellingType::getTypeOptions()[$type]);
 			})
 			->thenInvalid('type %s is not in T.')

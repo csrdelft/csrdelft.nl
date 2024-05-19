@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\agenda;
 
+use CsrDelft\repository\agenda\AgendaRepository;
+use DateInterval;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
@@ -16,65 +18,63 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * AgendaItems worden door de agenda getoont samen met andere Agendeerbare dingen.
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\agenda\AgendaRepository")
- * @ORM\Table("agenda", indexes={
- *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
- *   @ORM\Index(name="eind_moment", columns={"eind_moment"})
- * })
  */
+#[ORM\Table('agenda')]
+#[ORM\Index(name: 'begin_moment', columns: ['begin_moment'])]
+#[ORM\Index(name: 'eind_moment', columns: ['eind_moment'])]
+#[ORM\Entity(repositoryClass: AgendaRepository::class)]
 class AgendaItem implements Agendeerbaar
 {
 	/**
-	 * Primary key
-	 * @ORM\Id()
-	 * @ORM\Column(type="integer")
-	 * @ORM\GeneratedValue()
-	 * @var int
-	 */
-	public $item_id;
+  * Primary key
+  * @var int
+  */
+ #[ORM\Id]
+ #[ORM\Column(type: 'integer')]
+ #[ORM\GeneratedValue]
+ public $item_id;
 	/**
-	 * Titel
-	 * @ORM\Column(type="string")
-	 * @var string
-	 */
-	public $titel;
+  * Titel
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $titel;
 	/**
-	 * Beschrijving
-	 * @ORM\Column(type="text", nullable=true)
-	 * @var string
-	 */
-	public $beschrijving;
+  * Beschrijving
+  * @var string
+  */
+ #[ORM\Column(type: 'text', nullable: true)]
+ public $beschrijving;
 	/**
-	 * DateTime begin
-	 * @ORM\Column(type="datetime")
-	 * @var DateTimeImmutable
-	 */
-	public $begin_moment;
+  * DateTime begin
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime_immutable')]
+ public $begin_moment;
 	/**
-	 * DateTime eind
-	 * @ORM\Column(type="datetime")
-	 * @var DateTimeImmutable
-	 */
-	public $eind_moment;
+  * DateTime eind
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime_immutable')]
+ public $eind_moment;
 	/**
-	 * Permissie voor tonen
-	 * @ORM\Column(type="string")
-	 * @var string
-	 */
-	public $rechten_bekijken;
+  * Permissie voor tonen
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $rechten_bekijken;
 	/**
-	 * Locatie
-	 * @ORM\Column(type="string", nullable=true)
-	 * @var string
-	 */
-	public $locatie;
+  * Locatie
+  * @var string
+  */
+ #[ORM\Column(type: 'string', nullable: true)]
+ public $locatie;
 	/**
-	 * Link
-	 * @ORM\Column(type="string", nullable=true)
-	 * @var string
-	 */
-	public $link;
+  * Link
+  * @var string
+  */
+ #[ORM\Column(type: 'string', nullable: true)]
+ public $link;
 
 	public function getBeginMoment(): DateTimeImmutable
 	{
@@ -86,7 +86,7 @@ class AgendaItem implements Agendeerbaar
 		if ($this->eind_moment && $this->eind_moment !== $this->begin_moment) {
 			return $this->eind_moment;
 		}
-		return $this->getBeginMoment()->add(new \DateInterval('PT30M'));
+		return $this->getBeginMoment()->add(new DateInterval('PT30M'));
 	}
 
 	public function getTitel()
@@ -109,7 +109,7 @@ class AgendaItem implements Agendeerbaar
 		return $this->link;
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		$begin = $this->getBeginMoment()->format('H:i');
 		$eind = $this->getEindMoment()->format('H:i');
@@ -122,7 +122,7 @@ class AgendaItem implements Agendeerbaar
 		return LoginService::mag($this->rechten_bekijken, $auth);
 	}
 
-	public function magBeheren($ical = false)
+	public function magBeheren($ical = false): bool
 	{
 		$auth = $ical ? AuthenticationMethod::getEnumValues() : null;
 		if (LoginService::mag(P_AGENDA_MOD, $auth)) {
@@ -138,14 +138,14 @@ class AgendaItem implements Agendeerbaar
 		return false;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		// Toon als transparant (vrij) als lid dat wil of activiteit hele dag(en) duurt
 		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
 			'ja' || $this->isHeledag();
 	}
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return strtolower(
 			sprintf(

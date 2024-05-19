@@ -32,7 +32,7 @@ class SavedQueryContent implements View
 		return null;
 	}
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return 'Opgeslagen query\'s';
 	}
@@ -121,7 +121,7 @@ class SavedQueryContent implements View
 		return $return;
 	}
 
-	public function getQueryselector()
+	public function getQueryselector(): string
 	{
 		//als er een query ingeladen is, die highlighten
 		$id = $this->sq instanceof SavedQueryResult ? $this->sq->query->ID : 0;
@@ -165,7 +165,7 @@ class SavedQueryContent implements View
 		return $return;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .= '<h1>' . $this->getTitel() . '</h1>';

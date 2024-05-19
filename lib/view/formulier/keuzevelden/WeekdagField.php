@@ -26,7 +26,7 @@ class WeekdagField extends SelectField
 		parent::__construct($name, $value, $description, self::$dagnamen);
 	}
 
-	public function getValue()
+	public function getValue(): int
 	{
 		$this->value = parent::getValue();
 		return (int) $this->value;

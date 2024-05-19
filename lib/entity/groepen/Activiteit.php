@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
@@ -18,9 +19,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Activiteit.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\ActiviteitenRepository")
  */
+#[ORM\Entity(repositoryClass: ActiviteitenRepository::class)]
 class Activiteit extends Groep implements
 	Agendeerbaar,
 	HeeftAanmeldLimiet,
@@ -35,33 +35,33 @@ class Activiteit extends Groep implements
 	use GroepAanmeldLimiet;
 
 	/**
-	 * Intern / Extern / SjaarsActie / etc.
-	 * @var ActiviteitSoort
-	 * @ORM\Column(type="enumActiviteitSoort")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $activiteitSoort;
+  * Intern / Extern / SjaarsActie / etc.
+  * @var ActiviteitSoort
+  */
+ #[ORM\Column(type: 'enumActiviteitSoort')]
+ #[Serializer\Groups('datatable')]
+ public $activiteitSoort;
 	/**
-	 * Locatie
-	 * @var string
-	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups("datatable")
-	 */
-	public $locatie;
+  * Locatie
+  * @var string
+  */
+ #[ORM\Column(type: 'string', nullable: true)]
+ #[Serializer\Groups('datatable')]
+ public $locatie;
 	/**
-	 * Tonen in agenda
-	 * @var boolean
-	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $inAgenda;
+  * Tonen in agenda
+  * @var boolean
+  */
+ #[ORM\Column(type: 'boolean')]
+ #[Serializer\Groups('datatable')]
+ public $inAgenda;
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->id . '@activiteit.csrdelft.nl';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/activiteiten/' . $this->id;
 	}
@@ -83,7 +83,7 @@ class Activiteit extends Groep implements
 		return $this->locatie;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		// Toon als transparant (vrij) als lid dat wil, activiteit hele dag(en) duurt of lid niet ingeketzt is
 		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
@@ -92,7 +92,7 @@ class Activiteit extends Groep implements
 			!$this->getLid(LoginService::getUid());
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		$begin = $this->getBeginMoment()->format('H:i');
 		$eind = $this->getEindMoment()->format('H:i');

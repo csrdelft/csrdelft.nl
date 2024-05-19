@@ -57,7 +57,7 @@ class Kernel extends BaseKernel
 		$routes->import('../config/{routes}.yaml');
 	}
 
-	protected function build(ContainerBuilder $builder)
+	protected function build(ContainerBuilder $builder): void
 	{
 		$builder
 			->registerForAutoconfiguration(FormulierTypeInterface::class)

@@ -2,18 +2,19 @@
 
 namespace CsrDelft\view\bbcode\prosemirror\embed;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use CsrDelft\view\bbcode\tag\embed\BbYoutube;
 
 class NodeYoutube implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbYoutube::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'youtube';
 	}
@@ -21,7 +22,7 @@ class NodeYoutube implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbYoutube) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 		return [
 			'attrs' => [
@@ -37,7 +38,7 @@ class NodeYoutube implements Node
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

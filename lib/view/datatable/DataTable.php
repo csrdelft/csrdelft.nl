@@ -3,7 +3,6 @@
 namespace CsrDelft\view\datatable;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
 use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\CustomDataTableEntry;
@@ -15,6 +14,7 @@ use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Types\BooleanType;
+use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
@@ -184,7 +184,7 @@ class DataTable implements View, FormElement, ToResponse
 		$this->settings['rowButtons'][] = $knop;
 	}
 
-	protected function columnPosition($name)
+	protected function columnPosition($name): int|string|false
 	{
 		return array_search($name, array_keys($this->columns));
 	}
@@ -381,7 +381,7 @@ class DataTable implements View, FormElement, ToResponse
 		return $settings;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->getHtml();
 	}
@@ -409,7 +409,7 @@ class DataTable implements View, FormElement, ToResponse
 		return ReflectionUtil::classNameZonderNamespace(get_class($this));
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$id = str_replace(' ', '-', strtolower($this->getTitel()));
 
@@ -425,7 +425,7 @@ class DataTable implements View, FormElement, ToResponse
 HTML;
 	}
 
-	public function getJavascript()
+	public function getJavascript(): string
 	{
 		//Nothing should be returned here because the script is already embedded in getView
 		return '';

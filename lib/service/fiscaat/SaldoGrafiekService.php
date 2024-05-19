@@ -7,7 +7,7 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use DateInterval;
 use DateTime;
 use Exception;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class SaldoGrafiekService
 {
@@ -100,7 +100,7 @@ class SaldoGrafiekService
 	 * @param string $uid
 	 * @return bool
 	 */
-	public function magGrafiekZien($uid)
+	public function magGrafiekZien($uid): bool
 	{
 		//mogen we uberhaupt een grafiek zien?
 		return $this->security->isGranted(

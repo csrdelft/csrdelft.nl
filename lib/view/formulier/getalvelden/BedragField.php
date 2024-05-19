@@ -37,7 +37,7 @@ class BedragField extends IntField
 		$this->valuta = $valuta;
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$parent = parent::getHtml();
 		return <<<HTML

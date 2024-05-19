@@ -35,7 +35,7 @@ class CourantBerichtRepository extends AbstractRepository
 	/**
 	 * @return CourantBericht[]
 	 */
-	public function findAll()
+	public function findAll(): array
 	{
 		return $this->findBy([], ['volgorde' => 'ASC']);
 	}

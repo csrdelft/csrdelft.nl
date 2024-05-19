@@ -20,7 +20,7 @@ class BbWerkgroep extends BbTagGroep
 		return 'werkgroep';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'aanmeldingen';
 	}

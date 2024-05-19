@@ -6,6 +6,8 @@ use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurVoorkeur;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -44,10 +46,10 @@ class CommissieVoorkeurRepository extends AbstractRepository
 		$qb = $this->createQueryBuilder('v');
 		$qb->andWhere('v.cid = :cid');
 		$qb->andWhere('v.voorkeur >= :minVoorkeur');
-		$qb->setParameters([
-			'cid' => $commissie->id,
-			'minVoorkeur' => $minVoorkeurWaarde,
-		]);
+		$qb->setParameters(new ArrayCollection([
+			new Parameter('cid', $commissie->id),
+			new Parameter('minVoorkeur', $minVoorkeurWaarde),
+		]));
 
 		return $qb->getQuery()->getResult();
 	}

@@ -32,7 +32,7 @@ class ArchiefMaaltijdenRepository extends AbstractRepository
 	 */
 	public function create(ArchiefMaaltijd $archiefMaaltijd)
 	{
-		$this->_em->persist($archiefMaaltijd);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($archiefMaaltijd);
+		$this->getEntityManager()->flush();
 	}
 }

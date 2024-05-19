@@ -2,6 +2,7 @@
 
 namespace CsrDelft\events;
 
+use ReflectionException;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
@@ -10,11 +11,11 @@ use CsrDelft\service\CsrfService;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Controlleer access op route niveau.
@@ -61,12 +62,12 @@ class AccessControlEventListener
 	}
 
 	/**
-	 * Controleer of gebruiker deze pagina mag zien.
-	 *
-	 * @param ControllerEvent $event
-	 * @throws \ReflectionException
-	 */
-	public function onKernelController(ControllerEvent $event)
+  * Controleer of gebruiker deze pagina mag zien.
+  *
+  * @param ControllerEvent $event
+  * @throws ReflectionException
+  */
+ public function onKernelController(ControllerEvent $event)
 	{
 		$request = $event->getRequest();
 

@@ -10,7 +10,7 @@ class LichtingPrefixVoter extends PrefixVoter
 	const PREFIX_LICHTING = 'LICHTING';
 	const PREFIX_LIDJAAR = 'LIDJAAR';
 
-	protected function supportsPrefix($prefix)
+	protected function supportsPrefix($prefix): bool
 	{
 		return strtoupper($prefix) == self::PREFIX_LICHTING ||
 			strtoupper($prefix) == self::PREFIX_LIDJAAR;
@@ -22,7 +22,7 @@ class LichtingPrefixVoter extends PrefixVoter
 		$role,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		/** @var Account $user */
 		$user = $token->getUser();
 

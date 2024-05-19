@@ -2,6 +2,7 @@
 
 namespace CsrDelft\Component\Formulier;
 
+use Closure;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -120,7 +121,7 @@ class FormulierBuilder
 		return $this->fields;
 	}
 
-	public function hasFields()
+	public function hasFields(): bool
 	{
 		return !empty($this->fields);
 	}
@@ -160,7 +161,7 @@ class FormulierBuilder
 		unset($this->fields[$pos]);
 	}
 
-	public function getFormulier()
+	public function getFormulier(): FormulierInstance
 	{
 		return new FormulierInstance(
 			$this->twig,
@@ -199,9 +200,9 @@ class FormulierBuilder
 	}
 
 	/**
-	 * @param \Closure $param Kan alle velden controleren als er false wordt gereturned is ($fields: FormElement[]) => boolean
-	 */
-	public function addValidationMethod(\Closure $param)
+  * @param Closure $param Kan alle velden controleren als er false wordt gereturned is ($fields: FormElement[]) => boolean
+  */
+ public function addValidationMethod(Closure $param)
 	{
 		$this->validationMethods[] = $param;
 	}

@@ -17,20 +17,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class BestellingZoeker extends AbstractController
 {
 	/**
-	 * @Route("/fiscaat/bestelling-zoeker")
-	 * @param Request $request
-	 * @param CiviCategorieRepository $civiCategorieRepository
-	 * @param CiviProductRepository $civiProductRepository
-	 * @param CiviSaldoRepository $civiSaldoRepository
-	 * @return Response
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function bestellingZoeker(
+  * @param Request $request
+  * @param CiviCategorieRepository $civiCategorieRepository
+  * @param CiviProductRepository $civiProductRepository
+  * @param CiviSaldoRepository $civiSaldoRepository
+  * @return Response
+  * @Auth(P_FISCAAT_READ)
+  */
+ #[Route(path: '/fiscaat/bestelling-zoeker')]
+ public function bestellingZoeker(
 		Request $request,
 		CiviCategorieRepository $civiCategorieRepository,
 		CiviProductRepository $civiProductRepository,
 		CiviSaldoRepository $civiSaldoRepository
-	) {
+	): Response {
 		$from = new DateTimeImmutable();
 		$from = $from->sub(new DateInterval('P1W'));
 

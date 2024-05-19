@@ -14,47 +14,35 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-/**
- * @ORM\Entity(repositoryClass=AanmeldActiviteitRepository::class)
- * @ORM\Table(name="aanmelder_activiteit")
- */
+#[ORM\Table(name: 'aanmelder_activiteit')]
+#[ORM\Entity(repositoryClass: AanmeldActiviteitRepository::class)]
 class AanmeldActiviteit extends ActiviteitEigenschappen implements
 	DataTableEntry
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable"})
-	 */
-	public $id;
+	#[ORM\Id]
+ #[ORM\GeneratedValue]
+ #[ORM\Column(type: 'integer')]
+ #[Serializer\Groups(['datatable'])]
+ public $id;
+
+	#[ORM\JoinColumn(nullable: false)]
+ #[ORM\ManyToOne(targetEntity: Reeks::class, inversedBy: 'activiteiten')]
+ private $reeks;
+
+	#[ORM\Column(type: 'datetime_immutable')]
+ private $start;
+
+	#[ORM\Column(type: 'datetime_immutable')]
+ private $einde;
+
+	#[ORM\Column(type: 'boolean')]
+ private $gesloten;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity=Reeks::class, inversedBy="activiteiten")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	private $reeks;
-
-	/**
-	 * @ORM\Column(type="datetime")
-	 */
-	private $start;
-
-	/**
-	 * @ORM\Column(type="datetime")
-	 */
-	private $einde;
-
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
-	private $gesloten;
-
-	/**
-	 * @ORM\OneToMany(targetEntity=Deelnemer::class, mappedBy="activiteit", orphanRemoval=true)
-	 * @var ArrayCollection|Deelnemer[]
-	 */
-	private $deelnemers;
+  * @var ArrayCollection|Deelnemer[]
+  */
+ #[ORM\OneToMany(targetEntity: Deelnemer::class, mappedBy: 'activiteit', orphanRemoval: true)]
+ private $deelnemers;
 
 	public function __construct()
 	{
@@ -84,11 +72,9 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 		return $this->start;
 	}
 
-	/**
-	 * @Serializer\Groups({"datatable"})
-	 * @Serializer\SerializedName("start")
-	 */
-	public function getStartDataTable(): string
+	#[Serializer\Groups(['datatable'])]
+ #[Serializer\SerializedName('start')]
+ public function getStartDataTable(): string
 	{
 		return DateUtil::dateFormatIntl(
 			$this->getStart(),
@@ -108,11 +94,9 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 		return $this->einde;
 	}
 
-	/**
-	 * @Serializer\Groups({"datatable"})
-	 * @Serializer\SerializedName("einde")
-	 */
-	public function getEindeDataTable(): string
+	#[Serializer\Groups(['datatable'])]
+ #[Serializer\SerializedName('einde')]
+ public function getEindeDataTable(): string
 	{
 		return DateUtil::dateFormatIntl(
 			$this->getEinde(),
@@ -298,11 +282,9 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 		return max($this->getCapaciteit() - $this->getAantalAanmeldingen(), 0);
 	}
 
-	/**
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("bezetting")
-	 */
-	public function getBezettingDataTable(): string
+	#[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('bezetting')]
+ public function getBezettingDataTable(): string
 	{
 		return $this->getAantalAanmeldingen() . ' / ' . $this->getCapaciteit();
 	}

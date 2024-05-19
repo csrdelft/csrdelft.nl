@@ -36,7 +36,7 @@ class JwtToken extends AbstractToken
 		$this->refreshToken = $refreshToken;
 	}
 
-	public function getCredentials()
+	public function getCredentials(): string
 	{
 		return '';
 	}

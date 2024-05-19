@@ -48,8 +48,8 @@ class CorveeTakenRepository extends AbstractRepository
 		$taak->setWanneerGemaild(
 			DateUtil::dateFormatIntl(date_create(), DateUtil::DATETIME_FORMAT)
 		);
-		$this->_em->persist($taak);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($taak);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -64,7 +64,7 @@ class CorveeTakenRepository extends AbstractRepository
 		CorveeTaak $taak,
 		Profiel $vorigProfiel = null,
 		Profiel $profiel = null
-	) {
+	): bool {
 		if ($taak->profiel && $taak->profiel->uid === $profiel) {
 			return false;
 		}
@@ -81,8 +81,8 @@ class CorveeTakenRepository extends AbstractRepository
 		if ($puntenruilen && $profiel != null) {
 			$this->puntenToekennen($taak, $profiel);
 		} else {
-			$this->_em->persist($taak);
-			$this->_em->flush();
+			$this->getEntityManager()->persist($taak);
+			$this->getEntityManager()->flush();
 		}
 		return true;
 	}
@@ -119,7 +119,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param CorveeTaak[] $taken
 	 * @return array
 	 */
-	public function getRoosterMatrix(array $taken)
+	public function getRoosterMatrix(array $taken): array
 	{
 		$matrix = [];
 		foreach ($taken as $taak) {
@@ -257,7 +257,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 */
 	public function saveTaak(CorveeTaak $taak)
 	{
-		return $this->_em->transactional(function () use ($taak) {
+		return $this->getEntityManager()->transactional(function () use ($taak) {
 			if ($taak->taak_id === null) {
 				$taak = $this->newTaak($taak);
 			} else {
@@ -274,8 +274,8 @@ class CorveeTakenRepository extends AbstractRepository
 
 				$this->taakToewijzenAanLid($taak, $oldTaak['profiel'], $taak->profiel);
 
-				$this->_em->persist($taak);
-				$this->_em->flush();
+				$this->getEntityManager()->persist($taak);
+				$this->getEntityManager()->flush();
 			}
 
 			return $taak;
@@ -287,13 +287,13 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function prullenbakLeegmaken()
+	public function prullenbakLeegmaken(): int
 	{
 		$taken = $this->findBy(['verwijderd' => true]);
 		foreach ($taken as $taak) {
-			$this->_em->remove($taak);
+			$this->getEntityManager()->remove($taak);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 		return count($taken);
 	}
 
@@ -302,7 +302,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderOudeTaken()
+	public function verwijderOudeTaken(): int
 	{
 		/** @var CorveeTaak[] $taken */
 		$taken = $this->createQueryBuilder('ct')
@@ -312,9 +312,9 @@ class CorveeTakenRepository extends AbstractRepository
 			->getResult();
 		foreach ($taken as $taak) {
 			$taak->verwijderd = true;
-			$this->_em->persist($taak);
+			$this->getEntityManager()->persist($taak);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 		return count($taken);
 	}
 
@@ -324,7 +324,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderTakenVoorLid($uid)
+	public function verwijderTakenVoorLid($uid): int
 	{
 		/** @var CorveeTaak[] $taken */
 		$taken = $this->createQueryBuilder('ct')
@@ -334,9 +334,9 @@ class CorveeTakenRepository extends AbstractRepository
 			->getQuery()
 			->getResult();
 		foreach ($taken as $taak) {
-			$this->_em->remove($taak);
+			$this->getEntityManager()->remove($taak);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 		return count($taken);
 	}
 
@@ -352,7 +352,7 @@ class CorveeTakenRepository extends AbstractRepository
 		$datum,
 		$maaltijd = null,
 		$bonus_malus = 0
-	) {
+	): CorveeTaak {
 		$taak = new CorveeTaak();
 		$taak->taak_id = null;
 		$taak->corveeFunctie = $repetitie->corveeFunctie;
@@ -376,7 +376,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	private function newTaak(CorveeTaak $taak)
+	private function newTaak(CorveeTaak $taak): CorveeTaak
 	{
 		$taak->punten_toegekend = 0;
 		$taak->bonus_toegekend = 0;
@@ -384,8 +384,8 @@ class CorveeTakenRepository extends AbstractRepository
 		$taak->wanneer_gemaild = '';
 		$taak->verwijderd = false;
 
-		$this->_em->persist($taak);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($taak);
+		$this->getEntityManager()->flush();
 
 		return $taak;
 	}
@@ -423,7 +423,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param int $mid
 	 * @return bool
 	 */
-	public function existMaaltijdCorvee($mid)
+	public function existMaaltijdCorvee($mid): bool
 	{
 		return count($this->findBy(['maaltijd_id' => $mid])) > 0;
 	}
@@ -435,14 +435,14 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @return int
 	 * @throws ORMException
 	 */
-	public function verwijderMaaltijdCorvee($mid)
+	public function verwijderMaaltijdCorvee($mid): int
 	{
 		$taken = $this->findBy(['maaltijd_id' => $mid]);
 		foreach ($taken as $taak) {
 			$taak->verwijderd = true;
-			$this->_em->persist($taak);
+			$this->getEntityManager()->persist($taak);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 		return count($taken);
 	}
 
@@ -454,7 +454,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param int $fid
 	 * @return bool
 	 */
-	public function existFunctieTaken($fid)
+	public function existFunctieTaken($fid): bool
 	{
 		return count($this->findBy(['functie_id' => $fid])) > 0;
 	}
@@ -481,12 +481,12 @@ class CorveeTakenRepository extends AbstractRepository
 			);
 		}
 
-		return $this->_em->transactional(function () use (
+		return $this->getEntityManager()->transactional(function () use (
 			$repetitie,
 			$beginDatum,
 			$eindDatum,
 			$maaltijd
-		) {
+		): array {
 			return $this->newRepetitieTaken(
 				$repetitie,
 				$beginDatum,
@@ -510,7 +510,7 @@ class CorveeTakenRepository extends AbstractRepository
 		DateTimeInterface $beginDatum,
 		DateTimeInterface $eindDatum,
 		$maaltijd = null
-	) {
+	): array {
 		// start at first occurence
 		$shift = $repetitie->dag_vd_week - $beginDatum->format('w') + 7;
 		$shift %= 7;
@@ -523,7 +523,7 @@ class CorveeTakenRepository extends AbstractRepository
 			// break after one
 			for ($i = $repetitie->standaard_aantal; $i > 0; $i--) {
 				$taak = $this->vanRepetitie($repetitie, $datum, $maaltijd, 0);
-				$this->_em->persist($taak);
+				$this->getEntityManager()->persist($taak);
 				$taken[] = $taak;
 			}
 			if ($repetitie->periode_in_dagen < 1) {
@@ -534,7 +534,7 @@ class CorveeTakenRepository extends AbstractRepository
 			);
 		}
 
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 
 		return $taken;
 	}
@@ -545,15 +545,15 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderRepetitieTaken($crid)
+	public function verwijderRepetitieTaken($crid): int
 	{
 		$taken = $this->findBy(['corveeRepetitie' => $crid]);
 		foreach ($taken as $taak) {
 			$taak->verwijderd = true;
-			$this->_em->persist($taak);
+			$this->getEntityManager()->persist($taak);
 		}
 
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 
 		return count($taken);
 	}
@@ -564,7 +564,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @param int $crid
 	 * @return bool
 	 */
-	public function existRepetitieTaken($crid)
+	public function existRepetitieTaken($crid): bool
 	{
 		return count($this->findBy(['corveeRepetitie' => $crid])) > 0;
 	}
@@ -577,7 +577,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 */
 	public function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats)
 	{
-		return $this->_em->transactional(function () use ($repetitie, $verplaats) {
+		return $this->getEntityManager()->transactional(function () use ($repetitie, $verplaats): RepetitieTakenUpdateDTO {
 			$taken = $this->findBy([
 				'verwijderd' => false,
 				'crv_repetitie_id' => $repetitie->crv_repetitie_id,
@@ -587,10 +587,10 @@ class CorveeTakenRepository extends AbstractRepository
 				$taak->corveeFunctie = $repetitie->corveeFunctie;
 				$taak->punten = $repetitie->standaard_punten;
 
-				$this->_em->persist($taak);
+				$this->getEntityManager()->persist($taak);
 			}
 
-			$this->_em->flush();
+			$this->getEntityManager()->flush();
 			$updatecount = count($taken);
 
 			$taken = $this->findBy([
@@ -625,7 +625,7 @@ class CorveeTakenRepository extends AbstractRepository
 					}
 					if ($shift !== 0) {
 						$taak->datum = $datum;
-						$this->_em->persist($taak);
+						$this->getEntityManager()->persist($taak);
 						$daycount++;
 					}
 				}
@@ -646,7 +646,7 @@ class CorveeTakenRepository extends AbstractRepository
 				$verschil = $repetitie->standaard_aantal - sizeof($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					$taak = $this->vanRepetitie($repetitie, $taken[0]->datum, null, 0);
-					$this->_em->persist($taak);
+					$this->getEntityManager()->persist($taak);
 				}
 				$datumcount += $verschil;
 			}
@@ -660,11 +660,11 @@ class CorveeTakenRepository extends AbstractRepository
 						$maaltijdenById[$mid],
 						0
 					);
-					$this->_em->persist($taak);
+					$this->getEntityManager()->persist($taak);
 				}
 				$maaltijdcount += $verschil;
 			}
-			$this->_em->flush();
+			$this->getEntityManager()->flush();
 			return new RepetitieTakenUpdateDTO(
 				$updatecount,
 				$daycount,

@@ -66,7 +66,7 @@ class CiviSaldoRepository extends AbstractRepository
 	 *
 	 * @return CiviSaldo
 	 */
-	public function maakSaldo($uid)
+	public function maakSaldo($uid): CiviSaldo
 	{
 		$saldo = new CiviSaldo();
 		$saldo->uid = $uid;
@@ -179,8 +179,8 @@ class CiviSaldoRepository extends AbstractRepository
 		}
 		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::DELETE_SALDO, $entity);
 
-		$this->_em->remove($entity);
-		$this->_em->flush();
+		$this->getEntityManager()->remove($entity);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -194,8 +194,8 @@ class CiviSaldoRepository extends AbstractRepository
 	{
 		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::CREATE_SALDO, $entity);
 
-		$this->_em->persist($entity);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($entity);
+		$this->getEntityManager()->flush();
 
 		return $entity->uid;
 	}
@@ -221,11 +221,11 @@ class CiviSaldoRepository extends AbstractRepository
 	{
 		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::UPDATE_SALDO, $entity);
 
-		$this->_em->persist($entity);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($entity);
+		$this->getEntityManager()->flush();
 	}
 
-	public function existsByUid(string $uid)
+	public function existsByUid(string $uid): bool
 	{
 		return count($this->findBy(['uid' => $uid])) == 1;
 	}
@@ -264,7 +264,7 @@ class CiviSaldoRepository extends AbstractRepository
 	public function getWeekinvoer(
 		DateTimeImmutable $from,
 		DateTimeImmutable $until
-	) {
+	): stdClass {
 		// Invoer gebeurt op maandag, zoek eerste en laatse maandag (eerste inbegrepen, laatste niet)
 		$from = $from->modify('monday');
 		$until = $until->modify('next monday'); // Ook als het maandag is de volgende maandag pakken
@@ -300,14 +300,14 @@ SQL;
 		$rsm->addScalarResult('total', 'total', 'integer');
 		$rsm->addScalarResult('yearweek', 'yearweek');
 
-		$nativeQuery = $this->_em->createNativeQuery($query, $rsm);
+		$nativeQuery = $this->getEntityManager()->createNativeQuery($query, $rsm);
 		$nativeQuery->setParameter('van', $from);
 		$nativeQuery->setParameter('tot', $until);
 
 		return self::formatWeekinvoer($nativeQuery->getResult());
 	}
 
-	private static function formatWeekinvoer($result)
+	private static function formatWeekinvoer($result): stdClass
 	{
 		$weekinvoeren = new stdClass();
 		// Standaard volgorde categorieën
@@ -432,7 +432,7 @@ WHERE
 ORDER BY {$orderBy}
 SQL;
 
-		$nativeQuery = $this->_em->createNativeQuery($query, $rsm);
+		$nativeQuery = $this->getEntityManager()->createNativeQuery($query, $rsm);
 		$nativeQuery->setParameter('van', $from);
 		$nativeQuery->setParameter('tot', $until);
 

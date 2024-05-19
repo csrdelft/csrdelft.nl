@@ -24,7 +24,7 @@ class DeclaratieWachtrijRepository extends AbstractRepository
 	{
 		return array_filter(
 			$this->findBy([], ['positie' => 'asc', 'naam' => 'asc']),
-			function ($wachtrij) {
+			function ($wachtrij): bool {
 				return $wachtrij->magBeoordelen();
 			}
 		);
@@ -55,7 +55,7 @@ class DeclaratieWachtrijRepository extends AbstractRepository
 	): array {
 		return array_filter($this->declaratiesInWachtrij($wachtrij), function (
 			$declaratie
-		) use ($status) {
+		) use ($status): bool {
 			return in_array($declaratie->getListStatus(), $status);
 		});
 	}

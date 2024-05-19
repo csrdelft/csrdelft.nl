@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
+use DateTimeImmutable;
 use CsrDelft\view\formulier\invoervelden\InputField;
 
 /**
@@ -50,13 +51,13 @@ class DateField extends InputField
 		$this->css_classes[] = 'DateField';
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;
 		}
 
-		$date = \DateTimeImmutable::createFromFormat('!Y-m-d', $this->value);
+		$date = DateTimeImmutable::createFromFormat('!Y-m-d', $this->value);
 
 		if ($this->value == '0000-00-00' or empty($this->value)) {
 			if ($this->required) {
@@ -79,7 +80,7 @@ class DateField extends InputField
 		return $this->error === '';
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$attributes = $this->getInputAttribute([
 			'type',

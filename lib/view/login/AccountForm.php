@@ -14,7 +14,7 @@ use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\DeleteKnop;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class AccountForm implements FormulierTypeInterface
 {

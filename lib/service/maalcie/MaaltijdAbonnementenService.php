@@ -241,7 +241,7 @@ class MaaltijdAbonnementenService
 	 */
 	public function getAbonnementenVanNovieten()
 	{
-		return $this->entityManager->wrapInTransaction(function () {
+		return $this->entityManager->wrapInTransaction(function (): array {
 			$novieten = $this->profielRepository->findBy([
 				'status' => LidStatus::Noviet,
 			]);
@@ -266,7 +266,7 @@ class MaaltijdAbonnementenService
 	 */
 	public function verwijderAbonnementenVoorLid(Profiel $profiel)
 	{
-		return $this->entityManager->wrapInTransaction(function () use ($profiel) {
+		return $this->entityManager->wrapInTransaction(function () use ($profiel): int {
 			$abos = $this->getAbonnementenVoorLid($profiel);
 			$aantal = 0;
 			foreach ($abos as $abo) {
@@ -305,7 +305,7 @@ class MaaltijdAbonnementenService
 			$profiel,
 			$abonneerbaar,
 			$uitgeschakeld
-		) {
+		): array {
 			$lijst = [];
 
 			if ($abonneerbaar) {
@@ -363,7 +363,7 @@ class MaaltijdAbonnementenService
 	 */
 	public function inschakelenAbonnement($abo)
 	{
-		return $this->entityManager->wrapInTransaction(function () use ($abo) {
+		return $this->entityManager->wrapInTransaction(function () use ($abo): int {
 			if (!$abo->maaltijd_repetitie->abonneerbaar) {
 				throw new CsrGebruikerException('Niet abonneerbaar');
 			}
@@ -409,7 +409,7 @@ class MaaltijdAbonnementenService
 	) {
 		return $this->entityManager->wrapInTransaction(function () use (
 			$repetitie
-		) {
+		): int {
 			$novieten = $this->profielRepository->findBy([
 				'status' => LidStatus::Noviet,
 			]);
@@ -495,7 +495,7 @@ class MaaltijdAbonnementenService
 	 */
 	public function verwijderAbonnementen(MaaltijdRepetitie $mrid)
 	{
-		return $this->entityManager->wrapInTransaction(function () use ($mrid) {
+		return $this->entityManager->wrapInTransaction(function () use ($mrid): int {
 			$abos = $mrid->abonnementen;
 			$aantal = count($abos);
 			foreach ($abos as $abo) {

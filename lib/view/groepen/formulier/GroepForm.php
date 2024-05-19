@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use Exception;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Util\FlashUtil;
@@ -38,14 +39,14 @@ class GroepForm extends ModalForm
 	private $isWijzigen;
 
 	/**
-	 * GroepForm constructor.
-	 * @param Groep $groep
-	 * @param $action
-	 * @param AccessAction $mode
-	 * @param false $nocancel
-	 * @throws \Exception
-	 */
-	public function __construct(
+  * GroepForm constructor.
+  * @param Groep $groep
+  * @param $action
+  * @param AccessAction $mode
+  * @param false $nocancel
+  * @throws Exception
+  */
+ public function __construct(
 		Groep $groep,
 		$action,
 		$magWijzigen,
@@ -129,7 +130,7 @@ class GroepForm extends ModalForm
 		$this->isWijzigen = $isWijzigen;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		/**
 		 * @var Groep $groep

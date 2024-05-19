@@ -24,7 +24,7 @@ class ForumDradenVerbergenRepository extends AbstractRepository
 		parent::__construct($registry, ForumDraadVerbergen::class);
 	}
 
-	protected function maakForumDraadVerbergen(ForumDraad $draad)
+	protected function maakForumDraadVerbergen(ForumDraad $draad): ForumDraadVerbergen
 	{
 		$verbergen = new ForumDraadVerbergen();
 		$verbergen->draad = $draad;
@@ -35,7 +35,7 @@ class ForumDradenVerbergenRepository extends AbstractRepository
 		return $verbergen;
 	}
 
-	public function getAantalVerborgenVoorLid()
+	public function getAantalVerborgenVoorLid(): int
 	{
 		return count($this->findBy(['uid' => LoginService::getUid()]));
 	}

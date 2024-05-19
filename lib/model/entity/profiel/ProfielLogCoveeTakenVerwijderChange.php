@@ -22,7 +22,7 @@ class ProfielLogCoveeTakenVerwijderChange extends AbstractProfielLogChangeEntry
 		$this->corveetaken = $corveetaken;
 	}
 
-	public function toHtml()
+	public function toHtml(): string
 	{
 		return 'Verwijder corveetaken:' . implode(',', $this->corveetaken);
 	}

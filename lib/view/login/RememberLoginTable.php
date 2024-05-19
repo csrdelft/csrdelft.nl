@@ -69,7 +69,7 @@ class RememberLoginTable extends DataTable
 		);
 	}
 
-	public function getType()
+	public function getType(): string
 	{
 		return get_class($this);
 	}

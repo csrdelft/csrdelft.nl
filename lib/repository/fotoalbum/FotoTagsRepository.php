@@ -34,7 +34,7 @@ class FotoTagsRepository extends AbstractRepository
 		array $orderBy = null,
 		$limit = null,
 		$offset = null
-	) {
+	): array {
 		if (!$orderBy) {
 			$orderBy = ['wanneer' => 'DESC'];
 		}
@@ -44,12 +44,12 @@ class FotoTagsRepository extends AbstractRepository
 	/**
 	 * @return FotoTag[]
 	 */
-	public function findAll()
+	public function findAll(): array
 	{
 		return parent::findBy([]);
 	}
 
-	public function getTags(Foto $foto)
+	public function getTags(Foto $foto): array
 	{
 		return $this->findBy(['refuuid' => $foto->getUUID()]);
 	}

@@ -37,7 +37,7 @@ class FotoRepository extends AbstractRepository
 	/**
 	 * @override parent::retrieveByUUID($UUID)
 	 */
-	public function retrieveByUUID($UUID)
+	public function retrieveByUUID($UUID): ?object
 	{
 		$parts = explode('@', $UUID, 2);
 		$path = explode('/', $parts[0]);
@@ -119,7 +119,7 @@ class FotoRepository extends AbstractRepository
 	 * @param Foto $foto
 	 * @return bool
 	 */
-	public function verwijderFoto(Foto $foto)
+	public function verwijderFoto(Foto $foto): int
 	{
 		$ret = true;
 		$ret &= unlink($foto->getFullPath());

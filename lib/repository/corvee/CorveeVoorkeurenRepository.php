@@ -50,7 +50,7 @@ class CorveeVoorkeurenRepository extends AbstractRepository
 	 * @param boolean $uitgeschakeld
 	 * @return CorveeVoorkeur[]
 	 */
-	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false)
+	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false): array
 	{
 		$repById = $this->corveeRepetitiesRepository->getVoorkeurbareRepetities(); // grouped by crid
 		$lijst = [];
@@ -123,7 +123,7 @@ class CorveeVoorkeurenRepository extends AbstractRepository
 	 */
 	private function loadLedenVoorkeuren()
 	{
-		return $this->_em
+		return $this->getEntityManager()
 			->createQuery(
 				<<<'DQL'
 SELECT NEW CsrDelft\entity\corvee\CorveeVoorkeurMatrixDTO(p.uid, r.crv_repetitie_id, v.uid)
@@ -143,7 +143,7 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function inschakelenVoorkeur(CorveeVoorkeur $voorkeur)
+	public function inschakelenVoorkeur(CorveeVoorkeur $voorkeur): CorveeVoorkeur
 	{
 		if ($this->getHeeftVoorkeur($voorkeur->crv_repetitie_id, $voorkeur->uid)) {
 			throw new CsrGebruikerException('Voorkeur al ingeschakeld');
@@ -163,13 +163,13 @@ DQL
 			}
 		}
 
-		$this->_em->persist($voorkeur);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($voorkeur);
+		$this->getEntityManager()->flush();
 
 		return $voorkeur;
 	}
 
-	public function getHeeftVoorkeur($crid, $uid)
+	public function getHeeftVoorkeur($crid, $uid): bool
 	{
 		return $this->find(['uid' => $uid, 'crv_repetitie_id' => $crid]) != null;
 	}
@@ -180,14 +180,14 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function uitschakelenVoorkeur(CorveeVoorkeur $voorkeur)
+	public function uitschakelenVoorkeur(CorveeVoorkeur $voorkeur): CorveeVoorkeur
 	{
 		if (!$this->getHeeftVoorkeur($voorkeur->crv_repetitie_id, $voorkeur->uid)) {
 			throw new CsrGebruikerException('Voorkeur al uitgeschakeld');
 		}
 
-		$this->_em->remove($voorkeur);
-		$this->_em->flush();
+		$this->getEntityManager()->remove($voorkeur);
+		$this->getEntityManager()->flush();
 
 		$voorkeur->uid = null;
 
@@ -203,14 +203,14 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderVoorkeuren($crid)
+	public function verwijderVoorkeuren($crid): int
 	{
 		$voorkeuren = $this->findBy(['corveeRepetitie' => $crid]);
 		$num = count($voorkeuren);
 		foreach ($voorkeuren as $voorkeur) {
-			$this->_em->remove($voorkeur);
+			$this->getEntityManager()->remove($voorkeur);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 
 		return $num;
 	}
@@ -223,14 +223,14 @@ DQL
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderVoorkeurenVoorLid($uid)
+	public function verwijderVoorkeurenVoorLid($uid): int
 	{
 		$voorkeuren = $this->findBy(['uid' => $uid]);
 		$num = count($voorkeuren);
 		foreach ($voorkeuren as $voorkeur) {
-			$this->_em->remove($voorkeur);
+			$this->getEntityManager()->remove($voorkeur);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 
 		return $num;
 	}

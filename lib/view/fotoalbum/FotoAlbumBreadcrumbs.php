@@ -19,7 +19,7 @@ class FotoAlbumBreadcrumbs
 		FotoAlbum $album,
 		$dropdown = true,
 		$self = false
-	) {
+	): string {
 		return static::getBreadcrumbsDropdown($album, $dropdown, $self);
 	}
 
@@ -27,7 +27,7 @@ class FotoAlbumBreadcrumbs
 		FotoAlbum $album,
 		$dropdown,
 		$self
-	) {
+	): string {
 		$breadcrumbs =
 			'<li class="breadcrumb-item"><a href="/">' .
 			Icon::getTag('home') .

@@ -32,19 +32,19 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function nieuw(Maaltijd $maaltijd)
+	public function nieuw(Maaltijd $maaltijd): MaaltijdBeoordeling
 	{
 		$b = new MaaltijdBeoordeling();
 		$b->maaltijd_id = $maaltijd->maaltijd_id;
 		$b->uid = LoginService::getUid();
 		$b->kwantiteit = null;
 		$b->kwaliteit = null;
-		$this->_em->persist($b);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($b);
+		$this->getEntityManager()->flush();
 		return $b;
 	}
 
-	public function getBeoordelingSamenvatting(Maaltijd $maaltijd)
+	public function getBeoordelingSamenvatting(Maaltijd $maaltijd): MaaltijdBeoordelingDTO
 	{
 		// Haal beoordelingen voor deze maaltijd op
 		$beoordelingen = $this->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
@@ -136,7 +136,7 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository
 	 */
 	public function update(MaaltijdBeoordeling $maaltijdBeoordeling)
 	{
-		$this->_em->persist($maaltijdBeoordeling);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($maaltijdBeoordeling);
+		$this->getEntityManager()->flush();
 	}
 }

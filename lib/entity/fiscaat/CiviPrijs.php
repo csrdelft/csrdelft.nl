@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use CsrDelft\repository\fiscaat\CiviPrijsRepository;
+use CiviProduct;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,43 +14,42 @@ use Doctrine\ORM\Mapping as ORM;
  * was op een bepaald moment.
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviPrijsRepository")
- * @ORM\Table("civi_prijs", uniqueConstraints={
- *   @ORM\UniqueConstraint(name="unique_van_product_id", columns={"van", "product_id"})
- * })
  */
+#[ORM\Table('civi_prijs')]
+#[ORM\UniqueConstraint(name: 'unique_van_product_id', columns: ['van', 'product_id'])]
+#[ORM\Entity(repositoryClass: CiviPrijsRepository::class)]
 class CiviPrijs
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $id;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $id;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
-	 */
-	public $van;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
+ public $van;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	public $tot;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+ public $tot;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 */
-	public $product_id;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ public $product_id;
 	/**
-	 * @var CiviProduct
-	 * @ORM\ManyToOne(targetEntity="CiviProduct", inversedBy="prijzen")
-	 */
-	public $product;
+  * @var CiviProduct
+  */
+ #[ORM\ManyToOne(targetEntity: CiviProduct::class, inversedBy: 'prijzen')]
+ public $product;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 */
-	public $prijs;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ public $prijs;
 }

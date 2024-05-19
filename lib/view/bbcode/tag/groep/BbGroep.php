@@ -20,7 +20,7 @@ class BbGroep extends BbTagGroep
 		return 'groep';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'personen';
 	}

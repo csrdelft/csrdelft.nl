@@ -53,7 +53,7 @@ trait YamlInstellingen
 		$this->defaults = $config;
 	}
 
-	public function hasKey($module, $key)
+	public function hasKey($module, $key): bool
 	{
 		return isset($this->defaults[$module][$key]);
 	}
@@ -76,12 +76,12 @@ trait YamlInstellingen
 		return $this->defaults;
 	}
 
-	public function getModules()
+	public function getModules(): array
 	{
 		return array_keys($this->defaults);
 	}
 
-	public function getModuleKeys($module)
+	public function getModuleKeys($module): array
 	{
 		return array_keys($this->defaults[$module]);
 	}

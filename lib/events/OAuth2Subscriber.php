@@ -11,7 +11,7 @@ use League\Bundle\OAuth2ServerBundle\ValueObject\Scope;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use League\Bundle\OAuth2ServerBundle\Event\AuthorizationRequestResolveEvent;
 use League\Bundle\OAuth2ServerBundle\Event\ScopeResolveEvent;
 use League\Bundle\OAuth2ServerBundle\OAuth2Events;
@@ -105,7 +105,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		$request = $this->requestStack->getMainRequest();
 
 		if ($request->query->has('scopeChoice')) {
-			$requestedScopes = array_map(function ($scope) {
+			$requestedScopes = array_map(function ($scope): Scope {
 				return new Scope($scope);
 			}, (array) $request->query->get('scopeChoice'));
 		}

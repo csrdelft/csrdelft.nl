@@ -103,7 +103,7 @@ class Icon
 		$hover = null,
 		$title = null,
 		$class = null
-	) {
+	): string {
 		$icon = self::get($key);
 
 		if ($hover !== null) {

@@ -46,7 +46,7 @@ use CsrDelft\view\Icon;
  */
 class ProfielForm extends Formulier
 {
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): string
 	{
 		return '<ol class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
 			Icon::getTag('home') .

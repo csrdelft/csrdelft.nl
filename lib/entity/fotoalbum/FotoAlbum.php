@@ -16,20 +16,19 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\fotoalbum\FotoAlbumRepository")
- * @ORM\Table("fotoalbums")
- * @ORM\EntityListeners({"CsrDelft\events\FotoAlbumListener"})
  */
+#[ORM\Table('fotoalbums')]
+#[ORM\Entity(repositoryClass: FotoAlbumRepository::class)]
+#[ORM\EntityListeners(['CsrDelft\events\FotoAlbumListener'])]
 class FotoAlbum extends Map
 {
 	/**
-	 * Relatief pad in fotoalbum
-	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
-	 */
-	public $subdir;
+  * Relatief pad in fotoalbum
+  * @var string
+  */
+ #[ORM\Column(type: 'stringkey')]
+ #[ORM\Id]
+ public $subdir;
 	/**
 	 * Subalbums in dit album
 	 * @var FotoAlbum[]
@@ -46,17 +45,17 @@ class FotoAlbum extends Map
 	 */
 	protected $fotos_incompleet;
 	/**
-	 * Creator
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 */
-	public $owner;
+  * Creator
+  * @var string
+  */
+ #[ORM\Column(type: 'uid')]
+ public $owner;
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="owner", referencedColumnName="uid")
-	 */
-	public $owner_profiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'owner', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
+ public $owner_profiel;
 
 	public function __construct($path = null, $absolute = false)
 	{
@@ -99,28 +98,28 @@ class FotoAlbum extends Map
 	/**
 	 * File modification time van het album.
 	 */
-	public function modified()
+	public function modified(): int|false
 	{
 		return filemtime($this->path);
 	}
 
-	public function getParentName()
+	public function getParentName(): ?string
 	{
 		return ucfirst(basename(dirname($this->subdir)));
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/fotoalbum/' . PathUtil::direncode($this->subdir);
 	}
 
-	public function isEmpty()
+	public function isEmpty(): bool
 	{
 		$subalbums = $this->getSubAlbums();
 		return empty($subalbums) && !$this->hasFotos(true);
 	}
 
-	public function hasFotos($incompleet = false)
+	public function hasFotos($incompleet = false): bool
 	{
 		$fotos = $this->getFotos($incompleet);
 		return !empty($fotos);
@@ -205,7 +204,7 @@ class FotoAlbum extends Map
 	/**
 	 * @return string[]
 	 */
-	public function getCoverUrls()
+	public function getCoverUrls(): array
 	{
 		$fotos = [];
 		$fotos[] = $this->getCoverUrl();
@@ -262,7 +261,7 @@ class FotoAlbum extends Map
 	 * Zegt of dit album publiek toegankelijk is.
 	 * @return bool
 	 */
-	public function isPubliek()
+	public function isPubliek(): bool
 	{
 		return preg_match('/Publiek\/?.*$/', $this->subdir) == 1;
 	}
@@ -272,7 +271,7 @@ class FotoAlbum extends Map
 	 *
 	 * @return string[][]
 	 */
-	public function getAlbumArrayRecursive()
+	public function getAlbumArrayRecursive(): array
 	{
 		$fotos = [];
 		foreach ($this->getFotos() as $foto) {
@@ -306,7 +305,7 @@ class FotoAlbum extends Map
 	 *
 	 * @return string[][]
 	 */
-	public function getAlbumArray()
+	public function getAlbumArray(): array
 	{
 		$fotos = [];
 		foreach ($this->getFotos() as $foto) {

@@ -11,15 +11,15 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 class GroepKeuzeSelectie
 {
 	/**
-	 * @var string|null
-	 * @Serializer\Groups("vue")
-	 */
-	public $naam;
+  * @var string|null
+  */
+ #[Serializer\Groups('vue')]
+ public $naam;
 	/**
-	 * @var string|null
-	 * @Serializer\Groups("vue")
-	 */
-	public $selectie;
+  * @var string|null
+  */
+ #[Serializer\Groups('vue')]
+ public $selectie;
 
 	public function __construct($naam = null, $selectie = null)
 	{
@@ -27,7 +27,7 @@ class GroepKeuzeSelectie
 		$this->selectie = $selectie;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return "$this->naam: $this->selectie";
 	}

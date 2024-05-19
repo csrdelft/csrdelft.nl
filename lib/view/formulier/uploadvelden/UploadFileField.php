@@ -39,12 +39,12 @@ class UploadFileField extends InputField
 		}
 	}
 
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		return isset($_FILES[$this->name]);
 	}
 
-	public function isAvailable()
+	public function isAvailable(): bool
 	{
 		return true;
 	}
@@ -54,7 +54,7 @@ class UploadFileField extends InputField
 		return $this->filterMime;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		parent::validate();
 		if ($this->value['error'] == UPLOAD_ERR_NO_FILE) {
@@ -113,7 +113,7 @@ class UploadFileField extends InputField
 		$this->model->filename = $filename;
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		// werkomheen onbekende mime-types voor client
 		if ($this->filterMime == Afbeelding::$mimeTypes) {
@@ -137,7 +137,7 @@ class UploadFileField extends InputField
 			'" />';
 	}
 
-	public function getJavascript()
+	public function getJavascript(): string
 	{
 		$max = FileUtil::getMaximumFileUploadSize();
 		$format = FileUtil::format_filesize($max);

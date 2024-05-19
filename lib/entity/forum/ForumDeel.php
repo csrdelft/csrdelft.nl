@@ -2,6 +2,9 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumDelenRepository;
+use ForumCategorie;
+use ForumDeelMelding;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
 use CsrDelft\repository\forum\ForumDradenRepository;
@@ -14,75 +17,74 @@ use Doctrine\ORM\PersistentCollection;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Een deelforum zit in een forumcategorie bevat ForumDraden.
- * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumDelenRepository")
- * @ORM\Table("forum_delen", indexes={
- *   @ORM\Index(name="volgorde", columns={"volgorde"}),
- * })
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
+#[ORM\Table('forum_delen')]
+#[ORM\Index(name: 'volgorde', columns: ['volgorde'])]
+#[ORM\Entity(repositoryClass: ForumDelenRepository::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class ForumDeel
 {
 	/**
-	 * Primary key
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $forum_id;
+  * Primary key
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $forum_id;
 	/**
-	 * Dit forum valt onder deze categorie
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $categorie_id;
+  * Dit forum valt onder deze categorie
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $categorie_id;
 	/**
-	 * Titel
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $titel;
+  * Titel
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $titel;
 	/**
-	 * Omschrijving
-	 * @var string
-	 * @ORM\Column(type="text")
-	 */
-	public $omschrijving;
+  * Omschrijving
+  * @var string
+  */
+ #[ORM\Column(type: 'text')]
+ public $omschrijving;
 	/**
-	 * Rechten benodigd voor lezen
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $rechten_lezen;
+  * Rechten benodigd voor lezen
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $rechten_lezen;
 	/**
-	 * Rechten benodigd voor posten
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $rechten_posten;
+  * Rechten benodigd voor posten
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $rechten_posten;
 	/**
-	 * Rechten benodigd voor modereren
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $rechten_modereren;
+  * Rechten benodigd voor modereren
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $rechten_modereren;
 	/**
-	 * Weergave volgorde
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $volgorde;
+  * Weergave volgorde
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $volgorde;
 	/**
-	 * @var ForumCategorie
-	 * @ORM\ManyToOne(targetEntity="ForumCategorie", inversedBy="forum_delen")
-	 * @ORM\JoinColumn(name="categorie_id", referencedColumnName="categorie_id")
-	 */
-	public $categorie;
+  * @var ForumCategorie
+  */
+ #[ORM\JoinColumn(name: 'categorie_id', referencedColumnName: 'categorie_id')]
+ #[ORM\ManyToOne(targetEntity: ForumCategorie::class, inversedBy: 'forum_delen')]
+ public $categorie;
 	/**
-	 * @var PersistentCollection|ForumDeelMelding[]
-	 * @ORM\OneToMany(targetEntity="ForumDeelMelding", mappedBy="deel")
-	 */
-	public $meldingen;
+  * @var PersistentCollection|ForumDeelMelding[]
+  */
+ #[ORM\OneToMany(targetEntity: ForumDeelMelding::class, mappedBy: 'deel')]
+ public $meldingen;
 	/**
 	 * Forumdraden
 	 * @var ForumDraad[]
@@ -94,7 +96,7 @@ class ForumDeel
 		$this->meldingen = new ArrayCollection();
 	}
 
-	public function magLezen($rss = false)
+	public function magLezen($rss = false): bool
 	{
 		return LoginService::mag(P_FORUM_READ) &&
 			LoginService::mag($this->rechten_lezen) &&
@@ -111,12 +113,12 @@ class ForumDeel
 		return LoginService::mag($this->rechten_modereren);
 	}
 
-	public function magMeldingKrijgen()
+	public function magMeldingKrijgen(): bool
 	{
 		return $this->magLezen();
 	}
 
-	public function isOpenbaar()
+	public function isOpenbaar(): bool
 	{
 		return strpos($this->rechten_lezen, P_FORUM_READ) !== false;
 	}
@@ -138,7 +140,7 @@ class ForumDeel
 		return $this->forum_draden;
 	}
 
-	public function hasForumDraden()
+	public function hasForumDraden(): bool
 	{
 		$this->getForumDraden();
 		return !empty($this->forum_draden);
@@ -154,7 +156,7 @@ class ForumDeel
 		$this->forum_draden = $forum_draden;
 	}
 
-	public function lidWilMeldingVoorDeel($uid = null)
+	public function lidWilMeldingVoorDeel($uid = null): bool
 	{
 		if ($uid === null) {
 			$uid = LoginService::getUid();

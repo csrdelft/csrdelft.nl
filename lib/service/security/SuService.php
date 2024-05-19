@@ -8,7 +8,7 @@ use CsrDelft\entity\security\Account;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class SuService
@@ -51,7 +51,7 @@ class SuService
 	/**
 	 * @return bool
 	 */
-	public function isSued()
+	public function isSued(): bool
 	{
 		return $this->security->getToken() &&
 			$this->security->isGranted('IS_IMPERSONATOR');
@@ -117,7 +117,7 @@ class SuService
 		$this->tokenStorage->setToken($token->getOriginalToken());
 	}
 
-	public function maySuTo(UserInterface $suNaar)
+	public function maySuTo(UserInterface $suNaar): bool
 	{
 		return $this->security->isGranted('ROLE_ALLOWED_TO_SWITCH') && // Mag switchen
 		!$this->security->isGranted('IS_IMPERSONATOR') && // Is niet al geswitched

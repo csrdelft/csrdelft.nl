@@ -11,7 +11,7 @@ use CsrDelft\service\security\LoginService;
 
 class OnderverenigingenRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Ondervereniging::class;
 	}
@@ -37,7 +37,7 @@ class OnderverenigingenRepository extends GroepRepository
 		int $limit = null,
 		int $offset = null,
 		string $soort = null
-	) {
+	): array {
 		if ($soort && OnderverenigingStatus::isValidValue($soort)) {
 			return $this->findBy(
 				[
@@ -52,7 +52,7 @@ class OnderverenigingenRepository extends GroepRepository
 		return parent::overzicht($limit, $offset, $soort);
 	}
 
-	public function beheer(string $soort = null)
+	public function beheer(string $soort = null): array
 	{
 		if ($soort && OnderverenigingStatus::isValidValue($soort)) {
 			return $this->findBy([

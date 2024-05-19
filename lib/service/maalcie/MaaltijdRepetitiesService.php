@@ -77,7 +77,7 @@ class MaaltijdRepetitiesService
 			$repetitie,
 			$beginDatum,
 			$eindDatum
-		) {
+		): array {
 			if ($repetitie->periode_in_dagen < 1) {
 				throw new CsrGebruikerException(
 					'New repetitie-maaltijden faalt: $periode =' .

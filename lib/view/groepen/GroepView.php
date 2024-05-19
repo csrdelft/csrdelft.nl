@@ -95,7 +95,7 @@ class GroepView implements FormElement, ToResponse
 		return null;
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$html =
 			'<a id="a-' .
@@ -156,7 +156,7 @@ class GroepView implements FormElement, ToResponse
 		return $html;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->getHtml();
 	}

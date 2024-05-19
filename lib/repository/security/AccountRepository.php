@@ -8,6 +8,7 @@ use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -36,7 +37,7 @@ class AccountRepository extends AbstractRepository implements
 	 * @param $uid
 	 * @return bool
 	 */
-	public static function isValidUid($uid)
+	public static function isValidUid(mixed $uid): bool
 	{
 		return is_string($uid) && preg_match('/^[a-z0-9]{4}$/', $uid);
 	}
@@ -46,7 +47,7 @@ class AccountRepository extends AbstractRepository implements
 	 *
 	 * @return bool
 	 */
-	public function existsUid($uid)
+	public function existsUid($uid): bool
 	{
 		return $this->find($uid) != null;
 	}
@@ -56,7 +57,7 @@ class AccountRepository extends AbstractRepository implements
 	 *
 	 * @return bool
 	 */
-	public function existsUsername($name)
+	public function existsUsername($name): bool
 	{
 		return $this->findOneBy(['username' => $name]) != null;
 	}
@@ -82,8 +83,8 @@ class AccountRepository extends AbstractRepository implements
 	{
 		$account->private_token = CryptoUtil::crypto_rand_token(150);
 		$account->private_token_since = date_create_immutable();
-		$this->_em->persist($account);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($account);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -127,8 +128,8 @@ class AccountRepository extends AbstractRepository implements
 	{
 		$account->failed_login_attempts++;
 		$account->last_login_attempt = date_create_immutable();
-		$this->_em->persist($account);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($account);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -139,29 +140,29 @@ class AccountRepository extends AbstractRepository implements
 		$account->failed_login_attempts = 0;
 		$account->last_login_attempt = date_create_immutable();
 		$account->last_login_success = date_create_immutable();
-		$this->_em->persist($account);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($account);
+		$this->getEntityManager()->flush();
 	}
 
 	public function delete(Account $account)
 	{
-		$this->_em->remove($account);
-		$this->_em->flush();
+		$this->getEntityManager()->remove($account);
+		$this->getEntityManager()->flush();
 	}
 
 	public function upgradePassword(
-		UserInterface $user,
+		PasswordAuthenticatedUserInterface $user,
 		string $newEncodedPassword
 	): void {
 		$user->pass_hash = $newEncodedPassword;
 
-		$this->_em->flush();
-		$this->_em->clear();
+		$this->getEntityManager()->flush();
+		$this->getEntityManager()->clear();
 	}
 
-	public function loadUserByUsername(string $username)
+	public function loadUserByIdentifier(string $identifier): ?UserInterface
 	{
-		return $this->findOneByUsername($username);
+		return $this->findOneByUsername($identifier);
 	}
 
 	public function findOneByUsername($username)

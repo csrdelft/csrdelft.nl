@@ -6,12 +6,12 @@ use CsrDelft\entity\groepen\enum\OnderverenigingStatus;
 
 class OnderverenigingStatusType extends EnumType
 {
-	public function getEnumClass()
+	public function getEnumClass(): string
 	{
 		return OnderverenigingStatus::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumOnderverenigingStatus';
 	}

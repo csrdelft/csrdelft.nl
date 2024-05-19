@@ -55,12 +55,12 @@ class CorveeFunctiesRepository extends AbstractRepository
 	 *
 	 * @return CorveeFunctie[]
 	 */
-	public function getAlleFuncties()
+	public function getAlleFuncties(): array
 	{
 		return ArrayUtil::group_by_distinct('functie_id', $this->findAll());
 	}
 
-	public function nieuw()
+	public function nieuw(): CorveeFunctie
 	{
 		$functie = new CorveeFunctie();
 		$functie->kwalificatie_benodigd = (bool) InstellingUtil::instelling(
@@ -91,8 +91,8 @@ class CorveeFunctiesRepository extends AbstractRepository
 				'Verwijder eerst de bijbehorende kwalificaties!'
 			);
 		}
-		$this->_em->remove($functie);
-		$this->_em->flush();
+		$this->getEntityManager()->remove($functie);
+		$this->getEntityManager()->flush();
 	}
 
 	public function getSuggesties($query)

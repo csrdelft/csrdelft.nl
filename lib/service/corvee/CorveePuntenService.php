@@ -150,7 +150,7 @@ class CorveePuntenService
 	/**
 	 * @return array|CorveePuntenOverzichtDTO[]
 	 */
-	public function loadPuntenTotaalVoorAlleLeden()
+	public function loadPuntenTotaalVoorAlleLeden(): array
 	{
 		$leden = $this->profielRepository->findByLidStatus([
 			LidStatus::Lid,
@@ -172,7 +172,7 @@ class CorveePuntenService
 	 * @param null $functies
 	 * @return CorveePuntenOverzichtDTO[]
 	 */
-	public function loadPuntenVoorAlleLeden($functies = null)
+	public function loadPuntenVoorAlleLeden($functies = null): array
 	{
 		$taken = $this->corveeTakenRepository->getAlleTaken(true); // grouped by uid
 		$leden = $this->profielRepository->findByLidStatus([
@@ -256,7 +256,7 @@ class CorveePuntenService
 	 * @param CorveeTaak[] $taken
 	 * @return CorveePuntenOverzichtDTO
 	 */
-	private function sumPuntenPerFunctie($functies, $taken)
+	private function sumPuntenPerFunctie($functies, $taken): CorveePuntenOverzichtDTO
 	{
 		$sumAantal = [];
 		$sumPunten = [];
@@ -292,7 +292,7 @@ class CorveePuntenService
 	 * @param bool $tekort
 	 * @return string
 	 */
-	private function rgbCalculate($punten, $tekort = false)
+	private function rgbCalculate($punten, $tekort = false): string
 	{
 		$perjaar = intval(InstellingUtil::instelling('corvee', 'punten_per_jaar'));
 		if (!$tekort) {

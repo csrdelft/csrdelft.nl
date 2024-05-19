@@ -2,6 +2,7 @@
 
 namespace CsrDelft\common\Annotation;
 
+use BadMethodCallException;
 use CsrDelft\events\AccessControlEventListener;
 
 /**
@@ -35,7 +36,7 @@ class Auth
 		foreach ($data as $key => $value) {
 			$method = 'set' . str_replace('_', '', $key);
 			if (!method_exists($this, $method)) {
-				throw new \BadMethodCallException(
+				throw new BadMethodCallException(
 					sprintf(
 						'Unknown property "%s" on annotation "%s".',
 						$key,

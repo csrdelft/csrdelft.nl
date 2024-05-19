@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service\forum;
 
+use DateTimeImmutable;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
 use CsrDelft\common\Util\ArrayUtil;
@@ -91,7 +92,7 @@ class ForumDelenService
 	 * @return ForumDraad[]
 	 * @throws Exception
 	 */
-	public function getWachtOpGoedkeuring()
+	public function getWachtOpGoedkeuring(): array
 	{
 		$postsByDraadId = ArrayUtil::group_by(
 			'draad_id',
@@ -159,7 +160,7 @@ class ForumDelenService
 		return $dradenById;
 	}
 
-	public function getRecent($belangrijk = null)
+	public function getRecent($belangrijk = null): ForumDeel
 	{
 		$deel = new ForumDeel();
 		if ($belangrijk) {
@@ -185,7 +186,7 @@ class ForumDelenService
 	 * @param $offset
 	 * @return ForumDraad[]
 	 */
-	public function zoeken(ForumZoeken $forumZoeken)
+	public function zoeken(ForumZoeken $forumZoeken): array
 	{
 		$zoek_in = $forumZoeken->zoek_in;
 
@@ -268,7 +269,7 @@ class ForumDelenService
 		return $gevonden_draden;
 	}
 
-	public function laatstGewijzigd($posts)
+	public function laatstGewijzigd($posts): DateTimeImmutable
 	{
 		return max(
 			array_map(function (ForumPost $post) {
@@ -281,15 +282,15 @@ class ForumDelenService
 	{
 		switch ($sorteerOp) {
 			case 'aangemaakt_op':
-				return function ($a, $b) {
+				return function ($a, $b): int {
 					return $a->datum_tijd < $b->datum_tijd ? 1 : -1;
 				};
 			case 'laatste_bericht':
-				return function ($a, $b) {
+				return function ($a, $b): int {
 					return $a->laatst_gewijzigd < $b->laatst_gewijzigd ? 1 : -1;
 				};
 			case 'relevantie':
-				return function ($a, $b) {
+				return function ($a, $b): int {
 					return $a->score < $b->score ? 1 : -1;
 				};
 			default:
@@ -314,7 +315,7 @@ class ForumDelenService
 		$belangrijk,
 		$rss = false,
 		$offset = 0
-	) {
+	): array {
 		if (!is_int($aantal)) {
 			$aantal = $this->forumDradenRepository->getAantalPerPagina();
 			$pagina = $this->forumDradenRepository->getHuidigePagina();
@@ -375,7 +376,7 @@ class ForumDelenService
 	/**
 	 * @return ForumCategorie[]
 	 */
-	public function getForumIndelingVoorLid()
+	public function getForumIndelingVoorLid(): array
 	{
 		$delenByCategorieId = ArrayUtil::group_by(
 			'categorie_id',

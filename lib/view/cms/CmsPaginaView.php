@@ -42,7 +42,7 @@ class CmsPaginaView implements View, ToResponse
 		return $this->pagina->titel;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return ContainerFacade::getContainer()
 			->get(Environment::class)

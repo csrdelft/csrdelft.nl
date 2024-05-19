@@ -2,17 +2,18 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbPeiling;
 
 class NodePeiling implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbPeiling::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'peiling';
 	}
@@ -20,7 +21,7 @@ class NodePeiling implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbPeiling) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		return [
@@ -37,7 +38,7 @@ class NodePeiling implements Node
 		];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return true;
 	}

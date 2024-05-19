@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class VerticalePrefixVoter extends PrefixVoter
 {
-	protected function supportsPrefix($prefix)
+	protected function supportsPrefix($prefix): bool
 	{
 		return strtoupper($prefix) == 'VERTICALE';
 	}
@@ -21,7 +21,7 @@ class VerticalePrefixVoter extends PrefixVoter
 		$role,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		/** @var Account $user */
 		$user = $token->getUser();
 		if (!$user) {

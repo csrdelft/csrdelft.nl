@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\FlashType;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
@@ -31,11 +32,11 @@ class LidInstellingenController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Route("/instellingen", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function beheer()
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/instellingen', methods: ['GET'])]
+ public function beheer(): Response
 	{
 		return $this->render('instellingen/lidinstellingen.html.twig', [
 			'defaultInstellingen' => $this->lidInstellingenRepository->getAll(),
@@ -51,15 +52,15 @@ class LidInstellingenController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param $module
-	 * @param $instelling
-	 * @param null $waarde
-	 * @return JsonResponse
-	 * @Route("/instellingen/update/{module}/{instelling}/{waarde}", methods={"POST"}, defaults={"waarde": null})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function update(Request $request, $module, $instelling, $waarde = null)
+  * @param Request $request
+  * @param $module
+  * @param $instelling
+  * @param null $waarde
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/instellingen/update/{module}/{instelling}/{waarde}', methods: ['POST'], defaults: ['waarde' => null])]
+ public function update(Request $request, $module, $instelling, $waarde = null): JsonResponse
 	{
 		if ($waarde === null) {
 			$waarde = $request->request->get('waarde');
@@ -84,11 +85,11 @@ class LidInstellingenController extends AbstractController
 	}
 
 	/**
-	 * @throws Exception
-	 * @Route("/instellingen/opslaan", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function opslaan()
+  * @throws Exception
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/instellingen/opslaan', methods: ['POST'])]
+ public function opslaan(): RedirectResponse
 	{
 		$this->lidInstellingenRepository->saveAll(); // fetches $_POST values itself
 		$this->addFlash(FlashType::SUCCESS, 'Instellingen opgeslagen');
@@ -96,13 +97,13 @@ class LidInstellingenController extends AbstractController
 	}
 
 	/**
-	 * @param string $module
-	 * @param string $key
-	 * @return JsonResponse
-	 * @Route("/instellingen/reset/{module}/{key}", methods={"POST"})
-	 * @Auth(P_ADMIN)
-	 */
-	public function reset($module, $key)
+  * @param string $module
+  * @param string $key
+  * @return JsonResponse
+  * @Auth(P_ADMIN)
+  */
+ #[Route(path: '/instellingen/reset/{module}/{key}', methods: ['POST'])]
+ public function reset($module, $key): JsonResponse
 	{
 		$this->lidInstellingenRepository->resetForAll($module, $key);
 		$this->addFlash(
@@ -113,10 +114,10 @@ class LidInstellingenController extends AbstractController
 	}
 
 	/**
-	 * @Route("/instellingen/reset/mijn", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function resetUser()
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/instellingen/reset/mijn', methods: ['POST'])]
+ public function resetUser(): Response
 	{
 		$account = $this->getUser();
 

@@ -13,11 +13,11 @@ class AccountFixtureUtil
 		Generator $faker,
 		$profiel,
 		$accessRole = null
-	) {
+	): Account {
 		$account = new Account();
 		$account->uuid = Uuid::v4();
 		$account->username = '';
-		$account->email = $faker->email;
+		$account->email = $faker->email();
 		$account->pass_hash = '';
 		$account->failed_login_attempts = 0;
 		$account->pass_since = date_create_immutable();

@@ -24,7 +24,7 @@ class TimeField extends InputField
 		}
 	}
 
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		return isset($_POST[$this->name . '_uur'], $_POST[$this->name . '_minuut']);
 	}
@@ -48,7 +48,7 @@ class TimeField extends InputField
 		return $this->value;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;
@@ -67,7 +67,7 @@ class TimeField extends InputField
 		return $this->error === '';
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$hours = range(0, 23);
 		$minutes = range(0, 59, $this->minutensteps);

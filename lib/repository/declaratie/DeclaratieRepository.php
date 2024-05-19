@@ -58,7 +58,7 @@ class DeclaratieRepository extends AbstractRepository
 		$this->getEntityManager()->flush();
 	}
 
-	public function mijnDeclaraties(Profiel $profiel)
+	public function mijnDeclaraties(Profiel $profiel): array
 	{
 		return array_filter(
 			$this->findBy(
@@ -67,7 +67,7 @@ class DeclaratieRepository extends AbstractRepository
 				],
 				['id' => 'desc']
 			),
-			function ($decl) {
+			function ($decl): bool {
 				return $decl->magBekijken();
 			}
 		);

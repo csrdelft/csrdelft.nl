@@ -44,7 +44,7 @@ class MultiSelectField extends InputField
 		}
 	}
 
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		return isset($_POST[$this->name]);
 	}
@@ -64,7 +64,7 @@ class MultiSelectField extends InputField
 		return $this->value;
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$html = '<div class="input-group">';
 		foreach ($this->selects as $select) {

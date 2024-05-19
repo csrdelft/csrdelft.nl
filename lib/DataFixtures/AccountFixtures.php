@@ -2,6 +2,7 @@
 
 namespace CsrDelft\DataFixtures;
 
+use Faker\Generator;
 use CsrDelft\DataFixtures\Util\ProfielFixtureUtil;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\profiel\Profiel;
@@ -46,9 +47,9 @@ class AccountFixtures extends Fixture
 	 */
 	private $accountService;
 	/**
-	 * @var \Faker\Generator
-	 */
-	private $faker;
+  * @var Generator
+  */
+ private $faker;
 
 	public function __construct(AccountService $accountService)
 	{
@@ -56,7 +57,7 @@ class AccountFixtures extends Fixture
 		$this->faker = Faker::create('nl_NL');
 	}
 
-	public function load(ObjectManager $manager)
+	public function load(ObjectManager $manager): void
 	{
 		$this->maakExternAccount($manager);
 
@@ -182,7 +183,7 @@ class AccountFixtures extends Fixture
 	 * @param ObjectManager $manager
 	 * @param $uid
 	 * @param string $permRole
-	 * @return void
+	 * @return Profiel
 	 */
 	private function maakProfielEnAccount(
 		ObjectManager $manager,

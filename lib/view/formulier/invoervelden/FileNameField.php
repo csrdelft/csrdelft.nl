@@ -16,12 +16,12 @@ class FileNameField extends TextField
 	 *
 	 * @return string
 	 */
-	public function getValue()
+	public function getValue(): string
 	{
 		return trim(parent::getValue());
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;

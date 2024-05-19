@@ -105,7 +105,7 @@ class PeilingenRepository extends AbstractRepository
 	 * @return string
 	 * @throws CsrGebruikerException
 	 */
-	public function validate(Peiling $entity)
+	public function validate(Peiling $entity): string
 	{
 		$errors = '';
 		if ($entity == null) {

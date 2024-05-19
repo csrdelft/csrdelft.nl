@@ -25,7 +25,7 @@ class AutocompleteField extends TextField
 		}
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$sources = [];
 
@@ -85,7 +85,7 @@ class AutocompleteField extends TextField
 			' />';
 	}
 
-	protected function getInputAttribute($attribute)
+	protected function getInputAttribute(string|array $attribute): string
 	{
 		switch ($attribute) {
 			case 'autocomplete':

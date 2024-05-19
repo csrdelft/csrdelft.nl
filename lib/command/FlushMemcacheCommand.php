@@ -2,6 +2,7 @@
 
 namespace CsrDelft\command;
 
+use ErrorException;
 use CsrDelft\common\Util\FileUtil;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,7 +32,7 @@ class FlushMemcacheCommand extends Command
 		$this->setName('stek:cache:flush')->setDescription('Flush de memcache');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		if ($this->appCache == null) {
 			$output->writeln('Geen cache geinstalleerd');
@@ -61,7 +62,7 @@ class FlushMemcacheCommand extends Command
 			FileUtil::delTree(CONFIG_CACHE_PATH);
 
 			$output->writeln('Instelling cache succesvol verwijderd');
-		} catch (\ErrorException $exception) {
+		} catch (ErrorException $exception) {
 			$output->writeln('Instelling cache verwijderen mislukt');
 			$output->writeln(error_get_last()['message']);
 		}

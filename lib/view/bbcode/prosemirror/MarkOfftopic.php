@@ -7,12 +7,12 @@ use CsrDelft\view\bbcode\tag\BbOfftopic;
 
 class MarkOfftopic implements Mark
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbOfftopic::class;
 	}
 
-	public static function getMarkType()
+	public static function getMarkType(): string
 	{
 		return 'offtopic';
 	}

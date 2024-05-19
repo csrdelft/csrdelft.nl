@@ -31,7 +31,7 @@ class LedenMemoryScoresRepository extends AbstractRepository
 	 */
 	protected $default_order = 'tijd ASC, beurten DESC';
 
-	public function nieuw()
+	public function nieuw(): LedenMemoryScore
 	{
 		$score = new LedenMemoryScore();
 		$score->door_uid = LoginService::getUid();
@@ -50,8 +50,8 @@ class LedenMemoryScoresRepository extends AbstractRepository
 
 	public function create(LedenMemoryScore $ledenMemoryScore)
 	{
-		$this->_em->persist($ledenMemoryScore);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($ledenMemoryScore);
+		$this->getEntityManager()->flush();
 	}
 
 	public function getAllTopScores()

@@ -41,12 +41,12 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 		return $this->findBy(['uid' => $uid]);
 	}
 
-	public function isLidGekwalificeerdVoorFunctie($uid, $fid)
+	public function isLidGekwalificeerdVoorFunctie($uid, $fid): bool
 	{
 		return $this->find(['uid' => $uid, 'functie_id' => $fid]) != null;
 	}
 
-	public function nieuw(CorveeFunctie $functie)
+	public function nieuw(CorveeFunctie $functie): CorveeKwalificatie
 	{
 		$kwalificatie = new CorveeKwalificatie();
 		$kwalificatie->setCorveeFunctie($functie);
@@ -70,8 +70,8 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 			throw new CsrGebruikerException('Is al gekwalificeerd!');
 		}
 
-		$this->_em->persist($kwali);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($kwali);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -81,8 +81,8 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 	 */
 	public function kwalificatieIntrekken(CorveeKwalificatie $kwalificatie)
 	{
-		$this->_em->remove($kwalificatie);
-		$this->_em->flush();
+		$this->getEntityManager()->remove($kwalificatie);
+		$this->getEntityManager()->flush();
 	}
 
 	/**

@@ -43,7 +43,7 @@ class MenuFixtures extends Fixture
 		$link,
 		$zichtbaar,
 		$rechten_bekijken
-	) {
+	): MenuItem {
 		$menuItem = new MenuItem();
 		$menuItem->parent = $parent;
 		$menuItem->volgorde = $volgorde;

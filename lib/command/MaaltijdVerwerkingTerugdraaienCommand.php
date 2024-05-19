@@ -45,7 +45,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command
 		);
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$helper = $this->getHelper('question');
 
@@ -139,7 +139,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command
 				$bestellingen,
 				$progress,
 				$maaltijden
-			) {
+			): void {
 				reset($bestellingen);
 				foreach ($bestellingen as $bestelling) {
 					$this->civiBestellingRepository->revert($bestelling);

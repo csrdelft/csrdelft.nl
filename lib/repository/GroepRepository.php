@@ -2,6 +2,8 @@
 
 namespace CsrDelft\repository;
 
+use InvalidArgumentException;
+use DateTimeImmutable;
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\ReflectionUtil;
@@ -22,7 +24,7 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use ReflectionClass;
 use ReflectionProperty;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 
@@ -60,12 +62,12 @@ abstract class GroepRepository extends AbstractRepository
 	 */
 	abstract public function getEntityClassName();
 
-	public static function getUrl()
+	public static function getUrl(): string
 	{
 		return '/groepen/' . static::getNaam();
 	}
 
-	public static function getNaam()
+	public static function getNaam(): string
 	{
 		return strtolower(
 			str_replace(
@@ -88,7 +90,7 @@ abstract class GroepRepository extends AbstractRepository
 		array $orderBy = null,
 		$limit = null,
 		$offset = null
-	) {
+	): array {
 		// Eerst sorteren op FT/HT/OT
 		$orderBy = ['status' => 'ASC'] + ($orderBy ?? []);
 		if (
@@ -175,8 +177,8 @@ abstract class GroepRepository extends AbstractRepository
 	 */
 	public function create(Groep $groep)
 	{
-		$this->_em->persist($groep);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($groep);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -186,8 +188,8 @@ abstract class GroepRepository extends AbstractRepository
 	 */
 	public function update(Groep $groep)
 	{
-		$this->_em->persist($groep);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($groep);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -197,8 +199,8 @@ abstract class GroepRepository extends AbstractRepository
 	 */
 	public function delete(Groep $groep)
 	{
-		$this->_em->remove($groep);
-		$this->_em->flush();
+		$this->getEntityManager()->remove($groep);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -215,7 +217,7 @@ abstract class GroepRepository extends AbstractRepository
 		$soort = null
 	) {
 		try {
-			return $this->_em->transactional(function () use (
+			return $this->getEntityManager()->transactional(function () use (
 				$oldgroep,
 				$oldmodel,
 				$soort
@@ -229,7 +231,7 @@ abstract class GroepRepository extends AbstractRepository
 					}
 				}
 				$newgroep->id = null;
-				$this->_em->persist($newgroep);
+				$this->getEntityManager()->persist($newgroep);
 
 				foreach ($oldgroep->getLeden() as $lid) {
 					$lid->groep = $newgroep;
@@ -237,8 +239,8 @@ abstract class GroepRepository extends AbstractRepository
 				}
 
 				// groep verwijderen
-				$this->_em->remove($oldgroep);
-				$this->_em->flush();
+				$this->getEntityManager()->remove($oldgroep);
+				$this->getEntityManager()->flush();
 
 				return $newgroep;
 			});
@@ -308,7 +310,7 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param Groep $groep
 	 * @return GroepStatistiekDTO
 	 */
-	public function getStatistieken(Groep $groep)
+	public function getStatistieken(Groep $groep): GroepStatistiekDTO
 	{
 		if ($groep->aantalLeden() == 0) {
 			return new GroepStatistiekDTO(0, [], [], [], []);
@@ -390,7 +392,7 @@ abstract class GroepRepository extends AbstractRepository
 	{
 		foreach ($status as $item) {
 			if (!GroepStatus::isValidValue($item)) {
-				throw new \InvalidArgumentException(
+				throw new InvalidArgumentException(
 					$item . ' is geen geldige groepstatus'
 				);
 			}
@@ -430,8 +432,8 @@ abstract class GroepRepository extends AbstractRepository
 	 * @return Groep[]
 	 */
 	public function getGroepenVoorAgenda(
-		\DateTimeImmutable $van,
-		\DateTimeImmutable $tot
+		DateTimeImmutable $van,
+		DateTimeImmutable $tot
 	) {
 		return $this->createQueryBuilder('a')
 			->where('a.inAgenda = true')
@@ -456,7 +458,7 @@ abstract class GroepRepository extends AbstractRepository
 		int $limit = null,
 		int $offset = null,
 		string $soort = null
-	) {
+	): array {
 		return $this->findBy(
 			['status' => GroepStatus::HT()],
 			null,
@@ -465,7 +467,7 @@ abstract class GroepRepository extends AbstractRepository
 		);
 	}
 
-	public function overzichtAantal(string $soort = null)
+	public function overzichtAantal(string $soort = null): int
 	{
 		$activiteiten = $this->overzicht(null, null, $soort);
 
@@ -481,7 +483,7 @@ abstract class GroepRepository extends AbstractRepository
 		return $aantal;
 	}
 
-	public function beheer(string $soort = null)
+	public function beheer(string $soort = null): array
 	{
 		return $this->findBy([]);
 	}

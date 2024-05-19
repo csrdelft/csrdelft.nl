@@ -15,7 +15,7 @@ class Subkopje extends HtmlComment
 {
 	public $h = 3;
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		return '<h' .
 			$this->h .

@@ -43,7 +43,7 @@ class EetplanBekendenRepository extends AbstractRepository
 	 *
 	 * @return bool
 	 */
-	public function exists($entity)
+	public function exists($entity): bool
 	{
 		return count(
 			$this->findBy([

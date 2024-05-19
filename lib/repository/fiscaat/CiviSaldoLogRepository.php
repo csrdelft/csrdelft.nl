@@ -51,7 +51,7 @@ class CiviSaldoLogRepository extends AbstractRepository
 			'groups' => ['log'],
 		]);
 		$logEntry->timestamp = date_create_immutable();
-		$this->_em->persist($logEntry);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($logEntry);
+		$this->getEntityManager()->flush();
 	}
 }

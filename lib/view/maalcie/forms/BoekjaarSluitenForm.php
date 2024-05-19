@@ -46,7 +46,7 @@ class BoekjaarSluitenForm extends ModalForm
 		$this->formKnoppen = new FormDefaultKnoppen();
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		$valid = parent::validate();
 		$fields = $this->getFields();

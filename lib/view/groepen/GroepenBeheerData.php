@@ -14,7 +14,7 @@ class GroepenBeheerData extends DataTableResponse
 	 * @return string
 	 * @throws Exception
 	 */
-	public function renderElement($groep)
+	public function renderElement($groep): array
 	{
 		$array = (array) $groep;
 

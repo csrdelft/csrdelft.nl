@@ -11,9 +11,9 @@ namespace CsrDelft\model\entity\profiel;
  */
 abstract class AbstractProfielLogEntry
 {
-	abstract public function toHtml();
+	abstract public function toHtml(): string;
 
-	public function censureerVeld($naam)
+	public function censureerVeld(string $naam): AbstractProfielLogEntry
 	{
 		return $this;
 	}

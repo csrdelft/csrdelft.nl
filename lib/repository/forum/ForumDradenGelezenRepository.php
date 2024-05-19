@@ -7,7 +7,7 @@ use CsrDelft\entity\forum\ForumDraadGelezen;
 use CsrDelft\repository\AbstractRepository;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * ForumDradenGelezenModel.class.php
@@ -33,7 +33,7 @@ class ForumDradenGelezenRepository extends AbstractRepository
 		$this->security = $security;
 	}
 
-	protected function maakForumDraadGelezen(ForumDraad $draad)
+	protected function maakForumDraadGelezen(ForumDraad $draad): ForumDraadGelezen
 	{
 		$gelezen = new ForumDraadGelezen();
 		$gelezen->draad = $draad;

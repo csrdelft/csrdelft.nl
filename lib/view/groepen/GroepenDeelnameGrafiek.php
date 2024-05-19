@@ -82,7 +82,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse
 		return null;
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$step = htmlspecialchars(json_encode($this->step));
 
@@ -95,7 +95,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse
 HTML;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->getHtml();
 	}

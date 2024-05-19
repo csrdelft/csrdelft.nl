@@ -40,7 +40,7 @@ class CiviBestellingInhoudTable extends DataTable
 	/**
 	 * Print niet de JS, dat wordt door formulier gedaan.
 	 */
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->getHtml();
 	}

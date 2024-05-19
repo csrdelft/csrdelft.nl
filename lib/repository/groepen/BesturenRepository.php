@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class BesturenRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Bestuur::class;
 	}

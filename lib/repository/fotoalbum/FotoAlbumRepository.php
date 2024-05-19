@@ -20,7 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -232,7 +232,7 @@ HTML;
 		}
 	}
 
-	public function hernoemAlbum(FotoAlbum $album, $newName)
+	public function hernoemAlbum(FotoAlbum $album, $newName): bool
 	{
 		if (!PathUtil::valid_filename($newName)) {
 			throw new CsrGebruikerException('Ongeldige naam');
@@ -296,7 +296,7 @@ HTML;
 		return true;
 	}
 
-	public function setAlbumCover(FotoAlbum $album, Foto $cover)
+	public function setAlbumCover(FotoAlbum $album, Foto $cover): int
 	{
 		$success = true;
 		// find old cover

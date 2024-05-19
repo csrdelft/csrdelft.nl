@@ -2,66 +2,67 @@
 
 namespace CsrDelft\entity\commissievoorkeuren;
 
+use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\AccessService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
+use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
+
 /**
  * Class VoorkeurVoorkeur
  * @package CsrDelft\model\entity\commissievoorkeuren
- * @ORM\Entity(repositoryClass="CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository")
  */
+#[ORM\Entity(repositoryClass: CommissieVoorkeurRepository::class)]
 class VoorkeurVoorkeur
 {
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
-	 */
-	public $uid;
+  * @var string
+  */
+ #[ORM\Column(type: 'uid')]
+ #[ORM\Id]
+ public $uid;
 
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 */
-	public $cid;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ public $cid;
 
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $voorkeur;
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ public $voorkeur;
 
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $timestamp;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime_immutable')]
+ public $timestamp;
 
-	/**
-	 * @ORM\PreUpdate
-	 */
+	#[ORM\PreUpdate]
 	public function setTimestamp()
 	{
 		$this->timestamp = new DateTimeImmutable();
 	}
 
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-	 */
-	public $profiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
+ public $profiel;
 
 	/**
-	 * @var VoorkeurCommissie
-	 * @ORM\ManyToOne(targetEntity="VoorkeurCommissie")
-	 * @ORM\JoinColumn(name="cid")
-	 */
-	public $commissie;
+  * @var VoorkeurCommissie
+  */
+ #[ORM\JoinColumn(name: 'cid')]
+ #[ORM\ManyToOne(targetEntity: VoorkeurCommissie::class)]
+ public $commissie;
 
 	public function getCommissieNaam()
 	{
@@ -109,7 +110,7 @@ class VoorkeurVoorkeur
 			);
 	}
 
-	public function getVoorkeurTekst()
+	public function getVoorkeurTekst(): string
 	{
 		return ['', 'nee', 'ja', 'misschien'][$this->voorkeur];
 	}

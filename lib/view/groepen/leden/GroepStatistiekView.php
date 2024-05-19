@@ -37,7 +37,7 @@ class GroepStatistiekView implements ToResponse
 		$this->groep = $groep;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->twig->render('groep/statistiek.html.twig', [
 			'groep' => $this->groep,

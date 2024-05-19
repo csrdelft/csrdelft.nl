@@ -36,7 +36,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository
 	 * @param Profiel $lid
 	 * @return int
 	 */
-	public function countVoorLid(Profiel $lid)
+	public function countVoorLid(Profiel $lid): int
 	{
 		return $this->count(['uid' => $lid->uid]);
 	}

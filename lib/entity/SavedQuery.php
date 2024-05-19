@@ -2,44 +2,43 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="CsrDelft\repository\SavedQueryRepository")
- * @ORM\Table("savedquery")
- */
+#[ORM\Table('savedquery')]
+#[ORM\Entity(repositoryClass: SavedQueryRepository::class)]
 class SavedQuery
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 */
-	public $ID;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ public $ID;
 	/**
-	 * @var string
-	 * @ORM\Column(type="text")
-	 */
-	public $savedquery;
+  * @var string
+  */
+ #[ORM\Column(type: 'text')]
+ public $savedquery;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $beschrijving;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $beschrijving;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string", options={"default"=P_LOGGED_IN})
-	 */
-	public $permissie;
+  * @var string
+  */
+ #[ORM\Column(type: 'string', options: ['default' => 'P_LOGGED_IN'])]
+ public $permissie;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string", options={"default"="Overig"})
-	 */
-	public $categorie;
+  * @var string
+  */
+ #[ORM\Column(type: 'string', options: ['default' => 'Overig'])]
+ public $categorie;
 
-	public function magBekijken()
+	public function magBekijken(): bool
 	{
 		return LoginService::mag($this->permissie) || LoginService::mag(P_ADMIN);
 	}

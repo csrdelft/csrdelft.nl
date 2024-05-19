@@ -5,7 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\entity\ForumPlaatje;
 use CsrDelft\repository\ForumPlaatjeRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class BbForumPlaatje extends BbImg
 {
@@ -30,7 +30,7 @@ class BbForumPlaatje extends BbImg
 		$this->security = $security;
 	}
 
-	public static function getTagName()
+	public static function getTagName(): string
 	{
 		return 'plaatje';
 	}
@@ -45,12 +45,12 @@ class BbForumPlaatje extends BbImg
 		return $this->plaatje->access_key;
 	}
 
-	public function getLinkUrl()
+	public function getLinkUrl(): string
 	{
 		return $this->plaatje->getUrl(false);
 	}
 
-	public function getSourceUrl()
+	public function getSourceUrl(): string
 	{
 		return $this->plaatje->getUrl(true);
 	}

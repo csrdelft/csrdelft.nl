@@ -7,12 +7,12 @@ use CsrDelft\bb\tag\BbQuote;
 
 class NodeQuote implements Node
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbQuote::class;
 	}
 
-	public static function getNodeType()
+	public static function getNodeType(): string
 	{
 		return 'blockquote';
 	}
@@ -27,7 +27,7 @@ class NodeQuote implements Node
 		return [];
 	}
 
-	public function selfClosing()
+	public function selfClosing(): bool
 	{
 		return false;
 	}

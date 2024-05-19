@@ -6,31 +6,24 @@ use ArrayObject;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * Als er een object genormalizeerd wordt met interface DataTableEntry, voeg dan het veld UUID toe.
  *
  * @package CsrDelft\common
  */
-class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface
+class RemoveDataTableEntryNormalizer implements NormalizerInterface
 {
 	/**
 	 * @var EntityManagerInterface
 	 */
 	private $entityManager;
-	/**
-	 * @var ObjectNormalizer
-	 */
-	private $normalizer;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
-		ObjectNormalizer $normalizer
 	) {
 		$this->entityManager = $entityManager;
-		$this->normalizer = $normalizer;
 	}
 
 	/**
@@ -43,7 +36,7 @@ class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface
 		$removed,
 		string $format = null,
 		array $context = []
-	) {
+	): string|int|float|bool|ArrayObject|array|null {
 		$id = $removed->getId();
 
 		if (!is_array($id)) {
@@ -65,7 +58,14 @@ class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface
 		$data,
 		string $format = null,
 		array $context = []
-	) {
+	): bool {
 		return $data instanceof RemoveDataTableEntry;
+	}
+
+	public function getSupportedTypes(?string $format): array
+	{
+		return [
+			"object" => true
+		];
 	}
 }

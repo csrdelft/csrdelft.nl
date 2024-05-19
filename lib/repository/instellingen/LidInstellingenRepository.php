@@ -12,6 +12,8 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
@@ -70,7 +72,7 @@ class LidInstellingenRepository extends AbstractRepository
 	 * @param string $uid
 	 * @return string[]
 	 */
-	public function getAllForLid(string $uid)
+	public function getAllForLid(string $uid): array
 	{
 		$result = [];
 		foreach ($this->findBy(['profiel' => $uid]) as $instelling) {
@@ -130,8 +132,8 @@ class LidInstellingenRepository extends AbstractRepository
 				} else {
 					if ($instelling) {
 						// Haal niet-bestaande instelling uit de database
-						$this->_em->remove($instelling);
-						$this->_em->flush();
+						$this->getEntityManager()->remove($instelling);
+						$this->getEntityManager()->flush();
 					}
 					throw new CsrException(
 						sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module)
@@ -146,7 +148,7 @@ class LidInstellingenRepository extends AbstractRepository
 		return $this->loginService->_getUid();
 	}
 
-	protected function newInstelling($module, $id, $uid)
+	protected function newInstelling($module, $id, $uid): LidInstelling
 	{
 		$instelling = new LidInstelling();
 		$instelling->module = $module;
@@ -154,8 +156,8 @@ class LidInstellingenRepository extends AbstractRepository
 		$instelling->waarde = $this->getDefault($module, $id);
 		$instelling->profiel = ProfielRepository::get($uid);
 
-		$this->_em->persist($instelling);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($instelling);
+		$this->getEntityManager()->flush();
 		return $instelling;
 	}
 
@@ -199,10 +201,10 @@ class LidInstellingenRepository extends AbstractRepository
 				$instelling->instelling = $id;
 				$instelling->profiel = ProfielRepository::get($this->getUid());
 				$instelling->waarde = $waarde;
-				$this->_em->persist($instelling);
+				$this->getEntityManager()->persist($instelling);
 			}
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 	}
 
 	public function isValidValue($module, $id, $waarde)
@@ -244,7 +246,10 @@ class LidInstellingenRepository extends AbstractRepository
 		$this->createQueryBuilder('i')
 			->andWhere('i.module = :module')
 			->andWhere('i.instelling = :id')
-			->setParameters(['module' => $module, 'id' => $id])
+			->setParameters(new ArrayCollection([
+				new Parameter('module', $module),
+				new Parameter('id', $id)
+			]))
 			->delete()
 			->getQuery()
 			->execute();
@@ -271,7 +276,7 @@ class LidInstellingenRepository extends AbstractRepository
 			$instelling->module = $module;
 			$instelling->instelling = $id;
 			$instelling->profiel = $this->loginService->_getAccount()->profiel;
-			$this->_em->persist($instelling);
+			$this->getEntityManager()->persist($instelling);
 		}
 
 		$instelling->waarde = $waarde;
@@ -323,7 +328,7 @@ class LidInstellingenRepository extends AbstractRepository
 			}
 		}
 
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 	}
 
 	/**

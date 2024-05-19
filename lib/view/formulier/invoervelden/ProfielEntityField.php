@@ -20,7 +20,7 @@ class ProfielEntityField extends DoctrineEntityField
 		$this->suggestieIdField = 'uid';
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (
 			is_array($this->blacklist) &&

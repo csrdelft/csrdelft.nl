@@ -7,12 +7,12 @@ use CsrDelft\bb\tag\BbSubscript;
 
 class MarkSubscript implements Mark
 {
-	public static function getBbTagType()
+	public static function getBbTagType(): string
 	{
 		return BbSubscript::class;
 	}
 
-	public static function getMarkType()
+	public static function getMarkType(): string
 	{
 		return 'subscript';
 	}

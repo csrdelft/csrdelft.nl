@@ -26,7 +26,7 @@ class ProfielLogValueChangeCensuur extends AbstractProfielLogValueChangeEntry
 	/**
 	 * @return string
 	 */
-	public function toHtml()
+	public function toHtml(): string
 	{
 		$old = $this->oldEmpty ? '' : '[GECENSUREERD]';
 		$new = $this->newEmpty ? '' : '[GECENSUREERD]';

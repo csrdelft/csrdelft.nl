@@ -32,12 +32,12 @@ class MenuBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param string $menuName
-	 * @return Response
-	 * @Route("/menubeheer/beheer/{menuName}", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function beheer($menuName = 'main'): Response
+  * @param string $menuName
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/menubeheer/beheer/{menuName}', methods: ['GET'])]
+ public function beheer($menuName = 'main'): Response
 	{
 		if ($menuName != $this->getUid() && !$this->mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
@@ -51,14 +51,14 @@ class MenuBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param $parentId
-	 * @return MenuItemForm
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/menubeheer/toevoegen/{parentId}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function toevoegen($parentId)
+  * @param $parentId
+  * @return MenuItemForm
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/menubeheer/toevoegen/{parentId}', methods: ['POST'])]
+ public function toevoegen($parentId)
 	{
 		if ($parentId == 'favoriet') {
 			$parent = $this->menuItemRepository->getMenuRoot($this->getUid());
@@ -83,12 +83,12 @@ class MenuBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param $itemId
-	 * @return JsonResponse|MenuItemForm
-	 * @Route("/menubeheer/bewerken/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function bewerken($itemId)
+  * @param $itemId
+  * @return JsonResponse|MenuItemForm
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/menubeheer/bewerken/{itemId}', methods: ['POST'], requirements: ['itemId' => '\d+'])]
+ public function bewerken($itemId)
 	{
 		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
 		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $item);
@@ -108,12 +108,12 @@ class MenuBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param $itemId
-	 * @return JsonResponse
-	 * @Route("/menubeheer/verwijderen/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function verwijderen($itemId): JsonResponse
+  * @param $itemId
+  * @return JsonResponse
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/menubeheer/verwijderen/{itemId}', methods: ['POST'], requirements: ['itemId' => '\d+'])]
+ public function verwijderen($itemId): JsonResponse
 	{
 		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
 		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $item);
@@ -129,14 +129,14 @@ class MenuBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param $itemId
-	 * @return JsonResponse
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/menubeheer/zichtbaar/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function zichtbaar($itemId): JsonResponse
+  * @param $itemId
+  * @return JsonResponse
+  * @throws ORMException
+  * @throws OptimisticLockException
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/menubeheer/zichtbaar/{itemId}', methods: ['POST'], requirements: ['itemId' => '\d+'])]
+ public function zichtbaar($itemId): JsonResponse
 	{
 		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
 		$this->denyAccessUnlessGranted(MenuItemVoter::BEHEREN, $item);
@@ -150,12 +150,12 @@ class MenuBeheerController extends AbstractController
 	}
 
 	/**
-	 * @Route("/menubeheer/suggesties")
-	 * @Auth(P_LOGGED_IN)
-	 * @param Request $request
-	 * @return GenericSuggestiesResponse
-	 */
-	public function suggesties(Request $request): GenericSuggestiesResponse
+  * @Auth(P_LOGGED_IN)
+  * @param Request $request
+  * @return GenericSuggestiesResponse
+  */
+ #[Route(path: '/menubeheer/suggesties')]
+ public function suggesties(Request $request): GenericSuggestiesResponse
 	{
 		return new GenericSuggestiesResponse(
 			$this->menuItemRepository->getSuggesties($request->query->get('q'))

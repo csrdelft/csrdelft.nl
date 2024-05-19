@@ -35,11 +35,11 @@ class ApiActiviteitenController extends AbstractController
 	}
 
 	/**
-	 * url POST /$id/aanmelden
-	 * @Route("/API/2.0/activiteiten/{id}/aanmelden", methods={"POST"})
-	 * @Auth(P_LEDEN_READ)
-	 */
-	public function activiteitAanmelden($id)
+  * url POST /$id/aanmelden
+  * @Auth(P_LEDEN_READ)
+  */
+ #[Route(path: '/API/2.0/activiteiten/{id}/aanmelden', methods: ['POST'])]
+ public function activiteitAanmelden($id)
 	{
 		$activiteit = $this->activiteitenRepository->get($id);
 
@@ -65,10 +65,10 @@ class ApiActiviteitenController extends AbstractController
 	}
 
 	/**
-	 * @Route("/API/2.0/activiteiten/{id}/afmelden", methods={"POST"})
-	 * @Auth(P_LEDEN_READ)
-	 */
-	public function activiteitAfmelden($id)
+  * @Auth(P_LEDEN_READ)
+  */
+ #[Route(path: '/API/2.0/activiteiten/{id}/afmelden', methods: ['POST'])]
+ public function activiteitAfmelden($id)
 	{
 		$activiteit = $this->activiteitenRepository->get($id);
 

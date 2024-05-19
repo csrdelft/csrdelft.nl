@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\fiscaat;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
@@ -24,29 +25,29 @@ use Symfony\Component\Routing\Annotation\Route;
 class CiviSaldoAfschrijvenController extends AbstractController
 {
 	/**
-	 * @Route("/fiscaat/afschrijven")
-	 * @return Response
-	 * @Auth(P_FISCAAT_MOD)
-	 */
-	public function afschrijven()
+  * @return Response
+  * @Auth(P_FISCAAT_MOD)
+  */
+ #[Route(path: '/fiscaat/afschrijven')]
+ public function afschrijven(): Response
 	{
 		return $this->render('fiscaat/afschrijven.html.twig', []);
 	}
 
-	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven')
+	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven'): RedirectResponse
 	{
 		$this->addFlash($code, $melding);
 		return $this->redirect($url);
 	}
 
 	/**
-	 * @Route("/fiscaat/afschrijven/upload", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 * @param Request $request
-	 * @param Session $session
-	 * @return Response
-	 */
-	public function upload(Request $request, Session $session)
+  * @Auth(P_FISCAAT_MOD)
+  * @param Request $request
+  * @param Session $session
+  * @return Response
+  */
+ #[Route(path: '/fiscaat/afschrijven/upload', methods: ['POST'])]
+ public function upload(Request $request, Session $session): RedirectResponse
 	{
 		// Kijk of bestand meegegeven is
 		if (!$request->files->has('csv')) {
@@ -105,20 +106,20 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	}
 
 	/**
-	 * @Route("/fiscaat/afschrijven/controle/{key}")
-	 * @Auth(P_FISCAAT_MOD)
-	 * @param string $key
-	 * @param Session $session
-	 * @param CiviSaldoRepository $civiSaldoRepository
-	 * @param CiviProductRepository $civiProductRepository
-	 * @return Response
-	 */
-	public function controle(
+  * @Auth(P_FISCAAT_MOD)
+  * @param string $key
+  * @param Session $session
+  * @param CiviSaldoRepository $civiSaldoRepository
+  * @param CiviProductRepository $civiProductRepository
+  * @return Response
+  */
+ #[Route(path: '/fiscaat/afschrijven/controle/{key}')]
+ public function controle(
 		string $key,
 		Session $session,
 		CiviSaldoRepository $civiSaldoRepository,
 		CiviProductRepository $civiProductRepository
-	) {
+	): RedirectResponse|Response {
 		// Haal data op
 		if (!$session->has("afschrijven-{$key}")) {
 			return $this->quickMelding(
@@ -225,18 +226,18 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	}
 
 	/**
-	 * @Route("/fiscaat/afschrijven/verwerk/{key}", methods={"POST"})
-	 * @Auth(P_FISCAAT_MOD)
-	 * @param string $key
-	 * @param Session $session
-	 * @param CiviSaldoRepository $civiSaldoRepository
-	 * @param CiviProductRepository $civiProductRepository
-	 * @param CiviBestellingRepository $civiBestellingRepository
-	 * @param Request $request
-	 * @param EntityManagerInterface $em
-	 * @return Response
-	 */
-	public function verwerk(
+  * @Auth(P_FISCAAT_MOD)
+  * @param string $key
+  * @param Session $session
+  * @param CiviSaldoRepository $civiSaldoRepository
+  * @param CiviProductRepository $civiProductRepository
+  * @param CiviBestellingRepository $civiBestellingRepository
+  * @param Request $request
+  * @param EntityManagerInterface $em
+  * @return Response
+  */
+ #[Route(path: '/fiscaat/afschrijven/verwerk/{key}', methods: ['POST'])]
+ public function verwerk(
 		string $key,
 		Session $session,
 		CiviSaldoRepository $civiSaldoRepository,
@@ -244,7 +245,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 		CiviBestellingRepository $civiBestellingRepository,
 		Request $request,
 		EntityManagerInterface $em
-	) {
+	): RedirectResponse|Response {
 		// Haal data op
 		if (!$session->has("afschrijven-{$key}")) {
 			return $this->quickMelding(
@@ -285,7 +286,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 			&$totaal,
 			$session,
 			$key
-		) {
+		): void {
 			/** @var CiviBestelling[] $bestellingen */
 			$bestellingen = [];
 			foreach ($data as $regel) {
@@ -369,11 +370,11 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	}
 
 	/**
-	 * @Route("/fiscaat/afschrijven/template")
-	 * @Auth(P_FISCAAT_MOD)
-	 * @return Response
-	 */
-	public function downloadTemplate()
+  * @Auth(P_FISCAAT_MOD)
+  * @return Response
+  */
+ #[Route(path: '/fiscaat/afschrijven/template')]
+ public function downloadTemplate(): Response
 	{
 		$template = "uid;productID;aantal;beschrijving\r\nx101;32;100;Lunch";
 		$response = new Response($template);

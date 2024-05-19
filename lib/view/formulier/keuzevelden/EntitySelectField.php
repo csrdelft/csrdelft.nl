@@ -54,7 +54,7 @@ class EntitySelectField extends InputField
 		return $this->options;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if (!parent::validate()) {
 			return false;
@@ -80,7 +80,7 @@ class EntitySelectField extends InputField
 		return $this->entityManager->getReference($this->entityType, $value);
 	}
 
-	public function getHtml($include_hidden = true)
+	public function getHtml($include_hidden = true): string
 	{
 		$html = '';
 		if ($include_hidden) {
@@ -107,7 +107,7 @@ class EntitySelectField extends InputField
 	 * @param ISelectEntity[] $options
 	 * @return string
 	 */
-	protected function getOptionsHtml(array $options)
+	protected function getOptionsHtml(array $options): string
 	{
 		$html = '';
 		foreach ($options as $description) {
@@ -134,7 +134,7 @@ class EntitySelectField extends InputField
 		$this->options = $options;
 	}
 
-	public function getOptionIds()
+	public function getOptionIds(): array
 	{
 		return array_map(function ($option) {
 			return $option->getId();

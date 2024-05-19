@@ -21,7 +21,7 @@ class VerticalenFixtures extends Fixture implements DependentFixtureInterface
 			$verticale = new Verticale();
 
 			$verticale->letter = $letter;
-			$verticale->naam = ucfirst($faker->unique()->word);
+			$verticale->naam = ucfirst($faker->unique()->word());
 			$verticale->familie = 'Verticale';
 			$verticale->beginMoment = date_create_immutable();
 			$verticale->eindMoment = null;

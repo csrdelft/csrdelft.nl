@@ -41,7 +41,7 @@ class SavedQueryRepository extends AbstractRepository
 		return $this->findBy([], ['categorie' => 'ASC']);
 	}
 
-	public function loadQuery($queryId)
+	public function loadQuery($queryId): SavedQueryResult
 	{
 		$query = $this->find($queryId);
 
@@ -53,7 +53,7 @@ class SavedQueryRepository extends AbstractRepository
 		$resultObject->query = $query;
 
 		try {
-			$result = $this->_em
+			$result = $this->getEntityManager()
 				->getConnection()
 				->fetchAllAssociative($query->savedquery);
 			$cols = [];

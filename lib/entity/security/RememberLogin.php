@@ -2,11 +2,14 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\view\Icon;
+use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -15,83 +18,82 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * RememberLogin.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\security\RememberLoginRepository")
- * @ORM\Table("login_remember")
  */
+#[ORM\Table('login_remember')]
+#[ORM\Entity(repositoryClass: RememberLoginRepository::class)]
 class RememberLogin implements DataTableEntry, PersistentTokenInterface
 {
 	/**
-	 * Primary key
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
-	 */
-	public $id;
+  * Primary key
+  * @var int
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ #[Serializer\Groups('datatable')]
+ public $id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $series;
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $series;
 	/**
-	 * Token string
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $token;
+  * Token string
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ public $token;
 	/**
-	 * Lidnummer
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $uid;
+  * Lidnummer
+  * @var string
+  */
+ #[ORM\Column(type: 'uid')]
+ #[Serializer\Groups('datatable')]
+ public $uid;
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-	 */
-	public $profiel;
+  * @var Profiel
+  */
+ #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
+ #[ORM\ManyToOne(targetEntity: Profiel::class)]
+ public $profiel;
 	/**
-	 * DateTime
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $remember_since;
+  * DateTime
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime_immutable')]
+ public $remember_since;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 */
-	public $last_used;
+  * @var DateTimeImmutable
+  */
+ #[ORM\Column(type: 'datetime_immutable')]
+ public $last_used;
 	/**
-	 * Device name
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $device_name;
+  * Device name
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ #[Serializer\Groups('datatable')]
+ public $device_name;
 	/**
-	 * IP address
-	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
-	 */
-	public $ip;
+  * IP address
+  * @var string
+  */
+ #[ORM\Column(type: 'string')]
+ #[Serializer\Groups('datatable')]
+ public $ip;
 	/**
-	 * Sessie koppelen aan ip
-	 * @var boolean
-	 * @ORM\Column(type="boolean")
-	 */
-	public $lock_ip;
+  * Sessie koppelen aan ip
+  * @var boolean
+  */
+ #[ORM\Column(type: 'boolean')]
+ public $lock_ip;
 
 	/**
-	 * @return string|null
-	 * @Serializer\SerializedName("lock_ip")
-	 * @Serializer\Groups("datatable")
-	 */
-	public function getDataTableLockIp()
+  * @return string|null
+  */
+ #[Serializer\SerializedName('lock_ip')]
+ #[Serializer\Groups('datatable')]
+ public function getDataTableLockIp(): string
 	{
 		return $this->lock_ip
 			? Icon::getTag('lock', null, 'Gekoppeld aan IP-adres')
@@ -99,26 +101,26 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\SerializedName("remember_since")
-	 * @Serializer\Groups("datatable")
-	 */
-	public function getDataTableRememberSince()
+  * @return string
+  */
+ #[Serializer\SerializedName('remember_since')]
+ #[Serializer\Groups('datatable')]
+ public function getDataTableRememberSince(): string
 	{
 		return DateUtil::reldate($this->remember_since);
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\SerializedName("last_used")
-	 * @Serializer\Groups("datatable")
-	 */
-	public function getDataTableLastUsed()
+  * @return string
+  */
+ #[Serializer\SerializedName('last_used')]
+ #[Serializer\Groups('datatable')]
+ public function getDataTableLastUsed(): string
 	{
 		return DateUtil::reldate($this->last_used);
 	}
 
-	public function getClass()
+	public function getClass(): string
 	{
 		return Account::class;
 	}
@@ -128,19 +130,19 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 		return $this->uid;
 	}
 
-	public function getSeries()
+	public function getSeries(): string
 	{
 		return $this->series;
 	}
 
-	public function getTokenValue()
+	public function getTokenValue(): string
 	{
 		return $this->token;
 	}
 
-	public function getLastUsed()
+	public function getLastUsed(): DateTime
 	{
-		return $this->last_used;
+		return DateTime::createFromImmutable($this->last_used);
 	}
 
 	public function getUserIdentifier(): string

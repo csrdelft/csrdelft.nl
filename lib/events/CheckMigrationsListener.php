@@ -36,7 +36,7 @@ class CheckMigrationsListener
 		if ($aantalNieuweMigraties > 0) {
 			$this->logger->alert(
 				"Er zijn '{$aantalNieuweMigraties}' migraties die nog uitgevoerd moeten worden.",
-				array_map(function (AvailableMigration $availableMigration) {
+				array_map(function (AvailableMigration $availableMigration): string {
 					return $availableMigration->getVersion() .
 						': ' .
 						$availableMigration->getMigration()->getDescription();

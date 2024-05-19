@@ -89,7 +89,7 @@ class AccessRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function setAcl($environment, $resource, array $acl)
+	public function setAcl($environment, $resource, array $acl): bool
 	{
 		// Has permission to change permissions?
 		if (!LoginService::mag(P_ADMIN)) {
@@ -137,7 +137,7 @@ class AccessRepository extends AbstractRepository
 			// Delete AC
 			if (empty($subject)) {
 				if ($ac) {
-					$this->_em->remove($ac);
+					$this->getEntityManager()->remove($ac);
 				}
 			}
 			// Update AC
@@ -149,10 +149,10 @@ class AccessRepository extends AbstractRepository
 				$ac = $this->nieuw($environment, $resource);
 				$ac->action = $action;
 				$ac->subject = $subject;
-				$this->_em->persist($ac);
+				$this->getEntityManager()->persist($ac);
 			}
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 		return true;
 	}
 
@@ -182,7 +182,7 @@ class AccessRepository extends AbstractRepository
 	 *
 	 * @return AccessControl
 	 */
-	public function nieuw($environment, $resource)
+	public function nieuw($environment, $resource): AccessControl
 	{
 		$ac = new AccessControl();
 		$ac->environment = $environment;

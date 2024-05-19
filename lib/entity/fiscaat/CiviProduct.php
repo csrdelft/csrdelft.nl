@@ -2,6 +2,10 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use CsrDelft\repository\fiscaat\CiviProductRepository;
+use CiviCategorie;
+use CiviPrijs;
+use DateTimeInterface;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,79 +19,79 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Bevat een @see CiviPrijs
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviProductRepository")
  */
+#[ORM\Entity(repositoryClass: CiviProductRepository::class)]
 class CiviProduct implements DataTableEntry, DisplayEntity
 {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"datatable", "bar"})
-	 */
-	public $id;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ #[ORM\Id]
+ #[ORM\GeneratedValue]
+ #[Serializer\Groups(['datatable', 'bar'])]
+ public $id;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "bar"})
-	 */
-	public $status;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ #[Serializer\Groups(['datatable', 'bar'])]
+ public $status;
 	/**
-	 * @var string
-	 * @ORM\Column(type="text")
-	 * @Serializer\Groups({"datatable", "bar"})
-	 */
-	public $beschrijving;
+  * @var string
+  */
+ #[ORM\Column(type: 'text')]
+ #[Serializer\Groups(['datatable', 'bar'])]
+ public $beschrijving;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "bar"})
-	 */
-	public $prioriteit;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ #[Serializer\Groups(['datatable', 'bar'])]
+ public $prioriteit;
 	/**
-	 * @var boolean
-	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups({"datatable", "bar"})
-	 */
-	public $beheer;
+  * @var boolean
+  */
+ #[ORM\Column(type: 'boolean')]
+ #[Serializer\Groups(['datatable', 'bar'])]
+ public $beheer;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 */
-	public $categorie_id;
+  * @var integer
+  */
+ #[ORM\Column(type: 'integer')]
+ public $categorie_id;
 	/**
-	 * @var CiviCategorie
-	 * @ORM\ManyToOne(targetEntity="CiviCategorie")
-	 */
-	public $categorie;
+  * @var CiviCategorie
+  */
+ #[ORM\ManyToOne(targetEntity: CiviCategorie::class)]
+ public $categorie;
 	/**
 	 * Tijdelijke placeholder
 	 * @var integer
 	 */
 	public $tmpPrijs;
 	/**
-	 * @var CiviPrijs[]|ArrayCollection
-	 * @ORM\OneToMany(targetEntity="CiviPrijs", mappedBy="product")
-	 * @ORM\OrderBy({"van" = "ASC"})
-	 */
-	public $prijzen;
+  * @var CiviPrijs[]|ArrayCollection
+  */
+ #[ORM\OneToMany(targetEntity: CiviPrijs::class, mappedBy: 'product')]
+ #[ORM\OrderBy(['van' => 'ASC'])]
+ public $prijzen;
 
 	/**
-	 * @return string
-	 * @Serializer\SerializedName("categorie")
-	 * @Serializer\Groups("bar")
-	 */
-	public function getCategorieString()
+  * @return string
+  */
+ #[Serializer\SerializedName('categorie')]
+ #[Serializer\Groups('bar')]
+ public function getCategorieString(): string
 	{
 		return $this->categorie->getWeergave();
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("bar")
-	 */
-	public function getCie()
+  * @return string
+  */
+ #[Serializer\Groups('bar')]
+ public function getCie()
 	{
 		return $this->categorie->cie;
 	}
@@ -97,7 +101,7 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 		$this->prijzen = new ArrayCollection();
 	}
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->id . '@civiproduct.csrdelft.nl';
 	}
@@ -111,11 +115,11 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	}
 
 	/**
-	 * @return int
-	 * @Serializer\Groups({"datatable", "bar"})
-	 * @Serializer\SerializedName("prijs")
-	 */
-	public function getPrijsInt()
+  * @return int
+  */
+ #[Serializer\Groups(['datatable', 'bar'])]
+ #[Serializer\SerializedName('prijs')]
+ public function getPrijsInt()
 	{
 		if ($prijs = $this->getPrijs()) {
 			return $prijs->prijs;
@@ -125,12 +129,12 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	}
 
 	/**
-	 * Haalt de prijs van dit product op in een bepaald moment.
-	 *
-	 * @param \DateTimeInterface $moment
-	 * @return false|mixed
-	 */
-	public function getPrijsOpMoment(\DateTimeInterface $moment)
+  * Haalt de prijs van dit product op in een bepaald moment.
+  *
+  * @param DateTimeInterface $moment
+  * @return false|mixed
+  */
+ public function getPrijsOpMoment(DateTimeInterface $moment)
 	{
 		$vanExpr = Criteria::expr()->lt('van', $moment);
 		$totExpr = Criteria::expr()->orX(
@@ -148,16 +152,16 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	}
 
 	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("categorie")
-	 */
-	public function getDataTableCategorie()
+  * @return string
+  */
+ #[Serializer\Groups('datatable')]
+ #[Serializer\SerializedName('categorie')]
+ public function getDataTableCategorie(): string
 	{
 		return $this->categorie->getBeschrijving();
 	}
 
-	public function getBeschrijvingFormatted()
+	public function getBeschrijvingFormatted(): string
 	{
 		return sprintf(
 			'%s (€%.2f)',

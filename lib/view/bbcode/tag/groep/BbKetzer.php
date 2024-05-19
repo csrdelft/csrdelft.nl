@@ -20,7 +20,7 @@ class BbKetzer extends BbTagGroep
 		return 'ketzer';
 	}
 
-	public function getLidNaam()
+	public function getLidNaam(): string
 	{
 		return 'aanmeldingen';
 	}

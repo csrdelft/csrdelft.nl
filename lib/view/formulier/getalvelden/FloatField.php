@@ -57,7 +57,7 @@ class FloatField extends InputField
 		$this->step = str_replace(',', '.', $this->step); // werkomheen
 	}
 
-	protected function getInputAttribute($attribute)
+	protected function getInputAttribute($attribute): string
 	{
 		if ($attribute == 'pattern' && $this->pattern) {
 			return 'pattern="' . $this->pattern . '"';
@@ -83,7 +83,7 @@ class FloatField extends InputField
 		return $this->value;
 	}
 
-	public function validate()
+	public function validate(): bool
 	{
 		if ($this->value === 0.) {
 			return true;

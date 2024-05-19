@@ -118,15 +118,15 @@ class ForumDraadController extends AbstractController
 	}
 
 	/**
-	 * Opzoeken forumdraad van forumpost.
-	 *
-	 * @param RequestStack $requestStack
-	 * @param ForumPost $post
-	 * @return Response
-	 * @Route("/forum/reactie/{post_id}", methods={"GET"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function reactie(RequestStack $requestStack, ForumPost $post): Response
+  * Opzoeken forumdraad van forumpost.
+  *
+  * @param RequestStack $requestStack
+  * @param ForumPost $post
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/forum/reactie/{post_id}', methods: ['GET'])]
+ public function reactie(RequestStack $requestStack, ForumPost $post): Response
 	{
 		if ($post->verwijderd) {
 			$this->addFlash(FlashType::INFO, 'Deze reactie is verwijderd');
@@ -139,17 +139,17 @@ class ForumDraadController extends AbstractController
 	}
 
 	/**
-	 * Forumdraadje laten zien met alle zichtbare/verwijderde posts.
-	 *
-	 * @param RequestStack $requestStack
-	 * @param ForumDraad $draad
-	 * @param int|null $pagina or 'laatste' or 'ongelezen'
-	 * @param string|null $statistiek
-	 * @return Response
-	 * @Route("/forum/onderwerp/{draad_id}/{pagina}/{statistiek}", methods={"GET"}, defaults={"pagina"=null,"statistiek"=null})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function onderwerp(
+  * Forumdraadje laten zien met alle zichtbare/verwijderde posts.
+  *
+  * @param RequestStack $requestStack
+  * @param ForumDraad $draad
+  * @param int|null $pagina or 'laatste' or 'ongelezen'
+  * @param string|null $statistiek
+  * @return Response
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/forum/onderwerp/{draad_id}/{pagina}/{statistiek}', methods: ['GET'], defaults: ['pagina' => null, 'statistiek' => null])]
+ public function onderwerp(
 		RequestStack $requestStack,
 		ForumDraad $draad,
 		$pagina = null,
@@ -223,15 +223,15 @@ class ForumDraadController extends AbstractController
 	}
 
 	/**
-	 * Wijzig een eigenschap van een draadje.
-	 *
-	 * @param ForumDraad $draad
-	 * @param string $property
-	 * @return Response
-	 * @Route("/forum/wijzigen/{draad_id}/{property}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function wijzigen(ForumDraad $draad, $property)
+  * Wijzig een eigenschap van een draadje.
+  *
+  * @param ForumDraad $draad
+  * @param string $property
+  * @return Response
+  * @Auth(P_LOGGED_IN)
+  */
+ #[Route(path: '/forum/wijzigen/{draad_id}/{property}', methods: ['POST'])]
+ public function wijzigen(ForumDraad $draad, $property)
 	{
 		// gedeelde moderators mogen dit niet
 		if (!$draad->deel->magModereren()) {
@@ -296,16 +296,16 @@ class ForumDraadController extends AbstractController
 	}
 
 	/**
-	 * Forum post toevoegen en evt. nieuw draadje aanmaken.
-	 * @TODO refactor deze veel te ingewikkelde functie en splits in meerdere functies, bijvoorbeeld in het ForumPostsModel
-	 *
-	 * @param ForumDeel $deel
-	 * @param ForumDraad|null $draad
-	 * @return RedirectResponse
-	 * @Route("/forum/posten/{forum_id}/{draad_id}", methods={"POST"}, defaults={"draad_id"=null})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function posten(
+  * Forum post toevoegen en evt. nieuw draadje aanmaken.
+  * @TODO refactor deze veel te ingewikkelde functie en splits in meerdere functies, bijvoorbeeld in het ForumPostsModel
+  *
+  * @param ForumDeel $deel
+  * @param ForumDraad|null $draad
+  * @return RedirectResponse
+  * @Auth(P_PUBLIC)
+  */
+ #[Route(path: '/forum/posten/{forum_id}/{draad_id}', methods: ['POST'], defaults: ['draad_id' => null])]
+ public function posten(
 		RequestStack $requestStack,
 		ForumDeel $deel,
 		ForumDraad $draad = null

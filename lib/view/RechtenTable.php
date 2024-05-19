@@ -73,7 +73,7 @@ class RechtenTable extends DataTable
 		$this->addKnop($delete);
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$view = new CmsPaginaView(
 			ContainerFacade::getContainer()

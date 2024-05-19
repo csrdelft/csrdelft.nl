@@ -21,7 +21,7 @@ use DateInterval;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -108,7 +108,7 @@ class AgendaRepository extends AbstractRepository
 		return $this->find($itemId);
 	}
 
-	public function getICalendarItems()
+	public function getICalendarItems(): array
 	{
 		return $this->filterVerborgen(
 			$this->getAllAgendeerbaar(
@@ -121,7 +121,10 @@ class AgendaRepository extends AbstractRepository
 		);
 	}
 
-	public function filterVerborgen(array $items)
+	/**
+  * @return mixed[]
+  */
+ public function filterVerborgen(array $items): array
 	{
 		// Items verbergen
 		$itemsByUUID = [];
@@ -186,7 +189,7 @@ class AgendaRepository extends AbstractRepository
 		DateTimeImmutable $tot,
 		$ical = false,
 		$zijbalk = false
-	) {
+	): array {
 		$result = [];
 
 		// AgendaItems
@@ -311,12 +314,12 @@ class AgendaRepository extends AbstractRepository
 		return null;
 	}
 
-	public function getItemsByDay(DateTimeImmutable $dag)
+	public function getItemsByDay(DateTimeImmutable $dag): array
 	{
 		return $this->getAllAgendeerbaar($dag, $dag);
 	}
 
-	public function nieuw($beginMoment, $eindMoment)
+	public function nieuw($beginMoment, $eindMoment): AgendaItem
 	{
 		$item = new AgendaItem();
 		$item->begin_moment = $beginMoment

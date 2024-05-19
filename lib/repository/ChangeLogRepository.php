@@ -8,7 +8,7 @@ use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -64,7 +64,7 @@ class ChangeLogRepository extends AbstractRepository
 		return $change;
 	}
 
-	public function serialize($value)
+	public function serialize($value): string
 	{
 		return $this->serializer->serialize($value, 'json', ['groups' => 'log']);
 	}
@@ -77,12 +77,12 @@ class ChangeLogRepository extends AbstractRepository
 	 *
 	 * @return ChangeLogEntry
 	 */
-	public function nieuw($subject, $property, $old, $new)
+	public function nieuw($subject, $property, $old, $new): ChangeLogEntry
 	{
 		$change = new ChangeLogEntry();
 		$change->moment = date_create_immutable();
 		try {
-			$meta = $this->_em->getClassMetadata(get_class($subject));
+			$meta = $this->getEntityManager()->getClassMetadata(get_class($subject));
 			$change->subject =
 				implode('.', $meta->getIdentifierValues($subject)) .
 				'@' .
