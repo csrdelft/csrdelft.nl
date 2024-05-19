@@ -25,7 +25,8 @@ final class FlashUtil
 	public static function setFlashWithContainerFacade(string $msg, int $lvl)
 	{
 		$flashBag = ContainerFacade::getContainer()
-			->get('session')
+			->get('request_stack')
+			->getSession()
 			->getFlashBag();
 
 		$levels[-1] = 'danger';
@@ -51,7 +52,8 @@ final class FlashUtil
 	public static function getFlashUsingContainerFacade(): string
 	{
 		$flashBag = ContainerFacade::getContainer()
-			->get('session')
+			->get('request_stack')
+			->getSession()
 			->getFlashBag();
 
 		$flashes = $flashBag->all();
