@@ -13,8 +13,6 @@ final class Version20200705132858 extends AbstractMigration {
 	}
 
 	public function up(Schema $schema): void {
-		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
 		$this->addSql('CREATE TABLE login_sessions (session_hash VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, login_moment DATETIME NOT NULL, expire DATETIME NOT NULL, user_agent VARCHAR(255) NOT NULL, ip VARCHAR(255) NOT NULL, lock_ip TINYINT(1) NOT NULL, authentication_method VARCHAR(255) NOT NULL, INDEX IDX_B4C4BD8C539B0606 (uid), PRIMARY KEY(session_hash)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_general_ci` ENGINE = InnoDB');
 		$this->addSql('CREATE TABLE accounts (uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, username VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, email VARCHAR(255) NOT NULL, pass_hash VARCHAR(255) NOT NULL, pass_since DATETIME NOT NULL, last_login_success DATETIME DEFAULT NULL, last_login_attempt DATETIME DEFAULT NULL, failed_login_attempts INT NOT NULL, blocked_reason LONGTEXT DEFAULT NULL, perm_role VARCHAR(255) NOT NULL, private_token VARCHAR(255) DEFAULT NULL, private_token_since DATETIME DEFAULT NULL, UNIQUE INDEX UNIQ_CAC89EACF85E0677 (username), PRIMARY KEY(uid)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_general_ci` ENGINE = InnoDB');
 		$this->addSql('CREATE TABLE login_remember (id INT AUTO_INCREMENT NOT NULL, uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, token VARCHAR(255) NOT NULL, remember_since DATETIME NOT NULL, device_name VARCHAR(255) NOT NULL, ip VARCHAR(255) NOT NULL, lock_ip TINYINT(1) NOT NULL, INDEX IDX_BD5B5182539B0606 (uid), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_general_ci` ENGINE = InnoDB');
@@ -225,8 +223,6 @@ final class Version20200705132858 extends AbstractMigration {
 	}
 
 	public function down(Schema $schema): void {
-		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
 		$this->addSql('ALTER TABLE login_sessions DROP FOREIGN KEY FK_B4C4BD8C539B0606');
 		$this->addSql('ALTER TABLE accounts DROP FOREIGN KEY FK_CAC89EAC539B0606');
 		$this->addSql('ALTER TABLE login_remember DROP FOREIGN KEY FK_BD5B5182539B0606');
