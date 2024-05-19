@@ -38,7 +38,8 @@ class AbstractController extends BaseController
 	 */
 	protected function getDataTableSelection(): array
 	{
-		$selection = $this->get('request_stack')
+		$selection = $this->container
+			->get('request_stack')
 			->getCurrentRequest()
 			->request->filter(DataTable::POST_SELECTION, [], FILTER_SANITIZE_STRING);
 
@@ -52,7 +53,7 @@ class AbstractController extends BaseController
 	protected function tableData($data, $groups = null): GenericDataTableResponse
 	{
 		return new GenericDataTableResponse(
-			$this->get('serializer'),
+			$this->container->get('serializer'),
 			$data,
 			null,
 			null,

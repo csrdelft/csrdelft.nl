@@ -45,7 +45,7 @@ class ErrorController extends AbstractController
 			case Response::HTTP_FORBIDDEN:
 				if ($this->getUser() == null) {
 					$requestUri = $request->getRequestUri();
-					$router = $this->get('router');
+					$router = $this->container->get('router');
 
 					$this->saveTargetPath($request->getSession(), 'main', $requestUri);
 
