@@ -21,7 +21,6 @@ class ForumFixtures extends Fixture implements DependentFixtureInterface
 		$forumCategorie->titel = 'Algemeen';
 		$forumCategorie->volgorde = 0;
 		$forumCategorie->rechten_lezen = P_LOGGED_IN;
-())
 		$manager->persist($forumCategorie);
 
 		$forum = new ForumDeel();
