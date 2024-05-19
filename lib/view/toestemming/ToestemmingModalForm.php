@@ -11,6 +11,7 @@ use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 use Exception;
+use Twig\Environment;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -69,7 +70,7 @@ class ToestemmingModalForm extends ModalForm
 			}
 		}
 
-		$twig = ContainerFacade::getContainer()->get('twig');
+		$twig = ContainerFacade::getContainer()->get(Environment::class);
 
 		$this->addFields([
 			new HtmlComment(

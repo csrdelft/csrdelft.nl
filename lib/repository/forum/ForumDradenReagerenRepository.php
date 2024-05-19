@@ -8,6 +8,8 @@ use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadReageren;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\service\security\LoginService;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -66,13 +68,13 @@ class ForumDradenReagerenRepository extends AbstractRepository
 			->where(
 				'r.draad_id = :draad_id and r.uid != :uid and r.datum_tijd > :datum_tijd'
 			)
-			->setParameters([
-				'draad_id' => $draad->draad_id,
-				'uid' => LoginService::getUid(),
-				'datum_tijd' => date_create_immutable(
+			->setParameters(new ArrayCollection([
+				new Parameter('draad_id', $draad->draad_id),
+				new Parameter('uid', LoginService::getUid()),
+				new Parameter('datum_tijd', date_create_immutable(
 					InstellingUtil::instelling('forum', 'reageren_tijd')
-				),
-			])
+				)),
+			]))
 			->getQuery()
 			->getResult();
 	}
@@ -83,13 +85,13 @@ class ForumDradenReagerenRepository extends AbstractRepository
 			->where(
 				'r.forum_id = :forum_id and r.draad_id = 0 and r.uid != :uid and r.datum_tijd > :datum_tijd'
 			)
-			->setParameters([
-				'forum_id' => $deel->forum_id,
-				'uid' => LoginService::getUid(),
-				'datum_tijd' => date_create_immutable(
+			->setParameters(new ArrayCollection([
+				new Parameter('forum_id' , $deel->forum_id),
+				new Parameter('uid' , LoginService::getUid()),
+				new Parameter('datum_tijd' , date_create_immutable(
 					InstellingUtil::instelling('forum', 'reageren_tijd')
-				),
-			])
+				)),
+			]))
 			->getQuery()
 			->getResult();
 	}

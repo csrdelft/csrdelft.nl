@@ -12,6 +12,8 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
@@ -244,7 +246,10 @@ class LidInstellingenRepository extends AbstractRepository
 		$this->createQueryBuilder('i')
 			->andWhere('i.module = :module')
 			->andWhere('i.instelling = :id')
-			->setParameters(['module' => $module, 'id' => $id])
+			->setParameters(new ArrayCollection([
+				new Parameter('module', $module),
+				new Parameter('id', $id)
+			]))
 			->delete()
 			->getQuery()
 			->execute();

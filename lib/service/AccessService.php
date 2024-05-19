@@ -94,7 +94,6 @@ class AccessService
 		$token = new UsernamePasswordToken(
 			$user,
 			'none',
-			'none',
 			$user->getRoles()
 		);
 

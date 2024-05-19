@@ -20,20 +20,12 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 class Verticale extends Groep
 {
 	/**
-  * Primary key
-  * @var string
-  */
- #[ORM\Column(type: 'string', unique: true, length: 1, options: ['fixed' => true])]
- #[Serializer\Groups(['datatable', 'log', 'vue'])]
- public $letter;
-
-	/**
-  * Naam
-  * @var string
-  */
- #[ORM\Column(type: 'stringkey', unique: true)]
- #[Serializer\Groups(['datatable', 'log', 'vue'])]
- public $naam;
+	* Primary key
+	* @var string
+	*/
+	#[ORM\Column(type: 'string', unique: true, length: 1, options: ['fixed' => true])]
+	#[Serializer\Groups(['datatable', 'log', 'vue'])]
+	public $letter;
 
 	// Stiekem hebben we helemaal geen leden.
 	public function getLeden(): ArrayCollection

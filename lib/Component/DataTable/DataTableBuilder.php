@@ -2,7 +2,7 @@
 
 namespace CsrDelft\Component\DataTable;
 
-use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
+use Doctrine\DBAL\Types\DateTimeImmutableType;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
