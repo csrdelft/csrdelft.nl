@@ -36,7 +36,7 @@ class CiviPrijsRepository extends AbstractRepository
 	 */
 	public function verwijderVoorProduct(CiviProduct $product)
 	{
-		if (!$this->_em->getConnection()->isTransactionActive()) {
+		if (!$this->getEntityManager()->getConnection()->isTransactionActive()) {
 			throw new CsrException(
 				'Kan geen product verwijderen als je niet in een transactie zit!'
 			);
@@ -45,8 +45,8 @@ class CiviPrijsRepository extends AbstractRepository
 		$prijzen = $this->findBy(['product_id' => $product->id]);
 
 		foreach ($prijzen as $prijs) {
-			$this->_em->remove($prijs);
+			$this->getEntityManager()->remove($prijs);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 	}
 }

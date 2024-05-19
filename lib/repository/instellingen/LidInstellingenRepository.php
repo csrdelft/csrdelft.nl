@@ -121,8 +121,8 @@ class LidInstellingenRepository extends AbstractRepository
 				} else {
 					if ($instelling) {
 						// Haal niet-bestaande instelling uit de database
-						$this->_em->remove($instelling);
-						$this->_em->flush();
+						$this->getEntityManager()->remove($instelling);
+						$this->getEntityManager()->flush();
 					}
 					throw new CsrException(
 						sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module)
@@ -145,8 +145,8 @@ class LidInstellingenRepository extends AbstractRepository
 		$instelling->waarde = $this->getDefault($module, $id);
 		$instelling->profiel = ProfielRepository::get($uid);
 
-		$this->_em->persist($instelling);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($instelling);
+		$this->getEntityManager()->flush();
 		return $instelling;
 	}
 
@@ -190,10 +190,10 @@ class LidInstellingenRepository extends AbstractRepository
 				$instelling->instelling = $id;
 				$instelling->profiel = ProfielRepository::get($this->getUid());
 				$instelling->waarde = $waarde;
-				$this->_em->persist($instelling);
+				$this->getEntityManager()->persist($instelling);
 			}
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 	}
 
 	public function isValidValue($module, $id, $waarde)
@@ -262,7 +262,7 @@ class LidInstellingenRepository extends AbstractRepository
 			$instelling->module = $module;
 			$instelling->instelling = $id;
 			$instelling->profiel = $this->loginService->_getAccount()->profiel;
-			$this->_em->persist($instelling);
+			$this->getEntityManager()->persist($instelling);
 		}
 
 		$instelling->waarde = $waarde;
@@ -314,7 +314,7 @@ class LidInstellingenRepository extends AbstractRepository
 			}
 		}
 
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 	}
 
 	/**

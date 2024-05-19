@@ -171,8 +171,8 @@ abstract class GroepRepository extends AbstractRepository
 	 */
 	public function create(Groep $groep)
 	{
-		$this->_em->persist($groep);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($groep);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -182,8 +182,8 @@ abstract class GroepRepository extends AbstractRepository
 	 */
 	public function update(Groep $groep)
 	{
-		$this->_em->persist($groep);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($groep);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -193,8 +193,8 @@ abstract class GroepRepository extends AbstractRepository
 	 */
 	public function delete(Groep $groep)
 	{
-		$this->_em->remove($groep);
-		$this->_em->flush();
+		$this->getEntityManager()->remove($groep);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -211,7 +211,7 @@ abstract class GroepRepository extends AbstractRepository
 		$soort = null
 	) {
 		try {
-			return $this->_em->transactional(function () use (
+			return $this->getEntityManager()->transactional(function () use (
 				$oldgroep,
 				$oldmodel,
 				$soort
@@ -225,7 +225,7 @@ abstract class GroepRepository extends AbstractRepository
 					}
 				}
 				$newgroep->id = null;
-				$this->_em->persist($newgroep);
+				$this->getEntityManager()->persist($newgroep);
 
 				foreach ($oldgroep->getLeden() as $lid) {
 					$lid->groep = $newgroep;
@@ -233,8 +233,8 @@ abstract class GroepRepository extends AbstractRepository
 				}
 
 				// groep verwijderen
-				$this->_em->remove($oldgroep);
-				$this->_em->flush();
+				$this->getEntityManager()->remove($oldgroep);
+				$this->getEntityManager()->flush();
 
 				return $newgroep;
 			});

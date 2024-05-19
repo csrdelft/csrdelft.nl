@@ -106,7 +106,7 @@ class CiviBestellingRepository extends AbstractRepository
 	 */
 	public function revert(CiviBestelling $bestelling)
 	{
-		return $this->_em->transactional(function () use ($bestelling): void {
+		return $this->getEntityManager()->transactional(function () use ($bestelling): void {
 			if ($bestelling->deleted) {
 				throw new Exception('Bestelling kan niet worden teruggedraaid.');
 			}
@@ -123,8 +123,8 @@ class CiviBestellingRepository extends AbstractRepository
 			}
 			$bestelling->deleted = true;
 			// TODO LOG?
-			$this->_em->persist($bestelling);
-			$this->_em->flush();
+			$this->getEntityManager()->persist($bestelling);
+			$this->getEntityManager()->flush();
 		});
 	}
 
@@ -201,17 +201,17 @@ class CiviBestellingRepository extends AbstractRepository
 		// Persist bestelling eerst zonder inhoud
 		$inhoud = $entity->inhoud;
 		$entity->inhoud = [];
-		$this->_em->persist($entity);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($entity);
+		$this->getEntityManager()->flush();
 
 		// Voeg inhoud toe
 		$entity->inhoud = $inhoud;
 		foreach ($entity->inhoud as $bestellingInhoud) {
 			$bestellingInhoud->setBestelling($entity);
-			$this->_em->persist($bestellingInhoud);
+			$this->getEntityManager()->persist($bestellingInhoud);
 		}
 
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 
 		return $entity->id;
 	}

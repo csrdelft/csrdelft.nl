@@ -80,8 +80,8 @@ class CorveeFunctiesRepository extends AbstractRepository
 				'Verwijder eerst de bijbehorende kwalificaties!'
 			);
 		}
-		$this->_em->remove($functie);
-		$this->_em->flush();
+		$this->getEntityManager()->remove($functie);
+		$this->getEntityManager()->flush();
 	}
 
 	public function getSuggesties($query)
