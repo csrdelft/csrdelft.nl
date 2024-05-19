@@ -7,6 +7,7 @@ use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
+use DateTimeImmutable;
 use Faker\Generator;
 
 class ProfielFixtureUtil
@@ -55,7 +56,7 @@ class ProfielFixtureUtil
 		$profiel->postfix = '';
 		$profiel->nickname = $nickname ?? '';
 		$profiel->duckname = '';
-		$profiel->gebdatum = $faker->dateTimeBetween('-25 years', '-18 years');
+		$profiel->gebdatum = DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-25 years', '-18 years'));
 		$profiel->sterfdatum = null;
 		$profiel->lengte = $faker->numberBetween(160, 210);
 		// getrouwd
