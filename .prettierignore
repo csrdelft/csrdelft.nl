@@ -10,6 +10,7 @@ htdocs
 bin/.phpunit
 vendor
 composer.lock
+composer.json
 
 # Built docs site
 docs/_site
@@ -24,3 +25,4 @@ var/
 # db bestanden kunnen wat chaotisch zijn.
 db/
 .vscode/tasks.json
+.phpactor.json
