@@ -39,8 +39,8 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository
 		$b->uid = LoginService::getUid();
 		$b->kwantiteit = null;
 		$b->kwaliteit = null;
-		$this->_em->persist($b);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($b);
+		$this->getEntityManager()->flush();
 		return $b;
 	}
 
@@ -136,7 +136,7 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository
 	 */
 	public function update(MaaltijdBeoordeling $maaltijdBeoordeling)
 	{
-		$this->_em->persist($maaltijdBeoordeling);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($maaltijdBeoordeling);
+		$this->getEntityManager()->flush();
 	}
 }

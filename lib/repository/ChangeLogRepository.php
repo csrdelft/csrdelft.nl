@@ -82,7 +82,7 @@ class ChangeLogRepository extends AbstractRepository
 		$change = new ChangeLogEntry();
 		$change->moment = date_create_immutable();
 		try {
-			$meta = $this->_em->getClassMetadata(get_class($subject));
+			$meta = $this->getEntityManager()->getClassMetadata(get_class($subject));
 			$change->subject =
 				implode('.', $meta->getIdentifierValues($subject)) .
 				'@' .

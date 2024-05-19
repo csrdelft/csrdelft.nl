@@ -69,8 +69,8 @@ class CiviProductRepository extends AbstractRepository
 	 */
 	public function create(CiviProduct $product)
 	{
-		return $this->_em->transactional(function () use ($product) {
-			$this->_em->persist($product);
+		return $this->getEntityManager()->transactional(function () use ($product) {
+			$this->getEntityManager()->persist($product);
 
 			$prijs = new CiviPrijs();
 			$prijs->product = $product;
@@ -80,9 +80,9 @@ class CiviProductRepository extends AbstractRepository
 
 			$product->prijzen->add($prijs);
 
-			$this->_em->persist($prijs);
+			$this->getEntityManager()->persist($prijs);
 
-			$this->_em->flush();
+			$this->getEntityManager()->flush();
 
 			return $product->id;
 		});
@@ -94,7 +94,7 @@ class CiviProductRepository extends AbstractRepository
 	 */
 	public function update(CiviProduct $product)
 	{
-		return $this->_em->transactional(function () use ($product): void {
+		return $this->getEntityManager()->transactional(function () use ($product): void {
 			$nu = date_create_immutable('now');
 
 			$prijs = $product->getPrijs();
@@ -110,10 +110,10 @@ class CiviProductRepository extends AbstractRepository
 
 				$product->prijzen->add($nieuw_prijs);
 
-				$this->_em->persist($nieuw_prijs);
+				$this->getEntityManager()->persist($nieuw_prijs);
 			}
 
-			$this->_em->flush();
+			$this->getEntityManager()->flush();
 		});
 	}
 }

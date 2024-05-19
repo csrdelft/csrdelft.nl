@@ -137,7 +137,7 @@ class AccessRepository extends AbstractRepository
 			// Delete AC
 			if (empty($subject)) {
 				if ($ac) {
-					$this->_em->remove($ac);
+					$this->getEntityManager()->remove($ac);
 				}
 			}
 			// Update AC
@@ -149,10 +149,10 @@ class AccessRepository extends AbstractRepository
 				$ac = $this->nieuw($environment, $resource);
 				$ac->action = $action;
 				$ac->subject = $subject;
-				$this->_em->persist($ac);
+				$this->getEntityManager()->persist($ac);
 			}
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 		return true;
 	}
 

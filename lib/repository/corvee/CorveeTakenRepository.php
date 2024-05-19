@@ -48,8 +48,8 @@ class CorveeTakenRepository extends AbstractRepository
 		$taak->setWanneerGemaild(
 			DateUtil::dateFormatIntl(date_create(), DateUtil::DATETIME_FORMAT)
 		);
-		$this->_em->persist($taak);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($taak);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -81,8 +81,8 @@ class CorveeTakenRepository extends AbstractRepository
 		if ($puntenruilen && $profiel != null) {
 			$this->puntenToekennen($taak, $profiel);
 		} else {
-			$this->_em->persist($taak);
-			$this->_em->flush();
+			$this->getEntityManager()->persist($taak);
+			$this->getEntityManager()->flush();
 		}
 		return true;
 	}
@@ -257,7 +257,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 */
 	public function saveTaak(CorveeTaak $taak)
 	{
-		return $this->_em->transactional(function () use ($taak) {
+		return $this->getEntityManager()->transactional(function () use ($taak) {
 			if ($taak->taak_id === null) {
 				$taak = $this->newTaak($taak);
 			} else {
@@ -274,8 +274,8 @@ class CorveeTakenRepository extends AbstractRepository
 
 				$this->taakToewijzenAanLid($taak, $oldTaak['profiel'], $taak->profiel);
 
-				$this->_em->persist($taak);
-				$this->_em->flush();
+				$this->getEntityManager()->persist($taak);
+				$this->getEntityManager()->flush();
 			}
 
 			return $taak;
@@ -291,9 +291,9 @@ class CorveeTakenRepository extends AbstractRepository
 	{
 		$taken = $this->findBy(['verwijderd' => true]);
 		foreach ($taken as $taak) {
-			$this->_em->remove($taak);
+			$this->getEntityManager()->remove($taak);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 		return count($taken);
 	}
 
@@ -312,9 +312,9 @@ class CorveeTakenRepository extends AbstractRepository
 			->getResult();
 		foreach ($taken as $taak) {
 			$taak->verwijderd = true;
-			$this->_em->persist($taak);
+			$this->getEntityManager()->persist($taak);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 		return count($taken);
 	}
 
@@ -334,9 +334,9 @@ class CorveeTakenRepository extends AbstractRepository
 			->getQuery()
 			->getResult();
 		foreach ($taken as $taak) {
-			$this->_em->remove($taak);
+			$this->getEntityManager()->remove($taak);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 		return count($taken);
 	}
 
@@ -384,8 +384,8 @@ class CorveeTakenRepository extends AbstractRepository
 		$taak->wanneer_gemaild = '';
 		$taak->verwijderd = false;
 
-		$this->_em->persist($taak);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($taak);
+		$this->getEntityManager()->flush();
 
 		return $taak;
 	}
@@ -440,9 +440,9 @@ class CorveeTakenRepository extends AbstractRepository
 		$taken = $this->findBy(['maaltijd_id' => $mid]);
 		foreach ($taken as $taak) {
 			$taak->verwijderd = true;
-			$this->_em->persist($taak);
+			$this->getEntityManager()->persist($taak);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 		return count($taken);
 	}
 
@@ -481,7 +481,7 @@ class CorveeTakenRepository extends AbstractRepository
 			);
 		}
 
-		return $this->_em->transactional(function () use (
+		return $this->getEntityManager()->transactional(function () use (
 			$repetitie,
 			$beginDatum,
 			$eindDatum,
@@ -523,7 +523,7 @@ class CorveeTakenRepository extends AbstractRepository
 			// break after one
 			for ($i = $repetitie->standaard_aantal; $i > 0; $i--) {
 				$taak = $this->vanRepetitie($repetitie, $datum, $maaltijd, 0);
-				$this->_em->persist($taak);
+				$this->getEntityManager()->persist($taak);
 				$taken[] = $taak;
 			}
 			if ($repetitie->periode_in_dagen < 1) {
@@ -534,7 +534,7 @@ class CorveeTakenRepository extends AbstractRepository
 			);
 		}
 
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 
 		return $taken;
 	}
@@ -550,10 +550,10 @@ class CorveeTakenRepository extends AbstractRepository
 		$taken = $this->findBy(['corveeRepetitie' => $crid]);
 		foreach ($taken as $taak) {
 			$taak->verwijderd = true;
-			$this->_em->persist($taak);
+			$this->getEntityManager()->persist($taak);
 		}
 
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 
 		return count($taken);
 	}
@@ -577,7 +577,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 */
 	public function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats)
 	{
-		return $this->_em->transactional(function () use ($repetitie, $verplaats): RepetitieTakenUpdateDTO {
+		return $this->getEntityManager()->transactional(function () use ($repetitie, $verplaats): RepetitieTakenUpdateDTO {
 			$taken = $this->findBy([
 				'verwijderd' => false,
 				'crv_repetitie_id' => $repetitie->crv_repetitie_id,
@@ -587,10 +587,10 @@ class CorveeTakenRepository extends AbstractRepository
 				$taak->corveeFunctie = $repetitie->corveeFunctie;
 				$taak->punten = $repetitie->standaard_punten;
 
-				$this->_em->persist($taak);
+				$this->getEntityManager()->persist($taak);
 			}
 
-			$this->_em->flush();
+			$this->getEntityManager()->flush();
 			$updatecount = count($taken);
 
 			$taken = $this->findBy([
@@ -625,7 +625,7 @@ class CorveeTakenRepository extends AbstractRepository
 					}
 					if ($shift !== 0) {
 						$taak->datum = $datum;
-						$this->_em->persist($taak);
+						$this->getEntityManager()->persist($taak);
 						$daycount++;
 					}
 				}
@@ -646,7 +646,7 @@ class CorveeTakenRepository extends AbstractRepository
 				$verschil = $repetitie->standaard_aantal - sizeof($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					$taak = $this->vanRepetitie($repetitie, $taken[0]->datum, null, 0);
-					$this->_em->persist($taak);
+					$this->getEntityManager()->persist($taak);
 				}
 				$datumcount += $verschil;
 			}
@@ -660,11 +660,11 @@ class CorveeTakenRepository extends AbstractRepository
 						$maaltijdenById[$mid],
 						0
 					);
-					$this->_em->persist($taak);
+					$this->getEntityManager()->persist($taak);
 				}
 				$maaltijdcount += $verschil;
 			}
-			$this->_em->flush();
+			$this->getEntityManager()->flush();
 			return new RepetitieTakenUpdateDTO(
 				$updatecount,
 				$daycount,

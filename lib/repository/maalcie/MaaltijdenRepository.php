@@ -63,8 +63,8 @@ class MaaltijdenRepository extends AbstractRepository
 			throw new CsrGebruikerException('Maaltijd is al geopend');
 		}
 		$maaltijd->gesloten = false;
-		$this->_em->persist($maaltijd);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($maaltijd);
+		$this->getEntityManager()->flush();
 		return $maaltijd;
 	}
 
@@ -80,8 +80,8 @@ class MaaltijdenRepository extends AbstractRepository
 		}
 		$maaltijd->gesloten = true;
 		$maaltijd->laatst_gesloten = date_create_immutable();
-		$this->_em->persist($maaltijd);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($maaltijd);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -189,8 +189,8 @@ class MaaltijdenRepository extends AbstractRepository
 			throw new CsrGebruikerException('Maaltijd is niet verwijderd');
 		}
 		$maaltijd->verwijderd = false;
-		$this->_em->persist($maaltijd);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($maaltijd);
+		$this->getEntityManager()->flush();
 		return $maaltijd;
 	}
 
@@ -261,8 +261,8 @@ class MaaltijdenRepository extends AbstractRepository
 		$maaltijden = $this->findBy(['mlt_repetitie_id' => $mrid]);
 		foreach ($maaltijden as $maaltijd) {
 			$maaltijd->verwijderd = true;
-			$this->_em->persist($maaltijd);
-			$this->_em->flush();
+			$this->getEntityManager()->persist($maaltijd);
+			$this->getEntityManager()->flush();
 		}
 	}
 
@@ -285,8 +285,8 @@ class MaaltijdenRepository extends AbstractRepository
 	 */
 	public function update(Maaltijd $maaltijd)
 	{
-		$this->_em->persist($maaltijd);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($maaltijd);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -296,8 +296,8 @@ class MaaltijdenRepository extends AbstractRepository
 	 */
 	public function delete(Maaltijd $maaltijd)
 	{
-		$this->_em->remove($maaltijd);
-		$this->_em->flush();
+		$this->getEntityManager()->remove($maaltijd);
+		$this->getEntityManager()->flush();
 	}
 
 	/**

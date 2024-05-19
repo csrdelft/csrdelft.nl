@@ -83,8 +83,8 @@ class AccountRepository extends AbstractRepository implements
 	{
 		$account->private_token = CryptoUtil::crypto_rand_token(150);
 		$account->private_token_since = date_create_immutable();
-		$this->_em->persist($account);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($account);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -128,8 +128,8 @@ class AccountRepository extends AbstractRepository implements
 	{
 		$account->failed_login_attempts++;
 		$account->last_login_attempt = date_create_immutable();
-		$this->_em->persist($account);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($account);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -140,14 +140,14 @@ class AccountRepository extends AbstractRepository implements
 		$account->failed_login_attempts = 0;
 		$account->last_login_attempt = date_create_immutable();
 		$account->last_login_success = date_create_immutable();
-		$this->_em->persist($account);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($account);
+		$this->getEntityManager()->flush();
 	}
 
 	public function delete(Account $account)
 	{
-		$this->_em->remove($account);
-		$this->_em->flush();
+		$this->getEntityManager()->remove($account);
+		$this->getEntityManager()->flush();
 	}
 
 	public function upgradePassword(
@@ -156,8 +156,8 @@ class AccountRepository extends AbstractRepository implements
 	): void {
 		$user->pass_hash = $newEncodedPassword;
 
-		$this->_em->flush();
-		$this->_em->clear();
+		$this->getEntityManager()->flush();
+		$this->getEntityManager()->clear();
 	}
 
 	public function loadUserByIdentifier(string $identifier): ?UserInterface

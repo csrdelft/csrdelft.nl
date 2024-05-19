@@ -50,8 +50,8 @@ class LedenMemoryScoresRepository extends AbstractRepository
 
 	public function create(LedenMemoryScore $ledenMemoryScore)
 	{
-		$this->_em->persist($ledenMemoryScore);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($ledenMemoryScore);
+		$this->getEntityManager()->flush();
 	}
 
 	public function getAllTopScores()

@@ -91,7 +91,7 @@ class CorveeVrijstellingenRepository extends AbstractRepository
 		DateTimeInterface $eind,
 		$percentage
 	) {
-		return $this->_em->transactional(function () use (
+		return $this->getEntityManager()->transactional(function () use (
 			$profiel,
 			$begin,
 			$eind,
@@ -107,8 +107,8 @@ class CorveeVrijstellingenRepository extends AbstractRepository
 				$vrijstelling->percentage = $percentage;
 			}
 
-			$this->_em->persist($vrijstelling);
-			$this->_em->flush();
+			$this->getEntityManager()->persist($vrijstelling);
+			$this->getEntityManager()->flush();
 			return $vrijstelling;
 		});
 	}
