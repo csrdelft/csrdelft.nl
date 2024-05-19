@@ -58,7 +58,7 @@ class MenuItemRepository extends AbstractRepository
 			$this->getExtendedTree($root, false);
 
 			// Voorkom dat extendedTree updates doorvoert
-			$this->_em->clear(MenuItem::class);
+			$this->getEntityManager()->clear(MenuItem::class);
 
 			return $root;
 		} catch (EntityNotFoundException) {
@@ -92,7 +92,7 @@ class MenuItemRepository extends AbstractRepository
 				$this->getExtendedTree($root, true);
 
 				// Voorkom dat extendedTree updates doorvoert
-				$this->_em->clear(MenuItem::class);
+				$this->getEntityManager()->clear(MenuItem::class);
 
 				return $root;
 			} catch (EntityNotFoundException) {
@@ -245,8 +245,8 @@ class MenuItemRepository extends AbstractRepository
 		$item->tekst = $uid;
 		$item->link = '/menubeheer/beheer/' . $uid;
 
-		$this->_em->persist($item);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($item);
+		$this->getEntityManager()->flush();
 
 		return $item;
 	}

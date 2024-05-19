@@ -58,7 +58,7 @@ class BoekRepository extends AbstractRepository
 	{
 		$qb = $this->createQueryBuilder('boek');
 		$qb->where($qb->expr()->like('boek.titel', ':zoekterm'));
-		$qb->setParameters(['zoekterm' => SqlUtil::sql_contains($zoekterm)]);
+		$qb->setParameter('zoekterm', SqlUtil::sql_contains($zoekterm));
 		return $qb->getQuery()->getResult();
 	}
 }

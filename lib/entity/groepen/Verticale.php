@@ -23,6 +23,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 class Verticale extends Groep
 {
 	/**
+<<<<<<< HEAD
 	 * Primary key
 	 * @var string
 	 */
@@ -44,6 +45,14 @@ class Verticale extends Groep
 	#[Serializer\Groups(['datatable', 'log', 'vue'])]
 	#[ORM\Column(type: 'stringkey', unique: true)]
 	public $naam;
+=======
+	* Primary key
+	* @var string
+	*/
+	#[ORM\Column(type: 'string', unique: true, length: 1, options: ['fixed' => true])]
+	#[Serializer\Groups(['datatable', 'log', 'vue'])]
+	public $letter;
+>>>>>>> 293c8a774 (Fix meer problemen)
 
 	// Stiekem hebben we helemaal geen leden.
 	public function getLeden()
