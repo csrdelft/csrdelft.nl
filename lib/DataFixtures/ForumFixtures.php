@@ -7,6 +7,7 @@ use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumPost;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -20,7 +21,7 @@ class ForumFixtures extends Fixture implements DependentFixtureInterface
 		$forumCategorie->titel = 'Algemeen';
 		$forumCategorie->volgorde = 0;
 		$forumCategorie->rechten_lezen = P_LOGGED_IN;
-
+())
 		$manager->persist($forumCategorie);
 
 		$forum = new ForumDeel();
@@ -39,10 +40,10 @@ class ForumFixtures extends Fixture implements DependentFixtureInterface
 
 		for ($i = 0; $i < 100; $i++) {
 			$draad = new ForumDraad();
-			$draad->titel = $faker->sentence;
+			$draad->titel = $faker->sentence();
 			$draad->uid = FixtureHelpers::getUid();
 			$draad->deel = $forum;
-			$draad->datum_tijd = $faker->dateTimeThisMonth;
+			$draad->datum_tijd = DateTimeImmutable::createFromMutable($faker->dateTimeThisMonth());
 			$draad->gesloten = false;
 			$draad->laatst_gewijzigd = $draad->datum_tijd;
 			$draad->laatste_wijziging_uid = $draad->uid;
@@ -58,10 +59,10 @@ class ForumFixtures extends Fixture implements DependentFixtureInterface
 
 			for ($j = 0; $j < $posts; $j++) {
 				$post = new ForumPost();
-				$post->datum_tijd = $faker->dateTimeBetween(
+				$post->datum_tijd = DateTimeImmutable::createFromMutable($faker->dateTimeBetween(
 					$draad->datum_tijd->format(DATE_RFC2822),
 					'now'
-				);
+				));
 				$post->laatst_gewijzigd = $post->datum_tijd;
 				$post->uid = FixtureHelpers::getUid();
 				$post->draad = $draad;
@@ -72,7 +73,7 @@ class ForumFixtures extends Fixture implements DependentFixtureInterface
 					'',
 					array_map(function ($p): string {
 						return '[p]' . $p . '[/p]';
-					}, $faker->paragraphs)
+					}, $faker->paragraphs())
 				);
 
 				$manager->persist($post);

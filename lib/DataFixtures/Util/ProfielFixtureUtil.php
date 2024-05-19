@@ -18,7 +18,7 @@ class ProfielFixtureUtil
 	 * @param string|null $voornaam
 	 * @param string|null $achternaam
 	 * @param string $voorletters
-	 * @return void
+	 * @return Profiel
 	 */
 	public static function maakProfiel(
 		Generator $faker,
@@ -51,7 +51,7 @@ class ProfielFixtureUtil
 				}, explode(' ', $profiel->voornamen))
 			);
 		$profiel->tussenvoegsel = '';
-		$profiel->achternaam = $achternaam ?? $faker->lastName;
+		$profiel->achternaam = $achternaam ?? $faker->lastName();
 		$profiel->postfix = '';
 		$profiel->nickname = $nickname ?? '';
 		$profiel->duckname = '';
@@ -63,20 +63,20 @@ class ProfielFixtureUtil
 		$profiel->adresseringechtpaar = null;
 		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee();
 		// adres
-		$profiel->adres = $faker->streetAddress;
-		$profiel->postcode = $faker->postcode;
-		$profiel->woonplaats = $faker->city;
-		$profiel->land = $faker->country;
-		$profiel->telefoon = $faker->e164PhoneNumber; // We hebben strenge telefoonnummer eisen
-		$profiel->o_adres = $faker->streetAddress;
-		$profiel->o_postcode = $faker->postcode;
-		$profiel->o_woonplaats = $faker->city;
-		$profiel->o_land = $faker->country;
-		$profiel->o_telefoon = $faker->e164PhoneNumber;
+		$profiel->adres = $faker->streetAddress();
+		$profiel->postcode = $faker->postcode();
+		$profiel->woonplaats = $faker->city();
+		$profiel->land = $faker->country();
+		$profiel->telefoon = $faker->e164PhoneNumber(); // We hebben strenge telefoonnummer eisen
+		$profiel->o_adres = $faker->streetAddress();
+		$profiel->o_postcode = $faker->postcode();
+		$profiel->o_woonplaats = $faker->city();
+		$profiel->o_land = $faker->country();
+		$profiel->o_telefoon = $faker->e164PhoneNumber();
 		// contact
-		$profiel->email = $faker->email;
-		$profiel->sec_email = $faker->email;
-		$profiel->mobiel = $faker->e164PhoneNumber;
+		$profiel->email = $faker->email();
+		$profiel->sec_email = $faker->email();
+		$profiel->mobiel = $faker->e164PhoneNumber();
 		$profiel->linkedin = null;
 		$profiel->website = null;
 		// studie
