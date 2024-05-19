@@ -50,7 +50,7 @@ class AccountFixtures extends Fixture
 		$this->faker = Faker::create('nl_NL');
 	}
 
-	public function load(ObjectManager $manager)
+	public function load(ObjectManager $manager): void
 	{
 		$this->maakExternAccount($manager);
 
@@ -176,7 +176,7 @@ class AccountFixtures extends Fixture
 	 * @param ObjectManager $manager
 	 * @param $uid
 	 * @param string $permRole
-	 * @return void
+	 * @return Profiel
 	 */
 	private function maakProfielEnAccount(
 		ObjectManager $manager,
