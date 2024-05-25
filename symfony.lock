@@ -144,17 +144,11 @@
     "felixfbecker/language-server-protocol": {
         "version": "1.5.1"
     },
-    "fgrosse/phpasn1": {
-        "version": "v2.5.0"
-    },
     "firebase/php-jwt": {
         "version": "v5.0.0"
     },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.3"
-    },
-    "fzaninotto/faker": {
-        "version": "v1.9.1"
     },
     "globalcitizen/php-iban": {
         "version": "v2.7.2"
@@ -194,12 +188,6 @@
     },
     "laminas/laminas-code": {
         "version": "3.4.1"
-    },
-    "laminas/laminas-eventmanager": {
-        "version": "3.3.0"
-    },
-    "laminas/laminas-zendframework-bridge": {
-        "version": "1.1.1"
     },
     "lcobucci/jwt": {
         "version": "3.4.5"
@@ -804,9 +792,6 @@
     },
     "vimeo/psalm": {
         "version": "4.7.1"
-    },
-    "web-token/jwt-core": {
-        "version": "v2.2.11"
     },
     "web-token/jwt-key-mgmt": {
         "version": "v2.2.11"

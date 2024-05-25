@@ -37,7 +37,7 @@
 		"firebase/php-jwt": "^6.0",
 		"globalcitizen/php-iban": "^2.6",
 		"google/apiclient": "^2.0",
-		"league/oauth2-server-bundle": "^0.4.1",
+		"league/oauth2-server-bundle": "^0.8.0",
 		"minishlink/web-push": "^7.0",
 		"nelmio/cors-bundle": "^2.1",
 		"parsecsv/php-parsecsv": "^1.2",
@@ -75,7 +75,7 @@
 	},
 	"config": {
 		"platform": {
-			"php": "7.3.14"
+			"php": "8.2"
 		},
 		"allow-plugins": {
 			"symfony/flex": true,
@@ -88,13 +88,11 @@
 			"CsrDelft\\tests\\": "tests/lib/"
 		}
 	},
-	"include-path": [
-		"lib/"
-	],
+	"include-path": ["lib/"],
 	"require-dev": {
 		"doctrine/doctrine-fixtures-bundle": "^3.3",
 		"symfony/maker-bundle": "^1.19",
-		"fzaninotto/faker": "^1.9",
+		"fakerphp/faker": "^1.23",
 		"symfony/phpunit-bridge": "^5.1",
 		"phpunit/phpunit": "8.5.32",
 		"spatie/phpunit-snapshot-assertions": "^4.0",
@@ -135,12 +133,7 @@
 			"@composer install",
 			"@migrate"
 		],
-		"update-dev": [
-			"@composer install",
-			"@migrate",
-			"yarn",
-			"yarn dev"
-		],
+		"update-dev": ["@composer install", "@migrate", "yarn", "yarn dev"],
 		"auto-scripts": {
 			"cache:clear": "symfony-cmd",
 			"assets:install %PUBLIC_DIR%": "symfony-cmd"
