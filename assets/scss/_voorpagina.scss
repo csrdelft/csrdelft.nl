@@ -25,7 +25,7 @@
 		"agenda posters posters foto-albums verjaardagen"
 		"agenda forum forum overig verjaardagen"
 		"agenda forum forum overig verjaardagen"
-		"radio forum forum is-het-al verjaardagen";
+		"csr-radio forum forum is-het-al verjaardagen";
 	gap: 1rem;
 
 	// Set font-size for the grid
@@ -96,7 +96,7 @@
 			"agenda posters posters foto-albums"
 			"agenda posters posters foto-albums"
 			"agenda forum forum verjaardagen"
-			"radio forum forum verjaardagen"
+			"csr-radio forum forum verjaardagen"
 			"overig overig civi-saldo is-het-al";
 	}
 }
@@ -330,7 +330,7 @@
 }
 
 .cell-radio {
-	grid-area: radio;
+	grid-area: csr-radio;
 	border-radius: 5px;
 	overflow: hidden;
 	padding-bottom: 0;
