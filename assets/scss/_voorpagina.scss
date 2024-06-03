@@ -328,3 +328,16 @@
 		width: 100%;
 	}
 }
+
+.cell-radio {
+	grid-area: radio;
+	border-radius: 5px;
+	overflow: hidden;
+	padding-bottom: 0;
+
+	.radio {
+		width: 100%;
+		height: 110px;
+		color-scheme: light;
+	}
+}
