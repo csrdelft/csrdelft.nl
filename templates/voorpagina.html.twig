@@ -8,37 +8,6 @@
 		<div class="cd-page-content voorpagina container px-0 ratio ratio-3x2">
 			<div class="grid-container p-0 p-md-3">
 				<div class="cell cell-posters ratio ratio-5x4">{{ render(path('csrdelft_voorpagina_posters')) }}</div>
-				<div class="cell cell-radio">
-					{% set theme = lid_instelling('layout', 'opmaak') %}
-					{% if theme == "donker" %}
-						<iframe class="radio" src="https://radio.csrdelft.nl/public/c.s.r._delft_radio/embed?theme=dark"
-										allowtransparency="true"></iframe>
-					{% elseif theme == "normaal" %}
-						<iframe class="radio" src="https://radio.csrdelft.nl/public/c.s.r._delft_radio/embed"
-										allowtransparency="true"></iframe>
-					{% elseif theme == "dies" %}
-						<iframe class="radio" src="https://radio.csrdelft.nl/public/c.s.r._delft_radio/embed?theme=dark"
-										allowtransparency="true"></iframe>
-					{% elseif theme == "lustrum" %}
-						<iframe class="radio" src="https://radio.csrdelft.nl/public/c.s.r._delft_radio/embed?theme=dark"
-										allowtransparency="true"></iframe>
-					{% elseif theme == "roze" %}
-						<iframe class="radio" src="https://radio.csrdelft.nl/public/c.s.r._delft_radio/embed?theme=dark"
-										allowtransparency="true"></iframe>
-					{% elseif theme == "koevoet" %}
-						<iframe class="radio" src="https://radio.csrdelft.nl/public/c.s.r._delft_radio/embed?theme=dark"
-										allowtransparency="true"></iframe>
-					{% elseif theme == "sineregno" %}
-						<iframe class="radio" src="https://radio.csrdelft.nl/public/c.s.r._delft_radio/embed?theme=light"
-										allowtransparency="true"></iframe>
-					{% elseif theme == "civitasia" %}
-						<iframe class="radio" src="https://radio.csrdelft.nl/public/c.s.r._delft_radio/embed?theme=light"
-										allowtransparency="true"></iframe>
-					{% elseif theme == "owee" %}
-						<iframe class="radio" src="https://radio.csrdelft.nl/public/c.s.r._delft_radio/embed?theme=light"
-										allowtransparency="true"></iframe>
-					{% endif %}
-				</div>
 				<div class="cell cell-forum cell-overflow">{{ render(path('csrdelft_voorpagina_forum')) }}</div>
 				<div class="cell cell-agenda cell-overflow">{{ render(path('csrdelft_voorpagina_agenda')) }}</div>
 				<div class="cell cell-civi-saldo position-relative">{{ render(path('csrdelft_voorpagina_civisaldo')) }}</div>
