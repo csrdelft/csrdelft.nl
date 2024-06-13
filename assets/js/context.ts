@@ -121,13 +121,13 @@ export const registerGlobalContext = async (): Promise<void> => {
 	});
 };
 
-export const registerFlatpickrContext = async (): Promise<void> => {
-	const { initDateTimePicker, initDatePicker } = await import(
-		'./lib/datepicker'
-	);
+export const registerLidInstellingenContext = async (): Promise<void> => {
+	const { instellingOpslaan } = await import('./page/instellingen');
 
-	ctx.addHandlers({
-		'.DateTimeField': initDateTimePicker,
-		'.DateField': initDatePicker,
-	});
+	ctx.addHandler('.instellingKnop', (el) =>
+		el.addEventListener('click', instellingOpslaan)
+	);
+	ctx.addHandler('.change-opslaan', (el) =>
+		el.addEventListener('change', instellingOpslaan)
+	);
 };
