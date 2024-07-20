@@ -864,6 +864,14 @@
 							C.S.R. heeft gedurende deze week veel interessante en gezellige activiteiten, waar je kennis kan maken met de vereniging!
 							Ook kan je je deze week inschrijven als lid van C.S.R..</target>
       </trans-unit>
+      <trans-unit id="sdJ.Eso" resname="Wil je op de hoogte worden gehouden van activiteiten die C.S.R. gaat organiseren voor (nieuwe) studenten in Delft? Schrijf je via onderstaande knop dan in voor de interesselijst!">
+        <source>Wil je op de hoogte worden gehouden van activiteiten die C.S.R. gaat organiseren voor (nieuwe) studenten in Delft? Schrijf je via onderstaande knop dan in voor de interesselijst!</source>
+        <target>__Wil je op de hoogte worden gehouden van activiteiten die C.S.R. gaat organiseren voor (nieuwe) studenten in Delft? Schrijf je via onderstaande knop dan in voor de interesselijst!</target>
+      </trans-unit>
+      <trans-unit id="_TDxf12" resname="Ik wil op de interesselijst!">
+        <source>Ik wil op de interesselijst!</source>
+        <target>I want to be on the interest list!</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
