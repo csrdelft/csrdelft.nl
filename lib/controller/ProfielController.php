@@ -420,7 +420,7 @@ class ProfielController extends AbstractController
 		string $pre,
 		EntityManagerInterface $em
 	): Response {
-		if (DateUtil::isDatumVoorbij('2021-08-28 00:00:00')) {
+		if (DateUtil::isDatumVoorbij('2024-08-24 00:00:00')) {
 			return $this->render('extern-inschrijven/tekstpagina.html.twig', [
 				'titel' => 'C.S.R. Delft - Inschrijven',
 				'content' => '
