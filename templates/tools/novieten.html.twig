@@ -13,6 +13,7 @@
 			<th scope="col">Studie</th>
 			<th scope="col">Nanoviet</th>
 			<th scope="col">Matrixplek</th>
+			<th scope="col">Startkamp</th>
 		</tr>
 		{% for noviet in novieten %}
 			<tr>
@@ -30,12 +31,20 @@
 					{% if noviet.novietSoort == '1' %}
 						{{ icon('check', null, 'Ja', 'text-success') }}
 					{% else %}
-						{{ icon('cross', null, 'Nee', 'text-danger') }}
+						{{ icon('xmark', null, 'Nee', 'text-danger') }}
 					{% endif %}
 				</td>
 				<td>
 					{% if noviet.matrixPlek is not none %}
 						{{ ['Voor', 'Midden', 'Achter'][noviet.matrixPlek] }}
+					{% endif %}
+				</td>
+				<td>
+					{# Om de een of andere reden, Joost mag het weten, is deze optie precies andersom #}
+					{% if noviet.startkamp == '1' %}
+						{{ icon('xmark', null, 'Nee', 'text-danger') }}
+					{% else %}
+						{{ icon('check', null, 'Ja', 'text-success') }}
 					{% endif %}
 				</td>
 			</tr>
