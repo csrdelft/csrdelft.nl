@@ -131,7 +131,7 @@ class ProfielRepository extends AbstractRepository
 		$logUsername =
 			$user == null ? LoginService::UID_EXTERN : $user->getUsername();
 		$profiel = new Profiel();
-		$profiel->lidjaar = 2024;
+		$profiel->lidjaar = $lidjaar;
 		$profiel->status = $lidstatus;
 		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee();
 		$profiel->changelog = [

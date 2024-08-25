@@ -26,7 +26,7 @@ _Je kan deze programma's allemaal tegelijk downloaden en installeren, behalve al
 - [wampserver](https://sourceforge.net/projects/wampserver/)
   - Komt met Apache2, Mariadb en PHP
   - wampserver komt met een iets vriendelijkere gebruikersinterface en wordt verder in deze uitleg gebruikt.
-  - Zorg ervoor dat je een versie met PHP 7.3 installeert, want dit is wat de productie versie van de stek ook draait. (7.4 is op zich ook prima)
+  - Zorg ervoor dat je een versie met PHP 8.2 installeert, want dit is wat de productie versie van de stek ook draait.
   - Zorg ervoor dat je MariaDB installeert en niet MySql, deze twee databases lijken erg op elkaar maar hebben allerlei subtiele verschillen.
   - In productie draait MariaDB 10.3, installeer deze als je zeker wil zijn dat alles hetzelfde is.
 - [git](https://git-scm.com)
