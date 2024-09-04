@@ -23,27 +23,16 @@ use Symfony\Contracts\Cache\CacheInterface;
 class AccessRepository extends AbstractRepository
 {
 	/**
-	 * @var CacheInterface
-	 */
-	private $cache;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $em;
-
-	/**
 	 * @param ManagerRegistry $registry
 	 * @param CacheInterface $cache
 	 * @param EntityManagerInterface $em
 	 */
 	public function __construct(
 		ManagerRegistry $registry,
-		CacheInterface $cache,
-		EntityManagerInterface $em
+		private readonly CacheInterface $cache,
+		private readonly EntityManagerInterface $em
 	) {
 		parent::__construct($registry, AccessControl::class);
-		$this->cache = $cache;
-		$this->em = $em;
 	}
 
 	/**

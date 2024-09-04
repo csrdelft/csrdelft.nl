@@ -52,7 +52,7 @@ class FormFieldFactory
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
 		/** @var ClassMetadata $meta */
-		$meta = $em->getClassMetadata(get_class($model));
+		$meta = $em->getClassMetadata($model::class);
 
 		$fields = [];
 		foreach ($meta->getFieldNames() as $fieldName) {
@@ -85,7 +85,7 @@ class FormFieldFactory
 					'Compound joinColumns worden niet ondersteund voor veld ' .
 						$fieldName .
 						' in class ' .
-						get_class($model)
+						$model::class
 				);
 			}
 
@@ -132,12 +132,11 @@ class FormFieldFactory
 
 	/**
 	 * @param string $fieldName
-	 * @param mixed $value
 	 * @param Type $type
 	 * @return InputField
 	 * @throws Exception
 	 */
-	private static function getFieldByType(string $fieldName, $value, $type)
+	private static function getFieldByType(string $fieldName, mixed $value, $type)
 	{
 		$desc = ucfirst(str_replace('_', ' ', $fieldName));
 

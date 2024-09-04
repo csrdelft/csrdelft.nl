@@ -64,41 +64,26 @@ use Throwable;
 
 class ProfielController extends AbstractController
 {
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var LidToestemmingRepository
-	 */
-	private $lidToestemmingRepository;
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
-	 * @var LidStatusService
-	 */
-	private $lidStatusService;
-
 	public function __construct(
-		ProfielRepository $profielRepository,
-		LidStatusService $lidStatusService,
-		AccountRepository $accountRepository,
-		LidToestemmingRepository $lidToestemmingRepository
+		private readonly ProfielRepository $profielRepository,
+		private readonly LidStatusService $lidStatusService,
+		private readonly AccountRepository $accountRepository,
+		private readonly LidToestemmingRepository $lidToestemmingRepository
 	) {
-		$this->profielRepository = $profielRepository;
-		$this->accountRepository = $accountRepository;
-		$this->lidToestemmingRepository = $lidToestemmingRepository;
-		$this->lidStatusService = $lidStatusService;
 	}
 
 	/**
 	 * @param $uid
 	 * @return RedirectResponse
-	 * @Route("/profiel/{uid}/resetPrivateToken", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
+	#[
+		Route(
+			path: '/profiel/{uid}/resetPrivateToken',
+			methods: ['GET'],
+			requirements: ['uid' => '.{4}']
+		)
+	]
 	public function resetPrivateToken($uid): RedirectResponse
 	{
 		$profiel = $this->profielRepository->get($uid);
@@ -139,9 +124,16 @@ class ProfielController extends AbstractController
 	 * @param Profiel|null $profiel
 	 * @return Response
 	 * @throws Throwable
-	 * @Route("/profiel/{uid}", methods={"GET"}, defaults={"uid": null}, requirements={"uid": ".{4}"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
+	#[
+		Route(
+			path: '/profiel/{uid}',
+			methods: ['GET'],
+			defaults: ['uid' => null],
+			requirements: ['uid' => '.{4}']
+		)
+	]
 	public function profiel(
 		BesturenRepository $besturenRepository,
 		CommissiesRepository $commissiesRepository,
@@ -245,19 +237,25 @@ class ProfielController extends AbstractController
 	 * @param $status
 	 * @param EntityManagerInterface $em
 	 * @return RedirectResponse|Response
-	 * @Route("/profiel/{lidjaar}/nieuw/{status}", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
 	 * @CsrfUnsafe()
 	 */
+	#[
+		Route(
+			path: '/profiel/{lidjaar}/nieuw/{status}',
+			methods: ['GET', 'POST'],
+			requirements: ['uid' => '.{4}']
+		)
+	]
 	public function nieuw($lidjaar, $status, EntityManagerInterface $em)
 	{
 		if ($em->getFilters()->isEnabled('verbergNovieten')) {
 			$em->getFilters()->disable('verbergNovieten');
 		}
 		// Controleer invoer
-		$lidstatus = 'S_' . strtoupper($status);
+		$lidstatus = 'S_' . strtoupper((string) $status);
 		if (
-			!preg_match('/^[0-9]{4}$/', $lidjaar) ||
+			!preg_match('/^[0-9]{4}$/', (string) $lidjaar) ||
 			!in_array($lidstatus, LidStatus::getEnumValues())
 		) {
 			throw $this->createAccessDeniedException();
@@ -359,9 +357,15 @@ class ProfielController extends AbstractController
 	/**
 	 * @param $uid
 	 * @return RedirectResponse|Response
-	 * @Route("/profiel/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
+	#[
+		Route(
+			path: '/profiel/{uid}/bewerken',
+			methods: ['GET', 'POST'],
+			requirements: ['uid' => '.{4}']
+		)
+	]
 	public function bewerken($uid)
 	{
 		$profiel = $this->profielRepository->get($uid);
@@ -374,10 +378,16 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @Route("/inschrijflink", methods={"GET", "POST"}, name="inschrijflink")
 	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
 	 * @return Response
 	 */
+	#[
+		Route(
+			path: '/inschrijflink',
+			methods: ['GET', 'POST'],
+			name: 'inschrijflink'
+		)
+	]
 	public function externInschrijfLink(): Response
 	{
 		$form = new InschrijfLinkForm();
@@ -408,7 +418,6 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @Route("/inschrijven/{pre}", methods={"GET", "POST"}, name="extern-inschrijven")
 	 * @Auth(P_PUBLIC)
 	 * @CsrfUnsafe()
 	 * @param string $pre
@@ -416,6 +425,13 @@ class ProfielController extends AbstractController
 	 * @return Response
 	 * @throws ConnectionException
 	 */
+	#[
+		Route(
+			path: '/inschrijven/{pre}',
+			methods: ['GET', 'POST'],
+			name: 'extern-inschrijven'
+		)
+	]
 	public function externInschrijfformulier(
 		string $pre,
 		EntityManagerInterface $em
@@ -445,17 +461,17 @@ class ProfielController extends AbstractController
 		if (!$data) {
 			throw new NotFoundHttpException();
 		}
-		$split = explode(';', $data);
+		$split = explode(';', (string) $data);
 		if (count($split) !== 5) {
 			throw new NotFoundHttpException();
 		}
-		list(
+		[
 			$profiel->voornaam,
 			$profiel->tussenvoegsel,
 			$profiel->achternaam,
 			$profiel->email,
 			$profiel->mobiel,
-		) = $split;
+		] = $split;
 
 		$form = new ExternProfielForm($profiel, '/inschrijven/' . $pre);
 		if ($form->validate()) {
@@ -530,9 +546,9 @@ class ProfielController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/profiel/voorkeuren", methods={"GET"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
+	#[Route(path: '/profiel/voorkeuren', methods: ['GET'])]
 	public function voorkeurenNoUid(
 		Request $request,
 		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
@@ -551,10 +567,16 @@ class ProfielController extends AbstractController
 	/**
 	 * @param $uid
 	 * @return Response
-	 * @Route("/profiel/{uid}/voorkeuren", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 * @CsrfUnsafe
 	 */
+	#[
+		Route(
+			path: '/profiel/{uid}/voorkeuren',
+			methods: ['GET', 'POST'],
+			requirements: ['uid' => '.{4}']
+		)
+	]
 	public function voorkeuren(
 		Request $request,
 		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
@@ -613,9 +635,15 @@ class ProfielController extends AbstractController
 	 * @param $uid
 	 * @param GoogleContactSync $googleContactSync
 	 * @return RedirectResponse
-	 * @Route("/profiel/{uid}/addToGoogleContacts", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
+	#[
+		Route(
+			path: '/profiel/{uid}/addToGoogleContacts',
+			methods: ['GET'],
+			requirements: ['uid' => '.{4}']
+		)
+	]
 	public function addToGoogleContacts(
 		$uid,
 		GoogleContactSync $googleContactSync
@@ -645,9 +673,15 @@ class ProfielController extends AbstractController
 	/**
 	 * @param null $uid
 	 * @return Response
-	 * @Route("/profiel/{uid}/stamboom", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
+	#[
+		Route(
+			path: '/profiel/{uid}/stamboom',
+			methods: ['GET'],
+			requirements: ['uid' => '.{4}']
+		)
+	]
 	public function stamboom($uid = null): Response
 	{
 		$profiel = $uid ? $this->profielRepository->get($uid) : $this->getProfiel();
@@ -660,9 +694,9 @@ class ProfielController extends AbstractController
 	/**
 	 * @param VerjaardagenService $verjaardagenService
 	 * @return Response
-	 * @Route("/leden/verjaardagen", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
+	#[Route(path: '/leden/verjaardagen', methods: ['GET'])]
 	public function verjaardagen(
 		VerjaardagenService $verjaardagenService
 	): Response {
@@ -680,9 +714,15 @@ class ProfielController extends AbstractController
 	 * @param SaldoGrafiekService $saldoGrafiekService
 	 * @return JsonResponse
 	 * @throws Exception
-	 * @Route("/profiel/{uid}/saldo/{timespan}", methods={"POST"}, requirements={"uid": ".{4}", "timespan": "\d+"})
 	 * @Auth(P_LEDEN_READ)
 	 */
+	#[
+		Route(
+			path: '/profiel/{uid}/saldo/{timespan}',
+			methods: ['POST'],
+			requirements: ['uid' => '.{4}', 'timespan' => '\d+']
+		)
+	]
 	public function saldo(
 		$uid,
 		$timespan,
@@ -700,9 +740,15 @@ class ProfielController extends AbstractController
 	/**
 	 * @param $uid
 	 * @return Response
-	 * @Route("/profiel/{uid}.vcf", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
+	#[
+		Route(
+			path: '/profiel/{uid}.vcf',
+			methods: ['GET'],
+			requirements: ['uid' => '.{4}']
+		)
+	]
 	public function vcard($uid): Response
 	{
 		$profiel = $this->profielRepository->get($uid);
@@ -723,9 +769,15 @@ class ProfielController extends AbstractController
 	/**
 	 * @param $uid
 	 * @return Response
-	 * @Route("/profiel/{uid}/kaartje", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
+	#[
+		Route(
+			path: '/profiel/{uid}/kaartje',
+			methods: ['GET'],
+			requirements: ['uid' => '.{4}']
+		)
+	]
 	public function kaartje($uid): Response
 	{
 		return $this->render('profiel/kaartje.html.twig', [

@@ -46,7 +46,7 @@ abstract class FormKnoppen implements FormElement
 
 	public function getType()
 	{
-		return ReflectionUtil::classNameZonderNamespace(get_class($this));
+		return ReflectionUtil::classNameZonderNamespace(static::class);
 	}
 
 	public function addKnop(FormulierKnop $knop, $left = false, $prepend = false)
@@ -87,9 +87,9 @@ abstract class FormKnoppen implements FormElement
 		return $html . '</div>';
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->getHtml();
+		return (string) $this->getHtml();
 	}
 
 	public function getJavascript()

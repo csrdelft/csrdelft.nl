@@ -26,41 +26,20 @@ use const P_LEDEN_MOD;
 
 class LedenMemoryController extends AbstractController
 {
-	/**
-	 * @var LedenMemoryScoresRepository
-	 */
-	private $ledenMemoryScoresModel;
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var VerticalenRepository
-	 */
-	private $verticalenRepository;
-	/**
-	 * @var LichtingenRepository
-	 */
-	private $lichtingenRepository;
-
 	public function __construct(
-		LedenMemoryScoresRepository $ledenMemoryScoresModel,
-		ProfielRepository $profielRepository,
-		VerticalenRepository $verticalenRepository,
-		LichtingenRepository $lichtingenRepository
+		private readonly LedenMemoryScoresRepository $ledenMemoryScoresModel,
+		private readonly ProfielRepository $profielRepository,
+		private readonly VerticalenRepository $verticalenRepository,
+		private readonly LichtingenRepository $lichtingenRepository
 	) {
-		$this->ledenMemoryScoresModel = $ledenMemoryScoresModel;
-		$this->profielRepository = $profielRepository;
-		$this->verticalenRepository = $verticalenRepository;
-		$this->lichtingenRepository = $lichtingenRepository;
 	}
 
 	/**
 	 * @return Response
 	 * @throws NonUniqueResultException
-	 * @Route("/leden/memory", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
+	#[Route(path: '/leden/memory', methods: ['GET'])]
 	public function memory(Request $request): Response
 	{
 		$lidstatus = array_merge(
@@ -128,7 +107,7 @@ class LedenMemoryController extends AbstractController
 				->getQuery()
 				->getOneOrNullResult();
 		}
-		return $verticale ? $verticale : null;
+		return $verticale ?: null;
 	}
 
 	/**
@@ -150,9 +129,9 @@ class LedenMemoryController extends AbstractController
 
 	/**
 	 * @return JsonResponse
-	 * @Route("/leden/memoryscore", methods={"POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
+	#[Route(path: '/leden/memoryscore', methods: ['POST'])]
 	public function memoryscore()
 	{
 		$score = $this->ledenMemoryScoresModel->nieuw();
@@ -166,12 +145,12 @@ class LedenMemoryController extends AbstractController
 	/**
 	 * @param string $groepUuid
 	 * @return LedenMemoryScoreResponse
-	 * @Route("/leden/memoryscores/{groep}", methods={"POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
+	#[Route(path: '/leden/memoryscores/{groep}', methods: ['POST'])]
 	public function memoryscores($groepUuid = null)
 	{
-		$parts = explode('@', $groepUuid);
+		$parts = explode('@', (string) $groepUuid);
 		if (isset($parts[0], $parts[1])) {
 			if ($parts[1] == 'verticale.csrdelft.nl') {
 				$groep = $this->verticalenRepository->retrieveByUUID($groepUuid);
@@ -189,9 +168,9 @@ class LedenMemoryController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/leden/namen-leren", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
+	#[Route(path: '/leden/namen-leren', methods: ['GET'])]
 	public function namenleren()
 	{
 		// Haal alle (adspirant-/gast-)leden op.
@@ -202,22 +181,20 @@ class LedenMemoryController extends AbstractController
 		// Bouw infostructuur. array_values om array te resetten voor json_encode
 		$leden = array_values(
 			array_map(
-				function ($profiel) {
-					/** @var $profiel Profiel */
-					return [
-						'uid' => $profiel->uid,
-						'voornaam' => $profiel->voornaam,
-						'tussenvoegsel' => $profiel->tussenvoegsel,
-						'achternaam' => $profiel->achternaam,
-						'postfix' => $profiel->postfix,
-						'lichting' => $profiel->lidjaar,
-						'verticale' => $profiel->verticale
-							? $profiel->getVerticale()->naam
-							: 'Geen',
-						'geslacht' => $profiel->geslacht->getValue(),
-						'studie' => $profiel->studie,
-					];
-				},
+				fn($profiel) => /** @var $profiel Profiel */
+				[
+					'uid' => $profiel->uid,
+					'voornaam' => $profiel->voornaam,
+					'tussenvoegsel' => $profiel->tussenvoegsel,
+					'achternaam' => $profiel->achternaam,
+					'postfix' => $profiel->postfix,
+					'lichting' => $profiel->lidjaar,
+					'verticale' => $profiel->verticale
+						? $profiel->getVerticale()->naam
+						: 'Geen',
+					'geslacht' => $profiel->geslacht->getValue(),
+					'studie' => $profiel->studie,
+				],
 				array_filter($profielen, function ($profiel) {
 					$path = $profiel->getPasfotoInternalPath();
 					return InstellingUtil::is_zichtbaar(

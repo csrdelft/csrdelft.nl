@@ -34,13 +34,9 @@ class GroepSoortField extends RadioField
 	 * @var Groep
 	 */
 	private $groep;
-	/**
-	 * @var ManagerRegistry
-	 */
-	private $doctrine;
 
 	public function __construct(
-		ManagerRegistry $doctrine,
+		private readonly ManagerRegistry $doctrine,
 		$name,
 		$value,
 		$description,
@@ -52,9 +48,7 @@ class GroepSoortField extends RadioField
 			$groep instanceof HeeftSoort &&
 			$groep->getSoort() instanceof ActiviteitSoort
 		) {
-			$default = $groep->getSoort()
-				? $groep->getSoort()
-				: ActiviteitSoort::Vereniging();
+			$default = $groep->getSoort() ?: ActiviteitSoort::Vereniging();
 		} else {
 			$default = ActiviteitSoort::Vereniging();
 		}
@@ -96,7 +90,6 @@ JS;
 			Commissie::class => $this->commissie,
 		];
 		$this->groep = $groep;
-		$this->doctrine = $doctrine;
 	}
 
 	public function getSoort()

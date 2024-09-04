@@ -38,7 +38,7 @@ class BbVideo extends BbTag
 
 	public function renderLight()
 	{
-		list($src, $type) = $this->processVideo();
+		[$src, $type] = $this->processVideo();
 
 		return BbHelper::lightLinkBlock('video', $src, $type . ' video', '');
 	}
@@ -49,7 +49,7 @@ class BbVideo extends BbTag
 	 */
 	public function render()
 	{
-		list($src, $type) = $this->processVideo();
+		[$src, $type] = $this->processVideo();
 
 		// Als er geen type is, laat dan het bestand zien.
 		if ($type == null) {

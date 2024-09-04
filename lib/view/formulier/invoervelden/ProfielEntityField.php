@@ -28,7 +28,7 @@ class ProfielEntityField extends DoctrineEntityField
 		) {
 			$this->error =
 				'Dit profiel mag niet gekozen worden: ' .
-				htmlspecialchars($this->getFormattedValue()->getNaam());
+				htmlspecialchars((string) $this->getFormattedValue()->getNaam());
 			return false;
 		}
 

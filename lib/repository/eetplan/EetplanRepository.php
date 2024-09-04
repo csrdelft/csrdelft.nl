@@ -23,7 +23,8 @@ class EetplanRepository extends AbstractRepository
 {
 	const FMT_DATE = 'dd-MM-Y';
 
-	public function __construct(ManagerRegistry $registry) {
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Eetplan::class);
 	}
 

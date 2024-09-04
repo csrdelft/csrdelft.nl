@@ -18,15 +18,11 @@ use Symfony\Component\Security\Core\Security;
  */
 class DocumentCategorieRepository extends AbstractRepository
 {
-	/**
-	 * @var Security
-	 */
-	private $security;
-
-	public function __construct(ManagerRegistry $registry, Security $security)
-	{
+	public function __construct(
+		ManagerRegistry $registry,
+		private readonly Security $security
+	) {
 		parent::__construct($registry, DocumentCategorie::class);
-		$this->security = $security;
 	}
 
 	/**
@@ -57,8 +53,9 @@ class DocumentCategorieRepository extends AbstractRepository
 
 	public function findMetSchijfrechtenVoorLid()
 	{
-		return array_filter($this->findAll(), function ($categorie) {
-			return $this->security->isGranted($categorie->schrijfrechten);
-		});
+		return array_filter(
+			$this->findAll(),
+			fn($categorie) => $this->security->isGranted($categorie->schrijfrechten)
+		);
 	}
 }

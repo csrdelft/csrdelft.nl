@@ -15,26 +15,15 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
  */
 class DataTableEntryNormalizer implements ContextAwareNormalizerInterface
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var ObjectNormalizer
-	 */
-	private $normalizer;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		ObjectNormalizer $normalizer
+		private readonly EntityManagerInterface $entityManager,
+		private readonly ObjectNormalizer $normalizer
 	) {
-		$this->entityManager = $entityManager;
-		$this->normalizer = $normalizer;
 	}
 
 	public function normalize($topic, string $format = null, array $context = [])
 	{
-		$metadata = $this->entityManager->getClassMetadata(get_class($topic));
+		$metadata = $this->entityManager->getClassMetadata($topic::class);
 
 		$data = $this->normalizer->normalize($topic, $format, $context);
 

@@ -34,87 +34,21 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ForumDraadController extends AbstractController
 {
-	/**
-	 * @var ForumPostsRepository
-	 */
-	private $forumPostsRepository;
-	/**
-	 * @var ForumDradenReagerenRepository
-	 */
-	private $forumDradenReagerenRepository;
-	/**
-	 * @var ForumDelenRepository
-	 */
-	private $forumDelenRepository;
-	/**
-	 * @var BbToProsemirror
-	 */
-	private $bbToProsemirror;
-	/**
-	 * @var ForumDradenGelezenRepository
-	 */
-	private $forumDradenGelezenRepository;
-	/**
-	 * @var ProsemirrorToBb
-	 */
-	private $prosemirrorToBb;
-	/**
-	 * @var DebugLogRepository
-	 */
-	private $debugLogRepository;
-	/**
-	 * @var ForumDradenRepository
-	 */
-	private $forumDradenRepository;
-	/**
-	 * @var ForumDradenMeldingRepository
-	 */
-	private $forumDradenMeldingRepository;
-	/**
-	 * @var ForumDelenMeldingRepository
-	 */
-	private $forumDelenMeldingRepository;
-	/**
-	 * @var ForumPostsService
-	 */
-	private $forumPostsService;
-	/**
-	 * @var ForumDelenService
-	 */
-	private $forumDelenService;
-	/**
-	 * @var ForumMeldingenService
-	 */
-	private $forumMeldingenService;
-
 	public function __construct(
-		ForumPostsRepository $forumPostsRepository,
-		ForumDradenReagerenRepository $forumDradenReagerenRepository,
-		ForumDelenRepository $forumDelenRepository,
-		ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		ProsemirrorToBb $prosemirrorToBb,
-		DebugLogRepository $debugLogRepository,
-		ForumDradenRepository $forumDradenRepository,
-		ForumDelenService $forumDelenService,
-		ForumPostsService $forumPostsService,
-		ForumMeldingenService $forumMeldingenService,
-		ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		ForumDelenMeldingRepository $forumDelenMeldingRepository,
-		BbToProsemirror $bbToProsemirror
+		private readonly ForumPostsRepository $forumPostsRepository,
+		private readonly ForumDradenReagerenRepository $forumDradenReagerenRepository,
+		private readonly ForumDelenRepository $forumDelenRepository,
+		private readonly ForumDradenGelezenRepository $forumDradenGelezenRepository,
+		private readonly ProsemirrorToBb $prosemirrorToBb,
+		private readonly DebugLogRepository $debugLogRepository,
+		private readonly ForumDradenRepository $forumDradenRepository,
+		private readonly ForumDelenService $forumDelenService,
+		private readonly ForumPostsService $forumPostsService,
+		private readonly ForumMeldingenService $forumMeldingenService,
+		private readonly ForumDradenMeldingRepository $forumDradenMeldingRepository,
+		private readonly ForumDelenMeldingRepository $forumDelenMeldingRepository,
+		private readonly BbToProsemirror $bbToProsemirror
 	) {
-		$this->forumPostsRepository = $forumPostsRepository;
-		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
-		$this->forumDelenRepository = $forumDelenRepository;
-		$this->bbToProsemirror = $bbToProsemirror;
-		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
-		$this->prosemirrorToBb = $prosemirrorToBb;
-		$this->debugLogRepository = $debugLogRepository;
-		$this->forumDradenRepository = $forumDradenRepository;
-		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
-		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
-		$this->forumPostsService = $forumPostsService;
-		$this->forumDelenService = $forumDelenService;
-		$this->forumMeldingenService = $forumMeldingenService;
 	}
 
 	/**
@@ -123,9 +57,9 @@ class ForumDraadController extends AbstractController
 	 * @param RequestStack $requestStack
 	 * @param ForumPost $post
 	 * @return Response
-	 * @Route("/forum/reactie/{post_id}", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[Route(path: '/forum/reactie/{post_id}', methods: ['GET'])]
 	public function reactie(RequestStack $requestStack, ForumPost $post): Response
 	{
 		if ($post->verwijderd) {
@@ -146,9 +80,15 @@ class ForumDraadController extends AbstractController
 	 * @param int|null $pagina or 'laatste' or 'ongelezen'
 	 * @param string|null $statistiek
 	 * @return Response
-	 * @Route("/forum/onderwerp/{draad_id}/{pagina}/{statistiek}", methods={"GET"}, defaults={"pagina"=null,"statistiek"=null})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[
+		Route(
+			path: '/forum/onderwerp/{draad_id}/{pagina}/{statistiek}',
+			methods: ['GET'],
+			defaults: ['pagina' => null, 'statistiek' => null]
+		)
+	]
 	public function onderwerp(
 		RequestStack $requestStack,
 		ForumDraad $draad,
@@ -228,9 +168,9 @@ class ForumDraadController extends AbstractController
 	 * @param ForumDraad $draad
 	 * @param string $property
 	 * @return Response
-	 * @Route("/forum/wijzigen/{draad_id}/{property}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/wijzigen/{draad_id}/{property}', methods: ['POST'])]
 	public function wijzigen(ForumDraad $draad, $property)
 	{
 		// gedeelde moderators mogen dit niet
@@ -302,9 +242,15 @@ class ForumDraadController extends AbstractController
 	 * @param ForumDeel $deel
 	 * @param ForumDraad|null $draad
 	 * @return RedirectResponse
-	 * @Route("/forum/posten/{forum_id}/{draad_id}", methods={"POST"}, defaults={"draad_id"=null})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[
+		Route(
+			path: '/forum/posten/{forum_id}/{draad_id}',
+			methods: ['POST'],
+			defaults: ['draad_id' => null]
+		)
+	]
 	public function posten(
 		RequestStack $requestStack,
 		ForumDeel $deel,

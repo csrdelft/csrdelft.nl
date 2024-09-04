@@ -15,7 +15,6 @@ use CsrDelft\view\formulier\getalvelden\FloatField;
 class SterrenField extends FloatField
 {
 	public $click_submit = false;
-	public $reset;
 	public $half;
 	public $hints;
 
@@ -25,7 +24,7 @@ class SterrenField extends FloatField
 		$description,
 		$max_stars = 5,
 		$half = false,
-		$reset = false
+		public $reset = false
 	) {
 		parent::__construct(
 			$name,
@@ -35,7 +34,6 @@ class SterrenField extends FloatField
 			1,
 			$max_stars
 		);
-		$this->reset = $reset;
 		$this->half = $half;
 		$this->hints = array_fill(0, $max_stars, '');
 		$this->css_classes[] = 'SterrenField';

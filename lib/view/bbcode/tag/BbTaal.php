@@ -13,17 +13,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class BbTaal extends BbTag
 {
 	/**
-	 * @var RequestStack
-	 */
-	private $requestStack;
-	/**
 	 * @var string
 	 */
 	private $taal;
 
-	public function __construct(RequestStack $requestStack)
+	public function __construct(private readonly RequestStack $requestStack)
 	{
-		$this->requestStack = $requestStack;
 	}
 
 	public static function getTagName()

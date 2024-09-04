@@ -12,25 +12,14 @@ use Symfony\Component\Security\Core\Security;
 
 class RechtenGroepenRepository extends GroepRepository
 {
-	/** @var BesturenRepository */
-	private $besturenRepository;
-	/** @var GroepLidRepository */
-	private $groepLidRepository;
-	/** @var CommissiesRepository */
-	private $commissiesRepository;
-
 	public function __construct(
-		BesturenRepository $besturenRepository,
-		CommissiesRepository $commissiesRepository,
-		GroepLidRepository $groepLidRepository,
+		private readonly BesturenRepository $besturenRepository,
+		private readonly CommissiesRepository $commissiesRepository,
+		private readonly GroepLidRepository $groepLidRepository,
 		Security $security,
 		ManagerRegistry $registry
 	) {
 		parent::__construct($registry, $security);
-
-		$this->besturenRepository = $besturenRepository;
-		$this->commissiesRepository = $commissiesRepository;
-		$this->groepLidRepository = $groepLidRepository;
 	}
 
 	public function getEntityClassName()

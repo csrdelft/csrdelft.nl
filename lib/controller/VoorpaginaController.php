@@ -25,8 +25,8 @@ class VoorpaginaController extends AbstractController
 	 * @param ForumDelenService $forumDelenService
 	 * @param ForumPostsRepository $forumPostsRepository
 	 * @return Response
-	 * @Route("/voorpagina/forum")
 	 */
+	#[Route(path: '/voorpagina/forum')]
 	public function forum(
 		ForumDelenService $forumDelenService,
 		ForumPostsRepository $forumPostsRepository
@@ -43,8 +43,8 @@ class VoorpaginaController extends AbstractController
 	/**
 	 * @param AgendaRepository $agendaRepository
 	 * @return Response
-	 * @Route("/voorpagina/agenda")
 	 */
+	#[Route(path: '/voorpagina/agenda')]
 	public function agenda(AgendaRepository $agendaRepository): Response
 	{
 		// Agenda
@@ -85,8 +85,8 @@ class VoorpaginaController extends AbstractController
 	/**
 	 * @param VerjaardagenService $verjaardagenService
 	 * @return Response
-	 * @Route("/voorpagina/verjaardagen")
 	 */
+	#[Route(path: '/voorpagina/verjaardagen')]
 	public function verjaardagen(
 		VerjaardagenService $verjaardagenService
 	): Response {
@@ -104,8 +104,8 @@ class VoorpaginaController extends AbstractController
 	/**
 	 * @param FotoAlbumRepository $fotoAlbumRepository
 	 * @return Response
-	 * @Route("/voorpagina/fotoalbum")
 	 */
+	#[Route(path: '/voorpagina/fotoalbum')]
 	public function fotoalbum(FotoAlbumRepository $fotoAlbumRepository): Response
 	{
 		// Nieuwste fotoalbum
@@ -123,8 +123,8 @@ class VoorpaginaController extends AbstractController
 	/**
 	 * @param MaaltijdenRepository $maaltijdenRepository
 	 * @return Response
-	 * @Route("/voorpagina/maaltijden")
 	 */
+	#[Route(path: '/voorpagina/maaltijden')]
 	public function maaltijden(MaaltijdenService $maaltijdenService): Response
 	{
 		$maaltijden = $maaltijdenService->getKomendeMaaltijdenVoorLid(
@@ -144,8 +144,8 @@ class VoorpaginaController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/voorpagina/posters")
 	 */
+	#[Route(path: '/voorpagina/posters')]
 	public function posters(): Response
 	{
 		return $this->render('voorpagina/posters.html.twig');
@@ -153,8 +153,8 @@ class VoorpaginaController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/voorpagina/civisaldo")
 	 */
+	#[Route(path: '/voorpagina/civisaldo')]
 	public function civisaldo(): Response
 	{
 		return $this->render('voorpagina/civisaldo.html.twig');
@@ -166,8 +166,8 @@ class VoorpaginaController extends AbstractController
 	 * @param AgendaRepository $agendaRepository
 	 * @param WoordVanDeDagRepository $woordVanDeDagRepository
 	 * @return Response
-	 * @Route("/voorpagina/ishetal")
 	 */
+	#[Route(path: '/voorpagina/ishetal')]
 	public function ishetal(
 		LidInstellingenRepository $lidInstellingenRepository,
 		RequestStack $requestStack,
@@ -193,8 +193,8 @@ class VoorpaginaController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/voorpagina/overig")
 	 */
+	#[Route(path: '/voorpagina/overig')]
 	public function overig()
 	{
 		return $this->render('voorpagina/overig.html.twig');

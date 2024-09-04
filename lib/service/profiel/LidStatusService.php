@@ -29,51 +29,15 @@ use Twig\Environment;
  */
 class LidStatusService
 {
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var MaaltijdAbonnementenService
-	 */
-	private $maaltijdAbonnementenService;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var BoekExemplaarRepository
-	 */
-	private $boekExemplaarRepository;
-
 	public function __construct(
-		Security $security,
-		ProfielRepository $profielRepository,
-		MailService $mailService,
-		Environment $twig,
-		MaaltijdAbonnementenService $maaltijdAbonnementenService,
-		CorveeTakenRepository $corveeTakenRepository,
-		BoekExemplaarRepository $boekExemplaarRepository
+		private readonly Security $security,
+		private readonly ProfielRepository $profielRepository,
+		private readonly MailService $mailService,
+		private readonly Environment $twig,
+		private readonly MaaltijdAbonnementenService $maaltijdAbonnementenService,
+		private readonly CorveeTakenRepository $corveeTakenRepository,
+		private readonly BoekExemplaarRepository $boekExemplaarRepository
 	) {
-		$this->security = $security;
-		$this->profielRepository = $profielRepository;
-		$this->mailService = $mailService;
-		$this->twig = $twig;
-		$this->maaltijdAbonnementenService = $maaltijdAbonnementenService;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->boekExemplaarRepository = $boekExemplaarRepository;
 	}
 
 	public function wijzig_lidstatus(Profiel $profiel, $oudestatus)
@@ -293,7 +257,7 @@ class LidStatusService
 			[
 				'naam' => $profiel->getNaam('volledig'),
 				'uid' => $profiel->uid,
-				'oud' => substr($oudestatus, 2),
+				'oud' => substr((string) $oudestatus, 2),
 				'nieuw' =>
 					$profiel->status === LidStatus::Nobody
 						? 'GEEN LID'

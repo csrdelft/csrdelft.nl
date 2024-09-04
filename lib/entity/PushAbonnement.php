@@ -20,28 +20,28 @@ class PushAbonnement
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $id;
 
 	/**
 	 * @var string
 	 * @ORM\Column(type="uid")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $uid;
 
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $client_endpoint;
 
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $client_keys;
 }

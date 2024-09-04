@@ -8,34 +8,25 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class GenericDataTableResponse implements ToResponse
 {
-	public $modal;
 	public $lastUpdate;
 	/**
 	 * @var null
 	 */
 	private $autoUpdate;
 	/**
-	 * @var SerializerInterface
-	 */
-	private $serializer;
-	private $data;
-	/**
 	 * @var string[]
 	 */
 	private $groups;
 
 	public function __construct(
-		SerializerInterface $serializer,
-		$data,
-		$modal = null,
+		private readonly SerializerInterface $serializer,
+		private $data,
+		public $modal = null,
 		$autoUpdate = null,
 		$groups = null
 	) {
-		$this->data = $data;
 		$this->lastUpdate = time() - 1;
 		$this->autoUpdate = $autoUpdate;
-		$this->serializer = $serializer;
-		$this->modal = $modal;
 		$this->groups = $groups ?? ['datatable'];
 	}
 

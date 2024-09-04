@@ -17,15 +17,10 @@ class CmsPaginaVoter extends Voter
 	const BEWERKEN = 'bewerken';
 	const RECHTEN_WIJZIGEN = 'rechten_wijzigen';
 	const VERWIJDEREN = 'verwijderen';
-	/**
-	 * @var AccessDecisionManagerInterface
-	 */
-	private $accessDecisionManager;
 
 	public function __construct(
-		AccessDecisionManagerInterface $accessDecisionManager
+		private AccessDecisionManagerInterface $accessDecisionManager
 	) {
-		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	public function supportsAttribute(string $attribute): bool
@@ -52,20 +47,19 @@ class CmsPaginaVoter extends Voter
 			return false;
 		}
 
-		switch ($attribute) {
-			case self::BEKIJKEN:
-				return $this->accessDecisionManager->decide($token, [
-					$subject->rechtenBekijken,
-				]);
-			case self::BEWERKEN:
-				return $this->accessDecisionManager->decide($token, [
-					$subject->rechtenBewerken,
-				]);
-			case self::RECHTEN_WIJZIGEN:
-			case self::VERWIJDEREN:
-				return $this->accessDecisionManager->decide($token, ['ROLE_ADMIN']);
-			default:
-				throw new CsrException("Onbekende rechten nodig: '$attribute'.");
-		}
+		return match ($attribute) {
+			self::BEKIJKEN => $this->accessDecisionManager->decide($token, [
+				$subject->rechtenBekijken,
+			]),
+			self::BEWERKEN => $this->accessDecisionManager->decide($token, [
+				$subject->rechtenBewerken,
+			]),
+			self::RECHTEN_WIJZIGEN,
+			self::VERWIJDEREN
+				=> $this->accessDecisionManager->decide($token, ['ROLE_ADMIN']),
+			default => throw new CsrException(
+				"Onbekende rechten nodig: '$attribute'."
+			),
+		};
 	}
 }

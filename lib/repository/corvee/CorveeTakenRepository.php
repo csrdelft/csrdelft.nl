@@ -481,19 +481,14 @@ class CorveeTakenRepository extends AbstractRepository
 			);
 		}
 
-		return $this->_em->transactional(function () use (
-			$repetitie,
-			$beginDatum,
-			$eindDatum,
-			$maaltijd
-		) {
-			return $this->newRepetitieTaken(
+		return $this->_em->transactional(
+			fn() => $this->newRepetitieTaken(
 				$repetitie,
 				$beginDatum,
 				$eindDatum,
 				$maaltijd
-			);
-		});
+			)
+		);
 	}
 
 	/**

@@ -10,24 +10,19 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 class CsrfField implements View, FormElement
 {
 	use ToHtmlResponse;
-	/**
-	 * @var CsrfToken
-	 */
-	private $token;
-	/**
-	 * @var string
-	 */
-	private $name;
 
-	public function __construct(CsrfToken $token, $name = 'X-CSRF-VALUE')
-	{
-		$this->token = $token;
-		$this->name = $name;
+	/**
+	 * @param string $name
+	 */
+	public function __construct(
+		private CsrfToken $token,
+		private $name = 'X-CSRF-VALUE'
+	) {
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->getHtml();
+		return (string) $this->getHtml();
 	}
 
 	public function getTitel()

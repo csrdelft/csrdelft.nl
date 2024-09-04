@@ -40,19 +40,13 @@ class AccountFixtures extends Fixture
 	const UID_SOCCIE_PRAESES = 'x018';
 	const UID_SOCCIE_FISCUS = 'x019';
 	const UID_PUBCIE = 'x101';
-
-	/**
-	 * @var AccountService
-	 */
-	private $accountService;
 	/**
 	 * @var \Faker\Generator
 	 */
 	private $faker;
 
-	public function __construct(AccountService $accountService)
+	public function __construct(private readonly AccountService $accountService)
 	{
-		$this->accountService = $accountService;
 		$this->faker = Faker::create('nl_NL');
 	}
 

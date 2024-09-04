@@ -26,29 +26,11 @@ class PinTransactieDownloader
 	 */
 	const CLIENT_ID_HEADER = 'X-IBM-Client-Id';
 
-	/**
-	 * @var PinTransactieRepository
-	 */
-	private $pinTransactieRepository;
-
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-
-	/**
-	 * @var HttpClientInterface
-	 */
-	private $httpClient;
-
 	public function __construct(
-		PinTransactieRepository $pinTransactieRepository,
-		EntityManagerInterface $entityManager,
-		HttpClientInterface $httpClient
+		private readonly PinTransactieRepository $pinTransactieRepository,
+		private readonly EntityManagerInterface $entityManager,
+		private readonly HttpClientInterface $httpClient
 	) {
-		$this->pinTransactieRepository = $pinTransactieRepository;
-		$this->entityManager = $entityManager;
-		$this->httpClient = $httpClient;
 	}
 
 	/**

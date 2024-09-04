@@ -15,15 +15,10 @@ class MenuItemVoter extends Voter
 
 	const BEKIJKEN = 'bekijken';
 	const BEHEREN = 'beheren';
-	/**
-	 * @var AccessDecisionManagerInterface
-	 */
-	private $accessDecisionManager;
 
 	public function __construct(
-		AccessDecisionManagerInterface $accessDecisionManager
+		private AccessDecisionManagerInterface $accessDecisionManager
 	) {
-		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	public function supportsAttribute(string $attribute): bool
@@ -47,18 +42,15 @@ class MenuItemVoter extends Voter
 		$subject,
 		TokenInterface $token
 	) {
-		switch ($attribute) {
-			case self::BEKIJKEN:
-				return $subject->zichtbaar &&
-					$this->accessDecisionManager->decide($token, [
-						$subject->rechten_bekijken,
-					]);
-			case self::BEHEREN:
-				return $subject->rechten_bekijken ==
-					$token->getUser()->getUserIdentifier() ||
-					$this->accessDecisionManager->decide($token, ['ROLE_ADMIN']);
-			default:
-				throw new CsrException("Onbekende attribute: '$attribute'.");
-		}
+		return match ($attribute) {
+			self::BEKIJKEN => $subject->zichtbaar &&
+				$this->accessDecisionManager->decide($token, [
+					$subject->rechten_bekijken,
+				]),
+			self::BEHEREN => $subject->rechten_bekijken ==
+				$token->getUser()->getUserIdentifier() ||
+				$this->accessDecisionManager->decide($token, ['ROLE_ADMIN']),
+			default => throw new CsrException("Onbekende attribute: '$attribute'."),
+		};
 	}
 }

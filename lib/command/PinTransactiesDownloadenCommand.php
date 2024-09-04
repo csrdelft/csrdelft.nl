@@ -24,55 +24,20 @@ class PinTransactiesDownloadenCommand extends Command
 {
 	protected static $defaultName = 'fiscaat:pintransacties:download';
 	/**
-	 * @var PinTransactieRepository
-	 */
-	private $pinTransactieRepository;
-	/**
-	 * @var PinTransactieMatchRepository
-	 */
-	private $pinTransactieMatchRepository;
-	/**
-	 * @var PinTransactieMatcher
-	 */
-	private $pinTransactieMatcher;
-	/**
-	 * @var PinTransactieDownloader
-	 */
-	private $pinTransactieDownloader;
-	/**
-	 * @var CiviBestellingRepository
-	 */
-	private $civiBestellingRepository;
-	/**
 	 * @var bool
 	 */
 	private $interactive;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
 
 	public function __construct(
-		Environment $twig,
-		PinTransactieRepository $pinTransactieRepository,
-		PinTransactieMatchRepository $pinTransactieMatchRepository,
-		PinTransactieMatcher $pinTransactieMatcher,
-		PinTransactieDownloader $pinTransactieDownloader,
-		CiviBestellingRepository $civiBestellingRepository,
-		MailService $mailService
+		private readonly Environment $twig,
+		private readonly PinTransactieRepository $pinTransactieRepository,
+		private readonly PinTransactieMatchRepository $pinTransactieMatchRepository,
+		private readonly PinTransactieMatcher $pinTransactieMatcher,
+		private readonly PinTransactieDownloader $pinTransactieDownloader,
+		private readonly CiviBestellingRepository $civiBestellingRepository,
+		private readonly MailService $mailService
 	) {
 		parent::__construct(null);
-		$this->pinTransactieRepository = $pinTransactieRepository;
-		$this->pinTransactieMatchRepository = $pinTransactieMatchRepository;
-		$this->pinTransactieMatcher = $pinTransactieMatcher;
-		$this->pinTransactieDownloader = $pinTransactieDownloader;
-		$this->civiBestellingRepository = $civiBestellingRepository;
-		$this->twig = $twig;
-		$this->mailService = $mailService;
 	}
 
 	protected function configure()

@@ -153,7 +153,7 @@ HTML;
 				default:
 					try {
 						$return .= $profiel->$veld;
-					} catch (Exception $e) {
+					} catch (Exception) {
 						//omit non-existant fields
 					}
 			}

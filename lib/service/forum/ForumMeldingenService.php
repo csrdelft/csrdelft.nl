@@ -29,67 +29,21 @@ use Twig\Error\SyntaxError;
 class ForumMeldingenService
 {
 	/**
-	 * @var SuService
-	 */
-	private $suService;
-	/**
-	 * @var ForumDradenMeldingRepository
-	 */
-	private $forumDradenMeldingRepository;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-	/**
-	 * @var ForumDelenMeldingRepository
-	 */
-	private $forumDelenMeldingRepository;
-	/**
-	 * @var LidInstellingenRepository
-	 */
-	private $lidInstellingenRepository;
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
 	 * @var WebPush
 	 */
 	private $webPush;
-	/**
-	 * @var PushAbonnementRepository
-	 */
-	private $pushAbonnementRepository;
 
 	public function __construct(
-		Environment $twig,
-		Security $security,
-		MailService $mailService,
-		SuService $suService,
-		ProfielRepository $profielRepository,
-		LidInstellingenRepository $lidInstellingenRepository,
-		ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		ForumDelenMeldingRepository $forumDelenMeldingRepository,
-		PushAbonnementRepository $pushAbonnementRepository
+		private readonly Environment $twig,
+		private readonly Security $security,
+		private readonly MailService $mailService,
+		private readonly SuService $suService,
+		private readonly ProfielRepository $profielRepository,
+		private readonly LidInstellingenRepository $lidInstellingenRepository,
+		private readonly ForumDradenMeldingRepository $forumDradenMeldingRepository,
+		private readonly ForumDelenMeldingRepository $forumDelenMeldingRepository,
+		private readonly PushAbonnementRepository $pushAbonnementRepository
 	) {
-		$this->suService = $suService;
-		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
-		$this->twig = $twig;
-		$this->mailService = $mailService;
-		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
-		$this->lidInstellingenRepository = $lidInstellingenRepository;
-		$this->profielRepository = $profielRepository;
-		$this->pushAbonnementRepository = $pushAbonnementRepository;
-		$this->security = $security;
-
 		// Initialiseren van de WebPush class met de VAPID (oftewel application server) keys uit .env
 		if (
 			$_ENV['VAPID_SUBJECT'] &&
@@ -191,9 +145,7 @@ class ForumMeldingenService
 
 			$magMeldingKrijgen = $this->suService->alsLid(
 				$genoemde->account,
-				function () use ($draad) {
-					return $draad->magMeldingKrijgen();
-				}
+				fn() => $draad->magMeldingKrijgen()
 			);
 
 			if (!$magMeldingKrijgen) {
@@ -275,9 +227,7 @@ class ForumMeldingenService
 		ForumPost $post,
 		ForumDraad $draad
 	) {
-		$allSubscriptions = $this->pushAbonnementRepository->findAll([
-			'uid' => $ontvanger->getUserIdentifier(),
-		]);
+		$allSubscriptions = $this->pushAbonnementRepository->findAll();
 		if (!$allSubscriptions || count($allSubscriptions) <= 0) {
 			throw new RuntimeError(
 				'No subscriptions found for ' . $ontvanger->getUserIdentifier()
@@ -336,7 +286,7 @@ class ForumMeldingenService
 			$post,
 			$draad,
 			$template
-		) {
+		): void {
 			$wilMeldingViaEmail = $this->lidInstellingenRepository->getInstellingVoorLid(
 				'forum',
 				'meldingEmail',
@@ -402,7 +352,7 @@ class ForumMeldingenService
 			$ontvanger,
 			$auteur,
 			$post
-		) {
+		): void {
 			if (!$draad->magMeldingKrijgen()) {
 				return;
 			}

@@ -10,7 +10,7 @@ class Barsysteem {
 	/**
 	 * @var Connection
 	 */
-	var $db;
+	public $db;
 	private $beheer;
 	private $csrfToken;
 
@@ -94,9 +94,9 @@ ON (civi_saldo.uid = civi_bestelling.uid AND DATEDIFF(NOW(), civi_bestelling.mom
 GROUP BY civi_saldo.uid;
 SQL
 		)->fetchAllAssociative();
-		$result = array();
+		$result = [];
 		foreach ($terug as $row) {
-			$persoon = array();
+			$persoon = [];
 			$persoon["naam"] = $row["naam"];
 			$persoon["status"] = LidStatus::Nobody;
 			if ($row["uid"]) {
@@ -129,9 +129,9 @@ ORDER BY prioriteit DESC
 SQL
 		);
 
-		$result = array();
+		$result = [];
 		foreach ($q->execute()->fetchAllAssociative() as $row) {
-			$product = array();
+			$product = [];
 			$product["productId"] = $row["id"];
 			$product["prijs"] = $row["prijs"];
 			$product["beheer"] = $row["beheer"];
@@ -223,7 +223,7 @@ SQL
 	}
 
 	function getBestellingLaatste($persoon, $begin, $eind, $productType) {
-		$productIDs = array();
+		$productIDs = [];
 		foreach ($productType as $product) {
 			$productIDs[] = $product['value'];
 		}
@@ -345,12 +345,12 @@ SQL
 		return true;
 	}
 
-	private function verwerkBestellingResultaat($queryResult, $productIDs = array()) {
-		$result = array();
+	private function verwerkBestellingResultaat($queryResult, $productIDs = []) {
+		$result = [];
 		foreach ($queryResult as $row) {
 			if (!array_key_exists($row["bestelling_id"], $result)) {
-				$result[$row["bestelling_id"]] = array();
-				$result[$row["bestelling_id"]]["bestelLijst"] = array();
+				$result[$row["bestelling_id"]] = [];
+				$result[$row["bestelling_id"]]["bestelLijst"] = [];
 				$result[$row["bestelling_id"]]["bestelTotaal"] = $row["totaal"];
 				$result[$row["bestelling_id"]]["persoon"] = $row["uid"];
 				$result[$row["bestelling_id"]]["tijd"] = $row["moment"];
@@ -393,7 +393,7 @@ SQL
 	}
 
 	private function parseDate($date) {
-		$elementen = explode(" ", $date);
+		$elementen = explode(" ", (string) $date);
 		$datum = str_pad($elementen[0], 2, "0", STR_PAD_LEFT);
 		$maanden = ["Januari" => "01", "Februari" => "02", "Maart" => "03", "April" => "04", "Mei" => "05", "Juni" => "06", "Juli" => "07", "Augustus" => "08", "September" => "09", "Oktober" => "10", "November" => "11", "December" => "12"];
 		return ($elementen[2] . "-" . $maanden[$elementen[1]] . "-" . $datum);
@@ -434,18 +434,18 @@ ORDER BY yearweek DESC
 		");
 		$result = $q->execute();
 
-		$weeks = array();
+		$weeks = [];
 
 		while ($r = $result->fetchAssociative()) {
 
 			$exists = isset($weeks[$r['yearweek']]);
 
-			$week = $exists ? $weeks[$r['yearweek']] : array();
+			$week = $exists ? $weeks[$r['yearweek']] : [];
 
 			if ($exists) {
-				$week['content'][] = array('type' => $r['type'], 'total' => $r['total']);
+				$week['content'][] = ['type' => $r['type'], 'total' => $r['total']];
 			} else {
-				$week['content'] = array(array('type' => $r['type'], 'total' => $r['total']));
+				$week['content'] = [['type' => $r['type'], 'total' => $r['total']]];
 				$week['title'] = 'Week ' . $r['week'] . ', ' . $r['year'];
 			}
 
@@ -457,7 +457,7 @@ ORDER BY yearweek DESC
 
 	public function getToolData() {
 
-		$data = array();
+		$data = [];
 
 		$data['sum_saldi'] = $this->sumSaldi();
 		$data['sum_saldi_lid'] = $this->sumSaldi(true);
@@ -479,19 +479,20 @@ ORDER BY yearweek DESC
 
 	private function getRed() {
 
-		$result = array();
+		$result = [];
 
 		$q = $this->db->query("SELECT uid, saldo FROM civi_saldo WHERE deleted = 0 AND saldo < 0 AND uid NOT LIKE 'c%' ORDER BY saldo");
 		while ($r = $q->fetchAssociative()) {
 
 			$profiel = $this->getProfiel($r['uid']);
 
-			$result[] = array(
-				'naam' => $this->getNaam($profiel),
-				'email' => $profiel['accountEmail'] ?? $profiel['email'],// ?: "rood" ?? $profiel['accountEmail'],
-				'saldo' => $r['saldo'],
-				'status' => $profiel['status'],
-			);
+			$result[] = [
+       'naam' => $this->getNaam($profiel),
+       'email' => $profiel['accountEmail'] ?? $profiel['email'],
+       // ?: "rood" ?? $profiel['accountEmail'],
+       'saldo' => $r['saldo'],
+       'status' => $profiel['status'],
+   ];
 		}
 
 		return $result;
@@ -595,7 +596,7 @@ ORDER BY yearweek DESC
 
 	// Log action by type
 	public function log($type, $data) {
-		$value = array();
+		$value = [];
 		foreach ($data as $key => $item) {
 
 			$value[] = $key . ' = ' . $item;

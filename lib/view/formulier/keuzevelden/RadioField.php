@@ -73,7 +73,7 @@ class RadioField extends SelectField
 				'<label for="' .
 				$id .
 				'" class="form-check-label">' .
-				htmlspecialchars($description) .
+				htmlspecialchars((string) $description) .
 				'</label>';
 		}
 		$html .= '</div>';

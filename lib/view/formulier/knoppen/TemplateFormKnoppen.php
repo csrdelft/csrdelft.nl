@@ -7,24 +7,15 @@ use Twig\Environment;
 class TemplateFormKnoppen extends FormKnoppen
 {
 	/**
-	 * @var Environment
+	 * @param string $template
+	 * @param mixed[] $options
 	 */
-	private $twig;
-	/**
-	 * @var string
-	 */
-	private $template;
-	/**
-	 * @var array
-	 */
-	private $options;
-
-	public function __construct(Environment $twig, $template, $options = [])
-	{
+	public function __construct(
+		private readonly Environment $twig,
+		private $template,
+		private $options = []
+	) {
 		parent::__construct();
-		$this->twig = $twig;
-		$this->template = $template;
-		$this->options = $options;
 	}
 
 	public function getHtml()

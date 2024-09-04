@@ -36,7 +36,7 @@ class KringenRepository extends GroepRepository
 		$role = null
 	): bool {
 		try {
-			list($verticale, $kringNummer) = explode('.', $familie);
+			[$verticale, $kringNummer] = explode('.', (string) $familie);
 			if ($verticale && $kringNummer) {
 				return 1 ===
 					(int) $this->_em
@@ -57,7 +57,7 @@ EOF
 			}
 
 			return parent::isLid($user, $familie, $status, $role);
-		} catch (NoResultException | NonUniqueResultException $e) {
+		} catch (NoResultException | NonUniqueResultException) {
 			return false;
 		}
 	}
@@ -67,7 +67,7 @@ EOF
 		if (is_numeric($id)) {
 			return parent::get($id);
 		}
-		list($verticale, $kringNummer) = explode('.', $id);
+		[$verticale, $kringNummer] = explode('.', (string) $id);
 		return $this->findOneBy([
 			'verticale' => $verticale,
 			'kringNummer' => $kringNummer,

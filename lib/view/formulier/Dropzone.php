@@ -20,22 +20,17 @@ class Dropzone extends Formulier
 	 * @var ImageField
 	 */
 	private $dropzone;
-	/**
-	 * @var FileField
-	 */
-	private $fallback;
 
 	public function __construct(
 		$model,
 		$action,
-		FileField $fallback,
+		private FileField $fallback,
 		$cancel_url,
 		$titel = false
 	) {
 		parent::__construct($model, $action, $titel);
 		$this->css_classes[] = 'dropzone';
-		$this->fallback = $fallback;
-		$this->dropzone = $fallback->getUploader();
+		$this->dropzone = $this->fallback->getUploader();
 
 		$fields[] = new HtmlComment('<div class="fallback">');
 		$fields[] = $this->fallback;
@@ -83,7 +78,7 @@ class Dropzone extends Formulier
 		if ($this->dataTableId) {
 			$this->css_classes[] = 'DataTableResponse';
 		}
-		$action = htmlspecialchars($this->action);
+		$action = htmlspecialchars((string) $this->action);
 		$className = implode(' ', $this->css_classes);
 		$maxsize = FileUtil::getMaximumFileUploadSize() / 1024 / 1024; // MB
 		$delete = str_replace('uploaden', 'verwijderen', $this->action);

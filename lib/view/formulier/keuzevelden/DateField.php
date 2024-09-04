@@ -39,7 +39,7 @@ class DateField extends InputField
 		} else {
 			$this->min_jaar = (int) date('Y') - 10;
 		}
-		$jaar = (int) date('Y', strtotime($value));
+		$jaar = (int) date('Y', strtotime((string) $value));
 		if ($jaar > $this->max_jaar) {
 			$this->max_jaar = $jaar;
 		}

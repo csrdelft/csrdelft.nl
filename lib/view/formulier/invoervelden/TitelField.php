@@ -10,13 +10,12 @@ use CsrDelft\repository\bibliotheek\BoekRepository;
 class TitelField extends TextField
 {
 	public $required = true;
-	private $nieuw;
 
 	public function __construct(
 		$name,
 		$value,
 		$description,
-		$nieuw,
+		private $nieuw,
 		$max_len = 255,
 		$min_len = 0,
 		$model = null
@@ -29,7 +28,6 @@ class TitelField extends TextField
 			$min_len,
 			$model
 		);
-		$this->nieuw = $nieuw;
 	}
 
 	public function validate()

@@ -21,21 +21,21 @@ use Psr\Container\ContainerInterface;
 class ProsemirrorToBb
 {
 	protected $document;
-	/**
-	 * Bevat @see Mark instances, met sleutel getMarkType
-	 * @var ContainerInterface
-	 */
-	private $marksRegistry;
-	/**
-	 * Bevat @see Node instances, met sleutel getNodeType
-	 * @var ContainerInterface
-	 */
-	private $nodesRegistry;
 
-	public function __construct($marksRegistry, $nodesRegistry)
-	{
-		$this->marksRegistry = $marksRegistry;
-		$this->nodesRegistry = $nodesRegistry;
+	/**
+	 * @param ContainerInterface $marksRegistry
+	 * @param ContainerInterface $nodesRegistry
+	 */
+	public function __construct(
+		/**
+		 * Bevat @see Mark instances, met sleutel getMarkType
+		 */
+		private $marksRegistry,
+		/**
+		 * Bevat @see Node instances, met sleutel getNodeType
+		 */
+		private $nodesRegistry
+	) {
 	}
 
 	public function convertToBb($value)

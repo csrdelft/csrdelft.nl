@@ -16,11 +16,8 @@ class Multiplicity
 	const TWO = '== 2';
 	const ANY = '>= 1';
 
-	protected $choice;
-
-	public function __construct($choice)
+	public function __construct(protected $choice)
 	{
-		$this->choice = $choice;
 	}
 
 	public function getChoice()

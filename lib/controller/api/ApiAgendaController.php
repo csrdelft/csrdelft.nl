@@ -21,46 +21,28 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiAgendaController extends AbstractController
 {
-	/** @var ActiviteitenRepository */
-	private $activiteitenRepository;
-	/** @var AgendaRepository */
-	private $agendaRepository;
-	/** @var GroepLidRepository */
-	private $groepLidRepository;
-	/** @var MaaltijdAanmeldingenRepository */
-	private $maaltijdAanmeldingenRepository;
-	/**
-	 * @var MaaltijdenService
-	 */
-	private $maaltijdenService;
-
 	public function __construct(
-		AgendaRepository $agendaRepository,
-		ActiviteitenRepository $activiteitenRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		MaaltijdenService $maaltijdenService,
-		GroepLidRepository $groepLidRepository
+		private readonly AgendaRepository $agendaRepository,
+		private readonly ActiviteitenRepository $activiteitenRepository,
+		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		private readonly MaaltijdenService $maaltijdenService,
+		private readonly GroepLidRepository $groepLidRepository
 	) {
-		$this->agendaRepository = $agendaRepository;
-		$this->activiteitenRepository = $activiteitenRepository;
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->groepLidRepository = $groepLidRepository;
-		$this->maaltijdenService = $maaltijdenService;
 	}
 
 	/**
-	 * @Route("/API/2.0/agenda", methods={"GET"})
 	 * @Auth(P_AGENDA_READ)
 	 * @return JsonResponse
 	 */
+	#[Route(path: '/API/2.0/agenda', methods: ['GET'])]
 	public function getAgenda()
 	{
 		if (!isset($_GET['from']) || !isset($_GET['to'])) {
 			throw new BadRequestHttpException();
 		}
 
-		$from = strtotime($_GET['from']);
-		$to = strtotime($_GET['to']);
+		$from = strtotime((string) $_GET['from']);
+		$to = strtotime((string) $_GET['to']);
 
 		$result = [];
 

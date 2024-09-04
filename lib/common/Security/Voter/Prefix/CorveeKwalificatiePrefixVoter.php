@@ -13,19 +13,13 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class CorveeKwalificatiePrefixVoter extends PrefixVoter
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $em;
-
-	public function __construct(EntityManagerInterface $em)
+	public function __construct(private readonly EntityManagerInterface $em)
 	{
-		$this->em = $em;
 	}
 
 	protected function supportsPrefix($prefix)
 	{
-		return strtoupper($prefix) == 'KWALIFICATIE';
+		return strtoupper((string) $prefix) == 'KWALIFICATIE';
 	}
 
 	protected function voteOnPrefix(

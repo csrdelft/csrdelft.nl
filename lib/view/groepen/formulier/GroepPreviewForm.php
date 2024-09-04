@@ -23,7 +23,7 @@ class GroepPreviewForm extends ModalForm implements FormElement
 		$fields[] = new HtmlBbComment(
 			'<div style="max-width: 580px;">Gebruik de volgende code in uw forumbericht voor onderstaand resultaat: [code][' .
 				strtolower(
-					ReflectionUtil::classNameZonderNamespace(get_class($groep))
+					ReflectionUtil::classNameZonderNamespace($groep::class)
 				) .
 				'=' .
 				$groep->id .
@@ -59,6 +59,6 @@ class GroepPreviewForm extends ModalForm implements FormElement
 
 	public function getType()
 	{
-		return ReflectionUtil::classNameZonderNamespace(get_class($this->model));
+		return ReflectionUtil::classNameZonderNamespace($this->model::class);
 	}
 }

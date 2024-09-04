@@ -24,14 +24,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 	RequestMatcherInterface
 {
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-
-	public function __construct(AccountRepository $accountRepository)
-	{
-		$this->accountRepository = $accountRepository;
+	public function __construct(
+		private readonly AccountRepository $accountRepository
+	) {
 	}
 
 	public function supports(Request $request): ?bool
@@ -39,7 +34,7 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 		return $request->attributes->has('private_auth_token') &&
 			preg_match(
 				'/^[a-zA-Z0-9]{150}$/',
-				$request->attributes->get('private_auth_token')
+				(string) $request->attributes->get('private_auth_token')
 			);
 	}
 
@@ -53,9 +48,7 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 			throw new AuthenticationException('Geen geldige private_token');
 		}
 
-		$badge = new UserBadge($user->getUsername(), function () use ($user) {
-			return $user;
-		});
+		$badge = new UserBadge($user->getUsername(), fn() => $user);
 
 		return new SelfValidatingPassport($badge);
 	}

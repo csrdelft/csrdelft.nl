@@ -5,7 +5,7 @@ namespace CsrDelft\view\lid;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\LidZoekerService;
 
-abstract class LLWeergave
+abstract class LLWeergave implements \Stringable
 {
 	protected $leden;
 	public $velden;
@@ -22,7 +22,7 @@ abstract class LLWeergave
 	//viewLid print één regel of vakje ofzo.
 	abstract public function viewLid(Profiel $profiel);
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .= $this->viewHeader();

@@ -21,21 +21,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class BoekFormulier implements FormulierTypeInterface
 {
-	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-	/**
-	 * @var BiebRubriekRepository
-	 */
-	private $biebRubriekRepository;
-
 	public function __construct(
-		UrlGeneratorInterface $urlGenerator,
-		BiebRubriekRepository $biebRubriekRepository
+		private readonly UrlGeneratorInterface $urlGenerator,
+		private readonly BiebRubriekRepository $biebRubriekRepository
 	) {
-		$this->urlGenerator = $urlGenerator;
-		$this->biebRubriekRepository = $biebRubriekRepository;
 	}
 
 	/**

@@ -12,13 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class JsonResponse extends Response
 {
-	protected $model;
-
-	public function __construct($model, $code = 200)
+	public function __construct(protected $model, $code = 200)
 	{
 		parent::__construct('', $code);
-
-		$this->model = $model;
 
 		$this->setContent(json_encode($this->getModel()));
 		$this->headers->set('Content-Type', 'application/json');

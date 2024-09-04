@@ -19,33 +19,19 @@ use Symfony\Component\Security\Core\Security;
 class VerjaardagenService
 {
 	const FILTER_BY_TOESTEMMING = "INNER JOIN lidtoestemmingen t ON T2.uid  = t.uid AND t.waarde = 'ja' AND t.module = 'profiel' AND t.instelling = 'gebdatum'";
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $em;
-
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	public function __construct(
-		Security $security,
-		ProfielRepository $profielRepository,
-		EntityManagerInterface $em
+		private readonly Security $security,
+		private readonly ProfielRepository $profielRepository,
+		private readonly EntityManagerInterface $em
 	) {
-		$this->security = $security;
-		$this->profielRepository = $profielRepository;
-		$this->em = $em;
 	}
 
 	private function getFilterByToestemmingSql()
 	{
-		return $this->security->isGranted(P_LEDEN_MOD) ? '' : self::FILTER_BY_TOESTEMMING;
+		return $this->security->isGranted(P_LEDEN_MOD)
+			? ''
+			: self::FILTER_BY_TOESTEMMING;
 	}
 
 	private function getNovietenFilter()
@@ -71,7 +57,7 @@ class VerjaardagenService
 	 */
 	public function getJaar()
 	{
-		return array_map([$this, 'get'], range(1, 12));
+		return array_map($this->get(...), range(1, 12));
 	}
 
 	/**
@@ -144,13 +130,20 @@ class VerjaardagenService
 	/**
 	 * Selecteer verjaardagen tussen twee data.
 	 */
-	private function getVerjaardagen($van, $tot = null, $limiet = null) {
+	private function getVerjaardagen($van, $tot = null, $limiet = null)
+	{
 		$rsm = new ResultSetMappingBuilder($this->em);
 		// We selecteren eerst een profiel.
 		$rsm->addRootEntityFromClassMetadata(Profiel::class, 'p');
 		// Voeg een joined entity toe, want de OneToOne relatie tussen Profiel en account _moet_ geladen worden omdat Profiel de owner is.
 		// Hernoem kolommen die in beide entities voorkomen.
-		$rsm->addJoinedEntityFromClassMetadata(Account::class, 'a', 'p', 'account', ['uid' => 'account_uid', 'email' => 'account_email']);
+		$rsm->addJoinedEntityFromClassMetadata(
+			Account::class,
+			'a',
+			'p',
+			'account',
+			['uid' => 'account_uid', 'email' => 'account_email']
+		);
 
 		// Genereer een select, alle profiel ('p') velden zijn te vinden in 'T2' in de query, en account ('a') in 'a'.
 		$select = $rsm->generateSelectClause(['p' => 'T2']);
@@ -165,12 +158,13 @@ class VerjaardagenService
 
 		if ($tot == null) {
 			// Als er geen tot is, sorteer dan op volgorde van afstand tot vandaag
-			$where = "";
-			$orderBy = "ORDER BY distance ";
+			$where = '';
+			$orderBy = 'ORDER BY distance ';
 		} else {
 			// Als er wel een tot is, geef dan alle verjaardagen tussen de gegeven momenten
-			$where = "WHERE volgende_verjaardag >= DATE(:van_datum) AND volgende_verjaardag <= DATE(:tot_datum) ";
-			$orderBy = "ORDER BY volgende_verjaardag ";
+			$where =
+				'WHERE volgende_verjaardag >= DATE(:van_datum) AND volgende_verjaardag <= DATE(:tot_datum) ';
+			$orderBy = 'ORDER BY volgende_verjaardag ';
 		}
 
 		$query = <<<SQL

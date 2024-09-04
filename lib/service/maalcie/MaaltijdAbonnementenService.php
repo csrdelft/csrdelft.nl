@@ -21,57 +21,16 @@ use Throwable;
 
 class MaaltijdAbonnementenService
 {
-	/**
-	 * @var MaaltijdRepetitiesRepository
-	 */
-	private $maaltijdRepetitiesRepository;
-	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var MaaltijdAbonnementenRepository
-	 */
-	private $maaltijdAbonnementenRepository;
-	/**
-	 * @var MaaltijdRepetitieAanmeldingenService
-	 */
-	private $maaltijdRepetitieAanmeldingenService;
-	/**
-	 * @var MaaltijdenRepository
-	 */
-	private $maaltijdenRepository;
-	/**
-	 * @var MaaltijdAanmeldingenService
-	 */
-	private $maaltijdAanmeldingenService;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		MaaltijdenRepository $maaltijdenRepository,
-		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
-		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		MaaltijdRepetitieAanmeldingenService $maaltijdRepetitieAanmeldingenService,
-		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
-		ProfielRepository $profielRepository
+		private readonly EntityManagerInterface $entityManager,
+		private readonly MaaltijdenRepository $maaltijdenRepository,
+		private readonly MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
+		private readonly MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
+		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		private readonly MaaltijdRepetitieAanmeldingenService $maaltijdRepetitieAanmeldingenService,
+		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
+		private readonly ProfielRepository $profielRepository
 	) {
-		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->profielRepository = $profielRepository;
-		$this->entityManager = $entityManager;
-		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
-		$this->maaltijdRepetitieAanmeldingenService = $maaltijdRepetitieAanmeldingenService;
-		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	/**

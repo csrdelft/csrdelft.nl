@@ -33,7 +33,7 @@ class NodeLid implements Node
 					'naam' => $profiel->getNaam('user'),
 				],
 			];
-		} catch (BbException $exception) {
+		} catch (BbException) {
 			return [
 				'attrs' => [
 					'uid' => $node->uid,

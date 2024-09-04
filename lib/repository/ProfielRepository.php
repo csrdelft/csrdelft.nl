@@ -30,16 +30,11 @@ use Symfony\Component\Security\Core\Security;
  */
 class ProfielRepository extends AbstractRepository
 {
-	/**
-	 * @var Security
-	 */
-	private $security;
-
-	public function __construct(ManagerRegistry $registry, Security $security)
-	{
+	public function __construct(
+		ManagerRegistry $registry,
+		private readonly Security $security
+	) {
 		parent::__construct($registry, Profiel::class);
-
-		$this->security = $security;
 	}
 
 	public static function changelog(array $diff, $uid)
@@ -111,7 +106,7 @@ class ProfielRepository extends AbstractRepository
 	 */
 	public static function existsUid($uid)
 	{
-		if (!ctype_alnum($uid) || strlen($uid) != 4) {
+		if (!ctype_alnum((string) $uid) || strlen((string) $uid) != 4) {
 			return false;
 		}
 		$model = ContainerFacade::getContainer()->get(ProfielRepository::class);
@@ -156,7 +151,7 @@ class ProfielRepository extends AbstractRepository
 				->getQuery()
 				->getSingleScalarResult();
 			$volgnummer = intval(substr($laatste_uid, 2, 2)) + 1;
-		} catch (NoResultException $exception) {
+		} catch (NoResultException) {
 			$volgnummer = 1;
 		}
 		$profiel->uid = $jj . sprintf('%02d', $volgnummer);
@@ -206,7 +201,7 @@ class ProfielRepository extends AbstractRepository
 			$entry['uid'] = $profiel->uid;
 			$entry['givenname'] = $profiel->voornaam;
 			$entry['sn'] = $profiel->achternaam;
-			if (substr($entry['uid'], 0, 2) == 'x2') {
+			if (str_starts_with($entry['uid'], 'x2')) {
 				$entry['cn'] = $entry['sn'];
 			} else {
 				$entry['cn'] = $profiel->getNaam();

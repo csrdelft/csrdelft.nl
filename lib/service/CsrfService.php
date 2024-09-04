@@ -10,25 +10,14 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 class CsrfService
 {
 	/**
-	 * @var CsrfTokenManagerInterface
-	 */
-	private $manager;
-	/**
-	 * @var LoggerInterface
-	 */
-	private $logger;
-
-	/**
 	 * CsrfService constructor.
 	 * @param $manager CsrfTokenManagerInterface
 	 * @param LoggerInterface $logger
 	 */
 	public function __construct(
-		CsrfTokenManagerInterface $manager,
-		LoggerInterface $logger
+		private readonly CsrfTokenManagerInterface $manager,
+		private readonly LoggerInterface $logger
 	) {
-		$this->manager = $manager;
-		$this->logger = $logger;
 	}
 
 	/**

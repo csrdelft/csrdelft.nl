@@ -11,27 +11,11 @@ use Symfony\Component\Security\Core\Security;
 
 class SaldoGrafiekService
 {
-	/**
-	 * @var CiviSaldoRepository
-	 */
-	private $civiSaldoRepository;
-	/**
-	 * @var CiviBestellingRepository
-	 */
-	private $civiBestellingRepository;
-	/**
-	 * @var Security
-	 */
-	private $security;
-
 	public function __construct(
-		Security $security,
-		CiviSaldoRepository $civiSaldoRepository,
-		CiviBestellingRepository $civiBestellingRepository
+		private readonly Security $security,
+		private readonly CiviSaldoRepository $civiSaldoRepository,
+		private readonly CiviBestellingRepository $civiBestellingRepository
 	) {
-		$this->civiSaldoRepository = $civiSaldoRepository;
-		$this->civiBestellingRepository = $civiBestellingRepository;
-		$this->security = $security;
 	}
 
 	/**

@@ -28,53 +28,28 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class AccountController extends AbstractController
 {
-	/**
-	 * @var CmsPaginaRepository
-	 */
-	private $cmsPaginaRepository;
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
-	 * @var LoginService
-	 */
-	private $loginService;
-	/**
-	 * @var AccessService
-	 */
-	private $accessService;
-	/**
-	 * @var AccountService
-	 */
-	private $accountService;
-	/**
-	 * @var CacheInterface
-	 */
-	private $cache;
-
 	public function __construct(
-		CacheInterface $cache,
-		AccessService $accessService,
-		AccountRepository $accountRepository,
-		AccountService $accountService,
-		CmsPaginaRepository $cmsPaginaRepository,
-		LoginService $loginService
+		private readonly CacheInterface $cache,
+		private readonly AccessService $accessService,
+		private readonly AccountRepository $accountRepository,
+		private readonly AccountService $accountService,
+		private readonly CmsPaginaRepository $cmsPaginaRepository,
+		private readonly LoginService $loginService
 	) {
-		$this->accessService = $accessService;
-		$this->accountRepository = $accountRepository;
-		$this->cmsPaginaRepository = $cmsPaginaRepository;
-		$this->loginService = $loginService;
-		$this->accountService = $accountService;
-		$this->cache = $cache;
 	}
 
 	/**
 	 * @param null $uid
 	 * @return RedirectResponse
-	 * @Route("/account/{uid}/aanmaken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_ADMIN)
 	 */
+	#[
+		Route(
+			path: '/account/{uid}/aanmaken',
+			methods: ['GET', 'POST'],
+			requirements: ['uid' => '.{4}']
+		)
+	]
 	public function aanmaken($uid = null): RedirectResponse
 	{
 		if ($uid == null) {
@@ -101,10 +76,16 @@ class AccountController extends AbstractController
 	 * @param Security $security
 	 * @param null $uid
 	 * @return Response
-	 * @Route("/account/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
-	 * @Route("/account/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/account/{uid}/bewerken',
+			methods: ['GET', 'POST'],
+			requirements: ['uid' => '.{4}']
+		)
+	]
+	#[Route(path: '/account/bewerken', methods: ['GET', 'POST'])]
 	public function bewerken(Request $request, $uid = null): Response
 	{
 		$eigenAccount = $this->getUser();
@@ -185,9 +166,15 @@ class AccountController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/account/{uid}/aanvragen", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[
+		Route(
+			path: '/account/{uid}/aanvragen',
+			methods: ['GET', 'POST'],
+			requirements: ['uid' => '.{4}']
+		)
+	]
 	public function aanvragen(): Response
 	{
 		return $this->render('default.html.twig', [
@@ -198,9 +185,15 @@ class AccountController extends AbstractController
 	/**
 	 * @param null $uid
 	 * @return JsonResponse
-	 * @Route("/account/{uid}/verwijderen", methods={"POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/account/{uid}/verwijderen',
+			methods: ['POST'],
+			requirements: ['uid' => '.{4}']
+		)
+	]
 	public function verwijderen($uid = null): JsonResponse
 	{
 		if ($uid == null) {
@@ -216,7 +209,7 @@ class AccountController extends AbstractController
 			try {
 				$this->accountRepository->delete($account);
 				$this->addFlash(FlashType::SUCCESS, 'Account succesvol verwijderd');
-			} catch (Exception $exception) {
+			} catch (Exception) {
 				$this->addFlash(FlashType::ERROR, 'Account verwijderen mislukt');
 			}
 		}

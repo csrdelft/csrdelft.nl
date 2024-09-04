@@ -14,20 +14,16 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class FotoBBView implements ToResponse, View
 {
-	private $groot;
-	private $responsive;
-	private $model;
-
-	public function __construct(Foto $foto, $groot = false, $responsive = false)
-	{
-		$this->model = $foto;
-		$this->groot = $groot;
-		$this->responsive = $responsive;
+	public function __construct(
+		private readonly Foto $model,
+		private $groot = false,
+		private $responsive = false
+	) {
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->getHtml();
+		return (string) $this->getHtml();
 	}
 
 	public function getHtml()

@@ -16,20 +16,16 @@ use DateTime;
 abstract class ProfielLogGroup
 {
 	/**
-	 * UID of editor
-	 * @var string
+	 * @param string $editor
+	 * @param DateTime $timestamp
 	 */
-	public $editor;
-
-	/**
-	 * @var DateTime
-	 */
-	public $timestamp;
-
-	public function __construct($editor, $timestamp)
-	{
-		$this->editor = $editor;
-		$this->timestamp = $timestamp;
+	public function __construct(
+		/**
+		 * UID of editor
+		 */
+		public $editor,
+		public $timestamp
+	) {
 	}
 
 	abstract public function toHtml();

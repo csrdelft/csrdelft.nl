@@ -23,48 +23,23 @@ use DateTime;
  */
 class CorveeHerinneringService
 {
-	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-
 	public function __construct(
-		Environment $twig,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		CorveeTakenRepository $corveeTakenRepository,
-		ProfielRepository $profielRepository,
-		MailService $mailService
+		private readonly Environment $twig,
+		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		private readonly CorveeTakenRepository $corveeTakenRepository,
+		private readonly ProfielRepository $profielRepository,
+		private readonly MailService $mailService
 	) {
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->profielRepository = $profielRepository;
-		$this->twig = $twig;
-		$this->mailService = $mailService;
 	}
 
 	public function stuurHerinnering(CorveeTaak $taak)
 	{
-		$datumCorvee = DateUtil::dateFormatIntl($taak->datum, DateUtil::DATE_FORMAT);
+		$datumCorvee = DateUtil::dateFormatIntl(
+			$taak->datum,
+			DateUtil::DATE_FORMAT
+		);
 		$datumAfmelden = DateUtil::dateFormatIntl(
-			$taak->datum->add(
-				DateInterval::createFromDateString('-22 days')
-			),
+			$taak->datum->add(DateInterval::createFromDateString('-22 days')),
 			DateUtil::DATE_FORMAT
 		);
 		if (!$taak->profiel) {
@@ -108,7 +83,12 @@ class CorveeHerinneringService
 				')';
 		} else {
 			throw new CsrGebruikerException(
-				$datumCorvee . ' ' . $taak->corveeFunctie->naam . ' faalt! (' . $lidnaam . ')'
+				$datumCorvee .
+					' ' .
+					$taak->corveeFunctie->naam .
+					' faalt! (' .
+					$lidnaam .
+					')'
 			);
 		}
 	}

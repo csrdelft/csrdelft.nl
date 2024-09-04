@@ -20,24 +20,14 @@ use Symfony\Component\Security\Core\Security;
 class BbLid extends BbTag
 {
 	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
 	 * @var string
 	 */
 	public $uid;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	public function __construct(
-		Security $security,
-		ProfielRepository $profielRepository
+		private readonly Security $security,
+		private readonly ProfielRepository $profielRepository
 	) {
-		$this->profielRepository = $profielRepository;
-		$this->security = $security;
 	}
 
 	public static function getTagName()

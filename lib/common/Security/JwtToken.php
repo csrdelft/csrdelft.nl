@@ -7,33 +7,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class JwtToken extends AbstractToken
 {
-	/**
-	 * @var string
-	 */
-	private $providerKey;
-	/**
-	 * @var string
-	 */
-	private $token;
-	/**
-	 * @var string
-	 */
-	private $refreshToken;
-
 	public function __construct(
 		UserInterface $user,
-		string $token,
-		?string $refreshToken,
-		string $firewall,
+		private readonly string $token,
+		/**
+		 * @var string
+		 */
+		private readonly ?string $refreshToken,
+		private readonly string $providerKey,
 		array $roles = []
 	) {
 		parent::__construct($roles);
 
 		$this->setUser($user);
 		$this->setAuthenticated(true);
-		$this->providerKey = $firewall;
-		$this->token = $token;
-		$this->refreshToken = $refreshToken;
 	}
 
 	public function getCredentials()

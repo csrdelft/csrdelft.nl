@@ -16,18 +16,16 @@ use CsrDelft\view\formulier\invoervelden\InputField;
 class CheckboxField extends InputField
 {
 	public $type = 'checkbox';
-	public $label;
 
 	public function __construct(
 		$name,
 		$value,
 		$description,
-		$label = null,
+		public $label = null,
 		$model = null
 	) {
 		$this->css_classes = ['FormElement'];
 		parent::__construct($name, $value, $description, $model);
-		$this->label = $label;
 	}
 
 	/**

@@ -8,28 +8,16 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use League\Bundle\OAuth2ServerBundle\Event\UserResolveEvent;
 
-final class UserResolveListener
+readonly final class UserResolveListener
 {
-	/**
-	 * @var UserProviderInterface
-	 */
-	private $userProvider;
-
-	/**
-	 * @var UserPasswordHasherInterface
-	 */
-	private $userPasswordHasher;
-
 	/**
 	 * @param UserProviderInterface $userProvider
 	 * @param UserPasswordHasherInterface $userPasswordHasher
 	 */
 	public function __construct(
-		UserProviderInterface $userProvider,
-		UserPasswordHasherInterface $userPasswordHasher
+		private UserProviderInterface $userProvider,
+		private UserPasswordHasherInterface $userPasswordHasher
 	) {
-		$this->userProvider = $userProvider;
-		$this->userPasswordHasher = $userPasswordHasher;
 	}
 
 	/**
@@ -39,7 +27,7 @@ final class UserResolveListener
 	{
 		try {
 			$user = $this->userProvider->loadUserByIdentifier($event->getUsername());
-		} catch (UserNotFoundException $ex) {
+		} catch (UserNotFoundException) {
 			return;
 		}
 

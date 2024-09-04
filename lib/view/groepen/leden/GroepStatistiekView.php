@@ -10,34 +10,18 @@ use CsrDelft\view\ToResponse;
 use DateTime;
 use Twig\Environment;
 
-class GroepStatistiekView implements ToResponse
+class GroepStatistiekView implements ToResponse, \Stringable
 {
 	use ToHtmlResponse;
 
-	/**
-	 * @var GroepStatistiekDTO
-	 */
-	private $statistiek;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var Groep
-	 */
-	private $groep;
-
 	public function __construct(
-		Environment $twig,
-		Groep $groep,
-		GroepStatistiekDTO $statistiek
+		private Environment $twig,
+		private Groep $groep,
+		private GroepStatistiekDTO $statistiek
 	) {
-		$this->statistiek = $statistiek;
-		$this->twig = $twig;
-		$this->groep = $groep;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->twig->render('groep/statistiek.html.twig', [
 			'groep' => $this->groep,

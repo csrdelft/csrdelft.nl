@@ -501,12 +501,24 @@ class Profiel implements Agendeerbaar, DisplayEntity
 
 	public function getAdres()
 	{
-		return $this->adres . ', ' . $this->postcode . ', ' . $this->woonplaats . ', ' . $this->land;
+		return $this->adres .
+			', ' .
+			$this->postcode .
+			', ' .
+			$this->woonplaats .
+			', ' .
+			$this->land;
 	}
 
 	public function getAdresOuders()
 	{
-		return $this->o_adres . ', ' . $this->o_postcode . ', ' . $this->o_woonplaats . ', ' . $this->o_land;
+		return $this->o_adres .
+			', ' .
+			$this->o_postcode .
+			', ' .
+			$this->o_woonplaats .
+			', ' .
+			$this->o_land;
 	}
 
 	public function getFormattedAddress()
@@ -548,9 +560,10 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	public function getProfielOpties()
 	{
 		$opties = $this->profielOpties
-			? array_map(function ($a) {
-				return trim($a);
-			}, explode(',', $this->profielOpties))
+			? array_map(
+				fn($a) => trim((string) $a),
+				explode(',', $this->profielOpties)
+			)
 			: [];
 		$opties[] = "lichting-{$this->lidjaar}";
 		if ($this->isJarig()) {
@@ -948,7 +961,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	public function getPasfotoTag($cssClass = '')
 	{
 		return '<img class="pasfoto ' .
-			htmlspecialchars($cssClass) .
+			htmlspecialchars((string) $cssClass) .
 			'" src="' .
 			$this->getPasfotoPath() .
 			'" alt="Pasfoto van ' .
@@ -981,7 +994,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 				$patroonProfiel->__load();
 			}
 			return $patroonProfiel;
-		} catch (EntityNotFoundException $ex) {
+		} catch (EntityNotFoundException) {
 			return null;
 		}
 	}

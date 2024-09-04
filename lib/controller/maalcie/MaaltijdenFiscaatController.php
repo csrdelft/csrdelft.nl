@@ -27,46 +27,20 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MaaltijdenFiscaatController extends AbstractController
 {
-	/**
-	 * @var MaaltijdenRepository
-	 */
-	private $maaltijdenRepository;
-	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
-	/**
-	 * @var CiviBestellingRepository
-	 */
-	private $civiBestellingRepository;
-	/**
-	 * @var CiviSaldoRepository
-	 */
-	private $civiSaldoRepository;
-	/**
-	 * @var MaaltijdAanmeldingenService
-	 */
-	private $maaltijdAanmeldingenService;
-
 	public function __construct(
-		MaaltijdenRepository $maaltijdenRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
-		CiviBestellingRepository $civiBestellingRepository,
-		CiviSaldoRepository $civiSaldoRepository
+		private readonly MaaltijdenRepository $maaltijdenRepository,
+		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
+		private readonly CiviBestellingRepository $civiBestellingRepository,
+		private readonly CiviSaldoRepository $civiSaldoRepository
 	) {
-		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->civiBestellingRepository = $civiBestellingRepository;
-		$this->civiSaldoRepository = $civiSaldoRepository;
-		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/maaltijden/fiscaat", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
+	#[Route(path: '/maaltijden/fiscaat', methods: ['GET'])]
 	public function GET_overzicht()
 	{
 		return $this->render('maaltijden/pagina.html.twig', [
@@ -77,9 +51,9 @@ class MaaltijdenFiscaatController extends AbstractController
 
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("/maaltijden/fiscaat", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
+	#[Route(path: '/maaltijden/fiscaat', methods: ['POST'])]
 	public function POST_overzicht()
 	{
 		$data = $this->maaltijdenRepository->findBy(['verwerkt' => true]);
@@ -89,9 +63,9 @@ class MaaltijdenFiscaatController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/maaltijden/fiscaat/onverwerkt", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
+	#[Route(path: '/maaltijden/fiscaat/onverwerkt', methods: ['GET'])]
 	public function GET_onverwerkt()
 	{
 		return $this->render('maaltijden/pagina.html.twig', [
@@ -103,9 +77,9 @@ class MaaltijdenFiscaatController extends AbstractController
 	/**
 	 * @param EntityManagerInterface $em
 	 * @return GenericDataTableResponse
-	 * @Route("/maaltijden/fiscaat/verwerk", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
+	#[Route(path: '/maaltijden/fiscaat/verwerk', methods: ['POST'])]
 	public function POST_verwerk(EntityManagerInterface $em)
 	{
 		// Haal maaltijd op

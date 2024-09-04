@@ -24,45 +24,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ForumDeelController extends AbstractController
 {
-	/**
-	 * @var ForumDradenRepository
-	 */
-	private $forumDradenRepository;
-	/**
-	 * @var ForumDradenReagerenRepository
-	 */
-	private $forumDradenReagerenRepository;
-	/**
-	 * @var BbToProsemirror
-	 */
-	private $bbToProsemirror;
-	/**
-	 * @var ForumDelenRepository
-	 */
-	private $forumDelenRepository;
-	/**
-	 * @var ForumPostsRepository
-	 */
-	private $forumPostsRepository;
-	/**
-	 * @var ForumDelenService
-	 */
-	private $forumDelenService;
-
 	public function __construct(
-		ForumDradenRepository $forumDradenRepository,
-		ForumDelenService $forumDelenService,
-		ForumDradenReagerenRepository $forumDradenReagerenRepository,
-		ForumDelenRepository $forumDelenRepository,
-		ForumPostsRepository $forumPostsRepository,
-		BbToProsemirror $bbToProsemirror
+		private readonly ForumDradenRepository $forumDradenRepository,
+		private readonly ForumDelenService $forumDelenService,
+		private readonly ForumDradenReagerenRepository $forumDradenReagerenRepository,
+		private readonly ForumDelenRepository $forumDelenRepository,
+		private readonly ForumPostsRepository $forumPostsRepository,
+		private readonly BbToProsemirror $bbToProsemirror
 	) {
-		$this->forumDradenRepository = $forumDradenRepository;
-		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
-		$this->bbToProsemirror = $bbToProsemirror;
-		$this->forumDelenRepository = $forumDelenRepository;
-		$this->forumPostsRepository = $forumPostsRepository;
-		$this->forumDelenService = $forumDelenService;
 	}
 
 	/**
@@ -71,9 +40,15 @@ class ForumDeelController extends AbstractController
 	 * @param ForumDeel $deel
 	 * @param int|string $pagina or 'laatste' or 'prullenbak'
 	 * @return Response
-	 * @Route("/forum/deel/{forum_id}/{pagina<\d+>}", methods={"GET","POST"}, defaults={"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[
+		Route(
+			path: '/forum/deel/{forum_id}/{pagina<\d+>}',
+			methods: ['GET', 'POST'],
+			defaults: ['pagina' => 1]
+		)
+	]
 	public function deel(RequestStack $requestStack, ForumDeel $deel, $pagina = 1)
 	{
 		if (!$deel->magLezen()) {
@@ -126,9 +101,9 @@ class ForumDeelController extends AbstractController
 	 * Forum deel aanmaken.
 	 * @param Request $request
 	 * @return JsonResponse|Response
-	 * @Route("/forum/aanmaken", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
+	#[Route(path: '/forum/aanmaken', methods: ['POST'])]
 	public function aanmaken(Request $request)
 	{
 		$deel = $this->forumDelenRepository->nieuwForumDeel();
@@ -153,9 +128,9 @@ class ForumDeelController extends AbstractController
 	 * @param Request $request
 	 * @param ForumDeel $deel
 	 * @return View|Response
-	 * @Route("/forum/beheren/{forum_id}", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
+	#[Route(path: '/forum/beheren/{forum_id}', methods: ['POST'])]
 	public function beheren(Request $request, ForumDeel $deel)
 	{
 		$form = $this->createFormulier(ForumDeelForm::class, $deel, [
@@ -179,9 +154,9 @@ class ForumDeelController extends AbstractController
 	 *
 	 * @param ForumDeel $deel
 	 * @return JsonResponse
-	 * @Route("/forum/opheffen/{forum_id}", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
+	#[Route(path: '/forum/opheffen/{forum_id}', methods: ['POST'])]
 	public function opheffen(ForumDeel $deel)
 	{
 		$count = count(
@@ -204,9 +179,9 @@ class ForumDeelController extends AbstractController
 	/**
 	 * @param $type
 	 * @return ChartTimeSeries
-	 * @Route("/forum/grafiekdata/{type}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/grafiekdata/{type}', methods: ['POST'])]
 	public function grafiekdata($type)
 	{
 		$datasets = [];
@@ -224,9 +199,9 @@ class ForumDeelController extends AbstractController
 
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
-	 * @Route("/forum/wacht", methods={"GET"})
 	 * @Auth(P_FORUM_MOD)
 	 */
+	#[Route(path: '/forum/wacht', methods: ['GET'])]
 	public function wacht()
 	{
 		return $this->render('forum/wacht.html.twig', [

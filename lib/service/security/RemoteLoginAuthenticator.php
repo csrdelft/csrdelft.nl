@@ -26,33 +26,12 @@ use Symfony\Component\Uid\Uuid;
  */
 class RemoteLoginAuthenticator extends AbstractLoginFormAuthenticator
 {
-	/**
-	 * @var HttpUtils
-	 */
-	private $httpUtils;
-	/**
-	 * @var RemoteLoginRepository
-	 */
-	private $remoteLoginRepository;
-	/**
-	 * @var AuthenticationSuccessHandlerInterface
-	 */
-	private $successHandler;
-	/**
-	 * @var AuthenticationFailureHandlerInterface
-	 */
-	private $failureHandler;
-
 	public function __construct(
-		HttpUtils $httpUtils,
-		RemoteLoginRepository $remoteLoginRepository,
-		AuthenticationSuccessHandlerInterface $successHandler,
-		AuthenticationFailureHandlerInterface $failureHandler
+		private readonly HttpUtils $httpUtils,
+		private readonly RemoteLoginRepository $remoteLoginRepository,
+		private readonly AuthenticationSuccessHandlerInterface $successHandler,
+		private readonly AuthenticationFailureHandlerInterface $failureHandler
 	) {
-		$this->httpUtils = $httpUtils;
-		$this->remoteLoginRepository = $remoteLoginRepository;
-		$this->successHandler = $successHandler;
-		$this->failureHandler = $failureHandler;
 	}
 
 	public function authenticate(Request $request): PassportInterface
@@ -77,9 +56,7 @@ class RemoteLoginAuthenticator extends AbstractLoginFormAuthenticator
 
 		$user = $remoteLogin->account;
 
-		$badge = new UserBadge($user->getUsername(), function () use ($user) {
-			return $user;
-		});
+		$badge = new UserBadge($user->getUsername(), fn() => $user);
 
 		return new SelfValidatingPassport($badge);
 	}

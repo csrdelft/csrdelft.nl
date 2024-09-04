@@ -26,20 +26,13 @@ class LedenlijstContent implements View
 {
 	use ToHtmlResponse;
 
-	/**
-	 * Lid-zoeker
-	 * @var LidZoekerService
-	 */
-	private $lidzoeker;
-	/**
-	 * @var Request
-	 */
-	private $requestStack;
-
-	public function __construct(Request $requestStack, LidZoekerService $zoeker)
-	{
-		$this->lidzoeker = $zoeker;
-		$this->requestStack = $requestStack;
+	public function __construct(
+		private Request $requestStack,
+		/**
+		 * Lid-zoeker
+		 */
+		private LidZoekerService $lidzoeker
+	) {
 	}
 
 	public function getModel()
@@ -66,11 +59,11 @@ class LedenlijstContent implements View
 		$html .=
 			'<select class="form-select" name="' . $name . '" id="f' . $name . '">';
 		foreach ($options as $key => $value) {
-			$html .= '<option value="' . htmlspecialchars($key) . '"';
+			$html .= '<option value="' . htmlspecialchars((string) $key) . '"';
 			if ($key == $this->lidzoeker->getRawQuery($name)) {
 				$html .= ' selected="selected"';
 			}
-			$html .= '>' . htmlspecialchars($value) . '</option>';
+			$html .= '>' . htmlspecialchars((string) $value) . '</option>';
 		}
 		$html .= '</select> ';
 		return $html;
@@ -99,7 +92,7 @@ class LedenlijstContent implements View
 				'<label class="form-check-label" for="veld' .
 				$key .
 				'">' .
-				ucfirst($veld) .
+				ucfirst((string) $veld) .
 				'</label>';
 			$html .= '</div>';
 		}
@@ -108,12 +101,12 @@ class LedenlijstContent implements View
 		return $html;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$requestUri = $this->requestStack->getRequestUri();
 		if ($this->lidzoeker->count() > 0) {
-			if (strstr($requestUri, '?') !== false) {
+			if (str_contains($requestUri, '?')) {
 				$url = $requestUri . '&addToGoogleContacts=true';
 			} else {
 				$url = $requestUri . '?addToGoogleContacts=true';
@@ -124,7 +117,7 @@ class LedenlijstContent implements View
 				'" class="btn float-end" title="Huidige selectie exporteren naar Google Contacten" onclick="return confirm(\'Weet u zeker dat u deze ' .
 				$this->lidzoeker->count() .
 				' leden wilt importeren in uw Google Contacten?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google Contacten" /></a>';
-			if (strstr($requestUri, '?') !== false) {
+			if (str_contains($requestUri, '?')) {
 				$url = $requestUri . '&exportVcf=true';
 			} else {
 				$url = $requestUri . '?exportVcf=true';
@@ -145,7 +138,7 @@ class LedenlijstContent implements View
 		$html .= '<div class="input-group">';
 		$html .=
 			'<input type="text" class="form-control" name="q" value="' .
-			htmlspecialchars($this->lidzoeker->getQuery()) .
+			htmlspecialchars((string) $this->lidzoeker->getQuery()) .
 			'" /> ';
 		$html .=
 			'<div class="input-group-text"><button class="btn submit">Zoeken</button></div></div><a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';

@@ -18,17 +18,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ForumPlaatjeRepository extends AbstractRepository
 {
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-
 	public function __construct(
 		ManagerRegistry $registry,
-		ProfielRepository $profielRepository
+		private readonly ProfielRepository $profielRepository
 	) {
 		parent::__construct($registry, ForumPlaatje::class);
-		$this->profielRepository = $profielRepository;
 	}
 
 	/**
@@ -74,6 +68,6 @@ class ForumPlaatjeRepository extends AbstractRepository
 
 	public static function isValidKey($key)
 	{
-		return preg_match('/^[a-zA-Z0-9]{32}$/', $key);
+		return preg_match('/^[a-zA-Z0-9]{32}$/', (string) $key);
 	}
 }

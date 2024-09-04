@@ -37,7 +37,7 @@ abstract class Enum
 	{
 		if (!static::isValidValue($value)) {
 			throw new InvalidArgumentException(
-				'Invalid enum value: ' . $value . ' in ' . get_class(static::class)
+				'Invalid enum value: ' . $value . ' in ' . static::class::class
 			);
 		}
 		$this->value = $value;
@@ -104,8 +104,8 @@ abstract class Enum
 
 	public function __call($name, $arguments)
 	{
-		if (str_starts_with($name, 'is')) {
-			$enumName = substr($name, 2);
+		if (str_starts_with((string) $name, 'is')) {
+			$enumName = substr((string) $name, 2);
 
 			if (isset(self::getConstants()[$enumName])) {
 				return static::from(self::getConstants()[$enumName]) == $this;

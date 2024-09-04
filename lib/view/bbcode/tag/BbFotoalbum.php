@@ -52,30 +52,15 @@ class BbFotoalbum extends BbTag
 	 */
 	private $album;
 	/**
-	 * @var FotoAlbumRepository
-	 */
-	private $fotoAlbumRepository;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
 	 * @var string
 	 */
 	private $albumUrl;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	public function __construct(
-		FotoAlbumRepository $fotoAlbumRepository,
-		Security $security,
-		Environment $twig
+		private readonly FotoAlbumRepository $fotoAlbumRepository,
+		private readonly Security $security,
+		private readonly Environment $twig
 	) {
-		$this->fotoAlbumRepository = $fotoAlbumRepository;
-		$this->twig = $twig;
-		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -164,7 +149,7 @@ class BbFotoalbum extends BbTag
 				$album = $this->fotoAlbumRepository->getFotoAlbum($url);
 			}
 			return $album;
-		} catch (NotFoundHttpException $ex) {
+		} catch (NotFoundHttpException) {
 			return null;
 		}
 	}

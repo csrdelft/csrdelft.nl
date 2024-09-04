@@ -22,7 +22,7 @@ final class PathUtil
 			return null;
 		}
 		$combined = $folder;
-		if (!str_ends_with($combined, '/')) {
+		if (!str_ends_with((string) $combined, '/')) {
 			$combined .= '/';
 		}
 		$combined .= $subpath;
@@ -60,8 +60,8 @@ final class PathUtil
 	public static function path_valid($prefix, $path)
 	{
 		return str_starts_with(
-			PathUtil::realpathunix(PathUtil::join_paths($prefix, $path)),
-			PathUtil::realpathunix($prefix)
+			(string) PathUtil::realpathunix(PathUtil::join_paths($prefix, $path)),
+			(string) PathUtil::realpathunix($prefix)
 		);
 	}
 
@@ -86,7 +86,7 @@ final class PathUtil
 	public static function filter_filename($name)
 	{
 		//Remove dots in front of filename to prevent directory traversal
-		$name = ltrim($name, '.');
+		$name = ltrim((string) $name, '.');
 
 		return preg_replace('/[^a-z0-9 \-_()éê\.]/i', ' ', $name);
 	}
@@ -98,6 +98,6 @@ final class PathUtil
 	 */
 	public static function valid_filename($name)
 	{
-		return preg_match('/^(?:[a-z0-9 \-_()éê]|\.(?!\.))+$/iD', $name);
+		return preg_match('/^(?:[a-z0-9 \-_()éê]|\.(?!\.))+$/iD', (string) $name);
 	}
 }

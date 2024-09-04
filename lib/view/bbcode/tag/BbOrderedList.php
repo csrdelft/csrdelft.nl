@@ -17,10 +17,10 @@ class BbOrderedList extends BbTag
 	public function parse($arguments = [])
 	{
 		if (isset($arguments['ol'])) {
-			$this->type = htmlspecialchars($arguments['ol']);
+			$this->type = htmlspecialchars((string) $arguments['ol']);
 		}
 		if (isset($arguments['order'])) {
-			$this->order = htmlspecialchars($arguments['order']);
+			$this->order = htmlspecialchars((string) $arguments['order']);
 		}
 		$this->readContent();
 	}

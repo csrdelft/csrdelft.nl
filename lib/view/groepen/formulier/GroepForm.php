@@ -35,7 +35,6 @@ class GroepForm extends ModalForm
 	 * @var bool
 	 */
 	private $magWijzigen;
-	private $isWijzigen;
 
 	/**
 	 * GroepForm constructor.
@@ -49,13 +48,13 @@ class GroepForm extends ModalForm
 		Groep $groep,
 		$action,
 		$magWijzigen,
-		$isWijzigen,
+		private $isWijzigen,
 		$nocancel = false
 	) {
 		parent::__construct(
 			$groep,
 			$action,
-			ReflectionUtil::classNameZonderNamespace(get_class($groep)),
+			ReflectionUtil::classNameZonderNamespace($groep::class),
 			true
 		);
 		if ($groep->id) {
@@ -126,7 +125,6 @@ class GroepForm extends ModalForm
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen($nocancel ? false : null);
-		$this->isWijzigen = $isWijzigen;
 	}
 
 	public function validate()
@@ -139,24 +137,24 @@ class GroepForm extends ModalForm
 		if (
 			isset($fields['eindMoment']) &&
 				$fields['eindMoment']->getValue() !== null and
-			strtotime($fields['eindMoment']->getValue()) <
-				strtotime($fields['beginMoment']->getValue())
+			strtotime((string) $fields['eindMoment']->getValue()) <
+				strtotime((string) $fields['beginMoment']->getValue())
 		) {
 			$fields['eindMoment']->error = 'Eindmoment moet na beginmoment liggen';
 		}
 		if ($groep instanceof Ketzer) {
 			if (
 				$fields['afmeldenTot']->getValue() !== null and
-				strtotime($fields['afmeldenTot']->getValue()) <
-					strtotime($fields['aanmeldenVanaf']->getValue())
+				strtotime((string) $fields['afmeldenTot']->getValue()) <
+					strtotime((string) $fields['aanmeldenVanaf']->getValue())
 			) {
 				$fields['afmeldenTot']->error =
 					'Afmeldperiode moet eindigen na begin aanmeldperiode';
 			}
 			if (
 				$fields['bewerkenTot']->getValue() !== null and
-				strtotime($fields['bewerkenTot']->getValue()) <
-					strtotime($fields['aanmeldenVanaf']->getValue())
+				strtotime((string) $fields['bewerkenTot']->getValue()) <
+					strtotime((string) $fields['aanmeldenVanaf']->getValue())
 			) {
 				$fields['bewerkenTot']->error =
 					'Bewerkenperiode moet eindigen na begin aanmeldperiode';

@@ -34,45 +34,14 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 class ApiAuthenticator extends AbstractAuthenticator
 {
-	/**
-	 * @var UserProviderInterface
-	 */
-	private $userProvider;
-	/**
-	 * @var TokenStorageInterface
-	 */
-	private $tokenStorage;
-	/**
-	 * @var HttpUtils
-	 */
-	private $httpUtils;
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
-	 * @var PersistentTokenProvider
-	 */
-	private $tokenProvider;
-	/**
-	 * @var AccountService
-	 */
-	private $accountService;
-
 	public function __construct(
-		UserProviderInterface $userProvider,
-		PersistentTokenProvider $tokenProvider,
-		TokenStorageInterface $tokenStorage,
-		HttpUtils $httpUtils,
-		AccountService $accountService,
-		AccountRepository $accountRepository
+		private readonly UserProviderInterface $userProvider,
+		private readonly PersistentTokenProvider $tokenProvider,
+		private readonly TokenStorageInterface $tokenStorage,
+		private readonly HttpUtils $httpUtils,
+		private readonly AccountService $accountService,
+		private readonly AccountRepository $accountRepository
 	) {
-		$this->userProvider = $userProvider;
-		$this->tokenStorage = $tokenStorage;
-		$this->httpUtils = $httpUtils;
-		$this->accountRepository = $accountRepository;
-		$this->tokenProvider = $tokenProvider;
-		$this->accountService = $accountService;
 	}
 
 	public function supports(Request $request): ?bool
@@ -128,7 +97,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 	{
 		$authHeader = $request->server->get('HTTP_X_CSR_AUTHORIZATION');
 
-		$jwt = substr($authHeader, 7);
+		$jwt = substr((string) $authHeader, 7);
 
 		if (!$jwt) {
 			throw new AuthenticationException(400);
@@ -136,7 +105,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 
 		try {
 			$token = JWT::decode($jwt, $_ENV['JWT_SECRET'], ['HS512']);
-		} catch (Exception $e) {
+		} catch (Exception) {
 			throw new AuthenticationException('', 401);
 		}
 
@@ -249,7 +218,10 @@ class ApiAuthenticator extends AbstractAuthenticator
 
 		$remember = $this->tokenProvider->loadTokenBySeries($series);
 
-		if (!$remember || $remember->getTokenValue() != hash('sha512', $rand)) {
+		if (
+			!$remember ||
+			$remember->getTokenValue() != hash('sha512', (string) $rand)
+		) {
 			throw new UnauthorizedHttpException('Unauthorized');
 		}
 

@@ -24,57 +24,16 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ForumDelenService
 {
-	/**
-	 * @var ForumDelenRepository
-	 */
-	private $forumDelenRepository;
-	/**
-	 * @var ForumDelenMeldingRepository
-	 */
-	private $forumDelenMeldingRepository;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var ForumPostsRepository
-	 */
-	private $forumPostsRepository;
-	/**
-	 * @var ForumDradenRepository
-	 */
-	private $forumDradenRepository;
-	/**
-	 * @var ForumDradenVerbergenRepository
-	 */
-	private $forumDradenVerbergenRepository;
-	/**
-	 * @var ForumCategorieRepository
-	 */
-	private $forumCategorieRepository;
-	/**
-	 * @var RequestStack
-	 */
-	private $requestStack;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		RequestStack $requestStack,
-		ForumDelenRepository $forumDelenRepository,
-		ForumPostsRepository $forumPostsRepository,
-		ForumDradenRepository $forumDradenRepository,
-		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
-		ForumCategorieRepository $forumCategorieRepository,
-		ForumDelenMeldingRepository $forumDelenMeldingRepository
+		private readonly EntityManagerInterface $entityManager,
+		private readonly RequestStack $requestStack,
+		private readonly ForumDelenRepository $forumDelenRepository,
+		private readonly ForumPostsRepository $forumPostsRepository,
+		private readonly ForumDradenRepository $forumDradenRepository,
+		private readonly ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
+		private readonly ForumCategorieRepository $forumCategorieRepository,
+		private readonly ForumDelenMeldingRepository $forumDelenMeldingRepository
 	) {
-		$this->forumDelenRepository = $forumDelenRepository;
-		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
-		$this->entityManager = $entityManager;
-		$this->forumPostsRepository = $forumPostsRepository;
-		$this->forumDradenRepository = $forumDradenRepository;
-		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
-		$this->forumCategorieRepository = $forumCategorieRepository;
-		$this->requestStack = $requestStack;
 	}
 
 	public function verwijderForumDeel($id)
@@ -271,30 +230,21 @@ class ForumDelenService
 	public function laatstGewijzigd($posts)
 	{
 		return max(
-			array_map(function (ForumPost $post) {
-				return $post->laatst_gewijzigd;
-			}, $posts)
+			array_map(fn(ForumPost $post) => $post->laatst_gewijzigd, $posts)
 		);
 	}
 
 	private function sorteerFunctie($sorteerOp)
 	{
-		switch ($sorteerOp) {
-			case 'aangemaakt_op':
-				return function ($a, $b) {
-					return $a->datum_tijd < $b->datum_tijd ? 1 : -1;
-				};
-			case 'laatste_bericht':
-				return function ($a, $b) {
-					return $a->laatst_gewijzigd < $b->laatst_gewijzigd ? 1 : -1;
-				};
-			case 'relevantie':
-				return function ($a, $b) {
-					return $a->score < $b->score ? 1 : -1;
-				};
-			default:
-				throw new CsrGebruikerException('Onbekende sorteermethode');
-		}
+		return match ($sorteerOp) {
+			'aangemaakt_op' => fn($a, $b) => $a->datum_tijd < $b->datum_tijd ? 1 : -1,
+			'laatste_bericht' => fn($a, $b) => $a->laatst_gewijzigd <
+			$b->laatst_gewijzigd
+				? 1
+				: -1,
+			'relevantie' => fn($a, $b) => $a->score < $b->score ? 1 : -1,
+			default => throw new CsrGebruikerException('Onbekende sorteermethode'),
+		};
 	}
 
 	/**

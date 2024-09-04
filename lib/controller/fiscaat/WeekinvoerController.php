@@ -15,12 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class WeekinvoerController extends AbstractController
 {
 	/**
-	 * @Route("/fiscaat/weekinvoer")
 	 * @param Request $request
 	 * @param CiviSaldoRepository $civiSaldoRepository
 	 * @return Response
 	 * @Auth(P_FISCAAT_READ)
 	 */
+	#[Route(path: '/fiscaat/weekinvoer')]
 	public function weekinvoer(
 		Request $request,
 		CiviSaldoRepository $civiSaldoRepository
@@ -34,14 +34,14 @@ class WeekinvoerController extends AbstractController
 		if ($request->query->has('van')) {
 			try {
 				$from = new DateTimeImmutable($request->query->get('van'));
-			} catch (Exception $e) {
+			} catch (Exception) {
 			}
 		}
 
 		if ($request->query->has('tot')) {
 			try {
 				$until = new DateTimeImmutable($request->query->get('tot'));
-			} catch (Exception $e) {
+			} catch (Exception) {
 			}
 		}
 

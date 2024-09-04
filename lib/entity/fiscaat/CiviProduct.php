@@ -24,32 +24,32 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
 	public $id;
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
 	public $status;
 	/**
 	 * @var string
 	 * @ORM\Column(type="text")
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
 	public $beschrijving;
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
 	public $prioriteit;
 	/**
 	 * @var boolean
 	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
 	public $beheer;
 	/**
 	 * @var integer
@@ -75,9 +75,9 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 
 	/**
 	 * @return string
-	 * @Serializer\SerializedName("categorie")
-	 * @Serializer\Groups("bar")
 	 */
+	#[Serializer\SerializedName('categorie')]
+	#[Serializer\Groups('bar')]
 	public function getCategorieString()
 	{
 		return $this->categorie->getWeergave();
@@ -85,8 +85,8 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("bar")
 	 */
+	#[Serializer\Groups('bar')]
 	public function getCie()
 	{
 		return $this->categorie->cie;
@@ -112,9 +112,9 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 
 	/**
 	 * @return int
-	 * @Serializer\Groups({"datatable", "bar"})
-	 * @Serializer\SerializedName("prijs")
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
+	#[Serializer\SerializedName('prijs')]
 	public function getPrijsInt()
 	{
 		if ($prijs = $this->getPrijs()) {
@@ -149,9 +149,9 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("categorie")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('categorie')]
 	public function getDataTableCategorie()
 	{
 		return $this->categorie->getBeschrijving();

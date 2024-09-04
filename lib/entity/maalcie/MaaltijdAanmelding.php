@@ -146,19 +146,13 @@ class MaaltijdAanmelding
 	{
 		$status = $this->getSaldoStatus();
 		$prijs = sprintf('%.2f', $this->maaltijd->getPrijsFloat());
-		switch ($status) {
-			case 3:
-				return 'ok';
-			case 2:
-				return $prijs;
-			case 1:
-				return '&lt; ' . $prijs;
-			case 0:
-				return '0';
-			case -1:
-				return '&lt; 0';
-		}
-
-		throw new CsrException('Ongeldige saldo status: ' . $status);
+		return match ($status) {
+			3 => 'ok',
+			2 => $prijs,
+			1 => '&lt; ' . $prijs,
+			0 => '0',
+			-1 => '&lt; 0',
+			default => throw new CsrException('Ongeldige saldo status: ' . $status),
+		};
 	}
 }

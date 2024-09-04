@@ -95,9 +95,9 @@ class GroepenDeelnameGrafiek implements View, ToResponse
 HTML;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->getHtml();
+		return (string) $this->getHtml();
 	}
 
 	public function toResponse(): Response

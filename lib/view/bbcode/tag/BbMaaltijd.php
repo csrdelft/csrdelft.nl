@@ -36,48 +36,18 @@ class BbMaaltijd extends BbTag
 	 */
 	private $maaltijden;
 	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
-	/**
-	 * @var MaaltijdBeoordelingenRepository
-	 */
-	private $maaltijdBeoordelingenRepository;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
 	 * @var string
 	 */
 	private $id;
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var MaaltijdAanmeldingenService
-	 */
-	private $maaltijdAanmeldingenService;
-	/**
-	 * @var MaaltijdenService
-	 */
-	private $maaltijdenService;
 
 	public function __construct(
-		Environment $twig,
-		Security $security,
-		MaaltijdenService $maaltijdenService,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
-		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository
+		private readonly Environment $twig,
+		private readonly Security $security,
+		private readonly MaaltijdenService $maaltijdenService,
+		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
+		private readonly MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository
 	) {
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
-		$this->twig = $twig;
-		$this->security = $security;
-		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
-		$this->maaltijdenService = $maaltijdenService;
 	}
 
 	public static function getTagName()
@@ -212,12 +182,7 @@ class BbMaaltijd extends BbTag
 					LoginService::getUid(),
 					$timestamp
 				);
-				$recent = array_slice(
-					array_map(function ($m) {
-						return $m->maaltijd;
-					}, $recent),
-					-2
-				);
+				$recent = array_slice(array_map(fn($m) => $m->maaltijd, $recent), -2);
 				if (count($recent) === 0) {
 					throw new BbException('');
 				}
@@ -225,7 +190,7 @@ class BbMaaltijd extends BbTag
 				if (count($recent) > 1) {
 					$maaltijd2 = array_values($recent)[1];
 				}
-			} elseif (preg_match('/\d+/', $mid)) {
+			} elseif (preg_match('/\d+/', (string) $mid)) {
 				$maaltijd = $this->maaltijdenService->getMaaltijdVoorKetzer((int) $mid); // met filter
 
 				if (!$maaltijd) {
@@ -233,10 +198,10 @@ class BbMaaltijd extends BbTag
 				}
 			}
 		} catch (CsrException $e) {
-			if (strpos($e->getMessage(), 'Not found') !== false) {
+			if (str_contains($e->getMessage(), 'Not found')) {
 				throw new BbException(
 					'<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' .
-						htmlspecialchars($mid) .
+						htmlspecialchars((string) $mid) .
 						'</div>'
 				);
 			}
@@ -245,7 +210,7 @@ class BbMaaltijd extends BbTag
 		if (!isset($maaltijd)) {
 			throw new BbException(
 				'<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' .
-					htmlspecialchars($mid) .
+					htmlspecialchars((string) $mid) .
 					'</div>'
 			);
 		}

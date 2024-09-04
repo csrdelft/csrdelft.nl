@@ -14,10 +14,6 @@ use CsrDelft\common\Util\UrlUtil;
  */
 class Mail
 {
-	/** @var string */
-	private $onderwerp;
-	/** @var string */
-	private $bericht;
 	/** @var array<string, string> */
 	private $from = ['pubcie@csrdelft.nl' => 'PubCie C.S.R. Delft'];
 	/** @var string[] */
@@ -35,10 +31,11 @@ class Mail
 	 * @param string $onderwerp
 	 * @param string $bericht
 	 */
-	public function __construct(array $to, string $onderwerp, string $bericht)
-	{
-		$this->onderwerp = $onderwerp;
-		$this->bericht = $bericht;
+	public function __construct(
+		array $to,
+		private string $onderwerp,
+		private readonly string $bericht
+	) {
 		$this->addTo($to);
 	}
 

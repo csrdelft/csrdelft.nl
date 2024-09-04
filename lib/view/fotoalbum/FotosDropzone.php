@@ -28,7 +28,7 @@ class FotosDropzone extends Dropzone
 			'</ul>';
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .=

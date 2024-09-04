@@ -27,24 +27,14 @@ class BbPeiling extends BbTag
 	 */
 	private $peiling;
 	/**
-	 * @var PeilingenRepository
-	 */
-	private $peilingenRepository;
-	/**
 	 * @var string
 	 */
 	private $id;
-	/**
-	 * @var NormalizerInterface
-	 */
-	private $normalizer;
 
 	public function __construct(
-		NormalizerInterface $normalizer,
-		PeilingenRepository $peilingenRepository
+		private readonly NormalizerInterface $normalizer,
+		private readonly PeilingenRepository $peilingenRepository
 	) {
-		$this->peilingenRepository = $peilingenRepository;
-		$this->normalizer = $normalizer;
 	}
 
 	public static function getTagName()

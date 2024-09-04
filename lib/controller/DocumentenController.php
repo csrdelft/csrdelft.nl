@@ -30,24 +30,17 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DocumentenController extends AbstractController
 {
-	/** @var DocumentRepository */
-	private $documentRepository;
-	/** @var DocumentCategorieRepository */
-	private $documentCategorieRepository;
-
 	public function __construct(
-		DocumentRepository $documentRepository,
-		DocumentCategorieRepository $documentCategorieRepository
+		private readonly DocumentRepository $documentRepository,
+		private readonly DocumentCategorieRepository $documentCategorieRepository
 	) {
-		$this->documentRepository = $documentRepository;
-		$this->documentCategorieRepository = $documentCategorieRepository;
 	}
 
 	/**
 	 * Recente documenten uit alle categorieën tonen
-	 * @Route("/documenten", methods={"GET"})
 	 * @Auth(P_DOCS_READ)
 	 */
+	#[Route(path: '/documenten', methods: ['GET'])]
 	public function recenttonen(): Response
 	{
 		return $this->render('documenten/documenten.html.twig', [
@@ -58,9 +51,9 @@ class DocumentenController extends AbstractController
 	/**
 	 * @param Document $document
 	 * @return JsonResponse|PlainView
-	 * @Route("/documenten/verwijderen/{id}", methods={"POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */
+	#[Route(path: '/documenten/verwijderen/{id}', methods: ['POST'])]
 	public function verwijderen(Document $document)
 	{
 		$id = $document->id;
@@ -79,9 +72,9 @@ class DocumentenController extends AbstractController
 	/**
 	 * @param Document $document
 	 * @return BinaryFileResponse|RedirectResponse
-	 * @Route("/documenten/bekijken/{id}/{bestandsnaam}", methods={"GET"})
 	 * @Auth(P_DOCS_READ)
 	 */
+	#[Route(path: '/documenten/bekijken/{id}/{bestandsnaam}', methods: ['GET'])]
 	public function bekijken(Document $document)
 	{
 		if (!$document->magBekijken()) {
@@ -113,9 +106,9 @@ class DocumentenController extends AbstractController
 	/**
 	 * @param Document $document
 	 * @return BinaryFileResponse|RedirectResponse
-	 * @Route("/documenten/download/{id}/{bestandsnaam}", methods={"GET"})
 	 * @Auth(P_DOCS_READ)
 	 */
+	#[Route(path: '/documenten/download/{id}/{bestandsnaam}', methods: ['GET'])]
 	public function download(Document $document)
 	{
 		if (!$document->magBekijken()) {
@@ -138,9 +131,15 @@ class DocumentenController extends AbstractController
 	/**
 	 * @param DocumentCategorie $categorie
 	 * @return Response
-	 * @Route("/documenten/categorie/{id}", methods={"GET"}, requirements={"id": "\d+"})
 	 * @Auth(P_DOCS_READ)
 	 */
+	#[
+		Route(
+			path: '/documenten/categorie/{id}',
+			methods: ['GET'],
+			requirements: ['id' => '\d+']
+		)
+	]
 	public function categorie(DocumentCategorie $categorie): Response
 	{
 		if (!$categorie->magBekijken()) {
@@ -158,9 +157,11 @@ class DocumentenController extends AbstractController
 	 * @param Request $request
 	 * @param DocumentCategorie|null $categorie
 	 * @return JsonResponse|Response
-	 * @Route("/documenten/categorie/{id}/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */
+	#[
+		Route(path: '/documenten/categorie/{id}/bewerken', methods: ['GET', 'POST'])
+	]
 	public function categorieBewerken(
 		Request $request,
 		DocumentCategorie $categorie
@@ -189,10 +190,10 @@ class DocumentenController extends AbstractController
 
 	/**
 	 * @param Request $request
-	 * @Route("/documenten/categorie/nieuw", methods={"GET", "POST"})
 	 * @Auth(P_DOCS_MOD)
 	 * @return JsonResponse|Response
 	 */
+	#[Route(path: '/documenten/categorie/nieuw', methods: ['GET', 'POST'])]
 	public function categorieAanmaken(Request $request)
 	{
 		$categorie = new DocumentCategorie();
@@ -221,10 +222,10 @@ class DocumentenController extends AbstractController
 
 	/**
 	 * @param DocumentCategorie $categorie
-	 * @Route("/documenten/categorie/{id}/verwijderen", methods={"POST"})
 	 * @Auth(P_DOCS_MOD)
 	 * @return JsonResponse
 	 */
+	#[Route(path: '/documenten/categorie/{id}/verwijderen', methods: ['POST'])]
 	public function categorieVerwijderen(
 		DocumentCategorie $categorie
 	): JsonResponse {
@@ -244,9 +245,9 @@ class DocumentenController extends AbstractController
 	 * @param Request $request
 	 * @param Document $document
 	 * @return Response
-	 * @Route("/documenten/bewerken/{id}", methods={"GET","POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/documenten/bewerken/{id}', methods: ['GET', 'POST'])]
 	public function bewerken(Request $request, Document $document): Response
 	{
 		if (!$document->magBewerken()) {
@@ -278,9 +279,9 @@ class DocumentenController extends AbstractController
 	 * @param Request $request
 	 * @return Response
 	 * @throws Exception
-	 * @Route("/documenten/toevoegen", methods={"GET","POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/documenten/toevoegen', methods: ['GET', 'POST'])]
 	public function toevoegen(Request $request): Response
 	{
 		$document = new Document();
@@ -340,9 +341,9 @@ class DocumentenController extends AbstractController
 	 * @param Request $request
 	 * @param null $zoekterm
 	 * @return JsonResponse
-	 * @Route("/documenten/zoeken", methods={"GET","POST"})
 	 * @Auth(P_DOCS_READ)
 	 */
+	#[Route(path: '/documenten/zoeken', methods: ['GET', 'POST'])]
 	public function zoeken(Request $request, $zoekterm = null): JsonResponse
 	{
 		if (!$zoekterm && !$request->query->has('q')) {

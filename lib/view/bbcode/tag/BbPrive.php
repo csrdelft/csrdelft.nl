@@ -22,19 +22,11 @@ class BbPrive extends BbTag
 	 * @var string
 	 */
 	private $permissie;
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var AccessService
-	 */
-	private $accessService;
 
-	public function __construct(Security $security, AccessService $accessService)
-	{
-		$this->security = $security;
-		$this->accessService = $accessService;
+	public function __construct(
+		private readonly Security $security,
+		private readonly AccessService $accessService
+	) {
 	}
 
 	public function isAllowed()

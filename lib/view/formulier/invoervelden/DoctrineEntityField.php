@@ -43,10 +43,6 @@ class DoctrineEntityField extends TextField
 	 * @var string
 	 */
 	private $entityType;
-	/**
-	 * @var string
-	 */
-	private $url;
 
 	/**
 	 * EntityField constructor.
@@ -55,8 +51,9 @@ class DoctrineEntityField extends TextField
 	 * @param $description string Beschrijvijng van de input
 	 * @param $type DisplayEntity|string
 	 * @param $url string Url waar aanvullingen te vinden zijn
+	 * @param string $url
 	 */
-	public function __construct($name, $value, $description, $type, $url)
+	public function __construct($name, $value, $description, $type, private $url)
 	{
 		if (!is_a($type, DisplayEntity::class, true)) {
 			throw new CsrException(
@@ -88,8 +85,6 @@ class DoctrineEntityField extends TextField
 		);
 
 		$this->css_classes[] = 'doctrine-field';
-
-		$this->url = $url;
 	}
 
 	public function getFormattedValue()

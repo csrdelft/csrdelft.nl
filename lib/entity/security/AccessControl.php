@@ -23,8 +23,8 @@ class AccessControl
 	 * @var string
 	 * @ORM\Column(type="stringkey")
 	 * @ORM\Id()
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $environment;
 	/**
 	 * Action
@@ -44,15 +44,15 @@ class AccessControl
 	 * Benodigde rechten
 	 * @var string
 	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $subject;
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("action")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('action')]
 	public function getDataTableAction()
 	{
 		return AccessAction::from($this->action)->getDescription();
@@ -60,9 +60,9 @@ class AccessControl
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("resource")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('resource')]
 	public function getDataTableResource()
 	{
 		if ($this->resource === '*') {

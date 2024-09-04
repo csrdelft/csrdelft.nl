@@ -102,7 +102,7 @@ h.t. Fiscus.';
 				continue;
 			}
 
-			if (in_array($saldo->uid, explode(',', $this->uitsluiten))) {
+			if (in_array($saldo->uid, explode(',', (string) $this->uitsluiten))) {
 				continue;
 			}
 
@@ -162,7 +162,7 @@ h.t. Fiscus.';
 			echo '<strong>' .
 				$bericht['onderwerp'] .
 				'</strong><br />' .
-				nl2br($bericht['bericht']) .
+				nl2br((string) $bericht['bericht']) .
 				'<hr />';
 		}
 	}

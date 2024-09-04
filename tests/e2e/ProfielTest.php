@@ -67,7 +67,7 @@ class ProfielTest extends BrowserTestCase
 		);
 		$value = $input->getDomProperty('value');
 		// ->clear werkt niet
-		$input->sendKeys(str_repeat(Keys::BACKSPACE, strlen($value)));
+		$input->sendKeys(str_repeat(Keys::BACKSPACE, strlen((string) $value)));
 		$input->sendKeys($newValue);
 	}
 

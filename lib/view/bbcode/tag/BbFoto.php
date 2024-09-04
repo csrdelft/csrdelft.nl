@@ -33,24 +33,14 @@ class BbFoto extends BbTag
 	 */
 	private $foto;
 	/**
-	 * @var FotoAlbumRepository
-	 */
-	private $fotoAlbumRepository;
-	/**
 	 * @var string
 	 */
 	private $fotoUrl;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	public function __construct(
-		Security $security,
-		FotoAlbumRepository $fotoAlbumRepository
+		private readonly Security $security,
+		private readonly FotoAlbumRepository $fotoAlbumRepository
 	) {
-		$this->fotoAlbumRepository = $fotoAlbumRepository;
-		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -120,7 +110,7 @@ class BbFoto extends BbTag
 				throw new BbException('Foto niet gevonden.');
 			}
 			return $foto;
-		} catch (NotFoundHttpException $ex) {
+		} catch (NotFoundHttpException) {
 			throw new BbException(
 				'<div class="bb-block">Fotoalbum niet gevonden: ' .
 					htmlspecialchars($url) .

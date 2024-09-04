@@ -20,33 +20,12 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CorveePuntenService
 {
-	/**
-	 * @var CorveeVrijstellingenRepository
-	 */
-	private $corveeVrijstellingenRepository;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		ProfielRepository $profielRepository,
-		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
-		CorveeTakenRepository $corveeTakenRepository
+		private readonly EntityManagerInterface $entityManager,
+		private readonly ProfielRepository $profielRepository,
+		private readonly CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
+		private readonly CorveeTakenRepository $corveeTakenRepository
 	) {
-		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->entityManager = $entityManager;
-		$this->profielRepository = $profielRepository;
 	}
 
 	public function resetCorveejaar()

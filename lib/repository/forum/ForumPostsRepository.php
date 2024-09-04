@@ -78,7 +78,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		$limit = null,
 		$offset = null
 	) {
-		$orderBy = $orderBy ?? ['datum_tijd' => 'ASC'];
+		$orderBy ??= ['datum_tijd' => 'ASC'];
 		return parent::findBy($criteria, $orderBy, $limit, $offset);
 	}
 
@@ -262,7 +262,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 	 */
 	public function findOneBy(array $criteria, array $orderBy = null)
 	{
-		$orderBy = $orderBy ?? ['datum_tijd' => 'ASC'];
+		$orderBy ??= ['datum_tijd' => 'ASC'];
 		return parent::findOneBy($criteria, $orderBy);
 	}
 

@@ -16,21 +16,17 @@ use CsrDelft\repository\ProfielRepository;
 class FotoTagAlbum extends FotoAlbum
 {
 	/**
+	 * @param string $uid
+	 */
+	public function __construct /**
 	 * Lidnummer
 	 * Foreign key
-	 * @var string
-	 */
-	public $uid;
-
-	public function __construct($uid)
-	{
+	 */(public $uid) {
 		parent::__construct();
-		// no parent constructor
-		$this->uid = $uid;
 		$this->subalbums = [];
 		$this->path = PHOTOALBUM_PATH;
 		$this->dirname =
-			'Foto\'s met ' . ProfielRepository::getNaam($uid, 'civitas');
+			'Foto\'s met ' . ProfielRepository::getNaam($this->uid, 'civitas');
 	}
 
 	public function modified()

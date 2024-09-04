@@ -28,53 +28,25 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MijnMaaltijdenController extends AbstractController
 {
-	/** @var MaaltijdenRepository */
-	private $maaltijdenRepository;
-	/** @var CorveeTakenRepository */
-	private $corveeTakenRepository;
-	/** @var MaaltijdBeoordelingenRepository */
-	private $maaltijdBeoordelingenRepository;
-	/** @var MaaltijdAanmeldingenRepository */
-	private $maaltijdAanmeldingenRepository;
-	/**
-	 * @var MaaltijdAanmeldingenService
-	 */
-	private $maaltijdAanmeldingenService;
-	/**
-	 * @var MaaltijdGastAanmeldingenService
-	 */
-	private $maaltijdGastAanmeldingenService;
-	/**
-	 * @var MaaltijdenService
-	 */
-	private $maaltijdenService;
-
 	public function __construct(
-		MaaltijdenRepository $maaltijdenRepository,
-		MaaltijdenService $maaltijdenService,
-		CorveeTakenRepository $corveeTakenRepository,
-		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository,
-		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
-		MaaltijdGastAanmeldingenService $maaltijdGastAanmeldingenService,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
+		private readonly MaaltijdenRepository $maaltijdenRepository,
+		private readonly MaaltijdenService $maaltijdenService,
+		private readonly CorveeTakenRepository $corveeTakenRepository,
+		private readonly MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository,
+		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
+		private readonly MaaltijdGastAanmeldingenService $maaltijdGastAanmeldingenService,
+		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
 	) {
-		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
-		$this->maaltijdGastAanmeldingenService = $maaltijdGastAanmeldingenService;
-		$this->maaltijdenService = $maaltijdenService;
 	}
 
 	/**
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/maaltijden", methods={"GET"})
-	 * @Route("/maaltijden/ketzer", methods={"GET"})
 	 * @Auth(P_MAAL_IK)
 	 */
+	#[Route(path: '/maaltijden', methods: ['GET'])]
+	#[Route(path: '/maaltijden/ketzer', methods: ['GET'])]
 	public function ketzer()
 	{
 		$maaltijden = $this->maaltijdenService->getKomendeMaaltijdenVoorLid(
@@ -138,9 +110,9 @@ class MijnMaaltijdenController extends AbstractController
 	/**
 	 * @param Maaltijd $maaltijd
 	 * @return Response
-	 * @Route("/maaltijden/lijst/{maaltijd_id}", methods={"GET"})
 	 * @Auth(P_MAAL_IK)
 	 */
+	#[Route(path: '/maaltijden/lijst/{maaltijd_id}', methods: ['GET'])]
 	public function lijst(Maaltijd $maaltijd)
 	{
 		if (!$maaltijd->magSluiten($this->getUid()) && !$this->mag(P_MAAL_MOD)) {
@@ -171,9 +143,9 @@ class MijnMaaltijdenController extends AbstractController
 	 * @param Maaltijd $maaltijd
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/lijst/sluit/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
+	#[Route(path: '/maaltijden/lijst/sluit/{maaltijd_id}', methods: ['POST'])]
 	public function sluit(Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {
@@ -193,9 +165,14 @@ class MijnMaaltijdenController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/ketzer/aanmelden/{maaltijd_id}", methods={"GET","POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
+	#[
+		Route(
+			path: '/maaltijden/ketzer/aanmelden/{maaltijd_id}',
+			methods: ['GET', 'POST']
+		)
+	]
 	public function aanmelden(Request $request, Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {
@@ -237,9 +214,14 @@ class MijnMaaltijdenController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/ketzer/afmelden/{maaltijd_id}", methods={"GET","POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
+	#[
+		Route(
+			path: '/maaltijden/ketzer/afmelden/{maaltijd_id}',
+			methods: ['GET', 'POST']
+		)
+	]
 	public function afmelden(Request $request, Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {
@@ -276,9 +258,9 @@ class MijnMaaltijdenController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/ketzer/gasten/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
+	#[Route(path: '/maaltijden/ketzer/gasten/{maaltijd_id}', methods: ['POST'])]
 	public function gasten(Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {
@@ -305,9 +287,9 @@ class MijnMaaltijdenController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/mijn/gasten/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
+	#[Route(path: '/maaltijden/mijn/gasten/{maaltijd_id}', methods: ['POST'])]
 	public function gasten_mijn(Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {
@@ -337,9 +319,11 @@ class MijnMaaltijdenController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/ketzer/opmerking/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
+	#[
+		Route(path: '/maaltijden/ketzer/opmerking/{maaltijd_id}', methods: ['POST'])
+	]
 	public function opmerking(Maaltijd $maaltijd)
 	{
 		$opmerking = filter_input(
@@ -363,9 +347,9 @@ class MijnMaaltijdenController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/mijn/opmerking/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
+	#[Route(path: '/maaltijden/mijn/opmerking/{maaltijd_id}', methods: ['POST'])]
 	public function opmerking_mijn(Maaltijd $maaltijd)
 	{
 		$opmerking = filter_input(
@@ -392,9 +376,14 @@ class MijnMaaltijdenController extends AbstractController
 	 * @return JsonResponse
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/ketzer/beoordeling/{maaltijd_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
+	#[
+		Route(
+			path: '/maaltijden/ketzer/beoordeling/{maaltijd_id}',
+			methods: ['POST']
+		)
+	]
 	public function beoordeling(Maaltijd $maaltijd)
 	{
 		if ($maaltijd->verwijderd) {

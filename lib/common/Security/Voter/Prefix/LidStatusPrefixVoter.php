@@ -32,7 +32,7 @@ class LidStatusPrefixVoter extends PrefixVoter
 
 		$profiel = $user->profiel;
 
-		$gevraagd = 'S_' . strtoupper($gevraagd);
+		$gevraagd = 'S_' . strtoupper((string) $gevraagd);
 
 		if ($gevraagd == $profiel->status) {
 			return true;

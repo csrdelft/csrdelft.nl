@@ -19,21 +19,11 @@ class BbInstelling extends BbTag
 	private $module;
 	private $testwaarde;
 	private $instelling;
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var LidInstellingenRepository
-	 */
-	private $lidInstellingenRepository;
 
 	public function __construct(
-		Security $security,
-		LidInstellingenRepository $lidInstellingenRepository
+		private readonly Security $security,
+		private readonly LidInstellingenRepository $lidInstellingenRepository
 	) {
-		$this->security = $security;
-		$this->lidInstellingenRepository = $lidInstellingenRepository;
 	}
 
 	public function isAllowed()
@@ -84,7 +74,7 @@ class BbInstelling extends BbTag
 			!isset($arguments['module'])
 		) {
 			// backwards compatibility
-			$key = explode('_', $arguments['instelling'], 2);
+			$key = explode('_', (string) $arguments['instelling'], 2);
 			$this->module = $key[0];
 			$this->instelling = $key[1];
 		} else {

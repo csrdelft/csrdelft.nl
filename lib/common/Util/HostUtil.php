@@ -6,7 +6,6 @@ use CsrDelft\common\ContainerFacade;
 
 final class HostUtil
 {
-
 	/**
 	 * Is de huidige host de production server?
 	 * @return boolean
@@ -14,7 +13,9 @@ final class HostUtil
 	public static function isProduction()
 	{
 		// Controleer voor alle namen die de production server had/heeft/zal hebben
-		return !ContainerFacade::getContainer()->get('kernel')->isDebug();
+		return !ContainerFacade::getContainer()
+			->get('kernel')
+			->isDebug();
 	}
 
 	public static function isCLI()

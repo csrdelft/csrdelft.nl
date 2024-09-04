@@ -15,30 +15,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiActiviteitenController extends AbstractController
 {
-	/** @var ChangeLogRepository  */
-	private $changeLogRepository;
-	/** @var ActiviteitenRepository  */
-	private $activiteitenRepository;
-	/**
-	 * @var GroepLidRepository
-	 */
-	private $groepLidRepository;
-
 	public function __construct(
-		ActiviteitenRepository $activiteitenRepository,
-		GroepLidRepository $groepLidRepository,
-		ChangeLogRepository $changeLogRepository
+		private readonly ActiviteitenRepository $activiteitenRepository,
+		private readonly GroepLidRepository $groepLidRepository,
+		private readonly ChangeLogRepository $changeLogRepository
 	) {
-		$this->activiteitenRepository = $activiteitenRepository;
-		$this->groepLidRepository = $groepLidRepository;
-		$this->changeLogRepository = $changeLogRepository;
 	}
 
 	/**
 	 * url POST /$id/aanmelden
-	 * @Route("/API/2.0/activiteiten/{id}/aanmelden", methods={"POST"})
 	 * @Auth(P_LEDEN_READ)
 	 */
+	#[Route(path: '/API/2.0/activiteiten/{id}/aanmelden', methods: ['POST'])]
 	public function activiteitAanmelden($id)
 	{
 		$activiteit = $this->activiteitenRepository->get($id);
@@ -65,9 +53,9 @@ class ApiActiviteitenController extends AbstractController
 	}
 
 	/**
-	 * @Route("/API/2.0/activiteiten/{id}/afmelden", methods={"POST"})
 	 * @Auth(P_LEDEN_READ)
 	 */
+	#[Route(path: '/API/2.0/activiteiten/{id}/afmelden', methods: ['POST'])]
 	public function activiteitAfmelden($id)
 	{
 		$activiteit = $this->activiteitenRepository->get($id);

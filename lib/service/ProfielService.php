@@ -14,21 +14,10 @@ use Symfony\Component\Security\Core\Security;
  */
 class ProfielService
 {
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var Security
-	 */
-	private $security;
-
 	public function __construct(
-		Security $security,
-		ProfielRepository $profielRepository
+		private readonly Security $security,
+		private readonly ProfielRepository $profielRepository
 	) {
-		$this->profielRepository = $profielRepository;
-		$this->security = $security;
 	}
 
 	/**

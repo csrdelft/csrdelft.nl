@@ -20,18 +20,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FotoRepository extends AbstractRepository
 {
-	/**
-	 * @var FotoTagsRepository
-	 */
-	private $fotoTagsRepository;
-
 	public function __construct(
 		ManagerRegistry $registry,
-		FotoTagsRepository $fotoTagsRepository
+		private readonly FotoTagsRepository $fotoTagsRepository
 	) {
 		parent::__construct($registry, Foto::class);
-
-		$this->fotoTagsRepository = $fotoTagsRepository;
 	}
 
 	/**
@@ -39,7 +32,7 @@ class FotoRepository extends AbstractRepository
 	 */
 	public function retrieveByUUID($UUID)
 	{
-		$parts = explode('@', $UUID, 2);
+		$parts = explode('@', (string) $UUID, 2);
 		$path = explode('/', $parts[0]);
 		$filename = array_pop($path);
 		$subdir = implode('/', $path);

@@ -12,20 +12,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiLedenController
 {
-	/**
-	 * @var LidZoekerService
-	 */
-	private $lidZoekerService;
-
-	public function __construct(LidZoekerService $lidZoekerService)
-	{
-		$this->lidZoekerService = $lidZoekerService;
+	public function __construct(
+		private readonly LidZoekerService $lidZoekerService
+	) {
 	}
 
 	/**
-	 * @Route("/API/2.0/leden", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
+	#[Route(path: '/API/2.0/leden', methods: ['GET'])]
 	public function getLeden()
 	{
 		$leden = [];
@@ -43,9 +38,9 @@ class ApiLedenController
 	}
 
 	/**
-	 * @Route("/API/2.0/leden/{id}", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
+	#[Route(path: '/API/2.0/leden/{id}', methods: ['GET'])]
 	public function getLid($id)
 	{
 		$profiel = ProfielRepository::get($id);

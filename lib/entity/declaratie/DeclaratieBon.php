@@ -213,9 +213,10 @@ class DeclaratieBon
 			]),
 			'datum' => $this->datum ? date_format($this->datum, 'd-m-Y') : null,
 			'id' => $this->id,
-			'regels' => array_map(function (DeclaratieRegel $a) {
-				return $a->naarObject();
-			}, $this->regels->toArray()),
+			'regels' => array_map(
+				fn(DeclaratieRegel $a) => $a->naarObject(),
+				$this->regels->toArray()
+			),
 		];
 	}
 

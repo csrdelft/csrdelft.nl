@@ -79,9 +79,9 @@ class ForumPlaatje
 		$command =
 			$_ENV['IMAGEMAGICK'] .
 			' ' .
-			escapeshellarg($this->getPath(false)) .
+			escapeshellarg((string) $this->getPath(false)) .
 			' -resize "750x>" -format jpg -quality 85 -interlace Line  -auto-orient ' .
-			escapeshellarg($this->getPath(true));
+			escapeshellarg((string) $this->getPath(true));
 		shell_exec($command);
 		if ($this->hasResized()) {
 			chmod($this->getPath(true), 0644);

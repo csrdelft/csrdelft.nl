@@ -14,15 +14,10 @@ class CourantBerichtVoter extends Voter
 	use CacheableVoterSupportsTrait;
 
 	const BEHEREN = 'beheren';
-	/**
-	 * @var AccessDecisionManagerInterface
-	 */
-	private $accessDecisionManager;
 
 	public function __construct(
-		AccessDecisionManagerInterface $accessDecisionManager
+		private AccessDecisionManagerInterface $accessDecisionManager
 	) {
-		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	public function supportsAttribute(string $attribute): bool
@@ -46,15 +41,13 @@ class CourantBerichtVoter extends Voter
 		$subject,
 		TokenInterface $token
 	) {
-		switch ($attribute) {
-			case self::BEHEREN:
-				return $this->accessDecisionManager->decide($token, [
-					'ROLE_MAIL_COMPOSE',
-				]) || $this->accessDecisionManager->decide($token, [$subject->uid]);
-			default:
-				throw new CsrGebruikerException(
-					"Attribute niet gevonden: '$attribute'."
-				);
-		}
+		return match ($attribute) {
+			self::BEHEREN => $this->accessDecisionManager->decide($token, [
+				'ROLE_MAIL_COMPOSE',
+			]) || $this->accessDecisionManager->decide($token, [$subject->uid]),
+			default => throw new CsrGebruikerException(
+				"Attribute niet gevonden: '$attribute'."
+			),
+		};
 	}
 }

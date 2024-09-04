@@ -13,14 +13,9 @@ namespace CsrDelft\model\entity\profiel;
  */
 class ProfielLogValueChangeCensuur extends AbstractProfielLogValueChangeEntry
 {
-	public $oldEmpty;
-	public $newEmpty;
-
-	public function __construct($property, $oldEmpty, $newEmpty)
+	public function __construct($property, public $oldEmpty, public $newEmpty)
 	{
 		parent::__construct($property);
-		$this->oldEmpty = $oldEmpty;
-		$this->newEmpty = $newEmpty;
 	}
 
 	/**

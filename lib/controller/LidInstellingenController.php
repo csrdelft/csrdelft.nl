@@ -21,20 +21,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class LidInstellingenController extends AbstractController
 {
-	/** @var LidInstellingenRepository  */
-	private $lidInstellingenRepository;
-
 	public function __construct(
-		LidInstellingenRepository $lidInstellingenRepository
+		private readonly LidInstellingenRepository $lidInstellingenRepository
 	) {
-		$this->lidInstellingenRepository = $lidInstellingenRepository;
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/instellingen", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/instellingen', methods: ['GET'])]
 	public function beheer()
 	{
 		return $this->render('instellingen/lidinstellingen.html.twig', [
@@ -56,9 +52,15 @@ class LidInstellingenController extends AbstractController
 	 * @param $instelling
 	 * @param null $waarde
 	 * @return JsonResponse
-	 * @Route("/instellingen/update/{module}/{instelling}/{waarde}", methods={"POST"}, defaults={"waarde": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/instellingen/update/{module}/{instelling}/{waarde}',
+			methods: ['POST'],
+			defaults: ['waarde' => null]
+		)
+	]
 	public function update(Request $request, $module, $instelling, $waarde = null)
 	{
 		if ($waarde === null) {
@@ -85,9 +87,9 @@ class LidInstellingenController extends AbstractController
 
 	/**
 	 * @throws Exception
-	 * @Route("/instellingen/opslaan", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/instellingen/opslaan', methods: ['POST'])]
 	public function opslaan()
 	{
 		$this->lidInstellingenRepository->saveAll(); // fetches $_POST values itself
@@ -99,9 +101,9 @@ class LidInstellingenController extends AbstractController
 	 * @param string $module
 	 * @param string $key
 	 * @return JsonResponse
-	 * @Route("/instellingen/reset/{module}/{key}", methods={"POST"})
 	 * @Auth(P_ADMIN)
 	 */
+	#[Route(path: '/instellingen/reset/{module}/{key}', methods: ['POST'])]
 	public function reset($module, $key)
 	{
 		$this->lidInstellingenRepository->resetForAll($module, $key);
@@ -113,9 +115,9 @@ class LidInstellingenController extends AbstractController
 	}
 
 	/**
-	 * @Route("/instellingen/reset/mijn", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/instellingen/reset/mijn', methods: ['POST'])]
 	public function resetUser()
 	{
 		$account = $this->getUser();

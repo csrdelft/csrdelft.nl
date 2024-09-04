@@ -58,13 +58,13 @@ if ($barsysteem->isLoggedIn() && $barsysteem->preventCsrf()){
 
 	// Insert order or update order
     if (isset($_POST["bestelling"])) {
-        $data = json_decode($_POST["bestelling"]);
+        $data = json_decode((string) $_POST["bestelling"]);
         if (property_exists($data, "oudeBestelling")) {
 			$barsysteem->log('update', $_POST);
             echo $barsysteem->updateBestelling($data);
         } else {
 			$barsysteem->log('insert', $_POST);
-            echo $barsysteem->verwerkBestelling(json_decode($_POST["bestelling"]));
+            echo $barsysteem->verwerkBestelling(json_decode((string) $_POST["bestelling"]));
         }
     }
 
@@ -76,18 +76,18 @@ if ($barsysteem->isLoggedIn() && $barsysteem->preventCsrf()){
 	// Remove order
     if (isset($_POST["verwijderBestelling"])) {
 		$barsysteem->log('remove', $_POST);
-        echo $barsysteem->verwijderBestelling(json_decode($_POST["verwijderBestelling"]));
+        echo $barsysteem->verwijderBestelling(json_decode((string) $_POST["verwijderBestelling"]));
     }
 
 	// Undo remove order
     if (isset($_POST["undoVerwijderBestelling"])) {
 		$barsysteem->log('remove', $_POST);
-        echo $barsysteem->undoVerwijderBestelling(json_decode($_POST["undoVerwijderBestelling"]));
+        echo $barsysteem->undoVerwijderBestelling(json_decode((string) $_POST["undoVerwijderBestelling"]));
     }
 
 	// Load orders
     if (isset($_POST["laadLaatste"])) {
-        echo json_encode($barsysteem->getBestellingLaatste($_POST["aantal"], $_POST["begin"], $_POST["eind"], isset($_POST['productType']) ? $_POST['productType'] : array()));
+        echo json_encode($barsysteem->getBestellingLaatste($_POST["aantal"], $_POST["begin"], $_POST["eind"], $_POST['productType'] ?? []));
     }
 }
 ?>

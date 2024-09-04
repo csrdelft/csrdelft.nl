@@ -26,7 +26,7 @@ class EmailField extends TextField
 		}
 		// check dns record
 		else {
-			$parts = explode('@', $this->value, 2);
+			$parts = explode('@', (string) $this->value, 2);
 			if (!checkdnsrr($parts[1], 'A') and !checkdnsrr($parts[1], 'MX')) {
 				$this->error = 'E-mailadres bestaat niet';
 			}
@@ -41,6 +41,6 @@ class EmailField extends TextField
 	 */
 	public function getValue()
 	{
-		return trim(parent::getValue());
+		return trim((string) parent::getValue());
 	}
 }

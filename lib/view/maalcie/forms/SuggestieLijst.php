@@ -13,36 +13,26 @@ use Twig\Environment;
 
 class SuggestieLijst implements ToResponse, FormElement
 {
-	/**
-	 * @var CorveePuntenOverzichtDTO[]
-	 */
-	private $suggesties;
-	/** @var CorveeTaak  */
-	private $taak;
 	/** @var bool  */
 	private $voorkeurbaar;
 	/** @var string  */
 	private $voorkeur;
 	/** @var string  */
 	private $recent;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
 
 	public function __construct(
-		array $suggesties,
-		Environment $twig,
-		CorveeTaak $taak
+		/**
+		 * @var CorveePuntenOverzichtDTO[]
+		 */
+		private readonly array $suggesties,
+		private readonly Environment $twig,
+		private readonly CorveeTaak $taak
 	) {
-		$this->suggesties = $suggesties;
-		$this->taak = $taak;
-
-		if ($taak->corveeRepetitie !== null) {
-			$this->voorkeurbaar = $taak->corveeRepetitie->voorkeurbaar;
+		if ($this->taak->corveeRepetitie !== null) {
+			$this->voorkeurbaar = $this->taak->corveeRepetitie->voorkeurbaar;
 		}
 
-		if ($taak->corveeFunctie->kwalificatie_benodigd) {
+		if ($this->taak->corveeFunctie->kwalificatie_benodigd) {
 			$this->voorkeur = InstellingUtil::instelling(
 				'corvee',
 				'suggesties_voorkeur_kwali_filter'
@@ -61,7 +51,6 @@ class SuggestieLijst implements ToResponse, FormElement
 				'suggesties_recent_filter'
 			);
 		}
-		$this->twig = $twig;
 	}
 
 	public function getHtml()
@@ -80,9 +69,9 @@ class SuggestieLijst implements ToResponse, FormElement
 		);
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->getHtml();
+		return (string) $this->getHtml();
 	}
 
 	public function getTitel()
@@ -92,7 +81,7 @@ class SuggestieLijst implements ToResponse, FormElement
 
 	public function getType()
 	{
-		return get_class($this);
+		return static::class;
 	}
 
 	public function getJavascript()

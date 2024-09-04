@@ -24,7 +24,7 @@ class SafeJsonField extends TextareaField
 	public function getFormattedValue()
 	{
 		return json_decode(
-			htmlspecialchars_decode(parent::getFormattedValue()),
+			htmlspecialchars_decode((string) parent::getFormattedValue()),
 			true
 		);
 	}

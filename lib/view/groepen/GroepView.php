@@ -30,52 +30,46 @@ use Twig\Environment;
 class GroepView implements FormElement, ToResponse
 {
 	use ToHtmlResponse;
-	private $groep;
 	private $leden;
-	private $geschiedenis;
-	private $bbAan;
 
 	public function __construct(
 		Environment $twig,
-		Groep $groep,
+		private Groep $groep,
 		$tab = null,
-		$geschiedenis = false,
-		$bbAan = false
+		private $geschiedenis = false,
+		private $bbAan = false
 	) {
-		$this->groep = $groep;
-		$this->geschiedenis = $geschiedenis;
-		$this->bbAan = $bbAan;
 		switch ($tab) {
 			case GroepTab::Pasfotos:
-				$this->leden = new GroepPasfotosView($twig, $groep);
+				$this->leden = new GroepPasfotosView($twig, $this->groep);
 				break;
 
 			case GroepTab::Lijst:
-				$this->leden = new GroepLijstView($twig, $groep);
+				$this->leden = new GroepLijstView($twig, $this->groep);
 				break;
 
 			case GroepTab::Statistiek:
 				/** @var GroepRepository $repository */
 				$repository = ContainerFacade::getContainer()
 					->get('doctrine.orm.entity_manager')
-					->getRepository(get_class($groep));
-				$statistiek = $repository->getStatistieken($groep);
-				$this->leden = new GroepStatistiekView($twig, $groep, $statistiek);
+					->getRepository($this->groep::class);
+				$statistiek = $repository->getStatistieken($this->groep);
+				$this->leden = new GroepStatistiekView($twig, $this->groep, $statistiek);
 				break;
 
 			case GroepTab::Emails:
-				$this->leden = new GroepEmailsView($twig, $groep);
+				$this->leden = new GroepEmailsView($twig, $this->groep);
 				break;
 
 			case GroepTab::Eetwens:
-				$this->leden = new GroepEetwensView($twig, $groep);
+				$this->leden = new GroepEetwensView($twig, $this->groep);
 				break;
 
 			default:
-				if ($groep->keuzelijst) {
-					$this->leden = new GroepLijstView($twig, $groep);
+				if ($this->groep->keuzelijst) {
+					$this->leden = new GroepLijstView($twig, $this->groep);
 				} else {
-					$this->leden = new GroepPasfotosView($twig, $groep);
+					$this->leden = new GroepPasfotosView($twig, $this->groep);
 				}
 		}
 	}
@@ -156,9 +150,9 @@ class GroepView implements FormElement, ToResponse
 		return $html;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->getHtml();
+		return (string) $this->getHtml();
 	}
 
 	public function getJavascript()
@@ -168,6 +162,6 @@ class GroepView implements FormElement, ToResponse
 
 	public function getType()
 	{
-		return ReflectionUtil::classNameZonderNamespace(get_class($this->groep));
+		return ReflectionUtil::classNameZonderNamespace($this->groep::class);
 	}
 }

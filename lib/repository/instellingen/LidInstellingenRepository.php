@@ -34,23 +34,14 @@ class LidInstellingenRepository extends AbstractRepository
 	use YamlInstellingen;
 
 	/**
-	 * @var LoginService
-	 */
-	private $loginService;
-	/**
-	 * @var CacheInterface
-	 */
-	private $cache;
-
-	/**
 	 * @param ManagerRegistry $registry
 	 * @throws FileLoaderImportCircularReferenceException
 	 * @throws LoaderLoadException
 	 */
 	public function __construct(
 		ManagerRegistry $registry,
-		LoginService $loginService,
-		CacheInterface $cache
+		private LoginService $loginService,
+		private CacheInterface $cache
 	) {
 		parent::__construct($registry, LidInstelling::class);
 
@@ -58,8 +49,6 @@ class LidInstellingenRepository extends AbstractRepository
 			'instellingen/lid_instelling.yaml',
 			new InstellingConfiguration()
 		);
-		$this->loginService = $loginService;
-		$this->cache = $cache;
 	}
 
 	/**
@@ -208,20 +197,17 @@ class LidInstellingenRepository extends AbstractRepository
 	public function isValidValue($module, $id, $waarde)
 	{
 		$options = $this->getTypeOptions($module, $id);
-		switch ($this->getType($module, $id)) {
-			case InstellingType::Enumeration:
-				return isset($options[$waarde]) || in_array($waarde, $options);
-			case InstellingType::Integer:
-				return is_numeric($waarde) &&
-					$waarde >= $options[0] &&
-					$waarde <= $options[1];
-			case InstellingType::String:
-				return strlen($waarde) >= $options[0] &&
-					strlen($waarde) <= $options[1] &&
-					preg_match('/^[\w\-_\. ]*$/', $waarde);
-			default:
-				return false;
-		}
+		return match ($this->getType($module, $id)) {
+			InstellingType::Enumeration => isset($options[$waarde]) ||
+				in_array($waarde, $options),
+			InstellingType::Integer => is_numeric($waarde) &&
+				$waarde >= $options[0] &&
+				$waarde <= $options[1],
+			InstellingType::String => strlen((string) $waarde) >= $options[0] &&
+				strlen((string) $waarde) <= $options[1] &&
+				preg_match('/^[\w\-_\. ]*$/', (string) $waarde),
+			default => false,
+		};
 	}
 
 	public function getTypeOptions($module, $id)

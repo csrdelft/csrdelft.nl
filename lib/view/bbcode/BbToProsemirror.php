@@ -26,27 +26,25 @@ class BbToProsemirror
 	private $csrBB;
 
 	private $storedMarks = [];
-	/**
-	 * Bevat @see Mark instances, met sleutel getBbTagType
-	 * @var ContainerInterface
-	 */
-	private $marksRegistry;
-	/**
-	 * Bevat @see Node instances, met sleutel getBbTagType
-	 * @var ContainerInterface
-	 */
-	private $nodesRegistry;
 
+	/**
+	 * @param ContainerInterface $marksRegistry
+	 * @param ContainerInterface $nodesRegistry
+	 */
 	public function __construct(
-		$marksRegistry,
-		$nodesRegistry,
+		/**
+		 * Bevat @see Mark instances, met sleutel getBbTagType
+		 */
+		private $marksRegistry,
+		/**
+		 * Bevat @see Node instances, met sleutel getBbTagType
+		 */
+		private $nodesRegistry,
 		ContainerInterface $container
 	) {
 		$env = new BbEnv();
 		$env->prosemirror = true;
 		$this->csrBB = new CsrBB($container, $env);
-		$this->marksRegistry = $marksRegistry;
-		$this->nodesRegistry = $nodesRegistry;
 	}
 
 	/**
@@ -81,9 +79,9 @@ class BbToProsemirror
 		$nodes = [];
 
 		foreach ($children as $child) {
-			if ($this->nodesRegistry->has(get_class($child))) {
+			if ($this->nodesRegistry->has($child::class)) {
 				/** @var Node $class */
-				$class = $this->nodesRegistry->get(get_class($child));
+				$class = $this->nodesRegistry->get($child::class);
 				$item = array_merge(
 					['type' => $class::getNodeType()],
 					$class->getData($child)
@@ -112,9 +110,9 @@ class BbToProsemirror
 				}
 
 				array_push($nodes, $item);
-			} elseif ($this->marksRegistry->has(get_class($child))) {
+			} elseif ($this->marksRegistry->has($child::class)) {
 				/** @var Mark $class */
-				$class = $this->marksRegistry->get(get_class($child));
+				$class = $this->marksRegistry->get($child::class);
 				array_push(
 					$this->storedMarks,
 					array_merge(

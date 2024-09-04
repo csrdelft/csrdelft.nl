@@ -73,7 +73,8 @@ class FileField extends RadioField
 	{
 		if (!isset($this->uploaders[$this->value])) {
 			throw new CsrException(
-				'Upload method not available: ' . htmlspecialchars($this->value)
+				'Upload method not available: ' .
+					htmlspecialchars((string) $this->value)
 			);
 		}
 		return $this->uploaders[$this->value];

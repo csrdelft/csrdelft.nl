@@ -22,41 +22,41 @@ class PeilingOptie implements DataTableEntry
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $id;
 	/**
 	 * Foreign key
 	 * @var int
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $peiling_id;
 	/**
 	 * Titel
 	 * @var string
 	 * @ORM\Column(type="string")
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $titel;
 	/**
 	 * @var string
 	 * @ORM\Column(type="text", nullable=true)
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $beschrijving;
 	/**
 	 * Aantal stemmen
 	 * @var int
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable"})
 	 */
+	#[Serializer\Groups(['datatable'])]
 	public $stemmen = 0;
 	/**
 	 * @var string
 	 * @ORM\Column(type="uid", nullable=true)
-	 * @Serializer\Groups({"datatable"})
 	 */
+	#[Serializer\Groups(['datatable'])]
 	public $ingebracht_door;
 	/**
 	 * @var Peiling
@@ -66,9 +66,9 @@ class PeilingOptie implements DataTableEntry
 
 	/**
 	 * @return int
-	 * @Serializer\Groups("vue")
-	 * @Serializer\SerializedName("stemmen")
 	 */
+	#[Serializer\Groups('vue')]
+	#[Serializer\SerializedName('stemmen')]
 	public function getVueStemmen()
 	{
 		$magStemmenZien =
@@ -84,8 +84,8 @@ class PeilingOptie implements DataTableEntry
 
 	/**
 	 * @return string
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public function getBeschrijvingFormatted()
 	{
 		return CsrBB::parse($this->beschrijving);

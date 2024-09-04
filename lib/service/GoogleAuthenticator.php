@@ -14,27 +14,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class GoogleAuthenticator
 {
-	/**
-	 * @var GoogleTokenRepository
-	 */
-	private $googleTokenRepository;
-	/**
-	 * @var LoginService
-	 */
-	private $loginService;
-	/**
-	 * @var RequestStack
-	 */
-	private $requestStack;
-
 	public function __construct(
-		GoogleTokenRepository $googleTokenRepository,
-		LoginService $loginService,
-		RequestStack $requestStack
+		private readonly GoogleTokenRepository $googleTokenRepository,
+		private readonly LoginService $loginService,
+		private readonly RequestStack $requestStack
 	) {
-		$this->googleTokenRepository = $googleTokenRepository;
-		$this->loginService = $loginService;
-		$this->requestStack = $requestStack;
 	}
 
 	/**

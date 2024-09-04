@@ -13,25 +13,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ForumDradenVerbergenController extends AbstractController
 {
-	/**
-	 * @var ForumDradenVerbergenRepository
-	 */
-	private $forumDradenVerbergenRepository;
-
 	public function __construct(
-		ForumDradenVerbergenRepository $forumDradenVerbergenRepository
+		private readonly ForumDradenVerbergenRepository $forumDradenVerbergenRepository
 	) {
-		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
-	}
+	} // @Auth(P_LOGGED_IN)
 
 	/**
 	 * Forum draad verbergen in zijbalk.
 	 *
 	 * @param ForumDraad $draad
 	 * @return JsonResponse
-	 * @Route("/forum/verbergen/{draad_id}", methods={"POST"}))
-	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/verbergen/{draad_id}', methods: ['POST'])]
 	public function verbergen(ForumDraad $draad)
 	{
 		if (!$draad->magVerbergen()) {
@@ -49,9 +42,9 @@ class ForumDradenVerbergenController extends AbstractController
 	 *
 	 * @param ForumDraad $draad
 	 * @return JsonResponse
-	 * @Route("/forum/tonen/{draad_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/tonen/{draad_id}', methods: ['POST'])]
 	public function tonen(ForumDraad $draad)
 	{
 		if (!$draad->isVerborgen()) {
@@ -63,9 +56,9 @@ class ForumDradenVerbergenController extends AbstractController
 
 	/**
 	 * Forum draden die verborgen zijn door lid weer tonen.
-	 * @Route("/forum/toonalles", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/toonalles', methods: ['POST'])]
 	public function toonalles()
 	{
 		$aantal = $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();

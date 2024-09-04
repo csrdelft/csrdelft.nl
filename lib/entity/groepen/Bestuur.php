@@ -20,8 +20,8 @@ class Bestuur extends Groep implements HeeftMoment
 	 * Bestuurstekst
 	 * @var string
 	 * @ORM\Column(type="text")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $bijbeltekst;
 
 	public function getUrl()

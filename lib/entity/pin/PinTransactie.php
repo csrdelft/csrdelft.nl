@@ -87,7 +87,7 @@ class PinTransactie
 	 */
 	public function getBedragInCenten()
 	{
-		list($valuta, $bedrag) = explode(' ', $this->amount);
+		[$valuta, $bedrag] = explode(' ', $this->amount);
 
 		if ($valuta !== 'EUR') {
 			throw new CsrException(

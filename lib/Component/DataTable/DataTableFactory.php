@@ -6,17 +6,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DataTableFactory
 {
-	/** @var ContainerInterface */
-	private $registry;
 	/**
-	 * @var DataTableBuilder
+	 * @param ContainerInterface $registry
 	 */
-	private $builder;
-
-	public function __construct($registry, DataTableBuilder $builder)
-	{
-		$this->registry = $registry;
-		$this->builder = $builder;
+	public function __construct(
+		private $registry,
+		private readonly DataTableBuilder $builder
+	) {
 	}
 
 	/**

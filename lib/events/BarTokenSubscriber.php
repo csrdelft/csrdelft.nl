@@ -14,19 +14,10 @@ use Symfony\Component\Uid\Uuid;
 
 class BarTokenSubscriber implements EventSubscriberInterface
 {
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var ManagerRegistry
-	 */
-	private $manager;
-
-	public function __construct(Security $security, ManagerRegistry $manager)
-	{
-		$this->security = $security;
-		$this->manager = $manager;
+	public function __construct(
+		private readonly Security $security,
+		private readonly ManagerRegistry $manager
+	) {
 	}
 
 	public static function getSubscribedEvents()

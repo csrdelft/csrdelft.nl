@@ -21,53 +21,34 @@ use Twig\Environment;
 class GroepenView implements View
 {
 	use ToHtmlResponse;
-
-	private $model;
-	/**
-	 * @var Groep[]
-	 */
-	private $groepen;
-	/**
-	 * @var Enum|null
-	 */
-	private $soort;
-	private $geschiedenis;
 	private $tab;
 	private $pagina;
-	private $paginaNummer;
-	/**
-	 * @var int
-	 */
-	private $paginaGrootte;
-	/**
-	 * @var int
-	 */
-	private $totaal;
 	/**
 	 * @var callable|null
 	 */
 	private $urlGetter;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
 
+	/**
+	 * @param \CsrDelft\entity\groepen\Groep[] $groepen
+	 * @param Enum|null $soort
+	 * @param int $paginaGrootte
+	 * @param int $totaal
+	 */
 	public function __construct(
-		Environment $twig,
-		GroepRepository $model,
-		$groepen,
-		$soort = null,
-		$paginaNummer = 0,
-		$paginaGrootte = 0,
-		$totaal = 0,
+		private Environment $twig,
+		private GroepRepository $model,
+		/**
+		 * @var Groep[]
+		 */
+		private $groepen,
+		private $soort = null,
+		private $paginaNummer = 0,
+		private $paginaGrootte = 0,
+		private $totaal = 0,
 		callable $urlGetter = null,
-		$geschiedenis = false
+		private $geschiedenis = false
 	) {
-		$this->model = $model;
-		$this->groepen = $groepen;
-		$this->soort = $soort;
-		$this->geschiedenis = $geschiedenis;
-		if ($model instanceof BesturenRepository) {
+		if ($this->model instanceof BesturenRepository) {
 			$this->tab = GroepTab::Lijst;
 		} else {
 			$this->tab = GroepTab::Pasfotos;
@@ -76,16 +57,12 @@ class GroepenView implements View
 			CmsPaginaRepository::class
 		);
 		$this->pagina = $cmsPaginaRepository->find(
-			'groepsbeschrijving_' . $model->getNaam()
+			'groepsbeschrijving_' . $this->model->getNaam()
 		);
 		if (!$this->pagina) {
 			$this->pagina = $cmsPaginaRepository->find('');
 		}
-		$this->paginaNummer = $paginaNummer;
-		$this->paginaGrootte = $paginaGrootte;
-		$this->totaal = $totaal;
 		$this->urlGetter = $urlGetter;
-		$this->twig = $twig;
 	}
 
 	public function getBreadcrumbs()
@@ -109,7 +86,7 @@ class GroepenView implements View
 		return $this->pagina->titel;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$orm = $this->model->getEntityClassName();
 		$html = '';

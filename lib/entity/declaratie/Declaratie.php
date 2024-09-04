@@ -189,7 +189,7 @@ class Declaratie
 
 	public function getOpmerkingen(): ?string
 	{
-		return trim($this->opmerkingen);
+		return trim((string) $this->opmerkingen);
 	}
 
 	public function setOpmerkingen(?string $opmerkingen): self
@@ -533,9 +533,10 @@ class Declaratie
 			'eigenRekening' => $eigenRekening,
 			'rekening' => $eigenRekening ? null : $this->rekening,
 			'tnv' => $this->csrPas || !$eigenRekening ? $this->naam : null,
-			'bonnen' => array_map(function (DeclaratieBon $bon) use ($generator) {
-				return $bon->naarObject($generator);
-			}, $this->bonnen->toArray()),
+			'bonnen' => array_map(
+				fn(DeclaratieBon $bon) => $bon->naarObject($generator),
+				$this->bonnen->toArray()
+			),
 			'opmerkingen' => $this->opmerkingen,
 			'nummer' => $this->nummer,
 			'status' => $this->getStatus(),

@@ -13,15 +13,13 @@ namespace CsrDelft\view\formulier\getalvelden;
  */
 class BedragField extends IntField
 {
-	public $valuta;
-
 	public $pattern = '-?[0-9]+';
 
 	public function __construct(
 		$name,
 		$value,
 		$description,
-		$valuta = '€',
+		public $valuta = '€',
 		$min = null,
 		$max = null,
 		$step = 0.01
@@ -34,7 +32,6 @@ class BedragField extends IntField
 			is_numeric($max) ? intval($max * 100) : null
 		);
 		$this->step = $step * 100;
-		$this->valuta = $valuta;
 	}
 
 	public function getHtml()

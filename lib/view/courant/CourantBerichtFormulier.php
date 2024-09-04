@@ -18,17 +18,12 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 class CourantBerichtFormulier implements FormulierTypeInterface
 {
 	/**
-	 * @var InstellingenRepository
-	 */
-	private $instellingenRepository;
-
-	/**
 	 * CourantFormulier constructor.
 	 * @param InstellingenRepository $instellingenRepository
 	 */
-	public function __construct(InstellingenRepository $instellingenRepository)
-	{
-		$this->instellingenRepository = $instellingenRepository;
+	public function __construct(
+		private readonly InstellingenRepository $instellingenRepository
+	) {
 	}
 
 	/**

@@ -126,18 +126,16 @@ abstract class AbstractGroepVoter extends Voter
 		HeeftAanmeldMoment $groep
 	): bool {
 		$nu = date_create_immutable();
-		switch ($attribute) {
-			case self::AANMELDEN:
-				return $groep->getAanmeldenTot() &&
-					$nu <= $groep->getAanmeldenTot() &&
-					$nu >= $groep->getAanmeldenVanaf();
-			case self::BEWERKEN:
-				return !$groep->getBewerkenTot() || $nu <= $groep->getBewerkenTot();
-			case self::AFMELDEN:
-				return !$groep->getAfmeldenTot() || $nu <= $groep->getAfmeldenTot();
-			default:
-				return true;
-		}
+		return match ($attribute) {
+			self::AANMELDEN => $groep->getAanmeldenTot() &&
+				$nu <= $groep->getAanmeldenTot() &&
+				$nu >= $groep->getAanmeldenVanaf(),
+			self::BEWERKEN => !$groep->getBewerkenTot() ||
+				$nu <= $groep->getBewerkenTot(),
+			self::AFMELDEN => !$groep->getAfmeldenTot() ||
+				$nu <= $groep->getAfmeldenTot(),
+			default => true,
+		};
 	}
 
 	protected function magAanmeldRechten(
@@ -169,20 +167,14 @@ abstract class AbstractGroepVoter extends Voter
 		$subject,
 		TokenInterface $token
 	): bool {
-		switch ($attribute) {
-			case self::BEKIJKEN:
-				return $this->accessDecisionManager->decide($token, [
-					'ROLE_LEDEN_READ',
-				]);
-
-			// Voorkom dat moderators overal een normale aanmeldknop krijgen
-			case self::AANMELDEN:
-			case self::BEWERKEN:
-			case self::AFMELDEN:
-				return false;
-			default:
-				// Moderators mogen alles
-				return $this->accessDecisionManager->decide($token, ['ROLE_LEDEN_MOD']);
-		}
+		return match ($attribute) {
+			self::BEKIJKEN => $this->accessDecisionManager->decide($token, [
+				'ROLE_LEDEN_READ',
+			]),
+			self::AANMELDEN, self::BEWERKEN, self::AFMELDEN => false,
+			default => $this->accessDecisionManager->decide($token, [
+				'ROLE_LEDEN_MOD',
+			]),
+		};
 	}
 }

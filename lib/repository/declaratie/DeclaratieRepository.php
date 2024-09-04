@@ -19,29 +19,13 @@ use Twig\Environment;
  */
 class DeclaratieRepository extends AbstractRepository
 {
-	/**
-	 * @var SuService
-	 */
-	private $suService;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-
 	public function __construct(
 		ManagerRegistry $registry,
-		SuService $suService,
-		Environment $twig,
-		MailService $mailService
+		private readonly SuService $suService,
+		private readonly Environment $twig,
+		private readonly MailService $mailService
 	) {
 		parent::__construct($registry, Declaratie::class);
-		$this->suService = $suService;
-		$this->twig = $twig;
-		$this->mailService = $mailService;
 	}
 
 	public function verwijderen(Declaratie $declaratie)
@@ -67,9 +51,7 @@ class DeclaratieRepository extends AbstractRepository
 				],
 				['id' => 'desc']
 			),
-			function ($decl) {
-				return $decl->magBekijken();
-			}
+			fn($decl) => $decl->magBekijken()
 		);
 	}
 

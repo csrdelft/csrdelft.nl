@@ -25,15 +25,15 @@ class Woonoord extends Groep implements HeeftSoort, HeeftMoment
 	 * Woonoord / Huis
 	 * @var HuisStatus
 	 * @ORM\Column(type="enumHuisStatus")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $huisStatus;
 
 	/**
 	 * Doet mee met Eetplan
 	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $eetplan;
 
 	public function getUrl()

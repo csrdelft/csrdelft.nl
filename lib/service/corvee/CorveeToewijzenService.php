@@ -16,33 +16,12 @@ use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
  */
 class CorveeToewijzenService
 {
-	/**
-	 * @var CorveePuntenService
-	 */
-	private $corveePuntenService;
-	/**
-	 * @var CorveeVrijstellingenRepository
-	 */
-	private $corveeVrijstellingenRepository;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var CorveeVoorkeurenRepository
-	 */
-	private $corveeVoorkeurenRepository;
-
 	public function __construct(
-		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
-		CorveeTakenRepository $corveeTakenRepository,
-		CorveeVoorkeurenRepository $corveeVoorkeurenRepository,
-		CorveePuntenService $corveePuntenService
+		private readonly CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
+		private readonly CorveeTakenRepository $corveeTakenRepository,
+		private readonly CorveeVoorkeurenRepository $corveeVoorkeurenRepository,
+		private readonly CorveePuntenService $corveePuntenService
 	) {
-		$this->corveePuntenService = $corveePuntenService;
-		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
 	}
 
 	/**

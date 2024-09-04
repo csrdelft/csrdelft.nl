@@ -20,23 +20,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CorveeFunctiesRepository extends AbstractRepository
 {
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var CorveeRepetitiesRepository
-	 */
-	private $corveeRepetitiesRepository;
-
 	public function __construct(
 		ManagerRegistry $registry,
-		CorveeTakenRepository $corveeTakenRepository,
-		CorveeRepetitiesRepository $corveeRepetitiesRepository
+		private readonly CorveeTakenRepository $corveeTakenRepository,
+		private readonly CorveeRepetitiesRepository $corveeRepetitiesRepository
 	) {
 		parent::__construct($registry, CorveeFunctie::class);
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 	}
 
 	/**

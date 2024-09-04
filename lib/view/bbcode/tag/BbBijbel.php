@@ -15,15 +15,10 @@ class BbBijbel extends BbTag
 {
 	private $bijbel;
 	private $vertaling;
-	/**
-	 * @var LidInstellingenRepository
-	 */
-	private $lidInstellingenRepository;
 
 	public function __construct(
-		LidInstellingenRepository $lidInstellingenRepository
+		private readonly LidInstellingenRepository $lidInstellingenRepository
 	) {
-		$this->lidInstellingenRepository = $lidInstellingenRepository;
 	}
 
 	public static function getTagName()
@@ -33,13 +28,13 @@ class BbBijbel extends BbTag
 
 	public function renderLight()
 	{
-		list($stukje, $link) = $this->getLink();
+		[$stukje, $link] = $this->getLink();
 		return BbHelper::lightLinkInline($this->env, 'bijbel', $link, $stukje);
 	}
 
 	public function render()
 	{
-		list($stukje, $link) = $this->getLink();
+		[$stukje, $link] = $this->getLink();
 		return '<a href="' . $link . '" target="_blank">' . $stukje . '</a>';
 	}
 
@@ -73,7 +68,7 @@ class BbBijbel extends BbTag
 		}
 		$link =
 			'https://www.debijbel.nl/bijbel/' .
-			urlencode($vertaling1) .
+			urlencode((string) $vertaling1) .
 			'/' .
 			urlencode($stukje);
 		return [$stukje, $link];

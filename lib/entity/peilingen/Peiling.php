@@ -27,14 +27,14 @@ class Peiling implements DataTableEntry
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $id;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $titel;
 	/**
 	 * @var string
@@ -44,57 +44,57 @@ class Peiling implements DataTableEntry
 	/**
 	 * @var string
 	 * @ORM\Column(type="uid", nullable=true)
-	 * @Serializer\Groups("vue")
 	 */
+	#[Serializer\Groups('vue')]
 	public $eigenaar;
 	/**
 	 * @var boolean
 	 * @ORM\Column(type="boolean", options={"default"=false})
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $mag_bewerken;
 	/**
 	 * @var boolean
 	 * @ORM\Column(type="boolean", options={"default"=true})
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $resultaat_zichtbaar;
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer", options={"default"=0})
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $aantal_voorstellen;
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer", options={"default"=1})
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $aantal_stemmen;
 	/**
 	 * @var string|null
 	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $rechten_stemmen;
 	/**
 	 * @var string|null
 	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $rechten_mod;
 	/**
 	 * @var DateTimeImmutable|null
 	 * @ORM\Column(type="datetime", nullable=true)
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $sluitingsdatum;
 
 	/**
 	 * @var PeilingOptie[]|ArrayCollection
 	 * @ORM\OneToMany(targetEntity="PeilingOptie", mappedBy="peiling")
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $opties;
 
 	/**
@@ -113,8 +113,8 @@ class Peiling implements DataTableEntry
 
 	/**
 	 * @return int
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public function getAantalGestemd()
 	{
 		if (!$this->opties) {
@@ -128,9 +128,7 @@ class Peiling implements DataTableEntry
 		return $aantalGestemd;
 	}
 
-	/**
-	 * @Serializer\Groups("vue")
-	 */
+	#[Serializer\Groups('vue')]
 	public function getHeeftGestemd()
 	{
 		return (bool) $this->stemmen
@@ -147,8 +145,8 @@ class Peiling implements DataTableEntry
 
 	/**
 	 * @return bool
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public function getMagBewerken()
 	{
 		return ContainerFacade::getContainer()
@@ -158,8 +156,8 @@ class Peiling implements DataTableEntry
 
 	/**
 	 * @return bool
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public function getIsMod()
 	{
 		return $this->getMagBewerken();
@@ -167,8 +165,8 @@ class Peiling implements DataTableEntry
 
 	/**
 	 * @return bool
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public function getMagStemmen()
 	{
 		return ContainerFacade::getContainer()
@@ -178,9 +176,9 @@ class Peiling implements DataTableEntry
 
 	/**
 	 * @return DataTableColumn|string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("eigenaar")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('eigenaar')]
 	public function getDataTableEigenaar()
 	{
 		return $this->eigenaarProfiel
@@ -190,9 +188,9 @@ class Peiling implements DataTableEntry
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("detailSource")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('detailSource')]
 	public function getDetailSource()
 	{
 		return '/peilingen/opties/' . $this->id;
@@ -219,8 +217,8 @@ class Peiling implements DataTableEntry
 
 	/**
 	 * @return string|null
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public function getBeschrijving()
 	{
 		return CsrBB::parse($this->beschrijving);

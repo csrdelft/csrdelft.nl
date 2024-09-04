@@ -22,27 +22,12 @@ class BbLedenmemoryscores extends BbTag
 	 */
 	private $groep;
 	private $titel;
-	/**
-	 * @var VerticalenRepository
-	 */
-	private $verticalenRepository;
-	/**
-	 * @var LichtingenRepository
-	 */
-	private $lichtingenRepository;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	public function __construct(
-		Security $security,
-		VerticalenRepository $verticalenRepository,
-		LichtingenRepository $lichtingenRepository
+		private readonly Security $security,
+		private readonly VerticalenRepository $verticalenRepository,
+		private readonly LichtingenRepository $lichtingenRepository
 	) {
-		$this->verticalenRepository = $verticalenRepository;
-		$this->lichtingenRepository = $lichtingenRepository;
-		$this->security = $security;
 	}
 
 	public static function getTagName()

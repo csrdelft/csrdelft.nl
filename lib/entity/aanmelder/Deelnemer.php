@@ -22,22 +22,11 @@ class Deelnemer
 	private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity=AanmeldActiviteit::class, inversedBy="deelnemers")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	private $activiteit;
-
-	/**
 	 * @var Profiel
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
 	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
 	 */
 	public $lid;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 */
-	private $aantal;
 
 	/**
 	 * @ORM\Column(type="datetime")
@@ -50,13 +39,18 @@ class Deelnemer
 	private $aanwezig = null;
 
 	public function __construct(
-		AanmeldActiviteit $activiteit,
+		/**
+		 * @ORM\ManyToOne(targetEntity=AanmeldActiviteit::class, inversedBy="deelnemers")
+		 * @ORM\JoinColumn(nullable=false)
+		 */
+		private AanmeldActiviteit $activiteit,
 		Profiel $lid,
-		int $aantal
+		/**
+		 * @ORM\Column(type="integer")
+		 */
+		private int $aantal
 	) {
-		$this->activiteit = $activiteit;
 		$this->lid = $lid;
-		$this->aantal = $aantal;
 		$this->aangemeld = date_create_immutable();
 	}
 

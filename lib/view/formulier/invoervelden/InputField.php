@@ -49,15 +49,11 @@ abstract class InputField implements FormElement, Validator
 	protected $labelClassName = 'col-3 col-form-label';
 	protected $fieldClassName = 'col-9';
 
-	private $id; // unique id
-	protected $model; // model voor remote data source en validatie
-	protected $name; // naam van het veld in POST
-	protected $value; // welke initiele waarde heeft het veld?
-	protected $origvalue; // welke originele waarde had het veld?
+	private $id; // naam van het veld in POST
+	protected $value; // welke originele waarde had het veld?
 	protected $empty_null = true; // lege waarden teruggeven als null (SET BEFORE getValue() call in constructor!)
 	public $type = 'text'; // input type
-	public $title; // omschrijving bij mouseover title
-	public $description; // omschrijving in label
+	public $title; // omschrijving in label
 	public $hidden = false; // veld onzichtbaar voor gebruiker?
 	public $readonly = false; // veld mag niet worden aangepast door client?
 	public $required = false; // mag het veld leeg zijn?
@@ -77,24 +73,24 @@ abstract class InputField implements FormElement, Validator
 	public $whitelist = null; // array met exclusief toegestane waarden
 	public $autoselect = false; // selecteer autoaanvullen automatisch
 
-	public function __construct($name, $value, $description, $model = null)
-	{
+	public function __construct(
+		protected $name,
+		protected $origvalue,
+		public $description,
+		protected $model = null
+	) {
 		$this->id = CryptoUtil::uniqid_safe('field_');
-		$this->model = $model;
-		$this->name = $name;
-		$this->origvalue = $value;
 		if ($this->isPosted()) {
 			$this->value = $this->getValue();
 		} else {
-			$this->value = $value;
+			$this->value = $this->origvalue;
 		}
-		$this->description = $description;
 		// add *Field classname to css_classes
 		$this->css_classes[] = ReflectionUtil::classNameZonderNamespace(
-			get_class($this)
+			static::class
 		);
 
-		if ($description === null) {
+		if ($this->description === null) {
 			$this->labelClassName .= ' d-none';
 			$this->fieldClassName = str_replace(
 				'col-9',
@@ -187,7 +183,8 @@ abstract class InputField implements FormElement, Validator
 			ArrayUtil::in_array_i($this->value, $this->blacklist)
 		) {
 			$this->error =
-				'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value ?? '');
+				'Deze waarde is niet toegestaan: ' .
+				htmlspecialchars($this->value ?? '');
 		}
 		// als whitelist is gezet dan controleren
 		if (
@@ -195,7 +192,8 @@ abstract class InputField implements FormElement, Validator
 			!ArrayUtil::in_array_i($this->value, $this->whitelist)
 		) {
 			$this->error =
-				'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value ?? '');
+				'Deze waarde is niet toegestaan: ' .
+				htmlspecialchars($this->value ?? '');
 		}
 		return $this->error === '';
 	}
@@ -214,7 +212,7 @@ abstract class InputField implements FormElement, Validator
 	{
 		if (!$this->isAvailable()) {
 			throw new CsrException(
-				'Uploadmethode niet beschikbaar: ' . get_class($this)
+				'Uploadmethode niet beschikbaar: ' . static::class
 			);
 		}
 		if (!$this->validate()) {
@@ -243,7 +241,9 @@ abstract class InputField implements FormElement, Validator
 				if (!unlink(PathUtil::join_paths($directory, $filename))) {
 					throw new CsrException(
 						'Overschrijven mislukt: ' .
-							htmlspecialchars(PathUtil::join_paths($directory, $filename) ?? '')
+							htmlspecialchars(
+								PathUtil::join_paths($directory, $filename) ?? ''
+							)
 					);
 				}
 			} elseif (!$this instanceof BestandBehouden) {
@@ -444,7 +444,7 @@ abstract class InputField implements FormElement, Validator
 	/**
 	 * View die zou moeten werken voor veel velden.
 	 */
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .= $this->getDiv();

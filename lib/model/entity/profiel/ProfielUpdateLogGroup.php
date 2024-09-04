@@ -17,15 +17,17 @@ use CsrDelft\repository\ProfielRepository;
 class ProfielUpdateLogGroup extends ProfielLogGroup
 {
 	/**
-	 * All changes in the entry
-	 * @var AbstractProfielLogEntry[]
+	 * @param \CsrDelft\model\entity\profiel\AbstractProfielLogEntry[] $entries
 	 */
-	public $entries;
-
-	public function __construct($editor, $timestamp, $entries)
-	{
+	public function __construct(
+		$editor,
+		$timestamp /**
+		 * All changes in the entry
+		 * @var AbstractProfielLogEntry[]
+		 */,
+		public $entries
+	) {
 		parent::__construct($editor, $timestamp);
-		$this->entries = $entries;
 	}
 
 	/**
@@ -46,7 +48,7 @@ class ProfielUpdateLogGroup extends ProfielLogGroup
 				: DateUtil::reldate($this->timestamp->format('Y-m-d H:i:s'))) .
 			"</div>
 			" .
-			implode($changesHtml) .
+			implode('', $changesHtml) .
 			"
 			</div>";
 	}
