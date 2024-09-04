@@ -8,7 +8,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
 use CsrDelft\entity\GoogleToken;
 use CsrDelft\repository\GoogleTokenRepository;
-use CsrDelft\service\GoogleAuthenticator;
+use CsrDelft\service\GoogleClientManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,37 +40,40 @@ class GoogleController extends AbstractController
 	 */
 	public function callback(
 		Request $request,
-		EntityManagerInterface $manager,
-		GoogleAuthenticator $googleAuthenticator
+		GoogleClientManager $googleClientManager
 	): RedirectResponse {
-		$state = urldecode($request->query->get('state', null));
-
-		if (!str_starts_with($state, $request->getSchemeAndHttpHost())) {
-			throw new CsrGebruikerException('Redirect is niet binnen de stek!');
-		}
 
 		$code = $request->query->get('code', null);
 		$error = $request->query->get('error', null);
+
+		$state = urldecode($request->query->get('state', null));
+		$session = $request->getSession();
+
+		$state_cmp = null;
+
+		if ($session->has('google_auth_state')) {
+			$state_cmp = $session->get('google_auth_state');
+			$session->remove('google_auth_state');
+		}
+		if ($state_cmp === null || !hash_equals($state_cmp, $state)) {
+			throw new CsrGebruikerException('Authenticatiestatus komt niet overeen met Google (' . $state_cmp . ',' . $state . '). Probeer opnieuw');
+		}
+		if (!str_contains($state, ':')) {
+			throw new CsrException('Foute authentication state!!', 500);
+		}
+		$redirect = substr($state, strpos($state, ':')+1);
+
+
+		if (!str_starts_with($redirect, $request->getSchemeAndHttpHost())) {
+			throw new CsrGebruikerException('Redirect is niet binnen de stek! ' . $redirect . ', ' . $request->getSchemeAndHttpHost());
+		}
+
 		if ($code) {
-			$client = $googleAuthenticator->createClient();
-			$client->fetchAccessTokenWithAuthCode($code);
+			$client = $googleClientManager->getClient();
+			$token = $client->fetchAccessTokenWithAuthCode($code);
+			$request->getSession()->set('google_access_token', $token);
 
-			$existingToken = $this->googleTokenModel->findOneBy([
-				'uid' => $this->getUid(),
-			]);
-
-			if (!$existingToken) {
-				$googleToken = new GoogleToken();
-				$googleToken->uid = $this->getUid();
-				$googleToken->token = $client->getRefreshToken();
-				$manager->persist($googleToken);
-			} else {
-				$existingToken->token = $client->getRefreshToken();
-			}
-
-			$manager->flush();
-
-			return $this->redirect($state);
+			return $this->redirect($redirect);
 		}
 
 		if ($error) {
@@ -78,9 +81,9 @@ class GoogleController extends AbstractController
 				FlashType::WARNING,
 				'Verbinding met Google niet geaccepteerd'
 			);
-			$state = substr(strstr($state, 'addToGoogleContacts', true), 0, -1);
+			$state = substr(strstr($redirect, 'addToGoogleContacts', true), 0, -1);
 
-			return $this->redirect($state);
+			return $this->redirect($redirect);
 		}
 
 		throw new CsrException('Geen error en geen code van Google gekregen.');
