@@ -56,7 +56,7 @@ class GoogleController extends AbstractController
 			$session->remove('google_auth_state');
 		}
 		if ($state_cmp === null || !hash_equals($state_cmp, $state)) {
-			throw new CsrGebruikerException('Authenticatiestatus komt niet overeen met Google. Probeer opnieuw');
+			throw new CsrGebruikerException('Authenticatiestatus komt niet overeen met Google (' . $state_cmp . ',' . $state . '). Probeer opnieuw');
 		}
 		if (!str_contains($state, ':')) {
 			throw new CsrException('Foute authentication state!!', 500);

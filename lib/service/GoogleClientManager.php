@@ -46,14 +46,13 @@ class GoogleClientManager
 	* Refresh de authentication token als die niet meer geldig is. Dit maakt een redirect
 	*
 	* @param redirectURI De URL waar terug naar genavigeerd wordt als de authenticatie klaar is
-	* @return false Als de access token nog werkt
 	*/
-	public function refreshToken(string $redirectURI): bool {
+	public function refreshToken(string $redirectURI): void {
 		if (!$this->client->isAccessTokenExpired()) {
-			return false;
+			return;
 		}
-		// Gebruik nonce voor de zekerheid
-		$state = rtrim(base64_encode(random_bytes(16)), '=') . ':' . $redirectURI;
+		// Gebruik nonce voor de zekerheid (base64url)
+		$state = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode(random_bytes(16))) . ':' . $redirectURI;
 		$this->client->setState($state);
 		$this->requestStack->getSession()->set('google_auth_state', $state);
 		$dest = $this->client->createAuthUrl();
