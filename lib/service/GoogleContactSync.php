@@ -43,7 +43,7 @@ class GoogleContactSync
 	private const UPDATE_MASK = 'names,nicknames,genders,birthdays,addresses,phoneNumbers,emailAddresses,urls,userDefined';
 
 	/**
-	 * @var GoogleAuthenticator
+	 * @var GoogleClientManager
 	 */
 	private $authenticator;
 	/**
@@ -76,7 +76,7 @@ class GoogleContactSync
 	private $initialized = false;
 
 	public function __construct(
-		GoogleAuthenticator $authenticator,
+		GoogleClientManager $authenticator,
 		ProfielRepository $profielRepository
 	) {
 		$this->authenticator = $authenticator;
@@ -541,17 +541,14 @@ class GoogleContactSync
 		if ($this->initialized) {
 			return;
 		}
-		$this->authenticator->doRequestToken($redirectURL);
-		$client = $this->authenticator->createClient();
-		$token = $this->authenticator->getToken()->token;
-		$client->fetchAccessTokenWithRefreshToken($token);
+		$this->authenticator->refreshToken($redirectURL);
+		$client = $this->authenticator->getClient();
 		$this->peopleService = new PeopleService($client);
 
 		try {
 			$this->loadCurrentContacts();
 			$this->initialized = true;
 		} catch (CsrException $e) {
-			$this->authenticator->deleteToken();
 			throw new CsrGebruikerException('Google synchronisatie mislukt');
 		}
 	}
