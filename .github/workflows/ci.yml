@@ -13,33 +13,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: 🗃 Cache Yarn
-        id: yarn-cache
-        uses: actions/cache@v3
+      - uses: actions/setup-node@v3
         with:
-          path: |
-            .yarn
-            .pnp.cjs
-            .pnp.loader.mjs
-            !.yarn/.cache
-          # De cache wordt alleen naderhand opgeslagen als yarn.lock veranderd is
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
-          # De cache wordt opgehaald als os hetzelfde is (altijd)
-          restore-keys: ${{ runner.os }}-yarn-
+          node-version: '20'
+          cache: yarn
 
-      - name: Install yarn dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --immutable
-
-      - name: 🗃 Cache cache-loader
-        uses: actions/cache@v3
-        with:
-          path: .yarn/.cache
-          # De cache wordt alleen naderhand opgeslagen als yarn.lock + alle assets zijn veranderd
-          key: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}-${{ hashFiles('assets/**') }}
-          # De cache wordt opgehaald als yarn.lock niet veranderd is
-          restore-keys: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}-
+      - name: Activeer corepack
 
       - name: 🔧 Run yarn build
         run: yarn run production
