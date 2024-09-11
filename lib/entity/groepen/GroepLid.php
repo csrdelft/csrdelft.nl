@@ -23,9 +23,9 @@ class GroepLid
 {
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("UUID")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('UUID')]
 	public function getUUID()
 	{
 		return $this->groepId .
@@ -42,8 +42,8 @@ class GroepLid
 	 * @var int
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $groepId;
 	/**
 	 * Lidnummer
@@ -52,8 +52,8 @@ class GroepLid
 	 * @var string
 	 * @ORM\Column(type="uid")
 	 * @ORM\Id()
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public $uid;
 	/**
 	 * @var Profiel
@@ -65,21 +65,21 @@ class GroepLid
 	 * CommissieFunctie of opmerking bij lidmaatschap
 	 * @var CommissieFunctie|string
 	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $opmerking;
 	/**
 	 * @var GroepKeuzeSelectie[]
 	 * @ORM\Column(type="groepkeuzeselectie", nullable=true)
-	 * @Serializer\Groups("vue")
 	 */
+	#[Serializer\Groups('vue')]
 	public $opmerking2;
 	/**
 	 * Datum en tijd van aanmelden
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $lidSinds;
 	/**
 	 * Lidnummer van aanmelder
@@ -102,9 +102,9 @@ class GroepLid
 
 	/**
 	 * @return string|null
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("lid")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('lid')]
 	public function getDatatableLid()
 	{
 		return ProfielRepository::getLink($this->uid);
@@ -112,9 +112,9 @@ class GroepLid
 
 	/**
 	 * @return string|null
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("door_uid")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('door_uid')]
 	public function getDatatableDoorUid()
 	{
 		return $this->doorProfiel->getLink();
@@ -122,8 +122,8 @@ class GroepLid
 
 	/**
 	 * @return string|null
-	 * @Serializer\Groups("vue")
 	 */
+	#[Serializer\Groups('vue')]
 	public function getLink()
 	{
 		return $this->profiel->getLink();
@@ -131,8 +131,8 @@ class GroepLid
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("vue")
 	 */
+	#[Serializer\Groups('vue')]
 	public function getNaam()
 	{
 		return $this->profiel->getNaam();
@@ -140,17 +140,15 @@ class GroepLid
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("opmerking2")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('opmerking2')]
 	public function getOpmerking2String()
 	{
 		if (is_array($this->opmerking2)) {
 			return implode(
 				', ',
-				array_map(function ($el) {
-					return $el->__toString();
-				}, $this->opmerking2)
+				array_map(fn($el) => $el->__toString(), $this->opmerking2)
 			);
 		} else {
 			return '';

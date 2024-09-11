@@ -155,12 +155,12 @@ class GroepenBeheerTable extends DataTable
 			'<li class="breadcrumb-item"><a href="' .
 			$this->model->getUrl() .
 			'">' .
-			ucfirst($this->naam) .
+			ucfirst((string) $this->naam) .
 			'</a></li>' .
 			'<li class="breadcrumb-item active">Beheren</li></ul>';
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$view = new CmsPaginaView($this->pagina);
 		return $view->__toString() . parent::__toString();

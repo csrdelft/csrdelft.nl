@@ -25,41 +25,20 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class BeheerCiviProductenController extends AbstractController
 {
-	/**
-	 * @var CiviProductRepository
-	 */
-	private $civiProductRepository;
-	/**
-	 * @var CiviBestellingInhoudRepository
-	 */
-	private $civiBestellingInhoudRepository;
-	/**
-	 * @var CiviPrijsRepository
-	 */
-	private $civiPrijsRepository;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $em;
-
 	public function __construct(
-		CiviProductRepository $civiProductRepository,
-		CiviBestellingInhoudRepository $civiBestellingInhoudRepository,
-		CiviPrijsRepository $civiPrijsRepository,
-		EntityManagerInterface $em
+		private readonly CiviProductRepository $civiProductRepository,
+		private readonly CiviBestellingInhoudRepository $civiBestellingInhoudRepository,
+		private readonly CiviPrijsRepository $civiPrijsRepository,
+		private readonly EntityManagerInterface $em
 	) {
-		$this->civiProductRepository = $civiProductRepository;
-		$this->civiBestellingInhoudRepository = $civiBestellingInhoudRepository;
-		$this->civiPrijsRepository = $civiPrijsRepository;
-		$this->em = $em;
 	}
 
 	/**
 	 * @param Request $request
 	 * @return CiviProductSuggestiesResponse
-	 * @Route("/fiscaat/producten/suggesties", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
+	#[Route(path: '/fiscaat/producten/suggesties', methods: ['GET'])]
 	public function suggesties(Request $request)
 	{
 		return new CiviProductSuggestiesResponse(
@@ -71,9 +50,9 @@ class BeheerCiviProductenController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/fiscaat/producten", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
+	#[Route(path: '/fiscaat/producten', methods: ['GET'])]
 	public function overzicht()
 	{
 		return $this->render('fiscaat/pagina.html.twig', [
@@ -84,9 +63,9 @@ class BeheerCiviProductenController extends AbstractController
 
 	/**
 	 * @return CiviProductForm
-	 * @Route("/fiscaat/producten/bewerken", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/producten/bewerken', methods: ['POST'])]
 	public function bewerken()
 	{
 		$selection = $this->getDataTableSelection();
@@ -103,9 +82,9 @@ class BeheerCiviProductenController extends AbstractController
 
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("/fiscaat/producten/verwijderen", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/producten/verwijderen', methods: ['POST'])]
 	public function verwijderen()
 	{
 		$selection = $this->getDataTableSelection();
@@ -152,9 +131,9 @@ class BeheerCiviProductenController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return GenericDataTableResponse|CiviProductForm
-	 * @Route("/fiscaat/producten/opslaan", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/producten/opslaan', methods: ['POST'])]
 	public function opslaan(Request $request)
 	{
 		$id = $request->request->getInt('id');
@@ -182,9 +161,15 @@ class BeheerCiviProductenController extends AbstractController
 
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("/fiscaat/producten/{cie}", defaults={"cie": null}, methods={"POST"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
+	#[
+		Route(
+			path: '/fiscaat/producten/{cie}',
+			defaults: ['cie' => null],
+			methods: ['POST']
+		)
+	]
 	public function lijst($cie)
 	{
 		if ($cie) {

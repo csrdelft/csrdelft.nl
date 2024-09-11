@@ -29,33 +29,13 @@ abstract class BbTagGroep extends BbTag
 	 * @var string
 	 */
 	private $id;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var NormalizerInterface
-	 */
-	private $normalizer;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	public function __construct(
-		Security $security,
-		EntityManagerInterface $entityManager,
-		Environment $twig,
-		NormalizerInterface $normalizer
+		private readonly Security $security,
+		private readonly EntityManagerInterface $entityManager,
+		private readonly Environment $twig,
+		private readonly NormalizerInterface $normalizer
 	) {
-		$this->twig = $twig;
-		$this->entityManager = $entityManager;
-		$this->normalizer = $normalizer;
-		$this->security = $security;
 	}
 
 	public function getId()
@@ -103,7 +83,11 @@ abstract class BbTagGroep extends BbTag
 			$url = $this->getRepository()->getUrl();
 			return vsprintf(
 				"%s met id=%s bestaat niet. <a href=\"%s/beheren\">Zoeken</a>",
-				[ucfirst($this->getTagName()), htmlspecialchars($this->id), $url]
+				[
+					ucfirst((string) $this->getTagName()),
+					htmlspecialchars($this->id),
+					$url,
+				]
 			);
 		}
 	}
@@ -137,7 +121,11 @@ abstract class BbTagGroep extends BbTag
 			throw new BbException(
 				vsprintf(
 					"%s met id=%s bestaat niet. <a href=\"%s/beheren\">Zoeken</a>",
-					[ucfirst($this->getTagName()), htmlspecialchars($this->id), $url]
+					[
+						ucfirst((string) $this->getTagName()),
+						htmlspecialchars($this->id),
+						$url,
+					]
 				)
 			);
 		}

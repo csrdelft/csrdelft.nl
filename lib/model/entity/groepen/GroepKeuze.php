@@ -14,43 +14,24 @@ class GroepKeuze
 	public function __wakeup()
 	{
 		assert(in_array($this->type, GroepKeuzeType::getEnumValues()));
-	}
-
-	/**
-	 * @var string
-	 * @Serializer\Groups("vue")
-	 */
-	public $naam;
-	/**
-	 * @var string
-	 * @Serializer\Groups("vue")
-	 */
-	public $type; // Checks, radios, dropdown, text, slider, number, date
+	} // Checks, radios, dropdown, text, slider, number, date
 	/**
 	 * @var string[]
-	 * @Serializer\Groups("vue")
 	 */
-	public $opties; // String, names, name
-	/**
-	 * @var string
-	 * @Serializer\Groups("vue")
-	 */
-	public $default; // String, names, name
-	/**
-	 * @var string
-	 * @Serializer\Groups("vue")
-	 */
-	public $description;
+	#[Serializer\Groups('vue')]
+	public $opties;
 
+	/**
+	 * @param string $naam
+	 * @param string $type
+	 * @param string $default
+	 * @param string $description
+	 */
 	public function __construct(
-		$naam = null,
-		$type = null,
-		$default = null,
-		$description = null
+		#[Serializer\Groups('vue')] public $naam = null,
+		#[Serializer\Groups('vue')] public $type = null,
+		#[Serializer\Groups('vue')] public $default = null,
+		#[Serializer\Groups('vue')] public $description = null
 	) {
-		$this->naam = $naam;
-		$this->type = $type;
-		$this->default = $default;
-		$this->description = $description;
 	}
 }

@@ -14,28 +14,18 @@ class DataTableKnop implements JsonSerializable
 {
 	protected $multiplicity;
 	protected $tableId;
-	protected $label;
-	protected $url;
-	protected $icon;
 	protected $id;
-	protected $extend = 'default';
 	protected $buttons;
-	protected $title;
 
 	public function __construct(
 		Multiplicity $multiplicity,
-		$url,
-		$label,
-		$title,
-		$icon = '',
-		$extend = 'default'
+		protected $url,
+		protected $label,
+		protected $title,
+		protected $icon = '',
+		protected $extend = 'default'
 	) {
-		$this->icon = $icon;
-		$this->label = $label;
-		$this->title = $title;
-		$this->url = $url;
 		$this->multiplicity = $multiplicity;
-		$this->extend = $extend;
 		$this->buttons = [];
 	}
 

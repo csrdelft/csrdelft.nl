@@ -20,14 +20,14 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable"})
 	 */
+	#[Serializer\Groups(['datatable'])]
 	public $id;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
-	 * @Serializer\Groups({"datatable"})
 	 */
+	#[Serializer\Groups(['datatable'])]
 	private $naam;
 
 	/**
@@ -119,9 +119,9 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("detailSource")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('detailSource')]
 	public function getDetailSource()
 	{
 		return '/aanmelder/beheer/activiteiten/' . $this->id;

@@ -13,42 +13,26 @@ use Twig\TwigFunction;
 
 class InstellingenTwigExtension extends AbstractExtension
 {
-	/**
-	 * @var LidInstellingenRepository
-	 */
-	private $lidInstellingenRepository;
-	/**
-	 * @var InstellingenRepository
-	 */
-	private $instellingenRepository;
-	/**
-	 * @var LidToestemmingRepository
-	 */
-	private $lidToestemmingRepository;
-
 	public function __construct(
-		LidInstellingenRepository $lidInstellingenRepository,
-		InstellingenRepository $instellingenRepository,
-		LidToestemmingRepository $lidToestemmingRepository
+		private readonly LidInstellingenRepository $lidInstellingenRepository,
+		private readonly InstellingenRepository $instellingenRepository,
+		private readonly LidToestemmingRepository $lidToestemmingRepository
 	) {
-		$this->lidInstellingenRepository = $lidInstellingenRepository;
-		$this->instellingenRepository = $instellingenRepository;
-		$this->lidToestemmingRepository = $lidToestemmingRepository;
 	}
 
 	public function getFunctions()
 	{
 		return [
-			new TwigFunction('instelling', [$this, 'instelling']),
-			new TwigFunction('lid_instelling', [$this, 'lid_instelling']),
-			new TwigFunction('toestemming_gegeven', [$this, 'toestemming_gegeven']),
-			new TwigFunction('toestemming_form', [$this, 'toestemming_form']),
+			new TwigFunction('instelling', $this->instelling(...)),
+			new TwigFunction('lid_instelling', $this->lid_instelling(...)),
+			new TwigFunction('toestemming_gegeven', $this->toestemming_gegeven(...)),
+			new TwigFunction('toestemming_form', $this->toestemming_form(...)),
 		];
 	}
 
 	public function getFilters()
 	{
-		return [new TwigFilter('is_zichtbaar', [$this, 'is_zichtbaar'])];
+		return [new TwigFilter('is_zichtbaar', $this->is_zichtbaar(...))];
 	}
 
 	public function lid_instelling($module, $key)

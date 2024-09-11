@@ -18,7 +18,7 @@ class FileNameField extends TextField
 	 */
 	public function getValue()
 	{
-		return trim(parent::getValue());
+		return trim((string) parent::getValue());
 	}
 
 	public function validate()

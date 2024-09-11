@@ -17,7 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class BestellingZoeker extends AbstractController
 {
 	/**
-	 * @Route("/fiscaat/bestelling-zoeker")
 	 * @param Request $request
 	 * @param CiviCategorieRepository $civiCategorieRepository
 	 * @param CiviProductRepository $civiProductRepository
@@ -25,6 +24,7 @@ class BestellingZoeker extends AbstractController
 	 * @return Response
 	 * @Auth(P_FISCAAT_READ)
 	 */
+	#[Route(path: '/fiscaat/bestelling-zoeker')]
 	public function bestellingZoeker(
 		Request $request,
 		CiviCategorieRepository $civiCategorieRepository,
@@ -40,14 +40,14 @@ class BestellingZoeker extends AbstractController
 		if ($request->query->has('van')) {
 			try {
 				$from = new DateTimeImmutable($request->query->get('van'));
-			} catch (Exception $e) {
+			} catch (Exception) {
 			}
 		}
 
 		if ($request->query->has('tot')) {
 			try {
 				$until = new DateTimeImmutable($request->query->get('tot'));
-			} catch (Exception $e) {
+			} catch (Exception) {
 			}
 		}
 

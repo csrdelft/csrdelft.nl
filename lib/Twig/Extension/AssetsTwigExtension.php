@@ -16,31 +16,21 @@ use Twig\TwigFunction;
  */
 class AssetsTwigExtension extends AbstractExtension
 {
-	/**
-	 * @var Security
-	 */
-	private $security;
-
-	public function __construct(Security $security)
+	public function __construct(private readonly Security $security)
 	{
-		$this->security = $security;
 	}
 
 	public function getFunctions()
 	{
 		return [
-			new TwigFunction('user_modules', [$this, 'getUserModules']),
-			new TwigFunction(
-				'css_asset',
-				[$this, 'css_asset'],
-				['is_safe' => ['html']]
-			),
-			new TwigFunction(
-				'js_asset',
-				[$this, 'js_asset'],
-				['is_safe' => ['html']]
-			),
-			new TwigFunction('asset_url', [$this, 'asset_url']),
+			new TwigFunction('user_modules', $this->getUserModules(...)),
+			new TwigFunction('css_asset', $this->css_asset(...), [
+				'is_safe' => ['html'],
+			]),
+			new TwigFunction('js_asset', $this->js_asset(...), [
+				'is_safe' => ['html'],
+			]),
+			new TwigFunction('asset_url', $this->asset_url(...)),
 		];
 	}
 

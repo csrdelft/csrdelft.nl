@@ -118,7 +118,7 @@ class ForumDeel
 
 	public function isOpenbaar()
 	{
-		return strpos($this->rechten_lezen, P_FORUM_READ) !== false;
+		return str_contains($this->rechten_lezen, P_FORUM_READ);
 	}
 
 	/**

@@ -14,9 +14,10 @@ abstract class EnumType extends Type
 
 	public function getSQLDeclaration(array $column, AbstractPlatform $platform)
 	{
-		$values = array_map(function ($val) {
-			return "'" . $val . "'";
-		}, $this->getEnumClass()::getEnumValues());
+		$values = array_map(
+			fn($val) => "'" . $val . "'",
+			$this->getEnumClass()::getEnumValues()
+		);
 
 		return sprintf(
 			'ENUM(%s) COMMENT \'(DC2Type:%s)\'',

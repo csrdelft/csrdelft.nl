@@ -11,24 +11,13 @@ use JsonSerializable;
  */
 class DataTableRowKnop implements JsonSerializable
 {
-	private $title;
-	private $icon;
-	private $action;
-	private $css;
-	private $method;
-
 	public function __construct(
-		$action,
-		$title,
-		$icon,
-		$css = '',
-		$method = 'post'
+		private $action,
+		private $title,
+		private $icon,
+		private $css = '',
+		private $method = 'post'
 	) {
-		$this->title = $title;
-		$this->icon = $icon;
-		$this->action = $action;
-		$this->method = $method;
-		$this->css = $css;
 	}
 
 	public function jsonSerialize()

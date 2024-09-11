@@ -67,8 +67,8 @@ class RepetitieCorveeForm extends ModalForm
 		$valid = parent::validate();
 		$fields = $this->getFields();
 		if (
-			strtotime($fields['eind']->getValue()) <
-			strtotime($fields['begin']->getValue())
+			strtotime((string) $fields['eind']->getValue()) <
+			strtotime((string) $fields['begin']->getValue())
 		) {
 			$fields['eind']->error = 'Moet na begindatum liggen';
 			$valid = false;

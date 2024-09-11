@@ -117,7 +117,11 @@ class EntitySelectField extends InputField
 			}
 			$html .=
 				'>' .
-				str_replace('&amp;', '&', htmlspecialchars($description->getValue())) .
+				str_replace(
+					'&amp;',
+					'&',
+					htmlspecialchars((string) $description->getValue())
+				) .
 				'</option>';
 		}
 		if ($this->value == null) {
@@ -136,8 +140,6 @@ class EntitySelectField extends InputField
 
 	public function getOptionIds()
 	{
-		return array_map(function ($option) {
-			return $option->getId();
-		}, $this->options);
+		return array_map(fn($option) => $option->getId(), $this->options);
 	}
 }

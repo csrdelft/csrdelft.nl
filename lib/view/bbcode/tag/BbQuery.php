@@ -26,17 +26,13 @@ class BbQuery extends BbTag
 	 */
 	private $query;
 	/**
-	 * @var SavedQueryRepository
-	 */
-	private $savedQueryRepository;
-	/**
 	 * @var string
 	 */
 	private $id;
 
-	public function __construct(SavedQueryRepository $savedQueryRepository)
-	{
-		$this->savedQueryRepository = $savedQueryRepository;
+	public function __construct(
+		private readonly SavedQueryRepository $savedQueryRepository
+	) {
 	}
 
 	public static function getTagName()
@@ -77,7 +73,7 @@ class BbQuery extends BbTag
 		$this->assertId($this->id);
 		try {
 			$this->query = $this->savedQueryRepository->loadQuery($this->id);
-		} catch (AccessDeniedException $ex) {
+		} catch (AccessDeniedException) {
 			throw new BbException('[query] Geen geldige query');
 		}
 	}

@@ -29,23 +29,12 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class MenuItemRepository extends AbstractRepository
 {
-	/**
-	 * @var CacheInterface
-	 */
-	private $cache;
-	/**
-	 * @var Security
-	 */
-	private $security;
-
 	public function __construct(
 		ManagerRegistry $registry,
-		CacheInterface $cache,
-		Security $security
+		private readonly CacheInterface $cache,
+		private readonly Security $security
 	) {
 		parent::__construct($registry, MenuItem::class);
-		$this->cache = $cache;
-		$this->security = $security;
 	}
 
 	/**
@@ -71,7 +60,7 @@ class MenuItemRepository extends AbstractRepository
 			$this->_em->clear(MenuItem::class);
 
 			return $root;
-		} catch (EntityNotFoundException $ex) {
+		} catch (EntityNotFoundException) {
 			return null;
 		}
 	}
@@ -105,7 +94,7 @@ class MenuItemRepository extends AbstractRepository
 				$this->_em->clear(MenuItem::class);
 
 				return $root;
-			} catch (EntityNotFoundException $ex) {
+			} catch (EntityNotFoundException) {
 				return null;
 			}
 		});
@@ -115,7 +104,7 @@ class MenuItemRepository extends AbstractRepository
 	{
 		$user = $this->security->getUser();
 		return 'stek.menu.' .
-			urlencode($naam) .
+			urlencode((string) $naam) .
 			'.' .
 			($user ? $user->getUsername() : 'x999');
 	}
@@ -271,9 +260,7 @@ class MenuItemRepository extends AbstractRepository
 	{
 		return $this->cache->get(
 			$this->createFlatCacheKey($root->tekst),
-			function () use ($root) {
-				return $this->flattenMenuInternal($root);
-			}
+			fn() => $this->flattenMenuInternal($root)
 		);
 	}
 
@@ -281,7 +268,7 @@ class MenuItemRepository extends AbstractRepository
 	{
 		$user = $this->security->getUser();
 		return 'stek.menu-flat.' .
-			urlencode($naam) .
+			urlencode((string) $naam) .
 			'.' .
 			($user ? $user->getUsername() : '');
 	}
@@ -352,7 +339,7 @@ class MenuItemRepository extends AbstractRepository
 			$manager->flush();
 
 			$manager->commit();
-		} catch (ORMException $exception) {
+		} catch (ORMException) {
 			$manager->rollback();
 		}
 

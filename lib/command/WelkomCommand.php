@@ -19,46 +19,16 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class WelkomCommand extends Command
 {
 	protected static $defaultName = 'stek:welkom';
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
-	 * @var string
-	 */
-	private $emailPubCie;
-	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-	/**
-	 * @var AccountService
-	 */
-	private $accountService;
 
 	public function __construct(
-		string $emailPubCie,
-		AccountRepository $accountRepository,
-		AccountService $accountService,
-		ProfielRepository $profielRepository,
-		UrlGeneratorInterface $urlGenerator,
-		MailService $mailService
+		private readonly string $emailPubCie,
+		private readonly AccountRepository $accountRepository,
+		private readonly AccountService $accountService,
+		private readonly ProfielRepository $profielRepository,
+		private readonly UrlGeneratorInterface $urlGenerator,
+		private readonly MailService $mailService
 	) {
 		parent::__construct();
-		$this->profielRepository = $profielRepository;
-		$this->accountRepository = $accountRepository;
-		$this->emailPubCie = $emailPubCie;
-		$this->urlGenerator = $urlGenerator;
-		$this->mailService = $mailService;
-		$this->accountService = $accountService;
 	}
 
 	protected function configure()

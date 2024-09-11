@@ -54,14 +54,14 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $maaltijd_id;
 	/**
 	 * @var integer|null
 	 * @ORM\Column(type="integer", nullable=true)
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $mlt_repetitie_id;
 	/**
 	 * @var MaaltijdRepetitie|null
@@ -72,8 +72,8 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $product_id;
 	/**
 	 * @var CiviProduct
@@ -83,14 +83,14 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $titel;
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $aanmeld_limiet;
 	/**
 	 * @var DateTimeImmutable
@@ -105,32 +105,32 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	/**
 	 * @var bool
 	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $gesloten = false;
 	/**
 	 * @var DateTimeInterface|null
 	 * @ORM\Column(type="datetime", nullable=true)
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $laatst_gesloten;
 	/**
 	 * @var bool
 	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $verwijderd = false;
 	/**
 	 * @var string|null
 	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $aanmeld_filter;
 	/**
 	 * @var string|null
 	 * @ORM\Column(type="text", nullable=true)
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $omschrijving;
 	/**
 	 * @var integer
@@ -139,8 +139,8 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	/**
 	 * @var bool
 	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $verwerkt = false;
 	/**
 	 * @var MaaltijdAanmelding[]|ArrayCollection
@@ -165,8 +165,8 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	/**
 	 * @return integer
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public function getPrijs()
 	{
 		return $this->product->getPrijsInt();
@@ -180,9 +180,9 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	/**
 	 * @return int
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("aantal_aanmeldingen")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('aantal_aanmeldingen')]
 	public function getAantalAanmeldingen(): int
 	{
 		$aantalAanmeldingen = 0;
@@ -350,9 +350,9 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	/**
 	 * @return string
-	 * @Serializer\SerializedName("repetitie_naam")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\SerializedName('repetitie_naam')]
+	#[Serializer\Groups('datatable')]
 	public function getRepetitieNaam()
 	{
 		return $this->repetitie ? $this->repetitie->standaard_titel : null;
@@ -360,9 +360,9 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("tijd")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('tijd')]
 	public function getDataTableTijd()
 	{
 		return DateUtil::dateFormatIntl($this->tijd, DateUtil::TIME_FORMAT);
@@ -370,9 +370,9 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("datum")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('datum')]
 	public function getDataTableDatum()
 	{
 		return DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT);
@@ -385,8 +385,8 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	/**
 	 * @return int
-	 * @Serializer\Groups("datatable-fiscaat")
 	 */
+	#[Serializer\Groups('datatable-fiscaat')]
 	public function getTotaal()
 	{
 		return $this->getAantalAanmeldingen() + $this->getPrijs();
@@ -394,9 +394,9 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("UUID")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('UUID')]
 	public function getUUID()
 	{
 		return $this->maaltijd_id . '@maaltijd.csrdelft.nl';

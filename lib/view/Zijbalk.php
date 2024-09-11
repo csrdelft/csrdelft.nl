@@ -24,75 +24,19 @@ use Twig\Environment;
  */
 class Zijbalk
 {
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var MenuItemRepository
-	 */
-	private $menuItemRepository;
-	/**
-	 * @var ForumDradenRepository
-	 */
-	private $forumDradenRepository;
-	/**
-	 * @var AgendaRepository
-	 */
-	private $agendaRepository;
-	/**
-	 * @var ForumPostsRepository
-	 */
-	private $forumPostsRepository;
-	/**
-	 * @var FotoAlbumRepository
-	 */
-	private $fotoAlbumRepository;
-	/**
-	 * @var VerjaardagenService
-	 */
-	private $verjaardagenService;
-	/**
-	 * @var WoordVanDeDagRepository
-	 */
-	private $woordVanDeDagRepository;
-	/**
-	 * @var LidInstellingenRepository
-	 */
-	private $lidInstellingenRepository;
-	/**
-	 * @var RequestStack
-	 */
-	private $requestStack;
-	/**
-	 * @var ForumDelenService
-	 */
-	private $forumDelenService;
-
 	public function __construct(
-		RequestStack $requestStack,
-		Environment $twig,
-		MenuItemRepository $menuItemRepository,
-		ForumDradenRepository $forumDradenRepository,
-		ForumDelenService $forumDelenService,
-		AgendaRepository $agendaRepository,
-		ForumPostsRepository $forumPostsRepository,
-		FotoAlbumRepository $fotoAlbumRepository,
-		VerjaardagenService $verjaardagenService,
-		LidInstellingenRepository $lidInstellingenRepository,
-		WoordVanDeDagRepository $woordVanDeDagRepository
+		private readonly RequestStack $requestStack,
+		private readonly Environment $twig,
+		private readonly MenuItemRepository $menuItemRepository,
+		private readonly ForumDradenRepository $forumDradenRepository,
+		private readonly ForumDelenService $forumDelenService,
+		private readonly AgendaRepository $agendaRepository,
+		private readonly ForumPostsRepository $forumPostsRepository,
+		private readonly FotoAlbumRepository $fotoAlbumRepository,
+		private readonly VerjaardagenService $verjaardagenService,
+		private readonly LidInstellingenRepository $lidInstellingenRepository,
+		private readonly WoordVanDeDagRepository $woordVanDeDagRepository
 	) {
-		$this->twig = $twig;
-		$this->menuItemRepository = $menuItemRepository;
-		$this->forumDradenRepository = $forumDradenRepository;
-		$this->agendaRepository = $agendaRepository;
-		$this->forumPostsRepository = $forumPostsRepository;
-		$this->fotoAlbumRepository = $fotoAlbumRepository;
-		$this->verjaardagenService = $verjaardagenService;
-		$this->lidInstellingenRepository = $lidInstellingenRepository;
-		$this->woordVanDeDagRepository = $woordVanDeDagRepository;
-		$this->requestStack = $requestStack;
-		$this->forumDelenService = $forumDelenService;
 	}
 
 	/**

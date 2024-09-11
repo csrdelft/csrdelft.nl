@@ -32,12 +32,10 @@ class BesturenController extends AbstractGroepenController
 		}
 		// Zoek ook op ot,ft
 		$groepen = $this->repository->findBy([], null, $limit, $offset);
-		$paginaUrl = function ($paginaNummer) use ($soort) {
-			return $this->generateUrl(
-				'csrdelft_groep_' . $this->repository::getNaam() . '_overzicht',
-				['soort' => $soort, 'pagina' => $paginaNummer]
-			);
-		};
+		$paginaUrl = fn($paginaNummer) => $this->generateUrl(
+			'csrdelft_groep_' . $this->repository::getNaam() . '_overzicht',
+			['soort' => $soort, 'pagina' => $paginaNummer]
+		);
 		// controleert rechten bekijken per groep
 		$body = new GroepenView(
 			$this->container->get('twig'),

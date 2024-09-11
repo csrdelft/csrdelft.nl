@@ -14,76 +14,52 @@ use Twig\TwigFunction;
 
 class ForumTwigExtension extends AbstractExtension
 {
-	/**
-	 * @var ForumDradenVerbergenRepository
-	 */
-	private $forumDradenVerbergenRepository;
-	/**
-	 * @var ForumPostsRepository
-	 */
-	private $forumPostsRepository;
-	/**
-	 * @var ForumDradenRepository
-	 */
-	private $forumDradenRepository;
-
 	public function __construct(
-		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
-		ForumPostsRepository $forumPostsRepository,
-		ForumDradenRepository $forumDradenRepository
+		private readonly ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
+		private readonly ForumPostsRepository $forumPostsRepository,
+		private readonly ForumDradenRepository $forumDradenRepository
 	) {
-		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
-		$this->forumPostsRepository = $forumPostsRepository;
-		$this->forumDradenRepository = $forumDradenRepository;
 	}
 
 	public function getFunctions()
 	{
 		return [
-			new TwigFunction('getAantalVerborgenVoorLid', [
-				$this,
-				'getAantalVerborgenVoorLid',
-			]),
-			new TwigFunction('getAantalWachtOpGoedkeuring', [
-				$this,
-				'getAantalWachtOpGoedkeuring',
-			]),
 			new TwigFunction(
-				'sliding_pager',
-				[$this, 'sliding_pager'],
-				['is_safe' => ['html']]
+				'getAantalVerborgenVoorLid',
+				$this->getAantalVerborgenVoorLid(...)
 			),
-			new TwigFunction('getHuidigePagina', [$this, 'getHuidigePagina']),
-			new TwigFunction('getAantalPaginas', [$this, 'getAantalPaginas']),
-			new TwigFunction('getBelangrijkOpties', [$this, 'getBelangrijkOpties']),
-			new TwigFunction('getForumDradenData', [$this, 'getForumDradenData']),
-			new TwigFunction('draadGetAantalPaginas', [
-				$this,
+			new TwigFunction(
+				'getAantalWachtOpGoedkeuring',
+				$this->getAantalWachtOpGoedkeuring(...)
+			),
+			new TwigFunction('sliding_pager', $this->sliding_pager(...), [
+				'is_safe' => ['html'],
+			]),
+			new TwigFunction('getHuidigePagina', $this->getHuidigePagina(...)),
+			new TwigFunction('getAantalPaginas', $this->getAantalPaginas(...)),
+			new TwigFunction('getBelangrijkOpties', $this->getBelangrijkOpties(...)),
+			new TwigFunction('getForumDradenData', $this->getForumDradenData(...)),
+			new TwigFunction(
 				'draadGetAantalPaginas',
-			]),
-			new TwigFunction('draadGetHuidigePagina', [
-				$this,
+				$this->draadGetAantalPaginas(...)
+			),
+			new TwigFunction(
 				'draadGetHuidigePagina',
-			]),
-			new TwigFunction('draadGetLaatstePost', [$this, 'draadGetLaatstePost']),
+				$this->draadGetHuidigePagina(...)
+			),
+			new TwigFunction('draadGetLaatstePost', $this->draadGetLaatstePost(...)),
 		];
 	}
 
 	public function getFilters()
 	{
 		return [
-			new TwigFilter(
-				'highlight_zoekterm',
-				[$this, 'highlight_zoekterm'],
-				['is_safe' => ['html']]
-			),
-			new TwigFilter(
-				'split_on_keyword',
-				[TextUtil::class, 'split_on_keyword'],
-				[
-					'is_safe' => ['html'],
-				]
-			),
+			new TwigFilter('highlight_zoekterm', $this->highlight_zoekterm(...), [
+				'is_safe' => ['html'],
+			]),
+			new TwigFilter('split_on_keyword', TextUtil::split_on_keyword(...), [
+				'is_safe' => ['html'],
+			]),
 		];
 	}
 
@@ -94,12 +70,10 @@ class ForumTwigExtension extends AbstractExtension
 
 	public function getForumDradenData($forum_draden)
 	{
-		$ids_from_draden = function (ForumDraad $draad) {
-			return [
-				'id' => $draad->draad_id,
-				'titel' => $draad->titel,
-			];
-		};
+		$ids_from_draden = fn(ForumDraad $draad) => [
+			'id' => $draad->draad_id,
+			'titel' => $draad->titel,
+		];
 
 		// Check of het een Array is (zoals bij 'forum/recent/') of een ArrayIterator (zoals bij deelfora) want array_map moet een Array hebben
 		if (is_array($forum_draden)) {
@@ -165,7 +139,7 @@ class ForumTwigExtension extends AbstractExtension
 			$before ?: '<span style="background-color: rgba(255,255,0,0.4);">';
 		$after = $after ?: '</span>';
 		return preg_replace(
-			'/' . preg_quote($zoekterm, '/') . '/i',
+			'/' . preg_quote((string) $zoekterm, '/') . '/i',
 			$before . '$0' . $after,
 			$bericht
 		);

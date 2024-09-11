@@ -63,10 +63,6 @@ class GoogleContactSync
 	 */
 	private $currentEtagMap = [];
 	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
 	 * @var string
 	 */
 	private $csrGroupResourceName;
@@ -79,15 +75,12 @@ class GoogleContactSync
 		GoogleClientManager $authenticator,
 		ProfielRepository $profielRepository
 	) {
-		$this->authenticator = $authenticator;
-
 		$this->groepNaam = trim(
 			InstellingUtil::lid_instelling('googleContacts', 'groepnaam')
 		);
 		if (empty($this->groepNaam)) {
 			$this->groepNaam = self::DEFAULT_GROEPNAAM;
 		}
-		$this->profielRepository = $profielRepository;
 	}
 
 	/**
@@ -258,7 +251,7 @@ class GoogleContactSync
 				!empty($profiel->voornaam) ? $profiel->voornaam : $profiel->voorletters
 			)
 		);
-		$name->setMiddleName(trim($profiel->tussenvoegsel));
+		$name->setMiddleName(trim((string) $profiel->tussenvoegsel));
 		$name->setFamilyName(trim($profiel->achternaam));
 		$person->setNames([$name]);
 
@@ -548,7 +541,7 @@ class GoogleContactSync
 		try {
 			$this->loadCurrentContacts();
 			$this->initialized = true;
-		} catch (CsrException $e) {
+		} catch (CsrException) {
 			throw new CsrGebruikerException('Google synchronisatie mislukt');
 		}
 	}
@@ -572,11 +565,12 @@ class GoogleContactSync
 			// Maak lijst van profielen
 			/** @var Profiel[] $profielBatch */
 			$profielBatch = array_filter(
-				array_map(function ($profiel) {
-					return $profiel instanceof Profiel
+				array_map(
+					fn($profiel) => $profiel instanceof Profiel
 						? $profiel
-						: $this->profielRepository->find($profiel);
-				}, $leden)
+						: $this->profielRepository->find($profiel),
+					$leden
+				)
 			);
 
 			// Bepaal inserts/updates

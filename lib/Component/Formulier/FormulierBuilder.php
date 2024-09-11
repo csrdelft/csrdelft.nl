@@ -37,21 +37,13 @@ class FormulierBuilder
 	 * @var array
 	 */
 	private $validationMethods = [];
-	/**
-	 * @var RequestStack
-	 */
-	private $requestStack;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
 
-	public function __construct(RequestStack $requestStack, Environment $twig)
-	{
+	public function __construct(
+		private readonly RequestStack $requestStack,
+		private readonly Environment $twig
+	) {
 		$this->css_classes[] = 'Formulier';
 		$this->formKnoppen = new FormDefaultKnoppen();
-		$this->requestStack = $requestStack;
-		$this->twig = $twig;
 	}
 
 	public function setShowMelding($showMelding)
@@ -206,10 +198,7 @@ class FormulierBuilder
 		$this->validationMethods[] = $param;
 	}
 
-	/**
-	 * @param mixed $model
-	 */
-	public function setModel($model): void
+	public function setModel(mixed $model): void
 	{
 		$this->model = $model;
 	}

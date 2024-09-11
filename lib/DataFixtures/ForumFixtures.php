@@ -70,9 +70,7 @@ class ForumFixtures extends Fixture implements DependentFixtureInterface
 				$post->wacht_goedkeuring = false;
 				$post->tekst = implode(
 					'',
-					array_map(function ($p) {
-						return '[p]' . $p . '[/p]';
-					}, $faker->paragraphs)
+					array_map(fn($p) => '[p]' . $p . '[/p]', $faker->paragraphs)
 				);
 
 				$manager->persist($post);

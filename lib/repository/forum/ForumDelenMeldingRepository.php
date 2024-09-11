@@ -22,29 +22,13 @@ use Twig\Environment;
  */
 class ForumDelenMeldingRepository extends AbstractRepository
 {
-	/**
-	 * @var SuService
-	 */
-	private $suService;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-
 	public function __construct(
 		ManagerRegistry $registry,
-		Environment $twig,
-		SuService $suService,
-		MailService $mailService
+		private readonly Environment $twig,
+		private readonly SuService $suService,
+		private readonly MailService $mailService
 	) {
 		parent::__construct($registry, ForumDeelMelding::class);
-		$this->suService = $suService;
-		$this->twig = $twig;
-		$this->mailService = $mailService;
 	}
 
 	protected function maakForumDeelMelding(ForumDeel $deel, $uid)

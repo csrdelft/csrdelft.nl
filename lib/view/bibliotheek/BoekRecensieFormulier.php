@@ -14,14 +14,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class BoekRecensieFormulier implements FormulierTypeInterface
 {
-	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-
-	public function __construct(UrlGeneratorInterface $urlGenerator)
-	{
-		$this->urlGenerator = $urlGenerator;
+	public function __construct(
+		private readonly UrlGeneratorInterface $urlGenerator
+	) {
 	}
 
 	/**

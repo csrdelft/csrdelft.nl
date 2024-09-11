@@ -23,8 +23,8 @@ class EetplanBekenden implements DataTableEntry
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $id;
 	/**
 	 * @var Profiel
@@ -41,15 +41,15 @@ class EetplanBekenden implements DataTableEntry
 	/**
 	 * @ORM\Column(type="string", nullable=true)
 	 * @var string
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $opmerking;
 
 	/**
 	 * @return DataTableColumn
-	 * @Serializer\SerializedName("noviet1")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\SerializedName('noviet1')]
+	#[Serializer\Groups('datatable')]
 	public function getDataTableNoviet1()
 	{
 		return $this->noviet1->getDataTableColumn();
@@ -57,9 +57,9 @@ class EetplanBekenden implements DataTableEntry
 
 	/**
 	 * @return DataTableColumn
-	 * @Serializer\SerializedName("noviet2")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\SerializedName('noviet2')]
+	#[Serializer\Groups('datatable')]
 	public function getDataTableNoviet2()
 	{
 		return $this->noviet2->getDataTableColumn();

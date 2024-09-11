@@ -119,13 +119,13 @@ class AgendaItem implements Agendeerbaar
 	public function magBekijken($ical = false)
 	{
 		$auth = $ical ? AuthenticationMethod::getEnumValues() : null;
-		return LoginService::mag($this->rechten_bekijken, $auth);
+		return LoginService::mag($this->rechten_bekijken);
 	}
 
 	public function magBeheren($ical = false)
 	{
 		$auth = $ical ? AuthenticationMethod::getEnumValues() : null;
-		if (LoginService::mag(P_AGENDA_MOD, $auth)) {
+		if (LoginService::mag(P_AGENDA_MOD)) {
 			return true;
 		}
 		$verticale = 'verticale:' . LoginService::getProfiel()->verticale;

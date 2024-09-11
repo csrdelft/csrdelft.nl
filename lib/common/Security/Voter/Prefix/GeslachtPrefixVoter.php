@@ -11,20 +11,14 @@ use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface
  */
 class GeslachtPrefixVoter extends PrefixVoter
 {
-	/**
-	 * @var AccessDecisionManagerInterface
-	 */
-	private $accessDecisionManager;
-
 	public function __construct(
-		AccessDecisionManagerInterface $accessDecisionManager
+		private readonly AccessDecisionManagerInterface $accessDecisionManager
 	) {
-		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	protected function supportsPrefix($prefix)
 	{
-		return strtoupper($prefix) == 'GESLACHT';
+		return strtoupper((string) $prefix) == 'GESLACHT';
 	}
 
 	protected function voteOnPrefix(
@@ -43,6 +37,6 @@ class GeslachtPrefixVoter extends PrefixVoter
 		$profiel = $token->getUser()->profiel;
 
 		return $profiel->geslacht &&
-			$gevraagd == strtoupper($profiel->geslacht->getValue());
+			$gevraagd == strtoupper((string) $profiel->geslacht->getValue());
 	}
 }

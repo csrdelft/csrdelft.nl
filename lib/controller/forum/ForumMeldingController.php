@@ -14,21 +14,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ForumMeldingController extends AbstractController
 {
-	/**
-	 * @var ForumDradenMeldingRepository
-	 */
-	private $forumDradenMeldingRepository;
-	/**
-	 * @var ForumDelenMeldingRepository
-	 */
-	private $forumDelenMeldingRepository;
-
 	public function __construct(
-		ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		ForumDelenMeldingRepository $forumDelenMeldingRepository
+		private readonly ForumDradenMeldingRepository $forumDradenMeldingRepository,
+		private readonly ForumDelenMeldingRepository $forumDelenMeldingRepository
 	) {
-		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
-		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
 	}
 
 	/**
@@ -38,9 +27,9 @@ class ForumMeldingController extends AbstractController
 	 * @param string $niveau
 	 *
 	 * @return JsonResponse
-	 * @Route("/forum/meldingsniveau/{draad_id}/{niveau}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/meldingsniveau/{draad_id}/{niveau}', methods: ['POST'])]
 	public function meldingsniveau(ForumDraad $draad, $niveau)
 	{
 		if (!$draad || !$draad->magLezen() || !$draad->magMeldingKrijgen()) {
@@ -67,9 +56,9 @@ class ForumMeldingController extends AbstractController
 	 * @param string $niveau
 	 *
 	 * @return JsonResponse
-	 * @Route("/forum/deelmelding/{forum_id}/{niveau}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/deelmelding/{forum_id}/{niveau}', methods: ['POST'])]
 	public function deelmelding(ForumDeel $deel, $niveau)
 	{
 		if (!$deel || !$deel->magLezen() || !$deel->magMeldingKrijgen()) {

@@ -24,24 +24,14 @@ class BbDocument extends BbTag
 	 */
 	private $document;
 	/**
-	 * @var DocumentRepository
-	 */
-	private $documentRepository;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
 	 * @var string
 	 */
 	public $id;
 
 	public function __construct(
-		DocumentRepository $documentRepository,
-		Environment $twig
+		private readonly DocumentRepository $documentRepository,
+		private readonly Environment $twig
 	) {
-		$this->documentRepository = $documentRepository;
-		$this->twig = $twig;
 	}
 
 	public static function getTagName()

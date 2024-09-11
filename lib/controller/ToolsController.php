@@ -42,9 +42,9 @@ class ToolsController extends AbstractController
 	 * @param VerticalenRepository $verticalenRepository
 	 * @param ProfielRepository $profielRepository
 	 * @return Response
-	 * @Route("/tools/verticalelijsten", methods={"GET"})
 	 * @Auth(P_ADMIN)
 	 */
+	#[Route(path: '/tools/verticalelijsten', methods: ['GET'])]
 	public function verticalelijsten(
 		VerticalenRepository $verticalenRepository,
 		ProfielRepository $profielRepository
@@ -70,9 +70,9 @@ class ToolsController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return Response
-	 * @Route("/tools/roodschopper", methods={"GET", "POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/tools/roodschopper', methods: ['GET', 'POST'])]
 	public function roodschopper(Request $request): Response
 	{
 		if ($request->query->has('verzenden')) {
@@ -111,9 +111,9 @@ class ToolsController extends AbstractController
 	 * @param ProfielRepository $profielRepository
 	 * @param SuService $suService
 	 * @return PlainView
-	 * @Route("/tools/syncldap", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[Route(path: '/tools/syncldap', methods: ['GET'])]
 	public function syncldap(
 		ProfielRepository $profielRepository,
 		SuService $suService
@@ -134,9 +134,9 @@ class ToolsController extends AbstractController
 
 	/**
 	 * @return PlainView
-	 * @Route("/tools/phpinfo", methods={"GET"})
 	 * @Auth(P_ADMIN)
 	 */
+	#[Route(path: '/tools/phpinfo', methods: ['GET'])]
 	public function phpinfo(): PlainView
 	{
 		ob_start();
@@ -146,10 +146,10 @@ class ToolsController extends AbstractController
 
 	/**
 	 * @return PlainView
-	 * @Route("/tools/timeout/{seconds}", methods={"GET", "POST"})
 	 * @Auth(P_ADMIN)
 	 * @CsrfUnsafe
 	 */
+	#[Route(path: '/tools/timeout/{seconds}', methods: ['GET', 'POST'])]
 	public function timeout(Request $request, $seconds): PlainView
 	{
 		if ($request->getMethod() == 'POST') {
@@ -166,9 +166,9 @@ class ToolsController extends AbstractController
 	/**
 	 * @param AccountRepository $accountRepository
 	 * @return Response
-	 * @Route("/tools/admins", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
+	#[Route(path: '/tools/admins', methods: ['GET'])]
 	public function admins(AccountRepository $accountRepository): Response
 	{
 		return $this->render('tools/admins.html.twig', [
@@ -181,9 +181,9 @@ class ToolsController extends AbstractController
 	 *
 	 * @param ProfielRepository $profielRepository
 	 * @return Response
-	 * @Route("/tools/novieten", methods={"GET"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
+	#[Route(path: '/tools/novieten', methods: ['GET'])]
 	public function novieten(ProfielRepository $profielRepository): Response
 	{
 		return $this->render('tools/novieten.html.twig', [
@@ -197,9 +197,9 @@ class ToolsController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return JsonResponse
-	 * @Route("/tools/dragobject", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/tools/dragobject', methods: ['POST'])]
 	public function dragobject(Request $request): JsonResponse
 	{
 		$id = $request->request->get('id');
@@ -215,9 +215,9 @@ class ToolsController extends AbstractController
 	 * @param AccountRepository $accountRepository
 	 * @param ProfielService $profielService
 	 * @return PlainView
-	 * @Route("/tools/naamlink", methods={"GET", "POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
+	#[Route(path: '/tools/naamlink', methods: ['GET', 'POST'])]
 	public function naamlink(
 		Request $request,
 		AccountRepository $accountRepository,
@@ -259,7 +259,7 @@ class ToolsController extends AbstractController
 			if ($naam) {
 				return $naam;
 			} else {
-				return 'Lid[' . htmlspecialchars($uid) . '] &notin; db.';
+				return 'Lid[' . htmlspecialchars((string) $uid) . '] &notin; db.';
 			}
 		}
 
@@ -267,7 +267,7 @@ class ToolsController extends AbstractController
 			if ($accountRepository->isValidUid($string)) {
 				return new PlainView(uid2naam($string));
 			} else {
-				$uids = explode(',', $string);
+				$uids = explode(',', (string) $string);
 				foreach ($uids as $uid) {
 					return new PlainView(uid2naam($uid));
 				}
@@ -298,9 +298,9 @@ class ToolsController extends AbstractController
 	 * @param null $zoekin
 	 * @param string $query
 	 * @return JsonResponse
-	 * @Route("/tools/naamsuggesties", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
+	#[Route(path: '/tools/naamsuggesties', methods: ['GET'])]
 	public function naamsuggesties(
 		ProfielService $profielService,
 		$zoekin = null,
@@ -372,7 +372,10 @@ class ToolsController extends AbstractController
 
 			// Beste match start met de zoekterm
 			if (
-				str_starts_with(strtolower($profiel->getNaam()), strtolower($query))
+				str_starts_with(
+					strtolower($profiel->getNaam()),
+					strtolower((string) $query)
+				)
 			) {
 				$score += 100;
 			}
@@ -386,9 +389,7 @@ class ToolsController extends AbstractController
 			];
 		}
 
-		usort($scoredProfielen, function ($a, $b) {
-			return $b['score'] - $a['score'];
-		});
+		usort($scoredProfielen, fn($a, $b) => $b['score'] - $a['score']);
 
 		$scoredProfielen = array_slice($scoredProfielen, 0, 5);
 
@@ -412,9 +413,9 @@ class ToolsController extends AbstractController
 	/**
 	 * @param SuService $suService
 	 * @return PlainView
-	 * @Route("/tools/memcachestats", methods={"GET"})
 	 * @Auth(P_ADMIN)
 	 */
+	#[Route(path: '/tools/memcachestats', methods: ['GET'])]
 	public function memcachestats(SuService $suService): PlainView
 	{
 		if (DEBUG || $this->mag(P_ADMIN) || $suService->isSued()) {
@@ -428,7 +429,7 @@ class ToolsController extends AbstractController
 				);
 
 				DebugUtil::debugprint(current($memcached->getStats()), 'pubcie_debug');
-			} catch (ServiceNotFoundException $ex) {
+			} catch (ServiceNotFoundException) {
 				echo 'Memcache is niet ingesteld.';
 			}
 
@@ -442,9 +443,9 @@ class ToolsController extends AbstractController
 	 * @param Request $request
 	 * @param SavedQueryRepository $savedQueryRepository
 	 * @return Response
-	 * @Route("/tools/query", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
+	#[Route(path: '/tools/query', methods: ['GET'])]
 	public function query(
 		Request $request,
 		SavedQueryRepository $savedQueryRepository

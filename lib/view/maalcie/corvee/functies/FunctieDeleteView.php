@@ -14,14 +14,11 @@ class FunctieDeleteView implements ToResponse, View
 {
 	use ToHtmlResponse;
 
-	private $functieId;
-
-	public function __construct($functieId)
+	public function __construct(private $functieId)
 	{
-		$this->functieId = $functieId;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .=

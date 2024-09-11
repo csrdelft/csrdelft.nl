@@ -19,28 +19,17 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MijnVoorkeurenController extends AbstractController
 {
-	/**
-	 * @var CorveeVoorkeurenRepository
-	 */
-	private $corveeVoorkeurenRepository;
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-
 	public function __construct(
-		CorveeVoorkeurenRepository $corveeVoorkeurenRepository,
-		ProfielRepository $profielRepository
+		private readonly CorveeVoorkeurenRepository $corveeVoorkeurenRepository,
+		private readonly ProfielRepository $profielRepository
 	) {
-		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
-		$this->profielRepository = $profielRepository;
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/corvee/voorkeuren", methods={"GET"})
 	 * @Auth(P_CORVEE_IK)
 	 */
+	#[Route(path: '/corvee/voorkeuren', methods: ['GET'])]
 	public function mijn()
 	{
 		$voorkeuren = $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid(
@@ -58,9 +47,14 @@ class MijnVoorkeurenController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/corvee/voorkeuren/inschakelen/{crv_repetitie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_IK)
 	 */
+	#[
+		Route(
+			path: '/corvee/voorkeuren/inschakelen/{crv_repetitie_id}',
+			methods: ['POST']
+		)
+	]
 	public function inschakelen(CorveeRepetitie $repetitie)
 	{
 		$voorkeur = new CorveeVoorkeur();
@@ -80,9 +74,14 @@ class MijnVoorkeurenController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/corvee/voorkeuren/uitschakelen/{crv_repetitie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_IK)
 	 */
+	#[
+		Route(
+			path: '/corvee/voorkeuren/uitschakelen/{crv_repetitie_id}',
+			methods: ['POST']
+		)
+	]
 	public function uitschakelen($crv_repetitie_id)
 	{
 		$voorkeur = $this->corveeVoorkeurenRepository->getVoorkeur(
@@ -99,9 +98,9 @@ class MijnVoorkeurenController extends AbstractController
 
 	/**
 	 * @return EetwensForm
-	 * @Route("/corvee/voorkeuren/eetwens", methods={"POST"})
 	 * @Auth(P_CORVEE_IK)
 	 */
+	#[Route(path: '/corvee/voorkeuren/eetwens', methods: ['POST'])]
 	public function eetwens()
 	{
 		$form = new EetwensForm();

@@ -34,48 +34,16 @@ use Symfony\Component\Security\Core\Security;
  */
 class AgendaRepository extends AbstractRepository
 {
-	/**
-	 * @var AgendaVerbergenRepository
-	 */
-	private $agendaVerbergenRepository;
-	/**
-	 * @var ActiviteitenRepository
-	 */
-	private $activiteitenRepository;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var VerjaardagenService
-	 */
-	private $verjaardagenService;
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var MaaltijdenService
-	 */
-	private $maaltijdenService;
-
 	public function __construct(
 		ManagerRegistry $registry,
-		Security $security,
-		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenRepository $activiteitenRepository,
-		CorveeTakenRepository $corveeTakenRepository,
-		MaaltijdenService $maaltijdenService,
-		VerjaardagenService $verjaardagenService
+		private readonly Security $security,
+		private readonly AgendaVerbergenRepository $agendaVerbergenRepository,
+		private readonly ActiviteitenRepository $activiteitenRepository,
+		private readonly CorveeTakenRepository $corveeTakenRepository,
+		private readonly MaaltijdenService $maaltijdenService,
+		private readonly VerjaardagenService $verjaardagenService
 	) {
 		parent::__construct($registry, AgendaItem::class);
-
-		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
-		$this->activiteitenRepository = $activiteitenRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->verjaardagenService = $verjaardagenService;
-		$this->security = $security;
-		$this->maaltijdenService = $maaltijdenService;
 	}
 
 	/**
@@ -259,7 +227,7 @@ class AgendaRepository extends AbstractRepository
 		$toonVerjaardagen = $ical ? 'toonVerjaardagenICal' : 'toonVerjaardagen';
 		if (
 			!$zijbalk &&
-			LoginService::mag(P_VERJAARDAGEN, $auth) &&
+			LoginService::mag(P_VERJAARDAGEN) &&
 			InstellingUtil::lid_instelling('agenda', $toonVerjaardagen) === 'ja'
 		) {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
@@ -288,7 +256,9 @@ class AgendaRepository extends AbstractRepository
 	 */
 	public function zoekWoordAgenda($woord)
 	{
-		return $this->zoekRegexAgenda('/' . preg_quote($woord, '/') . '/iu');
+		return $this->zoekRegexAgenda(
+			'/' . preg_quote((string) $woord, '/') . '/iu'
+		);
 	}
 
 	/**
@@ -302,8 +272,8 @@ class AgendaRepository extends AbstractRepository
 		$beginDag = date_create_immutable('today');
 		foreach ($this->getItemsByDay($beginDag) as $item) {
 			if (
-				preg_match($patroon, $item->getTitel()) ||
-				preg_match($patroon, $item->getBeschrijving())
+				preg_match($patroon, (string) $item->getTitel()) ||
+				preg_match($patroon, (string) $item->getBeschrijving())
 			) {
 				return $item;
 			}

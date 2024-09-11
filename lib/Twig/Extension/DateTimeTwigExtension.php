@@ -13,30 +13,26 @@ class DateTimeTwigExtension extends AbstractExtension
 	public function getFilters()
 	{
 		return [
-			new TwigFilter(
-				'reldate',
-				[DateUtil::class, 'reldate'],
-				['is_safe' => ['html']]
-			),
-			new TwigFilter('date_format', [$this, 'twig_date_format']),
-			new TwigFilter('datetime_format', [$this, 'twig_datetime_format']),
-			new TwigFilter('datetime_format_long', [
-				$this,
-				'twig_datetime_format_long',
+			new TwigFilter('reldate', DateUtil::reldate(...), [
+				'is_safe' => ['html'],
 			]),
-			new TwigFilter('time_format', [$this, 'twig_time_format']),
+			new TwigFilter('date_format', $this->twig_date_format(...)),
+			new TwigFilter('datetime_format', $this->twig_datetime_format(...)),
 			new TwigFilter(
-				'rfc2822',
-				[$this, 'twig_rfc2822'],
-				['is_safe' => ['html']]
+				'datetime_format_long',
+				$this->twig_datetime_format_long(...)
 			),
+			new TwigFilter('time_format', $this->twig_time_format(...)),
+			new TwigFilter('rfc2822', $this->twig_rfc2822(...), [
+				'is_safe' => ['html'],
+			]),
 			new TwigFilter(
 				'zijbalk_date_format',
-				[$this, 'twig_zijbalk_date_format'],
+				$this->twig_zijbalk_date_format(...),
 				['is_safe' => ['html']]
 			),
-			new TwigFilter('date_format_intl', [DateUtil::class, 'dateFormatIntl']),
-			new TwigFilter('date_create', [$this, 'twig_date_create']),
+			new TwigFilter('date_format_intl', DateUtil::dateFormatIntl(...)),
+			new TwigFilter('date_create', $this->twig_date_create(...)),
 		];
 	}
 

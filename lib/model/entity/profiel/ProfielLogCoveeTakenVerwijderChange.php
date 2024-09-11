@@ -14,12 +14,14 @@ namespace CsrDelft\model\entity\profiel;
 class ProfielLogCoveeTakenVerwijderChange extends AbstractProfielLogChangeEntry
 {
 	/**
-	 * @var string[]
+	 * @param string[] $corveetaken
 	 */
-	public $corveetaken = [];
-	public function __construct($corveetaken)
-	{
-		$this->corveetaken = $corveetaken;
+	public function __construct(
+		/**
+		 * @var string[]
+		 */
+		public $corveetaken
+	) {
 	}
 
 	public function toHtml()

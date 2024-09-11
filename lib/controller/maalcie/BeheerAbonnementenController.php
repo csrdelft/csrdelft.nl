@@ -23,30 +23,24 @@ use Throwable;
  */
 class BeheerAbonnementenController extends AbstractController
 {
-	/**
-	 * @var MaaltijdRepetitiesRepository
-	 */
-	private $maaltijdRepetitiesRepository;
-	/**
-	 * @var MaaltijdAbonnementenService
-	 */
-	private $maaltijdAbonnementenService;
-
 	public function __construct(
-		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
-		MaaltijdAbonnementenService $maaltijdAbonnementenService
+		private readonly MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
+		private readonly MaaltijdAbonnementenService $maaltijdAbonnementenService
 	) {
-		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
-		$this->maaltijdAbonnementenService = $maaltijdAbonnementenService;
 	}
 
 	/**
 	 * @return Response
 	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/beheer", methods={"GET"})
-	 * @Route("/maaltijden/abonnementen/beheer/waarschuwingen", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
+	#[Route(path: '/maaltijden/abonnementen/beheer', methods: ['GET'])]
+	#[
+		Route(
+			path: '/maaltijden/abonnementen/beheer/waarschuwingen',
+			methods: ['GET']
+		)
+	]
 	public function waarschuwingen()
 	{
 		$matrix_repetities = $this->maaltijdAbonnementenService->getAbonnementenWaarschuwingenMatrix();
@@ -67,9 +61,14 @@ class BeheerAbonnementenController extends AbstractController
 	/**
 	 * @return Response
 	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/beheer/ingeschakeld", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
+	#[
+		Route(
+			path: '/maaltijden/abonnementen/beheer/ingeschakeld',
+			methods: ['GET']
+		)
+	]
 	public function ingeschakeld()
 	{
 		$matrix_repetities = $this->maaltijdAbonnementenService->getAbonnementenMatrix();
@@ -90,9 +89,14 @@ class BeheerAbonnementenController extends AbstractController
 	/**
 	 * @return Response
 	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/beheer/abonneerbaar", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
+	#[
+		Route(
+			path: '/maaltijden/abonnementen/beheer/abonneerbaar',
+			methods: ['GET']
+		)
+	]
 	public function abonneerbaar()
 	{
 		$matrix_repetities = $this->maaltijdAbonnementenService->getAbonnementenAbonneerbaarMatrix();
@@ -113,9 +117,9 @@ class BeheerAbonnementenController extends AbstractController
 	/**
 	 * @return Response
 	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/beheer/novieten", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
+	#[Route(path: '/maaltijden/abonnementen/beheer/novieten', methods: ['POST'])]
 	public function novieten()
 	{
 		$mrid = filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
@@ -147,9 +151,14 @@ class BeheerAbonnementenController extends AbstractController
 	 * @param string $uid
 	 * @return Response
 	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/beheer/inschakelen/{mlt_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
+	#[
+		Route(
+			path: '/maaltijden/abonnementen/beheer/inschakelen/{mlt_repetitie_id}/{uid}',
+			methods: ['POST']
+		)
+	]
 	public function inschakelen(MaaltijdRepetitie $repetitie, Profiel $profiel)
 	{
 		$abo = new MaaltijdAbonnement();
@@ -174,9 +183,14 @@ class BeheerAbonnementenController extends AbstractController
 	 * @param string $uid
 	 * @return Response
 	 * @throws Throwable
-	 * @Route("/maaltijden/abonnementen/beheer/uitschakelen/{mlt_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
+	#[
+		Route(
+			path: '/maaltijden/abonnementen/beheer/uitschakelen/{mlt_repetitie_id}/{uid}',
+			methods: ['POST']
+		)
+	]
 	public function uitschakelen(MaaltijdRepetitie $repetitie, $uid)
 	{
 		if (!ProfielRepository::existsUid($uid)) {

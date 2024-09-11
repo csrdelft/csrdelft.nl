@@ -86,7 +86,7 @@ class FotoAlbumBreadcrumbs
 			}
 			$dropdown .= '</select>';
 			return '<li class="breadcrumb-item">' . $dropdown . '</li>';
-		} catch (NotFoundHttpException $ex) {
+		} catch (NotFoundHttpException) {
 			return '';
 		}
 	}

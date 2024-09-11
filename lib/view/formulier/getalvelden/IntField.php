@@ -73,7 +73,9 @@ class IntField extends InputField
 		// parent checks not null
 		if ($this->value == '') {
 			return true;
-		} elseif (!preg_match('/^' . $this->pattern . '$/', $this->value)) {
+		} elseif (
+			!preg_match('/^' . $this->pattern . '$/', (string) $this->value)
+		) {
 			$this->error = 'Alleen gehele getallen toegestaan';
 		} elseif (is_int($this->max) && $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';

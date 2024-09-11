@@ -13,12 +13,9 @@ namespace CsrDelft\view\formulier\elementen;
  */
 class CollapsableSubkopje extends Subkopje
 {
-	private $collapsed;
-
-	public function __construct($titel, $collapsed = false)
+	public function __construct($titel, private $collapsed = false)
 	{
 		parent::__construct($titel);
-		$this->collapsed = $collapsed;
 	}
 
 	public function getHtml()
@@ -34,8 +31,8 @@ class CollapsableSubkopje extends Subkopje
 HTML;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->getHtml();
+		return (string) $this->getHtml();
 	}
 }

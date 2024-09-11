@@ -13,11 +13,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class GoogleClientManager
 {
 
-	private Google_Client $client;
+	private readonly Google_Client $client;
 
 	public function __construct(
-		private LoginService $loginService,
-		private RequestStack $requestStack
+		private readonly LoginService $loginService,
+		private readonly RequestStack $requestStack
 	) {
 		$request = $this->requestStack->getCurrentRequest();
 		$redirect_uri = $request->getSchemeAndHttpHost() . '/google/callback';

@@ -21,58 +21,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ForumPostController extends AbstractController
 {
-	/**
-	 * @var BbToProsemirror
-	 */
-	private $bbToProsemirror;
-	/**
-	 * @var ForumPostsRepository
-	 */
-	private $forumPostsRepository;
-	/**
-	 * @var ProsemirrorToBb
-	 */
-	private $prosemirrorToBb;
-	/**
-	 * @var ForumDradenGelezenRepository
-	 */
-	private $forumDradenGelezenRepository;
-	/**
-	 * @var ForumDradenRepository
-	 */
-	private $forumDradenRepository;
-	/**
-	 * @var ForumDradenReagerenRepository
-	 */
-	private $forumDradenReagerenRepository;
-	/**
-	 * @var ForumPostsService
-	 */
-	private $forumPostsService;
-
 	public function __construct(
-		BbToProsemirror $bbToProsemirror,
-		ProsemirrorToBb $prosemirrorToBb,
-		ForumPostsRepository $forumPostsRepository,
-		ForumPostsService $forumPostsService,
-		ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		ForumDradenReagerenRepository $forumDradenReagerenRepository,
-		ForumDradenRepository $forumDradenRepository
+		private readonly BbToProsemirror $bbToProsemirror,
+		private readonly ProsemirrorToBb $prosemirrorToBb,
+		private readonly ForumPostsRepository $forumPostsRepository,
+		private readonly ForumPostsService $forumPostsService,
+		private readonly ForumDradenGelezenRepository $forumDradenGelezenRepository,
+		private readonly ForumDradenReagerenRepository $forumDradenReagerenRepository,
+		private readonly ForumDradenRepository $forumDradenRepository
 	) {
-		$this->bbToProsemirror = $bbToProsemirror;
-		$this->forumPostsRepository = $forumPostsRepository;
-		$this->prosemirrorToBb = $prosemirrorToBb;
-		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
-		$this->forumDradenRepository = $forumDradenRepository;
-		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
-		$this->forumPostsService = $forumPostsService;
 	}
 
 	/**
 	 * @param ForumPost $post
-	 * @Route("/forum/citeren/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/citeren/{post_id}', methods: ['POST'])]
 	public function citeren(ForumPost $post)
 	{
 		if (!$post->magCiteren()) {
@@ -89,9 +53,9 @@ class ForumPostController extends AbstractController
 
 	/**
 	 * @param ForumPost $post
-	 * @Route("/forum/tekst/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/tekst/{post_id}', methods: ['POST'])]
 	public function tekst(ForumPost $post)
 	{
 		if (!$post->magBewerken()) {
@@ -106,9 +70,9 @@ class ForumPostController extends AbstractController
 	/**
 	 * @param ForumPost $post
 	 * @return Response
-	 * @Route("/forum/bewerken/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/bewerken/{post_id}', methods: ['POST'])]
 	public function bewerken(ForumPost $post)
 	{
 		if (!$post->magBewerken()) {
@@ -133,9 +97,9 @@ class ForumPostController extends AbstractController
 	/**
 	 * @param ForumPost $post
 	 * @return Response
-	 * @Route("/forum/verplaatsen/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/verplaatsen/{post_id}', methods: ['POST'])]
 	public function verplaatsen(ForumPost $post)
 	{
 		$oudDraad = $post->draad;
@@ -157,9 +121,9 @@ class ForumPostController extends AbstractController
 	/**
 	 * @param ForumPost $post
 	 * @return Response
-	 * @Route("/forum/verwijderen/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/verwijderen/{post_id}', methods: ['POST'])]
 	public function verwijderen(ForumPost $post)
 	{
 		if (!$post->draad->magModereren()) {
@@ -174,9 +138,9 @@ class ForumPostController extends AbstractController
 	/**
 	 * @param ForumPost $post
 	 * @return Response
-	 * @Route("/forum/offtopic/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/offtopic/{post_id}', methods: ['POST'])]
 	public function offtopic(ForumPost $post)
 	{
 		if (!$post->draad->magModereren()) {
@@ -191,9 +155,9 @@ class ForumPostController extends AbstractController
 	/**
 	 * @param ForumPost $post
 	 * @return Response
-	 * @Route("/forum/goedkeuren/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/goedkeuren/{post_id}', methods: ['POST'])]
 	public function goedkeuren(ForumPost $post)
 	{
 		if (!$post->draad->magModereren()) {
@@ -210,9 +174,15 @@ class ForumPostController extends AbstractController
 	 * @param ForumDeel $deel
 	 * @param ForumDraad|null $draad
 	 * @return Response
-	 * @Route("/forum/concept/{forum_id}/{draad_id}", methods={"POST"}, defaults={"draad_id"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/forum/concept/{forum_id}/{draad_id}',
+			methods: ['POST'],
+			defaults: ['draad_id' => null]
+		)
+	]
 	public function concept(ForumDeel $deel, ForumDraad $draad = null)
 	{
 		$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));

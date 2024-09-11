@@ -49,8 +49,8 @@ class LDAP
 		}
 		$conn = ldap_connect($_ENV['LDAP_HOST'], (int) $_ENV['LDAP_PORT']);
 		ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
-		if ($_ENV['LDAP_TLS'] == "true") {
-		    ldap_start_tls($conn);
+		if ($_ENV['LDAP_TLS'] == 'true') {
+			ldap_start_tls($conn);
 		}
 		if ($dobind === true) {
 			$bind = ldap_bind($conn, $_ENV['LDAP_BINDDN'], $_ENV['LDAP_PASSWD']);

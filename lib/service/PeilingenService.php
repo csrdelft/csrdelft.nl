@@ -19,27 +19,11 @@ use Doctrine\ORM\ORMException;
  */
 class PeilingenService
 {
-	/**
-	 * @var PeilingenRepository
-	 */
-	private $peilingenRepository;
-	/**
-	 * @var PeilingOptiesRepository
-	 */
-	private $peilingOptiesRepository;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-
 	public function __construct(
-		PeilingenRepository $peilingenRepository,
-		PeilingOptiesRepository $peilingOptiesRepository,
-		EntityManagerInterface $entityManager
+		private readonly PeilingenRepository $peilingenRepository,
+		private readonly PeilingOptiesRepository $peilingOptiesRepository,
+		private readonly EntityManagerInterface $entityManager
 	) {
-		$this->peilingenRepository = $peilingenRepository;
-		$this->peilingOptiesRepository = $peilingOptiesRepository;
-		$this->entityManager = $entityManager;
 	}
 
 	public function magOptieToevoegen(Peiling $peiling)
@@ -107,9 +91,10 @@ class PeilingenService
 	 */
 	public function valideerOpties(Peiling $peiling, $opties)
 	{
-		$mogelijkeOptieIds = array_map(function ($optie) {
-			return $optie->id;
-		}, $peiling->opties->toArray());
+		$mogelijkeOptieIds = array_map(
+			fn($optie) => $optie->id,
+			$peiling->opties->toArray()
+		);
 		return array_intersect($mogelijkeOptieIds, $opties);
 	}
 

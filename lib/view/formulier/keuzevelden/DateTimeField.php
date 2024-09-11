@@ -37,7 +37,7 @@ class DateTimeField extends TextField
 		} else {
 			$this->min_jaar = (int) date('Y') - 10;
 		}
-		$jaar = (int) date('Y', strtotime($value));
+		$jaar = (int) date('Y', strtotime((string) $value));
 		if ($jaar > $this->max_jaar) {
 			$this->max_jaar = $jaar;
 		}
@@ -57,12 +57,12 @@ class DateTimeField extends TextField
 		if ($this->value == '') {
 			return true;
 		}
-		$jaar = (int) substr($this->value, 0, 4);
-		$maand = (int) substr($this->value, 5, 2);
-		$dag = (int) substr($this->value, 8, 2);
-		$uur = (int) substr($this->value, 11, 2);
-		$min = (int) substr($this->value, 14, 2);
-		$sec = (int) substr($this->value, 17, 2);
+		$jaar = (int) substr((string) $this->value, 0, 4);
+		$maand = (int) substr((string) $this->value, 5, 2);
+		$dag = (int) substr((string) $this->value, 8, 2);
+		$uur = (int) substr((string) $this->value, 11, 2);
+		$min = (int) substr((string) $this->value, 14, 2);
+		$sec = (int) substr((string) $this->value, 17, 2);
 		if (!checkdate($maand, $dag, $jaar)) {
 			$this->error = 'Ongeldige datum';
 		} elseif (

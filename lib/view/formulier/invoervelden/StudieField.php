@@ -31,9 +31,10 @@ class StudieField extends AutocompleteField
 			'WB',
 		];
 		// de studies aan de TU, even prefixen met 'TU Delft - '
-		$this->suggestions['TU Delft'] = array_map(function ($value) {
-			return 'TU Delft - ' . $value;
-		}, $tustudies);
+		$this->suggestions['TU Delft'] = array_map(
+			fn($value) => 'TU Delft - ' . $value,
+			$tustudies
+		);
 		$this->suggestions[] = [
 			'INHolland - ',
 			'Haagse Hogeschool - ',

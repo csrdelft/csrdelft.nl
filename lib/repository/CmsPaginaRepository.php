@@ -19,15 +19,11 @@ use Symfony\Component\Security\Core\Security;
  */
 class CmsPaginaRepository extends AbstractRepository
 {
-	/**
-	 * @var Security
-	 */
-	private $security;
-
-	public function __construct(ManagerRegistry $registry, Security $security)
-	{
+	public function __construct(
+		ManagerRegistry $registry,
+		private readonly Security $security
+	) {
 		parent::__construct($registry, CmsPagina::class);
-		$this->security = $security;
 	}
 
 	/**

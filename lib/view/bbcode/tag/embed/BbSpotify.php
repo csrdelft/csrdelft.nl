@@ -44,14 +44,14 @@ class BbSpotify extends BbTag
 	{
 		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$this->uri\" frameborder=\"0\" allowtransparency=\"true\"";
 
-		switch ($this->formaat) {
-			case 'hoog':
-				return "<iframe class=\"w-100\" height=\"380\" $commonAttributen></iframe>";
-			case 'blok':
-				return "<iframe width=\"80\" height=\"80\" class=\"float-start\" $commonAttributen></iframe>";
-			default:
-				return "<iframe class=\"w-100\" height=\"80\" $commonAttributen></iframe>";
-		}
+		return match ($this->formaat) {
+			'hoog'
+				=> "<iframe class=\"w-100\" height=\"380\" $commonAttributen></iframe>",
+			'blok'
+				=> "<iframe width=\"80\" height=\"80\" class=\"float-start\" $commonAttributen></iframe>",
+			default
+				=> "<iframe class=\"w-100\" height=\"80\" $commonAttributen></iframe>",
+		};
 	}
 
 	/**

@@ -11,16 +11,14 @@ namespace CsrDelft\view;
 class PlainView implements View, ToResponse
 {
 	use ToHtmlResponse;
-	private $body;
 
-	public function __construct($body)
+	public function __construct(private $body)
 	{
-		$this->body = $body;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->body;
+		return (string) $this->body;
 	}
 
 	public function getTitel()

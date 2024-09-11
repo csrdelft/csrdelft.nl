@@ -21,22 +21,17 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MenuBeheerController extends AbstractController
 {
-	/**
-	 * @var MenuItemRepository
-	 */
-	private $menuItemRepository;
-
-	public function __construct(MenuItemRepository $menuItemRepository)
-	{
-		$this->menuItemRepository = $menuItemRepository;
+	public function __construct(
+		private readonly MenuItemRepository $menuItemRepository
+	) {
 	}
 
 	/**
 	 * @param string $menuName
 	 * @return Response
-	 * @Route("/menubeheer/beheer/{menuName}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/menubeheer/beheer/{menuName}', methods: ['GET'])]
 	public function beheer($menuName = 'main'): Response
 	{
 		if ($menuName != $this->getUid() && !$this->mag(P_ADMIN)) {
@@ -55,9 +50,9 @@ class MenuBeheerController extends AbstractController
 	 * @return MenuItemForm
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/menubeheer/toevoegen/{parentId}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/menubeheer/toevoegen/{parentId}', methods: ['POST'])]
 	public function toevoegen($parentId)
 	{
 		if ($parentId == 'favoriet') {
@@ -85,9 +80,15 @@ class MenuBeheerController extends AbstractController
 	/**
 	 * @param $itemId
 	 * @return JsonResponse|MenuItemForm
-	 * @Route("/menubeheer/bewerken/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/menubeheer/bewerken/{itemId}',
+			methods: ['POST'],
+			requirements: ['itemId' => '\d+']
+		)
+	]
 	public function bewerken($itemId)
 	{
 		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
@@ -98,7 +99,7 @@ class MenuBeheerController extends AbstractController
 			try {
 				$this->menuItemRepository->persist($item);
 				$this->addFlash(FlashType::SUCCESS, $item->tekst . ' bijgewerkt');
-			} catch (Exception $e) {
+			} catch (Exception) {
 				$this->addFlash(FlashType::INFO, $item->tekst . ' ongewijzigd');
 			}
 			return new JsonResponse(true);
@@ -110,9 +111,15 @@ class MenuBeheerController extends AbstractController
 	/**
 	 * @param $itemId
 	 * @return JsonResponse
-	 * @Route("/menubeheer/verwijderen/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/menubeheer/verwijderen/{itemId}',
+			methods: ['POST'],
+			requirements: ['itemId' => '\d+']
+		)
+	]
 	public function verwijderen($itemId): JsonResponse
 	{
 		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
@@ -133,9 +140,15 @@ class MenuBeheerController extends AbstractController
 	 * @return JsonResponse
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/menubeheer/zichtbaar/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/menubeheer/zichtbaar/{itemId}',
+			methods: ['POST'],
+			requirements: ['itemId' => '\d+']
+		)
+	]
 	public function zichtbaar($itemId): JsonResponse
 	{
 		$item = $this->menuItemRepository->getMenuItem((int) $itemId);
@@ -150,11 +163,11 @@ class MenuBeheerController extends AbstractController
 	}
 
 	/**
-	 * @Route("/menubeheer/suggesties")
 	 * @Auth(P_LOGGED_IN)
 	 * @param Request $request
 	 * @return GenericSuggestiesResponse
 	 */
+	#[Route(path: '/menubeheer/suggesties')]
 	public function suggesties(Request $request): GenericSuggestiesResponse
 	{
 		return new GenericSuggestiesResponse(

@@ -26,27 +26,22 @@ use Symfony\Component\Security\Http\RememberMe\PersistentRememberMeHandler;
 class SessionController extends AbstractController
 {
 	/**
-	 * @var RememberLoginRepository
-	 */
-	private $rememberLoginRepository;
-	/**
 	 * @var ObjectManager
 	 */
 	private $objectManager;
 
 	public function __construct(
 		ManagerRegistry $managerRegistry,
-		RememberLoginRepository $rememberLoginRepository
+		private readonly RememberLoginRepository $rememberLoginRepository
 	) {
-		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->objectManager = $managerRegistry->getManager();
 	}
 
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("/session/rememberdata", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/session/rememberdata', methods: ['POST'])]
 	public function rememberdata(): GenericDataTableResponse
 	{
 		return $this->tableData(
@@ -58,9 +53,9 @@ class SessionController extends AbstractController
 	 * @param Request $request
 	 * @param PersistentRememberMeHandler $rememberMeHandler
 	 * @return RememberLoginForm|Response
-	 * @Route("/session/remember", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/session/remember', methods: ['POST'])]
 	public function remember(
 		Request $request,
 		PersistentRememberMeHandler $rememberMeHandler
@@ -102,9 +97,9 @@ class SessionController extends AbstractController
 
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("/session/forget-all", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/session/forget-all', methods: ['POST'])]
 	public function forgetAll(): GenericDataTableResponse
 	{
 		$remembers = $this->rememberLoginRepository->findBy([
@@ -126,9 +121,9 @@ class SessionController extends AbstractController
 
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("/session/forget", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/session/forget', methods: ['POST'])]
 	public function forget(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();

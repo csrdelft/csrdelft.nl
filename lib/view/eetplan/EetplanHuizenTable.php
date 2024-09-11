@@ -10,14 +10,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class EetplanHuizenTable extends AbstractDataTableType
 {
-	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-
-	public function __construct(UrlGeneratorInterface $urlGenerator)
-	{
-		$this->urlGenerator = $urlGenerator;
+	public function __construct(
+		private readonly UrlGeneratorInterface $urlGenerator
+	) {
 	}
 
 	public function createDataTable(

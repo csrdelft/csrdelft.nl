@@ -7,26 +7,15 @@ use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use Twig\Environment;
 
-class GroepEmailsView implements ToResponse
+class GroepEmailsView implements ToResponse, \Stringable
 {
 	use ToHtmlResponse;
 
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var Groep
-	 */
-	private $groep;
-
-	public function __construct(Environment $twig, Groep $groep)
+	public function __construct(private Environment $twig, private Groep $groep)
 	{
-		$this->twig = $twig;
-		$this->groep = $groep;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->twig->render('groep/emails.html.twig', [
 			'groep' => $this->groep,

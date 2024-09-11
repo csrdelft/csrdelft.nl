@@ -16,17 +16,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class VoorkeurCommissieRepository extends AbstractRepository
 {
-	/**
-	 * @var VoorkeurCommissieCategorieRepository
-	 */
-	private $voorkeurCommissieCategorieModel;
-
 	public function __construct(
-		VoorkeurCommissieCategorieRepository $voorkeurCommissieCategorieRepository,
+		private readonly VoorkeurCommissieCategorieRepository $voorkeurCommissieCategorieModel,
 		ManagerRegistry $registry
 	) {
 		parent::__construct($registry, VoorkeurCommissie::class);
-		$this->voorkeurCommissieCategorieModel = $voorkeurCommissieCategorieRepository;
 	}
 
 	public function getByCategorie()

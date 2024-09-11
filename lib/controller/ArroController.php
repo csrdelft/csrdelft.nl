@@ -11,9 +11,9 @@ class ArroController extends AbstractController
 {
 	/**
 	 * @return Response
-	 * @Route("/arro")
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/arro')]
 	public function arro()
 	{
 		$now = new DateTimeImmutable();

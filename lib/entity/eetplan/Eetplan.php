@@ -22,9 +22,9 @@ class Eetplan implements DataTableEntry
 	 * @var int
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
-	 * @Serializer\Groups("datatable")
 	 * @ORM\GeneratedValue()
 	 */
+	#[Serializer\Groups('datatable')]
 	public $id;
 	/**
 	 * @var Woonoord
@@ -42,8 +42,8 @@ class Eetplan implements DataTableEntry
 	 *
 	 * @ORM\Column(type="string", nullable=true)
 	 * @var string
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $opmerking;
 	/**
 	 * @var Profiel
@@ -54,9 +54,9 @@ class Eetplan implements DataTableEntry
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("woonoord")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('woonoord')]
 	public function getDataTableWoonoord()
 	{
 		return $this->woonoord->naam;
@@ -64,9 +64,9 @@ class Eetplan implements DataTableEntry
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("naam")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('naam')]
 	public function getDataTableNaam()
 	{
 		return $this->noviet->getNaam();
@@ -74,9 +74,9 @@ class Eetplan implements DataTableEntry
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("avond")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('avond')]
 	public function getDataTableAvond()
 	{
 		if ($this->avond) {

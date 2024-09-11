@@ -41,7 +41,7 @@ class BbImg extends BbTag
 		$style = '';
 		$class = '';
 		if (isset($arguments['class'])) {
-			$class .= htmlspecialchars($arguments['class']);
+			$class .= htmlspecialchars((string) $arguments['class']);
 		}
 		if (isset($arguments['float'])) {
 			switch ($arguments['float']) {
@@ -74,7 +74,7 @@ class BbImg extends BbTag
 				[
 					$class,
 					$this->getSourceUrl(),
-					htmlspecialchars($this->getSourceUrl()),
+					htmlspecialchars((string) $this->getSourceUrl()),
 					$style,
 				]
 			);

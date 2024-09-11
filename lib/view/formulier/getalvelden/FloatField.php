@@ -52,7 +52,7 @@ class FloatField extends InputField
 		if (is_float($step)) {
 			$this->step = $step;
 		} else {
-			$this->step = 1.0 / (float) pow(10, $this->precision);
+			$this->step = 1.0 / (float) 10 ** $this->precision;
 		}
 		$this->step = str_replace(',', '.', $this->step); // werkomheen
 	}
@@ -94,7 +94,9 @@ class FloatField extends InputField
 		// parent checks not null
 		if ($this->value == '') {
 			return true;
-		} elseif (!preg_match('/^' . $this->pattern . '$/', $this->getValue())) {
+		} elseif (
+			!preg_match('/^' . $this->pattern . '$/', (string) $this->getValue())
+		) {
 			$this->error = 'Voer maximaal ' . $this->precision . ' decimalen in';
 		} elseif ($this->max !== null and $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';

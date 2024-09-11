@@ -24,37 +24,17 @@ class BarSysteemService
 	 * @var Connection|PDO
 	 */
 	private $db;
-	/**
-	 * @var CiviSaldoRepository
-	 */
-	private $civiSaldoRepository;
-	/**
-	 * @var CiviProductRepository
-	 */
-	private $civiProductRepository;
-	/**
-	 * @var CiviBestellingRepository
-	 */
-	private $civiBestellingRepository;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
 
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		CiviSaldoRepository $civiSaldoRepository,
-		CiviProductRepository $civiProductRepository,
-		CiviBestellingRepository $civiBestellingRepository
+		private EntityManagerInterface $entityManager,
+		private readonly CiviSaldoRepository $civiSaldoRepository,
+		private readonly CiviProductRepository $civiProductRepository,
+		private readonly CiviBestellingRepository $civiBestellingRepository
 	) {
 		$this->db = DriverManager::getConnection([
 			'url' => $_ENV['DATABASE_URL'],
 			'driverOptions' => [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"],
 		])->getWrappedConnection();
-		$this->civiSaldoRepository = $civiSaldoRepository;
-		$this->civiProductRepository = $civiProductRepository;
-		$this->civiBestellingRepository = $civiBestellingRepository;
-		$this->entityManager = $entityManager;
 	}
 
 	/**
@@ -62,7 +42,10 @@ class BarSysteemService
 	 */
 	public function getPersonen()
 	{
-		return $this->civiSaldoRepository->findBy(['deleted' => false], ['laatst_veranderd' => 'DESC']);
+		return $this->civiSaldoRepository->findBy(
+			['deleted' => false],
+			['laatst_veranderd' => 'DESC']
+		);
 	}
 
 	public function getProfiel($uid)
@@ -236,11 +219,10 @@ SQL
 		}
 
 		if ($persoon == 'alles') {
-			return $this->civiBestellingRepository->findTussen(
-				$begin,
-				$eind,
-				['soccie', 'oweecie'],
-			);
+			return $this->civiBestellingRepository->findTussen($begin, $eind, [
+				'soccie',
+				'oweecie',
+			]);
 		} else {
 			return $this->civiBestellingRepository->findTussen(
 				$begin,
@@ -260,7 +242,7 @@ SQL
 	{
 		$em = $this->entityManager;
 
-		$em->transactional(function () use ($em, $uid, $bestelId, $inhoud) {
+		$em->transactional(function () use ($em, $uid, $bestelId, $inhoud): void {
 			$civiBestelling = $this->civiBestellingRepository->find($bestelId);
 			$civiSaldo = $this->civiSaldoRepository->find($uid);
 
@@ -321,7 +303,7 @@ SQL
 	{
 		$em = $this->entityManager;
 
-		$em->transactional(function () use ($em, $bestelId) {
+		$em->transactional(function () use ($em, $bestelId): void {
 			$civiBestelling = $this->civiBestellingRepository->find($bestelId);
 
 			if ($civiBestelling->deleted) {
@@ -342,7 +324,7 @@ SQL
 	{
 		$em = $this->entityManager;
 
-		$em->transactional(function () use ($em, $bestelId) {
+		$em->transactional(function () use ($em, $bestelId): void {
 			$civiBestelling = $this->civiBestellingRepository->find($bestelId);
 
 			if (!$civiBestelling->deleted) {
@@ -592,14 +574,18 @@ ORDER BY yearweek DESC
 	 */
 	public function getPrakCiePilsjes(DateTimeImmutable $vanaf)
 	{
-		$q =  $this->db->prepare(
-			"select sum(cbi.aantal) from civi_bestelling_inhoud cbi" .
-				" join civi_product cp on cp.id = cbi.product_id" .
-				" join civi_bestelling cb on cb.id = cbi.bestelling_id" .
+		$q = $this->db->prepare(
+			'select sum(cbi.aantal) from civi_bestelling_inhoud cbi' .
+				' join civi_product cp on cp.id = cbi.product_id' .
+				' join civi_bestelling cb on cb.id = cbi.bestelling_id' .
 				" where cp.beschrijving = 'PrakCiePilsje' and cb.moment > DATE(:datum)"
 		);
-		$q->bindValue(':datum', $vanaf->format(DateTimeInterface::RFC3339), PDO::PARAM_STR);
+		$q->bindValue(
+			':datum',
+			$vanaf->format(DateTimeInterface::RFC3339),
+			PDO::PARAM_STR
+		);
 		$res = $q->execute();
-		return (int)$res->fetchOne();
+		return (int) $res->fetchOne();
 	}
 }

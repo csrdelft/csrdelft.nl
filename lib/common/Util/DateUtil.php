@@ -38,13 +38,14 @@ final class DateUtil
 			$return = 'gisteren om ' . self::dateFormatIntl($datum, "hh':'mm");
 		} else {
 			// zelfde jaar: geen jaar laten zien
-			$format = $datum->format('Y') === $vandaag->format('Y')
-				? "eeee d MMMM 'om' hh':'mm"
-				: "eeee d MMMM yyyy 'om' hh':'mm";
+			$format =
+				$datum->format('Y') === $vandaag->format('Y')
+					? "eeee d MMMM 'om' hh':'mm"
+					: "eeee d MMMM yyyy 'om' hh':'mm";
 			$return = self::dateFormatIntl($datum, $format);
 		}
-		if ($return === "") {
-			error_log("wtf");
+		if ($return === '') {
+			error_log('wtf');
 		}
 		return '<time class="timeago" title="' .
 			$return .
@@ -89,7 +90,11 @@ final class DateUtil
 	 */
 	public static function dateFormatIntl(DateTimeInterface $date, $format)
 	{
-		$fmt = new IntlDateFormatter('nl', IntlDateFormatter::NONE, IntlDateFormatter::NONE);
+		$fmt = new IntlDateFormatter(
+			'nl',
+			IntlDateFormatter::NONE,
+			IntlDateFormatter::NONE
+		);
 		$fmt->setPattern($format);
 		return $fmt->format($date);
 	}

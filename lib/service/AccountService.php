@@ -14,45 +14,14 @@ use Symfony\Component\Uid\Uuid;
 
 class AccountService
 {
-	/**
-	 * @var CiviSaldoRepository
-	 */
-	private $civiSaldoRepository;
-	/**
-	 * @var MenuItemRepository
-	 */
-	private $menuItemRepository;
-	/**
-	 * @var AccessService
-	 */
-	private $accessService;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $manager;
-	/**
-	 * @var PasswordHasherFactoryInterface
-	 */
-	private $passwordHasherFactory;
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-
 	public function __construct(
-		CiviSaldoRepository $civiSaldoRepository,
-		MenuItemRepository $menuItemRepository,
-		AccessService $accessService,
-		ProfielRepository $profielRepository,
-		PasswordHasherFactoryInterface $passwordHasherFactory,
-		EntityManagerInterface $manager
+		private readonly CiviSaldoRepository $civiSaldoRepository,
+		private readonly MenuItemRepository $menuItemRepository,
+		private readonly AccessService $accessService,
+		private readonly ProfielRepository $profielRepository,
+		private readonly PasswordHasherFactoryInterface $passwordHasherFactory,
+		private readonly EntityManagerInterface $manager
 	) {
-		$this->civiSaldoRepository = $civiSaldoRepository;
-		$this->menuItemRepository = $menuItemRepository;
-		$this->accessService = $accessService;
-		$this->manager = $manager;
-		$this->passwordHasherFactory = $passwordHasherFactory;
-		$this->profielRepository = $profielRepository;
 	}
 
 	/**

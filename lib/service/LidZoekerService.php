@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\Security;
  *
  * de array's die in deze class staan bepalen wat er in het formulier te zien is.
  */
-class LidZoekerService
+class LidZoekerService implements \Stringable
 {
 	//velden die door gewone leden geselecteerd mogen worden.
 	public $veldNamen = [
@@ -106,32 +106,16 @@ class LidZoekerService
 	private $weergave = LLLijst::class;
 	private $result = null;
 	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
 	 * @var Security
 	 */
 	private $security;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $em;
-	/**
-	 * @var LidToestemmingRepository
-	 */
-	private $lidToestemmingRepository;
-	/**
-	 * @var VerticalenRepository
-	 */
-	private $verticalenRepository;
 
 	public function __construct(
-		EntityManagerInterface $em,
-		ProfielRepository $profielRepository,
+		private readonly EntityManagerInterface $em,
+		private readonly ProfielRepository $profielRepository,
 		Security $security,
-		VerticalenRepository $verticalenRepository,
-		LidToestemmingRepository $lidToestemmingRepository
+		private readonly VerticalenRepository $verticalenRepository,
+		private readonly LidToestemmingRepository $lidToestemmingRepository
 	) {
 		$this->allowStatus = LidStatus::getEnumValues();
 
@@ -145,11 +129,7 @@ class LidZoekerService
 
 		//parse default values.
 		$this->parseQuery($this->rawQuery);
-		$this->profielRepository = $profielRepository;
 		$this->security = $security;
-		$this->em = $em;
-		$this->lidToestemmingRepository = $lidToestemmingRepository;
-		$this->verticalenRepository = $verticalenRepository;
 	}
 
 	public function parseQuery($query)
@@ -157,7 +137,7 @@ class LidZoekerService
 		$this->result = null; //nieuwe parameters, oude resultaat wegmikken.
 
 		if (!is_array($query)) {
-			$query = explode('&', $query);
+			$query = explode('&', (string) $query);
 		}
 		$this->rawQuery = $query;
 
@@ -194,7 +174,7 @@ class LidZoekerService
 					break;
 
 				case 'status':
-					$value = strtoupper($value);
+					$value = strtoupper((string) $value);
 					//als op alle lid-statussen moet worden gezocht verwijderen we
 					//eventueel aanwezige filters en zoeken we in alles.
 					if ($value == '*' || $value == 'ALL') {
@@ -280,7 +260,7 @@ class LidZoekerService
 		$this->result = [];
 		$qb = $this->profielRepository->createQueryBuilder('p');
 
-		if (trim($this->query) == '') {
+		if (trim((string) $this->query) == '') {
 			return;
 		}
 
@@ -308,7 +288,7 @@ class LidZoekerService
 	 */
 	private function defaultSearch(QueryBuilder $queryBuilder, $zoekterm)
 	{
-		if (preg_match('/^groep:([0-9]+|[a-z]+)$/i', $zoekterm)) {
+		if (preg_match('/^groep:([0-9]+|[a-z]+)$/i', (string) $zoekterm)) {
 			//leden van een groep
 			$uids = [];
 			/*try {
@@ -319,9 +299,9 @@ class LidZoekerService
 			}*/
 			$queryBuilder->where('p.uid in (:uids)');
 			$queryBuilder->setParameter('uids', $uids);
-		} elseif (preg_match('/^verticale:\w*$/', $zoekterm)) {
+		} elseif (preg_match('/^verticale:\w*$/', (string) $zoekterm)) {
 			//verticale, id, letter
-			$v = substr($zoekterm, 10);
+			$v = substr((string) $zoekterm, 10);
 			if (strlen($v) > 1) {
 				$result = $this->verticalenRepository->searchByNaam($v);
 				$verticales = [];
@@ -339,13 +319,13 @@ class LidZoekerService
 					$queryBuilder->where('p.verticale = \'\'');
 				}
 			}
-		} elseif (preg_match('/^\d{2}$/', $zoekterm)) {
+		} elseif (preg_match('/^\d{2}$/', (string) $zoekterm)) {
 			//lichting bij een string van 2 cijfers
 			$queryBuilder->where('p.lidjaar LIKE :zoekterm');
 			$queryBuilder->setParameter('zoekterm', '__' . $zoekterm);
-		} elseif (preg_match('/^lichting:\d\d(\d\d)?$/', $zoekterm)) {
+		} elseif (preg_match('/^lichting:\d\d(\d\d)?$/', (string) $zoekterm)) {
 			//lichting op de explicite manier
-			$lichting = substr($zoekterm, 9);
+			$lichting = substr((string) $zoekterm, 9);
 			if (strlen($lichting) == 4) {
 				$queryBuilder->where('p.lidjaar = :lidjaar');
 				$queryBuilder->setParameter('lidjaar', $lichting);
@@ -353,16 +333,19 @@ class LidZoekerService
 				$queryBuilder->where('p.lidjaar LIKE :lidjaar');
 				$queryBuilder->setParameter('lidjaar', '__' . $lichting);
 			}
-		} elseif (preg_match('/^[a-z0-9][0-9]{3}$/', $zoekterm)) {
+		} elseif (preg_match('/^[a-z0-9][0-9]{3}$/', (string) $zoekterm)) {
 			//uid's is ook niet zo moeilijk.
 			$queryBuilder->where('p.uid = :uid');
 			$queryBuilder->setParameter('uid', $zoekterm);
 		} elseif (
-			preg_match('/^([a-z0-9][0-9]{3} ?,? ?)*([a-z0-9][0-9]{3})$/', $zoekterm)
+			preg_match(
+				'/^([a-z0-9][0-9]{3} ?,? ?)*([a-z0-9][0-9]{3})$/',
+				(string) $zoekterm
+			)
 		) {
 			//meerdere uid's gescheiden door komma's.
 			//explode en trim() elke waarde van de array.
-			$uids = array_map('trim', explode(',', $zoekterm));
+			$uids = array_map('trim', explode(',', (string) $zoekterm));
 			$queryBuilder->where('p.uid in (:uids)');
 			$queryBuilder->setParameter('uids', $uids);
 		} elseif (
@@ -370,12 +353,12 @@ class LidZoekerService
 				'/^(' .
 					implode('|', $this->getDBVeldenAllowed()) .
 					'):=?([a-z0-9\-_])+$/i',
-				$zoekterm
+				(string) $zoekterm
 			)
 		) {
 			//Zoeken in de velden van $this->allowVelden. Zoektermen met 'veld:' ervoor.
 			//met 'veld:=<zoekterm> wordt exact gezocht.
-			$parts = explode(':', $zoekterm);
+			$parts = explode(':', (string) $zoekterm);
 
 			$veld = strtolower($parts[0]);
 
@@ -468,7 +451,7 @@ class LidZoekerService
 		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
 		$zoekvelden = $this->lidToestemmingRepository->getModuleKeys('profiel');
 
-		if (strpos($profiel->getNaam(), $query) !== false) {
+		if (str_contains($profiel->getNaam(), $query)) {
 			return true;
 		}
 
@@ -485,7 +468,7 @@ class LidZoekerService
 			$queryInVeld =
 				is_string($profiel->$veld) &&
 				$query !== '' &&
-				strpos($profiel->$veld, $query) !== false;
+				str_contains($profiel->$veld, $query);
 
 			// Geef dit profiel niet terug als een niet zichtbaar veld de query bevat.
 			if (!$zichtbaar && $queryInVeld) {
@@ -542,7 +525,7 @@ class LidZoekerService
 		return $this->velden;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$return = 'Zoeker:';
 		$return .= print_r($this->rawQuery, true);

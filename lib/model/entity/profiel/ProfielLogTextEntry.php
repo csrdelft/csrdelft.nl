@@ -13,15 +13,12 @@ namespace CsrDelft\model\entity\profiel;
  */
 class ProfielLogTextEntry extends AbstractProfielLogEntry
 {
-	public $text;
-
-	public function __construct($text)
+	public function __construct(public $text)
 	{
-		$this->text = $text;
 	}
 
 	public function toHtml()
 	{
-		return htmlspecialchars($this->text);
+		return htmlspecialchars((string) $this->text);
 	}
 }

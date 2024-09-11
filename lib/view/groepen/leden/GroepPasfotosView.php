@@ -16,23 +16,15 @@ use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use Twig\Environment;
 
-class GroepPasfotosView implements ToResponse
+class GroepPasfotosView implements ToResponse, \Stringable
 {
 	use ToHtmlResponse;
 
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	private $groep;
-
-	public function __construct(Environment $twig, $groep)
+	public function __construct(private Environment $twig, private $groep)
 	{
-		$this->twig = $twig;
-		$this->groep = $groep;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 		$lid = $em

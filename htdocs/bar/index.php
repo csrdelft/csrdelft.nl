@@ -6,7 +6,7 @@ $barsysteem = new Barsysteem();
 
 function barCsrf() {
     global $barsysteem;
-    echo "<input type='hidden' name=\"X-BARSYSTEEM-CSRF\" value=\"".htmlentities($barsysteem->getCsrfToken())."\" />";
+    echo "<input type='hidden' name=\"X-BARSYSTEEM-CSRF\" value=\"".htmlentities((string) $barsysteem->getCsrfToken())."\" />";
 }
 
 
@@ -19,7 +19,7 @@ if ($barsysteem->isLoggedIn()) {
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta property="X-BARSYSTEEM-CSRF" content="<?php echo htmlentities($barsysteem->getCsrfToken()); ?>" />
+        <meta property="X-BARSYSTEEM-CSRF" content="<?php echo htmlentities((string) $barsysteem->getCsrfToken()); ?>" />
         <title>Barsysteem C.S.R.</title>
 
         <!-- Bootstrap core CSS -->

@@ -41,21 +41,11 @@ class PinTransactieMatcher
 	 * @var PinTransactieMatch[]
 	 */
 	private $matches;
-	/**
-	 * @var PinTransactieMatchRepository
-	 */
-	private $pinTransactieMatchModel;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
 
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		PinTransactieMatchRepository $pinTransactieMatchModel
+		private readonly EntityManagerInterface $entityManager,
+		private readonly PinTransactieMatchRepository $pinTransactieMatchModel
 	) {
-		$this->pinTransactieMatchModel = $pinTransactieMatchModel;
-		$this->entityManager = $entityManager;
 	}
 
 	public function setPinTransacties(array $pinTransacties)
@@ -72,9 +62,10 @@ class PinTransactieMatcher
 	 */
 	public function clean()
 	{
-		$ids = array_map(function (CiviBestelling $inhoud) {
-			return $inhoud->id;
-		}, $this->pinBestellingen);
+		$ids = array_map(
+			fn(CiviBestelling $inhoud) => $inhoud->id,
+			$this->pinBestellingen
+		);
 		$this->pinTransactieMatchModel->cleanByBestellingIds($ids);
 	}
 
@@ -137,15 +128,20 @@ class PinTransactieMatcher
 	public function match()
 	{
 		// Sorteer beide op volgorde van moment
-		usort($this->pinBestellingen, function (
-			CiviBestelling $a,
-			CiviBestelling $b
-		) {
-			return self::compareDate($a->moment, $b->moment);
-		});
-		usort($this->pinTransacties, function (PinTransactie $a, PinTransactie $b) {
-			return self::compareDate($a->datetime, $b->datetime);
-		});
+		usort(
+			$this->pinBestellingen,
+			fn(CiviBestelling $a, CiviBestelling $b) => self::compareDate(
+				$a->moment,
+				$b->moment
+			)
+		);
+		usort(
+			$this->pinTransacties,
+			fn(PinTransactie $a, PinTransactie $b) => self::compareDate(
+				$a->datetime,
+				$b->datetime
+			)
+		);
 
 		$pinTransacties = $this->pinTransacties;
 		$pinBestellingen = $this->pinBestellingen;

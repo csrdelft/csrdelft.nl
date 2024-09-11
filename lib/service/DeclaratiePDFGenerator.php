@@ -12,19 +12,10 @@ use Twig\Environment;
 
 class DeclaratiePDFGenerator
 {
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var Filesystem
-	 */
-	private $filesystem;
-
-	public function __construct(Environment $twig, Filesystem $filesystem)
-	{
-		$this->twig = $twig;
-		$this->filesystem = $filesystem;
+	public function __construct(
+		private readonly Environment $twig,
+		private readonly Filesystem $filesystem
+	) {
 	}
 
 	private function correctImageOrientation($filename)
@@ -114,7 +105,7 @@ class DeclaratiePDFGenerator
 		$pdf->AddPage();
 		$this->correctImageOrientation($filename);
 
-		list($width, $height) = getimagesize($filename);
+		[$width, $height] = getimagesize($filename);
 		$aspectImage = $width / $height;
 		$aspectPage = $pdf->getPageWidth() / $pdf->getPageHeight();
 		if ($aspectImage > $aspectPage) {

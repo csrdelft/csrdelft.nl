@@ -48,7 +48,7 @@ class KetzerSoortField extends GroepSoortField
 	 */
 	public function validate()
 	{
-		$class = explode('_', $this->value, 2);
+		$class = explode('_', (string) $this->value, 2);
 
 		if ($class[0] === Activiteit::class) {
 			$soort = $class[1];

@@ -31,33 +31,13 @@ class AccessControlEventListener
 		'league.oauth2_server.controller.token::indexAction' => true,
 		'league.oauth2_server.controller.authorization::indexAction' => true,
 	];
-	/**
-	 * @var CsrfService
-	 */
-	private $csrfService;
-	/**
-	 * @var Reader
-	 */
-	private $annotations;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $em;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	public function __construct(
-		CsrfService $csrfService,
-		Security $security,
-		Reader $annotations,
-		EntityManagerInterface $entityManager
+		private readonly CsrfService $csrfService,
+		private readonly Security $security,
+		private readonly Reader $annotations,
+		private readonly EntityManagerInterface $em
 	) {
-		$this->csrfService = $csrfService;
-		$this->annotations = $annotations;
-		$this->em = $entityManager;
-		$this->security = $security;
 	}
 
 	/**

@@ -6,19 +6,10 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 
 class JwtTokenBadge implements BadgeInterface
 {
-	/**
-	 * @var string
-	 */
-	private $token;
-	/**
-	 * @var string|null
-	 */
-	private $refreshToken;
-
-	public function __construct(string $token, ?string $refreshToken)
-	{
-		$this->token = $token;
-		$this->refreshToken = $refreshToken;
+	public function __construct(
+		private readonly string $token,
+		private readonly ?string $refreshToken
+	) {
 	}
 
 	/**

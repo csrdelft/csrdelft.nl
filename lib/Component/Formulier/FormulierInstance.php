@@ -23,54 +23,32 @@ use Twig\Environment;
  */
 class FormulierInstance
 {
-	public $post = true;
 	protected $enctype = 'multipart/form-data';
-	private $action;
-	private $formKnoppen;
-	/** @var FormElement[] */
-	private $fields;
-	private $showMelding;
-	private $titel;
-	private $preventCsrf;
 	/**
 	 * @var string
 	 */
 	private $formId;
 	private $model;
-	private $css_classes;
-	private $dataTableId;
 	private $modalBreedte;
-	private $validationMethods;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
 
+	/**
+	 * @param \CsrDelft\view\formulier\FormElement[] $fields
+	 */
 	public function __construct(
-		Environment $twig,
-		$action,
-		$titel,
-		$dataTableId,
-		$formKnoppen,
-		$fields,
-		$showMelding,
-		$preventCsrf,
-		$css_classes,
-		$validationMethods = [],
-		$post = true
+		private readonly Environment $twig,
+		private $action,
+		private $titel,
+		private $dataTableId,
+		private $formKnoppen,
+		/** @var FormElement[] */
+		private $fields,
+		private $showMelding,
+		private $preventCsrf,
+		private $css_classes,
+		private $validationMethods = [],
+		public $post = true
 	) {
 		$this->formId = CryptoUtil::uniqid_safe('Formulier_');
-		$this->action = $action;
-		$this->formKnoppen = $formKnoppen;
-		$this->fields = $fields;
-		$this->showMelding = $showMelding;
-		$this->titel = $titel;
-		$this->post = $post;
-		$this->preventCsrf = $preventCsrf;
-		$this->css_classes = $css_classes;
-		$this->dataTableId = $dataTableId;
-		$this->validationMethods = $validationMethods;
-		$this->twig = $twig;
 	}
 
 	public function createView()
@@ -110,7 +88,7 @@ class FormulierInstance
 		return '<form enctype="' .
 			$this->enctype .
 			'" action="' .
-			htmlspecialchars($this->action) .
+			htmlspecialchars((string) $this->action) .
 			'" id="' .
 			$this->formId .
 			'" data-tableid="' .
@@ -140,7 +118,7 @@ class FormulierInstance
 	protected function getScriptTag()
 	{
 		$js = $this->getJavascript();
-		if (trim($js) == '') {
+		if (trim((string) $js) == '') {
 			return '';
 		}
 		return <<<HTML
@@ -360,9 +338,9 @@ HTML;
 	{
 		$fieldName = $field->getName();
 		if ($this->model) {
-			if (method_exists($this->model, 'set' . ucfirst($fieldName))) {
+			if (method_exists($this->model, 'set' . ucfirst((string) $fieldName))) {
 				call_user_func(
-					[$this->model, 'set' . ucfirst($fieldName)],
+					[$this->model, 'set' . ucfirst((string) $fieldName)],
 					$field->getFormattedValue()
 				);
 			} elseif (property_exists($this->model, $fieldName)) {
@@ -371,10 +349,7 @@ HTML;
 		}
 	}
 
-	/**
-	 * @param mixed $model
-	 */
-	public function setModel($model): void
+	public function setModel(mixed $model): void
 	{
 		$this->model = $model;
 	}

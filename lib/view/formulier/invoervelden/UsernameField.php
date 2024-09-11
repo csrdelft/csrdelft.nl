@@ -33,7 +33,8 @@ class UsernameField extends TextField
 			ContainerFacade::getContainer()
 				->get(AccountRepository::class)
 				->existsUsername($this->value) and
-			strtolower($this->value) !== strtolower($this->origvalue)
+			strtolower((string) $this->value) !==
+				strtolower((string) $this->origvalue)
 		) {
 			$this->error = 'Deze gebruikersnaam is al in gebruik';
 		}

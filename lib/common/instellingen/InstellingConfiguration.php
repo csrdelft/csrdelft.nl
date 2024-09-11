@@ -33,9 +33,7 @@ class InstellingConfiguration implements ConfigurationInterface
 			->arrayPrototype()
 			->beforeNormalization()
 			->ifString()
-			->then(function ($v) {
-				return [self::FIELD_DEFAULT => $v];
-			})
+			->then(fn($v) => [self::FIELD_DEFAULT => $v])
 			->end()
 			->validate()
 			->ifTrue(function ($options) {
@@ -65,9 +63,7 @@ class InstellingConfiguration implements ConfigurationInterface
 			->scalarNode(self::FIELD_TYPE)
 			->defaultValue(InstellingType::String)
 			->validate()
-			->ifTrue(function ($type) {
-				return !isset(InstellingType::getTypeOptions()[$type]);
-			})
+			->ifTrue(fn($type) => !isset(InstellingType::getTypeOptions()[$type]))
 			->thenInvalid('type %s is not in T.')
 			->end()
 			->end()

@@ -26,9 +26,9 @@ class OAuth2Controller extends AbstractController
 {
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("/session/oauth2-refresh-token", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/session/oauth2-refresh-token', methods: ['POST'])]
 	public function oauth2Data(ManagerRegistry $managerRegistry)
 	{
 		$accessTokens = $managerRegistry
@@ -47,8 +47,8 @@ class OAuth2Controller extends AbstractController
 		}
 
 		return $this->tableData(
-			array_map(function (RefreshToken $token) {
-				return [
+			array_map(
+				fn(RefreshToken $token) => [
 					'UUID' => $token->getIdentifier() . '@RefreshToken.csrdelft.nl',
 					'identifier' => $token->getIdentifier(),
 					'client' => $token
@@ -57,17 +57,23 @@ class OAuth2Controller extends AbstractController
 						->getIdentifier(),
 					'expiry' => $token->getExpiry(),
 					'revoked' => $token->isRevoked(),
-				];
-			}, $refreshTokens)
+				],
+				$refreshTokens
+			)
 		);
 	}
 
 	/**
-	 * @Route("/session/oauth2-refresh-token-revoke/{identifier}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 * @param RefreshToken $refreshToken
 	 * @return GenericDataTableResponse
 	 */
+	#[
+		Route(
+			path: '/session/oauth2-refresh-token-revoke/{identifier}',
+			methods: ['POST']
+		)
+	]
 	public function oauth2RefreshTokenRevoke(
 		ManagerRegistry $managerRegistry,
 		RefreshToken $refreshToken
@@ -92,12 +98,12 @@ class OAuth2Controller extends AbstractController
 	}
 
 	/**
-	 * @Route("/session/oauth/remember", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 * @param RememberOAuthRepository $rememberOAuthRepository
 	 * @return Response
 	 * @throws ExceptionInterface
 	 */
+	#[Route(path: '/session/oauth/remember', methods: ['POST'])]
 	public function oauth2RememberTokenData(
 		RememberOAuthRepository $rememberOAuthRepository
 	) {
@@ -107,11 +113,11 @@ class OAuth2Controller extends AbstractController
 	}
 
 	/**
-	 * @Route("/session/oauth/remember/{id}/delete", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 * @param RememberOAuth $rememberOAuth
 	 * @return GenericDataTableResponse
 	 */
+	#[Route(path: '/session/oauth/remember/{id}/delete', methods: ['POST'])]
 	public function oauth2RememberDelete(
 		ManagerRegistry $managerRegistry,
 		RememberOAuth $rememberOAuth

@@ -10,33 +10,19 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class DataTableInstance
 {
-	/** @var array */
-	private $settings;
-	/** @var string */
-	private $titel;
-	/** @var string */
-	private $tableId;
-	/** @var SerializerInterface */
-	private $serializer;
-	/** @var NormalizerInterface */
-	private $normalizer;
-	/** @var string */
-	private $beschrijving;
-
+	/**
+	 * @param string $titel
+	 * @param string $tableId
+	 * @param string $beschrijving
+	 */
 	public function __construct(
-		SerializerInterface $serializer,
-		NormalizerInterface $normalizer,
-		$titel,
-		$beschrijving,
-		$tableId,
-		array $settings
+		private readonly SerializerInterface $serializer,
+		private readonly NormalizerInterface $normalizer,
+		private $titel,
+		private $beschrijving,
+		private $tableId,
+		private readonly array $settings
 	) {
-		$this->settings = $settings;
-		$this->titel = $titel;
-		$this->tableId = $tableId;
-		$this->serializer = $serializer;
-		$this->normalizer = $normalizer;
-		$this->beschrijving = $beschrijving;
 	}
 
 	public function createView()

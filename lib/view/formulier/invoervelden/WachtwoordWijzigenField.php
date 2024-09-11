@@ -24,11 +24,11 @@ class WachtwoordWijzigenField extends InputField
 	protected $fieldClassName = '';
 	protected $wrapperClassName = '';
 
-	private $require_current;
-
-	public function __construct($name, Account $account, $require_current = true)
-	{
-		$this->require_current = $require_current;
+	public function __construct(
+		$name,
+		Account $account,
+		private $require_current = true
+	) {
 		parent::__construct($name, null, '', $account);
 		$this->title =
 			'Het nieuwe wachtwoord moet langer zijn dan 23 tekens of langer dan 10 en ook hoofdletters, kleine letters, cijfers en speciale tekens bevatten.';
@@ -96,8 +96,8 @@ class WachtwoordWijzigenField extends InputField
 	public function checkZwarteLijst($pass_plain)
 	{
 		foreach ($this->blacklist as $disallowed) {
-			if (stripos($pass_plain, $disallowed) !== false) {
-				$this->error = htmlspecialchars($disallowed);
+			if (stripos((string) $pass_plain, (string) $disallowed) !== false) {
+				$this->error = htmlspecialchars((string) $disallowed);
 				return true;
 			}
 		}
@@ -118,7 +118,7 @@ class WachtwoordWijzigenField extends InputField
 		// filter_input does not use current value in $_POST
 		$new = $_POST[$this->name . '_new'];
 		$confirm = $_POST[$this->name . '_confirm'];
-		$length = strlen(utf8_decode($new));
+		$length = strlen(mb_convert_encoding($new, 'ISO-8859-1'));
 		if ($this->require_current and empty($current)) {
 			$this->error = 'U moet uw huidige wachtwoord invoeren';
 		} elseif ($this->required and empty($new)) {
@@ -143,29 +143,29 @@ class WachtwoordWijzigenField extends InputField
 					'Het nieuwe wachtwoord of een deel ervan staat op de zwarte lijst: "' .
 					$this->error .
 					'"';
-			} elseif (preg_match('/^[0-9]*$/', $new)) {
+			} elseif (preg_match('/^[0-9]*$/', (string) $new)) {
 				$this->error =
 					'Het nieuwe wachtwoord mag niet uit alleen getallen bestaan';
 			} elseif ($length < 23) {
-				if (preg_match('/^[a-zA-Z]*$/', $new)) {
+				if (preg_match('/^[a-zA-Z]*$/', (string) $new)) {
 					$this->error =
 						'Het nieuwe wachtwoord moet ook cijfers en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-				} elseif (preg_match('/^[0-9a-z]*$/', $new)) {
+				} elseif (preg_match('/^[0-9a-z]*$/', (string) $new)) {
 					$this->error =
 						'Het nieuwe wachtwoord moet ook hoofdletters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-				} elseif (preg_match('/^[0-9A-Z]*$/', $new)) {
+				} elseif (preg_match('/^[0-9A-Z]*$/', (string) $new)) {
 					$this->error =
 						'Het nieuwe wachtwoord moet ook kleine letters en speciale tekens bevatten<br />of langer zijn dan 23 tekens';
-				} elseif (preg_match('/^[0-9a-zA-Z]*$/', $new)) {
+				} elseif (preg_match('/^[0-9a-zA-Z]*$/', (string) $new)) {
 					$this->error =
 						'Het nieuwe wachtwoord moet ook speciale tekens bevatten<br />of langer zijn dan 23 tekens';
 				}
 			}
 
 			if (
-				preg_match('/(.)\1\1+/', $new) ||
-				preg_match('/(.{3,})\1+/', $new) ||
-				preg_match('/(.{4,}).*\1+/', $new)
+				preg_match('/(.)\1\1+/', (string) $new) ||
+				preg_match('/(.{3,})\1+/', (string) $new) ||
+				preg_match('/(.{4,}).*\1+/', (string) $new)
 			) {
 				$this->error = 'Het nieuwe wachtwoord bevat teveel herhaling';
 			} elseif (empty($confirm)) {

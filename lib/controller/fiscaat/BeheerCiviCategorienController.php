@@ -14,20 +14,17 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class BeheerCiviCategorienController
 {
-	/** @var CiviCategorieRepository */
-	private $civiCategorieRepository;
-
-	public function __construct(CiviCategorieRepository $civiCategorieRepository)
-	{
-		$this->civiCategorieRepository = $civiCategorieRepository;
+	public function __construct(
+		private readonly CiviCategorieRepository $civiCategorieRepository
+	) {
 	}
 
 	/**
 	 * @param Request $request
 	 * @return CiviCategorieSuggestiesResponse
-	 * @Route("/fiscaat/categorien/suggesties", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
+	#[Route(path: '/fiscaat/categorien/suggesties', methods: ['GET'])]
 	public function suggesties(Request $request)
 	{
 		$suggesties = $this->civiCategorieRepository->suggesties(

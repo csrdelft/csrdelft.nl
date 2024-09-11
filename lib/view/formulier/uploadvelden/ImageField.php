@@ -14,11 +14,6 @@ use CsrDelft\model\entity\Map;
  */
 class ImageField extends FileField
 {
-	protected $vierkant;
-	protected $minWidth;
-	protected $minHeight;
-	protected $maxWidth;
-	protected $maxHeight;
 	private $filterMime;
 
 	public function __construct(
@@ -27,11 +22,11 @@ class ImageField extends FileField
 		Afbeelding $behouden = null,
 		Map $dir = null,
 		array $filterMime = null,
-		$vierkant = false,
-		$minWidth = null,
-		$minHeight = null,
-		$maxWidth = 10000,
-		$maxHeight = 10000
+		protected $vierkant = false,
+		protected $minWidth = null,
+		protected $minHeight = null,
+		protected $maxWidth = 10000,
+		protected $maxHeight = 10000
 	) {
 		$this->filterMime =
 			$filterMime === null
@@ -44,11 +39,6 @@ class ImageField extends FileField
 			$dir,
 			$this->filterMime
 		);
-		$this->vierkant = $vierkant;
-		$this->minWidth = $minWidth;
-		$this->minHeight = $minHeight;
-		$this->maxWidth = $maxWidth;
-		$this->maxHeight = $maxHeight;
 	}
 
 	public function validate()

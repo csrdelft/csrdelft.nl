@@ -26,19 +26,6 @@ use Exception;
 class CiviBestellingRepository extends AbstractRepository
 {
 	/**
-	 * @var CiviBestellingInhoudRepository
-	 */
-	private $civiBestellingInhoudRepository;
-	/**
-	 * @var CiviProductRepository
-	 */
-	private $civiProductRepository;
-	/**
-	 * @var CiviSaldoRepository
-	 */
-	private $civiSaldoRepository;
-
-	/**
 	 * @param ManagerRegistry $registry
 	 * @param CiviBestellingInhoudRepository $civiBestellingInhoudRepository
 	 * @param CiviProductRepository $civiProductRepository
@@ -46,15 +33,11 @@ class CiviBestellingRepository extends AbstractRepository
 	 */
 	public function __construct(
 		ManagerRegistry $registry,
-		CiviBestellingInhoudRepository $civiBestellingInhoudRepository,
-		CiviProductRepository $civiProductRepository,
-		CiviSaldoRepository $civiSaldoRepository
+		private readonly CiviBestellingInhoudRepository $civiBestellingInhoudRepository,
+		private readonly CiviProductRepository $civiProductRepository,
+		private readonly CiviSaldoRepository $civiSaldoRepository
 	) {
 		parent::__construct($registry, CiviBestelling::class);
-
-		$this->civiBestellingInhoudRepository = $civiBestellingInhoudRepository;
-		$this->civiProductRepository = $civiProductRepository;
-		$this->civiSaldoRepository = $civiSaldoRepository;
 	}
 
 	/**
@@ -123,7 +106,7 @@ class CiviBestellingRepository extends AbstractRepository
 	 */
 	public function revert(CiviBestelling $bestelling)
 	{
-		return $this->_em->transactional(function () use ($bestelling) {
+		return $this->_em->transactional(function () use ($bestelling): void {
 			if ($bestelling->deleted) {
 				throw new Exception('Bestelling kan niet worden teruggedraaid.');
 			}

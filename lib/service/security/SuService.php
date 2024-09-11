@@ -13,39 +13,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class SuService
 {
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
-	 * @var LoginService
-	 */
-	private $loginService;
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var TokenStorageInterface
-	 */
-	private $tokenStorage;
-	/**
-	 * @var AccessService
-	 */
-	private $accessService;
-
 	public function __construct(
-		Security $security,
-		LoginService $loginService,
-		AccountRepository $accountRepository,
-		TokenStorageInterface $tokenStorage,
-		AccessService $accessService
+		private readonly Security $security,
+		private readonly LoginService $loginService,
+		private readonly AccountRepository $accountRepository,
+		private readonly TokenStorageInterface $tokenStorage,
+		private readonly AccessService $accessService
 	) {
-		$this->accountRepository = $accountRepository;
-		$this->loginService = $loginService;
-		$this->security = $security;
-		$this->tokenStorage = $tokenStorage;
-		$this->accessService = $accessService;
 	}
 
 	/**

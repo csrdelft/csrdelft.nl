@@ -10,27 +10,11 @@ use Twig\Environment;
 
 class BbNovietVanDeDag extends BbTag
 {
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var Security
-	 */
-	private $security;
-
 	public function __construct(
-		Security $security,
-		ProfielRepository $profielRepository,
-		Environment $twig
+		private readonly Security $security,
+		private readonly ProfielRepository $profielRepository,
+		private readonly Environment $twig
 	) {
-		$this->profielRepository = $profielRepository;
-		$this->twig = $twig;
-		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -70,9 +54,7 @@ class BbNovietVanDeDag extends BbTag
 				$volgorde[] = @mt_rand();
 			}
 
-			uksort($profielen, function ($a, $b) use ($volgorde) {
-				return $volgorde[$a] <=> $volgorde[$b];
-			});
+			uksort($profielen, fn($a, $b) => $volgorde[$a] <=> $volgorde[$b]);
 
 			$noviet = array_values($profielen)[$positie];
 

@@ -41,14 +41,6 @@ class LidToestemmingRepository extends AbstractRepository
 	const MODULE_ALGEMEEN = 'algemeen';
 	const FIELD_WAARDE = 'waarde';
 	const MODULE_TOESTEMMING = 'toestemming';
-	/**
-	 * @var RequestStack
-	 */
-	private $requestStack;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	/**
 	 * @param ManagerRegistry $registry
@@ -57,14 +49,12 @@ class LidToestemmingRepository extends AbstractRepository
 	 */
 	public function __construct(
 		ManagerRegistry $registry,
-		RequestStack $requestStack,
-		Security $security
+		private RequestStack $requestStack,
+		private Security $security
 	) {
 		parent::__construct($registry, LidToestemming::class);
 
 		$this->load('instellingen/toestemming.yaml', new InstellingConfiguration());
-		$this->requestStack = $requestStack;
-		$this->security = $security;
 	}
 
 	/**

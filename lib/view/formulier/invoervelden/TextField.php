@@ -28,7 +28,7 @@ class TextField extends InputField
 	) {
 		parent::__construct(
 			$name,
-			$value === null ? $value : htmlspecialchars_decode($value),
+			$value === null ? $value : htmlspecialchars_decode((string) $value),
 			$description,
 			$model
 		);
@@ -40,7 +40,7 @@ class TextField extends InputField
 		}
 		if ($this->isPosted()) {
 			// reverse InputField constructor $this->getValue()
-			$this->value = htmlspecialchars_decode($this->value);
+			$this->value = htmlspecialchars_decode((string) $this->value);
 		}
 	}
 
@@ -58,12 +58,18 @@ class TextField extends InputField
 			return false;
 		}
 		// als max_len is gezet dan checken of de lengte er niet boven zit
-		if (is_int($this->max_len) and strlen($this->value) > $this->max_len) {
+		if (
+			is_int($this->max_len) and
+			strlen((string) $this->value) > $this->max_len
+		) {
 			$this->error =
 				'Dit veld mag maximaal ' . $this->max_len . ' tekens lang zijn';
 		}
 		// als min_len is gezet dan checken of de lengte er niet onder zit
-		if (is_int($this->min_len) and strlen($this->value) < $this->min_len) {
+		if (
+			is_int($this->min_len) and
+			strlen((string) $this->value) < $this->min_len
+		) {
 			$this->error =
 				'Dit veld moet minimaal ' . $this->min_len . ' tekens lang zijn';
 		}
@@ -79,6 +85,6 @@ class TextField extends InputField
 		if ($this->empty_null and $this->value == '') {
 			return null;
 		}
-		return htmlspecialchars($this->value);
+		return htmlspecialchars((string) $this->value);
 	}
 }

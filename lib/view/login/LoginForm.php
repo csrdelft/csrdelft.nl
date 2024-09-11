@@ -24,33 +24,12 @@ use Twig\Environment;
  */
 class LoginForm implements FormulierTypeInterface
 {
-	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-	/**
-	 * @var CsrfTokenManagerInterface
-	 */
-	private $csrfTokenManager;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var TranslatorInterface
-	 */
-	private $translator;
-
 	public function __construct(
-		TranslatorInterface $translator,
-		UrlGeneratorInterface $urlGenerator,
-		CsrfTokenManagerInterface $csrfTokenManager,
-		Environment $twig
+		private readonly TranslatorInterface $translator,
+		private readonly UrlGeneratorInterface $urlGenerator,
+		private readonly CsrfTokenManagerInterface $csrfTokenManager,
+		private readonly Environment $twig
 	) {
-		$this->urlGenerator = $urlGenerator;
-		$this->csrfTokenManager = $csrfTokenManager;
-		$this->twig = $twig;
-		$this->translator = $translator;
 	}
 
 	/**
@@ -63,20 +42,14 @@ class LoginForm implements FormulierTypeInterface
 		AuthenticationException $exception,
 		$lastUsername
 	) {
-		switch ($exception->getMessageKey()) {
-			case 'Username could not be found.':
-				$errorString = $this->translator->trans(
-					"Gebruiker '%username%' niet gevonden.",
-					['%username%' => $lastUsername]
-				);
-				break;
-			case 'Invalid credentials.':
-				$errorString = $this->translator->trans('Onjuist wachtwoord.');
-				break;
-			default:
-				$errorString = $this->translator->trans('Er was een fout.');
-				break;
-		}
+		$errorString = match ($exception->getMessageKey()) {
+			'Username could not be found.' => $this->translator->trans(
+				"Gebruiker '%username%' niet gevonden.",
+				['%username%' => $lastUsername]
+			),
+			'Invalid credentials.' => $this->translator->trans('Onjuist wachtwoord.'),
+			default => $this->translator->trans('Er was een fout.'),
+		};
 
 		return strtr($errorString, $exception->getMessageData());
 	}

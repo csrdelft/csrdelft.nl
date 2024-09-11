@@ -24,8 +24,8 @@ class Commissie extends Groep implements HeeftSoort, HeeftMoment
 	 * (Bestuurs-)Commissie / SjaarCie
 	 * @var CommissieSoort
 	 * @ORM\Column(type="enumCommissieSoort")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $commissieSoort;
 
 	public function getUrl()

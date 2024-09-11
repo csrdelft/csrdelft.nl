@@ -276,7 +276,7 @@ class ExternProfielForm extends Formulier
 				$fields,
 				(new ToestemmingModalForm($lidToestemmingRepository, true))->getFields()
 			);
-		} catch (Exception $e) {
+		} catch (Exception) {
 		}
 
 		$fields[] = new SubmitKnop(

@@ -15,8 +15,8 @@ trait GroepAanmeldRechten
 	 * Rechten benodigd voor aanmelden
 	 * @var string|null
 	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public $rechtenAanmelden;
 
 	public function getAanmeldRechten()

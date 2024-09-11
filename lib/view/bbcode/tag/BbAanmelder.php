@@ -14,27 +14,11 @@ class BbAanmelder extends BbTag
 	private $activiteit;
 	private $aantal;
 
-	/**
-	 * @var ReeksRepository
-	 */
-	private $reeksRepository;
-	/**
-	 * @var AanmeldActiviteitRepository
-	 */
-	private $activiteitRepository;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-
 	public function __construct(
-		ReeksRepository $reeksRepository,
-		AanmeldActiviteitRepository $activiteitRepository,
-		Environment $twig
+		private readonly ReeksRepository $reeksRepository,
+		private readonly AanmeldActiviteitRepository $activiteitRepository,
+		private readonly Environment $twig
 	) {
-		$this->reeksRepository = $reeksRepository;
-		$this->activiteitRepository = $activiteitRepository;
-		$this->twig = $twig;
 	}
 
 	public static function getTagName()

@@ -113,7 +113,7 @@ class MenuItem implements DisplayEntity
 				);
 				$draad = $forumDradenRepository->get((int) $draad_id);
 				return $draad->isOngelezen();
-			} catch (CsrException $e) {
+			} catch (CsrException) {
 				FlashUtil::setFlashWithContainerFacade(
 					'Uw favoriete forumdraadje bestaat helaas niet meer: ' .
 						htmlspecialchars($this->tekst),

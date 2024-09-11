@@ -14,42 +14,17 @@ use Symfony\Component\Security\Core\Security;
 class BbIsHetAl extends BbTag
 {
 	/**
-	 * @var RequestStack
-	 */
-	private $requestStack;
-	/**
-	 * @var AgendaRepository
-	 */
-	private $agendaRepository;
-	/**
-	 * @var LidInstellingenRepository
-	 */
-	private $lidInstellingenRepository;
-	/**
-	 * @var WoordVanDeDagRepository
-	 */
-	private $woordVanDeDagRepository;
-	/**
 	 * @var string
 	 */
 	private $value;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	public function __construct(
-		RequestStack $requestStack,
-		Security $security,
-		AgendaRepository $agendaRepository,
-		LidInstellingenRepository $lidInstellingenRepository,
-		WoordVanDeDagRepository $woordVanDeDagRepository
+		private readonly RequestStack $requestStack,
+		private readonly Security $security,
+		private readonly AgendaRepository $agendaRepository,
+		private readonly LidInstellingenRepository $lidInstellingenRepository,
+		private readonly WoordVanDeDagRepository $woordVanDeDagRepository
 	) {
-		$this->agendaRepository = $agendaRepository;
-		$this->lidInstellingenRepository = $lidInstellingenRepository;
-		$this->woordVanDeDagRepository = $woordVanDeDagRepository;
-		$this->requestStack = $requestStack;
-		$this->security = $security;
 	}
 
 	public static function getTagName()

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BiebRubriekRepository")
  * @ORM\Table("biebcategorie")
  */
-class BiebRubriek
+class BiebRubriek implements \Stringable
 {
 	/**
 	 * @var int
@@ -36,7 +36,7 @@ class BiebRubriek
 	 */
 	protected $parent;
 
-	public function __toString()
+	public function __toString(): string
 	{
 		if ($this->p_id == $this->id) {
 			return '';

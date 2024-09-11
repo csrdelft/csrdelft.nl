@@ -24,7 +24,7 @@ class MultiSelectField extends InputField
 
 		// Splits keuzes
 		$selects = explode('&&', str_replace('&amp;&amp;', '&&', $keuzeopties));
-		$gekozen = explode('&&', $this->value);
+		$gekozen = explode('&&', (string) $this->value);
 
 		foreach ($selects as $i => $opties) {
 			// Splits mogelijkheden per keuze

@@ -21,30 +21,15 @@ use Twig\Environment;
 class BbBoek extends BbTag
 {
 	/**
-	 * @var BoekRepository
-	 */
-	private $boekRepository;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
 	 * @var string
 	 */
 	private $id;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	public function __construct(
-		BoekRepository $boekRepository,
-		Environment $twig,
-		Security $security
+		private readonly BoekRepository $boekRepository,
+		private readonly Environment $twig,
+		private readonly Security $security
 	) {
-		$this->boekRepository = $boekRepository;
-		$this->twig = $twig;
-		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -66,7 +51,7 @@ class BbBoek extends BbTag
 				$boek->titel,
 				'Auteur: ' . $boek->auteur
 			);
-		} catch (CsrException $e) {
+		} catch (CsrException) {
 			return '[boek] Boek [boekid:' . (int) $this->id . '] bestaat niet.';
 		}
 	}
@@ -82,7 +67,7 @@ class BbBoek extends BbTag
 			return $this->twig->render('bibliotheek/boek-bb.html.twig', [
 				'boek' => $boek,
 			]);
-		} catch (CsrException $e) {
+		} catch (CsrException) {
 			return '[boek] Boek [boekid:' . (int) $this->id . '] bestaat niet.';
 		}
 	}

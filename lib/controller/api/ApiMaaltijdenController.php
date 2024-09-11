@@ -12,27 +12,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiMaaltijdenController extends AbstractController
 {
-	private $maaltijdenRepository;
-	private $maaltijdAanmeldingenRepository;
-	/**
-	 * @var MaaltijdAanmeldingenService
-	 */
-	private $maaltijdAanmeldingenService;
-
 	public function __construct(
-		MaaltijdenRepository $maaltijdenRepository,
-		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
+		private readonly MaaltijdenRepository $maaltijdenRepository,
+		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
+		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
 	) {
-		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	/**
-	 * @Route("/API/2.0/maaltijden/{id}/aanmelden", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
+	#[Route(path: '/API/2.0/maaltijden/{id}/aanmelden', methods: ['POST'])]
 	public function maaltijdAanmelden($id)
 	{
 		try {
@@ -49,9 +39,9 @@ class ApiMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @Route("/API/2.0/maaltijden/{id}/afmelden", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
 	 */
+	#[Route(path: '/API/2.0/maaltijden/{id}/afmelden', methods: ['POST'])]
 	public function maaltijdAfmelden($id)
 	{
 		try {

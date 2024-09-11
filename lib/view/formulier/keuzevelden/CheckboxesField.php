@@ -10,15 +10,12 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  */
 class CheckboxesField extends InputField
 {
-	/**
-	 * @var array
-	 */
-	private $opties;
-
-	public function __construct($name, $value, $description, array $opties)
-	{
-		$this->opties = $opties;
-
+	public function __construct(
+		$name,
+		$value,
+		$description,
+		private readonly array $opties
+	) {
 		parent::__construct($name, $value, $description, null);
 	}
 

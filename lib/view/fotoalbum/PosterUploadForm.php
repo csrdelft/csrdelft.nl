@@ -45,7 +45,7 @@ class PosterUploadForm extends Formulier
 			'</ul>';
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .= parent::__toString();

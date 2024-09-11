@@ -21,27 +21,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class DocumentBewerkenForm implements FormulierTypeInterface
 {
-	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-	/**
-	 * @var DocumentCategorieRepository
-	 */
-	private $documentCategorieRepository;
-	/**
-	 * @var LoginService
-	 */
-	private $loginService;
-
 	public function __construct(
-		UrlGeneratorInterface $urlGenerator,
-		LoginService $loginService,
-		DocumentCategorieRepository $documentCategorieRepository
+		private readonly UrlGeneratorInterface $urlGenerator,
+		private readonly LoginService $loginService,
+		private readonly DocumentCategorieRepository $documentCategorieRepository
 	) {
-		$this->urlGenerator = $urlGenerator;
-		$this->documentCategorieRepository = $documentCategorieRepository;
-		$this->loginService = $loginService;
 	}
 
 	/**

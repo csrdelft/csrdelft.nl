@@ -18,30 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CronCommand extends Command
 {
 	protected static $defaultName = 'stek:cron';
-	/**
-	 * @var DebugLogRepository
-	 */
-	private $debugLogRepository;
-	/**
-	 * @var OneTimeTokensRepository
-	 */
-	private $oneTimeTokensRepository;
-	/**
-	 * @var InstellingenRepository
-	 */
-	private $instellingenRepository;
-	/**
-	 * @var LidInstellingenRepository
-	 */
-	private $lidInstellingenRepository;
-	/**
-	 * @var CorveeHerinneringService
-	 */
-	private $corveeHerinneringService;
-	/**
-	 * @var ForumService
-	 */
-	private $forumService;
 
 	protected function configure()
 	{
@@ -49,20 +25,14 @@ class CronCommand extends Command
 	}
 
 	public function __construct(
-		DebugLogRepository $debugLogRepository,
-		OneTimeTokensRepository $oneTimeTokensRepository,
-		InstellingenRepository $instellingenRepository,
-		LidInstellingenRepository $lidInstellingenRepository,
-		CorveeHerinneringService $corveeHerinneringService,
-		ForumService $forumService
+		private readonly DebugLogRepository $debugLogRepository,
+		private readonly OneTimeTokensRepository $oneTimeTokensRepository,
+		private readonly InstellingenRepository $instellingenRepository,
+		private readonly LidInstellingenRepository $lidInstellingenRepository,
+		private readonly CorveeHerinneringService $corveeHerinneringService,
+		private readonly ForumService $forumService
 	) {
 		parent::__construct(null);
-		$this->debugLogRepository = $debugLogRepository;
-		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
-		$this->instellingenRepository = $instellingenRepository;
-		$this->lidInstellingenRepository = $lidInstellingenRepository;
-		$this->corveeHerinneringService = $corveeHerinneringService;
-		$this->forumService = $forumService;
 	}
 
 	protected function execute(

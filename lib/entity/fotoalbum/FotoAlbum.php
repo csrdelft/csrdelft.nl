@@ -67,12 +67,12 @@ class FotoAlbum extends Map
 		} elseif (
 			$absolute == true &&
 			str_starts_with(
-				PathUtil::realpathunix($path),
-				PathUtil::realpathunix(PHOTOALBUM_PATH)
+				(string) PathUtil::realpathunix($path),
+				(string) PathUtil::realpathunix(PHOTOALBUM_PATH)
 			)
 		) {
 			// Check that $path is inside PHOTOALBUM_PATH
-			$this->path = rtrim($path, '/');
+			$this->path = rtrim((string) $path, '/');
 			$this->subdir = substr(
 				$this->path,
 				strlen(PathUtil::realpathunix(PHOTOALBUM_PATH) . '/')
@@ -80,7 +80,9 @@ class FotoAlbum extends Map
 		} elseif (PathUtil::path_valid(PHOTOALBUM_PATH, $path)) {
 			// Check if $path not trying to traverse outside PHOTOALBUM_PATH
 			$this->path = rtrim(
-				PathUtil::realpathunix(PathUtil::join_paths(PHOTOALBUM_PATH, $path)),
+				(string) PathUtil::realpathunix(
+					PathUtil::join_paths(PHOTOALBUM_PATH, $path)
+				),
 				'/'
 			);
 			//We verwijderen het beginstuk van de string
@@ -88,7 +90,7 @@ class FotoAlbum extends Map
 		} else {
 			throw new NotFoundHttpException('Fotoalbum niet gevonden');
 		}
-		$this->dirname = basename($this->path);
+		$this->dirname = basename((string) $this->path);
 	}
 
 	public function getPath()
@@ -183,8 +185,8 @@ class FotoAlbum extends Map
 			}
 			foreach ($scan as $entry) {
 				if (
-					substr($entry, 0, 1) !== '.' &&
-					substr($entry, 0, 1) !== '_' &&
+					!str_starts_with($entry, '.') &&
+					!str_starts_with($entry, '_') &&
 					is_dir(PathUtil::join_paths($this->path, $entry))
 				) {
 					$subalbum = ContainerFacade::getContainer()
@@ -221,14 +223,14 @@ class FotoAlbum extends Map
 			// Anders een willekeurige foto:
 			$count = count($this->fotos);
 			if ($count > 0) {
-				$idx = rand(0, $count - 1);
+				$idx = random_int(0, $count - 1);
 				return $this->fotos[$idx]->getThumbUrl();
 			}
 		}
 		// Foto uit willekeurig subalbum:
 		$count = count($this->getSubAlbums());
 		if ($count > 0) {
-			$idx = rand(0, $count - 1);
+			$idx = random_int(0, $count - 1);
 			return $this->subalbums[$idx]->getCoverUrl();
 		}
 		// If all else fails:
@@ -239,7 +241,7 @@ class FotoAlbum extends Map
 	{
 		if ($this->hasFotos() && $this->dirname !== 'Posters') {
 			foreach ($this->getFotos() as $foto) {
-				if (strpos($foto->filename, 'folder') !== false) {
+				if (str_contains($foto->filename, 'folder')) {
 					return $foto->getThumbUrl();
 				}
 			}
@@ -281,7 +283,11 @@ class FotoAlbum extends Map
 				'fullUrl' => HostUtil::getCsrRoot() . $foto->getFullUrl(),
 				'thumbUrl' => $foto->getThumbUrl(),
 				'title' => '',
-				'hash' => str_replace(' ', '%20', urldecode($foto->getFullUrl())),
+				'hash' => str_replace(
+					' ',
+					'%20',
+					urldecode((string) $foto->getFullUrl())
+				),
 			];
 		}
 
@@ -315,7 +321,11 @@ class FotoAlbum extends Map
 				'fullUrl' => HostUtil::getCsrRoot() . $foto->getFullUrl(),
 				'thumbUrl' => $foto->getThumbUrl(),
 				'title' => '',
-				'hash' => str_replace(' ', '%20', urldecode($foto->getFullUrl())),
+				'hash' => str_replace(
+					' ',
+					'%20',
+					urldecode((string) $foto->getFullUrl())
+				),
 			];
 		}
 

@@ -30,29 +30,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CourantController extends AbstractController
 {
-	/**
-	 * @var CourantRepository
-	 */
-	private $courantRepository;
-	/**
-	 * @var CourantBerichtRepository
-	 */
-	private $courantBerichtRepository;
-
 	public function __construct(
-		CourantRepository $courantRepository,
-		CourantBerichtRepository $courantBerichtRepository
+		private readonly CourantRepository $courantRepository,
+		private readonly CourantBerichtRepository $courantBerichtRepository
 	) {
-		$this->courantRepository = $courantRepository;
-		$this->courantBerichtRepository = $courantBerichtRepository;
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/courant/archief", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 * @throws Exception
 	 */
+	#[Route(path: '/courant/archief', methods: ['GET'])]
 	public function archief(): Response
 	{
 		return $this->render('courant/archief.html.twig', [
@@ -66,9 +55,9 @@ class CourantController extends AbstractController
 	/**
 	 * @param Courant $courant
 	 * @return Response
-	 * @Route("/courant/bekijken/{id}", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
+	#[Route(path: '/courant/bekijken/{id}', methods: ['GET'])]
 	public function bekijken(Courant $courant): Response
 	{
 		return new Response($courant->inhoud);
@@ -76,9 +65,9 @@ class CourantController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/courant/voorbeeld", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
+	#[Route(path: '/courant/voorbeeld', methods: ['GET'])]
 	public function voorbeeld(): Response
 	{
 		return $this->render('courant/mail.html.twig', [
@@ -90,9 +79,9 @@ class CourantController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return Response
-	 * @Route("/courant", methods={"GET", "POST"})
 	 * @Auth(P_MAIL_POST)
 	 */
+	#[Route(path: '/courant', methods: ['GET', 'POST'])]
 	public function toevoegen(Request $request): Response
 	{
 		$bericht = new CourantBericht();
@@ -128,9 +117,9 @@ class CourantController extends AbstractController
 	 * @param Request $request
 	 * @param CourantBericht $bericht
 	 * @return Response
-	 * @Route("/courant/bewerken/{id}", methods={"GET", "POST"})
 	 * @Auth(P_MAIL_POST)
 	 */
+	#[Route(path: '/courant/bewerken/{id}', methods: ['GET', 'POST'])]
 	public function bewerken(Request $request, CourantBericht $bericht): Response
 	{
 		$form = $this->createFormulier(CourantBerichtFormulier::class, $bericht, [
@@ -157,9 +146,9 @@ class CourantController extends AbstractController
 	/**
 	 * @param CourantBericht $bericht
 	 * @return RedirectResponse
-	 * @Route("/courant/verwijderen/{id}", methods={"POST"})
 	 * @Auth(P_MAIL_POST)
 	 */
+	#[Route(path: '/courant/verwijderen/{id}', methods: ['POST'])]
 	public function verwijderen(CourantBericht $bericht): RedirectResponse
 	{
 		$this->denyAccessUnlessGranted(CourantBerichtVoter::BEHEREN, $bericht);
@@ -170,7 +159,7 @@ class CourantController extends AbstractController
 			$manager->flush();
 
 			$this->addFlash(FlashType::SUCCESS, 'Uw bericht is verwijderd.');
-		} catch (Exception $exception) {
+		} catch (Exception) {
 			$this->addFlash(FlashType::ERROR, 'Uw bericht is niet verwijderd.');
 		}
 		return $this->redirectToRoute('csrdelft_courant_toevoegen');
@@ -180,9 +169,15 @@ class CourantController extends AbstractController
 	 * @param null $iedereen
 	 * @return PlainView|RedirectResponse
 	 * @throws ConnectionException
-	 * @Route("/courant/verzenden/{iedereen}", methods={"POST"}, defaults={"iedereen": null})
 	 * @Auth(P_MAIL_SEND)
 	 */
+	#[
+		Route(
+			path: '/courant/verzenden/{iedereen}',
+			methods: ['POST'],
+			defaults: ['iedereen' => null]
+		)
+	]
 	public function verzenden($iedereen = null)
 	{
 		if (count($this->courantBerichtRepository->findAll()) < 1) {
@@ -225,7 +220,7 @@ class CourantController extends AbstractController
 					FlashType::SUCCESS,
 					'De courant is verzonden naar iedereen'
 				);
-			} catch (Exception $exception) {
+			} catch (Exception) {
 				$conn->rollBack();
 				$this->addFlash(FlashType::ERROR, 'Courant niet verzonden');
 			}

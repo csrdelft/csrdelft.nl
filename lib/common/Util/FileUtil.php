@@ -166,8 +166,8 @@ final class FileUtil
 		if (is_numeric($sSize)) {
 			return $sSize;
 		}
-		$sSuffix = substr($sSize, -1);
-		$iValue = substr($sSize, 0, -1);
+		$sSuffix = substr((string) $sSize, -1);
+		$iValue = substr((string) $sSize, 0, -1);
 		switch (strtoupper($sSuffix)) {
 			/** @noinspection PhpMissingBreakStatementInspection */
 			case 'P':
@@ -214,7 +214,9 @@ final class FileUtil
 		}
 
 		// Determine format from MIME-Type
-		$image['format'] = strtolower(preg_replace('/^.*?\//', '', $image['mime']));
+		$image['format'] = strtolower(
+			(string) preg_replace('/^.*?\//', '', $image['mime'])
+		);
 
 		// Import image
 		switch ($image['format']) {
@@ -268,22 +270,12 @@ final class FileUtil
 			)
 		) {
 			// Create thumbnail
-			switch (strtolower(preg_replace('/^.*\./', '', $dest_image))) {
-				case 'jpg':
-				case 'jpeg':
-					$return = imagejpeg($canvas, $dest_image, $jpg_quality);
-					break;
-				case 'png':
-					$return = imagepng($canvas, $dest_image);
-					break;
-				case 'gif':
-					$return = imagegif($canvas, $dest_image);
-					break;
-				default:
-					// Unsupported format
-					$return = false;
-					break;
-			}
+			$return = match (strtolower(preg_replace('/^.*\./', '', $dest_image))) {
+				'jpg', 'jpeg' => imagejpeg($canvas, $dest_image, $jpg_quality),
+				'png' => imagepng($canvas, $dest_image),
+				'gif' => imagegif($canvas, $dest_image),
+				default => false,
+			};
 
 			//plaatje ook voor de webserver leesbaar maken.
 			if ($return) {

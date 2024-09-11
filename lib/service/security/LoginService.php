@@ -36,27 +36,12 @@ class LoginService
 	 * @var string Huidige uid als met cli is ingelogd.
 	 */
 	private static $cliUid = 'x999';
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var TokenStorageInterface
-	 */
-	private $tokenStorage;
 
 	public function __construct(
-		Security $security,
-		AccountRepository $accountRepository,
-		TokenStorageInterface $tokenStorage
+		private readonly Security $security,
+		private readonly AccountRepository $accountRepository,
+		private readonly TokenStorageInterface $tokenStorage
 	) {
-		$this->accountRepository = $accountRepository;
-		$this->security = $security;
-		$this->tokenStorage = $tokenStorage;
 	}
 
 	/**
@@ -68,7 +53,9 @@ class LoginService
 	 */
 	public static function mag($permission)
 	{
-		return ContainerFacade::getContainer()->get(LoginService::class)->_mag($permission);
+		return ContainerFacade::getContainer()
+			->get(LoginService::class)
+			->_mag($permission);
 	}
 
 	private function _mag($permission)
@@ -149,7 +136,7 @@ class LoginService
 			return null;
 		}
 
-		switch (get_class($token)) {
+		switch ($token::class) {
 			case SwitchUserToken::class:
 				$method = AuthenticationMethod::impersonate;
 				break;

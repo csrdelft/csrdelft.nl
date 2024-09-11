@@ -19,57 +19,16 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ForumPostsService
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var ForumDradenRepository
-	 */
-	private $forumDradenRepository;
-	/**
-	 * @var ForumDradenVerbergenRepository
-	 */
-	private $forumDradenVerbergenRepository;
-	/**
-	 * @var ForumDradenMeldingRepository
-	 */
-	private $forumDradenMeldingRepository;
-	/**
-	 * @var ForumPostsRepository
-	 */
-	private $forumPostsRepository;
-	/**
-	 * @var ForumDradenGelezenRepository
-	 */
-	private $forumDradenGelezenRepository;
-	/**
-	 * @var ForumDradenReagerenRepository
-	 */
-	private $forumDradenReagerenRepository;
-	/**
-	 * @var ForumMeldingenService
-	 */
-	private $forumMeldingenService;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		ForumDradenRepository $forumDradenRepository,
-		ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		ForumPostsRepository $forumPostsRepository,
-		ForumMeldingenService $forumMeldingenService,
-		ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		ForumDradenReagerenRepository $forumDradenReagerenRepository,
-		ForumDradenVerbergenRepository $forumDradenVerbergenRepository
+		private readonly EntityManagerInterface $entityManager,
+		private readonly ForumDradenRepository $forumDradenRepository,
+		private readonly ForumDradenMeldingRepository $forumDradenMeldingRepository,
+		private readonly ForumPostsRepository $forumPostsRepository,
+		private readonly ForumMeldingenService $forumMeldingenService,
+		private readonly ForumDradenGelezenRepository $forumDradenGelezenRepository,
+		private readonly ForumDradenReagerenRepository $forumDradenReagerenRepository,
+		private readonly ForumDradenVerbergenRepository $forumDradenVerbergenRepository
 	) {
-		$this->entityManager = $entityManager;
-		$this->forumDradenRepository = $forumDradenRepository;
-		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
-		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
-		$this->forumPostsRepository = $forumPostsRepository;
-		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
-		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
-		$this->forumMeldingenService = $forumMeldingenService;
 	}
 
 	public function verplaatsForumPost(ForumDraad $nieuwDraad, ForumPost $post)
@@ -144,7 +103,7 @@ class ForumPostsService
 
 	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post)
 	{
-		similar_text($post->tekst, $nieuwe_tekst, $gelijkheid);
+		similar_text($post->tekst, (string) $nieuwe_tekst, $gelijkheid);
 		$post->tekst = $nieuwe_tekst;
 		$post->laatst_gewijzigd = date_create_immutable();
 		$bewerkt =

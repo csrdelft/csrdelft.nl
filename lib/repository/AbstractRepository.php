@@ -17,7 +17,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 	{
 		$metadata = $this->getClassMetadata();
 
-		$parts = explode('@', $UUID, 2);
+		$parts = explode('@', (string) $UUID, 2);
 		$primary_key_values = explode('.', $parts[0]);
 		return $this->findOneBy(
 			array_combine($metadata->getIdentifierFieldNames(), $primary_key_values)

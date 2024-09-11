@@ -14,11 +14,9 @@ class CellType
 {
 	const STRING = 'string';
 	const FORMATTED_NUMBER = 'num-fmt';
-	protected $choice;
 
-	public function __construct($choice)
+	public function __construct(protected $choice)
 	{
-		$this->choice = $choice;
 	}
 
 	public function getChoice()

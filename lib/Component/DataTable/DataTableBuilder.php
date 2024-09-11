@@ -77,30 +77,15 @@ class DataTableBuilder
 	private $columns = [];
 	private $groupByColumn;
 	/**
-	 * @var SerializerInterface
-	 */
-	private $serializer;
-	/**
-	 * @var NormalizerInterface
-	 */
-	private $normalizer;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
 	 * @var CamelCaseToSnakeCaseNameConverter
 	 */
 	private $camelCaseToSnakeCaseNameConverter;
 
 	public function __construct(
-		SerializerInterface $serializer,
-		NormalizerInterface $normalizer,
-		EntityManagerInterface $entityManager
+		private readonly SerializerInterface $serializer,
+		private readonly NormalizerInterface $normalizer,
+		private readonly EntityManagerInterface $entityManager
 	) {
-		$this->serializer = $serializer;
-		$this->normalizer = $normalizer;
-		$this->entityManager = $entityManager;
 		$this->camelCaseToSnakeCaseNameConverter = new CamelCaseToSnakeCaseNameConverter();
 	}
 
@@ -381,7 +366,7 @@ class DataTableBuilder
 
 	public function getType()
 	{
-		return ReflectionUtil::classNameZonderNamespace(get_class($this));
+		return ReflectionUtil::classNameZonderNamespace(static::class);
 	}
 
 	public function getTable()

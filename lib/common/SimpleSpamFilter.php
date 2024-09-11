@@ -33,7 +33,7 @@ class SimpleSpamFilter
 	{
 		$score = 0;
 		// score gaat niet met meer dan 1 omhoog omdat preg_match na de eerste match stopt met zoeken.
-		$score += preg_match($this->spamregex, $string);
+		$score += preg_match($this->spamregex, (string) $string);
 		if ($this->hasOnlyLinks($string)) {
 			$score++;
 		}

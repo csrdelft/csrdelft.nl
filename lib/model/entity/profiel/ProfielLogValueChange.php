@@ -14,22 +14,19 @@ namespace CsrDelft\model\entity\profiel;
 class ProfielLogValueChange extends AbstractProfielLogValueChangeEntry
 {
 	/**
-	 * Oude waarde
-	 * @var string
+	 * @param string $oldValue
+	 * @param string $newValue
 	 */
-	public $oldValue;
-
-	/**
-	 * Nieuwe waarde
-	 * @var string
-	 */
-	public $newValue;
-
-	public function __construct($property, $oldValue, $newValue)
-	{
+	public function __construct(
+		$property /**
+		 * Oude waarde
+		 */,
+		public $oldValue /**
+		 * Nieuwe waarde
+		 */,
+		public $newValue
+	) {
 		parent::__construct($property);
-		$this->oldValue = $oldValue;
-		$this->newValue = $newValue;
 	}
 
 	public function toHtml()

@@ -29,9 +29,9 @@ class LedenLijstController extends AbstractController
 	 * @throws LoaderError
 	 * @throws RuntimeError
 	 * @throws SyntaxError
-	 * @Route("/ledenlijst", methods={"GET", "POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
+	#[Route(path: '/ledenlijst', methods: ['GET', 'POST'])]
 	public function lijst(
 		Request $request,
 		LidZoekerService $lidZoeker,

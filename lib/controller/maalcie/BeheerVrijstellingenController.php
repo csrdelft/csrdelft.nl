@@ -17,20 +17,16 @@ use Throwable;
  */
 class BeheerVrijstellingenController extends AbstractController
 {
-	/** @var CorveeVrijstellingenRepository */
-	private $corveeVrijstellingenRepository;
-
 	public function __construct(
-		CorveeVrijstellingenRepository $corveeVrijstellingenRepository
+		private readonly CorveeVrijstellingenRepository $corveeVrijstellingenRepository
 	) {
-		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/corvee/vrijstellingen", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[Route(path: '/corvee/vrijstellingen', methods: ['GET'])]
 	public function beheer()
 	{
 		return $this->render(
@@ -41,9 +37,9 @@ class BeheerVrijstellingenController extends AbstractController
 
 	/**
 	 * @return VrijstellingForm
-	 * @Route("/corvee/vrijstellingen/nieuw", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[Route(path: '/corvee/vrijstellingen/nieuw', methods: ['POST'])]
 	public function nieuw()
 	{
 		return new VrijstellingForm($this->corveeVrijstellingenRepository->nieuw()); // fetches POST values itself
@@ -52,9 +48,9 @@ class BeheerVrijstellingenController extends AbstractController
 	/**
 	 * @param Profiel $profiel
 	 * @return VrijstellingForm
-	 * @Route("/corvee/vrijstellingen/bewerk/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[Route(path: '/corvee/vrijstellingen/bewerk/{uid}', methods: ['POST'])]
 	public function bewerk(Profiel $profiel)
 	{
 		return new VrijstellingForm(
@@ -66,9 +62,15 @@ class BeheerVrijstellingenController extends AbstractController
 	 * @param Profiel|null $profiel
 	 * @return VrijstellingForm|Response
 	 * @throws Throwable
-	 * @Route("/corvee/vrijstellingen/opslaan/{uid}", methods={"POST"}, defaults={"uid"=null})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[
+		Route(
+			path: '/corvee/vrijstellingen/opslaan/{uid}',
+			methods: ['POST'],
+			defaults: ['uid' => null]
+		)
+	]
 	public function opslaan(Profiel $profiel = null)
 	{
 		if ($profiel) {
@@ -97,9 +99,9 @@ class BeheerVrijstellingenController extends AbstractController
 	/**
 	 * @param Profiel $profiel
 	 * @return PlainView
-	 * @Route("/corvee/vrijstellingen/verwijder/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[Route(path: '/corvee/vrijstellingen/verwijder/{uid}', methods: ['POST'])]
 	public function verwijder(Profiel $profiel)
 	{
 		$this->corveeVrijstellingenRepository->verwijderVrijstelling($profiel->uid);

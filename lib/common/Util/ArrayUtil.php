@@ -58,7 +58,7 @@ final class ArrayUtil
 	 */
 	public static function array_filter_empty($array)
 	{
-		return array_filter($array, [ArrayUtil::class, 'not_empty']);
+		return array_filter($array, ArrayUtil::not_empty(...));
 	}
 
 	public static function not_empty($value)

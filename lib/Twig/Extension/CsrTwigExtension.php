@@ -40,87 +40,48 @@ use Twig\TwigTest;
 
 class CsrTwigExtension extends AbstractExtension
 {
-	/**
-	 * @var CsrfService
-	 */
-	private $csrfService;
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
-	/**
-	 * @var MaaltijdBeoordelingenRepository
-	 */
-	private $maaltijdBeoordelingenRepository;
-	/**
-	 * @var CmsPaginaRepository
-	 */
-	private $cmsPaginaRepository;
-	/**
-	 * @var Security
-	 */
-	private $security;
-
 	public function __construct(
-		CsrfService $csrfService,
-		Security $security,
-		CmsPaginaRepository $cmsPaginaRepository,
-		ProfielRepository $profielRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository
+		private readonly CsrfService $csrfService,
+		private readonly Security $security,
+		private readonly CmsPaginaRepository $cmsPaginaRepository,
+		private readonly ProfielRepository $profielRepository,
+		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		private readonly MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository
 	) {
-		$this->csrfService = $csrfService;
-		$this->profielRepository = $profielRepository;
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
-		$this->cmsPaginaRepository = $cmsPaginaRepository;
-		$this->security = $security;
 	}
 
 	public function getFunctions()
 	{
 		return [
-			new TwigFunction('dragobject_coords', [$this, 'dragobject_coords']),
-			new TwigFunction('commitHash', [$this, 'commitHash']),
-			new TwigFunction('commitLink', [$this, 'commitLink']),
+			new TwigFunction('dragobject_coords', $this->dragobject_coords(...)),
+			new TwigFunction('commitHash', $this->commitHash(...)),
+			new TwigFunction('commitLink', $this->commitLink(...)),
+			new TwigFunction('csrfMetaTag', $this->csrfMetaTag(...), [
+				'is_safe' => ['html'],
+			]),
+			new TwigFunction('csrfField', $this->csrfField(...), [
+				'is_safe' => ['html'],
+			]),
+			new TwigFunction('vereniging_leeftijd', $this->vereniging_leeftijd(...)),
+			new TwigFunction('get_profiel', $this->get_profiel(...)),
 			new TwigFunction(
-				'csrfMetaTag',
-				[$this, 'csrfMetaTag'],
-				['is_safe' => ['html']]
-			),
-			new TwigFunction(
-				'csrfField',
-				[$this, 'csrfField'],
-				['is_safe' => ['html']]
-			),
-			new TwigFunction('vereniging_leeftijd', [$this, 'vereniging_leeftijd']),
-			new TwigFunction('get_profiel', [$this, 'get_profiel']),
-			new TwigFunction('get_maaltijd_aanmelding', [
-				$this,
 				'get_maaltijd_aanmelding',
-			]),
-			new TwigFunction('get_maaltijd_beoordeling', [
-				$this,
+				$this->get_maaltijd_aanmelding(...)
+			),
+			new TwigFunction(
 				'get_maaltijd_beoordeling',
-			]),
-			new TwigFunction('huidige_jaargang', [$this, 'huidige_jaargang']),
+				$this->get_maaltijd_beoordeling(...)
+			),
+			new TwigFunction('huidige_jaargang', $this->huidige_jaargang(...)),
 			new TwigFunction('gethostbyaddr', 'gethostbyaddr'),
-			new TwigFunction('cms', [$this, 'cms'], ['is_safe' => ['html']]),
-			new TwigFunction('table', [$this, 'table'], ['is_safe' => ['html']]),
-			new TwigFunction(
-				'groep_bewerken_form',
-				[$this, 'groepBewerkenForm'],
-				['is_safe' => ['html']]
-			),
-			new TwigFunction(
-				'vue',
-				[VueUtil::class, 'vueComponent'],
-				['is_safe' => ['html']]
-			),
+			new TwigFunction('cms', $this->cms(...), ['is_safe' => ['html']]),
+			new TwigFunction('table', $this->table(...), ['is_safe' => ['html']]),
+			new TwigFunction('groep_bewerken_form', $this->groepBewerkenForm(...), [
+				'is_safe' => ['html'],
+			]),
+			new TwigFunction('vue', VueUtil::vueComponent(...), [
+				'is_safe' => ['html'],
+			]),
 		];
 	}
 
@@ -194,7 +155,7 @@ class CsrTwigExtension extends AbstractExtension
 
 		if (!$pagina) {
 			return '<div class="alert alert-danger">Gedeelte van de pagina met naam "' .
-				htmlspecialchars($id) .
+				htmlspecialchars((string) $id) .
 				'" niet gevonden.</div>';
 		}
 
@@ -208,18 +169,16 @@ class CsrTwigExtension extends AbstractExtension
 	public function getFilters()
 	{
 		return [
-			new TwigFilter('escape_ical', [TextUtil::class, 'escape_ical']),
-			new TwigFilter('file_base64', [$this, 'file_base64']),
-			new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
-			new TwigFilter('uniqid', function ($prefix) {
-				return CryptoUtil::uniqid_safe($prefix);
-			}),
-			new TwigFilter('format_bedrag', [BedragUtil::class, 'format_bedrag']),
-			new TwigFilter('format_euro', [BedragUtil::class, 'format_euro']),
-			new TwigFilter('truncate', [TextUtil::class, 'truncate']),
-			new TwigFilter('format_filesize', [FileUtil::class, 'format_filesize']),
-			new TwigFilter('shuffle', [ArrayUtil::class, 'array_shuffle']),
-			new TwigFilter('pluralize', [$this, 'pluralize']),
+			new TwigFilter('escape_ical', TextUtil::escape_ical(...)),
+			new TwigFilter('file_base64', $this->file_base64(...)),
+			new TwigFilter('bbcode', $this->bbcode(...), ['is_safe' => ['html']]),
+			new TwigFilter('uniqid', fn($prefix) => CryptoUtil::uniqid_safe($prefix)),
+			new TwigFilter('format_bedrag', BedragUtil::format_bedrag(...)),
+			new TwigFilter('format_euro', BedragUtil::format_euro(...)),
+			new TwigFilter('truncate', TextUtil::truncate(...)),
+			new TwigFilter('format_filesize', FileUtil::format_filesize(...)),
+			new TwigFilter('shuffle', ArrayUtil::array_shuffle(...)),
+			new TwigFilter('pluralize', $this->pluralize(...)),
 		];
 	}
 
@@ -248,36 +207,25 @@ class CsrTwigExtension extends AbstractExtension
 		 * @return bool
 		 */
 		return [
-			new TwigTest('numeric', function ($value) {
-				return is_numeric($value);
-			}),
-			new TwigTest('profiel', function ($value) {
-				return $value instanceof Profiel;
-			}),
-			new TwigTest('corveetaak', function ($value) {
-				return $value instanceof CorveeTaak;
-			}),
-			new TwigTest('maaltijd', function ($value) {
-				return $value instanceof Maaltijd;
-			}),
-			new TwigTest('agendeerbaar', function ($value) {
-				return $value instanceof Agendeerbaar;
-			}),
-			new TwigTest('abstractgroep', function ($value) {
-				return $value instanceof Groep;
-			}),
-			new TwigTest('agendaitem', function ($value) {
-				return $value instanceof AgendaItem;
-			}),
-			new TwigTest('verticale', function ($value) {
-				return $value instanceof Verticale;
-			}),
-			new TwigTest('heeftaanmeldlimiet', function ($value) {
-				return $value instanceof HeeftAanmeldLimiet;
-			}),
-			new TwigTest('heeftaanmeldmoment', function ($value) {
-				return $value instanceof HeeftAanmeldMoment;
-			}),
+			new TwigTest('numeric', fn($value) => is_numeric($value)),
+			new TwigTest('profiel', fn($value) => $value instanceof Profiel),
+			new TwigTest('corveetaak', fn($value) => $value instanceof CorveeTaak),
+			new TwigTest('maaltijd', fn($value) => $value instanceof Maaltijd),
+			new TwigTest(
+				'agendeerbaar',
+				fn($value) => $value instanceof Agendeerbaar
+			),
+			new TwigTest('abstractgroep', fn($value) => $value instanceof Groep),
+			new TwigTest('agendaitem', fn($value) => $value instanceof AgendaItem),
+			new TwigTest('verticale', fn($value) => $value instanceof Verticale),
+			new TwigTest(
+				'heeftaanmeldlimiet',
+				fn($value) => $value instanceof HeeftAanmeldLimiet
+			),
+			new TwigTest(
+				'heeftaanmeldmoment',
+				fn($value) => $value instanceof HeeftAanmeldMoment
+			),
 		];
 	}
 
@@ -354,9 +302,9 @@ class CsrTwigExtension extends AbstractExtension
 	public function commitHash($full = false)
 	{
 		if ($full) {
-			return trim(`git rev-parse HEAD`);
+			return trim((string) `git rev-parse HEAD`);
 		} else {
-			return trim(`git rev-parse --short HEAD`);
+			return trim((string) `git rev-parse --short HEAD`);
 		}
 	}
 }

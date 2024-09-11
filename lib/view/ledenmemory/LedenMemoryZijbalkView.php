@@ -7,13 +7,8 @@ use CsrDelft\view\View;
 
 class LedenMemoryZijbalkView implements View
 {
-	private $scores;
-	private $titel;
-
-	public function __construct($scores, $titel)
+	public function __construct(private $scores, private $titel)
 	{
-		$this->scores = $scores;
-		$this->titel = $titel;
 	}
 
 	public function getTitel()
@@ -31,7 +26,7 @@ class LedenMemoryZijbalkView implements View
 		return $this->scores;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .=

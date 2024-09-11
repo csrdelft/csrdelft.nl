@@ -11,14 +11,9 @@ use Doctrine\Persistence\ObjectManager;
 
 class BestuurGroepFixtures extends Fixture implements DependentFixtureInterface
 {
-	/**
-	 * @var BesturenRepository
-	 */
-	private $besturenRepository;
-
-	public function __construct(BesturenRepository $besturenRepository)
-	{
-		$this->besturenRepository = $besturenRepository;
+	public function __construct(
+		private readonly BesturenRepository $besturenRepository
+	) {
 	}
 
 	public function load(ObjectManager $manager)

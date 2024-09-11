@@ -21,39 +21,13 @@ use Doctrine\ORM\OptimisticLockException;
 
 class MaaltijdAanmeldingenService
 {
-	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
-	/**
-	 * @var CiviSaldoRepository
-	 */
-	private $civiSaldoRepository;
-	/**
-	 * @var MaaltijdenRepository
-	 */
-	private $maaltijdenRepository;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var AccessService
-	 */
-	private $accessService;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		AccessService $accessService,
-		MaaltijdenRepository $maaltijdenRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		CiviSaldoRepository $civiSaldoRepository
+		private readonly EntityManagerInterface $entityManager,
+		private readonly AccessService $accessService,
+		private readonly MaaltijdenRepository $maaltijdenRepository,
+		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		private readonly CiviSaldoRepository $civiSaldoRepository
 	) {
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->civiSaldoRepository = $civiSaldoRepository;
-		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->entityManager = $entityManager;
-		$this->accessService = $accessService;
 	}
 
 	/**

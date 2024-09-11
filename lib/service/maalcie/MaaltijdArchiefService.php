@@ -18,33 +18,12 @@ use Doctrine\ORM\OptimisticLockException;
 
 class MaaltijdArchiefService
 {
-	/**
-	 * @var MaaltijdenRepository
-	 */
-	private $maaltijdenRepository;
-	/**
-	 * @var ArchiefMaaltijdenRepository
-	 */
-	private $archiefMaaltijdenRepository;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
-
 	public function __construct(
-		MaaltijdenRepository $maaltijdenRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		ArchiefMaaltijdenRepository $archiefMaaltijdenRepository,
-		CorveeTakenRepository $corveeTakenRepository
+		private readonly MaaltijdenRepository $maaltijdenRepository,
+		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		private readonly ArchiefMaaltijdenRepository $archiefMaaltijdenRepository,
+		private readonly CorveeTakenRepository $corveeTakenRepository
 	) {
-		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->archiefMaaltijdenRepository = $archiefMaaltijdenRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
 	public function vanMaaltijd(Maaltijd $maaltijd)

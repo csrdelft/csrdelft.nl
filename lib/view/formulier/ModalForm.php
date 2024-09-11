@@ -19,7 +19,7 @@ class ModalForm extends Formulier
 	 */
 	protected $modalBreedte = '';
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$this->css_classes[] = 'ModalForm';
 		$html = '';

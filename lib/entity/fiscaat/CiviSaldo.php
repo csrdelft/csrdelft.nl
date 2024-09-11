@@ -31,32 +31,32 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	 * @var string
 	 * @ORM\Column(type="uid", unique=true)
 	 * @ORM\Id()
-	 * @Serializer\Groups({"log", "datatable", "bar"})
 	 */
+	#[Serializer\Groups(['log', 'datatable', 'bar'])]
 	public $uid;
 	/**
 	 * @var string
 	 * @ORM\Column(type="text")
-	 * @Serializer\Groups({"log", "datatable", "bar"})
 	 */
+	#[Serializer\Groups(['log', 'datatable', 'bar'])]
 	public $naam;
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"log", "datatable", "bar"})
 	 */
+	#[Serializer\Groups(['log', 'datatable', 'bar'])]
 	public $saldo;
 	/**
 	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
-	 * @Serializer\Groups({"log", "datatable"})
 	 */
+	#[Serializer\Groups(['log', 'datatable'])]
 	public $laatst_veranderd;
 	/**
 	 * @var bool
 	 * @ORM\Column(type="boolean", options={"default"=false})
-	 * @Serializer\Groups({"log", "datatable", "bar"})
 	 */
+	#[Serializer\Groups(['log', 'datatable', 'bar'])]
 	public $deleted = false;
 
 	/**
@@ -67,8 +67,8 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 
 	/**
 	 * @return integer
-	 * @Serializer\Groups("bar")
 	 */
+	#[Serializer\Groups('bar')]
 	public function getRecent()
 	{
 		$eb = Criteria::expr();
@@ -88,9 +88,9 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("lichting")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('lichting')]
 	public function getDataTableLichting()
 	{
 		return substr($this->uid, 0, 2);
@@ -98,9 +98,9 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("naam")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('naam')]
 	public function getDataTableNaam()
 	{
 		return $this->getWeergave();
@@ -113,8 +113,8 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("bar")
 	 */
+	#[Serializer\Groups('bar')]
 	public function getWeergave(): string
 	{
 		return ProfielRepository::existsUid($this->uid)

@@ -25,31 +25,25 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class BeheerFunctiesController extends AbstractController
 {
-	/** @var CorveeFunctiesRepository */
-	private $corveeFunctiesRepository;
-	/** @var CorveeKwalificatiesRepository */
-	private $corveeKwalificatiesRepository;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		CorveeFunctiesRepository $corveeFunctiesRepository,
-		CorveeKwalificatiesRepository $corveeKwalificatiesRepository
+		private readonly EntityManagerInterface $entityManager,
+		private readonly CorveeFunctiesRepository $corveeFunctiesRepository,
+		private readonly CorveeKwalificatiesRepository $corveeKwalificatiesRepository
 	) {
-		$this->corveeFunctiesRepository = $corveeFunctiesRepository;
-		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
-		$this->entityManager = $entityManager;
 	}
 
 	/**
 	 * @param Request $request
 	 * @return GenericSuggestiesResponse
-	 * @Route("/corvee/functies/suggesties", methods={"GET"}, options={"priority"=1})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/corvee/functies/suggesties',
+			methods: ['GET'],
+			options: ['priority' => 1]
+		)
+	]
 	public function suggesties(Request $request)
 	{
 		return new GenericSuggestiesResponse(
@@ -60,9 +54,15 @@ class BeheerFunctiesController extends AbstractController
 	/**
 	 * @param CorveeFunctie|null $functie
 	 * @return Response
-	 * @Route("/corvee/functies/{functie_id}", methods={"GET"}, defaults={"functie_id"=null})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[
+		Route(
+			path: '/corvee/functies/{functie_id}',
+			methods: ['GET'],
+			defaults: ['functie_id' => null]
+		)
+	]
 	public function beheer(CorveeFunctie $functie = null)
 	{
 		$modal = $functie ? $this->bewerken($functie) : null;
@@ -75,9 +75,9 @@ class BeheerFunctiesController extends AbstractController
 
 	/**
 	 * @return FunctieForm|Response
-	 * @Route("/corvee/functies/toevoegen", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[Route(path: '/corvee/functies/toevoegen', methods: ['POST'])]
 	public function toevoegen()
 	{
 		$functie = $this->corveeFunctiesRepository->nieuw();
@@ -99,9 +99,9 @@ class BeheerFunctiesController extends AbstractController
 	/**
 	 * @param CorveeFunctie $functie
 	 * @return FunctieForm|Response
-	 * @Route("/corvee/functies/bewerken/{functie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[Route(path: '/corvee/functies/bewerken/{functie_id}', methods: ['POST'])]
 	public function bewerken(CorveeFunctie $functie)
 	{
 		$form = new FunctieForm($functie, 'bewerken'); // fetches POST values itself
@@ -121,9 +121,9 @@ class BeheerFunctiesController extends AbstractController
 	/**
 	 * @param CorveeFunctie $functie
 	 * @return FunctieDeleteView
-	 * @Route("/corvee/functies/verwijderen/{functie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[Route(path: '/corvee/functies/verwijderen/{functie_id}', methods: ['POST'])]
 	public function verwijderen(CorveeFunctie $functie)
 	{
 		$functieId = $functie->functie_id;
@@ -137,9 +137,9 @@ class BeheerFunctiesController extends AbstractController
 	 * @return KwalificatieForm|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/corvee/functies/kwalificeer/{functie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[Route(path: '/corvee/functies/kwalificeer/{functie_id}', methods: ['POST'])]
 	public function kwalificeer(CorveeFunctie $functie)
 	{
 		$kwalificatie = $this->corveeKwalificatiesRepository->nieuw($functie);
@@ -159,9 +159,14 @@ class BeheerFunctiesController extends AbstractController
 	/**
 	 * @param CorveeKwalificatie $kwalificatie
 	 * @return Response
-	 * @Route("/corvee/functies/dekwalificeer/{functie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[
+		Route(
+			path: '/corvee/functies/dekwalificeer/{functie_id}/{uid}',
+			methods: ['POST']
+		)
+	]
 	public function dekwalificeer(CorveeKwalificatie $kwalificatie)
 	{
 		$functie = $kwalificatie->corveeFunctie;

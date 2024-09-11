@@ -8,30 +8,17 @@ use CsrDelft\repository\eetplan\EetplanRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\repository\ProfielRepository;
 
-class EetplanService 
+class EetplanService
 {
-    /** @var EetplanRepository */
-    private $eetplanRepository;
-    /** @var EetplanBekendenRepository */
-    private $eetplanBekendenRepository;
-    /** @var WoonoordenRepository */
-    private $woonoordenRepository;
-    /** @var ProfielRepository */
-    private $profielRepository;
+	public function __construct(
+		private readonly EetplanRepository $eetplanRepository,
+		private readonly EetplanBekendenRepository $eetplanBekendenRepository,
+		private readonly WoonoordenRepository $woonoordenRepository,
+		private readonly ProfielRepository $profielRepository
+	) {
+	}
 
-    public function __construct(
-        EetplanRepository $eetplanRepository, 
-        EetplanBekendenRepository $eetplanBekendenRepository, 
-        WoonoordenRepository $woonoordenRepository,
-        ProfielRepository $profielRepository
-    ) {
-        $this->eetplanRepository = $eetplanRepository;
-        $this->eetplanBekendenRepository = $eetplanBekendenRepository;
-        $this->woonoordenRepository = $woonoordenRepository;
-        $this->profielRepository = $profielRepository;
-    }
-
-    /**
+	/**
 	 * @param string $avond
 	 * @param integer $lidjaar
 	 *
@@ -54,7 +41,10 @@ class EetplanService
 		);
 		$factory->setNovieten($novieten);
 
-		$huizen = $this->woonoordenRepository->findBy(['eetplan' => true, 'status' => GroepStatus::HT()]);
+		$huizen = $this->woonoordenRepository->findBy([
+			'eetplan' => true,
+			'status' => GroepStatus::HT(),
+		]);
 		$factory->setHuizen($huizen);
 
 		return $factory->genereer($avond, true);

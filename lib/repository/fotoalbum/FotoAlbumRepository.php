@@ -28,30 +28,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class FotoAlbumRepository extends AbstractRepository
 {
-	/**
-	 * @var FotoRepository
-	 */
-	private $fotoRepository;
-	/**
-	 * @var FotoTagsRepository
-	 */
-	private $fotoTagsRepository;
-	/**
-	 * @var Security
-	 */
-	private $security;
-
 	public function __construct(
 		ManagerRegistry $registry,
-		Security $security,
-		FotoRepository $fotoRepository,
-		FotoTagsRepository $fotoTagsRepository
+		private readonly Security $security,
+		private readonly FotoRepository $fotoRepository,
+		private readonly FotoTagsRepository $fotoTagsRepository
 	) {
 		parent::__construct($registry, FotoAlbum::class);
-
-		$this->fotoRepository = $fotoRepository;
-		$this->fotoTagsRepository = $fotoTagsRepository;
-		$this->security = $security;
 	}
 
 	/**
@@ -167,7 +150,7 @@ class FotoAlbumRepository extends AbstractRepository
 		$errors = 0;
 		foreach ($iterator as $path => $object) {
 			// skip _thumbs & _resized
-			if (strpos($path, '/_') !== false) {
+			if (str_contains((string) $path, '/_')) {
 				continue;
 			}
 			try {
@@ -184,13 +167,13 @@ class FotoAlbumRepository extends AbstractRepository
 				}
 				// Foto
 				else {
-					$filename = basename($path);
+					$filename = basename((string) $path);
 					if ($filename === 'Thumbs.db') {
 						unlink($path);
 						continue;
 					}
 					$fotos++;
-					$album = new FotoAlbum(dirname($path), true);
+					$album = new FotoAlbum(dirname((string) $path), true);
 					$foto = new Foto($filename, $album, true);
 					if (!$foto->exists()) {
 						throw new CsrException(
@@ -227,7 +210,7 @@ HTML;
 		try {
 			$album = $this->getFotoAlbum('');
 			return $album->getMostRecentSubAlbum();
-		} catch (NotFoundHttpException $ex) {
+		} catch (NotFoundHttpException) {
 			return null;
 		}
 	}
@@ -301,7 +284,7 @@ HTML;
 		$success = true;
 		// find old cover
 		foreach ($album->getFotos() as $foto) {
-			if (strpos($foto->filename, 'folder') !== false) {
+			if (str_contains($foto->filename, 'folder')) {
 				if ($foto->getFullPath() === $cover->getFullPath()) {
 					$foto = $cover;
 				}
@@ -327,12 +310,12 @@ HTML;
 		$path = $cover->getThumbPath();
 		$success &= rename(
 			$path,
-			substr_replace($path, 'folder', strrpos($path, '.'), 0)
+			substr_replace($path, 'folder', strrpos((string) $path, '.'), 0)
 		);
 		$path = $cover->getResizedPath();
 		$success &= rename(
 			$path,
-			substr_replace($path, 'folder', strrpos($path, '.'), 0)
+			substr_replace($path, 'folder', strrpos((string) $path, '.'), 0)
 		);
 		$path = $cover->getFullPath();
 		$success &= rename(

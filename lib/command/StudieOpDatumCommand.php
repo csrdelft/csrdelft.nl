@@ -15,12 +15,9 @@ use Symfony\Component\Console\Question\Question;
 
 class StudieOpDatumCommand extends Command
 {
-	private $profielRepository;
-
-	public function __construct(ProfielRepository $profielRepository)
-	{
-		$this->profielRepository = $profielRepository;
-
+	public function __construct(
+		private readonly ProfielRepository $profielRepository
+	) {
 		parent::__construct();
 	}
 
@@ -62,19 +59,17 @@ class StudieOpDatumCommand extends Command
 				$values[$field] = $lid->$field;
 			}
 
-			$logs = array_filter($lid->changelog, function ($a) {
-				return $a instanceof ProfielUpdateLogGroup;
-			});
-			usort($logs, function (
-				ProfielUpdateLogGroup $a,
-				ProfielUpdateLogGroup $b
-			) {
-				if ($a->timestamp == $b->timestamp) {
-					return 0;
-				}
-
-				return $a->timestamp < $b->timestamp ? -1 : 1;
-			});
+			$logs = array_filter(
+				$lid->changelog,
+				fn($a) => $a instanceof ProfielUpdateLogGroup
+			);
+			usort(
+				$logs,
+				fn(
+					ProfielUpdateLogGroup $a,
+					ProfielUpdateLogGroup $b
+				) => $a->timestamp <=> $b->timestamp
+			);
 			foreach ($logs as $log) {
 				if (empty($watch)) {
 					break;

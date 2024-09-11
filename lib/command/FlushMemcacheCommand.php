@@ -10,20 +10,11 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 class FlushMemcacheCommand extends Command
 {
-	/**
-	 * @var CacheInterface
-	 */
-	private $appCache;
-	/**
-	 * @var CacheInterface
-	 */
-	private $systemCache;
-
-	public function __construct(CacheInterface $app, CacheInterface $system)
-	{
+	public function __construct(
+		private readonly CacheInterface $appCache,
+		private readonly CacheInterface $systemCache
+	) {
 		parent::__construct();
-		$this->appCache = $app;
-		$this->systemCache = $system;
 	}
 
 	public function configure()
@@ -61,7 +52,7 @@ class FlushMemcacheCommand extends Command
 			FileUtil::delTree(CONFIG_CACHE_PATH);
 
 			$output->writeln('Instelling cache succesvol verwijderd');
-		} catch (\ErrorException $exception) {
+		} catch (\ErrorException) {
 			$output->writeln('Instelling cache verwijderen mislukt');
 			$output->writeln(error_get_last()['message']);
 		}

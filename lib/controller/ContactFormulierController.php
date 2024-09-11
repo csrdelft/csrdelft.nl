@@ -17,20 +17,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ContactFormulierController extends AbstractController
 {
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-
-	public function __construct(MailService $mailService)
+	public function __construct(private readonly MailService $mailService)
 	{
-		$this->mailService = $mailService;
 	}
 	/**
 	 * @return PlainView
-	 * @Route("/contactformulier/interesse", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[Route(path: '/contactformulier/interesse', methods: ['POST'])]
 	public function interesse()
 	{
 		$resp = $this->checkCaptcha(
@@ -120,9 +114,9 @@ De PubCie.
 
 	/**
 	 * @return PlainView
-	 * @Route("/contactformulier/owee", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[Route(path: '/contactformulier/owee', methods: ['POST'])]
 	public function owee()
 	{
 		$resp = $this->checkCaptcha(
@@ -185,10 +179,10 @@ De PubCie.
 
 	/**
 	 * @return PlainView
-	 * @Route("/civitasproducties/bestel", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 * @CsrfUnsafe
 	 */
+	#[Route(path: '/civitasproducties/bestel', methods: ['POST'])]
 	public function civitasproducties()
 	{
 		$resp = $this->checkCaptcha(
@@ -247,8 +241,10 @@ De PubCie.
 
 	private function bevatUrl($opmerking)
 	{
-		return preg_match('/https?:|\.(com|ru|pw|pro|nl)\/?($|\W)/', $opmerking) ==
-			true;
+		return preg_match(
+			'/https?:|\.(com|ru|pw|pro|nl)\/?($|\W)/',
+			(string) $opmerking
+		) == true;
 	}
 
 	/**

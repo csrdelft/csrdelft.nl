@@ -107,7 +107,7 @@ class BrowserTestCase extends PantherTestCase
 				$this->client->takeScreenshot(
 					__DIR__ . '/../../screenshot/failure-' . $this->getName() . '-2.png'
 				);
-			} catch (NoSuchElementException $e) {
+			} catch (NoSuchElementException) {
 				// Negeer
 			}
 		}
@@ -134,7 +134,7 @@ class BrowserTestCase extends PantherTestCase
 
 		try {
 			return $this->client->clickLink($linkText);
-		} catch (ElementClickInterceptedException $e) {
+		} catch (ElementClickInterceptedException) {
 			sleep(1); // Zijn nog aan het scrollen, probeer na een tijdje nog een keer.
 			// Dit zou geen probleem _moeten_ zijn.
 			return $this->client->clickLink($linkText);

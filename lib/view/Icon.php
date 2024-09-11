@@ -116,7 +116,7 @@ class Icon
 		}
 
 		// Test if string contains the a fa brands tag.
-		if (strpos($icon, 'fab fa-') !== false) {
+		if (str_contains((string) $icon, 'fab fa-')) {
 			return sprintf(
 				'<i class="%s %s %s" title="%s" aria-hidden="true"></i>',
 				htmlspecialchars($icon ?? ''),

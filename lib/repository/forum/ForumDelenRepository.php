@@ -104,10 +104,10 @@ class ForumDelenRepository extends AbstractRepository
 				'r.rechten_posten != :rechten_posten and r.rechten_posten LIKE :query'
 			)
 			->setParameter('rechten_posten', $deel->rechten_posten);
-		if (strpos($deel->rechten_posten, 'verticale:') !== false) {
+		if (str_contains($deel->rechten_posten, 'verticale:')) {
 			$qb->setParameter('query', '%verticale:%');
 			$qb->orderBy('r.titel', 'ASC');
-		} elseif (strpos($deel->rechten_posten, 'lidjaar:') !== false) {
+		} elseif (str_contains($deel->rechten_posten, 'lidjaar:')) {
 			$qb->setParameter('query', '%lidjaar:%');
 			$qb->orderBy('r.titel', 'DESC');
 		} else {

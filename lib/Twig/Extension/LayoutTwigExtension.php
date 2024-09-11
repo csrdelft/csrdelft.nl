@@ -14,50 +14,28 @@ use Twig\TwigFunction;
 
 class LayoutTwigExtension extends AbstractExtension
 {
-	/**
-	 * @var MenuItemRepository
-	 */
-	private $menuItemRepository;
-	/**
-	 * @var RequestStack
-	 */
-	private $requestStack;
-	/**
-	 * @var FormulierFactory
-	 */
-	private $formulierFactory;
-
 	public function __construct(
-		RequestStack $requestStack,
-		MenuItemRepository $menuItemRepository,
-		FormulierFactory $formulierFactory
+		private readonly RequestStack $requestStack,
+		private readonly MenuItemRepository $menuItemRepository,
+		private readonly FormulierFactory $formulierFactory
 	) {
-		$this->menuItemRepository = $menuItemRepository;
-		$this->requestStack = $requestStack;
-		$this->formulierFactory = $formulierFactory;
 	}
 
 	public function getFunctions()
 	{
 		return [
-			new TwigFunction(
-				'csr_breadcrumbs',
-				[$this, 'csr_breadcrumbs'],
-				['is_safe' => ['html']]
-			),
-			new TwigFunction('get_breadcrumbs', [$this, 'get_breadcrumbs']),
-			new TwigFunction('get_menu', [$this, 'get_menu']),
-			new TwigFunction(
-				'instant_search_form',
-				[$this, 'instant_search_form'],
-				['is_safe' => ['html']]
-			),
-			new TwigFunction(
-				'login_form',
-				[$this, 'login_form'],
-				['is_safe' => ['html']]
-			),
-			new TwigFunction('icon', [$this, 'icon'], ['is_safe' => ['html']]),
+			new TwigFunction('csr_breadcrumbs', $this->csr_breadcrumbs(...), [
+				'is_safe' => ['html'],
+			]),
+			new TwigFunction('get_breadcrumbs', $this->get_breadcrumbs(...)),
+			new TwigFunction('get_menu', $this->get_menu(...)),
+			new TwigFunction('instant_search_form', $this->instant_search_form(...), [
+				'is_safe' => ['html'],
+			]),
+			new TwigFunction('login_form', $this->login_form(...), [
+				'is_safe' => ['html'],
+			]),
+			new TwigFunction('icon', $this->icon(...), ['is_safe' => ['html']]),
 		];
 	}
 
@@ -114,6 +92,6 @@ class LayoutTwigExtension extends AbstractExtension
 		$class = null,
 		$content = null
 	) {
-		return Icon::getTag($key, $hover, $title, $class, $content);
+		return Icon::getTag($key, $hover, $title, $class);
 	}
 }

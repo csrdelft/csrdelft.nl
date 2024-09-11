@@ -2,20 +2,17 @@
 
 namespace CsrDelft\Component\DataTable;
 
-class DataTableView
+class DataTableView implements \Stringable
 {
-	/**
-	 * @var string
-	 */
-	private $data;
-
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->data;
 	}
 
-	public function __construct($data)
+	/**
+	 * @param string $data
+	 */
+	public function __construct(private $data)
 	{
-		$this->data = $data;
 	}
 }

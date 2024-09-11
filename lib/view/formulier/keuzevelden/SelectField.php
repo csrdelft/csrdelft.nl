@@ -16,7 +16,6 @@ use CsrDelft\view\formulier\invoervelden\InputField;
 class SelectField extends InputField
 {
 	public $size;
-	public $multiple;
 	protected $options;
 
 	public function __construct(
@@ -25,12 +24,11 @@ class SelectField extends InputField
 		$description,
 		array $options,
 		$size = 1,
-		$multiple = false
+		public $multiple = false
 	) {
 		parent::__construct($name, $value, $description);
 		$this->options = $options;
 		$this->size = (int) $size;
-		$this->multiple = $multiple;
 
 		$this->css_classes = ['form-select'];
 	}
@@ -110,7 +108,7 @@ class SelectField extends InputField
 			}
 			$html .=
 				'>' .
-				str_replace('&amp;', '&', htmlspecialchars($description)) .
+				str_replace('&amp;', '&', htmlspecialchars((string) $description)) .
 				'</option>';
 		}
 		if ($this->value == '') {

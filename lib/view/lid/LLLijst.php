@@ -18,7 +18,7 @@ class LLLijst extends LLWeergave
 		$html = '';
 		$html .= '<tr>';
 		foreach ($this->velden as $veld) {
-			$html .= '<th>' . ucfirst($veld) . '</th>';
+			$html .= '<th>' . ucfirst((string) $veld) . '</th>';
 		}
 		$html .= '</tr>';
 		return $html;
@@ -45,21 +45,17 @@ class LLLijst extends LLWeergave
 		//fix jQuery datatables op deze tabel.
 		$aoColumns = [];
 		foreach ($this->velden as $veld) {
-			switch ($veld) {
-				case 'pasfoto':
-					$aoColumns[] = '{"bSortable": false}';
-					break;
-				case 'email':
-				case 'naam':
-				case 'kring':
-				case 'patroon':
-				case 'verticale':
-				case 'woonoord':
-					$aoColumns[] = '{"sType": \'html\'}';
-					break;
-				default:
-					$aoColumns[] = 'null';
-			}
+			$aoColumns[] = match ($veld) {
+				'pasfoto' => '{"bSortable": false}',
+				'email',
+				'naam',
+				'kring',
+				'patroon',
+				'verticale',
+				'woonoord'
+					=> '{"sType": \'html\'}',
+				default => 'null',
+			};
 		}
 		return $html;
 	}
@@ -79,11 +75,11 @@ class LLLijst extends LLWeergave
 					break;
 
 				case 'adres':
-					$html .= htmlspecialchars($profiel->getAdres());
+					$html .= htmlspecialchars((string) $profiel->getAdres());
 					break;
 
 				case 'adres_ouders':
-					$html .= htmlspecialchars($profiel->getAdresOuders());
+					$html .= htmlspecialchars((string) $profiel->getAdresOuders());
 					break;
 
 				case 'kring':
@@ -151,15 +147,15 @@ class LLLijst extends LLWeergave
 				case 'website':
 					$html .=
 						'<a target="_blank" href="' .
-						htmlspecialchars($profiel->$veld) .
+						htmlspecialchars((string) $profiel->$veld) .
 						'">' .
-						htmlspecialchars($profiel->$veld) .
+						htmlspecialchars((string) $profiel->$veld) .
 						'</a>';
 					break;
 
 				case 'geslacht':
 					if ($profiel->geslacht) {
-						$html .= htmlspecialchars($profiel->geslacht->getValue());
+						$html .= htmlspecialchars((string) $profiel->geslacht->getValue());
 					}
 					break;
 
@@ -171,9 +167,9 @@ class LLLijst extends LLWeergave
 								DateUtil::DATE_FORMAT
 							);
 						} else {
-							$html .= htmlspecialchars($profiel->$veld);
+							$html .= htmlspecialchars((string) $profiel->$veld);
 						}
-					} catch (Exception $e) {
+					} catch (Exception) {
 						$html .= ' - ';
 					}
 			}

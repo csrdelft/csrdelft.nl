@@ -9,27 +9,22 @@ use Twig\Extension\EscaperExtension;
 
 class Configurator
 {
-	/**
-	 * @var EnvironmentConfigurator
-	 */
-	private $configurator;
-
-	public function __construct(EnvironmentConfigurator $configurator)
-	{
-		$this->configurator = $configurator;
+	public function __construct(
+		private readonly EnvironmentConfigurator $configurator
+	) {
 	}
 
 	public function configure(Environment $environment)
 	{
 		$environment
 			->getExtension(EscaperExtension::class)
-			->setEscaper(AutoEscapeService::STRATEGY_ICAL, [$this, 'escape_ical']);
+			->setEscaper(AutoEscapeService::STRATEGY_ICAL, $this->escape_ical(...));
 		$environment
 			->getExtension(EscaperExtension::class)
-			->setEscaper(AutoEscapeService::STRATEGY_XML, [$this, 'escape_xml']);
+			->setEscaper(AutoEscapeService::STRATEGY_XML, $this->escape_xml(...));
 		$environment
 			->getExtension(EscaperExtension::class)
-			->setEscaper(AutoEscapeService::STRATEGY_MAIL, [$this, 'escape_mail']);
+			->setEscaper(AutoEscapeService::STRATEGY_MAIL, $this->escape_mail(...));
 
 		$this->configurator->configure($environment);
 	}
@@ -41,7 +36,7 @@ class Configurator
 
 	public function escape_xml($twig, $string, $charset)
 	{
-		return htmlspecialchars($string, ENT_XML1, 'UTF-8');
+		return htmlspecialchars((string) $string, ENT_XML1, 'UTF-8');
 	}
 
 	public function escape_mail($twig, $string, $charset)

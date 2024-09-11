@@ -16,28 +16,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SponsorAffiliateDownloadCommand extends Command
 {
 	protected static $defaultName = 'stek:sponsor:download';
-	/**
-	 * @var string
-	 */
-	private $sponsorSlHost;
-	/**
-	 * @var string
-	 */
-	private $sponsorClubId;
-	/**
-	 * @var string
-	 */
-	private $sponsorUserAgent;
 
 	public function __construct(
-		string $sponsorSlHost,
-		string $sponsorClubId,
-		string $sponsorUserAgent
+		private readonly string $sponsorSlHost,
+		private readonly string $sponsorClubId,
+		private readonly string $sponsorUserAgent
 	) {
 		parent::__construct();
-		$this->sponsorSlHost = $sponsorSlHost;
-		$this->sponsorClubId = $sponsorClubId;
-		$this->sponsorUserAgent = $sponsorUserAgent;
 	}
 
 	protected function configure()
@@ -74,7 +59,7 @@ class SponsorAffiliateDownloadCommand extends Command
 			CURLOPT_USERAGENT => $this->sponsorUserAgent . 'a',
 		]);
 
-		$webshops = json_decode($result)->webshops;
+		$webshops = json_decode((string) $result)->webshops;
 
 		//3. Follow links to final destination
 		$data = ['club_id' => $this->sponsorClubId];

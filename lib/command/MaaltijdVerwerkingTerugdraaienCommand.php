@@ -19,22 +19,11 @@ use Symfony\Component\Console\Question\Question;
 
 class MaaltijdVerwerkingTerugdraaienCommand extends Command
 {
-	/** @var MaaltijdenRepository */
-	private $maaltijdenRepository;
-	/** @var CiviBestellingRepository */
-	private $civiBestellingRepository;
-	/** @var EntityManagerInterface */
-	private $em;
-
 	public function __construct(
-		MaaltijdenRepository $maaltijdenRepository,
-		CiviBestellingRepository $civiBestellingRepository,
-		EntityManagerInterface $em
+		private readonly MaaltijdenRepository $maaltijdenRepository,
+		private readonly CiviBestellingRepository $civiBestellingRepository,
+		private readonly EntityManagerInterface $em
 	) {
-		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->civiBestellingRepository = $civiBestellingRepository;
-		$this->em = $em;
-
 		parent::__construct();
 	}
 
@@ -139,7 +128,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command
 				$bestellingen,
 				$progress,
 				$maaltijden
-			) {
+			): void {
 				reset($bestellingen);
 				foreach ($bestellingen as $bestelling) {
 					$this->civiBestellingRepository->revert($bestelling);

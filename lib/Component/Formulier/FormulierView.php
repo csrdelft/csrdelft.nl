@@ -4,15 +4,10 @@ namespace CsrDelft\Component\Formulier;
 
 use CsrDelft\common\CsrException;
 
-class FormulierView
+class FormulierView implements \Stringable
 {
-	private $view;
-	private $titel;
-
-	public function __construct($view, $titel)
+	public function __construct(private $view, private $titel)
 	{
-		$this->view = $view;
-		$this->titel = $titel;
 	}
 
 	public function getView()
@@ -25,12 +20,12 @@ class FormulierView
 		return $this->titel;
 	}
 
-	public function getBreadcrumbs()
+	public function getBreadcrumbs(): never
 	{
 		throw new CsrException('Niet geimplementeerd');
 	}
 
-	public function getModel()
+	public function getModel(): never
 	{
 		throw new CsrException('Niet geimplementeerd');
 	}
@@ -40,8 +35,8 @@ class FormulierView
 		return $this->view;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->view;
+		return (string) $this->view;
 	}
 }

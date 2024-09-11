@@ -96,20 +96,12 @@ class AccountRepository extends AbstractRepository implements
 		/**
 		 * @source OWASP best-practice
 		 */
-		switch ($account->failed_login_attempts) {
-			case 0:
-				$wacht = 0;
-				break;
-			case 1:
-				$wacht = 5;
-				break;
-			case 2:
-				$wacht = 15;
-				break;
-			default:
-				$wacht = 45;
-				break;
-		}
+		$wacht = match ($account->failed_login_attempts) {
+			0 => 0,
+			1 => 5,
+			2 => 15,
+			default => 45,
+		};
 		if ($account->last_login_attempt == null) {
 			return 0;
 		}

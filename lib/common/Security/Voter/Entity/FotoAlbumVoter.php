@@ -19,15 +19,10 @@ class FotoAlbumVoter extends Voter
 	const TOEVOEGEN = 'toevoegen';
 	const AANPASSEN = 'aanpassen';
 	const DOWNLOADEN = 'downloaden';
-	/**
-	 * @var AccessDecisionManagerInterface
-	 */
-	private $accessDecisionManager;
 
 	public function __construct(
-		AccessDecisionManagerInterface $accessDecisionManager
+		private AccessDecisionManagerInterface $accessDecisionManager
 	) {
-		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	public function supportsAttribute(string $attribute): bool

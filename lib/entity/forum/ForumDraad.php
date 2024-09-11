@@ -316,7 +316,7 @@ class ForumDraad
 	public function getLaatstePostSamenvatting()
 	{
 		$laatste = $this->laatste_post;
-		$parseMail = strip_tags(CsrBB::parseMail($laatste->tekst));
+		$parseMail = strip_tags((string) CsrBB::parseMail($laatste->tekst));
 		return TextUtil::truncate($parseMail, 100);
 	}
 
