@@ -541,7 +541,7 @@ class GoogleContactSync
 		try {
 			$this->loadCurrentContacts();
 			$this->initialized = true;
-		} catch (CsrException $e) {
+		} catch (CsrException) {
 			throw new CsrGebruikerException('Google synchronisatie mislukt');
 		}
 	}
