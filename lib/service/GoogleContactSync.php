@@ -41,6 +41,11 @@ class GoogleContactSync
 	private const DEFAULT_GROEPNAAM = 'C.S.R.-leden';
 	private const READ_MASK = 'userDefined';
 	private const UPDATE_MASK = 'names,nicknames,genders,birthdays,addresses,phoneNumbers,emailAddresses,urls,userDefined';
+
+	/**
+	 * @var GoogleClientManager
+	 */
+	private $authenticator;
 	/**
 	 * @var string
 	 */
@@ -67,8 +72,8 @@ class GoogleContactSync
 	private $initialized = false;
 
 	public function __construct(
-		private readonly GoogleAuthenticator $authenticator,
-		private readonly ProfielRepository $profielRepository
+		GoogleClientManager $authenticator,
+		ProfielRepository $profielRepository
 	) {
 		$this->groepNaam = trim(
 			InstellingUtil::lid_instelling('googleContacts', 'groepnaam')
@@ -529,17 +534,14 @@ class GoogleContactSync
 		if ($this->initialized) {
 			return;
 		}
-		$this->authenticator->doRequestToken($redirectURL);
-		$client = $this->authenticator->createClient();
-		$token = $this->authenticator->getToken()->token;
-		$client->fetchAccessTokenWithRefreshToken($token);
+		$this->authenticator->refreshToken($redirectURL);
+		$client = $this->authenticator->getClient();
 		$this->peopleService = new PeopleService($client);
 
 		try {
 			$this->loadCurrentContacts();
 			$this->initialized = true;
-		} catch (CsrException) {
-			$this->authenticator->deleteToken();
+		} catch (CsrException $e) {
 			throw new CsrGebruikerException('Google synchronisatie mislukt');
 		}
 	}
