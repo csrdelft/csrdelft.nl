@@ -12,9 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Een ketzer is een aanmeldbare groep.
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\KetzersRepository")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\groepen\KetzersRepository::class
+	)
+]
 class Ketzer extends Groep implements HeeftAanmeldLimiet, HeeftAanmeldMoment
 {
 	use GroepAanmeldMoment;

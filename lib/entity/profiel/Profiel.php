@@ -42,15 +42,14 @@ use const P_LEDEN_MOD;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Profiel van een lid. Agendeerbaar vanwege verjaardag in agenda.
- * @ORM\Entity(repositoryClass="CsrDelft\repository\ProfielRepository")
- * @ORM\Table("profielen", indexes={
- *   @ORM\Index(name="voornaam", columns={"voornaam"}),
- *   @ORM\Index(name="achternaam", columns={"achternaam"}),
- *   @ORM\Index(name="verticale", columns={"verticale"}),
- *   @ORM\Index(name="nickname", columns={"nickname"}),
- *   @ORM\Index(name="status", columns={"status"})
- * })
  */
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\ProfielRepository::class)]
+#[ORM\Table('profielen')]
+#[ORM\Index(name: 'voornaam', columns: ['voornaam'])]
+#[ORM\Index(name: 'achternaam', columns: ['achternaam'])]
+#[ORM\Index(name: 'verticale', columns: ['verticale'])]
+#[ORM\Index(name: 'nickname', columns: ['nickname'])]
+#[ORM\Index(name: 'status', columns: ['status'])]
 class Profiel implements Agendeerbaar, DisplayEntity
 {
 	public function __construct()
@@ -59,354 +58,364 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	}
 
 	/**
-	 * @ORM\Id()
-	 * @ORM\Column(type="uid")
 	 * @var string
 	 */
+	#[ORM\Id]
+	#[ORM\Column(type: 'uid')]
 	public $uid;
 	/**
-	 * @ORM\Column(type="changelog")
 	 * @var ProfielLogGroup[]
 	 */
+	#[ORM\Column(type: 'changelog')]
 	public $changelog;
 	// naam
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $voornamen;
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $voorletters;
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $voornaam;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $tussenvoegsel;
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $achternaam;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $postfix;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $nickname;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $duckname;
 	// fysiek
 	/**
-	 * @ORM\Column(type="enumGeslacht")
 	 * @var Geslacht
 	 */
+	#[ORM\Column(type: 'enumGeslacht')]
 	public $geslacht;
 	/**
-	 * @ORM\Column(type="date")
 	 * @var DateTimeImmutable
 	 */
+	#[ORM\Column(type: 'date')]
 	public $gebdatum;
 	/**
-	 * @ORM\Column(type="date", nullable=true)
 	 * @var DateTimeImmutable|null
 	 */
+	#[ORM\Column(type: 'date', nullable: true)]
 	public $sterfdatum;
 	/**
-	 * @ORM\Column(type="integer")
 	 * @var integer
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $lengte;
 	// getrouwd
 	/**
-	 * @ORM\Column(type="uid", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'uid', nullable: true)]
 	public $echtgenoot;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $adresseringechtpaar;
 	/**
-	 * @ORM\Column(type="enumOntvangtContactueel")
 	 * @var OntvangtContactueel
 	 */
+	#[ORM\Column(type: 'enumOntvangtContactueel')]
 	public $ontvangtcontactueel;
 	// adres
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $adres;
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $postcode;
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $woonplaats;
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $land;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $telefoon;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $o_adres;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $o_postcode;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $o_woonplaats;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $o_land;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $o_telefoon;
 	// contact
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $email;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $sec_email;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $mobiel;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $linkedin;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $website;
 	// studie
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $studie;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $studiejaar;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $beroep;
 	// lidmaatschap
 	/**
-	 * @ORM\Column(type="integer")
 	 * @var integer
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $lidjaar;
 	/**
-	 * @ORM\Column(type="date", nullable=true)
 	 * @var DateTimeImmutable|null
 	 */
+	#[ORM\Column(type: 'date', nullable: true)]
 	public $lidafdatum;
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $status;
 	// geld
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $bankrekening;
 	/**
-	 * @ORM\Column(type="boolean", nullable=true)
 	 * @var boolean|null
 	 */
+	#[ORM\Column(type: 'boolean', nullable: true)]
 	public $machtiging;
 	/**
-	 * @ORM\Column(type="boolean", nullable=true, name="toestemmingAfschrijven")
 	 * @var boolean|null
 	 */
+	#[ORM\Column(type: 'boolean', nullable: true, name: 'toestemmingAfschrijven')]
 	public $toestemmingAfschrijven;
 	// verticale
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $moot;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $verticale;
 	/**
-	 * @ORM\Column(type="boolean", nullable=true)
 	 * @var boolean|null
 	 */
+	#[ORM\Column(type: 'boolean', nullable: true)]
 	public $verticaleleider;
 	/**
-	 * @ORM\Column(type="boolean", nullable=true)
 	 * @var boolean|null
 	 */
+	#[ORM\Column(type: 'boolean', nullable: true)]
 	public $kringcoach;
 	// civi-gegevens
 	/**
-	 * @ORM\Column(type="uid", nullable=true)
 	 * @var string
 	 */
+	#[ORM\Column(type: 'uid', nullable: true)]
 	public $patroon;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $eetwens;
 	/**
-	 * @ORM\Column(type="integer", nullable=true)
 	 * @var integer|null
 	 */
+	#[ORM\Column(type: 'integer', nullable: true)]
 	public $corvee_punten;
 	/**
-	 * @ORM\Column(type="integer", nullable=true)
 	 * @var integer|null
 	 */
+	#[ORM\Column(type: 'integer', nullable: true)]
 	public $corvee_punten_bonus;
 	// novitiaat
 	/**
-	 * @ORM\Column(type="text", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'text', nullable: true)]
 	public $novitiaat;
 	/**
-	 * @ORM\Column(type="text", nullable=true, name="novitiaatBijz")
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'text', nullable: true, name: 'novitiaatBijz')]
 	public $novitiaatBijz;
 	/**
-	 * @ORM\Column(type="text", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'text', nullable: true)]
 	public $medisch;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $startkamp;
 	/**
-	 * @ORM\Column(type="string", nullable=true, name="matrixPlek")
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true, name: 'matrixPlek')]
 	public $matrixPlek;
 	/**
-	 * @ORM\Column(type="string", nullable=true, name="novietSoort")
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true, name: 'novietSoort')]
 	public $novietSoort;
 	/**
-	 * @ORM\Column(type="text", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'text', nullable: true)]
 	public $kgb;
 	/**
-	 * @ORM\Column(type="text", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'text', nullable: true)]
 	public $vrienden;
 	/**
-	 * @ORM\Column(type="string", nullable=true, name="middelbareSchool")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string', nullable: true, name: 'middelbareSchool')]
 	public $middelbareSchool;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $huisarts;
 	/**
-	 * @ORM\Column(type="string", nullable=true, name="huisartsPlaats")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string', nullable: true, name: 'huisartsPlaats')]
 	public $huisartsPlaats;
 	/**
-	 * @ORM\Column(type="string", nullable=true, name="huisartsTelefoon")
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true, name: 'huisartsTelefoon')]
 	public $huisartsTelefoon;
 	// overig
 	/**
-	 * @ORM\Column(type="string", nullable=true, name="profielOpties")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string', nullable: true, name: 'profielOpties')]
 	public $profielOpties;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $kerk;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $muziek;
 	/**
-	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $zingen;
 
 	/**
 	 * @var Account|null
-	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\security\Account", mappedBy="profiel")
 	 */
+	#[
+		ORM\OneToOne(
+			targetEntity: \CsrDelft\entity\security\Account::class,
+			mappedBy: 'profiel'
+		)
+	]
 	public $account;
 
 	/**
 	 * @var LidToestemming[]
-	 * @ORM\OneToMany(targetEntity="CsrDelft\entity\LidToestemming", mappedBy="profiel")
 	 */
+	#[
+		ORM\OneToMany(
+			targetEntity: \CsrDelft\entity\LidToestemming::class,
+			mappedBy: 'profiel'
+		)
+	]
 	public $toestemmingen;
 
 	/**
@@ -981,9 +990,11 @@ class Profiel implements Agendeerbaar, DisplayEntity
 
 	/**
 	 * @var Profiel|null
-	 * @ORM\ManyToOne(targetEntity="Profiel", inversedBy="kinderen")
-	 * @ORM\JoinColumn(name="patroon", referencedColumnName="uid", nullable=true)
 	 */
+	#[ORM\ManyToOne(targetEntity: \Profiel::class, inversedBy: 'kinderen')]
+	#[
+		ORM\JoinColumn(name: 'patroon', referencedColumnName: 'uid', nullable: true)
+	]
 	private $patroonProfiel;
 
 	public function getPatroonProfiel()
@@ -1001,8 +1012,8 @@ class Profiel implements Agendeerbaar, DisplayEntity
 
 	/**
 	 * @var Profiel[]|ArrayCollection
-	 * @ORM\OneToMany(targetEntity="Profiel", mappedBy="patroonProfiel")
 	 */
+	#[ORM\OneToMany(targetEntity: \Profiel::class, mappedBy: 'patroonProfiel')]
 	public $kinderen;
 
 	public function hasKinderen()

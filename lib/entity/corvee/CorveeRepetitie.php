@@ -31,68 +31,81 @@ use Doctrine\ORM\Mapping as ORM;
  *
  *
  * Zie ook CorveeTaak.class.php
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeRepetitiesRepository")
- * @ORM\Table("crv_repetities")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\corvee\CorveeRepetitiesRepository::class
+	)
+]
+#[ORM\Table('crv_repetities')]
 class CorveeRepetitie implements DisplayEntity
 {
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
 	 */
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $crv_repetitie_id;
 	/**
 	 * @var integer|null
-	 * @ORM\Column(type="integer", nullable=true)
 	 */
+	#[ORM\Column(type: 'integer', nullable: true)]
 	public $mlt_repetitie_id;
 	/**
 	 * @var MaaltijdRepetitie|null
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\maalcie\MaaltijdRepetitie")
-	 * @ORM\JoinColumn(name="mlt_repetitie_id", referencedColumnName="mlt_repetitie_id", nullable=true)
 	 */
+	#[
+		ORM\ManyToOne(
+			targetEntity: \CsrDelft\entity\maalcie\MaaltijdRepetitie::class
+		)
+	]
+	#[
+		ORM\JoinColumn(
+			name: 'mlt_repetitie_id',
+			referencedColumnName: 'mlt_repetitie_id',
+			nullable: true
+		)
+	]
 	public $maaltijdRepetitie;
 	/**
 	 * 0: zondag
 	 * 6: zaterdag
 	 * @var int
-	 * @ORM\Column(type="integer")
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $dag_vd_week;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $periode_in_dagen;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $functie_id;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $standaard_punten;
 	/**
 	 * @var integer|null
-	 * @ORM\Column(type="integer", nullable=true)
 	 */
+	#[ORM\Column(type: 'integer', nullable: true)]
 	public $standaard_aantal;
 	/**
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
 	 */
+	#[ORM\Column(type: 'boolean')]
 	public $voorkeurbaar;
 
 	/**
 	 * @var CorveeFunctie
-	 * @ORM\ManyToOne(targetEntity="CorveeFunctie")
-	 * @ORM\JoinColumn(name="functie_id", referencedColumnName="functie_id")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CorveeFunctie::class)]
+	#[ORM\JoinColumn(name: 'functie_id', referencedColumnName: 'functie_id')]
 	public $corveeFunctie;
 
 	/**

@@ -10,60 +10,60 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * ChangeLogEntry.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- * @ORM\Entity(repositoryClass="CsrDelft\repository\ChangeLogRepository")
- * @ORM\Table("changelog")
  */
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\ChangeLogRepository::class)]
+#[ORM\Table('changelog')]
 class ChangeLogEntry
 {
 	/**
 	 * Primary key
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
 	 */
 	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $id;
 	/**
 	 * The moment it changed
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
 	 */
 	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'datetime')]
 	public $moment;
 	/**
 	 * The thing that changed
 	 * @var string
-	 * @ORM\Column(type="string")
 	 */
 	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'string')]
 	public $subject;
 	/**
 	 * The property that changed
 	 * @var string
-	 * @ORM\Column(type="string")
 	 */
 	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'string')]
 	public $property;
 	/**
 	 * The value before
 	 * @var string
-	 * @ORM\Column(type="text", nullable=true)
 	 */
 	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'text', nullable: true)]
 	public $old_value;
 	/**
 	 * The value after
 	 * @var string
-	 * @ORM\Column(type="text", nullable=true)
 	 */
 	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'text', nullable: true)]
 	public $new_value;
 	/**
 	 * Lidnummer of who did it
 	 * @var string
-	 * @ORM\Column(type="uid")
 	 */
 	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'uid')]
 	public $uid;
 }

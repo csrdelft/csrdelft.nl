@@ -59,7 +59,7 @@ doctrine:
     mappings:
       CsrDelft:
         is_bundle: false
-        type: annotation
+        type: attribute
         dir: '%kernel.project_dir%/lib/entity'
         prefix: 'CsrDelft\entity'
         alias: App

@@ -14,46 +14,40 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-/**
- * @ORM\Entity(repositoryClass=AanmeldActiviteitRepository::class)
- * @ORM\Table(name="aanmelder_activiteit")
- */
+#[ORM\Entity(repositoryClass: AanmeldActiviteitRepository::class)]
+#[ORM\Table(name: 'aanmelder_activiteit')]
 class AanmeldActiviteit extends ActiviteitEigenschappen implements
 	DataTableEntry
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
 	#[Serializer\Groups(['datatable'])]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	public $id;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Reeks::class, inversedBy="activiteiten")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
+	#[ORM\ManyToOne(targetEntity: Reeks::class, inversedBy: 'activiteiten')]
+	#[ORM\JoinColumn(nullable: false)]
 	private $reeks;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 */
+	#[ORM\Column(type: 'datetime')]
 	private $start;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 */
+	#[ORM\Column(type: 'datetime')]
 	private $einde;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
+	#[ORM\Column(type: 'boolean')]
 	private $gesloten;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=Deelnemer::class, mappedBy="activiteit", orphanRemoval=true)
 	 * @var ArrayCollection|Deelnemer[]
 	 */
+	#[
+		ORM\OneToMany(
+			targetEntity: Deelnemer::class,
+			mappedBy: 'activiteit',
+			orphanRemoval: true
+		)
+	]
 	private $deelnemers;
 
 	public function __construct()

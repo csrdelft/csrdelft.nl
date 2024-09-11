@@ -12,17 +12,20 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Lichting.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\LichtingenRepository")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\groepen\LichtingenRepository::class
+	)
+]
 class Lichting extends Groep
 {
 	/**
 	 * Lidjaar
 	 * @var int
-	 * @ORM\Column(type="integer", unique=true)
 	 */
 	#[Serializer\Groups(['datatable', 'log', 'vue'])]
+	#[ORM\Column(type: 'integer', unique: true)]
 	public $lidjaar;
 
 	/**

@@ -8,47 +8,38 @@ use CsrDelft\repository\aanmelder\DeelnemerRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=DeelnemerRepository::class)
- * @ORM\Table(name="aanmelder_deelnemer")
- */
+#[ORM\Entity(repositoryClass: DeelnemerRepository::class)]
+#[ORM\Table(name: 'aanmelder_deelnemer')]
 class Deelnemer
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private $id;
 
 	/**
 	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $lid;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 */
+	#[ORM\Column(type: 'datetime')]
 	private $aangemeld;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
+	#[ORM\Column(type: 'datetime', nullable: true)]
 	private $aanwezig = null;
 
 	public function __construct(
-		/**
-		 * @ORM\ManyToOne(targetEntity=AanmeldActiviteit::class, inversedBy="deelnemers")
-		 * @ORM\JoinColumn(nullable=false)
-		 */
-		private AanmeldActiviteit $activiteit,
+		#[
+			ORM\ManyToOne(
+				targetEntity: AanmeldActiviteit::class,
+				inversedBy: 'deelnemers'
+			)
+		]
+		#[ORM\JoinColumn(nullable: false)] private AanmeldActiviteit $activiteit,
 		Profiel $lid,
-		/**
-		 * @ORM\Column(type="integer")
-		 */
-		private int $aantal
+		#[ORM\Column(type: 'integer')] private int $aantal
 	) {
 		$this->lid = $lid;
 		$this->aangemeld = date_create_immutable();

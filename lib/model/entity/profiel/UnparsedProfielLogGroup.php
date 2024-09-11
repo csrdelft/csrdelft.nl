@@ -19,10 +19,12 @@ class UnparsedProfielLogGroup extends ProfielLogGroup
 	 * @param $content
 	 * @param string $content
 	 */
-	public function __construct /**
-	 * BB-code uit het oude log.
-	 * @var string content
-	 */(public $content) {
+	public function __construct(
+		/**
+		 * BB-code uit het oude log.
+		 * @var string content
+		 */ public $content
+	) {
 		parent::__construct(null, null);
 	}
 
