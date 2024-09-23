@@ -5845,7 +5845,6 @@ fsevents@~2.3.1:
     style-loader: ^2.0.0
     terser-webpack-plugin: ^5.1.1
     textcomplete: ^0.17.1
-    three: ^0.117.0
     timeago.js: ^4.0.2
     ts-loader: ^9.0.1
     ts-node: ^8.0.2
@@ -6546,13 +6545,6 @@ fsevents@~2.3.1:
     textarea-caret: ^3.0.1
     undate: ^0.2.3
   checksum: 67b616d9b7d3be09a67f16c8302f2e7b3dca94a00739e0a5bf5bf4550caa79a1082630471b907986d86f3fdaf708a8163bda096766662b61e56aaecbaa41a5df
-  languageName: node
-  linkType: hard
-
-"three@npm:^0.117.0":
-  version: 0.117.1
-  resolution: "three@npm:0.117.1"
-  checksum: 1ac1022599777f61f056f769aebe434e9de4f4516a420c1b2ce3d704b1e3f0e3daea56ee110d163937d567ddd364c8a05fa43a9e8eb88788b79e6ea961576ee9
   languageName: node
   linkType: hard
 
