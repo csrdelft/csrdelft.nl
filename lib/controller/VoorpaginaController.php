@@ -90,15 +90,15 @@ class VoorpaginaController extends AbstractController
 	public function verjaardagen(
 		VerjaardagenService $verjaardagenService
 	): Response {
-		// Komende verjaardagen
-		if (LoginService::mag(P_LOGGED_IN)) {
-			return $this->render('voorpagina/verjaardagen.html.twig', [
-				'verjaardagen' => $verjaardagenService->getKomende(10),
-				true,
-			]);
+		if (!LoginService::mag(P_VERJAARDAGEN)) {
+			throw $this->createAccessDeniedException();
 		}
-
-		throw $this->createAccessDeniedException();
+		
+		// Komende verjaardagen
+		return $this->render('voorpagina/verjaardagen.html.twig', [
+			'verjaardagen' => $verjaardagenService->getKomende(10),
+			true,
+		]);
 	}
 
 	/**
