@@ -8,33 +8,37 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class VoorkeurOpmerking
  * @package CsrDelft\entity\commissievoorkeuren
- * @ORM\Entity(repositoryClass="CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository::class
+	)
+]
 class VoorkeurOpmerking
 {
 	/**
 	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
 	 */
+	#[ORM\Column(type: 'uid')]
+	#[ORM\Id]
 	public $uid;
 
 	/**
 	 * @var string
-	 * @ORM\Column(type="text", nullable=true, name="lidOpmerking")
 	 */
+	#[ORM\Column(type: 'text', nullable: true, name: 'lidOpmerking')]
 	public $lidOpmerking;
 
 	/**
 	 * @var string
-	 * @ORM\Column(type="text", nullable=true, name="praesesOpmerking")
 	 */
+	#[ORM\Column(type: 'text', nullable: true, name: 'praesesOpmerking')]
 	public $praesesOpmerking;
 
 	/**
 	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $profiel;
 }

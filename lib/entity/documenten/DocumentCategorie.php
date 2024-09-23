@@ -10,44 +10,53 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Entity(repositoryClass="CsrDelft\repository\documenten\DocumentCategorieRepository")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\documenten\DocumentCategorieRepository::class
+	)
+]
 class DocumentCategorie implements ISelectEntity, DisplayEntity
 {
 	/**
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="integer")
 	 * @var int
 	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	public $id;
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $naam;
 	/**
-	 * @ORM\Column(type="boolean")
 	 * @var boolean
 	 */
+	#[ORM\Column(type: 'boolean')]
 	public $zichtbaar = true;
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $leesrechten = P_LOGGED_IN;
 
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $schrijfrechten = P_DOCS_MOD;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="CsrDelft\entity\documenten\Document", mappedBy="categorie")
-	 * @ORM\OrderBy({"toegevoegd" = "DESC"})
 	 * @var Document[]|ArrayCollection
 	 */
+	#[
+		ORM\OneToMany(
+			targetEntity: \CsrDelft\entity\documenten\Document::class,
+			mappedBy: 'categorie'
+		)
+	]
+	#[ORM\OrderBy(['toegevoegd' => 'DESC'])]
 	public $documenten;
 
 	public function magBekijken()

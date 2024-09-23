@@ -14,18 +14,21 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Een commissie is een groep waarvan de groepsleden een specifieke functie (kunnen) hebben.
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\CommissiesRepository")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\groepen\CommissiesRepository::class
+	)
+]
 class Commissie extends Groep implements HeeftSoort, HeeftMoment
 {
 	use GroepMoment;
 	/**
 	 * (Bestuurs-)Commissie / SjaarCie
 	 * @var CommissieSoort
-	 * @ORM\Column(type="enumCommissieSoort")
 	 */
 	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'enumCommissieSoort')]
 	public $commissieSoort;
 
 	public function getUrl()

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Symfony\Set\SymfonySetList;
 
 return RectorConfig::configure()
@@ -18,5 +19,9 @@ return RectorConfig::configure()
 	])
 	// uncomment to reach your current PHP version
 	->withPhpSets()
-	->withSets([SymfonySetList::SYMFONY_54])
+	->withSets([
+		SymfonySetList::SYMFONY_54,
+		DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
+		DoctrineSetList::DOCTRINE_ORM_29,
+	])
 	->withTypeCoverageLevel(0);

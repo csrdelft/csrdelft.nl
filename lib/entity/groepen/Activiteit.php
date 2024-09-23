@@ -18,9 +18,12 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Activiteit.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\ActiviteitenRepository")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\groepen\ActiviteitenRepository::class
+	)
+]
 class Activiteit extends Groep implements
 	Agendeerbaar,
 	HeeftAanmeldLimiet,
@@ -37,23 +40,23 @@ class Activiteit extends Groep implements
 	/**
 	 * Intern / Extern / SjaarsActie / etc.
 	 * @var ActiviteitSoort
-	 * @ORM\Column(type="enumActiviteitSoort")
 	 */
 	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'enumActiviteitSoort')]
 	public $activiteitSoort;
 	/**
 	 * Locatie
 	 * @var string
-	 * @ORM\Column(type="string", nullable=true)
 	 */
 	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $locatie;
 	/**
 	 * Tonen in agenda
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
 	 */
 	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'boolean')]
 	public $inAgenda;
 
 	public function getUUID()
