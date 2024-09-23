@@ -179,8 +179,6 @@ class AgendaRepository extends AbstractRepository
 			}
 		}
 
-		$auth = $ical ? AuthenticationMethod::getEnumValues() : null;
-
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
 		$activiteiten = $this->activiteitenRepository->getGroepenVoorAgenda(
