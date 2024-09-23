@@ -4499,7 +4499,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"object-assign@npm:^4.1.0, object-assign@npm:^4.1.1":
+"object-assign@npm:^4.1.0":
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
   checksum: fcc6e4ea8c7fe48abfbb552578b1c53e0d194086e2e6bbbf59e0a536381a292f39943c6e9628af05b5528aa5e3318bb30d6b2e53cadaf5b8fe9e12c4b69af23f
@@ -4661,16 +4661,6 @@ fsevents@~2.3.1:
   version: 1.0.11
   resolution: "pako@npm:1.0.11"
   checksum: 1be2bfa1f807608c7538afa15d6f25baa523c30ec870a3228a89579e474a4d992f4293859524e46d5d87fd30fa17c5edf34dbef0671251d9749820b488660b16
-  languageName: node
-  linkType: hard
-
-"parallax-js@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "parallax-js@npm:3.1.0"
-  dependencies:
-    object-assign: ^4.1.1
-    raf: ^3.3.0
-  checksum: 8cb2eaa511cf289ebb57eb2d2ee1b00ef01bb6a4b1439b962df0f6ab1324c501c845ee160714d3081264d9364763061eee290913b3d6b3e34b664ba279bbd742
   languageName: node
   linkType: hard
 
@@ -5503,15 +5493,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"raf@npm:^3.3.0":
-  version: 3.4.1
-  resolution: "raf@npm:3.4.1"
-  dependencies:
-    performance-now: ^2.1.0
-  checksum: 50ba284e481c8185dbcf45fc4618ba3aec580bb50c9121385d5698cb6012fe516d2015b1df6dd407a7b7c58d44be8086108236affbce1861edd6b44637c8cd52
-  languageName: node
-  linkType: hard
-
 "randombytes@npm:^2.1.0":
   version: 2.1.0
   resolution: "randombytes@npm:2.1.0"
@@ -5818,7 +5799,6 @@ fsevents@~2.3.1:
     moment-locales-webpack-plugin: ^1.2.0
     optimize-css-assets-webpack-plugin: ^6.0.1
     orderedmap: ^2.1.0
-    parallax-js: ^3.1.0
     path: ^0.12.7
     popper.js: ^1.15
     postcss: ^8.2.10

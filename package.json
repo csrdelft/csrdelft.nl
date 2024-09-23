@@ -123,7 +123,6 @@
 		"jszip": "^3.1.5",
 		"moment": "^2.29.4",
 		"orderedmap": "^2.1.0",
-		"parallax-js": "^3.1.0",
 		"popper.js": "^1.15",
 		"prosemirror-autocomplete": "^0.4.3",
 		"prosemirror-commands": "^1.5.1",
