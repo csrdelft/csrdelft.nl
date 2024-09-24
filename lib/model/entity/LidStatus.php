@@ -2,212 +2,110 @@
 
 namespace CsrDelft\model\entity;
 
-use CsrDelft\common\Enum;
+use CsrDelft\common\EnumTrait;
 
 /**
- * LidStatus.enum.php
- *
- * @author C.S.R. Delft <pubcie@csrdelft.nl>
- * @author P.W.G. Brussee <brussee@live.nl>
  */
-class LidStatus extends Enum
+enum LidStatus: string
 {
+	use EnumTrait;
 	/**
 	 * Status voor h.t. leden.
 	 */
-	const Noviet = 'S_NOVIET';
-	const Lid = 'S_LID';
-	const Gastlid = 'S_GASTLID';
+	case Noviet = 'S_NOVIET';
+	case Lid = 'S_LID';
+	case Gastlid = 'S_GASTLID';
 
 	/**
 	 * Status voor o.t. leden.
 	 */
-	const Oudlid = 'S_OUDLID';
-	const Erelid = 'S_ERELID';
+	case Oudlid = 'S_OUDLID';
+	case Erelid = 'S_ERELID';
 
 	/**
 	 * Status voor niet-leden.
 	 */
-	const Overleden = 'S_OVERLEDEN';
-	const Exlid = 'S_EXLID';
-	const Nobody = 'S_NOBODY';
-	const Commissie = 'S_CIE';
-	const Kringel = 'S_KRINGEL';
+	case Overleden = 'S_OVERLEDEN';
+	case Exlid = 'S_EXLID';
+	case Nobody = 'S_NOBODY';
+	case Commissie = 'S_CIE';
+	case Kringel = 'S_KRINGEL';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $lidlike = [
-		self::Noviet => self::Noviet,
-		self::Lid => self::Lid,
-		self::Gastlid => self::Gastlid,
-	];
-
-	/**
-	 * @var string[]
-	 */
-	protected static $oudlidlike = [
-		self::Oudlid => self::Oudlid,
-		self::Erelid => self::Erelid,
-	];
-
-	/**
-	 * @var string[]
-	 */
-	protected static $fiscaalOudlidlike = [
-		self::Oudlid => self::Oudlid,
-		self::Erelid => self::Erelid,
-		self::Exlid => self::Exlid,
-		self::Nobody => self::Nobody,
-	];
-
-	/**
-	 * @var string[]
-	 */
-	protected static $fiscaalLidlike = [
-		self::Noviet => self::Noviet,
-		self::Lid => self::Lid,
-		self::Gastlid => self::Gastlid,
-		self::Kringel => self::Kringel,
-	];
-
-	protected static $zoekenLidlike = [
-		self::Noviet => self::Noviet,
-		self::Lid => self::Lid,
-		self::Gastlid => self::Gastlid,
-		self::Kringel => self::Kringel,
-	];
-
-	/**
-	 * @var string[]
-	 */
-	protected static $zoekenOudlidlike = [
-		self::Oudlid => self::Oudlid,
-		self::Erelid => self::Erelid,
-	];
-
-	protected static $zoekenExlidlike = [
-		self::Nobody => self::Nobody,
-		self::Exlid => self::Exlid,
-	];
-
-	/**
-	 * @var string[]
-	 */
-	protected static $mapChoiceToDescription = [
-		self::Noviet => 'Noviet',
-		self::Lid => 'Lid',
-		self::Gastlid => 'Gastlid',
-		self::Oudlid => 'Oudlid',
-		self::Erelid => 'Erelid',
-		self::Overleden => 'Overleden',
-		self::Exlid => 'Ex-lid',
-		self::Nobody => 'Nobody',
-		self::Commissie => 'Commissie (LDAP)',
-		self::Kringel => 'Kringel',
-	];
-
-	/**
-	 * @var string[]
-	 */
-	protected static $mapChoiceToChar = [
-		self::Noviet => '',
-		self::Lid => '',
-		self::Gastlid => '',
-		self::Commissie => '∈',
-		self::Exlid => '∉',
-		self::Nobody => '∉',
-		self::Kringel => '~',
-		self::Oudlid => '•',
-		self::Erelid => '☀',
-		self::Overleden => '✝',
-	];
-
-	/**
-	 * @return string[]
-	 */
-	public static function getLidLike()
-	{
-		return array_values(static::$lidlike);
+	public function getDescription(): string {
+		return match($this) {
+			self::Noviet => 'Noviet',
+			self::Lid => 'Lid',
+			self::Gastlid => 'Gastlid',
+			self::Oudlid => 'Oudlid',
+			self::Erelid => 'Erelid',
+			self::Overleden => 'Overleden',
+			self::Exlid => 'Ex-lid',
+			self::Nobody => 'Nobody',
+			self::Commissie => 'Commissie (LDAP)',
+			self::Kringel => 'Kringel',
+		};
 	}
 
+	public function getChar(): string {
+		return match($this) {
+			self::Noviet => '',
+			self::Lid => '',
+			self::Gastlid => '',
+			self::Commissie => '∈',
+			self::Exlid => '∉',
+			self::Nobody => '∉',
+			self::Kringel => '~',
+			self::Oudlid => '•',
+			self::Erelid => '☀',
+			self::Overleden => '✝',
+		};
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isLidLike(): bool
+	{
+		return match($this) {
+			self::Noviet, self::Lid, self::Gastlid => true,
+			default => false
+		};
+	}
 	/**
 	 * @return LidStatus[]
 	 */
-	public static function getLidLikeObject()
+	public static function getLidLike(): array
 	{
-		return array_map(fn($val) => static::from($val), static::getLidLike());
+		return [self::Noviet, self::Lid, self::Gastlid];
+	}
+
+	public function isFiscaalLidLike(): bool {
+		return match($this) {
+			self::Noviet, self::Lid, self::Gastlid, self::Kringel => true,
+			default => false
+		};
+	}
+
+	public function isFiscaalOudlidLike(): bool {
+		return match($this) {
+			self::Oudlid, self::Erelid, self::Exlid, self::Nobody => true,
+			default => false
+		};
 	}
 
 	/**
-	 * @return string[]
-	 */
-	public static function getOudlidLike()
-	{
-		return array_values(static::$oudlidlike);
-	}
-
-	/**
-	 * @return LidStatus[]
-	 */
-	public static function getOudLidLikeObject()
-	{
-		return array_map(fn($val) => static::from($val), static::getOudLidLike());
-	}
-
-	/**
-	 * @return string[]
-	 */
-	public static function getFiscaalLidLike()
-	{
-		return array_values(static::$fiscaalLidlike);
-	}
-
-	/**
-	 * @return string[]
-	 */
-	public static function getFiscaalOudlidLike()
-	{
-		return array_values(static::$fiscaalOudlidlike);
-	}
-
-	/**
-	 * @param string $option
-	 *
 	 * @return bool
 	 */
-	public static function isLidLike($option)
+	public function isOudlidLike(): bool
 	{
-		return isset(static::$lidlike[$option]);
+		return match($this) {
+			self::Oudlid, self::Erelid => true,
+			default => false
+		};
 	}
 
-	/**
-	 * @param string $option
-	 *
-	 * @return bool
-	 */
-	public static function isOudlidLike($option)
-	{
-		return isset(static::$oudlidlike[$option]);
+	public function getValue(): string {
+		return $this->value;
 	}
 
-	public static function getZoekenLidLike()
-	{
-		return array_values(static::$zoekenLidlike);
-	}
-
-	public static function getZoekenOudlidLike()
-	{
-		return array_values(static::$zoekenOudlidlike);
-	}
-
-	public static function getZoekenExlidLike()
-	{
-		return array_values(static::$zoekenExlidlike);
-	}
-
-	public function getChar()
-	{
-		return static::$mapChoiceToChar[$this->getValue()];
-	}
 }

@@ -102,8 +102,8 @@ class ProfielForm extends Formulier
 
 		if ($admin) {
 			$statussen = [];
-			foreach (LidStatus::getEnumValues() as $optie) {
-				$statussen[$optie] = LidStatus::from($optie)->getDescription();
+			foreach (LidStatus::cases() as $optie) {
+				$statussen[$optie->value] = $optie->getDescription();
 			}
 			$fields[] = new SelectField(
 				'status',
