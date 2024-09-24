@@ -109,12 +109,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 */
 	#[ORM\Column(type: 'string', nullable: true)]
 	public $duckname;
-	// fysiek
-	/**
-	 * @var Geslacht
-	 */
-	#[ORM\Column(type: 'enumGeslacht')]
-	public $geslacht;
+
+	#[ORM\Column(type: 'string', enumType: Geslacht::class)]
+	public Geslacht $geslacht;
 	/**
 	 * @var DateTimeImmutable
 	 */
@@ -839,9 +836,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 				} elseif ($this->isLid() || $this->isOudlid()) {
 					// voor novieten is het Dhr./ Mevr.
 					if (LoginService::getProfiel()->status === LidStatus::Noviet) {
-						$naam = Geslacht::isVrouw($this->geslacht) ? 'Mevr. ' : 'Dhr. ';
+						$naam = $this->geslacht === Geslacht::Vrouw ? 'Mevr. ' : 'Dhr. ';
 					} else {
-						$naam = Geslacht::isVrouw($this->geslacht) ? 'Ama. ' : 'Am. ';
+						$naam = $this->geslacht === Geslacht::Vrouw ? 'Ama. ' : 'Am. ';
 					}
 					if (!empty($this->tussenvoegsel)) {
 						$naam .= ucfirst($this->tussenvoegsel) . ' ';
