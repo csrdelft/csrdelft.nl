@@ -29,7 +29,7 @@ class SavedQuery
 	/**
 	 * @var string
 	 */
-	#[ORM\Column(type: 'string', options: ['default' => 'P_LOGGED_IN'])]
+	#[ORM\Column(type: 'string', options: ['default' => P_LOGGED_IN])]
 	public $permissie;
 	/**
 	 * @var string
