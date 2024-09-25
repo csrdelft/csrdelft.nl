@@ -14,25 +14,35 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Verticale.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\VerticalenRepository")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\groepen\VerticalenRepository::class
+	)
+]
 class Verticale extends Groep
 {
 	/**
 	 * Primary key
 	 * @var string
-	 * @ORM\Column(type="string", unique=true, length=1, options={"fixed"=true})
 	 */
 	#[Serializer\Groups(['datatable', 'log', 'vue'])]
+	#[
+		ORM\Column(
+			type: 'string',
+			unique: true,
+			length: 1,
+			options: ['fixed' => true]
+		)
+	]
 	public $letter;
 
 	/**
 	 * Naam
 	 * @var string
-	 * @ORM\Column(type="stringkey", unique=true)
 	 */
 	#[Serializer\Groups(['datatable', 'log', 'vue'])]
+	#[ORM\Column(type: 'stringkey', unique: true)]
 	public $naam;
 
 	// Stiekem hebben we helemaal geen leden.

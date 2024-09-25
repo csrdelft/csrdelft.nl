@@ -12,11 +12,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\fotoalbum\FotoRepository")
- * @ORM\Table("fotos")
- * @ORM\EntityListeners({"CsrDelft\events\FotoListener"})
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\fotoalbum\FotoRepository::class
+	)
+]
+#[ORM\EntityListeners([\CsrDelft\events\FotoListener::class])]
+#[ORM\Table('fotos')]
 class Foto extends Afbeelding
 {
 	const FOTOALBUM_ROOT = '/fotoalbum';
@@ -26,33 +29,33 @@ class Foto extends Afbeelding
 	/**
 	 * Relatief pad in fotoalbum
 	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
 	 */
+	#[ORM\Column(type: 'stringkey')]
+	#[ORM\Id]
 	public $subdir;
 	/**
 	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
 	 */
+	#[ORM\Column(type: 'stringkey')]
+	#[ORM\Id]
 	public $filename;
 	/**
 	 * Degrees of rotation
 	 * @var int
-	 * @ORM\Column(type="integer")
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $rotation;
 	/**
 	 * Uploader
 	 * @var string
-	 * @ORM\Column(type="uid")
 	 */
+	#[ORM\Column(type: 'uid')]
 	public $owner;
 	/**
 	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="owner", referencedColumnName="uid")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\JoinColumn(name: 'owner', referencedColumnName: 'uid')]
 	public $owner_profiel;
 
 	public function __construct(

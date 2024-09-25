@@ -9,47 +9,49 @@ use DateTime;
  * Class Streeplijst.
  *
  * @author J. de Jong
- * @ORM\Entity(repositoryClass="CsrDelft\repository\StreeplijstRepository")
- * @ORM\Table("streeplijsten")
  */
+#[
+	ORM\Entity(repositoryClass: \CsrDelft\repository\StreeplijstRepository::class)
+]
+#[ORM\Table('streeplijsten')]
 class Streeplijst
 {
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\GeneratedValue()
-	 * @ORM\Id()
 	 */
+	#[ORM\Column(type: 'integer')]
+	#[ORM\GeneratedValue]
+	#[ORM\Id]
 	public $id;
 
 	/**
 	 * @var string
-	 * @ORM\Column(type="uid")
 	 */
+	#[ORM\Column(type: 'uid')]
 	public $maker;
 
 	/**
 	 * @var DateTime
-	 * @ORM\Column(type="datetime")
 	 */
+	#[ORM\Column(type: 'datetime')]
 	public $aanmaakdatum;
 
 	/**
 	 * @var string
-	 * @ORM\Column(type="text", nullable=true)
 	 */
+	#[ORM\Column(type: 'text', nullable: true)]
 	public $inhoud_streeplijst;
 
 	/**
 	 * @var string
-	 * @ORM\Column(type="text", nullable=true)
 	 */
+	#[ORM\Column(type: 'text', nullable: true)]
 	public $leden_streeplijst;
 
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", nullable=true)
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $naam_streeplijst;
 
 	public function getLeden()

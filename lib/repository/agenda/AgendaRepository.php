@@ -9,7 +9,6 @@ use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\AgendaVerbergen;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\Activiteit;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
@@ -146,14 +145,14 @@ class AgendaRepository extends AbstractRepository
 	 * @param DateTimeImmutable $van
 	 * @param DateTimeImmutable $tot
 	 * @param bool $ical
-	 * @param bool $zijbalk
+	 * @param bool $voorpagina
 	 * @return Agendeerbaar[]
 	 */
 	public function getAllAgendeerbaar(
 		DateTimeImmutable $van,
 		DateTimeImmutable $tot,
 		$ical = false,
-		$zijbalk = false
+		$voorpagina = false
 	) {
 		$result = [];
 
@@ -179,8 +178,6 @@ class AgendaRepository extends AbstractRepository
 				$result[] = $item;
 			}
 		}
-
-		$auth = $ical ? AuthenticationMethod::getEnumValues() : null;
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
@@ -226,7 +223,7 @@ class AgendaRepository extends AbstractRepository
 		// Verjaardagen
 		$toonVerjaardagen = $ical ? 'toonVerjaardagenICal' : 'toonVerjaardagen';
 		if (
-			!$zijbalk &&
+			!$voorpagina &&
 			LoginService::mag(P_VERJAARDAGEN) &&
 			InstellingUtil::lid_instelling('agenda', $toonVerjaardagen) === 'ja'
 		) {

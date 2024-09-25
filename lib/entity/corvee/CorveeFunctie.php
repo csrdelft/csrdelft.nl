@@ -26,11 +26,14 @@ use Doctrine\ORM\Mapping as ORM;
  *
  *
  * Zie ook CorveeKwalificatie.class.php en CorveeTaak.class.php
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeFunctiesRepository")
- * @ORM\Table("crv_functies")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\corvee\CorveeFunctiesRepository::class
+	)
+]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table('crv_functies')]
 class CorveeFunctie implements ISelectEntity, DisplayEntity
 {
 	# ID om functie van kwalikok op te halen, wijzigen als ID van Kwalikok wijzigt
@@ -39,53 +42,58 @@ class CorveeFunctie implements ISelectEntity, DisplayEntity
 	/**
 	 * Primary key
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
 	 */
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $functie_id;
 	/**
 	 * Naam
 	 * @var string
-	 * @ORM\Column(type="string")
 	 */
+	#[ORM\Column(type: 'string')]
 	public $naam;
 	/**
 	 * Afkorting
 	 * @var string
-	 * @ORM\Column(type="string")
 	 */
+	#[ORM\Column(type: 'string')]
 	public $afkorting;
 	/**
 	 * E-mailbericht
 	 * @var string
-	 * @ORM\Column(type="text")
 	 */
+	#[ORM\Column(type: 'text')]
 	public $email_bericht;
 	/**
 	 * Standaard aantal corveepunten
 	 * @var int
-	 * @ORM\Column(type="integer")
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $standaard_punten;
 	/**
 	 * Is een kwalificatie benodigd
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
 	 */
+	#[ORM\Column(type: 'boolean')]
 	public $kwalificatie_benodigd;
 	/**
 	 * Geeft deze functie speciale rechten
 	 * om maaltijden te mogen sluiten
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
 	 */
+	#[ORM\Column(type: 'boolean')]
 	public $maaltijden_sluiten;
 	/**
 	 * Kwalificaties
 	 * @var CorveeKwalificatie[]
-	 * @ORM\OneToMany(targetEntity="CorveeKwalificatie", mappedBy="corveeFunctie")
 	 */
+	#[
+		ORM\OneToMany(
+			targetEntity: \CorveeKwalificatie::class,
+			mappedBy: 'corveeFunctie'
+		)
+	]
 	public $kwalificaties;
 
 	public function hasKwalificaties()

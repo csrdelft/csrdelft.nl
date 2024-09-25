@@ -181,8 +181,7 @@ class LedenMemoryController extends AbstractController
 		// Bouw infostructuur. array_values om array te resetten voor json_encode
 		$leden = array_values(
 			array_map(
-				fn($profiel) => /** @var $profiel Profiel */
-				[
+				fn($profiel /** @var $profiel Profiel */) => [
 					'uid' => $profiel->uid,
 					'voornaam' => $profiel->voornaam,
 					'tussenvoegsel' => $profiel->tussenvoegsel,

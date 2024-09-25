@@ -37,7 +37,6 @@ class GoogleController extends AbstractController
 		Request $request,
 		GoogleClientManager $googleClientManager
 	): RedirectResponse {
-
 		$code = $request->query->get('code', null);
 		$error = $request->query->get('error', null);
 
@@ -51,16 +50,26 @@ class GoogleController extends AbstractController
 			$session->remove('google_auth_state');
 		}
 		if ($state_cmp === null || !hash_equals($state_cmp, $state)) {
-			throw new CsrGebruikerException('Authenticatiestatus komt niet overeen met Google (' . $state_cmp . ',' . $state . '). Probeer opnieuw');
+			throw new CsrGebruikerException(
+				'Authenticatiestatus komt niet overeen met Google (' .
+					$state_cmp .
+					',' .
+					$state .
+					'). Probeer opnieuw'
+			);
 		}
 		if (!str_contains($state, ':')) {
 			throw new CsrException('Foute authentication state!!', 500);
 		}
-		$redirect = substr($state, strpos($state, ':')+1);
-
+		$redirect = substr($state, strpos($state, ':') + 1);
 
 		if (!str_starts_with($redirect, $request->getSchemeAndHttpHost())) {
-			throw new CsrGebruikerException('Redirect is niet binnen de stek! ' . $redirect . ', ' . $request->getSchemeAndHttpHost());
+			throw new CsrGebruikerException(
+				'Redirect is niet binnen de stek! ' .
+					$redirect .
+					', ' .
+					$request->getSchemeAndHttpHost()
+			);
 		}
 
 		if ($code) {

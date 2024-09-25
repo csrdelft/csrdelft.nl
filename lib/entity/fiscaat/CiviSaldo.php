@@ -20,49 +20,52 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 07/04/2017
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviSaldoRepository"))
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\fiscaat\CiviSaldoRepository::class
+	)
+]
 class CiviSaldo implements DataTableEntry, DisplayEntity
 {
 	/**
 	 * Let op, dit is geen fk naar Profiel. Er zijn CiviSaldo's die geen profiel zijn en vice versa.
 	 *
 	 * @var string
-	 * @ORM\Column(type="uid", unique=true)
-	 * @ORM\Id()
 	 */
 	#[Serializer\Groups(['log', 'datatable', 'bar'])]
+	#[ORM\Column(type: 'uid', unique: true)]
+	#[ORM\Id]
 	public $uid;
 	/**
 	 * @var string
-	 * @ORM\Column(type="text")
 	 */
 	#[Serializer\Groups(['log', 'datatable', 'bar'])]
+	#[ORM\Column(type: 'text')]
 	public $naam;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
 	 */
 	#[Serializer\Groups(['log', 'datatable', 'bar'])]
+	#[ORM\Column(type: 'integer')]
 	public $saldo;
 	/**
 	 * @var \DateTimeImmutable
-	 * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
 	 */
 	#[Serializer\Groups(['log', 'datatable'])]
+	#[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
 	public $laatst_veranderd;
 	/**
 	 * @var bool
-	 * @ORM\Column(type="boolean", options={"default"=false})
 	 */
 	#[Serializer\Groups(['log', 'datatable', 'bar'])]
+	#[ORM\Column(type: 'boolean', options: ['default' => false])]
 	public $deleted = false;
 
 	/**
 	 * @var CiviBestelling[]|ArrayCollection
-	 * @ORM\OneToMany(targetEntity="CiviBestelling", mappedBy="civiSaldo")
 	 */
+	#[ORM\OneToMany(targetEntity: \CiviBestelling::class, mappedBy: 'civiSaldo')]
 	public $bestellingen;
 
 	/**

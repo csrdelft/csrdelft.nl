@@ -103,7 +103,8 @@
 		"weirdan/doctrine-psalm-plugin": "^1.0",
 		"psalm/plugin-symfony": "^2.2",
 		"symfony/stopwatch": "^5.4",
-		"symfony/web-profiler-bundle": "^5.4"
+		"symfony/web-profiler-bundle": "^5.4",
+		"rector/rector": "^1.2"
 	},
 	"scripts": {
 		"serve": [

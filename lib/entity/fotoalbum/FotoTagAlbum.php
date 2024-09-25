@@ -18,10 +18,12 @@ class FotoTagAlbum extends FotoAlbum
 	/**
 	 * @param string $uid
 	 */
-	public function __construct /**
-	 * Lidnummer
-	 * Foreign key
-	 */(public $uid) {
+	public function __construct(
+		/**
+		 * Lidnummer
+		 * Foreign key
+		 */ public $uid
+	) {
 		parent::__construct();
 		$this->subalbums = [];
 		$this->path = PHOTOALBUM_PATH;

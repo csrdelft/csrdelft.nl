@@ -16,19 +16,22 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\fotoalbum\FotoAlbumRepository")
- * @ORM\Table("fotoalbums")
- * @ORM\EntityListeners({"CsrDelft\events\FotoAlbumListener"})
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\fotoalbum\FotoAlbumRepository::class
+	)
+]
+#[ORM\EntityListeners([\CsrDelft\events\FotoAlbumListener::class])]
+#[ORM\Table('fotoalbums')]
 class FotoAlbum extends Map
 {
 	/**
 	 * Relatief pad in fotoalbum
 	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
 	 */
+	#[ORM\Column(type: 'stringkey')]
+	#[ORM\Id]
 	public $subdir;
 	/**
 	 * Subalbums in dit album
@@ -48,14 +51,14 @@ class FotoAlbum extends Map
 	/**
 	 * Creator
 	 * @var string
-	 * @ORM\Column(type="uid")
 	 */
+	#[ORM\Column(type: 'uid')]
 	public $owner;
 	/**
 	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="owner", referencedColumnName="uid")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\JoinColumn(name: 'owner', referencedColumnName: 'uid')]
 	public $owner_profiel;
 
 	public function __construct($path = null, $absolute = false)

@@ -28,75 +28,83 @@ use Monolog\DateTimeImmutable;
  * Bij het aanmaken van een nieuwe maaltijd (op basis van deze repetitie) worden alle leden met een abonnement op deze repetitie aangemeldt voor deze nieuwe maaltijd.
  *
  * @see MaaltijdAbonnement
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository")
- * @ORM\Table("mlt_repetities")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository::class
+	)
+]
+#[ORM\Table('mlt_repetities')]
 class MaaltijdRepetitie implements DisplayEntity
 {
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
 	 */
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $mlt_repetitie_id;
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $product_id;
 	/**
 	 * @var CiviProduct
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\fiscaat\CiviProduct")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\fiscaat\CiviProduct::class)]
 	public $product;
 	/**
 	 * 0: Sunday
 	 * 6: Saturday
 	 * @var int
-	 * @ORM\Column(type="integer")
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $dag_vd_week;
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $periode_in_dagen;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
 	 */
+	#[ORM\Column(type: 'string')]
 	public $standaard_titel;
 	/**
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="time")
 	 */
+	#[ORM\Column(type: 'time')]
 	public $standaard_tijd;
 	/**
 	 * @var int|null
-	 * @ORM\Column(type="integer", nullable=true)
 	 */
+	#[ORM\Column(type: 'integer', nullable: true)]
 	public $standaard_prijs;
 	/**
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
 	 */
+	#[ORM\Column(type: 'boolean')]
 	public $abonneerbaar;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $standaard_limiet;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", nullable=true)
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $abonnement_filter;
 	/**
 	 * @var MaaltijdAbonnement[]|ArrayCollection
-	 * @ORM\OneToMany(targetEntity="MaaltijdAbonnement", mappedBy="maaltijd_repetitie")
 	 */
+	#[
+		ORM\OneToMany(
+			targetEntity: \MaaltijdAbonnement::class,
+			mappedBy: 'maaltijd_repetitie'
+		)
+	]
 	public $abonnementen;
 
 	public function getStandaardPrijs()

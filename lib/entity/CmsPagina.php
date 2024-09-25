@@ -13,53 +13,52 @@ use Doctrine\ORM\Mapping as ORM;
  * @see CmsPaginaVoter
  *
  * Content Management System Paginas zijn statische pagina's die via de front-end kunnen worden gewijzigd.
- *
- * @ORM\Table("cms_paginas")
- * @ORM\Entity(repositoryClass="CsrDelft\repository\CmsPaginaRepository")
  */
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\CmsPaginaRepository::class)]
+#[ORM\Table('cms_paginas')]
 class CmsPagina
 {
 	/**
 	 * Primary key
-	 * @ORM\Id()
-	 * @ORM\Column(type="stringkey")
 	 * @var string
 	 */
+	#[ORM\Id]
+	#[ORM\Column(type: 'stringkey')]
 	public $naam;
 	/**
 	 * Titel
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string')]
 	public $titel;
 	/**
 	 * Inhoud
-	 * @ORM\Column(type="text", length=16777216)
 	 * @var string
 	 */
+	#[ORM\Column(type: 'text', length: 16777216)]
 	public $inhoud;
 	/**
 	 * DateTime
-	 * @ORM\Column(type="datetime", name="laatst_gewijzigd")
 	 * @var DateTimeImmutable
 	 */
+	#[ORM\Column(type: 'datetime', name: 'laatst_gewijzigd')]
 	public $laatstGewijzigd;
 	/**
 	 * Permissie voor tonen
-	 * @ORM\Column(type="string", name="rechten_bekijken")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string', name: 'rechten_bekijken')]
 	public $rechtenBekijken;
 	/**
 	 * Link
-	 * @ORM\Column(type="string", name="rechten_bewerken")
 	 * @var string
 	 */
+	#[ORM\Column(type: 'string', name: 'rechten_bewerken')]
 	public $rechtenBewerken;
 	/**
 	 * Inline HTML
-	 * @ORM\Column(type="boolean", name="inline_html")
 	 * @var boolean
 	 */
+	#[ORM\Column(type: 'boolean', name: 'inline_html')]
 	public $inlineHtml;
 }
