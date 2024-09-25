@@ -45,7 +45,7 @@ final class Version20240925192739 extends AbstractMigration
         $this->addSql('ALTER TABLE peiling CHANGE beschrijving beschrijving LONGTEXT NOT NULL');
         $this->addSql('ALTER TABLE peiling_optie CHANGE beschrijving beschrijving LONGTEXT DEFAULT NULL');
         $this->addSql('ALTER TABLE profielen CHANGE kgb kgb LONGTEXT DEFAULT NULL, CHANGE novitiaat novitiaat LONGTEXT DEFAULT NULL, CHANGE vrienden vrienden LONGTEXT DEFAULT NULL, CHANGE medisch medisch LONGTEXT DEFAULT NULL, CHANGE novitiaatBijz novitiaatBijz LONGTEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE savedquery CHANGE savedquery savedquery LONGTEXT NOT NULL, CHANGE permissie permissie VARCHAR(255) DEFAULT \'P_LOGGED_IN\' NOT NULL');
+        $this->addSql('ALTER TABLE savedquery CHANGE savedquery savedquery LONGTEXT NOT NULL');
         $this->addSql('ALTER TABLE voorkeur_opmerking CHANGE lidOpmerking lidOpmerking LONGTEXT DEFAULT NULL, CHANGE praesesOpmerking praesesOpmerking LONGTEXT DEFAULT NULL');
     }
 
@@ -77,7 +77,7 @@ final class Version20240925192739 extends AbstractMigration
         $this->addSql('ALTER TABLE peiling CHANGE beschrijving beschrijving MEDIUMTEXT NOT NULL');
         $this->addSql('ALTER TABLE peiling_optie CHANGE beschrijving beschrijving MEDIUMTEXT DEFAULT NULL');
         $this->addSql('ALTER TABLE profielen CHANGE novitiaat novitiaat MEDIUMTEXT DEFAULT NULL, CHANGE novitiaatBijz novitiaatBijz MEDIUMTEXT DEFAULT NULL, CHANGE medisch medisch MEDIUMTEXT DEFAULT NULL, CHANGE kgb kgb MEDIUMTEXT DEFAULT NULL, CHANGE vrienden vrienden MEDIUMTEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE savedquery CHANGE savedquery savedquery MEDIUMTEXT NOT NULL, CHANGE permissie permissie VARCHAR(255) DEFAULT \'ROLE_LOGGED_IN\' NOT NULL');
+        $this->addSql('ALTER TABLE savedquery CHANGE savedquery savedquery MEDIUMTEXT NOT NULL');
         $this->addSql('ALTER TABLE voorkeur_opmerking CHANGE lidOpmerking lidOpmerking MEDIUMTEXT DEFAULT NULL, CHANGE praesesOpmerking praesesOpmerking MEDIUMTEXT DEFAULT NULL');
     }
 }
