@@ -278,7 +278,7 @@
 							href="{{ url('csrdelft_ledenlijst_lijst') }}?q=verticale:{{ profiel.verticale().letter }}">{{ profiel.verticale().naam }}
 							{% if profiel.status == 'S_KRINGEL' %}
 								(kringel)
-							{% elseif profiel.kring and profiel.kring.lid(profiel.uid).opmerking == 'leider' %}
+							{% elseif profiel.kring and 'kringleider' in (profiel.kring.lid(profiel.uid).opmerking|lower) %}
 								(kringleider)
 							{% elseif profiel.verticaleleider %}
 								(leider)
@@ -295,9 +295,14 @@
 			</dl>
 			<dl class="col-md-6">
 				{% if profiel.kring and profiel|is_zichtbaar('kring', 'intern') %}
+					{% set kringlid = profiel.kring.lid(profiel.uid) %}
 					<dt>Kring</dt>
 					<dd>
-						<a href="{{ profiel.kring.url }}">{{ profiel.kring.naam }}</a>
+						<a href="{{ profiel.kring.url }}">{{ profiel.kring.naam }}
+						{% if kringlid.opmerking is not empty %}
+							({{ kringlid.opmerking }})
+						{% endif %}
+						</a>
 					</dd>
 				{% endif %}
 			</dl>
