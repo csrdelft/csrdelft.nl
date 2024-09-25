@@ -149,5 +149,5 @@
 	"lint-staged": {
 		"*": "yarn dlx -q prettier --write --ignore-unknown"
 	},
-	"packageManager": "yarn@3.2.2"
+	"packageManager": "yarn@4.4.1"
 }
