@@ -30,7 +30,7 @@ abstract class PrefixVoter extends Voter
 		TokenInterface $token
 	): bool;
 
-	protected function supports(string $attribute, $subject)
+	protected function supports(string $attribute, $subject): bool
 	{
 		if (preg_match('/[|,+]/', $attribute)) {
 			// ExpressionVoter mag eerst!

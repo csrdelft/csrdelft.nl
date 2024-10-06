@@ -42,7 +42,7 @@
 		"nelmio/cors-bundle": "^2.1",
 		"parsecsv/php-parsecsv": "^1.2",
 		"phpdocumentor/reflection-docblock": "^5.2",
-		"sensio/framework-extra-bundle": "^5.5",
+		"sensio/framework-extra-bundle": "^6.2",
 		"sentry/sentry-symfony": "^4.5",
 		"symfony/cache": "5.4.*",
 		"symfony/config": "5.4.*",

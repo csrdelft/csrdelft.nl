@@ -54,7 +54,7 @@ class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface
 		$data,
 		string $format = null,
 		array $context = []
-	) {
+	): bool {
 		return $data instanceof RemoveDataTableEntry;
 	}
 }
