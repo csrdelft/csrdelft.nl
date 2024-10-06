@@ -151,12 +151,12 @@ class AccountRepository extends AbstractRepository implements
 		$this->_em->clear();
 	}
 
-	public function loadUserByUsername(string $username)
+	public function loadUserByUsername(string $username): ?UserInterface
 	{
 		return $this->findOneByUsername($username);
 	}
 
-	public function findOneByUsername($username)
+	public function findOneByUsername(string $username): ?Account
 	{
 		return $this->find($username) ??
 			($this->findOneBy(['username' => $username]) ??
@@ -167,7 +167,7 @@ class AccountRepository extends AbstractRepository implements
 	 * @param $email
 	 * @return Account|null
 	 */
-	public function findOneByEmail($email)
+	public function findOneByEmail(string $email): ?Account
 	{
 		if (empty($email)) {
 			return null;

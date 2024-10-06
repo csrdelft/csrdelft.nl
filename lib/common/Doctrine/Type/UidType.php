@@ -10,7 +10,7 @@ class UidType extends Type
 	/**
 	 * @inheritDoc
 	 */
-	public function getSQLDeclaration(array $column, AbstractPlatform $platform)
+	public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
 	{
 		return 'VARCHAR(4) COMMENT \'(DC2Type:uid)\'';
 	}
@@ -18,7 +18,7 @@ class UidType extends Type
 	/**
 	 * @inheritDoc
 	 */
-	public function getName()
+	public function getName(): string
 	{
 		return 'uid';
 	}

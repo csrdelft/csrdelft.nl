@@ -78,8 +78,8 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 		return new Response('', 403);
 	}
 
-	public function matches(Request $request)
+	public function matches(Request $request): bool
 	{
-		return $this->supports($request);
+		return $this->supports($request) ?? false;
 	}
 }

@@ -25,7 +25,7 @@ class StringKeyType extends Type
 	/**
 	 * @inheritDoc
 	 */
-	public function getName()
+	public function getName(): string
 	{
 		return 'stringkey';
 	}

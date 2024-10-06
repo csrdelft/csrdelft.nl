@@ -28,7 +28,7 @@ abstract class PrefixVoter extends Voter
 		$role,
 		$subject,
 		TokenInterface $token
-	);
+	): bool;
 
 	protected function supports(string $attribute, $subject)
 	{
@@ -52,7 +52,7 @@ abstract class PrefixVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		// Altijd uppercase
 		$attribute = strtoupper($attribute);
 		// splits permissie in type, waarde en rol

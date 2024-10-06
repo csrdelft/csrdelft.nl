@@ -45,7 +45,7 @@ class DataTableColumn implements JsonSerializable
 		$this->filterValue = $filterValue ?? $this->exportValue;
 	}
 
-	public function jsonSerialize()
+	public function jsonSerialize(): array
 	{
 		return [
 			'display' => $this->displayValue,

@@ -29,7 +29,7 @@ class DataTableKnop implements JsonSerializable
 		$this->buttons = [];
 	}
 
-	public function jsonSerialize()
+	public function jsonSerialize(): array
 	{
 		return [
 			'text' => $this->label,

@@ -19,7 +19,7 @@ class CollectionDataTableKnop extends DataTableKnop
 		parent::__construct($multiplicity, '', $label, $title, $icon, 'collection');
 	}
 
-	public function jsonSerialize()
+	public function jsonSerialize(): array
 	{
 		return array_merge(parent::jsonSerialize(), ['buttons' => $this->buttons]);
 	}
