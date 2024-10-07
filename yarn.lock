@@ -206,6 +206,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kurkle/color@npm:^0.3.0":
+  version: 0.3.2
+  resolution: "@kurkle/color@npm:0.3.2"
+  checksum: 10/079c4b7688061070f1d570cee4cf0e7c4085867b940688ff80356a56825a5ace7077257c9ec5863eb344a8eae78379388ab57cdf9d75c491389fad56f411cd43
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.4":
   version: 2.1.4
   resolution: "@nodelib/fs.scandir@npm:2.1.4"
@@ -267,10 +274,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.6.0":
-  version: 2.8.3
-  resolution: "@popperjs/core@npm:2.8.3"
-  checksum: 10/9c1984ba8591b1f8062038e97c5d455a58f8305b6ec8ce240b60a77ec6f7be09342b4b8836b88d8d56c6c370359ce1d188ec3231d67915d223081c2e32b554b5
+"@popperjs/core@npm:^2.11.8":
+  version: 2.11.8
+  resolution: "@popperjs/core@npm:2.11.8"
+  checksum: 10/ddd16090cde777aaf102940f05d0274602079a95ad9805bd20bc55dcc7c3a2ba1b99dd5c73e5cc2753c3d31250ca52a67d58059459d7d27debb983a9f552936c
   languageName: node
   linkType: hard
 
@@ -384,12 +391,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chart.js@npm:^2.7.42":
-  version: 2.9.32
-  resolution: "@types/chart.js@npm:2.9.32"
+"@types/chart.js@npm:^2.9.41":
+  version: 2.9.41
+  resolution: "@types/chart.js@npm:2.9.41"
   dependencies:
     moment: "npm:^2.10.2"
-  checksum: 10/c46788ff85002d02102c0ccff78aadaf93325b70f216a3e4fe9f33335fe8644e944a40a28d50766f26707eb37768506ae7f5ec0a02d7e9c8d63e44e8f31b6c52
+  checksum: 10/302b251633bb469410c0a8bd3e9b30fdc08c14f9d92998095ae3849a1c3069f61e70df530e6598e6416b3abd13d15dd4eb4c45914300a679ce4c8dee21847301
   languageName: node
   linkType: hard
 
@@ -1647,32 +1654,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:^2.7.3":
-  version: 2.9.4
-  resolution: "chart.js@npm:2.9.4"
+"chart.js@npm:^4.4.4":
+  version: 4.4.4
+  resolution: "chart.js@npm:4.4.4"
   dependencies:
-    chartjs-color: "npm:^2.1.0"
-    moment: "npm:^2.10.2"
-  checksum: 10/0f07ab60f7280970bce3d7871176a6fbff340b76a61fa070084cc500fa0954565aa55931bf3060dc206b3a5a4cc1c1aef2594e50ec6c7d7b13e72778d7406d7b
-  languageName: node
-  linkType: hard
-
-"chartjs-color-string@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "chartjs-color-string@npm:0.6.0"
-  dependencies:
-    color-name: "npm:^1.0.0"
-  checksum: 10/c08303cdd4ed567f0db31afd8d2eb6b055d759af3e5c1b94a70b89c6fe22524972ff35ba03ce71dbd7ac16fb15d6f07bdb075fe5c2eb4346805d7a42d7836ff6
-  languageName: node
-  linkType: hard
-
-"chartjs-color@npm:^2.1.0":
-  version: 2.4.1
-  resolution: "chartjs-color@npm:2.4.1"
-  dependencies:
-    chartjs-color-string: "npm:^0.6.0"
-    color-convert: "npm:^1.9.3"
-  checksum: 10/8c40ca412abae628f58d2c9c778244d0a3e67c2028d62a5a0d503b0467725fb154c72a529ac480eb8506d8555c53bf793f5d716633292d66375ec47939d8e684
+    "@kurkle/color": "npm:^0.3.0"
+  checksum: 10/77221dce07606c67686b31b14c3e8c56d71fadc93a5d754ef1f0abc870160253c31751edd9962a0f5bd929824ca69458b914b6c90c8a0c1e9a547d276e9ca9b0
   languageName: node
   linkType: hard
 
@@ -1772,7 +1759,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-convert@npm:^1.9.0, color-convert@npm:^1.9.3":
+"color-convert@npm:^1.9.0":
   version: 1.9.3
   resolution: "color-convert@npm:1.9.3"
   dependencies:
@@ -1797,7 +1784,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-name@npm:^1.0.0, color-name@npm:~1.1.4":
+"color-name@npm:~1.1.4":
   version: 1.1.4
   resolution: "color-name@npm:1.1.4"
   checksum: 10/b0445859521eb4021cd0fb0cc1a75cecf67fceecae89b63f62b201cca8d345baf8b952c966862a9d9a2632987d4f6581f0ec8d957dfacece86f0a7919316f610
@@ -5703,13 +5690,13 @@ __metadata:
     "@fullcalendar/interaction": "npm:^5.11.0"
     "@fullcalendar/list": "npm:^5.11.0"
     "@fullcalendar/timegrid": "npm:^5.11.0"
-    "@popperjs/core": "npm:^2.6.0"
+    "@popperjs/core": "npm:^2.11.8"
     "@prettier/plugin-php": "npm:^0.19.3"
     "@sentry/browser": "npm:^7.29.0"
     "@sentry/tracing": "npm:^7.29.0"
     "@sentry/types": "npm:^7.29.0"
     "@types/bootstrap": "npm:^5.0.0"
-    "@types/chart.js": "npm:^2.7.42"
+    "@types/chart.js": "npm:^2.9.41"
     "@types/datatables.net": "npm:^1.10.21"
     "@types/datatables.net-buttons": "npm:^1.4.2"
     "@types/datatables.net-select": "npm:^1.2.7"
@@ -5730,7 +5717,7 @@ __metadata:
     autoprefixer: "npm:^9.1.1"
     axios: "npm:^0.21.4"
     bootstrap: "npm:^5.2.3"
-    chart.js: "npm:^2.7.3"
+    chart.js: "npm:^4.4.4"
     corejs-typeahead: "npm:^1.2.1"
     cross-env: "npm:^7.0.3"
     css-loader: "npm:^6.7.1"
