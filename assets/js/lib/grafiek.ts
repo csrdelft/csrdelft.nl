@@ -71,9 +71,7 @@ function kleurPerDataset(data: ChartData) {
 		throw new Error('Data heeft geen datasets');
 	}
 
-	const kleuren = palette(['tol', 'qualitative'], datasets.length)[
-		Symbol.iterator
-	]();
+	const kleuren = palette(['tol', 'qualitative'], datasets.length)[Symbol.iterator]();
 	datasets.forEach((dataset) => {
 		dataset.pointBorderColor =
 			dataset.backgroundColor =
