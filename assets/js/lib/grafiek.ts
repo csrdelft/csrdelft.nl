@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Chart, ChartData, ChartOptions } from 'chart.js';
+import Chart, { ChartData, ChartOptions } from 'chart.js';
 import palette from 'google-palette';
 import { formatBedrag, html } from './util';
 
@@ -38,29 +38,33 @@ export async function initLine(el: HTMLElement): Promise<Chart> {
 	data = kleurPerDataset(data);
 
 	return new Chart(createCanvas(el), {
-		type: 'line',
 		data,
 		options: {
 			scales: {
-				x: {
-					type: 'time',
-					time: {
-						tooltipFormat: 'D MMM H:mm',
+				xAxes: [
+					{
+						stacked: true,
+						time: {
+							tooltipFormat: 'D MMM H:mm ',
+						},
+						type: 'time',
 					},
-					stacked: true,
-				},
-				y: {
-					stacked: true,
-					beginAtZero: true,
-				},
+				],
+				yAxes: [
+					{
+						stacked: true,
+						ticks: {
+							min: 0,
+						},
+					},
+				],
 			},
-			plugins: {
-				tooltip: {
-					intersect: false,
-					mode: 'index',
-				},
+			tooltips: {
+				intersect: false,
+				mode: 'index',
 			},
 		},
+		type: 'line',
 	});
 }
 
@@ -71,7 +75,9 @@ function kleurPerDataset(data: ChartData) {
 		throw new Error('Data heeft geen datasets');
 	}
 
-	const kleuren = palette(['tol', 'qualitative'], datasets.length)[Symbol.iterator]();
+	const kleuren = palette(['tol', 'qualitative'], datasets.length)[
+		Symbol.iterator
+	]();
 	datasets.forEach((dataset) => {
 		dataset.pointBorderColor =
 			dataset.backgroundColor =
@@ -108,12 +114,14 @@ export function initBar(el: HTMLElement): Chart {
 
 	const options: ChartOptions = {
 		scales: {
-			y: {
-				beginAtZero: true,
-				ticks: {
-					stepSize: 1,
+			yAxes: [
+				{
+					ticks: {
+						beginAtZero: true,
+						stepSize: 1,
+					},
 				},
-			},
+			],
 		},
 	};
 
@@ -129,36 +137,38 @@ export function initDeelnamegrafiek(el: HTMLElement): Chart {
 	const data = JSON.parse(stringData) as ChartData & { jaren: number[] };
 	const options: ChartOptions = {
 		scales: {
-			x: {
-				stacked: true,
-				ticks: {
-					callback: (t, index) => data.jaren[index],
-				},
-			},
-			y: {
-				stacked: true,
-				ticks: {
-					stepSize: 1,
-				},
-			},
-		},
-		plugins: {
-			tooltip: {
-				callbacks: {
-					title: (t, d) => {
-						const labels = d.labels;
-						const index = t[0].dataIndex;
-
-						if (!labels || !index) {
-							throw new Error('Data heeft geen labels of index');
-						}
-
-						return String(labels[index]);
+			xAxes: [
+				{
+					stacked: true,
+					ticks: {
+						callback: (t, index) => data.jaren[index],
 					},
 				},
-				intersect: false,
-				mode: 'index',
+			],
+			yAxes: [
+				{
+					stacked: true,
+					ticks: {
+						stepSize: 1,
+					},
+				},
+			],
+		},
+		tooltips: {
+			callbacks: {
+				title: (t, d) => {
+					const labels = d.labels;
+					const index = t[0].index;
+
+					if (!labels || !index) {
+						throw new Error('Data heeft geen labels of index');
+					}
+
+					return String(labels[index]);
+				},
 			},
+			intersect: false,
+			mode: 'index',
 		},
 	};
 
@@ -170,16 +180,17 @@ function createNegativetransparentLineChartController() {
 		return;
 	}
 
-	Chart.defaults.NegativeTransparentLine = Chart.defaults.line;
+	Chart.defaults.NegativeTransparentLine = Chart.helpers.clone(
+		Chart.defaults.line
+	);
 	Chart.controllers.NegativeTransparentLine = Chart.controllers.line.extend({
 		update(...args: unknown[]) {
 			if (this.chart.data.datasets.length) {
-				const dataset = this.chart.data.datasets[0];
-
 				// get the min and max values
-				const min = dataset.data.reduce(
-					(minimum: number, p: any) => (p.y < minimum ? p.y : minimum),
-					dataset.data[0].y
+				const min = this.chart.data.datasets[0].data.reduce(
+					(mininum: number, p: { x: number; y: number }) =>
+						p.y < mininum ? p.y : mininum,
+					this.chart.data.datasets[0].data[0].y
 				);
 
 				if (min >= 0) {
@@ -187,9 +198,10 @@ function createNegativetransparentLineChartController() {
 					return Chart.controllers.line.prototype.update.apply(this, args);
 				}
 
-				const max = dataset.data.reduce(
-					(maximum: number, p: any) => (p.y > maximum ? p.y : maximum),
-					dataset.data[0].y
+				const max = this.chart.data.datasets[0].data.reduce(
+					(maximum: number, p: { x: number; y: number }) =>
+						p.y > maximum ? p.y : maximum,
+					this.chart.data.datasets[0].data[0].y
 				);
 
 				if (max <= 0) {
@@ -205,7 +217,7 @@ function createNegativetransparentLineChartController() {
 				const bottom = yScale.getPixelForValue(min);
 
 				// build a gradient that switches color at the 0 point
-				const context = this.chart.ctx;
+				const context = this.chart.chart.ctx;
 				const gradient = context.createLinearGradient(0, top, 0, bottom);
 				const ratio = Math.min((zero - top) / (bottom - top), 1);
 				gradient.addColorStop(0, 'green');
@@ -215,6 +227,7 @@ function createNegativetransparentLineChartController() {
 				this.chart.data.datasets[0].borderColor = gradient;
 			}
 
+			// noinspection JSPotentiallyInvalidConstructorUsage
 			return Chart.controllers.line.prototype.update.apply(this, args);
 		},
 	});
@@ -232,31 +245,33 @@ export function initSaldoGrafiek(el: HTMLElement): void {
 
 	const options: ChartOptions = {
 		scales: {
-			x: {
-				type: 'time',
-				time: {
-					tooltipFormat: 'LLL',
-				},
-			},
-			y: {
-				ticks: {
-					callback: formatBedrag,
-				},
-			},
-		},
-		plugins: {
-			tooltip: {
-				callbacks: {
-					label(tooltipItem, data) {
-						const datasets = data.datasets;
-						const datasetIndex = tooltipItem.datasetIndex;
-
-						if (!datasets || datasetIndex === undefined) {
-							throw new Error('Saldografiek heeft geen datasets');
-						}
-						const datasetLabel = datasets[datasetIndex].label || '';
-						return datasetLabel + ': ' + formatBedrag(Number(tooltipItem.raw));
+			xAxes: [
+				{
+					time: {
+						tooltipFormat: 'LLL',
 					},
+					type: 'time',
+				},
+			],
+			yAxes: [
+				{
+					ticks: {
+						callback: formatBedrag,
+					},
+				},
+			],
+		},
+		tooltips: {
+			callbacks: {
+				label(tooltipItem, data) {
+					const datasets = data.datasets;
+					const datasetIndex = tooltipItem.datasetIndex;
+
+					if (!datasets || !datasetIndex) {
+						throw new Error('Saldografiek heeft geen datasets');
+					}
+					const datasetLabel = datasets[datasetIndex].label || '';
+					return datasetLabel + ': ' + formatBedrag(Number(tooltipItem.yLabel));
 				},
 			},
 		},
