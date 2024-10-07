@@ -5,7 +5,6 @@
 		"lib": ["DOM", "ES2019"],
 		"moduleResolution": "node",
 		"removeComments": false,
-		"types": ["@types/jqueryui"],
 		"allowSyntheticDefaultImports": true,
 		"skipLibCheck": true
 	},
