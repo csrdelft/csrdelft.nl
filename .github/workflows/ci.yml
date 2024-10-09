@@ -25,7 +25,7 @@ jobs:
       - uses: actions/cache@v3
         name: Cache build dependencies
         with:
-          path: node_modules/.cache
+          path: .yarn/.cache/webpack
           key: build-${{ hashFiles('**/webpack.config.js') }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |-
             build-${{ hashFiles('**/webpack.config.js') }}-${{ hashFiles('**/yarn.lock') }}
