@@ -3,11 +3,13 @@
 namespace CsrDelft\command;
 
 use CsrDelft\common\Util\FileUtil;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
+#[AsCommand(name: 'stek:cache:flush', description: 'Flush memcached')]
 class FlushMemcacheCommand extends Command
 {
 	public function __construct(
@@ -17,12 +19,7 @@ class FlushMemcacheCommand extends Command
 		parent::__construct();
 	}
 
-	public function configure()
-	{
-		$this->setName('stek:cache:flush')->setDescription('Flush de memcache');
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		if ($this->appCache == null) {
 			$output->writeln('Geen cache geinstalleerd');

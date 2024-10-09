@@ -121,27 +121,27 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 		return DateUtil::reldate($this->last_used);
 	}
 
-	public function getClass()
+	public function getClass(): string
 	{
 		return Account::class;
 	}
 
-	public function getUsername()
+	public function getUsername(): string
 	{
 		return $this->uid;
 	}
 
-	public function getSeries()
+	public function getSeries(): string
 	{
 		return $this->series;
 	}
 
-	public function getTokenValue()
+	public function getTokenValue(): string
 	{
 		return $this->token;
 	}
 
-	public function getLastUsed()
+	public function getLastUsed(): DateTimeImmutable
 	{
 		return $this->last_used;
 	}

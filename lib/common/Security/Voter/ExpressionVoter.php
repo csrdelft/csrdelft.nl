@@ -35,7 +35,7 @@ class ExpressionVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		// OR
 		if (str_contains($attribute, ',')) {
 			/**
@@ -47,7 +47,7 @@ class ExpressionVoter extends Voter
 			$p = explode(',', $attribute);
 			$result = false;
 			foreach ($p as $perm) {
-				$result |= $this->accessDecisionManager->decide(
+				$result = $result || $this->accessDecisionManager->decide(
 					$token,
 					[$perm],
 					$subject
@@ -63,7 +63,7 @@ class ExpressionVoter extends Voter
 			$p = explode('+', $attribute);
 			$result = true;
 			foreach ($p as $perm) {
-				$result &= $this->accessDecisionManager->decide(
+				$result = $result && $this->accessDecisionManager->decide(
 					$token,
 					[$perm],
 					$subject
@@ -80,7 +80,7 @@ class ExpressionVoter extends Voter
 			$p = explode('|', $attribute);
 			$result = false;
 			foreach ($p as $perm) {
-				$result |= $this->accessDecisionManager->decide(
+				$result =  $result || $this->accessDecisionManager->decide(
 					$token,
 					[$perm],
 					$subject

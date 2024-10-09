@@ -93,7 +93,7 @@ class VoorpaginaController extends AbstractController
 		if (!LoginService::mag(P_VERJAARDAGEN)) {
 			throw $this->createAccessDeniedException();
 		}
-		
+
 		// Komende verjaardagen
 		return $this->render('voorpagina/verjaardagen.html.twig', [
 			'verjaardagen' => $verjaardagenService->getKomende(10),

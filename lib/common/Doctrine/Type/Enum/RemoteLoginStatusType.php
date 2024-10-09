@@ -11,7 +11,7 @@ class RemoteLoginStatusType extends EnumType
 		return RemoteLoginStatus::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumRemoteLoginStatus';
 	}

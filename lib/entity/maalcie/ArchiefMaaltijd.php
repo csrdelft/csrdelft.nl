@@ -156,7 +156,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return true;
 	}
 
-	public function jsonSerialize()
+	public function jsonSerialize(): mixed
 	{
 		$json = (array) $this;
 		$json['aanmeldingen'] = count($this->getAanmeldingenArray());

@@ -11,7 +11,7 @@ class ActiviteitSoortType extends EnumType
 		return ActiviteitSoort::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumActiviteitSoort';
 	}

@@ -19,7 +19,7 @@ class PersistentTokenProvider implements TokenProviderInterface
 	) {
 	}
 
-	public function loadTokenBySeries(string $series)
+	public function loadTokenBySeries(string $series): PersistentTokenInterface
 	{
 		$token = $this->rememberLoginRepository->findOneBy(['series' => $series]);
 

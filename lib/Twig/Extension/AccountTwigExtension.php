@@ -22,12 +22,12 @@ class AccountTwigExtension extends AbstractExtension
 	) {
 	}
 
-	public function getFilters()
+	public function getFilters(): array
 	{
 		return [new TwigFilter('may_su_to', $this->may_su_to(...))];
 	}
 
-	public function getFunctions()
+	public function getFunctions(): array
 	{
 		return [
 			new TwigFunction('getBestuurslid', $this->getBestuurslid(...)),

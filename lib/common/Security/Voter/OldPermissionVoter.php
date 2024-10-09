@@ -22,7 +22,7 @@ class OldPermissionVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		throw new CsrException("Rechten voor '$attribute' niet te verwerken!");
 	}
 }

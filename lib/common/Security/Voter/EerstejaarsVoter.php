@@ -23,7 +23,7 @@ class EerstejaarsVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		/** @var Account $user */
 		$user = $token->getUser();
 

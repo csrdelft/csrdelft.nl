@@ -10,7 +10,7 @@ class LongTextType extends Type
 	/**
 	 * @inheritDoc
 	 */
-	public function getSQLDeclaration(array $column, AbstractPlatform $platform)
+	public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
 	{
 		return 'LONGTEXT COMMENT \'(DC2Type:longtext)\'';
 	}
@@ -18,7 +18,7 @@ class LongTextType extends Type
 	/**
 	 * @inheritDoc
 	 */
-	public function getName()
+	public function getName(): string
 	{
 		return 'longtext';
 	}

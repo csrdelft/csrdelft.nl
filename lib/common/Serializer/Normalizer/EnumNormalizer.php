@@ -26,7 +26,7 @@ class EnumNormalizer implements NormalizerInterface
 		$data,
 		string $format = null,
 		array $context = []
-	) {
+	): bool {
 		return $data instanceof Enum;
 	}
 }

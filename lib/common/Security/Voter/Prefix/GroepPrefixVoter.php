@@ -64,7 +64,7 @@ class GroepPrefixVoter extends PrefixVoter
 		$role,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		$user = $token->getUser();
 
 		if (!$user) {

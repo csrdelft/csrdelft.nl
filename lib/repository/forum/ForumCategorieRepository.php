@@ -19,7 +19,10 @@ class ForumCategorieRepository extends AbstractRepository
 		parent::__construct($managerRegistry, ForumCategorie::class);
 	}
 
-	public function findAll()
+	/**
+	 * @return ForumCategorie[]
+	 */
+	public function findAll(): array
 	{
 		return $this->findBy([], ['volgorde' => 'ASC']);
 	}

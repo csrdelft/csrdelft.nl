@@ -212,8 +212,6 @@ final class PinTransactieMatcherTest extends TestCase
 		foreach ($matches as $match) {
 			$transactie = $match->transactie ? $match->transactie->id : 'niet';
 			$bestelling = $match->bestelling ? $match->bestelling->id : 'geen';
-
-			echo "Transactie {$transactie} gematcht met bestelling {$bestelling}\n";
 		}
 
 		for ($i = 0; $i <= 13; $i++) {

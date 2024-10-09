@@ -11,7 +11,7 @@ class CommissieSoortType extends EnumType
 		return CommissieSoort::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumCommissieSoort';
 	}

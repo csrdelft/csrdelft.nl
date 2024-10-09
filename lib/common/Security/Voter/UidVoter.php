@@ -22,7 +22,7 @@ class UidVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
-		return $attribute == $token->getUserIdentifier();
+	): bool {
+		return $attribute === $token->getUserIdentifier();
 	}
 }
