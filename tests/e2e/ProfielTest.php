@@ -4,6 +4,7 @@ namespace e2e;
 
 use CsrDelft\tests\BrowserTestCase;
 use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverExpectedCondition;
 use Facebook\WebDriver\WebDriverKeys as Keys;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -29,6 +30,8 @@ class ProfielTest extends BrowserTestCase
 		$crawler = $this->clickLink('Profiel bewerken');
 		$this->updateField($crawler, 'studie', 'TestStudie');
 		$crawler = $this->clickLink('Opslaan');
+
+		$this->client->wait(10, 250)->until(WebDriverExpectedCondition::urlMatches("/profiel/x101$"));
 
 		$this->assertStringEndsWith(
 			'/profiel/x101',

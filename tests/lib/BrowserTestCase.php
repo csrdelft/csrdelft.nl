@@ -3,7 +3,6 @@
 namespace CsrDelft\tests;
 
 use CsrDelft\DataFixtures\AccountFixtures;
-use Facebook\WebDriver\Exception\ElementClickInterceptedException;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Exception\TimeoutException;
 use Facebook\WebDriver\WebDriverBy;
@@ -122,22 +121,11 @@ class BrowserTestCase extends PantherTestCase
 	 */
 	protected function clickLink($linkText): Crawler
 	{
-		$webDriverElement = $this->client->findElement(
-			WebDriverBy::linkText($linkText)
+		$webDriverElement = $this->client->getCrawler()->selectLink(
+			$linkText
 		);
-
 		$webDriverElement->getLocationOnScreenOnceScrolledIntoView();
 
-		$this->client
-			->wait()
-			->until(WebDriverExpectedCondition::visibilityOf($webDriverElement));
-
-		try {
-			return $this->client->clickLink($linkText);
-		} catch (ElementClickInterceptedException) {
-			sleep(1); // Zijn nog aan het scrollen, probeer na een tijdje nog een keer.
-			// Dit zou geen probleem _moeten_ zijn.
-			return $this->client->clickLink($linkText);
-		}
+		return $this->client->click($webDriverElement->link());
 	}
 }
