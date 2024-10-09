@@ -22,6 +22,14 @@ jobs:
         with:
           node-version: '20.x'
           cache: yarn
+      - uses: actions/cache@v3
+        name: Cache build dependencies
+        with:
+          path: node_modules/.cache
+          key: build-${{ hashFiles('**/webpack.config.js') }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |-
+            build-${{ hashFiles('**/webpack.config.js') }}-${{ hashFiles('**/yarn.lock') }}
+            build-${{ hashFiles('**/webpack.config.js') }}-
 
       - name: Yarn install
         run: yarn install --immutable
