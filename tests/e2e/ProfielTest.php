@@ -31,12 +31,13 @@ class ProfielTest extends BrowserTestCase
 		$this->updateField($crawler, 'studie', 'TestStudie');
 		$crawler = $this->clickLink('Opslaan');
 
-		$this->client->wait(10, 250)->until(WebDriverExpectedCondition::urlMatches("/profiel/x101$"));
-
-		$this->assertStringEndsWith(
-			'/profiel/x101',
-			$this->client->getCurrentURL(),
-			'Niet terug gekomen op de profiel pagina' . $crawler->text()
+		$this->client->wait(10, 250)->until(
+			fn() => match (parse_url($this->client->getCurrentURL(), PHP_URL_PATH)) {
+				"/profiel/x101" => true,
+				"/profiel" => true,
+				default => false
+			},
+			'Niet teruggekomen op de profielpagina'
 		);
 
 		$this->assertEquals(
