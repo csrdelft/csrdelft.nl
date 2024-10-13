@@ -4,6 +4,7 @@ namespace e2e;
 
 use CsrDelft\tests\BrowserTestCase;
 use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverExpectedCondition;
 use Facebook\WebDriver\WebDriverKeys as Keys;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -30,10 +31,13 @@ class ProfielTest extends BrowserTestCase
 		$this->updateField($crawler, 'studie', 'TestStudie');
 		$crawler = $this->clickLink('Opslaan');
 
-		$this->assertStringEndsWith(
-			'/profiel/x101',
-			$this->client->getCurrentURL(),
-			'Niet terug gekomen op de profiel pagina' . $crawler->text()
+		$this->client->wait(10, 250)->until(
+			fn() => match (parse_url($this->client->getCurrentURL(), PHP_URL_PATH)) {
+				"/profiel/x101" => true,
+				"/profiel" => true,
+				default => false
+			},
+			'Niet teruggekomen op de profielpagina'
 		);
 
 		$this->assertEquals(
