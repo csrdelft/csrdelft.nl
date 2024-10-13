@@ -6,7 +6,7 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 
 class DisableForeignKeysORMPurger extends ORMPurger
 {
-	public function purge()
+	public function purge(): void
 	{
 		$connection = $this->getObjectManager()->getConnection();
 

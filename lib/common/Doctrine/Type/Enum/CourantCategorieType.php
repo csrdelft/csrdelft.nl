@@ -11,7 +11,7 @@ class CourantCategorieType extends EnumType
 		return CourantCategorie::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumCourantCategorie';
 	}

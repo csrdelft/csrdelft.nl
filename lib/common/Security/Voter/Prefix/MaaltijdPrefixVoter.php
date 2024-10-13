@@ -32,7 +32,7 @@ class MaaltijdPrefixVoter extends PrefixVoter
 		$role,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		/** @var Account $user */
 		$user = $token->getUser();
 

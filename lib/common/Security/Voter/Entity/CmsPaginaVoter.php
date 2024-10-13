@@ -42,7 +42,7 @@ class CmsPaginaVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		if (!$subject instanceof CmsPagina) {
 			return false;
 		}

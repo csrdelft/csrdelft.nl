@@ -11,7 +11,7 @@ class GeslachtType extends EnumType
 		return Geslacht::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumGeslacht';
 	}

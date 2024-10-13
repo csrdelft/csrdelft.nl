@@ -11,7 +11,7 @@ class GroepStatusType extends EnumType
 		return GroepStatus::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumGroepStatus';
 	}

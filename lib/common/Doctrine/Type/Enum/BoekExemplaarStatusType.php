@@ -11,7 +11,7 @@ class BoekExemplaarStatusType extends EnumType
 		return BoekExemplaarStatus::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumBoekExemplaarStatus';
 	}

@@ -28,7 +28,7 @@ class RolePublicVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		return true;
 	}
 }

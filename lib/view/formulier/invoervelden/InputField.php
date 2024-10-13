@@ -120,7 +120,7 @@ abstract class InputField implements FormElement, Validator
 		return $this->description;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return $this->name;
 	}

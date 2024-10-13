@@ -3,12 +3,13 @@
 namespace CsrDelft\view\datatable\knoppen;
 
 use CsrDelft\view\datatable\Multiplicity;
+use JsonSerializable;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 07/03/2018
  */
-class ConfirmDataTableKnop extends DataTableKnop
+class ConfirmDataTableKnop extends DataTableKnop implements JsonSerializable
 {
 	public function __construct(
 		Multiplicity $multiplicity,
@@ -20,7 +21,7 @@ class ConfirmDataTableKnop extends DataTableKnop
 		parent::__construct($multiplicity, $url, $label, $title, $icon, 'confirm');
 	}
 
-	public function jsonSerialize()
+	public function jsonSerialize(): array
 	{
 		return array_merge(parent::jsonSerialize(), ['buttons' => []]);
 	}

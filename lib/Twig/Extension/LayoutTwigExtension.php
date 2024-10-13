@@ -21,7 +21,7 @@ class LayoutTwigExtension extends AbstractExtension
 	) {
 	}
 
-	public function getFunctions()
+	public function getFunctions(): array
 	{
 		return [
 			new TwigFunction('csr_breadcrumbs', $this->csr_breadcrumbs(...), [

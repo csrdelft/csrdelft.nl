@@ -23,12 +23,16 @@ class VerticalenRepository extends GroepRepository
 		return parent::get($letter);
 	}
 
+	/**
+	 * @inheritDoc
+	 * @return Verticale[]
+	 */
 	public function findBy(
 		array $criteria,
 		array $orderBy = null,
 		$limit = null,
 		$offset = null
-	) {
+	): array {
 		return parent::findBy(
 			$criteria,
 			['letter' => 'ASC'] + ($orderBy ?? []),

@@ -8,11 +8,18 @@ use CsrDelft\model\entity\profiel\ProfielLogValueChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\repository\ProfielRepository;
 use DateTime;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
+#[
+	AsCommand(
+		name: 'leden:studie:datum',
+		description: 'Haal de studies van leden op een bepaalde datum.'
+	)
+]
 class StudieOpDatumCommand extends Command
 {
 	public function __construct(
@@ -21,14 +28,7 @@ class StudieOpDatumCommand extends Command
 		parent::__construct();
 	}
 
-	protected function configure()
-	{
-		$this->setName('leden:studie:datum')->setDescription(
-			'Haal de studies van leden op op een bepaalde datum.'
-		);
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$helper = $this->getHelper('question');
 

@@ -43,7 +43,6 @@ class BbToProsemirror
 		ContainerInterface $container
 	) {
 		$env = new BbEnv();
-		$env->prosemirror = true;
 		$this->csrBB = new CsrBB($container, $env);
 	}
 
