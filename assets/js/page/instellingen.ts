@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { select } from '../lib/dom';
-import { urlBase64ToUint8Array } from '../lib/util';
+import { docReady, urlBase64ToUint8Array } from '../lib/util';
 import ctx from '../ctx';
 
 /**
@@ -172,8 +172,6 @@ const checkPushAvailability = async () => {
 checkPushAvailability();
 
 const instellingOpslaan = async (ev: Event) => {
-	ev.preventDefault();
-
 	const input = ev.target as HTMLElement;
 
 	let href: string | null = null;
@@ -215,9 +213,9 @@ const instellingOpslaan = async (ev: Event) => {
 	}
 };
 
-ctx.addHandler('.instellingKnop', (el) =>
-	el.addEventListener('click', instellingOpslaan)
-);
-ctx.addHandler('.change-opslaan', (el) =>
-	el.addEventListener('change', instellingOpslaan)
+docReady(
+	() =>
+		void document
+			.querySelectorAll('.instellingKnop, .change-opslaan')
+			.forEach((el) => el.addEventListener('click', instellingOpslaan))
 );
