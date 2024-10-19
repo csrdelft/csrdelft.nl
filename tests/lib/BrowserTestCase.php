@@ -63,9 +63,8 @@ class BrowserTestCase extends PantherTestCase
 	public function login(): Crawler
 	{
 		$crawler = $this->client->request('GET', '/');
-		$this->client->waitFor('.inloggen');
 
-		$crawler->selectLink('Inloggen')->click();
+		$this->clickLink('Inloggen');
 
 		$form = $crawler->selectButton('Inloggen')->form();
 
