@@ -2,12 +2,9 @@
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\GroepLid;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;

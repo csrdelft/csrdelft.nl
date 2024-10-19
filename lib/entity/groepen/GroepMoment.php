@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use DateInterval;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -51,7 +52,7 @@ trait GroepMoment
 		if ($this->eindMoment && $this->eindMoment !== $this->beginMoment) {
 			return $this->eindMoment;
 		}
-		return $this->getBeginMoment()->add(new \DateInterval('PT30M'));
+		return $this->getBeginMoment()->add(new DateInterval('PT30M'));
 	}
 
 	/**

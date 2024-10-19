@@ -14,12 +14,8 @@ class WachtwoordField extends TextField
 	// Override TextField getValue as passwords do not need to be sanitised here
 	public function getValue()
 	{
-		if ($this->isPosted()) {
-			$this->value = $_POST[$this->name];
-		} else {
-			$this->value = false;
-		}
-		if ($this->empty_null and $this->value == '') {
+		$this->value = $this->isPosted() ? $_POST[$this->name] : false;
+		if ($this->empty_null && $this->value == '') {
 			return null;
 		}
 		return $this->value;

@@ -2,6 +2,10 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use CsrDelft\repository\fiscaat\CiviBestellingRepository;
+use CiviBestellingInhoud;
+use CiviSaldo;
+use DateTimeImmutable;
 use CsrDelft\common\Util\BedragUtil;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,11 +20,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\fiscaat\CiviBestellingRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: CiviBestellingRepository::class)]
 class CiviBestelling
 {
 	/**
@@ -50,7 +50,7 @@ class CiviBestelling
 	#[ORM\Column(type: 'boolean', options: ['default' => false])]
 	public $deleted;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 */
 	#[Serializer\Groups(['datatable', 'bar'])]
 	#[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
@@ -73,7 +73,7 @@ class CiviBestelling
 	#[Serializer\Groups('bar')]
 	#[
 		ORM\OneToMany(
-			targetEntity: \CiviBestellingInhoud::class,
+			targetEntity: CiviBestellingInhoud::class,
 			mappedBy: 'bestelling'
 		)
 	]
@@ -82,7 +82,7 @@ class CiviBestelling
 	/**
 	 * @var CiviSaldo
 	 */
-	#[ORM\ManyToOne(targetEntity: \CiviSaldo::class, inversedBy: 'bestellingen')]
+	#[ORM\ManyToOne(targetEntity: CiviSaldo::class, inversedBy: 'bestellingen')]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $civiSaldo;
 

@@ -9,7 +9,6 @@ use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\AgendaVerbergen;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\Activiteit;
-use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
@@ -20,7 +19,7 @@ use DateInterval;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -96,7 +95,7 @@ class AgendaRepository extends AbstractRepository
 			$itemsByUUID[$item->getUUID()] = $item;
 			unset($items[$index]);
 		}
-		if (!empty($itemsByUUID)) {
+		if ($itemsByUUID !== []) {
 			/** @var AgendaVerbergen[] $verborgen */
 			$verborgen = $this->agendaVerbergenRepository
 				->createQueryBuilder('av')

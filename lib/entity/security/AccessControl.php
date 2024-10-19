@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\entity\security\enum\AccessAction;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -13,11 +14,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * ACL-entry.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\security\AccessRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: AccessRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 #[ORM\Table('acl')]
 class AccessControl

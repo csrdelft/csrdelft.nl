@@ -2,18 +2,16 @@
 
 namespace CsrDelft\entity\bibliotheek;
 
+use CsrDelft\repository\bibliotheek\BiebRubriekRepository;
+use Stringable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package CsrDelft\entity\bibliotheek
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\bibliotheek\BiebRubriekRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: BiebRubriekRepository::class)]
 #[ORM\Table('biebcategorie')]
-class BiebRubriek implements \Stringable
+class BiebRubriek implements Stringable
 {
 	/**
 	 * @var int

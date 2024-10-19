@@ -15,19 +15,19 @@ class CivisaldoField extends AutocompleteField
 {
 	protected $fieldClassName = 'col-sm-5';
 
-	private $zoekin;
+	private $zoekin = 'civisaldo';
 
 	public function __construct($name, $value, $description)
 	{
 		parent::__construct($name, $value, $description);
-		$this->zoekin = 'civisaldo';
-		$this->suggestions[ucfirst($this->zoekin)] = '/fiscaat/saldo/zoek?q=';
+		$this->suggestions[ucfirst((string) $this->zoekin)] =
+			'/fiscaat/saldo/zoek?q=';
 	}
 
 	public function getValue()
 	{
 		$this->value = parent::getValue();
-		if ($this->empty_null and empty($this->value)) {
+		if ($this->empty_null && empty($this->value)) {
 			return null;
 		}
 		if (!AccountRepository::isValidUid($this->value)) {
@@ -60,7 +60,7 @@ class CivisaldoField extends AutocompleteField
 		$value = parent::getValue();
 		// geldig uid?
 		if (
-			AccountRepository::isValidUid($value) and
+			AccountRepository::isValidUid($value) &&
 			ContainerFacade::getContainer()
 				->get(CiviSaldoRepository::class)
 				->existsByUid($value)

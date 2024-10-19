@@ -32,7 +32,7 @@ class DuckField extends TextField
 			ProfielRepository::class
 		);
 		if (
-			$profielRepository->existsDuck($this->value) and
+			$profielRepository->existsDuck($this->value) &&
 			strtolower((string) $this->value) !==
 				strtolower((string) $this->origvalue)
 		) {

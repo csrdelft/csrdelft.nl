@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\streeplijst;
 
-use CsrDelft\entity\Streeplijst;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;

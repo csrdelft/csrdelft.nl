@@ -88,11 +88,7 @@ class IsHetAlView implements View
 					$begin = strtotime('+1 year', $begin);
 				}
 				$dagen = round(($begin - $nu) / 86400);
-				if ($dagen <= 0) {
-					$this->ja = true;
-				} else {
-					$this->ja = $dagen;
-				}
+				$this->ja = $dagen <= 0 ? true : $dagen;
 				break;
 
 			case 'lustrum':
@@ -103,11 +99,7 @@ class IsHetAlView implements View
 					$begin = strtotime('+5 year', $begin);
 				}
 				$dagen = round(($begin - $nu) / 86400);
-				if ($dagen <= 0) {
-					$this->ja = true;
-				} else {
-					$this->ja = $dagen;
-				}
+				$this->ja = $dagen <= 0 ? true : $dagen;
 				break;
 
 			case 'jarig':
@@ -115,20 +107,20 @@ class IsHetAlView implements View
 				break;
 
 			case 'lunch':
-				$this->ja = (date('Hi') > '1230' and date('Hi') < '1330');
+				$this->ja = date('Hi') > '1230' && date('Hi') < '1330';
 				break;
 
 			case 'weekend':
 				$this->ja =
-					(date('w') == 0 or
-					date('w') > 5 or
-					date('w') == 5 and date('Hi') >= '1700');
+					date('w') == 0 ||
+					date('w') > 5 ||
+					(date('w') == 5 && date('Hi') >= '1700');
 				break;
 
 			case 'studeren':
 				if ($session->has('studeren')) {
 					$this->ja =
-						(time() > $session->get('studeren') + 5 * 60 and date('w') != 0);
+						time() > $session->get('studeren') + 5 * 60 && date('w') != 0;
 					$tijd = $session->get('studeren');
 				} else {
 					$this->ja = false;

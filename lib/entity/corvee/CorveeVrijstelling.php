@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\corvee;
 
+use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
@@ -18,11 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Wordt gebruikt bij de indeling van corveetaken om bijv. leden die
  * in het buitenland zitten niet in te delen gedurende die periode.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\corvee\CorveeVrijstellingenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: CorveeVrijstellingenRepository::class)]
 #[ORM\Table('crv_vrijstellingen')]
 class CorveeVrijstelling
 {
@@ -52,7 +49,7 @@ class CorveeVrijstelling
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $profiel;
 

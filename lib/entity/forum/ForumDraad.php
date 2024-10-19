@@ -2,6 +2,12 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumDradenRepository;
+use ForumPost;
+use ForumDraadGelezen;
+use ForumDeel;
+use ForumDraadVerbergen;
+use ForumDraadMelding;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
 use CsrDelft\common\Util\InstellingUtil;
@@ -21,11 +27,7 @@ use Doctrine\ORM\PersistentCollection;
  *
  * Een ForumDraad zit in een deelforum en bevat forumposts.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\forum\ForumDradenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: ForumDradenRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 #[ORM\Table('forum_draden')]
 #[ORM\Index(name: 'verwijderd', columns: ['verwijderd'])]
@@ -89,7 +91,7 @@ class ForumDraad
 	/**
 	 * @var ForumPost
 	 */
-	#[ORM\OneToOne(targetEntity: \ForumPost::class)]
+	#[ORM\OneToOne(targetEntity: ForumPost::class)]
 	#[
 		ORM\JoinColumn(
 			name: 'laatste_post_id',
@@ -150,19 +152,19 @@ class ForumDraad
 	 * Lijst van lezers (wanneer)
 	 * @var PersistentCollection|ForumDraadGelezen[]
 	 */
-	#[ORM\OneToMany(targetEntity: \ForumDraadGelezen::class, mappedBy: 'draad')]
+	#[ORM\OneToMany(targetEntity: ForumDraadGelezen::class, mappedBy: 'draad')]
 	#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 	public $lezers;
 	/**
 	 * @var ForumDeel
 	 */
-	#[ORM\ManyToOne(targetEntity: \ForumDeel::class)]
+	#[ORM\ManyToOne(targetEntity: ForumDeel::class)]
 	#[ORM\JoinColumn(name: 'forum_id', referencedColumnName: 'forum_id')]
 	public $deel;
 	/**
 	 * @var ForumDeel
 	 */
-	#[ORM\ManyToOne(targetEntity: \ForumDeel::class)]
+	#[ORM\ManyToOne(targetEntity: ForumDeel::class)]
 	#[
 		ORM\JoinColumn(
 			name: 'gedeeld_met',
@@ -184,12 +186,12 @@ class ForumDraad
 	/**
 	 * @var PersistentCollection|ForumDraadVerbergen[]
 	 */
-	#[ORM\OneToMany(targetEntity: \ForumDraadVerbergen::class, mappedBy: 'draad')]
+	#[ORM\OneToMany(targetEntity: ForumDraadVerbergen::class, mappedBy: 'draad')]
 	private $verbergen;
 	/**
 	 * @var PersistentCollection|ForumDraadMelding[]
 	 */
-	#[ORM\OneToMany(targetEntity: \ForumDraadMelding::class, mappedBy: 'draad')]
+	#[ORM\OneToMany(targetEntity: ForumDraadMelding::class, mappedBy: 'draad')]
 	private $meldingen;
 
 	public function __construct()
@@ -281,13 +283,8 @@ class ForumDraad
 		if ($gelezen = $this->getWanneerGelezen()) {
 			// Omdat this en gelezen uit de cache _kunnen_ komen kunnen de milliseconden in
 			// de date verschillend zijn van wat er in de db staat. Doe dus hier check op seconden.
-			if (
-				$this->laatst_gewijzigd->getTimestamp() >
-				$gelezen->datum_tijd->getTimestamp()
-			) {
-				return true;
-			}
-			return false;
+			return $this->laatst_gewijzigd->getTimestamp() >
+				$gelezen->datum_tijd->getTimestamp();
 		}
 		return true;
 	}
@@ -314,7 +311,7 @@ class ForumDraad
 	 */
 	public function getForumPosts()
 	{
-		if (!isset($this->forum_posts)) {
+		if ($this->forum_posts === null) {
 			$this->setForumPosts(
 				ContainerFacade::getContainer()
 					->get(ForumPostsRepository::class)
@@ -346,7 +343,7 @@ class ForumDraad
 
 	public function getAantalOngelezenPosts()
 	{
-		if (!isset($this->aantal_ongelezen_posts)) {
+		if ($this->aantal_ongelezen_posts === null) {
 			$forumPostsRepository = ContainerFacade::getContainer()->get(
 				ForumPostsRepository::class
 			);

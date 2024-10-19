@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\entity\aanmelder\AanmeldActiviteit;
 use CsrDelft\entity\aanmelder\Reeks;
 use CsrDelft\repository\aanmelder\ReeksRepository;
@@ -9,7 +10,6 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use CsrDelft\common\Annotation\Auth;
 
 use CsrDelft\repository\aanmelder\AanmeldActiviteitRepository;

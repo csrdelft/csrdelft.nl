@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\PushAbonnementRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -10,11 +11,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * De informatie die nodig is voor de web-push notificaties.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\PushAbonnementRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: PushAbonnementRepository::class)]
 class PushAbonnement
 {
 	/**

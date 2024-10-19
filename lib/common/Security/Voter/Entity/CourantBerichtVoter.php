@@ -22,12 +22,12 @@ class CourantBerichtVoter extends Voter
 
 	public function supportsAttribute(string $attribute): bool
 	{
-		return $attribute == self::BEHEREN;
+		return $attribute === self::BEHEREN;
 	}
 
 	public function supportsType(string $subjectType): bool
 	{
-		return $subjectType == CourantBericht::class;
+		return $subjectType === CourantBericht::class;
 	}
 
 	/**

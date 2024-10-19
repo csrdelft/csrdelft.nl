@@ -84,14 +84,14 @@ class DownloadUrlField extends UrlField
 		} elseif (!UrlUtil::url_like($this->value)) {
 			$this->error = 'Ongeldige url';
 		} elseif (
-			!$this->model instanceof Bestand or
-			!$this->model->exists() or
+			!$this->model instanceof Bestand ||
+			!$this->model->exists() ||
 			empty($this->model->filesize)
 		) {
 			$error = error_get_last();
 			$this->error = $error['message'];
 		} elseif (
-			!empty($this->filterMime) and
+			!empty($this->filterMime) &&
 			!in_array($this->model->mimetype, $this->filterMime)
 		) {
 			$this->error = 'Bestandstype niet toegestaan: ' . $this->model->mimetype;

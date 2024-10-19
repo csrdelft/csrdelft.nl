@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\repository\security\RememberOAuthRepository;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,11 +14,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * Een Account kan een oauth2_client trusten. Het is dan niet meer nodig om opnieuw the accepteren
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\security\RememberOAuthRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: RememberOAuthRepository::class)]
 #[ORM\Table('oauth2_remember')]
 #[
 	ORM\UniqueConstraint(
@@ -52,7 +49,7 @@ class RememberOAuth implements DataTableEntry
 	/**
 	 * @var Account
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\security\Account::class)]
+	#[ORM\ManyToOne(targetEntity: Account::class)]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $account;
 	/**

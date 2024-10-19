@@ -9,7 +9,7 @@ class LoginTest extends BrowserTestCase
 	/**
 	 * Eerste test, controleer of we een pagina kunnen opvragen.
 	 */
-	public function testPageLoad()
+	public function testPageLoad(): void
 	{
 		$this->client->request('GET', '/');
 
@@ -17,7 +17,7 @@ class LoginTest extends BrowserTestCase
 		$this->assertTrue(true);
 	}
 
-	public function testLogin()
+	public function testLogin(): void
 	{
 		$crawler = $this->login();
 

@@ -2,6 +2,9 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumDelenRepository;
+use ForumCategorie;
+use ForumDeelMelding;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
 use CsrDelft\repository\forum\ForumDradenRepository;
@@ -15,11 +18,7 @@ use Doctrine\ORM\PersistentCollection;
  *
  * Een deelforum zit in een forumcategorie bevat ForumDraden.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\forum\ForumDelenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: ForumDelenRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 #[ORM\Table('forum_delen')]
 #[ORM\Index(name: 'volgorde', columns: ['volgorde'])]
@@ -80,7 +79,7 @@ class ForumDeel
 	 */
 	#[
 		ORM\ManyToOne(
-			targetEntity: \ForumCategorie::class,
+			targetEntity: ForumCategorie::class,
 			inversedBy: 'forum_delen'
 		)
 	]
@@ -89,7 +88,7 @@ class ForumDeel
 	/**
 	 * @var PersistentCollection|ForumDeelMelding[]
 	 */
-	#[ORM\OneToMany(targetEntity: \ForumDeelMelding::class, mappedBy: 'deel')]
+	#[ORM\OneToMany(targetEntity: ForumDeelMelding::class, mappedBy: 'deel')]
 	public $meldingen;
 	/**
 	 * Forumdraden
@@ -136,7 +135,7 @@ class ForumDeel
 	 */
 	public function getForumDraden()
 	{
-		if (!isset($this->forum_draden)) {
+		if ($this->forum_draden === null) {
 			$this->setForumDraden(
 				ContainerFacade::getContainer()
 					->get(ForumDradenRepository::class)

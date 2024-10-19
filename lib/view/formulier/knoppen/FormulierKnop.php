@@ -68,7 +68,7 @@ class FormulierKnop implements FormElement
 			'" title="' .
 			htmlspecialchars((string) $this->title) .
 			'" tabindex="0"';
-		if (isset($this->data)) {
+		if ($this->data !== null) {
 			$html .= ' data="' . $this->data . '"';
 		}
 		$html .= '>';

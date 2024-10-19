@@ -117,12 +117,10 @@ final class FileUtil
 
 		if (is_null($expectedExtension)) {
 			return false;
+		} elseif (is_array($expectedExtension)) {
+			return in_array($extension, $expectedExtension);
 		} else {
-			if (is_array($expectedExtension)) {
-				return in_array($extension, $expectedExtension);
-			} else {
-				return $extension === $expectedExtension;
-			}
+			return $extension === $expectedExtension;
 		}
 	}
 
@@ -130,9 +128,7 @@ final class FileUtil
 	{
 		$files = array_diff(scandir($dir), ['.', '..']);
 		foreach ($files as $file) {
-			is_dir("$dir/$file")
-				? static::delTree("$dir/$file")
-				: unlink("$dir/$file");
+			is_dir("$dir/$file") ? self::delTree("$dir/$file") : unlink("$dir/$file");
 		}
 		return rmdir($dir);
 	}
@@ -270,7 +266,9 @@ final class FileUtil
 			)
 		) {
 			// Create thumbnail
-			$return = match (strtolower(preg_replace('/^.*\./', '', $dest_image))) {
+			$return = match (
+			strtolower((string) preg_replace('/^.*\./', '', (string) $dest_image))
+			) {
 				'jpg', 'jpeg' => imagejpeg($canvas, $dest_image, $jpg_quality),
 				'png' => imagepng($canvas, $dest_image),
 				'gif' => imagegif($canvas, $dest_image),

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use CsrDelft\repository\fiscaat\CiviCategorieRepository;
 use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,11 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\fiscaat\CiviCategorieRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: CiviCategorieRepository::class)]
 #[ORM\Table('civi_categorie')]
 #[ORM\Index(name: 'cie', columns: ['cie'])]
 class CiviCategorie implements DisplayEntity

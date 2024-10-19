@@ -59,7 +59,7 @@ class TextField extends InputField
 		}
 		// als max_len is gezet dan checken of de lengte er niet boven zit
 		if (
-			is_int($this->max_len) and
+			is_int($this->max_len) &&
 			strlen((string) $this->value) > $this->max_len
 		) {
 			$this->error =
@@ -67,13 +67,13 @@ class TextField extends InputField
 		}
 		// als min_len is gezet dan checken of de lengte er niet onder zit
 		if (
-			is_int($this->min_len) and
+			is_int($this->min_len) &&
 			strlen((string) $this->value) < $this->min_len
 		) {
 			$this->error =
 				'Dit veld moet minimaal ' . $this->min_len . ' tekens lang zijn';
 		}
-		if ($this->value !== null and !TextUtil::is_utf8($this->value)) {
+		if ($this->value !== null && !TextUtil::is_utf8($this->value)) {
 			$this->error = 'Ongeldige karakters, gebruik reguliere tekst';
 		}
 		return $this->error === '';
@@ -82,7 +82,7 @@ class TextField extends InputField
 	public function getValue()
 	{
 		$this->value = parent::getValue();
-		if ($this->empty_null and $this->value == '') {
+		if ($this->empty_null && $this->value == '') {
 			return null;
 		}
 		return htmlspecialchars((string) $this->value);

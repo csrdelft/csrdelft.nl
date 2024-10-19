@@ -3,7 +3,6 @@
 namespace CsrDelft\repository\maalcie;
 
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
-use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;

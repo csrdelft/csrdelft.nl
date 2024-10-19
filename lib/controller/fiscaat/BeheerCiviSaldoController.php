@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\fiscaat;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
@@ -22,7 +23,6 @@ use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
@@ -50,7 +50,7 @@ class BeheerCiviSaldoController extends AbstractController
 	{
 		$table = $this->createDataTable(CiviSaldoTable::class);
 
-		if ($request->getMethod() == 'POST') {
+		if ($request->getMethod() === 'POST') {
 			return $table->createData(
 				$this->civiSaldoRepository->findBy(['deleted' => false])
 			);
@@ -140,7 +140,7 @@ class BeheerCiviSaldoController extends AbstractController
 			}
 		}
 
-		if (!empty($removed)) {
+		if ($removed !== []) {
 			return $this->tableData($removed);
 		}
 
@@ -234,7 +234,7 @@ class BeheerCiviSaldoController extends AbstractController
 		foreach ($civiSaldi as $civiSaldo) {
 			$profiel = ProfielRepository::get($civiSaldo->uid);
 			$resp[] = [
-				'label' => !$profiel ? $civiSaldo->naam : $profiel->getNaam('volledig'),
+				'label' => $profiel ? $profiel->getNaam('volledig') : $civiSaldo->naam,
 				'value' => $civiSaldo->uid,
 			];
 		}

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\command;
 
+use DateTimeImmutable;
 use CsrDelft\common\Mail;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
@@ -64,13 +65,15 @@ class PinTransactiesDownloadenCommand extends Command
 			);
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
+	protected function execute(
+		InputInterface $input,
+		OutputInterface $output
+	): int {
 		$this->interactive =
 			$input->isInteractive() && !$input->getOption('no-interaction');
 
 		if ($this->interactive) {
-			$vanaf = \DateTimeImmutable::createFromFormat(
+			$vanaf = DateTimeImmutable::createFromFormat(
 				'Y-m-d',
 				$input->getArgument('vanaf')
 			);

@@ -30,7 +30,7 @@
 		"doctrine/annotations": "^1.0",
 		"doctrine/doctrine-bundle": "^2.3",
 		"doctrine/doctrine-migrations-bundle": "^3.1",
-		"doctrine/orm": "^2.8",
+		"doctrine/orm": "^2.9",
 		"doctrine/persistence": "^2.0",
 		"easyrdf/easyrdf": "^0.9.1",
 		"endroid/qr-code": "^4.1",

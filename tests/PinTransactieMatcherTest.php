@@ -5,7 +5,6 @@ use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\entity\pin\PinTransactie;
-use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\service\pin\PinTransactieMatcher;
@@ -22,7 +21,7 @@ final class PinTransactieMatcherTest extends TestCase
 		);
 	}
 
-	public function testMatch()
+	public function testMatch(): void
 	{
 		$transacties = [
 			$this->trans(0, 100),
@@ -95,7 +94,7 @@ final class PinTransactieMatcherTest extends TestCase
 		);
 	}
 
-	public function testMatchDifferentLength()
+	public function testMatchDifferentLength(): void
 	{
 		$transacties = [$this->trans(1, 100)];
 
@@ -130,7 +129,7 @@ final class PinTransactieMatcherTest extends TestCase
 		);
 	}
 
-	public function testMatchDifferentLength2()
+	public function testMatchDifferentLength2(): void
 	{
 		$transacties = [
 			$this->trans(0, 170), # missende bestelling
@@ -165,7 +164,7 @@ final class PinTransactieMatcherTest extends TestCase
 		);
 	}
 
-	public function testRealLifeExample()
+	public function testRealLifeExample(): void
 	{
 		$transacties = [
 			$this->trans(0, 18, '2023-02-02 16:23:48'),

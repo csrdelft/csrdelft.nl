@@ -18,7 +18,7 @@ class ProsemirrorToBbTest extends CsrTestCase
 		$this->converter = $this->getContainer()->get(ProsemirrorToBb::class);
 	}
 
-	public function testSingleTag()
+	public function testSingleTag(): void
 	{
 		$this->assertEquals(
 			'[b]vetgedrukt[/b]',
@@ -39,7 +39,7 @@ class ProsemirrorToBbTest extends CsrTestCase
 	 * Meerdere marks en veranderingen tussen marks worden in losse blokken gesplitst. Dit is om
 	 * er voor te zorgen dat de conversie makkelijk gaat en niet te ingewikkeld is.
 	 */
-	public function testMultipleMark()
+	public function testMultipleMark(): void
 	{
 		$this->assertEquals(
 			'[b]vetgedrukt en [/b][b][i]schuingedrukt[/i][/b]',
@@ -61,7 +61,7 @@ class ProsemirrorToBbTest extends CsrTestCase
 		);
 	}
 
-	public function testLink()
+	public function testLink(): void
 	{
 		$this->assertEquals(
 			'Een linkje naar: [url=https://google.com]Google[/url]',

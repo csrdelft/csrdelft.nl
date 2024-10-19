@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier;
 
+use ReflectionClass;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\DateUtil;
@@ -115,7 +116,7 @@ class Formulier implements View, Validator, ToResponse
 	{
 		$fieldName = $field->getName();
 		if ($this->model) {
-			$class = new \ReflectionClass($this->model);
+			$class = new ReflectionClass($this->model);
 			$setterMethod = 'set' . ucfirst((string) $fieldName);
 			if ($class->hasMethod($setterMethod)) {
 				$method = $class->getMethod($setterMethod);
@@ -143,7 +144,7 @@ class Formulier implements View, Validator, ToResponse
 
 	public function hasFields()
 	{
-		return !empty($this->fields);
+		return $this->fields !== [];
 	}
 	/**
 	 * Zoekt een InputField met exact de gegeven naam.
@@ -155,8 +156,7 @@ class Formulier implements View, Validator, ToResponse
 	{
 		foreach ($this->fields as $field) {
 			if (
-				($field instanceof InputField or $field instanceof FileField) and
-				$field->getName() === $fieldName
+				($field instanceof InputField || $field instanceof FileField) && $field->getName() === $fieldName
 			) {
 				return $field;
 			}
@@ -199,7 +199,7 @@ class Formulier implements View, Validator, ToResponse
 	public function isPosted()
 	{
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField and !$field->isPosted()) {
+			if ($field instanceof InputField && !$field->isPosted()) {
 				//MeldingUtil::setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}
@@ -218,7 +218,7 @@ class Formulier implements View, Validator, ToResponse
 		}
 		$valid = true;
 		foreach ($this->fields as $field) {
-			if ($field instanceof Validator and !$field->validate()) {
+			if ($field instanceof Validator && !$field->validate()) {
 				// geen comments bijv.
 				$valid = false; // niet gelijk retourneren om voor alle velden eventueel errors te zetten
 			}
@@ -257,7 +257,7 @@ class Formulier implements View, Validator, ToResponse
 				}
 			}
 		}
-		if (empty($errors)) {
+		if ($errors === []) {
 			return null;
 		}
 		return $errors;
@@ -295,7 +295,7 @@ class Formulier implements View, Validator, ToResponse
 	{
 		$js = $this->getJavascript();
 
-		if (trim((string) $js) == '') {
+		if (trim((string) $js) === '') {
 			return '';
 		}
 
@@ -326,7 +326,7 @@ HTML;
 		if (!empty($titel)) {
 			$string .= '<h1 class="Titel">' . $titel . '</h1>';
 		}
-		if (isset($this->error)) {
+		if ($this->error !== null) {
 			$string .= '<span class="error">' . $this->error . '</span>';
 		}
 		//debugprint($this->getError()); //DEBUG
@@ -392,7 +392,7 @@ HTML;
 	public function changelog(array $diff)
 	{
 		$changelog = '';
-		if (!empty($diff)) {
+		if ($diff !== []) {
 			$changelog .=
 				'[div]Bewerking van [lid=' .
 				LoginService::getUid() .

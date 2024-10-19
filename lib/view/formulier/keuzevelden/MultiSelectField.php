@@ -29,11 +29,7 @@ class MultiSelectField extends InputField
 		foreach ($selects as $i => $opties) {
 			// Splits mogelijkheden per keuze
 			$opties = explode('|', $opties);
-			if (isset($gekozen[$i])) {
-				$keuze = $gekozen[$i];
-			} else {
-				$keuze = $opties[0];
-			}
+			$keuze = $gekozen[$i] ?? $opties[0];
 
 			// Value == label
 			$values = [];

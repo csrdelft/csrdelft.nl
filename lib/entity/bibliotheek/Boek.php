@@ -2,17 +2,17 @@
 
 namespace CsrDelft\entity\bibliotheek;
 
+use CsrDelft\repository\bibliotheek\BoekRepository;
+use BiebAuteur;
+use BoekRecensie;
+use BoekExemplaar;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package CsrDelft\entity\bibliotheek
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\bibliotheek\BoekRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: BoekRepository::class)]
 #[ORM\Table('biebboek')]
 class Boek
 {
@@ -78,20 +78,20 @@ class Boek
 	/**
 	 * @var BiebAuteur
 	 */
-	#[ORM\ManyToOne(targetEntity: \BiebAuteur::class)]
+	#[ORM\ManyToOne(targetEntity: BiebAuteur::class)]
 	#[ORM\JoinColumn(name: 'auteur_id', referencedColumnName: 'id')]
 	public $auteur2;
 
 	/**
 	 * @var BoekRecensie[]
 	 */
-	#[ORM\OneToMany(targetEntity: \BoekRecensie::class, mappedBy: 'boek')]
+	#[ORM\OneToMany(targetEntity: BoekRecensie::class, mappedBy: 'boek')]
 	protected $recensies;
 
 	/**
 	 * @var BoekExemplaar[]
 	 */
-	#[ORM\OneToMany(targetEntity: \BoekExemplaar::class, mappedBy: 'boek')]
+	#[ORM\OneToMany(targetEntity: BoekExemplaar::class, mappedBy: 'boek')]
 	protected $exemplaren;
 
 	/**

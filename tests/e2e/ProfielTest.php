@@ -4,13 +4,12 @@ namespace e2e;
 
 use CsrDelft\tests\BrowserTestCase;
 use Facebook\WebDriver\WebDriverBy;
-use Facebook\WebDriver\WebDriverExpectedCondition;
 use Facebook\WebDriver\WebDriverKeys as Keys;
 use Symfony\Component\DomCrawler\Crawler;
 
 class ProfielTest extends BrowserTestCase
 {
-	public function testProfielPagina()
+	public function testProfielPagina(): void
 	{
 		$this->login();
 
@@ -21,7 +20,7 @@ class ProfielTest extends BrowserTestCase
 		$this->assertEquals('pubcie', $bijnaam);
 	}
 
-	public function testProfielBewerken()
+	public function testProfielBewerken(): void
 	{
 		$this->login();
 
@@ -33,9 +32,9 @@ class ProfielTest extends BrowserTestCase
 
 		$this->client->wait(10, 250)->until(
 			fn() => match (parse_url($this->client->getCurrentURL(), PHP_URL_PATH)) {
-				"/profiel/x101" => true,
-				"/profiel" => true,
-				default => false
+				'/profiel/x101' => true,
+				'/profiel' => true,
+				default => false,
 			},
 			'Niet teruggekomen op de profielpagina'
 		);

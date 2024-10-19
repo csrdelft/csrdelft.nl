@@ -2,16 +2,14 @@
 
 namespace CsrDelft\controller\api;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Security\Voter\Entity\Groep\ActiviteitGroepVoter;
 use CsrDelft\controller\AbstractController;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\GroepLidRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ApiActiviteitenController extends AbstractController
 {

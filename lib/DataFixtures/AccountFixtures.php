@@ -2,6 +2,7 @@
 
 namespace CsrDelft\DataFixtures;
 
+use Faker\Generator;
 use CsrDelft\DataFixtures\Util\ProfielFixtureUtil;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\profiel\Profiel;
@@ -41,7 +42,7 @@ class AccountFixtures extends Fixture
 	const UID_SOCCIE_FISCUS = 'x019';
 	const UID_PUBCIE = 'x101';
 	/**
-	 * @var \Faker\Generator
+	 * @var Generator
 	 */
 	private $faker;
 

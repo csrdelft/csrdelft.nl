@@ -2,7 +2,6 @@
 
 namespace CsrDelft\common\yaml;
 
-use CsrDelft\command\FlushMemcacheCommand;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;

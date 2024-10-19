@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbDocument;
 
@@ -20,7 +21,7 @@ class NodeDocument implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbDocument) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		return [

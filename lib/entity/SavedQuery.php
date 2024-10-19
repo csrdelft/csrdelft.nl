@@ -2,10 +2,11 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\SavedQueryRepository::class)]
+#[ORM\Entity(repositoryClass: SavedQueryRepository::class)]
 #[ORM\Table('savedquery')]
 class SavedQuery
 {

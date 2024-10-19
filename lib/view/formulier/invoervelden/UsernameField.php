@@ -32,7 +32,7 @@ class UsernameField extends TextField
 		if (
 			ContainerFacade::getContainer()
 				->get(AccountRepository::class)
-				->existsUsername($this->value) and
+				->existsUsername($this->value) &&
 			strtolower((string) $this->value) !==
 				strtolower((string) $this->origvalue)
 		) {

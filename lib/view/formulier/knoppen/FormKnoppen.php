@@ -57,12 +57,10 @@ abstract class FormKnoppen implements FormElement
 			} else {
 				$this->knoppen_left[] = $knop;
 			}
+		} elseif ($prepend) {
+			array_unshift($this->knoppen_right, $knop);
 		} else {
-			if ($prepend) {
-				array_unshift($this->knoppen_right, $knop);
-			} else {
-				$this->knoppen_right[] = $knop;
-			}
+			$this->knoppen_right[] = $knop;
 		}
 	}
 

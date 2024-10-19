@@ -2,6 +2,8 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
+use Exception;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\UrlUtil;
@@ -15,7 +17,6 @@ use CsrDelft\controller\groepen\WoonoordenController;
 use CsrDelft\view\Icon;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ZoekController extends AbstractController
 {
@@ -115,7 +116,7 @@ class ZoekController extends AbstractController
 
 	/**
 	 * @return JsonResponse
-	 * @throws \Exception
+	 * @throws Exception
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[Route(path: '/wikizoek', methods: ['GET'])]

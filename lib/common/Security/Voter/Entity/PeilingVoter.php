@@ -37,7 +37,7 @@ class PeilingVoter extends Voter
 
 	public function supportsType(string $subjectType): bool
 	{
-		return $subjectType == Peiling::class;
+		return $subjectType === Peiling::class;
 	}
 
 	/**
@@ -90,15 +90,15 @@ class PeilingVoter extends Voter
 		if ($subject->eigenaar == $token->getUserIdentifier()) {
 			return true;
 		}
-		if (empty(trim((string) $subject->rechten_stemmen))) {
-			return true;
-		}
 		if (
-			$this->accessDecisionManager->decide($token, [$subject->rechten_stemmen])
+			trim((string) $subject->rechten_stemmen) === '' ||
+			trim((string) $subject->rechten_stemmen) === '0'
 		) {
 			return true;
 		}
-		return false;
+		return $this->accessDecisionManager->decide($token, [
+			$subject->rechten_stemmen,
+		]);
 	}
 
 	/**

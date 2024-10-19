@@ -3,7 +3,6 @@
 namespace CsrDelft\common\Security\Voter\Entity\Groep;
 
 use CsrDelft\entity\groepen\Ketzer;
-use CsrDelft\entity\security\enum\AccessAction;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class KetzerGroepVoter extends AbstractGroepVoter

@@ -92,7 +92,7 @@ class SuggestieLijst implements ToResponse, FormElement
 window.maalcie.takenColorSuggesties();
 
 JS;
-		if (isset($this->voorkeurbaar) and $this->voorkeur) {
+		if ($this->voorkeurbaar !== null && $this->voorkeur) {
 			$js .= "window.maalcie.takenToggleSuggestie('geenvoorkeur');";
 		}
 		if ($this->recent) {

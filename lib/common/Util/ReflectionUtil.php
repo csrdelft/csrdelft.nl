@@ -46,7 +46,7 @@ final class ReflectionUtil
 	 */
 	public static function short_class($class)
 	{
-		return (new \ReflectionClass($class))->getShortName();
+		return (new ReflectionClass($class))->getShortName();
 	}
 
 	/**
@@ -74,6 +74,6 @@ final class ReflectionUtil
 	 */
 	public static function className($className)
 	{
-		return preg_replace('/\\\\/', '-', $className);
+		return preg_replace('/\\\\/', '-', (string) $className);
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\events;
 
+use ReflectionException;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
@@ -14,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Controlleer access op route niveau.
@@ -44,7 +45,7 @@ class AccessControlEventListener
 	 * Controleer of gebruiker deze pagina mag zien.
 	 *
 	 * @param ControllerEvent $event
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	public function onKernelController(ControllerEvent $event)
 	{
@@ -98,11 +99,9 @@ class AccessControlEventListener
 			Auth::class
 		);
 
-		if ($authAnnotation) {
-			$mag = $authAnnotation->getMag();
-		} else {
-			$mag = $request->attributes->get('_mag');
-		}
+		$mag = $authAnnotation
+			? $authAnnotation->getMag()
+			: $request->attributes->get('_mag');
 
 		if (!$mag) {
 			throw new CsrException('Route heeft geen @Auth: ' . $controller);

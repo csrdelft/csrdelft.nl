@@ -37,7 +37,7 @@ abstract class AbstractGroepVoter extends Voter
 
 	public function supportsType(string $subjectType): bool
 	{
-		return $subjectType == $this->getGroepType();
+		return $subjectType === $this->getGroepType();
 	}
 
 	abstract protected function getGroepType(): string;
@@ -111,7 +111,7 @@ abstract class AbstractGroepVoter extends Voter
 		string $attribute,
 		HeeftAanmeldLimiet $groep
 	): bool {
-		if ($attribute != self::AANMELDEN) {
+		if ($attribute !== self::AANMELDEN) {
 			return true;
 		}
 		if ($groep->getAanmeldLimiet() == null) {

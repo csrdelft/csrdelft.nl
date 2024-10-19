@@ -170,7 +170,7 @@ class AccountRepository extends AbstractRepository implements
 	 */
 	public function findOneByEmail(string $email): ?Account
 	{
-		if (empty($email)) {
+		if ($email === '' || $email === '0') {
 			return null;
 		}
 

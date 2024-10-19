@@ -82,11 +82,7 @@ class WachtwoordWijzigenField extends InputField
 
 	public function getValue()
 	{
-		if ($this->isPosted()) {
-			$this->value = $_POST[$this->name . '_new'];
-		} else {
-			$this->value = false;
-		}
+		$this->value = $this->isPosted() ? $_POST[$this->name . '_new'] : false;
 		if ($this->empty_null && $this->value == '') {
 			return null;
 		}
@@ -119,17 +115,17 @@ class WachtwoordWijzigenField extends InputField
 		$new = $_POST[$this->name . '_new'];
 		$confirm = $_POST[$this->name . '_confirm'];
 		$length = strlen(mb_convert_encoding($new, 'ISO-8859-1'));
-		if ($this->require_current and empty($current)) {
+		if ($this->require_current && empty($current)) {
 			$this->error = 'U moet uw huidige wachtwoord invoeren';
-		} elseif ($this->required and empty($new)) {
+		} elseif ($this->required && empty($new)) {
 			$this->error = 'U moet een nieuw wachtwoord invoeren';
 		} elseif (
-			$this->require_current and
+			$this->require_current &&
 			!$accountService->controleerWachtwoord($this->model, $current)
 		) {
 			$this->error = 'Uw huidige wachtwoord is niet juist';
 		} elseif (!empty($new)) {
-			if ($this->require_current and $current == $new) {
+			if ($this->require_current && $current == $new) {
 				$this->error =
 					'Het nieuwe wachtwoord is hetzelfde als het huidige wachtwoord';
 			} elseif ($length < 10) {
@@ -143,7 +139,7 @@ class WachtwoordWijzigenField extends InputField
 					'Het nieuwe wachtwoord of een deel ervan staat op de zwarte lijst: "' .
 					$this->error .
 					'"';
-			} elseif (preg_match('/^[0-9]*$/', (string) $new)) {
+			} elseif (preg_match('/^\d*$/', (string) $new)) {
 				$this->error =
 					'Het nieuwe wachtwoord mag niet uit alleen getallen bestaan';
 			} elseif ($length < 23) {
@@ -183,7 +179,7 @@ class WachtwoordWijzigenField extends InputField
 		if ($this->error !== '') {
 			$this->css_classes[] = 'is-invalid';
 		}
-		$inputCssClasses = join(' ', $this->css_classes);
+		$inputCssClasses = implode(' ', $this->css_classes);
 
 		if ($this->require_current) {
 			$html .= <<<HTML

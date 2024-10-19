@@ -90,7 +90,7 @@ class CorveePuntenService
 			throw new CsrGebruikerException('Punten toekennen faalt: geen integer');
 		}
 
-		if ($punten !== 0 or $bonus_malus !== 0) {
+		if ($punten !== 0 || $bonus_malus !== 0) {
 			$this->savePuntenVoorLid(
 				$profiel,
 				(int) $profiel->corvee_punten + $punten,

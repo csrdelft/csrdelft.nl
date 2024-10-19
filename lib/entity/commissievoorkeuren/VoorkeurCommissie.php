@@ -2,17 +2,15 @@
 
 namespace CsrDelft\entity\commissievoorkeuren;
 
+use CsrDelft\repository\commissievoorkeuren\VoorkeurCommissieRepository;
+use VoorkeurCommissieCategorie;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class VoorkeurCommissie
  * @package CsrDelft\entity\commissievoorkeuren
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\commissievoorkeuren\VoorkeurCommissieRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: VoorkeurCommissieRepository::class)]
 class VoorkeurCommissie
 {
 	/**
@@ -46,7 +44,7 @@ class VoorkeurCommissie
 	 */
 	#[
 		ORM\ManyToOne(
-			targetEntity: \VoorkeurCommissieCategorie::class,
+			targetEntity: VoorkeurCommissieCategorie::class,
 			inversedBy: 'commissies'
 		)
 	]

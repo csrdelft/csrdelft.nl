@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\FlashType;
 use CsrDelft\common\Util\FlashUtil;
@@ -14,7 +15,6 @@ use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
@@ -50,7 +50,10 @@ class MaaltijdRepetitiesController extends AbstractController
 			'maaltijden/maaltijdrepetitie/beheer_maaltijd_repetities.html.twig',
 			[
 				'repetities' => $this->maaltijdRepetitiesRepository->getAlleRepetities(),
-				'modal' => $repetitie ? $this->bewerk($repetitie) : null,
+				'modal' =>
+					$repetitie instanceof MaaltijdRepetitie
+						? $this->bewerk($repetitie)
+						: null,
 			]
 		);
 	}
@@ -97,11 +100,10 @@ class MaaltijdRepetitiesController extends AbstractController
 	#[Route(path: '/maaltijden/repetities/opslaan/', methods: ['POST'])]
 	public function opslaan(MaaltijdRepetitie $repetitie = null)
 	{
-		if ($repetitie) {
-			$view = $this->bewerk($repetitie);
-		} else {
-			$view = $this->nieuw();
-		}
+		$view =
+			$repetitie instanceof MaaltijdRepetitie
+				? $this->bewerk($repetitie)
+				: $this->nieuw();
 
 		if ($view->validate()) {
 			$repetitie = $view->getModel();

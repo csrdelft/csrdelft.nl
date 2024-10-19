@@ -24,7 +24,7 @@ class Declaratie
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(nullable: false, referencedColumnName: 'uid')]
 	private $indiener;
 
@@ -58,7 +58,7 @@ class Declaratie
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(referencedColumnName: 'uid')]
 	private $beoordelaar;
 
@@ -347,7 +347,7 @@ class Declaratie
 			$this->setNaam($data->get('tnv'));
 		} elseif ($data->get('betaalwijze') === 'voorgeschoten') {
 			$this->setCsrPas(false);
-			if ($data->getBoolean('eigenRekening') === true) {
+			if ($data->getBoolean('eigenRekening')) {
 				$this->setRekening($this->getIndiener()->bankrekening);
 				$this->setNaam($this->getIndiener()->getNaam('voorletters'));
 			} else {
@@ -432,7 +432,7 @@ class Declaratie
 		if ($this->isIngediend() && $this->getCategorie()) {
 			return $this->getCategorie()
 				->getWachtrij()
-				->getPrefix() . static::getBoekjaar($this->getIngediend(), true);
+				->getPrefix() . $this->getBoekjaar($this->getIngediend(), true);
 		}
 		return '';
 	}
@@ -442,11 +442,11 @@ class Declaratie
 	 * @param bool $substr Of alleen de laatste twee cijfers gegeven moeten worden
 	 * @return string Startjaar van boekjaar van gegeven datum
 	 */
-	private static function getBoekjaar(
+	private function getBoekjaar(
 		DateTimeInterface $date = null,
 		bool $substr = false
 	): string {
-		if ($date === null) {
+		if (!$date instanceof DateTimeInterface) {
 			$date = date_create_immutable();
 		}
 

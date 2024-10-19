@@ -7,7 +7,7 @@ use CsrDelft\tests\AbstractVoterTestCase;
 
 class ExpressionVoterTest extends AbstractVoterTestCase
 {
-	public function testEnExpressie()
+	public function testEnExpressie(): void
 	{
 		$lidToken = $this->getToken(AccountFixtures::UID_LID_MAN);
 		$bestuurToken = $this->getToken(AccountFixtures::UID_BESTUUR_PRAESES);
@@ -21,7 +21,7 @@ class ExpressionVoterTest extends AbstractVoterTestCase
 		$this->assertGeenToegang($lidToken, 'ROLE_LOGGED_IN+ROLE_BESTUUR'); // true and false
 	}
 
-	public function testOrPrimaryExpressie()
+	public function testOrPrimaryExpressie(): void
 	{
 		$lidToken = $this->getToken(AccountFixtures::UID_LID_MAN);
 
@@ -30,7 +30,7 @@ class ExpressionVoterTest extends AbstractVoterTestCase
 		$this->assertToegang($lidToken, 'ROLE_LOGGED_IN,ROLE_BESTUUR'); // true or false
 	}
 
-	public function testOrSecondaryExpressie()
+	public function testOrSecondaryExpressie(): void
 	{
 		$lidToken = $this->getToken(AccountFixtures::UID_LID_MAN);
 

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Security\Voter\Entity\MenuItemVoter;
 use CsrDelft\common\Util\SqlUtil;
@@ -16,7 +17,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -106,7 +107,7 @@ class MenuItemRepository extends AbstractRepository
 		return 'stek.menu.' .
 			urlencode((string) $naam) .
 			'.' .
-			($user ? $user->getUsername() : 'x999');
+			($user instanceof UserInterface ? $user->getUsername() : 'x999');
 	}
 
 	/**
@@ -202,13 +203,11 @@ class MenuItemRepository extends AbstractRepository
 					$item->tekst = $categorie->naam;
 					if (!$overig && $item->tekst == 'Overig') {
 						$overig = $item;
-					} else {
-						if (
-							!$checkRechten ||
-							$this->security->isGranted(MenuItemVoter::BEKIJKEN, $item)
-						) {
-							$parent->children[] = $item;
-						}
+					} elseif (
+						!$checkRechten ||
+						$this->security->isGranted(MenuItemVoter::BEKIJKEN, $item)
+					) {
+						$parent->children[] = $item;
 					}
 				}
 				if (
@@ -270,7 +269,7 @@ class MenuItemRepository extends AbstractRepository
 		return 'stek.menu-flat.' .
 			urlencode((string) $naam) .
 			'.' .
-			($user ? $user->getUsername() : '');
+			($user instanceof UserInterface ? $user->getUsername() : '');
 	}
 
 	private function flattenMenuInternal(MenuItem $root)

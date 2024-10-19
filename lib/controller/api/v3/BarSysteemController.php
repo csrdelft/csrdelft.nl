@@ -2,6 +2,9 @@
 
 namespace CsrDelft\controller\api\v3;
 
+use Symfony\Component\Routing\Attribute\Route;
+use Doctrine\DBAL\ConnectionException;
+use Doctrine\DBAL\Driver\Exception;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\bar\BarLocatie;
@@ -12,7 +15,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -46,7 +48,7 @@ class BarSysteemController extends AbstractController
 	 * @param Request $request
 	 * @return JsonResponse
 	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:TRUST")]
+	#[IsGranted('ROLE_OAUTH2_BAR:TRUST')]
 	#[Route(path: '/trust', methods: ['POST'])]
 	public function trust(Request $request)
 	{
@@ -76,7 +78,7 @@ class BarSysteemController extends AbstractController
 	/**
 	 * @Auth(P_LOGGED_IN)
 	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+	#[IsGranted('ROLE_OAUTH2_BAR:BEHEER')]
 	#[Route(path: '/updatePerson', methods: ['POST'])]
 	public function updatePerson(Request $request)
 	{
@@ -91,7 +93,7 @@ class BarSysteemController extends AbstractController
 	 * @return JsonResponse
 	 * @Auth(P_LOGGED_IN)
 	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[IsGranted('ROLE_OAUTH2_BAR:NORMAAL')]
 	#[Route(path: '/personen', methods: ['POST'])]
 	public function personen()
 	{
@@ -102,7 +104,7 @@ class BarSysteemController extends AbstractController
 	 * @return JsonResponse
 	 * @Auth(P_LOGGED_IN)
 	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[IsGranted('ROLE_OAUTH2_BAR:NORMAAL')]
 	#[Route(path: '/producten', methods: ['POST'])]
 	public function producten()
 	{
@@ -112,12 +114,12 @@ class BarSysteemController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return Response
-	 * @throws \Doctrine\DBAL\ConnectionException
-	 * @throws \Doctrine\DBAL\Driver\Exception
+	 * @throws ConnectionException
+	 * @throws Exception
 	 * @throws \Doctrine\DBAL\Exception
 	 * @Auth(P_LOGGED_IN)
 	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[IsGranted('ROLE_OAUTH2_BAR:NORMAAL')]
 	#[Route(path: '/bestelling', methods: ['POST'])]
 	public function bestelling(Request $request)
 	{
@@ -145,7 +147,7 @@ class BarSysteemController extends AbstractController
 	 * @return JsonResponse
 	 * @Auth(P_LOGGED_IN)
 	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[IsGranted('ROLE_OAUTH2_BAR:NORMAAL')]
 	#[Route(path: '/saldo', methods: ['POST'])]
 	public function saldo(Request $request)
 	{
@@ -158,7 +160,7 @@ class BarSysteemController extends AbstractController
 	 * @return Response
 	 * @Auth(P_LOGGED_IN)
 	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[IsGranted('ROLE_OAUTH2_BAR:NORMAAL')]
 	#[Route(path: '/verwijderBestelling', methods: ['POST'])]
 	public function verwijderBestelling(Request $request)
 	{
@@ -176,7 +178,7 @@ class BarSysteemController extends AbstractController
 	 * @return Response
 	 * @Auth(P_LOGGED_IN)
 	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[IsGranted('ROLE_OAUTH2_BAR:NORMAAL')]
 	#[Route(path: '/undoVerwijderBestelling', methods: ['POST'])]
 	public function undoVerwijderBestelling(Request $request)
 	{
@@ -193,7 +195,7 @@ class BarSysteemController extends AbstractController
 	 * @return JsonResponse
 	 * @Auth(P_LOGGED_IN)
 	 */
-	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[IsGranted('ROLE_OAUTH2_BAR:NORMAAL')]
 	#[Route(path: '/laadLaatste', methods: ['POST'])]
 	public function laadLaatste(Request $request)
 	{

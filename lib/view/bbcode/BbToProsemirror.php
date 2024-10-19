@@ -102,22 +102,19 @@ class BbToProsemirror
 					]);
 				}
 
-				if (count($this->storedMarks)) {
+				if (count($this->storedMarks) > 0) {
 					$item = array_merge($item, [
 						'marks' => $this->storedMarks,
 					]);
 				}
 
-				array_push($nodes, $item);
+				$nodes[] = $item;
 			} elseif ($this->marksRegistry->has($child::class)) {
 				/** @var Mark $class */
 				$class = $this->marksRegistry->get($child::class);
-				array_push(
-					$this->storedMarks,
-					array_merge(
-						['type' => $class::getMarkType()],
-						$class->getData($child)
-					)
+				$this->storedMarks[] = array_merge(
+					['type' => $class::getMarkType()],
+					$class->getData($child)
 				);
 
 				if (!empty($child->getChildren())) {

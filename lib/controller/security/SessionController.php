@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\security;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
@@ -14,7 +15,6 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\RememberMe\PersistentRememberMeHandler;
 
 /**
@@ -62,7 +62,7 @@ class SessionController extends AbstractController
 	) {
 		$selection = $this->getDataTableSelection();
 
-		if (empty($selection)) {
+		if ($selection === []) {
 			$response = new Response();
 
 			$request->request->set('_remember_me', true);
@@ -127,7 +127,7 @@ class SessionController extends AbstractController
 	public function forget(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
-		if (!$selection) {
+		if ($selection === []) {
 			throw $this->createAccessDeniedException();
 		}
 		$response = [];

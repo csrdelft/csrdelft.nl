@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\profiel;
 
+use CsrDelft\repository\ProfielRepository;
+use DateInterval;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\ArrayUtil;
 use CsrDelft\common\Util\DateUtil;
@@ -43,7 +45,7 @@ use const P_LEDEN_MOD;
  *
  * Profiel van een lid. Agendeerbaar vanwege verjaardag in agenda.
  */
-#[ORM\Entity(repositoryClass: \CsrDelft\repository\ProfielRepository::class)]
+#[ORM\Entity(repositoryClass: ProfielRepository::class)]
 #[ORM\Table('profielen')]
 #[ORM\Index(name: 'voornaam', columns: ['voornaam'])]
 #[ORM\Index(name: 'achternaam', columns: ['achternaam'])]
@@ -399,23 +401,13 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	/**
 	 * @var Account|null
 	 */
-	#[
-		ORM\OneToOne(
-			targetEntity: \CsrDelft\entity\security\Account::class,
-			mappedBy: 'profiel'
-		)
-	]
+	#[ORM\OneToOne(targetEntity: Account::class, mappedBy: 'profiel')]
 	public $account;
 
 	/**
 	 * @var LidToestemming[]
 	 */
-	#[
-		ORM\OneToMany(
-			targetEntity: \CsrDelft\entity\LidToestemming::class,
-			mappedBy: 'profiel'
-		)
-	]
+	#[ORM\OneToMany(targetEntity: LidToestemming::class, mappedBy: 'profiel')]
 	public $toestemmingen;
 
 	/**
@@ -464,13 +456,8 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		if ($this->uid === LoginService::getUid()) {
 			return true;
 		}
-		if (
-			$this->status === LidStatus::Noviet &&
-			LoginService::mag('commissie:NovCie')
-		) {
-			return true;
-		}
-		return false;
+		return $this->status === LidStatus::Noviet &&
+			LoginService::mag('commissie:NovCie');
 	}
 
 	public function getAccount()
@@ -649,7 +636,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 
 	public function getEindMoment(): DateTimeImmutable
 	{
-		return $this->getBeginMoment()->add(new \DateInterval('PT1H'));
+		return $this->getBeginMoment()->add(new DateInterval('PT1H'));
 	}
 
 	public function isHeledag()
@@ -788,11 +775,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 				break;
 
 			case 'volledig':
-				if (empty($this->voornaam)) {
-					$naam = $this->voorletters . ' ';
-				} else {
-					$naam = $this->voornaam . ' ';
-				}
+				$naam = empty($this->voornaam)
+					? $this->voorletters . ' '
+					: $this->voornaam . ' ';
 				if (!empty($this->tussenvoegsel)) {
 					$naam .= $this->tussenvoegsel . ' ';
 				}
@@ -857,11 +842,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 				}
 				// geen lid
 				else {
-					if (LoginService::mag(P_LEDEN_READ)) {
-						$naam = $this->voornaam . ' ';
-					} else {
-						$naam = $this->voorletters . ' ';
-					}
+					$naam = LoginService::mag(P_LEDEN_READ)
+						? $this->voornaam . ' '
+						: $this->voorletters . ' ';
 					if (!empty($this->tussenvoegsel)) {
 						$naam .= $this->tussenvoegsel . ' ';
 					}
@@ -928,11 +911,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		$path = null;
 		if (LoginService::mag(P_OUDLEDEN_READ)) {
 			// in welke (sub)map moeten we zoeken?
-			if ($vorm == 'vierkant') {
-				$folders = [''];
-			} else {
-				$folders = [$vorm . '/', ''];
-			}
+			$folders = $vorm == 'vierkant' ? [''] : [$vorm . '/', ''];
 			// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
 			foreach ($folders as $subfolder) {
 				foreach (['png', 'jpeg', 'jpg', 'gif'] as $validExtension) {

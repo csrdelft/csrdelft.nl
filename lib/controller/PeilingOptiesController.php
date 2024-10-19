@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Security\Voter\Entity\PeilingVoter;
@@ -9,12 +10,10 @@ use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\peilingen\PeilingOptie;
 use CsrDelft\repository\peilingen\PeilingOptiesRepository;
-use CsrDelft\service\PeilingenService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\peilingen\PeilingOptieForm;
 use CsrDelft\view\peilingen\PeilingOptieTable;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -51,7 +50,7 @@ class PeilingOptiesController extends AbstractController
 	 * @return GenericDataTableResponse
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	#[IsGranted("bekijken", subject: "peiling")]
+	#[IsGranted('bekijken', subject: 'peiling')]
 	#[
 		Route(
 			path: '/peilingen/opties/{id}',

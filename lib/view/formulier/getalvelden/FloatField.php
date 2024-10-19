@@ -15,6 +15,10 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  */
 class FloatField extends InputField
 {
+	/**
+	 * @var string[]|float|string
+	 */
+	public $step;
 	public $pattern = null; // html5 input validation pattern
 
 	public $precision;
@@ -31,10 +35,10 @@ class FloatField extends InputField
 		$step = null
 	) {
 		parent::__construct($name, $value, $description, $min, $max);
-		if (!is_float($this->value) and $this->value !== null) {
+		if (!is_float($this->value) && $this->value !== null) {
 			throw new CsrGebruikerException('value geen float');
 		}
-		if (!is_float($this->origvalue) and $this->origvalue !== null) {
+		if (!is_float($this->origvalue) && $this->origvalue !== null) {
 			throw new CsrGebruikerException('origvalue geen float');
 		}
 		if (is_int($precision)) {
@@ -49,11 +53,9 @@ class FloatField extends InputField
 		if ($max !== null) {
 			$this->max = (float) $max;
 		}
-		if (is_float($step)) {
-			$this->step = $step;
-		} else {
-			$this->step = 1.0 / (float) 10 ** $this->precision;
-		}
+		$this->step = is_float($step)
+			? $step
+			: 1.0 / (float) 10 ** $this->precision;
 		$this->step = str_replace(',', '.', $this->step); // werkomheen
 	}
 
@@ -77,7 +79,7 @@ class FloatField extends InputField
 				$this->value = (float) $this->value;
 			}
 		}
-		if ($this->empty_null and $this->value == '' and $this->value !== 0.) {
+		if ($this->empty_null && $this->value == '' && $this->value !== 0.) {
 			$this->value = null;
 		}
 		return $this->value;
@@ -98,9 +100,9 @@ class FloatField extends InputField
 			!preg_match('/^' . $this->pattern . '$/', (string) $this->getValue())
 		) {
 			$this->error = 'Voer maximaal ' . $this->precision . ' decimalen in';
-		} elseif ($this->max !== null and $this->value > $this->max) {
+		} elseif ($this->max !== null && $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} elseif ($this->min !== null and $this->value < $this->min) {
+		} elseif ($this->min !== null && $this->value < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
 		return $this->error === '';

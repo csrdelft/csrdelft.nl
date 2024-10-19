@@ -124,13 +124,13 @@ class AccessService
 	 */
 	public function getPermissionSuggestions()
 	{
-		$suggestions = [];
-		$suggestions[] = 'bestuur';
-		$suggestions[] = 'geslacht:m';
-		$suggestions[] = 'geslacht:v';
-		$suggestions[] = 'ouderejaars';
-		$suggestions[] = 'eerstejaars';
-		return $suggestions;
+		return [
+			'bestuur',
+			'geslacht:m',
+			'geslacht:v',
+			'ouderejaars',
+			'eerstejaars',
+		];
 	}
 
 	/**
@@ -188,13 +188,10 @@ class AccessService
 		// splits permissie in type, waarde en rol
 		$p = explode(':', $permission);
 		if (in_array($p[0], self::$prefix) && count($p) <= 3) {
-			if (isset($p[1]) && $p[1] == '') {
+			if (isset($p[1]) && $p[1] === '') {
 				return false;
 			}
-			if (isset($p[2]) && $p[2] == '') {
-				return false;
-			}
-			return true;
+			return !(isset($p[2]) && $p[2] === '');
 		}
 
 		return false;
@@ -208,6 +205,6 @@ class AccessService
 	 */
 	public function converteerPermissie($permissie)
 	{
-		return preg_replace('/P_/', 'ROLE_', $permissie);
+		return preg_replace('/P_/', 'ROLE_', (string) $permissie);
 	}
 }

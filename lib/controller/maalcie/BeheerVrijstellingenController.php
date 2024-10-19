@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\profiel\Profiel;
@@ -9,7 +10,6 @@ use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\view\maalcie\forms\VrijstellingForm;
 use CsrDelft\view\PlainView;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
@@ -73,11 +73,8 @@ class BeheerVrijstellingenController extends AbstractController
 	]
 	public function opslaan(Profiel $profiel = null)
 	{
-		if ($profiel) {
-			$view = $this->bewerk($profiel);
-		} else {
-			$view = $this->nieuw();
-		}
+		$view =
+			$profiel instanceof Profiel ? $this->bewerk($profiel) : $this->nieuw();
 		if ($view->validate()) {
 			$values = $view->getModel();
 			return $this->render(

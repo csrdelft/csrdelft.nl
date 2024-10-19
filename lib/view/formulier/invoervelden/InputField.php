@@ -45,6 +45,9 @@ use CsrDelft\view\Validator;
  */
 abstract class InputField implements FormElement, Validator
 {
+	public $step;
+	public $min;
+	public $max;
 	protected $wrapperClassName = 'row mb-3';
 	protected $labelClassName = 'col-3 col-form-label';
 	protected $fieldClassName = 'col-9';
@@ -80,11 +83,7 @@ abstract class InputField implements FormElement, Validator
 		protected $model = null
 	) {
 		$this->id = CryptoUtil::uniqid_safe('field_');
-		if ($this->isPosted()) {
-			$this->value = $this->getValue();
-		} else {
-			$this->value = $this->origvalue;
-		}
+		$this->value = $this->isPosted() ? $this->getValue() : $this->origvalue;
 		// add *Field classname to css_classes
 		$this->css_classes[] = ReflectionUtil::classNameZonderNamespace(
 			static::class
@@ -374,11 +373,7 @@ abstract class InputField implements FormElement, Validator
 			case 'name':
 				return 'name="' . $this->name . '"';
 			case 'type':
-				if ($this->hidden) {
-					$type = 'hidden';
-				} else {
-					$type = $this->type;
-				}
+				$type = $this->hidden ? 'hidden' : $this->type;
 				return 'type="' . $type . '"';
 			case 'readonly':
 				if ($this->readonly) {
@@ -535,7 +530,7 @@ document.getElementById('{$this->getId()}').addEventListener('keyup', function(e
 JS;
 		}
 
-		if (trim($js) == '') {
+		if (trim($js) === '') {
 			return '';
 		}
 

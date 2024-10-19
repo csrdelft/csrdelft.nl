@@ -74,8 +74,8 @@ class OneTimeTokensRepository extends AbstractRepository
 	{
 		$token = $this->find(['uid' => $uid, 'url' => $url]);
 		if ($token) {
-			return $token->verified and
-				LoginService::getUid() === $token->uid and
+			return $token->verified &&
+				LoginService::getUid() === $token->uid &&
 				strtotime($token->expire) > time();
 		}
 		return false;

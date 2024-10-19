@@ -10,7 +10,7 @@ use CsrDelft\tests\AbstractVoterTestCase;
 
 class GroepVoterAanmeldenTest extends AbstractVoterTestCase
 {
-	public function testActiviteitAanmelden_aanmeldLimiet()
+	public function testActiviteitAanmelden_aanmeldLimiet(): void
 	{
 		$activiteit = new Activiteit();
 		$activiteit->aanmeldLimiet = 2;
@@ -39,7 +39,7 @@ class GroepVoterAanmeldenTest extends AbstractVoterTestCase
 	/**
 	 * Mag niet aanmelden als aanmeldenVanaf in de toekomst is.
 	 */
-	public function testActiviteitAanmelden_aanmeldenVanaf()
+	public function testActiviteitAanmelden_aanmeldenVanaf(): void
 	{
 		$activiteit = new Activiteit();
 		$activiteit->aanmeldLimiet = 2;
@@ -56,7 +56,7 @@ class GroepVoterAanmeldenTest extends AbstractVoterTestCase
 	/**
 	 * Mag niet aanmelden als aanmeldenTot in het verleden is.
 	 */
-	public function testActiviteitAanmelden_aanmeldenTot()
+	public function testActiviteitAanmelden_aanmeldenTot(): void
 	{
 		$activiteit = new Activiteit();
 		$activiteit->aanmeldLimiet = 2;
@@ -73,7 +73,7 @@ class GroepVoterAanmeldenTest extends AbstractVoterTestCase
 	/**
 	 * Mag alleen aanmelden als je aanmeldRechten hebt.
 	 */
-	public function testActiviteitAanmelden_aanmeldRechten()
+	public function testActiviteitAanmelden_aanmeldRechten(): void
 	{
 		$activiteit = new Activiteit();
 		$activiteit->aanmeldLimiet = 2;
@@ -101,7 +101,7 @@ class GroepVoterAanmeldenTest extends AbstractVoterTestCase
 	/**
 	 * Mag niet aanmelden als al aangemeld.
 	 */
-	public function testActiviteitAanmelden_alAangemeld()
+	public function testActiviteitAanmelden_alAangemeld(): void
 	{
 		$activiteit = new Activiteit();
 		$activiteit->aanmeldLimiet = 3;

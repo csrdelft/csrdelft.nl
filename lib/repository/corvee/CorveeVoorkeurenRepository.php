@@ -54,24 +54,21 @@ class CorveeVoorkeurenRepository extends AbstractRepository
 			$lijst[$crid] = $voorkeur;
 		}
 		foreach ($repById as $crid => $repetitie) {
-			if ($repetitie->corveeFunctie->kwalificatie_benodigd) {
-				if (
-					!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie(
-						$uid,
-						$repetitie->corveeFunctie->functie_id
-					)
-				) {
-					continue;
-				}
+			if (
+				$repetitie->corveeFunctie->kwalificatie_benodigd &&
+				!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie(
+					$uid,
+					$repetitie->corveeFunctie->functie_id
+				)
+			) {
+				continue;
 			}
-			if (!array_key_exists($crid, $lijst)) {
-				// uitgeschakelde voorkeuren weergeven
-				if ($uitgeschakeld) {
-					$voorkeur = new CorveeVoorkeur();
-					$voorkeur->setCorveeRepetitie($repetitie);
-					$voorkeur->van_uid = $uid;
-					$lijst[$crid] = $voorkeur;
-				}
+			// uitgeschakelde voorkeuren weergeven
+			if (!array_key_exists($crid, $lijst) && $uitgeschakeld) {
+				$voorkeur = new CorveeVoorkeur();
+				$voorkeur->setCorveeRepetitie($repetitie);
+				$voorkeur->van_uid = $uid;
+				$lijst[$crid] = $voorkeur;
 			}
 		}
 		ksort($lijst);
@@ -141,15 +138,14 @@ DQL
 		if (!$repetitie->voorkeurbaar) {
 			throw new CsrGebruikerException('Niet voorkeurbaar');
 		}
-		if ($repetitie->corveeFunctie->kwalificatie_benodigd) {
-			if (
-				!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie(
-					$voorkeur->uid,
-					$repetitie->corveeFunctie->functie_id
-				)
-			) {
-				throw new CsrGebruikerException('Niet gekwalificeerd');
-			}
+		if (
+			$repetitie->corveeFunctie->kwalificatie_benodigd &&
+			!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie(
+				$voorkeur->uid,
+				$repetitie->corveeFunctie->functie_id
+			)
+		) {
+			throw new CsrGebruikerException('Niet gekwalificeerd');
 		}
 
 		$this->_em->persist($voorkeur);

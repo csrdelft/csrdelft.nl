@@ -5,9 +5,7 @@ namespace CsrDelft\controller\groepen;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
-use CsrDelft\common\Security\Voter\Entity\GroepLidVoter;
 use CsrDelft\common\Util\ArrayUtil;
-use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
@@ -23,7 +21,6 @@ use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\groepen\Woonoord;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\GroepLidRepository;
@@ -252,11 +249,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		}
 
 		$groepen = $this->repository->findBy(['familie' => $groep->familie]);
-		if ($groep instanceof HeeftSoort) {
-			$soort = $groep->getSoort();
-		} else {
-			$soort = null;
-		}
+		$soort = $groep instanceof HeeftSoort ? $groep->getSoort() : null;
 		// controleert rechten bekijken per groep
 		$body = new GroepenView(
 			$this->container->get('twig'),
@@ -477,7 +470,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			$this->isGranted(AbstractGroepVoter::AANMAKEN, $groep),
 			false
 		);
-		if ($request->getMethod() == 'GET') {
+		if ($request->getMethod() === 'GET') {
 			$table = new GroepenBeheerTable($this->repository);
 			$form->setDataTableId($table->getDataTableId());
 			return $this->render('default.html.twig', [
@@ -513,13 +506,9 @@ abstract class AbstractGroepenController extends AbstractController implements
 
 	public function beheren(Request $request, $soort = null)
 	{
-		if ($request->getMethod() == 'POST') {
+		if ($request->getMethod() === 'POST') {
 			$soortEnum = $this->repository->parseSoort($soort);
-			if ($soortEnum) {
-				$groepen = $this->repository->findBy(['soort' => $soortEnum]);
-			} else {
-				$groepen = $this->repository->findAll();
-			}
+			$groepen = $soortEnum ? $this->repository->findBy(['soort' => $soortEnum]) : $this->repository->findAll();
 			return $this->tableData($groepen);
 		} else {
 			$this->table = new GroepenBeheerTable($this->repository);
@@ -552,7 +541,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			$this->isGranted(AbstractGroepVoter::WIJZIGEN, $groep),
 			true
 		);
-		if ($request->getMethod() == 'GET') {
+		if ($request->getMethod() === 'GET') {
 			$this->beheren($request);
 			$this->table->filter = $groep->naam;
 			$form->setDataTableId($this->table->getDataTableId());
@@ -754,7 +743,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 	public function logboek(Request $request, $id)
 	{
 		// data request
-		if ($request->getMethod() == 'POST') {
+		if ($request->getMethod() === 'POST') {
 			$groep = $this->repository->get($id);
 			if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 				throw $this->createAccessDeniedException();
@@ -780,7 +769,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
-		if ($request->getMethod() == 'POST') {
+		if ($request->getMethod() === 'POST') {
 			return $this->tableData($groep->getLeden());
 		} else {
 			return new GroepLedenTable(

@@ -28,8 +28,10 @@ abstract class SafeJsonType extends Type
 		return $serializer->unserialize($value);
 	}
 
-	public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
-	{
+	public function convertToDatabaseValue(
+		$value,
+		AbstractPlatform $platform
+	): mixed {
 		$serializer = new SafeJsonSerializer($this->getAcceptedTypes());
 		return $serializer->serialize($value);
 	}

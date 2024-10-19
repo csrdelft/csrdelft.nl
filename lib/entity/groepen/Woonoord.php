@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\entity\groepen\enum\HuisStatus;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
@@ -15,11 +16,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * Een woonoord is waar C.S.R.-ers bij elkaar wonen.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\groepen\WoonoordenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: WoonoordenRepository::class)]
 class Woonoord extends Groep implements HeeftSoort, HeeftMoment
 {
 	use GroepMoment;

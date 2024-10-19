@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumPostsRepository;
+use ForumDraad;
 use CsrDelft\common\Util\HostUtil;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
@@ -14,11 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een forumpost zit in een ForumDraad.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\forum\ForumPostsRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: ForumPostsRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 #[ORM\Table('forum_posts')]
 #[ORM\Index(name: 'verwijderd', columns: ['verwijderd'])]
@@ -99,7 +97,7 @@ class ForumPost
 	/**
 	 * @var ForumDraad
 	 */
-	#[ORM\ManyToOne(targetEntity: \ForumDraad::class)]
+	#[ORM\ManyToOne(targetEntity: ForumDraad::class)]
 	#[ORM\JoinColumn(name: 'draad_id', referencedColumnName: 'draad_id')]
 	public $draad;
 
@@ -128,7 +126,7 @@ class ForumPost
 
 	public function getAantalGelezen()
 	{
-		if (!isset($this->aantal_gelezen)) {
+		if ($this->aantal_gelezen === null) {
 			$this->aantal_gelezen = 0;
 			foreach ($this->draad->lezers as $gelezen) {
 				if (

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\StreeplijstRepository;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 
@@ -10,9 +11,7 @@ use DateTime;
  *
  * @author J. de Jong
  */
-#[
-	ORM\Entity(repositoryClass: \CsrDelft\repository\StreeplijstRepository::class)
-]
+#[ORM\Entity(repositoryClass: StreeplijstRepository::class)]
 #[ORM\Table('streeplijsten')]
 class Streeplijst
 {

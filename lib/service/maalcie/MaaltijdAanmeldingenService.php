@@ -11,7 +11,6 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
-use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
 use DateTime;
 use DateTimeInterface;
@@ -226,7 +225,7 @@ class MaaltijdAanmeldingenService
 				$maaltijdenFiltered[] = $maaltijd;
 			}
 		}
-		if (empty($maaltijdenFiltered)) {
+		if ($maaltijdenFiltered === []) {
 			return 0;
 		}
 		$aantal = 0;

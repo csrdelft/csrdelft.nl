@@ -2,11 +2,7 @@
 
 namespace CsrDelft\entity;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\CsrException;
-use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\repository\MenuItemRepository;
-use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;

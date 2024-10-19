@@ -2,6 +2,7 @@
 
 namespace CsrDelft\common\Security;
 
+use DateTime;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
@@ -30,7 +31,7 @@ class PersistentTokenProvider implements TokenProviderInterface
 		return $token;
 	}
 
-	public function deleteTokenBySeries(string $series)
+	public function deleteTokenBySeries(string $series): void
 	{
 		$token = $this->loadTokenBySeries($series);
 		if ($token) {
@@ -42,8 +43,8 @@ class PersistentTokenProvider implements TokenProviderInterface
 	public function updateToken(
 		string $series,
 		string $tokenValue,
-		\DateTime $lastUsed
-	) {
+		DateTime $lastUsed
+	): void {
 		$token = $this->loadTokenBySeries($series);
 		$token->token = $tokenValue;
 		$token->last_used = $lastUsed;
@@ -51,29 +52,21 @@ class PersistentTokenProvider implements TokenProviderInterface
 		$this->entityManager->flush();
 	}
 
-	public function createNewToken(PersistentTokenInterface $token)
+	public function createNewToken(PersistentTokenInterface $token): void
 	{
 		$persistentToken = new RememberLogin();
 		$persistentToken->token = $token->getTokenValue();
 		$persistentToken->series = $token->getSeries();
 		$persistentToken->last_used = $token->getLastUsed();
 		$persistentToken->remember_since = date_create_immutable();
-		$persistentToken->uid = $token->getUsername();
+		$persistentToken->uid = $token->getUserIdentifier();
 		$persistentToken->profiel = $this->profielRepository->find(
-			$token->getUsername()
+			$token->getUserIdentifier()
 		);
 
-		if (isset($_SERVER['HTTP_USER_AGENT'])) {
-			$persistentToken->device_name = $_SERVER['HTTP_USER_AGENT'];
-		} else {
-			$persistentToken->device_name = '';
-		}
+		$persistentToken->device_name = $_SERVER['HTTP_USER_AGENT'] ?? '';
 
-		if (isset($_SERVER['REMOTE_ADDR'])) {
-			$persistentToken->ip = $_SERVER['REMOTE_ADDR'];
-		} else {
-			$persistentToken->ip = '';
-		}
+		$persistentToken->ip = $_SERVER['REMOTE_ADDR'] ?? '';
 
 		$persistentToken->lock_ip = false;
 

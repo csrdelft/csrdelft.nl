@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbMaaltijd;
 
@@ -20,7 +21,7 @@ class NodeMaaltijd implements Node
 	public function getData(BbNode $node)
 	{
 		if (!($node instanceof BbMaaltijd)) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		return [

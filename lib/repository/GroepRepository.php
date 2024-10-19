@@ -2,6 +2,9 @@
 
 namespace CsrDelft\repository;
 
+use CsrDelft\entity\groepen\Verticale;
+use InvalidArgumentException;
+use DateTimeImmutable;
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\common\Util\ReflectionUtil;
@@ -22,7 +25,7 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use ReflectionClass;
 use ReflectionProperty;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 
@@ -337,12 +340,7 @@ abstract class GroepRepository extends AbstractRepository
 			->innerJoin('g.leden', 'l')
 			->innerJoin('l.profiel', 'p')
 			// v.letter is niet onderdeel van de pk van Verticale, dus een association is hier niet mogelijk
-			->innerJoin(
-				\CsrDelft\entity\groepen\Verticale::class,
-				'v',
-				Join::WITH,
-				'v.letter = p.verticale'
-			)
+			->innerJoin(Verticale::class, 'v', Join::WITH, 'v.letter = p.verticale')
 			->groupBy('p.verticale')
 			->getQuery()
 			->getArrayResult();
@@ -386,7 +384,7 @@ abstract class GroepRepository extends AbstractRepository
 	{
 		foreach ($status as $item) {
 			if (!GroepStatus::isValidValue($item)) {
-				throw new \InvalidArgumentException(
+				throw new InvalidArgumentException(
 					$item . ' is geen geldige groepstatus'
 				);
 			}
@@ -426,8 +424,8 @@ abstract class GroepRepository extends AbstractRepository
 	 * @return Groep[]
 	 */
 	public function getGroepenVoorAgenda(
-		\DateTimeImmutable $van,
-		\DateTimeImmutable $tot
+		DateTimeImmutable $van,
+		DateTimeImmutable $tot
 	) {
 		return $this->createQueryBuilder('a')
 			->where('a.inAgenda = true')

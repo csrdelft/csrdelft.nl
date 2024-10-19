@@ -297,10 +297,10 @@ SQL;
 		$nativeQuery->setParameter('van', $from);
 		$nativeQuery->setParameter('tot', $until);
 
-		return self::formatWeekinvoer($nativeQuery->getResult());
+		return $this->formatWeekinvoer($nativeQuery->getResult());
 	}
 
-	private static function formatWeekinvoer($result)
+	private function formatWeekinvoer($result)
 	{
 		$weekinvoeren = new stdClass();
 		// Standaard volgorde categorieën
@@ -452,11 +452,9 @@ SQL;
 		if (!$groeperen) {
 			foreach ($result as $key => $value) {
 				$civiSaldo = $this->getSaldo($value['uid']);
-				if ($civiSaldo) {
-					$result[$key]['civisaldo'] = $civiSaldo->getLink();
-				} else {
-					$result[$key]['civisaldo'] = $value['uid'];
-				}
+				$result[$key]['civisaldo'] = $civiSaldo
+					? $civiSaldo->getLink()
+					: $value['uid'];
 			}
 		}
 		return $result;

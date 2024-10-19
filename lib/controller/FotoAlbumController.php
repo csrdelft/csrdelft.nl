@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
@@ -28,7 +29,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * FotoAlbumController.class.php
@@ -100,7 +100,7 @@ class FotoAlbumController extends AbstractController
 		$this->denyAccessUnlessGranted(FotoAlbumVoter::TOEVOEGEN, $album);
 
 		$formulier = new FotoAlbumToevoegenForm($album);
-		if ($request->getMethod() == 'POST' && $formulier->validate()) {
+		if ($request->getMethod() === 'POST' && $formulier->validate()) {
 			$subalbum = $formulier->findByName('subalbum')->getValue();
 			$album->path = PathUtil::join_paths($album->path, $subalbum);
 			$album->subdir = PathUtil::join_paths($album->subdir, $subalbum);
@@ -139,7 +139,7 @@ class FotoAlbumController extends AbstractController
 			$formulier = new FotosDropzone($album);
 			$uploader = $formulier->getPostedUploader();
 		}
-		if ($request->getMethod() == 'POST') {
+		if ($request->getMethod() === 'POST') {
 			if ($formulier->validate()) {
 				try {
 					if ($poster) {
@@ -174,10 +174,8 @@ class FotoAlbumController extends AbstractController
 				} catch (CsrGebruikerException $e) {
 					return new JsonResponse(['error' => $e->getMessage()], 500);
 				}
-			} else {
-				if (!$poster && $uploader !== null) {
-					return new JsonResponse(['error' => $uploader->getError()], 500);
-				}
+			} elseif (!$poster && $uploader !== null) {
+				return new JsonResponse(['error' => $uploader->getError()], 500);
 			}
 		}
 		return $this->render('default.html.twig', ['content' => $formulier]);
@@ -466,7 +464,7 @@ class FotoAlbumController extends AbstractController
 			throw $this->createAccessDeniedException();
 		}
 		$formulier = new FotoTagToevoegenForm($foto);
-		if ($request->getMethod() == 'POST' && $formulier->validate()) {
+		if ($request->getMethod() === 'POST' && $formulier->validate()) {
 			$uid = $formulier->findByName('uid')->getValue();
 			$x = $formulier->findByName('x')->getValue();
 			$y = $formulier->findByName('y')->getValue();

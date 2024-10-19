@@ -2,22 +2,20 @@
 
 namespace CsrDelft\controller\api;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\GroepLidRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
-use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\maalcie\MaaltijdenService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ApiAgendaController extends AbstractController
 {
@@ -79,7 +77,8 @@ class ApiAgendaController extends AbstractController
 					ActiviteitSoort::Extern(),
 					ActiviteitSoort::OWee(),
 					ActiviteitSoort::IFES(),
-				]) or $this->isGranted(AbstractGroepVoter::BEKIJKEN, $activiteit)
+				]) ||
+				$this->isGranted(AbstractGroepVoter::BEKIJKEN, $activiteit)
 			) {
 				$activiteitenFiltered[] = $activiteit;
 			}

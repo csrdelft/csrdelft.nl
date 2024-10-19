@@ -27,7 +27,7 @@ class EmailField extends TextField
 		// check dns record
 		else {
 			$parts = explode('@', (string) $this->value, 2);
-			if (!checkdnsrr($parts[1], 'A') and !checkdnsrr($parts[1], 'MX')) {
+			if (!checkdnsrr($parts[1], 'A') && !checkdnsrr($parts[1], 'MX')) {
 				$this->error = 'E-mailadres bestaat niet';
 			}
 		}

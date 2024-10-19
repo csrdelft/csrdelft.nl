@@ -13,7 +13,6 @@ use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepTab;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\FormElement;
@@ -123,7 +122,7 @@ class GroepView implements FormElement, ToResponse
 		}
 		$html .= '<h3>' . $this->getTitel();
 		if (
-			property_exists($this->groep, 'locatie') and !empty($this->groep->locatie)
+			property_exists($this->groep, 'locatie') && !empty($this->groep->locatie)
 		) {
 			$html .=
 				' &nbsp; <a target="_blank" href="https://maps.google.nl/maps?q=' .

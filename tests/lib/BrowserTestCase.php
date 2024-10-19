@@ -2,6 +2,7 @@
 
 namespace CsrDelft\tests;
 
+use Symfony\Component\Panther\Client;
 use CsrDelft\DataFixtures\AccountFixtures;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Exception\TimeoutException;
@@ -14,7 +15,7 @@ use Symfony\Component\Panther\PantherTestCase;
 class BrowserTestCase extends PantherTestCase
 {
 	/**
-	 * @var \Symfony\Component\Panther\Client
+	 * @var Client
 	 */
 	protected $client;
 
@@ -120,9 +121,7 @@ class BrowserTestCase extends PantherTestCase
 	 */
 	protected function clickLink($linkText): Crawler
 	{
-		$webDriverElement = $this->client->getCrawler()->selectLink(
-			$linkText
-		);
+		$webDriverElement = $this->client->getCrawler()->selectLink($linkText);
 		$webDriverElement->getLocationOnScreenOnceScrolledIntoView();
 
 		return $this->client->click($webDriverElement->link());

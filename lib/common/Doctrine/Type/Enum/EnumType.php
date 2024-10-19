@@ -12,8 +12,10 @@ abstract class EnumType extends Type
 
 	abstract public function getEnumClass();
 
-	public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
-	{
+	public function getSQLDeclaration(
+		array $column,
+		AbstractPlatform $platform
+	): string {
 		$values = array_map(
 			fn($val) => "'" . $val . "'",
 			$this->getEnumClass()::getEnumValues()
@@ -36,8 +38,10 @@ abstract class EnumType extends Type
 		return $enumClass::from($value);
 	}
 
-	public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
-	{
+	public function convertToDatabaseValue(
+		$value,
+		AbstractPlatform $platform
+	): mixed {
 		$enumClass = $this->getEnumClass();
 		if ($value instanceof $enumClass) {
 			return $value->getValue();

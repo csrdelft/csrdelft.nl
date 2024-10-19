@@ -4,9 +4,7 @@ namespace CsrDelft\repository\peilingen;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\Util\FlashUtil;
 use CsrDelft\entity\peilingen\Peiling;
-use CsrDelft\entity\peilingen\PeilingStem;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\ORMException;
@@ -99,10 +97,10 @@ class PeilingenRepository extends AbstractRepository
 		if ($entity == null) {
 			throw new CsrGebruikerException('Peiling is leeg');
 		}
-		if (trim($entity->beschrijving) == '') {
+		if (trim($entity->beschrijving) === '') {
 			$errors .= 'Tekst mag niet leeg zijn.<br />';
 		}
-		if (trim($entity->titel) == '') {
+		if (trim($entity->titel) === '') {
 			$errors .= 'Titel mag niet leeg zijn.<br />';
 		}
 		if (count($entity->opties) == 0) {

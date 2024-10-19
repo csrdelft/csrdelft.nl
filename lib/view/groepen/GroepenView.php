@@ -8,7 +8,6 @@ use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
 use CsrDelft\entity\groepen\enum\GroepTab;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\repository\GroepRepository;
@@ -29,7 +28,7 @@ class GroepenView implements View
 	private $urlGetter;
 
 	/**
-	 * @param \CsrDelft\entity\groepen\Groep[] $groepen
+	 * @param Groep[] $groepen
 	 * @param Enum|null $soort
 	 * @param int $paginaGrootte
 	 * @param int $totaal

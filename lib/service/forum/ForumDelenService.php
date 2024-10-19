@@ -121,11 +121,9 @@ class ForumDelenService
 	public function getRecent($belangrijk = null)
 	{
 		$deel = new ForumDeel();
-		if ($belangrijk) {
-			$deel->titel = 'Belangrijk recent gewijzigd';
-		} else {
-			$deel->titel = 'Recent gewijzigd';
-		}
+		$deel->titel = $belangrijk
+			? 'Belangrijk recent gewijzigd'
+			: 'Recent gewijzigd';
 		$deel->setForumDraden($this->getRecenteForumDraden(null, $belangrijk));
 		return $deel;
 	}
@@ -189,13 +187,7 @@ class ForumDelenService
 
 		// laad posts bij draden
 		foreach ($gevonden_draden as $draad) {
-			if (property_exists($draad, 'score')) {
-				// gevonden op draad titel
-				$draad->score = (float) 50;
-			} else {
-				// gevonden op post tekst
-				$draad->score = (float) 0;
-			}
+			$draad->score = property_exists($draad, 'score') ? (float) 50 : (float) 0;
 			if (array_key_exists($draad->draad_id, $gevonden_posts)) {
 				// posts al gevonden
 				$draad->setForumPosts($gevonden_posts[$draad->draad_id]);
@@ -289,7 +281,7 @@ class ForumDelenService
 		$draden_ids = array_keys(
 			ArrayUtil::group_by_distinct('draad_id', $verbergen)
 		);
-		if (count($draden_ids) > 0) {
+		if ($draden_ids !== []) {
 			$qb->andWhere('d.draad_id not in (:draden_ids)');
 			$qb->setParameter('draden_ids', $draden_ids);
 		}
@@ -299,14 +291,11 @@ class ForumDelenService
 		if (is_bool($belangrijk)) {
 			if ($belangrijk) {
 				$qb->andWhere('d.belangrijk is not null');
-			} else {
-				if (
-					!isset($pagina) ||
-					InstellingUtil::lid_instelling('forum', 'belangrijkBijRecent') ===
-						'nee'
-				) {
-					$qb->andWhere('d.belangrijk is null');
-				}
+			} elseif (
+				!isset($pagina) ||
+				InstellingUtil::lid_instelling('forum', 'belangrijkBijRecent') === 'nee'
+			) {
+				$qb->andWhere('d.belangrijk is null');
 			}
 		}
 		$this->forumDradenRepository->filterLaatstGewijzigdExtern($qb);

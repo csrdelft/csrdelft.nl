@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbImg;
 
@@ -15,7 +16,7 @@ class NodeImage implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbImg) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		return [

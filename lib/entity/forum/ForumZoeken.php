@@ -19,11 +19,11 @@ class ForumZoeken
 	/**
 	 * @var string
 	 */
-	public $sorteer_volgorde;
+	public $sorteer_volgorde = 'desc';
 	/**
 	 * @var string
 	 */
-	public $sorteer_op;
+	public $sorteer_op = 'laatste_bericht';
 	/**
 	 * @var string
 	 */
@@ -35,20 +35,16 @@ class ForumZoeken
 	/**
 	 * @var array
 	 */
-	public $zoek_in;
+	public $zoek_in = ['titel', 'alle_berichten', 'eerste_bericht'];
 	/**
 	 * @var int
 	 */
-	public $limit;
+	public $limit = 20;
 
 	public function __construct()
 	{
-		$this->zoek_in = ['titel', 'alle_berichten', 'eerste_bericht'];
 		$this->van = (new DateTime())->modify('-1 year')->format('Y-m-d');
 		$this->tot = (new DateTime())->modify('+1 day')->format('Y-m-d');
-		$this->sorteer_op = 'laatste_bericht';
-		$this->sorteer_volgorde = 'desc';
-		$this->limit = 20;
 	}
 
 	public static function nieuw($zoekterm, $limit, $zoek_in)

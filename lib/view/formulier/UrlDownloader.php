@@ -19,8 +19,8 @@ class UrlDownloader
 	 */
 	public function isAvailable()
 	{
-		return $this->file_get_contents_available() or
-			function_exists('curl_init') or
+		return $this->file_get_contents_available() ||
+			function_exists('curl_init') ||
 			function_exists('fsockopen');
 	}
 
@@ -111,11 +111,9 @@ class UrlDownloader
 		} else {
 			stream_set_timeout($fp, $timeout);
 			if (isset($url_parts['path'])) {
-				if (isset($url_parts['query'])) {
-					$get = "$url_parts[path]?$url_parts[query]";
-				} else {
-					$get = $url_parts['path'];
-				}
+				$get = isset($url_parts['query'])
+					? "$url_parts[path]?$url_parts[query]"
+					: $url_parts['path'];
 			} else {
 				$get = '/';
 			}

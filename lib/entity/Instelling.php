@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\instellingen\InstellingenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,11 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Voor corvee-module:
  *  - Corveepunten per jaar
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\instellingen\InstellingenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: InstellingenRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 #[ORM\Table('instellingen')]
 #[

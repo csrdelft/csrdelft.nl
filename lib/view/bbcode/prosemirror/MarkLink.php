@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbUrl;
 
@@ -27,7 +28,7 @@ class MarkLink implements Mark
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbUrl) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		return [

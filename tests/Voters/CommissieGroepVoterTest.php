@@ -7,7 +7,7 @@ use CsrDelft\tests\AbstractVoterTestCase;
 
 class CommissieGroepVoterTest extends AbstractVoterTestCase
 {
-	public function testCommissieSoccie()
+	public function testCommissieSoccie(): void
 	{
 		$socciePraeses = $this->getToken(AccountFixtures::UID_SOCCIE_PRAESES);
 

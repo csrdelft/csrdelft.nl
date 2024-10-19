@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
@@ -12,7 +13,6 @@ use CsrDelft\view\lid\LedenlijstContent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -89,18 +89,16 @@ class LedenLijstController extends AbstractController
 			$response->setCharset('UTF-8');
 
 			return $response;
-		} else {
+		} elseif ($lidZoeker->count() == 1) {
 			//redirect to profile if only one result.
-			if ($lidZoeker->count() == 1) {
-				$leden = $lidZoeker->getLeden();
-				$profiel = $leden[0];
-				return $this->redirectToRoute('csrdelft_profiel_profiel', [
-					'uid' => $profiel->uid,
-				]);
-			}
+			$leden = $lidZoeker->getLeden();
+			$profiel = $leden[0];
+			return $this->redirectToRoute('csrdelft_profiel_profiel', [
+				'uid' => $profiel->uid,
+			]);
 		}
 
-		if ($message != '') {
+		if ($message !== '') {
 			$this->addFlash(FlashType::INFO, $message);
 		}
 

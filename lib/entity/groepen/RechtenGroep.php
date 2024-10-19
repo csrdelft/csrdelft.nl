@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\RechtenGroepenRepository;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,11 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een groep beperkt voor rechten.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\groepen\RechtenGroepenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: RechtenGroepenRepository::class)]
 class RechtenGroep extends Groep implements HeeftAanmeldRechten
 {
 	use GroepAanmeldRechten;

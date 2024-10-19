@@ -26,7 +26,7 @@ class FileNameField extends TextField
 		if (!parent::validate()) {
 			return false;
 		}
-		if ($this->value !== '' and !PathUtil::valid_filename($this->value)) {
+		if ($this->value !== '' && !PathUtil::valid_filename($this->value)) {
 			$this->error = 'Ongeldige bestandsnaam';
 		}
 		return $this->error === '';

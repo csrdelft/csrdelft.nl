@@ -7,7 +7,7 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use DateInterval;
 use DateTime;
 use Exception;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class SaldoGrafiekService
 {
@@ -61,7 +61,7 @@ class SaldoGrafiekService
 			DateTime::RFC2822,
 			strtotime($timespan - 1 . ' days 23 hours ago')
 		);
-		array_push($data, ['t' => $time, 'y' => $row['y']]);
+		$data[] = ['t' => $time, 'y' => $row['y']];
 
 		return [
 			'labels' => [$time, date(DateTime::RFC2822)],

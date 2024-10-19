@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\fotoalbum;
 
+use CsrDelft\events\FotoAlbumListener;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\HostUtil;
 use CsrDelft\common\Util\PathUtil;
@@ -17,12 +18,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\fotoalbum\FotoAlbumRepository::class
-	)
-]
-#[ORM\EntityListeners([\CsrDelft\events\FotoAlbumListener::class])]
+#[ORM\Entity(repositoryClass: FotoAlbumRepository::class)]
+#[ORM\EntityListeners([FotoAlbumListener::class])]
 #[ORM\Table('fotoalbums')]
 class FotoAlbum extends Map
 {
@@ -57,7 +54,7 @@ class FotoAlbum extends Map
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(name: 'owner', referencedColumnName: 'uid')]
 	public $owner_profiel;
 
@@ -137,12 +134,12 @@ class FotoAlbum extends Map
 	 */
 	public function getFotos($incompleet = false)
 	{
-		if (!isset($this->fotos)) {
+		if ($this->fotos === null) {
 			$this->fotos = [];
 			$this->fotos_incompleet = [];
 
 			$scan = scandir($this->path, SCANDIR_SORT_ASCENDING);
-			if (empty($scan)) {
+			if ($scan === [] || $scan === false) {
 				return [];
 			}
 			foreach ($scan as $entry) {
@@ -171,7 +168,7 @@ class FotoAlbum extends Map
 		}
 		arsort($order);
 		$result = [];
-		foreach ($order as $i => $mtime) {
+		foreach (array_keys($order) as $i) {
 			$result[] = $this->fotos[$i];
 		}
 		$this->fotos = $result;
@@ -179,11 +176,11 @@ class FotoAlbum extends Map
 
 	public function getSubAlbums($recursive = false)
 	{
-		if (!isset($this->subalbums)) {
+		if ($this->subalbums === null) {
 			$this->subalbums = [];
 
 			$scan = scandir($this->path, SCANDIR_SORT_DESCENDING);
-			if (empty($scan)) {
+			if ($scan === [] || $scan === false) {
 				return false;
 			}
 			foreach ($scan as $entry) {
@@ -212,12 +209,11 @@ class FotoAlbum extends Map
 	 */
 	public function getCoverUrls()
 	{
-		$fotos = [];
-		$fotos[] = $this->getCoverUrl();
-		$fotos[] = $this->getRandomCover();
-		$fotos[] = $this->getRandomCover();
-
-		return $fotos;
+		return [
+			$this->getCoverUrl(),
+			$this->getRandomCover(),
+			$this->getRandomCover(),
+		];
 	}
 
 	public function getRandomCover()

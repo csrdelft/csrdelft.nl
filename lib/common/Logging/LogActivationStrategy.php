@@ -31,11 +31,6 @@ class LogActivationStrategy implements ActivationStrategyInterface
 		if ($exception instanceof HttpException) {
 			return $exception->getStatusCode() == 500;
 		}
-
-		if ($exception instanceof AccessDeniedException) {
-			return false;
-		}
-
-		return true;
+		return !$exception instanceof AccessDeniedException;
 	}
 }

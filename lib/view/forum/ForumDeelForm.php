@@ -38,7 +38,9 @@ class ForumDeelForm implements FormulierTypeInterface
 		$options = []
 	) {
 		$aanmaken = $options['aanmaken'];
-		$builder->setTitel('Deelforum ' . $aanmaken ? 'aanmaken' : 'beheren');
+		$builder->setTitel(
+			'Deelforum ' . $aanmaken !== '' ? 'aanmaken' : 'beheren'
+		);
 		$builder->addCssClass('ReloadPage PreventUnchanged');
 
 		$fields = [];

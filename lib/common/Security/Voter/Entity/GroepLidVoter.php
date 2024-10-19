@@ -21,7 +21,7 @@ class GroepLidVoter extends Voter
 	public function supportsType(string $subjectType): bool
 	{
 		// Ook subclasses van Groep
-		return $subjectType == GroepLid::class;
+		return $subjectType === GroepLid::class;
 	}
 
 	/**

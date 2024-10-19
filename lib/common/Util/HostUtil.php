@@ -20,7 +20,7 @@ final class HostUtil
 
 	public static function isCLI()
 	{
-		return PHP_SAPI == 'cli' && $_SERVER['APP_ENV'] != 'test';
+		return PHP_SAPI === 'cli' && $_SERVER['APP_ENV'] != 'test';
 	}
 
 	public static function isCI()

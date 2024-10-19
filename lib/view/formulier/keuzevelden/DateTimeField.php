@@ -27,16 +27,8 @@ class DateTimeField extends TextField
 		$minyear = null
 	) {
 		parent::__construct($name, $value, $description);
-		if (is_int($maxyear)) {
-			$this->max_jaar = $maxyear;
-		} else {
-			$this->max_jaar = (int) date('Y') + 10;
-		}
-		if (is_int($minyear)) {
-			$this->min_jaar = $minyear;
-		} else {
-			$this->min_jaar = (int) date('Y') - 10;
-		}
+		$this->max_jaar = is_int($maxyear) ? $maxyear : (int) date('Y') + 10;
+		$this->min_jaar = is_int($minyear) ? $minyear : (int) date('Y') - 10;
 		$jaar = (int) date('Y', strtotime((string) $value));
 		if ($jaar > $this->max_jaar) {
 			$this->max_jaar = $jaar;

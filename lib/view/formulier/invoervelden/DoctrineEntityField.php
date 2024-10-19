@@ -169,11 +169,6 @@ class DoctrineEntityField extends TextField
 		) {
 			return false;
 		}
-
-		if (null === filter_input(INPUT_POST, $this->name, FILTER_DEFAULT)) {
-			return false;
-		}
-
-		return true;
+		return null !== filter_input(INPUT_POST, $this->name, FILTER_DEFAULT);
 	}
 }

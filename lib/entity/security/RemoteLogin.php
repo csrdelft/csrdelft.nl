@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\repository\security\RemoteLoginRepository;
+use DateTimeImmutable;
 use CsrDelft\entity\security\enum\RemoteLoginStatus;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -11,11 +13,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Class RemoteLogin
  * @package CsrDelft\entity\security
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\security\RemoteLoginRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: RemoteLoginRepository::class)]
 class RemoteLogin
 {
 	/**
@@ -26,7 +24,7 @@ class RemoteLogin
 	#[ORM\Id]
 	public $id;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 */
 	#[Serializer\Groups('json')]
 	#[ORM\Column(type: 'datetime')]
@@ -46,7 +44,7 @@ class RemoteLogin
 	/**
 	 * @var Account|null
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\security\Account::class)]
+	#[ORM\ManyToOne(targetEntity: Account::class)]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $account;
 }

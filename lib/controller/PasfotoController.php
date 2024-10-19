@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\profiel\Profiel;
@@ -9,7 +10,6 @@ use CsrDelft\model\entity\Afbeelding;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use const P_LEDEN_MOD;
 
 class PasfotoController extends AbstractController

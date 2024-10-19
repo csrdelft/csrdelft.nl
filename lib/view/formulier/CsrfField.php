@@ -47,7 +47,7 @@ class CsrfField implements View, FormElement
 
 	public function getHtml()
 	{
-		if ($this->token === null) {
+		if (!$this->token instanceof CsrfToken) {
 			return '';
 		}
 

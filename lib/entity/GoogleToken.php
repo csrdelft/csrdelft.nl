@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\GoogleTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,9 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-#[
-	ORM\Entity(repositoryClass: \CsrDelft\repository\GoogleTokenRepository::class)
-]
+#[ORM\Entity(repositoryClass: GoogleTokenRepository::class)]
 class GoogleToken
 {
 	/**

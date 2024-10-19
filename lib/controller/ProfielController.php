@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
@@ -58,7 +59,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
 
@@ -156,7 +156,7 @@ class ProfielController extends AbstractController
 		MaaltijdAbonnementenService $maaltijdAbonnementenService,
 		Profiel $profiel = null
 	): Response {
-		if (!$profiel) {
+		if (!$profiel instanceof Profiel) {
 			$profiel = $this->getProfiel();
 		}
 		$fotos = [];
@@ -255,7 +255,7 @@ class ProfielController extends AbstractController
 		// Controleer invoer
 		$lidstatus = 'S_' . strtoupper((string) $status);
 		if (
-			!preg_match('/^[0-9]{4}$/', (string) $lidjaar) ||
+			!preg_match('/^\d{4}$/', (string) $lidjaar) ||
 			!in_array($lidstatus, LidStatus::getEnumValues())
 		) {
 			throw $this->createAccessDeniedException();

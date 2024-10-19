@@ -10,7 +10,7 @@ use CsrDelft\tests\AbstractVoterTestCase;
 
 class GroepVoterAfmeldenTest extends AbstractVoterTestCase
 {
-	public function testAfmelden()
+	public function testAfmelden(): void
 	{
 		$activiteit = new Activiteit();
 		$activiteit->setAanmeldenTot(date_create_immutable('+3 days'));
@@ -24,7 +24,7 @@ class GroepVoterAfmeldenTest extends AbstractVoterTestCase
 		$this->assertToegang($token, AbstractGroepVoter::AFMELDEN, $activiteit);
 	}
 
-	public function testAfmelden_nietAangemeld()
+	public function testAfmelden_nietAangemeld(): void
 	{
 		$activiteit = new Activiteit();
 		$token = $this->getToken(AccountFixtures::UID_LID_MAN);
@@ -32,7 +32,7 @@ class GroepVoterAfmeldenTest extends AbstractVoterTestCase
 		$this->assertGeenToegang($token, AbstractGroepVoter::AFMELDEN, $activiteit);
 	}
 
-	public function testAfmelden_afmeldenTot()
+	public function testAfmelden_afmeldenTot(): void
 	{
 		$activiteit = new Activiteit();
 		$activiteit->setAanmeldenTot(date_create_immutable('+3 days'));
@@ -52,7 +52,7 @@ class GroepVoterAfmeldenTest extends AbstractVoterTestCase
 		$this->assertToegang($token, AbstractGroepVoter::AFMELDEN, $activiteit);
 	}
 
-	public function testAfmelden_aanmeldRechten()
+	public function testAfmelden_aanmeldRechten(): void
 	{
 		$activiteit = new Activiteit();
 		$activiteit->setAanmeldenTot(date_create_immutable('+3 days'));

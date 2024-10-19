@@ -87,7 +87,7 @@ class DateTimeTwigExtension extends AbstractExtension
 	public function twig_rfc2822(DateTimeInterface $date)
 	{
 		$date = $date->getTimestamp();
-		if (strlen($date) == strlen((int) $date)) {
+		if (strlen($date) === strlen((int) $date)) {
 			return date('r', $date);
 		} else {
 			return date('r', strtotime($date));

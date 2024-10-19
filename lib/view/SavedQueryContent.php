@@ -15,7 +15,7 @@ class SavedQueryContent implements View
 		/**
 		 * Saved query
 		 */
-		private ?\CsrDelft\entity\SavedQueryResult $sq = null
+		private ?SavedQueryResult $sq = null
 	) {
 	}
 
@@ -69,7 +69,7 @@ class SavedQueryContent implements View
 				$contents .
 				'</a>';
 		} elseif (
-			str_starts_with((string) $name, 'groep_naam') and
+			str_starts_with((string) $name, 'groep_naam') &&
 			$contents != ''
 		) {
 			return ''; //FIXME: OldGroep::ids2links($contents, '<br />');

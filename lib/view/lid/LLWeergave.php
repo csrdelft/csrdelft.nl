@@ -2,10 +2,11 @@
 
 namespace CsrDelft\view\lid;
 
+use Stringable;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\LidZoekerService;
 
-abstract class LLWeergave implements \Stringable
+abstract class LLWeergave implements Stringable
 {
 	protected $leden;
 	public $velden;

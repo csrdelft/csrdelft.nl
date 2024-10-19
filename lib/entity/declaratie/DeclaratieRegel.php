@@ -181,7 +181,7 @@ class DeclaratieRegel
 			$toFill[] = 'het btw-percentage';
 		}
 
-		if (!empty($toFill)) {
+		if ($toFill !== []) {
 			$combined =
 				implode(', ', array_slice($toFill, 0, count($toFill) - 1)) .
 				(count($toFill) > 1 ? ' en ' : '') .

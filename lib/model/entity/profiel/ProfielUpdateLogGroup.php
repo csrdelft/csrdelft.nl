@@ -17,7 +17,7 @@ use CsrDelft\repository\ProfielRepository;
 class ProfielUpdateLogGroup extends ProfielLogGroup
 {
 	/**
-	 * @param \CsrDelft\model\entity\profiel\AbstractProfielLogEntry[] $entries
+	 * @param AbstractProfielLogEntry[] $entries
 	 */
 	public function __construct(
 		$editor,
@@ -61,7 +61,8 @@ class ProfielUpdateLogGroup extends ProfielLogGroup
 	public function censureerVeld($naam): bool
 	{
 		$data_verwijderd = false;
-		for ($i = 0; $i < sizeof($this->entries); $i++) {
+		$counter = count($this->entries);
+		for ($i = 0; $i < $counter; $i++) {
 			$gecensureerd = $this->entries[$i]->censureerVeld($naam);
 			$data_verwijderd |= $gecensureerd !== $this->entries[$i];
 			$this->entries[$i] = $gecensureerd;

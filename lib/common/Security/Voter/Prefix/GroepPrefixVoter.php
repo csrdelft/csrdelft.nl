@@ -2,6 +2,7 @@
 
 namespace CsrDelft\common\Security\Voter\Prefix;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Bestuur;
@@ -67,7 +68,7 @@ class GroepPrefixVoter extends PrefixVoter
 	): bool {
 		$user = $token->getUser();
 
-		if (!$user) {
+		if (!$user instanceof UserInterface) {
 			return false;
 		}
 

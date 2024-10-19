@@ -67,7 +67,7 @@ class FotoTagAlbum extends FotoAlbum
 	 */
 	public function getFotos($incompleet = false)
 	{
-		if (!isset($this->fotos)) {
+		if ($this->fotos === null) {
 			// find tagged fotos
 			$container = ContainerFacade::getContainer();
 			$fotoTagsRepository = $container->get(FotoTagsRepository::class);

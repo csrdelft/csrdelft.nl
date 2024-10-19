@@ -17,7 +17,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -39,7 +39,7 @@ class ProfielRepository extends AbstractRepository
 
 	public static function changelog(array $diff, $uid)
 	{
-		if (empty($diff)) {
+		if ($diff === []) {
 			return null;
 		}
 		$changes = [];
@@ -183,7 +183,7 @@ class ProfielRepository extends AbstractRepository
 	{
 		$success = true;
 
-		if ($ldap === null) {
+		if (!$ldap instanceof LDAP) {
 			$ldap = new LDAP();
 			$persistent = false;
 		} else {
@@ -192,8 +192,8 @@ class ProfielRepository extends AbstractRepository
 
 		// Alleen leden, gastleden, novieten en kringels staan in LDAP (en Knorrie öO~ en Gerrit Uitslag)
 		if (
-			preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL|CIE)$/', $profiel->status) or
-			$profiel->uid == '9808' or
+			preg_match('/^S_(LID|GASTLID|NOVIET|KRINGEL|CIE)$/', $profiel->status) ||
+			$profiel->uid == '9808' ||
 			$profiel->uid == '0431'
 		) {
 			// LDAP entry in elkaar zetten
@@ -201,11 +201,9 @@ class ProfielRepository extends AbstractRepository
 			$entry['uid'] = $profiel->uid;
 			$entry['givenname'] = $profiel->voornaam;
 			$entry['sn'] = $profiel->achternaam;
-			if (str_starts_with($entry['uid'], 'x2')) {
-				$entry['cn'] = $entry['sn'];
-			} else {
-				$entry['cn'] = $profiel->getNaam();
-			}
+			$entry['cn'] = str_starts_with($entry['uid'], 'x2')
+				? $entry['sn']
+				: $profiel->getNaam();
 			$entry['mail'] = $profiel->getPrimaryEmail();
 			$entry['homephone'] = $profiel->telefoon;
 			$entry['mobile'] = $profiel->mobiel;
@@ -226,30 +224,23 @@ class ProfielRepository extends AbstractRepository
 			if ($profiel->account) {
 				$entry['userPassword'] = $profiel->account->pass_hash;
 			}
-
 			$woonoord = $profiel->getWoonoord();
 			if ($woonoord) {
 				$entry['ou'] = $woonoord->naam;
 			}
-
 			# lege velden er uit gooien
 			foreach ($entry as $i => $e) {
 				if ($e == '') {
 					unset($entry[$i]);
 				}
 			}
-
 			// Bestaat deze uid al in LDAP? dan wijzigen, anders aanmaken
-			if ($ldap->isLid($entry['uid'])) {
-				$success = $ldap->modifyLid($entry['uid'], $entry);
-			} else {
-				$success = $ldap->addLid($entry['uid'], $entry);
-			}
-		} else {
+			$success = $ldap->isLid($entry['uid'])
+				? $ldap->modifyLid($entry['uid'], $entry)
+				: $ldap->addLid($entry['uid'], $entry);
+		} elseif ($ldap->isLid($profiel->uid)) {
 			// Als het een andere status is even kijken of de uid in LDAP voorkomt, zo ja wissen
-			if ($ldap->isLid($profiel->uid)) {
-				$success = $ldap->removeLid($profiel->uid);
-			}
+			$success = $ldap->removeLid($profiel->uid);
 		}
 
 		if (!$persistent) {

@@ -117,11 +117,9 @@ class LedenlijstContent implements View
 				'" class="btn float-end" title="Huidige selectie exporteren naar Google Contacten" onclick="return confirm(\'Weet u zeker dat u deze ' .
 				$this->lidzoeker->count() .
 				' leden wilt importeren in uw Google Contacten?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google Contacten" /></a>';
-			if (str_contains($requestUri, '?')) {
-				$url = $requestUri . '&exportVcf=true';
-			} else {
-				$url = $requestUri . '?exportVcf=true';
-			}
+			$url = str_contains($requestUri, '?')
+				? $requestUri . '&exportVcf=true'
+				: $requestUri . '?exportVcf=true';
 			$html .=
 				'<a href="' .
 				htmlspecialchars($url) .

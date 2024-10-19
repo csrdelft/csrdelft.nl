@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\fiscaat;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\fiscaat\CiviCategorieRepository;
@@ -12,7 +13,6 @@ use DateTimeImmutable;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class BestellingZoeker extends AbstractController
 {
@@ -67,7 +67,7 @@ class BestellingZoeker extends AbstractController
 		$categorieen = [];
 		$producten = [];
 
-		foreach ($commissies as $key => $commissie) {
+		foreach (array_keys($commissies) as $key) {
 			if ($request->query->get('commissie') == $key) {
 				$selectedCommissie = $key;
 			}

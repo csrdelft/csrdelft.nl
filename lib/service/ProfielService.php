@@ -6,7 +6,7 @@ use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -43,7 +43,7 @@ class ProfielService
 			str_replace(' ', '', $zoekterm)
 		);
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
-		if ($zoekveld == 'naam' && !preg_match('/^\d{2}$/', $zoekterm)) {
+		if ($zoekveld === 'naam' && !preg_match('/^\d{2}$/', $zoekterm)) {
 			if (preg_match('/ /', trim($zoekterm))) {
 				$zoekdelen = explode(' ', $zoekterm);
 				$iZoekdelen = count($zoekdelen);
@@ -96,7 +96,7 @@ class ProfielService
 				)
 				->orWhere('CONCAT_WS(\' \', p.voornaam, p.achternaam) LIKE :naam')
 				->setParameter('naam', SqlUtil::sql_contains($zoekterm));
-		} elseif ($zoekveld == 'adres') {
+		} elseif ($zoekveld === 'adres') {
 			$queryBuilder
 				->where(
 					$expr
@@ -113,20 +113,18 @@ class ProfielService
 					'containsZonderSpatiesZoekterm',
 					$containsZonderSpatiesZoekterm
 				);
+		} elseif (
+			preg_match('/^\d{2}$/', $zoekterm) &&
+			($zoekveld === 'uid' || $zoekveld === 'naam')
+		) {
+			//zoeken op lichtingen...
+			$queryBuilder
+				->where('p.uid LIKE :uid')
+				->setParameter('uid', $zoekterm . '__');
 		} else {
-			if (
-				preg_match('/^\d{2}$/', $zoekterm) &&
-				($zoekveld == 'uid' || $zoekveld == 'naam')
-			) {
-				//zoeken op lichtingen...
-				$queryBuilder
-					->where('p.uid LIKE :uid')
-					->setParameter('uid', $zoekterm . '__');
-			} else {
-				$queryBuilder
-					->where("p.{$zoekveld} LIKE :containsZoekterm")
-					->setParameter('containsZoekterm', SqlUtil::sql_contains($zoekterm));
-			}
+			$queryBuilder
+				->where("p.{$zoekveld} LIKE :containsZoekterm")
+				->setParameter('containsZoekterm', SqlUtil::sql_contains($zoekterm));
 		}
 
 		if ($zoekstatus == 'alleleden') {
@@ -146,7 +144,7 @@ class ProfielService
 			->setParameter('zoekstatus', $statussen);
 
 		// als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
-		if ($verticale != 'alle') {
+		if ($verticale !== 'alle') {
 			$queryBuilder
 				->andWhere('p.verticale = :verticale')
 				->setParameter('verticale', $verticale);

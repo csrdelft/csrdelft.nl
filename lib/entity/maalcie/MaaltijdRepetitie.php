@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
+use MaaltijdAbonnement;
 use CsrDelft\common\Eisen;
 use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\view\formulier\DisplayEntity;
@@ -29,11 +31,7 @@ use Monolog\DateTimeImmutable;
  *
  * @see MaaltijdAbonnement
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: MaaltijdRepetitiesRepository::class)]
 #[ORM\Table('mlt_repetities')]
 class MaaltijdRepetitie implements DisplayEntity
 {
@@ -52,7 +50,7 @@ class MaaltijdRepetitie implements DisplayEntity
 	/**
 	 * @var CiviProduct
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\fiscaat\CiviProduct::class)]
+	#[ORM\ManyToOne(targetEntity: CiviProduct::class)]
 	public $product;
 	/**
 	 * 0: Sunday
@@ -101,7 +99,7 @@ class MaaltijdRepetitie implements DisplayEntity
 	 */
 	#[
 		ORM\OneToMany(
-			targetEntity: \MaaltijdAbonnement::class,
+			targetEntity: MaaltijdAbonnement::class,
 			mappedBy: 'maaltijd_repetitie'
 		)
 	]

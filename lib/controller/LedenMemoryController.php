@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\InstellingUtil;
@@ -21,7 +22,6 @@ use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use const P_LEDEN_MOD;
 
 class LedenMemoryController extends AbstractController
@@ -152,9 +152,9 @@ class LedenMemoryController extends AbstractController
 	{
 		$parts = explode('@', (string) $groepUuid);
 		if (isset($parts[0], $parts[1])) {
-			if ($parts[1] == 'verticale.csrdelft.nl') {
+			if ($parts[1] === 'verticale.csrdelft.nl') {
 				$groep = $this->verticalenRepository->retrieveByUUID($groepUuid);
-			} elseif ($parts[1] == 'lichting.csrdelft.nl') {
+			} elseif ($parts[1] === 'lichting.csrdelft.nl') {
 				$groep = $this->lichtingenRepository->get($parts[0]);
 			}
 		}

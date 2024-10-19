@@ -15,7 +15,7 @@ class DataTableKnop implements JsonSerializable
 	protected $multiplicity;
 	protected $tableId;
 	protected $id;
-	protected $buttons;
+	protected $buttons = [];
 
 	public function __construct(
 		Multiplicity $multiplicity,
@@ -26,7 +26,6 @@ class DataTableKnop implements JsonSerializable
 		protected $extend = 'default'
 	) {
 		$this->multiplicity = $multiplicity;
-		$this->buttons = [];
 	}
 
 	public function jsonSerialize(): array

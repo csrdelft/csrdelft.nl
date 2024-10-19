@@ -21,7 +21,9 @@ class SaldiSomForm extends InlineForm
 	) {
 		$field = new DateTimeField(
 			'moment',
-			$date ? $date->format('Y-m-d H:i:s') : date('Y-m-d H:i:s'),
+			$date instanceof DateTime
+				? $date->format('Y-m-d H:i:s')
+				: date('Y-m-d H:i:s'),
 			'Saldi som op',
 			(int) date('Y')
 		);

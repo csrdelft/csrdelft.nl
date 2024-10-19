@@ -119,7 +119,7 @@ class Groep implements DataTableEntry, DisplayEntity
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[
 		ORM\JoinColumn(
 			name: 'maker_uid',
@@ -225,7 +225,7 @@ class Groep implements DataTableEntry, DisplayEntity
 
 	public function getOpmerkingSuggesties()
 	{
-		if (isset($this->keuzelijst)) {
+		if ($this->keuzelijst !== null) {
 			$suggesties = [];
 		} elseif ($this instanceof Commissie || $this instanceof Bestuur) {
 			$suggesties = CommissieFunctie::getEnumValues();
@@ -268,18 +268,14 @@ class Groep implements DataTableEntry, DisplayEntity
 		foreach ($keuzes as $keuze) {
 			foreach ($this->keuzelijst2 as $optie) {
 				// TODO: vaststellen waarom deze niet als object uit doctrine komt
-				if (is_array($optie)) {
-					$optieNaam = $optie['naam'];
-				} else {
-					$optieNaam = $optie->naam;
-				}
+				$optieNaam = is_array($optie) ? $optie['naam'] : $optie->naam;
 				if ($optieNaam == $keuze->naam && !in_array($keuze, $correct)) {
 					$correct[] = $keuze;
 				}
 			}
 		}
 
-		return count($keuzes) == count($correct);
+		return count($keuzes) === count($correct);
 	}
 
 	/**

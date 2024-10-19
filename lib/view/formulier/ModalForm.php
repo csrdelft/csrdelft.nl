@@ -45,7 +45,7 @@ HTML;
 		$html .= <<<HTML
 			<div class="modal-body">
 HTML;
-		if (isset($this->error)) {
+		if ($this->error !== null) {
 			$html .= '<span class="error">' . $this->error . '</span>';
 		}
 		//debugprint($this->getError()); //DEBUG

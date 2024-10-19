@@ -68,7 +68,7 @@ h.t. Fiscus.';
 		}
 		$leden = [];
 		if (is_array($this->teschoppen)) {
-			foreach ($this->teschoppen as $uid => $bericht) {
+			foreach (array_keys($this->teschoppen) as $uid) {
 				$leden[] = ProfielRepository::get($uid);
 			}
 		}

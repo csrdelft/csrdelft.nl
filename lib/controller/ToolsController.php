@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrGebruikerException;
@@ -28,7 +29,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Deze controller bevat een aantal beheertools die niet direct onder een andere controller geschaard kunnen worden.
@@ -152,7 +152,7 @@ class ToolsController extends AbstractController
 	#[Route(path: '/tools/timeout/{seconds}', methods: ['GET', 'POST'])]
 	public function timeout(Request $request, $seconds): PlainView
 	{
-		if ($request->getMethod() == 'POST') {
+		if ($request->getMethod() === 'POST') {
 			for ($i = 0; $i < $seconds; $i++) {
 				sleep(10);
 			}
@@ -263,7 +263,7 @@ class ToolsController extends AbstractController
 			}
 		}
 
-		if ($given == 'uid') {
+		if ($given === 'uid') {
 			if ($accountRepository->isValidUid($string)) {
 				return new PlainView(uid2naam($string));
 			} else {
@@ -272,7 +272,7 @@ class ToolsController extends AbstractController
 					return new PlainView(uid2naam($uid));
 				}
 			}
-		} elseif ($given == 'naam') {
+		} elseif ($given === 'naam') {
 			$namen = $profielService->zoekLeden(
 				$string,
 				'naam',

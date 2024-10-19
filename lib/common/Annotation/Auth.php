@@ -2,7 +2,7 @@
 
 namespace CsrDelft\common\Annotation;
 
-use CsrDelft\events\AccessControlEventListener;
+use BadMethodCallException;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -24,18 +24,16 @@ class Auth
 	public function __construct(array $data)
 	{
 		if (isset($data['value'])) {
-			if (is_array($data['value'])) {
-				$data['mag'] = implode(',', $data['value']);
-			} else {
-				$data['mag'] = $data['value'];
-			}
+			$data['mag'] = is_array($data['value'])
+				? implode(',', $data['value'])
+				: $data['value'];
 			unset($data['value']);
 		}
 
 		foreach ($data as $key => $value) {
 			$method = 'set' . str_replace('_', '', $key);
 			if (!method_exists($this, $method)) {
-				throw new \BadMethodCallException(
+				throw new BadMethodCallException(
 					sprintf(
 						'Unknown property "%s" on annotation "%s".',
 						$key,

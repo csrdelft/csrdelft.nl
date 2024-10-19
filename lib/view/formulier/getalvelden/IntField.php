@@ -30,10 +30,10 @@ class IntField extends InputField
 		$max = null
 	) {
 		parent::__construct($name, $value, $description, 11);
-		if (!is_int($this->value) and $this->value !== null) {
+		if (!is_int($this->value) && $this->value !== null) {
 			throw new CsrGebruikerException('value geen int');
 		}
-		if (!is_int($this->origvalue) and $this->origvalue !== null) {
+		if (!is_int($this->origvalue) && $this->origvalue !== null) {
 			throw new CsrGebruikerException('origvalue geen int');
 		}
 		if (is_int($min)) {
@@ -56,7 +56,7 @@ class IntField extends InputField
 				$this->value = (int) $this->value;
 			}
 		}
-		if ($this->empty_null and $this->value == '' and $this->value !== 0) {
+		if ($this->empty_null && $this->value == '' && $this->value !== 0) {
 			$this->value = null;
 		}
 		return $this->value;

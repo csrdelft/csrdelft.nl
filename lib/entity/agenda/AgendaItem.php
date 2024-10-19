@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\agenda;
 
+use CsrDelft\repository\agenda\AgendaRepository;
+use DateInterval;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
@@ -17,11 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * AgendaItems worden door de agenda getoont samen met andere Agendeerbare dingen.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\agenda\AgendaRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: AgendaRepository::class)]
 #[ORM\Table('agenda')]
 #[ORM\Index(name: 'begin_moment', columns: ['begin_moment'])]
 #[ORM\Index(name: 'eind_moment', columns: ['eind_moment'])]
@@ -88,7 +86,7 @@ class AgendaItem implements Agendeerbaar
 		if ($this->eind_moment && $this->eind_moment !== $this->begin_moment) {
 			return $this->eind_moment;
 		}
-		return $this->getBeginMoment()->add(new \DateInterval('PT30M'));
+		return $this->getBeginMoment()->add(new DateInterval('PT30M'));
 	}
 
 	public function getTitel()
@@ -131,13 +129,8 @@ class AgendaItem implements Agendeerbaar
 			return true;
 		}
 		$verticale = 'verticale:' . LoginService::getProfiel()->verticale;
-		if (
-			$this->rechten_bekijken === $verticale and
-			LoginService::getProfiel()->verticaleleider
-		) {
-			return true;
-		}
-		return false;
+		return $this->rechten_bekijken === $verticale &&
+			LoginService::getProfiel()->verticaleleider;
 	}
 
 	public function isTransparant()

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\common\Doctrine\Type\Serializer;
 
+use ReflectionException;
 use ReflectionClass;
 use Zumba\JsonSerializer\JsonSerializer;
 
@@ -34,7 +35,7 @@ class SafeJsonSerializer extends JsonSerializer
 	/**
 	 * @param object $value
 	 * @return array
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	protected function serializeObject($value): array
 	{

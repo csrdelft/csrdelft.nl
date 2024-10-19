@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\fiscaat;
 
+use DateTimeInterface;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
@@ -50,8 +51,8 @@ class CiviBestellingRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param \DateTimeInterface $van
-	 * @param \DateTimeInterface $tot
+	 * @param DateTimeInterface $van
+	 * @param DateTimeInterface $tot
 	 * @param array $cie
 	 * @return CiviBestelling[]
 	 */

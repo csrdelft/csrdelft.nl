@@ -2,6 +2,7 @@
 
 namespace CsrDelft\events;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -31,7 +32,7 @@ readonly final class UserResolveListener
 			return;
 		}
 
-		if (null === $user) {
+		if (!$user instanceof UserInterface) {
 			return;
 		}
 

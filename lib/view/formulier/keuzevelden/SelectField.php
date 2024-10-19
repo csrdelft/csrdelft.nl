@@ -41,7 +41,7 @@ class SelectField extends InputField
 	public function getValue()
 	{
 		$this->value = parent::getValue();
-		if ($this->empty_null and $this->value == '') {
+		if ($this->empty_null && $this->value == '') {
 			return null;
 		}
 		return $this->value;
@@ -60,13 +60,11 @@ class SelectField extends InputField
 			) {
 				$this->error = 'Onbekende optie gekozen';
 			}
-		} else {
-			if (
-				($this->required || $this->getValue() !== null) &&
-				!array_key_exists($this->value, $this->options)
-			) {
-				$this->error = 'Onbekende optie gekozen';
-			}
+		} elseif (
+			($this->required || $this->getValue() !== null) &&
+			!array_key_exists($this->value, $this->options)
+		) {
+			$this->error = 'Onbekende optie gekozen';
 		}
 		return $this->error === '';
 	}

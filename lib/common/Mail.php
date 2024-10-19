@@ -33,7 +33,7 @@ class Mail
 	 */
 	public function __construct(
 		array $to,
-		private string $onderwerp,
+		private readonly string $onderwerp,
 		private readonly string $bericht
 	) {
 		$this->addTo($to);
@@ -149,11 +149,7 @@ class Mail
 	{
 		$bccLijst = [];
 		foreach ($this->bcc as $email => $name) {
-			if (empty($name)) {
-				$bccLijst[] = $email;
-			} else {
-				$bccLijst[] = $name . ' <' . $email . '>';
-			}
+			$bccLijst[] = empty($name) ? $email : $name . ' <' . $email . '>';
 		}
 		return implode(', ', $bccLijst);
 	}
@@ -162,11 +158,7 @@ class Mail
 	{
 		$toLijst = [];
 		foreach ($this->to as $email => $name) {
-			if (empty($name)) {
-				$toLijst[] = $email;
-			} else {
-				$toLijst[] = $name . ' <' . $email . '>';
-			}
+			$toLijst[] = empty($name) ? $email : $name . ' <' . $email . '>';
 		}
 		return implode(', ', $toLijst);
 	}
