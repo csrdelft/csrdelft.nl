@@ -1,0 +1,8 @@
+{
+    "$schema": "/phpactor.schema.json",
+    "language_server_psalm.enabled": false,
+    "language_server_phpstan.enabled": true,
+    "symfony.enabled": true,
+    "phpunit.enabled": true,
+    "psalm.enabled": true
+}
