@@ -4,13 +4,11 @@ namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
-use CsrDelft\common\Security\Voter\Entity\Groep\ActiviteitGroepVoter;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\groepen\Ketzer;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\GroepRepository;
 use Symfony\Bridge\Doctrine\ManagerRegistry;

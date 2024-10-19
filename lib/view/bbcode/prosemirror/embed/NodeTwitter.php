@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\prosemirror\embed;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use CsrDelft\view\bbcode\tag\embed\BbTwitter;
@@ -21,7 +22,7 @@ class NodeTwitter implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbTwitter) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		return [

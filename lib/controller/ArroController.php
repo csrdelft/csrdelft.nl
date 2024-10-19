@@ -2,10 +2,10 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ArroController extends AbstractController
 {

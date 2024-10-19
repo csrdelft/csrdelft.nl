@@ -2,13 +2,13 @@
 
 namespace CsrDelft\controller\api;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\LidZoekerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ApiLedenController
 {
@@ -77,9 +77,9 @@ class ApiLedenController
 				'sinds' => $profiel->studiejaar,
 			],
 			'lichting' => $profiel->lidjaar,
-			'verticale' => !$profiel->getVerticale()
-				? null
-				: $profiel->getVerticale()->naam,
+			'verticale' => $profiel->getVerticale()
+				? $profiel->getVerticale()->naam
+				: null,
 		];
 
 		return new JsonResponse(['data' => $lid]);

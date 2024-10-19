@@ -113,7 +113,8 @@ class MaaltijdBeoordelingDTO implements CustomDataTableEntry
 		$this->aanmeldLimiet = $maaltijd->getAanmeldLimiet();
 		$kokTaken = $maaltijd->getCorveeTaken(CorveeFunctie::KWALIKOK_FUNCTIE_ID);
 		$this->koks = '';
-		for ($i = 0; $i < count($kokTaken); $i++) {
+		$counter = count($kokTaken);
+		for ($i = 0; $i < $counter; $i++) {
 			$kokTaak = $kokTaken[$i];
 
 			if ($kokTaak->profiel) {

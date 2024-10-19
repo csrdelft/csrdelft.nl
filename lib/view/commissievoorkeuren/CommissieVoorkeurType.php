@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CommissieVoorkeurType extends AbstractType
 {
-	public function buildForm(FormBuilderInterface $builder, array $options)
+	public function buildForm(FormBuilderInterface $builder, array $options): void
 	{
 		$builder->add('voorkeur', ChoiceType::class, [
 			'choices' => ['nee' => 1, 'ja' => 2, 'mischien' => 3],

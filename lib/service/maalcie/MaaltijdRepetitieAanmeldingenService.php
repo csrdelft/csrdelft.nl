@@ -64,10 +64,11 @@ class MaaltijdRepetitieAanmeldingenService
 			->getResult();
 
 		foreach ($maaltijden as $maaltijd) {
-			if (!$maaltijd->getAanmelding($profiel)) {
-				if ($this->aanmeldenDoorAbonnement($maaltijd, $repetitie, $profiel)) {
-					$aantal++;
-				}
+			if (
+				!$maaltijd->getAanmelding($profiel) &&
+				$this->aanmeldenDoorAbonnement($maaltijd, $repetitie, $profiel)
+			) {
+				$aantal++;
 			}
 		}
 		return $aantal;

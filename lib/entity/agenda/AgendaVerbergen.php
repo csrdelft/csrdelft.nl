@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\agenda;
 
+use CsrDelft\repository\agenda\AgendaVerbergenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,11 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Items in de agenda kunnen worden verborgen per gebruiker.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\agenda\AgendaVerbergenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: AgendaVerbergenRepository::class)]
 #[ORM\Table('agenda_verbergen')]
 class AgendaVerbergen
 {

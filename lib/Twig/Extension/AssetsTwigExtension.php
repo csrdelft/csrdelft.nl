@@ -4,7 +4,7 @@ namespace CsrDelft\Twig\Extension;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\InstellingUtil;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

@@ -68,14 +68,14 @@ class UploadFileField extends InputField
 		} elseif ($this->value['error'] != UPLOAD_ERR_OK) {
 			$this->error = 'Upload-error: code ' . $this->value['error'];
 		} elseif (
-			!is_uploaded_file($this->value['tmp_name']) or
+			!is_uploaded_file($this->value['tmp_name']) ||
 			empty($this->model->filesize)
 		) {
 			$this->error =
 				'Bestand bestaat niet (meer): ' .
 				htmlspecialchars((string) $this->value['tmp_name']);
 		} elseif (
-			!empty($this->filterMime) and
+			!empty($this->filterMime) &&
 			!in_array($this->model->mimetype, $this->filterMime)
 		) {
 			$this->error =

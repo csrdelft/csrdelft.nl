@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\forum;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\forum\ForumDeel;
@@ -10,7 +11,6 @@ use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ForumMeldingController extends AbstractController
 {

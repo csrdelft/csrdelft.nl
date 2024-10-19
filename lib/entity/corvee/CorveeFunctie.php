@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\corvee;
 
+use CsrDelft\repository\corvee\CorveeFunctiesRepository;
+use CorveeKwalificatie;
 use CsrDelft\entity\ISelectEntity;
 use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,11 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Zie ook CorveeKwalificatie.class.php en CorveeTaak.class.php
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\corvee\CorveeFunctiesRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: CorveeFunctiesRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 #[ORM\Table('crv_functies')]
 class CorveeFunctie implements ISelectEntity, DisplayEntity
@@ -90,7 +88,7 @@ class CorveeFunctie implements ISelectEntity, DisplayEntity
 	 */
 	#[
 		ORM\OneToMany(
-			targetEntity: \CorveeKwalificatie::class,
+			targetEntity: CorveeKwalificatie::class,
 			mappedBy: 'corveeFunctie'
 		)
 	]
@@ -98,7 +96,7 @@ class CorveeFunctie implements ISelectEntity, DisplayEntity
 
 	public function hasKwalificaties()
 	{
-		return sizeof($this->kwalificaties) > 0;
+		return count($this->kwalificaties) > 0;
 	}
 
 	public function getValue()

@@ -23,7 +23,7 @@ class ErrorController extends AbstractController
 			$statusCode = $exception->getStatusCode();
 		}
 
-		if ($request->getMethod() == 'POST') {
+		if ($request->getMethod() === 'POST') {
 			return new Response($exception->getMessage(), $statusCode);
 		}
 

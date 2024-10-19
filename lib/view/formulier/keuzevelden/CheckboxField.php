@@ -42,7 +42,7 @@ class CheckboxField extends InputField
 		if (parent::isPosted()) {
 			return true;
 		}
-		return !empty($_POST);
+		return $_POST !== [];
 	}
 
 	/**
@@ -61,8 +61,8 @@ class CheckboxField extends InputField
 
 	public function validate()
 	{
-		if (!$this->value and $this->required) {
-			if ($this->leden_mod and LoginService::mag(P_LEDEN_MOD)) {
+		if (!$this->value && $this->required) {
+			if ($this->leden_mod && LoginService::mag(P_LEDEN_MOD)) {
 				// exception for leden mod
 			} else {
 				$this->error = 'Dit is een verplicht veld';

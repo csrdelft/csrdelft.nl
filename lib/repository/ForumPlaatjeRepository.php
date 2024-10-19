@@ -34,7 +34,7 @@ class ForumPlaatjeRepository extends AbstractRepository
 	 */
 	public function fromUploader(ImageField $uploader, $uid)
 	{
-		$plaatje = static::generate();
+		$plaatje = $this->generate();
 		$plaatje->maker = $uid;
 		$plaatje->maker_profiel = $this->profielRepository->find($uid);
 
@@ -46,7 +46,7 @@ class ForumPlaatjeRepository extends AbstractRepository
 		return $plaatje;
 	}
 
-	private static function generate()
+	private function generate()
 	{
 		$plaatje = new ForumPlaatje();
 		$plaatje->datum_toegevoegd = date_create_immutable();

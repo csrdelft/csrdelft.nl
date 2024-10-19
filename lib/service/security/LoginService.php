@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service\security;
 
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Security\JwtToken;
 use CsrDelft\common\Security\PrivateTokenToken;
@@ -82,7 +83,7 @@ class LoginService
 
 		$token = $this->security->getToken();
 
-		if (!$token) {
+		if (!$token instanceof TokenInterface) {
 			return self::UID_EXTERN;
 		}
 

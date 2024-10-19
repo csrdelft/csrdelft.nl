@@ -2,6 +2,7 @@
 
 namespace CsrDelft\common\Logging;
 
+use Symfony\Component\HttpFoundation\Request;
 use CsrDelft\service\security\LoginService;
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
@@ -20,8 +21,10 @@ class LogProcessor implements ProcessorInterface
 	{
 		$request = $this->requestStack->getCurrentRequest();
 
-		if ($request) {
-			$record->extra['uid'] = $this->security->getUser()?->getUserIdentifier() ?? LoginService::UID_EXTERN;
+		if ($request instanceof Request) {
+			$record->extra['uid'] =
+				$this->security->getUser()?->getUserIdentifier() ??
+				LoginService::UID_EXTERN;
 		}
 
 		return $record;

@@ -28,7 +28,7 @@ class MenuItemVoter extends Voter
 
 	public function supportsType(string $subjectType): bool
 	{
-		return $subjectType == MenuItem::class;
+		return $subjectType === MenuItem::class;
 	}
 
 	/**

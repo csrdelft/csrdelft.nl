@@ -59,7 +59,11 @@ class DeclaratieRepository extends AbstractRepository
 	{
 		$wachtrij = $declaratie->getCategorie()->getWachtrij();
 
-		if (!empty($wachtrij->getEmail())) {
+		if (
+			$wachtrij->getEmail() !== null &&
+			$wachtrij->getEmail() !== '' &&
+			$wachtrij->getEmail() !== '0'
+		) {
 			$bericht = $this->twig->render('declaratie/mail.html.twig', [
 				'declaratie' => $declaratie,
 			]);

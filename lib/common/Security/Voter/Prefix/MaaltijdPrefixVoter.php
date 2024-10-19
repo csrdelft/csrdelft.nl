@@ -23,7 +23,7 @@ class MaaltijdPrefixVoter extends PrefixVoter
 
 	protected function supportsPrefix($prefix)
 	{
-		return strtoupper((string) $prefix) == 'MAALTIJD';
+		return strtoupper((string) $prefix) === 'MAALTIJD';
 	}
 
 	protected function voteOnPrefix(

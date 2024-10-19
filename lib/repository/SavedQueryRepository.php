@@ -7,7 +7,6 @@ namespace CsrDelft\repository;
 
 use CsrDelft\entity\SavedQuery;
 use CsrDelft\entity\SavedQueryResult;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;

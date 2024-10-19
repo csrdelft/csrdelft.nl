@@ -21,7 +21,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use CsrDelft\service\MailService;
 use DateTime;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 
 /**
@@ -120,7 +120,7 @@ class LidStatusService
 		$aantal = $this->corveeTakenRepository->verwijderTakenVoorLid(
 			$profiel->uid
 		);
-		if (sizeof($taken) !== $aantal) {
+		if (count($taken) !== $aantal) {
 			FlashUtil::setFlashWithContainerFacade(
 				'Niet alle toekomstige corveetaken zijn verwijderd!',
 				-1
@@ -233,12 +233,12 @@ class LidStatusService
 		$mv = $profiel->geslacht->getValue() === Geslacht::Man ? 'hem' : 'haar';
 		$enkelvoud = "Het volgende boek is nog door {$mv} geleend";
 		$meervoud = "De volgende boeken zijn nog door {$mv} geleend";
-		if ($bkncsr['aantal']) {
+		if ($bkncsr['aantal'] !== 0) {
 			$bkncsr['kopje'] =
 				($bkncsr['aantal'] > 1 ? $meervoud : $enkelvoud) .
 				' van de C.S.R.-bibliotheek:';
 		}
-		if ($bknleden['aantal']) {
+		if ($bknleden['aantal'] !== 0) {
 			$bknleden['kopje'] =
 				($bknleden['aantal'] > 1 ? $meervoud : $enkelvoud) . ' van leden:';
 		}
@@ -299,7 +299,7 @@ class LidStatusService
 				}
 			}
 		}
-		if (empty($velden_verwijderd)) {
+		if ($velden_verwijderd === []) {
 			return [];
 		} else {
 			return [new ProfielLogVeldenVerwijderChange($velden_verwijderd)];

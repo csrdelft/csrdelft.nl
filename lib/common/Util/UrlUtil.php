@@ -48,14 +48,10 @@ final class UrlUtil
 			(UrlUtil::url_like($url) ||
 				UrlUtil::url_like(HostUtil::getCsrRoot() . $url))
 		) {
-			if (
-				str_starts_with($url, 'http://') ||
-				str_starts_with($url, 'https://')
-			) {
-				$extern = 'target="_blank" rel="noopener"';
-			} else {
-				$extern = '';
-			}
+			$extern =
+				str_starts_with($url, 'http://') || str_starts_with($url, 'https://')
+					? 'target="_blank" rel="noopener"'
+					: '';
 			$result =
 				'<a href="' .
 				$url .

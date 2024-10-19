@@ -2,7 +2,9 @@
 
 namespace CsrDelft\Component\DataTable;
 
-class DataTableView implements \Stringable
+use Stringable;
+
+class DataTableView implements Stringable
 {
 	public function __toString(): string
 	{

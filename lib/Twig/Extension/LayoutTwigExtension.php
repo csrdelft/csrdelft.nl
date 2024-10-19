@@ -59,7 +59,7 @@ class LayoutTwigExtension extends AbstractExtension
 		$defaultName = $name;
 		$locale = $this->requestStack->getCurrentRequest()->getLocale();
 		if (
-			$locale != $this->requestStack->getCurrentRequest()->getDefaultLocale()
+			$locale !== $this->requestStack->getCurrentRequest()->getDefaultLocale()
 		) {
 			$name = $name . '_' . $locale;
 		}

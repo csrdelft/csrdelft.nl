@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
@@ -13,7 +14,6 @@ use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
@@ -128,7 +128,7 @@ class BeheerAbonnementenController extends AbstractController
 			$repetitie
 		);
 		$matrix = $this->maaltijdAbonnementenService->getAbonnementenVanNovieten();
-		$novieten = sizeof($matrix);
+		$novieten = count($matrix);
 		$this->addFlash(
 			FlashType::SUCCESS,
 			$aantal .

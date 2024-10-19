@@ -2,6 +2,9 @@
 
 namespace CsrDelft\entity\corvee;
 
+use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CorveeRepetitie;
+use CorveeFunctie;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
@@ -34,11 +37,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Zie ook MaaltijdCorvee.class.php
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\corvee\CorveeTakenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: CorveeTakenRepository::class)]
 #[ORM\Table('crv_taken')]
 class CorveeTaak implements Agendeerbaar
 {
@@ -57,13 +56,13 @@ class CorveeTaak implements Agendeerbaar
 	/**
 	 * @var Profiel|null
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid', nullable: true)]
 	public $profiel;
 	/**
 	 * @var CorveeRepetitie|null
 	 */
-	#[ORM\ManyToOne(targetEntity: \CorveeRepetitie::class)]
+	#[ORM\ManyToOne(targetEntity: CorveeRepetitie::class)]
 	#[
 		ORM\JoinColumn(
 			name: 'crv_repetitie_id',
@@ -80,7 +79,7 @@ class CorveeTaak implements Agendeerbaar
 	/**
 	 * @var Maaltijd|null
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\maalcie\Maaltijd::class)]
+	#[ORM\ManyToOne(targetEntity: Maaltijd::class)]
 	#[
 		ORM\JoinColumn(
 			name: 'maaltijd_id',
@@ -133,7 +132,7 @@ class CorveeTaak implements Agendeerbaar
 	/**
 	 * @var CorveeFunctie
 	 */
-	#[ORM\ManyToOne(targetEntity: \CorveeFunctie::class)]
+	#[ORM\ManyToOne(targetEntity: CorveeFunctie::class)]
 	#[
 		ORM\JoinColumn(
 			name: 'functie_id',
@@ -254,10 +253,7 @@ class CorveeTaak implements Agendeerbaar
 				return true;
 			}
 		}
-		if ($moeten > $aantal) {
-			return true;
-		}
-		return false;
+		return $moeten > $aantal;
 	}
 
 	public function setWanneerGemaild($datumtijd)

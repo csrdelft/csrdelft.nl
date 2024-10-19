@@ -20,8 +20,15 @@ return RectorConfig::configure()
 	// uncomment to reach your current PHP version
 	->withPhpSets()
 	->withSets([
-		SymfonySetList::SYMFONY_54,
+		SymfonySetList::SYMFONY_64,
+		SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
 		DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
 		DoctrineSetList::DOCTRINE_ORM_29,
 	])
-	->withTypeCoverageLevel(0);
+	->withPreparedSets(codeQuality: true, twig: true)
+	->withImportNames(
+		importNames: true,
+		importDocBlockNames: true,
+		removeUnusedImports: true
+	)
+	->withTypeCoverageLevel(2);

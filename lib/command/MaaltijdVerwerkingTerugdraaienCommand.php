@@ -5,7 +5,6 @@ namespace CsrDelft\command;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\BedragUtil;
 use CsrDelft\common\Util\DateUtil;
-use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,8 +33,10 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command
 		parent::__construct();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
+	protected function execute(
+		InputInterface $input,
+		OutputInterface $output
+	): int {
 		$helper = $this->getHelper('question');
 
 		// Bepaal datum

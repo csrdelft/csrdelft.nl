@@ -2,9 +2,10 @@
 
 namespace CsrDelft\controller\api;
 
+use Symfony\Component\Routing\Attribute\Route;
+use LogicException;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\service\security\ApiAuthenticator;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ApiAuthController extends AbstractController
 {
@@ -14,7 +15,7 @@ class ApiAuthController extends AbstractController
 	#[Route(path: '/API/2.0/auth/authorize', methods: ['POST'])]
 	public function postAuthorize(): never
 	{
-		throw new \LogicException(
+		throw new LogicException(
 			'Deze request wordt opgevangen door ApiAuthenticator.'
 		);
 	}
@@ -25,7 +26,7 @@ class ApiAuthController extends AbstractController
 	#[Route(path: '/API/2.0/auth/token', methods: ['POST'])]
 	public function postToken(): never
 	{
-		throw new \LogicException(
+		throw new LogicException(
 			'Deze request wordt opgevangen door ApiAuthenticator.'
 		);
 	}

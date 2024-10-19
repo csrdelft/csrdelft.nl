@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\ForumPlaatjeRepository;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Afbeelding;
@@ -12,11 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class ForumPlaatje
  * @package CsrDelft\entity
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\ForumPlaatjeRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: ForumPlaatjeRepository::class)]
 #[ORM\Table('forumplaatjes')]
 #[ORM\Index(name: 'access_key', columns: ['access_key'])]
 class ForumPlaatje
@@ -46,7 +43,7 @@ class ForumPlaatje
 	/**
 	 * @var Profiel|null
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(name: 'maker', referencedColumnName: 'uid', nullable: true)]
 	public $maker_profiel;
 	/**

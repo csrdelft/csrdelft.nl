@@ -22,6 +22,7 @@ use CsrDelft\view\Icon;
  */
 class GroepenBeheerTable extends DataTable
 {
+	public $model;
 	private $naam;
 	private $pagina;
 

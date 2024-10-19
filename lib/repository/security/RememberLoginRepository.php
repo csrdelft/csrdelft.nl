@@ -34,16 +34,8 @@ class RememberLoginRepository extends AbstractRepository
 		$remember->uid = LoginService::getUid();
 		$remember->profiel = LoginService::getProfiel();
 		$remember->remember_since = date_create_immutable();
-		if (isset($_SERVER['HTTP_USER_AGENT'])) {
-			$remember->device_name = $_SERVER['HTTP_USER_AGENT'];
-		} else {
-			$remember->device_name = '';
-		}
-		if (isset($_SERVER['REMOTE_ADDR'])) {
-			$remember->ip = $_SERVER['REMOTE_ADDR'];
-		} else {
-			$remember->ip = '';
-		}
+		$remember->device_name = $_SERVER['HTTP_USER_AGENT'] ?? '';
+		$remember->ip = $_SERVER['REMOTE_ADDR'] ?? '';
 		$remember->lock_ip = false;
 		return $remember;
 	}

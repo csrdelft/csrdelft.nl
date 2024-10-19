@@ -51,7 +51,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 			return true;
 		}
 
-		if (null !== $this->tokenStorage->getToken()) {
+		if ($this->tokenStorage->getToken() instanceof TokenInterface) {
 			return false;
 		}
 
@@ -100,7 +100,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 
 		$jwt = substr((string) $authHeader, 7);
 
-		if (!$jwt) {
+		if ($jwt === '' || $jwt === '0') {
 			throw new AuthenticationException(400);
 		}
 
@@ -118,7 +118,9 @@ class ApiAuthenticator extends AbstractAuthenticator
 			);
 		}
 
-		return new SelfValidatingPassport(new UserBadge($user->getUserIdentifier()));
+		return new SelfValidatingPassport(
+			new UserBadge($user->getUserIdentifier())
+		);
 	}
 
 	private function authorizeRequest(Request $request)
@@ -221,7 +223,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 
 		if (
 			!$remember ||
-			$remember->getTokenValue() != hash('sha512', (string) $rand)
+			$remember->getTokenValue() !== hash('sha512', (string) $rand)
 		) {
 			throw new UnauthorizedHttpException('Unauthorized');
 		}

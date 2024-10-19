@@ -2,19 +2,14 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
-use CsrDelft\common\Util\FlashUtil;
+use Exception;
 use CsrDelft\common\Util\ReflectionUtil;
-use CsrDelft\entity\groepen\enum\HuisStatus;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
-use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\groepen\Kring;
-use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\FormFieldFactory;
@@ -42,7 +37,7 @@ class GroepForm extends ModalForm
 	 * @param $action
 	 * @param AccessAction $mode
 	 * @param false $nocancel
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function __construct(
 		Groep $groep,
@@ -136,7 +131,7 @@ class GroepForm extends ModalForm
 		$fields = $this->getFields();
 		if (
 			isset($fields['eindMoment']) &&
-				$fields['eindMoment']->getValue() !== null and
+			$fields['eindMoment']->getValue() !== null &&
 			strtotime((string) $fields['eindMoment']->getValue()) <
 				strtotime((string) $fields['beginMoment']->getValue())
 		) {
@@ -144,7 +139,7 @@ class GroepForm extends ModalForm
 		}
 		if ($groep instanceof Ketzer) {
 			if (
-				$fields['afmeldenTot']->getValue() !== null and
+				$fields['afmeldenTot']->getValue() !== null &&
 				strtotime((string) $fields['afmeldenTot']->getValue()) <
 					strtotime((string) $fields['aanmeldenVanaf']->getValue())
 			) {
@@ -152,7 +147,7 @@ class GroepForm extends ModalForm
 					'Afmeldperiode moet eindigen na begin aanmeldperiode';
 			}
 			if (
-				$fields['bewerkenTot']->getValue() !== null and
+				$fields['bewerkenTot']->getValue() !== null &&
 				strtotime((string) $fields['bewerkenTot']->getValue()) <
 					strtotime((string) $fields['aanmeldenVanaf']->getValue())
 			) {

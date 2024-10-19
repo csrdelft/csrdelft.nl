@@ -34,7 +34,8 @@ final class FlashUtil
 		$levels[2] = 'warning';
 		$msg = trim($msg);
 		if (
-			!empty($msg) &&
+			$msg !== '' &&
+			$msg !== '0' &&
 			($lvl === -1 || $lvl === 0 || $lvl === 1 || $lvl === 2)
 		) {
 			$flashBag->add($levels[$lvl], $msg);

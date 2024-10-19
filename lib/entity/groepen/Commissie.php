@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\CommissiesRepository;
 use CsrDelft\entity\groepen\enum\CommissieSoort;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
@@ -15,11 +16,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * Een commissie is een groep waarvan de groepsleden een specifieke functie (kunnen) hebben.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\groepen\CommissiesRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: CommissiesRepository::class)]
 class Commissie extends Groep implements HeeftSoort, HeeftMoment
 {
 	use GroepMoment;

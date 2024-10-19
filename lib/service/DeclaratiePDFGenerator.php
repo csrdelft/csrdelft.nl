@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service;
 
+use Exception;
 use Clegginabox\PDFMerger\PDFMerger;
 use CsrDelft\entity\declaratie\Declaratie;
 use CsrDelft\entity\declaratie\DeclaratieBon;
@@ -38,7 +39,7 @@ class DeclaratiePDFGenerator
 							$deg = 90;
 							break;
 					}
-					if ($deg) {
+					if ($deg !== 0) {
 						$img = imagerotate($img, $deg, 0);
 					}
 					// then rewrite the rotated image back to the disk as $filename
@@ -149,7 +150,7 @@ class DeclaratiePDFGenerator
 			}
 
 			return ['pdf', $merged];
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			//			$zipTmp = tempnam(sys_get_temp_dir(), "zip");
 			//			$zip = new ZipArchive();
 			//			$zip->open($zipTmp, ZipArchive::OVERWRITE);

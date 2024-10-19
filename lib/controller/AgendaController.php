@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
@@ -28,7 +29,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -87,7 +87,7 @@ class AgendaController extends AbstractController
 	/**
 	 * @return Response
 	 */
-	#[IsGranted("ROLE_LOGGED_IN")]
+	#[IsGranted('ROLE_LOGGED_IN')]
 	#[
 		Route(
 			path: '/agenda/ical/{private_auth_token}/csrdelft.ics',
@@ -163,11 +163,9 @@ class AgendaController extends AbstractController
 			$d = $begin->format('d');
 			$m = $begin->format('m');
 			$y = $begin->format('Y');
-			if ($item->getUrl()) {
-				$url = $item->getUrl();
-			} else {
-				$url = '/agenda/' . $y . '/' . $m . '#dag-' . $y . '-' . $m . '-' . $d;
-			}
+			$url =
+				$item->getUrl() ?:
+				'/agenda/' . $y . '/' . $m . '#dag-' . $y . '-' . $m . '-' . $d;
 			$result[] = [
 				'icon' => Icon::getTag('calendar'),
 				'url' => $url,

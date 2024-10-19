@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\forum;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\SqlUtil;
@@ -23,7 +24,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -157,7 +157,7 @@ class ForumController extends AbstractController
 			$result[] = $this->draadAutocompleteArray($draad);
 		}
 
-		if (empty($result)) {
+		if ($result === []) {
 			$result[] = [
 				'url' => '/forum/zoeken/' . urlencode($query),
 				'icon' => Icon::getTag('magnifier'),

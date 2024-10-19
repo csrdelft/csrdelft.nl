@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\fiscaat;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository;
@@ -10,7 +11,6 @@ use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

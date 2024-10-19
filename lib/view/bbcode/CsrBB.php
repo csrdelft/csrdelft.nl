@@ -282,11 +282,9 @@ class CsrBB extends Parser
 
 	protected function createTagInstance(string $tag, Parser $parser, $env)
 	{
-		if ($this->container->has($tag)) {
-			$tag = $this->container->get($tag);
-		} else {
-			$tag = new $tag();
-		}
+		$tag = $this->container->has($tag)
+			? $this->container->get($tag)
+			: new $tag();
 		$tag->setParser($parser);
 		$tag->setEnv($env);
 

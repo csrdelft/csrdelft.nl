@@ -9,6 +9,8 @@ use Twig\Environment;
 
 class MailService
 {
+	public $replyTo;
+	public $bcc;
 	public function __construct(
 		private readonly Environment $environment,
 		private readonly RequestStack $requestStack

@@ -16,7 +16,7 @@ class EerstejaarsVoter extends Voter
 
 	public function supportsAttribute(string $attribute): bool
 	{
-		return strtoupper($attribute) == 'EERSTEJAARS';
+		return strtoupper($attribute) === 'EERSTEJAARS';
 	}
 
 	protected function voteOnAttribute(
@@ -30,10 +30,7 @@ class EerstejaarsVoter extends Voter
 		if (!$user) {
 			return false;
 		}
-
-		if ($user->profiel->lidjaar === LichtingenRepository::getJongsteLidjaar()) {
-			return true;
-		}
-		return false;
+		return $user->profiel->lidjaar ===
+			LichtingenRepository::getJongsteLidjaar();
 	}
 }

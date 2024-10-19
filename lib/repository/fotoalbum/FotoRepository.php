@@ -122,7 +122,7 @@ class FotoRepository extends AbstractRepository
 		if ($foto->hasThumb()) {
 			$ret &= unlink($foto->getThumbPath());
 		}
-		if ($ret) {
+		if ($ret !== 0) {
 			$this->getEntityManager()->remove($foto);
 			$this->getEntityManager()->flush();
 			$this->fotoTagsRepository->verwijderFotoTags($foto);

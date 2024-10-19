@@ -38,6 +38,7 @@ use Google_Service_Exception;
  */
 class GoogleContactSync
 {
+	public $profielRepository;
 	private const DEFAULT_GROEPNAAM = 'C.S.R.-leden';
 	private const READ_MASK = 'userDefined';
 	private const UPDATE_MASK = 'names,nicknames,genders,birthdays,addresses,phoneNumbers,emailAddresses,urls,userDefined';
@@ -78,7 +79,7 @@ class GoogleContactSync
 		$this->groepNaam = trim(
 			InstellingUtil::lid_instelling('googleContacts', 'groepnaam')
 		);
-		if (empty($this->groepNaam)) {
+		if ($this->groepNaam === '' || $this->groepNaam === '0') {
 			$this->groepNaam = self::DEFAULT_GROEPNAAM;
 		}
 	}
@@ -192,7 +193,7 @@ class GoogleContactSync
 	 * @param Person $contact
 	 * @return string|null
 	 */
-	private static function getContactCsrUid(Person $contact): ?string
+	private function getContactCsrUid(Person $contact): ?string
 	{
 		$velden = $contact->getUserDefined();
 
@@ -213,7 +214,7 @@ class GoogleContactSync
 	{
 		$contacts = $this->getCurrentContacts();
 		foreach ($contacts as $contact) {
-			$csrUid = self::getContactCsrUid($contact);
+			$csrUid = $this->getContactCsrUid($contact);
 			if ($csrUid) {
 				$this->currentContactMap[$csrUid] = $contact->getResourceName();
 				$this->currentEtagMap[$csrUid] = $contact->getEtag();
@@ -248,7 +249,7 @@ class GoogleContactSync
 		$name = new Name();
 		$name->setGivenName(
 			trim(
-				!empty($profiel->voornaam) ? $profiel->voornaam : $profiel->voorletters
+				empty($profiel->voornaam) ? $profiel->voorletters : $profiel->voornaam
 			)
 		);
 		$name->setMiddleName(trim((string) $profiel->tussenvoegsel));
@@ -464,7 +465,7 @@ class GoogleContactSync
 			// Zet resourceNames in currentContactMap
 			foreach ($inserted->getCreatedPeople() as $created) {
 				if ($created->getHttpStatusCode() === 200) {
-					$uid = self::getContactCsrUid($created->getPerson());
+					$uid = $this->getContactCsrUid($created->getPerson());
 					if ($uid) {
 						$this->currentContactMap[$uid] = $created
 							->getPerson()
@@ -585,12 +586,12 @@ class GoogleContactSync
 			}
 
 			// Maak nieuwe contacten aan
-			if (!empty($toInsert)) {
+			if ($toInsert !== []) {
 				$this->createContacts($toInsert);
 			}
 
 			// Update bestaande contacten
-			if (!empty($toUpdate)) {
+			if ($toUpdate !== []) {
 				$this->updateContacts($toUpdate);
 			}
 

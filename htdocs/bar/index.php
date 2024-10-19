@@ -4,7 +4,7 @@ require_once __DIR__ . '/controller/Barsysteem.class.php';
 
 $barsysteem = new Barsysteem();
 
-function barCsrf() {
+function barCsrf(): void {
     global $barsysteem;
     echo "<input type='hidden' name=\"X-BARSYSTEEM-CSRF\" value=\"".htmlentities((string) $barsysteem->getCsrfToken())."\" />";
 }

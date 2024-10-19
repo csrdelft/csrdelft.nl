@@ -22,15 +22,15 @@ class BbTextType extends AbstractType
 		return TextareaType::class;
 	}
 
-	public function buildForm(FormBuilderInterface $builder, array $options)
+	public function buildForm(FormBuilderInterface $builder, array $options): void
 	{
 		$builder->addModelTransformer(
 			new CallbackTransformer(
-				fn($bbcode) => json_encode(
+				fn(mixed $bbcode): string => json_encode(
 					$this->bbToProsemirror->toProseMirror($bbcode),
 					JSON_HEX_QUOT
 				),
-				fn($data) => $this->prosemirrorToBb->convertToBb(
+				fn(mixed $data): mixed => $this->prosemirrorToBb->convertToBb(
 					json_decode((string) $data)
 				)
 			)

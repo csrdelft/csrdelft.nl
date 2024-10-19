@@ -45,7 +45,7 @@ class DeelnemerRepository extends ServiceEntityRepository
 		AanmeldActiviteit $activiteit,
 		Profiel $profiel
 	): bool {
-		return $this->getDeelnemer($activiteit, $profiel) !== null;
+		return $this->getDeelnemer($activiteit, $profiel) instanceof Deelnemer;
 	}
 
 	public function getAantalGasten(

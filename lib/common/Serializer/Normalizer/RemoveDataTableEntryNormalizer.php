@@ -6,7 +6,6 @@ use ArrayObject;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
@@ -50,6 +49,14 @@ class RemoveDataTableEntryNormalizer implements NormalizerInterface
 			'remove' => true,
 		];
 	}
+
+	public function getSupportedTypes(?string $format): array {
+		return [
+			'object' => false,
+			'*' => null
+		];
+	}
+
 
 	public function supportsNormalization(
 		$data,

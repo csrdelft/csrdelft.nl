@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\forum;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\FlashType;
 use CsrDelft\common\SimpleSpamFilter;
@@ -30,7 +31,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ForumDraadController extends AbstractController
 {
@@ -98,11 +98,7 @@ class ForumDraadController extends AbstractController
 		if (!$draad->magLezen()) {
 			throw $this->createAccessDeniedException();
 		}
-		if ($this->mag(P_LOGGED_IN)) {
-			$gelezen = $draad->getWanneerGelezen();
-		} else {
-			$gelezen = null;
-		}
+		$gelezen = $this->mag(P_LOGGED_IN) ? $draad->getWanneerGelezen() : null;
 		if ($pagina === null) {
 			$pagina = InstellingUtil::lid_instelling('forum', 'open_draad_op_pagina');
 		}
@@ -208,7 +204,7 @@ class ForumDraadController extends AbstractController
 			$value = trim(
 				filter_input(INPUT_POST, $property, FILTER_SANITIZE_STRING)
 			);
-			if (empty($value)) {
+			if ($value === '' || $value === '0') {
 				$value = null;
 			}
 		} else {
@@ -258,7 +254,7 @@ class ForumDraadController extends AbstractController
 	) {
 		// post in bestaand draadje?
 		$titel = null;
-		if ($draad !== null) {
+		if ($draad instanceof ForumDraad) {
 			// check draad in forum deel
 			if (
 				!$draad ||
@@ -373,7 +369,7 @@ class ForumDraadController extends AbstractController
 
 		// post in nieuw draadje?
 		if ($nieuw) {
-			if (empty($titel)) {
+			if ($titel === null || $titel === '' || $titel === '0') {
 				$this->addFlash(FlashType::ERROR, 'U moet een titel opgeven!');
 				return $redirect;
 			}

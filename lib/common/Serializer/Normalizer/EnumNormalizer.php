@@ -22,6 +22,13 @@ class EnumNormalizer implements NormalizerInterface
 		return $enum->getDescription();
 	}
 
+	public function getSupportedTypes(?string $format): array {
+		return [
+			'object' => false,
+			'*' => null
+		];
+	}
+
 	public function supportsNormalization(
 		$data,
 		string $format = null,

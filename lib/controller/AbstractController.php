@@ -42,7 +42,7 @@ class AbstractController extends BaseController
 			->getCurrentRequest()
 			->request->filter(DataTable::POST_SELECTION, [], FILTER_SANITIZE_STRING);
 
-		if (is_string($selection) && !empty($selection)) {
+		if (is_string($selection) && ($selection !== '' && $selection !== '0')) {
 			return [$selection];
 		}
 

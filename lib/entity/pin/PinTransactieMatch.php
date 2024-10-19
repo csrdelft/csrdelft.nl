@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\pin;
 
+use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\DateUtil;
@@ -22,11 +23,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 23/02/2018
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\pin\PinTransactieMatchRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: PinTransactieMatchRepository::class)]
 #[ORM\Table('pin_transactie_match')]
 class PinTransactieMatch implements DataTableEntry
 {
@@ -64,7 +61,7 @@ class PinTransactieMatch implements DataTableEntry
 	/**
 	 * @var CiviBestelling|null
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\fiscaat\CiviBestelling::class)]
+	#[ORM\ManyToOne(targetEntity: CiviBestelling::class)]
 	#[ORM\JoinColumn(nullable: true)]
 	public $bestelling;
 	/**

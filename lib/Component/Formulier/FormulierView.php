@@ -2,9 +2,10 @@
 
 namespace CsrDelft\Component\Formulier;
 
+use Stringable;
 use CsrDelft\common\CsrException;
 
-class FormulierView implements \Stringable
+class FormulierView implements Stringable
 {
 	public function __construct(private $view, private $titel)
 	{

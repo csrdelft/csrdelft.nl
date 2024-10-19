@@ -141,8 +141,8 @@ class EetplanFactory
 	 */
 	public function genereer($avond, $random = false)
 	{
-		assert(isset($this->novieten), 'Veld novieten is niet gezet');
-		assert(isset($this->huizen), 'Veld huizen is niet gezet');
+		assert($this->novieten !== null, 'Veld novieten is niet gezet');
+		assert($this->huizen !== null, 'Veld huizen is niet gezet');
 
 		$eetplan = [];
 
@@ -181,18 +181,16 @@ class EetplanFactory
 			$aantalHuizenVol = 0; # aantal huizen dat aan de max zit.
 			while (
 				isset($this->bezocht_sh[$noviet->uid][$huisId]) ||
-				count(
-					array_intersect(
-						$this->ahs[$avond][$huisId],
-						$this->bekenden[$noviet->uid]
-					)
-				) > 0 ||
+				array_intersect(
+					$this->ahs[$avond][$huisId],
+					$this->bekenden[$noviet->uid]
+				) !== [] ||
 				count($this->bezocht_ah[$avond][$huisId]) >= $max
 			) {
 				$huisIndex = ($huisIndex % $aantalHuizen) + 1;
 				$huisId = $this->huizen[$huisIndex]->id;
 
-				if ($huisIndex == $startih) {
+				if ($huisIndex === $startih) {
 					$max++;
 				}
 				if (!isset($this->ahs[$avond][$huisId])) {
@@ -234,11 +232,10 @@ class EetplanFactory
 			$eetplan[] = $nieuweetplan;
 
 			# huis ophogen
-			if ($random == 0) {
-				$huisIndex = ($huisIndex % $aantalHuizen) + 1;
-			} else {
-				$huisIndex = random_int(0, $aantalHuizen);
-			}
+			$huisIndex =
+				$random == 0
+					? ($huisIndex % $aantalHuizen) + 1
+					: random_int(0, $aantalHuizen);
 
 			$huisId = $this->huizen[$huisIndex]->id;
 		}

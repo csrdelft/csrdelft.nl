@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\courant;
 
+use CsrDelft\repository\CourantBerichtRepository;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,11 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class CourantBericht
  * @package CsrDelft\entity\courant
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\CourantBerichtRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: CourantBerichtRepository::class)]
 #[ORM\Table('courantbericht')]
 class CourantBericht
 {
@@ -53,7 +50,7 @@ class CourantBericht
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $schrijver;
 	/**

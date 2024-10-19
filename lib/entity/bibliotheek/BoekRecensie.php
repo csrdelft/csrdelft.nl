@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\bibliotheek;
 
+use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
+use Boek;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
@@ -10,11 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @package CsrDelft\entity\bibliotheek
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\bibliotheek\BoekRecensieRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: BoekRecensieRepository::class)]
 #[ORM\Table('biebbeschrijving')]
 class BoekRecensie
 {
@@ -38,7 +36,7 @@ class BoekRecensie
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(name: 'schrijver_uid', referencedColumnName: 'uid')]
 	public $schrijver;
 	/**
@@ -60,7 +58,7 @@ class BoekRecensie
 	/**
 	 * @var Boek
 	 */
-	#[ORM\ManyToOne(targetEntity: \Boek::class, inversedBy: 'recensies')]
+	#[ORM\ManyToOne(targetEntity: Boek::class, inversedBy: 'recensies')]
 	#[ORM\JoinColumn(name: 'boek_id', referencedColumnName: 'id')]
 	public $boek;
 

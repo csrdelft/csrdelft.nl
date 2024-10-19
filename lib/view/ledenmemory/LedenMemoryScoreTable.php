@@ -12,7 +12,8 @@ class LedenMemoryScoreTable extends DataTable
 	{
 		parent::__construct(
 			LedenMemoryScore::class,
-			'/leden/memoryscores' . ($groep ? '/' . $groep->getUUID() : null),
+			'/leden/memoryscores' .
+				($groep instanceof Groep ? '/' . $groep->getUUID() : null),
 			'Topscores Ledenmemory' . $titel,
 			'groep'
 		);

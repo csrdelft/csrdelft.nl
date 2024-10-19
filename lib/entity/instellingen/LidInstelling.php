@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\instellingen;
 
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\entity\profiel\Profiel;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,11 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een LidInstelling beschrijft een Instelling per Lid.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\instellingen\LidInstellingenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: LidInstellingenRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 #[ORM\Table('lidinstellingen')]
 #[
@@ -51,7 +48,7 @@ class LidInstelling
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid', nullable: false)]
 	public $profiel;
 }

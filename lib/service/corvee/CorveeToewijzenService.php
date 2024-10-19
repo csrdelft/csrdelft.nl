@@ -73,7 +73,7 @@ class CorveeToewijzenService
 					$corveePuntenOverzichten[$uid]->aantallen[$functie->functie_id];
 				$avg += $corveePuntenOverzichten[$uid]->aantal;
 			}
-			$avg /= sizeof($corveePuntenOverzichten);
+			$avg /= count($corveePuntenOverzichten);
 			foreach ($corveePuntenOverzichten as $uid => $punten) {
 				$corveePuntenOverzichten[$uid]->relatief =
 					$corveePuntenOverzichten[$uid]->aantal - (int) $avg;

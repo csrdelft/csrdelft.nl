@@ -7,7 +7,7 @@ use CsrDelft\tests\AbstractVoterTestCase;
 
 class GeslachtVoterTest extends AbstractVoterTestCase
 {
-	public function testGeslacht()
+	public function testGeslacht(): void
 	{
 		$man = $this->getToken(AccountFixtures::UID_LID_MAN);
 		$vrouw = $this->getToken(AccountFixtures::UID_LID_VROUW);

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
+use InvalidArgumentException;
 use CsrDelft\bb\internal\BbString;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbBb;
@@ -21,7 +22,7 @@ class NodeBb implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbBb) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 		$content = $node->getChildren();
 		$node->setChildren([]);

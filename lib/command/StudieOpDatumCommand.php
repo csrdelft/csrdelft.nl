@@ -28,8 +28,10 @@ class StudieOpDatumCommand extends Command
 		parent::__construct();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
+	protected function execute(
+		InputInterface $input,
+		OutputInterface $output
+	): int {
 		$helper = $this->getHelper('question');
 
 		// Bepaal datum
@@ -71,18 +73,19 @@ class StudieOpDatumCommand extends Command
 				) => $a->timestamp <=> $b->timestamp
 			);
 			foreach ($logs as $log) {
-				if (empty($watch)) {
+				if ($watch === []) {
 					break;
 				}
 				foreach ($log->entries as $entry) {
-					if ($entry instanceof ProfielLogValueChange) {
-						if (in_array($entry->field, $watch)) {
-							$value =
-								$log->timestamp < $datum ? $entry->newValue : $entry->oldValue;
-							$values[$entry->field] = $value;
-							if ($log->timestamp > $datum) {
-								$watch = array_diff($watch, [$entry->field]);
-							}
+					if (
+						$entry instanceof ProfielLogValueChange &&
+						in_array($entry->field, $watch)
+					) {
+						$value =
+							$log->timestamp < $datum ? $entry->newValue : $entry->oldValue;
+						$values[$entry->field] = $value;
+						if ($log->timestamp > $datum) {
+							$watch = array_diff($watch, [$entry->field]);
 						}
 					}
 				}

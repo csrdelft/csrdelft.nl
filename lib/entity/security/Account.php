@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,11 +17,7 @@ use Symfony\Component\Uid\Uuid;
  *
  * Login account.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\security\AccountRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: AccountRepository::class)]
 #[ORM\Table('accounts')]
 class Account implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -109,12 +106,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 	/**
 	 * @var Profiel
 	 */
-	#[
-		ORM\OneToOne(
-			targetEntity: \CsrDelft\entity\profiel\Profiel::class,
-			inversedBy: 'account'
-		)
-	]
+	#[ORM\OneToOne(targetEntity: Profiel::class, inversedBy: 'account')]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $profiel;
 
@@ -179,7 +171,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public $pass_plain;
 
-	public function eraseCredentials()
+	public function eraseCredentials(): void
 	{
 		$this->pass_plain = null;
 	}

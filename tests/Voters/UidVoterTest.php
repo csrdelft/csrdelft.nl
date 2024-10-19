@@ -7,7 +7,7 @@ use CsrDelft\tests\AbstractVoterTestCase;
 
 class UidVoterTest extends AbstractVoterTestCase
 {
-	public function testUidVoter()
+	public function testUidVoter(): void
 	{
 		$lid = $this->getToken(AccountFixtures::UID_PUBCIE);
 

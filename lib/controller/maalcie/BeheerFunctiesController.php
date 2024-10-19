@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
@@ -18,7 +19,6 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -65,7 +65,8 @@ class BeheerFunctiesController extends AbstractController
 	]
 	public function beheer(CorveeFunctie $functie = null)
 	{
-		$modal = $functie ? $this->bewerken($functie) : null;
+		$modal =
+			$functie instanceof CorveeFunctie ? $this->bewerken($functie) : null;
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		return $this->render('maaltijden/functie/beheer_functies.html.twig', [
 			'functies' => $functies,

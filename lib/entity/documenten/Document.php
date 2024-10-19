@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\documenten;
 
+use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
@@ -14,11 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\documenten\DocumentRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: DocumentRepository::class)]
 #[ORM\Table('document')]
 #[ORM\Index(name: 'Zoeken', columns: ['naam', 'filename'], flags: ['fulltext'])]
 #[ORM\Index(name: 'toegevoegd', columns: ['toegevoegd'])]
@@ -41,7 +38,7 @@ class Document extends Bestand
 	 */
 	#[
 		ORM\ManyToOne(
-			targetEntity: \CsrDelft\entity\documenten\DocumentCategorie::class,
+			targetEntity: DocumentCategorie::class,
 			inversedBy: 'documenten'
 		)
 	]
@@ -64,7 +61,7 @@ class Document extends Bestand
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(name: 'eigenaar', referencedColumnName: 'uid')]
 	public $eigenaar_profiel;
 	/**
@@ -104,7 +101,7 @@ class Document extends Bestand
 	 */
 	public function exists()
 	{
-		return @is_readable($this->directory . '/' . $this->filename) and
+		return @is_readable($this->directory . '/' . $this->filename) &&
 			is_file($this->directory . '/' . $this->filename);
 	}
 
@@ -113,7 +110,7 @@ class Document extends Bestand
 		if (!$this->magBekijken()) {
 			return false;
 		}
-		return $this->filename != '' and file_exists($this->getFullPath());
+		return $this->filename != '' && file_exists($this->getFullPath());
 	}
 
 	public function isEigenaar()
@@ -129,7 +126,7 @@ class Document extends Bestand
 
 	public function magBewerken()
 	{
-		return $this->isEigenaar() or LoginService::mag(P_DOCS_MOD);
+		return $this->isEigenaar() || LoginService::mag(P_DOCS_MOD);
 	}
 
 	public function magVerwijderen()
@@ -217,7 +214,7 @@ class Document extends Bestand
 			'application/vnd.ms-excel.sheet.macroenabled.12' => 'excel',
 		];
 
-		if (key_exists($this->mimetype, $mimetypeMap)) {
+		if (array_key_exists($this->mimetype, $mimetypeMap)) {
 			return $mimetypeMap[$this->mimetype];
 		} else {
 			return 'onbekend';
@@ -246,17 +243,15 @@ class Document extends Bestand
 		if (@unlink($this->getFullPath())) {
 			$this->filename = '';
 			return true;
+		} elseif (is_writable($this->getFullPath())) {
+			throw new CsrException(
+				'Kan bestand niet verwijderen, lijkt wel beschrijfbaar' .
+					$this->getFullPath()
+			);
 		} else {
-			if (is_writable($this->getFullPath())) {
-				throw new CsrException(
-					'Kan bestand niet verwijderen, lijkt wel beschrijfbaar' .
-						$this->getFullPath()
-				);
-			} else {
-				throw new CsrException(
-					'Kan bestand niet verwijderen, niet beschrijfbaar'
-				);
-			}
+			throw new CsrException(
+				'Kan bestand niet verwijderen, niet beschrijfbaar'
+			);
 		}
 	}
 }

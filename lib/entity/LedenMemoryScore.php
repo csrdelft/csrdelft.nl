@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\LedenMemoryScoresRepository;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,11 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\LedenMemoryScoresRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: LedenMemoryScoresRepository::class)]
 #[ORM\Table('memory_scores')]
 class LedenMemoryScore implements DataTableEntry
 {

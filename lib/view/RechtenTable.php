@@ -40,7 +40,7 @@ class RechtenTable extends DataTable
 				AccessAction::Rechten,
 				$resource
 			);
-			if (!$rechten or !LoginService::mag($rechten)) {
+			if (!$rechten || !LoginService::mag($rechten)) {
 				return;
 			}
 		}

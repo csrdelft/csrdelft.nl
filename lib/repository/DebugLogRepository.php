@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository;
 
+use Symfony\Component\HttpFoundation\Request;
 use CsrDelft\common\FlashType;
 use CsrDelft\entity\DebugLogEntry;
 use CsrDelft\service\security\LoginService;
@@ -9,7 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -60,7 +61,7 @@ class DebugLogRepository extends AbstractRepository
 		}
 		$entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '127.0.0.1';
 		$entry->referer = @$_SERVER['HTTP_REFERER'] ?: 'CLI';
-		if ($this->requestStack->getCurrentRequest()) {
+		if ($this->requestStack->getCurrentRequest() instanceof Request) {
 			$entry->request =
 				$this->requestStack->getCurrentRequest()->getRequestUri() ?: 'CLI';
 		} else {
@@ -70,7 +71,7 @@ class DebugLogRepository extends AbstractRepository
 
 		$this->getEntityManager()->persist($entry);
 		if (
-			DEBUG and
+			DEBUG &&
 			$this->getEntityManager()
 				->getConnection()
 				->isTransactionActive()

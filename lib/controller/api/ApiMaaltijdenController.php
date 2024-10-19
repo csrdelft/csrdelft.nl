@@ -2,13 +2,13 @@
 
 namespace CsrDelft\controller\api;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\maalcie\MaaltijdAanmeldingenService;
 use Exception;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ApiMaaltijdenController extends AbstractController
 {

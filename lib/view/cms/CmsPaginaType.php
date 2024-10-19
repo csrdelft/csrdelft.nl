@@ -13,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CmsPaginaType extends AbstractType
 {
-	public function buildForm(FormBuilderInterface $builder, array $options)
+	public function buildForm(FormBuilderInterface $builder, array $options): void
 	{
 		$builder
 			->add('laatstGewijzigd', DateDisplayType::class)
@@ -40,7 +40,7 @@ class CmsPaginaType extends AbstractType
 		$builder->add('inhoud', BbTextType::class);
 	}
 
-	public function configureOptions(OptionsResolver $resolver)
+	public function configureOptions(OptionsResolver $resolver): void
 	{
 		$resolver->setDefaults([
 			'data_class' => CmsPagina::class,

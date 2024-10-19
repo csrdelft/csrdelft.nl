@@ -13,7 +13,6 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\MailService;
 use DateInterval;
 use Twig\Environment;
-use DateTime;
 
 /**
  * CorveeHerinneringenModel.class.php

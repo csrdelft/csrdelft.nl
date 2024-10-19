@@ -17,7 +17,7 @@ final class CryptoUtil
 		$codeAlphabet .= '0123456789';
 		for ($i = 0; $i < $length; $i++) {
 			$token .=
-				$codeAlphabet[static::crypto_rand_secure(0, strlen($codeAlphabet))];
+				$codeAlphabet[self::crypto_rand_secure(0, strlen($codeAlphabet))];
 		}
 		return $token;
 	}
@@ -40,7 +40,7 @@ final class CryptoUtil
 		$filter = (int) (1 << $bits) - 1; // set all lower bits to 1
 		do {
 			$rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
-			$rnd = $rnd & $filter; // discard irrelevant bits
+			$rnd &= $filter; // discard irrelevant bits
 		} while ($rnd >= $range);
 		return $min + $rnd;
 	}

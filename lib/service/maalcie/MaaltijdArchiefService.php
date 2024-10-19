@@ -12,7 +12,6 @@ use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 

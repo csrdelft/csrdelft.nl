@@ -2,6 +2,8 @@
 
 namespace CsrDelft\service\pin;
 
-class PinDownloadException extends \Exception
+use Exception;
+
+class PinDownloadException extends Exception
 {
 }

@@ -38,6 +38,6 @@ class Map
 	 */
 	public function exists()
 	{
-		return @is_readable($this->path) and is_dir($this->path);
+		return @is_readable($this->path) && is_dir($this->path);
 	}
 }

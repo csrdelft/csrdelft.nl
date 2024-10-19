@@ -39,7 +39,7 @@ HTML;
 
 	public function isPosted()
 	{
-		foreach ($this->opties as $value => $description) {
+		foreach (array_keys($this->opties) as $value) {
 			if (!isset($_POST[$this->name . '_' . $value])) {
 				return false;
 			}
@@ -53,7 +53,7 @@ HTML;
 		if ($this->isPosted()) {
 			$values = [];
 
-			foreach ($this->opties as $value => $description) {
+			foreach (array_keys($this->opties) as $value) {
 				$selection = filter_input(INPUT_POST, $this->name . '_' . $value);
 				if ($selection != 'false') {
 					$values[] = $value;

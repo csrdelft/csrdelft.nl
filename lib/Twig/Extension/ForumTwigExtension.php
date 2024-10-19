@@ -141,7 +141,7 @@ class ForumTwigExtension extends AbstractExtension
 		return preg_replace(
 			'/' . preg_quote((string) $zoekterm, '/') . '/i',
 			$before . '$0' . $after,
-			$bericht
+			(string) $bericht
 		);
 	}
 
@@ -201,7 +201,7 @@ class ForumTwigExtension extends AbstractExtension
 
 		/* Convert page count if array */
 		if (is_array($pagecount)) {
-			$pagecount = sizeof($pagecount);
+			$pagecount = count($pagecount);
 		}
 
 		/* Define additional required vars */
@@ -213,7 +213,7 @@ class ForumTwigExtension extends AbstractExtension
 		}
 
 		/* There is no 0th page: assume last page */
-		$curpage = $curpage == 0 ? $pagecount : $curpage;
+		$curpage = $curpage === 0 ? $pagecount : $curpage;
 
 		/* Internally we need an "array-compatible" index */
 		$intCurpage = $curpage - 1;
@@ -303,7 +303,8 @@ class ForumTwigExtension extends AbstractExtension
 					$separator;
 			}
 		}
-		for ($i = 0; $i < sizeof($links); $i++) {
+		$counter = count($links);
+		for ($i = 0; $i < $counter; $i++) {
 			if ($links[$i] != $curpage) {
 				$retval .=
 					'<li class="page-item"><a class="page-link" href="' .
@@ -322,12 +323,12 @@ class ForumTwigExtension extends AbstractExtension
 					'</span></li>';
 			}
 
-			if ($i < sizeof($links) - 1) {
+			if ($i < count($links) - 1) {
 				$retval .= $separator;
 			}
 		}
-		if ($links[sizeof($links) - 1] != $pagecount) {
-			if ($links[sizeof($links) - 2] != $pagecount - 1) {
+		if ($links[count($links) - 1] != $pagecount) {
+			if ($links[count($links) - 2] != $pagecount - 1) {
 				$retval .=
 					$separator .
 					'<li class="page-item"><span class="page-link">' .

@@ -7,7 +7,7 @@ use CsrDelft\bb\BbTag;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\BbHelper;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Geef een link weer naar het profiel van het lid-nummer wat opgegeven is.

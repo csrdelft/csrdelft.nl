@@ -35,7 +35,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 	 * Huidige pagina
 	 * @var int
 	 */
-	private $pagina;
+	private $pagina = 1;
 	/**
 	 * Aantal posts per pagina
 	 * Waarschuwing, is lazy, gebruik @see ForumPostsRepository::getAantalPerPagina()
@@ -46,7 +46,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 	 * Totaal aantal paginas per forumdraad
 	 * @var int[]
 	 */
-	private $aantal_paginas;
+	private $aantal_paginas = [];
 	/**
 	 * Totaal aantal posts die wachten op goedkeuring
 	 * @var int
@@ -56,8 +56,6 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 	public function __construct(ManagerRegistry $registry)
 	{
 		parent::__construct($registry, ForumPost::class);
-		$this->pagina = 1;
-		$this->aantal_paginas = [];
 	}
 
 	/**
@@ -280,7 +278,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 
 	public function getAantalWachtOpGoedkeuring()
 	{
-		if (!isset($this->aantal_wacht)) {
+		if ($this->aantal_wacht === null) {
 			$this->aantal_wacht = $this->count([
 				'wacht_goedkeuring' => true,
 				'verwijderd' => false,

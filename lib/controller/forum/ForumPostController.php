@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\forum;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\forum\ForumDeel;
@@ -17,7 +18,6 @@ use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\bbcode\ProsemirrorToBb;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ForumPostController extends AbstractController
 {
@@ -194,7 +194,7 @@ class ForumPostController extends AbstractController
 		$ping = filter_input(INPUT_POST, 'ping', FILTER_SANITIZE_STRING);
 
 		// bestaand draadje?
-		if ($draad !== null) {
+		if ($draad instanceof ForumDraad) {
 			$draad_id = $draad->draad_id;
 			// check draad in forum deel
 			if (

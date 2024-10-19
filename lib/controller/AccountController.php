@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
@@ -18,8 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -52,11 +52,8 @@ class AccountController extends AbstractController
 	]
 	public function aanmaken($uid = null): RedirectResponse
 	{
-		if ($uid == null) {
-			$account = $this->getUser();
-		} else {
-			$account = $this->accountRepository->find($uid);
-		}
+		$account =
+			$uid == null ? $this->getUser() : $this->accountRepository->find($uid);
 
 		if ($account) {
 			$this->addFlash(FlashType::INFO, 'Account bestaat al');

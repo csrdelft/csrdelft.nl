@@ -3,7 +3,6 @@
 namespace CsrDelft\common\Security\Voter\Entity\Groep;
 
 use CsrDelft\entity\groepen\Verticale;
-use CsrDelft\entity\security\enum\AccessAction;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class VerticaleGroepVoter extends AbstractGroepVoter

@@ -2,8 +2,6 @@
 
 namespace CsrDelft\common\Annotation;
 
-use CsrDelft\events\AccessControlEventListener;
-
 /**
  * Annotatie om CSRF uit te zetten voor deze route
  *

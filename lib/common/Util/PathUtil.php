@@ -47,7 +47,7 @@ final class PathUtil
 			}
 		}
 
-		return preg_replace('#/+#', '/', join('/', $paths));
+		return preg_replace('#/+#', '/', implode('/', $paths));
 	}
 
 	/**

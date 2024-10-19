@@ -10,7 +10,7 @@ use CsrDelft\tests\AbstractVoterTestCase;
 
 class GroepVoterAanmakenTest extends AbstractVoterTestCase
 {
-	public function testCommissieAanmaken()
+	public function testCommissieAanmaken(): void
 	{
 		$commissie = new Commissie();
 		// Lid mag geen commissie maken
@@ -27,7 +27,7 @@ class GroepVoterAanmakenTest extends AbstractVoterTestCase
 		);
 	}
 
-	public function testActiviteitAanmaken()
+	public function testActiviteitAanmaken(): void
 	{
 		$activiteit = new Activiteit();
 		// Lid mag activiteit maken

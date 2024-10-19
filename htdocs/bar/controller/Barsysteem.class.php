@@ -1,5 +1,6 @@
 <?php
 
+use Doctrine\DBAL\Exception;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\model\entity\LidStatus;
 use Doctrine\DBAL\Driver\Connection;
@@ -15,9 +16,9 @@ class Barsysteem {
 	private $csrfToken;
 
 	/**
-	 * @throws \Doctrine\DBAL\Exception
-	 */
-	function __construct() {
+  * @throws Exception
+  */
+ function __construct() {
 		$this->db = DriverManager::getConnection([
 			'url' => $_ENV['DATABASE_URL'],
 			'driverOptions' => [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"]
@@ -25,12 +26,13 @@ class Barsysteem {
 	}
 
 	function isLoggedIn() {
-		return isset($_COOKIE['barsysteem']) && md5('my_salt_is_strong' . $_COOKIE['barsysteem']) == '8f700ce34a77ef4ef9db9bbdde9e97d8';
+		return isset($_COOKIE['barsysteem']) && md5('my_salt_is_strong' . $_COOKIE['barsysteem']) === '8f700ce34a77ef4ef9db9bbdde9e97d8';
 	}
 
 	function isBeheer() {
-		if (!$this->beheer)
-			$this->beheer = isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) == '5367b4668337c47a02cf87793a6a05d5';
+		if (!$this->beheer) {
+      $this->beheer = isset($_COOKIE['barsysteembeheer']) && md5('my_salt_is_strong' . $_COOKIE['barsysteembeheer']) === '5367b4668337c47a02cf87793a6a05d5';
+  }
 
 		return $this->beheer;
 	}
@@ -49,10 +51,10 @@ class Barsysteem {
 	public function preventCsrf() {
 		$token = null;
 		if (isset($_SERVER['HTTP_X_BARSYSTEEM_CSRF'])) {
-			$token = $_SERVER['HTTP_X_BARSYSTEEM_CSRF'];
-		} else if (isset($_POST["X-BARSYSTEEM-CSRF"])) {
-			$token = $_POST("X-BARSYSTEEM-CSRF");
-		}
+      $token = $_SERVER['HTTP_X_BARSYSTEEM_CSRF'];
+  } elseif (isset($_POST["X-BARSYSTEEM-CSRF"])) {
+      $token = $_POST("X-BARSYSTEEM-CSRF");
+  }
 		return $token != null && $this->getCsrfToken() === $token;
 	}
 
@@ -70,11 +72,7 @@ SQL
 
 	function getNaam($profiel) {
 
-		if (empty($profiel["voornaam"])) {
-			$naam = $profiel["voorletters"] . ' ';
-		} else {
-			$naam = $profiel["voornaam"] . ' ';
-		}
+		$naam = empty($profiel["voornaam"]) ? $profiel["voorletters"] . ' ' : $profiel["voornaam"] . ' ';
 		if (!empty($profiel["tussenvoegsel"])) {
 			$naam .= $profiel["tussenvoegsel"] . ' ';
 		}
@@ -233,14 +231,11 @@ SQL
 		} else {
 			$begin = $this->parseDate($begin) . " 00:00:00";
 		}
-		if ($eind == "") {
-			$eind = DateUtil::getDateTime();
-		} else {
-			$eind = $this->parseDate($eind) . " 23:59:59";
-		}
+		$eind = $eind == "" ? DateUtil::getDateTime() : $this->parseDate($eind) . " 23:59:59";
 		$qa = "";
-		if ($persoon != "alles")
-			$qa = "B.uid=:socCieId AND";
+		if ($persoon != "alles") {
+      $qa = "B.uid=:socCieId AND";
+  }
 		$q = $this->db->prepare(<<<SQL
 SELECT *, B.deleted AS d, K.deleted AS oud
 FROM civi_bestelling AS B
@@ -251,8 +246,9 @@ USING (uid)
 WHERE (B.cie = 'soccie' OR B.cie = 'oweecie') AND $qa (moment BETWEEN :begin AND :eind)
 SQL
 		);
-		if ($persoon != "alles")
-			$q->bindValue(":socCieId", $persoon, PDO::PARAM_STR);
+		if ($persoon != "alles") {
+      $q->bindValue(":socCieId", $persoon, PDO::PARAM_STR);
+  }
 		$q->bindValue(":begin", $begin);
 		$q->bindValue(":eind", $eind);
 		return $this->verwerkBestellingResultaat($q->execute()->fetchAllAssociative(), $productIDs);
@@ -371,8 +367,9 @@ SQL
 					}
 				}
 
-				if (!$keep)
-					unset($result[$key]);
+				if (!$keep) {
+        unset($result[$key]);
+    }
 			}
 		}
 
@@ -455,16 +452,10 @@ ORDER BY yearweek DESC
 		return $weeks;
 	}
 
-	public function getToolData() {
-
-		$data = [];
-
-		$data['sum_saldi'] = $this->sumSaldi();
-		$data['sum_saldi_lid'] = $this->sumSaldi(true);
-		$data['red'] = $this->getRed();
-
-		return $data;
-	}
+	public function getToolData()
+ {
+     return ['sum_saldi' => $this->sumSaldi(), 'sum_saldi_lid' => $this->sumSaldi(true), 'red' => $this->getRed()];
+ }
 
 	/**
 	 * @throws \Doctrine\DBAL\Driver\Exception
@@ -500,8 +491,9 @@ ORDER BY yearweek DESC
 
 	public function addProduct($name, $price, $type) {
 
-		if ($type < 1)
-			return false;
+		if ($type < 1) {
+      return false;
+  }
 
 		$this->db->beginTransaction();
 

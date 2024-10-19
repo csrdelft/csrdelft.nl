@@ -37,7 +37,7 @@ class FotoBBView implements ToResponse, View
 			$html .= 'responsive';
 		}
 		if (
-			!$this->groot and
+			!$this->groot &&
 			InstellingUtil::lid_instelling('forum', 'fotoWeergave') == 'boven bericht'
 		) {
 			$html .=
@@ -49,8 +49,8 @@ class FotoBBView implements ToResponse, View
 		}
 		$html .= '<div class="bb-img-loading" data-src="';
 		if (
-			$this->groot and
-				InstellingUtil::lid_instelling('forum', 'fotoWeergave') != 'nee' or
+			($this->groot &&
+				InstellingUtil::lid_instelling('forum', 'fotoWeergave') != 'nee') ||
 			InstellingUtil::lid_instelling('forum', 'fotoWeergave') == 'in bericht'
 		) {
 			$html .= $this->model->getResizedUrl();

@@ -17,11 +17,7 @@ class TimeField extends InputField
 	public function __construct($name, $value, $description, $minutensteps = null)
 	{
 		parent::__construct($name, $value, $description);
-		if ($minutensteps === null) {
-			$this->minutensteps = 1;
-		} else {
-			$this->minutensteps = (int) $minutensteps;
-		}
+		$this->minutensteps = $minutensteps === null ? 1 : (int) $minutensteps;
 	}
 
 	public function isPosted()
@@ -56,10 +52,10 @@ class TimeField extends InputField
 		$uren = (int) substr((string) $this->value, 0, 2);
 		$minuten = (int) substr((string) $this->value, 3, 5);
 		if (
-			!preg_match('/^(\d\d?):(\d\d?)$/', (string) $this->value) or
-			$uren < 0 or
-			$uren > 23 or
-			$minuten < 0 or
+			!preg_match('/^(\d\d?):(\d\d?)$/', (string) $this->value) ||
+			$uren < 0 ||
+			$uren > 23 ||
+			$minuten < 0 ||
 			$minuten > 59
 		) {
 			$this->error = 'Ongeldig tijdstip';
@@ -85,7 +81,7 @@ class TimeField extends InputField
 		foreach ($hours as $value) {
 			$value = sprintf('%02d', $value);
 			$html .= '<option value="' . $value . '"';
-			if ($value == substr((string) $this->value, 0, 2)) {
+			if ($value === substr((string) $this->value, 0, 2)) {
 				$html .= ' selected="selected"';
 			}
 			$html .= '>' . $value . '</option>';

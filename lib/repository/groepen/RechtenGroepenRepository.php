@@ -8,7 +8,7 @@ use CsrDelft\repository\GroepLidRepository;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class RechtenGroepenRepository extends GroepRepository
 {
@@ -53,7 +53,7 @@ class RechtenGroepenRepository extends GroepRepository
 		if (!$profiel) {
 			return $result;
 		}
-		if ($profiel->isLid() or $profiel->isOudlid()) {
+		if ($profiel->isLid() || $profiel->isOudlid()) {
 			$result[] = 'htleden-oudleden';
 		}
 		// 1 generatie vooruit en 1 achteruit (default order by)
@@ -76,7 +76,7 @@ class RechtenGroepenRepository extends GroepRepository
 		) {
 			$commissie = $commissielid->groep;
 			if (
-				$commissie->status === GroepStatus::HT() or
+				$commissie->status === GroepStatus::HT() ||
 				$commissie->status === GroepStatus::FT()
 			) {
 				$result[] = $commissie->familie;

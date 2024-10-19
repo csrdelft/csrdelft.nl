@@ -47,31 +47,31 @@ class ImageField extends FileField
 			return false;
 		}
 		if (
-			$this->getModel() instanceof Afbeelding and
+			$this->getModel() instanceof Afbeelding &&
 			in_array($this->getModel()->mimetype, $this->filterMime)
 		) {
 			$width = $this->getModel()->width;
 			$height = $this->getModel()->height;
 			$resize = false;
-			if ($this->vierkant and $width !== $height) {
+			if ($this->vierkant && $width !== $height) {
 				$resize = 'Afbeelding is niet vierkant.';
 			} else {
-				if ($this->maxWidth !== null and $width > $this->maxWidth) {
+				if ($this->maxWidth !== null && $width > $this->maxWidth) {
 					$resize =
 						'Afbeelding is te breed. Maximaal ' . $this->maxWidth . ' pixels.';
 					$smallerW = floor(((float) $this->maxWidth * 100) / (float) $width);
-				} elseif ($this->minWidth !== null and $width < $this->minWidth) {
+				} elseif ($this->minWidth !== null && $width < $this->minWidth) {
 					$resize =
 						'Afbeelding is niet breed genoeg. Minimaal ' .
 						$this->minWidth .
 						' pixels.';
 					$biggerW = ceil(((float) $this->minWidth * 100) / (float) $width);
 				}
-				if ($this->maxHeight !== null and $height > $this->maxHeight) {
+				if ($this->maxHeight !== null && $height > $this->maxHeight) {
 					$resize =
 						'Afbeelding is te hoog. Maximaal ' . $this->maxHeight . ' pixels.';
 					$smallerH = floor(((float) $this->maxHeight * 100) / (float) $height);
-				} elseif ($this->minHeight !== null and $height < $this->minHeight) {
+				} elseif ($this->minHeight !== null && $height < $this->minHeight) {
 					$resize =
 						'Afbeelding is niet hoog genoeg. Minimaal ' .
 						$this->minHeight .
@@ -82,7 +82,7 @@ class ImageField extends FileField
 			if ($resize) {
 				if ($this->vierkant) {
 					$percent = 'vierkant';
-				} elseif (isset($biggerW, $smallerH) or isset($biggerH, $smallerW)) {
+				} elseif (isset($biggerW, $smallerH) || isset($biggerH, $smallerW)) {
 					$this->getUploader()->error = 'Geen resize verhouding';
 					return false;
 				} elseif (isset($smallerW, $smallerH)) {
@@ -137,10 +137,8 @@ class ImageField extends FileField
 					}
 				}
 			}
-		} else {
-			if ($this->required) {
-				$this->getUploader()->error = 'Afbeelding is verplicht';
-			}
+		} elseif ($this->required) {
+			$this->getUploader()->error = 'Afbeelding is verplicht';
 		}
 		return $this->getUploader()->error === '';
 	}

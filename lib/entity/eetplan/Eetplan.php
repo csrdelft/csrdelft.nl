@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\eetplan;
 
+use CsrDelft\repository\eetplan\EetplanRepository;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\groepen\Woonoord;
@@ -10,11 +11,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\eetplan\EetplanRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: EetplanRepository::class)]
 #[ORM\Table]
 #[
 	ORM\UniqueConstraint(name: 'noviet_woonoord', columns: ['uid', 'woonoord_id'])
@@ -32,7 +29,7 @@ class Eetplan implements DataTableEntry
 	/**
 	 * @var Woonoord
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\groepen\Woonoord::class)]
+	#[ORM\ManyToOne(targetEntity: Woonoord::class)]
 	public $woonoord;
 
 	/**
@@ -51,7 +48,7 @@ class Eetplan implements DataTableEntry
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $noviet;
 
