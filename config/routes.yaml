@@ -1,6 +1,6 @@
 app-controller-sub:
   resource: ../lib/controller/**/*.php
-  type: annotation
+  type: attribute
 
 # Deze route is een catch-all als allerlaatste
 default:
