@@ -10,3 +10,8 @@ twig:
     email_abactis: '%env(EMAIL_ABACTIS)%'
     csrmail_password: '%env(CSRMAIL_PASSWORD)%'
     email_corvee: '%env(EMAIL_CC)%'
+    file_name_pattern: '*.twig'
+
+when@test:
+  twig:
+    strict_variables: true
