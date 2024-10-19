@@ -32,7 +32,7 @@ class FotoAlbumBBView implements View
 			$subalbums = $fotoalbum->getSubAlbums();
 			$count = count($subalbums);
 			if ($count > 0) {
-				$idx = rand(0, $count - 1);
+				$idx = random_int(0, $count - 1);
 				$fotoalbum = $subalbums[$idx];
 			}
 		}
@@ -40,7 +40,7 @@ class FotoAlbumBBView implements View
 		$this->model = $fotoalbum;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		if (count($this->model->getFotos()) < 1) {

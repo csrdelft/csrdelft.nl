@@ -36,12 +36,16 @@ class LichtingenRepository extends GroepRepository
 		return $lichting;
 	}
 
+	/**
+	* @inheritDoc
+	* @return Lichting[]
+	*/
 	public function findBy(
 		array $criteria,
 		array $orderBy = null,
 		$limit = null,
 		$offset = null
-	) {
+	): array {
 		$jongste = static::getJongsteLidjaar();
 		$oudste = static::getOudsteLidjaar();
 		$lichtingen = [];
@@ -51,7 +55,7 @@ class LichtingenRepository extends GroepRepository
 		return $lichtingen;
 	}
 
-	public static function getHuidigeJaargang()
+	public static function getHuidigeJaargang(): string
 	{
 		$jaar = (int) date('Y');
 		$maand = (int) date('m');

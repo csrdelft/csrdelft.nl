@@ -13,12 +13,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class IsHetAlView implements View
 {
 	use ToHtmlResponse;
-
-	/**
-	 * Type of IsHetAlContent
-	 * @var string
-	 */
-	private $model;
 	/**
 	 * True OR aantal dagen OR woordvandedag
 	 * @var boolean|int|string
@@ -39,12 +33,18 @@ class IsHetAlView implements View
 		'u het forum kan volgen met RSS?' => '/profiel#forum',
 	];
 
+	/**
+	 * @param string $ishetal
+	 */
 	public function __construct(
 		LidInstellingenRepository $lidInstellingenRepository,
 		RequestStack $requestStack,
 		AgendaRepository $agendaRepository,
 		WoordVanDeDagRepository $woordVanDeDagRepository,
-		$ishetal
+		/**
+		 * Type of IsHetAlContent
+		 */
+		private $model
 	) {
 		$session =
 			$requestStack->getMainRequest() == null
@@ -55,7 +55,11 @@ class IsHetAlView implements View
 		$differenceDays = floor(
 			(strtotime(date('d-m-Y')) - strtotime('21-12-2021')) / 86400
 		);
-		if ($differenceDays >= 1 && $differenceDays <= 60 && rand(0, 100) < 25) {
+		if (
+			$differenceDays >= 1 &&
+			$differenceDays <= 60 &&
+			random_int(0, 100) < 25
+		) {
 			$this->model = 'wvdd';
 			$woordVanDeDag = $woordVanDeDagRepository->find(intval($differenceDays));
 			$this->ja = $woordVanDeDag
@@ -64,7 +68,6 @@ class IsHetAlView implements View
 
 			return;
 		}
-		$this->model = $ishetal;
 		if ($this->model == 'willekeurig') {
 			$opties = array_slice(
 				$lidInstellingenRepository->getTypeOptions('zijbalk', 'ishetal'),
@@ -78,8 +81,8 @@ class IsHetAlView implements View
 			// TODO: Weghalen dat sponsorkliks wordt laten zien
 
 			case 'dies':
-				$begin = strtotime('2023-02-13');
-				$einde = strtotime('2023-02-24');
+				$begin = strtotime('2024-02-13');
+				$einde = strtotime('2024-02-23');
 				$nu = strtotime(date('Y-m-d'));
 				if ($nu > $einde) {
 					$begin = strtotime('+1 year', $begin);
@@ -176,7 +179,7 @@ class IsHetAlView implements View
 		return $this->model;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .=

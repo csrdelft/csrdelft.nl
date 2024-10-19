@@ -19,17 +19,11 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class CiviSaldoLogRepository extends AbstractRepository
 {
-	/**
-	 * @var SerializerInterface
-	 */
-	private $serializer;
-
 	public function __construct(
 		ManagerRegistry $registry,
-		SerializerInterface $serializer
+		private readonly SerializerInterface $serializer
 	) {
 		parent::__construct($registry, CiviSaldoLog::class);
-		$this->serializer = $serializer;
 	}
 
 	/**

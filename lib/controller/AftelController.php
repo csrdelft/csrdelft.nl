@@ -10,9 +10,9 @@ class AftelController extends AbstractController
 {
 	/**
 	 * @return Response
-	 * @Route("/aftel", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/aftel', methods: ['GET'])]
 	public function doorverwijs()
 	{
 		if (isset($_ENV['AFTEL_EIND']) && time() >= $_ENV['AFTEL_EIND'] - 3) {

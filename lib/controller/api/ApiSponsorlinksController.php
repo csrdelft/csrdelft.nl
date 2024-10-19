@@ -14,9 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiSponsorlinksController
 {
 	/**
-	 * @Route("/API/2.0/sponsorlinks", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[Route(path: '/API/2.0/sponsorlinks', methods: ['GET'])]
 	public function getSponsorlinks()
 	{
 		$json = file_get_contents(DATA_PATH . 'sponsorlinks.json');
@@ -24,9 +24,9 @@ class ApiSponsorlinksController
 	}
 
 	/**
-	 * @Route("/API/2.0/sponsorlinks/timestamp", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[Route(path: '/API/2.0/sponsorlinks/timestamp', methods: ['GET'])]
 	public function getTimestamp()
 	{
 		return new JsonResponse(filemtime(DATA_PATH . 'sponsorlinks.json'));

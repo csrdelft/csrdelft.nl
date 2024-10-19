@@ -16,34 +16,19 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiForumController extends AbstractController
 {
-	private $forumDradenRepository;
-	private $forumPostsRepository;
-	/**
-	 * @var ForumDradenGelezenRepository
-	 */
-	private $forumDradenGelezenRepository;
-	/**
-	 * @var ForumDelenService
-	 */
-	private $forumDelenService;
-
 	public function __construct(
-		ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		ForumDelenService $forumDelenService,
-		ForumPostsRepository $forumPostsRepository,
-		ForumDradenRepository $forumDradenRepository
+		private readonly ForumDradenGelezenRepository $forumDradenGelezenRepository,
+		private readonly ForumDelenService $forumDelenService,
+		private readonly ForumPostsRepository $forumPostsRepository,
+		private readonly ForumDradenRepository $forumDradenRepository
 	) {
-		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
-		$this->forumPostsRepository = $forumPostsRepository;
-		$this->forumDradenRepository = $forumDradenRepository;
-		$this->forumDelenService = $forumDelenService;
 	}
 
 	/**
-	 * @Route("/API/2.0/forum/recent", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 * @return JsonResponse
 	 */
+	#[Route(path: '/API/2.0/forum/recent', methods: ['GET'])]
 	public function getRecent()
 	{
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
@@ -71,12 +56,12 @@ class ApiForumController extends AbstractController
 	}
 
 	/**
-	 * @Route("/API/2.0/forum/onderwerp/{id}", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 * @param int offset
 	 * @param int limit
 	 * @return JsonResponse
 	 */
+	#[Route(path: '/API/2.0/forum/onderwerp/{id}', methods: ['GET'])]
 	public function getOnderwerp($id)
 	{
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
@@ -84,7 +69,7 @@ class ApiForumController extends AbstractController
 
 		try {
 			$draad = $this->forumDradenRepository->get((int) $id);
-		} catch (Exception $e) {
+		} catch (Exception) {
 			throw $this->createNotFoundException();
 		}
 

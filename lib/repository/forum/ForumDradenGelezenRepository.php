@@ -22,15 +22,11 @@ use Symfony\Component\Security\Core\Security;
  */
 class ForumDradenGelezenRepository extends AbstractRepository
 {
-	/**
-	 * @var Security
-	 */
-	private $security;
-
-	public function __construct(ManagerRegistry $registry, Security $security)
-	{
+	public function __construct(
+		ManagerRegistry $registry,
+		private readonly Security $security
+	) {
 		parent::__construct($registry, ForumDraadGelezen::class);
-		$this->security = $security;
 	}
 
 	protected function maakForumDraadGelezen(ForumDraad $draad)

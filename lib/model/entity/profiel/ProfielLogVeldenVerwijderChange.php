@@ -14,12 +14,14 @@ namespace CsrDelft\model\entity\profiel;
 class ProfielLogVeldenVerwijderChange extends AbstractProfielLogChangeEntry
 {
 	/**
-	 * @var string[]
+	 * @param string[] $velden
 	 */
-	public $velden = [];
-	public function __construct($velden)
-	{
-		$this->velden = $velden;
+	public function __construct(
+		/**
+		 * @var string[]
+		 */
+		public $velden
+	) {
 	}
 
 	public function toHtml()

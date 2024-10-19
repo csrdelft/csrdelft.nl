@@ -3,35 +3,23 @@
 namespace CsrDelft\command;
 
 use CsrDelft\common\Util\FileUtil;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
+#[AsCommand(name: 'stek:cache:flush', description: 'Flush memcached')]
 class FlushMemcacheCommand extends Command
 {
-	/**
-	 * @var CacheInterface
-	 */
-	private $appCache;
-	/**
-	 * @var CacheInterface
-	 */
-	private $systemCache;
-
-	public function __construct(CacheInterface $app, CacheInterface $system)
-	{
+	public function __construct(
+		private readonly CacheInterface $appCache,
+		private readonly CacheInterface $systemCache
+	) {
 		parent::__construct();
-		$this->appCache = $app;
-		$this->systemCache = $system;
 	}
 
-	public function configure()
-	{
-		$this->setName('stek:cache:flush')->setDescription('Flush de memcache');
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		if ($this->appCache == null) {
 			$output->writeln('Geen cache geinstalleerd');
@@ -61,7 +49,7 @@ class FlushMemcacheCommand extends Command
 			FileUtil::delTree(CONFIG_CACHE_PATH);
 
 			$output->writeln('Instelling cache succesvol verwijderd');
-		} catch (\ErrorException $exception) {
+		} catch (\ErrorException) {
 			$output->writeln('Instelling cache verwijderen mislukt');
 			$output->writeln(error_get_last()['message']);
 		}

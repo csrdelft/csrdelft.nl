@@ -15,19 +15,14 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class TemporaryToken extends AbstractToken
 {
-	/**
-	 * @var TokenInterface
-	 */
-	private $originalToken;
-
-	public function __construct(Account $account, TokenInterface $originalToken)
-	{
+	public function __construct(
+		Account $account,
+		private readonly TokenInterface $originalToken
+	) {
 		parent::__construct($account->getRoles());
 
 		$this->setUser($account);
 		$this->setAuthenticated(true);
-
-		$this->originalToken = $originalToken;
 	}
 
 	public function getOriginalToken()

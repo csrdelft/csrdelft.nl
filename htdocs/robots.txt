@@ -2,19 +2,27 @@
 # Niet-relevante pagina's uitsluiten van indexering
 # mailto:pubcie@csrdelft.nl
 
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: SemrushBot
-Disallow: /
-
-User-agent: magpie-crawler
-Disallow: /
-
-User-agent: olbicobot
-Disallow: /
-
 User-agent: *
+Disallow: /
+
+# Google
+User-agent: Googlebot
+# Bing
+User-agent: Bingbot
+# DuckDuckGo
+User-agent: DuckDuckBot
+User-agent: DuckDuckGo
+# Apple
+User-agent: Applebot
+# Link previews in Meta producten
+User-agent: facebookexternalhit
+# Yahoo
+User-agent: Slurp
+User-agent: Twitterbot
+User-agent: LinkedInBot
+# Wayback machine
+User-agent: ia_archiver
+
 Disallow: /tools/
 Disallow: /forum/posten/
 Disallow: /fotoalbum/

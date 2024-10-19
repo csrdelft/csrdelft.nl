@@ -18,17 +18,12 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 class CourantBerichtFormulier implements FormulierTypeInterface
 {
 	/**
-	 * @var InstellingenRepository
-	 */
-	private $instellingenRepository;
-
-	/**
 	 * CourantFormulier constructor.
 	 * @param InstellingenRepository $instellingenRepository
 	 */
-	public function __construct(InstellingenRepository $instellingenRepository)
-	{
-		$this->instellingenRepository = $instellingenRepository;
+	public function __construct(
+		private readonly InstellingenRepository $instellingenRepository
+	) {
 	}
 
 	/**
@@ -73,7 +68,7 @@ class CourantBerichtFormulier implements FormulierTypeInterface
 				<<<HTML
 <div>
 	<input type="button" value="Importeer agenda" onclick="window.courant.importAgenda();" class="btn btn-primary" />
-	<input type="button" value="Importeer sponsor" onclick="window.courant.importSponsor('${sponsorlink}')" class="btn btn-primary" />
+	<input type="button" value="Importeer sponsor" onclick="window.courant.importSponsor('{$sponsorlink}')" class="btn btn-primary" />
 </div>
 HTML
 			);

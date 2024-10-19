@@ -17,21 +17,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MaalCieBoekjaarController extends AbstractController
 {
-	/**
-	 * @var MaaltijdArchiefService
-	 */
-	private $maaltijdArchiefService;
-
-	public function __construct(MaaltijdArchiefService $maaltijdArchiefService)
-	{
-		$this->maaltijdArchiefService = $maaltijdArchiefService;
+	public function __construct(
+		private readonly MaaltijdArchiefService $maaltijdArchiefService
+	) {
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/maaltijden/boekjaar", methods={"GET"})
 	 * @Auth(P_MAAL_SALDI)
 	 */
+	#[Route(path: '/maaltijden/boekjaar', methods: ['GET'])]
 	public function beheer()
 	{
 		return $this->render('maaltijden/boekjaar_sluiten.html.twig');
@@ -41,9 +36,9 @@ class MaalCieBoekjaarController extends AbstractController
 	 * @return BoekjaarSluitenForm|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/boekjaar/sluitboekjaar", methods={"POST"})
 	 * @Auth(P_MAAL_SALDI)
 	 */
+	#[Route(path: '/maaltijden/boekjaar/sluitboekjaar', methods: ['POST'])]
 	public function sluitboekjaar()
 	{
 		$form = new BoekjaarSluitenForm(
@@ -53,8 +48,8 @@ class MaalCieBoekjaarController extends AbstractController
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$errors_aantal = $this->maaltijdArchiefService->archiveerOudeMaaltijden(
-				strtotime($values['begindatum']),
-				strtotime($values['einddatum'])
+				strtotime((string) $values['begindatum']),
+				strtotime((string) $values['einddatum'])
 			);
 			if (count($errors_aantal[0]) === 0) {
 				$this->addFlash(

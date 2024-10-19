@@ -14,14 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class InstellingenBeheerController extends AbstractController
 {
-	/**
-	 * @var InstellingenRepository
-	 */
-	private $instellingenRepository;
-
-	public function __construct(InstellingenRepository $instellingenRepository)
-	{
-		$this->instellingenRepository = $instellingenRepository;
+	public function __construct(
+		private readonly InstellingenRepository $instellingenRepository
+	) {
 	}
 
 	protected function assertToegang($module = null)
@@ -34,16 +29,12 @@ class InstellingenBeheerController extends AbstractController
 	protected function magModuleZien($module = null)
 	{
 		if ($module) {
-			switch ($module) {
-				case 'agenda':
-					return $this->mag(P_AGENDA_MOD);
-				case 'corvee':
-					return $this->mag(P_CORVEE_MOD);
-				case 'maaltijden':
-					return $this->mag(P_MAAL_MOD);
-				default:
-					return $this->mag(P_ADMIN);
-			}
+			return match ($module) {
+				'agenda' => $this->mag(P_AGENDA_MOD),
+				'corvee' => $this->mag(P_CORVEE_MOD),
+				'maaltijden' => $this->mag(P_MAAL_MOD),
+				default => $this->mag(P_ADMIN),
+			};
 		}
 		return true; // hoofdpagina: geen module
 	}
@@ -51,21 +42,22 @@ class InstellingenBeheerController extends AbstractController
 	/**
 	 * @param null $module
 	 * @return Response
-	 * @Route("/instellingenbeheer/module/{module}", methods={"GET"})
-	 * @Route("/instellingenbeheer", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/instellingenbeheer/module/{module}', methods: ['GET'])]
+	#[Route(path: '/instellingenbeheer', methods: ['GET'])]
 	public function module($module = null)
 	{
 		$this->assertToegang($module);
 
 		if (in_array($module, $this->instellingenRepository->getModules())) {
-			$instellingen = array_map(function ($instelling) use ($module) {
-				return $this->instellingenRepository->getInstelling(
+			$instellingen = array_map(
+				fn($instelling) => $this->instellingenRepository->getInstelling(
 					$module,
 					$instelling
-				);
-			}, $this->instellingenRepository->getModuleKeys($module));
+				),
+				$this->instellingenRepository->getModuleKeys($module)
+			);
 		} else {
 			$instellingen = null;
 			$module = null;
@@ -82,9 +74,9 @@ class InstellingenBeheerController extends AbstractController
 	 * @param $module
 	 * @param $id
 	 * @return Response
-	 * @Route("/instellingenbeheer/opslaan/{module}/{id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/instellingenbeheer/opslaan/{module}/{id}', methods: ['POST'])]
 	public function opslaan($module, $id)
 	{
 		$this->assertToegang($module);
@@ -105,9 +97,9 @@ class InstellingenBeheerController extends AbstractController
 	 * @param $module
 	 * @param $id
 	 * @return Response
-	 * @Route("/instellingenbeheer/reset/{module}/{id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/instellingenbeheer/reset/{module}/{id}', methods: ['POST'])]
 	public function reset($module, $id)
 	{
 		$this->assertToegang($module);

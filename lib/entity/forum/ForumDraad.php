@@ -20,142 +20,156 @@ use Doctrine\ORM\PersistentCollection;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Een ForumDraad zit in een deelforum en bevat forumposts.
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumDradenRepository")
- * @ORM\Table("forum_draden", indexes={
- *   @ORM\Index(name="verwijderd", columns={"verwijderd"}),
- *   @ORM\Index(name="plakkerig", columns={"plakkerig"}),
- *   @ORM\Index(name="belangrijk", columns={"belangrijk"}),
- *   @ORM\Index(name="laatst_gewijzigd", columns={"laatst_gewijzigd"}),
- *   @ORM\Index(name="titel", columns={"titel"}, flags={"fulltext"}),
- *   @ORM\Index(name="wacht_goedkeuring", columns={"wacht_goedkeuring"})
- * })
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\forum\ForumDradenRepository::class
+	)
+]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table('forum_draden')]
+#[ORM\Index(name: 'verwijderd', columns: ['verwijderd'])]
+#[ORM\Index(name: 'plakkerig', columns: ['plakkerig'])]
+#[ORM\Index(name: 'belangrijk', columns: ['belangrijk'])]
+#[ORM\Index(name: 'laatst_gewijzigd', columns: ['laatst_gewijzigd'])]
+#[ORM\Index(name: 'titel', columns: ['titel'], flags: ['fulltext'])]
+#[ORM\Index(name: 'wacht_goedkeuring', columns: ['wacht_goedkeuring'])]
 class ForumDraad
 {
 	/**
 	 * Primary key
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
 	 */
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $draad_id;
 	/**
 	 * Forum waaronder dit topic valt
 	 * @var int
-	 * @ORM\Column(type="integer")
 	 */
+	#[ORM\Column(type: 'integer')]
 	public $forum_id;
 	/**
 	 * Forum waarmee dit topic gedeeld is
 	 * @var int
-	 * @ORM\Column(type="integer", nullable=true)
 	 */
+	#[ORM\Column(type: 'integer', nullable: true)]
 	public $gedeeld_met;
 	/**
 	 * Lidnummer van auteur
 	 * @var string
-	 * @ORM\Column(type="uid")
 	 */
+	#[ORM\Column(type: 'uid')]
 	public $uid;
 	/**
 	 * Titel
 	 * @var string
-	 * @ORM\Column(type="string")
 	 */
+	#[ORM\Column(type: 'string')]
 	public $titel;
 	/**
 	 * Datum en tijd van aanmaken
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
 	 */
+	#[ORM\Column(type: 'datetime')]
 	public $datum_tijd;
 	/**
 	 * Datum en tijd van laatst geplaatste of gewijzigde post
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime", nullable=true)
 	 */
+	#[ORM\Column(type: 'datetime', nullable: true)]
 	public $laatst_gewijzigd;
 	/**
 	 * Id van de laatst geplaatste of gewijzigde post
 	 * @var integer
-	 * @ORM\Column(type="integer", nullable=true)
 	 */
+	#[ORM\Column(type: 'integer', nullable: true)]
 	public $laatste_post_id;
 	/**
 	 * @var ForumPost
-	 * @ORM\OneToOne(targetEntity="ForumPost")
-	 * @ORM\JoinColumn(name="laatste_post_id", referencedColumnName="post_id", nullable=true)
 	 */
+	#[ORM\OneToOne(targetEntity: \ForumPost::class)]
+	#[
+		ORM\JoinColumn(
+			name: 'laatste_post_id',
+			referencedColumnName: 'post_id',
+			nullable: true
+		)
+	]
 	public $laatste_post;
 	/**
 	 * Uid van de auteur van de laatst geplaatste of gewijzigde post
 	 * @var string
-	 * @ORM\Column(type="uid", nullable=true)
 	 */
+	#[ORM\Column(type: 'uid', nullable: true)]
 	public $laatste_wijziging_uid;
 	/**
 	 * Gesloten (posten niet meer mogelijk)
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
 	 */
+	#[ORM\Column(type: 'boolean')]
 	public $gesloten;
 	/**
 	 * Verwijderd
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
 	 */
+	#[ORM\Column(type: 'boolean')]
 	public $verwijderd;
 	/**
 	 * Wacht op goedkeuring
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
 	 */
+	#[ORM\Column(type: 'boolean')]
 	public $wacht_goedkeuring;
 	/**
 	 * Altijd bovenaan weergeven
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
 	 */
+	#[ORM\Column(type: 'boolean')]
 	public $plakkerig;
 	/**
 	 * Belangrijk markering
 	 * @var string
-	 * @ORM\Column(type="string", nullable=true)
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $belangrijk;
 	/**
 	 * Eerste post altijd bovenaan weergeven
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
 	 */
+	#[ORM\Column(type: 'boolean')]
 	public $eerste_post_plakkerig;
 	/**
 	 * Een post per pagina
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
 	 */
+	#[ORM\Column(type: 'boolean')]
 	public $pagina_per_post;
 	/**
 	 * Lijst van lezers (wanneer)
 	 * @var PersistentCollection|ForumDraadGelezen[]
-	 * @ORM\OneToMany(targetEntity="ForumDraadGelezen", mappedBy="draad")
-	 * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
 	 */
+	#[ORM\OneToMany(targetEntity: \ForumDraadGelezen::class, mappedBy: 'draad')]
+	#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 	public $lezers;
 	/**
 	 * @var ForumDeel
-	 * @ORM\ManyToOne(targetEntity="ForumDeel")
-	 * @ORM\JoinColumn(name="forum_id", referencedColumnName="forum_id")
 	 */
+	#[ORM\ManyToOne(targetEntity: \ForumDeel::class)]
+	#[ORM\JoinColumn(name: 'forum_id', referencedColumnName: 'forum_id')]
 	public $deel;
 	/**
 	 * @var ForumDeel
-	 * @ORM\ManyToOne(targetEntity="ForumDeel")
-	 * @ORM\JoinColumn(name="gedeeld_met", referencedColumnName="forum_id", nullable=true)
 	 */
+	#[ORM\ManyToOne(targetEntity: \ForumDeel::class)]
+	#[
+		ORM\JoinColumn(
+			name: 'gedeeld_met',
+			referencedColumnName: 'forum_id',
+			nullable: true
+		)
+	]
 	public $gedeeld_met_deel;
 	/**
 	 * ForumPosts
@@ -169,13 +183,13 @@ class ForumDraad
 	private $aantal_ongelezen_posts;
 	/**
 	 * @var PersistentCollection|ForumDraadVerbergen[]
-	 * @ORM\OneToMany(targetEntity="ForumDraadVerbergen", mappedBy="draad")
 	 */
+	#[ORM\OneToMany(targetEntity: \ForumDraadVerbergen::class, mappedBy: 'draad')]
 	private $verbergen;
 	/**
 	 * @var PersistentCollection|ForumDraadMelding[]
-	 * @ORM\OneToMany(targetEntity="ForumDraadMelding", mappedBy="draad")
 	 */
+	#[ORM\OneToMany(targetEntity: \ForumDraadMelding::class, mappedBy: 'draad')]
 	private $meldingen;
 
 	public function __construct()
@@ -316,7 +330,7 @@ class ForumDraad
 	public function getLaatstePostSamenvatting()
 	{
 		$laatste = $this->laatste_post;
-		$parseMail = strip_tags(CsrBB::parseMail($laatste->tekst));
+		$parseMail = strip_tags((string) CsrBB::parseMail($laatste->tekst));
 		return TextUtil::truncate($parseMail, 100);
 	}
 

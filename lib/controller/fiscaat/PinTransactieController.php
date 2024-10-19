@@ -40,51 +40,25 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
  */
 class PinTransactieController extends AbstractController
 {
-	/** @var CiviBestellingRepository */
-	private $civiBestellingModel;
-	/** @var CiviSaldoRepository */
-	private $civiSaldoRepository;
-	/** @var CiviProductRepository */
-	private $civiProductRepository;
-	/** @var PinTransactieMatchRepository */
-	private $pinTransactieMatchRepository;
-	/** @var PinTransactieRepository */
-	private $pinTransactieRepository;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $em;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-
 	public function __construct(
-		EntityManagerInterface $em,
-		CiviBestellingRepository $civiBestellingRepository,
-		CiviSaldoRepository $civiSaldoRepository,
-		CiviProductRepository $civiProductRepository,
-		PinTransactieMatchRepository $pinTransactieMatchRepository,
-		PinTransactieRepository $pinTransactieRepository,
-		MailService $mailService
+		private readonly EntityManagerInterface $em,
+		private readonly CiviBestellingRepository $civiBestellingModel,
+		private readonly CiviSaldoRepository $civiSaldoRepository,
+		private readonly CiviProductRepository $civiProductRepository,
+		private readonly PinTransactieMatchRepository $pinTransactieMatchRepository,
+		private readonly PinTransactieRepository $pinTransactieRepository,
+		private readonly MailService $mailService
 	) {
-		$this->civiBestellingModel = $civiBestellingRepository;
-		$this->civiSaldoRepository = $civiSaldoRepository;
-		$this->civiProductRepository = $civiProductRepository;
-		$this->pinTransactieMatchRepository = $pinTransactieMatchRepository;
-		$this->pinTransactieRepository = $pinTransactieRepository;
-		$this->em = $em;
-		$this->mailService = $mailService;
 	}
 
 	/**
 	 * @param Request $request
 	 * @return Response
 	 * @throws ExceptionInterface
-	 * @Route("/fiscaat/pin", methods={"GET", "POST"})
 	 * @Auth(P_FISCAAT_READ)
 	 * @return GenericDataTableResponse
 	 */
+	#[Route(path: '/fiscaat/pin', methods: ['GET', 'POST'])]
 	public function overzicht(Request $request)
 	{
 		$table = $this->createDataTable(PinTransactieMatchTableType::class);
@@ -92,16 +66,10 @@ class PinTransactieController extends AbstractController
 		if ($request->isMethod('POST')) {
 			$filter = $request->query->get('filter', '');
 
-			switch ($filter) {
-				case 'metFout':
-					$data = $this->pinTransactieMatchRepository->metFout();
-					break;
-
-				case 'alles':
-				default:
-					$data = $this->pinTransactieMatchRepository->findAll();
-					break;
-			}
+			$data = match ($filter) {
+				'metFout' => $this->pinTransactieMatchRepository->metFout(),
+				default => $this->pinTransactieMatchRepository->findAll(),
+			};
 
 			return $table->createData($data);
 		}
@@ -114,9 +82,9 @@ class PinTransactieController extends AbstractController
 
 	/**
 	 * @throws CsrException
-	 * @Route("/fiscaat/pin/verwerk", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/pin/verwerk', methods: ['POST'])]
 	public function verwerk()
 	{
 		$selection = $this->getDataTableSelection();
@@ -165,9 +133,9 @@ class PinTransactieController extends AbstractController
 
 	/**
 	 * @throws CsrGebruikerException
-	 * @Route("/fiscaat/pin/aanmaken", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/pin/aanmaken', methods: ['POST'])]
 	public function aanmaken()
 	{
 		$form = new PinBestellingAanmakenForm();
@@ -263,9 +231,9 @@ class PinTransactieController extends AbstractController
 
 	/**
 	 * @throws CsrGebruikerException
-	 * @Route("/fiscaat/pin/ontkoppel", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/pin/ontkoppel', methods: ['POST'])]
 	public function ontkoppel()
 	{
 		$selection = $this->getDataTableSelection();
@@ -320,9 +288,9 @@ class PinTransactieController extends AbstractController
 
 	/**
 	 * @throws CsrException
-	 * @Route("/fiscaat/pin/koppel", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/pin/koppel', methods: ['POST'])]
 	public function koppel()
 	{
 		$selection = $this->getDataTableSelection();
@@ -424,9 +392,9 @@ class PinTransactieController extends AbstractController
 
 	/**
 	 * Crediteer pingedeelte van deze bestelling.
-	 * @Route("/fiscaat/pin/crediteer", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/pin/crediteer', methods: ['POST'])]
 	public function crediteer()
 	{
 		$form = new PinBestellingCrediterenForm();
@@ -527,9 +495,9 @@ class PinTransactieController extends AbstractController
 
 	/**
 	 * Verander het bedrag in de bestelling.
-	 * @Route("/fiscaat/pin/update", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/pin/update', methods: ['POST'])]
 	public function update()
 	{
 		$form = new PinBestellingVeranderenForm();
@@ -651,9 +619,9 @@ class PinTransactieController extends AbstractController
 
 	/**
 	 * @throws CsrGebruikerException
-	 * @Route("/fiscaat/pin/info", methods={"POST"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
+	#[Route(path: '/fiscaat/pin/info', methods: ['POST'])]
 	public function info()
 	{
 		$form = new PinBestellingInfoForm(new PinTransactieMatch());
@@ -688,9 +656,9 @@ class PinTransactieController extends AbstractController
 	}
 
 	/**
-	 * @Route("/fiscaat/pin/negeer", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/pin/negeer', methods: ['POST'])]
 	public function negeer()
 	{
 		$selection = $this->getDataTableSelection();
@@ -701,7 +669,7 @@ class PinTransactieController extends AbstractController
 
 			$updated = $this->em->transactional(function () use ($values) {
 				$updated = [];
-				foreach (explode(',', $values['ids']) as $uuid) {
+				foreach (explode(',', (string) $values['ids']) as $uuid) {
 					$pinTransactieMatch = $this->pinTransactieMatchRepository->retrieveByUuid(
 						$uuid
 					);
@@ -734,9 +702,9 @@ class PinTransactieController extends AbstractController
 	/**
 	 * Verwijder matches die geen bestelling en transactie hebben. Dit kan gebeuren als een probleem binnen het
 	 * socciesysteem wordt opgelost.
-	 * @Route("/fiscaat/pin/heroverweeg", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/pin/heroverweeg', methods: ['POST'])]
 	public function heroverweeg()
 	{
 		$deleted = $this->em->transactional(function () {

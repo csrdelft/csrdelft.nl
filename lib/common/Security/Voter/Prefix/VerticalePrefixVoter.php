@@ -12,7 +12,7 @@ class VerticalePrefixVoter extends PrefixVoter
 {
 	protected function supportsPrefix($prefix)
 	{
-		return strtoupper($prefix) == 'VERTICALE';
+		return strtoupper((string) $prefix) == 'VERTICALE';
 	}
 
 	protected function voteOnPrefix(
@@ -21,7 +21,7 @@ class VerticalePrefixVoter extends PrefixVoter
 		$role,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		/** @var Account $user */
 		$user = $token->getUser();
 		if (!$user) {

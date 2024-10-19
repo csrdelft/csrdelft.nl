@@ -10,6 +10,7 @@ htdocs
 bin/.phpunit
 vendor
 composer.lock
+composer.json
 
 # Built docs site
 docs/_site

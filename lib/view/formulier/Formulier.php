@@ -31,10 +31,8 @@ use CsrDelft\view\View;
 class Formulier implements View, Validator, ToResponse
 {
 	use ToHtmlResponse;
-	protected $model;
 	protected $formId;
 	protected $dataTableId;
-	protected $action = null;
 	public $post = true;
 	protected $error;
 	protected $enctype = 'multipart/form-data';
@@ -51,22 +49,18 @@ class Formulier implements View, Validator, ToResponse
 	protected $formKnoppen;
 	public $css_classes = [];
 	protected $javascript = '';
-	public $titel;
 
 	public function __construct(
-		$model,
-		$action,
-		$titel = false,
+		protected $model,
+		protected $action,
+		public $titel = false,
 		$dataTableId = false
 	) {
-		$this->model = $model;
 		$this->formId = CryptoUtil::uniqid_safe(
 			ReflectionUtil::classNameZonderNamespace(
-				get_class($this->model == null ? $this : $this->model)
+				($this->model == null ? $this : $this->model)::class
 			)
 		);
-		$this->action = $action;
-		$this->titel = $titel;
 		$this->css_classes[] = 'Formulier';
 		// Link with DataTable?
 		if ($dataTableId === true) {
@@ -122,7 +116,7 @@ class Formulier implements View, Validator, ToResponse
 		$fieldName = $field->getName();
 		if ($this->model) {
 			$class = new \ReflectionClass($this->model);
-			$setterMethod = 'set' . ucfirst($fieldName);
+			$setterMethod = 'set' . ucfirst((string) $fieldName);
 			if ($class->hasMethod($setterMethod)) {
 				$method = $class->getMethod($setterMethod);
 				if ($field->getFormattedValue() == null) {
@@ -285,7 +279,7 @@ class Formulier implements View, Validator, ToResponse
 		return '<form enctype="' .
 			$this->enctype .
 			'" action="' .
-			htmlspecialchars($this->action) .
+			htmlspecialchars((string) $this->action) .
 			'" id="' .
 			$this->formId .
 			'" data-tableid="' .
@@ -301,7 +295,7 @@ class Formulier implements View, Validator, ToResponse
 	{
 		$js = $this->getJavascript();
 
-		if (trim($js) == '') {
+		if (trim((string) $js) == '') {
 			return '';
 		}
 
@@ -320,7 +314,7 @@ HTML;
 	 *
 	 * @return string
 	 */
-	public function __toString()
+	public function __toString(): string
 	{
 		$string = '';
 

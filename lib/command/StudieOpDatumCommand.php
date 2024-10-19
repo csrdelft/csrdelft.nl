@@ -8,30 +8,27 @@ use CsrDelft\model\entity\profiel\ProfielLogValueChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\repository\ProfielRepository;
 use DateTime;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
+#[
+	AsCommand(
+		name: 'leden:studie:datum',
+		description: 'Haal de studies van leden op een bepaalde datum.'
+	)
+]
 class StudieOpDatumCommand extends Command
 {
-	private $profielRepository;
-
-	public function __construct(ProfielRepository $profielRepository)
-	{
-		$this->profielRepository = $profielRepository;
-
+	public function __construct(
+		private readonly ProfielRepository $profielRepository
+	) {
 		parent::__construct();
 	}
 
-	protected function configure()
-	{
-		$this->setName('leden:studie:datum')->setDescription(
-			'Haal de studies van leden op op een bepaalde datum.'
-		);
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$helper = $this->getHelper('question');
 
@@ -62,19 +59,17 @@ class StudieOpDatumCommand extends Command
 				$values[$field] = $lid->$field;
 			}
 
-			$logs = array_filter($lid->changelog, function ($a) {
-				return $a instanceof ProfielUpdateLogGroup;
-			});
-			usort($logs, function (
-				ProfielUpdateLogGroup $a,
-				ProfielUpdateLogGroup $b
-			) {
-				if ($a->timestamp == $b->timestamp) {
-					return 0;
-				}
-
-				return $a->timestamp < $b->timestamp ? -1 : 1;
-			});
+			$logs = array_filter(
+				$lid->changelog,
+				fn($a) => $a instanceof ProfielUpdateLogGroup
+			);
+			usort(
+				$logs,
+				fn(
+					ProfielUpdateLogGroup $a,
+					ProfielUpdateLogGroup $b
+				) => $a->timestamp <=> $b->timestamp
+			);
 			foreach ($logs as $log) {
 				if (empty($watch)) {
 					break;

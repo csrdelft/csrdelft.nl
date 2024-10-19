@@ -13,6 +13,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\MailService;
 use DateInterval;
 use Twig\Environment;
+use DateTime;
 
 /**
  * CorveeHerinneringenModel.class.php
@@ -22,53 +23,34 @@ use Twig\Environment;
  */
 class CorveeHerinneringService
 {
-	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-
 	public function __construct(
-		Environment $twig,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		CorveeTakenRepository $corveeTakenRepository,
-		ProfielRepository $profielRepository,
-		MailService $mailService
+		private readonly Environment $twig,
+		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		private readonly CorveeTakenRepository $corveeTakenRepository,
+		private readonly ProfielRepository $profielRepository,
+		private readonly MailService $mailService
 	) {
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->profielRepository = $profielRepository;
-		$this->twig = $twig;
-		$this->mailService = $mailService;
 	}
 
 	public function stuurHerinnering(CorveeTaak $taak)
 	{
-		$datum = DateUtil::dateFormatIntl($taak->datum, DateUtil::DATE_FORMAT);
+		$datumCorvee = DateUtil::dateFormatIntl(
+			$taak->datum,
+			DateUtil::DATE_FORMAT
+		);
+		$datumAfmelden = DateUtil::dateFormatIntl(
+			$taak->datum->add(DateInterval::createFromDateString('-22 days')),
+			DateUtil::DATE_FORMAT
+		);
 		if (!$taak->profiel) {
 			throw new CsrGebruikerException(
-				$datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!'
+				$datumCorvee . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!'
 			);
 		}
 		$lidnaam = $taak->profiel->getNaam('civitas');
 		$to = $taak->profiel->getEmailOntvanger();
 		$from = $_ENV['EMAIL_CC'];
-		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
+		$onderwerp = 'C.S.R. Delft corvee ' . $datumCorvee;
 		$eten = '';
 		if ($taak->maaltijd !== null) {
 			$aangemeld = $this->maaltijdAanmeldingenRepository->getIsAangemeld(
@@ -82,8 +64,8 @@ class CorveeHerinneringService
 			}
 		}
 		$bericht = str_replace(
-			['LIDNAAM', 'DATUM', 'MEEETEN'],
-			[$lidnaam, $datum, $eten],
+			['LIDNAAM', 'DATUM_CORVEE', 'MEEETEN', 'DATUM_AFMELDEN'],
+			[$lidnaam, $datumCorvee, $eten, $datumAfmelden],
 			$taak->corveeFunctie->email_bericht
 		);
 		$mail = new Mail($to, $onderwerp, $bericht);
@@ -93,7 +75,7 @@ class CorveeHerinneringService
 			if (!$mail->inDebugMode()) {
 				$this->corveeTakenRepository->updateGemaild($taak);
 			}
-			return $datum .
+			return $datumCorvee .
 				' ' .
 				$taak->corveeFunctie->naam .
 				' verstuurd! (' .
@@ -101,7 +83,12 @@ class CorveeHerinneringService
 				')';
 		} else {
 			throw new CsrGebruikerException(
-				$datum . ' ' . $taak->corveeFunctie->naam . ' faalt! (' . $lidnaam . ')'
+				$datumCorvee .
+					' ' .
+					$taak->corveeFunctie->naam .
+					' faalt! (' .
+					$lidnaam .
+					')'
 			);
 		}
 	}

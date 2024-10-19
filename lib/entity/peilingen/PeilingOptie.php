@@ -9,66 +9,69 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Entity(repositoryClass="CsrDelft\repository\peilingen\PeilingOptiesRepository")
- * @ORM\Table("peiling_optie", indexes={
- *   @ORM\Index(name="optie", columns={"titel"})
- * })
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\peilingen\PeilingOptiesRepository::class
+	)
+]
+#[ORM\Table('peiling_optie')]
+#[ORM\Index(name: 'optie', columns: ['titel'])]
 class PeilingOptie implements DataTableEntry
 {
 	/**
 	 * Primary key
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $id;
 	/**
 	 * Foreign key
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
+	#[ORM\Column(type: 'integer')]
 	public $peiling_id;
 	/**
 	 * Titel
 	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
+	#[ORM\Column(type: 'string')]
 	public $titel;
 	/**
 	 * @var string
-	 * @ORM\Column(type="text", nullable=true)
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
+	#[ORM\Column(type: 'text', nullable: true)]
 	public $beschrijving;
 	/**
 	 * Aantal stemmen
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable"})
 	 */
+	#[Serializer\Groups(['datatable'])]
+	#[ORM\Column(type: 'integer')]
 	public $stemmen = 0;
 	/**
 	 * @var string
-	 * @ORM\Column(type="uid", nullable=true)
-	 * @Serializer\Groups({"datatable"})
 	 */
+	#[Serializer\Groups(['datatable'])]
+	#[ORM\Column(type: 'uid', nullable: true)]
 	public $ingebracht_door;
 	/**
 	 * @var Peiling
-	 * @ORM\ManyToOne(targetEntity="Peiling", inversedBy="opties")
 	 */
+	#[ORM\ManyToOne(targetEntity: \Peiling::class, inversedBy: 'opties')]
 	public $peiling;
 
 	/**
 	 * @return int
-	 * @Serializer\Groups("vue")
-	 * @Serializer\SerializedName("stemmen")
 	 */
+	#[Serializer\Groups('vue')]
+	#[Serializer\SerializedName('stemmen')]
 	public function getVueStemmen()
 	{
 		$magStemmenZien =
@@ -84,8 +87,8 @@ class PeilingOptie implements DataTableEntry
 
 	/**
 	 * @return string
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
 	public function getBeschrijvingFormatted()
 	{
 		return CsrBB::parse($this->beschrijving);

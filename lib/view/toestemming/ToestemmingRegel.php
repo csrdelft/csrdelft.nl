@@ -4,36 +4,23 @@ namespace CsrDelft\view\toestemming;
 
 class ToestemmingRegel
 {
-	/** @var string */
-	public $module;
-	/** @var string */
-	public $id;
-	/** @var string */
-	public $type;
-	/** @var string */
-	public $opties;
-	/** @var string */
-	public $label;
-	/** @var string */
-	public $waarde;
-	/** @var string */
-	public $default;
-
+	/**
+	 * @param string $module
+	 * @param string $id
+	 * @param string $type
+	 * @param string $opties
+	 * @param string $label
+	 * @param string $waarde
+	 * @param string $default
+	 */
 	public function __construct(
-		$module,
-		$id,
-		$type,
-		$opties,
-		$label,
-		$waarde,
-		$default
+		public $module,
+		public $id,
+		public $type,
+		public $opties,
+		public $label,
+		public $waarde,
+		public $default
 	) {
-		$this->module = $module;
-		$this->id = $id;
-		$this->type = $type;
-		$this->opties = $opties;
-		$this->label = $label;
-		$this->waarde = $waarde;
-		$this->default = $default;
 	}
 }

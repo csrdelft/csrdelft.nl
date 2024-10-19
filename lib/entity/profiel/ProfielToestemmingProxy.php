@@ -15,15 +15,6 @@ use ReflectionProperty;
 class ProfielToestemmingProxy extends Profiel
 {
 	/**
-	 * @var Profiel
-	 */
-	private $profiel;
-	/**
-	 * @var LidToestemmingRepository
-	 */
-	private $lidToestemmingRepository;
-
-	/**
 	 * @var string[]
 	 */
 	private $filterVelden;
@@ -34,16 +25,13 @@ class ProfielToestemmingProxy extends Profiel
 	private static $publicVelden;
 
 	public function __construct(
-		Profiel $profiel,
-		LidToestemmingRepository $lidToestemmingRepository
+		private readonly Profiel $profiel,
+		private readonly LidToestemmingRepository $lidToestemmingRepository
 	) {
 		parent::__construct();
 
-		$this->profiel = $profiel;
-		$this->lidToestemmingRepository = $lidToestemmingRepository;
-
 		if (!static::$publicVelden) {
-			$reflectionClass = new ReflectionClass(get_class($this));
+			$reflectionClass = new ReflectionClass(static::class);
 			$publicReflectionProperties = $reflectionClass->getProperties(
 				ReflectionProperty::IS_PUBLIC
 			);
@@ -51,9 +39,10 @@ class ProfielToestemmingProxy extends Profiel
 				ReflectionProperty::IS_STATIC
 			);
 
-			static::$publicVelden = array_map(function ($prop) {
-				return $prop->name;
-			}, array_diff($publicReflectionProperties, $staticReflectionProperties));
+			static::$publicVelden = array_map(
+				fn($prop) => $prop->name,
+				array_diff($publicReflectionProperties, $staticReflectionProperties)
+			);
 		}
 
 		$this->filterVelden = $this->lidToestemmingRepository->getModuleKeys(
@@ -74,6 +63,18 @@ class ProfielToestemmingProxy extends Profiel
 
 	public function __get(string $name)
 	{
+		if (!$this->zichtbaar($name)) {
+			return null;
+		}
+
+		// Als profiel->get... bestaat, gebruik de getter
+		// Voor compatibiliteit met twig, want daar is geen verschil tussen
+		// een getter en een property.
+		$getter = 'get' . ucfirst($name);
+		if (method_exists($this, $getter)) {
+			return $this->profiel->{$getter}();
+		}
+
 		return $this->zichtbaar($name) ? $this->profiel->$name : null;
 	}
 

@@ -19,7 +19,7 @@ final class UrlUtil
 		}
 		return preg_match(
 			"/^[a-zA-Z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+(?:[a-zA-Z]{2,})\b$/",
-			$email
+			(string) $email
 		);
 	}
 
@@ -36,7 +36,7 @@ final class UrlUtil
 		}
 		return preg_match(
 			'_^(?:(?:https?|ftp)://)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)(?:\.(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)*(?:\.(?:[a-z\x{00a1}-\x{ffff}]{2,})))(?::\d{2,5})?(?:/[^\s]*)?$_iuS',
-			$url
+			(string) $url
 		);
 	}
 
@@ -75,9 +75,11 @@ final class UrlUtil
 	public static function url2absolute($baseurl, $relativeurl)
 	{
 		// if the relative URL is scheme relative then treat it differently
-		if (substr($relativeurl, 0, 2) === '//') {
-			if (parse_url($baseurl, PHP_URL_SCHEME) != null) {
-				return parse_url($baseurl, PHP_URL_SCHEME) . ':' . $relativeurl;
+		if (str_starts_with((string) $relativeurl, '//')) {
+			if (parse_url((string) $baseurl, PHP_URL_SCHEME) != null) {
+				return parse_url((string) $baseurl, PHP_URL_SCHEME) .
+					':' .
+					$relativeurl;
 			} else {
 				// assume HTTP
 				return 'http:' . $relativeurl;
@@ -85,8 +87,8 @@ final class UrlUtil
 		}
 
 		// if the relative URL points to the root then treat it more simply
-		if (substr($relativeurl, 0, 1) === '/') {
-			$parts = parse_url($baseurl);
+		if (str_starts_with((string) $relativeurl, '/')) {
+			$parts = parse_url((string) $baseurl);
 			$return = $parts['scheme'] . ':';
 			$return .= $parts['scheme'] === 'file' ? '///' : '//';
 			// username:password@host:port ... could go here too!
@@ -95,15 +97,15 @@ final class UrlUtil
 		}
 
 		// If the relative URL is actually an absolute URL then just use that
-		if (parse_url($relativeurl, PHP_URL_SCHEME) !== null) {
+		if (parse_url((string) $relativeurl, PHP_URL_SCHEME) !== null) {
 			return $relativeurl;
 		}
 
-		$parts = parse_url($baseurl);
+		$parts = parse_url((string) $baseurl);
 
 		// Chop off the query string in a base URL if it is there
 		if (isset($parts['query'])) {
-			$baseurl = strstr($baseurl, '?', true);
+			$baseurl = strstr((string) $baseurl, '?', true);
 		}
 
 		// The rest is adapted from Puggan Se
@@ -115,8 +117,8 @@ final class UrlUtil
 
 		// logic for username:password@host:port ... query string etc. could go here too ... somewhere?
 
-		$basepath = explode('/', $baseurl); // will this handle correctly when query strings have '/'
-		$relpath = explode('/', $relativeurl);
+		$basepath = explode('/', (string) $baseurl); // will this handle correctly when query strings have '/'
+		$relpath = explode('/', (string) $relativeurl);
 
 		array_pop($basepath);
 
@@ -148,13 +150,18 @@ final class UrlUtil
 	// Base64url functies van https://www.php.net/manual/en/function.base64-encode.php#103849
 	public static function base64url_encode($data)
 	{
-		return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+		return rtrim(strtr(base64_encode((string) $data), '+/', '-_'), '=');
 	}
 
 	public static function base64url_decode($data)
 	{
 		return base64_decode(
-			str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT)
+			str_pad(
+				strtr($data, '-_', '+/'),
+				strlen((string) $data) % 4,
+				'=',
+				STR_PAD_RIGHT
+			)
 		);
 	}
 

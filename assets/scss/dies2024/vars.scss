@@ -1,0 +1,69 @@
+/* variables */
+$kleur-blauw-1: #0f1432;
+$kleur-blauw-2: #1e2050;
+$kleur-blauw-3: #45496e;
+$kleur-blauw-4: #4b81a7;
+$kleur-blauw-5: #8cc2de;
+
+$kleur-paars-6: #31163f;
+$kleur-paars-7: #632f7a;
+$kleur-paars-8: #8752a2;
+$kleur-paars-9: #b28abf;
+$kleur-paars-10: #ccb7d8;
+
+$kleur-blauw-11: #6da9dd;
+$kleur-blauw-12: #7db7e4;
+$kleur-blauw-13: #85c6ea;
+$kleur-blauw-14: #a9e0f5;
+$kleur-blauw-15: #bfe6f7;
+
+$kleur-geel-16: #ffd37a;
+$kleur-geel-17: #faea95;
+$kleur-geel-18: #f9f498;
+$kleur-geel-19: #fbf9c9;
+$kleur-geel-20: #fdfbe2;
+
+$kleur-oranje-21: #d75c38;
+$kleur-oranje-22: #fabd5c;
+$kleur-oranje-23: #f9c76b;
+$kleur-oranje-24: #eedda2;
+$kleur-oranje-25: #fcfae0;
+
+$kleur-wit: #ffffff;
+$kleur-zwart: #000000;
+
+$kleur-text-wit: #fbf8cc;
+$kleur-text-wit-onhover: #d3d1ad;
+$kleur-text-blauw: #39358a;
+$kleur-text-zwart: #0e143b;
+$kleur-oranje-1: #ed8a22;
+$kleur-oranje-2: #f1b770;
+$kleur-oranje-3: #fad9a8;
+$kleur-paars-1: #9b86be;
+$kleur-paars-2: #7054a3;
+
+$font-header: Helvetica, sans-serif;
+$font-text: Arial, Helvetica, sans-serif;
+
+$primary: $kleur-oranje-1 !default;
+$secondary: $kleur-paars-2 !default;
+$font-color-primary: $kleur-text-wit !default;
+$font-color-secondary: #ffffff !default;
+
+$theme-colors: (
+	"primary": $primary,
+	"secondary": $secondary,
+	"danger": #ff4136,
+	"white": #f6c8b1,
+);
+
+$font-family-sans-serif: $font-text;
+$headings-font-family: $font-header;
+$headings-font-weight: 700;
+$header-color: $font-color-primary;
+$body-bg: $secondary;
+
+$h1-font-size: 4.4rem;
+$h2-font-size: 3.2rem;
+$h3-font-size: 2.5rem;
+$h4-font-size: 2rem;

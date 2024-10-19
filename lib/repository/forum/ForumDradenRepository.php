@@ -14,6 +14,7 @@ use CsrDelft\repository\Paging;
 use CsrDelft\service\security\LoginService;
 use Doctrine\DBAL\Exception\SyntaxErrorException;
 use Doctrine\ORM\PersistentCollection;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -152,7 +153,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return max(1, $this->aantal_paginas[$forum_id]);
 	}
 
-	public function createQueryBuilder($alias, $indexBy = null)
+	public function createQueryBuilder($alias, $indexBy = null): QueryBuilder
 	{
 		return parent::createQueryBuilder($alias, $indexBy)
 			->orderBy($alias . '.plakkerig', 'DESC')
@@ -200,7 +201,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	{
 		$qb = $this->createQueryBuilder('draad');
 		// Als er geen spatie in de zoekterm zit, doe dan keyword search met '<zoekterm>*'
-		if (strstr($forumZoeken->zoekterm, ' ') == false) {
+		if (!str_contains($forumZoeken->zoekterm, ' ')) {
 			$qb->addSelect(
 				'MATCH(draad.titel) AGAINST (:query IN BOOLEAN MODE) AS score'
 			);
@@ -221,7 +222,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		$qb->setMaxResults($forumZoeken->limit);
 		try {
 			$results = $qb->getQuery()->getResult();
-		} catch (SyntaxErrorException $ex) {
+		} catch (SyntaxErrorException) {
 			FlashUtil::setFlashWithContainerFacade(
 				'Op deze term kan niet gezocht worden',
 				-1
@@ -320,7 +321,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 			$this->getEntityManager()->flush();
 
 			return 1;
-		} catch (Exception $ex) {
+		} catch (Exception) {
 			return 0;
 		}
 	}

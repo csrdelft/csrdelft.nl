@@ -18,21 +18,10 @@ use Symfony\Component\Security\Core\Security;
 
 class AccountForm implements FormulierTypeInterface
 {
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-
 	public function __construct(
-		Security $security,
-		UrlGeneratorInterface $urlGenerator
+		private readonly Security $security,
+		private readonly UrlGeneratorInterface $urlGenerator
 	) {
-		$this->security = $security;
-		$this->urlGenerator = $urlGenerator;
 	}
 
 	/**

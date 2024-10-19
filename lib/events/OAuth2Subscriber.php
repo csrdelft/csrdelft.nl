@@ -22,48 +22,17 @@ use Twig\Error\SyntaxError;
 
 class OAuth2Subscriber implements EventSubscriberInterface
 {
-	/**
-	 * @var RequestStack
-	 */
-	private $requestStack;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var AccessService
-	 */
-	private $accessService;
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
-	 * @var RememberOAuthRepository
-	 */
-	private $rememberOAuthRepository;
-	/**
-	 * @var Security
-	 */
-	private $security;
-
 	public function __construct(
-		RequestStack $requestStack,
-		Environment $twig,
-		Security $security,
-		AccessService $accessService,
-		RememberOAuthRepository $rememberOAuthRepository,
-		AccountRepository $accountRepository
+		private readonly RequestStack $requestStack,
+		private readonly Environment $twig,
+		private readonly Security $security,
+		private readonly AccessService $accessService,
+		private readonly RememberOAuthRepository $rememberOAuthRepository,
+		private readonly AccountRepository $accountRepository
 	) {
-		$this->requestStack = $requestStack;
-		$this->twig = $twig;
-		$this->accessService = $accessService;
-		$this->accountRepository = $accountRepository;
-		$this->rememberOAuthRepository = $rememberOAuthRepository;
-		$this->security = $security;
 	}
 
-	public static function getSubscribedEvents()
+	public static function getSubscribedEvents(): array
 	{
 		return [
 			OAuth2Events::SCOPE_RESOLVE => 'onScopeResolve',
@@ -105,9 +74,10 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		$request = $this->requestStack->getMainRequest();
 
 		if ($request->query->has('scopeChoice')) {
-			$requestedScopes = array_map(function ($scope) {
-				return new Scope($scope);
-			}, (array) $request->query->get('scopeChoice'));
+			$requestedScopes = array_map(
+				fn($scope) => new Scope($scope),
+				(array) $request->query->get('scopeChoice')
+			);
 		}
 
 		$scopes = [];
@@ -196,7 +166,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 			}
 		}
 
-		$redirect_uri = parse_url($request->get('redirect_uri'));
+		$redirect_uri = parse_url((string) $request->get('redirect_uri'));
 
 		$redirect_uri_formatted =
 			$redirect_uri['host'] .

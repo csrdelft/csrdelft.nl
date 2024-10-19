@@ -15,68 +15,75 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Heeft een of meer @see CiviBestellingInhoud
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviBestellingRepository")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\fiscaat\CiviBestellingRepository::class
+	)
+]
 class CiviBestelling
 {
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
+	#[ORM\Column(type: 'uid')]
 	public $uid;
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer", options={"default"=0})
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
+	#[ORM\Column(type: 'integer', options: ['default' => 0])]
 	public $totaal = 0;
 	/**
 	 * @var boolean
-	 * @ORM\Column(type="boolean", options={"default"=false})
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
+	#[ORM\Column(type: 'boolean', options: ['default' => false])]
 	public $deleted;
 	/**
 	 * @var \DateTimeImmutable
-	 * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
+	#[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
 	public $moment;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
-	public $comment;
+	#[Serializer\Groups(['datatable', 'bar'])]
+	#[ORM\Column(type: 'string', nullable: true)]
+	public $comment; // TODO dit is een CiviSaldoCommissieEnum
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
-	 * TODO dit is een CiviSaldoCommissieEnum
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
+	#[ORM\Column(type: 'string')]
 	public $cie;
 	/**
 	 * @var CiviBestellingInhoud[]|ArrayCollection
-	 * @ORM\OneToMany(targetEntity="CiviBestellingInhoud", mappedBy="bestelling")
-	 * @Serializer\Groups("bar")
 	 */
+	#[Serializer\Groups('bar')]
+	#[
+		ORM\OneToMany(
+			targetEntity: \CiviBestellingInhoud::class,
+			mappedBy: 'bestelling'
+		)
+	]
 	public $inhoud;
 
 	/**
 	 * @var CiviSaldo
-	 * @ORM\ManyToOne(targetEntity="CiviSaldo", inversedBy="bestellingen")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CiviSaldo::class, inversedBy: 'bestellingen')]
+	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $civiSaldo;
 
 	public function __construct()
@@ -86,9 +93,9 @@ class CiviBestelling
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("inhoud")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('inhoud')]
 	public function getInhoudTekst()
 	{
 		$bestellingenInhoud = [];

@@ -8,14 +8,8 @@ use Symfony\Component\Security\Core\Security;
 
 class CacheControlEventListener
 {
-	/**
-	 * @var Security
-	 */
-	private $security;
-
-	public function __construct(Security $security)
+	public function __construct(private readonly Security $security)
 	{
-		$this->security = $security;
 	}
 
 	public function onKernelResponse(ResponseEvent $event)

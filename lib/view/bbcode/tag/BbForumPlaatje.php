@@ -13,21 +13,11 @@ class BbForumPlaatje extends BbImg
 	 * @var ForumPlaatje
 	 */
 	private $plaatje;
-	/**
-	 * @var ForumPlaatjeRepository
-	 */
-	private $forumPlaatjeRepository;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	public function __construct(
-		Security $security,
-		ForumPlaatjeRepository $forumPlaatjeRepository
+		private readonly Security $security,
+		private readonly ForumPlaatjeRepository $forumPlaatjeRepository
 	) {
-		$this->forumPlaatjeRepository = $forumPlaatjeRepository;
-		$this->security = $security;
 	}
 
 	public static function getTagName()

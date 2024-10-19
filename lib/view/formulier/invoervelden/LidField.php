@@ -40,7 +40,7 @@ class LidField extends AutocompleteField
 			$zoekin = 'leden';
 		}
 		$this->zoekin = $zoekin;
-		$this->suggestions[ucfirst($this->zoekin)] =
+		$this->suggestions[ucfirst((string) $this->zoekin)] =
 			'/tools/naamsuggesties?zoekin=' . $this->zoekin . '&q=';
 	}
 

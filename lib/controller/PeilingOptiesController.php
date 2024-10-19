@@ -24,20 +24,23 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PeilingOptiesController extends AbstractController
 {
-	/** @var PeilingOptiesRepository */
-	private $peilingOptiesRepository;
-
-	public function __construct(PeilingOptiesRepository $peilingOptiesRepository)
-	{
-		$this->peilingOptiesRepository = $peilingOptiesRepository;
+	public function __construct(
+		private readonly PeilingOptiesRepository $peilingOptiesRepository
+	) {
 	}
 
 	/**
 	 * @param $id
 	 * @return PeilingOptieTable
-	 * @Route("/peilingen/opties/{id}", methods={"GET"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
+	#[
+		Route(
+			path: '/peilingen/opties/{id}',
+			methods: ['GET'],
+			requirements: ['id' => '\d+']
+		)
+	]
 	public function table($id): PeilingOptieTable
 	{
 		return new PeilingOptieTable($id);
@@ -46,10 +49,16 @@ class PeilingOptiesController extends AbstractController
 	/**
 	 * @param $id
 	 * @return GenericDataTableResponse
-	 * @Route("/peilingen/opties/{id}", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
 	#[IsGranted("bekijken", subject: "peiling")]
+	#[
+		Route(
+			path: '/peilingen/opties/{id}',
+			methods: ['POST'],
+			requirements: ['id' => '\d+']
+		)
+	]
 	public function lijst(Peiling $peiling): GenericDataTableResponse
 	{
 		return $this->tableData(
@@ -60,9 +69,15 @@ class PeilingOptiesController extends AbstractController
 	/**
 	 * @param Peiling $peiling
 	 * @return GenericDataTableResponse|PeilingOptieForm
-	 * @Route("/peilingen/opties/{id}/toevoegen", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_VOTE)
 	 */
+	#[
+		Route(
+			path: '/peilingen/opties/{id}/toevoegen',
+			methods: ['POST'],
+			requirements: ['id' => '\d+']
+		)
+	]
 	public function toevoegen(Peiling $peiling)
 	{
 		$form = new PeilingOptieForm(new PeilingOptie(), $peiling->id);
@@ -94,9 +109,9 @@ class PeilingOptiesController extends AbstractController
 	/**
 	 * @throws CsrGebruikerException
 	 * @return GenericDataTableResponse
-	 * @Route("/peilingen/opties/verwijderen", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
+	#[Route(path: '/peilingen/opties/verwijderen', methods: ['POST'])]
 	public function verwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();

@@ -18,37 +18,43 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Voor corvee-module:
  *  - Corveepunten per jaar
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\instellingen\InstellingenRepository")
- * @ORM\Table(
- *   "instellingen",
- *   uniqueConstraints={@ORM\UniqueConstraint(name="module_instelling", columns={"module", "instelling"})}
- * )
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\instellingen\InstellingenRepository::class
+	)
+]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table('instellingen')]
+#[
+	ORM\UniqueConstraint(
+		name: 'module_instelling',
+		columns: ['module', 'instelling']
+	)
+]
 class Instelling
 {
 	/**
 	 * @var integer
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="integer")
 	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	public $id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
 	 */
+	#[ORM\Column(type: 'string')]
 	public $module;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
 	 */
+	#[ORM\Column(type: 'string')]
 	public $instelling;
 	/**
 	 * Value
 	 * @var string
-	 * @ORM\Column(type="text")
 	 */
+	#[ORM\Column(type: 'text')]
 	public $waarde;
 }

@@ -18,13 +18,13 @@ class VerticaleGroepVoter extends AbstractGroepVoter
 		$subject,
 		TokenInterface $token
 	): bool {
-		switch ($attribute) {
-			case self::BEKIJKEN:
-			case self::AANMAKEN:
-			case self::WIJZIGEN:
-				return parent::voteOnAttribute($attribute, $subject, $token);
-			default:
-				return false;
-		}
+		return match ($attribute) {
+			self::BEKIJKEN, self::AANMAKEN, self::WIJZIGEN => parent::voteOnAttribute(
+				$attribute,
+				$subject,
+				$token
+			),
+			default => false,
+		};
 	}
 }

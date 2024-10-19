@@ -8,26 +8,19 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/04/2019
  */
-class GroepKeuzeSelectie
+class GroepKeuzeSelectie implements \Stringable
 {
 	/**
-	 * @var string|null
-	 * @Serializer\Groups("vue")
+	 * @param string|null $naam
+	 * @param string|null $selectie
 	 */
-	public $naam;
-	/**
-	 * @var string|null
-	 * @Serializer\Groups("vue")
-	 */
-	public $selectie;
-
-	public function __construct($naam = null, $selectie = null)
-	{
-		$this->naam = $naam;
-		$this->selectie = $selectie;
+	public function __construct(
+		#[Serializer\Groups('vue')] public $naam = null,
+		#[Serializer\Groups('vue')] public $selectie = null
+	) {
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return "$this->naam: $this->selectie";
 	}

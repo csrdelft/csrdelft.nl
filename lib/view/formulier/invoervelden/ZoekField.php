@@ -77,7 +77,7 @@ JS;
 		}
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$lidInstellingenRepository = ContainerFacade::getContainer()->get(
@@ -89,13 +89,13 @@ JS;
 			if ($instelling !== 'nee') {
 				$html .= Icon::getTag('check', null, '', 'fa-fw me-2') . ' ';
 				if ($option === 'leden') {
-					$html .= ucfirst(strtolower($instelling)) . '</a>';
+					$html .= ucfirst(strtolower((string) $instelling)) . '</a>';
 					continue;
 				}
 			} else {
 				$html .= Icon::getTag('', null, '', 'fa-fw me-2') . ' ';
 			}
-			$html .= ucfirst($option) . '</a>';
+			$html .= ucfirst((string) $option) . '</a>';
 		}
 		$wikiUrl = ContainerFacade::getContainer()->getParameter('wiki_url');
 		$zoekIcoon = Icon::getTag('search', null, 'Zoeken');

@@ -25,27 +25,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class DocumentToevoegenForm implements FormulierTypeInterface
 {
 	private $uploader;
-	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-	/**
-	 * @var DocumentCategorieRepository
-	 */
-	private $documentCategorieRepository;
-	/**
-	 * @var LoginService
-	 */
-	private $loginService;
 
 	public function __construct(
-		UrlGeneratorInterface $urlGenerator,
-		DocumentCategorieRepository $documentCategorieRepository,
-		LoginService $loginService
+		private readonly UrlGeneratorInterface $urlGenerator,
+		private readonly DocumentCategorieRepository $documentCategorieRepository,
+		private readonly LoginService $loginService
 	) {
-		$this->urlGenerator = $urlGenerator;
-		$this->documentCategorieRepository = $documentCategorieRepository;
-		$this->loginService = $loginService;
 	}
 
 	/**

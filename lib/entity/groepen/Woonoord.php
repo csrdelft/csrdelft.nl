@@ -14,9 +14,12 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Een woonoord is waar C.S.R.-ers bij elkaar wonen.
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WoonoordenRepository")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\groepen\WoonoordenRepository::class
+	)
+]
 class Woonoord extends Groep implements HeeftSoort, HeeftMoment
 {
 	use GroepMoment;
@@ -24,16 +27,16 @@ class Woonoord extends Groep implements HeeftSoort, HeeftMoment
 	/**
 	 * Woonoord / Huis
 	 * @var HuisStatus
-	 * @ORM\Column(type="enumHuisStatus")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'enumHuisStatus')]
 	public $huisStatus;
 
 	/**
 	 * Doet mee met Eetplan
-	 * @ORM\Column(type="boolean")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'boolean')]
 	public $eetplan;
 
 	public function getUrl()

@@ -24,15 +24,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 class ChangeLogRepository extends AbstractRepository
 {
 	/**
-	 * @var SerializerInterface
-	 */
-	private $serializer;
-	/**
-	 * @var Security
-	 */
-	private $security;
-
-	/**
 	 * ChangeLogModel constructor.
 	 * @param ManagerRegistry $registry
 	 * @param SerializerInterface $serializer
@@ -40,13 +31,10 @@ class ChangeLogRepository extends AbstractRepository
 	 */
 	public function __construct(
 		ManagerRegistry $registry,
-		SerializerInterface $serializer,
-		Security $security
+		private readonly SerializerInterface $serializer,
+		private readonly Security $security
 	) {
 		parent::__construct($registry, ChangeLogEntry::class);
-
-		$this->serializer = $serializer;
-		$this->security = $security;
 	}
 
 	/**
@@ -82,13 +70,13 @@ class ChangeLogRepository extends AbstractRepository
 		$change = new ChangeLogEntry();
 		$change->moment = date_create_immutable();
 		try {
-			$meta = $this->_em->getClassMetadata(get_class($subject));
+			$meta = $this->_em->getClassMetadata($subject::class);
 			$change->subject =
 				implode('.', $meta->getIdentifierValues($subject)) .
 				'@' .
-				strtolower(ReflectionUtil::short_class(get_class($subject))) .
+				strtolower(ReflectionUtil::short_class($subject::class)) .
 				'.csrdelft.nl';
-		} catch (MappingException $ex) {
+		} catch (MappingException) {
 			// ignore
 			$change->subject = $subject;
 		}

@@ -23,25 +23,25 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PeilingenController extends AbstractController
 {
-	/** @var PeilingenRepository */
-	private $peilingenRepository;
-	/** @var PeilingenService */
-	private $peilingenService;
-
 	public function __construct(
-		PeilingenRepository $peilingenRepository,
-		PeilingenService $peilingenService
+		private readonly PeilingenRepository $peilingenRepository,
+		private readonly PeilingenService $peilingenService
 	) {
-		$this->peilingenRepository = $peilingenRepository;
-		$this->peilingenService = $peilingenService;
 	}
 
 	/**
 	 * @param Peiling|null $peiling
 	 * @return Response
-	 * @Route("/peilingen/beheer/{id}", methods={"GET"}, requirements={"id": "\d+"}, defaults={"id": null})
 	 * @Auth(P_PEILING_EDIT)
 	 */
+	#[
+		Route(
+			path: '/peilingen/beheer/{id}',
+			methods: ['GET'],
+			requirements: ['id' => '\d+'],
+			defaults: ['id' => null]
+		)
+	]
 	public function table(Peiling $peiling = null): Response
 	{
 		// Laat een modal zien als een specifieke peiling bewerkt wordt
@@ -70,9 +70,9 @@ class PeilingenController extends AbstractController
 
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("/peilingen/beheer", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
+	#[Route(path: '/peilingen/beheer', methods: ['POST'])]
 	public function lijst(): GenericDataTableResponse
 	{
 		return $this->tableData(
@@ -83,9 +83,9 @@ class PeilingenController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return GenericDataTableResponse|Response
-	 * @Route("/peilingen/nieuw", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
+	#[Route(path: '/peilingen/nieuw', methods: ['POST'])]
 	public function nieuw(Request $request)
 	{
 		$peiling = new Peiling();
@@ -118,9 +118,9 @@ class PeilingenController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return GenericDataTableResponse|Response
-	 * @Route("/peilingen/bewerken", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
+	#[Route(path: '/peilingen/bewerken', methods: ['POST'])]
 	public function bewerken(Request $request)
 	{
 		$selection = $this->getDataTableSelection();
@@ -164,9 +164,9 @@ class PeilingenController extends AbstractController
 
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("/peilingen/verwijderen", methods={"GET", "POST"})
 	 * @Auth(P_PEILING_MOD)
 	 */
+	#[Route(path: '/peilingen/verwijderen', methods: ['GET', 'POST'])]
 	public function verwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
@@ -184,10 +184,16 @@ class PeilingenController extends AbstractController
 	 * @param Request $request
 	 * @param int $id
 	 * @return JsonResponse
-	 * @Route("/peilingen/stem/{id}", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_VOTE)
 	 */
 	#[IsGranted("stemmen", subject: "peiling")]
+	#[
+		Route(
+			path: '/peilingen/stem/{id}',
+			methods: ['POST'],
+			requirements: ['id' => '\d+']
+		)
+	]
 	public function stem(Request $request, Peiling $peiling): JsonResponse
 	{
 		$ids = $request->request->filter('opties', [], FILTER_VALIDATE_INT);

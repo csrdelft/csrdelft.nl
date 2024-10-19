@@ -40,7 +40,10 @@ class DownloadUrlField extends UrlField
 			if (empty($data)) {
 				return;
 			}
-			$url_name = substr(trim($this->value), strrpos($this->value, '/') + 1);
+			$url_name = substr(
+				trim((string) $this->value),
+				strrpos((string) $this->value, '/') + 1
+			);
 			$clean_name = preg_replace('/[^a-zA-Z0-9\s\.\-\_]/', '', $url_name);
 			$this->tmp_file = TMP_PATH . $clean_name;
 			if (!is_writable(TMP_PATH)) {
@@ -107,7 +110,7 @@ class DownloadUrlField extends UrlField
 			throw new CsrException(
 				'Bestand kopieren mislukt: ' .
 					htmlspecialchars(
-						PathUtil::join_paths(
+						(string) PathUtil::join_paths(
 							$this->model->directory,
 							$this->model->filename
 						)
@@ -121,7 +124,7 @@ class DownloadUrlField extends UrlField
 			throw new CsrException(
 				'Verplaatsen mislukt: ' .
 					htmlspecialchars(
-						PathUtil::join_paths(
+						(string) PathUtil::join_paths(
 							$this->model->directory,
 							$this->model->filename
 						)
@@ -131,7 +134,7 @@ class DownloadUrlField extends UrlField
 		if (false === @chmod(PathUtil::join_paths($directory, $filename), 0644)) {
 			throw new CsrException(
 				'Geen eigenaar van bestand: ' .
-					htmlspecialchars(PathUtil::join_paths($directory, $filename))
+					htmlspecialchars((string) PathUtil::join_paths($directory, $filename))
 			);
 		}
 		$this->model->directory = $directory;

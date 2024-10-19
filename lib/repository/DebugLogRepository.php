@@ -16,24 +16,12 @@ use Symfony\Component\Security\Core\Security;
  */
 class DebugLogRepository extends AbstractRepository
 {
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var RequestStack
-	 */
-	private $requestStack;
-
 	public function __construct(
 		ManagerRegistry $registry,
-		RequestStack $requestStack,
-		Security $security
+		private readonly RequestStack $requestStack,
+		private readonly Security $security
 	) {
 		parent::__construct($registry, DebugLogEntry::class);
-
-		$this->security = $security;
-		$this->requestStack = $requestStack;
 	}
 
 	/**
@@ -72,8 +60,12 @@ class DebugLogRepository extends AbstractRepository
 		}
 		$entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '127.0.0.1';
 		$entry->referer = @$_SERVER['HTTP_REFERER'] ?: 'CLI';
-		$entry->request =
-			$this->requestStack->getCurrentRequest()->getRequestUri() ?: 'CLI';
+		if ($this->requestStack->getCurrentRequest()) {
+			$entry->request =
+				$this->requestStack->getCurrentRequest()->getRequestUri() ?: 'CLI';
+		} else {
+			$entry->request = 'CLI';
+		}
 		$entry->user_agent = @$_SERVER['HTTP_USER_AGENT'] ?: 'CLI';
 
 		$this->getEntityManager()->persist($entry);

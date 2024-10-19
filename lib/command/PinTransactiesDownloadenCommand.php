@@ -12,6 +12,7 @@ use CsrDelft\service\pin\PinTransactieDownloader;
 use CsrDelft\service\pin\PinTransactieMatcher;
 use DateInterval;
 use DateTime;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,62 +21,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Twig\Environment;
 
+#[AsCommand(name: 'fiscaat:pintransacties:download')]
 class PinTransactiesDownloadenCommand extends Command
 {
-	protected static $defaultName = 'fiscaat:pintransacties:download';
-	/**
-	 * @var PinTransactieRepository
-	 */
-	private $pinTransactieRepository;
-	/**
-	 * @var PinTransactieMatchRepository
-	 */
-	private $pinTransactieMatchRepository;
-	/**
-	 * @var PinTransactieMatcher
-	 */
-	private $pinTransactieMatcher;
-	/**
-	 * @var PinTransactieDownloader
-	 */
-	private $pinTransactieDownloader;
-	/**
-	 * @var CiviBestellingRepository
-	 */
-	private $civiBestellingRepository;
 	/**
 	 * @var bool
 	 */
 	private $interactive;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
 
 	public function __construct(
-		Environment $twig,
-		PinTransactieRepository $pinTransactieRepository,
-		PinTransactieMatchRepository $pinTransactieMatchRepository,
-		PinTransactieMatcher $pinTransactieMatcher,
-		PinTransactieDownloader $pinTransactieDownloader,
-		CiviBestellingRepository $civiBestellingRepository,
-		MailService $mailService
+		private readonly Environment $twig,
+		private readonly PinTransactieRepository $pinTransactieRepository,
+		private readonly PinTransactieMatchRepository $pinTransactieMatchRepository,
+		private readonly PinTransactieMatcher $pinTransactieMatcher,
+		private readonly PinTransactieDownloader $pinTransactieDownloader,
+		private readonly CiviBestellingRepository $civiBestellingRepository,
+		private readonly MailService $mailService
 	) {
 		parent::__construct(null);
-		$this->pinTransactieRepository = $pinTransactieRepository;
-		$this->pinTransactieMatchRepository = $pinTransactieMatchRepository;
-		$this->pinTransactieMatcher = $pinTransactieMatcher;
-		$this->pinTransactieDownloader = $pinTransactieDownloader;
-		$this->civiBestellingRepository = $civiBestellingRepository;
-		$this->twig = $twig;
-		$this->mailService = $mailService;
 	}
 
-	protected function configure()
+	protected function configure(): void
 	{
 		$this->setDescription(
 			'Download pintransacties van aangegeven periode en probeer te matchen met bestellingen.'
@@ -98,7 +64,7 @@ class PinTransactiesDownloadenCommand extends Command
 			);
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$this->interactive =
 			$input->isInteractive() && !$input->getOption('no-interaction');

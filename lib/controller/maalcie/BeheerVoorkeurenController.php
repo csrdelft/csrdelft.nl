@@ -18,28 +18,22 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class BeheerVoorkeurenController extends AbstractController
 {
-	/**
-	 * @var CorveeVoorkeurenRepository
-	 */
-	private $corveeVoorkeurenRepository;
-
 	public function __construct(
-		CorveeVoorkeurenRepository $corveeVoorkeurenRepository
+		private readonly CorveeVoorkeurenRepository $corveeVoorkeurenRepository
 	) {
-		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/corvee/voorkeuren/beheer", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[Route(path: '/corvee/voorkeuren/beheer', methods: ['GET'])]
 	public function beheer()
 	{
-		list(
+		[
 			$matrix,
 			$repetities,
-		) = $this->corveeVoorkeurenRepository->getVoorkeurenMatrix();
+		] = $this->corveeVoorkeurenRepository->getVoorkeurenMatrix();
 		return $this->render('maaltijden/voorkeur/beheer_voorkeuren.html.twig', [
 			'matrix' => $matrix,
 			'repetities' => $repetities,
@@ -52,9 +46,14 @@ class BeheerVoorkeurenController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/corvee/voorkeuren/beheer/inschakelen/{crv_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[
+		Route(
+			path: '/corvee/voorkeuren/beheer/inschakelen/{crv_repetitie_id}/{uid}',
+			methods: ['POST']
+		)
+	]
 	public function inschakelen(CorveeRepetitie $repetitie, Profiel $profiel)
 	{
 		$voorkeur = new CorveeVoorkeur();
@@ -77,9 +76,14 @@ class BeheerVoorkeurenController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/corvee/voorkeuren/beheer/uitschakelen/{crv_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[
+		Route(
+			path: '/corvee/voorkeuren/beheer/uitschakelen/{crv_repetitie_id}/{uid}',
+			methods: ['POST']
+		)
+	]
 	public function uitschakelen(CorveeVoorkeur $voorkeur)
 	{
 		$voorkeur->van_uid = $voorkeur->uid;

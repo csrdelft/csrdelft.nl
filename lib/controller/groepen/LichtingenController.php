@@ -50,7 +50,7 @@ class LichtingenController extends AbstractGroepenController
 		return new JsonResponse($result);
 	}
 
-	public function beheren(Request $request, $soort = null)
+	public function beheren(Request $request, $soort = null): never
 	{
 		throw $this->createNotFoundException('Kan geen lichtingen beheren');
 	}

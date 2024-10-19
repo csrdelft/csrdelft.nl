@@ -7,6 +7,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccountService;
 use CsrDelft\service\MailService;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,61 +17,23 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+#[
+	AsCommand(
+		name: 'stek:welkom',
+		description: 'Stuur welkom mails naar novieten'
+	)
+]
 class WelkomCommand extends Command
 {
-	protected static $defaultName = 'stek:welkom';
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
-	 * @var string
-	 */
-	private $emailPubCie;
-	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-	/**
-	 * @var AccountService
-	 */
-	private $accountService;
-
 	public function __construct(
-		string $emailPubCie,
-		AccountRepository $accountRepository,
-		AccountService $accountService,
-		ProfielRepository $profielRepository,
-		UrlGeneratorInterface $urlGenerator,
-		MailService $mailService
+		private readonly string $emailPubCie,
+		private readonly AccountRepository $accountRepository,
+		private readonly AccountService $accountService,
+		private readonly ProfielRepository $profielRepository,
+		private readonly UrlGeneratorInterface $urlGenerator,
+		private readonly MailService $mailService
 	) {
 		parent::__construct();
-		$this->profielRepository = $profielRepository;
-		$this->accountRepository = $accountRepository;
-		$this->emailPubCie = $emailPubCie;
-		$this->urlGenerator = $urlGenerator;
-		$this->mailService = $mailService;
-		$this->accountService = $accountService;
-	}
-
-	protected function configure()
-	{
-		$this->setDescription('Add a short description for your command')
-			->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-			->addOption(
-				'option1',
-				null,
-				InputOption::VALUE_NONE,
-				'Option description'
-			);
 	}
 
 	protected function execute(

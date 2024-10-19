@@ -11,10 +11,9 @@ final class DebugUtil
 	/**
 	 * print_r een variabele met <pre>-tags eromheen.
 	 *
-	 * @param mixed $sString
 	 * @param string $cssID
 	 */
-	public static function debugprint($sString, $cssID = 'pubcie_debug')
+	public static function debugprint(mixed $sString, $cssID = 'pubcie_debug')
 	{
 		if (
 			DEBUG ||

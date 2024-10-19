@@ -11,24 +11,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class BbTextType extends AbstractType
 {
-	/**
-	 * @var BbToProsemirror
-	 */
-	private $bbToProsemirror;
-	/**
-	 * @var ProsemirrorToBb
-	 */
-	private $prosemirrorToBb;
-
 	public function __construct(
-		BbToProsemirror $bbToProsemirror,
-		ProsemirrorToBb $prosemirrorToBb
+		private readonly BbToProsemirror $bbToProsemirror,
+		private readonly ProsemirrorToBb $prosemirrorToBb
 	) {
-		$this->bbToProsemirror = $bbToProsemirror;
-		$this->prosemirrorToBb = $prosemirrorToBb;
 	}
 
-	public function getParent()
+	public function getParent(): string
 	{
 		return TextareaType::class;
 	}
@@ -37,15 +26,13 @@ class BbTextType extends AbstractType
 	{
 		$builder->addModelTransformer(
 			new CallbackTransformer(
-				function ($bbcode) {
-					return json_encode(
-						$this->bbToProsemirror->toProseMirror($bbcode),
-						JSON_HEX_QUOT
-					);
-				},
-				function ($data) {
-					return $this->prosemirrorToBb->convertToBb(json_decode($data));
-				}
+				fn($bbcode) => json_encode(
+					$this->bbToProsemirror->toProseMirror($bbcode),
+					JSON_HEX_QUOT
+				),
+				fn($data) => $this->prosemirrorToBb->convertToBb(
+					json_decode((string) $data)
+				)
 			)
 		);
 	}

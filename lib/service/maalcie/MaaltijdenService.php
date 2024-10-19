@@ -18,45 +18,14 @@ use Doctrine\ORM\OptimisticLockException;
 
 class MaaltijdenService
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
-	/**
-	 * @var MaaltijdenRepository
-	 */
-	private $maaltijdenRepository;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var MaaltijdAbonnementenService
-	 */
-	private $maaltijdAbonnementenService;
-	/**
-	 * @var MaaltijdAanmeldingenService
-	 */
-	private $maaltijdAanmeldingenService;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
-		MaaltijdenRepository $maaltijdenRepository,
-		MaaltijdAbonnementenService $maaltijdAbonnementenService,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		CorveeTakenRepository $corveeTakenRepository
+		private readonly EntityManagerInterface $entityManager,
+		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
+		private readonly MaaltijdenRepository $maaltijdenRepository,
+		private readonly MaaltijdAbonnementenService $maaltijdAbonnementenService,
+		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		private readonly CorveeTakenRepository $corveeTakenRepository
 	) {
-		$this->entityManager = $entityManager;
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->maaltijdAbonnementenService = $maaltijdAbonnementenService;
-		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	/**

@@ -13,15 +13,9 @@ class GroepLidVoter extends Voter
 {
 	use CacheableVoterSupportsTrait;
 
-	/**
-	 * @var AccessDecisionManagerInterface
-	 */
-	private $accessDecisionManager;
-
 	public function __construct(
-		AccessDecisionManagerInterface $accessDecisionManager
+		private AccessDecisionManagerInterface $accessDecisionManager
 	) {
-		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	public function supportsType(string $subjectType): bool
@@ -50,13 +44,13 @@ class GroepLidVoter extends Voter
 		) {
 			return false;
 		}
-		switch ($attribute) {
-			case AbstractGroepVoter::AFMELDEN:
-			case AbstractGroepVoter::BEWERKEN:
-				return $this->magLid($token, $subject);
-			default:
-				return false;
-		}
+		return match ($attribute) {
+			AbstractGroepVoter::AFMELDEN,
+			AbstractGroepVoter::BEHEREN,
+			AbstractGroepVoter::BEWERKEN
+				=> $this->magLid($token, $subject),
+			default => false,
+		};
 	}
 
 	/**

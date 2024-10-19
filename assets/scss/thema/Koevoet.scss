@@ -51,8 +51,7 @@ h4 {
 	font-weight: bold;
 }
 
-/*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
-#zijbalk,
+/*Achtergrond kleur forum headers, navigatie menu*/
 #forumtabel th,
 .cd-primary-nav ul {
 	background-color: $donkerrood !important;
@@ -97,11 +96,7 @@ a:hover,
 	box-shadow: inset 0 -2px 0 #000000;
 }
 
-/*ZIJBALK*/
-
-.staatrood,
-#zijbalk .blok .item a,
-#zijbalk .blok .item {
+.staatrood {
 	color: darken(#fff, 5%);
 }
 

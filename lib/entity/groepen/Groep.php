@@ -24,122 +24,129 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Een groep met leden.
- * @ORM\Entity()
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="groep_type", type="string")
- * @ORM\DiscriminatorMap({
- *   "groep" = "Groep",
- *   "activiteit" = "Activiteit",
- *   "bestuur" = "Bestuur",
- *   "commissie" = "Commissie",
- *   "ketzer" = "Ketzer",
- *   "kring" = "Kring",
- *   "lichting" = "Lichting",
- *   "ondervereniging" = "Ondervereniging",
- *   "rechtengroep" = "RechtenGroep",
- *   "verticale" = "Verticale",
- *   "werkgroep" = "Werkgroep",
- *   "woonoord" = "Woonoord",
- * })
- * @ORM\Table("groep", indexes={
- *   @ORM\Index(columns={"in_agenda"}),
- *   @ORM\Index(columns={"familie"}),
- *   @ORM\Index(columns={"begin_moment"}),
- *   @ORM\Index(columns={"huis_status"}),
- *   @ORM\Index(columns={"ondervereniging_status"}),
- *   @ORM\Index(columns={"activiteit_soort"}),
- *   @ORM\Index(columns={"commissie_soort"}),
- *   @ORM\Index(columns={"eetplan"}),
- *   @ORM\Index(columns={"kring_nummer"}),
- *   @ORM\Index(columns={"verticale"}),
- *   @ORM\Index(columns={"groep_type"}),
- * })
  */
+#[ORM\Entity]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'groep_type', type: 'string')]
+#[
+	ORM\DiscriminatorMap([
+		'groep' => 'Groep',
+		'activiteit' => 'Activiteit',
+		'bestuur' => 'Bestuur',
+		'commissie' => 'Commissie',
+		'ketzer' => 'Ketzer',
+		'kring' => 'Kring',
+		'lichting' => 'Lichting',
+		'ondervereniging' => 'Ondervereniging',
+		'rechtengroep' => 'RechtenGroep',
+		'verticale' => 'Verticale',
+		'werkgroep' => 'Werkgroep',
+		'woonoord' => 'Woonoord',
+	])
+]
+#[ORM\Table('groep')]
+#[ORM\Index(columns: ['in_agenda'])]
+#[ORM\Index(columns: ['familie'])]
+#[ORM\Index(columns: ['begin_moment'])]
+#[ORM\Index(columns: ['huis_status'])]
+#[ORM\Index(columns: ['ondervereniging_status'])]
+#[ORM\Index(columns: ['activiteit_soort'])]
+#[ORM\Index(columns: ['commissie_soort'])]
+#[ORM\Index(columns: ['eetplan'])]
+#[ORM\Index(columns: ['kring_nummer'])]
+#[ORM\Index(columns: ['verticale'])]
+#[ORM\Index(columns: ['groep_type'])]
 class Groep implements DataTableEntry, DisplayEntity
 {
 	/**
 	 * Primary key, groter dan 3000 in de database
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'log', 'vue'])]
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $id;
 	/**
 	 * Oude ID, uniek voor type groep, kleiner dan 3000 in de database (sorry)
 	 * @var int
-	 * @ORM\Column(type="integer", nullable=true)
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
+	#[ORM\Column(type: 'integer', nullable: true)]
 	public $oudId;
 
 	/**
 	 * Naam
 	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'log', 'vue'])]
+	#[ORM\Column(type: 'stringkey')]
 	public $naam;
 	/**
 	 * Naam voor opvolging
 	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'log', 'vue'])]
+	#[ORM\Column(type: 'stringkey')]
 	public $familie;
 	/**
 	 * o.t. / h.t. / f.t.
 	 * @var GroepStatus
-	 * @ORM\Column(type="enumGroepStatus")
-	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'log', 'vue'])]
+	#[ORM\Column(type: 'enumGroepStatus')]
 	public $status;
 	/**
 	 * Korte omschrijving
 	 * @var string
-	 * @ORM\Column(type="text")
-	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'log', 'vue'])]
+	#[ORM\Column(type: 'text')]
 	public $samenvatting;
 	/**
 	 * Lange omschrijving
 	 * @var string
-	 * @ORM\Column(type="text", nullable=true)
-	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'log', 'vue'])]
+	#[ORM\Column(type: 'text', nullable: true)]
 	public $omschrijving;
 	/**
 	 * Serialized keuzelijst(en)
 	 * @var string
-	 * @ORM\Column(type="string", nullable=true)
 	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $keuzelijst;
 	/**
 	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="maker_uid", referencedColumnName="uid", nullable=false)
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[
+		ORM\JoinColumn(
+			name: 'maker_uid',
+			referencedColumnName: 'uid',
+			nullable: false
+		)
+	]
 	public $maker;
 	/**
 	 * @var GroepVersie
-	 * @ORM\Column(type="enumGroepVersie")
-	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'log', 'vue'])]
+	#[ORM\Column(type: 'enumGroepVersie')]
 	public $versie;
 	/**
 	 * @var GroepKeuze[]
-	 * @ORM\Column(type="groepkeuze", nullable=true)
-	 * @Serializer\Groups("vue")
 	 */
+	#[Serializer\Groups('vue')]
+	#[ORM\Column(type: 'groepkeuze', nullable: true)]
 	public $keuzelijst2 = [];
 	/**
 	 * Gebruik @see Groep::getLeden om leden op te vragen.
 	 * @var GroepLid[]|ArrayCollection
-	 * @ORM\OneToMany(targetEntity="GroepLid", mappedBy="groep")
-	 * @ORM\OrderBy({"lidSinds"="ASC"})
-	 * @ORM\JoinColumn(name="groep_id", referencedColumnName="id")
 	 */
+	#[ORM\OneToMany(targetEntity: \GroepLid::class, mappedBy: 'groep')]
+	#[ORM\OrderBy(['lidSinds' => 'ASC'])]
+	#[ORM\JoinColumn(name: 'groep_id', referencedColumnName: 'id')]
 	protected $leden;
 
 	public function __construct()
@@ -150,9 +157,9 @@ class Groep implements DataTableEntry, DisplayEntity
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("detailSource")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('detailSource')]
 	public function getDetailSource()
 	{
 		return $this->getUrl() . '/leden';
@@ -175,8 +182,8 @@ class Groep implements DataTableEntry, DisplayEntity
 	/**
 	 * Maak het mogelijk om leden te 'faken', zie verticale/lichting
 	 * @return GroepLid[]|ArrayCollection
-	 * @Serializer\Groups("vue")
 	 */
+	#[Serializer\Groups('vue')]
 	public function getLeden()
 	{
 		return $this->leden;
@@ -187,11 +194,14 @@ class Groep implements DataTableEntry, DisplayEntity
 		$leden = $this->getLeden();
 		try {
 			$iterator = $leden->getIterator();
-			$iterator->uasort(function (GroepLid $a, GroepLid $b) {
-				return strcmp($a->profiel->achternaam, $b->profiel->achternaam) ?:
-					strnatcmp($a->uid, $b->uid);
-			});
-		} catch (Exception $e) {
+			$iterator->uasort(
+				fn(GroepLid $a, GroepLid $b) => strcmp(
+					$a->profiel->achternaam,
+					$b->profiel->achternaam
+				) ?:
+				strnatcmp($a->uid, $b->uid)
+			);
+		} catch (Exception) {
 			return $leden;
 		}
 		return new ArrayCollection(iterator_to_array($iterator));
@@ -202,7 +212,7 @@ class Groep implements DataTableEntry, DisplayEntity
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
 		/** @var GroepRepository $repo */
-		$repo = $em->getRepository(get_class($this));
+		$repo = $em->getRepository(static::class);
 
 		$result = $repo
 			->createQueryBuilder('g')
@@ -210,9 +220,7 @@ class Groep implements DataTableEntry, DisplayEntity
 			->getQuery()
 			->getScalarResult();
 
-		return array_map(function ($e) {
-			return $e['familie'];
-		}, $result);
+		return array_map(fn($e) => $e['familie'], $result);
 	}
 
 	public function getOpmerkingSuggesties()
@@ -224,9 +232,7 @@ class Groep implements DataTableEntry, DisplayEntity
 		} else {
 			$suggesties = array_unique(
 				$this->getLeden()
-					->map(function (GroepLid $lid) {
-						return $lid->opmerking;
-					})
+					->map(fn(GroepLid $lid) => $lid->opmerking)
 					->toArray()
 			);
 		}
@@ -278,8 +284,8 @@ class Groep implements DataTableEntry, DisplayEntity
 
 	/**
 	 * @return string|null
-	 * @Serializer\Groups("vue")
 	 */
+	#[Serializer\Groups('vue')]
 	public function getSamenvattingHtml()
 	{
 		return CsrBB::parse($this->samenvatting);

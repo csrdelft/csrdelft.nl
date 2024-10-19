@@ -24,7 +24,7 @@ class TelefoonField extends TextField
 		if ($this->value == '') {
 			return true;
 		}
-		if (!preg_match('/^([\d\+\-]{10,20})$/', $this->value)) {
+		if (!preg_match('/^([\d\+\-]{10,20})$/', (string) $this->value)) {
 			$this->error = 'Geen geldig telefoonnummer.';
 		}
 		return $this->error === '';

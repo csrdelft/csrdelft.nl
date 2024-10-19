@@ -16,40 +16,19 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MijnCorveeController extends AbstractController
 {
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var CorveeFunctiesRepository
-	 */
-	private $corveeFunctiesRepository;
-	/**
-	 * @var CorveeVrijstellingenRepository
-	 */
-	private $corveeVrijstellingenRepository;
-	/**
-	 * @var CorveePuntenService
-	 */
-	private $corveePuntenService;
-
 	public function __construct(
-		CorveeTakenRepository $corveeTakenRepository,
-		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
-		CorveeFunctiesRepository $corveeFunctiesRepository,
-		CorveePuntenService $corveePuntenService
+		private readonly CorveeTakenRepository $corveeTakenRepository,
+		private readonly CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
+		private readonly CorveeFunctiesRepository $corveeFunctiesRepository,
+		private readonly CorveePuntenService $corveePuntenService
 	) {
-		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
-		$this->corveeFunctiesRepository = $corveeFunctiesRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->corveePuntenService = $corveePuntenService;
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/corvee", methods={"GET"})
 	 * @Auth(P_CORVEE_IK)
 	 */
+	#[Route(path: '/corvee', methods: ['GET'])]
 	public function mijn()
 	{
 		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid(
@@ -74,9 +53,9 @@ class MijnCorveeController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/corvee/rooster", methods={"GET"})
 	 * @Auth(P_CORVEE_IK)
 	 */
+	#[Route(path: '/corvee/rooster', methods: ['GET'])]
 	public function rooster()
 	{
 		$taken = $this->corveeTakenRepository->getKomendeTaken();
@@ -90,9 +69,9 @@ class MijnCorveeController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/corvee/rooster/verleden", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
+	#[Route(path: '/corvee/rooster/verleden', methods: ['GET'])]
 	public function roosterVerleden()
 	{
 		$taken = $this->corveeTakenRepository->getVerledenTaken();

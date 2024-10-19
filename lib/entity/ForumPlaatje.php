@@ -11,45 +11,48 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class ForumPlaatje
  * @package CsrDelft\entity
- * @ORM\Entity(repositoryClass="CsrDelft\repository\ForumPlaatjeRepository")
- * @ORM\Table("forumplaatjes", indexes={
- *   @ORM\Index(name="access_key", columns={"access_key"})
- * })
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\ForumPlaatjeRepository::class
+	)
+]
+#[ORM\Table('forumplaatjes')]
+#[ORM\Index(name: 'access_key', columns: ['access_key'])]
 class ForumPlaatje
 {
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
 	 */
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="stringkey")
 	 */
+	#[ORM\Column(type: 'stringkey')]
 	public $access_key;
 	/**
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
 	 */
+	#[ORM\Column(type: 'datetime')]
 	public $datum_toegevoegd;
 	/**
 	 * @var string
-	 * @ORM\Column(type="uid", nullable=true)
 	 */
+	#[ORM\Column(type: 'uid', nullable: true)]
 	public $maker;
 	/**
 	 * @var Profiel|null
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="maker", referencedColumnName="uid", nullable=true)
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\JoinColumn(name: 'maker', referencedColumnName: 'uid', nullable: true)]
 	public $maker_profiel;
 	/**
 	 * @var string
-	 * @ORM\Column(type="text", nullable=true)
 	 */
+	#[ORM\Column(type: 'text', nullable: true)]
 	public $source_url;
 
 	public function exists()
@@ -79,9 +82,9 @@ class ForumPlaatje
 		$command =
 			$_ENV['IMAGEMAGICK'] .
 			' ' .
-			escapeshellarg($this->getPath(false)) .
+			escapeshellarg((string) $this->getPath(false)) .
 			' -resize "750x>" -format jpg -quality 85 -interlace Line  -auto-orient ' .
-			escapeshellarg($this->getPath(true));
+			escapeshellarg((string) $this->getPath(true));
 		shell_exec($command);
 		if ($this->hasResized()) {
 			chmod($this->getPath(true), 0644);

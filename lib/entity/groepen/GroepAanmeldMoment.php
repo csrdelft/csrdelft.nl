@@ -11,30 +11,30 @@ trait GroepAanmeldMoment
 	/**
 	 * Datum en tijd aanmeldperiode begin
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'datetime')]
 	public $aanmeldenVanaf;
 	/**
 	 * Datum en tijd aanmeldperiode einde
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
+	#[ORM\Column(type: 'datetime')]
 	public $aanmeldenTot;
 	/**
 	 * Datum en tijd aanmelding bewerken toegestaan
 	 * @var DateTimeImmutable|null
-	 * @ORM\Column(type="datetime", nullable=true)
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'datetime', nullable: true)]
 	public $bewerkenTot;
 	/**
 	 * Datum en tijd afmelden toegestaan
 	 * @var DateTimeImmutable|null
-	 * @ORM\Column(type="datetime", nullable=true)
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'datetime', nullable: true)]
 	public $afmeldenTot;
 
 	/**
@@ -56,7 +56,7 @@ trait GroepAanmeldMoment
 	/**
 	 * @return DateTimeImmutable
 	 */
-	public function getAanmeldenTot(): DateTimeImmutable
+	public function getAanmeldenTot(): ?DateTimeImmutable
 	{
 		return $this->aanmeldenTot;
 	}

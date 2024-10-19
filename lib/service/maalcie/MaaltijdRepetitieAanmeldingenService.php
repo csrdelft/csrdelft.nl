@@ -15,33 +15,12 @@ use Doctrine\ORM\OptimisticLockException;
 
 class MaaltijdRepetitieAanmeldingenService
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var MaaltijdenRepository
-	 */
-	private $maaltijdenRepository;
-	/**
-	 * @var MaaltijdAanmeldingenService
-	 */
-	private $maaltijdAanmeldingenService;
-	/**
-	 * @var MaaltijdRepetitiesRepository
-	 */
-	private $maaltijdRepetitiesRepository;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		MaaltijdenRepository $maaltijdenRepository,
-		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
-		MaaltijdAanmeldingenService $maaltijdAanmeldingenService
+		private readonly EntityManagerInterface $entityManager,
+		private readonly MaaltijdenRepository $maaltijdenRepository,
+		private readonly MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
+		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService
 	) {
-		$this->entityManager = $entityManager;
-		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
-		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 	}
 
 	/**
@@ -129,7 +108,7 @@ class MaaltijdRepetitieAanmeldingenService
 				$this->entityManager->flush();
 
 				return true;
-			} catch (CsrGebruikerException $e) {
+			} catch (CsrGebruikerException) {
 				return false;
 			}
 		}

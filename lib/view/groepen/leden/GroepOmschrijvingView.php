@@ -13,7 +13,7 @@ use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use Twig\Environment;
 
-class GroepOmschrijvingView implements ToResponse
+class GroepOmschrijvingView implements ToResponse, \Stringable
 {
 	use ToHtmlResponse;
 
@@ -29,7 +29,7 @@ class GroepOmschrijvingView implements ToResponse
 		$this->twig = $twig;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->twig->render('groep/omschrijving.html.twig', [
 			'groep' => $this->groep,

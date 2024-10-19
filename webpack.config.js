@@ -35,14 +35,10 @@ module.exports = (env, argv) => {
 			app: './js/entry/app.ts',
 			sentry: './js/entry/sentry.ts',
 			ledenmemory: './js/entry/ledenmemory.ts',
-			fxclouds: './js/entry/fxclouds.ts',
-			fxsneeuw: './js/entry/fxsneeuw.ts',
-			fxonontdekt: './js/entry/fxonontdekt.ts',
 			fxtrein: './js/entry/fxtrein.ts',
 			fxraket: './js/entry/fxraket.ts',
 			fxdruif: './js/entry/fxdruif.ts',
 			fxminion: './js/entry/fxminion.ts',
-			fxspace: './js/entry/fxspace.ts',
 			extern: ['./js/entry/extern.ts', './scss/extern.scss'],
 			bredeletters: './scss/bredeletters.scss',
 			common: './scss/common.scss',
@@ -64,6 +60,7 @@ module.exports = (env, argv) => {
 			lustrumdies: './scss/lustrum12/dies.scss',
 			lustrumreis: './scss/lustrum12/lustrumreis.scss',
 			dies2023: './scss/dies2023/dies2023.scss',
+			dies2024: './scss/dies2024/dies2024.scss',
 		},
 		output: {
 			// De map waarin alle bestanden geplaatst worden.

@@ -18,17 +18,9 @@ use Symfony\Component\Security\Core\Security;
 class BbVerticale extends BbTag
 {
 	/**
-	 * @var VerticalenRepository
-	 */
-	private $verticalenRepository;
-	/**
 	 * @var string
 	 */
 	private $letter;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	public function getLetter()
 	{
@@ -36,11 +28,9 @@ class BbVerticale extends BbTag
 	}
 
 	public function __construct(
-		Security $security,
-		VerticalenRepository $verticalenRepository
+		private readonly Security $security,
+		private readonly VerticalenRepository $verticalenRepository
 	) {
-		$this->verticalenRepository = $verticalenRepository;
-		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -62,7 +52,7 @@ class BbVerticale extends BbTag
 				'">' .
 				$verticale->naam .
 				'</a>';
-		} catch (CsrException $e) {
+		} catch (CsrException) {
 			return 'Verticale met letter=' .
 				htmlspecialchars($this->letter) .
 				' bestaat niet. <a href="/verticalen">Zoeken</a>';

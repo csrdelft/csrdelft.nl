@@ -60,7 +60,10 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		$this->aantal_paginas = [];
 	}
 
-	public function findAll()
+	/**
+	 * @return ForumPost[]
+	 */
+	public function findAll(): array
 	{
 		return $this->findBy([]);
 	}
@@ -78,7 +81,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		$limit = null,
 		$offset = null
 	) {
-		$orderBy = $orderBy ?? ['datum_tijd' => 'ASC'];
+		$orderBy ??= ['datum_tijd' => 'ASC'];
 		return parent::findBy($criteria, $orderBy, $limit, $offset);
 	}
 
@@ -218,7 +221,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		$results = $this->createQueryBuilder('fp')
 			->addSelect('MATCH(fp.tekst) AGAINST (:query) AS score')
 			->where(
-				'fp.wacht_goedkeuring = false and fp.verwijderd = false and fp.laatst_gewijzigd >= :van and fp.laatst_gewijzigd <= :tot'
+				'fp.wacht_goedkeuring = false and fp.verwijderd = false and fp.laatst_gewijzigd >= :van and fp.laatst_gewijzigd <= :tot and MATCH(fp.tekst) AGAINST (:query) > 0'
 			)
 			->setParameter('query', $forumZoeken->zoekterm)
 			->setParameter('van', $forumZoeken->van)
@@ -262,7 +265,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 	 */
 	public function findOneBy(array $criteria, array $orderBy = null)
 	{
-		$orderBy = $orderBy ?? ['datum_tijd' => 'ASC'];
+		$orderBy ??= ['datum_tijd' => 'ASC'];
 		return parent::findOneBy($criteria, $orderBy);
 	}
 

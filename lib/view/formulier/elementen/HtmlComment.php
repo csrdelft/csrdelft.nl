@@ -16,11 +16,8 @@ use CsrDelft\view\formulier\FormElement;
  */
 class HtmlComment implements FormElement
 {
-	protected $comment;
-
-	public function __construct($comment)
+	public function __construct(protected $comment)
 	{
-		$this->comment = $comment;
 	}
 
 	public function getModel()
@@ -38,7 +35,7 @@ class HtmlComment implements FormElement
 		return $this->comment;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return '<div>' . $this->getHtml() . '</div>';
 	}
@@ -55,6 +52,6 @@ class HtmlComment implements FormElement
 
 	public function getType()
 	{
-		return ReflectionUtil::classNameZonderNamespace(get_class($this));
+		return ReflectionUtil::classNameZonderNamespace(static::class);
 	}
 }

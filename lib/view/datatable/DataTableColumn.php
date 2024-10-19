@@ -13,11 +13,6 @@ use JsonSerializable;
 class DataTableColumn implements JsonSerializable
 {
 	/**
-	 * Waarde die wordt weergegeven, kan HTML bevatten.
-	 * @var string
-	 */
-	public $displayValue;
-	/**
 	 * Waarde waarop gesorteerd wordt.
 	 * @var string
 	 */
@@ -33,19 +28,24 @@ class DataTableColumn implements JsonSerializable
 	 */
 	public $filterValue;
 
+	/**
+	 * @param string $displayValue
+	 */
 	public function __construct(
-		$displayValue,
+		/**
+		 * Waarde die wordt weergegeven, kan HTML bevatten.
+		 */
+		public $displayValue,
 		$sortValue = null,
 		$exportValue = null,
 		$filterValue = null
 	) {
-		$this->displayValue = $displayValue;
 		$this->sortValue = $sortValue ?? $this->displayValue;
 		$this->exportValue = $exportValue ?? $this->sortValue;
 		$this->filterValue = $filterValue ?? $this->exportValue;
 	}
 
-	public function jsonSerialize()
+	public function jsonSerialize(): array
 	{
 		return [
 			'display' => $this->displayValue,

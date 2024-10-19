@@ -25,40 +25,22 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Annotation\Route; // ;
 
-/**
- * @Route("/aanmelder/beheer");
- */
+#[Route(path: '/aanmelder/beheer')]
 class AanmelderBeheerController extends AbstractController
 {
-	/**
-	 * @var ReeksRepository
-	 */
-	private $reeksRepository;
-	/**
-	 * @var AanmeldActiviteitRepository
-	 */
-	private $activiteitRepository;
-	/**
-	 * @var DeelnemerRepository
-	 */
-	private $deelnemerRepository;
-
 	public function __construct(
-		ReeksRepository $reeksRepository,
-		AanmeldActiviteitRepository $activiteitRepository,
-		DeelnemerRepository $deelnemerRepository
+		private readonly ReeksRepository $reeksRepository,
+		private readonly AanmeldActiviteitRepository $activiteitRepository,
+		private readonly DeelnemerRepository $deelnemerRepository
 	) {
-		$this->reeksRepository = $reeksRepository;
-		$this->activiteitRepository = $activiteitRepository;
-		$this->deelnemerRepository = $deelnemerRepository;
 	}
 
 	/**
-	 * @Route("", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '', methods: ['GET'])]
 	public function beheerTabel(): Response
 	{
 		return $this->render('default.html.twig', ['content' => new ReeksTabel()]);
@@ -66,9 +48,9 @@ class AanmelderBeheerController extends AbstractController
 
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '', methods: ['POST'])]
 	public function beheerTabelLijst(): GenericDataTableResponse
 	{
 		$reeksen = $this->reeksRepository->findAll();
@@ -78,9 +60,9 @@ class AanmelderBeheerController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return GenericDataTableResponse|Response
-	 * @Route("/reeks/nieuw", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/reeks/nieuw', methods: ['POST'])]
 	public function reeksNieuw(Request $request)
 	{
 		if (!Reeks::magAanmaken()) {
@@ -114,9 +96,9 @@ class AanmelderBeheerController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return GenericDataTableResponse|Response
-	 * @Route("/reeks/bewerken", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/reeks/bewerken', methods: ['POST'])]
 	public function reeksBewerken(Request $request)
 	{
 		$selection = $this->getDataTableSelection();
@@ -155,9 +137,9 @@ class AanmelderBeheerController extends AbstractController
 
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("/reeks/verwijderen", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/reeks/verwijderen', methods: ['GET', 'POST'])]
 	public function reeksVerwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
@@ -174,11 +156,11 @@ class AanmelderBeheerController extends AbstractController
 	}
 
 	/**
-	 * @Route("/activiteiten/{reeks}", methods={"GET"})
 	 * @param Reeks $reeks
 	 * @return Response
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/activiteiten/{reeks}', methods: ['GET'])]
 	public function reeksDetail(Reeks $reeks): Response
 	{
 		$activiteitTabel = new AanmeldActiviteitTabel($reeks);
@@ -188,9 +170,9 @@ class AanmelderBeheerController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return GenericDataTableResponse|Response
-	 * @Route("/activiteiten/bewerken", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/activiteiten/bewerken', methods: ['POST'])]
 	public function activiteitBewerken(Request $request)
 	{
 		$selection = $this->getDataTableSelection();
@@ -233,9 +215,9 @@ class AanmelderBeheerController extends AbstractController
 
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("/activiteiten/verwijderen", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/activiteiten/verwijderen', methods: ['GET', 'POST'])]
 	public function activiteitVerwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
@@ -258,9 +240,9 @@ class AanmelderBeheerController extends AbstractController
 	 * @param Request $request
 	 * @param Reeks $reeks
 	 * @return GenericDataTableResponse|Response
-	 * @Route("/activiteiten/nieuw/{reeks}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/activiteiten/nieuw/{reeks}', methods: ['POST'])]
 	public function activiteitNieuw(Request $request, Reeks $reeks)
 	{
 		if (!$reeks->magActiviteitenBeheren()) {
@@ -299,12 +281,12 @@ class AanmelderBeheerController extends AbstractController
 	}
 
 	/**
-	 * @Route("/activiteiten/{reeks}", methods={"POST"})
 	 * @param Reeks $reeks
 	 * @param Request $request
 	 * @return GenericDataTableResponse
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/activiteiten/{reeks}', methods: ['POST'])]
 	public function reeksDetailLijst(
 		Reeks $reeks,
 		Request $request
@@ -314,9 +296,9 @@ class AanmelderBeheerController extends AbstractController
 		} else {
 			$activiteiten = $reeks
 				->getActiviteiten()
-				->filter(function (AanmeldActiviteit $activiteit) {
-					return $activiteit->isInToekomst();
-				})
+				->filter(
+					fn(AanmeldActiviteit $activiteit) => $activiteit->isInToekomst()
+				)
 				->getValues();
 		}
 
@@ -326,9 +308,9 @@ class AanmelderBeheerController extends AbstractController
 	/**
 	 * @param AanmeldActiviteit $activiteit
 	 * @return Response
-	 * @Route("/lijst/{activiteit}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/lijst/{activiteit}', methods: ['GET'])]
 	public function lijst(AanmeldActiviteit $activiteit): Response
 	{
 		if (!$activiteit->magLijstBekijken()) {
@@ -336,11 +318,12 @@ class AanmelderBeheerController extends AbstractController
 		}
 
 		$deelnemers = $activiteit->getDeelnemers()->getValues();
-		usort($deelnemers, function (Deelnemer $deelnemerA, Deelnemer $deelnemerB) {
-			return $deelnemerA->getLid()->achternaam <=>
-				$deelnemerB->getLid()->achternaam ?:
-				$deelnemerA->getLid()->voornaam <=> $deelnemerB->getLid()->voornaam;
-		});
+		usort(
+			$deelnemers,
+			fn(Deelnemer $deelnemerA, Deelnemer $deelnemerB) => $deelnemerA->getLid()
+				->achternaam <=> $deelnemerB->getLid()->achternaam ?:
+			$deelnemerA->getLid()->voornaam <=> $deelnemerB->getLid()->voornaam
+		);
 
 		$form = $this->createFormulier(
 			AanmeldActiviteitAanmeldForm::class,
@@ -365,9 +348,9 @@ class AanmelderBeheerController extends AbstractController
 	 * @param bool $sluit
 	 * @param AanmeldActiviteitRepository $activiteitRepository
 	 * @return Response
-	 * @Route("/lijst/{activiteit}/sluiten/{sluit}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/lijst/{activiteit}/sluiten/{sluit}', methods: ['POST'])]
 	public function sluit(
 		AanmeldActiviteit $activiteit,
 		bool $sluit,
@@ -388,9 +371,9 @@ class AanmelderBeheerController extends AbstractController
 	 * @param Request $request
 	 * @return Response
 	 * @throws ORMException
-	 * @Route("/lijst/{activiteit}/aanmelden", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/lijst/{activiteit}/aanmelden', methods: ['POST'])]
 	public function lijstAanmelden(
 		AanmeldActiviteit $activiteit,
 		Request $request
@@ -433,9 +416,9 @@ class AanmelderBeheerController extends AbstractController
 	 * @param Profiel $lid
 	 * @return Response
 	 * @throws ORMException
-	 * @Route("/lijst/{activiteit}/afmelden/{lid}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/lijst/{activiteit}/afmelden/{lid}', methods: ['POST'])]
 	public function lijstAfmelden(
 		AanmeldActiviteit $activiteit,
 		Profiel $lid
@@ -456,9 +439,9 @@ class AanmelderBeheerController extends AbstractController
 	 * @param int $aantal
 	 * @return Response
 	 * @throws ORMException
-	 * @Route("/lijst/{activiteit}/aantal/{lid}/{aantal}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/lijst/{activiteit}/aantal/{lid}/{aantal}', methods: ['POST'])]
 	public function lijstAantal(
 		AanmeldActiviteit $activiteit,
 		Profiel $lid,
@@ -491,9 +474,14 @@ class AanmelderBeheerController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/lijst/{activiteit}/aanwezig/{lid}/{aanwezig}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/lijst/{activiteit}/aanwezig/{lid}/{aanwezig}',
+			methods: ['POST']
+		)
+	]
 	public function lijstAanwezig(
 		AanmeldActiviteit $activiteit,
 		Profiel $lid,

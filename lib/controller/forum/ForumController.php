@@ -32,58 +32,22 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ForumController extends AbstractController
 {
-	/**
-	 * @var ForumDradenGelezenRepository
-	 */
-	private $forumDradenGelezenRepository;
-	/**
-	 * @var ForumDradenRepository
-	 */
-	private $forumDradenRepository;
-	/**
-	 * @var ForumDradenReagerenRepository
-	 */
-	private $forumDradenReagerenRepository;
-	/**
-	 * @var ForumCategorieRepository
-	 */
-	private $forumCategorieRepository;
-	/**
-	 * @var ForumPostsRepository
-	 */
-	private $forumPostsRepository;
-	/**
-	 * @var BbToProsemirror
-	 */
-	private $bbToProsemirror;
-	/**
-	 * @var ForumDelenService
-	 */
-	private $forumDelenService;
-
 	public function __construct(
-		BbToProsemirror $bbToProsemirror,
-		ForumCategorieRepository $forumCategorieRepository,
-		ForumDelenService $forumDelenService,
-		ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		ForumDradenRepository $forumDradenRepository,
-		ForumDradenReagerenRepository $forumDradenReagerenRepository,
-		ForumPostsRepository $forumPostsRepository
+		private readonly BbToProsemirror $bbToProsemirror,
+		private readonly ForumCategorieRepository $forumCategorieRepository,
+		private readonly ForumDelenService $forumDelenService,
+		private readonly ForumDradenGelezenRepository $forumDradenGelezenRepository,
+		private readonly ForumDradenRepository $forumDradenRepository,
+		private readonly ForumDradenReagerenRepository $forumDradenReagerenRepository,
+		private readonly ForumPostsRepository $forumPostsRepository
 	) {
-		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
-		$this->forumDradenRepository = $forumDradenRepository;
-		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
-		$this->forumCategorieRepository = $forumCategorieRepository;
-		$this->forumPostsRepository = $forumPostsRepository;
-		$this->bbToProsemirror = $bbToProsemirror;
-		$this->forumDelenService = $forumDelenService;
 	}
 
 	/**
 	 * Overzicht met categorien en forumdelen laten zien.
-	 * @Route("/forum", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[Route(path: '/forum', methods: ['GET'])]
 	public function forum()
 	{
 		return $this->render('forum/overzicht.html.twig', [
@@ -94,10 +58,15 @@ class ForumController extends AbstractController
 
 	/**
 	 * RSS feed van recente draadjes tonen.
-	 * @Route("/forum/rss/csrdelft.xml", methods={"GET"})
-	 * @Route("/forum/rss/{private_auth_token}/csrdelft.xml", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[Route(path: '/forum/rss/csrdelft.xml', methods: ['GET'])]
+	#[
+		Route(
+			path: '/forum/rss/{private_auth_token}/csrdelft.xml',
+			methods: ['GET']
+		)
+	]
 	public function rss()
 	{
 		$response = new Response(null, 200, [
@@ -125,9 +94,15 @@ class ForumController extends AbstractController
 	 * @param string|null $query
 	 * @param int $pagina
 	 * @return Response
-	 * @Route("/forum/zoeken/{query}/{pagina<\d+>}", methods={"GET", "POST"}, defaults={"query"=null,"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[
+		Route(
+			path: '/forum/zoeken/{query}/{pagina<\d+>}',
+			methods: ['GET', 'POST'],
+			defaults: ['query' => null, 'pagina' => 1]
+		)
+	]
 	public function zoeken($query = null, int $pagina = 1)
 	{
 		$this->forumPostsRepository->setHuidigePagina($pagina, 0);
@@ -157,9 +132,9 @@ class ForumController extends AbstractController
 	 * @param Request $request
 	 * @param null $zoekterm
 	 * @return JsonResponse
-	 * @Route("/forum/titelzoeken", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/titelzoeken', methods: ['GET'])]
 	public function titelzoeken(Request $request, $zoekterm = null)
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
@@ -200,9 +175,15 @@ class ForumController extends AbstractController
 	 *
 	 * @param int $pagina
 	 * @return Response
-	 * @Route("/forum/belangrijk/{pagina<\d+>}", methods={"GET"}, defaults={"pagina"=1})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/forum/belangrijk/{pagina<\d+>}',
+			methods: ['GET'],
+			defaults: ['pagina' => 1]
+		)
+	]
 	public function belangrijk(RequestStack $requestStack, int $pagina = 1)
 	{
 		return $this->recent($requestStack, $pagina, 'belangrijk');
@@ -214,10 +195,22 @@ class ForumController extends AbstractController
 	 * @param int|string $pagina
 	 * @param string|null $belangrijk
 	 * @return Response
-	 * @Route("/forum/recent/{pagina<\d+>}", methods={"GET"}, defaults={"pagina"=1})
-	 * @Route("/forum/recent/{pagina<\d+>}/belangrijk", methods={"GET"}, defaults={"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[
+		Route(
+			path: '/forum/recent/{pagina<\d+>}',
+			methods: ['GET'],
+			defaults: ['pagina' => 1]
+		)
+	]
+	#[
+		Route(
+			path: '/forum/recent/{pagina<\d+>}/belangrijk',
+			methods: ['GET'],
+			defaults: ['pagina' => 1]
+		)
+	]
 	public function recent(
 		RequestStack $requestStack,
 		$pagina = 1,
@@ -258,9 +251,9 @@ class ForumController extends AbstractController
 
 	/**
 	 * @return GenericSuggestiesResponse
-	 * @Route("/forum/categorie/suggestie")
 	 * @Auth(P_FORUM_ADMIN)
 	 */
+	#[Route(path: '/forum/categorie/suggestie')]
 	public function forumCategorieSuggestie(Request $request)
 	{
 		$zoekterm = $request->query->get('q');
@@ -277,9 +270,9 @@ class ForumController extends AbstractController
 	 * Leg bladwijzer
 	 *
 	 * @param ForumDraad $draad
-	 * @Route("/forum/bladwijzer/{draad_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/forum/bladwijzer/{draad_id}', methods: ['POST'])]
 	public function bladwijzer(ForumDraad $draad)
 	{
 		$timestamp = (int) filter_input(

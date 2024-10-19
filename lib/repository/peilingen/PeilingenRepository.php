@@ -25,24 +25,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PeilingenRepository extends AbstractRepository
 {
-	/**
-	 * @var PeilingOptiesRepository
-	 */
-	private $peilingOptiesModel;
-	/**
-	 * @var PeilingStemmenRepository
-	 */
-	private $peilingStemmenModel;
-
 	public function __construct(
-		PeilingOptiesRepository $peilingOptiesRepository,
-		PeilingStemmenRepository $peilingStemmenRepository,
+		private readonly PeilingOptiesRepository $peilingOptiesModel,
+		private readonly PeilingStemmenRepository $peilingStemmenModel,
 		ManagerRegistry $registry
 	) {
 		parent::__construct($registry, Peiling::class);
-
-		$this->peilingOptiesModel = $peilingOptiesRepository;
-		$this->peilingStemmenModel = $peilingStemmenRepository;
 	}
 
 	/**

@@ -7,14 +7,8 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class LogEventListener
 {
-	/**
-	 * @var LoggerInterface
-	 */
-	private $logger;
-
-	public function __construct(LoggerInterface $logger)
+	public function __construct(private readonly LoggerInterface $logger)
 	{
-		$this->logger = $logger;
 	}
 
 	/**

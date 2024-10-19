@@ -31,9 +31,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class DeclaratieController extends AbstractController
 {
 	/**
-	 * @Route("/declaratie/mijn/{uid}", name="declaraties_mijn")
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/declaratie/mijn/{uid}', name: 'declaraties_mijn')]
 	public function lijstMijn(
 		DeclaratieRepository $declaratieRepository,
 		string $uid = null
@@ -53,9 +53,9 @@ class DeclaratieController extends AbstractController
 	}
 
 	/**
-	 * @Route("/declaratie/wachtrij", name="declaraties_wachtrijen")
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/declaratie/wachtrij', name: 'declaraties_wachtrijen')]
 	public function wachtrijen(
 		DeclaratieWachtrijRepository $declaratieWachtrijRepository
 	): Response {
@@ -84,9 +84,11 @@ class DeclaratieController extends AbstractController
 	}
 
 	/**
-	 * @Route("/declaratie/wachtrij/{wachtrij}", name="declaraties_wachtrij")
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(path: '/declaratie/wachtrij/{wachtrij}', name: 'declaraties_wachtrij')
+	]
 	public function lijstWachtrij(
 		DeclaratieWachtrij $wachtrij,
 		DeclaratieWachtrijRepository $wachtrijRepository,
@@ -111,9 +113,11 @@ class DeclaratieController extends AbstractController
 	/**
 	 * @param DeclaratieCategorieRepository $categorieRepository
 	 * @return Response
-	 * @Route("/declaratie/nieuw", name="declaratie_nieuw", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(path: '/declaratie/nieuw', name: 'declaratie_nieuw', methods: ['GET'])
+	]
 	public function nieuw(
 		DeclaratieCategorieRepository $categorieRepository
 	): Response {
@@ -133,9 +137,15 @@ class DeclaratieController extends AbstractController
 	 * @param DeclaratieCategorieRepository $categorieRepository
 	 * @param UrlGeneratorInterface $generator
 	 * @return Response
-	 * @Route("/declaratie/{declaratie}", name="declaratie_detail", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/declaratie/{declaratie}',
+			name: 'declaratie_detail',
+			methods: ['GET']
+		)
+	]
 	public function detail(
 		Declaratie $declaratie,
 		DeclaratieCategorieRepository $categorieRepository,
@@ -161,9 +171,16 @@ class DeclaratieController extends AbstractController
 	 * @param Filesystem $filesystem
 	 * @param DeclaratieBonRepository $bonRepository
 	 * @return Response
-	 * @Route("/declaratie/download/{path}", name="declaratie_download", methods={"GET"}, requirements={"filename"="[a-f0-9]+.[a-z]+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/declaratie/download/{path}',
+			name: 'declaratie_download',
+			methods: ['GET'],
+			requirements: ['filename' => '[a-f0-9]+.[a-z]+']
+		)
+	]
 	public function download(
 		string $path,
 		Filesystem $filesystem,
@@ -190,9 +207,15 @@ class DeclaratieController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/declaratie/upload", name="declaratie_upload", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/declaratie/upload',
+			name: 'declaratie_upload',
+			methods: ['POST']
+		)
+	]
 	public function upload(
 		Request $request,
 		DeclaratieBonRepository $bonRepository
@@ -254,9 +277,15 @@ class DeclaratieController extends AbstractController
 	 * @param DeclaratieCategorieRepository $categorieRepository
 	 * @param EntityManagerInterface $entityManager
 	 * @return Response
-	 * @Route("/declaratie/opslaan", name="declaratie_opslaan", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/declaratie/opslaan',
+			name: 'declaratie_opslaan',
+			methods: ['POST']
+		)
+	]
 	public function opslaan(
 		Request $request,
 		DeclaratieRepository $declaratieRepository,
@@ -391,9 +420,15 @@ class DeclaratieController extends AbstractController
 	 * @param Request $request
 	 * @param EntityManagerInterface $entityManager
 	 * @return Response
-	 * @Route("/declaratie/status/{declaratie}", name="declaratie_status", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/declaratie/status/{declaratie}',
+			name: 'declaratie_status',
+			methods: ['POST']
+		)
+	]
 	public function setStatus(
 		Declaratie $declaratie,
 		Request $request,
@@ -463,9 +498,15 @@ class DeclaratieController extends AbstractController
 	 * @param Declaratie $declaratie
 	 * @param DeclaratieRepository $declaratieRepository
 	 * @return Response
-	 * @Route("/declaratie/verwijderen/{declaratie}", name="declaratie_verwijderen", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/declaratie/verwijderen/{declaratie}',
+			name: 'declaratie_verwijderen',
+			methods: ['POST']
+		)
+	]
 	public function declaratieVerwijderen(
 		Declaratie $declaratie,
 		DeclaratieRepository $declaratieRepository

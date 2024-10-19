@@ -65,17 +65,11 @@ class AccessService
 	];
 
 	/**
-	 * @var AccessDecisionManagerInterface
-	 */
-	private $accessDecisionManager;
-
-	/**
 	 * @param AccessDecisionManagerInterface $accessDecisionManager
 	 */
 	public function __construct(
-		AccessDecisionManagerInterface $accessDecisionManager
+		private readonly AccessDecisionManagerInterface $accessDecisionManager
 	) {
-		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	/**
@@ -109,23 +103,20 @@ class AccessService
 	 */
 	public function getDefaultPermissionRole($lidstatus)
 	{
-		switch ($lidstatus) {
-			case LidStatus::Kringel:
-			case LidStatus::Noviet:
-			case LidStatus::Lid:
-			case LidStatus::Gastlid:
-				return AccessRole::Lid;
-			case LidStatus::Oudlid:
-			case LidStatus::Erelid:
-				return AccessRole::Oudlid;
-			case LidStatus::Commissie:
-			case LidStatus::Overleden:
-			case LidStatus::Exlid:
-			case LidStatus::Nobody:
-				return AccessRole::Nobody;
-			default:
-				throw new CsrException('LidStatus onbekend');
-		}
+		return match ($lidstatus) {
+			LidStatus::Kringel,
+			LidStatus::Noviet,
+			LidStatus::Lid,
+			LidStatus::Gastlid
+				=> AccessRole::Lid,
+			LidStatus::Oudlid, LidStatus::Erelid => AccessRole::Oudlid,
+			LidStatus::Commissie,
+			LidStatus::Overleden,
+			LidStatus::Exlid,
+			LidStatus::Nobody
+				=> AccessRole::Nobody,
+			default => throw new CsrException('LidStatus onbekend'),
+		};
 	}
 
 	/**

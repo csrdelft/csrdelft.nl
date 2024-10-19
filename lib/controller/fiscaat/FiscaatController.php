@@ -13,19 +13,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FiscaatController extends AbstractController
 {
-	/** @var CiviSaldoRepository */
-	private $civiSaldoRepository;
-
-	public function __construct(CiviSaldoRepository $civiSaldoRepository)
-	{
-		$this->civiSaldoRepository = $civiSaldoRepository;
+	public function __construct(
+		private readonly CiviSaldoRepository $civiSaldoRepository
+	) {
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/fiscaat")
 	 * @Auth(P_FISCAAT_READ)
 	 */
+	#[Route(path: '/fiscaat')]
 	public function overzicht()
 	{
 		return $this->render('fiscaat/overzicht.html.twig', [

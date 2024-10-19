@@ -8,18 +8,12 @@ namespace CsrDelft\entity\groepen;
  */
 class GroepStatistiekDTO
 {
-	public $totaal;
-	public $verticale;
-	public $geslacht;
-	public $lichting;
-	public $tijd;
-
-	public function __construct($totaal, $verticale, $geslacht, $lichting, $tijd)
-	{
-		$this->totaal = $totaal;
-		$this->verticale = $verticale;
-		$this->geslacht = $geslacht;
-		$this->lichting = $lichting;
-		$this->tijd = $tijd;
+	public function __construct(
+		public $totaal,
+		public $verticale,
+		public $geslacht,
+		public $lichting,
+		public $tijd
+	) {
 	}
 }

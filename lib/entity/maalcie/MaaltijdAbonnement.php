@@ -30,39 +30,53 @@ use Doctrine\ORM\Mapping as ORM;
  *
  *
  * @see MaaltijdAanmelding
- * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository")
- * @ORM\Table("mlt_abonnementen")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository::class
+	)
+]
+#[ORM\Table('mlt_abonnementen')]
 class MaaltijdAbonnement
 {
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
 	 */
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
 	public $mlt_repetitie_id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
 	 */
+	#[ORM\Column(type: 'uid')]
+	#[ORM\Id]
 	public $uid;
 	/**
 	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $profiel;
 	/**
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
 	 */
+	#[ORM\Column(type: 'datetime')]
 	public $wanneer_ingeschakeld; # datetime
 	/**
 	 * @var MaaltijdRepetitie
-	 * @ORM\ManyToOne(targetEntity="MaaltijdRepetitie", inversedBy="abonnementen")
-	 * @ORM\JoinColumn(name="mlt_repetitie_id", referencedColumnName="mlt_repetitie_id")
 	 */
+	#[
+		ORM\ManyToOne(
+			targetEntity: \MaaltijdRepetitie::class,
+			inversedBy: 'abonnementen'
+		)
+	]
+	#[
+		ORM\JoinColumn(
+			name: 'mlt_repetitie_id',
+			referencedColumnName: 'mlt_repetitie_id'
+		)
+	]
 	public $maaltijd_repetitie;
 	public $van_uid;
 	public $waarschuwing;

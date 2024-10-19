@@ -53,10 +53,10 @@ class TimeField extends InputField
 		if (!parent::validate()) {
 			return false;
 		}
-		$uren = (int) substr($this->value, 0, 2);
-		$minuten = (int) substr($this->value, 3, 5);
+		$uren = (int) substr((string) $this->value, 0, 2);
+		$minuten = (int) substr((string) $this->value, 3, 5);
 		if (
-			!preg_match('/^(\d\d?):(\d\d?)$/', $this->value) or
+			!preg_match('/^(\d\d?):(\d\d?)$/', (string) $this->value) or
 			$uren < 0 or
 			$uren > 23 or
 			$minuten < 0 or
@@ -78,14 +78,14 @@ class TimeField extends InputField
 			'_uur" name="' .
 			$this->name .
 			'_uur" origvalue="' .
-			substr($this->origvalue, 0, 2) .
+			substr((string) $this->origvalue, 0, 2) .
 			'" ' .
 			$this->getInputAttribute('class') .
 			'>';
 		foreach ($hours as $value) {
 			$value = sprintf('%02d', $value);
 			$html .= '<option value="' . $value . '"';
-			if ($value == substr($this->value, 0, 2)) {
+			if ($value == substr((string) $this->value, 0, 2)) {
 				$html .= ' selected="selected"';
 			}
 			$html .= '>' . $value . '</option>';
@@ -98,7 +98,7 @@ class TimeField extends InputField
 			'_minuut" name="' .
 			$this->name .
 			'_minuut" origvalue="' .
-			substr($this->origvalue, 3, 2) .
+			substr((string) $this->origvalue, 3, 2) .
 			'" ' .
 			$this->getInputAttribute('class') .
 			'>';
@@ -106,7 +106,10 @@ class TimeField extends InputField
 		foreach ($minutes as $value) {
 			$value = sprintf('%02d', $value);
 			$html .= '<option value="' . $value . '"';
-			if ($value > $previousvalue && $value <= substr($this->value, 3, 2)) {
+			if (
+				$value > $previousvalue &&
+				$value <= substr((string) $this->value, 3, 2)
+			) {
 				$html .= ' selected="selected"';
 			}
 			$html .= '>' . $value . '</option>';

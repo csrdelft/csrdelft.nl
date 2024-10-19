@@ -15,26 +15,15 @@ use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface
  */
 class MaaltijdPrefixVoter extends PrefixVoter
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $em;
-	/**
-	 * @var AccessDecisionManagerInterface
-	 */
-	private $accessDecisionManager;
-
 	public function __construct(
-		EntityManagerInterface $em,
-		AccessDecisionManagerInterface $accessDecisionManager
+		private readonly EntityManagerInterface $em,
+		private readonly AccessDecisionManagerInterface $accessDecisionManager
 	) {
-		$this->em = $em;
-		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	protected function supportsPrefix($prefix)
 	{
-		return strtoupper($prefix) == 'MAALTIJD';
+		return strtoupper((string) $prefix) == 'MAALTIJD';
 	}
 
 	protected function voteOnPrefix(
@@ -43,7 +32,7 @@ class MaaltijdPrefixVoter extends PrefixVoter
 		$role,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		/** @var Account $user */
 		$user = $token->getUser();
 
@@ -76,7 +65,7 @@ class MaaltijdPrefixVoter extends PrefixVoter
 				if ($maaltijd && $maaltijd->magSluiten($profiel->uid)) {
 					return true;
 				}
-			} catch (CsrException $e) {
+			} catch (CsrException) {
 				// Maaltijd bestaat niet
 			}
 		}

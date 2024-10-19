@@ -105,7 +105,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$routes = new RouteCollection();
 		$prefix = 'csrdelft_groep_' . $this->repository::getNaam();
 
-		$className = get_class($this);
+		$className = static::class;
 
 		$route = function (
 			$path,
@@ -114,7 +114,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			$defaults = [],
 			$requirements = [],
 			$overrideName = null
-		) use ($routes, $prefix, $className) {
+		) use ($routes, $prefix, $className): void {
 			$name = $prefix . '_' . ($overrideName ?? $func);
 			$controller = "$className::$func";
 			$routes->add(
@@ -225,12 +225,10 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$groepen = $this->repository->overzicht($limit, $offset, $soort);
 		$soortEnum = $this->repository->parseSoort($soort);
 
-		$paginaUrl = function ($paginaNummer) use ($soort) {
-			return $this->generateUrl(
+		$paginaUrl = fn($paginaNummer) => $this->generateUrl(
 				'csrdelft_groep_' . $this->repository::getNaam() . '_overzicht',
 				['soort' => $soort, 'pagina' => $paginaNummer]
 			);
-		};
 		// controleert rechten bekijken per groep
 		$body = new GroepenView(
 			$this->container->get('twig'),
@@ -268,9 +266,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			0,
 			count($groepen),
 			count($groepen),
-			function () {
-				return '';
-			},
+			fn() => '',
 			$groep->id
 		);
 		return $this->render('default.html.twig', ['content' => $body]);
@@ -381,7 +377,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$groepen = $this->repository->zoeken($zoekterm, $limit, $status);
 
 		foreach ($groepen as $groep) {
-			$type = ReflectionUtil::classNameZonderNamespace(get_class($groep));
+			$type = ReflectionUtil::classNameZonderNamespace($groep::class);
 			$result[] = [
 				'url' => $groep->getUrl() . '#' . $groep->id,
 				'label' => 'Groepen',
@@ -505,7 +501,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			$view = $this->tableData($response);
 			$this->addFlash(
 				FlashType::SUCCESS,
-				get_class($groep) . ' succesvol aangemaakt!'
+				$groep::class . ' succesvol aangemaakt!'
 			);
 			$form = new GroepPreviewForm($this->container->get('twig'), $groep);
 			$view->modal = $form->__toString();
@@ -607,13 +603,11 @@ abstract class AbstractGroepenController extends AbstractController implements
 			count($groep->getLeden()) === 0
 		) {
 			$old = $serializer->serialize($groep, 'json', [
-				AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($obj) {
-					return $obj->id ?? '';
-				},
+				AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => fn($obj) => $obj->id ?? '',
 				AbstractNormalizer::GROUPS => ['log'],
 			]);
 			$this->changeLogRepository->log($groep, 'delete', $old, null);
-			$response[] = new RemoveDataTableEntry($groep->id, get_class($groep));
+			$response[] = new RemoveDataTableEntry($groep->id, $groep::class);
 			$this->repository->delete($groep);
 		}
 		return $this->tableData($response);
@@ -673,7 +667,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			$values = $form->getValues();
 			/** @var GroepRepository $model */
 			$model = $doctrine->getRepository($values['model']);
-			$converteer = get_class($model) !== get_class($this->repository);
+			$converteer = $model::class !== $this->repository::class;
 			$response = [];
 			$groep = $this->repository->retrieveByUUID($id);
 			if ($this->isGranted(AbstractGroepVoter::WIJZIGEN, $groep)) {
@@ -681,7 +675,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 					$this->changeLogRepository->log(
 						$groep,
 						'class',
-						get_class($groep),
+						$groep::class,
 						$model->getEntityClassName()
 					);
 					$nieuw = $model->converteer(
@@ -692,7 +686,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 					if ($nieuw) {
 						$response[] = new RemoveDataTableEntry(
 							$groep->id,
-							get_class($groep)
+							$groep::class
 						);
 						$response[] = $groep;
 					}
@@ -1001,7 +995,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
 		$response = new RemoveDataTableEntry(
 			['groepId' => $lid->groepId, 'uid' => $uid],
-			get_class($lid)
+			$lid !== null ? $lid::class : self::class
 		);
 		$em->remove($lid);
 		$em->flush();
@@ -1032,7 +1026,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		}
 
 		$lid = $groep->getLid($uid);
-		$em->transactional(function () use ($groep, $otGroep, $lid, $em) {
+		$em->transactional(function () use ($groep, $otGroep, $lid, $em): void {
 			$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
 			$this->changeLogRepository->log($otGroep, 'aanmelden', $lid->uid, null);
 			$em->remove($lid);
@@ -1048,7 +1042,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		return $this->tableData([
 			new RemoveDataTableEntry(
 				['groep_id' => $groep->id, 'uid' => $lid->uid],
-				get_class($lid)
+				$lid !== null ? $lid::class : self::class
 			),
 		]);
 	}

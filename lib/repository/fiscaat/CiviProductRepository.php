@@ -94,7 +94,7 @@ class CiviProductRepository extends AbstractRepository
 	 */
 	public function update(CiviProduct $product)
 	{
-		return $this->_em->transactional(function () use ($product) {
+		return $this->_em->transactional(function () use ($product): void {
 			$nu = date_create_immutable('now');
 
 			$prijs = $product->getPrijs();

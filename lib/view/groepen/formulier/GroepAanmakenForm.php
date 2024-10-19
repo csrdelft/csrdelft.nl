@@ -48,7 +48,7 @@ class GroepAanmakenForm extends ModalForm
 	{
 		$return = [];
 		$value = $this->findByName('model')->getValue();
-		$values = explode('_', $value, 2);
+		$values = explode('_', (string) $value, 2);
 		$return['model'] = $values[0];
 		if (isset($values[1])) {
 			$return['soort'] = $values[1];

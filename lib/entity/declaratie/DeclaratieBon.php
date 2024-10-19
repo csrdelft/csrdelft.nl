@@ -12,43 +12,31 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/**
- * @ORM\Entity(repositoryClass=DeclaratieBonRepository::class)
- */
+#[ORM\Entity(repositoryClass: DeclaratieBonRepository::class)]
 class DeclaratieBon
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private $id;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 */
+	#[ORM\Column(type: 'string', length: 255)]
 	private $bestand;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Declaratie::class, inversedBy="bonnen")
-	 */
+	#[ORM\ManyToOne(targetEntity: Declaratie::class, inversedBy: 'bonnen')]
 	private $declaratie;
 
 	/**
 	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(nullable=false, referencedColumnName="uid")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\JoinColumn(nullable: false, referencedColumnName: 'uid')]
 	private $maker;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
+	#[ORM\Column(type: 'datetime', nullable: true)]
 	private $datum;
 
-	/**
-	 * @ORM\OneToMany(targetEntity=DeclaratieRegel::class, mappedBy="bon")
-	 */
+	#[ORM\OneToMany(targetEntity: DeclaratieRegel::class, mappedBy: 'bon')]
 	private $regels;
 
 	public function __construct()
@@ -213,9 +201,10 @@ class DeclaratieBon
 			]),
 			'datum' => $this->datum ? date_format($this->datum, 'd-m-Y') : null,
 			'id' => $this->id,
-			'regels' => array_map(function (DeclaratieRegel $a) {
-				return $a->naarObject();
-			}, $this->regels->toArray()),
+			'regels' => array_map(
+				fn(DeclaratieRegel $a) => $a->naarObject(),
+				$this->regels->toArray()
+			),
 		];
 	}
 

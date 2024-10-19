@@ -48,14 +48,9 @@ class GroepPrefixVoter extends PrefixVoter
 		self::PREFIX_WOONOORD => Woonoord::class,
 		self::PREFIX_KRING => Kring::class,
 	];
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $em;
 
-	public function __construct(EntityManagerInterface $em)
+	public function __construct(private readonly EntityManagerInterface $em)
 	{
-		$this->em = $em;
 	}
 
 	protected function supportsPrefix($prefix)
@@ -69,7 +64,7 @@ class GroepPrefixVoter extends PrefixVoter
 		$role,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		$user = $token->getUser();
 
 		if (!$user) {

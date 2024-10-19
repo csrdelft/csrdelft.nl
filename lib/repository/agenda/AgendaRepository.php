@@ -9,7 +9,6 @@ use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\AgendaVerbergen;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\Activiteit;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
@@ -34,48 +33,16 @@ use Symfony\Component\Security\Core\Security;
  */
 class AgendaRepository extends AbstractRepository
 {
-	/**
-	 * @var AgendaVerbergenRepository
-	 */
-	private $agendaVerbergenRepository;
-	/**
-	 * @var ActiviteitenRepository
-	 */
-	private $activiteitenRepository;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var VerjaardagenService
-	 */
-	private $verjaardagenService;
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var MaaltijdenService
-	 */
-	private $maaltijdenService;
-
 	public function __construct(
 		ManagerRegistry $registry,
-		Security $security,
-		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenRepository $activiteitenRepository,
-		CorveeTakenRepository $corveeTakenRepository,
-		MaaltijdenService $maaltijdenService,
-		VerjaardagenService $verjaardagenService
+		private readonly Security $security,
+		private readonly AgendaVerbergenRepository $agendaVerbergenRepository,
+		private readonly ActiviteitenRepository $activiteitenRepository,
+		private readonly CorveeTakenRepository $corveeTakenRepository,
+		private readonly MaaltijdenService $maaltijdenService,
+		private readonly VerjaardagenService $verjaardagenService
 	) {
 		parent::__construct($registry, AgendaItem::class);
-
-		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
-		$this->activiteitenRepository = $activiteitenRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->verjaardagenService = $verjaardagenService;
-		$this->security = $security;
-		$this->maaltijdenService = $maaltijdenService;
 	}
 
 	/**
@@ -178,14 +145,14 @@ class AgendaRepository extends AbstractRepository
 	 * @param DateTimeImmutable $van
 	 * @param DateTimeImmutable $tot
 	 * @param bool $ical
-	 * @param bool $zijbalk
+	 * @param bool $voorpagina
 	 * @return Agendeerbaar[]
 	 */
 	public function getAllAgendeerbaar(
 		DateTimeImmutable $van,
 		DateTimeImmutable $tot,
 		$ical = false,
-		$zijbalk = false
+		$voorpagina = false
 	) {
 		$result = [];
 
@@ -211,8 +178,6 @@ class AgendaRepository extends AbstractRepository
 				$result[] = $item;
 			}
 		}
-
-		$auth = $ical ? AuthenticationMethod::getEnumValues() : null;
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
@@ -258,8 +223,8 @@ class AgendaRepository extends AbstractRepository
 		// Verjaardagen
 		$toonVerjaardagen = $ical ? 'toonVerjaardagenICal' : 'toonVerjaardagen';
 		if (
-			!$zijbalk &&
-			LoginService::mag(P_VERJAARDAGEN, $auth) &&
+			!$voorpagina &&
+			LoginService::mag(P_VERJAARDAGEN) &&
 			InstellingUtil::lid_instelling('agenda', $toonVerjaardagen) === 'ja'
 		) {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
@@ -288,7 +253,9 @@ class AgendaRepository extends AbstractRepository
 	 */
 	public function zoekWoordAgenda($woord)
 	{
-		return $this->zoekRegexAgenda('/' . preg_quote($woord, '/') . '/iu');
+		return $this->zoekRegexAgenda(
+			'/' . preg_quote((string) $woord, '/') . '/iu'
+		);
 	}
 
 	/**
@@ -302,8 +269,8 @@ class AgendaRepository extends AbstractRepository
 		$beginDag = date_create_immutable('today');
 		foreach ($this->getItemsByDay($beginDag) as $item) {
 			if (
-				preg_match($patroon, $item->getTitel()) ||
-				preg_match($patroon, $item->getBeschrijving())
+				preg_match($patroon, (string) $item->getTitel()) ||
+				preg_match($patroon, (string) $item->getBeschrijving())
 			) {
 				return $item;
 			}

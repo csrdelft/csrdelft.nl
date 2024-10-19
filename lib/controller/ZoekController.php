@@ -21,9 +21,9 @@ class ZoekController extends AbstractController
 {
 	/**
 	 * @return JsonResponse
-	 * @Route("/zoeken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/zoeken', methods: ['GET', 'POST'])]
 	public function zoeken(Request $request)
 	{
 		$zoekterm = $request->query->get('q');
@@ -104,9 +104,10 @@ class ZoekController extends AbstractController
 		return new JsonResponse(
 			array_merge(
 				...array_values(
-					array_map(function ($response) {
-						return json_decode($response->getContent());
-					}, $resultaat)
+					array_map(
+						fn($response) => json_decode((string) $response->getContent()),
+						$resultaat
+					)
 				)
 			)
 		);
@@ -115,9 +116,9 @@ class ZoekController extends AbstractController
 	/**
 	 * @return JsonResponse
 	 * @throws \Exception
-	 * @Route("/wikizoek", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/wikizoek', methods: ['GET'])]
 	public function wikizoek(Request $request, $zoekterm = null)
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
@@ -139,13 +140,13 @@ class ZoekController extends AbstractController
 			]);
 
 		$response = json_decode(
-			UrlUtil::curl_request($url, [CURLOPT_FOLLOWLOCATION => true]),
+			(string) UrlUtil::curl_request($url, [CURLOPT_FOLLOWLOCATION => true]),
 			true
 		);
 
 		$result = [];
 
-		foreach ($response['query']['search'] as $item) {
+		foreach ($response['query']['search'] ?? [] as $item) {
 			if ($item['ns'] !== 0) {
 				// Alleen NS_MAIN
 				continue;
@@ -172,7 +173,7 @@ class ZoekController extends AbstractController
 			'label' => 'Zoeken in wiki',
 			'value' => $zoekterm,
 			'icon' => Icon::getTag('wiki'),
-			'id' => htmlspecialchars($zoekterm) . 'wiki',
+			'id' => htmlspecialchars((string) $zoekterm) . 'wiki',
 		];
 
 		return new JsonResponse($result);

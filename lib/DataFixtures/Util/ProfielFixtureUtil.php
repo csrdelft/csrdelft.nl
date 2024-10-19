@@ -32,7 +32,7 @@ class ProfielFixtureUtil
 
 		$profiel = new Profiel();
 		$profiel->uid = $uid;
-		$profiel->lidjaar = (int) ('20' . substr($uid, 2));
+		$profiel->lidjaar = (int) ('20' . substr((string) $uid, 2));
 		$profiel->geslacht = [
 			'male' => Geslacht::Man(),
 			'female' => Geslacht::Vrouw(),
@@ -46,9 +46,10 @@ class ProfielFixtureUtil
 			$voorletters ??
 			implode(
 				'',
-				array_map(function ($el) {
-					return substr($el, 0, 1) . '.';
-				}, explode(' ', $profiel->voornamen))
+				array_map(
+					fn($el) => substr((string) $el, 0, 1) . '.',
+					explode(' ', $profiel->voornamen)
+				)
 			);
 		$profiel->tussenvoegsel = '';
 		$profiel->achternaam = $achternaam ?? $faker->lastName;

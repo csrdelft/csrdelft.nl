@@ -19,42 +19,17 @@ class BbForum extends BbTag
 	 */
 	private $deel;
 	/**
-	 * @var ForumDradenRepository
-	 */
-	private $forumDradenRepository;
-	/**
-	 * @var ForumDelenRepository
-	 */
-	private $forumDelenRepository;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
 	 * @var string
 	 */
 	private $id;
-	/**
-	 * @var ForumDelenService
-	 */
-	private $forumDelenService;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
 	public function __construct(
-		ForumDradenRepository $forumDradenRepository,
-		ForumDelenRepository $forumDelenRepository,
-		ForumDelenService $forumDelenService,
-		Security $security,
-		Environment $twig
+		private readonly ForumDradenRepository $forumDradenRepository,
+		private readonly ForumDelenRepository $forumDelenRepository,
+		private readonly ForumDelenService $forumDelenService,
+		private readonly Security $security,
+		private readonly Environment $twig
 	) {
-		$this->forumDradenRepository = $forumDradenRepository;
-		$this->forumDelenRepository = $forumDelenRepository;
-		$this->twig = $twig;
-		$this->forumDelenService = $forumDelenService;
-		$this->security = $security;
 	}
 
 	public static function getTagName()
@@ -98,16 +73,10 @@ class BbForum extends BbTag
 		}
 
 		$this->forumDradenRepository->setAantalPerPagina($this->num);
-		switch ($this->id) {
-			case 'recent':
-				$this->deel = $this->forumDelenService->getRecent();
-				break;
-			case 'belangrijk':
-				$this->deel = $this->forumDelenService->getRecent(true);
-				break;
-			default:
-				$this->deel = $this->forumDelenRepository->get($this->id);
-				break;
-		}
+		$this->deel = match ($this->id) {
+			'recent' => $this->forumDelenService->getRecent(),
+			'belangrijk' => $this->forumDelenService->getRecent(true),
+			default => $this->forumDelenRepository->get($this->id),
+		};
 	}
 }

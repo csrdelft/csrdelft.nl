@@ -2,6 +2,8 @@
 
 namespace CsrDelft\common\Util;
 
+use DateInterval;
+use DateTimeImmutable;
 use DateTimeInterface;
 use IntlDateFormatter;
 
@@ -13,28 +15,45 @@ final class DateUtil
 	public const TIME_FORMAT = 'HH:mm';
 	public const FULL_TIME_FORMAT = 'HH:mm:ss';
 
+	/**
+	 * @param DateTimeInterface|string $datum
+	 *
+	 * @return string|false
+	 */
 	public static function reldate($datum)
 	{
-		if ($datum instanceof DateTimeInterface) {
-			$moment = $datum->getTimestamp();
-		} else {
-			$moment = strtotime($datum);
+		if (!$datum instanceof DateTimeImmutable) {
+			if ($datum instanceof DateTimeInterface) {
+				$datum = DateTimeImmutable::createFromInterface($datum);
+			} else {
+				$datum = new DateTimeImmutable($datum);
+			}
 		}
+		$vandaag = (new DateTimeImmutable())->setTime(0, 0);
+		$gisteren = $vandaag->sub(new DateInterval('P1D')); // P1D == 1 dag
 
-		if (date('Y-m-d') == date('Y-m-d', $moment)) {
-			$return = 'vandaag om ' . strftime('%H:%M', $moment);
-		} elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
-			$return = 'gisteren om ' . strftime('%H:%M', $moment);
+		if ($datum->format('Y-m-d') === $vandaag->format('Y-m-d')) {
+			$return = 'vandaag om ' . self::dateFormatIntl($datum, "hh':'mm");
+		} elseif ($datum->format('Y-m-d') === $gisteren->format('Y-m-d')) {
+			$return = 'gisteren om ' . self::dateFormatIntl($datum, "hh':'mm");
 		} else {
-			$return = strftime('%A %e %B %Y om %H:%M', $moment); // php-bug: %e does not work on Windows
+			// zelfde jaar: geen jaar laten zien
+			$format =
+				$datum->format('Y') === $vandaag->format('Y')
+					? "eeee d MMMM 'om' hh':'mm"
+					: "eeee d MMMM yyyy 'om' hh':'mm";
+			$return = self::dateFormatIntl($datum, $format);
+		}
+		if ($return === '') {
+			error_log('wtf');
 		}
 		return '<time class="timeago" title="' .
 			$return .
 			'" datetime="' .
-			date('Y-m-d\TG:i:sO', $moment) .
+			$datum->format(DateTimeImmutable::ATOM) .
 			'">' .
 			$return .
-			'</time>'; // ISO8601
+			'</time>';
 	}
 
 	/**
@@ -71,9 +90,12 @@ final class DateUtil
 	 */
 	public static function dateFormatIntl(DateTimeInterface $date, $format)
 	{
-		$fmt = new IntlDateFormatter('nl', null, null);
+		$fmt = new IntlDateFormatter(
+			'nl',
+			IntlDateFormatter::NONE,
+			IntlDateFormatter::NONE
+		);
 		$fmt->setPattern($format);
-
 		return $fmt->format($date);
 	}
 }

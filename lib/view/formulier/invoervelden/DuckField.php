@@ -33,7 +33,8 @@ class DuckField extends TextField
 		);
 		if (
 			$profielRepository->existsDuck($this->value) and
-			strtolower($this->value) !== strtolower($this->origvalue)
+			strtolower((string) $this->value) !==
+				strtolower((string) $this->origvalue)
 		) {
 			$this->error = 'Deze Duckstad-naam is al in gebruik';
 		}

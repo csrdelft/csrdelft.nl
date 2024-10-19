@@ -1,16 +1,5 @@
-import Hammer from 'hammerjs';
 import { docReady } from './lib/util';
 import { select, selectAll } from './lib/dom';
-
-declare global {
-	// Hammer kan een Document als element krijgen, dit zorgt ervoor dat horizontale scroll mogelijk is op mobiel.
-	interface HammerStatic {
-		new (
-			element: HTMLElement | SVGElement | Document,
-			options?: HammerOptions | undefined
-		): HammerManager;
-	}
-}
 
 const initSubmenus = () => {
 	// Probeer menu te selecteren
@@ -84,102 +73,6 @@ docReady(() => {
 	try {
 		initSubmenus();
 		initInstantSearch();
-
-		const ZIJBALK_SELECTOR = '#zijbalk';
-		let active: string | null = null;
-
-		/**
-		 * Zorg ervoor dat de body niet kan scrollen als de overlay zichtbaar is.
-		 */
-		const toggleScroll = () => {
-			if (active === '#zijbalk') {
-				document.body.classList.add('overflow-x-hidden');
-			} else {
-				// Sta toe om te scrollen _nadat_ de animatie klaar is.
-				setTimeout(
-					() => document.body.classList.remove('overflow-x-hidden'),
-					300
-				);
-			}
-		};
-
-		/**
-		 * Terug naar gewone view.
-		 */
-		const reset = (event?: Event) => {
-			if (event && active != null) {
-				event.preventDefault();
-			}
-
-			active = null;
-
-			selectAll('.target').forEach((el) => el.classList.remove('target'));
-
-			toggleScroll();
-		};
-
-		/**
-		 * Toggle view met id.
-		 */
-		const toggle = (event?: Event) => {
-			if (event) {
-				event.preventDefault();
-				event.stopImmediatePropagation();
-			}
-			if (active === ZIJBALK_SELECTOR) {
-				reset();
-			} else {
-				active = ZIJBALK_SELECTOR;
-
-				selectAll('.target').forEach((el) => {
-					if (el.id != 'zijbalk') {
-						el.classList.remove('target');
-					}
-				});
-
-				select(ZIJBALK_SELECTOR).classList.toggle('target');
-
-				toggleScroll();
-			}
-		};
-
-		selectAll('.trigger[href="#zijbalk"]').forEach((el) =>
-			el.addEventListener('click', toggle)
-		);
-
-		selectAll('.cd-page-content, #menu, footer').forEach((el) =>
-			el.addEventListener('click', reset)
-		);
-
-		document.addEventListener('keydown', (e) => {
-			if (e.key == 'Escape') {
-				reset();
-			}
-		});
-
-		// Maak het mogelijk om nog tekst te kunnen selecteren.
-		delete Hammer.defaults.cssProps.userSelect;
-
-		const hammertime = new Hammer(document, { inputClass: Hammer.TouchInput });
-
-		const swipeDisabled = (e: HammerInput) =>
-			e.target.closest('.disable-swipe, table') != null;
-
-		hammertime.on('swiperight', (e) => {
-			if (swipeDisabled(e)) {
-				return;
-			}
-
-			toggle();
-		});
-
-		hammertime.on('swipeleft', (e) => {
-			if (swipeDisabled(e)) {
-				return;
-			}
-
-			reset();
-		});
 	} catch (e) {
 		// Geen menu aanwezig
 	}

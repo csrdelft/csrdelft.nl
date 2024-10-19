@@ -13,14 +13,8 @@ class RolePublicVoter extends Voter
 {
 	use CacheableVoterSupportsTrait;
 
-	/**
-	 * @var Security
-	 */
-	private $security;
-
-	public function __construct(Security $security)
+	public function __construct(private Security $security)
 	{
-		$this->security = $security;
 	}
 
 	public function supportsAttribute(string $attribute): bool

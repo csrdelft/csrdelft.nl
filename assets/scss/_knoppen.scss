@@ -31,7 +31,7 @@ a[href*="localhost"],
 a.not-external {
 	&:after {
 		margin-left: 0;
-		content: "";
+		content: none;
 	}
 }
 

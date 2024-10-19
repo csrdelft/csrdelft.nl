@@ -33,9 +33,10 @@ class AanmeldActiviteitRepository extends AbstractRepository
 	{
 		return $reeks
 			->getActiviteiten()
-			->filter(function (AanmeldActiviteit $activiteit) {
-				return $activiteit->magBekijken() && $activiteit->isInToekomst();
-			});
+			->filter(
+				fn(AanmeldActiviteit $activiteit) => $activiteit->magBekijken() &&
+					$activiteit->isInToekomst()
+			);
 	}
 
 	public function delete(AanmeldActiviteit $activiteit)

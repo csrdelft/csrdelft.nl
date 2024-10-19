@@ -3,16 +3,18 @@
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
 // Zet hier de OWee kleuren
-$primary: #ffc4de;
-$secondary: #3fa34d;
-$tertiary: #3f8c4d;
-$accent: #ff9eca;
+$lila: rgb(232, 191, 255);
+$orangeowee: rgb(255, 59, 0);
+$primary: $lila;
+$secondary: $lila;
+$tertiary: $lila;
+$accent: $lila;
 $youtubeRed: rgb(170, 1, 1);
 $whatsappGreen: rgb(14, 214, 14);
 $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
 
-$basiskleur: #3fa34d;
-$lijnkleur: #ff9eca;
+$basiskleur: $lila;
+$lijnkleur: $orangeowee;
 
 @font-face {
 	font-family: "Tw Cen MT";
@@ -217,8 +219,9 @@ body {
 			}
 		}
 
+		//kleur van de knop
 		&.secondary {
-			background: $accent;
+			background: $lijnkleur;
 			color: white;
 
 			&:hover {
@@ -307,7 +310,7 @@ body {
 	.videos {
 		//background: $primary url("../images/owee2022-achtergrond.png") no-repeat
 		//	left center;
-		background-color: $tertiary;
+		background-color: $secondary;
 		background-size: cover;
 		width: 100%;
 

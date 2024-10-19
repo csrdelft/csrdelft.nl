@@ -11,15 +11,12 @@ class SavedQueryContent implements View
 {
 	use ToHtmlResponse;
 
-	/**
-	 * Saved query
-	 * @var SavedQueryResult
-	 */
-	private $sq;
-
-	public function __construct(SavedQueryResult $sq = null)
-	{
-		$this->sq = $sq;
+	public function __construct(
+		/**
+		 * Saved query
+		 */
+		private ?\CsrDelft\entity\SavedQueryResult $sq = null
+	) {
 	}
 
 	public function getModel()
@@ -51,8 +48,8 @@ class SavedQueryContent implements View
 			case 'med_link':
 				return 'Mededeling';
 			default:
-				if (substr($name, 0, 10) == 'groep_naam') {
-					return substr($name, 11);
+				if (str_starts_with((string) $name, 'groep_naam')) {
+					return substr((string) $name, 11);
 				}
 		}
 		return $name;
@@ -71,14 +68,17 @@ class SavedQueryContent implements View
 				'">' .
 				$contents .
 				'</a>';
-		} elseif (substr($name, 0, 10) == 'groep_naam' and $contents != '') {
+		} elseif (
+			str_starts_with((string) $name, 'groep_naam') and
+			$contents != ''
+		) {
 			return ''; //FIXME: OldGroep::ids2links($contents, '<br />');
 		} elseif ($name == 'med_link') {
 			//link naar een mededeling.
 			return '<a href="/mededelingen/' . $contents . '">' . $contents . '</a>';
 		}
 
-		return htmlspecialchars($contents);
+		return htmlspecialchars((string) $contents);
 	}
 
 	public function render_queryResult()
@@ -165,7 +165,7 @@ class SavedQueryContent implements View
 		return $return;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$html = '';
 		$html .= '<h1>' . $this->getTitel() . '</h1>';

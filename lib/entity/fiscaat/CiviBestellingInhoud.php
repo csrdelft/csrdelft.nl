@@ -11,40 +11,44 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Onderdeel van een @see CiviBestelling
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository::class
+	)
+]
 class CiviBestellingInhoud
 {
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
 	public $bestelling_id;
 	/**
 	 * @var CiviBestelling
-	 * @ORM\ManyToOne(targetEntity="CiviBestelling", inversedBy="inhoud")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CiviBestelling::class, inversedBy: 'inhoud')]
 	public $bestelling;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
 	public $product_id;
 	/**
 	 * @var CiviProduct
-	 * @ORM\ManyToOne(targetEntity="CiviProduct")
-	 * @Serializer\Groups("bar")
 	 */
+	#[Serializer\Groups('bar')]
+	#[ORM\ManyToOne(targetEntity: \CiviProduct::class)]
 	public $product;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "bar"})
 	 */
+	#[Serializer\Groups(['datatable', 'bar'])]
+	#[ORM\Column(type: 'integer')]
 	public $aantal;
 
 	public function setProduct(CiviProduct $product = null)
@@ -74,8 +78,8 @@ class CiviBestellingInhoud
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public function getStukprijs()
 	{
 		return sprintf('€%.2f', $this->product->getPrijsInt() / 100);
@@ -83,8 +87,8 @@ class CiviBestellingInhoud
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
 	public function getTotaalprijs()
 	{
 		return sprintf('€%.2f', $this->getPrijs() / 100);
@@ -92,9 +96,9 @@ class CiviBestellingInhoud
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("product")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('product')]
 	public function getDataTableProduct()
 	{
 		return $this->product->beschrijving;

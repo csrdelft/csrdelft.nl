@@ -15,22 +15,17 @@ use CsrDelft\view\Icon;
 class FormulierKnop implements FormElement
 {
 	protected $id;
-	public $url;
-	public $action;
 	public $data;
-	public $icon;
-	public $label;
-	public $title;
 	public $css_classes = ['FormulierKnop'];
 
-	public function __construct($url, $action, $label, $title, $icon)
-	{
+	public function __construct(
+		public $url,
+		public $action,
+		public $label,
+		public $title,
+		public $icon
+	) {
 		$this->id = CryptoUtil::uniqid_safe('knop_');
-		$this->url = $url;
-		$this->action = $action;
-		$this->label = $label;
-		$this->title = $title;
-		$this->icon = $icon;
 		$this->css_classes[] = $this->getType();
 		$this->css_classes[] = 'btn btn-primary';
 	}
@@ -57,7 +52,7 @@ class FormulierKnop implements FormElement
 
 	public function getType()
 	{
-		return ReflectionUtil::classNameZonderNamespace(get_class($this));
+		return ReflectionUtil::classNameZonderNamespace(static::class);
 	}
 
 	public function getHtml()
@@ -71,7 +66,7 @@ class FormulierKnop implements FormElement
 			'" class="' .
 			implode(' ', $this->css_classes) .
 			'" title="' .
-			htmlspecialchars($this->title) .
+			htmlspecialchars((string) $this->title) .
 			'" tabindex="0"';
 		if (isset($this->data)) {
 			$html .= ' data="' . $this->data . '"';
@@ -84,9 +79,9 @@ class FormulierKnop implements FormElement
 		return $html . '</a> ';
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->getHtml();
+		return (string) $this->getHtml();
 	}
 
 	public function getJavascript()

@@ -56,7 +56,7 @@ class OneTimeTokensRepository extends AbstractRepository
 		try {
 			$tokenObj = $qb->getQuery()->getSingleResult();
 			return $tokenObj->account;
-		} catch (NoResultException $e) {
+		} catch (NoResultException) {
 			return null;
 		} catch (NonUniqueResultException $e) {
 			throw $e;

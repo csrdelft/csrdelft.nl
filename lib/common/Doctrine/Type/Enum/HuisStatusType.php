@@ -11,7 +11,7 @@ class HuisStatusType extends EnumType
 		return HuisStatus::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumHuisStatus';
 	}

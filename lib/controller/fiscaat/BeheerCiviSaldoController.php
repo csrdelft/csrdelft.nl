@@ -33,35 +33,19 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
  */
 class BeheerCiviSaldoController extends AbstractController
 {
-	/**
-	 * @var CiviSaldoRepository
-	 */
-	private $civiSaldoRepository;
-	/**
-	 * @var CiviBestellingRepository
-	 */
-	private $civiBestellingRepository;
-	/**
-	 * @var ProfielService
-	 */
-	private $profielService;
-
 	public function __construct(
-		CiviSaldoRepository $civiSaldoRepository,
-		CiviBestellingRepository $civiBestellingRepository,
-		ProfielService $profielService
+		private readonly CiviSaldoRepository $civiSaldoRepository,
+		private readonly CiviBestellingRepository $civiBestellingRepository,
+		private readonly ProfielService $profielService
 	) {
-		$this->profielService = $profielService;
-		$this->civiSaldoRepository = $civiSaldoRepository;
-		$this->civiBestellingRepository = $civiBestellingRepository;
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/fiscaat/saldo")
 	 * @Auth(P_FISCAAT_READ)
 	 * @throws ExceptionInterface
 	 */
+	#[Route(path: '/fiscaat/saldo')]
 	public function overzicht(Request $request)
 	{
 		$table = $this->createDataTable(CiviSaldoTable::class);
@@ -82,9 +66,15 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @param EntityManagerInterface $em
 	 * @param string $uid
 	 * @return GenericDataTableResponse|InleggenForm
-	 * @Route("/fiscaat/saldo/inleggen/{uid}", defaults={"uid"=null}, methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[
+		Route(
+			path: '/fiscaat/saldo/inleggen/{uid}',
+			defaults: ['uid' => null],
+			methods: ['POST']
+		)
+	]
 	public function inleggen(EntityManagerInterface $em, $uid)
 	{
 		if ($uid) {
@@ -104,7 +94,7 @@ class BeheerCiviSaldoController extends AbstractController
 				$values['saldo'] == $civisaldo->saldo
 			) {
 				$inleg = $values['inleg'];
-				$em->transactional(function () use ($inleg, $civisaldo) {
+				$em->transactional(function () use ($inleg, $civisaldo): void {
 					$bestelling = $this->civiBestellingRepository->vanBedragInCenten(
 						$inleg,
 						$civisaldo->uid
@@ -128,9 +118,9 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @return GenericDataTableResponse
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/fiscaat/saldo/verwijderen", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/saldo/verwijderen', methods: ['POST'])]
 	public function verwijderen()
 	{
 		$selection = $this->getDataTableSelection();
@@ -161,9 +151,9 @@ class BeheerCiviSaldoController extends AbstractController
 	 * @return GenericDataTableResponse|LidRegistratieForm
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/fiscaat/saldo/registreren", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/saldo/registreren', methods: ['POST'])]
 	public function registreren()
 	{
 		$form = new LidRegistratieForm(new CiviSaldo());
@@ -199,9 +189,9 @@ class BeheerCiviSaldoController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/fiscaat/saldo/som", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/saldo/som', methods: ['POST'])]
 	public function som()
 	{
 		$momentString = filter_input(INPUT_POST, 'moment', FILTER_SANITIZE_STRING);
@@ -223,9 +213,9 @@ class BeheerCiviSaldoController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return JsonResponse
-	 * @Route("/fiscaat/saldo/zoek", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
+	#[Route(path: '/fiscaat/saldo/zoek', methods: ['GET'])]
 	public function zoek(Request $request)
 	{
 		$zoekterm = $request->query->get('q');
@@ -236,9 +226,7 @@ class BeheerCiviSaldoController extends AbstractController
 			'alle',
 			'achternaam'
 		);
-		$uids = array_map(function ($profiel) {
-			return $profiel->uid;
-		}, $leden);
+		$uids = array_map(fn($profiel) => $profiel->uid, $leden);
 
 		$civiSaldi = $this->civiSaldoRepository->zoeken($uids, $zoekterm);
 

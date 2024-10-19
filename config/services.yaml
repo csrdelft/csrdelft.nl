@@ -92,10 +92,6 @@ services:
       - '@security.authentication.success_handler.main.form_login'
       - '@security.authentication.failure_handler.main.form_login'
 
-  # Voor Zijbalk in blade templates
-  CsrDelft\view\Zijbalk:
-    public: true
-
   Psr\Container\ContainerInterface: '@service_container'
 
   security:

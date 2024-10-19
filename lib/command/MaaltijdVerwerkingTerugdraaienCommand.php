@@ -10,6 +10,7 @@ use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,35 +18,23 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
+#[
+	AsCommand(
+		name: 'maalcie:fiscaat:terugdraaien',
+		description: 'Draai verwerking van maaltijden op bepaalde datum terug. Let op: hiermee wordt ook civi-saldo teruggestort naar oud-leden.'
+	)
+]
 class MaaltijdVerwerkingTerugdraaienCommand extends Command
 {
-	/** @var MaaltijdenRepository */
-	private $maaltijdenRepository;
-	/** @var CiviBestellingRepository */
-	private $civiBestellingRepository;
-	/** @var EntityManagerInterface */
-	private $em;
-
 	public function __construct(
-		MaaltijdenRepository $maaltijdenRepository,
-		CiviBestellingRepository $civiBestellingRepository,
-		EntityManagerInterface $em
+		private readonly MaaltijdenRepository $maaltijdenRepository,
+		private readonly CiviBestellingRepository $civiBestellingRepository,
+		private readonly EntityManagerInterface $em
 	) {
-		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->civiBestellingRepository = $civiBestellingRepository;
-		$this->em = $em;
-
 		parent::__construct();
 	}
 
-	protected function configure()
-	{
-		$this->setName('maalcie:fiscaat:terugdraaien')->setDescription(
-			'Draai verwerking van maaltijden op bepaalde datum terug. Let op: hiermee wordt ook civi-saldo teruggestort naar oud-leden.'
-		);
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$helper = $this->getHelper('question');
 
@@ -139,7 +128,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command
 				$bestellingen,
 				$progress,
 				$maaltijden
-			) {
+			): void {
 				reset($bestellingen);
 				foreach ($bestellingen as $bestelling) {
 					$this->civiBestellingRepository->revert($bestelling);

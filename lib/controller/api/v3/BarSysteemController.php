@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\bar\BarLocatie;
 use CsrDelft\service\BarSysteemService;
+use DateTimeImmutable;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,18 +18,13 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Class BarSysteemController
  * @package CsrDelft\controller\api\v3
- * @Route("/api/v3/bar")
  */
+#[Route(path: '/api/v3/bar')]
 class BarSysteemController extends AbstractController
 {
-	/**
-	 * @var BarSysteemService
-	 */
-	private $barSysteemService;
-
-	public function __construct(BarSysteemService $barSysteemService)
-	{
-		$this->barSysteemService = $barSysteemService;
+	public function __construct(
+		private readonly BarSysteemService $barSysteemService
+	) {
 	}
 
 	protected function json(
@@ -45,13 +41,13 @@ class BarSysteemController extends AbstractController
 		);
 	}
 
-	#[IsGranted("ROLE_OAUTH2_BAR:TRUST")]
 	/**
-	 * @Route("/trust", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 * @param Request $request
 	 * @return JsonResponse
 	 */
+	#[IsGranted("ROLE_OAUTH2_BAR:TRUST")]
+	#[Route(path: '/trust', methods: ['POST'])]
 	public function trust(Request $request)
 	{
 		// maak een nieuwe BarSysteemTrust object en sla op.
@@ -78,10 +74,10 @@ class BarSysteemController extends AbstractController
 	}
 
 	/**
-	 * @Route("/updatePerson", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:BEHEER")]
+	#[Route(path: '/updatePerson', methods: ['POST'])]
 	public function updatePerson(Request $request)
 	{
 		$id = $request->request->get('id');
@@ -93,10 +89,10 @@ class BarSysteemController extends AbstractController
 
 	/**
 	 * @return JsonResponse
-	 * @Route("/personen", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[Route(path: '/personen', methods: ['POST'])]
 	public function personen()
 	{
 		return $this->json($this->barSysteemService->getPersonen());
@@ -104,10 +100,10 @@ class BarSysteemController extends AbstractController
 
 	/**
 	 * @return JsonResponse
-	 * @Route("/producten", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[Route(path: '/producten', methods: ['POST'])]
 	public function producten()
 	{
 		return $this->json($this->barSysteemService->getProducten());
@@ -119,10 +115,10 @@ class BarSysteemController extends AbstractController
 	 * @throws \Doctrine\DBAL\ConnectionException
 	 * @throws \Doctrine\DBAL\Driver\Exception
 	 * @throws \Doctrine\DBAL\Exception
-	 * @Route("/bestelling", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[Route(path: '/bestelling', methods: ['POST'])]
 	public function bestelling(Request $request)
 	{
 		$uid = $request->request->get('uid');
@@ -147,10 +143,10 @@ class BarSysteemController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return JsonResponse
-	 * @Route("/saldo", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[Route(path: '/saldo', methods: ['POST'])]
 	public function saldo(Request $request)
 	{
 		$soccieSaldoId = $request->request->get('saldoSocCieId');
@@ -160,10 +156,10 @@ class BarSysteemController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return Response
-	 * @Route("/verwijderBestelling", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[Route(path: '/verwijderBestelling', methods: ['POST'])]
 	public function verwijderBestelling(Request $request)
 	{
 		$this->barSysteemService->log('remove', $_POST);
@@ -178,10 +174,10 @@ class BarSysteemController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return Response
-	 * @Route("/undoVerwijderBestelling", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[Route(path: '/undoVerwijderBestelling', methods: ['POST'])]
 	public function undoVerwijderBestelling(Request $request)
 	{
 		$this->barSysteemService->log('remove', $_POST);
@@ -195,10 +191,10 @@ class BarSysteemController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return JsonResponse
-	 * @Route("/laadLaatste", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	#[IsGranted("ROLE_OAUTH2_BAR:NORMAAL")]
+	#[Route(path: '/laadLaatste', methods: ['POST'])]
 	public function laadLaatste(Request $request)
 	{
 		$persoon = $request->request->get('aantal');
@@ -220,5 +216,23 @@ class BarSysteemController extends AbstractController
 				$productType
 			)
 		);
+	}
+
+	/**
+	 * @param Request $request
+	 * @return Response
+	 * @Auth(P_PUBLIC)
+	 */
+	#[Route(path: '/prakciePilsjes')]
+	public function prakciePilsjes(Request $request)
+	{
+		$vanaf = date_create_immutable($request->query->get('vanaf', 'now'));
+		if ($vanaf === false) {
+			return new Response('Verkeerde formaat voor datum', 400);
+		}
+		$pilsjes = $this->barSysteemService->getPrakCiePilsjes($vanaf);
+		$res = new Response((string) $pilsjes, 200);
+		$res->headers->set('Content-Type', 'text/plain');
+		return $res;
 	}
 }

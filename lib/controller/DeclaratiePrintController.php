@@ -13,9 +13,15 @@ use Transliterator;
 class DeclaratiePrintController extends AbstractController
 {
 	/**
-	 * @Route("/declaratie/print/{declaratie}", name="declaratie_print", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/declaratie/print/{declaratie}',
+			name: 'declaratie_print',
+			methods: ['GET']
+		)
+	]
 	public function print(
 		Declaratie $declaratie,
 		DeclaratiePDFGenerator $declaratiePDFGenerator
@@ -24,7 +30,7 @@ class DeclaratiePrintController extends AbstractController
 			throw $this->createAccessDeniedException();
 		}
 
-		list($type, $content) = $declaratiePDFGenerator->genereerDeclaratie(
+		[$type, $content] = $declaratiePDFGenerator->genereerDeclaratie(
 			$declaratie
 		);
 		$response = new Response($content);

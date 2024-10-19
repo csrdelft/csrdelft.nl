@@ -17,21 +17,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ForumPlaatjesController extends AbstractController
 {
-	/** @var ForumPlaatjeRepository  */
-	private $forumPlaatjeRepository;
-
-	public function __construct(ForumPlaatjeRepository $forumPlaatjeRepository)
-	{
-		$this->forumPlaatjeRepository = $forumPlaatjeRepository;
+	public function __construct(
+		private readonly ForumPlaatjeRepository $forumPlaatjeRepository
+	) {
 	}
 
 	/**
-	 * @Route("/forum/plaatjes/upload_json", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 * @return JsonResponse
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
+	#[Route(path: '/forum/plaatjes/upload_json', methods: ['POST'])]
 	public function uploadJson()
 	{
 		$form = new PlaatjesUploadModalForm();
@@ -56,10 +53,23 @@ class ForumPlaatjesController extends AbstractController
 	 * @param $id
 	 * @param bool $resized
 	 * @return BinaryFileResponse
-	 * @Route("/forum/plaatjes/bekijken/{id}", methods={"GET"}, requirements={"id"="[a-zA-Z0-9]*"})
-	 * @Route("/forum/plaatjes/bekijken/{id}/resized", methods={"GET"}, requirements={"id"="[a-zA-Z0-9]*"}, defaults={"resized"=true})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/forum/plaatjes/bekijken/{id}',
+			methods: ['GET'],
+			requirements: ['id' => '[a-zA-Z0-9]*']
+		)
+	]
+	#[
+		Route(
+			path: '/forum/plaatjes/bekijken/{id}/resized',
+			methods: ['GET'],
+			requirements: ['id' => '[a-zA-Z0-9]*'],
+			defaults: ['resized' => true]
+		)
+	]
 	public function bekijken($id, $resized = false)
 	{
 		$plaatje = $this->forumPlaatjeRepository->getByKey($id);

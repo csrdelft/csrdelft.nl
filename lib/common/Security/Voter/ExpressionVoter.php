@@ -20,15 +20,10 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class ExpressionVoter extends Voter
 {
 	use CacheableVoterSupportsTrait;
-	/**
-	 * @var AccessDecisionManagerInterface
-	 */
-	private $accessDecisionManager;
 
 	public function __construct(
-		AccessDecisionManagerInterface $accessDecisionManager
+		private AccessDecisionManagerInterface $accessDecisionManager
 	) {
-		$this->accessDecisionManager = $accessDecisionManager;
 	}
 
 	public function supportsAttribute(string $attribute): bool
@@ -42,7 +37,7 @@ class ExpressionVoter extends Voter
 		TokenInterface $token
 	): bool {
 		// OR
-		if (strpos($attribute, ',') !== false) {
+		if (str_contains($attribute, ',')) {
 			/**
 			 * Het gevraagde mag een enkele permissie zijn, of meerdere, door komma's
 			 * gescheiden, waarvan de gebruiker er dan een hoeft te hebben. Er kunnen
@@ -52,7 +47,7 @@ class ExpressionVoter extends Voter
 			$p = explode(',', $attribute);
 			$result = false;
 			foreach ($p as $perm) {
-				$result |= $this->accessDecisionManager->decide(
+				$result = $result || $this->accessDecisionManager->decide(
 					$token,
 					[$perm],
 					$subject
@@ -60,7 +55,7 @@ class ExpressionVoter extends Voter
 			}
 		}
 		// AND
-		elseif (strpos($attribute, '+') !== false) {
+		elseif (str_contains($attribute, '+')) {
 			/**
 			 * Gecombineerde permissie:
 			 * gebruiker moet alle permissies bezitten
@@ -68,7 +63,7 @@ class ExpressionVoter extends Voter
 			$p = explode('+', $attribute);
 			$result = true;
 			foreach ($p as $perm) {
-				$result &= $this->accessDecisionManager->decide(
+				$result = $result && $this->accessDecisionManager->decide(
 					$token,
 					[$perm],
 					$subject
@@ -76,7 +71,7 @@ class ExpressionVoter extends Voter
 			}
 		}
 		// OR (secondary)
-		elseif (strpos($attribute, '|') !== false) {
+		elseif (str_contains($attribute, '|')) {
 			/**
 			 * Mogelijkheid voor OR binnen een AND
 			 * Hierdoor zijn er geen haakjes nodig in de syntax voor niet al te ingewikkelde statements.
@@ -85,7 +80,7 @@ class ExpressionVoter extends Voter
 			$p = explode('|', $attribute);
 			$result = false;
 			foreach ($p as $perm) {
-				$result |= $this->accessDecisionManager->decide(
+				$result =  $result || $this->accessDecisionManager->decide(
 					$token,
 					[$perm],
 					$subject

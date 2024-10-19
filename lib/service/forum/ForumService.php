@@ -15,57 +15,16 @@ use CsrDelft\repository\ProfielRepository;
 
 class ForumService
 {
-	/**
-	 * @var ForumDradenReagerenRepository
-	 */
-	private $forumDradenReagerenRepository;
-	/**
-	 * @var ForumPostsRepository
-	 */
-	private $forumPostsRepository;
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var ForumDradenGelezenRepository
-	 */
-	private $forumDradenGelezenRepository;
-	/**
-	 * @var ForumDradenVerbergenRepository
-	 */
-	private $forumDradenVerbergenRepository;
-	/**
-	 * @var ForumDradenMeldingRepository
-	 */
-	private $forumDradenMeldingRepository;
-	/**
-	 * @var ForumDelenMeldingRepository
-	 */
-	private $forumDelenMeldingRepository;
-	/**
-	 * @var ForumDradenRepository
-	 */
-	private $forumDradenRepository;
-
 	public function __construct(
-		ForumDradenReagerenRepository $forumDradenReagerenRepository,
-		ForumPostsRepository $forumPostsRepository,
-		ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
-		ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		ForumDelenMeldingRepository $forumDelenMeldingRepository,
-		ForumDradenRepository $forumDradenRepository,
-		ProfielRepository $profielRepository
+		private readonly ForumDradenReagerenRepository $forumDradenReagerenRepository,
+		private readonly ForumPostsRepository $forumPostsRepository,
+		private readonly ForumDradenGelezenRepository $forumDradenGelezenRepository,
+		private readonly ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
+		private readonly ForumDradenMeldingRepository $forumDradenMeldingRepository,
+		private readonly ForumDelenMeldingRepository $forumDelenMeldingRepository,
+		private readonly ForumDradenRepository $forumDradenRepository,
+		private readonly ProfielRepository $profielRepository
 	) {
-		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
-		$this->forumPostsRepository = $forumPostsRepository;
-		$this->profielRepository = $profielRepository;
-		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
-		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
-		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
-		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
-		$this->forumDradenRepository = $forumDradenRepository;
 	}
 
 	public function opschonen()

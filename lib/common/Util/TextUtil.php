@@ -33,11 +33,11 @@ final class TextUtil
 				);
 			}
 			if (!$middle) {
-				return mb_substr($string, 0, $length, 'UTF-8') . $etc;
+				return mb_substr((string) $string, 0, $length, 'UTF-8') . $etc;
 			}
-			return mb_substr($string, 0, $length / 2, 'UTF-8') .
+			return mb_substr((string) $string, 0, $length / 2, 'UTF-8') .
 				$etc .
-				mb_substr($string, -$length / 2, $length, 'UTF-8');
+				mb_substr((string) $string, -$length / 2, $length, 'UTF-8');
 		}
 		return $string;
 	}

@@ -28,7 +28,7 @@ abstract class PrefixVoter extends Voter
 		$role,
 		$subject,
 		TokenInterface $token
-	);
+	): bool;
 
 	protected function supports(string $attribute, $subject): bool
 	{

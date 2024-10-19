@@ -23,6 +23,6 @@ class UidVoter extends Voter
 		$subject,
 		TokenInterface $token
 	): bool {
-		return $attribute == $token->getUserIdentifier();
+		return $attribute === $token->getUserIdentifier();
 	}
 }

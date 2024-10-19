@@ -13,33 +13,12 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CorveeRepetitiesService
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var CorveeVoorkeurenRepository
-	 */
-	private $corveeVoorkeurenRepository;
-	/**
-	 * @var CorveeRepetitiesRepository
-	 */
-	private $corveeRepetitiesRepository;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		CorveeTakenRepository $corveeTakenRepository,
-		CorveeRepetitiesRepository $corveeRepetitiesRepository,
-		CorveeVoorkeurenRepository $corveeVoorkeurenRepository
+		private readonly EntityManagerInterface $entityManager,
+		private readonly CorveeTakenRepository $corveeTakenRepository,
+		private readonly CorveeRepetitiesRepository $corveeRepetitiesRepository,
+		private readonly CorveeVoorkeurenRepository $corveeVoorkeurenRepository
 	) {
-		$this->entityManager = $entityManager;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
-		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 	}
 
 	public function verwijderRepetitie($crid)

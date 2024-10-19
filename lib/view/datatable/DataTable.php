@@ -32,9 +32,6 @@ class DataTable implements View, FormElement, ToResponse
 {
 	use ToHtmlResponse;
 	const POST_SELECTION = 'DataTableSelection';
-
-	protected $dataUrl;
-	protected $titel;
 	protected $dataTableId;
 	protected $defaultLength = 10;
 	protected $selectEnabled = true;
@@ -76,26 +73,21 @@ class DataTable implements View, FormElement, ToResponse
 	];
 
 	private $columns = [];
-	private $groupByColumn;
 
 	public function __construct(
 		$orm,
-		$dataUrl,
-		$titel = false,
-		$groupByColumn = null,
+		protected $dataUrl,
+		protected $titel = false,
+		private $groupByColumn = null,
 		$loadColumns = true
 	) {
-		$this->titel = $titel;
-
-		$this->dataUrl = $dataUrl;
 		$this->dataTableId = CryptoUtil::uniqid_safe(
 			ReflectionUtil::classNameZonderNamespace($orm)
 		);
-		$this->groupByColumn = $groupByColumn;
 
-		if ($titel) {
-			$this->settings['buttons'][1]['filename'] = $titel;
-			$this->settings['buttons'][2]['filename'] = $titel;
+		if ($this->titel) {
+			$this->settings['buttons'][1]['filename'] = $this->titel;
+			$this->settings['buttons'][2]['filename'] = $this->titel;
 		}
 
 		// create group expand / collapse column
@@ -381,9 +373,9 @@ class DataTable implements View, FormElement, ToResponse
 		return $settings;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->getHtml();
+		return (string) $this->getHtml();
 	}
 
 	public function getTitel()
@@ -406,12 +398,12 @@ class DataTable implements View, FormElement, ToResponse
 
 	public function getType()
 	{
-		return ReflectionUtil::classNameZonderNamespace(get_class($this));
+		return ReflectionUtil::classNameZonderNamespace(static::class);
 	}
 
 	public function getHtml()
 	{
-		$id = str_replace(' ', '-', strtolower($this->getTitel()));
+		$id = str_replace(' ', '-', strtolower((string) $this->getTitel()));
 
 		$settingsJson = htmlspecialchars(
 			json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0)

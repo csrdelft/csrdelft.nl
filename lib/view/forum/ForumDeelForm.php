@@ -19,17 +19,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class ForumDeelForm implements FormulierTypeInterface
 {
 	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-
-	/**
 	 * @param UrlGeneratorInterface $urlGenerator
 	 * @param ForumCategorieRepository $forumCategorieRepository
 	 */
-	public function __construct(UrlGeneratorInterface $urlGenerator)
-	{
-		$this->urlGenerator = $urlGenerator;
+	public function __construct(
+		private readonly UrlGeneratorInterface $urlGenerator
+	) {
 	}
 
 	/**

@@ -19,21 +19,10 @@ class PeilingVoter extends Voter
 	const BEWERKEN = 'bewerken';
 	const TOEVOEGEN = 'toevoegen';
 
-	/**
-	 * @var AccessDecisionManagerInterface
-	 */
-	private $accessDecisionManager;
-	/**
-	 * @var PeilingOptiesRepository
-	 */
-	private $peilingOptiesRepository;
-
 	public function __construct(
-		PeilingOptiesRepository $peilingOptiesRepository,
-		AccessDecisionManagerInterface $accessDecisionManager
+		private PeilingOptiesRepository $peilingOptiesRepository,
+		private AccessDecisionManagerInterface $accessDecisionManager
 	) {
-		$this->accessDecisionManager = $accessDecisionManager;
-		$this->peilingOptiesRepository = $peilingOptiesRepository;
 	}
 
 	public function supportsAttribute(string $attribute): bool
@@ -62,18 +51,15 @@ class PeilingVoter extends Voter
 		$subject,
 		TokenInterface $token
 	): bool {
-		switch ($attribute) {
-			case self::STEMMEN:
-				return $this->magStemmen($token, $subject);
-			case self::TOEVOEGEN:
-				return $this->magToevoegen($token, $subject);
-			case self::BEKIJKEN:
-				return $this->accessDecisionManager->decide($token, ['ROLE_LOGGED_IN']);
-			case self::BEWERKEN:
-				return $this->magBewerken($token, $subject);
-			default:
-				throw new CsrException("Onbekende attribute: '$attribute'.");
-		}
+		return match ($attribute) {
+			self::STEMMEN => $this->magStemmen($token, $subject),
+			self::TOEVOEGEN => $this->magToevoegen($token, $subject),
+			self::BEKIJKEN => $this->accessDecisionManager->decide($token, [
+				'ROLE_LOGGED_IN',
+			]),
+			self::BEWERKEN => $this->magBewerken($token, $subject),
+			default => throw new CsrException("Onbekende attribute: '$attribute'."),
+		};
 	}
 
 	/**
@@ -104,7 +90,7 @@ class PeilingVoter extends Voter
 		if ($subject->eigenaar == $token->getUserIdentifier()) {
 			return true;
 		}
-		if (empty(trim($subject->rechten_stemmen))) {
+		if (empty(trim((string) $subject->rechten_stemmen))) {
 			return true;
 		}
 		if (

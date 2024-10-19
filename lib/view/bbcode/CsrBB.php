@@ -161,16 +161,12 @@ class CsrBB extends Parser
 		BbAanmelder::class,
 		BbAftel::class,
 	];
-	/**
-	 * @var ContainerInterface
-	 */
-	private $container;
 
-	public function __construct(ContainerInterface $container, $env = null)
-	{
+	public function __construct(
+		private readonly ContainerInterface $container,
+		$env = null
+	) {
 		parent::__construct($env);
-
-		$this->container = $container;
 	}
 
 	public static function parse($bbcode)

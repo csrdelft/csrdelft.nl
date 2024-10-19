@@ -15,9 +15,9 @@ class ApiInfoController extends AbstractController
 	/**
 	 * @param Security $security
 	 * @return JsonResponse
-	 * @Route("/api/v3/profiel")
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/api/v3/profiel')]
 	public function profiel(Security $security): JsonResponse
 	{
 		$token = $security->getToken();

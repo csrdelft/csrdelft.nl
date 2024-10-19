@@ -31,7 +31,7 @@ class GroepLedenImportDTO
 
 		// Haal lid op
 		$this->lid = $profielRepository->find(
-			(strlen($regel['uid']) === 3 ? '0' : '') . $regel['uid']
+			(strlen((string) $regel['uid']) === 3 ? '0' : '') . $regel['uid']
 		);
 		if (!$this->lid) {
 			$this->waarschuwingen[] = "Profiel {$regel['uid']} niet gevonden";
@@ -60,7 +60,7 @@ class GroepLedenImportDTO
 		// Check opmerking
 		if (!empty($regel['opmerking'])) {
 			$this->opmerking = $regel['opmerking'];
-			if (strlen($this->opmerking) > 255) {
+			if (strlen((string) $this->opmerking) > 255) {
 				$this->waarschuwingen[] = 'Opmerking is te lang';
 			}
 		}
@@ -79,17 +79,14 @@ class GroepLedenImportDTO
 		EntityRepository $groepRepository,
 		array $data
 	): array {
-		return array_map(function (array $regel) use (
-			$profielRepository,
-			$groepRepository
-		) {
-			return new GroepLedenImportDTO(
+		return array_map(
+			fn(array $regel) => new GroepLedenImportDTO(
 				$profielRepository,
 				$groepRepository,
 				$regel
-			);
-		},
-		$data);
+			),
+			$data
+		);
 	}
 
 	public function waarschuwing(): string

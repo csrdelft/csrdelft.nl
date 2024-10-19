@@ -9,15 +9,11 @@ use CsrDelft\common\Util\UrlUtil;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * Alle mailadressen in to of bcc zullen als de host niet syrinx is
+ * Alle mailadressen in to of bcc zullen als de host niet production is
  * worden aangepast naar pubcie@csrdelft.nl
  */
 class Mail
 {
-	/** @var string */
-	private $onderwerp;
-	/** @var string */
-	private $bericht;
 	/** @var array<string, string> */
 	private $from = ['pubcie@csrdelft.nl' => 'PubCie C.S.R. Delft'];
 	/** @var string[] */
@@ -35,10 +31,11 @@ class Mail
 	 * @param string $onderwerp
 	 * @param string $bericht
 	 */
-	public function __construct(array $to, string $onderwerp, string $bericht)
-	{
-		$this->onderwerp = $onderwerp;
-		$this->bericht = $bericht;
+	public function __construct(
+		array $to,
+		private string $onderwerp,
+		private readonly string $bericht
+	) {
 		$this->addTo($to);
 	}
 
@@ -59,7 +56,7 @@ class Mail
 	}
 
 	/**
-	 * Mails uit testomgevingen moet en niet naar andere dingen dan naar
+	 * Mails uit testomgevingen moeten niet naar andere dingen dan naar
 	 * het pubcie-mailadres.
 	 * @param string $email
 	 * @return string
@@ -75,7 +72,7 @@ class Mail
 
 	public function inDebugMode(): bool
 	{
-		return !HostUtil::isSyrinx();
+		return !HostUtil::isProduction();
 	}
 
 	public function addBcc(array $bcc)

@@ -19,22 +19,13 @@ use Exception;
 class ToestemmingModalForm extends ModalForm
 {
 	/**
-	 * @var bool
-	 */
-	private $nieuw;
-	/**
-	 * @var LidToestemmingRepository
-	 */
-	private $lidToestemmingRepository;
-
-	/**
 	 * @param LidToestemmingRepository $lidToestemmingRepository
 	 * @param bool $nieuw
 	 * @throws Exception
 	 */
 	public function __construct(
-		LidToestemmingRepository $lidToestemmingRepository,
-		$nieuw = false
+		private readonly LidToestemmingRepository $lidToestemmingRepository,
+		private $nieuw = false
 	) {
 		parent::__construct(
 			new LidToestemming(),
@@ -43,25 +34,25 @@ class ToestemmingModalForm extends ModalForm
 		);
 
 		$this->modalBreedte = 'modal-lg';
-		$this->lidToestemmingRepository = $lidToestemmingRepository;
-		$this->nieuw = $nieuw;
 
 		$fields = [];
 
 		$akkoord = '';
 
-		$instellingen = $lidToestemmingRepository->getRelevantToestemmingCategories(
+		$instellingen = $this->lidToestemmingRepository->getRelevantToestemmingCategories(
 			LoginService::getProfiel()->isLid()
 		);
 
 		foreach ($instellingen as $module => $instelling) {
 			foreach ($instelling as $id) {
 				if (
-					$lidToestemmingRepository->getValue($module, $id) == 'ja' &&
+					$this->lidToestemmingRepository->getValue($module, $id) == 'ja' &&
 					$akkoord == null
 				) {
 					$akkoord = 'ja';
-				} elseif ($lidToestemmingRepository->getValue($module, $id) == 'nee') {
+				} elseif (
+					$this->lidToestemmingRepository->getValue($module, $id) == 'nee'
+				) {
 					$akkoord = 'nee';
 				}
 

@@ -15,39 +15,23 @@ use Twig\TwigFunction;
 
 class AccountTwigExtension extends AbstractExtension
 {
-	/**
-	 * @var SuService
-	 */
-	private $suService;
-	/**
-	 * @var BesturenRepository
-	 */
-	private $besturenRepository;
-	/**
-	 * @var CommissiesRepository
-	 */
-	private $commissiesRepository;
-
 	public function __construct(
-		BesturenRepository $besturenRepository,
-		CommissiesRepository $commissiesRepository,
-		SuService $suService
+		private readonly BesturenRepository $besturenRepository,
+		private readonly CommissiesRepository $commissiesRepository,
+		private readonly SuService $suService
 	) {
-		$this->suService = $suService;
-		$this->besturenRepository = $besturenRepository;
-		$this->commissiesRepository = $commissiesRepository;
 	}
 
-	public function getFilters()
+	public function getFilters(): array
 	{
-		return [new TwigFilter('may_su_to', [$this, 'may_su_to'])];
+		return [new TwigFilter('may_su_to', $this->may_su_to(...))];
 	}
 
-	public function getFunctions()
+	public function getFunctions(): array
 	{
 		return [
-			new TwigFunction('getBestuurslid', [$this, 'getBestuurslid']),
-			new TwigFunction('getCommissielid', [$this, 'getCommissielid']),
+			new TwigFunction('getBestuurslid', $this->getBestuurslid(...)),
+			new TwigFunction('getCommissielid', $this->getCommissielid(...)),
 		];
 	}
 

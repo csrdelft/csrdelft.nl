@@ -29,21 +29,14 @@ use stdClass;
 class CiviSaldoRepository extends AbstractRepository
 {
 	/**
-	 * @var CiviSaldoLogRepository
-	 */
-	private $civiSaldoLogRepository;
-
-	/**
 	 * @param ManagerRegistry $registry
 	 * @param CiviSaldoLogRepository $civiSaldoLogRepository
 	 */
 	public function __construct(
 		ManagerRegistry $registry,
-		CiviSaldoLogRepository $civiSaldoLogRepository
+		private readonly CiviSaldoLogRepository $civiSaldoLogRepository
 	) {
 		parent::__construct($registry, CiviSaldo::class);
-
-		$this->civiSaldoLogRepository = $civiSaldoLogRepository;
 	}
 
 	/**
@@ -335,8 +328,8 @@ SQL;
 			$yearweek = $regel['yearweek'];
 			if (!isset($weekinvoeren->weken[$yearweek])) {
 				$weekinvoer = new stdClass();
-				$weekinvoer->jaar = intval(substr($yearweek, 0, 4));
-				$weekinvoer->week = intval(substr($yearweek, 4));
+				$weekinvoer->jaar = intval(substr((string) $yearweek, 0, 4));
+				$weekinvoer->week = intval(substr((string) $yearweek, 4));
 				$padWeek = str_pad($weekinvoer->week, 2, '0', STR_PAD_LEFT);
 				$weekinvoer->datum = new DateTimeImmutable(
 					"{$weekinvoer->jaar}-W{$padWeek}-1"

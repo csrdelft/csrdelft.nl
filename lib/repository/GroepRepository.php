@@ -38,21 +38,15 @@ use Throwable;
 abstract class GroepRepository extends AbstractRepository
 {
 	/**
-	 * @var Security
-	 */
-	private $security;
-
-	/**
 	 * AbstractGroepenModel constructor.
 	 * @param ManagerRegistry $managerRegistry
 	 * @param Groep|string $entityClass
 	 */
 	public function __construct(
 		ManagerRegistry $managerRegistry,
-		Security $security
+		private readonly Security $security
 	) {
 		parent::__construct($managerRegistry, $this->getEntityClassName());
-		$this->security = $security;
 	}
 
 	/**
@@ -71,7 +65,7 @@ abstract class GroepRepository extends AbstractRepository
 			str_replace(
 				'Repository',
 				'',
-				ReflectionUtil::classNameZonderNamespace(get_called_class())
+				ReflectionUtil::classNameZonderNamespace(static::class)
 			)
 		);
 	}
@@ -123,10 +117,12 @@ abstract class GroepRepository extends AbstractRepository
 				$status = 'ht';
 			}
 
-			if (in_array(strtolower($status), GroepStatus::getEnumValues())) {
+			if (
+				in_array(strtolower((string) $status), GroepStatus::getEnumValues())
+			) {
 				$qb = $qb
 					->andWhere('groep.status = :status')
-					->setParameter('status', strtolower($status));
+					->setParameter('status', strtolower((string) $status));
 			} elseif (!$role) {
 				// Role op de status positie
 				$role = $status;
@@ -142,7 +138,7 @@ abstract class GroepRepository extends AbstractRepository
 			}
 
 			return 1 === (int) $qb->getQuery()->getSingleScalarResult();
-		} catch (NoResultException | NonUniqueResultException $e) {
+		} catch (NoResultException | NonUniqueResultException) {
 			return false;
 		}
 	}
@@ -342,7 +338,7 @@ abstract class GroepRepository extends AbstractRepository
 			->innerJoin('l.profiel', 'p')
 			// v.letter is niet onderdeel van de pk van Verticale, dus een association is hier niet mogelijk
 			->innerJoin(
-				'\CsrDelft\entity\groepen\Verticale',
+				\CsrDelft\entity\groepen\Verticale::class,
 				'v',
 				Join::WITH,
 				'v.letter = p.verticale'

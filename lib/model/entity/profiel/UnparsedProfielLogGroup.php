@@ -15,18 +15,17 @@ use CsrDelft\view\bbcode\CsrBB;
 class UnparsedProfielLogGroup extends ProfielLogGroup
 {
 	/**
-	 * BB-code uit het oude log.
-	 * @var string content
-	 */
-	public $content;
-	/**
 	 * UnparsedProfielLogEntry constructor.
 	 * @param $content
+	 * @param string $content
 	 */
-	public function __construct($content)
-	{
+	public function __construct(
+		/**
+		 * BB-code uit het oude log.
+		 * @var string content
+		 */ public $content
+	) {
 		parent::__construct(null, null);
-		$this->content = $content;
 	}
 
 	public function toHtml()

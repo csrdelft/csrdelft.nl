@@ -25,53 +25,56 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  *
  * @see Maaltijd
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository")
- * @ORM\Table("mlt_archief")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository::class
+	)
+]
+#[ORM\Table('mlt_archief')]
 class ArchiefMaaltijd implements Agendeerbaar
 {
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $maaltijd_id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'string')]
 	public $titel;
 	/**
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="date")
 	 */
+	#[ORM\Column(type: 'date')]
 	public $datum;
 	/**
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="time")
 	 */
+	#[ORM\Column(type: 'time')]
 	public $tijd;
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'integer')]
 	public $prijs;
 	/**
 	 * @var string
-	 * @ORM\Column(type="text")
 	 */
+	#[ORM\Column(type: 'text')]
 	public $aanmeldingen;
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("tijd")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('tijd')]
 	public function getTijdFormatted()
 	{
 		return DateUtil::dateFormatIntl($this->tijd, DateUtil::TIME_FORMAT);
@@ -79,9 +82,9 @@ class ArchiefMaaltijd implements Agendeerbaar
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("datum")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('datum')]
 	public function getDatumFormatted()
 	{
 		return DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT);
@@ -89,9 +92,9 @@ class ArchiefMaaltijd implements Agendeerbaar
 
 	/**
 	 * @return int
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("aanmeldingen")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('aanmeldingen')]
 	public function getAantalAanmelding()
 	{
 		return count($this->getAanmeldingenArray());
@@ -153,7 +156,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return true;
 	}
 
-	public function jsonSerialize()
+	public function jsonSerialize(): mixed
 	{
 		$json = (array) $this;
 		$json['aanmeldingen'] = count($this->getAanmeldingenArray());

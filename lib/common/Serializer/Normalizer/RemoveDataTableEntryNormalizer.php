@@ -17,21 +17,10 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
  */
 class RemoveDataTableEntryNormalizer implements NormalizerInterface
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var ObjectNormalizer
-	 */
-	private $normalizer;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		ObjectNormalizer $normalizer
+		private readonly EntityManagerInterface $entityManager,
+		private readonly ObjectNormalizer $normalizer
 	) {
-		$this->entityManager = $entityManager;
-		$this->normalizer = $normalizer;
 	}
 
 	/**

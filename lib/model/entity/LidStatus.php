@@ -136,9 +136,7 @@ class LidStatus extends Enum
 	 */
 	public static function getLidLikeObject()
 	{
-		return array_map(function ($val) {
-			return static::from($val);
-		}, static::getLidLike());
+		return array_map(fn($val) => static::from($val), static::getLidLike());
 	}
 
 	/**
@@ -154,9 +152,7 @@ class LidStatus extends Enum
 	 */
 	public static function getOudLidLikeObject()
 	{
-		return array_map(function ($val) {
-			return static::from($val);
-		}, static::getOudLidLike());
+		return array_map(fn($val) => static::from($val), static::getOudLidLike());
 	}
 
 	/**

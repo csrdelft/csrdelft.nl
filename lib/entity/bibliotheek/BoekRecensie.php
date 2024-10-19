@@ -9,55 +9,59 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package CsrDelft\entity\bibliotheek
- * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BoekRecensieRepository")
- * @ORM\Table("biebbeschrijving")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\bibliotheek\BoekRecensieRepository::class
+	)
+]
+#[ORM\Table('biebbeschrijving')]
 class BoekRecensie
 {
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
 	 */
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $id;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer", options={"default"=0})
 	 */
+	#[ORM\Column(type: 'integer', options: ['default' => 0])]
 	public $boek_id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="uid")
 	 */
+	#[ORM\Column(type: 'uid')]
 	public $schrijver_uid;
 	/**
 	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="schrijver_uid", referencedColumnName="uid")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\JoinColumn(name: 'schrijver_uid', referencedColumnName: 'uid')]
 	public $schrijver;
 	/**
 	 * @var string
-	 * @ORM\Column(type="text")
 	 */
+	#[ORM\Column(type: 'text')]
 	public $beschrijving;
 	/**
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
 	 */
+	#[ORM\Column(type: 'datetime')]
 	public $toegevoegd;
 	/**
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
 	 */
+	#[ORM\Column(type: 'datetime')]
 	public $bewerkdatum;
 
 	/**
 	 * @var Boek
-	 * @ORM\ManyToOne(targetEntity="Boek", inversedBy="recensies")
-	 * @ORM\JoinColumn(name="boek_id", referencedColumnName="id")
 	 */
+	#[ORM\ManyToOne(targetEntity: \Boek::class, inversedBy: 'recensies')]
+	#[ORM\JoinColumn(name: 'boek_id', referencedColumnName: 'id')]
 	public $boek;
 
 	public function getBoek()

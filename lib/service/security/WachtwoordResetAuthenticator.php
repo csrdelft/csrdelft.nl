@@ -29,39 +29,13 @@ use Twig\Environment;
  */
 class WachtwoordResetAuthenticator extends AbstractAuthenticator
 {
-	/**
-	 * @var OneTimeTokensRepository
-	 */
-	private $oneTimeTokensRepository;
-	/**
-	 * @var HttpUtils
-	 */
-	private $httpUtils;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-	/**
-	 * @var AccountService
-	 */
-	private $accountService;
-
 	public function __construct(
-		HttpUtils $httpUtils,
-		Environment $twig,
-		OneTimeTokensRepository $oneTimeTokensRepository,
-		AccountService $accountService,
-		MailService $mailService
+		private readonly HttpUtils $httpUtils,
+		private readonly Environment $twig,
+		private readonly OneTimeTokensRepository $oneTimeTokensRepository,
+		private readonly AccountService $accountService,
+		private readonly MailService $mailService
 	) {
-		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
-		$this->httpUtils = $httpUtils;
-		$this->twig = $twig;
-		$this->mailService = $mailService;
-		$this->accountService = $accountService;
 	}
 
 	public function supports(Request $request): ?bool
@@ -121,9 +95,7 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 			);
 			$this->mailService->send($mail);
 
-			$badge = new UserBadge($user->getUsername(), function () use ($user) {
-				return $user;
-			});
+			$badge = new UserBadge($user->getUsername(), fn() => $user);
 
 			return new SelfValidatingPassport($badge);
 		}

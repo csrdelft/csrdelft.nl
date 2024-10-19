@@ -15,34 +15,27 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
  */
 class DataTableEntryNormalizer implements NormalizerInterface
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var ObjectNormalizer
-	 */
-	private $normalizer;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		ObjectNormalizer $normalizer
+		private readonly EntityManagerInterface $entityManager,
+		private readonly ObjectNormalizer $normalizer
 	) {
-		$this->entityManager = $entityManager;
-		$this->normalizer = $normalizer;
 	}
 
-	public function normalize($topic, string $format = null, array $context = [])
+	/**
+	* @inheritDoc
+	* @return array|string|int|float|bool|\ArrayObject|null
+	*/
+	public function normalize($object, string $format = null, array $context = [])
 	{
-		$metadata = $this->entityManager->getClassMetadata(get_class($topic));
+		$metadata = $this->entityManager->getClassMetadata($object::class);
 
-		$data = $this->normalizer->normalize($topic, $format, $context);
+		$data = $this->normalizer->normalize($object, $format, $context);
 
 		$data['UUID'] = strtolower(
 			sprintf(
 				'%s@%s.csrdelft.nl',
-				implode('.', $metadata->getIdentifierValues($topic)),
-				ReflectionUtil::short_class($topic)
+				implode('.', $metadata->getIdentifierValues($object)),
+				ReflectionUtil::short_class($object)
 			)
 		);
 

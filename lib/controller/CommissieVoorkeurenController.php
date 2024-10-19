@@ -34,34 +34,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CommissieVoorkeurenController extends AbstractController
 {
-	/**
-	 * @var CommissieVoorkeurRepository
-	 */
-	private $commissieVoorkeurRepository;
-	/**
-	 * @var VoorkeurCommissieRepository
-	 */
-	private $voorkeurCommissieRepository;
-	/**
-	 * @var VoorkeurOpmerkingRepository
-	 */
-	private $voorkeurOpmerkingRepository;
-
 	public function __construct(
-		CommissieVoorkeurRepository $commissieVoorkeurRepository,
-		VoorkeurCommissieRepository $voorkeurCommissieRepository,
-		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository
+		private readonly CommissieVoorkeurRepository $commissieVoorkeurRepository,
+		private readonly VoorkeurCommissieRepository $voorkeurCommissieRepository,
+		private readonly VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository
 	) {
-		$this->commissieVoorkeurRepository = $commissieVoorkeurRepository;
-		$this->voorkeurCommissieRepository = $voorkeurCommissieRepository;
-		$this->voorkeurOpmerkingRepository = $voorkeurOpmerkingRepository;
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/commissievoorkeuren", methods={"GET"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
+	#[Route(path: '/commissievoorkeuren', methods: ['GET'])]
 	public function overzicht(): Response
 	{
 		$commissieFormulier = $this->createForm(
@@ -96,9 +80,15 @@ class CommissieVoorkeurenController extends AbstractController
 	 * @param $cid
 	 * @param $waarde
 	 * @return JsonResponse
-	 * @Route("/commissievoorkeuren/update/{cid}/{uid}/{waarde}", methods={"POST"}, defaults={"waarde": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/commissievoorkeuren/update/{cid}/{uid}/{waarde}',
+			methods: ['POST'],
+			defaults: ['waarde' => null]
+		)
+	]
 	public function lidUpdate(
 		Request $request,
 		ProfielRepository $profielRepository,
@@ -141,9 +131,9 @@ class CommissieVoorkeurenController extends AbstractController
 	/**
 	 * @param VoorkeurCommissie $commissie
 	 * @return Response
-	 * @Route("/commissievoorkeuren/overzicht/{id}", methods={"GET"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
+	#[Route(path: '/commissievoorkeuren/overzicht/{id}', methods: ['GET'])]
 	public function commissie(VoorkeurCommissie $commissie): Response
 	{
 		$form = $this->createForm(VoorkeurCommissieType::class, $commissie);
@@ -161,10 +151,10 @@ class CommissieVoorkeurenController extends AbstractController
 	 * @param Request $request
 	 * @param VoorkeurCommissie $commissie
 	 * @return RedirectResponse
-	 * @Route("/commissievoorkeuren/overzicht/{id}", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 * @CsrfUnsafe
 	 */
+	#[Route(path: '/commissievoorkeuren/overzicht/{id}', methods: ['POST'])]
 	public function updatecommissie(
 		Request $request,
 		VoorkeurCommissie $commissie
@@ -188,10 +178,10 @@ class CommissieVoorkeurenController extends AbstractController
 	/**
 	 * @return Response
 	 * @throws ORMException
-	 * @Route("/commissievoorkeuren/nieuwecommissie", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 * @CsrfUnsafe
 	 */
+	#[Route(path: '/commissievoorkeuren/nieuwecommissie', methods: ['POST'])]
 	public function nieuwecommissie(Request $request): Response
 	{
 		$model = new VoorkeurCommissie();
@@ -235,10 +225,10 @@ class CommissieVoorkeurenController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/commissievoorkeuren/nieuwecategorie", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 * @CsrfUnsafe
 	 */
+	#[Route(path: '/commissievoorkeuren/nieuwecategorie', methods: ['POST'])]
 	public function nieuwecategorie(Request $request): Response
 	{
 		$model = new VoorkeurCommissieCategorie();
@@ -279,9 +269,14 @@ class CommissieVoorkeurenController extends AbstractController
 	/**
 	 * @param VoorkeurCommissieCategorie $categorie
 	 * @return RedirectResponse
-	 * @Route("/commissievoorkeuren/verwijdercategorie/{id}", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
+	#[
+		Route(
+			path: '/commissievoorkeuren/verwijdercategorie/{id}',
+			methods: ['POST']
+		)
+	]
 	public function verwijdercategorie(
 		VoorkeurCommissieCategorie $categorie
 	): RedirectResponse {
@@ -306,9 +301,9 @@ class CommissieVoorkeurenController extends AbstractController
 	/**
 	 * @param Profiel $profiel
 	 * @return Response
-	 * @Route("/commissievoorkeuren/lidpagina/{uid}", methods={"GET"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
+	#[Route(path: '/commissievoorkeuren/lidpagina/{uid}', methods: ['GET'])]
 	public function lidpagina(Profiel $profiel): Response
 	{
 		$voorkeuren = $this->commissieVoorkeurRepository->getVoorkeurenVoorLid(
@@ -352,10 +347,10 @@ class CommissieVoorkeurenController extends AbstractController
 	 * @param $uid
 	 * @param VoorkeurOpmerking|null $opmerking
 	 * @return RedirectResponse
-	 * @Route("/commissievoorkeuren/lidpagina/{uid}", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 * @CsrfUnsafe
 	 */
+	#[Route(path: '/commissievoorkeuren/lidpagina/{uid}', methods: ['POST'])]
 	public function lidpaginaopmerking(
 		Request $request,
 		$uid,

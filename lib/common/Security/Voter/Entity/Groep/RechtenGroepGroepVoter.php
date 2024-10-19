@@ -17,14 +17,9 @@ class RechtenGroepGroepVoter extends AbstractGroepVoter
 		$subject,
 		TokenInterface $token
 	): bool {
-		switch ($attribute) {
-			case self::AANMAKEN:
-			case self::AANMELDEN:
-			case self::BEWERKEN:
-			case self::AFMELDEN:
-				return true;
-			default:
-				return parent::magAlgemeen($attribute, $subject, $token);
-		}
+		return match ($attribute) {
+			self::AANMAKEN, self::AANMELDEN, self::BEWERKEN, self::AFMELDEN => true,
+			default => parent::magAlgemeen($attribute, $subject, $token),
+		};
 	}
 }

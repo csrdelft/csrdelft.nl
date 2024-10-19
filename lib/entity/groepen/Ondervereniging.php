@@ -11,18 +11,21 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Ondervereniging.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\OnderverenigingenRepository")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\groepen\OnderverenigingenRepository::class
+	)
+]
 class Ondervereniging extends Groep implements HeeftMoment
 {
 	use GroepMoment;
 	/**
 	 * (Adspirant-)Ondervereniging
 	 * @var OnderverenigingStatus
-	 * @ORM\Column(type="enumOnderverenigingStatus")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'enumOnderverenigingStatus')]
 	public $onderverenigingStatus;
 
 	public function getUrl()

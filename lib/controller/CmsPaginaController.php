@@ -23,19 +23,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CmsPaginaController extends AbstractController
 {
-	/** @var CmsPaginaRepository */
-	private $cmsPaginaRepository;
-
-	public function __construct(CmsPaginaRepository $cmsPaginaRepository)
-	{
-		$this->cmsPaginaRepository = $cmsPaginaRepository;
+	public function __construct(
+		private readonly CmsPaginaRepository $cmsPaginaRepository
+	) {
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/pagina")
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/pagina')]
 	public function overzicht(): Response
 	{
 		return $this->render('cms/overzicht.html.twig', [
@@ -47,9 +44,9 @@ class CmsPaginaController extends AbstractController
 	 * @param $naam
 	 * @param string $subnaam
 	 * @return Response
-	 * @Route("/pagina/{naam}")
 	 * @Auth(P_PUBLIC)
 	 */
+	#[Route(path: '/pagina/{naam}')]
 	public function bekijken($naam, $subnaam = ''): Response
 	{
 		$paginaNaam = $naam;
@@ -94,10 +91,10 @@ class CmsPaginaController extends AbstractController
 	 * @param Request $request
 	 * @param $naam
 	 * @return Response
-	 * @Route("/pagina/bewerken/{naam}")
 	 * @Auth(P_LOGGED_IN)
 	 * @CsrfUnsafe
 	 */
+	#[Route(path: '/pagina/bewerken/{naam}')]
 	public function bewerken(Request $request, $naam): Response
 	{
 		$pagina = $this->cmsPaginaRepository->find($naam);
@@ -136,9 +133,9 @@ class CmsPaginaController extends AbstractController
 	/**
 	 * @param $naam
 	 * @return JsonResponse
-	 * @Route("/pagina/verwijderen/{naam}", methods={"POST"})
 	 * @Auth(P_ADMIN)
 	 */
+	#[Route(path: '/pagina/verwijderen/{naam}', methods: ['POST'])]
 	public function verwijderen($naam): JsonResponse
 	{
 		/** @var CmsPagina $pagina */

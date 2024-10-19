@@ -6,36 +6,39 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package CsrDelft\entity\fiscaat
- * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviSaldoLogRepository")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\fiscaat\CiviSaldoLogRepository::class
+	)
+]
 class CiviSaldoLog
 {
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
 	 */
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
 	 */
-	public $ip;
+	#[ORM\Column(type: 'string')]
+	public $ip; // TODO Dit is een CiviSaldoLogEnum
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
-	 * TODO Dit is een CiviSaldoLogEnum
 	 */
+	#[ORM\Column(type: 'string')]
 	public $type;
 	/**
 	 * @var string
-	 * @ORM\Column(type="text")
 	 */
+	#[ORM\Column(type: 'text')]
 	public $data;
 	/**
 	 * @var \DateTimeImmutable
-	 * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
 	 */
+	#[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
 	public $timestamp;
 }

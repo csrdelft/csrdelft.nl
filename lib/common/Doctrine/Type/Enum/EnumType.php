@@ -12,11 +12,12 @@ abstract class EnumType extends Type
 
 	abstract public function getEnumClass();
 
-	public function getSQLDeclaration(array $column, AbstractPlatform $platform)
+	public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
 	{
-		$values = array_map(function ($val) {
-			return "'" . $val . "'";
-		}, $this->getEnumClass()::getEnumValues());
+		$values = array_map(
+			fn($val) => "'" . $val . "'",
+			$this->getEnumClass()::getEnumValues()
+		);
 
 		return sprintf(
 			'ENUM(%s) COMMENT \'(DC2Type:%s)\'',
@@ -25,7 +26,7 @@ abstract class EnumType extends Type
 		);
 	}
 
-	public function convertToPHPValue($value, AbstractPlatform $platform)
+	public function convertToPHPValue($value, AbstractPlatform $platform): mixed
 	{
 		if ($value == null) {
 			return null;
@@ -35,7 +36,7 @@ abstract class EnumType extends Type
 		return $enumClass::from($value);
 	}
 
-	public function convertToDatabaseValue($value, AbstractPlatform $platform)
+	public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
 	{
 		$enumClass = $this->getEnumClass();
 		if ($value instanceof $enumClass) {
@@ -47,7 +48,7 @@ abstract class EnumType extends Type
 		}
 	}
 
-	public function requiresSQLCommentHint(AbstractPlatform $platform)
+	public function requiresSQLCommentHint(AbstractPlatform $platform): bool
 	{
 		return true;
 	}

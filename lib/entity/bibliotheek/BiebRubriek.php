@@ -6,37 +6,41 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package CsrDelft\entity\bibliotheek
- * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BiebRubriekRepository")
- * @ORM\Table("biebcategorie")
  */
-class BiebRubriek
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\bibliotheek\BiebRubriekRepository::class
+	)
+]
+#[ORM\Table('biebcategorie')]
+class BiebRubriek implements \Stringable
 {
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
 	 */
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
 	public $id;
 	/**
 	 * @var int parent rubriek
-	 * @ORM\Column(type="integer", nullable=true)
 	 */
+	#[ORM\Column(type: 'integer', nullable: true)]
 	public $p_id;
 	/**
 	 * @var string naam
-	 * @ORM\Column(type="string")
 	 */
+	#[ORM\Column(type: 'string')]
 	public $categorie;
 
 	/**
 	 * @var BiebRubriek
-	 * @ORM\ManyToOne(targetEntity="BiebRubriek")
-	 * @ORM\JoinColumn(name="p_id", referencedColumnName="id")
 	 */
+	#[ORM\ManyToOne(targetEntity: \BiebRubriek::class)]
+	#[ORM\JoinColumn(name: 'p_id', referencedColumnName: 'id')]
 	protected $parent;
 
-	public function __toString()
+	public function __toString(): string
 	{
 		if ($this->p_id == $this->id) {
 			return '';

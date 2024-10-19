@@ -25,37 +25,21 @@ class LoginController extends AbstractController
 {
 	use TargetPathTrait;
 
-	/**
-	 * @var LoginService
-	 */
-	private $loginService;
-	/**
-	 * @var RememberLoginRepository
-	 */
-	private $rememberLoginRepository;
-	/**
-	 * @var SuService
-	 */
-	private $suService;
-
 	public function __construct(
-		LoginService $loginService,
-		SuService $suService,
-		RememberLoginRepository $rememberLoginRepository
+		private LoginService $loginService,
+		private SuService $suService,
+		private RememberLoginRepository $rememberLoginRepository
 	) {
-		$this->rememberLoginRepository = $rememberLoginRepository;
-		$this->loginService = $loginService;
-		$this->suService = $suService;
 	}
 
 	/**
 	 * @param Request $request
 	 * @param AuthenticationUtils $authenticationUtils
 	 * @return Response
-	 * @Route("/login", methods={"GET"})
-	 * @Route("/{_locale<%app.supported_locales%>}/login", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
+	#[Route(path: '/login', methods: ['GET'])]
+	#[Route(path: '/{_locale<%app.supported_locales%>}/login', methods: ['GET'])]
 	public function loginForm(
 		Request $request,
 		AuthenticationUtils $authenticationUtils
@@ -71,7 +55,7 @@ class LoginController extends AbstractController
 
 		if (
 			str_contains(
-				$this->getTargetPath($request->getSession(), 'main'),
+				(string) $this->getTargetPath($request->getSession(), 'main'),
 				'remote-login=true'
 			)
 		) {
@@ -101,11 +85,17 @@ class LoginController extends AbstractController
 	}
 
 	/**
-	 * @Route("/login_check", name="app_login_check", methods={"POST"})
-	 * @Route("/{_locale<%app.supported_locales%>}/login_check", name="app_login_check", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function login_check()
+	#[Route(path: '/login_check', name: 'app_login_check', methods: ['POST'])]
+	#[
+		Route(
+			path: '/{_locale<%app.supported_locales%>}/login_check',
+			name: 'app_login_check',
+			methods: ['POST']
+		)
+	]
+	public function login_check(): never
 	{
 		throw new LogicException(
 			'Deze route wordt opgevangen door de firewall, zie security.firewalls.main.form_login.check_path in config/packages/security.yaml'
@@ -113,10 +103,10 @@ class LoginController extends AbstractController
 	}
 
 	/**
-	 * @Route("/logout", name="app_logout")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function logout()
+	#[Route(path: '/logout', name: 'app_logout')]
+	public function logout(): never
 	{
 		throw new LogicException(
 			'Deze route wordt opgevangen door de firewall, zie security.firewalls.main.logout.path config/packages/security.yaml'

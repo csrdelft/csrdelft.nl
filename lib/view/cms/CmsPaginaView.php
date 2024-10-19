@@ -20,11 +20,9 @@ use Twig\Environment;
 class CmsPaginaView implements View, ToResponse
 {
 	use ToHtmlResponse;
-	private $pagina;
 
-	public function __construct(CmsPagina $pagina)
+	public function __construct(private CmsPagina $pagina)
 	{
-		$this->pagina = $pagina;
 	}
 
 	public function getModel()
@@ -42,9 +40,9 @@ class CmsPaginaView implements View, ToResponse
 		return $this->pagina->titel;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return ContainerFacade::getContainer()
+		return (string) ContainerFacade::getContainer()
 			->get(Environment::class)
 			->render('cms/pagina-inhoud.html.twig', [
 				'pagina' => $this->pagina,

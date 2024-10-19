@@ -24,7 +24,7 @@ class OuderejaarsVoter extends Voter
 		$subject,
 		TokenInterface $token
 	): bool {
-		/** @var Account $user */
+		/** @var ?Account $user */
 		$user = $token->getUser();
 		if (!$user) {
 			return false;

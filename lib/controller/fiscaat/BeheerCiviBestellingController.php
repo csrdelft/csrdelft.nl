@@ -17,25 +17,24 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class BeheerCiviBestellingController extends AbstractController
 {
-	/** @var CiviBestellingRepository */
-	private $civiBestellingRepository;
-	/** @var CiviBestellingInhoudRepository  */
-	private $civiBestellingInhoudRepository;
-
 	public function __construct(
-		CiviBestellingRepository $civiBestellingRepository,
-		CiviBestellingInhoudRepository $civiBestellingInhoudRepository
+		private readonly CiviBestellingRepository $civiBestellingRepository,
+		private readonly CiviBestellingInhoudRepository $civiBestellingInhoudRepository
 	) {
-		$this->civiBestellingInhoudRepository = $civiBestellingInhoudRepository;
-		$this->civiBestellingRepository = $civiBestellingRepository;
 	}
 
 	/**
 	 * @param null $uid
 	 * @return Response
-	 * @Route("/fiscaat/bestellingen/{uid}", methods={"GET"}, defaults={"uid"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/fiscaat/bestellingen/{uid}',
+			methods: ['GET'],
+			defaults: ['uid' => null]
+		)
+	]
 	public function overzicht($uid = null)
 	{
 		$this->checkToegang($uid);
@@ -50,9 +49,9 @@ class BeheerCiviBestellingController extends AbstractController
 	 * @param Request $request
 	 * @param null $uid
 	 * @return GenericDataTableResponse
-	 * @Route("/fiscaat/bestellingen/{uid}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[Route(path: '/fiscaat/bestellingen/{uid}', methods: ['POST'])]
 	public function lijst(Request $request, $uid = null)
 	{
 		$this->checkToegang($uid);
@@ -71,9 +70,14 @@ class BeheerCiviBestellingController extends AbstractController
 	/**
 	 * @param $bestelling_id
 	 * @return GenericDataTableResponse
-	 * @Route("/fiscaat/bestellingen/inhoud/{bestelling_id}", methods={"POST"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
+	#[
+		Route(
+			path: '/fiscaat/bestellingen/inhoud/{bestelling_id}',
+			methods: ['POST']
+		)
+	]
 	public function inhoud($bestelling_id)
 	{
 		$data = $this->civiBestellingInhoudRepository->findBy([

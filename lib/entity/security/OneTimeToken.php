@@ -11,9 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * One time token for two-step authentication.
- * @ORM\Entity(repositoryClass="CsrDelft\repository\security\OneTimeTokensRepository")
- * @ORM\Table("onetime_tokens")
  */
+#[
+	ORM\Entity(
+		repositoryClass: \CsrDelft\repository\security\OneTimeTokensRepository::class
+	)
+]
+#[ORM\Table('onetime_tokens')]
 class OneTimeToken
 {
 	/**
@@ -21,40 +25,40 @@ class OneTimeToken
 	 * Shared primary key
 	 * Foreign key
 	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
 	 */
+	#[ORM\Column(type: 'uid')]
+	#[ORM\Id]
 	public $uid;
 	/**
 	 * Protected action url
 	 * Shared primary key
 	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
 	 */
+	#[ORM\Column(type: 'stringkey')]
+	#[ORM\Id]
 	public $url;
 	/**
 	 * Token string
 	 * @var string
-	 * @ORM\Column(type="stringkey")
 	 */
+	#[ORM\Column(type: 'stringkey')]
 	public $token;
 	/**
 	 * Moment of expiration
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
 	 */
+	#[ORM\Column(type: 'datetime')]
 	public $expire;
 	/**
 	 * Is verfied?
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
 	 */
+	#[ORM\Column(type: 'boolean')]
 	public $verified;
 	/**
 	 * @var Account|null
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\security\Account")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid", nullable=true)
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\security\Account::class)]
+	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid', nullable: true)]
 	public $account;
 }

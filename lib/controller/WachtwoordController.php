@@ -28,47 +28,27 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class WachtwoordController extends AbstractController
 {
-	/**
-	 * @var AccountRepository
-	 */
-	private $accountRepository;
-	/**
-	 * @var OneTimeTokensRepository
-	 */
-	private $oneTimeTokensRepository;
-	/**
-	 * @var AccessService
-	 */
-	private $accessService;
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-	/**
-	 * @var AccountService
-	 */
-	private $accountService;
-
 	public function __construct(
-		AccountRepository $accountRepository,
-		AccountService $accountService,
-		OneTimeTokensRepository $oneTimeTokensRepository,
-		AccessService $accessService,
-		MailService $mailService
+		private readonly AccountRepository $accountRepository,
+		private readonly AccountService $accountService,
+		private readonly OneTimeTokensRepository $oneTimeTokensRepository,
+		private readonly AccessService $accessService,
+		private readonly MailService $mailService
 	) {
-		$this->accountRepository = $accountRepository;
-		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
-		$this->accessService = $accessService;
-		$this->mailService = $mailService;
-		$this->accountService = $accountService;
 	}
 
 	/**
 	 * @return Response
-	 * @Route("/wachtwoord/wijzigen", methods={"GET", "POST"}, name="wachtwoord_wijzigen")
-	 * @Route("/wachtwoord/verlopen", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
+	#[
+		Route(
+			path: '/wachtwoord/wijzigen',
+			methods: ['GET', 'POST'],
+			name: 'wachtwoord_wijzigen'
+		)
+	]
+	#[Route(path: '/wachtwoord/verlopen', methods: ['GET', 'POST'])]
 	public function wijzigen(): Response
 	{
 		$account = $this->getUser();
@@ -97,12 +77,12 @@ class WachtwoordController extends AbstractController
 	 *
 	 * @param Request $request
 	 * @return Response
-	 * @Route("/wachtwoord/reset", name="wachtwoord_reset")
 	 * @Auth(P_PUBLIC)
 	 * @throws NonUniqueResultException
 	 * @see WachtwoordResetAuthenticator
 	 *
 	 */
+	#[Route(path: '/wachtwoord/reset', name: 'wachtwoord_reset')]
 	public function reset(Request $request): Response
 	{
 		$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
@@ -144,10 +124,16 @@ class WachtwoordController extends AbstractController
 	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/wachtwoord/vergeten", methods={"GET", "POST"})
-	 * @Route("/wachtwoord/aanvragen", methods={"GET", "POST"}, name="wachtwoord_aanvragen")
 	 * @Auth(P_PUBLIC)
 	 */
+	#[Route(path: '/wachtwoord/vergeten', methods: ['GET', 'POST'])]
+	#[
+		Route(
+			path: '/wachtwoord/aanvragen',
+			methods: ['GET', 'POST'],
+			name: 'wachtwoord_aanvragen'
+		)
+	]
 	public function vergeten(): Response
 	{
 		$form = new WachtwoordVergetenForm();

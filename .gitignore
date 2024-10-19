@@ -106,3 +106,7 @@ package-lock.json
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 csrdelft.nl.code-workspace
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###

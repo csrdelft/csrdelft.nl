@@ -14,18 +14,17 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 /**
  * Class GroepLid
  * @package CsrDelft\entity\groepen2
- * @ORM\Entity(repositoryClass="CsrDelft\repository\GroepLidRepository")
- * @ORM\Table("groep_lid", indexes={
- *   @ORM\Index(name="lid_sinds", columns={"lid_sinds"})
- * })
  */
+#[ORM\Entity(repositoryClass: \CsrDelft\repository\GroepLidRepository::class)]
+#[ORM\Table('groep_lid')]
+#[ORM\Index(name: 'lid_sinds', columns: ['lid_sinds'])]
 class GroepLid
 {
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("UUID")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('UUID')]
 	public function getUUID()
 	{
 		return $this->groepId .
@@ -40,71 +39,71 @@ class GroepLid
 	 * Shared primary key
 	 * Foreign key
 	 * @var int
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'integer')]
+	#[ORM\Id]
 	public $groepId;
 	/**
 	 * Lidnummer
 	 * Shared primary key
 	 * Foreign key
 	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
+	#[Serializer\Groups(['datatable', 'vue'])]
+	#[ORM\Column(type: 'uid')]
+	#[ORM\Id]
 	public $uid;
 	/**
 	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $profiel;
 	/**
 	 * CommissieFunctie of opmerking bij lidmaatschap
 	 * @var CommissieFunctie|string
-	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'string', nullable: true)]
 	public $opmerking;
 	/**
 	 * @var GroepKeuzeSelectie[]
-	 * @ORM\Column(type="groepkeuzeselectie", nullable=true)
-	 * @Serializer\Groups("vue")
 	 */
+	#[Serializer\Groups('vue')]
+	#[ORM\Column(type: 'groepkeuzeselectie', nullable: true)]
 	public $opmerking2;
 	/**
 	 * Datum en tijd van aanmelden
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups("datatable")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[ORM\Column(type: 'datetime')]
 	public $lidSinds;
 	/**
 	 * Lidnummer van aanmelder
 	 * @var string
-	 * @ORM\Column(type="uid")
 	 */
+	#[ORM\Column(type: 'uid')]
 	public $doorUid;
 	/**
 	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="door_uid", referencedColumnName="uid")
 	 */
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\JoinColumn(name: 'door_uid', referencedColumnName: 'uid')]
 	public $doorProfiel;
 	/**
 	 * @var Groep
-	 * @ORM\ManyToOne(targetEntity="Groep", inversedBy="leden")
-	 * @ORM\JoinColumn(name="groep_id", referencedColumnName="id")
 	 */
+	#[ORM\ManyToOne(targetEntity: \Groep::class, inversedBy: 'leden')]
+	#[ORM\JoinColumn(name: 'groep_id', referencedColumnName: 'id')]
 	public $groep;
 
 	/**
 	 * @return string|null
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("lid")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('lid')]
 	public function getDatatableLid()
 	{
 		return ProfielRepository::getLink($this->uid);
@@ -112,9 +111,9 @@ class GroepLid
 
 	/**
 	 * @return string|null
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("door_uid")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('door_uid')]
 	public function getDatatableDoorUid()
 	{
 		return $this->doorProfiel->getLink();
@@ -122,8 +121,8 @@ class GroepLid
 
 	/**
 	 * @return string|null
-	 * @Serializer\Groups("vue")
 	 */
+	#[Serializer\Groups('vue')]
 	public function getLink()
 	{
 		return $this->profiel->getLink();
@@ -131,8 +130,8 @@ class GroepLid
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("vue")
 	 */
+	#[Serializer\Groups('vue')]
 	public function getNaam()
 	{
 		return $this->profiel->getNaam();
@@ -140,17 +139,15 @@ class GroepLid
 
 	/**
 	 * @return string
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("opmerking2")
 	 */
+	#[Serializer\Groups('datatable')]
+	#[Serializer\SerializedName('opmerking2')]
 	public function getOpmerking2String()
 	{
 		if (is_array($this->opmerking2)) {
 			return implode(
 				', ',
-				array_map(function ($el) {
-					return $el->__toString();
-				}, $this->opmerking2)
+				array_map(fn($el) => $el->__toString(), $this->opmerking2)
 			);
 		} else {
 			return '';

@@ -10,17 +10,21 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class KringenRepository extends GroepRepository
 {
-	public function getEntityClassName()
+	public function getEntityClassName(): string
 	{
 		return Kring::class;
 	}
 
+	/**
+	 * @inheritDoc
+	 * @return Kring[]
+	 */
 	public function findBy(
 		array $criteria,
 		array $orderBy = null,
 		$limit = null,
 		$offset = null
-	) {
+	): array {
 		return parent::findBy(
 			$criteria,
 			['verticale' => 'ASC', 'kringNummer' => 'ASC'] + ($orderBy ?? []),
@@ -36,7 +40,7 @@ class KringenRepository extends GroepRepository
 		$role = null
 	): bool {
 		try {
-			list($verticale, $kringNummer) = explode('.', $familie);
+			[$verticale, $kringNummer] = explode('.', (string) $familie);
 			if ($verticale && $kringNummer) {
 				return 1 ===
 					(int) $this->_em
@@ -57,7 +61,7 @@ EOF
 			}
 
 			return parent::isLid($user, $familie, $status, $role);
-		} catch (NoResultException | NonUniqueResultException $e) {
+		} catch (NoResultException | NonUniqueResultException) {
 			return false;
 		}
 	}
@@ -67,7 +71,7 @@ EOF
 		if (is_numeric($id)) {
 			return parent::get($id);
 		}
-		list($verticale, $kringNummer) = explode('.', $id);
+		[$verticale, $kringNummer] = explode('.', (string) $id);
 		return $this->findOneBy([
 			'verticale' => $verticale,
 			'kringNummer' => $kringNummer,

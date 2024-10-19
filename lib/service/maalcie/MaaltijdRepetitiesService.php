@@ -17,45 +17,14 @@ use Exception;
 
 class MaaltijdRepetitiesService
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var MaaltijdenRepository
-	 */
-	private $maaltijdenRepository;
-	/**
-	 * @var CorveeRepetitiesRepository
-	 */
-	private $corveeRepetitiesRepository;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var MaaltijdAbonnementenService
-	 */
-	private $maaltijdAbonnementenService;
-	/**
-	 * @var MaaltijdAanmeldingenService
-	 */
-	private $maaltijdAanmeldingenService;
-
 	public function __construct(
-		EntityManagerInterface $entityManager,
-		MaaltijdenRepository $maaltijdenRepository,
-		MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
-		MaaltijdAbonnementenService $maaltijdAbonnementenService,
-		CorveeRepetitiesRepository $corveeRepetitiesRepository,
-		CorveeTakenRepository $corveeTakenRepository
+		private readonly EntityManagerInterface $entityManager,
+		private readonly MaaltijdenRepository $maaltijdenRepository,
+		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
+		private readonly MaaltijdAbonnementenService $maaltijdAbonnementenService,
+		private readonly CorveeRepetitiesRepository $corveeRepetitiesRepository,
+		private readonly CorveeTakenRepository $corveeTakenRepository
 	) {
-		$this->entityManager = $entityManager;
-		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->maaltijdAbonnementenService = $maaltijdAbonnementenService;
-		$this->maaltijdAanmeldingenService = $maaltijdAanmeldingenService;
 	}
 
 	/**
@@ -181,7 +150,7 @@ class MaaltijdRepetitiesService
 					$this->entityManager->persist($maaltijd);
 					$this->entityManager->flush();
 					$updated++;
-				} catch (Exception $e) {
+				} catch (Exception) {
 				}
 			}
 			return [$updated, $aanmeldingen];

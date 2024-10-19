@@ -21,16 +21,16 @@ final class ReflectionUtil
 		if (is_callable($fn)) {
 			if (is_array($fn)) {
 				if (is_object($fn[0])) {
-					return new ReflectionMethod(\get_class($fn[0]), $fn[1]);
+					return new ReflectionMethod($fn[0]::class, $fn[1]);
 				} elseif (is_string($fn[0])) {
 					return new ReflectionMethod($fn[0], $fn[1]);
 				}
 			} elseif (is_string($fn)) {
-				if (strpos($fn, '::') !== false) {
+				if (str_contains($fn, '::')) {
 					return new ReflectionMethod($fn);
 				}
 			} elseif (is_object($fn)) {
-				return new ReflectionMethod(\get_class($fn), '__invoke');
+				return new ReflectionMethod($fn::class, '__invoke');
 			}
 		}
 
@@ -60,7 +60,7 @@ final class ReflectionUtil
 	{
 		try {
 			return (new ReflectionClass($className))->getShortName();
-		} catch (ReflectionException $e) {
+		} catch (ReflectionException) {
 			return '';
 		}
 	}

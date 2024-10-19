@@ -15,14 +15,11 @@ use CsrDelft\view\formulier\knoppen\FormKnoppen;
  */
 abstract class InlineForm extends Formulier implements FormElement
 {
-	private $field;
-	private $toggle;
-
 	public function __construct(
 		$model,
 		$action,
-		InputField $field,
-		$toggle = true,
+		private InputField $field,
+		private $toggle = true,
 		$buttons = false,
 		$dataTableId = false
 	) {
@@ -36,8 +33,6 @@ abstract class InlineForm extends Formulier implements FormElement
 		}
 		$this->css_classes[] = 'InlineForm';
 		$this->css_classes[] = $this->getType();
-		$this->field = $field;
-		$this->toggle = $toggle;
 
 		$fields = [];
 		$fields[] = $this->field;
@@ -87,9 +82,9 @@ abstract class InlineForm extends Formulier implements FormElement
 		return $html . '</form></div>';
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->getHtml();
+		return (string) $this->getHtml();
 	}
 
 	public function getField()
@@ -99,7 +94,7 @@ abstract class InlineForm extends Formulier implements FormElement
 
 	public function getType()
 	{
-		return ReflectionUtil::classNameZonderNamespace(get_class($this));
+		return ReflectionUtil::classNameZonderNamespace(static::class);
 	}
 
 	/**

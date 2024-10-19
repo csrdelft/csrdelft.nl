@@ -10,29 +10,18 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class LogProcessor implements ProcessorInterface
 {
-	/**
-	 * @var RequestStack
-	 */
-	private $requestStack;
-	/**
-	 * @var Security
-	 */
-	private $security;
-
-	public function __construct(RequestStack $requestStack, Security $security)
-	{
-		$this->requestStack = $requestStack;
-		$this->security = $security;
+	public function __construct(
+		private readonly RequestStack $requestStack,
+		private readonly Security $security
+	) {
 	}
 
-	public function __invoke(LogRecord $record)
+	public function __invoke(LogRecord $record): LogRecord
 	{
 		$request = $this->requestStack->getCurrentRequest();
 
 		if ($request) {
-			$record->extra['uid'] = $this->security->getUser()
-				? $this->security->getUser()->getUserIdentifier()
-				: LoginService::UID_EXTERN;
+			$record->extra['uid'] = $this->security->getUser()?->getUserIdentifier() ?? LoginService::UID_EXTERN;
 		}
 
 		return $record;

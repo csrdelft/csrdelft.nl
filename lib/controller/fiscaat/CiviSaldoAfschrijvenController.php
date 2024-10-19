@@ -24,10 +24,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class CiviSaldoAfschrijvenController extends AbstractController
 {
 	/**
-	 * @Route("/fiscaat/afschrijven")
 	 * @return Response
 	 * @Auth(P_FISCAAT_MOD)
 	 */
+	#[Route(path: '/fiscaat/afschrijven')]
 	public function afschrijven()
 	{
 		return $this->render('fiscaat/afschrijven.html.twig', []);
@@ -40,12 +40,12 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	}
 
 	/**
-	 * @Route("/fiscaat/afschrijven/upload", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 * @param Request $request
 	 * @param Session $session
 	 * @return Response
 	 */
+	#[Route(path: '/fiscaat/afschrijven/upload', methods: ['POST'])]
 	public function upload(Request $request, Session $session)
 	{
 		// Kijk of bestand meegegeven is
@@ -105,7 +105,6 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	}
 
 	/**
-	 * @Route("/fiscaat/afschrijven/controle/{key}")
 	 * @Auth(P_FISCAAT_MOD)
 	 * @param string $key
 	 * @param Session $session
@@ -113,6 +112,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @param CiviProductRepository $civiProductRepository
 	 * @return Response
 	 */
+	#[Route(path: '/fiscaat/afschrijven/controle/{key}')]
 	public function controle(
 		string $key,
 		Session $session,
@@ -156,7 +156,8 @@ class CiviSaldoAfschrijvenController extends AbstractController
 
 			// Haal account op
 			$account = $civiSaldoRepository->findOneBy([
-				'uid' => (strlen($regel['uid']) === 3 ? '0' : '') . $regel['uid'],
+				'uid' =>
+					(strlen((string) $regel['uid']) === 3 ? '0' : '') . $regel['uid'],
 			]);
 			if (!$account) {
 				$afschriften[$i]->succes = false;
@@ -196,7 +197,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 			if (empty($regel['beschrijving'])) {
 				$afschriften[$i]->succes = false;
 				$afschriften[$i]->waarschuwing[] = 'Geen beschrijving ingevuld';
-			} elseif (strlen($regel['beschrijving']) > 255) {
+			} elseif (strlen((string) $regel['beschrijving']) > 255) {
 				$afschriften[$i]->succes = false;
 				$afschriften[$i]->waarschuwing[] = 'Beschrijving is te lang';
 			}
@@ -225,7 +226,6 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	}
 
 	/**
-	 * @Route("/fiscaat/afschrijven/verwerk/{key}", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 * @param string $key
 	 * @param Session $session
@@ -236,6 +236,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	 * @param EntityManagerInterface $em
 	 * @return Response
 	 */
+	#[Route(path: '/fiscaat/afschrijven/verwerk/{key}', methods: ['POST'])]
 	public function verwerk(
 		string $key,
 		Session $session,
@@ -285,7 +286,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 			&$totaal,
 			$session,
 			$key
-		) {
+		): void {
 			/** @var CiviBestelling[] $bestellingen */
 			$bestellingen = [];
 			foreach ($data as $regel) {
@@ -303,7 +304,8 @@ class CiviSaldoAfschrijvenController extends AbstractController
 
 				// Haal account & product op
 				$account = $civiSaldoRepository->findOneBy([
-					'uid' => (strlen($regel['uid']) === 3 ? '0' : '') . $regel['uid'],
+					'uid' =>
+						(strlen((string) $regel['uid']) === 3 ? '0' : '') . $regel['uid'],
 				]);
 				$product = $civiProductRepository->find(intval($regel['productID']));
 				if (!$account || $account->deleted || !$product) {
@@ -320,7 +322,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 				// Check beschrijving
 				if (
 					empty($regel['beschrijving']) ||
-					strlen($regel['beschrijving']) > 255
+					strlen((string) $regel['beschrijving']) > 255
 				) {
 					continue;
 				}
@@ -369,10 +371,10 @@ class CiviSaldoAfschrijvenController extends AbstractController
 	}
 
 	/**
-	 * @Route("/fiscaat/afschrijven/template")
 	 * @Auth(P_FISCAAT_MOD)
 	 * @return Response
 	 */
+	#[Route(path: '/fiscaat/afschrijven/template')]
 	public function downloadTemplate()
 	{
 		$template = "uid;productID;aantal;beschrijving\r\nx101;32;100;Lunch";

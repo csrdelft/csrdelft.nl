@@ -20,7 +20,7 @@ class Subkopje extends HtmlComment
 		return '<h' .
 			$this->h .
 			' class="' .
-			ReflectionUtil::classNameZonderNamespace(get_class($this)) .
+			ReflectionUtil::classNameZonderNamespace(static::class) .
 			'">' .
 			$this->comment .
 			'</h' .

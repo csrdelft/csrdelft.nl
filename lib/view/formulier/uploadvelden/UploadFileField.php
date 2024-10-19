@@ -35,7 +35,7 @@ class UploadFileField extends InputField
 			$this->model->filename = $this->value['name'];
 			$this->model->filesize = $this->value['size'];
 			$this->model->mimetype = $this->value['type'];
-			$this->model->directory = dirname($this->value['tmp_name']);
+			$this->model->directory = dirname((string) $this->value['tmp_name']);
 		}
 	}
 
@@ -73,7 +73,7 @@ class UploadFileField extends InputField
 		) {
 			$this->error =
 				'Bestand bestaat niet (meer): ' .
-				htmlspecialchars($this->value['tmp_name']);
+				htmlspecialchars((string) $this->value['tmp_name']);
 		} elseif (
 			!empty($this->filterMime) and
 			!in_array($this->model->mimetype, $this->filterMime)
@@ -100,13 +100,14 @@ class UploadFileField extends InputField
 		);
 		if (!$moved) {
 			throw new CsrException(
-				'Verplaatsen mislukt: ' . htmlspecialchars($this->value['tmp_name'])
+				'Verplaatsen mislukt: ' .
+					htmlspecialchars((string) $this->value['tmp_name'])
 			);
 		}
 		if (false === @chmod(PathUtil::join_paths($directory, $filename), 0644)) {
 			throw new CsrException(
 				'Geen eigenaar van bestand: ' .
-					htmlspecialchars(PathUtil::join_paths($directory, $filename))
+					htmlspecialchars((string) PathUtil::join_paths($directory, $filename))
 			);
 		}
 		$this->model->directory = $directory;
