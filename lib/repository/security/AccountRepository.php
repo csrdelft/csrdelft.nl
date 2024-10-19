@@ -152,7 +152,7 @@ class AccountRepository extends AbstractRepository implements
 		$this->_em->clear();
 	}
 
-	public function loadUserByIdentifier(string $username): ?UserInterface
+	public function loadUserByIdentifier(string $identifier): ?UserInterface
 	{
 		return $this->findOneByUsername($identifier);
 	}
