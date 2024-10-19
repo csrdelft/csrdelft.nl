@@ -27,7 +27,6 @@ class BrowserTestCase extends PantherTestCase
 	public function geefToestemmingAlsNodig(Crawler $crawler): Crawler
 	{
 		if ($crawler->filter('.modal')->count() == 0) {
-			echo 'Toestemming is al gegeven!' . PHP_EOL;
 			return $crawler;
 		}
 
@@ -65,7 +64,7 @@ class BrowserTestCase extends PantherTestCase
 	{
 		$crawler = $this->client->request('GET', '/');
 
-		$crawler->selectLink('Inloggen')->click();
+		$this->clickLink('Inloggen');
 
 		$form = $crawler->selectButton('Inloggen')->form();
 

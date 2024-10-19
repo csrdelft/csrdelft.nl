@@ -11,7 +11,7 @@ class ForumDraadMeldingNiveauType extends EnumType
 		return ForumDraadMeldingNiveau::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumForumDraadMeldingNiveau';
 	}

@@ -14,6 +14,7 @@ use CsrDelft\repository\Paging;
 use CsrDelft\service\security\LoginService;
 use Doctrine\DBAL\Exception\SyntaxErrorException;
 use Doctrine\ORM\PersistentCollection;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -152,7 +153,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return max(1, $this->aantal_paginas[$forum_id]);
 	}
 
-	public function createQueryBuilder($alias, $indexBy = null)
+	public function createQueryBuilder($alias, $indexBy = null): QueryBuilder
 	{
 		return parent::createQueryBuilder($alias, $indexBy)
 			->orderBy($alias . '.plakkerig', 'DESC')

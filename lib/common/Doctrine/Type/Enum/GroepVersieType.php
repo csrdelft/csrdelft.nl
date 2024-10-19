@@ -11,7 +11,7 @@ class GroepVersieType extends EnumType
 		return GroepVersie::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumGroepVersie';
 	}

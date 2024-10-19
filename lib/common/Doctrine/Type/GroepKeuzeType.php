@@ -9,7 +9,7 @@ class GroepKeuzeType extends SafeJsonType
 	/**
 	 * @inheritDoc
 	 */
-	public function getName()
+	public function getName(): string
 	{
 		return 'groepkeuze';
 	}
