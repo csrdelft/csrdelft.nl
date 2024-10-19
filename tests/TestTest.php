@@ -11,7 +11,7 @@ final class TestTest extends KernelTestCase
 	public function setUp(): void
 	{
 		self::bootKernel();
-		ContainerFacade::init(self::$container);
+		ContainerFacade::init($this->getContainer());
 	}
 
 	public function testGetNaam(): void
