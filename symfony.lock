@@ -629,16 +629,16 @@
         "version": "v2.1.0"
     },
     "symfony/routing": {
-        "version": "3.3",
+        "version": "6.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "3.3",
-            "ref": "eb64cc2de2fa548a89fbf1446d37b391c9a9e936"
+            "branch": "main",
+            "version": "6.2",
+            "ref": "e0a11b4ccb8c9e70b574ff5ad3dfdcd41dec5aa6"
         },
         "files": [
-            "./config/packages/prod/routing.yaml",
-            "./config/routes.yaml"
+            "config/packages/routing.yaml",
+            "config/routes.yaml"
         ]
     },
     "symfony/security-bundle": {
