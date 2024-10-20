@@ -58,11 +58,7 @@ class OAuth2Scope
 
 	public static function isOptioneel($scope)
 	{
-		if (isset(self::OPTIONAL[(string) $scope])) {
-			return true;
-		}
-
-		return false;
+		return isset(self::OPTIONAL[(string) $scope]);
 	}
 
 	/**

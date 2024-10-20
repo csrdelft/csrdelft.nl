@@ -35,7 +35,7 @@ class BbLocatie extends BbTag
 	{
 		$address = $this->getContent();
 		$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
-		if (trim(htmlspecialchars($address)) == '') {
+		if (trim(htmlspecialchars($address)) === '') {
 			$maps = 'Geen adres opgegeven';
 		} else {
 			$maps =
@@ -61,11 +61,10 @@ class BbLocatie extends BbTag
 	public function parse($arguments = [])
 	{
 		// Hoogte maakt niet veel uit
-		if (isset($arguments['h']) && $arguments['h'] <= 900) {
-			$this->height = (int) $arguments['h'];
-		} else {
-			$this->height = 450;
-		}
+		$this->height =
+			isset($arguments['h']) && $arguments['h'] <= 900
+				? (int) $arguments['h']
+				: 450;
 		$this->readContent([], false);
 	}
 }

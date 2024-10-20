@@ -73,7 +73,7 @@ class CorveeTakenRepository extends AbstractRepository
 			$puntenruilen = true;
 		}
 		$taak->wanneer_gemaild = null;
-		if ($puntenruilen && $vorigProfiel !== null) {
+		if ($puntenruilen && $vorigProfiel instanceof Profiel) {
 			$this->puntenIntrekken($taak, $vorigProfiel);
 		}
 
@@ -96,8 +96,8 @@ class CorveeTakenRepository extends AbstractRepository
 		ContainerFacade::getContainer()
 			->get(CorveePuntenService::class)
 			->puntenToekennen($profiel, $taak->punten, $taak->bonus_malus);
-		$taak->punten_toegekend = $taak->punten_toegekend + $taak->punten;
-		$taak->bonus_toegekend = $taak->bonus_toegekend + $taak->bonus_malus;
+		$taak->punten_toegekend += $taak->punten;
+		$taak->bonus_toegekend += $taak->bonus_malus;
 		$taak->wanneer_toegekend = date_create_immutable();
 	}
 
@@ -110,8 +110,8 @@ class CorveeTakenRepository extends AbstractRepository
 		ContainerFacade::getContainer()
 			->get(CorveePuntenService::class)
 			->puntenIntrekken($profiel, $taak->punten, $taak->bonus_malus);
-		$taak->punten_toegekend = $taak->punten_toegekend - $taak->punten;
-		$taak->bonus_toegekend = $taak->bonus_toegekend - $taak->bonus_malus;
+		$taak->punten_toegekend -= $taak->punten;
+		$taak->bonus_toegekend -= $taak->bonus_malus;
 		$taak->wanneer_toegekend = null;
 	}
 
@@ -638,7 +638,7 @@ class CorveeTakenRepository extends AbstractRepository
 			// standaard aantal aanvullen
 			$datumcount = 0;
 			foreach ($takenPerDatum as $datum => $taken) {
-				$verschil = $repetitie->standaard_aantal - sizeof($taken);
+				$verschil = $repetitie->standaard_aantal - count($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					$taak = $this->vanRepetitie($repetitie, $taken[0]->datum, null, 0);
 					$this->_em->persist($taak);
@@ -647,7 +647,7 @@ class CorveeTakenRepository extends AbstractRepository
 			}
 			$maaltijdcount = 0;
 			foreach ($takenPerMaaltijd as $mid => $taken) {
-				$verschil = $repetitie->standaard_aantal - sizeof($taken);
+				$verschil = $repetitie->standaard_aantal - count($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					$taak = $this->vanRepetitie(
 						$repetitie,

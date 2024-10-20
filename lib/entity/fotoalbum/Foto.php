@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\fotoalbum;
 
+use CsrDelft\repository\fotoalbum\FotoRepository;
+use CsrDelft\events\FotoListener;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\entity\profiel\Profiel;
@@ -13,12 +15,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\fotoalbum\FotoRepository::class
-	)
-]
-#[ORM\EntityListeners([\CsrDelft\events\FotoListener::class])]
+#[ORM\Entity(repositoryClass: FotoRepository::class)]
+#[ORM\EntityListeners([FotoListener::class])]
 #[ORM\Table('fotos')]
 class Foto extends Afbeelding
 {
@@ -54,7 +52,7 @@ class Foto extends Afbeelding
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(name: 'owner', referencedColumnName: 'uid')]
 	public $owner_profiel;
 
@@ -63,7 +61,7 @@ class Foto extends Afbeelding
 		FotoAlbum $album = null,
 		$parse = false
 	) {
-		if ($album !== null) {
+		if ($album instanceof FotoAlbum) {
 			$this->filename = $filename;
 			$this->directory = $album->path;
 			$this->subdir = $album->subdir;
@@ -171,11 +169,7 @@ class Foto extends Afbeelding
 		if (!file_exists($path)) {
 			mkdir($path, 0755, true);
 		}
-		if (empty($this->rotation)) {
-			$rotate = '';
-		} else {
-			$rotate = '-rotate ' . $this->rotation . ' ';
-		}
+		$rotate = empty($this->rotation) ? '' : '-rotate ' . $this->rotation . ' ';
 		$command =
 			$_ENV['IMAGEMAGICK'] .
 			' ' .
@@ -201,11 +195,7 @@ class Foto extends Afbeelding
 		if (!file_exists($path)) {
 			mkdir($path, 0755, true);
 		}
-		if (empty($this->rotation)) {
-			$rotate = '';
-		} else {
-			$rotate = '-rotate ' . $this->rotation . ' ';
-		}
+		$rotate = empty($this->rotation) ? '' : '-rotate ' . $this->rotation . ' ';
 		$command =
 			$_ENV['IMAGEMAGICK'] .
 			' ' .

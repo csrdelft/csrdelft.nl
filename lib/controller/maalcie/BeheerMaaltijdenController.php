@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
@@ -34,7 +35,6 @@ use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
 
@@ -45,6 +45,10 @@ use Throwable;
  */
 class BeheerMaaltijdenController extends AbstractController
 {
+	/**
+	 * @var MaaltijdAanmeldingenRepository
+	 */
+	public $maaltijdAanmeldingenRepository;
 	public function __construct(
 		private readonly MaaltijdenRepository $maaltijdenRepository,
 		private readonly MaaltijdenService $maaltijdenService,
@@ -254,9 +258,9 @@ class BeheerMaaltijdenController extends AbstractController
 	]
 	public function bewerk(Maaltijd $maaltijd = null)
 	{
-		if (!$maaltijd) {
+		if (!$maaltijd instanceof Maaltijd) {
 			$selection = $this->getDataTableSelection();
-			if (empty($selection)) {
+			if ($selection === []) {
 				throw new ResourceNotFoundException();
 			}
 			$maaltijd = $this->maaltijdenRepository->retrieveByUuid($selection[0]);

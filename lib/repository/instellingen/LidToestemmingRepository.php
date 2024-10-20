@@ -14,7 +14,7 @@ use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -106,7 +106,7 @@ class LidToestemmingRepository extends AbstractRepository
 			->getSession()
 			->get('stop_nag', null);
 		// Doe niet naggen op de privacy info pagina.
-		if ($requestUri == '/privacy') {
+		if ($requestUri === '/privacy') {
 			return true;
 		}
 		// Voorkom problemen tijdens opnieuw instellen wachtwoord
@@ -136,11 +136,7 @@ class LidToestemmingRepository extends AbstractRepository
 			return false;
 		}
 		// Er is geen enkele selectie gemaakt
-		if ($this->count([self::FIELD_UID => $uid]) == 0) {
-			return false;
-		}
-
-		return true;
+		return $this->count([self::FIELD_UID => $uid]) != 0;
 	}
 
 	public function toestemming(
@@ -224,12 +220,8 @@ class LidToestemmingRepository extends AbstractRepository
 	public function isValidValue($module, $id, $waarde)
 	{
 		$options = $this->getTypeOptions($module, $id);
-		if ($this->getType($module, $id) == InstellingType::Enumeration) {
-			if (in_array($waarde, $options)) {
-				return true;
-			}
-		}
-		return false;
+		return $this->getType($module, $id) == InstellingType::Enumeration &&
+			in_array($waarde, $options);
 	}
 
 	/**

@@ -9,8 +9,6 @@ use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
-use Twig\Environment;
 
 /**
  * Peiling

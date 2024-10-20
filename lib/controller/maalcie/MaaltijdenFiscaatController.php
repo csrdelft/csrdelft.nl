@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
@@ -18,7 +19,6 @@ use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * MaaltijdenFiscaatController.class.php

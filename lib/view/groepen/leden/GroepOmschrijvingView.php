@@ -8,12 +8,13 @@
 
 namespace CsrDelft\view\groepen\leden;
 
+use Stringable;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use Twig\Environment;
 
-class GroepOmschrijvingView implements ToResponse, \Stringable
+class GroepOmschrijvingView implements ToResponse, Stringable
 {
 	use ToHtmlResponse;
 

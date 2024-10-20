@@ -2,11 +2,13 @@
 
 namespace CsrDelft\entity\peilingen;
 
+use CsrDelft\repository\peilingen\PeilingenRepository;
+use PeilingOptie;
+use PeilingStem;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
 use DateTimeImmutable;
@@ -17,11 +19,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\peilingen\PeilingenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: PeilingenRepository::class)]
 #[ORM\Table('peiling')]
 class Peiling implements DataTableEntry
 {
@@ -97,20 +95,20 @@ class Peiling implements DataTableEntry
 	 * @var PeilingOptie[]|ArrayCollection
 	 */
 	#[Serializer\Groups(['datatable', 'vue'])]
-	#[ORM\OneToMany(targetEntity: \PeilingOptie::class, mappedBy: 'peiling')]
+	#[ORM\OneToMany(targetEntity: PeilingOptie::class, mappedBy: 'peiling')]
 	public $opties;
 
 	/**
 	 * @var PeilingStem[]|ArrayCollection
 	 */
-	#[ORM\OneToMany(targetEntity: \PeilingStem::class, mappedBy: 'peiling')]
+	#[ORM\OneToMany(targetEntity: PeilingStem::class, mappedBy: 'peiling')]
 	#[ORM\JoinColumn(name: 'id', referencedColumnName: 'peiling_id')]
 	public $stemmen;
 
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[
 		ORM\JoinColumn(
 			name: 'eigenaar',

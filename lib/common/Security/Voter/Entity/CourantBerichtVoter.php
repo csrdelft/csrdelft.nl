@@ -22,12 +22,12 @@ class CourantBerichtVoter extends Voter
 
 	public function supportsAttribute(string $attribute): bool
 	{
-		return $attribute == self::BEHEREN;
+		return $attribute === self::BEHEREN;
 	}
 
 	public function supportsType(string $subjectType): bool
 	{
-		return $subjectType == CourantBericht::class;
+		return $subjectType === CourantBericht::class;
 	}
 
 	/**
@@ -40,7 +40,7 @@ class CourantBerichtVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		return match ($attribute) {
 			self::BEHEREN => $this->accessDecisionManager->decide($token, [
 				'ROLE_MAIL_COMPOSE',
@@ -49,5 +49,6 @@ class CourantBerichtVoter extends Voter
 				"Attribute niet gevonden: '$attribute'."
 			),
 		};
+>>>>>>> master
 	}
 }

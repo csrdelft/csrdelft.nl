@@ -35,7 +35,7 @@ class CmsPaginaVoter extends Voter
 
 	public function supportsType(string $subjectType): bool
 	{
-		return $subjectType == CmsPagina::class;
+		return $subjectType === CmsPagina::class;
 	}
 
 	protected function voteOnAttribute(

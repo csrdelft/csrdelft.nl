@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service;
 
+use DateInterval;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\fiscaat\CiviBestelling;
@@ -26,7 +27,7 @@ class BarSysteemService
 	private $db;
 
 	public function __construct(
-		private EntityManagerInterface $entityManager,
+		private readonly EntityManagerInterface $entityManager,
 		private readonly CiviSaldoRepository $civiSaldoRepository,
 		private readonly CiviProductRepository $civiProductRepository,
 		private readonly CiviBestellingRepository $civiBestellingRepository
@@ -66,11 +67,9 @@ SQL
 
 	public function getNaam($profiel)
 	{
-		if (empty($profiel['voornaam'])) {
-			$naam = $profiel['voorletters'] . ' ';
-		} else {
-			$naam = $profiel['voornaam'] . ' ';
-		}
+		$naam = empty($profiel['voornaam'])
+			? $profiel['voorletters'] . ' '
+			: $profiel['voornaam'] . ' ';
 		if (!empty($profiel['tussenvoegsel'])) {
 			$naam .= $profiel['tussenvoegsel'] . ' ';
 		}
@@ -203,20 +202,16 @@ SQL
 
 	public function getBestellingLaatste(
 		$persoon,
-		\DateTimeImmutable $begin = null,
-		\DateTimeImmutable $eind = null,
+		DateTimeImmutable $begin = null,
+		DateTimeImmutable $eind = null,
 		$productIDs = []
 	) {
-		if ($begin == null) {
-			$begin = date_create_immutable()->add(new \DateInterval('P15H'));
-		} else {
-			$begin = $begin->setTime(0, 0, 0);
-		}
-		if ($eind == null) {
-			$eind = date_create_immutable();
-		} else {
-			$eind = $eind->setTime(23, 59, 59);
-		}
+		$begin =
+			$begin == null
+				? date_create_immutable()->add(new DateInterval('P15H'))
+				: $begin->setTime(0, 0, 0);
+		$eind =
+			$eind == null ? date_create_immutable() : $eind->setTime(23, 59, 59);
 
 		if ($persoon == 'alles') {
 			return $this->civiBestellingRepository->findTussen($begin, $eind, [
@@ -395,13 +390,11 @@ ORDER BY yearweek DESC
 
 	public function getToolData()
 	{
-		$data = [];
-
-		$data['sum_saldi'] = $this->sumSaldi();
-		$data['sum_saldi_lid'] = $this->sumSaldi(true);
-		$data['red'] = $this->getRed();
-
-		return $data;
+		return [
+			'sum_saldi' => $this->sumSaldi(),
+			'sum_saldi_lid' => $this->sumSaldi(true),
+			'red' => $this->getRed(),
+		];
 	}
 
 	private function sumSaldi($profielOnly = false)

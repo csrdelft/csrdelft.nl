@@ -20,12 +20,9 @@ class VerbergNovietenFilter extends SQLFilter
 		if ($targetEntity->getReflectionClass()->name !== Profiel::class) {
 			return '';
 		} else {
-			if (!$this->hasParameter('jaar')) {
-				$jaar = date_create_immutable()->format('Y');
-			} else {
-				$jaar = trim($this->getParameter('jaar'), "'");
-			}
-
+			$jaar = $this->hasParameter('jaar')
+				? trim($this->getParameter('jaar'), "'")
+				: date_create_immutable()->format('Y');
 			return sprintf(
 				"NOT (%s.status = '%s' AND %s.lidjaar = %d)",
 				$targetTableAlias,

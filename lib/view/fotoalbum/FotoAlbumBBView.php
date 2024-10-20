@@ -94,12 +94,10 @@ class FotoAlbumBBView implements View
 			}
 			return;
 		}
-		if (count(explode(',', $index)) > 1) {
-			//explode on ',' and convert tot int.
-			$this->big = array_map('intval', explode(',', $index));
-		} else {
-			$this->big = [(int) $index];
-		}
+		$this->big =
+			count(explode(',', $index)) > 1
+				? array_map('intval', explode(',', $index))
+				: [(int) $index];
 	}
 
 	/**
@@ -156,11 +154,11 @@ class FotoAlbumBBView implements View
 			}
 			// find first free place.
 			while ($grid[$row][$col] != null) {
-				$col = $col + 1;
+				$col += 1;
 				// move to next row if end of row is reached.
 				if ($col >= $this->per_row) {
-					$row = $row + 1;
-					$col = $col % $this->per_row;
+					$row += 1;
+					$col %= $this->per_row;
 					// break out of two loops if reached row limit.
 					if ($row >= $this->rows) {
 						break 2;

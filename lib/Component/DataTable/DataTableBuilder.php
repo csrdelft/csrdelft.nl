@@ -320,11 +320,11 @@ class DataTableBuilder
 		$index = 0;
 		$visibleIndex = 0;
 		foreach ($this->columns as $name => $def) {
-			if (!isset($def['visible']) or $def['visible'] === true) {
+			if (!isset($def['visible']) || $def['visible'] === true) {
 				// default order by first visible orderable column
 				if (
-					!isset($this->settings['order']) and
-					!(isset($def['orderable']) and $def['orderable'] === false)
+					!isset($this->settings['order']) &&
+					!(isset($def['orderable']) && $def['orderable'] === false)
 				) {
 					$this->settings['order'] = [[$index, 'asc']];
 				}

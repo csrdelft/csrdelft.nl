@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\groepen\leden;
 
+use Stringable;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepStatistiekDTO;
@@ -10,7 +11,7 @@ use CsrDelft\view\ToResponse;
 use DateTime;
 use Twig\Environment;
 
-class GroepStatistiekView implements ToResponse, \Stringable
+class GroepStatistiekView implements ToResponse, Stringable
 {
 	use ToHtmlResponse;
 

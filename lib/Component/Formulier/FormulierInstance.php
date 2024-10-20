@@ -23,6 +23,7 @@ use Twig\Environment;
  */
 class FormulierInstance
 {
+	public $error;
 	protected $enctype = 'multipart/form-data';
 	/**
 	 * @var string
@@ -32,7 +33,7 @@ class FormulierInstance
 	private $modalBreedte;
 
 	/**
-	 * @param \CsrDelft\view\formulier\FormElement[] $fields
+	 * @param FormElement[] $fields
 	 */
 	public function __construct(
 		private readonly Environment $twig,
@@ -62,7 +63,7 @@ class FormulierInstance
 		if (!empty($titel)) {
 			$html .= '<h1 class="Titel">' . $titel . '</h1>';
 		}
-		if (isset($this->error)) {
+		if (property_exists($this, 'error') && $this->error !== null) {
 			$html .= '<span class="error">' . $this->error . '</span>';
 		}
 		//debugprint($this->getError()); //DEBUG
@@ -118,7 +119,7 @@ class FormulierInstance
 	protected function getScriptTag()
 	{
 		$js = $this->getJavascript();
-		if (trim((string) $js) == '') {
+		if (trim((string) $js) === '') {
 			return '';
 		}
 		return <<<HTML
@@ -166,7 +167,7 @@ HTML;
 		$html .= <<<HTML
 			<div class="modal-body">
 HTML;
-		if (isset($this->error)) {
+		if (property_exists($this, 'error') && $this->error !== null) {
 			$html .= '<span class="error">' . $this->error . '</span>';
 		}
 		//debugprint($this->getError()); //DEBUG
@@ -214,7 +215,7 @@ HTML;
 				}
 			}
 		}
-		if (empty($errors)) {
+		if ($errors === []) {
 			return null;
 		}
 		return $errors;
@@ -301,7 +302,7 @@ HTML;
 	public function changelog(array $diff)
 	{
 		$changelog = '';
-		if (!empty($diff)) {
+		if ($diff !== []) {
 			$changelog .=
 				'[div]Bewerking van [lid=' .
 				LoginService::getUid() .

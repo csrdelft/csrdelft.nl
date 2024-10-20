@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
@@ -19,11 +20,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\groepen\ActiviteitenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: ActiviteitenRepository::class)]
 class Activiteit extends Groep implements
 	Agendeerbaar,
 	HeeftAanmeldLimiet,

@@ -87,12 +87,12 @@ class AutocompleteField extends TextField
 
 	protected function getInputAttribute($attribute)
 	{
-		switch ($attribute) {
-			case 'autocomplete':
-				if (!$this->autocomplete || !empty($this->suggestions)) {
-					return 'autocomplete="off"'; // browser autocompete
-				}
-				break;
+		if (
+			$attribute === 'autocomplete' &&
+			(!$this->autocomplete || $this->suggestions !== [])
+		) {
+			return 'autocomplete="off"';
+			// browser autocompete
 		}
 		return parent::getInputAttribute($attribute);
 	}

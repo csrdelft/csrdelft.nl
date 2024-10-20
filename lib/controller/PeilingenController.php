@@ -2,8 +2,8 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Security\Voter\Entity\PeilingVoter;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\entity\peilingen\Peiling;
@@ -12,11 +12,10 @@ use CsrDelft\service\PeilingenService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingTable;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -45,7 +44,7 @@ class PeilingenController extends AbstractController
 	public function table(Peiling $peiling = null): Response
 	{
 		// Laat een modal zien als een specifieke peiling bewerkt wordt
-		if ($peiling) {
+		if ($peiling instanceof Peiling) {
 			$table = new PeilingTable();
 			$table->setSearch($peiling->titel);
 
@@ -125,7 +124,7 @@ class PeilingenController extends AbstractController
 	{
 		$selection = $this->getDataTableSelection();
 
-		if ($selection) {
+		if ($selection !== []) {
 			$peiling = $this->peilingenRepository->retrieveByUUID($selection[0]);
 		} else {
 			// Hier is de id in post gezet
@@ -185,8 +184,8 @@ class PeilingenController extends AbstractController
 	 * @param int $id
 	 * @return JsonResponse
 	 * @Auth(P_PEILING_VOTE)
-	 * @IsGranted("stemmen", subject="peiling")
 	 */
+	#[IsGranted('stemmen', subject: 'peiling')]
 	#[
 		Route(
 			path: '/peilingen/stem/{id}',

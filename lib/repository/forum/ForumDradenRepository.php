@@ -58,7 +58,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	 * Huidige pagina
 	 * @var int
 	 */
-	private $pagina;
+	private $pagina = 1;
 	/**
 	 * Aantal draden per pagina
 	 * Gebruik @see ForumDradenRepository::getAantalPerPagina()
@@ -69,19 +69,16 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 	 * Totaal aantal paginas per forumdeel
 	 * @var int[]
 	 */
-	private $aantal_paginas;
+	private $aantal_paginas = [];
 	/**
 	 * Aantal plakkerige draden
 	 * @var int
 	 */
-	private $aantal_plakkerig;
+	private $aantal_plakkerig = null;
 
 	public function __construct(ManagerRegistry $registry)
 	{
 		parent::__construct($registry, ForumDraad::class);
-		$this->pagina = 1;
-		$this->aantal_paginas = [];
-		$this->aantal_plakkerig = null;
 	}
 
 	/**

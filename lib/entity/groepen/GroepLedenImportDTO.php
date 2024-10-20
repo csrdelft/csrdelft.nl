@@ -91,7 +91,7 @@ class GroepLedenImportDTO
 
 	public function waarschuwing(): string
 	{
-		return join('<br />', $this->waarschuwingen);
+		return implode('<br />', $this->waarschuwingen);
 	}
 
 	public function aanmelden(GroepLidRepository $groepLidRepository): bool

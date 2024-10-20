@@ -14,7 +14,7 @@ class BibliotheekCatalogusDatatableResponse extends DataTableResponse
 	{
 		$arr = (array) $entity;
 		$arr['titel_link'] = "<a href='{$entity->getUrl()}'>$entity->titel</a>";
-		$arr['recensie_count'] = sizeof($entity->getRecensies());
+		$arr['recensie_count'] = count($entity->getRecensies());
 		return $arr;
 	}
 }

@@ -18,11 +18,8 @@ class MenuItemForm extends ModalForm
 	public function __construct(MenuItem $item, $actie, $id)
 	{
 		parent::__construct($item, '/menubeheer/' . $actie . '/' . $id);
-		if ($id == 'favoriet') {
-			$this->titel = 'Favoriet ' . $actie;
-		} else {
-			$this->titel = 'Menu-item ' . $actie;
-		}
+		$this->titel =
+			$id == 'favoriet' ? 'Favoriet ' . $actie : 'Menu-item ' . $actie;
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
@@ -60,7 +57,7 @@ class MenuItemForm extends ModalForm
 			'Lees-rechten'
 		);
 		$fields['r']->title = 'Wie mag dit menu-item zien';
-		if (!LoginService::mag(P_ADMIN) or $id == 'favoriet') {
+		if (!LoginService::mag(P_ADMIN) || $id == 'favoriet') {
 			$fields['r']->readonly = true;
 			$fields['r']->hidden = true;
 		}

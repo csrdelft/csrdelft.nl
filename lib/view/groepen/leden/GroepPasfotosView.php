@@ -8,6 +8,7 @@
 
 namespace CsrDelft\view\groepen\leden;
 
+use Stringable;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\service\security\LoginService;
@@ -16,7 +17,7 @@ use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use Twig\Environment;
 
-class GroepPasfotosView implements ToResponse, \Stringable
+class GroepPasfotosView implements ToResponse, Stringable
 {
 	use ToHtmlResponse;
 

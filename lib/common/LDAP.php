@@ -12,14 +12,13 @@ namespace CsrDelft\common;
 // de data die LDAP in gaat. Maak dus op de juiste manier gebruik
 // van de ldap_escape_(dn|attribute) functies!
 // -------------------------------------------------------------------
-
+use LDAP\Connection;
 use CsrDelft\common\Util\TextUtil;
 
 class LDAP
 {
 	//## private ###
-
-	/** @var \LDAP\Connection|resource|bool */
+	/** @var Connection|resource|bool */
 	private $conn = false;
 	private $baseLeden;
 	private $baseGroepen;
@@ -54,7 +53,7 @@ class LDAP
 		}
 		if ($dobind === true) {
 			$bind = ldap_bind($conn, $_ENV['LDAP_BINDDN'], $_ENV['LDAP_PASSWD']);
-			if ($bind !== true) {
+			if (!$bind) {
 				return false;
 			}
 		}
@@ -109,10 +108,7 @@ class LDAP
 		$filter = sprintf('(uid=%s)', $this->ldap_escape_filter($uid));
 		$result = ldap_search($this->conn, $base, $filter);
 		$num = ldap_count_entries($this->conn, $result);
-		if ($num == 0 || $num === false) {
-			return false;
-		}
-		return true;
+		return $num != 0 && $num !== false;
 	}
 
 	// een, of alle records opvragen
@@ -120,11 +116,10 @@ class LDAP
 	public function getLid($uid = '')
 	{
 		$base = $this->baseLeden;
-		if ($uid == '') {
-			$filter = '(uid=*)';
-		} else {
-			$filter = sprintf('(uid=%s)', $this->ldap_escape_filter($uid));
-		}
+		$filter =
+			$uid == ''
+				? '(uid=*)'
+				: sprintf('(uid=%s)', $this->ldap_escape_filter($uid));
 		$result = ldap_search($this->conn, $base, $filter);
 		return ldap_get_entries($this->conn, $result);
 	}
@@ -176,10 +171,7 @@ class LDAP
 		$filter = sprintf('(cn=%s)', $this->ldap_escape_filter($cn));
 		$result = ldap_search($this->conn, $base, $filter);
 		$num = ldap_count_entries($this->conn, $result);
-		if ($num == 0 || $num === false) {
-			return false;
-		}
-		return true;
+		return $num != 0 && $num !== false;
 	}
 
 	// een, of alle records opvragen
@@ -187,11 +179,8 @@ class LDAP
 	public function getGroep($cn = '')
 	{
 		$base = $this->baseGroepen;
-		if ($cn == '') {
-			$filter = '(cn=*)';
-		} else {
-			$filter = sprintf('(cn=%s)', $this->ldap_escape_filter($cn));
-		}
+		$filter =
+			$cn == '' ? '(cn=*)' : sprintf('(cn=%s)', $this->ldap_escape_filter($cn));
 		$result = ldap_search($this->conn, $base, $filter);
 		return ldap_get_entries($this->conn, $result);
 	}
@@ -270,13 +259,13 @@ class LDAP
 		// A DN may contain special characters which require escaping. These characters are:
 		// , (comma), = (equals), + (plus), < (less than), > (greater than), ; (semicolon),
 		// \ (backslash), and "" (quotation marks).
-		$text = preg_replace("/([,=+<>;\"\\\])/", '\\\\$1', $text);
+		$text = preg_replace("/([,=+<>;\"\\\])/", '\\\\$1', (string) $text);
 
 		// In addition, the # (number sign) requires
 		// escaping if it is the first character in an attribute value, and a space character
 		// requires escaping if it is the first or last character in an attribute value.
-		$text = preg_replace('/^#/', '\\#', $text);
-		return preg_replace('/^ /', '\\ ', $text);
+		$text = preg_replace('/^#/', '\\#', (string) $text);
+		return preg_replace('/^ /', '\\ ', (string) $text);
 	}
 
 	// RFC2254
@@ -298,7 +287,7 @@ class LDAP
 	private function ldap_escape_filter($text)
 	{
 		// ascii control characters er uit gooien, die zijn niet nodig in deze applicatie
-		$text = preg_replace('/[\x00-\x1F\x7F]/', '', $text);
+		$text = preg_replace('/[\x00-\x1F\x7F]/', '', (string) $text);
 		// zie opmerking hierboven, \ staat voorop!
 		$search = ['\\', '*', '(', ')', "\0"];
 		$replace = ["\\5C", "\\2A", "\\28", "\\29", "\\00"];

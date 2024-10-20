@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\entity\groepen\interfaces\HeeftMoment;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -11,11 +12,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\groepen\KringenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: KringenRepository::class)]
 class Kring extends Groep implements HeeftMoment
 {
 	use GroepMoment;

@@ -16,7 +16,7 @@ class OuderejaarsVoter extends Voter
 
 	public function supportsAttribute(string $attribute): bool
 	{
-		return strtoupper($attribute) == 'OUDEREJAARS';
+		return strtoupper($attribute) === 'OUDEREJAARS';
 	}
 
 	protected function voteOnAttribute(
@@ -29,10 +29,7 @@ class OuderejaarsVoter extends Voter
 		if (!$user) {
 			return false;
 		}
-
-		if ($user->profiel->lidjaar === LichtingenRepository::getJongsteLidjaar()) {
-			return false;
-		}
-		return true;
+		return $user->profiel->lidjaar !==
+			LichtingenRepository::getJongsteLidjaar();
 	}
 }

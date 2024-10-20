@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\entity\profiel\Profiel;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,11 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een LidToestemming beschrijft een Instelling per Lid.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\instellingen\LidToestemmingRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: LidToestemmingRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 #[ORM\Table('lidtoestemmingen')]
 #[
@@ -51,12 +48,7 @@ class LidToestemming
 	/**
 	 * @var Profiel
 	 */
-	#[
-		ORM\ManyToOne(
-			targetEntity: \CsrDelft\entity\profiel\Profiel::class,
-			inversedBy: 'toestemmingen'
-		)
-	]
+	#[ORM\ManyToOne(targetEntity: Profiel::class, inversedBy: 'toestemmingen')]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid', nullable: false)]
 	public $profiel;
 

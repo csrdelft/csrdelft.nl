@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\entity\declaratie\Declaratie;
 use CsrDelft\entity\declaratie\DeclaratieRegel;
@@ -25,7 +26,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DeclaratieController extends AbstractController
@@ -99,7 +99,7 @@ class DeclaratieController extends AbstractController
 		}
 
 		$status = $request->query->get('status', ['ingediend']);
-		$status = !is_array($status) ? ['ingediend'] : $status;
+		$status = is_array($status) ? $status : ['ingediend'];
 		$declaraties = $wachtrijRepository->filterDeclaraties($wachtrij, $status);
 
 		return $this->render('declaratie/lijst.html.twig', [
@@ -262,10 +262,16 @@ class DeclaratieController extends AbstractController
 		Declaratie $declaratie = null
 	): JsonResponse {
 		return $this->json([
-			'success' => empty($messages),
-			'id' => $declaratie ? $declaratie->getId() : null,
-			'status' => $declaratie ? $declaratie->getStatus() : 'concept',
-			'statusData' => $declaratie ? $declaratie->naarStatusData() : null,
+			'success' => $messages === [],
+			'id' => $declaratie instanceof Declaratie ? $declaratie->getId() : null,
+			'status' =>
+				$declaratie instanceof Declaratie
+					? $declaratie->getStatus()
+					: 'concept',
+			'statusData' =>
+				$declaratie instanceof Declaratie
+					? $declaratie->naarStatusData()
+					: null,
 			'messages' => $messages,
 		]);
 	}
@@ -300,7 +306,7 @@ class DeclaratieController extends AbstractController
 		$messages = [];
 
 		// Laad declaratie of maak nieuwe
-		if ($data->getInt('id')) {
+		if ($data->getInt('id') !== 0) {
 			$declaratie = $declaratieRepository->find($data->getInt('id'));
 			if (!$declaratie || !$declaratie->magBewerken()) {
 				return $this->ajaxResponse(['Je mag deze declaratie niet aanpassen']);
@@ -336,7 +342,7 @@ class DeclaratieController extends AbstractController
 				$bonData = new ParameterBag($rawBon);
 				$bon = $bonRepository->find($bonData->getInt('id'));
 				if (
-					!($bon->magBekijken() || $declaratie->magBeoordelen()) ||
+					(!$bon->magBekijken() && !$declaratie->magBeoordelen()) ||
 					($bon->getDeclaratie() !== null &&
 						$bon->getDeclaratie()->getId() !== $declaratie->getId())
 				) {
@@ -371,9 +377,11 @@ class DeclaratieController extends AbstractController
 						$index++;
 					}
 				}
+				// Haal niet-gebruikte regels weg
+				$counter = count($regels);
 
 				// Haal niet-gebruikte regels weg
-				for ($i = $index; $i < count($regels); $i++) {
+				for ($i = $index; $i < $counter; $i++) {
 					$entityManager->remove($regels[$i]);
 				}
 			}
@@ -386,7 +394,7 @@ class DeclaratieController extends AbstractController
 
 		if ($request->request->getBoolean('indienen')) {
 			$messages = array_merge($messages, $declaratie->valideer());
-			if (empty($messages) && $declaratie->getIngediend() === null) {
+			if ($messages === [] && $declaratie->getIngediend() === null) {
 				$declaratie->setIngediend(date_create_immutable());
 				$declaratieRepository->stuurMail($declaratie);
 			}

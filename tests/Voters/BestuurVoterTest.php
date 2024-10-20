@@ -7,7 +7,7 @@ use CsrDelft\tests\AbstractVoterTestCase;
 
 class BestuurVoterTest extends AbstractVoterTestCase
 {
-	public function testBestuurHtPraeses()
+	public function testBestuurHtPraeses(): void
 	{
 		$htPraesesToken = $this->getToken(AccountFixtures::UID_BESTUUR_PRAESES);
 
@@ -22,7 +22,7 @@ class BestuurVoterTest extends AbstractVoterTestCase
 		$this->assertGeenToegang($htPraesesToken, 'bestuur:ht:sjaars');
 	}
 
-	public function testBestuurHtAbactis()
+	public function testBestuurHtAbactis(): void
 	{
 		$htAbactisToken = $this->getToken(AccountFixtures::UID_BESTUUR_ABACTIS);
 
@@ -35,7 +35,7 @@ class BestuurVoterTest extends AbstractVoterTestCase
 		$this->assertGeenToegang($htAbactisToken, 'bestuur:ft');
 	}
 
-	public function testBestuurOtPraeses()
+	public function testBestuurOtPraeses(): void
 	{
 		$otPraesesToken = $this->getToken(AccountFixtures::UID_BESTUUR_OT_PRAESES);
 
@@ -49,7 +49,7 @@ class BestuurVoterTest extends AbstractVoterTestCase
 		$this->assertGeenToegang($otPraesesToken, 'bestuur:ft');
 	}
 
-	public function testBestuurFtPraeses()
+	public function testBestuurFtPraeses(): void
 	{
 		$ftPraesesToken = $this->getToken(AccountFixtures::UID_BESTUUR_FT_PRAESES);
 

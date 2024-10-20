@@ -38,8 +38,8 @@ class FotoAlbumVoter extends Voter
 
 	public function supportsType(string $subjectType): bool
 	{
-		return $subjectType == FotoAlbum::class ||
-			$subjectType == FotoTagAlbum::class;
+		return $subjectType === FotoAlbum::class ||
+			$subjectType === FotoTagAlbum::class;
 	}
 
 	/**
@@ -52,7 +52,7 @@ class FotoAlbumVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		switch ($attribute) {
 			case self::BEKIJKEN:
 				if (

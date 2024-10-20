@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\KetzersRepository;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,11 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een ketzer is een aanmeldbare groep.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\groepen\KetzersRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: KetzersRepository::class)]
 class Ketzer extends Groep implements HeeftAanmeldLimiet, HeeftAanmeldMoment
 {
 	use GroepAanmeldMoment;

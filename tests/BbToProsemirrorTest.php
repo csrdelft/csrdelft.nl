@@ -21,7 +21,7 @@ final class BbToProsemirrorTest extends CsrTestCase
 		$this->converter = $this->getContainer()->get(BbToProsemirror::class);
 	}
 
-	public function testString()
+	public function testString(): void
 	{
 		$this->assertEquals(
 			[
@@ -37,7 +37,7 @@ final class BbToProsemirrorTest extends CsrTestCase
 		);
 	}
 
-	public function testBold()
+	public function testBold(): void
 	{
 		$this->assertEquals(
 			[
@@ -54,7 +54,7 @@ final class BbToProsemirrorTest extends CsrTestCase
 		);
 	}
 
-	public function testMultipleMark()
+	public function testMultipleMark(): void
 	{
 		$this->assertEquals(
 			[
@@ -78,7 +78,7 @@ final class BbToProsemirrorTest extends CsrTestCase
 		);
 	}
 
-	public function testLink()
+	public function testLink(): void
 	{
 		$this->assertEquals(
 			[

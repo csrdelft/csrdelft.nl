@@ -159,10 +159,8 @@ class ProfielForm extends Formulier
 			$html .= '</div><div class="leden">';
 			if (
 				count($gelijknamigeleden) > 1 ||
-				(!(
-					$profiel->status == LidStatus::Lid ||
-					$profiel->status == LidStatus::Gastlid
-				) &&
+				($profiel->status != LidStatus::Lid &&
+					$profiel->status != LidStatus::Gastlid &&
 					!empty($gelijknamigeleden))
 			) {
 				$html .= 'Gelijknamige (gast)leden:<ul class="nobullets">';

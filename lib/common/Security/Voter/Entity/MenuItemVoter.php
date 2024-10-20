@@ -28,7 +28,7 @@ class MenuItemVoter extends Voter
 
 	public function supportsType(string $subjectType): bool
 	{
-		return $subjectType == MenuItem::class;
+		return $subjectType === MenuItem::class;
 	}
 
 	/**
@@ -41,7 +41,7 @@ class MenuItemVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		return match ($attribute) {
 			self::BEKIJKEN => $subject->zichtbaar &&
 				$this->accessDecisionManager->decide($token, [

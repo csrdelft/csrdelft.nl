@@ -38,7 +38,7 @@ class BbAanmelder extends BbTag
 
 	public function render()
 	{
-		if (isset($this->reeks)) {
+		if ($this->reeks !== null) {
 			$reeks = $this->reeksRepository->find($this->reeks);
 			if (!$reeks) {
 				return "Reeks met id {$this->reeks} niet gevonden.";

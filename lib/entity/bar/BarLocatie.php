@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\bar;
 
+use CsrDelft\entity\security\Account;
 use CsrDelft\entity\profiel\Profiel;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -24,7 +25,7 @@ class BarLocatie
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\security\Account::class)]
+	#[ORM\ManyToOne(targetEntity: Account::class)]
 	#[ORM\JoinColumn(referencedColumnName: 'uid')]
 	public $doorAccount;
 

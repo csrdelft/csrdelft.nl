@@ -12,7 +12,7 @@ class VerticalePrefixVoter extends PrefixVoter
 {
 	protected function supportsPrefix($prefix)
 	{
-		return strtoupper((string) $prefix) == 'VERTICALE';
+		return strtoupper((string) $prefix) === 'VERTICALE';
 	}
 
 	protected function voteOnPrefix(

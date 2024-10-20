@@ -2,6 +2,10 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use MaaltijdRepetitie;
+use MaaltijdAanmelding;
+use DateInterval;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Eisen;
@@ -44,11 +48,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * Zie ook MaaltijdAanmelding.class.php
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\maalcie\MaaltijdenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: MaaltijdenRepository::class)]
 #[ORM\Table('mlt_maaltijden')]
 class Maaltijd implements Agendeerbaar, DisplayEntity
 {
@@ -69,7 +69,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	/**
 	 * @var MaaltijdRepetitie|null
 	 */
-	#[ORM\ManyToOne(targetEntity: \MaaltijdRepetitie::class)]
+	#[ORM\ManyToOne(targetEntity: MaaltijdRepetitie::class)]
 	#[
 		ORM\JoinColumn(
 			name: 'mlt_repetitie_id',
@@ -87,7 +87,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	/**
 	 * @var CiviProduct
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\fiscaat\CiviProduct::class)]
+	#[ORM\ManyToOne(targetEntity: CiviProduct::class)]
 	public $product;
 	/**
 	 * @var string
@@ -155,10 +155,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @var MaaltijdAanmelding[]|ArrayCollection
 	 */
 	#[
-		ORM\OneToMany(
-			targetEntity: \MaaltijdAanmelding::class,
-			mappedBy: 'maaltijd'
-		)
+		ORM\OneToMany(targetEntity: MaaltijdAanmelding::class, mappedBy: 'maaltijd')
 	]
 	public $aanmeldingen;
 	/**
@@ -277,7 +274,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	public function getEindMoment(): DateTimeImmutable
 	{
-		return $this->getBeginMoment()->add(new \DateInterval('PT1H30M'));
+		return $this->getBeginMoment()->add(new DateInterval('PT1H30M'));
 	}
 
 	public function getBeschrijving()
@@ -322,7 +319,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 */
 	public function magBekijken($uid)
 	{
-		if (!isset($this->maaltijdcorvee)) {
+		if ($this->maaltijdcorvee === null) {
 			// Zoek op datum, want er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is.
 			// Ook hoeft een taak niet per se gekoppeld te zijn aan een maaltijd (maximaal aan 1 maaltijd).
 			/** @var CorveeTaak $taken */

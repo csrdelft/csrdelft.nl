@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use DateInterval;
@@ -26,11 +27,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @see Maaltijd
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: ArchiefMaaltijdenRepository::class)]
 #[ORM\Table('mlt_archief')]
 class ArchiefMaaltijd implements Agendeerbaar
 {

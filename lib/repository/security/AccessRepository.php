@@ -102,7 +102,7 @@ class AccessRepository extends AbstractRepository
 			return true;
 		}
 		// Delete entire ACL for object
-		if (empty($acl)) {
+		if ($acl === []) {
 			$this->createQueryBuilder('access')
 				->delete()
 				->where(

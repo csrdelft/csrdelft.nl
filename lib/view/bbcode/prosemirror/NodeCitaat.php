@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\prosemirror;
 
+use InvalidArgumentException;
 use CsrDelft\bb\tag\BbNode;
 use CsrDelft\view\bbcode\tag\BbCitaat;
 
@@ -20,7 +21,7 @@ class NodeCitaat implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbCitaat) {
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		if ($node->bron_profiel != null) {

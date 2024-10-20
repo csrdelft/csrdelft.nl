@@ -8,7 +8,7 @@ use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -88,9 +88,9 @@ class ChangeLogRepository extends AbstractRepository
 		if ($token == null) {
 			$change->uid = LoginService::UID_EXTERN;
 		} elseif ($token instanceof SwitchUserToken) {
-			$change->uid = $token->getOriginalToken()->getUsername();
+			$change->uid = $token->getOriginalToken()->getUserIdentifier();
 		} else {
-			$change->uid = $token->getUsername();
+			$change->uid = $token->getUserIdentifier();
 		}
 		return $change;
 	}

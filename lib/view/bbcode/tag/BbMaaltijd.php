@@ -16,7 +16,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 
 /**
@@ -84,11 +84,9 @@ class BbMaaltijd extends BbTag
 				[$maaltijd->maaltijd_id => $maaltijd],
 				LoginService::getUid()
 			);
-			if (empty($aanmeldingen)) {
-				$aanmelding = null;
-			} else {
-				$aanmelding = $aanmeldingen[$maaltijd->maaltijd_id];
-			}
+			$aanmelding = empty($aanmeldingen)
+				? null
+				: $aanmeldingen[$maaltijd->maaltijd_id];
 
 			// Beoordelingen ophalen
 			$kwaliteit = null;
@@ -163,7 +161,7 @@ class BbMaaltijd extends BbTag
 				$maaltijden = $this->maaltijdenService->getKomendeMaaltijdenVoorLid(
 					LoginService::getProfiel()
 				); // met filter
-				$aantal = sizeof($maaltijden);
+				$aantal = count($maaltijden);
 				if ($aantal < 1) {
 					throw new BbException(
 						'<div class="bb-block bb-maaltijd">Geen aankomende maaltijd.</div>'
@@ -183,7 +181,7 @@ class BbMaaltijd extends BbTag
 					$timestamp
 				);
 				$recent = array_slice(array_map(fn($m) => $m->maaltijd, $recent), -2);
-				if (count($recent) === 0) {
+				if ($recent === []) {
 					throw new BbException('');
 				}
 				$maaltijd = array_values($recent)[0];

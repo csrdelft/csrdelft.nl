@@ -2,17 +2,16 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
-use CsrDelft\entity\GoogleToken;
 use CsrDelft\repository\GoogleTokenRepository;
 use CsrDelft\service\GoogleClientManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class GoogleController.

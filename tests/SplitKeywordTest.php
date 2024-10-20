@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SplitKeywordTest extends TestCase
 {
-	public function testSplitString()
+	public function testSplitString(): void
 	{
 		$this->assertEquals(
 			'Lorem ipsum dolor sit amet,…',
@@ -47,7 +47,7 @@ class SplitKeywordTest extends TestCase
 		);
 	}
 
-	public function testSplitMultiByte()
+	public function testSplitMultiByte(): void
 	{
 		for ($i = 0; $i < 5; $i++) {
 			$this->assertEquals(

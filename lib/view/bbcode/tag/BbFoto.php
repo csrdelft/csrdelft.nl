@@ -11,7 +11,7 @@ use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Toont de thumbnail van een foto met link naar fotoalbum.

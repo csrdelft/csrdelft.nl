@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\repository\security\OneTimeTokensRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,11 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * One time token for two-step authentication.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\security\OneTimeTokensRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: OneTimeTokensRepository::class)]
 #[ORM\Table('onetime_tokens')]
 class OneTimeToken
 {
@@ -58,7 +55,7 @@ class OneTimeToken
 	/**
 	 * @var Account|null
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\security\Account::class)]
+	#[ORM\ManyToOne(targetEntity: Account::class)]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid', nullable: true)]
 	public $account;
 }

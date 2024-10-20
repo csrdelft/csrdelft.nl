@@ -24,7 +24,7 @@ class Dropzone extends Formulier
 	public function __construct(
 		$model,
 		$action,
-		private FileField $fallback,
+		private readonly FileField $fallback,
 		$cancel_url,
 		$titel = false
 	) {

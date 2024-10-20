@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
@@ -17,7 +18,6 @@ use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\IsHetAlView;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class VoorpaginaController extends AbstractController
 {
@@ -133,7 +133,7 @@ class VoorpaginaController extends AbstractController
 
 		$maaltijd = reset($maaltijden);
 
-		$aantal = sizeof($maaltijden);
+		$aantal = count($maaltijden);
 
 		return $this->render('voorpagina/maaltijden.html.twig', [
 			'maaltijden' => $maaltijden,

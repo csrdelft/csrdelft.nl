@@ -9,7 +9,7 @@ use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -59,11 +59,10 @@ class BbLedenmemoryscores extends BbTag
 		$titel = null;
 		if (isset($arguments['verticale'])) {
 			$v = filter_var($arguments['verticale'], FILTER_SANITIZE_STRING);
-			if (strlen($v) > 1) {
-				$verticale = $this->verticalenRepository->searchByNaam($v);
-			} else {
-				$verticale = $this->verticalenRepository->get($v);
-			}
+			$verticale =
+				strlen($v) > 1
+					? $this->verticalenRepository->searchByNaam($v)
+					: $this->verticalenRepository->get($v);
 			if ($verticale) {
 				$titel = ' Verticale ' . $verticale->naam;
 				$groep = $verticale;

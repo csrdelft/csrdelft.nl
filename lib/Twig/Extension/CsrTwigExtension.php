@@ -32,7 +32,7 @@ use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -253,13 +253,13 @@ class CsrTwigExtension extends AbstractExtension
 
 		if ($mode === 'html') {
 			return CsrBB::parseHtml($string, $inlineHtml);
-		} elseif ($mode == 'mail') {
+		} elseif ($mode === 'mail') {
 			return CsrBB::parseMail($string);
-		} elseif ($mode == 'light') {
+		} elseif ($mode === 'light') {
 			return CsrBB::parseLight($string);
-		} elseif ($mode == 'preview') {
+		} elseif ($mode === 'preview') {
 			return CsrBB::parsePreview($string);
-		} elseif ($mode == 'plain') {
+		} elseif ($mode === 'plain') {
 			return CsrBB::parsePlain($string);
 		} else {
 			return CsrBB::parse($string);

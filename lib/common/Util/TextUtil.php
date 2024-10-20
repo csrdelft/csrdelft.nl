@@ -91,7 +91,7 @@ final class TextUtil
 		}
 
 		if ($firstPos > $space_around) {
-			$split = static::first_space_before($string, $firstPos - $space_around);
+			$split = self::first_space_before($string, $firstPos - $space_around);
 
 			if ($split > $threshold) {
 				$string = $ellipsis . mb_substr($string, $split);
@@ -105,11 +105,8 @@ final class TextUtil
 		) {
 			// Split and insert ellipsis if the space between keywords is large enough.
 			if ($lastPos - $prevPos > 2 * $space_around) {
-				$split_l = static::first_space_after($string, $prevPos + $space_around);
-				$split_r = static::first_space_before(
-					$string,
-					$lastPos - $space_around
-				);
+				$split_l = self::first_space_after($string, $prevPos + $space_around);
+				$split_r = self::first_space_before($string, $lastPos - $space_around);
 
 				// Only do the split if enough characters are hidden by splitting
 				if ($split_r - $split_l > $threshold) {
@@ -135,7 +132,7 @@ final class TextUtil
 				mb_substr(
 					$string,
 					0,
-					static::first_space_after($string, $prevPos + $space_around)
+					self::first_space_after($string, $prevPos + $space_around)
 				) . $ellipsis;
 		}
 
@@ -196,7 +193,7 @@ final class TextUtil
 		return sprintf(
 			'%s %s%s',
 			$nwvoor,
-			!empty($tussenvoegsel) ? $tussenvoegsel . ' ' : '',
+			empty($tussenvoegsel) ? '' : $tussenvoegsel . ' ',
 			$nwachter
 		);
 	}

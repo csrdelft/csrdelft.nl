@@ -5,7 +5,7 @@ namespace CsrDelft\view\bbcode\tag\groep;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\groepen\VerticalenRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Geeft een link naar de verticale.

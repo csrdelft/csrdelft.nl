@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,11 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Concept berichten opslaan per draadje.
  * Bijhouden als iemand bezig is een reactie te schrijven.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\forum\ForumDradenReagerenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: ForumDradenReagerenRepository::class)]
 #[ORM\Table('forum_draden_reageren')]
 class ForumDraadReageren
 {

@@ -20,7 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -115,7 +115,7 @@ class FotoAlbumRepository extends AbstractRepository
 	public function getFotoAlbum($path)
 	{
 		if (
-			AccountRepository::isValidUid($path) and
+			AccountRepository::isValidUid($path) &&
 			ProfielRepository::existsUid($path)
 		) {
 			$album = new FotoTagAlbum($path);
@@ -294,7 +294,7 @@ HTML;
 				$success &= rename($path, str_replace('folder', '', $path));
 				$path = $foto->getFullPath();
 				$success &= rename($path, str_replace('folder', '', $path));
-				if ($success) {
+				if ($success !== 0) {
 					// database in sync houden
 					// updaten gaat niet vanwege primary key
 					$this->fotoRepository->delete($foto);
@@ -322,7 +322,7 @@ HTML;
 			$path,
 			substr_replace($path, 'folder', strrpos($path, '.'), 0)
 		);
-		if ($success) {
+		if ($success !== 0) {
 			// database in sync houden
 			// updaten gaat niet vanwege primary key
 			$this->fotoRepository->delete($cover);

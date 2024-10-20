@@ -32,11 +32,9 @@ class AanmeldingForm extends ModalForm
 			true
 		);
 
-		if ($nieuw) {
-			$this->titel = 'Aanmelding toevoegen/aanpassen';
-		} else {
-			$this->titel = 'Aanmelding verwijderen (inclusief gasten)';
-		}
+		$this->titel = $nieuw
+			? 'Aanmelding toevoegen/aanpassen'
+			: 'Aanmelding verwijderen (inclusief gasten)';
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields = [];

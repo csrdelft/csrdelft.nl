@@ -21,7 +21,7 @@ class GroepLidVoter extends Voter
 	public function supportsType(string $subjectType): bool
 	{
 		// Ook subclasses van Groep
-		return $subjectType == GroepLid::class;
+		return $subjectType === GroepLid::class;
 	}
 
 	/**
@@ -34,7 +34,7 @@ class GroepLidVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		if (
 			!$this->accessDecisionManager->decide(
 				$token,

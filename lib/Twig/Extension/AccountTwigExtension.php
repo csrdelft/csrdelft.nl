@@ -2,6 +2,7 @@
 
 namespace CsrDelft\Twig\Extension;
 
+use Generator;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\profiel\Profiel;
@@ -59,7 +60,7 @@ class AccountTwigExtension extends AbstractExtension
 
 	/**
 	 * @param Profiel $profiel
-	 * @return GroepLid[]|\Generator
+	 * @return GroepLid[]|Generator
 	 */
 	public function getCommissielid(Profiel $profiel)
 	{

@@ -24,6 +24,7 @@ use Symfony\Component\Security\Core\Exception\LogicException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
@@ -50,7 +51,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 			return true;
 		}
 
-		if (null !== $this->tokenStorage->getToken()) {
+		if ($this->tokenStorage->getToken() instanceof TokenInterface) {
 			return false;
 		}
 
@@ -76,7 +77,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 			$request->request->has('refresh_token');
 	}
 
-	public function authenticate(Request $request): PassportInterface
+	public function authenticate(Request $request): Passport
 	{
 		if ($request->server->get('HTTP_X_CSR_AUTHORIZATION')) {
 			return $this->authenticateHeader($request);
@@ -99,7 +100,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 
 		$jwt = substr((string) $authHeader, 7);
 
-		if (!$jwt) {
+		if ($jwt === '' || $jwt === '0') {
 			throw new AuthenticationException(400);
 		}
 
@@ -109,7 +110,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 			throw new AuthenticationException('', 401);
 		}
 
-		$user = $this->userProvider->loadUserByUsername($token->data->userId);
+		$user = $this->userProvider->loadUserByIdentifier($token->data->userId);
 
 		if (!$user instanceof UserInterface) {
 			throw new AuthenticationServiceException(
@@ -117,7 +118,9 @@ class ApiAuthenticator extends AbstractAuthenticator
 			);
 		}
 
-		return new SelfValidatingPassport($user);
+		return new SelfValidatingPassport(
+			new UserBadge($user->getUserIdentifier())
+		);
 	}
 
 	private function authorizeRequest(Request $request)
@@ -176,7 +179,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 		$refreshToken = $this->createRefreshToken($series, $rand);
 
 		return new Passport(
-			$user,
+			new UserBadge($user->getUserIdentifier()),
 			new PasswordCredentials($credentials['password']),
 			[new JwtTokenBadge($token, $refreshToken)]
 		);
@@ -220,7 +223,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 
 		if (
 			!$remember ||
-			$remember->getTokenValue() != hash('sha512', (string) $rand)
+			$remember->getTokenValue() !== hash('sha512', (string) $rand)
 		) {
 			throw new UnauthorizedHttpException('Unauthorized');
 		}

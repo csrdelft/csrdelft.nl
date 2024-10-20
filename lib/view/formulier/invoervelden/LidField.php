@@ -47,7 +47,7 @@ class LidField extends AutocompleteField
 	public function getValue()
 	{
 		$this->value = parent::getValue();
-		if ($this->empty_null and empty($this->value)) {
+		if ($this->empty_null && empty($this->value)) {
 			return null;
 		}
 		if (!AccountRepository::isValidUid($this->value)) {
@@ -80,7 +80,7 @@ class LidField extends AutocompleteField
 		$value = parent::getValue();
 		// geldig uid?
 		if (
-			AccountRepository::isValidUid($value) and
+			AccountRepository::isValidUid($value) &&
 			ProfielRepository::existsUid($value)
 		) {
 			return true;

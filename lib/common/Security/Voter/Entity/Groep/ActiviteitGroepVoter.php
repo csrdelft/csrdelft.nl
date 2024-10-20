@@ -4,8 +4,6 @@ namespace CsrDelft\common\Security\Voter\Entity\Groep;
 
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
-use CsrDelft\entity\security\enum\AccessAction;
-use CsrDelft\service\security\LoginService;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class ActiviteitGroepVoter extends AbstractGroepVoter

@@ -30,6 +30,6 @@ final class BedragUtil
 	 */
 	public static function format_bedrag($bedrag)
 	{
-		return '€' . static::format_bedrag_kaal($bedrag);
+		return '€' . self::format_bedrag_kaal($bedrag);
 	}
 }

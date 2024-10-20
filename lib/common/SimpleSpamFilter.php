@@ -43,11 +43,11 @@ class SimpleSpamFilter
 	private function hasOnlyLinks($str)
 	{
 		// strip out all URLs from the comment
-		$str = preg_replace("'https*://(\S*)'", '', $str);
-		$str = preg_replace("'<a ([^<]*?)</a>'", '', $str);
-		$str = preg_replace("'\[url= ([^<]*?)\[/url\]'", '', $str);
+		$str = preg_replace("'https*://(\S*)'", '', (string) $str);
+		$str = preg_replace("'<a ([^<]*?)</a>'", '', (string) $str);
+		$str = preg_replace("'\[url= ([^<]*?)\[/url\]'", '', (string) $str);
 		// trim out any whitespace
-		$str = trim($str);
-		return empty($str);
+		$str = trim((string) $str);
+		return $str === '' || $str === '0';
 	}
 }

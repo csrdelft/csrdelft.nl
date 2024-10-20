@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\FlashType;
 use CsrDelft\controller\AbstractController;
@@ -10,7 +11,6 @@ use CsrDelft\view\maalcie\forms\BoekjaarSluitenForm;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>

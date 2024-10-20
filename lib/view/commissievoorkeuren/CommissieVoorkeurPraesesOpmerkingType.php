@@ -20,7 +20,7 @@ class CommissieVoorkeurPraesesOpmerkingType extends AbstractType
 	 * CommissieVoorkeurOpmerkingForm constructor.
 	 * @param VoorkeurOpmerking $model
 	 */
-	public function buildForm(FormBuilderInterface $builder, array $options)
+	public function buildForm(FormBuilderInterface $builder, array $options): void
 	{
 		$builder
 			->add('praesesOpmerking', TextareaType::class)

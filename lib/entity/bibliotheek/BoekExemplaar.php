@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\bibliotheek;
 
+use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
+use Boek;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
@@ -10,11 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @package CsrDelft\model\entity\bibliotheek
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\bibliotheek\BoekExemplaarRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: BoekExemplaarRepository::class)]
 #[ORM\Table('biebexemplaar')]
 class BoekExemplaar
 {
@@ -38,7 +36,7 @@ class BoekExemplaar
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(name: 'eigenaar_uid', referencedColumnName: 'uid')]
 	public $eigenaar;
 	/**
@@ -55,7 +53,7 @@ class BoekExemplaar
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: Profiel::class)]
 	#[ORM\JoinColumn(name: 'uitgeleend_uid', referencedColumnName: 'uid')]
 	public $uitgeleend;
 	/**
@@ -82,7 +80,7 @@ class BoekExemplaar
 	/**
 	 * @var Boek
 	 */
-	#[ORM\ManyToOne(targetEntity: \Boek::class, inversedBy: 'exemplaren')]
+	#[ORM\ManyToOne(targetEntity: Boek::class, inversedBy: 'exemplaren')]
 	public $boek;
 
 	public function isBiebBoek(): bool

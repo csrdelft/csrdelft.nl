@@ -2,6 +2,7 @@
 
 namespace CsrDelft\tests;
 
+use Symfony\Component\Panther\Client;
 use CsrDelft\DataFixtures\AccountFixtures;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Exception\TimeoutException;
@@ -14,7 +15,7 @@ use Symfony\Component\Panther\PantherTestCase;
 class BrowserTestCase extends PantherTestCase
 {
 	/**
-	 * @var \Symfony\Component\Panther\Client
+	 * @var Client
 	 */
 	protected $client;
 
@@ -88,27 +89,6 @@ class BrowserTestCase extends PantherTestCase
 	 */
 	protected function tearDown(): void
 	{
-		$status = $this->getStatus();
-		if (
-			$status == BaseTestRunner::STATUS_ERROR ||
-			$status == BaseTestRunner::STATUS_FAILURE
-		) {
-			$this->client->takeScreenshot(
-				__DIR__ . '/../../screenshot/failure-' . $this->getName() . '.png'
-			);
-
-			try {
-				$this->client
-					->findElement(WebDriverBy::cssSelector('.invalid-feedback'))
-					->getLocationOnScreenOnceScrolledIntoView();
-
-				$this->client->takeScreenshot(
-					__DIR__ . '/../../screenshot/failure-' . $this->getName() . '-2.png'
-				);
-			} catch (NoSuchElementException) {
-				// Negeer
-			}
-		}
 		$this->client->request('GET', '/logout');
 	}
 
@@ -120,9 +100,7 @@ class BrowserTestCase extends PantherTestCase
 	 */
 	protected function clickLink($linkText): Crawler
 	{
-		$webDriverElement = $this->client->getCrawler()->selectLink(
-			$linkText
-		);
+		$webDriverElement = $this->client->getCrawler()->selectLink($linkText);
 		$webDriverElement->getLocationOnScreenOnceScrolledIntoView();
 
 		return $this->client->click($webDriverElement->link());

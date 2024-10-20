@@ -89,7 +89,7 @@ final class ArrayUtil
 			}
 
 			$out[$key][] = $obj; // add to array
-			if ($del) {
+			if ($del !== 0) {
 				unset($in[$i]);
 			}
 		}
@@ -111,7 +111,7 @@ final class ArrayUtil
 		$out = [];
 		foreach ($in as $i => $obj) {
 			$out[$obj->$prop] = $obj; // overwrite existing
-			if ($del) {
+			if ($del !== 0) {
 				unset($in[$i]);
 			}
 		}

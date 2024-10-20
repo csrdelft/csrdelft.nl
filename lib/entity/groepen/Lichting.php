@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,11 +14,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\groepen\LichtingenRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: LichtingenRepository::class)]
 class Lichting extends Groep
 {
 	/**

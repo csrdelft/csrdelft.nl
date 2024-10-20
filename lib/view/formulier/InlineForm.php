@@ -18,7 +18,7 @@ abstract class InlineForm extends Formulier implements FormElement
 	public function __construct(
 		$model,
 		$action,
-		private InputField $field,
+		private readonly InputField $field,
 		private $toggle = true,
 		$buttons = false,
 		$dataTableId = false
@@ -53,7 +53,7 @@ abstract class InlineForm extends Formulier implements FormElement
 			$this->field->enter_submit = true;
 			$this->field->escape_cancel = true;
 		}
-		if (!isset($this->field->title)) {
+		if ($this->field->title === null) {
 			$this->field->title = $this->field->description;
 		}
 

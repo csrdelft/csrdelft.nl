@@ -17,7 +17,6 @@ use CsrDelft\entity\groepen\Ondervereniging;
 use CsrDelft\entity\groepen\RechtenGroep;
 use CsrDelft\entity\groepen\Werkgroep;
 use CsrDelft\entity\groepen\Woonoord;
-use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\CommissiesRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;

@@ -8,7 +8,7 @@ use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\service\forum\ForumDelenService;
 use Exception;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 
 class BbForum extends BbTag

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\fiscaat;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Util\SqlUtil;
@@ -18,7 +19,6 @@ use CsrDelft\view\fiscaat\producten\CiviProductTable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -70,7 +70,7 @@ class BeheerCiviProductenController extends AbstractController
 	{
 		$selection = $this->getDataTableSelection();
 
-		if (empty($selection)) {
+		if ($selection === []) {
 			return new CiviProductForm(new CiviProduct());
 		}
 
@@ -138,11 +138,9 @@ class BeheerCiviProductenController extends AbstractController
 	{
 		$id = $request->request->getInt('id');
 
-		if (!$id) {
-			$product = new CiviProduct();
-		} else {
-			$product = $this->civiProductRepository->getProduct($id);
-		}
+		$product = $id
+			? $this->civiProductRepository->getProduct($id)
+			: new CiviProduct();
 
 		$form = new CiviProductForm($product);
 

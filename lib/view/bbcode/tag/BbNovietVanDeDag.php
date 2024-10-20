@@ -5,7 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbTag;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 
 class BbNovietVanDeDag extends BbTag

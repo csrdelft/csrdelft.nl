@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\pin;
 
+use CsrDelft\repository\pin\PinTransactieRepository;
+use DateTimeImmutable;
 use CsrDelft\common\CsrException;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,11 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 06/09/2017
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\pin\PinTransactieRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: PinTransactieRepository::class)]
 #[ORM\Table('pin_transacties')]
 class PinTransactie
 {
@@ -25,7 +23,7 @@ class PinTransactie
 	#[ORM\GeneratedValue]
 	public $id;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 */
 	#[ORM\Column(type: 'datetime')]
 	public $datetime;

@@ -52,7 +52,7 @@ class Bestand
 	 */
 	public function exists()
 	{
-		return @is_readable($this->directory . '/' . $this->filename) and
+		return @is_readable($this->directory . '/' . $this->filename) &&
 			is_file($this->directory . '/' . $this->filename);
 	}
 }

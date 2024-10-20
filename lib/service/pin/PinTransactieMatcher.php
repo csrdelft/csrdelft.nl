@@ -108,15 +108,15 @@ class PinTransactieMatcher
 		return $distanceMatrix;
 	}
 
-	private static function compareDate(
+	private function compareDate(
 		?DateTimeInterface $a,
 		?DateTimeInterface $b
 	): int {
-		if ($a === null && $b === null) {
+		if (!$a instanceof DateTimeInterface && !$b instanceof DateTimeInterface) {
 			return 0;
-		} elseif ($a === null) {
+		} elseif (!$a instanceof DateTimeInterface) {
 			return 1;
-		} elseif ($b === null) {
+		} elseif (!$b instanceof DateTimeInterface) {
 			return -1;
 		}
 		return $b->getTimestamp() - $a->getTimestamp();
@@ -130,14 +130,14 @@ class PinTransactieMatcher
 		// Sorteer beide op volgorde van moment
 		usort(
 			$this->pinBestellingen,
-			fn(CiviBestelling $a, CiviBestelling $b) => self::compareDate(
+			fn(CiviBestelling $a, CiviBestelling $b) => $this->compareDate(
 				$a->moment,
 				$b->moment
 			)
 		);
 		usort(
 			$this->pinTransacties,
-			fn(PinTransactie $a, PinTransactie $b) => self::compareDate(
+			fn(PinTransactie $a, PinTransactie $b) => $this->compareDate(
 				$a->datetime,
 				$b->datetime
 			)

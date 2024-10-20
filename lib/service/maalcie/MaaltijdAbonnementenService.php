@@ -234,7 +234,7 @@ class MaaltijdAbonnementenService
 			}
 			$this->entityManager->flush();
 
-			if (sizeof($abos) !== $aantal) {
+			if (count($abos) !== $aantal) {
 				FlashUtil::setFlashWithContainerFacade(
 					'Niet alle abonnementen zijn uitgeschakeld!',
 					-1
@@ -482,17 +482,14 @@ class MaaltijdAbonnementenService
 					$this->maaltijdAanmeldingenService->checkAanmeldFilter(
 						$abo->profiel,
 						$maaltijd->aanmeld_filter
+					) &&
+					$this->maaltijdRepetitieAanmeldingenService->aanmeldenDoorAbonnement(
+						$maaltijd,
+						$abo->maaltijd_repetitie,
+						$abo->profiel
 					)
 				) {
-					if (
-						$this->maaltijdRepetitieAanmeldingenService->aanmeldenDoorAbonnement(
-							$maaltijd,
-							$abo->maaltijd_repetitie,
-							$abo->profiel
-						)
-					) {
-						$aantal++;
-					}
+					$aantal++;
 				}
 			}
 		}

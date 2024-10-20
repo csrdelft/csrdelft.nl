@@ -18,7 +18,7 @@ class WerkgroepGroepVoter extends AbstractGroepVoter
 		TokenInterface $token
 	): bool {
 		if (
-			$attribute == self::AANMAKEN &&
+			$attribute === self::AANMAKEN &&
 			!$this->accessDecisionManager->decide($token, ['ROLE_LEDEN_MOD'])
 		) {
 			return false;

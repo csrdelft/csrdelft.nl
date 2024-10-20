@@ -2,6 +2,10 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use CsrDelft\repository\fiscaat\CiviProductRepository;
+use CiviCategorie;
+use CiviPrijs;
+use DateTimeInterface;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,11 +20,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\fiscaat\CiviProductRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: CiviProductRepository::class)]
 class CiviProduct implements DataTableEntry, DisplayEntity
 {
 	/**
@@ -63,7 +63,7 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	/**
 	 * @var CiviCategorie
 	 */
-	#[ORM\ManyToOne(targetEntity: \CiviCategorie::class)]
+	#[ORM\ManyToOne(targetEntity: CiviCategorie::class)]
 	public $categorie;
 	/**
 	 * Tijdelijke placeholder
@@ -73,7 +73,7 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	/**
 	 * @var CiviPrijs[]|ArrayCollection
 	 */
-	#[ORM\OneToMany(targetEntity: \CiviPrijs::class, mappedBy: 'product')]
+	#[ORM\OneToMany(targetEntity: CiviPrijs::class, mappedBy: 'product')]
 	#[ORM\OrderBy(['van' => 'ASC'])]
 	public $prijzen;
 
@@ -131,10 +131,10 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	/**
 	 * Haalt de prijs van dit product op in een bepaald moment.
 	 *
-	 * @param \DateTimeInterface $moment
+	 * @param DateTimeInterface $moment
 	 * @return false|mixed
 	 */
-	public function getPrijsOpMoment(\DateTimeInterface $moment)
+	public function getPrijsOpMoment(DateTimeInterface $moment)
 	{
 		$vanExpr = Criteria::expr()->lt('van', $moment);
 		$totExpr = Criteria::expr()->orX(

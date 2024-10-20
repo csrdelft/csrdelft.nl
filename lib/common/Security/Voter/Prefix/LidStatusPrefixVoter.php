@@ -37,12 +37,12 @@ class LidStatusPrefixVoter extends PrefixVoter
 		if ($gevraagd == $profiel->status) {
 			return true;
 		} elseif (
-			$gevraagd == LidStatus::Lid &&
+			$gevraagd === LidStatus::Lid &&
 			LidStatus::isLidLike($profiel->status)
 		) {
 			return true;
 		} elseif (
-			$gevraagd == LidStatus::Oudlid &&
+			$gevraagd === LidStatus::Oudlid &&
 			LidStatus::isOudlidLike($profiel->status)
 		) {
 			return true;

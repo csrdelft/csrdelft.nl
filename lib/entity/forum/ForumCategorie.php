@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\repository\forum\ForumCategorieRepository;
+use ForumDeel;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,11 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een forum categorie bevat deelfora.
  */
-#[
-	ORM\Entity(
-		repositoryClass: \CsrDelft\repository\forum\ForumCategorieRepository::class
-	)
-]
+#[ORM\Entity(repositoryClass: ForumCategorieRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 #[ORM\Table('forum_categorien')]
 #[ORM\Index(name: 'volgorde', columns: ['volgorde'])]
@@ -54,7 +52,7 @@ class ForumCategorie implements DisplayEntity
 	 * Forumdelen
 	 * @var ForumDeel[]
 	 */
-	#[ORM\OneToMany(targetEntity: \ForumDeel::class, mappedBy: 'categorie')]
+	#[ORM\OneToMany(targetEntity: ForumDeel::class, mappedBy: 'categorie')]
 	#[ORM\OrderBy(['volgorde' => 'ASC'])]
 	public $forum_delen;
 

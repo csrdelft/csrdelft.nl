@@ -11,7 +11,7 @@ use League\Bundle\OAuth2ServerBundle\ValueObject\Scope;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use League\Bundle\OAuth2ServerBundle\Event\AuthorizationRequestResolveEvent;
 use League\Bundle\OAuth2ServerBundle\Event\ScopeResolveEvent;
 use League\Bundle\OAuth2ServerBundle\OAuth2Events;

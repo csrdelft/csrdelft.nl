@@ -2,12 +2,13 @@
 
 namespace CsrDelft\view\groepen\leden;
 
+use Stringable;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use Twig\Environment;
 
-class GroepEmailsView implements ToResponse, \Stringable
+class GroepEmailsView implements ToResponse, Stringable
 {
 	use ToHtmlResponse;
 

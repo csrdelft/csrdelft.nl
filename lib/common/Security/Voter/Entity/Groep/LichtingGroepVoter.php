@@ -16,7 +16,7 @@ class LichtingGroepVoter extends AbstractGroepVoter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
-		return $attribute == AbstractGroepVoter::BEKIJKEN;
+	): bool {
+		return $attribute === AbstractGroepVoter::BEKIJKEN;
 	}
 }

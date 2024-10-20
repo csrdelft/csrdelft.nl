@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\FlashType;
@@ -24,7 +25,6 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 use Twig\Environment;
 
@@ -76,10 +76,10 @@ class BeheerTakenController extends AbstractController
 	public function beheer(CorveeTaak $taak = null, Maaltijd $maaltijd = null)
 	{
 		$modal = null;
-		if ($taak) {
+		if ($taak instanceof CorveeTaak) {
 			$modal = $this->bewerk($taak);
 		}
-		if ($maaltijd) {
+		if ($maaltijd instanceof Maaltijd) {
 			$taken = $this->corveeTakenRepository->getTakenVoorMaaltijd(
 				$maaltijd->maaltijd_id,
 				true
@@ -109,7 +109,7 @@ class BeheerTakenController extends AbstractController
 			'taken' => $model,
 			'maaltijd' => $maaltijd,
 			'prullenbak' => false,
-			'show' => $maaltijd !== null,
+			'show' => $maaltijd instanceof Maaltijd,
 			'repetities' => $this->corveeRepetitiesRepository->getAlleRepetities(),
 			'modal' => $modal,
 		]);
@@ -172,8 +172,8 @@ class BeheerTakenController extends AbstractController
 		$verstuurd_errors = $this->corveeHerinneringService->stuurHerinneringen();
 		$verstuurd = $verstuurd_errors[0];
 		$errors = $verstuurd_errors[1];
-		$aantal = sizeof($verstuurd);
-		$count = sizeof($errors);
+		$aantal = count($verstuurd);
+		$count = count($errors);
 		if ($count > 0) {
 			$this->addFlash(
 				FlashType::ERROR,
@@ -215,11 +215,7 @@ class BeheerTakenController extends AbstractController
 	]
 	public function opslaan(CorveeTaak $taak = null)
 	{
-		if ($taak) {
-			$view = $this->bewerk($taak);
-		} else {
-			$view = $this->nieuw();
-		}
+		$view = $taak instanceof CorveeTaak ? $this->bewerk($taak) : $this->nieuw();
 		if ($view->validate()) {
 			/** @var CorveeTaak $values */
 			$values = $view->getModel();
@@ -266,7 +262,7 @@ class BeheerTakenController extends AbstractController
 	public function nieuw(Maaltijd $maaltijd = null)
 	{
 		$beginDatum = null;
-		if ($maaltijd) {
+		if ($maaltijd instanceof Maaltijd) {
 			$beginDatum = $maaltijd->datum;
 		}
 		$crv_repetitie_id = filter_input(
@@ -278,7 +274,7 @@ class BeheerTakenController extends AbstractController
 			$repetitie = $this->corveeRepetitiesRepository->getRepetitie(
 				(int) $crv_repetitie_id
 			);
-			if (!$maaltijd) {
+			if (!$maaltijd instanceof Maaltijd) {
 				$beginDatum = $this->corveeRepetitiesRepository->getFirstOccurrence(
 					$repetitie
 				);

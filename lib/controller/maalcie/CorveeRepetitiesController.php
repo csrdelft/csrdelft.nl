@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use Symfony\Component\Routing\Attribute\Route;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\FlashType;
 use CsrDelft\common\Util\FlashUtil;
@@ -18,7 +19,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
@@ -56,10 +56,10 @@ class CorveeRepetitiesController extends AbstractController
 		MaaltijdRepetitie $maaltijdRepetitie = null
 	) {
 		$modal = null;
-		if ($corveeRepetitie) {
+		if ($corveeRepetitie instanceof CorveeRepetitie) {
 			$modal = $this->bewerk($corveeRepetitie);
 			$repetities = $this->corveeRepetitiesRepository->getAlleRepetities();
-		} elseif ($maaltijdRepetitie) {
+		} elseif ($maaltijdRepetitie instanceof MaaltijdRepetitie) {
 			$repetities = $this->corveeRepetitiesRepository->getRepetitiesVoorMaaltijdRepetitie(
 				$maaltijdRepetitie->mlt_repetitie_id
 			);
@@ -142,11 +142,10 @@ class CorveeRepetitiesController extends AbstractController
 	]
 	public function opslaan(CorveeRepetitie $corveeRepetitie = null)
 	{
-		if ($corveeRepetitie) {
-			$view = $this->bewerk($corveeRepetitie);
-		} else {
-			$view = $this->nieuw();
-		}
+		$view =
+			$corveeRepetitie instanceof CorveeRepetitie
+				? $this->bewerk($corveeRepetitie)
+				: $this->nieuw();
 		if ($view->validate()) {
 			$repetitie = $view->getModel();
 

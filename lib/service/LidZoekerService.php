@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service;
 
+use Stringable;
 use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\profiel\ProfielToestemmingProxy;
@@ -14,14 +15,14 @@ use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * LidZoeker
  *
  * de array's die in deze class staan bepalen wat er in het formulier te zien is.
  */
-class LidZoekerService implements \Stringable
+class LidZoekerService implements Stringable
 {
 	//velden die door gewone leden geselecteerd mogen worden.
 	public $veldNamen = [
@@ -177,7 +178,7 @@ class LidZoekerService implements \Stringable
 					$value = strtoupper((string) $value);
 					//als op alle lid-statussen moet worden gezocht verwijderen we
 					//eventueel aanwezige filters en zoeken we in alles.
-					if ($value == '*' || $value == 'ALL') {
+					if ($value === '*' || $value === 'ALL') {
 						if (isset($this->filters['status'])) {
 							unset($this->filters['status']);
 						}
@@ -187,11 +188,11 @@ class LidZoekerService implements \Stringable
 
 					$add = [];
 					foreach ($filters as $filter) {
-						if ($filter == 'LEDEN') {
+						if ($filter === 'LEDEN') {
 							$add = array_merge($add, LidStatus::getLidLike());
 							continue;
 						}
-						if ($filter == 'OUDLEDEN') {
+						if ($filter === 'OUDLEDEN') {
 							$add = array_merge($add, LidStatus::getOudlidLike());
 							continue;
 						}
@@ -221,22 +222,14 @@ class LidZoekerService implements \Stringable
 			if (in_array($veld, $this->veldenNotSelectable)) {
 				continue;
 			}
-			if (isset($this->veldNamen[$veld])) {
-				$return[$veld] = $this->veldNamen[$veld];
-			} else {
-				$return[$veld] = $veld;
-			}
+			$return[$veld] = $this->veldNamen[$veld] ?? $veld;
 		}
 		return $return;
 	}
 
 	public function addFilter($field, $value)
 	{
-		if (is_array($value)) {
-			$this->filters[$field] = $value;
-		} else {
-			$this->filters[$field] = [$value];
-		}
+		$this->filters[$field] = is_array($value) ? $value : [$value];
 	}
 
 	public function getSortableVelden()
@@ -260,7 +253,7 @@ class LidZoekerService implements \Stringable
 		$this->result = [];
 		$qb = $this->profielRepository->createQueryBuilder('p');
 
-		if (trim((string) $this->query) == '') {
+		if (trim((string) $this->query) === '') {
 			return;
 		}
 
@@ -333,13 +326,13 @@ class LidZoekerService implements \Stringable
 				$queryBuilder->where('p.lidjaar LIKE :lidjaar');
 				$queryBuilder->setParameter('lidjaar', '__' . $lichting);
 			}
-		} elseif (preg_match('/^[a-z0-9][0-9]{3}$/', (string) $zoekterm)) {
+		} elseif (preg_match('/^[a-z0-9]\d{3}$/', (string) $zoekterm)) {
 			//uid's is ook niet zo moeilijk.
 			$queryBuilder->where('p.uid = :uid');
 			$queryBuilder->setParameter('uid', $zoekterm);
 		} elseif (
 			preg_match(
-				'/^([a-z0-9][0-9]{3} ?,? ?)*([a-z0-9][0-9]{3})$/',
+				'/^([a-z0-9]\d{3} ?,? ?)*([a-z0-9]\d{3})$/',
 				(string) $zoekterm
 			)
 		) {
@@ -362,7 +355,7 @@ class LidZoekerService implements \Stringable
 
 			$veld = strtolower($parts[0]);
 
-			if ($parts[1][0] == '=') {
+			if ($parts[1][0] === '=') {
 				$queryBuilder->where(
 					$queryBuilder->expr()->eq('p.' . $veld, ':zoekterm')
 				);
