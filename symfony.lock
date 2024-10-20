@@ -397,15 +397,15 @@
         "version": "2.4.3"
     },
     "sentry/sentry-symfony": {
-        "version": "3.0",
+        "version": "4.14",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "3.0",
-            "ref": "9746f0823302d7980e5273ef7a69ef3f5ac80914"
+            "branch": "main",
+            "version": "4.6",
+            "ref": "153de5f041f7e8a9c19f3674b800b76be0e6fd90"
         },
         "files": [
-            "./config/packages/sentry.yaml"
+            "config/packages/sentry.yaml"
         ]
     },
     "setasign/fpdf": {
