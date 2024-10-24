@@ -29,7 +29,7 @@ class Configurator
 		$this->configurator->configure($environment);
 	}
 
-	public function escape_ical(string $twig, string $string): string
+	public function escape_ical(string $string, string $charset): string
 	{
 		return TextUtil::escape_ical($string);
 	}

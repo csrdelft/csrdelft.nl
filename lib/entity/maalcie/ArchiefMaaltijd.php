@@ -107,7 +107,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return (float) $this->prijs / 100.0;
 	}
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return $this->titel;
 	}
@@ -126,32 +126,34 @@ class ArchiefMaaltijd implements Agendeerbaar
 		);
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
-
-	public function getAantalAanmeldingen()
+    /**
+     * @return int<0, max>
+     */
+    public function getAantalAanmeldingen()
 	{
 		return substr_count($this->aanmeldingen, ',');
 	}
 
-	public function getLocatie()
+	public function getLocatie(): string
 	{
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/maaltijdenbeheer/archief';
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		return false;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		return true;
 	}
@@ -163,7 +165,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return $json;
 	}
 
-	public function getAanmeldingenArray()
+	public function getAanmeldingenArray(): array
 	{
 		$result = [];
 		$aanmeldingen = explode(',', $this->aanmeldingen);
@@ -175,7 +177,7 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return $result;
 	}
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->maaltijd_id . '@archiefmaaltijd.csrdelft.nl';
 	}
