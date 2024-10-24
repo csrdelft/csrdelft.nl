@@ -57,12 +57,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		$this->kinderen = new ArrayCollection();
 	}
 
-	/**
-	 * @var string
-	 */
 	#[ORM\Id]
 	#[ORM\Column(type: 'uid')]
-	public $uid;
+	public string $uid;
 	/**
 	 * @var ProfielLogGroup[]
 	 */
@@ -448,7 +445,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		'huisartsTelefoon' => [LidStatus::Noviet],
 	];
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->uid . '@csrdelft.nl';
 	}
@@ -508,7 +505,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		]);
 	}
 
-	public function getAdres()
+	public function getAdres(): string
 	{
 		return $this->adres .
 			', ' .
@@ -652,17 +649,17 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->getBeginMoment()->add(new \DateInterval('PT1H'));
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		return true;
 	}
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return $this->getNaam('civitas');
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		$leeftijd =
 			$this->getBeginMoment()->format('Y') - $this->gebdatum->format('Y');
@@ -681,17 +678,17 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->getTitel() . ' wordt ' . $leeftijd . ' jaar';
 	}
 
-	public function getLocatie()
+	public function getLocatie(): string
 	{
 		return $this->getAdres();
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/profiel/' . $this->uid;
 	}
 
-	public function getLink($vorm = 'civitas')
+	public function getLink($vorm = 'civitas'): string
 	{
 		if (
 			!LoginService::mag(P_LEDEN_READ) ||
@@ -760,7 +757,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $l . $naam . '</a>';
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		return true;
 	}
@@ -1115,7 +1112,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		);
 	}
 
-	public function getId()
+	public function getId(): string
 	{
 		return $this->uid;
 	}

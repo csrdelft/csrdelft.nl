@@ -42,9 +42,13 @@ END:VTIMEZONE
 	UID:{{ item.uUID }}
 	ORGANIZER:C.S.R. Delft
 	CREATED:{{ published }}
+	{% if item.beschrijving %}
 	DESCRIPTION:{{ item.beschrijving }}
+	{% endif %}
 	LAST-MODIFIED:{{ published }}
+	{% if item.locatie %}
 	LOCATION:{{ item.locatie }}
+	{% endif %}
 	SEQUENCE:0
 	STATUS:CONFIRMED
 	SUMMARY:{{ item.titel }}

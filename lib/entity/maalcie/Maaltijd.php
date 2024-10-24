@@ -265,7 +265,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	// Agendeerbaar ############################################################
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return $this->titel;
 	}
@@ -280,7 +280,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		return $this->getBeginMoment()->add(new \DateInterval('PT1H30M'));
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		return 'Maaltijd met ' .
 			$this->getAantalAanmeldingen() .
@@ -289,22 +289,22 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 			')';
 	}
 
-	public function getLocatie()
+	public function getLocatie(): string
 	{
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/maaltijden';
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		return false;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		// Toon als transparant (vrij) als lid dat wil of lid niet ingeketzt is
 		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
@@ -411,7 +411,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 */
 	#[Serializer\Groups('datatable')]
 	#[Serializer\SerializedName('UUID')]
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->maaltijd_id . '@maaltijd.csrdelft.nl';
 	}
