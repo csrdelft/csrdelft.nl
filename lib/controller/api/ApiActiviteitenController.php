@@ -11,7 +11,7 @@ use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\GroepLidRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ApiActiviteitenController extends AbstractController
 {

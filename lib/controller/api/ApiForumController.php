@@ -12,7 +12,7 @@ use CsrDelft\service\forum\ForumDelenService;
 use CsrDelft\view\bbcode\CsrBB;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ApiForumController extends AbstractController
 {

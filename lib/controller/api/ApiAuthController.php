@@ -4,7 +4,7 @@ namespace CsrDelft\controller\api;
 
 use CsrDelft\controller\AbstractController;
 use CsrDelft\service\security\ApiAuthenticator;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ApiAuthController extends AbstractController
 {

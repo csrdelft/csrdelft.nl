@@ -9,7 +9,7 @@ use CsrDelft\model\entity\Afbeelding;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use const P_LEDEN_MOD;
 
 class PasfotoController extends AbstractController
