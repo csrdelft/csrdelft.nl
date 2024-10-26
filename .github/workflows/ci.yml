@@ -52,9 +52,9 @@ jobs:
       - name: 💤 Shutdown Ubuntu MySQL (SUDO)
         run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
 
-      - uses: getong/mariadb-action@v1.1
+      - uses: getong/mariadb-action@v1.11
         with:
-          mariadb version: '10.3'
+          mariadb version: '10.11'
           mysql root password: ''
 
       - uses: actions/checkout@v3
