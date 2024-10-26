@@ -56,7 +56,7 @@ class RemoteLoginAuthenticator extends AbstractLoginFormAuthenticator
 
 		$user = $remoteLogin->account;
 
-		$badge = new UserBadge($user->getUsername(), fn() => $user);
+		$badge = new UserBadge($user->getUserIdentifier(), fn() => $user);
 
 		return new SelfValidatingPassport($badge);
 	}

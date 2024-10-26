@@ -2,6 +2,8 @@
 
 namespace CsrDelft\common\Security;
 
+use DateTime;
+use DateTimeImmutable;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
@@ -42,7 +44,7 @@ class PersistentTokenProvider implements TokenProviderInterface
 	public function updateToken(
 		string $series,
 		string $tokenValue,
-		\DateTime $lastUsed
+		DateTime $lastUsed
 	) {
 		$token = $this->loadTokenBySeries($series);
 		$token->token = $tokenValue;
@@ -51,16 +53,16 @@ class PersistentTokenProvider implements TokenProviderInterface
 		$this->entityManager->flush();
 	}
 
-	public function createNewToken(PersistentTokenInterface $token)
+	public function createNewToken(PersistentTokenInterface $token): void
 	{
 		$persistentToken = new RememberLogin();
 		$persistentToken->token = $token->getTokenValue();
 		$persistentToken->series = $token->getSeries();
-		$persistentToken->last_used = $token->getLastUsed();
+		$persistentToken->last_used = DateTimeImmutable::createFromMutable($token->getLastUsed());
 		$persistentToken->remember_since = date_create_immutable();
-		$persistentToken->uid = $token->getUsername();
+		$persistentToken->uid = $token->getUserIdentifier();
 		$persistentToken->profiel = $this->profielRepository->find(
-			$token->getUsername()
+			$token->getUserIdentifier()
 		);
 
 		if (isset($_SERVER['HTTP_USER_AGENT'])) {

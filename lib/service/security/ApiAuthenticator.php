@@ -226,9 +226,9 @@ class ApiAuthenticator extends AbstractAuthenticator
 			throw new UnauthorizedHttpException('Unauthorized');
 		}
 
-		$token = $this->createJwtToken($remember->getUsername());
+		$token = $this->createJwtToken($remember->getUserIdentifier());
 
-		$user = $this->userProvider->loadUserByUsername($remember->getUserName());
+		$user = $this->userProvider->loadUserByIdentifier($remember->getUserIdentifier());
 
 		return new SelfValidatingPassport($user, [new JwtTokenBadge($token, null)]);
 	}

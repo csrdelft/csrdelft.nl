@@ -95,7 +95,7 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 			);
 			$this->mailService->send($mail);
 
-			$badge = new UserBadge($user->getUsername(), fn() => $user);
+			$badge = new UserBadge($user->getUserIdentifier(), fn() => $user);
 
 			return new SelfValidatingPassport($badge);
 		}
