@@ -172,7 +172,6 @@ class LoginService
 			$this->tokenStorage->setToken(
 				new UsernamePasswordToken(
 					$token->getUser(),
-					[],
 					$token->getFirewallName(),
 					$token->getRoleNames()
 				)
