@@ -8,6 +8,6 @@
 	{% endif %}
 
 	{% for lid in groep.leden %}
-		{{ lid.profiel.link('pasfoto') | raw }}
+		{{ lid.profiel.link('pasfoto.vierkant') | raw }}
 	{% endfor %}
 {% endblock %}

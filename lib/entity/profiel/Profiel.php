@@ -401,9 +401,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 */
 	#[
 		ORM\OneToOne(
-			targetEntity: \CsrDelft\entity\security\Account::class,
-			mappedBy: 'profiel'
-		)
+		targetEntity: \CsrDelft\entity\security\Account::class,
+		mappedBy: 'profiel'
+	)
 	]
 	public $account;
 
@@ -412,9 +412,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 */
 	#[
 		ORM\OneToMany(
-			targetEntity: \CsrDelft\entity\LidToestemming::class,
-			mappedBy: 'profiel'
-		)
+		targetEntity: \CsrDelft\entity\LidToestemming::class,
+		mappedBy: 'profiel'
+	)
 	]
 	public $toestemmingen;
 
@@ -706,16 +706,21 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			if ($vorm === 'pasfoto' && LoginService::mag(P_LEDEN_READ)) {
 				return $this->getPasfotoTag();
 			}
+			if ($vorm === 'pasfoto.vierkant' && LoginService::mag(P_LEDEN_READ)) {
+				return $this->getPasfotoTag('', 'vierkant');
+			}
 			return $this->getNaam();
 		}
 		$naam = $this->getNaam($vorm);
 		if ($vorm === 'pasfoto') {
 			$naam = $this->getPasfotoTag();
+		} elseif ($vorm === 'pasfoto.vierkant') {
+			$naam = $this->getPasfotoTag('', 'vierkant');
 		} elseif ($this->lidjaar === 2013) {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
 		if (
-			$vorm !== 'pasfoto' &&
+			$vorm !== 'pasfoto' && $vorm !== 'pasfoto.vierkant' &&
 			InstellingUtil::lid_instelling('layout', 'visitekaartjes') == 'ja'
 		) {
 			$title = '';
@@ -735,7 +740,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			$this->getNaam($vorm) .
 			'">';
 		if (
-			$vorm !== 'pasfoto' &&
+			$vorm !== 'pasfoto' && $vorm !== 'pasfoto.vierkant' &&
 			InstellingUtil::lid_instelling('layout', 'visitekaartjes') == 'ja'
 		) {
 			return '<span data-visite="' .
@@ -967,12 +972,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return PathUtil::safe_combine_path(PASFOTO_PATH, $path);
 	}
 
-	public function getPasfotoTag($cssClass = '')
+	public function getPasfotoTag($cssClass = '', $vorm = 'user')
 	{
 		return '<img class="pasfoto ' .
 			htmlspecialchars((string) $cssClass) .
 			'" src="' .
-			$this->getPasfotoPath() .
+			$this->getPasfotoPath($vorm) .
 			'" alt="Pasfoto van ' .
 			$this->getNaam('volledig') .
 			'" />';
