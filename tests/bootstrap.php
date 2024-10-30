@@ -4,6 +4,7 @@ use Symfony\Component\Dotenv\Dotenv;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
+require_once dirname(__DIR__) . '/lib/defines.include.php';
 // configuratie.include.php word niet uitgevoerd en deze constant moet bestaan
 define('MODE', 'TEST');
 
