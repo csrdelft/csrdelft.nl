@@ -81,7 +81,7 @@ class FotoAlbumRepository extends AbstractRepository
 				);
 			}
 		}
-		$album->owner = $this->security->getUser()->getUsername();
+		$album->owner = $this->security->getUser()->getUserIdentifier();
 		$album->owner_profiel = $this->security->getUser()->profiel;
 
 		$this->getEntityManager()->persist($album);

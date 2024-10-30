@@ -88,9 +88,9 @@ class ChangeLogRepository extends AbstractRepository
 		if ($token == null) {
 			$change->uid = LoginService::UID_EXTERN;
 		} elseif ($token instanceof SwitchUserToken) {
-			$change->uid = $token->getOriginalToken()->getUsername();
+			$change->uid = $token->getOriginalToken()->getUserIdentifier();
 		} else {
-			$change->uid = $token->getUsername();
+			$change->uid = $token->getUserIdentifier();
 		}
 		return $change;
 	}

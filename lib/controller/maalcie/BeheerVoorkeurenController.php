@@ -11,7 +11,7 @@ use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>

@@ -40,7 +40,7 @@ class CourantBerichtVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		return match ($attribute) {
 			self::BEHEREN => $this->accessDecisionManager->decide($token, [
 				'ROLE_MAIL_COMPOSE',

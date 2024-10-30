@@ -13,7 +13,7 @@ use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\maalcie\MaaltijdAbonnementenService;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Throwable;
 
 /**
