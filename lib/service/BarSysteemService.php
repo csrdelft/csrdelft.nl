@@ -294,7 +294,7 @@ SQL
 		$q = $this->db->prepare(
 			'SELECT saldo FROM civi_saldo WHERE uid = :socCieId'
 		);
-		$q->bindValue(':socCieId', $socCieId);
+		$q->bindValue(':socCieId', $socCieId, PDO::PARAM_INT);
 		$q->execute();
 		return $q->fetchColumn();
 	}
