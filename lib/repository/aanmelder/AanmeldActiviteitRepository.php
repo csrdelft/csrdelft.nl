@@ -20,10 +20,7 @@ use Exception;
  */
 class AanmeldActiviteitRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, AanmeldActiviteit::class);
-	}
+
 
 	/**
 	 * @param Reeks $reeks

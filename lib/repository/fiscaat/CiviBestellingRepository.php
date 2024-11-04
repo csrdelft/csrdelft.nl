@@ -25,20 +25,7 @@ use Exception;
  */
 class CiviBestellingRepository extends AbstractRepository
 {
-	/**
-	 * @param ManagerRegistry $registry
-	 * @param CiviBestellingInhoudRepository $civiBestellingInhoudRepository
-	 * @param CiviProductRepository $civiProductRepository
-	 * @param CiviSaldoRepository $civiSaldoRepository
-	 */
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly CiviBestellingInhoudRepository $civiBestellingInhoudRepository,
-		private readonly CiviProductRepository $civiProductRepository,
-		private readonly CiviSaldoRepository $civiSaldoRepository
-	) {
-		parent::__construct($registry, CiviBestelling::class);
-	}
+
 
 	/**
 	 * @param int $id
@@ -143,29 +130,7 @@ class CiviBestellingRepository extends AbstractRepository
 		);
 	}
 
-	/**
-	 * @param DateTime $date
-	 * @param bool $profielOnly
-	 *
-	 * @return integer
-	 * @throws NoResultException
-	 * @throws NonUniqueResultException
-	 */
-	public function getSomBestellingenVanaf(DateTime $date, $profielOnly = false)
-	{
-		$qb = $this->createQueryBuilder('cb')
-			->select('SUM(cb.totaal)')
-			->where('cb.deleted = false and cb.moment > :moment')
-			->setParameter('moment', $date);
-
-		if ($profielOnly) {
-			$qb->andWhere('cb.uid NOT LIKE \'c%\'');
-		}
-
-		return (int) $qb->getQuery()->getSingleScalarResult();
-	}
-
-	public function vanBedragInCenten($bedrag, $uid)
+	public function vanBedragInCenten($bedrag, string $uid)
 	{
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'anders';

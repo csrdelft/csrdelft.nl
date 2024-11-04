@@ -35,6 +35,8 @@ class Map
 
 	/**
 	 * Bestaat er een map met het pad.
+	 *
+	 * @return bool
 	 */
 	public function exists()
 	{

@@ -22,23 +22,7 @@ use Symfony\Component\Security\Core\Security;
  */
 class ForumDradenGelezenRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly Security $security
-	) {
-		parent::__construct($registry, ForumDraadGelezen::class);
-	}
 
-	protected function maakForumDraadGelezen(ForumDraad $draad)
-	{
-		$gelezen = new ForumDraadGelezen();
-		$gelezen->draad = $draad;
-		$gelezen->draad_id = $draad->draad_id; // Set pk
-		$gelezen->uid = $this->security->getUser()->getUsername();
-		$gelezen->profiel = $this->security->getUser()->profiel;
-		$gelezen->datum_tijd = date_create_immutable();
-		return $gelezen;
-	}
 
 	/**
 	 * Ga na welke posts op de huidige pagina het laatst is geplaatst of gewijzigd.

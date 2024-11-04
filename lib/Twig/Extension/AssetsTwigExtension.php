@@ -20,6 +20,11 @@ class AssetsTwigExtension extends AbstractExtension
 	{
 	}
 
+	/**
+	 * @return TwigFunction[]
+	 *
+	 * @psalm-return list{TwigFunction, TwigFunction, TwigFunction, TwigFunction}
+	 */
 	public function getFunctions(): array
 	{
 		return [
@@ -38,9 +43,11 @@ class AssetsTwigExtension extends AbstractExtension
 	 * Geeft een array met gevraagde modules, afhankelijk van lidinstellingen
 	 * De modules zijn terug te vinden in /assets/sass
 	 *
-	 * @return array
+	 * @return string[]
+	 *
+	 * @psalm-return list{0?: string, 1?: 'bredeletters'|'effect-civisaldo', 2?: 'effect-civisaldo'}
 	 */
-	public function getUserModules()
+	public function getUserModules(): array
 	{
 		if (!$this->security->isGranted('ROLE_LOGGED_IN')) {
 			return [];
@@ -88,7 +95,7 @@ class AssetsTwigExtension extends AbstractExtension
 		return $assetString;
 	}
 
-	public function js_asset(string $module)
+	public function js_asset(string $module): string
 	{
 		$assetString = '';
 
@@ -99,7 +106,12 @@ class AssetsTwigExtension extends AbstractExtension
 		return $assetString;
 	}
 
-	private function module_asset(string $module, string $extension)
+	/**
+	 * @return (mixed|string)[][]
+	 *
+	 * @psalm-return list{0?: list{string, mixed},...}
+	 */
+	private function module_asset(string $module, string $extension): array
 	{
 		$manifest = $this->readManifest();
 
@@ -126,7 +138,7 @@ class AssetsTwigExtension extends AbstractExtension
 		return $relevantAssets;
 	}
 
-	public function asset_url($name)
+	public function asset_url($name): string
 	{
 		$manifest = $this->readManifest();
 

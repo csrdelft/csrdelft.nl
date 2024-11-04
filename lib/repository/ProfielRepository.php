@@ -30,14 +30,12 @@ use Symfony\Component\Security\Core\Security;
  */
 class ProfielRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly Security $security
-	) {
-		parent::__construct($registry, Profiel::class);
-	}
 
-	public static function changelog(array $diff, $uid)
+
+	/**
+	 * @param null|string $uid
+	 */
+	public static function changelog(array $diff, string|null $uid)
 	{
 		if (empty($diff)) {
 			return null;
@@ -72,10 +70,14 @@ class ProfielRepository extends AbstractRepository
 	/**
 	 * @param $uid
 	 * @param $vorm
+	 *
 	 * @return string|null
+	 *
 	 * @deprecated Gebruik Profiel::getNaam($vorm)
+	 *
+	 * @psalm-param 'civitas'|'user'|'volledig' $vorm
 	 */
-	public static function getNaam($uid, $vorm = 'civitas')
+	public static function getNaam(string $uid, string $vorm = 'civitas')
 	{
 		$profiel = static::get($uid);
 		if (!$profiel) {
@@ -87,10 +89,14 @@ class ProfielRepository extends AbstractRepository
 	/**
 	 * @param $uid
 	 * @param $vorm
+	 *
 	 * @return string|null
+	 *
 	 * @deprecated Gebruik Profiel::getLink($vorm)
+	 *
+	 * @psalm-param 'civitas'|'volledig' $vorm
 	 */
-	public static function getLink($uid, $vorm = 'civitas')
+	public static function getLink(string $uid, string $vorm = 'civitas')
 	{
 		$profiel = static::get($uid);
 		if (!$profiel) {
@@ -100,8 +106,10 @@ class ProfielRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param $uid
+	 * @param null|scalar $uid
+	 *
 	 * @return bool
+	 *
 	 * @deprecated Doe een null check op ProfielRepository::find($uid)
 	 */
 	public static function existsUid($uid)
@@ -118,7 +126,7 @@ class ProfielRepository extends AbstractRepository
 		return count($this->findBy(['duckname' => $duck])) !== 0;
 	}
 
-	public function nieuw($lidjaar, $lidstatus)
+	public function nieuw(int|string $lidjaar, string $lidstatus)
 	{
 		$user = $this->security->getUser();
 
@@ -284,10 +292,13 @@ class ProfielRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param $toegestaan
+	 * @param string[] $toegestaan
+	 *
 	 * @return Profiel[]
+	 *
+	 * @psalm-param array<string> $toegestaan
 	 */
-	public function findByLidStatus($toegestaan)
+	public function findByLidStatus(array $toegestaan)
 	{
 		return $this->createQueryBuilder('p')
 			->where('p.status in (:toegestaan)')

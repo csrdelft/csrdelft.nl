@@ -55,6 +55,9 @@ class AgendaItem implements Agendeerbaar
 		return $this->begin_moment;
 	}
 
+	/**
+	 * @return DateTimeImmutable
+	 */
 	public function getEindMoment(): DateTimeImmutable
 	{
 		if ($this->eind_moment && $this->eind_moment !== $this->begin_moment) {
@@ -90,15 +93,15 @@ class AgendaItem implements Agendeerbaar
 		return $begin == '00:00' && ($eind == '23:59' || $eind == '00:00');
 	}
 
-	public function magBekijken($ical = false)
+	public function magBekijken($ical = false): bool
 	{
-		$auth = $ical ? AuthenticationMethod::getEnumValues() : null;
+		$ical ? AuthenticationMethod::getEnumValues() : null;
 		return LoginService::mag($this->rechten_bekijken);
 	}
 
-	public function magBeheren($ical = false)
+	public function magBeheren($ical = false): bool
 	{
-		$auth = $ical ? AuthenticationMethod::getEnumValues() : null;
+		$ical ? AuthenticationMethod::getEnumValues() : null;
 		if (LoginService::mag(P_AGENDA_MOD)) {
 			return true;
 		}
@@ -119,6 +122,9 @@ class AgendaItem implements Agendeerbaar
 			'ja' || $this->isHeledag();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getUUID(): string
 	{
 		return strtolower(

@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\groep\BbWerkgroep;
 
 class NodeWerkgroep implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbWerkgroep::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbWerkgroep::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'werkgroep'
+	 */
 	public static function getNodeType()
 	{
 		return 'werkgroep';
@@ -36,6 +44,9 @@ class NodeWerkgroep implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

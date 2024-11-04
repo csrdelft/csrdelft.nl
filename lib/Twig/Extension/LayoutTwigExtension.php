@@ -21,6 +21,11 @@ class LayoutTwigExtension extends AbstractExtension
 	) {
 	}
 
+	/**
+	 * @return TwigFunction[]
+	 *
+	 * @psalm-return list{TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction}
+	 */
 	public function getFunctions(): array
 	{
 		return [
@@ -39,12 +44,17 @@ class LayoutTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function csr_breadcrumbs($breadcrumbs)
+	public function csr_breadcrumbs($breadcrumbs): string
 	{
 		return $this->menuItemRepository->renderBreadcrumbs($breadcrumbs);
 	}
 
-	public function get_breadcrumbs($name)
+	/**
+	 * @return MenuItem[]
+	 *
+	 * @psalm-return array<MenuItem>
+	 */
+	public function get_breadcrumbs($name): array
 	{
 		return $this->menuItemRepository->getBreadcrumbs($name);
 	}
@@ -52,9 +62,8 @@ class LayoutTwigExtension extends AbstractExtension
 	/**
 	 * @param $name
 	 * @param bool $root
-	 * @return MenuItem
 	 */
-	public function get_menu($name, $root = false)
+	public function get_menu($name, $root = false): MenuItem|null
 	{
 		$defaultName = $name;
 		$locale = $this->requestStack->getCurrentRequest()->getLocale();
@@ -72,7 +81,7 @@ class LayoutTwigExtension extends AbstractExtension
 			$this->menuItemRepository->getMenu($defaultName);
 	}
 
-	public function instant_search_form()
+	public function instant_search_form(): string
 	{
 		return (new InstantSearchForm())->__toString();
 	}
@@ -91,7 +100,7 @@ class LayoutTwigExtension extends AbstractExtension
 		$title = null,
 		$class = null,
 		$content = null
-	) {
+	): string {
 		return Icon::getTag($key, $hover, $title, $class);
 	}
 }

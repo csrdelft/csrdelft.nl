@@ -60,40 +60,23 @@ class ForumPlaatje
 		return $this->getAfbeelding()->exists();
 	}
 
-	public function getAfbeelding($resize = false)
+	public function getAfbeelding(bool $resize = false): Afbeelding
 	{
 		return new Afbeelding($this->getPath($resize));
 	}
 
-	public function getPath($resize = false)
+	public function getPath(bool $resize = false): string
 	{
 		return PLAATJES_PATH . ($resize ? 'resized/' : '') . strval($this->id);
 	}
 
-	public function getUrl($resized = false)
+	public function getUrl(bool $resized = false): string
 	{
 		return "/forum/plaatjes/bekijken/$this->access_key" .
 			($resized ? '/resized' : '');
 	}
 
-	public function createResized()
-	{
-		// Resize the smallest side of the image to at most 1024px
-		$command =
-			$_ENV['IMAGEMAGICK'] .
-			' ' .
-			escapeshellarg((string) $this->getPath(false)) .
-			' -resize "750x>" -format jpg -quality 85 -interlace Line  -auto-orient ' .
-			escapeshellarg((string) $this->getPath(true));
-		shell_exec($command);
-		if ($this->hasResized()) {
-			chmod($this->getPath(true), 0644);
-		} else {
-			throw new CsrException('Resized maken mislukt: ' . $this->getPath(true));
-		}
-	}
-
-	public function hasResized()
+	public function hasResized(): bool
 	{
 		$path = $this->getPath(true);
 		return file_exists($path) && is_file($path);

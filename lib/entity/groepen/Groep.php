@@ -156,16 +156,6 @@ class Groep implements DataTableEntry, DisplayEntity
 	}
 
 	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('detailSource')]
-	public function getDetailSource()
-	{
-		return $this->getUrl() . '/leden';
-	}
-
-	/**
 	 * De URL van de groep
 	 * @return string
 	 */
@@ -174,7 +164,10 @@ class Groep implements DataTableEntry, DisplayEntity
 		return '/groepen/groep/' . $this->id;
 	}
 
-	public function aantalLeden()
+	/**
+	 * @psalm-return int<0, max>
+	 */
+	public function aantalLeden(): int
 	{
 		return $this->getLeden()->count();
 	}
@@ -189,25 +182,7 @@ class Groep implements DataTableEntry, DisplayEntity
 		return $this->leden;
 	}
 
-	public function getLedenOpAchternaamGesorteerd()
-	{
-		$leden = $this->getLeden();
-		try {
-			$iterator = $leden->getIterator();
-			$iterator->uasort(
-				fn(GroepLid $a, GroepLid $b) => strcmp(
-					$a->profiel->achternaam,
-					$b->profiel->achternaam
-				) ?:
-				strnatcmp($a->uid, $b->uid)
-			);
-		} catch (Exception) {
-			return $leden;
-		}
-		return new ArrayCollection(iterator_to_array($iterator));
-	}
-
-	public function getFamilieSuggesties()
+	public function getFamilieSuggesties(): array
 	{
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
@@ -283,14 +258,8 @@ class Groep implements DataTableEntry, DisplayEntity
 	}
 
 	/**
-	 * @return string|null
+	 * @return string
 	 */
-	#[Serializer\Groups('vue')]
-	public function getSamenvattingHtml()
-	{
-		return CsrBB::parse($this->samenvatting);
-	}
-
 	public function getUUID()
 	{
 		return $this->id .
@@ -299,6 +268,9 @@ class Groep implements DataTableEntry, DisplayEntity
 			'.csrdelft.nl';
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getId()
 	{
 		return $this->id;

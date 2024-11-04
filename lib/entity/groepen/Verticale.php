@@ -46,6 +46,11 @@ class Verticale extends Groep
 	public $naam;
 
 	// Stiekem hebben we helemaal geen leden.
+	/**
+	 * @return ArrayCollection
+	 *
+	 * @psalm-return ArrayCollection<int<0, max>, mixed>
+	 */
 	public function getLeden()
 	{
 		$leden = [];
@@ -80,6 +85,9 @@ class Verticale extends Groep
 		return new ArrayCollection($leden);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getUrl()
 	{
 		return '/groepen/verticalen/' . $this->letter;

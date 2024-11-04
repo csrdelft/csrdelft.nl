@@ -39,6 +39,9 @@ class RechtenField extends AutocompleteField
 			'Met , en + voor respectievelijk OR en AND. Gebruik | voor OR binnen AND (alsof er haakjes omheen staan)';
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {

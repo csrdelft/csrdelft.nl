@@ -25,7 +25,7 @@ class DataTableInstance
 	) {
 	}
 
-	public function createView()
+	public function createView(): DataTableView
 	{
 		$id = str_replace(' ', '-', strtolower($this->titel));
 
@@ -43,13 +43,17 @@ class DataTableInstance
 	}
 
 	/**
-	 * @param $data
+	 * @param (\CsrDelft\entity\fiscaat\CiviSaldo|\CsrDelft\entity\pin\PinTransactieMatch|\CsrDelft\entity\security\RememberOAuth)[] $data
 	 * @param null $modal
 	 * @param bool $autoUpdate
+	 *
 	 * @return Response
+	 *
 	 * @throws ExceptionInterface
+	 *
+	 * @psalm-param array<\CsrDelft\entity\fiscaat\CiviSaldo|\CsrDelft\entity\pin\PinTransactieMatch|\CsrDelft\entity\security\RememberOAuth> $data
 	 */
-	public function createData($data, $modal = null, $autoUpdate = false)
+	public function createData(array $data, $modal = null, $autoUpdate = false)
 	{
 		$normalizedData = $this->normalizer->normalize($data, 'json', [
 			AbstractNormalizer::GROUPS => ['datatable'],
@@ -65,13 +69,5 @@ class DataTableInstance
 		return new Response($this->serializer->serialize($model, 'json'), 200, [
 			'Content-Type' => 'application/json',
 		]);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getTableId(): string
-	{
-		return $this->tableId;
 	}
 }

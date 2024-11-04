@@ -11,6 +11,9 @@ class LedenMemoryZijbalkView implements View
 	{
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getTitel()
 	{
 		return 'Topscores ' . $this->titel;

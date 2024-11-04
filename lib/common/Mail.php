@@ -39,6 +39,9 @@ class Mail
 		$this->addTo($to);
 	}
 
+	/**
+	 * @return void
+	 */
 	public function addTo(array $to)
 	{
 		foreach ($to as $email => $name) {
@@ -75,6 +78,9 @@ class Mail
 		return !HostUtil::isProduction();
 	}
 
+	/**
+	 * @return void
+	 */
 	public function addBcc(array $bcc)
 	{
 		foreach ($bcc as $email => $name) {
@@ -93,9 +99,10 @@ class Mail
 
 	/**
 	 * @param bool $emailOnly
-	 * @return int|string|null
+	 *
+	 * @return null|string
 	 */
-	public function getFrom($emailOnly = false)
+	public function getFrom($emailOnly = false): string|null
 	{
 		$name = reset($this->from);
 		$email = key($this->from);
@@ -108,6 +115,8 @@ class Mail
 	/**
 	 * @param string $email
 	 * @param string|null $name
+	 *
+	 * @return void
 	 */
 	public function setFrom(string $email, string $name = null)
 	{
@@ -132,17 +141,6 @@ class Mail
 			return $email;
 		}
 		return $name . ' <' . $email . '>';
-	}
-
-	public function setReplyTo(string $email, string $name = null)
-	{
-		if (!UrlUtil::email_like($email)) {
-			throw new CsrGebruikerException(
-				'Emailadres in $reply_to geen valide e-mailadres'
-			);
-		}
-		// Geen speciale tekens in naam vanwege spamfilters
-		$this->replyTo = [$email => filter_var($name, FILTER_SANITIZE_STRING)];
 	}
 
 	public function getBcc(): string

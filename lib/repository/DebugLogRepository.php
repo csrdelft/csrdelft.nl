@@ -16,13 +16,7 @@ use Symfony\Component\Security\Core\Security;
  */
 class DebugLogRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly RequestStack $requestStack,
-		private readonly Security $security
-	) {
-		parent::__construct($registry, DebugLogEntry::class);
-	}
+
 
 	/**
 	 */

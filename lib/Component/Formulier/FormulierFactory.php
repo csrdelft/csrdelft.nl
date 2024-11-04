@@ -7,17 +7,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class FormulierFactory
 {
-	/**
-	 * @param ContainerInterface $registry
-	 */
-	public function __construct(
-		private $registry,
-		private readonly RequestStack $requestStack,
-		private readonly FormulierBuilder $formulierBuilder
-	) {
-	}
 
-	public function create(string $type, $data, $options)
+
+	public function create(string $type, $data, array $options)
 	{
 		/** @var FormulierTypeInterface $typeInstance */
 		$typeInstance = $this->registry->get($type);

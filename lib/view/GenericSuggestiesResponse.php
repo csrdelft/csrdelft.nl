@@ -8,7 +8,10 @@ class GenericSuggestiesResponse extends JsonLijstResponse
 {
 	/**
 	 * @param DisplayEntity $entity
-	 * @return array
+	 *
+	 * @return (mixed|string)[]
+	 *
+	 * @psalm-return array{value: string, label: mixed, id: mixed}
 	 */
 	public function renderElement($entity)
 	{

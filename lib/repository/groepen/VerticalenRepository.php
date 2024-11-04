@@ -14,7 +14,10 @@ class VerticalenRepository extends GroepRepository
 		return Verticale::class;
 	}
 
-	public function get($letter)
+	/**
+	 * @param false|null|string $letter
+	 */
+	public function get(string|false|null $letter)
 	{
 		if ($verticale = $this->findOneBy(['letter' => $letter])) {
 			return $verticale;
@@ -42,11 +45,13 @@ class VerticalenRepository extends GroepRepository
 	}
 
 	/**
-	 * @param $naam
+	 * @param false|string $naam
+	 *
 	 * @return Verticale|null
+	 *
 	 * @throws NonUniqueResultException
 	 */
-	public function searchByNaam($naam)
+	public function searchByNaam(string|false $naam)
 	{
 		return $this->createQueryBuilder('v')
 			->where('v.naam LIKE :naam')

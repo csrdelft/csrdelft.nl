@@ -20,6 +20,8 @@ class AanmeldActiviteitForm implements FormulierTypeInterface
 	 * @param FormulierBuilder $builder
 	 * @param AanmeldActiviteit $data
 	 * @param array $options
+	 *
+	 * @return void
 	 */
 	public function createFormulier(
 		FormulierBuilder $builder,

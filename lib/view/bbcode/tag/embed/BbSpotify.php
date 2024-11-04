@@ -22,6 +22,11 @@ class BbSpotify extends BbTag
 	 */
 	public $uri;
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'spotify'
+	 */
 	public static function getTagName()
 	{
 		return 'spotify';
@@ -40,6 +45,9 @@ class BbSpotify extends BbTag
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$this->uri\" frameborder=\"0\" allowtransparency=\"true\"";
@@ -56,7 +64,10 @@ class BbSpotify extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
 	 * @throws BbException
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{
@@ -71,7 +82,7 @@ class BbSpotify extends BbTag
 		$this->uri = urlencode($url);
 	}
 
-	private function getBeschrijving()
+	private function getBeschrijving(): string
 	{
 		if (strstr($this->uri, 'playlist')) {
 			return 'Afspeellijst';

@@ -110,29 +110,7 @@ class LidZoekerService implements \Stringable
 	 */
 	private $security;
 
-	public function __construct(
-		private readonly EntityManagerInterface $em,
-		private readonly ProfielRepository $profielRepository,
-		Security $security,
-		private readonly VerticalenRepository $verticalenRepository,
-		private readonly LidToestemmingRepository $lidToestemmingRepository
-	) {
-		$this->allowStatus = LidStatus::getEnumValues();
-
-		//wat extra velden voor moderators.
-		if ($security->isGranted('ROLE_LEDEN_MOD')) {
-			$this->allowVelden = array_merge(
-				$this->allowVelden,
-				$this->allowVeldenLEDENMOD
-			);
-		}
-
-		//parse default values.
-		$this->parseQuery($this->rawQuery);
-		$this->security = $security;
-	}
-
-	public function parseQuery($query)
+	public function parseQuery(array $query): void
 	{
 		$this->result = null; //nieuwe parameters, oude resultaat wegmikken.
 
@@ -214,7 +192,7 @@ class LidZoekerService implements \Stringable
 
 	//lijst met velden die bruikbaar zijn in een '<veld>:=?<zoekterm>'-zoekopdracht.
 
-	public function getSelectableVelden()
+	public function getSelectableVelden(): array
 	{
 		$return = [];
 		foreach ($this->allowVelden as $veld) {
@@ -230,7 +208,7 @@ class LidZoekerService implements \Stringable
 		return $return;
 	}
 
-	public function addFilter($field, $value)
+	public function addFilter(string $field, array $value): void
 	{
 		if (is_array($value)) {
 			$this->filters[$field] = $value;
@@ -244,7 +222,10 @@ class LidZoekerService implements \Stringable
 		return $this->sortable;
 	}
 
-	public function count()
+	/**
+	 * @psalm-return int<0, max>
+	 */
+	public function count(): int
 	{
 		if ($this->result === null) {
 			$this->search();
@@ -254,6 +235,8 @@ class LidZoekerService implements \Stringable
 
 	/**
 	 * Doe de zoektocht.
+	 *
+	 * @return void
 	 */
 	public function search()
 	{
@@ -413,7 +396,7 @@ class LidZoekerService implements \Stringable
 		return $queryBuilder;
 	}
 
-	private function getDBVeldenAllowed()
+	private function getDBVeldenAllowed(): array
 	{
 		//hier staat eigenlijk $a - $b, maar die heeft php niet.
 		return array_intersect(
@@ -422,7 +405,7 @@ class LidZoekerService implements \Stringable
 		);
 	}
 
-	public function getFilterSQL(QueryBuilder $queryBuilder)
+	public function getFilterSQL(QueryBuilder $queryBuilder): QueryBuilder
 	{
 		$andExpr = $queryBuilder->expr()->andX();
 
@@ -479,7 +462,7 @@ class LidZoekerService implements \Stringable
 		return true;
 	}
 
-	public function searched()
+	public function searched(): bool
 	{
 		return $this->result !== null;
 	}

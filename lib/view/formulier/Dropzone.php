@@ -40,7 +40,7 @@ class Dropzone extends Formulier
 		$this->addFields($fields);
 	}
 
-	public function getPostedUploader()
+	public function getPostedUploader(): FileField|null
 	{
 		if ($this->dropzone->isPosted()) {
 			return $this->dropzone;
@@ -50,6 +50,9 @@ class Dropzone extends Formulier
 		return null;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!$this->isPosted()) {
@@ -63,6 +66,9 @@ class Dropzone extends Formulier
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isPosted()
 	{
 		if ($this->dropzone->isPosted()) {
@@ -73,6 +79,9 @@ class Dropzone extends Formulier
 		return false;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function getFormTag()
 	{
 		if ($this->dataTableId) {

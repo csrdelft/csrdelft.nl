@@ -12,7 +12,12 @@ class InstellingType
 	const Integer = 'Integer';
 	const String = 'String';
 
-	public static function getTypeOptions()
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return array{Enumeration: 'Enumeration', Integer: 'Integer', String: 'String'}
+	 */
+	public static function getTypeOptions(): array
 	{
 		return [
 			self::Enumeration => self::Enumeration,

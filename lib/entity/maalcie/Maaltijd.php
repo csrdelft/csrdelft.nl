@@ -172,7 +172,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		$this->aanmeldingen = new ArrayCollection();
 	}
 
-	public function getPrijsFloat()
+	public function getPrijsFloat(): float
 	{
 		return (float) $this->getPrijs() / 100.0;
 	}
@@ -186,7 +186,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		return $this->product->getPrijsInt();
 	}
 
-	public function getIsAangemeld($uid)
+	public function getIsAangemeld(string $uid): bool
 	{
 		return $this->aanmeldingen->matching(Eisen::voorGebruiker($uid))->count() ==
 			1;
@@ -209,10 +209,8 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	/**
 	 * Bereken de marge in verband met niet aangemelde gasten.
-	 *
-	 * @return int
 	 */
-	public function getMarge()
+	public function getMarge(): float|int
 	{
 		$aantal = $this->getAantalAanmeldingen();
 		$marge = floor(
@@ -233,26 +231,15 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	}
 
 	/**
-	 * Bereken het budget voor deze maaltijd.
-	 *
-	 * @return integer
-	 */
-	public function getBudget()
-	{
-		$budget = $this->getAantalAanmeldingen() + $this->getMarge();
-		$budget *=
-			$this->getPrijs() -
-			intval(InstellingUtil::instelling('maaltijden', 'budget_maalcie'));
-		return $budget;
-	}
-
-	/**
 	 * Vind corveetaken van gegeven functie bij deze maaltijd
 	 *
 	 * @param $functieID int ID van de functie
+	 *
 	 * @return CorveeTaak[]
+	 *
+	 * @psalm-param 7 $functieID
 	 */
-	public function getCorveeTaken($functieID)
+	public function getCorveeTaken(int $functieID)
 	{
 		return ContainerFacade::getContainer()
 			->get(CorveeTakenRepository::class)
@@ -275,11 +262,17 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		return $this->getMoment();
 	}
 
+	/**
+	 * @return DateTimeImmutable
+	 */
 	public function getEindMoment(): DateTimeImmutable
 	{
 		return $this->getBeginMoment()->add(new \DateInterval('PT1H30M'));
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getBeschrijving(): string
 	{
 		return 'Maaltijd met ' .
@@ -289,16 +282,29 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 			')';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'C.S.R. Delft'
+	 */
 	public function getLocatie(): string
 	{
 		return 'C.S.R. Delft';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return '/maaltijden'
+	 */
 	public function getUrl(): string
 	{
 		return '/maaltijden';
 	}
 
+	/**
+	 * @return false
+	 */
 	public function isHeledag(): bool
 	{
 		return false;
@@ -363,47 +369,28 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	}
 
 	/**
-	 * @return string
-	 */
-	#[Serializer\SerializedName('repetitie_naam')]
-	#[Serializer\Groups('datatable')]
-	public function getRepetitieNaam()
-	{
-		return $this->repetitie ? $this->repetitie->standaard_titel : null;
-	}
-
-	/**
-	 * @return string
+	 * @return false|string
 	 */
 	#[Serializer\Groups('datatable')]
 	#[Serializer\SerializedName('tijd')]
-	public function getDataTableTijd()
+	public function getDataTableTijd(): string|false
 	{
 		return DateUtil::dateFormatIntl($this->tijd, DateUtil::TIME_FORMAT);
 	}
 
 	/**
-	 * @return string
+	 * @return false|string
 	 */
 	#[Serializer\Groups('datatable')]
 	#[Serializer\SerializedName('datum')]
-	public function getDataTableDatum()
+	public function getDataTableDatum(): string|false
 	{
 		return DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT);
 	}
 
-	public function getAanmeldLimiet()
+	public function getAanmeldLimiet(): int
 	{
 		return $this->aanmeld_limiet;
-	}
-
-	/**
-	 * @return int
-	 */
-	#[Serializer\Groups('datatable-fiscaat')]
-	public function getTotaal()
-	{
-		return $this->getAantalAanmeldingen() + $this->getPrijs();
 	}
 
 	/**
@@ -416,7 +403,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		return $this->maaltijd_id . '@maaltijd.csrdelft.nl';
 	}
 
-	public function getMoment()
+	public function getMoment(): DateTimeImmutable
 	{
 		return $this->datum->setTime(
 			$this->tijd->format('H'),
@@ -425,6 +412,9 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getId()
 	{
 		return $this->maaltijd_id;

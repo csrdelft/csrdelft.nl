@@ -30,6 +30,9 @@ class CronCommand extends Command
 		parent::__construct(null);
 	}
 
+	/**
+	 * @return int
+	 */
 	protected function execute(
 		InputInterface $input,
 		OutputInterface $output

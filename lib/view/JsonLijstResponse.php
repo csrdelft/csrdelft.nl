@@ -12,6 +12,9 @@ use CsrDelft\common\Util\ArrayUtil;
 
 abstract class JsonLijstResponse extends JsonResponse
 {
+	/**
+	 * @return array
+	 */
 	public function getModel()
 	{
 		return array_map(

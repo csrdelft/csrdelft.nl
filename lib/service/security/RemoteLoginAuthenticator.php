@@ -34,6 +34,9 @@ class RemoteLoginAuthenticator extends AbstractLoginFormAuthenticator
 	) {
 	}
 
+	/**
+	 * @return SelfValidatingPassport
+	 */
 	public function authenticate(Request $request): PassportInterface
 	{
 		$uuid = $request->request->get('uuid');

@@ -50,11 +50,17 @@ class FormulierKnop implements FormElement
 		return $this->getType();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType()
 	{
 		return ReflectionUtil::classNameZonderNamespace(static::class);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$this->css_classes[] = $this->action;
@@ -84,6 +90,9 @@ class FormulierKnop implements FormElement
 		return (string) $this->getHtml();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getJavascript()
 	{
 		return <<<JS

@@ -15,7 +15,7 @@ class ErrorController extends AbstractController
 	public function handleException(
 		RequestStack $requestStack,
 		Throwable $exception
-	) {
+	): Response {
 		$request = $requestStack->getMainRequest();
 
 		$statusCode = 500;

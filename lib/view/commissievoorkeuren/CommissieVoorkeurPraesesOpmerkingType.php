@@ -18,7 +18,10 @@ class CommissieVoorkeurPraesesOpmerkingType extends AbstractType
 {
 	/**
 	 * CommissieVoorkeurOpmerkingForm constructor.
+	 *
 	 * @param VoorkeurOpmerking $model
+	 *
+	 * @return void
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{

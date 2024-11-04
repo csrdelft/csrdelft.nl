@@ -59,9 +59,4 @@ class LidToestemming
 	]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid', nullable: false)]
 	public $profiel;
-
-	public function uid()
-	{
-		return $this->profiel->uid;
-	}
 }

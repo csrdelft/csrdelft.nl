@@ -23,12 +23,6 @@ class BbPrive extends BbTag
 	 */
 	private $permissie;
 
-	public function __construct(
-		private readonly Security $security,
-		private readonly AccessService $accessService
-	) {
-	}
-
 	public function isAllowed()
 	{
 		return $this->security->isGranted(
@@ -36,11 +30,19 @@ class BbPrive extends BbTag
 		);
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'prive'
+	 */
 	public static function getTagName()
 	{
 		return 'prive';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		return '<span class="bb-prive bb-tag-prive">' .
@@ -50,6 +52,8 @@ class BbPrive extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{
@@ -57,7 +61,7 @@ class BbPrive extends BbTag
 		$this->permissie = $arguments['prive'] ?? 'ROLE_LOGGED_IN';
 	}
 
-	public function getPermissie()
+	public function getPermissie(): string
 	{
 		return $this->permissie;
 	}

@@ -33,35 +33,7 @@ class ForumMeldingenService
 	 */
 	private $webPush;
 
-	public function __construct(
-		private readonly Environment $twig,
-		private readonly Security $security,
-		private readonly MailService $mailService,
-		private readonly SuService $suService,
-		private readonly ProfielRepository $profielRepository,
-		private readonly LidInstellingenRepository $lidInstellingenRepository,
-		private readonly ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		private readonly ForumDelenMeldingRepository $forumDelenMeldingRepository,
-		private readonly PushAbonnementRepository $pushAbonnementRepository
-	) {
-		// Initialiseren van de WebPush class met de VAPID (oftewel application server) keys uit .env
-		if (
-			$_ENV['VAPID_SUBJECT'] &&
-			$_ENV['VAPID_PUBLIC_KEY'] &&
-			$_ENV['VAPID_PRIVATE_KEY']
-		) {
-			$auth = [
-				'VAPID' => [
-					'subject' => $_ENV['VAPID_SUBJECT'],
-					'publicKey' => $_ENV['VAPID_PUBLIC_KEY'],
-					'privateKey' => $_ENV['VAPID_PRIVATE_KEY'],
-				],
-			];
-			$this->webPush = new WebPush($auth);
-		}
-	}
-
-	public function stuurDraadMeldingen(ForumPost $post)
+	public function stuurDraadMeldingen(ForumPost $post): void
 	{
 		$this->stuurDraadMeldingenNaarVolgers($post);
 		$this->stuurDraadMeldingenNaarGenoemden($post);
@@ -72,7 +44,7 @@ class ForumMeldingenService
 	 *
 	 * @param ForumPost $post
 	 */
-	private function stuurDraadMeldingenNaarVolgers(ForumPost $post)
+	private function stuurDraadMeldingenNaarVolgers(ForumPost $post): void
 	{
 		$auteur = $this->profielRepository->find($post->uid);
 		// Laad meldingsbericht in
@@ -120,7 +92,7 @@ class ForumMeldingenService
 	 *
 	 * @param ForumPost $post
 	 */
-	public function stuurDraadMeldingenNaarGenoemden(ForumPost $post)
+	public function stuurDraadMeldingenNaarGenoemden(ForumPost $post): void
 	{
 		$auteur = $this->profielRepository->find($post->uid);
 		$draad = $post->draad;
@@ -176,9 +148,12 @@ class ForumMeldingenService
 	 * Zoek genoemde leden in gegeven bericht
 	 *
 	 * @param string $bericht
+	 *
 	 * @return string[]
+	 *
+	 * @psalm-return array<int<0, max>, string>
 	 */
-	public function zoekGenoemdeLeden($bericht)
+	public function zoekGenoemdeLeden($bericht): array
 	{
 		$regex = '/\[(?:lid|citaat)=?\s*]?\s*([[:alnum:]]+)\s*[\[\]]/';
 		preg_match_all($regex, $bericht, $leden);
@@ -186,7 +161,10 @@ class ForumMeldingenService
 		return array_unique($leden[1]);
 	}
 
-	public function getDraadMeldingNiveauVoorLid(ForumDraad $draad, $uid = null)
+	/**
+	 * @param null|string $uid
+	 */
+	public function getDraadMeldingNiveauVoorLid(ForumDraad $draad, string|null $uid = null)
 	{
 		if ($uid === null && $this->security->getUser()) {
 			$uid = $this->security->getUser()->getUserIdentifier();
@@ -217,9 +195,12 @@ class ForumMeldingenService
 	 * @param Profiel $auteur
 	 * @param ForumPost $post
 	 * @param ForumDraad $draad
+	 *
 	 * @throws LoaderError
 	 * @throws RuntimeError
 	 * @throws SyntaxError
+	 *
+	 * @return void
 	 */
 	private function stuurPushBericht(
 		Account $ontvanger,
@@ -268,17 +249,20 @@ class ForumMeldingenService
 	 * @param ForumPost $post
 	 * @param ForumDraad $draad
 	 * @param $template
+	 *
 	 * @throws LoaderError
 	 * @throws RuntimeError
 	 * @throws SyntaxError
+	 *
+	 * @psalm-param 'mail/bericht/forumaltijdmelding.mail.twig'|'mail/bericht/forumvermeldingmelding.mail.twig' $template
 	 */
 	private function stuurDraadMelding(
 		Account $ontvanger,
 		Profiel $auteur,
 		ForumPost $post,
 		ForumDraad $draad,
-		$template
-	) {
+		string $template
+	): void {
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
 		$this->suService->alsLid($ontvanger, function () use (
 			$ontvanger,
@@ -322,9 +306,10 @@ class ForumMeldingenService
 
 	/**
 	 * Stuur alle meldingen rondom forumdelen.
+	 *
 	 * @param ForumPost $post
 	 */
-	public function stuurDeelMeldingen(ForumPost $post)
+	public function stuurDeelMeldingen(ForumPost $post): void
 	{
 		$this->stuurDeelMeldingenNaarVolgers($post);
 	}
@@ -344,7 +329,7 @@ class ForumMeldingenService
 		ForumPost $post,
 		ForumDraad $draad,
 		ForumDeel $deel
-	) {
+	): void {
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
 		$this->suService->alsLid($ontvanger, function () use (
 			$draad,
@@ -402,7 +387,7 @@ class ForumMeldingenService
 	 *
 	 * @param ForumPost $post
 	 */
-	private function stuurDeelMeldingenNaarVolgers(ForumPost $post)
+	private function stuurDeelMeldingenNaarVolgers(ForumPost $post): void
 	{
 		$auteur = ProfielRepository::get($post->uid);
 		$draad = $post->draad;

@@ -103,12 +103,12 @@ class ForumPost
 	#[ORM\JoinColumn(name: 'draad_id', referencedColumnName: 'draad_id')]
 	public $draad;
 
-	public function magCiteren()
+	public function magCiteren(): bool
 	{
 		return LoginService::mag(P_LOGGED_IN) && $this->draad->magPosten();
 	}
 
-	public function magBewerken()
+	public function magBewerken(): bool
 	{
 		$draad = $this->draad;
 		if ($draad->magModereren()) {
@@ -121,12 +121,7 @@ class ForumPost
 			LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function getGelezenPercentage()
-	{
-		return ($this->getAantalGelezen() * 100) / $this->draad->getAantalLezers();
-	}
-
-	public function getAantalGelezen()
+	public function getAantalGelezen(): int
 	{
 		if (!isset($this->aantal_gelezen)) {
 			$this->aantal_gelezen = 0;
@@ -142,7 +137,7 @@ class ForumPost
 		return $this->aantal_gelezen;
 	}
 
-	public function getLink($external = false)
+	public function getLink(bool $external = false): string
 	{
 		return ($external ? HostUtil::getCsrRoot() : '') .
 			'/forum/reactie/' .

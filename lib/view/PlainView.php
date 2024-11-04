@@ -21,11 +21,21 @@ class PlainView implements View, ToResponse
 		return (string) $this->body;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ''
+	 */
 	public function getTitel()
 	{
 		return '';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ''
+	 */
 	public function getBreadcrumbs()
 	{
 		return '';

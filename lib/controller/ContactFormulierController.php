@@ -228,7 +228,7 @@ De PubCie.
 		);
 	}
 
-	private function isSpam(...$input)
+	private function isSpam(bool ...$input): bool
 	{
 		$filter = new SimpleSpamFilter();
 		foreach ($input as $item) {
@@ -239,7 +239,7 @@ De PubCie.
 		return false;
 	}
 
-	private function bevatUrl($opmerking)
+	private function bevatUrl(bool $opmerking): bool
 	{
 		return preg_match(
 			'/https?:|\.(com|ru|pw|pro|nl)\/?($|\W)/',
@@ -248,10 +248,11 @@ De PubCie.
 	}
 
 	/**
-	 * @param $response
+	 * @param false $response
+	 *
 	 * @return mixed
 	 */
-	public function checkCaptcha($response)
+	public function checkCaptcha(bool $response)
 	{
 		$secret = $_ENV['GOOGLE_CAPTCHA_SECRET'];
 

@@ -27,9 +27,12 @@ final class ArrayUtil
 	 * Versie van shuffle die niet de originele array veranderd en wel een waarde terug geeft.
 	 *
 	 * @param array $arr
+	 *
 	 * @return array
+	 *
+	 * @psalm-return list<mixed>
 	 */
-	public static function array_shuffle(array $arr)
+	public static function array_shuffle(array $arr): array
 	{
 		shuffle($arr);
 
@@ -61,7 +64,7 @@ final class ArrayUtil
 		return array_filter($array, ArrayUtil::not_empty(...));
 	}
 
-	public static function not_empty($value)
+	public static function not_empty($value): bool
 	{
 		return $value != '';
 	}
@@ -73,9 +76,11 @@ final class ArrayUtil
 	 * @param array|PDOStatement $in
 	 * @param boolean $del delete from $in array
 	 *
-	 * @return array $out
+	 * @return array[] $out
+	 *
+	 * @psalm-return array<non-empty-list<mixed>>
 	 */
-	public static function group_by($prop, $in, $del = true)
+	public static function group_by($prop, $in, $del = true): array
 	{
 		$del &= is_array($in);
 		$out = [];

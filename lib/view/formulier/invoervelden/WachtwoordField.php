@@ -12,6 +12,11 @@ class WachtwoordField extends TextField
 	public $type = 'password';
 
 	// Override TextField getValue as passwords do not need to be sanitised here
+	/**
+	 * @return (array|string)[]|false|null|string
+	 *
+	 * @psalm-return array<int|string, array<int|string, mixed>|string>|false|null|string
+	 */
 	public function getValue()
 	{
 		if ($this->isPosted()) {

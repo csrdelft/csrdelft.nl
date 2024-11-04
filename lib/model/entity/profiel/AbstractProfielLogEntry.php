@@ -13,6 +13,9 @@ abstract class AbstractProfielLogEntry
 {
 	abstract public function toHtml();
 
+	/**
+	 * @return static
+	 */
 	public function censureerVeld($naam)
 	{
 		return $this;

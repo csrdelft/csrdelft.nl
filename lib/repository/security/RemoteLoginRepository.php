@@ -10,12 +10,9 @@ use Symfony\Component\Uid\Uuid;
 
 class RemoteLoginRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, RemoteLogin::class);
-	}
 
-	public function refresh($remoteLogin)
+
+	public function refresh(object $remoteLogin)
 	{
 		$remoteLogin->status = RemoteLoginStatus::PENDING();
 		$remoteLogin->expires = date_create_immutable('+1 minute');
@@ -29,18 +26,5 @@ class RemoteLoginRepository extends AbstractRepository
 		$this->refresh($remoteLogin);
 
 		return $remoteLogin;
-	}
-
-	/**
-	 * Gooi alle oude sessies weg.
-	 */
-	public function opschonen()
-	{
-		$this->createQueryBuilder('rl')
-			->delete()
-			->where('rl.expires > :now')
-			->setParameter('now', date_create_immutable('+1 hour'))
-			->getQuery()
-			->execute();
 	}
 }

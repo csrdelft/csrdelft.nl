@@ -16,28 +16,25 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DocumentRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, Document::class);
-	}
+
 
 	/**
 	 * @param $id
 	 *
 	 * @return Document|false
 	 */
-	public function get($id)
+	public function get(string $id)
 	{
 		return $this->find($id);
 	}
 
 	/**
-	 * @param $zoekterm
+	 * @param null|string $zoekterm
 	 * @param int $limiet
 	 *
 	 * @return Document[]
 	 */
-	public function zoek($zoekterm, $limiet = null)
+	public function zoek(string|null $zoekterm, $limiet = null)
 	{
 		return $this->createQueryBuilder('d')
 			->where('MATCH(d.naam, d.filename) AGAINST (:zoekterm) > 0')

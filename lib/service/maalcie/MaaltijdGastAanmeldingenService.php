@@ -17,12 +17,7 @@ use Doctrine\ORM\OptimisticLockException;
  */
 class MaaltijdGastAanmeldingenService
 {
-	public function __construct(
-		private readonly EntityManagerInterface $entityManager,
-		private readonly MaaltijdenRepository $maaltijdenRepository,
-		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
-	) {
-	}
+
 
 	/**
 	 * @param int $mid

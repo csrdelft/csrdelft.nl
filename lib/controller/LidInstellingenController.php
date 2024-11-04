@@ -87,10 +87,11 @@ class LidInstellingenController extends AbstractController
 
 	/**
 	 * @throws Exception
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[Route(path: '/instellingen/opslaan', methods: ['POST'])]
-	public function opslaan()
+	public function opslaan(): \Symfony\Component\HttpFoundation\RedirectResponse
 	{
 		$this->lidInstellingenRepository->saveAll(); // fetches $_POST values itself
 		$this->addFlash(FlashType::SUCCESS, 'Instellingen opgeslagen');
@@ -115,10 +116,10 @@ class LidInstellingenController extends AbstractController
 	}
 
 	/**
-	 * @Auth(P_LOGGED_IN)
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[Route(path: '/instellingen/reset/mijn', methods: ['POST'])]
-	public function resetUser()
+	public function resetUser(): Response
 	{
 		$account = $this->getUser();
 

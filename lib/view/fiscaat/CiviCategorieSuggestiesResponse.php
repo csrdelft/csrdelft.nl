@@ -13,7 +13,10 @@ class CiviCategorieSuggestiesResponse extends JsonLijstResponse
 {
 	/**
 	 * @param CiviCategorie $entity
-	 * @return array
+	 *
+	 * @return (mixed|string)[]
+	 *
+	 * @psalm-return array{url: '/fiscaat/categorien', value: string, label: string, id: mixed}
 	 */
 	public function renderElement($entity)
 	{

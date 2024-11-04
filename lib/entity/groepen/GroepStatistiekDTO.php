@@ -8,12 +8,5 @@ namespace CsrDelft\entity\groepen;
  */
 class GroepStatistiekDTO
 {
-	public function __construct(
-		public $totaal,
-		public $verticale,
-		public $geslacht,
-		public $lichting,
-		public $tijd
-	) {
-	}
+
 }

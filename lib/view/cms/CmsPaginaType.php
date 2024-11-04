@@ -13,6 +13,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CmsPaginaType extends AbstractType
 {
+	/**
+	 * @return void
+	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
@@ -40,6 +43,9 @@ class CmsPaginaType extends AbstractType
 		$builder->add('inhoud', BbTextType::class);
 	}
 
+	/**
+	 * @return void
+	 */
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults([

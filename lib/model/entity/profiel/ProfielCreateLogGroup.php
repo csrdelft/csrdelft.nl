@@ -16,17 +16,6 @@ use CsrDelft\repository\ProfielRepository;
  */
 class ProfielCreateLogGroup extends ProfielLogGroup
 {
-	public function __construct($editor, $timestamp)
-	{
-		parent::__construct($editor, $timestamp);
-	}
-	public function toHtml()
-	{
-		return "<div class='ProfielLogEntry'>Aangemaakt door " .
-			ProfielRepository::getLink($this->editor) .
-			($this->timestamp === null
-				? '?'
-				: DateUtil::reldate($this->timestamp->format('Y-m-d H:i:s'))) .
-			'</div>';
-	}
+
+
 }

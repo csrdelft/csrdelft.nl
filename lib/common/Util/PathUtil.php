@@ -4,7 +4,14 @@ namespace CsrDelft\common\Util;
 
 final class PathUtil
 {
-	public static function to_unix_path($path)
+	/**
+	 * @param false|string $path
+	 *
+	 * @return string|string[]
+	 *
+	 * @psalm-return array<string>|string
+	 */
+	public static function to_unix_path(string|false $path): array|string
 	{
 		return str_replace(DIRECTORY_SEPARATOR, '/', $path);
 	}
@@ -16,7 +23,7 @@ final class PathUtil
 	 * @param $subpath
 	 * @return string|null
 	 */
-	public static function safe_combine_path($folder, $subpath)
+	public static function safe_combine_path(string $folder, string $subpath)
 	{
 		if ($folder == null || $subpath == null) {
 			return null;
@@ -32,12 +39,12 @@ final class PathUtil
 		return $combined;
 	}
 
-	public static function realpathunix($path)
+	public static function realpathunix(string $path)
 	{
 		return PathUtil::to_unix_path(realpath($path));
 	}
 
-	public static function join_paths(...$args)
+	public static function join_paths(string ...$args): string|null
 	{
 		$paths = [];
 
@@ -57,7 +64,7 @@ final class PathUtil
 	 * @param $path
 	 * @return bool
 	 */
-	public static function path_valid($prefix, $path)
+	public static function path_valid(string $prefix, $path)
 	{
 		return str_starts_with(
 			(string) PathUtil::realpathunix(PathUtil::join_paths($prefix, $path)),
@@ -78,25 +85,13 @@ final class PathUtil
 	}
 
 	/**
-	 * Remove unsafe characters from filename
 	 * @param $name string
 	 *
-	 * @return bool
-	 */
-	public static function filter_filename($name)
-	{
-		//Remove dots in front of filename to prevent directory traversal
-		$name = ltrim((string) $name, '.');
-
-		return preg_replace('/[^a-z0-9 \-_()éê\.]/i', ' ', $name);
-	}
-
-	/**
-	 * @param $name string
+	 * @return false|int
 	 *
-	 * @return bool
+	 * @psalm-return 0|1|false
 	 */
-	public static function valid_filename($name)
+	public static function valid_filename(string $name): int|false
 	{
 		return preg_match('/^(?:[a-z0-9 \-_()éê]|\.(?!\.))+$/iD', (string) $name);
 	}

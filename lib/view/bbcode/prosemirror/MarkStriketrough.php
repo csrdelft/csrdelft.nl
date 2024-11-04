@@ -7,16 +7,29 @@ use CsrDelft\bb\tag\BbStrikethrough;
 
 class MarkStriketrough implements Mark
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbStrikethrough::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbStrikethrough::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'strikethrough'
+	 */
 	public static function getMarkType()
 	{
 		return 'strikethrough';
 	}
 
+	/**
+	 * @return array
+	 *
+	 * @psalm-return array<never, never>
+	 */
 	public function getTagAttributes($mark)
 	{
 		return [];

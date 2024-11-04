@@ -16,6 +16,9 @@ class GeslachtPrefixVoter extends PrefixVoter
 	) {
 	}
 
+	/**
+	 * @return bool
+	 */
 	protected function supportsPrefix($prefix)
 	{
 		return strtoupper((string) $prefix) == 'GESLACHT';

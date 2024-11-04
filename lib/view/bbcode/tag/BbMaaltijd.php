@@ -40,16 +40,11 @@ class BbMaaltijd extends BbTag
 	 */
 	private $id;
 
-	public function __construct(
-		private readonly Environment $twig,
-		private readonly Security $security,
-		private readonly MaaltijdenService $maaltijdenService,
-		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
-		private readonly MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'maaltijd'
+	 */
 	public static function getTagName()
 	{
 		return 'maaltijd';
@@ -75,6 +70,9 @@ class BbMaaltijd extends BbTag
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		$result = '<div class="my-3 p-3 maaltijdketzer-wrapper rounded">';
@@ -130,7 +128,10 @@ class BbMaaltijd extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
 	 * @throws BbException
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{
@@ -145,8 +146,12 @@ class BbMaaltijd extends BbTag
 
 	/**
 	 * @param string|null $mid
-	 * @return array
+	 *
+	 * @return (Maaltijd|false|mixed|null)[]
+	 *
 	 * @throws BbException
+	 *
+	 * @psalm-return list{mixed, Maaltijd|false|mixed|null}
 	 */
 	private function getMaaltijd($mid): array
 	{
@@ -217,7 +222,7 @@ class BbMaaltijd extends BbTag
 		return [$maaltijd, $maaltijd2];
 	}
 
-	public function getId()
+	public function getId(): string
 	{
 		return $this->id;
 	}

@@ -22,17 +22,19 @@ class BbCitaat extends BbTag
 	public $bron_url = null;
 	private $hidden = false;
 
-	public function __construct(
-		private readonly Security $security,
-		private readonly ProfielRepository $profielRepository
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'citaat'
+	 */
 	public static function getTagName()
 	{
 		return 'citaat';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function renderPlain()
 	{
 		$text = 'Citaat';
@@ -48,6 +50,9 @@ class BbCitaat extends BbTag
 		return $text . ":\n " . trim($this->getContent());
 	}
 
+	/**
+	 * @return string
+	 */
 	public function renderPreview()
 	{
 		$text = '🗣️ ';
@@ -135,6 +140,9 @@ class BbCitaat extends BbTag
 			'</blockquote></div>';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function parse($arguments = [])
 	{
 		$this->env->quote_level++;

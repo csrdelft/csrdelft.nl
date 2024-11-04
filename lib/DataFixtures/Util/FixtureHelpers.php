@@ -10,7 +10,7 @@ class FixtureHelpers
 	const LIDJAAR_EIND = 29;
 	const LICHTING_GROOTTE = 50;
 
-	public static function getUid()
+	public static function getUid(): string
 	{
 		$faker = Faker::create('nl_NL');
 
@@ -20,7 +20,12 @@ class FixtureHelpers
 		return sprintf('%02d%02d', $lichting, $id);
 	}
 
-	public static function getRandomUids($aantal)
+	/**
+	 * @psalm-param 8 $aantal
+	 *
+	 * @psalm-return list{0?: mixed,...}
+	 */
+	public static function getRandomUids(int $aantal): array
 	{
 		$uids = [];
 

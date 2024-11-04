@@ -19,19 +19,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ForumPostsService
 {
-	public function __construct(
-		private readonly EntityManagerInterface $entityManager,
-		private readonly ForumDradenRepository $forumDradenRepository,
-		private readonly ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		private readonly ForumPostsRepository $forumPostsRepository,
-		private readonly ForumMeldingenService $forumMeldingenService,
-		private readonly ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		private readonly ForumDradenReagerenRepository $forumDradenReagerenRepository,
-		private readonly ForumDradenVerbergenRepository $forumDradenVerbergenRepository
-	) {
-	}
 
-	public function verplaatsForumPost(ForumDraad $nieuwDraad, ForumPost $post)
+
+	public function verplaatsForumPost(ForumDraad $nieuwDraad, ForumPost $post): void
 	{
 		$oudeDraad = $post->draad;
 		$post->draad = $nieuwDraad;
@@ -57,7 +47,12 @@ class ForumPostsService
 		}
 	}
 
-	public function wijzigForumDraad(ForumDraad $draad, $property, $value)
+	/**
+	 * @param bool|int|null|string $value
+	 *
+	 * @return void
+	 */
+	public function wijzigForumDraad(ForumDraad $draad, string $property, bool|int|string|null $value)
 	{
 		if (!property_exists($draad, $property)) {
 			throw new CsrException('Property undefined: ' . $property);
@@ -92,7 +87,7 @@ class ForumPostsService
 		}
 	}
 
-	public function verwijderForumPost(ForumPost $post)
+	public function verwijderForumPost(ForumPost $post): void
 	{
 		$post->verwijderd = !$post->verwijderd;
 		$this->entityManager->persist($post);
@@ -101,7 +96,10 @@ class ForumPostsService
 		$this->resetLastPost($post->draad);
 	}
 
-	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post)
+	/**
+	 * @return void
+	 */
+	public function bewerkForumPost($nieuwe_tekst, string $reden, ForumPost $post)
 	{
 		similar_text($post->tekst, (string) $nieuwe_tekst, $gelijkheid);
 		$post->tekst = $nieuwe_tekst;
@@ -135,7 +133,7 @@ class ForumPostsService
 		}
 	}
 
-	public function resetLastPost(ForumDraad $draad)
+	public function resetLastPost(ForumDraad $draad): void
 	{
 		// reset last post
 		$last_post = $this->forumPostsRepository->findBy(
@@ -164,7 +162,7 @@ class ForumPostsService
 		$this->entityManager->flush();
 	}
 
-	public function goedkeurenForumPost(ForumPost $post)
+	public function goedkeurenForumPost(ForumPost $post): void
 	{
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;

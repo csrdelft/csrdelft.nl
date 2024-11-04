@@ -75,6 +75,9 @@ class DownloadUrlField extends UrlField
 		return $this->filterMime;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		parent::validate();
@@ -99,6 +102,9 @@ class DownloadUrlField extends UrlField
 		return $this->error === '';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function opslaan($directory, $filename, $overwrite = false)
 	{
 		parent::opslaan($directory, $filename, $overwrite);
@@ -141,6 +147,9 @@ class DownloadUrlField extends UrlField
 		$this->model->filename = $filename;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		return '<input ' .

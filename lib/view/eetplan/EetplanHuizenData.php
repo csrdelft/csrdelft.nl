@@ -6,6 +6,11 @@ use CsrDelft\Component\DataTable\CustomDataTableEntry;
 
 class EetplanHuizenData implements CustomDataTableEntry
 {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{'id'}
+	 */
 	public static function getIdentifierFieldNames()
 	{
 		return ['id'];

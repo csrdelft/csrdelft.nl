@@ -14,6 +14,11 @@ use CsrDelft\bb\BbTag;
  */
 class BbUbboff extends BbTag
 {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{'ubboff', 'tekst'}
+	 */
 	public static function getTagName()
 	{
 		return ['ubboff', 'tekst'];
@@ -26,6 +31,8 @@ class BbUbboff extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{
@@ -34,6 +41,11 @@ class BbUbboff extends BbTag
 		$this->parser->bb_mode = true;
 	}
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{'[/tekst]', '[/uboff]'}
+	 */
 	protected function getStoppers()
 	{
 		// De [/] tag werkt niet hier

@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\BbLid;
 
 class NodeLid implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbLid::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbLid::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'lid'
+	 */
 	public static function getNodeType()
 	{
 		return 'lid';
@@ -50,6 +58,9 @@ class NodeLid implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

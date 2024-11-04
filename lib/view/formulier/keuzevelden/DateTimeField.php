@@ -48,6 +48,9 @@ class DateTimeField extends TextField
 		$this->css_classes[] = 'DateTimeField';
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {
@@ -82,6 +85,9 @@ class DateTimeField extends TextField
 		return $this->error === '';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$attributes = $this->getInputAttribute([

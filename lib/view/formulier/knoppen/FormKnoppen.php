@@ -29,6 +29,9 @@ abstract class FormKnoppen implements FormElement
 		$this->css_classes[] = $this->getType();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getModel()
 	{
 		return array_merge($this->knoppen_left, $this->knoppen_right);
@@ -44,12 +47,15 @@ abstract class FormKnoppen implements FormElement
 		return $this->getType();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType()
 	{
 		return ReflectionUtil::classNameZonderNamespace(static::class);
 	}
 
-	public function addKnop(FormulierKnop $knop, $left = false, $prepend = false)
+	public function addKnop(FormulierKnop $knop, bool $left = false, bool $prepend = false): void
 	{
 		if ($left) {
 			if ($prepend) {
@@ -66,6 +72,9 @@ abstract class FormKnoppen implements FormElement
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$html = '<div class="' . implode(' ', $this->css_classes) . '">';
@@ -92,6 +101,9 @@ abstract class FormKnoppen implements FormElement
 		return (string) $this->getHtml();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getJavascript()
 	{
 		$js = <<<JS

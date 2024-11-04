@@ -16,6 +16,11 @@ use CsrDelft\common\Util\DateUtil;
  */
 class BbReldate extends BbTag
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'reldate'
+	 */
 	public static function getTagName()
 	{
 		return 'reldate';
@@ -31,6 +36,8 @@ class BbReldate extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

@@ -7,6 +7,11 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class WerkgroepGroepVoter extends AbstractGroepVoter
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Werkgroep::class
+	 */
 	protected function getGroepType(): string
 	{
 		return Werkgroep::class;

@@ -29,18 +29,6 @@ class PinTransactiesDownloadenCommand extends Command
 	 */
 	private $interactive;
 
-	public function __construct(
-		private readonly Environment $twig,
-		private readonly PinTransactieRepository $pinTransactieRepository,
-		private readonly PinTransactieMatchRepository $pinTransactieMatchRepository,
-		private readonly PinTransactieMatcher $pinTransactieMatcher,
-		private readonly PinTransactieDownloader $pinTransactieDownloader,
-		private readonly CiviBestellingRepository $civiBestellingRepository,
-		private readonly MailService $mailService
-	) {
-		parent::__construct(null);
-	}
-
 	protected function configure(): void
 	{
 		$this->setDescription(
@@ -64,6 +52,11 @@ class PinTransactiesDownloadenCommand extends Command
 			);
 	}
 
+	/**
+	 * @return int
+	 *
+	 * @psalm-return 0|1
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$this->interactive =
@@ -137,7 +130,7 @@ class PinTransactiesDownloadenCommand extends Command
 		return 0;
 	}
 
-	private function downloadDag(OutputInterface $output, $from, $to)
+	private function downloadDag(OutputInterface $output, string $from, string $to): void
 	{
 		// Verwijder eerdere download.
 		$vorigePinTransacties = $this->pinTransactieRepository->getPinTransactieInMoment(

@@ -14,6 +14,9 @@ use Faker\Factory as Faker;
 
 class ForumFixtures extends Fixture implements DependentFixtureInterface
 {
+	/**
+	 * @return void
+	 */
 	public function load(ObjectManager $manager)
 	{
 		$forumCategorie = new ForumCategorie();
@@ -80,6 +83,11 @@ class ForumFixtures extends Fixture implements DependentFixtureInterface
 		$manager->flush();
 	}
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{AccountFixtures::class, ProfielFixtures::class}
+	 */
 	public function getDependencies()
 	{
 		return [AccountFixtures::class, ProfielFixtures::class];

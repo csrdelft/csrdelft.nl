@@ -17,10 +17,8 @@ final class DateUtil
 
 	/**
 	 * @param DateTimeInterface|string $datum
-	 *
-	 * @return string|false
 	 */
-	public static function reldate($datum)
+	public static function reldate($datum): string
 	{
 		if (!$datum instanceof DateTimeImmutable) {
 			if ($datum instanceof DateTimeInterface) {
@@ -59,9 +57,10 @@ final class DateUtil
 	/**
 	 * @param string $date
 	 * @param string $format
-	 * @return true als huidige datum & tijd voorbij gegeven datum en tijd zijn
+	 *
+	 * @return bool als huidige datum & tijd voorbij gegeven datum en tijd zijn
 	 */
-	public static function isDatumVoorbij(string $date, $format = 'Y-m-d H:i:s')
+	public static function isDatumVoorbij(string $date, $format = 'Y-m-d H:i:s'): bool
 	{
 		$date = date_create_immutable_from_format($format, $date);
 		$now = date_create_immutable();
@@ -88,7 +87,7 @@ final class DateUtil
 	 * @param $format
 	 * @return false|string
 	 */
-	public static function dateFormatIntl(DateTimeInterface $date, $format)
+	public static function dateFormatIntl(DateTimeInterface $date, string $format)
 	{
 		$fmt = new IntlDateFormatter(
 			'nl',

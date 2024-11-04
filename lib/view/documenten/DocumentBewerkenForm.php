@@ -21,17 +21,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class DocumentBewerkenForm implements FormulierTypeInterface
 {
-	public function __construct(
-		private readonly UrlGeneratorInterface $urlGenerator,
-		private readonly LoginService $loginService,
-		private readonly DocumentCategorieRepository $documentCategorieRepository
-	) {
-	}
+
 
 	/**
 	 * @param FormulierBuilder $builder
 	 * @param Document $data
 	 * @param array $options
+	 *
+	 * @return void
 	 */
 	public function createFormulier(
 		FormulierBuilder $builder,

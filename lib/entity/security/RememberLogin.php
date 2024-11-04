@@ -90,37 +90,10 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	public $lock_ip;
 
 	/**
-	 * @return string|null
-	 */
-	#[Serializer\SerializedName('lock_ip')]
-	#[Serializer\Groups('datatable')]
-	public function getDataTableLockIp()
-	{
-		return $this->lock_ip
-			? Icon::getTag('lock', null, 'Gekoppeld aan IP-adres')
-			: '';
-	}
-
-	/**
 	 * @return string
+	 *
+	 * @psalm-return Account::class
 	 */
-	#[Serializer\SerializedName('remember_since')]
-	#[Serializer\Groups('datatable')]
-	public function getDataTableRememberSince()
-	{
-		return DateUtil::reldate($this->remember_since);
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\SerializedName('last_used')]
-	#[Serializer\Groups('datatable')]
-	public function getDataTableLastUsed()
-	{
-		return DateUtil::reldate($this->last_used);
-	}
-
 	public function getClass(): string
 	{
 		return Account::class;
@@ -144,10 +117,5 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	public function getLastUsed(): DateTimeImmutable
 	{
 		return $this->last_used;
-	}
-
-	public function getUserIdentifier(): string
-	{
-		return $this->uid;
 	}
 }

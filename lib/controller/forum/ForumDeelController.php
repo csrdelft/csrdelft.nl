@@ -127,11 +127,11 @@ class ForumDeelController extends AbstractController
 	 *
 	 * @param Request $request
 	 * @param ForumDeel $deel
-	 * @return View|Response
-	 * @Auth(P_FORUM_ADMIN)
+	 *
+	 * @Auth (P_FORUM_ADMIN)
 	 */
 	#[Route(path: '/forum/beheren/{forum_id}', methods: ['POST'])]
-	public function beheren(Request $request, ForumDeel $deel)
+	public function beheren(Request $request, ForumDeel $deel): Response
 	{
 		$form = $this->createFormulier(ForumDeelForm::class, $deel, [
 			'action' => $this->generateUrl('csrdelft_forum_forumdeel_beheren', [
@@ -199,10 +199,11 @@ class ForumDeelController extends AbstractController
 
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
-	 * @Auth(P_FORUM_MOD)
+	 *
+	 * @Auth (P_FORUM_MOD)
 	 */
 	#[Route(path: '/forum/wacht', methods: ['GET'])]
-	public function wacht()
+	public function wacht(): Response
 	{
 		return $this->render('forum/wacht.html.twig', [
 			'resultaten' => $this->forumDelenService->getWachtOpGoedkeuring(),

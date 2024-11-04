@@ -13,6 +13,11 @@ abstract class DataTableResponse extends JsonLijstResponse
 	public $autoUpdate = false;
 	public $modal = null;
 
+	/**
+	 * @return (int|mixed)[]
+	 *
+	 * @psalm-return array{modal: mixed, autoUpdate: mixed, lastUpdate: int<0, max>, data: mixed}
+	 */
 	public function getModel()
 	{
 		return [

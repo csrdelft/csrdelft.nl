@@ -26,21 +26,9 @@ class DocumentToevoegenForm implements FormulierTypeInterface
 {
 	private $uploader;
 
-	public function __construct(
-		private readonly UrlGeneratorInterface $urlGenerator,
-		private readonly DocumentCategorieRepository $documentCategorieRepository,
-		private readonly LoginService $loginService
-	) {
-	}
-
 	/**
-	 * @return FileField
+	 * @return void
 	 */
-	public function getUploader()
-	{
-		return $this->uploader;
-	}
-
 	public function createFormulier(
 		FormulierBuilder $builder,
 		$data,

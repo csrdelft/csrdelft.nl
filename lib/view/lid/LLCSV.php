@@ -11,6 +11,9 @@ use Exception;
  */
 class LLCSV extends LLWeergave
 {
+	/**
+	 * @return string
+	 */
 	public function viewHeader()
 	{
 		$html = '';
@@ -46,6 +49,19 @@ class LLCSV extends LLWeergave
 		return $html;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return '</textarea><a href="" class="btn btn-primary download-ledenlijst">Download</a>
+<script>
+	let csvContent = "data:text/csv;charset=utf-8,";
+	csvContent += $('textarea.csv').text();
+	let encodedUri = encodeURI(csvContent);
+	let link = $('.download-ledenlijst');
+	link.attr("href", encodedUri);
+	link.attr("download", "ledenlijst.csv");
+</script>'
+	 */
 	public function viewFooter()
 	{
 		$html = '';
@@ -64,6 +80,9 @@ HTML;
 		return $html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function viewLid(Profiel $profiel)
 	{
 		$html = '';

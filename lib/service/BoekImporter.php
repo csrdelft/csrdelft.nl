@@ -8,6 +8,9 @@ use EasyRdf_Resource;
 
 class BoekImporter
 {
+	/**
+	 * @return void
+	 */
 	public function import(Boek $boek)
 	{
 		$isbn = filter_var($boek->isbn, FILTER_SANITIZE_NUMBER_INT);

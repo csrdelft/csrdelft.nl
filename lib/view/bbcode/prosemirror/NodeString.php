@@ -7,7 +7,10 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeString implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbString::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbString::class;
 	}
@@ -19,16 +22,29 @@ class NodeString implements Node
 		];
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'text'
+	 */
 	public static function getNodeType()
 	{
 		return 'text';
 	}
 
+	/**
+	 * @return array
+	 *
+	 * @psalm-return array<never, never>
+	 */
 	public function getTagAttributes($node)
 	{
 		return [];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

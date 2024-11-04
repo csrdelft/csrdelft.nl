@@ -7,11 +7,19 @@ use CsrDelft\view\bbcode\tag\BbPrive;
 
 class MarkPrive implements Mark
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbPrive::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbPrive::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'prive'
+	 */
 	public static function getMarkType()
 	{
 		return 'prive';

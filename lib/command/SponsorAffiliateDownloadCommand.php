@@ -19,14 +19,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 ]
 class SponsorAffiliateDownloadCommand extends Command
 {
-	public function __construct(
-		private readonly string $sponsorSlHost,
-		private readonly string $sponsorClubId,
-		private readonly string $sponsorUserAgent
-	) {
-		parent::__construct();
-	}
 
+
+	/**
+	 * @return int
+	 *
+	 * @psalm-return 0|1
+	 */
 	protected function execute(
 		InputInterface $input,
 		OutputInterface $output
@@ -61,7 +60,6 @@ class SponsorAffiliateDownloadCommand extends Command
 		//3. Follow links to final destination
 		$data = ['club_id' => $this->sponsorClubId];
 		$affiliates = [];
-		$amount = 0;
 		foreach ($webshops as $webshop) {
 			if ($webshop->extension == '0') {
 				continue;

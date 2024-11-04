@@ -46,11 +46,14 @@ class CiviCategorie implements DisplayEntity
 	#[ORM\Column(type: 'string')]
 	public $cie;
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		return sprintf('%s (%s)', $this->type, $this->cie);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getId()
 	{
 		return $this->id;

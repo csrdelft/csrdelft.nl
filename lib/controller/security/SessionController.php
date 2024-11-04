@@ -52,14 +52,16 @@ class SessionController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @param PersistentRememberMeHandler $rememberMeHandler
-	 * @return RememberLoginForm|Response
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @return GenericDataTableResponse|RememberLoginForm|Response
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[Route(path: '/session/remember', methods: ['POST'])]
 	public function remember(
 		Request $request,
 		PersistentRememberMeHandler $rememberMeHandler
-	) {
+	): RememberLoginForm|Response|GenericDataTableResponse {
 		$selection = $this->getDataTableSelection();
 
 		if (empty($selection)) {

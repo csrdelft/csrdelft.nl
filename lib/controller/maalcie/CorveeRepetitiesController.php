@@ -191,7 +191,10 @@ class CorveeRepetitiesController extends AbstractController
 
 	/**
 	 * @param CorveeRepetitie $corveeRepetitie
-	 * @Auth(P_CORVEE_MOD)
+	 *
+	 * @Auth (P_CORVEE_MOD)
+	 *
+	 * @return never
 	 */
 	#[
 		Route(

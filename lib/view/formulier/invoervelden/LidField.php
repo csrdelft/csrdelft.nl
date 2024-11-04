@@ -68,6 +68,9 @@ class LidField extends AutocompleteField
 		return $this->value;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {
@@ -107,11 +110,17 @@ class LidField extends AutocompleteField
 		return $this->error === '';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getPreviewDiv()
 	{
 		return '<div id="lidPreview_' . $this->getId() . '"></div>';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getJavascript()
 	{
 		return /** @lang JavaScript */

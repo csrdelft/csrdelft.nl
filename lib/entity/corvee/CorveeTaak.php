@@ -143,7 +143,7 @@ class CorveeTaak implements Agendeerbaar
 	]
 	public $corveeFunctie;
 
-	public function getPuntenPrognose()
+	public function getPuntenPrognose(): int
 	{
 		return $this->punten +
 			$this->bonus_malus -
@@ -151,7 +151,7 @@ class CorveeTaak implements Agendeerbaar
 			$this->bonus_toegekend;
 	}
 
-	public function getLaatstGemaildDate()
+	public function getLaatstGemaildDate(): DateTimeImmutable|false|null
 	{
 		if ($this->wanneer_gemaild === null) {
 			return null;
@@ -219,60 +219,11 @@ class CorveeTaak implements Agendeerbaar
 		return false;
 	}
 
-	/**
-	 * Bepaalt of er op tijd is gemaild op basis van de laatst verstuurde email.
-	 *
-	 * @return boolean
-	 */
-	public function getIsTelaatGemaild()
-	{
-		$aantal = $this->getAantalKeerGemaild();
-		$datum = $this->datum;
-		$laatst = $this->getLaatstGemaildDate();
-		$nu = date_create_immutable();
-		$moeten = 0;
-
-		for (
-			$i = intval(
-				InstellingUtil::instelling('corvee', 'herinnering_aantal_mails')
-			);
-			$i > 0;
-			$i--
-		) {
-			$uiterlijk = $datum->add(
-				DateInterval::createFromDateString(
-					InstellingUtil::instelling(
-						'corvee',
-						'herinnering_' . $i . 'e_mail_uiterlijk'
-					)
-				)
-			);
-			if ($nu >= $uiterlijk) {
-				$moeten++;
-			}
-			if ($aantal <= $i && $laatst >= $uiterlijk) {
-				return true;
-			}
-		}
-		if ($moeten > $aantal) {
-			return true;
-		}
-		return false;
-	}
-
-	public function setWanneerGemaild($datumtijd)
-	{
-		if (!is_string($datumtijd)) {
-			throw new CsrGebruikerException('Geen string: wanneer gemaild');
-		}
-		if ($datumtijd !== '') {
-			$datumtijd .= '&#013;' . $this->wanneer_gemaild;
-		}
-		$this->wanneer_gemaild = $datumtijd;
-	}
-
 	// Agendeerbaar ############################################################
 
+	/**
+	 * @return string
+	 */
 	public function getUUID(): string
 	{
 		return $this->taak_id . '@corveetaak.csrdelft.nl';
@@ -283,11 +234,17 @@ class CorveeTaak implements Agendeerbaar
 		return $this->datum;
 	}
 
+	/**
+	 * @return DateTimeImmutable
+	 */
 	public function getEindMoment(): DateTimeImmutable
 	{
 		return $this->getBeginMoment()->add(new DateInterval('PT1H30M'));
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getTitel(): string
 	{
 		if ($this->profiel) {
@@ -306,21 +263,37 @@ class CorveeTaak implements Agendeerbaar
 		return 'Nog niet ingedeeld';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'C.S.R. Delft'
+	 */
 	public function getLocatie(): string
 	{
 		return 'C.S.R. Delft';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return '/corvee/rooster'
+	 */
 	public function getUrl(): string
 	{
 		return '/corvee/rooster';
 	}
 
+	/**
+	 * @return true
+	 */
 	public function isHeledag(): bool
 	{
 		return true;
 	}
 
+	/**
+	 * @return true
+	 */
 	public function isTransparant(): bool
 	{
 		return true;

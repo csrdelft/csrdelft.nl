@@ -18,10 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CorveeRepetitiesRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registy)
-	{
-		parent::__construct($registy, CorveeRepetitie::class);
-	}
+
 
 	public function nieuw(MaaltijdRepetitie $maaltijdRepetitie = null)
 	{
@@ -59,19 +56,6 @@ class CorveeRepetitiesRepository extends AbstractRepository
 		return date_create_immutable('@' . $datum);
 	}
 
-	/**
-	 * @return CorveeRepetitie[]
-	 */
-	public function getVoorkeurbareRepetities()
-	{
-		$repetities = $this->findBy(['voorkeurbaar' => true]);
-		$result = [];
-		foreach ($repetities as $repetitie) {
-			$result[$repetitie->crv_repetitie_id] = $repetitie;
-		}
-		return $result;
-	}
-
 	public function getAlleRepetities()
 	{
 		return $this->findAll();
@@ -92,7 +76,7 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	 * @param $crid
 	 * @return CorveeRepetitie|null
 	 */
-	public function getRepetitie($crid)
+	public function getRepetitie(int $crid)
 	{
 		return $this->find($crid);
 	}
@@ -111,15 +95,4 @@ class CorveeRepetitiesRepository extends AbstractRepository
 	}
 
 	// Functie-Repetities ############################################################
-
-	/**
-	 * Called when a CorveeFunctie is going to be deleted.
-	 *
-	 * @param int $fid
-	 * @return bool
-	 */
-	public function existFunctieRepetities($fid)
-	{
-		return count($this->findBy(['functie_id' => $fid])) > 0;
-	}
 }

@@ -55,11 +55,17 @@ class Activiteit extends Groep implements
 	#[ORM\Column(type: 'boolean')]
 	public $inAgenda;
 
+	/**
+	 * @return string
+	 */
 	public function getUUID(): string
 	{
 		return $this->id . '@activiteit.csrdelft.nl';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getUrl(): string
 	{
 		return '/groepen/activiteiten/' . $this->id;
@@ -98,21 +104,33 @@ class Activiteit extends Groep implements
 		return $begin == '00:00' && ($eind == '23:59' || $eind == '00:00');
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getAanmeldLimiet()
 	{
 		return $this->aanmeldLimiet;
 	}
 
+	/**
+	 * @return ActiviteitSoort
+	 */
 	public function getSoort()
 	{
 		return $this->activiteitSoort;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function setSoort($soort)
 	{
 		$this->activiteitSoort = $soort;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function setSoortString($soort)
 	{
 		$this->activiteitSoort = ActiviteitSoort::from($soort);

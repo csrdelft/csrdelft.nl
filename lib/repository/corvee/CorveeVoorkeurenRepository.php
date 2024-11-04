@@ -21,13 +21,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CorveeVoorkeurenRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly CorveeRepetitiesRepository $corveeRepetitiesRepository,
-		private readonly CorveeKwalificatiesRepository $corveeKwalificatiesRepository
-	) {
-		parent::__construct($registry, CorveeVoorkeur::class);
-	}
+
 
 	/**
 	 * Geeft de ingeschakelde voorkeuren voor een lid terug en ook
@@ -158,7 +152,12 @@ DQL
 		return $voorkeur;
 	}
 
-	public function getHeeftVoorkeur($crid, $uid)
+	/**
+	 * @param (int|string) $uid
+	 *
+	 * @psalm-param array-key $uid
+	 */
+	public function getHeeftVoorkeur(int $crid, $uid)
 	{
 		return $this->find(['uid' => $uid, 'crv_repetitie_id' => $crid]) != null;
 	}
@@ -187,8 +186,10 @@ DQL
 	 * Called when a CorveeRepetitie is being deleted.
 	 * This is only possible after all CorveeVoorkeuren are deleted of this CorveeRepetitie (db foreign key)
 	 *
-	 * @param $crid
+	 * @param int|null|numeric $crid
+	 *
 	 * @return int amount of deleted voorkeuren
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -205,26 +206,9 @@ DQL
 	}
 
 	/**
-	 * Called when a Lid is being made Lid-af.
-	 *
-	 * @param $uid
-	 * @return int amount of deleted voorkeuren
-	 * @throws ORMException
-	 * @throws OptimisticLockException
+	 * @param null|string $uid
 	 */
-	public function verwijderVoorkeurenVoorLid($uid)
-	{
-		$voorkeuren = $this->findBy(['uid' => $uid]);
-		$num = count($voorkeuren);
-		foreach ($voorkeuren as $voorkeur) {
-			$this->_em->remove($voorkeur);
-		}
-		$this->_em->flush();
-
-		return $num;
-	}
-
-	public function getVoorkeur($crid, $uid)
+	public function getVoorkeur($crid, string|null $uid)
 	{
 		return $this->find(['uid' => $uid, 'crv_repetitie_id' => $crid]);
 	}

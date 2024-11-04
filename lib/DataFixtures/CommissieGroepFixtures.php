@@ -14,9 +14,11 @@ use Doctrine\Persistence\ObjectManager;
 class CommissieGroepFixtures extends Fixture implements
 	DependentFixtureInterface
 {
+	/**
+	 * @return void
+	 */
 	public function load(ObjectManager $manager)
 	{
-		/** @var CommissiesRepository $commissiesRepository */
 		$commissiesRepository = $manager->getRepository(Commissie::class);
 		$soccie = $commissiesRepository->nieuw();
 		$soccie->familie = 'SocCie';
@@ -50,6 +52,11 @@ class CommissieGroepFixtures extends Fixture implements
 		$manager->flush();
 	}
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{AccountFixtures::class, ProfielFixtures::class}
+	 */
 	public function getDependencies()
 	{
 		return [AccountFixtures::class, ProfielFixtures::class];

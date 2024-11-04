@@ -48,6 +48,9 @@ class CivisaldoField extends AutocompleteField
 		return $this->value;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {
@@ -71,6 +74,9 @@ class CivisaldoField extends AutocompleteField
 		return $this->error === '';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getPreviewDiv()
 	{
 		return '<div class="col-md-4 col-form-label" id="lidPreview_' .
@@ -78,6 +84,9 @@ class CivisaldoField extends AutocompleteField
 			'"></div>';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getJavascript()
 	{
 		return /** @lang JavaScript */

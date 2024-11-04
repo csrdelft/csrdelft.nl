@@ -33,7 +33,7 @@ class CiviSaldoAfschrijvenController extends AbstractController
 		return $this->render('fiscaat/afschrijven.html.twig', []);
 	}
 
-	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven')
+	private function quickMelding(string $melding, string $code, string $url = '/fiscaat/afschrijven'): \Symfony\Component\HttpFoundation\RedirectResponse
 	{
 		$this->addFlash($code, $melding);
 		return $this->redirect($url);

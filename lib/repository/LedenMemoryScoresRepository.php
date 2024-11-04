@@ -20,10 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class LedenMemoryScoresRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, LedenMemoryScore::class);
-	}
+
 
 	/**
 	 * Default ORDER BY

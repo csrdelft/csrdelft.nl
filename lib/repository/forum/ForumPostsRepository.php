@@ -53,13 +53,6 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 	 */
 	private $aantal_wacht;
 
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, ForumPost::class);
-		$this->pagina = 1;
-		$this->aantal_paginas = [];
-	}
-
 	/**
 	 * @return ForumPost[]
 	 */
@@ -90,7 +83,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 	 * @return ForumPost
 	 * @throws CsrGebruikerException
 	 */
-	public function get($id)
+	public function get(int $id)
 	{
 		$post = $this->find($id);
 		if (!$post) {
@@ -120,12 +113,12 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		return $this->pagina;
 	}
 
-	public function setLaatstePagina($draad_id)
+	public function setLaatstePagina(int $draad_id)
 	{
 		$this->pagina = $this->getAantalPaginas($draad_id);
 	}
 
-	public function getAantalPaginas($draad_id)
+	public function getAantalPaginas(int $draad_id)
 	{
 		if (!array_key_exists($draad_id, $this->aantal_paginas)) {
 			$forumDradenRepository = ContainerFacade::getContainer()->get(
@@ -201,7 +194,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		);
 	}
 
-	public function setHuidigePagina($pagina, $draad_id)
+	public function setHuidigePagina(int $pagina, int $draad_id)
 	{
 		if (!is_int($pagina) || $pagina < 1) {
 			$pagina = 1;
@@ -216,7 +209,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 	 * @param $alleen_eerste_post
 	 * @return ForumPost[]
 	 */
-	public function zoeken(ForumZoeken $forumZoeken, $alleen_eerste_post)
+	public function zoeken(ForumZoeken $forumZoeken, bool $alleen_eerste_post)
 	{
 		$results = $this->createQueryBuilder('fp')
 			->addSelect('MATCH(fp.tekst) AGAINST (:query) AS score')
@@ -269,7 +262,10 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		return parent::findOneBy($criteria, $orderBy);
 	}
 
-	public function getAantalForumPostsVoorLid($uid)
+	/**
+	 * @param null|string $uid
+	 */
+	public function getAantalForumPostsVoorLid(string|null $uid)
 	{
 		return $this->count([
 			'uid' => $uid,
@@ -361,7 +357,10 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		return $posts;
 	}
 
-	public function maakForumPost($draad, $tekst, $ip, $wacht_goedkeuring, $email)
+	/**
+	 * @param false|null|string $email
+	 */
+	public function maakForumPost($draad, $tekst, string $ip, bool $wacht_goedkeuring, string|false|null $email)
 	{
 		$post = new ForumPost();
 		$post->draad = $draad;
@@ -479,26 +478,5 @@ SQL
 				),
 			])
 			->getResult();
-	}
-
-	public function getStatsVoorDraad(ForumDraad $draad)
-	{
-		$qb = $this->createQueryBuilder('fp');
-		$qb->select([
-			'UNIX_TIMESTAMP(DATE(fp.datum_tijd)) AS timestamp',
-			'COUNT(fp.post_id) AS count',
-		]);
-		$qb->where('fp.draad_id = :draad_id && fp.datum_tijd > :terug');
-		$qb->setParameter('draad_id', $draad->draad_id);
-		$qb->setParameter(
-			'terug',
-			$draad->laatst_gewijzigd->add(
-				DateInterval::createFromDateString(
-					InstellingUtil::instelling('forum', 'grafiek_draad_recent')
-				)
-			)
-		);
-		$qb->groupBy('timestamp');
-		return $qb->getQuery()->getResult();
 	}
 }

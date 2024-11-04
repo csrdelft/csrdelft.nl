@@ -35,16 +35,25 @@ class CsrfField implements View, FormElement
 		return null;
 	}
 
+	/**
+	 * @return CsrfToken
+	 */
 	public function getModel()
 	{
 		return $this->token;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType()
 	{
 		return ReflectionUtil::short_class(static::class);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		if ($this->token === null) {
@@ -62,6 +71,11 @@ class CsrfField implements View, FormElement
 			'"  />';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ''
+	 */
 	public function getJavascript()
 	{
 		return '';

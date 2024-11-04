@@ -14,7 +14,7 @@ class GroepFixtureUtil
 		Groep $groep,
 		Profiel $profiel,
 		string $opmerking = null
-	) {
+	): void {
 		$groepLid = new GroepLid();
 		$groepLid->uid = $profiel->uid;
 		$groepLid->profiel = $profiel;

@@ -11,20 +11,19 @@ use Symfony\Component\Security\Core\Security;
 
 class SaldoGrafiekService
 {
-	public function __construct(
-		private readonly Security $security,
-		private readonly CiviSaldoRepository $civiSaldoRepository,
-		private readonly CiviBestellingRepository $civiBestellingRepository
-	) {
-	}
+
 
 	/**
 	 * @param string $uid
 	 * @param int $timespan
-	 * @return array|null
+	 *
+	 * @return (((int|mixed|string)[][]|bool|int|string)[]|string)[][]|null
+	 *
 	 * @throws Exception
+	 *
+	 * @psalm-return array{labels: list{string, string}, datasets: list{array{label: 'Civisaldo', steppedLine: true, borderWidth: 2, pointRadius: 0, hitRadius: 2, fill: false, borderColor: 'green', data: non-empty-list<array{t: mixed|string, y: int|mixed}>}}}|null
 	 */
-	public function getDataPoints($uid, $timespan)
+	public function getDataPoints($uid, $timespan): array|null
 	{
 		if (!$this->magGrafiekZien($uid)) {
 			return null;

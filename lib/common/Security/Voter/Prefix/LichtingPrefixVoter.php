@@ -10,6 +10,9 @@ class LichtingPrefixVoter extends PrefixVoter
 	const PREFIX_LICHTING = 'LICHTING';
 	const PREFIX_LIDJAAR = 'LIDJAAR';
 
+	/**
+	 * @return bool
+	 */
 	protected function supportsPrefix($prefix)
 	{
 		return strtoupper((string) $prefix) == self::PREFIX_LICHTING ||

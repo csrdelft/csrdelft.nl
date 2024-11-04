@@ -12,7 +12,12 @@ namespace CsrDelft\service;
  */
 class DragObjectService
 {
-	public static function getCoords($id, $top, $left)
+	/**
+	 * @return (int|mixed)[]
+	 *
+	 * @psalm-return array{top: int|mixed, left: int|mixed}
+	 */
+	public static function getCoords($id, $top, $left): array
 	{
 		if (isset($_SESSION['dragobject'][$id])) {
 			$top = (int) $_SESSION['dragobject'][$id]['top'];

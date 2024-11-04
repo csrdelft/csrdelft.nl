@@ -33,7 +33,10 @@ class GroepStatistiekView implements ToResponse, \Stringable
 		]);
 	}
 
-	private function verticale($data)
+	/**
+	 * @return false|string
+	 */
+	private function verticale($data): string|false
 	{
 		$verticalen = [];
 		$deelnemers = [];
@@ -53,7 +56,10 @@ class GroepStatistiekView implements ToResponse, \Stringable
 		]);
 	}
 
-	private function geslacht($data)
+	/**
+	 * @return false|string
+	 */
+	private function geslacht($data): string|false
 	{
 		$mannen = 0;
 		$vrouwen = 0;
@@ -79,7 +85,10 @@ class GroepStatistiekView implements ToResponse, \Stringable
 		]);
 	}
 
-	private function lichting($data)
+	/**
+	 * @return false|string
+	 */
+	private function lichting($data): string|false
 	{
 		$aantal = [];
 		$lichting = [];
@@ -99,7 +108,10 @@ class GroepStatistiekView implements ToResponse, \Stringable
 		]);
 	}
 
-	private function tijd($data)
+	/**
+	 * @return false|string
+	 */
+	private function tijd($data): string|false
 	{
 		$totaal = 0;
 		$series = [];

@@ -51,28 +51,4 @@ class AccessControl
 	#[Serializer\Groups('datatable')]
 	#[ORM\Column(type: 'string')]
 	public $subject;
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('action')]
-	public function getDataTableAction()
-	{
-		return AccessAction::from($this->action)->getDescription();
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('resource')]
-	public function getDataTableResource()
-	{
-		if ($this->resource === '*') {
-			return 'Elke ' . lcfirst($this->environment);
-		} else {
-			return 'Deze ' . lcfirst($this->environment);
-		}
-	}
 }

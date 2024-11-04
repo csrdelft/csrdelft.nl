@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\embed\BbTwitter;
 
 class NodeTwitter implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbTwitter::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbTwitter::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'twitter'
+	 */
 	public static function getNodeType()
 	{
 		return 'twitter';
@@ -38,6 +46,9 @@ class NodeTwitter implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

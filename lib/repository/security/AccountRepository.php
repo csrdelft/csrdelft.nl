@@ -26,17 +26,14 @@ class AccountRepository extends AbstractRepository implements
 	PasswordUpgraderInterface,
 	UserLoaderInterface
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, Account::class);
-	}
+
 
 	/**
 	 * Dit zegt niet in dat een account of profiel ook werkelijk bestaat!
 	 * @param $uid
 	 * @return bool
 	 */
-	public static function isValidUid($uid)
+	public static function isValidUid(string $uid)
 	{
 		return is_string($uid) && preg_match('/^[a-z0-9]{4}$/', $uid);
 	}
@@ -141,26 +138,9 @@ class AccountRepository extends AbstractRepository implements
 		$this->_em->flush();
 	}
 
-	public function upgradePassword(
-		UserInterface $user,
-		string $newEncodedPassword
-	): void {
-		$user->pass_hash = $newEncodedPassword;
-
-		$this->_em->flush();
-		$this->_em->clear();
-	}
-
 	public function loadUserByUsername(string $username): ?UserInterface
 	{
 		return $this->findOneByUsername($username);
-	}
-
-	public function findOneByUsername(string $username): ?Account
-	{
-		return $this->find($username) ??
-			($this->findOneBy(['username' => $username]) ??
-				$this->findOneByEmail($username));
 	}
 
 	/**

@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\groep\BbWoonoord;
 
 class NodeWoonoord implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbWoonoord::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbWoonoord::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'woonoord'
+	 */
 	public static function getNodeType()
 	{
 		return 'woonoord';
@@ -36,6 +44,9 @@ class NodeWoonoord implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

@@ -31,34 +31,13 @@ class ProfielUpdateLogGroup extends ProfielLogGroup
 	}
 
 	/**
-	 * @return string
-	 */
-	public function toHtml()
-	{
-		$changesHtml = [];
-		foreach ($this->entries as $change) {
-			$changesHtml[] = "<div class='change'>{$change->toHtml()}</div>";
-		}
-		return "<div class='ProfielLogEntry'>
-			<div class='metadata'>Gewijzigd door " .
-			ProfielRepository::getLink($this->editor, 'civitas') .
-			' ' .
-			($this->timestamp === null
-				? '?'
-				: DateUtil::reldate($this->timestamp->format('Y-m-d H:i:s'))) .
-			"</div>
-			" .
-			implode('', $changesHtml) .
-			"
-			</div>";
-	}
-
-	/**
 	 * Censureer alle velden met gegeven naam
+	 *
 	 * @param $naam
-	 * @return boolean Of er data gecensureerd is
+	 *
+	 * @return false|float|int Of er data gecensureerd is
 	 */
-	public function censureerVeld($naam): bool
+	public function censureerVeld($naam): int|float|false
 	{
 		$data_verwijderd = false;
 		for ($i = 0; $i < sizeof($this->entries); $i++) {

@@ -14,15 +14,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class BoekRecensieFormulier implements FormulierTypeInterface
 {
-	public function __construct(
-		private readonly UrlGeneratorInterface $urlGenerator
-	) {
-	}
+
 
 	/**
 	 * @param FormulierBuilder $builder
 	 * @param BoekRecensie $data
 	 * @param array $options
+	 *
+	 * @return void
 	 */
 	public function createFormulier(
 		FormulierBuilder $builder,

@@ -20,15 +20,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FotoRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly FotoTagsRepository $fotoTagsRepository
-	) {
-		parent::__construct($registry, Foto::class);
-	}
+
 
 	/**
 	 * @override parent::retrieveByUUID($UUID)
+	 *
+	 * @param null|scalar $UUID
 	 */
 	public function retrieveByUUID($UUID)
 	{
@@ -41,7 +38,8 @@ class FotoRepository extends AbstractRepository
 
 	/**
 	 * @param $subdir
-	 * @param $filename
+	 * @param null|scalar $filename
+	 *
 	 * @return Foto|null
 	 */
 	public function get($subdir, $filename)
@@ -154,18 +152,5 @@ class FotoRepository extends AbstractRepository
 			unlink($foto->getResizedPath());
 		}
 		$foto->createResized();
-	}
-
-	/**
-	 * @param string|null $subdir
-	 * @return Foto[]
-	 */
-	public function findBySubdir(?string $subdir)
-	{
-		return $this->createQueryBuilder('foto')
-			->where('foto.subdir like :subdir')
-			->setParameter('subdir', $subdir . '%')
-			->getQuery()
-			->getResult();
 	}
 }

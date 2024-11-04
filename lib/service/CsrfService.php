@@ -9,23 +9,13 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class CsrfService
 {
-	/**
-	 * CsrfService constructor.
-	 * @param $manager CsrfTokenManagerInterface
-	 * @param LoggerInterface $logger
-	 */
-	public function __construct(
-		private readonly CsrfTokenManagerInterface $manager,
-		private readonly LoggerInterface $logger
-	) {
-	}
+
 
 	/**
 	 * @param string $path
 	 * @param string $method
-	 * @return CsrfToken|null
 	 */
-	public function generateToken($path, string $method)
+	public function generateToken($path, string $method): CsrfToken
 	{
 		return $this->manager->getToken('global');
 	}
@@ -66,7 +56,7 @@ class CsrfService
 	 * @param string $method
 	 * @return bool
 	 */
-	public function isValid($token, string $path, string $method): bool
+	public function isValid(CsrfToken $token, string $path, string $method): bool
 	{
 		return $this->manager->isTokenValid($token);
 	}

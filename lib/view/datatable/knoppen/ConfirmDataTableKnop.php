@@ -21,6 +21,11 @@ class ConfirmDataTableKnop extends DataTableKnop implements JsonSerializable
 		parent::__construct($multiplicity, $url, $label, $title, $icon, 'confirm');
 	}
 
+	/**
+	 * @return (array|mixed)[]
+	 *
+	 * @psalm-return array{buttons: array<never, never>,...}
+	 */
 	public function jsonSerialize(): array
 	{
 		return array_merge(parent::jsonSerialize(), ['buttons' => []]);

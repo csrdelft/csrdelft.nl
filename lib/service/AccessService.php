@@ -65,14 +65,6 @@ class AccessService
 	];
 
 	/**
-	 * @param AccessDecisionManagerInterface $accessDecisionManager
-	 */
-	public function __construct(
-		private readonly AccessDecisionManagerInterface $accessDecisionManager
-	) {
-	}
-
-	/**
 	 * Controleert of een specifieke gebruiker de juiste rechten heeft.
 	 *
 	 * @param UserInterface $user
@@ -82,7 +74,7 @@ class AccessService
 	 */
 	public function isUserGranted(
 		UserInterface $user,
-		$attribute,
+		string $attribute,
 		$subject = null
 	) {
 		$token = new UsernamePasswordToken(
@@ -99,9 +91,12 @@ class AccessService
 	 * @param string $lidstatus
 	 *
 	 * @return string
+	 *
 	 * @throws CsrException
+	 *
+	 * @psalm-return 'R_LID'|'R_NOBODY'|'R_OUDLID'
 	 */
-	public function getDefaultPermissionRole($lidstatus)
+	public function getDefaultPermissionRole($lidstatus): string
 	{
 		return match ($lidstatus) {
 			LidStatus::Kringel,
@@ -121,8 +116,10 @@ class AccessService
 
 	/**
 	 * @return string[]
+	 *
+	 * @psalm-return list{'bestuur', 'geslacht:m', 'geslacht:v', 'ouderejaars', 'eerstejaars'}
 	 */
-	public function getPermissionSuggestions()
+	public function getPermissionSuggestions(): array
 	{
 		$suggestions = [];
 		$suggestions[] = 'bestuur';
@@ -137,9 +134,12 @@ class AccessService
 	 * Get error(s) in permission string, if any.
 	 *
 	 * @param string $permissions
-	 * @return array empty if no errors; substring(s) of $permissions containing error(s) otherwise
+	 *
+	 * @return string[] empty if no errors; substring(s) of $permissions containing error(s) otherwise
+	 *
+	 * @psalm-return list{0?: string,...}
 	 */
-	public function getPermissionStringErrors($permissions)
+	public function getPermissionStringErrors($permissions): array
 	{
 		$errors = [];
 		// OR
@@ -204,9 +204,12 @@ class AccessService
 	 * Converteer een oude permissie, zoals P_LOGGED_IN naar een nieuwe permissie zoals ROLE_LOGGED_IN.
 	 *
 	 * @param $permissie
-	 * @return array|string|string[]|null
+	 *
+	 * @return null|string|string[]
+	 *
+	 * @psalm-return array<string>|null|string
 	 */
-	public function converteerPermissie($permissie)
+	public function converteerPermissie(string $permissie): array|string|null
 	{
 		return preg_replace('/P_/', 'ROLE_', $permissie);
 	}

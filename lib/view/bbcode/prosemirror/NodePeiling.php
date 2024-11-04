@@ -7,11 +7,19 @@ use CsrDelft\view\bbcode\tag\BbPeiling;
 
 class NodePeiling implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbPeiling::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbPeiling::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'peiling'
+	 */
 	public static function getNodeType()
 	{
 		return 'peiling';
@@ -37,6 +45,9 @@ class NodePeiling implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

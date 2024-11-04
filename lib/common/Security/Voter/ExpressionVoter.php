@@ -21,11 +21,6 @@ class ExpressionVoter extends Voter
 {
 	use CacheableVoterSupportsTrait;
 
-	public function __construct(
-		private AccessDecisionManagerInterface $accessDecisionManager
-	) {
-	}
-
 	public function supportsAttribute(string $attribute): bool
 	{
 		return (bool) preg_match('/[|,+]/', $attribute);

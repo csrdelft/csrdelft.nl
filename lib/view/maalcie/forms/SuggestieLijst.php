@@ -53,6 +53,9 @@ class SuggestieLijst implements ToResponse, FormElement
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		return $this->twig->render(
@@ -79,11 +82,17 @@ class SuggestieLijst implements ToResponse, FormElement
 		return $this->getType();
 	}
 
+	/**
+	 * @return class-string<SuggestieLijst>
+	 */
 	public function getType()
 	{
 		return static::class;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getJavascript()
 	{
 		$js = <<<JS
@@ -101,6 +110,11 @@ JS;
 		return $js;
 	}
 
+	/**
+	 * @return CorveePuntenOverzichtDTO[]
+	 *
+	 * @psalm-return array<CorveePuntenOverzichtDTO>
+	 */
 	public function getModel()
 	{
 		return $this->suggesties;
@@ -111,6 +125,11 @@ JS;
 		return new Response($this->getHtml());
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ''
+	 */
 	public function getBreadcrumbs()
 	{
 		return '';

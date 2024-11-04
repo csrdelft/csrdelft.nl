@@ -63,6 +63,11 @@ class FotoTag implements JsonSerializable
 	#[ORM\Column(type: 'float')]
 	public $size;
 
+	/**
+	 * @return (mixed|null|string)[]
+	 *
+	 * @psalm-return array{name: null|string,...}
+	 */
 	public function jsonSerialize(): array
 	{
 		$array = (array) $this;

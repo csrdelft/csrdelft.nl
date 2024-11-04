@@ -12,7 +12,7 @@ class CacheControlEventListener
 	{
 	}
 
-	public function onKernelResponse(ResponseEvent $event)
+	public function onKernelResponse(ResponseEvent $event): void
 	{
 		// Voorkom caching van interne bestanden, zolang ze geen bestanden zijn.
 		if (

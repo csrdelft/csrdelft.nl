@@ -39,7 +39,7 @@ class JwtToken extends AbstractToken
 	/**
 	 * @return string
 	 */
-	public function getRefreshToken(): ?string
+	public function getRefreshToken(): string
 	{
 		return $this->refreshToken;
 	}

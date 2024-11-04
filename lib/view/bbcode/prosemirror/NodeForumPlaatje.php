@@ -7,11 +7,19 @@ use CsrDelft\view\bbcode\tag\BbForumPlaatje;
 
 class NodeForumPlaatje implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbForumPlaatje::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbForumPlaatje::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'plaatje'
+	 */
 	public static function getNodeType()
 	{
 		return 'plaatje';
@@ -38,6 +46,9 @@ class NodeForumPlaatje implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

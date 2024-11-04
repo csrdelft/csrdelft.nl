@@ -128,10 +128,14 @@ class MaaltijdRepetitiesController extends AbstractController
 
 	/**
 	 * @param MaaltijdRepetitie $repetitie
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @throws Throwable
-	 * @Auth(P_MAAL_MOD)
+	 *
+	 * @Auth (P_MAAL_MOD)
+	 *
+	 * @return never
 	 */
 	#[
 		Route(
@@ -164,9 +168,10 @@ class MaaltijdRepetitiesController extends AbstractController
 
 	/**
 	 * @param MaaltijdRepetitie $repetitie
-	 * @return MaaltijdRepetitieForm
+	 *
 	 * @throws Throwable
-	 * @Auth(P_MAAL_MOD)
+	 *
+	 * @Auth (P_MAAL_MOD)
 	 */
 	#[
 		Route(
@@ -174,7 +179,7 @@ class MaaltijdRepetitiesController extends AbstractController
 			methods: ['POST']
 		)
 	]
-	public function bijwerken(MaaltijdRepetitie $repetitie)
+	public function bijwerken(MaaltijdRepetitie $repetitie): MaaltijdRepetitieForm|Response
 	{
 		$view = $this->opslaan($repetitie);
 

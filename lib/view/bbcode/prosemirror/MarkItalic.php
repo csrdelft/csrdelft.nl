@@ -7,7 +7,10 @@ use CsrDelft\bb\tag\BbNode;
 
 class MarkItalic implements Mark
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbItalic::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbItalic::class;
 	}
@@ -17,11 +20,21 @@ class MarkItalic implements Mark
 		return [];
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'em'
+	 */
 	public static function getMarkType()
 	{
 		return 'em';
 	}
 
+	/**
+	 * @return array
+	 *
+	 * @psalm-return array<never, never>
+	 */
 	public function getTagAttributes($mark)
 	{
 		return [];

@@ -15,19 +15,9 @@ use CsrDelft\repository\ProfielRepository;
 
 class ForumService
 {
-	public function __construct(
-		private readonly ForumDradenReagerenRepository $forumDradenReagerenRepository,
-		private readonly ForumPostsRepository $forumPostsRepository,
-		private readonly ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		private readonly ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
-		private readonly ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		private readonly ForumDelenMeldingRepository $forumDelenMeldingRepository,
-		private readonly ForumDradenRepository $forumDradenRepository,
-		private readonly ProfielRepository $profielRepository
-	) {
-	}
 
-	public function opschonen()
+
+	public function opschonen(): void
 	{
 		// Oude lege concepten verwijderen
 		$this->forumDradenReagerenRepository->verwijderLegeConcepten();

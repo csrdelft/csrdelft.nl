@@ -20,13 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CorveePuntenService
 {
-	public function __construct(
-		private readonly EntityManagerInterface $entityManager,
-		private readonly ProfielRepository $profielRepository,
-		private readonly CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
-		private readonly CorveeTakenRepository $corveeTakenRepository
-	) {
-	}
+
 
 	public function resetCorveejaar()
 	{
@@ -48,7 +42,6 @@ class CorveePuntenService
 					}
 					$punten = $totalen->puntenTotaal;
 					$punten += $totalen->bonusTotaal;
-					$vrijstelling = null;
 					if (
 						array_key_exists($uid, $vrijstellingen) &&
 						time() > $vrijstellingen[$uid]->begin_datum->getTimestamp()
@@ -84,7 +77,10 @@ class CorveePuntenService
 		});
 	}
 
-	public function puntenToekennen(Profiel $profiel, $punten, $bonus_malus)
+	/**
+	 * @return void
+	 */
+	public function puntenToekennen(Profiel $profiel, int $punten, int $bonus_malus)
 	{
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Punten toekennen faalt: geen integer');
@@ -99,18 +95,13 @@ class CorveePuntenService
 		}
 	}
 
-	public function puntenIntrekken(Profiel $profiel, $punten, $bonus_malus)
-	{
-		if (!is_int($punten) || !is_int($bonus_malus)) {
-			throw new CsrGebruikerException('Punten intrekken faalt: geen integer');
-		}
-		$this->puntenToekennen($profiel, -$punten, -$bonus_malus);
-	}
-
+	/**
+	 * @return void
+	 */
 	public function savePuntenVoorLid(
 		Profiel $profiel,
-		$punten = null,
-		$bonus_malus = null
+		int|null $punten = null,
+		int|null $bonus_malus = null
 	) {
 		if (!is_int($punten) && !is_int($bonus_malus)) {
 			throw new CsrGebruikerException(
@@ -127,9 +118,11 @@ class CorveePuntenService
 	}
 
 	/**
-	 * @return array|CorveePuntenOverzichtDTO[]
+	 * @return CorveePuntenOverzichtDTO[]
+	 *
+	 * @psalm-return array<string, CorveePuntenOverzichtDTO>
 	 */
-	public function loadPuntenTotaalVoorAlleLeden()
+	public function loadPuntenTotaalVoorAlleLeden(): array
 	{
 		$leden = $this->profielRepository->findByLidStatus([
 			LidStatus::Lid,
@@ -149,9 +142,12 @@ class CorveePuntenService
 
 	/**
 	 * @param null $functies
+	 *
 	 * @return CorveePuntenOverzichtDTO[]
+	 *
+	 * @psalm-return array<string, CorveePuntenOverzichtDTO>
 	 */
-	public function loadPuntenVoorAlleLeden($functies = null)
+	public function loadPuntenVoorAlleLeden($functies = null): array
 	{
 		$taken = $this->corveeTakenRepository->getAlleTaken(true); // grouped by uid
 		$leden = $this->profielRepository->findByLidStatus([
@@ -267,11 +263,13 @@ class CorveePuntenService
 
 	/**
 	 * RGB kleurovergang berekenen
-	 * @param $punten
+	 *
+	 * @param float|int $punten
 	 * @param bool $tekort
+	 *
 	 * @return string
 	 */
-	private function rgbCalculate($punten, $tekort = false)
+	private function rgbCalculate(int|float $punten, $tekort = false)
 	{
 		$perjaar = intval(InstellingUtil::instelling('corvee', 'punten_per_jaar'));
 		if (!$tekort) {

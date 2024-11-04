@@ -18,10 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ArchiefMaaltijdenRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, ArchiefMaaltijd::class);
-	}
+
 
 	protected $default_order = 'datum DESC, tijd DESC';
 

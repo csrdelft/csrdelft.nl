@@ -10,16 +10,31 @@ use CsrDelft\entity\groepen\Werkgroep;
  */
 class BbWerkgroep extends BbTagGroep
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Werkgroep::class
+	 */
 	public function getEntityClass(): string
 	{
 		return Werkgroep::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'werkgroep'
+	 */
 	public static function getTagName()
 	{
 		return 'werkgroep';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'aanmeldingen'
+	 */
 	public function getLidNaam()
 	{
 		return 'aanmeldingen';

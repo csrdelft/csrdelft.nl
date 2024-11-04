@@ -70,53 +70,24 @@ class ArchiefMaaltijd implements Agendeerbaar
 	#[ORM\Column(type: 'text')]
 	public $aanmeldingen;
 
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('tijd')]
-	public function getTijdFormatted()
-	{
-		return DateUtil::dateFormatIntl($this->tijd, DateUtil::TIME_FORMAT);
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('datum')]
-	public function getDatumFormatted()
-	{
-		return DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT);
-	}
-
-	/**
-	 * @return int
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('aanmeldingen')]
-	public function getAantalAanmelding()
-	{
-		return count($this->getAanmeldingenArray());
-	}
-
 	// Agendeerbaar ############################################################
-
-	public function getPrijsFloat()
-	{
-		return (float) $this->prijs / 100.0;
-	}
 
 	public function getTitel(): string
 	{
 		return $this->titel;
 	}
 
+	/**
+	 * @return DateTimeImmutable
+	 */
 	public function getEindMoment(): DateTimeImmutable
 	{
 		return $this->getBeginMoment()->add(new DateInterval('PT1H30M'));
 	}
 
+	/**
+	 * @return DateTimeImmutable
+	 */
 	public function getBeginMoment(): DateTimeImmutable
 	{
 		return $this->datum->setTime(
@@ -126,6 +97,9 @@ class ArchiefMaaltijd implements Agendeerbaar
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getBeschrijving(): string
 	{
 		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
@@ -138,21 +112,37 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return substr_count($this->aanmeldingen, ',');
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'C.S.R. Delft'
+	 */
 	public function getLocatie(): string
 	{
 		return 'C.S.R. Delft';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return '/maaltijdenbeheer/archief'
+	 */
 	public function getUrl(): string
 	{
 		return '/maaltijdenbeheer/archief';
 	}
 
+	/**
+	 * @return false
+	 */
 	public function isHeledag(): bool
 	{
 		return false;
 	}
 
+	/**
+	 * @return true
+	 */
 	public function isTransparant(): bool
 	{
 		return true;
@@ -165,6 +155,11 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return $json;
 	}
 
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array<int<0, max>, non-empty-list<string>>
+	 */
 	public function getAanmeldingenArray(): array
 	{
 		$result = [];
@@ -177,6 +172,9 @@ class ArchiefMaaltijd implements Agendeerbaar
 		return $result;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getUUID(): string
 	{
 		return $this->maaltijd_id . '@archiefmaaltijd.csrdelft.nl';

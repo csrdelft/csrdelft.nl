@@ -54,7 +54,7 @@ trait GroepAanmeldMoment
 	}
 
 	/**
-	 * @return DateTimeImmutable
+	 * @return \DateTimeImmutable
 	 */
 	public function getAanmeldenTot(): ?DateTimeImmutable
 	{

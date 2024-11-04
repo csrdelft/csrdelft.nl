@@ -47,24 +47,4 @@ class EetplanBekenden implements DataTableEntry
 	#[Serializer\Groups('datatable')]
 	#[ORM\Column(type: 'string', nullable: true)]
 	public $opmerking;
-
-	/**
-	 * @return DataTableColumn
-	 */
-	#[Serializer\SerializedName('noviet1')]
-	#[Serializer\Groups('datatable')]
-	public function getDataTableNoviet1()
-	{
-		return $this->noviet1->getDataTableColumn();
-	}
-
-	/**
-	 * @return DataTableColumn
-	 */
-	#[Serializer\SerializedName('noviet2')]
-	#[Serializer\Groups('datatable')]
-	public function getDataTableNoviet2()
-	{
-		return $this->noviet2->getDataTableColumn();
-	}
 }

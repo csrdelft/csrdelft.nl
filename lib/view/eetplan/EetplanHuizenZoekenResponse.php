@@ -15,6 +15,9 @@ class EetplanHuizenZoekenResponse extends JsonLijstResponse
 	/**
 	 * @param Woonoord $entity
 	 *
+	 * @return (int|string)[]
+	 *
+	 * @psalm-return array{url: string, label: int, value: string, id: int}
 	 */
 	public function renderElement($entity)
 	{

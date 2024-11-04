@@ -96,16 +96,17 @@ class CorveeFunctie implements ISelectEntity, DisplayEntity
 	]
 	public $kwalificaties;
 
-	public function hasKwalificaties()
-	{
-		return sizeof($this->kwalificaties) > 0;
-	}
-
+	/**
+	 * @return string
+	 */
 	public function getValue()
 	{
 		return $this->naam;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getId()
 	{
 		return $this->functie_id;

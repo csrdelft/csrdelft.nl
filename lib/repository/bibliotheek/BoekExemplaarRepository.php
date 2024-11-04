@@ -18,10 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BoekExemplaarRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, BoekExemplaar::class);
-	}
+
 
 	/**
 	 * @param $id
@@ -30,11 +27,6 @@ class BoekExemplaarRepository extends AbstractRepository
 	public function get($id)
 	{
 		return $this->find($id);
-	}
-
-	public function getExemplaren(Boek $boek)
-	{
-		return $this->find('boek_id = ?', [$boek->id]);
 	}
 
 	/**
@@ -47,10 +39,11 @@ class BoekExemplaarRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param $uid
+	 * @param null|string $uid
+	 *
 	 * @return BoekExemplaar[]
 	 */
-	public function getEigendom($uid)
+	public function getEigendom(string|null $uid)
 	{
 		return $this->findBy(['eigenaar_uid' => $uid]);
 	}

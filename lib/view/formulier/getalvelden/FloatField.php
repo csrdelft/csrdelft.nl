@@ -57,7 +57,12 @@ class FloatField extends InputField
 		$this->step = str_replace(',', '.', $this->step); // werkomheen
 	}
 
-	protected function getInputAttribute($attribute)
+	/**
+	 * @param string[] $attribute
+	 *
+	 * @psalm-param list{'id', 'name', 'class'} $attribute
+	 */
+	protected function getInputAttribute(array $attribute)
 	{
 		if ($attribute == 'pattern' && $this->pattern) {
 			return 'pattern="' . $this->pattern . '"';
@@ -83,6 +88,9 @@ class FloatField extends InputField
 		return $this->value;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if ($this->value === 0.) {

@@ -108,7 +108,7 @@ class PinTransactie
 	 * @return string
 	 * @throws CsrException
 	 */
-	public function getKorteBeschrijving()
+	public function getKorteBeschrijving(): string
 	{
 		return sprintf('€%.2f', $this->getBedragInCenten() / 100);
 	}

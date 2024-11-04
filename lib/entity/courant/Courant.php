@@ -42,9 +42,4 @@ class Courant
 	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
 	#[ORM\JoinColumn(name: 'verzender', referencedColumnName: 'uid')]
 	public $verzender_profiel;
-
-	public function getJaar()
-	{
-		return $this->verzendMoment->format('Y');
-	}
 }

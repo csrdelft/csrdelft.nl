@@ -44,7 +44,10 @@ class AccessControlEventListener
 	 * Controleer of gebruiker deze pagina mag zien.
 	 *
 	 * @param ControllerEvent $event
+	 *
 	 * @throws \ReflectionException
+	 *
+	 * @return void
 	 */
 	public function onKernelController(ControllerEvent $event)
 	{

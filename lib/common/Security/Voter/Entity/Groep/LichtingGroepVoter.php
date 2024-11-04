@@ -7,6 +7,11 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class LichtingGroepVoter extends AbstractGroepVoter
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Lichting::class
+	 */
 	protected function getGroepType(): string
 	{
 		return Lichting::class;

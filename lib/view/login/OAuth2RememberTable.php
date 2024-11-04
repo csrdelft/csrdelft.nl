@@ -10,9 +10,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class OAuth2RememberTable implements DataTableTypeInterface
 {
-	public function __construct(private readonly UrlGeneratorInterface $generator)
-	{
-	}
+
 
 	public function createDataTable(
 		DataTableBuilder $builder,

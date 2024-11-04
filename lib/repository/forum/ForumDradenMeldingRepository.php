@@ -20,10 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ForumDradenMeldingRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, ForumDraadMelding::class);
-	}
+
 
 	public function setNiveauVoorLid(
 		ForumDraad $draad,
@@ -38,22 +35,6 @@ class ForumDradenMeldingRepository extends AbstractRepository
 		} else {
 			$this->maakForumDraadMelding($draad, $uid, $niveau);
 		}
-	}
-
-	protected function maakForumDraadMelding(
-		ForumDraad $draad,
-		$uid,
-		ForumDraadMeldingNiveau $niveau
-	) {
-		$melding = new ForumDraadMelding();
-		$melding->draad = $draad;
-		$melding->draad_id = $draad->draad_id;
-		$melding->uid = $uid;
-		$melding->niveau = $niveau;
-
-		$this->getEntityManager()->persist($melding);
-		$this->getEntityManager()->flush();
-		return $melding;
 	}
 
 	public function stopAlleMeldingenVoorLeden(array $uids)

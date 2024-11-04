@@ -40,6 +40,9 @@ class CiviBestellingTable extends DataTable
 		$this->setOrder(['moment' => 'desc']);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getBreadcrumbs()
 	{
 		return '<a href="/" title="Startpagina">' .

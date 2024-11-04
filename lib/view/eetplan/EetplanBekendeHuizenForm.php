@@ -23,6 +23,8 @@ class EetplanBekendeHuizenForm implements FormulierTypeInterface
 	 * @param FormulierBuilder $builder
 	 * @param Eetplan $data
 	 * @param array $options
+	 *
+	 * @return void
 	 */
 	public function createFormulier(
 		FormulierBuilder $builder,

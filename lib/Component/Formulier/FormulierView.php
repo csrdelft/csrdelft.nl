@@ -10,29 +10,9 @@ class FormulierView implements \Stringable
 	{
 	}
 
-	public function getView()
-	{
-		return $this->view;
-	}
-
-	public function getTitel()
-	{
-		return $this->titel;
-	}
-
-	public function getBreadcrumbs(): never
-	{
-		throw new CsrException('Niet geimplementeerd');
-	}
-
 	public function getModel(): never
 	{
 		throw new CsrException('Niet geimplementeerd');
-	}
-
-	public function toString()
-	{
-		return $this->view;
 	}
 
 	public function __toString(): string

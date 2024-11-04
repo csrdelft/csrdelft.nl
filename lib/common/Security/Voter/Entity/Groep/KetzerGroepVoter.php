@@ -8,6 +8,11 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class KetzerGroepVoter extends AbstractGroepVoter
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Ketzer::class
+	 */
 	protected function getGroepType(): string
 	{
 		return Ketzer::class;

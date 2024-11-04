@@ -14,6 +14,11 @@ class GroepKeuzeSelectieType extends SafeJsonType
 		return 'groepkeuzeselectie';
 	}
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{GroepKeuzeSelectie::class}
+	 */
 	protected function getAcceptedTypes()
 	{
 		return [GroepKeuzeSelectie::class];

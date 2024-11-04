@@ -157,28 +157,6 @@ class PinTransactieMatch implements DataTableEntry
 		return $pinTransactieMatch;
 	}
 
-	public function getUUID()
-	{
-		return strtolower(
-			sprintf(
-				'%s@%s.csrdelft.nl',
-				$this->id,
-				ReflectionUtil::short_class($this)
-			)
-		);
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('status')]
-	public function getDataTableStatus()
-	{
-		return PinTransactieMatchStatusEnum::from($this->status)->getDescription() .
-			$this->icons();
-	}
-
 	/**
 	 * @return string
 	 */
@@ -193,83 +171,6 @@ class PinTransactieMatch implements DataTableEntry
 			$desc .= '&nbsp;' . Icon::getTag('circle-info', null, $this->notitie);
 		}
 		return $desc;
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('transactie')]
-	public function getDataTableTransactie()
-	{
-		if ($this->transactie) {
-			return $this->transactie->getKorteBeschrijving();
-		} else {
-			return '-';
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('bestelling')]
-	public function getDataTableBestelling()
-	{
-		if ($this->bestelling) {
-			return $this->bestelling->getPinBeschrijving();
-		} else {
-			return '-';
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('moment')]
-	public function getDataTableMoment()
-	{
-		return self::renderMoment($this->getMoment());
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('bestelling_tijd')]
-	public function getDataTableBestellingTijd()
-	{
-		return $this->bestelling ? self::renderTijd($this->bestelling->moment) : '';
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('transactie_tijd')]
-	public function getDataTableTransactieTijd()
-	{
-		return $this->transactie
-			? self::renderTijd($this->transactie->datetime)
-			: '';
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('tijdsverschil')]
-	public function getDataTableTijdsverschil()
-	{
-		if (!$this->transactie || !$this->bestelling) {
-			return '-';
-		} else {
-			return abs(
-				$this->transactie->datetime->getTimestamp() -
-					$this->bestelling->moment->getTimestamp()
-			) . 's';
-		}
 	}
 
 	/**
@@ -292,9 +193,10 @@ class PinTransactieMatch implements DataTableEntry
 	/**
 	 * @param DateTimeImmutable $moment
 	 * @param bool $link
-	 * @return string
+	 *
+	 * @return false|string
 	 */
-	public static function renderMoment(DateTimeImmutable $moment, $link = true)
+	public static function renderMoment(DateTimeImmutable $moment, $link = true): string|false
 	{
 		$formatted = DateUtil::dateFormatIntl($moment, DateUtil::DATETIME_FORMAT);
 		if (!$link) {
@@ -307,36 +209,20 @@ class PinTransactieMatch implements DataTableEntry
 
 	/**
 	 * @param DateTimeImmutable $moment
-	 * @return string
+	 *
+	 * @return false|string
 	 */
-	public static function renderTijd(DateTimeImmutable $moment)
+	public static function renderTijd(DateTimeImmutable $moment): string|false
 	{
 		return DateUtil::dateFormatIntl($moment, DateUtil::FULL_TIME_FORMAT);
 	}
 
 	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('verschil')]
-	public function getDataTableVerschil()
-	{
-		$verschil = $this->getVerschil();
-		if ($verschil !== null) {
-			$min = $verschil < 0 ? '-' : '';
-			$minuten = floor(abs($verschil) / 60);
-			$seconden = abs($verschil) % 60;
-			return $min . sprintf('%d:%02d', $minuten, $seconden);
-		} else {
-			return '';
-		}
-	}
-
-	/**
-	 * @return int Seconds difference
+	 * @return int|null Seconds difference
+	 *
 	 * @throws CsrException
 	 */
-	public function getVerschil()
+	public function getVerschil(): int|null
 	{
 		if ($this->transactie !== null && $this->bestelling !== null) {
 			return $this->transactie->datetime->getTimestamp() -
@@ -351,7 +237,7 @@ class PinTransactieMatch implements DataTableEntry
 	 * Houdt geen rekening met eventuele correcties.
 	 * @return string
 	 */
-	public function logischeStatus()
+	public function logischeStatus(): string
 	{
 		if ($this->bestelling === null) {
 			return PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING;
@@ -404,9 +290,8 @@ class PinTransactieMatch implements DataTableEntry
 
 	/**
 	 * @param CiviProductRepository $civiProductRepository
-	 * @return CiviBestellingInhoud|null
 	 */
-	public function bouwBestellingInhoud($civiProductRepository)
+	public function bouwBestellingInhoud($civiProductRepository): CiviBestellingInhoud
 	{
 		$bestellingInhoud = new CiviBestellingInhoud();
 		// Gebruik pincorrectie voor periode voor invoering tussenrekeningen, gebruik pintransactie erna

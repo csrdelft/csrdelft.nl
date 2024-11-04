@@ -13,7 +13,10 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 abstract class AbstractRepository extends ServiceEntityRepository
 {
-	public function retrieveByUuid($UUID)
+	/**
+	 * @param null|string $UUID
+	 */
+	public function retrieveByUuid(string|null $UUID)
 	{
 		$metadata = $this->getClassMetadata();
 
@@ -24,12 +27,20 @@ abstract class AbstractRepository extends ServiceEntityRepository
 		);
 	}
 
-	public function save($entity)
+	/**
+	 * @param \CsrDelft\service\Eetplan|null|object $entity
+	 */
+	public function save(\CsrDelft\service\Eetplan|object|null $entity)
 	{
 		$this->_em->persist($entity);
 		$this->_em->flush();
 	}
 
+	/**
+	 * @param \CsrDelft\entity\PushAbonnement|\CsrDelft\entity\agenda\AgendaItem|\CsrDelft\entity\documenten\Document|\CsrDelft\entity\eetplan\Eetplan|\CsrDelft\entity\eetplan\EetplanBekenden|\CsrDelft\entity\forum\ForumDeelMelding|mixed|null $entity
+	 *
+	 * @psalm-param T|\CsrDelft\entity\PushAbonnement|\CsrDelft\entity\agenda\AgendaItem|\CsrDelft\entity\documenten\Document|\CsrDelft\entity\eetplan\Eetplan|\CsrDelft\entity\eetplan\EetplanBekenden|\CsrDelft\entity\forum\ForumDeelMelding|null $entity
+	 */
 	public function remove($entity)
 	{
 		$this->_em->remove($entity);

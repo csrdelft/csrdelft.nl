@@ -102,19 +102,19 @@ class ForumDeel
 		$this->meldingen = new ArrayCollection();
 	}
 
-	public function magLezen($rss = false)
+	public function magLezen($rss = false): bool
 	{
 		return LoginService::mag(P_FORUM_READ) &&
 			LoginService::mag($this->rechten_lezen) &&
 			$this->categorie->magLezen();
 	}
 
-	public function magPosten()
+	public function magPosten(): bool
 	{
 		return LoginService::mag($this->rechten_posten);
 	}
 
-	public function magModereren()
+	public function magModereren(): bool
 	{
 		return LoginService::mag($this->rechten_modereren);
 	}
@@ -122,11 +122,6 @@ class ForumDeel
 	public function magMeldingKrijgen()
 	{
 		return $this->magLezen();
-	}
-
-	public function isOpenbaar()
-	{
-		return str_contains($this->rechten_lezen, P_FORUM_READ);
 	}
 
 	/**
@@ -146,29 +141,13 @@ class ForumDeel
 		return $this->forum_draden;
 	}
 
-	public function hasForumDraden()
-	{
-		$this->getForumDraden();
-		return !empty($this->forum_draden);
-	}
-
 	/**
 	 * Public for search results and all sorts of prefetching.
 	 *
 	 * @param array $forum_draden
 	 */
-	public function setForumDraden($forum_draden)
+	public function setForumDraden($forum_draden): void
 	{
 		$this->forum_draden = $forum_draden;
-	}
-
-	public function lidWilMeldingVoorDeel($uid = null)
-	{
-		if ($uid === null) {
-			$uid = LoginService::getUid();
-		}
-
-		return $this->meldingen->matching(Eisen::voorGebruiker($uid))->first() !=
-			null;
 	}
 }

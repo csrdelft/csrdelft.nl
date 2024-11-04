@@ -16,8 +16,5 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class VoorkeurCommissieCategorieRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, VoorkeurCommissieCategorie::class);
-	}
+
 }

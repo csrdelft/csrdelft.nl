@@ -141,9 +141,13 @@ class MijnMaaltijdenController extends AbstractController
 
 	/**
 	 * @param Maaltijd $maaltijd
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Auth(P_MAAL_IK)
+	 *
+	 * @Auth (P_MAAL_IK)
+	 *
+	 * @return never
 	 */
 	#[Route(path: '/maaltijden/lijst/sluit/{maaltijd_id}', methods: ['POST'])]
 	public function sluit(Maaltijd $maaltijd)

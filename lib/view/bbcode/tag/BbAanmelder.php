@@ -14,18 +14,19 @@ class BbAanmelder extends BbTag
 	private $activiteit;
 	private $aantal;
 
-	public function __construct(
-		private readonly ReeksRepository $reeksRepository,
-		private readonly AanmeldActiviteitRepository $activiteitRepository,
-		private readonly Environment $twig
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'aanmelder'
+	 */
 	public static function getTagName()
 	{
 		return 'aanmelder';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function parse($arguments = [])
 	{
 		if (isset($arguments['aanmelder'])) {

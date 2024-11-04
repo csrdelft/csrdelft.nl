@@ -19,35 +19,9 @@ use Doctrine\ORM\ORMException;
  */
 class PeilingenService
 {
-	public function __construct(
-		private readonly PeilingenRepository $peilingenRepository,
-		private readonly PeilingOptiesRepository $peilingOptiesRepository,
-		private readonly EntityManagerInterface $entityManager
-	) {
-	}
 
-	public function magOptieToevoegen(Peiling $peiling)
-	{
-		if ($this->peilingenRepository->magBewerken($peiling)) {
-			return true;
-		}
 
-		if ($peiling->getStem(LoginService::getProfiel())) {
-			return false;
-		}
-
-		if (!$peiling->getMagStemmen()) {
-			return false;
-		}
-
-		$aantalVoorgesteld = $this->peilingOptiesRepository->count([
-			'peiling_id' => $peiling->id,
-			'ingebracht_door' => LoginService::getUid(),
-		]);
-		return $aantalVoorgesteld < $peiling->aantal_voorstellen;
-	}
-
-	public function stem(Peiling $peiling, $opties, Profiel $profiel)
+	public function stem(Peiling $peiling, $opties, Profiel $profiel): bool
 	{
 		try {
 			$this->entityManager->beginTransaction();
@@ -102,10 +76,12 @@ class PeilingenService
 	 * @param $peilingId
 	 * @param $opties
 	 * @param $uid
-	 * @return bool
+	 *
+	 * @return true
+	 *
 	 * @throws CsrGebruikerException
 	 */
-	public function isGeldigeStem(Peiling $peiling, $opties, Profiel $profiel)
+	public function isGeldigeStem(Peiling $peiling, $opties, Profiel $profiel): bool
 	{
 		if ($peiling->getStem($profiel)) {
 			throw new CsrGebruikerException('Alreeds gestemd.');

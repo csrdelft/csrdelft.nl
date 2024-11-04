@@ -120,25 +120,8 @@ class Peiling implements DataTableEntry
 	]
 	public $eigenaarProfiel;
 
-	/**
-	 * @return int
-	 */
-	#[Serializer\Groups(['datatable', 'vue'])]
-	public function getAantalGestemd()
-	{
-		if (!$this->opties) {
-			return 0;
-		}
-
-		$aantalGestemd = 0;
-		foreach ($this->opties as $optie) {
-			$aantalGestemd += $optie->stemmen;
-		}
-		return $aantalGestemd;
-	}
-
 	#[Serializer\Groups('vue')]
-	public function getHeeftGestemd()
+	public function getHeeftGestemd(): bool
 	{
 		return (bool) $this->stemmen
 			->matching(Eisen::voorIngelogdeGebruiker())
@@ -167,42 +150,11 @@ class Peiling implements DataTableEntry
 	 * @return bool
 	 */
 	#[Serializer\Groups(['datatable', 'vue'])]
-	public function getIsMod()
-	{
-		return $this->getMagBewerken();
-	}
-
-	/**
-	 * @return bool
-	 */
-	#[Serializer\Groups(['datatable', 'vue'])]
 	public function getMagStemmen()
 	{
 		return ContainerFacade::getContainer()
 			->get('security')
 			->isGranted('stemmen', $this);
-	}
-
-	/**
-	 * @return DataTableColumn|string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('eigenaar')]
-	public function getDataTableEigenaar()
-	{
-		return $this->eigenaarProfiel
-			? $this->eigenaarProfiel->getDataTableColumn()
-			: '';
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('detailSource')]
-	public function getDetailSource()
-	{
-		return '/peilingen/opties/' . $this->id;
 	}
 
 	/**

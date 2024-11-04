@@ -13,11 +13,6 @@ class GroepLidVoter extends Voter
 {
 	use CacheableVoterSupportsTrait;
 
-	public function __construct(
-		private AccessDecisionManagerInterface $accessDecisionManager
-	) {
-	}
-
 	public function supportsType(string $subjectType): bool
 	{
 		// Ook subclasses van Groep
@@ -28,7 +23,8 @@ class GroepLidVoter extends Voter
 	 * @param string $attribute
 	 * @param GroepLid $subject
 	 * @param TokenInterface $token
-	 * @return bool|void
+	 *
+	 * @return bool
 	 */
 	protected function voteOnAttribute(
 		string $attribute,

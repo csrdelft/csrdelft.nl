@@ -18,6 +18,9 @@ class UsernameField extends TextField
 		$this->title = 'Om mee in te loggen in plaats van het lidnummer.';
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {

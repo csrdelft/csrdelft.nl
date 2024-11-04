@@ -16,21 +16,6 @@ interface Node
 	public static function getBbTagType();
 
 	/**
-	 * Referentie naar type in Prosemirror schema.
-	 *
-	 * @return string
-	 */
-	public static function getNodeType();
-
-	/**
-	 * Prosemirror definitie.
-	 *
-	 * @param BbNode $node
-	 * @return mixed
-	 */
-	public function getData(BbNode $node);
-
-	/**
 	 * Bb attributes.
 	 *
 	 * @param $node \stdClass Prosemirror definitie.

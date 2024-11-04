@@ -28,16 +28,7 @@ use stdClass;
  */
 class CiviSaldoRepository extends AbstractRepository
 {
-	/**
-	 * @param ManagerRegistry $registry
-	 * @param CiviSaldoLogRepository $civiSaldoLogRepository
-	 */
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly CiviSaldoLogRepository $civiSaldoLogRepository
-	) {
-		parent::__construct($registry, CiviSaldo::class);
-	}
+
 
 	/**
 	 * @param string $uid
@@ -223,7 +214,12 @@ class CiviSaldoRepository extends AbstractRepository
 		return count($this->findBy(['uid' => $uid])) == 1;
 	}
 
-	public function zoeken($uids, $query)
+	/**
+	 * @param string[] $uids
+	 *
+	 * @psalm-param array<string> $uids
+	 */
+	public function zoeken(array $uids, string $query)
 	{
 		return $this->createQueryBuilder('cs')
 			->where('cs.deleted = false')

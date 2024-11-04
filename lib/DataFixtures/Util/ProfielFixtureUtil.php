@@ -18,11 +18,10 @@ class ProfielFixtureUtil
 	 * @param string|null $voornaam
 	 * @param string|null $achternaam
 	 * @param string $voorletters
-	 * @return void
 	 */
 	public static function maakProfiel(
 		Generator $faker,
-		$uid,
+		string $uid,
 		string $nickname = null,
 		string $voornaam = null,
 		string $achternaam = null,
@@ -122,7 +121,7 @@ class ProfielFixtureUtil
 	/**
 	 * @return mixed
 	 */
-	private static function getVerticale($faker)
+	private static function getVerticale(Generator $faker)
 	{
 		return $faker->randomElement(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']);
 	}

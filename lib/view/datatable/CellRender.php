@@ -91,33 +91,9 @@ class CellRender
 		return new static(self::TOTAAL_PRIJS);
 	}
 
-	/**
-	 * @return static
-	 */
-	public static function Timeago()
-	{
-		return new static(self::TIMEAGO);
-	}
-
-	/**
-	 * @return static
-	 */
-	public static function Filesize()
-	{
-		return new static(self::FILESIZE);
-	}
-
-	public static function DateTime()
+	public static function DateTime(): static
 	{
 		return new static(self::DATETIME);
 	}
 
-	public static function Date()
-	{
-		return new static(self::DATE);
-	}
-	public static function Time()
-	{
-		return new static(self::TIME);
-	}
 }

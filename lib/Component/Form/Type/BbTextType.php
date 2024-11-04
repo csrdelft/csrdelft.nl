@@ -11,17 +11,21 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class BbTextType extends AbstractType
 {
-	public function __construct(
-		private readonly BbToProsemirror $bbToProsemirror,
-		private readonly ProsemirrorToBb $prosemirrorToBb
-	) {
-	}
 
+
+	/**
+	 * @return string
+	 *
+	 * @psalm-return TextareaType::class
+	 */
 	public function getParent(): string
 	{
 		return TextareaType::class;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder->addModelTransformer(

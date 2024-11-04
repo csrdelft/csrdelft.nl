@@ -26,13 +26,6 @@ class PinTransactieDownloader
 	 */
 	const CLIENT_ID_HEADER = 'X-IBM-Client-Id';
 
-	public function __construct(
-		private readonly PinTransactieRepository $pinTransactieRepository,
-		private readonly EntityManagerInterface $entityManager,
-		private readonly HttpClientInterface $httpClient
-	) {
-	}
-
 	/**
 	 * @throws ClientExceptionInterface
 	 * @throws RedirectionExceptionInterface
@@ -40,14 +33,18 @@ class PinTransactieDownloader
 	 * @throws TransportExceptionInterface
 	 * @throws DecodingExceptionInterface
 	 * @throws PinDownloadException
+	 *
+	 * @return PinTransactie[]
+	 *
+	 * @psalm-return list{0?: PinTransactie,...}
 	 */
 	public function download(
 		$moment,
-		$pinURL,
-		$clientID,
-		$certificatePath,
-		$privateKeyPath
-	) {
+		string $pinURL,
+		string $clientID,
+		string $certificatePath,
+		string $privateKeyPath
+	): array {
 		$momentStart = date_create_immutable($moment);
 		$momentEnd = $momentStart->modify('+1 day');
 

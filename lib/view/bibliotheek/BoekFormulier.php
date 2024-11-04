@@ -21,16 +21,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class BoekFormulier implements FormulierTypeInterface
 {
-	public function __construct(
-		private readonly UrlGeneratorInterface $urlGenerator,
-		private readonly BiebRubriekRepository $biebRubriekRepository
-	) {
-	}
+
 
 	/**
 	 * @param FormulierBuilder $builder
 	 * @param Boek $data
 	 * @param array $options
+	 *
+	 * @return void
 	 */
 	public function createFormulier(
 		FormulierBuilder $builder,
@@ -104,6 +102,11 @@ class BoekFormulier implements FormulierTypeInterface
 		$builder->addCssClass('boekformulier');
 	}
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return array<int, string>
+	 */
 	private function getRubriekOptions(): array
 	{
 		$ret = [];

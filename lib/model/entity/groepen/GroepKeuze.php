@@ -20,18 +20,4 @@ class GroepKeuze
 	 */
 	#[Serializer\Groups('vue')]
 	public $opties;
-
-	/**
-	 * @param string $naam
-	 * @param string $type
-	 * @param string $default
-	 * @param string $description
-	 */
-	public function __construct(
-		#[Serializer\Groups('vue')] public $naam = null,
-		#[Serializer\Groups('vue')] public $type = null,
-		#[Serializer\Groups('vue')] public $default = null,
-		#[Serializer\Groups('vue')] public $description = null
-	) {
-	}
 }

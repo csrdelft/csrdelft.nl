@@ -9,11 +9,19 @@ class BbOrderedList extends BbTag
 	private $type;
 	private $order;
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'ol'
+	 */
 	public static function getTagName()
 	{
 		return 'ol';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function parse($arguments = [])
 	{
 		if (isset($arguments['ol'])) {
@@ -25,6 +33,9 @@ class BbOrderedList extends BbTag
 		$this->readContent();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		$attrs = '';
@@ -37,11 +48,6 @@ class BbOrderedList extends BbTag
 		}
 
 		return "<ol$attrs>{$this->getContent()}</ol>";
-	}
-
-	public function getType()
-	{
-		return $this->type;
 	}
 
 	public function getOrder()

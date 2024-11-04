@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\groep\BbOndervereniging;
 
 class NodeOndervereniging implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbOndervereniging::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbOndervereniging::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'ondervereniging'
+	 */
 	public static function getNodeType()
 	{
 		return 'ondervereniging';
@@ -36,6 +44,9 @@ class NodeOndervereniging implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

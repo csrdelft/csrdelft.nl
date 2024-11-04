@@ -7,11 +7,19 @@ use CsrDelft\view\bbcode\tag\BbOrderedList;
 
 class NodeOrderedList implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbOrderedList::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbOrderedList::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'ordered_list'
+	 */
 	public static function getNodeType()
 	{
 		return 'ordered_list';
@@ -37,6 +45,9 @@ class NodeOrderedList implements Node
 		];
 	}
 
+	/**
+	 * @return false
+	 */
 	public function selfClosing()
 	{
 		return false;

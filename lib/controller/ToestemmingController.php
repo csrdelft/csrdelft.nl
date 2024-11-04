@@ -32,10 +32,13 @@ class ToestemmingController extends AbstractController
 
 	/**
 	 * @throws Exception
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
+	 *
+	 * @return Response|ToestemmingModalForm
 	 */
 	#[Route(path: '/toestemming', methods: ['POST'])]
-	public function POST_overzicht()
+	public function POST_overzicht(): ToestemmingModalForm|Response
 	{
 		$form = new ToestemmingModalForm($this->lidToestemmingRepository);
 

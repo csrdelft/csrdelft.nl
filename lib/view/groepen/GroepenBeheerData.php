@@ -11,10 +11,14 @@ class GroepenBeheerData extends DataTableResponse
 {
 	/**
 	 * @param Groep $groep
-	 * @return string
+	 *
+	 * @return (mixed|null|string)[]
+	 *
 	 * @throws Exception
+	 *
+	 * @psalm-return array{detailSource: string, naam: string, status: mixed|null, samenvatting: null, omschrijving: null, website: null, leden: null, inAgenda?: 'ja'|'nee'|mixed,...}
 	 */
-	public function renderElement($groep)
+	public function renderElement($groep): array
 	{
 		$array = (array) $groep;
 

@@ -8,6 +8,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class DisableForeignKeysORMPurgerFactory implements PurgerFactory
 {
+	/**
+	 * @return DisableForeignKeysORMPurger
+	 */
 	public function createForEntityManager(
 		?string $emName,
 		EntityManagerInterface $em,

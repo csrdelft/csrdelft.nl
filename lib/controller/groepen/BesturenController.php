@@ -16,11 +16,19 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class BesturenController extends AbstractGroepenController
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Bestuur::class
+	 */
 	public function getGroepType()
 	{
 		return Bestuur::class;
 	}
 
+	/**
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
 	public function overzicht(Request $request, $soort = null)
 	{
 		$pagina = $request->get('pagina');
@@ -32,7 +40,7 @@ class BesturenController extends AbstractGroepenController
 		}
 		// Zoek ook op ot,ft
 		$groepen = $this->repository->findBy([], null, $limit, $offset);
-		$paginaUrl = fn($paginaNummer) => $this->generateUrl(
+		$paginaUrl = fn($paginaNummer): string => $this->generateUrl(
 			'csrdelft_groep_' . $this->repository::getNaam() . '_overzicht',
 			['soort' => $soort, 'pagina' => $paginaNummer]
 		);

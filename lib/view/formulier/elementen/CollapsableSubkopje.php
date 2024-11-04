@@ -18,6 +18,9 @@ class CollapsableSubkopje extends Subkopje
 		parent::__construct($titel);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$className = $this->collapsed ? 'collapse' : 'collapse show';

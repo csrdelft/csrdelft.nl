@@ -30,11 +30,6 @@ class DeclaratieCategorie
 	#[ORM\OneToMany(targetEntity: Declaratie::class, mappedBy: 'categorie')]
 	private $declaraties;
 
-	public function __construct()
-	{
-		$this->declaraties = new ArrayCollection();
-	}
-
 	public function getId(): ?int
 	{
 		return $this->id;
@@ -45,52 +40,14 @@ class DeclaratieCategorie
 		return $this->naam;
 	}
 
-	public function setNaam(string $naam): self
-	{
-		$this->naam = $naam;
-
-		return $this;
-	}
-
 	public function getWachtrij(): DeclaratieWachtrij
 	{
 		return $this->wachtrij;
 	}
 
-	public function setWachtrij(DeclaratieWachtrij $wachtrij): self
+	public function setWachtrij(DeclaratieWachtrij $wachtrij): static
 	{
 		$this->wachtrij = $wachtrij;
-
-		return $this;
-	}
-
-	/**
-	 * @return Collection|Declaratie[]
-	 */
-	public function getDeclaraties(): Collection
-	{
-		return $this->declaraties;
-	}
-
-	public function addDeclaratie(Declaratie $declaratie): self
-	{
-		if (!$this->declaraties->contains($declaratie)) {
-			$this->declaraties[] = $declaratie;
-			$declaratie->setCategorie($this);
-		}
-
-		return $this;
-	}
-
-	public function removeDeclaratie(Declaratie $declaratie): self
-	{
-		if ($this->declaraties->contains($declaratie)) {
-			$this->declaraties->removeElement($declaratie);
-			// set the owning side to null (unless already changed)
-			if ($declaratie->getCategorie() === $this) {
-				$declaratie->setCategorie(null);
-			}
-		}
 
 		return $this;
 	}

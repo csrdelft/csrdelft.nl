@@ -13,11 +13,19 @@ class OldPermissionVoter extends Voter
 {
 	use CacheableVoterSupportsTrait;
 
-	public function supportsAttribute(string $attribute): bool
+	/**
+	 * @return false|int
+	 *
+	 * @psalm-return 0|1|false
+	 */
+	public function supportsAttribute(string $attribute): int|false
 	{
 		return preg_match('/^P_[a-zA-Z_]+$/', $attribute);
 	}
 
+	/**
+	 * @return never
+	 */
 	protected function voteOnAttribute(
 		string $attribute,
 		$subject,

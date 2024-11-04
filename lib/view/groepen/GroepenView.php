@@ -65,6 +65,9 @@ class GroepenView implements View
 		$this->urlGetter = $urlGetter;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getBreadcrumbs()
 	{
 		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
@@ -76,6 +79,11 @@ class GroepenView implements View
 			'</li></ul>';
 	}
 
+	/**
+	 * @return Groep[]
+	 *
+	 * @psalm-return array<Groep>
+	 */
 	public function getModel()
 	{
 		return $this->groepen;
@@ -148,7 +156,10 @@ class GroepenView implements View
 		return $html;
 	}
 
-	private function url($paginaNummer)
+	/**
+	 * @psalm-param int<1, max> $paginaNummer
+	 */
+	private function url(int $paginaNummer)
 	{
 		$getter = $this->urlGetter;
 		return $getter($paginaNummer);

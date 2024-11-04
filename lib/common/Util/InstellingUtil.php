@@ -56,7 +56,7 @@ final class InstellingUtil
 	 * @param $key
 	 * @return string
 	 */
-	public static function lid_instelling($module, $key)
+	public static function lid_instelling(string $module, string $key)
 	{
 		return ContainerFacade::getContainer()
 			->get(LidInstellingenRepository::class)
@@ -68,7 +68,7 @@ final class InstellingUtil
 	 * @param $key
 	 * @return string
 	 */
-	public static function instelling($module, $key)
+	public static function instelling(string $module, string $key)
 	{
 		return ContainerFacade::getContainer()
 			->get(InstellingenRepository::class)

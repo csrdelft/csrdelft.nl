@@ -108,7 +108,7 @@ class Document extends Bestand
 			is_file($this->directory . '/' . $this->filename);
 	}
 
-	public function hasFile()
+	public function hasFile(): bool
 	{
 		if (!$this->magBekijken()) {
 			return false;
@@ -116,23 +116,23 @@ class Document extends Bestand
 		return $this->filename != '' and file_exists($this->getFullPath());
 	}
 
-	public function isEigenaar()
+	public function isEigenaar(): bool
 	{
 		return LoginService::getUid() === $this->eigenaar;
 	}
 
-	public function magBekijken()
+	public function magBekijken(): bool
 	{
 		return LoginService::mag($this->leesrechten) &&
 			LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function magBewerken()
+	public function magBewerken(): bool
 	{
 		return $this->isEigenaar() or LoginService::mag(P_DOCS_MOD);
 	}
 
-	public function magVerwijderen()
+	public function magVerwijderen(): bool
 	{
 		return LoginService::mag(P_DOCS_MOD);
 	}
@@ -140,7 +140,7 @@ class Document extends Bestand
 	/**
 	 * @return string file name on disk
 	 */
-	public function getFullFileName()
+	public function getFullFileName(): string
 	{
 		return $this->id . '_' . $this->filename;
 	}
@@ -148,17 +148,17 @@ class Document extends Bestand
 	/**
 	 * @return string location on disk
 	 */
-	public function getPath()
+	public function getPath(): string
 	{
 		return DATA_PATH . 'documenten/';
 	}
 
-	public function getFullPath()
+	public function getFullPath(): string
 	{
 		return $this->getPath() . $this->getFullFileName();
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/documenten/bekijken/' .
 			$this->id .
@@ -166,7 +166,7 @@ class Document extends Bestand
 			rawurlencode($this->filename);
 	}
 
-	public function getDownloadUrl()
+	public function getDownloadUrl(): string
 	{
 		return '/documenten/download/' .
 			$this->id .
@@ -174,12 +174,7 @@ class Document extends Bestand
 			rawurlencode($this->filename);
 	}
 
-	public function getMimetypeIcon()
-	{
-		return Icon::getTag('mime-' . $this->getFriendlyMimetype());
-	}
-
-	public function getFriendlyMimetype()
+	public function getFriendlyMimetype(): string
 	{
 		$mimetypeMap = [
 			'application/pdf' => 'pdf',
@@ -229,10 +224,11 @@ class Document extends Bestand
 	 *
 	 * @param bool $throwWhenNotFound
 	 *
-	 * @return bool
+	 * @return true
+	 *
 	 * @throws CsrException
 	 */
-	public function deleteFile($throwWhenNotFound = true)
+	public function deleteFile($throwWhenNotFound = true): bool
 	{
 		if (!$this->hasFile()) {
 			if ($throwWhenNotFound) {

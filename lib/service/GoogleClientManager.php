@@ -14,26 +14,6 @@ class GoogleClientManager
 {
 	private readonly Google_Client $client;
 
-	public function __construct(
-		private readonly LoginService $loginService,
-		private readonly RequestStack $requestStack
-	) {
-		$request = $this->requestStack->getCurrentRequest();
-		$redirect_uri = $request->getSchemeAndHttpHost() . '/google/callback';
-		$client = new Google_Client();
-		$client->setApplicationName('Stek');
-		$client->setClientId($_ENV['GOOGLE_CLIENT_ID']);
-		$client->setClientSecret($_ENV['GOOGLE_CLIENT_SECRET']);
-		$client->setRedirectUri($redirect_uri);
-		$client->setAccessType('online');
-		$client->setScopes(['https://www.googleapis.com/auth/contacts']);
-		$session = $this->requestStack->getSession();
-		if ($session->has('google_access_token')) {
-			$client->setAccessToken($session->get('google_access_token'));
-		}
-		$this->client = $client;
-	}
-
 	/**
 	 * Vraag de client op
 	 */

@@ -24,13 +24,7 @@ use Twig\Environment;
  */
 class LoginForm implements FormulierTypeInterface
 {
-	public function __construct(
-		private readonly TranslatorInterface $translator,
-		private readonly UrlGeneratorInterface $urlGenerator,
-		private readonly CsrfTokenManagerInterface $csrfTokenManager,
-		private readonly Environment $twig
-	) {
-	}
+
 
 	/**
 	 * Bij gebrek aan standaard vertalingen.
@@ -54,12 +48,9 @@ class LoginForm implements FormulierTypeInterface
 		return strtr($errorString, $exception->getMessageData());
 	}
 
-	protected function getScriptTag()
-	{
-		// er is geen javascript
-		return '';
-	}
-
+	/**
+	 * @return void
+	 */
 	public function createFormulier(
 		FormulierBuilder $builder,
 		$data,

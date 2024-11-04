@@ -20,15 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CorveeKwalificatiesRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, CorveeKwalificatie::class);
-	}
 
-	public function getKwalificatiesVoorFunctie($fid)
-	{
-		return $this->findBy(['functie_id' => $fid]);
-	}
 
 	/**
 	 * Eager loading of corveefuncties.
@@ -41,7 +33,7 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 		return $this->findBy(['uid' => $uid]);
 	}
 
-	public function isLidGekwalificeerdVoorFunctie($uid, $fid)
+	public function isLidGekwalificeerdVoorFunctie(string $uid, int $fid)
 	{
 		return $this->find(['uid' => $uid, 'functie_id' => $fid]) != null;
 	}
@@ -72,26 +64,5 @@ class CorveeKwalificatiesRepository extends AbstractRepository
 
 		$this->_em->persist($kwali);
 		$this->_em->flush();
-	}
-
-	/**
-	 * @param CorveeKwalificatie $kwalificatie
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function kwalificatieIntrekken(CorveeKwalificatie $kwalificatie)
-	{
-		$this->_em->remove($kwalificatie);
-		$this->_em->flush();
-	}
-
-	/**
-	 * @param $uid
-	 * @param $fid
-	 * @return CorveeKwalificatie|null
-	 */
-	public function getKwalificatie($uid, $fid)
-	{
-		return $this->find(['uid' => $uid, 'functie_id' => $fid]);
 	}
 }

@@ -39,11 +39,6 @@ class DeclaratieBon
 	#[ORM\OneToMany(targetEntity: DeclaratieRegel::class, mappedBy: 'bon')]
 	private $regels;
 
-	public function __construct()
-	{
-		$this->regels = new ArrayCollection();
-	}
-
 	public function getId(): ?int
 	{
 		return $this->id;
@@ -52,13 +47,6 @@ class DeclaratieBon
 	public function getBestand(): string
 	{
 		return $this->bestand;
-	}
-
-	public function setBestand(string $bestand): self
-	{
-		$this->bestand = $bestand;
-
-		return $this;
 	}
 
 	public function isPDF(): bool
@@ -71,7 +59,7 @@ class DeclaratieBon
 		return $this->declaratie;
 	}
 
-	public function setDeclaratie(?Declaratie $declaratie): self
+	public function setDeclaratie(?Declaratie $declaratie): static
 	{
 		$this->declaratie = $declaratie;
 
@@ -83,34 +71,24 @@ class DeclaratieBon
 		return $this->maker;
 	}
 
-	public function setMaker(Profiel $maker): self
-	{
-		$this->maker = $maker;
-
-		return $this;
-	}
-
 	public function getDatum(): ?DateTimeInterface
 	{
 		return $this->datum;
 	}
 
-	public function setDatum(?DateTimeInterface $datum): self
+	public function setDatum(?DateTimeInterface $datum): static
 	{
 		$this->datum = $datum;
 
 		return $this;
 	}
 
-	/**
-	 * @return Collection|DeclaratieRegel[]
-	 */
 	public function getRegels(): Collection
 	{
 		return $this->regels;
 	}
 
-	public function addRegel(DeclaratieRegel $regel): self
+	public function addRegel(DeclaratieRegel $regel): static
 	{
 		if (!$this->regels->contains($regel)) {
 			$this->regels[] = $regel;
@@ -120,20 +98,7 @@ class DeclaratieBon
 		return $this;
 	}
 
-	public function removeRegel(DeclaratieRegel $regel): self
-	{
-		if ($this->regels->contains($regel)) {
-			$this->regels->removeElement($regel);
-			// set the owning side to null (unless already changed)
-			if ($regel->getBon() === $this) {
-				$regel->setBon(null);
-			}
-		}
-
-		return $this;
-	}
-
-	public function fromParameters(ParameterBag $bonData): self
+	public function fromParameters(ParameterBag $bonData): static
 	{
 		$this->setDatum(null);
 		if ($bonData->get('datum')) {
@@ -173,7 +138,10 @@ class DeclaratieBon
 		return round($som, 2);
 	}
 
-	public function valideer($bonIndex): array
+	/**
+	 * @psalm-param int<1, max> $bonIndex
+	 */
+	public function valideer(int $bonIndex): array
 	{
 		$fouten = [];
 
@@ -193,6 +161,11 @@ class DeclaratieBon
 		return $fouten;
 	}
 
+	/**
+	 * @return (array[]|mixed|null|string)[]
+	 *
+	 * @psalm-return array{bestandsnaam: string, datum: null|string, id: mixed, regels: array<array>}
+	 */
 	public function naarObject(UrlGeneratorInterface $generator): array
 	{
 		return [

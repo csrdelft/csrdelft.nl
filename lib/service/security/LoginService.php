@@ -37,13 +37,6 @@ class LoginService
 	 */
 	private static $cliUid = 'x999';
 
-	public function __construct(
-		private readonly Security $security,
-		private readonly AccountRepository $accountRepository,
-		private readonly TokenStorageInterface $tokenStorage
-	) {
-	}
-
 	/**
 	 * @param string $permission
 	 * @param array|null $allowedAuthenticationMethods
@@ -58,7 +51,7 @@ class LoginService
 			->_mag($permission);
 	}
 
-	private function _mag($permission)
+	private function _mag(string $permission): bool
 	{
 		return $this->security->isGranted($permission);
 	}
@@ -74,7 +67,7 @@ class LoginService
 			->_getUid();
 	}
 
-	public function _getUid()
+	public function _getUid(): string
 	{
 		if (HostUtil::isCLI()) {
 			return static::$cliUid;
@@ -100,7 +93,7 @@ class LoginService
 			->_getAccount();
 	}
 
-	public function _getAccount()
+	public function _getAccount(): UserInterface|null
 	{
 		return $this->security->getUser() ??
 			$this->accountRepository->find(self::UID_EXTERN);
@@ -122,9 +115,10 @@ class LoginService
 	/**
 	 * Indien de huidige gebruiker is geauthenticeerd door middel van een token in de url
 	 * worden Permissies hierdoor beperkt voor de veiligheid.
-	 * @return string|null uit AuthenticationMethod
+	 *
+	 * @return null|string uit AuthenticationMethod
 	 */
-	public function getAuthenticationMethod()
+	public function getAuthenticationMethod(): string|null
 	{
 		if (HostUtil::isCLI()) {
 			return AuthenticationMethod::password_login;
@@ -164,7 +158,7 @@ class LoginService
 	/**
 	 * Maak de gebruiker opnieuw recent ingelogd
 	 */
-	public function setRecentLoginToken()
+	public function setRecentLoginToken(): void
 	{
 		$token = $this->security->getToken();
 

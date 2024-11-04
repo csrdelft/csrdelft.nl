@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\groep\BbActiviteit;
 
 class NodeActiviteit implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbActiviteit::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbActiviteit::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'activiteit'
+	 */
 	public static function getNodeType()
 	{
 		return 'activiteit';
@@ -36,6 +44,9 @@ class NodeActiviteit implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

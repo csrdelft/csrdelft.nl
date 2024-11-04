@@ -71,18 +71,6 @@ class GoogleContactSync
 	 */
 	private $initialized = false;
 
-	public function __construct(
-		GoogleClientManager $authenticator,
-		ProfielRepository $profielRepository
-	) {
-		$this->groepNaam = trim(
-			InstellingUtil::lid_instelling('googleContacts', 'groepnaam')
-		);
-		if (empty($this->groepNaam)) {
-			$this->groepNaam = self::DEFAULT_GROEPNAAM;
-		}
-	}
-
 	/**
 	 * @return ContactGroup[] Alle ContactGroups van gebruiker.
 	 */
@@ -209,7 +197,7 @@ class GoogleContactSync
 		return null;
 	}
 
-	private function loadCurrentContacts()
+	private function loadCurrentContacts(): void
 	{
 		$contacts = $this->getCurrentContacts();
 		foreach ($contacts as $contact) {
@@ -500,28 +488,6 @@ class GoogleContactSync
 			$this->peopleService->people->batchUpdateContacts(
 				$batchUpdateContactsRequest
 			);
-		}
-	}
-
-	/**
-	 * @param Profiel[] $profielBatch
-	 * @return void
-	 */
-	private function updatePhotos(array $profielBatch)
-	{
-		foreach ($profielBatch as $profiel) {
-			$pasfotoPath = $profiel->getPasfotoInternalPath('vierkant');
-			if ($pasfotoPath) {
-				$resourceId = $this->currentContactMap[$profiel->uid];
-				$photoBytes = base64_encode(file_get_contents($pasfotoPath));
-				$updateContactPhotoRequest = new UpdateContactPhotoRequest();
-				$updateContactPhotoRequest->setPhotoBytes($photoBytes);
-
-				$this->peopleService->people->updateContactPhoto(
-					$resourceId,
-					$updateContactPhotoRequest
-				);
-			}
 		}
 	}
 

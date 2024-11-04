@@ -96,6 +96,9 @@ class CiviProductTable extends DataTable
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getBreadcrumbs()
 	{
 		return '<a href="/" title="Startpagina">' .

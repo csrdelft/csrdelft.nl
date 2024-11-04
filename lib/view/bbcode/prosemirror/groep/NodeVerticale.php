@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\groep\BbVerticale;
 
 class NodeVerticale implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbVerticale::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbVerticale::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'verticale'
+	 */
 	public static function getNodeType()
 	{
 		return 'verticale';
@@ -36,6 +44,9 @@ class NodeVerticale implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

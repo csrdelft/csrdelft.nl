@@ -37,7 +37,7 @@ class LDAP
 
 	// Openen van de LDAP connectie, die we regelmatig nodig hebben...
 
-	public function connect($dobind)
+	public function connect($dobind): bool
 	{
 		// zijn we al ingelogd?
 		if ($this->conn !== false) {
@@ -68,7 +68,7 @@ class LDAP
 
 	// verbinding sluiten, maar alleen als er een geldige resource is
 
-	public function disconnect()
+	public function disconnect(): void
 	{
 		@ldap_close($this->conn);
 		$this->conn = false;
@@ -76,48 +76,12 @@ class LDAP
 
 	// functie voor LDAPAuthMech (class.authmech.php) om gebruikersinlog te verifieren
 
-	public function checkBindPass($mech, $user, $pass)
-	{
-		$validbase = [
-			'people' => $this->basePeople,
-			'antiplesk' => $this->baseAntiplesk,
-			'mailbox' => $this->baseMailbox,
-		];
-		if (!array_key_exists($mech, $validbase)) {
-			return false;
-		}
-
-		// sanitaire controle
-		if (!TextUtil::is_utf8($user) || !TextUtil::is_utf8($pass)) {
-			return false;
-		}
-
-		// als er geen bindingsangst is gaan we proberen met de ldap te binden...
-		return @ldap_bind(
-			$this->conn,
-			sprintf('uid=%s,%s', $this->ldap_escape_dn($user), $validbase[$mech]),
-			$pass
-		);
-	}
-
 	//### Ledenlijst ####
 	// controleert of een gebruiker met de betreffende 'uid' voorkomt
 
-	public function isLid($uid)
-	{
-		$base = $this->baseLeden;
-		$filter = sprintf('(uid=%s)', $this->ldap_escape_filter($uid));
-		$result = ldap_search($this->conn, $base, $filter);
-		$num = ldap_count_entries($this->conn, $result);
-		if ($num == 0 || $num === false) {
-			return false;
-		}
-		return true;
-	}
-
 	// een, of alle records opvragen
 
-	public function getLid($uid = '')
+	public function getLid($uid = ''): array|false
 	{
 		$base = $this->baseLeden;
 		if ($uid == '') {
@@ -133,138 +97,24 @@ class LDAP
 	// N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
 	// http://nl2.php.net/manual/en/function.ldap-add.php
 
-	public function addLid($uid, $entry)
-	{
-		$base = $this->baseLeden;
-		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', ' . $base;
-
-		// objectClass definities
-		unset($entry['objectClass']);
-		$entry['objectClass'][] = 'top';
-		$entry['objectClass'][] = 'person';
-		$entry['objectClass'][] = 'organizationalPerson';
-		$entry['objectClass'][] = 'inetOrgPerson';
-		$entry['objectClass'][] = 'mozillaAbPersonObsolete';
-
-		return ldap_add($this->conn, $dn, $entry);
-	}
-
 	// Wijzig de informatie van een lid
 	// N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
 	// http://nl2.php.net/manual/en/function.ldap-add.php
 
-	public function modifyLid($uid, $entry)
-	{
-		$base = $this->baseLeden;
-		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', ' . $base;
-		return ldap_modify($this->conn, $dn, $entry);
-	}
-
-	public function removeLid($uid)
-	{
-		$base = $this->baseLeden;
-		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', ' . $base;
-		return ldap_delete($this->conn, $dn);
-	}
-
 	//### Groepen ####
 	// controleert of een groep met de betreffende 'cn' voorkomt
 
-	public function isGroep($cn)
-	{
-		$base = $this->baseGroepen;
-		$filter = sprintf('(cn=%s)', $this->ldap_escape_filter($cn));
-		$result = ldap_search($this->conn, $base, $filter);
-		$num = ldap_count_entries($this->conn, $result);
-		if ($num == 0 || $num === false) {
-			return false;
-		}
-		return true;
-	}
-
 	// een, of alle records opvragen
-
-	public function getGroep($cn = '')
-	{
-		$base = $this->baseGroepen;
-		if ($cn == '') {
-			$filter = '(cn=*)';
-		} else {
-			$filter = sprintf('(cn=%s)', $this->ldap_escape_filter($cn));
-		}
-		$result = ldap_search($this->conn, $base, $filter);
-		return ldap_get_entries($this->conn, $result);
-	}
-
-	/**
-	 * Voeg een nieuw record toe
-	 * N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
-	 * http://nl2.php.net/manual/en/function.ldap-add.php
-	 *
-	 * @param string $cn kortegroepnaam
-	 * @param array $entry onderstaande array zonder [objectClass]
-	 * @return bool gelukt/mislukt
-	 *
-	 * $entry zoals die door ldap_add() wordt toegevoegd:
-	 * $entry = Array (
-	 * [cn] => kortenaamcommissie
-	 * [member] => Array (
-	 * [0] => uid=0431,ou=leden,dc=csrdelft,dc=nl
-	 * )
-	 * [objectClass] => Array (
-	 * [0] => top
-	 * [1] => groupOfNames
-	 * )
-	 * )
-	 */
-	public function addGroep($cn, $entry)
-	{
-		$base = $this->baseGroepen;
-		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', ' . $base;
-
-		// objectClass definities
-		unset($entry['objectClass']);
-		$entry['objectClass'][] = 'top';
-		$entry['objectClass'][] = 'groupOfNames';
-
-		return ldap_add($this->conn, $dn, $entry);
-	}
-
-	/**
-	 * Wijzig de informatie van een groep
-	 * N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
-	 * http://nl2.php.net/manual/en/function.ldap-add.php
-	 *
-	 * @param string $cn kortegroepnaam
-	 * @param array $entry array zoals in addGroep maar zonder [objectClass]
-	 * @return bool gelukt/mislukt
-	 *
-	 * ldap_modify overschrijft de members-array in ldap met nieuwe array.
-	 */
-	public function modifyGroep($cn, $entry)
-	{
-		$base = $this->baseGroepen;
-		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', ' . $base;
-		return ldap_modify($this->conn, $dn, $entry);
-	}
-
-	/**
-	 * verwijder de hele groep uit ldap
-	 *
-	 * @param string $cn kortegroepnaam
-	 * @return bool gelukt/mislukt
-	 */
-	public function removeGroep($cn)
-	{
-		$base = $this->baseGroepen;
-		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', ' . $base;
-		return ldap_delete($this->conn, $dn);
-	}
 
 	//### Escapen van LDAP-invoer ####
 	// RFC2253
 
-	private function ldap_escape_dn($text)
+	/**
+	 * @return null|string|string[]
+	 *
+	 * @psalm-return array<string>|null|string
+	 */
+	private function ldap_escape_dn(string $text): array|string|null
 	{
 		// DN escaping rules
 		// A DN may contain special characters which require escaping. These characters are:
@@ -295,7 +145,12 @@ class LDAP
 	// value of the encoded character. The case of the two hexadecimal
 	// digits is not significant.
 
-	private function ldap_escape_filter($text)
+	/**
+	 * @return string|string[]
+	 *
+	 * @psalm-return array<string>|string
+	 */
+	private function ldap_escape_filter($text): array|string
 	{
 		// ascii control characters er uit gooien, die zijn niet nodig in deze applicatie
 		$text = preg_replace('/[\x00-\x1F\x7F]/', '', $text);

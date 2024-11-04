@@ -31,12 +31,11 @@ class BbPeiling extends BbTag
 	 */
 	private $id;
 
-	public function __construct(
-		private readonly NormalizerInterface $normalizer,
-		private readonly PeilingenRepository $peilingenRepository
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'peiling'
+	 */
 	public static function getTagName()
 	{
 		return 'peiling';
@@ -46,6 +45,11 @@ class BbPeiling extends BbTag
 		return $this->peiling->magBekijken();
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return '🗳️ '
+	 */
 	public function renderPreview()
 	{
 		return '🗳️ ';
@@ -90,7 +94,10 @@ class BbPeiling extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
 	 * @throws BbException
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{
@@ -98,7 +105,7 @@ class BbPeiling extends BbTag
 		$this->peiling = $this->getPeiling($this->id);
 	}
 
-	public function getId()
+	public function getId(): string
 	{
 		return $this->id;
 	}

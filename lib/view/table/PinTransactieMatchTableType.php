@@ -14,10 +14,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PinTransactieMatchTableType extends AbstractDataTableType
 {
-	public function __construct(
-		private readonly UrlGeneratorInterface $urlGenerator
-	) {
-	}
+
 
 	public function createDataTable(
 		DataTableBuilder $builder,

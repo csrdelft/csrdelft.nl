@@ -29,19 +29,13 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class MenuItemRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly CacheInterface $cache,
-		private readonly Security $security
-	) {
-		parent::__construct($registry, MenuItem::class);
-	}
+
 
 	/**
 	 * Haal menu op voor beheer, checkt geen rechten.
 	 * @param $naam
 	 */
-	public function getMenuBeheer($naam)
+	public function getMenuBeheer(string $naam)
 	{
 		if (empty($naam)) {
 			return null;
@@ -238,7 +232,10 @@ class MenuItemRepository extends AbstractRepository
 		return $item;
 	}
 
-	public function nieuwFavorietMenu($uid)
+	/**
+	 * @param null|string $uid
+	 */
+	public function nieuwFavorietMenu(string|null $uid)
 	{
 		$item = $this->nieuw(null);
 		$item->tekst = $uid;
@@ -374,30 +371,6 @@ class MenuItemRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param MenuItem $breadcrumb
-	 * @param $active
-	 * @return string
-	 */
-	protected function renderBreadcrumb($breadcrumb, $active)
-	{
-		$tekst = $breadcrumb->tekst;
-
-		if ($tekst == 'main') {
-			$tekst = Icon::getTag('home');
-		}
-
-		if ($active) {
-			return '<li class="breadcrumb-item active">' . $tekst . '</li>';
-		} else {
-			return '<li class="breadcrumb-item"><a href="' .
-				$breadcrumb->link .
-				'">' .
-				$tekst .
-				'</a></li>';
-		}
-	}
-
-	/**
 	 * Haal de breadcrumbs op voor een link.
 	 *
 	 * @param $link
@@ -444,28 +417,10 @@ class MenuItemRepository extends AbstractRepository
 		$this->deleteItemFromCache($item);
 	}
 
-	public function deleteItemFromCache(MenuItem $item)
-	{
-		do {
-			$this->cache->delete($this->createCacheKey($item->tekst));
-			$this->cache->delete($this->createFlatCacheKey($item->tekst));
-		} while ($item = $item->parent);
-	}
-
 	/**
-	 * @param MenuItem $item
-	 *
-	 * @return MenuItem
+	 * @param null|string $query
 	 */
-	public function getRoot(MenuItem $item)
-	{
-		if (!$item->parent) {
-			return $item;
-		}
-		return $this->getRoot($item->parent);
-	}
-
-	public function getSuggesties($query)
+	public function getSuggesties(string|null $query)
 	{
 		return $this->createQueryBuilder('menuItem')
 			->where('menuItem.tekst like :query or menuItem.link like :query')

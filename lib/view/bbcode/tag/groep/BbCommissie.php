@@ -10,16 +10,31 @@ use CsrDelft\entity\groepen\Commissie;
  */
 class BbCommissie extends BbTagGroep
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Commissie::class
+	 */
 	public function getEntityClass(): string
 	{
 		return Commissie::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'commissie'
+	 */
 	public static function getTagName()
 	{
 		return 'commissie';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'leden'
+	 */
 	public function getLidNaam()
 	{
 		return 'leden';

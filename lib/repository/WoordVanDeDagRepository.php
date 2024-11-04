@@ -14,8 +14,5 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class WoordVanDeDagRepository extends ServiceEntityRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, WoordVanDeDag::class);
-	}
+
 }

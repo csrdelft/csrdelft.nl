@@ -112,9 +112,8 @@ class LedenMemoryController extends AbstractController
 
 	/**
 	 * @param Request $request
-	 * @return Groep|null
 	 */
-	private function getLichting(Request $request)
+	private function getLichting(Request $request): Groep|false
 	{
 		$l = $request->query->getInt('lichting');
 		$min = LichtingenRepository::getOudsteLidjaar();

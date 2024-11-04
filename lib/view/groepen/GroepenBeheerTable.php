@@ -146,6 +146,9 @@ class GroepenBeheerTable extends DataTable
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getBreadcrumbs()
 	{
 		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .

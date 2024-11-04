@@ -23,12 +23,7 @@ use Symfony\Component\Security\Core\Security;
  */
 class CourantRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly Security $security
-	) {
-		parent::__construct($registry, Courant::class);
-	}
+
 
 	public function nieuwCourant()
 	{
@@ -40,7 +35,7 @@ class CourantRepository extends AbstractRepository
 		return $courant;
 	}
 
-	public function verzenden($email, $inhoud)
+	public function verzenden(string $email, $inhoud)
 	{
 		$csrMailPassword = $_ENV['CSRMAIL_PASSWORD'];
 		$datum = DateUtil::dateFormatIntl(date_create_immutable(), 'd MMMM y');

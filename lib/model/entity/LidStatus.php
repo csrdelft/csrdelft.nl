@@ -125,48 +125,60 @@ class LidStatus extends Enum
 
 	/**
 	 * @return string[]
+	 *
+	 * @psalm-return list<string>
 	 */
-	public static function getLidLike()
+	public static function getLidLike(): array
 	{
 		return array_values(static::$lidlike);
 	}
 
 	/**
-	 * @return LidStatus[]
+	 * @return static[]
+	 *
+	 * @psalm-return array<static>
 	 */
-	public static function getLidLikeObject()
+	public static function getLidLikeObject(): array
 	{
 		return array_map(fn($val) => static::from($val), static::getLidLike());
 	}
 
 	/**
 	 * @return string[]
+	 *
+	 * @psalm-return list<string>
 	 */
-	public static function getOudlidLike()
+	public static function getOudlidLike(): array
 	{
 		return array_values(static::$oudlidlike);
 	}
 
 	/**
-	 * @return LidStatus[]
+	 * @return static[]
+	 *
+	 * @psalm-return array<static>
 	 */
-	public static function getOudLidLikeObject()
+	public static function getOudLidLikeObject(): array
 	{
 		return array_map(fn($val) => static::from($val), static::getOudLidLike());
 	}
 
 	/**
 	 * @return string[]
+	 *
+	 * @psalm-return list<string>
 	 */
-	public static function getFiscaalLidLike()
+	public static function getFiscaalLidLike(): array
 	{
 		return array_values(static::$fiscaalLidlike);
 	}
 
 	/**
 	 * @return string[]
+	 *
+	 * @psalm-return list<string>
 	 */
-	public static function getFiscaalOudlidLike()
+	public static function getFiscaalOudlidLike(): array
 	{
 		return array_values(static::$fiscaalOudlidlike);
 	}
@@ -191,22 +203,37 @@ class LidStatus extends Enum
 		return isset(static::$oudlidlike[$option]);
 	}
 
-	public static function getZoekenLidLike()
+	/**
+	 * @return value-of<TArray>[]
+	 *
+	 * @psalm-return list<value-of<array>>
+	 */
+	public static function getZoekenLidLike(): array
 	{
 		return array_values(static::$zoekenLidlike);
 	}
 
-	public static function getZoekenOudlidLike()
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list<string>
+	 */
+	public static function getZoekenOudlidLike(): array
 	{
 		return array_values(static::$zoekenOudlidlike);
 	}
 
-	public static function getZoekenExlidLike()
+	/**
+	 * @return value-of<TArray>[]
+	 *
+	 * @psalm-return list<value-of<array>>
+	 */
+	public static function getZoekenExlidLike(): array
 	{
 		return array_values(static::$zoekenExlidlike);
 	}
 
-	public function getChar()
+	public function getChar(): string
 	{
 		return static::$mapChoiceToChar[$this->getValue()];
 	}

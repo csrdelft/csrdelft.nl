@@ -20,10 +20,7 @@ use Throwable;
  */
 class CorveeVrijstellingenRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, CorveeVrijstelling::class);
-	}
+
 
 	public function nieuw(
 		$profiel = null,
@@ -55,7 +52,7 @@ class CorveeVrijstellingenRepository extends AbstractRepository
 		return $vrijstelling;
 	}
 
-	public function getAlleVrijstellingen($groupByUid = false)
+	public function getAlleVrijstellingen(bool $groupByUid = false)
 	{
 		$vrijstellingen = $this->findAll();
 		if ($groupByUid) {
@@ -69,10 +66,11 @@ class CorveeVrijstellingenRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param $uid
+	 * @param null|string $uid
+	 *
 	 * @return CorveeVrijstelling|null
 	 */
-	public function getVrijstelling($uid)
+	public function getVrijstelling(string|null $uid)
 	{
 		return $this->find($uid);
 	}
@@ -113,7 +111,7 @@ class CorveeVrijstellingenRepository extends AbstractRepository
 		});
 	}
 
-	public function verwijderVrijstelling($uid)
+	public function verwijderVrijstelling(string $uid)
 	{
 		$this->createQueryBuilder('v')
 			->delete()

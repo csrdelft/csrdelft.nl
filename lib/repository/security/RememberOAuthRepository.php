@@ -18,18 +18,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class RememberOAuthRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, RememberOAuth::class);
-	}
+
 
 	/**
 	 * @return RememberOAuth
+	 *
+	 * @param \League\Bundle\OAuth2ServerBundle\ValueObject\Scope[] $scopes
+	 *
+	 * @psalm-param array<\League\Bundle\OAuth2ServerBundle\ValueObject\Scope> $scopes
 	 */
 	public function nieuw(
 		UserInterface $account,
-		$clientIdentifier,
-		$scopes
+		string $clientIdentifier,
+		array $scopes
 	): RememberOAuth {
 		$remember = new RememberOAuth();
 		$remember->account = $account;

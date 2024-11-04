@@ -169,13 +169,13 @@ class CsrBB extends Parser
 		parent::__construct($env);
 	}
 
-	public static function parse($bbcode)
+	public static function parse(string $bbcode): string
 	{
 		$parser = new CsrBB(ContainerFacade::getContainer());
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseHtml($bbcode, $inline = false)
+	public static function parseHtml(string $bbcode, bool $inline = false): string
 	{
 		$parser = new CsrBB(ContainerFacade::getContainer());
 		$parser->allow_html = true;
@@ -183,7 +183,7 @@ class CsrBB extends Parser
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseMail($bbcode)
+	public static function parseMail(string $bbcode): string
 	{
 		$env = new BbEnv();
 		$env->mode = 'light';
@@ -191,7 +191,7 @@ class CsrBB extends Parser
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseLight($bbcode)
+	public static function parseLight(string $bbcode): string
 	{
 		$env = new BbEnv();
 		$env->mode = 'light';
@@ -199,7 +199,7 @@ class CsrBB extends Parser
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parsePreview($bbcode)
+	public static function parsePreview(string $bbcode): string
 	{
 		$env = new BbEnv();
 		$env->mode = 'preview';
@@ -207,31 +207,12 @@ class CsrBB extends Parser
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parsePlain($bbcode)
+	public static function parsePlain(string $bbcode): string
 	{
 		$env = new BbEnv();
 		$env->mode = 'plain';
 		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
 		return $parser->getHtml($bbcode);
-	}
-
-	/**
-	 * Bij citeren mogen er geen ongesloten tags zijn om problemen te voorkomen.
-	 * Werkt niet bij [ubboff] / [tekst].
-	 *
-	 * @param string $bbcode
-	 * @return string
-	 */
-	public static function sluitTags($bbcode)
-	{
-		$aantalOngesloten =
-			substr_count($bbcode, '[') -
-			substr_count($bbcode, '[*]') -
-			2 * substr_count($bbcode, '[/');
-		for ($i = 0; $i < $aantalOngesloten; $i++) {
-			$bbcode .= '[/]';
-		}
-		return $bbcode;
 	}
 
 	/**
@@ -242,42 +223,6 @@ class CsrBB extends Parser
 	public static function escapeUbbOff($bbcode)
 	{
 		return str_replace(['[/ubboff]', '[/tekst]'], ['[/]', '[/]'], $bbcode);
-	}
-
-	/**
-	 * Omdat we niet willen dat dingen die in privé staan alsnog gezien kunnen worden
-	 * bij het citeren, slopen we hier alles wat in privé-tags staat weg.
-	 * @param string $bbcode
-	 * @return string
-	 */
-	public static function filterPrive($bbcode)
-	{
-		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
-		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
-		// wat we hier willen, omdat anders [prive]foo[/prive]bar[prive]foo[/prive]
-		// niets zou opleveren.
-		// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
-		return preg_replace('/\[prive=?.*?\].*?\[\/prive\]/s', '', $bbcode);
-	}
-
-	/**
-	 * Omdat we niet willen dat dingen die in commentaar staan alsnog gezien kunnen worden
-	 * bij het citeren, slopen we hier alles wat in commentaar-tags staat weg.
-	 * @param string $bbcode
-	 * @return string
-	 */
-	public static function filterCommentaar($bbcode)
-	{
-		// .* is greedy by default, dat wil zeggen, matched zoveel mogelijk.
-		// door er .*? van te maken matched het zo weinig mogelijk, dat is precies
-		// wat we hier willen, omdat anders [commentaar]foo[/commentaar]bar[commentaar]foo[/commentaar]
-		// niets zou opleveren.
-		// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
-		return preg_replace(
-			'/\[commentaar=?.*?\].*?\[\/commentaar\]/s',
-			'',
-			$bbcode
-		);
 	}
 
 	protected function createTagInstance(string $tag, Parser $parser, $env)

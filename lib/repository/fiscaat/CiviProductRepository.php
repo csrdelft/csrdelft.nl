@@ -17,10 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CiviProductRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, CiviProduct::class);
-	}
+
 
 	/**
 	 * @param string ...$cie

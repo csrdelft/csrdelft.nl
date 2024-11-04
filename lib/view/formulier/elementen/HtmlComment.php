@@ -40,6 +40,11 @@ class HtmlComment implements FormElement
 		return '<div>' . $this->getHtml() . '</div>';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ''
+	 */
 	public function getJavascript()
 	{
 		return '';
@@ -50,6 +55,9 @@ class HtmlComment implements FormElement
 		return $this->getType();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType()
 	{
 		return ReflectionUtil::classNameZonderNamespace(static::class);

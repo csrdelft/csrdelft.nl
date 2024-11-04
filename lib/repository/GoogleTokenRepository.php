@@ -16,10 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GoogleTokenRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, GoogleToken::class);
-	}
+
 
 	/**
 	 * @param $uid

@@ -15,6 +15,9 @@ class TimeObjectField extends TimeField
 		parent::__construct($name, $value, $description, $minutensteps);
 	}
 
+	/**
+	 * @return \DateTimeImmutable|false|null
+	 */
 	public function getFormattedValue()
 	{
 		return $this->value ? date_create_immutable($this->value) : null;

@@ -37,17 +37,7 @@ use Throwable;
  */
 abstract class GroepRepository extends AbstractRepository
 {
-	/**
-	 * AbstractGroepenModel constructor.
-	 * @param ManagerRegistry $managerRegistry
-	 * @param Groep|string $entityClass
-	 */
-	public function __construct(
-		ManagerRegistry $managerRegistry,
-		private readonly Security $security
-	) {
-		parent::__construct($managerRegistry, $this->getEntityClassName());
-	}
+
 
 	/**
 	 * @return Groep|string
@@ -98,56 +88,11 @@ abstract class GroepRepository extends AbstractRepository
 		return parent::findBy($criteria, $orderBy, $limit, $offset);
 	}
 
-	public function isLid(
-		UserInterface $user,
-		$familie,
-		$status = 'ht',
-		$role = null
-	): bool {
-		try {
-			$qb = $this->createQueryBuilder('groep')
-				->select('COUNT(groep)')
-				->join('groep.leden', 'leden')
-				->where('leden.uid = :uid')
-				->setParameter('uid', $user->getUserIdentifier())
-				->andWhere('groep.familie = :familie')
-				->setParameter('familie', $familie);
-
-			if ($status == null) {
-				$status = 'ht';
-			}
-
-			if (
-				in_array(strtolower((string) $status), GroepStatus::getEnumValues())
-			) {
-				$qb = $qb
-					->andWhere('groep.status = :status')
-					->setParameter('status', strtolower((string) $status));
-			} elseif (!$role) {
-				// Role op de status positie
-				$role = $status;
-				$qb = $qb
-					->andWhere('groep.status = :status')
-					->setParameter('status', GroepStatus::HT);
-			}
-
-			if ($role) {
-				$qb = $qb
-					->andWhere('leden.opmerking = :role')
-					->setParameter('role', $role);
-			}
-
-			return 1 === (int) $qb->getQuery()->getSingleScalarResult();
-		} catch (NoResultException | NonUniqueResultException) {
-			return false;
-		}
-	}
-
 	/**
 	 * @param $id
 	 * @return Groep|false
 	 */
-	public function get($id)
+	public function get(int|null $id)
 	{
 		if (is_numeric($id)) {
 			$groep = $this->find($id);
@@ -421,26 +366,6 @@ abstract class GroepRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param $van
-	 * @param $tot
-	 * @return Groep[]
-	 */
-	public function getGroepenVoorAgenda(
-		\DateTimeImmutable $van,
-		\DateTimeImmutable $tot
-	) {
-		return $this->createQueryBuilder('a')
-			->where('a.inAgenda = true')
-			->andWhere(
-				'(a.beginMoment >= :van and a.beginMoment <= :tot) or (a.eindMoment >= :van and a.eindMoment <= :tot)'
-			)
-			->setParameter('van', $van)
-			->setParameter('tot', $tot)
-			->getQuery()
-			->getResult();
-	}
-
-	/**
 	 * Laat een specifieke implementatie ook filteren op soort
 	 *
 	 * @param int|null $limit
@@ -475,11 +400,6 @@ abstract class GroepRepository extends AbstractRepository
 		}
 
 		return $aantal;
-	}
-
-	public function beheer(string $soort = null)
-	{
-		return $this->findBy([]);
 	}
 
 	public function parseSoort(string $soort = null)

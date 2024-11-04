@@ -37,11 +37,17 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 	) {
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function supports(Request $request): ?bool
 	{
 		return $request->getSession()->has('wachtwoord_reset_token');
 	}
 
+	/**
+	 * @return SelfValidatingPassport
+	 */
 	public function authenticate(Request $request): PassportInterface
 	{
 		$token = $request->getSession()->get('wachtwoord_reset_token');
@@ -102,6 +108,9 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 		throw new AuthenticationException();
 	}
 
+	/**
+	 * @return RedirectResponse
+	 */
 	public function onAuthenticationSuccess(
 		Request $request,
 		TokenInterface $token,
@@ -112,6 +121,9 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator
 		);
 	}
 
+	/**
+	 * @return null
+	 */
 	public function onAuthenticationFailure(
 		Request $request,
 		AuthenticationException $exception

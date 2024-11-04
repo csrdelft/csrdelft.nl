@@ -8,11 +8,16 @@ final class UrlUtil
 {
 	/**
 	 * @source http://www.regular-expressions.info/email.html
-	 * @param $email
 	 *
-	 * @return bool
+	 * @param (int|string)|false|null $email
+	 *
+	 * @return false|int
+	 *
+	 * @psalm-param array-key|false|null $email
+	 *
+	 * @psalm-return 0|1|false
 	 */
-	public static function email_like($email)
+	public static function email_like($email): int|false
 	{
 		if (empty($email)) {
 			return false;
@@ -25,11 +30,14 @@ final class UrlUtil
 
 	/**
 	 * @source https://mathiasbynens.be/demo/url-regex
+	 *
 	 * @param $url
 	 *
-	 * @return bool
+	 * @return false|int
+	 *
+	 * @psalm-return 0|1|false
 	 */
-	public static function url_like($url)
+	public static function url_like(string $url): int|false
 	{
 		if (empty($url)) {
 			return false;
@@ -40,7 +48,10 @@ final class UrlUtil
 		);
 	}
 
-	public static function external_url($url, $label)
+	/**
+	 * @return false|string
+	 */
+	public static function external_url(string $url, string $label): string|false
 	{
 		$url = filter_var($url, FILTER_SANITIZE_URL);
 		if (
@@ -72,88 +83,13 @@ final class UrlUtil
 		return $result;
 	}
 
-	public static function url2absolute($baseurl, $relativeurl)
-	{
-		// if the relative URL is scheme relative then treat it differently
-		if (str_starts_with((string) $relativeurl, '//')) {
-			if (parse_url((string) $baseurl, PHP_URL_SCHEME) != null) {
-				return parse_url((string) $baseurl, PHP_URL_SCHEME) .
-					':' .
-					$relativeurl;
-			} else {
-				// assume HTTP
-				return 'http:' . $relativeurl;
-			}
-		}
-
-		// if the relative URL points to the root then treat it more simply
-		if (str_starts_with((string) $relativeurl, '/')) {
-			$parts = parse_url((string) $baseurl);
-			$return = $parts['scheme'] . ':';
-			$return .= $parts['scheme'] === 'file' ? '///' : '//';
-			// username:password@host:port ... could go here too!
-			$return .= $parts['host'] . $relativeurl;
-			return $return;
-		}
-
-		// If the relative URL is actually an absolute URL then just use that
-		if (parse_url((string) $relativeurl, PHP_URL_SCHEME) !== null) {
-			return $relativeurl;
-		}
-
-		$parts = parse_url((string) $baseurl);
-
-		// Chop off the query string in a base URL if it is there
-		if (isset($parts['query'])) {
-			$baseurl = strstr((string) $baseurl, '?', true);
-		}
-
-		// The rest is adapted from Puggan Se
-
-		$minpartsinfinal = 3; // for everything except file:///
-		if ($parts['scheme'] === 'file') {
-			$minpartsinfinal = 4;
-		}
-
-		// logic for username:password@host:port ... query string etc. could go here too ... somewhere?
-
-		$basepath = explode('/', (string) $baseurl); // will this handle correctly when query strings have '/'
-		$relpath = explode('/', (string) $relativeurl);
-
-		array_pop($basepath);
-
-		$returnpath = array_merge($basepath, $relpath);
-		$returnpath = array_reverse($returnpath);
-
-		$parents = 0;
-		foreach ($returnpath as $part_nr => $part_value) {
-			/* if we find '..', remove this and the next element */
-			if ($part_value == '..') {
-				$parents++;
-				unset($returnpath[$part_nr]);
-			} /* if we find '.' remove this element */ elseif ($part_value == '.') {
-				unset($returnpath[$part_nr]);
-			} /* if this is a normal element, and we have unhandled '..', then remove this */ elseif (
-				$parents > 0
-			) {
-				unset($returnpath[$part_nr]);
-				$parents--;
-			}
-		}
-		$returnpath = array_reverse($returnpath);
-		if (count($returnpath) < $minpartsinfinal) {
-			return false;
-		}
-		return implode('/', $returnpath);
-	}
-
 	// Base64url functies van https://www.php.net/manual/en/function.base64-encode.php#103849
-	public static function base64url_encode($data)
+	public static function base64url_encode(string $data): string
 	{
 		return rtrim(strtr(base64_encode((string) $data), '+/', '-_'), '=');
 	}
 
-	public static function base64url_decode($data)
+	public static function base64url_decode(string $data): string
 	{
 		return base64_decode(
 			str_pad(
@@ -171,7 +107,7 @@ final class UrlUtil
 	 * @param array $options curl options
 	 * @return mixed The curl_exec result
 	 */
-	public static function curl_request($url, $options = [])
+	public static function curl_request(string $url, $options = [])
 	{
 		$curl = curl_init($url);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);

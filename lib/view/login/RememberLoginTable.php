@@ -69,6 +69,9 @@ class RememberLoginTable extends DataTable
 		);
 	}
 
+	/**
+	 * @return class-string<RememberLoginTable>
+	 */
 	public function getType()
 	{
 		return static::class;

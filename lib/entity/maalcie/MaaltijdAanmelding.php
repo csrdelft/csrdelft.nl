@@ -127,7 +127,7 @@ class MaaltijdAanmelding
 	 *
 	 * @return int
 	 */
-	public function getSaldoStatus()
+	public function getSaldoStatus(): int
 	{
 		$saldo = $this->getSaldo();
 		$prijs = $this->maaltijd->getPrijsFloat();
@@ -147,24 +147,5 @@ class MaaltijdAanmelding
 		} else {
 			return -1; // saldo negatief
 		}
-	}
-
-	/**
-	 * Melding voor saldo status.
-	 *
-	 * @return String
-	 */
-	public function getSaldoMelding()
-	{
-		$status = $this->getSaldoStatus();
-		$prijs = sprintf('%.2f', $this->maaltijd->getPrijsFloat());
-		return match ($status) {
-			3 => 'ok',
-			2 => $prijs,
-			1 => '&lt; ' . $prijs,
-			0 => '0',
-			-1 => '&lt; 0',
-			default => throw new CsrException('Ongeldige saldo status: ' . $status),
-		};
 	}
 }

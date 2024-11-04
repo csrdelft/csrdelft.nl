@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\groep\BbBestuur;
 
 class NodeBestuur implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbBestuur::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbBestuur::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'bestuur'
+	 */
 	public static function getNodeType()
 	{
 		return 'bestuur';
@@ -36,6 +44,9 @@ class NodeBestuur implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

@@ -29,6 +29,11 @@ class BbImg extends BbTag
 	 */
 	private $url;
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'img'
+	 */
 	public static function getTagName()
 	{
 		return 'img';
@@ -98,7 +103,10 @@ class BbImg extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
 	 * @throws BbException
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

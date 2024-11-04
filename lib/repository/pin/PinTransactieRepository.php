@@ -20,10 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PinTransactieRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, PinTransactie::class);
-	}
+
 
 	/**
 	 * @param string $from
@@ -53,16 +50,6 @@ class PinTransactieRepository extends AbstractRepository
 			->setParameter('ids', $ids)
 			->getQuery()
 			->execute();
-	}
-
-	/**
-	 * @param PinTransactie $pinTransactie
-	 * @return string
-	 * @throws CsrException
-	 */
-	public function getKorteBeschrijving($pinTransactie)
-	{
-		return sprintf('€%.2f', $pinTransactie->getBedragInCenten() / 100);
 	}
 
 	/**

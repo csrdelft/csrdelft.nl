@@ -25,6 +25,9 @@ class AutocompleteField extends TextField
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$sources = [];
@@ -85,7 +88,12 @@ class AutocompleteField extends TextField
 			' />';
 	}
 
-	protected function getInputAttribute($attribute)
+	/**
+	 * @param string[] $attribute
+	 *
+	 * @psalm-param list{'type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete'} $attribute
+	 */
+	protected function getInputAttribute(array $attribute)
 	{
 		switch ($attribute) {
 			case 'autocomplete':

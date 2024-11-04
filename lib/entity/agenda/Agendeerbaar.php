@@ -35,6 +35,4 @@ interface Agendeerbaar
 	public function getUrl(): ?string;
 
 	public function isHeledag(): bool;
-
-	public function isTransparant(): bool;
 }

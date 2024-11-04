@@ -24,19 +24,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ForumDelenService
 {
-	public function __construct(
-		private readonly EntityManagerInterface $entityManager,
-		private readonly RequestStack $requestStack,
-		private readonly ForumDelenRepository $forumDelenRepository,
-		private readonly ForumPostsRepository $forumPostsRepository,
-		private readonly ForumDradenRepository $forumDradenRepository,
-		private readonly ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
-		private readonly ForumCategorieRepository $forumCategorieRepository,
-		private readonly ForumDelenMeldingRepository $forumDelenMeldingRepository
-	) {
-	}
 
-	public function verwijderForumDeel($id)
+
+	public function verwijderForumDeel(int $id): void
 	{
 		$this->forumDelenMeldingRepository->stopMeldingenVoorIedereen($id);
 		$this->entityManager->remove($this->forumDelenRepository->find($id));
@@ -118,7 +108,7 @@ class ForumDelenService
 		return $dradenById;
 	}
 
-	public function getRecent($belangrijk = null)
+	public function getRecent(bool|null $belangrijk = null): ForumDeel
 	{
 		$deel = new ForumDeel();
 		if ($belangrijk) {
@@ -227,14 +217,17 @@ class ForumDelenService
 		return $gevonden_draden;
 	}
 
-	public function laatstGewijzigd($posts)
+	public function laatstGewijzigd(array $posts): \DateTimeImmutable
 	{
 		return max(
 			array_map(fn(ForumPost $post) => $post->laatst_gewijzigd, $posts)
 		);
 	}
 
-	private function sorteerFunctie($sorteerOp)
+	/**
+	 * @psalm-return \Closure(mixed, mixed):(-1|1)
+	 */
+	private function sorteerFunctie(string $sorteerOp): \Closure
 	{
 		return match ($sorteerOp) {
 			'aangemaakt_op' => fn($a, $b) => $a->datum_tijd < $b->datum_tijd ? 1 : -1,
@@ -324,8 +317,10 @@ class ForumDelenService
 
 	/**
 	 * @return ForumCategorie[]
+	 *
+	 * @psalm-return list<CsrDelft\entity\forum\ForumCategorie>
 	 */
-	public function getForumIndelingVoorLid()
+	public function getForumIndelingVoorLid(): array
 	{
 		$delenByCategorieId = ArrayUtil::group_by(
 			'categorie_id',

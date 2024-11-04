@@ -13,16 +13,18 @@ final class FlashUtil
 	 * Levels can be:
 	 *
 	 * -1 error / danger
-	 *  0 info
-	 *  1 success
-	 *  2 warning / notify
+	 * 0 info
+	 * 1 success
+	 * 2 warning / notify
 	 *
 	 * @param string $msg
 	 * @param int $lvl
-	 * @see    getFlashUsingContainerFacade()
+	 *
+	 * @see getFlashUsingContainerFacade()
+	 *
 	 * @deprecated gebruik FlashBag
 	 */
-	public static function setFlashWithContainerFacade(string $msg, int $lvl)
+	public static function setFlashWithContainerFacade(string $msg, int $lvl): void
 	{
 		$flashBag = ContainerFacade::getContainer()
 			->get('session')

@@ -14,7 +14,7 @@ class LichtingenRepository extends GroepRepository
 		return Lichting::class;
 	}
 
-	public function get($lidjaar)
+	public function get(string $lidjaar)
 	{
 		return $this->nieuw($lidjaar);
 	}

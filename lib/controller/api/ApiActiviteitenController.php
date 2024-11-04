@@ -24,10 +24,15 @@ class ApiActiviteitenController extends AbstractController
 
 	/**
 	 * url POST /$id/aanmelden
-	 * @Auth(P_LEDEN_READ)
+	 *
+	 * @Auth (P_LEDEN_READ)
+	 *
+	 * @return (\CsrDelft\entity\groepen\Groep|false)[]
+	 *
+	 * @psalm-return array{data: \CsrDelft\entity\groepen\Groep|false}
 	 */
 	#[Route(path: '/API/2.0/activiteiten/{id}/aanmelden', methods: ['POST'])]
-	public function activiteitAanmelden($id)
+	public function activiteitAanmelden($id): array
 	{
 		$activiteit = $this->activiteitenRepository->get($id);
 
@@ -53,10 +58,14 @@ class ApiActiviteitenController extends AbstractController
 	}
 
 	/**
-	 * @Auth(P_LEDEN_READ)
+	 * @Auth (P_LEDEN_READ)
+	 *
+	 * @return \CsrDelft\entity\groepen\Groep[]
+	 *
+	 * @psalm-return array{data: \CsrDelft\entity\groepen\Groep}
 	 */
 	#[Route(path: '/API/2.0/activiteiten/{id}/afmelden', methods: ['POST'])]
-	public function activiteitAfmelden($id)
+	public function activiteitAfmelden($id): array
 	{
 		$activiteit = $this->activiteitenRepository->get($id);
 

@@ -38,7 +38,7 @@ abstract class BbTagGroep extends BbTag
 	) {
 	}
 
-	public function getId()
+	public function getId(): string
 	{
 		return $this->id;
 	}
@@ -69,6 +69,9 @@ abstract class BbTagGroep extends BbTag
 		return $groep;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function parse($arguments = [])
 	{
 		$this->id = $this->readMainArgument($arguments);
@@ -92,7 +95,7 @@ abstract class BbTagGroep extends BbTag
 		}
 	}
 
-	protected function groepLight(Groep $groep, $tag, $leden)
+	protected function groepLight(Groep $groep, string $tag, $leden): string
 	{
 		return BbHelper::lightLinkBlock(
 			$tag,
@@ -104,9 +107,6 @@ abstract class BbTagGroep extends BbTag
 
 	abstract public function getLidNaam();
 
-	/**
-	 * @return Groep|string
-	 */
 	abstract public function getEntityClass(): string;
 
 	/**

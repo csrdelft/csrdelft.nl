@@ -21,6 +21,11 @@ class ForumTwigExtension extends AbstractExtension
 	) {
 	}
 
+	/**
+	 * @return TwigFunction[]
+	 *
+	 * @psalm-return list{TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction}
+	 */
 	public function getFunctions(): array
 	{
 		return [
@@ -51,6 +56,11 @@ class ForumTwigExtension extends AbstractExtension
 		];
 	}
 
+	/**
+	 * @return TwigFilter[]
+	 *
+	 * @psalm-return list{TwigFilter, TwigFilter}
+	 */
 	public function getFilters(): array
 	{
 		return [
@@ -68,9 +78,17 @@ class ForumTwigExtension extends AbstractExtension
 		return ForumDradenRepository::$belangrijk_opties;
 	}
 
-	public function getForumDradenData($forum_draden)
+	/**
+	 * @return false|string
+	 */
+	public function getForumDradenData($forum_draden): string|false
 	{
-		$ids_from_draden = fn(ForumDraad $draad) => [
+		$ids_from_draden = /**
+		 * @return (int|string)[]
+		 *
+		 * @psalm-return array{id: int, titel: string}
+		 */
+		fn(ForumDraad $draad): array => [
 			'id' => $draad->draad_id,
 			'titel' => $draad->titel,
 		];
@@ -121,7 +139,7 @@ class ForumTwigExtension extends AbstractExtension
 		return $this->forumPostsRepository->getHuidigePagina();
 	}
 
-	public function draadGetLaatstePost($draad_id)
+	public function draadGetLaatstePost($draad_id): string|null
 	{
 		return $this->forumPostsRepository->findOneBy(
 			['draad_id' => $draad_id, 'verwijderd' => false],
@@ -129,12 +147,17 @@ class ForumTwigExtension extends AbstractExtension
 		)->tekst;
 	}
 
+	/**
+	 * @return null|string|string[]
+	 *
+	 * @psalm-return array<string>|null|string
+	 */
 	public function highlight_zoekterm(
 		$bericht,
 		$zoekterm,
 		$before = null,
 		$after = null
-	) {
+	): array|string|null {
 		$before =
 			$before ?: '<span style="background-color: rgba(255,255,0,0.4);">';
 		$after = $after ?: '</span>';

@@ -44,7 +44,7 @@ final class ReflectionUtil
 	 *
 	 * @return string
 	 */
-	public static function short_class($class)
+	public static function short_class($class): string
 	{
 		return (new \ReflectionClass($class))->getShortName();
 	}
@@ -52,11 +52,11 @@ final class ReflectionUtil
 	/**
 	 * Haal de classname op uit een class beschrijving met namespace
 	 *
-	 * @param $className
+	 * @param class-string $className
 	 *
 	 * @return string
 	 */
-	public static function classNameZonderNamespace($className)
+	public static function classNameZonderNamespace(string $className)
 	{
 		try {
 			return (new ReflectionClass($className))->getShortName();
@@ -70,9 +70,11 @@ final class ReflectionUtil
 	 *
 	 * @param $className
 	 *
-	 * @return string
+	 * @return null|string|string[]
+	 *
+	 * @psalm-return array<string>|null|string
 	 */
-	public static function className($className)
+	public static function className(\CsrDelft\view\groepen\GroepLogboekTable $className): array|string|null
 	{
 		return preg_replace('/\\\\/', '-', $className);
 	}

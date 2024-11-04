@@ -101,22 +101,17 @@ class Boek
 	#[ORM\JoinColumn(name: 'categorie_id', referencedColumnName: 'id')]
 	protected $categorie;
 
-	public function getRubriek()
+	public function getRubriek(): BiebRubriek|null
 	{
 		return $this->categorie;
 	}
 
-	public function setCategorie(BiebRubriek $biebRubriek)
+	public function setCategorie(BiebRubriek $biebRubriek): void
 	{
 		$this->categorie = $biebRubriek;
 	}
 
-	public function getStatus()
-	{
-		return '';
-	}
-
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/bibliotheek/boek/' . $this->id;
 	}
@@ -124,7 +119,7 @@ class Boek
 	/**
 	 * Iedereen met extra rechten en zij met BIEB_READ mogen
 	 */
-	public function magBekijken()
+	public function magBekijken(): bool
 	{
 		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
 	}
@@ -144,16 +139,18 @@ class Boek
 
 	/**
 	 * Controleert of ingelogd eigenaar is van boek/exemplaar
-	 *  - BASFCieleden zijn eigenaar van boeken van de bibliotheek
+	 * - BASFCieleden zijn eigenaar van boeken van de bibliotheek
 	 *
 	 * @param null|int geen of $exemplaarid integer
+	 * @param null|string $uid
+	 *
 	 * @return bool true
-	 *        of ingelogd eigenaar is v.e. exemplaar van het boek
-	 *        of van het specifieke exemplaar als exemplaarid is gegeven.
-	 *      false
-	 *        geen geen resultaat of niet de eigenaar
+  *        of ingelogd eigenaar is v.e. exemplaar van het boek
+  *        of van het specifieke exemplaar als exemplaarid is gegeven.
+  *      false
+  *        geen geen resultaat of niet de eigenaar
 	 */
-	public function isEigenaar($uid = null)
+	public function isEigenaar(string|null $uid = null)
 	{
 		foreach ($this->getExemplaren() as $exemplaar) {
 			if ($uid != null) {
@@ -186,16 +183,6 @@ class Boek
 	public function magVerwijderen()
 	{
 		return LoginService::mag('commissie:BASFCie,' . P_BIEB_MOD . ',' . P_ADMIN);
-	}
-
-	public function isBiebBoek()
-	{
-		foreach ($this->getExemplaren() as $exemplaar) {
-			if ($exemplaar->isBiebBoek()) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**

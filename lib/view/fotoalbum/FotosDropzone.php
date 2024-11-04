@@ -21,6 +21,9 @@ class FotosDropzone extends Dropzone
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getBreadcrumbs()
 	{
 		return '<ul class="breadcrumb">' .

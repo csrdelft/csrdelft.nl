@@ -18,15 +18,9 @@ use Doctrine\ORM\OptimisticLockException;
 
 class MaaltijdArchiefService
 {
-	public function __construct(
-		private readonly MaaltijdenRepository $maaltijdenRepository,
-		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		private readonly ArchiefMaaltijdenRepository $archiefMaaltijdenRepository,
-		private readonly CorveeTakenRepository $corveeTakenRepository
-	) {
-	}
 
-	public function vanMaaltijd(Maaltijd $maaltijd)
+
+	public function vanMaaltijd(Maaltijd $maaltijd): ArchiefMaaltijd
 	{
 		$archief = new ArchiefMaaltijd();
 		$archief->maaltijd_id = $maaltijd->maaltijd_id;
@@ -56,11 +50,15 @@ class MaaltijdArchiefService
 	/**
 	 * @param int $van
 	 * @param int $tot
-	 * @return array
+	 *
+	 * @return (CsrGebruikerException[]|int)[]
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
+	 *
+	 * @psalm-return list{list{0?: CsrGebruikerException,...}, int<0, max>}
 	 */
-	public function archiveerOudeMaaltijden($van, $tot)
+	public function archiveerOudeMaaltijden($van, $tot): array
 	{
 		if (!is_int($van) || !is_int($tot)) {
 			throw new CsrException('Invalid timestamp: archiveerOudeMaaltijden()');

@@ -42,25 +42,17 @@ class PinTransactieMatcher
 	 */
 	private $matches;
 
-	public function __construct(
-		private readonly EntityManagerInterface $entityManager,
-		private readonly PinTransactieMatchRepository $pinTransactieMatchModel
-	) {
-	}
-
-	public function setPinTransacties(array $pinTransacties)
+	public function setPinTransacties(array $pinTransacties): void
 	{
 		$this->pinTransacties = $pinTransacties;
 	}
 
-	public function setPinBestellingen(array $pinBestellingen)
+	public function setPinBestellingen(array $pinBestellingen): void
 	{
 		$this->pinBestellingen = $pinBestellingen;
 	}
 
-	/**
-	 */
-	public function clean()
+	public function clean(): void
 	{
 		$ids = array_map(
 			fn(CiviBestelling $inhoud) => $inhoud->id,
@@ -125,7 +117,7 @@ class PinTransactieMatcher
 	/**
 	 * @throws CsrException
 	 */
-	public function match()
+	public function match(): void
 	{
 		// Sorteer beide op volgorde van moment
 		usort(
@@ -339,9 +331,7 @@ class PinTransactieMatcher
 		return $report;
 	}
 
-	/**
-	 */
-	public function save()
+	public function save(): void
 	{
 		foreach ($this->matches as $match) {
 			$this->entityManager->persist($match);
@@ -349,15 +339,7 @@ class PinTransactieMatcher
 		$this->entityManager->flush();
 	}
 
-	/**
-	 * @return PinTransactieMatch[]
-	 */
-	public function getMatches()
-	{
-		return $this->matches;
-	}
-
-	private function matchCost($i, $j)
+	private function matchCost(int $i, int $j): int
 	{
 		if (
 			$this->pinTransacties[$i]->getBedragInCenten() ==

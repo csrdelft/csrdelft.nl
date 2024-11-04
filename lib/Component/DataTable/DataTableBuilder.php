@@ -81,15 +81,7 @@ class DataTableBuilder
 	 */
 	private $camelCaseToSnakeCaseNameConverter;
 
-	public function __construct(
-		private readonly SerializerInterface $serializer,
-		private readonly NormalizerInterface $normalizer,
-		private readonly EntityManagerInterface $entityManager
-	) {
-		$this->camelCaseToSnakeCaseNameConverter = new CamelCaseToSnakeCaseNameConverter();
-	}
-
-	public function loadFromClass(string $className)
+	public function loadFromClass(string $className): void
 	{
 		if (is_a($className, CustomDataTableEntry::class, true)) {
 			$this->loadCustomDataTableEntry($className);
@@ -100,7 +92,7 @@ class DataTableBuilder
 		}
 	}
 
-	public function loadFromMetadata(ClassMetadata $metadata)
+	public function loadFromMetadata(ClassMetadata $metadata): void
 	{
 		// generate columns from entity attributes
 		foreach ($metadata->getFieldNames() as $attribute) {
@@ -132,31 +124,31 @@ class DataTableBuilder
 		return $this->dataTableId;
 	}
 
-	public function setSearch($searchString)
-	{
-		$this->settings['search'] = ['search' => $searchString];
-	}
-
 	/**
 	 * @param DataTableKnop $knop
 	 */
-	public function addKnop(DataTableKnop $knop)
+	public function addKnop(DataTableKnop $knop): void
 	{
 		$knop->setDataTableId($this->dataTableId);
 		$this->settings['userButtons'][] = $knop;
 	}
 
-	public function addRowKnop(DataTableRowKnop $knop)
+	public function addRowKnop(DataTableRowKnop $knop): void
 	{
 		$this->settings['rowButtons'][] = $knop;
 	}
 
-	public function columnPosition($name)
+	/**
+	 * @return false|int
+	 *
+	 * @psalm-return false|int<0, max>
+	 */
+	public function columnPosition(string $name): int|false
 	{
 		return array_search($name, array_keys($this->columns));
 	}
 
-	public function setOrder($names)
+	public function setOrder(array $names): void
 	{
 		$orders = [];
 		foreach ($names as $name => $order) {
@@ -182,7 +174,7 @@ class DataTableBuilder
 		$order_by = null,
 		CellType $type = null,
 		$data = null
-	) {
+	): void {
 		$type = $type ?: CellType::String();
 		$render = $render ?: CellRender::Default();
 
@@ -223,12 +215,12 @@ class DataTableBuilder
 	 * Gebruik deze functie om kolommen te verwijderen, doe dit als eerst.
 	 *
 	 * @see columnPosition geeft een andere uitvoer na deze functie.
-	 *
-	 * Gebruik de veiligere @see hideColumn als je de inhoud van een kolom nog wil kunnen opvragen.
+
+  * Gebruik de veiligere @see hideColumn als je de inhoud van een kolom nog wil kunnen opvragen.
 	 *
 	 * @param string $name
 	 */
-	public function deleteColumn($name)
+	public function deleteColumn($name): void
 	{
 		if (isset($this->columns[$name])) {
 			array_splice($this->columns, $this->columnPosition($name), 1);
@@ -239,7 +231,7 @@ class DataTableBuilder
 	 * @param string $name
 	 * @param bool $hide
 	 */
-	public function hideColumn($name, $hide = true)
+	public function hideColumn($name, $hide = true): void
 	{
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['visible'] = !$hide;
@@ -250,7 +242,7 @@ class DataTableBuilder
 	 * @param string $name
 	 * @param bool $searchable
 	 */
-	public function searchColumn($name, $searchable = true)
+	public function searchColumn($name, $searchable = true): void
 	{
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['searchable'] = (bool) $searchable;
@@ -261,7 +253,7 @@ class DataTableBuilder
 	 * @param string $name
 	 * @param string $title
 	 */
-	public function setColumnTitle($name, $title)
+	public function setColumnTitle($name, $title): void
 	{
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['title'] = $title;
@@ -318,7 +310,6 @@ class DataTableBuilder
 
 		// create visible columns index array and default order
 		$index = 0;
-		$visibleIndex = 0;
 		foreach ($this->columns as $name => $def) {
 			if (!isset($def['visible']) or $def['visible'] === true) {
 				// default order by first visible orderable column
@@ -351,11 +342,6 @@ class DataTableBuilder
 		return $this->titel;
 	}
 
-	public function getBreadcrumbs()
-	{
-		return $this->titel;
-	}
-
 	/**
 	 * Hiermee wordt gepoogt af te dwingen dat een view een model heeft om te tonen
 	 */
@@ -364,12 +350,7 @@ class DataTableBuilder
 		return $this->model;
 	}
 
-	public function getType()
-	{
-		return ReflectionUtil::classNameZonderNamespace(static::class);
-	}
-
-	public function getTable()
+	public function getTable(): DataTableInstance
 	{
 		return new DataTableInstance(
 			$this->serializer,
@@ -381,7 +362,7 @@ class DataTableBuilder
 		);
 	}
 
-	public function setTitel($titel)
+	public function setTitel(string $titel): void
 	{
 		$this->titel = $titel;
 
@@ -394,7 +375,7 @@ class DataTableBuilder
 		}
 	}
 
-	public function setBeschrijving($beschrijving)
+	public function setBeschrijving(string $beschrijving): void
 	{
 		$this->beschrijving = $beschrijving;
 	}
@@ -405,33 +386,17 @@ class DataTableBuilder
 	}
 
 	// create group expand / collapse column
-	public function addDefaultDetailsColumn()
-	{
-		$this->columns['details'] = [
-			'name' => 'details',
-			'data' => 'details',
-			'title' => '',
-			'type' => 'string',
-			'orderable' => false,
-			'searchable' => false,
-			'defaultContent' => '',
-		];
-	}
 
-	public function setTableId($tableId)
-	{
-		$this->dataTableId = $tableId;
-	}
 
-	public function setDataUrl($dataUrl)
+	public function setDataUrl(string $dataUrl): void
 	{
 		$this->dataUrl = $dataUrl;
 	}
 
 	/**
-	 * @param string|CustomDataTableEntry $className
+	 * @param string $className
 	 */
-	private function loadCustomDataTableEntry(string $className)
+	private function loadCustomDataTableEntry(string $className): void
 	{
 		foreach ($className::getFieldNames() as $attribute) {
 			$this->addColumn($attribute);
@@ -442,7 +407,7 @@ class DataTableBuilder
 		}
 	}
 
-	public function resetButtons()
+	public function resetButtons(): void
 	{
 		$this->settings['buttons'] = [];
 	}

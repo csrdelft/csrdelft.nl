@@ -19,6 +19,9 @@ class SavedQueryContent implements View
 	) {
 	}
 
+	/**
+	 * @return SavedQueryResult|null
+	 */
 	public function getModel()
 	{
 		return $this->sq;
@@ -29,12 +32,17 @@ class SavedQueryContent implements View
 		return null;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'Opgeslagen query's'
+	 */
 	public function getTitel()
 	{
 		return 'Opgeslagen query\'s';
 	}
 
-	public static function render_header($name)
+	public static function render_header(string $name)
 	{
 		switch ($name) {
 			case 'uid_naam':
@@ -55,7 +63,7 @@ class SavedQueryContent implements View
 		return $name;
 	}
 
-	public static function render_field($name, $contents)
+	public static function render_field($name, $contents): string|null
 	{
 		if ($name == 'uid_naam') {
 			return ProfielRepository::getLink($contents, 'volledig');
@@ -81,7 +89,7 @@ class SavedQueryContent implements View
 		return htmlspecialchars((string) $contents);
 	}
 
-	public function render_queryResult()
+	public function render_queryResult(): string
 	{
 		if ($this->sq && !$this->sq->error) {
 			$sq = $this->sq;
@@ -121,7 +129,7 @@ class SavedQueryContent implements View
 		return $return;
 	}
 
-	public function getQueryselector()
+	public function getQueryselector(): string
 	{
 		//als er een query ingeladen is, die highlighten
 		$id = $this->sq instanceof SavedQueryResult ? $this->sq->query->ID : 0;

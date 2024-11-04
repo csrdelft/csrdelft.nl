@@ -44,6 +44,11 @@ class GroepAanmakenForm extends ModalForm
 		$this->formKnoppen->submit->label = 'Aanmaken';
 	}
 
+	/**
+	 * @return (null|string)[]
+	 *
+	 * @psalm-return array{model: string, soort: null|string}
+	 */
 	public function getValues()
 	{
 		$return = [];

@@ -7,6 +7,11 @@ use CsrDelft\common\Util\CryptoUtil;
 
 class BbAftel extends BbTag
 {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{'aftel'}
+	 */
 	public static function getTagName()
 	{
 		return ['aftel'];
@@ -53,6 +58,8 @@ HTML;
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

@@ -20,12 +20,16 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 abstract class PrefixVoter extends Voter
 {
-	abstract protected function supportsPrefix($prefix);
+	abstract protected function supportsPrefix(string $prefix);
 
+	/**
+	 * @param false|string $gevraagd
+	 * @param false|string $role
+	 */
 	abstract protected function voteOnPrefix(
 		string $prefix,
-		$gevraagd,
-		$role,
+		string|false $gevraagd,
+		string|false $role,
 		$subject,
 		TokenInterface $token
 	): bool;

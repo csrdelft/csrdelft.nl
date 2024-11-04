@@ -20,11 +20,9 @@ class ProfielFixtures extends Fixture
 	 */
 	private $faker;
 
-	public function __construct()
-	{
-		$this->faker = Faker::create('nl_NL');
-	}
-
+	/**
+	 * @return void
+	 */
 	public function load(ObjectManager $manager)
 	{
 		$lichtingen = range(

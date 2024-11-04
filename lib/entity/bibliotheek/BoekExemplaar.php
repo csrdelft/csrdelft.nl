@@ -105,33 +105,18 @@ class BoekExemplaar
 		return $this->isEigenaar();
 	}
 
-	public function magBekijken()
-	{
-		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
-	}
-
-	public function isBeschikbaar()
+	public function isBeschikbaar(): bool
 	{
 		return $this->status === BoekExemplaarStatus::beschikbaar();
 	}
 
-	public function kanLenen(string $uid)
-	{
-		return $this->eigenaar_uid != $uid && $this->isBeschikbaar();
-	}
-
-	public function isUitgeleend()
+	public function isUitgeleend(): bool
 	{
 		return $this->status === BoekExemplaarStatus::uitgeleend();
 	}
 
-	public function isTeruggegeven()
+	public function isTeruggegeven(): bool
 	{
 		return $this->status === BoekExemplaarStatus::teruggegeven();
-	}
-
-	public function isVermist()
-	{
-		return $this->status === BoekExemplaarStatus::vermist();
 	}
 }

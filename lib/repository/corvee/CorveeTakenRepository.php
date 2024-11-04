@@ -33,10 +33,7 @@ use Throwable;
  */
 class CorveeTakenRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, CorveeTaak::class);
-	}
+
 
 	/**
 	 * @param CorveeTaak $taak
@@ -156,7 +153,7 @@ class CorveeTakenRepository extends AbstractRepository
 			->getResult();
 	}
 
-	public function getAlleTaken($groupByUid = false)
+	public function getAlleTaken(bool $groupByUid = false)
 	{
 		$taken = $this->findBy(['verwijderd' => false], ['datum' => 'ASC']);
 		if ($groupByUid) {
@@ -324,7 +321,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderTakenVoorLid($uid)
+	public function verwijderTakenVoorLid(string $uid)
 	{
 		/** @var CorveeTaak[] $taken */
 		$taken = $this->createQueryBuilder('ct')
@@ -448,17 +445,6 @@ class CorveeTakenRepository extends AbstractRepository
 
 	// Functie-Taken ############################################################
 
-	/**
-	 * Called when a CorveeFunctie is going to be deleted.
-	 *
-	 * @param int $fid
-	 * @return bool
-	 */
-	public function existFunctieTaken($fid)
-	{
-		return count($this->findBy(['functie_id' => $fid])) > 0;
-	}
-
 	// Repetitie-Taken ############################################################
 
 	/**
@@ -535,8 +521,10 @@ class CorveeTakenRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param $crid
+	 * @param numeric $crid
+	 *
 	 * @return int
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -570,7 +558,7 @@ class CorveeTakenRepository extends AbstractRepository
 	 * @return RepetitieTakenUpdateDTO
 	 * @throws Throwable
 	 */
-	public function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats)
+	public function updateRepetitieTaken(CorveeRepetitie $repetitie, bool $verplaats)
 	{
 		return $this->_em->transactional(function () use ($repetitie, $verplaats) {
 			$taken = $this->findBy([

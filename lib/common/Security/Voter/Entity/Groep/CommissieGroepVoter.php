@@ -8,6 +8,11 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class CommissieGroepVoter extends AbstractGroepVoter
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Commissie::class
+	 */
 	protected function getGroepType(): string
 	{
 		return Commissie::class;

@@ -69,37 +69,6 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	public $bestellingen;
 
 	/**
-	 * @return integer
-	 */
-	#[Serializer\Groups('bar')]
-	public function getRecent()
-	{
-		$eb = Criteria::expr();
-		$criteria = Criteria::create()
-			->where($eb->eq('deleted', false))
-			->andWhere(
-				$eb->gt(
-					'moment',
-					date_create_immutable()->add(
-						\DateInterval::createFromDateString('-100 days')
-					)
-				)
-			);
-
-		return $this->bestellingen->matching($criteria)->count();
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('lichting')]
-	public function getDataTableLichting()
-	{
-		return substr($this->uid, 0, 2);
-	}
-
-	/**
 	 * @return string
 	 */
 	#[Serializer\Groups('datatable')]
@@ -109,26 +78,22 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 		return $this->getWeergave();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getId()
 	{
 		return $this->uid;
 	}
 
 	/**
-	 * @return string
+	 * @return null|string
 	 */
 	#[Serializer\Groups('bar')]
-	public function getWeergave(): string
+	public function getWeergave(): string|null
 	{
 		return ProfielRepository::existsUid($this->uid)
 			? ProfielRepository::getNaam($this->uid, 'volledig')
-			: $this->naam;
-	}
-
-	public function getLink(): string
-	{
-		return ProfielRepository::existsUid($this->uid)
-			? ProfielRepository::getLink($this->uid, 'volledig')
 			: $this->naam;
 	}
 }

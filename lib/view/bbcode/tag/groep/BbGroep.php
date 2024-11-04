@@ -10,16 +10,31 @@ use CsrDelft\entity\groepen\RechtenGroep;
  */
 class BbGroep extends BbTagGroep
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return RechtenGroep::class
+	 */
 	public function getEntityClass(): string
 	{
 		return RechtenGroep::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'groep'
+	 */
 	public static function getTagName()
 	{
 		return 'groep';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'personen'
+	 */
 	public function getLidNaam()
 	{
 		return 'personen';

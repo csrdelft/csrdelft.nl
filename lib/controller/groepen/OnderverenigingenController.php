@@ -13,6 +13,11 @@ use CsrDelft\entity\groepen\Ondervereniging;
  */
 class OnderverenigingenController extends AbstractGroepenController
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Ondervereniging::class
+	 */
 	public function getGroepType()
 	{
 		return Ondervereniging::class;

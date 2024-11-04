@@ -18,12 +18,7 @@ use Symfony\Component\Security\Core\Security;
  */
 class DocumentCategorieRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly Security $security
-	) {
-		parent::__construct($registry, DocumentCategorie::class);
-	}
+
 
 	/**
 	 * @param $id
@@ -33,22 +28,6 @@ class DocumentCategorieRepository extends AbstractRepository
 	public function get($id)
 	{
 		return $this->find($id);
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getCategorieNamen()
-	{
-		$categorien = $this->findAll();
-
-		$return = [];
-
-		foreach ($categorien as $categorie) {
-			$return[$categorie->id] = $categorie->naam;
-		}
-
-		return $return;
 	}
 
 	public function findMetSchijfrechtenVoorLid()

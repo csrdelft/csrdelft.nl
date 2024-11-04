@@ -118,22 +118,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $profiel;
 
-	public function hasPrivateToken()
-	{
-		return !empty($this->private_token);
-	}
-
-	public function getICalLink()
-	{
-		$url = '/agenda/ical/';
-		if (empty($this->private_token)) {
-			return $url . 'csrdelft.ics';
-		} else {
-			return $url . $this->private_token . '/csrdelft.ics';
-		}
-	}
-
-	public function getRssLink()
+	public function getRssLink(): string
 	{
 		$url = '/forum/rss/';
 		if (empty($this->private_token)) {
@@ -143,15 +128,15 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 		}
 	}
 
-	public function getEmail()
-	{
-		return $this->email;
-	}
-
 	//****
 	// UserInterface implementatie
 	//****
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{string}
+	 */
 	public function getRoles(): array
 	{
 		return [str_replace('R_', 'ROLE_', $this->perm_role)];
@@ -162,6 +147,11 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 		return $this->pass_hash;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ''
+	 */
 	public function getSalt(): string
 	{
 		return '';
@@ -179,6 +169,9 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public $pass_plain;
 
+	/**
+	 * @return void
+	 */
 	public function eraseCredentials()
 	{
 		$this->pass_plain = null;

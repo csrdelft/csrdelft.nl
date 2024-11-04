@@ -111,7 +111,7 @@ class CorveeRepetitie implements DisplayEntity
 	/**
 	 * @return string
 	 */
-	public function getDagVanDeWeekText()
+	public function getDagVanDeWeekText(): string
 	{
 		$weekDagen = [
 			'zondag',
@@ -125,7 +125,7 @@ class CorveeRepetitie implements DisplayEntity
 		return $weekDagen[$this->dag_vd_week];
 	}
 
-	public function getPeriodeInDagenText()
+	public function getPeriodeInDagenText(): string
 	{
 		switch ($this->periode_in_dagen) {
 			case 0:
@@ -143,6 +143,9 @@ class CorveeRepetitie implements DisplayEntity
 		}
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getId()
 	{
 		return $this->crv_repetitie_id;

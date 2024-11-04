@@ -17,15 +17,19 @@ class BbTaal extends BbTag
 	 */
 	private $taal;
 
-	public function __construct(private readonly RequestStack $requestStack)
-	{
-	}
-
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{'taal'}
+	 */
 	public static function getTagName()
 	{
 		return ['taal'];
 	}
 
+	/**
+	 * @return void
+	 */
 	public function parse($arguments = [])
 	{
 		$this->taal = $arguments['taal'];

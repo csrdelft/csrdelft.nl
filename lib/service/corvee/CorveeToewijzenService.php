@@ -30,10 +30,14 @@ class CorveeToewijzenService
 	 * gekwalificeerde leden teruggegeven.
 	 *
 	 * @param CorveeTaak $taak
-	 * @return array
+	 *
+	 * @return CorveePuntenOverzichtDTO[]
+	 *
 	 * @throws CsrGebruikerException
+	 *
+	 * @psalm-return array<CorveePuntenOverzichtDTO>
 	 */
-	public function getSuggesties(CorveeTaak $taak)
+	public function getSuggesties(CorveeTaak $taak): array
 	{
 		$vrijstellingen = $this->corveeVrijstellingenRepository->getAlleVrijstellingen(
 			true
@@ -138,14 +142,18 @@ class CorveeToewijzenService
 
 	/**
 	 * Langst geleden bovenaan. Bij geen laatste taken op aantal.
+	 *
 	 * @param CorveePuntenOverzichtDTO $a
 	 * @param CorveePuntenOverzichtDTO $b
+	 *
 	 * @return int
+	 *
+	 * @psalm-return -1|0|1
 	 */
 	public function sorteerKwali(
 		CorveePuntenOverzichtDTO $a,
 		CorveePuntenOverzichtDTO $b
-	) {
+	): int {
 		if (!$a->laatste && !$b->laatste) {
 			$a = $a->aantal;
 			$b = $b->aantal;
@@ -170,7 +178,7 @@ class CorveeToewijzenService
 	public function sorteerPrognose(
 		CorveePuntenOverzichtDTO $a,
 		CorveePuntenOverzichtDTO $b
-	) {
+	): int {
 		$a = $a->prognose;
 		$b = $b->prognose;
 		if ($a === $b) {

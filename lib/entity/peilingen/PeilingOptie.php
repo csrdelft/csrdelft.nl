@@ -66,31 +66,4 @@ class PeilingOptie implements DataTableEntry
 	 */
 	#[ORM\ManyToOne(targetEntity: \Peiling::class, inversedBy: 'opties')]
 	public $peiling;
-
-	/**
-	 * @return int
-	 */
-	#[Serializer\Groups('vue')]
-	#[Serializer\SerializedName('stemmen')]
-	public function getVueStemmen()
-	{
-		$magStemmenZien =
-			($this->peiling->getHeeftGestemd() || !$this->peiling->getMagStemmen()) &&
-			$this->peiling->resultaat_zichtbaar;
-
-		if ($magStemmenZien) {
-			return $this->stemmen;
-		}
-
-		return 0;
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups(['datatable', 'vue'])]
-	public function getBeschrijvingFormatted()
-	{
-		return CsrBB::parse($this->beschrijving);
-	}
 }

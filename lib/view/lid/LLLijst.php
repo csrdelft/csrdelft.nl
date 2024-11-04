@@ -13,7 +13,7 @@ use Exception;
  */
 class LLLijst extends LLWeergave
 {
-	private function viewVeldnamen()
+	private function viewVeldnamen(): string
 	{
 		$html = '';
 		$html .= '<tr>';
@@ -24,6 +24,9 @@ class LLLijst extends LLWeergave
 		return $html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function viewHeader()
 	{
 		$html = '';
@@ -35,6 +38,9 @@ class LLLijst extends LLWeergave
 		return $html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function viewFooter()
 	{
 		$html = '';
@@ -43,7 +49,6 @@ class LLLijst extends LLWeergave
 		$html .= '</tfoot></table>';
 
 		//fix jQuery datatables op deze tabel.
-		$aoColumns = [];
 		foreach ($this->velden as $veld) {
 			$aoColumns[] = match ($veld) {
 				'pasfoto' => '{"bSortable": false}',
@@ -60,6 +65,9 @@ class LLLijst extends LLWeergave
 		return $html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function viewLid(Profiel $profiel)
 	{
 		$html = '';

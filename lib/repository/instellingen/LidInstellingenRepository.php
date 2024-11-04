@@ -34,24 +34,6 @@ class LidInstellingenRepository extends AbstractRepository
 	use YamlInstellingen;
 
 	/**
-	 * @param ManagerRegistry $registry
-	 * @throws FileLoaderImportCircularReferenceException
-	 * @throws LoaderLoadException
-	 */
-	public function __construct(
-		ManagerRegistry $registry,
-		private LoginService $loginService,
-		private CacheInterface $cache
-	) {
-		parent::__construct($registry, LidInstelling::class);
-
-		$this->load(
-			'instellingen/lid_instelling.yaml',
-			new InstellingConfiguration()
-		);
-	}
-
-	/**
 	 * Geeft een array terug van dezelfde vorm als de instellingen, maar gevuld met gekozen instellingen.
 	 *
 	 * Let op, kan minder bevatten dan de instellingen array.
@@ -73,7 +55,10 @@ class LidInstellingenRepository extends AbstractRepository
 		return $result;
 	}
 
-	public function getValue($module, $id)
+	/**
+	 * @psalm-param 'zoeken' $module
+	 */
+	public function getValue(string $module, $id)
 	{
 		$instelling = $this->getInstelling($module, $id);
 
@@ -84,86 +69,9 @@ class LidInstellingenRepository extends AbstractRepository
 		return $instelling->waarde;
 	}
 
-	/**
-	 * Haal een instelling op uit het cache of de database.
-	 * Als een instelling niet is gezet wordt deze aangemaakt met de default waarde en opgeslagen.
-	 *
-	 * @param string $module
-	 * @param string $id
-	 * @param string|null $uid
-	 * @return LidInstelling
-	 * @throws CsrException indien de default waarde ontbreekt (de instelling bestaat niet)
-	 * @throws InvalidArgumentException
-	 */
-	protected function getInstelling($module, $id, $uid = null)
-	{
-		if (!$uid) {
-			$uid = $this->getUid();
-		}
-
-		return $this->cache->get(
-			$this->getCacheKey($module, $id, $uid),
-			function () use ($module, $id, $uid) {
-				/** @var LidInstelling $instelling */
-				$instelling = $this->findOneBy([
-					'module' => $module,
-					'instelling' => $id,
-					'profiel' => $uid,
-				]);
-
-				if ($this->hasKey($module, $id)) {
-					if (!$instelling) {
-						$instelling = $this->newInstelling($module, $id, $uid);
-					}
-					return $instelling;
-				} else {
-					if ($instelling) {
-						// Haal niet-bestaande instelling uit de database
-						$this->_em->remove($instelling);
-						$this->_em->flush();
-					}
-					throw new CsrException(
-						sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module)
-					);
-				}
-			}
-		);
-	}
-
 	private function getUid()
 	{
 		return $this->loginService->_getUid();
-	}
-
-	protected function newInstelling($module, $id, $uid)
-	{
-		$instelling = new LidInstelling();
-		$instelling->module = $module;
-		$instelling->instelling = $id;
-		$instelling->waarde = $this->getDefault($module, $id);
-		$instelling->profiel = ProfielRepository::get($uid);
-
-		$this->_em->persist($instelling);
-		$this->_em->flush();
-		return $instelling;
-	}
-
-	public function getDefault($module, $id)
-	{
-		return $this->getField(
-			$module,
-			$id,
-			InstellingConfiguration::FIELD_DEFAULT
-		);
-	}
-
-	public function getType($module, $id)
-	{
-		if ($this->hasKey($module, $id)) {
-			return $this->getField($module, $id, InstellingConfiguration::FIELD_TYPE);
-		} else {
-			return null;
-		}
 	}
 
 	/**
@@ -194,7 +102,11 @@ class LidInstellingenRepository extends AbstractRepository
 		$this->_em->flush();
 	}
 
-	public function isValidValue($module, $id, $waarde)
+	/**
+	 * @psalm-param 'algemeen' $module
+	 * @psalm-param 'bijbel' $id
+	 */
+	public function isValidValue(string $module, string $id, string $waarde)
 	{
 		$options = $this->getTypeOptions($module, $id);
 		return match ($this->getType($module, $id)) {
@@ -210,7 +122,11 @@ class LidInstellingenRepository extends AbstractRepository
 		};
 	}
 
-	public function getTypeOptions($module, $id)
+	/**
+	 * @psalm-param 'zijbalk' $module
+	 * @psalm-param 'ishetal' $id
+	 */
+	public function getTypeOptions(string $module, string $id)
 	{
 		return $this->getField($module, $id, InstellingConfiguration::FIELD_OPTIES);
 	}
@@ -225,7 +141,7 @@ class LidInstellingenRepository extends AbstractRepository
 			->execute();
 	}
 
-	public function resetForAll($module, $id)
+	public function resetForAll(string $module, string $id)
 	{
 		$this->createQueryBuilder('i')
 			->andWhere('i.module = :module')

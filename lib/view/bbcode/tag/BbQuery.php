@@ -30,11 +30,11 @@ class BbQuery extends BbTag
 	 */
 	private $id;
 
-	public function __construct(
-		private readonly SavedQueryRepository $savedQueryRepository
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'query'
+	 */
 	public static function getTagName()
 	{
 		return 'query';
@@ -64,7 +64,10 @@ class BbQuery extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
 	 * @throws BbException
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{
@@ -80,7 +83,10 @@ class BbQuery extends BbTag
 
 	/**
 	 * @param int $queryID
+	 *
 	 * @throws BbException
+	 *
+	 * @return void
 	 */
 	private function assertId(int $queryID)
 	{

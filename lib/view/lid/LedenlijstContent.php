@@ -35,11 +35,17 @@ class LedenlijstContent implements View
 	) {
 	}
 
+	/**
+	 * @return LidZoekerService
+	 */
 	public function getModel()
 	{
 		return $this->lidzoeker;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getBreadcrumbs()
 	{
 		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
@@ -48,12 +54,17 @@ class LedenlijstContent implements View
 			'<li class="breadcrumb-item active">Ledenlijst der Civitas</li></ul>';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'Ledenlijst der Civitas'
+	 */
 	public function getTitel()
 	{
 		return 'Ledenlijst der Civitas';
 	}
 
-	public function viewSelect($name, $options)
+	public function viewSelect(string $name, array $options): string
 	{
 		$html = '';
 		$html .=
@@ -69,7 +80,7 @@ class LedenlijstContent implements View
 		return $html;
 	}
 
-	public function viewVeldselectie()
+	public function viewVeldselectie(): string
 	{
 		$html = '';
 		$html .= '<div class="mb-3">';

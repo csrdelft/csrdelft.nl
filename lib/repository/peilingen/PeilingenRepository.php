@@ -25,13 +25,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PeilingenRepository extends AbstractRepository
 {
-	public function __construct(
-		private readonly PeilingOptiesRepository $peilingOptiesModel,
-		private readonly PeilingStemmenRepository $peilingStemmenModel,
-		ManagerRegistry $registry
-	) {
-		parent::__construct($registry, Peiling::class);
-	}
+
 
 	/**
 	 * @param Peiling $entity
@@ -79,10 +73,11 @@ class PeilingenRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param $peiling_id
+	 * @param null|string $peiling_id
+	 *
 	 * @return Peiling|false
 	 */
-	public function getPeilingById($peiling_id)
+	public function getPeilingById(string|null $peiling_id)
 	{
 		return $this->find($peiling_id);
 	}
@@ -137,7 +132,7 @@ class PeilingenRepository extends AbstractRepository
 		}
 	}
 
-	public function magBewerken($peiling)
+	public function magBewerken(Peiling $peiling)
 	{
 		if (
 			LoginService::mag(P_PEILING_MOD) ||
@@ -148,13 +143,5 @@ class PeilingenRepository extends AbstractRepository
 		}
 
 		return false;
-	}
-
-	/**
-	 * @return Peiling[]
-	 */
-	public function getLijst()
-	{
-		return $this->findBy([], ['id' => 'DESC']);
 	}
 }

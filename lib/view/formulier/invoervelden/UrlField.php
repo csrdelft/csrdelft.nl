@@ -26,6 +26,9 @@ class UrlField extends TextField
 		return $this->value;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {

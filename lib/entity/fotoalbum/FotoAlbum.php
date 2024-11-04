@@ -96,36 +96,45 @@ class FotoAlbum extends Map
 		$this->dirname = basename((string) $this->path);
 	}
 
-	public function getPath()
-	{
-		return $this->path ?? PathUtil::join_paths(PHOTOALBUM_PATH, $this->subdir);
-	}
-
 	/**
 	 * File modification time van het album.
+	 *
+	 * @return false|int
 	 */
 	public function modified()
 	{
 		return filemtime($this->path);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getParentName()
 	{
 		return ucfirst(basename(dirname($this->subdir)));
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getUrl()
 	{
 		return '/fotoalbum/' . PathUtil::direncode($this->subdir);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isEmpty()
 	{
 		$subalbums = $this->getSubAlbums();
 		return empty($subalbums) && !$this->hasFotos(true);
 	}
 
-	public function hasFotos($incompleet = false)
+	/**
+	 * @return bool
+	 */
+	public function hasFotos(bool $incompleet = false)
 	{
 		$fotos = $this->getFotos($incompleet);
 		return !empty($fotos);
@@ -163,7 +172,7 @@ class FotoAlbum extends Map
 		}
 	}
 
-	public function orderByDateModified()
+	public function orderByDateModified(): void
 	{
 		$order = [];
 		foreach ($this->getFotos() as $i => $foto) {
@@ -177,7 +186,12 @@ class FotoAlbum extends Map
 		$this->fotos = $result;
 	}
 
-	public function getSubAlbums($recursive = false)
+	/**
+	 * @return (mixed|self)[]|false
+	 *
+	 * @psalm-return array<mixed|self>|false
+	 */
+	public function getSubAlbums($recursive = false): array|false
 	{
 		if (!isset($this->subalbums)) {
 			$this->subalbums = [];
@@ -205,19 +219,6 @@ class FotoAlbum extends Map
 			}
 		}
 		return $this->subalbums;
-	}
-
-	/**
-	 * @return string[]
-	 */
-	public function getCoverUrls()
-	{
-		$fotos = [];
-		$fotos[] = $this->getCoverUrl();
-		$fotos[] = $this->getRandomCover();
-		$fotos[] = $this->getRandomCover();
-
-		return $fotos;
 	}
 
 	public function getRandomCover()
@@ -308,30 +309,5 @@ class FotoAlbum extends Map
 		}
 
 		return $albums;
-	}
-
-	/**
-	 * Album array zonder poespas. Wordt voor sliders gebruikt.
-	 *
-	 * @return string[][]
-	 */
-	public function getAlbumArray()
-	{
-		$fotos = [];
-		foreach ($this->getFotos() as $foto) {
-			$fotos[] = [
-				'url' => $foto->getResizedUrl(),
-				'fullUrl' => HostUtil::getCsrRoot() . $foto->getFullUrl(),
-				'thumbUrl' => $foto->getThumbUrl(),
-				'title' => '',
-				'hash' => str_replace(
-					' ',
-					'%20',
-					urldecode((string) $foto->getFullUrl())
-				),
-			];
-		}
-
-		return $fotos;
 	}
 }

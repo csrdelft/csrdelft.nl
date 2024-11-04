@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\embed\BbVideo;
 
 class NodeVideo implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbVideo::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbVideo::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'video'
+	 */
 	public static function getNodeType()
 	{
 		return 'video';
@@ -38,6 +46,9 @@ class NodeVideo implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

@@ -20,17 +20,16 @@ class BbInstelling extends BbTag
 	private $testwaarde;
 	private $instelling;
 
-	public function __construct(
-		private readonly Security $security,
-		private readonly LidInstellingenRepository $lidInstellingenRepository
-	) {
-	}
-
 	public function isAllowed()
 	{
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'instelling'
+	 */
 	public static function getTagName()
 	{
 		return 'instelling';

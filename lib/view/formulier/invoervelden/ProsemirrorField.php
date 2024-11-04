@@ -18,6 +18,9 @@ class ProsemirrorField extends InputField
 	 */
 	public $extern = false;
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$attribute = $this->getInputAttribute([

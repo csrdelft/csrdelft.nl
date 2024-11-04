@@ -20,11 +20,6 @@ class FotoAlbumVoter extends Voter
 	const AANPASSEN = 'aanpassen';
 	const DOWNLOADEN = 'downloaden';
 
-	public function __construct(
-		private AccessDecisionManagerInterface $accessDecisionManager
-	) {
-	}
-
 	public function supportsAttribute(string $attribute): bool
 	{
 		return in_array($attribute, [

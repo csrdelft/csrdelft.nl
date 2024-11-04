@@ -31,7 +31,7 @@ class Eisen
 			->setMaxResults(1);
 	}
 
-	public static function voorGebruiker($uid, $veld = 'uid'): Criteria
+	public static function voorGebruiker(string $uid, string $veld = 'uid'): Criteria
 	{
 		return Criteria::create()
 			->where(Criteria::expr()->eq($veld, $uid))

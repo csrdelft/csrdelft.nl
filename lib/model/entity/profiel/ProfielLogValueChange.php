@@ -13,22 +13,11 @@ namespace CsrDelft\model\entity\profiel;
  */
 class ProfielLogValueChange extends AbstractProfielLogValueChangeEntry
 {
-	/**
-	 * @param string $oldValue
-	 * @param string $newValue
-	 */
-	public function __construct(
-		$property /**
-		 * Oude waarde
-		 */,
-		public $oldValue /**
-		 * Nieuwe waarde
-		 */,
-		public $newValue
-	) {
-		parent::__construct($property);
-	}
 
+
+	/**
+	 * @return string
+	 */
 	public function toHtml()
 	{
 		return "($this->field) " .
@@ -37,7 +26,7 @@ class ProfielLogValueChange extends AbstractProfielLogValueChangeEntry
 			htmlspecialchars($this->newValue ?? '');
 	}
 
-	public function censureer()
+	public function censureer(): ProfielLogValueChangeCensuur
 	{
 		$oldEmpty = trim($this->oldValue) === '';
 		$newEmpty = trim($this->newValue) === '';

@@ -7,11 +7,19 @@ use CsrDelft\view\bbcode\tag\BbUrl;
 
 class MarkLink implements Mark
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbUrl::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbUrl::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'link'
+	 */
 	public static function getMarkType()
 	{
 		return 'link';

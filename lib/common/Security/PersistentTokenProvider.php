@@ -12,13 +12,11 @@ use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
 
 class PersistentTokenProvider implements TokenProviderInterface
 {
-	public function __construct(
-		private readonly EntityManagerInterface $entityManager,
-		private readonly RememberLoginRepository $rememberLoginRepository,
-		private readonly ProfielRepository $profielRepository
-	) {
-	}
 
+
+	/**
+	 * @return RememberLogin
+	 */
 	public function loadTokenBySeries(string $series): PersistentTokenInterface
 	{
 		$token = $this->rememberLoginRepository->findOneBy(['series' => $series]);
@@ -30,6 +28,9 @@ class PersistentTokenProvider implements TokenProviderInterface
 		return $token;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function deleteTokenBySeries(string $series)
 	{
 		$token = $this->loadTokenBySeries($series);
@@ -39,6 +40,9 @@ class PersistentTokenProvider implements TokenProviderInterface
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public function updateToken(
 		string $series,
 		string $tokenValue,
@@ -51,6 +55,9 @@ class PersistentTokenProvider implements TokenProviderInterface
 		$this->entityManager->flush();
 	}
 
+	/**
+	 * @return void
+	 */
 	public function createNewToken(PersistentTokenInterface $token)
 	{
 		$persistentToken = new RememberLogin();

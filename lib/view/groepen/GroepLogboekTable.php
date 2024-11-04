@@ -25,6 +25,9 @@ class GroepLogboekTable extends DataTable
 		$this->setColumnTitle('uid', 'Door');
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType()
 	{
 		return ReflectionUtil::className($this);

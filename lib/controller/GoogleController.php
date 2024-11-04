@@ -85,7 +85,6 @@ class GoogleController extends AbstractController
 				FlashType::WARNING,
 				'Verbinding met Google niet geaccepteerd'
 			);
-			$state = substr(strstr($redirect, 'addToGoogleContacts', true), 0, -1);
 
 			return $this->redirect($redirect);
 		}

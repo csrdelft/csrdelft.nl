@@ -30,6 +30,9 @@ class TitelField extends TextField
 		);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {

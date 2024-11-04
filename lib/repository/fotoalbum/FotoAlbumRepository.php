@@ -28,14 +28,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class FotoAlbumRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly Security $security,
-		private readonly FotoRepository $fotoRepository,
-		private readonly FotoTagsRepository $fotoTagsRepository
-	) {
-		parent::__construct($registry, FotoAlbum::class);
-	}
+
 
 	/**
 	 * @param string $dir
@@ -49,19 +42,6 @@ class FotoAlbumRepository extends AbstractRepository
 			->setParameter('subdir', '%' . $dir . '%')
 			->orderBy('fa.subdir', 'DESC')
 			->setMaxResults($limit)
-			->getQuery()
-			->getResult();
-	}
-
-	/**
-	 * @param string $subdir
-	 * @return FotoAlbum[]
-	 */
-	public function findBySubdir($subdir)
-	{
-		return $this->createQueryBuilder('fa')
-			->where('fa.subdir LIKE :subdir')
-			->setParameter('subdir', $subdir . '%')
 			->getQuery()
 			->getResult();
 	}
@@ -112,7 +92,7 @@ class FotoAlbumRepository extends AbstractRepository
 		$this->getEntityManager()->flush();
 	}
 
-	public function getFotoAlbum($path)
+	public function getFotoAlbum(string $path)
 	{
 		if (
 			AccountRepository::isValidUid($path) and
@@ -215,7 +195,7 @@ HTML;
 		}
 	}
 
-	public function hernoemAlbum(FotoAlbum $album, $newName)
+	public function hernoemAlbum(FotoAlbum $album, string $newName)
 	{
 		if (!PathUtil::valid_filename($newName)) {
 			throw new CsrGebruikerException('Ongeldige naam');
@@ -335,19 +315,5 @@ HTML;
 			$this->fotoRepository->create($cover);
 		}
 		return $success;
-	}
-
-	public function opschonen(FotoAlbum $fotoalbum)
-	{
-		foreach ($this->findBySubdir($fotoalbum->subdir) as $album) {
-			/** @var FotoAlbum $album */
-			if (!$album->exists()) {
-				foreach ($this->fotoRepository->findBySubdir($album->subdir) as $foto) {
-					$this->fotoRepository->delete($foto);
-					$this->fotoTagsRepository->verwijderFotoTags($foto);
-				}
-				$this->delete($album);
-			}
-		}
 	}
 }

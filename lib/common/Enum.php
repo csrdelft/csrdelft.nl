@@ -43,7 +43,7 @@ abstract class Enum
 		$this->value = $value;
 	}
 
-	public static function isValidValue($value)
+	public static function isValidValue(string $value): bool
 	{
 		$values = array_values(self::getConstants());
 		return in_array($value, $values, $strict = true);
@@ -61,12 +61,22 @@ abstract class Enum
 		return self::$constCacheArray[static::class];
 	}
 
-	public static function getEnumValues()
+	/**
+	 * @return value-of<TArray>[]
+	 *
+	 * @psalm-return list<value-of<array>>
+	 */
+	public static function getEnumValues(): array
 	{
 		return array_values(self::getConstants());
 	}
 
-	public static function getEnumDescriptions()
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return array<string>
+	 */
+	public static function getEnumDescriptions(): array
 	{
 		return static::$mapChoiceToDescription;
 	}
@@ -102,24 +112,12 @@ abstract class Enum
 		);
 	}
 
-	public function __call($name, $arguments)
-	{
-		if (str_starts_with((string) $name, 'is')) {
-			$enumName = substr((string) $name, 2);
-
-			if (isset(self::getConstants()[$enumName])) {
-				return static::from(self::getConstants()[$enumName]) == $this;
-			}
-		}
-
-		return static::__callStatic($name, $arguments);
-	}
-
 	/**
-	 * @param $value
+	 * @param null|string $value
+	 *
 	 * @return static
 	 */
-	public static function from($value)
+	public static function from(string|null $value)
 	{
 		if (!static::isValidValue($value)) {
 			throw new InvalidArgumentException(
@@ -143,15 +141,17 @@ abstract class Enum
 		return $this->value;
 	}
 
-	public function getDescription()
+	public function getDescription(): string
 	{
 		return static::$mapChoiceToDescription[$this->value];
 	}
 
 	/**
-	 * @return Enum[]
+	 * @return static[]
+	 *
+	 * @psalm-return array<static>
 	 */
-	public static function all()
+	public static function all(): array
 	{
 		return array_map(['static', 'from'], static::getEnumValues());
 	}

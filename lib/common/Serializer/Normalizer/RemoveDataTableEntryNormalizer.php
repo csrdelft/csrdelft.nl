@@ -26,7 +26,10 @@ class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface
 	 * @param RemoveDataTableEntry $removed
 	 * @param string|null $format
 	 * @param array $context
-	 * @return array|ArrayObject|bool|float|int|string|null
+	 *
+	 * @return (string|true)[]
+	 *
+	 * @psalm-return array{UUID: string, remove: true}
 	 */
 	public function normalize(
 		$removed,

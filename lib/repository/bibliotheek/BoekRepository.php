@@ -16,10 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BoekRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, Boek::class);
-	}
+
 
 	public function existsTitel($value)
 	{

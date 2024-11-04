@@ -23,6 +23,11 @@ use Throwable;
  */
 class AbstractController extends BaseController
 {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return array<string>
+	 */
 	public static function getSubscribedServices(): array
 	{
 		return parent::getSubscribedServices() + [
@@ -49,7 +54,14 @@ class AbstractController extends BaseController
 		return $selection;
 	}
 
-	protected function tableData($data, $groups = null): GenericDataTableResponse
+	/**
+	 * @param ((\DateTimeInterface|bool|string)[]|\CsrDelft\Component\DataTable\RemoveDataTableEntry|\CsrDelft\entity\ChangeLogEntry|\CsrDelft\entity\aanmelder\AanmeldActiviteit|\CsrDelft\entity\aanmelder\Reeks|\CsrDelft\entity\eetplan\Eetplan|\CsrDelft\entity\eetplan\EetplanBekenden|\CsrDelft\entity\fiscaat\CiviBestelling|\CsrDelft\entity\fiscaat\CiviBestellingInhoud|\CsrDelft\entity\fiscaat\CiviProduct|\CsrDelft\entity\fiscaat\CiviSaldo|\CsrDelft\entity\groepen\Groep|\CsrDelft\entity\groepen\Groep&\CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment|\CsrDelft\entity\groepen\Groep&\CsrDelft\entity\groepen\interfaces\HeeftSoort|\CsrDelft\entity\groepen\GroepLid|\CsrDelft\entity\maalcie\ArchiefMaaltijd|\CsrDelft\entity\maalcie\Maaltijd|\CsrDelft\entity\peilingen\Peiling|\CsrDelft\entity\peilingen\PeilingOptie|\CsrDelft\entity\pin\PinTransactieMatch|\CsrDelft\entity\security\AccessControl|\CsrDelft\entity\security\RememberLogin|mixed|null)[]|\Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection $data
+	 * @param null|string[] $groups
+	 *
+	 * @psalm-param \Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection|array<\CsrDelft\Component\DataTable\RemoveDataTableEntry|\CsrDelft\entity\ChangeLogEntry|\CsrDelft\entity\aanmelder\AanmeldActiviteit|\CsrDelft\entity\aanmelder\Reeks|\CsrDelft\entity\eetplan\Eetplan|\CsrDelft\entity\eetplan\EetplanBekenden|\CsrDelft\entity\fiscaat\CiviBestelling|\CsrDelft\entity\fiscaat\CiviBestellingInhoud|\CsrDelft\entity\fiscaat\CiviProduct|\CsrDelft\entity\fiscaat\CiviSaldo|\CsrDelft\entity\groepen\Groep|\CsrDelft\entity\groepen\Groep&\CsrDelft\entity\groepen\interfaces\HeeftAanmeldMoment|\CsrDelft\entity\groepen\Groep&\CsrDelft\entity\groepen\interfaces\HeeftSoort|\CsrDelft\entity\groepen\GroepLid|\CsrDelft\entity\maalcie\ArchiefMaaltijd|\CsrDelft\entity\maalcie\Maaltijd|\CsrDelft\entity\peilingen\Peiling|\CsrDelft\entity\peilingen\PeilingOptie|\CsrDelft\entity\pin\PinTransactieMatch|\CsrDelft\entity\security\AccessControl|\CsrDelft\entity\security\RememberLogin|array{UUID: string, identifier: string, client: string, expiry: \DateTimeInterface, revoked: bool}|mixed|null> $data
+	 * @psalm-param list{'datatable', 'datatable-fiscaat'}|null $groups
+	 */
+	protected function tableData(array|\Doctrine\Common\Collections\Collection|\Doctrine\Common\Collections\ArrayCollection $data, array|null $groups = null): GenericDataTableResponse
 	{
 		return new GenericDataTableResponse(
 			$this->get('serializer'),
@@ -84,6 +96,9 @@ class AbstractController extends BaseController
 		return null;
 	}
 
+	/**
+	 * @param null|scalar $permissie
+	 */
 	protected function mag($permissie): bool
 	{
 		return $this->isGranted($permissie);
@@ -125,7 +140,7 @@ class AbstractController extends BaseController
 	 * @param array $options
 	 * @return DataTableInstance
 	 */
-	protected function createDataTable($type, $options = [])
+	protected function createDataTable(string $type, $options = [])
 	{
 		return $this->container
 			->get('csr.table.factory')

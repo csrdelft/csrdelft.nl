@@ -130,6 +130,9 @@ abstract class InputField implements FormElement, Validator
 		return $this->id;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isPosted()
 	{
 		return isset($_POST[$this->name]);
@@ -162,6 +165,8 @@ abstract class InputField implements FormElement, Validator
 	 *
 	 * Kindertjes van deze classe kunnen deze methode overloaden om specifiekere
 	 * testen mogelijk te maken.
+	 *
+	 * @return bool
 	 */
 	public function validate()
 	{
@@ -206,7 +211,10 @@ abstract class InputField implements FormElement, Validator
 	 * @param string $directory fully qualified path with trailing slash
 	 * @param string $filename filename with extension
 	 * @param boolean $overwrite allowed to overwrite existing file
+	 *
 	 * @throws CsrException Ongeldige bestandsnaam, doelmap niet schrijfbaar of naam ingebruik
+	 *
+	 * @return void
 	 */
 	public function opslaan($directory, $filename, $overwrite = false)
 	{
@@ -258,7 +266,7 @@ abstract class InputField implements FormElement, Validator
 	/**
 	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
 	 */
-	public function getDiv()
+	public function getDiv(): string
 	{
 		$cssclass = $this->wrapperClassName;
 		if ($this->hidden) {
@@ -274,7 +282,7 @@ abstract class InputField implements FormElement, Validator
 	/**
 	 * Elk veld heeft een label, geef de html voor het label
 	 */
-	public function getLabel()
+	public function getLabel(): string
 	{
 		if (!empty($this->description)) {
 			$required = '';
@@ -307,6 +315,8 @@ abstract class InputField implements FormElement, Validator
 
 	/**
 	 * Geef een div met de foutmelding voor dit veld terug.
+	 *
+	 * @return string
 	 */
 	public function getErrorDiv()
 	{
@@ -318,6 +328,11 @@ abstract class InputField implements FormElement, Validator
 		return '';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ''
+	 */
 	public function getPreviewDiv()
 	{
 		return '';
@@ -352,8 +367,14 @@ abstract class InputField implements FormElement, Validator
 	 * Dit is bij veel dingen het zelfde, en het is niet zo handig om in
 	 * elke instantie dan bijvoorbeeld de prefix van het id-veld te
 	 * moeten aanpassen. Niet meer nodig dus.
+	 *
+	 * @param string|string[] $attribute
+	 *
+	 * @psalm-param 'class'|list{0: 'id'|'type', 1: 'id'|'name'|'origvalue', 2: 'class'|'name'|'origvalue', 3?: 'class'|'disabled'|'origvalue', 4?: string, 5?: 'disabled'|'origvalue'|'readonly', 6?: string, 7?: 'disabled'|'readonly', 8?: 'maxlength'|'readonly', 9?: 'maxlength'|'placeholder', 10?: 'autocomplete'|'placeholder', 11?: 'autocomplete', 12?: 'min', 13?: 'max', 14?: 'step'} $attribute
+	 *
+	 * @return string
 	 */
-	protected function getInputAttribute($attribute)
+	protected function getInputAttribute(array|string $attribute)
 	{
 		if (is_array($attribute)) {
 			$return = '';
@@ -414,6 +435,9 @@ abstract class InputField implements FormElement, Validator
 		return '';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		return '<input ' .
@@ -433,7 +457,7 @@ abstract class InputField implements FormElement, Validator
 			' />';
 	}
 
-	public function getHelpDiv()
+	public function getHelpDiv(): string
 	{
 		if ($this->title) {
 			return '<div class="form-text">' . $this->title . '</div>';
@@ -469,10 +493,12 @@ abstract class InputField implements FormElement, Validator
 	 *
 	 * Toelichting op options voor RemoteSuggestions:
 	 * result = array(
-	 *        array(data:array(..,..,..), value: "string", result:"string"),
-	 *        array(... )
+	 * array(data:array(..,..,..), value: "string", result:"string"),
+	 * array(... )
 	 * )
 	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
+	 *
+	 * @return string
 	 */
 	public function getJavascript()
 	{

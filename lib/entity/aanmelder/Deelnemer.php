@@ -30,32 +30,17 @@ class Deelnemer
 	#[ORM\Column(type: 'datetime', nullable: true)]
 	private $aanwezig = null;
 
-	public function __construct(
-		#[
-			ORM\ManyToOne(
-				targetEntity: AanmeldActiviteit::class,
-				inversedBy: 'deelnemers'
-			)
-		]
-		#[ORM\JoinColumn(nullable: false)] private AanmeldActiviteit $activiteit,
-		Profiel $lid,
-		#[ORM\Column(type: 'integer')] private int $aantal
-	) {
-		$this->lid = $lid;
-		$this->aangemeld = date_create_immutable();
-	}
-
 	public function getId(): ?int
 	{
 		return $this->id;
 	}
 
-	public function getActiviteit(): ?AanmeldActiviteit
+	public function getActiviteit(): AanmeldActiviteit
 	{
 		return $this->activiteit;
 	}
 
-	public function setActiviteit(?AanmeldActiviteit $activiteit): self
+	public function setActiviteit(?AanmeldActiviteit $activiteit): static
 	{
 		$this->activiteit = $activiteit;
 
@@ -67,32 +52,6 @@ class Deelnemer
 		return $this->aantal;
 	}
 
-	public function setAantal(int $aantal): self
-	{
-		$this->aantal = $aantal;
-
-		return $this;
-	}
-
-	public function getAangemeld(): DateTimeImmutable
-	{
-		return $this->aangemeld;
-	}
-
-	public function setAangemeld(DateTimeImmutable $aangemeld): self
-	{
-		$this->aangemeld = $aangemeld;
-
-		return $this;
-	}
-
-	public function setLid(Profiel $lid): Deelnemer
-	{
-		$this->lid = $lid;
-
-		return $this;
-	}
-
 	public function getLid(): Profiel
 	{
 		return $this->lid;
@@ -101,22 +60,5 @@ class Deelnemer
 	public function isAanwezig(): bool
 	{
 		return $this->aanwezig !== null;
-	}
-
-	public function getAanwezigTijd(): string
-	{
-		return $this->isAanwezig()
-			? DateUtil::dateFormatIntl($this->aanwezig, 'H:mm')
-			: '';
-	}
-
-	public function setAanwezig()
-	{
-		$this->aanwezig = date_create_immutable();
-	}
-
-	public function setNietAanwezig()
-	{
-		$this->aanwezig = null;
 	}
 }

@@ -20,6 +20,8 @@ class AgendaItemForm implements FormulierTypeInterface
 	 * @param FormulierBuilder $builder
 	 * @param AgendaItem $data
 	 * @param array $options
+	 *
+	 * @return void
 	 */
 	public function createFormulier(
 		FormulierBuilder $builder,

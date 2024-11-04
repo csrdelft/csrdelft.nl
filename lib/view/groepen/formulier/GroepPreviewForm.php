@@ -37,6 +37,9 @@ class GroepPreviewForm extends ModalForm implements FormElement
 		$this->formKnoppen = new ModalCloseButtons();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$this->css_classes[] = 'ModalForm';
@@ -52,11 +55,17 @@ class GroepPreviewForm extends ModalForm implements FormElement
 		return $html . '</form>';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function getJavascript()
 	{
 		parent::getJavascript();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType()
 	{
 		return ReflectionUtil::classNameZonderNamespace($this->model::class);

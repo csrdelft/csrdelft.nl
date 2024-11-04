@@ -74,11 +74,17 @@ class GroepView implements FormElement, ToResponse
 		}
 	}
 
+	/**
+	 * @return Groep
+	 */
 	public function getModel()
 	{
 		return $this->groep;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getTitel()
 	{
 		return $this->groep->naam;
@@ -89,6 +95,9 @@ class GroepView implements FormElement, ToResponse
 		return null;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$html =
@@ -160,6 +169,9 @@ class GroepView implements FormElement, ToResponse
 		return null;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType()
 	{
 		return ReflectionUtil::classNameZonderNamespace($this->groep::class);

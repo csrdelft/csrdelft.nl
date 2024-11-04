@@ -18,10 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EetplanBekendenRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, EetplanBekenden::class);
-	}
+
 
 	/**
 	 * @param int $lidjaar

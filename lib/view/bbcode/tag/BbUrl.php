@@ -19,11 +19,19 @@ class BbUrl extends BbTag
 {
 	public $url;
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{'url', 'rul'}
+	 */
 	public static function getTagName()
 	{
 		return ['url', 'rul'];
 	}
 
+	/**
+	 * @return void
+	 */
 	public function parse($arguments = [])
 	{
 		$this->url = $this->getUrl($arguments);
@@ -35,11 +43,17 @@ class BbUrl extends BbTag
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function renderPreview()
 	{
 		return $this->getContent() . ' 🔗 ';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function renderPlain()
 	{
 		return $this->getContent() . ' (' . $this->url . ')';
@@ -64,7 +78,7 @@ class BbUrl extends BbTag
 	 * @param $arguments
 	 * @return string|null
 	 */
-	private function getUrl($arguments)
+	private function getUrl(array $arguments)
 	{
 		$url = null;
 		if (isset($arguments['url'])) {

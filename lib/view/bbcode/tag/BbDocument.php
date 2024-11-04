@@ -28,12 +28,11 @@ class BbDocument extends BbTag
 	 */
 	public $id;
 
-	public function __construct(
-		private readonly DocumentRepository $documentRepository,
-		private readonly Environment $twig
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'document'
+	 */
 	public static function getTagName()
 	{
 		return 'document';
@@ -44,6 +43,11 @@ class BbDocument extends BbTag
 		return $this->document == false || $this->document->magBekijken();
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ' 📄 '
+	 */
 	public function renderPreview()
 	{
 		return ' 📄 ';
@@ -85,6 +89,8 @@ class BbDocument extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

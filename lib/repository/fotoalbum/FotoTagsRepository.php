@@ -17,10 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FotoTagsRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, FotoTag::class);
-	}
+
 
 	/**
 	 * @param array $criteria
@@ -78,6 +75,10 @@ class FotoTagsRepository extends AbstractRepository
 		return $tag;
 	}
 
+	/**
+	 * @param null|scalar $refuuid
+	 * @param null|scalar $keyword
+	 */
 	public function removeTag($refuuid, $keyword)
 	{
 		$tag = $this->find(['refuuid' => $refuuid, 'keyword' => $keyword]);
@@ -85,16 +86,6 @@ class FotoTagsRepository extends AbstractRepository
 			$this->getEntityManager()->remove($tag);
 			$this->getEntityManager()->flush();
 		}
-	}
-
-	public function verwijderFotoTags(Foto $foto)
-	{
-		$this->createQueryBuilder('t')
-			->delete()
-			->where('t.refuuid = :refuuid')
-			->setParameter('refuuid', $foto->getUUID())
-			->getQuery()
-			->execute();
 	}
 
 	public function create(FotoTag $tag)

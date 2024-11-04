@@ -45,6 +45,11 @@ class DataTableColumn implements JsonSerializable
 		$this->filterValue = $filterValue ?? $this->exportValue;
 	}
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return array{display: string, sort: string, export: string, filter: string}
+	 */
 	public function jsonSerialize(): array
 	{
 		return [

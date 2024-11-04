@@ -18,10 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MaaltijdAbonnementenRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, MaaltijdAbonnement::class);
-	}
+
 
 	/**
 	 * @param Profiel $lid

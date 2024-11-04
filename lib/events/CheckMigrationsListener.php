@@ -15,7 +15,7 @@ class CheckMigrationsListener
 	) {
 	}
 
-	public function onKernelRequest()
+	public function onKernelRequest(): void
 	{
 		$migrationStatusCalculator = $this->dependencyFactory->getMigrationStatusCalculator();
 

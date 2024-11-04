@@ -26,7 +26,7 @@ class FotoBBView implements ToResponse, View
 		return (string) $this->getHtml();
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		$html = '<a href="' . $this->model->getAlbumUrl();
 		if ($this->groot) {
@@ -66,11 +66,21 @@ class FotoBBView implements ToResponse, View
 		return new Response($this->getHtml());
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ''
+	 */
 	public function getTitel()
 	{
 		return '';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ''
+	 */
 	public function getBreadcrumbs()
 	{
 		return '';

@@ -34,6 +34,9 @@ class BedragField extends IntField
 		$this->step = $step * 100;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$parent = parent::getHtml();

@@ -40,62 +40,42 @@ class DeclaratieRegel
 		return $this->bon;
 	}
 
-	public function setBon(?DeclaratieBon $bon): self
+	public function setBon(?DeclaratieBon $bon): static
 	{
 		$this->bon = $bon;
 
 		return $this;
 	}
 
-	public function getBedrag(): ?float
-	{
-		return $this->bedrag;
-	}
-
-	public function setBedrag(?float $bedrag): self
+	public function setBedrag(?float $bedrag): static
 	{
 		$this->bedrag = $bedrag;
 
 		return $this;
 	}
 
-	public function getInclBtw(): ?bool
-	{
-		return $this->inclBtw;
-	}
-
-	public function setInclBtw(?bool $inclBtw): self
+	public function setInclBtw(?bool $inclBtw): static
 	{
 		$this->inclBtw = $inclBtw;
 
 		return $this;
 	}
 
-	public function getBtw(): ?int
-	{
-		return $this->btw;
-	}
-
-	public function setBtw(?int $btw): self
+	public function setBtw(?int $btw): static
 	{
 		$this->btw = $btw;
 
 		return $this;
 	}
 
-	public function getOmschrijving(): ?string
-	{
-		return $this->omschrijving;
-	}
-
-	public function setOmschrijving(?string $omschrijving): self
+	public function setOmschrijving(?string $omschrijving): static
 	{
 		$this->omschrijving = $omschrijving;
 
 		return $this;
 	}
 
-	public function fromParameters(ParameterBag $regelData): self
+	public function fromParameters(ParameterBag $regelData): static
 	{
 		$this->setOmschrijving(null);
 		if ($regelData->get('omschrijving')) {
@@ -166,7 +146,14 @@ class DeclaratieRegel
 		}
 	}
 
-	public function valideer($bonIndex, $regelIndex): array
+	/**
+	 * @param float|int $regelIndex
+	 *
+	 * @return string[]
+	 *
+	 * @psalm-return list{0?: string}
+	 */
+	public function valideer($bonIndex, int|float $regelIndex): array
 	{
 		$fouten = [];
 
@@ -192,6 +179,11 @@ class DeclaratieRegel
 		return $fouten;
 	}
 
+	/**
+	 * @return (mixed|null|string)[]
+	 *
+	 * @psalm-return array{bedrag: mixed, btw: null|string, omschrijving: mixed}
+	 */
 	public function naarObject(): array
 	{
 		if ($this->btw === 0) {

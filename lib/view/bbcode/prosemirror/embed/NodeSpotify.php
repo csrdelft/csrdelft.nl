@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\embed\BbSpotify;
 
 class NodeSpotify implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbSpotify::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbSpotify::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'spotify'
+	 */
 	public static function getNodeType()
 	{
 		return 'spotify';
@@ -40,6 +48,9 @@ class NodeSpotify implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

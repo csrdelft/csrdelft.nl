@@ -56,10 +56,11 @@ class ForumDradenVerbergenController extends AbstractController
 
 	/**
 	 * Forum draden die verborgen zijn door lid weer tonen.
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[Route(path: '/forum/toonalles', methods: ['POST'])]
-	public function toonalles()
+	public function toonalles(): JsonResponse
 	{
 		$aantal = $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
 		$this->forumDradenVerbergenRepository->toonAllesVoorLeden([

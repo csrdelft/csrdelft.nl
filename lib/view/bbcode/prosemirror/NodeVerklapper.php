@@ -7,7 +7,10 @@ use CsrDelft\view\bbcode\tag\BbVerklapper;
 
 class NodeVerklapper implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbVerklapper::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbVerklapper::class;
 	}
@@ -17,16 +20,29 @@ class NodeVerklapper implements Node
 		return [];
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'verklapper'
+	 */
 	public static function getNodeType()
 	{
 		return 'verklapper';
 	}
 
+	/**
+	 * @return array
+	 *
+	 * @psalm-return array<never, never>
+	 */
 	public function getTagAttributes($node)
 	{
 		return [];
 	}
 
+	/**
+	 * @return false
+	 */
 	public function selfClosing()
 	{
 		return false;

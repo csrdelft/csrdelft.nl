@@ -28,9 +28,10 @@ abstract class ProfielLogGroup
 	) {
 	}
 
-	abstract public function toHtml();
-
-	public function censureerVeld($naam): bool
+	/**
+	 * @return false
+	 */
+	public function censureerVeld(string $naam): bool
 	{
 		return false;
 	}

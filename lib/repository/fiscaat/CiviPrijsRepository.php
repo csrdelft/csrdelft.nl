@@ -20,10 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CiviPrijsRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, CiviPrijs::class);
-	}
+
 
 	/**
 	 * Verwijderd alle prijzen voor een product zonder klagen. PAS DUS OP.

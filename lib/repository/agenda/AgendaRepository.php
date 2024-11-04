@@ -33,17 +33,7 @@ use Symfony\Component\Security\Core\Security;
  */
 class AgendaRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly Security $security,
-		private readonly AgendaVerbergenRepository $agendaVerbergenRepository,
-		private readonly ActiviteitenRepository $activiteitenRepository,
-		private readonly CorveeTakenRepository $corveeTakenRepository,
-		private readonly MaaltijdenService $maaltijdenService,
-		private readonly VerjaardagenService $verjaardagenService
-	) {
-		parent::__construct($registry, AgendaItem::class);
-	}
+
 
 	/**
 	 * Vergelijkt twee Agendeerbaars op beginMoment t.b.v. sorteren.
@@ -70,7 +60,7 @@ class AgendaRepository extends AbstractRepository
 	 * @param $itemId
 	 * @return AgendaItem|null
 	 */
-	public function getAgendaItem($itemId)
+	public function getAgendaItem(int $itemId)
 	{
 		return $this->find($itemId);
 	}
@@ -88,43 +78,19 @@ class AgendaRepository extends AbstractRepository
 		);
 	}
 
-	public function filterVerborgen(array $items)
-	{
-		// Items verbergen
-		$itemsByUUID = [];
-		foreach ($items as $index => $item) {
-			$itemsByUUID[$item->getUUID()] = $item;
-			unset($items[$index]);
-		}
-		if (!empty($itemsByUUID)) {
-			/** @var AgendaVerbergen[] $verborgen */
-			$verborgen = $this->agendaVerbergenRepository
-				->createQueryBuilder('av')
-				->where('av.uid = :uid and av.refuuid in (:uuids)')
-				->setParameter('uid', LoginService::getUid())
-				->setParameter('uuids', array_keys($itemsByUUID))
-				->getQuery()
-				->getResult();
-
-			foreach ($verborgen as $verbergen) {
-				unset($itemsByUUID[$verbergen->refuuid]);
-			}
-		}
-		return $itemsByUUID;
-	}
-
 	/**
 	 * @param DateTimeImmutable $van
 	 * @param DateTimeImmutable $tot
-	 * @param $query
+	 * @param null|string $query
 	 * @param $limiet
+	 *
 	 * @return AgendaItem[]
 	 */
 	public function zoeken(
 		DateTimeImmutable $van,
 		DateTimeImmutable $tot,
-		$query,
-		$limiet
+		string|null $query,
+		int $limiet
 	) {
 		return $this->createQueryBuilder('a')
 			->where('a.eind_moment >= :van and a.begin_moment <= :tot')
@@ -261,10 +227,14 @@ class AgendaRepository extends AbstractRepository
 	/**
 	 * Vind de eerste activiteit van vandaag waarvan de
 	 * titel of omschrijving wordt gematcht door $patroon.
+	 *
 	 * @param $patroon string
+	 *
 	 * @return Agendeerbaar|null
+	 *
+	 * @psalm-param '/kring(?: \d+|\b|lezing\b)/i' $patroon
 	 */
-	public function zoekRegexAgenda($patroon)
+	public function zoekRegexAgenda(string $patroon)
 	{
 		$beginDag = date_create_immutable('today');
 		foreach ($this->getItemsByDay($beginDag) as $item) {
@@ -278,11 +248,10 @@ class AgendaRepository extends AbstractRepository
 		return null;
 	}
 
-	public function getItemsByDay(DateTimeImmutable $dag)
-	{
-		return $this->getAllAgendeerbaar($dag, $dag);
-	}
-
+	/**
+	 * @param null|scalar $beginMoment
+	 * @param null|scalar $eindMoment
+	 */
 	public function nieuw($beginMoment, $eindMoment)
 	{
 		$item = new AgendaItem();

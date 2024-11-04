@@ -7,6 +7,11 @@ namespace CsrDelft\view;
  */
 class ChartTimeSeries extends JsonResponse
 {
+	/**
+	 * @return (((int|string)[][]|false|int|mixed)[]|string)[][]
+	 *
+	 * @psalm-return array{labels: list{string, string}, datasets: list{0?: array{label: mixed, data: list{0?: array{x: string, y: int},...}, lineTension: 0, fill: false, borderWidth: 2, pointRadius: 1, pointHitRadius: 2},...}}
+	 */
 	public function getModel()
 	{
 		$array = [];

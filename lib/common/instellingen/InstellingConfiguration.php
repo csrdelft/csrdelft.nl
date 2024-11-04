@@ -21,6 +21,8 @@ class InstellingConfiguration implements ConfigurationInterface
 	 * Generates the configuration tree builder.
 	 *
 	 * @return TreeBuilder The tree builder
+	 *
+	 * @psalm-return TreeBuilder<'array'>
 	 */
 	public function getConfigTreeBuilder()
 	{

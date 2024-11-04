@@ -14,11 +14,7 @@ use Symfony\Component\Security\Core\Security;
  */
 class ProfielService
 {
-	public function __construct(
-		private readonly Security $security,
-		private readonly ProfielRepository $profielRepository
-	) {
-	}
+
 
 	/**
 	 * @param string $zoekterm

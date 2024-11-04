@@ -30,7 +30,10 @@ class Lichting extends Groep
 
 	/**
 	 * Stiekem hebben we helemaal geen leden
-	 * @return GroepLid[]|ArrayCollection
+	 *
+	 * @return ArrayCollection
+	 *
+	 * @psalm-return ArrayCollection<int<0, max>, GroepLid>
 	 */
 	public function getLeden()
 	{
@@ -57,6 +60,9 @@ class Lichting extends Groep
 		return new ArrayCollection($leden);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getUrl()
 	{
 		return '/groepen/lichtingen/' . $this->lidjaar;

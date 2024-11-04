@@ -64,11 +64,6 @@ class BoekRecensie
 	#[ORM\JoinColumn(name: 'boek_id', referencedColumnName: 'id')]
 	public $boek;
 
-	public function getBoek()
-	{
-		return $this->boek;
-	}
-
 	/*
 	 * @param 	$uid lidnummer of null
 	 * @return	bool
@@ -86,7 +81,7 @@ class BoekRecensie
 		return $this->isSchrijver();
 	}
 
-	public function isSchrijver($uid = null)
+	public function isSchrijver($uid = null): bool
 	{
 		if (!LoginService::mag(P_LOGGED_IN)) {
 			return false;

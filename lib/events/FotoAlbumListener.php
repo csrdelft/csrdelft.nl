@@ -11,11 +11,5 @@ use Doctrine\ORM\Mapping\PostLoad;
  */
 class FotoAlbumListener
 {
-	#[PostLoad]
-	public function postLoadHandler(FotoAlbum $album)
-	{
-		$album->path = PathUtil::realpathunix(
-			PathUtil::join_paths(PHOTOALBUM_PATH, $album->subdir)
-		);
-	}
+
 }

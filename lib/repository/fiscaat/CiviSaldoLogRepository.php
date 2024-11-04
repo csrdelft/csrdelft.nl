@@ -19,33 +19,5 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class CiviSaldoLogRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly SerializerInterface $serializer
-	) {
-		parent::__construct($registry, CiviSaldoLog::class);
-	}
 
-	/**
-	 * @param string $type
-	 * @param string $data
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function log($type, $data)
-	{
-		$logEntry = new CiviSaldoLog();
-		// Don't use filter_input for $_SERVER when PHP runs through FastCGI:
-		// https://bugs.php.net/bug.php?id=49184
-		$logEntry->ip = isset($_SERVER['REMOTE_ADDR'])
-			? filter_var($_SERVER['REMOTE_ADDR'])
-			: '';
-		$logEntry->type = $type;
-		$logEntry->data = $this->serializer->serialize($data, 'json', [
-			'groups' => ['log'],
-		]);
-		$logEntry->timestamp = date_create_immutable();
-		$this->_em->persist($logEntry);
-		$this->_em->flush();
-	}
 }

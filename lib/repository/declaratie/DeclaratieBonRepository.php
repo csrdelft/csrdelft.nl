@@ -17,10 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DeclaratieBonRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, DeclaratieBon::class);
-	}
+
 
 	/**
 	 * @param string $filename

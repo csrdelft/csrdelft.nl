@@ -17,15 +17,7 @@ use Exception;
 
 class MaaltijdRepetitiesService
 {
-	public function __construct(
-		private readonly EntityManagerInterface $entityManager,
-		private readonly MaaltijdenRepository $maaltijdenRepository,
-		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
-		private readonly MaaltijdAbonnementenService $maaltijdAbonnementenService,
-		private readonly CorveeRepetitiesRepository $corveeRepetitiesRepository,
-		private readonly CorveeTakenRepository $corveeTakenRepository
-	) {
-	}
+
 
 	/**
 	 * Maakt nieuwe maaltijden aan volgens de definitie van de maaltijd-repetitie.
@@ -108,7 +100,7 @@ class MaaltijdRepetitiesService
 	 */
 	public function updateRepetitieMaaltijden(
 		MaaltijdRepetitie $repetitie,
-		$verplaats
+		bool $verplaats
 	) {
 		return $this->entityManager->wrapInTransaction(function () use (
 			$repetitie,
@@ -161,7 +153,7 @@ class MaaltijdRepetitiesService
 	 * @param $repetitie MaaltijdRepetitie
 	 * @return array
 	 */
-	public function saveRepetitie($repetitie)
+	public function saveRepetitie(MaaltijdRepetitie $repetitie)
 	{
 		return $this->entityManager->wrapInTransaction(function () use (
 			$repetitie

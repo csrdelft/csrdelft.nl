@@ -18,11 +18,19 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class LichtingenController extends AbstractGroepenController
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Lichting::class
+	 */
 	public function getGroepType()
 	{
 		return Lichting::class;
 	}
 
+	/**
+	 * @return JsonResponse
+	 */
 	public function zoeken(Request $request, $zoekterm = null)
 	{
 		if (!$zoekterm && !$request->query->has('q')) {

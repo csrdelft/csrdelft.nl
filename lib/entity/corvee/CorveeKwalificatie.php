@@ -63,16 +63,4 @@ class CorveeKwalificatie
 	]
 	#[ORM\JoinColumn(name: 'functie_id', referencedColumnName: 'functie_id')]
 	public $corveeFunctie;
-
-	public function setCorveeFunctie(CorveeFunctie $corveeFunctie = null)
-	{
-		$this->corveeFunctie = $corveeFunctie;
-		$this->functie_id = $corveeFunctie->functie_id ?? null;
-	}
-
-	public function setProfiel(Profiel $profiel = null)
-	{
-		$this->profiel = $profiel;
-		$this->uid = $profiel->uid ?? null;
-	}
 }

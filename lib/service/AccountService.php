@@ -14,15 +14,7 @@ use Symfony\Component\Uid\Uuid;
 
 class AccountService
 {
-	public function __construct(
-		private readonly CiviSaldoRepository $civiSaldoRepository,
-		private readonly MenuItemRepository $menuItemRepository,
-		private readonly AccessService $accessService,
-		private readonly ProfielRepository $profielRepository,
-		private readonly PasswordHasherFactoryInterface $passwordHasherFactory,
-		private readonly EntityManagerInterface $manager
-	) {
-	}
+
 
 	/**
 	 * @param string $uid
@@ -70,18 +62,22 @@ class AccountService
 
 	/**
 	 * Reset het wachtwoord van de gebruiker.
-	 *  - Controleert GEEN eisen aan wachtwoord
-	 *  - Wordt NIET gelogged in de changelog van het profiel
+	 * - Controleert GEEN eisen aan wachtwoord
+	 * - Wordt NIET gelogged in de changelog van het profiel
+	 *
 	 * @param Account $account
 	 * @param $passPlain
 	 * @param bool $isVeranderd
-	 * @return bool
+	 *
+	 * @return true
+	 *
+	 * @psalm-param 'stek open u voor mij!' $passPlain
 	 */
 	public function wijzigWachtwoord(
 		Account $account,
-		$passPlain,
+		string $passPlain,
 		bool $isVeranderd = true
-	) {
+	): bool {
 		if ($passPlain != '') {
 			$account->pass_hash = $this->maakWachtwoord($account, $passPlain);
 			if ($isVeranderd) {

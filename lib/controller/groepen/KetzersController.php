@@ -31,6 +31,11 @@ class KetzersController extends AbstractGroepenController
 		$this->registry = $registry;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Ketzer::class
+	 */
 	public function getGroepType()
 	{
 		return Ketzer::class;

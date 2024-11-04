@@ -25,13 +25,11 @@ class BbBoek extends BbTag
 	 */
 	private $id;
 
-	public function __construct(
-		private readonly BoekRepository $boekRepository,
-		private readonly Environment $twig,
-		private readonly Security $security
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'boek'
+	 */
 	public static function getTagName()
 	{
 		return 'boek';
@@ -56,7 +54,7 @@ class BbBoek extends BbTag
 		}
 	}
 
-	public function render()
+	public function render(): string|null
 	{
 		if (!$this->security->isGranted('ROLE_BIEB_READ')) {
 			return null;
@@ -74,6 +72,8 @@ class BbBoek extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

@@ -57,11 +57,4 @@ class FormDefaultKnoppen extends FormKnoppen
 			}
 		}
 	}
-
-	public function setConfirmAll()
-	{
-		foreach ($this->getModel() as $knop) {
-			$knop->action .= ' confirm';
-		}
-	}
 }

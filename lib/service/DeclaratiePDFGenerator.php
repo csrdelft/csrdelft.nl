@@ -12,13 +12,9 @@ use Twig\Environment;
 
 class DeclaratiePDFGenerator
 {
-	public function __construct(
-		private readonly Environment $twig,
-		private readonly Filesystem $filesystem
-	) {
-	}
 
-	private function correctImageOrientation($filename)
+
+	private function correctImageOrientation(string $filename): void
 	{
 		if (function_exists('exif_read_data')) {
 			$exif = exif_read_data($filename);
@@ -120,7 +116,12 @@ class DeclaratiePDFGenerator
 		return $pdf->Output('declaratie.pdf', 'S');
 	}
 
-	public function genereerDeclaratie(Declaratie $declaratie)
+	/**
+	 * @return (\Clegginabox\PDFMerger\PDF|string)[]
+	 *
+	 * @psalm-return list{'pdf'|'txt', \Clegginabox\PDFMerger\PDF|string}
+	 */
+	public function genereerDeclaratie(Declaratie $declaratie): array
 	{
 		$location = $this->filesystem->tempnam(TMP_PATH, 'decla_');
 		$declaInfo = $this->genereerDeclaratieInfo($declaratie);

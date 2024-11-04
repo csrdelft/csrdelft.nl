@@ -27,14 +27,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class OneTimeTokensRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		AccountRepository $accountRepository
-	) {
-		parent::__construct($registry, OneTimeToken::class);
-	}
 
-	public function hasToken($uid, $url)
+
+	/**
+	 * @psalm-param '/wachtwoord/reset' $url
+	 */
+	public function hasToken(string $uid, string $url)
 	{
 		return $this->find(['uid' => $uid, 'url' => $url]) != null;
 	}
@@ -61,24 +59,6 @@ class OneTimeTokensRepository extends AbstractRepository
 		} catch (NonUniqueResultException $e) {
 			throw $e;
 		}
-	}
-
-	/**
-	 * Is current session verified by an one time token to execute a certain url on behalf of the given user uid?
-	 *
-	 * @param string $uid
-	 * @param string $url
-	 * @return boolean
-	 */
-	public function isVerified($uid, $url)
-	{
-		$token = $this->find(['uid' => $uid, 'url' => $url]);
-		if ($token) {
-			return $token->verified and
-				LoginService::getUid() === $token->uid and
-				strtotime($token->expire) > time();
-		}
-		return false;
 	}
 
 	/**

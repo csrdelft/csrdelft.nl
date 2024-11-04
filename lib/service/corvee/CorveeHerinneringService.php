@@ -23,16 +23,9 @@ use DateTime;
  */
 class CorveeHerinneringService
 {
-	public function __construct(
-		private readonly Environment $twig,
-		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		private readonly CorveeTakenRepository $corveeTakenRepository,
-		private readonly ProfielRepository $profielRepository,
-		private readonly MailService $mailService
-	) {
-	}
 
-	public function stuurHerinnering(CorveeTaak $taak)
+
+	public function stuurHerinnering(CorveeTaak $taak): string
 	{
 		$datumCorvee = DateUtil::dateFormatIntl(
 			$taak->datum,
@@ -93,7 +86,12 @@ class CorveeHerinneringService
 		}
 	}
 
-	public function stuurHerinneringen()
+	/**
+	 * @return (CsrGebruikerException|mixed)[][]
+	 *
+	 * @psalm-return list{list<mixed>, list<CsrDelft\common\CsrGebruikerException>}
+	 */
+	public function stuurHerinneringen(): array
 	{
 		$vooraf = str_replace(
 			'-',

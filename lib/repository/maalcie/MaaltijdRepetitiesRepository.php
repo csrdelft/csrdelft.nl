@@ -19,17 +19,12 @@ class MaaltijdRepetitiesRepository extends AbstractRepository
 {
 	protected $default_order = '(periode_in_dagen = 0) ASC, periode_in_dagen ASC, dag_vd_week ASC, standaard_titel ASC';
 
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, MaaltijdRepetitie::class);
-	}
-
 	public function getAbboneerbareRepetities()
 	{
 		return $this->findBy(['abonneerbaar' => 'true']);
 	}
 
-	public function getAlleRepetities($groupById = false)
+	public function getAlleRepetities(bool $groupById = false)
 	{
 		$repetities = $this->findAll();
 		if ($groupById) {
@@ -47,7 +42,7 @@ class MaaltijdRepetitiesRepository extends AbstractRepository
 	 * @return MaaltijdRepetitie
 	 * @throws CsrGebruikerException
 	 */
-	public function getRepetitie($mrid)
+	public function getRepetitie(int $mrid)
 	{
 		$repetitie = $this->find($mrid);
 		if (!$repetitie) {

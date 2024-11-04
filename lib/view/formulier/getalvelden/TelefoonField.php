@@ -15,6 +15,9 @@ use CsrDelft\view\formulier\invoervelden\TextField;
  */
 class TelefoonField extends TextField
 {
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {

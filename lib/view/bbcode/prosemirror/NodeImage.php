@@ -7,7 +7,10 @@ use CsrDelft\view\bbcode\tag\BbImg;
 
 class NodeImage implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbImg::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbImg::class;
 	}
@@ -34,11 +37,19 @@ class NodeImage implements Node
 		];
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'image'
+	 */
 	public static function getNodeType()
 	{
 		return 'image';
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

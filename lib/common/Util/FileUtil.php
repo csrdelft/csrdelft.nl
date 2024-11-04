@@ -126,7 +126,7 @@ final class FileUtil
 		}
 	}
 
-	public static function delTree($dir)
+	public static function delTree(string $dir): bool
 	{
 		$files = array_diff(scandir($dir), ['.', '..']);
 		foreach ($files as $file) {
@@ -137,7 +137,7 @@ final class FileUtil
 		return rmdir($dir);
 	}
 
-	public static function format_filesize($size)
+	public static function format_filesize(int $size): string
 	{
 		$units = [' B', ' KB', ' MB', ' GB', ' TB'];
 		for ($i = 0; $size >= 1024 && $i < 4; $i++) {
@@ -146,7 +146,10 @@ final class FileUtil
 		return round($size, 1) . $units[$i];
 	}
 
-	public static function getMaximumFileUploadSize()
+	/**
+	 * @return false|int|string
+	 */
+	public static function getMaximumFileUploadSize(): int|string|false
 	{
 		return min(
 			FileUtil::convertPHPSizeToBytes(ini_get('post_max_size')),
@@ -158,10 +161,12 @@ final class FileUtil
 	 * This function transforms the php.ini notation for numbers (like '2M') to an integer (2*1024*1024 in this case)
 	 *
 	 * @source http://stackoverflow.com/a/22500394
-	 * @param $sSize
-	 * @return false|int|string
+	 *
+	 * @param false|string $sSize
+	 *
+	 * @return float|int|numeric|string
 	 */
-	public static function convertPHPSizeToBytes($sSize)
+	public static function convertPHPSizeToBytes(string|false $sSize)
 	{
 		if (is_numeric($sSize)) {
 			return $sSize;
@@ -200,8 +205,8 @@ final class FileUtil
 	 * @return bool
 	 */
 	public static function square_crop(
-		$src_image,
-		$dest_image,
+		string $src_image,
+		string $dest_image,
 		$thumb_size = 64,
 		$jpg_quality = 90
 	) {

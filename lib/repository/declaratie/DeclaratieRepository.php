@@ -19,14 +19,7 @@ use Twig\Environment;
  */
 class DeclaratieRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly SuService $suService,
-		private readonly Environment $twig,
-		private readonly MailService $mailService
-	) {
-		parent::__construct($registry, Declaratie::class);
-	}
+
 
 	public function verwijderen(Declaratie $declaratie)
 	{

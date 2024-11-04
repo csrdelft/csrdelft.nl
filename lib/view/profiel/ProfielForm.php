@@ -46,6 +46,9 @@ use CsrDelft\view\Icon;
  */
 class ProfielForm extends Formulier
 {
+	/**
+	 * @return string
+	 */
 	public function getBreadcrumbs()
 	{
 		return '<ol class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .

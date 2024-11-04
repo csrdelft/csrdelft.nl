@@ -19,6 +19,11 @@ class BbLocatie extends BbTag
 	 */
 	private $height;
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{'map', 'kaart', 'locatie'}
+	 */
 	public static function getTagName()
 	{
 		return ['map', 'kaart', 'locatie'];
@@ -31,6 +36,9 @@ class BbLocatie extends BbTag
 		return BbHelper::lightLinkInline($this->env, 'locatie', $url, $address);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		$address = $this->getContent();
@@ -58,6 +66,9 @@ class BbLocatie extends BbTag
 			'</span></span>';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function parse($arguments = [])
 	{
 		// Hoogte maakt niet veel uit

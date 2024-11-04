@@ -369,15 +369,16 @@ class AanmelderBeheerController extends AbstractController
 	/**
 	 * @param AanmeldActiviteit $activiteit
 	 * @param Request $request
-	 * @return Response
+	 *
 	 * @throws ORMException
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[Route(path: '/lijst/{activiteit}/aanmelden', methods: ['POST'])]
 	public function lijstAanmelden(
 		AanmeldActiviteit $activiteit,
 		Request $request
-	): Response {
+	): \Symfony\Component\HttpFoundation\RedirectResponse {
 		if (!$activiteit->magLijstBeheren()) {
 			throw $this->createAccessDeniedException();
 		}

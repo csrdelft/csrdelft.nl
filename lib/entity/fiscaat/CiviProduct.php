@@ -77,49 +77,24 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 	#[ORM\OrderBy(['van' => 'ASC'])]
 	public $prijzen;
 
-	/**
-	 * @return string
-	 */
-	#[Serializer\SerializedName('categorie')]
-	#[Serializer\Groups('bar')]
-	public function getCategorieString()
-	{
-		return $this->categorie->getWeergave();
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('bar')]
-	public function getCie()
-	{
-		return $this->categorie->cie;
-	}
-
 	public function __construct()
 	{
 		$this->prijzen = new ArrayCollection();
 	}
 
-	public function getUUID()
-	{
-		return $this->id . '@civiproduct.csrdelft.nl';
-	}
-
 	/**
-	 * @return CiviPrijs
+	 * @return false|mixed
+	 *
+	 * @psalm-return T|false
 	 */
 	public function getPrijs()
 	{
 		return $this->prijzen->last();
 	}
 
-	/**
-	 * @return int
-	 */
 	#[Serializer\Groups(['datatable', 'bar'])]
 	#[Serializer\SerializedName('prijs')]
-	public function getPrijsInt()
+	public function getPrijsInt(): int|null
 	{
 		if ($prijs = $this->getPrijs()) {
 			return $prijs->prijs;
@@ -151,17 +126,7 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 		return $prijs->prijs;
 	}
 
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('categorie')]
-	public function getDataTableCategorie()
-	{
-		return $this->categorie->getBeschrijving();
-	}
-
-	public function getBeschrijvingFormatted()
+	public function getBeschrijvingFormatted(): string
 	{
 		return sprintf(
 			'%s (€%.2f)',
@@ -170,6 +135,9 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 		);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getId()
 	{
 		return $this->id;

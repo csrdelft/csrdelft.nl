@@ -20,13 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CorveeFunctiesRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly CorveeTakenRepository $corveeTakenRepository,
-		private readonly CorveeRepetitiesRepository $corveeRepetitiesRepository
-	) {
-		parent::__construct($registry, CorveeFunctie::class);
-	}
+
 
 	/**
 	 * Lazy loading of kwalificaties.
@@ -84,7 +78,10 @@ class CorveeFunctiesRepository extends AbstractRepository
 		$this->_em->flush();
 	}
 
-	public function getSuggesties($query)
+	/**
+	 * @param null|string $query
+	 */
+	public function getSuggesties(string|null $query)
 	{
 		return $this->createQueryBuilder('f')
 			->where('f.naam LIKE :query')

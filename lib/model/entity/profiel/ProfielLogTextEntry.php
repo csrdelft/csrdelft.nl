@@ -17,6 +17,9 @@ class ProfielLogTextEntry extends AbstractProfielLogEntry
 	{
 	}
 
+	/**
+	 * @return string
+	 */
 	public function toHtml()
 	{
 		return htmlspecialchars((string) $this->text);

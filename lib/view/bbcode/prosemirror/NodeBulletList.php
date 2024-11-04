@@ -7,11 +7,19 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeBulletList implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbList::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbList::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'bullet_list'
+	 */
 	public static function getNodeType()
 	{
 		return 'bullet_list';
@@ -22,11 +30,19 @@ class NodeBulletList implements Node
 		return [];
 	}
 
+	/**
+	 * @return array
+	 *
+	 * @psalm-return array<never, never>
+	 */
 	public function getTagAttributes($node)
 	{
 		return [];
 	}
 
+	/**
+	 * @return false
+	 */
 	public function selfClosing()
 	{
 		return false;

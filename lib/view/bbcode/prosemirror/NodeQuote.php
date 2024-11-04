@@ -7,11 +7,19 @@ use CsrDelft\bb\tag\BbQuote;
 
 class NodeQuote implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbQuote::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbQuote::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'blockquote'
+	 */
 	public static function getNodeType()
 	{
 		return 'blockquote';
@@ -22,11 +30,19 @@ class NodeQuote implements Node
 		return [];
 	}
 
+	/**
+	 * @return array
+	 *
+	 * @psalm-return array<never, never>
+	 */
 	public function getTagAttributes($node)
 	{
 		return [];
 	}
 
+	/**
+	 * @return false
+	 */
 	public function selfClosing()
 	{
 		return false;

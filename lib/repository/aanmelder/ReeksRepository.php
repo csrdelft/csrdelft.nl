@@ -17,10 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ReeksRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, Reeks::class);
-	}
+
 
 	public function delete(Reeks $reeks)
 	{

@@ -7,11 +7,19 @@ use CsrDelft\view\bbcode\tag\BbMaaltijd;
 
 class NodeMaaltijd implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbMaaltijd::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbMaaltijd::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'maaltijd'
+	 */
 	public static function getNodeType()
 	{
 		return 'maaltijd';
@@ -35,6 +43,9 @@ class NodeMaaltijd implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

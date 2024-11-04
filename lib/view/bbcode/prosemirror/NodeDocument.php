@@ -7,11 +7,19 @@ use CsrDelft\view\bbcode\tag\BbDocument;
 
 class NodeDocument implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbDocument::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbDocument::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'document'
+	 */
 	public static function getNodeType()
 	{
 		return 'document';
@@ -37,6 +45,9 @@ class NodeDocument implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

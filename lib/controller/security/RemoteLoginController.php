@@ -49,11 +49,11 @@ class RemoteLoginController extends AbstractController
 
 	/**
 	 * @param Request $request
-	 * @return Response
-	 * @Auth(P_PUBLIC)
+	 *
+	 * @Auth (P_PUBLIC)
 	 */
 	#[Route(path: '/remote-login-refresh', methods: ['POST'])]
-	public function remoteLoginRefresh(Request $request): Response
+	public function remoteLoginRefresh(Request $request): \Symfony\Component\HttpFoundation\JsonResponse
 	{
 		$id = $request->getSession()->get('remote_login');
 
@@ -80,11 +80,11 @@ class RemoteLoginController extends AbstractController
 	 * Geeft de huidige status voor een remote_login sessie weer.
 	 *
 	 * @param Request $request
-	 * @return Response
-	 * @Auth(P_PUBLIC)
+	 *
+	 * @Auth (P_PUBLIC)
 	 */
 	#[Route(path: '/remote-login-status', methods: ['POST'])]
-	public function remoteLoginStatus(Request $request): Response
+	public function remoteLoginStatus(Request $request): \Symfony\Component\HttpFoundation\JsonResponse
 	{
 		$id = $request->getSession()->get('remote_login');
 
@@ -107,11 +107,11 @@ class RemoteLoginController extends AbstractController
 
 	/**
 	 * @param $uuid
-	 * @return Response
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[Route(path: '/rla/{uuid}', methods: ['GET'])]
-	public function remoteLoginAuthorizeRedirect($uuid): Response
+	public function remoteLoginAuthorizeRedirect($uuid): RedirectResponse
 	{
 		return new RedirectResponse(
 			$this->generateUrl('csrdelft_security_remotelogin_remoteloginauthorize', [
@@ -159,11 +159,11 @@ class RemoteLoginController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @param $uuid
-	 * @return Response
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[Route(path: '/remote-login-authorize/{uuid}', methods: ['POST'])]
-	public function remoteLoginAuthorizePost(Request $request, $uuid): Response
+	public function remoteLoginAuthorizePost(Request $request, $uuid): RedirectResponse
 	{
 		$remoteLogin = $this->remoteLoginRepository->findOneBy([
 			'uuid' => Uuid::fromString($uuid),
@@ -204,12 +204,14 @@ class RemoteLoginController extends AbstractController
 	}
 
 	/**
-	 * @return Response
-	 * @Auth(P_PUBLIC)
+	 * @return never
+	 *
+	 * @Auth (P_PUBLIC)
+	 *
 	 * @see RemoteLoginAuthenticator
 	 */
 	#[Route(path: '/remote-login-final', methods: ['POST'])]
-	public function remoteLoginFinal(): Response
+	public function remoteLoginFinal()
 	{
 		throw new LogicException(
 			'Moet opgevangen worden door RemoteLoginAuthenticator'

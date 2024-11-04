@@ -13,6 +13,11 @@ use CsrDelft\entity\groepen\Activiteit;
  */
 class ActiviteitenController extends KetzersController
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Activiteit::class
+	 */
 	public function getGroepType()
 	{
 		return Activiteit::class;

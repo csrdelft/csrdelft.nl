@@ -18,11 +18,6 @@ class CmsPaginaVoter extends Voter
 	const RECHTEN_WIJZIGEN = 'rechten_wijzigen';
 	const VERWIJDEREN = 'verwijderen';
 
-	public function __construct(
-		private AccessDecisionManagerInterface $accessDecisionManager
-	) {
-	}
-
 	public function supportsAttribute(string $attribute): bool
 	{
 		return in_array($attribute, [

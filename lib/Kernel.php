@@ -30,33 +30,18 @@ class Kernel extends BaseKernel
 	}
 
 	/**
-	 * @param ContainerConfigurator $container
-	 */
-	protected function configureContainer(ContainerConfigurator $container)
-	{
-		$container->import('../config/{packages}/*.yaml');
-		$container->import(
-			'../config/{packages}/' . $this->environment . '/**/*.yaml'
-		);
-		$container->import('../config/{services}.yaml');
-		$container->import('../config/{services}_' . $this->environment . '.yaml');
-
-		// We willen dat alles ook werkt als Memcache niet bestaat
-		if (class_exists('Memcached') && $_ENV['MEMCACHED_URL'] != '') {
-			$container->import('../config/custom/memcache.yaml');
-		}
-	}
-
-	/**
 	 * @param RoutingConfigurator $routes
 	 */
-	protected function configureRoutes(RoutingConfigurator $routes)
+	protected function configureRoutes(RoutingConfigurator $routes): void
 	{
 		$routes->import('../config/{routes}/' . $this->environment . '/**/*.yaml');
 		$routes->import('../config/{routes}/*.yaml');
 		$routes->import('../config/{routes}.yaml');
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function build(ContainerBuilder $builder)
 	{
 		$builder

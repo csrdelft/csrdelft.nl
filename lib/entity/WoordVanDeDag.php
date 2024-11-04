@@ -24,7 +24,7 @@ class WoordVanDeDag
 		return $this->id;
 	}
 
-	public function getWoord(): ?string
+	public function getWoord(): string
 	{
 		return $this->woord;
 	}

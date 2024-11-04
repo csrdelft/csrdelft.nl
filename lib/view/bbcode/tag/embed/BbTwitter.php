@@ -24,6 +24,11 @@ class BbTwitter extends BbTag
 	 */
 	public $url;
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'twitter'
+	 */
 	public static function getTagName()
 	{
 		return 'twitter';
@@ -39,6 +44,9 @@ class BbTwitter extends BbTag
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		// widget size
@@ -75,7 +83,10 @@ HTML;
 
 	/**
 	 * @param array $arguments
+	 *
 	 * @throws BbException
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

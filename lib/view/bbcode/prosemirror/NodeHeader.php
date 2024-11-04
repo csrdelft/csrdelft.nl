@@ -7,11 +7,19 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeHeader implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbHeading::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbHeading::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'heading'
+	 */
 	public static function getNodeType()
 	{
 		return 'heading';
@@ -35,6 +43,9 @@ class NodeHeader implements Node
 		];
 	}
 
+	/**
+	 * @return false
+	 */
 	public function selfClosing()
 	{
 		return false;

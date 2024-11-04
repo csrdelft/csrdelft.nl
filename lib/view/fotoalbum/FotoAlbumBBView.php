@@ -54,17 +54,17 @@ class FotoAlbumBBView implements View
 		return $html;
 	}
 
-	public function makeCompact()
+	public function makeCompact(): void
 	{
 		$this->compact = true;
 	}
 
-	public function setRows($rows)
+	public function setRows(int $rows): void
 	{
 		$this->rows = $rows;
 	}
 
-	public function setPerRow($per_row)
+	public function setPerRow(int $per_row): void
 	{
 		$this->per_row = $per_row;
 	}
@@ -77,6 +77,8 @@ class FotoAlbumBBView implements View
 	 * - c (odd/even)
 	 *
 	 * @param string $index
+	 *
+	 * @return void
 	 */
 	public function setBig($index)
 	{
@@ -107,8 +109,12 @@ class FotoAlbumBBView implements View
 	 *
 	 * The index is saved together with the object for correct reference
 	 * in case the image is moved one left or one up in the grid at borders.
+	 *
+	 * @return (array|null|string)[][]
+	 *
+	 * @psalm-return array<int, array<'USED'|array{index: mixed, foto: mixed}|null>>
 	 */
-	private function getGrid()
+	private function getGrid(): array
 	{
 		$fotos = $this->model->getFotos();
 		$grid = array_fill(0, $this->rows, array_fill(0, $this->per_row, null));
@@ -185,7 +191,7 @@ class FotoAlbumBBView implements View
 		return $grid;
 	}
 
-	public function getGridHtml()
+	public function getGridHtml(): string
 	{
 		$grid = $this->getGrid();
 		$url = $this->model->getUrl();
@@ -215,7 +221,7 @@ class FotoAlbumBBView implements View
 		return $ret;
 	}
 
-	public function getHtml()
+	public function getHtml(): string
 	{
 		if ($this->compact) {
 			// compacte versie van de tag is alleen een thumbnail.
@@ -235,11 +241,17 @@ class FotoAlbumBBView implements View
 			'</div>';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function getTitel()
 	{
 		// Niet boeiend
 	}
 
+	/**
+	 * @return void
+	 */
 	public function getBreadcrumbs()
 	{
 		// Niet boeiend

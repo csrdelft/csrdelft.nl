@@ -27,25 +27,6 @@ class InstellingenRepository extends AbstractRepository
 	use YamlInstellingen;
 
 	/**
-	 * InstellingenModel constructor.
-	 * @param ManagerRegistry $manager
-	 * @param CacheInterface $cache
-	 * @throws FileLoaderImportCircularReferenceException
-	 * @throws LoaderLoadException
-	 */
-	public function __construct(
-		ManagerRegistry $manager,
-		private CacheInterface $cache
-	) {
-		parent::__construct($manager, Instelling::class);
-
-		$this->load(
-			'instellingen/stek_instelling.yaml',
-			new InstellingConfiguration()
-		);
-	}
-
-	/**
 	 * @param string $module
 	 * @param string $id
 	 *
@@ -87,24 +68,6 @@ class InstellingenRepository extends AbstractRepository
 				);
 			}
 		});
-	}
-
-	/**
-	 * @param string $module
-	 * @param string $id
-	 *
-	 * @return Instelling
-	 */
-	protected function newInstelling($module, $id)
-	{
-		$instelling = new Instelling();
-		$instelling->module = $module;
-		$instelling->instelling = $id;
-		$instelling->waarde = $this->getDefault($module, $id);
-		$entityManager = $this->getEntityManager();
-		$entityManager->persist($instelling);
-		$entityManager->flush();
-		return $instelling;
 	}
 
 	/**

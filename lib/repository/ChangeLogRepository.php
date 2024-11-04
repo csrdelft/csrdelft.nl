@@ -23,19 +23,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class ChangeLogRepository extends AbstractRepository
 {
-	/**
-	 * ChangeLogModel constructor.
-	 * @param ManagerRegistry $registry
-	 * @param SerializerInterface $serializer
-	 * @param Security $security
-	 */
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly SerializerInterface $serializer,
-		private readonly Security $security
-	) {
-		parent::__construct($registry, ChangeLogEntry::class);
-	}
+
 
 	/**
 	 * @param string $subject
@@ -52,7 +40,10 @@ class ChangeLogRepository extends AbstractRepository
 		return $change;
 	}
 
-	public function serialize($value)
+	/**
+	 * @param \CsrDelft\entity\groepen\Groep|\CsrDelft\entity\groepen\Groep&\CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten $value
+	 */
+	public function serialize(\CsrDelft\entity\groepen\Groep&\CsrDelft\entity\groepen\interfaces\HeeftAanmeldRechten|\CsrDelft\entity\groepen\Groep $value)
 	{
 		return $this->serializer->serialize($value, 'json', ['groups' => 'log']);
 	}

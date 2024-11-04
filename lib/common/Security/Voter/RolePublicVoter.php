@@ -13,10 +13,6 @@ class RolePublicVoter extends Voter
 {
 	use CacheableVoterSupportsTrait;
 
-	public function __construct(private Security $security)
-	{
-	}
-
 	public function supportsAttribute(string $attribute): bool
 	{
 		return strtoupper($attribute) == 'ROLE_PUBLIC' ||
@@ -24,6 +20,9 @@ class RolePublicVoter extends Voter
 			strtoupper($attribute) == 'ROLE_ALBUM_PUBLIC_READ';
 	}
 
+	/**
+	 * @return true
+	 */
 	protected function voteOnAttribute(
 		string $attribute,
 		$subject,

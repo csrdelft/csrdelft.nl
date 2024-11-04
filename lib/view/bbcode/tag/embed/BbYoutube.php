@@ -23,11 +23,21 @@ class BbYoutube extends BbTag
 	 */
 	public $id;
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'youtube'
+	 */
 	public static function getTagName()
 	{
 		return 'youtube';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return '📹'
+	 */
 	public function renderPreview()
 	{
 		return '📹';
@@ -48,7 +58,10 @@ class BbYoutube extends BbTag
 
 	/**
 	 * @param string|null $id
+	 *
 	 * @throws BbException
+	 *
+	 * @return void
 	 */
 	private function assertId($id)
 	{
@@ -88,6 +101,8 @@ HTML;
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

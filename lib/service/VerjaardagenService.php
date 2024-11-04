@@ -20,21 +20,14 @@ class VerjaardagenService
 {
 	const FILTER_BY_TOESTEMMING = "INNER JOIN lidtoestemmingen t ON T2.uid  = t.uid AND t.waarde = 'ja' AND t.module = 'profiel' AND t.instelling = 'gebdatum'";
 
-	public function __construct(
-		private readonly Security $security,
-		private readonly ProfielRepository $profielRepository,
-		private readonly EntityManagerInterface $em
-	) {
-	}
-
-	private function getFilterByToestemmingSql()
+	private function getFilterByToestemmingSql(): string
 	{
 		return $this->security->isGranted(P_LEDEN_MOD)
 			? ''
 			: self::FILTER_BY_TOESTEMMING;
 	}
 
-	private function getNovietenFilter()
+	private function getNovietenFilter(): string
 	{
 		if ($this->em->getFilters()->isEnabled('verbergNovieten')) {
 			$jaar = intval(
@@ -54,8 +47,10 @@ class VerjaardagenService
 
 	/**
 	 * @return Profiel[][]
+	 *
+	 * @psalm-return non-empty-list<array<array-key, CsrDelft\entity\profiel\Profiel>>
 	 */
-	public function getJaar()
+	public function getJaar(): array
 	{
 		return array_map($this->get(...), range(1, 12));
 	}
@@ -86,10 +81,10 @@ class VerjaardagenService
 
 	public static function filterByToestemming(
 		QueryBuilder $queryBuilder,
-		$module,
-		$instelling,
+		string $module,
+		string $instelling,
 		$profielAlias = 'p'
-	) {
+	): QueryBuilder {
 		return $queryBuilder
 			->andWhere(
 				't.waarde = \'ja\' and t.module = :t_module and t.instelling = :t_instelling'
@@ -110,27 +105,9 @@ class VerjaardagenService
 	}
 
 	/**
-	 * Als je deze methode aanpast, controleer dan of deze goed werkt met schrikkeljaren en als van en tot in
-	 * verschillende jaren liggen. Er wordt wel aangenomen dat de afstand tussen van en tot maximaal een jaar is.
-	 *
-	 * @param DateTimeInterface $van
-	 * @param DateTimeInterface $tot
-	 * @param int $limiet
-	 *
-	 * @return Profiel[]
-	 */
-	public function getTussen(
-		DateTimeInterface $van,
-		DateTimeInterface $tot,
-		$limiet = null
-	) {
-		return $this->getVerjaardagen($van, $tot, $limiet);
-	}
-
-	/**
 	 * Selecteer verjaardagen tussen twee data.
 	 */
-	private function getVerjaardagen($van, $tot = null, $limiet = null)
+	private function getVerjaardagen(DateTimeInterface|false $van, DateTimeInterface|null $tot = null, int|null $limiet = null)
 	{
 		$rsm = new ResultSetMappingBuilder($this->em);
 		// We selecteren eerst een profiel.

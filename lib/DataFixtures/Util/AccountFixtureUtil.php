@@ -13,7 +13,7 @@ class AccountFixtureUtil
 		Generator $faker,
 		$profiel,
 		$accessRole = null
-	) {
+	): Account {
 		$account = new Account();
 		$account->uuid = Uuid::v4();
 		$account->username = '';

@@ -16,20 +16,5 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PeilingStemmenRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, PeilingStem::class);
-	}
 
-	/**
-	 * @param int $peiling_id
-	 * @param string $uid
-	 *
-	 * @return bool
-	 */
-	public function heeftGestemd($peiling_id, $uid)
-	{
-		return count($this->findBy(['peiling_id' => $peiling_id, 'uid' => $uid])) !=
-			0;
-	}
 }

@@ -13,15 +13,9 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CorveeRepetitiesService
 {
-	public function __construct(
-		private readonly EntityManagerInterface $entityManager,
-		private readonly CorveeTakenRepository $corveeTakenRepository,
-		private readonly CorveeRepetitiesRepository $corveeRepetitiesRepository,
-		private readonly CorveeVoorkeurenRepository $corveeVoorkeurenRepository
-	) {
-	}
 
-	public function verwijderRepetitie($crid)
+
+	public function verwijderRepetitie(int $crid)
 	{
 		if (!is_numeric($crid) || $crid <= 0) {
 			throw new CsrGebruikerException(

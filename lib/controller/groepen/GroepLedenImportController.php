@@ -32,7 +32,10 @@ class GroepLedenImportController extends AbstractController
 		return $this->render('groepen/groepimport.html.twig', []);
 	}
 
-	private function quickMelding($melding, $url = null): RedirectResponse
+	/**
+	 * @param null|string $url
+	 */
+	private function quickMelding(string $melding, string|null $url = null): RedirectResponse
 	{
 		$this->addFlash(FlashType::WARNING, $melding);
 		if (!$url) {
@@ -42,10 +45,10 @@ class GroepLedenImportController extends AbstractController
 	}
 
 	/**
-	 * @Auth(P_LOGGED_IN)
+	 * @Auth (P_LOGGED_IN)
+	 *
 	 * @param Request $request
 	 * @param Session $session
-	 * @return Response
 	 */
 	#[
 		Route(
@@ -54,7 +57,7 @@ class GroepLedenImportController extends AbstractController
 			methods: ['POST']
 		)
 	]
-	public function upload(Request $request, Session $session): Response
+	public function upload(Request $request, Session $session): RedirectResponse
 	{
 		// Kijk of bestand meegegeven is
 		if (!$request->files->has('csv')) {

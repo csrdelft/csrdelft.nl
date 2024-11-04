@@ -23,10 +23,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class SavedQueryRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, SavedQuery::class);
-	}
+
 
 	public function get($id)
 	{
@@ -41,7 +38,7 @@ class SavedQueryRepository extends AbstractRepository
 		return $this->findBy([], ['categorie' => 'ASC']);
 	}
 
-	public function loadQuery($queryId)
+	public function loadQuery(int $queryId)
 	{
 		$query = $this->find($queryId);
 

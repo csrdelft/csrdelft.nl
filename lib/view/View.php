@@ -16,8 +16,6 @@ interface View
 
 	public function getTitel();
 
-	public function getBreadcrumbs();
-
 	/**
 	 * Hiermee wordt gepoogt af te dwingen dat een view een model heeft om te tonen
 	 */

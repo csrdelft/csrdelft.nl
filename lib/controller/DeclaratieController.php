@@ -170,8 +170,8 @@ class DeclaratieController extends AbstractController
 	 * @param string $path
 	 * @param Filesystem $filesystem
 	 * @param DeclaratieBonRepository $bonRepository
-	 * @return Response
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[
 		Route(
@@ -185,7 +185,7 @@ class DeclaratieController extends AbstractController
 		string $path,
 		Filesystem $filesystem,
 		DeclaratieBonRepository $bonRepository
-	) {
+	): BinaryFileResponse {
 		$filename = DECLARATIE_PATH . $path;
 		if (!$filesystem->exists($filename)) {
 			throw $this->createAccessDeniedException();
@@ -204,10 +204,11 @@ class DeclaratieController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @param DeclaratieBonRepository $bonRepository
-	 * @return Response
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[
 		Route(
@@ -219,7 +220,7 @@ class DeclaratieController extends AbstractController
 	public function upload(
 		Request $request,
 		DeclaratieBonRepository $bonRepository
-	) {
+	): JsonResponse {
 		$key = bin2hex(random_bytes(16));
 
 		/** @var File $file */
@@ -276,8 +277,8 @@ class DeclaratieController extends AbstractController
 	 * @param DeclaratieBonRepository $bonRepository
 	 * @param DeclaratieCategorieRepository $categorieRepository
 	 * @param EntityManagerInterface $entityManager
-	 * @return Response
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[
 		Route(
@@ -292,7 +293,7 @@ class DeclaratieController extends AbstractController
 		DeclaratieBonRepository $bonRepository,
 		DeclaratieCategorieRepository $categorieRepository,
 		EntityManagerInterface $entityManager
-	) {
+	): JsonResponse {
 		$data = $request->request->get('declaratie');
 		if (!empty($data)) {
 			$data = new ParameterBag($data);
@@ -419,8 +420,8 @@ class DeclaratieController extends AbstractController
 	 * @param Declaratie $declaratie
 	 * @param Request $request
 	 * @param EntityManagerInterface $entityManager
-	 * @return Response
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[
 		Route(
@@ -433,7 +434,7 @@ class DeclaratieController extends AbstractController
 		Declaratie $declaratie,
 		Request $request,
 		EntityManagerInterface $entityManager
-	) {
+	): JsonResponse {
 		$status = $request->request->getAlpha('status');
 		$vanNaar = $declaratie->getStatus() . '-' . $status;
 
@@ -497,8 +498,8 @@ class DeclaratieController extends AbstractController
 	/**
 	 * @param Declaratie $declaratie
 	 * @param DeclaratieRepository $declaratieRepository
-	 * @return Response
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[
 		Route(
@@ -510,7 +511,7 @@ class DeclaratieController extends AbstractController
 	public function declaratieVerwijderen(
 		Declaratie $declaratie,
 		DeclaratieRepository $declaratieRepository
-	): Response {
+	): JsonResponse {
 		if (!$declaratie->magBewerken()) {
 			throw $this->createAccessDeniedException();
 		}

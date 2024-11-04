@@ -95,7 +95,7 @@ class Declaratie
 		return $this->indiener;
 	}
 
-	public function setIndiener(Profiel $indiener): self
+	public function setIndiener(Profiel $indiener): static
 	{
 		$this->indiener = $indiener;
 
@@ -107,7 +107,7 @@ class Declaratie
 		return $this->categorie;
 	}
 
-	public function setCategorie(?DeclaratieCategorie $categorie): self
+	public function setCategorie(?DeclaratieCategorie $categorie): static
 	{
 		$this->categorie = $categorie;
 
@@ -119,7 +119,7 @@ class Declaratie
 		return $this->omschrijving;
 	}
 
-	public function setOmschrijving(?string $omschrijving): self
+	public function setOmschrijving(?string $omschrijving): static
 	{
 		$this->omschrijving = $omschrijving;
 
@@ -131,19 +131,14 @@ class Declaratie
 		return $this->csrPas;
 	}
 
-	public function setCsrPas(bool $csrPas): self
+	public function setCsrPas(bool $csrPas): static
 	{
 		$this->csrPas = $csrPas;
 
 		return $this;
 	}
 
-	public function getRekening(): ?string
-	{
-		return $this->rekening;
-	}
-
-	public function setRekening(?string $rekening): self
+	public function setRekening(?string $rekening): static
 	{
 		$this->rekening = $rekening;
 
@@ -155,43 +150,28 @@ class Declaratie
 		return $this->naam;
 	}
 
-	public function setNaam(?string $naam): self
+	public function setNaam(?string $naam): static
 	{
 		$this->naam = $naam;
 
 		return $this;
 	}
 
-	public function getOpmerkingen(): ?string
-	{
-		return trim((string) $this->opmerkingen);
-	}
-
-	public function setOpmerkingen(?string $opmerkingen): self
+	public function setOpmerkingen(?string $opmerkingen): static
 	{
 		$this->opmerkingen = $opmerkingen;
 
 		return $this;
 	}
 
-	public function getTotaal(): float
-	{
-		return $this->totaal;
-	}
-
-	public function setTotaal(float $totaal): self
+	public function setTotaal(float $totaal): static
 	{
 		$this->totaal = $totaal;
 
 		return $this;
 	}
 
-	public function getBeoordelaar(): ?Profiel
-	{
-		return $this->beoordelaar;
-	}
-
-	public function setBeoordelaar(?Profiel $beoordelaar): self
+	public function setBeoordelaar(?Profiel $beoordelaar): static
 	{
 		$this->beoordelaar = $beoordelaar;
 
@@ -203,7 +183,7 @@ class Declaratie
 		return $this->nummer;
 	}
 
-	public function setNummer(?string $nummer): self
+	public function setNummer(?string $nummer): static
 	{
 		$this->nummer = $nummer;
 
@@ -220,7 +200,7 @@ class Declaratie
 		return $this->ingediend;
 	}
 
-	public function setIngediend(?DateTimeInterface $ingediend): self
+	public function setIngediend(?DateTimeInterface $ingediend): static
 	{
 		$this->ingediend = $ingediend;
 
@@ -232,12 +212,7 @@ class Declaratie
 		return $this->beoordeeld !== null;
 	}
 
-	public function getBeoordeeld(): ?DateTimeInterface
-	{
-		return $this->beoordeeld;
-	}
-
-	public function setBeoordeeld(?DateTimeInterface $beoordeeld): self
+	public function setBeoordeeld(?DateTimeInterface $beoordeeld): static
 	{
 		$this->beoordeeld = $beoordeeld;
 
@@ -249,12 +224,7 @@ class Declaratie
 		return $this->uitbetaald !== null;
 	}
 
-	public function getUitbetaald(): ?DateTimeInterface
-	{
-		return $this->uitbetaald;
-	}
-
-	public function setUitbetaald(?DateTimeInterface $uitbetaald): self
+	public function setUitbetaald(?DateTimeInterface $uitbetaald): static
 	{
 		$this->uitbetaald = $uitbetaald;
 
@@ -266,22 +236,19 @@ class Declaratie
 		return $this->goedgekeurd;
 	}
 
-	public function setGoedgekeurd(bool $goedgekeurd): self
+	public function setGoedgekeurd(bool $goedgekeurd): static
 	{
 		$this->goedgekeurd = $goedgekeurd;
 
 		return $this;
 	}
 
-	/**
-	 * @return Collection|DeclaratieBon[]
-	 */
 	public function getBonnen(): Collection
 	{
 		return $this->bonnen;
 	}
 
-	public function addBon(DeclaratieBon $bon): self
+	public function addBon(DeclaratieBon $bon): static
 	{
 		if (!$this->bonnen->contains($bon)) {
 			$this->bonnen[] = $bon;
@@ -291,7 +258,7 @@ class Declaratie
 		return $this;
 	}
 
-	public function removeBon(DeclaratieBon $bon): self
+	public function removeBon(DeclaratieBon $bon): static
 	{
 		if ($this->bonnen->contains($bon)) {
 			$this->bonnen->removeElement($bon);
@@ -319,22 +286,7 @@ class Declaratie
 		}
 	}
 
-	public function getListStatus(): string
-	{
-		$status = $this->getStatus();
-		if (
-			$status === 'uitbetaald' ||
-			($status === 'goedgekeurd' && $this->getCsrPas())
-		) {
-			return 'goedgekeurd';
-		} elseif ($status === 'goedgekeurd') {
-			return 'uitbetaald';
-		} else {
-			return $status;
-		}
-	}
-
-	public function fromParameters(ParameterBag $data): self
+	public function fromParameters(ParameterBag $data): static
 	{
 		if ($data->get('omschrijving')) {
 			$this->setOmschrijving($data->get('omschrijving'));
@@ -440,12 +392,13 @@ class Declaratie
 	/**
 	 * @param DateTimeInterface|null $date Datum om van te bepalen, bij null: vandaag
 	 * @param bool $substr Of alleen de laatste twee cijfers gegeven moeten worden
-	 * @return string Startjaar van boekjaar van gegeven datum
+	 *
+	 * @return int|string Startjaar van boekjaar van gegeven datum
 	 */
 	private static function getBoekjaar(
 		DateTimeInterface $date = null,
 		bool $substr = false
-	): string {
+	): string|int {
 		if ($date === null) {
 			$date = date_create_immutable();
 		}
@@ -459,6 +412,11 @@ class Declaratie
 		return $substr ? substr($jaar, 2, 2) : $jaar;
 	}
 
+	/**
+	 * @return (bool|null|string)[]
+	 *
+	 * @psalm-return array{ingediendOp: false|null|string, ingediendDoor: string, goedgekeurdOp: false|null|string, afgekeurdOp: false|null|string, beoordeeldDoor: string, uitbetaaldOp: false|null|string, magBeoordelen: bool, magUitbetalen: bool, nummerPrefix: string}
+	 */
 	public function naarStatusData(): array
 	{
 		return [
@@ -486,6 +444,11 @@ class Declaratie
 		];
 	}
 
+	/**
+	 * @return ((array|mixed)[]|bool|int|mixed|null|string)[]
+	 *
+	 * @psalm-return array{id: mixed, datum: false|null|string, categorie: int|null, omschrijving: mixed, betaalwijze: 'C.S.R.-pas'|'voorgeschoten'|null, eigenRekening: bool, rekening: mixed|null, tnv: mixed|null, bonnen: array<array>, opmerkingen: mixed, nummer: mixed, status: string, statusData: array}
+	 */
 	public function naarObject(UrlGeneratorInterface $generator): array
 	{
 		$eigenRekening =
@@ -548,7 +511,7 @@ class Declaratie
 			$this->magBeoordelen();
 	}
 
-	public function getRelatie(): string
+	public function getRelatie(): string|null
 	{
 		if ($this->getCsrPas()) {
 			return $this->getNaam();

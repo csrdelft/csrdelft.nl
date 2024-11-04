@@ -119,6 +119,9 @@ class ToestemmingModalForm extends ModalForm
 		);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {

@@ -15,6 +15,11 @@ use CsrDelft\entity\groepen\Werkgroep;
  */
 class WerkgroepenController extends AbstractGroepenController
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Werkgroep::class
+	 */
 	public function getGroepType()
 	{
 		return Werkgroep::class;

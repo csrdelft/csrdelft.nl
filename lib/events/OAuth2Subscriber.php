@@ -32,6 +32,11 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	) {
 	}
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return array{'league.oauth2_server.event.scope_resolve': 'onScopeResolve', 'league.oauth2_server.event.authorization_request_resolve': 'onAuthorizationRequest'}
+	 */
 	public static function getSubscribedEvents(): array
 	{
 		return [
@@ -40,6 +45,9 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		];
 	}
 
+	/**
+	 * @return void
+	 */
 	public function onScopeResolve(ScopeResolveEvent $event)
 	{
 		$rememberOAuth = $this->rememberOAuthRepository->findByUser(
@@ -149,7 +157,6 @@ class OAuth2Subscriber implements EventSubscriberInterface
 			return;
 		}
 
-		/** @var Scope[] $requestedScopes */
 		$requestedScopes = array_unique(
 			array_merge($event->getScopes(), $event->getClient()->getScopes())
 		);

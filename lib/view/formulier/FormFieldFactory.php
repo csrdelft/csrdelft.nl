@@ -44,10 +44,14 @@ class FormFieldFactory
 {
 	/**
 	 * @param $model
+	 *
 	 * @return InputField[]
+	 *
 	 * @throws Exception
+	 *
+	 * @psalm-return array<string, InputField>
 	 */
-	public static function generateFields($model)
+	public static function generateFields(\CsrDelft\entity\groepen\Groep $model): array
 	{
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
@@ -133,10 +137,12 @@ class FormFieldFactory
 	/**
 	 * @param string $fieldName
 	 * @param Type $type
-	 * @return InputField
+	 *
+	 * @return EnumSelectField|FloatField|IntField|JaNeeField|TextField|TimeObjectField|VerticaleField
+	 *
 	 * @throws Exception
 	 */
-	private static function getFieldByType(string $fieldName, mixed $value, $type)
+	private static function getFieldByType(string $fieldName, mixed $value, $type): TimeObjectField|VerticaleField|EnumSelectField|IntField|TextField|JaNeeField|FloatField
 	{
 		$desc = ucfirst(str_replace('_', ' ', $fieldName));
 

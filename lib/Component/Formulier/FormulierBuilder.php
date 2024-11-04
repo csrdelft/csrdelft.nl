@@ -38,32 +38,14 @@ class FormulierBuilder
 	 */
 	private $validationMethods = [];
 
-	public function __construct(
-		private readonly RequestStack $requestStack,
-		private readonly Environment $twig
-	) {
-		$this->css_classes[] = 'Formulier';
-		$this->formKnoppen = new FormDefaultKnoppen();
-	}
-
-	public function setShowMelding($showMelding)
+	public function setShowMelding(bool $showMelding): void
 	{
 		$this->showMelding = $showMelding;
 	}
 
-	public function setFormId($formId)
+	public function setFormId(string $formId): void
 	{
 		$this->formId = $formId;
-	}
-
-	public function getFormId()
-	{
-		return $this->formId;
-	}
-
-	public function getDataTableId()
-	{
-		return $this->dataTableId;
 	}
 
 	/**
@@ -72,7 +54,7 @@ class FormulierBuilder
 	 *
 	 * @param string|bool $dataTableId
 	 */
-	public function setDataTableId($dataTableId)
+	public function setDataTableId($dataTableId): void
 	{
 		// Link with DataTable?
 		if ($dataTableId === true) {
@@ -82,11 +64,6 @@ class FormulierBuilder
 		} else {
 			$this->dataTableId = $dataTableId;
 		}
-	}
-
-	public function getTitel()
-	{
-		return $this->titel;
 	}
 
 	/**
@@ -102,57 +79,12 @@ class FormulierBuilder
 		return $this->model;
 	}
 
-	public function getBreadcrumbs()
-	{
-		return null;
-	}
-
-	public function getFields()
-	{
-		return $this->fields;
-	}
-
-	public function hasFields()
-	{
-		return !empty($this->fields);
-	}
-
-	/**
-	 * Zoekt een InputField met exact de gegeven naam.
-	 *
-	 * @param string $fieldName
-	 * @return InputField|false if not found
-	 */
-	public function findByName($fieldName)
-	{
-		foreach ($this->fields as $field) {
-			if (
-				($field instanceof InputField || $field instanceof FileField) &&
-				$field->getName() === $fieldName
-			) {
-				return $field;
-			}
-		}
-		return false;
-	}
-
-	public function addFields(array $fields)
+	public function addFields(array $fields): void
 	{
 		$this->fields = array_merge($this->fields, $fields);
 	}
 
-	public function insertAtPos($pos, FormElement $field)
-	{
-		array_splice($this->fields, $pos, 0, [$field]);
-	}
-
-	public function removeField(FormElement $field)
-	{
-		$pos = array_search($field, $this->fields);
-		unset($this->fields[$pos]);
-	}
-
-	public function getFormulier()
+	public function getFormulier(): FormulierInstance
 	{
 		return new FormulierInstance(
 			$this->twig,
@@ -177,7 +109,10 @@ class FormulierBuilder
 		$this->action = $action;
 	}
 
-	public function addCssClass($class): void
+	/**
+	 * @psalm-param 'PreventUnchanged'|'ReloadPage PreventUnchanged'|'boekformulier' $class
+	 */
+	public function addCssClass(string $class): void
 	{
 		$this->css_classes[] = $class;
 	}
@@ -193,7 +128,7 @@ class FormulierBuilder
 	/**
 	 * @param \Closure $param Kan alle velden controleren als er false wordt gereturned is ($fields: FormElement[]) => boolean
 	 */
-	public function addValidationMethod(\Closure $param)
+	public function addValidationMethod(\Closure $param): void
 	{
 		$this->validationMethods[] = $param;
 	}

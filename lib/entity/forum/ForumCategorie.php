@@ -63,7 +63,7 @@ class ForumCategorie implements DisplayEntity
 		$this->forum_delen = new ArrayCollection();
 	}
 
-	public function magLezen()
+	public function magLezen(): bool
 	{
 		return LoginService::mag($this->rechten_lezen);
 	}
@@ -73,11 +73,14 @@ class ForumCategorie implements DisplayEntity
 	 *
 	 * @param array $forum_delen
 	 */
-	public function setForumDelen(array $forum_delen)
+	public function setForumDelen(array $forum_delen): void
 	{
 		$this->forum_delen = $forum_delen;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getId()
 	{
 		return $this->categorie_id;

@@ -60,6 +60,9 @@ abstract class InlineForm extends Formulier implements FormElement
 		$this->addFields($fields);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$html = '<div id="wrapper_' . $this->formId . '" class="InlineForm">';
@@ -87,11 +90,14 @@ abstract class InlineForm extends Formulier implements FormElement
 		return (string) $this->getHtml();
 	}
 
-	public function getField()
+	public function getField(): InputField
 	{
 		return $this->field;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType()
 	{
 		return ReflectionUtil::classNameZonderNamespace(static::class);

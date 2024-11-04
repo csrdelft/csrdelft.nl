@@ -89,11 +89,6 @@ class GroepLedenImportDTO
 		);
 	}
 
-	public function waarschuwing(): string
-	{
-		return join('<br />', $this->waarschuwingen);
-	}
-
 	public function aanmelden(GroepLidRepository $groepLidRepository): bool
 	{
 		if ($this->succes) {

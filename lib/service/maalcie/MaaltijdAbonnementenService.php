@@ -21,17 +21,7 @@ use Throwable;
 
 class MaaltijdAbonnementenService
 {
-	public function __construct(
-		private readonly EntityManagerInterface $entityManager,
-		private readonly MaaltijdenRepository $maaltijdenRepository,
-		private readonly MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
-		private readonly MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
-		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		private readonly MaaltijdRepetitieAanmeldingenService $maaltijdRepetitieAanmeldingenService,
-		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
-		private readonly ProfielRepository $profielRepository
-	) {
-	}
+
 
 	/**
 	 * @return bool|mixed
@@ -114,12 +104,17 @@ class MaaltijdAbonnementenService
 	}
 
 	/**
-	 * @param $matrix
+	 * @param MaaltijdAbonnement[][] $matrix
 	 * @param $repById
 	 * @param bool $ingeschakeld
-	 * @return array
+	 *
+	 * @return ((MaaltijdAbonnement[]|mixed)[]|mixed)[]
+	 *
+	 * @psalm-param array<string, array<int, MaaltijdAbonnement>> $matrix
+	 *
+	 * @psalm-return list{array<array<MaaltijdAbonnement>|mixed>|mixed, mixed}
 	 */
-	private function fillHoles($matrix, $repById, $ingeschakeld = false)
+	private function fillHoles(array $matrix, $repById, $ingeschakeld = false): array
 	{
 		foreach ($repById as $mrid => $repetitie) {
 			// vul gaten in matrix vanwege uitgeschakelde abonnementen
@@ -256,7 +251,7 @@ class MaaltijdAbonnementenService
 	 * @throws Throwable
 	 */
 	public function getAbonnementenVoorLid(
-		$profiel,
+		Profiel|null $profiel,
 		$abonneerbaar = false,
 		$uitgeschakeld = false
 	) {
@@ -320,7 +315,7 @@ class MaaltijdAbonnementenService
 	 * @throws CsrGebruikerException
 	 * @throws Throwable
 	 */
-	public function inschakelenAbonnement($abo)
+	public function inschakelenAbonnement(MaaltijdAbonnement $abo)
 	{
 		return $this->entityManager->wrapInTransaction(function () use ($abo) {
 			if (!$abo->maaltijd_repetitie->abonneerbaar) {
@@ -413,11 +408,13 @@ class MaaltijdAbonnementenService
 
 	/**
 	 * @param MaaltijdRepetitie $repetitie
-	 * @param $uid
+	 * @param null|string $uid
+	 *
 	 * @return bool|mixed
+	 *
 	 * @throws Throwable
 	 */
-	public function uitschakelenAbonnement(MaaltijdRepetitie $repetitie, $uid)
+	public function uitschakelenAbonnement(MaaltijdRepetitie $repetitie, string|null $uid)
 	{
 		return $this->entityManager->wrapInTransaction(function () use (
 			$repetitie,
@@ -468,10 +465,11 @@ class MaaltijdAbonnementenService
 
 	/**
 	 * @param Maaltijd $maaltijd
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function meldAboAan($maaltijd)
+	public function meldAboAan($maaltijd): void
 	{
 		$aantal = 0;
 		// aanmelden van leden met abonnement op deze repetitie
@@ -505,11 +503,12 @@ class MaaltijdAbonnementenService
 	 * @param MaaltijdRepetitie $repetitie
 	 * @param string $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
 	 *
-	 * @return int|null
 	 * @throws ORMException
 	 * @throws OptimisticLockException
+	 *
+	 * @psalm-return int<0, max>
 	 */
-	public function afmeldenDoorAbonnement(MaaltijdRepetitie $repetitie, $uid)
+	public function afmeldenDoorAbonnement(MaaltijdRepetitie $repetitie, $uid): int
 	{
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
 		$maaltijden = $this->maaltijdenRepository->getKomendeOpenRepetitieMaaltijden(

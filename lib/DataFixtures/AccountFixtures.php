@@ -45,17 +45,15 @@ class AccountFixtures extends Fixture
 	 */
 	private $faker;
 
-	public function __construct(private readonly AccountService $accountService)
-	{
-		$this->faker = Faker::create('nl_NL');
-	}
-
+	/**
+	 * @return void
+	 */
 	public function load(ObjectManager $manager)
 	{
 		$this->maakExternAccount($manager);
 
 		// Maak PubCie account
-		$profielPubCie = ProfielFixtureUtil::maakProfiel(
+		ProfielFixtureUtil::maakProfiel(
 			$this->faker,
 			self::UID_PUBCIE,
 			'pubcie',
@@ -113,9 +111,9 @@ class AccountFixtures extends Fixture
 		$this->maakProfielEnAccount($manager, self::UID_BESTUUR_FT_VICEPRAESES);
 
 		// Maak een doodgewoon lid
-		$man = $this->maakProfielEnAccount($manager, self::UID_LID_MAN);
+		$this->maakProfielEnAccount($manager, self::UID_LID_MAN);
 		$man->geslacht = Geslacht::Man();
-		$vrouw = $this->maakProfielEnAccount($manager, self::UID_LID_VROUW);
+		$this->maakProfielEnAccount($manager, self::UID_LID_VROUW);
 		$vrouw->geslacht = Geslacht::Vrouw();
 
 		$this->maakProfielEnAccount($manager, self::UID_SOCCIE_PRAESES);
@@ -134,7 +132,7 @@ class AccountFixtures extends Fixture
 	 */
 	private function maakExternAccount(ObjectManager $manager): void
 	{
-		$externProfiel = ProfielFixtureUtil::maakProfiel(
+		ProfielFixtureUtil::maakProfiel(
 			$this->faker,
 			LoginService::UID_EXTERN,
 			'nobody',
@@ -165,7 +163,7 @@ class AccountFixtures extends Fixture
 	 * @param $permRole
 	 * @return Account
 	 */
-	private function maakAccount($uid, $permRole): Account
+	private function maakAccount(string $uid, string $permRole): Account
 	{
 		$account = $this->accountService->maakAccount($uid);
 		$account->perm_role = $permRole;
@@ -176,14 +174,15 @@ class AccountFixtures extends Fixture
 	 * @param ObjectManager $manager
 	 * @param $uid
 	 * @param string $permRole
-	 * @return void
+	 *
+	 * @return null
 	 */
 	private function maakProfielEnAccount(
 		ObjectManager $manager,
 		string $uid,
 		string $permRole = AccessRole::Lid
-	): Profiel {
-		$profiel = ProfielFixtureUtil::maakProfiel($this->faker, $uid);
+	) {
+		ProfielFixtureUtil::maakProfiel($this->faker, $uid);
 		$this->setReference($uid, $profiel);
 		$manager->persist($profiel);
 		$manager->persist($this->maakAccount($uid, $permRole));

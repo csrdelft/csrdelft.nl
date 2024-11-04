@@ -49,6 +49,9 @@ class ProfielVoter extends Voter
 		return in_array($attribute, $relevanteAttributes);
 	}
 
+	/**
+	 * @return false
+	 */
 	protected function voteOnAttribute(
 		string $attribute,
 		$subject,

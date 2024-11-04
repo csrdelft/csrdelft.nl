@@ -56,13 +56,11 @@ class BbFotoalbum extends BbTag
 	 */
 	private $albumUrl;
 
-	public function __construct(
-		private readonly FotoAlbumRepository $fotoAlbumRepository,
-		private readonly Security $security,
-		private readonly Environment $twig
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'fotoalbum'
+	 */
 	public static function getTagName()
 	{
 		return 'fotoalbum';
@@ -74,6 +72,11 @@ class BbFotoalbum extends BbTag
 			($this->album == null && $this->security->isGranted('ROLE_LOGGED_IN'));
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ' 📷 '
+	 */
 	public function renderPreview()
 	{
 		return ' 📷 ';
@@ -156,6 +159,8 @@ class BbFotoalbum extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

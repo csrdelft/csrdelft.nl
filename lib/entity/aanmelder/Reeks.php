@@ -52,54 +52,14 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry
 		return $this->naam;
 	}
 
-	public function setNaam(string $naam): self
-	{
-		$this->naam = $naam;
-
-		return $this;
-	}
-
 	public function getRechtenAanmaken(): ?string
 	{
 		return $this->rechtenAanmaken;
 	}
 
-	public function setRechtenAanmaken(string $rechtenAanmaken): self
-	{
-		$this->rechtenAanmaken = $rechtenAanmaken;
-
-		return $this;
-	}
-
-	/**
-	 * @return Collection|AanmeldActiviteit[]
-	 */
 	public function getActiviteiten(): Collection
 	{
 		return $this->activiteiten;
-	}
-
-	public function addActiviteiten(AanmeldActiviteit $activiteiten): self
-	{
-		if (!$this->activiteiten->contains($activiteiten)) {
-			$this->activiteiten[] = $activiteiten;
-			$activiteiten->setReeks($this);
-		}
-
-		return $this;
-	}
-
-	public function removeActiviteiten(AanmeldActiviteit $activiteiten): self
-	{
-		if ($this->activiteiten->contains($activiteiten)) {
-			$this->activiteiten->removeElement($activiteiten);
-			// set the owning side to null (unless already changed)
-			if ($activiteiten->getReeks() === $this) {
-				$activiteiten->setReeks(null);
-			}
-		}
-
-		return $this;
 	}
 
 	public function magActiviteitenBeheren(): bool
@@ -111,15 +71,5 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry
 	public static function magAanmaken(): bool
 	{
 		return LoginService::mag(P_ADMIN);
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('detailSource')]
-	public function getDetailSource()
-	{
-		return '/aanmelder/beheer/activiteiten/' . $this->id;
 	}
 }

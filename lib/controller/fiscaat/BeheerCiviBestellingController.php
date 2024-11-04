@@ -91,6 +91,8 @@ class BeheerCiviBestellingController extends AbstractController
 	 * Alleen leden met P_FISCAAT_READ mogen het overzicht van andere leden zien.
 	 *
 	 * @param string $uid
+	 *
+	 * @return void
 	 */
 	private function checkToegang($uid)
 	{

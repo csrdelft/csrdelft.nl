@@ -16,10 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CiviCategorieRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, CiviCategorie::class);
-	}
+
 
 	/**
 	 * @param $query

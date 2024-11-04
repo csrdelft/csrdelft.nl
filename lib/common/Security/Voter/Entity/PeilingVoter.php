@@ -19,12 +19,6 @@ class PeilingVoter extends Voter
 	const BEWERKEN = 'bewerken';
 	const TOEVOEGEN = 'toevoegen';
 
-	public function __construct(
-		private PeilingOptiesRepository $peilingOptiesRepository,
-		private AccessDecisionManagerInterface $accessDecisionManager
-	) {
-	}
-
 	public function supportsAttribute(string $attribute): bool
 	{
 		return in_array($attribute, [

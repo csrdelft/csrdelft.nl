@@ -8,6 +8,9 @@ use Doctrine\Persistence\ObjectManager;
 
 class MenuFixtures extends Fixture
 {
+	/**
+	 * @return void
+	 */
 	public function load(ObjectManager $manager)
 	{
 		$mainMenuItem = $this->nieuwMenuItem(null, 0, 'main', '/', true, P_PUBLIC);
@@ -38,12 +41,12 @@ class MenuFixtures extends Fixture
 
 	private function nieuwMenuItem(
 		$parent,
-		$volgorde,
-		$tekst,
-		$link,
-		$zichtbaar,
-		$rechten_bekijken
-	) {
+		int $volgorde,
+		string $tekst,
+		string $link,
+		bool $zichtbaar,
+		string $rechten_bekijken
+	): MenuItem {
 		$menuItem = new MenuItem();
 		$menuItem->parent = $parent;
 		$menuItem->volgorde = $volgorde;

@@ -26,6 +26,9 @@ class RadioField extends SelectField
 		$this->css_classes = ['FormElement', 'form-check-input'];
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml($include_hidden = true)
 	{
 		$html = '';
@@ -42,6 +45,9 @@ class RadioField extends SelectField
 		return $html . '</div>';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function getOptionHtml($value, $description)
 	{
 		$id = $this->getId() . 'Option_' . $value;

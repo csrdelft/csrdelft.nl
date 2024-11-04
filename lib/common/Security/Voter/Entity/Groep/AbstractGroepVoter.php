@@ -164,7 +164,7 @@ abstract class AbstractGroepVoter extends Voter
 
 	protected function magAlgemeen(
 		string $attribute,
-		$subject,
+		Groep $subject,
 		TokenInterface $token
 	): bool {
 		return match ($attribute) {

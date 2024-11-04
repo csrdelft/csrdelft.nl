@@ -7,11 +7,19 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeCodeBlock implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbCode::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbCode::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'code_block'
+	 */
 	public static function getNodeType()
 	{
 		return 'code_block';
@@ -22,11 +30,19 @@ class NodeCodeBlock implements Node
 		return [];
 	}
 
+	/**
+	 * @return array
+	 *
+	 * @psalm-return array<never, never>
+	 */
 	public function getTagAttributes($node)
 	{
 		return [];
 	}
 
+	/**
+	 * @return false
+	 */
 	public function selfClosing()
 	{
 		return false;

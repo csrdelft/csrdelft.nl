@@ -47,6 +47,9 @@ class SelectField extends InputField
 		return $this->value;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {
@@ -71,6 +74,9 @@ class SelectField extends InputField
 		return $this->error === '';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml($include_hidden = true)
 	{
 		$html = '';
@@ -98,7 +104,7 @@ class SelectField extends InputField
 		return $html . '</select>';
 	}
 
-	protected function getOptionsHtml(array $options)
+	protected function getOptionsHtml(array $options): string
 	{
 		$html = '';
 		foreach ($options as $value => $description) {

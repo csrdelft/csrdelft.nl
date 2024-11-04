@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\embed\BbAudio;
 
 class NodeAudio implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbAudio::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbAudio::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'audio'
+	 */
 	public static function getNodeType()
 	{
 		return 'audio';
@@ -37,6 +45,9 @@ class NodeAudio implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

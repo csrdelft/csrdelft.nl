@@ -10,21 +10,17 @@ use CsrDelft\repository\ProfielRepository;
 
 class EetplanService
 {
-	public function __construct(
-		private readonly EetplanRepository $eetplanRepository,
-		private readonly EetplanBekendenRepository $eetplanBekendenRepository,
-		private readonly WoonoordenRepository $woonoordenRepository,
-		private readonly ProfielRepository $profielRepository
-	) {
-	}
+
 
 	/**
 	 * @param string $avond
 	 * @param integer $lidjaar
 	 *
-	 * @return Eetplan[]
+	 * @return \CsrDelft\entity\eetplan\Eetplan[]
+	 *
+	 * @psalm-return array<\CsrDelft\entity\eetplan\Eetplan>
 	 */
-	public function maakEetplan($avond, $lidjaar)
+	public function maakEetplan($avond, $lidjaar): array
 	{
 		$factory = new EetplanFactory();
 

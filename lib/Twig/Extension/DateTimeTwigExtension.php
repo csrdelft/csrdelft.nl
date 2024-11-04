@@ -10,6 +10,11 @@ use Twig\TwigFilter;
 
 class DateTimeTwigExtension extends AbstractExtension
 {
+	/**
+	 * @return TwigFilter[]
+	 *
+	 * @psalm-return list{TwigFilter, TwigFilter, TwigFilter, TwigFilter, TwigFilter, TwigFilter, TwigFilter, TwigFilter, TwigFilter}
+	 */
 	public function getFilters(): array
 	{
 		return [
@@ -36,22 +41,34 @@ class DateTimeTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function twig_date_format($date)
+	/**
+	 * @return false|string
+	 */
+	public function twig_date_format($date): string|false
 	{
 		return DateUtil::dateFormatIntl($date, DateUtil::DATE_FORMAT);
 	}
 
-	public function twig_time_format($date)
+	/**
+	 * @return false|string
+	 */
+	public function twig_time_format($date): string|false
 	{
 		return DateUtil::dateFormatIntl($date, DateUtil::TIME_FORMAT);
 	}
 
-	public function twig_datetime_format($datetime)
+	/**
+	 * @return false|string
+	 */
+	public function twig_datetime_format($datetime): string|false
 	{
 		return DateUtil::dateFormatIntl($datetime, DateUtil::DATETIME_FORMAT);
 	}
 
-	public function twig_datetime_format_long($datetime)
+	/**
+	 * @return false|string
+	 */
+	public function twig_datetime_format_long($datetime): string|false
 	{
 		return DateUtil::dateFormatIntl($datetime, DateUtil::LONG_DATE_FORMAT);
 	}
@@ -82,9 +99,8 @@ class DateTimeTwigExtension extends AbstractExtension
 
 	/**
 	 * @param $date
-	 * @return false|string
 	 */
-	public function twig_rfc2822(DateTimeInterface $date)
+	public function twig_rfc2822(DateTimeInterface $date): string
 	{
 		$date = $date->getTimestamp();
 		if (strlen($date) == strlen((int) $date)) {
@@ -94,7 +110,7 @@ class DateTimeTwigExtension extends AbstractExtension
 		}
 	}
 
-	public function twig_date_create($date, $format)
+	public function twig_date_create($date, $format): DateTime|false
 	{
 		return DateTime::createFromFormat($format, $date);
 	}

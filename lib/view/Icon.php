@@ -82,7 +82,7 @@ class Icon
 		'rechten' => 'key',
 	];
 
-	public static function get($key)
+	public static function get(string $key)
 	{
 		if (array_key_exists($key, self::$alias)) {
 			return self::$alias[$key];
@@ -103,7 +103,7 @@ class Icon
 		$hover = null,
 		$title = null,
 		$class = null
-	) {
+	): string {
 		$icon = self::get($key);
 
 		if ($hover !== null) {

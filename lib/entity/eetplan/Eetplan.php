@@ -54,38 +54,4 @@ class Eetplan implements DataTableEntry
 	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $noviet;
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('woonoord')]
-	public function getDataTableWoonoord()
-	{
-		return $this->woonoord->naam;
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('naam')]
-	public function getDataTableNaam()
-	{
-		return $this->noviet->getNaam();
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('avond')]
-	public function getDataTableAvond()
-	{
-		if ($this->avond) {
-			return DateUtil::dateFormatIntl($this->avond, DateUtil::DATE_FORMAT);
-		} else {
-			return null;
-		}
-	}
 }

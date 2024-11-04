@@ -20,11 +20,19 @@ class BarTokenSubscriber implements EventSubscriberInterface
 	) {
 	}
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{'kernel.controller'}
+	 */
 	public static function getSubscribedEvents(): array
 	{
 		return [KernelEvents::CONTROLLER];
 	}
 
+	/**
+	 * @return void
+	 */
 	public function onKernelController(ControllerEvent $event)
 	{
 		$controller = $event->getController();

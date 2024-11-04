@@ -18,10 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PushAbonnementRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, PushAbonnement::class);
-	}
+
 
 	/**
 	 * @param null $soort

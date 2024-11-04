@@ -15,22 +15,13 @@ use CsrDelft\repository\ProfielRepository;
  */
 class FotoTagAlbum extends FotoAlbum
 {
-	/**
-	 * @param string $uid
-	 */
-	public function __construct(
-		/**
-		 * Lidnummer
-		 * Foreign key
-		 */ public $uid
-	) {
-		parent::__construct();
-		$this->subalbums = [];
-		$this->path = PHOTOALBUM_PATH;
-		$this->dirname =
-			'Foto\'s met ' . ProfielRepository::getNaam($this->uid, 'civitas');
-	}
 
+
+	/**
+	 * @return int
+	 *
+	 * @psalm-return int<1, max>
+	 */
 	public function modified()
 	{
 		return time();
@@ -41,21 +32,33 @@ class FotoTagAlbum extends FotoAlbum
 		return null;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getUrl()
 	{
 		return '/fotoalbum/' . $this->uid;
 	}
 
+	/**
+	 * @return true
+	 */
 	public function exists()
 	{
 		return true;
 	}
 
+	/**
+	 * @return false
+	 */
 	public function isEmpty()
 	{
 		return false;
 	}
 
+	/**
+	 * @return true
+	 */
 	public function hasFotos($incompleet = false)
 	{
 		return true;

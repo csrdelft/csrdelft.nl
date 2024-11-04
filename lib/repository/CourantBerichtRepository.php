@@ -14,10 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CourantBerichtRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, CourantBericht::class);
-	}
+
 
 	public function getBerichtenVoorGebruiker()
 	{

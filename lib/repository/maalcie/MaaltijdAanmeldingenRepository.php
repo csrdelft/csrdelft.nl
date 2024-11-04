@@ -20,12 +20,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MaaltijdAanmeldingenRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, MaaltijdAanmelding::class);
-	}
 
-	public function getIsAangemeld($mid, $uid)
+
+	public function getIsAangemeld(int $mid, string $uid)
 	{
 		return $this->find(['maaltijd_id' => $mid, 'uid' => $uid]) != null;
 	}
@@ -33,9 +30,12 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 	/**
 	 * @param $mid
 	 * @param $uid
+	 *
 	 * @return MaaltijdAanmelding
+	 *
+	 * @psalm-param int<1, max> $mid
 	 */
-	public function loadAanmelding($mid, $uid)
+	public function loadAanmelding(int $mid, string $uid)
 	{
 		$aanmelding = $this->find(['maaltijd_id' => $mid, 'uid' => $uid]);
 		if ($aanmelding == null) {
@@ -47,11 +47,14 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param $maaltijdenById
-	 * @param $uid
+	 * @param Maaltijd[] $maaltijdenById
+	 * @param null|string $uid
+	 *
 	 * @return MaaltijdAanmelding[]
+	 *
+	 * @psalm-param array<Maaltijd> $maaltijdenById
 	 */
-	public function getAanmeldingenVoorLid($maaltijdenById, $uid)
+	public function getAanmeldingenVoorLid(array $maaltijdenById, string|null $uid)
 	{
 		if (empty($maaltijdenById)) {
 			return $maaltijdenById; // array()

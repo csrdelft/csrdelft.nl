@@ -48,23 +48,9 @@ abstract class ActiviteitEigenschappen
 		return $this->titel;
 	}
 
-	public function setTitel(?string $titel): self
-	{
-		$this->titel = $titel;
-
-		return $this;
-	}
-
 	public function getRawBeschrijving(): ?string
 	{
 		return $this->beschrijving;
-	}
-
-	public function setBeschrijving(?string $beschrijving): self
-	{
-		$this->beschrijving = $beschrijving;
-
-		return $this;
 	}
 
 	public function getRawCapaciteit(): ?int
@@ -72,23 +58,9 @@ abstract class ActiviteitEigenschappen
 		return $this->capaciteit;
 	}
 
-	public function setCapaciteit(?int $capaciteit): self
-	{
-		$this->capaciteit = $capaciteit;
-
-		return $this;
-	}
-
 	public function getRawRechtenAanmelden(): ?string
 	{
 		return $this->rechtenAanmelden;
-	}
-
-	public function setRechtenAanmelden(?string $rechtenAanmelden): self
-	{
-		$this->rechtenAanmelden = $rechtenAanmelden;
-
-		return $this;
 	}
 
 	public function getRawRechtenLijstBekijken(): ?string
@@ -96,23 +68,9 @@ abstract class ActiviteitEigenschappen
 		return $this->rechtenLijstBekijken;
 	}
 
-	public function setRechtenLijstBekijken(?string $rechtenLijstBekijken): self
-	{
-		$this->rechtenLijstBekijken = $rechtenLijstBekijken;
-
-		return $this;
-	}
-
 	public function getRawRechtenLijstBeheren(): ?string
 	{
 		return $this->rechtenLijstBeheren;
-	}
-
-	public function setRechtenLijstBeheren(?string $rechtenLijstBeheren): self
-	{
-		$this->rechtenLijstBeheren = $rechtenLijstBeheren;
-
-		return $this;
 	}
 
 	public function getRawMaxGasten(): ?int
@@ -120,23 +78,9 @@ abstract class ActiviteitEigenschappen
 		return $this->maxGasten;
 	}
 
-	public function setMaxGasten(?int $maxGasten): self
-	{
-		$this->maxGasten = $maxGasten;
-
-		return $this;
-	}
-
 	public function isRawAanmeldenMogelijk(): ?bool
 	{
 		return $this->aanmeldenMogelijk;
-	}
-
-	public function setAanmeldenMogelijk(?bool $aanmeldenMogelijk): self
-	{
-		$this->aanmeldenMogelijk = $aanmeldenMogelijk;
-
-		return $this;
 	}
 
 	public function getRawAanmeldenVanaf(): ?int
@@ -144,23 +88,9 @@ abstract class ActiviteitEigenschappen
 		return $this->aanmeldenVanaf;
 	}
 
-	public function setAanmeldenVanaf(?int $aanmeldenVanaf): self
-	{
-		$this->aanmeldenVanaf = $aanmeldenVanaf;
-
-		return $this;
-	}
-
 	public function getRawAanmeldenTot(): ?int
 	{
 		return $this->aanmeldenTot;
-	}
-
-	public function setAanmeldenTot(?int $aanmeldenTot): self
-	{
-		$this->aanmeldenTot = $aanmeldenTot;
-
-		return $this;
 	}
 
 	public function isRawAfmeldenMogelijk(): ?bool
@@ -168,22 +98,8 @@ abstract class ActiviteitEigenschappen
 		return $this->afmeldenMogelijk;
 	}
 
-	public function setAfmeldenMogelijk(?bool $afmeldenMogelijk): self
-	{
-		$this->afmeldenMogelijk = $afmeldenMogelijk;
-
-		return $this;
-	}
-
 	public function getRawAfmeldenTot(): ?int
 	{
 		return $this->afmeldenTot;
-	}
-
-	public function setAfmeldenTot(?int $afmeldenTot): self
-	{
-		$this->afmeldenTot = $afmeldenTot;
-
-		return $this;
 	}
 }

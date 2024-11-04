@@ -28,6 +28,9 @@ class Ondervereniging extends Groep implements HeeftMoment
 	#[ORM\Column(type: 'enumOnderverenigingStatus')]
 	public $onderverenigingStatus;
 
+	/**
+	 * @return string
+	 */
 	public function getUrl()
 	{
 		return '/groepen/onderverenigingen/' . $this->id;

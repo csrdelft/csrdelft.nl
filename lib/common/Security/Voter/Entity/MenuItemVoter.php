@@ -16,11 +16,6 @@ class MenuItemVoter extends Voter
 	const BEKIJKEN = 'bekijken';
 	const BEHEREN = 'beheren';
 
-	public function __construct(
-		private AccessDecisionManagerInterface $accessDecisionManager
-	) {
-	}
-
 	public function supportsAttribute(string $attribute): bool
 	{
 		return in_array($attribute, [self::BEKIJKEN, self::BEHEREN]);

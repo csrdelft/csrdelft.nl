@@ -114,11 +114,15 @@ class BrowserTestCase extends PantherTestCase
 
 	/**
 	 * @param $linkText
+	 *
 	 * @return Crawler
+	 *
 	 * @throws NoSuchElementException
 	 * @throws TimeoutException
+	 *
+	 * @psalm-param 'Inloggen' $linkText
 	 */
-	protected function clickLink($linkText): Crawler
+	protected function clickLink(string $linkText): Crawler
 	{
 		$webDriverElement = $this->client->getCrawler()->selectLink(
 			$linkText

@@ -28,6 +28,9 @@ class JwtTokenBadge implements BadgeInterface
 		return $this->refreshToken;
 	}
 
+	/**
+	 * @return true
+	 */
 	public function isResolved(): bool
 	{
 		return true;

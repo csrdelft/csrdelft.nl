@@ -7,11 +7,19 @@ use CsrDelft\view\bbcode\tag\BbCitaat;
 
 class NodeCitaat implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbCitaat::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbCitaat::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'citaat'
+	 */
 	public static function getNodeType()
 	{
 		return 'citaat';
@@ -46,7 +54,12 @@ class NodeCitaat implements Node
 		];
 	}
 
-	public function getTagAttributes($node)
+	/**
+	 * @return (mixed|string|string[])[]
+	 *
+	 * @psalm-return array{citaat: array<string>|string, url: mixed}
+	 */
+	public function getTagAttributes($node): array
 	{
 		return [
 			'citaat' => str_replace(' ', '_', $node->attrs->van),
@@ -54,6 +67,9 @@ class NodeCitaat implements Node
 		];
 	}
 
+	/**
+	 * @return false
+	 */
 	public function selfClosing()
 	{
 		return false;

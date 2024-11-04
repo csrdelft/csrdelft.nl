@@ -7,6 +7,11 @@ use CsrDelft\view\datatable\DataTableResponse;
 
 class GroepLedenData extends DataTableResponse
 {
+	/**
+	 * @return (mixed|null|string)[]
+	 *
+	 * @psalm-return array{lid: null|string, door_uid: null|string,...}
+	 */
 	public function renderElement($lid)
 	{
 		$array = (array) $lid;

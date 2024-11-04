@@ -17,6 +17,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 ]
 class CronMonthlyCommand extends Command
 {
+	/**
+	 * @return int
+	 */
 	protected function execute(
 		InputInterface $input,
 		OutputInterface $output

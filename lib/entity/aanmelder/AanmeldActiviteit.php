@@ -66,7 +66,7 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 		return $this->reeks;
 	}
 
-	public function setReeks(?Reeks $reeks): self
+	public function setReeks(?Reeks $reeks): static
 	{
 		$this->reeks = $reeks;
 
@@ -78,43 +78,9 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 		return $this->start;
 	}
 
-	#[Serializer\Groups(['datatable'])]
-	#[Serializer\SerializedName('start')]
-	public function getStartDataTable(): string
-	{
-		return DateUtil::dateFormatIntl(
-			$this->getStart(),
-			DateUtil::DATETIME_FORMAT
-		);
-	}
-
-	public function setStart(DateTimeImmutable $start): self
-	{
-		$this->start = $start;
-
-		return $this;
-	}
-
 	public function getEinde(): ?DateTimeImmutable
 	{
 		return $this->einde;
-	}
-
-	#[Serializer\Groups(['datatable'])]
-	#[Serializer\SerializedName('einde')]
-	public function getEindeDataTable(): string
-	{
-		return DateUtil::dateFormatIntl(
-			$this->getEinde(),
-			DateUtil::DATETIME_FORMAT
-		);
-	}
-
-	public function setEinde(DateTimeImmutable $einde): self
-	{
-		$this->einde = $einde;
-
-		return $this;
 	}
 
 	public function isGesloten(): ?bool
@@ -122,7 +88,7 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 		return $this->gesloten;
 	}
 
-	public function setGesloten(bool $gesloten): self
+	public function setGesloten(bool $gesloten): static
 	{
 		$this->gesloten = $gesloten;
 
@@ -130,82 +96,53 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 	}
 
 	/**
-	 * @return Collection|Deelnemer[]
+	 * @return ArrayCollection|Deelnemer[]
+	 *
+	 * @psalm-return ArrayCollection|array<Deelnemer>
 	 */
-	public function getDeelnemers(): Collection
+	public function getDeelnemers(): array|ArrayCollection
 	{
 		return $this->deelnemers;
 	}
 
-	public function addDeelnemer(Deelnemer $deelnemer): self
-	{
-		if (!$this->deelnemers->contains($deelnemer)) {
-			$this->deelnemers[] = $deelnemer;
-			$deelnemer->setActiviteit($this);
-		}
-
-		return $this;
-	}
-
-	public function removeDeelnemer(Deelnemer $deelnemer): self
-	{
-		if ($this->deelnemers->contains($deelnemer)) {
-			$this->deelnemers->removeElement($deelnemer);
-			// set the owning side to null (unless already changed)
-			if ($deelnemer->getActiviteit() === $this) {
-				$deelnemer->setActiviteit(null);
-			}
-		}
-
-		return $this;
-	}
-
 	// Eigenschappen
-	public function getTitel(): string
-	{
-		return $this->getRawTitel() ?: $this->getReeks()->getRawTitel();
-	}
 
-	public function getBeschrijving(): string
+
+	public function getBeschrijving(): string|null
 	{
 		return $this->getRawBeschrijving() ?:
 			$this->getReeks()->getRawBeschrijving();
 	}
 
-	public function getCapaciteit(): int
+	public function getCapaciteit(): int|null
 	{
 		return $this->getRawCapaciteit() ?: $this->getReeks()->getRawCapaciteit();
 	}
 
-	public function getRechtenAanmelden(): string
+	public function getRechtenAanmelden(): string|null
 	{
 		return $this->getRawRechtenAanmelden() ?:
 			$this->getReeks()->getRawRechtenAanmelden();
 	}
 
-	public function getRechtenLijstBekijken(): string
+	public function getRechtenLijstBekijken(): string|null
 	{
 		return $this->getRawRechtenLijstBekijken() ?:
 			$this->getReeks()->getRawRechtenLijstBekijken();
 	}
 
-	public function getRechtenLijstBeheren(): string
+	public function getRechtenLijstBeheren(): string|null
 	{
 		return $this->getRawRechtenLijstBeheren() ?:
 			$this->getReeks()->getRawRechtenLijstBeheren();
 	}
 
-	public function getMaxGasten(): int
+	public function getMaxGasten(): int|null
 	{
 		return $this->getRawMaxGasten() ?: $this->getReeks()->getRawMaxGasten();
 	}
 
-	public function getMaxAantal(): int
-	{
-		return $this->getMaxGasten() + 1;
-	}
-
-	public function isAanmeldenMogelijk(): bool
+	public function isAanmeldenMogelijk(): bool|null
 	{
 		return $this->isRawAanmeldenMogelijk() ?:
 			$this->getReeks()->isRawAanmeldenMogelijk();
@@ -223,7 +160,7 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 			$this->getReeks()->getRawAanmeldenTot();
 	}
 
-	public function isAfmeldenMogelijk(): bool
+	public function isAfmeldenMogelijk(): bool|null
 	{
 		return $this->isRawAfmeldenMogelijk() ?:
 			$this->getReeks()->isRawAfmeldenMogelijk();
@@ -247,29 +184,14 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 		return $this->getTijdVoor($this->getAanmeldenVanaf());
 	}
 
-	public function aanmeldenNogNietOpen(): bool
-	{
-		return $this->getStartAanmelden() > date_create_immutable();
-	}
-
 	public function getEindAanmelden(): DateTimeImmutable
 	{
 		return $this->getTijdVoor($this->getAanmeldenTot());
 	}
 
-	public function aanmeldenVoorbij(): bool
-	{
-		return $this->getEindAanmelden() < date_create_immutable();
-	}
-
 	public function getEindAfmelden(): DateTimeImmutable
 	{
 		return $this->getTijdVoor($this->getAfmeldenTot());
-	}
-
-	public function afmeldenVoorbij(): bool
-	{
-		return $this->getEindAfmelden() < date_create_immutable();
 	}
 
 	// Aanmeldingen
@@ -283,30 +205,16 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 		return $aantal;
 	}
 
+	/**
+	 * @psalm-return int<0, max>
+	 */
 	public function getResterendeCapaciteit(): int
 	{
 		return max($this->getCapaciteit() - $this->getAantalAanmeldingen(), 0);
 	}
 
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('bezetting')]
-	public function getBezettingDataTable(): string
-	{
-		return $this->getAantalAanmeldingen() . ' / ' . $this->getCapaciteit();
-	}
-
 	// Rechten
-	public function magBekijken(): bool
-	{
-		return $this->magLijstBekijken() ||
-			LoginService::mag($this->getRechtenAanmelden()) ||
-			$this->isAangemeld();
-	}
 
-	public function magAanpassen(): bool
-	{
-		return $this->getReeks()->magActiviteitenBeheren();
-	}
 
 	public function magLijstBekijken(): bool
 	{
@@ -318,12 +226,6 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements
 	{
 		return $this->getReeks()->magActiviteitenBeheren() ||
 			LoginService::mag($this->getRechtenLijstBeheren());
-	}
-
-	public function magGastenAanpassen(): bool
-	{
-		return $this->magAanmelden(1) ||
-			($this->magAfmelden() && $this->aantalGasten() > 0);
 	}
 
 	public function magAanmelden(int $aantal, string &$reden = null): bool

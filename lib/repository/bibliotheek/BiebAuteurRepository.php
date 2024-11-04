@@ -14,8 +14,5 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BiebAuteurRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, BiebAuteur::class);
-	}
+
 }

@@ -103,11 +103,17 @@ class FileField extends RadioField
 		return $this->getUploader()->validate();
 	}
 
+	/**
+	 * @return void
+	 */
 	public function opslaan($directory, $filename, $overwrite = false)
 	{
 		$this->getUploader()->opslaan($directory, $filename, $overwrite);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getOptionHtml($value, $description)
 	{
 		$html = '<div class="UploadOptie';
@@ -126,6 +132,9 @@ class FileField extends RadioField
 		return $html . '</div>';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getJavascript()
 	{
 		$js =

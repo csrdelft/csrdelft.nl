@@ -26,11 +26,21 @@ class BbVideo extends BbTag
 	 */
 	public $url;
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'video'
+	 */
 	public static function getTagName()
 	{
 		return 'video';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return '📹'
+	 */
 	public function renderPreview()
 	{
 		return '📹';
@@ -73,8 +83,11 @@ HTML;
 	}
 
 	/**
-	 * @return array
+	 * @return (null|string)[]
+	 *
 	 * @throws BbException
+	 *
+	 * @psalm-return list{string, 'DailyMotion'|'Vimeo'|'YouTube'|null}
 	 */
 	private function processVideo(): array
 	{
@@ -124,6 +137,8 @@ HTML;
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

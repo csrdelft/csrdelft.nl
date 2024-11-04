@@ -82,24 +82,17 @@ class MenuItem implements DisplayEntity
 	#[ORM\OrderBy(['volgorde' => 'ASC', 'tekst' => 'ASC'])]
 	public $children;
 
-	public function hasChildren()
-	{
-		if (!$this->children) {
-			return false;
-		}
-
-		if (is_array($this->children)) {
-			return count($this->children);
-		}
-
-		return $this->children->count();
-	}
-
+	/**
+	 * @return int
+	 */
 	public function getId()
 	{
 		return $this->item_id;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getWeergave(): string
 	{
 		return $this->tekst . ' [' . $this->link . ']';

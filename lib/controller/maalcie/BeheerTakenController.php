@@ -304,7 +304,10 @@ class BeheerTakenController extends AbstractController
 
 	/**
 	 * @param CorveeTaak $taak
-	 * @Auth(P_CORVEE_MOD)
+	 *
+	 * @Auth (P_CORVEE_MOD)
+	 *
+	 * @return never
 	 */
 	#[Route(path: '/corvee/beheer/verwijder/{taak_id}', methods: ['POST'])]
 	public function verwijder(CorveeTaak $taak)
@@ -322,7 +325,10 @@ class BeheerTakenController extends AbstractController
 
 	/**
 	 * @param CorveeTaak $taak
-	 * @Auth(P_CORVEE_MOD)
+	 *
+	 * @Auth (P_CORVEE_MOD)
+	 *
+	 * @return never
 	 */
 	#[Route(path: '/corvee/beheer/herstel/{taak_id}', methods: ['POST'])]
 	public function herstel(CorveeTaak $taak)

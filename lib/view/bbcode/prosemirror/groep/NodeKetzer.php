@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\groep\BbKetzer;
 
 class NodeKetzer implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbKetzer::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbKetzer::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'ketzer'
+	 */
 	public static function getNodeType()
 	{
 		return 'ketzer';
@@ -36,6 +44,9 @@ class NodeKetzer implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

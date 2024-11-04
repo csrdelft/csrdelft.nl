@@ -12,6 +12,9 @@ abstract class EnumType extends Type
 
 	abstract public function getEnumClass();
 
+	/**
+	 * @return string
+	 */
 	public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
 	{
 		$values = array_map(
@@ -48,6 +51,9 @@ abstract class EnumType extends Type
 		}
 	}
 
+	/**
+	 * @return true
+	 */
 	public function requiresSQLCommentHint(AbstractPlatform $platform): bool
 	{
 		return true;

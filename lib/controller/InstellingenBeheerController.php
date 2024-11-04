@@ -19,6 +19,9 @@ class InstellingenBeheerController extends AbstractController
 	) {
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function assertToegang($module = null)
 	{
 		if (!$this->magModuleZien($module)) {
@@ -26,7 +29,7 @@ class InstellingenBeheerController extends AbstractController
 		}
 	}
 
-	protected function magModuleZien($module = null)
+	protected function magModuleZien($module = null): bool
 	{
 		if ($module) {
 			return match ($module) {

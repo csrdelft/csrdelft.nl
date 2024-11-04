@@ -445,12 +445,15 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		'huisartsTelefoon' => [LidStatus::Noviet],
 	];
 
+	/**
+	 * @return string
+	 */
 	public function getUUID(): string
 	{
 		return $this->uid . '@csrdelft.nl';
 	}
 
-	public function magBewerken()
+	public function magBewerken(): bool
 	{
 		if (LoginService::mag(P_LEDEN_MOD)) {
 			return true;
@@ -470,12 +473,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return false;
 	}
 
-	public function getAccount()
+	public function getAccount(): Account|null
 	{
 		return $this->account;
 	}
 
-	public function getPrimaryEmail()
+	public function getPrimaryEmail(): string
 	{
 		if ($this->account != null) {
 			return $this->account->email;
@@ -484,9 +487,11 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
+	 *
+	 * @psalm-return array<string>
 	 */
-	public function getEmailOntvanger()
+	public function getEmailOntvanger(): array
 	{
 		return [$this->getPrimaryEmail() => $this->getNaam()];
 	}
@@ -496,7 +501,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 *
 	 * TODO: aparte tabellen voor multiple email, telefoon, etc...
 	 */
-	public function getContactgegevens()
+	public function getContactgegevens(): array
 	{
 		return ArrayUtil::array_filter_empty([
 			'Email' => $this->getPrimaryEmail(),
@@ -516,7 +521,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			$this->land;
 	}
 
-	public function getAdresOuders()
+	public function getAdresOuders(): string
 	{
 		return $this->o_adres .
 			', ' .
@@ -527,7 +532,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			$this->o_land;
 	}
 
-	public function getFormattedAddress()
+	public function getFormattedAddress(): string
 	{
 		return $this->adres .
 			"\n" .
@@ -538,7 +543,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			$this->land;
 	}
 
-	public function getFormattedAddressOuders()
+	public function getFormattedAddressOuders(): string
 	{
 		return $this->o_adres .
 			"\n" .
@@ -549,7 +554,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			$this->o_land;
 	}
 
-	public function isJarig()
+	public function isJarig(): bool
 	{
 		return $this->gebdatum != null &&
 			substr(
@@ -562,8 +567,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	/**
 	 * Vervormt kommagescheiden opties naar lijst,
 	 * voegt lichting toe en voegt verjaardag toe indien van toepassing.
+	 *
+	 * @return string[]
+	 *
+	 * @psalm-return list{string,...}
 	 */
-	public function getProfielOpties()
+	public function getProfielOpties(): array
 	{
 		$opties = $this->profielOpties
 			? array_map(
@@ -583,12 +592,15 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 * Vervormt kommagescheiden opties naar spatiegescheiden opties
 	 * en voegt verjaardag toe indien van toepassing.
 	 */
-	public function getProfielClasses()
+	public function getProfielClasses(): string
 	{
 		return implode(' ', $this->getProfielOpties());
 	}
 
-	public function getJarigOver()
+	/**
+	 * @return float|true
+	 */
+	public function getJarigOver(): float|bool
 	{
 		$verjaardag = strtotime(
 			date('Y') . '-' . date('m-d', $this->gebdatum->getTimestamp())
@@ -613,9 +625,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 * verwacht, terwijl een verjaardag een periodieke activiteit (elk
 	 * jaar) is.
 	 *
-	 * @return int timestamp
+	 * @return DateTimeImmutable|false timestamp
 	 */
-	public function getBeginMoment(): DateTimeImmutable
+	public function getBeginMoment(): DateTimeImmutable|false
 	{
 		$dag = $this->gebdatum->format('m-d');
 		if (isset($GLOBALS['agenda_van'], $GLOBALS['agenda_tot'])) {
@@ -627,7 +639,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			 * alles doordat het jaar nog op het restje van de vorige maand staat.
 			 */
 			$van = $GLOBALS['agenda_van'];
-			$tot = $GLOBALS['agenda_tot'];
+			$GLOBALS['agenda_tot'];
 
 			$jaar = $van->format('Y');
 			do {
@@ -649,6 +661,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->getBeginMoment()->add(new \DateInterval('PT1H'));
 	}
 
+	/**
+	 * @return true
+	 */
 	public function isHeledag(): bool
 	{
 		return true;
@@ -659,6 +674,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->getNaam('civitas');
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getBeschrijving(): string
 	{
 		$leeftijd =
@@ -683,12 +701,15 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->getAdres();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getUrl(): string
 	{
 		return '/profiel/' . $this->uid;
 	}
 
-	public function getLink($vorm = 'civitas'): string
+	public function getLink(string $vorm = 'civitas'): string
 	{
 		if (
 			!LoginService::mag(P_LEDEN_READ) ||
@@ -757,6 +778,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $l . $naam . '</a>';
 	}
 
+	/**
+	 * @return true
+	 */
 	public function isTransparant(): bool
 	{
 		return true;
@@ -897,7 +921,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 * @param string $vorm
 	 * @return string
 	 */
-	public function getPasfotoPath($vorm = 'user')
+	public function getPasfotoPath($vorm = 'user'): string
 	{
 		if ($vorm === 'user') {
 			$vorm = InstellingUtil::lid_instelling('forum', 'naamWeergave');
@@ -920,7 +944,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return "/profiel/pasfoto/$this->uid.jpg";
 	}
 
-	public function getPasfotoInternalPath($vorm = 'user')
+	public function getPasfotoInternalPath(string $vorm = 'user'): string|null
 	{
 		$path = null;
 		if (LoginService::mag(P_OUDLEDEN_READ)) {
@@ -964,7 +988,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return PathUtil::safe_combine_path(PASFOTO_PATH, $path);
 	}
 
-	public function getPasfotoTag($cssClass = '')
+	public function getPasfotoTag(string $cssClass = ''): string
 	{
 		return '<img class="pasfoto ' .
 			htmlspecialchars((string) $cssClass) .
@@ -980,7 +1004,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->getPasfotoTag('rounded-circle flex-shrink-0');
 	}
 
-	public function getPasfotoLink()
+	public function getPasfotoLink(): string
 	{
 		return $this->getPasfotoPath();
 	}
@@ -994,7 +1018,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	]
 	private $patroonProfiel;
 
-	public function getPatroonProfiel()
+	public function getPatroonProfiel(): self|null
 	{
 		try {
 			$patroonProfiel = $this->patroonProfiel;
@@ -1013,7 +1037,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	#[ORM\OneToMany(targetEntity: \Profiel::class, mappedBy: 'patroonProfiel')]
 	public $kinderen;
 
-	public function hasKinderen()
+	public function hasKinderen(): bool
 	{
 		return $this->kinderen->count() !== 0;
 	}
@@ -1029,12 +1053,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $nageslacht;
 	}
 
-	public function isLid()
+	public function isLid(): bool
 	{
 		return LidStatus::isLidLike($this->status);
 	}
 
-	public function isOudlid()
+	public function isOudlid(): bool
 	{
 		return LidStatus::isOudlidLike($this->status);
 	}
@@ -1054,10 +1078,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return reset($woonoorden);
 	}
 
-	/**
-	 * @return Verticale|null
-	 */
-	public function getVerticale()
+	public function getVerticale(): \CsrDelft\entity\groepen\Groep|false
 	{
 		return ContainerFacade::getContainer()
 			->get(VerticalenRepository::class)
@@ -1095,7 +1116,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return 0;
 	}
 
-	public function propertyMogelijk(string $name)
+	public function propertyMogelijk(string $name): bool
 	{
 		if (!array_key_exists($name, Profiel::$properties_lidstatus)) {
 			return true;
@@ -1103,7 +1124,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return in_array($this->status, Profiel::$properties_lidstatus[$name]);
 	}
 
-	public function getDataTableColumn()
+	public function getDataTableColumn(): DataTableColumn
 	{
 		return new DataTableColumn(
 			$this->getLink('volledig'),
@@ -1132,7 +1153,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return LidStatus::from($this->status)->getDescription();
 	}
 
-	public function getLeeftijd()
+	public function getLeeftijd(): int
 	{
 		return $this->gebdatum->diff(date_create_immutable())->y;
 	}

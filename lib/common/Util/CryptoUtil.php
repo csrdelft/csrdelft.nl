@@ -6,10 +6,14 @@ final class CryptoUtil
 {
 	/**
 	 * @source http://stackoverflow.com/a/13733588
+	 *
 	 * @param $length
+	 *
 	 * @return string
+	 *
+	 * @psalm-param 255 $length
 	 */
-	public static function crypto_rand_token($length)
+	public static function crypto_rand_token(int $length)
 	{
 		$token = '';
 		$codeAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -27,8 +31,11 @@ final class CryptoUtil
 	 * @param $max int
 	 *
 	 * @return mixed
+	 *
+	 * @psalm-param 0 $min
+	 * @psalm-param int<1, max> $max
 	 */
-	public static function crypto_rand_secure($min, $max)
+	public static function crypto_rand_secure(int $min, int $max)
 	{
 		$range = $max - $min;
 		if ($range < 0) {

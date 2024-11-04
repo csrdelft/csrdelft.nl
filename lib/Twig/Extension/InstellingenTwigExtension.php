@@ -20,6 +20,11 @@ class InstellingenTwigExtension extends AbstractExtension
 	) {
 	}
 
+	/**
+	 * @return TwigFunction[]
+	 *
+	 * @psalm-return list{TwigFunction, TwigFunction, TwigFunction, TwigFunction}
+	 */
 	public function getFunctions(): array
 	{
 		return [
@@ -30,6 +35,11 @@ class InstellingenTwigExtension extends AbstractExtension
 		];
 	}
 
+	/**
+	 * @return TwigFilter[]
+	 *
+	 * @psalm-return list{TwigFilter}
+	 */
 	public function getFilters(): array
 	{
 		return [new TwigFilter('is_zichtbaar', $this->is_zichtbaar(...))];
@@ -40,7 +50,7 @@ class InstellingenTwigExtension extends AbstractExtension
 		return $this->lidInstellingenRepository->getValue($module, $key);
 	}
 
-	public function instelling($module, $key)
+	public function instelling($module, $key): string
 	{
 		return $this->instellingenRepository->getValue($module, $key);
 	}
@@ -50,7 +60,7 @@ class InstellingenTwigExtension extends AbstractExtension
 		return $this->lidToestemmingRepository->toestemmingGegeven();
 	}
 
-	public function toestemming_form()
+	public function toestemming_form(): ToestemmingModalForm
 	{
 		return new ToestemmingModalForm($this->lidToestemmingRepository);
 	}

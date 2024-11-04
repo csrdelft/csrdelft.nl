@@ -13,14 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class SuService
 {
-	public function __construct(
-		private readonly Security $security,
-		private readonly LoginService $loginService,
-		private readonly AccountRepository $accountRepository,
-		private readonly TokenStorageInterface $tokenStorage,
-		private readonly AccessService $accessService
-	) {
-	}
+
 
 	/**
 	 * @return bool
@@ -56,9 +49,14 @@ class SuService
 	/**
 	 * Schakel tijdelijk naar een lid om gedrag van functies te simuleren alsof dit lid is ingelogd.
 	 * Moet z.s.m. (binnen dit request) weer ongedaan worden met `endTempSwitchUser()`
+	 *
 	 * @param Account $account Account van lid waarnaartoe geschakeld moet worden
+	 *
 	 * @throws CsrException als er al een tijdelijke schakeling actief is.
+	 *
 	 * @see SuService::alsLid() voor een veilige methode
+	 *
+	 * @return void
 	 */
 	public function overrideUid(Account $account)
 	{
@@ -76,8 +74,12 @@ class SuService
 
 	/**
 	 * Beëindig tijdelijke schakeling naar lid.
+	 *
 	 * @throws CsrException als er geen tijdelijke schakeling actief is.
+	 *
 	 * @see SuService::alsLid() voor een veilige methode
+	 *
+	 * @return void
 	 */
 	public function resetUid()
 	{
@@ -91,7 +93,7 @@ class SuService
 		$this->tokenStorage->setToken($token->getOriginalToken());
 	}
 
-	public function maySuTo(UserInterface $suNaar)
+	public function maySuTo(UserInterface $suNaar): bool
 	{
 		return $this->security->isGranted('ROLE_ALLOWED_TO_SWITCH') && // Mag switchen
 		!$this->security->isGranted('IS_IMPERSONATOR') && // Is niet al geswitched

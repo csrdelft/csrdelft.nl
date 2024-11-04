@@ -23,12 +23,7 @@ class EetplanRepository extends AbstractRepository
 {
 	const FMT_DATE = 'dd-MM-Y';
 
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, Eetplan::class);
-	}
-
-	public function avondHasEetplan($avond)
+	public function avondHasEetplan(\DateTimeImmutable|false $avond)
 	{
 		return count($this->findBy(['avond' => $avond])) > 0;
 	}
@@ -40,7 +35,7 @@ class EetplanRepository extends AbstractRepository
 	 *
 	 * @return Eetplan[] Lijst met eetplan objecten met alleen een avond.
 	 */
-	public function getAvonden($lidjaar)
+	public function getAvonden(string $lidjaar)
 	{
 		return $this->createQueryBuilder('e')
 			->join('e.noviet', 'n')
@@ -60,7 +55,7 @@ class EetplanRepository extends AbstractRepository
 	 *
 	 * @return array Het eetplan
 	 */
-	public function getEetplan($lidjaar)
+	public function getEetplan(string $lidjaar)
 	{
 		// Avond null wordt gebruikt voor novieten die huizen kennen
 		// Orderen bij avond, zodat de avondvolgorde per noviet klopt
@@ -181,23 +176,6 @@ class EetplanRepository extends AbstractRepository
 		foreach ($alleEetplan as $eetplan) {
 			$this->remove($eetplan);
 		}
-	}
-
-	/**
-	 * @param string $avond
-	 *
-	 * @param $lidjaar
-	 * @return Eetplan[]
-	 */
-	public function getEetplanVoorAvond($avond, $lidjaar)
-	{
-		return $this->createQueryBuilder('e')
-			->join('e.noviet', 'n')
-			->where('e.avond = :avond and n.lidjaar = :lidjaar')
-			->setParameter('avond', $avond)
-			->setParameter('lidjaar', $lidjaar)
-			->getQuery()
-			->getResult();
 	}
 
 	/**

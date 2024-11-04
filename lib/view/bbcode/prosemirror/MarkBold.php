@@ -7,7 +7,10 @@ use CsrDelft\bb\tag\BbNode;
 
 class MarkBold implements Mark
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbBold::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbBold::class;
 	}
@@ -17,11 +20,21 @@ class MarkBold implements Mark
 		return [];
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'strong'
+	 */
 	public static function getMarkType()
 	{
 		return 'strong';
 	}
 
+	/**
+	 * @return array
+	 *
+	 * @psalm-return array<never, never>
+	 */
 	public function getTagAttributes($mark)
 	{
 		return [];

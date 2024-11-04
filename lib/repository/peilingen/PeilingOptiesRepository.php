@@ -17,19 +17,5 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PeilingOptiesRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, PeilingOptie::class);
-	}
 
-	/**
-	 * Zie PeilingenLogic::getOptiesVoorPeiling
-	 *
-	 * @param $peilingId
-	 * @return PeilingOptie[]
-	 */
-	public function getByPeilingId($peilingId)
-	{
-		return $this->findBy(['peiling_id' => $peilingId]);
-	}
 }

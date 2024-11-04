@@ -20,6 +20,11 @@ class DataTableRowKnop implements JsonSerializable
 	) {
 	}
 
+	/**
+	 * @return (mixed|string)[]
+	 *
+	 * @psalm-return array{action: mixed, title: mixed, icon: string, css: mixed, method: mixed}
+	 */
 	public function jsonSerialize(): array
 	{
 		return [

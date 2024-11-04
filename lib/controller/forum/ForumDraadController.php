@@ -167,11 +167,11 @@ class ForumDraadController extends AbstractController
 	 *
 	 * @param ForumDraad $draad
 	 * @param string $property
-	 * @return Response
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[Route(path: '/forum/wijzigen/{draad_id}/{property}', methods: ['POST'])]
-	public function wijzigen(ForumDraad $draad, $property)
+	public function wijzigen(ForumDraad $draad, $property): JsonResponse|RedirectResponse
 	{
 		// gedeelde moderators mogen dit niet
 		if (!$draad->deel->magModereren()) {

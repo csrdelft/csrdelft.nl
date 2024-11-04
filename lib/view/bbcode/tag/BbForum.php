@@ -23,15 +23,11 @@ class BbForum extends BbTag
 	 */
 	private $id;
 
-	public function __construct(
-		private readonly ForumDradenRepository $forumDradenRepository,
-		private readonly ForumDelenRepository $forumDelenRepository,
-		private readonly ForumDelenService $forumDelenService,
-		private readonly Security $security,
-		private readonly Environment $twig
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'forum'
+	 */
 	public static function getTagName()
 	{
 		return 'forum';
@@ -64,6 +60,8 @@ class BbForum extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

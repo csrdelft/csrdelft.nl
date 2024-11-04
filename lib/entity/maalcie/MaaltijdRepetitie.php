@@ -107,7 +107,7 @@ class MaaltijdRepetitie implements DisplayEntity
 	]
 	public $abonnementen;
 
-	public function getStandaardPrijs()
+	public function getStandaardPrijs(): int
 	{
 		return $this->product->getPrijsInt();
 	}
@@ -115,7 +115,7 @@ class MaaltijdRepetitie implements DisplayEntity
 	/**
 	 * @return string
 	 */
-	public function getDagVanDeWeekText()
+	public function getDagVanDeWeekText(): string
 	{
 		$weekDagen = [
 			'zondag',
@@ -129,7 +129,7 @@ class MaaltijdRepetitie implements DisplayEntity
 		return $weekDagen[$this->dag_vd_week];
 	}
 
-	public function getPeriodeInDagenText()
+	public function getPeriodeInDagenText(): string
 	{
 		switch ($this->periode_in_dagen) {
 			case 0:
@@ -147,12 +147,7 @@ class MaaltijdRepetitie implements DisplayEntity
 		}
 	}
 
-	public function getStandaardPrijsFloat()
-	{
-		return (float) $this->getStandaardPrijs() / 100.0;
-	}
-
-	public function getFirstOccurrence()
+	public function getFirstOccurrence(): string
 	{
 		$datum = time();
 		$shift = $this->dag_vd_week - date('w', $datum) + 7;
@@ -163,6 +158,9 @@ class MaaltijdRepetitie implements DisplayEntity
 		return date('Y-m-d', $datum);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getId()
 	{
 		return $this->mlt_repetitie_id;
@@ -177,7 +175,7 @@ class MaaltijdRepetitie implements DisplayEntity
 	 * @param $uid
 	 * @return MaaltijdAbonnement|false
 	 */
-	public function getAbonnementVoor($uid)
+	public function getAbonnementVoor(string $uid)
 	{
 		return $this->abonnementen->matching(Eisen::voorGebruiker($uid))->first();
 	}

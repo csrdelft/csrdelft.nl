@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\BbBb;
 
 class NodeBb implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbBb::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbBb::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'bb'
+	 */
 	public static function getNodeType()
 	{
 		return 'bb';
@@ -41,6 +49,9 @@ class NodeBb implements Node
 		return [$node->attrs->bb];
 	}
 
+	/**
+	 * @return false
+	 */
 	public function selfClosing()
 	{
 		return false;

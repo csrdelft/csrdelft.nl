@@ -37,12 +37,11 @@ class BbFoto extends BbTag
 	 */
 	private $fotoUrl;
 
-	public function __construct(
-		private readonly Security $security,
-		private readonly FotoAlbumRepository $fotoAlbumRepository
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'foto'
+	 */
 	public static function getTagName()
 	{
 		return 'foto';
@@ -56,6 +55,11 @@ class BbFoto extends BbTag
 		);
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ' 📷 '
+	 */
 	public function renderPreview()
 	{
 		return ' 📷 ';
@@ -84,6 +88,8 @@ class BbFoto extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

@@ -14,6 +14,10 @@ class EetplanHuizenResponse extends DataTableResponse
 {
 	/**
 	 * @param Woonoord $entity
+	 *
+	 * @return (int|mixed|string)[]
+	 *
+	 * @psalm-return array{UUID: mixed, id: int, naam: string, soort: mixed, eetplan: mixed}
 	 */
 	public function renderElement($entity)
 	{

@@ -6,20 +6,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DataTableFactory
 {
-	/**
-	 * @param ContainerInterface $registry
-	 */
-	public function __construct(
-		private $registry,
-		private readonly DataTableBuilder $builder
-	) {
-	}
+
 
 	/**
 	 * @param $type
-	 * @return DataTableTypeInterface|object
+	 *
+	 * @return null|object
 	 */
-	private function getType($type)
+	private function getType($type): object|null
 	{
 		if ($this->registry->has($type)) {
 			return $this->registry->get($type);

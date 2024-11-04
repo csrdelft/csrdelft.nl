@@ -10,11 +10,19 @@ use CsrDelft\bb\BbTag;
  */
 class BbOfftopic extends BbTag
 {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{'ot', 'offtopic', 'vanonderwerp'}
+	 */
 	public static function getTagName()
 	{
 		return ['ot', 'offtopic', 'vanonderwerp'];
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		return '<span data-offtopic class="offtopic bb-tag-offtopic">' .
@@ -24,6 +32,8 @@ class BbOfftopic extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

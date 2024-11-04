@@ -17,13 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PinTransactieMatchRepository extends AbstractRepository
 {
-	/**
-	 * @param ManagerRegistry $registry
-	 */
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, PinTransactieMatch::class);
-	}
+
 
 	/**
 	 * @return PinTransactieMatch[]

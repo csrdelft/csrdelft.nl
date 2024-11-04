@@ -10,6 +10,11 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class ActiviteitGroepVoter extends AbstractGroepVoter
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Activiteit::class
+	 */
 	protected function getGroepType(): string
 	{
 		return Activiteit::class;

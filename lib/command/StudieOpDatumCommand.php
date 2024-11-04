@@ -28,6 +28,9 @@ class StudieOpDatumCommand extends Command
 		parent::__construct();
 	}
 
+	/**
+	 * @return int
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$helper = $this->getHelper('question');
@@ -45,7 +48,6 @@ class StudieOpDatumCommand extends Command
 		$output->writeln('');
 
 		// Haal leden op
-		/** @var Profiel $lid */
 		foreach ($this->profielRepository->findAll() as $lid) {
 			// Check of lid al lid was
 			$lidVanaf = DateTime::createFromFormat('d-m-Y', '01-09-' . $lid->lidjaar);

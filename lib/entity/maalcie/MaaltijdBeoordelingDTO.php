@@ -75,6 +75,11 @@ class MaaltijdBeoordelingDTO implements CustomDataTableEntry
 	#[Serializer\Groups('datatable')]
 	public $koks;
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{'maaltijd_id'}
+	 */
 	public static function getIdentifierFieldNames()
 	{
 		return ['maaltijd_id'];
@@ -92,36 +97,5 @@ class MaaltijdBeoordelingDTO implements CustomDataTableEntry
 			'kwantiteit_afwijking',
 			'kwaliteit_afwijking',
 		];
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	public function getAantalBeoordelingen()
-	{
-		return $this->kwantiteitAantal . ', ' . $this->kwaliteitAantal;
-	}
-
-	public function setMaaltijd(Maaltijd $maaltijd)
-	{
-		$this->maaltijd_id = $maaltijd->maaltijd_id;
-		$this->datum = $maaltijd->getDataTableDatum();
-		$this->tijd = $maaltijd->getDataTableTijd();
-		$this->titel = $maaltijd->titel;
-		$this->aantalAanmeldingen = $maaltijd->getAantalAanmeldingen();
-		$this->aanmeldLimiet = $maaltijd->getAanmeldLimiet();
-		$kokTaken = $maaltijd->getCorveeTaken(CorveeFunctie::KWALIKOK_FUNCTIE_ID);
-		$this->koks = '';
-		for ($i = 0; $i < count($kokTaken); $i++) {
-			$kokTaak = $kokTaken[$i];
-
-			if ($kokTaak->profiel) {
-				$this->koks .= $kokTaken[$i]->profiel->getLink();
-				if ($i < count($kokTaken) - 1) {
-					$this->koks .= '<br>';
-				}
-			}
-		}
 	}
 }

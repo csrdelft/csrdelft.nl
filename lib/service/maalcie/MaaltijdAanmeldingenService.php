@@ -21,14 +21,7 @@ use Doctrine\ORM\OptimisticLockException;
 
 class MaaltijdAanmeldingenService
 {
-	public function __construct(
-		private readonly EntityManagerInterface $entityManager,
-		private readonly AccessService $accessService,
-		private readonly MaaltijdenRepository $maaltijdenRepository,
-		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		private readonly CiviSaldoRepository $civiSaldoRepository
-	) {
-	}
+
 
 	/**
 	 * @param Maaltijd $maaltijd
@@ -95,7 +88,10 @@ class MaaltijdAanmeldingenService
 	/**
 	 * @param Maaltijd $maaltijd
 	 * @param string $uid
+	 *
 	 * @throws CsrGebruikerException
+	 *
+	 * @return void
 	 */
 	public function assertMagAanmelden(Maaltijd $maaltijd, Profiel $profiel)
 	{
@@ -170,10 +166,17 @@ class MaaltijdAanmeldingenService
 		return $maaltijd;
 	}
 
+	/**
+	 * @param null|string $uid
+	 *
+	 * @return MaaltijdAanmelding[]
+	 *
+	 * @psalm-return array<MaaltijdAanmelding>
+	 */
 	public function getRecenteAanmeldingenVoorLid(
-		$uid,
+		string|null $uid,
 		DateTimeInterface $timestamp
-	) {
+	): array {
 		$maaltijdenById = $this->maaltijdenRepository->getRecenteMaaltijden(
 			$timestamp
 		);
@@ -183,7 +186,7 @@ class MaaltijdAanmeldingenService
 		);
 	}
 
-	public function maakCiviBestelling(MaaltijdAanmelding $aanmelding)
+	public function maakCiviBestelling(MaaltijdAanmelding $aanmelding): CiviBestelling
 	{
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = $aanmelding->maaltijd->product->categorie->cie;

@@ -20,10 +20,14 @@ class ApiMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @Auth(P_MAAL_IK)
+	 * @Auth (P_MAAL_IK)
+	 *
+	 * @return (\CsrDelft\entity\maalcie\Maaltijd|null)[]
+	 *
+	 * @psalm-return array{data: \CsrDelft\entity\maalcie\Maaltijd|null}
 	 */
 	#[Route(path: '/API/2.0/maaltijden/{id}/aanmelden', methods: ['POST'])]
-	public function maaltijdAanmelden($id)
+	public function maaltijdAanmelden($id): array
 	{
 		try {
 			$maaltijd = $this->maaltijdenRepository->getMaaltijd($id);
@@ -39,10 +43,14 @@ class ApiMaaltijdenController extends AbstractController
 	}
 
 	/**
-	 * @Auth(P_MAAL_IK)
+	 * @Auth (P_MAAL_IK)
+	 *
+	 * @return \CsrDelft\entity\maalcie\Maaltijd[]
+	 *
+	 * @psalm-return array{data: \CsrDelft\entity\maalcie\Maaltijd}
 	 */
 	#[Route(path: '/API/2.0/maaltijden/{id}/afmelden', methods: ['POST'])]
-	public function maaltijdAfmelden($id)
+	public function maaltijdAfmelden($id): array
 	{
 		try {
 			$maaltijd = $this->maaltijdenRepository->getMaaltijd($id);

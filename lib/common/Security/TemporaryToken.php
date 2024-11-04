@@ -25,7 +25,7 @@ class TemporaryToken extends AbstractToken
 		$this->setAuthenticated(true);
 	}
 
-	public function getOriginalToken()
+	public function getOriginalToken(): TokenInterface
 	{
 		return $this->originalToken;
 	}

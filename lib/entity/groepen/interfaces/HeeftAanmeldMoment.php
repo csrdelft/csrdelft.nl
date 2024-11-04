@@ -12,11 +12,6 @@ interface HeeftAanmeldMoment
 	public function getAanmeldenVanaf(): DateTimeImmutable;
 
 	/**
-	 * @param DateTimeImmutable $aanmeldenVanaf
-	 */
-	public function setAanmeldenVanaf(DateTimeImmutable $aanmeldenVanaf): void;
-
-	/**
 	 * @return DateTimeImmutable
 	 */
 	public function getAanmeldenTot(): ?DateTimeImmutable;
@@ -32,17 +27,7 @@ interface HeeftAanmeldMoment
 	public function getBewerkenTot(): ?DateTimeImmutable;
 
 	/**
-	 * @param DateTimeImmutable|null $bewerkenTot
-	 */
-	public function setBewerkenTot(?DateTimeImmutable $bewerkenTot): void;
-
-	/**
 	 * @return DateTimeImmutable|null
 	 */
 	public function getAfmeldenTot(): ?DateTimeImmutable;
-
-	/**
-	 * @param DateTimeImmutable|null $afmeldenTot
-	 */
-	public function setAfmeldenTot(?DateTimeImmutable $afmeldenTot): void;
 }

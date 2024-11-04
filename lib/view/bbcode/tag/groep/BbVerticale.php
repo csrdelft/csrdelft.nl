@@ -22,17 +22,16 @@ class BbVerticale extends BbTag
 	 */
 	private $letter;
 
-	public function getLetter()
+	public function getLetter(): string
 	{
 		return $this->letter;
 	}
 
-	public function __construct(
-		private readonly Security $security,
-		private readonly VerticalenRepository $verticalenRepository
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'verticale'
+	 */
 	public static function getTagName()
 	{
 		return 'verticale';
@@ -43,6 +42,9 @@ class BbVerticale extends BbTag
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		try {
@@ -61,6 +63,8 @@ class BbVerticale extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

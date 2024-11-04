@@ -29,18 +29,14 @@ use Twig\Environment;
  */
 class LidStatusService
 {
-	public function __construct(
-		private readonly Security $security,
-		private readonly ProfielRepository $profielRepository,
-		private readonly MailService $mailService,
-		private readonly Environment $twig,
-		private readonly MaaltijdAbonnementenService $maaltijdAbonnementenService,
-		private readonly CorveeTakenRepository $corveeTakenRepository,
-		private readonly BoekExemplaarRepository $boekExemplaarRepository
-	) {
-	}
 
-	public function wijzig_lidstatus(Profiel $profiel, $oudestatus)
+
+	/**
+	 * @return AbstractProfielLogEntry[]
+	 *
+	 * @psalm-return array<AbstractProfielLogEntry>
+	 */
+	public function wijzig_lidstatus(Profiel $profiel, $oudestatus): array
 	{
 		$changes = [];
 		// Maaltijd en corvee bijwerken
@@ -92,9 +88,12 @@ class LidStatusService
 	 *
 	 * @param Profiel $profiel
 	 * @param $oudestatus
-	 * @return AbstractProfielLogEntry[] wijzigingen
+	 *
+	 * @return ProfielLogTextEntry[] wijzigingen
+	 *
+	 * @psalm-return list{0?: ProfielLogTextEntry}
 	 */
-	private function disableMaaltijdabos(Profiel $profiel, $oudestatus)
+	private function disableMaaltijdabos(Profiel $profiel, $oudestatus): array
 	{
 		$aantal = $this->maaltijdAbonnementenService->verwijderAbonnementenVoorLid(
 			$profiel
@@ -112,9 +111,12 @@ class LidStatusService
 	 *
 	 * @param Profiel $profiel
 	 * @param $oudestatus
-	 * @return AbstractProfielLogEntry[] wijzigingen
+	 *
+	 * @return ProfielLogCoveeTakenVerwijderChange[] wijzigingen
+	 *
+	 * @psalm-return list{0?: ProfielLogCoveeTakenVerwijderChange}
 	 */
-	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus)
+	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus): array
 	{
 		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($profiel);
 		$aantal = $this->corveeTakenRepository->verwijderTakenVoorLid(
@@ -281,10 +283,14 @@ class LidStatusService
 
 	/**
 	 * Verwijdert overbodige velden van het profiel.
+	 *
 	 * @param Profiel $profiel
-	 * @return AbstractProfielLogEntry[]  Een logentry als er wijzigingen zijn.
+	 *
+	 * @return ProfielLogVeldenVerwijderChange[] Een logentry als er wijzigingen zijn.
+	 *
+	 * @psalm-return list{0?: ProfielLogVeldenVerwijderChange}
 	 */
-	private function verwijderVelden(Profiel $profiel)
+	private function verwijderVelden(Profiel $profiel): array
 	{
 		$velden_verwijderd = [];
 		foreach (Profiel::$properties_lidstatus as $key => $status_allowed) {
@@ -304,24 +310,5 @@ class LidStatusService
 		} else {
 			return [new ProfielLogVeldenVerwijderChange($velden_verwijderd)];
 		}
-	}
-
-	/**
-	 * Verwijder onnodige velden van het profiel. Slaat wijzigingen op in database.
-	 * @param Profiel $profiel
-	 */
-	public function verwijderVeldenUpdate(Profiel $profiel)
-	{
-		$changes = $this->verwijderVelden($profiel);
-		if (empty($changes)) {
-			return false;
-		}
-		$profiel->changelog[] = new ProfielUpdateLogGroup(
-			$this->security->getUser()->getUsername(),
-			new DateTime(),
-			$changes
-		);
-		$this->profielRepository->update($profiel);
-		return true;
 	}
 }

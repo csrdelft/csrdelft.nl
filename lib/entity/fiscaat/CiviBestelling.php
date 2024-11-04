@@ -94,20 +94,6 @@ class CiviBestelling
 	/**
 	 * @return string
 	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('inhoud')]
-	public function getInhoudTekst()
-	{
-		$bestellingenInhoud = [];
-		foreach ($this->inhoud as $item) {
-			$bestellingenInhoud[] = $item->getBeschrijving();
-		}
-		return implode(', ', $bestellingenInhoud);
-	}
-
-	/**
-	 * @return string
-	 */
 	public function getPinBeschrijving()
 	{
 		$pinProduct = $this->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
@@ -139,9 +125,12 @@ class CiviBestelling
 
 	/**
 	 * @param $product_id
+	 *
 	 * @return CiviBestellingInhoud|null
+	 *
+	 * @psalm-param 24|151 $product_id
 	 */
-	public function getProduct($product_id)
+	public function getProduct(int $product_id)
 	{
 		$product = $this->inhoud->matching(
 			Criteria::create()

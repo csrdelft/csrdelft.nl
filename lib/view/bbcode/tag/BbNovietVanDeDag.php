@@ -10,13 +10,13 @@ use Twig\Environment;
 
 class BbNovietVanDeDag extends BbTag
 {
-	public function __construct(
-		private readonly Security $security,
-		private readonly ProfielRepository $profielRepository,
-		private readonly Environment $twig
-	) {
-	}
 
+
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'novietvandedag'
+	 */
 	public static function getTagName()
 	{
 		return 'novietvandedag';
@@ -27,6 +27,9 @@ class BbNovietVanDeDag extends BbTag
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
+	/**
+	 * @return void
+	 */
 	public function parse($arguments = [])
 	{
 		// geen argumenten
@@ -68,6 +71,9 @@ class BbNovietVanDeDag extends BbTag
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public function renderLight()
 	{
 		// Niet light te renderen

@@ -51,6 +51,8 @@ JS;
 
 	/**
 	 * @param MenuItem[]|null $list
+	 *
+	 * @return void
 	 */
 	private function addSuggestions($list)
 	{

@@ -23,11 +23,17 @@ class Ketzer extends Groep implements HeeftAanmeldLimiet, HeeftAanmeldMoment
 	use GroepAanmeldMoment;
 	use GroepAanmeldLimiet;
 
+	/**
+	 * @return string
+	 */
 	public function getUrl()
 	{
 		return '/groepen/ketzers/' . $this->id;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getAanmeldLimiet()
 	{
 		return $this->aanmeldLimiet;

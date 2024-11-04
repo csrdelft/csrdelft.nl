@@ -14,12 +14,11 @@ class BbForumPlaatje extends BbImg
 	 */
 	private $plaatje;
 
-	public function __construct(
-		private readonly Security $security,
-		private readonly ForumPlaatjeRepository $forumPlaatjeRepository
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'plaatje'
+	 */
 	public static function getTagName()
 	{
 		return 'plaatje';
@@ -30,7 +29,7 @@ class BbForumPlaatje extends BbImg
 		return $this->security->isGranted('ROLE_LOGGED_IN');
 	}
 
-	public function getKey()
+	public function getKey(): string
 	{
 		return $this->plaatje->access_key;
 	}
@@ -45,11 +44,19 @@ class BbForumPlaatje extends BbImg
 		return $this->plaatje->getUrl(true);
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ' 📷 '
+	 */
 	public function renderPreview()
 	{
 		return ' 📷 ';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function renderPlain()
 	{
 		return 'Plaatje (' . $this->getLinkUrl() . ')';
@@ -57,7 +64,10 @@ class BbForumPlaatje extends BbImg
 
 	/**
 	 * @param array $arguments
+	 *
 	 * @throws BbException
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

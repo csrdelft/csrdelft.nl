@@ -18,15 +18,11 @@ class BbIsHetAl extends BbTag
 	 */
 	private $value;
 
-	public function __construct(
-		private readonly RequestStack $requestStack,
-		private readonly Security $security,
-		private readonly AgendaRepository $agendaRepository,
-		private readonly LidInstellingenRepository $lidInstellingenRepository,
-		private readonly WoordVanDeDagRepository $woordVanDeDagRepository
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'ishetal'
+	 */
 	public static function getTagName()
 	{
 		return 'ishetal';
@@ -39,6 +35,8 @@ class BbIsHetAl extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{
@@ -48,6 +46,9 @@ class BbIsHetAl extends BbTag
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		$html = '';

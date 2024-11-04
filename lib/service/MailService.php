@@ -9,11 +9,7 @@ use Twig\Environment;
 
 class MailService
 {
-	public function __construct(
-		private readonly Environment $environment,
-		private readonly RequestStack $requestStack
-	) {
-	}
+
 
 	public function send(Mail $mail): bool
 	{

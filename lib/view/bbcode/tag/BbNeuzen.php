@@ -13,11 +13,19 @@ use CsrDelft\view\Icon;
  */
 class BbNeuzen extends BbTag
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'neuzen'
+	 */
 	public static function getTagName()
 	{
 		return 'neuzen';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		$content = $this->getContent();
@@ -29,6 +37,9 @@ class BbNeuzen extends BbTag
 		return '<span data-neuzen>' . $content . '</span>';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function parse($arguments = [])
 	{
 		$this->readContent([], false);

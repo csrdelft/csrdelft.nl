@@ -50,6 +50,11 @@ class CsrTwigExtension extends AbstractExtension
 	) {
 	}
 
+	/**
+	 * @return TwigFunction[]
+	 *
+	 * @psalm-return list{TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction, TwigFunction}
+	 */
 	public function getFunctions(): array
 	{
 		return [
@@ -95,12 +100,12 @@ class CsrTwigExtension extends AbstractExtension
 		return LichtingenRepository::getHuidigeJaargang();
 	}
 
-	public function get_profiel($uid)
+	public function get_profiel($uid): Profiel|null
 	{
 		return $this->profielRepository->find($uid);
 	}
 
-	public function get_maaltijd_aanmelding($maaltijd_id)
+	public function get_maaltijd_aanmelding($maaltijd_id): \CsrDelft\entity\maalcie\MaaltijdAanmelding|null
 	{
 		return $this->maaltijdAanmeldingenRepository->find([
 			'maaltijd_id' => $maaltijd_id,
@@ -108,7 +113,10 @@ class CsrTwigExtension extends AbstractExtension
 		]);
 	}
 
-	public function get_maaltijd_beoordeling($maaltijd)
+	/**
+	 * @psalm-return array{kwaliteit: mixed, kwantiteit: mixed}
+	 */
+	public function get_maaltijd_beoordeling($maaltijd): array
 	{
 		$beoordeling = $this->maaltijdBeoordelingenRepository->find([
 			'maaltijd_id' => $maaltijd->maaltijd_id,
@@ -132,14 +140,14 @@ class CsrTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function csrfField($path = '', $method = 'post')
+	public function csrfField($path = '', $method = 'post'): string
 	{
 		return (new CsrfField(
 			$this->csrfService->generateToken($path, $method)
 		))->__toString();
 	}
 
-	public function csrfMetaTag()
+	public function csrfMetaTag(): string
 	{
 		$token = $this->csrfService->generateToken('', 'POST');
 		return '<meta property="X-CSRF-ID" content="' .
@@ -166,6 +174,11 @@ class CsrTwigExtension extends AbstractExtension
 		return '';
 	}
 
+	/**
+	 * @return TwigFilter[]
+	 *
+	 * @psalm-return list{TwigFilter, TwigFilter, TwigFilter, TwigFilter, TwigFilter, TwigFilter, TwigFilter, TwigFilter, TwigFilter, TwigFilter}
+	 */
 	public function getFilters(): array
 	{
 		return [
@@ -196,6 +209,11 @@ class CsrTwigExtension extends AbstractExtension
 		return str_replace('{}', $count, $singular);
 	}
 
+	/**
+	 * @return TwigTest[]
+	 *
+	 * @psalm-return list{TwigTest, TwigTest, TwigTest, TwigTest, TwigTest, TwigTest, TwigTest, TwigTest, TwigTest, TwigTest}
+	 */
 	public function getTests(): array
 	{
 		/**
@@ -229,7 +247,12 @@ class CsrTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function dragobject_coords(SessionInterface $session, $id, $top, $left)
+	/**
+	 * @return (int|mixed)[]
+	 *
+	 * @psalm-return array{top: int|mixed, left: int|mixed}
+	 */
+	public function dragobject_coords(SessionInterface $session, $id, $top, $left): array
 	{
 		if ($session->has("dragobject_$id")) {
 			$dragObject = $session->get("dragobject_$id");
@@ -266,7 +289,7 @@ class CsrTwigExtension extends AbstractExtension
 		}
 	}
 
-	public function file_base64($filename)
+	public function file_base64($filename): string
 	{
 		if (file_exists($filename)) {
 			return base64_encode(file_get_contents($filename));
@@ -293,13 +316,13 @@ class CsrTwigExtension extends AbstractExtension
 		return (string) $table;
 	}
 
-	public function commitLink()
+	public function commitLink(): string
 	{
 		return 'https://github.com/csrdelft/productie/commit/' .
 			$this->commitHash(true);
 	}
 
-	public function commitHash($full = false)
+	public function commitHash(bool $full = false): string
 	{
 		if ($full) {
 			return trim((string) `git rev-parse HEAD`);

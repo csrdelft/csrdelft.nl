@@ -41,6 +41,9 @@ class ImageField extends FileField
 		);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {

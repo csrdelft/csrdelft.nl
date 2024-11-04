@@ -15,10 +15,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GroepLidRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $managerRegistry)
-	{
-		parent::__construct($managerRegistry, GroepLid::class);
-	}
+
 	/**
 	 * Default ORDER BY
 	 * @var string
@@ -27,22 +24,22 @@ class GroepLidRepository extends AbstractRepository
 
 	/**
 	 * @param Groep $groep
-	 * @param $uid
+	 * @param null|string $uid
 	 *
 	 * @return GroepLid|null
 	 */
-	public function get(Groep $groep, $uid)
+	public function get(Groep $groep, string|null $uid)
 	{
 		return $this->find(['groep_id' => $groep->id, 'uid' => $uid]);
 	}
 
 	/**
 	 * @param Groep $groep
-	 * @param $uid
+	 * @param null|string $uid
 	 *
 	 * @return GroepLid
 	 */
-	public function nieuw(Groep $groep, $uid)
+	public function nieuw(Groep $groep, string|null $uid)
 	{
 		$lid = new GroepLid();
 		$lid->groep = $groep;

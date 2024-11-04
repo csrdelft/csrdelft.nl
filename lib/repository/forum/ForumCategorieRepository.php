@@ -14,10 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ForumCategorieRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $managerRegistry)
-	{
-		parent::__construct($managerRegistry, ForumCategorie::class);
-	}
+
 
 	/**
 	 * @return ForumCategorie[]

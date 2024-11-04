@@ -20,20 +20,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 #[ORM\Index(name: 'lid_sinds', columns: ['lid_sinds'])]
 class GroepLid
 {
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('UUID')]
-	public function getUUID()
-	{
-		return $this->groepId .
-			'.' .
-			$this->uid .
-			'@' .
-			strtolower(ReflectionUtil::short_class($this)) .
-			'.csrdelft.nl';
-	}
+
 
 	/**
 	 * Shared primary key
@@ -100,63 +87,11 @@ class GroepLid
 	public $groep;
 
 	/**
-	 * @return string|null
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('lid')]
-	public function getDatatableLid()
-	{
-		return ProfielRepository::getLink($this->uid);
-	}
-
-	/**
-	 * @return string|null
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('door_uid')]
-	public function getDatatableDoorUid()
-	{
-		return $this->doorProfiel->getLink();
-	}
-
-	/**
-	 * @return string|null
-	 */
-	#[Serializer\Groups('vue')]
-	public function getLink()
-	{
-		return $this->profiel->getLink();
-	}
-
-	/**
 	 * @return string
 	 */
 	#[Serializer\Groups('vue')]
 	public function getNaam()
 	{
 		return $this->profiel->getNaam();
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('opmerking2')]
-	public function getOpmerking2String()
-	{
-		if (is_array($this->opmerking2)) {
-			return implode(
-				', ',
-				array_map(fn($el) => $el->__toString(), $this->opmerking2)
-			);
-		} else {
-			return '';
-		}
-	}
-
-	public function setProfiel(Profiel $profiel)
-	{
-		$this->profiel = $profiel;
-		$this->uid = $profiel->uid;
 	}
 }

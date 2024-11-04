@@ -15,10 +15,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DeclaratieWachtrijRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, DeclaratieWachtrij::class);
-	}
+
 
 	public function mijnWachtrijen(): array
 	{
@@ -26,25 +23,6 @@ class DeclaratieWachtrijRepository extends AbstractRepository
 			$this->findBy([], ['positie' => 'asc', 'naam' => 'asc']),
 			fn($wachtrij) => $wachtrij->magBeoordelen()
 		);
-	}
-
-	/**
-	 * @param DeclaratieWachtrij $wachtrij
-	 * @return Declaratie[]
-	 */
-	public function declaratiesInWachtrij(DeclaratieWachtrij $wachtrij): array
-	{
-		$qb = $this->getEntityManager()->createQueryBuilder();
-		$qb
-			->select('d')
-			->from(Declaratie::class, 'd')
-			->leftJoin('d.categorie', 'c')
-			->leftJoin('c.wachtrij', 'w')
-			->where('w.id = ?1')
-			->orderBy('d.id', 'DESC')
-			->setParameter(1, $wachtrij->getId());
-
-		return $qb->getQuery()->getResult();
 	}
 
 	public function filterDeclaraties(

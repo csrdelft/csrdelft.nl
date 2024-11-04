@@ -22,11 +22,21 @@ class AccountTwigExtension extends AbstractExtension
 	) {
 	}
 
+	/**
+	 * @return TwigFilter[]
+	 *
+	 * @psalm-return list{TwigFilter}
+	 */
 	public function getFilters(): array
 	{
 		return [new TwigFilter('may_su_to', $this->may_su_to(...))];
 	}
 
+	/**
+	 * @return TwigFunction[]
+	 *
+	 * @psalm-return list{TwigFunction, TwigFunction}
+	 */
 	public function getFunctions(): array
 	{
 		return [
@@ -59,9 +69,10 @@ class AccountTwigExtension extends AbstractExtension
 
 	/**
 	 * @param Profiel $profiel
-	 * @return GroepLid[]|\Generator
+	 *
+	 * @psalm-return \Generator<int, GroepLid|null, mixed, void>
 	 */
-	public function getCommissielid(Profiel $profiel)
+	public function getCommissielid(Profiel $profiel): \Generator
 	{
 		$commissies = $this->commissiesRepository->getGroepenVoorLid($profiel);
 		foreach ($commissies as $commissie) {

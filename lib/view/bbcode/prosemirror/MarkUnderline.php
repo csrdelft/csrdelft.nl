@@ -7,7 +7,10 @@ use CsrDelft\bb\tag\BbUnderline;
 
 class MarkUnderline implements Mark
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbUnderline::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbUnderline::class;
 	}
@@ -17,11 +20,21 @@ class MarkUnderline implements Mark
 		return [];
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'underline'
+	 */
 	public static function getMarkType()
 	{
 		return 'underline';
 	}
 
+	/**
+	 * @return array
+	 *
+	 * @psalm-return array<never, never>
+	 */
 	public function getTagAttributes($mark)
 	{
 		return [];

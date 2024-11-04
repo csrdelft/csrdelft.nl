@@ -18,12 +18,15 @@ final class HostUtil
 			->isDebug();
 	}
 
-	public static function isCLI()
+	public static function isCLI(): bool
 	{
 		return PHP_SAPI == 'cli' && $_SERVER['APP_ENV'] != 'test';
 	}
 
-	public static function isCI()
+	/**
+	 * @return false|string
+	 */
+	public static function isCI(): string|false
 	{
 		return getenv('CI');
 	}

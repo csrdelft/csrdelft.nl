@@ -44,7 +44,7 @@ trait GroepMoment
 	}
 
 	/**
-	 * @return DateTimeImmutable
+	 * @return \DateTimeImmutable
 	 */
 	public function getEindMoment(): DateTimeImmutable
 	{

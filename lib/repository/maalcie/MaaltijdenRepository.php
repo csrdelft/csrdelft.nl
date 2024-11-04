@@ -25,14 +25,6 @@ class MaaltijdenRepository extends AbstractRepository
 {
 	protected $default_order = 'datum ASC, tijd ASC';
 
-	/**
-	 * @param ManagerRegistry $registry
-	 */
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, Maaltijd::class);
-	}
-
 	public function vanRepetitie(
 		MaaltijdRepetitie $repetitie,
 		DateTimeInterface $datum
@@ -159,10 +151,11 @@ class MaaltijdenRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param $mid
+	 * @param int|numeric $mid
 	 * @param bool $verwijderd
 	 *
 	 * @return Maaltijd
+	 *
 	 * @throws CsrGebruikerException
 	 */
 	public function getMaaltijd($mid, $verwijderd = false)
@@ -178,28 +171,12 @@ class MaaltijdenRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param Maaltijd $maaltijd
-	 * @return Maaltijd|null
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function herstelMaaltijd(Maaltijd $maaltijd)
-	{
-		if (!$maaltijd->verwijderd) {
-			throw new CsrGebruikerException('Maaltijd is niet verwijderd');
-		}
-		$maaltijd->verwijderd = false;
-		$this->_em->persist($maaltijd);
-		$this->_em->flush();
-		return $maaltijd;
-	}
-
-	/**
-	 * @param $van
-	 * @param $tot
+	 * @param \DateTime|\DateTimeImmutable|false|int $van
+	 * @param \DateTime|\DateTimeImmutable|false|int $tot
+	 *
 	 * @return Maaltijd[]
 	 */
-	public function getMaaltijdenTussen($van, $tot)
+	public function getMaaltijdenTussen(int|\DateTimeImmutable|\DateTime|false $van, int|\DateTimeImmutable|\DateTime|false $tot)
 	{
 		return $this->createQueryBuilder('m')
 			->where(
@@ -219,25 +196,7 @@ class MaaltijdenRepository extends AbstractRepository
 	 * @param $mrid
 	 * @return Maaltijd[]
 	 */
-	public function getKomendeRepetitieMaaltijden($mrid)
-	{
-		return $this->createQueryBuilder('m')
-			->where(
-				'm.mlt_repetitie_id = :maaltijd_id and verwijderd = false and datum >= :datum'
-			)
-			->setParameter('maaltijd_id', $mrid)
-			->setParameter('datum', date_create())
-			->orderBy('m.datum', 'ASC')
-			->addOrderBy('m.tijd', 'ASC')
-			->getQuery()
-			->getResult();
-	}
-
-	/**
-	 * @param $mrid
-	 * @return Maaltijd[]
-	 */
-	public function getKomendeOpenRepetitieMaaltijden($mrid)
+	public function getKomendeOpenRepetitieMaaltijden(int $mrid)
 	{
 		return $this->createQueryBuilder('m')
 			->where(
@@ -256,7 +215,7 @@ class MaaltijdenRepository extends AbstractRepository
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderRepetitieMaaltijden($mrid)
+	public function verwijderRepetitieMaaltijden(int $mrid)
 	{
 		$maaltijden = $this->findBy(['mlt_repetitie_id' => $mrid]);
 		foreach ($maaltijden as $maaltijd) {
@@ -301,10 +260,11 @@ class MaaltijdenRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param $query
+	 * @param null|string $query
+	 *
 	 * @return Maaltijd[]
 	 */
-	public function getSuggesties($query)
+	public function getSuggesties(string|null $query)
 	{
 		return $this->createQueryBuilder('m')
 			->where(

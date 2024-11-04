@@ -19,11 +19,17 @@ class JaNeeField extends RadioField
 		]);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		return array_key_exists($this->value, $this->options);
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getValue()
 	{
 		// Override $this->value, want parent doet dat ook.

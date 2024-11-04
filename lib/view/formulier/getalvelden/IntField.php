@@ -62,6 +62,9 @@ class IntField extends InputField
 		return $this->value;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if ($this->value === 0) {
@@ -87,6 +90,9 @@ class IntField extends InputField
 		return $this->error === '';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		return ' <input ' .

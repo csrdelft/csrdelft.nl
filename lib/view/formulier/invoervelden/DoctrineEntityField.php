@@ -87,6 +87,9 @@ class DoctrineEntityField extends TextField
 		$this->css_classes[] = 'doctrine-field';
 	}
 
+	/**
+	 * @return null|object
+	 */
 	public function getFormattedValue()
 	{
 		$value = $this->getValue();
@@ -103,6 +106,9 @@ class DoctrineEntityField extends TextField
 		return $this->name;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {
@@ -116,6 +122,9 @@ class DoctrineEntityField extends TextField
 		return $this->error === '';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$id = $this->getId() . '_' . $this->idField;

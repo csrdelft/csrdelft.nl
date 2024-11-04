@@ -10,16 +10,31 @@ use CsrDelft\entity\groepen\Woonoord;
  */
 class BbWoonoord extends BbTagGroep
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Woonoord::class
+	 */
 	public function getEntityClass(): string
 	{
 		return Woonoord::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'woonoord'
+	 */
 	public static function getTagName()
 	{
 		return 'woonoord';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'bewoners'
+	 */
 	public function getLidNaam()
 	{
 		return 'bewoners';

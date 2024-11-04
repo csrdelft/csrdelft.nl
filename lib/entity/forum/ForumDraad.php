@@ -198,7 +198,7 @@ class ForumDraad
 		$this->meldingen = new ArrayCollection();
 	}
 
-	public function magPosten()
+	public function magPosten(): bool
 	{
 		if ($this->verwijderd || $this->gesloten) {
 			return false;
@@ -207,25 +207,25 @@ class ForumDraad
 			($this->isGedeeld() && $this->gedeeld_met_deel->magPosten());
 	}
 
-	public function isGedeeld()
+	public function isGedeeld(): bool
 	{
 		return !empty($this->gedeeld_met);
 	}
 
-	public function magStatistiekBekijken()
+	public function magStatistiekBekijken(): bool
 	{
 		return $this->magModereren() ||
 			($this->uid != LoginService::UID_EXTERN &&
 				$this->uid === LoginService::getUid());
 	}
 
-	public function magModereren()
+	public function magModereren(): bool
 	{
 		return $this->deel->magModereren() ||
 			($this->isGedeeld() && $this->gedeeld_met_deel->magModereren());
 	}
 
-	public function magVerbergen()
+	public function magVerbergen(): bool
 	{
 		return !$this->belangrijk && LoginService::mag(P_LOGGED_IN);
 	}
@@ -235,7 +235,7 @@ class ForumDraad
 		return $this->magLezen();
 	}
 
-	public function magLezen()
+	public function magLezen(): bool
 	{
 		if ($this->verwijderd && !$this->magModereren()) {
 			return false;
@@ -264,19 +264,22 @@ class ForumDraad
 			($this->isGedeeld() && $this->gedeeld_met_deel->magLezen());
 	}
 
-	public function isVerborgen()
+	public function isVerborgen(): bool
 	{
 		return $this->verbergen
 			->matching(Eisen::voorIngelogdeGebruiker())
 			->first() != null;
 	}
 
-	public function getAantalLezers()
+	/**
+	 * @psalm-return int<0, max>
+	 */
+	public function getAantalLezers(): int
 	{
 		return count($this->lezers);
 	}
 
-	public function isOngelezen()
+	public function isOngelezen(): bool
 	{
 		if ($gelezen = $this->getWanneerGelezen()) {
 			// Omdat this en gelezen uit de cache _kunnen_ komen kunnen de milliseconden in
@@ -302,11 +305,6 @@ class ForumDraad
 		return $this->lezers->matching(Eisen::voorIngelogdeGebruiker())->first();
 	}
 
-	public function hasForumPosts()
-	{
-		return !empty($this->getForumPosts());
-	}
-
 	/**
 	 * Lazy loading by foreign key.
 	 *
@@ -325,21 +323,11 @@ class ForumDraad
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getLaatstePostSamenvatting()
-	{
-		$laatste = $this->laatste_post;
-		$parseMail = strip_tags((string) CsrBB::parseMail($laatste->tekst));
-		return TextUtil::truncate($parseMail, 100);
-	}
-
-	/**
 	 * Public for search results and all sorts of prefetching.
 	 *
 	 * @param array $forum_posts
 	 */
-	public function setForumPosts(array $forum_posts)
+	public function setForumPosts(array $forum_posts): void
 	{
 		$this->forum_posts = $forum_posts;
 	}
@@ -355,26 +343,5 @@ class ForumDraad
 			);
 		}
 		return $this->aantal_ongelezen_posts;
-	}
-
-	/**
-	 * @return ForumDraadMeldingNiveau
-	 */
-	public function getMeldingsNiveau()
-	{
-		if (!$this->magLezen()) {
-			return ForumDraadMeldingNiveau::NOOIT();
-		}
-
-		/** @var ForumDraadMelding $melding */
-		if (
-			$melding = $this->meldingen
-				->matching(Eisen::voorIngelogdeGebruiker())
-				->first()
-		) {
-			return $melding->niveau;
-		}
-
-		return ForumDraadMeldingNiveau::NOOIT();
 	}
 }

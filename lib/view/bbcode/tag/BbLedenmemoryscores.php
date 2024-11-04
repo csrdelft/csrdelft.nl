@@ -23,13 +23,11 @@ class BbLedenmemoryscores extends BbTag
 	private $groep;
 	private $titel;
 
-	public function __construct(
-		private readonly Security $security,
-		private readonly VerticalenRepository $verticalenRepository,
-		private readonly LichtingenRepository $lichtingenRepository
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'ledenmemoryscores'
+	 */
 	public static function getTagName()
 	{
 		return 'ledenmemoryscores';
@@ -52,6 +50,8 @@ class BbLedenmemoryscores extends BbTag
 
 	/**
 	 * @param $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

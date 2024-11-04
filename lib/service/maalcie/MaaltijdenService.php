@@ -18,24 +18,19 @@ use Doctrine\ORM\OptimisticLockException;
 
 class MaaltijdenService
 {
-	public function __construct(
-		private readonly EntityManagerInterface $entityManager,
-		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService,
-		private readonly MaaltijdenRepository $maaltijdenRepository,
-		private readonly MaaltijdAbonnementenService $maaltijdAbonnementenService,
-		private readonly MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		private readonly CorveeTakenRepository $corveeTakenRepository
-	) {
-	}
+
 
 	/**
 	 * @param Maaltijd $maaltijd
 	 *
-	 * @return array
+	 * @return (Maaltijd|int)[]
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
+	 *
+	 * @psalm-return list{Maaltijd, int}
 	 */
-	public function saveMaaltijd($maaltijd)
+	public function saveMaaltijd($maaltijd): array
 	{
 		$verwijderd = 0;
 		if (!$maaltijd->maaltijd_id) {
@@ -69,10 +64,13 @@ class MaaltijdenService
 
 	/**
 	 * @return int
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
+	 *
+	 * @psalm-return int<0, max>
 	 */
-	public function prullenbakLeegmaken()
+	public function prullenbakLeegmaken(): int
 	{
 		$aantal = 0;
 		$maaltijden = $this->maaltijdenRepository->getVerwijderdeMaaltijden();
@@ -89,8 +87,11 @@ class MaaltijdenService
 
 	/**
 	 * @param Maaltijd $maaltijd
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
+	 *
+	 * @return void
 	 */
 	public function verwijderMaaltijd(Maaltijd $maaltijd)
 	{
@@ -128,12 +129,14 @@ class MaaltijdenService
 	 * @param bool $verbergVerleden
 	 *
 	 * @return Maaltijd[]
+	 *
+	 * @psalm-return array<int, Maaltijd>
 	 */
 	private function filterMaaltijdenVoorLid(
 		$maaltijden,
 		Profiel $profiel,
 		$verbergVerleden = false
-	) {
+	): array {
 		$result = [];
 		foreach ($maaltijden as $maaltijd) {
 			// Verberg afgelopen maaltijd

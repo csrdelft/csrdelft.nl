@@ -29,6 +29,11 @@ class DataTableKnop implements JsonSerializable
 		$this->buttons = [];
 	}
 
+	/**
+	 * @return (mixed|string|true)[]
+	 *
+	 * @psalm-return array{text: mixed, titleAttr: mixed, multiplicity: mixed, extend: mixed, href: mixed, className: string, dataTableId: mixed, autoClose: true}
+	 */
 	public function jsonSerialize(): array
 	{
 		return [
@@ -43,7 +48,7 @@ class DataTableKnop implements JsonSerializable
 		];
 	}
 
-	public function setDataTableId($dataTableId)
+	public function setDataTableId($dataTableId): void
 	{
 		$this->tableId = $dataTableId;
 

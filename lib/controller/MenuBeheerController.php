@@ -47,13 +47,14 @@ class MenuBeheerController extends AbstractController
 
 	/**
 	 * @param $parentId
-	 * @return MenuItemForm
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[Route(path: '/menubeheer/toevoegen/{parentId}', methods: ['POST'])]
-	public function toevoegen($parentId)
+	public function toevoegen($parentId): MenuItemForm|Response
 	{
 		if ($parentId == 'favoriet') {
 			$parent = $this->menuItemRepository->getMenuRoot($this->getUid());

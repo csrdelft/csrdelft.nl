@@ -43,21 +43,6 @@ class LidToestemmingRepository extends AbstractRepository
 	const MODULE_TOESTEMMING = 'toestemming';
 
 	/**
-	 * @param ManagerRegistry $registry
-	 * @throws FileLoaderImportCircularReferenceException
-	 * @throws LoaderLoadException
-	 */
-	public function __construct(
-		ManagerRegistry $registry,
-		private RequestStack $requestStack,
-		private Security $security
-	) {
-		parent::__construct($registry, LidToestemming::class);
-
-		$this->load('instellingen/toestemming.yaml', new InstellingConfiguration());
-	}
-
-	/**
 	 * Geef de categorien waar een lid toestemming voor kan geven. Oudleden hebben minder gegevens dan leden.
 	 *
 	 * @param boolean $islid
@@ -84,18 +69,6 @@ class LidToestemmingRepository extends AbstractRepository
 		);
 
 		return $toestemmingen;
-	}
-
-	protected function newToestemming($module, $id, $uid)
-	{
-		$toestemming = new LidToestemming();
-		$toestemming->module = $module;
-		$toestemming->instelling = $id;
-		$toestemming->waarde = $this->getDefault($module, $id);
-		$toestemming->profiel = ProfielRepository::get($uid);
-		$this->_em->persist($toestemming);
-		$this->_em->flush();
-		return $toestemming;
 	}
 
 	public function toestemmingGegeven()
@@ -144,10 +117,10 @@ class LidToestemmingRepository extends AbstractRepository
 	}
 
 	public function toestemming(
-		$profiel,
-		$id,
-		$cat = 'profiel',
-		$except = 'ROLE_LEDEN_MOD'
+		\CsrDelft\entity\profiel\Profiel $profiel,
+		string $id,
+		string $cat = 'profiel',
+		string $except = 'ROLE_LEDEN_MOD'
 	) {
 		if (!$this->security->isGranted('ROLE_LEDEN_READ')) {
 			return false;
@@ -174,35 +147,12 @@ class LidToestemmingRepository extends AbstractRepository
 		return $toestemming->waarde == 'ja';
 	}
 
-	public function toestemmingUid($uid, $id, $except = 'ROLE_LEDEN_MOD')
-	{
-		if ($uid == $this->security->getUser()->getUserIdentifier()) {
-			return true;
-		}
-
-		if ($this->security->isGranted($except)) {
-			return true;
-		}
-
-		$toestemming = $this->findOneBy([
-			self::FIELD_MODULE => self::MODULE_TOESTEMMING,
-			self::FIELD_INSTELLING => $id,
-			self::FIELD_UID => $uid,
-		]);
-
-		if (!$toestemming) {
-			return false;
-		}
-
-		return $toestemming->waarde == 'ja';
-	}
-
-	public function getDescription($module, $id)
+	public function getDescription(string $module, string $id)
 	{
 		return $this->getField($module, $id, 'titel');
 	}
 
-	public function getType($module, $id)
+	public function getType(string $module, string $id)
 	{
 		if ($this->hasKey($module, $id)) {
 			return $this->getField($module, $id, 'type');
@@ -211,25 +161,14 @@ class LidToestemmingRepository extends AbstractRepository
 		}
 	}
 
-	public function getTypeOptions($module, $id)
+	public function getTypeOptions(string $module, string $id)
 	{
 		return $this->getField($module, $id, 'opties');
 	}
 
-	public function getDefault($module, $id)
+	public function getDefault(string $module, string $id)
 	{
 		return $this->getField($module, $id, 'default');
-	}
-
-	public function isValidValue($module, $id, $waarde)
-	{
-		$options = $this->getTypeOptions($module, $id);
-		if ($this->getType($module, $id) == InstellingType::Enumeration) {
-			if (in_array($waarde, $options)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**
@@ -243,34 +182,12 @@ class LidToestemmingRepository extends AbstractRepository
 		return $this->getToestemming($module, $id)->waarde;
 	}
 
-	protected function getToestemming($module, $id, $uid = null)
-	{
-		if ($uid == null) {
-			$uid = $this->security->getUser()->getUserIdentifier();
-		}
-		$instelling = $this->findOneBy([
-			self::FIELD_MODULE => $module,
-			self::FIELD_INSTELLING => $id,
-			self::FIELD_UID => $uid,
-		]);
-		if ($this->hasKey($module, $id)) {
-			if (!$instelling) {
-				$instelling = $this->newToestemming($module, $id, $uid);
-			}
-			return $instelling;
-		} else {
-			if ($instelling) {
-				// Haal niet-bestaande instelling uit de database
-				$this->_em->remove($instelling);
-				$this->_em->flush();
-			}
-			throw new CsrException(
-				sprintf('Toestemming bestaat niet: "%s" module: "%s".', $id, $module)
-			);
-		}
-	}
-
-	public function getToestemmingForIds($ids, $waardes = ['ja', 'nee'])
+	/**
+	 * @param string[] $ids
+	 *
+	 * @psalm-param list{0: 'foto_intern', 1: 'foto_extern', 2?: 'vereniging', 3?: 'bijzonder'} $ids
+	 */
+	public function getToestemmingForIds(array $ids, $waardes = ['ja', 'nee'])
 	{
 		return $this->findBy(
 			[self::FIELD_INSTELLING => $ids, self::FIELD_WAARDE => $waardes],

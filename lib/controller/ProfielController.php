@@ -270,7 +270,7 @@ class ProfielController extends AbstractController
 		return $this->profielBewerken($profiel, true);
 	}
 
-	private function profielBewerken(Profiel $profiel, $alleenFormulier = false)
+	private function profielBewerken(Profiel $profiel, bool $alleenFormulier = false): Response
 	{
 		if (!$profiel->magBewerken()) {
 			throw $this->createAccessDeniedException();
@@ -565,9 +565,12 @@ class ProfielController extends AbstractController
 	}
 
 	/**
-	 * @param $uid
+	 * @param null|string $uid
+	 *
 	 * @return Response
-	 * @Auth(P_PROFIEL_EDIT)
+	 *
+	 * @Auth (P_PROFIEL_EDIT)
+	 *
 	 * @CsrfUnsafe
 	 */
 	#[
@@ -582,7 +585,7 @@ class ProfielController extends AbstractController
 		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
 		CommissieVoorkeurRepository $commissieVoorkeurRepository,
 		VoorkeurCommissieRepository $voorkeurCommissieRepository,
-		$uid
+		string|null $uid
 	): Response {
 		$profiel = $this->profielRepository->get($uid);
 

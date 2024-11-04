@@ -59,6 +59,9 @@ class CheckboxField extends InputField
 		return $this->value;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!$this->value and $this->required) {
@@ -71,6 +74,9 @@ class CheckboxField extends InputField
 		return $this->error === '';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$html =

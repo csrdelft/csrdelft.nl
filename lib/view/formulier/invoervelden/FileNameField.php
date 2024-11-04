@@ -21,6 +21,9 @@ class FileNameField extends TextField
 		return trim((string) parent::getValue());
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {

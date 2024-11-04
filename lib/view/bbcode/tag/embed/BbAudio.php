@@ -11,16 +11,27 @@ class BbAudio extends BbTag
 	 */
 	public $url;
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{'audio', 'geluid'}
+	 */
 	public static function getTagName()
 	{
 		return ['audio', 'geluid'];
 	}
 
+	/**
+	 * @return void
+	 */
 	public function parse($arguments = [])
 	{
 		$this->url = $this->readMainArgument($arguments);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		$src = htmlspecialchars($this->url);

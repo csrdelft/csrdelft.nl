@@ -23,12 +23,4 @@ class RepetitieTakenUpdateDTO
 	public $datum;
 	/** @var int */
 	public $maaltijd;
-
-	public function __construct(int $update, int $day, int $datum, int $maaltijd)
-	{
-		$this->update = $update;
-		$this->day = $day;
-		$this->datum = $datum;
-		$this->maaltijd = $maaltijd;
-	}
 }

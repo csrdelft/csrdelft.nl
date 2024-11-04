@@ -18,10 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AgendaVerbergenRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, AgendaVerbergen::class);
-	}
+
 
 	public function toggleVerbergen(Agendeerbaar $item)
 	{

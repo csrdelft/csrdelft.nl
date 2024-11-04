@@ -49,11 +49,19 @@ class EntitySelectField extends InputField
 		$this->options = $this->repository->findAll();
 	}
 
-	public function getOptions()
+	/**
+	 * @return ISelectEntity[]
+	 *
+	 * @psalm-return array<ISelectEntity>
+	 */
+	public function getOptions(): array
 	{
 		return $this->options;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {
@@ -80,6 +88,9 @@ class EntitySelectField extends InputField
 		return $this->entityManager->getReference($this->entityType, $value);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml($include_hidden = true)
 	{
 		$html = '';
@@ -138,7 +149,7 @@ class EntitySelectField extends InputField
 		$this->options = $options;
 	}
 
-	public function getOptionIds()
+	public function getOptionIds(): array
 	{
 		return array_map(fn($option) => $option->getId(), $this->options);
 	}

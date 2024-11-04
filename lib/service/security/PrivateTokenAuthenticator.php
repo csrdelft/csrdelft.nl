@@ -29,6 +29,9 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 	) {
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function supports(Request $request): ?bool
 	{
 		return $request->attributes->has('private_auth_token') &&
@@ -38,6 +41,9 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 			);
 	}
 
+	/**
+	 * @return SelfValidatingPassport
+	 */
 	public function authenticate(Request $request): Passport
 	{
 		$token = $request->attributes->get('private_auth_token');
@@ -53,6 +59,9 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 		return new SelfValidatingPassport($badge);
 	}
 
+	/**
+	 * @return PrivateTokenToken
+	 */
 	public function createToken(
 		Passport $passport,
 		string $firewallName
@@ -63,6 +72,9 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 		);
 	}
 
+	/**
+	 * @return null
+	 */
 	public function onAuthenticationSuccess(
 		Request $request,
 		TokenInterface $token,
@@ -71,6 +83,9 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 		return null;
 	}
 
+	/**
+	 * @return Response
+	 */
 	public function onAuthenticationFailure(
 		Request $request,
 		AuthenticationException $exception

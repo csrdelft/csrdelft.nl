@@ -15,11 +15,6 @@ class CourantBerichtVoter extends Voter
 
 	const BEHEREN = 'beheren';
 
-	public function __construct(
-		private AccessDecisionManagerInterface $accessDecisionManager
-	) {
-	}
-
 	public function supportsAttribute(string $attribute): bool
 	{
 		return $attribute == self::BEHEREN;

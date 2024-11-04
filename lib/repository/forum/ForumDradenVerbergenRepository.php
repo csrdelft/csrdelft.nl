@@ -19,36 +19,14 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ForumDradenVerbergenRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, ForumDraadVerbergen::class);
-	}
 
-	protected function maakForumDraadVerbergen(ForumDraad $draad)
-	{
-		$verbergen = new ForumDraadVerbergen();
-		$verbergen->draad = $draad;
-		$verbergen->draad_id = $draad->draad_id;
-		$verbergen->uid = LoginService::getUid();
-		$this->getEntityManager()->persist($verbergen);
-		$this->getEntityManager()->flush();
-		return $verbergen;
-	}
 
 	public function getAantalVerborgenVoorLid()
 	{
 		return count($this->findBy(['uid' => LoginService::getUid()]));
 	}
 
-	public function getVerbergenVoorLid(ForumDraad $draad)
-	{
-		return $this->find([
-			'draad_id' => $draad->draad_id,
-			'uid' => LoginService::getUid(),
-		]);
-	}
-
-	public function setVerbergenVoorLid(ForumDraad $draad, $verbergen = true)
+	public function setVerbergenVoorLid(ForumDraad $draad, bool $verbergen = true)
 	{
 		if ($verbergen) {
 			if (!$this->getVerbergenVoorLid($draad)) {

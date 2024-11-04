@@ -24,12 +24,11 @@ class BbLid extends BbTag
 	 */
 	public $uid;
 
-	public function __construct(
-		private readonly Security $security,
-		private readonly ProfielRepository $profielRepository
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'lid'
+	 */
 	public static function getTagName()
 	{
 		return 'lid';
@@ -81,6 +80,8 @@ class BbLid extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

@@ -21,49 +21,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DeelnemerRepository extends ServiceEntityRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, Deelnemer::class);
-	}
 
-	public function getAantalAanmeldingen(AanmeldActiviteit $activiteit): int
-	{
-		$q = $this->createQueryBuilder('a')
-			->select('SUM(a.aantal)')
-			->where('a.activiteit = :activiteit')
-			->setParameter('activiteit', $activiteit)
-			->getQuery();
-
-		try {
-			return $q->getSingleScalarResult() ?? 0;
-		} catch (NoResultException | NonUniqueResultException) {
-			return 0;
-		}
-	}
-
-	public function isAangemeld(
-		AanmeldActiviteit $activiteit,
-		Profiel $profiel
-	): bool {
-		return $this->getDeelnemer($activiteit, $profiel) !== null;
-	}
-
-	public function getAantalGasten(
-		AanmeldActiviteit $activiteit,
-		Profiel $profiel
-	): int {
-		if (!$this->isAangemeld($activiteit, $profiel)) {
-			return 0;
-		}
-		return $this->getDeelnemer($activiteit, $profiel)->getAantal() - 1;
-	}
-
-	public function getDeelnemer(
-		AanmeldActiviteit $activiteit,
-		Profiel $profiel
-	): ?Deelnemer {
-		return $this->findOneBy(['activiteit' => $activiteit, 'lid' => $profiel]);
-	}
 
 	/**
 	 * @param AanmeldActiviteit $activiteit
@@ -180,7 +138,7 @@ class DeelnemerRepository extends ServiceEntityRepository
 	public function setAanwezig(
 		AanmeldActiviteit $activiteit,
 		Profiel $lid,
-		$aanwezig = true
+		bool $aanwezig = true
 	): Deelnemer {
 		if (!$this->isAangemeld($activiteit, $lid)) {
 			throw new CsrGebruikerException(

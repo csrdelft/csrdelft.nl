@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\groep\BbCommissie;
 
 class NodeCommissie implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbCommissie::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbCommissie::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'commissie'
+	 */
 	public static function getNodeType()
 	{
 		return 'commissie';
@@ -36,6 +44,9 @@ class NodeCommissie implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

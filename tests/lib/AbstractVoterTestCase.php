@@ -43,7 +43,7 @@ abstract class AbstractVoterTestCase extends CsrTestCase
 		UsernamePasswordToken $token,
 		$permissie,
 		$subject = null
-	) {
+	): void {
 		$this->assertTrue($this->adm->decide($token, [$permissie], $subject));
 	}
 
@@ -51,7 +51,7 @@ abstract class AbstractVoterTestCase extends CsrTestCase
 		UsernamePasswordToken $token,
 		$permissie,
 		$subject = null
-	) {
+	): void {
 		$this->assertFalse($this->adm->decide($token, [$permissie], $subject));
 	}
 

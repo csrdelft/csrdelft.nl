@@ -9,11 +9,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DateDisplayType extends AbstractType
 {
+	/**
+	 * @return void
+	 */
 	public function buildView(FormView $view, FormInterface $form, array $options)
 	{
 		$view->vars['relative'] = $options['relative'];
 	}
 
+	/**
+	 * @return void
+	 */
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults([

@@ -51,7 +51,7 @@ class FormulierInstance
 		$this->formId = CryptoUtil::uniqid_safe('Formulier_');
 	}
 
-	public function createView()
+	public function createView(): FormulierView
 	{
 		$html = '';
 		if ($this->showMelding) {
@@ -80,7 +80,7 @@ class FormulierInstance
 		return new FormulierView($html, $this->titel);
 	}
 
-	protected function getFormTag()
+	protected function getFormTag(): string
 	{
 		if ($this->dataTableId) {
 			$this->css_classes[] = 'DataTableResponse';
@@ -100,7 +100,7 @@ class FormulierInstance
 			'">';
 	}
 
-	public function getCsrfField()
+	public function getCsrfField(): CsrfField|null
 	{
 		if (!$this->preventCsrf) {
 			return null;
@@ -110,12 +110,12 @@ class FormulierInstance
 		return new CsrfField($token);
 	}
 
-	public function getMethod()
+	public function getMethod(): string
 	{
 		return $this->post ? 'post' : 'get';
 	}
 
-	protected function getScriptTag()
+	protected function getScriptTag(): string
 	{
 		$js = $this->getJavascript();
 		if (trim((string) $js) == '') {
@@ -131,7 +131,7 @@ docReady(function() {
 HTML;
 	}
 
-	protected function getJavascript()
+	protected function getJavascript(): string
 	{
 		$javascript = '';
 		foreach ($this->fields as $field) {
@@ -140,7 +140,7 @@ HTML;
 		return $javascript;
 	}
 
-	public function createModalView()
+	public function createModalView(): FormulierView
 	{
 		$html = '';
 		$this->css_classes[] = 'ModalForm';
@@ -187,23 +187,9 @@ HTML;
 	}
 
 	/**
-	 * Geeft waardes van de formuliervelden terug.
-	 */
-	public function getValues()
-	{
-		$values = [];
-		foreach ($this->fields as $field) {
-			if ($field instanceof InputField) {
-				$values[$field->getName()] = $field->getValue();
-			}
-		}
-		return $values;
-	}
-
-	/**
 	 * Geeft errors van de formuliervelden terug.
 	 */
-	public function getError()
+	public function getError(): array|null
 	{
 		$errors = [];
 		foreach ($this->fields as $field) {
@@ -224,7 +210,7 @@ HTML;
 	 * Alle valideer-functies kunnen het model gebruiken bij het valideren
 	 * dat meegegeven is bij de constructie van het InputField.
 	 */
-	public function validate()
+	public function validate(): bool
 	{
 		if (!$this->isPosted()) {
 			return false;
@@ -252,7 +238,7 @@ HTML;
 	/**
 	 * Is het formulier *helemaal* gePOST?
 	 */
-	public function isPosted()
+	public function isPosted(): bool
 	{
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField && !$field->isPosted()) {
@@ -263,67 +249,7 @@ HTML;
 		return $_SERVER['REQUEST_METHOD'] == 'POST';
 	}
 
-	/**
-	 * Geef een array terug van de gewijzigde velden.
-	 *
-	 * @returns ChangeLogEntry[]
-	 */
-	public function diff()
-	{
-		$changeLogRepository = ContainerFacade::getContainer()->get(
-			ChangeLogRepository::class
-		);
-		$diff = [];
-		foreach ($this->fields as $field) {
-			if ($field instanceof InputField) {
-				$old = $field->getOrigValue();
-				$new = $field->getValue();
-				if ($old !== $new) {
-					$prop = $field->getName();
-					$diff[$prop] = $changeLogRepository->nieuw(
-						$this->model,
-						$prop,
-						$old,
-						$new
-					);
-				}
-			}
-		}
-		return $diff;
-	}
-
-	/**
-	 * Maak een stukje bbcode aan met daarin de huidige wijziging, door wie en wanneer.
-	 *
-	 * @param ChangeLogEntry[] $diff
-	 * @return string
-	 */
-	public function changelog(array $diff)
-	{
-		$changelog = '';
-		if (!empty($diff)) {
-			$changelog .=
-				'[div]Bewerking van [lid=' .
-				LoginService::getUid() .
-				'] op [reldate]' .
-				DateUtil::getDatetime() .
-				'[/reldate][br]';
-			foreach ($diff as $change) {
-				$changelog .=
-					'(' .
-					$change->property .
-					') ' .
-					$change->old_value .
-					' => ' .
-					$change->new_value .
-					'[br]';
-			}
-			$changelog .= '[/div][hr]';
-		}
-		return $changelog;
-	}
-
-	public function handleRequest(Request $request)
+	public function handleRequest(Request $request): void
 	{
 		if ($this->isPosted()) {
 			foreach ($this->fields as $field) {
@@ -334,7 +260,7 @@ HTML;
 		}
 	}
 
-	private function loadProperty(InputField $field)
+	private function loadProperty(InputField $field): void
 	{
 		$fieldName = $field->getName();
 		if ($this->model) {
@@ -354,7 +280,7 @@ HTML;
 		$this->model = $model;
 	}
 
-	public function getField($name)
+	public function getField(string $name): FormElement
 	{
 		return $this->fields[$name];
 	}

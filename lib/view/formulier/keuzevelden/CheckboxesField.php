@@ -19,6 +19,9 @@ class CheckboxesField extends InputField
 		parent::__construct($name, $value, $description, null);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$html = '';
@@ -37,6 +40,9 @@ HTML;
 		return $html;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isPosted()
 	{
 		foreach ($this->opties as $value => $description) {

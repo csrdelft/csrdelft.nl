@@ -66,9 +66,10 @@ class SafeJsonSerializer extends JsonSerializer
 
 	/**
 	 * Whether this classname is allowed to be (un)serialized.
-	 * @param $className
+	 *
+	 * @param class-string $className
 	 */
-	protected function classAllowed($className)
+	protected function classAllowed(string $className): bool
 	{
 		return $this->allowedClasses === null ||
 			in_array($className, $this->allowedClasses);

@@ -11,11 +11,21 @@ use CsrDelft\common\Util\CryptoUtil;
  */
 class BbVerklapper extends BbTag
 {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{'spoiler', 'verklapper'}
+	 */
 	public static function getTagName()
 	{
 		return ['spoiler', 'verklapper'];
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ''
+	 */
 	public function renderPreview()
 	{
 		return '';
@@ -29,6 +39,9 @@ class BbVerklapper extends BbTag
 			'">Toon verklapper</a>';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		$id = CryptoUtil::uniqid_safe('verklapper_');
@@ -43,6 +56,8 @@ HTML;
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

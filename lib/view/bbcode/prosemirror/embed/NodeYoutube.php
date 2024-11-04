@@ -8,11 +8,19 @@ use CsrDelft\view\bbcode\tag\embed\BbYoutube;
 
 class NodeYoutube implements Node
 {
-	public static function getBbTagType()
+	/**
+	 * @psalm-return BbYoutube::class
+	 */
+	public static function getBbTagType(): string
 	{
 		return BbYoutube::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'youtube'
+	 */
 	public static function getNodeType()
 	{
 		return 'youtube';
@@ -37,6 +45,9 @@ class NodeYoutube implements Node
 		];
 	}
 
+	/**
+	 * @return true
+	 */
 	public function selfClosing()
 	{
 		return true;

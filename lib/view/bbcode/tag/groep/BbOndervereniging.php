@@ -10,16 +10,31 @@ use CsrDelft\entity\groepen\Ondervereniging;
  */
 class BbOndervereniging extends BbTagGroep
 {
+	/**
+	 * @return string
+	 *
+	 * @psalm-return Ondervereniging::class
+	 */
 	public function getEntityClass(): string
 	{
 		return Ondervereniging::class;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'ondervereniging'
+	 */
 	public static function getTagName()
 	{
 		return 'ondervereniging';
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'leden'
+	 */
 	public function getLidNaam()
 	{
 		return 'leden';

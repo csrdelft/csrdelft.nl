@@ -34,10 +34,11 @@ class ForumPostController extends AbstractController
 
 	/**
 	 * @param ForumPost $post
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[Route(path: '/forum/citeren/{post_id}', methods: ['POST'])]
-	public function citeren(ForumPost $post)
+	public function citeren(ForumPost $post): JsonResponse
 	{
 		if (!$post->magCiteren()) {
 			throw $this->createAccessDeniedException('Mag niet citeren');
@@ -53,10 +54,11 @@ class ForumPostController extends AbstractController
 
 	/**
 	 * @param ForumPost $post
-	 * @Auth(P_LOGGED_IN)
+	 *
+	 * @Auth (P_LOGGED_IN)
 	 */
 	#[Route(path: '/forum/tekst/{post_id}', methods: ['POST'])]
-	public function tekst(ForumPost $post)
+	public function tekst(ForumPost $post): JsonResponse
 	{
 		if (!$post->magBewerken()) {
 			throw $this->createAccessDeniedException('Mag niet bewerken');

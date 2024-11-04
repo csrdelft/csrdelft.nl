@@ -20,10 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class RememberLoginRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, RememberLogin::class);
-	}
+
 
 	/**
 	 * @return RememberLogin
@@ -46,19 +43,5 @@ class RememberLoginRepository extends AbstractRepository
 		}
 		$remember->lock_ip = false;
 		return $remember;
-	}
-
-	/**
-	 * @param $token
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function verwijder($token)
-	{
-		$rememberLogin = $this->findOneBy(['token' => $token]);
-		if ($rememberLogin) {
-			$this->getEntityManager()->remove($rememberLogin);
-			$this->getEntityManager()->flush();
-		}
 	}
 }

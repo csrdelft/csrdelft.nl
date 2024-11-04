@@ -15,27 +15,25 @@ use Doctrine\ORM\OptimisticLockException;
 
 class MaaltijdRepetitieAanmeldingenService
 {
-	public function __construct(
-		private readonly EntityManagerInterface $entityManager,
-		private readonly MaaltijdenRepository $maaltijdenRepository,
-		private readonly MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
-		private readonly MaaltijdAanmeldingenService $maaltijdAanmeldingenService
-	) {
-	}
+
 
 	/**
 	 * Alleen aanroepen voor inschakelen abonnement!
 	 *
 	 * @param MaaltijdRepetitie $repetitie
 	 * @param string $uid
-	 * @return int|false aantal aanmeldingen or false
+	 *
+	 * @return int aantal aanmeldingen or false
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
+	 *
+	 * @psalm-return int<0, max>
 	 */
 	public function aanmeldenVoorKomendeRepetitieMaaltijden(
 		MaaltijdRepetitie $repetitie,
 		Profiel $profiel
-	) {
+	): int {
 		if (
 			!$this->maaltijdAanmeldingenService->checkAanmeldFilter(
 				$profiel,

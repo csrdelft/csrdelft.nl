@@ -13,7 +13,10 @@ class CiviProductSuggestiesResponse extends JsonLijstResponse
 {
 	/**
 	 * @param CiviProduct $entity
-	 * @return array
+	 *
+	 * @return (int|mixed|string)[]
+	 *
+	 * @psalm-return array{url: '/fiscaat/producten', value: mixed, label: int, id: int}
 	 */
 	public function renderElement($entity)
 	{

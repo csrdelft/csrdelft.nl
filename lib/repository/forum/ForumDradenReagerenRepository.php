@@ -21,44 +21,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ForumDradenReagerenRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, ForumDraadReageren::class);
-	}
 
-	protected function maakForumDraadReageren(
-		ForumDeel $deel,
-		$draad_id = null,
-		$concept = null,
-		$titel = null
-	) {
-		$reageren = new ForumDraadReageren();
-		$reageren->forum_id = $deel->forum_id;
-		$reageren->draad_id = (int) $draad_id;
-		$reageren->uid = LoginService::getUid();
-		$reageren->datum_tijd = date_create_immutable();
-		$reageren->concept = $concept;
-		$reageren->titel = $titel;
-		$this->getEntityManager()->persist($reageren);
-		$this->getEntityManager()->flush();
-		return $reageren;
-	}
-
-	/**
-	 * Fetch reageren object voor deel of draad.
-	 *
-	 * @param ForumDeel $deel
-	 * @param int $draad_id
-	 * @return ForumDraadReageren
-	 */
-	protected function getReagerenDoorLid(ForumDeel $deel, $draad_id = null)
-	{
-		return $this->find([
-			'forum_id' => (int) $deel->forum_id,
-			'draad_id' => (int) $draad_id,
-			'uid' => LoginService::getUid(),
-		]);
-	}
 
 	public function getReagerenVoorDraad(ForumDraad $draad)
 	{
@@ -119,7 +82,10 @@ class ForumDradenReagerenRepository extends AbstractRepository
 			->execute();
 	}
 
-	public function verwijderReagerenVoorLeden($uids)
+	/**
+	 * @psalm-param list<mixed> $uids
+	 */
+	public function verwijderReagerenVoorLeden(array $uids)
 	{
 		$this->createQueryBuilder('r')
 			->where('r.uid in (:uids)')
@@ -129,7 +95,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 			->execute();
 	}
 
-	public function setWanneerReagerenDoorLid(ForumDeel $deel, $draad_id = null)
+	public function setWanneerReagerenDoorLid(ForumDeel $deel, int|null $draad_id = null)
 	{
 		$reageren = $this->getReagerenDoorLid($deel, $draad_id);
 		if ($reageren) {
@@ -141,7 +107,7 @@ class ForumDradenReagerenRepository extends AbstractRepository
 		}
 	}
 
-	public function getConcept(ForumDeel $deel, $draad_id = null)
+	public function getConcept(ForumDeel $deel, int|null $draad_id = null)
 	{
 		$reageren = $this->getReagerenDoorLid($deel, $draad_id);
 		if ($reageren) {
@@ -159,11 +125,14 @@ class ForumDradenReagerenRepository extends AbstractRepository
 		return null;
 	}
 
+	/**
+	 * @param null|string $titel
+	 */
 	public function setConcept(
 		ForumDeel $deel,
-		$draad_id = null,
+		int|null $draad_id = null,
 		$concept = null,
-		$titel = null
+		string|null $titel = null
 	) {
 		$reageren = $this->getReagerenDoorLid($deel, $draad_id);
 		if (empty($concept)) {

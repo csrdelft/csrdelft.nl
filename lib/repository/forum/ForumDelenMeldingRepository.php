@@ -22,25 +22,7 @@ use Twig\Environment;
  */
 class ForumDelenMeldingRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly Environment $twig,
-		private readonly SuService $suService,
-		private readonly MailService $mailService
-	) {
-		parent::__construct($registry, ForumDeelMelding::class);
-	}
 
-	protected function maakForumDeelMelding(ForumDeel $deel, $uid)
-	{
-		$melding = new ForumDeelMelding();
-		$melding->deel = $deel;
-		$melding->forum_id = $deel->forum_id;
-		$melding->uid = $uid;
-		$this->getEntityManager()->persist($melding);
-		$this->getEntityManager()->flush();
-		return $melding;
-	}
 
 	/**
 	 * Past gewenste meldingsactie toe voor gegeven lid.
@@ -72,9 +54,12 @@ class ForumDelenMeldingRepository extends AbstractRepository
 
 	/**
 	 * Verwijder alle te ontvangen meldingen voor gegeven lid
+	 *
 	 * @param $uids
+	 *
+	 * @psalm-param list<mixed> $uids
 	 */
-	public function stopAlleMeldingenVoorLeden($uids)
+	public function stopAlleMeldingenVoorLeden(array $uids)
 	{
 		$this->createQueryBuilder('fdm')
 			->delete()

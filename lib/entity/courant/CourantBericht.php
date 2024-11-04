@@ -62,6 +62,9 @@ class CourantBericht
 	#[ORM\Column(type: 'datetime', name: 'datumTijd')]
 	public $datumTijd;
 
+	/**
+	 * @return void
+	 */
 	public function setVolgorde()
 	{
 		if ($this->cat == null) {

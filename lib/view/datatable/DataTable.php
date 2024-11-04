@@ -114,7 +114,7 @@ class DataTable implements View, FormElement, ToResponse
 		return $this->dataTableId;
 	}
 
-	public function setSearch($searchString)
+	public function setSearch(string $searchString): void
 	{
 		$this->settings['search'] = ['search' => $searchString];
 	}
@@ -165,23 +165,28 @@ class DataTable implements View, FormElement, ToResponse
 	/**
 	 * @param DataTableKnop $knop
 	 */
-	protected function addKnop(DataTableKnop $knop)
+	protected function addKnop(DataTableKnop $knop): void
 	{
 		$knop->setDataTableId($this->dataTableId);
 		$this->settings['userButtons'][] = $knop;
 	}
 
-	protected function addRowKnop(DataTableRowKnop $knop)
+	protected function addRowKnop(DataTableRowKnop $knop): void
 	{
 		$this->settings['rowButtons'][] = $knop;
 	}
 
-	protected function columnPosition($name)
+	/**
+	 * @return false|int
+	 *
+	 * @psalm-return false|int<0, max>
+	 */
+	protected function columnPosition(string $name): int|false
 	{
 		return array_search($name, array_keys($this->columns));
 	}
 
-	protected function setOrder($names)
+	protected function setOrder(array $names): void
 	{
 		$orders = [];
 		foreach ($names as $name => $order) {
@@ -207,7 +212,7 @@ class DataTable implements View, FormElement, ToResponse
 		$order_by = null,
 		CellType $type = null,
 		$data = null
-	) {
+	): void {
 		$type = $type ?: CellType::String();
 		$render = $render ?: CellRender::Default();
 
@@ -248,12 +253,12 @@ class DataTable implements View, FormElement, ToResponse
 	 * Gebruik deze functie om kolommen te verwijderen, doe dit als eerst.
 	 *
 	 * @see columnPosition geeft een andere uitvoer na deze functie.
-	 *
-	 * Gebruik de veiligere @see hideColumn als je de inhoud van een kolom nog wil kunnen opvragen.
+
+  * Gebruik de veiligere @see hideColumn als je de inhoud van een kolom nog wil kunnen opvragen.
 	 *
 	 * @param string $name
 	 */
-	protected function deleteColumn($name)
+	protected function deleteColumn($name): void
 	{
 		if (isset($this->columns[$name])) {
 			array_splice($this->columns, $this->columnPosition($name), 1);
@@ -264,7 +269,7 @@ class DataTable implements View, FormElement, ToResponse
 	 * @param string $name
 	 * @param bool $hide
 	 */
-	protected function hideColumn($name, $hide = true)
+	protected function hideColumn($name, $hide = true): void
 	{
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['visible'] = !$hide;
@@ -275,7 +280,7 @@ class DataTable implements View, FormElement, ToResponse
 	 * @param string $name
 	 * @param bool $searchable
 	 */
-	protected function searchColumn($name, $searchable = true)
+	protected function searchColumn($name, $searchable = true): void
 	{
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['searchable'] = (bool) $searchable;
@@ -286,7 +291,7 @@ class DataTable implements View, FormElement, ToResponse
 	 * @param string $name
 	 * @param string $title
 	 */
-	protected function setColumnTitle($name, $title)
+	protected function setColumnTitle($name, $title): void
 	{
 		if (isset($this->columns[$name])) {
 			$this->columns[$name]['title'] = $title;
@@ -345,7 +350,6 @@ class DataTable implements View, FormElement, ToResponse
 
 		// create visible columns index array and default order
 		$index = 0;
-		$visibleIndex = 0;
 		foreach ($this->columns as $name => $def) {
 			if (!isset($def['visible']) || $def['visible'] === true) {
 				// default order by first visible orderable column
@@ -396,11 +400,17 @@ class DataTable implements View, FormElement, ToResponse
 		return null;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType()
 	{
 		return ReflectionUtil::classNameZonderNamespace(static::class);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$id = str_replace(' ', '-', strtolower((string) $this->getTitel()));
@@ -417,6 +427,11 @@ class DataTable implements View, FormElement, ToResponse
 HTML;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ''
+	 */
 	public function getJavascript()
 	{
 		//Nothing should be returned here because the script is already embedded in getView

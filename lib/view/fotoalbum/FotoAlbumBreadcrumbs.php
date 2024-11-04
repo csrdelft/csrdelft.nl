@@ -17,8 +17,8 @@ class FotoAlbumBreadcrumbs
 {
 	public static function getBreadcrumbs(
 		FotoAlbum $album,
-		$dropdown = true,
-		$self = false
+		bool $dropdown = true,
+		bool $self = false
 	) {
 		return static::getBreadcrumbsDropdown($album, $dropdown, $self);
 	}
@@ -27,7 +27,7 @@ class FotoAlbumBreadcrumbs
 		FotoAlbum $album,
 		$dropdown,
 		$self
-	) {
+	): string {
 		$breadcrumbs =
 			'<li class="breadcrumb-item"><a href="/">' .
 			Icon::getTag('home') .
@@ -69,7 +69,7 @@ class FotoAlbumBreadcrumbs
 		return $breadcrumbs;
 	}
 
-	private static function getDropDown($subdir, $albumnaam)
+	private static function getDropDown(string $subdir, string $albumnaam): string
 	{
 		try {
 			$parent = ContainerFacade::getContainer()

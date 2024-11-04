@@ -18,6 +18,9 @@ class TemplateFormKnoppen extends FormKnoppen
 		parent::__construct();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		return $this->twig->render($this->template, $this->options);

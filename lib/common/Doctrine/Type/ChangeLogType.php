@@ -24,6 +24,11 @@ class ChangeLogType extends SafeJsonType
 		return 'changelog';
 	}
 
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{ProfielLogGroup::class, ProfielCreateLogGroup::class, ProfielLogVeldenVerwijderChange::class, ProfielLogCoveeTakenVerwijderChange::class, ProfielLogTextEntry::class, ProfielLogValueChangeCensuur::class, ProfielLogValueChange::class, ProfielUpdateLogGroup::class, UnparsedProfielLogGroup::class, DateTime::class, DateTimeImmutable::class}
+	 */
 	protected function getAcceptedTypes()
 	{
 		return [

@@ -45,12 +45,6 @@ class VoorkeurVoorkeur
 	#[ORM\Column(type: 'datetime')]
 	public $timestamp;
 
-	#[ORM\PreUpdate]
-	public function setTimestamp()
-	{
-		$this->timestamp = new DateTimeImmutable();
-	}
-
 	/**
 	 * @var Profiel
 	 */
@@ -64,55 +58,4 @@ class VoorkeurVoorkeur
 	#[ORM\ManyToOne(targetEntity: \VoorkeurCommissie::class)]
 	#[ORM\JoinColumn(name: 'cid')]
 	public $commissie;
-
-	public function getCommissieNaam()
-	{
-		return $this->commissie->naam;
-	}
-
-	public function getCategorieNaam()
-	{
-		return $this->commissie->categorie->naam;
-	}
-
-	/**
-	 * cid is onderdeel van primary key en moet dus gezet zijn bij saven.
-	 *
-	 * @param VoorkeurCommissie $commissie
-	 */
-	public function setCommissie(VoorkeurCommissie $commissie)
-	{
-		$this->commissie = $commissie;
-		$this->cid = $commissie->id;
-	}
-
-	/**
-	 * uid is onderdeel van primary key en moet dus gezet zijn bij saven.
-	 *
-	 * @param Profiel $profiel
-	 */
-	public function setProfiel(Profiel $profiel)
-	{
-		$this->profiel = $profiel;
-		$this->uid = $profiel->uid;
-	}
-
-	public function heeftGedaan()
-	{
-		return ContainerFacade::getContainer()
-			->get(AccessService::class)
-			->isUserGranted(
-				$this->profiel->account,
-				'commissie:' .
-					$this->commissie->naam .
-					',commissie:' .
-					$this->commissie->naam .
-					':ot'
-			);
-	}
-
-	public function getVoorkeurTekst()
-	{
-		return ['', 'nee', 'ja', 'misschien'][$this->voorkeur];
-	}
 }

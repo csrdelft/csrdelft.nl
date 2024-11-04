@@ -28,6 +28,9 @@ class DateTimeObjectField extends DateTimeField
 		parent::__construct($name, $value, $description, $maxyear, $minyear);
 	}
 
+	/**
+	 * @return \DateTimeImmutable|false|null
+	 */
 	public function getFormattedValue()
 	{
 		return $this->value ? date_create_immutable($this->value) : null;

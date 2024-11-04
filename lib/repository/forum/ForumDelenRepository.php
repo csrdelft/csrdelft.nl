@@ -20,17 +20,14 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ForumDelenRepository extends AbstractRepository
 {
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry, ForumDeel::class);
-	}
+
 
 	/**
 	 * @param $id
 	 * @return ForumDeel
 	 * @throws CsrGebruikerException
 	 */
-	public function get($id)
+	public function get(int|string $id)
 	{
 		$deel = $this->find($id);
 		if (!$deel) {
@@ -63,20 +60,7 @@ class ForumDelenRepository extends AbstractRepository
 		return $deel;
 	}
 
-	public function bestaatForumDeel($id)
-	{
-		return $this->findBy($id) !== null;
-	}
-
-	public function getForumDelenVoorCategorie(ForumCategorie $categorie)
-	{
-		return $this->findBy(
-			['categorie_id' => $categorie->categorie_id],
-			['volgorde' => 'ASC']
-		);
-	}
-
-	public function getForumDelenVoorLid($rss = false)
+	public function getForumDelenVoorLid(bool $rss = false)
 	{
 		/** @var ForumDeel[] $delen */
 		$delen = ArrayUtil::group_by_distinct(

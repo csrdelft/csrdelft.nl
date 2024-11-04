@@ -16,11 +16,11 @@ class BbBijbel extends BbTag
 	private $bijbel;
 	private $vertaling;
 
-	public function __construct(
-		private readonly LidInstellingenRepository $lidInstellingenRepository
-	) {
-	}
-
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'bijbel'
+	 */
 	public static function getTagName()
 	{
 		return 'bijbel';
@@ -32,6 +32,9 @@ class BbBijbel extends BbTag
 		return BbHelper::lightLinkInline($this->env, 'bijbel', $link, $stukje);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render()
 	{
 		[$stukje, $link] = $this->getLink();
@@ -40,7 +43,10 @@ class BbBijbel extends BbTag
 
 	/**
 	 * @param $arguments
-	 * @return array
+	 *
+	 * @return (string|string[])[]
+	 *
+	 * @psalm-return list{array<string>|string, string}
 	 */
 	private function getLink(): array
 	{
@@ -76,6 +82,8 @@ class BbBijbel extends BbTag
 
 	/**
 	 * @param array $arguments
+	 *
+	 * @return void
 	 */
 	public function parse($arguments = [])
 	{

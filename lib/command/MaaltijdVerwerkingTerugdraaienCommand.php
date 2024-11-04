@@ -34,6 +34,11 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command
 		parent::__construct();
 	}
 
+	/**
+	 * @return int
+	 *
+	 * @psalm-return 0|1
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$helper = $this->getHelper('question');

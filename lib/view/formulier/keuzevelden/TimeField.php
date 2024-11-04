@@ -24,17 +24,30 @@ class TimeField extends InputField
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isPosted()
 	{
 		return isset($_POST[$this->name . '_uur'], $_POST[$this->name . '_minuut']);
 	}
 
-	public function getUur()
+	/**
+	 * @return (array|string)[]|string
+	 *
+	 * @psalm-return array<int|string, array<int|string, mixed>|string>|string
+	 */
+	public function getUur(): array|string
 	{
 		return $_POST[$this->name . '_uur'];
 	}
 
-	public function getMinuut()
+	/**
+	 * @return (array|string)[]|string
+	 *
+	 * @psalm-return array<int|string, array<int|string, mixed>|string>|string
+	 */
+	public function getMinuut(): array|string
 	{
 		return $_POST[$this->name . '_minuut'];
 	}
@@ -48,6 +61,9 @@ class TimeField extends InputField
 		return $this->value;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function validate()
 	{
 		if (!parent::validate()) {
@@ -67,6 +83,9 @@ class TimeField extends InputField
 		return $this->error === '';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		$hours = range(0, 23);

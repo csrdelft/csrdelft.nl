@@ -18,6 +18,10 @@ class ToestemmingLijstResponse extends DataTableResponse
 
 	/**
 	 * @param LidToestemming[] $entity
+	 *
+	 * @return string[]
+	 *
+	 * @psalm-return array<string>
 	 */
 	public function renderElement($entity)
 	{

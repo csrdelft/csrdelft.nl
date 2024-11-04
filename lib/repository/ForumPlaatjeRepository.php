@@ -18,21 +18,18 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ForumPlaatjeRepository extends AbstractRepository
 {
-	public function __construct(
-		ManagerRegistry $registry,
-		private readonly ProfielRepository $profielRepository
-	) {
-		parent::__construct($registry, ForumPlaatje::class);
-	}
+
 
 	/**
 	 * @param ImageField $uploader
-	 * @param $uid
+	 * @param null|string $uid
+	 *
 	 * @return ForumPlaatje
+	 *
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function fromUploader(ImageField $uploader, $uid)
+	public function fromUploader(ImageField $uploader, string|null $uid)
 	{
 		$plaatje = static::generate();
 		$plaatje->maker = $uid;
@@ -58,16 +55,11 @@ class ForumPlaatjeRepository extends AbstractRepository
 	 * @param $key
 	 * @return ForumPlaatje|null
 	 */
-	public function getByKey($key)
+	public function getByKey(string $key)
 	{
 		if (!self::isValidKey($key)) {
 			return null;
 		}
 		return $this->findOneBy(['access_key' => $key]);
-	}
-
-	public static function isValidKey($key)
-	{
-		return preg_match('/^[a-zA-Z0-9]{32}$/', (string) $key);
 	}
 }
