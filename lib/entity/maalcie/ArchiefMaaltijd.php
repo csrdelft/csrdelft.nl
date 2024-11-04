@@ -96,14 +96,6 @@ class ArchiefMaaltijd implements Agendeerbaar
 			$this->tijd->format('s')
 		);
 	}
-
-	/**
-	 * @return string
-	 */
-	public function getBeschrijving(): string
-	{
-		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
-	}
     /**
      * @return int<0, max>
      */
@@ -115,37 +107,11 @@ class ArchiefMaaltijd implements Agendeerbaar
 	/**
 	 * @return string
 	 *
-	 * @psalm-return 'C.S.R. Delft'
-	 */
-	public function getLocatie(): string
-	{
-		return 'C.S.R. Delft';
-	}
-
-	/**
-	 * @return string
-	 *
 	 * @psalm-return '/maaltijdenbeheer/archief'
 	 */
 	public function getUrl(): string
 	{
 		return '/maaltijdenbeheer/archief';
-	}
-
-	/**
-	 * @return false
-	 */
-	public function isHeledag(): bool
-	{
-		return false;
-	}
-
-	/**
-	 * @return true
-	 */
-	public function isTransparant(): bool
-	{
-		return true;
 	}
 
 	public function jsonSerialize(): mixed
@@ -170,13 +136,5 @@ class ArchiefMaaltijd implements Agendeerbaar
 			}
 		}
 		return $result;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUUID(): string
-	{
-		return $this->maaltijd_id . '@archiefmaaltijd.csrdelft.nl';
 	}
 }

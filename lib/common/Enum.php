@@ -82,37 +82,6 @@ abstract class Enum
 	}
 
 	/**
-	 * Returns a value when called statically like so: MyEnum::SOME_VALUE() given SOME_VALUE is a class constant
-	 * Returns if a value is part of this enum if called like MyEnum::isSOME_VALUE()
-	 *
-	 * @param string $name
-	 * @param array $arguments
-	 *
-	 * @return static|bool
-	 * @psalm-pure
-	 * @throws \BadMethodCallException
-	 */
-	public static function __callStatic($name, $arguments)
-	{
-		if (str_starts_with($name, 'is') && count($arguments) == 1) {
-			$enumName = substr($name, 2);
-
-			if (isset(self::getConstants()[$enumName])) {
-				return static::from(self::getConstants()[$enumName]) == $arguments[0];
-			}
-		}
-
-		if (isset(self::getConstants()[$name])) {
-			$value = self::getConstants()[$name];
-			return static::from($value);
-		}
-
-		throw new \BadMethodCallException(
-			'Enum ' . static::class . '::' . $name . ' bestaat niet.'
-		);
-	}
-
-	/**
 	 * @param null|string $value
 	 *
 	 * @return static

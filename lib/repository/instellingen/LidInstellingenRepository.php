@@ -58,7 +58,7 @@ class LidInstellingenRepository extends AbstractRepository
 	/**
 	 * @psalm-param 'zoeken' $module
 	 */
-	public function getValue(string $module, $id)
+	public function getValue(string $module, string $id)
 	{
 		$instelling = $this->getInstelling($module, $id);
 

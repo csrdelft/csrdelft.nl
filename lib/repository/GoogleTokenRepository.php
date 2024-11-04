@@ -17,13 +17,4 @@ use Doctrine\Persistence\ManagerRegistry;
 class GoogleTokenRepository extends AbstractRepository
 {
 
-
-	/**
-	 * @param $uid
-	 * @return bool
-	 */
-	public function exists($uid): bool
-	{
-		return $this->find($uid) != null;
-	}
 }

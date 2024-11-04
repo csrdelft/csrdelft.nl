@@ -51,7 +51,7 @@ class CiviProductRepository extends AbstractRepository
 	 * @param $query
 	 * @return CiviProduct[]
 	 */
-	public function getSuggesties($query)
+	public function getSuggesties(string $query)
 	{
 		return $this->createQueryBuilder('cp')
 			->where('cp.beschrijving LIKE :query')

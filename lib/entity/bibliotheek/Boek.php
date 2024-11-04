@@ -106,83 +106,9 @@ class Boek
 		return $this->categorie;
 	}
 
-	public function setCategorie(BiebRubriek $biebRubriek): void
-	{
-		$this->categorie = $biebRubriek;
-	}
-
 	public function getUrl(): string
 	{
 		return '/bibliotheek/boek/' . $this->id;
-	}
-
-	/**
-	 * Iedereen met extra rechten en zij met BIEB_READ mogen
-	 */
-	public function magBekijken(): bool
-	{
-		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
-	}
-
-	/**
-	 * Controleert rechten voor bewerkactie
-	 *
-	 * @return  bool
-	 *    boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
-	 */
-	public function magBewerken()
-	{
-		return LoginService::mag(P_BIEB_EDIT) ||
-			$this->isEigenaar() ||
-			$this->magVerwijderen();
-	}
-
-	/**
-	 * Controleert of ingelogd eigenaar is van boek/exemplaar
-	 * - BASFCieleden zijn eigenaar van boeken van de bibliotheek
-	 *
-	 * @param null|int geen of $exemplaarid integer
-	 * @param null|string $uid
-	 *
-	 * @return bool true
-  *        of ingelogd eigenaar is v.e. exemplaar van het boek
-  *        of van het specifieke exemplaar als exemplaarid is gegeven.
-  *      false
-  *        geen geen resultaat of niet de eigenaar
-	 */
-	public function isEigenaar(string|null $uid = null)
-	{
-		foreach ($this->getExemplaren() as $exemplaar) {
-			if ($uid != null) {
-				if ($uid == $exemplaar->eigenaar_uid) {
-					return true;
-				}
-			} elseif ($exemplaar->isEigenaar()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Geeft alle exemplaren van dit boek
-	 *
-	 * @return BoekExemplaar[]
-	 */
-	public function getExemplaren()
-	{
-		return $this->exemplaren ?? [];
-	}
-
-	/**
-	 * Controleert rechten voor wijderactie
-	 *
-	 * @return  bool
-	 *    boek mag alleen door admins verwijdert worden
-	 */
-	public function magVerwijderen()
-	{
-		return LoginService::mag('commissie:BASFCie,' . P_BIEB_MOD . ',' . P_ADMIN);
 	}
 
 	/**

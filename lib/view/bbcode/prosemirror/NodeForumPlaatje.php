@@ -25,7 +25,12 @@ class NodeForumPlaatje implements Node
 		return 'plaatje';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return (mixed|string)[][]
+	 *
+	 * @psalm-return array{attrs: array{key: string, src: mixed}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbForumPlaatje) {
 			throw new \InvalidArgumentException();

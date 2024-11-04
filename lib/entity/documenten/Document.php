@@ -108,54 +108,10 @@ class Document extends Bestand
 			is_file($this->directory . '/' . $this->filename);
 	}
 
-	public function hasFile(): bool
-	{
-		if (!$this->magBekijken()) {
-			return false;
-		}
-		return $this->filename != '' and file_exists($this->getFullPath());
-	}
-
-	public function isEigenaar(): bool
-	{
-		return LoginService::getUid() === $this->eigenaar;
-	}
-
 	public function magBekijken(): bool
 	{
 		return LoginService::mag($this->leesrechten) &&
 			LoginService::mag(P_LOGGED_IN);
-	}
-
-	public function magBewerken(): bool
-	{
-		return $this->isEigenaar() or LoginService::mag(P_DOCS_MOD);
-	}
-
-	public function magVerwijderen(): bool
-	{
-		return LoginService::mag(P_DOCS_MOD);
-	}
-
-	/**
-	 * @return string file name on disk
-	 */
-	public function getFullFileName(): string
-	{
-		return $this->id . '_' . $this->filename;
-	}
-
-	/**
-	 * @return string location on disk
-	 */
-	public function getPath(): string
-	{
-		return DATA_PATH . 'documenten/';
-	}
-
-	public function getFullPath(): string
-	{
-		return $this->getPath() . $this->getFullFileName();
 	}
 
 	public function getUrl(): string
@@ -216,43 +172,6 @@ class Document extends Bestand
 			return $mimetypeMap[$this->mimetype];
 		} else {
 			return 'onbekend';
-		}
-	}
-
-	/**
-	 * Aangehangen bestand verwijderen van file system.
-	 *
-	 * @param bool $throwWhenNotFound
-	 *
-	 * @return true
-	 *
-	 * @throws CsrException
-	 */
-	public function deleteFile($throwWhenNotFound = true): bool
-	{
-		if (!$this->hasFile()) {
-			if ($throwWhenNotFound) {
-				throw new CsrGebruikerException(
-					'Geen bestand gevonden voor dit document'
-				);
-			} else {
-				return true;
-			}
-		}
-		if (@unlink($this->getFullPath())) {
-			$this->filename = '';
-			return true;
-		} else {
-			if (is_writable($this->getFullPath())) {
-				throw new CsrException(
-					'Kan bestand niet verwijderen, lijkt wel beschrijfbaar' .
-						$this->getFullPath()
-				);
-			} else {
-				throw new CsrException(
-					'Kan bestand niet verwijderen, niet beschrijfbaar'
-				);
-			}
 		}
 	}
 }

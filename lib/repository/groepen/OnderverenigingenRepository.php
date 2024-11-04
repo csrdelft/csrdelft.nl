@@ -33,35 +33,6 @@ class OnderverenigingenRepository extends GroepRepository
 		return $ondervereniging;
 	}
 
-	public function overzicht(
-		int $limit = null,
-		int $offset = null,
-		string $soort = null
-	) {
-		if ($soort && OnderverenigingStatus::isValidValue($soort)) {
-			return $this->findBy(
-				[
-					'status' => GroepStatus::HT(),
-					'onderverenigingStatus' => OnderverenigingStatus::from($soort),
-				],
-				null,
-				$limit,
-				$offset
-			);
-		}
-		return parent::overzicht($limit, $offset, $soort);
-	}
-
-	public function beheer(string $soort = null)
-	{
-		if ($soort && OnderverenigingStatus::isValidValue($soort)) {
-			return $this->findBy([
-				'onderverenigingStatus' => OnderverenigingStatus::from($soort),
-			]);
-		}
-		return parent::beheer($soort);
-	}
-
 	public function parseSoort(string $soort = null)
 	{
 		if ($soort && OnderverenigingStatus::isValidValue($soort)) {

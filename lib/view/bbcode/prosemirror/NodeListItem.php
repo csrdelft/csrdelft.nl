@@ -25,7 +25,10 @@ class NodeListItem implements Node
 		return 'list_item';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @psalm-return array<never, never>
+	 */
+	public function getData(BbNode $node): array
 	{
 		return [];
 	}

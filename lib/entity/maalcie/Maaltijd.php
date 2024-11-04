@@ -177,11 +177,8 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		return (float) $this->getPrijs() / 100.0;
 	}
 
-	/**
-	 * @return integer
-	 */
 	#[Serializer\Groups('datatable')]
-	public function getPrijs()
+	public function getPrijs(): int|null
 	{
 		return $this->product->getPrijsInt();
 	}
@@ -230,26 +227,6 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		return $marge;
 	}
 
-	/**
-	 * Vind corveetaken van gegeven functie bij deze maaltijd
-	 *
-	 * @param $functieID int ID van de functie
-	 *
-	 * @return CorveeTaak[]
-	 *
-	 * @psalm-param 7 $functieID
-	 */
-	public function getCorveeTaken(int $functieID)
-	{
-		return ContainerFacade::getContainer()
-			->get(CorveeTakenRepository::class)
-			->findBy([
-				'corveeFunctie' => $functieID,
-				'maaltijd_id' => $this->maaltijd_id,
-				'verwijderd' => false,
-			]);
-	}
-
 	// Agendeerbaar ############################################################
 
 	public function getTitel(): string
@@ -272,49 +249,12 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 
 	/**
 	 * @return string
-	 */
-	public function getBeschrijving(): string
-	{
-		return 'Maaltijd met ' .
-			$this->getAantalAanmeldingen() .
-			' eters (max. ' .
-			$this->getAanmeldLimiet() .
-			')';
-	}
-
-	/**
-	 * @return string
-	 *
-	 * @psalm-return 'C.S.R. Delft'
-	 */
-	public function getLocatie(): string
-	{
-		return 'C.S.R. Delft';
-	}
-
-	/**
-	 * @return string
 	 *
 	 * @psalm-return '/maaltijden'
 	 */
 	public function getUrl(): string
 	{
 		return '/maaltijden';
-	}
-
-	/**
-	 * @return false
-	 */
-	public function isHeledag(): bool
-	{
-		return false;
-	}
-
-	public function isTransparant(): bool
-	{
-		// Toon als transparant (vrij) als lid dat wil of lid niet ingeketzt is
-		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
-			'ja' || !$this->getIsAangemeld(LoginService::getUid());
 	}
 
 	// Controller ############################################################
@@ -366,41 +306,6 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	{
 		return $this->magBekijken($uid) &&
 			$this->maaltijdcorvee->corveeFunctie->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
-	}
-
-	/**
-	 * @return false|string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('tijd')]
-	public function getDataTableTijd(): string|false
-	{
-		return DateUtil::dateFormatIntl($this->tijd, DateUtil::TIME_FORMAT);
-	}
-
-	/**
-	 * @return false|string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('datum')]
-	public function getDataTableDatum(): string|false
-	{
-		return DateUtil::dateFormatIntl($this->datum, DateUtil::DATE_FORMAT);
-	}
-
-	public function getAanmeldLimiet(): int
-	{
-		return $this->aanmeld_limiet;
-	}
-
-	/**
-	 * @return string
-	 */
-	#[Serializer\Groups('datatable')]
-	#[Serializer\SerializedName('UUID')]
-	public function getUUID(): string
-	{
-		return $this->maaltijd_id . '@maaltijd.csrdelft.nl';
 	}
 
 	public function getMoment(): DateTimeImmutable

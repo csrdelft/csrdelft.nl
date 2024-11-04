@@ -39,7 +39,12 @@ final class PathUtil
 		return $combined;
 	}
 
-	public static function realpathunix(string $path)
+	/**
+	 * @return string|string[]
+	 *
+	 * @psalm-return array<string>|string
+	 */
+	public static function realpathunix(string $path): array|string
 	{
 		return PathUtil::to_unix_path(realpath($path));
 	}
@@ -61,10 +66,11 @@ final class PathUtil
 	 * Checks if $path exists in $prefix and if it is still inside $prefix.
 	 *
 	 * @param $prefix
-	 * @param $path
+	 * @param null|string $path
+	 *
 	 * @return bool
 	 */
-	public static function path_valid(string $prefix, $path)
+	public static function path_valid(string $prefix, string|null $path)
 	{
 		return str_starts_with(
 			(string) PathUtil::realpathunix(PathUtil::join_paths($prefix, $path)),

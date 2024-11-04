@@ -55,11 +55,6 @@ class ForumPlaatje
 	#[ORM\Column(type: 'text', nullable: true)]
 	public $source_url;
 
-	public function exists()
-	{
-		return $this->getAfbeelding()->exists();
-	}
-
 	public function getAfbeelding(bool $resize = false): Afbeelding
 	{
 		return new Afbeelding($this->getPath($resize));
@@ -74,11 +69,5 @@ class ForumPlaatje
 	{
 		return "/forum/plaatjes/bekijken/$this->access_key" .
 			($resized ? '/resized' : '');
-	}
-
-	public function hasResized(): bool
-	{
-		$path = $this->getPath(true);
-		return file_exists($path) && is_file($path);
 	}
 }

@@ -222,24 +222,6 @@ class ForumDradenRepository extends AbstractRepository implements Paging
 		return $qb->getQuery()->getResult();
 	}
 
-	public function getForumDradenVoorDeel(ForumDeel $deel)
-	{
-		$qb = $this->createQueryBuilder('d');
-		$qb->where(
-			'(d.forum_id = :forum_id or d.gedeeld_met = :forum_id) and d.wacht_goedkeuring = false and d.verwijderd = false'
-		);
-		$qb->setParameter('forum_id', $deel->forum_id);
-
-		$this->filterLaatstGewijzigdExtern($qb);
-
-		$qb->setFirstResult(($this->pagina - 1) * $this->getAantalPerPagina());
-		$qb->setMaxResults($this->getAantalPerPagina());
-
-		$paginator = new Paginator($qb);
-
-		return $paginator->getIterator();
-	}
-
 	/**
 	 * @param array $ids
 	 * @return array|ForumDraad[]

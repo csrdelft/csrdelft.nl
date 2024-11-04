@@ -27,22 +27,17 @@ class SavedQueryContent implements View
 		return $this->sq;
 	}
 
-	public function getBreadcrumbs()
-	{
-		return null;
-	}
-
 	/**
 	 * @return string
 	 *
 	 * @psalm-return 'Opgeslagen query's'
 	 */
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return 'Opgeslagen query\'s';
 	}
 
-	public static function render_header(string $name)
+	public static function render_header(string $name): string
 	{
 		switch ($name) {
 			case 'uid_naam':
@@ -63,6 +58,11 @@ class SavedQueryContent implements View
 		return $name;
 	}
 
+	/**
+	 * @param (int|string) $name
+	 *
+	 * @psalm-param array-key $name
+	 */
 	public static function render_field($name, $contents): string|null
 	{
 		if ($name == 'uid_naam') {

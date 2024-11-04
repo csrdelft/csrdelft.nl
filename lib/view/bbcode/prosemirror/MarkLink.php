@@ -32,7 +32,12 @@ class MarkLink implements Mark
 		];
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return array[]
+	 *
+	 * @psalm-return array{attrs: array{href: mixed}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbUrl) {
 			throw new \InvalidArgumentException();

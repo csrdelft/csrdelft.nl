@@ -69,11 +69,11 @@ class CiviSaldo implements DataTableEntry, DisplayEntity
 	public $bestellingen;
 
 	/**
-	 * @return string
+	 * @return null|string
 	 */
 	#[Serializer\Groups('datatable')]
 	#[Serializer\SerializedName('naam')]
-	public function getDataTableNaam()
+	public function getDataTableNaam(): string|null
 	{
 		return $this->getWeergave();
 	}

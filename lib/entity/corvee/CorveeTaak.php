@@ -221,14 +221,6 @@ class CorveeTaak implements Agendeerbaar
 
 	// Agendeerbaar ############################################################
 
-	/**
-	 * @return string
-	 */
-	public function getUUID(): string
-	{
-		return $this->taak_id . '@corveetaak.csrdelft.nl';
-	}
-
 	public function getBeginMoment(): DateTimeImmutable
 	{
 		return $this->datum;
@@ -255,24 +247,6 @@ class CorveeTaak implements Agendeerbaar
 		return 'Corvee vacature (' . $this->corveeFunctie->naam . ')';
 	}
 
-	public function getBeschrijving(): string
-	{
-		if ($this->profiel) {
-			return $this->corveeFunctie->naam;
-		}
-		return 'Nog niet ingedeeld';
-	}
-
-	/**
-	 * @return string
-	 *
-	 * @psalm-return 'C.S.R. Delft'
-	 */
-	public function getLocatie(): string
-	{
-		return 'C.S.R. Delft';
-	}
-
 	/**
 	 * @return string
 	 *
@@ -281,21 +255,5 @@ class CorveeTaak implements Agendeerbaar
 	public function getUrl(): string
 	{
 		return '/corvee/rooster';
-	}
-
-	/**
-	 * @return true
-	 */
-	public function isHeledag(): bool
-	{
-		return true;
-	}
-
-	/**
-	 * @return true
-	 */
-	public function isTransparant(): bool
-	{
-		return true;
 	}
 }

@@ -147,9 +147,9 @@ final class FileUtil
 	}
 
 	/**
-	 * @return false|int|string
+	 * @return float|int|numeric|string
 	 */
-	public static function getMaximumFileUploadSize(): int|string|false
+	public static function getMaximumFileUploadSize()|string|false
 	{
 		return min(
 			FileUtil::convertPHPSizeToBytes(ini_get('post_max_size')),

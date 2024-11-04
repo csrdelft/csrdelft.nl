@@ -22,40 +22,4 @@ class BoekRepository extends AbstractRepository
 	{
 		return count($this->findBy(['titel' => $value])) > 0;
 	}
-
-	/**
-	 * @param string $zoekveld
-	 * @param string $zoekterm
-	 * @return string[][]
-	 * @throws CsrGebruikerException
-	 */
-	public function autocompleteProperty(string $zoekveld, string $zoekterm)
-	{
-		$allowedFields = ['titel', 'auteur', 'taal'];
-		if (!in_array($zoekveld, $allowedFields)) {
-			throw new CsrGebruikerException(
-				'Autocomplete niet toegestaan voor dit veld'
-			);
-		}
-		return $this->createQueryBuilder('b')
-			->select("b.$zoekveld")
-			->distinct()
-			->where("b.$zoekveld LIKE :zoekterm")
-			->setParameter('zoekterm', SqlUtil::sql_contains($zoekterm))
-			->getQuery()
-			->getScalarResult();
-	}
-
-	/**
-	 * @param string $zoekterm
-	 * @return Boek[]
-	 * @throws CsrGebruikerException
-	 */
-	public function autocompleteBoek(string $zoekterm)
-	{
-		$qb = $this->createQueryBuilder('boek');
-		$qb->where($qb->expr()->like('boek.titel', ':zoekterm'));
-		$qb->setParameters(['zoekterm' => SqlUtil::sql_contains($zoekterm)]);
-		return $qb->getQuery()->getResult();
-	}
 }

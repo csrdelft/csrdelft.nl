@@ -43,22 +43,6 @@ class FotoTagAlbum extends FotoAlbum
 	/**
 	 * @return true
 	 */
-	public function exists()
-	{
-		return true;
-	}
-
-	/**
-	 * @return false
-	 */
-	public function isEmpty()
-	{
-		return false;
-	}
-
-	/**
-	 * @return true
-	 */
 	public function hasFotos($incompleet = false)
 	{
 		return true;

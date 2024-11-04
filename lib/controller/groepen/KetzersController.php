@@ -41,7 +41,7 @@ class KetzersController extends AbstractGroepenController
 		return Ketzer::class;
 	}
 
-	public function nieuw(Request $request, $id = null, $soort = null)
+	public function nieuw(Request $request, $id = null, $soort = null): GroepAanmakenForm|\CsrDelft\view\datatable\GenericDataTableResponse|\Symfony\Component\HttpFoundation\Response|\CsrDelft\view\datatable\GenericDataTableResponse|\Symfony\Component\HttpFoundation\Response|\CsrDelft\view\datatable\GenericDataTableResponse|\Symfony\Component\HttpFoundation\Response|\CsrDelft\view\datatable\GenericDataTableResponse|\Symfony\Component\HttpFoundation\Response|\CsrDelft\view\datatable\GenericDataTableResponse|\Symfony\Component\HttpFoundation\Response
 	{
 		$form = new GroepAanmakenForm($this->registry, $this->repository, $soort);
 		if ($request->getMethod() == 'GET') {

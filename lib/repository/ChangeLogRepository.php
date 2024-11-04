@@ -95,14 +95,4 @@ class ChangeLogRepository extends AbstractRepository
 		$this->getEntityManager()->persist($change);
 		$this->getEntityManager()->flush();
 	}
-
-	/**
-	 * @param ChangeLogEntry[] $diff
-	 */
-	public function logChanges(array $diff)
-	{
-		foreach ($diff as $change) {
-			$this->create($change);
-		}
-	}
 }

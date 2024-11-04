@@ -25,7 +25,12 @@ class NodeMaaltijd implements Node
 		return 'maaltijd';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{id: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!($node instanceof BbMaaltijd)) {
 			throw new \InvalidArgumentException();

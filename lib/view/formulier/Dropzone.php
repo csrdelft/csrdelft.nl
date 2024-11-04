@@ -40,16 +40,6 @@ class Dropzone extends Formulier
 		$this->addFields($fields);
 	}
 
-	public function getPostedUploader(): FileField|null
-	{
-		if ($this->dropzone->isPosted()) {
-			return $this->dropzone;
-		} elseif ($this->fallback->isPosted()) {
-			return $this->fallback;
-		}
-		return null;
-	}
-
 	/**
 	 * @return bool
 	 */

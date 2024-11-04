@@ -25,11 +25,6 @@ class HtmlComment implements FormElement
 		return $this->comment;
 	}
 
-	public function getBreadcrumbs()
-	{
-		return null;
-	}
-
 	public function getHtml()
 	{
 		return $this->comment;
@@ -50,6 +45,9 @@ class HtmlComment implements FormElement
 		return '';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getTitel()
 	{
 		return $this->getType();

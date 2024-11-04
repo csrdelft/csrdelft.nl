@@ -121,22 +121,6 @@ class ForumPost
 			LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function getAantalGelezen(): int
-	{
-		if (!isset($this->aantal_gelezen)) {
-			$this->aantal_gelezen = 0;
-			foreach ($this->draad->lezers as $gelezen) {
-				if (
-					$this->laatst_gewijzigd &&
-					$this->laatst_gewijzigd <= $gelezen->datum_tijd
-				) {
-					$this->aantal_gelezen++;
-				}
-			}
-		}
-		return $this->aantal_gelezen;
-	}
-
 	public function getLink(bool $external = false): string
 	{
 		return ($external ? HostUtil::getCsrRoot() : '') .

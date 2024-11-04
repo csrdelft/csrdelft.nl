@@ -111,41 +111,4 @@ class MaaltijdAanmelding
 	{
 		return $this->profiel->getCiviSaldo();
 	}
-
-	/**
-	 * Bereken of het saldo toereikend is voor de prijs van de maaltijd.
-	 *
-	 * 3: saldo meer dan genoeg
-	 *
-	 * 2: saldo precies genoeg
-	 *
-	 * 1: saldo positief maar te weinig
-	 *
-	 * 0: saldo nul
-	 *
-	 * -1: saldo negatief
-	 *
-	 * @return int
-	 */
-	public function getSaldoStatus(): int
-	{
-		$saldo = $this->getSaldo();
-		$prijs = $this->maaltijd->getPrijsFloat();
-
-		if ($saldo > $prijs) {
-			// saldo meer dan genoeg
-			return 3;
-		} elseif ($saldo > $prijs - 0.004) {
-			// saldo precies genoeg
-			return 2;
-		} elseif ($saldo > 0.004) {
-			// saldo positief maar te weinig
-			return 1;
-		} elseif ($saldo > -0.004) {
-			// saldo nul
-			return 0;
-		} else {
-			return -1; // saldo negatief
-		}
-	}
 }

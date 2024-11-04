@@ -26,7 +26,12 @@ class NodeGroep implements Node
 		return 'groep';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{id: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbGroep) {
 			throw new \InvalidArgumentException();

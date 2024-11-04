@@ -19,28 +19,4 @@ use Doctrine\Persistence\ManagerRegistry;
 class AgendaVerbergenRepository extends AbstractRepository
 {
 
-
-	public function toggleVerbergen(Agendeerbaar $item)
-	{
-		$verborgen = $this->find([
-			'uid' => LoginService::getUid(),
-			'refuuid' => $item->getUUID(),
-		]);
-		if (!$verborgen) {
-			$verborgen = new AgendaVerbergen();
-			$verborgen->uid = LoginService::getUid();
-			$verborgen->refuuid = $item->getUUID();
-			$this->save($verborgen);
-		} else {
-			$this->remove($verborgen);
-		}
-	}
-
-	public function isVerborgen(Agendeerbaar $item)
-	{
-		return $this->find([
-			'uid' => LoginService::getUid(),
-			'refuuid' => $item->getUUID(),
-		]);
-	}
 }

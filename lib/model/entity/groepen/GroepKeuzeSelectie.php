@@ -10,15 +10,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class GroepKeuzeSelectie implements \Stringable
 {
-	/**
-	 * @param string|null $naam
-	 * @param string|null $selectie
-	 */
-	public function __construct(
-		#[Serializer\Groups('vue')] public $naam = null,
-		#[Serializer\Groups('vue')] public $selectie = null
-	) {
-	}
+
 
 	public function __toString(): string
 	{

@@ -249,14 +249,6 @@ class FotoAlbumBBView implements View
 		// Niet boeiend
 	}
 
-	/**
-	 * @return void
-	 */
-	public function getBreadcrumbs()
-	{
-		// Niet boeiend
-	}
-
 	public function getModel()
 	{
 		return $this->model;

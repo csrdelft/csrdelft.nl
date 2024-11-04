@@ -26,7 +26,12 @@ class NodeWerkgroep implements Node
 		return 'werkgroep';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{id: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbWerkgroep) {
 			throw new \InvalidArgumentException();

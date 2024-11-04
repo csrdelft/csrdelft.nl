@@ -15,7 +15,12 @@ class NodeString implements Node
 		return BbString::class;
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return void[]
+	 *
+	 * @psalm-return array{text: void}
+	 */
+	public function getData(BbNode $node): array
 	{
 		return [
 			'text' => $node->getContent(),

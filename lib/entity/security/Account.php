@@ -118,16 +118,6 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $profiel;
 
-	public function getRssLink(): string
-	{
-		$url = '/forum/rss/';
-		if (empty($this->private_token)) {
-			return $url . 'csrdelft.xml';
-		} else {
-			return $url . $this->private_token . '/csrdelft.xml';
-		}
-	}
-
 	//****
 	// UserInterface implementatie
 	//****

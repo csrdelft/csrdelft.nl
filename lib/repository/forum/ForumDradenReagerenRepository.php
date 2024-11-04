@@ -127,11 +127,12 @@ class ForumDradenReagerenRepository extends AbstractRepository
 
 	/**
 	 * @param null|string $titel
+	 * @param null|string $concept
 	 */
 	public function setConcept(
 		ForumDeel $deel,
 		int|null $draad_id = null,
-		$concept = null,
+		string|null $concept = null,
 		string|null $titel = null
 	) {
 		$reageren = $this->getReagerenDoorLid($deel, $draad_id);

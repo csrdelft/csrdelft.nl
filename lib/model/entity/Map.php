@@ -32,14 +32,4 @@ class Map
 	 * @var string
 	 */
 	protected static $table_name = '';
-
-	/**
-	 * Bestaat er een map met het pad.
-	 *
-	 * @return bool
-	 */
-	public function exists()
-	{
-		return @is_readable($this->path) and is_dir($this->path);
-	}
 }

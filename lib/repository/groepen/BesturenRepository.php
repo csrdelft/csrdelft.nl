@@ -21,29 +21,4 @@ class BesturenRepository extends GroepRepository
 		$bestuur->bijbeltekst = '';
 		return $bestuur;
 	}
-
-	/**
-	 * Bestuur heeft de vorm:
-	 *
-	 * bestuur:<ht|ot|ft>:<praeses|abactis|...>
-	 * bestuur:<praeses|abactis|...>
-	 *
-	 * @param UserInterface $user
-	 * @param $familie
-	 * @param $status
-	 * @param $role
-	 * @return bool
-	 */
-	public function isLid(
-		UserInterface $user,
-		$familie,
-		$status = 'ht',
-		$role = null
-	): bool {
-		if (GroepStatus::isValidValue(strtolower((string) $familie))) {
-			return parent::isLid($user, 'bestuur', $familie, $status);
-		} else {
-			return parent::isLid($user, 'bestuur', 'ht', $familie);
-		}
-	}
 }

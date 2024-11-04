@@ -25,7 +25,10 @@ class NodeCodeBlock implements Node
 		return 'code_block';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @psalm-return array<never, never>
+	 */
+	public function getData(BbNode $node): array
 	{
 		return [];
 	}

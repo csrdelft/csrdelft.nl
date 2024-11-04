@@ -46,48 +46,6 @@ class FotoTagsRepository extends AbstractRepository
 		return parent::findBy([]);
 	}
 
-	public function getTags(Foto $foto)
-	{
-		return $this->findBy(['refuuid' => $foto->getUUID()]);
-	}
-
-	public function addTag(Foto $foto, $uid, $x, $y, $size)
-	{
-		if (!ProfielRepository::existsUid($uid)) {
-			throw new CsrGebruikerException('Profiel bestaat niet');
-		}
-
-		$tag =
-			$this->find(['refuuid' => $foto->getUUID(), 'keyword' => $uid]) ??
-			new FotoTag();
-
-		$tag->refuuid = $foto->getUUID();
-		$tag->keyword = $uid;
-		$tag->door = LoginService::getUid();
-		$tag->wanneer = date_create_immutable();
-		$tag->x = (int) $x;
-		$tag->y = (int) $y;
-		$tag->size = (int) $size;
-
-		$this->getEntityManager()->persist($tag);
-		$this->getEntityManager()->flush();
-
-		return $tag;
-	}
-
-	/**
-	 * @param null|scalar $refuuid
-	 * @param null|scalar $keyword
-	 */
-	public function removeTag($refuuid, $keyword)
-	{
-		$tag = $this->find(['refuuid' => $refuuid, 'keyword' => $keyword]);
-		if ($tag) {
-			$this->getEntityManager()->remove($tag);
-			$this->getEntityManager()->flush();
-		}
-	}
-
 	public function create(FotoTag $tag)
 	{
 		$this->getEntityManager()->persist($tag);

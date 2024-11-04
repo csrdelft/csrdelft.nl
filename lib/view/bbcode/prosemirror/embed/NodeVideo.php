@@ -26,7 +26,12 @@ class NodeVideo implements Node
 		return 'video';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{url: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbVideo) {
 			throw new \InvalidArgumentException();

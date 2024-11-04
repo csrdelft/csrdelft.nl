@@ -77,6 +77,9 @@ class SuggestieLijst implements ToResponse, FormElement
 		return (string) $this->getHtml();
 	}
 
+	/**
+	 * @return class-string<SuggestieLijst>
+	 */
 	public function getTitel()
 	{
 		return $this->getType();
@@ -123,15 +126,5 @@ JS;
 	public function toResponse(): Response
 	{
 		return new Response($this->getHtml());
-	}
-
-	/**
-	 * @return string
-	 *
-	 * @psalm-return ''
-	 */
-	public function getBreadcrumbs()
-	{
-		return '';
 	}
 }

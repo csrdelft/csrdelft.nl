@@ -158,22 +158,6 @@ class PinTransactieMatch implements DataTableEntry
 	}
 
 	/**
-	 * @return string
-	 */
-	private function icons()
-	{
-		$desc = '';
-		if ($this->bestelling !== null && $this->bestelling->comment) {
-			$desc .=
-				'&nbsp;' . Icon::getTag('message', null, $this->bestelling->comment);
-		}
-		if ($this->notitie) {
-			$desc .= '&nbsp;' . Icon::getTag('circle-info', null, $this->notitie);
-		}
-		return $desc;
-	}
-
-	/**
 	 * @return DateTimeImmutable
 	 * @throws CsrException
 	 */
@@ -205,31 +189,6 @@ class PinTransactieMatch implements DataTableEntry
 		$dag = DateUtil::dateFormatIntl($moment, 'cccc');
 		$agendaLink = "/agenda/{$moment->format('Y')}/{$moment->format('m')}";
 		return "<a data-moment='{$formatted}' target='_blank' href='{$agendaLink}' title='{$dag}'>{$formatted}</a>"; // Data attribuut voor sortering
-	}
-
-	/**
-	 * @param DateTimeImmutable $moment
-	 *
-	 * @return false|string
-	 */
-	public static function renderTijd(DateTimeImmutable $moment): string|false
-	{
-		return DateUtil::dateFormatIntl($moment, DateUtil::FULL_TIME_FORMAT);
-	}
-
-	/**
-	 * @return int|null Seconds difference
-	 *
-	 * @throws CsrException
-	 */
-	public function getVerschil(): int|null
-	{
-		if ($this->transactie !== null && $this->bestelling !== null) {
-			return $this->transactie->datetime->getTimestamp() -
-				$this->bestelling->moment->getTimestamp();
-		} else {
-			return null;
-		}
 	}
 
 	/**

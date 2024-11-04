@@ -71,68 +71,14 @@ class AgendaItem implements Agendeerbaar
 		return $this->titel;
 	}
 
-	public function getBeschrijving(): ?string
-	{
-		return $this->beschrijving;
-	}
-
-	public function getLocatie(): ?string
-	{
-		return $this->locatie;
-	}
-
 	public function getUrl(): ?string
 	{
 		return $this->link;
-	}
-
-	public function isHeledag(): bool
-	{
-		$begin = $this->getBeginMoment()->format('H:i');
-		$eind = $this->getEindMoment()->format('H:i');
-		return $begin == '00:00' && ($eind == '23:59' || $eind == '00:00');
 	}
 
 	public function magBekijken($ical = false): bool
 	{
 		$ical ? AuthenticationMethod::getEnumValues() : null;
 		return LoginService::mag($this->rechten_bekijken);
-	}
-
-	public function magBeheren($ical = false): bool
-	{
-		$ical ? AuthenticationMethod::getEnumValues() : null;
-		if (LoginService::mag(P_AGENDA_MOD)) {
-			return true;
-		}
-		$verticale = 'verticale:' . LoginService::getProfiel()->verticale;
-		if (
-			$this->rechten_bekijken === $verticale and
-			LoginService::getProfiel()->verticaleleider
-		) {
-			return true;
-		}
-		return false;
-	}
-
-	public function isTransparant(): bool
-	{
-		// Toon als transparant (vrij) als lid dat wil of activiteit hele dag(en) duurt
-		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
-			'ja' || $this->isHeledag();
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUUID(): string
-	{
-		return strtolower(
-			sprintf(
-				'%s@%s.csrdelft.nl',
-				implode('.', [$this->item_id]),
-				ReflectionUtil::short_class($this)
-			)
-		);
 	}
 }

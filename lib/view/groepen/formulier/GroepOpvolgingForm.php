@@ -49,7 +49,7 @@ class GroepOpvolgingForm extends ModalForm
 		return $this->groepStatusField->getValue();
 	}
 
-	public function getFamilie(): string
+	public function getFamilie(): string|null
 	{
 		return $this->familieField->getValue();
 	}

@@ -22,7 +22,7 @@ class CiviCategorieRepository extends AbstractRepository
 	 * @param $query
 	 * @return CiviCategorie[]
 	 */
-	public function suggesties($query)
+	public function suggesties(string $query)
 	{
 		return $this->createQueryBuilder('cc')
 			->where('cc.type LIKE :query')

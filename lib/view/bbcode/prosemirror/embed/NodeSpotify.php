@@ -26,7 +26,12 @@ class NodeSpotify implements Node
 		return 'spotify';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return (mixed|string)[][]
+	 *
+	 * @psalm-return array{attrs: array{url: string, formaat: mixed}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbSpotify) {
 			throw new \InvalidArgumentException();

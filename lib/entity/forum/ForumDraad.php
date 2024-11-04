@@ -230,7 +230,7 @@ class ForumDraad
 		return !$this->belangrijk && LoginService::mag(P_LOGGED_IN);
 	}
 
-	public function magMeldingKrijgen()
+	public function magMeldingKrijgen(): bool
 	{
 		return $this->magLezen();
 	}
@@ -269,14 +269,6 @@ class ForumDraad
 		return $this->verbergen
 			->matching(Eisen::voorIngelogdeGebruiker())
 			->first() != null;
-	}
-
-	/**
-	 * @psalm-return int<0, max>
-	 */
-	public function getAantalLezers(): int
-	{
-		return count($this->lezers);
 	}
 
 	public function isOngelezen(): bool

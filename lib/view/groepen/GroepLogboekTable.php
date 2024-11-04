@@ -26,9 +26,11 @@ class GroepLogboekTable extends DataTable
 	}
 
 	/**
-	 * @return string
+	 * @return null|string|string[]
+	 *
+	 * @psalm-return array<string>|null|string
 	 */
-	public function getType()
+	public function getType(): array|string|null
 	{
 		return ReflectionUtil::className($this);
 	}

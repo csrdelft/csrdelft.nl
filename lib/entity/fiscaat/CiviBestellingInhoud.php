@@ -51,23 +51,6 @@ class CiviBestellingInhoud
 	#[ORM\Column(type: 'integer')]
 	public $aantal;
 
-	public function setProduct(CiviProduct $product = null): void
-	{
-		$this->product = $product;
-		$this->product_id = $product->id ?? null;
-	}
-
-	public function setBestelling(CiviBestelling $bestelling = null): void
-	{
-		$this->bestelling = $bestelling;
-		$this->bestelling_id = $bestelling->id ?? null;
-	}
-
-	public function getBeschrijving(): string
-	{
-		return sprintf('%d %s', $this->aantal, $this->product->beschrijving);
-	}
-
 	/**
 	 * @return int
 	 */

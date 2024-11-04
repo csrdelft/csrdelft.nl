@@ -19,14 +19,14 @@ class FotoAlbumBreadcrumbs
 		FotoAlbum $album,
 		bool $dropdown = true,
 		bool $self = false
-	) {
+	): string {
 		return static::getBreadcrumbsDropdown($album, $dropdown, $self);
 	}
 
 	private static function getBreadcrumbsDropdown(
 		FotoAlbum $album,
-		$dropdown,
-		$self
+		bool $dropdown,
+		bool $self
 	): string {
 		$breadcrumbs =
 			'<li class="breadcrumb-item"><a href="/">' .

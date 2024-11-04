@@ -25,7 +25,12 @@ class NodeCitaat implements Node
 		return 'citaat';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return (string|string[])[][]
+	 *
+	 * @psalm-return array{attrs: array{van: array<string>|string, naam: array<string>|string, url: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbCitaat) {
 			throw new \InvalidArgumentException();

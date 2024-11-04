@@ -58,20 +58,6 @@ class AccountRepository extends AbstractRepository implements
 		return $this->findOneBy(['username' => $name]) != null;
 	}
 
-	public function findAdmins()
-	{
-		return $this->createQueryBuilder('a')
-			->where('a.perm_role NOT IN (:admin_perm_roles)')
-			->setParameter('admin_perm_roles', [
-				AccessRole::Lid,
-				AccessRole::Nobody,
-				AccessRole::Eter,
-				AccessRole::Oudlid,
-			])
-			->getQuery()
-			->getResult();
-	}
-
 	/**
 	 * @param Account $account
 	 */

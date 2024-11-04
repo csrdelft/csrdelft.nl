@@ -45,7 +45,7 @@ class AccountTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function may_su_to(Account $account)
+	public function may_su_to(Account $account): bool
 	{
 		return $this->suService->maySuTo($account);
 	}

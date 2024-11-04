@@ -35,9 +35,9 @@ class Afbeelding extends Bestand
 	public $height;
 
 	/**
-	 * @return string
+	 * @return null|string
 	 */
-	public function getFullPath()
+	public function getFullPath(): string|null
 	{
 		return PathUtil::join_paths($this->directory, $this->filename);
 	}

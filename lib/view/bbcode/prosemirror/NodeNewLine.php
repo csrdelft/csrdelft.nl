@@ -25,7 +25,10 @@ class NodeNewLine implements Node
 		return 'hard_break';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @psalm-return array<never, never>
+	 */
+	public function getData(BbNode $node): array
 	{
 		return [];
 	}

@@ -146,23 +146,6 @@ class GroepenBeheerTable extends DataTable
 		);
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getBreadcrumbs()
-	{
-		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
-			Icon::getTag('home') .
-			'</a></li>' .
-			'<li class="breadcrumb-item"><a href="/groepen">Groepen</a></li>' .
-			'<li class="breadcrumb-item"><a href="' .
-			$this->model->getUrl() .
-			'">' .
-			ucfirst((string) $this->naam) .
-			'</a></li>' .
-			'<li class="breadcrumb-item active">Beheren</li></ul>';
-	}
-
 	public function __toString(): string
 	{
 		$view = new CmsPaginaView($this->pagina);

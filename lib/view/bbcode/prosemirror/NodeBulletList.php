@@ -25,7 +25,10 @@ class NodeBulletList implements Node
 		return 'bullet_list';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @psalm-return array<never, never>
+	 */
+	public function getData(BbNode $node): array
 	{
 		return [];
 	}

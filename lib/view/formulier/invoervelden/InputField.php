@@ -110,11 +110,6 @@ abstract class InputField implements FormElement, Validator
 		return $this->model;
 	}
 
-	public function getBreadcrumbs()
-	{
-		return null;
-	}
-
 	public function getTitel()
 	{
 		return $this->description;

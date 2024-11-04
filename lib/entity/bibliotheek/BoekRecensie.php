@@ -69,34 +69,4 @@ class BoekRecensie
 	 * @return	bool
 	 * 		een beschrijving mag door schrijver van beschrijving en door admins bewerkt worden.
 	 */
-
-	/**
-	 * controleert rechten voor bewerkactie
-	 *
-	 * @return bool
-	 *        een beschrijving mag door schrijver van beschrijving en door admins bewerkt worden.
-	 */
-	public function magVerwijderen()
-	{
-		return $this->isSchrijver();
-	}
-
-	public function isSchrijver($uid = null): bool
-	{
-		if (!LoginService::mag(P_LOGGED_IN)) {
-			return false;
-		}
-		if ($uid === null) {
-			$uid = LoginService::getUid();
-		}
-		return $this->schrijver->uid == $uid;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function magBewerken()
-	{
-		return $this->isSchrijver();
-	}
 }

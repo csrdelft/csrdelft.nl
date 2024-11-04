@@ -37,11 +37,9 @@ abstract class FormKnoppen implements FormElement
 		return array_merge($this->knoppen_left, $this->knoppen_right);
 	}
 
-	public function getBreadcrumbs()
-	{
-		return null;
-	}
-
+	/**
+	 * @return string
+	 */
 	public function getTitel()
 	{
 		return $this->getType();

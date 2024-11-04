@@ -495,7 +495,7 @@ class LidZoekerService implements \Stringable
 		return $this->weergave;
 	}
 
-	public function getRawQuery($key)
+	public function getRawQuery(string $key)
 	{
 		if (!isset($this->rawQuery[$key])) {
 			return false;

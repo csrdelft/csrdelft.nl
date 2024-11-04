@@ -26,7 +26,12 @@ class NodeBestuur implements Node
 		return 'bestuur';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{id: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbBestuur) {
 			throw new \InvalidArgumentException();

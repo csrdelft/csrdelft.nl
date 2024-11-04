@@ -96,11 +96,6 @@ class Formulier implements View, Validator, ToResponse
 		return $this->model;
 	}
 
-	public function getBreadcrumbs()
-	{
-		return null;
-	}
-
 	private function loadProperty(InputField $field): void
 	{
 		$fieldName = $field->getName();

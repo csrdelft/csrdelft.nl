@@ -16,6 +16,9 @@ use CsrDelft\view\bbcode\CsrBB;
  */
 class HtmlBbComment extends HtmlComment
 {
+	/**
+	 * @return string
+	 */
 	public function getHtml()
 	{
 		return CsrBB::parseHtml($this->comment, true);

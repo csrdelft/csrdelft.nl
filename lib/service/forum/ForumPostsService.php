@@ -99,7 +99,7 @@ class ForumPostsService
 	/**
 	 * @return void
 	 */
-	public function bewerkForumPost($nieuwe_tekst, string $reden, ForumPost $post)
+	public function bewerkForumPost(string $nieuwe_tekst, string $reden, ForumPost $post)
 	{
 		similar_text($post->tekst, (string) $nieuwe_tekst, $gelijkheid);
 		$post->tekst = $nieuwe_tekst;

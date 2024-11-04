@@ -123,7 +123,7 @@ class DataTable implements View, FormElement, ToResponse
 	 * @param $orm
 	 * @throws Exception
 	 */
-	public function loadColumns($orm): void
+	public function loadColumns(string $orm): void
 	{
 		if (is_a($orm, CustomDataTableEntry::class, true)) {
 			foreach ($orm::getFieldNames() as $attribute) {
@@ -383,11 +383,6 @@ class DataTable implements View, FormElement, ToResponse
 	}
 
 	public function getTitel()
-	{
-		return $this->titel;
-	}
-
-	public function getBreadcrumbs()
 	{
 		return $this->titel;
 	}

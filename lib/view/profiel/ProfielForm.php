@@ -46,19 +46,7 @@ use CsrDelft\view\Icon;
  */
 class ProfielForm extends Formulier
 {
-	/**
-	 * @return string
-	 */
-	public function getBreadcrumbs()
-	{
-		return '<ol class="breadcrumb"><li class="breadcrumb-item"><a href="/">' .
-			Icon::getTag('home') .
-			'</a></li>' .
-			'<li class="breadcrumb-item"><a href="/ledenlijst">Leden</a></li>' .
-			'<li class="breadcrumb-item">' .
-			$this->model->getLink('civitas') .
-			'</li></ol>';
-	}
+
 
 	public function __construct(Profiel $profiel, $inschrijven)
 	{

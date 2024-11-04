@@ -125,15 +125,6 @@ class FotoAlbum extends Map
 	/**
 	 * @return bool
 	 */
-	public function isEmpty()
-	{
-		$subalbums = $this->getSubAlbums();
-		return empty($subalbums) && !$this->hasFotos(true);
-	}
-
-	/**
-	 * @return bool
-	 */
 	public function hasFotos(bool $incompleet = false)
 	{
 		$fotos = $this->getFotos($incompleet);
@@ -170,20 +161,6 @@ class FotoAlbum extends Map
 		} else {
 			return $this->fotos;
 		}
-	}
-
-	public function orderByDateModified(): void
-	{
-		$order = [];
-		foreach ($this->getFotos() as $i => $foto) {
-			$order[$i] = filemtime($foto->getFullPath());
-		}
-		arsort($order);
-		$result = [];
-		foreach ($order as $i => $mtime) {
-			$result[] = $this->fotos[$i];
-		}
-		$this->fotos = $result;
 	}
 
 	/**

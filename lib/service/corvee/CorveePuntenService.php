@@ -80,24 +80,6 @@ class CorveePuntenService
 	/**
 	 * @return void
 	 */
-	public function puntenToekennen(Profiel $profiel, int $punten, int $bonus_malus)
-	{
-		if (!is_int($punten) || !is_int($bonus_malus)) {
-			throw new CsrGebruikerException('Punten toekennen faalt: geen integer');
-		}
-
-		if ($punten !== 0 or $bonus_malus !== 0) {
-			$this->savePuntenVoorLid(
-				$profiel,
-				(int) $profiel->corvee_punten + $punten,
-				(int) $profiel->corvee_punten_bonus + $bonus_malus
-			);
-		}
-	}
-
-	/**
-	 * @return void
-	 */
 	public function savePuntenVoorLid(
 		Profiel $profiel,
 		int|null $punten = null,

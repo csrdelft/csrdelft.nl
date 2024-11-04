@@ -26,7 +26,12 @@ class NodeOndervereniging implements Node
 		return 'ondervereniging';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{id: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbOndervereniging) {
 			throw new \InvalidArgumentException();

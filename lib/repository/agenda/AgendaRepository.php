@@ -57,28 +57,6 @@ class AgendaRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param $itemId
-	 * @return AgendaItem|null
-	 */
-	public function getAgendaItem(int $itemId)
-	{
-		return $this->find($itemId);
-	}
-
-	public function getICalendarItems()
-	{
-		return $this->filterVerborgen(
-			$this->getAllAgendeerbaar(
-				date_create_immutable(
-					InstellingUtil::instelling('agenda', 'ical_from')
-				),
-				date_create_immutable(InstellingUtil::instelling('agenda', 'ical_to')),
-				true
-			)
-		);
-	}
-
-	/**
 	 * @param DateTimeImmutable $van
 	 * @param DateTimeImmutable $tot
 	 * @param null|string $query

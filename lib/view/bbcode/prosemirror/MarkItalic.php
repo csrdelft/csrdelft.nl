@@ -15,7 +15,10 @@ class MarkItalic implements Mark
 		return BbItalic::class;
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @psalm-return array<never, never>
+	 */
+	public function getData(BbNode $node): array
 	{
 		return [];
 	}

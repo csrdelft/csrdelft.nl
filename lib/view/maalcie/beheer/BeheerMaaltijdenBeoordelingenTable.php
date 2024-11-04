@@ -48,14 +48,4 @@ class BeheerMaaltijdenBeoordelingenTable extends DataTable
 		$this->searchColumn('titel');
 		$this->searchColumn('datum');
 	}
-
-	/**
-	 * @return string
-	 *
-	 * @psalm-return 'Maaltijden / Beheer / Beoordelingen'
-	 */
-	public function getBreadcrumbs()
-	{
-		return 'Maaltijden / Beheer / Beoordelingen';
-	}
 }

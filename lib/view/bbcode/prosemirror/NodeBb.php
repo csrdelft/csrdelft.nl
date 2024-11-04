@@ -26,7 +26,12 @@ class NodeBb implements Node
 		return 'bb';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{bb: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbBb) {
 			throw new \InvalidArgumentException();

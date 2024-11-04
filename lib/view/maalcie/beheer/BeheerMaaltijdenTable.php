@@ -184,14 +184,4 @@ class BeheerMaaltijdenTable extends DataTable
 			)
 		);
 	}
-
-	/**
-	 * @return string
-	 *
-	 * @psalm-return 'Maaltijden / Beheer'
-	 */
-	public function getBreadcrumbs()
-	{
-		return 'Maaltijden / Beheer';
-	}
 }

@@ -103,7 +103,7 @@ class UploadFileField extends InputField
 	/**
 	 * @return void
 	 */
-	public function opslaan($directory, $filename, $overwrite = false)
+	public function opslaan(string $directory, string $filename, $overwrite = false)
 	{
 		parent::opslaan($directory, $filename, $overwrite);
 		$moved = @move_uploaded_file(

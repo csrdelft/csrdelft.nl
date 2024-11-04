@@ -34,11 +34,17 @@ class BbForumPlaatje extends BbImg
 		return $this->plaatje->access_key;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getLinkUrl()
 	{
 		return $this->plaatje->getUrl(false);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getSourceUrl()
 	{
 		return $this->plaatje->getUrl(true);

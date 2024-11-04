@@ -103,29 +103,6 @@ class CiviProduct implements DataTableEntry, DisplayEntity
 		return null;
 	}
 
-	/**
-	 * Haalt de prijs van dit product op in een bepaald moment.
-	 *
-	 * @param \DateTimeInterface $moment
-	 * @return false|mixed
-	 */
-	public function getPrijsOpMoment(\DateTimeInterface $moment)
-	{
-		$vanExpr = Criteria::expr()->lt('van', $moment);
-		$totExpr = Criteria::expr()->orX(
-			Criteria::expr()->gt('tot', $moment),
-			Criteria::expr()->isNull('tot')
-		);
-		$criteria = Criteria::create()->where(
-			Criteria::expr()->andX($vanExpr, $totExpr)
-		);
-
-		/** @var CiviPrijs $prijs */
-		$prijs = $this->prijzen->matching($criteria)->first();
-
-		return $prijs->prijs;
-	}
-
 	public function getBeschrijvingFormatted(): string
 	{
 		return sprintf(

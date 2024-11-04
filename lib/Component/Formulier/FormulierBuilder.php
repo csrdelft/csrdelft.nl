@@ -132,9 +132,4 @@ class FormulierBuilder
 	{
 		$this->validationMethods[] = $param;
 	}
-
-	public function setModel(mixed $model): void
-	{
-		$this->model = $model;
-	}
 }

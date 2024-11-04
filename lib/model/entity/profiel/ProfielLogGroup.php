@@ -15,18 +15,7 @@ use DateTime;
  */
 abstract class ProfielLogGroup
 {
-	/**
-	 * @param string $editor
-	 * @param DateTime $timestamp
-	 */
-	public function __construct(
-		/**
-		 * UID of editor
-		 */
-		public $editor,
-		public $timestamp
-	) {
-	}
+
 
 	/**
 	 * @return false

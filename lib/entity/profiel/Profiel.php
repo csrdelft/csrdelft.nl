@@ -625,9 +625,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 * verwacht, terwijl een verjaardag een periodieke activiteit (elk
 	 * jaar) is.
 	 *
-	 * @return DateTimeImmutable|false timestamp
+	 * @return DateTimeImmutable timestamp
 	 */
-	public function getBeginMoment(): DateTimeImmutable|false
+	public function getBeginMoment(): DateTimeImmutable
 	{
 		$dag = $this->gebdatum->format('m-d');
 		if (isset($GLOBALS['agenda_van'], $GLOBALS['agenda_tot'])) {
@@ -999,7 +999,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			'" />';
 	}
 
-	public function getPasfotoRounded()
+	public function getPasfotoRounded(): string
 	{
 		return $this->getPasfotoTag('rounded-circle flex-shrink-0');
 	}
@@ -1143,12 +1143,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->achternaam ? $this->getNaam('volledig') : '';
 	}
 
-	public function getChar()
+	public function getChar(): string
 	{
 		return LidStatus::from($this->status)->getChar();
 	}
 
-	public function getLidStatusDescription()
+	public function getLidStatusDescription(): string
 	{
 		return LidStatus::from($this->status)->getDescription();
 	}

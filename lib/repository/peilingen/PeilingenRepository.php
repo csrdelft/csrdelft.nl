@@ -131,17 +131,4 @@ class PeilingenRepository extends AbstractRepository
 			return $zichtbarePeilingen;
 		}
 	}
-
-	public function magBewerken(Peiling $peiling)
-	{
-		if (
-			LoginService::mag(P_PEILING_MOD) ||
-			$peiling->eigenaar == LoginService::getUid() ||
-			LoginService::mag($peiling->rechten_mod)
-		) {
-			return $peiling;
-		}
-
-		return false;
-	}
 }

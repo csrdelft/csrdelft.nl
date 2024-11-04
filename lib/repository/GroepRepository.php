@@ -143,53 +143,6 @@ abstract class GroepRepository extends AbstractRepository
 	}
 
 	/**
-	 * Converteer groep inclusief leden van klasse.
-	 *
-	 * @param Groep $oldgroep
-	 * @param GroepRepository $oldmodel
-	 * @param string $soort
-	 * @return Groep|bool
-	 */
-	public function converteer(
-		Groep $oldgroep,
-		GroepRepository $oldmodel,
-		$soort = null
-	) {
-		try {
-			return $this->_em->transactional(function () use (
-				$oldgroep,
-				$oldmodel,
-				$soort
-			) {
-				// groep converteren
-				$newgroep = $this->nieuw($soort);
-				$rc = new ReflectionClass($oldgroep);
-				foreach ($rc->getProperties(ReflectionProperty::IS_PUBLIC) as $field) {
-					if (property_exists($newgroep, $field->getName())) {
-						$newgroep->{$field->getName()} = $oldgroep->{$field->getName()};
-					}
-				}
-				$newgroep->id = null;
-				$this->_em->persist($newgroep);
-
-				foreach ($oldgroep->getLeden() as $lid) {
-					$lid->groep = $newgroep;
-					$newgroep->getLeden()->add($lid);
-				}
-
-				// groep verwijderen
-				$this->_em->remove($oldgroep);
-				$this->_em->flush();
-
-				return $newgroep;
-			});
-		} catch (Throwable $ex) {
-			FlashUtil::setFlashWithContainerFacade($ex->getMessage(), -1);
-			return false;
-		}
-	}
-
-	/**
 	 * @param null $soort
 	 * @return Groep
 	 */
@@ -365,62 +318,8 @@ abstract class GroepRepository extends AbstractRepository
 		return [];
 	}
 
-	/**
-	 * Laat een specifieke implementatie ook filteren op soort
-	 *
-	 * @param int|null $limit
-	 * @param int|null $offset
-	 * @param string|null $soort
-	 * @return Groep
-	 */
-	public function overzicht(
-		int $limit = null,
-		int $offset = null,
-		string $soort = null
-	) {
-		return $this->findBy(
-			['status' => GroepStatus::HT()],
-			null,
-			$limit,
-			$offset
-		);
-	}
-
-	public function overzichtAantal(string $soort = null)
-	{
-		$activiteiten = $this->overzicht(null, null, $soort);
-
-		$aantal = 0;
-		foreach ($activiteiten as $activiteit) {
-			if (
-				$this->security->isGranted(AbstractGroepVoter::BEKIJKEN, $activiteit)
-			) {
-				$aantal++;
-			}
-		}
-
-		return $aantal;
-	}
-
 	public function parseSoort(string $soort = null)
 	{
 		return null;
-	}
-
-	/**
-	 * Vind de groep uit deze familie met het laatste eindMoment
-	 * @param Groep $groep
-	 * @return Groep|null
-	 */
-	public function findOt(Groep $groep)
-	{
-		$sortBy = [];
-		if ($groep instanceof HeeftMoment) {
-			$sortBy = ['eindMoment' => 'DESC'];
-		}
-		return $this->findOneBy(
-			['familie' => $groep->familie, 'status' => GroepStatus::OT()],
-			$sortBy
-		);
 	}
 }

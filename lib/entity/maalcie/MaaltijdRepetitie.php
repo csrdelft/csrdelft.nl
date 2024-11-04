@@ -107,11 +107,6 @@ class MaaltijdRepetitie implements DisplayEntity
 	]
 	public $abonnementen;
 
-	public function getStandaardPrijs(): int
-	{
-		return $this->product->getPrijsInt();
-	}
-
 	/**
 	 * @return string
 	 */

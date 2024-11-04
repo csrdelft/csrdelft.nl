@@ -15,7 +15,12 @@ class NodeImage implements Node
 		return BbImg::class;
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return array[]
+	 *
+	 * @psalm-return array{attrs: array{alt: mixed, src: mixed, title: mixed}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbImg) {
 			throw new \InvalidArgumentException();

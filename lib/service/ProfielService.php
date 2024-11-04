@@ -162,16 +162,20 @@ class ProfielService
 	 *
 	 * R_LID en R_OUDLID hebben beide P_LEDEN_READ en P_OUDLEDEN_READ en kunnen
 	 * de volgende afkortingen gebruiken:
-	 *  - '' (lege string) of alleleden: novieten, (gast)leden, kringels, ere- en oudleden
-	 *  - leden :  						novieten, (gast)leden en kringels
-	 *  - oudleden : 					oud- en ereleden
-	 *  - allepersonen:	 novieten, (gast)leden, kringels, oud- en ereleden, overleden leden en nobodies (alleen geen commissies)
+	 * - '' (lege string) of alleleden: novieten, (gast)leden, kringels, ere- en oudleden
+	 * - leden :        novieten, (gast)leden en kringels
+	 * - oudleden :      oud- en ereleden
+	 * - allepersonen:  novieten, (gast)leden, kringels, oud- en ereleden, overleden leden en nobodies (alleen geen commissies)
 	 * én alleen voor OUDLEDENMOD:
-	 *  - nobodies : 					alleen nobodies
+	 * - nobodies :      alleen nobodies
+	 *
 	 * @param $zoekstatus
+	 *
 	 * @return array
+	 *
+	 * @psalm-param list<mixed>|string $zoekstatus
 	 */
-	private function determineStatussen($zoekstatus): array
+	private function determineStatussen(array|string $zoekstatus): array
 	{
 		$statussen = [];
 		if (is_array($zoekstatus)) {

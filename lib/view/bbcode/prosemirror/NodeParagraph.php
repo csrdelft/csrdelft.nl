@@ -25,7 +25,10 @@ class NodeParagraph implements Node
 		return 'paragraph';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @psalm-return array<never, never>
+	 */
+	public function getData(BbNode $node): array
 	{
 		return [];
 	}

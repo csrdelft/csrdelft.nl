@@ -25,7 +25,12 @@ class NodeHeader implements Node
 		return 'heading';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return array[]
+	 *
+	 * @psalm-return array{attrs: array{level: mixed}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbHeading) {
 			throw new \InvalidArgumentException();

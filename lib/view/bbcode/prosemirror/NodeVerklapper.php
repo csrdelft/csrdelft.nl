@@ -15,7 +15,10 @@ class NodeVerklapper implements Node
 		return BbVerklapper::class;
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @psalm-return array<never, never>
+	 */
+	public function getData(BbNode $node): array
 	{
 		return [];
 	}

@@ -25,7 +25,12 @@ class NodeDocument implements Node
 		return 'document';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{id: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbDocument) {
 			throw new \InvalidArgumentException();

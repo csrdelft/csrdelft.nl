@@ -62,12 +62,4 @@ class Woonoord extends Groep implements HeeftSoort, HeeftMoment
 	{
 		$this->huisStatus = $soort;
 	}
-
-	/**
-	 * @return void
-	 */
-	public function setSoortString($soort)
-	{
-		$this->huisStatus = HuisStatus::from($soort);
-	}
 }

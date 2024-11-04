@@ -89,34 +89,4 @@ class BoekExemplaar
 	{
 		return $this->eigenaar_uid == 'x222';
 	}
-
-	public function isEigenaar(): bool
-	{
-		if ($this->eigenaar_uid == LoginService::getUid()) {
-			return true;
-		} elseif ($this->isBiebBoek() && LoginService::mag(P_BIEB_MOD)) {
-			return true;
-		}
-		return false;
-	}
-
-	public function magBewerken(): bool
-	{
-		return $this->isEigenaar();
-	}
-
-	public function isBeschikbaar(): bool
-	{
-		return $this->status === BoekExemplaarStatus::beschikbaar();
-	}
-
-	public function isUitgeleend(): bool
-	{
-		return $this->status === BoekExemplaarStatus::uitgeleend();
-	}
-
-	public function isTeruggegeven(): bool
-	{
-		return $this->status === BoekExemplaarStatus::teruggegeven();
-	}
 }

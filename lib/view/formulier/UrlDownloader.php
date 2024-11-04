@@ -30,7 +30,7 @@ class UrlDownloader
 	 * @param $url
 	 * @return mixed|string
 	 */
-	public function file_get_contents($url)
+	public function file_get_contents(string $url)
 	{
 		if ($this->file_get_contents_available()) {
 			return @file_get_contents($url);
@@ -54,7 +54,7 @@ class UrlDownloader
 	 * @param $url
 	 * @return mixed
 	 */
-	protected function curl_file_get_contents($url)
+	protected function curl_file_get_contents(string $url)
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);

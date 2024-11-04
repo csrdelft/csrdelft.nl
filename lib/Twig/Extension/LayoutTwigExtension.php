@@ -86,7 +86,7 @@ class LayoutTwigExtension extends AbstractExtension
 		return (new InstantSearchForm())->__toString();
 	}
 
-	public function login_form()
+	public function login_form(): string
 	{
 		return $this->formulierFactory
 			->create(LoginForm::class, null, [])

@@ -54,12 +54,4 @@ class Commissie extends Groep implements HeeftSoort, HeeftMoment
 	{
 		$this->commissieSoort = $soort;
 	}
-
-	/**
-	 * @return void
-	 */
-	public function setSoortString($soort)
-	{
-		$this->commissieSoort = CommissieSoort::from($soort);
-	}
 }

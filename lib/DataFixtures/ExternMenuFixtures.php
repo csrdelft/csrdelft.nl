@@ -38,7 +38,7 @@ class ExternMenuFixtures extends Fixture
 	}
 
 	private function nieuwMenuItem(
-		$parent,
+		MenuItem|null $parent,
 		int $volgorde,
 		string $tekst,
 		string $link,

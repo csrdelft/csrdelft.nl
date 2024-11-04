@@ -26,7 +26,12 @@ class NodeLid implements Node
 		return 'lid';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{uid: string, naam: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbLid) {
 			throw new \InvalidArgumentException();

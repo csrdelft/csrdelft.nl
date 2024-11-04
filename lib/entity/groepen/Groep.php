@@ -198,7 +198,12 @@ class Groep implements DataTableEntry, DisplayEntity
 		return array_map(fn($e) => $e['familie'], $result);
 	}
 
-	public function getOpmerkingSuggesties()
+	/**
+	 * @return (CommissieFunctie|mixed|string)[]
+	 *
+	 * @psalm-return array<CommissieFunctie|mixed|string>
+	 */
+	public function getOpmerkingSuggesties(): array
 	{
 		if (isset($this->keuzelijst)) {
 			$suggesties = [];
@@ -229,32 +234,6 @@ class Groep implements DataTableEntry, DisplayEntity
 		return $this->getLeden()
 			->matching(Eisen::voorGebruiker($uid))
 			->first();
-	}
-
-	/**
-	 * Controleer of keuzes overeen komen.
-	 *
-	 * @param GroepKeuzeSelectie[] $keuzes
-	 * @return bool
-	 */
-	public function valideerOpmerking(array $keuzes)
-	{
-		$correct = [];
-		foreach ($keuzes as $keuze) {
-			foreach ($this->keuzelijst2 as $optie) {
-				// TODO: vaststellen waarom deze niet als object uit doctrine komt
-				if (is_array($optie)) {
-					$optieNaam = $optie['naam'];
-				} else {
-					$optieNaam = $optie->naam;
-				}
-				if ($optieNaam == $keuze->naam && !in_array($keuze, $correct)) {
-					$correct[] = $keuze;
-				}
-			}
-		}
-
-		return count($keuzes) == count($correct);
 	}
 
 	/**

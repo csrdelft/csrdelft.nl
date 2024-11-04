@@ -16,19 +16,7 @@ use CsrDelft\repository\ProfielRepository;
  */
 class ProfielUpdateLogGroup extends ProfielLogGroup
 {
-	/**
-	 * @param \CsrDelft\model\entity\profiel\AbstractProfielLogEntry[] $entries
-	 */
-	public function __construct(
-		$editor,
-		$timestamp /**
-		 * All changes in the entry
-		 * @var AbstractProfielLogEntry[]
-		 */,
-		public $entries
-	) {
-		parent::__construct($editor, $timestamp);
-	}
+
 
 	/**
 	 * Censureer alle velden met gegeven naam

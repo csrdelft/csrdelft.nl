@@ -25,7 +25,10 @@ class NodeHorizontalRule implements Node
 		return 'horizontal_rule';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @psalm-return array<never, never>
+	 */
+	public function getData(BbNode $node): array
 	{
 		return [];
 	}

@@ -26,7 +26,12 @@ class NodeVerticale implements Node
 		return 'verticale';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{id: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbVerticale) {
 			throw new \InvalidArgumentException();

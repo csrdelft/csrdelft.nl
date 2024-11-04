@@ -87,9 +87,9 @@ class CorveeHerinneringService
 	}
 
 	/**
-	 * @return (CsrGebruikerException|mixed)[][]
+	 * @return (CsrGebruikerException|string)[][]
 	 *
-	 * @psalm-return list{list<mixed>, list<CsrDelft\common\CsrGebruikerException>}
+	 * @psalm-return list{list<string>, list<CsrDelft\common\CsrGebruikerException>}
 	 */
 	public function stuurHerinneringen(): array
 	{

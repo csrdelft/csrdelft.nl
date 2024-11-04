@@ -25,7 +25,12 @@ class NodeOrderedList implements Node
 		return 'ordered_list';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return array[]
+	 *
+	 * @psalm-return array{attrs: array{order: mixed}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbOrderedList) {
 			throw new \InvalidArgumentException();

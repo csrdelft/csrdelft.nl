@@ -233,19 +233,6 @@ class CiviSaldoRepository extends AbstractRepository
 	}
 
 	/**
-	 * @param int $saldogrens
-	 * @return CiviSaldo[]
-	 */
-	public function getRoodstaandeLeden($saldogrens)
-	{
-		return $this->createQueryBuilder('cs')
-			->where('cs.saldo < :saldogrens')
-			->setParameter('saldogrens', $saldogrens)
-			->getQuery()
-			->getResult();
-	}
-
-	/**
 	 * @param DateTimeImmutable $from
 	 * @param DateTimeImmutable $until
 	 * @return stdClass

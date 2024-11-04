@@ -119,26 +119,9 @@ class ForumDeel
 		return LoginService::mag($this->rechten_modereren);
 	}
 
-	public function magMeldingKrijgen()
+	public function magMeldingKrijgen(): bool
 	{
 		return $this->magLezen();
-	}
-
-	/**
-	 * Lazy loading by foreign key.
-	 *
-	 * @return ForumDraad[]
-	 */
-	public function getForumDraden()
-	{
-		if (!isset($this->forum_draden)) {
-			$this->setForumDraden(
-				ContainerFacade::getContainer()
-					->get(ForumDradenRepository::class)
-					->getForumDradenVoorDeel($this)
-			);
-		}
-		return $this->forum_draden;
 	}
 
 	/**

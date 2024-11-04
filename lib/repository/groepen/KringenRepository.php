@@ -33,39 +33,6 @@ class KringenRepository extends GroepRepository
 		);
 	}
 
-	public function isLid(
-		UserInterface $user,
-		$familie,
-		$status = 'ht',
-		$role = null
-	): bool {
-		try {
-			[$verticale, $kringNummer] = explode('.', (string) $familie);
-			if ($verticale && $kringNummer) {
-				return 1 ===
-					(int) $this->_em
-						->createQuery(
-							<<<'EOF'
-SELECT COUNT(kring)
-FROM CsrDelft\entity\groepen\Kring kring
-JOIN kring.leden lid
-WHERE kring.verticale = :verticale AND kring.kringNummer = :kringNummer AND lid.uid = :uid
-EOF
-						)
-						->setParameters([
-							'verticale' => $verticale,
-							'kringNummer' => $kringNummer,
-							'uid' => $user->getUserIdentifier(),
-						])
-						->getSingleScalarResult();
-			}
-
-			return parent::isLid($user, $familie, $status, $role);
-		} catch (NoResultException | NonUniqueResultException) {
-			return false;
-		}
-	}
-
 	public function get($id)
 	{
 		if (is_numeric($id)) {

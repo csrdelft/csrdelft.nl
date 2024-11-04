@@ -164,26 +164,6 @@ class LidStatus extends Enum
 	}
 
 	/**
-	 * @return string[]
-	 *
-	 * @psalm-return list<string>
-	 */
-	public static function getFiscaalLidLike(): array
-	{
-		return array_values(static::$fiscaalLidlike);
-	}
-
-	/**
-	 * @return string[]
-	 *
-	 * @psalm-return list<string>
-	 */
-	public static function getFiscaalOudlidLike(): array
-	{
-		return array_values(static::$fiscaalOudlidlike);
-	}
-
-	/**
 	 * @param string $option
 	 *
 	 * @return bool

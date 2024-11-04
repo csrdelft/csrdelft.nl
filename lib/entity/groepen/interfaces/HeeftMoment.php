@@ -10,9 +10,4 @@ interface HeeftMoment
 	 * @return DateTimeImmutable
 	 */
 	public function getBeginMoment(): DateTimeImmutable;
-
-	/**
-	 * @return DateTimeImmutable
-	 */
-	public function getEindMoment(): DateTimeImmutable;
 }

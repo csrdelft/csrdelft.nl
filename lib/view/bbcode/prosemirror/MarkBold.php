@@ -15,7 +15,10 @@ class MarkBold implements Mark
 		return BbBold::class;
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @psalm-return array<never, never>
+	 */
+	public function getData(BbNode $node): array
 	{
 		return [];
 	}

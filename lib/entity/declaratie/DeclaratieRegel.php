@@ -35,11 +35,6 @@ class DeclaratieRegel
 		return $this->id;
 	}
 
-	public function getBon(): ?DeclaratieBon
-	{
-		return $this->bon;
-	}
-
 	public function setBon(?DeclaratieBon $bon): static
 	{
 		$this->bon = $bon;

@@ -120,41 +120,11 @@ class Peiling implements DataTableEntry
 	]
 	public $eigenaarProfiel;
 
-	#[Serializer\Groups('vue')]
-	public function getHeeftGestemd(): bool
-	{
-		return (bool) $this->stemmen
-			->matching(Eisen::voorIngelogdeGebruiker())
-			->first();
-	}
-
 	public function getStem(Profiel $profiel)
 	{
 		return $this->stemmen
 			->matching(Eisen::voorGebruiker($profiel->uid))
 			->first();
-	}
-
-	/**
-	 * @return bool
-	 */
-	#[Serializer\Groups(['datatable', 'vue'])]
-	public function getMagBewerken()
-	{
-		return ContainerFacade::getContainer()
-			->get('security')
-			->isGranted('bewerken', $this);
-	}
-
-	/**
-	 * @return bool
-	 */
-	#[Serializer\Groups(['datatable', 'vue'])]
-	public function getMagStemmen()
-	{
-		return ContainerFacade::getContainer()
-			->get('security')
-			->isGranted('stemmen', $this);
 	}
 
 	/**
@@ -174,14 +144,5 @@ class Peiling implements DataTableEntry
 		return ContainerFacade::getContainer()
 			->get('security')
 			->isGranted('bekijken', $this);
-	}
-
-	/**
-	 * @return string|null
-	 */
-	#[Serializer\Groups(['datatable', 'vue'])]
-	public function getBeschrijving()
-	{
-		return CsrBB::parse($this->beschrijving);
 	}
 }

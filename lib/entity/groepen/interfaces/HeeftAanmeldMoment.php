@@ -17,11 +17,6 @@ interface HeeftAanmeldMoment
 	public function getAanmeldenTot(): ?DateTimeImmutable;
 
 	/**
-	 * @param DateTimeImmutable $aanmeldenTot
-	 */
-	public function setAanmeldenTot(DateTimeImmutable $aanmeldenTot): void;
-
-	/**
 	 * @return DateTimeImmutable|null
 	 */
 	public function getBewerkenTot(): ?DateTimeImmutable;

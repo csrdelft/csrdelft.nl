@@ -40,11 +40,9 @@ class FormulierKnop implements FormElement
 		return null;
 	}
 
-	public function getBreadcrumbs()
-	{
-		return null;
-	}
-
+	/**
+	 * @return string
+	 */
 	public function getTitel()
 	{
 		return $this->getType();

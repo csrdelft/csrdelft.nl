@@ -30,11 +30,6 @@ class CsrfField implements View, FormElement
 		return null;
 	}
 
-	public function getBreadcrumbs()
-	{
-		return null;
-	}
-
 	/**
 	 * @return CsrfToken
 	 */

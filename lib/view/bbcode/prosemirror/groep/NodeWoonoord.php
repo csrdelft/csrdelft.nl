@@ -26,7 +26,12 @@ class NodeWoonoord implements Node
 		return 'woonoord';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{id: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbWoonoord) {
 			throw new \InvalidArgumentException();

@@ -27,20 +27,4 @@ class DocumentRepository extends AbstractRepository
 	{
 		return $this->find($id);
 	}
-
-	/**
-	 * @param null|string $zoekterm
-	 * @param int $limiet
-	 *
-	 * @return Document[]
-	 */
-	public function zoek(string|null $zoekterm, $limiet = null)
-	{
-		return $this->createQueryBuilder('d')
-			->where('MATCH(d.naam, d.filename) AGAINST (:zoekterm) > 0')
-			->setParameter('zoekterm', $zoekterm)
-			->setMaxResults($limiet)
-			->getQuery()
-			->getResult();
-	}
 }

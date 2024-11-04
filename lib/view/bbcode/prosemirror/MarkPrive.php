@@ -32,7 +32,12 @@ class MarkPrive implements Mark
 		];
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{prive: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbPrive) {
 			throw new \InvalidArgumentException();

@@ -35,18 +35,6 @@ class Deelnemer
 		return $this->id;
 	}
 
-	public function getActiviteit(): AanmeldActiviteit
-	{
-		return $this->activiteit;
-	}
-
-	public function setActiviteit(?AanmeldActiviteit $activiteit): static
-	{
-		$this->activiteit = $activiteit;
-
-		return $this;
-	}
-
 	public function getAantal(): int
 	{
 		return $this->aantal;
@@ -55,10 +43,5 @@ class Deelnemer
 	public function getLid(): Profiel
 	{
 		return $this->lid;
-	}
-
-	public function isAanwezig(): bool
-	{
-		return $this->aanwezig !== null;
 	}
 }

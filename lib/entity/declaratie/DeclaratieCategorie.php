@@ -45,13 +45,6 @@ class DeclaratieCategorie
 		return $this->wachtrij;
 	}
 
-	public function setWachtrij(DeclaratieWachtrij $wachtrij): static
-	{
-		$this->wachtrij = $wachtrij;
-
-		return $this;
-	}
-
 	public function magBeoordelen(): bool
 	{
 		return $this->getWachtrij()->magBeoordelen();

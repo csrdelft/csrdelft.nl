@@ -9,7 +9,7 @@ class FormulierFactory
 {
 
 
-	public function create(string $type, $data, array $options)
+	public function create(string $type, $data, array $options): FormulierInstance
 	{
 		/** @var FormulierTypeInterface $typeInstance */
 		$typeInstance = $this->registry->get($type);

@@ -157,7 +157,7 @@ class CsrTwigExtension extends AbstractExtension
 			'" />';
 	}
 
-	public function cms($id)
+	public function cms($id): string
 	{
 		$pagina = $this->cmsPaginaRepository->find($id);
 
@@ -269,7 +269,7 @@ class CsrTwigExtension extends AbstractExtension
 		?string $string,
 		string $mode = 'normal',
 		bool $inlineHtml = false
-	) {
+	): string {
 		if (!$string) {
 			return '';
 		}

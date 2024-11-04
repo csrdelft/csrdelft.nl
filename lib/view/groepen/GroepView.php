@@ -90,11 +90,6 @@ class GroepView implements FormElement, ToResponse
 		return $this->groep->naam;
 	}
 
-	public function getBreadcrumbs()
-	{
-		return null;
-	}
-
 	/**
 	 * @return string
 	 */

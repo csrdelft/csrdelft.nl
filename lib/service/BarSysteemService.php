@@ -25,17 +25,6 @@ class BarSysteemService
 	 */
 	private $db;
 
-	/**
-	 * @return CiviSaldo[]
-	 */
-	public function getPersonen()
-	{
-		return $this->civiSaldoRepository->findBy(
-			['deleted' => false],
-			['laatst_veranderd' => 'DESC']
-		);
-	}
-
 	public function getProfiel($uid)
 	{
 		$q = $this->db->prepare(
@@ -77,179 +66,6 @@ SQL
 	}
 
 	/**
-	 * Maak een nieuwe bestelling aan.
-	 *
-	 * @param string $uid
-	 * @param string $cie
-	 * @param null|scalar $inhoud
-	 *
-	 * @return bool|mixed
-	 */
-	public function verwerkBestelling($uid, $cie, $inhoud)
-	{
-		$em = $this->entityManager;
-		return $em->transactional(function () use ($em, $uid, $cie, $inhoud) {
-			$civiBestelling = new CiviBestelling();
-
-			$civiSaldo = $this->civiSaldoRepository->find($uid);
-
-			$civiBestelling->civiSaldo = $civiSaldo;
-			$civiBestelling->cie = $cie;
-			$civiBestelling->deleted = false;
-			$civiBestelling->moment = date_create_immutable();
-
-			$em->persist($civiBestelling);
-
-			$em->flush();
-
-			$totaal = 0;
-
-			foreach ($inhoud as $id => $aantal) {
-				$nieuwBestellingInhoud = new CiviBestellingInhoud();
-				$nieuwBestellingInhoud->aantal = $aantal;
-				$nieuwBestellingInhoud->setProduct(
-					$this->civiProductRepository->find($id)
-				);
-				$nieuwBestellingInhoud->setBestelling($civiBestelling);
-
-				$totaal += $aantal * $nieuwBestellingInhoud->product->getPrijsInt();
-
-				$civiBestelling->inhoud->add($nieuwBestellingInhoud);
-
-				$em->persist($nieuwBestellingInhoud);
-			}
-
-			$civiBestelling->totaal = $totaal;
-
-			$civiSaldo->saldo -= $totaal;
-			$civiSaldo->laatst_veranderd = date_create_immutable();
-
-			$em->flush();
-
-			return null;
-		});
-	}
-
-	/**
-	 * @return CiviProduct[]
-	 */
-	public function getProducten()
-	{
-		return $this->civiProductRepository->findByCie('soccie');
-	}
-
-	/**
-	 * @param false|int|string $bestelId
-	 */
-	private function getBestellingTotaal(string|int|false $bestelId)
-	{
-		$q = $this->db->prepare(
-			'SELECT SUM(prijs * aantal) FROM civi_bestelling_inhoud AS I JOIN civi_prijs AS P USING (product_id) WHERE bestelling_id = :bestelId AND tot IS NULL'
-		);
-		$q->bindValue(':bestelId', $bestelId, PDO::PARAM_INT);
-		$q->execute();
-		return $q->fetchColumn();
-	}
-
-	/**
-	 * @param null|scalar $persoon
-	 * @param array|null|scalar $productIDs
-	 *
-	 * @psalm-param T|array|null|scalar $productIDs
-	 *
-	 * @return CiviBestelling[]
-	 *
-	 * @psalm-return array<CiviBestelling>
-	 */
-	public function getBestellingLaatste(
-		$persoon,
-		\DateTimeImmutable $begin = null,
-		\DateTimeImmutable $eind = null,
-		$productIDs = []
-	): array {
-		if ($begin == null) {
-			$begin = date_create_immutable()->add(new \DateInterval('P15H'));
-		} else {
-			$begin = $begin->setTime(0, 0, 0);
-		}
-		if ($eind == null) {
-			$eind = date_create_immutable();
-		} else {
-			$eind = $eind->setTime(23, 59, 59);
-		}
-
-		if ($persoon == 'alles') {
-			return $this->civiBestellingRepository->findTussen($begin, $eind, [
-				'soccie',
-				'oweecie',
-			]);
-		} else {
-			return $this->civiBestellingRepository->findTussen(
-				$begin,
-				$eind,
-				['soccie', 'oweecie'],
-				$persoon
-			);
-		}
-	}
-
-	/**
-	 * @param string $uid
-	 * @param integer $bestelId
-	 * @param null|scalar $inhoud
-	 */
-	public function updateBestelling($uid, $bestelId, $inhoud): void
-	{
-		$em = $this->entityManager;
-
-		$em->transactional(function () use ($em, $uid, $bestelId, $inhoud): void {
-			$civiBestelling = $this->civiBestellingRepository->find($bestelId);
-			$civiSaldo = $this->civiSaldoRepository->find($uid);
-
-			// Voeg totaal van bestelling toe aan CiviSaldo
-			$civiSaldo->saldo += $civiBestelling->berekenTotaal();
-
-			$em->flush();
-
-			// Verwijder de inhoud van de oude bestelling.
-
-			foreach ($civiBestelling->inhoud as $item) {
-				$item->setBestelling(null);
-				$em->remove($item);
-			}
-
-			$civiBestelling->inhoud->clear();
-			$civiBestelling->totaal = 0;
-
-			$em->flush();
-
-			// Voeg de inhoud van de bestelling toe.
-
-			foreach ($inhoud as $id => $aantal) {
-				$bestellinInhoud = new CiviBestellingInhoud();
-				$bestellinInhoud->setProduct($this->civiProductRepository->find($id));
-				$bestellinInhoud->aantal = $aantal;
-				$bestellinInhoud->setBestelling($civiBestelling);
-
-				$em->persist($bestellinInhoud);
-
-				$civiBestelling->inhoud->add($bestellinInhoud);
-			}
-
-			$em->flush();
-
-			// Update het totaal van de CiviBestelling
-			$civiBestelling->totaal = $civiBestelling->berekenTotaal();
-
-			// Trek totaal van het saldo af.
-
-			$civiSaldo->saldo -= $civiBestelling->totaal;
-
-			$em->flush();
-		});
-	}
-
-	/**
 	 * @param null|scalar $socCieId
 	 */
 	public function getSaldo($socCieId)
@@ -260,48 +76,6 @@ SQL
 		$q->bindValue(':socCieId', $socCieId);
 		$q->execute();
 		return $q->fetchColumn();
-	}
-
-	public function verwijderBestelling($bestelId): void
-	{
-		$em = $this->entityManager;
-
-		$em->transactional(function () use ($em, $bestelId): void {
-			$civiBestelling = $this->civiBestellingRepository->find($bestelId);
-
-			if ($civiBestelling->deleted) {
-				throw new CsrGebruikerException('Bestelling is al verwijderd');
-			}
-
-			$civiSaldo = $civiBestelling->civiSaldo;
-
-			$civiSaldo->saldo += $civiBestelling->totaal;
-
-			$civiBestelling->deleted = true;
-
-			$em->flush();
-		});
-	}
-
-	public function undoVerwijderBestelling($bestelId): void
-	{
-		$em = $this->entityManager;
-
-		$em->transactional(function () use ($em, $bestelId): void {
-			$civiBestelling = $this->civiBestellingRepository->find($bestelId);
-
-			if (!$civiBestelling->deleted) {
-				throw new CsrGebruikerException('Bestelling is niet verwijderd');
-			}
-
-			$civiSaldo = $civiBestelling->civiSaldo;
-
-			$civiSaldo->saldo -= $civiBestelling->totaal;
-
-			$civiBestelling->deleted = false;
-
-			$em->flush();
-		});
 	}
 
 	// Beheer
@@ -412,6 +186,11 @@ ORDER BY yearweek DESC
 		return $result;
 	}
 
+	/**
+	 * @param null|scalar $name
+	 * @param null|scalar $price
+	 * @param null|scalar $type
+	 */
 	public function addProduct($name, $price, $type): bool
 	{
 		if ($type < 1) {
@@ -442,14 +221,6 @@ ORDER BY yearweek DESC
 		return true;
 	}
 
-	public function updatePerson($id, $name): void
-	{
-		$civiSaldo = $this->civiSaldoRepository->find($id);
-		$civiSaldo->naam = $name;
-
-		$this->civiSaldoRepository->update($civiSaldo);
-	}
-
 	/**
 	 * @param null|scalar $id
 	 */
@@ -463,6 +234,11 @@ ORDER BY yearweek DESC
 		return $q->rowCount();
 	}
 
+	/**
+	 * @param null|scalar $name
+	 * @param null|scalar $saldo
+	 * @param null|scalar $uid
+	 */
 	public function addPerson($name, $saldo, $uid): bool|\Doctrine\DBAL\Result
 	{
 		$q = $this->db->prepare(
@@ -484,6 +260,10 @@ ORDER BY yearweek DESC
 		return $q->execute();
 	}
 
+	/**
+	 * @param null|scalar $productId
+	 * @param null|scalar $price
+	 */
 	public function updatePrice($productId, $price): bool
 	{
 		$this->db->beginTransaction();
@@ -509,6 +289,10 @@ ORDER BY yearweek DESC
 		return true;
 	}
 
+	/**
+	 * @param null|scalar $productId
+	 * @param null|scalar $visibility
+	 */
 	public function updateVisibility($productId, $visibility): bool
 	{
 		$this->db->beginTransaction();
@@ -529,42 +313,5 @@ ORDER BY yearweek DESC
 	}
 
 	// Log action by type
-	public function log(string $type, array $data): void
-	{
-		$value = [];
-		foreach ($data as $key => $item) {
-			$value[] = $key . ' = ' . $item;
-		}
-		$value = implode("\r\n", $value);
 
-		$q = $this->db->prepare(
-			'INSERT INTO civi_saldo_log (ip, type, data) VALUES(:ip, :type, :data)'
-		);
-		$q->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-		$q->bindValue(':type', $type, PDO::PARAM_STR);
-		$q->bindValue(':data', $value, PDO::PARAM_STR);
-		$q->execute();
-	}
-
-	/**
-	 * Haal het aantal prakciepilsjes dat ooit besteld is van de database.
-	 *
-	 * @return int Het aantal prakciepilsjes dat besteld is
-	 */
-	public function getPrakCiePilsjes(DateTimeImmutable $vanaf)
-	{
-		$q = $this->db->prepare(
-			'select sum(cbi.aantal) from civi_bestelling_inhoud cbi' .
-				' join civi_product cp on cp.id = cbi.product_id' .
-				' join civi_bestelling cb on cb.id = cbi.bestelling_id' .
-				" where cp.beschrijving = 'PrakCiePilsje' and cb.moment > DATE(:datum)"
-		);
-		$q->bindValue(
-			':datum',
-			$vanaf->format(DateTimeInterface::RFC3339),
-			PDO::PARAM_STR
-		);
-		$res = $q->execute();
-		return (int) $res->fetchOne();
-	}
 }

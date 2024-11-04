@@ -30,35 +30,6 @@ class ActiviteitenRepository extends KetzersRepository
 		return $activiteit;
 	}
 
-	public function overzicht(
-		int $limit = null,
-		int $offset = null,
-		string $soort = null
-	) {
-		if ($soort && ActiviteitSoort::isValidValue($soort)) {
-			return $this->findBy(
-				[
-					'status' => GroepStatus::HT(),
-					'activiteitSoort' => ActiviteitSoort::from($soort),
-				],
-				null,
-				$limit,
-				$offset
-			);
-		}
-		return parent::overzicht($limit, $offset, $soort);
-	}
-
-	public function beheer(string $soort = null)
-	{
-		if ($soort && ActiviteitSoort::isValidValue($soort)) {
-			return $this->findBy([
-				'activiteitSoort' => ActiviteitSoort::from($soort),
-			]);
-		}
-		return parent::beheer($soort);
-	}
-
 	public function parseSoort(string $soort = null)
 	{
 		if ($soort && ActiviteitSoort::isValidValue($soort)) {

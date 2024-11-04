@@ -360,7 +360,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 	/**
 	 * @param false|null|string $email
 	 */
-	public function maakForumPost($draad, $tekst, string $ip, bool $wacht_goedkeuring, string|false|null $email)
+	public function maakForumPost($draad, string $tekst, string $ip, bool $wacht_goedkeuring, string|false|null $email)
 	{
 		$post = new ForumPost();
 		$post->draad = $draad;

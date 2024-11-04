@@ -78,32 +78,6 @@ class Activiteit extends Groep implements
 		return $this->naam;
 	}
 
-	public function getBeschrijving(): string
-	{
-		return $this->samenvatting;
-	}
-
-	public function getLocatie(): ?string
-	{
-		return $this->locatie;
-	}
-
-	public function isTransparant(): bool
-	{
-		// Toon als transparant (vrij) als lid dat wil, activiteit hele dag(en) duurt of lid niet ingeketzt is
-		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
-			'ja' ||
-			$this->isHeledag() ||
-			!$this->getLid(LoginService::getUid());
-	}
-
-	public function isHeledag(): bool
-	{
-		$begin = $this->getBeginMoment()->format('H:i');
-		$eind = $this->getEindMoment()->format('H:i');
-		return $begin == '00:00' && ($eind == '23:59' || $eind == '00:00');
-	}
-
 	/**
 	 * @return string
 	 */
@@ -126,13 +100,5 @@ class Activiteit extends Groep implements
 	public function setSoort($soort)
 	{
 		$this->activiteitSoort = $soort;
-	}
-
-	/**
-	 * @return void
-	 */
-	public function setSoortString($soort)
-	{
-		$this->activiteitSoort = ActiviteitSoort::from($soort);
 	}
 }

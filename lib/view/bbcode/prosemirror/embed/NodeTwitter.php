@@ -26,7 +26,12 @@ class NodeTwitter implements Node
 		return 'twitter';
 	}
 
-	public function getData(BbNode $node)
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{attrs: array{url: string}}
+	 */
+	public function getData(BbNode $node): array
 	{
 		if (!$node instanceof BbTwitter) {
 			throw new \InvalidArgumentException();

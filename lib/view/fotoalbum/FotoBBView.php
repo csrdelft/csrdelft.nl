@@ -76,16 +76,6 @@ class FotoBBView implements ToResponse, View
 		return '';
 	}
 
-	/**
-	 * @return string
-	 *
-	 * @psalm-return ''
-	 */
-	public function getBreadcrumbs()
-	{
-		return '';
-	}
-
 	public function getModel()
 	{
 		return null;

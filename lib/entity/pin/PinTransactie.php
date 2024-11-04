@@ -103,13 +103,4 @@ class PinTransactie
 
 		return intval($centen);
 	}
-
-	/**
-	 * @return string
-	 * @throws CsrException
-	 */
-	public function getKorteBeschrijving(): string
-	{
-		return sprintf('€%.2f', $this->getBedragInCenten() / 100);
-	}
 }

@@ -92,38 +92,6 @@ class CiviBestelling
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getPinBeschrijving()
-	{
-		$pinProduct = $this->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
-
-		if ($pinProduct === null) {
-			$pinCorrectieProduct = $this->getProduct(
-				CiviProductTypeEnum::PINCORRECTIE
-			);
-			if ($pinCorrectieProduct) {
-				return BedragUtil::format_bedrag($pinCorrectieProduct->aantal) .
-					' pincorrectie';
-			} else {
-				return '';
-			}
-		}
-
-		$beschrijving = BedragUtil::format_bedrag($pinProduct->aantal) . ' PIN';
-
-		$aantalInhoud = count($this->inhoud);
-
-		if ($aantalInhoud == 2) {
-			$beschrijving .= ' en 1 ander product';
-		} elseif ($aantalInhoud > 2) {
-			$beschrijving .= sprintf(' en %d andere producten', $aantalInhoud - 1);
-		}
-
-		return $beschrijving;
-	}
-
-	/**
 	 * @param $product_id
 	 *
 	 * @return CiviBestellingInhoud|null
@@ -143,22 +111,5 @@ class CiviBestelling
 		}
 
 		return $product->first();
-	}
-
-	/**
-	 * Bereken de prijs van deze bestelling opnieuw.
-	 *
-	 * @return int
-	 */
-	public function berekenTotaal()
-	{
-		$totaal = 0;
-
-		foreach ($this->inhoud as $item) {
-			$totaal +=
-				$item->aantal * $item->product->getPrijsOpMoment($this->moment);
-		}
-
-		return $totaal;
 	}
 }
