@@ -354,9 +354,9 @@ class CorveeTakenRepository extends AbstractRepository
 		$bonus_malus = 0
 	) {
 		$taak = new CorveeTaak();
-		$taak->taak_id = null;
+//		$taak->taak_id = null;
 		$taak->corveeFunctie = $repetitie->corveeFunctie;
-		$taak->profiel = null;
+//		$taak->profiel = null;
 		$taak->corveeRepetitie = $repetitie;
 		$taak->maaltijd = $maaltijd;
 		$taak->datum = $datum;
@@ -364,7 +364,7 @@ class CorveeTakenRepository extends AbstractRepository
 		$taak->punten = $repetitie->standaard_punten;
 		$taak->punten_toegekend = 0;
 		$taak->bonus_toegekend = 0;
-		$taak->wanneer_toegekend = null;
+//		$taak->wanneer_toegekend = null;
 		$taak->wanneer_gemaild = '';
 		$taak->verwijderd = false;
 		return $taak;
