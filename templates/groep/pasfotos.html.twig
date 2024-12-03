@@ -8,6 +8,6 @@
 	{% endif %}
 
 	{% for lid in groep.leden %}
-		{{ lid.profiel.link('pasfoto') | raw }}
+		<img class="pasfoto" loading="lazy" src="{{ lid.profiel.pasfoto }}" alt="Pasfoto van {{ lid.profiel.naam('volledig') }}">
 	{% endfor %}
 {% endblock %}
