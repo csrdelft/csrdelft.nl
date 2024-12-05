@@ -33,6 +33,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\Persistence\Proxy;
 use const P_LEDEN_MOD;
 
@@ -53,15 +55,14 @@ use const P_LEDEN_MOD;
 #[ORM\Index(name: 'status', columns: ['status'])]
 class Profiel implements Agendeerbaar, DisplayEntity
 {
-	public function __construct()
+	public function __construct(
+		// FIXME(#1231): Hack voor ProfielEntityField initialisatie (zie issue #1231)
+		#[Id, Column(type: 'uid')] public ?string $uid = null
+	)
 	{
 		$this->toestemmingen = new ArrayCollection();
 		$this->kinderen = new ArrayCollection();
 	}
-
-	#[ORM\Id]
-	#[ORM\Column(type: 'uid')]
-	public string $uid;
 	/**
 	 * @var ProfielLogGroup[]
 	 */
@@ -1102,7 +1103,8 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		);
 	}
 
-	public function getId(): string
+	// FIXME(#1231): Wordt gebruikt in DoctrineEntityField voor Formlogica, die verwacht dat alle velden null kunnen zijn.
+	public function getId(): ?string
 	{
 		return $this->uid;
 	}
