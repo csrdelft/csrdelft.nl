@@ -426,12 +426,6 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		'o_woonplaats' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
 		'o_land' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
 		'o_telefoon' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
-		'eetwens' => [
-			LidStatus::Lid,
-			LidStatus::Gastlid,
-			LidStatus::Noviet,
-			LidStatus::Kringel,
-		],
 		'vrienden' => [LidStatus::Noviet],
 		// novitiaat
 		'novitiaat' => [LidStatus::Noviet],
