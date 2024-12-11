@@ -705,7 +705,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			if ($vorm === 'pasfoto') {
 				return $this->getPasfotoTag();
 			}
-			if ($vorm === 'pasfoto.vierkant' && LoginService::mag(P_LEDEN_READ)) {
+			if ($vorm === 'pasfoto.vierkant') {
 				return $this->getPasfotoTag('', 'vierkant');
 			}
 			return $this->getNaam();
