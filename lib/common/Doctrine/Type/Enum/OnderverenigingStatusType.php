@@ -11,7 +11,7 @@ class OnderverenigingStatusType extends EnumType
 		return OnderverenigingStatus::class;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return 'enumOnderverenigingStatus';
 	}

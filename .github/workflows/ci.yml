@@ -22,6 +22,14 @@ jobs:
         with:
           node-version: '20.x'
           cache: yarn
+      - uses: actions/cache/restore@v4
+        name: Restore build dependencies cache
+        with:
+          path: .yarn/.cache/webpack
+          key: build-${{ hashFiles('**/webpack.config.js') }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |-
+            build-${{ hashFiles('**/webpack.config.js') }}-${{ hashFiles('**/yarn.lock') }}
+            build-${{ hashFiles('**/webpack.config.js') }}-
 
       - name: Yarn install
         run: yarn install --immutable
@@ -34,6 +42,15 @@ jobs:
         with:
           name: js
           path: htdocs/dist
+
+      - uses: actions/cache/save@v4
+        name: Save build dependencies cache
+        with:
+          path: .yarn/.cache/webpack
+          key: build-${{ hashFiles('**/webpack.config.js') }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |-
+            build-${{ hashFiles('**/webpack.config.js') }}-${{ hashFiles('**/yarn.lock') }}
+            build-${{ hashFiles('**/webpack.config.js') }}-
 
   test:
     name: Voer tests uit
@@ -101,7 +118,7 @@ jobs:
 
       - name: 🧪 Run PhpUnit
         env:
-          PANTHER_CHROME_ARGUMENTS: '--disable-dev-shm-usage'
+          PANTHER_CHROME_ARGUMENTS: '--disable-dev-shm-usage --window-size=1400,1024 --force-prefers-reduced-motion'
           PANTHER_CHROME_DRIVER_BINARY: '/usr/bin/chromedriver'
           PANTHER_NO_SANDBOX: '1'
         run: php bin/phpunit

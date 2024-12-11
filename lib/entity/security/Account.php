@@ -152,7 +152,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 	// UserInterface implementatie
 	//****
 
-	public function getRoles()
+	public function getRoles(): array
 	{
 		return [str_replace('R_', 'ROLE_', $this->perm_role)];
 	}
@@ -162,12 +162,12 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 		return $this->pass_hash;
 	}
 
-	public function getSalt()
+	public function getSalt(): string
 	{
 		return '';
 	}
 
-	public function getUsername()
+	public function getUsername(): string
 	{
 		return $this->uid;
 	}

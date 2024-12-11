@@ -14,7 +14,7 @@ use DateTimeImmutable;
  */
 interface Agendeerbaar
 {
-	public function getUUID();
+	public function getUUID(): string;
 
 	/**
 	 * Timestamp van beginmoment.
@@ -26,15 +26,15 @@ interface Agendeerbaar
 	 */
 	public function getEindMoment(): DateTimeImmutable;
 
-	public function getTitel();
+	public function getTitel(): string;
 
-	public function getBeschrijving();
+	public function getBeschrijving(): ?string;
 
-	public function getLocatie();
+	public function getLocatie(): ?string;
 
-	public function getUrl();
+	public function getUrl(): ?string;
 
-	public function isHeledag();
+	public function isHeledag(): bool;
 
-	public function isTransparant();
+	public function isTransparant(): bool;
 }

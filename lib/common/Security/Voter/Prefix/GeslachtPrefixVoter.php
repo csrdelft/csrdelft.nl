@@ -27,7 +27,7 @@ class GeslachtPrefixVoter extends PrefixVoter
 		$role,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		// Niet ingelogd heeft geslacht m dus check of ingelogd
 		if (!$this->accessDecisionManager->decide($token, ['ROLE_LOGGED_IN'])) {
 			return false;

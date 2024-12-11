@@ -20,7 +20,7 @@ class InstellingenTwigExtension extends AbstractExtension
 	) {
 	}
 
-	public function getFunctions()
+	public function getFunctions(): array
 	{
 		return [
 			new TwigFunction('instelling', $this->instelling(...)),
@@ -30,7 +30,7 @@ class InstellingenTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function getFilters()
+	public function getFilters(): array
 	{
 		return [new TwigFilter('is_zichtbaar', $this->is_zichtbaar(...))];
 	}

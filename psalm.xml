@@ -5,12 +5,16 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="https://getpsalm.org/schema/config"
 	xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+
+	findUnusedBaselineEntry="true"
+	findUnusedCode="true"
 >
 	<projectFiles>
 		<directory name="lib"/>
 		<directory name="tests/lib"/>
 		<ignoreFiles>
 			<directory name="vendor"/>
+			<file name="lib/view/bbcode/BbToProsemirror.php"/>
 		</ignoreFiles>
 	</projectFiles>
 	<stubs>
@@ -23,4 +27,11 @@
 		<pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
 		<pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
 	</plugins>
+	<issueHandlers>
+		<PropertyNotSetInConstructor>
+			<errorLevel type="suppress">
+				<directory name="lib/entity" />
+			</errorLevel>
+		</PropertyNotSetInConstructor>
+	</issueHandlers>
 </psalm>

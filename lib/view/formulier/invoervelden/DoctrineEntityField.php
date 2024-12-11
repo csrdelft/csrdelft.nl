@@ -98,7 +98,7 @@ class DoctrineEntityField extends TextField
 		return $this->entity;
 	}
 
-	public function getName()
+	public function getName(): string
 	{
 		return $this->name;
 	}

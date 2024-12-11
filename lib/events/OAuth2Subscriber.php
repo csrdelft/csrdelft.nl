@@ -32,7 +32,7 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	) {
 	}
 
-	public static function getSubscribedEvents()
+	public static function getSubscribedEvents(): array
 	{
 		return [
 			OAuth2Events::SCOPE_RESOLVE => 'onScopeResolve',

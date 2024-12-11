@@ -50,7 +50,7 @@ class CsrTwigExtension extends AbstractExtension
 	) {
 	}
 
-	public function getFunctions()
+	public function getFunctions(): array
 	{
 		return [
 			new TwigFunction('dragobject_coords', $this->dragobject_coords(...)),
@@ -85,12 +85,12 @@ class CsrTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function groepBewerkenForm($lid, $groep)
+	public function groepBewerkenForm($lid, $groep): GroepBewerkenForm
 	{
 		return new GroepBewerkenForm($lid, $groep);
 	}
 
-	public function huidige_jaargang()
+	public function huidige_jaargang(): string
 	{
 		return LichtingenRepository::getHuidigeJaargang();
 	}
@@ -166,7 +166,7 @@ class CsrTwigExtension extends AbstractExtension
 		return '';
 	}
 
-	public function getFilters()
+	public function getFilters(): array
 	{
 		return [
 			new TwigFilter('escape_ical', TextUtil::escape_ical(...)),
@@ -196,7 +196,7 @@ class CsrTwigExtension extends AbstractExtension
 		return str_replace('{}', $count, $singular);
 	}
 
-	public function getTests()
+	public function getTests(): array
 	{
 		/**
 		 * @param Agendeerbaar $value

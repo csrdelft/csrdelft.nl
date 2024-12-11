@@ -8,6 +8,8 @@
 	{% endif %}
 
 	{% for lid in groep.leden %}
-		{{ lid.profiel.link('pasfoto.vierkant') | raw }}
+		<a href="/profiel/{{lid.uid}}" title="{{lid.profiel.naam('volledig')}}" class="lidLink {{lid.profiel.status}}" data-lid="{{lid.uid}}" data-lid-naam="{{lid.profiel.naam('volledig')}}">
+			<img class="pasfoto" loading="lazy" src="{{ lid.profiel.pasfotoVierkant }}" alt="Pasfoto van {{ lid.profiel.naam('volledig') }}">
+		</a>
 	{% endfor %}
 {% endblock %}

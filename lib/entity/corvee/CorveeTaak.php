@@ -48,7 +48,7 @@ class CorveeTaak implements Agendeerbaar
 	#[ORM\Column(type: 'integer')]
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
-	public $taak_id;
+	public int $taak_id;
 	/**
 	 * @var string
 	 */
@@ -273,7 +273,7 @@ class CorveeTaak implements Agendeerbaar
 
 	// Agendeerbaar ############################################################
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->taak_id . '@corveetaak.csrdelft.nl';
 	}
@@ -288,7 +288,7 @@ class CorveeTaak implements Agendeerbaar
 		return $this->getBeginMoment()->add(new DateInterval('PT1H30M'));
 	}
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		if ($this->profiel) {
 			return $this->corveeFunctie->naam .
@@ -298,7 +298,7 @@ class CorveeTaak implements Agendeerbaar
 		return 'Corvee vacature (' . $this->corveeFunctie->naam . ')';
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		if ($this->profiel) {
 			return $this->corveeFunctie->naam;
@@ -306,22 +306,22 @@ class CorveeTaak implements Agendeerbaar
 		return 'Nog niet ingedeeld';
 	}
 
-	public function getLocatie()
+	public function getLocatie(): string
 	{
 		return 'C.S.R. Delft';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/corvee/rooster';
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		return true;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		return true;
 	}

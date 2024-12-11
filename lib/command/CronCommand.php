@@ -10,20 +10,15 @@ use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\service\corvee\CorveeHerinneringService;
 use CsrDelft\service\forum\ForumService;
 use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'stek:cron', description: 'Voer alle periodieke taken uit')]
 class CronCommand extends Command
 {
-	protected static $defaultName = 'stek:cron';
-
-	protected function configure()
-	{
-		$this->setDescription('Voer alle periodieke taken uit');
-	}
-
 	public function __construct(
 		private readonly DebugLogRepository $debugLogRepository,
 		private readonly OneTimeTokensRepository $oneTimeTokensRepository,

@@ -23,7 +23,7 @@ use Throwable;
  */
 class AbstractController extends BaseController
 {
-	public static function getSubscribedServices()
+	public static function getSubscribedServices(): array
 	{
 		return parent::getSubscribedServices() + [
 			'csr.table.factory' => DataTableFactory::class,

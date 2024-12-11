@@ -60,7 +60,10 @@ class ForumPostsRepository extends AbstractRepository implements Paging
 		$this->aantal_paginas = [];
 	}
 
-	public function findAll()
+	/**
+	 * @return ForumPost[]
+	 */
+	public function findAll(): array
 	{
 		return $this->findBy([]);
 	}
