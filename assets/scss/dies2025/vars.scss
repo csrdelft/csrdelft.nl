@@ -1,0 +1,40 @@
+/* variables */
+
+@font-face {
+	font-family: constantia;
+	src: url("../../fonts/dies2025/constan.ttf") format("opentype");
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: calibri;
+	src: url("../../fonts/dies2025/calibri.ttf") format("opentype");
+	font-weight: normal;
+}
+
+$font-constantia: "constantia", Arial, Helvetica, sans-serif;
+$font-calibri: "calibri", Arial, Helvetica, sans-serif;
+
+$kleur-wit: #ffffff;
+$kleur-zwart: #000000;
+
+$font-header: $font-constantia;
+$font-text: $font-constantia;
+
+$primary: #f39207 !default;
+$secondary: #003f2a !default;
+$tertiary: #6380bf !default;
+$font-color-primary: #ffffff !default;
+$font-color-secondary: #ffffff !default;
+
+$theme-colors: (
+	"primary": $primary,
+	"secondary": $secondary,
+	"danger": #ff4136,
+	"white": #f6c8b1,
+);
+
+$h1-font-size: 96px;
+$h2-font-size: 50px;
+$h3-font-size: 40px;
+$h4-font-size: 2rem;
