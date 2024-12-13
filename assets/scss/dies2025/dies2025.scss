@@ -85,7 +85,6 @@ a {
 		// }
 	}
 
-
 	.video-container {
 		width: 100%;
 		height: 100%;
@@ -166,7 +165,8 @@ section {
 		margin-bottom: 2rem;
 	}
 
-	h2, h3 {
+	h2,
+	h3 {
 		font-family: $font-constantia;
 		color: $primary;
 	}
@@ -224,7 +224,7 @@ $kleur-ketzer: $tertiary;
 	z-index: 1;
 
 	.poster {
-		margin-top: 40px
+		margin-top: 40px;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -325,7 +325,7 @@ $kleur-ketzer: $tertiary;
 							.maaltijdketzer-wrapper {
 								padding: 20px;
 								border-radius: 20px;
-								
+
 								* {
 									background-color: transparent !important;
 								}
@@ -347,53 +347,113 @@ $kleur-ketzer: $tertiary;
 }
 
 .body {
-	background: 
-		linear-gradient(90deg, #003f2a 0%, rgba(#01402b, 90%) 29%, rgba(#07452d, 65%) 64%, rgba(#0f4b30, 3%) 97%), 
-		repeating-linear-gradient(#008d36, #008d36 222px, $secondary 222px, $secondary 454px);
+	background: linear-gradient(
+			90deg,
+			#003f2a 0%,
+			rgba(#01402b, 90%) 29%,
+			rgba(#07452d, 65%) 64%,
+			rgba(#0f4b30, 3%) 97%
+		),
+		repeating-linear-gradient(
+			#008d36,
+			#008d36 222px,
+			$secondary 222px,
+			$secondary 454px
+		);
 	background-position: 0 16px;
 }
 
 @media screen and (max-width: 1400px) {
 	.body {
-		background:
-			linear-gradient(90deg, #003f2a 0%, rgba(#01402b, 90%) 29%, rgba(#07452d, 65%) 64%, rgba(#0f4b30, 3%) 97%), 
-			repeating-linear-gradient(#008d36, #008d36 193px, $secondary 193px, $secondary 386px);
+		background: linear-gradient(
+				90deg,
+				#003f2a 0%,
+				rgba(#01402b, 90%) 29%,
+				rgba(#07452d, 65%) 64%,
+				rgba(#0f4b30, 3%) 97%
+			),
+			repeating-linear-gradient(
+				#008d36,
+				#008d36 193px,
+				$secondary 193px,
+				$secondary 386px
+			);
 		background-position: 0 -280px;
 	}
 }
 
 @media screen and (max-width: 1200px) {
 	.body {
-		background:
-			linear-gradient(90deg, #003f2a 0%, rgba(#01402b, 90%) 29%, rgba(#07452d, 65%) 64%, rgba(#0f4b30, 3%) 97%), 
-			repeating-linear-gradient(#008d36, #008d36 162px, $secondary 162px, $secondary 324px);
+		background: linear-gradient(
+				90deg,
+				#003f2a 0%,
+				rgba(#01402b, 90%) 29%,
+				rgba(#07452d, 65%) 64%,
+				rgba(#0f4b30, 3%) 97%
+			),
+			repeating-linear-gradient(
+				#008d36,
+				#008d36 162px,
+				$secondary 162px,
+				$secondary 324px
+			);
 		background-position: 0 -158px;
 	}
 }
 
 @media screen and (max-width: 992px) {
 	.body {
-		background:
-			linear-gradient(90deg, #003f2a 0%, rgba(#01402b, 90%) 29%, rgba(#07452d, 65%) 64%, rgba(#0f4b30, 3%) 97%), 
-			repeating-linear-gradient(#008d36, #008d36 122px, $secondary 122px, $secondary 244px);
+		background: linear-gradient(
+				90deg,
+				#003f2a 0%,
+				rgba(#01402b, 90%) 29%,
+				rgba(#07452d, 65%) 64%,
+				rgba(#0f4b30, 3%) 97%
+			),
+			repeating-linear-gradient(
+				#008d36,
+				#008d36 122px,
+				$secondary 122px,
+				$secondary 244px
+			);
 		background-position: 0 -142px;
 	}
 }
 
 @media screen and (max-width: 768px) {
 	.body {
-		background:
-			linear-gradient(90deg, #003f2a 0%, rgba(#01402b, 90%) 29%, rgba(#07452d, 65%) 64%, rgba(#0f4b30, 3%) 97%), 
-			repeating-linear-gradient(#008d36, #008d36 91px, $secondary 91px, $secondary 182px);
+		background: linear-gradient(
+				90deg,
+				#003f2a 0%,
+				rgba(#01402b, 90%) 29%,
+				rgba(#07452d, 65%) 64%,
+				rgba(#0f4b30, 3%) 97%
+			),
+			repeating-linear-gradient(
+				#008d36,
+				#008d36 91px,
+				$secondary 91px,
+				$secondary 182px
+			);
 		background-position: 0 -84px;
 	}
 }
 
 @media screen and (max-width: 576px) {
 	.body {
-		background:
-			linear-gradient(90deg, #003f2a 0%, rgba(#01402b, 90%) 29%, rgba(#07452d, 65%) 64%, rgba(#0f4b30, 3%) 97%), 
-			repeating-linear-gradient(#008d36, #008d36 65px, $secondary 65px, $secondary 130px);
+		background: linear-gradient(
+				90deg,
+				#003f2a 0%,
+				rgba(#01402b, 90%) 29%,
+				rgba(#07452d, 65%) 64%,
+				rgba(#0f4b30, 3%) 97%
+			),
+			repeating-linear-gradient(
+				#008d36,
+				#008d36 65px,
+				$secondary 65px,
+				$secondary 130px
+			);
 		background-position: 0 11px;
 	}
 
@@ -408,9 +468,19 @@ $kleur-ketzer: $tertiary;
 
 @media screen and (max-width: 420px) {
 	.body {
-		background:
-			linear-gradient(90deg, #003f2a 0%, rgba(#01402b, 90%) 29%, rgba(#07452d, 65%) 64%, rgba(#0f4b30, 3%) 97%), 
-			repeating-linear-gradient(#008d36, #008d36 48px, $secondary 48px, $secondary 96px);
+		background: linear-gradient(
+				90deg,
+				#003f2a 0%,
+				rgba(#01402b, 90%) 29%,
+				rgba(#07452d, 65%) 64%,
+				rgba(#0f4b30, 3%) 97%
+			),
+			repeating-linear-gradient(
+				#008d36,
+				#008d36 48px,
+				$secondary 48px,
+				$secondary 96px
+			);
 		background-position: 0 -5px;
 	}
 
