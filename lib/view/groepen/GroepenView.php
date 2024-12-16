@@ -5,11 +5,13 @@ namespace CsrDelft\view\groepen;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Enum;
 use CsrDelft\common\Security\Voter\Entity\Groep\AbstractGroepVoter;
+use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepTab;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\CmsPaginaRepository;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\view\cms\CmsPaginaView;
@@ -48,7 +50,9 @@ class GroepenView implements View
 		callable $urlGetter = null,
 		private $geschiedenis = false
 	) {
-		if ($this->model instanceof BesturenRepository) {
+		// HACK: Voorkom gala DDOS door dies-activiteiten standaard als lijst te laten zien ipv profielfoto's
+		if ($this->model instanceof BesturenRepository
+			|| ($this->model instanceof ActiviteitenRepository && $this->soort === ActiviteitSoort::Dies())) {
 			$this->tab = GroepTab::Lijst;
 		} else {
 			$this->tab = GroepTab::Pasfotos;
