@@ -29,7 +29,7 @@ class TaakForm extends ModalForm
 	{
 		parent::__construct($taak, '/corvee/beheer/' . $action);
 
-		if ($taak->taak_id === null) {
+		if (!isset($taak->taak_id)) {
 			$this->titel = 'Corveetaak aanmaken';
 		} else {
 			$this->titel = 'Corveetaak wijzigen';
