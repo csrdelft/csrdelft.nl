@@ -36,13 +36,17 @@
 						<div class="col-md-9">
 							{% if instelling.type == 'Enumeration' %}
 								{% if instelling.opties | length > 8 %}
-									<select name="{{ module }}_{{ id }}" id="inst_{{ module }}_{{ id }}"
-													class="form-select change-opslaan"
-													data-href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id}) }}">
+									<select 
+										name="{{ module }}_{{ id }}" id="inst_{{ module }}_{{ id }}"
+										class="form-select change-opslaan"
+										onChange="fetch('{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id, waarde: ''}) }}', { method: 'POST', body: new URLSearchParams({waarde: this.value}) });"
+										value="{{ keuze }}"
+									>
 										{% for optieId, optie in instelling.opties %}
 											{% if optieId is numeric %}
 												<option value="{{ optie }}"
-																{% if optie == keuze %}selected{% endif %}>{{ optie | title }}</option>
+																{% if optie == keuze %}selected{% endif %}
+																>{{ optie | title }}</option>
 											{% else %}
 												<option value="{{ optieId }}"
 																{% if optie == keuze %}selected{% endif %}>{{ optie | title }}</option>
