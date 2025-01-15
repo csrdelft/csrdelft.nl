@@ -39,6 +39,7 @@
 									<select 
 										name="{{ module }}_{{ id }}" id="inst_{{ module }}_{{ id }}"
 										class="form-select change-opslaan"
+										data-href="."
 										onChange="fetch('{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id, waarde: ''}) }}', { method: 'POST', body: new URLSearchParams({waarde: this.value}) });"
 										value="{{ keuze }}"
 									>
