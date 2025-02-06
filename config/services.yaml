@@ -164,10 +164,6 @@ services:
       - { name: kernel.event_listener, event: kernel.request }
       - { name: monolog.logger, channel: access }
 
-  Monolog\Processor\GitProcessor:
-    tags:
-      - { name: monolog.processor, handler: access }
-
   csr.table.factory:
     alias: CsrDelft\Component\DataTable\DataTableFactory
 

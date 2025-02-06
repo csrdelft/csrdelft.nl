@@ -542,17 +542,15 @@
         "version": "v5.0.4"
     },
     "symfony/monolog-bundle": {
-        "version": "3.3",
+        "version": "3.10",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "3.3",
-            "ref": "5f5bdd0f0bd94eedc40ebf637d3c9fe9e48c9689"
+            "branch": "main",
+            "version": "3.7",
+            "ref": "aff23899c4440dd995907613c1dd709b6f59503f"
         },
         "files": [
-            "./config/packages/dev/monolog.yaml",
-            "./config/packages/prod/monolog.yaml",
-            "./config/packages/test/monolog.yaml"
+            "config/packages/monolog.yaml"
         ]
     },
     "symfony/options-resolver": {
