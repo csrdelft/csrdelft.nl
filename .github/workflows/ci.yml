@@ -123,19 +123,12 @@ jobs:
           PANTHER_NO_SANDBOX: '1'
         run: php bin/phpunit
 
-      - name: 📤 Upload screenshot van fout
+      - name: 📤 Upload cache + logs + screenshots bij fout
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: screenshot
-          path: var/error-screenshots
-
-      - name: 📤 Upload container voor debugging
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: container
-          path: var/cache
+          name: debug
+          path: var
 
   deploy:
     name: Push naar productie

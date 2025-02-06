@@ -33,7 +33,8 @@ when@test:
         excluded_http_codes: [404, 405]
         channels: ['!event']
       nested:
-        type: console
+        type: stream
+        path: '%kernel.logs_dir%/%kernel.environment%.log'
         level: debug
 
 when@prod:
@@ -53,10 +54,12 @@ when@prod:
         excluded_http_codes: [404, 405]
         buffer_size: 50 # How many messages should be saved? Prevent memory leaks
       nested:
-        type: stream
-        path: php://stderr
-        level: debug
-        formatter: monolog.formatter.json
+        type: rotating_file
+        path: '%kernel.logs_dir%/%kernel.environment%.error.log'
+        action_level: debug
+        channels: ['!event']
+        # 2 maanden
+        max_files: 60
       console:
         type: console
         process_psr_3_messages: false
