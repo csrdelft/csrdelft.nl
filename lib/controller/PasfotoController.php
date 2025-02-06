@@ -2,14 +2,14 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Util\InstellingUtil;
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\Afbeelding;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+
 use const P_LEDEN_MOD;
 
 class PasfotoController extends AbstractController
@@ -35,10 +35,9 @@ class PasfotoController extends AbstractController
 			requirements: ['uid' => '.{4}']
 		)
 	]
-	public function pasfoto(Request $request, Profiel $profiel, $vorm = 'civitas')
+	public function pasfoto(Profiel $profiel, string $vorm): BinaryFileResponse|RedirectResponse
 	{
 		if (
-			$profiel &&
 			InstellingUtil::is_zichtbaar(
 				$profiel,
 				'profielfoto',
@@ -47,12 +46,12 @@ class PasfotoController extends AbstractController
 			) &&
 			($path = $profiel->getPasfotoInternalPath($vorm)) != null
 		) {
-			$image = new Afbeelding($path);
-			return new BinaryFileResponse($image->getFullPath(), 200, [], false);
+			$resp = new BinaryFileResponse(file: $path, status: 200, autoEtag: true);
+		} else {
+			$resp = $this->redirect('/images/geen-foto.jpg', status: 301);
 		}
-
-		return $this->redirect(
-			$request->getSchemeAndHttpHost() . '/images/geen-foto.jpg'
-		);
+		$resp->setPrivate();
+		$resp->setClientTtl(24*3600);
+		return $resp;
 	}
 }

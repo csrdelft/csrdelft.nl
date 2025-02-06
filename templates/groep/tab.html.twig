@@ -79,7 +79,7 @@
 		</script>
 	</div>
 
-	{% if groep is heeftaanmeldlimiet and groep.aanmeldLimiet is not none %}
+	{% if groep is heeftaanmeldlimiet and groep.aanmeldLimiet is not none and groep.aanmeldLimiet != 0 %}
 		{# Progress bar #}
 		{% set aantal = groep.aantalLeden %}
 		{% set percent = ((aantal * 100) / groep.aanmeldLimiet) | round %}
