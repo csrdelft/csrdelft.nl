@@ -119,7 +119,7 @@
 		"generator": "@php bin/dev/generate.php",
 		"flushcache": "@console stek:cache:flush",
 		"analyze": "@php vendor/vimeo/psalm/psalm",
-		"test": "@php vendor/phpunit/phpunit/phpunit --bootstrap ./phpunit.init.php tests",
+		"test": "@php bin/phpunit",
 		"console": "@php bin/console",
 		"update-prod": [
 			"@php -r \"exit(exec('git rev-parse --abbrev-ref HEAD') == 'master' ? 'Branch is master' . PHP_EOL : 1);\"",
