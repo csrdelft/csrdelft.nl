@@ -197,9 +197,9 @@ module.exports = (env, argv) => {
 						filename: 'fonts/[hash][ext][query]',
 					},
 				},
-				// Sla plaetjes op in de images map.
+				// Sla plaetjes/videos op in de images map.
 				{
-					test: /\.(png|svg|jpg|gif)$/,
+					test: /\.(png|svg|jpg|gif|webm|mp4)$/,
 					type: 'asset/resource',
 					generator: {
 						filename: 'images/[hash][ext][query]',
