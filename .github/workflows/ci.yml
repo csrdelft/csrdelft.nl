@@ -130,6 +130,13 @@ jobs:
           name: screenshot
           path: var/error-screenshots
 
+      - name: 📤 Upload container voor debugging
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: container
+          path: var/cache
+
   deploy:
     name: Push naar productie
     runs-on: ubuntu-latest
