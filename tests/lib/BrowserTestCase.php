@@ -88,6 +88,7 @@ class BrowserTestCase extends PantherTestCase
 	 */
 	protected function tearDown(): void
 	{
+		parent::tearDown();
 		$this->client->request('GET', '/logout');
 	}
 
