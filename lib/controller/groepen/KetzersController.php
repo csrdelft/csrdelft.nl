@@ -20,16 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class KetzersController extends AbstractGroepenController
 {
-	/**
-	 * @var ManagerRegistry
-	 */
-	private $registry;
-
-	public function __construct(ManagerRegistry $registry)
-	{
-		parent::__construct($registry);
-		$this->registry = $registry;
-	}
 
 	public function getGroepType()
 	{

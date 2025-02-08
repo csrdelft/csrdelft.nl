@@ -63,6 +63,7 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Twig\Environment;
 
 /**
  * Algemene controller voor groepen.
@@ -82,13 +83,13 @@ abstract class AbstractGroepenController extends AbstractController implements
 	/** @var GroepLidRepository */
 	private $groepLidRepository;
 
-	public function __construct(ManagerRegistry $registry)
+	public function __construct(protected ManagerRegistry $registry, private Environment $twig)
 	{
-		$this->repository = $registry->getRepository($this->getGroepType());
-		$this->changeLogRepository = $registry->getRepository(
+		$this->repository = $this->registry->getRepository($this->getGroepType());
+		$this->changeLogRepository = $this->registry->getRepository(
 			ChangeLogEntry::class
 		);
-		$this->groepLidRepository = $registry->getRepository(GroepLid::class);
+		$this->groepLidRepository = $this->registry->getRepository(GroepLid::class);
 	}
 
 	/**
@@ -231,7 +232,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			);
 		// controleert rechten bekijken per groep
 		$body = new GroepenView(
-			$this->container->get('csr.hack.twig'),
+			$this->twig,
 			$this->repository,
 			$groepen,
 			$soortEnum,
@@ -259,7 +260,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		}
 		// controleert rechten bekijken per groep
 		$body = new GroepenView(
-			$this->container->get('csr.hack.twig'),
+			$this->twig,
 			$this->repository,
 			$groepen,
 			$soort,
@@ -310,7 +311,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
-		return new GroepPasfotosView($this->container->get('csr.hack.twig'), $groep);
+		return new GroepPasfotosView($this->twig, $groep);
 	}
 
 	public function lijst($id)
@@ -319,7 +320,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
-		return new GroepLijstView($this->container->get('csr.hack.twig'), $groep);
+		return new GroepLijstView($this->twig, $groep);
 	}
 
 	public function stats($id)
@@ -332,7 +333,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$statistieken = $this->repository->getStatistieken($groep);
 
 		return new GroepStatistiekView(
-			$this->container->get('csr.hack.twig'),
+			$this->twig,
 			$groep,
 			$statistieken
 		);
@@ -344,7 +345,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
-		return new GroepEmailsView($this->container->get('csr.hack.twig'), $groep);
+		return new GroepEmailsView($this->twig, $groep);
 	}
 
 	public function eetwens($id)
@@ -353,7 +354,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
-		return new GroepEetwensView($this->container->get('csr.hack.twig'), $groep);
+		return new GroepEetwensView($this->twig, $groep);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null)
@@ -503,7 +504,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 				FlashType::SUCCESS,
 				$groep::class . ' succesvol aangemaakt!'
 			);
-			$form = new GroepPreviewForm($this->container->get('csr.hack.twig'), $groep);
+			$form = new GroepPreviewForm($this->twig, $groep);
 			$view->modal = $form->__toString();
 			return $view;
 		} else {
@@ -743,7 +744,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		if (!$this->isGranted(AbstractGroepVoter::BEKIJKEN, $groep)) {
 			throw $this->createAccessDeniedException();
 		}
-		return new GroepPreviewForm($this->container->get('csr.hack.twig'), $groep);
+		return new GroepPreviewForm($this->twig, $groep);
 	}
 
 	/**
@@ -851,7 +852,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 			$em->persist($lid);
 			$em->flush();
 			$groep->getLeden()->add($lid);
-			return new GroepPasfotosView($this->container->get('csr.hack.twig'), $groep);
+			return new GroepPasfotosView($this->twig, $groep);
 		} else {
 			return $form;
 		}
@@ -980,7 +981,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$em->remove($lid);
 		$em->flush();
 
-		return new GroepView($this->container->get('csr.hack.twig'), $groep);
+		return new GroepView($this->twig, $groep);
 	}
 
 	public function afmelden(EntityManagerInterface $em, $id, $uid)

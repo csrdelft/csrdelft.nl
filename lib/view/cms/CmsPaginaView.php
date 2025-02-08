@@ -43,7 +43,7 @@ class CmsPaginaView implements View, ToResponse
 	public function __toString(): string
 	{
 		return (string) ContainerFacade::getContainer()
-			->get(Environment::class)
+			->get('csr.hack.twig')
 			->render('cms/pagina-inhoud.html.twig', [
 				'pagina' => $this->pagina,
 			]);
