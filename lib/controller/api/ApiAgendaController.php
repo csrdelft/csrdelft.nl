@@ -17,7 +17,7 @@ use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\maalcie\MaaltijdenService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ApiAgendaController extends AbstractController
 {

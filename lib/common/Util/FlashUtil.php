@@ -3,7 +3,11 @@
 namespace CsrDelft\common\Util;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\CsrException;
 use CsrDelft\view\Icon;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
+use function CsrDelft\common\CsrException;
 
 final class FlashUtil
 {
@@ -24,20 +28,25 @@ final class FlashUtil
 	 */
 	public static function setFlashWithContainerFacade(string $msg, int $lvl)
 	{
-		$flashBag = ContainerFacade::getContainer()
-			->get('session')
-			->getFlashBag();
+		/** @var RequestStack */
+		$requestStack = ContainerFacade::getContainer()
+			->get('request_stack');
 
-		$levels[-1] = 'danger';
-		$levels[0] = 'info';
-		$levels[1] = 'success';
-		$levels[2] = 'warning';
+		$session = $requestStack->getSession();
+
+		$level = match ($lvl) {
+			-1 => 'danger',
+			0 => 'info',
+			1 => 'success',
+			2 => 'warning',
+			default => null
+		};
+
 		$msg = trim($msg);
 		if (
-			!empty($msg) &&
-			($lvl === -1 || $lvl === 0 || $lvl === 1 || $lvl === 2)
+			!empty($msg) && $level !== null && $session instanceof FlashBagAwareSessionInterface
 		) {
-			$flashBag->add($levels[$lvl], $msg);
+			$session->getFlashBag()->add($level, $msg);
 		}
 	}
 
@@ -50,11 +59,17 @@ final class FlashUtil
 	 */
 	public static function getFlashUsingContainerFacade()
 	{
-		$flashBag = ContainerFacade::getContainer()
-			->get('session')
-			->getFlashBag();
+		/** @var RequestStack */
+		$requestStack = ContainerFacade::getContainer()
+			->get('request_stack');
 
-		$flashes = $flashBag->all();
+		$session = $requestStack->getSession();
+
+		if (!$session instanceof FlashBagAwareSessionInterface) {
+			throw new CsrException("Geen flash bag");
+		}
+
+		$flashes = $session->getFlashBag()->all();
 		return self::format($flashes);
 	}
 

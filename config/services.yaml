@@ -95,15 +95,16 @@ services:
   Psr\Container\ContainerInterface: '@service_container'
 
   security:
-    class: Symfony\Component\Security\Core\Security
+    class: Symfony\Bundle\SecurityBundle\Security
     public: true
 
-  # Sta gebruik van twig overal toe.
-  # Dit is een tijdelijke oplossing en moet er tzt weer uit gezet worden.
-  # Voor nu is het makkelijk om overal templates aan te kunnen roepen en is het in ieder geval
-  # beter dan html genereren in PHP code op deze plekken
-  Twig\Environment:
-    alias: twig
+  security.authorization_checker:
+    class: Symfony\Component\Security\Core\Authorization\AuthorizationChecker
+    public: true
+
+  # FIXME: Verwijder zodra ContainerFacade weg is
+  csr.hack.twig:
+    alias: Twig\Environment
     public: true
 
   CsrDelft\view\bbcode\CsrBB:
@@ -159,10 +160,6 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
       - { name: monolog.logger, channel: access }
-
-  Monolog\Processor\GitProcessor:
-    tags:
-      - { name: monolog.processor, handler: access }
 
   csr.table.factory:
     alias: CsrDelft\Component\DataTable\DataTableFactory

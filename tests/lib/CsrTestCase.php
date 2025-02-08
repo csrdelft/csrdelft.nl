@@ -10,6 +10,6 @@ class CsrTestCase extends KernelTestCase
 	public function setUp(): void
 	{
 		self::bootKernel();
-		ContainerFacade::init(self::$container);
+		ContainerFacade::init($this->getContainer());
 	}
 }

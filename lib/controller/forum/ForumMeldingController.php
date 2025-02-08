@@ -10,7 +10,7 @@ use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ForumMeldingController extends AbstractController
 {

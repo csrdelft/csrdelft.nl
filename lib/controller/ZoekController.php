@@ -15,7 +15,7 @@ use CsrDelft\controller\groepen\WoonoordenController;
 use CsrDelft\view\Icon;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ZoekController extends AbstractController
 {

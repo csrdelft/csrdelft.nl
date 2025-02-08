@@ -10,7 +10,7 @@ use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * BeheerPuntenController.class.php

@@ -50,7 +50,7 @@ class PeilingVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	) {
+	): bool {
 		return match ($attribute) {
 			self::STEMMEN => $this->magStemmen($token, $subject),
 			self::TOEVOEGEN => $this->magToevoegen($token, $subject),

@@ -56,7 +56,7 @@ class DebugLogRepository extends AbstractRepository
 		$entry->uid = LoginService::getUid();
 		$token = $this->security->getToken();
 		if ($token instanceof SwitchUserToken) {
-			$entry->su_uid = $token->getOriginalToken()->getUsername();
+			$entry->su_uid = $token->getOriginalToken()->getUserIdentifier();
 		}
 		$entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '127.0.0.1';
 		$entry->referer = @$_SERVER['HTTP_REFERER'] ?: 'CLI';
