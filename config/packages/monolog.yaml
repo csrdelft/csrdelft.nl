@@ -9,7 +9,7 @@ when@dev:
         type: stream
         path: '%kernel.logs_dir%/%kernel.environment%.log'
         level: debug
-        channels: ['!event']
+        channels: ['!event', '!doctrine']
       # uncomment to get logging in your browser
       # you may have to allow bigger header sizes in your Web server configuration
       #firephp:
@@ -19,9 +19,14 @@ when@dev:
       #    type: chromephp
       #    level: info
       console:
+        type: fingers_crossed
+        action_level: error
+        handler: console_nested
+        excluded_http_codes: [404, 405]
+        channels: ['!event']
+      console_nested:
         type: console
-        process_psr_3_messages: false
-        channels: ['!event', '!doctrine', '!console']
+        level: debug
 
 when@test:
   monolog:
