@@ -61,11 +61,7 @@ class ToestemmingModalForm extends ModalForm
 			}
 		}
 
-<<<<<<< HEAD
 		$twig = ContainerFacade::getContainer()->get('csr.hack.twig');
-=======
-		$twig = ContainerFacade::getContainer()->get(Environment::class);
->>>>>>> 293c8a774 (Fix meer problemen)
 
 		$this->addFields([
 			new HtmlComment(

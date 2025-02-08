@@ -5,9 +5,9 @@ namespace CsrDelft\entity\maalcie;
 use CsrDelft\common\Eisen;
 use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\view\formulier\DisplayEntity;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Monolog\DateTimeImmutable;
 
 /**
  * MaaltijdRepetitie.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -74,7 +74,7 @@ class MaaltijdRepetitie implements DisplayEntity
 	/**
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'time')]
+	#[ORM\Column(type: 'time_immutable')]
 	public $standaard_tijd;
 	/**
 	 * @var int|null

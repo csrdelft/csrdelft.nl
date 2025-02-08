@@ -92,7 +92,7 @@ class CorveeTaak implements Agendeerbaar
 	/**
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'date')]
+	#[ORM\Column(type: 'date_immutable')]
 	public $datum;
 	/**
 	 * @var integer
