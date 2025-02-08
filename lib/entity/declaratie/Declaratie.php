@@ -65,13 +65,13 @@ class Declaratie
 	#[ORM\Column(type: 'string', length: 255, nullable: true)]
 	private $nummer;
 
-	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[ORM\Column(type: 'datetime_immutable', nullable: true)]
 	private $ingediend;
 
-	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[ORM\Column(type: 'datetime_immutable', nullable: true)]
 	private $beoordeeld;
 
-	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[ORM\Column(type: 'datetime_immutable', nullable: true)]
 	private $uitbetaald;
 
 	#[ORM\Column(type: 'boolean')]

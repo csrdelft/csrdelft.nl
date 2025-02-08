@@ -172,8 +172,8 @@ class CiviSaldoRepository extends AbstractRepository
 		}
 		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::DELETE_SALDO, $entity);
 
-		$this->_em->remove($entity);
-		$this->_em->flush();
+		$this->getEntityManager()->remove($entity);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -187,8 +187,8 @@ class CiviSaldoRepository extends AbstractRepository
 	{
 		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::CREATE_SALDO, $entity);
 
-		$this->_em->persist($entity);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($entity);
+		$this->getEntityManager()->flush();
 
 		return $entity->uid;
 	}
@@ -214,8 +214,8 @@ class CiviSaldoRepository extends AbstractRepository
 	{
 		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::UPDATE_SALDO, $entity);
 
-		$this->_em->persist($entity);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($entity);
+		$this->getEntityManager()->flush();
 	}
 
 	public function existsByUid(string $uid)
@@ -293,7 +293,7 @@ SQL;
 		$rsm->addScalarResult('total', 'total', 'integer');
 		$rsm->addScalarResult('yearweek', 'yearweek');
 
-		$nativeQuery = $this->_em->createNativeQuery($query, $rsm);
+		$nativeQuery = $this->getEntityManager()->createNativeQuery($query, $rsm);
 		$nativeQuery->setParameter('van', $from);
 		$nativeQuery->setParameter('tot', $until);
 
@@ -425,7 +425,7 @@ WHERE
 ORDER BY {$orderBy}
 SQL;
 
-		$nativeQuery = $this->_em->createNativeQuery($query, $rsm);
+		$nativeQuery = $this->getEntityManager()->createNativeQuery($query, $rsm);
 		$nativeQuery->setParameter('van', $from);
 		$nativeQuery->setParameter('tot', $until);
 

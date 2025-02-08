@@ -14,7 +14,7 @@ use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -93,8 +93,8 @@ class LidToestemmingRepository extends AbstractRepository
 		$toestemming->instelling = $id;
 		$toestemming->waarde = $this->getDefault($module, $id);
 		$toestemming->profiel = ProfielRepository::get($uid);
-		$this->_em->persist($toestemming);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($toestemming);
+		$this->getEntityManager()->flush();
 		return $toestemming;
 	}
 
@@ -261,8 +261,8 @@ class LidToestemmingRepository extends AbstractRepository
 		} else {
 			if ($instelling) {
 				// Haal niet-bestaande instelling uit de database
-				$this->_em->remove($instelling);
-				$this->_em->flush();
+				$this->getEntityManager()->remove($instelling);
+				$this->getEntityManager()->flush();
 			}
 			throw new CsrException(
 				sprintf('Toestemming bestaat niet: "%s" module: "%s".', $id, $module)

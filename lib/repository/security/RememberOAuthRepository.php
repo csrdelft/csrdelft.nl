@@ -39,8 +39,8 @@ class RememberOAuthRepository extends AbstractRepository
 		$remember->clientIdentifier = $clientIdentifier;
 		$remember->scopes = implode(' ', $scopes);
 
-		$this->_em->persist($remember);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($remember);
+		$this->getEntityManager()->flush();
 
 		return $remember;
 	}

@@ -11,6 +11,7 @@ use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 use Exception;
+use Twig\Environment;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

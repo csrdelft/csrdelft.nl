@@ -182,3 +182,5 @@ services:
   CsrDelft\common\Security\Voter\:
     resource: '../lib/common/Security/Voter'
 
+  Doctrine\Common\Annotations\Reader:
+    class: Doctrine\Common\Annotations\AnnotationReader

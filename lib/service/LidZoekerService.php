@@ -14,7 +14,7 @@ use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * LidZoeker

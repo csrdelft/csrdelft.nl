@@ -61,7 +61,7 @@ class BoekExemplaar
 	/**
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public $toegevoegd;
 	/**
 	 * @var BoekExemplaarStatus
@@ -71,7 +71,7 @@ class BoekExemplaar
 	/**
 	 * @var DateTimeImmutable|null
 	 */
-	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[ORM\Column(type: 'datetime_immutable', nullable: true)]
 	public $uitleendatum;
 	/**
 	 * @var int

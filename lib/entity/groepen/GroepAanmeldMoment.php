@@ -13,28 +13,28 @@ trait GroepAanmeldMoment
 	 * @var DateTimeImmutable
 	 */
 	#[Serializer\Groups('datatable')]
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public $aanmeldenVanaf;
 	/**
 	 * Datum en tijd aanmeldperiode einde
 	 * @var DateTimeImmutable
 	 */
 	#[Serializer\Groups(['datatable', 'vue'])]
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public $aanmeldenTot;
 	/**
 	 * Datum en tijd aanmelding bewerken toegestaan
 	 * @var DateTimeImmutable|null
 	 */
 	#[Serializer\Groups('datatable')]
-	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[ORM\Column(type: 'datetime_immutable', nullable: true)]
 	public $bewerkenTot;
 	/**
 	 * Datum en tijd afmelden toegestaan
 	 * @var DateTimeImmutable|null
 	 */
 	#[Serializer\Groups('datatable')]
-	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[ORM\Column(type: 'datetime_immutable', nullable: true)]
 	public $afmeldenTot;
 
 	/**

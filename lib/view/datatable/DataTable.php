@@ -3,7 +3,6 @@
 namespace CsrDelft\view\datatable;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
 use CsrDelft\common\Util\CryptoUtil;
 use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\CustomDataTableEntry;
@@ -15,6 +14,7 @@ use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Types\BooleanType;
+use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\ClassMetadata;
 

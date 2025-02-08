@@ -8,7 +8,7 @@ use CsrDelft\repository\GroepLidRepository;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class RechtenGroepenRepository extends GroepRepository
 {

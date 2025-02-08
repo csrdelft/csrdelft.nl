@@ -39,6 +39,6 @@ class CiviSaldoLog
 	/**
 	 * @var \DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
+	#[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
 	public $timestamp;
 }

@@ -112,7 +112,7 @@ class CorveeVoorkeurenRepository extends AbstractRepository
 	 */
 	private function loadLedenVoorkeuren()
 	{
-		return $this->_em
+		return $this->getEntityManager()
 			->createQuery(
 				<<<'DQL'
 SELECT NEW CsrDelft\entity\corvee\CorveeVoorkeurMatrixDTO(p.uid, r.crv_repetitie_id, v.uid)
@@ -152,8 +152,8 @@ DQL
 			}
 		}
 
-		$this->_em->persist($voorkeur);
-		$this->_em->flush();
+		$this->getEntityManager()->persist($voorkeur);
+		$this->getEntityManager()->flush();
 
 		return $voorkeur;
 	}
@@ -175,8 +175,8 @@ DQL
 			throw new CsrGebruikerException('Voorkeur al uitgeschakeld');
 		}
 
-		$this->_em->remove($voorkeur);
-		$this->_em->flush();
+		$this->getEntityManager()->remove($voorkeur);
+		$this->getEntityManager()->flush();
 
 		$voorkeur->uid = null;
 
@@ -197,9 +197,9 @@ DQL
 		$voorkeuren = $this->findBy(['corveeRepetitie' => $crid]);
 		$num = count($voorkeuren);
 		foreach ($voorkeuren as $voorkeur) {
-			$this->_em->remove($voorkeur);
+			$this->getEntityManager()->remove($voorkeur);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 
 		return $num;
 	}
@@ -217,9 +217,9 @@ DQL
 		$voorkeuren = $this->findBy(['uid' => $uid]);
 		$num = count($voorkeuren);
 		foreach ($voorkeuren as $voorkeur) {
-			$this->_em->remove($voorkeur);
+			$this->getEntityManager()->remove($voorkeur);
 		}
-		$this->_em->flush();
+		$this->getEntityManager()->flush();
 
 		return $num;
 	}

@@ -51,12 +51,12 @@ class ArchiefMaaltijd implements Agendeerbaar
 	/**
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'date')]
+	#[ORM\Column(type: 'date_immutable')]
 	public $datum;
 	/**
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'time')]
+	#[ORM\Column(type: 'time_immutable')]
 	public $tijd;
 	/**
 	 * @var int

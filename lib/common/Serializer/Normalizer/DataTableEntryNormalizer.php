@@ -49,4 +49,9 @@ class DataTableEntryNormalizer implements NormalizerInterface
 	): bool {
 		return $data instanceof DataTableEntry;
 	}
+
+	public function getSupportedTypes(?string $format): array
+	{
+		return $this->normalizer->getSupportedTypes($format);
+	}
 }

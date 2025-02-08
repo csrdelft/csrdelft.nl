@@ -8,7 +8,7 @@ use CsrDelft\entity\security\Account;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class SuService

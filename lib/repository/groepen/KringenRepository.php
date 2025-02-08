@@ -43,7 +43,7 @@ class KringenRepository extends GroepRepository
 			[$verticale, $kringNummer] = explode('.', (string) $familie);
 			if ($verticale && $kringNummer) {
 				return 1 ===
-					(int) $this->_em
+					(int) $this->getEntityManager()
 						->createQuery(
 							<<<'EOF'
 SELECT COUNT(kring)

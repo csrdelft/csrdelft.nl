@@ -5,7 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\entity\ForumPlaatje;
 use CsrDelft\repository\ForumPlaatjeRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class BbForumPlaatje extends BbImg
 {

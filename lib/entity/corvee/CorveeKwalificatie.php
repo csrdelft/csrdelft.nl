@@ -42,7 +42,7 @@ class CorveeKwalificatie
 	 * Datum en tijd
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public $wanneer_toegewezen;
 
 	/**

@@ -53,7 +53,7 @@ class SavedQueryRepository extends AbstractRepository
 		$resultObject->query = $query;
 
 		try {
-			$result = $this->_em
+			$result = $this->getEntityManager()
 				->getConnection()
 				->fetchAllAssociative($query->savedquery);
 			$cols = [];

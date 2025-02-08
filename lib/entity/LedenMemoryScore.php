@@ -68,6 +68,6 @@ class LedenMemoryScore implements DataTableEntry
 	 * Behaald op datum en tijd
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public $wanneer;
 }

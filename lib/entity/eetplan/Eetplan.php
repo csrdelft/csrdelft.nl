@@ -38,7 +38,7 @@ class Eetplan implements DataTableEntry
 	/**
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'date', nullable: true)]
+	#[ORM\Column(type: 'date_immutable', nullable: true)]
 	public $avond;
 	/**
 	 * Specifiek bedoelt voor bekende huizen.

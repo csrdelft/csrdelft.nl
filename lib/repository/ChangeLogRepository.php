@@ -8,7 +8,7 @@ use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -70,7 +70,7 @@ class ChangeLogRepository extends AbstractRepository
 		$change = new ChangeLogEntry();
 		$change->moment = date_create_immutable();
 		try {
-			$meta = $this->_em->getClassMetadata($subject::class);
+			$meta = $this->getEntityManager()->getClassMetadata(get_class($subject));
 			$change->subject =
 				implode('.', $meta->getIdentifierValues($subject)) .
 				'@' .

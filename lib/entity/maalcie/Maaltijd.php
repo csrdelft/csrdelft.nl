@@ -104,12 +104,12 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	/**
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'date')]
+	#[ORM\Column(type: 'date_immutable')]
 	public $datum;
 	/**
 	 * @var DateTimeImmutable
 	 */
-	#[ORM\Column(type: 'time')]
+	#[ORM\Column(type: 'time_immutable')]
 	public $tijd;
 	/**
 	 * @var bool
@@ -121,7 +121,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 	 * @var DateTimeInterface|null
 	 */
 	#[Serializer\Groups('datatable')]
-	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[ORM\Column(type: 'datetime_immutable', nullable: true)]
 	public $laatst_gesloten;
 	/**
 	 * @var bool
@@ -416,7 +416,7 @@ class Maaltijd implements Agendeerbaar, DisplayEntity
 		return $this->maaltijd_id . '@maaltijd.csrdelft.nl';
 	}
 
-	public function getMoment()
+	public function getMoment(): DateTimeImmutable
 	{
 		return $this->datum->setTime(
 			$this->tijd->format('H'),

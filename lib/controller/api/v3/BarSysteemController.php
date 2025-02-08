@@ -41,6 +41,7 @@ class BarSysteemController extends AbstractController
 		);
 	}
 
+	#[IsGranted("ROLE_OAUTH2_BAR:TRUST")]
 	/**
 	 * @Auth(P_FISCAAT_MOD)
 	 * @param Request $request

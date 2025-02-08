@@ -78,7 +78,7 @@ class GroepLid
 	 * @var DateTimeImmutable
 	 */
 	#[Serializer\Groups('datatable')]
-	#[ORM\Column(type: 'datetime')]
+	#[ORM\Column(type: 'datetime_immutable')]
 	public $lidSinds;
 	/**
 	 * Lidnummer van aanmelder
