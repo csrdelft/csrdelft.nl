@@ -22,7 +22,6 @@ class TemporaryToken extends AbstractToken
 		parent::__construct($account->getRoles());
 
 		$this->setUser($account);
-		$this->setAuthenticated(true);
 	}
 
 	public function getOriginalToken()
