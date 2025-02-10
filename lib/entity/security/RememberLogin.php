@@ -2,14 +2,11 @@
 
 namespace CsrDelft\entity\security;
 
-use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\common\Util\DateUtil;
 use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\view\Icon;
-use DateTime;
 use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -21,7 +18,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 #[
 	ORM\Entity(
-		repositoryClass: RememberLoginRepository::class
+		repositoryClass: \CsrDelft\repository\security\RememberLoginRepository::class
 	)
 ]
 #[ORM\Table('login_remember')]
@@ -57,7 +54,7 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	/**
 	 * @var Profiel
 	 */
-	#[ORM\ManyToOne(targetEntity: Profiel::class)]
+	#[ORM\ManyToOne(targetEntity: \CsrDelft\entity\profiel\Profiel::class)]
 	#[ORM\JoinColumn(name: 'uid', referencedColumnName: 'uid')]
 	public $profiel;
 	/**
@@ -115,7 +112,7 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 	}
 
 	/**
-	 * @return string|false
+	 * @return string
 	 */
 	#[Serializer\SerializedName('last_used')]
 	#[Serializer\Groups('datatable')]
@@ -144,9 +141,9 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface
 		return $this->token;
 	}
 
-	public function getLastUsed(): DateTime
+	public function getLastUsed(): DateTimeImmutable
 	{
-		return DateTime::createFromImmutable($this->last_used);
+		return $this->last_used;
 	}
 
 	public function getUserIdentifier(): string

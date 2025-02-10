@@ -12,11 +12,11 @@ use CsrDelft\service\PeilingenService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingTable;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -185,8 +185,8 @@ class PeilingenController extends AbstractController
 	 * @param int $id
 	 * @return JsonResponse
 	 * @Auth(P_PEILING_VOTE)
+	 * @IsGranted("stemmen", subject="peiling")
 	 */
-	#[IsGranted("stemmen", subject: "peiling")]
 	#[
 		Route(
 			path: '/peilingen/stem/{id}',

@@ -9,7 +9,7 @@ use CsrDelft\common\Mail;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\service\MailService;
 use CsrDelft\view\PlainView;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

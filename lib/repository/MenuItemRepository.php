@@ -17,7 +17,6 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -107,7 +106,7 @@ class MenuItemRepository extends AbstractRepository
 		return 'stek.menu.' .
 			urlencode((string) $naam) .
 			'.' .
-			($user instanceof UserInterface ? $user->getUserIdentifier() : 'x999');
+			($user ? $user->getUsername() : 'x999');
 	}
 
 	/**
@@ -271,7 +270,7 @@ class MenuItemRepository extends AbstractRepository
 		return 'stek.menu-flat.' .
 			urlencode((string) $naam) .
 			'.' .
-			($user instanceof UserInterface ? $user->getUserIdentifier() : '');
+			($user ? $user->getUsername() : '');
 	}
 
 	private function flattenMenuInternal(MenuItem $root)

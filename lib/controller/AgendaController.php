@@ -24,11 +24,11 @@ use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\Icon;
 use CsrDelft\view\response\IcalResponse;
 use DateInterval;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -86,8 +86,8 @@ class AgendaController extends AbstractController
 
 	/**
 	 * @return Response
+	 * @IsGranted("ROLE_LOGGED_IN")
 	 */
-	#[IsGranted("ROLE_LOGGED_IN")]
 	#[
 		Route(
 			path: '/agenda/ical/{private_auth_token}/csrdelft.ics',

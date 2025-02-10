@@ -15,7 +15,6 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Util\HostUtil;
 use CsrDelft\Kernel;
 use CsrDelft\repository\security\AccountRepository;
-
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 

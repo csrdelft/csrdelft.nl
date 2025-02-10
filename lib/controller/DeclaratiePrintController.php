@@ -7,7 +7,7 @@ use CsrDelft\entity\declaratie\Declaratie;
 use CsrDelft\service\DeclaratiePDFGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Transliterator;
 
 class DeclaratiePrintController extends AbstractController

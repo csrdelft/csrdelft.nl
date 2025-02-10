@@ -58,6 +58,7 @@ security:
         path: /
         token_provider: 'CsrDelft\common\Security\PersistentTokenProvider'
       switch_user: true
+
   password_hashers:
     CsrDelft\entity\security\Account:
       algorithm: auto

@@ -1,3 +1,0 @@
-http:
-  document_root: htdocs/
-  passthru: index.php

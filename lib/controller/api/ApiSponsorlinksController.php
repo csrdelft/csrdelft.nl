@@ -5,7 +5,7 @@ namespace CsrDelft\controller\api;
 use CsrDelft\common\Annotation\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author J. Rijsdijk <jorairijsdijk@gmail.com>

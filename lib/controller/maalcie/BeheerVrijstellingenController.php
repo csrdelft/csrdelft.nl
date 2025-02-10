@@ -9,7 +9,7 @@ use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\view\maalcie\forms\VrijstellingForm;
 use CsrDelft\view\PlainView;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**

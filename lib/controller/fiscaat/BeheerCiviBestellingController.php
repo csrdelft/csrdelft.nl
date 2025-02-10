@@ -10,7 +10,7 @@ use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

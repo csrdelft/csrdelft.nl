@@ -34,7 +34,7 @@ class ForumDradenGelezenRepository extends AbstractRepository
 		$gelezen = new ForumDraadGelezen();
 		$gelezen->draad = $draad;
 		$gelezen->draad_id = $draad->draad_id; // Set pk
-		$gelezen->uid = $this->security->getUser()->getUserIdentifier();
+		$gelezen->uid = $this->security->getUser()->getUsername();
 		$gelezen->profiel = $this->security->getUser()->profiel;
 		$gelezen->datum_tijd = date_create_immutable();
 		return $gelezen;
@@ -50,7 +50,7 @@ class ForumDradenGelezenRepository extends AbstractRepository
 	{
 		$gelezen = $this->find([
 			'draad_id' => $draad->draad_id,
-			'uid' => $this->security->getUser()->getUserIdentifier(),
+			'uid' => $this->security->getUser()->getUsername(),
 		]);
 		if (!$gelezen) {
 			$gelezen = $this->maakForumDraadGelezen($draad);

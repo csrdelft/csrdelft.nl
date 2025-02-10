@@ -16,7 +16,7 @@ class WoonoordGroepVoter extends AbstractGroepVoter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	): bool {
+	) {
 		switch ($attribute) {
 			case self::BEHEREN:
 			case self::WIJZIGEN:

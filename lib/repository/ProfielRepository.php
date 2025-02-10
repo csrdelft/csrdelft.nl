@@ -17,7 +17,6 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Security;
 
 /**
@@ -33,8 +32,7 @@ class ProfielRepository extends AbstractRepository
 {
 	public function __construct(
 		ManagerRegistry $registry,
-		private readonly Security $security,
-		private readonly LoggerInterface $logger
+		private readonly Security $security
 	) {
 		parent::__construct($registry, Profiel::class);
 	}
@@ -169,7 +167,7 @@ class ProfielRepository extends AbstractRepository
 		try {
 			$this->save_ldap($profiel);
 		} catch (Exception $e) {
-			$this->logger->error($e);
+			FlashUtil::setFlashWithContainerFacade($e->getMessage(), -1); //TODO: logging
 		}
 		$this->save($profiel);
 	}

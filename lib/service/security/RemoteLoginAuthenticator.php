@@ -12,7 +12,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Uid\Uuid;
@@ -34,7 +34,7 @@ class RemoteLoginAuthenticator extends AbstractLoginFormAuthenticator
 	) {
 	}
 
-	public function authenticate(Request $request): Passport
+	public function authenticate(Request $request): PassportInterface
 	{
 		$uuid = $request->request->get('uuid');
 
@@ -56,7 +56,7 @@ class RemoteLoginAuthenticator extends AbstractLoginFormAuthenticator
 
 		$user = $remoteLogin->account;
 
-		$badge = new UserBadge($user->getUserIdentifier(), fn() => $user);
+		$badge = new UserBadge($user->getUsername(), fn() => $user);
 
 		return new SelfValidatingPassport($badge);
 	}

@@ -24,7 +24,6 @@ use Symfony\Component\Security\Core\Exception\LogicException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
@@ -77,7 +76,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 			$request->request->has('refresh_token');
 	}
 
-	public function authenticate(Request $request): Passport
+	public function authenticate(Request $request): PassportInterface
 	{
 		if ($request->server->get('HTTP_X_CSR_AUTHORIZATION')) {
 			return $this->authenticateHeader($request);
@@ -110,7 +109,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 			throw new AuthenticationException('', 401);
 		}
 
-		$user = $this->userProvider->loadUserByIdentifier($token->data->userId);
+		$user = $this->userProvider->loadUserByUsername($token->data->userId);
 
 		if (!$user instanceof UserInterface) {
 			throw new AuthenticationServiceException(
@@ -118,7 +117,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 			);
 		}
 
-		return new SelfValidatingPassport(new UserBadge($user->getUserIdentifier()));
+		return new SelfValidatingPassport($user);
 	}
 
 	private function authorizeRequest(Request $request)
@@ -177,7 +176,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 		$refreshToken = $this->createRefreshToken($series, $rand);
 
 		return new Passport(
-			new UserBadge($user->getUserIdentifier()),
+			$user,
 			new PasswordCredentials($credentials['password']),
 			[new JwtTokenBadge($token, $refreshToken)]
 		);
@@ -226,9 +225,9 @@ class ApiAuthenticator extends AbstractAuthenticator
 			throw new UnauthorizedHttpException('Unauthorized');
 		}
 
-		$token = $this->createJwtToken($remember->getUserIdentifier());
+		$token = $this->createJwtToken($remember->getUsername());
 
-		$user = $this->userProvider->loadUserByIdentifier($remember->getUserIdentifier());
+		$user = $this->userProvider->loadUserByUsername($remember->getUserName());
 
 		return new SelfValidatingPassport($user, [new JwtTokenBadge($token, null)]);
 	}
