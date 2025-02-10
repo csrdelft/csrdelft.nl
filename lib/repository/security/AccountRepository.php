@@ -8,7 +8,6 @@ use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -143,7 +142,7 @@ class AccountRepository extends AbstractRepository implements
 	}
 
 	public function upgradePassword(
-		PasswordAuthenticatedUserInterface $user,
+		UserInterface $user,
 		string $newEncodedPassword
 	): void {
 		$user->pass_hash = $newEncodedPassword;
@@ -152,9 +151,9 @@ class AccountRepository extends AbstractRepository implements
 		$this->_em->clear();
 	}
 
-	public function loadUserByIdentifier(string $identifier): ?UserInterface
+	public function loadUserByUsername(string $username): ?UserInterface
 	{
-		return $this->findOneByUsername($identifier);
+		return $this->findOneByUsername($username);
 	}
 
 	public function findOneByUsername(string $username): ?Account

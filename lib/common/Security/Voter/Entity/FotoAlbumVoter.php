@@ -52,7 +52,7 @@ class FotoAlbumVoter extends Voter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	): bool {
+	) {
 		switch ($attribute) {
 			case self::BEKIJKEN:
 				if (

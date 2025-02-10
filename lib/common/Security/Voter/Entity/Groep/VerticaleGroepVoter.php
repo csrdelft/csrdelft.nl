@@ -17,7 +17,7 @@ class VerticaleGroepVoter extends AbstractGroepVoter
 		string $attribute,
 		$subject,
 		TokenInterface $token
-	): bool {
+	) {
 		return match ($attribute) {
 			self::BEKIJKEN, self::AANMAKEN, self::WIJZIGEN => parent::voteOnAttribute(
 				$attribute,

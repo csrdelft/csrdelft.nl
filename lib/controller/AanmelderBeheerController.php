@@ -25,7 +25,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route; // ;
+use Symfony\Component\Routing\Annotation\Route; // ;
 
 #[Route(path: '/aanmelder/beheer')]
 class AanmelderBeheerController extends AbstractController

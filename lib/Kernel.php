@@ -4,7 +4,6 @@ namespace CsrDelft;
 
 use CsrDelft\Component\DataTable\DataTableTypeInterface;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\view\bbcode\prosemirror\Mark;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -33,7 +32,7 @@ class Kernel extends BaseKernel
 	/**
 	 * @param ContainerConfigurator $container
 	 */
-	protected function configureContainer(ContainerConfigurator $container): void
+	protected function configureContainer(ContainerConfigurator $container)
 	{
 		$container->import('../config/{packages}/*.yaml');
 		$container->import(
@@ -48,35 +47,28 @@ class Kernel extends BaseKernel
 		}
 	}
 
-	/** @return void */
-	public function boot()
-	{
-		parent::boot();
-		ContainerFacade::init($this->container);
-	}
-
 	/**
 	 * @param RoutingConfigurator $routes
 	 */
-	protected function configureRoutes(RoutingConfigurator $routes): void
+	protected function configureRoutes(RoutingConfigurator $routes)
 	{
 		$routes->import('../config/{routes}/' . $this->environment . '/**/*.yaml');
 		$routes->import('../config/{routes}/*.yaml');
 		$routes->import('../config/{routes}.yaml');
 	}
 
-	protected function build(ContainerBuilder $container): void
+	protected function build(ContainerBuilder $builder)
 	{
-		$container
+		$builder
 			->registerForAutoconfiguration(FormulierTypeInterface::class)
 			->addTag('csr.formulier.type');
-		$container
+		$builder
 			->registerForAutoconfiguration(Mark::class)
 			->addTag('csr.editor.mark');
-		$container
+		$builder
 			->registerForAutoconfiguration(Node::class)
 			->addTag('csr.editor.node');
-		$container
+		$builder
 			->registerForAutoconfiguration(DataTableTypeInterface::class)
 			->addTag('csr.table.type');
 	}

@@ -8,7 +8,7 @@ use CsrDelft\repository\PushAbonnementRepository;
 use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class PushAbonnementController extends AbstractController
 {

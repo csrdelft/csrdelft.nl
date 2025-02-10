@@ -1,0 +1,25 @@
+monolog:
+  handlers:
+    main:
+      type: fingers_crossed
+      action_level: critical
+      handler: grouped
+      activation_strategy: CsrDelft\common\Logging\LogActivationStrategy
+    grouped:
+      type: group
+      members: [streamed, filtered]
+    streamed:
+      type: stream
+      path: '%kernel.logs_dir%/%kernel.environment%.log'
+    filtered:
+      type: filter
+      min_level: error
+      max_level: emergency
+      handler: slackwebhook
+    slackwebhook:
+      type: slackwebhook
+      webhook_url: '%env(SLACK_URL)%'
+      channel: '%env(SLACK_CHANNEL)%'
+      icon_emoji: '%env(SLACK_ICON)%'
+      bot_name: '%env(SLACK_USERNAME)%'
+      include_extra: true

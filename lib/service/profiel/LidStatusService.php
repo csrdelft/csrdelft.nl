@@ -317,7 +317,7 @@ class LidStatusService
 			return false;
 		}
 		$profiel->changelog[] = new ProfielUpdateLogGroup(
-			$this->security->getUser()?->getUserIdentifier(),
+			$this->security->getUser()->getUsername(),
 			new DateTime(),
 			$changes
 		);

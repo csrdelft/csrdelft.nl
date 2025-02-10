@@ -9,7 +9,7 @@ use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ForumDradenVerbergenController extends AbstractController
 {

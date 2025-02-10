@@ -88,7 +88,27 @@ class BrowserTestCase extends PantherTestCase
 	 */
 	protected function tearDown(): void
 	{
-		parent::tearDown();
+		$status = $this->getStatus();
+		if (
+			$status == BaseTestRunner::STATUS_ERROR ||
+			$status == BaseTestRunner::STATUS_FAILURE
+		) {
+			$this->client->takeScreenshot(
+				__DIR__ . '/../../screenshot/failure-' . $this->getName() . '.png'
+			);
+
+			try {
+				$this->client
+					->findElement(WebDriverBy::cssSelector('.invalid-feedback'))
+					->getLocationOnScreenOnceScrolledIntoView();
+
+				$this->client->takeScreenshot(
+					__DIR__ . '/../../screenshot/failure-' . $this->getName() . '-2.png'
+				);
+			} catch (NoSuchElementException) {
+				// Negeer
+			}
+		}
 		$this->client->request('GET', '/logout');
 	}
 

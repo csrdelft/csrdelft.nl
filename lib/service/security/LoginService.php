@@ -15,10 +15,10 @@ use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 use League\Bundle\OAuth2ServerBundle\Security\Authentication\Token\OAuth2Token;
-use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Deze service verteld je dingen over de op dit moment ingelogde gebruiker.
@@ -172,6 +172,7 @@ class LoginService
 			$this->tokenStorage->setToken(
 				new UsernamePasswordToken(
 					$token->getUser(),
+					[],
 					$token->getFirewallName(),
 					$token->getRoleNames()
 				)

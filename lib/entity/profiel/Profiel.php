@@ -750,7 +750,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 				$naam .
 				'</a></span>';
 		} elseif ($vorm === 'leeg') {
-			$twig = ContainerFacade::getContainer()->get('csr.hack.twig');
+			$twig = ContainerFacade::getContainer()->get('twig');
 
 			return $twig->render('profiel/kaartje.html.twig', ['profiel' => $this]);
 		}

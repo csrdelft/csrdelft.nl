@@ -48,7 +48,7 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements
 			throw new AuthenticationException('Geen geldige private_token');
 		}
 
-		$badge = new UserBadge($user->getUserIdentifier(), fn() => $user);
+		$badge = new UserBadge($user->getUsername(), fn() => $user);
 
 		return new SelfValidatingPassport($badge);
 	}

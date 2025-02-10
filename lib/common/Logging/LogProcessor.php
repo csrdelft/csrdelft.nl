@@ -5,7 +5,7 @@ namespace CsrDelft\common\Logging;
 use CsrDelft\service\security\LoginService;
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class LogProcessor implements ProcessorInterface

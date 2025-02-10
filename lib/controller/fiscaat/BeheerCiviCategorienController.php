@@ -7,7 +7,7 @@ use CsrDelft\common\Util\SqlUtil;
 use CsrDelft\repository\fiscaat\CiviCategorieRepository;
 use CsrDelft\view\fiscaat\CiviCategorieSuggestiesResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

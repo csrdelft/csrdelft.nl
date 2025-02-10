@@ -61,9 +61,9 @@ jobs:
       - name: 💤 Shutdown Ubuntu MySQL (SUDO)
         run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
 
-      - uses: getong/mariadb-action@v1.11
+      - uses: getong/mariadb-action@v1.1
         with:
-          mariadb version: '10.11'
+          mariadb version: '10.3'
           mysql root password: ''
 
       - uses: actions/checkout@v3
@@ -89,7 +89,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: 8.2
           tools: composer:v2
           extensions: pdo_mysql
 
@@ -123,12 +123,12 @@ jobs:
           PANTHER_NO_SANDBOX: '1'
         run: php bin/phpunit
 
-      - name: 📤 Upload cache + logs + screenshots bij fout
+      - name: 📤 Upload screenshot van fout
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: debug
-          path: var
+          name: screenshot
+          path: screenshot
 
   deploy:
     name: Push naar productie
@@ -155,7 +155,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: 8.2
           tools: composer:v2
           extensions: pdo_mysql
 
@@ -213,7 +213,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: 8.2
           tools: composer:v2
           extensions: pdo_mysql
 

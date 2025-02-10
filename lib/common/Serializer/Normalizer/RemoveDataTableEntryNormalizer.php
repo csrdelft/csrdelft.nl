@@ -7,7 +7,6 @@ use CsrDelft\common\Util\ReflectionUtil;
 use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
@@ -15,7 +14,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
  *
  * @package CsrDelft\common
  */
-class RemoveDataTableEntryNormalizer implements NormalizerInterface
+class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface
 {
 	public function __construct(
 		private readonly EntityManagerInterface $entityManager,

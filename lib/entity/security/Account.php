@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\security;
 
-use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,7 +18,7 @@ use Symfony\Component\Uid\Uuid;
  */
 #[
 	ORM\Entity(
-		repositoryClass: AccountRepository::class
+		repositoryClass: \CsrDelft\repository\security\AccountRepository::class
 	)
 ]
 #[ORM\Table('accounts')]
@@ -112,7 +111,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 	 */
 	#[
 		ORM\OneToOne(
-			targetEntity: Profiel::class,
+			targetEntity: \CsrDelft\entity\profiel\Profiel::class,
 			inversedBy: 'account'
 		)
 	]
