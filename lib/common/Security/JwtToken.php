@@ -20,6 +20,7 @@ class JwtToken extends AbstractToken
 		parent::__construct($roles);
 
 		$this->setUser($user);
+		$this->setAuthenticated(true);
 	}
 
 	public function getCredentials()
