@@ -87,7 +87,7 @@ class AccessControlEventListener
 			$this->annotations->getMethodAnnotation(
 				$reflectionMethod,
 				IsGranted::class
-			) || !empty($reflectionMethod->getAttributes(IsGranted::class))
+			)
 		) {
 			return;
 		}
