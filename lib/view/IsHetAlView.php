@@ -81,11 +81,14 @@ class IsHetAlView implements View
 			// TODO: Weghalen dat sponsorkliks wordt laten zien
 
 			case 'dies':
-				$begin = strtotime('2024-02-13');
-				$einde = strtotime('2024-02-23');
+				$jaar = date('Y');
+				$dagVanDeWeek1jan = date('w', strtotime($jaar . '-01-01'));
+				$begin = strtotime($jaar . '-02-' . 14 - $dagVanDeWeek1jan);
+				$einde = strtotime($jaar . '-02-' . 24 - $dagVanDeWeek1jan);
 				$nu = strtotime(date('Y-m-d'));
 				if ($nu > $einde) {
-					$begin = strtotime('+1 year', $begin);
+					$dagVanDeWeek1jan = date('w', strtotime($jaar + 1 . '-01-01'));
+					$begin = strtotime($jaar + 1 . '-02-' . 14 - $dagVanDeWeek1jan);
 				}
 				$dagen = round(($begin - $nu) / 86400);
 				if ($dagen <= 0) {
