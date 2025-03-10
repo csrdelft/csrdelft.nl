@@ -2,7 +2,7 @@ BEGIN:VCARD
 VERSION:4.0
 FN;CHARSET=UTF-8:{{ profiel.getNaam('volledig') }}
 N;CHARSET=UTF-8:{{ (profiel.tussenvoegsel ? profiel.tussenvoegsel ~ ' ' : '') ~ profiel.achternaam }};{{ profiel.voornaam }};;;
-{% if profiel | is_zichtbaar('nickname') -%}
+{% if profiel | is_zichtbaar('nickname') and profiel.nickname is defined and profiel.nickname is not null -%}
 	NICKNAME;CHARSET=UTF-8:{{ profiel.nickname }}
 {% endif %}
 {% if profiel|is_zichtbaar('geslacht') -%}
@@ -12,19 +12,23 @@ UID;CHARSET=UTF-8:{{ profiel.uid }}
 {% if profiel|is_zichtbaar('gebdatum') -%}
 	BDAY:{{ profiel.gebdatum | date('Ymd') }}
 {% endif %}
-{% if profiel|is_zichtbaar('email') -%}
+{% if profiel|is_zichtbaar('email') and profiel.email is defined and profiel.email is not null  -%}
 	EMAIL;CHARSET=UTF-8;type=HOME,INTERNET:{{ profiel.email }}
 {% endif %}
-{% if profiel|is_zichtbaar('profielfoto', 'intern') -%}
+{% if profiel|is_zichtbaar('profielfoto', 'intern') and profiel.pasfotoInternalPath is defined and profiel.pasfotoInternalPath is not null -%}
 	PHOTO;ENCODING=BASE64;TYPE=JPEG:{{ profiel.pasfotoInternalPath | file_base64 }}
 {% endif %}
-{% if profiel|is_zichtbaar('mobiel') -%}
+{% if profiel|is_zichtbaar('mobiel') and profiel.mobiel is defined and profiel.mobiel is not null -%}
 	TEL;TYPE=CELL:{{ profiel.mobiel }}
 {% endif %}
-{% if profiel|is_zichtbaar('telefoon') -%}
+{% if profiel|is_zichtbaar('telefoon') and profiel.telefoon is defined and profiel.telefoon is not null  -%}
 	TEL;TYPE=HOME,VOICE:{{ profiel.telefoon }}
 {% endif %}
-{% if profiel|is_zichtbaar(['adres', 'woonplaats', 'postcode', 'land']) -%}
+{% if profiel|is_zichtbaar(['adres', 'woonplaats', 'postcode', 'land'])
+	and profiel.adres is defined and profiel.adres is not null
+	and profiel.woonplaats is defined and profiel.woonplaats is not null
+	and profiel.postcode is defined and profiel.postcode is not null
+	and profiel.land is defined and profiel.land is not null -%}
 	ADR;CHARSET=UTF-8;TYPE=HOME:;;{{ profiel.adres }};{{ profiel.woonplaats }};;{{ profiel.postcode }};{{ profiel.land }}
 {% endif %}
 REV:{{ date().format('c') }}
