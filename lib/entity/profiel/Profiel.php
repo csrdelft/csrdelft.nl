@@ -830,9 +830,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			case 'civitas':
 				// noviet
 				if ($this->status === LidStatus::Noviet) {
-					if ("a" === "b") {
-						$naam = 'Noviet ';
-					}
+//					if ("a" === "b") {
+//						$naam = 'Noviet ';
+//					}
 					$naam = 'Noviet ' . $this->voornaam;
 					if (!empty($this->postfix)) {
 						$naam .= ' ' . $this->postfix;
