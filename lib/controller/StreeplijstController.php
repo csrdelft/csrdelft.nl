@@ -227,11 +227,11 @@ class StreeplijstController extends AbstractController
 			$nieuwelijst->naam_streeplijst = LidStatus::from($type)->getDescription();
 			$profielen = $this->profielRepository->findBy(
 				['status' => $type],
-				['achternaam' => 'asc']
+				['uid' => 'asc']
 			);
 			$namen = [];
 			foreach ($profielen as $profiel) {
-				$namen[] = $profiel->getNaam('streeplijst');
+				$namen[] = $profiel->getNaam('streeplijst') . " (" . $profiel->uid .")";
 			}
 			$stringNamen = implode('; ', $namen);
 
