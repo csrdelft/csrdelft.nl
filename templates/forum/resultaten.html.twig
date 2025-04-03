@@ -71,7 +71,7 @@
 					{% endif %}
 								</span>
 								{% if app.user and post.uid != 'x999' %}
-									<div class="forumpasfoto">{{ get_profiel(post.uid).link('pasfoto') | raw }}</div>
+									<div class="forumpasfoto">{{ get_profiel(post.uid).link('pasfoto.vierkant') | raw }}</div>
 								{% endif %}
 							</div>
 							<div class="forum-bericht {{ cycle(['bericht0', 'bericht1'], loop.index) }}" id="post{{ post.post_id }}">

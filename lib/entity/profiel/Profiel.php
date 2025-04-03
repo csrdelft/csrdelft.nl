@@ -9,13 +9,13 @@ use CsrDelft\common\Util\FileUtil;
 use CsrDelft\common\Util\InstellingUtil;
 use CsrDelft\common\Util\PathUtil;
 use CsrDelft\common\Util\TextUtil;
+use CsrDelft\entity\LidToestemming;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\Kring;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\entity\groepen\Woonoord;
-use CsrDelft\entity\LidToestemming;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\LidStatus;
@@ -30,8 +30,11 @@ use CsrDelft\view\datatable\DataTableColumn;
 use CsrDelft\view\formulier\DisplayEntity;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\Persistence\Proxy;
 use const P_LEDEN_MOD;
 
@@ -52,17 +55,14 @@ use const P_LEDEN_MOD;
 #[ORM\Index(name: 'status', columns: ['status'])]
 class Profiel implements Agendeerbaar, DisplayEntity
 {
-	public function __construct()
+	public function __construct(
+		// FIXME(#1231): Hack voor ProfielEntityField initialisatie (zie issue #1231)
+		#[Id, Column(type: 'uid')] public ?string $uid = null
+	)
 	{
+		$this->toestemmingen = new ArrayCollection();
 		$this->kinderen = new ArrayCollection();
 	}
-
-	/**
-	 * @var string
-	 */
-	#[ORM\Id]
-	#[ORM\Column(type: 'uid')]
-	public $uid;
 	/**
 	 * @var ProfielLogGroup[]
 	 */
@@ -395,22 +395,20 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 */
 	#[
 		ORM\OneToOne(
-			targetEntity: \CsrDelft\entity\security\Account::class,
-			mappedBy: 'profiel'
-		)
+		targetEntity: \CsrDelft\entity\security\Account::class,
+		mappedBy: 'profiel'
+	)
 	]
 	public $account;
 
-	/**
-	 * @var LidToestemming[]
-	 */
 	#[
 		ORM\OneToMany(
-			targetEntity: \CsrDelft\entity\LidToestemming::class,
+			targetEntity: LidToestemming::class,
 			mappedBy: 'profiel'
 		)
 	]
-	public $toestemmingen;
+	/** @var Collection<int, LidToestemming> */
+	public Collection $toestemmingen;
 
 	/**
 	 * In $properties_lidstatus kan per property worden aangegeven voor welke lidstatusen deze nodig. Bij wijziging van
@@ -422,12 +420,6 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		'o_woonplaats' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
 		'o_land' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
 		'o_telefoon' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
-		'eetwens' => [
-			LidStatus::Lid,
-			LidStatus::Gastlid,
-			LidStatus::Noviet,
-			LidStatus::Kringel,
-		],
 		'vrienden' => [LidStatus::Noviet],
 		// novitiaat
 		'novitiaat' => [LidStatus::Noviet],
@@ -442,7 +434,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		'huisartsTelefoon' => [LidStatus::Noviet],
 	];
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->uid . '@csrdelft.nl';
 	}
@@ -502,7 +494,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		]);
 	}
 
-	public function getAdres()
+	public function getAdres(): string
 	{
 		return $this->adres .
 			', ' .
@@ -646,17 +638,17 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->getBeginMoment()->add(new \DateInterval('PT1H'));
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		return true;
 	}
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return $this->getNaam('civitas');
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		$leeftijd =
 			$this->getBeginMoment()->format('Y') - $this->gebdatum->format('Y');
@@ -675,17 +667,18 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->getTitel() . ' wordt ' . $leeftijd . ' jaar';
 	}
 
-	public function getLocatie()
+	public function getLocatie(): string
 	{
 		return $this->getAdres();
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/profiel/' . $this->uid;
 	}
 
-	public function getLink($vorm = 'civitas')
+	// TODO: Dit moet anders. Pasfoto mag weg
+	public function getLink($vorm = 'civitas'): string
 	{
 		if (
 			!LoginService::mag(P_LEDEN_READ) ||
@@ -697,19 +690,24 @@ class Profiel implements Agendeerbaar, DisplayEntity
 				'4444',
 			])
 		) {
-			if ($vorm === 'pasfoto' && LoginService::mag(P_LEDEN_READ)) {
+			if ($vorm === 'pasfoto') {
 				return $this->getPasfotoTag();
+			}
+			if ($vorm === 'pasfoto.vierkant') {
+				return $this->getPasfotoTag('', 'vierkant');
 			}
 			return $this->getNaam();
 		}
 		$naam = $this->getNaam($vorm);
 		if ($vorm === 'pasfoto') {
 			$naam = $this->getPasfotoTag();
+		} elseif ($vorm === 'pasfoto.vierkant') {
+			$naam = $this->getPasfotoTag('', 'vierkant');
 		} elseif ($this->lidjaar === 2013) {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
 		if (
-			$vorm !== 'pasfoto' &&
+			$vorm !== 'pasfoto' && $vorm !== 'pasfoto.vierkant' &&
 			InstellingUtil::lid_instelling('layout', 'visitekaartjes') == 'ja'
 		) {
 			$title = '';
@@ -729,7 +727,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			$this->getNaam($vorm) .
 			'">';
 		if (
-			$vorm !== 'pasfoto' &&
+			$vorm !== 'pasfoto' && $vorm !== 'pasfoto.vierkant' &&
 			InstellingUtil::lid_instelling('layout', 'visitekaartjes') == 'ja'
 		) {
 			return '<span data-visite="' .
@@ -754,7 +752,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $l . $naam . '</a>';
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		return true;
 	}
@@ -825,8 +823,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 
 			case 'civitas':
 				// noviet
-				if ($this->status === LidStatus::Noviet) {
-					$naam = 'Noviet ' . $this->voornaam;
+				if ($this->status === LidStatus::Noviet){
+					if ($this->uid==="2404"){
+						$naam = 'Feut ' . $this->voornaam;
+					} else{
+						$naam = 'Noviet ' . $this->voornaam;
+					}
 					if (!empty($this->postfix)) {
 						$naam .= ' ' . $this->postfix;
 					}
@@ -866,6 +868,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 					}
 				}
 
+
 				break;
 
 			case 'aaidrom': // voor een 1 aprilgrap ooit
@@ -887,29 +890,24 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $naam;
 	}
 
+	public function pasfoto(): string {
+		return "/profiel/pasfoto/$this->uid.jpg";
+	}
+
+	public function pasfotoVierkant(): string {
+		return "/profiel/pasfoto/$this->uid.vierkant.jpg";
+	}
+
 	/**
 	 * Kijkt of er een pasfoto voor het gegeven uid is, en geef die terug.
 	 * Geef anders een standaard-plaatje terug.
 	 *
+	 * @deprecated gebruik Profiel::pasfoto
 	 * @param string $vorm
 	 * @return string
 	 */
 	public function getPasfotoPath($vorm = 'user')
 	{
-		if ($vorm === 'user') {
-			$vorm = InstellingUtil::lid_instelling('forum', 'naamWeergave');
-		}
-
-		if (
-			!InstellingUtil::is_zichtbaar($this, 'profielfoto', 'intern', P_LEDEN_MOD)
-		) {
-			return '/images/geen-foto.jpg';
-		}
-		$path = $this->getPasfotoInternalPath($vorm);
-		if ($path === null) {
-			return '/images/geen-foto.jpg';
-		}
-
 		if (in_array($vorm, ['Duckstad', 'vierkant'])) {
 			return "/profiel/pasfoto/$this->uid.$vorm.jpg";
 		}
@@ -920,31 +918,29 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	public function getPasfotoInternalPath($vorm = 'user')
 	{
 		$path = null;
-		if (LoginService::mag(P_OUDLEDEN_READ)) {
-			// in welke (sub)map moeten we zoeken?
-			if ($vorm == 'vierkant') {
-				$folders = [''];
-			} else {
-				$folders = [$vorm . '/', ''];
+		// in welke (sub)map moeten we zoeken?
+		if ($vorm == 'vierkant') {
+			$folders = [''];
+		} else {
+			$folders = [$vorm . '/', ''];
+		}
+		// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
+		foreach ($folders as $subfolder) {
+			foreach (['png', 'jpeg', 'jpg', 'gif'] as $validExtension) {
+				if (
+					file_exists(
+						PASFOTO_PATH . $subfolder . $this->uid . '.' . $validExtension
+					)
+				) {
+					$path = $subfolder . $this->uid . '.' . $validExtension;
+					break;
+				}
 			}
-			// loop de volgende folders af op zoek naar de gevraagde pasfoto vorm
-			foreach ($folders as $subfolder) {
-				foreach (['png', 'jpeg', 'jpg', 'gif'] as $validExtension) {
-					if (
-						file_exists(
-							PASFOTO_PATH . $subfolder . $this->uid . '.' . $validExtension
-						)
-					) {
-						$path = $subfolder . $this->uid . '.' . $validExtension;
-						break;
-					}
-				}
-				if ($path) {
-					break;
-				} elseif ($vorm === 'Duckstad') {
-					$path = $vorm . '/eend.jpg';
-					break;
-				}
+			if ($path) {
+				break;
+			} elseif ($vorm === 'Duckstad') {
+				$path = $vorm . '/eend.jpg';
+				break;
 			}
 		}
 		if (!$path) {
@@ -961,12 +957,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return PathUtil::safe_combine_path(PASFOTO_PATH, $path);
 	}
 
-	public function getPasfotoTag($cssClass = '')
+	public function getPasfotoTag($cssClass = '', $vorm = 'user')
 	{
 		return '<img class="pasfoto ' .
 			htmlspecialchars((string) $cssClass) .
 			'" src="' .
-			$this->getPasfotoPath() .
+			$this->getPasfotoPath($vorm) .
 			'" alt="Pasfoto van ' .
 			$this->getNaam('volledig') .
 			'" />';
@@ -1109,7 +1105,8 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		);
 	}
 
-	public function getId(): string
+	// FIXME(#1231): Wordt gebruikt in DoctrineEntityField voor Formlogica, die verwacht dat alle velden null kunnen zijn.
+	public function getId(): ?string
 	{
 		return $this->uid;
 	}

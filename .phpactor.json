@@ -1,0 +1,8 @@
+{
+	"$schema": "/phpactor.schema.json",
+	"symfony.enabled": true,
+	"phpunit.enabled": true,
+	"language_server_psalm.enabled": true,
+	"language_server_phpstan.enabled": true,
+	"symfony.xml_path": "%project_root%/var/cache/dev/CsrDelft_KernelDevDebugContainer.xml"
+}

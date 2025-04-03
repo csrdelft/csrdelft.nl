@@ -44,13 +44,9 @@ class Activiteit extends Groep implements
 	#[Serializer\Groups('datatable')]
 	#[ORM\Column(type: 'enumActiviteitSoort')]
 	public $activiteitSoort;
-	/**
-	 * Locatie
-	 * @var string
-	 */
 	#[Serializer\Groups('datatable')]
 	#[ORM\Column(type: 'string', nullable: true)]
-	public $locatie;
+	public ?string $locatie;
 	/**
 	 * Tonen in agenda
 	 * @var boolean
@@ -59,34 +55,34 @@ class Activiteit extends Groep implements
 	#[ORM\Column(type: 'boolean')]
 	public $inAgenda;
 
-	public function getUUID()
+	public function getUUID(): string
 	{
 		return $this->id . '@activiteit.csrdelft.nl';
 	}
 
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return '/groepen/activiteiten/' . $this->id;
 	}
 
 	// Agendeerbaar:
 
-	public function getTitel()
+	public function getTitel(): string
 	{
 		return $this->naam;
 	}
 
-	public function getBeschrijving()
+	public function getBeschrijving(): string
 	{
 		return $this->samenvatting;
 	}
 
-	public function getLocatie()
+	public function getLocatie(): ?string
 	{
 		return $this->locatie;
 	}
 
-	public function isTransparant()
+	public function isTransparant(): bool
 	{
 		// Toon als transparant (vrij) als lid dat wil, activiteit hele dag(en) duurt of lid niet ingeketzt is
 		return InstellingUtil::lid_instelling('agenda', 'transparantICal') ===
@@ -95,7 +91,7 @@ class Activiteit extends Groep implements
 			!$this->getLid(LoginService::getUid());
 	}
 
-	public function isHeledag()
+	public function isHeledag(): bool
 	{
 		$begin = $this->getBeginMoment()->format('H:i');
 		$eind = $this->getEindMoment()->format('H:i');

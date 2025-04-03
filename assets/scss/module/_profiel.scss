@@ -112,10 +112,13 @@ li.verborgen {
 	background-image: url(../../images/jarig.jpg);
 }
 
+// Hack om dit in de webpack bundle te krijgen
 .include-banaan {
-	background-image: url(../../images/banaan.gif);
+	background-image: url(../../images/banaan.webm);
+	background-image: url(../../images/banaan.mp4);
 }
-img.banaan {
+
+video.banaan {
 	width: 160px;
 }
 

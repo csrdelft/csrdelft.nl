@@ -31,8 +31,10 @@
 						</div>
 						<div class="col-md">
 							{% if 'banaan' in profiel.profielOpties %}
-								<img src="{{ absolute_url(asset_url('images/banaan.gif')) }}" alt="Dansende banaan"
-										 class="banaan clear">
+								<video autoplay loop muted playsinline class="banaan clear">
+									<source src="{{ absolute_url(asset_url('images/banaan.webm')) }}" type="video/webm">
+									<source src="{{ absolute_url(asset_url('images/banaan.mp4')) }}" type="video/mp4">
+								</video>
 							{% endif %}
 						</div>
 					</div>

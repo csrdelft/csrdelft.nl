@@ -10,7 +10,7 @@ use Twig\TwigFilter;
 
 class DateTimeTwigExtension extends AbstractExtension
 {
-	public function getFilters()
+	public function getFilters(): array
 	{
 		return [
 			new TwigFilter('reldate', DateUtil::reldate(...), [

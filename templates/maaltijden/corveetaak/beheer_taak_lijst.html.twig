@@ -39,7 +39,7 @@
 	</td>
 	<td class="text-center" style="width: 50px;">
 		{% set aantal = taak.aantalKeerGemaild %}
-		{% if not taak.verwijderd and (maaltijd is none or (maaltijd is not none and not maaltijd.verwijderd)) %}
+		{% if not taak.verwijderd and (maaltijd is not defined or maaltijd is none or (maaltijd is not none and not maaltijd.verwijderd)) %}
 		{% set wijzigbaar = true %}
 		{% if taak.profiel %}
 			{{ aantal }}x

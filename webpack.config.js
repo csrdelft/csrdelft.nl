@@ -61,6 +61,7 @@ module.exports = (env, argv) => {
 			lustrumreis: './scss/lustrum12/lustrumreis.scss',
 			dies2023: './scss/dies2023/dies2023.scss',
 			dies2024: './scss/dies2024/dies2024.scss',
+			dies2025: './scss/dies2025/dies2025.scss',
 		},
 		output: {
 			// De map waarin alle bestanden geplaatst worden.
@@ -196,9 +197,9 @@ module.exports = (env, argv) => {
 						filename: 'fonts/[hash][ext][query]',
 					},
 				},
-				// Sla plaetjes op in de images map.
+				// Sla plaetjes/videos op in de images map.
 				{
-					test: /\.(png|svg|jpg|gif)$/,
+					test: /\.(png|svg|jpg|gif|webm|mp4)$/,
 					type: 'asset/resource',
 					generator: {
 						filename: 'images/[hash][ext][query]',

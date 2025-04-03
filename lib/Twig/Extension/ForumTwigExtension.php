@@ -21,7 +21,7 @@ class ForumTwigExtension extends AbstractExtension
 	) {
 	}
 
-	public function getFunctions()
+	public function getFunctions(): array
 	{
 		return [
 			new TwigFunction(
@@ -51,7 +51,7 @@ class ForumTwigExtension extends AbstractExtension
 		];
 	}
 
-	public function getFilters()
+	public function getFilters(): array
 	{
 		return [
 			new TwigFilter('highlight_zoekterm', $this->highlight_zoekterm(...), [

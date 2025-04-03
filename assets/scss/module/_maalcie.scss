@@ -37,6 +37,18 @@
 	border-spacing: 0;
 	margin-bottom: 1em;
 
+	.eerste-in-week {
+		border-top: 2px solid $black;
+	}
+
+	.later-in-week {
+		border-top: 1px solid $black;
+	}
+
+	.left-border {
+		border-left: 1px solid $black;
+	}
+
 	th {
 		background-color: $tabel-header;
 		font-weight: bold;
@@ -46,20 +58,18 @@
 
 	tr {
 		background-color: $tabel-regel-donker;
-
-		&:nth-child(even) {
-			background-color: $tabel-regel-licht;
-		}
-
-		&:hover {
-			background-color: $tabel-hover;
-		}
 	}
 
 	td {
-		vertical-align: middle;
+		vertical-align: top;
+		text-align: left;
 		padding: 0 1em;
 		white-space: nowrap;
+
+		&:hover {
+			background-color: $tabel-hover;
+			color: $black;
+		}
 	}
 
 	.col-del {

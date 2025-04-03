@@ -3,6 +3,7 @@
 namespace CsrDelft\command;
 
 use CsrDelft\common\Util\UrlUtil;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,21 +14,17 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author J. Rijsdijk <jorairijsdijk@gmail.com>
  * @since 26/10/2017
  */
+#[
+	AsCommand(name: 'stek:sponsor:download', description: 'Download sponsorkliks')
+]
 class SponsorAffiliateDownloadCommand extends Command
 {
-	protected static $defaultName = 'stek:sponsor:download';
-
 	public function __construct(
 		private readonly string $sponsorSlHost,
 		private readonly string $sponsorClubId,
 		private readonly string $sponsorUserAgent
 	) {
 		parent::__construct();
-	}
-
-	protected function configure()
-	{
-		$this->setDescription('Download sponsorlinks');
 	}
 
 	protected function execute(

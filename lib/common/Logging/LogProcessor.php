@@ -16,14 +16,12 @@ class LogProcessor implements ProcessorInterface
 	) {
 	}
 
-	public function __invoke(LogRecord $record)
+	public function __invoke(LogRecord $record): LogRecord
 	{
 		$request = $this->requestStack->getCurrentRequest();
 
 		if ($request) {
-			$record->extra['uid'] = $this->security->getUser()
-				? $this->security->getUser()->getUserIdentifier()
-				: LoginService::UID_EXTERN;
+			$record->extra['uid'] = $this->security->getUser()?->getUserIdentifier() ?? LoginService::UID_EXTERN;
 		}
 
 		return $record;
