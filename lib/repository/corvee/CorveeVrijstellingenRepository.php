@@ -68,6 +68,11 @@ class CorveeVrijstellingenRepository extends AbstractRepository
 		return $vrijstellingen;
 	}
 
+	public function getVrijstellingenByDate()
+	{
+		return $this->findBy([], ['begin_datum' => 'ASC']);
+	}
+
 	/**
 	 * @param $uid
 	 * @return CorveeVrijstelling|null
