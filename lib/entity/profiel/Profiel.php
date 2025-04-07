@@ -798,11 +798,11 @@ class Profiel implements Agendeerbaar, DisplayEntity
 				break;
 
 			case 'streeplijst':
-				$naam = $this->achternaam . ', ';
-				if (!empty($this->tussenvoegsel)) {
-					$naam .= $this->tussenvoegsel . ', ';
-				}
-				$naam .= $this->voornaam;
+				$naam = $this->voornaam . '|';
+
+				$naam .= $this->tussenvoegsel . '|';
+
+				$naam .= $this->achternaam;
 				break;
 
 			case 'voorletters':
