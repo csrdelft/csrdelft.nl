@@ -221,7 +221,7 @@ class StreeplijstController extends AbstractController
 		$arrayStreeplijsten = [];
 		$ledentype = $request->query->get('ledentype');
 		$streepopties = $request->query->get('HVStreepopties');
-
+		//array_unshift($streepopties, "lidnummer");
 		foreach ($ledentype as $type) {
 			$nieuwelijst = new Streeplijst();
 			$nieuwelijst->naam_streeplijst = LidStatus::from($type)->getDescription();
@@ -230,8 +230,13 @@ class StreeplijstController extends AbstractController
 				['uid' => 'asc']
 			);
 			$namen = [];
+
 			foreach ($profielen as $profiel) {
-				$namen[] = $profiel->getNaam('streeplijst') . " (" . $profiel->uid .")";
+				if ($profiel->verticale !== null){
+					$namen[] = $profiel->uid . "|" . $profiel->getNaam('streeplijst')  ;
+					//$lidnummers[] = $profiel->uid;
+				}
+
 			}
 			$stringNamen = implode('; ', $namen);
 
