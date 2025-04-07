@@ -24,7 +24,7 @@
 			<tr>
 			{% set naamlid = lid|split("|") %}
 				{% for type in naamlid %}
-					<td scope="row" style="padding:0px">{{ type | trim }}</td>
+					<td scope="row" style="padding:0px 8px">{{ type | trim }}</td>
 				{% endfor %}
 				{% for inhoud in streeplijst.inhoud %}
 					<td style="padding:0px"></td>
