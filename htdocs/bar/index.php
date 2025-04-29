@@ -183,11 +183,10 @@ if ($barsysteem->isLoggedIn()) {
                 <div class="tab-pane <?= $barsysteem->isBeheer() ? "beheer" : "" ?>" id="bestelLijstBeheer">
 
                     <div class=" input-group input-group-lg input-daterange" id="datepicker">
-						<span class="input-group-btn">
-							<button class="btn btn-toggle btn-default" id="eenPersoon">Geselecteerde persoon</button>
-							<button class="btn btn-toggle btn-default btn-primary" id="allePersonen">Alle personen
-                            </button>
-						</span>
+												<span class="input-group-btn">
+													<button class="btn btn-toggle btn-default" id="eenPersoon">Geselecteerde persoon</button>
+													<button class="btn btn-toggle btn-default btn-primary" id="allePersonen">Alle personen</button>
+												</span>
                         <span class="input-group-addon">van</span><input type="text" class="input-sm form-control"
                                                                          name="start"
                                                                          placeholder="begin borrel" id="beginDatum"/>
@@ -195,14 +194,15 @@ if ($barsysteem->isLoggedIn()) {
                         <span class="input-group-addon">tot</span><input type="text"
                                                                          class="clearable input-sm form-control "
                                                                          name="end"
-                                                                         placeholder="nu" id="eindDatum"/> <span
-                            class="clearKruisje glyphicon glyphicon glyphicon-remove-circle"></span>
+                                                                         placeholder="nu" id="eindDatum"/>
+											  <span class="clearKruisje glyphicon glyphicon glyphicon-remove-circle"></span>
                         <span class="input-group-addon">naar</span>
-						<span class="input-group-btn">
-                            <button class="btn btn-default btn-primary" id="pSearch">alle</button>
-							<button class="btn btn-primary" id="krijgBestellingen"><span
-                                    class="glyphicon glyphicon glyphicon-cloud-download"></span></button>
-						</span>
+												<span class="input-group-btn">
+													<button class="btn btn-default btn-primary" id="pSearch">alle</button>
+													<button class="btn btn-primary" id="krijgBestellingen">
+														<span class="glyphicon glyphicon glyphicon-cloud-download"></span>
+													</button>
+												</span>
 
                     </div>
                     <div id="pSearchContent" class="hidden input-group input-group-lg">
