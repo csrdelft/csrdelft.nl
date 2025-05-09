@@ -221,6 +221,8 @@ class StreeplijstController extends AbstractController
 		$arrayStreeplijsten = [];
 		$ledentype = $request->query->get('ledentype');
 		$streepopties = $request->query->get('HVStreepopties');
+		$gedispenseerde_string = $request->query->get('gedispenseerde_lijst');
+		$gedispenseerde_string = explode(",", $gedispenseerde_string);
 
 		foreach ($ledentype as $type) {
 			$nieuwelijst = new Streeplijst();
@@ -249,6 +251,7 @@ class StreeplijstController extends AbstractController
 		return $this->render('streeplijst/presentielijst.html.twig', [
 			'streeplijsten' => $arrayStreeplijsten,
 			'HVnummer' => $naam_HVlijst,
+			'Gedispenseerden' => $gedispenseerde_string,
 		]);
 	}
 }

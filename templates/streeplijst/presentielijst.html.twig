@@ -27,7 +27,21 @@
 					<td scope="row" style="padding:0px 8px">{{ type | trim }}</td>
 				{% endfor %}
 				{% for inhoud in streeplijst.inhoud %}
-					<td style="padding:0px"></td>
+
+					{# if inhoud == "Dispensatie" werkt niet... #}
+
+					{% for type in naamlid %}
+						{# if type == lidnummer #}
+						{% if loop.index == 1 %}
+							{% if type in Gedispenseerden %}
+								<td style="padding:0px;padding-left: 4px;">Dispensatie</td>
+							{% else %}
+								<td style="padding:0px"></td>
+							{% endif %}
+
+						{% endif %}
+					{% endfor %}
+
 				{% endfor %}
 			</tr>
 		{% endfor %}

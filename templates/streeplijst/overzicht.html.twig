@@ -57,14 +57,21 @@
 				<p></p>
 				<label for="naam_HVlijst">Presentielijst </label>
 				<input size = "1" placeholder="..." name="naam_HVlijst" id="naam_HVlijst" type="text"
-							 placeholder="..." aria-describedby="naam_HVlijst"> e Huishoudelijke Vergadering
+							 aria-describedby="naam_HVlijst"> e Huishoudelijke Vergadering
+			</div>
+
+			<div>
+				<p></p>
+				<label for="gedispenseerde_lijst">Lijst van mensen met dispensatie</label>
+				<input size = "15" placeholder="Bijv. 1234,5678" name="gedispenseerde_lijst" id="gedispenseerde_lijst" type="text"
+							 aria-describedby="gedispenseerde_lijst"> (plaats comma's tussen de lidnummers)
 			</div>
 
 			<div>
 				<em>Streepopties</em>
 				<input type="checkbox" id=Aanwezig name="HVStreepopties[]" value="Aanwezig" checked>
 				<label for="Aanwezig">Aanwezig</label>
-				<input type="checkbox" id="Dispensatie" name="HVStreepopties[]" value="Dispensatie" checked>
+				<input type="checkbox" id="Dispensatie" name="HVStreepopties[]" value="Dispensatie">
 				<label for="Dispensatie">Dispensatie</label>
 				<input type="checkbox" id="Afwezig" name="HVStreepopties[]" value="Afwezig">
 				<label for="Afwezig">Afwezig</label>
@@ -72,8 +79,13 @@
 			<div>
 				<p></p>  <em>Type leden:</em>
 				{% for status in lidstatus %}
+					{% if status.description in ["Lid","Gastlid","Noviet"] %}
 					<input type="checkbox" id="{{ status.value }}" name="ledentype[]" value="{{ status.value }}" checked>
 					<label for="{{ status.value }}">{{ status.description }}</label>
+					{% else %}
+						<input type="checkbox" id="{{ status.value }}" name="ledentype[]" value="{{ status.value }}">
+						<label for="{{ status.value }}">{{ status.description }}</label>
+					{% endif %}
 				{% endfor %}
 				<p></p>
 			</div>
