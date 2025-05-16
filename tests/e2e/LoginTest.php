@@ -17,14 +17,14 @@ class LoginTest extends BrowserTestCase
 		$this->assertTrue(true);
 	}
 
-//	public function testLogin()
-//	{
-//		$crawler = $this->login();
-//
-//		$civiSaldoCell = $crawler->filter('.cell-civi-saldo')->text();
-//
-//		$this->assertStringContainsString('Civisaldo', $civiSaldoCell);
-//		$this->assertStringContainsString('€ 0,00', $civiSaldoCell);
-//		$this->assertStringContainsString('Inleggen?', $civiSaldoCell);
-//	}
+	public function testLogin()
+	{
+		$crawler = $this->login();
+
+		$civiSaldoCell = $crawler->filter('.cell-civi-saldo')->text();
+
+		$this->assertStringContainsString('Civisaldo', $civiSaldoCell);
+		$this->assertStringContainsString('€ 0,00', $civiSaldoCell);
+		$this->assertStringContainsString('Inleggen?', $civiSaldoCell);
+	}
 }
