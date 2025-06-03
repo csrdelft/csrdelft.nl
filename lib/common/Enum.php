@@ -143,6 +143,11 @@ abstract class Enum
 		return $this->value;
 	}
 
+	public function __toString(): string
+	{
+		return $this->value;
+	}
+
 	public function getDescription()
 	{
 		return static::$mapChoiceToDescription[$this->value];
