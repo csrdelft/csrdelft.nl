@@ -152,7 +152,7 @@ class VerjaardagenService
 			"'" .
 			implode(
 				"', '",
-				array_merge(LidStatus::getLidLike(), [LidStatus::Kringel])
+				array_map(fn($x) => $x->value, array_merge(LidStatus::getLidLike(), [LidStatus::Kringel]))
 			) .
 			"'";
 
