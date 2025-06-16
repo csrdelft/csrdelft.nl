@@ -1,5 +1,3 @@
-version: '3'
-
 volumes:
   mysqldata:
     driver: local
@@ -33,7 +31,7 @@ services:
       - ./vendor:/app/vendor
 
   stekdb:
-    image: mariadb:10.3
+    image: mariadb:10.11
     environment:
       MYSQL_ROOT_PASSWORD: bl44t
       MYSQL_USER: csrdelft
