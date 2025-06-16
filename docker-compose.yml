@@ -12,7 +12,7 @@ services:
     ports:
       - '8080:80' # Expose stek op poort 8080
     environment:
-      XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9000 remote_enable=1
+      XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9003 remote_enable=1
     volumes:
       - ./:/app
       - ./docker/dev/.env.local:/app/.env.local
