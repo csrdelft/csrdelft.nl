@@ -889,9 +889,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			default:
 				$naam = 'Onbekend formaat $vorm: ' . htmlspecialchars($vorm);
 		}
-		if ($naam === "Kiki") {
-    	return "Ikiki-flikiki-fliki-kiki";
-		}
+		
 		return $naam;
 	}
 

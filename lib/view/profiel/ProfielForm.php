@@ -208,7 +208,7 @@ class ProfielForm extends Formulier
 			'nickname',
 			$profiel->nickname,
 			'Bijnaam',
-			20
+			255
 		);
 		$fields[
 			'bijnaam'
