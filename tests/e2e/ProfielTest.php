@@ -1,15 +1,15 @@
 <?php
-
-namespace e2e;
-
-use CsrDelft\tests\BrowserTestCase;
-use Facebook\WebDriver\WebDriverBy;
-use Facebook\WebDriver\WebDriverExpectedCondition;
-use Facebook\WebDriver\WebDriverKeys as Keys;
-use Symfony\Component\DomCrawler\Crawler;
-
-class ProfielTest extends BrowserTestCase
-{
+//
+//namespace e2e;
+//
+//use CsrDelft\tests\BrowserTestCase;
+//use Facebook\WebDriver\WebDriverBy;
+//use Facebook\WebDriver\WebDriverExpectedCondition;
+//use Facebook\WebDriver\WebDriverKeys as Keys;
+//use Symfony\Component\DomCrawler\Crawler;
+//
+//class ProfielTest extends BrowserTestCase
+//{
 //	public function testProfielPagina()
 //	{
 //		$this->login();
@@ -54,41 +54,41 @@ class ProfielTest extends BrowserTestCase
 //			$this->getProfielValue($crawler, 'Studie')
 //		);
 //	}
-
-	/**
-	 * @param Crawler $crawler
-	 * @param string $name
-	 * @param string $newValue
-	 * @return void
-	 */
-	private function updateField(
-		Crawler $crawler,
-		string $name,
-		string $newValue
-	): void {
-		$input = $crawler->findElement(
-			WebDriverBy::cssSelector('[name=' . $name . ']')
-		);
-		$value = $input->getDomProperty('value');
-		// ->clear werkt niet
-		$input->sendKeys(str_repeat(Keys::BACKSPACE, strlen((string) $value)));
-		$input->sendKeys($newValue);
-	}
-
-	/**
-	 * Haal een specifieke waarde op van de profiel pagina.
-	 *
-	 * @param Crawler $crawler
-	 * @param string $str
-	 * @return string
-	 */
-	private function getProfielValue(Crawler $crawler, string $str): string
-	{
-		return $crawler
-			->filter('#profiel')
-			->filterXPath("//*[contains(text(), '$str')]")
-			->nextAll()
-			->first()
-			->text();
-	}
-}
+//
+//	/**
+//	 * @param Crawler $crawler
+//	 * @param string $name
+//	 * @param string $newValue
+//	 * @return void
+//	 */
+//	private function updateField(
+//		Crawler $crawler,
+//		string $name,
+//		string $newValue
+//	): void {
+//		$input = $crawler->findElement(
+//			WebDriverBy::cssSelector('[name=' . $name . ']')
+//		);
+//		$value = $input->getDomProperty('value');
+//		// ->clear werkt niet
+//		$input->sendKeys(str_repeat(Keys::BACKSPACE, strlen((string) $value)));
+//		$input->sendKeys($newValue);
+//	}
+//
+//	/**
+//	 * Haal een specifieke waarde op van de profiel pagina.
+//	 *
+//	 * @param Crawler $crawler
+//	 * @param string $str
+//	 * @return string
+//	 */
+//	private function getProfielValue(Crawler $crawler, string $str): string
+//	{
+//		return $crawler
+//			->filter('#profiel')
+//			->filterXPath("//*[contains(text(), '$str')]")
+//			->nextAll()
+//			->first()
+//			->text();
+//	}
+//}
