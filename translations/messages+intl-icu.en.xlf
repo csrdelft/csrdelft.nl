@@ -384,14 +384,14 @@
         <source>Ik wil meedoen met een meeloopdag!</source>
         <target>Let a student show you around for a day!</target>
       </trans-unit>
-      <trans-unit id="Ba0TIjG" resname="Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;(ook wel de kennismakingstijd, afgekort KMT).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De novitiaatsweek vindt plaats van 23 t/m 29 augustus, dus zorg dat je die week vrijhoudt!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;In deze week zal je elkaar, de vereniging en haar leden leren kennen. De activiteiten die tijdens&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.">
+      <trans-unit id="OS7wj1E" resname="Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;(ook wel de kennismakingstijd, afgekort KMT).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De novitiaatsweek vindt plaats van 25 t/m 29 augustus, dus zorg dat je die week vrijhoudt!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;In deze week zal je elkaar, de vereniging en haar leden leren kennen. De activiteiten die tijdens&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.">
         <source>Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek
 							(ook wel de kennismakingstijd, afgekort KMT).
-								De novitiaatsweek vindt plaats van 23 t/m 29 augustus, dus zorg dat je die week vrijhoudt!
+								De novitiaatsweek vindt plaats van 25 t/m 29 augustus, dus zorg dat je die week vrijhoudt!
 								In deze week zal je elkaar, de vereniging en haar leden leren kennen. De activiteiten die tijdens
 							de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.</source>
-        <target>When you want to become member of C.S.R. you'll be going through the "novitiaatsweek"
-							This week is from the 23rd of august to the 29th of august, so make you to save those dates!
+        <target>When you want to become member of C.S.R. you'll be going through the "novitiaatsweek".
+							This week is from the 25th of august to the 29th of august, so make you to save those dates!
 							In this week you'll be getting to know the association and its members.
 							The activities during this week will be in a respectful and safe way.</target>
       </trans-unit>
@@ -871,6 +871,34 @@
       <trans-unit id="_TDxf12" resname="Ik wil op de interesselijst!">
         <source>Ik wil op de interesselijst!</source>
         <target>I want to be on the interest list!</target>
+      </trans-unit>
+      <trans-unit id="0NtxOzv" resname="17 t/m 21 augustus">
+        <source>17 t/m 21 augustus</source>
+        <target>__17 t/m 21 augustus</target>
+      </trans-unit>
+      <trans-unit id="vmvUd6m" resname="Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Dit jaar duurt de OWee van 17 t/m 21 augustus.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Tijdens deze week is er de uitgelezen kans om kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Al deze groepen en instanties zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;C.S.R. heeft gedurende deze week veel interessante en gezellige activiteiten, waar je kennis kan maken met de vereniging!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Ook kan je je deze week inschrijven als lid van C.S.R..">
+        <source>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.
+							Dit jaar duurt de OWee van 17 t/m 21 augustus.
+							Tijdens deze week is er de uitgelezen kans om kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer!
+							Al deze groepen en instanties zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
+							C.S.R. heeft gedurende deze week veel interessante en gezellige activiteiten, waar je kennis kan maken met de vereniging!
+							Ook kan je je deze week inschrijven als lid van C.S.R..</source>
+        <target>__Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.
+							Dit jaar duurt de OWee van 17 t/m 21 augustus.
+							Tijdens deze week is er de uitgelezen kans om kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer!
+							Al deze groepen en instanties zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
+							C.S.R. heeft gedurende deze week veel interessante en gezellige activiteiten, waar je kennis kan maken met de vereniging!
+							Ook kan je je deze week inschrijven als lid van C.S.R..</target>
+      </trans-unit>
+      <trans-unit id="dc2o9Ys" resname="Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De novitiaatsweek vindt plaats van 25 augustus t/m 29 augustus, dus zorg dat je die week vrijhoudt!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;In deze week zal je elkaar, de vereniging en haar leden leren kennen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.">
+        <source>Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT).
+							De novitiaatsweek vindt plaats van 25 augustus t/m 29 augustus, dus zorg dat je die week vrijhoudt!
+							In deze week zal je elkaar, de vereniging en haar leden leren kennen.
+							De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.</source>
+        <target>__Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT).
+							De novitiaatsweek vindt plaats van 25 augustus t/m 29 augustus, dus zorg dat je die week vrijhoudt!
+							In deze week zal je elkaar, de vereniging en haar leden leren kennen.
+							De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.</target>
       </trans-unit>
     </body>
   </file>

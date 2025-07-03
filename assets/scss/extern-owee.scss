@@ -3,8 +3,8 @@
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
 // Zet hier de OWee kleuren
-$roze: #E2066F;
-$kaarskleur: #FDD71E;
+$roze: #e2066f;
+$kaarskleur: #fdd71e;
 $primary: $roze;
 $secondary: $roze;
 $tertiary: $roze;
@@ -116,7 +116,7 @@ body {
 }
 
 .owee-pagina {
-	font-size: 0;
+	//font-size: 0;
 	@import "~bootstrap/scss/bootstrap";
 
 	.btl {
@@ -199,7 +199,6 @@ body {
 	.header-p1 {
 		font-family: $header-font-p1;
 		font-size: 4.5rem;
-		vertical-align: text-bottom;
 		font-weight: bold;
 	}
 
@@ -222,7 +221,7 @@ body {
 		//kleur van de knop
 		&.secondary {
 			background: $lijnkleur;
-			color: white;
+			color: black;
 
 			&:hover {
 				background: darken($accent, 10%);
