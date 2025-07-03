@@ -10,8 +10,8 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class ProfielTest extends BrowserTestCase
 {
-	public function testProfielPagina()
-	{
+//	public function testProfielPagina()
+//	{
 //		$this->login();
 //
 //		$crawler = $this->client->request('GET', '/profiel');
@@ -19,10 +19,10 @@ class ProfielTest extends BrowserTestCase
 //		$bijnaam = $this->getProfielValue($crawler, 'Bijnaam');
 //
 //		$this->assertEquals('pubcie', $bijnaam);
-	}
-
-	public function testProfielBewerken()
-	{
+//	}
+//
+//	public function testProfielBewerken()
+//	{
 //		$this->login();
 //
 //		$this->client->request('GET', '/profiel');
@@ -53,7 +53,7 @@ class ProfielTest extends BrowserTestCase
 //			'TestStudie2',
 //			$this->getProfielValue($crawler, 'Studie')
 //		);
-	}
+//	}
 
 	/**
 	 * @param Crawler $crawler
