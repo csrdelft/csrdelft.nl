@@ -199,7 +199,6 @@ body {
 	.header-p1 {
 		font-family: $header-font-p1;
 		font-size: 4.5rem;
-		vertical-align: text-bottom;
 		font-weight: bold;
 	}
 
@@ -222,7 +221,7 @@ body {
 		//kleur van de knop
 		&.secondary {
 			background: $lijnkleur;
-			color: white;
+			color: black;
 
 			&:hover {
 				background: darken($accent, 10%);
