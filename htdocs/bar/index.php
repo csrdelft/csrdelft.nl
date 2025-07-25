@@ -24,6 +24,7 @@ if ($barsysteem->isLoggedIn()) {
 
         <!-- Bootstrap core CSS -->
         <link href="css/bar.css" rel="stylesheet">
+			<link href="css/barplaatjes.css" rel="stylesheet">
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
 		<script type="text/javascript">
