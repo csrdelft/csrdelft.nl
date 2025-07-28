@@ -34,21 +34,21 @@ class AgendaItem implements Agendeerbaar
 	#[ORM\Id]
 	#[ORM\Column(type: 'integer')]
 	#[ORM\GeneratedValue]
-	public int $item_id;
+	public $item_id;
 	#[ORM\Column(type: 'string')]
-	public string $titel;
+	public $titel;
 	#[ORM\Column(type: 'text', nullable: true)]
-	public ?string $beschrijving;
+	public $beschrijving;
 	#[ORM\Column(type: 'datetime')]
-	public DateTimeImmutable $begin_moment;
+	public $begin_moment;
 	#[ORM\Column(type: 'datetime')]
-	public DateTimeImmutable $eind_moment;
+	public $eind_moment;
 	#[ORM\Column(type: 'string')]
-	public string $rechten_bekijken;
+	public $rechten_bekijken;
 	#[ORM\Column(type: 'string', nullable: true)]
-	public ?string $locatie;
+	public $locatie;
 	#[ORM\Column(type: 'string', nullable: true)]
-	public ?string $link;
+	public $link;
 
 	public function getBeginMoment(): DateTimeImmutable
 	{
