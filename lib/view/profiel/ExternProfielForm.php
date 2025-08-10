@@ -230,7 +230,7 @@ class ExternProfielForm extends Formulier
 		$fields[] = new TextField(
 			'vrienden',
 			$profiel->vrienden,
-			'Vrienden binnnen C.S.R.',
+			'Vrienden binnen C.S.R.',
 			300
 		);
 		$fields['middelbareSchool'] = new TextField(
