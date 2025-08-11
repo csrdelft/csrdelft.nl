@@ -24,7 +24,16 @@ if ($barsysteem->isLoggedIn()) {
 
         <!-- Bootstrap core CSS -->
         <link href="css/bar.css" rel="stylesheet">
-			<link href="css/barplaatjes.css" rel="stylesheet">
+			<?php
+			if (file_exists(__DIR__ . '/../.barmetplaatjes')) {
+				http_response_code(503);
+				echo <<<'HTML'
+				<link href="css/barplaatjes.css" rel="stylesheet">
+				HTML;
+				exit;
+			}
+			?>
+
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
 		<script type="text/javascript">
