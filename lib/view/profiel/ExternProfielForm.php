@@ -174,15 +174,6 @@ class ExternProfielForm extends Formulier
 		);
 		$fields['bankrekening']->required = true;
 
-		$fields[] = new HtmlComment('<p>
-			Door dit vakje aan te vinken geef je de fiscus van C.S.R. toestemming om bedragen van je rekening af te schrijven voor contributie en activiteiten. Zowel voor jou als voor de fiscus is dit erg fijn. De contributie komend jaar is vastgesteld op &euro; 147,50 euro.
-		</p>');
-		$fields[] = new JaNeeField(
-			'toestemmingAfschrijven',
-			$profiel->toestemmingAfschrijven,
-			'Ik geef C.S.R. toestemming voor afschrijven voor contributie en activiteiten'
-		);
-
 		$fields[] = new Subkopje('Studie');
 		$fields['studie'] = new StudieField(
 			'studie',
@@ -190,6 +181,7 @@ class ExternProfielForm extends Formulier
 			'Onderwijsinstelling en studie'
 		);
 		$fields['studie']->required = true;
+		$fields['studie']->title = 'Onderwijsinstelling - Studie';
 		$fields['studiejaar'] = new IntField(
 			'studiejaar',
 			(int) $profiel->lidjaar,
