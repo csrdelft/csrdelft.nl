@@ -71,7 +71,8 @@
 		"twig/extra-bundle": "^3.2",
 		"twig/intl-extra": "^3.2",
 		"twig/string-extra": "^3.5",
-		"zumba/json-serializer": "^3.0"
+		"zumba/json-serializer": "^3.0",
+		"chillerlan/php-qrcode": "^5.0"
 	},
 	"config": {
 		"platform": {

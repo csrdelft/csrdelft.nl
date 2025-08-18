@@ -64,6 +64,7 @@ use Throwable;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\ExpiredException;
+use chillerlan\QRCode\QRCode;
 
 class ProfielController extends AbstractController
 {
@@ -422,6 +423,7 @@ class ProfielController extends AbstractController
 
 		return $this->render('extern-inschrijven/link.html.twig', [
 			'link' => $link,
+			'qrcode' => (new QRCode)->render($link),
 			'form' => $form,
 		]);
 	}
