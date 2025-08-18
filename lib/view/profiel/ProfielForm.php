@@ -448,6 +448,9 @@ class ProfielForm extends Formulier
 		}
 
 		$fields[] = new Subkopje('Persoonlijk');
+		$fields[] = new HtmlComment('<p>
+			Voor de duidelijkheid: indien je vegetarisch wenst te eten, dien je dat onder dieet/voedelallergie aan te geven.
+		</p>');
 		$fields[] = new TextField(
 			'eetwens',
 			$profiel->eetwens,
