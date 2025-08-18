@@ -482,6 +482,12 @@ class ProfielForm extends Formulier
 				'Vrienden binnen C.S.R.',
 				300
 			);
+			$fields[] = new TextField(
+				'vriendenNovitiaat',
+				$profiel->vriendenNovitiaat,
+				'vrienden die zich dit jaar ook bij C.S.R. aanmelden',
+				300
+			);
 			$fields['middelbareSchool'] = new TextField(
 				'middelbareSchool',
 				$profiel->middelbareSchool,
