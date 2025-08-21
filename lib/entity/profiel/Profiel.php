@@ -355,6 +355,11 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	#[ORM\Column(type: 'text', nullable: true)]
 	public $vrienden;
 	/**
+	 * @var string|null
+	 */
+	#[ORM\Column(type: 'text', nullable: true)]
+	public $vriendenNovitiaat;
+	/**
 	 * @var string
 	 */
 	#[ORM\Column(type: 'string', nullable: true, name: 'middelbareSchool')]
@@ -426,8 +431,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		'o_woonplaats' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
 		'o_land' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
 		'o_telefoon' => [LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet],
-		'vrienden' => [LidStatus::Noviet],
 		// novitiaat
+		'vrienden' => [LidStatus::Noviet],
+		'vriendenNovitiaat' => [LidStatus::Noviet],
 		'novitiaat' => [LidStatus::Noviet],
 		'novitiaatBijz' => [LidStatus::Noviet],
 		'medisch' => [LidStatus::Noviet],

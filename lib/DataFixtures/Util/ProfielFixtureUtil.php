@@ -109,6 +109,7 @@ class ProfielFixtureUtil
 		$profiel->novietSoort = null;
 		$profiel->kgb = null;
 		$profiel->vrienden = null;
+		$profiel->vriendenNovitiaat = null;
 		$profiel->middelbareSchool = null;
 		$profiel->profielOpties = null;
 		// overig

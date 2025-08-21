@@ -38,6 +38,9 @@ class ToestemmingModalForm extends ModalForm
 		$fields = [];
 
 		$akkoord = '';
+		if ($this->nieuw) {
+			$akkoord = 'ja';
+		}
 
 		$instellingen = $this->lidToestemmingRepository->getRelevantToestemmingCategories(
 			LoginService::getProfiel()->isLid()
@@ -45,15 +48,17 @@ class ToestemmingModalForm extends ModalForm
 
 		foreach ($instellingen as $module => $instelling) {
 			foreach ($instelling as $id) {
-				if (
-					$this->lidToestemmingRepository->getValue($module, $id) == 'ja' &&
-					$akkoord == null
-				) {
-					$akkoord = 'ja';
-				} elseif (
-					$this->lidToestemmingRepository->getValue($module, $id) == 'nee'
-				) {
-					$akkoord = 'nee';
+				if (!$this->nieuw) {
+					if (
+						$this->lidToestemmingRepository->getValue($module, $id) == 'ja' &&
+						$akkoord == null
+					) {
+						$akkoord = 'ja';
+					} elseif (
+						$this->lidToestemmingRepository->getValue($module, $id) == 'nee'
+					) {
+						$akkoord = 'nee';
+					}
 				}
 
 				$fields[] = $this->maakToestemmingLine($module, $id);

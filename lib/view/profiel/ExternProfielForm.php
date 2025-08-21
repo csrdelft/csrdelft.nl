@@ -174,15 +174,6 @@ class ExternProfielForm extends Formulier
 		);
 		$fields['bankrekening']->required = true;
 
-		$fields[] = new HtmlComment('<p>
-			Door dit vakje aan te vinken geef je de fiscus van C.S.R. toestemming om bedragen van je rekening af te schrijven voor contributie en activiteiten. Zowel voor jou als voor de fiscus is dit erg fijn. De contributie komend jaar is vastgesteld op &euro; 147,50 euro.
-		</p>');
-		$fields[] = new JaNeeField(
-			'toestemmingAfschrijven',
-			$profiel->toestemmingAfschrijven,
-			'Ik geef C.S.R. toestemming voor afschrijven voor contributie en activiteiten'
-		);
-
 		$fields[] = new Subkopje('Studie');
 		$fields['studie'] = new StudieField(
 			'studie',
@@ -190,6 +181,7 @@ class ExternProfielForm extends Formulier
 			'Onderwijsinstelling en studie'
 		);
 		$fields['studie']->required = true;
+		$fields['studie']->title = 'Onderwijsinstelling - Studie';
 		$fields['studiejaar'] = new IntField(
 			'studiejaar',
 			(int) $profiel->lidjaar,
@@ -200,6 +192,10 @@ class ExternProfielForm extends Formulier
 		$fields['studiejaar']->required = true;
 
 		$fields[] = new Subkopje('Persoonlijk');
+
+		$fields[] = new HtmlComment('<p>
+			Voor de duidelijkheid: indien je vegetarisch wenst te eten, dien je dat onder dieet/voedelallergie aan te geven.
+		</p>');
 		$fields[] = new TextField(
 			'eetwens',
 			$profiel->eetwens,
@@ -228,9 +224,16 @@ class ExternProfielForm extends Formulier
 		]);
 
 		$fields[] = new TextField(
+			'vriendenNovitiaat',
+			$profiel->vriendenNovitiaat,
+			'vrienden die zich dit jaar ook bij C.S.R. aanmelden',
+			300
+		);
+
+		$fields[] = new TextField(
 			'vrienden',
 			$profiel->vrienden,
-			'Vrienden binnnen C.S.R.',
+			'Vrienden binnen C.S.R.',
 			300
 		);
 		$fields['middelbareSchool'] = new TextField(

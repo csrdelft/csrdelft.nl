@@ -61,6 +61,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Firebase\JWT\ExpiredException;
+use chillerlan\QRCode\QRCode;
 
 class ProfielController extends AbstractController
 {
@@ -392,27 +396,34 @@ class ProfielController extends AbstractController
 	{
 		$form = new InschrijfLinkForm();
 		$link = null;
+
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$string = implode(';', [
-				$values['voornaam'],
-				$values['tussenvoegsel'],
-				$values['achternaam'],
-				$values['email'],
-				$values['mobiel'],
-			]);
-			$token = UrlUtil::base64url_encode($string);
+
+			$payload = [
+				'voornaam'       => $values['voornaam'],
+				'tussenvoegsel'  => $values['tussenvoegsel'],
+				'achternaam'     => $values['achternaam'],
+				'email'          => $values['email'],
+				'mobiel'         => $values['mobiel'],
+				'exp'            => time() + 7 * 24 * 60 * 60 // 1 week
+			];
+
+			$jwt = JWT::encode($payload, $_ENV['INSCHRIJFLINK_SECRET'], 'HS256');
+
 			$link = $this->generateUrl(
 				'extern-inschrijven',
-				['pre' => $token],
+				['pre' => $jwt],
 				UrlGeneratorInterface::ABSOLUTE_URL
 			);
+
 			$_POST = [];
 			$form = new InschrijfLinkForm();
 		}
 
 		return $this->render('extern-inschrijven/link.html.twig', [
 			'link' => $link,
+			'qrcode' => (new QRCode)->render($link),
 			'form' => $form,
 		]);
 	}
@@ -436,7 +447,7 @@ class ProfielController extends AbstractController
 		string $pre,
 		EntityManagerInterface $em
 	): Response {
-		if (DateUtil::isDatumVoorbij('2021-08-28 00:00:00')) {
+		if (DateUtil::isDatumVoorbij('2025-08-21 23:59:59')) {
 			return $this->render('extern-inschrijven/tekstpagina.html.twig', [
 				'titel' => 'C.S.R. Delft - Inschrijven',
 				'content' => '
@@ -449,6 +460,7 @@ class ProfielController extends AbstractController
 		if ($em->getFilters()->isEnabled('verbergNovieten')) {
 			$em->getFilters()->disable('verbergNovieten');
 		}
+
 		$profiel = $this->profielRepository->nieuw(
 			date_create_immutable()->format('Y'),
 			LidStatus::Noviet
@@ -457,21 +469,20 @@ class ProfielController extends AbstractController
 		if (empty($pre)) {
 			throw new NotFoundHttpException();
 		}
-		$data = UrlUtil::base64url_decode($pre);
-		if (!$data) {
-			throw new NotFoundHttpException();
+
+		try {
+			$decoded = (array) JWT::decode($pre, new Key($_ENV['INSCHRIJFLINK_SECRET'], 'HS256'));
+		} catch (ExpiredException $e) {
+			throw new NotFoundHttpException('Link expired');
+		} catch (Exception $e) {
+			throw new NotFoundHttpException('Invalid link');
 		}
-		$split = explode(';', (string) $data);
-		if (count($split) !== 5) {
-			throw new NotFoundHttpException();
-		}
-		[
-			$profiel->voornaam,
-			$profiel->tussenvoegsel,
-			$profiel->achternaam,
-			$profiel->email,
-			$profiel->mobiel,
-		] = $split;
+
+		$profiel->voornaam      = $decoded['voornaam'] ?? '';
+		$profiel->tussenvoegsel = $decoded['tussenvoegsel'] ?? '';
+		$profiel->achternaam    = $decoded['achternaam'] ?? '';
+		$profiel->email         = $decoded['email'] ?? '';
+		$profiel->mobiel        = $decoded['mobiel'] ?? '';
 
 		$form = new ExternProfielForm($profiel, '/inschrijven/' . $pre);
 		if ($form->validate()) {
@@ -485,9 +496,9 @@ class ProfielController extends AbstractController
 					array_push(
 						$changeEntry->entries,
 						...$this->lidStatusService->wijzig_lidstatus(
-							$profiel,
-							$change->old_value
-						)
+						$profiel,
+						$change->old_value
+					)
 					);
 				}
 			}
@@ -506,7 +517,6 @@ class ProfielController extends AbstractController
 						true
 					);
 
-					// Sla toesteming op.
 					if ($toestemmingForm->validate()) {
 						$this->profielRepository->create($profiel);
 						$this->lidToestemmingRepository->saveForLid($profiel->uid);
@@ -531,9 +541,9 @@ class ProfielController extends AbstractController
 				return $this->render('extern-inschrijven/tekstpagina.html.twig', [
 					'titel' => 'C.S.R. Delft - Inschrijven',
 					'content' => '
-					<h1 class="Titel">Bedankt voor je inschrijving!</h1>
-					<p>De NovCie neemt z.s.m. contact met je op.</p>
-				',
+                    <h1 class="Titel">Bedankt voor je inschrijving!</h1>
+                    <p>De NovCie neemt z.s.m. contact met je op.</p>
+                ',
 				]);
 			}
 		}
