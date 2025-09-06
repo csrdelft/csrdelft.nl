@@ -58,7 +58,7 @@ class Barsysteem {
 
 	function getProfiel($uid) {
 		$q = $this->db->prepare(<<<SQL
-SELECT profielen.voornaam, profielen.voorletters, profielen.tussenvoegsel, profielen.achternaam, profielen.status, profielen.email, accounts.email as accountEmail
+SELECT profielen.voornaam, profielen.voorletters, profielen.tussenvoegsel, profielen.achternaam, profielen.status, profielen.gebdatum, profielen.email, accounts.email as accountEmail
 FROM profielen LEFT JOIN accounts ON accounts.uid = profielen.uid
 WHERE profielen.uid = :uid
 SQL
@@ -67,6 +67,8 @@ SQL
 
 		return $q->execute()->fetchAssociative();
 	}
+
+
 
 	function getNaam($profiel) {
 
@@ -104,6 +106,7 @@ SQL
 				if ($profiel) {
 					$persoon["naam"] = $this->getNaam($profiel);
 					$persoon["status"] = $profiel["status"];
+					$persoon["gebdatum"] = $profiel["gebdatum"];
 				}
 			}
 			$persoon["socCieId"] = $row["uid"];
