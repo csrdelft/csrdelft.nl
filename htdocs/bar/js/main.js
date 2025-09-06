@@ -47,7 +47,8 @@ $(function () {
      /*************************************************************************************************/
 
 		var now = new Date();
-		var achttienjaargeleden = now.setFullYear(now.getFullYear()-18);
+		var achttienjaargeleden = new Date();
+	  achttienjaargeleden.setFullYear(achttienjaargeleden.getFullYear()-18);
 		achttienjaargeleden.setHours(0);
 		achttienjaargeleden.setMinutes(0);
 		achttienjaargeleden.setSeconds(0);
