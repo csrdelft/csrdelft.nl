@@ -148,8 +148,9 @@ body, html{
 }
 
 #selectieTabel td {
-    font-size: 20px;
+    font-size: 30px;
     line-height: 30px;
+		padding:20px;
 }
 
 #persoonInput {

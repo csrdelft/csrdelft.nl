@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/lib" isTestSource="false" packagePrefix="CsrDelft\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests/lib" isTestSource="false" packagePrefix="CsrDelft\tests\" />
+      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/bin/.phpunit" />
       <excludeFolder url="file://$MODULE_DIR$/var" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/csrdelft/bb" />
@@ -196,6 +197,8 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/endroid/qr-code" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/bacon/bacon-qr-code" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/oauth2-server-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/chillerlan/php-qrcode" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/chillerlan/php-settings-container" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
