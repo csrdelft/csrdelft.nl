@@ -979,16 +979,35 @@ $(function () {
 
 	});
 
-    /**
-    /* Toggle search on selective products
-     */
-    $("#pSearch").click(function() {
-        if($(this).hasClass("btn-primary")) {
-            $("#pSearchContent").removeClass("hidden");
-        } else {
-            $("#pSearchContent").addClass("hidden").find("input").prop("checked", false);
-        }
-        $(this).toggleClass("btn-primary");
-    });
+	/**
+	/* Toggle search on selective products
+	 */
+	$("#pSearch").click(function() {
+			if($(this).hasClass("btn-primary")) {
+					$("#pSearchContent").removeClass("hidden");
+			} else {
+					$("#pSearchContent").addClass("hidden").find("input").prop("checked", false);
+			}
+			$(this).toggleClass("btn-primary");
+	});
+
+
+	$("#plaatjes-button").click(function(){
+		if ($(this).is(":checked"))
+		{
+			var link = $("<link />",{
+				rel: "stylesheet",
+				type: "text/css",
+				href: "css/barplaatjes.css"
+			})
+			$('head').append(link);
+		} else
+		{
+			$('link[rel=stylesheet][href~="css/barplaatjes.css"]').remove();
+		}
+
+
+	});
+
 
 });
