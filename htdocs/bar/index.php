@@ -25,9 +25,10 @@ if ($barsysteem->isLoggedIn()) {
         <!-- Bootstrap core CSS -->
         <link href="css/bar.css" rel="stylesheet">
 			<?php
+			/*
 			if (file_exists(__DIR__ . '/../.barmetplaatjes')) {
 				echo "<link href='css/barplaatjes.css' rel='stylesheet'>";
-			}
+			} */
 			?>
 
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -352,6 +353,10 @@ if ($barsysteem->isLoggedIn()) {
 						</div>
 
 						<div id="tools" class="hidden">
+
+							<h2>Barplaatjes</h2>
+							<input class="btn-check" id="plaatjes-button" type="checkbox">
+							<label class="btn btn-primary" for="plaatjes-button">Plaatjes achter bestelknoppen</label>
 
 							<h2>Som van saldi</h2>
 							<table class="table table-striped">
