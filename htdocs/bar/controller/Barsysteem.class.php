@@ -108,6 +108,9 @@ SQL
 					$persoon["status"] = $profiel["status"];
 					$persoon["gebdatum"] = $profiel["gebdatum"];
 				}
+				else {
+					$persoon["gebdatum"] = "1924-12-24";
+				}
 			}
 			$persoon["socCieId"] = $row["uid"];
 			$persoon["bijnaam"] = $row["naam"];
