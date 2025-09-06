@@ -47,6 +47,13 @@ $(function () {
      /*************************************************************************************************/
 
 		var now = new Date();
+		var achttienjaargeleden = now.setFullYear(now.getFullYear()-18);
+		achttienjaargeleden.setHours(0);
+		achttienjaargeleden.setMinutes(0);
+		achttienjaargeleden.setSeconds(0);
+		achttienjaargeleden.setMilliseconds(0);
+
+
 		var isStartkamp = new Date("2022-09-02") < now && new Date("2022-09-05") > now;
 		// Feestmodus: niemand mag rood komen te staan
 		var isFeestmodus = new Date("2022-04-21") < now && new Date("2022-04-23") > now;
@@ -103,7 +110,12 @@ $(function () {
     function zetInTabel(personen) {
         var tbody = $("<tbody />");
         $.each(personen, function(key, persoon) {
-            var newRow = $("<tr id='persoon" + persoon.socCieId + "'><td>" + persoon.bijnaam + "</td><td>" + persoon.naam + "</td><td class=\"" + (persoon.saldo < 0 ? "bg-danger" : "bg-success") +"\">" + saldoStr(persoon.saldo) + "</td></tr>");
+						var gebdatum = new Date(persoon.gebdatum);
+
+						var isAchttien = (gebdatum.getTime() < achttienjaargeleden.getTime());
+
+
+            var newRow = $("<tr id='persoon" + persoon.socCieId + "'><td>" + persoon.bijnaam + "</td><td"+ (isAchttien ? "" : " style='color:red;'") +">" + persoon.naam + "</td><td class=\"" + (persoon.saldo < 0 ? "bg-danger" : "bg-success") +"\">" + saldoStr(persoon.saldo) + "</td></tr>");
             newRow.click(function () {
                 cancel();
                 $.ajax({
