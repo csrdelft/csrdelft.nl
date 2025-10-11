@@ -258,7 +258,7 @@ class CorveeTakenRepository extends AbstractRepository
 	public function saveTaak(CorveeTaak $taak)
 	{
 		return $this->_em->transactional(function () use ($taak) {
-			if ($taak->taak_id === null) {
+			if (isset($taak->taak_id) && $taak->taak_id === null) {
 				$taak = $this->newTaak($taak);
 			} else {
 				$oldTaak = $this->getEntityManager()
