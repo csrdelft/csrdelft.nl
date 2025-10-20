@@ -5,7 +5,6 @@
       <sourceFolder url="file://$MODULE_DIR$/lib" isTestSource="false" packagePrefix="CsrDelft\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests/lib" isTestSource="false" packagePrefix="CsrDelft\tests\" />
-      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/bin/.phpunit" />
       <excludeFolder url="file://$MODULE_DIR$/var" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/csrdelft/bb" />
