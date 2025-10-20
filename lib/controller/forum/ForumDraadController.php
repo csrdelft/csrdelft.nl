@@ -145,7 +145,7 @@ class ForumDraadController extends AbstractController
 			'paging' =>
 				$paging &&
 				$this->forumPostsRepository->getAantalPaginas($draad->draad_id) > 1,
-			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($concept),
+			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($concept ?? ''),
 			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDraad(
 				$draad
 			),
