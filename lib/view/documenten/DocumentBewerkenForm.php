@@ -25,8 +25,7 @@ class DocumentBewerkenForm implements FormulierTypeInterface
 		private readonly UrlGeneratorInterface $urlGenerator,
 		private readonly LoginService $loginService,
 		private readonly DocumentCategorieRepository $documentCategorieRepository
-	) {
-	}
+	) {}
 
 	/**
 	 * @param FormulierBuilder $builder
@@ -57,7 +56,6 @@ class DocumentBewerkenForm implements FormulierTypeInterface
 			$data->leesrechten,
 			'Leesrechten'
 		);
-		$fields['rechten']->readonly = true;
 
 		$builder->addFields($fields);
 
