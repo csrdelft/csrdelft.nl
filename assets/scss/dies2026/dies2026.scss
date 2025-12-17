@@ -43,17 +43,27 @@ nav {
 	padding-right: 0.5rem !important;
 	padding-left: 0.5rem !important;
 }
-
 .poster-boven {
-	margin-top: 30px;
-	padding: 0%;
+	margin-top: 40px;
+	padding: 0;
 	margin-bottom: -36px;
 	padding-top: 40px;
 
-	div {
-		overflow: visible;
+	.poster {
+		width: 29%;        // scale container
+		position: fixed;    // stays in place while scrolling
+		top: 12%;          // distance from top
+		right: 0;           // flush to right
+		z-index: -1;      // on top of other elements
+
+		svg {
+			width: 100%;    // scale SVG to container width
+			height: auto;   // maintain aspect ratio
+			display: block; // remove inline spacing
+		}
 	}
 }
+
 
 a {
 	text-decoration: none;
