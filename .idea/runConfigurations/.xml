@@ -1,11 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="[yarn] Startup" type="js.build_tools.npm">
+  <configuration default="false" type="js.build_tools.npm">
     <package-json value="$PROJECT_DIR$/package.json" />
     <command value="run" />
     <scripts>
       <script value="startup" />
     </scripts>
     <node-interpreter value="project" />
+    <package-manager value="C:\Users\xldav\AppData\Roaming\nvm\v24.2.0\npm.cmd" />
     <envs />
     <method v="2">
       <option name="NpmBeforeRunTask" enabled="true">

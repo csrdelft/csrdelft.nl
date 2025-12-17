@@ -16,6 +16,10 @@ RewriteRule (.*) /lumiere [R=302,L]
 RewriteCond %{REQUEST_URI} ^/dies/2025
 RewriteRule (.*) /euphoria [R=302,L]
 
-#Redirect /dies/ to /euphoria
+#Redirect /dies/2026 to /euphoria
+RewriteCond %{REQUEST_URI} ^/dies/2026
+RewriteRule (.*) /flamenco [R=302,L]
+
+#Redirect /dies/ to /flamenco
 RewriteCond %{REQUEST_URI} ^/dies/$
-RewriteRule (.*) /euphoria [R=302,L]
+RewriteRule (.*) /flamenco [R=302,L]
