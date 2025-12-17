@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectStartupSharedConfiguration">
     <configurations>
+      <configuration id="npm." name="" />
       <configuration id="Composer Script.[composer] Startup" name="[composer] Startup" />
-      <configuration id="npm.[yarn] Startup" name="[yarn] Startup" />
     </configurations>
   </component>
 </project>
