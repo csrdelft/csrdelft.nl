@@ -51,6 +51,15 @@ nav {
 		text-align: center;
 		line-height: unset;
 		margin-bottom: -8px;
+		text-shadow:
+			2px 2px $schaduw-kleur,
+			-2px -2px $schaduw-kleur,
+			2px -2px $schaduw-kleur,
+			-2px 2px $schaduw-kleur,
+			0 2px $schaduw-kleur,
+			0 -2px $schaduw-kleur,
+			2px 0 $schaduw-kleur,
+			-2px 0 $schaduw-kleur;
 	}
 	width: 100%;
 	// text-transform: uppercase;
@@ -63,13 +72,20 @@ nav {
 }
 
 .ondertitel {
-	font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-	text-transform: uppercase;
-	color: deeppink;
-	-webkit-text-stroke: 2px $schaduw-kleur;
+	font-family: $font-header;
+	color: $kleur-zwart;
 	text-align: center;
 	margin-bottom: 10px;
-	font-size: $h3-font-size;
+	font-size: 75px;
+	text-shadow:
+		2px 2px $schaduw-kleur,
+		-2px -2px $schaduw-kleur,
+		2px -2px $schaduw-kleur,
+		-2px 2px $schaduw-kleur,
+		0 2px $schaduw-kleur,
+		0 -2px $schaduw-kleur,
+		2px 0 $schaduw-kleur,
+		-2px 0 $schaduw-kleur;
 }
 
 /* IMG Kopjes */
