@@ -1,33 +1,41 @@
 /* variables */
 
+/* meow-script-regular - latin */
 @font-face {
-	font-family: constantia;
-	src: url("../../fonts/dies2025/constan.ttf") format("opentype");
-	font-weight: normal;
+	font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+	font-family: 'Meow Script';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../../fonts/dies2026/meow-script-v6-latin-regular.woff2') format('woff2'), /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+	url('../../fonts/dies2026/meow-script-v6-latin-regular.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5+, IE 9+, Safari 3.1+, iOS 4.2+, Android Browser 2.2+ */
 }
+$font-meow-script: "Meow Script", cursive;
 
+/* NimbusSanL - latin */
 @font-face {
-	font-family: calibri;
-	src: url("../../fonts/dies2025/calibri.ttf") format("opentype");
-	font-weight: normal;
-}
+	font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+	font-family: 'NimbusSanL';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../../fonts/dies2026/NimbusSanL-Reg.otf') format('opentype') /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 
-$font-constantia: "constantia", Arial, Helvetica, sans-serif;
-$font-calibri: "calibri", Arial, Helvetica, sans-serif;
+}
+$font-nimbus: "NimbusSanL", sans-serif;
+
 
 $kleur-wit: #ffffff;
 $kleur-zwart: #000000;
 
-$font-header: $font-constantia;
-$font-text: $font-constantia;
+$font-header: $font-meow-script;
+$font-text: $font-nimbus;
 
-$primary: #A51C18 !default;
-$secondary: #EAB818 !default;
-$tertiary: #F4DBB3 !default;
-$font-color-primary: #ffffff !default;
-$font-color-secondary: #ffffff !default;
+$primary: #A51C18 !default;//A51C18 or 891814
+$secondary: #EAB818 !default;//EAB818
+$tertiary: #F4DBB3 !default;//F4DBB3
+$font-color-primary: $kleur-zwart !default;
+$font-color-secondary: $tertiary !default;
 $ondertitel-kleur: $kleur-zwart !default;
-$schaduw-kleur: $kleur-wit !default;
+$schaduw-kleur: $tertiary !default;
 
 $theme-colors: (
 	"primary": $primary,
