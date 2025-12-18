@@ -1,10 +1,9 @@
 @import "style";
-@import "colls";
 
 /* nav */
 nav {
 	background-color: $primary;
-
+	border-bottom: 2px solid $kleur-zwart;
 	.logo {
 		width: 130px;
 		height: 100%;
@@ -17,14 +16,14 @@ nav {
 	}
 	a {
 		/* Header text */
-		color: $font-color-primary;
-		font-family: $font-constantia;
+		color: $font-color-secondary;
+		font-family: $font-header;
 		text-decoration: none;
 		font-size: $h3-font-size;
 		transition: ease-in-out color 0.15s;
 
 		&:hover {
-			color: rgba($color: $font-color-primary, $alpha: 0.7);
+			color: rgba($color: $font-color-secondary, $alpha: 0.7);
 			text-decoration: none;
 		}
 	}
@@ -44,25 +43,24 @@ nav {
 	padding-left: 0.5rem !important;
 }
 .poster-boven {
-	margin-top: 40px;
-	padding: 0;
-	margin-bottom: -36px;
-	padding-top: 40px;
+	 margin: 0;
+	 padding: 0;
 
-	.poster {
-		width: 29%;        // scale container
-		position: fixed;    // stays in place while scrolling
-		top: 12%;          // distance from top
-		right: 0;           // flush to right
-		z-index: -1;      // on top of other elements
+	 .poster {
+		 position: fixed;
+		 top: 9.5vh;
+		 right: 0;
+		 height: 90.5vh;
+		 width: auto;
+		 z-index: -1;
 
-		svg {
-			width: 100%;    // scale SVG to container width
-			height: auto;   // maintain aspect ratio
-			display: block; // remove inline spacing
-		}
-	}
-}
+		 svg {
+			 height: 90.5vh;
+			 width: auto;
+			 display: block;
+		 }
+	 }
+ }
 
 
 a {
@@ -75,24 +73,15 @@ a {
 }
 
 .filmpje {
-	.container {
-		padding-bottom: 30px;
-		display: flex;
-		flex-direction: column;
-		position: relative;
+	margin-top: 5vh;
+	margin-left: 7.5%;
+	margin-bottom: 5%;
+	width: 55%;
+	left: 0;
 
-		// &::after {
-		// 	content: "";
-		// 	display: block;
-		// 	clear: both;
-		// 	background-color: $tertiary;
-		// 	height: 100%;
-		// 	width: 100%;
-		// 	top: 0;
-		// 	left: 0;
-		// 	position: absolute;
-		// 	z-index: -1;
-		// }
+	.containerFilmpje {
+		padding-bottom: 30px;
+		position: relative;
 	}
 
 	.video-container {
@@ -165,8 +154,8 @@ section {
 /* Etiquette section */
 .etiquette {
 	background-color: $tertiary;
-	color: $font-color-secondary;
-	font-family: $font-calibri;
+	color: $font-color-primary;
+	font-family: $font-text;
 
 	p {
 		font-size: 1rem;
@@ -177,7 +166,7 @@ section {
 
 	h2,
 	h3 {
-		font-family: $font-constantia;
+		font-family: $font-header;
 		color: $primary;
 	}
 }
@@ -233,6 +222,7 @@ $kleur-ketzer: $tertiary;
 	text-align: center;
 	z-index: 1;
 
+	//-webkit-text-stroke: 2px $schaduw-kleur;
 	.poster {
 		margin-top: 40px;
 	}
@@ -275,7 +265,7 @@ $kleur-ketzer: $tertiary;
 				background-color: $primary;
 
 				h3 {
-					font-family: $font-constantia;
+					font-family: $font-header;
 					text-align: center;
 					color: $font-color-primary;
 					font-size: 2.4rem;
@@ -284,7 +274,7 @@ $kleur-ketzer: $tertiary;
 				}
 
 				p {
-					font-family: $font-constantia;
+					font-family: $font-header;
 					color: $font-color-primary;
 					text-align: left;
 				}

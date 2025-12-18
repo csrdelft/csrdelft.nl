@@ -46,7 +46,7 @@ nav {
 /* Kopjes */
 .titel {
 	h1 {
-		font-family: $font-constantia;
+		font-family: $font-header;
 		font-size: $h1-font-size;
 		text-align: center;
 		line-height: unset;
@@ -54,7 +54,6 @@ nav {
 	}
 	width: 100%;
 	// text-transform: uppercase;
-	border-bottom: 8px solid white;
 	margin-bottom: 15px;
 	color: $font-color-primary;
 	// text-shadow:
@@ -66,8 +65,8 @@ nav {
 .ondertitel {
 	font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
 	text-transform: uppercase;
-	color: $ondertitel-kleur;
-	text-shadow: -2px -1px $schaduw-kleur, -4px -2px $schaduw-kleur;
+	color: deeppink;
+	-webkit-text-stroke: 2px $schaduw-kleur;
 	text-align: center;
 	margin-bottom: 10px;
 	font-size: $h3-font-size;
