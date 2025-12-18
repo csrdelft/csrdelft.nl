@@ -4,16 +4,19 @@
 nav {
 	background-color: $primary;
 	border-bottom: 2px solid $kleur-zwart;
+
 	.logo {
 		width: 130px;
 		height: 100%;
 		@media screen and (max-width: 768px) {
 			margin: auto;
 		}
+
 		img {
 			width: 100%;
 		}
 	}
+
 	a {
 		/* Header text */
 		color: $font-color-secondary;
@@ -28,40 +31,50 @@ nav {
 		}
 	}
 }
+
 .py-1 {
 	padding-top: 0.25rem !important;
 }
+
 .py-2 {
 	padding-top: 0.5rem !important;
 }
+
 .px-1 {
 	padding-right: 0.25rem !important;
 	padding-left: 0.25rem !important;
 }
+
 .px-2 {
 	padding-right: 0.5rem !important;
 	padding-left: 0.5rem !important;
 }
+
 .poster-boven {
-	 margin: 0;
-	 padding: 0;
+	margin: 0;
+	padding: 0;
 
-	 .poster {
-		 position: fixed;
-		 top: 9.5vh;
-		 right: 0;
-		 height: 90.5vh;
-		 width: auto;
-		 z-index: -1;
+	.poster {
+		position: fixed;
+		top: 9.5vh;
+		right: 0;
+		height: 90.5vh;
+		width: auto;
+		z-index: -1;
 
-		 svg {
-			 height: 90.5vh;
-			 width: auto;
-			 display: block;
-		 }
-	 }
- }
+		svg {
+			height: 90.5vh;
+			width: auto;
+			display: block;
+		}
+	}
+}
 
+.posteract {
+	width: 70%;
+	left: 0;
+	margin-bottom: -45%;
+}
 
 a {
 	text-decoration: none;
@@ -75,7 +88,6 @@ a {
 .filmpje {
 	margin-top: 5vh;
 	margin-left: 7.5%;
-	margin-bottom: 5%;
 	width: 55%;
 	left: 0;
 
@@ -87,6 +99,7 @@ a {
 	.video-container {
 		width: 100%;
 		height: 100%;
+
 		.youtube-container {
 			display: flex;
 			justify-content: center;
@@ -95,6 +108,7 @@ a {
 		}
 	}
 }
+
 section {
 	width: 100%;
 	align-self: center;
@@ -136,12 +150,14 @@ section {
 		font-size: 4rem;
 		text-transform: uppercase;
 	}
+
 	.container {
 		h3 {
 			text-align: left;
 			font-size: 2.4rem;
 			// color: $bordeaux-rood;
 		}
+
 		h4 {
 			font-size: 2rem;
 			text-align: left;
@@ -154,192 +170,77 @@ section {
 /* Etiquette section */
 .etiquette {
 	background-color: $tertiary;
-	color: $font-color-primary;
 	font-family: $font-text;
+	padding: 60px 20px;
+	color: #222; // dark text for contrast
+	line-height: 1.6;
+
+	.titel {
+		text-align: center;
+		margin-bottom: 40px;
+
+		h1 {
+			font-size: 3rem;
+			margin: 0;
+		}
+	}
+
+	.d-flex.row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 30px;
+
+		.col-md-4 {
+			flex: 1 1 30%;
+			background-color: lighten($tertiary, 5%);
+			padding: 20px;
+			border-radius: 12px;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+			h2.subkopje-etiquette {
+				font-size: 1.5rem;
+				margin-bottom: 15px;
+				color: darken($tertiary, 30%);
+			}
+
+			h3 {
+				font-size: 1.2rem;
+				margin: 15px 0 10px;
+				font-weight: 600;
+			}
+
+			p {
+				font-size: 1rem;
+			}
+		}
+	}
+
+	h2.subkopje-etiquette {
+		font-size: 2rem;
+		margin-top: 40px;
+		margin-bottom: 20px;
+		text-align: center;
+	}
+
+	h3 {
+		margin-top: 20px;
+	}
 
 	p {
-		font-size: 1rem;
-	}
-	.margin-bottom {
-		margin-bottom: 2rem;
+		margin-bottom: 20px;
 	}
 
-	h2,
-	h3 {
-		font-family: $font-header;
-		color: $primary;
-	}
-}
+	@media (max-width: 992px) {
+		.d-flex.row {
+			flex-direction: column;
 
-$kleur-ketzer: $tertiary;
-
-/* Ketzers */
-.ketzers {
-	align-items: center;
-
-	.ketzer {
-		width: 100%;
-		color: white;
-
-		.bb-block {
-			padding: 5px;
-			border-radius: 5px;
-		}
-
-		> div {
-			background-color: $kleur-ketzer;
-			border: 5px solid white !important;
-			box-shadow: none !important;
-		}
-
-		a[id*="groep-lid-remove"] {
-			color: $kleur-wit;
-			// background-color: $oranje;
-		}
-		h3 {
-			font-weight: bold;
-			font-size: 2rem;
-		}
-		.GroepStatistiekView {
-			background-color: $primary;
-			padding: 20px;
-			border-radius: 25px;
-		}
-		.progress-bar {
-			background-color: $primary;
-		}
-		.GroupAanmeldenForm {
-			input.FormElement {
-				background-color: $primary;
+			.col-md-4 {
+				flex: 1 1 100%;
 			}
 		}
 	}
 }
-.verborgen {
-	display: none;
-}
-.programma {
-	text-align: center;
-	z-index: 1;
 
-	//-webkit-text-stroke: 2px $schaduw-kleur;
-	.poster {
-		margin-top: 40px;
-	}
-
-	@media screen and (max-width: 768px) {
-		padding-left: 0px;
-		padding-right: 0px;
-		margin-left: 0px;
-		margin-right: 0px;
-	}
-	.programma-container {
-		@media screen and (max-width: 768px) {
-			padding-left: 0px;
-			padding-right: 0px;
-			margin-left: 0px;
-			margin-right: 0px;
-		}
-	}
-	.container {
-		.dag {
-			padding: 20px;
-			border-radius: 5px;
-			h2 {
-				@media screen and (max-width: 768px) {
-					font-size: 3rem;
-				}
-			}
-			.activiteit {
-				padding: 20px;
-				overflow: hidden;
-				// box-shadow: 0px 0px 10px $kleur-geel-20;
-				border-radius: 10px;
-				margin-bottom: 40px;
-				width: 80%;
-				@media screen and (max-width: 768px) {
-					width: 100%;
-				}
-				align-self: center;
-				align-items: center;
-				background-color: $primary;
-
-				h3 {
-					font-family: $font-header;
-					text-align: center;
-					color: $font-color-primary;
-					font-size: 2.4rem;
-					margin: 0;
-					padding: 0;
-				}
-
-				p {
-					font-family: $font-header;
-					color: $font-color-primary;
-					text-align: left;
-				}
-
-				> .btn {
-					font-size: large;
-					background-color: $kleur-ketzer;
-					border: none;
-
-					&:hover {
-						background-color: darken($color: $kleur-ketzer, $amount: 10%);
-					}
-
-					i {
-						transition: transform 0.3s;
-					}
-					&:not(.collapsed) i {
-						transform: rotate(-180deg);
-					}
-				}
-
-				.dies-activiteit-ketzers {
-					overflow: hidden;
-					.toggler {
-						// color: $oranje;
-						cursor: pointer;
-						user-select: none;
-					}
-					.toggler:hover {
-						color: darken($color: $primary, $amount: 10%);
-					}
-					.bb-block {
-						border: 2px solid $secondary;
-						box-shadow: 2px 2px 10px $secondary;
-					}
-					.ketzers {
-						.ketzer {
-							ul li .btn-primary {
-								background-color: $primary;
-								border-color: $primary !important;
-							}
-
-							div {
-								a {
-									color: white;
-								}
-							}
-							.maaltijdketzer-wrapper {
-								padding: 20px;
-								border-radius: 20px;
-
-								* {
-									background-color: transparent !important;
-								}
-							}
-							h3 {
-								font-size: 1.8rem;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
 .sponsor {
 	display: flex;
 	justify-content: center;
@@ -347,21 +248,20 @@ $kleur-ketzer: $tertiary;
 }
 
 .body {
-	background:
-		repeating-conic-gradient(
-				from 0deg at 130% 15%,
-				#A51C18 0deg 0.2deg,      /* 0.8 * 0.25 */
-				#A51C18 0.2deg 0.25deg,   /* 1 * 0.25 */
+	background: repeating-conic-gradient(
+			from 0deg at 130% 15%,
+			#A51C18 0deg 0.2deg, /* 0.8 * 0.25 */
+			#A51C18 0.2deg 0.25deg, /* 1 * 0.25 */
 
-				#F4DBB3 0.25deg 1deg,     /* 1 * 0.25 → 0.25, 4 * 0.25 → 1 */
-				#F4DBB3 1deg 1.05deg,     /* 4.2 * 0.25 → 1.05 */
+			#F4DBB3 0.25deg 1deg, /* 1 * 0.25 → 0.25, 4 * 0.25 → 1 */
+			#F4DBB3 1deg 1.05deg, /* 4.2 * 0.25 → 1.05 */
 
-				#EAB818 1.05deg 1.5deg,   /* 4.2*0.25=1.05 → 6*0.25=1.5 */
-				#EAB818 1.5deg 1.55deg,   /* 6.2*0.25=1.55 */
+			#EAB818 1.05deg 1.5deg, /* 4.2*0.25=1.05 → 6*0.25=1.5 */
+			#EAB818 1.5deg 1.55deg, /* 6.2*0.25=1.55 */
 
-				#F4DBB3 1.55deg 2.25deg,  /* 6.2*0.25 → 9*0.25=2.25 */
-				#F4DBB3 2.25deg 2.45deg              /* transition back to red */
-		);
+			#F4DBB3 1.55deg 2.25deg, /* 6.2*0.25 → 9*0.25=2.25 */
+			#F4DBB3 2.25deg 2.45deg /* transition back to red */
+	);
 	background-repeat: no-repeat;
 	background-size: cover;
 }
