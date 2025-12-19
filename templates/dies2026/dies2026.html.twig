@@ -23,10 +23,11 @@
 <body id="Flamenco" class="body">
 <nav class="site-header py-1">
 	<div class="container d-flex flex-column flex-md-row justify-content-around">
-		<a class="py-2 px-2" href="./">Flamenco</a>
+		<a class="py-2 px-2" href="./">Huis</a>
 		<a class="py-2 px-2 d-none d-md-inline-block" href="#filmpje">Film</a>
 		<a class="py-2 px-2 d-none d-md-inline-block" href="#programma">Programma</a>
-		<a class="py-2 px-2 d-none d-md-inline-block" href="#etiquette">Etiquette</a>
+		<a class="py-2 px-2 d-none d-md-inline-block" href="#flamklik">Flamenco</a>
+		<a class="py-2 px-2 d-none d-md-inline-block" href="#etiklik">Etiquette</a>
 	</div>
 </nav>
 
@@ -266,20 +267,21 @@
 						<p class="col-md-12 actbeschrijving">TODO</p>
 					</div>
 				</div>
-			</div>
+				<div class="activiteit row">
+					<h3 class="col-md-11" data-bs-toggle="collapse" data-bs-target="#collapse13-22" aria-expanded="false" aria-controls="collapse13-22">22:00 Waaiers en Draaiers</h3>
+					<button class="btn btn-primary col-md-1 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse13-22" aria-expanded="false" aria-controls="collapse13-22">
+						{{ icon('caret-down') }}
+					</button>
 
-			<div class="activiteit row">
-				<h3 class="col-md-11" data-bs-toggle="collapse" data-bs-target="#collapse13-22" aria-expanded="false" aria-controls="collapse13-22">22:00 Waaiers en Draaiers</h3>
-				<button class="btn btn-primary col-md-1 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse13-22" aria-expanded="false" aria-controls="collapse13-22">
-					{{ icon('caret-down') }}
-				</button>
-
-				<div class="collapse" id="collapse13-22">
-					<div class="d-flex row">
-						<p class="col-md-12 actbeschrijving">De naam zegt het al: dit mooie feest heeft waaiers en draaiers. Kom dansen en zingen, en geniet van de waaiers (Spaanse aankleding), en draaiers (DJ’s en bandjes)</p>
+					<div class="collapse" id="collapse13-22">
+						<div class="d-flex row">
+							<p class="col-md-12 actbeschrijving">De naam zegt het al: dit mooie feest heeft waaiers en draaiers. Kom dansen en zingen, en geniet van de waaiers (Spaanse aankleding), en draaiers (DJ’s en bandjes)</p>
+						</div>
 					</div>
 				</div>
 			</div>
+
+
 		</div>
 
 		<a class="anchor" id="14-feb" ></a>
@@ -334,18 +336,18 @@
 					<p class="col-md-12 actbeschrijving">Altijd al gedroomd van het ritme van Flamenco in je voeten? Ketz u dan snel in voor
 						deze dansles. De dansles zal gegeven worden door een ervaren Flamenco lerares waardoor
 						u op het gala uw mooiste Flamenco dans kan laten zien!</p>
-				</div>
-				<div class="dies-activiteit-ketzers col-md-12">
-					<div class="ketzers">
-						<div class="ketzer">
-							{{ '[activiteit=13037]' | bbcode }}
+					<div class="dies-activiteit-ketzers col-md-12">
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=13037]' | bbcode }}
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="dies-activiteit-ketzers col-md-12">
-					<div class="ketzers">
-						<div class="ketzer">
-							{{ '[activiteit=13038]' | bbcode }}
+					<div class="dies-activiteit-ketzers col-md-12">
+						<div class="ketzers">
+							<div class="ketzer">
+								{{ '[activiteit=13038]' | bbcode }}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -624,7 +626,7 @@
 						<div class="dies-activiteit-ketzers col-md-12">
 							<div class="ketzers">
 								<div class="ketzer">
-									{{ '[activiteit=12745]' | bbcode }}
+									{{ '[activiteit=13042]' | bbcode }}
 								</div>
 							</div>
 						</div>
@@ -632,7 +634,7 @@
 							{# Reserveketzer #}
 							<div class="ketzers">
 								<div class="ketzer">
-									{{ '[activiteit=12746]' | bbcode }}
+									{{ '[activiteit=113043]' | bbcode }}
 								</div>
 							</div>
 						</div>
@@ -646,9 +648,19 @@
 	<a id="etiquette" class="anchor"></a>
 
 	<div class="container">
+		<div class="titel">
+			<h1 id="flamklik">Flamenco</h1>
+		</div>
+
+		<!-- Intro paragraph -->
+		<div class="actbeschrijving">
+			<p>Beeld het je even in: een Spaans terrasje op een zwoele zomeravond, vol tapashapjes en wijntjes. De zon gaat al onder, maar men is nog heerlijk samen aan het naborrelen en aan het genieten van elkaars aanwezigheid. Op de achtergrond klinkt gezellige gitaarmuziek en er wordt Flamenco gedanst op straat. Langzamerhand begint iedereen te dansen, de siësta is allang vergeten en de fiësta begint!
+				Het Diesthema van dit jaar, Flamenco, staat dus voor gezellig samen eten, borrelen, dansen en genieten van het samen zijn in Gods naam! Zeg maar alvast gedag tegen de winterdip, want Confide krijgt een heerlijk Spaans sfeertje deze februari!
+				Flamenco is een muziekgenre en een bijbehorende dans afkomstig uit Zuid-Spanje. De muziek van flamenco wordt doorgaans niet genoteerd, maar net als veel andere volksmuziek mondeling en via overlevering aan de volgende generatie doorgegeven. Kenmerkend is dat iedere generatie nieuwe elementen aan de muziek toevoegt. Laten wij als Civitas ook onze eigen unieke elementen toevoegen aan de komende Dies!</p>
+		</div>
 		<!-- Title -->
 		<div class="titel">
-			<h1>Etiquette</h1>
+			<h1 id="etiklik">Etiquette</h1>
 		</div>
 
 		<!-- Intro paragraph -->
