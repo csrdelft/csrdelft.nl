@@ -12,7 +12,7 @@ class Dies2026Controller extends AbstractController
 	 * @return Response
 	 * @Auth(P_LOGGED_IN)
 	 */
-	#[Route(path: '/flamencotest')]
+	#[Route(path: '/flamenco')]
 	public function lustrum()
 	{
 		return $this->render('dies2026/dies2026.html.twig');
