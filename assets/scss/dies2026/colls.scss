@@ -1,0 +1,58 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+// Alleen importeren wat we nodig hebben.
+
+/* drie kolommen op grote schermen, twee kolommon op gemiddelde schermen, één kolom op mobiel */
+
+.fluid-columns {
+	column-count: 3;
+	column-gap: 30px;
+
+	& > * {
+		break-inside: avoid;
+		page-break-inside: avoid;
+	}
+}
+
+.fluid-columns-4 {
+	column-count: 4;
+	column-gap: 30px;
+
+	& > * {
+		break-inside: avoid;
+		page-break-inside: avoid;
+	}
+}
+
+.column-split {
+	height: 200px;
+}
+
+@include media-breakpoint-down(lg) {
+	.fluid-columns {
+		column-count: 2;
+	}
+	.fluid-columns-4 {
+		column-count: 3;
+	}
+	.column-split {
+		height: 0;
+	}
+}
+
+@include media-breakpoint-down(md) {
+	.fluid-columns {
+		column-count: 1;
+	}
+	.fluid-columns-4 {
+		column-count: 2;
+	}
+}
+
+@include media-breakpoint-down(sm) {
+	.fluid-columns-4 {
+		column-count: 1;
+	}
+}
