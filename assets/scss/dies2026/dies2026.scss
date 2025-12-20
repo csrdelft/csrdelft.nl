@@ -69,6 +69,22 @@ nav {
 		}
 	}
 }
+.uitklapknop{
+	background-color: $tertiary;
+	//background-color: rgba($color: $tertiary, $alpha: 0.7);
+}
+.uitklapknop:hover {
+	//background-color:$tertiary;
+	background-color:rgba($color: $font-color-secondary, $alpha: 0.7);
+}
+.tijdentitel {
+	font-family: $font-header;
+	color: $kleur-zwart;
+	text-align: center;
+	font-size: 2.5rem;
+	margin: 0 auto; // center
+}
+
 
 .posteract {
 	width: 70%;
@@ -240,7 +256,12 @@ section {
 		}
 	}
 }
-
+.activiteit {
+	background-color: $primary;
+	border-radius: 10px;
+	padding: 16px;
+	margin-bottom: 16px;
+}
 .sponsor {
 	display: flex;
 	justify-content: center;
