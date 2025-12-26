@@ -178,6 +178,8 @@ class ProfielService
 	private function determineStatussen($zoekstatus): array
 	{
 		$statussen = [];
+		$zoekenLidLike = [LidStatus::Noviet, LidStatus::Lid, LidStatus::Gastlid, LidStatus::Kringel];
+		$zoekenOudLidLike = [LidStatus::Oudlid, LidStatus::Erelid];
 		if (is_array($zoekstatus)) {
 			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu
 			//geen controle of een gebruiker dat mag, dat moet dus eerder gebeuren.
@@ -190,13 +192,13 @@ class ProfielService
 				$this->security->isGranted('ROLE_LEDEN_READ') &&
 				!$this->security->isGranted('ROLE_OUDLEDEN_READ')
 			) {
-				$statussen = array_merge($statussen, LidStatus::getZoekenLidLike());
+				$statussen = array_merge($statussen, $zoekenLidLike);
 			} elseif (
 				$this->security->isGranted('ROLE_LEDEN_READ') &&
 				$this->security->isGranted('ROLE_OUDLEDEN_READ') &&
 				$zoekstatus != 'oudleden'
 			) {
-				$statussen = array_merge($statussen, LidStatus::getZoekenLidLike());
+				$statussen = array_merge($statussen, $zoekenLidLike);
 			}
 			// we zoeken in oudleden als
 			// 1. ingelogde persoon dat alleen maar mag of
@@ -205,13 +207,13 @@ class ProfielService
 				!$this->security->isGranted('ROLE_LEDEN_READ') &&
 				$this->security->isGranted('ROLE_OUDLEDEN_READ')
 			) {
-				$statussen = array_merge($statussen, LidStatus::getZoekenOudlidLike());
+				$statussen = array_merge($statussen, $zoekenOudLidLike);
 			} elseif (
 				$this->security->isGranted('ROLE_LEDEN_READ') &&
 				$this->security->isGranted('ROLE_OUDLEDEN_READ') &&
 				$zoekstatus != 'leden'
 			) {
-				$statussen = array_merge($statussen, LidStatus::getZoekenOudlidLike());
+				$statussen = array_merge($statussen, $zoekenOudLidLike);
 			}
 			// we zoeken in nobodies als
 			// de ingelogde persoon dat mag EN daarom gevraagd heeft
@@ -220,7 +222,7 @@ class ProfielService
 				$zoekstatus === 'nobodies'
 			) {
 				// alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
-				$statussen = LidStatus::getZoekenExlidLike();
+				$statussen = [LidStatus::Nobody, LidStatus::Exlid];
 			}
 
 			if (
