@@ -260,13 +260,14 @@ class IsHetAlView implements View
 			$html .=
 				'<script>(function(el){ var countDownDate = (new Date("' . $this->ja->format(\DateTimeInterface::RFC3339) . '")).getTime(), countDownEl = document.createElement("p");' .
 				'countDownEl.classList.add("text-uppercase","fw-bolder","fs-5","text-danger");' .
-				'var update=function(time) {' .
-				'var diff = Math.floor(Math.max(countDownDate - (new Date()).getTime(), 0) / 1000);' .
+				'var update=function() {' .
+				'var time = (new Date()).getTime();' .
+				'var diff = Math.round(Math.max(countDownDate - time, 0) / 1000);' .
 				'var days = Math.floor(diff / 86400), hours = Math.floor(diff / 3600) % 24, minutes = Math.floor(diff / 60) % 60, seconds = Math.floor(diff % 60);' .
 				'countDownEl.innerText = (days ? days + ":" : "") + (hours + ":").padStart(3,0) + (minutes + ":").padStart(3,0) + (seconds+"").padStart(2,0);' .
-				'var delay = Math.max((Math.round(countDownDate - time - 1000)/1000)*1000, 0);' .
-				'setTimeout(requestAnimationFrame.bind(globalThis,update),delay)};' .
-				'update(document.timeline?document.timeline.currentTime:performance.now());el.replaceWith(countDownEl);' .
+				'var delay = Math.max(countDownDate - time - Math.round((countDownDate - time - 1000)/1000)*1000, 0);' .
+				'setTimeout(requestAnimationFrame.bind(window,update),delay)};' .
+				'update();el.replaceWith(countDownEl);' .
 				'})(document.currentScript)</script>';
 		} else {
 			// wist u dat
