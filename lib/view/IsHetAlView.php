@@ -7,6 +7,8 @@ use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\WoordVanDeDagRepository;
 use CsrDelft\service\security\LoginService;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -48,8 +50,20 @@ class IsHetAlView implements View
 	) {
 		$session =
 			$requestStack->getMainRequest() == null
-				? new Session()
-				: $requestStack->getMainRequest()->getSession();
+			? new Session()
+			: $requestStack->getMainRequest()->getSession();
+
+		// Een mysterieuze aftel...
+		$countdown = $_ENV["COUNTDOWN"] ?? null;
+		$countdown = is_string($countdown)
+			? \DateTimeImmutable::createFromFormat(\DateTimeInterface::RFC3339, $countdown)
+			: null;
+		$countdown = $countdown > new \DateTimeImmutable() ? $countdown : null;
+		if (null !== $countdown) {
+			$this->model = 'countdown';
+			$this->ja = $countdown;
+			return;
+		}
 
 		// Ongeveer de 1/4 van de tijd het lustrumwoord van de dag laten zien, alleen in de periode van 21-12-2021 tot 19-2-2022
 		$differenceDays = floor(
@@ -78,7 +92,7 @@ class IsHetAlView implements View
 		switch ($this->model) {
 			case 'wist u dat':
 			case 'foutmelding':
-			// TODO: Weghalen dat sponsorkliks wordt laten zien
+				// TODO: Weghalen dat sponsorkliks wordt laten zien
 
 			case 'dies':
 				$jaar = date('Y');
@@ -124,8 +138,8 @@ class IsHetAlView implements View
 			case 'weekend':
 				$this->ja =
 					(date('w') == 0 or
-					date('w') > 5 or
-					date('w') == 5 and date('Hi') >= '1700');
+						date('w') > 5 or
+						date('w') == 5 and date('Hi') >= '1700');
 				break;
 
 			case 'studeren':
@@ -188,6 +202,9 @@ class IsHetAlView implements View
 		$html .=
 			'<div class="d-flex flex-column justify-content-center align-items-center w-100 h-100">';
 		switch ($this->model) {
+			case 'countdown':
+				$html .= '<h4 class="h6 m-0">Hoe lang nog?</h4>';
+				break;
 			case 'jarig':
 				$html .= '<h4 class="h6 m-0">Ben ik al jarig?</h4>';
 				break;
@@ -239,6 +256,18 @@ class IsHetAlView implements View
 				' ' .
 				($this->ja == 1 ? 'DAG' : 'DAGEN') .
 				'!</p>';
+		} elseif ($this->ja instanceof \DateTimeImmutable) {
+			$html .=
+				'<script>(function(el){ var countDownDate = (new Date("' . $this->ja->format(\DateTimeInterface::RFC3339) . '")).getTime(), countDownEl = document.createElement("p");' .
+				'countDownEl.classList.add("text-uppercase","fw-bolder","fs-5","text-danger");' .
+				'var update=function(time) {' .
+				'var diff = Math.floor(Math.max(countDownDate - (new Date()).getTime(), 0) / 1000);' .
+				'var days = Math.floor(diff / 86400), hours = Math.floor(diff / 3600) % 24, minutes = Math.floor(diff / 60) % 60, seconds = Math.floor(diff % 60);' .
+				'countDownEl.innerText = (days ? days + ":" : "") + (hours + ":").padStart(3,0) + (minutes + ":").padStart(3,0) + (seconds+"").padStart(2,0);' .
+				'var delay = Math.max((Math.round(countDownDate - time - 1000)/1000)*1000, 0);' .
+				'setTimeout(requestAnimationFrame.bind(globalThis,update),delay)};' .
+				'update(document.timeline?document.timeline.currentTime:performance.now());el.replaceWith(countDownEl);' .
+				'})(document.currentScript)</script>';
 		} else {
 			// wist u dat
 		}
