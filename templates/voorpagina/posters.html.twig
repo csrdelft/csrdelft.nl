@@ -28,3 +28,19 @@
 		<span class="visually-hidden">Next</span>
 	</button>
 </div>
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+	const posters = Array.from(document.querySelectorAll(".carousel-item"));
+	if (posters.length < 2) return;
+
+	// Eerst "active" verwijderen van eerste item (komt van cms)
+		posters[0].classList.remove("active");
+
+	const randItem = posters[Math.floor(Math.random() * posters.length)];
+		randItem.classList.add("active");
+
+	// de willekeurige naar voren halen
+	const parentItem = randItem.parentElement;
+	parentItem.prepend(randItem);
+	});
+</script>
