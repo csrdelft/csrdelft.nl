@@ -34,6 +34,8 @@ define('VAR_PATH', BASE_PATH . 'var/');
 define('TMP_PATH', VAR_PATH . 'tmp/');
 define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
 define('PHOTOALBUM_PATH', DATA_PATH . 'foto/fotoalbum/');
+define('RESIZED_PATH', DATA_PATH . 'foto/resized/');
+define('THUMBS_PATH', DATA_PATH . 'foto/thumbs/');
 define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
 define('PLAATJES_PATH', DATA_PATH . 'plaatjes/');
 define('CONFIG_CACHE_PATH', VAR_PATH . 'config_cache/');
