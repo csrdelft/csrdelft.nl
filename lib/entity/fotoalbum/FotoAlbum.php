@@ -80,7 +80,10 @@ class FotoAlbum extends Map
 				$this->path,
 				strlen(PathUtil::realpathunix(PHOTOALBUM_PATH) . '/')
 			);
-		} elseif (PathUtil::path_valid(PHOTOALBUM_PATH, $path)) {
+		} elseif (
+			PathUtil::path_valid(PHOTOALBUM_PATH, $path) ||
+			PathUtil::path_valid(RESIZED_PATH, $path)
+		) {
 			// Check if $path not trying to traverse outside PHOTOALBUM_PATH
 			$this->path = rtrim(
 				(string) PathUtil::realpathunix(
