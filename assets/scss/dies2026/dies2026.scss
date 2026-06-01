@@ -69,13 +69,13 @@ nav {
 		}
 	}
 }
-.uitklapknop{
+.uitklapknop {
 	background-color: $tertiary;
 	//background-color: rgba($color: $tertiary, $alpha: 0.7);
 }
 .uitklapknop:hover {
 	//background-color:$tertiary;
-	background-color:rgba($color: $font-color-secondary, $alpha: 0.7);
+	background-color: rgba($color: $font-color-secondary, $alpha: 0.7);
 }
 .tijdentitel {
 	font-family: $font-header;
@@ -84,7 +84,6 @@ nav {
 	font-size: 2.5rem;
 	margin: 0 auto; // center
 }
-
 
 .posteract {
 	width: 70%;
@@ -270,23 +269,23 @@ section {
 
 .body {
 	background: repeating-conic-gradient(
-			from 0deg at 130% 15%,
-			#A51C18 0deg 0.2deg, /* 0.8 * 0.25 */
-			#A51C18 0.2deg 0.25deg, /* 1 * 0.25 */
+		from 0deg at 130% 15%,
+		#a51c18 0deg 0.2deg,
+		/* 0.8 * 0.25 */ #a51c18 0.2deg 0.25deg,
 
-			#F4DBB3 0.25deg 1deg, /* 1 * 0.25 → 0.25, 4 * 0.25 → 1 */
-			#F4DBB3 1deg 1.05deg, /* 4.2 * 0.25 → 1.05 */
+		/* 1 * 0.25 */ #f4dbb3 0.25deg 1deg,
+		/* 1 * 0.25 → 0.25, 4 * 0.25 → 1 */ #f4dbb3 1deg 1.05deg,
 
-			#EAB818 1.05deg 1.5deg, /* 4.2*0.25=1.05 → 6*0.25=1.5 */
-			#EAB818 1.5deg 1.55deg, /* 6.2*0.25=1.55 */
+		/* 4.2 * 0.25 → 1.05 */ #eab818 1.05deg 1.5deg,
+		/* 4.2*0.25=1.05 → 6*0.25=1.5 */ #eab818 1.5deg 1.55deg,
 
-			#F4DBB3 1.55deg 2.25deg, /* 6.2*0.25 → 9*0.25=2.25 */
-			#F4DBB3 2.25deg 2.45deg /* transition back to red */
+		/* 6.2*0.25=1.55 */ #f4dbb3 1.55deg 2.25deg,
+		/* 6.2*0.25 → 9*0.25=2.25 */ #f4dbb3 2.25deg 2.45deg
+			/* transition back to red */
 	);
 	background-repeat: no-repeat;
 	background-size: cover;
 }
-
 
 /*
 @media screen and (max-width: 1400px) {
