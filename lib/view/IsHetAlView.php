@@ -113,8 +113,8 @@ class IsHetAlView implements View
 				break;
 
 			case 'lustrum':
-				$begin = strtotime('2021-06-16');
-				$einde = strtotime('2022-06-16');
+				$begin = strtotime('2026-06-16');
+				$einde = strtotime('2027-06-16');
 				$nu = strtotime(date('Y-m-d'));
 				if ($nu > $einde) {
 					$begin = strtotime('+5 year', $begin);
