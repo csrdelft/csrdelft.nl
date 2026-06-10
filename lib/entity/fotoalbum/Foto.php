@@ -72,6 +72,9 @@ class Foto extends Afbeelding
 				!PathUtil::path_valid(
 					PHOTOALBUM_PATH,
 					PathUtil::join_paths($album->subdir, $filename)
+				) && !PathUtil::path_valid( // Temp fix voor symlinks naar resized
+					RESIZED_PATH,
+					PathUtil::join_paths($album->subdir, $filename)
 				)
 			) {
 				throw new NotFoundHttpException(); // Voorkom traversal door filename
