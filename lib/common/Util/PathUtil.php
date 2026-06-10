@@ -4,6 +4,21 @@ namespace CsrDelft\common\Util;
 
 final class PathUtil
 {
+	static function get_absolute_path($path) {
+		$path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
+		$parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+		$absolutes = array();
+		foreach ($parts as $part) {
+			if ('.' == $part) continue;
+			if ('..' == $part) {
+				array_pop($absolutes);
+			} else {
+				$absolutes[] = $part;
+			}
+		}
+		return implode(DIRECTORY_SEPARATOR, $absolutes);
+	}
+
 	public static function to_unix_path($path)
 	{
 		return str_replace(DIRECTORY_SEPARATOR, '/', $path);
@@ -26,7 +41,7 @@ final class PathUtil
 			$combined .= '/';
 		}
 		$combined .= $subpath;
-		if (!str_starts_with(realpath($combined), realpath($folder))) {
+		if (!str_starts_with(PathUtil::get_absolute_path($combined), PathUtil::get_absolute_path($folder))) {
 			return null;
 		}
 		return $combined;
@@ -34,7 +49,7 @@ final class PathUtil
 
 	public static function realpathunix($path)
 	{
-		return PathUtil::to_unix_path(realpath($path));
+		return PathUtil::to_unix_path(PathUtil::get_absolute_path($path));
 	}
 
 	public static function join_paths(...$args)
