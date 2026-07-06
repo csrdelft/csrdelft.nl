@@ -3,17 +3,19 @@
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
 // Zet hier de OWee kleuren
-$roze: #e2066f;
-$kaarskleur: #fdd71e;
-$primary: $roze;
-$secondary: $roze;
-$tertiary: $roze;
-$accent: $roze;
+$lichtblauw: #98ccf4;
+$rood: #ff2e00;
+$donkerblauw: #0046fa;
+$kaarskleur: $rood;
+$primary: $lichtblauw;
+$secondary: $lichtblauw;
+$tertiary: $lichtblauw;
+$accent: $lichtblauw;
 $youtubeRed: rgb(170, 1, 1);
 $whatsappGreen: rgb(14, 214, 14);
 $headingFont: "Tw Cen MT", "Source Sans Pro", Helvetica, Arial, sans-serif;
 
-$basiskleur: $roze;
+$basiskleur: $lichtblauw;
 $lijnkleur: $kaarskleur;
 
 @font-face {
