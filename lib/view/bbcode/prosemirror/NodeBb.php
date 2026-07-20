@@ -28,7 +28,7 @@ class NodeBb implements Node
 
 		$contentString = implode(
 			'',
-			array_map(fn(BbString $string) => $string->getContent(), $content)
+			array_map(fn(BbNode $string) => $string->getContent(), $content)
 		);
 
 		return [
