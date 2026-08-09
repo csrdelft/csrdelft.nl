@@ -3,8 +3,8 @@ doctrine:
     # configure these for your database server
     # use postgresql for PostgreSQL
     # use sqlite for SQLite
-    driver: 'mysql'
-    server_version: 'mariadb-10.3.20'
+    driver: "mysql"
+    server_version: "mariadb-10.3.20"
 
     # only needed for MySQL
     charset: utf8mb4
@@ -12,7 +12,7 @@ doctrine:
       charset: utf8mb4
       collate: utf8mb4_general_ci
 
-    url: '%env(resolve:DATABASE_URL)%'
+    url: "%env(resolve:DATABASE_URL)%"
     types:
       date: CsrDelft\common\Doctrine\Type\DateImmutableType
       datetime: CsrDelft\common\Doctrine\Type\DateTimeImmutableType
@@ -60,12 +60,12 @@ doctrine:
       CsrDelft:
         is_bundle: false
         type: attribute
-        dir: '%kernel.project_dir%/lib/entity'
+        dir: "%kernel.project_dir%/lib/entity"
         prefix: 'CsrDelft\entity'
         alias: App
     filters:
       verbergNovieten:
         class: CsrDelft\common\Doctrine\VerbergNovietenFilter
-        enabled: false
+        enabled: true
         parameters:
-          jaar: 2025
+          jaar: 2026
