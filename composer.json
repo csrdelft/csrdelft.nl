@@ -140,6 +140,18 @@
 		"auto-scripts": {
 			"cache:clear": "symfony-cmd",
 			"assets:install %PUBLIC_DIR%": "symfony-cmd"
-		}
+		},
+		"tc-lib-pdf-fonts": [
+			"[ -d vendor/tecnickcom/tc-lib-pdf-font ] && make -C vendor/tecnickcom/tc-lib-pdf-font deps fonts || true"
+		],
+		"post-install-cmd": [
+			"@tc-lib-pdf-fonts"
+		],
+		"post-update-cmd": [
+			"@tc-lib-pdf-fonts"
+		],
+		"post-autoload-dump": [
+			"@tc-lib-pdf-fonts"
+		]
 	}
 }
