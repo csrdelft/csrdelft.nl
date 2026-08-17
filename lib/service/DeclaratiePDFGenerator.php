@@ -7,6 +7,7 @@ use CsrDelft\entity\declaratie\Declaratie;
 use CsrDelft\entity\declaratie\DeclaratieBon;
 use Symfony\Component\Filesystem\Filesystem;
 use TCPDF;
+use setasign\Fpdi\Tcpdf\Fpdi;
 use Twig\Environment;
 //use ZipArchive;
 
@@ -137,12 +138,20 @@ class DeclaratiePDFGenerator
 		}
 
 		try {
-			$pdf = new PDFMerger();
+			$fpdi = new Fpdi();
+
 			foreach ($pdfs as $location) {
-				$pdf->addPDF($location, 'all');
+				$count = $fpdi->setSourceFile($location);
+
+				for ($page = 1; $page <= $count; $page++) {
+					$template = $fpdi->importPage($page);
+					$size = $fpdi->getTemplateSize($template);
+					$fpdi->AddPage('P', array($size['width'], $size['height']));
+					$fpdi->useTemplate($template);
+				}
 			}
 
-			$merged = $pdf->merge('string');
+			$merged = $fpdi->Output('declaratie.pdf', 'S');
 
 			foreach ($pdfs as $location) {
 				$this->filesystem->remove($location);
@@ -150,18 +159,6 @@ class DeclaratiePDFGenerator
 
 			return ['pdf', $merged];
 		} catch (\Exception $e) {
-			//			$zipTmp = tempnam(sys_get_temp_dir(), "zip");
-			//			$zip = new ZipArchive();
-			//			$zip->open($zipTmp, ZipArchive::OVERWRITE);
-			//			foreach ($pdfs as $index => $location) {
-			//				$nummer = $index + 1;
-			//				$zip->addFromString("{$declaratie->getTitel()} - {$nummer}.pdf", file_get_contents($location));
-			//			}
-			//			$filename = $zip->filename;
-			//			$zip->close();
-			//
-			//			$data = ['zip', file_get_contents($filename)];
-			//			unlink($zipTmp);
 			$data = [
 				'txt',
 				'Er ging iets fout bij het genereren van de PDF: ' . $e->getMessage(),
