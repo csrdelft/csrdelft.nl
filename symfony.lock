@@ -14,9 +14,6 @@
     "brick/math": {
         "version": "0.9.3"
     },
-    "clegginabox/pdf-merger": {
-        "version": "dev-master"
-    },
     "clue/stream-filter": {
         "version": "v1.4.1"
     },
@@ -428,9 +425,6 @@
         "files": [
             "./config/packages/sentry.yaml"
         ]
-    },
-    "setasign/fpdf": {
-        "version": "1.8.4"
     },
     "setasign/fpdi": {
         "version": "v2.3.6"
