@@ -96,7 +96,7 @@ class AccountService
 			$profiel = $account->profiel;
 			if ($profiel) {
 				$profiel->email = $account->email;
-				$this->profielRepository->update($profiel);
+				$this->profielRepository->save($profiel);
 			}
 		}
 
