@@ -161,14 +161,10 @@ class ProfielRepository extends AbstractRepository
 
 	/**
 	 * @param Profiel $profiel
+	 * @deprecated gebruik save()
 	 */
 	public function update(Profiel $profiel)
 	{
-		try {
-			$this->save_ldap($profiel);
-		} catch (Exception $e) {
-			FlashUtil::setFlashWithContainerFacade($e->getMessage(), -1); //TODO: logging
-		}
 		$this->save($profiel);
 	}
 
@@ -302,6 +298,6 @@ class ProfielRepository extends AbstractRepository
 			return;
 		}
 		$profiel->eetwens = $eetwens;
-		$this->update($profiel);
+		$this->save($profiel);
 	}
 }

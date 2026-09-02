@@ -321,7 +321,7 @@ class LidStatusService
 			new DateTime(),
 			$changes
 		);
-		$this->profielRepository->update($profiel);
+		$this->profielRepository->save($profiel);
 		return true;
 	}
 }
