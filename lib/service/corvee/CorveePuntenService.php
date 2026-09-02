@@ -123,7 +123,7 @@ class CorveePuntenService
 		if (is_int($bonus_malus)) {
 			$profiel->corvee_punten_bonus = $bonus_malus;
 		}
-		$this->profielRepository->update($profiel);
+		$this->profielRepository->save($profiel);
 	}
 
 	/**

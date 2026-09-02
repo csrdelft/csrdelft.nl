@@ -338,7 +338,7 @@ class ProfielController extends AbstractController
 						'Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid
 					);
 				} else {
-					$this->profielRepository->update($profiel);
+					$this->profielRepository->save($profiel);
 					$this->addFlash(
 						FlashType::SUCCESS,
 						count($diff) . ' wijziging(en) succesvol opgeslagen'
