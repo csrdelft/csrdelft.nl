@@ -31,7 +31,6 @@ doctrine:
       enumGroepStatus: CsrDelft\common\Doctrine\Type\Enum\GroepStatusType
       enumHuisStatus: CsrDelft\common\Doctrine\Type\Enum\HuisStatusType
       enumCommissieSoort: CsrDelft\common\Doctrine\Type\Enum\CommissieSoortType
-      enumGeslacht: CsrDelft\common\Doctrine\Type\Enum\GeslachtType
       enumGroepVersie: CsrDelft\common\Doctrine\Type\Enum\GroepVersieType
       enumOnderverenigingStatus: CsrDelft\common\Doctrine\Type\Enum\OnderverenigingStatusType
       enumActiviteitSoort: CsrDelft\common\Doctrine\Type\Enum\ActiviteitSoortType
