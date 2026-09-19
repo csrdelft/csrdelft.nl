@@ -1,4 +1,26 @@
 <style>
+	body, table {
+		font-family: Helvetica, serif;
+		font-size: 9pt;
+	}
+
+	.header {
+		background-color: #11273A;
+		color: #ffffff;
+		padding: 4mm;
+		margin-bottom: 6mm;
+	}
+
+	.header h3 {
+		margin: 0;
+		font-size: 12pt;
+	}
+
+	.header p {
+		margin: 0;
+		font-size: 10pt;
+	}
+
 	table .headers td {
 		font-weight: bold;
 		font-size: 8pt;
@@ -31,6 +53,11 @@
 		text-align: right;
 	}
 </style>
+
+<div class="header">
+	<h3>Declaratie C.S.R. Delft #{{ declaratie.id }}</h3>
+	<p>{{ declaratie.titel }}</p>
+</div>
 
 <table>
 	<tr class="headers">
