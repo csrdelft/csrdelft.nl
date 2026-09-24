@@ -2,20 +2,15 @@
 
 namespace CsrDelft\service;
 
-use Clegginabox\PDFMerger\PDFMerger;
 use CsrDelft\entity\declaratie\Declaratie;
 use CsrDelft\entity\declaratie\DeclaratieBon;
-use Symfony\Component\Filesystem\Filesystem;
-use TCPDF;
-use setasign\Fpdi\Tcpdf\Fpdi;
+use Com\Tecnick\Pdf\Tcpdf;
 use Twig\Environment;
-//use ZipArchive;
 
 class DeclaratiePDFGenerator
 {
 	public function __construct(
-		private readonly Environment $twig,
-		private readonly Filesystem $filesystem
+		private readonly Environment $twig
 	) {
 	}
 
@@ -51,35 +46,32 @@ class DeclaratiePDFGenerator
 
 	public function genereerDeclaratieInfo(Declaratie $declaratie): string
 	{
-		// PDF informatie
-		$pdf = new TCPDF();
-		$pdf->SetCreator(PDF_CREATOR);
+		// PDF metadata
+		$pdf = new Tcpdf();
+		$pdf->SetCreator('csrdelft.nl');
 		$pdf->SetAuthor('C.S.R. Delft');
 		$pdf->SetTitle($declaratie->getTitel());
 
-		// PDF styling
-		$pdf->setHeaderData(
-			null,
-			null,
-			'Declaratie C.S.R. Delft (#' . $declaratie->getId() . ')',
-			$declaratie->getTitel(),
-			[17, 39, 58]
-		);
-		$pdf->SetMargins(PDF_MARGIN_LEFT, 20, PDF_MARGIN_RIGHT);
-		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-		$pdf->setPrintFooter(false);
-		$pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
-		$pdf->SetFontSize(9);
-
 		// Declaratie informatie
-		$pdf->AddPage();
 		$declaratieInhoud = $this->twig->render('declaratie/print.html.twig', [
 			'declaratie' => $declaratie,
 		]);
-		$pdf->writeHTML($declaratieInhoud);
 
-		// Output
-		return $pdf->Output('declaratie.pdf', 'S');
+		$pagina = $pdf->AddPage();
+
+		$marge = 15;
+		$pdf->addHTMLCell(
+			html: $declaratieInhoud,
+			posx: $marge,
+			posy: 20,
+			width: $pagina['width'] - (2 * $marge),
+		);
+
+		try {
+			return $pdf->getOutPDFString();
+		} catch (\Throwable $e) {
+			return "Error bij het genereren van declaratie-info: " . $e->getMessage();
+		}
 	}
 
 	public function genereerBon(DeclaratieBon $bon): string
@@ -90,80 +82,87 @@ class DeclaratiePDFGenerator
 		}
 
 		$declaratie = $bon->getDeclaratie();
-		$pdf = new TCPDF();
+		$pdf = new Tcpdf();
 
-		// PDF informatie
-		$pdf->SetCreator(PDF_CREATOR);
+		// PDF metadata
+		$pdf->SetCreator('csrdelft.nl');
 		$pdf->SetAuthor('C.S.R. Delft');
 		$pdf->SetTitle($declaratie->getTitel());
 
-		// PDF styling
-		$pdf->setPrintHeader(false);
-		$pdf->setPrintFooter(false);
-		$pdf->SetMargins(0, 0, 0);
-
 		// Bon informatie
-		$pdf->AddPage();
 		$this->correctImageOrientation($filename);
 
 		[$width, $height] = getimagesize($filename);
 		$aspectImage = $width / $height;
-		$aspectPage = $pdf->getPageWidth() / $pdf->getPageHeight();
+
+		$pagina = $pdf->AddPage();
+		$aspectPage = $pagina['width'] / $pagina['height'];
+
 		if ($aspectImage > $aspectPage) {
 			// Breder dan pagina, gebruik breedte
-			$pdf->Image($filename, 0, 0, $pdf->getPageWidth());
+			$imgWidth = $pagina['width'];
+			$imgHeight = $imgWidth / $aspectImage;
 		} else {
 			// Smaller dan pagina, gebruik hoogte
-			$pdf->Image($filename, 0, 0, 0, $pdf->getPageHeight());
-		}
-
-		// Output
-		return $pdf->Output('declaratie.pdf', 'S');
-	}
-
-	public function genereerDeclaratie(Declaratie $declaratie)
-	{
-		$location = $this->filesystem->tempnam(TMP_PATH, 'decla_');
-		$declaInfo = $this->genereerDeclaratieInfo($declaratie);
-		$this->filesystem->dumpFile($location, $declaInfo);
-		$pdfs = [$location];
-
-		foreach ($declaratie->getBonnen() as $i => $declaratieBon) {
-			$location = $this->filesystem->tempnam(TMP_PATH, 'decla_');
-			$this->filesystem->dumpFile(
-				$location,
-				$this->genereerBon($declaratieBon)
-			);
-			$pdfs[] = $location;
+			$imgHeight = $pagina['height'];
+			$imgWidth = $imgHeight * $aspectImage;
 		}
 
 		try {
-			$fpdi = new Fpdi();
+			$plaatjeId = $pdf->image->add($filename);
+			$plaatjeContent = $pdf->image->getSetImage(
+				$plaatjeId,
+				xpos: 0,
+				ypos: 0,
+				width: $imgWidth,
+				height: $imgHeight,
+				pageheight: $pagina['height'],
+			);
 
-			foreach ($pdfs as $location) {
-				$count = $fpdi->setSourceFile($location);
+			$pdf->page->addContent($plaatjeContent);
 
-				for ($page = 1; $page <= $count; $page++) {
-					$template = $fpdi->importPage($page);
-					$size = $fpdi->getTemplateSize($template);
-					$fpdi->AddPage('P', array($size['width'], $size['height']));
-					$fpdi->useTemplate($template);
-				}
+			return $pdf->getOutPDFString();
+		} catch (\Throwable $e) {
+			return "Error bij het genereren van declaratie-bon: " . $e->getMessage();
+		}
+	}
+
+	/**
+	 * Exporteert een pdf van de gegeven declaratie.
+	 *
+	 * Declaraties-exports hebben een eerste pagina met gegevens (gegenereerd
+	 * door `genereerDeclaratieInfo()`). Vervolgens zijn alle bonnen
+	 * (afbeeldingen of pdf's) elk op een eigen pagina toegevoegd.
+	 *
+	 * @param Declaratie $declaratie
+	 * @return array|string[]
+	 */
+	public function genereerDeclaratie(Declaratie $declaratie): array
+	{
+		try {
+			$pdf = new Tcpdf();
+			$pdf->setCreator('csrdelft.nl');
+			$pdf->setAuthor('C.S.R. Delft');
+			$pdf->setTitle($declaratie->getTitel());
+
+			// Voeg info-pagina toe
+			$infoSourceId = $pdf->setImportSourceData($this->genereerDeclaratieInfo($declaratie));
+			$pdf->appendDocument($infoSourceId);
+
+			// Voeg alle pagina's met bonnetjes toe
+			foreach ($declaratie->getBonnen() as $declaratieBon) {
+				$bonSourceId = $pdf->setImportSourceData($this->genereerBon($declaratieBon));
+				$pdf->appendDocument($bonSourceId);
 			}
 
-			$merged = $fpdi->Output('declaratie.pdf', 'S');
-
-			foreach ($pdfs as $location) {
-				$this->filesystem->remove($location);
-			}
+			$merged = $pdf->getOutPDFString();
 
 			return ['pdf', $merged];
-		} catch (\Exception $e) {
-			$data = [
+		} catch (\Throwable $e) {
+			return [
 				'txt',
 				'Er ging iets fout bij het genereren van de PDF: ' . $e->getMessage(),
 			];
-			return $data;
 		}
 	}
 }
