@@ -196,8 +196,6 @@
       <path value="$PROJECT_DIR$/vendor/symfony/password-hasher" />
       <path value="$PROJECT_DIR$/vendor/nelmio/cors-bundle" />
       <path value="$PROJECT_DIR$/vendor/monolog/monolog" />
-      <path value="$PROJECT_DIR$/vendor/setasign/fpdi" />
-      <path value="$PROJECT_DIR$/vendor/tecnickcom/tcpdf" />
       <path value="$PROJECT_DIR$/vendor/symfony/serializer-pack" />
       <path value="$PROJECT_DIR$/vendor/symfony/profiler-pack" />
       <path value="$PROJECT_DIR$/vendor/symfony/orm-pack" />
@@ -239,14 +237,32 @@
       <path value="$PROJECT_DIR$/vendor/web-token/jwt-library" />
       <path value="$PROJECT_DIR$/vendor/chillerlan/php-qrcode" />
       <path value="$PROJECT_DIR$/vendor/chillerlan/php-settings-container" />
+      <path value="$PROJECT_DIR$/vendor/clegginabox/pdf-merger" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-pdf-sign" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-pdf-filter" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-pdf-page" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-file" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-unicode" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-pdf-encrypt" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-barcode" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-pdf-graph" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-pdf-font" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-pdf-image" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-pdf" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-pdf-parser" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-color" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-unicode-data" />
+      <path value="$PROJECT_DIR$/vendor/setasign/fpdi" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tcpdf" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="8.3">
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.2">
     <option name="suggestChangeDefaultLanguageLevel" value="false" />
   </component>
   <component name="PhpStan">
     <PhpStan_settings>
       <PhpStanConfiguration tool_path="$PROJECT_DIR$/vendor/bin/phpstan" />
+      <phpstan_by_interpreter asDefaultInterpreter="true" interpreter_id="c3fe0027-03ba-4acb-9d28-f92689fcbfa6" tool_path="C:\Users\markv\Documents\Code\Stek\csrdelft.nl\vendor\bin\phpstan" timeout="60000" />
     </PhpStan_settings>
   </component>
   <component name="PhpStanOptionsConfiguration">

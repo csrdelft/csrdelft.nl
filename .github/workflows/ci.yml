@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [ master ]
   pull_request:
-    branches: [master]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -163,6 +163,10 @@ jobs:
         working-directory: main
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --no-dev --optimize-autoloader
+
+      - name: Build fonts voor pdf
+        working-directory: main/vendor/tecnickcom/tc-lib-pdf-font
+        run: make -C vendor/tecnickcom/tc-lib-pdf-font deps fonts"
 
       - name: 📥 Pull productie
         uses: actions/checkout@v3
