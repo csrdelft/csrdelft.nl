@@ -67,7 +67,7 @@
 		"symfony/yaml": "5.4.*",
 		"tecnickcom/tc-lib-pdf": "^8.75",
 		"twig/cssinliner-extra": "^3.3",
-		"twig/extra-bundle": "^3.2",
+		"twig/extra-bundle": "=3.24",
 		"twig/intl-extra": "^3.2",
 		"twig/string-extra": "^3.5",
 		"zumba/json-serializer": "^3.0",
