@@ -188,14 +188,26 @@
       <excludeFolder url="file://$MODULE_DIR$/docs/_site" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nelmio/cors-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/monolog/monolog" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tcpdf" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/setasign/fpdi" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/dasprid/enum" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/endroid/qr-code" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/bacon/bacon-qr-code" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/oauth2-server-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/chillerlan/php-qrcode" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/chillerlan/php-settings-container" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-barcode" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-color" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-file" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-pdf" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-pdf-encrypt" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-pdf-filter" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-pdf-font" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-pdf-graph" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-pdf-image" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-pdf-page" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-pdf-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-pdf-sign" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-unicode" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-unicode-data" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
