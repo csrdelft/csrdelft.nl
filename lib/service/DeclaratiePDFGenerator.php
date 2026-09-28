@@ -51,6 +51,7 @@ class DeclaratiePDFGenerator
 		$pdf->SetCreator('csrdelft.nl');
 		$pdf->SetAuthor('C.S.R. Delft');
 		$pdf->SetTitle($declaratie->getTitel());
+		$pdf->font->insert($pdf->pon, 'helvetica', '', 9);
 
 		// Declaratie informatie
 		$declaratieInhoud = $this->twig->render('declaratie/print.html.twig', [
@@ -88,6 +89,7 @@ class DeclaratiePDFGenerator
 		$pdf->SetCreator('csrdelft.nl');
 		$pdf->SetAuthor('C.S.R. Delft');
 		$pdf->SetTitle($declaratie->getTitel());
+		$pdf->font->insert($pdf->pon, 'helvetica', '', 9);
 
 		// Bon informatie
 		$this->correctImageOrientation($filename);
@@ -144,6 +146,7 @@ class DeclaratiePDFGenerator
 			$pdf->setCreator('csrdelft.nl');
 			$pdf->setAuthor('C.S.R. Delft');
 			$pdf->setTitle($declaratie->getTitel());
+			$pdf->font->insert($pdf->pon, 'helvetica', '', 9);
 
 			// Voeg info-pagina toe
 			$infoSourceId = $pdf->setImportSourceData($this->genereerDeclaratieInfo($declaratie));
