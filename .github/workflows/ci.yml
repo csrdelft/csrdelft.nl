@@ -166,7 +166,7 @@ jobs:
 
       - name: Build fonts voor pdf
         working-directory: main/vendor/tecnickcom/tc-lib-pdf-font
-        run: make -C vendor/tecnickcom/tc-lib-pdf-font deps fonts"
+        run: make -C vendor/tecnickcom/tc-lib-pdf-font deps fonts
 
       - name: 📥 Pull productie
         uses: actions/checkout@v3
