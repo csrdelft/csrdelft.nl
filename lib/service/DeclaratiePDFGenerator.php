@@ -14,7 +14,36 @@ class DeclaratiePDFGenerator
 	) {
 	}
 
-	private function correctImageOrientation($filename)
+	/**
+	 * Helperfunctie om een nieuw tc-lib-pdf instance te krijgen met juiste instellingen
+	 * @throws \Exception Als de configuratie incorrect is of de helvetica-font niet geïmporteerd kan worden
+	 */
+	private function nieuwPdf(string $titel): Tcpdf {
+		$pdf = new Tcpdf(
+			fileOptions: [
+				// geef tcpdf toegang tot bonnetjes van decla's en de (in CI) gecompilede fonts.
+				'allowedPaths' => [
+					realpath(dirname(__DIR__, 2) . '/data/declaraties'),
+					realpath(dirname(__DIR__, 2) . '/vendor/tecnickcom/tc-lib-pdf-font/target/fonts'),
+				],
+			]
+		);
+
+		$pdf->SetCreator('csrdelft.nl');
+		$pdf->SetAuthor('C.S.R. Delft');
+		$pdf->SetTitle($titel);
+		$pdf->font->insert($pdf->pon, 'helvetica', '', 9);
+
+		return $pdf;
+	}
+
+	/**
+	 * Draait de image zoals aangegeven in de exif-metadata en vervangt het originele bestand,
+	 * zodat tc-lib-pdf het rechtstreeks kan importeren.
+	 * @param $filename
+	 * @return void
+	 */
+	private function correctImageOrientation($filename): void
 	{
 		if (function_exists('exif_read_data')) {
 			$exif = exif_read_data($filename);
@@ -44,16 +73,18 @@ class DeclaratiePDFGenerator
 		}
 	}
 
+	/**
+	 * Genereert een info-pagina voor de declaratie (de eerste pagina)
+	 *
+	 * @param Declaratie $declaratie
+	 * @return string PDF-bestand als string
+	 * @throws \Throwable
+	 */
 	public function genereerDeclaratieInfo(Declaratie $declaratie): string
 	{
-		// PDF metadata
-		$pdf = new Tcpdf();
-		$pdf->SetCreator('csrdelft.nl');
-		$pdf->SetAuthor('C.S.R. Delft');
-		$pdf->SetTitle($declaratie->getTitel());
-		$pdf->font->insert($pdf->pon, 'helvetica', '', 9);
+		$pdf = $this->nieuwPdf($declaratie->getTitel());
 
-		// Declaratie informatie
+		// Render declaratie-informatie
 		$declaratieInhoud = $this->twig->render('declaratie/print.html.twig', [
 			'declaratie' => $declaratie,
 		]);
@@ -68,28 +99,28 @@ class DeclaratiePDFGenerator
 			width: $pagina['width'] - (2 * $marge),
 		);
 
-		try {
-			return $pdf->getOutPDFString();
-		} catch (\Throwable $e) {
-			return "Error bij het genereren van declaratie-info: " . $e->getMessage();
-		}
+		return $pdf->getOutPDFString();
 	}
 
+	/**
+	 * Genereert een PDF-string voor een bon in de declaratie (afbeelding of pdf)
+	 *
+	 * @throws \Throwable Allerlei tc-lib-pdf errors, in principe alleen als het bestand van de bon niet kan worden
+	 * 										geopend of er een breaking change in de pdf is geweest.
+	 */
 	public function genereerBon(DeclaratieBon $bon): string
 	{
 		$filename = DECLARATIE_PATH . $bon->getBestand();
 		if ($bon->isPDF()) {
-			return file_get_contents($filename);
+			$pdf_file = file_get_contents($filename);
+			if (!$pdf_file) {
+				throw new \Exception("Gelinkte PDF-bestand $filename van declaratiebon {$bon->getId()} kan niet worden geopend.");
+			}
+			return $pdf_file;
 		}
 
 		$declaratie = $bon->getDeclaratie();
-		$pdf = new Tcpdf();
-
-		// PDF metadata
-		$pdf->SetCreator('csrdelft.nl');
-		$pdf->SetAuthor('C.S.R. Delft');
-		$pdf->SetTitle($declaratie->getTitel());
-		$pdf->font->insert($pdf->pon, 'helvetica', '', 9);
+		$pdf = $this->nieuwPdf($declaratie->getTitel());
 
 		// Bon informatie
 		$this->correctImageOrientation($filename);
@@ -110,23 +141,19 @@ class DeclaratiePDFGenerator
 			$imgWidth = $imgHeight * $aspectImage;
 		}
 
-		try {
-			$plaatjeId = $pdf->image->add($filename);
-			$plaatjeContent = $pdf->image->getSetImage(
-				$plaatjeId,
-				xpos: 0,
-				ypos: 0,
-				width: $imgWidth,
-				height: $imgHeight,
-				pageheight: $pagina['height'],
-			);
+		$plaatjeId = $pdf->image->add($filename);
+		$plaatjeContent = $pdf->image->getSetImage(
+			$plaatjeId,
+			xpos: 0,
+			ypos: 0,
+			width: $imgWidth,
+			height: $imgHeight,
+			pageheight: $pagina['height'],
+		);
 
-			$pdf->page->addContent($plaatjeContent);
+		$pdf->page->addContent($plaatjeContent);
 
-			return $pdf->getOutPDFString();
-		} catch (\Throwable $e) {
-			return "Error bij het genereren van declaratie-bon: " . $e->getMessage();
-		}
+		return $pdf->getOutPDFString();
 	}
 
 	/**
@@ -137,35 +164,24 @@ class DeclaratiePDFGenerator
 	 * (afbeeldingen of pdf's) elk op een eigen pagina toegevoegd.
 	 *
 	 * @param Declaratie $declaratie
-	 * @return array|string[]
+	 * @return string[] Een array met 2 strings: bestandstype en het bestand als string
+	 * @throws \Throwable
 	 */
 	public function genereerDeclaratie(Declaratie $declaratie): array
 	{
-		try {
-			$pdf = new Tcpdf();
-			$pdf->setCreator('csrdelft.nl');
-			$pdf->setAuthor('C.S.R. Delft');
-			$pdf->setTitle($declaratie->getTitel());
-			$pdf->font->insert($pdf->pon, 'helvetica', '', 9);
+		$pdf = $this->nieuwPdf($declaratie->getTitel());
 
-			// Voeg info-pagina toe
-			$infoSourceId = $pdf->setImportSourceData($this->genereerDeclaratieInfo($declaratie));
-			$pdf->appendDocument($infoSourceId);
+		// Voeg info-pagina toe
+		$infoSourceId = $pdf->setImportSourceData($this->genereerDeclaratieInfo($declaratie));
+		$pdf->appendDocument($infoSourceId);
 
-			// Voeg alle pagina's met bonnetjes toe
+		// Voeg alle pagina's met bonnetjes toe
 			foreach ($declaratie->getBonnen() as $declaratieBon) {
 				$bonSourceId = $pdf->setImportSourceData($this->genereerBon($declaratieBon));
 				$pdf->appendDocument($bonSourceId);
 			}
 
-			$merged = $pdf->getOutPDFString();
-
-			return ['pdf', $merged];
-		} catch (\Throwable $e) {
-			return [
-				'txt',
-				'Er ging iets fout bij het genereren van de PDF: ' . $e->getMessage(),
-			];
-		}
+		$merged = $pdf->getOutPDFString();
+		return ['pdf', $merged];
 	}
 }
