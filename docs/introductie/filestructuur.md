@@ -36,7 +36,6 @@ Hier wordt voor iedere map kort uitgelegd wat het doel van de map is.
 - `sessie`: **Hier kijk je meestal niet in** Map waar sessiebestanden in worden opgeslagen.
 - `templates`: [Symfony Twig](../backend/twig.md) templates. Vervolg op Blade templates
 - `tests`: Tests voor de stek. Wordt niet zoveel mee gedaan en er wordt vrij weinig getest.
-- `translations`: Vertalingen voor de Engelse externe stek, zie [Translations](../onderdelen/translations.md)
 - `var`: **Hier kijk je meestal niet in** De cache map van Symfony. Als deze mist wordt deze gegenereerd (als je in dev mode zit). Als er iets stuk is of als er klassen niet gevonden kunnen worden kan het helpen om deze map weg te gooien.
 - `vendor`: **Hier kijk je meestal niet in** Modules die Composer (package manager) gebruikt.
 

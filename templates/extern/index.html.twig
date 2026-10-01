@@ -6,28 +6,28 @@
 {% endblock %}
 
 
-{#{% block oweebanner %}#}
-{#		<a href="/lidworden" class="owee-banner">#}
-{#			<div class="logo">#}
-{#				<img src="/images/beeldmerk-wit.png" alt="C.S.R. - Eigen Wijs">#}
-{#			</div>#}
-{#			<div class="tekst">#}
-{#				<h2>{% trans %}Volgend jaar lid worden bij C.S.R. Delft?{% endtrans %}</h2>#}
-{#				<p>{% trans %}Zet alvast de volgende data in je agenda:{% endtrans %}</p>#}
-{#				<ul class="data">#}
-{#					<li>{% trans %}OWee: 13 tot 17 augustus{% endtrans %}</li>#}
-{#					<li>{% trans %}Novitiaatsweek: 21 tot 26 augustus{% endtrans %}</li>#}
-{#					<li>{% trans %}Startweekend: 8 tot 10 september{% endtrans %}</li>#}
-{#				</ul>#}
+{# {% block oweebanner %} #}
+{#    <a href="/lidworden" class="owee-banner"> #}
+{#      <div class="logo"> #}
+{#        <img src="/images/beeldmerk-wit.png" alt="C.S.R. - Eigen Wijs"> #}
+{#      </div> #}
+{#      <div class="tekst"> #}
+{#        <h2>Volgend jaar lid worden bij C.S.R. Delft?</h2> #}
+{#        <p>Zet alvast de volgende data in je agenda:</p> #}
+{#        <ul class="data"> #}
+{#          <li>OWee: 13 tot 17 augustus</li> #}
+{#          <li>Novitiaatsweek: 21 tot 26 augustus</li> #}
+{#          <li>Startweekend: 8 tot 10 september</li> #}
+{#        </ul> #}
 
-{#					<br>Lees hier alles over de OWee en lid worden bij C.S.R.</p>#}
-{#				<div class="knop"><span>Alles over de </span>OWee & lid worden</div>#}
-{#			</div>#}
-{#		</a>#}
-{#		<script>#}
-{#			document.body.className += ' ' + 'met-owee-banner';#}
-{#		</script>#}
-{#{% endblock %}#}
+{#          <br>Lees hier alles over de OWee en lid worden bij C.S.R.</p> #}
+{#        <div class="knop"><span>Alles over de </span>OWee & lid worden</div> #}
+{#      </div> #}
+{#    </a> #}
+{#    <script> #}
+{#      document.body.className += ' ' + 'met-owee-banner'; #}
+{#    </script> #}
+{# {% endblock %} #}
 
 
 {% block body %}
@@ -52,16 +52,14 @@
 					</picture>
 				</span>
 				<div class="content">
-					<h2 class="major">{% trans %}C.S.R. Delft{% endtrans %}</h2>
-					<p>{% trans with {"{leeftijd}": vereniging_leeftijd()} %}De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
-						Delft, rijk aan tradities die zijn ontstaan in haar {leeftijd}-jarig bestaan. Het is een
-						breed gezelschap
-						van zo'n 275 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
-						eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
-						vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
-						uithalen.{% endtrans %}
-					</p>
-					<a href="{{ url('default', {naam: 'vereniging'}) }}" class="special">{% trans %}Lees meer over C.S.R.{% endtrans %}</a>
+					<h2 class="major">C.S.R. Delft</h2>
+					<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in Delft,
+						rijk aan tradities die zijn ontstaan in haar {{ vereniging_leeftijd() }}-jarig bestaan. Het is een breed
+						gezelschap van zo'n 275 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
+						eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede vrienden van
+						elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen uithalen.</p>
+					<a href="{{ url('default', {naam: 'vereniging'}) }}"
+						 class="special">Lees meer over C.S.R.</a>
 				</div>
 			</div>
 		</section>
@@ -72,11 +70,11 @@
 				<div class="content">
 					<div class="een-minuut">
 						<div id="hero">
-							<h1 class="major">{% trans %}C.S.R. IN 1 MINUUT{% endtrans %}</h1>
+							<h1 class="major">C.S.R. IN 1 MINUUT</h1>
 							<noscript class="lazy-load">
 								<div class="bb-video">
-									<iframe src="{% trans %}https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl{% endtrans %}"
-													title="{% trans %}C.S.R. Delft in 1 minuut{% endtrans %}"
+									<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl"
+													title="C.S.R. Delft in 1 minuut"
 													allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
 													allowfullscreen></iframe>
 								</div>
@@ -85,8 +83,8 @@
 						<noscript class="lazy-load">
 							<div class="sociaal">
 								<div class="youtube">
-									<p>{% trans %}Wil je zien hoe
-										de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'{% endtrans %}</p>
+									<p>Wil je zien hoe
+											de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'</p>
 									<div class="bb-video">
 										<iframe src="https://www.youtube-nocookie.com/embed/a7hhtoo_kzY?hl=nl"
 														title="Delft studie is maar de helft! Aflevering 1 uit 3"
@@ -95,7 +93,7 @@
 									</div>
 								</div>
 								<div class="instagram">
-									<p>{% trans %}Bekijk en volg ook ons Instagram account voor meer van onze vereniging!{% endtrans %}</p>
+									<p>Bekijk en volg ook ons Instagram account voor meer van onze vereniging!</p>
 									<div class="insta-grid">
 										<a href="https://www.instagram.com/csrdelft/"><img
 												src="{{ absolute_url(asset_url('images/instagram.svg')) }}"
@@ -115,25 +113,26 @@
 			<div class="inner">
 				<noscript class="lazy-load">
 					<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_in_de_OWee.jpg"
-																	 alt="Sfeerfoto buiten"/></span>
+																	 alt="Sfeerfoto buiten" /></span>
 				</noscript>
 				<div class="content col-md-6 mb-4 mb-md-0">
-					<h2 class="major">{% trans %}OWee: 16 t/m 20 augustus{% endtrans %}</h2>
-					<p>{% trans %} Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee. Dit jaar duurt de OWee van 16 t/m 20 augustus.
+					<h2 class="major">OWee: 16 t/m 20 augustus</h2>
+					<p> Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee. Dit jaar duurt de OWee van 16 t/m 20 augustus.
 							Tijdens deze week is er de uitgelezen kans om kennis te maken met de TU en hogescholen, studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer!
 							Al deze groepen en instanties zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren. C.S.R. heeft
 							gedurende deze week veel interessante en gezellige activiteiten, waar je kennis kan maken met de vereniging! Ook kan je je deze week inschrijven als lid van C.S.R.
-						{% endtrans %}</p>
+						</p>
 
 					<div class="mt-4">
-						<a href="https://csrdelft.nl/lidworden" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">
-							{% trans %}Lid worden?{% endtrans %}
+						<a href="https://csrdelft.nl/lidworden" class="cta secondary"
+							 onclick="document.getElementById('lid-worden').checked = true">
+							Lid worden?
 						</a>
 						{# <a href="#contact" class="cta primary" onclick="document.getElementById('lid-spreken').checked = true">
-							{% trans %}Eerst een lid spreken{% endtrans %}
+							Eerst een lid spreken
 						</a> #}
 						{# <a target="_blank" rel="noopener" class="cta secondary">
-							{% trans %}Open avond bezoeken{% endtrans %}
+							Open avond bezoeken
 						</a> #}
 					</div>
 				</div>
@@ -152,17 +151,17 @@
 																						 alt="Owee Commissie"/></span>
 				</noscript>
 				<div class="content">
-					<h2 class="major">{% trans %}Interesse/vragen{% endtrans %}</h2>
-					<p>{% trans %}Uiteraard is er de mogelijkheid om ons tijdens de OWee te spreken. Er is daarnaast ook gelegenheid
+					<h2 class="major">Interesse/vragen</h2>
+					<p>Uiteraard is er de mogelijkheid om ons tijdens de OWee te spreken. Er is daarnaast ook gelegenheid
 							om onze sociëteit Confide aan de Oude Delft 9 te bezoeken.
-					{% endtrans %}
 
-					<p class="lidworden">{% trans with {'{lidworden}': url('default', {naam: 'lidworden', _fragment: 'owee-form'})} %}
+
+					<p class="lidworden">{{ url('default', {naam: 'lidworden', _fragment: 'owee-form'}) }}
 							Wil je lid worden? Inschrijven kan in de OWee (21 t/m 25 augustus).
 							Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden	opgenomen.
 							Doe dit door <a href="{lidworden}">hier</a> te klikken.
-						  Zorg ervoor dat je de week van 29 augustus t/m 2 september vrij houdt voor de novitiaatsweek.{% endtrans %}</p>
-					<a href="{{ url('default', {naam: 'lidworden'}) }}" class="special">{% trans %}Meer informatie over lid worden{% endtrans %}</a>
+						  Zorg ervoor dat je de week van 29 augustus t/m 2 september vrij houdt voor de novitiaatsweek.</p>
+					<a href="{{ url('default', {naam: 'lidworden'}) }}" class="special">Meer informatie over lid worden</a>
 				</div>
 			</div>
 		</section>
@@ -178,7 +177,7 @@
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr1.jpg"
 								 data-fslightbox>
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr1.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr1.jpg"/>
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr1.jpg" />
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr2.jpg"
 								 data-fslightbox>
@@ -237,8 +236,8 @@
 					<li>
 						{{ icon('home') }}
 						<span>
-							Soci&euml;teit Confide <br/>
-							Oude Delft 9<br/>
+							Soci&euml;teit Confide <br />
+							Oude Delft 9<br />
 							2611 BA Delft
 						</span>
 					</li>
@@ -257,7 +256,7 @@
 					<li>
 						{{ icon('fab fa-instagram') }}
 						<a href="https://www.instagram.com/csrdelft/" target="_blank" rel="noopener noreferrer">
-							{% trans %}Like onze foto's op Instagram en volg de laatste posts{% endtrans %}
+							Like onze foto's op Instagram en volg de laatste posts
 						</a>
 					</li>
 					<li>
