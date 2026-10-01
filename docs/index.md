@@ -48,7 +48,6 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 - [Composer](backend/composer.md)
 - [Security](backend/security.md)
 - [Tests](backend/test.md)
-- [Vertalingen](onderdelen/translations.md)
 - [Editor](onderdelen/prosemirror.md)
 - [OAuth](onderdelen/oauth.md)
 - [Web Push](onderdelen/web-push.md)

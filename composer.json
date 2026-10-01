@@ -60,7 +60,6 @@
 		"symfony/security-csrf": "5.4.*",
 		"symfony/serializer": "5.4.*",
 		"symfony/templating": "5.4.*",
-		"symfony/translation": "5.4.*",
 		"symfony/twig-bundle": "5.4.*",
 		"symfony/uid": "5.4.*",
 		"symfony/var-dumper": "5.4.*",
@@ -68,7 +67,6 @@
 		"tecnickcom/tc-lib-pdf": "^8.75",
 		"twig/cssinliner-extra": "^3.3",
 		"twig/extra-bundle": "=3.24",
-		"twig/intl-extra": "^3.2",
 		"twig/string-extra": "^3.5",
 		"zumba/json-serializer": "^3.0",
 		"chillerlan/php-qrcode": "^5.0"
