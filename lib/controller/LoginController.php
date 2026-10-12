@@ -39,7 +39,6 @@ class LoginController extends AbstractController
 	 * @Auth(P_PUBLIC)
 	 */
 	#[Route(path: '/login', methods: ['GET'])]
-	#[Route(path: '/{_locale<%app.supported_locales%>}/login', methods: ['GET'])]
 	public function loginForm(
 		Request $request,
 		AuthenticationUtils $authenticationUtils
@@ -87,10 +86,9 @@ class LoginController extends AbstractController
 	/**
 	 * @Auth(P_PUBLIC)
 	 */
-	#[Route(path: '/login_check', name: 'app_login_check', methods: ['POST'])]
 	#[
 		Route(
-			path: '/{_locale<%app.supported_locales%>}/login_check',
+			path: '/login_check',
 			name: 'app_login_check',
 			methods: ['POST']
 		)
