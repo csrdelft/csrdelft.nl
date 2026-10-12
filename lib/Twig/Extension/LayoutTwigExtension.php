@@ -15,6 +15,7 @@ use Twig\TwigFunction;
 class LayoutTwigExtension extends AbstractExtension
 {
 	public function __construct(
+		private readonly RequestStack $requestStack,
 		private readonly MenuItemRepository $menuItemRepository,
 		private readonly FormulierFactory $formulierFactory
 	) {
@@ -51,15 +52,24 @@ class LayoutTwigExtension extends AbstractExtension
 	/**
 	 * @param $name
 	 * @param bool $root
-	 * @return ?MenuItem
+	 * @return MenuItem
 	 */
-	public function get_menu($name, bool $root = false): ?MenuItem
+	public function get_menu($name, $root = false)
 	{
+		$defaultName = $name;
+		$locale = $this->requestStack->getCurrentRequest()->getLocale();
+		if (
+			$locale != $this->requestStack->getCurrentRequest()->getDefaultLocale()
+		) {
+			$name = $name . '_' . $locale;
+		}
 		if ($root) {
-			return $this->menuItemRepository->getMenuRoot($name);
+			return $this->menuItemRepository->getMenuRoot($name) ??
+				$this->menuItemRepository->getMenuRoot($defaultName);
 		}
 
-		return $this->menuItemRepository->getMenu($name);
+		return $this->menuItemRepository->getMenu($name) ??
+			$this->menuItemRepository->getMenu($defaultName);
 	}
 
 	public function instant_search_form()
