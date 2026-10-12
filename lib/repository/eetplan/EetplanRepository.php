@@ -69,7 +69,7 @@ class EetplanRepository extends AbstractRepository
 			->join('e.noviet', ' n')
 			->where('n.lidjaar = :lidjaar and e.avond is not null')
 			->setParameter('lidjaar', $lidjaar)
-			->orderBy('e.avond', 'DESC')
+			->orderBy('e.avond', 'ASC')
 			->getQuery()
 			->getResult();
 		$eetplanFeut = [];
