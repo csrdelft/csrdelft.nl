@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
@@ -24,27 +25,33 @@ use Twig\Environment;
 class LoginForm implements FormulierTypeInterface
 {
 	public function __construct(
-		private readonly UrlGeneratorInterface     $urlGenerator,
+		private readonly TranslatorInterface $translator,
+		private readonly UrlGeneratorInterface $urlGenerator,
 		private readonly CsrfTokenManagerInterface $csrfTokenManager,
-		private readonly Environment               $twig
-	)
-	{
+		private readonly Environment $twig
+	) {
 	}
 
 	/**
 	 * Bij gebrek aan standaard vertalingen.
 	 *
 	 * @param AuthenticationException $exception
-	 * @param $lastUsername
 	 * @return string
 	 */
-	private function formatError(AuthenticationException $exception, $lastUsername): string
-	{
-		return match ($exception->getMessageKey()) {
-			'Username could not be found.' => "Gebruiker $lastUsername niet gevonden.",
-			'Invalid credentials.' => "Onjuist wachtwoord.",
-			default => 'Er was een fout'
+	private function formatError(
+		AuthenticationException $exception,
+		$lastUsername
+	) {
+		$errorString = match ($exception->getMessageKey()) {
+			'Username could not be found.' => $this->translator->trans(
+				"Gebruiker '%username%' niet gevonden.",
+				['%username%' => $lastUsername]
+			),
+			'Invalid credentials.' => $this->translator->trans('Onjuist wachtwoord.'),
+			default => $this->translator->trans('Er was een fout.'),
 		};
+
+		return strtr($errorString, $exception->getMessageData());
 	}
 
 	protected function getScriptTag()
@@ -55,10 +62,9 @@ class LoginForm implements FormulierTypeInterface
 
 	public function createFormulier(
 		FormulierBuilder $builder,
-										 $data,
-										 $options = []
-	): void
-	{
+		$data,
+		$options = []
+	) {
 		$builder->setAction($this->urlGenerator->generate('app_login_check'));
 
 		$builder->setFormId('loginform');
@@ -76,10 +82,12 @@ class LoginForm implements FormulierTypeInterface
 			$options['lastUserName'] ?? '',
 			null
 		);
-		$fields['user']->placeholder = 'Lidnummer of emailadres';
+		$fields['user']->placeholder = $this->translator->trans(
+			'Lidnummer of emailadres'
+		);
 
 		$fields['pass'] = new WachtwoordField('_password', null, null);
-		$fields['pass']->placeholder = 'Wachtwoord';
+		$fields['pass']->placeholder = $this->translator->trans('Wachtwoord');
 
 		if (isset($options['lastError'])) {
 			$fields[] = new HtmlComment(
@@ -99,7 +107,7 @@ class LoginForm implements FormulierTypeInterface
 				'_remember_me',
 				false,
 				null,
-				'Blijf ingelogd'
+				$this->translator->trans('Blijf ingelogd')
 			);
 		}
 

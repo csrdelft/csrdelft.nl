@@ -4,6 +4,11 @@ app-controller-sub:
 
 # Deze route is een catch-all als allerlaatste
 default:
-  path: /{naam}/{subnaam}
+  path: /{_locale<%app.supported_locales%>}/{naam}/{subnaam}
   controller: CsrDelft\controller\CmsPaginaController::bekijken
   defaults: { naam: thuis, subnaam: '', _mag: 'PUBLIC_ACCESS' }
+
+defaultNoLocale:
+  path: /{naam}/{subnaam}
+  controller: CsrDelft\controller\CmsPaginaController::bekijken
+  defaults: { naam: thuis, subnaam: '', _mag: 'PUBLIC_ACCESS', _locale: nl }
