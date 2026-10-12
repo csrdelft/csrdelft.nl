@@ -127,6 +127,7 @@
 			"@composer dump-env prod",
 			"@flushcache",
 			"@migrate",
+			"reload-php",
 			"rm .onderhoud",
 			"@console cache:warmup"
 		],
