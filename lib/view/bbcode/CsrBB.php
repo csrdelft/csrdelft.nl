@@ -57,7 +57,6 @@ use CsrDelft\view\bbcode\tag\BbPrive;
 use CsrDelft\view\bbcode\tag\BbQuery;
 use CsrDelft\view\bbcode\tag\BbBb;
 use CsrDelft\view\bbcode\tag\BbReldate;
-use CsrDelft\view\bbcode\tag\BbTaal;
 use CsrDelft\view\bbcode\tag\BbUbboff;
 use CsrDelft\view\bbcode\tag\BbUrl;
 use CsrDelft\view\bbcode\tag\BbVerklapper;
@@ -147,7 +146,6 @@ class CsrBB extends Parser
 		BbQuery::class,
 		BbReldate::class,
 		BbSpotify::class,
-		BbTaal::class,
 		BbTwitter::class,
 		BbUbboff::class,
 		BbUrl::class,

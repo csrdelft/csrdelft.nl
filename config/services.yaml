@@ -5,7 +5,6 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
   container.dumper.inline_class_loader: true
-  app.supported_locales: 'nl|en'
   memcached_url: '%env(MEMCACHED_URL)%'
   wiki_url: '%env(WIKI_URL)%'
 

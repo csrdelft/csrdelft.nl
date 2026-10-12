@@ -197,35 +197,3 @@ jobs:
           git add -A
           git diff-index --quiet HEAD || git commit -m "Stek deploy $GITHUB_RUN_NUMBER van csrdelft/csrdelft.nl@$GITHUB_SHA"
           git push --force --quiet --set-upstream origin master
-
-  translation:
-    name: Controleer vertalingen
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: 🗃 Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-dev-${{ hashFiles('**/composer.lock', '**/composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-dev-
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          tools: composer:v2
-          extensions: pdo_mysql
-
-      - name: Install Composer packages
-        if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: php -v && composer install
-
-      - name: Check translations
-        run: |
-          php bin/console translation:extract en --force --domain=messages
-          git diff --exit-code
