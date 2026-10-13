@@ -10,6 +10,8 @@ final class BedragUtil
 	 */
 	public static function format_euro($bedrag)
 	{
+		// locale wordt soms gereset door dependencies, dus opnieuw op nl zetten voor ',' in getallen
+		setlocale(LC_NUMERIC, 'nl_NL.UTF-8');
 		$bedragtekst = sprintf('%.2f', $bedrag);
 		$leesbaar = str_replace(',00', ',-', $bedragtekst);
 		return '€ ' . $leesbaar;
@@ -21,6 +23,7 @@ final class BedragUtil
 	 */
 	public static function format_bedrag_kaal($bedrag)
 	{
+		// locale wordt soms gereset door dependencies, dus opnieuw op nl zetten voor ',' in getallen
 		return sprintf('%.2f', $bedrag / 100);
 	}
 

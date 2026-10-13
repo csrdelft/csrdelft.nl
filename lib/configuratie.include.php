@@ -33,9 +33,7 @@ error_reporting(E_ALL);
 mb_internal_encoding('UTF-8');
 
 // datum weergave enzo
-setlocale(LC_ALL, 'nl_NL');
-//setlocale(LC_ALL, 'nl_NL.utf8');
-setlocale(LC_ALL, 'nld_nld');
+setlocale(LC_ALL, 'nl_NL.UTF-8');
 date_default_timezone_set('Europe/Amsterdam');
 
 if (
