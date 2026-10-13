@@ -188,26 +188,29 @@
 				<div class="cell cell-overig">{{ render(path('csrdelft_voorpagina_overig')) }}</div>
 			</div>
 		</div>
-		<div class="container p-0 p-md-3 mt-5">
-			{# TODO: advertenties #}
+		<div class="container p-0 p-md-3">
 			<div class="cell cell-advertenties gap-2">
 				{{ cms('voorpagina_advertenties') }}
 			</div>
 		</div>
 	</main>
 
-
-	<!-- Footer -->
 	<div id="wrapper">
-		<section id="footer">
-			<div class="inner">
-				<ul class="copyright">
-					<li>&copy; {{ date().format('Y') }} - C.S.R. Delft - <a
-							href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">Privacy</a></li>
+		<footer id="footer" class="border-t-2 border-[#e59200] bg-[#11273a] text-white">
+			<div class="mx-auto w-full max-w-7xl px-6 py-8 sm:px-8 sm:py-12">
+				<ul class="m-0 list-none text-center">
+					<li class="text-sm leading-relaxed text-gray-300">
+						&copy; {{ date().format('Y') }} - C.S.R. Delft -
+						<a
+							href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
+							class="text-gray-300 underline decoration-dotted underline-offset-4 transition-colors duration-200 hover:text-[#e59200] hover:decoration-solid"
+						>
+							Privacy
+						</a>
+					</li>
 				</ul>
 			</div>
-		</section>
+		</footer>
 	</div>
-
 
 {% endblock %}
