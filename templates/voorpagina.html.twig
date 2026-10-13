@@ -5,175 +5,55 @@
 
 
 {% block body_inner %}
+
 	<style>
+    #footer {
+      border-top: 2px solid #e59200;
+      background: #11273a;
+      color: #d1d5db;
+    }
 
-		#footer {
-		.inner,
-		h2,
-		a,
-		label {
-		color: black;
-		}
+    #footer .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
 
-		a {
-		border-bottom: dotted 1px $tekstdonker;
-		text-decoration: none;
-		&:hover {
-		border-bottom-color: transparent;
-		color: #ffffff !important;
-		}
-		}
+    #footer .copyright {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      text-align: center;
+    }
 
-		iframe {
-		width: 100%;
-		}
+    #footer .copyright li,
+    #footer .copyright a {
+      color: #d1d5db;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
 
-		input,
-		textarea {
-		color: #11273a !important;
-		}
+    #footer .copyright a {
+      text-decoration: underline dotted;
+      text-underline-offset: 4px;
+      transition: color 0.2s ease;
+    }
 
-		.inner {
-		padding: 5em 0 3em 0;
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		margin: 0 auto;
-		width: 100%;
+    #footer .copyright a:hover {
+      color: #e59200;
+    }
 
-		& > * {
-		width: 100%;
-		}
+    @media (max-width: 480px) {
+      #footer .footer-inner {
+        padding: 1.5rem 1rem;
+      }
 
-		form {
-		margin: 0 3em 0 0;
-		width: calc(50% - 1.5em);
-		}
-
-		.contact {
-		width: calc(50% - 1.5em);
-
-		&.zonder-interesseformulier {
-		width: 100%;
-		}
-		}
-
-		.copyright,
-		.sponsors {
-			border-top: solid 2px #e59200;
-			list-style: none;
-			margin: 2em 0 1em 0;
-			padding: 2em 0 0 0;
-			width: 100%;
-			text-align: center;
-
-		li {
-		display: block;
-		font-size: 0.9em;
-		line-height: 1;
-		margin-left: 1em;
-		padding: 0 0 0 1em;
-		margin-bottom: 2em;
-
-		&:first-child {
-		border-left: 0;
-		margin-left: 0;
-		padding-left: 0;
-		}
-
-		&:last-child {
-		margin-bottom: 0;
-		}
-
-		a {
-		color: inherit;
-		border-bottom: none;
-		}
-
-		img {
-		max-width: 100%;
-		}
-		}
-		}
-		}
-		}
-
-		@media screen and (max-width: $scherm-extrabreed) {
-		#footer {
-		margin-top: -6.5em;
-		padding-top: 6.5em;
-		}
-		}
-
-		@media screen and (max-width: $scherm-breed) {
-		#footer {
-		margin-top: -4.75em;
-		padding-top: 4.75em;
-		.inner {
-		padding: 3em 3em 1em 3em;
-		display: block;
-		width: 100%;
-		form {
-		width: 100%;
-		margin: 0 0 4em 0;
-		}
-
-		.contact {
-		width: 100%;
-		margin: 0 0 4em 0;
-		}
-
-		.copyright,
-		.sponsors {
-		margin: 4em 0 2em 0;
-		}
-		}
-		}
-		}
-
-		@media screen and (max-width: $scherm-middel) {
-		#footer {
-		margin-top: -2.5em;
-		padding-top: 2.5em;
-		.inner {
-		padding: 2em 2em 0.1em 2em;
-		}
-
-		form {
-		margin: 0 0 3em 0;
-		}
-
-		.contact {
-		margin: 0 0 3em 0;
-		}
-		}
-		}
-
-		@media screen and (max-width: $scherm-middelsmal) {
-		#footer .inner {
-		.copyright li,
-		.sponsors li {
-		border-left: 0;
-		display: block;
-		margin: 1em 0 0 0;
-		padding-left: 0;
-		&:first-child {
-		margin-top: 0;
-		}
-		}
-		}
-		}
-
-		@media screen and (max-width: $scherm-smal) {
-		#footer .inner {
-		padding: 2em 1.5em 0.1em 1.5em;
-		}
-		}
-
-
-
+      #footer .copyright li,
+      #footer .copyright a {
+				font-size: 0.8rem;
+			}
+    }
 	</style>
-
 	<main class="container-fluid p-3 min-vh-100">
 		{% include 'melding.html.twig' %}
 		<div class="cd-page-content voorpagina container px-0 ratio ratio-3x2">
@@ -196,15 +76,12 @@
 	</main>
 
 	<div id="wrapper">
-		<footer id="footer" class="border-t-2 border-[#e59200] bg-[#11273a] text-white">
-			<div class="mx-auto w-full max-w-7xl px-6 py-8 sm:px-8 sm:py-12">
-				<ul class="m-0 list-none text-center">
-					<li class="text-sm leading-relaxed text-gray-300">
+		<footer id="footer">
+			<div class="footer-inner">
+				<ul class="copyright">
+					<li>
 						&copy; {{ date().format('Y') }} - C.S.R. Delft -
-						<a
-							href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
-							class="text-gray-300 underline decoration-dotted underline-offset-4 transition-colors duration-200 hover:text-[#e59200] hover:decoration-solid"
-						>
+						<a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">
 							Privacy
 						</a>
 					</li>
