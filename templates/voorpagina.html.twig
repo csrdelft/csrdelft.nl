@@ -2,57 +2,8 @@
 
 {% block titel %}Vereniging van Christenstudenten{% endblock %}
 
-
-
 {% block body_inner %}
 
-	<style>
-    #footer {
-      border-top: 2px solid #e59200;
-      color: #d1d5db;
-    }
-
-    #footer .footer-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    #footer .copyright {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      text-align: center;
-    }
-
-    #footer .copyright li,
-    #footer .copyright a {
-      color: #d1d5db;
-      font-size: 0.875rem;
-      line-height: 1.6;
-    }
-
-    #footer .copyright a {
-      text-decoration: underline dotted;
-      text-underline-offset: 4px;
-      transition: color 0.2s ease;
-    }
-
-    #footer .copyright a:hover {
-      color: #e59200;
-    }
-
-    @media (max-width: 480px) {
-      #footer .footer-inner {
-        padding: 1.5rem 1rem;
-      }
-
-      #footer .copyright li,
-      #footer .copyright a {
-				font-size: 0.8rem;
-			}
-    }
-	</style>
 	<main class="container-fluid p-3 min-vh-100">
 		{% include 'melding.html.twig' %}
 		<div class="cd-page-content voorpagina container px-0 ratio ratio-3x2">
@@ -67,26 +18,24 @@
 				<div class="cell cell-overig">{{ render(path('csrdelft_voorpagina_overig')) }}</div>
 			</div>
 		</div>
-		<div class="container p-0 p-md-3">
+		<div class="container p-0 p-md-3 mt-5">
 			<div class="cell cell-advertenties gap-2">
 				{{ cms('voorpagina_advertenties') }}
 			</div>
 		</div>
 	</main>
 
-	<div id="wrapper">
-		<footer id="footer">
-			<div class="footer-inner">
-				<ul class="copyright">
-					<li>
-						&copy; {{ date().format('Y') }} - C.S.R. Delft -
-						<a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">
-							Privacy
-						</a>
-					</li>
-				</ul>
-			</div>
-		</footer>
-	</div>
+	<footer id="footer">
+		<div class="footer-inner">
+			<ul class="copyright">
+				<li>
+					&copy; {{ date().format('Y') }} - C.S.R. Delft -
+					<a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">
+						Privacy
+					</a>
+				</li>
+			</ul>
+		</div>
+	</footer>
 
 {% endblock %}
