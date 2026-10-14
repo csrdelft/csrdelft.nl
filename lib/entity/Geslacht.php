@@ -2,29 +2,29 @@
 
 namespace CsrDelft\entity;
 
-use CsrDelft\common\Enum;
+use CsrDelft\common\EnumTrait;
 
-/**
- * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @method static Geslacht Man()
- * @method static Geslacht Vrouw()
- * @method static boolean isMan($geslacht)
- * @method static boolean isVrouw($geslacht)
- */
-class Geslacht extends Enum
-{
-	/**
-	 * Geslacht opties.
-	 */
-	const Man = 'm';
-	const Vrouw = 'v';
+enum Geslacht: string {
+	use EnumTrait;
+	case Man = 'm';
+	case Vrouw = 'v';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $mapChoiceToDescription = [
-		self::Man => 'man',
-		self::Vrouw => 'vrouw',
-	];
+	public function getDescription(): string {
+		return match($this) {
+			Geslacht::Man => 'man',
+			Geslacht::Vrouw => 'vrouw'
+		};
+	}
+
+	public function getValue(): string {
+		return $this->value;
+	}
+
+	public function isVrouw(): bool {
+		return $this === self::Vrouw;
+	}
+
+	public function isMan(): bool {
+		return $this === self::Man;
+	}
 }

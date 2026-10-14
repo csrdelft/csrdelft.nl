@@ -78,14 +78,8 @@ h.t. Fiscus.';
 	/**
 	 * @return CiviSaldo[]
 	 */
-	public function getSaldi()
+	public function getSaldi(): array
 	{
-		if ($this->doelgroep == 'oudleden') {
-			$status = LidStatus::getFiscaalOudlidLike();
-		} else {
-			$status = LidStatus::getFiscaalLidLike();
-		}
-
 		$saldi = ContainerFacade::getContainer()
 			->get(CiviSaldoRepository::class)
 			->getRoodstaandeLeden($this->saldogrens);
@@ -98,9 +92,12 @@ h.t. Fiscus.';
 				continue;
 			}
 
-			if (!in_array($profiel->status, $status)) {
+			if (!($this->doelgroep === 'oudleden'
+				? $profiel->status->isFiscaalOudlidLike()
+				: $profiel->status->isFiscaalLidLike())) {
 				continue;
 			}
+
 
 			if (in_array($saldo->uid, explode(',', (string) $this->uitsluiten))) {
 				continue;

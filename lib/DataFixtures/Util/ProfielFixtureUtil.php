@@ -34,8 +34,8 @@ class ProfielFixtureUtil
 		$profiel->uid = $uid;
 		$profiel->lidjaar = (int) ('20' . substr((string) $uid, 2));
 		$profiel->geslacht = [
-			'male' => Geslacht::Man(),
-			'female' => Geslacht::Vrouw(),
+			'male' => Geslacht::Man,
+			'female' => Geslacht::Vrouw,
 		][$geslacht];
 		// TODO $profiel->changelog;
 		$profiel->changelog = [new ProfielLogTextEntry('Aangemaakt door fixtures')];
