@@ -25,13 +25,6 @@
 				© 2006-{{ date().format('Y') }} C.S.R. Delft
 			</small>
 
-			<a
-				class="link-secondary"
-				href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
-			>
-				Privacyverklaring
-			</a>
-
 			{% if not app.debug and is_granted('ROLE_ADMIN') %}
 				<small>
 					<a
@@ -42,6 +35,13 @@
 					>{{ commitHash() }}</a>
 				</small>
 			{% endif %}
+
+			<a
+				class="link-secondary"
+				href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
+			>
+				Privacyverklaring
+			</a>
 		</div>
 	</div>
 </footer>
