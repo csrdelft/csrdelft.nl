@@ -18,24 +18,11 @@
 				<div class="cell cell-overig">{{ render(path('csrdelft_voorpagina_overig')) }}</div>
 			</div>
 		</div>
-		<div class="container p-0 p-md-3 mt-5">
+		<div class="container p-0 p-md-3 mt-5 mt-md-0">
 			<div class="cell cell-advertenties gap-2">
 				{{ cms('voorpagina_advertenties') }}
 			</div>
 		</div>
 	</main>
-
-	<footer id="footer">
-		<div class="footer-inner">
-			<ul class="copyright">
-				<li>
-					&copy; {{ date().format('Y') }} - C.S.R. Delft -
-					<a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">
-						Privacy
-					</a>
-				</li>
-			</ul>
-		</div>
-	</footer>
 
 {% endblock %}

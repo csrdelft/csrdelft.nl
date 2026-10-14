@@ -322,51 +322,9 @@
 	}
 }
 
-#footer {
-	background: $menu-bg;
-	color: white;
-	border-top: 2px solid $secondary;
-
-	.footer-inner {
-		max-width: 1280px;
-		margin: 0 auto;
-		padding: 2rem;
-	}
-
-	.copyright {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		text-align: center;
-
-		a {
-			color: white;
-			text-decoration: underline dotted;
-			text-underline-offset: 4px;
-
-			&:hover {
-				color: $gray-300;
-			}
-		}
-	}
-}
-
 @include media-breakpoint-down(sm) {
 	.cell-advertenties img {
 		height: auto;
 		width: 100%;
-	}
-
-	#footer {
-		.footer-inner {
-			padding: 1.5rem 1rem;
-		}
-
-		.copyright {
-			li,
-			a {
-				font-size: 0.8rem;
-			}
-		}
 	}
 }

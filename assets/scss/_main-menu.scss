@@ -70,6 +70,16 @@ Primary style
 	}
 }
 
+.footer {
+	background: $menu-bg;
+	border-top: 3px solid $secondary;
+
+	.copyright {
+		margin: 0;
+		padding: 0;
+	}
+}
+
 @include media-breakpoint-down(md) {
 	#menu .navbar-nav {
 		width: 100%;
