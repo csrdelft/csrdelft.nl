@@ -1,16 +1,6 @@
 <footer class="footer mt-auto py-3">
 	<div class="container-fluid p-md-5">
 		<div class="row">
-			<div class="col-12 col-md-auto">
-				<img src="{{ absolute_url('/images/beeldmerk.png') }}" width="80" class="d-block mb-2"
-						 alt="C.S.R. Logo"/>
-				<small class="d-block mb-3 text-muted">© 2006-{{ date().format('Y') }}</small>
-				{% if not app.debug and is_granted('ROLE_ADMIN') %}
-					<small class="cd-block mb-3">
-						<a href="{{ commitLink() }}" target="_blank" rel="noopener" class="not-external text-muted">{{ commitHash() }}</a>
-					</small>
-				{% endif %}
-			</div>
 			{% set menu = get_menu('main') %}
 			{% for item in menu.children %}
 				{% if is_granted('bekijken', item) %}
@@ -26,6 +16,32 @@
 					</div>
 				{% endif %}
 			{% endfor %}
+		</div>
+
+		<hr class="my-4">
+
+		<div class="copyright footer-inner d-flex justify-content-between align-items-center flex-wrap">
+			<small>
+				© 2006-{{ date().format('Y') }} C.S.R. Delft
+			</small>
+
+			<a
+				class="link-secondary"
+				href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
+			>
+				Privacyverklaring
+			</a>
+
+			{% if not app.debug and is_granted('ROLE_ADMIN') %}
+				<small>
+					<a
+						href="{{ commitLink() }}"
+						target="_blank"
+						rel="noopener"
+						class="not-external"
+					>{{ commitHash() }}</a>
+				</small>
+			{% endif %}
 		</div>
 	</div>
 </footer>
