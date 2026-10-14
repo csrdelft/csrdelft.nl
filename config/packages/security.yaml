@@ -101,6 +101,7 @@ security:
         ROLE_ALBUM_DEL,
         ROLE_BIEB_MOD,
       ]
+    ROLE_BAALCIE: [ROLE_MAALCIE, ROLE_BASF]
     ROLE_BESTUUR:
       [
         ROLE_BASF,

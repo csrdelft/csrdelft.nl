@@ -23,6 +23,7 @@ class AccessRole extends Enum
 	const Lid = 'R_LID';
 	const BASFCie = 'R_BASF';
 	const MaalCie = 'R_MAALCIE';
+	const BaalCie = 'R_BAALCIE'; // BASFCie + MaalCie
 	const Bestuur = 'R_BESTUUR';
 	const PubCie = 'R_PUBCIE';
 	const Fiscaat = 'R_FISCAAT';
@@ -43,6 +44,7 @@ class AccessRole extends Enum
 		self::Lid => 'Lid',
 		self::BASFCie => 'BASFCie-rechten',
 		self::MaalCie => 'MaalCie-rechten',
+		self::BaalCie => 'MaalCie+BASFCie-rechten',
 		self::Bestuur => 'Bestuur-rechten',
 		self::PubCie => 'PubCie-rechten',
 		self::Fiscaat => 'Fiscaat-rechten',
