@@ -30,17 +30,15 @@
 </div>
 <script>
 	document.addEventListener("DOMContentLoaded", () => {
-	const posters = Array.from(document.querySelectorAll(".carousel-item"));
-	if (posters.length < 2) return;
+    const carousel = document.querySelector("#postersCarousel");
+		const posters = carousel.querySelectorAll(".carousel-item");
 
-	// Eerst "active" verwijderen van eerste item (komt van cms)
-		posters[0].classList.remove("active");
+		if (posters.length < 2) return;
 
-	const randItem = posters[Math.floor(Math.random() * posters.length)];
+		// Eerst "active" verwijderen van eerste item (komt van cms)
+    posters.forEach(poster => poster.classList.remove("active"));
+
+		const randItem = posters[Math.floor(Math.random() * posters.length)];
 		randItem.classList.add("active");
-
-	// de willekeurige naar voren halen
-	const parentItem = randItem.parentElement;
-	parentItem.prepend(randItem);
 	});
 </script>
