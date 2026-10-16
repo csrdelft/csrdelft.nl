@@ -1724,14 +1724,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.33":
-  version: 0.33.0
-  resolution: "axios@npm:0.33.0"
+"axios@npm:^0.34":
+  version: 0.34.0
+  resolution: "axios@npm:0.34.0"
   dependencies:
     follow-redirects: "npm:^1.15.4"
     form-data: "npm:^4.0.4"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10/36c468997b94f71cda99c8b575fe3fbb75d6dc19242c43546e3a72e703f398df98bff8294c418bccfbc88da67da88cfb94f37c49cb89468c648fe83ec6f3e955
+  checksum: 10/ea12eb0dd038a574f9fac0b986f5157fbe210716e726accc0367bfbed6aa0eedb6ed4428cb693047c61919494f56466810d75ea46744cf89307469a17587e160
   languageName: node
   linkType: hard
 
@@ -6307,7 +6307,7 @@ __metadata:
     "@vue/compiler-sfc": "npm:^3.2.47"
     "@vue/runtime-dom": "npm:^3.2.47"
     autoprefixer: "npm:^9.1.1"
-    axios: "npm:^0.33"
+    axios: "npm:^0.34"
     bootstrap: "npm:^5.3"
     chart.js: "npm:^2.7.3"
     corejs-typeahead: "npm:^1.2.1"
