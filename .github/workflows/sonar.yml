@@ -35,7 +35,6 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install yarn dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --immutable
 
       - name: ESLint report
