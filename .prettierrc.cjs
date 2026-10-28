@@ -1,3 +1,3 @@
-{
-	"plugins": ["@prettier/plugin-php"]
-}
+module.exports = {
+	plugins: [require.resolve('@prettier/plugin-php')],
+};
