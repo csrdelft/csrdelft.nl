@@ -1,0 +1,275 @@
+@font-face {
+	font-family: "Panorama Sans";
+	src: url("../../fonts/SourceSansPro-Regular.otf") format("opentype");
+	font-weight: 400;
+	font-display: swap;
+}
+@font-face {
+	font-family: "Panorama Serif";
+	src: url("../../fonts/lustrum12/OrpheusPro-Bold.otf") format("opentype");
+	font-weight: 700;
+	font-display: swap;
+}
+$olive: #444f1b;
+$paper: #fff7e0;
+$brown: #451b03;
+* {
+	box-sizing: border-box;
+}
+html {
+	scroll-behavior: smooth;
+	scroll-padding-top: 85px;
+}
+body {
+	margin: 0;
+	background: $paper;
+	color: $brown;
+	font: 19px/1.45 "Panorama Sans", sans-serif;
+}
+a {
+	color: inherit;
+	text-underline-offset: 4px;
+}
+button {
+	font: inherit;
+}
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+	outline: 3px solid #e96723;
+	outline-offset: 5px;
+}
+[hidden] {
+	display: none !important;
+}
+.sr-only,
+.skip-link:not(:focus) {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+.skip-link:focus {
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	z-index: 20;
+	padding: 12px;
+	background: $paper;
+}
+.navigation {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	background: $olive;
+	color: $paper;
+	border-bottom: 1px solid rgba($paper, 0.3);
+}
+nav {
+	max-width: 1440px;
+	margin: auto;
+	padding: 15px 4%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 25px;
+}
+nav a {
+	text-decoration: none;
+}
+nav a:hover {
+	text-decoration: underline;
+}
+.wordmark {
+	font: 700 25px "Panorama Serif", serif;
+}
+.wordmark span {
+	font: 15px "Panorama Sans", sans-serif;
+	margin-left: 8px;
+}
+nav > div {
+	display: flex;
+	gap: 32px;
+}
+.themaposter {
+	background: #94c7dd;
+}
+.themaposter > a:first-of-type {
+	display: block;
+}
+.themaposter img {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-height: calc(100svh - 118px);
+	object-fit: contain;
+}
+.poster-link {
+	display: flex;
+	justify-content: center;
+	gap: 25px;
+	background: $olive;
+	color: $paper;
+	padding: 13px 20px;
+	text-decoration: none;
+	text-align: center;
+}
+.poster-link:hover {
+	text-decoration: underline;
+}
+.nature {
+	padding: 65px 5% 80px;
+	max-width: 1550px;
+	margin: auto;
+}
+.section-heading {
+	text-align: center;
+	margin-bottom: 50px;
+	color: $olive;
+}
+.section-heading p {
+	margin: 5px;
+}
+.section-heading p:first-child {
+	font-family: Georgia, serif;
+	font-style: italic;
+	font-size: 24px;
+}
+h2 {
+	font: 700 clamp(40px, 5vw, 72px) / 1.1 "Panorama Serif", Georgia, serif;
+	margin: 10px 0;
+}
+.programme-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	align-items: start;
+	gap: clamp(35px, 5vw, 85px);
+}
+.nature-poster {
+	margin: 0;
+	position: sticky;
+	top: 90px;
+}
+.nature-poster img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+.programme h2 {
+	font-size: 43px;
+	margin: 0 0 25px;
+}
+.programme-days {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.programme-days li {
+	border-top: 1px solid rgba($olive, 0.35);
+	padding: 19px 0 22px;
+}
+h3 {
+	font: 700 26px/1.2 "Panorama Serif", Georgia, serif;
+	margin: 0 0 13px;
+	color: $olive;
+}
+h3 span {
+	font: 17px "Panorama Sans", sans-serif;
+	margin-left: 10px;
+	white-space: nowrap;
+}
+.activity {
+	display: grid;
+	grid-template-columns: 74px minmax(0, 1fr);
+	gap: 10px;
+	margin-top: 12px;
+}
+.activity time,
+.activity-time {
+	font-size: 16px;
+	padding-top: 3px;
+}
+h4 {
+	font: inherit;
+	font-size: 21px;
+	margin: 0;
+}
+.activity p {
+	margin: 2px 0 0;
+	font-size: 17px;
+	opacity: 0.8;
+}
+.print-link {
+	display: inline-block;
+	margin-top: 18px;
+}
+footer {
+	background: $olive;
+	color: $paper;
+	padding: 26px 5%;
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+	flex-wrap: wrap;
+	font-size: 15px;
+}
+footer a {
+	text-decoration: none;
+}
+@media (min-width: 1700px) {
+	.themaposter img {
+		max-height: 950px;
+	}
+}
+@media (max-width: 750px) {
+	body {
+		font-size: 18px;
+	}
+	nav {
+		padding: 12px 5%;
+		gap: 12px;
+		flex-wrap: wrap;
+	}
+	nav > div {
+		gap: 20px;
+		font-size: 16px;
+	}
+	.wordmark {
+		font-size: 22px;
+	}
+	.wordmark span {
+		display: none;
+	}
+	.themaposter img {
+		max-height: none;
+	}
+	.poster-link {
+		font-size: 16px;
+	}
+	.nature {
+		padding-top: 38px;
+		padding-bottom: 45px;
+	}
+	.section-heading {
+		margin-bottom: 30px;
+	}
+	.programme-layout {
+		grid-template-columns: 1fr;
+	}
+	.nature-poster {
+		position: static;
+		width: min(100%, 480px);
+		margin: auto;
+	}
+	.programme {
+		margin-top: 15px;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+}
