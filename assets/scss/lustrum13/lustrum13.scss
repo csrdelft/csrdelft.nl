@@ -1,0 +1,399 @@
+@font-face {
+	font-family: "Panorama Sans";
+	src: url("../../fonts/SourceSansPro-Regular.otf") format("opentype");
+	font-weight: 400;
+	font-display: swap;
+}
+@font-face {
+	font-family: "Panorama Serif";
+	src: url("../../fonts/lustrum12/OrpheusPro-Bold.otf") format("opentype");
+	font-weight: 700;
+	font-display: swap;
+}
+$olive: #444f1b;
+$paper: #fff7e0;
+$brown: #451b03;
+* {
+	box-sizing: border-box;
+}
+html {
+	scroll-behavior: smooth;
+	scroll-padding-top: 85px;
+}
+body {
+	margin: 0;
+	background: $paper;
+	color: $brown;
+	font: 19px/1.45 "Panorama Sans", sans-serif;
+}
+a {
+	color: inherit;
+	text-underline-offset: 4px;
+}
+button {
+	font: inherit;
+}
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+	outline: 3px solid #e96723;
+	outline-offset: 5px;
+}
+[hidden] {
+	display: none !important;
+}
+.sr-only,
+.skip-link:not(:focus) {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+.skip-link:focus {
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	z-index: 20;
+	padding: 12px;
+	background: $paper;
+}
+.navigation {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	background: $olive;
+	color: $paper;
+	border-bottom: 1px solid rgba($paper, 0.3);
+}
+nav {
+	max-width: 1440px;
+	margin: auto;
+	padding: 15px 4%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 25px;
+}
+nav a {
+	text-decoration: none;
+}
+nav a:hover {
+	text-decoration: underline;
+}
+.wordmark {
+	font: 700 25px "Panorama Serif", serif;
+}
+.wordmark span {
+	font: 15px "Panorama Sans", sans-serif;
+	margin-left: 8px;
+}
+nav > div {
+	display: flex;
+	gap: 32px;
+}
+.themaposter {
+	background: #94c7dd;
+}
+.themaposter > a:first-of-type {
+	display: block;
+}
+.themaposter img {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-height: calc(100svh - 118px);
+	object-fit: contain;
+}
+.poster-link {
+	display: flex;
+	justify-content: center;
+	gap: 25px;
+	background: $olive;
+	color: $paper;
+	padding: 13px 20px;
+	text-decoration: none;
+	text-align: center;
+}
+.poster-link:hover {
+	text-decoration: underline;
+}
+.nature {
+	padding: 65px 5% 80px;
+	max-width: 1550px;
+	margin: auto;
+}
+.section-heading {
+	text-align: center;
+	margin-bottom: 50px;
+	color: $olive;
+}
+.section-heading p {
+	margin: 5px;
+}
+.section-heading p:first-child {
+	font-family: Georgia, serif;
+	font-style: italic;
+	font-size: 24px;
+}
+h2 {
+	font: 700 clamp(40px, 5vw, 72px) / 1.1 "Panorama Serif", Georgia, serif;
+	margin: 10px 0;
+}
+.programme-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	align-items: start;
+	gap: clamp(35px, 5vw, 85px);
+}
+.nature-poster {
+	margin: 0;
+	position: sticky;
+	top: 90px;
+}
+.nature-poster img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+.programme h2 {
+	font-size: 43px;
+	margin: 0 0 25px;
+}
+.programme-days {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.programme-days li {
+	border-top: 1px solid rgba($olive, 0.35);
+	padding: 19px 0 22px;
+}
+h3 {
+	font: 700 26px/1.2 "Panorama Serif", Georgia, serif;
+	margin: 0 0 13px;
+	color: $olive;
+}
+h3 span {
+	font: 17px "Panorama Sans", sans-serif;
+	margin-left: 10px;
+	white-space: nowrap;
+}
+.activity {
+	display: grid;
+	grid-template-columns: 74px minmax(0, 1fr);
+	gap: 10px;
+	margin-top: 12px;
+}
+.activity time,
+.activity-time {
+	font-size: 16px;
+	padding-top: 3px;
+}
+h4 {
+	font: inherit;
+	font-size: 21px;
+	margin: 0;
+}
+.activity p {
+	margin: 2px 0 0;
+	font-size: 17px;
+	opacity: 0.8;
+}
+.print-link {
+	display: inline-block;
+	margin-top: 18px;
+}
+.play-section {
+	padding: 0 5% 70px;
+	max-width: 1550px;
+	margin: auto;
+}
+.puzzle-disclosure {
+	border-top: 1px solid rgba($olive, 0.4);
+	border-bottom: 1px solid rgba($olive, 0.4);
+}
+summary {
+	cursor: pointer;
+	padding: 25px 0;
+	display: flex;
+	gap: 20px;
+	justify-content: space-between;
+	align-items: center;
+}
+summary > span:first-child {
+	font: 700 clamp(25px, 3vw, 37px) "Panorama Serif", Georgia, serif;
+}
+.play-label {
+	font-size: 17px;
+}
+.play-label span {
+	margin-left: 20px;
+}
+.puzzle-content {
+	max-width: 850px;
+	margin: 0 auto;
+	padding-bottom: 30px;
+}
+.puzzle-board {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	aspect-ratio: 20/9;
+	border: 3px solid $olive;
+	gap: 3px;
+	background: $olive;
+}
+.puzzle-piece {
+	display: block;
+	padding: 0;
+	min-width: 0;
+	cursor: pointer;
+	border: 0;
+	border-radius: 0;
+	background-image: url("../../../htdocs/images/lustrum13/panorama-landschap.webp");
+	background-size: 300% 200%;
+}
+.puzzle-piece[aria-pressed="true"] {
+	outline: 4px solid #e96723;
+	outline-offset: -4px;
+	filter: brightness(1.15);
+}
+.puzzle-piece:focus-visible {
+	position: relative;
+	z-index: 1;
+	outline-offset: -5px;
+}
+.puzzle-board.is-complete {
+	gap: 0;
+}
+.puzzle-controls {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 15px;
+	min-height: 70px;
+}
+.puzzle-controls button {
+	border: 1px solid $olive;
+	background: transparent;
+	color: $olive;
+	padding: 8px 13px;
+	cursor: pointer;
+}
+footer {
+	background: $olive;
+	color: $paper;
+	padding: 26px 5%;
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+	flex-wrap: wrap;
+	font-size: 15px;
+}
+footer a {
+	text-decoration: none;
+}
+@media (min-width: 1700px) {
+	.themaposter img {
+		max-height: 950px;
+	}
+}
+@media (max-width: 750px) {
+	body {
+		font-size: 18px;
+	}
+	nav {
+		padding: 12px 5%;
+		gap: 12px;
+		flex-wrap: wrap;
+	}
+	nav > div {
+		gap: 20px;
+		font-size: 16px;
+	}
+	.wordmark {
+		font-size: 22px;
+	}
+	.wordmark span {
+		display: none;
+	}
+	.themaposter img {
+		max-height: none;
+	}
+	.poster-link {
+		font-size: 16px;
+	}
+	.nature {
+		padding-top: 38px;
+		padding-bottom: 45px;
+	}
+	.section-heading {
+		margin-bottom: 30px;
+	}
+	.programme-layout {
+		grid-template-columns: 1fr;
+	}
+	.nature-poster {
+		position: static;
+		width: min(100%, 480px);
+		margin: auto;
+	}
+	.programme {
+		margin-top: 15px;
+	}
+	summary {
+		align-items: start;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.puzzle-controls {
+		align-items: start;
+		flex-direction: column;
+		padding-top: 10px;
+	}
+	.puzzle-controls p {
+		margin: 0;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+}
+.expedition-invitation {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 50px;
+	align-items: center;
+	margin: 0 auto 70px;
+	padding: 0 5%;
+	max-width: 1550px;
+	h2 {
+		font-size: clamp(30px, 4vw, 50px);
+	}
+	p {
+		max-width: 520px;
+	}
+	p:first-child {
+		font-family: Georgia, serif;
+		font-style: italic;
+	}
+	img {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+}
+@media (max-width: 750px) {
+	.expedition-invitation {
+		grid-template-columns: 1fr;
+		gap: 25px;
+		margin-bottom: 45px;
+	}
+	.navigation nav > div {
+		gap: 15px;
+		flex-wrap: wrap;
+	}
+}
