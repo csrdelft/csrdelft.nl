@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="nl">
+<head>
+ <meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta name="description" content="Panorama, het XIIIde lustrum der C.S.R. Delft. Puur natuur: 16 tot en met 21 november 2026.">
+ <meta name="theme-color" content="#444f1b">
+ <title>Panorama · Lustrum XIII · C.S.R. Delft</title>
+ {{ css_asset('lustrum13') }}
+ {% include 'common/sentry.html.twig' %}
+</head>
+<body id="panorama">
+ <a class="skip-link" href="#programma">Direct naar het programma</a>
+ <header class="navigation">
+  <nav aria-label="Hoofdnavigatie">
+   <a href="#panorama" class="wordmark">Panorama <span>XIII</span></a>
+   <div><a href="#puur-natuur">Puur natuur</a><a href="#programma">Programma</a><a href="/panorama/spellen">De spellen</a><a href="/">Naar de stek</a></div>
+  </nav>
+ </header>
+ <main>
+  <section class="themaposter" aria-label="Panorama, het XIIIde lustrum der C.S.R. Delft">
+   <h1 class="sr-only">Panorama — XIIIde lustrum der C.S.R. Delft</h1>
+   <a href="/images/lustrum13/panorama-poster.webp" target="_blank" rel="noopener" aria-label="Open de volledige Panorama-poster in een nieuw tabblad">
+    <img src="/images/lustrum13/panorama-poster.webp" width="1800" height="1279" alt="Panorama. XIIIde Lustrum der C.S.R. Delft. De Delftse kerken, EWI en Confide in een getekend berglandschap aan zee." fetchpriority="high">
+   </a>
+   <a class="poster-link" href="#puur-natuur">Puur natuur · 16–21 november 2026 <span aria-hidden="true">↓</span></a>
+  </section>
+  <section class="nature" id="puur-natuur" aria-labelledby="nature-title">
+   <div class="section-heading"><p>Panorama Natura</p><h2 id="nature-title">Puur natuur</h2><p>16–21 november 2026</p></div>
+   <div class="programme-layout">
+    <figure class="nature-poster">
+     <a href="/images/lustrum13/puur-natuur-poster.webp" target="_blank" rel="noopener" aria-label="Open de Puur natuur-poster in een nieuw tabblad"><img src="/images/lustrum13/puur-natuur-poster.webp" width="1000" height="1414" alt="Puur natuur. Lustrumweek 1, 16–21 november 2026. Getekende bergen, dennenbomen en wandelschoenen." loading="lazy"></a>
+    </figure>
+    <section class="programme" id="programma" aria-labelledby="programme-title">
+     <h2 id="programme-title">Programma</h2>
+     {% include 'lustrum13/programma.html.twig' %}
+     <a class="print-link" href="/images/lustrum13/puur-natuur-programma.webp" target="_blank" rel="noopener">Bekijk de programmaposter <span aria-hidden="true">↗</span></a>
+    </section>
+   </div>
+  </section>
+  <section class="expedition-invitation" aria-labelledby="expedition-invitation-title">
+   <div><p>Vijf minigames. Eén klassement.</p><h2 id="expedition-invitation-title">De Panorama-spellen</h2><p>Leg een bergroute, puzzel een panorama of test je geheugen. Verzamel punten, medailles en de wisseltrofeeën.</p><a href="/panorama/spellen">Kies je spel →</a></div>
+   <a href="/panorama/spellen" tabindex="-1" aria-hidden="true"><img src="/images/lustrum13/expeditie/meer.svg" width="1440" height="800" alt="" loading="lazy"></a>
+  </section>
+  <section class="play-section" data-puzzle-section hidden aria-labelledby="puzzle-title">
+   <details class="puzzle-disclosure">
+    <summary><span id="puzzle-title">Even het overzicht kwijt?</span><span class="play-label">Leg het panorama weer goed <span aria-hidden="true">+</span></span></summary>
+    <div class="puzzle-content">
+     <p id="puzzle-instructions">De tekening ligt door elkaar. Kies twee stukken om ze te verwisselen.</p>
+     <div class="puzzle-board" role="group" aria-label="Panoramapuzzel" aria-describedby="puzzle-instructions"></div>
+     <div class="puzzle-controls"><p data-puzzle-status role="status" aria-live="polite"></p><button type="button" data-puzzle-reset>Opnieuw schudden</button></div>
+    </div>
+   </details>
+  </section>
+ </main>
+ <footer><a href="#panorama">Panorama · Lustrum XIII</a><span>2026-2027</span><a href="/">Terug naar de stek</a></footer>
+ {{ js_asset('lustrum13') }}
+</body>
+</html>
