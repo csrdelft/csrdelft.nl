@@ -10,6 +10,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Cache Yarn packages
         id: yarn-cache
         uses: actions/cache@v3
