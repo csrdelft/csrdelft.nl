@@ -54,10 +54,16 @@ De twaalf SVG-landschappen blijven beschikbaar binnen spellen. De losse galerij 
 
 Een echte HTTP-controle bevestigt toegang voor een commissielid, weigering voor gewone leden en anonieme bezoekers, CSRF-controle en afscherming van toekomstige foto's. De browsertest gebruikt echte Twig, gebouwde bestanden en de echte spelservices, met 140 ms nagebootste netwerkvertraging. Alle vijf spellen, snelle invoer, dagquiz, beheer, upload en planning zijn getest op desktop en mobiel. Spelbeheer is gecontroleerd door een spel te sluiten/openen, de naam te wijzigen en een geüploade foto te selecteren en daadwerkelijk in de puzzel te gebruiken. Testgegevens zijn opgeruimd.
 
-ESLint, TypeScript, Psalm, Twig-controle en de ontwikkelbuild zijn geslaagd. De nieuwe Doctrine-mapping komt overeen met het lokale schema. Er is niets gecommit, gepusht of live gezet.
+ESLint, TypeScript, Psalm, Twig-controle en de ontwikkelbuild zijn geslaagd. De nieuwe Doctrine-mapping komt overeen met het lokale schema. Publiceer via de normale GitHub-controles en voer daarna op de server `composer update-prod` uit. Controleer de actuele serverversie en de migraties voordat je publiceert.
 
 ## Voorbereide fotovragen
 
 Vijf nieuwe CC0-fotovragen staan in de lokale database ingepland op de eerstvolgende vrije dagen, zonder bestaande vragen te overschrijven. Onderwerpen zijn een stad, brug, Grieks eiland, berg en land. Antwoordvarianten, fotograaf en originele bestandsbronnen staan in `docs/panorama-dagvragen-bronnen.json`. Foto’s zijn visueel gecontroleerd en via de normale uploadverwerking privé opgeslagen. De commissie kan de geplande vragen in het beheer aanpassen; toekomstige vragen blijven verborgen voor andere leden. Dit is lokale inhoud, geen automatisch uitgevoerde productieseed.
 
 De aantallen deelnemers en in-één-keer-goed staan standaard uit. Commissieleden kunnen deze onafhankelijk aanzetten bij Dagvragen beheren → Zichtbare cijfers. Het percentage goed blijft zichtbaar. De instelling gebruikt dezelfde beveiligde, revisiegecontroleerde opslag als spelbeheer.
+
+## Publicatie zonder aankondiging
+
+Er komen geen verwijzingen vanuit de bestaande homepage of menu’s. Alleen de nieuwe Panorama-pagina’s linken onderling. De normale ledenlogin blijft verplicht. HTML en responses krijgen `noindex, nofollow, noarchive`; de bestaande robots- en sitemapbestanden blijven ongewijzigd.
+
+De lokale basissnapshot is voor deze publicatie vergeleken met de opgehaalde `origin/master`; beide stonden op `58d27c2bb`. De productie-URL’s gaven vóór publicatie een 404. De daadwerkelijke checkout op de server moet via SSH gecontroleerd worden. Lokale spelstanden, ledenaanpassingen, inloggegevens en quizuploads worden nooit als code meegenomen. De voorbereide quizvragen en hun afbeeldingen moeten afzonderlijk via het beheer of een gecontroleerde inhoudsimport worden overgezet.
