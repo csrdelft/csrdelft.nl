@@ -58,7 +58,7 @@ ESLint, TypeScript, Psalm, Twig-controle en de ontwikkelbuild zijn geslaagd. De 
 
 ## Voorbereide fotovragen
 
-Vijf nieuwe CC0-fotovragen staan in de lokale database ingepland op de eerstvolgende vrije dagen, zonder bestaande vragen te overschrijven. Onderwerpen zijn een stad, brug, Grieks eiland, berg en land. Antwoordvarianten, fotograaf en originele bestandsbronnen staan in `docs/panorama-dagvragen-bronnen.json`. Foto’s zijn visueel gecontroleerd en via de normale uploadverwerking privé opgeslagen. De commissie kan de geplande vragen in het beheer aanpassen; toekomstige vragen blijven verborgen voor andere leden. Dit is lokale inhoud, geen automatisch uitgevoerde productieseed.
+Vijf nieuwe CC0-fotovragen staan in de lokale database ingepland op de eerstvolgende vrije dagen, zonder bestaande vragen te overschrijven. Onderwerpen zijn een stad, brug, Grieks eiland, berg en land. Antwoordvarianten, fotograaf en originele bestandsbronnen blijven bij de private inhoudsexport voor de commissie. Deze worden niet in de publicatiecode opgenomen. Foto’s zijn visueel gecontroleerd en via de normale uploadverwerking privé opgeslagen. De commissie kan de geplande vragen in het beheer aanpassen; toekomstige vragen blijven verborgen voor andere leden. Dit is lokale inhoud, geen automatisch uitgevoerde productieseed.
 
 De aantallen deelnemers en in-één-keer-goed staan standaard uit. Commissieleden kunnen deze onafhankelijk aanzetten bij Dagvragen beheren → Zichtbare cijfers. Het percentage goed blijft zichtbaar. De instelling gebruikt dezelfde beveiligde, revisiegecontroleerde opslag als spelbeheer.
 
