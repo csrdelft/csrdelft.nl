@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify';
+
 type Kind = 'route' | 'puzzle' | 'memory' | 'spot' | 'stars';
 type Info = { name: string; art: string; enabled?: boolean };
 type RouteMap = {
@@ -141,12 +143,31 @@ const escape = (value: unknown): string =>
 				c
 			] as string)
 	);
-const image = (id: string): string =>
-	id.startsWith('u_')
-		? '/panorama/spellen/spelfoto/' + id.slice(2)
-		: id.startsWith('f0')
-		? '/images/lustrum13/fotos/' + id + '.webp'
-		: '/images/lustrum13/expeditie/' + id + '.svg';
+const image = (id: string): string => {
+	if (/^u_[a-f0-9]{40}$/.test(id))
+		return '/panorama/spellen/spelfoto/' + encodeURIComponent(id.slice(2));
+	if (/^f0[1-8]$/.test(id))
+		return '/images/lustrum13/fotos/' + encodeURIComponent(id) + '.webp';
+	const landscapes = [
+		'bos',
+		'meer',
+		'nacht',
+		'kloof',
+		'sneeuw',
+		'top',
+		'heide',
+		'waterval',
+		'duinen',
+		'vulkaan',
+		'noorderlicht',
+		'archipel',
+	];
+	return (
+		'/images/lustrum13/expeditie/' +
+		(landscapes.includes(id) ? encodeURIComponent(id) : 'meer') +
+		'.svg'
+	);
+};
 const time = (ms: number): string =>
 	`${Math.floor(ms / 60000)}:${String(Math.floor(ms / 1000) % 60).padStart(
 		2,
@@ -809,12 +830,13 @@ function resultScreen(): string {
 function render(): void {
 	if (!root) return;
 	clearInterval(watchTimer);
-	root.innerHTML =
+	root.innerHTML = DOMPurify.sanitize(
 		screen === 'play'
 			? play()
 			: screen === 'result'
 			? resultScreen()
-			: dashboard();
+			: dashboard()
+	);
 	if (screen === 'play' && data.state?.active?.kind === 'route') updateRoute();
 	if (
 		screen === 'play' &&
@@ -955,7 +977,7 @@ let pictureSending: Promise<void> | null = null;
 let pictureTimer: number;
 async function flushPictures(): Promise<void> {
 	clearTimeout(pictureTimer);
-	if (pictureSending) {
+	if (pictureSending !== null) {
 		await pictureSending;
 		if (pictureOps.length) await flushPictures();
 		return;
