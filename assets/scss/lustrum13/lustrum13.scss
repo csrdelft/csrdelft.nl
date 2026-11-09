@@ -227,28 +227,28 @@ footer a {
 	text-decoration: none;
 }
 .programme-days details summary::-webkit-details-marker {
-    display: none;
+	display: none;
 }
 .programme-days details > p {
-    padding-left: 3rem;
+	padding-left: 3rem;
 }
 
 .programme-days details summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    list-style: none;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	cursor: pointer;
+	list-style: none;
 }
 
 .programme-days .dropdown-icon {
-    margin-left: auto;
-    flex-shrink: 0;
-    transition: transform 0.25s ease;
+	margin-left: auto;
+	flex-shrink: 0;
+	transition: transform 0.25s ease;
 }
 
 .programme-days details[open] .dropdown-icon {
-    transform: rotate(180deg);
+	transform: rotate(180deg);
 }
 .ketzer > div {
 	border-radius: var(--bs-border-radius);
@@ -256,7 +256,7 @@ footer a {
 	border: 1px solid rgba($olive, 0.2);
 	padding: 15px 20px;
 	color: $brown;
-	box-shadow: 0 4px 12px rgba($brown, 0.10);
+	box-shadow: 0 4px 12px rgba($brown, 0.1);
 
 	li {
 		border: none;
