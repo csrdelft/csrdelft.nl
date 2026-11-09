@@ -157,25 +157,25 @@ h2 {
 	gap: clamp(35px, 5vw, 85px);
 }
 .trailer {
-    padding-bottom: 2rem;
-    background: #444f1b;
-    color: #f4f0df;
+	padding-bottom: 2rem;
+	background: #444f1b;
+	color: #f4f0df;
 }
 .trailer-video {
-    width: min(100%, 1050px);
-    margin: 0 auto;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-    border: 1px solid rgb(244 240 223 / 25%);
-    border-radius: 4px;
-    box-shadow: 0 24px 60px rgb(0 0 0 / 25%);
-    background: #222;
+	width: min(100%, 1050px);
+	margin: 0 auto;
+	aspect-ratio: 16 / 9;
+	overflow: hidden;
+	border: 1px solid rgb(244 240 223 / 25%);
+	border-radius: 4px;
+	box-shadow: 0 24px 60px rgb(0 0 0 / 25%);
+	background: #222;
 }
 .trailer-video iframe {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border: 0;
+	display: block;
+	width: 100%;
+	height: 100%;
+	border: 0;
 }
 .nature-poster {
 	margin: 0;
@@ -282,6 +282,19 @@ footer a {
 
 	li {
 		border: none;
+	}
+	img.pasfoto {
+		height: 2.5rem;
+		-o-object-fit: cover;
+		object-fit: cover;
+		width: 2.5rem;
+	}
+	.lidLink:hover img {
+		box-shadow: 0 0 5px #000;
+		transform: scale(1.33);
+	}
+	.lidLink img {
+		transition: all 0.4s ease-out;
 	}
 }
 @media (min-width: 1700px) {
