@@ -1,3 +1,10 @@
+@import "../_defaults";
+@import "../fonts";
+
+@import "~bootstrap/scss/bootstrap";
+
+@import "../_bbcode.scss";
+
 @font-face {
 	font-family: "Panorama Sans";
 	src: url("../../fonts/SourceSansPro-Regular.otf") format("opentype");
@@ -218,6 +225,42 @@ footer {
 }
 footer a {
 	text-decoration: none;
+}
+.programme-days details summary::-webkit-details-marker {
+	display: none;
+}
+.programme-days details > p {
+	padding-left: 3rem;
+}
+
+.programme-days details summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	cursor: pointer;
+	list-style: none;
+}
+
+.programme-days .dropdown-icon {
+	margin-left: auto;
+	flex-shrink: 0;
+	transition: transform 0.25s ease;
+}
+
+.programme-days details[open] .dropdown-icon {
+	transform: rotate(180deg);
+}
+.ketzer > div {
+	border-radius: var(--bs-border-radius);
+	background: rgba($olive, 0.08);
+	border: 1px solid rgba($olive, 0.2);
+	padding: 15px 20px;
+	color: $brown;
+	box-shadow: 0 4px 12px rgba($brown, 0.1);
+
+	li {
+		border: none;
+	}
 }
 @media (min-width: 1700px) {
 	.themaposter img {

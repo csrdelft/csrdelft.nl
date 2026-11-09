@@ -6,8 +6,9 @@
  <meta name="description" content="Panorama, het XIIIde lustrum der C.S.R. Delft. Puur natuur: 16 tot en met 21 november 2026.">
  <meta name="theme-color" content="#444f1b">
  <title>Panorama · Lustrum XIII · C.S.R. Delft</title>
+ {{ css_asset('common') }}
+ {{ include('common/sentry.html.twig') }}
  {{ css_asset('lustrum13') }}
- {% include 'common/sentry.html.twig' %}
 </head>
 <body id="panorama">
  <a class="skip-link" href="#programma">Direct naar het programma</a>
@@ -33,8 +34,7 @@
     </figure>
     <section class="programme" id="programma" aria-labelledby="programme-title">
      <h2 id="programme-title">Programma</h2>
-     {% include 'lustrum13/programma.html.twig' %}
-     <a class="print-link" href="/images/lustrum13/puur-natuur-programma.webp" target="_blank" rel="noopener">Bekijk de programmaposter <span aria-hidden="true">↗</span></a>
+     {{ include('lustrum13/programma.html.twig') }}
     </section>
    </div>
   </section>
