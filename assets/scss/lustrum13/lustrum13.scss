@@ -226,11 +226,6 @@ footer {
 footer a {
 	text-decoration: none;
 }
-.programme-days details summary {
-    cursor: pointer;
-    list-style: none;
-}
-
 .programme-days details summary::-webkit-details-marker {
     display: none;
 }
@@ -246,10 +241,6 @@ footer a {
     list-style: none;
 }
 
-.programme-days details summary::-webkit-details-marker {
-    display: none;
-}
-
 .programme-days .dropdown-icon {
     margin-left: auto;
     flex-shrink: 0;
@@ -260,7 +251,7 @@ footer a {
     transform: rotate(180deg);
 }
 .ketzer > div {
-	border-radius: var(--bs-border-radius) !important;
+	border-radius: var(--bs-border-radius);
 	background: rgba($olive, 0.08);
 	border: 1px solid rgba($olive, 0.2);
 	padding: 15px 20px;
