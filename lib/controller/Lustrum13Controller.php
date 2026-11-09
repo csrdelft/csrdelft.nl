@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class Lustrum13Controller extends AbstractController
 {
     /**
+     * @return Response
      * @Auth(P_LOGGED_IN)
      */
     #[Route(path: '/panorama')]

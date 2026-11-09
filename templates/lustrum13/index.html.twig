@@ -6,9 +6,11 @@
  <meta name="description" content="Panorama, het XIIIde lustrum der C.S.R. Delft. Puur natuur: 16 tot en met 21 november 2026.">
  <meta name="theme-color" content="#444f1b">
  <title>Panorama · Lustrum XIII · C.S.R. Delft</title>
+ {{ csrfMetaTag() }}
+ {{ js_asset('app') }}
  {{ css_asset('common') }}
- {{ include('common/sentry.html.twig') }}
  {{ css_asset('lustrum13') }}
+ {{ include('common/sentry.html.twig') }}
 </head>
 <body id="panorama">
  <a class="skip-link" href="#programma">Direct naar het programma</a>
@@ -26,7 +28,18 @@
    </a>
    <a class="poster-link" href="#puur-natuur">Puur natuur · 16–21 november 2026 <span aria-hidden="true">↓</span></a>
   </section>
-  <section class="nature" id="puur-natuur" aria-labelledby="nature-title">
+  <section class="trailer" aria-labelledby="trailer-title">
+    <div class="trailer-video">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/hwJ7EL2VVrs"
+        title="Panorama XIII — Lustrum C.S.R. Delft"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </section>  <section class="nature" id="puur-natuur" aria-labelledby="nature-title">
    <div class="section-heading"><p>Panorama Natura</p><h2 id="nature-title">Puur natuur</h2><p>16–21 november 2026</p></div>
    <div class="programme-layout">
     <figure class="nature-poster">
