@@ -1,3 +1,11 @@
+@import "../_defaults";
+@import "../fonts";
+
+@import "~bootstrap/scss/bootstrap";
+
+@import "../_common.scss";
+@import "../_bbcode.scss";
+
 @font-face {
 	font-family: "Panorama Sans";
 	src: url("../../fonts/SourceSansPro-Regular.otf") format("opentype");
@@ -141,12 +149,34 @@ nav > div {
 h2 {
 	font: 700 clamp(40px, 5vw, 72px) / 1.1 "Panorama Serif", Georgia, serif;
 	margin: 10px 0;
+	text-align: center;
 }
 .programme-layout {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 	align-items: start;
 	gap: clamp(35px, 5vw, 85px);
+}
+.trailer {
+	padding-bottom: 2rem;
+	background: #444f1b;
+	color: #f4f0df;
+}
+.trailer-video {
+	width: min(100%, 1050px);
+	margin: 0 auto;
+	aspect-ratio: 16 / 9;
+	overflow: hidden;
+	border: 1px solid rgb(244 240 223 / 25%);
+	border-radius: 4px;
+	box-shadow: 0 24px 60px rgb(0 0 0 / 25%);
+	background: #222;
+}
+.trailer-video iframe {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border: 0;
 }
 .nature-poster {
 	margin: 0;
@@ -218,6 +248,58 @@ footer {
 }
 footer a {
 	text-decoration: none;
+}
+.programme-days details summary::-webkit-details-marker {
+	display: none;
+}
+.programme-days details > p {
+	padding-left: 3rem;
+}
+
+.programme-days details summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	cursor: pointer;
+	list-style: none;
+}
+
+.programme-days .dropdown-icon {
+	margin-left: auto;
+	flex-shrink: 0;
+	transition: transform 0.25s ease;
+}
+
+.programme-days details[open] .dropdown-icon {
+	transform: rotate(180deg);
+}
+.ketzer > div {
+	border-radius: var(--bs-border-radius);
+	background: rgba($olive, 0.08);
+	border: 1px solid rgba($olive, 0.2);
+	padding: 15px 20px;
+	color: $brown;
+	box-shadow: 0 4px 12px rgba($brown, 0.1);
+
+	li {
+		border: none;
+	}
+	img.pasfoto {
+		height: 2.5rem;
+		-o-object-fit: cover;
+		object-fit: cover;
+		width: 2.5rem;
+	}
+	.lidLink:hover img {
+		box-shadow: 0 0 5px #000;
+		transform: scale(1.33);
+	}
+	.lidLink img {
+		transition: all 0.4s ease-out;
+	}
+	table {
+		--bs-table-bg: rgba(olive, 0.08);
+	}
 }
 @media (min-width: 1700px) {
 	.themaposter img {
