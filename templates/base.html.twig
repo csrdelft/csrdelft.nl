@@ -49,7 +49,7 @@
 	class="{% block bodyClass %}{% endblock %}" {% block bodyArgs %}{% endblock %}>
 {{ js_asset('app') }}
 {% block body %}
-	{{ include('menu/main.html.twig', {root: get_menu('main'), personal: get_menu('Personal'), favorieten: get_menu(app.user.uid)}) }}
+	{{ include('menu/main.html.twig', {root: get_menu('main'), persoonlijk: get_menu('Personal'), favorieten: get_menu(app.user.uid)}) }}
 	{% block body_inner %}
 		<main class="container-fluid p-3 min-vh-100">
 			<div class="container">

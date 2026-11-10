@@ -4,6 +4,19 @@
 
 {% block body_inner %}
 
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			if (!document.documentElement.hasAttribute('data-sponsorkliks-extension')) {
+				document.getElementById('sponsorkliks-warning').style.display = 'block';
+			}
+		});
+	</script>
+
+	<div id="sponsorkliks-warning" class="w-100 p-3 bg-warning text-dark text-center" style="display: none;">
+		<strong>SponsorKliks extensie niet gevonden!</strong>
+		<p class="mb-2">Installeer of activeer de SponsorKliks-extensie om verder te gaan.</p>
+	</div>
+
 	<main class="container-fluid p-3 min-vh-100">
 		{% include 'melding.html.twig' %}
 		<div class="cd-page-content voorpagina container px-0 ratio ratio-3x2">
@@ -18,7 +31,7 @@
 				<div class="cell cell-overig">{{ render(path('csrdelft_voorpagina_overig')) }}</div>
 			</div>
 		</div>
-		<div class="container p-0 p-md-3 mt-5 mt-md-0">
+		<div class="container p-0 p-md-3 mt-3 mt-md-0">
 			<div class="cell cell-advertenties gap-2">
 				{{ cms('voorpagina_advertenties') }}
 			</div>

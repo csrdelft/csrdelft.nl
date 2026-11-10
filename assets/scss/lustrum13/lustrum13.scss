@@ -149,6 +149,7 @@ nav > div {
 h2 {
 	font: 700 clamp(40px, 5vw, 72px) / 1.1 "Panorama Serif", Georgia, serif;
 	margin: 10px 0;
+	text-align: center;
 }
 .programme-layout {
 	display: grid;
@@ -295,6 +296,9 @@ footer a {
 	}
 	.lidLink img {
 		transition: all 0.4s ease-out;
+	}
+	table {
+    --bs-table-bg: rgba(olive, 0.08) !important;
 	}
 }
 @media (min-width: 1700px) {
