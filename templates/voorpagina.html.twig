@@ -4,19 +4,6 @@
 
 {% block body_inner %}
 
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-			if (!document.documentElement.hasAttribute('data-sponsorkliks-extension')) {
-				document.getElementById('sponsorkliks-warning').style.display = 'block';
-			}
-		});
-	</script>
-
-	<div id="sponsorkliks-warning" class="w-100 p-3 bg-warning text-dark text-center" style="display: none;">
-		<strong>SponsorKliks extensie niet gevonden!</strong>
-		<p class="mb-2">Installeer of activeer de SponsorKliks-extensie om verder te gaan.</p>
-	</div>
-
 	<main class="container-fluid p-3 min-vh-100">
 		{% include 'melding.html.twig' %}
 		<div class="cd-page-content voorpagina container px-0 ratio ratio-3x2">
