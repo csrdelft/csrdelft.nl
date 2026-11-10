@@ -24,11 +24,10 @@ use Twig\Environment;
 class LoginForm implements FormulierTypeInterface
 {
 	public function __construct(
-		private readonly UrlGeneratorInterface     $urlGenerator,
+		private readonly UrlGeneratorInterface $urlGenerator,
 		private readonly CsrfTokenManagerInterface $csrfTokenManager,
-		private readonly Environment               $twig
-	)
-	{
+		private readonly Environment $twig
+	) {
 	}
 
 	/**
@@ -38,12 +37,15 @@ class LoginForm implements FormulierTypeInterface
 	 * @param $lastUsername
 	 * @return string
 	 */
-	private function formatError(AuthenticationException $exception, $lastUsername): string
-	{
+	private function formatError(
+		AuthenticationException $exception,
+		$lastUsername
+	): string {
 		return match ($exception->getMessageKey()) {
-			'Username could not be found.' => "Gebruiker $lastUsername niet gevonden.",
-			'Invalid credentials.' => "Onjuist wachtwoord.",
-			default => 'Er was een fout'
+			'Username could not be found.'
+				=> "Gebruiker $lastUsername niet gevonden.",
+			'Invalid credentials.' => 'Onjuist wachtwoord.',
+			default => 'Er was een fout',
 		};
 	}
 
@@ -55,10 +57,9 @@ class LoginForm implements FormulierTypeInterface
 
 	public function createFormulier(
 		FormulierBuilder $builder,
-										 $data,
-										 $options = []
-	): void
-	{
+		$data,
+		$options = []
+	): void {
 		$builder->setAction($this->urlGenerator->generate('app_login_check'));
 
 		$builder->setFormId('loginform');

@@ -54,7 +54,11 @@ class GroepView implements FormElement, ToResponse
 					->get('doctrine.orm.entity_manager')
 					->getRepository($this->groep::class);
 				$statistiek = $repository->getStatistieken($this->groep);
-				$this->leden = new GroepStatistiekView($twig, $this->groep, $statistiek);
+				$this->leden = new GroepStatistiekView(
+					$twig,
+					$this->groep,
+					$statistiek
+				);
 				break;
 
 			case GroepTab::Emails:

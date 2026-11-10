@@ -20,7 +20,7 @@ class NodeOndervereniging implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbOndervereniging) {
+		if (!($node instanceof BbOndervereniging)) {
 			throw new \InvalidArgumentException();
 		}
 

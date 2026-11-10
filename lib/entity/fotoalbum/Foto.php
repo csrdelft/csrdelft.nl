@@ -90,20 +90,12 @@ class Foto extends Afbeelding
 
 	public function getThumbPath()
 	{
-		return PathUtil::join_paths(
-			THUMBS_PATH,
-			$this->subdir,
-			$this->filename
-		);
+		return PathUtil::join_paths(THUMBS_PATH, $this->subdir, $this->filename);
 	}
 
 	public function getResizedPath()
 	{
-		return PathUtil::join_paths(
-			RESIZED_PATH,
-			$this->subdir,
-			$this->filename
-		);
+		return PathUtil::join_paths(RESIZED_PATH, $this->subdir, $this->filename);
 	}
 
 	public function getAlbumUrl()
@@ -161,10 +153,7 @@ class Foto extends Afbeelding
 
 	public function createThumb()
 	{
-		$path = PathUtil::join_paths(
-			THUMBS_PATH,
-			$this->subdir,
-		);
+		$path = PathUtil::join_paths(THUMBS_PATH, $this->subdir);
 		if (!file_exists($path)) {
 			mkdir($path, 0755, true);
 		}
@@ -190,10 +179,7 @@ class Foto extends Afbeelding
 
 	public function createResized()
 	{
-		$path = PathUtil::join_paths(
-			RESIZED_PATH,
-			$this->subdir,
-		);
+		$path = PathUtil::join_paths(RESIZED_PATH, $this->subdir);
 		if (!file_exists($path)) {
 			mkdir($path, 0755, true);
 		}

@@ -20,7 +20,7 @@ class NodeAudio implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbAudio) {
+		if (!($node instanceof BbAudio)) {
 			throw new \InvalidArgumentException();
 		}
 		return [

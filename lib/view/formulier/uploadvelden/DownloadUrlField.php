@@ -84,7 +84,7 @@ class DownloadUrlField extends UrlField
 		} elseif (!UrlUtil::url_like($this->value)) {
 			$this->error = 'Ongeldige url';
 		} elseif (
-			!$this->model instanceof Bestand or
+			!($this->model instanceof Bestand) or
 			!$this->model->exists() or
 			empty($this->model->filesize)
 		) {

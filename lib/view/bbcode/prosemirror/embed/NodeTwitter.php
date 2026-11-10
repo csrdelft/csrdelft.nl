@@ -20,7 +20,7 @@ class NodeTwitter implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbTwitter) {
+		if (!($node instanceof BbTwitter)) {
 			throw new \InvalidArgumentException();
 		}
 

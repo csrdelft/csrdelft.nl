@@ -37,9 +37,9 @@ class LichtingenRepository extends GroepRepository
 	}
 
 	/**
-	* @inheritDoc
-	* @return Lichting[]
-	*/
+	 * @inheritDoc
+	 * @return Lichting[]
+	 */
 	public function findBy(
 		array $criteria,
 		array $orderBy = null,

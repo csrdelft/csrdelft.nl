@@ -9,22 +9,25 @@ use Twig\Environment;
 
 class DeclaratiePDFGenerator
 {
-	public function __construct(
-		private readonly Environment $twig
-	) {
+	public function __construct(private readonly Environment $twig)
+	{
 	}
 
 	/**
 	 * Helperfunctie om een nieuw tc-lib-pdf instance te krijgen met juiste instellingen
 	 * @throws \Exception Als de configuratie incorrect is of de helvetica-font niet geïmporteerd kan worden
 	 */
-	private function nieuwPdf(string $titel): Tcpdf {
+	private function nieuwPdf(string $titel): Tcpdf
+	{
 		$pdf = new Tcpdf(
 			fileOptions: [
 				// geef tcpdf toegang tot bonnetjes van decla's en de (in CI) gecompilede fonts.
 				'allowedPaths' => [
 					realpath(dirname(__DIR__, 2) . '/data/declaraties'),
-					realpath(dirname(__DIR__, 2) . '/vendor/tecnickcom/tc-lib-pdf-font/target/fonts'),
+					realpath(
+						dirname(__DIR__, 2) .
+							'/vendor/tecnickcom/tc-lib-pdf-font/target/fonts'
+					),
 				],
 			]
 		);
@@ -96,7 +99,7 @@ class DeclaratiePDFGenerator
 			html: $declaratieInhoud,
 			posx: $marge,
 			posy: 20,
-			width: $pagina['width'] - (2 * $marge),
+			width: $pagina['width'] - 2 * $marge
 		);
 
 		return $pdf->getOutPDFString();
@@ -114,7 +117,9 @@ class DeclaratiePDFGenerator
 		if ($bon->isPDF()) {
 			$pdf_file = file_get_contents($filename);
 			if (!$pdf_file) {
-				throw new \Exception("Gelinkte PDF-bestand $filename van declaratiebon {$bon->getId()} kan niet worden geopend.");
+				throw new \Exception(
+					"Gelinkte PDF-bestand $filename van declaratiebon {$bon->getId()} kan niet worden geopend."
+				);
 			}
 			return $pdf_file;
 		}
@@ -148,7 +153,7 @@ class DeclaratiePDFGenerator
 			ypos: 0,
 			width: $imgWidth,
 			height: $imgHeight,
-			pageheight: $pagina['height'],
+			pageheight: $pagina['height']
 		);
 
 		$pdf->page->addContent($plaatjeContent);
@@ -172,14 +177,18 @@ class DeclaratiePDFGenerator
 		$pdf = $this->nieuwPdf($declaratie->getTitel());
 
 		// Voeg info-pagina toe
-		$infoSourceId = $pdf->setImportSourceData($this->genereerDeclaratieInfo($declaratie));
+		$infoSourceId = $pdf->setImportSourceData(
+			$this->genereerDeclaratieInfo($declaratie)
+		);
 		$pdf->appendDocument($infoSourceId);
 
 		// Voeg alle pagina's met bonnetjes toe
-			foreach ($declaratie->getBonnen() as $declaratieBon) {
-				$bonSourceId = $pdf->setImportSourceData($this->genereerBon($declaratieBon));
-				$pdf->appendDocument($bonSourceId);
-			}
+		foreach ($declaratie->getBonnen() as $declaratieBon) {
+			$bonSourceId = $pdf->setImportSourceData(
+				$this->genereerBon($declaratieBon)
+			);
+			$pdf->appendDocument($bonSourceId);
+		}
 
 		$merged = $pdf->getOutPDFString();
 		return ['pdf', $merged];

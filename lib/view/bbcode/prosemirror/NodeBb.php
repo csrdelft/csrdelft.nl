@@ -20,7 +20,7 @@ class NodeBb implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbBb) {
+		if (!($node instanceof BbBb)) {
 			throw new \InvalidArgumentException();
 		}
 		$content = $node->getChildren();

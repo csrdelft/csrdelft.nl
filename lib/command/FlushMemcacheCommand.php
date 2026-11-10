@@ -19,8 +19,10 @@ class FlushMemcacheCommand extends Command
 		parent::__construct();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
+	protected function execute(
+		InputInterface $input,
+		OutputInterface $output
+	): int {
 		if ($this->appCache == null) {
 			$output->writeln('Geen cache geinstalleerd');
 			return 1;

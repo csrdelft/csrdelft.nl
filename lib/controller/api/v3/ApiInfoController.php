@@ -21,7 +21,7 @@ class ApiInfoController extends AbstractController
 	public function profiel(Security $security): JsonResponse
 	{
 		$token = $security->getToken();
-		if (!$token instanceof OAuth2Token) {
+		if (!($token instanceof OAuth2Token)) {
 			throw new BadRequestHttpException();
 		}
 
