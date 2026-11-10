@@ -17,7 +17,7 @@ const nl = (number: number, index: number): [string, string] => {
 		['1 jaar geleden', 'over 1 jaar'],
 		['%s jaar geleden', 'over %s jaar'],
 	][index] as [string, string];
-}
+};
 
 register('nl', nl);
 
