@@ -83,7 +83,7 @@
 		"@sentry/tracing": "^7.29.0",
 		"@types/orderedmap": "^2.0.0",
 		"@vue/runtime-dom": "^3.2.47",
-		"axios": "^0.33",
+		"axios": "^0.34",
 		"bootstrap": "^5.3",
 		"chart.js": "^2.7.3",
 		"corejs-typeahead": "^1.2.1",
