@@ -114,9 +114,10 @@ class LidField extends AutocompleteField
 
 	public function getJavascript()
 	{
-		return /** @lang JavaScript */
+		return
+			/** @lang JavaScript */
 			parent::getJavascript() .
-				<<<JS
+			<<<JS
 
 var preview{$this->getId()} = function() {
 	var val = $('#{$this->getId()}').val();

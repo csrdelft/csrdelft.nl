@@ -22,7 +22,7 @@ final class DateUtil
 	 */
 	public static function reldate($datum)
 	{
-		if (!($datum instanceof DateTimeImmutable)) {
+		if (!$datum instanceof DateTimeImmutable) {
 			if ($datum instanceof DateTimeInterface) {
 				$datum = DateTimeImmutable::createFromInterface($datum);
 			} else {

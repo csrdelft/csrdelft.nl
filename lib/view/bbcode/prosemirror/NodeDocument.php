@@ -19,7 +19,7 @@ class NodeDocument implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!($node instanceof BbDocument)) {
+		if (!$node instanceof BbDocument) {
 			throw new \InvalidArgumentException();
 		}
 

@@ -86,7 +86,13 @@ class LoginController extends AbstractController
 	/**
 	 * @Auth(P_PUBLIC)
 	 */
-	#[Route(path: '/login_check', name: 'app_login_check', methods: ['POST'])]
+	#[
+		Route(
+			path: '/login_check',
+			name: 'app_login_check',
+			methods: ['POST']
+		)
+	]
 	public function login_check(): never
 	{
 		throw new LogicException(

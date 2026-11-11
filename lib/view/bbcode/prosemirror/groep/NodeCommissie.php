@@ -20,7 +20,7 @@ class NodeCommissie implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!($node instanceof BbCommissie)) {
+		if (!$node instanceof BbCommissie) {
 			throw new \InvalidArgumentException();
 		}
 

@@ -26,7 +26,7 @@ class MarkLink implements Mark
 
 	public function getData(BbNode $node)
 	{
-		if (!($node instanceof BbUrl)) {
+		if (!$node instanceof BbUrl) {
 			throw new \InvalidArgumentException();
 		}
 

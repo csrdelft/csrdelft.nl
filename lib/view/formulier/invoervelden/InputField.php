@@ -246,7 +246,7 @@ abstract class InputField implements FormElement, Validator
 							)
 					);
 				}
-			} elseif (!($this instanceof BestandBehouden)) {
+			} elseif (!$this instanceof BestandBehouden) {
 				throw new CsrGebruikerException(
 					'Bestandsnaam al in gebruik: ' .
 						htmlspecialchars(PathUtil::join_paths($directory, $filename) ?? '')

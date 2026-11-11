@@ -19,7 +19,7 @@ class NodeHeader implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!($node instanceof BbHeading)) {
+		if (!$node instanceof BbHeading) {
 			throw new \InvalidArgumentException();
 		}
 

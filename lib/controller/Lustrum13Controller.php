@@ -8,13 +8,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class Lustrum13Controller extends AbstractController
 {
-	/**
-	 * @return Response
-	 * @Auth(P_LOGGED_IN)
-	 */
-	#[Route(path: '/panorama')]
-	public function lustrum(): Response
-	{
-		return $this->render('lustrum13/index.html.twig');
-	}
+    /**
+     * @return Response
+     * @Auth(P_LOGGED_IN)
+     */
+    #[Route(path: '/panorama')]
+    public function lustrum(): Response
+    {
+        return $this->render('lustrum13/index.html.twig');
+    }
 }

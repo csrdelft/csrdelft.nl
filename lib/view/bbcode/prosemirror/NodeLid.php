@@ -20,7 +20,7 @@ class NodeLid implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!($node instanceof BbLid)) {
+		if (!$node instanceof BbLid) {
 			throw new \InvalidArgumentException();
 		}
 

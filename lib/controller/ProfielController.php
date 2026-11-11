@@ -401,12 +401,12 @@ class ProfielController extends AbstractController
 			$values = $form->getValues();
 
 			$payload = [
-				'voornaam' => $values['voornaam'],
-				'tussenvoegsel' => $values['tussenvoegsel'],
-				'achternaam' => $values['achternaam'],
-				'email' => $values['email'],
-				'mobiel' => $values['mobiel'],
-				'exp' => time() + 7 * 24 * 60 * 60, // 1 week
+				'voornaam'       => $values['voornaam'],
+				'tussenvoegsel'  => $values['tussenvoegsel'],
+				'achternaam'     => $values['achternaam'],
+				'email'          => $values['email'],
+				'mobiel'         => $values['mobiel'],
+				'exp'            => time() + 7 * 24 * 60 * 60 // 1 week
 			];
 
 			$jwt = JWT::encode($payload, $_ENV['INSCHRIJFLINK_SECRET'], 'HS256');
@@ -423,7 +423,7 @@ class ProfielController extends AbstractController
 
 		return $this->render('extern-inschrijven/link.html.twig', [
 			'link' => $link,
-			'qrcode' => (new QRCode())->render($link),
+			'qrcode' => (new QRCode)->render($link),
 			'form' => $form,
 		]);
 	}
@@ -471,21 +471,18 @@ class ProfielController extends AbstractController
 		}
 
 		try {
-			$decoded = (array) JWT::decode(
-				$pre,
-				new Key($_ENV['INSCHRIJFLINK_SECRET'], 'HS256')
-			);
+			$decoded = (array) JWT::decode($pre, new Key($_ENV['INSCHRIJFLINK_SECRET'], 'HS256'));
 		} catch (ExpiredException $e) {
 			throw new NotFoundHttpException('Link expired');
 		} catch (Exception $e) {
 			throw new NotFoundHttpException('Invalid link');
 		}
 
-		$profiel->voornaam = $decoded['voornaam'] ?? '';
+		$profiel->voornaam      = $decoded['voornaam'] ?? '';
 		$profiel->tussenvoegsel = $decoded['tussenvoegsel'] ?? '';
-		$profiel->achternaam = $decoded['achternaam'] ?? '';
-		$profiel->email = $decoded['email'] ?? '';
-		$profiel->mobiel = $decoded['mobiel'] ?? '';
+		$profiel->achternaam    = $decoded['achternaam'] ?? '';
+		$profiel->email         = $decoded['email'] ?? '';
+		$profiel->mobiel        = $decoded['mobiel'] ?? '';
 
 		$form = new ExternProfielForm($profiel, '/inschrijven/' . $pre);
 		if ($form->validate()) {
@@ -499,9 +496,9 @@ class ProfielController extends AbstractController
 					array_push(
 						$changeEntry->entries,
 						...$this->lidStatusService->wijzig_lidstatus(
-							$profiel,
-							$change->old_value
-						)
+						$profiel,
+						$change->old_value
+					)
 					);
 				}
 			}
