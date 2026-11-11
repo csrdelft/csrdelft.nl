@@ -40,7 +40,7 @@ class ProfielVoter extends Voter
 	}
 	protected function supports(string $attribute, mixed $subject): bool
 	{
-		if (!$subject instanceof Profiel) {
+		if (!($subject instanceof Profiel)) {
 			return false;
 		}
 		$relevanteAttributes = $this->lidToestemming->getRelevantToestemmingCategories(

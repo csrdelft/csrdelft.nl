@@ -19,7 +19,7 @@ class NodeOrderedList implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbOrderedList) {
+		if (!($node instanceof BbOrderedList)) {
 			throw new \InvalidArgumentException();
 		}
 

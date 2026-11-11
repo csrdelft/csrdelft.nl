@@ -20,7 +20,7 @@ class NodeBestuur implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbBestuur) {
+		if (!($node instanceof BbBestuur)) {
 			throw new \InvalidArgumentException();
 		}
 

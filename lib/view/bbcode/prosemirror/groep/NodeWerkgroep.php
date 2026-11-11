@@ -20,7 +20,7 @@ class NodeWerkgroep implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbWerkgroep) {
+		if (!($node instanceof BbWerkgroep)) {
 			throw new \InvalidArgumentException();
 		}
 

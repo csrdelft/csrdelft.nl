@@ -232,10 +232,9 @@ class StreeplijstController extends AbstractController
 			$namen = [];
 
 			foreach ($profielen as $profiel) {
-				if ($profiel->verticale !== null){
-					$namen[] = $profiel->uid . "|" . $profiel->getNaam('streeplijst')  ;
+				if ($profiel->verticale !== null) {
+					$namen[] = $profiel->uid . '|' . $profiel->getNaam('streeplijst');
 				}
-
 			}
 			$stringNamen = implode('; ', $namen);
 

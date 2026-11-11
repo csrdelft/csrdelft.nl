@@ -20,7 +20,7 @@ class NodeActiviteit implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbActiviteit) {
+		if (!($node instanceof BbActiviteit)) {
 			throw new \InvalidArgumentException();
 		}
 

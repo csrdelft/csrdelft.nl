@@ -14,7 +14,7 @@ class NodeImage implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbImg) {
+		if (!($node instanceof BbImg)) {
 			throw new \InvalidArgumentException();
 		}
 

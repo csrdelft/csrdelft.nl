@@ -22,9 +22,9 @@ class DataTableEntryNormalizer implements ContextAwareNormalizerInterface
 	}
 
 	/**
-	* @inheritDoc
-	* @return array|string|int|float|bool|\ArrayObject|null
-	*/
+	 * @inheritDoc
+	 * @return array|string|int|float|bool|\ArrayObject|null
+	 */
 	public function normalize($object, string $format = null, array $context = [])
 	{
 		$metadata = $this->entityManager->getClassMetadata($object::class);

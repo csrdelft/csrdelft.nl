@@ -83,6 +83,13 @@ class LidStatusService
 		) {
 			$this->notifyFisci($profiel, $oudestatus);
 			$this->notifyBibliothecaris($profiel, $oudestatus);
+			$profiel->lidafdatum = new DateTime();
+
+			$changes[] = new ProfielLogValueChange(
+				$change->lidafdatum,
+				$change->lidafdatum,
+				$change->lidafdatum
+			);
 		}
 		return array_merge($changes, $this->verwijderVelden($profiel));
 	}

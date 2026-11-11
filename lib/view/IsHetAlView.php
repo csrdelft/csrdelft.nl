@@ -50,13 +50,16 @@ class IsHetAlView implements View
 	) {
 		$session =
 			$requestStack->getMainRequest() == null
-			? new Session()
-			: $requestStack->getMainRequest()->getSession();
+				? new Session()
+				: $requestStack->getMainRequest()->getSession();
 
 		// Een mysterieuze aftel...
-		$countdown = $_ENV["COUNTDOWN"] ?? null;
+		$countdown = $_ENV['COUNTDOWN'] ?? null;
 		$countdown = is_string($countdown)
-			? \DateTimeImmutable::createFromFormat(\DateTimeInterface::RFC3339, $countdown)
+			? \DateTimeImmutable::createFromFormat(
+				\DateTimeInterface::RFC3339,
+				$countdown
+			)
 			: null;
 		$countdown = $countdown > new \DateTimeImmutable() ? $countdown : null;
 		if (null !== $countdown) {
@@ -92,7 +95,7 @@ class IsHetAlView implements View
 		switch ($this->model) {
 			case 'wist u dat':
 			case 'foutmelding':
-				// TODO: Weghalen dat sponsorkliks wordt laten zien
+			// TODO: Weghalen dat sponsorkliks wordt laten zien
 
 			case 'dies':
 				$jaar = date('Y');
@@ -138,8 +141,8 @@ class IsHetAlView implements View
 			case 'weekend':
 				$this->ja =
 					(date('w') == 0 or
-						date('w') > 5 or
-						date('w') == 5 and date('Hi') >= '1700');
+					date('w') > 5 or
+					date('w') == 5 and date('Hi') >= '1700');
 				break;
 
 			case 'studeren':
@@ -258,7 +261,9 @@ class IsHetAlView implements View
 				'!</p>';
 		} elseif ($this->ja instanceof \DateTimeImmutable) {
 			$html .=
-				'<script>(function(el){ var countDownDate = (new Date("' . $this->ja->format(\DateTimeInterface::RFC3339) . '")).getTime(), countDownEl = document.createElement("p");' .
+				'<script>(function(el){ var countDownDate = (new Date("' .
+				$this->ja->format(\DateTimeInterface::RFC3339) .
+				'")).getTime(), countDownEl = document.createElement("p");' .
 				'countDownEl.classList.add("text-uppercase","fw-bolder","fs-5","text-danger");' .
 				'var update=function() {' .
 				'var time = (new Date()).getTime();' .

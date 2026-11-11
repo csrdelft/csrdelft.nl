@@ -19,7 +19,7 @@ class NodeCitaat implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbCitaat) {
+		if (!($node instanceof BbCitaat)) {
 			throw new \InvalidArgumentException();
 		}
 

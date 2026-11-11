@@ -19,7 +19,7 @@ class NodePeiling implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbPeiling) {
+		if (!($node instanceof BbPeiling)) {
 			throw new \InvalidArgumentException();
 		}
 

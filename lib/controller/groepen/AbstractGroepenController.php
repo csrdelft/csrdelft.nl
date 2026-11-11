@@ -226,9 +226,9 @@ abstract class AbstractGroepenController extends AbstractController implements
 		$soortEnum = $this->repository->parseSoort($soort);
 
 		$paginaUrl = fn($paginaNummer) => $this->generateUrl(
-				'csrdelft_groep_' . $this->repository::getNaam() . '_overzicht',
-				['soort' => $soort, 'pagina' => $paginaNummer]
-			);
+			'csrdelft_groep_' . $this->repository::getNaam() . '_overzicht',
+			['soort' => $soort, 'pagina' => $paginaNummer]
+		);
 		// controleert rechten bekijken per groep
 		$body = new GroepenView(
 			$this->container->get('twig'),
@@ -603,7 +603,9 @@ abstract class AbstractGroepenController extends AbstractController implements
 			count($groep->getLeden()) === 0
 		) {
 			$old = $serializer->serialize($groep, 'json', [
-				AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => fn($obj) => $obj->id ?? '',
+				AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => fn(
+					$obj
+				) => $obj->id ?? '',
 				AbstractNormalizer::GROUPS => ['log'],
 			]);
 			$this->changeLogRepository->log($groep, 'delete', $old, null);
@@ -684,10 +686,7 @@ abstract class AbstractGroepenController extends AbstractController implements
 						$values['soort']
 					);
 					if ($nieuw) {
-						$response[] = new RemoveDataTableEntry(
-							$groep->id,
-							$groep::class
-						);
+						$response[] = new RemoveDataTableEntry($groep->id, $groep::class);
 						$response[] = $groep;
 					}
 				} elseif ($groep instanceof HeeftSoort) {

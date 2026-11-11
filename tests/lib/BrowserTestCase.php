@@ -120,9 +120,7 @@ class BrowserTestCase extends PantherTestCase
 	 */
 	protected function clickLink($linkText): Crawler
 	{
-		$webDriverElement = $this->client->getCrawler()->selectLink(
-			$linkText
-		);
+		$webDriverElement = $this->client->getCrawler()->selectLink($linkText);
 		$webDriverElement->getLocationOnScreenOnceScrolledIntoView();
 
 		return $this->client->click($webDriverElement->link());

@@ -20,7 +20,7 @@ class NodeSpotify implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbSpotify) {
+		if (!($node instanceof BbSpotify)) {
 			throw new \InvalidArgumentException();
 		}
 

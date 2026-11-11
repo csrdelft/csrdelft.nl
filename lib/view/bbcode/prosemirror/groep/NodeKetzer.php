@@ -20,7 +20,7 @@ class NodeKetzer implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbKetzer) {
+		if (!($node instanceof BbKetzer)) {
 			throw new \InvalidArgumentException();
 		}
 
