@@ -21,9 +21,7 @@ class LogProcessor implements ProcessorInterface
 		$request = $this->requestStack->getCurrentRequest();
 
 		if ($request) {
-			$record->extra['uid'] =
-				$this->security->getUser()?->getUserIdentifier() ??
-				LoginService::UID_EXTERN;
+			$record->extra['uid'] = $this->security->getUser()?->getUserIdentifier() ?? LoginService::UID_EXTERN;
 		}
 
 		return $record;

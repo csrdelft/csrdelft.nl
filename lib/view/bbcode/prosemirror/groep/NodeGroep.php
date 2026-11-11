@@ -20,7 +20,7 @@ class NodeGroep implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!($node instanceof BbGroep)) {
+		if (!$node instanceof BbGroep) {
 			throw new \InvalidArgumentException();
 		}
 

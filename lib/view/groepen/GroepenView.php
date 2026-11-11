@@ -51,11 +51,8 @@ class GroepenView implements View
 		private $geschiedenis = false
 	) {
 		// HACK: Voorkom gala DDOS door dies-activiteiten standaard als lijst te laten zien ipv profielfoto's
-		if (
-			$this->model instanceof BesturenRepository ||
-			($this->model instanceof ActiviteitenRepository &&
-				$this->soort === ActiviteitSoort::Dies())
-		) {
+		if ($this->model instanceof BesturenRepository
+			|| ($this->model instanceof ActiviteitenRepository && $this->soort === ActiviteitSoort::Dies())) {
 			$this->tab = GroepTab::Lijst;
 		} else {
 			$this->tab = GroepTab::Pasfotos;

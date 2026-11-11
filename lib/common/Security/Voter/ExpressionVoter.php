@@ -47,9 +47,11 @@ class ExpressionVoter extends Voter
 			$p = explode(',', $attribute);
 			$result = false;
 			foreach ($p as $perm) {
-				$result =
-					$result ||
-					$this->accessDecisionManager->decide($token, [$perm], $subject);
+				$result = $result || $this->accessDecisionManager->decide(
+					$token,
+					[$perm],
+					$subject
+				);
 			}
 		}
 		// AND
@@ -61,9 +63,11 @@ class ExpressionVoter extends Voter
 			$p = explode('+', $attribute);
 			$result = true;
 			foreach ($p as $perm) {
-				$result =
-					$result &&
-					$this->accessDecisionManager->decide($token, [$perm], $subject);
+				$result = $result && $this->accessDecisionManager->decide(
+					$token,
+					[$perm],
+					$subject
+				);
 			}
 		}
 		// OR (secondary)
@@ -76,9 +80,11 @@ class ExpressionVoter extends Voter
 			$p = explode('|', $attribute);
 			$result = false;
 			foreach ($p as $perm) {
-				$result =
-					$result ||
-					$this->accessDecisionManager->decide($token, [$perm], $subject);
+				$result =  $result || $this->accessDecisionManager->decide(
+					$token,
+					[$perm],
+					$subject
+				);
 			}
 		} else {
 			throw new CsrException('Rechten expressie bevat geen |,+');

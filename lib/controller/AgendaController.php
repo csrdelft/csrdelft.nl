@@ -307,7 +307,7 @@ class AgendaController extends AbstractController
 	{
 		$item = $this->getAgendaItemByUuid($uuid);
 
-		if (!$item || !($item instanceof AgendaItem)) {
+		if (!$item || !$item instanceof AgendaItem) {
 			throw new CsrGebruikerException('Kan alleen AgendaItem verplaatsen');
 		}
 

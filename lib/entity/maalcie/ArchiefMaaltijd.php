@@ -130,10 +130,10 @@ class ArchiefMaaltijd implements Agendeerbaar
 	{
 		return 'Maaltijd met ' . $this->getAantalAanmeldingen() . ' eters';
 	}
-	/**
-	 * @return int<0, max>
-	 */
-	public function getAantalAanmeldingen()
+    /**
+     * @return int<0, max>
+     */
+    public function getAantalAanmeldingen()
 	{
 		return substr_count($this->aanmeldingen, ',');
 	}

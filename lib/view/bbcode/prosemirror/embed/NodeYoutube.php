@@ -20,7 +20,7 @@ class NodeYoutube implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!($node instanceof BbYoutube)) {
+		if (!$node instanceof BbYoutube) {
 			throw new \InvalidArgumentException();
 		}
 		return [

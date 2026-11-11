@@ -20,7 +20,7 @@ class NodeWoonoord implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!($node instanceof BbWoonoord)) {
+		if (!$node instanceof BbWoonoord) {
 			throw new \InvalidArgumentException();
 		}
 

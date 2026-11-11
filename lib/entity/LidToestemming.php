@@ -22,12 +22,10 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 #[Entity(repositoryClass: LidToestemmingRepository::class)]
 #[Cache(usage: 'NONSTRICT_READ_WRITE')]
 #[Table('lidtoestemmingen')]
-#[
-	UniqueConstraint(
-		name: 'uid_module_instelling',
-		columns: ['uid', 'module', 'instelling']
-	)
-]
+#[UniqueConstraint(
+	name: 'uid_module_instelling',
+	columns: ['uid', 'module', 'instelling']
+)]
 class LidToestemming
 {
 	#[Column(type: 'integer'), Id, GeneratedValue]
@@ -44,7 +42,12 @@ class LidToestemming
 	/**
 	 * @var Profiel
 	 */
-	#[ManyToOne(targetEntity: Profiel::class, inversedBy: 'toestemmingen')]
+	#[
+		ManyToOne(
+			targetEntity: Profiel::class,
+			inversedBy: 'toestemmingen'
+		)
+	]
 	#[JoinColumn(name: 'uid', referencedColumnName: 'uid', nullable: false)]
 	public Profiel $profiel;
 

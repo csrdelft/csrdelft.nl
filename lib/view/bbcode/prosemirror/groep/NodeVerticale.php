@@ -20,7 +20,7 @@ class NodeVerticale implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!($node instanceof BbVerticale)) {
+		if (!$node instanceof BbVerticale) {
 			throw new \InvalidArgumentException();
 		}
 

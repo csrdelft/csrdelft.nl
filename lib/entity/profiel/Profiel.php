@@ -58,7 +58,8 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	public function __construct(
 		// FIXME(#1231): Hack voor ProfielEntityField initialisatie (zie issue #1231)
 		#[Id, Column(type: 'uid')] public ?string $uid = null
-	) {
+	)
+	{
 		$this->toestemmingen = new ArrayCollection();
 		$this->kinderen = new ArrayCollection();
 	}
@@ -405,15 +406,20 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 */
 	#[
 		ORM\OneToOne(
-			targetEntity: \CsrDelft\entity\security\Account::class,
-			mappedBy: 'profiel'
-		)
+		targetEntity: \CsrDelft\entity\security\Account::class,
+		mappedBy: 'profiel'
+	)
 	]
 	public $account;
 
-	#[ORM\OneToMany(targetEntity: LidToestemming::class, mappedBy: 'profiel')]
-	public /** @var Collection<int, LidToestemming> */
-		Collection $toestemmingen;
+	#[
+		ORM\OneToMany(
+			targetEntity: LidToestemming::class,
+			mappedBy: 'profiel'
+		)
+	]
+	/** @var Collection<int, LidToestemming> */
+	public Collection $toestemmingen;
 
 	/**
 	 * In $properties_lidstatus kan per property worden aangegeven voor welke lidstatusen deze nodig. Bij wijziging van
@@ -713,8 +719,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
 		if (
-			$vorm !== 'pasfoto' &&
-			$vorm !== 'pasfoto.vierkant' &&
+			$vorm !== 'pasfoto' && $vorm !== 'pasfoto.vierkant' &&
 			InstellingUtil::lid_instelling('layout', 'visitekaartjes') == 'ja'
 		) {
 			$title = '';
@@ -734,8 +739,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			$this->getNaam($vorm) .
 			'">';
 		if (
-			$vorm !== 'pasfoto' &&
-			$vorm !== 'pasfoto.vierkant' &&
+			$vorm !== 'pasfoto' && $vorm !== 'pasfoto.vierkant' &&
 			InstellingUtil::lid_instelling('layout', 'visitekaartjes') == 'ja'
 		) {
 			return '<span data-visite="' .
@@ -831,7 +835,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 
 			case 'civitas':
 				// noviet
-				if ($this->status === LidStatus::Noviet) {
+				if ($this->status === LidStatus::Noviet){
 					$naam = 'Noviet ' . $this->voornaam;
 					if (!empty($this->postfix)) {
 						$naam .= ' ' . $this->postfix;
@@ -872,6 +876,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 					}
 				}
 
+
 				break;
 
 			case 'aaidrom': // voor een 1 aprilgrap ooit
@@ -894,13 +899,11 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $naam;
 	}
 
-	public function pasfoto(): string
-	{
+	public function pasfoto(): string {
 		return "/profiel/pasfoto/$this->uid.jpg";
 	}
 
-	public function pasfotoVierkant(): string
-	{
+	public function pasfotoVierkant(): string {
 		return "/profiel/pasfoto/$this->uid.vierkant.jpg";
 	}
 

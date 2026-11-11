@@ -111,7 +111,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 
 		$user = $this->userProvider->loadUserByUsername($token->data->userId);
 
-		if (!($user instanceof UserInterface)) {
+		if (!$user instanceof UserInterface) {
 			throw new AuthenticationServiceException(
 				'The user provider must return a UserInterface object.'
 			);

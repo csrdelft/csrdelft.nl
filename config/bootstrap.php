@@ -3,10 +3,7 @@
 use Symfony\Component\Dotenv\Dotenv;
 
 // Locatie van de gecompilede fonts (compilation in CI)
-@define(
-	'K_PATH_FONTS',
-	dirname(__DIR__) . '/vendor/tecnickcom/tc-lib-pdf-font/target/fonts'
-);
+@define('K_PATH_FONTS', dirname(__DIR__) . '/vendor/tecnickcom/tc-lib-pdf-font/target/fonts');
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 

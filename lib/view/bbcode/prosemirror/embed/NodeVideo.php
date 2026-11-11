@@ -20,7 +20,7 @@ class NodeVideo implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!($node instanceof BbVideo)) {
+		if (!$node instanceof BbVideo) {
 			throw new \InvalidArgumentException();
 		}
 

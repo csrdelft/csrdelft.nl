@@ -30,8 +30,7 @@ class DocumentToevoegenForm implements FormulierTypeInterface
 		private readonly UrlGeneratorInterface $urlGenerator,
 		private readonly DocumentCategorieRepository $documentCategorieRepository,
 		private readonly LoginService $loginService
-	) {
-	}
+	) {}
 
 	/**
 	 * @return FileField

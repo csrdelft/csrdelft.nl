@@ -43,7 +43,7 @@ class CmsPaginaVoter extends Voter
 		$subject,
 		TokenInterface $token
 	): bool {
-		if (!($subject instanceof CmsPagina)) {
+		if (!$subject instanceof CmsPagina) {
 			return false;
 		}
 

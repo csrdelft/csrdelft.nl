@@ -28,10 +28,8 @@ class StudieOpDatumCommand extends Command
 		parent::__construct();
 	}
 
-	protected function execute(
-		InputInterface $input,
-		OutputInterface $output
-	): int {
+	protected function execute(InputInterface $input, OutputInterface $output): int
+	{
 		$helper = $this->getHelper('question');
 
 		// Bepaal datum

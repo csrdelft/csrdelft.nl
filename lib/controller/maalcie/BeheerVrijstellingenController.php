@@ -31,9 +31,7 @@ class BeheerVrijstellingenController extends AbstractController
 	{
 		return $this->render(
 			'maaltijden/vrijstelling/beheer_vrijstellingen.html.twig',
-			[
-				'vrijstellingen' => $this->corveeVrijstellingenRepository->getVrijstellingenByDate(),
-			]
+			['vrijstellingen' => $this->corveeVrijstellingenRepository->getVrijstellingenByDate()]
 		);
 	}
 

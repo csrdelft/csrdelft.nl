@@ -33,10 +33,8 @@ class PasfotoController extends AbstractController
 			requirements: ['uid' => '.{4}']
 		)
 	]
-	public function pasfoto(
-		Profiel $profiel,
-		string $vorm
-	): BinaryFileResponse|RedirectResponse {
+	public function pasfoto(Profiel $profiel, string $vorm): BinaryFileResponse|RedirectResponse
+	{
 		if (
 			InstellingUtil::is_zichtbaar(
 				$profiel,
@@ -51,7 +49,7 @@ class PasfotoController extends AbstractController
 			$resp = $this->redirect('/images/geen-foto.jpg', status: 301);
 		}
 		$resp->setPrivate();
-		$resp->setClientTtl(24 * 3600);
+		$resp->setClientTtl(24*3600);
 		return $resp;
 	}
 }
