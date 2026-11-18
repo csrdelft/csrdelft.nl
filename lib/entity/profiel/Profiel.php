@@ -109,12 +109,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 */
 	#[ORM\Column(type: 'string', nullable: true)]
 	public $duckname;
-	// fysiek
-	/**
-	 * @var Geslacht
-	 */
-	#[ORM\Column(type: 'enumGeslacht')]
-	public $geslacht;
+
+	#[ORM\Column(type: 'string', enumType: Geslacht::class)]
+	public Geslacht $geslacht;
 	/**
 	 * @var DateTimeImmutable
 	 */
@@ -250,11 +247,8 @@ class Profiel implements Agendeerbaar, DisplayEntity
 	 */
 	#[ORM\Column(type: 'date', nullable: true)]
 	public $lidafdatum;
-	/**
-	 * @var string
-	 */
-	#[ORM\Column(type: 'string')]
-	public $status;
+	#[ORM\Column(type: 'string', enumType: LidStatus::class)]
+	public LidStatus $status;
 	// geld
 	/**
 	 * @var string|null
@@ -732,7 +726,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 			'"' .
 			$title .
 			' class="lidLink ' .
-			htmlspecialchars($this->status) .
+			htmlspecialchars($this->status->value) .
 			'" data-lid="' .
 			$this->uid .
 			'" data-lid-naam="' .
@@ -751,7 +745,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 				'"><a href="/profiel/' .
 				$this->uid .
 				'" class="lidLink ' .
-				htmlspecialchars($this->status) .
+				htmlspecialchars($this->status->value) .
 				'">' .
 				$naam .
 				'</a></span>';
@@ -843,9 +837,9 @@ class Profiel implements Agendeerbaar, DisplayEntity
 				} elseif ($this->isLid() || $this->isOudlid()) {
 					// voor novieten is het Dhr./ Mevr.
 					if (LoginService::getProfiel()->status === LidStatus::Noviet) {
-						$naam = Geslacht::isVrouw($this->geslacht) ? 'Mevr. ' : 'Dhr. ';
+						$naam = $this->geslacht === Geslacht::Vrouw ? 'Mevr. ' : 'Dhr. ';
 					} else {
-						$naam = Geslacht::isVrouw($this->geslacht) ? 'Ama. ' : 'Am. ';
+						$naam = $this->geslacht === Geslacht::Vrouw ? 'Ama. ' : 'Am. ';
 					}
 					if (!empty($this->tussenvoegsel)) {
 						$naam .= ucfirst($this->tussenvoegsel) . ' ';
@@ -856,7 +850,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 					}
 					// status char weergeven bij oudleden en ereleden
 					if ($this->isOudlid()) {
-						$naam .= ' ' . LidStatus::from($this->status)->getChar();
+						$naam .= ' ' . $this->status->getChar();
 					}
 				}
 				// geen lid
@@ -872,7 +866,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 					$naam .= $this->achternaam;
 					// status char weergeven bij kringels
 					if ($this->status === LidStatus::Kringel) {
-						$naam .= ' ' . LidStatus::from($this->status)->getChar();
+						$naam .= ' ' . $this->status->getChar();
 					}
 				}
 
@@ -1033,12 +1027,12 @@ class Profiel implements Agendeerbaar, DisplayEntity
 
 	public function isLid()
 	{
-		return LidStatus::isLidLike($this->status);
+		return $this->status->isLidLike();
 	}
 
 	public function isOudlid()
 	{
-		return LidStatus::isOudlidLike($this->status);
+		return $this->status->isOudlidLike();
 	}
 
 	/**
@@ -1105,7 +1099,7 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return in_array($this->status, Profiel::$properties_lidstatus[$name]);
 	}
 
-	public function getDataTableColumn()
+	public function getDataTableColumn(): DataTableColumn
 	{
 		return new DataTableColumn(
 			$this->getLink('volledig'),
@@ -1125,17 +1119,17 @@ class Profiel implements Agendeerbaar, DisplayEntity
 		return $this->achternaam ? $this->getNaam('volledig') : '';
 	}
 
-	public function getChar()
+	public function getChar(): string
 	{
-		return LidStatus::from($this->status)->getChar();
+		return $this->status->getChar();
 	}
 
-	public function getLidStatusDescription()
+	public function getLidStatusDescription(): string
 	{
-		return LidStatus::from($this->status)->getDescription();
+		return $this->status->getDescription();
 	}
 
-	public function getLeeftijd()
+	public function getLeeftijd(): int
 	{
 		return $this->gebdatum->diff(date_create_immutable())->y;
 	}
